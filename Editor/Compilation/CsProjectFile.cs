@@ -18,13 +18,9 @@ internal class CsProjectFile
     public string TargetFramework { get; }
     public AssemblyInformation Assembly { get; private set; }
     public IReadOnlyList<DependencyInfo> Dependencies => _dependencies;
+    public bool IsOperatorAssembly => Assembly.OperatorTypes.Count > 0;
     private readonly List<DependencyInfo> _dependencies;
     public event Action<CsProjectFile> Recompiled;
-
-    public CsProjectFile(FileInfo file, AssemblyInformation assembly) : this(file)
-    {
-        Assembly = assembly;
-    }
 
     public CsProjectFile(FileInfo file)
     {
@@ -68,7 +64,8 @@ internal class CsProjectFile
         var end = contents.IndexOf(endNamespaceTag, StringComparison.Ordinal);
         if (start == -1 || end == -1)
         {
-            throw new Exception($"Could not find {beginNamespaceTag} in {FullPath}");
+            Log.Error($"Could not find {beginNamespaceTag} in {FullPath}");
+            return string.Empty;
         }
 
         return contents[start..end];
@@ -194,12 +191,6 @@ internal class CsProjectFile
         return Compiler.TryCompile(this, buildMode);
     }
 
-    public void UpdateAssembly(AssemblyInformation assembly)
-    {
-        Assembly = assembly;
-        Recompiled?.Invoke(this);
-    }
-
     // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation
     public static CsProjectFile CreateNewProject(string projectName, string parentDirectory)
     {
@@ -246,5 +237,28 @@ internal class CsProjectFile
         }
 
         return new CsProjectFile(new FileInfo(csprojPath));
+    }
+
+    public bool TryLoadAssembly(Compiler.BuildMode buildMode)
+    {
+        var assemblyFile = GetBuildTargetPath(buildMode);
+        if (!assemblyFile.Exists)
+        {
+            Log.Error($"Could not find assembly at \"{assemblyFile.FullName}\"");
+            return false;
+        }
+
+        var gotAssembly = RuntimeAssemblies.TryLoadAssemblyInformation(assemblyFile.FullName, out var assembly);
+        if (!gotAssembly)
+        {
+            Log.Error($"Could not load assembly at \"{assemblyFile.FullName}\"");
+            return false;
+        }
+        
+        // resolve dependencies 
+        Assembly = assembly;
+        Recompiled?.Invoke(this);
+
+        return gotAssembly;
     }
 }

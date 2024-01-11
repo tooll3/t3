@@ -1,7 +1,6 @@
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics;
-using T3.Core.Compilation;
 using T3.Core.Logging;
 
 namespace T3.Editor.Compilation;
@@ -69,22 +68,7 @@ internal static class Compiler
             return false;
         }
         
-        var assemblyFile = projectFile.GetBuildTargetPath(buildMode);
-        if (!assemblyFile.Exists)
-        {
-            Log.Error($"Could not find assembly at \"{assemblyFile.FullName}\"");
-            return false;
-        }
-        
-        var gotAssembly = RuntimeAssemblies.TryLoadAssemblyInformation(assemblyFile.FullName, out var assembly);
-        if (!gotAssembly)
-        {
-            Log.Error($"Could not load assembly at \"{assemblyFile.FullName}\"");
-            return false;
-        }
-        
-        projectFile.UpdateAssembly(assembly);
-        return true;
+        return projectFile.TryLoadAssembly(buildMode);
     }
 
     public enum BuildMode

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Loader;
+using Microsoft.Extensions.DependencyModel;
+using Microsoft.Extensions.DependencyModel.Resolution;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 
@@ -27,6 +29,9 @@ public class AssemblyInformation
 
     public Guid HomeGuid { get; private set; } = Guid.Empty;
     public bool HasHome => HomeGuid != Guid.Empty;
+    
+    private AssemblyLoadContext _loadContext;
+    private ICompilationAssemblyResolver _assemblyResolver;
 
     public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly)
     {
@@ -35,6 +40,8 @@ public class AssemblyInformation
         AssemblyName = assemblyName;
         Assembly = assembly;
         Directory = System.IO.Path.GetDirectoryName(path);
+
+        TryResolveReferences(path);
 
         try
         {
@@ -65,7 +72,78 @@ public class AssemblyInformation
                                .ToDictionary(x => x.Guid, x => x.Type);
     }
 
-    public static bool TryGetGuidOfType(Type newType, out Guid guid)
+    /// <summary>
+    /// Adapted from https://www.codeproject.com/Articles/1194332/Resolving-Assemblies-in-NET-Core
+    /// </summary>
+    /// <param name="path">path to dll</param>
+    private void TryResolveReferences(string path)
+    {
+        var dependencyContext = DependencyContext.Load(Assembly);
+
+        if (dependencyContext == null)
+        {
+            Log.Error($"Failed to load dependency context for assembly {Assembly.FullName}");
+            return;
+        }
+
+        var resolvers = new ICompilationAssemblyResolver[]
+                            {
+                                new AppBaseCompilationAssemblyResolver(path),
+                                new ReferenceAssemblyPathResolver(),
+                                new PackageCompilationAssemblyResolver()
+                            };
+        _assemblyResolver = new CompositeCompilationAssemblyResolver(resolvers);
+        _loadContext = AssemblyLoadContext.GetLoadContext(Assembly);
+
+        if (_loadContext == null)
+        {
+            Log.Error($"Failed to get load context for assembly {Assembly.FullName}");
+            return;
+        }
+
+        _loadContext.Resolving += OnResolving;
+        return;
+
+        Assembly OnResolving(AssemblyLoadContext context, AssemblyName name)
+        {
+            var library = dependencyContext.RuntimeLibraries.FirstOrDefault(NamesMatch);
+
+            if (library == null)
+            {
+                return null;
+            }
+
+            var wrapper = new CompilationLibrary(
+                                                 library.Type,
+                                                 library.Name,
+                                                 library.Version,
+                                                 library.Hash,
+                                                 library.RuntimeAssemblyGroups.SelectMany(g => g.AssetPaths),
+                                                 library.Dependencies,
+                                                 library.Serviceable);
+
+            var assemblies = new List<string>();
+            _assemblyResolver.TryResolveAssemblyPaths(wrapper, assemblies);
+            switch (assemblies.Count)
+            {
+                case 0:
+                    return null;
+                case 1:
+                    return context.LoadFromAssemblyPath(assemblies[0]);
+                default:
+                {
+                    Log.Error($"Multiple assemblies found for {name.Name}");
+                    foreach (var assembly in assemblies)
+                        Log.Info($"\t{assembly}");
+                    return null;
+                }
+            }
+
+            bool NamesMatch(RuntimeLibrary runtime) => string.Equals(runtime.Name, name.Name, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    private static bool TryGetGuidOfType(Type newType, out Guid guid)
     {
         var guidAttributes = newType.GetCustomAttributes(typeof(GuidAttribute), false);
         if (guidAttributes.Length == 0)

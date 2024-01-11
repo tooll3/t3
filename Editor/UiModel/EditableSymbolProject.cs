@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using T3.Core.Compilation;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Windows;
@@ -204,7 +203,8 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     public static Instance RootInstance { get; private set; }
 
-    public static EditableSymbolProject ActiveProject { get; private set; }
+    internal static EditableSymbolProject ActiveProjectRw;
+    public static EditableSymbolProject ActiveProject => ActiveProjectRw ??= AllProjectsRw.FirstOrDefault(x => x.AssemblyInformation.HasHome); // todo - userSettings recents
     private static readonly List<EditableSymbolProject> AllProjectsRw = new();
     public static readonly IReadOnlyList<EditableSymbolProject> AllProjects = AllProjectsRw;
 

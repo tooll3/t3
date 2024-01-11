@@ -25,7 +25,13 @@ internal static class EditorInitialization
 
         if (NeedsUserProject)
         {
-            NeedsUserProject = !TryCreateProject(name);
+            var success= !TryCreateProject(name, out var project);
+            NeedsUserProject = success;
+            if (success)
+            {
+                EditableSymbolDatasList.Add(project);
+                EditableSymbolProject.ActiveProjectRw = project;
+            }
         }
         else if (nameArgs.NewName != nameArgs.OldName)
         {
@@ -36,36 +42,39 @@ internal static class EditorInitialization
         }
     }
 
-    private static bool TryCreateProject(string name)
+    private static bool TryCreateProject(string name, out EditableSymbolProject newProject)
     {
-        var newProject = CsProjectFile.CreateNewProject(name, UserSettings.Config.DefaultNewProjectDirectory);
-        if(newProject == null)
+        var newCsProj = CsProjectFile.CreateNewProject(name, UserSettings.Config.DefaultNewProjectDirectory);
+        if (newCsProj == null)
         {
             Log.Error("Failed to create new project");
+            newProject = null;
             return false;
         }
-            
-        var compiled = Compiler.TryCompile(newProject, Compiler.BuildMode.Debug);
-            
+
+        var compiled = Compiler.TryCompile(newCsProj, Compiler.BuildMode.Debug);
+
         if (!compiled)
         {
             Log.Error("Failed to compile new project");
+            newProject = null;
             return false;
         }
-            
-        if(!newProject.Assembly.HasHome)
-        {
-            Log.Error("Failed to create project home");
-            return false;
-        }
-            
-        var newUiSymbolData = new EditableSymbolProject(newProject);
 
-        UpdateSymbolPackages(newUiSymbolData);
-        if (!newUiSymbolData.TryCreateHome())
+        if (!newCsProj.Assembly.HasHome)
         {
             Log.Error("Failed to create project home");
-            RemoveSymbolPackage(newUiSymbolData);
+            newProject = null;
+            return false;
+        }
+
+        newProject = new EditableSymbolProject(newCsProj);
+
+        UpdateSymbolPackages(newProject);
+        if (!newProject.TryCreateHome())
+        {
+            Log.Error("Failed to create project home");
+            RemoveSymbolPackage(newProject);
             return false;
         }
 
@@ -84,35 +93,55 @@ internal static class EditorInitialization
 
         try
         {
+            #if IDE
+                CreateSymlinks();
+            #endif
+            
             // todo: change to load CsProjs from specific directories and specific nuget packages from a package directory
-            var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
-            List<EditableSymbolProject> editablePackages = new();
-            List<EditorSymbolPackage> staticPackages = new();
+            //var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
+            List<EditorSymbolPackage> operatorNugetPackages = new(); // "static" packages, remember to filter by operator vs non-operator assemblies
 
-            foreach (var assemblyInfo in operatorAssemblies)
-            {
-                if (TryFindMatchingCSProj(assemblyInfo, out var csprojFile))
-                {
-                    var editableSymbolData = new EditableSymbolProject(csprojFile);
-                    editablePackages.Add(editableSymbolData);
-                }
-                else
-                {
-                    var staticSymbolData = new EditorSymbolPackage(assemblyInfo);
-                    staticPackages.Add(staticSymbolData);
-                }
-            }
+            var rootDirectories = new[] { RuntimeAssemblies.Core.Directory, UserSettings.Config.DefaultNewProjectDirectory };
+            var csProjFiles = rootDirectories
+               .SelectMany(x => Directory.EnumerateFiles(x, "*.csproj", SearchOption.AllDirectories));
 
-            var allSymbolPackages = editablePackages
-                                .Concat(staticPackages)
-                                .ToArray();
+            ConcurrentBag<EditableSymbolProject> projects = new();
+            ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = new();
+            csProjFiles
+               .AsParallel()
+               .ForAll(path =>
+                       {
+                           var csProjFile = new CsProjectFile(new FileInfo(path));
+                           var loaded = csProjFile.TryLoadAssembly(Compiler.BuildMode.Debug);
+                           if (!loaded)
+                           {
+                               loaded = csProjFile.TryRecompile(Compiler.BuildMode.Debug);
+                               if (!loaded)
+                                   return;
+                           }
+
+                           if (csProjFile.IsOperatorAssembly)
+                           {
+                               var project = new EditableSymbolProject(csProjFile);
+                               projects.Add(project);
+                           }
+                           else
+                           {
+                               nonOperatorAssemblies.Add(csProjFile.Assembly);
+                           }
+                       });
+            
+
+            var allSymbolPackages = projects
+                                   .Concat(operatorNugetPackages)
+                                   .ToArray();
             // Load operators
+            InitializeCustomUis(nonOperatorAssemblies);
             UpdateSymbolPackages(allSymbolPackages);
 
-            InitializeCustomUis();
-
+            var activeProject = EditableSymbolProject.ActiveProject;
             // Create home
-            if (EditableSymbolProject.ActiveProject == null || !EditableSymbolProject.ActiveProject.TryCreateHome())
+            if (activeProject == null || !activeProject.TryCreateHome())
             {
                 NeedsUserProject = true;
             }
@@ -127,9 +156,32 @@ internal static class EditorInitialization
         }
     }
 
-    private static void InitializeCustomUis()
+    #if IDE
+    private static void CreateSymlinks()
     {
-        var uiInitializerTypes = RuntimeAssemblies.AllAssemblies
+        var projectParentDirectory = Path.Combine(RuntimeAssemblies.Core.Directory, "..", "..", "..", "..", "Operators");
+        var directoryInfo = new DirectoryInfo(projectParentDirectory);
+        if (!directoryInfo.Exists)
+            throw new Exception($"Could not find project parent directory {projectParentDirectory}");
+        
+        var targetDirectory = UserSettings.Config.DefaultNewProjectDirectory;
+        Directory.CreateDirectory(targetDirectory);
+
+        foreach (var subDirectory in directoryInfo.EnumerateDirectories())
+        {
+            //symlink to user project directory
+            var linkName = Path.Combine(targetDirectory, subDirectory.Name);
+            if (Directory.Exists(linkName))
+                continue;
+            
+            Directory.CreateSymbolicLink(linkName, subDirectory.FullName);
+        }
+    }
+    #endif
+
+    private static void InitializeCustomUis(IReadOnlyCollection<AssemblyInformation> nonOperatorAssemblies)
+    {
+        var uiInitializerTypes = nonOperatorAssemblies
                                                   .Where(x => x.Name != "Editor")
                                                   .ToArray()
                                                   .AsParallel()
@@ -168,43 +220,6 @@ internal static class EditorInitialization
         }
     }
 
-    private static bool TryFindMatchingCSProj(AssemblyInformation assembly, out CsProjectFile csprojFile)
-    {
-        var assemblyNameString = assembly.Name;
-        if (assemblyNameString == null)
-            throw new ArgumentException("Assembly name is null", nameof(assembly));
-
-        var assemblyDirectory = assembly.Directory;
-
-        // search upwards from the assembly directory to find a matching csproj
-        var csprojName = $"{assemblyNameString}.csproj";
-
-        var workingDirectory = Directory.GetParent(assemblyDirectory);
-        FileInfo csprojFileInfo = null;
-
-        while (workingDirectory != null)
-        {
-            var fileFound = Directory.EnumerateFiles(workingDirectory.FullName, csprojName)
-                                     .FirstOrDefault();
-            if (fileFound != null)
-            {
-                csprojFileInfo = new FileInfo(fileFound);
-                break;
-            }
-
-            workingDirectory = workingDirectory.Parent;
-        }
-
-        if (csprojFileInfo == null)
-        {
-            csprojFile = null;
-            return false;
-        }
-
-        csprojFile = new CsProjectFile(csprojFileInfo, assembly);
-        return true;
-    }
-    
     internal static void UpdateSymbolPackage(EditableSymbolProject project)
     {
         UpdateSymbolPackages(project);
@@ -219,7 +234,7 @@ internal static class EditorInitialization
                                                loadedSymbols.TryAdd(package, newlyRead);
                                            });
         loadedSymbols.AsParallel().ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
-        
+
         ConcurrentDictionary<EditorSymbolPackage, IReadOnlyCollection<SymbolUi>> loadedSymbolUis = new();
         symbolPackages.AsParallel().ForAll(package =>
                                            {

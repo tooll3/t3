@@ -546,7 +546,7 @@ namespace T3.Editor.Gui.Graph
 
         internal readonly GraphImageBackground GraphImageBackground = new();
         
-        bool MustPreventModification => GraphCanvas.Current.CompositionOp != null && !GraphCanvas.Current.CompositionOp.Symbol.SymbolPackage.IsModifiable;
+        bool MustPreventModification => GraphCanvas.Current?.CompositionOp != null && !GraphCanvas.Current.CompositionOp.Symbol.SymbolPackage.IsModifiable;
 
         public readonly GraphCanvas GraphCanvas;
         private const int UseComputedHeight = -1;

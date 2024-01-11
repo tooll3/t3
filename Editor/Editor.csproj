@@ -13,6 +13,9 @@
         <!--<AssemblyName>T3Editor</AssemblyName>-->
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DefineConstants>TRACE;IDE</DefineConstants>
+    </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="ImGui.NET" Version="1.87.3"/>
         <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.0-2.final"/>

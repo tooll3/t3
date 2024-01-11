@@ -10,17 +10,6 @@
 
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
-        <PackageReference Include="CppSharp" Version="1.0.1" />
-        <PackageReference Include="OpenGL.Net" Version="0.8.4">
-            <NoWarn>NU1701</NoWarn>
-        </PackageReference>
-        <PackageReference Include="Rug.Osc" Version="1.2.5">
-		        <NoWarn>NU1701</NoWarn>
-        </PackageReference>
-        <PackageReference Include="SharpDX.Desktop" Version="4.2.0">
-		        <NoWarn>NU1701</NoWarn>
-        </PackageReference>
-        <PackageReference Include="Svg" Version="3.3.0" />
     </ItemGroup>
 
     <ItemGroup>
