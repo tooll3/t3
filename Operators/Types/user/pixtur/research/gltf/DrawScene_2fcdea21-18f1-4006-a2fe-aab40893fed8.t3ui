@@ -1,0 +1,314 @@
+{
+  "Id": "2fcdea21-18f1-4006-a2fe-aab40893fed8"/*DrawScene*/,
+  "Description": "Experimental new draw operator.",
+  "InputUis": [
+    {
+      "InputId": "22ad6256-f741-4e8f-9a47-4b5b82e2cecf"/*Scene*/,
+      "Position": {
+        "X": 1360.2021,
+        "Y": 3992.2544
+      }
+    },
+    {
+      "InputId": "d7b086be-46c5-4021-8e7a-571236495594"/*Mesh*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 1360.2021,
+        "Y": 4037.2544
+      }
+    },
+    {
+      "InputId": "dd74d2b9-8c91-4a2a-adca-5ca187d433a3"/*Color*/,
+      "Position": {
+        "X": 1359.0396,
+        "Y": 4080.268
+      }
+    },
+    {
+      "InputId": "69151dfb-59cf-4618-8642-c9dc88260786"/*BlendMode*/,
+      "Position": {
+        "X": 1359.0396,
+        "Y": 4125.268
+      }
+    },
+    {
+      "InputId": "42e7cc49-5102-4e74-8bea-c7698cb4abca"/*Culling*/,
+      "Position": {
+        "X": 1359.0396,
+        "Y": 4170.268
+      }
+    },
+    {
+      "InputId": "121f0f29-36f3-4ef7-9ebf-d14ad65b16a2"/*EnableZTest*/,
+      "Position": {
+        "X": 1359.0396,
+        "Y": 4215.268
+      }
+    },
+    {
+      "InputId": "d517b62c-0f11-4d76-a945-4dabb7d84d74"/*EnableZWrite*/,
+      "Position": {
+        "X": 1359.0396,
+        "Y": 4260.268
+      }
+    },
+    {
+      "InputId": "35d67171-b2e3-45af-9adc-5c6539319ce9"/*AlphaCutOff*/,
+      "Position": {
+        "X": 1359.0396,
+        "Y": 4305.268
+      }
+    },
+    {
+      "InputId": "49e57c71-cbd3-4f8a-9a96-8fb116c947b0"/*FillMode*/,
+      "Position": {
+        "X": 1359.0396,
+        "Y": 4350.268
+      }
+    },
+    {
+      "InputId": "a5ba01f8-5176-4f2f-aac3-ba7d8ede4c20"/*Filter*/,
+      "Position": {
+        "X": 1359.0396,
+        "Y": 4395.268
+      }
+    },
+    {
+      "InputId": "b17800d2-cdf3-4334-90a0-d10b8cc27445"/*WrapMode*/,
+      "Position": {
+        "X": 1359.0396,
+        "Y": 4440.268
+      }
+    },
+    {
+      "InputId": "07089671-d27e-4eec-9719-8f6db7479b0b"/*UseMaterialId*/,
+      "Position": {
+        "X": 1359.0396,
+        "Y": 4485.268
+      },
+      "Usage": "CustomDropdown"
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "31af83a3-e521-4360-afc7-dea6ffaea073"/*TransformsConstBuffer*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2220.5193,
+        "Y": 3647.264
+      }
+    },
+    {
+      "ChildId": "b90ee6ce-5921-454f-aa55-c3334c65977a"/*VertexShader*/,
+      "Position": {
+        "X": 2220.5193,
+        "Y": 3561.264
+      }
+    },
+    {
+      "ChildId": "c7020cbf-1469-4105-81f0-4f11001822d5"/*RasterizerStateOp*/,
+      "Position": {
+        "X": 2391.1904,
+        "Y": 4127.1104
+      }
+    },
+    {
+      "ChildId": "2855b49d-7ec8-4df0-9597-b3ac02b17694"/*PixelShader*/,
+      "Position": {
+        "X": 2220.5193,
+        "Y": 3604.264
+      }
+    },
+    {
+      "ChildId": "844fa3ed-7810-4f8a-8fcc-a46d2a4f61d8"/*Rasterizer*/,
+      "Position": {
+        "X": 2541.1904,
+        "Y": 4127.1104
+      }
+    },
+    {
+      "ChildId": "f45c908f-325a-4ab8-a3ad-6729c463d742"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 2569.713,
+        "Y": 3516.228
+      }
+    },
+    {
+      "ChildId": "f9120c1f-286c-41ef-89f0-b4f72201b982"/*texSampler*/,
+      "Position": {
+        "X": 2220.5193,
+        "Y": 3897.264
+      }
+    },
+    {
+      "ChildId": "568372b7-1fe3-4708-b464-f735a786d4ed"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 55.07945,
+        "Y": 921.4707
+      },
+      "Position": {
+        "X": 2782.8516,
+        "Y": 3498.376
+      }
+    },
+    {
+      "ChildId": "9625cfd9-cb40-4b8e-80f4-35b6053f8232"/*Vector4Components*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 111.079544,
+        "Y": 59.905018
+      },
+      "Position": {
+        "X": 2070.5193,
+        "Y": 3690.264
+      }
+    },
+    {
+      "ChildId": "669c900d-fdb8-4de0-9eb8-fe3913b1e515"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 2220.5193,
+        "Y": 3690.264
+      }
+    },
+    {
+      "ChildId": "0b13837a-39ad-410e-bacb-923a03ed311c"/*Draw*/,
+      "Position": {
+        "X": 2541.1904,
+        "Y": 4321.1104
+      }
+    },
+    {
+      "ChildId": "fdd942a1-3afb-46a8-b457-4b913e580a96"/*PickBlendMode*/,
+      "Position": {
+        "X": 2391.1904,
+        "Y": 4265.1104
+      }
+    },
+    {
+      "ChildId": "8e2031e1-2b3d-4abe-a4f9-52b9fcc02b39"/*ContextCBuffers*/,
+      "Position": {
+        "X": 2220.5193,
+        "Y": 3811.264
+      }
+    },
+    {
+      "ChildId": "af38ddc6-cb0b-4e79-b341-cd330544ad44"/*IntValue*/,
+      "Position": {
+        "X": 2391.1904,
+        "Y": 4321.1104
+      }
+    },
+    {
+      "ChildId": "32ce3c4d-d260-4768-a577-72491b9fa831"/*GetSRVProperties*/,
+      "Position": {
+        "X": 2091.1904,
+        "Y": 4321.1104
+      }
+    },
+    {
+      "ChildId": "3299e98c-e472-416d-a99f-d0a5bfa3290b"/*MultiplyInt*/,
+      "Position": {
+        "X": 2241.1904,
+        "Y": 4321.1104
+      }
+    },
+    {
+      "ChildId": "70808645-df2c-495d-a41c-5b120e8c4faf"/*GetBufferComponents*/,
+      "Position": {
+        "X": 1902.3158,
+        "Y": 3994.7734
+      }
+    },
+    {
+      "ChildId": "21e3fbb8-6b6b-4fc5-b0a8-42d4930a4d50"/*GetBufferComponents*/,
+      "Position": {
+        "X": 1898.559,
+        "Y": 4085.4102
+      }
+    },
+    {
+      "ChildId": "6839f154-dbec-4da8-a5e3-29d63727b2ca"/*GetPbrParameters*/,
+      "Position": {
+        "X": 2220.5193,
+        "Y": 3854.264
+      }
+    },
+    {
+      "ChildId": "8e297fb0-aee0-4ab4-a752-8596c54613e9"/*OutputMergerStage*/,
+      "Position": {
+        "X": 2541.1904,
+        "Y": 4183.1104
+      }
+    },
+    {
+      "ChildId": "e12df7f0-2c0b-461d-891f-4974c5af3c95"/*DepthStencilStateOp*/,
+      "Position": {
+        "X": 2391.1904,
+        "Y": 4196.1104
+      }
+    },
+    {
+      "ChildId": "7e296801-3371-4761-98f5-429f4687e088"/*_MeshBufferComponents*/,
+      "Position": {
+        "X": 1589.0894,
+        "Y": 4018.4824
+      }
+    },
+    {
+      "ChildId": "56abc0fa-eb79-4c0b-9c7a-d38445824f02"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 2375.174,
+        "Y": 3881.7014
+      }
+    },
+    {
+      "ChildId": "09b386a7-91fe-42a0-be6e-3cf9fcc46a8e"/*clampedSampler*/,
+      "Position": {
+        "X": 2223.0505,
+        "Y": 4037.1074
+      }
+    },
+    {
+      "ChildId": "5e3cabe0-d937-44cd-bc95-dd573f5362a6"/*BlendColors*/,
+      "Position": {
+        "X": 1869.131,
+        "Y": 3741.237
+      }
+    },
+    {
+      "ChildId": "cd614e1a-8736-454f-89c8-6bce3a540094"/*GetForegroundColor*/,
+      "Position": {
+        "X": 1721.7012,
+        "Y": 3794.8032
+      }
+    },
+    {
+      "ChildId": "de8cc58b-db99-45c8-a04b-e00ef2d95b73"/*SetPixelAndVertexShaderStage*/,
+      "Position": {
+        "X": 2566.4556,
+        "Y": 3634.1453
+      }
+    },
+    {
+      "ChildId": "d79eafd4-ec6b-4d01-a840-8ce45371ef2f"/*linearSampler*/,
+      "Position": {
+        "X": 2128.127,
+        "Y": 3946.9358
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "3b00e1d6-f966-4b03-81fc-2291e0fa7dbf"/*Output*/,
+      "Position": {
+        "X": 2903.7742,
+        "Y": 3900.1826
+      }
+    }
+  ]
+}

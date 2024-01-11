@@ -11,6 +11,7 @@ public static class PbrContextSettings
         if (!_wasInitialized)
             InitDefaultMaterialAndResources();
 
+        context.Materials.Clear();
         context.PbrMaterial = _defaultMaterial;
         context.ContextTextures[PrefilteredSpecularId] = _prefilteredBrdfTexture;
     }

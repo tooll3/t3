@@ -9,15 +9,16 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering.Material;
 
-namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
+namespace T3.Operators.Types.Id_2fcdea21_18f1_4006_a2fe_aab40893fed8
 {
-    public class DrawMesh : Instance<DrawMesh>, ICustomDropdownHolder
+    public class DrawScene : Instance<DrawScene>
+,ICustomDropdownHolder
     {
-        [Output(Guid = "53b3fdca-9d5e-4808-a02f-4aa743cd8456")]
+        [Output(Guid = "3b00e1d6-f966-4b03-81fc-2291e0fa7dbf")]
         public readonly Slot<Command> Output = new();
         
         
-        public DrawMesh()
+        public DrawScene()
         {
             Output.UpdateAction = Update;
         }
@@ -28,41 +29,42 @@ namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
             Log.Debug("Here", this);
             _pbrMaterials = context.Materials;
         }
-        
 
+        [Input(Guid = "22ad6256-f741-4e8f-9a47-4b5b82e2cecf")]
+        public readonly InputSlot<T3.Core.DataTypes.SceneSetup> Scene = new InputSlot<T3.Core.DataTypes.SceneSetup>();
 
-        [Input(Guid = "97429e1f-3f30-4789-89a6-8e930e356ee6")]
+        [Input(Guid = "d7b086be-46c5-4021-8e7a-571236495594")]
         public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
 
-        [Input(Guid = "8c9dee45-d165-48c8-b8dd-b7f47e77fd00")]
+        [Input(Guid = "dd74d2b9-8c91-4a2a-adca-5ca187d433a3")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
-        [Input(Guid = "4748d9ab-58a4-41d7-a2ee-6f7dfed86211")]
-        public readonly InputSlot<float> AlphaCutOff = new InputSlot<float>();
-
-        [Input(Guid = "9c17fa15-35f1-49d4-802f-a3a796cad96a", MappedType = typeof(SharedEnums.BlendModes))]
+        [Input(Guid = "69151dfb-59cf-4618-8642-c9dc88260786")]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
-        [Input(Guid = "2c4b5f3a-e9ec-432e-b1ae-6d999ae44f1b", MappedType = typeof(FillMode))]
-        public readonly InputSlot<int> FillMode = new InputSlot<int>();
-
-        [Input(Guid = "9e957f4a-6502-4905-8d97-331f8b54097c")]
+        [Input(Guid = "42e7cc49-5102-4e74-8bea-c7698cb4abca")]
         public readonly InputSlot<SharpDX.Direct3D11.CullMode> Culling = new InputSlot<SharpDX.Direct3D11.CullMode>();
 
-        [Input(Guid = "b50b3fc7-35e1-421d-be0a-b3008a54c33c")]
+        [Input(Guid = "121f0f29-36f3-4ef7-9ebf-d14ad65b16a2")]
         public readonly InputSlot<bool> EnableZTest = new InputSlot<bool>();
 
-        [Input(Guid = "dfad3400-885a-4f83-8c39-ec6520f4e2aa")]
+        [Input(Guid = "d517b62c-0f11-4d76-a945-4dabb7d84d74")]
         public readonly InputSlot<bool> EnableZWrite = new InputSlot<bool>();
 
-        [Input(Guid = "155c2396-0e05-4437-8171-288048b1158a")]
+        [Input(Guid = "35d67171-b2e3-45af-9adc-5c6539319ce9")]
+        public readonly InputSlot<float> AlphaCutOff = new InputSlot<float>();
+
+        [Input(Guid = "49e57c71-cbd3-4f8a-9a96-8fb116c947b0")]
+        public readonly InputSlot<int> FillMode = new InputSlot<int>();
+
+        [Input(Guid = "a5ba01f8-5176-4f2f-aac3-ba7d8ede4c20")]
         public readonly InputSlot<SharpDX.Direct3D11.Filter> Filter = new InputSlot<SharpDX.Direct3D11.Filter>();
 
-        [Input(Guid = "d1db33ea-1739-4323-9105-7b236a0e240f")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new();
-        
-        [Input(Guid = "D7BD3003-8589-4537-92E8-E95C5EB2BFAB")]
-        public readonly InputSlot<string> UseMaterialId = new ();
+        [Input(Guid = "b17800d2-cdf3-4334-90a0-d10b8cc27445")]
+        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
+
+        [Input(Guid = "07089671-d27e-4eec-9719-8f6db7479b0b")]
+        public readonly InputSlot<string> UseMaterialId = new InputSlot<string>();
 
         
         public string GetValueForInput(Guid inputId)

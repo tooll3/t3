@@ -13,6 +13,7 @@ using T3.Core.DataTypes;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
+using T3.Core.Rendering.Material;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Int3 = T3.Core.DataTypes.Vector.Int3;
@@ -309,14 +310,19 @@ public partial class SymbolData
                          }
                      }
                      );
+        
+        // Rendering
         RegisterType(typeof(Texture3dWithViews), "Texture3dWithViews",
                      () => new InputValue<Texture3dWithViews>(new Texture3dWithViews()));
+        
         RegisterType(typeof(MeshBuffers), "MeshBuffers",
                      () => new InputValue<MeshBuffers>(null));
         
         RegisterType(typeof(DataSet), "DataSet",
                      () => new InputValue<DataSet>());
         
+        RegisterType(typeof(PbrMaterial), "Material",
+                     () => new InputValue<PbrMaterial>());
         
         RegisterType(typeof(SceneSetup), nameof(SceneSetup),
                      InputDefaultValueCreator<SceneSetup>,
@@ -341,6 +347,10 @@ public partial class SymbolData
 
                          return sceneSetup;
                      });        
+        
+        RegisterType(typeof(Dict<float>), "Dict<float>",
+                     () => new InputValue<Dict<float>>());
+
         
         // sharpdx types
         RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",
@@ -480,8 +490,7 @@ public partial class SymbolData
                      });
         RegisterType(typeof(Vector4[]), "Vector4[]",
                      () => new InputValue<Vector4[]>(Array.Empty<Vector4>()));
-        RegisterType(typeof(Dict<float>), "Dict<float>",
-                     () => new InputValue<Dict<float>>());
+        
     }
 
     private static void RegisterType(Type type, string typeName,

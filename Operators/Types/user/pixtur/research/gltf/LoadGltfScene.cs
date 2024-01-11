@@ -73,6 +73,12 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
             ResultSetup.Value = _sceneSetup;
         }
+
+        if (_sceneSetup != null)
+        {
+            Log.Debug($"LoadGltfScene.Update " + context.Materials.Count,this);
+            _sceneSetup.Materials = context.Materials;
+        }
         
         
         
@@ -333,6 +339,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
     [Input(Guid = "D02F41A6-1A6B-4A6E-8D6C-A28873C79F2C")]
     public readonly InputSlot<SceneSetup> Setup = new();
+
+    
+    [Input(Guid = "EF7075E9-4BC2-442E-8E0C-E03667FF2E0A")]
+    public readonly InputSlot<bool> TriggerUpdate = new();
+
 
     public IStatusProvider.StatusLevel GetStatusLevel()
     {

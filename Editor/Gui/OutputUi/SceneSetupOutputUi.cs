@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.OutputUi;
 
@@ -35,6 +36,15 @@ public class SceneSetupOutputUi : OutputUi<float>
             
         }
 
+        FormInputs.AddSectionHeader("Materials");
+        foreach (var m in setup.Materials)
+        {
+            ImGui.TextUnformatted(string.IsNullOrEmpty(m.Name) ? "unnamed" : m.Name);
+        }
+
+        
+        FormInputs.AddSectionHeader("Structure");
+
         foreach (var node in setup.Nodes)
         {
             DrawNode(node);
@@ -46,7 +56,8 @@ public class SceneSetupOutputUi : OutputUi<float>
         var label = string.IsNullOrEmpty(node.Name) ? "???" : node.Name;
         //ImGui.SetNextItemOpen(true);
         
-        if(ImGui.TreeNode(label))
+        var isOpen = ImGui.TreeNodeEx(label,ImGuiTreeNodeFlags.DefaultOpen);
+        if(isOpen)
         {
             var meshLabel = string.IsNullOrEmpty(node.MeshName) ? "-" : "Mesh:" + node.MeshName;
             ImGui.SameLine(200);
