@@ -32,7 +32,7 @@
       "DefaultValue": 0
     },
     {
-      "Id": "6026d26d-b958-4508-b543-92fbdf8950d6"/*AddSeperators*/,
+      "Id": "6026d26d-b958-4508-b543-92fbdf8950d6"/*AddSeparators*/,
       "DefaultValue": true
     }
   ],

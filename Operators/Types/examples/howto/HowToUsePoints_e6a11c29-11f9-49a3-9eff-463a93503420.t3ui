@@ -62,8 +62,8 @@
     {
       "ChildId": "663fe5da-bbab-48b7-bd16-bdf5a880b998"/*RepetitionPointsExample*/,
       "Position": {
-        "X": -2135.8828,
-        "Y": 1905.2755
+        "X": -2137.3948,
+        "Y": 2409.9072
       }
     },
     {
@@ -432,15 +432,15 @@
     {
       "ChildId": "89d6eda5-72db-47b3-a3e6-1c9041b50d5b"/*DisplacePoints2dExample*/,
       "Position": {
-        "X": -1685.8827,
-        "Y": 1905.2755
+        "X": -1687.3947,
+        "Y": 2409.9072
       }
     },
     {
       "ChildId": "03638616-65e6-4eab-bd84-7918122cb4fb"/*DrawBillboardsExample*/,
       "Position": {
-        "X": -2435.8828,
-        "Y": 1905.2755
+        "X": -2437.3948,
+        "Y": 2409.9072
       }
     },
     {
@@ -451,36 +451,36 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -2585.8828,
-        "Y": 1905.2755
+        "X": -2587.3948,
+        "Y": 2409.9072
       }
     },
     {
       "ChildId": "05178e56-7460-46e0-8f1e-8282c1eacd20"/*SamplePointAttributesExample2*/,
       "Position": {
-        "X": -1835.8827,
-        "Y": 1905.2755
+        "X": -1837.3947,
+        "Y": 2409.9072
       }
     },
     {
       "ChildId": "9841cf8b-b316-484e-9bc1-06150fd99ddc"/*SimulateBoidsExample*/,
       "Position": {
-        "X": -1535.8827,
-        "Y": 1905.2755
+        "X": -1537.3947,
+        "Y": 2409.9072
       }
     },
     {
       "ChildId": "39d62d2e-b4fd-42dc-8862-2f2e87914dfa"/*TransformPointsExample*/,
       "Position": {
-        "X": -2285.8828,
-        "Y": 1905.2755
+        "X": -2287.3948,
+        "Y": 2409.9072
       }
     },
     {
       "ChildId": "0efa48b2-9177-497c-a7df-5ec4b5805953"/*TraceContourLinesExample*/,
       "Position": {
-        "X": -1985.8827,
-        "Y": 1905.2755
+        "X": -1987.3947,
+        "Y": 2409.9072
       }
     },
     {
@@ -500,8 +500,8 @@
     {
       "ChildId": "5bdc3357-ff13-4c98-9573-d78efd836003"/*CollectSpawnPointsExample*/,
       "Position": {
-        "X": -1385.8827,
-        "Y": 1905.2755
+        "X": -1387.3947,
+        "Y": 2409.9072
       }
     },
     {
@@ -579,6 +579,100 @@
       "Position": {
         "X": -1846.2559,
         "Y": 184.34985
+      }
+    },
+    {
+      "ChildId": "e57a5f2d-aa54-4df4-a367-fc53d6d1c97b"/*LinePoints*/,
+      "Comment": "A set of points twisted by 360 degree along the y-axis squeezed to a length of zero into a single point.",
+      "Position": {
+        "X": -2033.7949,
+        "Y": 1897.8767
+      }
+    },
+    {
+      "ChildId": "0d26827b-af65-4b61-8729-7fc3f3e5e087"/*RepeatAtGPoints*/,
+      "Comment": "We change connection type.",
+      "Position": {
+        "X": -1883.7938,
+        "Y": 1897.8767
+      }
+    },
+    {
+      "ChildId": "ae3364cd-e1f4-49c4-b8e4-18af7b503d9f"/*DrawLines*/,
+      "Position": {
+        "X": -1733.7938,
+        "Y": 1897.8767
+      }
+    },
+    {
+      "ChildId": "a07606fd-6a79-4dea-bf5d-f4f4981ce882"/*RadialPoints*/,
+      "Comment": "A half circle that is being revolved around the axis - points.",
+      "Position": {
+        "X": -2333.796,
+        "Y": 1940.8767
+      }
+    },
+    {
+      "ChildId": "1017cc67-7174-421a-8985-fa60f1a88158"/*SetFog*/,
+      "Position": {
+        "X": -1583.7938,
+        "Y": 1897.8767
+      }
+    },
+    {
+      "ChildId": "b45af5a2-642e-4a0a-a44c-7459ab0fee78"/*AddNoise*/,
+      "Position": {
+        "X": -2033.7949,
+        "Y": 1940.8767
+      }
+    },
+    {
+      "ChildId": "fb6ee221-e410-4ce5-bc05-43fb7d1706da"/*Time*/,
+      "Position": {
+        "X": -2183.796,
+        "Y": 2109.877
+      }
+    },
+    {
+      "ChildId": "6f7da270-1103-45c3-a9d7-2c1841cb9045"/*LinePoints*/,
+      "Position": {
+        "X": -2333.796,
+        "Y": 1983.8767
+      }
+    },
+    {
+      "ChildId": "d4f5cd5a-8979-46de-bfcd-3425ccc45ddf"/*PickPointList*/,
+      "Position": {
+        "X": -2183.796,
+        "Y": 1940.8767
+      }
+    },
+    {
+      "ChildId": "ec2fe129-9f18-4d98-868b-a8686e247ac6"/*AnimValue*/,
+      "Position": {
+        "X": -2483.796,
+        "Y": 2066.877
+      }
+    },
+    {
+      "ChildId": "a649b727-a62b-46e7-93fc-25cf80fc8fde"/*CountInt*/,
+      "Position": {
+        "X": -2333.796,
+        "Y": 2026.8767
+      }
+    },
+    {
+      "ChildId": "219ba314-0163-457f-b824-4fb4a086c989"/*Compare*/,
+      "Position": {
+        "X": -2183.796,
+        "Y": 2172.8772
+      }
+    },
+    {
+      "ChildId": "1ed9aac0-287a-484e-8531-5fd524148d3d"/*BoolToInt*/,
+      "Position": {
+        "X": -2033.7949,
+        "Y": 2172.8772
       }
     }
   ],
@@ -908,12 +1002,30 @@
         "W": 1.0
       },
       "Position": {
-        "X": -2673.9067,
-        "Y": 1760.9423
+        "X": -2675.4187,
+        "Y": 2265.574
       },
       "Size": {
         "X": 1855.191,
         "Y": 243.97777
+      }
+    },
+    {
+      "Id": "be3ffcbc-81c9-43e4-96a4-322a3ab5e96e",
+      "Title": "# Construction shapes\n\nWith [LinearPoints] and twist, we can create a surface of revolution.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2672.3398,
+        "Y": 1767.6255
+      },
+      "Size": {
+        "X": 1848.9546,
+        "Y": 475.84146
       }
     }
   ]
