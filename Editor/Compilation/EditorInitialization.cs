@@ -96,7 +96,6 @@ internal static class EditorInitialization
         try
         {
             // todo: change to load CsProjs from specific directories and specific nuget packages from a package directory
-            //var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
             List<EditorSymbolPackage> operatorNugetPackages = new(); // "static" packages, remember to filter by operator vs non-operator assemblies
 
             stopwatch.Start();
