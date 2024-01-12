@@ -47,12 +47,16 @@ internal static class Duplicate
 
         var newSymbolId = Guid.NewGuid();
         newSource = newSource.Replace(sourceSymbol.Namespace, nameSpace);
+        newSource = ReplaceGuidAttributeWith(newSymbolId, newSource);
         Log.Debug(newSource);
 
         var success = EditableSymbolProject.ActiveProject.TryCompile(newSource, newTypeName, newSymbolId, nameSpace, out var newSymbol);
         if (!success)
+        {
+            Log.Error($"Could not compile new symbol '{newTypeName}'");
             return null;
-        
+        }
+
         var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];
         var newSymbolUi = sourceSymbolUi.CloneForNewSymbol(newSymbol, oldToNewIdMap);
         newSymbolUi.Description = description;
@@ -122,6 +126,23 @@ internal static class Duplicate
         }
 
         return newSymbol;
+    }
+
+    private static string ReplaceGuidAttributeWith(Guid newSymbolId, string newSource)
+    {
+        const string guidTagStart = "Guid(\"";
+        int start = newSource.IndexOf(guidTagStart, StringComparison.Ordinal);
+        if (start < 0)
+            return newSource;
+
+        start += guidTagStart.Length;
+        int end = newSource.IndexOf("\")", start, StringComparison.Ordinal);
+        if (end < 0)
+            return newSource;
+        
+        var oldGuid = newSource[start..end];
+        var newGuid = newSymbolId.ToString();
+        return newSource.Replace(oldGuid, newGuid);
     }
 
     private class ConnectionEntry

@@ -145,22 +145,24 @@ internal sealed partial class EditableSymbolProject
 
     private string BuildFilepathFmt(string name, string @namespace)
     {
-        var dir = BuildAndCreateFolderFromNamespace(Folder, @namespace);
+        var dir = BuildAndCreateFolderFromNamespace(@namespace);
         return Path.Combine(dir, name + "{0}");
 
-        string BuildAndCreateFolderFromNamespace(string rootFolder, string symbolNamespace)
+        string BuildAndCreateFolderFromNamespace(string symbolNamespace)
         {
-            if (string.IsNullOrEmpty(symbolNamespace) || symbolNamespace == AssemblyInformation.Name)
+            var rootNamespace = CsProjectFile.RootNamespace;
+            symbolNamespace = symbolNamespace.StartsWith(rootNamespace) 
+                                  ? symbolNamespace.Replace(rootNamespace, "")
+                                  : symbolNamespace;
+            
+            if (string.IsNullOrWhiteSpace(symbolNamespace) || symbolNamespace == CsProjectFile.RootNamespace)
             {
-                return rootFolder;
+                return Folder;
             }
 
-            var namespaceParts = symbolNamespace.Split('.');
-            var assemblyRootParts = Folder.Split(Path.DirectorySeparatorChar);
-            var rootOfOperatorDirectoryIndex = Array.IndexOf(assemblyRootParts, AssemblyInformation.Name);
-            var operatorRootParts = assemblyRootParts.AsSpan()[..(rootOfOperatorDirectoryIndex)].ToArray();
-
-            var directory = Path.Combine(operatorRootParts.Concat(namespaceParts).ToArray());
+            var namespaceParts = symbolNamespace.Split('.').Where(x => x.Length > 0);
+            var subfolders = new [] { Folder }.Concat(namespaceParts).ToArray();
+            var directory = Path.Combine(subfolders); 
             Directory.CreateDirectory(directory);
             return directory;
         }

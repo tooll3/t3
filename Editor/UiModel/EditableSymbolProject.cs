@@ -116,24 +116,16 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         return success;
     }
 
-    private bool TryRecompile() => CsProjectFile.TryRecompile(Compiler.BuildMode.Debug);
+    private bool TryRecompile()
+    {
+        SaveAll();
+        return CsProjectFile.TryRecompile(Compiler.BuildMode.Debug, DateTime.UtcNow.Ticks);
+    }
 
     private void UpdateSymbols(CsProjectFile project)
     {
         LocateSourceCodeFiles();
         EditorInitialization.UpdateSymbolPackage(this);
-    }
-
-    private bool RemoveSymbol(Guid guid)
-    {
-        if (!Symbols.Remove(guid, out _))
-            return false;
-
-        SymbolRegistry.EntriesEditable.Remove(guid);
-        SymbolUiRegistry.EntriesEditable.Remove(guid, out var symbolUi);
-
-        // todo - are connections still valid?
-        return true;
     }
 
     private void UpdateUiEntriesForSymbol(Symbol symbol)
@@ -154,12 +146,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     {
         var symbol = symbolUi.Symbol;
         SymbolUiRegistry.EntriesEditable[symbol.Id] = symbolUi;
-
-        if (SymbolUis.TryGetValue(symbolUi.Symbol.Id, out var oldSymbolUi))
-        {
-            // todo - are connections still valid?
-        }
-        
         SymbolUis[symbol.Id] = symbolUi; 
         UpdateUiEntriesForSymbol(symbol);
         RegisterCustomChildUi(symbol);

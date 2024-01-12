@@ -23,8 +23,8 @@ public class AssemblyInformation
     public bool TryGetType(Guid typeId, out Type type) => _operatorTypes.TryGetValue(typeId, out type);
 
     public IReadOnlyDictionary<Guid, Type> OperatorTypes => _operatorTypes;
-    private readonly Dictionary<Guid, Type> _operatorTypes;
-    private readonly Dictionary<string, Type> _types;
+    private Dictionary<Guid, Type> _operatorTypes;
+    private Dictionary<string, Type> _types;
     public IReadOnlyCollection<Type> Types => _types.Values;
 
     public Guid HomeGuid { get; private set; } = Guid.Empty;
@@ -33,7 +33,7 @@ public class AssemblyInformation
     private AssemblyLoadContext _loadContext;
     private ICompilationAssemblyResolver _assemblyResolver;
 
-    public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, bool skipTypes = false)
+    public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext, bool skipTypes = false)
     {
         Name = assemblyName.Name;
         Path = path;
@@ -41,9 +41,16 @@ public class AssemblyInformation
         Assembly = assembly;
         Directory = System.IO.Path.GetDirectoryName(path);
 
+        _loadContext = loadContext;
+
         if (skipTypes)
             return;
         
+        LoadTypes(path, assembly);
+    }
+
+    private void LoadTypes(string path, Assembly assembly)
+    {
         TryResolveReferences(path);
 
         try
@@ -94,7 +101,6 @@ public class AssemblyInformation
                                 new PackageCompilationAssemblyResolver()
                             };
         _assemblyResolver = new CompositeCompilationAssemblyResolver(resolvers);
-        _loadContext = AssemblyLoadContext.GetLoadContext(Assembly);
 
         if (_loadContext == null)
         {
@@ -104,44 +110,44 @@ public class AssemblyInformation
 
         _loadContext.Resolving += OnResolving;
         return;
+    }
 
-        Assembly OnResolving(AssemblyLoadContext context, AssemblyName name)
+    private Assembly OnResolving(AssemblyLoadContext context, AssemblyName name)
+    {
+        var library = DependencyContext.RuntimeLibraries.FirstOrDefault(NamesMatch);
+
+        if (library == null)
         {
-            var library = DependencyContext.RuntimeLibraries.FirstOrDefault(NamesMatch);
+            return null;
+        }
 
-            if (library == null)
+        var wrapper = new CompilationLibrary(
+                                             library.Type,
+                                             library.Name,
+                                             library.Version,
+                                             library.Hash,
+                                             library.RuntimeAssemblyGroups.SelectMany(g => g.AssetPaths),
+                                             library.Dependencies,
+                                             library.Serviceable);
+
+        var assemblies = new List<string>();
+        _assemblyResolver.TryResolveAssemblyPaths(wrapper, assemblies);
+        switch (assemblies.Count)
+        {
+            case 0:
+                return null;
+            case 1:
+                return context.LoadFromAssemblyPath(assemblies[0]);
+            default:
             {
+                Log.Error($"Multiple assemblies found for {name.Name}");
+                foreach (var assembly in assemblies)
+                    Log.Info($"\t{assembly}");
                 return null;
             }
-
-            var wrapper = new CompilationLibrary(
-                                                 library.Type,
-                                                 library.Name,
-                                                 library.Version,
-                                                 library.Hash,
-                                                 library.RuntimeAssemblyGroups.SelectMany(g => g.AssetPaths),
-                                                 library.Dependencies,
-                                                 library.Serviceable);
-
-            var assemblies = new List<string>();
-            _assemblyResolver.TryResolveAssemblyPaths(wrapper, assemblies);
-            switch (assemblies.Count)
-            {
-                case 0:
-                    return null;
-                case 1:
-                    return context.LoadFromAssemblyPath(assemblies[0]);
-                default:
-                {
-                    Log.Error($"Multiple assemblies found for {name.Name}");
-                    foreach (var assembly in assemblies)
-                        Log.Info($"\t{assembly}");
-                    return null;
-                }
-            }
-
-            bool NamesMatch(RuntimeLibrary runtime) => string.Equals(runtime.Name, name.Name, StringComparison.OrdinalIgnoreCase);
         }
+
+        bool NamesMatch(RuntimeLibrary runtime) => string.Equals(runtime.Name, name.Name, StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool TryGetGuidOfType(Type newType, out Guid guid)
@@ -189,4 +195,13 @@ public class AssemblyInformation
     
     private DependencyContext DependencyContext => _dependencyContext ??= DependencyContext.Load(Assembly);
     private DependencyContext _dependencyContext;
+
+    public void Unload()
+    {
+        _operatorTypes.Clear();
+        _types.Clear();
+        _loadContext.Resolving -= OnResolving;
+        _loadContext.Unload();
+        _loadContext = null;
+    }
 }

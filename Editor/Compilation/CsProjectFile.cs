@@ -22,6 +22,8 @@ internal class CsProjectFile
     private readonly List<DependencyInfo> _dependencies;
     public event Action<CsProjectFile> Recompiled;
 
+    private long _buildId = -1;
+
     public CsProjectFile(FileInfo file)
     {
         FullPath = file.FullName;
@@ -37,8 +39,16 @@ internal class CsProjectFile
 
     public FileInfo GetBuildTargetPath(Compiler.BuildMode buildMode)
     {
+        var directory = GetBuildTargetDirectory(buildMode);
+        return new FileInfo(Path.Combine(directory, $"{Name}.dll"));
+    }
+    
+    public string GetBuildTargetDirectory(Compiler.BuildMode buildMode)
+    {
         var buildModeStr = buildMode == Compiler.BuildMode.Debug ? "Debug" : "Release";
-        return new FileInfo(Path.Combine(Directory, "bin", buildModeStr, TargetFramework, $"{Name}.dll"));
+        return _buildId == -1 || Assembly == null
+                   ? Path.Combine(Directory, "bin", buildModeStr, TargetFramework) 
+                   : Path.Combine(Directory, "bin", _buildId.ToString(), buildModeStr, TargetFramework);
     }
 
     private string GetTargetFramework(string contents)
@@ -186,9 +196,24 @@ internal class CsProjectFile
     private const string PackageReferenceStart = "<PackageReference Include=\"";
 
     // todo - rate limit recompiles for when multiple files change. should change operator resources to projects or something
-    public bool TryRecompile(Compiler.BuildMode buildMode)
+    public bool TryRecompile(Compiler.BuildMode buildMode, long buildId = -1)
     {
-        return Compiler.TryCompile(this, buildMode);
+        var previousBuildId = _buildId;
+        var previousAssembly = Assembly;
+        _buildId = buildId;
+        var success = Compiler.TryCompile(this, buildMode);
+        
+        if(!success)
+        {
+            _buildId = previousBuildId;
+            //TryLoadAssembly(buildMode);
+        }
+        else
+        {
+            previousAssembly?.Unload();
+        }
+        
+        return success;
     }
 
     // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation
@@ -255,6 +280,7 @@ internal class CsProjectFile
         }
 
         Assembly = assembly;
+        
         Recompiled?.Invoke(this);
 
         return true;

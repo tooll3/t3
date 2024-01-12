@@ -132,6 +132,7 @@ internal static class EditorInitialization
             var csProjFiles = rootDirectories
                              .Where(Directory.Exists)
                              .SelectMany(x => Directory.EnumerateFiles(x, "*.csproj", SearchOption.AllDirectories))
+                             .Where(x => !x.Contains("{{USER}}"))
                              .ToArray();
 
             stopwatch.Stop();
@@ -280,10 +281,7 @@ internal static class EditorInitialization
         }
     }
 
-    internal static void UpdateSymbolPackage(EditableSymbolProject project)
-    {
-        UpdateSymbolPackages(project);
-    }
+    internal static void UpdateSymbolPackage(EditableSymbolProject project) => UpdateSymbolPackages(project);
 
     private static void UpdateSymbolPackages(params EditorSymbolPackage[] symbolPackages)
     {

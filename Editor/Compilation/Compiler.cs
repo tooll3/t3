@@ -9,7 +9,6 @@ internal static class Compiler
 {
     public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, Verbosity verbosity = Verbosity.Minimal)
     {
-        var fullPath = projectFile.FullPath;
         var workingDirectory = projectFile.Directory;
         
         const string configurationArgFmt = "--configuration {0}";
@@ -18,7 +17,7 @@ internal static class Compiler
 
 
         const string command = "dotnet";
-        string arguments = $"build \"{projectFile.FullPath}\" --nologo {buildModeArg} --verbosity {VerbosityArgs[verbosity]}";
+        string arguments = $"build \"{projectFile.FullPath}\" --nologo {buildModeArg} --verbosity {VerbosityArgs[verbosity]} --output \"{projectFile.GetBuildTargetDirectory(buildMode)}\"";
         
         var process = new Process
                           {

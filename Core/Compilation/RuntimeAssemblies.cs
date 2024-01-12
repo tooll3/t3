@@ -62,9 +62,10 @@ public class RuntimeAssemblies
     {
         try
         {
-            var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(name.Path);
+            var loadContext = new AssemblyLoadContext(name.AssemblyName.FullName, true);
+            var assembly = loadContext.LoadFromAssemblyPath(name.Path);
             Log.Debug($"Loaded assembly {name.AssemblyName.FullName}");
-            info = new AssemblyInformation(name.Path, name.AssemblyName, assembly);
+            info = new AssemblyInformation(name.Path, name.AssemblyName, assembly, loadContext);
             return true;
         }
         catch (Exception e)

@@ -176,6 +176,7 @@ namespace T3.Core.Operator
         public void UpdateInstanceType(Type instanceType)
         {
             InstanceType = instanceType;
+            
             Name = instanceType.Name;
             Log.Info($"New instance type name: {Name}");
             var newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<ConnectionEntry>)>();
@@ -190,7 +191,7 @@ namespace T3.Core.Operator
             {
                 inputs = (from inputInfo in inputInfos
                           let customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false)
-                          where customAttributes.Any()
+                          where customAttributes.Length != 0
                           select (inputInfo, (InputAttribute)customAttributes[0])).ToArray();
             }
             catch (Exception e)
