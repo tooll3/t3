@@ -8,7 +8,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Editor\Editor.csproj" />
-      <ProjectReference Include="..\lib\lib.csproj" />
+      <ProjectReference Include="..\lib\lib.csproj" >
+          <ExcludeAssets>All</ExcludeAssets>
+      </ProjectReference>
     </ItemGroup>
 
 </Project>

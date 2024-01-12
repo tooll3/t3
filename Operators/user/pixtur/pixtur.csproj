@@ -8,7 +8,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Core\Core.csproj" />
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll">
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll">
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.dll">
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll">
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.DXGI.dll">
+            <Private>False</Private>
+        </Reference>
     </ItemGroup>
 
 </Project>

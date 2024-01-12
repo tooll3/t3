@@ -106,7 +106,7 @@ namespace T3.Editor.Gui.UiHelpers
             private string _defaultNewProjectDirectory = DefaultProjectFolder;
             public string DefaultNewProjectDirectory => _defaultNewProjectDirectory ??= DefaultProjectFolder;
             
-            private static string DefaultProjectFolder => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "T3Projects");
+            private static readonly string DefaultProjectFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "T3Projects");
         }
 
         public enum ValueEditGizmos

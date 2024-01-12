@@ -10,7 +10,7 @@ using T3.Core.Resource;
 using DeviceContext = OpenGL.DeviceContext;
 using Resource = SharpDX.DXGI.Resource;
 
-namespace SpoutNDI.video
+namespace user.SpoutNDI.video
 {
     [Guid("13BE1E3F-861D-4350-A94E-E083637B3E55")]
     public class SpoutOutput : Instance<SpoutOutput>

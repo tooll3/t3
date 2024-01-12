@@ -1,7 +1,7 @@
 {
   "Name": "SpoutOutput",
   "Id": "13be1e3f-861d-4350-a94e-e083637b3e55",
-  "Namespace": "lib.io.video",
+  "Namespace": "user.SpoutNDI",
   "Inputs": [
     {
       "Id": "d4b5c642-9cb9-4f41-8739-edbb9c6c4857"/*Texture*/,

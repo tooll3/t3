@@ -5,14 +5,33 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RootNamespace>user.SpoutNDI</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Core.csproj"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll">
+            <Private>False</Private>
+        </Reference>
+        
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll">
+            <Private>False</Private>
+        </Reference>
+
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.dll">
+            <Private>False</Private>
+        </Reference>
+
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll">
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.DXGI.dll">
+            <Private>False</Private>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CppSharp" Version="1.0.1" />
+        <PackageReference Include="CppSharp" Version="1.0.1"/>
+        <PackageReference Include="CppSharp.Runtime" Version="1.1.5.3168"/>
         <PackageReference Include="NDILibDotNet6" Version="1.0.11"/>
         <PackageReference Include="OpenGL.Net" Version="0.8.4"/>
     </ItemGroup>

@@ -8,8 +8,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Editor\Editor.csproj" />
-      <ProjectReference Include="..\cynic\cynic.csproj" />
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll">
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll">
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Editor.dll">
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/ImGUI.NET.dll">
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\cynic\cynic.csproj">
+            <ExcludeAssets>All</ExcludeAssets>
+        </ProjectReference>
     </ItemGroup>
 
 </Project>

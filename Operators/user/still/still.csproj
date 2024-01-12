@@ -8,7 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Core\Core.csproj" />
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll" />
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll" />
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll" />
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Newtonsoft.Json.dll" />
     </ItemGroup>
 
 </Project>

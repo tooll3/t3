@@ -12,7 +12,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace SpoutNDI.video
+namespace user.SpoutNDI.video
 {
     [Guid("7567c3b0-9d91-40d2-899d-3a95b481d023")]
     public class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDropdownHolder

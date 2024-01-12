@@ -29,11 +29,11 @@ public class AssemblyInformation
 
     public Guid HomeGuid { get; private set; } = Guid.Empty;
     public bool HasHome => HomeGuid != Guid.Empty;
-    
+
     private AssemblyLoadContext _loadContext;
     private ICompilationAssemblyResolver _assemblyResolver;
 
-    public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly)
+    public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, bool skipTypes = false)
     {
         Name = assemblyName.Name;
         Path = path;
@@ -41,6 +41,9 @@ public class AssemblyInformation
         Assembly = assembly;
         Directory = System.IO.Path.GetDirectoryName(path);
 
+        if (skipTypes)
+            return;
+        
         TryResolveReferences(path);
 
         try
@@ -78,11 +81,9 @@ public class AssemblyInformation
     /// <param name="path">path to dll</param>
     private void TryResolveReferences(string path)
     {
-        var dependencyContext = DependencyContext.Load(Assembly);
-
-        if (dependencyContext == null)
+        if (DependencyContext == null)
         {
-            Log.Error($"Failed to load dependency context for assembly {Assembly.FullName}");
+            Log.Error($"Failed to load dependency context for assembly {AssemblyName.FullName}");
             return;
         }
 
@@ -97,7 +98,7 @@ public class AssemblyInformation
 
         if (_loadContext == null)
         {
-            Log.Error($"Failed to get load context for assembly {Assembly.FullName}");
+            Log.Error($"Failed to get load context for assembly {AssemblyName.FullName}");
             return;
         }
 
@@ -106,7 +107,7 @@ public class AssemblyInformation
 
         Assembly OnResolving(AssemblyLoadContext context, AssemblyName name)
         {
-            var library = dependencyContext.RuntimeLibraries.FirstOrDefault(NamesMatch);
+            var library = DependencyContext.RuntimeLibraries.FirstOrDefault(NamesMatch);
 
             if (library == null)
             {
@@ -185,4 +186,7 @@ public class AssemblyInformation
             this.Type = type;
         }
     }
+    
+    private DependencyContext DependencyContext => _dependencyContext ??= DependencyContext.Load(Assembly);
+    private DependencyContext _dependencyContext;
 }

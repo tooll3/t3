@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -25,7 +26,7 @@ internal static class EditorInitialization
 
         if (NeedsUserProject)
         {
-            var success= !TryCreateProject(name, out var project);
+            var success = !TryCreateProject(name, out var project);
             NeedsUserProject = success;
             if (success)
             {
@@ -89,55 +90,105 @@ internal static class EditorInitialization
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
     internal static bool TryInitialize(out Exception exception)
     {
+        Stopwatch stopwatch = new();
         UiRegistration.RegisterUiTypes();
 
         try
         {
-            #if IDE
-                CreateSymlinks();
-            #endif
-            
             // todo: change to load CsProjs from specific directories and specific nuget packages from a package directory
             //var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
             List<EditorSymbolPackage> operatorNugetPackages = new(); // "static" packages, remember to filter by operator vs non-operator assemblies
 
-            var rootDirectories = new[] { RuntimeAssemblies.Core.Directory, UserSettings.Config.DefaultNewProjectDirectory };
-            var csProjFiles = rootDirectories
-               .SelectMany(x => Directory.EnumerateFiles(x, "*.csproj", SearchOption.AllDirectories));
+            stopwatch.Start();
+            var coreAssemblyDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators"); // theoretically where the core libs assemblies will be
+            var rootDirectories = new[] { coreAssemblyDirectory, UserSettings.Config.DefaultNewProjectDirectory };
 
+            stopwatch.Stop();
+            Log.Debug($"Core directories initialized in {stopwatch.ElapsedMilliseconds}ms");
+            
+            
+            #if IDE
+            // add lib projects
+            stopwatch.Restart();
+            string t3ParentDirectory = GetT3ParentDirectory();
+            CreateSymlinks(t3ParentDirectory);
+            
+            stopwatch.Stop();
+            Log.Debug($"Created symlinks in {stopwatch.ElapsedMilliseconds}ms");
+            
+            stopwatch.Restart();
+
+            var operatorFolder = Path.Combine(t3ParentDirectory, "Operators");
+            rootDirectories = Directory.EnumerateDirectories(operatorFolder)
+                                       .Where(path => !path.EndsWith("user"))
+                                       .Concat(rootDirectories)
+                                       .ToArray();
+
+            stopwatch.Stop();
+            Log.Debug($"Found {rootDirectories.Length} root directories in {stopwatch.ElapsedMilliseconds}ms");
+            #endif
+
+
+            stopwatch.Restart();
+            var csProjFiles = rootDirectories
+                             .Where(Directory.Exists)
+                             .SelectMany(x => Directory.EnumerateFiles(x, "*.csproj", SearchOption.AllDirectories))
+                             .ToArray();
+
+            stopwatch.Stop();
+            Log.Debug($"Found {csProjFiles.Length} csproj files in {stopwatch.ElapsedMilliseconds}ms");
+
+            stopwatch.Restart();
             ConcurrentBag<EditableSymbolProject> projects = new();
             ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = new();
             csProjFiles
-               .AsParallel()
-               .ForAll(path =>
-                       {
-                           var csProjFile = new CsProjectFile(new FileInfo(path));
-                           var loaded = csProjFile.TryLoadAssembly(Compiler.BuildMode.Debug);
-                           if (!loaded)
-                           {
-                               loaded = csProjFile.TryRecompile(Compiler.BuildMode.Debug);
-                               if (!loaded)
-                                   return;
-                           }
+               .ToList()
+               .ForEach(path =>
+                        {
+                            stopwatch.Restart();
+                            var csProjFile = new CsProjectFile(new FileInfo(path));
+                            var loaded = csProjFile.TryLoadAssembly(Compiler.BuildMode.Debug);
+                            if (!loaded)
+                            {
+                                loaded = csProjFile.TryRecompile(Compiler.BuildMode.Debug);
+                                if (!loaded)
+                                {
+                                    stopwatch.Stop();
+                                    Log.Info($"Failed to load {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
+                                    return;
+                                }
+                            }
 
-                           if (csProjFile.IsOperatorAssembly)
-                           {
-                               var project = new EditableSymbolProject(csProjFile);
-                               projects.Add(project);
-                           }
-                           else
-                           {
-                               nonOperatorAssemblies.Add(csProjFile.Assembly);
-                           }
-                       });
+                            if (csProjFile.IsOperatorAssembly)
+                            {
+                                var project = new EditableSymbolProject(csProjFile);
+                                projects.Add(project);
+                            }
+                            else
+                            {
+                                nonOperatorAssemblies.Add(csProjFile.Assembly);
+                            }
+
+                            stopwatch.Stop();
+                            Log.Info($"Loaded {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
+                        });
+
+            stopwatch.Stop();
+            Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {stopwatch.ElapsedMilliseconds}ms");
             
-
             var allSymbolPackages = projects
                                    .Concat(operatorNugetPackages)
                                    .ToArray();
             // Load operators
+            stopwatch.Restart();
             InitializeCustomUis(nonOperatorAssemblies);
+            stopwatch.Stop();
+            Log.Debug($"Initialized custom uis in {stopwatch.ElapsedMilliseconds}ms");
+            
+            stopwatch.Restart();
             UpdateSymbolPackages(allSymbolPackages);
+            stopwatch.Stop();
+            Log.Debug($"Updated symbol packages in {stopwatch.ElapsedMilliseconds}ms");
 
             var activeProject = EditableSymbolProject.ActiveProject;
             // Create home
@@ -157,39 +208,49 @@ internal static class EditorInitialization
     }
 
     #if IDE
-    private static void CreateSymlinks()
+    private static void CreateSymlinks(string t3ParentDirectory)
     {
-        var projectParentDirectory = Path.Combine(RuntimeAssemblies.Core.Directory, "..", "..", "..", "..", "Operators");
+        Log.Debug($"Creating symlinks for t3 project in {t3ParentDirectory}");
+        var projectParentDirectory = Path.Combine(t3ParentDirectory, "Operators", "user");
         var directoryInfo = new DirectoryInfo(projectParentDirectory);
         if (!directoryInfo.Exists)
             throw new Exception($"Could not find project parent directory {projectParentDirectory}");
-        
+
+        Log.Debug($"Continuing creating symlinks for t3 project in {projectParentDirectory}");
         var targetDirectory = UserSettings.Config.DefaultNewProjectDirectory;
         Directory.CreateDirectory(targetDirectory);
 
-        foreach (var subDirectory in directoryInfo.EnumerateDirectories())
+        Log.Debug($"Beginning enumerating subdirectories of {directoryInfo}");
+        foreach (var subDirectory in directoryInfo.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
         {
             //symlink to user project directory
             var linkName = Path.Combine(targetDirectory, subDirectory.Name);
+            Log.Debug($"Target: {linkName} <- {subDirectory.FullName}");
             if (Directory.Exists(linkName))
                 continue;
             
+            Log.Debug($"Creating symlink: {linkName} <- {subDirectory.FullName}");
             Directory.CreateSymbolicLink(linkName, subDirectory.FullName);
         }
+    }
+
+    private static string GetT3ParentDirectory()
+    {
+        return Path.Combine(RuntimeAssemblies.CoreDirectory, "..", "..", "..", "..");
     }
     #endif
 
     private static void InitializeCustomUis(IReadOnlyCollection<AssemblyInformation> nonOperatorAssemblies)
     {
         var uiInitializerTypes = nonOperatorAssemblies
-                                                  .Where(x => x.Name != "Editor")
-                                                  .ToArray()
-                                                  .AsParallel()
-                                                  .SelectMany(assemblyInfo => assemblyInfo.Types
-                                                                                          .Where(type =>
-                                                                                                     type.IsAssignableTo(typeof(IOperatorUIInitializer)))
-                                                                                          .Select(type => new AssemblyConstructorInfo(assemblyInfo, type)))
-                                                  .ToList();
+                                .Where(x => x.Name != "Editor")
+                                .ToArray()
+                                .AsParallel()
+                                .SelectMany(assemblyInfo => assemblyInfo.Types
+                                                                        .Where(type =>
+                                                                                   type.IsAssignableTo(typeof(IOperatorUIInitializer)))
+                                                                        .Select(type => new AssemblyConstructorInfo(assemblyInfo, type)))
+                                .ToList();
 
         foreach (var constructorInfo in uiInitializerTypes)
         {

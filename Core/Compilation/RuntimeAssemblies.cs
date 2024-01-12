@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 using T3.Core.Logging;
@@ -8,17 +9,32 @@ namespace T3.Core.Compilation;
 
 public class RuntimeAssemblies
 {
-    public static readonly AssemblyInformation Core;
+    public static readonly string CorePath;
+    public static readonly string CoreDirectory;
     public static IReadOnlyList<AssemblyInformation> AllAssemblies { get; private set; } = Array.Empty<AssemblyInformation>();
+    public const string EnvironmentVariableName = "T3_ASSEMBLY_PATH";
 
     static RuntimeAssemblies()
     {
         var coreAssembly = typeof(RuntimeAssemblies).Assembly;
-        var coreAssemblyName = coreAssembly.GetName();
-        var path = coreAssembly.Location;
-        Core = new AssemblyInformation(path, coreAssemblyName, coreAssembly);
+        CorePath = coreAssembly.Location;
+
+        CoreDirectory = Path.GetDirectoryName(CorePath);
+        SetEnvironmentVariable(EnvironmentVariableName, CoreDirectory);
     }
-    
+
+    private static void SetEnvironmentVariable(string envVar, string envValue)
+    {
+        Environment.SetEnvironmentVariable(envVar, envValue, EnvironmentVariableTarget.Process);
+
+        // todo - this will not work on linux
+        var existing = Environment.GetEnvironmentVariable(envVar, EnvironmentVariableTarget.User);
+        if (existing == envValue)
+            return;
+        
+        Environment.SetEnvironmentVariable(envVar, envValue, EnvironmentVariableTarget.User);
+    }
+
     public static bool TryLoadAssemblyInformation(string path, out AssemblyInformation info)
     {
         AssemblyName assemblyName;
@@ -26,7 +42,7 @@ public class RuntimeAssemblies
         {
             assemblyName = AssemblyName.GetAssemblyName(path);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Log.Error($"Failed to get assembly name for {path}\n{e.Message}\n{e.StackTrace}");
             info = null;
@@ -38,7 +54,7 @@ public class RuntimeAssemblies
                                           AssemblyName = assemblyName,
                                           Path = path
                                       };
-        
+
         return TryLoadAssemblyInformation(assemblyNameAndPath, out info);
     }
 

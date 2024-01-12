@@ -1,7 +1,7 @@
 {
   "Name": "SpoutInput",
   "Id": "25307357-6f6c-45b1-a38d-de635510a845",
-  "Namespace": "lib.io.video",
+  "Namespace": "user.SpoutNDI",
   "Inputs": [
     {
       "Id": "f7a7a410-fb91-448c-a0fe-ba4278d82107"/*Command*/,

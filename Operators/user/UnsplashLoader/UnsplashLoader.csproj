@@ -4,17 +4,21 @@
         <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <RootNamespace>user.newemka980</RootNamespace>
+        <RootNamespace>UnsplashLoader</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll">
+      <PackageReference Include="unsplasharp.api" Version="0.7.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll" >
             <Private>False</Private>
         </Reference>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll">
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll" >
             <Private>False</Private>
         </Reference>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll">
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll" >
             <Private>False</Private>
         </Reference>
     </ItemGroup>

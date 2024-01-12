@@ -196,7 +196,7 @@ internal class CsProjectFile
     {
         var defaultHomeDir = Path.Combine(UserData.RootFolder, "default-home");
         var files = System.IO.Directory.EnumerateFiles(defaultHomeDir, "*");
-        string destinationDirectory = Path.Combine(parentDirectory, "user", projectName);
+        string destinationDirectory = Path.Combine(parentDirectory, projectName);
         destinationDirectory = Path.GetFullPath(destinationDirectory);
         System.IO.Directory.CreateDirectory(destinationDirectory);
 
@@ -208,17 +208,16 @@ internal class CsProjectFile
 
         const string namePlaceholder = "{{USER}}";
         const string guidPlaceholder = "{{GUID}}";
-        const string coreReferencePlaceholder = "{{CORE_REFERENCE}}";
+        const string defaultReferencesPlaceholder = "{{DEFAULT_REFERENCES}}";
 
-        string coreReference = RuntimeAssemblies.Core.Path;
-        string homeGuid = Guid.NewGuid().ToString();
+        var homeGuid = Guid.NewGuid().ToString();
         string csprojPath = null;
         foreach (var file in files)
         {
             string text = File.ReadAllText(file);
             text = text.Replace(namePlaceholder, projectName)
                        .Replace(guidPlaceholder, homeGuid)
-                       .Replace(coreReferencePlaceholder, coreReference);
+                       .Replace(defaultReferencesPlaceholder, CoreReferences);
 
             var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file));
             destinationFilePath = destinationFilePath.Replace(namePlaceholder, projectName)
@@ -254,11 +253,23 @@ internal class CsProjectFile
             Log.Error($"Could not load assembly at \"{assemblyFile.FullName}\"");
             return false;
         }
-        
-        // resolve dependencies 
+
         Assembly = assembly;
         Recompiled?.Invoke(this);
 
-        return gotAssembly;
+        return true;
     }
+
+    private const string ExpandedAssemblyDirectory = $"$({RuntimeAssemblies.EnvironmentVariableName})";
+    private const string PrivateTag = "<Private>True</Private>\n";
+    private const string EndReference = "</Reference>\n";
+    private const string BeginReference = $"<Reference Include=\"{ExpandedAssemblyDirectory}/";
+    private const string Ending = "\">\n" + PrivateTag + EndReference;
+    
+
+    private const string CoreReferences = BeginReference + "Core.dll" + Ending +
+                                          BeginReference + "Logging.dll" + Ending +
+                                          BeginReference + "SharpDX.dll" + Ending +
+                                          BeginReference + "SharpDX.Direct3D11.dll" + Ending +
+                                          BeginReference + "SharpDX.DXGI.dll" + Ending;
 }

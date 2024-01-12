@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="{{CORE_REFERENCE}}"/>
+      {{DEFAULT_REFERENCES}}
     </ItemGroup>
 
     <!--This copies all files in the `dependencies` folder *directly* into the output directory-->

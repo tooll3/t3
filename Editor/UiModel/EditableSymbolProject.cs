@@ -31,6 +31,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         if (!CsProjectFile.Assembly.HasHome)
             return false;
 
+        Log.Info($"Creating home for {CsProjectFile.Name}...");
         var homeGuid = CsProjectFile.Assembly.HomeGuid;
         var symbol = Symbols[homeGuid];
         RootInstance = symbol.CreateInstance(HomeInstanceId);
