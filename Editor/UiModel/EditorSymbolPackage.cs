@@ -19,42 +19,58 @@ internal class EditorSymbolPackage : StaticSymbolPackage
     {
     }
 
-    public void LoadUiFiles(List<SymbolJson.SymbolReadResult> newlyReadSymbols, out IReadOnlyCollection<SymbolUi> newlyReadSymbolUis)
+    public void LoadUiFiles(IEnumerable<Symbol> newlyReadSymbols, out IReadOnlyCollection<SymbolUi> newlyReadSymbolUis)
     {
-        var newSymbols = newlyReadSymbols.ToDictionary(result => result.Symbol.Id, result => result.Symbol);
+        var newSymbols = newlyReadSymbols.ToDictionary(result => result.Id, symbol => symbol);
+        var newSymbolsWithoutUis = new ConcurrentDictionary<Guid, Symbol>(newSymbols);
         Log.Debug($"{AssemblyInformation.Name}: Loading Symbol UIs from \"{Folder}\"");
-        newlyReadSymbolUis = Directory.EnumerateFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories)
-                                      .AsParallel()
-                                      .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
-                                      .Where(result => newSymbols.ContainsKey(result.Guid))
-                                      .Select(symbolUiJson =>
-                                              {
-                                                  var gotSymbolUi = SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, symbolUiJson.Guid, out var symbolUi);
-                                                  if (!gotSymbolUi)
-                                                  {
-                                                      Log.Error($"Error reading symbol Ui for {symbolUiJson.Guid} from file \"{symbolUiJson.FilePath}\"");
-                                                      return null;
-                                                  }
+        var newlyReadSymbolUiList = Directory.EnumerateFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories)
+                                             .AsParallel()
+                                             .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
+                                             .Where(result => newSymbols.ContainsKey(result.Guid))
+                                             .Select(symbolUiJson =>
+                                                     {
+                                                         var gotSymbolUi =
+                                                             SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, symbolUiJson.Guid, out var symbolUi);
+                                                         if (!gotSymbolUi)
+                                                         {
+                                                             Log.Error($"Error reading symbol Ui for {symbolUiJson.Guid} from file \"{symbolUiJson.FilePath}\"");
+                                                             return null;
+                                                         }
 
-                                                  symbolUi.UiFilePath = symbolUiJson.FilePath;
-                                                  symbolUiJson.Object = symbolUi;
-                                                  return symbolUiJson;
-                                              })
-                                      .Where(result =>
-                                             {
-                                                 if (result?.Object == null)
-                                                     return false;
+                                                         symbolUi.UiFilePath = symbolUiJson.FilePath;
+                                                         symbolUiJson.Object = symbolUi;
+                                                         return symbolUiJson;
+                                                     })
+                                             .Where(result =>
+                                                    {
+                                                        if (result?.Object == null)
+                                                            return false;
 
-                                                 var symbolUi = result.Object;
-                                                 return SymbolUis.TryAdd(symbolUi.Symbol.Id, symbolUi);
-                                             })
-                                      .Select(result => result!.Object)
-                                      .ToArray();
+                                                        var symbolUi = result.Object;
+                                                        newSymbolsWithoutUis.Remove(symbolUi.Symbol.Id, out _);
+                                                        return SymbolUis.TryAdd(symbolUi.Symbol.Id, symbolUi);
+                                                    })
+                                             .Select(result => result!.Object)
+                                             .ToList();
 
-        Log.Debug($"{AssemblyInformation.Name}: Loaded {newlyReadSymbolUis.Count} symbol UIs");
+        foreach (var (guid, symbol) in newSymbolsWithoutUis)
+        {
+            var symbolUi = new SymbolUi(symbol);
+
+            if (!SymbolUis.TryAdd(guid, symbolUi))
+            {
+                Log.Error($"{AssemblyInformation.Name}: Duplicate symbol UI for {symbol.Name}?");
+                continue;
+            }
+
+            newlyReadSymbolUiList.Add(symbolUi);
+        }
+
+        newlyReadSymbolUis = newlyReadSymbolUiList;
     }
 
-    protected static void RegisterCustomChildUi(Symbol symbol)
+    private static void RegisterCustomChildUi(Symbol symbol)
     {
         var valueInstanceType = symbol.InstanceType;
         if (typeof(IDescriptiveFilename).IsAssignableFrom(valueInstanceType))
@@ -85,11 +101,11 @@ internal class EditorSymbolPackage : StaticSymbolPackage
                 Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
         }
     }
-    
+
     protected override bool RemoveSymbol(Guid guid)
     {
-        return base.RemoveSymbol(guid) 
-               && SymbolUis.Remove(guid, out _) 
+        return base.RemoveSymbol(guid)
+               && SymbolUis.Remove(guid, out _)
                && SymbolUiRegistry.EntriesEditable.Remove(guid);
     }
 

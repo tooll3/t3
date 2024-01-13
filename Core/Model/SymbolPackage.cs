@@ -23,7 +23,7 @@ public abstract partial class SymbolPackage
         RegisterTypes();
     }
 
-    public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> newlyRead)
+    public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> newlyRead, out IReadOnlyCollection<Symbol> allNewSymbols)
     {
         Log.Debug($"{AssemblyInformation.Name}: Loading symbols...");
         // Check if there are symbols without a file, if yes add these. this is a copy
@@ -59,6 +59,7 @@ public abstract partial class SymbolPackage
         }
 
         newlyRead = new();
+        List<Symbol> allNewSymbolsList = new();
 
         if (newTypes.Count > 0)
         {
@@ -87,6 +88,7 @@ public abstract partial class SymbolPackage
 
                 newlyRead.Add(readSymbolResult.Result);
                 newTypes.Remove(symbol.Id);
+                allNewSymbolsList.Add(symbol);
                 symbol.SymbolPackage = this;
                 symbol.SymbolFilePath = readSymbolResult.Path;
             }
@@ -117,8 +119,10 @@ public abstract partial class SymbolPackage
                 Log.Debug($"new added symbol: {newType}");
 
             symbol.SymbolPackage = this;
+            allNewSymbolsList.Add(symbol);
         }
 
+        allNewSymbols = allNewSymbolsList;
         return;
 
         SymbolJsonResult ReadSymbolFromJsonFileResult(JsonFileResult<Symbol> jsonInfo)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,7 +39,7 @@ internal static class Compiler
                                           if (args.Data == null)
                                               return;
                                           
-                                          Log.Info(args.Data);
+                                          Console.WriteLine('\t' + args.Data);
                                           output.Add(args.Data);
                                       };
 

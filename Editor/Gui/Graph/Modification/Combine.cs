@@ -142,7 +142,10 @@ internal static class Combine
 
         var success = EditableSymbolProject.ActiveProject.TryCompile(newSource, newSymbolName, newSymbolId, nameSpace, out var newSymbol);
         if (!success)
+        {
+            Log.Error($"Could not compile new symbol '{newSymbolName}'");
             return;
+        }
 
         var newSymbolUi = SymbolUiRegistry.Entries[newSymbolId];
         newSymbolUi.Description = description;

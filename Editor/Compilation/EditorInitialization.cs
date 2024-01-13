@@ -8,6 +8,7 @@ using System.Linq;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
+using T3.Core.Operator;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -290,17 +291,19 @@ internal static class EditorInitialization
     private static void UpdateSymbolPackages(params EditorSymbolPackage[] symbolPackages)
     {
         ConcurrentDictionary<EditorSymbolPackage, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
+        ConcurrentDictionary<EditorSymbolPackage, IReadOnlyCollection<Symbol>> loadedOrCreatedSymbols = new();
         symbolPackages.AsParallel().ForAll(package => //pull out for non-editable ones too
                                            {
-                                               package.LoadSymbols(false, out var newlyRead);
+                                               package.LoadSymbols(false, out var newlyRead, out var allNewSymbols);
                                                loadedSymbols.TryAdd(package, newlyRead);
+                                               loadedOrCreatedSymbols.TryAdd(package, allNewSymbols);
                                            });
         loadedSymbols.AsParallel().ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
 
         ConcurrentDictionary<EditorSymbolPackage, IReadOnlyCollection<SymbolUi>> loadedSymbolUis = new();
         symbolPackages.AsParallel().ForAll(package =>
                                            {
-                                               package.LoadUiFiles(loadedSymbols[package], out var newlyRead);
+                                               package.LoadUiFiles(loadedOrCreatedSymbols[package], out var newlyRead);
                                                loadedSymbolUis.TryAdd(package, newlyRead);
                                            });
 
