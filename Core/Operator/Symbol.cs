@@ -27,6 +27,7 @@ namespace T3.Core.Operator
         public string PendingSource { get; set; }
         public string SymbolFilePath { get; set; }
         public SymbolPackage SymbolPackage { get; internal set; }
+        public bool IsHome { get; set; }
 
         public readonly List<Instance> InstancesOfSymbol = new();
         public readonly List<SymbolChild> Children = new();
@@ -72,11 +73,12 @@ namespace T3.Core.Operator
             }
         }
 
-        public Symbol(Type instanceType, Guid symbolId, Guid[] orderedInputIds = null)
+        public Symbol(Type instanceType, Guid symbolId, Guid[] orderedInputIds = null , bool isHome = false)
         {
             InstanceType = instanceType;
             Name = instanceType.Name;
             Id = symbolId;
+            IsHome = isHome;
 
             // input identified by base interface
             Type inputSlotType = typeof(IInputSlot);
@@ -175,6 +177,12 @@ namespace T3.Core.Operator
 
         public void UpdateInstanceType(Type instanceType)
         {
+            if (IsHome)
+            {
+                Log.Warning($"Skipping updating home instance type: {Name}");
+                return;
+            }
+
             InstanceType = instanceType;
             
             Name = instanceType.Name;
@@ -304,7 +312,7 @@ namespace T3.Core.Operator
                 if (parent == null || !parent.Children.Contains(instance))
                 {
                     // This happens when recompiling ops...
-                    //Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
+                    Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
                     continue;
                 }
 
@@ -706,6 +714,12 @@ namespace T3.Core.Operator
 
         public void CreateAnimationUpdateActionsForSymbolInstances()
         {
+            if (IsHome)
+            {
+                Log.Warning("Skipping creation of animation update actions for home symbol");
+                return;
+            }
+            
             var parents = new HashSet<Symbol>();
             foreach (var instance in InstancesOfSymbol)
             {
