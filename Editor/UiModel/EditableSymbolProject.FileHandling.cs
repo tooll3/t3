@@ -67,7 +67,7 @@ internal sealed partial class EditableSymbolProject
 
     private void WriteSymbolUi(SymbolUi symbolUi, string filePathFmt)
     {
-        var uiFilePath = string.Format(filePathFmt, '_' + symbolUi.Symbol.Id.ToString() + SymbolUiExtension);
+        var uiFilePath = string.Format(filePathFmt, SymbolUiExtension);
 
         MoveIfNecessary(symbolUi.UiFilePath, uiFilePath);
         symbolUi.UiFilePath = uiFilePath;
