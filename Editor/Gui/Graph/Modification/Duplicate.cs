@@ -124,6 +124,9 @@ internal static class Duplicate
         {
             newSelectables[i].PosOnCanvas = sourceSelectables[i].PosOnCanvas; // todo: check if this is enough or if id check needed
         }
+        newSymbolUi.FlagAsModified();
+        compositionUi.FlagAsModified();
+        EditableSymbolProject.ActiveProject.MarkAsModified();
 
         return newSymbol;
     }

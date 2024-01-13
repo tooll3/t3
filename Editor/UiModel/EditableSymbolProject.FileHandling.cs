@@ -121,7 +121,7 @@ internal sealed partial class EditableSymbolProject
     /// <returns></returns>
     private static bool MoveIfNecessary(string previousPath, string path)
     {
-        if (previousPath == path)
+        if (previousPath == path || string.IsNullOrWhiteSpace(previousPath))
             return false;
 
         Log.Debug($" Moving {previousPath} -> {path} ...");

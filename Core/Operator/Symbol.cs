@@ -297,7 +297,7 @@ namespace T3.Core.Operator
                 //
                 if (parent == null)
                 {
-                    Log.Error($"Warning: Skipping instance without parent {instance.Symbol}");
+                    Log.Error($"Warning: Skipping instance without parent {instance.Symbol.Name}");
                     continue;
                 }
 

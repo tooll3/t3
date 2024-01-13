@@ -46,6 +46,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         try
         {
             File.WriteAllText(path, sourceCode);
+            MarkAsModified();
         }
         catch
         {
@@ -147,8 +148,10 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         var symbol = symbolUi.Symbol;
         SymbolUiRegistry.EntriesEditable[symbol.Id] = symbolUi;
         SymbolUis[symbol.Id] = symbolUi; 
-        UpdateUiEntriesForSymbol(symbol);
-        RegisterCustomChildUi(symbol);
+        //UpdateUiEntriesForSymbol(symbol);
+        //RegisterCustomChildUi(symbol);
+        
+        Log.Debug($"Replaced symbol ui for {symbol.Name}");
     }
 
     public void RenameNameSpace(NamespaceTreeNode node, string nameSpace, EditableSymbolProject newDestinationProject)
@@ -178,7 +181,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         throw new NotImplementedException();
     }
 
-    private void MarkAsModified()
+    public void MarkAsModified()
     {
         _needsCompilation = true;
     }

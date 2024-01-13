@@ -16,8 +16,8 @@ namespace T3.Editor.Compilation;
 
 internal static class EditorInitialization
 {
-    private static readonly List<EditableSymbolProject> EditableSymbolDatasList = new();
-    public static readonly IReadOnlyList<EditableSymbolProject> EditableSymbolPackages = EditableSymbolDatasList;
+    private static readonly List<EditableSymbolProject> EditableSymbolProjectsRw = new();
+    public static readonly IReadOnlyList<EditableSymbolProject> EditableSymbolPackages = EditableSymbolProjectsRw;
     internal static bool NeedsUserProject;
 
     internal static void CreateOrMigrateProject(object sender, UserNameDialog.NameChangedEventArgs nameArgs)
@@ -30,7 +30,7 @@ internal static class EditorInitialization
             NeedsUserProject = success;
             if (success)
             {
-                EditableSymbolDatasList.Add(project);
+                EditableSymbolProjectsRw.Add(project);
                 EditableSymbolProject.ActiveProjectRw = project;
             }
         }
@@ -175,10 +175,14 @@ internal static class EditorInitialization
 
             stopwatch.Stop();
             Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {stopwatch.ElapsedMilliseconds}ms");
-            
-            var allSymbolPackages = projects
+
+            var projectList = projects.ToArray();
+            var allSymbolPackages = projectList
                                    .Concat(operatorNugetPackages)
                                    .ToArray();
+            
+            EditableSymbolProjectsRw.AddRange(projectList);
+            
             // Load operators
             stopwatch.Restart();
             InitializeCustomUis(nonOperatorAssemblies);
