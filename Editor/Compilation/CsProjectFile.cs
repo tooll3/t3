@@ -24,7 +24,7 @@ internal class CsProjectFile
     private readonly List<DependencyInfo> _dependencies;
     public event Action<CsProjectFile> Recompiled;
 
-    private long _buildId = DateTime.UtcNow.Ticks;
+    private int _buildId = GetNewBuildId();
     private readonly string _releaseRootDirectory;
     private readonly string _debugRootDirectory;
     private readonly string _dllName;
@@ -40,7 +40,7 @@ internal class CsProjectFile
         _dependencies = ParseDependencies(Contents);
         RootNamespace = GetRootNamespace(Contents);
         TargetFramework = GetTargetFramework(Contents);
-        
+
         _releaseRootDirectory = Path.Combine(Directory, "bin", "Release");
         _debugRootDirectory = Path.Combine(Directory, "bin", "Debug");
         _dllName = Name + ".dll";
@@ -51,12 +51,12 @@ internal class CsProjectFile
         var directory = GetBuildTargetDirectory(buildMode);
         return new FileInfo(Path.Combine(directory, _dllName));
     }
-    
+
     public string GetBuildTargetDirectory(Compiler.BuildMode buildMode)
     {
         return Path.Combine(GetRootDirectory(buildMode), _buildId.ToString(CultureInfo.InvariantCulture), TargetFramework);
     }
-    
+
     private string GetRootDirectory(Compiler.BuildMode buildMode) => buildMode == Compiler.BuildMode.Debug ? _debugRootDirectory : _releaseRootDirectory;
 
     private string GetTargetFramework(string contents)
@@ -73,6 +73,9 @@ internal class CsProjectFile
 
         return contents[start..end];
     }
+
+    // int to keep directory name smaller
+    private static int GetNewBuildId() => unchecked((int)DateTime.UtcNow.Ticks);
 
     private string GetRootNamespace(string contents)
     {
@@ -204,14 +207,14 @@ internal class CsProjectFile
     private const string PackageReferenceStart = "<PackageReference Include=\"";
 
     // todo - rate limit recompiles for when multiple files change
-    public bool TryRecompile(Compiler.BuildMode buildMode, long buildId = -1)
+    public bool TryRecompile(Compiler.BuildMode buildMode)
     {
         var previousBuildId = _buildId;
         var previousAssembly = Assembly;
-        _buildId = buildId;
+        _buildId = GetNewBuildId();
         var success = Compiler.TryCompile(this, buildMode);
-        
-        if(!success)
+
+        if (!success)
         {
             _buildId = previousBuildId;
         }
@@ -220,7 +223,7 @@ internal class CsProjectFile
             // may be unnecessary, will not unload if assembly contains Home because Home type is never unloaded even when project is recompiled
             previousAssembly?.Unload();
         }
-        
+
         return success;
     }
 
@@ -270,7 +273,7 @@ internal class CsProjectFile
 
         return new CsProjectFile(new FileInfo(csprojPath));
     }
-    
+
     public bool TryLoadLatestAssembly(Compiler.BuildMode buildMode)
     {
         var rootDir = new DirectoryInfo(GetRootDirectory(buildMode));
@@ -280,16 +283,33 @@ internal class CsProjectFile
         var compatibleDirectories = rootDir.EnumerateDirectories($"*{TargetFramework}", SearchOption.AllDirectories).ToArray();
         if (compatibleDirectories.Length == 0)
             return false;
-        
+
         var latestDll = compatibleDirectories.SelectMany(x => x.EnumerateFiles(_dllName)).MaxBy(x => x.LastWriteTime);
         if (latestDll == null)
             return false;
-        
+
         var loaded = TryLoadAssembly(buildMode, latestDll);
-        
-        if(!loaded)
+
+        if (!loaded)
+        {
             Log.Error($"Could not load latest assembly at \"{latestDll.FullName}\"");
-        
+        }
+        else
+        {
+            var latestDir = latestDll.Directory!.FullName;
+
+            // delete all other dll directories
+            compatibleDirectories
+               .AsParallel()
+               .ForAll(directory =>
+                       {
+                           if (directory.FullName == latestDir)
+                               return;
+
+                           directory.Delete(recursive: true);
+                       });
+        }
+
         return loaded;
     }
 
@@ -312,7 +332,7 @@ internal class CsProjectFile
         }
 
         Assembly = assembly;
-        
+
         Recompiled?.Invoke(this);
 
         return true;
@@ -323,7 +343,6 @@ internal class CsProjectFile
     private const string EndReference = "</Reference>\n";
     private const string BeginReference = $"<Reference Include=\"{ExpandedAssemblyDirectory}/";
     private const string Ending = "\">\n" + PrivateTag + EndReference;
-    
 
     private const string CoreReferences = BeginReference + "Core.dll" + Ending +
                                           BeginReference + "Logging.dll" + Ending +
