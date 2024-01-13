@@ -34,7 +34,7 @@ namespace T3.Editor.Compilation
                 return;
             }
 
-            foreach (var package in EditorInitialization.EditableSymbolPackages)
+            foreach (var package in ProjectSetup.EditableSymbolPackages)
             {
                 package.RenameNameSpace(node, nameSpace, targetPackage);
             }
@@ -42,7 +42,7 @@ namespace T3.Editor.Compilation
 
         private static bool IsEditableTargetNamespace(NamespaceTreeNode node, out EditableSymbolProject targetProject)
         {
-            var namespaceInfos = EditorInitialization.EditableSymbolPackages
+            var namespaceInfos = ProjectSetup.EditableSymbolPackages
                                                      .Select(package => new PackageNamespaceInfo(package, package.CsProjectFile.RootNamespace));
 
             string targetNamespace = node.GetAsString();
@@ -70,13 +70,13 @@ namespace T3.Editor.Compilation
         /// </summary>
         public static void UpdateChangedOperators()
         {
-            foreach (var project in EditorInitialization.EditableSymbolPackages)
+            foreach (var project in ProjectSetup.EditableSymbolPackages)
             {
                 project.ExecutePendingUpdates();
             }
 
             return;
-            var failedProjects = EditorInitialization.EditableSymbolPackages.ToList();
+            var failedProjects = ProjectSetup.EditableSymbolPackages.ToList();
             var failedRecompilationCount = failedProjects.Count;
             var previousFailedRecompilationCount = -1;
 

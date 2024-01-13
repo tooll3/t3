@@ -39,7 +39,7 @@ public static class T3Ui
 {
     static T3Ui()
     {
-        _userNameDialog.UserNameChanged += EditorInitialization.CreateOrMigrateProject;
+        _userNameDialog.UserNameChanged += ProjectSetup.CreateOrMigrateProject;
     }
 
     public static void InitializeEnvironment()
@@ -141,7 +141,7 @@ public static class T3Ui
         #endif
         _createFromTemplateDialog.Draw();
 
-        if (!UserSettings.IsUserNameDefined() || EditorInitialization.NeedsUserProject)
+        if (!UserSettings.IsUserNameDefined() || ProjectSetup.NeedsUserProject)
         {
             UserSettings.Config.UserName = Environment.UserName;
             _userNameDialog.ShowNextFrame();
@@ -403,7 +403,7 @@ public static class T3Ui
             SaveStopwatch.Restart();
 
             // Todo - parallelize? 
-            foreach (var package in EditorInitialization.EditableSymbolPackages)
+            foreach (var package in ProjectSetup.EditableSymbolPackages)
             {
                 if (saveAll)
                     package.SaveAll();

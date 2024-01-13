@@ -38,7 +38,9 @@ namespace T3.Editor.Gui.Graph.Modification
             var resultJsonString = string.Empty;
             var containerOp = new Symbol(typeof(object), Guid.NewGuid());
             var newContainerUi = new SymbolUi(containerOp);
-            SymbolUiRegistry.EntriesEditable.Add(newContainerUi.Symbol.Id, newContainerUi);
+            
+            if(!SymbolUiRegistry.EntriesEditable.TryAdd(newContainerUi.Symbol.Id, newContainerUi))
+                throw new Exception("Could not add new container to SymbolUiRegistry. Guid collision!");
 
             var compositionSymbolUi = SymbolUiRegistry.Entries[symbolId];
             var cmd = new CopySymbolChildrenCommand(compositionSymbolUi,
@@ -66,7 +68,7 @@ namespace T3.Editor.Gui.Graph.Modification
                 }
             }
 
-            SymbolUiRegistry.EntriesEditable.Remove(newContainerUi.Symbol.Id);
+            SymbolUiRegistry.EntriesEditable.Remove(newContainerUi.Symbol.Id, out _);
             return resultJsonString;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.UiModel;
@@ -8,63 +9,69 @@ namespace T3.Editor.Gui.Graph.Interaction
 {
     public static class ExampleSymbolLinking
     {
+        // Todo: unlink Examples implementation from naming - this should be done in a different way via attribute, guid links, etc.
         public static void UpdateExampleLinks()
         {
             ExampleSymbols.Clear();
 
             const string exampleSuffix = "Example";
             const string examplesSuffix = "Examples";
+            
 
-            var potentialExamples = new List<(string correspondingSymbolName, Symbol exampleSymbol)>();
+            var potentialExamples = new List<(Range correspondingNameRange, Symbol exampleSymbol)>();
 
             var symbolUiCollection = SymbolUiRegistry.Entries.Values;
-            Dictionary<string, Symbol> symbolsByName = new(capacity: SymbolUiRegistry.Entries.Count);
+            Dictionary<int, List<Symbol>> symbolsByName = new(capacity: SymbolUiRegistry.Entries.Count);
             foreach (var symbolUi in symbolUiCollection)
             {
-                var symbol = symbolUi.Symbol;
-                var name = symbol.Name;
-                
-                symbolsByName.Add(name, symbol);
-                
-                var endsWithExample = name.EndsWith(exampleSuffix);
+                var potentialExampleSymbol = symbolUi.Symbol;
+                var name = potentialExampleSymbol.Name;
+                var hashCode = name.GetHashCode();
 
-                if (endsWithExample)
+                if (!symbolsByName.TryGetValue(hashCode, out var symbolsWithName))
                 {
-                    var correspondingSymbolName = name.Substring(0, name.Length - exampleSuffix.Length);
-                    potentialExamples.Add((correspondingSymbolName, symbol));
+                    symbolsWithName = [];
+                    symbolsByName.Add(hashCode, symbolsWithName);
+                }
+                
+                symbolsWithName.Add(potentialExampleSymbol);
+
+                var lastChar = name[^1];
+                var endsWithS = lastChar == 's';
+                var endsWithE = lastChar == 'e';
+                if(!endsWithS && !endsWithE)
                     continue;
-                }
-                
-                var endsWithExamples = name.EndsWith(examplesSuffix);
 
-                if (endsWithExamples)
-                {
-                    var correspondingSymbolName = name.Substring(0, name.Length - examplesSuffix.Length);
-                    potentialExamples.Add((correspondingSymbolName, symbol));
-                }
+                var index = endsWithS 
+                                ? name.IndexOf(examplesSuffix, StringComparison.Ordinal) 
+                                : name.IndexOf(exampleSuffix, StringComparison.Ordinal);
+                if (index < 0)
+                    continue;
+
+                potentialExamples.Add((..index, potentialExampleSymbol));
             }
 
-            Log.Debug($"Found {potentialExamples.Count.ToString()} potential examples");
-            
-            foreach (var potentialExample in potentialExamples)
+            foreach (var (correspondingSymbolNameRange, exampleSymbol) in potentialExamples)
             {
-                var gotSymbol = symbolsByName.TryGetValue(potentialExample.correspondingSymbolName, out var symbol);
-                
+                var name = exampleSymbol.Name[correspondingSymbolNameRange];
+                var gotSymbol = symbolsByName.TryGetValue(name.GetHashCode(), out var symbolsWithName);
+
                 if (!gotSymbol)
                     continue;
 
-                var hasExampleList = ExampleSymbols.TryGetValue(symbol.Id, out var exampleList);
-
-                if (!hasExampleList)
+                foreach (var symbol in symbolsWithName)
                 {
-                    exampleList = new();
-                    ExampleSymbols.Add(symbol.Id, exampleList);
+                    if (!ExampleSymbols.TryGetValue(symbol.Id, out var exampleList))
+                    {
+                        exampleList = [];
+                        ExampleSymbols.Add(symbol.Id, exampleList);
+                    }
+
+                    exampleList.Add(exampleSymbol.Id);
                 }
-                
-                exampleList.Add(potentialExample.exampleSymbol.Id);
             }
 
-            Log.Debug($"Found examples for {ExampleSymbols.Count} operators");
+            Log.Debug($"Found {ExampleSymbols.Sum(x=> x.Value.Count)} examples for {ExampleSymbols.Count} operators out of {potentialExamples.Count} potential examples");
         }
 
         public static Dictionary<Guid, List<Guid>> ExampleSymbols { get; } = new(50);

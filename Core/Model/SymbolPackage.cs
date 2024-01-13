@@ -30,32 +30,27 @@ public abstract partial class SymbolPackage
         var operatorTypes = AssemblyInformation.OperatorTypes.ToDictionary();
 
         Dictionary<Guid, Type> newTypes = new();
-        Dictionary<Guid, Symbol> foundSymbols = new();
 
+        var removedSymbolIds = new HashSet<Guid>(Symbols.Keys);
         foreach (var (guid, type) in operatorTypes)
         {
-            if (Symbols.Count > 0 && Symbols.Remove(guid, out var symbol))
+            if (Symbols.Count > 0 && Symbols.TryGetValue(guid, out var symbol))
             {
-                SymbolRegistry.EntriesEditable.Remove(guid);
-                foundSymbols.Add(guid, symbol);
+                removedSymbolIds.Remove(guid);
                 symbol.UpdateInstanceType(type);
                 symbol.CreateAnimationUpdateActionsForSymbolInstances();
-                //UpdateUiEntriesForSymbol(symbol);
             }
             else
             {
                 // it's a new type!!
                 newTypes.Add(guid, type);
             }
-
-            //UpdateUiEntriesForSymbol(symbol);
         }
 
         // remaining symbols have been removed from the assembly
-        while (Symbols.Count > 0)
+        foreach(var symbolId in removedSymbolIds)
         {
-            var guid = Symbols.Keys.First();
-            RemoveSymbol(guid);
+            RemoveSymbol(symbolId);
         }
 
         newlyRead = new();
@@ -64,12 +59,13 @@ public abstract partial class SymbolPackage
         if (newTypes.Count > 0)
         {
             var symbolFiles = Directory.EnumerateFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
-            var symbolsRead = symbolFiles.AsParallel()
-                                     .Select(JsonFileResult<Symbol>.ReadAndCreate)
-                                     .Where(result => newTypes.ContainsKey(result.Guid))
-                                     .Select(ReadSymbolFromJsonFileResult)
-                                     .Where(symbolReadResult => symbolReadResult.Result.Symbol is not null)
-                                     .ToList(); // Execute and bring back to main thread
+            var symbolsRead = symbolFiles
+                             .AsParallel()
+                             .Select(JsonFileResult<Symbol>.ReadAndCreate)
+                             .Where(result => newTypes.ContainsKey(result.Guid))
+                             .Select(ReadSymbolFromJsonFileResult)
+                             .Where(symbolReadResult => symbolReadResult.Result.Symbol is not null)
+                             .ToList(); // Execute and bring back to main thread
 
             Log.Debug($"{AssemblyInformation.Name}: Registering loaded symbols...");
 
@@ -145,10 +141,7 @@ public abstract partial class SymbolPackage
 
     protected virtual bool RemoveSymbol(Guid guid)
     {
-        if (!Symbols.Remove(guid, out _))
-            return false;
-
-        return SymbolRegistry.EntriesEditable.Remove(guid);
+        return Symbols.Remove(guid, out _) && SymbolRegistry.EntriesEditable.Remove(guid, out _);
     }
 
     public void ApplySymbolChildren(List<SymbolJson.SymbolReadResult> symbolsRead)

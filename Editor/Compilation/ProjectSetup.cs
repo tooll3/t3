@@ -15,7 +15,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation;
 
-internal static class EditorInitialization
+internal static class ProjectSetup
 {
     private static readonly List<EditableSymbolProject> EditableSymbolProjectsRw = new();
     public static readonly IReadOnlyList<EditableSymbolProject> EditableSymbolPackages = EditableSymbolProjectsRw;
@@ -93,6 +93,10 @@ internal static class EditorInitialization
     {
         Stopwatch stopwatch = new();
         UiRegistration.RegisterUiTypes();
+        #if DEBUG
+        Stopwatch totalStopwatch = new();
+        totalStopwatch.Start();
+        #endif
 
         try
         {
@@ -105,17 +109,16 @@ internal static class EditorInitialization
 
             stopwatch.Stop();
             Log.Debug($"Core directories initialized in {stopwatch.ElapsedMilliseconds}ms");
-            
-            
+
             #if IDE
             // add lib projects
             stopwatch.Restart();
-            string t3ParentDirectory = GetT3ParentDirectory();
+            var t3ParentDirectory = GetT3ParentDirectory();
             CreateSymlinks(t3ParentDirectory);
-            
+
             stopwatch.Stop();
             Log.Debug($"Created symlinks in {stopwatch.ElapsedMilliseconds}ms");
-            
+
             stopwatch.Restart();
 
             var operatorFolder = Path.Combine(t3ParentDirectory, "Operators");
@@ -127,7 +130,6 @@ internal static class EditorInitialization
             stopwatch.Stop();
             Log.Debug($"Found {rootDirectories.Length} root directories in {stopwatch.ElapsedMilliseconds}ms");
             #endif
-
 
             stopwatch.Restart();
             var csProjFiles = rootDirectories
@@ -148,11 +150,9 @@ internal static class EditorInitialization
                         {
                             stopwatch.Restart();
                             var csProjFile = new CsProjectFile(new FileInfo(path));
-                            var loaded = csProjFile.TryLoadAssembly(Compiler.BuildMode.Debug);
-                            if (!loaded)
+                            if (!csProjFile.TryLoadLatestAssembly(Compiler.BuildMode.Debug))
                             {
-                                loaded = csProjFile.TryRecompile(Compiler.BuildMode.Debug);
-                                if (!loaded)
+                                if (!csProjFile.TryRecompile(Compiler.BuildMode.Debug))
                                 {
                                     stopwatch.Stop();
                                     Log.Info($"Failed to load {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
@@ -174,33 +174,45 @@ internal static class EditorInitialization
                             Log.Info($"Loaded {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
                         });
 
-            stopwatch.Stop();
-            Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {stopwatch.ElapsedMilliseconds}ms");
+            #if DEBUG
+            Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {totalStopwatch.ElapsedMilliseconds}ms");
+            #endif
 
             var projectList = projects.ToArray();
             var allSymbolPackages = projectList
                                    .Concat(operatorNugetPackages)
                                    .ToArray();
-            
+
             EditableSymbolProjectsRw.AddRange(projectList);
-            
+
             // Load operators
             stopwatch.Restart();
             InitializeCustomUis(nonOperatorAssemblies);
             stopwatch.Stop();
             Log.Debug($"Initialized custom uis in {stopwatch.ElapsedMilliseconds}ms");
-            
+
             stopwatch.Restart();
             UpdateSymbolPackages(allSymbolPackages);
             stopwatch.Stop();
             Log.Debug($"Updated symbol packages in {stopwatch.ElapsedMilliseconds}ms");
 
             var activeProject = EditableSymbolProject.ActiveProject;
+            
+            #if DEBUG
+            totalStopwatch.Stop();
+            Log.Debug($"Total load time pre-home: {totalStopwatch.ElapsedMilliseconds}ms");
+            #endif
+            
+            stopwatch.Start();
             // Create home
             if (activeProject == null || !activeProject.TryCreateHome())
             {
                 NeedsUserProject = true;
             }
+            
+            stopwatch.Stop();
+            if(!NeedsUserProject)
+                Log.Debug($"Created home in {stopwatch.ElapsedMilliseconds}ms");
 
             exception = null;
             return true;
@@ -233,7 +245,7 @@ internal static class EditorInitialization
             Log.Debug($"Target: {linkName} <- {subDirectory.FullName}");
             if (Directory.Exists(linkName))
                 continue;
-            
+
             Log.Debug($"Creating symlink: {linkName} <- {subDirectory.FullName}");
             Directory.CreateSymbolicLink(linkName, subDirectory.FullName);
         }
@@ -292,26 +304,39 @@ internal static class EditorInitialization
     {
         ConcurrentDictionary<EditorSymbolPackage, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
         ConcurrentDictionary<EditorSymbolPackage, IReadOnlyCollection<Symbol>> loadedOrCreatedSymbols = new();
-        symbolPackages.AsParallel().ForAll(package => //pull out for non-editable ones too
-                                           {
-                                               package.LoadSymbols(false, out var newlyRead, out var allNewSymbols);
-                                               loadedSymbols.TryAdd(package, newlyRead);
-                                               loadedOrCreatedSymbols.TryAdd(package, allNewSymbols);
-                                           });
-        loadedSymbols.AsParallel().ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
+        symbolPackages
+           .AsParallel()
+           .ForAll(package => //pull out for non-editable ones too
+                   {
+                       package.LoadSymbols(false, out var newlyRead, out var allNewSymbols);
+                       loadedSymbols.TryAdd(package, newlyRead);
+                       loadedOrCreatedSymbols.TryAdd(package, allNewSymbols);
+                   });
+        
+        loadedSymbols
+           .AsParallel()
+           .ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
 
         ConcurrentDictionary<EditorSymbolPackage, IReadOnlyCollection<SymbolUi>> loadedSymbolUis = new();
-        symbolPackages.AsParallel().ForAll(package =>
-                                           {
-                                               package.LoadUiFiles(loadedOrCreatedSymbols[package], out var newlyRead);
-                                               loadedSymbolUis.TryAdd(package, newlyRead);
-                                           });
+        symbolPackages
+           .AsParallel()
+           .ForAll(package =>
+                   {
+                       package.LoadUiFiles(loadedOrCreatedSymbols[package], out var newlyRead);
+                       loadedSymbolUis.TryAdd(package, newlyRead);
+                   });
 
+        loadedSymbolUis
+           .AsParallel()
+           .ForAll(pair =>
+                   {
+                       if(pair.Key is EditableSymbolProject project)
+                           project.LocateSourceCodeFiles();
+                   });
+        
         foreach (var (symbolPackage, symbolUis) in loadedSymbolUis)
         {
             symbolPackage.RegisterUiSymbols(enableLog: false, symbolUis);
-            if (symbolPackage is EditableSymbolProject project)
-                project.LocateSourceCodeFiles();
         }
     }
 

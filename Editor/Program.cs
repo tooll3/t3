@@ -129,7 +129,7 @@ namespace T3.Editor
             Log.Debug($"About to initialize T3 UI");
 
             // Initialize UI and load complete symbol model
-            if (!EditorInitialization.TryInitialize(out var uiException))
+            if (!ProjectSetup.TryInitialize(out var uiException))
             {
                 Log.Error(uiException.Message + "\n\n" + uiException.StackTrace);
                 var innerException = uiException.InnerException?.Message.Replace("\\r", "\r") ?? string.Empty;

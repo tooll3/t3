@@ -1103,7 +1103,8 @@ namespace T3.Editor.Gui.Graph
                     return;
                 }
                     
-                SymbolRegistry.EntriesEditable.Add(containerSymbol.Id, containerSymbol);
+                if(!SymbolRegistry.EntriesEditable.TryAdd(containerSymbol.Id, containerSymbol))
+                    throw new Exception($"Failed to add symbol for {containerSymbol.Name}");
 
                 var symbolUiJson = jArray[1];
                 var hasContainerSymbolUi = SymbolUiJson.TryReadSymbolUi(symbolUiJson, out var containerSymbolUi);
@@ -1114,15 +1115,17 @@ namespace T3.Editor.Gui.Graph
                 }
                     
                 var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                SymbolUiRegistry.EntriesEditable.Add(containerSymbolUi.Symbol.Id, containerSymbolUi);
+                if(!SymbolUiRegistry.EntriesEditable.TryAdd(containerSymbolUi.Symbol.Id, containerSymbolUi))
+                    throw new Exception($"Failed to add symbol ui for {containerSymbolUi.Symbol.Name}");
+                
                 var cmd = new CopySymbolChildrenCommand(containerSymbolUi,
                                                         null,
                                                         containerSymbolUi.Annotations.Values.ToList(),
                                                         compositionSymbolUi,
                                                         InverseTransformPositionFloat(ImGui.GetMousePos()));
                 cmd.Do(); // FIXME: Shouldn't this be UndoRedoQueue.AddAndExecute() ? 
-                SymbolUiRegistry.EntriesEditable.Remove(containerSymbolUi.Symbol.Id);
-                SymbolRegistry.EntriesEditable.Remove(containerSymbol.Id);
+                SymbolUiRegistry.EntriesEditable.Remove(containerSymbolUi.Symbol.Id, out _);
+                SymbolRegistry.EntriesEditable.Remove(containerSymbol.Id, out _);
 
                 // Select new operators
                 NodeSelection.Clear();

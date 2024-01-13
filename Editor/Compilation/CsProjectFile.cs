@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.UserData;
@@ -22,7 +24,10 @@ internal class CsProjectFile
     private readonly List<DependencyInfo> _dependencies;
     public event Action<CsProjectFile> Recompiled;
 
-    private long _buildId = -1;
+    private long _buildId = DateTime.UtcNow.Ticks;
+    private readonly string _releaseRootDirectory;
+    private readonly string _debugRootDirectory;
+    private readonly string _dllName;
 
     public CsProjectFile(FileInfo file)
     {
@@ -35,21 +40,24 @@ internal class CsProjectFile
         _dependencies = ParseDependencies(Contents);
         RootNamespace = GetRootNamespace(Contents);
         TargetFramework = GetTargetFramework(Contents);
+        
+        _releaseRootDirectory = Path.Combine(Directory, "bin", "Release");
+        _debugRootDirectory = Path.Combine(Directory, "bin", "Debug");
+        _dllName = Name + ".dll";
     }
 
-    public FileInfo GetBuildTargetPath(Compiler.BuildMode buildMode)
+    private FileInfo GetBuildTargetPath(Compiler.BuildMode buildMode)
     {
         var directory = GetBuildTargetDirectory(buildMode);
-        return new FileInfo(Path.Combine(directory, $"{Name}.dll"));
+        return new FileInfo(Path.Combine(directory, _dllName));
     }
     
     public string GetBuildTargetDirectory(Compiler.BuildMode buildMode)
     {
-        var buildModeStr = buildMode == Compiler.BuildMode.Debug ? "Debug" : "Release";
-        return _buildId == -1 || Assembly == null
-                   ? Path.Combine(Directory, "bin", buildModeStr, TargetFramework) 
-                   : Path.Combine(Directory, "bin", _buildId.ToString(), buildModeStr, TargetFramework);
+        return Path.Combine(GetRootDirectory(buildMode), _buildId.ToString(CultureInfo.InvariantCulture), TargetFramework);
     }
+    
+    private string GetRootDirectory(Compiler.BuildMode buildMode) => buildMode == Compiler.BuildMode.Debug ? _debugRootDirectory : _releaseRootDirectory;
 
     private string GetTargetFramework(string contents)
     {
@@ -195,7 +203,7 @@ internal class CsProjectFile
     private const string ProjectReferenceStart = "<ProjectReference Include=\"";
     private const string PackageReferenceStart = "<PackageReference Include=\"";
 
-    // todo - rate limit recompiles for when multiple files change. should change operator resources to projects or something
+    // todo - rate limit recompiles for when multiple files change
     public bool TryRecompile(Compiler.BuildMode buildMode, long buildId = -1)
     {
         var previousBuildId = _buildId;
@@ -206,10 +214,10 @@ internal class CsProjectFile
         if(!success)
         {
             _buildId = previousBuildId;
-            //TryLoadAssembly(buildMode);
         }
         else
         {
+            // may be unnecessary, will not unload if assembly contains Home because Home type is never unloaded even when project is recompiled
             previousAssembly?.Unload();
         }
         
@@ -262,10 +270,34 @@ internal class CsProjectFile
 
         return new CsProjectFile(new FileInfo(csprojPath));
     }
-
-    public bool TryLoadAssembly(Compiler.BuildMode buildMode)
+    
+    public bool TryLoadLatestAssembly(Compiler.BuildMode buildMode)
     {
-        var assemblyFile = GetBuildTargetPath(buildMode);
+        var rootDir = new DirectoryInfo(GetRootDirectory(buildMode));
+        if (!rootDir.Exists)
+            return false;
+
+        var compatibleDirectories = rootDir.EnumerateDirectories($"*{TargetFramework}", SearchOption.AllDirectories).ToArray();
+        if (compatibleDirectories.Length == 0)
+            return false;
+        
+        var latestDll = compatibleDirectories.SelectMany(x => x.EnumerateFiles(_dllName)).MaxBy(x => x.LastWriteTime);
+        if (latestDll == null)
+            return false;
+        
+        var loaded = TryLoadAssembly(buildMode, latestDll);
+        
+        if(!loaded)
+            Log.Error($"Could not load latest assembly at \"{latestDll.FullName}\"");
+        
+        return loaded;
+    }
+
+    public bool TryLoadAssembly(Compiler.BuildMode buildMode) => TryLoadAssembly(buildMode, null);
+
+    private bool TryLoadAssembly(Compiler.BuildMode buildMode, FileInfo assemblyFile)
+    {
+        assemblyFile ??= GetBuildTargetPath(buildMode);
         if (!assemblyFile.Exists)
         {
             Log.Error($"Could not find assembly at \"{assemblyFile.FullName}\"");

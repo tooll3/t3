@@ -79,7 +79,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
         }
     }
 
-    public void RegisterUiSymbols(bool enableLog, IReadOnlyCollection<SymbolUi> newSymbolUis)
+    public void RegisterUiSymbols(bool enableLog, IEnumerable<SymbolUi> newSymbolUis)
     {
         Log.Debug($@"{AssemblyInformation.Name}: Registering UI entries...");
 
@@ -106,7 +106,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
     {
         return base.RemoveSymbol(guid)
                && SymbolUis.Remove(guid, out _)
-               && SymbolUiRegistry.EntriesEditable.Remove(guid);
+               && SymbolUiRegistry.EntriesEditable.Remove(guid, out _);
     }
 
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();

@@ -127,21 +127,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     private void UpdateSymbols(CsProjectFile project)
     {
         LocateSourceCodeFiles();
-        EditorInitialization.UpdateSymbolPackage(this);
-    }
-
-    private void UpdateUiEntriesForSymbol(Symbol symbol)
-    {
-        if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
-        {
-            symbolUi.UpdateConsistencyWithSymbol();
-        }
-        else
-        {
-            symbolUi = new SymbolUi(symbol);
-            SymbolUiRegistry.EntriesEditable.Add(symbol.Id, symbolUi);
-            SymbolUis.TryAdd(symbol.Id, symbolUi);
-        }
+        ProjectSetup.UpdateSymbolPackage(this);
     }
 
     public void ReplaceSymbolUi(SymbolUi symbolUi)

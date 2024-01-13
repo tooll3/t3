@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -320,6 +321,6 @@ namespace T3.Editor.UiModel
         public static IReadOnlyDictionary<Guid, SymbolUi> Entries => EntriesEditable;
         
         // split up to track changes more easily
-        internal static Dictionary<Guid, SymbolUi> EntriesEditable { get; } = new(1000);
+        internal static ConcurrentDictionary<Guid, SymbolUi> EntriesEditable { get; } = new(-1, 1000);
     }
 }
