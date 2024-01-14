@@ -55,44 +55,20 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             }
 
 
-            List<float> bins = default;
             var mode = (InputModes)InputBand.GetValue(context).Clamp(0, Enum.GetNames(typeof(InputModes)).Length - 1);
-            switch (mode)
-            {
-                case InputModes.RawFft:
-                    bins = AudioAnalysis.FftGainBuffer == null
-                                ? _emptyList
-                                : AudioAnalysis.FftGainBuffer.ToList();
 
-                    break;
+            var bins2 = mode switch
+                            {
+                                InputModes.RawFft                => AudioAnalysis.FftGainBuffer,
+                                InputModes.NormalizedFft         => AudioAnalysis.FftNormalizedBuffer,
+                                InputModes.FrequencyBands        => AudioAnalysis.FrequencyBands,
+                                InputModes.FrequencyBandsPeaks   => AudioAnalysis.FrequencyBandPeaks,
+                                InputModes.FrequencyBandsAttacks => AudioAnalysis.FrequencyBandAttacks,
+                                _                                => null
+                            };
 
-                case InputModes.NormalizedFft:
-                    bins = AudioAnalysis.FftNormalizedBuffer == null
-                                ? _emptyList
-                                : AudioAnalysis.FftNormalizedBuffer.ToList();
-                    break;
-
-                case InputModes.FrequencyBands:
-                    bins = AudioAnalysis.FrequencyBands == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBands.ToList();
-                    break;
-
-                case InputModes.FrequencyBandsPeaks:
-                    bins = AudioAnalysis.FrequencyBandPeaks == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBandPeaks.ToList();
-
-                    break;
-
-                case InputModes.FrequencyBandsAttacks:
-                    bins = AudioAnalysis.FrequencyBandAttacks == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBandAttacks.ToList();
-
-                    break;
-            }
-
+            var bins = bins2 == null ? _emptyList : bins2.ToList();
+            
             var threshold = Threshold.GetValue(context);
             var minTimeBetweenHits = MinTimeBetweenHits.GetValue(context);
             

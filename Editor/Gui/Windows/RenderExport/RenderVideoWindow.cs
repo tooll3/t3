@@ -3,6 +3,8 @@ using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Logging;
+using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -45,7 +47,7 @@ public class RenderVideoWindow : RenderHelperWindow
         }
         
 
-        // custom parameters for this renderer
+        // Custom parameters for this renderer
         FormInputs.AddInt("Bitrate", ref _bitrate, 0, 25000000, 1000);
         {
             var duration = FrameCount / Fps;
@@ -61,13 +63,14 @@ public class RenderVideoWindow : RenderHelperWindow
         ImGui.Separator();
 
 
-
         if (!_isExporting)
         {
             if (ImGui.Button("Start Export"))
             {
                 if (ValidateOrCreateTargetFolder(_targetFile))
                 {
+                    _previousPlaybackSpeed = Playback.Current.PlaybackSpeed;
+                    Playback.Current.PlaybackSpeed = 1;
                     _isExporting = true;
                     _exportStartedTime = Playback.RunTimeInSecs;
                     FrameIndex = 0;
@@ -82,8 +85,6 @@ public class RenderVideoWindow : RenderHelperWindow
                         // FIXME: Allow floating point FPS in a future version
                         _videoWriter.Framerate = (int)Fps;
                     }
-
-                    //SaveCurrentFrameAndAdvance(ref mainTexture);
                 }
             }
         }
@@ -116,6 +117,7 @@ public class RenderVideoWindow : RenderHelperWindow
             {
                 _videoWriter?.Dispose();
                 _videoWriter = null;
+                Playback.Current.PlaybackSpeed = _previousPlaybackSpeed;
             }
         }
         
@@ -148,7 +150,7 @@ public class RenderVideoWindow : RenderHelperWindow
     {
         if (Playback.OpNotReady)
         {
-            //Log.Debug("Waiting for operators to complete");
+            Log.Debug("Waiting for operators to complete");
             return true;
         }
         try
@@ -215,4 +217,5 @@ public class RenderVideoWindow : RenderHelperWindow
 
     private static Mp4VideoWriter _videoWriter = null;
     private static string _lastHelpString = string.Empty;
+    private double _previousPlaybackSpeed;
 }

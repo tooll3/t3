@@ -44,6 +44,8 @@ public class RenderSequenceWindow : RenderHelperWindow
             {
                 if (ValidateOrCreateTargetFolder(_targetFolder))
                 {
+                    _previousPlaybackSpeed = Playback.Current.PlaybackSpeed;
+                    Playback.Current.PlaybackSpeed = 1;
                     _isExporting = true;
                     _exportStartedTime = Playback.RunTimeInSecs;
                     FrameIndex = 0;
@@ -80,6 +82,7 @@ public class RenderSequenceWindow : RenderHelperWindow
             if (!IsExporting &&  ScreenshotWriter.SavingComplete)
             {
                 ScreenshotWriter.Dispose();
+                Playback.Current.PlaybackSpeed = _previousPlaybackSpeed;
             }
         }
 
@@ -127,4 +130,5 @@ public class RenderSequenceWindow : RenderHelperWindow
 
     private static ScreenshotWriter.FileFormats _fileFormat;
     private static string _lastHelpString = string.Empty;
+    private double _previousPlaybackSpeed;
 }
