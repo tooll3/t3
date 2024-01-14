@@ -55,7 +55,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float4 biasedA = GetBiasGain(lerp(hash41u(phaseIndex ), hash41u(phaseIndex + 1), t), BiasAndGain.x, BiasAndGain.y);
     float4 biasedB = GetBiasGain(lerp(hash41u(phaseIndex + _PRIME0 ), hash41u(phaseIndex + _PRIME0 + 1), t), BiasAndGain.x, BiasAndGain.y);
 
-    float amount = Amount * p.Selected;
+    float amount = Amount * lerp( UseSelection, p.Selected,1);
     float4 rot = p.Rotation;
     
     biasedA -= OffsetMode * 0.5;
@@ -75,6 +75,11 @@ void main(uint3 i : SV_DispatchThreadID)
     p.Color = ClampColorsEtc ? saturate(rgba) : rgba;
 
     p.W += biasedA.w * RandomizeW * amount;
+
+    if(ClampColorsEtc && !isnan(p.W)) {
+        p.W = max(0, p.W);
+
+    }
     p.Extend += float3(biasedB.w, biasedA.w, biasedA.z) * RandomizeExtend * amount; // Not ideal... distribution overlap
 
     // Rotation

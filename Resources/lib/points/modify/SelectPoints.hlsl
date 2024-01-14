@@ -69,76 +69,72 @@ float Bias2(float x, float bias)
 
     //ResultPoints[i.x] = SourcePoints[i.x];
 
-    if (isnan(p.W))
+    if (!isnan(p.W))
     {
-        return;
-    }
+        float3 posInObject = p.Position;
 
-    float3 posInObject = p.Position;
+        float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
 
-    float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
+        float s = 1;
 
-    float s = 1;
+        if (VolumeShape < VolumeSphere)
+        {
+            float distance = length(posInVolume);
+            s = smoothstep(1 + FallOff, 1, distance);
+        }
+        else if (VolumeShape < VolumeBox)
+        {
+            float3 t = abs(posInVolume);
+            float distance = max(max(t.x, t.y), t.z) + Phase;
+            s = smoothstep(1 + FallOff, 1, distance);
+        }
+        else if (VolumeShape < VolumePlane)
+        {
+            float distance = posInVolume.y;
+            s = smoothstep(FallOff, 0, distance);
+        }
+        else if (VolumeShape < VolumeZebra)
+        {
+            float distance = 1 - abs(mod(posInVolume.y * 1 + Phase, 2) - 1);
+            s = smoothstep(Threshold + 0.5 + FallOff, Threshold + 0.5, distance);
+        }
+        else if (VolumeShape < VolumeNoise)
+        {
+            float3 noiseLookup = (posInVolume * 0.91 + Phase);
+            float noise = snoise(noiseLookup);
+            s = smoothstep(Threshold + FallOff, Threshold, noise);
+        }
 
-    if (VolumeShape < VolumeSphere)
-    {
-        float distance = length(posInVolume);
-        s = smoothstep(1 + FallOff, 1, distance);
-    }
-    else if (VolumeShape < VolumeBox)
-    {
-        float3 t = abs(posInVolume);
-        float distance = max(max(t.x, t.y), t.z) + Phase;
-        s = smoothstep(1 + FallOff, 1, distance);
-    }
-    else if (VolumeShape < VolumePlane)
-    {
-        float distance = posInVolume.y;
-        s = smoothstep(FallOff, 0, distance);
-    }
-    else if (VolumeShape < VolumeZebra)
-    {
-        float distance = 1 - abs(mod(posInVolume.y * 1 + Phase, 2) - 1);
-        s = smoothstep(Threshold + 0.5 + FallOff, Threshold + 0.5, distance);
-    }
-    else if (VolumeShape < VolumeNoise)
-    {
-        float3 noiseLookup = (posInVolume * 0.91 + Phase);
-        float noise = snoise(noiseLookup);
-        s = smoothstep(Threshold + FallOff, Threshold, noise);
-    }
+        s = Bias2(s, Bias);
 
-    s = Bias2(s, Bias);
+        float selected = p.Selected;
+        if (SelectMode < ModeOverride)
+        {
+            s *= Strength;
+        }
+        else if (SelectMode < ModeAdd)
+        {
+            s += selected * Strength;
+        }
+        else if (SelectMode < ModeSub)
+        {
+            s = selected - s * Strength;
+        }
+        else if (SelectMode < ModeMultiply)
+        {
+            s = lerp(selected, selected * s, Strength);
+        }
+        else if (SelectMode < ModeInvert)
+        {
+            s = s * (1 - selected);
+        }
 
-    float w = p.W;
-    if (SelectMode < ModeOverride)
-    {
-        s *= Strength;
+        p.Selected = (DiscardNonSelected > 0.5 && s <= 0)
+                        ? sqrt(-1)
+                    : (ClampResult > 0.5)
+                        ? saturate(s)
+                        : s;
     }
-    else if (SelectMode < ModeAdd)
-    {
-        s += w * Strength;
-    }
-    else if (SelectMode < ModeSub)
-    {
-        s = w - s * Strength;
-    }
-    else if (SelectMode < ModeMultiply)
-    {
-        s = lerp(w, w * s, Strength);
-    }
-    else if (SelectMode < ModeInvert)
-    {
-        s = s * (1 - w);
-    }
-
-    float newW = (DiscardNonSelected > 0.5 && s <= 0)
-                     ? sqrt(-1)
-                 : (ClampResult > 0.5)
-                     ? saturate(s)
-                     : s;
-
-    p.W = newW;
 
     ResultPoints[i.x] = p;
 }

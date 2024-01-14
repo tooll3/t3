@@ -2,20 +2,6 @@
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
 #include "lib/shared/quat-functions.hlsl"
-
-// cbuffer Transforms : register(b0)
-// {
-//     float4x4 CameraToClipSpace;
-//     float4x4 ClipSpaceToCamera;
-//     float4x4 WorldToCamera;
-//     float4x4 CameraToWorld;
-//     float4x4 WorldToClipSpace;
-//     float4x4 ClipSpaceToWorld;
-//     float4x4 ObjectToWorld;
-//     float4x4 WorldToObject;
-//     float4x4 ObjectToCamera;
-//     float4x4 ObjectToClipSpace;
-// };
   
 cbuffer Params : register(b0)
 {
@@ -29,7 +15,7 @@ cbuffer Params : register(b0)
 
     float3 NoiseOffset;
 
-    float UseWAsWeight;
+    float UseSelection;
 
 }
 
@@ -79,19 +65,16 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-
-    //float3 variationOffset = hash31((float)(i.x%1234)/0.123 ) * Variation;
     float3 variationOffset = hash41u(i.x).xyz * Variation;
 
     Point p = SourcePoints[i.x];
 
-    float weight = UseWAsWeight < 0 ? lerp(1, 1- p.W, -UseWAsWeight) 
-                                : lerp(1, p.W, UseWAsWeight);
+    float weight = UseSelection < 0 ? lerp(1, 1- p.Selected, -UseSelection) 
+                                : lerp(1, p.Selected, UseSelection);
 
     float3 offset;;
     float4 newRotation = p.Rotation;
 
-    //float4 posInWorld = mul(float4(p.position ,1), ObjectToWorld);
     GetTranslationAndRotation(weight , p.Position + variationOffset, p.Rotation, offset, newRotation);
 
     p.Position += offset;
