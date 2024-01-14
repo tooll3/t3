@@ -17,8 +17,8 @@ public class AssemblyInformation
     public readonly string Name;
     public readonly string Path;
     public readonly string Directory;
-    public readonly AssemblyName AssemblyName;
-    public readonly Assembly Assembly;
+    private readonly AssemblyName _assemblyName;
+    private readonly Assembly _assembly;
 
     public bool TryGetType(Guid typeId, out Type type) => _operatorTypes.TryGetValue(typeId, out type);
 
@@ -31,14 +31,14 @@ public class AssemblyInformation
     public bool HasHome => HomeGuid != Guid.Empty;
 
     private AssemblyLoadContext _loadContext;
-    private ICompilationAssemblyResolver _assemblyResolver;
+    private CompositeCompilationAssemblyResolver _assemblyResolver;
 
     public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext, bool skipTypes = false)
     {
         Name = assemblyName.Name;
         Path = path;
-        AssemblyName = assemblyName;
-        Assembly = assembly;
+        _assemblyName = assemblyName;
+        _assembly = assembly;
         Directory = System.IO.Path.GetDirectoryName(path);
 
         _loadContext = loadContext;
@@ -90,7 +90,7 @@ public class AssemblyInformation
     {
         if (DependencyContext == null)
         {
-            Log.Error($"Failed to load dependency context for assembly {AssemblyName.FullName}");
+            Log.Error($"Failed to load dependency context for assembly {_assemblyName.FullName}");
             return;
         }
 
@@ -104,7 +104,7 @@ public class AssemblyInformation
 
         if (_loadContext == null)
         {
-            Log.Error($"Failed to get load context for assembly {AssemblyName.FullName}");
+            Log.Error($"Failed to get load context for assembly {_assemblyName.FullName}");
             return;
         }
 
@@ -193,7 +193,7 @@ public class AssemblyInformation
         }
     }
     
-    private DependencyContext DependencyContext => _dependencyContext ??= DependencyContext.Load(Assembly);
+    private DependencyContext DependencyContext => _dependencyContext ??= DependencyContext.Load(_assembly);
     private DependencyContext _dependencyContext;
 
     public void Unload()
