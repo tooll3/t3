@@ -4,7 +4,6 @@ using SharpDX.Direct3D11;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
-using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -17,7 +16,7 @@ public class RenderVideoWindow : RenderHelperWindow
     public RenderVideoWindow()
     {
         Config.Title = "Render Video";
-        _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.";
+        _lastHelpString = RenderHelperWindow.PreferredInputFormatHint;
     }
 
 
@@ -26,26 +25,17 @@ public class RenderVideoWindow : RenderHelperWindow
         DrawTimeSetup();
 
         var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
-        if (mainTexture == null)
+     
+        if(FindIssueWithTexture(mainTexture, MfVideoWriter.SupportedFormats, out var warning))
         {
-            CustomComponents.HelpText("You have selected an operator that does not render. " +
-                                      "Hint: Use a [ConvertFormat] with format R8G8B8A8_UNorm for fast exports.");
+            CustomComponents.HelpText(warning);
             return;
         }
 
         Int2 size = default;
-        try
-        {
-            var currentDesc = mainTexture.Description;
-            size.Width = currentDesc.Width;
-            size.Height = currentDesc.Height;
-        }
-        catch
-        {
-            CustomComponents.HelpText("You have selected an operator that does not render. " +
-                                      "Hint: Use a [ConvertFormat] with format R8G8B8A8_UNorm for fast exports.");
-        }
-        
+        var currentDesc = mainTexture!.Description;
+        size.Width = currentDesc.Width;
+        size.Height = currentDesc.Height;
 
         // Custom parameters for this renderer
         FormInputs.AddInt("Bitrate", ref _bitrate, 0, 25000000, 1000);

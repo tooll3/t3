@@ -21,12 +21,21 @@ using MF = SharpDX.MediaFoundation;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
+
 internal abstract class MfVideoWriter : IDisposable
 {
     /** Skip a certain number of images at the beginning since the
      * final content will only appear after several buffer flips*/
     public const int SkipImages = 0;
 
+    public static List<Format> SupportedFormats { get; }= new()
+                                                                       {
+                                                                           SharpDX.DXGI.Format.R8G8B8A8_UNorm,
+                                                                           SharpDX.DXGI.Format.R16G16B16A16_UNorm,
+                                                                           SharpDX.DXGI.Format.R16G16B16A16_Float,
+                                                                           SharpDX.DXGI.Format.B8G8R8A8_UNorm
+                                                                       };
+    
     public string FilePath { get; }
     
     protected MfVideoWriter(string filePath, Int2 videoPixelSize)
@@ -50,14 +59,10 @@ internal abstract class MfVideoWriter : IDisposable
                 throw new InvalidOperationException("Empty image handed over");
             }
 
-            if (currentDesc.Format != SharpDX.DXGI.Format.R8G8B8A8_UNorm &&
-                currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_UNorm &&
-                currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_Float && 
-                currentDesc.Format != SharpDX.DXGI.Format.B8G8R8A8_UNorm)
+            if(!SupportedFormats.Contains(currentDesc.Format))
             {
                 throw new InvalidOperationException($"Unknown format: {currentDesc.Format.ToString()}. " +
-                                                    "Only R8G8B8A8_UNorm, R16G16B16A16_UNorm and R16G16B16A16_Float " +
-                                                    "input formats are supported so far.");
+                                                    "Only " + string.Join(", ",SupportedFormats) + " are supported so far.");
             }
 
             if (SinkWriter == null)
@@ -562,4 +567,3 @@ internal class Mp4VideoWriter : MfVideoWriter
     protected override bool FlipY => true;
 }
 
-// namespace

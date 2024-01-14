@@ -15,10 +15,9 @@ public class RenderSequenceWindow : RenderHelperWindow
     public RenderSequenceWindow()
     {
         Config.Title = "Render Sequence";
-        _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.";
+        _lastHelpString = PreferredInputFormatHint;
     }
-
-
+    
     protected override void DrawContent()
     {
         DrawTimeSetup();
@@ -31,11 +30,11 @@ public class RenderSequenceWindow : RenderHelperWindow
         ImGui.Separator();
 
         var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
-        if (mainTexture == null)
+        if (FindIssueWithTexture(mainTexture, ScreenshotWriter.SupportedInputFormats, out var warning))
         {
-            CustomComponents.HelpText("You have selected an operator that does not render. " +
-                                      "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for fast exports.");
+            CustomComponents.HelpText(warning);
             return;
+            
         }
 
         if (!IsExporting)

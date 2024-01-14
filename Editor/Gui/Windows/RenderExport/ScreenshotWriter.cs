@@ -18,7 +18,14 @@ public static class ScreenshotWriter
         Png,
         Jpg,
     }
-
+    public static List<Format> SupportedInputFormats { get; }= new()
+                                                       {
+                                                           SharpDX.DXGI.Format.R8G8B8A8_UNorm,
+                                                           SharpDX.DXGI.Format.R16G16B16A16_UNorm,
+                                                           SharpDX.DXGI.Format.R16G16B16A16_Float,
+                                                           SharpDX.DXGI.Format.B8G8R8A8_UNorm
+                                                       };
+    
     public static bool SavingComplete => _saveQueue.Count == 0;
     
     public static bool StartSavingToFile(Texture2D texture2d, string filepath, FileFormats format)
@@ -109,7 +116,6 @@ public static class ScreenshotWriter
         
         try
         {
-
             switch (_currentDesc.Format)
             {
                 case Format.R16G16B16A16_Float:
@@ -156,6 +162,31 @@ public static class ScreenshotWriter
                         }
                     }
                     break;
+                
+                case SharpDX.DXGI.Format.B8G8R8A8_UNorm:
+                    if (request.FileFormat == FileFormats.Png)
+                    {
+                        // Note: dataBox.RowPitch and outputStream.RowPitch can diverge if width is not divisible by 16.
+                        for (int loopY = 0; loopY < height; loopY++)
+                        {
+                            imageStream.Position = (long)(loopY) * dataBox.RowPitch;
+                            outDataStream.WriteRange(imageStream.ReadRange<byte>(rowStride));
+                        }
+                    }
+                    else
+                    {
+                        for (var y1 = 0; y1 < height; y1++)
+                        {
+                            imageStream.Position = (long)(y1) * dataBox.RowPitch;
+                            for (var x1 = 0; x1 < width; x1++)
+                            {
+                                outDataStream.WriteRange(imageStream.ReadRange<byte>(3));
+                                imageStream.ReadByte();
+                            }
+                        }
+                    }
+
+                    break;                
 
                 case Format.R16G16B16A16_UNorm:
                     for (var y1 = 0; y1 < height; y1++)
@@ -166,6 +197,7 @@ public static class ScreenshotWriter
                             imageStream.ReadByte(); var r = (byte)imageStream.ReadByte();
                             imageStream.ReadByte(); var g = (byte)imageStream.ReadByte();
                             imageStream.ReadByte(); var b = (byte)imageStream.ReadByte();
+                            
                             outDataStream.WriteByte(b);
                             outDataStream.WriteByte(g);
                             outDataStream.WriteByte(r);
