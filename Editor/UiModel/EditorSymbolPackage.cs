@@ -112,5 +112,6 @@ internal class EditorSymbolPackage : StaticSymbolPackage
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
 
     public override bool IsModifiable => false;
+    protected override bool InEditor => true;
     protected const string SymbolUiExtension = ".t3ui";
 }

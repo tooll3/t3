@@ -17,10 +17,32 @@ public abstract partial class SymbolPackage
     protected abstract AssemblyInformation AssemblyInformation { get; }
     public abstract string Folder { get; }
 
+    private readonly DirectoryInfo _resourcesDirectory;
+    public DirectoryInfo ResourcesDirectory
+    {
+        get
+        {
+            _resourcesDirectory.Refresh();
+            return _resourcesDirectory;
+        }
+    }
+
+    protected abstract bool InEditor { get; }
+
     static SymbolPackage()
     {
         _updateCounter = new OpUpdateCounter();
         RegisterTypes();
+    }
+
+    protected SymbolPackage(AssemblyInformation assembly)
+    {
+        // ReSharper disable once VirtualMemberCallInConstructor
+        var resourcesFolder = InEditor 
+                                  ? Path.Combine(assembly.Directory, "Resources") 
+                                  : Path.Combine(assembly.Directory, "Resources", assembly.Name);
+        
+        _resourcesDirectory = new DirectoryInfo(resourcesFolder);
     }
 
     public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> newlyRead, out IReadOnlyCollection<Symbol> allNewSymbols)
@@ -48,7 +70,7 @@ public abstract partial class SymbolPackage
         }
 
         // remaining symbols have been removed from the assembly
-        foreach(var symbolId in removedSymbolIds)
+        foreach (var symbolId in removedSymbolIds)
         {
             RemoveSymbol(symbolId);
         }

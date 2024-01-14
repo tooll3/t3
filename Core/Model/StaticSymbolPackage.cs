@@ -4,7 +4,7 @@ namespace T3.Core.Model;
 
 public class StaticSymbolPackage : SymbolPackage
 {
-    public StaticSymbolPackage(AssemblyInformation assembly)
+    public StaticSymbolPackage(AssemblyInformation assembly) : base(assembly)
     {
         AssemblyInformation = assembly;
     }
@@ -13,4 +13,5 @@ public class StaticSymbolPackage : SymbolPackage
     public override bool IsModifiable => false;
 
     protected override AssemblyInformation AssemblyInformation { get; }
+    protected override bool InEditor => false;
 }

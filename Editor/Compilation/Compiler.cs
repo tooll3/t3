@@ -39,7 +39,7 @@ internal static class Compiler
                                           if (args.Data == null)
                                               return;
                                           
-                                          Console.WriteLine('\t' + args.Data);
+                                          Console.Write(args.Data);
                                           output.Add(args.Data);
                                       };
 
