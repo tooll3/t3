@@ -111,17 +111,10 @@ internal static class ProjectSetup
             Log.Debug($"Core directories initialized in {stopwatch.ElapsedMilliseconds}ms");
 
             #if IDE
-            // add lib projects
-            stopwatch.Restart();
-            var t3ParentDirectory = GetT3ParentDirectory();
-            CreateSymlinks(t3ParentDirectory);
-
-            stopwatch.Stop();
-            Log.Debug($"Created symlinks in {stopwatch.ElapsedMilliseconds}ms");
 
             stopwatch.Restart();
 
-            var operatorFolder = Path.Combine(t3ParentDirectory, "Operators");
+            var operatorFolder = Path.Combine(GetT3ParentDirectory(), "Operators");
             rootDirectories = Directory.EnumerateDirectories(operatorFolder)
                                        .Where(path => !path.EndsWith("user"))
                                        .Concat(rootDirectories)
@@ -225,8 +218,9 @@ internal static class ProjectSetup
     }
 
     #if IDE
-    private static void CreateSymlinks(string t3ParentDirectory)
+    internal static void CreateSymlinks()
     {
+        var t3ParentDirectory = GetT3ParentDirectory();
         Log.Debug($"Creating symlinks for t3 project in {t3ParentDirectory}");
         var projectParentDirectory = Path.Combine(t3ParentDirectory, "Operators", "user");
         var directoryInfo = new DirectoryInfo(projectParentDirectory);
@@ -249,6 +243,28 @@ internal static class ProjectSetup
             Log.Debug($"Creating symlink: {linkName} <- {subDirectory.FullName}");
             Directory.CreateSymbolicLink(linkName, subDirectory.FullName);
         }
+        
+        CreateResourcesLink(t3ParentDirectory);
+    }
+
+    private static void CreateResourcesLink(string t3ParentDirectory)
+    {
+        var outerResourcesDir = Path.Combine(t3ParentDirectory, "Resources");
+        var resourcesDir = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources");
+        if(Directory.Exists(resourcesDir))
+        {
+            try
+            {
+                Directory.Delete(resourcesDir, recursive: true);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Could not delete resources directory: {e}");
+            }
+        }
+        
+        Log.Debug($"Creating symlink: {resourcesDir} <- {outerResourcesDir}");
+        Directory.CreateSymbolicLink(resourcesDir, outerResourcesDir);
     }
 
     private static string GetT3ParentDirectory()

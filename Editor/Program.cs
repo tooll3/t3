@@ -101,6 +101,10 @@ namespace T3.Editor
             var userSettingsPath = Path.Combine(UserData.RootFolder, "userSettings.json");
             var userSettings = new UserSettings(saveOnQuit: true, userSettingsPath);
             var projectSettings = new ProjectSettings(saveOnQuit: true);
+            
+            #if IDE
+            ProjectSetup.CreateSymlinks();
+            #endif
 
             Log.Debug($"About to initialize ProgramWindows");
             ProgramWindows.InitializeMainWindow(GetReleaseVersion(), out var device);

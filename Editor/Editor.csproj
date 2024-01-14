@@ -73,4 +73,16 @@
               UseHardlinksIfPossible="true"
               DestinationFiles="@(Variations->'$(OutputPath)/Variations/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
+    
+    <!-- Thhs copies ../t3/Resources into the output directory -->
+    <ItemGroup>
+        <Resources Include="../Resources/**/*.*" Visible="false"/>
+    </ItemGroup>
+    
+    <Target Name="CopyResources" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+        <Copy SourceFiles="@(Resources)"
+              SkipUnchangedFiles="true"
+              UseHardlinksIfPossible="true"
+              DestinationFiles="@(EditorResources->'$(OutputPath)/Resources/t3-editor/%(RecursiveDir)%(Filename)%(Extension)')"/>
+    </Target>
 </Project>
