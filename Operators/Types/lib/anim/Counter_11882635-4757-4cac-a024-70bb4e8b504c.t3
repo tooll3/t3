@@ -37,7 +37,7 @@
     },
     {
       "Id": "e0c386b9-a987-4d11-9171-2971fa759827"/*SmoothBlending*/,
-      "DefaultValue": false
+      "DefaultValue": true
     },
     {
       "Id": "c386b9e0-a987-4d11-9171-2971fa759827"/*AllowSpeedFactor*/,
