@@ -83,8 +83,8 @@ public class DX11ShaderCompiler : ShaderCompiler
         public IDisposable Shadow { get; set; }
 
         public Stream Open(IncludeType type, string fileName, Stream parentStream)
-        {
-            const string resourcesFolder = ResourceManager.ResourcesFolder;
+        { 
+            string resourcesFolder = ResourceManager.CommonResourcesFolder;
 
             try
             {

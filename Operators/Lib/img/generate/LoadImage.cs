@@ -60,8 +60,8 @@ namespace lib.img.generate
             }
             else
             {
-                resourceManager.UpdateTextureFromFile(_textureResId, Path.Value, ref Texture.Value);
-                resourceManager.CreateShaderResourceView(_textureResId, "", ref ShaderResourceView.Value);
+                ResourceManager.UpdateTextureFromFile(_textureResId, Path.Value, ref Texture.Value);
+                ResourceManager.CreateShaderResourceView(_textureResId, "", ref ShaderResourceView.Value);
             }
 
             try

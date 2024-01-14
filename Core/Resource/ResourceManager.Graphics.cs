@@ -1,0 +1,414 @@
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using SharpDX;
+using SharpDX.Direct3D;
+using SharpDX.Direct3D11;
+using SharpDX.DXGI;
+using SharpDX.Mathematics.Interop;
+using SharpDX.WIC;
+using T3.Core.Logging;
+using Buffer = SharpDX.Direct3D11.Buffer;
+using Device = SharpDX.Direct3D11.Device;
+
+namespace T3.Core.Resource;
+
+public sealed partial class ResourceManager
+{
+    public void CreateRenderTargetView(uint textureId, string name, ref RenderTargetView renderTargetView)
+    {
+        if (!ResourcesById.TryGetValue(textureId, out var resource))
+        {
+            Log.Error($"Trying to look up texture resource with id {textureId} but did not found it.");
+            return;
+        }
+
+        switch (resource)
+        {
+            case Texture2dResource texture2dResource:
+                renderTargetView?.Dispose();
+                renderTargetView = new RenderTargetView(Device, texture2dResource.Texture) { DebugName = name };
+                Log.Info($"Created render target view '{name}' for texture '{texture2dResource.Name}'.");
+                break;
+            case Texture3dResource texture3dResource:
+                renderTargetView?.Dispose();
+                renderTargetView = new RenderTargetView(Device, texture3dResource.Texture) { DebugName = name };
+                Log.Info($"Created render target view '{name}' for texture '{texture3dResource.Name}'.");
+                break;
+            default:
+                Log.Error("Trying to generate render target view from a resource that's not a texture resource");
+                break;
+        }
+    }
+
+    /**
+         * Returns a textureViewResourceEntryId
+         */
+    private uint CreateShaderResourceView(uint textureId, string name)
+    {
+        ShaderResourceView textureView = null;
+        CreateShaderResourceView(textureId, name, ref textureView);
+        var textureViewResourceEntry = new ShaderResourceViewResource(GetNextResourceId(), name, textureView, textureId);
+        ResourcesById.TryAdd(textureViewResourceEntry.Id, textureViewResourceEntry);
+        ShaderResourceViews.Add(textureViewResourceEntry);
+        return textureViewResourceEntry.Id;
+    }
+
+    public static void CreateStructuredBufferUav(Buffer buffer, UnorderedAccessViewBufferFlags bufferFlags, ref UnorderedAccessView uav)
+    {
+        if (buffer == null)
+            return;
+
+        try
+        {
+            if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) == 0)
+            {
+                // Log.Warning($"{nameof(SrvFromStructuredBuffer)} - input buffer is not structured, skipping SRV creation.");
+                return;
+            }
+
+            uav?.Dispose();
+            var uavDesc = new UnorderedAccessViewDescription
+                              {
+                                  Dimension = UnorderedAccessViewDimension.Buffer,
+                                  Format = Format.Unknown,
+                                  Buffer = new UnorderedAccessViewDescription.BufferResource
+                                               {
+                                                   FirstElement = 0,
+                                                   ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
+                                                   Flags = bufferFlags
+                                               }
+                              };
+            uav = new UnorderedAccessView(Device, buffer, uavDesc);
+        }
+        catch (Exception e)
+        {
+            Log.Warning("Failed to create UAV " + e.Message);
+        }
+    }
+
+    public static void CreateStructuredBufferSrv(Buffer buffer, ref ShaderResourceView srv)
+    {
+        if (buffer == null)
+            return;
+
+        try
+        {
+            if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) == 0)
+            {
+                // Log.Warning($"{nameof(SrvFromStructuredBuffer)} - input buffer is not structured, skipping SRV creation.");
+                return;
+            }
+
+            srv?.Dispose();
+            var srvDesc = new ShaderResourceViewDescription
+                              {
+                                  Dimension = ShaderResourceViewDimension.ExtendedBuffer,
+                                  Format = Format.Unknown,
+                                  BufferEx = new ShaderResourceViewDescription.ExtendedBufferResource
+                                                 {
+                                                     FirstElement = 0,
+                                                     ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride
+                                                 }
+                              };
+            srv = new ShaderResourceView(Device, buffer, srvDesc);
+        }
+        catch (Exception e)
+        {
+            Log.Warning("Failed to create SRV:" + e.Message);
+        }
+    }
+
+    public static void SetupStructuredBuffer(int sizeInBytes, int stride, ref Buffer buffer)
+    {
+        try
+        {
+            if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
+            {
+                buffer?.Dispose();
+                var bufferDesc = new BufferDescription
+                                     {
+                                         Usage = ResourceUsage.Default,
+                                         BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
+                                         SizeInBytes = sizeInBytes,
+                                         OptionFlags = ResourceOptionFlags.BufferStructured,
+                                         StructureByteStride = stride
+                                     };
+                try
+                {
+                    buffer = new Buffer(Device, bufferDesc);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to setup structured buffer (stride:{stride} {sizeInBytes}b):" + e.Message);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Warning("Failed to create Structured buffer " + e.Message);
+        }
+    }
+
+    public static void SetupStructuredBuffer(DataStream data, int sizeInBytes, int stride, ref Buffer buffer)
+    {
+        if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
+        {
+            buffer?.Dispose();
+            var bufferDesc = new BufferDescription
+                                 {
+                                     Usage = ResourceUsage.Default,
+                                     BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
+                                     SizeInBytes = sizeInBytes,
+                                     OptionFlags = ResourceOptionFlags.BufferStructured,
+                                     StructureByteStride = stride
+                                 };
+            buffer = new Buffer(Device, data, bufferDesc);
+        }
+        else
+        {
+            Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer);
+        }
+    }
+
+    public static void SetupStructuredBuffer<T>(T[] bufferData, int sizeInBytes, int stride, ref Buffer buffer) where T : struct
+    {
+        using var data = new DataStream(sizeInBytes, true, true);
+
+        data.WriteRange(bufferData);
+        data.Position = 0;
+
+        SetupStructuredBuffer(data, sizeInBytes, stride, ref buffer);
+    }
+
+    public static void SetupStructuredBuffer<T>(T[] bufferData, ref Buffer buffer) where T : struct
+    {
+        int stride = Marshal.SizeOf(typeof(T));
+        int sizeInBytes = stride * bufferData.Length;
+        SetupStructuredBuffer(bufferData, sizeInBytes, stride, ref buffer);
+    }
+
+    public static void CreateBufferUav<T>(Buffer buffer, Format format, ref UnorderedAccessView uav)
+    {
+        if (buffer == null)
+            return;
+
+        if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) != 0)
+        {
+            Log.Warning("Input buffer is structured, skipping UAV creation.");
+            return;
+        }
+
+        uav?.Dispose();
+        var desc = new UnorderedAccessViewDescription
+                       {
+                           Dimension = UnorderedAccessViewDimension.Buffer,
+                           Format = format,
+                           Buffer = new UnorderedAccessViewDescription.BufferResource
+                                        {
+                                            FirstElement = 0,
+                                            ElementCount = buffer.Description.SizeInBytes / Marshal.SizeOf<T>(),
+                                            Flags = UnorderedAccessViewBufferFlags.None
+                                        }
+                       };
+        uav = new UnorderedAccessView(Device, buffer, desc);
+    }
+
+    public static void SetupIndirectBuffer(int sizeInBytes, ref Buffer buffer)
+    {
+        var bufferDesc = new BufferDescription
+                             {
+                                 Usage = ResourceUsage.Default,
+                                 BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
+                                 SizeInBytes = sizeInBytes,
+                                 OptionFlags = ResourceOptionFlags.DrawIndirectArguments,
+                             };
+        SetupBuffer(bufferDesc, ref buffer);
+    }
+
+    public static void SetupBuffer(BufferDescription bufferDesc, ref Buffer buffer)
+    {
+        buffer ??= new Buffer(Device, bufferDesc);
+    }
+
+    public static void SetupConstBuffer<T>(T bufferData, ref Buffer buffer) where T : struct
+    {
+        using var data = new DataStream(Marshal.SizeOf(typeof(T)), true, true);
+
+        data.Write(bufferData);
+        data.Position = 0;
+
+        if (buffer == null)
+        {
+            var bufferDesc = new BufferDescription
+                                 {
+                                     Usage = ResourceUsage.Default,
+                                     SizeInBytes = Marshal.SizeOf(typeof(T)),
+                                     BindFlags = BindFlags.ConstantBuffer
+                                 };
+            buffer = new Buffer(Device, data, bufferDesc);
+        }
+        else
+        {
+            Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer);
+        }
+    }
+
+    private void InitializeDevice(Device device)
+    {
+        _device = device;
+        var samplerDesc = new SamplerStateDescription
+                              {
+                                  Filter = Filter.MinMagMipLinear,
+                                  AddressU = TextureAddressMode.Clamp,
+                                  AddressV = TextureAddressMode.Clamp,
+                                  AddressW = TextureAddressMode.Clamp,
+                                  MipLodBias = 0.0f,
+                                  MaximumAnisotropy = 1,
+                                  ComparisonFunction = Comparison.Never,
+                                  BorderColor = new RawColor4(1.0f, 1.0f, 1.0f, 1.0f),
+                                  MinimumLod = -Single.MaxValue,
+                                  MaximumLod = Single.MaxValue,
+                              };
+
+        DefaultSamplerState = new SamplerState(device, samplerDesc);
+        ResourceFileWatcher.Setup();
+    }
+
+    public static void CreateShaderResourceView(uint textureId, string name, ref ShaderResourceView shaderResourceView)
+    {
+        if (!ResourcesById.TryGetValue(textureId, out var resource))
+        {
+            Log.Error($"Trying to look up texture resource with id {textureId} but did not found it.");
+            return;
+        }
+
+        switch (resource)
+        {
+            case Texture2dResource texture2dResource:
+                shaderResourceView?.Dispose();
+                shaderResourceView = new ShaderResourceView(Device, texture2dResource.Texture) { DebugName = name };
+                Log.Info($"Created shader resource view '{name}' for texture '{texture2dResource.Name}'.");
+                break;
+            case Texture3dResource texture3dResource:
+                shaderResourceView?.Dispose();
+                shaderResourceView = new ShaderResourceView(Device, texture3dResource.Texture) { DebugName = name };
+                Log.Info($"Created shader resource view '{name}' for texture '{texture3dResource.Name}'.");
+                break;
+            default:
+                Log.Error("Trying to generate shader resource view from a resource that's not a texture resource");
+                break;
+        }
+    }
+
+    public bool CreateTexture2d(Texture2DDescription description, string name, ref uint id, ref Texture2D texture)
+    {
+        if (texture != null)
+        {
+            bool descriptionMatches;
+            try
+            {
+                descriptionMatches = texture.Description.Equals(description);
+            }
+            catch
+            {
+                descriptionMatches = false;
+            }
+
+            if (descriptionMatches)
+            {
+                return false; // no change
+            }
+        }
+
+        ResourcesById.TryGetValue(id, out var resource);
+        Texture2dResource texture2dResource = resource as Texture2dResource;
+
+        if (texture2dResource == null)
+        {
+            // no entry so far, if texture is also null then create a new one
+            texture ??= new Texture2D(Device, description);
+
+            // new texture, create resource entry
+            texture2dResource = new Texture2dResource(GetNextResourceId(), name, texture);
+            ResourcesById.TryAdd(texture2dResource.Id, texture2dResource);
+        }
+        else
+        {
+            texture2dResource.Texture?.Dispose();
+            texture2dResource.Texture = new Texture2D(Device, description);
+            texture = texture2dResource.Texture;
+        }
+
+        id = texture2dResource.Id;
+
+        return true;
+    }
+
+    public bool CreateTexture3d(Texture3DDescription description, string name, ref uint id, ref Texture3D texture)
+    {
+        if (texture != null && texture.Description.Equals(description))
+        {
+            return false; // no change
+        }
+
+        ResourcesById.TryGetValue(id, out var resource);
+        Texture3dResource texture3dResource = resource as Texture3dResource;
+
+        if (texture3dResource == null)
+        {
+            // no entry so far, if texture is also null then create a new one
+            texture ??= new Texture3D(Device, description);
+
+            // new texture, create resource entry
+            texture3dResource = new Texture3dResource(GetNextResourceId(), name, texture);
+            ResourcesById.TryAdd(texture3dResource.Id, texture3dResource);
+        }
+        else
+        {
+            texture3dResource.Texture?.Dispose();
+            texture3dResource.Texture = new Texture3D(Device, description);
+            texture = texture3dResource.Texture;
+        }
+
+        id = texture3dResource.Id;
+
+        return true;
+    }
+
+    private static readonly List<ShaderResourceViewResource> ShaderResourceViews = new();
+    private Device _device;
+    public SamplerState DefaultSamplerState { get; private set; }
+
+    public static Texture2D CreateTexture2DFromBitmap(Device device, BitmapSource bitmapSource)
+    {
+        // Allocate DataStream to receive the WIC image pixels
+        var stride = bitmapSource.Size.Width * 4;
+        using var buffer = new DataStream(bitmapSource.Size.Height * stride, true, true);
+
+        // Copy the content of the WIC to the buffer
+        bitmapSource.CopyPixels(stride, buffer);
+        int mipLevels = (int)Math.Log(bitmapSource.Size.Width, 2.0) + 1;
+        var texDesc = new Texture2DDescription
+                          {
+                              Width = bitmapSource.Size.Width,
+                              Height = bitmapSource.Size.Height,
+                              ArraySize = 1,
+                              BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
+                              Usage = ResourceUsage.Default,
+                              CpuAccessFlags = CpuAccessFlags.None,
+                              Format = Format.R8G8B8A8_UNorm,
+                              MipLevels = mipLevels,
+                              OptionFlags = ResourceOptionFlags.GenerateMipMaps,
+                              SampleDescription = new SampleDescription(1, 0),
+                          };
+        var dataRectangles = new DataRectangle[mipLevels];
+        for (var i = 0; i < mipLevels; i++)
+        {
+            dataRectangles[i] = new DataRectangle(buffer.DataPointer, stride);
+            stride /= 2;
+        }
+
+        return new Texture2D(device, texDesc, dataRectangles);
+    }
+}

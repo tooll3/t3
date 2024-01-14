@@ -13,15 +13,15 @@ namespace T3.Core.Resource
     {
         public static void Setup()
         {
-            var hlslWatcher = AddWatcher(ResourceManager.ResourcesFolder, "*.hlsl");
+            var hlslWatcher = AddWatcher(ResourceManager.CommonResourcesFolder, "*.hlsl");
             hlslWatcher.Deleted += FileChangedHandler;
             hlslWatcher.Renamed += FileChangedHandler;
             hlslWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // Creation time needed for visual studio (2017)
 
-            AddWatcher(ResourceManager.ResourcesFolder, "*.png");
-            AddWatcher(ResourceManager.ResourcesFolder, "*.jpg");
-            AddWatcher(ResourceManager.ResourcesFolder, "*.dds");
-            AddWatcher(ResourceManager.ResourcesFolder, "*.tiff");
+            AddWatcher(ResourceManager.CommonResourcesFolder, "*.png");
+            AddWatcher(ResourceManager.CommonResourcesFolder, "*.jpg");
+            AddWatcher(ResourceManager.CommonResourcesFolder, "*.dds");
+            AddWatcher(ResourceManager.CommonResourcesFolder, "*.tiff");
         }
 
         public static void AddFileHook(string filepath, Action action)
@@ -42,7 +42,7 @@ namespace T3.Core.Resource
 
             if (!_fileWatchers.ContainsKey(pattern))
             {
-                AddWatcher(ResourceManager.ResourcesFolder, pattern);
+                AddWatcher(ResourceManager.CommonResourcesFolder, pattern);
             }
 
             if (HooksForResourceFilepaths.TryGetValue(filepath, out var hook))
