@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualBasic.Logging;
 using T3.Core.Audio;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
+using Log = T3.Core.Logging.Log;
 
 namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
 {
@@ -31,6 +33,15 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         
         private void Update(EvaluationContext context)
         {
+            if (context.IntVariables.TryGetValue("__MotionBlurPass", out var motionBlurPass))
+            {
+                if (motionBlurPass > 0)
+                {
+                    //Log.Debug($"Skip motion blur pass {motionBlurPass}");
+                    return;
+                }                
+            } 
+            
             if (Math.Abs(context.LocalFxTime - _lastEvalTime) < 0.001f)
             {
                 return;
@@ -112,7 +123,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
                         _isHitActive = couldBeHit;
                     }
                 }
-                
+
                 AccumulatedLevel +=  MathF.Pow((Sum * 2) / threshold, 2) * 0.001 * amplitude;
                 _dampedTimeBetweenHits = MathUtils.Lerp((float)timeSinceLastHit, _dampedTimeBetweenHits, 0.94f);
             }
