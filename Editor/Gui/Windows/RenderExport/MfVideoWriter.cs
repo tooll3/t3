@@ -219,6 +219,7 @@ internal abstract class MfVideoWriter : IDisposable
                     break;
 
                 case SharpDX.DXGI.Format.B8G8R8A8_UNorm:
+                    // Note: dataBox.RowPitch and outputStream.RowPitch can diverge if width is not divisible by 16.
                     for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
                     {
                         if (!FlipY)
@@ -229,7 +230,7 @@ internal abstract class MfVideoWriter : IDisposable
                         // An attempt to speed up encoding by copying larger ranges. Sadly this froze the execution
                         //inputStream.CopyTo(outputStream, dataBox.RowPitch);
 
-                        outputStream.WriteRange(inputStream.ReadRange<byte>(dataBox.RowPitch));
+                        outputStream.WriteRange(inputStream.ReadRange<byte>(rowStride));
                     }
 
                     break;
