@@ -73,6 +73,9 @@ namespace T3.Operators.Types.Id_bb4803d2_0c23_470a_94a8_c477e4f7dd8c
             Rotate_X =5,
             Rotate_Y =6 ,
             Rotate_Z =7,
+            Extend_X = 8,
+            Extend_Y = 9,
+            Extend_Z = 10,
         }
 
         private enum Modes

@@ -22,6 +22,9 @@ namespace T3.Operators.Types.Id_816336a8_e214_4d2c_b8f9_05b1aa3ff2e2
         [Input(Guid = "332e7d07-f6a2-4f58-8fe4-d2b368a63f4a")]
         public readonly InputSlot<float> Width = new();
 
+        [Input(Guid = "7a2eff05-ab49-42ab-816c-86937f0ebbaf")]
+        public readonly InputSlot<bool> UseExtend = new InputSlot<bool>();
+
 
         private enum SampleModes
         {

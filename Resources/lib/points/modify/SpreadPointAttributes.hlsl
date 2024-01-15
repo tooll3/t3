@@ -34,7 +34,6 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-
     Point p = SourcePoints[index];
     
     float f=0;
@@ -81,12 +80,9 @@ void main(uint3 i : SV_DispatchThreadID)
         w= p.W + curveValue;
     }
 
-    w = lerp(p.W, w, Amount);
+    p.W = lerp(p.W, w, Amount);;
+    p.Color = p.Color * gradientColor;
 
-    ResultPoints[index].W = w;
-    ResultPoints[index].Position = p.Position;
-    ResultPoints[index].Rotation = p.Rotation;
-    ResultPoints[index].Color = p.Color * gradientColor;
-    ResultPoints[index].Selected = p.Selected;
+    ResultPoints[index] = p;
 }
 

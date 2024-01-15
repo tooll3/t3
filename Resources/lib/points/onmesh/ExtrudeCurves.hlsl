@@ -7,6 +7,7 @@
 cbuffer Params : register(b0)
 {
     float UseWAsWidth;
+    float UseExtend;
     float Width;
 }
 
@@ -47,10 +48,11 @@ void main(uint3 i : SV_DispatchThreadID)
     Point railPoint = RailPoints[columnIndex];
     Point shapePoint = ShapePoints[rowIndex];
 
-    float width = (UseWAsWidth ? railPoint.W : 1) * Width;
+    float3 scaleFactor = (UseExtend ? railPoint.Extend : 1)
+     *  (UseWAsWidth ? railPoint.W : 1) * Width;;
 
     float4 rotation = normalize(qMul( railPoint.Rotation ,shapePoint.Rotation ));
-    float3 position = qRotateVec3(shapePoint.Position * width, railPoint.Rotation) + railPoint.Position;
+    float3 position = qRotateVec3(shapePoint.Position * scaleFactor, railPoint.Rotation) + railPoint.Position;
 
     //float3 normal =
 

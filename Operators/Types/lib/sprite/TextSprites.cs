@@ -118,7 +118,7 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
             float textureHeight = _bmFont.BmFont.Common.ScaleH;
             float cursorX = 0;
             float cursorY = 0;
-            var verticalCenterOffset = _bmFont.Padding.Up + _bmFont.BmFont.Common.Base + _bmFont.Padding.Down - _bmFont.BmFont.Info.Size /2f;
+            var verticalCenterOffset = _bmFont.Padding.Up + _bmFont.BmFont.Common.Base + _bmFont.Padding.Down - _bmFont.BmFont.Info.Size / 2f;
 
             switch (verticalAlign)
             {
@@ -203,7 +203,10 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                                     {
                                         Position = center,
                                         W = 1,
-                                        Orientation = Quaternion.Identity
+                                        Orientation = Quaternion.Identity,
+                                        Selected = 1,
+                                        Velocity = Vector3.One,
+                                        Color = Vector4.One,
                                     });
                     outputIndex++;
                     currentLineCharacterCount++;
@@ -252,7 +255,9 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                                                                Position = Vector3.Zero,
                                                                W= float.NaN,
                                                                Orientation =  Quaternion.Identity,
-                                                             
+                                                               Color = Vector4.One,
+                                                               Selected = 1,
+                                                               Velocity = Vector3.One,
                                                            } };
 
         private void OffsetLineCharacters(float offset, int currentLineCharacterCount, int outputIndex)

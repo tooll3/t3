@@ -92,6 +92,7 @@ void main(uint3 i : SV_DispatchThreadID)
         rot2 = normalize(qFromAngleAxis((OrientationAngle + Twist * f) / 180 * 3.141578, ManualOrientationAxis));
     }
 
+    ResultPoints[index].Extend = 1;
     ResultPoints[index].Rotation = rot2;
     ResultPoints[index].Color = lerp(ColorA, ColorB, f1);
     ResultPoints[index].Selected = 1;

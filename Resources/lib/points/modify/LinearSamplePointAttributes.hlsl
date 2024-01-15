@@ -1,7 +1,7 @@
 #include "lib/shared/point.hlsl"
 #include "lib/shared/quat-functions.hlsl"
 
-static const float4 Factors[] =
+static const float4 FactorsForPositionAndW[] =
     {
         //     x  y  z  w
         float4(0, 0, 0, 0), // 0 nothing
@@ -11,6 +11,7 @@ static const float4 Factors[] =
         float4(0, 0, 0, 1), // 4 for w
         float4(0, 0, 0, 0), // avoid rotation effects
 };
+
 
 cbuffer Params : register(b0)
 {
@@ -46,11 +47,12 @@ sampler texSampler : register(s0);
 {
     uint index = i.x;
 
-    Point P = Points[index];
     uint pointCount, stride;
     ResultPoints.GetDimensions(pointCount, stride);
     if (i.x >= pointCount)
         return;
+
+    Point p = Points[index];
 
     float divider = pointCount < 2 ? 1 : (pointCount - 1);
     float f = (float)i.x / divider;
@@ -64,10 +66,11 @@ sampler texSampler : register(s0);
     float4 c = inputTexture.SampleLevel(texSampler, uv, 0);
     float gray = (c.r + c.g + c.b) / 3;
 
-    // Rotation
-    ResultPoints[index].Rotation = P.Rotation;
 
-    float4 rot = P.Rotation;
+ // Rotation
+    ResultPoints[index].Rotation = p.Rotation;
+
+    float4 rot = p.Rotation;
     float rotXFactor = (R == 5 ? (c.r * RFactor + ROffset) : 0) +
                        (G == 5 ? (c.g * GFactor + GOffset) : 0) +
                        (B == 5 ? (c.b * BFactor + BOffset) : 0) +
@@ -82,6 +85,7 @@ sampler texSampler : register(s0);
                        (G == 7 ? (c.g * GFactor + GOffset) : 0) +
                        (B == 7 ? (c.b * BFactor + BOffset) : 0) +
                        (L == 7 ? (gray * LFactor + LOffset) : 0);
+
 
     float tau = 3.141578 / 180;
 
@@ -102,30 +106,58 @@ sampler texSampler : register(s0);
 
     rot2 = normalize(rot2);
 
-    ResultPoints[index].Rotation = qMul(rot, rot2);
+    ResultPoints[index].Rotation = p.Rotation;
+
+
+    // Stretch
+    //float3 stretch = p.Extend;
+    float3 stretchFactor =float3( 
+        (R == 8 ? (c.r * RFactor + ROffset) : 1) *
+        (G == 8 ? (c.g * GFactor + GOffset) : 1) *
+        (B == 8 ? (c.b * BFactor + BOffset) : 1) *
+        (L == 8 ? (gray * LFactor + LOffset) : 1),
+
+        (R == 9 ? (c.r * RFactor + ROffset) : 1) *
+        (G == 9 ? (c.g * GFactor + GOffset) : 1) *
+        (B == 9 ? (c.b * BFactor + BOffset) : 1) *
+        (L == 9 ? (gray * LFactor + LOffset) : 1),
+
+        (R == 10 ? (c.r * RFactor + ROffset) : 1) *
+        (G == 10 ? (c.g * GFactor + GOffset) : 1) *
+        (B == 10 ? (c.b * BFactor + BOffset) : 1) *
+        (L == 10 ? (gray * LFactor + LOffset) : 1)
+    );
+
+    
+    float3 stretchOffset = Mode < 0.5 ? stretchFactor
+                               : float3(stretchFactor) * p.Extend;
+
+    p.Extend *= stretchOffset;
 
     // Position
-    float4 ff = Factors[(uint)clamp(L, 0, 5.1)] * (gray * LFactor + LOffset) +
-                Factors[(uint)clamp(R, 0, 5.1)] * (c.r * RFactor + ROffset) +
-                Factors[(uint)clamp(G, 0, 5.1)] * (c.g * GFactor + GOffset) +
-                Factors[(uint)clamp(B, 0, 5.1)] * (c.b * BFactor + BOffset);
+    float4 ff = FactorsForPositionAndW[(uint)clamp(L, 0, 5.1)] * (gray * LFactor + LOffset) +
+                FactorsForPositionAndW[(uint)clamp(R, 0, 5.1)] * (c.r * RFactor + ROffset) +
+                FactorsForPositionAndW[(uint)clamp(G, 0, 5.1)] * (c.g * GFactor + GOffset) +
+                FactorsForPositionAndW[(uint)clamp(B, 0, 5.1)] * (c.b * BFactor + BOffset);
 
     float3 offset = Mode < 0.5 ? float3(ff.xyz)
-                               : float3(ff.xyz) * P.Position;
+                               : float3(ff.xyz) * p.Position;
 
     if (TranslationSpace > 0.5)
     {
-        offset = qRotateVec3(offset, P.Rotation);
+        offset = qRotateVec3(offset, p.Rotation);
     }
 
-    float3 newPos = P.Position + offset;
+    float3 newPos = p.Position + offset;
 
     if (RotationSpace < 0.5)
     {
         newPos = qRotateVec3(newPos, rot2);
     }
-    ResultPoints[index].Position = newPos;
+    p.Position = newPos;
 
-    ResultPoints[index].W = Mode < 0.5 ? (P.W + ff.w)
-                                       : (P.W * (1 + ff.w));
+    p.W = Mode < 0.5 ? (p.W + ff.w)
+                                       : (p.W * (1 + ff.w));
+
+    ResultPoints[index] = p;
 }

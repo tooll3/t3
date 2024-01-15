@@ -1,6 +1,6 @@
 {
   "Id": "816336a8-e214-4d2c-b8f9-05b1aa3ff2e2"/*ExtrudeCurves*/,
-  "Description": "Generates a mesh by extruding a set of points along a set of other points.",
+  "Description": "Generates a mesh by extruding a set of points along a set of other points.\n\nThe extrusion is done along the z-axis. This means that the rail points should be aligned in a way that z is pointing along the rail.\n\nAlso the normals are directly taken from the extruded points z-axis. You can use the [VisualizePoints] to verify the alignment and adjust it it [TransformPoints] in point space.",
   "InputUis": [
     {
       "InputId": "4d31be7a-3011-4fdf-9c63-425387b9bbfc"/*RailPoints*/,
@@ -30,6 +30,13 @@
       "Position": {
         "X": -1423.521,
         "Y": 1124.9822
+      }
+    },
+    {
+      "InputId": "7a2eff05-ab49-42ab-816c-86937f0ebbaf"/*UseExtend*/,
+      "Position": {
+        "X": -1423.521,
+        "Y": 1169.9822
       }
     }
   ],
@@ -80,7 +87,7 @@
       "ChildId": "df410598-e163-4a1d-9c82-36093a380355"/*GetBufferComponents*/,
       "Position": {
         "X": 82.98674,
-        "Y": 744.2196
+        "Y": 757.2196
       }
     },
     {
@@ -186,6 +193,20 @@
       "Position": {
         "X": -1134.7095,
         "Y": 1144.9644
+      }
+    },
+    {
+      "ChildId": "c71e26f4-1454-499e-8da7-39234262ff14"/*MultiplyInt*/,
+      "Position": {
+        "X": -252.08154,
+        "Y": 1045.3643
+      }
+    },
+    {
+      "ChildId": "e752e32f-84bc-4e55-9caa-a165cecb3447"/*BoolToFloat*/,
+      "Position": {
+        "X": -937.3934,
+        "Y": 1231.455
       }
     }
   ],

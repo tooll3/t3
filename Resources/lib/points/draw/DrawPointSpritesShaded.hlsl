@@ -109,7 +109,7 @@ psInput vsMain(uint id: SV_VertexID)
     Point p = Points[entryIndex];
 
     float3 quadCorners = Corners[vertexIndex];
-    float3 posInObject =  (-float3(sprite.Pivot, 0) + quadCorners * float3(sprite.Size,0)) * Size * p.W;
+    float3 posInObject =  (-float3(sprite.Pivot, 0) + quadCorners * float3(sprite.Size,0)) * Size * p.Extend.xyz * p.W;
 
     float4x4 orientationMatrix = transpose(qToMatrix(p.Rotation));
     posInObject = mul( float4(posInObject.xyz, 1), orientationMatrix);
@@ -139,7 +139,7 @@ psInput vsMain(uint id: SV_VertexID)
     float4 uv = float4(sprite.UvMin, sprite.UvMax) * UV[vertexIndex];
     output.texCoord =  uv.xy + uv.zw;
 
-    output.color = sprite.Color * Color;
+    output.color = sprite.Color * Color * p.Color;
 
     // Fog
     float4 posInCamera = mul(float4(posInObject,1), ObjectToCamera);
