@@ -96,8 +96,8 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         _allMeshes.Clear();
         ParseChildren(modelDefaultScene.VisualChildren, rootNode, _allMeshes);
 
-        var totalFaceCount = 0;
-        var totalIndicesCount = 0;
+        // var totalFaceCount = 0;
+        // var totalIndicesCount = 0;
         
         foreach (var mesh in _allMeshes)
         {

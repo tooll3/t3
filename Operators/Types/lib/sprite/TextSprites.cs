@@ -205,7 +205,7 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                                         W = 1,
                                         Orientation = Quaternion.Identity,
                                         Selected = 1,
-                                        Velocity = Vector3.One,
+                                        Stretch = Vector3.One,
                                         Color = Vector4.One,
                                     });
                     outputIndex++;
@@ -257,7 +257,7 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                                                                Orientation =  Quaternion.Identity,
                                                                Color = Vector4.One,
                                                                Selected = 1,
-                                                               Velocity = Vector3.One,
+                                                               Stretch = Vector3.One,
                                                            } };
 
         private void OffsetLineCharacters(float offset, int currentLineCharacterCount, int outputIndex)

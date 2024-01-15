@@ -16,11 +16,9 @@ namespace T3.Core.DataTypes;
 /// </summary>
 public class SceneSetup : IEditableInputType
 {
-    private List<MeshBuffers> _meshBuffers;
-
-    private Point[] Positions;
-
-    private List<PbrMaterial> Materials;
+    // private List<MeshBuffers> _meshBuffers;
+    // private Point[] Positions;
+    // private List<PbrMaterial> Materials;
 
     // private Dictionary<string, string> MaterialAssignments;
 
@@ -82,17 +80,17 @@ public class SceneSetup : IEditableInputType
         }
     }
 
-    private List<DrawBatch> _drawBatches;
+    // private List<DrawBatch> _drawBatches;
 
-    struct DrawBatch
-    {
-        public PbrMaterial Material;
-        public MeshBuffers Mesh;
-        public int StartFaceIndex;
-        public int FaceCount;
-        public int[] PointIndices;
-        public Buffer PointIndexBuffer;
-    }
+    // struct DrawBatch
+    // {
+    //     public PbrMaterial Material;
+    //     public MeshBuffers Mesh;
+    //     public int StartFaceIndex;
+    //     public int FaceCount;
+    //     public int[] PointIndices;
+    //     public Buffer PointIndexBuffer;
+    // }
 
     #region serialization
     public void Write(JsonTextWriter writer)
