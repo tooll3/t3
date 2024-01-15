@@ -164,15 +164,15 @@ namespace T3.Editor.Gui.Graph
 
                 resourcePaths.UnionWith(Directory.GetFiles(@"Resources\lib\shared\"));
 
-                resourcePaths.Add(@"Resources\lib\points\spatial-hash-map\hash-map-settings.hlsl");
+                resourcePaths.Add(@"points\spatial-hash-map\hash-map-settings.hlsl");
 
-                resourcePaths.Add(@"Resources\lib\dx11\fullscreen-texture.hlsl");
-                resourcePaths.Add(@"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl");
+                resourcePaths.Add(@"dx11\fullscreen-texture.hlsl");
+                resourcePaths.Add(@"img\internal\resolve-multisampled-depth-buffer-cs.hlsl");
 
-                resourcePaths.Add(@"Resources\common\images\BRDF-LookUp.png");
-                resourcePaths.Add(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
+                resourcePaths.Add(@"common\images\BRDF-LookUp.png");
+                resourcePaths.Add(@"common\HDRI\studio_small_08-prefiltered.dds");
 
-                resourcePaths.Add(@"Resources\t3-editor\images\t3.ico");
+                resourcePaths.Add(@"t3-editor\images\t3.ico");
                 foreach (var resourcePath in resourcePaths)
                 {
                     try

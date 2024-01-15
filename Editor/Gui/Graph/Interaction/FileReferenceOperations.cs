@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using T3.Core.Logging;
@@ -15,7 +16,12 @@ namespace T3.Editor.Gui.Graph.Interaction
         public static void FixOperatorFilepathsCommand_Executed()
         {
             AssetFiles.Clear();
-            ScanAssetDirectory(ResourceManager.CommonResourcesFolder);
+
+            foreach (var directory in ResourceManager.SharedResourceFolders)
+            {
+                ScanAssetDirectory(directory);
+            }
+
             foreach (var ( key, value) in AssetFiles)
             {
                 Log.Debug($"found {key} in {value}");
@@ -35,7 +41,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         
         private static void ScanAssetDirectory(string path)
         {
-            string[] files = new string[0];
+            string[] files;
             try
             {
                 files = Directory.GetFiles(path);

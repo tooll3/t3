@@ -4,7 +4,8 @@ namespace T3.Core.Model;
 
 public class StaticSymbolPackage : SymbolPackage
 {
-    public StaticSymbolPackage(AssemblyInformation assembly) : base(assembly)
+    
+    public StaticSymbolPackage(AssemblyInformation assembly)
     {
         AssemblyInformation = assembly;
     }

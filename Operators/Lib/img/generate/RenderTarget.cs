@@ -216,12 +216,13 @@ namespace lib.img.generate
         {
             if (_resolveComputeShaderResource == null)
             {
-                string sourcePath = @"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl";
+                string sourcePath = @"img\internal\resolve-multisampled-depth-buffer-cs.hlsl";
                 string entryPoint = "main";
                 string debugName = "resolve-multisampled-depth-buffer";
                 var resourceManager = ResourceManager.Instance();
                 var success = resourceManager.TryCreateShaderResource(out _resolveComputeShaderResource, 
-                                                                      fileName: sourcePath, 
+                                                                      relativePath: sourcePath, 
+                                                                      watcher: ResourceFileWatcher,
                                                                       entryPoint: entryPoint, 
                                                                       name: debugName,
                                                                       errorMessage: out var errorMessage);

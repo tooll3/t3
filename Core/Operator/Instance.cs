@@ -5,6 +5,7 @@ using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Core.Operator
@@ -14,7 +15,7 @@ namespace T3.Core.Operator
         public abstract Type Type { get; }
         public Guid SymbolChildId { get; set; }
         public Instance Parent { get; internal set; }
-        public Symbol Symbol { get; internal set; }
+        public abstract Symbol Symbol { get; }
 
         public List<ISlot> Outputs { get; set; } = new();
         public List<Instance> Children { get; set; } = new();
@@ -148,6 +149,14 @@ namespace T3.Core.Operator
     public class Instance<T> : Instance where T : Instance
     {
         public override Type Type { get; } = typeof(T);
+        public override Symbol Symbol => _typeSymbol;
+        
+        // ReSharper disable once StaticMemberInGenericType
+        #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
+        private static Symbol _typeSymbol; // this is set with reflection in Symbol.UpdateType()
+        #pragma warning restore CS0649 // Field is never assigned to, and will always have its default value
+        
+        protected ResourceFileWatcher ResourceFileWatcher => Symbol.SymbolPackage.FileWatcher;
 
         protected Instance()
         {

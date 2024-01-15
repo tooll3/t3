@@ -171,7 +171,7 @@ namespace T3.Player
                 ResourceManager.Init(_device);
                 ResourceManager resourceManager = ResourceManager.Instance();
                 var gotVertexShader = resourceManager.TryCreateShaderResource(out  _fullScreenVertexShaderResource,
-                                                                              fileName: @"lib\dx11\fullscreen-texture.hlsl",
+                                                                              relativePath: @"lib\dx11\fullscreen-texture.hlsl",
                                                                               entryPoint: "vsMain",
                                                                               name: "vs-fullscreen-texture",
                                                                               errorMessage: out var errorMessage);
@@ -181,7 +181,7 @@ namespace T3.Player
                     
                 
                 var gotPixelShader = resourceManager.TryCreateShaderResource(out  _fullScreenPixelShaderResource,
-                                                                             fileName: @"lib\dx11\fullscreen-texture.hlsl",
+                                                                             relativePath: @"lib\dx11\fullscreen-texture.hlsl",
                                                                              entryPoint: "psMain",
                                                                              name: "ps-fullscreen-texture",
                                                                              errorMessage: out errorMessage);

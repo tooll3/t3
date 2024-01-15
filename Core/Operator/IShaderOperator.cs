@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
@@ -12,6 +13,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
     public InputSlot<string> Source { get; }
     public InputSlot<string> EntryPoint { get; }
     public InputSlot<string> DebugName { get; }
+    public Symbol Symbol { get; }
     bool SourceIsSourceCode { get; }
     protected internal ShaderResource<T> ShaderResource { get; set; }
 
@@ -22,7 +24,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
         var sourceSlot = Source;
         var entryPointSlot = EntryPoint;
         var debugNameSlot = DebugName;
-        
+
         var shouldUpdate = !isSourceCode || sourceSlot.DirtyFlag.IsDirty || entryPointSlot.DirtyFlag.IsDirty || debugNameSlot.DirtyFlag.IsDirty;
 
         if (!shouldUpdate)
@@ -34,7 +36,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
         var source = sourceSlot.GetValue(context);
         var entryPoint = entryPointSlot.GetValue(context);
         var debugName = debugNameSlot.GetValue(context);
-        
+
         var type = GetType();
 
         if (!TryGetDebugName(out message, ref debugName))
@@ -44,25 +46,30 @@ public interface IShaderOperator<T> where T : class, IDisposable
         }
 
         //Log.Debug($"Attempting to update shader \"{debugName}\" ({GetType().Name}) with entry point \"{entryPoint}\".");
-        
+
         // Cache ShaderResource to avoid additional virtual method calls
         var shaderResource = ShaderResource;
         var needsNewResource = shaderResource == null;
 
         if (!isSourceCode)
+        {
             needsNewResource = needsNewResource || cachedSource != source;
+        }
 
         bool updated;
+        var watcher = Symbol.SymbolPackage.FileWatcher;
 
         if (needsNewResource)
         {
-            updated = TryCreateResource(source, entryPoint, debugName, isSourceCode, Shader, out message, out shaderResource);
-            if(updated)
+            updated = TryCreateResource(source, entryPoint, debugName, isSourceCode, Shader, watcher, out message, out shaderResource);
+            if (updated)
                 ShaderResource = shaderResource;
         }
         else
         {
-            updated = TryUpdateShaderResource(source, entryPoint, isSourceCode, shaderResource, out message);
+            updated = isSourceCode
+                          ? shaderResource.TryUpdateFromSource(source, entryPoint, watcher.WatchedFolder, out message)
+                          : shaderResource.TryUpdateFromFile(source, entryPoint, out message);
         }
 
         if (updated && shaderResource != null)
@@ -109,17 +116,9 @@ public interface IShaderOperator<T> where T : class, IDisposable
                 return false;
             }
         }
-        
-        static bool TryUpdateShaderResource(string source, string entryPoint, bool srcIsSourceCode, ShaderResource<T> resource, out string errorMessage)
-        {
-            var success = srcIsSourceCode 
-                              ? resource.TryUpdateFromSource(source, entryPoint, out errorMessage) 
-                              : resource.TryUpdateFromFile(source, entryPoint, out errorMessage);
 
-            return success;
-        }
-
-        static bool TryCreateResource(string source, string entryPoint, string debugName, bool isSourceCode, Slot<T> shaderSlot, out string errorMessage, out ShaderResource<T> shaderResource)
+        static bool TryCreateResource(string source, string entryPoint, string debugName, bool isSourceCode, ISlot shaderSlot, ResourceFileWatcher watcher,
+                                      out string errorMessage, out ShaderResource<T> shaderResource)
         {
             bool updated;
             var resourceManager = ResourceManager.Instance();
@@ -128,6 +127,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
             {
                 updated = resourceManager.TryCreateShaderResourceFromSource(out shaderResource,
                                                                             shaderSource: source,
+                                                                            directory: watcher.WatchedFolder,
                                                                             entryPoint: entryPoint,
                                                                             name: debugName,
                                                                             errorMessage: out errorMessage);
@@ -135,7 +135,8 @@ public interface IShaderOperator<T> where T : class, IDisposable
             else
             {
                 updated = resourceManager.TryCreateShaderResource(out shaderResource,
-                                                                  fileName: source,
+                                                                  watcher: watcher,
+                                                                  relativePath: source,
                                                                   entryPoint: entryPoint,
                                                                   name: debugName,
                                                                   fileChangedAction: () =>

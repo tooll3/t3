@@ -55,7 +55,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             if (resourceManager == null)
                 return;
 
-            (_, _srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
+            (_, _srvResId) = resourceManager.CreateTextureFromFile(imagePath, null, () => { });
             _loadedImagePath = imagePath;
         }
 

@@ -272,7 +272,6 @@ public sealed partial class ResourceManager
                               };
 
         DefaultSamplerState = new SamplerState(device, samplerDesc);
-        ResourceFileWatcher.Setup();
     }
 
     public static void CreateShaderResourceView(uint textureId, string name, ref ShaderResourceView shaderResourceView)

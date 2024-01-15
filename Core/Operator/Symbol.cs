@@ -42,6 +42,8 @@ namespace T3.Core.Operator
 
         public Type InstanceType { get; private set; }
 
+        public readonly List<FieldInfo> FieldInfos = new(4);
+
         public Animator Animator { get; } = new();
 
         public PlaybackSettings PlaybackSettings { get; set; } = new();
@@ -75,16 +77,15 @@ namespace T3.Core.Operator
 
         public Symbol(Type instanceType, Guid symbolId, Guid[] orderedInputIds = null , bool isHome = false)
         {
-            InstanceType = instanceType;
             Name = instanceType.Name;
             Id = symbolId;
             IsHome = isHome;
 
+            UpdateType(instanceType);
+
             // input identified by base interface
-            Type inputSlotType = typeof(IInputSlot);
 
-
-            var inputInfos = instanceType.GetFields().Where(f => inputSlotType.IsAssignableFrom(f.FieldType));
+            var inputInfos = GetFieldInfosAssignableTo(typeof(IInputSlot));
             var inputDefs = new List<InputDefinition>();
             foreach (var inputInfo in inputInfos)
             {
@@ -122,7 +123,7 @@ namespace T3.Core.Operator
             InputDefinitions.AddRange(inputDefs);
 
             // outputs identified by attribute
-            var outputs = (from field in instanceType.GetFields()
+            var outputs = (from field in FieldInfos
                            let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
                            from attr in attributes
                            select (field, attributes)).ToArray();
@@ -147,6 +148,23 @@ namespace T3.Core.Operator
                                               DirtyFlagTrigger = attribute.DirtyFlagTrigger
                                           });
             }
+        }
+        
+        private void UpdateType(Type instanceType)
+        {
+            InstanceType = instanceType;
+
+            if (instanceType == typeof(object))
+                return;
+            
+            FieldInfos.Clear();
+            FieldInfos.AddRange(instanceType.GetFields());
+            
+            // set the static TypeSymbol field so that instances can access their resources in their constructor
+            var genericType = typeof(Instance<>).MakeGenericType(instanceType);
+            var staticFieldInfos = genericType.GetFields(BindingFlags.Static | BindingFlags.NonPublic);
+            var staticSymbolField = staticFieldInfos.Single(x => x.Name == "_typeSymbol");
+            staticSymbolField.SetValue(null, this);
         }
 
         private static Type GetOutputDataType(FieldInfo output)
@@ -174,23 +192,24 @@ namespace T3.Core.Operator
                                             && c.TargetSlotId == con.TargetSlotId)
                               .FindIndex(cc => cc == con); // todo: fix this mess! connection rework!
         }
+        
+        private IEnumerable<FieldInfo> GetFieldInfosAssignableTo(Type type) => FieldInfos.Where(f => type.IsAssignableFrom(f.FieldType));
 
         public void UpdateInstanceType(Type instanceType)
         {
-            if (IsHome)
+            if (IsHome && InstanceType != null)
             {
                 Log.Warning($"Skipping updating home instance type: {Name}");
                 return;
             }
 
-            InstanceType = instanceType;
+            UpdateType(instanceType);
             
             Name = instanceType.Name;
             var newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<ConnectionEntry>)>();
 
             // check if inputs have changed
-            Type inputSlotType = typeof(IInputSlot);
-            var inputInfos = instanceType.GetFields().Where(f => inputSlotType.IsAssignableFrom(f.FieldType));
+            var inputInfos = GetFieldInfosAssignableTo(typeof(IInputSlot));
 
             (FieldInfo inputInfo, InputAttribute)[] inputs = null;
 
@@ -232,7 +251,7 @@ namespace T3.Core.Operator
             }
 
             // check if outputs have changed
-            var outputs = (from field in instanceType.GetFields()
+            var outputs = (from field in FieldInfos
                            let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
                            where attributes.Any()
                            select (field, (OutputAttribute)attributes[0])).ToArray();
@@ -483,7 +502,6 @@ namespace T3.Core.Operator
             var newInstance = Activator.CreateInstance(InstanceType) as Instance;
             Debug.Assert(newInstance != null);
             newInstance.SymbolChildId = id;
-            newInstance.Symbol = this;
 
             SortInputSlotsByDefinitionOrder(newInstance.Inputs);
             InstancesOfSymbol.Add(newInstance);

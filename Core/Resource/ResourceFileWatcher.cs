@@ -2,31 +2,39 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
 
 namespace T3.Core.Resource
 {
-    public static class ResourceFileWatcher
+    public class ResourceFileWatcher
     {
-        public static void Setup()
+        public readonly string WatchedFolder;
+        
+        internal ResourceFileWatcher(string watchedFolder, bool shared)
         {
-            var hlslWatcher = AddWatcher(ResourceManager.CommonResourcesFolder, "*.hlsl");
+            Directory.CreateDirectory(watchedFolder);
+            var hlslWatcher = AddWatcher(watchedFolder, "*.hlsl");
             hlslWatcher.Deleted += FileChangedHandler;
             hlslWatcher.Renamed += FileChangedHandler;
             hlslWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // Creation time needed for visual studio (2017)
 
-            AddWatcher(ResourceManager.CommonResourcesFolder, "*.png");
-            AddWatcher(ResourceManager.CommonResourcesFolder, "*.jpg");
-            AddWatcher(ResourceManager.CommonResourcesFolder, "*.dds");
-            AddWatcher(ResourceManager.CommonResourcesFolder, "*.tiff");
+            AddWatcher(watchedFolder, "*.png");
+            AddWatcher(watchedFolder, "*.jpg");
+            AddWatcher(watchedFolder, "*.dds");
+            AddWatcher(watchedFolder, "*.tiff");
+            WatchedFolder = watchedFolder;
+
+            if (shared)
+            {
+                ResourceManager.SharedResourceFileWatchers.Add(this);
+            }
         }
 
-        public static void AddFileHook(string filepath, Action action)
+        public void AddFileHook(string filepath, Action action)
         {
-            if (string.IsNullOrEmpty(filepath))
+            if (string.IsNullOrWhiteSpace(filepath))
                 return;
 
             string pattern;
@@ -42,7 +50,7 @@ namespace T3.Core.Resource
 
             if (!_fileWatchers.ContainsKey(pattern))
             {
-                AddWatcher(ResourceManager.CommonResourcesFolder, pattern);
+                AddWatcher(WatchedFolder, pattern);
             }
 
             if (HooksForResourceFilepaths.TryGetValue(filepath, out var hook))
@@ -66,7 +74,7 @@ namespace T3.Core.Resource
             }
         }
 
-        private static FileSystemWatcher AddWatcher(string folder, string filePattern)
+        private FileSystemWatcher AddWatcher(string folder, string filePattern)
         {
             var newWatcher = new FileSystemWatcher(folder, filePattern)
                                  {
@@ -79,9 +87,9 @@ namespace T3.Core.Resource
             return newWatcher;
         }
 
-        private static Dictionary<string, FileSystemWatcher> _fileWatchers = new();
+        private readonly Dictionary<string, FileSystemWatcher> _fileWatchers = new(5);
 
-        private static void FileChangedHandler(object sender, FileSystemEventArgs fileSystemEventArgs)
+        private void FileChangedHandler(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
             // Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
             if (!HooksForResourceFilepaths.TryGetValue(fileSystemEventArgs.FullPath, out var fileHook))
@@ -103,19 +111,6 @@ namespace T3.Core.Resource
             Thread.Sleep(32);
             var ids = string.Join(",", fileHook.ResourceIds);
             Log.Info($"Updating '{fileSystemEventArgs.FullPath}' ({ids} {fileSystemEventArgs.ChangeType})");
-            foreach (var id in fileHook.ResourceIds)
-            {
-                // Update all resources that depend from this file
-                if (ResourceManager.ResourcesById.TryGetValue(id, out var resource))
-                {
-                    var updateable = resource as IUpdateable;
-                    updateable?.Update(fileHook.Path);
-                }
-                else
-                {
-                    Log.Info($"Trying to update a non existing file resource '{fileHook.Path}'.");
-                }
-            }
 
             fileHook.FileChangeAction?.Invoke();
 
@@ -124,7 +119,7 @@ namespace T3.Core.Resource
             // else discard the (duplicated) OnChanged event
         }
 
-        public static readonly ConcurrentDictionary<string, ResourceFileHook> HooksForResourceFilepaths = new();
+        internal readonly ConcurrentDictionary<string, ResourceFileHook> HooksForResourceFilepaths = new();
     }
 
     /// <summary>
@@ -141,7 +136,7 @@ namespace T3.Core.Resource
             LastWriteReferenceTime = File.GetLastWriteTime(path);
         }
 
-        public string Path;
+        public readonly string Path;
         public readonly List<uint> ResourceIds = new();
         public DateTime LastWriteReferenceTime;
         public Action FileChangeAction;

@@ -24,14 +24,14 @@ public abstract class ShaderCompiler
         }
     }
 
-    protected abstract bool CompileShaderFromSource<TShader>(string shaderSource, string entryPoint, string name, out ShaderBytecode blob,
+    protected abstract bool CompileShaderFromSource<TShader>(string shaderSource, string directory, string entryPoint, string name, out ShaderBytecode blob,
                                                              out string errorMessage)
         where TShader : class, IDisposable;
 
     protected abstract void CreateShaderInstance<TShader>(string name, in ShaderBytecode blob, out TShader shader)
         where TShader : class, IDisposable;
 
-    public bool TryCompileShaderFromSource<TShader>(string shaderSource, string entryPoint, string name, ref TShader shader, ref ShaderBytecode blob,
+    public bool TryCompileShaderFromSource<TShader>(string shaderSource, string directory, string entryPoint, string name, ref TShader shader, ref ShaderBytecode blob,
                                                     out string errorMessage)
         where TShader : class, IDisposable
     {
@@ -52,7 +52,7 @@ public abstract class ShaderCompiler
             }
             else
             {
-                success = CompileShaderFromSource<TShader>(shaderSource, entryPoint, name, out latestBlob, out errorMessage);
+                success = CompileShaderFromSource<TShader>(shaderSource, directory, entryPoint, name, out latestBlob, out errorMessage);
 
                 if (success)
                 {
@@ -103,16 +103,22 @@ public abstract class ShaderCompiler
         }
 
         var fileText = File.ReadAllText(srcFile);
-        return TryCompileShaderFromSource(fileText, entryPoint, name, ref shader, ref blob, out errorMessage);
+        return TryCompileShaderFromSource(shaderSource: fileText,
+                                          directory: file.DirectoryName!, 
+                                          entryPoint: entryPoint, 
+                                          name: name, 
+                                          shader: ref shader, 
+                                          blob: ref blob, 
+                                          errorMessage: out errorMessage);
     }
 
-    public bool TryCreateShaderResourceFromSource<TShader>(string shaderSource, string name, string entryPoint, uint resourceId,
+    public bool TryCreateShaderResourceFromSource<TShader>(string shaderSource, string name, string directory, string entryPoint, uint resourceId,
                                                            out ShaderResource<TShader> resource, out string errorMessage)
         where TShader : class, IDisposable
     {
         TShader shader = null;
         ShaderBytecode blob = null;
-        var success = TryCompileShaderFromSource(shaderSource, entryPoint, name, ref shader, ref blob, out errorMessage);
+        var success = TryCompileShaderFromSource(shaderSource, directory, entryPoint, name, ref shader, ref blob, out errorMessage);
         if (!success)
         {
             Log.Info($"Failed to create {nameof(TShader)} '{name}'.");

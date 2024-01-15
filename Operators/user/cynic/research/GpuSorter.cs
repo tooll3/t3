@@ -152,17 +152,18 @@ namespace user.cynic.research
             csStage.Set(prevShader);
         }
 
-        public void Init()
+        private void Init()
         {
             var resourceManager = ResourceManager.Instance();
 
             if (_sortShaderResource == null)
             {
-                string sourcePath = @"Resources\proj-partial\particle\bitonic-sort.hlsl";
+                string sourcePath = @"proj-there\particle\bitonic-sort.hlsl";
                 string entryPoint = "bitonicSort";
                 string debugName = "bitonic-sort";
                 resourceManager.TryCreateShaderResource(resource: out _sortShaderResource, 
-                                                        fileName: sourcePath, 
+                                                        relativePath: sourcePath, 
+                                                        watcher: ResourceFileWatcher,
                                                         errorMessage: out var errorMessage, 
                                                         name: debugName, 
                                                         entryPoint: entryPoint);
@@ -170,11 +171,12 @@ namespace user.cynic.research
 
             if (_transposeShaderResource == null)
             {
-                string sourcePath = @"Resources\proj-partial\particle\bitonic-transpose.hlsl";
+                string sourcePath = @"proj-partial\particle\bitonic-transpose.hlsl";
                 string entryPoint = "transpose";
                 string debugName = "bitonic-transpose";
                 resourceManager.TryCreateShaderResource(resource: out _transposeShaderResource, 
-                                                        fileName: sourcePath, 
+                                                        relativePath: sourcePath, 
+                                                        watcher: ResourceFileWatcher,
                                                         errorMessage: out var errorMessage, 
                                                         name: debugName, 
                                                         entryPoint: entryPoint);

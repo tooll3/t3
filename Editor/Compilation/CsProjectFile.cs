@@ -239,6 +239,9 @@ internal class CsProjectFile
         var dependenciesDirectory = Path.Combine(destinationDirectory, "dependencies");
         System.IO.Directory.CreateDirectory(dependenciesDirectory);
 
+        var resourcesDirectory = Path.Combine(destinationDirectory, "Resources");
+        System.IO.Directory.CreateDirectory(resourcesDirectory);
+
         string placeholderDependencyPath = Path.Combine(dependenciesDirectory, "PlaceNativeDllDependenciesHere.txt");
         File.Create(placeholderDependencyPath).Dispose();
 

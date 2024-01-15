@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using SharpDX;
-using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.Logging;
@@ -34,12 +33,13 @@ namespace T3.Core.DataTypes
         {
             if (_initDeadListShaderResource == null)
             {
-                string sourcePath = @"lib\particles\particle-dead-list-init.hlsl";
+                string sourcePath = @"particles\particle-dead-list-init.hlsl";
                 string entryPoint = "main";
                 string debugName = "particle-dead-list-init";
                 var resourceManager = ResourceManager.Instance();
                 resourceManager.TryCreateShaderResource(resource: out _initDeadListShaderResource, 
-                                                        fileName: sourcePath, 
+                                                        relativePath: sourcePath, 
+                                                        watcher: null,
                                                         errorMessage: out var errorMessage, 
                                                         name: entryPoint, 
                                                         entryPoint: debugName, 

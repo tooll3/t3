@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Resource;
 using T3.Core.Stats;
 
 // ReSharper disable RedundantNameQualifier
@@ -17,17 +20,20 @@ public abstract partial class SymbolPackage
     protected abstract AssemblyInformation AssemblyInformation { get; }
     public abstract string Folder { get; }
 
-    private readonly DirectoryInfo _resourcesDirectory;
-    public DirectoryInfo ResourcesDirectory
+    private ResourceFileWatcher _fileWatcher;
+    internal ResourceFileWatcher FileWatcher
     {
         get
         {
-            _resourcesDirectory.Refresh();
-            return _resourcesDirectory;
+            if(_fileWatcher == null)
+                InitializeFileWatcher();
+            
+            return _fileWatcher;
         }
     }
 
     protected abstract bool InEditor { get; }
+    private DirectoryInfo _resourcesDirectory;
 
     static SymbolPackage()
     {
@@ -35,14 +41,19 @@ public abstract partial class SymbolPackage
         RegisterTypes();
     }
 
-    protected SymbolPackage(AssemblyInformation assembly)
+    private void InitializeFileWatcher()
     {
-        // ReSharper disable once VirtualMemberCallInConstructor
-        var resourcesFolder = InEditor 
-                                  ? Path.Combine(assembly.Directory, "Resources") 
-                                  : Path.Combine(assembly.Directory, "Resources", assembly.Name);
+        if(_fileWatcher != null)
+            return;
         
+        var resourcesFolder = InEditor
+                                  ? Path.Combine(Folder, "Resources")
+                                  : Path.Combine(Folder, "Resources", AssemblyInformation.Name);
+
         _resourcesDirectory = new DirectoryInfo(resourcesFolder);
+
+        var shared = AssemblyInformation.Name == "lib" || AssemblyInformation.Name == "examples";
+        _fileWatcher = new ResourceFileWatcher(resourcesFolder, shared);
     }
 
     public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> newlyRead, out IReadOnlyCollection<Symbol> allNewSymbols)

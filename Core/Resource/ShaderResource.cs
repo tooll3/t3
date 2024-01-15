@@ -53,9 +53,9 @@ public class ShaderResource<T> : ShaderResource where T : class, IDisposable
         return success;
     }
     
-    public bool TryUpdateFromSource(string source, string entryPoint, out string errorMessage)
+    public bool TryUpdateFromSource(string source, string entryPoint, string directory, out string errorMessage)
     {
-        var success = ShaderCompiler.Instance.TryCompileShaderFromSource(source, entryPoint, Name, ref _shader, ref _blob, out errorMessage);
+        var success = ShaderCompiler.Instance.TryCompileShaderFromSource(source, directory, entryPoint, Name, ref _shader, ref _blob, out errorMessage);
         if(success)
             _entryPoint = entryPoint;
         return success;

@@ -21,7 +21,8 @@ namespace T3.Editor.Gui.OutputUi
             const string debugName = "render-volume-slice";
             var resourceManager = ResourceManager.Instance();
             var success= resourceManager.TryCreateShaderResource(resource: out _shaderResource, 
-                                                                                fileName: sourcePath, 
+                                                                                relativePath: sourcePath, 
+                                                                                watcher: null,
                                                                                 errorMessage: out var errorMessage, 
                                                                                 name: debugName, 
                                                                                 entryPoint: entryPoint, 

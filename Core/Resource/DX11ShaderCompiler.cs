@@ -12,7 +12,7 @@ public class DX11ShaderCompiler : ShaderCompiler
 {
     public Device Device { get; set; }
 
-    protected override bool CompileShaderFromSource<TShader>(string shaderSource, string entryPoint, string name, out ShaderBytecode blob,
+    protected override bool CompileShaderFromSource<TShader>(string shaderSource, string directory, string entryPoint, string name, out ShaderBytecode blob,
                                                              out string errorMessage)
     {
         CompilationResult compilationResult = null;
@@ -26,7 +26,7 @@ public class DX11ShaderCompiler : ShaderCompiler
             flags |= ShaderFlags.Debug;
             #endif
 
-            compilationResult = ShaderBytecode.Compile(shaderSource, entryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler());
+            compilationResult = ShaderBytecode.Compile(shaderSource, entryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler(directory));
 
             success = compilationResult.ResultCode == Result.Ok;
             resultMessage = compilationResult.Message;
@@ -74,6 +74,12 @@ public class DX11ShaderCompiler : ShaderCompiler
     private class IncludeHandler : SharpDX.D3DCompiler.Include
     {
         private StreamReader _streamReader;
+        private readonly string _directory;
+        
+        public IncludeHandler(string directory)
+        {
+            _directory = directory;
+        }
 
         public void Dispose()
         {
@@ -83,31 +89,24 @@ public class DX11ShaderCompiler : ShaderCompiler
         public IDisposable Shadow { get; set; }
 
         public Stream Open(IncludeType type, string fileName, Stream parentStream)
-        { 
-            string resourcesFolder = ResourceManager.CommonResourcesFolder;
-
-            try
+        {
+            var preferredPath = Path.Combine(_directory, fileName);
+            if(File.Exists(preferredPath))
             {
-                _streamReader = new StreamReader(Path.Combine(resourcesFolder, fileName));
+                _streamReader = new StreamReader(preferredPath);
+                return _streamReader.BaseStream;
             }
-            catch (DirectoryNotFoundException rs_e)
+            
+            foreach (var folder in ResourceManager.SharedResourceFolders)
             {
-                try
-                {
-                    _streamReader = new StreamReader(Path.Combine(
-                                                                  new FileInfo(((System.IO.FileStream)parentStream).Name).DirectoryName.ToString(),
-                                                                  fileName
-                                                                 ));
-                }
-                catch (DirectoryNotFoundException in_e)
-                {
-                    Log.Error($"Included file {fileName} wasn't found in {resourcesFolder} or its parent folder " +
-                              $"({rs_e.Message}, {in_e.Message})");
-                    return null;
-                }
+                var path = Path.Combine(folder, fileName);
+                if (!File.Exists(path))
+                    continue;
+                _streamReader = new StreamReader(path);
+                return _streamReader.BaseStream;
             }
 
-            return _streamReader.BaseStream;
+            return null;
         }
 
         public void Close(Stream stream)

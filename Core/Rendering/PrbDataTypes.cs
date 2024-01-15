@@ -92,8 +92,8 @@ namespace T3.Core.Rendering
             NormalFallbackTexture = CreateFallBackTexture(new Vector4(0.5f, 0.5f, 1, 0));
             _normalMapSrv = new ShaderResourceView(device, NormalFallbackTexture);
             
-            _pbrLookUpTexture = LoadTextureAsSRV(@"Resources\common\images\BRDF-LookUp.dds");
-            _prefilteredBrdfTexture = LoadTexture(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
+            _pbrLookUpTexture = LoadTextureAsSRV(@"common\images\BRDF-LookUp.dds");
+            _prefilteredBrdfTexture = LoadTexture(@"common\HDRI\studio_small_08-prefiltered.dds");
             
             _wasInitialized = true;
         }
@@ -128,7 +128,7 @@ namespace T3.Core.Rendering
             var resourceManager = ResourceManager.Instance();
             try
             {
-                var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
+                var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, null, () => { });
                 
                 if (ResourceManager.ResourcesById.TryGetValue(srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
                     return srvResource.ShaderResourceView;                
@@ -147,7 +147,7 @@ namespace T3.Core.Rendering
             var resourceManager = ResourceManager.Instance();
             try
             {
-                var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
+                var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, null, () => { });
                 if (ResourceManager.ResourcesById.TryGetValue(textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
                      return textureResource.Texture;
                 
