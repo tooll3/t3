@@ -24,6 +24,7 @@ cbuffer Params : register(b1)
     float SegmentCount;
     float UseWForSize;
     float AlphaCutOff;
+    float UseExtend;
 };
 
 cbuffer FogParams : register(b2)
@@ -93,8 +94,9 @@ psInput vsMain(uint id
     PbrVertex vertex = PbrVertices[FaceIndices[faceIndex][faceVertexIndex]];
     float4 posInObject = float4(vertex.Position, 1);
 
-    float resize = (UseWForSize ? Points[instanceIndex].W : 1);
-    posInObject.xyz *= max(0, resize) * Size;
+    float resizeFromW = UseWForSize ? Points[instanceIndex].W : 1;
+    float3 resizeFromStretch = UseExtend ? Points[instanceIndex].Extend : 1;
+    posInObject.xyz *= max(0, resizeFromW) * Size * resizeFromStretch;
     float4x4 orientationMatrix = transpose(qToMatrix(normalize(Points[instanceIndex].Rotation)));
     posInObject = mul(float4(posInObject.xyz, 1), orientationMatrix);
 
