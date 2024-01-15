@@ -333,7 +333,7 @@
           "Value": "None"
         },
         {
-          "Id": "d1db33ea-1739-4323-9105-7b236a0e240f"/*TextureWrap*/,
+          "Id": "d1db33ea-1739-4323-9105-7b236a0e240f"/*WrapMode*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "Clamp"
         }
@@ -394,7 +394,7 @@
       "SymbolId": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
       "InputValues": [
         {
-          "Id": "d1db33ea-1739-4323-9105-7b236a0e240f"/*TextureWrap*/,
+          "Id": "d1db33ea-1739-4323-9105-7b236a0e240f"/*WrapMode*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "Clamp"
         }
@@ -577,7 +577,7 @@
           "Value": true
         },
         {
-          "Id": "d1db33ea-1739-4323-9105-7b236a0e240f"/*TextureWrap*/,
+          "Id": "d1db33ea-1739-4323-9105-7b236a0e240f"/*WrapMode*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "Clamp"
         }

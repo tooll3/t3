@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Stats;
 
 namespace T3.Core.Operator.Slots
@@ -157,12 +158,24 @@ namespace T3.Core.Operator.Slots
         {
             if (!IsConnected && sourceSlot != null)
             {
-                _actionBeforeAddingConnecting = UpdateAction;
+                if (UpdateAction != null)
+                {
+                    _actionBeforeAddingConnecting = UpdateAction;
+                    if (Parent.Children.Count > 0 && Parent is ICompoundWithUpdate compoundWithUpdate && this is not IInputSlot)
+                    {
+                        Log.Debug($"Skipping connection for compound op with update method for {Parent.Symbol} {this}", compoundWithUpdate);
+                        //compoundWithUpdate.RegisterOutputUpdateAction(this, ConnectedUpdate);
+                        InputConnection.Insert(index, (Slot<T>)sourceSlot);
+                        DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
+                        DirtyFlag.Reference = DirtyFlag.Target - 1;
+                        return;
+                    }
+                }
                 UpdateAction = ConnectedUpdate;
                 DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
                 DirtyFlag.Reference = DirtyFlag.Target - 1;
             }
-
+            
             if (sourceSlot == null)
                 return;
             
@@ -172,6 +185,7 @@ namespace T3.Core.Operator.Slots
                 return;
             }
             InputConnection.Insert(index, (Slot<T>)sourceSlot);
+            
         }
 
         private Action<EvaluationContext> _actionBeforeAddingConnecting;

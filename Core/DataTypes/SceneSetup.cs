@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using Newtonsoft.Json;
@@ -79,6 +80,8 @@ public class SceneSetup : IEditableInputType
             HiddenBranch,
         }
     }
+
+    public List<PbrMaterial> Materials { get; set; } = new List<PbrMaterial>();
 
     // private List<DrawBatch> _drawBatches;
 

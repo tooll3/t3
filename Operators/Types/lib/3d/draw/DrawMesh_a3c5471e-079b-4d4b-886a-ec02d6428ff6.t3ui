@@ -80,12 +80,20 @@
       "Description": "Defines the mode for texture filtering"
     },
     {
-      "InputId": "d1db33ea-1739-4323-9105-7b236a0e240f"/*TextureWrap*/,
+      "InputId": "d1db33ea-1739-4323-9105-7b236a0e240f"/*WrapMode*/,
       "Position": {
         "X": 1361.8606,
         "Y": 4594.013
       },
       "Description": "Defines how the texture behaves when repeated.\n\nWrap: The texture repeats itself continuously\nMirror: The texture is mirrored and repeats infinitely.\nClamp: The texture is cut off at the edge\nBorder: Unclear\nMirrOnce: The texture is mirrored once, then cut off"
+    },
+    {
+      "InputId": "d7bd3003-8589-4537-92e8-e95c5eb2bfab"/*UseMaterialId*/,
+      "Position": {
+        "X": 1361.8606,
+        "Y": 4639.013
+      },
+      "Usage": "CustomDropdown"
     }
   ],
   "SymbolChildUis": [

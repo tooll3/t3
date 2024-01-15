@@ -11,7 +11,7 @@ using T3.Core.Rendering.Material;
 
 namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
 {
-    public class DrawMesh : Instance<DrawMesh>, ICustomDropdownHolder
+    public class DrawMesh : Instance<DrawMesh>, ICustomDropdownHolder, ICompoundWithUpdate
     {
         [Output(Guid = "53b3fdca-9d5e-4808-a02f-4aa743cd8456")]
         public readonly Slot<Command> Output = new();
@@ -19,14 +19,49 @@ namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
         
         public DrawMesh()
         {
+            Log.Debug("Construct DrawMesh[]", this);
             Output.UpdateAction = Update;
         }
 
-
+        // public void RegisterOutputUpdateAction(ISlot slot, Action<EvaluationContext> connectedUpdate)
+        // {
+        //     Log.Debug("Register update action");
+        //     _connectedUpdates.Add(connectedUpdate);
+        // }
+        // private readonly List<Action<EvaluationContext>> _connectedUpdates = new ();
+        
+        
         private void Update(EvaluationContext context)
         {
-            Log.Debug("Here", this);
-            _pbrMaterials = context.Materials;
+            // Log.Debug("Update() " + context.Materials.Count, this);
+
+            if (context.Materials != null)
+            {
+                _pbrMaterials.Clear();
+                _pbrMaterials.AddRange(context.Materials);
+            }
+
+
+            var previousMaterial = context.PbrMaterial;
+            
+            var materialId = UseMaterialId.GetValue(context);
+            if (!string.IsNullOrEmpty(materialId))
+            {
+                foreach(var m in context.Materials)
+                {
+                    if (m.Name != materialId)
+                        continue;
+                    
+                    context.PbrMaterial = m;
+                    break;
+
+                }
+            }
+            
+            // Inner update
+            Output.ConnectedUpdate(context);
+
+            context.PbrMaterial = previousMaterial;
         }
         
 
@@ -67,10 +102,9 @@ namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
         
         public string GetValueForInput(Guid inputId)
         {
-            if (inputId != UseMaterialId.Input.InputDefinition.Id)
-                return "Undefined input";
-
-            return "Default";
+            return inputId != UseMaterialId.Input.InputDefinition.Id 
+                       ? "Undefined input" 
+                       : UseMaterialId.TypedInputValue.Value;
         }
 
         public IEnumerable<string> GetOptionsForInput(Guid inputId)
@@ -94,7 +128,8 @@ namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
             UseMaterialId.SetTypedInputValue(result);
         }
 
-        private List<PbrMaterial> _pbrMaterials;
+        private readonly List<PbrMaterial> _pbrMaterials = new(8);
+
     }
 }
 
