@@ -1,5 +1,7 @@
-﻿using System.Numerics;
+﻿using System.IO;
+using System.Numerics;
 using ImGuiNET;
+using T3.Core.Compilation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
@@ -253,7 +255,7 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.PopUp, slotIndex:79),
             };
 
-        public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
+        public static readonly string IconAtlasPath = Path.Combine(RuntimeAssemblies.CoreDirectory, @"Resources\t3-editor\images\t3-icons.png");
     }
 
     public enum Icon

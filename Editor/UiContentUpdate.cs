@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Numerics;
 using System.Threading;
 using System.Windows.Forms;
 using ImGuiNET;
 using SharpDX.Direct3D11;
+using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
@@ -117,10 +119,11 @@ internal static class UiContentUpdate
 
         var fontAtlasPtr = ImGui.GetIO().Fonts;
         fontAtlasPtr.Clear();
-        Fonts.FontNormal = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 18f * dpiAwareScale);
-        Fonts.FontBold = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Medium.ttf", 18f * dpiAwareScale);
-        Fonts.FontSmall = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 14f * dpiAwareScale);
-        Fonts.FontLarge = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Light.ttf", 30f * dpiAwareScale);
+        var root = Path.Combine(RuntimeAssemblies.CorePath, "Resources", "t3-editor", "fonts");
+        Fonts.FontNormal = fontAtlasPtr.AddFontFromFileTTF(Path.Combine(root, "Roboto-Regular.ttf"), 18f * dpiAwareScale);
+        Fonts.FontBold = fontAtlasPtr.AddFontFromFileTTF(Path.Combine(root, "Roboto-Medium.ttf"), 18f * dpiAwareScale);
+        Fonts.FontSmall = fontAtlasPtr.AddFontFromFileTTF(Path.Combine(root, "Roboto-Regular.ttf"), 14f * dpiAwareScale);
+        Fonts.FontLarge = fontAtlasPtr.AddFontFromFileTTF(Path.Combine(root, "Roboto-Light.ttf"), 30f * dpiAwareScale);
 
         Program.UiContentContentDrawer.CreateDeviceObjects();
     }

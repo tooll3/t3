@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Windows;
+using T3.Core.Compilation;
 using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Styling;
 using Device = SharpDX.Direct3D11.Device;
@@ -147,17 +149,18 @@ namespace T3.Editor.App
 
         private void CreateRenderForm(string windowTitle, bool disableClose)
         {
+            var fileName = Path.Combine(RuntimeAssemblies.CoreDirectory, @"Resources\t3-editor\images\t3.ico");
             Form = disableClose
                        ? new NoCloseRenderForm(windowTitle)
                              {
                                  ClientSize = new Size(640, 360 + 20),
-                                 Icon = new Icon(@"Resources\t3-editor\images\t3.ico", 48, 48),
+                                 Icon = new Icon(fileName, 48, 48),
                                  FormBorderStyle = FormBorderStyle.None,
                              }
                        : new ImGuiDx11RenderForm(windowTitle)
                              {
                                  ClientSize = new Size(640, 480),
-                                 Icon = new Icon(@"Resources\t3-editor\images\t3.ico", 48, 48)
+                                 Icon = new Icon(fileName, 48, 48)
                              };
         }
 
