@@ -90,22 +90,13 @@ public class DX11ShaderCompiler : ShaderCompiler
 
         public Stream Open(IncludeType type, string fileName, Stream parentStream)
         {
-            var preferredPath = Path.Combine(_directory, fileName);
-            if(File.Exists(preferredPath))
+            if (ResourceManager.TryResolvePath(fileName, _directory, out var path))
             {
-                _streamReader = new StreamReader(preferredPath);
-                return _streamReader.BaseStream;
-            }
-            
-            foreach (var folder in ResourceManager.SharedResourceFolders)
-            {
-                var path = Path.Combine(folder, fileName);
-                if (!File.Exists(path))
-                    continue;
                 _streamReader = new StreamReader(path);
                 return _streamReader.BaseStream;
             }
 
+            _streamReader = null;
             return null;
         }
 

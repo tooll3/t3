@@ -356,6 +356,28 @@ namespace T3.Core.Resource
 
             return relativePath;
         }
+
+        public static bool TryResolvePath(string relativeFileName, string? directory, out string path)
+        {
+            relativeFileName = RelativePathBackwardsCompatibility(relativeFileName);
+            
+            if (directory != null)
+            {
+                path = Path.Combine(directory, relativeFileName);
+                if (File.Exists(path))
+                    return true;
+            }
+            
+            foreach(var folder in SharedResourceFolders)
+            {
+                path = Path.Combine(folder, relativeFileName);
+                if (File.Exists(path))
+                    return true;
+            }
+
+            path = string.Empty;
+            return false;
+        }
         #endregion
 
         private uint GetNextResourceId() => Interlocked.Increment(ref _resourceIdCounter);

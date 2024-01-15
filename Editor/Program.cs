@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using T3.Core.Compilation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Resource;
@@ -63,19 +64,12 @@ namespace T3.Editor
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
 
-            CrashReporting.InitializeCrashReporting();
+            //CrashReporting.InitializeCrashReporting();
 
             ISplashScreen splashScreen = new SplashScreen.SplashScreen();
 
-            try
-            {
-                splashScreen.Show("Resources/t3-editor/images/t3-SplashScreen.png");
-            }
-            catch (System.IO.FileNotFoundException e)
-            {
-                // Catching this exception will the validation check dialog allow to be shown later
-                Log.Error("Failed to create splash screen. Please make sure to run from the correct working directory: " + e.Message);
-            }
+            var path = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources", "t3-editor", "images", "t3-SplashScreen.png");
+            splashScreen.Show(path);
 
             var logDirectory = Path.Combine(Core.UserData.UserData.RootFolder, "log");
             Log.AddWriter(splashScreen);

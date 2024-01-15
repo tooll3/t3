@@ -119,11 +119,20 @@ internal static class UiContentUpdate
 
         var fontAtlasPtr = ImGui.GetIO().Fonts;
         fontAtlasPtr.Clear();
-        var root = Path.Combine(RuntimeAssemblies.CorePath, "Resources", "t3-editor", "fonts");
-        Fonts.FontNormal = fontAtlasPtr.AddFontFromFileTTF(Path.Combine(root, "Roboto-Regular.ttf"), 18f * dpiAwareScale);
-        Fonts.FontBold = fontAtlasPtr.AddFontFromFileTTF(Path.Combine(root, "Roboto-Medium.ttf"), 18f * dpiAwareScale);
-        Fonts.FontSmall = fontAtlasPtr.AddFontFromFileTTF(Path.Combine(root, "Roboto-Regular.ttf"), 14f * dpiAwareScale);
-        Fonts.FontLarge = fontAtlasPtr.AddFontFromFileTTF(Path.Combine(root, "Roboto-Light.ttf"), 30f * dpiAwareScale);
+        const string fontName = "Roboto";
+        var root = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources", "t3-editor", "fonts", fontName + '-');
+        
+        const string fileExtension = ".ttf";
+        var format = $"{root}{{0}}{fileExtension}";
+        
+        var normalPath = string.Format(format, "Regular");
+        var boldPath = string.Format(format, "Medium");
+        var lightPath = string.Format(format, "Light");
+        
+        Fonts.FontNormal = fontAtlasPtr.AddFontFromFileTTF(normalPath, 18f * dpiAwareScale);
+        Fonts.FontBold = fontAtlasPtr.AddFontFromFileTTF(boldPath, 18f * dpiAwareScale);
+        Fonts.FontSmall = fontAtlasPtr.AddFontFromFileTTF(normalPath, 14f * dpiAwareScale);
+        Fonts.FontLarge = fontAtlasPtr.AddFontFromFileTTF(lightPath, 30f * dpiAwareScale);
 
         Program.UiContentContentDrawer.CreateDeviceObjects();
     }
