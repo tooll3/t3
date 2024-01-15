@@ -27,6 +27,15 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
             var currentTime = UseAppRunTime.GetValue(context) ? Playback.RunTimeInSecs : context.LocalFxTime;
             if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
                 return;
+            
+            if (context.IntVariables.TryGetValue("__MotionBlurPass", out var motionBlurPass))
+            {
+                if (motionBlurPass > 0)
+                {
+                    //Log.Debug($"Skip motion blur pass {motionBlurPass}");
+                    return;
+                }                
+            } 
 
             _lastEvalTime = currentTime;
 
