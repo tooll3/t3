@@ -469,7 +469,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                                             W = 1,
                                             Orientation = Quaternion.Identity,
                                             Color = Vector4.One,
-                                            Velocity = Vector3.One,
+                                            Stretch = Vector3.One,
                                             Selected = 1,
                                         });
                 }

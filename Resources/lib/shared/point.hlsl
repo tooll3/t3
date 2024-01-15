@@ -10,7 +10,7 @@ struct Point
     float W;
     float4 Rotation;
     float4 Color;
-    float3 Extend;
+    float3 Stretch;
     float Selected;
 };
 

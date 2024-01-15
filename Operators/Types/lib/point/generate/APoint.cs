@@ -63,7 +63,7 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
             array.TypedElements[0].Position = pos;
             array.TypedElements[0].W = W.GetValue(context);
             array.TypedElements[0].Color = Color.GetValue(context);
-            array.TypedElements[0].Velocity = Extend.GetValue(context);
+            array.TypedElements[0].Stretch = Extend.GetValue(context);
             array.TypedElements[0].Selected = Selected.GetValue(context);
             array.TypedElements[0].Orientation = rot;
             ResultList.Value = array;

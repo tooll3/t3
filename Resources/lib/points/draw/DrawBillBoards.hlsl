@@ -69,7 +69,7 @@ cbuffer Params : register(b1)
     float UseRotationAsRgba;
 
     float UseWFoScale;
-    float UseExtend;
+    float UseStretch;
 };
 
 cbuffer FogParams : register(b2)
@@ -225,7 +225,7 @@ psInput vsMain(uint id
 
     if (OrientationMode <= 1.5)
     {
-        float2 corner = float2((cornerFactors.xy + Offset.xy) * 0.010 * Stretch * (UseExtend > 0.5 ? p.Extend.xy : 1) * textureAspect) * float2(-1, -1);
+        float2 corner = float2((cornerFactors.xy + Offset.xy) * 0.010 * Stretch * (UseStretch > 0.5 ? p.Stretch.xy : 1) * textureAspect) * float2(-1, -1);
 
         float4 rot = qFromAngleAxis((adjustedRotate + RandomRotate * scatterForScale.x * adjustedRandomize) * 3.141578 / 180, RotationAxis);
 

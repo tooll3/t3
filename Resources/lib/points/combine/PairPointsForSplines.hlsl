@@ -69,7 +69,7 @@ inline float3 Interpolate(float t, float3 pA, float3 tA, float3 tB, float3 pB)
     float3 pF = Interpolate(f, posA1, tA, tB, posB1);
     ResultPoints[i.x].Position = pF;
     ResultPoints[i.x].Color = lerp(PointsA[indexA].Color, PointsA[indexA].Color, f);
-    ResultPoints[i.x].Extend = lerp(PointsA[indexA].Extend, PointsA[indexA].Extend, f);
+    ResultPoints[i.x].Stretch = lerp(PointsA[indexA].Stretch, PointsA[indexA].Stretch, f);
 
     float3 pF2 = Interpolate(f+0.001, posA1, tA, tB, posB1);
     float3 forward2= normalize(pF-pF2);

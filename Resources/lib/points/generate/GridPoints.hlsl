@@ -67,7 +67,7 @@ static const float ToRad = 3.141578 / 180;
 
     ResultPoints[index].Color = Color;
     ResultPoints[index].Selected = 1;
-    ResultPoints[index].Extend = 1;
+    ResultPoints[index].Stretch = 1;
 
     if (Tiling < 0.5)
     {

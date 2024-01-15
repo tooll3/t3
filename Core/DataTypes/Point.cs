@@ -20,7 +20,7 @@ namespace T3.Core.DataTypes
         public Vector4 Color;
         
         [FieldOffset(12 * 4)]
-        public Vector3 Velocity;
+        public Vector3 Stretch;
         
         [FieldOffset(15 * 4)]
         public float Selected;
@@ -33,7 +33,7 @@ namespace T3.Core.DataTypes
                            W = float.NaN,
                            Orientation = Quaternion.Identity,
                            Color = Vector4.One,
-                           Velocity = Vector3.Zero,
+                           Stretch = Vector3.One,
                            Selected = 0,
                        };
         }

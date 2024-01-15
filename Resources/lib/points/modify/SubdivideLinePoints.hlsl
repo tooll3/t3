@@ -66,7 +66,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
         ResultPoints[i.x].Color = lerp( SourcePoints[segmentIndex].Color,  SourcePoints[segmentIndex + 1].Color, f);
         ResultPoints[i.x].Selected = lerp( SourcePoints[segmentIndex].Selected,  SourcePoints[segmentIndex + 1].Selected, f);
-        ResultPoints[i.x].Extend = lerp( SourcePoints[segmentIndex].Extend,  SourcePoints[segmentIndex + 1].Extend, f);
+        ResultPoints[i.x].Stretch = lerp( SourcePoints[segmentIndex].Stretch,  SourcePoints[segmentIndex + 1].Stretch, f);
     }
     
 

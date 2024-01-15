@@ -129,7 +129,7 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
     ResultPoints[gi].Selected = 1;
-    ResultPoints[gi].Extend = 1;
+    ResultPoints[gi].Stretch = 1;
 
     //ResultPoints[gi].Color = 1;
     //ResultPoints[gi].Rotation = QUATERNION_IDENTITY;

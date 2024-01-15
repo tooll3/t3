@@ -18,7 +18,7 @@ static uint sourceCount;
 static float3 sumPos =0;
 static float sumWeight=0;
 static float4 sumColor=0;
-static float3 sumExtend=0;
+static float3 sumStretch=0;
 static float3 sumSelected=0;
 static int sampledCount=0;
 
@@ -43,7 +43,7 @@ void SamplePosAtF(float f)
     sumWeight += lerp(w1, w2, fraction );
     sumPos += lerp(SourcePoints[index].Position, SourcePoints[index+1].Position , fraction );
     sumColor += lerp(SourcePoints[index].Color, SourcePoints[index+1].Color , fraction );
-    sumExtend += lerp(SourcePoints[index].Extend, SourcePoints[index+1].Extend , fraction );
+    sumStretch += lerp(SourcePoints[index].Stretch, SourcePoints[index+1].Stretch , fraction );
     sumSelected += lerp(SourcePoints[index].Selected, SourcePoints[index+1].Selected , fraction );
     sampledCount++;
 }
@@ -107,7 +107,7 @@ void main(uint3 i : SV_DispatchThreadID)
     ResultPoints[i.x].W = sumWeight / sampledCount;
     ResultPoints[i.x].Rotation = SampleRotationAtF(f); // float4(0,0,0,1);//  p.rotation; //qMul(rotationFromDisplace , SourcePoints[i.x].rotation);
     ResultPoints[i.x].Color = sumColor / sampledCount;
-    ResultPoints[i.x].Extend = sumExtend / sampledCount;
+    ResultPoints[i.x].Stretch = sumStretch / sampledCount;
     ResultPoints[i.x].Selected = sumSelected / sampledCount;
     //ResultPoints[i.x].w = 1;//SourcePoints[i.x].w;
 }

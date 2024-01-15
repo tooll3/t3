@@ -53,7 +53,7 @@ void main(uint3 i : SV_DispatchThreadID)
         p.Position = lerp(p.Position, Position, Amount);
 
     if(SetExtend)
-        p.Extend = lerp(p.Extend, Extend, Amount);
+        p.Stretch = lerp(p.Stretch, Extend, Amount);
 
     if(SetW)
         p.W = lerp(p.W, W, Amount);

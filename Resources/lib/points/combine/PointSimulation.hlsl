@@ -41,7 +41,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     ResultPoints[i.x].Position = lerp(ResultPoints[i.x].Position,  SourcePoints[i.x].Position, MixOriginal);
     ResultPoints[i.x].Color = lerp(ResultPoints[i.x].Color,  SourcePoints[i.x].Color, MixOriginal);
-    ResultPoints[i.x].Extend = lerp(ResultPoints[i.x].Extend,  SourcePoints[i.x].Extend, MixOriginal);
+    ResultPoints[i.x].Stretch = lerp(ResultPoints[i.x].Stretch,  SourcePoints[i.x].Stretch, MixOriginal);
     ResultPoints[i.x].Selected = lerp(ResultPoints[i.x].Selected,  SourcePoints[i.x].Selected, MixOriginal);
     ResultPoints[i.x].Rotation = qSlerp(ResultPoints[i.x].Rotation,  SourcePoints[i.x].Rotation, MixOriginal);
 

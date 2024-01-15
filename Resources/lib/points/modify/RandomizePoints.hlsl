@@ -80,7 +80,7 @@ void main(uint3 i : SV_DispatchThreadID)
         p.W = max(0, p.W);
 
     }
-    p.Extend += float3(biasedB.w, biasedA.w, biasedA.z) * RandomizeExtend * amount; // Not ideal... distribution overlap
+    p.Stretch += float3(biasedB.w, biasedA.w, biasedA.z) * RandomizeExtend * amount; // Not ideal... distribution overlap
 
     // Rotation
     float3 randomRotate = (RandomizeRotation / 180 * PI) * amount * biasedA.xyz; 

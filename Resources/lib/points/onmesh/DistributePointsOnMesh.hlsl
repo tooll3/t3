@@ -91,7 +91,7 @@ void main(uint3 i : SV_DispatchThreadID)
     Point p;
 
     p.Selected = 1;
-    p.Extend = 0;
+    p.Stretch = 1;
     float xi1Sqrt = sqrt(xi1);
     float u = 1.0 - xi1Sqrt;
     float v = xi2 * xi1Sqrt; 

@@ -79,6 +79,6 @@ RWStructuredBuffer<Point> ResultPoints : u0; // output
     ResultPoints[i.x].Position = lerp(A.Position, B.Position, f);
     ResultPoints[i.x].W = lerp(A.W, B.W, f);
     ResultPoints[i.x].Color = lerp(A.Color, B.Color, f);
-    ResultPoints[i.x].Extend = lerp(A.Extend, B.Extend, f);
+    ResultPoints[i.x].Stretch = lerp(A.Stretch, B.Stretch, f);
     ResultPoints[i.x].Selected = lerp(A.Selected, B.Selected, f);
 }
