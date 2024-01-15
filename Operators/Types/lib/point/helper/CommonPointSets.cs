@@ -69,20 +69,29 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
             {
                 for (var bufferIndex = 0; bufferIndex < bufferCount; bufferIndex++)
                 {
-                    _gpuBuffersWithViews[bufferIndex] = new BufferWithViews();
-                    
-                    //const int strideOfPointStructure = 2 * 16;
+                    Buffer gpuBuffer = null;
+                    ShaderResourceView srv = null;
+                    UnorderedAccessView uav = null;
                     
                     var pointBuffer = _cpuPointBuffers[bufferIndex];
                     
                     ResourceManager.SetupStructuredBuffer(pointBuffer.TypedElements, 
                                                           Point.Stride * pointBuffer.NumElements, 
                                                           Point.Stride, 
-                                                          ref _gpuBuffers[bufferIndex]);
+                                                          ref gpuBuffer);
                     
+                    ResourceManager.CreateStructuredBufferSrv(gpuBuffer, 
+                                                              ref srv);
+                    ResourceManager.CreateStructuredBufferUav(gpuBuffer, 
+                                                              UnorderedAccessViewBufferFlags.None, 
+                                                              ref uav); 
                     
-                    ResourceManager.CreateStructuredBufferSrv(_gpuBuffers[bufferIndex], ref _gpuBuffersWithViews[bufferIndex].Srv);
-                    ResourceManager.CreateStructuredBufferUav(_gpuBuffers[bufferIndex], UnorderedAccessViewBufferFlags.None, ref _gpuBuffersWithViews[bufferIndex].Uav);
+                    _gpuBuffersWithViews[bufferIndex] = new BufferWithViews
+                                                            {
+                                                                Buffer = gpuBuffer,
+                                                                Srv = srv,
+                                                                Uav = uav
+                                                            };
                 }
             }
             catch (Exception e)
