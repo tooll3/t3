@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
         <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>T3.SystemUi</RootNamespace>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
 </Project>

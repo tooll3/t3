@@ -197,6 +197,7 @@ internal static class ProjectSetup
             #endif
             
             stopwatch.Start();
+            
             // Create home
             if (activeProject == null || !activeProject.TryCreateHome())
             {
@@ -244,7 +245,7 @@ internal static class ProjectSetup
             Directory.CreateSymbolicLink(linkName, subDirectory.FullName);
         }
         
-        CreateResourcesLink(t3ParentDirectory, RuntimeAssemblies.CoreDirectory);
+        //CreateResourcesLink(t3ParentDirectory, RuntimeAssemblies.CoreDirectory);
     }
 
     private static void CreateResourcesLink(string parentDirectory, string linkLocation)
@@ -278,7 +279,6 @@ internal static class ProjectSetup
     private static void InitializeCustomUis(IReadOnlyCollection<AssemblyInformation> nonOperatorAssemblies)
     {
         var uiInitializerTypes = nonOperatorAssemblies
-                                .Where(x => x.Name != "Editor")
                                 .ToArray()
                                 .AsParallel()
                                 .SelectMany(assemblyInfo => assemblyInfo.Types

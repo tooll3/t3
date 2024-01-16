@@ -7,6 +7,8 @@
         <RootNamespace>T3.Core</RootNamespace>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <ItemGroup>

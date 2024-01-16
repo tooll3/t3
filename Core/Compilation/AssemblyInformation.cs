@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyModel.Resolution;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
+using T3.Core.Resource;
 
 namespace T3.Core.Compilation;
 
@@ -33,7 +35,7 @@ public class AssemblyInformation
     private AssemblyLoadContext _loadContext;
     private CompositeCompilationAssemblyResolver _assemblyResolver;
 
-    public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext, bool skipTypes = false)
+    public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
     {
         Name = assemblyName.Name;
         Path = path;
@@ -43,13 +45,10 @@ public class AssemblyInformation
 
         _loadContext = loadContext;
 
-        if (skipTypes)
-            return;
-        
-        LoadTypes(path, assembly);
+        LoadTypes(path, assembly, out ShouldShareResources);
     }
 
-    private void LoadTypes(string path, Assembly assembly)
+    private void LoadTypes(string path, Assembly assembly, out bool shouldShareResources)
     {
         TryResolveReferences(path);
 
@@ -62,24 +61,60 @@ public class AssemblyInformation
             Log.Warning($"Failed to load types from assembly {assembly.FullName}\n{e.Message}\n{e.StackTrace}");
             _types = new Dictionary<string, Type>();
             _operatorTypes = new Dictionary<Guid, Type>();
+            shouldShareResources = false;
             return;
         }
 
+        ConcurrentBag<Type> nonOperatorTypes = new();
         _operatorTypes = _types.Values
-                               .Where(x => x.IsAssignableTo(typeof(Instance)))
-                               .Select(x =>
+                               .Where(type =>
+                                      {
+                                          var isOperator = type.IsAssignableTo(typeof(Instance));
+                                          if (!isOperator)
+                                              nonOperatorTypes.Add(type);
+                                          return isOperator;
+                                      })
+                               .Select(type =>
                                        {
-                                           var gotGuid = TryGetGuidOfType(x, out var id);
-                                           var isHome = x.GetCustomAttribute<HomeAttribute>() is not null;
+                                           var gotGuid = TryGetGuidOfType(type, out var id);
+                                           var isHome = type.GetCustomAttribute<HomeAttribute>() is not null;
                                            if (isHome && gotGuid)
                                            {
                                                HomeGuid = id;
                                            }
 
-                                           return new GuidInfo(gotGuid, id, x);
+                                           return new GuidInfo(gotGuid, id, type);
                                        })
                                .Where(x => x.HasGuid)
                                .ToDictionary(x => x.Guid, x => x.Type);
+
+        shouldShareResources = nonOperatorTypes
+                              .Where(type =>
+                                     {
+                                         // check for shareable type
+                                         if (!type.IsAssignableTo(typeof(IShareResources)))
+                                         {
+                                             return false;
+                                         }
+
+                                         try
+                                         {
+                                             var obj = Activator.CreateInstanceFrom(Path, type.FullName!);
+                                             var unwrapped = obj?.Unwrap();
+                                             if (unwrapped is IShareResources shareable)
+                                             {
+                                                 return shareable.ShouldShareResources;
+                                             }
+
+                                             Log.Error($"Failed to create {nameof(IShareResources)} for {type.FullName}");
+                                         }
+                                         catch (Exception e)
+                                         {
+                                             Log.Error($"Failed to create shareable resource for {type.FullName}\n{e.Message}");
+                                         }
+
+                                         return false;
+                                     }).Any();
     }
 
     /// <summary>
@@ -192,8 +227,9 @@ public class AssemblyInformation
             this.Type = type;
         }
     }
-    
+
     private DependencyContext DependencyContext => _dependencyContext ??= DependencyContext.Load(_assembly);
+    public readonly bool ShouldShareResources;
     private DependencyContext _dependencyContext;
 
     public void Unload()

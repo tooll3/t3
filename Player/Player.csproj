@@ -6,6 +6,8 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<ApplicationIcon>..\Resources\t3-editor\images\t3.ico</ApplicationIcon>
 	<RootNamespace>T3.Player</RootNamespace>
+	<Configurations>Debug;Release</Configurations>
+	<Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <ItemGroup>

@@ -110,7 +110,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
     }
 
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
-    protected override string ResourcesSubfolder => Path.Combine("Resources", AssemblyInformation.Name);
+    protected override string ResourcesSubfolder => "Resources";
 
     public override bool IsModifiable => false;
     protected const string SymbolUiExtension = ".t3ui";

@@ -10,11 +10,17 @@
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
         <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
         <!--<AssemblyName>T3Editor</AssemblyName>-->
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE;IDE</DefineConstants>
+      <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition=" '$(Configuration)' == 'IDE' ">
+      <DefineConstants>IDE;TRACE</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
@@ -79,7 +85,7 @@
         <Resources Include="../Resources/**/*.*" Visible="false"/>
     </ItemGroup>
     
-    <Target Name="CopyResources" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+    <Target Name="CopyResources" AfterTargets="AfterBuild">
         <Copy SourceFiles="@(Resources)"
               SkipUnchangedFiles="true"
               UseHardlinksIfPossible="true"

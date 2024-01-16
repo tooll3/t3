@@ -46,6 +46,7 @@ namespace lib._3d.mesh.generate
                                    || Math.Abs(scaleFactor - _scaleFactor) > 0.001f
                                    || vertexSorting != _lastSorting)
             {
+                // todo - these files should already be watched - file hooks should occur elsewhere
                 ResourceFileWatcher.AddFileHook(path, FileChangedHandler);
                 _sourceFileChanged = false;
                 _lastSorting = vertexSorting;

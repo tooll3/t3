@@ -47,22 +47,18 @@ public abstract partial class SymbolPackage
         if (_resourceFileWatcher != null)
             return;
 
-        var resourcesFolder = Path.Combine(Folder, ResourcesSubfolder);
-
-        var shared = AssemblyInformation.Name == "lib" || AssemblyInformation.Name == "examples";
-        _resourceFileWatcher = new ResourceFileWatcher(resourcesFolder, shared);
+        var fullResourcesFolder = Path.Combine(Folder, ResourcesSubfolder);
+        _resourceFileWatcher = new ResourceFileWatcher(fullResourcesFolder, AssemblyInformation.ShouldShareResources);
     }
 
     public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> newlyRead, out IReadOnlyCollection<Symbol> allNewSymbols)
     {
         Log.Debug($"{AssemblyInformation.Name}: Loading symbols...");
-        // Check if there are symbols without a file, if yes add these. this is a copy
-        var operatorTypes = AssemblyInformation.OperatorTypes.ToDictionary();
 
         Dictionary<Guid, Type> newTypes = new();
 
         var removedSymbolIds = new HashSet<Guid>(Symbols.Keys);
-        foreach (var (guid, type) in operatorTypes)
+        foreach (var (guid, type) in AssemblyInformation.OperatorTypes)
         {
             if (Symbols.Count > 0 && Symbols.TryGetValue(guid, out var symbol))
             {
