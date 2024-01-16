@@ -115,13 +115,13 @@ internal static class ProjectSetup
             stopwatch.Restart();
 
             var operatorFolder = Path.Combine(GetT3ParentDirectory(), "Operators");
-            rootDirectories = Directory.EnumerateDirectories(operatorFolder)
+            projectSearchDirectories = Directory.EnumerateDirectories(operatorFolder)
                                        .Where(path => !path.EndsWith("user"))
-                                       .Concat(rootDirectories)
+                                       .Concat(projectSearchDirectories)
                                        .ToArray();
 
             stopwatch.Stop();
-            Log.Debug($"Found {rootDirectories.Length} root directories in {stopwatch.ElapsedMilliseconds}ms");
+            Log.Debug($"Found {projectSearchDirectories.Length} root directories in {stopwatch.ElapsedMilliseconds}ms");
             #else
             var readOnlyRootDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators");
             var directory = Directory.CreateDirectory(readOnlyRootDirectory);

@@ -105,18 +105,18 @@
         <BuildFolder>bin/$(Configuration)/$(TargetFramework)</BuildFolder>
         <ResourceDir>Resources</ResourceDir>
     </PropertyGroup>
-    
-    <ItemGroup Condition=" '$(Configuration)' != 'IDE' ">
-        <Lib Include="$(lib)/$(BuildFolder)/**/*.dll;$(lib)/**/*.t3;$(lib)/**/*.t3ui" Visible="false"/>
-        <LibEditor Include="$(libEditor)/$(BuildFolder)/**/*.dll;$(libEditor)/**/*.t3;$(libEditor)/**/*.t3ui" Visible="false"/>
-        <Examples Include="$(examples)/$(BuildFolder)/**/*.dll;$(examples)/**/*.t3;$(examples)/**/*.t3ui" Visible="false"/>
-        
-        <LibResources Include="$(lib)/$(ResourceDir)/**/*" Visible="false"/>
-        <LibEditorResources Include="$(libEditor)/$(ResourceDir)/**/*" Visible="false"/>
-        <ExamplesResources Include="$(examples)/$(ResourceDir)/**/*" Visible="false"/>
-    </ItemGroup>
 
     <Target Name="CopyLibs" AfterTargets="AfterBuild" Condition=" '$(Configuration)' != 'IDE' ">
+        <ItemGroup Condition=" '$(Configuration)' != 'IDE' ">
+            <Lib Include="$(lib)/$(BuildFolder)/**/*.dll;$(lib)/**/*.t3;$(lib)/**/*.t3ui" Visible="false"/>
+            <LibEditor Include="$(libEditor)/$(BuildFolder)/**/*.dll;$(libEditor)/**/*.t3;$(libEditor)/**/*.t3ui" Visible="false"/>
+            <Examples Include="$(examples)/$(BuildFolder)/**/*.dll;$(examples)/**/*.t3;$(examples)/**/*.t3ui" Visible="false"/>
+
+            <LibResources Include="$(lib)/$(ResourceDir)/**/*" Visible="false"/>
+            <LibEditorResources Include="$(libEditor)/$(ResourceDir)/**/*" Visible="false"/>
+            <ExamplesResources Include="$(examples)/$(ResourceDir)/**/*" Visible="false"/>
+        </ItemGroup>
+
         <!-- Copy Dlls and symbols -->
         <Copy SourceFiles="@(Lib)"
               SkipUnchangedFiles="true"
@@ -130,7 +130,7 @@
               SkipUnchangedFiles="true"
               UseHardlinksIfPossible="true"
               DestinationFiles="@(Examples->'$(OutputPath)/Operators/examples/%(RecursiveDir)%(Filename)%(Extension)')"/>
-        
+
         <!-- Copy Resources -->
         <Copy SourceFiles="@(LibResources)"
               SkipUnchangedFiles="true"
@@ -144,7 +144,7 @@
               SkipUnchangedFiles="true"
               UseHardlinksIfPossible="true"
               DestinationFiles="@(ExamplesResources->'$(OutputPath)/Operators/examples/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
-              
+
     </Target>
 
 </Project>
