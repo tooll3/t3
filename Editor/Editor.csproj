@@ -83,6 +83,6 @@
         <Copy SourceFiles="@(Resources)"
               SkipUnchangedFiles="true"
               UseHardlinksIfPossible="true"
-              DestinationFiles="@(Resources->'$(OutputPath)/Resources/t3-editor/%(RecursiveDir)%(Filename)%(Extension)')"/>
+              DestinationFiles="@(Resources->'$(OutputPath)/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
 </Project>

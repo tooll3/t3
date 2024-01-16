@@ -34,8 +34,7 @@ public abstract partial class SymbolPackage
     }
 
     internal string ResourcesFolder => ResourceFileWatcher.WatchedFolder;
-
-    protected abstract bool InEditor { get; }
+    protected abstract string ResourcesSubfolder { get; }
 
     static SymbolPackage()
     {
@@ -48,9 +47,7 @@ public abstract partial class SymbolPackage
         if (_resourceFileWatcher != null)
             return;
 
-        var resourcesFolder = InEditor
-                                  ? Path.Combine(Folder, "Resources")
-                                  : Path.Combine(Folder, "Resources", AssemblyInformation.Name);
+        var resourcesFolder = Path.Combine(Folder, ResourcesSubfolder);
 
         var shared = AssemblyInformation.Name == "lib" || AssemblyInformation.Name == "examples";
         _resourceFileWatcher = new ResourceFileWatcher(resourcesFolder, shared);

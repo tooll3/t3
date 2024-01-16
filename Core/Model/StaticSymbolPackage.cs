@@ -14,5 +14,5 @@ public class StaticSymbolPackage : SymbolPackage
     public override bool IsModifiable => false;
 
     public override AssemblyInformation AssemblyInformation { get; }
-    protected override bool InEditor => false;
+    protected override string ResourcesSubfolder => "Resources";
 }
