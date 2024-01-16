@@ -82,6 +82,7 @@ namespace T3.Core.Resource
 
         private static FileSystemWatcher AddWatcher(string folder, string filePattern, Dictionary<string, FileSystemWatcher> collection, FileSystemEventHandler handler)
         {
+            Directory.CreateDirectory(folder);
             var newWatcher = new FileSystemWatcher(folder, filePattern)
                                  {
                                      IncludeSubdirectories = true,
