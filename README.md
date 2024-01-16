@@ -20,7 +20,7 @@ create motion graphics use many industry standard features like color correction
 We hope to bring together a community of artists, developers and creative tinkerers to drive the design and development of the software as a free open source project.
 
 ## Installation
-Please follow the [installation guide](https://github.com/tooll3/t3/wiki/Installation).
+Please follow the [installation guide](https://github.com/tooll3/t3/wiki/help.Installation).
 
 ## Get Help
 To get started read the [documentation](https://github.com/tooll3/t3/wiki) or watch [tutorial videos](https://www.youtube.com/watch?v=eH2E02U6P5Q&list=PLj-rnPROvbn3LigXGRSDvmLtgTwmNHcQs&index=4).
