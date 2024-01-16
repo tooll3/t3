@@ -7,7 +7,7 @@
 cbuffer Params : register(b0)
 {
     float UseWAsWidth;
-    float UseExtend;
+    float UseStretch;
     float Width;
 }
 
@@ -48,7 +48,7 @@ void main(uint3 i : SV_DispatchThreadID)
     Point railPoint = RailPoints[columnIndex];
     Point shapePoint = ShapePoints[rowIndex];
 
-    float3 scaleFactor = (UseExtend ? railPoint.Extend : 1)
+    float3 scaleFactor = (UseStretch ? railPoint.Stretch : 1)
      *  (UseWAsWidth ? railPoint.W : 1) * Width;;
 
     float4 rotation = normalize(qMul( railPoint.Rotation ,shapePoint.Rotation ));

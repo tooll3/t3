@@ -110,7 +110,7 @@ sampler texSampler : register(s0);
 
 
     // Stretch
-    //float3 stretch = p.Extend;
+    //float3 stretch = p.Stretch;
     float3 stretchFactor =float3( 
         (R == 8 ? (c.r * RFactor + ROffset) : 1) *
         (G == 8 ? (c.g * GFactor + GOffset) : 1) *
@@ -130,9 +130,9 @@ sampler texSampler : register(s0);
 
     
     float3 stretchOffset = Mode < 0.5 ? stretchFactor
-                               : float3(stretchFactor) * p.Extend;
+                               : float3(stretchFactor) * p.Stretch;
 
-    p.Extend *= stretchOffset;
+    p.Stretch *= stretchOffset;
 
     // Position
     float4 ff = FactorsForPositionAndW[(uint)clamp(L, 0, 5.1)] * (gray * LFactor + LOffset) +

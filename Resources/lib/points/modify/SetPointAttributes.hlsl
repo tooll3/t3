@@ -13,9 +13,9 @@ cbuffer Params : register(b0)
 
     float RotationAngle;
     float2 __padding;
-    float SetExtend;
+    float SetStretch;
 
-    float3 Extend;
+    float3 Stretch;
     float SetW;
 
     float W;
@@ -52,8 +52,8 @@ void main(uint3 i : SV_DispatchThreadID)
     if(SetPosition)
         p.Position = lerp(p.Position, Position, Amount);
 
-    if(SetExtend)
-        p.Stretch = lerp(p.Stretch, Extend, Amount);
+    if(SetStretch)
+        p.Stretch = lerp(p.Stretch, Stretch, Amount);
 
     if(SetW)
         p.W = lerp(p.W, W, Amount);

@@ -1,7 +1,7 @@
 // Points are particles share the same structure and stride,
 // But some attributes change their meaning:
 //   W -> Radius
-//   Extend -> Velocity
+//   Stretch -> Velocity
 //   Selected -> BirthTime
 
 struct Point
