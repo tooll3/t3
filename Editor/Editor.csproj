@@ -16,15 +16,15 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE</DefineConstants>
+        <DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
-    
+
     <PropertyGroup Condition=" '$(Configuration)' == 'IDE' ">
-      <DefineConstants>IDE;TRACE</DefineConstants>
+        <DefineConstants>IDE;TRACE</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ImGui.NET" Version="1.89.9.4" />
+        <PackageReference Include="ImGui.NET" Version="1.89.9.4"/>
         <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.0-2.final"/>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.0-2.final"/>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.0-2.final"/>
@@ -49,15 +49,15 @@
     <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
     <ItemGroup>
         <Content Include="../Dependencies/**/*" Visible="false">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 
 
     <!--This copies all files in the `.Defaults` folder into the output/.t3 folder-->
     <ItemGroup>
-        <DefaultUserConfigs Include="../.Defaults/**/*.*"/>
+        <DefaultUserConfigs Include="../.Defaults/**/*"/>
     </ItemGroup>
 
     <Target Name="CopyDefaults" AfterTargets="AfterBuild">
@@ -69,8 +69,9 @@
 
 
     <!--This copies all files in the `.Variations` folder into the output/.Variations folder-->
+    <!--Should these also be in user projects?-->
     <ItemGroup>
-        <Variations Include="../Variations/**/*.*" Visible="false"/>
+        <Variations Include="../Variations/**/*" Visible="false"/>
     </ItemGroup>
 
     <Target Name="CopyVariations" AfterTargets="AfterBuild">
@@ -79,16 +80,71 @@
               UseHardlinksIfPossible="true"
               DestinationFiles="@(Variations->'$(OutputPath)/Variations/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
-    
+
     <!-- Thhs copies ../t3/Resources into the output directory -->
     <ItemGroup>
-        <Resources Include="../Resources/**/*.*" Visible="false"/>
+        <Resources Include="../Resources/**/*" Visible="false"/>
     </ItemGroup>
-    
+
     <Target Name="CopyResources" AfterTargets="AfterBuild">
         <Copy SourceFiles="@(Resources)"
               SkipUnchangedFiles="true"
               UseHardlinksIfPossible="true"
               DestinationFiles="@(Resources->'$(OutputPath)/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
+
+    <!-- Build lib, libEditor, and examples AfterBuild and copy them to the output directory-->
+
+
+    <!-- This copies built-in operator projects into the output directory -->
+    <PropertyGroup Condition=" '$(Configuration)' != 'IDE' ">
+        <OperatorsFolder>../Operators</OperatorsFolder>
+        <lib>$(OperatorsFolder)/lib</lib>
+        <libEditor>$(OperatorsFolder)/libEditor</libEditor>
+        <examples>$(OperatorsFolder)/examples</examples>
+        <BuildFolder>bin/$(Configuration)/$(TargetFramework)</BuildFolder>
+        <ResourceDir>Resources</ResourceDir>
+    </PropertyGroup>
+    
+    <ItemGroup Condition=" '$(Configuration)' != 'IDE' ">
+        <Lib Include="$(lib)/$(BuildFolder)/**/*.dll;$(lib)/**/*.t3;$(lib)/**/*.t3ui" Visible="false"/>
+        <LibEditor Include="$(libEditor)/$(BuildFolder)/**/*.dll;$(libEditor)/**/*.t3;$(libEditor)/**/*.t3ui" Visible="false"/>
+        <Examples Include="$(examples)/$(BuildFolder)/**/*.dll;$(examples)/**/*.t3;$(examples)/**/*.t3ui" Visible="false"/>
+        
+        <LibResources Include="$(lib)/$(ResourceDir)/**/*" Visible="false"/>
+        <LibEditorResources Include="$(libEditor)/$(ResourceDir)/**/*" Visible="false"/>
+        <ExamplesResources Include="$(examples)/$(ResourceDir)/**/*" Visible="false"/>
+    </ItemGroup>
+
+    <Target Name="CopyLibs" AfterTargets="AfterBuild" Condition=" '$(Configuration)' != 'IDE' ">
+        <!-- Copy Dlls and symbols -->
+        <Copy SourceFiles="@(Lib)"
+              SkipUnchangedFiles="true"
+              UseHardlinksIfPossible="true"
+              DestinationFiles="@(Lib->'$(OutputPath)/Operators/lib/%(RecursiveDir)%(Filename)%(Extension)')"/>
+        <Copy SourceFiles="@(LibEditor)"
+              SkipUnchangedFiles="true"
+              UseHardlinksIfPossible="true"
+              DestinationFiles="@(LibEditor->'$(OutputPath)/Operators/libEditor/%(RecursiveDir)%(Filename)%(Extension)')"/>
+        <Copy SourceFiles="@(Examples)"
+              SkipUnchangedFiles="true"
+              UseHardlinksIfPossible="true"
+              DestinationFiles="@(Examples->'$(OutputPath)/Operators/examples/%(RecursiveDir)%(Filename)%(Extension)')"/>
+        
+        <!-- Copy Resources -->
+        <Copy SourceFiles="@(LibResources)"
+              SkipUnchangedFiles="true"
+              UseHardlinksIfPossible="true"
+              DestinationFiles="@(LibResources->'$(OutputPath)/Operators/lib/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
+        <Copy SourceFiles="@(LibEditorResources)"
+              SkipUnchangedFiles="true"
+              UseHardlinksIfPossible="true"
+              DestinationFiles="@(LibEditorResources->'$(OutputPath)/Operators/libEditor/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
+        <Copy SourceFiles="@(ExamplesResources)"
+              SkipUnchangedFiles="true"
+              UseHardlinksIfPossible="true"
+              DestinationFiles="@(ExamplesResources->'$(OutputPath)/Operators/examples/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
+              
+    </Target>
+
 </Project>

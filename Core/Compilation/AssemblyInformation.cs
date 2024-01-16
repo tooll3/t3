@@ -229,6 +229,7 @@ public class AssemblyInformation
     }
 
     private DependencyContext DependencyContext => _dependencyContext ??= DependencyContext.Load(_assembly);
+    public bool IsOperatorAssembly => _operatorTypes.Count > 0;
     public readonly bool ShouldShareResources;
     private DependencyContext _dependencyContext;
 

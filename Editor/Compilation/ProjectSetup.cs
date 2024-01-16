@@ -101,17 +101,17 @@ internal static class ProjectSetup
         try
         {
             // todo: change to load CsProjs from specific directories and specific nuget packages from a package directory
-            List<EditorSymbolPackage> operatorNugetPackages = new(); // "static" packages, remember to filter by operator vs non-operator assemblies
+            ConcurrentBag<EditorSymbolPackage> readOnlyPackages = new(); // "static" packages, remember to filter by operator vs non-operator assemblies
+            ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = new();
 
             stopwatch.Start();
             var coreAssemblyDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators"); // theoretically where the core libs assemblies will be
-            var rootDirectories = new[] { coreAssemblyDirectory, UserSettings.Config.DefaultNewProjectDirectory };
+            var projectSearchDirectories = new[] { coreAssemblyDirectory, UserSettings.Config.DefaultNewProjectDirectory };
 
             stopwatch.Stop();
             Log.Debug($"Core directories initialized in {stopwatch.ElapsedMilliseconds}ms");
 
             #if IDE
-
             stopwatch.Restart();
 
             var operatorFolder = Path.Combine(GetT3ParentDirectory(), "Operators");
@@ -122,10 +122,33 @@ internal static class ProjectSetup
 
             stopwatch.Stop();
             Log.Debug($"Found {rootDirectories.Length} root directories in {stopwatch.ElapsedMilliseconds}ms");
+            #else
+            var readOnlyRootDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators");
+            var directory = Directory.CreateDirectory(readOnlyRootDirectory);
+            directory
+               .EnumerateDirectories("*", SearchOption.TopDirectoryOnly)
+               .ToList()
+               .ForEach(package =>
+                        {
+                            foreach (var file in package.EnumerateFiles($"{package.Name}.dll", SearchOption.AllDirectories))
+                            {
+                                var loaded = RuntimeAssemblies.TryLoadAssemblyInformation(file.FullName, out var assembly);
+                                if (!loaded)
+                                {
+                                    Log.Error($"Could not load assembly at \"{file.FullName}\"");
+                                    continue;
+                                }
+
+                                if (assembly.IsOperatorAssembly)
+                                    readOnlyPackages.Add(new EditorSymbolPackage(assembly));
+                                else
+                                    nonOperatorAssemblies.Add(assembly);
+                            }
+                        });
             #endif
 
             stopwatch.Restart();
-            var csProjFiles = rootDirectories
+            var csProjFiles = projectSearchDirectories
                              .Where(Directory.Exists)
                              .SelectMany(x => Directory.EnumerateFiles(x, "*.csproj", SearchOption.AllDirectories))
                              .Where(x => !x.Contains("{{USER}}"))
@@ -136,7 +159,6 @@ internal static class ProjectSetup
 
             stopwatch.Restart();
             ConcurrentBag<EditableSymbolProject> projects = new();
-            ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = new();
             csProjFiles
                .ToList()
                .ForEach(path =>
@@ -173,7 +195,7 @@ internal static class ProjectSetup
 
             var projectList = projects.ToArray();
             var allSymbolPackages = projectList
-                                   .Concat(operatorNugetPackages)
+                                   .Concat(readOnlyPackages)
                                    .ToArray();
 
             EditableSymbolProjectsRw.AddRange(projectList);
@@ -190,22 +212,22 @@ internal static class ProjectSetup
             Log.Debug($"Updated symbol packages in {stopwatch.ElapsedMilliseconds}ms");
 
             var activeProject = EditableSymbolProject.ActiveProject;
-            
+
             #if DEBUG
             totalStopwatch.Stop();
             Log.Debug($"Total load time pre-home: {totalStopwatch.ElapsedMilliseconds}ms");
             #endif
-            
+
             stopwatch.Start();
-            
+
             // Create home
             if (activeProject == null || !activeProject.TryCreateHome())
             {
                 NeedsUserProject = true;
             }
-            
+
             stopwatch.Stop();
-            if(!NeedsUserProject)
+            if (!NeedsUserProject)
                 Log.Debug($"Created home in {stopwatch.ElapsedMilliseconds}ms");
 
             exception = null;
@@ -330,7 +352,7 @@ internal static class ProjectSetup
                        loadedSymbols.TryAdd(package, newlyRead);
                        loadedOrCreatedSymbols.TryAdd(package, allNewSymbols);
                    });
-        
+
         loadedSymbols
            .AsParallel()
            .ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
@@ -348,10 +370,10 @@ internal static class ProjectSetup
            .AsParallel()
            .ForAll(pair =>
                    {
-                       if(pair.Key is EditableSymbolProject project)
+                       if (pair.Key is EditableSymbolProject project)
                            project.LocateSourceCodeFiles();
                    });
-        
+
         foreach (var (symbolPackage, symbolUis) in loadedSymbolUis)
         {
             symbolPackage.RegisterUiSymbols(enableLog: false, symbolUis);

@@ -20,7 +20,7 @@ internal class CsProjectFile
     public string TargetFramework { get; }
     public AssemblyInformation Assembly { get; private set; }
     public IReadOnlyList<DependencyInfo> Dependencies => _dependencies;
-    public bool IsOperatorAssembly => Assembly.OperatorTypes.Count > 0;
+    public bool IsOperatorAssembly => Assembly.IsOperatorAssembly;
     private readonly List<DependencyInfo> _dependencies;
     public event Action<CsProjectFile> Recompiled;
 
