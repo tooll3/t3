@@ -373,37 +373,38 @@ namespace T3.Core.Resource
             return relativePath;
         }
 
-        public static bool TryResolvePath(string relativeFileName, out string path, params string[] directories)
+        public static bool TryResolvePath(string relativeFileName, out string absolutePath, params string[]? directories)
         {
-            return TryResolvePath(relativeFileName, out path, (IEnumerable<string>)directories);
+            directories ??= Array.Empty<string>();
+            return TryResolvePath(relativeFileName, out absolutePath, (IEnumerable<string>)directories);
         }
 
-        public static bool TryResolvePath(string relativeFileName, out string path, IEnumerable<string> directories)
+        public static bool TryResolvePath(string relativeFileName, out string absolutePath, IEnumerable<string> directories)
         {
             relativeFileName = RelativePathBackwardsCompatibility(relativeFileName);
 
             foreach (var directory in directories)
             {
-                path = Path.Combine(directory, relativeFileName);
-                if (File.Exists(path))
+                absolutePath = Path.Combine(directory, relativeFileName);
+                if (File.Exists(absolutePath))
                     return true;
             }
 
-            return CheckSharedResources(relativeFileName, out path);
+            return CheckSharedResources(relativeFileName, out absolutePath);
         }
 
-        public static bool TryResolvePath(string relativeFileName, out string path, string? directory)
+        public static bool TryResolvePath(string relativeFileName, out string absolutePath, string? directory)
         {
             relativeFileName = RelativePathBackwardsCompatibility(relativeFileName);
 
             if (directory != null)
             {
-                path = Path.Combine(directory, relativeFileName);
-                if (File.Exists(path))
+                absolutePath = Path.Combine(directory, relativeFileName);
+                if (File.Exists(absolutePath))
                     return true;
             }
 
-            return CheckSharedResources(relativeFileName, out path);
+            return CheckSharedResources(relativeFileName, out absolutePath);
         }
 
         private static bool CheckSharedResources(string relativeFileName, out string path)
@@ -416,6 +417,35 @@ namespace T3.Core.Resource
             }
 
             path = string.Empty;
+            return false;
+        }
+
+        public static bool TryResolveDirectory(string relativeDirectory, out string absoluteDirectory, IEnumerable<string> parentResourceFolders)
+        {
+            relativeDirectory = RelativePathBackwardsCompatibility(relativeDirectory);
+            
+            foreach(var parentResourceFolder in parentResourceFolders)
+            {
+                var directory = Path.Combine(parentResourceFolder, relativeDirectory);
+                if(Directory.Exists(directory))
+                {
+                    absoluteDirectory = directory;
+                    return true;
+                }
+            }
+            
+            absoluteDirectory = string.Empty;
+            
+            foreach(var sharedResourceFolder in SharedResourceFolders)
+            {
+                var directory = Path.Combine(sharedResourceFolder, relativeDirectory);
+                if(Directory.Exists(directory))
+                {
+                    absoluteDirectory = directory;
+                    return true;
+                }
+            }
+            
             return false;
         }
         #endregion

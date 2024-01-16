@@ -13,7 +13,7 @@ namespace T3.Editor.UiModel;
 
 internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 {
-    protected override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;
+    public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;
 
     private static readonly Queue<Action> PendingUpdateActions = new();
 

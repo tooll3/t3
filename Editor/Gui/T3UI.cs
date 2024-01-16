@@ -136,9 +136,7 @@ public static class T3Ui
 
         _userNameDialog.Draw();
         _searchDialog.Draw();
-        #if !DEBUG
         _importDialog.Draw();
-        #endif
         _createFromTemplateDialog.Draw();
 
         if (!UserSettings.IsUserNameDefined() || ProjectSetup.NeedsUserProject)
@@ -231,12 +229,10 @@ public static class T3Ui
                     _createFromTemplateDialog.ShowNextFrame();
                 }
 
-                #if !DEBUG
                 if (ImGui.MenuItem("Import Operators", null, false, !IsCurrentlySaving))
                 {
                     _importDialog.ShowNextFrame();
                 }
-                #endif
 
                 if (ImGui.MenuItem("Fix File references", ""))
                 {
@@ -487,9 +483,7 @@ public static class T3Ui
     private static readonly UserNameDialog _userNameDialog = new();
     private static readonly SearchDialog _searchDialog = new();
     
-    #if !DEBUG
     private static readonly MigrateOperatorsDialog _importDialog = new();
-    #endif
 
     [Flags]
     public enum EditingFlags

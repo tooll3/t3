@@ -41,7 +41,7 @@ namespace lib.point.helper
         private void Update(EvaluationContext context)
         {
             var path = Path.GetValue(context);
-            var mesh = ObjMesh.LoadFromFile(path);
+            var mesh = ObjMesh.LoadFromFile(path, ResourceFolders);
 
             if (mesh == null)
             {

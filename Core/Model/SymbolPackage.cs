@@ -17,7 +17,7 @@ namespace T3.Core.Model;
 
 public abstract partial class SymbolPackage
 {
-    protected internal abstract AssemblyInformation AssemblyInformation { get; }
+    public abstract AssemblyInformation AssemblyInformation { get; }
     public abstract string Folder { get; }
 
     private ResourceFileWatcher _resourceFileWatcher;

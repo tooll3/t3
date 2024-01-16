@@ -24,7 +24,7 @@ namespace T3.Core.Operator
         protected internal ResourceFileWatcher ResourceFileWatcher => Symbol.SymbolPackage.ResourceFileWatcher;
 
         private List<string> _resourceFolders = null;
-        protected internal IReadOnlyList<string> ResourceFolders
+        public IReadOnlyList<string> ResourceFolders
         {
             get
             {

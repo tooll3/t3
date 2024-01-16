@@ -1,5 +1,4 @@
-﻿#if !DEBUG
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,6 +14,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Dialog
 {
+    [Obsolete("This dialog has been deprecated due to the new project structure.")]
     public class MigrateOperatorsDialog : ModalDialog
     {
         public MigrateOperatorsDialog()
@@ -28,6 +28,10 @@ namespace T3.Editor.Gui.Dialog
             FormInputs.SetIndentToParameters();
             if (BeginDialog("Import Operators from another Tooll installation"))
             {
+                EditorUi.Instance.ShowMessageBox("This function has been deprecated due to the new project structure.");
+                EndDialog();
+                return;
+                
                 ImGui.BeginChild("options", new Vector2(ImGui.GetContentRegionAvail().X - 400, -1));
                 {
                     FormInputs.AddHint("This will help you to import Operators and resources from another Tooll installation.");
@@ -70,7 +74,8 @@ namespace T3.Editor.Gui.Dialog
                     FormInputs.ApplyIndent();
                     if (CustomComponents.DisablableButton("Import and Restart", isValid))
                     {
-                        MigrateSelection();
+                        EditorUi.Instance.ShowMessageBox($"This function has been deprecated as a result of the new project structure.");
+                        return;
                         EditorUi.Instance.ShowMessageBox("Tooll now has to restart to complete the import.");
                         EditorUi.Instance.ExitApplication();
                         //Application.Restart();
@@ -191,7 +196,7 @@ namespace T3.Editor.Gui.Dialog
         }
 
         // todo - should this really be here?
-        private void MigrateSelection()
+        /*private void MigrateSelection()
         {
             string[] allRemoteT3Files;
             string[] allRemoteT3UiFiles;
@@ -300,16 +305,16 @@ namespace T3.Editor.Gui.Dialog
 
             static string FixLocalNamespaceUsages(string sourceCode)
             {
-                foreach (var (key, value) in _stringReplacements)
+                foreach (var (key, value) in StringReplacements)
                 {
                     sourceCode = sourceCode.Replace(key, value);
                 }
 
                 return sourceCode;
             }
-        }
+        }*/
 
-        private static readonly Dictionary<string, string> _stringReplacements
+        private static readonly Dictionary<string, string> StringReplacements
             = new()
                   {
                       { "<T3.Core.Command>", "<Command>" }
@@ -342,4 +347,3 @@ namespace T3.Editor.Gui.Dialog
         private string _localOperatorNamespaceDirectory;
     }
 }
-#endif

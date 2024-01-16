@@ -2,10 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
+using SharpDX.Direct3D11;
+using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
+using T3.Editor.Gui.Interaction.Timing;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 // ReSharper disable StringLiteralTypo
@@ -16,214 +23,176 @@ namespace T3.Editor.Gui.Graph
     {
         public static void ExportInstance(GraphCanvas graphCanvas, SymbolChildUi childUi)
         {
-            #if !DEBUG
+            T3Ui.Save(true);
+            
+            var homePackage = graphCanvas.CompositionOp.Symbol.SymbolPackage;
+            if (!homePackage.IsModifiable)
+            {
+                EditorUi.Instance.ShowMessageBox("Cannot export symbols from non-modifiable packages.");
+                return;
+            }
+
+            var exportDir = Path.Combine(homePackage.Folder, "bin", childUi.SymbolChild.ReadableName);
+
             // Collect all ops and types
             var instance = graphCanvas.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
             Log.Info($"Exporting {instance.Symbol.Name}...");
             var errorCount = 0;
 
-            if (instance.Outputs.Count >= 1 && instance.Outputs.First().ValueType == typeof(Texture2D))
-            {
-                // Update project settings
-                ProjectSettings.Config.MainOperatorName = instance.Symbol.Name;
-                ProjectSettings.Save();
-
-                // traverse starting at output and collect everything
-                var exportInfo = new ExportInfo();
-                CollectChildSymbols(instance.Symbol, exportInfo);
-
-                const string exportDir = "Export";
-                try
-                {
-                    Directory.Delete(exportDir, true);
-                }
-                catch (Exception)
-                {
-                    // ignored
-                }
-
-                Directory.CreateDirectory(exportDir);
-
-                // Generate Operators assembly
-                var operatorAssemblySources
-                    = exportInfo
-                     .UniqueSymbols
-                     .AsParallel()
-                     .Select(symbol =>
-                             {
-                                 var filePathForSymbol = symbol.SymbolPackage.BuildFilepathForSymbol(symbol,
-                                                                                           SymbolPackage.SourceCodeExtension);
-
-                                 if (!File.Exists(filePathForSymbol))
-                                 {
-                                     Log.Warning($"Can't find source file {filePathForSymbol}");
-                                     return string.Empty;
-                                 }
-
-                                 var source = File.ReadAllText(filePathForSymbol);
-                                 return source;
-                             }).ToList();
-                
-
-                foreach (var file in Directory.GetFiles(@"Operators\Utils\", "*.cs", SearchOption.AllDirectories))
-                {
-                    operatorAssemblySources.Add(File.ReadAllText(file));
-                }
-
-                // Copy player and dependent assemblies to export dir
-                var currentDir = Directory.GetCurrentDirectory();
-
-                var playerPublishPath = currentDir + @"\Player\bin\Release\net8.0-windows\publish\";
-                var playerBuildPath = currentDir + @"\Player\bin\Release\net8.0-windows\";
-
-                if (!File.Exists(currentDir + @"\Player\bin\Release\net8.0-windows\publish\Player.exe"))
-                {
-                    Log.Error($"Can't find valid build in player release folder: (${playerPublishPath})");
-                    Log.Error("Please use your IDE to rebuild solution in release mode.");
-                    return;
-                }
-
-                Log.Debug("Copy player resources...");
-                CopyFiles(new[]
-                              {
-                                  playerPublishPath + "Svg.dll",
-                                  playerPublishPath + "Player.exe",
-
-                                  playerBuildPath + "SpoutDX.dll",
-                                  playerBuildPath + "Spout.dll",
-                                  playerBuildPath + "Processing.NDI.Lib.x64.dll",
-                                  playerBuildPath + "basswasapi.dll",
-                                  playerBuildPath + "bass.dll",
-                              },
-                          exportDir);
-
-                var parentAssemblies = exportInfo.UniqueSymbols.Select(x => x.SymbolPackage).Distinct();
-                
-                Log.Debug("Compiling Operators.dll...");
-                var references = CompileSymbolsFromSource(exportDir, parentAssemblies, operatorAssemblySources.ToArray());
-
-                Log.Error($"Not implemented");
-                return;
-
-               // if (!Program.IsStandAlone)
-                {
-                    Log.Debug("Copy dependencies referenced in Operators.dll...");
-                    var referencedAssemblies = references.Where(assembly => assembly.Display != null && assembly.Display.Contains(currentDir))
-                                                         .Select(r => r.Display)
-                                                         .Distinct()
-                                                         .ToArray();
-                    CopyFiles(referencedAssemblies,
-                              exportDir);
-                }
-
-                // Generate exported .t3 files
-
-                var symbolExportDir = Path.Combine(exportDir, "Operators");
-                if (Directory.Exists(symbolExportDir))
-                    Directory.Delete(symbolExportDir, true);
-
-                Directory.CreateDirectory(symbolExportDir);
-                foreach (var symbol in exportInfo.UniqueSymbols)
-                {
-                    using var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + SymbolPackage.SymbolExtension);
-                    using var writer = new JsonTextWriter(sw);
-                    
-                    writer.Formatting = Formatting.Indented;
-                    SymbolJson.WriteSymbol(symbol, writer);
-                }
-
-                // Copy referenced resources
-                RecursivelyCollectExportData(instance.Outputs.First(), exportInfo);
-                exportInfo.PrintInfo();
-                var resourcePaths = exportInfo.UniqueResourcePaths;
-
-                {
-                    var symbolPlaybackSettings = childUi.SymbolChild.Symbol.PlaybackSettings;
-
-                    var soundtrack = symbolPlaybackSettings?.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
-                    if (soundtrack == null)
-                    {
-                        if (PlaybackUtils.TryFindingSoundtrack(out var otherSoundtrack))
-                        {
-                            Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {otherSoundtrack.FilePath} set in parent...");
-                            resourcePaths.Add(otherSoundtrack.FilePath);
-                            errorCount++;
-                        }
-                        else
-                        {
-                            Log.Debug("No soundtrack defined within operator.");
-                        }
-                    }
-                    else
-                    {
-                        resourcePaths.Add(soundtrack.FilePath);
-                    }
-                }
-
-                resourcePaths.Add(@"projectSettings.json");
-
-                resourcePaths.UnionWith(Directory.GetFiles(@"Resources\lib\shared\"));
-
-                resourcePaths.Add(@"points\spatial-hash-map\hash-map-settings.hlsl");
-
-                resourcePaths.Add(@"dx11\fullscreen-texture.hlsl");
-                resourcePaths.Add(@"img\internal\resolve-multisampled-depth-buffer-cs.hlsl");
-
-                resourcePaths.Add(@"common\images\BRDF-LookUp.png");
-                resourcePaths.Add(@"common\HDRI\studio_small_08-prefiltered.dds");
-
-                resourcePaths.Add(@"t3-editor\images\t3.ico");
-                foreach (var resourcePath in resourcePaths)
-                {
-                    try
-                    {
-                        if (!resourcePath.Contains("\\") && resourcePath.StartsWith("Resources"))
-                        {
-                            Log.Warning($" {resourcePath} can't be used for exporting because it's not located in Resources/ folder.");
-                            errorCount++;
-                            continue;
-                        }
-
-                        var targetPath = exportDir + Path.DirectorySeparatorChar + resourcePath;
-
-                        var targetDirectoryInfo = new DirectoryInfo(targetPath);
-                        if (targetDirectoryInfo.Parent == null)
-                        {
-                            Log.Warning($"Can't access parent of {targetPath}");
-                            continue;
-                        }
-                        
-                        var targetDir = targetDirectoryInfo.Parent.FullName;
-                        if (!Directory.Exists(targetDir))
-                            Directory.CreateDirectory(targetDir);
-
-                        File.Copy(resourcePath, targetPath);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error($"Error exporting resource '{resourcePath}': '{e.Message}'");
-                        errorCount++;
-                    }
-                }
-            }
-            else
+            if (instance.Outputs.Count < 1 || instance.Outputs.First().ValueType != typeof(Texture2D))
             {
                 Log.Warning("Can only export ops with 'Texture2D' output");
-                errorCount++;
+                return;
+            }
+
+            // Update project settings
+            ProjectSettings.Config.MainOperatorName = instance.Symbol.Name;
+            ProjectSettings.Save();
+
+            // traverse starting at output and collect everything
+            var exportInfo = new ExportInfo();
+            CollectChildSymbols(instance.Symbol, exportInfo);
+
+            try
+            {
+                Directory.Delete(exportDir, true);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to delete export dir: {exportDir}. Exception: {e}");
+                exportDir = exportDir + '_' + DateTime.Now;
+            }
+
+            Directory.CreateDirectory(exportDir);
+
+            var playerProjectPath = GetPlayerProjectPath();
+
+            // Copy player and dependent assemblies to export dir
+
+            var playerPublishPath = Path.Combine(playerProjectPath, "bin", "Release", "net8.0-windows", "publish");
+            
+            var playerBuildPath = Path.Combine(playerProjectPath, "bin", "Release", "net8.0-windows");
+            
+            
+
+            var playerExecutablePath = Path.Combine(playerBuildPath, "Player.exe");
+            if (!File.Exists(playerExecutablePath))
+            {
+                Log.Error($"Can't find valid build in player release folder: (${playerPublishPath})");
+                Log.Error("Please use your IDE to rebuild solution in release mode.");
+                return;
+            }
+
+            Log.Debug("Copy core resources...");
+            CopyFiles(new[]
+                          {
+                              playerPublishPath + "Svg.dll",
+                              playerPublishPath + "Player.exe",
+
+                              playerBuildPath + "SpoutDX.dll",
+                              playerBuildPath + "Spout.dll",
+                              playerBuildPath + "Processing.NDI.Lib.x64.dll",
+                              playerBuildPath + "basswasapi.dll",
+                              playerBuildPath + "bass.dll",
+                          },
+                      exportDir);
+
+            var packages = exportInfo.UniqueSymbols.Select(x => x.SymbolPackage).Distinct();
+
+            // Generate exported .t3 files
+
+            var symbolExportDir = Path.Combine(exportDir, "Operators");
+            if (Directory.Exists(symbolExportDir))
+                Directory.Delete(symbolExportDir, true);
+
+            Directory.CreateDirectory(symbolExportDir);
+
+            foreach (var package in packages)
+            {
+                var assemblyPath = package.AssemblyInformation.Directory;
+                // copy full assembly directory in the build output directly and much of below can probably be skipped
+            }
+            
+            exportInfo.UniqueSymbols
+                      .AsParallel()
+                      .ForAll(symbol =>
+                              {
+                                  using var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + SymbolPackage.SymbolExtension);
+                                  using var writer = new JsonTextWriter(sw);
+
+                                  writer.Formatting = Formatting.Indented;
+                                  SymbolJson.WriteSymbol(symbol, writer);
+                              });
+
+            // Copy referenced resources
+            RecursivelyCollectExportData(instance.Outputs.First(), exportInfo);
+            exportInfo.PrintInfo();
+
+            var symbolPlaybackSettings = childUi.SymbolChild.Symbol.PlaybackSettings;
+            FindAudioClip(exportInfo.UniqueResourcePaths, symbolPlaybackSettings, ref errorCount);
+
+            const string t3IconPath = @"t3-editor\images\t3.ico";
+            const string hashMapSettingsShader = @"points\spatial-hash-map\hash-map-settings.hlsl";
+            const string fullscreenTextureShader = @"dx11\fullscreen-texture.hlsl";
+            const string resolveMultisampledDepthBufferShader = @"img\internal\resolve-multisampled-depth-buffer-cs.hlsl";
+            const string brdfLookUp = @"common\images\BRDF-LookUp.png";
+            const string studioSmall08Prefiltered = @"common\HDRI\studio_small_08-prefiltered.dds";
+
+            var success = TryAddSharedResource(t3IconPath)
+                          && TryAddSharedResource(hashMapSettingsShader)
+                          && TryAddSharedResource(fullscreenTextureShader)
+                          && TryAddSharedResource(resolveMultisampledDepthBufferShader)
+                          && TryAddSharedResource(brdfLookUp)
+                          && TryAddSharedResource(studioSmall08Prefiltered);
+
+            if (!success)
+            {
+                Log.Error("Failed to add shared resources");
+                return;
+            }
+
+            foreach (var resourcePath in exportInfo.UniqueResourcePaths)
+            {
+                try
+                {
+                    var targetPath = Path.Combine(exportDir, resourcePath);
+                    var directory = Path.GetDirectoryName(targetPath);
+                    Directory.CreateDirectory(directory!);
+                    File.Copy(resourcePath, targetPath);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Error exporting resource '{resourcePath}': '{e.Message}'");
+                    errorCount++;
+                }
             }
 
             if (errorCount > 0)
             {
-                Log.Error($"{errorCount} problem{(errorCount > 1 ? "s" : string.Empty)}. Export might be broken.");
             }
             else
             {
-                Log.Debug("Done. Please check Export/ directory.");
+                Log.Debug($"Exported successfully to {exportDir}");
             }
-            
-            #else
-                Log.Error("Exporting is disabled");
-            #endif
+
+            return;
+
+            bool TryAddSharedResource(string sharedFile)
+            {
+                if (!ResourceManager.TryResolvePath(sharedFile, out var iconPath))
+                {
+                    Log.Error($"Can't find icon: {sharedFile}");
+                    return false;
+                }
+
+                exportInfo.AddResourcePath(iconPath);
+                return true;
+            }
+        }
+
+        private static string GetPlayerProjectPath()
+        {
+            throw new NotImplementedException();
         }
 
         private class ExportInfo
@@ -300,40 +269,63 @@ namespace T3.Editor.Gui.Graph
                 }
 
                 CheckInputForResourcePath(slot, exportInfo);
+                return;
             }
-            else if (slot.IsConnected)
+
+            if (slot.IsConnected)
             {
                 // slot is an output of an composition op
                 RecursivelyCollectExportData(slot.GetConnection(0), exportInfo);
                 exportInfo.AddInstance(slot.Parent);
+                return;
+            }
+
+            var parent = slot.Parent;
+
+            if (!exportInfo.AddInstance(parent))
+                return; // already visited
+
+            foreach (var input in parent.Inputs)
+            {
+                CheckInputForResourcePath(input, exportInfo);
+
+                if (!input.IsConnected)
+                    continue;
+
+                if (input.IsMultiInput)
+                {
+                    var multiInput = (IMultiInputSlot)input;
+                    foreach (var entry in multiInput.GetCollectedInputs())
+                    {
+                        RecursivelyCollectExportData(entry, exportInfo);
+                    }
+                }
+                else
+                {
+                    RecursivelyCollectExportData(input.GetConnection(0), exportInfo);
+                }
+            }
+        }
+
+        private static void FindAudioClip(ICollection<string> resourcePaths, PlaybackSettings symbolPlaybackSettings, ref int errorCount)
+        {
+            var soundtrack = symbolPlaybackSettings?.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
+            if (soundtrack == null)
+            {
+                if (PlaybackUtils.TryFindingSoundtrack(out var otherSoundtrack))
+                {
+                    Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {otherSoundtrack.FilePath} set in parent...");
+                    resourcePaths.Add(otherSoundtrack.FilePath);
+                    errorCount++;
+                }
+                else
+                {
+                    Log.Debug("No soundtrack defined within operator.");
+                }
             }
             else
             {
-                Instance parent = slot.Parent;
-                // Log.Info(parent.Symbol.Name);
-                if (!exportInfo.AddInstance(parent))
-                    return; // already visited
-
-                foreach (var input in parent.Inputs)
-                {
-                    CheckInputForResourcePath(input, exportInfo);
-
-                    if (!input.IsConnected)
-                        continue;
-
-                    if (input.IsMultiInput)
-                    {
-                        var multiInput = (IMultiInputSlot)input;
-                        foreach (var entry in multiInput.GetCollectedInputs())
-                        {
-                            RecursivelyCollectExportData(entry, exportInfo);
-                        }
-                    }
-                    else
-                    {
-                        RecursivelyCollectExportData(input.GetConnection(0), exportInfo);
-                    }
-                }
+                resourcePaths.Add(soundtrack.FilePath);
             }
         }
 
@@ -357,7 +349,14 @@ namespace T3.Editor.Gui.Graph
             {
                 case StringInputUi.UsageType.FilePath:
                 {
-                    var resourcePath = stringValue.Value;
+                    var originalPath = stringValue.Value;
+
+                    if (!ResourceManager.TryResolvePath(originalPath, out var resourcePath, parent.ResourceFolders))
+                    {
+                        Log.Warning($"File '{originalPath}' was not found in any resource folder");
+                        return;
+                    }
+
                     exportInfo.AddResourcePath(resourcePath);
 
                     // Copy related font textures
@@ -370,24 +369,26 @@ namespace T3.Editor.Gui.Graph
                 }
                 case StringInputUi.UsageType.DirectoryPath:
                 {
-                    var resourceDirectory = stringValue.Value;
-                    if (!Directory.Exists(resourceDirectory))
-                        break;
+                    var originalDirectory = stringValue.Value;
 
-                    if (!resourceDirectory.StartsWith("Resources"))
+                    if (!ResourceManager.TryResolveDirectory(originalDirectory, out var absoluteDirectory, parent.ResourceFolders))
                     {
-                        Log.Debug($"skipping folder {resourceDirectory} because not in Resources/ folder...");
-                        break;
+                        Log.Warning($"Directory '{originalDirectory}' was not found in any resource folder");
                     }
 
-                    Log.Debug($"Export all entries folder {resourceDirectory}...");
-                    foreach (var resourcePath in Directory.GetFiles(resourceDirectory))
+                    Log.Debug($"Export all entries folder {absoluteDirectory}...");
+                    foreach (var resourcePath in Directory.EnumerateFiles(absoluteDirectory, "*", SearchOption.AllDirectories))
                     {
                         exportInfo.AddResourcePath(resourcePath);
                     }
 
                     break;
                 }
+                case StringInputUi.UsageType.Default:
+                case StringInputUi.UsageType.Multiline:
+                case StringInputUi.UsageType.CustomDropdown:
+                default:
+                    break;
             }
         }
     }
