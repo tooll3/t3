@@ -5,6 +5,7 @@ using ManagedBass;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Core.Utils;
+using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Audio
 {
@@ -60,28 +61,30 @@ namespace T3.Editor.Gui.Audio
 
             int a, b, r, g;
             var palette = new System.Drawing.Color[PaletteSize];
-            int palettePos;
+            
+            const float upperThreshold = PaletteSize * 2 / 3f;
+            const float lowerThreshold = PaletteSize / 3f;
 
-            for (palettePos = 0; palettePos < PaletteSize; ++palettePos)
+            for (var palettePos = 0; palettePos < PaletteSize; ++palettePos)
             {
                 a = 255;
-                if (palettePos < PaletteSize * 0.666f)
-                    a = (int)(palettePos * 255 / (PaletteSize * 0.666f));
+                if (palettePos < upperThreshold)
+                    a = (int)(palettePos * 255 / upperThreshold);
 
                 b = 0;
-                if (palettePos < PaletteSize * 0.333f)
+                if (palettePos < lowerThreshold)
                     b = palettePos;
-                else if (palettePos < PaletteSize * 0.666f)
+                else if (palettePos < upperThreshold)
                     b = -palettePos + 510;
 
                 r = 0;
-                if (palettePos > PaletteSize * 0.666f)
+                if (palettePos > upperThreshold)
                     r = 255;
-                else if (palettePos > PaletteSize * 0.333f)
+                else if (palettePos > lowerThreshold)
                     r = palettePos - 255;
 
                 g = 0;
-                if (palettePos > PaletteSize * 0.666f)
+                if (palettePos > upperThreshold)
                     g = palettePos - 510;
 
                 palette[palettePos] = System.Drawing.Color.FromArgb(a, r, g, b);
@@ -96,6 +99,8 @@ namespace T3.Editor.Gui.Audio
             var f2 = (float)((PaletteSize - 1) / Math.Log(MaxIntensity + 1));
             //var f3 = (float)((ImageHeight - 1) / Math.Log(32768.0f + 1));
 
+            var logarithmicExponent = UserSettings.Config.ExpandSpectrumVisualizerVertically ? 10d : Math.E;
+
             for (var sampleIndex = 0; sampleIndex < numSamples; ++sampleIndex)
             {
                 Bass.ChannelSetPosition(stream, sampleIndex * sampleLength);
@@ -104,15 +109,15 @@ namespace T3.Editor.Gui.Audio
                 for (var rowIndex = 0; rowIndex < ImageHeight; ++rowIndex)
                 {
                     var j = (int)(f * Math.Log(rowIndex + 1));
-                    var pj = (int)(rowIndex > 0 ? f * Math.Log(rowIndex - 1 + 1) : j);
-                    var nj = (int)(rowIndex < ImageHeight - 1 ? f * Math.Log(rowIndex + 1 + 1) : j);
+                    var pj = (int)(rowIndex > 0 ? f * Math.Log(rowIndex - 1 + 1, logarithmicExponent) : j);
+                    var nj = (int)(rowIndex < ImageHeight - 1 ? f * Math.Log(rowIndex + 1 + 1, logarithmicExponent) : j);
                     var intensity = 125.0f * _fftBuffer[SpectrumLength - pj - 1] +
                                     750.0f * _fftBuffer[SpectrumLength - j - 1] +
                                     125.0f * _fftBuffer[SpectrumLength - nj - 1];
                     intensity = Math.Min(MaxIntensity, intensity);
                     intensity = Math.Max(0.0f, intensity);
 
-                    palettePos = (int)(f2 * Math.Log(intensity + 1));
+                    var palettePos = (int)(f2 * Math.Log(intensity + 1));
                     spectrumImage.SetPixel(sampleIndex, rowIndex, palette[palettePos]);
                 }
 

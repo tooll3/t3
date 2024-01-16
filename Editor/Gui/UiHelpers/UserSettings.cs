@@ -94,6 +94,8 @@ namespace T3.Editor.Gui.UiHelpers
             public float SpaceMouseMoveSpeedFactor = 1f;
             public float SpaceMouseDamping = 0.5f;
             
+            public bool ExpandSpectrumVisualizerVertically = true;
+            
 
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
@@ -105,7 +107,7 @@ namespace T3.Editor.Gui.UiHelpers
 
             private string _defaultNewProjectDirectory = DefaultProjectFolder;
             public string DefaultNewProjectDirectory => _defaultNewProjectDirectory ??= DefaultProjectFolder;
-            
+
             private static readonly string DefaultProjectFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "T3Projects");
         }
 

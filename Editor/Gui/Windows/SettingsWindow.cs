@@ -95,6 +95,11 @@ namespace T3.Editor.Gui.Windows
                                                           ref UserSettings.Config.SuspendRenderingWhenHidden,
                                                           "Suspend rendering and update when Tooll's editor window is minimized. This will reduce energy consumption significantly.",
                                                           UserSettings.Defaults.SuspendRenderingWhenHidden);
+                        
+                        changed |= FormInputs.AddCheckBox("Balance soundtrack visualizer",
+                                                          ref UserSettings.Config.ExpandSpectrumVisualizerVertically,
+                                                          "If true, changes the visualized pitch's logarithmic scale from base 'e' to base 10.\nLower frequencies will become more visible, making the frequency spectrum\n appear more \"balanced\"",
+                                                          UserSettings.Defaults.ExpandSpectrumVisualizerVertically);
 
                         FormInputs.SetIndentToParameters();
                         FormInputs.AddVerticalSpace();
