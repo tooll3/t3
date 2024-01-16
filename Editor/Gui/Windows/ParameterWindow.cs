@@ -114,18 +114,21 @@ namespace T3.Editor.Gui.Windows
                 return;
 
             // Draw parameter Settings
-            foreach (var input in NodeSelection.GetSelectedNodes<IInputUi>())
+            foreach (var inputUi in NodeSelection.GetSelectedNodes<IInputUi>())
             {
-                ImGui.PushID(input.Id.GetHashCode());
+                ImGui.PushID(inputUi.Id.GetHashCode());
                 ImGui.PushFont(Fonts.FontLarge);
-                ImGui.TextUnformatted("Parameter settings for " + input.InputDefinition.Name);
+                ImGui.TextUnformatted("Parameter settings for " + inputUi.InputDefinition.Name);
+                FormInputs.AddVerticalSpace(5);
+                FormInputs.SetIndent(100);
                 ImGui.PopFont();
-                input.DrawSettings();
+                inputUi.DrawSettings();
                 ImGui.Spacing();
+                inputUi.DrawDescriptionEdit();
                 ImGui.PopID();
+
             }
 
-            // ImGui.Separator();
             // Draw Annotation settings
             foreach (var annotation in NodeSelection.GetSelectedNodes<Annotation>())
             {
@@ -139,6 +142,7 @@ namespace T3.Editor.Gui.Windows
             }
         }
 
+
         public static void DrawDescription(SymbolUi symbolUi)
         {
             // Description
@@ -151,6 +155,7 @@ namespace T3.Editor.Gui.Windows
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                 ImGui.TextWrapped(symbolUi.Description);
+                
                 ImGui.PopStyleColor();
                 if (ImGui.IsItemHovered())
                 {
@@ -168,6 +173,37 @@ namespace T3.Editor.Gui.Windows
                 if (ImGui.Button("Edit description... "))
                     _editDescriptionDialog.ShowNextFrame();
             }
+            
+            // Parameter descriptions
+            if (_parametersWithDescription.Count > 0)
+            {
+                // ImGui.Indent();
+                //ImGui.SetCursorPosX(10);
+                FormInputs.AddVerticalSpace(5);
+                
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                ImGui.PushFont(Fonts.FontNormal);
+                ImGui.TextUnformatted("Parameters details");
+                ImGui.PopFont();
+                ImGui.PopStyleColor();
+
+                var parameterColorWidth = 140f * T3Ui.UiScaleFactor;
+                foreach (var p in _parametersWithDescription)
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+
+                    var parameterNameWidth = ImGui.CalcTextSize(p.InputDefinition.Name).X;
+                    ImGui.SetCursorPosX(parameterColorWidth - parameterNameWidth);
+                    ImGui.TextUnformatted(p.InputDefinition.Name);
+                    ImGui.PopStyleColor();
+                    
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                    ImGui.SameLine(parameterColorWidth + 10);
+                    ImGui.TextWrapped(p.Description);
+                    ImGui.PopStyleColor();
+                }
+            }            
+            
 
             ImGui.Dummy(Vector2.One);
 
@@ -268,6 +304,7 @@ namespace T3.Editor.Gui.Windows
             ImGui.Dummy(new Vector2(10, 10));
             ImGui.PopFont();
         }
+        
 
         private static void DrawGroupLabel(string title)
         {
@@ -293,6 +330,7 @@ namespace T3.Editor.Gui.Windows
         {
             var groupState = GroupState.None;
 
+            _parametersWithDescription.Clear();
             foreach (var inputSlot in instance.Inputs)
             {
                 if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
@@ -301,6 +339,12 @@ namespace T3.Editor.Gui.Windows
                     continue;
                 }
 
+                
+                if (!string.IsNullOrEmpty(inputUi.Description))
+                {
+                    _parametersWithDescription.Add(inputUi);
+                }
+                
                 if (inputUi.AddPadding)
                     FormInputs.AddVerticalSpace(4);
 
@@ -359,6 +403,9 @@ namespace T3.Editor.Gui.Windows
                 FormInputs.EndGroup();
         }
 
+        private static readonly List<IInputUi> _parametersWithDescription = new(10);
+
+        
         private bool DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi)
         {
             var modified = false;
