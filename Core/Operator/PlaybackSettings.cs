@@ -89,9 +89,9 @@ namespace T3.Core.Operator
             writer.WriteEndObject();
         }
 
-        public static PlaybackSettings ReadFromJson(JToken o)
+        public static PlaybackSettings ReadFromJson(JToken o, string resourceDirectory)
         {
-            var clips = GetClips(o).ToList(); // Support legacy json format
+            var clips = GetClips(o, resourceDirectory).ToList(); // Support legacy json format
 
             var settingsToken = (JObject)o[nameof(Symbol.PlaybackSettings)];
             if (settingsToken == null && clips.Count == 0)
@@ -112,7 +112,7 @@ namespace T3.Core.Operator
                 newSettings.AudioGainFactor = JsonUtils.ReadToken(settingsToken, nameof(AudioGainFactor), 1f);
                 newSettings.AudioInputDeviceName = JsonUtils.ReadToken<string>(settingsToken, nameof(AudioInputDeviceName), null);
                 
-                newSettings.AudioClips.AddRange(GetClips(settingsToken)); // Support correct format
+                newSettings.AudioClips.AddRange(GetClips(settingsToken, resourceDirectory)); // Support correct format
             }
             
             if (newSettings.Bpm == 0 && newSettings.GetMainSoundtrack(out var soundtrack))
@@ -124,14 +124,14 @@ namespace T3.Core.Operator
             return newSettings;
         }
 
-        private static IEnumerable<AudioClip> GetClips(JToken o)
+        private static IEnumerable<AudioClip> GetClips(JToken o, string resourceDirectory)
         {
             var jAudioClipArray = (JArray)o[nameof(Symbol.PlaybackSettings.AudioClips)];
             if (jAudioClipArray != null)
             {
                 foreach (var c in jAudioClipArray)
                 {
-                    yield return AudioClip.FromJson(c);
+                    yield return AudioClip.FromJson(c, resourceDirectory);
                 }
             }
         }

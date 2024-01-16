@@ -13,7 +13,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
     public InputSlot<string> Source { get; }
     public InputSlot<string> EntryPoint { get; }
     public InputSlot<string> DebugName { get; }
-    public Symbol Symbol { get; }
+    public Instance Instance { get; }
     bool SourceIsSourceCode { get; }
     protected internal ShaderResource<T> ShaderResource { get; set; }
 
@@ -57,19 +57,19 @@ public interface IShaderOperator<T> where T : class, IDisposable
         }
 
         bool updated;
-        var watcher = Symbol.SymbolPackage.FileWatcher;
 
+        var instance = Instance;
         if (needsNewResource)
         {
-            updated = TryCreateResource(source, entryPoint, debugName, isSourceCode, Shader, watcher, out message, out shaderResource);
+            updated = TryCreateResource(source, entryPoint, debugName, isSourceCode, Shader, instance, out message, out shaderResource);
             if (updated)
                 ShaderResource = shaderResource;
         }
         else
         {
             updated = isSourceCode
-                          ? shaderResource.TryUpdateFromSource(source, entryPoint, watcher.WatchedFolder, out message)
-                          : shaderResource.TryUpdateFromFile(source, entryPoint, out message);
+                          ? shaderResource.TryUpdateFromSource(source, entryPoint, instance.ResourceFolders, out message)
+                          : shaderResource.TryUpdateFromFile(source, entryPoint, instance.ResourceFolders, out message);
         }
 
         if (updated && shaderResource != null)
@@ -80,7 +80,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
         }
         else
         {
-            Log.Error($"Failed to update shader \"{debugName}\":\n{message}");
+            Log.Error($"Failed to update shader \"{debugName}\": {message}");
         }
 
         cachedSource = source;
@@ -112,12 +112,12 @@ public interface IShaderOperator<T> where T : class, IDisposable
             }
             catch (Exception e)
             {
-                dbgMessage = $"Invalid source path for shader: {source}:\n" + e.Message;
+                dbgMessage = $"Invalid source path for shader: {source}: {e.Message}";
                 return false;
             }
         }
 
-        static bool TryCreateResource(string source, string entryPoint, string debugName, bool isSourceCode, ISlot shaderSlot, ResourceFileWatcher watcher,
+        static bool TryCreateResource(string source, string entryPoint, string debugName, bool isSourceCode, ISlot shaderSlot, Instance instance,
                                       out string errorMessage, out ShaderResource<T> shaderResource)
         {
             bool updated;
@@ -127,7 +127,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
             {
                 updated = resourceManager.TryCreateShaderResourceFromSource(out shaderResource,
                                                                             shaderSource: source,
-                                                                            directory: watcher.WatchedFolder,
+                                                                            directories: instance.ResourceFolders,
                                                                             entryPoint: entryPoint,
                                                                             name: debugName,
                                                                             errorMessage: out errorMessage);
@@ -135,7 +135,8 @@ public interface IShaderOperator<T> where T : class, IDisposable
             else
             {
                 updated = resourceManager.TryCreateShaderResource(out shaderResource,
-                                                                  watcher: watcher,
+                                                                  watcher: instance.ResourceFileWatcher,
+                                                                  resourceFolders: instance.ResourceFolders,
                                                                   relativePath: source,
                                                                   entryPoint: entryPoint,
                                                                   name: debugName,

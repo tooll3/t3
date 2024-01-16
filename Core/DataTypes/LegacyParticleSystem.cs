@@ -40,6 +40,7 @@ namespace T3.Core.DataTypes
                 resourceManager.TryCreateShaderResource(resource: out _initDeadListShaderResource, 
                                                         relativePath: sourcePath, 
                                                         watcher: null,
+                                                        resourceFolders: null,
                                                         errorMessage: out var errorMessage, 
                                                         name: entryPoint, 
                                                         entryPoint: debugName, 

@@ -336,7 +336,7 @@ namespace T3.Core.Model
             return false;
         }
 
-        internal static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, bool allowNonOperatorInstanceType, AssemblyInformation owningAssembly)
+        internal static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, bool allowNonOperatorInstanceType, SymbolPackage package)
         {
             // Read symbol with Id - dictionary of Guid-JToken?
             var name = jToken[JsonKeys.Name].Value<string>();
@@ -373,8 +373,8 @@ namespace T3.Core.Model
             Type instanceType;
             if (!allowNonOperatorInstanceType)
             {
-                if(!owningAssembly.TryGetType(id, out instanceType))
-                    LogMissingTypeAndExit(owningAssembly, name);
+                if (!package.AssemblyInformation.TryGetType(id, out instanceType))
+                    LogMissingTypeAndExit(package, name);
             }
             else
             {
@@ -382,18 +382,14 @@ namespace T3.Core.Model
                 {
                     instanceType = Type.GetType(name) ?? typeof(object);
                 }
-                catch (Exception e) 
+                catch (Exception e)
                 {
                     instanceType = typeof(object);
                     Log.Warning($"Failed to load type {name}: {e}");
                 }
             }
 
-            var symbol = new Symbol(instanceType, id, orderedInputIds)
-                             {
-                                 Name = name,
-                                 Namespace = @namespace,
-                             };
+            var symbol = package.CreateSymbol(instanceType, id, name, @namespace, orderedInputIds);
 
             if (hasConnections)
                 symbol.Connections.AddRange(connections);
@@ -407,20 +403,22 @@ namespace T3.Core.Model
                 }
             }
 
-            symbol.PlaybackSettings = PlaybackSettings.ReadFromJson(jToken);
+            symbol.PlaybackSettings = PlaybackSettings.ReadFromJson(jToken, symbol.SymbolPackage.ResourcesFolder);
 
             var animatorData = (JArray)jToken[JsonKeys.Animator];
             return new SymbolReadResult(symbol, childrenJsons, animatorData);
         }
 
 
+
         // Method for when allowNonOpInstanceType = true
-        static Type LogMissingTypeAndExit(AssemblyInformation assemblyInformation, string typeName)
+        static Type LogMissingTypeAndExit(SymbolPackage package, string typeName)
         {
+            var assemblyInformation = package.AssemblyInformation;
             var existingTypes = string.Join(",\n", assemblyInformation.Types.Select(x => x.FullName));
 
             CoreUi.Instance.ShowMessageBox($"Definition '{typeName}' is missing.\nPlease try to rebuild your solution.\n\n" +
-                                           $"Existing types in {assemblyInformation.Name}:\n{existingTypes}\n\n");
+                                           $"Existing types in project {assemblyInformation.Name}:\n{existingTypes}\n\n");
             CoreUi.Instance.ExitApplication();
             CoreUi.Instance.ExitThread();
 

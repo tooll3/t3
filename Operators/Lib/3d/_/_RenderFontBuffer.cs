@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 using lib.Utils.BmFont;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,7 +10,7 @@ using T3.Core.Utils;
 
 namespace lib._3d.@_
 {
-	[Guid("c5707b79-859b-4d53-92e0-cbed53aae648")]
+    [Guid("c5707b79-859b-4d53-92e0-cbed53aae648")]
     public class _RenderFontBuffer : Instance<_RenderFontBuffer>
     {
         [Output(Guid = "3D2F53A3-F1F0-489B-B20B-BADB09CDAEBE")]
@@ -18,7 +19,6 @@ namespace lib._3d.@_
         [Output(Guid = "A0ECA9CE-35AA-497D-B5C9-CDE52A7C8D58")]
         public readonly Slot<int> VertexCount = new();
 
-        
         public _RenderFontBuffer()
         {
             Buffer.UpdateAction = Update;
@@ -29,19 +29,25 @@ namespace lib._3d.@_
             if (Filepath.DirtyFlag.IsDirty || _font == null)
             {
                 var filepath = Filepath.GetValue(context);
-                
-                ResourceFileWatcher.AddFileHook(filepath, () => {Filepath.DirtyFlag.Invalidate();});
-                
-                _font = BmFontDescription.InitializeFromFile(filepath);
+
+                if (ResourceManager.TryResolvePath(filepath, out filepath, ResourceFolders))
+                {
+                    ResourceFileWatcher.AddFileHook(filepath, () => { Filepath.DirtyFlag.Invalidate(); });
+                    _font = BmFontDescription.InitializeFromFile(filepath);
+                }
+                else
+                {
+                    Log.Warning("Could not find font file: " + filepath, this);
+                }
             }
-            
+
             UpdateMesh(context);
         }
 
         private void UpdateMesh(EvaluationContext context)
         {
             var text = Text.GetValue(context);
-            if (string.IsNullOrEmpty(text) )
+            if (string.IsNullOrEmpty(text))
             {
                 text = " ";
             }
@@ -50,13 +56,17 @@ namespace lib._3d.@_
                 return;
 
             var lineNumber = 0;
-            var horizontalAlign = (BmFontDescription.HorizontalAligns)HorizontalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(BmFontDescription.HorizontalAligns)).Length -1);
-            var verticalAlign = (BmFontDescription.VerticalAligns)VerticalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(BmFontDescription.VerticalAligns)).Length -1);
-            
+            var horizontalAlign = (BmFontDescription.HorizontalAligns)HorizontalAlign.GetValue(context)
+                                                                                     .Clamp(0,
+                                                                                            Enum.GetValues(typeof(BmFontDescription.HorizontalAligns)).Length -
+                                                                                            1);
+            var verticalAlign =
+                (BmFontDescription.VerticalAligns)VerticalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(BmFontDescription.VerticalAligns)).Length - 1);
+
             var characterSpacing = Spacing.GetValue(context);
             var lineHeight = LineHeight.GetValue(context);
-            var scaleFactor = 1.0 / _font.BmFont.Info.Size * 0.00185; 
-            var size = (float)(Size.GetValue(context)  * scaleFactor); // Scaling to match 1080p 72DPI pt font sizes 
+            var scaleFactor = 1.0 / _font.BmFont.Info.Size * 0.00185;
+            var size = (float)(Size.GetValue(context) * scaleFactor); // Scaling to match 1080p 72DPI pt font sizes 
             var position = Position.GetValue(context);
 
             var numLinesInText = text.Split('\n').Length;
@@ -94,7 +104,7 @@ namespace lib._3d.@_
             for (var index = 0; index < text.Length; index++)
             {
                 var c = text[index];
-                
+
                 if (c == '\n')
                 {
                     AdjustLineAlignment();
@@ -113,8 +123,6 @@ namespace lib._3d.@_
                     continue;
                 }
 
-
-
                 if (lastChar != 0)
                 {
                     int key = lastChar | c;
@@ -126,8 +134,8 @@ namespace lib._3d.@_
 
                 var sizeWidth = charInfo.Width * size;
                 var sizeHeight = charInfo.Height * size;
-                var x = position.X + (cursorX + charInfo.XOffset)  * size;
-                var y = position.Y + ((cursorY - charInfo.YOffset)) * size ;
+                var x = position.X + (cursorX + charInfo.XOffset) * size;
+                var y = position.Y + ((cursorY - charInfo.YOffset)) * size;
 
                 if (charInfo.Width != 1 || charInfo.Height != 1)
                 {
@@ -158,6 +166,7 @@ namespace lib._3d.@_
                 cursorX += characterSpacing;
                 lastChar = c;
             }
+
             AdjustLineAlignment();
 
             ResourceManager.SetupStructuredBuffer(_bufferContent, ref Buffer.Value);
@@ -185,7 +194,7 @@ namespace lib._3d.@_
                 var index0 = outputIndex - backIndex;
                 if (index0 < 0 || index0 >= _bufferContent.Length)
                     continue;
-                
+
                 _bufferContent[index0].Position.X -= offset;
             }
         }
@@ -204,28 +213,28 @@ namespace lib._3d.@_
 
             [FieldOffset(4 * 4)]
             public float AspectRatio;
-            
+
             [FieldOffset(5 * 4)]
             public Quaternion Orientation;
-            
+
             [FieldOffset(9 * 4)]
             public Vector4 Color;
 
             [FieldOffset(13 * 4)]
             public Vector4 UvMinMax;
-            
+
             [FieldOffset(17 * 4)]
             public uint Id;
-            
+
             [FieldOffset(18 * 4)]
             public uint LineNumber;
-            
+
             [FieldOffset(19 * 4)]
             public Vector2 Offset;
 
             private const int StructSize = 21 * 4;
         }
-        
+
         // Inputs ----------------------------------------------------
         [Input(Guid = "F2DD87B1-7F37-4B02-871B-B2E35972F246")]
         public readonly InputSlot<string> Text = new();
@@ -255,6 +264,6 @@ namespace lib._3d.@_
         public readonly InputSlot<int> VerticalAlign = new();
 
         [Input(Guid = "E43BC887-D425-4F9C-8A86-A32C761DE0CC")]
-        public readonly InputSlot<int> HorizontalAlign = new();        
+        public readonly InputSlot<int> HorizontalAlign = new();
     }
 }

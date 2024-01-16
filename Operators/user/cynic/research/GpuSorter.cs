@@ -164,6 +164,7 @@ namespace user.cynic.research
                 resourceManager.TryCreateShaderResource(resource: out _sortShaderResource, 
                                                         relativePath: sourcePath, 
                                                         watcher: ResourceFileWatcher,
+                                                        resourceFolders: ResourceFolders,
                                                         errorMessage: out var errorMessage, 
                                                         name: debugName, 
                                                         entryPoint: entryPoint);
@@ -177,6 +178,7 @@ namespace user.cynic.research
                 resourceManager.TryCreateShaderResource(resource: out _transposeShaderResource, 
                                                         relativePath: sourcePath, 
                                                         watcher: ResourceFileWatcher,
+                                                        resourceFolders: ResourceFolders,
                                                         errorMessage: out var errorMessage, 
                                                         name: debugName, 
                                                         entryPoint: entryPoint);

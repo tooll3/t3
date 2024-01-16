@@ -70,6 +70,7 @@ namespace lib.dx11.draw
         Slot<PixelShaderD3D> IShaderOperator<PixelShaderD3D>.Shader => Shader;
         ShaderResource<PixelShaderD3D> IShaderOperator<PixelShaderD3D>.ShaderResource { get; set; }
         bool IShaderOperator<PixelShaderD3D>.SourceIsSourceCode => false;
+        Instance IShaderOperator<PixelShaderD3D>.Instance => this;
         #endregion
     }
 }

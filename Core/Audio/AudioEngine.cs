@@ -30,8 +30,8 @@ namespace T3.Core.Audio
                 Bass.StreamFree(stream.StreamHandle);
                 _clipPlaybacks.Remove(clip.Id);
             }
-            
-            UseAudioClip(clip,0);
+
+            UseAudioClip(clip, 0);
         }
 
         public static void CompleteFrame(Playback playback)
@@ -42,8 +42,9 @@ namespace T3.Core.Audio
                 Bass.Init();
                 _bassInitialized = true;
             }
+
             AudioAnalysis.CompleteFrame(playback);
-            
+
             // Create new streams
             foreach (var (audioClip, time) in _updatedClipTimes)
             {
@@ -58,13 +59,13 @@ namespace T3.Core.Audio
                         _clipPlaybacks[audioClip.Id] = audioClipStream;
                 }
             }
-            
+
             List<Guid> obsoleteIds = new();
             var playbackSpeedChanged = Math.Abs(_lastPlaybackSpeed - playback.PlaybackSpeed) > 0.001f;
             _lastPlaybackSpeed = playback.PlaybackSpeed;
 
             var handledMainSoundtrack = false;
-            foreach ( var (audioClipId,clipStream) in  _clipPlaybacks)
+            foreach (var (audioClipId, clipStream) in _clipPlaybacks)
             {
                 clipStream.IsInUse = _updatedClipTimes.ContainsKey(clipStream.AudioClip);
                 if (!clipStream.IsInUse)
@@ -81,15 +82,17 @@ namespace T3.Core.Audio
                         UpdateFftBuffer(clipStream.StreamHandle, playback);
                         handledMainSoundtrack = true;
                     }
+
                     clipStream.UpdateTime(playback);
                 }
             }
 
-            foreach(var id in obsoleteIds)
+            foreach (var id in obsoleteIds)
             {
                 _clipPlaybacks[id].Disable();
                 _clipPlaybacks.Remove(id);
             }
+
             _updatedClipTimes.Clear();
         }
 
@@ -98,39 +101,38 @@ namespace T3.Core.Audio
             IsMuted = configAudioMuted;
             UpdateMuting();
         }
-        
+
         public static bool IsMuted { get; private set; }
-        
+
         private static void UpdateMuting()
         {
             foreach (var stream in _clipPlaybacks.Values)
             {
                 var volume = IsMuted ? 0 : 1;
-                Bass.ChannelSetAttribute(stream.StreamHandle,ChannelAttribute.Volume, volume);
+                Bass.ChannelSetAttribute(stream.StreamHandle, ChannelAttribute.Volume, volume);
             }
         }
-        
+
         private static void UpdateFftBuffer(int soundStreamHandle, Playback playback)
         {
             const int get256FftValues = (int)DataFlags.FFT512;
-            
+
             if (playback.Settings != null && playback.Settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
             {
                 Bass.ChannelGetData(soundStreamHandle, AudioAnalysis.FftGainBuffer, get256FftValues);
             }
         }
-        
+
         private static double _lastPlaybackSpeed = 1;
         private static bool _bassInitialized;
         private static readonly Dictionary<Guid, AudioClipStream> _clipPlaybacks = new();
         private static readonly Dictionary<AudioClip, double> _updatedClipTimes = new();
     }
 
-
     public class AudioClipStream
     {
         public AudioClip AudioClip;
-        
+
         public double Duration;
         public int StreamHandle;
         public bool IsInUse;
@@ -159,20 +161,20 @@ namespace T3.Core.Audio
                 Bass.ChannelPlay(StreamHandle);
             }
         }
-        
 
         public static AudioClipStream LoadClip(AudioClip clip)
         {
-            if (string.IsNullOrEmpty(clip.FilePath))
+            if (string.IsNullOrWhiteSpace(clip.FilePath))
                 return null;
-            
+
             Log.Debug($"Loading audioClip {clip.FilePath} ...");
             if (!File.Exists(clip.FilePath))
             {
                 Log.Error($"AudioClip file '{clip.FilePath}' does not exist.");
                 return null;
             }
-            var streamHandle = Bass.CreateStream(clip.FilePath, 0,0, BassFlags.Prescan);
+
+            var streamHandle = Bass.CreateStream(clip.FilePath, 0, 0, BassFlags.Prescan);
             Bass.ChannelGetAttribute(streamHandle, ChannelAttribute.Frequency, out var defaultPlaybackFrequency);
             Bass.ChannelSetAttribute(streamHandle, ChannelAttribute.Volume, AudioEngine.IsMuted ? 0 : 1);
             var bytes = Bass.ChannelGetLength(streamHandle);
@@ -180,8 +182,9 @@ namespace T3.Core.Audio
             {
                 Log.Error($"Failed to initialize audio playback for {clip.FilePath}.");
             }
+
             var duration = (float)Bass.ChannelBytes2Seconds(streamHandle, bytes);
-            
+
             var stream = new AudioClipStream()
                              {
                                  AudioClip = clip,
@@ -193,7 +196,7 @@ namespace T3.Core.Audio
             clip.LengthInSeconds = duration;
             return stream;
         }
-        
+
         private const double AudioSyncingOffset = -2 / 60f;
         private const double AudioTriggerDelayOffset = 2 / 60f;
 
@@ -209,12 +212,12 @@ namespace T3.Core.Audio
         {
             if (Playback.Current.PlaybackSpeed == 0)
                 return;
-            
+
             var localTargetTimeInSecs = TargetTime - playback.SecondsFromBars(AudioClip.StartTime);
 
             var isOutOfBounds = localTargetTimeInSecs < 0 || localTargetTimeInSecs >= AudioClip.LengthInSeconds;
             var isPlaying = Bass.ChannelIsActive(StreamHandle) == PlaybackState.Playing;
-            
+
             if (isOutOfBounds)
             {
                 if (isPlaying)
@@ -222,7 +225,7 @@ namespace T3.Core.Audio
                     //Log.Debug("Pausing");
                     Bass.ChannelPause(StreamHandle);
                 }
-                
+
                 return;
             }
 
@@ -231,20 +234,19 @@ namespace T3.Core.Audio
                 //Log.Debug("Restarting");
                 Bass.ChannelPlay(StreamHandle);
             }
-            
+
             var currentStreamPos = Bass.ChannelGetPosition(StreamHandle);
             var currentPos = Bass.ChannelBytes2Seconds(StreamHandle, currentStreamPos) - AudioSyncingOffset;
             var soundDelta = (currentPos - localTargetTimeInSecs) * playback.PlaybackSpeed;
 
-            
-            if (Math.Abs(soundDelta) <=  ProjectSettings.Config.AudioResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed)) 
+            if (Math.Abs(soundDelta) <= ProjectSettings.Config.AudioResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed))
                 return;
-            
+
             // Resync
             //Log.Debug($"Sound delta {soundDelta:0.000}s for {AudioClip.FilePath}");
-            var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs + AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset);
+            var newStreamPos =
+                Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs + AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset);
             Bass.ChannelSetPosition(StreamHandle, newStreamPos);
-
         }
 
         public void Disable()
@@ -252,10 +254,10 @@ namespace T3.Core.Audio
             Bass.StreamFree(StreamHandle);
         }
     }
-    
+
     public class AudioClip
     {
-        #region serialized attributes 
+        #region serialized attributes
         public Guid Id;
         public string FilePath;
         public double StartTime;
@@ -268,11 +270,10 @@ namespace T3.Core.Audio
         /// <summary>
         /// Is initialized after loading...
         /// </summary>
-        public double LengthInSeconds;  
+        public double LengthInSeconds;
 
-        
         #region serialization
-        public static AudioClip FromJson(JToken jToken)
+        public static AudioClip FromJson(JToken jToken, string projectResourceDir)
         {
             var idToken = jToken[nameof(Id)];
 
@@ -280,17 +281,28 @@ namespace T3.Core.Audio
             if (idString == null)
                 return null;
 
+            var path = jToken[nameof(FilePath)]?.Value<string>();
+
+            if (path != null)
+            {
+                _ = ResourceManager.TryResolvePath(path, out path, projectResourceDir);
+            }
+            else
+            {
+                path = string.Empty;
+            }
+
             var newAudioClip = new AudioClip
                                    {
                                        Id = Guid.Parse(idString),
-                                       FilePath = jToken[nameof(FilePath)]?.Value<string>() ?? String.Empty,
+                                       FilePath = path,
                                        StartTime = jToken[nameof(StartTime)]?.Value<double>() ?? 0,
                                        EndTime = jToken[nameof(EndTime)]?.Value<double>() ?? 0,
                                        Bpm = jToken[nameof(Bpm)]?.Value<float>() ?? 0,
                                        DiscardAfterUse = jToken[nameof(DiscardAfterUse)]?.Value<bool>() ?? true,
                                        IsSoundtrack = jToken[nameof(IsSoundtrack)]?.Value<bool>() ?? true,
                                    };
-            
+
             return newAudioClip;
         }
 
@@ -309,7 +321,6 @@ namespace T3.Core.Audio
             }
             writer.WriteEndObject();
         }
-
-        #endregion        
+        #endregion
     }
 }

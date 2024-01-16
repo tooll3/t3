@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
+using T3.Core.Resource;
+
 // ReSharper disable RedundantNameQualifier
 
 namespace T3.Core.Rendering
@@ -19,8 +21,14 @@ namespace T3.Core.Rendering
         public readonly List<Face> Faces = new();
         public readonly List<Line> Lines = new();
 
-        public static ObjMesh LoadFromFile(string objFilePath)
+        public static ObjMesh LoadFromFile(string filePathRelative, IEnumerable<string> projectResourceFolders)
         {
+            if (!ResourceManager.TryResolvePath(filePathRelative, out var objFilePath, projectResourceFolders))
+            {
+                Log.Warning($"Failed to load object path '{filePathRelative}' (Resolved to '{objFilePath}')");
+                return null;
+            }
+            
             try
             {
                 if (string.IsNullOrEmpty(objFilePath) || !(new FileInfo(objFilePath).Exists))

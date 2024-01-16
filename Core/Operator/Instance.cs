@@ -21,8 +21,21 @@ namespace T3.Core.Operator
         public List<Instance> Children { get; set; } = new();
         public List<IInputSlot> Inputs { get; set; } = new();
 
-        public Action<EvaluationContext> KeepUpdatedAction;
-        
+        protected internal ResourceFileWatcher ResourceFileWatcher => Symbol.SymbolPackage.ResourceFileWatcher;
+
+        private List<string> _resourceFolders = null;
+        protected internal IReadOnlyList<string> ResourceFolders
+        {
+            get
+            {
+                if (_resourceFolders != null)
+                    return _resourceFolders;
+
+                GatherResourceFolders(this, out _resourceFolders);
+                return _resourceFolders;
+            }
+        }
+
         /// <summary>
         /// get input without GC allocations 
         /// </summary>
@@ -37,7 +50,7 @@ namespace T3.Core.Operator
 
             return null;
         }
-        
+
         public void Dispose() => Dispose(true);
 
         protected virtual void Dispose(bool disposing)
@@ -83,7 +96,7 @@ namespace T3.Core.Operator
 
             if (!gotSource || !gotTarget)
                 return false;
-            
+
             targetSlot.AddConnection(sourceSlot, multiInputIndex);
             sourceSlot.DirtyFlag.Invalidate();
             return true;
@@ -123,7 +136,7 @@ namespace T3.Core.Operator
         private bool TryGetTargetSlot(Symbol.Connection connection, out ISlot targetSlot)
         {
             var compositionInstance = this;
-              
+
             // Get target Instance
             var targetInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.TargetParentOrChildId);
             var gotTargetInstance = targetInstance is not null;
@@ -132,15 +145,29 @@ namespace T3.Core.Operator
             var targetSlotList = gotTargetInstance ? targetInstance.Inputs.Cast<ISlot>() : compositionInstance.Outputs;
             targetSlot = targetSlotList.SingleOrDefault(slot => slot.Id == connection.TargetSlotId);
             var gotTargetSlot = targetSlot is not null;
-            
+
             #if DEBUG
             if (!gotTargetInstance)
             {
                 Debug.Assert(connection.TargetParentOrChildId == Guid.Empty);
             }
             #endif
-            
+
             return gotTargetSlot;
+        }
+
+        private static void GatherResourceFolders(Instance instance, out List<string> resourceFolders)
+        {
+            resourceFolders = [instance.ResourceFileWatcher.WatchedFolder];
+            
+            while (instance.Parent != null)
+            {
+                instance = instance.Parent;
+                var resourceFolder = instance.ResourceFileWatcher.WatchedFolder;
+
+                if (!resourceFolders.Contains(resourceFolder))
+                    resourceFolders.Add(resourceFolder);
+            }
         }
 
         public IList<Guid> InstancePath => OperatorUtils.BuildIdPathForInstance(this).ToArray();
@@ -150,13 +177,11 @@ namespace T3.Core.Operator
     {
         public override Type Type { get; } = typeof(T);
         public override Symbol Symbol => _typeSymbol;
-        
+
         // ReSharper disable once StaticMemberInGenericType
         #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
         private static Symbol _typeSymbol; // this is set with reflection in Symbol.UpdateType()
         #pragma warning restore CS0649 // Field is never assigned to, and will always have its default value
-        
-        protected ResourceFileWatcher ResourceFileWatcher => Symbol.SymbolPackage.FileWatcher;
 
         protected Instance()
         {

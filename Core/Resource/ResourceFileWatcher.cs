@@ -15,15 +15,19 @@ namespace T3.Core.Resource
         internal ResourceFileWatcher(string watchedFolder, bool shared)
         {
             Directory.CreateDirectory(watchedFolder);
-            var hlslWatcher = AddWatcher(watchedFolder, "*.hlsl");
-            hlslWatcher.Deleted += FileChangedHandler;
-            hlslWatcher.Renamed += FileChangedHandler;
+            
+            FileSystemEventHandler handler = (_, eventArgs) => FileChangedHandler(eventArgs, HooksForResourceFilePaths);
+            RenamedEventHandler renamedHandler = (_, eventArgs) => FileChangedHandler(eventArgs, HooksForResourceFilePaths);
+            
+            var hlslWatcher = AddWatcher(watchedFolder, "*.hlsl", _fileWatchers, handler);
+            hlslWatcher.Deleted += handler;
+            hlslWatcher.Renamed += renamedHandler;
             hlslWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // Creation time needed for visual studio (2017)
 
-            AddWatcher(watchedFolder, "*.png");
-            AddWatcher(watchedFolder, "*.jpg");
-            AddWatcher(watchedFolder, "*.dds");
-            AddWatcher(watchedFolder, "*.tiff");
+            AddWatcher(watchedFolder, "*.png", _fileWatchers, handler);
+            AddWatcher(watchedFolder, "*.jpg", _fileWatchers, handler);
+            AddWatcher(watchedFolder, "*.dds", _fileWatchers, handler);
+            AddWatcher(watchedFolder, "*.tiff", _fileWatchers, handler);
             WatchedFolder = watchedFolder;
 
             if (shared)
@@ -32,7 +36,8 @@ namespace T3.Core.Resource
             }
         }
 
-        public void AddFileHook(string filepath, Action action)
+        // todo - optimize this by making pairing it with the correct watcher that already exists
+        public static void AddFileHook(string filepath, Action action)
         {
             if (string.IsNullOrWhiteSpace(filepath))
                 return;
@@ -48,12 +53,13 @@ namespace T3.Core.Resource
                 return;
             }
 
-            if (!_fileWatchers.ContainsKey(pattern))
+            if (!ExternalFileWatchers.ContainsKey(pattern))
             {
-                AddWatcher(WatchedFolder, pattern);
+                FileSystemEventHandler handler = (_, eventArgs) => FileChangedHandler(eventArgs, StaticHooksForResourceFilePaths);
+                AddWatcher(Path.GetDirectoryName(filepath), pattern, ExternalFileWatchers, handler);
             }
 
-            if (HooksForResourceFilepaths.TryGetValue(filepath, out var hook))
+            if (StaticHooksForResourceFilePaths.TryGetValue(filepath, out var hook))
             {
                 hook.FileChangeAction -= action;
                 hook.FileChangeAction += action;
@@ -70,40 +76,34 @@ namespace T3.Core.Resource
                                   {
                                       FileChangeAction = action
                                   };
-                HooksForResourceFilepaths.TryAdd(filepath, newHook);
+                StaticHooksForResourceFilePaths.TryAdd(filepath, newHook);
             }
         }
 
-        private FileSystemWatcher AddWatcher(string folder, string filePattern)
+        private static FileSystemWatcher AddWatcher(string folder, string filePattern, Dictionary<string, FileSystemWatcher> collection, FileSystemEventHandler handler)
         {
             var newWatcher = new FileSystemWatcher(folder, filePattern)
                                  {
                                      IncludeSubdirectories = true,
                                      EnableRaisingEvents = true
                                  };
-            newWatcher.Changed += FileChangedHandler;
-            newWatcher.Created += FileChangedHandler;
-            _fileWatchers.Add(filePattern, newWatcher);
+            newWatcher.Changed += handler;
+            newWatcher.Created += handler;
+            collection.Add(filePattern, newWatcher);
             return newWatcher;
         }
 
-        private readonly Dictionary<string, FileSystemWatcher> _fileWatchers = new(5);
-
-        private void FileChangedHandler(object sender, FileSystemEventArgs fileSystemEventArgs)
+        private static void FileChangedHandler(FileSystemEventArgs fileSystemEventArgs, ConcurrentDictionary<string, ResourceFileHook> hooks)
         {
-            // Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
-            if (!HooksForResourceFilepaths.TryGetValue(fileSystemEventArgs.FullPath, out var fileHook))
+            if (!hooks.TryGetValue(fileSystemEventArgs.FullPath, out var fileHook))
             {
-                //Log.Warning("Invalid FileResource?");
                 return;
             }
 
-            // Log.Info($"valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
-            DateTime lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
+            var lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
             if (lastWriteTime == fileHook.LastWriteReferenceTime)
                 return;
 
-            // Log.Info($"very valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
             // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
             //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
             //       it cannot read the file. 
@@ -119,7 +119,11 @@ namespace T3.Core.Resource
             // else discard the (duplicated) OnChanged event
         }
 
-        internal readonly ConcurrentDictionary<string, ResourceFileHook> HooksForResourceFilepaths = new();
+        internal readonly ConcurrentDictionary<string, ResourceFileHook> HooksForResourceFilePaths = new();
+        private static readonly ConcurrentDictionary<string, ResourceFileHook> StaticHooksForResourceFilePaths = new(); 
+
+        private readonly Dictionary<string, FileSystemWatcher> _fileWatchers = new(5);
+        private static readonly Dictionary<string, FileSystemWatcher> ExternalFileWatchers = new(5);
     }
 
     /// <summary>

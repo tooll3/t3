@@ -2,8 +2,7 @@
   "profiles": {
     "t3": {
       "commandName": "Project",
-      "workingDirectory": "..",
-      "nativeDebugging": true
+      "nativeDebugging": false
     }
   }
 }

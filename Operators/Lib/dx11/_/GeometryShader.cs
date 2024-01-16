@@ -42,6 +42,7 @@ namespace lib.dx11.@_
         Slot<GeometryShaderD3D> IShaderOperator<GeometryShaderD3D>.Shader => Shader;
         ShaderResource<GeometryShaderD3D> IShaderOperator<GeometryShaderD3D>.ShaderResource { get; set; }
         bool IShaderOperator<GeometryShaderD3D>.SourceIsSourceCode => false;
+        Instance IShaderOperator<GeometryShaderD3D>.Instance => this;
         #endregion
     }
 }

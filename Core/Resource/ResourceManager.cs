@@ -90,11 +90,11 @@ namespace T3.Core.Resource
             if (!TryGetResourcePath(watcher, relativePath, out var path, out var relevantFileWatcher))
             {
                 // todo - search other packages? common?
-                Log.Warning($"Couldn't find texture '{relativePath}'.");
+                Log.Warning($"Couldn't find texture '{relativePath} (Resolved to '{path}'.");
                 return (NullResource, NullResource);
             }
 
-            if (relevantFileWatcher != null && relevantFileWatcher.HooksForResourceFilepaths.TryGetValue(relativePath, out var existingHook))
+            if (relevantFileWatcher != null && relevantFileWatcher.HooksForResourceFilePaths.TryGetValue(relativePath, out var existingHook))
             {
                 uint textureId = existingHook.ResourceIds.First();
                 existingHook.FileChangeAction += fileChangeAction;
@@ -138,7 +138,7 @@ namespace T3.Core.Resource
             {
                 var hook = new ResourceFileHook(relativePath, new[] { textureResourceEntry.Id, srvResourceId });
                 hook.FileChangeAction += fileChangeAction;
-                relevantFileWatcher.HooksForResourceFilepaths.TryAdd(relativePath, hook);
+                relevantFileWatcher.HooksForResourceFilePaths.TryAdd(relativePath, hook);
             }
 
             return (textureResourceEntry.Id, srvResourceId);
@@ -157,7 +157,7 @@ namespace T3.Core.Resource
         // returns true if the texture changed
 
         #region Shaders
-        public bool TryCreateShaderResourceFromSource<TShader>(out ShaderResource<TShader> resource, string shaderSource, string directory,
+        public bool TryCreateShaderResourceFromSource<TShader>(out ShaderResource<TShader> resource, string shaderSource, IReadOnlyList<string> directories,
                                                                out string errorMessage,
                                                                string name = "", string entryPoint = "main")
             where TShader : class, IDisposable
@@ -170,7 +170,7 @@ namespace T3.Core.Resource
 
             var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromSource<TShader>(shaderSource: shaderSource,
                                                                                               name: name,
-                                                                                              directory: directory,
+                                                                                              directory: directories,
                                                                                               entryPoint: entryPoint,
                                                                                               resourceId: resourceId,
                                                                                               resource: out var newResource,
@@ -190,7 +190,7 @@ namespace T3.Core.Resource
         }
 
         public bool TryCreateShaderResource<TShader>(out ShaderResource<TShader>? resource, ResourceFileWatcher? watcher, string relativePath,
-                                                     out string errorMessage,
+                                                     out string errorMessage, IEnumerable<string>? resourceFolders,
                                                      string name = "", string entryPoint = "main", Action? fileChangedAction = null)
             where TShader : class, IDisposable
         {
@@ -204,7 +204,7 @@ namespace T3.Core.Resource
             if (!TryGetResourcePath(watcher, relativePath, out var path, out var relevantFileWatcher))
             {
                 resource = null;
-                errorMessage = $"File not found: {relativePath}";
+                errorMessage = $"Path not found: '{relativePath}' (Resolved to '{path}').";
                 return false;
             }
 
@@ -213,7 +213,7 @@ namespace T3.Core.Resource
                 name = fileInfo.Name;
 
             ResourceFileHook? fileHook = null;
-            var hookExists = relevantFileWatcher != null && relevantFileWatcher.HooksForResourceFilepaths.TryGetValue(relativePath, out fileHook);
+            var hookExists = relevantFileWatcher != null && relevantFileWatcher.HooksForResourceFilePaths.TryGetValue(relativePath, out fileHook);
             if (hookExists)
             {
                 foreach (var id in fileHook!.ResourceIds)
@@ -236,12 +236,22 @@ namespace T3.Core.Resource
 
             // need to create
             var resourceId = GetNextResourceId();
+            List<string> compilationReferences = new();
+            
+            if(resourceFolders != null)
+                compilationReferences.AddRange(resourceFolders);
+            else if(relevantFileWatcher != null)
+                compilationReferences.Add(relevantFileWatcher.WatchedFolder);
+            
+            
+            
             var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromFile(srcFile: path,
                                                                                    entryPoint: entryPoint,
                                                                                    name: name,
                                                                                    resourceId: resourceId,
                                                                                    resource: out resource,
-                                                                                   errorMessage: out errorMessage);
+                                                                                   errorMessage: out errorMessage,
+                                                                                   resourceDirs: compilationReferences);
 
             if (!compiled)
             {
@@ -256,7 +266,7 @@ namespace T3.Core.Resource
             if (fileHook == null)
             {
                 fileHook = new ResourceFileHook(path, new[] { resourceId });
-                relevantFileWatcher.HooksForResourceFilepaths.TryAdd(relativePath, fileHook);
+                relevantFileWatcher.HooksForResourceFilePaths.TryAdd(relativePath, fileHook);
             }
 
             if (fileChangedAction != null)
@@ -268,22 +278,21 @@ namespace T3.Core.Resource
             return true;
         }
 
-        private static bool TryGetResourcePath(ResourceFileWatcher? watcher, string relativePath, out string? path,
+        private static bool TryGetResourcePath(ResourceFileWatcher? watcher, string relativePath, out string path,
                                                out ResourceFileWatcher? relevantFileWatcher)
         {
             // keep backwards compatibility
-
             if (Path.IsPathRooted(relativePath))
             {
-                Log.Warning($"Absolute paths for shaders are deprecated, live updating will not occur. " +
+                Log.Warning($"Absolute paths for resources are deprecated, live updating will not occur. " +
                             $"Please use paths relative to your project or a shared resource folder instead: {relativePath}");
                 path = relativePath;
                 relevantFileWatcher = null;
                 return true;
             }
-            
-            relativePath = RelativePathBackwardsCompatibility(relativePath);
-            
+
+            relativePath = RelativePathBackwardsCompatibility(relativePath, false);
+
             // prioritize project-local resources
             if (watcher != null)
             {
@@ -297,7 +306,7 @@ namespace T3.Core.Resource
             }
 
             bool found = false;
-            path = null;
+            path = relativePath;
             relevantFileWatcher = null;
 
             foreach (var sharedWatcher in SharedResourceFileWatchers)
@@ -315,37 +324,44 @@ namespace T3.Core.Resource
             return found;
         }
 
-        private static string RelativePathBackwardsCompatibility(string relativePath)
+        private static string RelativePathBackwardsCompatibility(string relativePath, bool checkRoot = true)
         {
+            if (checkRoot && Path.IsPathRooted(relativePath))
+            {
+                Log.Warning($"AudioClip path '{relativePath}' is not relative. This is deprecated and should be relative to the project Resources folder. Please update your project settings.");
+                return relativePath;
+            }
+
             const string resourcesSubfolder = "resources";
-            if(relativePath.StartsWith(resourcesSubfolder, StringComparison.OrdinalIgnoreCase))
+            if (relativePath.StartsWith(resourcesSubfolder, StringComparison.OrdinalIgnoreCase))
             {
                 relativePath = relativePath[(resourcesSubfolder.Length + 1)..];
             }
-            
+
             const string userSubfolder = "user";
-            if(relativePath.StartsWith(userSubfolder, StringComparison.OrdinalIgnoreCase))
+            if (relativePath.StartsWith(userSubfolder, StringComparison.OrdinalIgnoreCase))
             {
                 // remove the user subfolder
-                var split = relativePath.AsSpan()[(userSubfolder.Length + 1)..];
-                
+                var pathWithoutUser = relativePath.AsSpan()[(userSubfolder.Length + 1)..];
+
                 // try to remove the user's name
-                var backslashIndex = split.IndexOf('/');
-                var forwardSlashIndex = split.IndexOf('\\');
+                var backslashIndex = pathWithoutUser.IndexOf('/');
+                var forwardSlashIndex = pathWithoutUser.IndexOf('\\');
 
                 if (backslashIndex == -1)
-                {
-                    if(forwardSlashIndex == -1)
-                        return split.ToString();
-                    
-                    return split[..forwardSlashIndex].ToString();
-                }
-                
-                if(forwardSlashIndex == -1)
-                    return split[..backslashIndex].ToString();
-                
-                var index = Math.Min(backslashIndex, forwardSlashIndex);
-                return split[..index].ToString();
+                    backslashIndex = int.MaxValue;
+
+                if (forwardSlashIndex == -1)
+                    forwardSlashIndex = int.MaxValue;
+
+                var slashIndex = Math.Min(backslashIndex, forwardSlashIndex);
+
+                if (slashIndex == int.MaxValue)
+                    slashIndex = 0;
+                else
+                    slashIndex += 1;
+
+                return pathWithoutUser[slashIndex..].ToString();
             }
 
             const string libSubfolder = "lib";
@@ -357,18 +373,42 @@ namespace T3.Core.Resource
             return relativePath;
         }
 
-        public static bool TryResolvePath(string relativeFileName, string? directory, out string path)
+        public static bool TryResolvePath(string relativeFileName, out string path, params string[] directories)
+        {
+            return TryResolvePath(relativeFileName, out path, (IEnumerable<string>)directories);
+        }
+
+        public static bool TryResolvePath(string relativeFileName, out string path, IEnumerable<string> directories)
         {
             relativeFileName = RelativePathBackwardsCompatibility(relativeFileName);
-            
+
+            foreach (var directory in directories)
+            {
+                path = Path.Combine(directory, relativeFileName);
+                if (File.Exists(path))
+                    return true;
+            }
+
+            return CheckSharedResources(relativeFileName, out path);
+        }
+
+        public static bool TryResolvePath(string relativeFileName, out string path, string? directory)
+        {
+            relativeFileName = RelativePathBackwardsCompatibility(relativeFileName);
+
             if (directory != null)
             {
                 path = Path.Combine(directory, relativeFileName);
                 if (File.Exists(path))
                     return true;
             }
-            
-            foreach(var folder in SharedResourceFolders)
+
+            return CheckSharedResources(relativeFileName, out path);
+        }
+
+        private static bool CheckSharedResources(string relativeFileName, out string path)
+        {
+            foreach (var folder in SharedResourceFolders)
             {
                 path = Path.Combine(folder, relativeFileName);
                 if (File.Exists(path))

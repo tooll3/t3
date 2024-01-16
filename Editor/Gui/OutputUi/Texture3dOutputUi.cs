@@ -16,13 +16,14 @@ namespace T3.Editor.Gui.OutputUi
     {
         public Texture3dOutputUi()
         {
-            const string sourcePath = @"lib\img\internal\render-volume-slice-cs.hlsl";
+            const string sourcePath = @"internal\render-volume-slice-cs.hlsl";
             const string entryPoint = "main";
             const string debugName = "render-volume-slice";
             var resourceManager = ResourceManager.Instance();
             var success= resourceManager.TryCreateShaderResource(resource: out _shaderResource, 
                                                                                 relativePath: sourcePath, 
                                                                                 watcher: null,
+                                                                                resourceFolders: null,
                                                                                 errorMessage: out var errorMessage, 
                                                                                 name: debugName, 
                                                                                 entryPoint: entryPoint, 

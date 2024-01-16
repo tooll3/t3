@@ -497,11 +497,12 @@ namespace T3.Core.Operator
             }
         }
 
-        public Instance CreateInstance(Guid id)
+        public Instance CreateInstance(Guid id, Instance parent)
         {
             var newInstance = Activator.CreateInstance(InstanceType) as Instance;
             Debug.Assert(newInstance != null);
             newInstance.SymbolChildId = id;
+            newInstance.Parent = parent;
 
             SortInputSlotsByDefinitionOrder(newInstance.Inputs);
             InstancesOfSymbol.Add(newInstance);
@@ -546,8 +547,7 @@ namespace T3.Core.Operator
         private static Instance CreateAndAddNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
         {
             var childSymbol = symbolChild.Symbol;
-            var childInstance = childSymbol.CreateInstance(symbolChild.Id);
-            childInstance.Parent = parentInstance;
+            var childInstance = childSymbol.CreateInstance(symbolChild.Id, parentInstance);
 
             // set up the inputs for the child instance
             for (int i = 0; i < symbolChild.Symbol.InputDefinitions.Count; i++)

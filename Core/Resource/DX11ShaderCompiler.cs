@@ -12,7 +12,7 @@ public class DX11ShaderCompiler : ShaderCompiler
 {
     public Device Device { get; set; }
 
-    protected override bool CompileShaderFromSource<TShader>(string shaderSource, string directory, string entryPoint, string name, out ShaderBytecode blob,
+    protected override bool CompileShaderFromSource<TShader>(string shaderSource, IReadOnlyList<string> directories, string entryPoint, string name, out ShaderBytecode blob,
                                                              out string errorMessage)
     {
         CompilationResult compilationResult = null;
@@ -26,7 +26,7 @@ public class DX11ShaderCompiler : ShaderCompiler
             flags |= ShaderFlags.Debug;
             #endif
 
-            compilationResult = ShaderBytecode.Compile(shaderSource, entryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler(directory));
+            compilationResult = ShaderBytecode.Compile(shaderSource, entryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler(directories));
 
             success = compilationResult.ResultCode == Result.Ok;
             resultMessage = compilationResult.Message;
@@ -74,11 +74,11 @@ public class DX11ShaderCompiler : ShaderCompiler
     private class IncludeHandler : SharpDX.D3DCompiler.Include
     {
         private StreamReader _streamReader;
-        private readonly string _directory;
+        private readonly IReadOnlyList<string> _directories;
         
-        public IncludeHandler(string directory)
+        public IncludeHandler(IReadOnlyList<string> directories)
         {
-            _directory = directory;
+            _directories = directories;
         }
 
         public void Dispose()
@@ -90,12 +90,13 @@ public class DX11ShaderCompiler : ShaderCompiler
 
         public Stream Open(IncludeType type, string fileName, Stream parentStream)
         {
-            if (ResourceManager.TryResolvePath(fileName, _directory, out var path))
+            if (ResourceManager.TryResolvePath(fileName, out var path, _directories))
             {
                 _streamReader = new StreamReader(path);
                 return _streamReader.BaseStream;
             }
 
+            Log.Error($"Could not locate include file '{fileName}'");
             _streamReader = null;
             return null;
         }

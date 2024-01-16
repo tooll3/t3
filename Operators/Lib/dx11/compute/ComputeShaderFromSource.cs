@@ -64,6 +64,7 @@ namespace lib.dx11.compute
         Slot<ComputeShaderD3D> IShaderOperator<ComputeShaderD3D>.Shader => ComputerShader;
         ShaderResource<ComputeShaderD3D> IShaderOperator<ComputeShaderD3D>.ShaderResource { get; set; }
         bool IShaderOperator<ComputeShaderD3D>.SourceIsSourceCode => true;
+        Instance IShaderOperator<ComputeShaderD3D>.Instance => this;
         #endregion
     }
 }

@@ -58,6 +58,7 @@ namespace lib.dx11.draw
         Slot<VertexShaderD3D> IShaderOperator<VertexShaderD3D>.Shader => Shader;
         ShaderResource<VertexShaderD3D> IShaderOperator<VertexShaderD3D>.ShaderResource { get; set; }
         bool IShaderOperator<VertexShaderD3D>.SourceIsSourceCode => false;
+        Instance IShaderOperator<VertexShaderD3D>.Instance => this;
         #endregion
     }
 }

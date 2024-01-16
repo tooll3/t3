@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SharpDX.D3DCompiler;
@@ -23,7 +24,7 @@ public abstract class ShaderResource : AbstractResource
         errorMessage = errorMessage.Split('\n').First();
         return $"Line {lineNumber}: {errorMessage}\n\n{shaderName}";
     }
-    
+
     /// <summary>
     /// Matches errors like....
     ///
@@ -38,25 +39,25 @@ public class ShaderResource<T> : ShaderResource where T : class, IDisposable
     public T Shader { get => _shader; init => _shader = value; }
 
     private ShaderBytecode _blob;
-    public ShaderBytecode Blob {get => _blob; init => _blob = value; }
-    
+    public ShaderBytecode Blob { get => _blob; init => _blob = value; }
+
     private string _entryPoint;
     public string EntryPoint { get => _entryPoint; init => _entryPoint = value; }
 
     public void UpdateDebugName(string newDebugName) => UpdateName(newDebugName);
 
-    public bool TryUpdateFromFile(string path, string entryPoint, out string errorMessage)
+    public bool TryUpdateFromFile(string path, string entryPoint, IReadOnlyList<string> resourceDirectories, out string errorMessage)
     {
-        var success = ShaderCompiler.Instance.TryCompileShaderFromFile(path, entryPoint, Name, ref _shader, ref _blob, out errorMessage);
-        if(success)
+        var success = ShaderCompiler.Instance.TryCompileShaderFromFile(path, entryPoint, Name, resourceDirectories, ref _shader, ref _blob, out errorMessage);
+        if (success)
             _entryPoint = entryPoint;
         return success;
     }
-    
-    public bool TryUpdateFromSource(string source, string entryPoint, string directory, out string errorMessage)
+
+    public bool TryUpdateFromSource(string source, string entryPoint, IReadOnlyList<string> directories, out string errorMessage)
     {
-        var success = ShaderCompiler.Instance.TryCompileShaderFromSource(source, directory, entryPoint, Name, ref _shader, ref _blob, out errorMessage);
-        if(success)
+        var success = ShaderCompiler.Instance.TryCompileShaderFromSource(source, entryPoint, Name, ref _shader, ref _blob, out errorMessage, directories);
+        if (success)
             _entryPoint = entryPoint;
         return success;
     }
@@ -73,10 +74,9 @@ public static class Extensions
 
         return shaderResource.TryGetThreadGroups(out threadGroups);
     }
-    
+
     public static bool TryGetThreadGroups(this ShaderResource<ComputeShader> computeShader, out Int3 threadGroups)
     {
-        
         threadGroups = default;
         if (computeShader.Blob == null)
             return false;

@@ -42,6 +42,7 @@ namespace lib.dx11.compute
         Slot<PixelShaderD3D> IShaderOperator<PixelShaderD3D>.Shader => PixelShader;
         ShaderResource<PixelShaderD3D> IShaderOperator<PixelShaderD3D>.ShaderResource { get; set; }
         bool IShaderOperator<PixelShaderD3D>.SourceIsSourceCode => true;
+        Instance IShaderOperator<PixelShaderD3D>.Instance => this;
         #endregion
     }
 }

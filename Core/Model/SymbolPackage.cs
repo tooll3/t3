@@ -17,23 +17,25 @@ namespace T3.Core.Model;
 
 public abstract partial class SymbolPackage
 {
-    protected abstract AssemblyInformation AssemblyInformation { get; }
+    protected internal abstract AssemblyInformation AssemblyInformation { get; }
     public abstract string Folder { get; }
 
-    private ResourceFileWatcher _fileWatcher;
-    internal ResourceFileWatcher FileWatcher
+    private ResourceFileWatcher _resourceFileWatcher;
+
+    internal ResourceFileWatcher ResourceFileWatcher
     {
         get
         {
-            if(_fileWatcher == null)
+            if (_resourceFileWatcher == null)
                 InitializeFileWatcher();
-            
-            return _fileWatcher;
+
+            return _resourceFileWatcher;
         }
     }
 
+    internal string ResourcesFolder => ResourceFileWatcher.WatchedFolder;
+
     protected abstract bool InEditor { get; }
-    private DirectoryInfo _resourcesDirectory;
 
     static SymbolPackage()
     {
@@ -43,17 +45,15 @@ public abstract partial class SymbolPackage
 
     private void InitializeFileWatcher()
     {
-        if(_fileWatcher != null)
+        if (_resourceFileWatcher != null)
             return;
-        
+
         var resourcesFolder = InEditor
                                   ? Path.Combine(Folder, "Resources")
                                   : Path.Combine(Folder, "Resources", AssemblyInformation.Name);
 
-        _resourcesDirectory = new DirectoryInfo(resourcesFolder);
-
         var shared = AssemblyInformation.Name == "lib" || AssemblyInformation.Name == "examples";
-        _fileWatcher = new ResourceFileWatcher(resourcesFolder, shared);
+        _resourceFileWatcher = new ResourceFileWatcher(resourcesFolder, shared);
     }
 
     public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> newlyRead, out IReadOnlyCollection<Symbol> allNewSymbols)
@@ -118,7 +118,6 @@ public abstract partial class SymbolPackage
                 newlyRead.Add(readSymbolResult.Result);
                 newTypes.Remove(symbol.Id);
                 allNewSymbolsList.Add(symbol);
-                symbol.SymbolPackage = this;
                 symbol.SymbolFilePath = readSymbolResult.Path;
             }
         }
@@ -134,7 +133,7 @@ public abstract partial class SymbolPackage
                 @namespace = AssemblyInformation.Name;
             }
 
-            var symbol = CreateSymbol(newType, guid, @namespace);
+            var symbol = CreateSymbol(newType, guid, newType.Name, @namespace);
 
             var added = Symbols.TryAdd(symbol.Id, symbol)
                         && SymbolRegistry.EntriesEditable.TryAdd(symbol.Id, symbol);
@@ -147,7 +146,6 @@ public abstract partial class SymbolPackage
             if (enableLog)
                 Log.Debug($"new added symbol: {newType}");
 
-            symbol.SymbolPackage = this;
             allNewSymbolsList.Add(symbol);
         }
 
@@ -156,20 +154,23 @@ public abstract partial class SymbolPackage
 
         SymbolJsonResult ReadSymbolFromJsonFileResult(JsonFileResult<Symbol> jsonInfo)
         {
-            var result = SymbolJson.ReadSymbolRoot(jsonInfo.Guid, jsonInfo.JToken, allowNonOperatorInstanceType: false, AssemblyInformation);
+            var result = SymbolJson.ReadSymbolRoot(jsonInfo.Guid, jsonInfo.JToken, allowNonOperatorInstanceType: false, this);
 
             jsonInfo.Object = result.Symbol;
             return new SymbolJsonResult(result, jsonInfo.FilePath);
         }
     }
 
-    protected static Symbol CreateSymbol(Type newType, Guid guid, string @namespace)
+    internal Symbol CreateSymbol(Type instanceType, Guid id, string name, string @namespace, Guid[] orderedInputIds = null)
     {
-        return new Symbol(newType, guid)
-                   {
-                       Namespace = @namespace,
-                       Name = newType.Name
-                   };
+        var symbol = new Symbol(instanceType, id, orderedInputIds)
+                         {
+                             Name = name,
+                             Namespace = @namespace,
+                         };
+
+        symbol.SymbolPackage = this;
+        return symbol;
     }
 
     protected virtual bool RemoveSymbol(Guid guid)

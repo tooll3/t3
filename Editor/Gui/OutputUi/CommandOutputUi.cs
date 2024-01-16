@@ -24,7 +24,7 @@ namespace T3.Editor.Gui.OutputUi
             // create op for drawing grid
             Guid gridPlaneGizmoId = Guid.Parse("e5588101-5686-4b02-ab7d-e58199ba552e");
             var gridPlaneGizmoSymbol = SymbolRegistry.Entries[gridPlaneGizmoId];
-            _gridInstance = gridPlaneGizmoSymbol.CreateInstance(Guid.NewGuid());
+            _gridInstance = gridPlaneGizmoSymbol.CreateInstance(Guid.NewGuid(), null);
         }
 
         protected override void Recompute(ISlot slot, EvaluationContext context)

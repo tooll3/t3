@@ -37,7 +37,7 @@ namespace lib.io.file
         private void Update(EvaluationContext context)
         {
             var filepath = FilePath.GetValue(context);
-            if (!File.Exists(filepath))
+            if (!ResourceManager.TryResolvePath(filepath, out filepath, ResourceFolders))
             {
                 Log.Debug($"File {filepath} doesn't exist", this);
                 return;
