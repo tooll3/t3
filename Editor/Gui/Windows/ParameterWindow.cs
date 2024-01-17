@@ -295,7 +295,7 @@ namespace T3.Editor.Gui.Windows
 
             foreach (var inputSlot in instance.Inputs)
             {
-                if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
+                if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out var inputUi))
                 {
                     Log.Warning("Trying to access an non existing input, probably the op instance is not the actual one.");
                     continue;

@@ -56,17 +56,14 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
             return false;
         }
 
-        var recompiled = TryRecompile();
-        
-        if (!recompiled)
+        if (TryRecompile())
         {
-            newSymbol = null;
-            return false;
+            ExecutePendingUpdates();
+            return Symbols.TryGetValue(newSymbolId, out newSymbol);
         }
-        
-        ExecutePendingUpdates();
-        
-        return Symbols.TryGetValue(newSymbolId, out newSymbol);
+
+        newSymbol = null;
+        return false;
     }
 
     /// <returns>
@@ -77,7 +74,13 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         if (!_needsCompilation)
             return true;
 
-        return TryRecompile();
+        if (TryRecompile())
+        {
+            ExecutePendingUpdates();
+            return true;
+        }
+
+        return false;
     }
 
     // todo : determine name from source code
@@ -101,21 +104,22 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         var filePathFmt = BuildFilepathFmt(symbol);
         WriteSymbolSourceToFile(symbol, filePathFmt);
 
-        var success = TryRecompile();
-
-        if (success)
+        if (TryRecompile())
         {
             symbol.Name = newName;
+            ExecutePendingUpdates();
+            UnmarkAsSaving();
+            return true;
         }
-        else if (currentSource != string.Empty)
+
+        if (currentSource != string.Empty)
         {
             symbol.PendingSource = currentSource;
             WriteSymbolSourceToFile(symbol, filePathFmt);
         }
 
         UnmarkAsSaving();
-
-        return success;
+        return false;
     }
 
     private bool TryRecompile()
@@ -168,7 +172,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         throw new NotImplementedException();
     }
 
-    public void MarkAsModified()
+    private void MarkAsModified()
     {
         _needsCompilation = true;
     }

@@ -201,8 +201,8 @@ internal static class InputsAndOutputs
 
         var root = syntaxTree.GetRoot();
 
-        var inputNodeFinder = new InputsAndOutputs.InputNodeByTypeFinder();
-        var blockFinder = new InputsAndOutputs.ClassDeclarationFinder();
+        var inputNodeFinder = new InputNodeByTypeFinder();
+        var blockFinder = new ClassDeclarationFinder();
         
         if (inputNodeFinder.LastInputNodeFound == null)
         {
@@ -235,7 +235,7 @@ internal static class InputsAndOutputs
         {
             var node = blockFinder.ClassDeclarationNode;
             var classDeclaration = node.AddMembers(inputDeclaration);
-            root = SyntaxNodeExtensions.ReplaceNode(root, (SyntaxNode)blockFinder.ClassDeclarationNode, (SyntaxNode)classDeclaration);
+            root = root.ReplaceNode(blockFinder.ClassDeclarationNode, classDeclaration);
         }
         else
         {

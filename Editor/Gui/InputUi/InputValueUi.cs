@@ -557,7 +557,6 @@ namespace T3.Editor.Gui.InputUi
             }
 
             InputsAndOutputs.AddInputToSymbol(input.Name, input.InputDefinition.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol);
-            OperatorUpdating.UpdateChangedOperators();
 
             var updatedComposition = Structure.GetInstanceFromIdPath(OperatorUtils.BuildIdPathForInstance(composition));
 
