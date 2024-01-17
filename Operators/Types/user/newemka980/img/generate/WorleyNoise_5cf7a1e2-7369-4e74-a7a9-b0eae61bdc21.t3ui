@@ -3,25 +3,17 @@
   "Description": "Also called Voronoi noise and cellular noise.\nIt allows to create nice textures, from organic to science fiction spaceship hull. \n\nIt has various methods like:\n* Manhattan Worley\n* Chebyshev Worley\n\nCombine it with [Steps] or / and [DetectEdges] for example. ",
   "InputUis": [
     {
-      "InputId": "471c27c5-f4c6-482f-81d6-3b5942c4e003"/*PixelShaderPath*/,
-      "Position": {
-        "X": -187.642,
-        "Y": -109.06139
-      },
-      "Usage": "FilePath"
-    },
-    {
       "InputId": "a9111412-3369-4848-af48-8a96f5697c84"/*ColorA*/,
       "Position": {
-        "X": -187.642,
-        "Y": -64.06139
+        "X": -183.38022,
+        "Y": -69.03347
       }
     },
     {
       "InputId": "f9899540-e495-41cb-87da-302d1bf090ac"/*ColorB*/,
       "Position": {
-        "X": -187.642,
-        "Y": -19.061394
+        "X": -183.38022,
+        "Y": -24.03347
       }
     },
     {
@@ -68,29 +60,29 @@
     {
       "InputId": "7b1a1f18-a1d4-4737-9c06-21f263277140"/*Resolution*/,
       "Position": {
-        "X": -187.642,
-        "Y": 340.9386
+        "X": -192.61407,
+        "Y": 401.31375
       }
     },
     {
       "InputId": "b4277cab-d286-410f-81be-ff4d53a9eca9"/*Method*/,
       "Position": {
-        "X": -187.642,
-        "Y": 295.9386
+        "X": -192.61407,
+        "Y": 356.31375
       }
     },
     {
       "InputId": "7b7e1f3b-7e5c-46af-9e2e-536cb1909867"/*GenerateMips*/,
       "Position": {
-        "X": -187.642,
-        "Y": 385.9386
+        "X": -192.61407,
+        "Y": 446.31375
       }
     },
     {
       "InputId": "bb34cad3-1676-4df1-86f3-d713df5ccda6"/*Clamping*/,
       "Position": {
-        "X": -187.642,
-        "Y": 250.9386
+        "X": -192.61407,
+        "Y": 311.31375
       }
     }
   ],
@@ -139,7 +131,7 @@
       "ChildId": "13e5bf4c-06da-473a-b518-52c754fdefea"/*IntToFloat*/,
       "Position": {
         "X": -37.642,
-        "Y": 295.9386
+        "Y": 306.9386
       }
     },
     {

@@ -4,10 +4,6 @@
   "Namespace": "user.newemka980.img.generate",
   "Inputs": [
     {
-      "Id": "471c27c5-f4c6-482f-81d6-3b5942c4e003"/*PixelShaderPath*/,
-      "DefaultValue": "Resources\\lib\\img\\generate\\noiseLab.hlsl"
-    },
-    {
       "Id": "a9111412-3369-4848-af48-8a96f5697c84"/*ColorA*/,
       "DefaultValue": {
         "X": 1E-06,

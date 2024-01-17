@@ -10,9 +10,6 @@ namespace T3.Operators.Types.Id_5cf7a1e2_7369_4e74_a7a9_b0eae61bdc21
         [Output(Guid = "59ca5836-cd4a-4c2d-b721-c392c332f798")]
         public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new ();
 
-        [Input(Guid = "471c27c5-f4c6-482f-81d6-3b5942c4e003")]
-        public readonly InputSlot<string> PixelShaderPath = new InputSlot<string>();
-
         [Input(Guid = "a9111412-3369-4848-af48-8a96f5697c84")]
         public readonly InputSlot<System.Numerics.Vector4> ColorA = new ();
 
