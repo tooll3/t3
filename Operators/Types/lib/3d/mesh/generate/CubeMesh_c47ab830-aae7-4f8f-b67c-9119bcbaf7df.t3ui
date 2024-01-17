@@ -7,35 +7,43 @@
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "GroupTitle": "Tesselation",
+      "Description": "Amount of segments from left to right / top to bottom / front to back."
     },
     {
       "InputId": "97c9849e-751c-49a9-823d-0af839fa503e"/*Stretch*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "GroupTitle": "Scaling",
+      "Description": "Scales the size X (width) Y (height) Z (depth)"
     },
     {
       "InputId": "9a7d34a1-ca39-48bc-b977-9a786d23f3b1"/*Scale*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Uniformly scales the mesh"
     },
     {
       "InputId": "febfae90-13e8-4f0a-8ccf-b8825ea525f8"/*Pivot*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "GroupTitle": "Position and Rotation",
+      "Description": "Offsets the position of the pivotpoint (center).\n\nThis is helpful to change the point around which the cube rotates / along which it is scaled."
     },
     {
       "InputId": "f4a78f77-8d8c-4b7b-8545-ea80947b428d"/*Center*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Description": "Transforms the position of the pivot"
     },
     {
       "InputId": "e641c244-9dc8-444d-8dee-c3e9b710f9db"/*Rotation*/,
@@ -43,7 +51,9 @@
         "X": -200.0,
         "Y": 135.0
       },
-      "Scale": 0.1
+      "Description": "Rotates the Mesh",
+      "Scale": 0.1,
+      "Format": "{0:0.0}°"
     }
   ],
   "SymbolChildUis": [],

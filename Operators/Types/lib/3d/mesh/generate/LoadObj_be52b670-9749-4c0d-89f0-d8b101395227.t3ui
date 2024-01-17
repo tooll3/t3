@@ -1,6 +1,6 @@
 {
   "Id": "be52b670-9749-4c0d-89f0-d8b101395227"/*LoadObj*/,
-  "Description": "Generates Vertex and Index buffers from obj file",
+  "Description": "Generates Vertex and Index buffers from obj file\n\nAll faces need to have UVs or they will appear 100% black.",
   "InputUis": [
     {
       "InputId": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
@@ -8,6 +8,8 @@
         "X": 51.512096,
         "Y": 46.995968
       },
+      "GroupTitle": "Select file",
+      "Description": "Use \"...\" to select a Wavefront .obj file to import",
       "Usage": "FilePath",
       "FileFilter": "OBJ-Files|*.obj"
     },
@@ -16,21 +18,25 @@
       "Position": {
         "X": 51.512096,
         "Y": 91.99597
-      }
+      },
+      "GroupTitle": "Advanced Options...",
+      "Description": "toggle GPU Caching"
     },
     {
       "InputId": "ddd22736-a600-4c97-a4a4-ad3526b8b35c"/*ClearGPUCache*/,
       "Position": {
         "X": 51.512096,
         "Y": 181.99597
-      }
+      },
+      "Description": "enable and disable to clear gpu cache"
     },
     {
       "InputId": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
       "Position": {
         "X": 51.512096,
         "Y": 136.99597
-      }
+      },
+      "Description": "check to sort vertices"
     },
     {
       "InputId": "c39a61b3-fb6b-4611-8f13-273f13c9c491"/*ScaleFactor*/,
@@ -38,6 +44,8 @@
         "X": 51.512096,
         "Y": 181.99597
       },
+      "GroupTitle": "Scaling",
+      "Description": "Uniformly scales the loaded mesh",
       "Min": 0.001,
       "Max": 1000.0,
       "Scale": 0.01,
