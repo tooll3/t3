@@ -1,9 +1,0 @@
-{
-  "TimeClipSuspending": true,
-  "MainOperatorName": "MakeMain1",
-  "AudioResyncThreshold": 0.04,
-  "EnablePlaybackControlWithKeyboard": true,
-  "WindowedMode": false,
-  "LimitMidiDeviceCapture": null,
-  "EnableMidiSnapshotIndication": false
-}

@@ -262,30 +262,6 @@ internal static class ProjectSetup
             Log.Debug($"Creating symlink: {linkName} <- {subDirectory.FullName}");
             Directory.CreateSymbolicLink(linkName, subDirectory.FullName);
         }
-        
-        //CreateResourcesLink(t3ParentDirectory, RuntimeAssemblies.CoreDirectory);
-    }
-
-    private static void CreateResourcesLink(string parentDirectory, string linkLocation)
-    {
-        var outerResourcesDir = Path.Combine(parentDirectory, "Resources");
-        Directory.CreateDirectory(outerResourcesDir);
-        var link = Path.Combine(linkLocation, "Resources");
-        
-        if(Directory.Exists(link))
-        {
-            try
-            {
-                Directory.Delete(link);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Could not delete resources link: {e}");
-            }
-        }
-        
-        Log.Debug($"Creating symlink: {link} <- {outerResourcesDir}");
-        Directory.CreateSymbolicLink(link, outerResourcesDir);
     }
 
     private static string GetT3ParentDirectory()
