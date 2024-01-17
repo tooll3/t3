@@ -33,10 +33,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
         var newlyReadSymbolUiList = Directory.EnumerateFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories)
                                              .AsParallel()
                                              .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
-                                             .Where(result =>
-                                                    {
-                                                        return newSymbols.ContainsKey(result.Guid);
-                                                    })
+                                             .Where(result => newSymbols.ContainsKey(result.Guid))
                                              .Select(uiJson =>
                                                      {
                                                          if (!SymbolUiJson.TryReadSymbolUi(uiJson.JToken, uiJson.Guid, out var symbolUi))
@@ -86,6 +83,13 @@ internal class EditorSymbolPackage : StaticSymbolPackage
         {
             CustomChildUiRegistry.Entries.TryAdd(valueInstanceType, DescriptiveUi.DrawChildUi);
         }
+    }
+
+    protected override void OnSymbolRemoved(Symbol symbol)
+    {
+        var id = symbol.Id;
+        SymbolUis.Remove(id, out _);
+        SymbolUiRegistry.EntriesEditable.Remove(id, out _);
     }
 
     public void RegisterUiSymbols(bool enableLog, IEnumerable<SymbolUi> newSymbolUis, IEnumerable<SymbolUi> preExistingSymbolUis)

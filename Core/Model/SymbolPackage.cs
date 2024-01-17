@@ -157,8 +157,16 @@ public abstract partial class SymbolPackage
 
     protected virtual bool RemoveSymbol(Guid guid)
     {
-        return Symbols.Remove(guid, out _) && SymbolRegistry.EntriesEditable.Remove(guid, out _);
+        var removed = Symbols.Remove(guid, out var symbol) && SymbolRegistry.EntriesEditable.Remove(guid, out _);
+        if (removed)
+        {
+            OnSymbolRemoved(symbol);
+        }
+
+        return removed;
     }
+    
+    protected abstract void OnSymbolRemoved(Symbol symbol);
 
     public void ApplySymbolChildren(List<SymbolJson.SymbolReadResult> symbolsRead)
     {
