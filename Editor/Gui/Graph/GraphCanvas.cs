@@ -282,7 +282,7 @@ namespace T3.Editor.Gui.Graph
                     if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.Duplicate))
                     {
                         CopySelectedNodesToClipboard();
-                        PasteClipboard();
+                        PasteClipboard(CompositionOp);
                     }
 
                     if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
@@ -312,7 +312,7 @@ namespace T3.Editor.Gui.Graph
 
                     if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
                     {
-                        PasteClipboard();
+                        PasteClipboard(CompositionOp);
                     }
 
                     if (KeyboardBinding.Triggered(UserActions.LayoutSelection))
@@ -820,7 +820,7 @@ namespace T3.Editor.Gui.Graph
 
             if (ImGui.MenuItem("Paste", KeyboardBinding.ListKeyboardShortcuts(UserActions.PasteFromClipboard, false)))
             {
-                PasteClipboard();
+                PasteClipboard(CompositionOp);
             }
 
             var selectedInputUis = GetSelectedInputUis().ToList();
@@ -840,7 +840,7 @@ namespace T3.Editor.Gui.Graph
                                enabled: selectedChildUis.Count > 0))
             {
                 CopySelectedNodesToClipboard();
-                PasteClipboard();
+                PasteClipboard(CompositionOp);
             }
 
             ImGui.Separator();
@@ -1084,8 +1084,14 @@ namespace T3.Editor.Gui.Graph
             EditorUi.Instance.SetClipboardText(resultJsonString);
         }
 
-        private void PasteClipboard()
+        private void PasteClipboard(Instance compositionOp)
         {
+            if (compositionOp.Symbol.SymbolPackage is not EditableSymbolProject project)
+            {
+                Log.Error($"Can't paste symbols into non-editable project");
+                return;
+            }
+            
             try
             {
                 var text = EditorUi.Instance.GetClipboardText();
@@ -1096,7 +1102,7 @@ namespace T3.Editor.Gui.Graph
 
                 var symbolJson = jArray[0];
                     
-                var gotSymbolJson = SymbolJson.GetPastedSymbol(symbolJson, out var containerSymbol);
+                var gotSymbolJson = GetPastedSymbol(symbolJson, project, out var containerSymbol);
                 if (!gotSymbolJson)
                 {
                     Log.Error($"Failed to paste symbol due to invalid symbol json");
@@ -1184,6 +1190,42 @@ namespace T3.Editor.Gui.Graph
 
         private readonly List<ISelectableCanvasObject> _selectableItems = new();
         #endregion
+        
+        
+        // todo - better encapsulate this in SymbolJson
+        private static bool GetPastedSymbol(JToken jToken, EditableSymbolProject project, out Symbol symbol)
+        {
+            var guidString = jToken[SymbolJson.JsonKeys.Id].Value<string>();
+            var hasId = Guid.TryParse(guidString, out var guid);
+
+            if (!hasId)
+            {
+                Log.Error($"Failed to parse guid in symbol json: `{guidString}`");
+                symbol = null;
+                return false;
+            }
+
+            var hasSymbol = SymbolRegistry.Entries.TryGetValue(guid, out symbol);
+
+            // is this really necessary? just bringing things into parity with what was previously there, but I feel like
+            // everything below can be skipped, unless "allowNonOperatorInstanceType" actually matters
+            if (hasSymbol)
+                return true;
+
+            var jsonResult = SymbolJson.ReadSymbolRoot(guid, jToken, allowNonOperatorInstanceType: true, project);
+
+            if (jsonResult.Symbol is null)
+                return false;
+
+            if (SymbolJson.TryReadAndApplySymbolChildren(jsonResult))
+            {
+                symbol = jsonResult.Symbol;
+                return true;
+            }
+
+            Log.Error($"Failed to get children of pasted token:\n{jToken}");
+            return false;
+        }
 
         #region public API
         /// <summary>

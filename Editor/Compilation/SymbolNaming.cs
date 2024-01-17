@@ -65,7 +65,6 @@ internal static class SymbolNaming
             return;
         }
 
-        OperatorUpdating.UpdateChangedOperators();
         T3Ui.Save(true);
     }
 }

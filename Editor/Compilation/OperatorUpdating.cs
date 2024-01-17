@@ -63,17 +63,10 @@ namespace T3.Editor.Compilation
         
         private readonly record struct PackageNamespaceInfo(EditableSymbolProject Project, string RootNamespace);
 
-        /// <summary>
-        /// A sort of hacky way to update all projects without considering their dependencies.
-        /// Any update that fails will be retried until it succeeds or no more progress can be made.
-        /// Should be replaced with actual dependency resolution.
-        /// </summary>
         public static void UpdateChangedOperators()
         {
-            foreach (var project in ProjectSetup.EditableSymbolPackages)
-            {
-                project.ExecutePendingUpdates();
-            }
+            foreach (var package in ProjectSetup.EditableSymbolPackages)
+                package.RecompileIfNecessary();
         }
     }
 }

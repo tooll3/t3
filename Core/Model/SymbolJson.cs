@@ -168,7 +168,7 @@ namespace T3.Core.Model
         #endregion
 
         #region reading
-        internal static bool TryReadAndApplySymbolChildren(SymbolReadResult symbolReadResult)
+        public static bool TryReadAndApplySymbolChildren(SymbolReadResult symbolReadResult)
         {
             var childrenJson = symbolReadResult.ChildrenJsonArray;
 
@@ -302,41 +302,7 @@ namespace T3.Core.Model
             output.OutputData.ReadFromJson(json);
         }
 
-        public static bool GetPastedSymbol(JToken jToken, out Symbol symbol)
-        {
-            var guidString = jToken[JsonKeys.Id].Value<string>();
-            var hasId = Guid.TryParse(guidString, out var guid);
-
-            if (!hasId)
-            {
-                Log.Error($"Failed to parse guid in symbol json: `{guidString}`");
-                symbol = null;
-                return false;
-            }
-
-            var hasSymbol = SymbolRegistry.Entries.TryGetValue(guid, out symbol);
-
-            // is this really necessary? just bringing things into parity with what was previously there, but I feel like
-            // everything below can be skipped, unless "allowNonOperatorInstanceType" actually matters
-            if (hasSymbol)
-                return true;
-
-            var jsonResult = ReadSymbolRoot(guid, jToken, allowNonOperatorInstanceType: true, null);
-
-            if (jsonResult.Symbol is null)
-                return false;
-
-            if (TryReadAndApplySymbolChildren(jsonResult))
-            {
-                symbol = jsonResult.Symbol;
-                return true;
-            }
-
-            Log.Error($"Failed to get children of pasted token:\n{jToken}");
-            return false;
-        }
-
-        internal static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, bool allowNonOperatorInstanceType, SymbolPackage package)
+        public static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, bool allowNonOperatorInstanceType, SymbolPackage package)
         {
             // Read symbol with Id - dictionary of Guid-JToken?
             var name = jToken[JsonKeys.Name].Value<string>();
@@ -435,7 +401,7 @@ namespace T3.Core.Model
         }
         #endregion
 
-        internal readonly struct JsonKeys
+        public readonly struct JsonKeys
         {
             public const string Connections = "Connections";
             public const string SourceParentOrChildId = "SourceParentOrChildId";
