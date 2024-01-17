@@ -161,7 +161,8 @@
       "Position": {
         "X": -489.22665,
         "Y": 1394.2065
-      }
+      },
+      "GroupTitle": "Twirl"
     },
     {
       "InputId": "b481a27b-3715-4b0e-869e-a2b5093138b6"/*TwirlNoiseScale*/,
@@ -182,7 +183,8 @@
       "Position": {
         "X": -489.22665,
         "Y": 1529.2065
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "e294f6ac-04c4-489b-8d26-615c8971ce11"/*IsEnabled*/,
