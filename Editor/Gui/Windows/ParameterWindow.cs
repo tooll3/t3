@@ -96,6 +96,9 @@ namespace T3.Editor.Gui.Windows
                     symbolUi.FlagAsModified();
                 }
 
+                _parametersWithDescription.Clear();
+
+                
                 if (instance.Parent != null)
                 {
                     var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
@@ -105,6 +108,7 @@ namespace T3.Editor.Gui.Windows
                     DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false);
                     FormInputs.AddVerticalSpace(15);
                 }
+                
 
                 DrawDescription(symbolUi);
                 return;
@@ -328,9 +332,10 @@ namespace T3.Editor.Gui.Windows
         public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
                                           SymbolUi compositionSymbolUi, bool hideNonEssentials)
         {
+            
+            
             var groupState = GroupState.None;
-
-            _parametersWithDescription.Clear();
+            
             foreach (var inputSlot in instance.Inputs)
             {
                 if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
