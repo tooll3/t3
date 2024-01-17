@@ -16,6 +16,7 @@
         "X": 0.0,
         "Y": 0.0
       },
+      "Description": "X (-left / +right), Y (-down / + up), Z (-forward/+backwards) coordinates of the current view position. \n\nThe default z-position is 2.41 behind the centered scene origin so that a [Layer2d] with a size of 2 precisely fills the screen height for a Field of view (Fov) of 45°.",
       "Scale": 0.01
     },
     {
@@ -24,31 +25,11 @@
         "X": 0.0,
         "Y": 0.0
       },
+      "Description": "The view target of the camera. The line between the Position and the Target defines the view direction.",
       "Scale": 0.01
     },
     {
-      "InputId": "e6dfbfb9-efed-4c17-8860-9c1a1ca2fa38"/*Up*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "f66e91a1-b991-48c3-a8c9-33bcad0c2f6f"/*AspectRatio*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "199d4ce0-aab1-403a-ad42-216ef1061a0e"/*NearFarClip*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "7bde5a5a-ce82-4903-92ff-14e540a605f0"/*Fov*/,
+      "InputId": "7bde5a5a-ce82-4903-92ff-14e540a605f0"/*FOV*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -71,6 +52,14 @@
       "Position": {
         "X": 0.0,
         "Y": 45.0
+      },
+      "GroupTitle": "Offset"
+    },
+    {
+      "InputId": "123396f0-62c4-43cd-8be0-a661553d4783"/*AlsoOffsetTarget*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 180.0
       }
     },
     {
@@ -88,11 +77,28 @@
       }
     },
     {
-      "InputId": "123396f0-62c4-43cd-8be0-a661553d4783"/*OffsetAffectsTarget*/,
+      "InputId": "199d4ce0-aab1-403a-ad42-216ef1061a0e"/*NearFarClip*/,
       "Position": {
         "X": 0.0,
-        "Y": 180.0
-      }
+        "Y": 0.0
+      },
+      "GroupTitle": "Options"
+    },
+    {
+      "InputId": "f66e91a1-b991-48c3-a8c9-33bcad0c2f6f"/*AspectRatio*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Enforce as fixed aspect ratio for the camera view. \nFor values smaller or equal 0 this settings is ignored and the current view's aspect-ratio is automatically used. When setting this parameter to a positive window the content get's stretched with the aspect of the output window."
+    },
+    {
+      "InputId": "e6dfbfb9-efed-4c17-8860-9c1a1ca2fa38"/*Up*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Description": "Defined a helping vector to control the rotation of the camera. If the the view direction approaches the Up-Vector, camera motion becomes instable because of gimbal lock.\n\nThis needs to be adjusted in cases where the camera needs to point directly up or down."
     }
   ],
   "SymbolChildUis": [],

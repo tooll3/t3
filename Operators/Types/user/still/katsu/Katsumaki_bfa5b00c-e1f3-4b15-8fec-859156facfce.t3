@@ -2997,7 +2997,7 @@
           }
         },
         {
-          "Id": "7bde5a5a-ce82-4903-92ff-14e540a605f0"/*Fov*/,
+          "Id": "7bde5a5a-ce82-4903-92ff-14e540a605f0"/*FOV*/,
           "Type": "System.Single",
           "Value": 38.04
         }
@@ -3733,7 +3733,7 @@
           }
         },
         {
-          "Id": "123396f0-62c4-43cd-8be0-a661553d4783"/*OffsetAffectsTarget*/,
+          "Id": "123396f0-62c4-43cd-8be0-a661553d4783"/*AlsoOffsetTarget*/,
           "Type": "System.Boolean",
           "Value": false
         }

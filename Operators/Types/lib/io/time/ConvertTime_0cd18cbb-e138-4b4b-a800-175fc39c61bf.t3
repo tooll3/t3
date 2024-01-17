@@ -1,7 +1,7 @@
 {
   "Name": "ConvertTime",
   "Id": "0cd18cbb-e138-4b4b-a800-175fc39c61bf",
-  "Namespace": "lib.io.time.",
+  "Namespace": "lib.io.time",
   "Inputs": [
     {
       "Id": "dd9b7590-9d1f-4a3a-afe7-fa37fefd5798"/*Time*/,

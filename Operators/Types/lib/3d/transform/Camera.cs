@@ -70,10 +70,10 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
                                         Target = Target.GetValue(context),
                                         Up = Up.GetValue(context),
                                         AspectRatio = aspectRatio,
-                                        Fov = Fov.GetValue(context).ToRadians(),
+                                        Fov = FOV.GetValue(context).ToRadians(),
                                         Roll = Roll.GetValue(context),
                                         RotationOffset = RotationOffset.GetValue(context),
-                                        OffsetAffectsTarget = OffsetAffectsTarget.GetValue(context)
+                                        OffsetAffectsTarget = AlsoOffsetTarget.GetValue(context)
                                     };
 
             
@@ -146,32 +146,38 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
         [Input(Guid = "A7ACB25C-D60C-43A6-B1DF-2CD5C6E183F3")]
         public readonly InputSlot<System.Numerics.Vector3> Target = new();
         
-        [Input(Guid = "E6DFBFB9-EFED-4C17-8860-9C1A1CA2FA38")]
-        public readonly InputSlot<System.Numerics.Vector3> Up = new();
-        
-        [Input(Guid = "F66E91A1-B991-48C3-A8C9-33BCAD0C2F6F")]
-        public readonly InputSlot<float> AspectRatio = new();
-        
-        [Input(Guid = "199D4CE0-AAB1-403A-AD42-216EF1061A0E")]
-        public readonly InputSlot<System.Numerics.Vector2> NearFarClip = new();
-        
         [Input(Guid = "7BDE5A5A-CE82-4903-92FF-14E540A605F0")]
-        public readonly InputSlot<float> Fov = new();
+        public readonly InputSlot<float> FOV = new();
         
         [Input(Guid = "764CA304-FC86-48A9-9C82-A04FAC7EADB2")]
         public readonly InputSlot<float> Roll = new();
 
+        // --- offset
+        
         [Input(Guid = "FEE19916-846F-491A-A2EE-1E7B1AC8E533")]
         public readonly InputSlot<System.Numerics.Vector3> PositionOffset = new();
 
+        [Input(Guid = "123396F0-62C4-43CD-8BE0-A661553D4783")]
+        public readonly InputSlot<bool> AlsoOffsetTarget = new();
+        
         [Input(Guid = "D4D0F046-297B-440A-AEF8-C2F0426EF4F5")]
         public readonly InputSlot<System.Numerics.Vector3> RotationOffset = new();
         
         [Input(Guid = "AE275370-A684-42FB-AB7A-50E16D24082D")]
         public readonly InputSlot<System.Numerics.Vector2> ViewportShift = new();
         
-        [Input(Guid = "123396F0-62C4-43CD-8BE0-A661553D4783")]
-        public readonly InputSlot<bool> OffsetAffectsTarget = new();
+        // --- options
+        
+        [Input(Guid = "199D4CE0-AAB1-403A-AD42-216EF1061A0E")]
+        public readonly InputSlot<System.Numerics.Vector2> NearFarClip = new();
+        
+        [Input(Guid = "F66E91A1-B991-48C3-A8C9-33BCAD0C2F6F")]
+        public readonly InputSlot<float> AspectRatio = new();
+        
+        [Input(Guid = "E6DFBFB9-EFED-4C17-8860-9C1A1CA2FA38")]
+        public readonly InputSlot<System.Numerics.Vector3> Up = new();
+        
+        
 
     }
 }

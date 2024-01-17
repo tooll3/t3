@@ -15,7 +15,8 @@
       "Position": {
         "X": 1359.0396,
         "Y": 4080.268
-      }
+      },
+      "Description": "Additional color that gets multiplied on result of mesh material settings."
     },
     {
       "InputId": "9c17fa15-35f1-49d4-802f-a3a796cad96a"/*BlendMode*/,
@@ -36,7 +37,8 @@
       "Position": {
         "X": 1359.0396,
         "Y": 4215.268
-      }
+      },
+      "Description": "If enabled discards fragments sorted out by by z-buffer."
     },
     {
       "InputId": "dfad3400-885a-4f83-8c39-ec6520f4e2aa"/*EnableZWrite*/,
