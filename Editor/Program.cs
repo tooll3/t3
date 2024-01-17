@@ -71,7 +71,7 @@ namespace T3.Editor
             var path = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources", "t3-editor", "images", "t3-SplashScreen.png");
             splashScreen.Show(path);
 
-            var logDirectory = Path.Combine(Core.UserData.UserData.RootFolder, "log");
+            var logDirectory = Path.Combine(UserData.SettingsFolder, "log");
             Log.AddWriter(splashScreen);
             Log.AddWriter(new ConsoleWriter());
             Log.AddWriter(FileWriter.CreateDefault(logDirectory));
@@ -92,8 +92,7 @@ namespace T3.Editor
 
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
             
-            var userSettingsPath = Path.Combine(UserData.RootFolder, "userSettings.json");
-            var userSettings = new UserSettings(saveOnQuit: true, userSettingsPath);
+            var userSettings = new UserSettings(saveOnQuit: true, "userSettings.json");
             var projectSettings = new ProjectSettings(saveOnQuit: true);
             
             #if IDE

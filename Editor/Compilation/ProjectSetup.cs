@@ -108,7 +108,6 @@ internal static class ProjectSetup
             var coreAssemblyDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators"); // theoretically where the core libs assemblies will be
             var projectSearchDirectories = new[] { coreAssemblyDirectory, UserSettings.Config.DefaultNewProjectDirectory };
 
-            stopwatch.Stop();
             Log.Debug($"Core directories initialized in {stopwatch.ElapsedMilliseconds}ms");
 
             #if IDE
@@ -123,6 +122,7 @@ internal static class ProjectSetup
             stopwatch.Stop();
             Log.Debug($"Found {projectSearchDirectories.Length} root directories in {stopwatch.ElapsedMilliseconds}ms");
             #else
+            stopwatch.Restart();
             var readOnlyRootDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators");
             var directory = Directory.CreateDirectory(readOnlyRootDirectory);
             directory
@@ -130,7 +130,7 @@ internal static class ProjectSetup
                .ToList()
                .ForEach(package =>
                         {
-                            foreach (var file in package.EnumerateFiles($"{package.Name}.dll", SearchOption.AllDirectories))
+                            foreach (var file in package.EnumerateFiles($"{package.Name}.dll", SearchOption.TopDirectoryOnly))
                             {
                                 var loaded = RuntimeAssemblies.TryLoadAssemblyInformation(file.FullName, out var assembly);
                                 if (!loaded)
@@ -145,6 +145,7 @@ internal static class ProjectSetup
                                     nonOperatorAssemblies.Add(assembly);
                             }
                         });
+            Log.Debug($"Found built-in operator assemblies in {stopwatch.ElapsedMilliseconds}ms");
             #endif
 
             stopwatch.Restart();
@@ -154,7 +155,6 @@ internal static class ProjectSetup
                              .Where(x => !x.Contains("{{USER}}"))
                              .ToArray();
 
-            stopwatch.Stop();
             Log.Debug($"Found {csProjFiles.Length} csproj files in {stopwatch.ElapsedMilliseconds}ms");
 
             stopwatch.Restart();
@@ -169,7 +169,6 @@ internal static class ProjectSetup
                             {
                                 if (!csProjFile.TryRecompile(Compiler.BuildMode.Debug))
                                 {
-                                    stopwatch.Stop();
                                     Log.Info($"Failed to load {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
                                     return;
                                 }
@@ -185,7 +184,6 @@ internal static class ProjectSetup
                                 nonOperatorAssemblies.Add(csProjFile.Assembly);
                             }
 
-                            stopwatch.Stop();
                             Log.Info($"Loaded {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
                         });
 
@@ -203,12 +201,10 @@ internal static class ProjectSetup
             // Load operators
             stopwatch.Restart();
             InitializeCustomUis(nonOperatorAssemblies);
-            stopwatch.Stop();
             Log.Debug($"Initialized custom uis in {stopwatch.ElapsedMilliseconds}ms");
 
             stopwatch.Restart();
             UpdateSymbolPackages(allSymbolPackages);
-            stopwatch.Stop();
             Log.Debug($"Updated symbol packages in {stopwatch.ElapsedMilliseconds}ms");
 
             var activeProject = EditableSymbolProject.ActiveProject;
@@ -218,7 +214,7 @@ internal static class ProjectSetup
             Log.Debug($"Total load time pre-home: {totalStopwatch.ElapsedMilliseconds}ms");
             #endif
 
-            stopwatch.Start();
+            stopwatch.Restart();
 
             // Create home
             if (activeProject == null || !activeProject.TryCreateHome())

@@ -95,6 +95,6 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
         }
 
         private const string HelpUrl = "https://github.com/tooll3/t3/wiki/installation#setup-and-installation";
-        private static string StartUpLockFilePath => Path.Combine(UserData.RootFolder, "startingUp");
+        private static string StartUpLockFilePath => Path.Combine(UserData.SettingsFolder, "startingUp");
     }
 }

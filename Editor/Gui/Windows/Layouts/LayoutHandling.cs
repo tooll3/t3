@@ -5,6 +5,7 @@ using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
 using T3.Core.Logging;
+using T3.Core.UserData;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
@@ -144,7 +145,8 @@ namespace T3.Editor.Gui.Windows.Layouts
             var serializer = JsonSerializer.Create();
             serializer.Formatting = Formatting.Indented;
 
-            using var file = File.CreateText(GetLayoutFilename(index));
+            var completePath = Path.Combine(LayoutFolder, GetLayoutFilename(index));
+            using var file = File.CreateText(completePath);
             var layout = new Layout
                              {
                                  WindowConfigs = WindowManager.GetAllWindows().Select(window => window.Config).ToList(),
@@ -159,18 +161,13 @@ namespace T3.Editor.Gui.Windows.Layouts
         {
             var isFocusMode = index == 11;
 
-            var filename = GetLayoutFilename(index);
-            if (!File.Exists(filename))
-            {
-                Log.Warning($"Layout {filename} doesn't exist yet");
+            var relativePath = Path.Combine(LayoutSubfolder, GetLayoutFilename(index));
+             if(!UserData.TryLoad(out var jsonBlob, relativePath))
                 return;
-            }
-
-            var jsonBlob = File.ReadAllText(filename);
+            
             var serializer = JsonSerializer.Create();
             var fileTextReader = new StringReader(jsonBlob);
-            if (!(serializer.Deserialize(fileTextReader, typeof(Layout))
-                      is Layout layout))
+            if (serializer.Deserialize(fileTextReader, typeof(Layout)) is not Layout layout)
             {
                 Log.Error("Can't load layout");
                 return;
@@ -189,12 +186,12 @@ namespace T3.Editor.Gui.Windows.Layouts
 
         private static string GetLayoutFilename(int index)
         {
-            return Path.Combine(LayoutFolder, string.Format(LayoutFileNameFormat, index));
+            return string.Format(LayoutFileNameFormat, index);
         }
 
         private static bool DoesLayoutExists(int index)
         {
-            return File.Exists(GetLayoutFilename(index));
+            return UserData.CanLoad(Path.Combine(LayoutSubfolder, GetLayoutFilename(index)));
         }
 
         private static readonly UserActions[] _loadLayoutActions =
@@ -235,6 +232,7 @@ namespace T3.Editor.Gui.Windows.Layouts
         }
 
         private const string LayoutFileNameFormat = "layout{0}.json";
-        public static string LayoutFolder => Path.Combine(Core.UserData.UserData.RootFolder, "layouts");
+        private static string LayoutSubfolder => "layouts";
+        public static string LayoutFolder => Path.Combine(UserData.SettingsFolder, LayoutSubfolder);
     }
 }

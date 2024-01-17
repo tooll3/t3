@@ -24,7 +24,7 @@ internal class CsProjectFile
     private readonly List<DependencyInfo> _dependencies;
     public event Action<CsProjectFile> Recompiled;
 
-    private int _buildId = GetNewBuildId();
+    private uint _buildId = GetNewBuildId();
     private readonly string _releaseRootDirectory;
     private readonly string _debugRootDirectory;
     private readonly string _dllName;
@@ -75,7 +75,7 @@ internal class CsProjectFile
     }
 
     // int to keep directory name smaller
-    private static int GetNewBuildId() => unchecked((int)DateTime.UtcNow.Ticks);
+    private static uint GetNewBuildId() => unchecked((uint)DateTime.UtcNow.Ticks);
 
     private string GetRootNamespace(string contents)
     {
@@ -230,7 +230,7 @@ internal class CsProjectFile
     // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation
     public static CsProjectFile CreateNewProject(string projectName, string parentDirectory)
     {
-        var defaultHomeDir = Path.Combine(UserData.RootFolder, "default-home");
+        var defaultHomeDir = Path.Combine(UserData.SettingsFolderInApplicationDirectory, "default-home");
         var files = System.IO.Directory.EnumerateFiles(defaultHomeDir, "*");
         string destinationDirectory = Path.Combine(parentDirectory, projectName);
         destinationDirectory = Path.GetFullPath(destinationDirectory);
@@ -309,7 +309,14 @@ internal class CsProjectFile
                            if (directory.FullName == latestDir)
                                return;
 
-                           directory.Delete(recursive: true);
+                           try
+                           {
+                               directory.Delete(recursive: true);
+                           }
+                           catch (Exception e)
+                           {
+                               Log.Error($"Could not delete directory \"{directory.FullName}\": {e}");
+                           }
                        });
         }
 

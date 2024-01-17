@@ -87,10 +87,19 @@ public static class ThemeHandling
     private static void LoadThemes()
     {
         Themes.Clear();
-        if (!Directory.Exists(ThemeFolder))
-            return;
+        
+        Directory.CreateDirectory(ThemeFolder);
+        Directory.CreateDirectory(DefaultThemeFolder);
 
-        foreach (var filepath in Directory.GetFiles(ThemeFolder))
+        // copy default themes if not present
+        foreach (var theme in Directory.EnumerateFiles(DefaultThemeFolder))
+        {
+            var targetPath = Path.Combine(ThemeFolder, Path.GetFileName(theme));
+            if(!File.Exists(targetPath))
+                File.Copy(theme, targetPath);
+        }
+
+        foreach (var filepath in Directory.EnumerateFiles(ThemeFolder))
         {
             try
             {
@@ -204,7 +213,8 @@ public static class ThemeHandling
     }
 
     public static readonly List<ColorTheme> Themes = new();
-    public static string ThemeFolder => Path.Combine(UserData.RootFolder, "themes");
+    public static string ThemeFolder => Path.Combine(UserData.SettingsFolder, "themes");
+    private static string DefaultThemeFolder => Path.Combine(UserData.SettingsFolderInApplicationDirectory, "themes");
     public static ColorTheme FactoryTheme;
     
     

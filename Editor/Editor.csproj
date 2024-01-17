@@ -108,9 +108,9 @@
 
     <Target Name="CopyLibs" AfterTargets="AfterBuild" Condition=" '$(Configuration)' != 'IDE' ">
         <ItemGroup Condition=" '$(Configuration)' != 'IDE' ">
-            <Lib Include="$(lib)/$(BuildFolder)/**/*.dll;$(lib)/**/*.t3;$(lib)/**/*.t3ui" Visible="false"/>
-            <LibEditor Include="$(libEditor)/$(BuildFolder)/**/*.dll;$(libEditor)/**/*.t3;$(libEditor)/**/*.t3ui" Visible="false"/>
-            <Examples Include="$(examples)/$(BuildFolder)/**/*.dll;$(examples)/**/*.t3;$(examples)/**/*.t3ui" Visible="false"/>
+            <Lib Include="$(lib)/$(BuildFolder)/**/*.dll;$(lib)/**/*.t3;$(lib)/**/*.t3ui;$(lib)/$(BuildFolder)/**/*deps.json" Visible="false"/>
+            <LibEditor Include="$(libEditor)/$(BuildFolder)/**/*.dll;$(libEditor)/**/*.t3;$(libEditor)/**/*.t3ui;$(libEditor)/$(BuildFolder)/**/*deps.json" Visible="false"/>
+            <Examples Include="$(examples)/$(BuildFolder)/**/*.dll;$(examples)/**/*.t3;$(examples)/**/*.t3ui;$(examples)/$(BuildFolder)/**/*deps.json" Visible="false"/>
 
             <LibResources Include="$(lib)/$(ResourceDir)/**/*" Visible="false"/>
             <LibEditorResources Include="$(libEditor)/$(ResourceDir)/**/*" Visible="false"/>

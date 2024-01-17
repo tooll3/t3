@@ -12,15 +12,15 @@ namespace T3.Core.IO
         public static T Config;
         public static T Defaults;
 
-        protected Settings(string filepath, bool saveOnQuit)
+        protected Settings(string relativeFilePath, bool saveOnQuit)
         {
             if(saveOnQuit)
                 AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
             Defaults = new T();
-            Config = JsonUtils.TryLoadingJson<T>(filepath) ?? new T();
+            _filePath = Path.Combine(ConfigDirectory, relativeFilePath);
+            Config = JsonUtils.TryLoadingJson<T>(_filePath) ?? new T();
             _instance = this;
-            _filepath = filepath;
         }
 
         private static void OnProcessExit(object sender, EventArgs e)
@@ -30,10 +30,11 @@ namespace T3.Core.IO
 
         public static void Save()
         {
-            JsonUtils.SaveJson(Config, _instance._filepath);
+            JsonUtils.SaveJson(Config, _instance._filePath);
         }
 
         private static Settings<T> _instance;
-        private readonly string _filepath;
+        private readonly string _filePath;
+        private static string ConfigDirectory => UserData.UserData.SettingsFolder;
     }
 }

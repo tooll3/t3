@@ -287,7 +287,7 @@ namespace T3.Editor.Gui.AutoBackup
 
         private static readonly Stopwatch Stopwatch = Stopwatch.StartNew();
         private static bool _isSaving;
-        private static string BackupDirectory => Path.Combine(UserData.RootFolder, "backup");
+        private static string BackupDirectory => Path.Combine(UserData.SettingsFolder, "backup");
 
         private static string[] SourcePaths
         {
