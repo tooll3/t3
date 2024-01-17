@@ -43,9 +43,8 @@ namespace T3.Editor.Gui.Graph
     ///</remarks>
     public static class Graph
     {
-        public static void DrawGraph(ImDrawListPtr drawList, bool preventInteraction , float graphOpacity= 1)
+        public static void DrawGraph(ImDrawListPtr drawList, bool preventInteraction, float graphOpacity = 1)
         {
-            
             var needsReinit = false;
             GraphOpacity = graphOpacity; //MathF.Sin((float)ImGui.GetTime() * 2) * 0.5f + 0.5f;
             DrawList = drawList;
@@ -67,11 +66,11 @@ namespace T3.Editor.Gui.Graph
             if (!needsReinit)
             {
                 var checkSum = 0;
-                
+
                 for (var index = 0; index < graphSymbol.Connections.Count; index++)
                 {
                     var c = graphSymbol.Connections[index];
-                    checkSum += c.GetHashCode() * (index+1);
+                    checkSum += c.GetHashCode() * (index + 1);
                 }
 
                 foreach (var c in ConnectionMaker.TempConnections)
@@ -104,12 +103,9 @@ namespace T3.Editor.Gui.Graph
             }
             else
             {
-                if (Connections != null && Connections.Lines != null)
+                foreach (var c in Connections.Lines)
                 {
-                    foreach (var c in Connections.Lines)
-                    {
-                        c.IsSelected = false;
-                    }
+                    c.IsSelected = false;
                 }
             }
 
@@ -117,40 +113,41 @@ namespace T3.Editor.Gui.Graph
             DrawList.ChannelsSetCurrent((int)Channels.Operators);
 
             // 3. Draw Nodes and their sockets and set positions for connection lines
-            for (var childIndex = 0; childIndex < children.Count; childIndex++)
+            if (graphSymbol == GraphCanvas.Current.CompositionOp.Symbol) // todo: is this check necessary?
             {
-                var instance = children[childIndex];
-                if (graphSymbol != GraphCanvas.Current.CompositionOp.Symbol)
-                    break;
-
-                foreach (var childUi in _childUis) // Don't use linq to avoid allocations
+                foreach (var instance in children)
                 {
-                    if (childUi.Id != instance.SymbolChildId)
-                        continue;
+                    foreach (var childUi in _childUis) // Don't use linq to avoid allocations
+                    {
+                        if (childUi.Id != instance.SymbolChildId)
+                            continue;
 
-                    GraphNode.Draw(childUi, instance, preventInteraction);
-                    break;
+                        GraphNode.Draw(childUi, instance, preventInteraction);
+                        break;
+                    }
                 }
             }
 
             // 4. Draw Inputs Nodes
-            if (Connections != null)
+            foreach (var (nodeId, node) in _inputUisById)
             {
-                foreach (var (nodeId, node) in _inputUisById)
+                var index = graphSymbol.InputDefinitions.FindIndex(def => def.Id == nodeId);
+                if (index < 0)
                 {
-                    var index = graphSymbol.InputDefinitions.FindIndex(def => def.Id == nodeId);
-                    var inputDef = graphSymbol.InputDefinitions[index];
-                    var isSelectedOrHovered = InputNode.Draw(inputDef, node, index);
+                    Log.Warning($"Input {nodeId} not found in {graphSymbol.Name}");
+                    continue;
+                }
+                var inputDef = graphSymbol.InputDefinitions[index];
+                var isSelectedOrHovered = InputNode.Draw(inputDef, node, index);
 
-                    var sourcePos = new Vector2(
-                                                InputNode._lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
-                                                InputNode._lastScreenRect.GetCenter().Y
-                                               );
-                    foreach (var line in Connections.GetLinesFromInputNodes(node, nodeId))
-                    {
-                        line.SourcePosition = sourcePos;
-                        line.IsSelected |= isSelectedOrHovered;
-                    }
+                var sourcePos = new Vector2(
+                                            InputNode._lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
+                                            InputNode._lastScreenRect.GetCenter().Y
+                                           );
+                foreach (var line in Connections.GetLinesFromInputNodes(node, nodeId))
+                {
+                    line.SourcePosition = sourcePos;
+                    line.IsSelected |= isSelectedOrHovered;
                 }
             }
 
@@ -209,7 +206,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     if (!_outputUisById.TryGetValue(c.TargetSlotId, out var outputNode))
                         return;
-                    
+
                     if (!_linesToOutputNodes.ContainsKey(outputNode))
                         _linesToOutputNodes.Add(outputNode, new List<ConnectionLineUi>());
 
@@ -221,7 +218,7 @@ namespace T3.Editor.Gui.Graph
                     var targetNode = _childUis.SingleOrDefault(childUi => childUi.Id == c.TargetParentOrChildId);
                     if (targetNode == null)
                         return;
-                    
+
                     if (!_linesIntoNodes.ContainsKey(targetNode))
                         _linesIntoNodes.Add(targetNode, new List<ConnectionLineUi>());
 
@@ -232,7 +229,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     if (!_inputUisById.TryGetValue(c.SourceSlotId, out var inputNode))
                         return;
-                    
+
                     if (!_linesFromInputNodes.ContainsKey(inputNode))
                         _linesFromInputNodes.Add(inputNode, new List<ConnectionLineUi>());
 
@@ -241,7 +238,7 @@ namespace T3.Editor.Gui.Graph
                     var color = UiColors.Gray;
                     if (TypeUiRegistry.Entries.TryGetValue(inputNode.Type, out var typeUiProperties))
                         color = typeUiProperties.Color;
-                    
+
                     newLine.ColorForType = color;
                 }
                 else if (c.SourceParentOrChildId != ConnectionMaker.NotConnectedId
@@ -440,7 +437,7 @@ namespace T3.Editor.Gui.Graph
                 }
             }
         }
-        
+
         private enum Channels
         {
             Annotations = 0,
@@ -448,7 +445,7 @@ namespace T3.Editor.Gui.Graph
         }
 
         public static float GraphOpacity = 0.2f;
-        
+
         private static int _lastCheckSum;
         internal static readonly ConnectionSorter Connections = new();
         public static ImDrawListPtr DrawList;
