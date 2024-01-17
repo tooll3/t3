@@ -151,8 +151,8 @@ internal static class ProjectSetup
             stopwatch.Restart();
             var csProjFiles = projectSearchDirectories
                              .Where(Directory.Exists)
-                             .SelectMany(x => Directory.EnumerateFiles(x, "*.csproj", SearchOption.AllDirectories))
-                             .Where(x => !x.Contains("{{USER}}"))
+                             .SelectMany(dir => Directory.EnumerateFiles(dir, "*.csproj", SearchOption.AllDirectories))
+                             .Where(filePath => !filePath.Contains(CsProjectFile.ProjectNamePlaceholder))
                              .ToArray();
 
             Log.Debug($"Found {csProjFiles.Length} csproj files in {stopwatch.ElapsedMilliseconds}ms");

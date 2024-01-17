@@ -2,10 +2,10 @@
 using T3.Core.Operator.Attributes;
 using System.Runtime.InteropServices;
 
-namespace user.{{USER}}
+namespace user.{{PROJ}}
 {
     [Guid("{{GUID}}"), Home]
-    public class HomeCanvas : Instance<HomeCanvas>
+    public class {{PROJ}} : Instance<{{PROJ}}>
     {
     }
 }

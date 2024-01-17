@@ -1,6 +1,6 @@
 {
-  "Id": "{{GUID}}"/*HomeCanvas*/,
-  "Description": "Your personal Workspace.",
+  "Id": "{{GUID}}"/*{{PROJ}}*/,
+  "Description": "Workspace for {{PROJ}}.",
   "InputUis": [],
   "SymbolChildUis": [
     {

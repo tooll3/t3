@@ -8,8 +8,11 @@ namespace T3.Editor.Compilation;
 
 internal static class Compiler
 {
+    static readonly Stopwatch _stopwatch = new();
+    
     public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, Verbosity verbosity = Verbosity.Minimal)
     {
+        _stopwatch.Restart();
         var workingDirectory = projectFile.Directory;
         
         const string configurationArgFmt = "--configuration {0}";
@@ -39,13 +42,15 @@ internal static class Compiler
                                           if (args.Data == null)
                                               return;
                                           
-                                          Console.Write(args.Data);
+                                          Console.WriteLine(args.Data);
                                           output.Add(args.Data);
                                       };
 
         process.Start();
         process.BeginOutputReadLine();
         process.WaitForExit();
+        
+        Log.Info($"{projectFile.Name}: Build process took {_stopwatch.ElapsedMilliseconds} ms");
 
         if (process.ExitCode != 0)
         {
@@ -64,12 +69,19 @@ internal static class Compiler
         
         if (!success)
         {
-            Log.Error($"{projectFile.Name}: Build failed");
+            Log.Error($"{projectFile.Name}: Build failed based on output in {_stopwatch.ElapsedMilliseconds}");
+            _stopwatch.Stop();
             return false;
         }
         
-        return projectFile.TryLoadAssembly(buildMode);
+        success = projectFile.TryLoadAssembly(buildMode);
+        
+        _stopwatch.Stop();
+        Log.Info($"{projectFile.Name}: Total build time took {_stopwatch.ElapsedMilliseconds} ms");
+
+        return success;
     }
+    
 
     public enum BuildMode
     {

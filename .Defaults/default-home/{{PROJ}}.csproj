@@ -4,11 +4,11 @@
         <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>user.{{USER}}</RootNamespace>
+        <RootNamespace>user.{{PROJ}}</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      {{DEFAULT_REFERENCES}}
+      {{DEFAULT_REFS}}
     </ItemGroup>
 
     <!--This copies all files in the `dependencies` folder *directly* into the output directory-->

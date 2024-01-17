@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text.RegularExpressions;
 using T3.Core.Compilation;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Windows;
@@ -16,6 +18,25 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;
 
     private static readonly Queue<Action> PendingUpdateActions = new();
+
+    private static SymbolUi InitializeRoot(SymbolPackage package)
+    {
+        var symbolGuid = new Guid("fa3db58b-068d-427d-96e7-8144f4721db3");
+        var rootSymbol = new Symbol(typeof(T3Projects), symbolGuid);
+        rootSymbol.SymbolPackage = package;
+        rootSymbol.Namespace = "Root";
+        SymbolRegistry.EntriesEditable.TryAdd(rootSymbol.Id, rootSymbol);
+
+        var rootSymbolUi = new SymbolUi(rootSymbol);
+        SymbolUiRegistry.EntriesEditable.TryAdd(rootSymbol.Id, rootSymbolUi);
+
+        _rootSymbolUi = rootSymbolUi;
+
+        var instanceGuid = new Guid("dd0eaa03-2833-4d8d-b527-fdc4f0ca8cbc");
+        var rootInstance = rootSymbol.CreateInstance(instanceGuid, null);
+        RootInstance = rootInstance;
+        return _rootSymbolUi;
+    }
 
     public EditableSymbolProject(CsProjectFile csProjectFile) : base(csProjectFile.Assembly, false)
     {
@@ -33,9 +54,16 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
         Log.Debug($"Creating home for {CsProjectFile.Name}...");
         var homeGuid = CsProjectFile.Assembly.HomeGuid;
-        var symbol = Symbols[homeGuid];
-        RootInstance = symbol.CreateInstance(HomeInstanceId, null);
-        symbol.IsHome = true;
+        var homeSymbol = Symbols[homeGuid];
+
+        var rootUi = _rootSymbolUi;
+        if (rootUi == null)
+        {
+            rootUi = InitializeRoot(this);
+        }
+
+        rootUi.AddChild(homeSymbol, Guid.NewGuid(), Vector2.Zero, Vector2.One * 100, homeSymbol.Namespace + '.' + homeSymbol.Name);
+
         return true;
     }
 
@@ -86,16 +114,24 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     // todo : determine name from source code
     public bool TryRecompileWithNewSource(Symbol symbol, string newSource, string newName = null)
     {
-        string currentSource;
         newName ??= symbol.Name;
+        var gotCurrentSource = _sourceCodeFiles.TryGetValue(symbol.Id, out var currentSourcePath);
+        if(!gotCurrentSource)
+        {
+            Log.Error($"Could not find original source code for symbol \"{symbol.Name}\"");
+            return false;
+        }
+        
+        string currentSourceCode;
+        
         try
         {
-            currentSource = File.ReadAllText(symbol.SymbolFilePath);
+            currentSourceCode = File.ReadAllText(currentSourcePath);
         }
         catch
         {
-            Log.Error($"Could not read original source code at \"{symbol.SymbolFilePath}\"");
-            currentSource = string.Empty;
+            Log.Error($"Could not read original source code at \"{currentSourcePath}\"");
+            currentSourceCode = string.Empty;
         }
 
         symbol.PendingSource = newSource;
@@ -112,9 +148,9 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
             return true;
         }
 
-        if (currentSource != string.Empty)
+        if (currentSourceCode != string.Empty)
         {
-            symbol.PendingSource = currentSource;
+            symbol.PendingSource = currentSourceCode;
             WriteSymbolSourceToFile(symbol, filePathFmt);
         }
 
@@ -125,6 +161,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     private bool TryRecompile()
     {
         SaveAll();
+        _needsCompilation = false;
         return CsProjectFile.TryRecompile(Compiler.BuildMode.Debug);
     }
 
@@ -138,10 +175,8 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     {
         var symbol = symbolUi.Symbol;
         SymbolUiRegistry.EntriesEditable[symbol.Id] = symbolUi;
-        SymbolUis[symbol.Id] = symbolUi; 
-        //UpdateUiEntriesForSymbol(symbol);
-        //RegisterCustomChildUi(symbol);
-        
+        SymbolUis[symbol.Id] = symbolUi;
+
         Log.Debug($"Replaced symbol ui for {symbol.Name}");
     }
 
@@ -177,7 +212,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         _needsCompilation = true;
     }
 
-    private static readonly Guid HomeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
     public override string Folder => CsProjectFile.Directory;
 
     public readonly CsProjectFile CsProjectFile;
@@ -185,9 +219,13 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public static Instance RootInstance { get; private set; }
 
     internal static EditableSymbolProject ActiveProjectRw;
-    public static EditableSymbolProject ActiveProject => ActiveProjectRw ??= AllProjectsRw.FirstOrDefault(x => x.AssemblyInformation.HasHome); // todo - userSettings recents
+
+    public static EditableSymbolProject ActiveProject =>
+        ActiveProjectRw ??= AllProjectsRw.FirstOrDefault(x => x.AssemblyInformation.HasHome); // todo - userSettings recents
+
     private static readonly List<EditableSymbolProject> AllProjectsRw = new();
     public static readonly IReadOnlyList<EditableSymbolProject> AllProjects = AllProjectsRw;
+    private static SymbolUi _rootSymbolUi;
 
     public override bool IsModifiable => true;
 
@@ -202,4 +240,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
             action.Invoke();
         }
     }
+
+    private class T3Projects : Instance<T3Projects>;
 }

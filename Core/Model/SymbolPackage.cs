@@ -68,8 +68,8 @@ public abstract partial class SymbolPackage
             RemoveSymbol(symbolId);
         }
 
-        newlyRead = new();
-        List<Symbol> allNewSymbolsList = new();
+        newlyRead = [];
+        List<Symbol> allNewSymbolsList = [];
 
         if (newTypes.Count > 0)
         {

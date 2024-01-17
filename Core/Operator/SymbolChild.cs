@@ -13,7 +13,7 @@ namespace T3.Core.Operator
     /// <summary>
     /// Represents an instance of a <see cref="Symbol"/> within a combined symbol group.
     /// </summary>
-    public class SymbolChild
+    public sealed class SymbolChild
     {
         /// <summary>A reference to the <see cref="Symbol"/> this is an instance from.</summary>
         public Symbol Symbol { get; }

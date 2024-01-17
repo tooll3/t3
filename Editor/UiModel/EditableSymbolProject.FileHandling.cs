@@ -35,10 +35,13 @@ internal sealed partial class EditableSymbolProject
                                .Select(x => x.Value)
                                .Where(symbolUi => symbolUi.HasBeenModified)
                                .ToArray();
-        
-        Log.Debug($"{CsProjectFile.Name}: Saving {modifiedSymbolUis.Length} modified symbols...");
 
-        WriteAllSymbolFilesOf(modifiedSymbolUis);
+        if (modifiedSymbolUis.Length != 0)
+        {
+            Log.Debug($"{CsProjectFile.Name}: Saving {modifiedSymbolUis.Length} modified symbols...");
+
+            WriteAllSymbolFilesOf(modifiedSymbolUis);
+        }
 
         UnmarkAsSaving();
     }
@@ -65,7 +68,7 @@ internal sealed partial class EditableSymbolProject
         }
     }
 
-    private void WriteSymbolUi(SymbolUi symbolUi, string filePathFmt)
+    private static void WriteSymbolUi(SymbolUi symbolUi, string filePathFmt)
     {
         var uiFilePath = string.Format(filePathFmt, SymbolUiExtension);
 
@@ -189,21 +192,7 @@ internal sealed partial class EditableSymbolProject
     private void OnFileRenamed(object sender, RenamedEventArgs args)
     {
         EditorUi.Instance.ShowMessageBox($"File {args.OldFullPath} renamed to {args.FullPath}. Please do not do this while the editor is running.");
-        return;
-        MarkAsModified();
-        var oldPath = args.OldFullPath;
-        var newPath = args.FullPath;
-
-        //determine if path is a file or a directory
-        FileAttributes attrs = File.GetAttributes(oldPath);
-        if ((attrs & FileAttributes.Directory) == FileAttributes.Directory)
-        {
-            // update all files previously in directory
-        }
-        else
-        {
-            // update single file
-        }
+        _needsCompilation = true;
     }
 
     public void LocateSourceCodeFiles()

@@ -26,8 +26,7 @@ namespace T3.Core.Operator
         public string Namespace { get; set; }
         public string PendingSource { get; set; }
         public string SymbolFilePath { get; set; }
-        public SymbolPackage SymbolPackage { get; internal set; }
-        public bool IsHome { get; set; }
+        public SymbolPackage SymbolPackage { get; set; }
 
         public readonly List<Instance> InstancesOfSymbol = new();
         public readonly List<SymbolChild> Children = new();
@@ -42,7 +41,6 @@ namespace T3.Core.Operator
 
         public Type InstanceType { get; private set; }
 
-        public readonly List<FieldInfo> FieldInfos = new(4);
 
         public Animator Animator { get; } = new();
 
@@ -75,11 +73,10 @@ namespace T3.Core.Operator
             }
         }
 
-        public Symbol(Type instanceType, Guid symbolId, Guid[] orderedInputIds = null , bool isHome = false)
+        public Symbol(Type instanceType, Guid symbolId, Guid[] orderedInputIds = null)
         {
             Name = instanceType.Name;
             Id = symbolId;
-            IsHome = isHome;
 
             UpdateType(instanceType);
 
@@ -123,7 +120,7 @@ namespace T3.Core.Operator
             InputDefinitions.AddRange(inputDefs);
 
             // outputs identified by attribute
-            var outputs = (from field in FieldInfos
+            var outputs = (from field in _fieldInfos
                            let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
                            from attr in attributes
                            select (field, attributes)).ToArray();
@@ -157,8 +154,8 @@ namespace T3.Core.Operator
             if (instanceType == typeof(object))
                 return;
             
-            FieldInfos.Clear();
-            FieldInfos.AddRange(instanceType.GetFields());
+            _fieldInfos.Clear();
+            _fieldInfos.AddRange(instanceType.GetFields());
             
             // set the static TypeSymbol field so that instances can access their resources in their constructor
             var genericType = typeof(Instance<>).MakeGenericType(instanceType);
@@ -193,16 +190,10 @@ namespace T3.Core.Operator
                               .FindIndex(cc => cc == con); // todo: fix this mess! connection rework!
         }
         
-        private IEnumerable<FieldInfo> GetFieldInfosAssignableTo(Type type) => FieldInfos.Where(f => type.IsAssignableFrom(f.FieldType));
+        private IEnumerable<FieldInfo> GetFieldInfosAssignableTo(Type type) => _fieldInfos.Where(f => type.IsAssignableFrom(f.FieldType));
 
         public void UpdateInstanceType(Type instanceType)
         {
-            if (IsHome && InstanceType != null)
-            {
-                Log.Warning($"Skipping updating home instance type: {Name}");
-                return;
-            }
-
             UpdateType(instanceType);
             
             Name = instanceType.Name;
@@ -251,7 +242,7 @@ namespace T3.Core.Operator
             }
 
             // check if outputs have changed
-            var outputs = (from field in FieldInfos
+            var outputs = (from field in _fieldInfos
                            let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
                            where attributes.Any()
                            select (field, (OutputAttribute)attributes[0])).ToArray();
@@ -320,14 +311,13 @@ namespace T3.Core.Operator
             foreach (var instance in InstancesOfSymbol)
             {
                 var parent = instance.Parent;
-                //
                 if (parent == null)
                 {
-                    Log.Error($"Warning: Skipping instance without parent {instance.Symbol.Name}");
+                    Log.Error($"Warning: Instance {instance} has no parent. Skipping.");
                     continue;
                 }
 
-                if (parent == null || !parent.Children.Contains(instance))
+                if (!parent.Children.Contains(instance))
                 {
                     // This happens when recompiling ops...
                     Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
@@ -383,14 +373,12 @@ namespace T3.Core.Operator
                 symbolChild.Inputs.Clear();
                 foreach (var inputDefinition in InputDefinitions)
                 {
-                    if (oldChildInputs.TryGetValue(inputDefinition.Id, out var input))
-                    {
-                        symbolChild.Inputs.Add(inputDefinition.Id, input);
-                    }
-                    else
-                    {
-                        symbolChild.Inputs.Add(inputDefinition.Id, new SymbolChild.Input(inputDefinition));
-                    }
+                    var inputId = inputDefinition.Id;
+                    var inputToAdd = oldChildInputs.TryGetValue(inputId, out var oldInput) 
+                                         ? oldInput 
+                                         : new SymbolChild.Input(inputDefinition);
+                    
+                    symbolChild.Inputs.Add(inputId, inputToAdd);
                 }
 
                 // update output of symbol child
@@ -398,18 +386,15 @@ namespace T3.Core.Operator
                 symbolChild.Outputs.Clear();
                 foreach (var outputDefinition in OutputDefinitions)
                 {
-                    if (oldChildOutputs.TryGetValue(outputDefinition.Id, out var output))
-                    {
-                        symbolChild.Outputs.Add(outputDefinition.Id, output);
-                    }
-                    else
+                    if (!oldChildOutputs.TryGetValue(outputDefinition.Id, out var output))
                     {
                         var outputData = (outputDefinition.OutputDataType != null)
                                              ? (Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData)
                                              : null;
-                        var newOutput = new SymbolChild.Output(outputDefinition, outputData);
-                        symbolChild.Outputs.Add(outputDefinition.Id, newOutput);
+                        output = new SymbolChild.Output(outputDefinition, outputData);
                     }
+                    
+                    symbolChild.Outputs.Add(outputDefinition.Id, output);
                 }
 
                 newInstanceSymbolChildren.Add((symbolChild, parent, connectionEntriesToReplace));
@@ -731,12 +716,6 @@ namespace T3.Core.Operator
 
         public void CreateAnimationUpdateActionsForSymbolInstances()
         {
-            if (IsHome)
-            {
-                Log.Warning("Skipping creation of animation update actions for home symbol");
-                return;
-            }
-            
             var parents = new HashSet<Symbol>();
             foreach (var instance in InstancesOfSymbol)
             {
@@ -805,7 +784,7 @@ namespace T3.Core.Operator
         /// <summary>
         /// Options on the visual presentation of <see cref="Symbol"/> input.
         /// </summary>
-        public class InputDefinition
+        public sealed class InputDefinition
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
@@ -813,7 +792,7 @@ namespace T3.Core.Operator
             public bool IsMultiInput { get; set; }
         }
 
-        public class OutputDefinition
+        public sealed class OutputDefinition
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
@@ -899,5 +878,7 @@ namespace T3.Core.Operator
                 slot.DirtyFlag.Invalidate();
             }
         }
+        
+        private readonly List<FieldInfo> _fieldInfos = new(4);
     }
 }

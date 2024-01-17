@@ -21,6 +21,7 @@ internal class CsProjectFile
     public AssemblyInformation Assembly { get; private set; }
     public IReadOnlyList<DependencyInfo> Dependencies => _dependencies;
     public bool IsOperatorAssembly => Assembly.IsOperatorAssembly;
+    public const string ProjectNamePlaceholder = "PROJECT_NAME";
     private readonly List<DependencyInfo> _dependencies;
     public event Action<CsProjectFile> Recompiled;
 
@@ -245,22 +246,21 @@ internal class CsProjectFile
         string placeholderDependencyPath = Path.Combine(dependenciesDirectory, "PlaceNativeDllDependenciesHere.txt");
         File.Create(placeholderDependencyPath).Dispose();
 
-        const string namePlaceholder = "{{USER}}";
         const string guidPlaceholder = "{{GUID}}";
-        const string defaultReferencesPlaceholder = "{{DEFAULT_REFERENCES}}";
+        const string defaultReferencesPlaceholder = "{{DEFAULT_REFS}}";
 
         var homeGuid = Guid.NewGuid().ToString();
         string csprojPath = null;
         foreach (var file in files)
         {
-            string text = File.ReadAllText(file);
-            text = text.Replace(namePlaceholder, projectName)
-                       .Replace(guidPlaceholder, homeGuid)
-                       .Replace(defaultReferencesPlaceholder, CoreReferences);
+            var text = File.ReadAllText(file)
+                              .Replace(ProjectNamePlaceholder, projectName)
+                              .Replace(guidPlaceholder, homeGuid)
+                              .Replace(defaultReferencesPlaceholder, CoreReferences);
 
-            var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file));
-            destinationFilePath = destinationFilePath.Replace(namePlaceholder, projectName)
-                                                     .Replace(guidPlaceholder, homeGuid);
+            var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file))
+                                          .Replace(ProjectNamePlaceholder, projectName)
+                                          .Replace(guidPlaceholder, homeGuid);
 
             File.WriteAllText(destinationFilePath, text);
 
