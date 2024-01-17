@@ -1,7 +1,7 @@
 {
   "Name": "ShardNoise",
   "Id": "dc34c54b-f856-4fd2-a182-68fd75189d7d",
-  "Namespace": "user.newemka980.img.generate",
+  "Namespace": "lib.img.generate",
   "Inputs": [
     {
       "Id": "2c6a429d-5a38-4457-94d5-8994e7d1242d"/*ColorA*/,
@@ -37,11 +37,11 @@
     },
     {
       "Id": "f5233be8-dfdf-463b-af49-029f3459bbeb"/*Scale*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 10.0
     },
     {
       "Id": "58ff3aee-7ced-4634-ac4a-871d67d96b57"/*Sharpen*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "fe0bda00-1c88-45d6-88a7-bc955ef5db61"/*Bias*/,

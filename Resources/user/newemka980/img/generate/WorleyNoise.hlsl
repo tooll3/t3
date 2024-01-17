@@ -1,3 +1,5 @@
+#include "lib/shared/bias-functions.hlsl"
+
 // This shader is based on a ShaderToy Project by jamelouis https://www.shadertoy.com/view/3dXyRl 
 // Ported to Tooll3 by Newemka (so you know who to blame)
 
@@ -11,9 +13,9 @@ cbuffer ParamConstants : register(b0)
 
     float Scale;
     float Phase;
-    float Bias;
-    
+
     float2 Clamping;
+    float2 BiasAndGain;
 
     float Method;
 }
@@ -138,15 +140,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 uv = psInput.texCoord;
     uv -= 0.5;
     uv /= Stretch * scale;
-    //uv += Offset * float2(-1 / aspectRatio, 1);
     uv += offset;
     uv.x *= aspectRatio;
 
-    float4 Color = float4(1,0,0,1.0);
-    float3 worley = Worley(uv, 32.0);
-    Color = float4(worley,1.0);
-    
-    //return lerp(ColorB, ColorA, saturate(Color * Bias));
-   return lerp(ColorB, ColorA, clamp(Color * Bias, Clamping.x, Clamping.y ) );
-    //return lerp(ColorB, ColorA, Color * Bias);
+    float worley = GetBiasGain( Worley(uv, 32.0), BiasAndGain.x, BiasAndGain.y);
+    return lerp(ColorB, ColorA, clamp(worley, Clamping.x, Clamping.y ) );
 }

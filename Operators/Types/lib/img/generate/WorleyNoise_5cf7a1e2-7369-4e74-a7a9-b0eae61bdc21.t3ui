@@ -49,15 +49,6 @@
       }
     },
     {
-      "InputId": "0ffe0cb8-ba08-4254-821a-e67cf687ce0c"/*Bias*/,
-      "Position": {
-        "X": -217.45303,
-        "Y": 169.32751
-      },
-      "Min": -1.0,
-      "Max": 1.0
-    },
-    {
       "InputId": "bb34cad3-1676-4df1-86f3-d713df5ccda6"/*Clamping*/,
       "Position": {
         "X": -217.45303,
@@ -84,6 +75,16 @@
         "X": -218.26428,
         "Y": 355.4367
       }
+    },
+    {
+      "InputId": "dce72235-839e-41f1-a2a4-e19f0ef66e5c"/*BiasAndGain*/,
+      "Position": {
+        "X": -218.26428,
+        "Y": 400.4367
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [
@@ -142,10 +143,17 @@
       }
     },
     {
-      "ChildId": "eb4bf4c2-08b8-4fa4-9498-3272b8cfc251"/*Value*/,
+      "ChildId": "8bc72402-4981-4142-a466-3919d5171b79"/*RandomizePoints*/,
       "Position": {
-        "X": 83.3465,
-        "Y": 475.28915
+        "X": 896.23193,
+        "Y": 743.1868
+      }
+    },
+    {
+      "ChildId": "1981ff03-a761-4c44-860b-802eecaf82f9"/*Vector2Components*/,
+      "Position": {
+        "X": -22.565247,
+        "Y": 500.50177
       }
     }
   ],
@@ -165,6 +173,13 @@
       "Description": "",
       "LinkUrl": "https://en.wikipedia.org/wiki/Worley_noise",
       "LinkType": "Documentation"
+    },
+    {
+      "Id": "5b37e3da-9690-4438-9264-6543525670d4",
+      "Title": "ShaderToy Project by jamelouis",
+      "Description": "ShaderToy Project by jamelouis",
+      "LinkUrl": "https://www.shadertoy.com/view/3dXyRl",
+      "LinkType": "Source"
     }
   ]
 }

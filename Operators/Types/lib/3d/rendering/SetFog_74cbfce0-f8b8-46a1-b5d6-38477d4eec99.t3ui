@@ -33,7 +33,10 @@
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "Description": "The fog color applied to distance geometry. Note that you can fade out the fog effect be reducing the alpha channel.",
+      "Min": 0.0,
+      "Max": 1.0
     }
   ],
   "SymbolChildUis": [],

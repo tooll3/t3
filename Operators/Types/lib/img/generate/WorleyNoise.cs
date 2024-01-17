@@ -28,9 +28,6 @@ namespace T3.Operators.Types.Id_5cf7a1e2_7369_4e74_a7a9_b0eae61bdc21
         [Input(Guid = "37fa6406-e29c-482d-9682-70cb2faea92d")]
         public readonly InputSlot<float> Phase = new InputSlot<float>();
 
-        [Input(Guid = "0ffe0cb8-ba08-4254-821a-e67cf687ce0c")]
-        public readonly InputSlot<float> Bias = new InputSlot<float>();
-
         [Input(Guid = "bb34cad3-1676-4df1-86f3-d713df5ccda6")]
         public readonly InputSlot<System.Numerics.Vector2> Clamping = new InputSlot<System.Numerics.Vector2>();
 
@@ -42,6 +39,9 @@ namespace T3.Operators.Types.Id_5cf7a1e2_7369_4e74_a7a9_b0eae61bdc21
 
         [Input(Guid = "7b7e1f3b-7e5c-46af-9e2e-536cb1909867")]
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
+
+        [Input(Guid = "dce72235-839e-41f1-a2a4-e19f0ef66e5c")]
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
 
 
         private enum Methods
