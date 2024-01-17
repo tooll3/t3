@@ -189,7 +189,7 @@ namespace T3.Editor.UiModel
         }
         
         
-        internal static bool TryReadSymbolUi(JToken mainObject, out SymbolUi symbolUi)
+        internal static bool TryReadSymbolUiExternal(JToken mainObject, out SymbolUi symbolUi)
         {
             symbolUi = null;
             var guidString = mainObject[JsonKeys.Id].Value<string>();
@@ -201,7 +201,11 @@ namespace T3.Editor.UiModel
                 return false;
             }
 
-            return TryReadSymbolUi(mainObject, symbolId, out symbolUi);
+            var success = TryReadSymbolUi(mainObject, symbolId, out symbolUi);
+            if(success)
+                symbolUi.UpdateConsistencyWithSymbol();
+
+            return success;
         }
 
 
@@ -272,12 +276,12 @@ namespace T3.Editor.UiModel
                     childUi.Comment = childEntry[JsonKeys.Comment].Value<string>();
                 }
 
-                JToken positionToken = childEntry[JsonKeys.Position];
+                var positionToken = childEntry[JsonKeys.Position];
                 childUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
 
                 if (childEntry[JsonKeys.Size] != null)
                 {
-                    JToken sizeToken = childEntry[JsonKeys.Size];
+                    var sizeToken = childEntry[JsonKeys.Size];
                     childUi.Size = (Vector2)_jsonToVector2(sizeToken);
                 }
                 
@@ -352,7 +356,7 @@ namespace T3.Editor.UiModel
             var linksDict = ReadLinks(mainObject);
 
 
-            symbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict, linksDict)
+            symbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict, linksDict, false)
                            {
                                Description = mainObject[JsonKeys.Description]?.Value<string>()
                            };

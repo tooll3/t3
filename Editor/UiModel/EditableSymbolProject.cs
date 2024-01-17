@@ -17,13 +17,13 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     private static readonly Queue<Action> PendingUpdateActions = new();
 
-    public EditableSymbolProject(CsProjectFile csProjectFile)
-        : base(csProjectFile.Assembly)
+    public EditableSymbolProject(CsProjectFile csProjectFile) : base(csProjectFile.Assembly, false)
     {
         CsProjectFile = csProjectFile;
         csProjectFile.Recompiled += project => PendingUpdateActions.Enqueue(() => UpdateSymbols(project));
         AllProjectsRw.Add(this);
-        _fileSystemWatcher = new EditablePackageFsWatcher(this, OnFileChanged, OnFileRenamed);
+        InitializeFileWatcher();
+        _csFileWatcher = new EditablePackageFsWatcher(this, OnFileChanged, OnFileRenamed);
     }
 
     public bool TryCreateHome()
@@ -191,11 +191,11 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     public override bool IsModifiable => true;
 
-    private readonly EditablePackageFsWatcher _fileSystemWatcher;
+    private readonly EditablePackageFsWatcher _csFileWatcher;
 
     private bool _needsCompilation;
 
-    public void ExecutePendingUpdates()
+    private void ExecutePendingUpdates()
     {
         while (PendingUpdateActions.TryDequeue(out var action))
         {

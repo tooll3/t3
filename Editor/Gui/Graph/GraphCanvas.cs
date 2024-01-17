@@ -1113,7 +1113,7 @@ namespace T3.Editor.Gui.Graph
                     throw new Exception($"Failed to add symbol for {containerSymbol.Name}");
 
                 var symbolUiJson = jArray[1];
-                var hasContainerSymbolUi = SymbolUiJson.TryReadSymbolUi(symbolUiJson, out var containerSymbolUi);
+                var hasContainerSymbolUi = SymbolUiJson.TryReadSymbolUiExternal(symbolUiJson, out var containerSymbolUi);
                 if (!hasContainerSymbolUi)
                 {
                     Log.Error($"Failed to paste symbol due to invalid symbol ui json");

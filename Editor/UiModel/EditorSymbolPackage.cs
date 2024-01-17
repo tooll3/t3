@@ -15,32 +15,36 @@ namespace T3.Editor.UiModel;
 // todo - make abstract, create NugetSymbolPackage
 internal class EditorSymbolPackage : StaticSymbolPackage
 {
-    public EditorSymbolPackage(AssemblyInformation assembly) : base(assembly)
+    internal EditorSymbolPackage(AssemblyInformation assembly, bool initializeFileWatcher) : base(assembly, false)
     {
+        if (initializeFileWatcher)
+        {
+            InitializeFileWatcher();
+        }
     }
 
-    public void LoadUiFiles(IEnumerable<Symbol> newlyReadSymbols, out IReadOnlyCollection<SymbolUi> newlyReadSymbolUis)
+    public void LoadUiFiles(IEnumerable<Symbol> newlyReadSymbols, out IReadOnlyCollection<SymbolUi> newlyReadSymbolUis,
+                            out IReadOnlyCollection<SymbolUi> preExistingSymbolUis)
     {
         var newSymbols = newlyReadSymbols.ToDictionary(result => result.Id, symbol => symbol);
         var newSymbolsWithoutUis = new ConcurrentDictionary<Guid, Symbol>(newSymbols);
+        ConcurrentBag<SymbolUi> preExistingCollection = new();
         Log.Debug($"{AssemblyInformation.Name}: Loading Symbol UIs from \"{Folder}\"");
         var newlyReadSymbolUiList = Directory.EnumerateFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories)
                                              .AsParallel()
                                              .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
                                              .Where(result => newSymbols.ContainsKey(result.Guid))
-                                             .Select(symbolUiJson =>
+                                             .Select(uiJson =>
                                                      {
-                                                         var gotSymbolUi =
-                                                             SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, symbolUiJson.Guid, out var symbolUi);
-                                                         if (!gotSymbolUi)
+                                                         if (!SymbolUiJson.TryReadSymbolUi(uiJson.JToken, uiJson.Guid, out var symbolUi))
                                                          {
-                                                             Log.Error($"Error reading symbol Ui for {symbolUiJson.Guid} from file \"{symbolUiJson.FilePath}\"");
+                                                             Log.Error($"Error reading symbol Ui for {uiJson.Guid} from file \"{uiJson.FilePath}\"");
                                                              return null;
                                                          }
 
-                                                         symbolUi.UiFilePath = symbolUiJson.FilePath;
-                                                         symbolUiJson.Object = symbolUi;
-                                                         return symbolUiJson;
+                                                         symbolUi.UiFilePath = uiJson.FilePath;
+                                                         uiJson.Object = symbolUi;
+                                                         return uiJson;
                                                      })
                                              .Where(result =>
                                                     {
@@ -49,14 +53,22 @@ internal class EditorSymbolPackage : StaticSymbolPackage
 
                                                         var symbolUi = result.Object;
                                                         newSymbolsWithoutUis.Remove(symbolUi.Symbol.Id, out _);
-                                                        return SymbolUis.TryAdd(symbolUi.Symbol.Id, symbolUi);
+                                                        var id = symbolUi.Symbol.Id;
+
+                                                        if (SymbolUis.TryGetValue(id, out var preExistingSymbolUi))
+                                                        {
+                                                            preExistingCollection.Add(preExistingSymbolUi);
+                                                            return false;
+                                                        }
+
+                                                        return SymbolUis.TryAdd(id, symbolUi);
                                                     })
                                              .Select(result => result!.Object)
                                              .ToList();
 
         foreach (var (guid, symbol) in newSymbolsWithoutUis)
         {
-            var symbolUi = new SymbolUi(symbol);
+            var symbolUi = new SymbolUi(symbol, false);
 
             if (!SymbolUis.TryAdd(guid, symbolUi))
             {
@@ -68,6 +80,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
         }
 
         newlyReadSymbolUis = newlyReadSymbolUiList;
+        preExistingSymbolUis = preExistingCollection;
     }
 
     private static void RegisterCustomChildUi(Symbol symbol)
@@ -79,7 +92,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
         }
     }
 
-    public void RegisterUiSymbols(bool enableLog, IEnumerable<SymbolUi> newSymbolUis)
+    public void RegisterUiSymbols(bool enableLog, IEnumerable<SymbolUi> newSymbolUis, IEnumerable<SymbolUi> preExistingSymbolUis)
     {
         Log.Debug($@"{AssemblyInformation.Name}: Registering UI entries...");
 
@@ -99,6 +112,11 @@ internal class EditorSymbolPackage : StaticSymbolPackage
             symbolUi.UpdateConsistencyWithSymbol();
             if (enableLog)
                 Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
+        }
+
+        foreach (var symbolUi in preExistingSymbolUis)
+        {
+            symbolUi.UpdateConsistencyWithSymbol();
         }
     }
 

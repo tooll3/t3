@@ -172,13 +172,13 @@ internal sealed partial class EditableSymbolProject
     private void MarkAsSaving()
     {
         Interlocked.Increment(ref _savingCount);
-        _fileSystemWatcher.EnableRaisingEvents = false;
+        _csFileWatcher.EnableRaisingEvents = false;
     }
 
     private void UnmarkAsSaving()
     {
         Interlocked.Decrement(ref _savingCount);
-        _fileSystemWatcher.EnableRaisingEvents = true;
+        _csFileWatcher.EnableRaisingEvents = true;
     }
 
     private void OnFileChanged(object sender, FileSystemEventArgs args)

@@ -29,8 +29,7 @@ internal static class InputsAndOutputs
         var newSource = newRoot.GetText().ToString();
         Log.Debug(newSource);
 
-        bool success = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
-        if (!success)
+        if (!OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource))
         {
             Log.Error("Compilation after removing inputs failed, aborting the remove.");
         }
@@ -59,8 +58,7 @@ internal static class InputsAndOutputs
         var newSource = newRoot.GetText().ToString();
         Log.Debug(newSource);
 
-        bool successful = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
-        if (!successful)
+        if (!OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource))
         {
             Log.Error("Compilation after removing outputs failed, aborting the remove.");
         }

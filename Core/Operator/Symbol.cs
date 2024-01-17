@@ -19,7 +19,7 @@ namespace T3.Core.Operator
     /// <remarks>
     /// - There can be multiple <see cref="Instance"/>s of a symbol.
     /// </remarks>
-    public class Symbol : IDisposable
+    public sealed class Symbol : IDisposable
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

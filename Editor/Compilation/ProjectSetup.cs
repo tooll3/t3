@@ -140,7 +140,7 @@ internal static class ProjectSetup
                                 }
 
                                 if (assembly.IsOperatorAssembly)
-                                    readOnlyPackages.Add(new EditorSymbolPackage(assembly));
+                                    readOnlyPackages.Add(new EditorSymbolPackage(assembly, true));
                                 else
                                     nonOperatorAssemblies.Add(assembly);
                             }
@@ -353,13 +353,13 @@ internal static class ProjectSetup
            .AsParallel()
            .ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
 
-        ConcurrentDictionary<EditorSymbolPackage, IReadOnlyCollection<SymbolUi>> loadedSymbolUis = new();
+        ConcurrentDictionary<EditorSymbolPackage, SymbolUiLoadInfo> loadedSymbolUis = new();
         symbolPackages
            .AsParallel()
            .ForAll(package =>
                    {
-                       package.LoadUiFiles(loadedOrCreatedSymbols[package], out var newlyRead);
-                       loadedSymbolUis.TryAdd(package, newlyRead);
+                       package.LoadUiFiles(loadedOrCreatedSymbols[package], out var newlyRead, out var preExisting);
+                       loadedSymbolUis.TryAdd(package, new SymbolUiLoadInfo(newlyRead, preExisting));
                    });
 
         loadedSymbolUis
@@ -372,8 +372,14 @@ internal static class ProjectSetup
 
         foreach (var (symbolPackage, symbolUis) in loadedSymbolUis)
         {
-            symbolPackage.RegisterUiSymbols(enableLog: false, symbolUis);
+            symbolPackage.RegisterUiSymbols(enableLog: false, symbolUis.NewlyLoaded, symbolUis.PreExisting);
         }
+    }
+    
+    readonly struct SymbolUiLoadInfo(IReadOnlyCollection<SymbolUi> newlyLoaded, IReadOnlyCollection<SymbolUi> preExisting)
+    {
+        public readonly IReadOnlyCollection<SymbolUi> NewlyLoaded = newlyLoaded;
+        public readonly IReadOnlyCollection<SymbolUi> PreExisting = preExisting;
     }
 
     readonly struct AssemblyConstructorInfo(AssemblyInformation assemblyInformation, Type instanceType)

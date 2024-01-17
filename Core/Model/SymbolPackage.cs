@@ -20,18 +20,7 @@ public abstract partial class SymbolPackage
     public abstract AssemblyInformation AssemblyInformation { get; }
     public abstract string Folder { get; }
 
-    private ResourceFileWatcher _resourceFileWatcher;
-
-    internal ResourceFileWatcher ResourceFileWatcher
-    {
-        get
-        {
-            if (_resourceFileWatcher == null)
-                InitializeFileWatcher();
-
-            return _resourceFileWatcher;
-        }
-    }
+    protected internal ResourceFileWatcher ResourceFileWatcher { get; private set; }
 
     internal string ResourcesFolder => ResourceFileWatcher.WatchedFolder;
     protected abstract string ResourcesSubfolder { get; }
@@ -42,13 +31,13 @@ public abstract partial class SymbolPackage
         RegisterTypes();
     }
 
-    private void InitializeFileWatcher()
+    protected void InitializeFileWatcher()
     {
-        if (_resourceFileWatcher != null)
+        if (ResourceFileWatcher != null)
             return;
 
         var fullResourcesFolder = Path.Combine(Folder, ResourcesSubfolder);
-        _resourceFileWatcher = new ResourceFileWatcher(fullResourcesFolder, AssemblyInformation.ShouldShareResources);
+        ResourceFileWatcher = new ResourceFileWatcher(fullResourcesFolder, AssemblyInformation.ShouldShareResources);
     }
 
     public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> newlyRead, out IReadOnlyCollection<Symbol> allNewSymbols)
