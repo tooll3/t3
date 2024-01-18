@@ -34,14 +34,14 @@ namespace T3.Operators.Types.Id_5cf7a1e2_7369_4e74_a7a9_b0eae61bdc21
         [Input(Guid = "7b1a1f18-a1d4-4737-9c06-21f263277140")]
         public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
 
+        [Input(Guid = "dce72235-839e-41f1-a2a4-e19f0ef66e5c")]
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+
         [Input(Guid = "b4277cab-d286-410f-81be-ff4d53a9eca9", MappedType = typeof(Methods))]
         public readonly InputSlot<int> Method = new InputSlot<int>();
 
         [Input(Guid = "7b7e1f3b-7e5c-46af-9e2e-536cb1909867")]
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
-
-        [Input(Guid = "dce72235-839e-41f1-a2a4-e19f0ef66e5c")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
 
 
         private enum Methods
