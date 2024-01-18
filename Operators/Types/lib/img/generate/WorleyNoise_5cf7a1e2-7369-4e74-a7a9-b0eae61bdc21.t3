@@ -58,19 +58,19 @@
       }
     },
     {
+      "Id": "dce72235-839e-41f1-a2a4-e19f0ef66e5c"/*BiasAndGain*/,
+      "DefaultValue": {
+        "X": 0.5,
+        "Y": 0.5
+      }
+    },
+    {
       "Id": "b4277cab-d286-410f-81be-ff4d53a9eca9"/*Method*/,
       "DefaultValue": 0
     },
     {
       "Id": "7b7e1f3b-7e5c-46af-9e2e-536cb1909867"/*GenerateMips*/,
       "DefaultValue": false
-    },
-    {
-      "Id": "dce72235-839e-41f1-a2a4-e19f0ef66e5c"/*BiasAndGain*/,
-      "DefaultValue": {
-        "X": 0.5,
-        "Y": 0.5
-      }
     }
   ],
   "Children": [
