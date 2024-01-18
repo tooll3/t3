@@ -13,6 +13,7 @@ using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Modification;
@@ -27,6 +28,13 @@ internal static class Duplicate
             Log.Warning("Can't find symbol to duplicate");
             return null;
         }
+
+        if (compositionUi.Symbol.SymbolPackage is not EditableSymbolProject project)
+        {
+            EditorUi.Instance.ShowMessageBox("Can only create new types in editable projects.");
+            return null;
+        }
+        
         //var sourceSymbol = symbolChildToDuplicate.Symbol;
 
         var syntaxTree = GraphUtils.GetSyntaxTree(sourceSymbol);
@@ -50,7 +58,7 @@ internal static class Duplicate
         newSource = ReplaceGuidAttributeWith(newSymbolId, newSource);
         Log.Debug(newSource);
 
-        var success = EditableSymbolProject.ActiveProject.TryCompile(newSource, newTypeName, newSymbolId, nameSpace, out var newSymbol);
+        var success = project.TryCompile(newSource, newTypeName, newSymbolId, nameSpace, out var newSymbol);
         if (!success)
         {
             Log.Error($"Could not compile new symbol '{newTypeName}'");
@@ -61,7 +69,7 @@ internal static class Duplicate
         var newSymbolUi = sourceSymbolUi.CloneForNewSymbol(newSymbol, oldToNewIdMap);
         newSymbolUi.Description = description;
         
-        EditableSymbolProject.ActiveProject.ReplaceSymbolUi(newSymbolUi);
+        project.ReplaceSymbolUi(newSymbolUi);
 
         // Apply content to new symbol
         var cmd = new CopySymbolChildrenCommand(sourceSymbolUi,

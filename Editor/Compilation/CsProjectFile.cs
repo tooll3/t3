@@ -21,7 +21,7 @@ internal class CsProjectFile
     public AssemblyInformation Assembly { get; private set; }
     public IReadOnlyList<DependencyInfo> Dependencies => _dependencies;
     public bool IsOperatorAssembly => Assembly.IsOperatorAssembly;
-    public const string ProjectNamePlaceholder = "PROJECT_NAME";
+    public const string ProjectNamePlaceholder = "{{PROJ}}";
     private readonly List<DependencyInfo> _dependencies;
     public event Action<CsProjectFile> Recompiled;
 

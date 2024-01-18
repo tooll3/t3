@@ -6,7 +6,6 @@ using System.Numerics;
 using System.Text.RegularExpressions;
 using T3.Core.Compilation;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Windows;
@@ -18,25 +17,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;
 
     private static readonly Queue<Action> PendingUpdateActions = new();
-
-    private static SymbolUi InitializeRoot(SymbolPackage package)
-    {
-        var symbolGuid = new Guid("fa3db58b-068d-427d-96e7-8144f4721db3");
-        var rootSymbol = new Symbol(typeof(T3Projects), symbolGuid);
-        rootSymbol.SymbolPackage = package;
-        rootSymbol.Namespace = "Root";
-        SymbolRegistry.EntriesEditable.TryAdd(rootSymbol.Id, rootSymbol);
-
-        var rootSymbolUi = new SymbolUi(rootSymbol);
-        SymbolUiRegistry.EntriesEditable.TryAdd(rootSymbol.Id, rootSymbolUi);
-
-        _rootSymbolUi = rootSymbolUi;
-
-        var instanceGuid = new Guid("dd0eaa03-2833-4d8d-b527-fdc4f0ca8cbc");
-        var rootInstance = rootSymbol.CreateInstance(instanceGuid, null);
-        RootInstance = rootInstance;
-        return _rootSymbolUi;
-    }
 
     public EditableSymbolProject(CsProjectFile csProjectFile) : base(csProjectFile.Assembly, false)
     {
@@ -55,14 +35,8 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         Log.Debug($"Creating home for {CsProjectFile.Name}...");
         var homeGuid = CsProjectFile.Assembly.HomeGuid;
         var homeSymbol = Symbols[homeGuid];
-
-        var rootUi = _rootSymbolUi;
-        if (rootUi == null)
-        {
-            rootUi = InitializeRoot(this);
-        }
-
-        rootUi.AddChild(homeSymbol, Guid.NewGuid(), Vector2.Zero, Vector2.One * 100, homeSymbol.Namespace + '.' + homeSymbol.Name);
+        
+        _rootSymbolUi.AddChild(homeSymbol, Guid.NewGuid(), Vector2.Zero, Vector2.One * 100, homeSymbol.Name);
 
         return true;
     }
@@ -216,16 +190,8 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     public readonly CsProjectFile CsProjectFile;
 
-    public static Instance RootInstance { get; private set; }
-
-    internal static EditableSymbolProject ActiveProjectRw;
-
-    public static EditableSymbolProject ActiveProject =>
-        ActiveProjectRw ??= AllProjectsRw.FirstOrDefault(x => x.AssemblyInformation.HasHome); // todo - userSettings recents
-
     private static readonly List<EditableSymbolProject> AllProjectsRw = new();
     public static readonly IReadOnlyList<EditableSymbolProject> AllProjects = AllProjectsRw;
-    private static SymbolUi _rootSymbolUi;
 
     public override bool IsModifiable => true;
 

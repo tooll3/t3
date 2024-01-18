@@ -38,7 +38,7 @@ namespace T3.Editor.Gui.Dialog
 
                     if (string.IsNullOrEmpty(_userNamespace))
                     {
-                        _userNamespace = $"user.{UserSettings.Config.UserName}";
+                        //_userNamespace = $"user.{UserSettings.Config.UserName}";
                     }
 
                     var hasChanged = false;

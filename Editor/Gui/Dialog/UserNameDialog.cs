@@ -9,11 +9,11 @@ namespace T3.Editor.Gui.Dialog
 {
     public class UserNameDialog : ModalDialog
     {
-        private string _userName;
+        private string _userName = DefaultName;
 
         public void Draw()
         {
-            if (BeginDialog("Edit nickname"))
+            if (BeginDialog("Edit project name"))
             {
                 ImGui.PushFont(Fonts.FontSmall);
                 ImGui.TextUnformatted("Nickname");
@@ -24,43 +24,24 @@ namespace T3.Editor.Gui.Dialog
                 if (ImGui.IsWindowAppearing())
                     ImGui.SetKeyboardFocusHere();
 
-                _userName ??= UserSettings.Config.UserName;
-
                 ImGui.InputText("##name", ref _userName, 255);
 
                 CustomComponents
                    .HelpText("Tooll will use this to group your projects into a namespace.\n\n(This is a local setting only and not stored online.\n\nIt should be short and not contain spaces or special characters.");
                 ImGui.Spacing();
 
-                if (CustomComponents.DisablableButton("Rename", GraphUtils.IsValidUserName(_userName)))
+                if (CustomComponents.DisablableButton("Rename", GraphUtils.IsValidProjectName(_userName)))
                 {
-                    var eventArgs = new NameChangedEventArgs(UserSettings.Config.UserName, _userName);
-
-                    // Change home (I.e. dashboard) namespace
-                    //if(!SymbolRegistry.Entries.TryGetValue(UiModel.UiSymbolData.HomeSymbolId, out var homeSymbol))
-                    //{
-                    //    Log.Warning("Skipped setting home canvas namespace because symbol wasn't found");
-                    //}
-                    //else
-                    //{
-                    //    // todo : remove invalid characters
-                    //    Log.Debug($"Moving home canvas to user.{UserSettings.Config.UserName}");
-                    //    homeSymbol.Namespace = $"user.{UserSettings.Config.UserName}"
-                    //    T3Ui.SaveAll();
-                    //}
-
                     try
                     {
-                        UserNameChanged?.Invoke(this, eventArgs);
-                        UserSettings.Config.UserName = _userName;
-                        UserSettings.Save();
+                        ProjectNameChanged?.Invoke(this, _userName);
                     }
                     catch (Exception e)
                     {
                         Log.Error($"Error while renaming user {e}");
-                        _userName = null;
                     }
 
+                    _userName = DefaultName;
                     ImGui.CloseCurrentPopup();
                 }
 
@@ -76,18 +57,7 @@ namespace T3.Editor.Gui.Dialog
             EndDialog();
         }
 
-        public event EventHandler<NameChangedEventArgs> UserNameChanged;
-
-        public class NameChangedEventArgs : EventArgs
-        {
-            public NameChangedEventArgs(string newName, string oldName)
-            {
-                NewName = newName;
-                OldName = oldName;
-            }
-
-            public string NewName { get; }
-            public string OldName { get; }
-        }
+        public event EventHandler<string> ProjectNameChanged;
+        private const string DefaultName = "RadNewProjectName";
     }
 }

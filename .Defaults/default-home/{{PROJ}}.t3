@@ -1,5 +1,5 @@
 {
-  "Name": "HomeCanvas",
+  "Name": "{{PROJ}}",
   "Id": "{{GUID}}",
   "Namespace": "user.{{PROJ}}",
   "Inputs": [],

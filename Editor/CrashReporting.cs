@@ -65,12 +65,12 @@ internal static class CrashReporting
                                      MessageBoxButtons.YesNo);
 
 
-        sentryEvent.SetTag("Nickname", UserSettings.Config?.UserName ?? "anonymous");
+        sentryEvent.SetTag("Nickname", "anonymous");
         sentryEvent.Contexts["tooll3"]= new
                                             {
                                                 UndoStack = UndoRedoStack.GetUndoStackAsString(),
                                                 Selection = string.Join("\n", NodeSelection.Selection),
-                                                Nickname = UserSettings.Config?.UserName ?? "",
+                                                Nickname = "",
                                                 RuntimeSeconds = Playback.RunTimeInSecs,
                                                 RuntimeFrames = ImGui.GetFrameCount(),
                                                 UndoActions = UndoRedoStack.UndoStack.Count,

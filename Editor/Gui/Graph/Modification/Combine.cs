@@ -10,6 +10,7 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Modification;
@@ -22,6 +23,12 @@ internal static class Combine
                                         string newSymbolName,
                                         string nameSpace, string description, bool shouldBeTimeClip)
     {
+        if (parentCompositionSymbolUi.Symbol.SymbolPackage is not EditableSymbolProject project)
+        {
+            EditorUi.Instance.ShowMessageBox("Can only create new types in editable projects.");
+            return;
+        }
+        
         var executedCommands = new List<ICommand>();
 
         Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
@@ -140,7 +147,7 @@ internal static class Combine
 
         // compile new instance type
 
-        var success = EditableSymbolProject.ActiveProject.TryCompile(newSource, newSymbolName, newSymbolId, nameSpace, out var newSymbol);
+        var success = project.TryCompile(newSource, newSymbolName, newSymbolId, nameSpace, out var newSymbol);
         if (!success)
         {
             Log.Error($"Could not compile new symbol '{newSymbolName}'");

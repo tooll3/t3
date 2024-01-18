@@ -127,6 +127,24 @@ internal class EditorSymbolPackage : StaticSymbolPackage
                && SymbolUiRegistry.EntriesEditable.Remove(guid, out _);
     }
 
+    public static void InitializeRoot(SymbolPackage package)
+    {
+        var rootInstanceId = new Guid("fa3db58b-068d-427d-96e7-8144f4721db3");
+        var rootSymbolId = new Guid("341992ea-6343-4485-9fef-3a84bb36199d");
+        
+        if (!package.TryCreateInstance(rootSymbolId, rootInstanceId, null, out var rootInstance))
+        {
+            throw new Exception("Could not create root symbol instance.");
+        }
+        
+        SymbolUiRegistry.Entries.TryGetValue(rootSymbolId, out _rootSymbolUi);
+
+        RootInstance = rootInstance;
+    }
+
+    public static Instance RootInstance { get; private set; }
+    private protected static SymbolUi _rootSymbolUi;
+
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
     protected override string ResourcesSubfolder => "Resources";
 

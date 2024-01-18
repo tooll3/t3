@@ -295,7 +295,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                 PrintTypeFilter();
 
-                var configUserName = "user." + UserSettings.Config.UserName + ".";
+                var projectNamespace = "user." + GraphCanvas.Current.CompositionOp.Symbol.SymbolPackage.AssemblyInformation.Name + ".";
                 var compositionNameSpace = "";
                 var currentMainComposition = GraphWindow.GetMainComposition();
                 if (currentMainComposition != null)
@@ -311,7 +311,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                         var symbolNamespace = symbolUi.Symbol.Namespace;
                         var isRelevantNamespace = symbolNamespace.StartsWith("lib.")
                                                   || symbolNamespace.StartsWith("examples.lib.")
-                                                  || symbolNamespace.StartsWith(configUserName)
+                                                  || symbolNamespace.StartsWith(projectNamespace)
                                                   || symbolNamespace.StartsWith(compositionNameSpace);
 
                         var color = symbolUi.Symbol.OutputDefinitions.Count > 0

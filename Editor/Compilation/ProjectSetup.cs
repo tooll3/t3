@@ -9,7 +9,6 @@ using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
@@ -21,9 +20,9 @@ internal static class ProjectSetup
     public static readonly IReadOnlyList<EditableSymbolProject> EditableSymbolPackages = EditableSymbolProjectsRw;
     internal static bool NeedsUserProject;
 
-    internal static void CreateOrMigrateProject(object sender, UserNameDialog.NameChangedEventArgs nameArgs)
+    internal static void CreateOrMigrateProject(object sender, string nameArgs)
     {
-        var name = nameArgs.NewName;
+        var name = nameArgs;
 
         if (NeedsUserProject)
         {
@@ -32,15 +31,14 @@ internal static class ProjectSetup
             if (success)
             {
                 EditableSymbolProjectsRw.Add(project);
-                EditableSymbolProject.ActiveProjectRw = project;
             }
         }
-        else if (nameArgs.NewName != nameArgs.OldName)
+        else 
         {
-            var oldUserNamespace = $"user.{nameArgs.OldName}";
-            var newUserNamespace = $"user.{nameArgs.NewName}";
+            //var oldUserNamespace = $"user.{nameArgs.OldName}";
+            //var newUserNamespace = $"user.{nameArgs.NewName}";
 
-            Log.Warning($"Have not implemented migration from {oldUserNamespace} to {newUserNamespace}");
+            Log.Warning($"Have not implemented project rename yet: {name}");
         }
     }
 
@@ -207,17 +205,25 @@ internal static class ProjectSetup
             UpdateSymbolPackages(allSymbolPackages);
             Log.Debug($"Updated symbol packages in {stopwatch.ElapsedMilliseconds}ms");
 
-            var activeProject = EditableSymbolProject.ActiveProject;
-
             #if DEBUG
             totalStopwatch.Stop();
             Log.Debug($"Total load time pre-home: {totalStopwatch.ElapsedMilliseconds}ms");
             #endif
 
             stopwatch.Restart();
+            
+            var exampleLib = allSymbolPackages.Single(x => x.AssemblyInformation.Name == "examples");
+            EditorSymbolPackage.InitializeRoot(exampleLib);
+            
+            Log.Debug($"Created root symbol in {stopwatch.ElapsedMilliseconds}ms");
+            
+            var createdHome = false;
+            foreach (var project in projectList)
+            {
+                createdHome |= project.TryCreateHome();
+            }
 
-            // Create home
-            if (activeProject == null || !activeProject.TryCreateHome())
+            if (!createdHome)
             {
                 NeedsUserProject = true;
             }

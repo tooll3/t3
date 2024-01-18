@@ -110,7 +110,7 @@ namespace T3.Editor.Gui.Templates
                                                          null,
                                                          isNewSymbolNameValid ? null : "Symbols must by unique and not contain spaces or special characters.");
 
-                    var isNamespaceValid = GraphUtils.IsNameSpaceValid(NameSpace);
+                    var isNamespaceValid = GraphUtils.IsIdentifierValid(NameSpace);
                     FormInputs.AddStringInput("NameSpace",
                                                          ref _newNameSpace,
                                                          NameSpace,
@@ -162,8 +162,9 @@ namespace T3.Editor.Gui.Templates
         private TemplateDefinition _selectedTemplate = TemplateDefinition.TemplateDefinitions[0];
         private static readonly Regex _validResourceFolderPattern = new(@"^Resources\\([A-Za-z_][A-Za-z_\-\d]*)(\\([A-Za-z_][A-Za-z\-_\d]*))*\\?$");
         
-        private string NameSpace => string.IsNullOrEmpty(_newNameSpace) ? $"user.{UserSettings.Config.UserName}.{_newSymbolName}" : _newNameSpace;
-        private string ResourceDirectory => string.IsNullOrEmpty(_resourceFolder) ? $"Resources\\user\\{UserSettings.Config.UserName}\\{_newSymbolName}\\" : _resourceFolder;
+        private string NameSpace => string.IsNullOrEmpty(_newNameSpace) ? $"user.{CurrentProjectName}.{_newSymbolName}" : _newNameSpace;
+        private string ResourceDirectory => string.IsNullOrEmpty(_resourceFolder) ? $"Resources\\user\\{CurrentProjectName}\\{_newSymbolName}\\" : _resourceFolder;
+        private string CurrentProjectName => GraphCanvas.Current.CompositionOp.Symbol.SymbolPackage.AssemblyInformation.Name;
 
         private string _newSymbolName = "MyNewOp";
         private string _newNameSpace = null;

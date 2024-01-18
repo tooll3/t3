@@ -143,6 +143,18 @@ public abstract partial class SymbolPackage
         }
     }
 
+    public bool TryCreateInstance(Guid id, Guid instanceId, Instance parent, out Instance instance)
+    {
+        if (Symbols.TryGetValue(id, out var symbol))
+        {
+            instance = symbol.CreateInstance(instanceId, parent);
+            return true;
+        }
+
+        instance = null;
+        return false;
+    }
+
     internal Symbol CreateSymbol(Type instanceType, Guid id, string name, string @namespace, Guid[] orderedInputIds = null)
     {
         var symbol = new Symbol(instanceType, id, orderedInputIds)

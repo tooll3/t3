@@ -39,7 +39,7 @@ public static class T3Ui
 {
     static T3Ui()
     {
-        _userNameDialog.UserNameChanged += ProjectSetup.CreateOrMigrateProject;
+        _userNameDialog.ProjectNameChanged += ProjectSetup.CreateOrMigrateProject;
     }
 
     public static void InitializeEnvironment()
@@ -139,9 +139,8 @@ public static class T3Ui
         _importDialog.Draw();
         _createFromTemplateDialog.Draw();
 
-        if (!UserSettings.IsUserNameDefined() || ProjectSetup.NeedsUserProject)
+        if (ProjectSetup.NeedsUserProject)
         {
-            UserSettings.Config.UserName = Environment.UserName;
             _userNameDialog.ShowNextFrame();
         }
 

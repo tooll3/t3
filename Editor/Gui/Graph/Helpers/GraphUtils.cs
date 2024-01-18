@@ -52,28 +52,23 @@ internal static class GraphUtils
 
     public static bool IsNewSymbolNameValid(SymbolPackage symbolPackage, string newSymbolName)
     {
-        return IsClassNameValid(newSymbolName)
+        return IsIdentifierValid(newSymbolName)
                && !symbolPackage.ContainsSymbolName(newSymbolName);
     }
 
     public static bool IsNewSymbolNameValid(IEnumerable<SymbolPackage> symbolPackages, string newSymbolName)
     {
-        return IsClassNameValid(newSymbolName)
+        return IsIdentifierValid(newSymbolName)
                && !symbolPackages.Any(p => p.ContainsSymbolName(newSymbolName));
     }
 
-    private static bool IsClassNameValid(string className) => !string.IsNullOrEmpty(className)
-                                                              && UsernameValidator.Value.IsValidIdentifier(className);
+    public static bool IsIdentifierValid(string className) => !string.IsNullOrWhiteSpace(className)
+                                                              && IdentifierValidator.Value.IsValidIdentifier(className);
 
-    public static bool IsNameSpaceValid(string nameSpaceString)
-    {
-        return !string.IsNullOrEmpty(nameSpaceString)
-               && _validTypeNameSpacePattern.IsMatch(nameSpaceString);
-    }
 
     private static readonly Regex _validTypeNameSpacePattern = new(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
 
-    public static bool IsValidUserName(string userName) => UsernameValidator.Value.IsValidIdentifier(userName);
+    public static bool IsValidProjectName(string userName) => IdentifierValidator.Value.IsValidIdentifier(userName);
 
-    private static readonly Lazy<CodeDomProvider> UsernameValidator = new(() => CodeDomProvider.CreateProvider("C#"));
+    private static readonly Lazy<CodeDomProvider> IdentifierValidator = new(() => CodeDomProvider.CreateProvider("C#"));
 }
