@@ -1,6 +1,6 @@
 {
   "Id": "9cb4d49e-135b-400b-a035-2b02c5ea6a72"/*Time*/,
-  "Description": "Returns the elapsed time since the beginning of playback.\n\nAKA: clock, seconds, bars\n\nWill pause when playback is stopped, unless the \"LocalFxTimeInBars\" mode is selected.\n\nTips:\n- If you want to restart the timer during playback, try the [Accumulator] operator.",
+  "Description": "Returns the elapsed time since the beginning of playback.\n\nAKA: clock, seconds, bars\n\nWill pause when playback is stopped, unless the \"LocalFxTimeInBars\" mode is selected.\n\nTips:\n- Add a [Modulo] operator after this one to create a looping timer.\n- For more advanced timing and animation features, try the [Accumulator] or [AnimValue] operators.",
   "InputUis": [
     {
       "InputId": "8da7d58d-10a5-4378-8f44-b98f87ec2697"/*Mode*/,
