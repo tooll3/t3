@@ -1,5 +1,6 @@
 {
   "Id": "9cb4d49e-135b-400b-a035-2b02c5ea6a72"/*Time*/,
+  "Description": "Returns the elapsed time since the beginning of playback.\n\nAKA: clock, seconds, bars\n\nWill pause when playback is stopped, unless the \"LocalFxTimeInBars\" mode is selected.\n\nTips:\n- If you want to restart the timer during playback, try the [Accumulator] operator.",
   "InputUis": [
     {
       "InputId": "8da7d58d-10a5-4378-8f44-b98f87ec2697"/*Mode*/,
@@ -14,6 +15,7 @@
         "X": -200.0,
         "Y": 0.0
       },
+      "Description": "Rate at which time increases.",
       "Min": -10.0,
       "Max": 10.0,
       "Scale": 0.001
