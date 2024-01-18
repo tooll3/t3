@@ -162,7 +162,7 @@ namespace T3.Editor.Gui.Windows.Layouts
             var isFocusMode = index == 11;
 
             var relativePath = Path.Combine(LayoutSubfolder, GetLayoutFilename(index));
-             if(!UserData.TryLoad(out var jsonBlob, relativePath))
+             if(!UserData.TryLoadOrWriteToUser(relativePath, out var jsonBlob))
                 return;
             
             var serializer = JsonSerializer.Create();

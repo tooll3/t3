@@ -8,6 +8,7 @@ using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Core.UserData;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
@@ -18,37 +19,44 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
     /// <summary>
     /// Collects all presets and variations for a symbol 
     /// </summary>
-    public class SymbolVariationPool
+    internal sealed class SymbolVariationPool
     {
-        public Guid SymbolId;
-        public List<Variation> Variations;
+        public readonly Guid SymbolId;
+        public readonly IReadOnlyList<Variation> AllVariations;
+        public readonly IReadOnlyList<Variation> UserVariations;
+        public readonly IReadOnlyList<Variation> Defaults;
+
+        private readonly List<Variation> _userVariations;
+        private readonly List<Variation> _defaults;
+        private readonly List<Variation> _allVariations;
 
         public Variation ActiveVariation { get; private set; }
 
-        public static SymbolVariationPool InitVariationPoolForSymbol(Guid compositionId)
+        public SymbolVariationPool(Guid symbolId)
         {
-            var newPool = new SymbolVariationPool()
-                              {
-                                  SymbolId = compositionId
-                              };
+            SymbolId = symbolId;
+            _userVariations = LoadVariations(symbolId, UserData.UserDataLocation.User);
+            _defaults = LoadVariations(symbolId, UserData.UserDataLocation.Defaults);
+            _allVariations = new List<Variation>(_userVariations.Count + _defaults.Count);
+            _allVariations.AddRange(_userVariations);
+            _allVariations.AddRange(_defaults);
 
-            newPool.Variations = LoadVariations(compositionId);
-            return newPool;
+            UserVariations = _userVariations;
+            Defaults = _defaults;
+            AllVariations = _allVariations;
         }
 
         #region serialization
-        private static List<Variation> LoadVariations(Guid compositionId)
+        private static List<Variation> LoadVariations(Guid compositionId, UserData.UserDataLocation location)
         {
-            var filepath = GetFilePathForVariationId(compositionId);
-
-            if (!File.Exists(filepath))
-            {
-                return new List<Variation>();
-            }
+            var relativePath = GetFilePathForVariationId(compositionId);
+            var loaded = UserData.TryLoad(relativePath, location, out var fileContent, out _);
+            if (!loaded)
+                return [];
 
             Log.Info($"Reading presets definition for : {compositionId}");
 
-            using var sr = new StreamReader(filepath);
+            using var sr = new StringReader(fileContent);
             using var jsonReader = new JsonTextReader(sr);
 
             var result = new List<Variation>();
@@ -91,15 +99,20 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public void SaveVariationsToFile()
         {
-            // if (Variations.Count == 0)
-            //     return;
+            SaveVariationsToFile(UserData.UserDataLocation.User);
 
-            CreateFolderIfNotExists(VariationsFolder);
-            
-            var filePath = GetFilePathForVariationId(SymbolId);
+            #if IDE
+            SaveVariationsToFile(UserData.UserDataLocation.Defaults);
+            #endif
+        }
 
-            using var sw = new StreamWriter(filePath);
+        private void SaveVariationsToFile(UserData.UserDataLocation location)
+        {
+            var relativePath = GetFilePathForVariationId(SymbolId);
+
+            using var sw = new StringWriter();
             using var writer = new JsonTextWriter(sw);
+            var variationCollection = location == UserData.UserDataLocation.User ? UserVariations : Defaults;
 
             try
             {
@@ -108,44 +121,30 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
                 writer.WriteValue("Id", SymbolId);
 
-                // Presets
-                {
-                    writer.WritePropertyName("Variations");
-                    writer.WriteStartArray();
-                    foreach (var v in Variations)
-                    {
-                        v.ToJson(writer);
-                    }
+                writer.WritePropertyName("Variations");
+                writer.WriteStartArray();
 
-                    writer.WriteEndArray();
+                foreach (var variation in variationCollection)
+                {
+                    variation.ToJson(writer);
                 }
+
+                writer.WriteEndArray();
 
                 writer.WriteEndObject();
             }
             catch (Exception e)
             {
-                Log.Error($"Saving variations failed: {e.Message}");
+                Log.Error($"Json variation serialization failed: {e.Message}");
             }
+
+            if (!UserData.TrySave(relativePath, sw.ToString(), location))
+                Log.Error($"Failed to save presets and variations for {SymbolId}");
         }
 
-        private const string VariationsFolder = "Variations";
+        private const string VariationsSubFolder = "variations";
 
-        private static string GetFilePathForVariationId(Guid compositionId)
-        {
-            var filepath = Path.Combine(VariationsFolder, $"{compositionId}.var");
-            return filepath;
-        }
-
-        private static void CreateFolderIfNotExists(string path)
-        {
-            if(Directory.Exists(path))
-                return;
-
-            Directory.CreateDirectory(path);
-
-        }
-        
-        
+        private static string GetFilePathForVariationId(Guid compositionId) => Path.Combine(VariationsSubFolder, $"{compositionId}.var");
         #endregion
 
         public void Apply(Instance instance, Variation variation)
@@ -163,7 +162,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public void UpdateActiveStateForVariation(int variationIndex)
         {
-            foreach (var v in Variations)
+            foreach (var v in AllVariations)
             {
                 v.State = v.ActivationIndex == variationIndex ? Variation.States.Active : Variation.States.InActive;
             }
@@ -188,7 +187,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             _activeBlendCommand = CreateBlendToPresetCommand(instance, variation, blend);
             _activeBlendCommand.Do();
         }
-        
+
         public void BeginBlendTowardsSnapshot(Instance instance, Variation variation, float blend)
         {
             StopHover();
@@ -197,7 +196,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             _activeBlendCommand.Do();
             UpdateActiveStateForVariation(variation.ActivationIndex);
         }
-        
 
         public void BeginWeightedBlend(Instance instance, List<Variation> variations, IEnumerable<float> weights)
         {
@@ -238,9 +236,9 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public void ApplyCurrentBlend()
         {
-            if(_activeBlendCommand != null)
+            if (_activeBlendCommand != null)
                 UndoRedoStack.Add(_activeBlendCommand);
-            
+
             _activeBlendCommand = null;
         }
 
@@ -274,12 +272,12 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                     changes[input.Id] = input.Input.Value.Clone();
                 }
             }
-            
+
             var newVariation = new Variation
                                    {
                                        Id = Guid.NewGuid(),
                                        Title = "untitled",
-                                       ActivationIndex = Variations.Count + 1, //TODO: First find the highest activation index
+                                       ActivationIndex = AllVariations.Count + 1, //TODO: First find the highest activation index
                                        IsPreset = true,
                                        PublishedDate = DateTime.Now,
                                        ParameterSetsForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>
@@ -346,7 +344,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                                    {
                                        Id = Guid.NewGuid(),
                                        Title = "untitled",
-                                       ActivationIndex = Variations.Count + 1, //TODO: First find the highest activation index
+                                       ActivationIndex = AllVariations.Count + 1, //TODO: First find the highest activation index
                                        IsPreset = false,
                                        PublishedDate = DateTime.Now,
                                        ParameterSetsForChildIds = changeSets,
@@ -488,19 +486,19 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             var activeBlendCommand = new MacroCommand("Set Blended Snapshot Values", commands);
             return activeBlendCommand;
         }
-        
+
         private static MacroCommand CreateBlendTowardsVariationCommand(Instance compositionInstance, Variation variation, float blend)
         {
             var commands = new List<ICommand>();
             //var parentSymbol = compositionInstance.Parent.Symbol;
             if (!variation.IsSnapshot)
                 return null;
-            
+
             foreach (var child in compositionInstance.Children)
             {
                 if (!variation.ParameterSetsForChildIds.TryGetValue(child.SymbolChildId, out var parametersForInputs))
                     continue;
-                
+
                 foreach (var inputSlot in child.Inputs)
                 {
                     if (!ValueUtils.BlendMethods.TryGetValue(inputSlot.Input.DefaultValue.ValueType, out var blendFunction))
@@ -527,8 +525,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             var activeBlendCommand = new MacroCommand("Blend towards snapshot", commands);
             return activeBlendCommand;
         }
-        
-        
+
         private static MacroCommand CreateApplyPresetCommand(Instance instance, Variation variation)
         {
             var commands = new List<ICommand>();
@@ -746,7 +743,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             if (VariationHandling.ActivePoolForSnapshots == null)
                 return false;
 
-            foreach (var v in VariationHandling.ActivePoolForSnapshots.Variations)
+            foreach (var v in VariationHandling.ActivePoolForSnapshots.AllVariations)
             {
                 if (v.ActivationIndex != activationIndex)
                     continue;
@@ -756,6 +753,30 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             }
 
             return false;
+        }
+
+        public void AddDefaultVariation(Variation newVariation)
+        {
+            _defaults.Add(newVariation);
+            _allVariations.Add(newVariation);
+        }
+
+        public void RemoveDefaultVariation(Variation newVariation)
+        {
+            _defaults.Remove(newVariation);
+            _allVariations.Remove(newVariation);
+        }
+
+        public void AddUserVariation(Variation newVariation)
+        {
+            _userVariations.Add(newVariation);
+            _allVariations.Add(newVariation);
+        }
+
+        public void RemoveUserVariation(Variation newVariation)
+        {
+            _userVariations.Remove(newVariation);
+            _allVariations.Remove(newVariation);
         }
     }
 }

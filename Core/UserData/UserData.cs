@@ -16,14 +16,14 @@ public static class UserData
         Directory.CreateDirectory(SettingsFolder);
     }
 
-    public static bool TryLoad(out string config, string relativeFileName)
+    public static bool TryLoadOrWriteToUser(string relativeFilePath, out string fileText)
     {
-        var filePath = Path.Combine(SettingsFolder, relativeFileName);
+        var filePath = GetFilePath(relativeFilePath, UserDataLocation.User);
         if (File.Exists(filePath))
         {
             try
             {
-                config = File.ReadAllText(filePath);
+                fileText = File.ReadAllText(filePath);
                 return true;
             }
             catch
@@ -32,18 +32,18 @@ public static class UserData
             }
         }
 
-        var defaultsFilePath = Path.Combine(SettingsFolderInApplicationDirectory, relativeFileName);
+        var defaultsFilePath = GetFilePath(relativeFilePath, UserDataLocation.Defaults);
         if (File.Exists(defaultsFilePath))
         {
             try
             {
-                config = File.ReadAllText(defaultsFilePath);
+                fileText = File.ReadAllText(defaultsFilePath);
 
                 try
                 {
                     var directory = Path.GetDirectoryName(filePath);
                     Directory.CreateDirectory(directory!);
-                    File.WriteAllText(filePath, config);
+                    File.WriteAllText(filePath, fileText);
                 }
                 catch (Exception e)
                 {
@@ -58,8 +58,61 @@ public static class UserData
             }
         }
 
-        config = string.Empty;
+        fileText = string.Empty;
         return false;
+    }
+    
+    public static string GetFilePath(string relativeFilePath, UserDataLocation location)
+    {
+        var filePath = Path.Combine(location == UserDataLocation.User 
+                                        ? SettingsFolder 
+                                        : SettingsFolderInApplicationDirectory, relativeFilePath);
+        return filePath;
+    }
+
+    public static bool TrySave(string relativeFilePath, string fileContent, UserDataLocation location = UserDataLocation.User)
+    {
+        var filePath = GetFilePath(relativeFilePath, location);
+        var directory = Path.GetDirectoryName(filePath);
+        Directory.CreateDirectory(directory!);
+        try
+        {
+            File.WriteAllText(filePath, fileContent);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to save file {filePath}: {e}");
+            return false;
+        }
+    }
+
+    public static bool CanLoad(string relativeFileName, UserDataLocation location, out string filePath)
+    {
+        filePath = GetFilePath(relativeFileName, location);
+        return File.Exists(filePath);
+    }
+
+    public static bool TryLoad(string relativeFilePath, UserDataLocation location, out string fileContent, out string filePath)
+    {
+        var canLoad = CanLoad(relativeFilePath, location, out filePath);
+        if (!canLoad)
+        {
+            fileContent = string.Empty;
+            return false;
+        }
+
+        try
+        {
+            fileContent = File.ReadAllText(filePath);
+            return true;
+        } 
+        catch
+        {
+            Log.Info($"User data file {filePath} could not be loaded.");
+            fileContent = string.Empty;
+            return false;
+        }
     }
 
     public static bool CanLoad(string relativeFileName)
@@ -70,8 +123,14 @@ public static class UserData
             return true;
         }
 
-        var defaultFilePath = Path.Combine(SettingsFolderInApplicationDirectory, relativeFileName);
-        return File.Exists(defaultFilePath);
+        var defaultsFilePath = Path.Combine(SettingsFolderInApplicationDirectory, relativeFileName);
+        return File.Exists(defaultsFilePath);
+    }
+
+    public enum UserDataLocation
+    {
+        Defaults,
+        User
     }
 
     public static string SettingsFolderInApplicationDirectory => Path.Combine(RuntimeAssemblies.CoreDirectory!, ".t3");

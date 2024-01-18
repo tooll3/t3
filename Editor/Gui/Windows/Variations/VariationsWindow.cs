@@ -11,7 +11,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows.Variations
 {
-    public class VariationsWindow : Window
+    internal class VariationsWindow : Window
     {
         public VariationsWindow()
         {
@@ -39,7 +39,7 @@ namespace T3.Editor.Gui.Windows.Variations
                 _variationsToBeDeletedNextFrame.Clear();
             }
 
-            var compositionHasVariations = VariationHandling.ActivePoolForSnapshots != null && VariationHandling.ActivePoolForSnapshots.Variations.Count > 0;
+            var compositionHasVariations = VariationHandling.ActivePoolForSnapshots != null && VariationHandling.ActivePoolForSnapshots.AllVariations.Count > 0;
             var oneChildSelected = NodeSelection.Selection.Count == 1;
             var selectionChanged = NodeSelection.Selection.Count != _selectedNodeCount;
 
@@ -105,7 +105,7 @@ namespace T3.Editor.Gui.Windows.Variations
                 {
                     if (VariationHandling.ActivePoolForPresets == null
                         || VariationHandling.ActiveInstanceForPresets == null
-                        || VariationHandling.ActivePoolForPresets.Variations.Count == 0)
+                        || VariationHandling.ActivePoolForPresets.AllVariations.Count == 0)
                     {
                         CustomComponents.EmptyWindowMessage("No presets yet.");
                     }
@@ -118,7 +118,7 @@ namespace T3.Editor.Gui.Windows.Variations
                 {
                     if (VariationHandling.ActivePoolForSnapshots == null
                         || VariationHandling.ActiveInstanceForSnapshots == null
-                        || VariationHandling.ActivePoolForSnapshots.Variations.Count == 0)
+                        || VariationHandling.ActivePoolForSnapshots.AllVariations.Count == 0)
                     {
                         var childUi = SymbolUiRegistry.Entries[VariationHandling.ActiveInstanceForSnapshots.Symbol.Id];
                         var shapshotsEnabledForNone = !childUi.ChildUis.Any(s => s.SnapshotGroupIndex > 0);

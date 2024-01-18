@@ -156,7 +156,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                         var presetPool = VariationHandling.GetOrLoadVariations(_selectedSymbolUi.Symbol.Id);
                         if (presetPool != null)
                         {
-                            _matchingPresets.AddRange(presetPool.Variations.FindAll(v => v.IsPreset && v.Title.Contains(_filter.PresetFilterString,
+                            _matchingPresets.AddRange(presetPool.AllVariations.Where(v => v.IsPreset && v.Title.Contains(_filter.PresetFilterString,
                                                                                              StringComparison.InvariantCultureIgnoreCase)));
                         }
                     }

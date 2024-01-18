@@ -154,6 +154,22 @@
           "51621e59-9bdd-4004-a053-d4637278bd92": false
         }
       }
+    },
+    {
+      "Id": "253589ac-b3d3-400e-8a40-d8a5e131260e",
+      "IsPreset": true,
+      "ActivationIndex": 8,
+      "Title": "plorp",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "a7669abe-65c7-4745-97a6-d0d80f6a3150": 31.937,
+          "806221f8-6e31-45ec-b62e-5baac6c1fd54": 0.03
+        }
+      }
     }
   ]
 }

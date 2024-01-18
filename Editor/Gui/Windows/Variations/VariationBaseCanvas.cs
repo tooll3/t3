@@ -25,7 +25,7 @@ namespace T3.Editor.Gui.Windows.Variations
         public abstract string GetTitle();
 
         protected abstract Instance InstanceForBlendOperations { get; }
-        protected abstract SymbolVariationPool PoolForBlendOperations { get; }
+        private protected abstract SymbolVariationPool PoolForBlendOperations { get; }
         protected abstract void DrawAdditionalContextMenuContent();
 
         public void Draw(ImDrawListPtr drawList, bool hideHeader = false)
@@ -66,10 +66,10 @@ namespace T3.Editor.Gui.Windows.Variations
 
             // Draw thumbnails...
             var modified = false;
-            for (var index = 0; index < PoolForBlendOperations.Variations.Count; index++)
+            for (var index = 0; index < PoolForBlendOperations.AllVariations.Count; index++)
             {
                 modified |= VariationThumbnail.Draw(this,
-                                                    PoolForBlendOperations.Variations[index],
+                                                    PoolForBlendOperations.AllVariations[index],
                                                     drawList,
                                                     _thumbnailCanvasRendering.CanvasTextureSrv,
                                                     GetUvRectForIndex(index));
@@ -231,7 +231,7 @@ namespace T3.Editor.Gui.Windows.Variations
                     Vector2 minPos = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
                     Vector2 maxPos = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
 
-                    foreach (var v in PoolForBlendOperations.Variations)
+                    foreach (var v in PoolForBlendOperations.AllVariations)
                     {
                         var vec2 = GetNodeCenterOnScreen(v);
                         minPos = Vector2.Min(vec2, minPos);
@@ -275,9 +275,9 @@ namespace T3.Editor.Gui.Windows.Variations
                         {
                             var vertex = t.Vertices[vertexIndex];
                             var variationIndex = points.IndexOf(vertex);
-                            if (variationIndex < PoolForBlendOperations.Variations.Count)
+                            if (variationIndex < PoolForBlendOperations.AllVariations.Count)
                             {
-                                _blendVariations.Add(PoolForBlendOperations.Variations[variationIndex]);
+                                _blendVariations.Add(PoolForBlendOperations.AllVariations[variationIndex]);
                                 _blendWeights.Add(weights[vertexIndex]);
                                 _blendPoints.Add(vertex.ToVec2());
                             }
@@ -408,7 +408,7 @@ namespace T3.Editor.Gui.Windows.Variations
             if (pool == null)
                 return;
 
-            if (TryToGetBoundingBox(pool.Variations, 40, out var area))
+            if (TryToGetBoundingBox(pool.AllVariations, 40, out var area))
             {
                 area.Min.Y -= 200;
                 FitAreaOnCanvas(area);
@@ -438,7 +438,7 @@ namespace T3.Editor.Gui.Windows.Variations
         private void HandleSelectionFenceUpdate(ImRect boundsInScreen)
         {
             var boundsInCanvas = InverseTransformRect(boundsInScreen);
-            var elementsToSelect = (from child in PoolForBlendOperations.Variations
+            var elementsToSelect = (from child in PoolForBlendOperations.AllVariations
                                     let rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size)
                                     where rect.Overlaps(boundsInCanvas)
                                     select child).ToList();
@@ -476,21 +476,21 @@ namespace T3.Editor.Gui.Windows.Variations
 
             _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
 
-            if (PoolForBlendOperations.Variations.Count == 0)
+            if (PoolForBlendOperations.AllVariations.Count == 0)
             {
                 _allThumbnailsRendered = true;
                 _rerenderManuallyRequested = false;
                 return;
             }
 
-            if (_renderThumbnailIndex >= PoolForBlendOperations.Variations.Count)
+            if (_renderThumbnailIndex >= PoolForBlendOperations.AllVariations.Count)
             {
                 _allThumbnailsRendered = true;
                 _rerenderManuallyRequested = false;
                 return;
             }
 
-            var variation = PoolForBlendOperations.Variations[_renderThumbnailIndex];
+            var variation = PoolForBlendOperations.AllVariations[_renderThumbnailIndex];
             RenderThumbnail(variation, _renderThumbnailIndex, outputUi, textureSlot);
             _renderThumbnailIndex++;
         }
@@ -553,7 +553,7 @@ namespace T3.Editor.Gui.Windows.Variations
             ResetView();
         }
 
-        private static bool TryToGetBoundingBox(List<Variation> variations, float extend, out ImRect area)
+        private static bool TryToGetBoundingBox(IEnumerable<Variation> variations, float extend, out ImRect area)
         {
             area = new ImRect();
             if (variations == null)
@@ -586,7 +586,7 @@ namespace T3.Editor.Gui.Windows.Variations
         /// Then step through possible positions and check if a position would intersect with an existing element.
         /// Wrap columns to enforce some kind of grid.  
         /// </summary>
-        internal static Vector2 FindFreePositionForNewThumbnail(List<Variation> variations)
+        internal static Vector2 FindFreePositionForNewThumbnail(IEnumerable<Variation> variations)
         {
             if (!TryToGetBoundingBox(variations, 0, out var area))
             {
@@ -657,7 +657,7 @@ namespace T3.Editor.Gui.Windows.Variations
         /// </summary>
         public IEnumerable<ISelectableCanvasObject> GetSelectables()
         {
-            return PoolForBlendOperations?.Variations;
+            return PoolForBlendOperations?.AllVariations;
         }
 
         public bool IsBlendingActive { get; private set; }

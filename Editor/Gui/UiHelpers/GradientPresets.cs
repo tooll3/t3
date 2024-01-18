@@ -15,7 +15,7 @@ public static class GradientPresets
             if(_presets != null)
                 return _presets;
 
-            var loaded = UserData.TryLoad(out var text, FileName);
+            var loaded = UserData.TryLoadOrWriteToUser(FileName, out var text);
 
             if (!loaded)
                 _presets = [];

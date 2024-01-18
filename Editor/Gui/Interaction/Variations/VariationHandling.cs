@@ -31,7 +31,7 @@ namespace T3.Editor.Gui.Interaction.Variations
     /// modified symbol has many instances. That's why applying symbol-variations is not allowed for Symbols
     /// in the lib-namespace.  
     /// </remarks>
-    public static class VariationHandling
+    internal static class VariationHandling
     {
         public static SymbolVariationPool ActivePoolForSnapshots { get; private set; }
         public static Instance ActiveInstanceForSnapshots  { get; private set; }
@@ -128,7 +128,7 @@ namespace T3.Editor.Gui.Interaction.Variations
                 return variationForComposition;
             }
 
-            var newOpVariation = SymbolVariationPool.InitVariationPoolForSymbol(symbolId);
+            var newOpVariation = new SymbolVariationPool(symbolId);
             _variationPoolForOperators[newOpVariation.SymbolId] = newOpVariation;
             return newOpVariation;
         }
@@ -316,7 +316,7 @@ namespace T3.Editor.Gui.Interaction.Variations
             if (newVariation == null)
                 return null;
             
-            newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForSnapshots.Variations);
+            newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(ActivePoolForSnapshots.AllVariations);
             if (activationIndex != AutoIndex)
                 newVariation.ActivationIndex = activationIndex;
 

@@ -15,7 +15,7 @@ namespace T3.Editor.Gui.Windows.Variations
     public class SnapshotCanvas : VariationBaseCanvas
     {
         protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
-        protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
+        private protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
 
         public override void DrawToolbarFunctions()
         {

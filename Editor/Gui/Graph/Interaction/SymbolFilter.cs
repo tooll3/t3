@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.Graph.Interaction
     /// <summary>
     /// Provides a regular expression to filter and sort matching <see cref="Symbol"/>s
     /// </summary>
-    public class SymbolFilter
+    internal class SymbolFilter
     {
         public string SearchString;  // not a property to allow ref passing
         public Type FilterInputType {

@@ -12,49 +12,54 @@ namespace T3.Editor.Gui.Commands.Variations
     {
         public string Name => "Add Preset";
         public bool IsUndoable => true;
-        
+
         private readonly Symbol _symbol;
         private readonly Variation _newVariation;
-        
+
         public AddPresetOrVariationCommand(Symbol symbol, Variation variation)
         {
             _symbol = symbol;
             _newVariation = variation;
         }
-        
+
         public void Do()
         {
-            var list = GetVariationsList();
+            var pool = VariationHandling.GetOrLoadVariations(_symbol.Id);
 
-            if(list.Any(v => v.Id == _newVariation.Id))
+            if (pool.AllVariations.Any(v => v.Id == _newVariation.Id))
             {
                 Log.Warning($"Variations with id {_newVariation.Id} already exists for symbol {_symbol.Id}");
+                return;
             }
 
-            list.Add(_newVariation);
+            #if IDE
+                pool.AddDefaultVariation(_newVariation);
+            #else
+                pool.AddUserVariation(_newVariation);
+            #endif
+            
             FlagSymbolAsModified();
         }
 
         public void Undo()
         {
-            var list = GetVariationsList();
+            var pool = VariationHandling.GetOrLoadVariations(_symbol.Id);
 
-            if(list.All(v => v.Id != _newVariation.Id))
+            if (pool.AllVariations.All(v => v.Id != _newVariation.Id))
             {
                 Log.Warning($"No variations for symbol {_symbol.Name}  with id {_newVariation.Id}");
                 return;
             }
-            
-            list.Remove(_newVariation);
+
+
+            #if IDE
+                pool.RemoveDefaultVariation(_newVariation);
+            #else
+                pool.RemoveUserVariation(_newVariation);
+            #endif
             FlagSymbolAsModified();
         }
-        
-        private List<Variation> GetVariationsList()
-        {
-            var pool = VariationHandling.GetOrLoadVariations(_symbol.Id);
-            return pool.Variations;
-        }
-        
+
         private void FlagSymbolAsModified()
         {
             var symbolUi = SymbolUiRegistry.Entries[_symbol.Id];

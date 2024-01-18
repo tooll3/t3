@@ -7,7 +7,7 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.Variations
 {
-    public class PresetCanvas : VariationBaseCanvas
+    internal class PresetCanvas : VariationBaseCanvas
     {
         public override void DrawToolbarFunctions()
         {
@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.Windows.Variations
         }
 
         protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForPresets;
-        protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForPresets;
+        private protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForPresets;
 
         protected override void DrawAdditionalContextMenuContent()
         {
@@ -41,7 +41,7 @@ namespace T3.Editor.Gui.Windows.Variations
             var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
             if (newVariation != null)
             {
-                newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
+                newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.AllVariations);
                 VariationThumbnail.VariationForRenaming = newVariation;
                 VariationHandling.ActivePoolForPresets.SaveVariationsToFile();
             }
