@@ -15,7 +15,9 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
+      },
+      "GroupTitle": "Transformations",
+      "Description": "Moves the incoming subgraph\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n"
     },
     {
       "InputId": "4e15eb7a-3872-4f26-93e3-1dd38bce01a5"/*Rotation*/,
@@ -23,6 +25,7 @@
         "X": 0.0,
         "Y": 0.0
       },
+      "Description": "Rotates the incoming subgraph around the following axes:\n\nX: Horizontal axis\nY: Vertical axis\nZ: Forward axis\n",
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.0}°"
@@ -32,7 +35,8 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Scales the incoming subgraph in the following directions:\n\nX: Width\nY: Height\nZ: Depth\n"
     },
     {
       "InputId": "25eb87f8-43b6-46fa-8066-3fdc1efb5e01"/*UniformScale*/,
@@ -40,6 +44,8 @@
         "X": 0.0,
         "Y": 45.0
       },
+      "Description": "Uniformly scales the incoming subgraph\n",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Format": "{0:0.000} ×"
@@ -49,7 +55,9 @@
       "Position": {
         "X": 0.0,
         "Y": 90.0
-      }
+      },
+      "GroupTitle": "Settings",
+      "Description": "Enables / Disables the group"
     },
     {
       "InputId": "996bd2d7-3741-4ade-b1b6-18eb3d884081"/*Color*/,
@@ -57,6 +65,8 @@
         "X": 0.0,
         "Y": 135.0
       },
+      "Description": "Everything in this group will be rendered with this color multiplied.",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -66,7 +76,8 @@
       "Position": {
         "X": 0.0,
         "Y": 180.0
-      }
+      },
+      "Description": "Forces constant updating if the colors animation is ignored."
     }
   ],
   "SymbolChildUis": [],
