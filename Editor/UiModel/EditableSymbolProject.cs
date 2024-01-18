@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using T3.Core.Compilation;
@@ -15,8 +14,6 @@ namespace T3.Editor.UiModel;
 internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 {
     public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;
-
-    private static readonly Queue<Action> PendingUpdateActions = new();
 
     public EditableSymbolProject(CsProjectFile csProjectFile) : base(csProjectFile.Assembly, false)
     {
@@ -35,8 +32,9 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         Log.Debug($"Creating home for {CsProjectFile.Name}...");
         var homeGuid = CsProjectFile.Assembly.HomeGuid;
         var homeSymbol = Symbols[homeGuid];
-        
-        _rootSymbolUi.AddChild(homeSymbol, Guid.NewGuid(), Vector2.Zero, Vector2.One * 100, homeSymbol.Name);
+
+        _rootSymbolUi.AddChild(homeSymbol, Guid.NewGuid(), new Vector2(0, _newProjectPosition), SymbolChildUi.DefaultOpSize, "");
+        _newProjectPosition += 100;
 
         return true;
     }
@@ -90,14 +88,14 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     {
         newName ??= symbol.Name;
         var gotCurrentSource = _sourceCodeFiles.TryGetValue(symbol.Id, out var currentSourcePath);
-        if(!gotCurrentSource)
+        if (!gotCurrentSource)
         {
             Log.Error($"Could not find original source code for symbol \"{symbol.Name}\"");
             return false;
         }
-        
+
         string currentSourceCode;
-        
+
         try
         {
             currentSourceCode = File.ReadAllText(currentSourcePath);
@@ -186,6 +184,14 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         _needsCompilation = true;
     }
 
+    private void ExecutePendingUpdates()
+    {
+        while (PendingUpdateActions.TryDequeue(out var action))
+        {
+            action.Invoke();
+        }
+    }
+
     public override string Folder => CsProjectFile.Directory;
 
     public readonly CsProjectFile CsProjectFile;
@@ -199,13 +205,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     private bool _needsCompilation;
 
-    private void ExecutePendingUpdates()
-    {
-        while (PendingUpdateActions.TryDequeue(out var action))
-        {
-            action.Invoke();
-        }
-    }
-
-    private class T3Projects : Instance<T3Projects>;
+    private static readonly Queue<Action> PendingUpdateActions = new();
+    private static int _newProjectPosition = 0;
 }
