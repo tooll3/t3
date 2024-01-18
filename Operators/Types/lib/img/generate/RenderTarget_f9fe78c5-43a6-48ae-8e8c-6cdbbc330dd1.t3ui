@@ -16,6 +16,7 @@
         "X": -100.96112,
         "Y": -102.246216
       },
+      "Description": "Overrides the default resolution or the resolution of the Output-window\n\nX (width), Y (height)",
       "Min": -1,
       "Max": 16384,
       "Clamp": true
@@ -25,14 +26,16 @@
       "Position": {
         "X": -100.96112,
         "Y": -57.246216
-      }
+      },
+      "Description": "Defines the RGBA value of the world background.\n\nThis setting can be transparent to composite the rendered image over another background."
     },
     {
       "InputId": "ec46bef4-8dce-4eb4-bfe8-e35a5ac416ec"/*TextureFormat*/,
       "Position": {
         "X": -100.96112,
         "Y": -12.246216
-      }
+      },
+      "GroupTitle": "Advanced Options..."
     },
     {
       "InputId": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
@@ -67,14 +70,18 @@
       "Position": {
         "X": -100.96112,
         "Y": 212.75378
-      }
+      },
+      "GroupTitle": "Render Quality",
+      "Description": "Selects the quality level of the Multisample anti-aliasing (MSAA). \n\nHigher values create smoother and less pixelated results but can have a high performance impact on slow GPUs (Graphics Cards).\n\nFor details see: https://en.wikipedia.org/wiki/Multisample_anti-aliasing"
     },
     {
       "InputId": "abebb02b-bcaa-42c7-8eb8-da3c1b2fc840"/*EnableUpdate*/,
       "Position": {
         "X": -100.96112,
         "Y": 257.75378
-      }
+      },
+      "GroupTitle": "Override",
+      "Description": "Enables / Disables rendering"
     }
   ],
   "SymbolChildUis": [],
