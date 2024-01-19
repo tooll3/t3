@@ -651,7 +651,7 @@ namespace T3.Editor.Gui.InputUi
             FormInputs.AddSectionHeader("Documentation");
             var width = ImGui.GetContentRegionAvail().X;
             var description = string.IsNullOrEmpty( Description) ? string.Empty : Description;
-            if (ImGui.InputTextMultiline("##parameterDescription", ref description, 4096, new Vector2(width,0)))
+            if (ImGui.InputTextMultiline("##parameterDescription", ref description, 16000, new Vector2(width,0)))
             {
                 Description = string.IsNullOrEmpty(description) ? null : description;
                 Parent.FlagAsModified();
