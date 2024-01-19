@@ -39,11 +39,13 @@ void main(uint3 i : SV_DispatchThreadID)
         uint sourceIndex = i.x % (sourceLength);
         uint targetIndex = (i.x / sourceLength )  % targetPointCount;
         
-        if(addSeperators && sourceIndex == sourcePointCount) {
+        if(addSeperators && sourceIndex == sourcePointCount) 
+        {
             ResultPoints[i.x].Position =  0;
             ResultPoints[i.x].W = NAN;            
         }
-        else {
+        else 
+        {
             Point A = SourcePoints[sourceIndex];
             Point B = TargetPoints[targetIndex];
             float4 rotA = normalize(A.Rotation);
@@ -60,6 +62,8 @@ void main(uint3 i : SV_DispatchThreadID)
             ResultPoints[i.x].Rotation = ApplyTargetOrientation  > 0.5 ? qMul(rotB, rotA) : rotA;
             ResultPoints[i.x].Color = SourcePoints[sourceIndex].Color * TargetPoints[targetIndex].Color;
             ResultPoints[i.x].Selected = SourcePoints[sourceIndex].Selected * TargetPoints[targetIndex].Selected;
+            ResultPoints[i.x].Stretch = SourcePoints[sourceIndex].Stretch * TargetPoints[targetIndex].Stretch;
+            
 
         }
     }
@@ -92,7 +96,5 @@ void main(uint3 i : SV_DispatchThreadID)
             ResultPoints[i.x].Color = SourcePoints[sourceIndex].Color * TargetPoints[targetIndex].Color;
             ResultPoints[i.x].Selected = SourcePoints[sourceIndex].Selected * TargetPoints[targetIndex].Selected;
         }
-
     }
-
 }
