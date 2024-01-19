@@ -100,10 +100,14 @@ namespace T3.Editor.Gui.UiHelpers
 
                                                     if (ImGui.MenuItem("Distribute evenly", gradientForEditing.Steps.Count > 2))
                                                     {
+                                                        var stepsCount = (gradientForEditing.Steps.Count - 1);
+                                                        if (gradientForEditing.Interpolation == Gradient.Interpolations.Hold)
+                                                            stepsCount++;
+                                                        
                                                         for (var index = 0; index < gradientForEditing.Steps.Count; index++)
                                                         {
                                                             gradientForEditing.Steps[index].NormalizedPosition =
-                                                                (float)index / (gradientForEditing.Steps.Count - 1);
+                                                                (float)index / stepsCount;
                                                         }
 
                                                         gradientForEditing.SortHandles();
