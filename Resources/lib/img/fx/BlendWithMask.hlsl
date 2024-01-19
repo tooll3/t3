@@ -27,8 +27,31 @@ float IsBetween( float value, float low, float high) {
 float4 psMain(vsOutput psInput) : SV_TARGET
 {    
     float4 tA = ImageA.Sample(texSampler, psInput.texCoord) * ImageAColor; 
-    float4 tB = ImageB.Sample(texSampler, psInput.texCoord) * ImageBColor;    
-    float4 mask = Mask.Sample(texSampler, psInput.texCoord);    
+
+    float2 uv = psInput.texCoord;
+
+    int height, width;
+
+    ImageA.GetDimensions(width, height);
+    float imageAAspect = (float)width / height;
+
+    ImageB.GetDimensions(width, height);
+    float imageBAspect = (float)width / height;
+
+    float2 uvB = imageAAspect < imageBAspect 
+    ?  float2( 
+        (uv.x - 0.5) * imageAAspect / imageBAspect + 0.5, 
+        uv.y)
+    :  float2(
+        uv.x, 
+        (uv.y - 0.5) * imageBAspect / imageAAspect + 0.5)
+    
+    ;
+
+    float4 tB = ImageB.Sample(texSampler, uvB) * ImageBColor;    
+
+
+    float4 mask = Mask.Sample(texSampler, uv);    
 
     tA.a = clamp(tA.a, 0,1);
     tB.a = clamp(tB.a, 0,1);
