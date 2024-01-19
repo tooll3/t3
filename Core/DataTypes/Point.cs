@@ -34,7 +34,7 @@ namespace T3.Core.DataTypes
                            Orientation = Quaternion.Identity,
                            Color = Vector4.One,
                            Stretch = Vector3.One,
-                           Selected = 0,
+                           Selected = 1,
                        };
         }
 
