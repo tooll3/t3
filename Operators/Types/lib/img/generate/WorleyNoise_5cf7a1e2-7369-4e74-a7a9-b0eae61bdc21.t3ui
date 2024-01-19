@@ -51,22 +51,15 @@
     {
       "InputId": "bb34cad3-1676-4df1-86f3-d713df5ccda6"/*Clamping*/,
       "Position": {
-        "X": -217.45303,
-        "Y": 214.32751
-      }
-    },
-    {
-      "InputId": "7b1a1f18-a1d4-4737-9c06-21f263277140"/*Resolution*/,
-      "Position": {
         "X": -218.26428,
-        "Y": 265.4367
+        "Y": 220.4367
       }
     },
     {
       "InputId": "dce72235-839e-41f1-a2a4-e19f0ef66e5c"/*BiasAndGain*/,
       "Position": {
         "X": -218.26428,
-        "Y": 355.4367
+        "Y": 265.4367
       },
       "Min": 0.0,
       "Max": 1.0,
@@ -76,7 +69,14 @@
       "InputId": "b4277cab-d286-410f-81be-ff4d53a9eca9"/*Method*/,
       "Position": {
         "X": -218.26428,
-        "Y": 400.4367
+        "Y": 310.4367
+      }
+    },
+    {
+      "InputId": "7b1a1f18-a1d4-4737-9c06-21f263277140"/*Resolution*/,
+      "Position": {
+        "X": -218.26428,
+        "Y": 355.4367
       }
     },
     {
