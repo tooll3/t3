@@ -44,11 +44,10 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
                     }
                     
                     
-                    if (string.IsNullOrWhiteSpace(symbolUi.Description))
-                    {
-                        
-                        symbolUi.Description = DescriptionMissing;
-                    }
+                    // if (string.IsNullOrWhiteSpace(symbolUi.Description))
+                    // {
+                    //     symbolUi.Description = DescriptionMissing;
+                    // }
 
                     if (symbol.Namespace.EndsWith("."))
                     {
