@@ -23,14 +23,17 @@
       "Position": {
         "X": 112.468506,
         "Y": 883.0534
-      }
+      },
+      "Description": "Refreshes any changes to the image and exposure settings. This can be kept turned on but will significantly decrease rendering performance.\n\nIf turned on this allows animated \"Exposure\"-Values and live changes in the incoming image.",
+      "AddPadding": "True"
     },
     {
       "InputId": "71c54c8e-a95f-47e8-b126-0cdaa89ae49b"/*Exposure*/,
       "Position": {
         "X": 114.808914,
         "Y": 1156.7096
-      }
+      },
+      "Description": "Defines the intensity with which the scene is illuminated by the image.\n\nIf changing this value has no effect temporarily turn on and off the \"update live\" setting.\n"
     },
     {
       "InputId": "4f573afe-8815-4fd3-a655-89ec40bf3c22"/*RenderBackground*/,
@@ -38,7 +41,8 @@
         "X": 114.808914,
         "Y": 1201.7096
       },
-      "GroupTitle": "Render Background..."
+      "GroupTitle": "Render Background...",
+      "Description": "If turned on the environment will be visible to the camera by being mapped on a sphere-mesh around the scene."
     },
     {
       "InputId": "96094239-9d82-4a32-bbb0-e9da7f6501da"/*BackgroundBlur*/,
@@ -46,6 +50,7 @@
         "X": 114.808914,
         "Y": 1246.7096
       },
+      "Description": "Defines how much the image on the sphere in the background is blurred.\n",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
