@@ -16,11 +16,22 @@
       }
     },
     {
-      "InputId": "1d9ccc5d-bed4-4d07-b664-0903442e4f58"/*ScaleMode*/,
+      "InputId": "da0941c9-c700-4552-9d8a-799bf7a08826"/*Rotate*/,
+      "Position": {
+        "X": -455.0904,
+        "Y": 943.4808
+      },
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "4618d8e0-2718-4373-a071-88ec1843b0c8"/*Stretch*/,
       "Position": {
         "X": -455.79684,
-        "Y": 767.9977
-      }
+        "Y": 857.9977
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "38f34034-b36f-4351-84e1-1a4f96e03fc6"/*Scale*/,
@@ -34,35 +45,27 @@
       "Format": "{0:0.000} ×"
     },
     {
-      "InputId": "4618d8e0-2718-4373-a071-88ec1843b0c8"/*Stretch*/,
+      "InputId": "1d9ccc5d-bed4-4d07-b664-0903442e4f58"/*ScaleMode*/,
       "Position": {
         "X": -455.79684,
-        "Y": 857.9977
+        "Y": 767.9977
       }
-    },
-    {
-      "InputId": "da0941c9-c700-4552-9d8a-799bf7a08826"/*Rotation*/,
-      "Position": {
-        "X": -455.0904,
-        "Y": 943.4808
-      },
-      "Min": -90.0,
-      "Max": 90.0,
-      "Format": "{0:0.0}°"
     },
     {
       "InputId": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
       "Position": {
         "X": -455.0904,
         "Y": 1033.4807
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "c8d0e44e-acd1-4045-b565-e1ce0b722e70"/*BlendMode*/,
       "Position": {
         "X": -455.0904,
         "Y": 1078.4807
-      }
+      },
+      "GroupTitle": "Additional Options"
     },
     {
       "InputId": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,

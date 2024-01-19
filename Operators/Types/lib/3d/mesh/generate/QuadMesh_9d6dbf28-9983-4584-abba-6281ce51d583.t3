@@ -6,8 +6,8 @@
     {
       "Id": "18a5f3be-92a7-438c-b32b-e0da7c7a5736"/*Segments*/,
       "DefaultValue": {
-        "X": 10,
-        "Y": 10
+        "X": 1,
+        "Y": 1
       }
     },
     {

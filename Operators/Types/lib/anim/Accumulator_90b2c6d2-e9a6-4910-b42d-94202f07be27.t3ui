@@ -40,7 +40,8 @@
       "Position": {
         "X": 197.0,
         "Y": 418.0
-      }
+      },
+      "Description": "This parameter is ignored when 0."
     }
   ],
   "SymbolChildUis": [],

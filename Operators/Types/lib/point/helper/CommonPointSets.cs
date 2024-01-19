@@ -58,6 +58,9 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
                 for (var pointIndex = 0; pointIndex < definitionPoints.Length; pointIndex++)
                 {
                     var p = definitionPoints[pointIndex];
+                    p.Orientation = Quaternion.Identity;
+                    p.Color = Vector4.One;
+                    p.Stretch = Vector3.One;
                     tmpBuffer.TypedElements[pointIndex] = p;
                 }
 
