@@ -8,6 +8,7 @@
         "X": -173.14885,
         "Y": 756.73737
       },
+      "Description": "Amount of points generated between the first and last point",
       "Min": 0,
       "Max": 1000
     },
@@ -17,6 +18,7 @@
         "X": -173.14885,
         "Y": 801.73737
       },
+      "Description": "Radius of radial",
       "Min": 0.0,
       "Max": 2.0
     },
@@ -26,6 +28,7 @@
         "X": -173.14885,
         "Y": 846.73737
       },
+      "Description": "This value defines how far the radius of the last point deviates from the radius of the first point.\n\nEspecially helpful if Cycles are increased",
       "AddPadding": "True",
       "Min": -10.0,
       "Max": 10.0,
@@ -36,14 +39,16 @@
       "Position": {
         "X": -159.31241,
         "Y": 926.32837
-      }
+      },
+      "Description": "Moves the points:\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)"
     },
     {
       "InputId": "f6986f68-851b-4cd1-ae59-bf189aa1698e"/*Offset*/,
       "Position": {
         "X": -150.41754,
         "Y": 1016.6262
-      }
+      },
+      "Description": "Moves the position of the last point in relation to the first point:\n\nX (-left / +right), \nY (-down / + up),\nZ (-forward/+backward)\n"
     },
     {
       "InputId": "5a3347a2-ba87-4b38-a1a8-94bd0ef70f48"/*StartAngle*/,
@@ -51,6 +56,7 @@
         "X": -150.41754,
         "Y": 1080.569
       },
+      "AddPadding": "True",
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.0}°"
@@ -89,6 +95,7 @@
         "X": -148.87996,
         "Y": 1288.0674
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0
     },

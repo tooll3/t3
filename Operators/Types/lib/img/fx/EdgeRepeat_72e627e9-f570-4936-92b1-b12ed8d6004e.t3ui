@@ -1,6 +1,6 @@
 {
   "Id": "72e627e9-f570-4936-92b1-b12ed8d6004e"/*EdgeRepeat*/,
-  "Description": "Repeats (stretches) pixels of the input image along a line.\n\nPlease explore the presets.",
+  "Description": "Repeats (stretches) pixels of the input image along a line.\n\nPlease explore the presets.\n\nWorks well with [Dither]",
   "InputUis": [
     {
       "InputId": "22b41600-7d42-44ad-8e94-3819f8d24964"/*Image*/,

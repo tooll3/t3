@@ -1,12 +1,14 @@
 {
   "Id": "9cb4d49e-135b-400b-a035-2b02c5ea6a72"/*Time*/,
+  "Description": "Returns the current value of the timeline.\n\nIs often used to animate the phase of Noise.",
   "InputUis": [
     {
       "InputId": "8da7d58d-10a5-4378-8f44-b98f87ec2697"/*Mode*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Select between different modes:\n\nLocalFXTimeInBars: The only method that works with \"Idle Motion\"\n\nLocalTimeInBars: Returns the time of the current timeline in Bars.\n\nLocalTimeInSecs: Returns the time of the current timeline in seconds.\n\nPlaybackTimeInBars: "
     },
     {
       "InputId": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
@@ -14,6 +16,7 @@
         "X": -200.0,
         "Y": 0.0
       },
+      "Description": "Multiplier to increase or decrease the speed.",
       "Min": -10.0,
       "Max": 10.0,
       "Scale": 0.001
