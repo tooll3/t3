@@ -15,6 +15,8 @@
         "X": -200.0,
         "Y": 45.0
       },
+      "Description": "Defines how far away from the view the fog starts to appear.",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 100.0,
       "Scale": 0.1
@@ -25,6 +27,7 @@
         "X": -200.0,
         "Y": 90.0
       },
+      "Description": "This value defines the distance and gradations of the fog.\n\nA low bias means the fog is rather thin. This means that the distance between the beginning of the fog until it becomes dense is very long. \n\nA high bias means very dense fog.\nThe area in which it completely obscures the view is only a short distance behind the area in which it begins.\n",
       "Min": 0.0,
       "Max": 10.0
     },
@@ -34,9 +37,8 @@
         "X": -200.0,
         "Y": 135.0
       },
-      "Description": "The fog color applied to distance geometry. Note that you can fade out the fog effect be reducing the alpha channel.",
-      "Min": 0.0,
-      "Max": 1.0
+      "Description": "Defines the color of the fog.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],
