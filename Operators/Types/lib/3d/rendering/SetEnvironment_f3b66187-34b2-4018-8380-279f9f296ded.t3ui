@@ -33,7 +33,7 @@
         "X": 114.808914,
         "Y": 1156.7096
       },
-      "Description": "Defines the intensity with which the scene is illuminated by the image.\n\nIf changing this value has no effect temporarily turn on and off the \"update live\" setting.\n"
+      "Description": "Defines the intensity with which the scene is illuminated by the image.\n\nIf changing this value has no effect temporarily turn on and off the \"UpdateLive\" setting.\n"
     },
     {
       "InputId": "4f573afe-8815-4fd3-a655-89ec40bf3c22"/*RenderBackground*/,
