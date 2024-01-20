@@ -61,6 +61,7 @@
         "X": 114.808914,
         "Y": 1291.7096
       },
+      "Description": "Tints the Background with the selected color.\n\nDoes not affect the color of the light and / or reflection.",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -70,7 +71,8 @@
       "Position": {
         "X": 114.808914,
         "Y": 1336.7096
-      }
+      },
+      "Description": "Sets the radius for the sphere mesh that surrounds the scene.\n\nProTip: Clipping of the Background can be prevented either by this setting or by the \"NearFarClip\" settings in the used camera."
     }
   ],
   "SymbolChildUis": [
