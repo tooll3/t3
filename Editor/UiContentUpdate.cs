@@ -28,7 +28,9 @@ internal static class UiContentUpdate
         if (Math.Abs(UserSettings.Config.UiScaleFactor - _lastUiScale) > 0.005f)
         {
             // Prevent scale factor from being "actually" 0.0
-            if (UserSettings.Config.UiScaleFactor < 0.1f) UserSettings.Config.UiScaleFactor = 0.1f;
+            if (UserSettings.Config.UiScaleFactor < 0.1f) 
+                UserSettings.Config.UiScaleFactor = 0.1f;
+            
             // Update font atlas texture if UI-Scale changed
             GenerateFontsWithScaleFactor(UserSettings.Config.UiScaleFactor);
             _lastUiScale = UserSettings.Config.UiScaleFactor;
