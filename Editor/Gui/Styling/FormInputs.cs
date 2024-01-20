@@ -31,17 +31,22 @@ namespace T3.Editor.Gui.Styling
 
         public static bool BeginGroup(string label)
         {
-            var shouldBeOpenByDefault = !label.EndsWith("...");
-
             AddVerticalSpace(5);
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-
-            var id = ImGui.GetID(label);
-            if (shouldBeOpenByDefault && !_openedGroups.Contains(id))
-            {
-                ImGui.SetNextItemOpen(true);
-                _openedGroups.Add(id);
-            }
+            // var isNotCollapsable = !label.EndsWith("...");
+            // if (isNotCollapsable)
+            // {
+            //     ImGui.Text(label);
+            //     ImGui.PopStyleColor();
+            //     return true;
+            // }
+            
+            // var id = ImGui.GetID(label);
+            // if (isNotCollapsable && !_openedGroups.Contains(id))
+            // {
+            //     ImGui.SetNextItemOpen(true);
+            //     _openedGroups.Add(id);
+            // }
 
             var isOpen = ImGui.TreeNode(label);
             ImGui.PopStyleColor();
@@ -51,7 +56,7 @@ namespace T3.Editor.Gui.Styling
             return isOpen;
         }
 
-        private static HashSet<uint> _openedGroups = new();
+        // private static HashSet<uint> _openedGroups = new();
 
         public static void EndGroup()
         {

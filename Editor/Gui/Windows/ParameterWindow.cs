@@ -7,6 +7,7 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
@@ -91,15 +92,14 @@ namespace T3.Editor.Gui.Windows
                     }
                 }
 
-                if (DrawSelectedSymbolHeader(instance, symbolChildUi))
+                if (DrawSelectedSymbolHeader(instance, symbolChildUi, symbolUi))
                 {
                     symbolUi.FlagAsModified();
                 }
 
                 _parametersWithDescription.Clear();
 
-                
-                if (instance.Parent != null)
+                if (instance.Parent != null && !_isDocumentationActive)
                 {
                     var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
                     var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
@@ -107,10 +107,16 @@ namespace T3.Editor.Gui.Windows
                     // Draw parameters
                     DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false);
                     FormInputs.AddVerticalSpace(15);
+                    DrawExamples(symbolUi);
+                }
+                else
+                {
+                    DrawDescription(symbolUi);
+                    
                 }
                 
+                
 
-                DrawDescription(symbolUi);
                 return;
             }
 
@@ -130,7 +136,6 @@ namespace T3.Editor.Gui.Windows
                 ImGui.Spacing();
                 inputUi.DrawDescriptionEdit();
                 ImGui.PopID();
-
             }
 
             // Draw Annotation settings
@@ -146,7 +151,6 @@ namespace T3.Editor.Gui.Windows
             }
         }
 
-
         public static void DrawDescription(SymbolUi symbolUi)
         {
             // Description
@@ -159,7 +163,7 @@ namespace T3.Editor.Gui.Windows
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                 ImGui.TextWrapped(symbolUi.Description);
-                
+
                 ImGui.PopStyleColor();
                 if (ImGui.IsItemHovered())
                 {
@@ -177,14 +181,12 @@ namespace T3.Editor.Gui.Windows
                 if (ImGui.Button("Edit description... "))
                     _editDescriptionDialog.ShowNextFrame();
             }
-            
+
             // Parameter descriptions
             if (_parametersWithDescription.Count > 0)
             {
-                // ImGui.Indent();
-                //ImGui.SetCursorPosX(10);
                 FormInputs.AddVerticalSpace(5);
-                
+
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                 ImGui.PushFont(Fonts.FontNormal);
                 ImGui.TextUnformatted("Parameters details");
@@ -200,17 +202,34 @@ namespace T3.Editor.Gui.Windows
                     ImGui.SetCursorPosX(parameterColorWidth - parameterNameWidth);
                     ImGui.TextUnformatted(p.InputDefinition.Name);
                     ImGui.PopStyleColor();
-                    
+
                     ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                     ImGui.SameLine(parameterColorWidth + 10);
                     ImGui.TextWrapped(p.Description);
                     ImGui.PopStyleColor();
                 }
-            }            
-            
+            }
 
             ImGui.Dummy(Vector2.One);
 
+
+
+            DrawExamples(symbolUi);
+
+            ImGui.PopStyleVar();
+            ImGui.Unindent();
+            ImGui.Dummy(new Vector2(10, 10));
+            ImGui.PopFont();
+        }
+
+        private static void DrawExamples(SymbolUi symbolUi)
+        {
+            ImGui.Indent();
+            ImGui.PushFont(Fonts.FontSmall);
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(5, 5));
+            FormInputs.SetIndentToLeft();
+            FormInputs.AddHint("Check the documentation in the header");
+            
             // Draw links
             if (symbolUi.Links.Count > 0)
             {
@@ -253,10 +272,7 @@ namespace T3.Editor.Gui.Windows
                 ImGui.Dummy(new Vector2(10, 10));
                 ImGui.PopStyleColor();
             }
-
-            // Draw examples
-            //SymbolBrowser.ListExampleOperators(symbolUi);
-
+            
             var groupLabel = "Also see:";
             var groupLabelShown = false;
             if (ExampleSymbolLinking.ExampleSymbols.TryGetValue(symbolUi.Symbol.Id, out var examplesOpIds))
@@ -302,13 +318,10 @@ namespace T3.Editor.Gui.Windows
                     }
                 }
             }
-
+            ImGui.PopFont();
             ImGui.PopStyleVar();
             ImGui.Unindent();
-            ImGui.Dummy(new Vector2(10, 10));
-            ImGui.PopFont();
         }
-        
 
         private static void DrawGroupLabel(string title)
         {
@@ -332,10 +345,8 @@ namespace T3.Editor.Gui.Windows
         public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
                                           SymbolUi compositionSymbolUi, bool hideNonEssentials)
         {
-            
-            
             var groupState = GroupState.None;
-            
+
             foreach (var inputSlot in instance.Inputs)
             {
                 if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
@@ -344,22 +355,36 @@ namespace T3.Editor.Gui.Windows
                     continue;
                 }
 
-                
                 if (!string.IsNullOrEmpty(inputUi.Description))
                 {
                     _parametersWithDescription.Add(inputUi);
                 }
-                
+
                 if (inputUi.AddPadding)
-                    FormInputs.AddVerticalSpace(4);
+                    FormInputs.AddVerticalSpace(2);
 
                 if (!string.IsNullOrEmpty(inputUi.GroupTitle))
                 {
                     if (groupState == GroupState.InsideOpened)
                         FormInputs.EndGroup();
 
-                    var isOpen = FormInputs.BeginGroup(inputUi.GroupTitle);
-                    groupState = isOpen ? GroupState.InsideOpened : GroupState.InsideClosed;
+                    if (inputUi.GroupTitle.EndsWith("..."))
+                    {
+                        var isOpen = FormInputs.BeginGroup(inputUi.GroupTitle);
+                        groupState = isOpen ? GroupState.InsideOpened : GroupState.InsideClosed;
+                    }
+                    else
+                    {
+                        groupState = GroupState.None;
+                        FormInputs.AddVerticalSpace(5);
+                        ImGui.PushFont(Fonts.FontSmall);
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                        ImGui.SetCursorPosX(4);
+                        ImGui.TextUnformatted(inputUi.GroupTitle.ToUpperInvariant());
+                        ImGui.PopStyleColor();
+                        ImGui.PopFont();
+                        FormInputs.AddVerticalSpace(2);
+                    }
                 }
 
                 ImGui.PushID(inputSlot.Id.GetHashCode());
@@ -409,13 +434,14 @@ namespace T3.Editor.Gui.Windows
         }
 
         private static readonly List<IInputUi> _parametersWithDescription = new(10);
+        private  bool _isDocumentationActive = false;
+        private float _timeSinceTooltipHovered = 0;
 
-        
-        private bool DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi)
+        private bool DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi, SymbolUi symbolUi)
         {
             var modified = false;
 
-            // namespace and symbol
+            // Namespace and symbol
             {
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
 
@@ -433,7 +459,7 @@ namespace T3.Editor.Gui.Windows
                 ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
                 var namespaceForEdit = op.Symbol.Namespace ?? "";
 
-                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 10);
+                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 42);
                 if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
                                                   SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
                 {
@@ -442,6 +468,50 @@ namespace T3.Editor.Gui.Windows
                 }
 
                 ImGui.PopStyleColor();
+            }
+            
+            // Help indicator
+            {
+                ImGui.SameLine();
+                var w = ImGui.GetFrameHeight();
+                ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 2);
+                if (CustomComponents.IconButton(
+                                                Icon.Help, 
+                                                new Vector2(w, w),
+                    _isDocumentationActive 
+                        ? CustomComponents.ButtonStates.Activated 
+                        : CustomComponents.ButtonStates.Dimmed 
+                    ))
+                {
+                    _isDocumentationActive = !_isDocumentationActive;
+                }
+
+                if (ImGui.IsItemHovered() && !_isDocumentationActive)
+                {
+                    _timeSinceTooltipHovered += ImGui.GetIO().DeltaTime;
+                    
+                    ImGui.PushStyleVar(ImGuiStyleVar.Alpha, (_timeSinceTooltipHovered * 3- 0.1f).Clamp(0,1));
+                    ImGui.BeginTooltip();
+                    ImGui.Dummy(new Vector2(500 * T3Ui.UiScaleFactor,1));
+                    ImGui.Indent(5);
+                    FormInputs.AddSectionHeader(symbolUi.Symbol.Name);
+                    ImGui.PushFont(Fonts.FontSmall);
+                    ImGui.TextUnformatted("in ");
+                    ImGui.SameLine();
+                    ImGui.TextUnformatted(symbolUi.Symbol.Namespace);
+                    ImGui.PopFont();
+                    ImGui.Unindent(5);
+                    FormInputs.SetIndentToLeft();
+                    FormInputs.AddVerticalSpace();
+                    //FormInputs.AddHint("Click to open documentation / CTRL+Click to edit ");
+                    DrawDescription(symbolUi);
+                    ImGui.EndTooltip();
+                    ImGui.PopStyleVar();
+                }
+                else
+                {
+                    _timeSinceTooltipHovered = 0;
+                }
             }
 
             // SymbolChild Name
