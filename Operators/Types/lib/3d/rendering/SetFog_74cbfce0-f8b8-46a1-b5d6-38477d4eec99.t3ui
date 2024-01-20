@@ -1,6 +1,6 @@
 {
   "Id": "74cbfce0-f8b8-46a1-b5d6-38477d4eec99"/*SetFog*/,
-  "Description": "Set fog rendering properties for the sub tree.",
+  "Description": "Set fog rendering properties for the sub tree.\n\nProTip: If large meshes (for example a \"quadmesh\" as a ground plane) are not properly obscured by the fog, one possible reason could be that the tessellation is not high enough.",
   "InputUis": [
     {
       "InputId": "afadb109-37b2-49aa-8c32-627cc35fd574"/*Command*/,
@@ -27,7 +27,7 @@
         "X": -200.0,
         "Y": 90.0
       },
-      "Description": "This value defines the distance and gradations of the fog.\n\nA low bias means the fog is rather thin. This means that the distance between the beginning of the fog until it becomes dense is very long. \n\nA high bias means very dense fog.\nThe area in which it completely obscures the view is only a short distance behind the area in which it begins.\n",
+      "Description": "Defines the thickness and gradations of the fog.\n\nA lower bias creates thin fog. \nMeaning that the distance between the beginning of the fog until it becomes dense is very long. \n\nA high bias creates dense fog.\nThe area in which it completely obscures the view is only a short distance behind the area in which it begins.\n",
       "Min": 0.0,
       "Max": 10.0
     },
