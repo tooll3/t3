@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -79,6 +80,7 @@ namespace T3.Editor.Gui.Windows
                 }
 
                 _editDescriptionDialog.Draw(instance.Symbol);
+                RenameInputDialog.Draw();
 
                 SymbolChildUi symbolChildUi = null;
                 if (instance.Parent != null)
@@ -622,5 +624,8 @@ namespace T3.Editor.Gui.Windows
         private static IInputSlot _inputSlotForActiveCommand;
         private static int _instanceCounter;
         private static readonly Regex _itemRegex = new(@"\[([A-Za-z\d_]+)\]", RegexOptions.Compiled);
+        
+        
+        public static readonly RenameInputDialog RenameInputDialog = new();
     }
 }

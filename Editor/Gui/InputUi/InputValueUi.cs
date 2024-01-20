@@ -27,6 +27,7 @@ using T3.Editor.Gui.Interaction.Animation;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.InputUi
@@ -566,6 +567,12 @@ namespace T3.Editor.Gui.InputUi
 
                                                         if (ImGui.MenuItem("Parameters settings"))
                                                             editState = InputEditStateFlags.ShowOptions;
+
+                                                        if (ParameterWindow.IsAnyInstanceVisible() && ImGui.MenuItem("Rename input"))
+                                                        {
+                                                            ParameterWindow.RenameInputDialog.ShowNextFrame(symbolChildUi.SymbolChild.Symbol,
+                                                                input.InputDefinition.Id);
+                                                        }
                                                     });
 
                 ImGui.PopStyleVar();
