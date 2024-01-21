@@ -385,8 +385,9 @@ namespace T3.Editor.Gui.Windows
                 if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
                                                   SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
                 {
-                    op.Symbol.Namespace = namespaceForEdit;
-                    modified = true;
+                    Log.Warning("Changing namespace in this way is not yet supported");
+                    //op.Symbol.Namespace = namespaceForEdit;
+                    //modified = true;
                 }
 
                 ImGui.PopStyleColor();
