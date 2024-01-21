@@ -312,7 +312,7 @@
       }
     },
     {
-      "ChildId": "25c51d29-facf-40a5-ad95-a29a3793716c"/*SnapPointsToGird*/,
+      "ChildId": "25c51d29-facf-40a5-ad95-a29a3793716c"/*SnapPointsToGrid*/,
       "Position": {
         "X": 2261.3042,
         "Y": 637.80524

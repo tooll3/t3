@@ -951,11 +951,6 @@
       "SymbolId": "371d72b8-69d4-4ced-beda-271386ad2fd6",
       "InputValues": [
         {
-          "Id": "2c5e5bb5-6023-4ff4-906d-d0a905110e95"/*VolumeShape*/,
-          "Type": "System.Int32",
-          "Value": 3
-        },
-        {
           "Id": "0b11d459-01cc-4e91-99d2-37e77a0c8a35"/*VolumeCenter*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -982,6 +977,11 @@
           "Id": "56bf96b4-e7c4-4747-b57a-64a39e0d6314"/*FallOff*/,
           "Type": "System.Single",
           "Value": 0.88
+        },
+        {
+          "Id": "2c5e5bb5-6023-4ff4-906d-d0a905110e95"/*VolumeShape*/,
+          "Type": "System.Int32",
+          "Value": 3
         },
         {
           "Id": "39c1db68-f3f7-4dac-b9e6-25877fe7e18a"/*Phase*/,
@@ -2471,7 +2471,7 @@
       "Outputs": []
     },
     {
-      "Id": "95d33d97-9535-465d-8da7-ba8cdd5f78b9"/*SnapPointsToGird*/,
+      "Id": "95d33d97-9535-465d-8da7-ba8cdd5f78b9"/*SnapPointsToGrid*/,
       "SymbolId": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de",
       "InputValues": [
         {

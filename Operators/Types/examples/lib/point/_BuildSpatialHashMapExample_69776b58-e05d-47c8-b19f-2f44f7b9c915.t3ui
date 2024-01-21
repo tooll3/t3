@@ -170,7 +170,7 @@
       }
     },
     {
-      "ChildId": "ce77266e-a632-4401-898a-a13809a126a9"/*SnapPointsToGird*/,
+      "ChildId": "ce77266e-a632-4401-898a-a13809a126a9"/*SnapPointsToGrid*/,
       "Position": {
         "X": 1217.9805,
         "Y": 614.92773

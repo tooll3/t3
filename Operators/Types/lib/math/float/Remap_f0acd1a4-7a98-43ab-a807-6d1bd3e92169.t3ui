@@ -13,7 +13,8 @@
       "Position": {
         "X": 197.0,
         "Y": 328.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "cd369755-5062-4934-8f37-e3a5cc9963df"/*RangeInMax*/,
@@ -27,7 +28,8 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "252276fb-8de1-42cc-ba41-07d6862015bd"/*RangeOutMax*/,

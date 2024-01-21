@@ -17,6 +17,7 @@
         "X": 0.0,
         "Y": 45.0
       },
+      "Description": "Optional separator inserted between elements. \nUse \"\\n\" to insert line breaks.",
       "Usage": "Default"
     }
   ],
