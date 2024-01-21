@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui;
@@ -13,7 +14,6 @@ namespace T3.Editor.Compilation
     /// </summary>
     internal static class OperatorUpdating
     {
-
         // this currently is primarily used when re-ordering symbol inputs and outputs
         public static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource)
         {
@@ -29,52 +29,72 @@ namespace T3.Editor.Compilation
 
         public static void RenameNameSpaces(NamespaceTreeNode node, string newNamespace)
         {
-            string sourceNamespace = node.GetAsString();
-            if (!IsEditableTargetNamespace(sourceNamespace, out var sourcePackage))
-            {
-                EditorUi.Instance.ShowMessageBox("Could not rename namespace", "The source namespace belongs to a readonly project.");
+            var sourceNamespace = node.GetAsString();
+            if (!TryGetSourceAndTargetProjects(sourceNamespace, newNamespace, out var sourcePackage, out var targetPackage))
                 return;
-            }
-            
-            if(!IsEditableTargetNamespace(newNamespace, out var targetNamespace))
-            {
-                EditorUi.Instance.ShowMessageBox("Could not rename namespace", "The target namespace belongs to a readonly project.");
-                return;
-            }
-            
-            sourcePackage.RenameNameSpace(sourceNamespace, newNamespace, targetNamespace);
+
+            sourcePackage.RenameNamespace(sourceNamespace, newNamespace, targetPackage);
             T3Ui.Save(false);
         }
 
-        private static bool IsEditableTargetNamespace(string targetNamespace, out EditableSymbolProject targetProject)
+        public static void UpdateNamespace(Guid symbolId, string nameSpace)
         {
-            var namespaceInfos = ProjectSetup.EditableSymbolPackages
-                                                     .Select(package => new PackageNamespaceInfo(package, package.CsProjectFile.RootNamespace));
+            var symbol = SymbolRegistry.Entries[symbolId];
+            var currentNamespace = symbol.Namespace;
+            if (!TryGetSourceAndTargetProjects(currentNamespace, nameSpace, out var sourcePackage, out var targetPackage))
+                return;
 
-            foreach (var namespaceInfo in namespaceInfos)
+            sourcePackage.ChangeNamespaceOf(symbolId, null, nameSpace, targetPackage);
+        }
+
+        private static bool TryGetSourceAndTargetProjects(string sourceNamespace, string targetNamespace, out EditableSymbolProject sourcePackage,
+                                                          out EditableSymbolProject targetPackage)
+        {
+            if (!TryGetEditableProjectOfNamespace(sourceNamespace, out sourcePackage))
             {
-                var projectNamespace = namespaceInfo.RootNamespace;
-
-                if (projectNamespace == null)
-                    continue;
-
-                if (targetNamespace.StartsWith(projectNamespace))
-                {
-                    targetProject = namespaceInfo.Project;
-                    return true;
-                }
+                EditorUi.Instance.ShowMessageBox("Could not rename namespace", "The source namespace belongs to a readonly project.");
+                targetPackage = null;
+                return false;
             }
 
-            targetProject = null;
-            return false;
+            if (!TryGetEditableProjectOfNamespace(targetNamespace, out targetPackage))
+            {
+                EditorUi.Instance.ShowMessageBox("Could not rename namespace", "The target namespace belongs to a readonly project.");
+                return false;
+            }
+
+            return true;
+
+            static bool TryGetEditableProjectOfNamespace(string targetNamespace, out EditableSymbolProject targetProject)
+            {
+                var namespaceInfos = ProjectSetup.EditableSymbolPackages
+                                                 .Select(package => new PackageNamespaceInfo(package, package.CsProjectFile.RootNamespace));
+
+                foreach (var namespaceInfo in namespaceInfos)
+                {
+                    var projectNamespace = namespaceInfo.RootNamespace;
+
+                    if (projectNamespace == null)
+                        continue;
+
+                    if (targetNamespace.StartsWith(projectNamespace))
+                    {
+                        targetProject = namespaceInfo.Project;
+                        return true;
+                    }
+                }
+
+                targetProject = null;
+                return false;
+            }
         }
-        
-        private readonly record struct PackageNamespaceInfo(EditableSymbolProject Project, string RootNamespace);
 
         public static void UpdateChangedOperators()
         {
             foreach (var package in ProjectSetup.EditableSymbolPackages)
                 package.RecompileIfNecessary();
         }
+
+        private readonly record struct PackageNamespaceInfo(EditableSymbolProject Project, string RootNamespace);
     }
 }

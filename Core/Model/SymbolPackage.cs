@@ -121,12 +121,12 @@ public abstract partial class SymbolPackage
                         && SymbolRegistry.EntriesEditable.TryAdd(symbol.Id, symbol);
             if (!added)
             {
-                Log.Error($"Ignoring redefinition symbol {symbol.Name}. Please fix multiple definitions in Operators/Types/ folder");
+                Log.Error($"{AssemblyInformation.Name}: Ignoring redefinition symbol {symbol.Name}.");
                 continue;
             }
 
             if (enableLog)
-                Log.Debug($"new added symbol: {newType}");
+                Log.Debug($"{AssemblyInformation.Name}: new added symbol: {newType}");
 
             allNewSymbolsList.Add(symbol);
         }

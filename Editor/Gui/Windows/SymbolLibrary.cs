@@ -7,6 +7,7 @@ using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
+using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
@@ -273,7 +274,7 @@ namespace T3.Editor.Gui.Windows
                         var guidString = myString.Split('|')[0];
                         var guid = Guid.Parse(guidString);
                         Log.Debug("dropped symbol here" + payload + " " + myString + "  " + guid);
-                        MoveSymbolToNamespace(guid, subtree);
+                        MoveSymbolToNamespace(guid, subtree.GetAsString());
                     }
                 }
 
@@ -281,11 +282,9 @@ namespace T3.Editor.Gui.Windows
             }
         }
 
-        private void MoveSymbolToNamespace(Guid symbolId, NamespaceTreeNode nameSpace)
+        private void MoveSymbolToNamespace(Guid symbolId, string nameSpace)
         {
-            var symbol = SymbolRegistry.Entries[symbolId];
-            symbol.Namespace = nameSpace.GetAsString();
-            Log.Debug($"moving {symbol.Name} to {symbol.Namespace}");
+            OperatorUpdating.UpdateNamespace(symbolId, nameSpace);
             _treeNode.PopulateCompleteTree();
         }
 

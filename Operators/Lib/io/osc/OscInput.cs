@@ -146,7 +146,8 @@ namespace lib.io.osc
             if (!isDisposing)
                 return;
 
-            OscConnectionManager.UnregisterConsumer(this);
+            if(_registeredPort != NotRegistered)
+                OscConnectionManager.UnregisterConsumer(this);
         }
         
         

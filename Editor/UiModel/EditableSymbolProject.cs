@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +9,7 @@ using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Compilation;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.UiModel;
@@ -34,7 +36,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         var homeSymbol = Symbols[homeGuid];
 
         RootSymbolUi.AddChild(homeSymbol, Guid.NewGuid(), new Vector2(0, _newProjectPosition), SymbolChildUi.DefaultOpSize, "");
-        _newProjectPosition += 100;
+        _newProjectPosition += (int)SymbolChildUi.DefaultOpSize.Y + 20;
 
         return true;
     }
@@ -151,12 +153,8 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         Log.Debug($"Replaced symbol ui for {symbol.Name}");
     }
 
-    public void RenameNameSpace(string sourceNamespace, string newNamespace, EditableSymbolProject newDestinationProject)
+    public void RenameNamespace(string sourceNamespace, string newNamespace, EditableSymbolProject newDestinationProject)
     {
-        var movingToAnotherPackage = newDestinationProject != this;
-
-        var moved = false;
-        
         // copy since we are modifying the collection while iterating
         var mySymbols = Symbols.Values.ToArray();
         foreach (var symbol in mySymbols)
@@ -164,34 +162,77 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
             if (!symbol.Namespace.StartsWith(sourceNamespace))
                 continue;
 
-            var newNameSpace = Regex.Replace(symbol.Namespace, sourceNamespace, newNamespace);
-            moved = true;
-            
-            var id = symbol.Id;
+            var substitutedNamespace = Regex.Replace(symbol.Namespace, sourceNamespace, newNamespace);
 
-            if (_sourceCodeFiles.TryGetValue(id, out var sourceCodePath))
-            {
-                var sourceCode = File.ReadAllText(sourceCodePath);
-                var newSourceCode = Regex.Replace(sourceCode, sourceNamespace, newNamespace);
-                symbol.PendingSource = newSourceCode;
-            }
-
-            Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
-            symbol.Namespace = newNameSpace;
-
-            var symbolUi = SymbolUis[id];
-            symbolUi.FlagAsModified();
-
-            if (movingToAnotherPackage)
-            {
-                GiveSymbolToPackage(id, newDestinationProject);
-            }
+            ChangeNamespaceOf(symbol.Id, sourceNamespace, substitutedNamespace, newDestinationProject);
         }
+    }
 
-        if (moved)
+    public void ChangeNamespaceOf(Guid id, string? sourceNamespace, string newNamespace, EditableSymbolProject newDestinationProject)
+    {
+        var symbol = Symbols[id];
+        sourceNamespace ??= symbol.Namespace;
+        if (_sourceCodeFiles.TryGetValue(id, out var sourceCodePath))
         {
-            MarkAsNeedingRecompilation();
+            if (!TryConvertToValidCodeNamespace(sourceNamespace, out var sourceCodeNamespace))
+            {
+                Log.Error($"Source namespace {sourceNamespace} is not a valid namespace. This is a bug.");
+                return;
+            }
+            
+            if (!TryConvertToValidCodeNamespace(newNamespace, out var newCodeNamespace))
+            {
+                Log.Error($"{sourceNamespace} is not a valid namespace.");
+                return;
+            }
+
+            var sourceCode = File.ReadAllText(sourceCodePath);
+            var newSourceCode = Regex.Replace(sourceCode, sourceCodeNamespace, newCodeNamespace);
+            symbol.PendingSource = newSourceCode;
         }
+        else
+        {
+            Log.Error($"Could not find source code for {symbol.Name} in {CsProjectFile.Name} ({id})");
+        }
+
+        Log.Debug($"Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNamespace}");
+        symbol.Namespace = newNamespace;
+
+        var symbolUi = SymbolUis[id];
+        symbolUi.FlagAsModified();
+
+        if (newDestinationProject != this)
+        {
+            GiveSymbolToPackage(id, newDestinationProject);
+            newDestinationProject.MarkAsNeedingRecompilation();
+        }
+
+        MarkAsNeedingRecompilation();
+    }
+
+    private static bool TryConvertToValidCodeNamespace(string sourceNamespace, out string result)
+    {
+        // prepend any reserved words with a '@'
+        // todo: stackalloc strings and array
+        var parts = sourceNamespace.Split('.');
+        for (var i = 0; i < parts.Length; i++)
+        {
+            var part = parts[i];
+            if (!GraphUtils.IsIdentifierValid(part))
+            {
+                var newPart = "@" + part;
+                if (!GraphUtils.IsIdentifierValid(newPart))
+                {
+                    result = string.Empty;
+                    return false;
+                }
+
+                parts[i] = newPart;
+            }
+        }
+
+        result = string.Join('.', parts);
+        return true;
     }
 
     private void GiveSymbolToPackage(Guid id, EditableSymbolProject newDestinationProject)
@@ -199,7 +240,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         Symbols.Remove(id, out var symbol);
         SymbolUis.Remove(id, out var symbolUi);
         _sourceCodeFiles.Remove(id, out var sourceCodePath);
-        
+
         symbol!.SymbolPackage = newDestinationProject;
 
         newDestinationProject.Symbols.Add(id, symbol);
