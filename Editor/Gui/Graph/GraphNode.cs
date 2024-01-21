@@ -504,7 +504,7 @@ namespace T3.Editor.Gui.Graph
                             if (_isVisible && socketHeight > 10)
                             {
                                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha,
-                                                   MathUtils.RemapAndClamp(socketHeight, 10, 20, 0, 0.5f).Clamp(0, 0.5f));
+                                                   MathUtils.RemapAndClamp(socketHeight, 10, 20, 0, 0.5f).Clamp(0, 0.5f) * ImGui.GetStyle().Alpha);
                                 ImGui.PushFont(Fonts.FontSmall);
                                 //ImGui.SetCursorScreenPos(targetPos +  new Vector2(0, -ImGui.GetFontSize()/2));
                                 //ImGui.Value(socketIndex % 4 == 0 ? ">" : "", socketIndex);

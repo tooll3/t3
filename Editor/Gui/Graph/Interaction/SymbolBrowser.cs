@@ -541,7 +541,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (!ExampleSymbolLinking.ExampleSymbols.TryGetValue(itemForHelp.Symbol.Id, out var examples))
                 return;
 
-            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
             foreach (var guid in examples)
             {
                 const string label = "Example";

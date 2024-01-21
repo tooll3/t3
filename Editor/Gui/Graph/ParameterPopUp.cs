@@ -149,7 +149,7 @@ internal static class ParameterPopUp
                     ImGui.TextUnformatted(symbolUi.Symbol.Name);
                     ImGui.PopFont();
                     FormInputs.AddVerticalSpace();
-                    ParameterWindow.DrawDescription(symbolUi);
+                    OperatorHelp.DrawDescription(symbolUi);
                     FormInputs.AddVerticalSpace();
                     break;
 
