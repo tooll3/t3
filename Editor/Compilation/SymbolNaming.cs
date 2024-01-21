@@ -62,10 +62,7 @@ internal static class SymbolNaming
         if (!updated)
         {
             Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
-            return;
         }
-
-        T3Ui.Save(true);
     }
 }
 

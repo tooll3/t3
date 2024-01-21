@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Editor.Gui;
 using T3.Editor.Gui.Windows;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
@@ -26,29 +27,36 @@ namespace T3.Editor.Compilation
             return editableSymbolPackage.TryRecompileWithNewSource(symbol, newSource);
         }
 
-        public static void RenameNameSpaces(NamespaceTreeNode node, string nameSpace)
+        public static void RenameNameSpaces(NamespaceTreeNode node, string newNamespace)
         {
-            if (!IsEditableTargetNamespace(node, out var targetPackage))
+            string sourceNamespace = node.GetAsString();
+            if (!IsEditableTargetNamespace(sourceNamespace, out var sourcePackage))
             {
-                EditorUi.Instance.ShowMessageBox("Could not rename namespace", "The namespace belongs to a readonly project.");
+                EditorUi.Instance.ShowMessageBox("Could not rename namespace", "The source namespace belongs to a readonly project.");
                 return;
             }
-
-            foreach (var package in ProjectSetup.EditableSymbolPackages)
+            
+            if(!IsEditableTargetNamespace(newNamespace, out var targetNamespace))
             {
-                package.RenameNameSpace(node, nameSpace, targetPackage);
+                EditorUi.Instance.ShowMessageBox("Could not rename namespace", "The target namespace belongs to a readonly project.");
+                return;
             }
+            
+            sourcePackage.RenameNameSpace(sourceNamespace, newNamespace, targetNamespace);
+            T3Ui.Save(false);
         }
 
-        private static bool IsEditableTargetNamespace(NamespaceTreeNode node, out EditableSymbolProject targetProject)
+        private static bool IsEditableTargetNamespace(string targetNamespace, out EditableSymbolProject targetProject)
         {
             var namespaceInfos = ProjectSetup.EditableSymbolPackages
                                                      .Select(package => new PackageNamespaceInfo(package, package.CsProjectFile.RootNamespace));
 
-            string targetNamespace = node.GetAsString();
             foreach (var namespaceInfo in namespaceInfos)
             {
-                string projectNamespace = namespaceInfo.RootNamespace;
+                var projectNamespace = namespaceInfo.RootNamespace;
+
+                if (projectNamespace == null)
+                    continue;
 
                 if (targetNamespace.StartsWith(projectNamespace))
                 {

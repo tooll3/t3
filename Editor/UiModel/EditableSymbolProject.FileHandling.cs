@@ -186,7 +186,7 @@ internal sealed partial class EditableSymbolProject
 
     private void OnFileChanged(object sender, FileSystemEventArgs args)
     {
-        MarkAsModified();
+        MarkAsNeedingRecompilation();
     }
 
     private void OnFileRenamed(object sender, RenamedEventArgs args)

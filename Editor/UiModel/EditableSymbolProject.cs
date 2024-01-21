@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using T3.Core.Compilation;
@@ -18,7 +19,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public EditableSymbolProject(CsProjectFile csProjectFile) : base(csProjectFile.Assembly, false)
     {
         CsProjectFile = csProjectFile;
-        csProjectFile.Recompiled += project => PendingUpdateActions.Enqueue(() => UpdateSymbols(project));
         AllProjectsRw.Add(this);
         InitializeFileWatcher();
         _csFileWatcher = new EditablePackageFsWatcher(this, OnFileChanged, OnFileRenamed);
@@ -33,7 +33,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         var homeGuid = CsProjectFile.Assembly.HomeGuid;
         var homeSymbol = Symbols[homeGuid];
 
-        _rootSymbolUi.AddChild(homeSymbol, Guid.NewGuid(), new Vector2(0, _newProjectPosition), SymbolChildUi.DefaultOpSize, "");
+        RootSymbolUi.AddChild(homeSymbol, Guid.NewGuid(), new Vector2(0, _newProjectPosition), SymbolChildUi.DefaultOpSize, "");
         _newProjectPosition += 100;
 
         return true;
@@ -47,7 +47,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         try
         {
             File.WriteAllText(path, sourceCode);
-            MarkAsModified();
         }
         catch
         {
@@ -58,7 +57,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
         if (TryRecompile())
         {
-            ExecutePendingUpdates();
             return Symbols.TryGetValue(newSymbolId, out newSymbol);
         }
 
@@ -74,13 +72,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         if (!_needsCompilation)
             return true;
 
-        if (TryRecompile())
-        {
-            ExecutePendingUpdates();
-            return true;
-        }
-
-        return false;
+        return TryRecompile();
     }
 
     // todo : determine name from source code
@@ -107,37 +99,44 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         }
 
         symbol.PendingSource = newSource;
-        MarkAsSaving();
+        symbol.Name = newName;
 
-        var filePathFmt = BuildFilepathFmt(symbol);
-        WriteSymbolSourceToFile(symbol, filePathFmt);
+        var symbolUi = SymbolUis[symbol.Id];
+        symbolUi.FlagAsModified();
 
         if (TryRecompile())
         {
-            symbol.Name = newName;
-            ExecutePendingUpdates();
-            UnmarkAsSaving();
             return true;
         }
 
         if (currentSourceCode != string.Empty)
         {
             symbol.PendingSource = currentSourceCode;
-            WriteSymbolSourceToFile(symbol, filePathFmt);
+            symbolUi.FlagAsModified();
+            SaveModifiedSymbols();
         }
 
-        UnmarkAsSaving();
         return false;
     }
 
     private bool TryRecompile()
     {
-        SaveAll();
+        MarkAsSaving();
+
         _needsCompilation = false;
-        return CsProjectFile.TryRecompile(Compiler.BuildMode.Debug);
+        SaveModifiedSymbols();
+        var updated = CsProjectFile.TryRecompile(Compiler.BuildMode.Debug);
+
+        UnmarkAsSaving();
+
+        if (!updated)
+            return false;
+
+        UpdateSymbols();
+        return true;
     }
 
-    private void UpdateSymbols(CsProjectFile project)
+    private void UpdateSymbols()
     {
         LocateSourceCodeFiles();
         ProjectSetup.UpdateSymbolPackage(this);
@@ -152,44 +151,71 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         Log.Debug($"Replaced symbol ui for {symbol.Name}");
     }
 
-    public void RenameNameSpace(NamespaceTreeNode node, string nameSpace, EditableSymbolProject newDestinationProject)
+    public void RenameNameSpace(string sourceNamespace, string newNamespace, EditableSymbolProject newDestinationProject)
     {
         var movingToAnotherPackage = newDestinationProject != this;
 
-        var ogNameSpace = node.GetAsString();
-        foreach (var symbol in Symbols.Values)
+        var moved = false;
+        
+        // copy since we are modifying the collection while iterating
+        var mySymbols = Symbols.Values.ToArray();
+        foreach (var symbol in mySymbols)
         {
-            if (!symbol.Namespace.StartsWith(ogNameSpace))
+            if (!symbol.Namespace.StartsWith(sourceNamespace))
                 continue;
 
-            //var newNameSpace = parent + "."
-            var newNameSpace = Regex.Replace(symbol.Namespace, ogNameSpace, nameSpace);
+            var newNameSpace = Regex.Replace(symbol.Namespace, sourceNamespace, newNamespace);
+            moved = true;
+            
+            var id = symbol.Id;
+
+            if (_sourceCodeFiles.TryGetValue(id, out var sourceCodePath))
+            {
+                var sourceCode = File.ReadAllText(sourceCodePath);
+                var newSourceCode = Regex.Replace(sourceCode, sourceNamespace, newNamespace);
+                symbol.PendingSource = newSourceCode;
+            }
+
             Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
             symbol.Namespace = newNameSpace;
 
-            if (!movingToAnotherPackage)
-                continue;
+            var symbolUi = SymbolUis[id];
+            symbolUi.FlagAsModified();
 
-            GiveSymbolToPackage(symbol, newDestinationProject);
+            if (movingToAnotherPackage)
+            {
+                GiveSymbolToPackage(id, newDestinationProject);
+            }
         }
-    }
 
-    private void GiveSymbolToPackage(Symbol symbol, EditableSymbolProject newDestinationProject)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void MarkAsModified()
-    {
-        _needsCompilation = true;
-    }
-
-    private void ExecutePendingUpdates()
-    {
-        while (PendingUpdateActions.TryDequeue(out var action))
+        if (moved)
         {
-            action.Invoke();
+            MarkAsNeedingRecompilation();
         }
+    }
+
+    private void GiveSymbolToPackage(Guid id, EditableSymbolProject newDestinationProject)
+    {
+        Symbols.Remove(id, out var symbol);
+        SymbolUis.Remove(id, out var symbolUi);
+        _sourceCodeFiles.Remove(id, out var sourceCodePath);
+        
+        symbol!.SymbolPackage = newDestinationProject;
+
+        newDestinationProject.Symbols.Add(id, symbol);
+        newDestinationProject.SymbolUis.TryAdd(id, symbolUi);
+        newDestinationProject._sourceCodeFiles.TryAdd(id, sourceCodePath);
+
+        symbolUi!.FlagAsModified();
+        newDestinationProject.MarkAsNeedingRecompilation();
+        MarkAsNeedingRecompilation();
+    }
+
+    private void MarkAsNeedingRecompilation()
+    {
+        if (IsSaving)
+            return;
+        _needsCompilation = true;
     }
 
     public override string Folder => CsProjectFile.Directory;
@@ -205,6 +231,5 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     private bool _needsCompilation;
 
-    private static readonly Queue<Action> PendingUpdateActions = new();
     private static int _newProjectPosition = 0;
 }

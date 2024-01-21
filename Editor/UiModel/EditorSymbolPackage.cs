@@ -137,13 +137,13 @@ internal class EditorSymbolPackage : StaticSymbolPackage
             throw new Exception("Could not create root symbol instance.");
         }
         
-        SymbolUiRegistry.Entries.TryGetValue(rootSymbolId, out _rootSymbolUi);
+        SymbolUiRegistry.Entries.TryGetValue(rootSymbolId, out RootSymbolUi);
 
         RootInstance = rootInstance;
     }
 
     public static Instance RootInstance { get; private set; }
-    private protected static SymbolUi _rootSymbolUi;
+    private protected static SymbolUi RootSymbolUi;
 
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
     protected override string ResourcesSubfolder => "Resources";

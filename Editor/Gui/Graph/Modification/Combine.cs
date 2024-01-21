@@ -253,7 +253,7 @@ internal static class Combine
         // Sadly saving in background does not save the source files.
         // This needs to be fixed.
         //T3Ui.SaveInBackground(false);
-        T3Ui.Save(true);
+        T3Ui.Save(false);
     }
 
     private static ImRect GetAreaFromChildren(List<SymbolChildUi> childUis)
