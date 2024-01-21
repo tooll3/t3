@@ -1,5 +1,5 @@
 {
-  "Id": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de"/*SnapPointsToGird*/,
+  "Id": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de"/*SnapPointsToGrid*/,
   "Description": "Rounds (floors) the position of points onto a grid, i.e., snaps them to the position of a grid.\n\nThis can be useful to debug compute shader effects that rely on a spatial grid.",
   "InputUis": [
     {
@@ -93,8 +93,8 @@
     {
       "ChildId": "7efe46d6-8479-49ec-bb91-3833cf040da5"/*GetSRVProperties*/,
       "Position": {
-        "X": -41.935432,
-        "Y": 733.74097
+        "X": -37.987556,
+        "Y": 682.4186
       }
     },
     {
@@ -121,8 +121,8 @@
     {
       "ChildId": "442bc6e2-dd6e-4a89-8b94-587309fa37af"/*StructuredBufferWithViews*/,
       "Position": {
-        "X": 112.39713,
-        "Y": 803.2626
+        "X": 117.003,
+        "Y": 719.6992
       }
     },
     {

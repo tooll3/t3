@@ -47,9 +47,11 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
+    Point p = Points1[i.x];
+
     //ResultPoints[i.x].position = (int3)(Points1[i.x].position / CellSize) * CellSize;
     float3 gridSize = CellSize * GridStretch;
-    float3 orgPosition = Points1[i.x].Position;
+    float3 orgPosition = p.Position;
     float3 pos = orgPosition + gridSize /2 - GridOffset;
 
     float3 snapPosition = f2(pos, gridSize);
@@ -59,14 +61,15 @@ void main(uint3 i : SV_DispatchThreadID)
     
     snapPosition += GridOffset;
     
-    float weight = UseWAsWeight > 0.5 ? Points1[i.x].W : 1;
+    float weight = UseWAsWeight > 0.5 ? p.W : 1;
 
     float fractionFactor = saturate(frac1 / BlendFraction + SnapFraction); 
     weight *= fractionFactor;
     snapPosition = lerp(orgPosition, snapPosition,  weight);
 
-    ResultPoints[i.x].Position = snapPosition;
-    ResultPoints[i.x].Rotation = Points1[i.x].Rotation;
-    ResultPoints[i.x].W = frac1;
+    p.Position = snapPosition;
+    p.W = frac1;
+
+    ResultPoints[i.x] = p;
 }
 
