@@ -4,7 +4,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_bc88304a_a2c7_4df9_93d8_b7dfecbce3de
 {
-    public class SnapPointsToGird : Instance<SnapPointsToGird>
+    public class SnapPointsToGrid : Instance<SnapPointsToGrid>
     {
 
         [Output(Guid = "b7bc82a2-f095-490a-91e3-276431d5eb87")]

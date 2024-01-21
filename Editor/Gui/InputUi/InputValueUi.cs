@@ -27,6 +27,7 @@ using T3.Editor.Gui.Interaction.Animation;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.InputUi
@@ -55,7 +56,7 @@ namespace T3.Editor.Gui.InputUi
         #endregion
 
         private const float ConnectionAreaWidth = 30.0f;
-        private static float ParameterNameWidth => ImGui.GetTextLineHeight() * 120.0f / 16;
+        private static float ParameterNameWidth => MathF.Max( ImGui.GetTextLineHeight() * 120.0f / 16, ImGui.GetWindowWidth() * 0.3f);
 
         public SymbolUi Parent { get; set; }
         public Symbol.InputDefinition InputDefinition { get; set; }
@@ -162,6 +163,7 @@ namespace T3.Editor.Gui.InputUi
                 {
                     // Just show actual value
                     ImGui.Button(name + "##paramName", new Vector2(-1, 0));
+                    
                     if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                     {
                         if (ImGui.MenuItem("Parameters settings"))
@@ -239,7 +241,9 @@ namespace T3.Editor.Gui.InputUi
 
                     // Draw Name
                     ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAutomated.Rgba);
                     ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
+                    ImGui.PopStyleColor();
                     if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                     {
                         if (ImGui.MenuItem("Parameters settings"))
@@ -247,11 +251,42 @@ namespace T3.Editor.Gui.InputUi
 
                         ImGui.EndPopup();
                     }
+                    
+                    CustomComponents.ContextMenuForItem(() =>
+                                    {
+                                        if (ImGui.MenuItem("Set as default", !input.IsDefault))
+                                        {
+                                            // Todo: Implement Undo/Redo Command
+                                            input.SetCurrentValueAsDefault();
+                                            var symbolUi = SymbolUiRegistry.Entries[symbolChildUi.SymbolChild.Symbol.Id];
+                                            symbolUi.Symbol.InvalidateInputDefaultInInstances(inputSlot);
+                                            symbolUi.FlagAsModified();
+                                        }
+
+                                        if (ImGui.MenuItem("Reset to default", !input.IsDefault))
+                                        {
+                                            UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id,
+                                                                            input));
+                                        }
+
+                                        if (ImGui.MenuItem("Extract as connection operator"))
+                                        {
+                                            ParameterExtraction.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input);
+                                        }
+
+                                        if (ImGui.MenuItem("Publish as Input"))
+                                        {
+                                            PublishAsInput(inputSlot, symbolChildUi, input);
+                                        }
+
+                                        if (ImGui.MenuItem("Parameters settings"))
+                                            editState = InputEditStateFlags.ShowOptions;
+                                    });
 
                     ImGui.PopStyleVar();
                     ImGui.SameLine();
 
-                    //// Draw name
+   
                     ImGui.PushItemWidth(200.0f);
                     ImGui.PushStyleColor(ImGuiCol.Text,
                                          input.IsDefault
@@ -532,6 +567,12 @@ namespace T3.Editor.Gui.InputUi
 
                                                         if (ImGui.MenuItem("Parameters settings"))
                                                             editState = InputEditStateFlags.ShowOptions;
+
+                                                        if (ParameterWindow.IsAnyInstanceVisible() && ImGui.MenuItem("Rename input"))
+                                                        {
+                                                            ParameterWindow.RenameInputDialog.ShowNextFrame(symbolChildUi.SymbolChild.Symbol,
+                                                                input.InputDefinition.Id);
+                                                        }
                                                     });
 
                 ImGui.PopStyleVar();
@@ -651,7 +692,7 @@ namespace T3.Editor.Gui.InputUi
             FormInputs.AddSectionHeader("Documentation");
             var width = ImGui.GetContentRegionAvail().X;
             var description = string.IsNullOrEmpty( Description) ? string.Empty : Description;
-            if (ImGui.InputTextMultiline("##parameterDescription", ref description, 4096, new Vector2(width,0)))
+            if (ImGui.InputTextMultiline("##parameterDescription", ref description, 16000, new Vector2(width,0)))
             {
                 Description = string.IsNullOrEmpty(description) ? null : description;
                 Parent.FlagAsModified();

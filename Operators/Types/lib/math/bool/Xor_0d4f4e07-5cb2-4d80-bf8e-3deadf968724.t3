@@ -1,5 +1,5 @@
 {
-  "Name": "Not",
+  "Name": "Xor",
   "Id": "0d4f4e07-5cb2-4d80-bf8e-3deadf968724",
   "Namespace": "lib.math.bool",
   "Inputs": [

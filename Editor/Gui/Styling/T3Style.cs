@@ -60,7 +60,7 @@ public static class T3Style
                 
         style.WindowPadding = Vector2.Zero;
         style.FramePadding = new Vector2(7, 4);
-        style.ItemSpacing = new Vector2(1, 1);
+        style.ItemSpacing = new Vector2(1, 1.49f);
         style.ItemInnerSpacing = new Vector2(3, 2);
         style.GrabMinSize = 10;
         style.FrameBorderSize = 0;

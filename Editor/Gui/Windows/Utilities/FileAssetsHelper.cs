@@ -49,7 +49,7 @@ public static class FileAssetsHelper
 
             ImGui.SameLine(50);
             ImGui.PushStyleColor(ImGuiCol.Text, r.State == FileResource.States.Missing ? UiColors.StatusWarning : UiColors.Text.Rgba);
-            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.4f);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.4f * ImGui.GetStyle().Alpha);
             ImGui.TextUnformatted(r.Directory + "\\");
             ImGui.PopStyleVar();
             ImGui.SameLine();

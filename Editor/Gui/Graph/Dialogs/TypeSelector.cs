@@ -58,7 +58,7 @@ public static class TypeSelector
                                                       ImGui.SetCursorScreenPos(ImGui.GetItemRectMin() + new Vector2(4, 4));
                                                       ImGui.TextUnformatted(typeName);
                                                       ImGui.SameLine();
-                                                      ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.3f);
+                                                      ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.3f * ImGui.GetStyle().Alpha);
                                                       ImGui.TextUnformatted(" - " + type.Namespace);
                                                       ImGui.PopStyleVar();
                                                       ImGui.PopStyleColor(2);

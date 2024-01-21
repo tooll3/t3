@@ -117,7 +117,7 @@ namespace T3.Editor.Gui.UiHelpers
                 if (ExampleSymbolLinking.ExampleSymbols.TryGetValue(symbol.Id, out var examples))
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+                    ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
                     for (var index = 0; index < examples.Count; index++)
                     {
                         var exampleId = examples[index];

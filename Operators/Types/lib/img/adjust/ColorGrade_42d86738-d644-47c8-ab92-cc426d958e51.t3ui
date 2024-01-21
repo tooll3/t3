@@ -52,6 +52,7 @@
         "X": -8.08049,
         "Y": 527.35626
       },
+      "GroupTitle": "Vignette",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -84,7 +85,8 @@
       "Position": {
         "X": -8.08049,
         "Y": 707.35626
-      }
+      },
+      "GroupTitle": "Additional options"
     },
     {
       "InputId": "c73bc2e6-338b-40f9-bfd6-32b6472ff250"/*ClampResult*/,

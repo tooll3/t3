@@ -541,7 +541,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (!ExampleSymbolLinking.ExampleSymbols.TryGetValue(itemForHelp.Symbol.Id, out var examples))
                 return;
 
-            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
             foreach (var guid in examples)
             {
                 const string label = "Example";
@@ -564,13 +564,20 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
 
             ImGui.SameLine();
+
+            var restSpace = ImGui.GetWindowWidth() - ImGui.GetCursorPos().X;
+            if (restSpace < 100)
+            {
+                ImGui.Dummy(new Vector2(10,10));
+            }
+
             ImGui.Button(label);
             SymbolTreeMenu.HandleDragAndDropForSymbolItem(symbolUi.Symbol);
             if (ImGui.IsItemHovered())
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
             }
-
+            
             if (!string.IsNullOrEmpty(symbolUi.Description))
             {
                 CustomComponents.TooltipForLastItem(symbolUi.Description);

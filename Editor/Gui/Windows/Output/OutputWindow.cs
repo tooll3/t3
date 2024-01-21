@@ -87,6 +87,9 @@ namespace T3.Editor.Gui.Windows.Output
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
+                var keepScale = T3Ui.UiScaleFactor;
+                T3Ui.UiScaleFactor = 1;
+                
                 // Draw output
                 _imageCanvas.SetAsCurrent();
 
@@ -100,6 +103,8 @@ namespace T3.Editor.Gui.Windows.Output
                 _camSelectionHandling.Update(drawnInstance, drawnType);
                 _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction;
                 _imageCanvas.Update();
+
+                T3Ui.UiScaleFactor = keepScale;
                 DrawToolbar(drawnType);
                 CustomComponents.DrawWindowFocusFrame();
             }

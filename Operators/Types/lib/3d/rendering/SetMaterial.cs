@@ -68,7 +68,8 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
             if (!needsUpdate)
                 return;
 
-            Utilities.Dispose(ref currentSrv);
+            if(currentSrv != defaultSrv)
+                Utilities.Dispose(ref currentSrv);
 
             var changedTexture = textureInputSlot.GetValue(context);
 

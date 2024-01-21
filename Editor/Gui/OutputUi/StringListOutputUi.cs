@@ -38,7 +38,7 @@ namespace T3.Editor.Gui.OutputUi
                 for (var index = 0; index < strings.Count; index++)
                 {
                     var s = strings[index];
-                    ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+                    ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
                     ImGui.TextUnformatted($"#{index}   ");
                     ImGui.PopStyleVar();
                     

@@ -44,9 +44,11 @@ internal static class GraphUtils
     {
         return !string.IsNullOrEmpty(newSymbolName)
                && _validTypeNamePattern.IsMatch(newSymbolName)
-               && !SymbolRegistry.Entries.Values.Any(value => string.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase));
+               && !SymbolRegistry.Entries.Values.Any(value => string.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase))
+               && !_reservedWords.Contains(newSymbolName);
     }
 
+    private static readonly string[] _reservedWords = new string[] { "object", "var", "float", "value", "Var", "instance", "item", "Input", "slot" };
     private static readonly Regex _validTypeNamePattern = new("^[A-Za-z_]+[A-Za-z0-9_]*$");
 
     public static bool IsNameSpaceValid(string nameSpaceString)

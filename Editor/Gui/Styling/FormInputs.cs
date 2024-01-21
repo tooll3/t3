@@ -31,17 +31,22 @@ namespace T3.Editor.Gui.Styling
 
         public static bool BeginGroup(string label)
         {
-            var shouldBeOpenByDefault = !label.EndsWith("...");
-
             AddVerticalSpace(5);
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-
-            var id = ImGui.GetID(label);
-            if (shouldBeOpenByDefault && !_openedGroups.Contains(id))
-            {
-                ImGui.SetNextItemOpen(true);
-                _openedGroups.Add(id);
-            }
+            // var isNotCollapsable = !label.EndsWith("...");
+            // if (isNotCollapsable)
+            // {
+            //     ImGui.Text(label);
+            //     ImGui.PopStyleColor();
+            //     return true;
+            // }
+            
+            // var id = ImGui.GetID(label);
+            // if (isNotCollapsable && !_openedGroups.Contains(id))
+            // {
+            //     ImGui.SetNextItemOpen(true);
+            //     _openedGroups.Add(id);
+            // }
 
             var isOpen = ImGui.TreeNode(label);
             ImGui.PopStyleColor();
@@ -51,7 +56,7 @@ namespace T3.Editor.Gui.Styling
             return isOpen;
         }
 
-        private static HashSet<uint> _openedGroups = new();
+        // private static HashSet<uint> _openedGroups = new();
 
         public static void EndGroup()
         {
@@ -262,7 +267,7 @@ namespace T3.Editor.Gui.Styling
 
             if (isDefault)
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha);
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha * ImGui.GetStyle().Alpha);
             }
 
             DrawInputLabel(label);
@@ -357,7 +362,7 @@ namespace T3.Editor.Gui.Styling
 
             if (isDefault)
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha);
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha * ImGui.GetStyle().Alpha);
             }
 
             ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 20);
@@ -387,7 +392,7 @@ namespace T3.Editor.Gui.Styling
 
             AddVerticalSpace(5);
             ApplyIndent();
-            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 20));
 
             AddIcon(Icon.Hint);
@@ -508,7 +513,7 @@ namespace T3.Editor.Gui.Styling
 
             // Tooltip
             ImGui.PushStyleColor(ImGuiCol.PopupBg, UiColors.BackgroundFull.Rgba);
-            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 1);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 1 * ImGui.GetStyle().Alpha);
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);
             ImGui.TextUnformatted(tooltip);

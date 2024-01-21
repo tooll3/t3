@@ -63,7 +63,7 @@ namespace T3.Editor.Gui.Interaction
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual Vector2 TransformPositionFloat(Vector2 posOnCanvas)
         {
-            return (posOnCanvas - Scroll) * Scale + WindowPos;
+            return (posOnCanvas - Scroll) * Scale  * T3Ui.UiScaleFactor+ WindowPos;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -97,7 +97,7 @@ namespace T3.Editor.Gui.Interaction
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual Vector2 InverseTransformPositionFloat(Vector2 screenPos)
         {
-            return (screenPos - WindowPos) / Scale + Scroll;
+            return (screenPos - WindowPos) / (Scale * T3Ui.UiScaleFactor) + Scroll;
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace T3.Editor.Gui.Interaction
         /// [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 InverseTransformDirection(Vector2 vectorInScreen)
         {
-            return vectorInScreen / Scale;
+            return vectorInScreen / (Scale  * T3Ui.UiScaleFactor);
         }
 
         public ImRect TransformRect(ImRect canvasRect)

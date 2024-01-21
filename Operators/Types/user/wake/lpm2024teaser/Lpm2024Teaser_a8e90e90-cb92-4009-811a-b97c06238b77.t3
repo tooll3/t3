@@ -1000,11 +1000,6 @@
           "Id": "e577a3fb-0655-48b2-998a-1080e872c2cd"/*DiscardNonSelected*/,
           "Type": "System.Boolean",
           "Value": false
-        },
-        {
-          "Id": "bdfbbc26-6815-4c5e-b67f-fbe0bbf1f58b"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 0.5
         }
       ],
       "Outputs": []

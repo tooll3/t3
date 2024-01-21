@@ -6,18 +6,18 @@
     {
       "Id": "a9111412-3369-4848-af48-8a96f5697c84"/*ColorA*/,
       "DefaultValue": {
-        "X": 1E-06,
-        "Y": 9.9999E-07,
-        "Z": 9.9999E-07,
+        "X": 1.0,
+        "Y": 0.9999899,
+        "Z": 0.9999899,
         "W": 1.0
       }
     },
     {
       "Id": "f9899540-e495-41cb-87da-302d1bf090ac"/*ColorB*/,
       "DefaultValue": {
-        "X": 1.0,
-        "Y": 0.99999,
-        "Z": 0.99999,
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0,
         "W": 1.0
       }
     },
@@ -51,10 +51,10 @@
       }
     },
     {
-      "Id": "7b1a1f18-a1d4-4737-9c06-21f263277140"/*Resolution*/,
+      "Id": "dce72235-839e-41f1-a2a4-e19f0ef66e5c"/*BiasAndGain*/,
       "DefaultValue": {
-        "X": 256,
-        "Y": 256
+        "X": 0.5,
+        "Y": 0.5
       }
     },
     {
@@ -62,15 +62,15 @@
       "DefaultValue": 0
     },
     {
-      "Id": "7b7e1f3b-7e5c-46af-9e2e-536cb1909867"/*GenerateMips*/,
-      "DefaultValue": false
+      "Id": "7b1a1f18-a1d4-4737-9c06-21f263277140"/*Resolution*/,
+      "DefaultValue": {
+        "X": 256,
+        "Y": 256
+      }
     },
     {
-      "Id": "dce72235-839e-41f1-a2a4-e19f0ef66e5c"/*BiasAndGain*/,
-      "DefaultValue": {
-        "X": 0.5,
-        "Y": 0.5
-      }
+      "Id": "7b7e1f3b-7e5c-46af-9e2e-536cb1909867"/*GenerateMips*/,
+      "DefaultValue": false
     }
   ],
   "Children": [

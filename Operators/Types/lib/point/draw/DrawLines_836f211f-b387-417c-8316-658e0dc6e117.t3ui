@@ -30,7 +30,8 @@
       "Position": {
         "X": -300.97974,
         "Y": 405.46448
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "28f85ae9-ebae-4300-8aa0-738c6327cc44"/*TransitionProgress*/,
@@ -51,7 +52,8 @@
       "Position": {
         "X": -297.12128,
         "Y": 595.0335
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "c10f9c6c-9923-42c6-848d-6b98097acc67"/*Texture_*/,
@@ -65,7 +67,8 @@
       "Position": {
         "X": 628.21533,
         "Y": 1099.5239
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableDepthWrite*/,
@@ -79,7 +82,8 @@
       "Position": {
         "X": 628.21533,
         "Y": 1189.5239
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "e797d93b-3847-4324-898e-09018267ea82"/*UvScale*/,

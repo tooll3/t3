@@ -283,7 +283,7 @@
       }
     },
     {
-      "ChildId": "c7fd89d8-4900-4ae1-92d8-82e972c12ed7"/*Invert*/,
+      "ChildId": "c7fd89d8-4900-4ae1-92d8-82e972c12ed7"/*Not*/,
       "Comment": "If all lights are on, I want to turn off the ambient light.\nSo I need to invert the result of my previous check.",
       "Position": {
         "X": 1033.3594,
