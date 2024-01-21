@@ -385,6 +385,8 @@ namespace T3.Editor.Gui.Windows
                 if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
                                                   SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
                 {
+                    // this is not yet supported because we need to wait until input is finished to try to apply the change and do so safely
+                    // doing this is very possible but i'm a tad bit lazy right now
                     Log.Warning("Changing namespace in this way is not yet supported");
                     //op.Symbol.Namespace = namespaceForEdit;
                     //modified = true;
