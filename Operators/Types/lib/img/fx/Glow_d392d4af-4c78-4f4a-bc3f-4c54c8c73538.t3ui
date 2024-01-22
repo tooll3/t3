@@ -16,9 +16,12 @@
         "X": -673.6466,
         "Y": -4.818144
       },
+      "Description": "Controls how much the glow effect is blurred.\n\nWhen heavily blurred, the effect consequently loses intensity.",
+      "AddPadding": "True",
       "Min": 0.0,
-      "Max": 3.0,
-      "Scale": 0.01
+      "Max": 5.0,
+      "Scale": 0.01,
+      "Clamp": true
     },
     {
       "InputId": "353ac2ee-aed3-4614-adf5-e1328768fd0b"/*Samples*/,
@@ -26,6 +29,8 @@
         "X": -673.6466,
         "Y": 40.181854
       },
+      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed.",
+      "AddPadding": "True",
       "Min": 1.0,
       "Max": 64.0
     },
@@ -35,9 +40,12 @@
         "X": -673.6466,
         "Y": 85.181854
       },
-      "Min": 0.0,
+      "Description": "Controls the intensity of the bloom effect.",
+      "AddPadding": "True",
+      "Min": 0.1,
       "Max": 1.0,
-      "Scale": 0.01
+      "Scale": 0.01,
+      "Clamp": true
     },
     {
       "InputId": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,
@@ -45,8 +53,10 @@
         "X": -673.6466,
         "Y": 130.18185
       },
-      "Min": -1.0,
-      "Max": 1.0
+      "Description": "Controls the brightness of the image and helps to control which areas of the image are included in the effect.",
+      "Min": -0.2,
+      "Max": 0.2,
+      "Clamp": true
     },
     {
       "InputId": "7f6dba80-bf4e-4e55-bd9a-ac1e2a077898"/*Color*/,
@@ -54,6 +64,7 @@
         "X": -673.6466,
         "Y": 175.18185
       },
+      "Description": "Colorizes the Bloom effect.",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -64,6 +75,7 @@
         "X": -673.6466,
         "Y": 220.18185
       },
+      "Description": "Further controls the intensity of the glow effect.",
       "Min": 0.0,
       "Max": 10.0,
       "Scale": 0.1,
@@ -74,7 +86,9 @@
       "Position": {
         "X": -673.6466,
         "Y": 265.18185
-      }
+      },
+      "Description": "Selects how the effect is blended into the image.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
