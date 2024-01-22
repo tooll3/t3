@@ -27,7 +27,7 @@ namespace T3.Operators.Types.Id_ec0675d7_6b72_4b15_b141_80bdd2367cd8
         public readonly InputSlot<float> W = new InputSlot<float>();
 
         [Input(Guid = "DD46595E-01E5-4616-9682-3A4EB7F63016")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<System.Numerics.Vector4> ColorHSB = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "1E2C9B94-B303-4454-BA08-5246C7336660")]
         public readonly InputSlot<System.Numerics.Vector3> Extend = new InputSlot<System.Numerics.Vector3>();

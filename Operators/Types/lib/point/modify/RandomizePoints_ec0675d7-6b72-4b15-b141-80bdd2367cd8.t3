@@ -32,7 +32,7 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "dd46595e-01e5-4616-9682-3a4eb7f63016"/*Color*/,
+      "Id": "dd46595e-01e5-4616-9682-3a4eb7f63016"/*ColorHSB*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,

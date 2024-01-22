@@ -4023,11 +4023,6 @@
           "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
           "Type": "System.Single",
           "Value": 0.0062
-        },
-        {
-          "Id": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
-          "Type": "System.Int32",
-          "Value": 0
         }
       ],
       "Outputs": []
@@ -4077,7 +4072,12 @@
           "Value": 0.78
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "4b7931a8-aace-41e8-ba38-db68d03d5cc2"/*ReconstructiveForce*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "9f3f735f-e106-4434-8871-85613c986705"/*Trigger*/,
@@ -4127,7 +4127,12 @@
           "Value": 1.25
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "e5bbe22e-e3f6-4f1f-9db0-fc7632c10639"/*TurbulenceForce*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "fff2e5bf-6798-411d-ad2a-d8ba8a7c732b"/*SurfaceForce*/,
@@ -4163,7 +4168,12 @@
           "Value": "On"
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "13b7dbbc-d418-4bd5-a8a1-182df2071a25"/*SurfaceForce*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "1e602b7c-f861-4032-aa76-276c6fbe2473"/*GetBufferComponents*/,
@@ -4525,7 +4535,12 @@
       "Id": "432282d2-65cc-4a65-823a-a18d094e1264"/*Group*/,
       "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
       "InputValues": [],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b"/*Group*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "5d841f1d-bf33-4fd9-991d-a80bf9069542"/*Boolean*/,
@@ -5102,6 +5117,12 @@
           "Value": 0.4
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "ca53e6d4-1a28-4d16-9e29-a0ffe25b1560"/*PointsToCPU*/,
+      "SymbolId": "a5f4552f-7e25-43a5-bb14-21ab836fa0b3",
+      "InputValues": [],
       "Outputs": []
     }
   ],
@@ -6233,6 +6254,12 @@
       "SourceSlotId": "bfce8bf6-9ef3-4fdb-8c6e-21aa65485f14",
       "TargetParentOrChildId": "ca4f42df-52e4-4959-81c8-19cdd4cffecc",
       "TargetSlotId": "3b04296a-14e5-40e0-91a2-eda0314b0490"
+    },
+    {
+      "SourceParentOrChildId": "1a8465bf-f3d5-4372-ac20-c4cd1c32b1bc",
+      "SourceSlotId": "51b9c6bd-b7cc-48a4-979b-3febcac914c2",
+      "TargetParentOrChildId": "ca53e6d4-1a28-4d16-9e29-a0ffe25b1560",
+      "TargetSlotId": "f267534c-59ae-4758-b04a-13b6337bc0eb"
     },
     {
       "SourceParentOrChildId": "882946a2-d40d-4be6-a662-a4105bfa59a1",

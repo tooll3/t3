@@ -29,6 +29,10 @@ StructuredBuffer<Point> EmitPoints : t0;
 RWStructuredBuffer<Particle> Particles : u0;
 RWStructuredBuffer<Point> ResultPoints : u1;
 
+#define W_KEEP_ORIGINAL 0
+#define W_PARTICLE_AGE 1
+#define W_PARTICLE_SPEED 2
+
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -68,9 +72,10 @@ void main(uint3 i : SV_DispatchThreadID)
             Particles[(gi-1) % maxParticleCount].BirthTime = NAN;
             Particles[(gi-1) % maxParticleCount].Radius = NAN;
         }
+
         Particles[gi].Position = EmitPoints[addIndex].Position;
         Particles[gi].Rotation = EmitPoints[addIndex].Rotation;
-        Particles[gi].Radius = EmitPoints[addIndex].W;
+        //Particles[gi].Radius = EmitPoints[addIndex].W;
         Particles[gi].BirthTime = Time;
         Particles[gi].Velocity = qRotateVec3(float3(0,0,1), normalize(Particles[gi].Rotation)) * InitialVelocity;
         Particles[gi].Radius = EmitPoints[gi].W * RadiusFromW;
@@ -111,19 +116,19 @@ void main(uint3 i : SV_DispatchThreadID)
     float age = (Time - Particles[gi].BirthTime) * AgingRate;
     bool tooOld =  age >= MaxAge;
 
-    if(WMode == 0) {
+    if(WMode == W_KEEP_ORIGINAL) {
         if(tooOld) {
           ResultPoints[gi].W = NAN;
         }
         else {
-          ResultPoints[gi].W = Particles[gi].Radius;
+          ResultPoints[gi].W = Particles[gi].Radius / RadiusFromW;
         }
     }
-    else if (WMode == 1) 
+    else if (WMode == W_PARTICLE_AGE) 
     {
         ResultPoints[gi].W = (isnan(Particles[gi].BirthTime) || tooOld) ? NAN : age;
     } 
-    else if(WMode == 2) 
+    else if(WMode == W_PARTICLE_SPEED) 
     {
         ResultPoints[gi].W = tooOld ? NAN : speed * AgingRate;
     }
