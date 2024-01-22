@@ -349,14 +349,13 @@ internal class CsProjectFile
     }
 
     private const string ExpandedAssemblyDirectory = $"$({RuntimeAssemblies.EnvironmentVariableName})";
-    private const string PrivateTag = "<Private>True</Private>\n";
-    private const string EndReference = "</Reference>\n";
+    private const string Indentation = "\t\t";
     private const string BeginReference = $"<Reference Include=\"{ExpandedAssemblyDirectory}/";
-    private const string Ending = "\">\n" + PrivateTag + EndReference;
+    private const string Ending = "\"/>\n";
 
     private const string CoreReferences = BeginReference + "Core.dll" + Ending +
-                                          BeginReference + "Logging.dll" + Ending +
-                                          BeginReference + "SharpDX.dll" + Ending +
-                                          BeginReference + "SharpDX.Direct3D11.dll" + Ending +
-                                          BeginReference + "SharpDX.DXGI.dll" + Ending;
+                                          Indentation + BeginReference + "Logging.dll" + Ending +
+                                          Indentation + BeginReference + "SharpDX.dll" + Ending +
+                                          Indentation + BeginReference + "SharpDX.Direct3D11.dll" + Ending +
+                                          Indentation + BeginReference + "SharpDX.DXGI.dll" + Ending;
 }

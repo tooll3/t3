@@ -8,18 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll">
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll">
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Editor.dll">
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/ImGUI.NET.dll">
-            <Private>False</Private>
-        </Reference>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Editor.dll"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/ImGUI.NET.dll"/>
     </ItemGroup>
 
     <ItemGroup>
