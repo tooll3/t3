@@ -16,15 +16,15 @@
     },
     {
       "Id": "b9e78f18-51e8-4440-b8a4-9338f14a5668"/*Size*/,
-      "DefaultValue": 0.25
+      "DefaultValue": 0.05
     },
     {
       "Id": "2bb8354d-b995-497d-962a-c5e9952eca50"/*Colorize*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 0.1
     },
     {
       "Id": "48e1129c-d6cc-4018-a6ee-5266244edd7f"/*Distort*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.1
     },
     {
       "Id": "e0344f32-479e-48b6-9473-26ef59d22a66"/*DistortOffset*/,
@@ -36,7 +36,7 @@
     },
     {
       "Id": "2bd2c6b9-93ce-4de9-9ee5-0b35f4f2719e"/*SampleCount*/,
-      "DefaultValue": 30
+      "DefaultValue": 16
     }
   ],
   "Children": [

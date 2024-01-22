@@ -1,5 +1,6 @@
 {
   "Id": "ecf2c782-4461-4a94-8995-067425e3f84b"/*ChromaticDistortion*/,
+  "Description": "Simulates an imaging error of optical camera lenses that manifests itself as blurring or discoloration at the outer edges.\n\nAlso see [ChromaticAbberation]",
   "InputUis": [
     {
       "InputId": "6297675f-891c-4c06-8685-de3a1a3ffe9b"/*Texture2d*/,
@@ -14,21 +15,30 @@
       "Position": {
         "X": 32.025677,
         "Y": 573.3099
-      }
+      },
+      "Description": "Offsets the center of the effect.",
+      "AddPadding": "True"
     },
     {
       "InputId": "b9e78f18-51e8-4440-b8a4-9338f14a5668"/*Size*/,
       "Position": {
         "X": 32.025677,
         "Y": 618.3099
-      }
+      },
+      "Description": "Controls the intensity of the effect.",
+      "AddPadding": "True"
     },
     {
       "InputId": "2bb8354d-b995-497d-962a-c5e9952eca50"/*Colorize*/,
       "Position": {
         "X": 32.025677,
         "Y": 663.30994
-      }
+      },
+      "Description": "Tints the image yellow.",
+      "AddPadding": "True",
+      "Min": -1.0,
+      "Max": 2.0,
+      "Clamp": true
     },
     {
       "InputId": "48e1129c-d6cc-4018-a6ee-5266244edd7f"/*Distort*/,
@@ -36,28 +46,40 @@
         "X": 32.025677,
         "Y": 708.31
       },
-      "Scale": 0.001
+      "GroupTitle": "Lense distort settings",
+      "Description": "Controls intensity of lense distortion.\n",
+      "Min": -0.1,
+      "Max": 0.3,
+      "Scale": 0.001,
+      "Clamp": true
     },
     {
       "InputId": "e0344f32-479e-48b6-9473-26ef59d22a66"/*DistortOffset*/,
       "Position": {
         "X": 32.025677,
         "Y": 753.31
-      }
+      },
+      "Description": "Uniformly scales the image to fix unwanted effects at the edges when using \"distort\" setting.",
+      "Min": 0.1,
+      "Max": 2.0,
+      "Clamp": true
     },
     {
       "InputId": "cb3ba878-127a-44cd-9aea-7c43e32a090a"/*ScaleImage*/,
       "Position": {
         "X": 32.025677,
         "Y": 798.30994
-      }
+      },
+      "Description": "Uniformly scales the image without cutting the edges."
     },
     {
       "InputId": "2bd2c6b9-93ce-4de9-9ee5-0b35f4f2719e"/*SampleCount*/,
       "Position": {
         "X": 32.025677,
         "Y": 843.30994
-      }
+      },
+      "GroupTitle": "Advanced Options",
+      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed."
     }
   ],
   "SymbolChildUis": [
