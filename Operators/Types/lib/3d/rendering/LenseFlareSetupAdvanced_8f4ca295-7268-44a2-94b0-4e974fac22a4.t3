@@ -50,7 +50,7 @@
     },
     {
       "Id": "be8975c0-2748-4ace-8047-c941caad45c2"/*Shimmer*/,
-      "DefaultValue": 1.2
+      "DefaultValue": 1.0
     },
     {
       "Id": "007b11db-6d0e-49e6-a747-6a2d8cdc0e6b"/*FlareSprites*/,
