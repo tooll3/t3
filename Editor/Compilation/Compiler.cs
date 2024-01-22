@@ -10,7 +10,7 @@ internal static class Compiler
 {
     static readonly Stopwatch _stopwatch = new();
     
-    public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, Verbosity verbosity = Verbosity.Minimal)
+    public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, Verbosity verbosity = Verbosity.Quiet)
     {
         _stopwatch.Restart();
         var workingDirectory = projectFile.Directory;
