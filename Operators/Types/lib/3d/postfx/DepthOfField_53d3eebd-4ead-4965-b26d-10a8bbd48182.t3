@@ -30,7 +30,7 @@
     },
     {
       "Id": "493c40f0-21e6-466b-afc2-eff570229c86"/*MaxSamples*/,
-      "DefaultValue": 50
+      "DefaultValue": 32
     },
     {
       "Id": "40de51d8-91dd-461d-a7be-d4096313eec2"/*NearFarRange*/,
