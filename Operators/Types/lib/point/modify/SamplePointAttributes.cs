@@ -95,14 +95,17 @@ namespace T3.Operators.Types.Id_b3de7a93_e921_4e43_8a56_6c84b2d18b74
 
         private enum Attributes
         {
-            NotUsed =0,
+            NotUsed = 0,
             For_X = 1,
-            For_Y =2,
-            For_Z =3,
-            For_W =4,
-            Rotate_X =5,
-            Rotate_Y =6 ,
-            Rotate_Z =7,
+            For_Y = 2,
+            For_Z = 3,
+            For_W = 4,
+            Rotate_X = 5,
+            Rotate_Y = 6,
+            Rotate_Z = 7,
+            Stretch_X = 8,
+            Stretch_Y = 9,
+            Stretch_Z = 10,
         }
 
         private enum Modes
