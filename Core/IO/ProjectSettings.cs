@@ -1,4 +1,6 @@
-﻿namespace T3.Core.IO
+﻿using System;
+
+namespace T3.Core.IO
 {
     /// <summary>
     /// Saves view layout and currently open node 
@@ -12,7 +14,7 @@
         public class ConfigData
         {
             public bool TimeClipSuspending = true;
-            public string MainOperatorName = "";
+            public Guid MainOperatorGuid = Guid.Empty;
             public float AudioResyncThreshold = 0.04f;
             public bool EnablePlaybackControlWithKeyboard = true;
             public bool WindowedMode = false;

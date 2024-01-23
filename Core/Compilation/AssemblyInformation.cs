@@ -32,6 +32,7 @@ public class AssemblyInformation
     public Guid HomeGuid { get; private set; } = Guid.Empty;
     public bool HasHome => HomeGuid != Guid.Empty;
 
+    public IEnumerable<Assembly> AllAssemblies => _loadContext.Assemblies;
     private AssemblyLoadContext _loadContext;
     private CompositeCompilationAssemblyResolver _assemblyResolver;
 
@@ -214,18 +215,11 @@ public class AssemblyInformation
         return true;
     }
 
-    readonly struct GuidInfo
+    private readonly struct GuidInfo(bool hasGuid, Guid guid, Type type)
     {
-        public readonly bool HasGuid;
-        public readonly Guid Guid;
-        public readonly Type Type;
-
-        public GuidInfo(bool hasGuid, Guid guid, Type type)
-        {
-            HasGuid = hasGuid;
-            Guid = guid;
-            this.Type = type;
-        }
+        public readonly bool HasGuid = hasGuid;
+        public readonly Guid Guid = guid;
+        public readonly Type Type = type;
     }
 
     private DependencyContext DependencyContext => _dependencyContext ??= DependencyContext.Load(_assembly);

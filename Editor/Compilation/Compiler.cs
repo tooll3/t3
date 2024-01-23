@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ internal static class Compiler
 {
     static readonly Stopwatch _stopwatch = new();
     
-    public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, Verbosity verbosity = Verbosity.Quiet)
+    public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, string? targetDirectory = null, Verbosity verbosity = Verbosity.Quiet)
     {
         _stopwatch.Restart();
         var workingDirectory = projectFile.Directory;
@@ -18,10 +19,11 @@ internal static class Compiler
         const string configurationArgFmt = "--configuration {0}";
         string buildModeName = buildMode == BuildMode.Debug ? "Debug" : "Release";
         var buildModeArg = string.Format(configurationArgFmt, buildModeName);
+        targetDirectory ??= projectFile.GetBuildTargetDirectory(buildMode);
 
 
         const string command = "dotnet";
-        string arguments = $"build \"{projectFile.FullPath}\" --nologo {buildModeArg} --verbosity {VerbosityArgs[verbosity]} --output \"{projectFile.GetBuildTargetDirectory(buildMode)}\"";
+        string arguments = $"build \"{projectFile.FullPath}\" --nologo {buildModeArg} --verbosity {VerbosityArgs[verbosity]} --output \"{targetDirectory}\"";
         
         var process = new Process
                           {
@@ -35,7 +37,7 @@ internal static class Compiler
                                               }
                           };
 
-        List<string> output = new(50);
+        var output = new List<string>(24);
 
         process.OutputDataReceived += (sender, args) =>
                                       {
@@ -57,7 +59,7 @@ internal static class Compiler
             return false;
         }
         
-        bool success = false;
+        var success = false;
         foreach (var line in output)
         {
             if (line.Contains("Build succeeded"))
@@ -74,12 +76,10 @@ internal static class Compiler
             return false;
         }
         
-        success = projectFile.TryLoadAssembly(buildMode);
-        
         _stopwatch.Stop();
         Log.Info($"{projectFile.Name}: Total build time took {_stopwatch.ElapsedMilliseconds} ms");
 
-        return success;
+        return true;
     }
     
 

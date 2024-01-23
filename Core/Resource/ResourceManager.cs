@@ -373,12 +373,6 @@ namespace T3.Core.Resource
             return relativePath;
         }
 
-        public static bool TryResolvePath(string relativeFileName, out string absolutePath, params string[]? directories)
-        {
-            directories ??= Array.Empty<string>();
-            return TryResolvePath(relativeFileName, out absolutePath, (IEnumerable<string>)directories);
-        }
-
         public static bool TryResolvePath(string relativeFileName, out string absolutePath, IEnumerable<string> directories)
         {
             relativeFileName = RelativePathBackwardsCompatibility(relativeFileName);
@@ -448,6 +442,11 @@ namespace T3.Core.Resource
             
             return false;
         }
+
+        public static string CleanRelativePath(string relativePath)
+        {
+            return RelativePathBackwardsCompatibility(relativePath, true);
+        }
         #endregion
 
         private uint GetNextResourceId() => Interlocked.Increment(ref _resourceIdCounter);
@@ -457,5 +456,6 @@ namespace T3.Core.Resource
 
         internal static readonly List<ResourceFileWatcher> SharedResourceFileWatchers = new(4);
         public static IEnumerable<string> SharedResourceFolders => SharedResourceFileWatchers.Select(x => x.WatchedFolder);
+
     }
 }

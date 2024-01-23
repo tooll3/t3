@@ -80,7 +80,7 @@ public abstract partial class SymbolPackage
                              .Where(result => newTypes.ContainsKey(result.Guid))
                              .Select(ReadSymbolFromJsonFileResult)
                              .Where(symbolReadResult => symbolReadResult.Result.Symbol is not null)
-                             .ToList(); // Execute and bring back to main thread
+                             .ToArray(); // Execute and bring back to main thread
 
             Log.Debug($"{AssemblyInformation.Name}: Registering loaded symbols...");
 

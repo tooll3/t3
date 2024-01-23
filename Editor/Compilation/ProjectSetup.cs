@@ -52,9 +52,7 @@ internal static class ProjectSetup
             return false;
         }
 
-        var compiled = Compiler.TryCompile(newCsProj, Compiler.BuildMode.Debug);
-
-        if (!compiled)
+        if (!newCsProj.TryRecompile(Compiler.BuildMode.Debug))
         {
             Log.Error("Failed to compile new project");
             newProject = null;

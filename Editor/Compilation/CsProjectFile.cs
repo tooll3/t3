@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -28,7 +29,7 @@ internal class CsProjectFile
     private uint _buildId = GetNewBuildId();
     private readonly string _releaseRootDirectory;
     private readonly string _debugRootDirectory;
-    private readonly string _dllName;
+    public readonly string DllName;
 
     public CsProjectFile(FileInfo file)
     {
@@ -44,13 +45,13 @@ internal class CsProjectFile
 
         _releaseRootDirectory = Path.Combine(Directory, "bin", "Release");
         _debugRootDirectory = Path.Combine(Directory, "bin", "Debug");
-        _dllName = Name + ".dll";
+        DllName = Name + ".dll";
     }
 
     private FileInfo GetBuildTargetPath(Compiler.BuildMode buildMode)
     {
         var directory = GetBuildTargetDirectory(buildMode);
-        return new FileInfo(Path.Combine(directory, _dllName));
+        return new FileInfo(Path.Combine(directory, DllName));
     }
 
     public string GetBuildTargetDirectory(Compiler.BuildMode buildMode)
@@ -91,11 +92,6 @@ internal class CsProjectFile
         }
 
         return contents[start..end];
-    }
-
-    public void MoveTo(string newPath)
-    {
-        throw new NotImplementedException();
     }
 
     private static List<DependencyInfo> ParseDependencies(string csproj)
@@ -203,10 +199,6 @@ internal class CsProjectFile
         return true;
     }
 
-    private const string DllReferenceStart = "<Reference Include=\"";
-    private const string ProjectReferenceStart = "<ProjectReference Include=\"";
-    private const string PackageReferenceStart = "<PackageReference Include=\"";
-
     // todo - rate limit recompiles for when multiple files change
     public bool TryRecompile(Compiler.BuildMode buildMode)
     {
@@ -218,14 +210,21 @@ internal class CsProjectFile
         if (!success)
         {
             _buildId = previousBuildId;
-        }
-        else
-        {
-            // may be unnecessary, will not unload if assembly contains Home because Home type is never unloaded even when project is recompiled
-            previousAssembly?.Unload();
+            return false;
         }
 
-        return success;
+        previousAssembly?.Unload();
+        Stopwatch stopwatch = new();
+        stopwatch.Start();
+        var loaded = TryLoadAssembly(buildMode, null);
+        stopwatch.Stop();
+        Log.Info($"{(loaded ? "Loading" : "Failing to load")} assembly took {stopwatch.ElapsedMilliseconds} ms");
+        return loaded;
+    }
+
+    public bool TryCompileExternal(Compiler.BuildMode buildMode, string externalDirectory)
+    {
+        return Compiler.TryCompile(this, buildMode, externalDirectory);
     }
 
     // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation
@@ -287,7 +286,7 @@ internal class CsProjectFile
         if (compatibleDirectories.Length == 0)
             return false;
 
-        var latestDll = compatibleDirectories.SelectMany(x => x.EnumerateFiles(_dllName)).MaxBy(x => x.LastWriteTime);
+        var latestDll = compatibleDirectories.SelectMany(x => x.EnumerateFiles(DllName)).MaxBy(x => x.LastWriteTime);
         if (latestDll == null)
             return false;
 
@@ -323,7 +322,6 @@ internal class CsProjectFile
         return loaded;
     }
 
-    public bool TryLoadAssembly(Compiler.BuildMode buildMode) => TryLoadAssembly(buildMode, null);
 
     private bool TryLoadAssembly(Compiler.BuildMode buildMode, FileInfo assemblyFile)
     {
@@ -358,4 +356,8 @@ internal class CsProjectFile
                                           Indentation + BeginReference + "SharpDX.dll" + Ending +
                                           Indentation + BeginReference + "SharpDX.Direct3D11.dll" + Ending +
                                           Indentation + BeginReference + "SharpDX.DXGI.dll" + Ending;
+
+    private const string DllReferenceStart = "<Reference Include=\"";
+    private const string ProjectReferenceStart = "<ProjectReference Include=\"";
+    private const string PackageReferenceStart = "<PackageReference Include=\"";
 }
