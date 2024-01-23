@@ -1,7 +1,7 @@
 #include "lib/shared/point.hlsl"
 #include "lib/shared/quat-functions.hlsl"
 
-static const float4 Factors[] =
+static const float4 FactorsForPositionAndW[] =
     {
         //     x  y  z  w
         float4(0, 0, 0, 0), // 0 nothing
@@ -109,11 +109,36 @@ sampler texSampler : register(s0);
     rot2 = normalize(rot2);
     p.Rotation = qMul(rot, rot2);
 
+        // Stretch
+    //float3 stretch = p.Stretch;
+    float3 stretchFactor =float3( 
+        (R == 8 ? (c.r * RFactor + ROffset) : 1) *
+        (G == 8 ? (c.g * GFactor + GOffset) : 1) *
+        (B == 8 ? (c.b * BFactor + BOffset) : 1) *
+        (L == 8 ? (gray * LFactor + LOffset) : 1),
+
+        (R == 9 ? (c.r * RFactor + ROffset) : 1) *
+        (G == 9 ? (c.g * GFactor + GOffset) : 1) *
+        (B == 9 ? (c.b * BFactor + BOffset) : 1) *
+        (L == 9 ? (gray * LFactor + LOffset) : 1),
+
+        (R == 10 ? (c.r * RFactor + ROffset) : 1) *
+        (G == 10 ? (c.g * GFactor + GOffset) : 1) *
+        (B == 10 ? (c.b * BFactor + BOffset) : 1) *
+        (L == 10 ? (gray * LFactor + LOffset) : 1)
+    );
+
+    
+    float3 stretchOffset = Mode < 0.5 ? stretchFactor
+                               : float3(stretchFactor) * p.Stretch;
+
+    p.Stretch *= stretchOffset;
+
     // Position
-    float4 ff = Factors[(uint)clamp(L, 0, 5.1)] * (gray * LFactor + LOffset) +
-                Factors[(uint)clamp(R, 0, 5.1)] * (c.r * RFactor + ROffset) +
-                Factors[(uint)clamp(G, 0, 5.1)] * (c.g * GFactor + GOffset) +
-                Factors[(uint)clamp(B, 0, 5.1)] * (c.b * BFactor + BOffset);
+    float4 ff = FactorsForPositionAndW[(uint)clamp(L, 0, 5.1)] * (gray * LFactor + LOffset) +
+                FactorsForPositionAndW[(uint)clamp(R, 0, 5.1)] * (c.r * RFactor + ROffset) +
+                FactorsForPositionAndW[(uint)clamp(G, 0, 5.1)] * (c.g * GFactor + GOffset) +
+                FactorsForPositionAndW[(uint)clamp(B, 0, 5.1)] * (c.b * BFactor + BOffset);
 
     float3 offset = Mode < 0.5 ? float3(ff.xyz)
                                : float3(ff.xyz) * p.Position;
@@ -130,6 +155,9 @@ sampler texSampler : register(s0);
         newPos = qRotateVec3(newPos, rot2);
     }
     p.Position = newPos;
-    p.W = Mode < 0.5 ? (p.W + ff.w) : (p.W * (1 + ff.w));
+
+    p.W = Mode < 0.5 ? (p.W + ff.w)
+                                       : (p.W * (1 + ff.w));
+
     ResultPoints[index] = p;
 }
