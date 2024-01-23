@@ -1,5 +1,5 @@
 {
-  "Name": "FindClosestPointOnMeshExample",
+  "Name": "FindClosestPointsOnMeshExample",
   "Id": "ff01e31e-c987-449f-ab4a-066fedf5d237",
   "Namespace": "user.pixtur.examples",
   "Inputs": [],
@@ -11,7 +11,7 @@
         {
           "Id": "72eda38f-fc49-4b1f-b7c0-97e07bee4f7c"/*CountX*/,
           "Type": "System.Int32",
-          "Value": 200
+          "Value": 64
         },
         {
           "Id": "8c46fc72-8960-4247-a5ef-dd38f822f1bb"/*CountY*/,
@@ -36,7 +36,7 @@
           "Id": "0f053c34-c9ef-46b7-9c73-fff9984a3d5e"/*Center*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": -0.07999998,
+            "X": 0.13,
             "Y": 0.78,
             "Z": -0.26999998
           }

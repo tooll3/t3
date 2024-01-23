@@ -116,7 +116,7 @@
       ]
     },
     {
-      "Id": "421e84a6-a0b4-46a1-b9ef-24773d63e4f2"/*FindClosestPointOnMeshExample*/,
+      "Id": "421e84a6-a0b4-46a1-b9ef-24773d63e4f2"/*FindClosestPointsOnMeshExample*/,
       "SymbolId": "ff01e31e-c987-449f-ab4a-066fedf5d237",
       "InputValues": [],
       "Outputs": []
