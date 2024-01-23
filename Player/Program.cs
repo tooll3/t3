@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
@@ -16,6 +18,7 @@ using SharpDX.DXGI;
 using SharpDX.Windows;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.Compilation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
 using T3.Core.Logging;
@@ -23,6 +26,7 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Editor.App;
 using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
 using Vector2 = System.Numerics.Vector2;
@@ -61,7 +65,6 @@ namespace T3.Player
             var fileWriter = FileWriter.CreateDefault(logDirectory);
             try
             {
-
                 Log.AddWriter(new ConsoleWriter());
                 Log.AddWriter(fileWriter);
 
@@ -75,11 +78,11 @@ namespace T3.Player
                 Log.Debug($"using vsync: {_vsync}, windowed: {_commandLineOptions.Windowed}, size: {_commandLineOptions.Size}, loop: {_commandLineOptions.Loop}, logging: {_commandLineOptions.Logging}");
 
                 _renderForm = new RenderForm($"{ProjectSettings.Config.MainOperatorName}")
-                               {
-                                   ClientSize = _commandLineOptions.Size,
-                                   AllowUserResizing = false,
-                                   Icon = new Icon(@"Resources\t3-editor\images\t3.ico")
-                               };
+                                  {
+                                      ClientSize = _commandLineOptions.Size,
+                                      AllowUserResizing = false,
+                                      Icon = new Icon(@"Resources\t3-editor\images\t3.ico")
+                                  };
 
                 // SwapChain description
                 var desc = new SwapChainDescription()
@@ -119,42 +122,42 @@ namespace T3.Player
                 _renderForm.KeyUp += HandleKeyUp;
 
                 _renderForm.KeyUp += (sender, keyArgs) =>
-                              {
-                                  if (startedWindowed && keyArgs.Alt && keyArgs.KeyCode == Keys.Enter)
-                                  {
-                                      _swapChain.IsFullScreen = !_swapChain.IsFullScreen;
-                                      RebuildBackBuffer(_renderForm, _device, ref _renderView, ref _backBuffer, ref _swapChain);
-                                      if (_swapChain.IsFullScreen)
-                                      {
-                                          Cursor.Hide();
-                                      }
-                                      else
-                                      {
-                                          Cursor.Show();
-                                      }
-                                  }
+                                     {
+                                         if (startedWindowed && keyArgs.Alt && keyArgs.KeyCode == Keys.Enter)
+                                         {
+                                             _swapChain.IsFullScreen = !_swapChain.IsFullScreen;
+                                             RebuildBackBuffer(_renderForm, _device, ref _renderView, ref _backBuffer, ref _swapChain);
+                                             if (_swapChain.IsFullScreen)
+                                             {
+                                                 Cursor.Hide();
+                                             }
+                                             else
+                                             {
+                                                 Cursor.Show();
+                                             }
+                                         }
 
-                                  if (ProjectSettings.Config.EnablePlaybackControlWithKeyboard)
-                                  {
-                                      switch (keyArgs.KeyCode)
-                                      {
-                                          case Keys.Left:
-                                              Playback.Current.TimeInBars -= 4;
-                                              break;
-                                          case Keys.Right:
-                                              Playback.Current.TimeInBars += 4;
-                                              break;
-                                          case Keys.Space:
-                                              Playback.Current.PlaybackSpeed = Math.Abs(Playback.Current.PlaybackSpeed) > 0.01f ? 0 : 1;
-                                              break;
-                                      }
-                                  }
+                                         if (ProjectSettings.Config.EnablePlaybackControlWithKeyboard)
+                                         {
+                                             switch (keyArgs.KeyCode)
+                                             {
+                                                 case Keys.Left:
+                                                     Playback.Current.TimeInBars -= 4;
+                                                     break;
+                                                 case Keys.Right:
+                                                     Playback.Current.TimeInBars += 4;
+                                                     break;
+                                                 case Keys.Space:
+                                                     Playback.Current.PlaybackSpeed = Math.Abs(Playback.Current.PlaybackSpeed) > 0.01f ? 0 : 1;
+                                                     break;
+                                             }
+                                         }
 
-                                  if (keyArgs.KeyCode == Keys.Escape)
-                                  {
-                                      Application.Exit();
-                                  }
-                              };
+                                         if (keyArgs.KeyCode == Keys.Escape)
+                                         {
+                                             MediaTypeNames.Application.Exit();
+                                         }
+                                     };
 
                 _renderForm.MouseMove += MouseMoveHandler;
                 _renderForm.MouseClick += MouseMoveHandler;
@@ -169,42 +172,13 @@ namespace T3.Player
                                          };
                 ShaderCompiler.Instance = shaderCompiler;
                 ResourceManager.Init(_device);
-                ResourceManager resourceManager = ResourceManager.Instance();
-                var gotVertexShader = resourceManager.TryCreateShaderResource(out  _fullScreenVertexShaderResource,
-                                                                              relativePath: @"lib\dx11\fullscreen-texture.hlsl",
-                                                                              entryPoint: "vsMain",
-                                                                              name: "vs-fullscreen-texture",
-                                                                              errorMessage: out var errorMessage);
-                
-                if(!string.IsNullOrWhiteSpace(errorMessage))
-                    Log.Error($"Failed to load vertex shader: {errorMessage}");
-                    
-                
-                var gotPixelShader = resourceManager.TryCreateShaderResource(out  _fullScreenPixelShaderResource,
-                                                                             relativePath: @"lib\dx11\fullscreen-texture.hlsl",
-                                                                             entryPoint: "psMain",
-                                                                             name: "ps-fullscreen-texture",
-                                                                             errorMessage: out errorMessage);
-                
-                if(!string.IsNullOrWhiteSpace(errorMessage))
-                    Log.Error($"Failed to load pixel shader: {errorMessage}");
+                SharedResources.Initialize(ResourceManager.Instance());
+                _fullScreenPixelShaderResource = SharedResources.FullScreenPixelShaderResource;
+                _fullScreenVertexShaderResource = SharedResources.FullScreenVertexShaderResource;
 
-                Assembly operatorsAssembly;
-                try
-                {
-                    operatorsAssembly = Assembly.LoadFrom("Operators.dll");
-                }
-                catch (Exception e)
-                {
-                    Log.Debug($"Error loading operator assembly: '{e.Message}'");
-                    return;
-                }
+                LoadOperators();
 
-                //_symbolData = new SymbolData(operatorsAssembly);
-                _symbolPackage.Load(enableLog: false);
-
-                var symbols = SymbolRegistry.Entries;
-                var demoSymbol = symbols.First(entry => entry.Value.Name == ProjectSettings.Config.MainOperatorName).Value;
+                var demoSymbol = SymbolRegistry.Entries[ProjectSettings.Config.MainOperatorGuid];
 
                 var playbackSettings = demoSymbol.PlaybackSettings;
                 _playback = new Playback
@@ -213,7 +187,7 @@ namespace T3.Player
                                 };
 
                 // Create instance of project op, all children are create automatically
-                _project = demoSymbol.CreateInstance(Guid.NewGuid());
+                _project = demoSymbol.CreateInstance(Guid.NewGuid(), null);
                 _evalContext = new EvaluationContext();
 
                 var prerenderRequired = false;
@@ -312,6 +286,32 @@ namespace T3.Player
             }
         }
 
+        private static void LoadOperators()
+        {
+            var assemblies = Directory.GetFiles(RuntimeAssemblies.CoreDirectory, "*.dll")
+                                      .Select(file =>
+                                              {
+                                                  RuntimeAssemblies.TryLoadAssemblyInformation(file, out var info);
+                                                  return info;
+                                              })
+                                      .Where(info => info != null)
+                                      .Where(info => info.IsOperatorAssembly);
+
+            var packageLoadInfo = assemblies
+                                 .AsParallel()
+                                 .Select(assemblyInfo =>
+                                         {
+                                             var symbolPackage = new PlayerSymbolPackage(assemblyInfo);
+                                             symbolPackage.LoadSymbols(false, out var newSymbolsWithFiles, out var allNewSymbols);
+                                             return new PackageLoadInfo(symbolPackage, newSymbolsWithFiles, allNewSymbols);
+                                         })
+                                 .ToArray();
+
+            packageLoadInfo
+               .AsParallel()
+               .ForAll(packageInfo => packageInfo.Package.ApplySymbolChildren(packageInfo.NewlyLoadedSymbols));
+        }
+
         private static void RenderCallback()
         {
             WasapiAudioInput.StartFrame(_playback.Settings);
@@ -329,7 +329,7 @@ namespace T3.Player
                     }
                     else
                     {
-                        Application.Exit();
+                        MediaTypeNames.Application.Exit();
                     }
                 }
             }
@@ -351,7 +351,7 @@ namespace T3.Player
                 textureOutput.Invalidate();
                 var outputTexture = textureOutput.GetValue(_evalContext);
                 var textureChanged = outputTexture != _outputTexture;
-                
+
                 if (_outputTexture != null || textureChanged)
                 {
                     _outputTexture = outputTexture;
@@ -366,7 +366,7 @@ namespace T3.Player
                         Log.Debug("Creating new srv...");
                         _outputTextureSrv = new ShaderResourceView(_device, _outputTexture);
                     }
-                    
+
                     _deviceContext.PixelShader.SetShaderResource(0, _outputTextureSrv);
 
                     _deviceContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
@@ -389,7 +389,6 @@ namespace T3.Player
 
             MouseInput.Set(relativePosition, (e.Button & MouseButtons.Left) != 0);
         }
-        
 
         private static void HandleKeyDown(object sender, KeyEventArgs e)
         {
@@ -449,10 +448,19 @@ namespace T3.Player
             parserResult.WithParsed(o => { parsedOptions = o; })
                         .WithNotParsed(o => { Log.Debug(helpText); });
             // use windowed status _only_ when explicitly set, the Options struct doesn't know about this
-            if(!args.Any(s => "--windowed".Contains(s))) {
+            if (!args.Any(s => "--windowed".Contains(s)))
+            {
                 parsedOptions.Windowed = ProjectSettings.Config.WindowedMode;
             }
+
             return parsedOptions;
+        }
+
+        private readonly struct PackageLoadInfo(PlayerSymbolPackage package, List<SymbolJson.SymbolReadResult> newlyLoadedSymbols, IReadOnlyCollection<Symbol> allNewSymbols)
+        {
+            public readonly PlayerSymbolPackage Package;
+            public readonly List<SymbolJson.SymbolReadResult> NewlyLoadedSymbols = newlyLoadedSymbols;
+            public readonly IReadOnlyCollection<Symbol> AllNewSymbols = allNewSymbols;
         }
 
         // Private static bool _inResize;
@@ -460,7 +468,6 @@ namespace T3.Player
         private static SwapChain _swapChain;
         private static RenderTargetView _renderView;
         private static Texture2D _backBuffer;
-        private static StaticSymbolPackage _symbolPackage;
         private static Instance _project;
         private static EvaluationContext _evalContext;
         private static Playback _playback;
