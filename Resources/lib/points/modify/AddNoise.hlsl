@@ -70,7 +70,7 @@ void main(uint3 i : SV_DispatchThreadID)
     Point p = SourcePoints[i.x];
 
     float weight = UseSelection < 0 ? lerp(1, 1- p.Selected, -UseSelection) 
-                                : lerp(1, p.Selected, UseSelection);
+                                : lerp(1, p.W, UseSelection);
 
     float3 offset;;
     float4 newRotation = p.Rotation;
