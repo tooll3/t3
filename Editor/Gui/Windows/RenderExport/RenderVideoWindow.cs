@@ -1,9 +1,12 @@
 using System;
+using System.IO;
+using System.Text.RegularExpressions;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
+using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -22,11 +25,17 @@ public class RenderVideoWindow : RenderHelperWindow
 
     protected override void DrawContent()
     {
+        FormInputs.AddVerticalSpace(15);
         DrawTimeSetup();
+        ImGui.Indent(5);
+        DrawInnerContent();
+    }
 
+    private void DrawInnerContent()
+    {
         var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
-     
-        if(FindIssueWithTexture(mainTexture, MfVideoWriter.SupportedFormats, out var warning))
+
+        if (FindIssueWithTexture(mainTexture, MfVideoWriter.SupportedFormats, out var warning))
         {
             CustomComponents.HelpText(warning);
             return;
@@ -43,15 +52,22 @@ public class RenderVideoWindow : RenderHelperWindow
             var duration = FrameCount / Fps;
             double bitsPerPixelSecond = _bitrate / (size.Width * size.Height * Fps);
             var q = GetQualityLevelFromRate((float)bitsPerPixelSecond);
-            FormInputs.AddHint($"{q.Title} quality ({_bitrate * duration / 1024 / 1024 / 8:0} MB for {duration/60:0}:{duration%60:00}s at {size.Width}×{size.Height})");
+            FormInputs.AddHint($"{q.Title} quality ({_bitrate * duration / 1024 / 1024 / 8:0} MB for {duration / 60:0}:{duration % 60:00}s at {size.Width}×{size.Height})");
             CustomComponents.TooltipForLastItem(q.Description);
         }
-        
+
         FormInputs.AddStringInput("File", ref _targetFile);
         ImGui.SameLine();
         FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref _targetFile);
-        ImGui.Separator();
 
+        if (IsFilenameIncrementible())
+        {
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, _autoIncrementVersionNumber ? 0.7f : 0.3f);
+            FormInputs.AddCheckBox("Increment version after export", ref _autoIncrementVersionNumber);
+            ImGui.PopStyleVar();
+        }
+
+        ImGui.Separator();
 
         if (!_isExporting)
         {
@@ -71,7 +87,6 @@ public class RenderVideoWindow : RenderHelperWindow
                         _videoWriter = new Mp4VideoWriter(_targetFile, size);
                         _videoWriter.Bitrate = _bitrate;
 
-                        
                         // FIXME: Allow floating point FPS in a future version
                         _videoWriter.Framerate = (int)Fps;
                     }
@@ -90,6 +105,7 @@ public class RenderVideoWindow : RenderHelperWindow
                 var successful = success ? "successfully" : "unsuccessfully";
                 _lastHelpString = $"Sequence export finished {successful} in {durationSoFar:0.00}s";
                 _isExporting = false;
+                TryIncrementingFileName();
             }
             else if (ImGui.Button("Cancel"))
             {
@@ -98,7 +114,7 @@ public class RenderVideoWindow : RenderHelperWindow
             }
             else
             {
-                var estimatedTimeLeft = durationSoFar /  Progress - durationSoFar;
+                var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
                 _lastHelpString = $"Saved {_videoWriter.FilePath} frame {FrameIndex}/{FrameCount}  ";
                 _lastHelpString += $"{Progress * 100.0:0}%%  {HumanReadableDurationFromSeconds(estimatedTimeLeft)} left";
             }
@@ -110,8 +126,47 @@ public class RenderVideoWindow : RenderHelperWindow
                 Playback.Current.PlaybackSpeed = _previousPlaybackSpeed;
             }
         }
-        
+
         CustomComponents.HelpText(_lastHelpString);
+    }
+
+    private static Regex _matchFileVersionPattern = new Regex(@"\bv(\d{2,4})\b");
+    
+    private static bool IsFilenameIncrementible()
+    {
+        var filename = Path.GetFileName(_targetFile);
+        if (string.IsNullOrEmpty(filename))
+            return false;
+        
+        //var result = Regex.Match(filename, @"\bv(\d{2,4})\b");
+        var result = _matchFileVersionPattern.Match(filename);
+        return result.Success;
+    }
+
+    private static void TryIncrementingFileName()
+    {
+        if (!_autoIncrementVersionNumber)
+            return;
+        
+        var filename = Path.GetFileName(_targetFile);
+        if (string.IsNullOrEmpty(filename))
+            return;
+        
+        //var result = Regex.Match(filename, @"\bv(\d{2,4})\b");
+        var result = _matchFileVersionPattern.Match(filename);
+        if (!result.Success)
+            return;
+        
+        var versionString = result.Groups[1].Value;
+        if (!int.TryParse(versionString, out var versionNumber))
+            return;
+        
+        var digits = versionString.Length.Clamp(2,4);
+        var newVersionString = "v"+ (versionNumber +1).ToString("D"+digits);
+        var newFilename = filename.Replace("v" + versionString, newVersionString);
+
+        var directoryName = Path.GetDirectoryName(_targetFile);
+        _targetFile = directoryName == null ? newFilename : Path.Combine(directoryName, newFilename);
     }
 
     private string HumanReadableDurationFromSeconds(double seconds)
@@ -202,9 +257,12 @@ public class RenderVideoWindow : RenderHelperWindow
                                                    new QualityLevel(1, "Reference", "Indistinguishable. Very large files."),
                                                };
     
-    private static int _bitrate = 15000000;
-    private static string _targetFile = "./Render/output.mp4";
+    private static int _bitrate = 25000000;
+    private static string _targetFile = "./Render/render-v01.mp4";
 
+    private static bool _autoIncrementVersionNumber = true;
+    private static int _versionNumberBeforeExport = 1;
+    private static int _versionDigitsBeforeExport = 2;
     private static Mp4VideoWriter _videoWriter = null;
     private static string _lastHelpString = string.Empty;
     private double _previousPlaybackSpeed;

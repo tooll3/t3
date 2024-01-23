@@ -8,7 +8,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "0a3e1e60-39c1-4cb7-a6c1-6442ef0fe9cd"/*Black*/,
+      "Id": "0a3e1e60-39c1-4cb7-a6c1-6442ef0fe9cd"/*ShadowColor*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
@@ -17,7 +17,7 @@
       }
     },
     {
-      "Id": "703cf883-ece6-42d6-9e8c-0248b58eca2d"/*White*/,
+      "Id": "703cf883-ece6-42d6-9e8c-0248b58eca2d"/*HighlightColor*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0,

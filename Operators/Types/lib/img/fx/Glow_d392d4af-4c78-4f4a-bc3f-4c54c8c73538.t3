@@ -17,7 +17,7 @@
     },
     {
       "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
-      "DefaultValue": 0.55
+      "DefaultValue": 0.5
     },
     {
       "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,

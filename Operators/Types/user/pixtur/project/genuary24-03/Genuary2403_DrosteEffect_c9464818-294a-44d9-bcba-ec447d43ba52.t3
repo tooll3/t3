@@ -913,7 +913,7 @@
           "Value": 0.49
         },
         {
-          "Id": "dd46595e-01e5-4616-9682-3a4eb7f63016"/*Color*/,
+          "Id": "dd46595e-01e5-4616-9682-3a4eb7f63016"/*ColorHSB*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.0,

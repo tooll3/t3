@@ -168,7 +168,9 @@ namespace T3.Editor.Gui.Graph
             if (FitViewToSelectionHandling.FitViewToSelectionRequested)
                 FitViewToSelection();
 
-            var fadeBackgroundImage = GraphImageBackground.IsActive ? (ImGui.GetMousePos().X).Clamp(0, 100) / 100 : 1;
+            var fadeBackgroundImage = GraphImageBackground.IsActive 
+                                          ? (ImGui.GetMousePos().X + 50).Clamp(0, 100) / 100 
+                                          : 1;
             if (GraphImageBackground.IsActive && fadeBackgroundImage == 0)
             {
                 if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
@@ -230,15 +232,27 @@ namespace T3.Editor.Gui.Graph
 
                 drawList.ChannelsSetCurrent(0);
                 {
+                    const float activeBorderWidth = 30;
                     // Fade and toggle graph on right edge
                     var windowPos = Vector2.Zero;
                     var windowSize = ImGui.GetIO().DisplaySize;
                     var mousePos = ImGui.GetMousePos();
-                    var showBackgroundOnly = GraphImageBackground.IsActive && mousePos.X > windowSize.X + windowPos.X - 2;
+                    var showBackgroundOnly = GraphImageBackground.IsActive && mousePos.X > windowSize.X + windowPos.X - activeBorderWidth;
 
                     var graphFade = (GraphImageBackground.IsActive && !ImGui.IsMouseDown(ImGuiMouseButton.Left))
-                                        ? (windowSize.X + windowPos.X - mousePos.X).Clamp(0, 100) / 100
+                                        ? (windowSize.X + windowPos.X - mousePos.X - activeBorderWidth ).Clamp(0, 100) / 100
                                         : 1;
+
+                    if (graphFade < 1)
+                    {
+                        var x = windowPos.X + windowSize.X - activeBorderWidth;
+                        drawList.AddRectFilled(new Vector2(x, windowPos.Y ),
+                                               new Vector2(x+1, windowPos.Y + windowSize.Y),
+                                               UiColors.BackgroundFull.Fade((1-graphFade)) * 0.5f);
+                        drawList.AddRectFilled(new Vector2(x+1, windowPos.Y ),
+                                               new Vector2(x+2, windowPos.Y + windowSize.Y),
+                                               UiColors.ForegroundFull.Fade((1-graphFade)) * 0.5f);
+                    }
 
                     if (showBackgroundOnly)
                     {

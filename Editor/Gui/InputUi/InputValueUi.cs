@@ -617,9 +617,9 @@ namespace T3.Editor.Gui.InputUi
             Extract,
         }
 
-        private static void PublishAsInput(IInputSlot inputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
+        private static void PublishAsInput(IInputSlot originalInputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
         {
-            var composition = NodeSelection.GetSelectedComposition() ?? inputSlot.Parent.Parent;
+            var composition = NodeSelection.GetSelectedComposition() ?? originalInputSlot.Parent.Parent;
 
             if (composition == null)
             {
@@ -632,19 +632,31 @@ namespace T3.Editor.Gui.InputUi
 
             var updatedComposition = Structure.GetInstanceFromIdPath(OperatorUtils.BuildIdPathForInstance(composition));
 
-            var newInput = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
-            if (newInput != null)
+            var newInputDefinition = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
+            if (newInputDefinition == null)
             {
-                var cmd = new AddConnectionCommand(updatedComposition.Symbol,
-                                                   new Symbol.Connection(sourceParentOrChildId: ConnectionMaker.UseSymbolContainerId,
-                                                                         sourceSlotId: newInput.Id,
-                                                                         targetParentOrChildId: symbolChildUi.Id,
-                                                                         targetSlotId: input.InputDefinition.Id),
-                                                   0);
-                cmd.Do();
-                newInput.DefaultValue = input.Value.Clone();
-                inputSlot.DirtyFlag.Invalidate();
+                Log.Warning("Publishing wasn't possible");
+                return;
             }
+            var cmd = new AddConnectionCommand(updatedComposition.Symbol,
+                                               new Symbol.Connection(sourceParentOrChildId: ConnectionMaker.UseSymbolContainerId,
+                                                                     sourceSlotId: newInputDefinition.Id,
+                                                                     targetParentOrChildId: symbolChildUi.Id,
+                                                                     targetSlotId: input.InputDefinition.Id),
+                                               0);
+            cmd.Do();
+            
+            newInputDefinition.DefaultValue.Assign(input.Value.Clone());
+            originalInputSlot.Input.Value.Assign(input.Value.Clone());
+            originalInputSlot.DirtyFlag.Invalidate();
+            
+            var newSlot = updatedComposition.Inputs.FirstOrDefault(i => i.Id == newInputDefinition.Id);
+            if (newSlot != null)
+            {
+                newSlot.Input.Value.Assign(input.Value.Clone());
+                newSlot.Input.IsDefault = false;
+            }
+            UndoRedoStack.Clear();
         }
 
         public virtual void DrawSettings()

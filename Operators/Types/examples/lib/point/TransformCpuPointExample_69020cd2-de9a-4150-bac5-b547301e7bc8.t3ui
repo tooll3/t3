@@ -48,36 +48,36 @@
     {
       "ChildId": "4463665e-ffa8-4887-a36e-bd2fa78d59f6"/*Camera*/,
       "Position": {
-        "X": 1650.0,
-        "Y": 0.0
+        "X": 1648.9097,
+        "Y": -141.74823
       }
     },
     {
       "ChildId": "62b4ab08-bf04-4658-ae10-a7013dfced42"/*GridPoints*/,
       "Position": {
-        "X": 1200.0,
-        "Y": 0.0
+        "X": 1198.9097,
+        "Y": -141.74823
       }
     },
     {
       "ChildId": "bd40aa56-1bda-4716-8783-a2f444d56569"/*DrawMeshAtPoints*/,
       "Position": {
-        "X": 1500.0,
-        "Y": 0.0
+        "X": 1498.9097,
+        "Y": -141.74823
       }
     },
     {
       "ChildId": "1ffddd6f-34bf-4e1f-b2a5-ee7d35a44230"/*CubeMesh*/,
       "Position": {
-        "X": 1350.0,
-        "Y": 63.0
+        "X": 1348.9097,
+        "Y": -78.74823
       }
     },
     {
       "ChildId": "64443450-8c7f-4bd3-85e5-898dceb9ff1b"/*_RandomizePoints_Legacy1*/,
       "Position": {
-        "X": 1350.0,
-        "Y": 0.0
+        "X": 1348.9097,
+        "Y": -141.74823
       }
     },
     {
@@ -132,8 +132,8 @@
     {
       "ChildId": "94487d1d-e5ce-419f-8620-1558cef22c96"/*TransformCpuPoint*/,
       "Position": {
-        "X": 1500.0,
-        "Y": 826.0
+        "X": 1498.9097,
+        "Y": 249.19379
       }
     },
     {
@@ -219,14 +219,21 @@
         "X": 1200.0,
         "Y": 166.0
       }
+    },
+    {
+      "ChildId": "11d85cf3-751a-403e-a31b-a5235f7e9b8a"/*APoint*/,
+      "Position": {
+        "X": 1181.7922,
+        "Y": 23.17279
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "3a1fe126-01e6-4d55-9abf-7344c195a4fd"/*Output*/,
       "Position": {
-        "X": 2060.0,
-        "Y": 437.5
+        "X": 1798.9097,
+        "Y": -141.74823
       }
     }
   ]

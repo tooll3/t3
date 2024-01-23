@@ -219,7 +219,7 @@ public abstract class RenderHelperWindow : Window
     private static TimeRanges _timeRange = TimeRanges.Custom;
     private static TimeReference _timeReference;
     private static float _startTime;
-    private static float _endTime = 1.0f; // one Bar
+    private static float _endTime = 4.0f; // one Bar
     protected static float Fps = 60.0f;
     private static float _lastValidFps = Fps;
 

@@ -13,10 +13,10 @@ namespace T3.Operators.Types.Id_299e9912_2a6a_40ea_aa31_4c357bbec125
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
 
         [Input(Guid = "0a3e1e60-39c1-4cb7-a6c1-6442ef0fe9cd")]
-        public readonly InputSlot<System.Numerics.Vector4> Black = new();
+        public readonly InputSlot<System.Numerics.Vector4> ShadowColor = new();
 
         [Input(Guid = "703cf883-ece6-42d6-9e8c-0248b58eca2d")]
-        public readonly InputSlot<System.Numerics.Vector4> White = new();
+        public readonly InputSlot<System.Numerics.Vector4> HighlightColor = new();
 
         [Input(Guid = "1c8ca868-0d54-4776-92bd-5c4183660216")]
         public readonly InputSlot<System.Numerics.Vector4> GrayScaleWeights = new();

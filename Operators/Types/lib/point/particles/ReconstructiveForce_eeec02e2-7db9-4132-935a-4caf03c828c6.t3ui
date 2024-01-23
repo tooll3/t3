@@ -7,7 +7,8 @@
       "Position": {
         "X": -935.70306,
         "Y": 1696.3352
-      }
+      },
+      "GroupTitle": "Volume"
     },
     {
       "InputId": "4b253a7c-0e50-477d-8eee-4f4c9a5608e9"/*VolumeStretch*/,
@@ -52,7 +53,8 @@
       "Position": {
         "X": -935.70306,
         "Y": 1966.3364
-      }
+      },
+      "GroupTitle": "Force"
     },
     {
       "InputId": "f6cb95fe-7079-4064-bac3-e36bc648da10"/*DistanceMode*/,

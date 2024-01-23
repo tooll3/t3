@@ -1,5 +1,6 @@
 {
   "Id": "13d5260d-4e50-48f8-909c-7d84d6f0a43f"/*SSAO*/,
+  "Description": "Adds a Screen Space Ambient Occlusion (SSAO) effect to a 3D rendered scene.\n\nWith this effect, a shading layer can be added in estimates how much a point or surface in the scene is exposed to ambient light.",
   "InputUis": [
     {
       "InputId": "450023da-53fb-4e36-9936-551a2ebcce84"/*Texture2d*/,
@@ -22,63 +23,80 @@
       "Position": {
         "X": -181.0277,
         "Y": 1812.5299
-      }
+      },
+      "Description": "Defines the range of the scene that the effect is applied to.",
+      "AddPadding": "True"
     },
     {
       "InputId": "40e22707-5c08-4c64-adcb-080b50aeb4f6"/*NearFarClip*/,
       "Position": {
         "X": -181.0277,
         "Y": 1902.5299
-      }
+      },
+      "Description": "Sets the Near and Far clipping."
     },
     {
       "InputId": "12cd23ef-82ea-41b3-a8da-72bb66018d86"/*Color*/,
       "Position": {
         "X": -181.0277,
         "Y": 1947.5299
-      }
+      },
+      "Description": "Selects the color which is applied to the parts of the image that are darkened.",
+      "AddPadding": "True"
     },
     {
       "InputId": "e54a0202-19ab-42f8-bd7d-ae2881d58ea2"/*BoostShadows*/,
       "Position": {
         "X": -181.0277,
         "Y": 1992.5299
-      }
+      },
+      "Description": "The first setting controls the bias shifting the whole effect.\nThe second setting boosts the darker areas."
     },
     {
       "InputId": "c310f731-bc13-44e7-a827-d8e4f996ff99"/*Passes*/,
       "Position": {
         "X": -181.0277,
         "Y": 2037.5299
-      }
+      },
+      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed.",
+      "AddPadding": "True"
     },
     {
       "InputId": "592b84f4-e53c-499a-ab83-150e0eabfcdf"/*Size*/,
       "Position": {
         "X": -181.0277,
         "Y": 2082.53
-      }
+      },
+      "Description": "Increases or decreases the size of the areas which are darkened.",
+      "AddPadding": "True",
+      "Min": 0.1,
+      "Max": 30.0,
+      "Clamp": true
     },
     {
       "InputId": "9ac4806b-bbcf-4b29-ac15-4bc7f52ef192"/*MixOriginal*/,
       "Position": {
         "X": -181.0277,
         "Y": 2127.53
-      }
+      },
+      "Description": "Controls how much the original image is mixed into the result.",
+      "AddPadding": "True"
     },
     {
       "InputId": "0fb4d665-3014-48a4-b544-c5d28d699fc4"/*MultiplyOriginal*/,
       "Position": {
         "X": -181.0277,
         "Y": 2172.5305
-      }
+      },
+      "Description": "Controls how much the original image is multiplied with the result."
     },
     {
       "InputId": "c7c1d642-851e-41a8-895d-df28b5bb770e"/*NoiseOffset*/,
       "Position": {
         "X": -189.67825,
         "Y": 2221.576
-      }
+      },
+      "Description": "Offsets the noise effect."
     }
   ],
   "SymbolChildUis": [

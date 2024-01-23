@@ -100,6 +100,9 @@ namespace T3.Editor.Gui.Graph
                                   playerBuildPath + "Processing.NDI.Lib.x64.dll",
                                   playerBuildPath + "basswasapi.dll",
                                   playerBuildPath + "bass.dll",
+                                  playerBuildPath + "AbletonLinkDLL.dll",
+                                  playerBuildPath + "AbletonLink.dll",
+                                  playerBuildPath + "AbletonLink.deps.json",
                               },
                           exportDir);
 

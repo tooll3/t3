@@ -13,7 +13,7 @@
     },
     {
       "Id": "88623684-a5e4-4415-8458-648761e834e1"/*GenerateMipMaps*/,
-      "DefaultValue": true
+      "DefaultValue": false
     },
     {
       "Id": "8686d1c3-c5a5-4b4a-b30f-95a1cfd0dc90"/*Enable*/,
