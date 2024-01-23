@@ -1,3 +1,6 @@
+using System.Drawing;
+using System.Numerics;
+
 namespace T3.SystemUi;
 
 public interface ICoreSystemUiService 
@@ -7,4 +10,13 @@ public interface ICoreSystemUiService
     public void ShowMessageBox(string message);
     public void ExitApplication();
     public void ExitThread();
+    
+    public ICursor Cursor { get; }
+}
+
+public interface ICursor
+{
+    public Vector2 PositionVec => new(Position.X, Position.Y);
+    public Point Position { get; }
+    public void SetVisible(bool visible);
 }

@@ -44,6 +44,7 @@ namespace T3.Editor.Gui.Graph
 
             // Update project settings
             ProjectSettings.Config.MainOperatorGuid = instance.Symbol.Id;
+            ProjectSettings.Config.MainOperatorName = instance.Symbol.Name;
             ProjectSettings.Save();
 
             // traverse starting at output and collect everything

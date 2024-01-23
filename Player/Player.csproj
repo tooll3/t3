@@ -12,6 +12,11 @@
 
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1"/>
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,7 +25,9 @@
         <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.dll"/>
         <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll"/>
         <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.DXGI.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Windows.Desktop.dll"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Desktop.dll"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Mathematics.dll"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/System.Windows.Forms"/>
         <Reference Include="$(T3_ASSEMBLY_PATH)/MsForms.dll"/>
         <Reference Include="$(T3_ASSEMBLY_PATH)/SystemUi.dll"/>
         <Reference Include="$(T3_ASSEMBLY_PATH)/ManagedBass.dll"/>

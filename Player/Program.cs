@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
@@ -26,43 +25,23 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Core.SystemUi;
 using T3.Editor.App;
 using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
+using Resource = SharpDX.Direct3D11.Resource;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Player
 {
     internal static class Program
     {
-        private class Options
-        {
-            [Option(Default = false, Required = false, HelpText = "Disable vsync")]
-            public bool NoVsync { get; set; }
-
-            [Option(Default = 1920, Required = false, HelpText = "Defines the width")]
-            public int Width { get; set; }
-
-            [Option(Default = 1080, Required = false, HelpText = "Defines the height")]
-            public int Height { get; set; }
-
-            public Size Size => new(Width, Height);
-
-            [Option(Default = false, Required = false, HelpText = "Run in windowed mode")]
-            public bool Windowed { get; set; }
-
-            [Option(Default = false, Required = false, HelpText = "Loops the demo")]
-            public bool Loop { get; set; }
-
-            [Option(Default = true, Required = false, HelpText = "Show log messages.")]
-            public bool Logging { get; set; }
-        }
-
         [STAThread]
         private static void Main(string[] args)
         {
-            var logDirectory = Path.Combine(Core.UserData.UserData.RootFolder, "log");
+            var logDirectory = Path.Combine(Core.UserData.UserData.SettingsFolder, "log");
             var fileWriter = FileWriter.CreateDefault(logDirectory);
+            CoreUi.Instance = new MsForms.MsForms();
             try
             {
                 Log.AddWriter(new ConsoleWriter());
@@ -76,12 +55,19 @@ namespace T3.Player
 
                 _vsync = !_commandLineOptions.NoVsync;
                 Log.Debug($"using vsync: {_vsync}, windowed: {_commandLineOptions.Windowed}, size: {_commandLineOptions.Size}, loop: {_commandLineOptions.Loop}, logging: {_commandLineOptions.Logging}");
+                
+                var gotIcon = ResourceManager.TryResolvePath("Resources/t3-editor/images/t3.ico", out var iconPath, Array.Empty<string>());
+                
+                if (!gotIcon)
+                {
+                    Log.Warning("Failed to load icon");
+                }
 
-                _renderForm = new RenderForm($"{ProjectSettings.Config.MainOperatorName}")
+                _renderForm = new RenderForm(ProjectSettings.Config.MainOperatorName)
                                   {
                                       ClientSize = _commandLineOptions.Size,
                                       AllowUserResizing = false,
-                                      Icon = new Icon(@"Resources\t3-editor\images\t3.ico")
+                                      Icon = gotIcon ? new System.Drawing.Icon(iconPath) : null,
                                   };
 
                 // SwapChain description
@@ -107,9 +93,11 @@ namespace T3.Player
                 Device.CreateWithSwapChain(DriverType.Hardware, deviceCreationFlags, desc, out _device, out _swapChain);
                 _deviceContext = _device.ImmediateContext;
 
+                var cursor = CoreUi.Instance.Cursor;
+
                 if (_swapChain.IsFullScreen)
                 {
-                    Cursor.Hide();
+                    cursor.SetVisible(false);
                 }
 
                 // Ignore all windows events
@@ -127,14 +115,7 @@ namespace T3.Player
                                          {
                                              _swapChain.IsFullScreen = !_swapChain.IsFullScreen;
                                              RebuildBackBuffer(_renderForm, _device, ref _renderView, ref _backBuffer, ref _swapChain);
-                                             if (_swapChain.IsFullScreen)
-                                             {
-                                                 Cursor.Hide();
-                                             }
-                                             else
-                                             {
-                                                 Cursor.Show();
-                                             }
+                                             cursor.SetVisible(!_swapChain.IsFullScreen);
                                          }
 
                                          if (ProjectSettings.Config.EnablePlaybackControlWithKeyboard)
@@ -155,7 +136,7 @@ namespace T3.Player
 
                                          if (keyArgs.KeyCode == Keys.Escape)
                                          {
-                                             MediaTypeNames.Application.Exit();
+                                             CoreUi.Instance.ExitApplication();
                                          }
                                      };
 
@@ -163,7 +144,7 @@ namespace T3.Player
                 _renderForm.MouseClick += MouseMoveHandler;
 
                 // New RenderTargetView from the backbuffer
-                _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
+                _backBuffer = Resource.FromSwapChain<Texture2D>(_swapChain, 0);
                 _renderView = new RenderTargetView(_device, _backBuffer);
 
                 var shaderCompiler = new DX11ShaderCompiler
@@ -196,23 +177,20 @@ namespace T3.Player
                 Bass.Init();
 
                 // Init wasapi input if required
-                if (playbackSettings != null && playbackSettings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
+                if (playbackSettings is { AudioSource: PlaybackSettings.AudioSources.ProjectSoundTrack } && playbackSettings.GetMainSoundtrack(out _soundtrack))
                 {
-                    if (playbackSettings.GetMainSoundtrack(out _soundtrack))
+                    if (File.Exists(_soundtrack.FilePath))
                     {
-                        if (File.Exists(_soundtrack.FilePath))
-                        {
-                            _playback.Bpm = _soundtrack.Bpm;
-                            // Trigger loading clip
-                            AudioEngine.UseAudioClip(_soundtrack, 0);
-                            AudioEngine.CompleteFrame(_playback); // Initialize
-                            prerenderRequired = true;
-                        }
-                        else
-                        {
-                            Log.Warning($"Can't find soundtrack {_soundtrack.FilePath}");
-                            _soundtrack = null;
-                        }
+                        _playback.Bpm = _soundtrack.Bpm;
+                        // Trigger loading clip
+                        AudioEngine.UseAudioClip(_soundtrack, 0);
+                        AudioEngine.CompleteFrame(_playback); // Initialize
+                        prerenderRequired = true;
+                    }
+                    else
+                    {
+                        Log.Warning($"Can't find soundtrack {_soundtrack.FilePath}");
+                        _soundtrack = null;
                     }
                 }
 
@@ -329,7 +307,7 @@ namespace T3.Player
                     }
                     else
                     {
-                        MediaTypeNames.Application.Exit();
+                        CoreUi.Instance.ExitApplication();
                     }
                 }
             }
@@ -456,7 +434,10 @@ namespace T3.Player
             return parsedOptions;
         }
 
-        private readonly struct PackageLoadInfo(PlayerSymbolPackage package, List<SymbolJson.SymbolReadResult> newlyLoadedSymbols, IReadOnlyCollection<Symbol> allNewSymbols)
+        private readonly struct PackageLoadInfo(
+            PlayerSymbolPackage package,
+            List<SymbolJson.SymbolReadResult> newlyLoadedSymbols,
+            IReadOnlyCollection<Symbol> allNewSymbols)
         {
             public readonly PlayerSymbolPackage Package;
             public readonly List<SymbolJson.SymbolReadResult> NewlyLoadedSymbols = newlyLoadedSymbols;

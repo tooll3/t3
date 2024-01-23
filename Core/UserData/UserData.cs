@@ -134,5 +134,7 @@ public static class UserData
     }
 
     public static string SettingsFolderInApplicationDirectory => Path.Combine(RuntimeAssemblies.CoreDirectory!, ".t3");
-    public static readonly string SettingsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "T3");
+    
+    public static readonly string SettingsFolder =
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "T3", Process.GetCurrentProcess().ProcessName);
 }

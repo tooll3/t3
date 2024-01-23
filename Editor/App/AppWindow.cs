@@ -10,6 +10,7 @@ using SharpDX.DXGI;
 using SharpDX.Windows;
 using T3.Core.Compilation;
 using T3.Core.DataTypes.Vector;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.Styling;
 using Device = SharpDX.Direct3D11.Device;
 using Icon = System.Drawing.Icon;
@@ -49,7 +50,7 @@ namespace T3.Editor.App
                                                                                        };
 
         internal bool IsMinimized => Form.WindowState == FormWindowState.Minimized;
-        internal bool IsCursorOverWindow => Form.Bounds.Contains(Cursor.Position);
+        internal bool IsCursorOverWindow => Form.Bounds.Contains(CoreUi.Instance.Cursor.Position);
         public Texture2D Texture { get; set; }
 
         internal AppWindow(string windowTitle, bool disableClose)

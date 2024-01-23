@@ -1,10 +1,11 @@
+using System.Numerics;
 using T3.SystemUi;
 
 namespace T3.MsForms;
 
 public class MsForms : ICoreSystemUiService
 {
-    protected MsForms()
+    public MsForms()
     {
     }
 
@@ -42,6 +43,8 @@ public class MsForms : ICoreSystemUiService
     {
         Application.ExitThread();
     }
+    
+    public ICursor Cursor { get; } = new CursorWrapper();
 
     private static readonly Dictionary<PopUpButtons, MessageBoxButtons> ButtonEnumConversion =
         new()
@@ -69,4 +72,16 @@ public class MsForms : ICoreSystemUiService
                 { DialogResult.TryAgain, PopUpResult.TryAgain },
                 { DialogResult.Continue, PopUpResult.Continue }
             };
+}
+
+public class CursorWrapper : ICursor
+{
+    public Point Position => Cursor.Position;
+    public void SetVisible(bool visible)
+    {
+        if(visible)
+            Cursor.Show();
+        else
+            Cursor.Hide();
+    }
 }

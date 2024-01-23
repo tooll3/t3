@@ -21,6 +21,7 @@ namespace T3.Core.IO
             
             public string LimitMidiDeviceCapture = null; 
             public bool EnableMidiSnapshotIndication = false;
+            public string MainOperatorName { get; set; }
         }
     }
 }
