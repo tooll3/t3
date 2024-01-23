@@ -67,8 +67,8 @@ sampler texSampler : register(s0);
     float gray = (c.r + c.g + c.b) / 3;
 
 
- // Rotation
-    ResultPoints[index].Rotation = p.Rotation;
+  // Rotation
+    //ResultPoints[index].Rotation = p.Rotation;
 
     float4 rot = p.Rotation;
     float rotXFactor = (R == 5 ? (c.r * RFactor + ROffset) : 0) +
@@ -85,7 +85,6 @@ sampler texSampler : register(s0);
                        (G == 7 ? (c.g * GFactor + GOffset) : 0) +
                        (B == 7 ? (c.b * BFactor + BOffset) : 0) +
                        (L == 7 ? (gray * LFactor + LOffset) : 0);
-
 
     float tau = 3.141578 / 180;
 
@@ -105,8 +104,7 @@ sampler texSampler : register(s0);
     }
 
     rot2 = normalize(rot2);
-
-    ResultPoints[index].Rotation = p.Rotation;
+    p.Rotation = qMul(rot, rot2);
 
 
     // Stretch
