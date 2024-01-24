@@ -1,6 +1,6 @@
 {
   "Id": "8f4ca295-7268-44a2-94b0-4e974fac22a4"/*LenseFlareSetupAdvanced*/,
-  "Description": "Same as LenseFlareSetup but all elements can be tweaked seperately.",
+  "Description": "Same as [LenseFlareSetup] but all elements can be tweaked seperately.\n",
   "InputUis": [
     {
       "InputId": "f2c310f0-a019-40e5-9b17-3c35d254bb82"/*Brightness*/,
@@ -8,7 +8,7 @@
         "X": -564.8251,
         "Y": 354.45773
       },
-      "Description": "Controls the intensity of all elements.",
+      "Description": "Controls the intensity of all elements listed in the advanced options.",
       "AddPadding": "True",
       "Min": 0.1,
       "Max": 11.0
@@ -19,6 +19,7 @@
         "X": -564.8251,
         "Y": 399.45773
       },
+      "Description": "Automatically creates different combinations of LenseFlares.\n\nElements include: MultiIris",
       "AddPadding": "True"
     },
     {
@@ -27,6 +28,7 @@
         "X": -564.8251,
         "Y": 444.45773
       },
+      "Description": "Select the Index / ID of the Pointlight to which the Lenseflare is attached.",
       "AddPadding": "True"
     },
     {
@@ -35,6 +37,7 @@
         "X": -564.8251,
         "Y": 489.45773
       },
+      "Description": "Select a color to tint various elements.",
       "AddPadding": "True"
     },
     {
@@ -44,7 +47,7 @@
         "Y": 534.45776
       },
       "GroupTitle": "Advanced Option",
-      "Description": "Intensity of digital bars.",
+      "Description": "Intensity of secondary digital bars.",
       "Min": 0.1,
       "Max": 11.0,
       "Clamp": true
@@ -55,6 +58,7 @@
         "X": -564.8251,
         "Y": 579.45776
       },
+      "Description": "Brightness and magnitude of the primary stellar element in the center of the light.",
       "Min": 0.1,
       "Max": 11.0,
       "Clamp": true
@@ -65,6 +69,7 @@
         "X": -564.8251,
         "Y": 624.45776
       },
+      "Description": "Intensity and magnitude of the primary element in the center of the light.",
       "Min": 0.1,
       "Max": 11.0,
       "Clamp": true
@@ -75,6 +80,7 @@
         "X": -564.8251,
         "Y": 669.45776
       },
+      "Description": "Intensity and size of the secondary blobs at the edge of the flare.",
       "Min": 0.1,
       "Max": 11.0,
       "Clamp": true
@@ -85,6 +91,7 @@
         "X": -564.8251,
         "Y": 714.45776
       },
+      "Description": "Intensity and transparency of the secondary lens reflections.",
       "Min": 0.1,
       "Max": 11.0,
       "Clamp": true
@@ -95,6 +102,7 @@
         "X": -564.8251,
         "Y": 746.45776
       },
+      "Description": "Visibility and intensity of the secondary rainbow glitter at the edge of the image.",
       "Min": 0.1,
       "Max": 11.0,
       "Clamp": true
@@ -105,6 +113,7 @@
         "X": -564.8251,
         "Y": 791.45776
       },
+      "Description": "Brightness and intensity of the primary glowing god rays.",
       "Min": 0.1,
       "Max": 11.0
     },
@@ -114,6 +123,7 @@
         "X": -564.8251,
         "Y": 836.45776
       },
+      "Description": "Brightness and intensity of the primary horizontal streak.",
       "Min": 0.1,
       "Max": 11.0,
       "Clamp": true

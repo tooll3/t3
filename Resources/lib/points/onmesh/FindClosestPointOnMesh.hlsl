@@ -155,7 +155,7 @@ void main(uint3 i : SV_DispatchThreadID)
     uint pointCount, pointStride;
     Points.GetDimensions(pointCount, pointStride);
     if(i.x >= pointCount) {
-        ResultPoints[i.x].w = 0 ;
+        ResultPoints[i.x].W = 0 ;
         return;
     }
 
@@ -168,7 +168,7 @@ void main(uint3 i : SV_DispatchThreadID)
     Point p = Points[i.x];
     int closestIndex = -1; 
     float closestDistance = 99999;
-    float3 pos = p.position;
+    float3 pos = p.Position;
     float3 closestPoint;
 
     for(uint faceIndex = 0; faceIndex < faceCount; faceIndex++) 
@@ -191,7 +191,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     if(closestIndex>=0) 
     {
-        p.position = closestPoint;
+        p.Position = closestPoint;
     }
 
     ResultPoints[i.x] = p;
