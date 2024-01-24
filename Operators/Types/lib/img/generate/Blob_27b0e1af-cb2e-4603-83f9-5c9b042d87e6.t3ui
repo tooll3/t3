@@ -1,27 +1,30 @@
 {
   "Id": "27b0e1af-cb2e-4603-83f9-5c9b042d87e6"/*Blob*/,
-  "Description": "A very versatile generator for rectangles, circles, blobs, vignettes, and many other shapes. Unlike [_BlobOld], it uses an elliptical shape and has easier-to-control parameters.\n\nAlso consider using [RoundedRect] and [RadialGradient].",
+  "Description": "Generates ellipses, circles, blobs, vignettes, and similar shapes.\n\nUpdated version of [_BlobOld] with slightly different functionality: uses an ellipse as a base rather than a rounded rectangle.\nFor other behaviours, consider [RoundedRect] or [RadialGradient].\n\nTips:\n- Set \"Feather\" to a negative value to create a vignette.\n- The background color is still visible on feathered edges when it's set to transparent.\n- For more information on mipmaps, see the attached link about realtime rendering in Tooll3.",
   "InputUis": [
     {
       "InputId": "8cc15ea0-074f-40ed-813d-b93f48681094"/*Image*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Image to use as a background for the blob.\nDrawn behind the background color."
     },
     {
-      "InputId": "d2b0dd99-c289-4c1b-9335-c29a6b4a6ba3"/*Fill*/,
+      "InputId": "d2b0dd99-c289-4c1b-9335-c29a6b4a6ba3"/*Color*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Fill color of the blob."
     },
     {
       "InputId": "fd05c355-7afa-4af6-9529-d4071d145d3b"/*Background*/,
       "Position": {
         "X": -200.0,
         "Y": 89.999985
-      }
+      },
+      "Description": "Background color of the blob."
     },
     {
       "InputId": "7daacb43-54de-47d2-afcd-694f6afce59d"/*Position*/,
@@ -29,6 +32,7 @@
         "X": -200.0,
         "Y": 180.00002
       },
+      "Description": "X/Y position, in relative units.",
       "Min": -1.0,
       "Max": 1.0
     },
@@ -38,6 +42,7 @@
         "X": -200.0,
         "Y": 135.00002
       },
+      "Description": "Stretches the blob unevenly.",
       "Min": -1.0,
       "Max": 1.0
     },
@@ -47,6 +52,7 @@
         "X": -200.0,
         "Y": 224.99998
       },
+      "Description": "Scales the blob evenly.",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -56,6 +62,7 @@
         "X": -200.0,
         "Y": 270.0
       },
+      "Description": "Feather edges to reduce pixel artifacts.\nCan also be used to blur the blob.\nSet to a negative value to create a vignette.",
       "AddPadding": "True",
       "Min": -1.0,
       "Max": 1.0
@@ -66,6 +73,7 @@
         "X": -200.0,
         "Y": 315.0
       },
+      "Description": "Weights the feathering towards one edge or the other of the blurred region.",
       "Min": -10.0,
       "Max": 10.0,
       "Scale": 0.1
@@ -75,7 +83,8 @@
       "Position": {
         "X": -200.0,
         "Y": 360.0
-      }
+      },
+      "Description": "Output resolution in pixels. Set to 0 for dynamic resolution."
     },
     {
       "InputId": "77544b82-e897-4e69-bfaf-e861891d1fd4"/*Rotate*/,
@@ -83,6 +92,7 @@
         "X": -200.0,
         "Y": 405.0
       },
+      "Description": "Rotation amount in degrees.\nRotation is applied after Stretch and Scale, but before Position.",
       "Min": -180.0,
       "Max": 180.0,
       "Scale": 2.0
@@ -92,14 +102,16 @@
       "Position": {
         "X": -200.0,
         "Y": 450.0
-      }
+      },
+      "Description": "Generate mipmaps (scaled-down versions of this image for use in situations where many small copies are shown on screen.)\nWill increase memory usage."
     },
     {
       "InputId": "a9d505ce-2cb1-4911-acc3-c509e1eebc2b"/*BlendMode*/,
       "Position": {
         "X": -200.0,
         "Y": 495.0
-      }
+      },
+      "Description": "Blend mode between the generated blob graphic and the backgrund image, if one is provided."
     }
   ],
   "SymbolChildUis": [
@@ -160,6 +172,15 @@
         "X": 577.0464,
         "Y": -29.479145
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "aff7e3a2-cd98-4a35-8626-523256226670",
+      "Title": "More info on mipmaps",
+      "Description": "",
+      "LinkUrl": "https://github.com/tooll3/t3/wiki/help.RealtimeRendering",
+      "LinkType": "Reference"
     }
   ]
 }
