@@ -53,7 +53,7 @@
       "Clamp": true
     },
     {
-      "InputId": "1e2c9b94-b303-4454-ba08-5246c7336660"/*Extend*/,
+      "InputId": "1e2c9b94-b303-4454-ba08-5246c7336660"/*Stretch*/,
       "Position": {
         "X": -526.3627,
         "Y": 1152.1829

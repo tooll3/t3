@@ -644,7 +644,7 @@
           }
         },
         {
-          "Id": "1e2c9b94-b303-4454-ba08-5246c7336660"/*Extend*/,
+          "Id": "1e2c9b94-b303-4454-ba08-5246c7336660"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.94,

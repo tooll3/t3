@@ -8,6 +8,7 @@ cbuffer Params : register(b0)
     float3 Stretch;
     float UseWForSize;
     float Size;
+    float PointsStretch;
 }
 
 StructuredBuffer<PbrVertex> SourceVertices : t0;       
@@ -41,8 +42,10 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float4x4 orientationMatrix = transpose(qToMatrix(p.Rotation));
 
-    posInObject.xyz *= Size;
-    posInObject.xyz *= UseWForSize ? (lerp(Size, Size + p.W,  Stretch) ) :1;
+    //posInObject.xyz *= Size * p.Stretch;
+    posInObject.xyz *= PointsStretch ? Size * p.Stretch : Size;
+    posInObject.xyz *= UseWForSize ? (lerp(Size, Size + p.W,  Stretch ) ) :1;
+
     //posInObject.xyz *= (UseWForSize ? (lerp(Size, Size + p.w,  Stretch) ) : Size);
     posInObject = mul( float4(posInObject.xyz, 1), orientationMatrix) ;
 
