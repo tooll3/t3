@@ -1,6 +1,6 @@
 {
   "Id": "c8590f8f-cca1-434a-a880-67bb91920e1a"/*_BlobOld*/,
-  "Description": "A very versatile generator for rectangles, circles, blobs, vignettes, and many other things. It's using a round rectangle shape that was too awkward to control. Consider using the updated [Blob].",
+  "Description": "Generates rectangles, circles, blobs, vignettes and other things.\n\nThis is a legacy operator; consider using the updated [Blob] or [RoundedRect] instead.",
   "InputUis": [
     {
       "InputId": "630d4d0b-d4ca-4987-93ca-7eb782ebccc6"/*Image*/,

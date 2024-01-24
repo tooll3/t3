@@ -16,7 +16,7 @@ namespace T3.Operators.Types.Id_27b0e1af_cb2e_4603_83f9_5c9b042d87e6
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
 
         [Input(Guid = "d2b0dd99-c289-4c1b-9335-c29a6b4a6ba3")]
-        public readonly InputSlot<System.Numerics.Vector4> Fill = new();
+        public readonly InputSlot<System.Numerics.Vector4> Color = new();
 
         [Input(Guid = "fd05c355-7afa-4af6-9529-d4071d145d3b")]
         public readonly InputSlot<System.Numerics.Vector4> Background = new();
