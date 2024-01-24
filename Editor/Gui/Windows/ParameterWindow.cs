@@ -105,14 +105,16 @@ internal class ParameterWindow : Window
                 DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false);
                 FormInputs.AddVerticalSpace(15);
 
-                FormInputs.SetIndentToLeft();
-                FormInputs.AddHint("Check the documentation in the header");
+                _help.DrawHelpSummary(symbolUi);
+
+                // FormInputs.SetIndentToLeft();
+                // FormInputs.AddHint("Check the documentation in the header");
 
                 OperatorHelp.DrawExamples(symbolUi);
             }
             else
             {
-                OperatorHelp.DrawDescription(symbolUi);
+                OperatorHelp.DrawHelp(symbolUi);
             }
 
             return;

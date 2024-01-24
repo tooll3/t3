@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
@@ -53,7 +54,7 @@ public class OperatorHelp
                 ImGui.BeginTooltip();
                 ImGui.Dummy(new Vector2(500 * T3Ui.UiScaleFactor, 1));
 
-                DrawDescription(symbolUi);
+                DrawHelp(symbolUi);
                 ImGui.EndTooltip();
                 ImGui.PopStyleVar();
             }
@@ -64,7 +65,44 @@ public class OperatorHelp
         }
     }
 
-    public static void DrawDescription(SymbolUi symbolUi)
+    public void DrawHelpSummary(SymbolUi symbolUi)
+    {
+        if (string.IsNullOrEmpty(symbolUi.Description))
+            return;
+
+        using var reader = new StringReader(symbolUi.Description);
+        var firstLine = reader.ReadLine();
+        if (string.IsNullOrEmpty(firstLine))
+            return;
+        
+        ImGui.Indent(10);
+
+        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+        ImGui.TextWrapped(firstLine);
+        if (ImGui.IsItemHovered())
+        {
+            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            {
+                EditDescriptionDialog.ShowNextFrame();
+            }
+        }        
+        ImGui.PopStyleColor();
+        
+        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Fade(0.5f).Rgba);
+        FormInputs.AddVerticalSpace(5);
+        ImGui.TextUnformatted("Read more...");
+        if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+        {
+            _isDocumentationActive = true;
+        } 
+        FormInputs.AddVerticalSpace();
+        ImGui.PopStyleColor();
+
+        ImGui.Unindent(10);
+    }
+    
+
+    public static void DrawHelp(SymbolUi symbolUi)
     {
         // Title and namespace
         ImGui.Indent(5);

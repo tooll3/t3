@@ -261,8 +261,6 @@ public class RenderVideoWindow : RenderHelperWindow
     private static string _targetFile = "./Render/render-v01.mp4";
 
     private static bool _autoIncrementVersionNumber = true;
-    private static int _versionNumberBeforeExport = 1;
-    private static int _versionDigitsBeforeExport = 2;
     private static Mp4VideoWriter _videoWriter = null;
     private static string _lastHelpString = string.Empty;
     private double _previousPlaybackSpeed;
