@@ -1,6 +1,6 @@
 {
   "Id": "4f89b41b-1643-442b-bec8-9f9ef2173baa"/*Raster*/,
-  "Description": "Generates a wide range of different raster patterns. You can also connect an input texture to drive various aspects of the pattern.",
+  "Description": "Generates a wide range of patterns of dots and lines.\n\nConnecting a texture to the Image input will allow the pattern to be influenced differently at different parts of the texture.\n\nAKA: polkadot, pattern, grid, crosshair",
   "InputUis": [
     {
       "InputId": "fd22eaf6-ed3c-4e63-985c-3a3756ecaef2"/*Resolution*/,
