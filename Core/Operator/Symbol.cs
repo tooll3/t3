@@ -525,10 +525,20 @@ namespace T3.Core.Operator
             // set up the inputs for the child instance
             for (int i = 0; i < symbolChild.Symbol.InputDefinitions.Count; i++)
             {
-                Debug.Assert(i < childInstance.Inputs.Count);
-                Guid inputDefinitionId = childSymbol.InputDefinitions[i].Id;
+                if (i >= childInstance.Inputs.Count)
+                {
+                    Log.Warning($"Skipping undefined input index");
+                    continue;
+                }
+                
+                var inputDefinitionId = childSymbol.InputDefinitions[i].Id;
                 var inputSlot = childInstance.Inputs[i];
-                inputSlot.Input = symbolChild.Inputs[inputDefinitionId];
+                if (!symbolChild.Inputs.TryGetValue(inputDefinitionId, out var input))
+                {
+                    Log.Warning($"Skipping undefined input: {inputDefinitionId}");
+                    continue;
+                }
+                inputSlot.Input = input;
                 inputSlot.Id = inputDefinitionId;
             }
 
