@@ -48,7 +48,7 @@ void main(uint3 i : SV_DispatchThreadID)
     //posInObject.xyz *= UseStretch ? Size * p.Stretch : 1;
     //posInObject.xyz *= (UseWForSize ? (lerp(Size, Size + p.w,  Stretch) ) : Size);
 
-    float3 resizeFromW = UseWForSize ?  p.W +  Stretch :1;
+    float3 resizeFromW = UseWForSize ?  p.W *  Stretch :1;
     float3 resizeFromStretch = UseStretch ?  p.Stretch : 1;
     posInObject.xyz *= max(0, resizeFromW) * Size * resizeFromStretch;
 
