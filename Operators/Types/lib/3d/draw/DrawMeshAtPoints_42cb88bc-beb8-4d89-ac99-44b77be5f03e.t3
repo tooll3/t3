@@ -53,7 +53,7 @@
       "DefaultValue": 3
     },
     {
-      "Id": "69e1f021-4db2-43a1-a4e6-837024350dc1"/*UseExtend*/,
+      "Id": "69e1f021-4db2-43a1-a4e6-837024350dc1"/*UseStretch*/,
       "DefaultValue": false
     }
   ],

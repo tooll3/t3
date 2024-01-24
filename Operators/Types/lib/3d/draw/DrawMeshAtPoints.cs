@@ -45,7 +45,7 @@ namespace T3.Operators.Types.Id_42cb88bc_beb8_4d89_ac99_44b77be5f03e
         public readonly InputSlot<int> FillMode = new();
 
         [Input(Guid = "69e1f021-4db2-43a1-a4e6-837024350dc1")]
-        public readonly InputSlot<bool> UseExtend = new InputSlot<bool>();
+        public readonly InputSlot<bool> UseStretch = new InputSlot<bool>();
     }
 }
 

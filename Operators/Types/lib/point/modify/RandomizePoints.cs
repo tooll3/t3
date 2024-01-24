@@ -30,7 +30,7 @@ namespace T3.Operators.Types.Id_ec0675d7_6b72_4b15_b141_80bdd2367cd8
         public readonly InputSlot<System.Numerics.Vector4> ColorHSB = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "1E2C9B94-B303-4454-BA08-5246C7336660")]
-        public readonly InputSlot<System.Numerics.Vector3> Extend = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> Stretch = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "4dffb439-da81-477c-8100-34a9ba59b0ee")]
         public readonly InputSlot<float> RandomSeed = new InputSlot<float>();
