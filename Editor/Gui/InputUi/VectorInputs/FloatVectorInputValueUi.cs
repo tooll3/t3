@@ -123,7 +123,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
                         MinValue = -5,
                         MaxValue = 5,
                         CustomFormat = "{0:0.000} ×",
-                        ClampRange = true,
+                        ClampRange = false,
                     },
                 new()
                     {
@@ -132,7 +132,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
                         MinValue = 0,
                         MaxValue = 5,
                         CustomFormat = "{0:0.000} ×",
-                        ClampRange = true,
+                        ClampRange = false,
                     },
             };
 

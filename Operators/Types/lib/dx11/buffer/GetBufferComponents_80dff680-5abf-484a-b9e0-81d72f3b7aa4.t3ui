@@ -8,6 +8,13 @@
         "X": -200.0,
         "Y": 0.0
       }
+    },
+    {
+      "InputId": "ac0f9d07-b93d-45d3-8b3f-a4b2f7240ae0"/*LogWarnings*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
     }
   ],
   "SymbolChildUis": [],
@@ -45,6 +52,13 @@
       "Position": {
         "X": -7.0460706,
         "Y": 306.77505
+      }
+    },
+    {
+      "OutputId": "5dcc43ac-4fb9-49c3-a093-0a59a002fb6c"/*IsValid*/,
+      "Position": {
+        "X": -7.0460706,
+        "Y": 406.77505
       }
     }
   ]

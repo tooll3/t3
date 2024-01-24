@@ -878,6 +878,11 @@
             "X": 0.45,
             "Y": 0.5
           }
+        },
+        {
+          "Id": "62119baf-5e02-4d2e-82bb-f82a149ccfb7"/*Visibility*/,
+          "Type": "T3.Core.Operator.GizmoVisibility",
+          "Value": "Off"
         }
       ],
       "Outputs": []

@@ -373,7 +373,13 @@
     {
       "Id": "e131a540-68da-4cdc-98d2-13df41e2a0d7"/*GetBufferComponents*/,
       "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "ac0f9d07-b93d-45d3-8b3f-a4b2f7240ae0"/*LogWarnings*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
       "Outputs": []
     },
     {
@@ -732,6 +738,12 @@
       "SourceSlotId": "49b28dc3-fcd1-4067-bc83-e1cc848ae55c",
       "TargetParentOrChildId": "111717c2-24ce-45c7-920f-58c1d4f0575b",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "e131a540-68da-4cdc-98d2-13df41e2a0d7",
+      "SourceSlotId": "5dcc43ac-4fb9-49c3-a093-0a59a002fb6c",
+      "TargetParentOrChildId": "111717c2-24ce-45c7-920f-58c1d4f0575b",
+      "TargetSlotId": "d68b5569-b43d-4a0d-9524-35289ce08098"
     },
     {
       "SourceParentOrChildId": "e131a540-68da-4cdc-98d2-13df41e2a0d7",

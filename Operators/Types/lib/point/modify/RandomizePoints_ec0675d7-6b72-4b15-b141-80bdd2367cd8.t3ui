@@ -75,8 +75,8 @@
       },
       "GroupTitle": "Distribution",
       "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
+      "Max": 5.0,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "362fcd1a-444a-417b-b49f-ee1babaee998"/*UseSelection*/,
