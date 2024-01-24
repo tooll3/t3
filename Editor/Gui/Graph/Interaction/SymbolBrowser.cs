@@ -199,7 +199,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, padding);
             ImGui.SetNextItemWidth(size.X);
 
-            ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 10);
+            ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 20);
 
             // Search input outline
             _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.Gray);
@@ -268,7 +268,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
             
             ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundPopup.Rgba);
-            //var itemForHelpIsHovered = false;
 
             if (ImGui.BeginChildFrame(999, size))
             {
