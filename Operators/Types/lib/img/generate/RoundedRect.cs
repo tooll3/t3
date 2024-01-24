@@ -14,13 +14,13 @@ namespace T3.Operators.Types.Id_bf7fcd04_0cf6_4518_86cc_48f74483d98d
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
 
         [Input(Guid = "a20d31a3-115f-4d38-a988-2a41f6e5cbea")]
-        public readonly InputSlot<System.Numerics.Vector4> Fill = new();
+        public readonly InputSlot<System.Numerics.Vector4> Color = new();
 
         [Input(Guid = "d4c20bfc-3943-4c5d-a8f8-5175fa152e91")]
         public readonly InputSlot<System.Numerics.Vector4> Background = new();
 
         [Input(Guid = "ee2f51f9-38bb-4613-b234-173218cb3aae")]
-        public readonly InputSlot<System.Numerics.Vector2> Center = new();
+        public readonly InputSlot<System.Numerics.Vector2> Position = new();
 
         [Input(Guid = "c608e4c4-c545-45ed-8e37-95a53f6871d0")]
         public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
