@@ -67,7 +67,7 @@
               DestinationFiles="@(DefaultUserConfigs->'$(OutputPath)/.t3/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
 
-    <!-- Thhs copies ../t3/Resources into the output directory -->
+    <!-- This copies ../t3/Resources into the output directory -->
     <ItemGroup>
         <Resources Include="../Resources/**/*" Visible="false"/>
     </ItemGroup>
@@ -77,6 +77,18 @@
               SkipUnchangedFiles="true"
               UseHardlinksIfPossible="true"
               DestinationFiles="@(Resources->'$(OutputPath)/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
+    </Target>
+    
+    <!-- This copies ../Player project into the output directory -->
+    <ItemGroup>
+        <Player Include="../Player/**/*" Visible="false"/>
+    </ItemGroup>
+    
+    <Target Name="CopyPlayer" AfterTargets="AfterBuild">
+        <Copy SourceFiles="@(Player)"
+              SkipUnchangedFiles="true"
+              UseHardlinksIfPossible="true"
+              DestinationFiles="@(Player->'$(OutputPath)/Player/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
 
     <!-- Build lib, libEditor, and examples AfterBuild and copy them to the output directory-->
