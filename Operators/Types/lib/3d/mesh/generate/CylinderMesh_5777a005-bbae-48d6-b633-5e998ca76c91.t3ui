@@ -7,7 +7,8 @@
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "8d290afb-2574-4afa-a545-a0d3588f89f6"/*Radius*/,
@@ -15,6 +16,8 @@
         "X": -200.0,
         "Y": 0.0
       },
+      "GroupTitle": "Size",
+      "Description": "Defines the thickness of the Mesh",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -23,28 +26,33 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Scales the radius of the surface on top in relation to the radius."
     },
     {
       "InputId": "57f3310c-6ed2-4a52-af72-43e083f73360"/*Height*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Scales the height of the Mesh"
     },
     {
       "InputId": "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a"/*Rows*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "GroupTitle": "Tesselation",
+      "Description": "Defines the subdivisions in height"
     },
     {
       "InputId": "321693a5-4e2c-47a0-a42e-95cbdc6ebf80"/*Columns*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "Description": "Defines the subdivisions of the outer surface"
     },
     {
       "InputId": "c29b5881-85bc-4d29-bc72-6dd36730fa8f"/*Spin*/,
@@ -52,6 +60,8 @@
         "X": -200.0,
         "Y": 180.0
       },
+      "GroupTitle": "Advanced Settings",
+      "Description": "Rotates the Geometry around the center",
       "Min": -90.0,
       "Max": 90.0,
       "Scale": 1.0,
@@ -63,6 +73,7 @@
         "X": -200.0,
         "Y": 225.0
       },
+      "Description": "Rotates the the surface on top in relation to the \"Spin\" setting",
       "Min": -90.0,
       "Max": 90.0,
       "Scale": 1.0,
@@ -74,6 +85,7 @@
         "X": -200.0,
         "Y": 270.0
       },
+      "Description": "Cuts and compresses / slides the geometry along the radius",
       "Min": 0.0,
       "Max": 360.0,
       "Scale": 1.0,
@@ -85,6 +97,8 @@
         "X": -200.0,
         "Y": 315.0
       },
+      "GroupTitle": "Pivot",
+      "Description": "Offsets the position of the pivotpoint (center).\n\nThis is helpful to change the point around which the cube rotates / along which it is scaled.",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -93,7 +107,9 @@
       "Position": {
         "X": -200.0,
         "Y": 315.0
-      }
+      },
+      "Description": "Creates subdivisions on the top and bottom sides",
+      "AddPadding": "True"
     },
     {
       "InputId": "4c7e0f67-a35b-4a23-b640-b0375c1a3259"/*Rotation*/,
@@ -101,6 +117,8 @@
         "X": -200.0,
         "Y": 360.0
       },
+      "Description": "Rotates the Mesh",
+      "AddPadding": "True",
       "Min": -180.0,
       "Max": 180.0,
       "Scale": 1.0,
