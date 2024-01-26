@@ -7,14 +7,18 @@
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "GroupTitle": "Sphere Parameters",
+      "Description": "Controls the size."
     },
     {
       "InputId": "6f327667-9054-4952-9f8f-570fa5497b13"/*Segments*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Description": "Controls the quantity of segments.\nThe first value controls the division along the equator of the sphere.\nThe second value controls the division from pole to pole.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],
