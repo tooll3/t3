@@ -1,6 +1,6 @@
 {
   "Id": "9d6dbf28-9983-4584-abba-6281ce51d583"/*QuadMesh*/,
-  "Description": "Generates a tessellated mesh.\n\nAlso known as: Plane, Quad",
+  "Description": "Generates a procedural three-dimensional tesselated mesh which can be rendered with [DrawMesh] , [DrawMeshUnlit] and [DrawMeshHatched] among others.\nAlso known as: Plane, Quad\n\nFor a simple and interactive tutorial on the Tooll3 rendering pipeline, see [HowToDrawThings].\n\nIt can also become the source for a particle system with [MeshVerticesToPoints] or [PointsOnMesh].\nTo import static 3D meshes from other programs refer to [LoadObj].\n\nAlso consider using [CylinderMesh].\n\n",
   "InputUis": [
     {
       "InputId": "18a5f3be-92a7-438c-b32b-e0da7c7a5736"/*Segments*/,
