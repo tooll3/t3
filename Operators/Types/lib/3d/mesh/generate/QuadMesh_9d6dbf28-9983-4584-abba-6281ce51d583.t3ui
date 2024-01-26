@@ -7,14 +7,17 @@
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Description": "Defines the tesselation\nX: Left to Right \nY: Top to Bottom"
     },
     {
       "InputId": "0295dd65-95b4-4e02-8d61-4622f59d4fc4"/*Stretch*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "GroupTitle": "Scaling",
+      "Description": "Controls the scaling:\nX: Width\nY: Height"
     },
     {
       "InputId": "44fc1e7b-b1d1-4199-b373-8b7c4cc060d2"/*Scale*/,
@@ -28,14 +31,17 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "GroupTitle": "Position and Rotation",
+      "Description": "Offsets the position of the pivotpoint (center).\n\nThis is helpful to change the point around which the Mesh rotates / along which it is scaled."
     },
     {
       "InputId": "b2a1c96a-4aef-412a-b006-2ef285dd2479"/*Center*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Description": "Transforms the position of the pivot"
     },
     {
       "InputId": "a89e41bf-5395-41f0-9804-a782ed4c0f30"/*Rotation*/,
@@ -43,6 +49,8 @@
         "X": -200.0,
         "Y": 135.0
       },
+      "Description": "Rotates the Mesh",
+      "AddPadding": "True",
       "Scale": 0.1
     }
   ],
