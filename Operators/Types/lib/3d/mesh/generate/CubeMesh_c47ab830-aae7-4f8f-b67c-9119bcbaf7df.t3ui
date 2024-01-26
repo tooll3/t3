@@ -52,6 +52,7 @@
         "Y": 135.0
       },
       "Description": "Rotates the Mesh",
+      "AddPadding": "True",
       "Scale": 0.1,
       "Format": "{0:0.0}°"
     }
