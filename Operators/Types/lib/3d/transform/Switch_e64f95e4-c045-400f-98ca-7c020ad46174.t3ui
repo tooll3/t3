@@ -22,7 +22,8 @@
       "Position": {
         "X": 0.0,
         "Y": 90.0
-      }
+      },
+      "Description": "If enable Tooll will only invalidate the active connection. This can significantly improve performance for very complex scenes with thousands of Op.\nThis feature is experimental and might have unexpected side effects."
     }
   ],
   "SymbolChildUis": [],

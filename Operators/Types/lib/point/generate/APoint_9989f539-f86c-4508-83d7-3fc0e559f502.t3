@@ -39,14 +39,14 @@
     {
       "Id": "130b5c11-66dd-4c0e-ac67-924554bad2d8"/*Extend*/,
       "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
       }
     },
     {
       "Id": "ca12df13-7529-4ede-b6fc-ce8aeba4f33e"/*Selected*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "53cde701-435f-42e4-b598-db0e607a238c"/*AddSeparator*/,

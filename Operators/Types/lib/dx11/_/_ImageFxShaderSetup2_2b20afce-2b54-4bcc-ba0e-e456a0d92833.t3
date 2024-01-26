@@ -161,23 +161,7 @@
     {
       "Id": "f42f3634-fa1f-49f8-a27c-ab955a485f31"/*OutputMergerStage*/,
       "SymbolId": "5efaf208-ba62-42ce-b3df-059b37fc1382",
-      "InputValues": [
-        {
-          "Id": "ccee2ec3-586f-4396-8b20-cc99484e1b64"/*BlendFactor*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0,
-            "W": 0.984
-          }
-        },
-        {
-          "Id": "03166157-1e18-4513-8af5-398c6f4fcb1e"/*BlendSampleMask*/,
-          "Type": "System.Int32",
-          "Value": 1
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {

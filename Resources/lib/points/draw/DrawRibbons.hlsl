@@ -67,6 +67,7 @@ struct psInput
     float3 worldPosition : POSITION;
     float3x3 tbnToWorld : TBASIS;    
     float fog:VPOS;
+    float4 color: COLOR;
 };
 
 sampler texSampler : register(s0);
@@ -147,6 +148,7 @@ psInput vsMain(uint id: SV_VertexID)
     // Fog
     float4 posInCamera = mul(float4(pInObject,1), ObjectToCamera);
     output.fog = pow(saturate(-posInCamera.z/FogDistance), FogBias);
+    output.color = Color * p.Color;
     return output;    
 }
 
@@ -254,7 +256,7 @@ float4 psMain(psInput pin) : SV_TARGET
     }
 
     // Final fragment color.
-    float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor * Color;
+    float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor * pin.color;
     litColor += float4(EmissiveColorMap.Sample(texSampler, pin.texCoord).rgb * EmissiveColor.rgb, 0);
     litColor.rgb = lerp(litColor.rgb, FogColor.rgb, pin.fog * FogColor.a);
     litColor.a *= albedo.a;

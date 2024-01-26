@@ -11,7 +11,8 @@
       "Description": "Controls the intensity of all elements listed in the advanced options.",
       "AddPadding": "True",
       "Min": 0.1,
-      "Max": 11.0
+      "Max": 11.0,
+      "Clamp": true
     },
     {
       "InputId": "18b19778-3ff2-4e38-8fb6-fa748babb967"/*RandomSeed*/,

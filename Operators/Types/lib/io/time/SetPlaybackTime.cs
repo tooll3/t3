@@ -1,3 +1,4 @@
+using System;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
@@ -37,6 +38,11 @@ namespace T3.Operators.Types.Id_c6d22dc3_a6ff_4a6f_aa14_8be6595da2b1
                 {
                     Log.Warning("Can't set playback time without active Playback", this);
                     return;
+                }
+
+                if (Math.Abs(Playback.Current.PlaybackSpeed) < 0.001f)
+                {
+                    Log.Warning("Setting playback speed requires playback to be running.", this);
                 }
 
                 if (ShowLogMessages.GetValue(context))

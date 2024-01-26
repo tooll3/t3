@@ -75,10 +75,10 @@ void main(uint3 i : SV_DispatchThreadID)
 
         Particles[gi].Position = EmitPoints[addIndex].Position;
         Particles[gi].Rotation = EmitPoints[addIndex].Rotation;
-        //Particles[gi].Radius = EmitPoints[addIndex].W;
+        Particles[gi].Radius = EmitPoints[addIndex].W * RadiusFromW;
         Particles[gi].BirthTime = Time;
         Particles[gi].Velocity = qRotateVec3(float3(0,0,1), normalize(Particles[gi].Rotation)) * InitialVelocity;
-        Particles[gi].Radius = EmitPoints[gi].W * RadiusFromW;
+        Particles[gi].Radius = EmitPoints[addIndex].W * RadiusFromW;
 
         // These will not change over lifetime...
         Particles[gi].Color = EmitPoints[addIndex].Color;
