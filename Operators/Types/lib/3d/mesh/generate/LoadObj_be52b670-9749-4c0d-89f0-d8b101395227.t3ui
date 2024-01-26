@@ -1,6 +1,6 @@
 {
   "Id": "be52b670-9749-4c0d-89f0-d8b101395227"/*LoadObj*/,
-  "Description": "Generates Vertex and Index buffers from obj file\n\nAll faces need to have UVs or they will appear 100% black.",
+  "Description": "Loads a a mesh from an obj. file  by generating Vertex and Index buffers which can be rendered with [DrawMesh] , [DrawMeshUnlit] and [DrawMeshHatched] among others.\nAll surfaces must have valid UVs, otherwise they will appear black.\n\nFor a simple and interactive tutorial on the Tooll3 rendering pipeline, see [HowToDrawThings].\n\nIt can also become the source for a particle system with [MeshVerticesToPoints] or [PointsOnMesh].\n\nTo generate meshes procedurally with many adjustment options see [CubeMesh], [CylinderMesh], [QuadMesh], [SphereMesh] or [TorusMesh].\n\n",
   "InputUis": [
     {
       "InputId": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
