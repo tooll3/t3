@@ -11,6 +11,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="System.Windows.Forms"/>
+    </ItemGroup>
+    <ItemGroup>
       <ProjectReference Include="..\SystemUi\SystemUi.csproj" />
     </ItemGroup>
 

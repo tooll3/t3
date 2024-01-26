@@ -35,7 +35,7 @@ namespace lib.io.input
             var scale = Scale.GetValue(context);
             var aspectRatio = (float)context.RequestedResolution.Width / context.RequestedResolution.Height;
 
-            var lastPosition = T3.Core.IO.MouseInput.LastPosition;
+            var lastPosition = T3.SystemUi.MouseInput.LastPosition;
 
             switch (mode)
             {
@@ -73,7 +73,7 @@ namespace lib.io.input
                     throw new ArgumentOutOfRangeException(nameof(mode));
             }
 
-            IsLeftButtonDown.Value = T3.Core.IO.MouseInput.IsLeftButtonDown;
+            IsLeftButtonDown.Value = T3.SystemUi.MouseInput.IsLeftButtonDown;
             Position3d.DirtyFlag.Clear();
             Position.DirtyFlag.Clear();
             IsLeftButtonDown.DirtyFlag.Clear();

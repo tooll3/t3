@@ -1,7 +1,6 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 
-namespace T3.Core.IO
+namespace T3.SystemUi
 {
     /// <summary>
     /// 
@@ -19,7 +18,6 @@ namespace T3.Core.IO
         
         public static Vector2 LastPosition { get; private set; } = Vector2.Zero;
         public static bool IsLeftButtonDown { get; private set; }
-
         public static Guid SelectedChildId = Guid.Empty;
     }
 }

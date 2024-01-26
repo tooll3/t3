@@ -1,4 +1,4 @@
-﻿namespace T3.Core.IO
+﻿namespace T3.SystemUi
 {
     /// <summary>
     /// Note: The actually handling is implemented differently in Editor and Player.
@@ -8,9 +8,41 @@
     /// </summary>
     public static class KeyHandler
     {
-        public static bool[] PressedKeys = new bool[512];
+        private static readonly bool[] PressedKeysPrivate = new bool[512];
+        public static readonly IReadOnlyList<bool> PressedKeys = PressedKeysPrivate;
+
+        public static bool IsKeyPressed(Key keyCode) => IsKeyPressed((int)keyCode);
+
+        public static void SetKeyDown(Key keyCode) => SetKeyPressed((int)keyCode, true);
+        public static void SetKeyDown(int keyCode) => SetKeyPressed(keyCode, true);
+        
+
+        public static void SetKeyUp(Key keyCode) => SetKeyPressed((int)keyCode, false);
+        public static void SetKeyUp(int keyCode) => SetKeyPressed(keyCode, false);
+        
+        public static bool IsKeyPressed(int keyCode)
+        {
+            if (keyCode < 0 || keyCode >= PressedKeysPrivate.Length)
+            {
+                Console.WriteLine($"KeyHandler: Invalid key code {keyCode}");
+                return false;
+            }
+            
+            return PressedKeysPrivate[keyCode];
+        }
+
+        private static void SetKeyPressed(int keyCode, bool value)
+        {
+            if (keyCode < 0 || keyCode >= PressedKeysPrivate.Length)
+            {
+                Console.WriteLine($"KeyHandler: Invalid key code {keyCode}");
+                return;
+            }
+            
+            PressedKeysPrivate[keyCode] = value;
+        }
     }
-    
+
     /// <summary>
     /// This enumeration is directly derived from <see cref="System.Windows.Forms.Keys"/>.
     /// Make sure to not confuse these with ImGuiKey enumeration.
@@ -56,13 +88,14 @@
         Z = 90,
         Backspace = 8,
         Delete = 46,
+
         // LeftShift,    
         // RightShift,
         // LeftCtrl,
         ShiftKey = 16,
         CtrlKey = 17,
         End = 0x23,
-        Home = 0x24,        
+        Home = 0x24,
         F1 = 112,
         F2 = 113,
         F3 = 114,
@@ -94,12 +127,11 @@
         Slash = 191,
         Pipe = 192,
         Alt = 18,
-        Ins= 45,
+        Ins = 45,
         PageUp = 33,
         PageDown = 34,
         Semicolon = 186,
         Apostrophe = 226,
         HashTag = 220,
-        
     }
 }

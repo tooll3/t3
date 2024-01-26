@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
-using System.Reflection;
 using System.Threading;
-using System.Windows.Forms;
 using CommandLine;
 using CommandLine.Text;
 using ManagedBass;
@@ -14,7 +11,6 @@ using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using SharpDX.Windows;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.Compilation;
@@ -31,6 +27,11 @@ using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
 using Resource = SharpDX.Direct3D11.Resource;
 using Vector2 = System.Numerics.Vector2;
+using System.Windows.Forms;
+using SharpDX.Windows;
+using T3.SystemUi;
+using ResourceManager = T3.Core.Resource.ResourceManager;
+using T3.MsForms;
 
 namespace T3.Player
 {
@@ -106,8 +107,7 @@ namespace T3.Player
 
                 var startedWindowed = _commandLineOptions.Windowed;
 
-                _renderForm.KeyDown += HandleKeyDown;
-                _renderForm.KeyUp += HandleKeyUp;
+                MsForms.MsForms.TrackKeysOf(_renderForm);
 
                 _renderForm.KeyUp += (sender, keyArgs) =>
                                      {
@@ -368,34 +368,12 @@ namespace T3.Player
             MouseInput.Set(relativePosition, (e.Button & MouseButtons.Left) != 0);
         }
 
-        private static void HandleKeyDown(object sender, KeyEventArgs e)
-        {
-            var keyIndex = (int)e.KeyCode;
-            if (keyIndex >= T3.Core.IO.KeyHandler.PressedKeys.Length)
-            {
-                Log.Warning($"Ignoring out of range key code {e.KeyCode} with index {keyIndex}");
-            }
-            else
-            {
-                T3.Core.IO.KeyHandler.PressedKeys[keyIndex] = true;
-            }
-        }
-
-        private static void HandleKeyUp(object sender, KeyEventArgs e)
-        {
-            var keyIndex = (int)e.KeyCode;
-            if (keyIndex < T3.Core.IO.KeyHandler.PressedKeys.Length)
-            {
-                T3.Core.IO.KeyHandler.PressedKeys[keyIndex] = false;
-            }
-        }
-
         private static void RebuildBackBuffer(RenderForm form, Device device, ref RenderTargetView rtv, ref Texture2D buffer, ref SwapChain swapChain)
         {
             rtv.Dispose();
             buffer.Dispose();
             swapChain.ResizeBuffers(3, form.ClientSize.Width, form.ClientSize.Height, Format.Unknown, SwapChainFlags.AllowModeSwitch);
-            buffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
+            buffer = Resource.FromSwapChain<Texture2D>(swapChain, 0);
             rtv = new RenderTargetView(device, buffer);
         }
 
@@ -439,7 +417,7 @@ namespace T3.Player
             List<SymbolJson.SymbolReadResult> newlyLoadedSymbols,
             IReadOnlyCollection<Symbol> allNewSymbols)
         {
-            public readonly PlayerSymbolPackage Package;
+            public readonly PlayerSymbolPackage Package = package;
             public readonly List<SymbolJson.SymbolReadResult> NewlyLoadedSymbols = newlyLoadedSymbols;
             public readonly IReadOnlyCollection<Symbol> AllNewSymbols = allNewSymbols;
         }

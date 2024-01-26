@@ -1,4 +1,3 @@
-using System.Numerics;
 using T3.SystemUi;
 
 namespace T3.MsForms;
@@ -72,6 +71,24 @@ public class MsForms : ICoreSystemUiService
                 { DialogResult.TryAgain, PopUpResult.TryAgain },
                 { DialogResult.Continue, PopUpResult.Continue }
             };
+
+    public static void TrackKeysOf(Form form)
+    {
+        form.KeyDown += HandleKeyDown;
+        form.KeyUp += HandleKeyUp;
+    }
+
+    private static void HandleKeyDown(object? sender, KeyEventArgs e)
+    {
+        var keyIndex = (int)e.KeyCode;
+        KeyHandler.SetKeyDown(keyIndex);
+    }
+
+    private static void HandleKeyUp(object? sender, KeyEventArgs e)
+    {
+        var keyIndex = (int)e.KeyCode;
+        KeyHandler.SetKeyUp(keyIndex);
+    }
 }
 
 public class CursorWrapper : ICursor
