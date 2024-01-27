@@ -6,6 +6,7 @@ cbuffer ParamConstants : register(b0)
 {
     float Mode;
     float CorrectGamma;
+    float GammaValue;
 }
 
 
@@ -82,7 +83,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     }
 
     if(CorrectGamma > 0.5) {
-        float gamma = 2.2;
+        float gamma = GammaValue;
         c.rgb = pow(c.rgb, 1.0/gamma);
     }
 
