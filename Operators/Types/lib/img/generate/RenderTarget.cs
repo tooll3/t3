@@ -35,7 +35,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         {
             ColorBuffer.UpdateAction = Update;
             DepthBuffer.UpdateAction = Update;
-            SetupShaderResources();
+            SetupResolveShaderResources();
 
             lock (_lock)
             {
@@ -213,28 +213,28 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             
         }
         
-        private void SetupShaderResources()
+        private static void SetupResolveShaderResources()
         {
-            if (_resolveComputeShaderResource == null)
-            {
-                string sourcePath = @"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl";
-                string entryPoint = "main";
-                string debugName = "resolve-multisampled-depth-buffer";
-                var resourceManager = ResourceManager.Instance();
-                var success = resourceManager.TryCreateShaderResource(out _resolveComputeShaderResource, 
-                                                                      fileName: sourcePath, 
-                                                                      entryPoint: entryPoint, 
-                                                                      name: debugName,
-                                                                      errorMessage: out var errorMessage);
-                
-                if(!string.IsNullOrWhiteSpace(errorMessage))
-                    Log.Error($"{nameof(RenderTarget)}: {errorMessage}");
-            }
+            if (_resolveComputeShaderResource != null)
+                return;
+            
+            const string sourcePath = @"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl";
+            const string entryPoint = "main";
+            const string debugName = "resolve-multisampled-depth-buffer";
+            var resourceManager = ResourceManager.Instance();
+            
+            var success = resourceManager.TryCreateShaderResource(out _resolveComputeShaderResource, 
+                                                                  fileName: sourcePath, 
+                                                                  entryPoint: entryPoint, 
+                                                                  name: debugName,
+                                                                  errorMessage: out var errorMessage);
+
+            if(!success || !string.IsNullOrWhiteSpace(errorMessage))
+                Log.Error($"Failed to initialize {nameof(RenderTarget)}: {errorMessage}");
         }
         
         private void ResolveDepthBuffer()
         {
-            var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
@@ -553,6 +553,6 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         private static int _statsCountPixels;
         private static bool _registeredStats;
 
-        private ShaderResource<SharpDX.Direct3D11.ComputeShader> _resolveComputeShaderResource;
+        private static ShaderResource<SharpDX.Direct3D11.ComputeShader> _resolveComputeShaderResource;
     }
 }

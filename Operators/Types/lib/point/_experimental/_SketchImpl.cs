@@ -405,7 +405,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                 }
                 catch(Exception e)
                 {
-                    Log.Warning($"Failed to load pages in {filepath}", this);
+                    Log.Warning($"Failed to load pages in {filepath}: {e.Message}", this);
                 }
             }
 
