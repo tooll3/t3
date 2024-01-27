@@ -5,8 +5,8 @@
     {
       "InputId": "8f203c5f-6eb8-42a1-bfea-9ca52a49e132"/*Scale*/,
       "Position": {
-        "X": -828.63654,
-        "Y": 214.806
+        "X": -820.6758,
+        "Y": 242.09961
       }
     },
     {
@@ -247,11 +247,19 @@
       "Max": 1.0
     },
     {
+      "InputId": "9c25f805-ae1c-42a5-a4e4-390bb7ea33bb"/*TooCloseFadeOut*/,
+      "Position": {
+        "X": -768.101,
+        "Y": 2247.3384
+      },
+      "Description": "Points too close to the camera will fade out"
+    },
+    {
       "InputId": "a129bf5c-e549-4f7c-b30b-5199ffd38f8c"/*GPoints*/,
       "Relevancy": "Required",
       "Position": {
         "X": -757.86597,
-        "Y": 2229.6323
+        "Y": 2319.6323
       }
     }
   ],
@@ -325,8 +333,8 @@
         "Y": 59.905018
       },
       "Position": {
-        "X": -556.022,
-        "Y": 1042.2227
+        "X": -408.18176,
+        "Y": 1051.3206
       }
     },
     {
@@ -631,15 +639,15 @@
     {
       "ChildId": "32109674-b163-4495-8117-fd279084b3cb"/*BlendColors*/,
       "Position": {
-        "X": -919.9809,
-        "Y": 1071.1115
+        "X": -632.7925,
+        "Y": 1047.1528
       }
     },
     {
       "ChildId": "740efcdf-0060-4d1e-8cad-8a51c06c6668"/*GetForegroundColor*/,
       "Position": {
-        "X": -1049.9607,
-        "Y": 1107.1825
+        "X": -959.0635,
+        "Y": 1095.5645
       }
     },
     {
@@ -654,6 +662,13 @@
       "Position": {
         "X": -535.162,
         "Y": 430.28204
+      }
+    },
+    {
+      "ChildId": "944ba8ed-f34f-47c3-8330-23a873cc7298"/*BoolToFloat*/,
+      "Position": {
+        "X": -593.702,
+        "Y": 2322.0808
       }
     }
   ],

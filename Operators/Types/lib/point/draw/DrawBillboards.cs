@@ -107,6 +107,9 @@ namespace T3.Operators.Types.Id_18d3d929_e530_45fa_9131_658368060ae2
         [Input(Guid = "c676823b-97d0-4e3e-a59e-e2297816ec69")]
         public readonly InputSlot<float> AlphaCut = new InputSlot<float>();
 
+        [Input(Guid = "9c25f805-ae1c-42a5-a4e4-390bb7ea33bb")]
+        public readonly InputSlot<bool> TooCloseFadeOut = new InputSlot<bool>();
+
         [Input(Guid = "a129bf5c-e549-4f7c-b30b-5199ffd38f8c")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
         
