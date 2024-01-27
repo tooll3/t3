@@ -53,7 +53,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             _trainedDeviceName = Device.GetValue(context);
 
             var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(_trainedDeviceName.GetHashCode());
-            _warningMessage = midiIn == null ? $"Midi device '{_trainedDeviceName}' is not captured" : null;
+            _warningMessage = midiIn == null ? $"Midi device '{_trainedDeviceName}' is not captured.\nYou can try Windows » Settings » Midi » Rescan Devices." : null;
             
             _trainedChannel = Channel.GetValue(context);
             _trainedControllerId = Control.GetValue(context);
@@ -303,7 +303,13 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                 }
             }
         }
-        
+
+        void MidiInConnectionManager.IMidiConsumer.OnSettingsChanged()
+        {
+            Result.DirtyFlag.Invalidate();
+            Range.DirtyFlag.Invalidate();
+            WasHit.DirtyFlag.Invalidate();
+        }
         
         public IStatusProvider.StatusLevel GetStatusLevel()
         {

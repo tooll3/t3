@@ -5,6 +5,7 @@ using ImGuiNET;
 using Operators.Utils;
 using T3.Core.IO;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.Variations.Midi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -118,7 +119,6 @@ namespace T3.Editor.Gui.Windows
                                                               "The control that pops up when dragging on a number value"
                                                              );
 
-
                         FormInputs.SetIndentToLeft();
                         FormInputs.AddVerticalSpace();
                         FormInputs.AddSectionHeader("Previews");
@@ -126,11 +126,10 @@ namespace T3.Editor.Gui.Windows
                         changed |= FormInputs.AddCheckBox("Show Graph thumbnails",
                                                           ref UserSettings.Config.ShowThumbnails, null,
                                                           UserSettings.Defaults.ShowThumbnails);
-                        
+
                         changed |= FormInputs.AddCheckBox("Show nodes thumbnails when hovering",
                                                           ref UserSettings.Config.EditorHoverPreview, null,
                                                           UserSettings.Defaults.EditorHoverPreview);
-
 
                         FormInputs.AddVerticalSpace();
                         FormInputs.AddSectionHeader("Advanced");
@@ -191,28 +190,38 @@ namespace T3.Editor.Gui.Windows
                     {
                         FormInputs.AddSectionHeader("Midi");
 
-                        ImGui.TextUnformatted("Limit captured MIDI devices...");
-                        CustomComponents
-                           .HelpText("This can be useful it avoid capturing devices required by other applications.\nEnter one search string per line...");
-
-                        var limitMidiDevices = string.IsNullOrEmpty(ProjectSettings.Config.LimitMidiDeviceCapture)
-                                                   ? string.Empty
-                                                   : ProjectSettings.Config.LimitMidiDeviceCapture;
-
-                        if (ImGui.InputTextMultiline("##Limit MidiDevices", ref limitMidiDevices, 2000, new Vector2(-1, 100)))
+                        if (ImGui.Button("Rescan devices"))
                         {
-                            changed = true;
-                            ProjectSettings.Config.LimitMidiDeviceCapture = string.IsNullOrEmpty(limitMidiDevices) ? null : limitMidiDevices;
                             MidiInConnectionManager.Rescan();
+                            MidiOutConnectionManager.Init();
                         }
 
-                        FormInputs.AddVerticalSpace();
+                        {
+                            FormInputs.AddVerticalSpace();
+                            ImGui.TextUnformatted("Limit captured MIDI devices...");
+                            CustomComponents
+                               .HelpText("This can be useful it avoid capturing devices required by other applications.\nEnter one search string per line...");
+
+                            var limitMidiDevices = string.IsNullOrEmpty(ProjectSettings.Config.LimitMidiDeviceCapture)
+                                                       ? string.Empty
+                                                       : ProjectSettings.Config.LimitMidiDeviceCapture;
+
+                            if (ImGui.InputTextMultiline("##Limit MidiDevices", ref limitMidiDevices, 2000, new Vector2(-1, 100)))
+                            {
+                                changed = true;
+                                ProjectSettings.Config.LimitMidiDeviceCapture = string.IsNullOrEmpty(limitMidiDevices) ? null : limitMidiDevices;
+                                MidiInConnectionManager.Rescan();
+                            }
+
+                            FormInputs.AddVerticalSpace();
+                        }
                         FormInputs.SetIndentToLeft();
                         changed |= FormInputs.AddCheckBox("Enable Midi snapshot LEDs",
                                                           ref ProjectSettings.Config.EnableMidiSnapshotIndication,
                                                           "With selected midi controllers like APC Mini and APC40, Tooll will highlight LEDs for available and active snapshots. This requires an active MIDI out channel which will interfere with the [MidiOut] operator.\nChanging this requires a restart.",
                                                           ProjectSettings.Defaults.EnableMidiSnapshotIndication);
 
+                        FormInputs.AddVerticalSpace();
                         FormInputs.SetIndentToParameters();
                         break;
                     }
