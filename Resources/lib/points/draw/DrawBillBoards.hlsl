@@ -70,6 +70,7 @@ cbuffer Params : register(b1)
 
     float UseWFoScale;
     float UseStretch;
+    float TooCloseFadeOut;
 };
 
 cbuffer FogParams : register(b2)
@@ -185,12 +186,16 @@ psInput vsMain(uint id
     // Shrink too close particles
     float4 posInCamera = mul(posInObject, ObjectToCamera);
     float tooCloseFactor = saturate(-posInCamera.z / 0.1 - 1);
-
+    
     output.fog = pow(saturate(-posInCamera.z / FogDistance), FogBias);
 
     float4 colorFromPoint = (UseRotationAsRgba > 0.5) ? pRotation : 1;
 
     float colorFxU = GetUFromMode(ColorVariationMode, pointId, f, normalizedScatter, p.W, output.fog);
+    if (TooCloseFadeOut > 0.5){
+        p.Color.a *= tooCloseFactor; // fade out the points too close to the camera
+    }
+    
     output.color = p.Color * Color * ColorOverW.SampleLevel(texSampler, float2(colorFxU, 0), 0) * colorFromPoint;
 
     float adjustedRotate = Rotate;
@@ -219,8 +224,8 @@ psInput vsMain(uint id
     float scaleFxU = GetUFromMode(ScaleDistribution, pointId, f, normalizedScatter, p.W, output.fog);
     float scaleFromCurve = SizeOverW.SampleLevel(texSampler, float2(scaleFxU, 0), 0).r;
     float hideUndefinedPoints = isnan(p.W) ? 0 : (UseWFoScale > 0.5 ? p.W : 1 ) ;
-    float computedScale = adjustedScale * (RandomScale * scatterForScale.y *adjustedRandomize + 1) * tooCloseFactor * scaleFromCurve * hideUndefinedPoints;
-
+    //float computedScale = adjustedScale * (RandomScale * scatterForScale.y *adjustedRandomize + 1) * tooCloseFactor * scaleFromCurve * hideUndefinedPoints; 
+    float computedScale = adjustedScale * (RandomScale * scatterForScale.y *adjustedRandomize + 1) * scaleFromCurve * hideUndefinedPoints;
     output.position = 0;
 
     if (OrientationMode <= 1.5)
@@ -255,7 +260,7 @@ float4 psMain(psInput input) : SV_TARGET
 {
     float4 imgColor = SpriteTexture.Sample(texSampler, input.texCoord);
     float4 color = input.color * imgColor;
-
+    
     if (color.a < AlphaCutOff)
         discard;
 
