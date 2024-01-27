@@ -282,16 +282,11 @@
           "Id": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0,
+            "X": 0.76076555,
+            "Y": 0.21912237,
+            "Z": 0.56375676,
             "W": 1.0
           }
-        },
-        {
-          "Id": "c8d0e44e-acd1-4045-b565-e1ce0b722e70"/*BlendMode*/,
-          "Type": "System.Int32",
-          "Value": 1
         },
         {
           "Id": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,
@@ -412,6 +407,46 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "37337083-f180-4308-acb6-6b19a1c1b46e"/*MidiInput*/,
+      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
+      "InputValues": [
+        {
+          "Id": "aad1e576-f144-423f-83b5-5694b1119c23"/*OutputRange*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.99,
+            "Y": 1.01
+          }
+        },
+        {
+          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "044168eb-791c-405f-867f-3d5702924165"/*EventType*/,
+          "Type": "System.Int32",
+          "Value": 2
+        },
+        {
+          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
+          "Type": "System.String",
+          "Value": "APC MINI"
+        },
+        {
+          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
+          "Type": "System.Int32",
+          "Value": 50
+        }
+      ],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -468,6 +503,12 @@
       "SourceSlotId": "ae4addf0-08cf-4b25-9515-4fef9359d183",
       "TargetParentOrChildId": "761ff952-d287-4c81-a284-120c30ccab32",
       "TargetSlotId": "4ed2a94d-ea7b-4fc5-8b3b-2ced9542b763"
+    },
+    {
+      "SourceParentOrChildId": "37337083-f180-4308-acb6-6b19a1c1b46e",
+      "SourceSlotId": "01706780-d25b-4c30-a741-8b7b81e04d82",
+      "TargetParentOrChildId": "761ff952-d287-4c81-a284-120c30ccab32",
+      "TargetSlotId": "62c7b815-b189-4cd7-bad2-bb1c4251e646"
     },
     {
       "SourceParentOrChildId": "af6dc633-a8c7-4785-abf1-d091b74f6d43",
