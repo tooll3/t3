@@ -178,12 +178,16 @@ namespace T3.Core.Operator
 
         private void SetBypassed(bool shouldBypass)
         {
+            if (shouldBypass == _isBypassed)
+                return;
+            
             if(!IsBypassable())
                 return;
 
             if (Parent == null)
             {
-                _isBypassed = true;  // during loading parents are not yet assigned. This flag will later be used when creating instances
+                // Clarify: shouldn't this be shouldBypass?
+                _isBypassed = shouldBypass;  // during loading parents are not yet assigned. This flag will later be used when creating instances
                 return;
             }
             
@@ -191,7 +195,7 @@ namespace T3.Core.Operator
             var parentInstancesOfSymbol = Parent.InstancesOfSymbol;
             if (parentInstancesOfSymbol.Count == 0)
             {
-                _isBypassed = true;  // while duplicating / cloning as new symbol there are no instances yet.
+                _isBypassed = shouldBypass;  // while duplicating / cloning as new symbol there are no instances yet.
                 return;
             }
             
