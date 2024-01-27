@@ -103,41 +103,6 @@
         "X": -1499.7317,
         "Y": -4711.058
       }
-    },
-    {
-      "ChildId": "16666007-3877-46ba-8523-e630a70e29b6"/*PerlinNoise3*/,
-      "Position": {
-        "X": -1929.2117,
-        "Y": -4618.9243
-      }
-    },
-    {
-      "ChildId": "3f1a2c3d-a229-4ab1-acb9-80c8b2dff22e"/*LoadObjEdges*/,
-      "Position": {
-        "X": -1910.2502,
-        "Y": -4460.082
-      }
-    },
-    {
-      "ChildId": "27a5fed1-999f-4e5b-bb47-a24c81fad819"/*ListToBuffer*/,
-      "Position": {
-        "X": -1730.7366,
-        "Y": -4473.357
-      }
-    },
-    {
-      "ChildId": "8eea9040-44d4-47da-be64-6afbb3e6c4a7"/*DrawLines*/,
-      "Position": {
-        "X": -1580.7366,
-        "Y": -4473.357
-      }
-    },
-    {
-      "ChildId": "d0d1637c-3679-4ba7-a339-ccca4a486a94"/*SetFog*/,
-      "Position": {
-        "X": -1430.7366,
-        "Y": -4473.357
-      }
     }
   ],
   "OutputUis": [],
