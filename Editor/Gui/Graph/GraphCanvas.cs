@@ -672,6 +672,8 @@ namespace T3.Editor.Gui.Graph
 
         private void DrawContextMenuContent()
         {
+            var clickPosition =ImGui.GetMousePosOnOpeningCurrentPopup();
+
             var selectedChildUis = GetSelectedChildUis();
             var nextUndoTitle = UndoRedoStack.CanUndo ? $" ({UndoRedoStack.GetNextUndoTitle()})" : string.Empty;
             if (ImGui.MenuItem("Undo" + nextUndoTitle,
@@ -886,7 +888,8 @@ namespace T3.Editor.Gui.Graph
             {
                 if (ImGui.MenuItem("Add Node...", "TAB", false, true))
                 {
-                    SymbolBrowser.OpenAt(InverseTransformPositionFloat(ImGui.GetMousePos()), null, null, false);
+
+                    SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
                 }
 
                 if (ImGui.MenuItem("Add input parameter..."))
