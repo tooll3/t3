@@ -166,7 +166,7 @@ public class OperatorHelp
             ImGui.PopFont();
             ImGui.PopStyleColor();
 
-            var parameterColorWidth = 140f * T3Ui.UiScaleFactor;
+            var parameterColorWidth = 15    0f * T3Ui.UiScaleFactor;
             foreach (var p in _parametersWithDescription)
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
