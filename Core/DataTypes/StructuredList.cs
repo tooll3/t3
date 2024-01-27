@@ -208,6 +208,13 @@ namespace T3.Core.DataTypes
                 foreach (var fieldInfo in fieldInfos)
                 {
                     var name = fieldInfo.Name;
+                    
+                    // Prevent writing read only attributes because they will cause an exception when
+                    // trying to read the const property like Point.Stride
+                    
+                    if (fieldInfo.IsPrivate || fieldInfo.IsStatic || fieldInfo.IsLiteral)
+                        continue;
+
                     writer.WritePropertyName(name);
                     var value = fieldInfo.GetValue(entry);
                     TypeValueToJsonConverters.Entries[fieldInfo.FieldType](writer, value);

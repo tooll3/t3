@@ -25,6 +25,17 @@ namespace T3.Core.DataTypes
         [FieldOffset(15 * 4)]
         public float Selected;
 
+
+        public Point()
+        {
+            Position = Vector3.Zero;
+            W = 1;
+            Orientation = Quaternion.Identity;
+            Color = Vector4.One;
+            Stretch = Vector3.One;
+            Selected = 1;
+        }
+
         public static Point Separator()
         {
             return new Point
