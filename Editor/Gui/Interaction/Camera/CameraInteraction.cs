@@ -6,6 +6,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Utils.Geometry;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.UiHelpers;
+using T3.SystemUi;
 
 namespace T3.Editor.Gui.Interaction.Camera
 {

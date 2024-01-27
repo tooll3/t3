@@ -6,6 +6,7 @@ using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
+using T3.SystemUi;
 
 namespace T3.Editor.Gui.UiHelpers;
 
@@ -131,7 +132,7 @@ public static class KeyboardAndMouseOverlay
     {
         var time = Playback.RunTimeInSecs;
 
-        for (var index = 0; index < KeyHandler.PressedKeys.Length; index++)
+        for (var index = 0; index < KeyHandler.PressedKeys.Count; index++)
         {
             var pressed = KeyHandler.PressedKeys[index];
             var status = _keyStates[index];

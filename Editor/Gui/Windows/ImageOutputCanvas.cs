@@ -8,6 +8,7 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.SystemUi;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -72,7 +73,7 @@ namespace T3.Editor.Gui.Windows
             if (ImGui.IsMouseHoveringRect(topLeftOnScreen, topLeftOnScreen + sizeOnScreen))
             {
                 var relativePosition = (ImGui.GetMousePos() - topLeftOnScreen) / sizeOnScreen;
-                T3.Core.IO.MouseInput.Set(relativePosition, ImGui.IsMouseDown(ImGuiMouseButton.Left));
+                MouseInput.Set(relativePosition, ImGui.IsMouseDown(ImGuiMouseButton.Left));
             }
             
             if (UserSettings.Config.ShowToolbar)

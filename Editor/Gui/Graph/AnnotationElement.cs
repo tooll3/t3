@@ -14,6 +14,7 @@ using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.SystemUi;
 
 namespace T3.Editor.Gui.Graph
 {
