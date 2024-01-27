@@ -24,6 +24,7 @@ namespace T3.Core.Operator
         protected internal ResourceFileWatcher ResourceFileWatcher => Symbol.SymbolPackage.ResourceFileWatcher;
 
         private List<string> _resourceFolders = null;
+
         public IReadOnlyList<string> ResourceFolders
         {
             get
@@ -59,32 +60,22 @@ namespace T3.Core.Operator
 
         protected void SetupInputAndOutputsFromType()
         {
-            // input identified by base interface
-            var inputInfos = from field in Type.GetFields()
-                             where typeof(IInputSlot).IsAssignableFrom(field.FieldType)
-                             select field;
-            foreach (var inputInfo in inputInfos)
+            var assemblyInfo = Symbol.SymbolPackage.AssemblyInformation;
+            foreach (var input in assemblyInfo.InputFields[Type])
             {
-                var customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false);
-                Debug.Assert(customAttributes.Length == 1);
-                var attribute = (InputAttribute)customAttributes[0];
-                var inputSlot = (IInputSlot)inputInfo.GetValue(this);
-                inputSlot.Parent = this;
-                inputSlot.Id = attribute.Id;
-                inputSlot.MappedType = attribute.MappedType;
+                var inputSlot = (IInputSlot)input.Field.GetValue(this);
+                inputSlot!.Parent = this;
+                inputSlot.Id = input.Attribute.Id;
+                inputSlot.MappedType = input.Attribute.MappedType;
                 Inputs.Add(inputSlot);
             }
 
             // outputs identified by attribute
-            var outputs = (from field in Type.GetFields()
-                           let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
-                           from attr in attributes
-                           select (field, (OutputAttribute)attributes[0])).ToArray();
-            foreach (var (output, outputAttribute) in outputs)
+            foreach (var output in assemblyInfo.OutputFields[Type])
             {
-                var slot = (ISlot)output.GetValue(this);
-                slot.Parent = this;
-                slot.Id = outputAttribute.Id;
+                var slot = (ISlot)output.Field.GetValue(this);
+                slot!.Parent = this;
+                slot.Id = output.Attribute.Id;
                 Outputs.Add(slot);
             }
         }
@@ -159,7 +150,7 @@ namespace T3.Core.Operator
         private static void GatherResourceFolders(Instance instance, out List<string> resourceFolders)
         {
             resourceFolders = [instance.ResourceFileWatcher.WatchedFolder];
-            
+
             while (instance.Parent != null)
             {
                 instance = instance.Parent;

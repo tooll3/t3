@@ -2,17 +2,32 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
+using System.Security.Cryptography;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.DependencyModel.Resolution;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
 namespace T3.Core.Compilation;
+
+public readonly struct InputSlotInfo(InputAttribute attribute, FieldInfo field)
+{
+    public readonly InputAttribute Attribute = attribute;
+    public readonly FieldInfo Field = field;
+}
+
+public struct OutputSlotInfo(OutputAttribute attribute, FieldInfo field)
+{
+    public readonly OutputAttribute Attribute = attribute;
+    public readonly FieldInfo Field = field;
+}
 
 public class AssemblyInformation
 {
@@ -35,6 +50,12 @@ public class AssemblyInformation
     public IEnumerable<Assembly> AllAssemblies => _loadContext.Assemblies;
     private AssemblyLoadContext _loadContext;
     private CompositeCompilationAssemblyResolver _assemblyResolver;
+    public IReadOnlyDictionary<Type, Func<object>> Constructors => _constructors;
+    private readonly ConcurrentDictionary<Type, Func<object>> _constructors = new();
+    public IReadOnlyDictionary<Type, IReadOnlyList<InputSlotInfo>> InputFields => _inputFields;
+    private readonly ConcurrentDictionary<Type, IReadOnlyList<InputSlotInfo>> _inputFields = new();
+    public IReadOnlyDictionary<Type, IReadOnlyList<OutputSlotInfo>> OutputFields => _outputFields;
+    private readonly ConcurrentDictionary<Type, IReadOnlyList<OutputSlotInfo>> _outputFields = new();
 
     public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
     {
@@ -55,7 +76,12 @@ public class AssemblyInformation
 
         try
         {
-            _types = assembly.GetExportedTypes().ToDictionary(type => type.FullName, type => type);
+            var types = assembly.GetExportedTypes();
+            _types = types.ToDictionary(type => type.FullName, type => type);
+
+            foreach (var type in types)
+            {
+            }
         }
         catch (Exception e)
         {
@@ -73,6 +99,9 @@ public class AssemblyInformation
                                           var isOperator = type.IsAssignableTo(typeof(Instance));
                                           if (!isOperator)
                                               nonOperatorTypes.Add(type);
+                                          else
+                                              SetUpOperatorType(type);
+
                                           return isOperator;
                                       })
                                .Select(type =>
@@ -116,6 +145,48 @@ public class AssemblyInformation
 
                                          return false;
                                      }).Any();
+    }
+
+    private void SetUpOperatorType(Type type)
+    {
+        _constructors[type] = Expression.Lambda<Func<object>>(Expression.New(type)).Compile();
+
+        var bindFlags = BindingFlags.Public | BindingFlags.Instance;
+        var slots = type.GetFields(bindFlags)
+                        .Where(field => field.FieldType.IsAssignableTo(typeof(ISlot)));
+
+        List<InputSlotInfo> inputFields = new();
+        List<OutputSlotInfo> outputFields = new();
+        foreach (var field in slots)
+        {
+            if (field.FieldType.IsAssignableTo(typeof(IInputSlot)))
+            {
+                var inputAttribute = field.GetCustomAttribute<InputAttribute>();
+                if(inputAttribute is not null)
+                {
+                    inputFields.Add(new InputSlotInfo(inputAttribute, field));
+                }
+                else
+                {
+                    Log.Error($"Input slot {field.Name} in {type.FullName} is missing {nameof(InputAttribute)}");
+                }
+            }
+            else
+            {
+                var outputAttribute = field.GetCustomAttribute<OutputAttribute>();
+                if(outputAttribute is not null)
+                {
+                    outputFields.Add(new OutputSlotInfo(outputAttribute, field));
+                }
+                else
+                {
+                    Log.Error($"Output slot {field.Name} in {type.FullName} is missing {nameof(OutputAttribute)}");
+                }
+            }
+        }
+        
+        _inputFields[type] = inputFields;
+        _outputFields[type] = outputFields;
     }
 
     /// <summary>

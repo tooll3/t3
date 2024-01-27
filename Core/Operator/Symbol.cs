@@ -484,7 +484,7 @@ namespace T3.Core.Operator
 
         public Instance CreateInstance(Guid id, Instance parent)
         {
-            var newInstance = Activator.CreateInstance(InstanceType) as Instance;
+            var newInstance = SymbolPackage.AssemblyInformation.Constructors[InstanceType].Invoke() as Instance;
             Debug.Assert(newInstance != null);
             newInstance.SymbolChildId = id;
             newInstance.Parent = parent;
@@ -545,7 +545,7 @@ namespace T3.Core.Operator
             }
 
             // set up the outputs for the child instance
-            for (int i = 0; i < symbolChild.Symbol.OutputDefinitions.Count; i++)
+            for (int i = 0; i < childSymbol.OutputDefinitions.Count; i++)
             {
                 Debug.Assert(i < childInstance.Outputs.Count);
                 var outputSlot = childInstance.Outputs[i];
