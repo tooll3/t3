@@ -189,6 +189,12 @@ namespace T3.Core.Operator
             
             
             var parentInstancesOfSymbol = Parent.InstancesOfSymbol;
+            if (parentInstancesOfSymbol.Count == 0)
+            {
+                _isBypassed = true;  // while duplicating / cloning as new symbol there are no instances yet.
+                return;
+            }
+            
             foreach (var parentInstance in parentInstancesOfSymbol)
             {
                 var instance = parentInstance.Children.First(child => child.SymbolChildId == Id);
