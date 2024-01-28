@@ -127,7 +127,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
         _needsCompilation = false;
         SaveModifiedSymbols();
-        var updated = CsProjectFile.TryRecompile(Compiler.BuildMode.Debug);
+        var updated = CsProjectFile.TryRecompile();
 
         UnmarkAsSaving();
 

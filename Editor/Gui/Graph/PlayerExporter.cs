@@ -71,7 +71,7 @@ namespace T3.Editor.Gui.Graph
 
             Directory.CreateDirectory(exportDir);
 
-            if (!playerProject.TryCompileExternal(Compiler.BuildMode.Release, exportDir))
+            if (!playerProject.TryCompileExternal(exportDir))
             {
                 EditorUi.Instance.ShowMessageBox("Failed to compile player project");
                 Log.Error("Failed to compile player project");

@@ -48,18 +48,18 @@ internal class CsProjectFile
         DllName = Name + ".dll";
     }
 
-    private FileInfo GetBuildTargetPath(Compiler.BuildMode buildMode)
+    private FileInfo GetBuildTargetPath()
     {
-        var directory = GetBuildTargetDirectory(buildMode);
+        var directory = GetBuildTargetDirectory();
         return new FileInfo(Path.Combine(directory, DllName));
     }
 
-    public string GetBuildTargetDirectory(Compiler.BuildMode buildMode)
+    public string GetBuildTargetDirectory()
     {
-        return Path.Combine(GetRootDirectory(buildMode), _buildId.ToString(CultureInfo.InvariantCulture), TargetFramework);
+        return Path.Combine(GetRootDirectory(), _buildId.ToString(CultureInfo.InvariantCulture), TargetFramework);
     }
 
-    private string GetRootDirectory(Compiler.BuildMode buildMode) => buildMode == Compiler.BuildMode.Debug ? _debugRootDirectory : _releaseRootDirectory;
+    private string GetRootDirectory() => BuildMode == Compiler.BuildMode.Debug ? _debugRootDirectory : _releaseRootDirectory;
 
     private string GetTargetFramework(string contents)
     {
@@ -200,12 +200,12 @@ internal class CsProjectFile
     }
 
     // todo - rate limit recompiles for when multiple files change
-    public bool TryRecompile(Compiler.BuildMode buildMode)
+    public bool TryRecompile()
     {
         var previousBuildId = _buildId;
         var previousAssembly = Assembly;
         _buildId = GetNewBuildId();
-        var success = Compiler.TryCompile(this, buildMode);
+        var success = Compiler.TryCompile(this);
 
         if (!success)
         {
@@ -216,15 +216,15 @@ internal class CsProjectFile
         previousAssembly?.Unload();
         Stopwatch stopwatch = new();
         stopwatch.Start();
-        var loaded = TryLoadAssembly(buildMode, null);
+        var loaded = TryLoadAssembly(null);
         stopwatch.Stop();
         Log.Info($"{(loaded ? "Loading" : "Failing to load")} assembly took {stopwatch.ElapsedMilliseconds} ms");
         return loaded;
     }
 
-    public bool TryCompileExternal(Compiler.BuildMode buildMode, string externalDirectory)
+    public bool TryCompileExternal(string externalDirectory)
     {
-        return Compiler.TryCompile(this, buildMode, externalDirectory);
+        return Compiler.TryCompile(this, externalDirectory);
     }
 
     // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation
@@ -253,9 +253,9 @@ internal class CsProjectFile
         foreach (var file in files)
         {
             var text = File.ReadAllText(file)
-                              .Replace(ProjectNamePlaceholder, projectName)
-                              .Replace(guidPlaceholder, homeGuid)
-                              .Replace(defaultReferencesPlaceholder, CoreReferences);
+                           .Replace(ProjectNamePlaceholder, projectName)
+                           .Replace(guidPlaceholder, homeGuid)
+                           .Replace(defaultReferencesPlaceholder, CoreReferences);
 
             var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file))
                                           .Replace(ProjectNamePlaceholder, projectName)
@@ -276,9 +276,9 @@ internal class CsProjectFile
         return new CsProjectFile(new FileInfo(csprojPath));
     }
 
-    public bool TryLoadLatestAssembly(Compiler.BuildMode buildMode)
+    public bool TryLoadLatestAssembly()
     {
-        var rootDir = new DirectoryInfo(GetRootDirectory(buildMode));
+        var rootDir = new DirectoryInfo(GetRootDirectory());
         if (!rootDir.Exists)
             return false;
 
@@ -290,7 +290,7 @@ internal class CsProjectFile
         if (latestDll == null)
             return false;
 
-        var loaded = TryLoadAssembly(buildMode, latestDll);
+        var loaded = TryLoadAssembly(latestDll);
 
         if (!loaded)
         {
@@ -322,10 +322,9 @@ internal class CsProjectFile
         return loaded;
     }
 
-
-    private bool TryLoadAssembly(Compiler.BuildMode buildMode, FileInfo assemblyFile)
+    private bool TryLoadAssembly(FileInfo assemblyFile)
     {
-        assemblyFile ??= GetBuildTargetPath(buildMode);
+        assemblyFile ??= GetBuildTargetPath();
         if (!assemblyFile.Exists)
         {
             Log.Error($"Could not find assembly at \"{assemblyFile.FullName}\"");
@@ -360,4 +359,10 @@ internal class CsProjectFile
     private const string DllReferenceStart = "<Reference Include=\"";
     private const string ProjectReferenceStart = "<ProjectReference Include=\"";
     private const string PackageReferenceStart = "<PackageReference Include=\"";
+
+    #if RELEASE
+    internal const Compiler.BuildMode BuildMode = Compiler.BuildMode.Release;
+    #else
+    internal const Compiler.BuildMode BuildMode = Compiler.BuildMode.Debug;
+    #endif
 }

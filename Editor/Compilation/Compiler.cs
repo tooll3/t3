@@ -11,15 +11,15 @@ internal static class Compiler
 {
     static readonly Stopwatch _stopwatch = new();
     
-    public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, string? targetDirectory = null, Verbosity verbosity = Verbosity.Quiet)
+    public static bool TryCompile(CsProjectFile projectFile, string? targetDirectory = null, Verbosity verbosity = Verbosity.Quiet)
     {
         _stopwatch.Restart();
         var workingDirectory = projectFile.Directory;
         
         const string configurationArgFmt = "--configuration {0}";
-        string buildModeName = buildMode == BuildMode.Debug ? "Debug" : "Release";
+        string buildModeName = CsProjectFile.BuildMode == BuildMode.Debug ? "Debug" : "Release";
         var buildModeArg = string.Format(configurationArgFmt, buildModeName);
-        targetDirectory ??= projectFile.GetBuildTargetDirectory(buildMode);
+        targetDirectory ??= projectFile.GetBuildTargetDirectory();
 
 
         const string command = "dotnet";

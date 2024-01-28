@@ -52,7 +52,7 @@ internal static class ProjectSetup
             return false;
         }
 
-        if (!newCsProj.TryRecompile(Compiler.BuildMode.Debug))
+        if (!newCsProj.TryRecompile())
         {
             Log.Error("Failed to compile new project");
             newProject = null;
@@ -160,9 +160,9 @@ internal static class ProjectSetup
                         {
                             stopwatch.Restart();
                             var csProjFile = new CsProjectFile(new FileInfo(path));
-                            if (!csProjFile.TryLoadLatestAssembly(Compiler.BuildMode.Debug))
+                            if (!csProjFile.TryLoadLatestAssembly())
                             {
-                                if (!csProjFile.TryRecompile(Compiler.BuildMode.Debug))
+                                if (!csProjFile.TryRecompile())
                                 {
                                     Log.Info($"Failed to load {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
                                     return;
