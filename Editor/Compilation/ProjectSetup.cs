@@ -156,8 +156,8 @@ internal static class ProjectSetup
             stopwatch.Restart();
             ConcurrentBag<EditableSymbolProject> projects = new();
             csProjFiles
-               .ToList()
-               .ForEach(path =>
+               .AsParallel()
+               .ForAll(path =>
                         {
                             stopwatch.Restart();
                             var csProjFile = new CsProjectFile(new FileInfo(path));
