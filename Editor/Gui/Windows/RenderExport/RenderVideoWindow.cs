@@ -35,11 +35,11 @@ public class RenderVideoWindow : RenderHelperWindow
     {
         var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
 
-        if (FindIssueWithTexture(mainTexture, MfVideoWriter.SupportedFormats, out var warning))
-        {
-            CustomComponents.HelpText(warning);
-            return;
-        }
+        // if (FindIssueWithTexture(mainTexture, MfVideoWriter.SupportedFormats, out var warning))
+        // {
+        //     CustomComponents.HelpText(warning);
+        //     return;
+        // }
 
         Int2 size = default;
         var currentDesc = mainTexture!.Description;
