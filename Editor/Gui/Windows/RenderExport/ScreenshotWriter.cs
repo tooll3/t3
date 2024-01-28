@@ -18,13 +18,13 @@ public static class ScreenshotWriter
         Png,
         Jpg,
     }
-    public static List<Format> SupportedInputFormats { get; }= new()
-                                                       {
-                                                           SharpDX.DXGI.Format.R8G8B8A8_UNorm,
-                                                           SharpDX.DXGI.Format.R16G16B16A16_UNorm,
-                                                           SharpDX.DXGI.Format.R16G16B16A16_Float,
-                                                           SharpDX.DXGI.Format.B8G8R8A8_UNorm
-                                                       };
+    // public static List<Format> SupportedInputFormats { get; }= new()
+    //                                                    {
+    //                                                        SharpDX.DXGI.Format.R8G8B8A8_UNorm,
+    //                                                        SharpDX.DXGI.Format.R16G16B16A16_UNorm,
+    //                                                        SharpDX.DXGI.Format.R16G16B16A16_Float,
+    //                                                        SharpDX.DXGI.Format.B8G8R8A8_UNorm
+    //                                                    };
     
     public static bool SavingComplete => _saveQueue.Count == 0;
     

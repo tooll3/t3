@@ -188,7 +188,7 @@ public class RenderVideoWindow : RenderHelperWindow
     {
         // since we are double-buffering and discarding the first few frames,
         // we have to subtract these frames to get the currently really shown framenumber...
-        return FrameIndex - MfVideoWriter.SkipImages;
+        return FrameIndex - TextureReadAccess.SkipImages;
     }
 
     private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture)

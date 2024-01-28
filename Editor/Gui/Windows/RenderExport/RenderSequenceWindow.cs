@@ -30,12 +30,12 @@ public class RenderSequenceWindow : RenderHelperWindow
         ImGui.Separator();
 
         var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
-        if (FindIssueWithTexture(mainTexture, ScreenshotWriter.SupportedInputFormats, out var warning))
-        {
-            CustomComponents.HelpText(warning);
-            return;
-            
-        }
+        // if (FindIssueWithTexture(mainTexture, ScreenshotWriter.SupportedInputFormats, out var warning))
+        // {
+        //     CustomComponents.HelpText(warning);
+        //     return;
+        //     
+        // }
 
         if (!IsExporting)
         {

@@ -16,36 +16,28 @@ using SharpDX.MediaFoundation;
 using SharpDX.WIC;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Editor.Gui.Graph.Rendering;
 using MF = SharpDX.MediaFoundation;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
-
 internal abstract class MfVideoWriter : IDisposable
 {
-    /** Skip a certain number of images at the beginning since the
-     * final content will only appear after several buffer flips*/
-    public const int SkipImages = 0;
+    public static List<Format> SupportedFormats { get; } = new()
+                                                               {
+                                                                   SharpDX.DXGI.Format.R8G8B8A8_UNorm,
+                                                                   SharpDX.DXGI.Format.R16G16B16A16_UNorm,
+                                                                   SharpDX.DXGI.Format.R16G16B16A16_Float,
+                                                                   SharpDX.DXGI.Format.B8G8R8A8_UNorm
+                                                               };
 
-    public static List<Format> SupportedFormats { get; }= new()
-                                                                       {
-                                                                           SharpDX.DXGI.Format.R8G8B8A8_UNorm,
-                                                                           SharpDX.DXGI.Format.R16G16B16A16_UNorm,
-                                                                           SharpDX.DXGI.Format.R16G16B16A16_Float,
-                                                                           SharpDX.DXGI.Format.B8G8R8A8_UNorm
-                                                                       };
-    
     public string FilePath { get; }
-    
+
     protected MfVideoWriter(string filePath, Int2 videoPixelSize)
         : this(filePath, videoPixelSize, _videoInputFormatId)
     {
     }
 
-    
     public void AddVideoFrame(ref Texture2D frame)
     {
         try
@@ -60,7 +52,6 @@ internal abstract class MfVideoWriter : IDisposable
             {
                 throw new InvalidOperationException("Empty image handed over");
             }
-
 
             if (SinkWriter == null)
             {
@@ -101,7 +92,7 @@ internal abstract class MfVideoWriter : IDisposable
         var videoSample = CreateSampleFromFrame(ref frame);
         if (videoSample == null)
             return;
-        
+
         try
         {
             // Write to stream
@@ -120,7 +111,6 @@ internal abstract class MfVideoWriter : IDisposable
         }
     }
 
-
     private MF.Sample CreateSampleFromFrame(ref Texture2D originalTexture)
     {
         if (originalTexture == null)
@@ -128,75 +118,51 @@ internal abstract class MfVideoWriter : IDisposable
 
         // Write all contents to the MediaBuffer for media foundation
         var mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(RgbaSizeInBytes(ref originalTexture));
-        
+
         //var device = ResourceManager.Device;
-        DataStream inputStream = null;
         DataStream outputStream = null;
         try
         {
-            var currentDesc = originalTexture.Description;
-            PrepareCpuAccessTextures(currentDesc);
-            PrepareResolveShaderResources();
-
-            ConvertTextureToRgba(originalTexture);
-
-            // Copy the original texture to a readable image
-            var immediateContext = ResourceManager.Device.ImmediateContext;
-            var cpuAccessTexture = _imagesWithCpuAccess[_currentIndex];
-            immediateContext.CopyResource(_conversionTexture, cpuAccessTexture);
-            immediateContext.UnmapSubresource(cpuAccessTexture, 0);
-            
-            _currentIndex = (_currentIndex + 1) % NumTextureEntries;
-
-            // Don't return first two samples since buffering is not ready yet
-            if (_currentUsageIndex++ < 0)
-                return null;
-
-            // Map image resource to get a stream we can read from
-            var dataBox = immediateContext.MapSubresource(cpuAccessTexture,
-                                                          0,
-                                                          0,
-                                                          MapMode.Read,
-                                                          SharpDX.Direct3D11.MapFlags.None,
-                                                          out inputStream);
-            // Create an 8 bit RGBA output buffer to write to
-            var width = _conversionTexture.Description.Width;
-            var height = _conversionTexture.Description.Height;
-            var formatId = PixelFormat.Format32bppRGBA;
-            var rowStride = PixelFormat.GetStride(formatId, width);
-            
-            //var pixelByteCount = PixelFormat.GetStride(formatId, 1);
-            var outBufferSize = height * rowStride;
-            outputStream = new DataStream(outBufferSize, true, true);
-
-            var mediaBufferPointer = mediaBuffer.Lock(out _, out _);
-            
-            // Note: dataBox.RowPitch and outputStream.RowPitch can diverge if width is not divisible by 16.
-            for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
+            if (TextureReadAccess.Setup(originalTexture, out var dataBox, out var inputStream))
             {
-                if (!FlipY)
-                    inputStream.Position = (long)(loopY) * dataBox.RowPitch;
-                else
-                    inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
-            
-                outputStream.WriteRange(inputStream.ReadRange<byte>(rowStride));
-            }            
-            
+                // Create an 8 bit RGBA output buffer to write to
+                var width = originalTexture.Description.Width;
+                var height = originalTexture.Description.Height;
+                var formatId = PixelFormat.Format32bppRGBA;
+                var rowStride = PixelFormat.GetStride(formatId, width);
 
-            // Copy our finished BGRA buffer to the media buffer pointer
-            for (int loopY = 0; loopY < height; loopY++)
-            {
-                int index = loopY * rowStride;
-                for (int loopX = width; loopX > 0; --loopX)
+                //var pixelByteCount = PixelFormat.GetStride(formatId, 1);
+                var outBufferSize = height * rowStride;
+                outputStream = new DataStream(outBufferSize, true, true);
+
+                var mediaBufferPointer = mediaBuffer.Lock(out _, out _);
+
+                // Note: dataBox.RowPitch and outputStream.RowPitch can diverge if width is not divisible by 16.
+                for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
                 {
-                    int value = Marshal.ReadInt32(outputStream.DataPointer, index);
-                    Marshal.WriteInt32(mediaBufferPointer, index, value);
-                    index += 4;
-                }
-            }
+                    if (!FlipY)
+                        inputStream.Position = (long)(loopY) * dataBox.RowPitch;
+                    else
+                        inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
 
-            // release our resources
-            immediateContext.UnmapSubresource(cpuAccessTexture, 0);
+                    outputStream.WriteRange(inputStream.ReadRange<byte>(rowStride));
+                }
+
+                // Copy our finished BGRA buffer to the media buffer pointer
+                for (int loopY = 0; loopY < height; loopY++)
+                {
+                    int index = loopY * rowStride;
+                    for (int loopX = width; loopX > 0; --loopX)
+                    {
+                        int value = Marshal.ReadInt32(outputStream.DataPointer, index);
+                        Marshal.WriteInt32(mediaBufferPointer, index, value);
+                        index += 4;
+                    }
+                }
+                inputStream?.Dispose();
+
+                // TextureReadAccess.Release();
+            }
         }
         catch (Exception e)
         {
@@ -205,10 +171,9 @@ internal abstract class MfVideoWriter : IDisposable
         }
         finally
         {
-            inputStream?.Dispose();
             outputStream?.Dispose();
             mediaBuffer.Unlock();
-            mediaBuffer.CurrentLength = RgbaSizeInBytes(ref _conversionTexture);
+            mediaBuffer.CurrentLength = RgbaSizeInBytes(ref TextureReadAccess.ConversionTexture);
         }
 
         // Create the sample (includes image and timing information)
@@ -244,7 +209,6 @@ internal abstract class MfVideoWriter : IDisposable
         return writer;
     }
 
-
     private MfVideoWriter(string filePath, Int2 videoPixelSize, Guid videoInputFormat, bool supportAudio = false)
     {
         if (!_mfInitialized)
@@ -279,9 +243,9 @@ internal abstract class MfVideoWriter : IDisposable
     {
         var low = (byte)imageStream.ReadByte();
         var high = (byte)imageStream.ReadByte();
-        return  FormatConversion.ToTwoByteFloat(low, high);
+        return FormatConversion.ToTwoByteFloat(low, high);
     }
-    
+
     public void AddVideoAndAudioFrame(ref Texture2D frame, byte[] audioFrame)
     {
         Debug.Assert(frame != null);
@@ -343,20 +307,9 @@ internal abstract class MfVideoWriter : IDisposable
     /// Internal use: FlipY during rendering?
     /// </summary>
     protected virtual bool FlipY => false;
-    
+
     public int Bitrate { get; set; }
     public int Framerate { get; set; }
-
-    private static void DisposeTextures()
-    {
-        _conversionTexture?.Dispose();
-        
-        foreach (var image in _imagesWithCpuAccess)
-        {
-            image?.Dispose();
-        }
-        _imagesWithCpuAccess.Clear();
-    }
 
     #region IDisposable Support
     public void Dispose()
@@ -383,143 +336,15 @@ internal abstract class MfVideoWriter : IDisposable
             }
         }
 
-        // dispose textures too
-        DisposeTextures();
+        TextureReadAccess.DisposeTextures();
     }
     #endregion
 
-    
-        
-    /// <summary>
-    /// create several textures with a given format with CPU access to be able to read out the initial texture values
-    /// </summary>
-    /// <param name="currentDesc"></param>
-    private static void PrepareCpuAccessTextures(Texture2DDescription currentDesc)
-    {
-        if (_imagesWithCpuAccess.Count != 0
-            // && _imagesWithCpuAccess[0].Description.Format == currentDesc.Format
-            && _imagesWithCpuAccess[0].Description.Width == currentDesc.Width
-            && _imagesWithCpuAccess[0].Description.Height == currentDesc.Height
-            // && _imagesWithCpuAccess[0].Description.MipLevels == currentDesc.MipLevels
-            )
-            return;
-        
-        DisposeTextures();
-        
-        // Create read back textures
-        var cpuAccessDescription = new Texture2DDescription
-                                       {
-                                           BindFlags = BindFlags.None,
-                                           Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
-                                           Width = currentDesc.Width,
-                                           Height = currentDesc.Height,
-                                           MipLevels = 1,
-                                           SampleDescription = new SampleDescription(1, 0),
-                                           Usage = ResourceUsage.Staging,
-                                           OptionFlags = ResourceOptionFlags.None,
-                                           CpuAccessFlags = CpuAccessFlags.Read,
-                                           ArraySize = 1
-                                       };
-
-        for (var i = 0; i < NumTextureEntries; ++i)
-        {
-            _imagesWithCpuAccess.Add(new Texture2D(ResourceManager.Device, cpuAccessDescription));
-        }
-
-        // Create format conversion texture
-        var convertTextureDescription = new Texture2DDescription
-                                       {
-                                           BindFlags = BindFlags.UnorderedAccess|BindFlags.RenderTarget|BindFlags.ShaderResource,
-                                           Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
-                                           Width = currentDesc.Width,
-                                           Height = currentDesc.Height,
-                                           MipLevels = 1,
-                                           SampleDescription = new SampleDescription(1, 0),
-                                           Usage = ResourceUsage.Default,
-                                           OptionFlags = ResourceOptionFlags.None,
-                                           CpuAccessFlags = CpuAccessFlags.None,
-                                           ArraySize = 1
-                                       };
-        _conversionTexture = new Texture2D(ResourceManager.Device, convertTextureDescription);
-        _conversionSrv = SrvManager.GetSrvForTexture(_conversionTexture);
-        _conversionUav = new UnorderedAccessView(ResourceManager.Device, _conversionTexture);
-        
-        // Skip the first two frames since they will only appear after buffers have been swapped.
-        _currentIndex = 0;
-        _currentUsageIndex = -SkipImages;
-    }
-    
-    #region conversion shader
-    
-    private static void PrepareResolveShaderResources()
-    {
-        if (_convertComputeShaderResource != null)
-            return;
-            
-        const string sourcePath = @"Resources\lib\img\ConvertFormat-cs.hlsl ";
-        const string entryPoint = "main";
-        const string debugName = "resolve-convert-texture-format";
-        var resourceManager = ResourceManager.Instance();
-            
-        var success = resourceManager.TryCreateShaderResource(out _convertComputeShaderResource, 
-                                                              fileName: sourcePath, 
-                                                              entryPoint: entryPoint, 
-                                                              name: debugName,
-                                                              errorMessage: out var errorMessage);
-
-        if(!success || !string.IsNullOrWhiteSpace(errorMessage))
-            Log.Error($"Failed to initialize video conversion shader: {errorMessage}");
-    }   
-    
-    private static void ConvertTextureToRgba(Texture2D inputTexture)
-    {
-        var device = ResourceManager.Device;
-        var deviceContext = device.ImmediateContext;
-        var csStage = deviceContext.ComputeShader;
-        
-        // Keep previous setup
-        var prevShader = csStage.Get();
-        var prevUavs = csStage.GetUnorderedAccessViews(0, 1);
-        var prevSrvs = csStage.GetShaderResources(0, 1);
-    
-        var convertShader = _convertComputeShaderResource.Shader;
-        csStage.Set(convertShader);
-    
-        const int threadNumX = 16, threadNumY = 16;
-        var srv = SrvManager.GetSrvForTexture(inputTexture);
-        csStage.SetShaderResource(0, srv);
-        csStage.SetUnorderedAccessView(0, _conversionUav, 0);
-        
-        var dispatchCountX = (inputTexture.Description.Width / threadNumX) + 1;
-        var dispatchCountY = (inputTexture.Description.Height / threadNumY) + 1;
-        deviceContext.Dispatch(dispatchCountX, dispatchCountY, 1);
-            
-        // Restore prev setup
-        csStage.SetUnorderedAccessView(0, prevUavs[0]);
-        csStage.SetShaderResource(0, prevSrvs[0]);
-        csStage.Set(prevShader);
-    }
-    
-    private static ShaderResource<SharpDX.Direct3D11.ComputeShader> _convertComputeShaderResource;
-    
-    
-    #endregion
-    
     #region Resources for MediaFoundation video rendering
     // private MF.ByteStream outStream;
     private readonly Int2 _videoPixelSize;
     private int _frameIndex;
     private int _streamIndex;
-
-    // Hold several textures internally to speed up calculations
-    private static Texture2D _conversionTexture;
-    private static ShaderResourceView _conversionSrv;
-    private static UnorderedAccessView _conversionUav;
-    
-    private const int NumTextureEntries = 3;
-    private static readonly List<Texture2D> _imagesWithCpuAccess = new();
-    private static int _currentIndex;
-    private static int _currentUsageIndex;
     #endregion
 
     private int StreamIndex => _streamIndex;
@@ -560,4 +385,3 @@ internal class Mp4VideoWriter : MfVideoWriter
     /// </summary>
     protected override bool FlipY => true;
 }
-
