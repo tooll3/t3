@@ -119,8 +119,7 @@ internal static class ProjectSetup
             Log.Debug($"Found {projectSearchDirectories.Length} root directories in {stopwatch.ElapsedMilliseconds}ms");
             #else
             stopwatch.Restart();
-            var readOnlyRootDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators");
-            var directory = Directory.CreateDirectory(readOnlyRootDirectory);
+            var directory = Directory.CreateDirectory(coreAssemblyDirectory);
             directory
                .EnumerateDirectories("*", SearchOption.TopDirectoryOnly)
                .ToList()
