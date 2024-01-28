@@ -88,7 +88,6 @@ internal static class ProjectSetup
     internal static bool TryInitialize(out Exception exception)
     {
         Stopwatch stopwatch = new();
-        UiRegistration.RegisterUiTypes();
         #if DEBUG
         Stopwatch totalStopwatch = new();
         totalStopwatch.Start();
@@ -133,6 +132,7 @@ internal static class ProjectSetup
                                     Log.Error($"Could not load assembly at \"{file.FullName}\"");
                                     continue;
                                 }
+                                
 
                                 if (assembly.IsOperatorAssembly)
                                     readOnlyPackages.Add(new EditorSymbolPackage(assembly, true));
@@ -195,6 +195,7 @@ internal static class ProjectSetup
 
             // Load operators
             stopwatch.Restart();
+            UiRegistration.RegisterUiTypes();
             InitializeCustomUis(nonOperatorAssemblies);
             Log.Debug($"Initialized custom uis in {stopwatch.ElapsedMilliseconds}ms");
 
