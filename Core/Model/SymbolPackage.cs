@@ -75,7 +75,7 @@ public abstract partial class SymbolPackage
         {
             var symbolFiles = Directory.EnumerateFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
             var symbolsRead = symbolFiles
-                             .AsParallel()
+                             //.AsParallel()
                              .Select(JsonFileResult<Symbol>.ReadAndCreate)
                              .Where(result => newTypes.ContainsKey(result.Guid))
                              .Select(ReadSymbolFromJsonFileResult)

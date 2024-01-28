@@ -31,7 +31,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
         preExistingSymbolUis = SymbolUis.Values.ToArray();
         Log.Debug($"{AssemblyInformation.Name}: Loading Symbol UIs from \"{Folder}\"");
         var newlyReadSymbolUiList = Directory.EnumerateFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories)
-                                             .AsParallel()
+                                             //.AsParallel()
                                              .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
                                              .Where(result => newSymbols.ContainsKey(result.Guid))
                                              .Select(uiJson =>

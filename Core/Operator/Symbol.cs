@@ -446,8 +446,9 @@ namespace T3.Core.Operator
         {
             // order the inputs by the given input definitions. original order is coming from code, but input def order is the relevant one
             int numInputs = inputs.Count;
+            var lastIndex = numInputs - 1;
             
-            for (int i = 0; i < numInputs - 1; i++)
+            for (int i = 0; i < lastIndex; i++)
             {
                 Guid inputId = InputDefinitions[i].Id;
                 if (inputs[i].Id != inputId)
@@ -455,14 +456,16 @@ namespace T3.Core.Operator
                     int index = inputs.FindIndex(i + 1, input => input.Id == inputId);
                     Debug.Assert(index >= 0);
                     inputs.Swap(i, index);
+                    Debug.Assert(inputId == inputs[i].Id);
                 }
             }
 
-            // verify the order
-            for (int i = 0; i < numInputs; i++)
+            #if DEBUG
+            if (numInputs > 0)
             {
-                Debug.Assert(InputDefinitions[i].Id == inputs[i].Id);
+                Debug.Assert(InputDefinitions[lastIndex].Id == inputs[lastIndex].Id);
             }
+            #endif
         }
 
         public Instance CreateInstance(Guid id, Instance parent)
@@ -501,7 +504,7 @@ namespace T3.Core.Operator
                         index--;
                         continue;
                     }
-
+                    
                     conHashToCount[hash] = count + 1;
                 }
             }
@@ -518,7 +521,7 @@ namespace T3.Core.Operator
             var childInstance = childSymbol.CreateInstance(symbolChild.Id, parentInstance);
 
             // set up the inputs for the child instance
-            for (int i = 0; i < symbolChild.Symbol.InputDefinitions.Count; i++)
+            for (int i = 0; i < childSymbol.InputDefinitions.Count; i++)
             {
                 Debug.Assert(i < childInstance.Inputs.Count);
                 Guid inputDefinitionId = childSymbol.InputDefinitions[i].Id;
