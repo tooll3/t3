@@ -68,7 +68,9 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             
             CameraToClipSpace = GraphicsMath.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
 
-            Vector3 p = new Vector3(0,0, Radius.GetValue(context));
+            var radiusValue = Radius.GetValue(context) == 0.0f ? .0001f : Radius.GetValue(context); // avoid 0 radius that causes issues
+            Vector3 p = new Vector3(0, 0, radiusValue);
+
             var seed = Seed.GetValue(context);
             var wobbleSpeed = WobbleSpeed.GetValue(context);
             var wobbleComplexity = (int)WobbleComplexity.GetValue(context).Clamp(1,8);
