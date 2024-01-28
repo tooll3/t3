@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using Newtonsoft.Json;
 using SharpDX.Direct3D11;
@@ -51,7 +52,7 @@ namespace T3.Editor.Gui.Graph
             var exportInfo = new ExportInfo();
             CollectChildSymbols(instance.Symbol, exportInfo);
 
-            var playerCsProjPath = Path.Combine(RuntimeAssemblies.CorePath, "Player", "Player.csproj");
+            var playerCsProjPath = Path.Combine(RuntimeAssemblies.CoreDirectory, "Player", "Player.csproj");
             var playerProject = new CsProjectFile(new FileInfo(playerCsProjPath));
 
             if (!File.Exists(playerCsProjPath))
@@ -66,7 +67,7 @@ namespace T3.Editor.Gui.Graph
             catch (Exception e)
             {
                 Log.Error($"Failed to delete export dir: {exportDir}. Exception: {e}");
-                exportDir = exportDir + '_' + DateTime.Now;
+                exportDir = exportDir + '_' + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
             }
 
             Directory.CreateDirectory(exportDir);
@@ -81,28 +82,27 @@ namespace T3.Editor.Gui.Graph
             // copy assemblies into export dir
             var successInt = Convert.ToInt32(true);
             exportInfo.UniqueSymbols
-                      .Select(x => x.SymbolPackage)
+                      .Select(symbol => symbol.SymbolPackage.AssemblyInformation)
                       .Distinct()
-                      .Select(x => x.AssemblyInformation)
-                      .SelectMany(x => x.AllAssemblies)
-                      .DistinctBy(x => x.FullName)
                       .AsParallel()
-                      .SelectMany(assembly => assembly.GetFiles(true))
-                      .ForAll(assemblyFileStream =>
+                      .ForAll(assemblyInfo =>
                               {
-                                  var fileName = Path.GetFileName(assemblyFileStream.Name);
-                                  var outputPath = Path.Combine(exportDir, fileName);
-                                  bool success;
-                                  try
+                                  bool success = true;
+                                  foreach (var assemblyPath in assemblyInfo.AssemblyPaths)
                                   {
-                                      using var outputStream = File.Create(outputPath);
-                                      assemblyFileStream.CopyTo(outputStream);
-                                      success = true;
-                                  }
-                                  catch (Exception e)
-                                  {
-                                      Log.Error($"Failed to copy assembly: {assemblyFileStream.Name} to {outputPath}. Exception: {e}");
-                                      success = false;
+                                      var fileName = Path.GetFileName(assemblyPath);
+                                      var outputPath = Path.Combine(exportDir, fileName);
+                                      
+                                      try
+                                      {
+                                          File.Copy(assemblyPath, outputPath, true);
+                                      }
+                                      catch (Exception e)
+                                      {
+                                          Log.Error($"Failed to copy assembly: {fileName} to {outputPath}. Exception: {e}");
+                                          success = false;
+                                          break;
+                                      }
                                   }
 
                                   Interlocked.And(ref successInt, Convert.ToInt32(success));

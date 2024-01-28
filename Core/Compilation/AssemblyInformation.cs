@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
-using System.Security.Cryptography;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.DependencyModel.Resolution;
 using T3.Core.Logging;
@@ -69,10 +68,16 @@ public class AssemblyInformation
     public IReadOnlyDictionary<Type, IReadOnlyList<OutputSlotInfo>> OutputFields => _outputFields;
     private readonly ConcurrentDictionary<Type, IReadOnlyList<OutputSlotInfo>> _outputFields = new();
 
+    private readonly List<string> _assemblyPaths = new();
+    public IReadOnlyCollection<string> AssemblyPaths;
+        
+
     public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
     {
+        AssemblyPaths = _assemblyPaths;
         Name = assemblyName.Name;
         Path = path;
+        _assemblyPaths.Add(path);
         _assemblyName = assemblyName;
         _assembly = assembly;
         Directory = System.IO.Path.GetDirectoryName(path);
@@ -90,10 +95,6 @@ public class AssemblyInformation
         {
             var types = assembly.GetExportedTypes();
             _types = types.ToDictionary(type => type.FullName, type => type);
-
-            foreach (var type in types)
-            {
-            }
         }
         catch (Exception e)
         {
@@ -256,7 +257,9 @@ public class AssemblyInformation
             case 0:
                 return null;
             case 1:
-                return context.LoadFromAssemblyPath(assemblies[0]);
+                var path = assemblies[0];
+                _assemblyPaths.Add(path);
+                return context.LoadFromAssemblyPath(path);
             default:
             {
                 Log.Error($"Multiple assemblies found for {name.Name}");
