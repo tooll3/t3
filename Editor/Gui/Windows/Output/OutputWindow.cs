@@ -180,7 +180,7 @@ namespace T3.Editor.Gui.Windows.Output
 
                 if (CustomComponents.IconButton(Icon.Snapshot, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight())))
                 {
-                    var folder = @"Screenshots/";
+                    const string folder = @"Screenshots/";
                     if (!Directory.Exists(folder))
                     {
                         Directory.CreateDirectory(folder);
@@ -191,8 +191,6 @@ namespace T3.Editor.Gui.Windows.Output
                 }
 
                 CustomComponents.TooltipForLastItem("Save screenshot");
-                if (!RenderHelperWindow.IsExporting)
-                    ScreenshotWriter.UpdateSaving();
             }
 
             ImGui.SameLine();

@@ -22,7 +22,6 @@ public class RenderSequenceWindow : RenderHelperWindow
     {
         DrawTimeSetup();
 
-        // Custom parameters for this renderer
         FormInputs.AddEnumDropdown(ref _fileFormat, "FileFormat");
         FormInputs.AddStringInput("Folder", ref _targetFolder);
         ImGui.SameLine();
@@ -30,12 +29,6 @@ public class RenderSequenceWindow : RenderHelperWindow
         ImGui.Separator();
 
         var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
-        // if (FindIssueWithTexture(mainTexture, ScreenshotWriter.SupportedInputFormats, out var warning))
-        // {
-        //     CustomComponents.HelpText(warning);
-        //     return;
-        //     
-        // }
 
         if (!IsExporting)
         {
@@ -44,23 +37,29 @@ public class RenderSequenceWindow : RenderHelperWindow
                 if (ValidateOrCreateTargetFolder(_targetFolder))
                 {
                     _previousPlaybackSpeed = Playback.Current.PlaybackSpeed;
-                    Playback.Current.PlaybackSpeed = 1;
+                    Playback.Current.PlaybackSpeed = 0;
                     _isExporting = true;
                     _exportStartedTime = Playback.RunTimeInSecs;
                     FrameIndex = 0;
                     SetPlaybackTimeForNextFrame();
+                    TextureReadAccess.ClearQueue();
                 }
             }
         }
         else
         {
+            // This is a very unfortunate hack. Sadly, activating playback can interfer
+            // with precise frame positioning will be required for exporting audio-reactivity...
+            if(FrameIndex>0)
+                Playback.Current.PlaybackSpeed = 1;
+            
             var success = SaveCurrentFrameAndAdvance(mainTexture);
-            ScreenshotWriter.UpdateSaving();
             ImGui.ProgressBar(Progress, new Vector2(-1, 4));
 
             var currentTime = Playback.RunTimeInSecs;
             var durationSoFar = currentTime - _exportStartedTime;
-            if (GetRealFrame() >= FrameCount || !success)
+            
+            if (FrameIndex  >= FrameCount +2 || !success)
             {
                 var successful = success ? "successfully" : "unsuccessfully";
                 _lastHelpString = $"Sequence export finished {successful} in {durationSoFar:0.00}s";
@@ -73,14 +72,12 @@ public class RenderSequenceWindow : RenderHelperWindow
             }
             else
             {
-                var estimatedTimeLeft = durationSoFar - durationSoFar /  Progress;
-                _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {GetRealFrame()+1}/{FrameCount}  ";
-                _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0}s left";
-            }
+                var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
+                _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {FrameIndex+1}/{FrameCount}  ";
+                _lastHelpString += $"{Progress * 100.0:0} %%  {estimatedTimeLeft:0}s left";            }
 
-            if (!IsExporting &&  ScreenshotWriter.SavingComplete)
+            if (!_isExporting)
             {
-                ScreenshotWriter.Dispose();
                 Playback.Current.PlaybackSpeed = _previousPlaybackSpeed;
             }
         }
@@ -88,23 +85,16 @@ public class RenderSequenceWindow : RenderHelperWindow
         CustomComponents.HelpText(_lastHelpString);
     }
 
-    private static int GetRealFrame()
-    {
-        // since we are double-buffering and discarding the first few frames,
-        // we have to subtract these frames to get the currently really shown framenumber...
-        return FrameIndex;
-    }
-
     private static string GetFilePath()
     {
-        return Path.Combine(_targetFolder, $"output_{GetRealFrame():0000}.{Extension}");
+        return Path.Combine(_targetFolder, $"output_{FrameIndex:0000}.{Extension}");
     }
 
     private static bool SaveCurrentFrameAndAdvance(Texture2D mainTexture)
     {
         try
         {
-            var success = SaveImage(mainTexture);
+            var success = ScreenshotWriter.StartSavingToFile(mainTexture, GetFilePath(), _fileFormat);
             FrameIndex++;
             SetPlaybackTimeForNextFrame();
             return success;
@@ -115,11 +105,6 @@ public class RenderSequenceWindow : RenderHelperWindow
             _isExporting = false;
             return false;
         }
-    }
-
-    private static bool SaveImage(Texture2D mainTexture)
-    {
-        return ScreenshotWriter.StartSavingToFile(mainTexture, GetFilePath(), _fileFormat);
     }
 
     private static string Extension => _fileFormat.ToString().ToLower(); 

@@ -31,6 +31,7 @@ using T3.Editor.Gui.UiHelpers.Wiki;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
@@ -86,12 +87,13 @@ public class T3Ui
         RenderStatsCollector.StartNewFrame();
             
         PlaybackUtils.UpdatePlaybackAndSyncing();
-
-
+        TextureReadAccess.Update();
+        
         //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
-            
+        
         AudioEngine.CompleteFrame(Playback.Current);    // Update
-            
+        
+
         AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
 
         VariationHandling.Update();
@@ -135,6 +137,7 @@ public class T3Ui
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
+
 
         FrameStats.CompleteFrame();
         TriggerGlobalActionsFromKeyBindings();

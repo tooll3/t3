@@ -11,26 +11,35 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
 using SharpDX.MediaFoundation;
 using SharpDX.WIC;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
-using T3.Core.Utils;
+using T3.Core.Resource;
 using MF = SharpDX.MediaFoundation;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
 internal abstract class MfVideoWriter : IDisposable
 {
-    public static List<Format> SupportedFormats { get; } = new()
-                                                               {
-                                                                   SharpDX.DXGI.Format.R8G8B8A8_UNorm,
-                                                                   SharpDX.DXGI.Format.R16G16B16A16_UNorm,
-                                                                   SharpDX.DXGI.Format.R16G16B16A16_Float,
-                                                                   SharpDX.DXGI.Format.B8G8R8A8_UNorm
-                                                               };
+    private MfVideoWriter(string filePath, Int2 videoPixelSize, Guid videoInputFormat, bool supportAudio = false)
+    {
+        if (!_mfInitialized)
+        {
+            // Initialize MF library. MUST be called before any MF related operations.
+            MF.MediaFactory.Startup(MF.MediaFactory.Version, 0);
+            _mfInitialized = true;
+        }
 
+        // Set initial default values
+        FilePath = filePath;
+        _videoPixelSize = videoPixelSize;
+        _videoInputFormat = videoInputFormat;
+        Bitrate = 2000000;
+        Framerate = 60; //TODO: is this actually used?
+        _frameIndex = -1;
+    }    
+    
     public string FilePath { get; }
 
     protected MfVideoWriter(string filePath, Int2 videoPixelSize)
@@ -38,21 +47,25 @@ internal abstract class MfVideoWriter : IDisposable
     {
     }
 
-    public void AddVideoFrame(ref Texture2D frame)
+    /// <summary>
+    /// Returns true if a frame has been written
+    /// </summary>
+    public bool ProcessFrames(ref Texture2D gpuTexture)
     {
         try
         {
-            if (frame == null)
+            if (gpuTexture == null)
             {
                 throw new InvalidOperationException("Handed frame was null");
             }
 
-            var currentDesc = frame.Description;
+            var currentDesc = gpuTexture.Description;
             if (currentDesc.Width == 0 || currentDesc.Height == 0)
             {
                 throw new InvalidOperationException("Empty image handed over");
             }
 
+            // Setup writer
             if (SinkWriter == null)
             {
                 SinkWriter = CreateSinkWriter(FilePath);
@@ -69,13 +82,6 @@ internal abstract class MfVideoWriter : IDisposable
                     SinkWriter.SetInputMediaType(_streamIndex, mediaTypeIn, null);
                 }
 
-                if (_supportAudio)
-                {
-                    // initialize audio writer
-                    var waveFormat = WaveFormatExtension.DefaultPcm;
-                    _audioWriter = new Mp3AudioWriter(SinkWriter, ref waveFormat);
-                }
-
                 // Start writing the video file. MUST be called before write operations.
                 SinkWriter.BeginWriting();
             }
@@ -88,102 +94,108 @@ internal abstract class MfVideoWriter : IDisposable
                                                 "(image size may be unsupported with the requested codec)");
         }
 
-        // Create the sample (includes image and timing information)
-        var videoSample = CreateSampleFromFrame(ref frame);
-        if (videoSample == null)
-            return;
-
-        try
+        // Save last sample (includes image and timing information)
+        var savedFrame = false;
+        if (_lastSample != null)
         {
-            // Write to stream
-            var samples = new Dictionary<int, Sample>();
-            samples.Add(StreamIndex, videoSample);
-            WriteSamples(samples);
-        }
-        catch (SharpDXException e)
-        {
-            Debug.WriteLine(e.Message);
-            throw new InvalidOperationException(e.Message);
-        }
-        finally
-        {
-            videoSample.Dispose();
-        }
-    }
-
-    private MF.Sample CreateSampleFromFrame(ref Texture2D originalTexture)
-    {
-        if (originalTexture == null)
-            return null;
-
-        // Write all contents to the MediaBuffer for media foundation
-        var mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(RgbaSizeInBytes(ref originalTexture));
-
-        //var device = ResourceManager.Device;
-        DataStream outputStream = null;
-        try
-        {
-            if (TextureReadAccess.Setup(originalTexture, out var dataBox, out var inputStream))
+            try
             {
-                // Create an 8 bit RGBA output buffer to write to
-                var width = originalTexture.Description.Width;
-                var height = originalTexture.Description.Height;
-                var formatId = PixelFormat.Format32bppRGBA;
-                var rowStride = PixelFormat.GetStride(formatId, width);
-
-                //var pixelByteCount = PixelFormat.GetStride(formatId, 1);
-                var outBufferSize = height * rowStride;
-                outputStream = new DataStream(outBufferSize, true, true);
-
-                var mediaBufferPointer = mediaBuffer.Lock(out _, out _);
-
-                // Note: dataBox.RowPitch and outputStream.RowPitch can diverge if width is not divisible by 16.
-                for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
-                {
-                    if (!FlipY)
-                        inputStream.Position = (long)(loopY) * dataBox.RowPitch;
-                    else
-                        inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
-
-                    outputStream.WriteRange(inputStream.ReadRange<byte>(rowStride));
-                }
-
-                // Copy our finished BGRA buffer to the media buffer pointer
-                for (int loopY = 0; loopY < height; loopY++)
-                {
-                    int index = loopY * rowStride;
-                    for (int loopX = width; loopX > 0; --loopX)
-                    {
-                        int value = Marshal.ReadInt32(outputStream.DataPointer, index);
-                        Marshal.WriteInt32(mediaBufferPointer, index, value);
-                        index += 4;
-                    }
-                }
-                inputStream?.Dispose();
-
-                // TextureReadAccess.Release();
+                // Write to stream
+                var samples = new Dictionary<int, Sample>();
+                samples.Add(StreamIndex, _lastSample);
+                WriteSamples(samples);
+                savedFrame = true;
+            }
+            catch (SharpDXException e)
+            {
+                Debug.WriteLine(e.Message);
+                throw new InvalidOperationException(e.Message);
+            }
+            finally
+            {
+                _lastSample.Dispose();
+                _lastSample = null;
             }
         }
-        catch (Exception e)
+        
+        // Initiate reading next frame
+        if (!TextureReadAccess.InitiateRead(gpuTexture, SaveSampleAfterReadback))
         {
-            Log.Warning("Internal image copy failed : " + e);
-            //throw new InvalidOperationException("Internal image copy failed : " + e);
+            Log.Warning("Can't initiate texture readback");
         }
-        finally
+
+        return savedFrame;
+    }
+
+
+
+    private void SaveSampleAfterReadback(TextureReadAccess.ReadRequestItem readRequestItem)
+    {
+        // if (_lastSample != null)
+        // {
+        //     //Log.Warning("Discarding previous video sample...");
+        //     _lastSample = null;
+        // }
+        _lastSample = null;
+
+        var cpuAccessTexture = readRequestItem.CpuAccessTexture;
+        if (cpuAccessTexture == null || cpuAccessTexture.IsDisposed)
+            return;
+        
+        // Map image resource to get a stream we can read from
+        var dataBox = ResourceManager.Device.ImmediateContext.MapSubresource(cpuAccessTexture,
+                                                                             0,
+                                                                             0,
+                                                                             MapMode.Read,
+                                                                             SharpDX.Direct3D11.MapFlags.None,
+                                                                             out var inputStream);
+
+        // Create an 8 bit RGBA output buffer to write to
+        var width = cpuAccessTexture.Description.Width;
+        var height = cpuAccessTexture.Description.Height;
+        var formatId = PixelFormat.Format32bppRGBA;
+        var rowStride = PixelFormat.GetStride(formatId, width);
+
+        var outBufferSize = height * rowStride;
+        var outputStream = new DataStream(outBufferSize, true, true);
+
+        // Write all contents to the MediaBuffer for media foundation
+        var mediaBufferLength = RgbaSizeInBytes(ref cpuAccessTexture);
+        var mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(mediaBufferLength);
+        var mediaBufferPointer = mediaBuffer.Lock(out _, out _);
+
+        // Note: dataBox.RowPitch and outputStream.RowPitch can diverge if width is not divisible by 16.
+        for (var loopY = 0; loopY < _videoPixelSize.Height; loopY++)
         {
-            outputStream?.Dispose();
-            mediaBuffer.Unlock();
-            mediaBuffer.CurrentLength = RgbaSizeInBytes(ref TextureReadAccess.ConversionTexture);
+            if (!FlipY)
+                inputStream.Position = (long)(loopY) * dataBox.RowPitch;
+            else
+                inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
+
+            outputStream.WriteRange(inputStream.ReadRange<byte>(rowStride));
         }
+
+        // Copy our finished BGRA buffer to the media buffer pointer
+        for (var loopY = 0; loopY < height; loopY++)
+        {
+            var index = loopY * rowStride;
+            for (var loopX = width; loopX > 0; --loopX)
+            {
+                var value = Marshal.ReadInt32(outputStream.DataPointer, index);
+                Marshal.WriteInt32(mediaBufferPointer, index, value);
+                index += 4;
+            }
+        }
+        inputStream?.Dispose();
+        outputStream?.Dispose();
+        mediaBuffer.Unlock();
+        mediaBuffer.CurrentLength = mediaBufferLength;
 
         // Create the sample (includes image and timing information)
-        MF.Sample sample = MF.MediaFactory.CreateSample();
-        sample.AddBuffer(mediaBuffer);
-
-        // we don't need the media buffer here anymore, so dispose it
-        // (otherwise we will get memory leaks)
+        _lastSample = MF.MediaFactory.CreateSample();
+        _lastSample.AddBuffer(mediaBuffer);
+        
         mediaBuffer.Dispose();
-        return sample;
     }
 
     private static SinkWriter CreateSinkWriter(string outputFile)
@@ -209,28 +221,11 @@ internal abstract class MfVideoWriter : IDisposable
         return writer;
     }
 
-    private MfVideoWriter(string filePath, Int2 videoPixelSize, Guid videoInputFormat, bool supportAudio = false)
-    {
-        if (!_mfInitialized)
-        {
-            // Initialize MF library. MUST be called before any MF related operations.
-            MF.MediaFactory.Startup(MF.MediaFactory.Version, 0);
-        }
 
-        // Set initial default values
-        FilePath = filePath;
-        _videoPixelSize = videoPixelSize;
-        _videoInputFormat = videoInputFormat;
-        _supportAudio = supportAudio;
-        Bitrate = 1500000;
-        Framerate = 15;
-        _frameIndex = -1;
-    }
 
     /// <summary>
     /// get minimum image buffer size in bytes if imager is RGBA converted
     /// </summary>
-    /// <param name="frame">texture to get information from</param>
     private static int RgbaSizeInBytes(ref Texture2D frame)
     {
         var currentDesc = frame.Description;
@@ -246,36 +241,37 @@ internal abstract class MfVideoWriter : IDisposable
         return FormatConversion.ToTwoByteFloat(low, high);
     }
 
-    public void AddVideoAndAudioFrame(ref Texture2D frame, byte[] audioFrame)
-    {
-        Debug.Assert(frame != null);
-        var currentDesc = frame.Description;
-        Debug.Assert(currentDesc.Width != 0 &&
-                     currentDesc.Height != 0 &&
-                     audioFrame != null &&
-                     audioFrame.Length != 0);
-
-        var videoSample = CreateSampleFromFrame(ref frame);
-        var audioSample = _audioWriter.CreateSampleFromFrame(audioFrame);
-        try
-        {
-            var samples = new Dictionary<int, Sample>();
-            samples.Add(StreamIndex, videoSample);
-            samples.Add(_audioWriter.StreamIndex, audioSample);
-
-            WriteSamples(samples);
-        }
-        catch (Exception e)
-        {
-            Debug.WriteLine(e.Message);
-            throw new InvalidOperationException(e.Message);
-        }
-        finally
-        {
-            videoSample.Dispose();
-            audioSample.Dispose();
-        }
-    }
+    // Kept for later reference
+    // public void AddVideoAndAudioFrame(ref Texture2D frame, byte[] audioFrame)
+    // {
+    //     Debug.Assert(frame != null);
+    //     var currentDesc = frame.Description;
+    //     Debug.Assert(currentDesc.Width != 0 &&
+    //                  currentDesc.Height != 0 &&
+    //                  audioFrame != null &&
+    //                  audioFrame.Length != 0);
+    //
+    //     var videoSample = CreateSampleFromFrame(ref frame);
+    //     var audioSample = _audioWriter.CreateSampleFromFrame(audioFrame);
+    //     try
+    //     {
+    //         var samples = new Dictionary<int, Sample>();
+    //         samples.Add(StreamIndex, videoSample);
+    //         samples.Add(_audioWriter.StreamIndex, audioSample);
+    //
+    //         WriteSamples(samples);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Debug.WriteLine(e.Message);
+    //         throw new InvalidOperationException(e.Message);
+    //     }
+    //     finally
+    //     {
+    //         videoSample.Dispose();
+    //         audioSample.Dispose();
+    //     }
+    // }
 
     private void WriteSamples(Dictionary<int, Sample> samples)
     {
@@ -340,7 +336,10 @@ internal abstract class MfVideoWriter : IDisposable
     }
     #endregion
 
+
+    
     #region Resources for MediaFoundation video rendering
+    private MF.Sample _lastSample;
     // private MF.ByteStream outStream;
     private readonly Int2 _videoPixelSize;
     private int _frameIndex;
@@ -350,12 +349,10 @@ internal abstract class MfVideoWriter : IDisposable
     private int StreamIndex => _streamIndex;
 
     private MF.SinkWriter SinkWriter { get; set; }
-    private MediaFoundationAudioWriter _audioWriter;
+    //private MediaFoundationAudioWriter _audioWriter;
 
     private static readonly Guid _videoInputFormatId = MF.VideoFormatGuids.Rgb32;
-    private static readonly bool _mfInitialized = false;
-
-    private readonly bool _supportAudio;
+    private static bool _mfInitialized = false;
     private readonly Guid _videoInputFormat;
 }
 

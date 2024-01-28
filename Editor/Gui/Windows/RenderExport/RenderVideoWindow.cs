@@ -76,7 +76,7 @@ public class RenderVideoWindow : RenderHelperWindow
                 if (ValidateOrCreateTargetFolder(_targetFile))
                 {
                     _previousPlaybackSpeed = Playback.Current.PlaybackSpeed;
-                    Playback.Current.PlaybackSpeed = 1;
+                    Playback.Current.PlaybackSpeed = 0;
                     _isExporting = true;
                     _exportStartedTime = Playback.RunTimeInSecs;
                     FrameIndex = 0;
@@ -90,17 +90,25 @@ public class RenderVideoWindow : RenderHelperWindow
                         // FIXME: Allow floating point FPS in a future version
                         _videoWriter.Framerate = (int)Fps;
                     }
+
+                    TextureReadAccess.ClearQueue();
                 }
             }
         }
         else
         {
+            // This is a very unfortunate hack. Sadly, activating playback can interfer
+            // with precise frame positioning will be required for exporting audio-reactivity...
+            if(FrameIndex>0)
+                Playback.Current.PlaybackSpeed = 1;
+            
             var success = SaveCurrentFrameAndAdvance(ref mainTexture);
             ImGui.ProgressBar(Progress, new Vector2(-1, 4));
 
             var currentTime = Playback.RunTimeInSecs;
             var durationSoFar = currentTime - _exportStartedTime;
-            if (GetRealFrame() >= FrameCount || !success)
+            
+            if (FrameIndex  >= FrameCount +2 || !success)
             {
                 var successful = success ? "successfully" : "unsuccessfully";
                 _lastHelpString = $"Sequence export finished {successful} in {durationSoFar:0.00}s";
@@ -130,7 +138,7 @@ public class RenderVideoWindow : RenderHelperWindow
         CustomComponents.HelpText(_lastHelpString);
     }
 
-    private static Regex _matchFileVersionPattern = new Regex(@"\bv(\d{2,4})\b");
+    private static readonly Regex _matchFileVersionPattern = new Regex(@"\bv(\d{2,4})\b");
     
     private static bool IsFilenameIncrementible()
     {
@@ -138,7 +146,6 @@ public class RenderVideoWindow : RenderHelperWindow
         if (string.IsNullOrEmpty(filename))
             return false;
         
-        //var result = Regex.Match(filename, @"\bv(\d{2,4})\b");
         var result = _matchFileVersionPattern.Match(filename);
         return result.Success;
     }
@@ -152,7 +159,6 @@ public class RenderVideoWindow : RenderHelperWindow
         if (string.IsNullOrEmpty(filename))
             return;
         
-        //var result = Regex.Match(filename, @"\bv(\d{2,4})\b");
         var result = _matchFileVersionPattern.Match(filename);
         if (!result.Success)
             return;
@@ -183,14 +189,7 @@ public class RenderVideoWindow : RenderHelperWindow
 
         return $"{(int)(seconds / 60 / 60):0}h {seconds/60%60:0}:{seconds%60:00}s";
     }
-
-    private static int GetRealFrame()
-    {
-        // since we are double-buffering and discarding the first few frames,
-        // we have to subtract these frames to get the currently really shown framenumber...
-        return FrameIndex - TextureReadAccess.SkipImages;
-    }
-
+    
     private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture)
     {
         if (Playback.OpNotReady)
@@ -200,9 +199,16 @@ public class RenderVideoWindow : RenderHelperWindow
         }
         try
         {
-            _videoWriter.AddVideoFrame(ref mainTexture);
-            FrameIndex++;
-            SetPlaybackTimeForNextFrame();
+            var savedFrame = _videoWriter.ProcessFrames(ref mainTexture);
+            if (savedFrame || FrameIndex ==0)
+            {
+                FrameIndex++;
+                SetPlaybackTimeForNextFrame();
+            }
+            else
+            {
+                Log.Debug($"Skipping {FrameIndex}");
+            }
         }
         catch (Exception e)
         {
@@ -241,9 +247,9 @@ public class RenderVideoWindow : RenderHelperWindow
             Description = description;
         }
         
-        public double MinBitsPerPixelSecond;
-        public string Title;
-        public string Description;
+        public readonly double MinBitsPerPixelSecond;
+        public readonly string Title;
+        public readonly string Description;
     }
 
     private QualityLevel[] QualityLevels = new[]
