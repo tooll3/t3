@@ -85,7 +85,7 @@ internal static class ProgramWindows
 
             Main.SetDevice(device, _deviceContext, swapchain);
 
-            Main.InitializeWindow(FormWindowState.Maximized, HandleKeyDown, HandleKeyUp, OnCloseMainWindow);
+            Main.InitializeWindow(FormWindowState.Maximized, OnCloseMainWindow, true);
 
             // Ignore all windows events
             _factory.MakeWindowAssociation(Main.HwndHandle, WindowAssociationFlags.IgnoreAll);
@@ -121,7 +121,7 @@ internal static class ProgramWindows
         Viewer.SetSize(width, height);
         Viewer.SetSizeable();
         Viewer.InitViewSwapChain(_factory);
-        Viewer.InitializeWindow(FormWindowState.Normal, null, null, null);
+        Viewer.InitializeWindow(FormWindowState.Normal, null, false);
         Viewer.Show();
     }
 
@@ -135,28 +135,6 @@ internal static class ProgramWindows
         else
         {
             Log.Debug("Shutting down");
-        }
-    }
-
-    private static void HandleKeyDown(object sender, KeyEventArgs e)
-    {
-        var keyIndex = (int)e.KeyCode;
-        if (keyIndex >= KeyHandler.PressedKeys.Length)
-        {
-            Log.Warning($"Ignoring out of range key code {e.KeyCode} with index {keyIndex}");
-        }
-        else
-        {
-            KeyHandler.PressedKeys[keyIndex] = true;
-        }
-    }
-
-    private static void HandleKeyUp(object sender, KeyEventArgs e)
-    {
-        var keyIndex = (int)e.KeyCode;
-        if (keyIndex < KeyHandler.PressedKeys.Length)
-        {
-            KeyHandler.PressedKeys[keyIndex] = false;
         }
     }
 

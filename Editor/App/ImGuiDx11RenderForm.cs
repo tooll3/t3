@@ -4,6 +4,7 @@ using ImGuiNET;
 using SharpDX.Windows;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.SystemUi;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable IdentifierTypo
@@ -68,8 +69,6 @@ namespace T3.Editor.App
                 var isViewer = this == ProgramWindows.Viewer?.Form;
 
                 ImGuiIOPtr io = ImGui.GetIO();
-                if (KeyHandler.PressedKeys == null)
-                    return;
 
                 switch (m.Msg)
                 {
@@ -130,7 +129,7 @@ namespace T3.Editor.App
                             case VK_ALT:
                                 io.KeyAlt = true;
                                 io.KeysDown[(int)Key.Alt] = true;
-                                KeyHandler.PressedKeys[(int)Key.Alt] = true;
+                                KeyHandler.SetKeyDown(Key.Alt);
                                 break;
                             default:
                             {
@@ -156,7 +155,7 @@ namespace T3.Editor.App
                             case VK_ALT:
                                 io.KeyAlt = false;
                                 io.KeysDown[(int)Key.Alt] = false;
-                                KeyHandler.PressedKeys[(int)Key.Alt] = false;
+                                KeyHandler.SetKeyUp(Key.Alt);
                                 break;
                             default:
                             {
@@ -188,7 +187,7 @@ namespace T3.Editor.App
                         if (m.WParam.ToInt64() == 0) /* Being deactivated */
                         {
                             io.KeysDown[(int)Key.Alt] = false;
-                            KeyHandler.PressedKeys[(int)Key.Alt] = false;
+                            KeyHandler.SetKeyUp(Key.Alt);
                         }
 
                         break;
@@ -242,6 +241,9 @@ namespace T3.Editor.App
                     break;
                 case ImGuiMouseCursor.Hand:
                     newCursor = Cursors.Hand;
+                    break;
+                default:
+                    newCursor = Cursors.Arrow;
                     break;
             }
 

@@ -114,15 +114,14 @@ namespace T3.Editor.App
 
         internal void SetBorderStyleSizable() => Form.FormBorderStyle = FormBorderStyle.Sizable;
 
-        internal void InitializeWindow(FormWindowState windowState, KeyEventHandler handleKeyDown, KeyEventHandler handleKeyUp, CancelEventHandler handleClose)
+        internal void InitializeWindow(FormWindowState windowState, CancelEventHandler handleClose, bool handleKeys)
         {
             InitRenderTargetsAndEventHandlers();
 
-            if (handleKeyDown != null)
-                Form.KeyDown += handleKeyDown;
-
-            if (handleKeyUp != null)
-                Form.KeyUp += handleKeyUp;
+            if (handleKeys)
+            {
+                MsForms.MsForms.TrackKeysOf(Form);
+            }
 
             if (handleClose != null)
                 Form.Closing += handleClose;
