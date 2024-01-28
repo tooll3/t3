@@ -157,7 +157,7 @@ public abstract partial class SymbolPackage
 
     internal Symbol CreateSymbol(Type instanceType, Guid id, string name, string @namespace, Guid[] orderedInputIds = null)
     {
-        var symbol = new Symbol(instanceType, id, orderedInputIds)
+        var symbol = new Symbol(instanceType, id, this, orderedInputIds)
                          {
                              Name = name,
                              Namespace = @namespace,

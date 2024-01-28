@@ -21,12 +21,24 @@ public readonly struct InputSlotInfo(InputAttribute attribute, FieldInfo field)
 {
     public readonly InputAttribute Attribute = attribute;
     public readonly FieldInfo Field = field;
+
+    public void Deconstruct(out FieldInfo info, out InputAttribute attribute)
+    {
+        info = Field;
+        attribute = Attribute;
+    }
 }
 
 public struct OutputSlotInfo(OutputAttribute attribute, FieldInfo field)
 {
     public readonly OutputAttribute Attribute = attribute;
     public readonly FieldInfo Field = field;
+    
+    public void Deconstruct(out FieldInfo info, out OutputAttribute attribute)
+    {
+        info = Field;
+        attribute = Attribute;
+    }
 }
 
 public class AssemblyInformation
@@ -151,7 +163,7 @@ public class AssemblyInformation
     {
         _constructors[type] = Expression.Lambda<Func<object>>(Expression.New(type)).Compile();
 
-        var bindFlags = BindingFlags.Public | BindingFlags.Instance;
+        var bindFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
         var slots = type.GetFields(bindFlags)
                         .Where(field => field.FieldType.IsAssignableTo(typeof(ISlot)));
 

@@ -73,16 +73,24 @@ namespace T3.Core.Operator
             }
         }
 
-        public Symbol(Type instanceType, Guid symbolId, Guid[] orderedInputIds = null)
+        public Symbol(Type instanceType, Guid symbolId, SymbolPackage symbolPackage, Guid[] orderedInputIds = null)
         {
             Name = instanceType.Name;
             Id = symbolId;
 
             UpdateType(instanceType);
 
+            if (symbolPackage != null)
+            {
+                SymbolPackage = symbolPackage;
+                UpdateInstanceType(instanceType);
+                return;
+            }
+
             // input identified by base interface
 
-            var inputInfos = GetFieldInfosAssignableTo(typeof(IInputSlot));
+            var fieldInfos = instanceType.GetFields(BindingFlags.Instance | BindingFlags.Public);
+            var inputInfos = fieldInfos.Where(field => field.FieldType.IsAssignableTo(typeof(IInputSlot)));
             var inputDefs = new List<InputDefinition>();
             foreach (var inputInfo in inputInfos)
             {
@@ -120,7 +128,7 @@ namespace T3.Core.Operator
             InputDefinitions.AddRange(inputDefs);
 
             // outputs identified by attribute
-            var outputs = (from field in _fieldInfos
+            var outputs = (from field in fieldInfos
                            let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
                            from attr in attributes
                            select (field, attributes)).ToArray();
@@ -153,9 +161,6 @@ namespace T3.Core.Operator
 
             if (instanceType == typeof(object))
                 return;
-            
-            _fieldInfos.Clear();
-            _fieldInfos.AddRange(instanceType.GetFields());
             
             // set the static TypeSymbol field so that instances can access their resources in their constructor
             var genericType = typeof(Instance<>).MakeGenericType(instanceType);
@@ -190,8 +195,6 @@ namespace T3.Core.Operator
                               .FindIndex(cc => cc == con); // todo: fix this mess! connection rework!
         }
         
-        private IEnumerable<FieldInfo> GetFieldInfosAssignableTo(Type type) => _fieldInfos.Where(f => type.IsAssignableFrom(f.FieldType));
-
         public void UpdateInstanceType(Type instanceType)
         {
             UpdateType(instanceType);
@@ -200,24 +203,7 @@ namespace T3.Core.Operator
             var newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<ConnectionEntry>)>();
 
             // check if inputs have changed
-            var inputInfos = GetFieldInfosAssignableTo(typeof(IInputSlot));
-
-            (FieldInfo inputInfo, InputAttribute)[] inputs = null;
-
-            try
-            {
-                inputs = (from inputInfo in inputInfos
-                          let customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false)
-                          where customAttributes.Length != 0
-                          select (inputInfo, (InputAttribute)customAttributes[0])).ToArray();
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed get input attribute type:{e.Message}\n {e.InnerException}");
-            }
-
-            if (inputs == null)
-                return;
+            var inputs = SymbolPackage.AssemblyInformation.InputFields[instanceType];
 
             // todo: it's probably better to first check if there's a change and only then allocate
             var oldInputDefinitions = new List<InputDefinition>(InputDefinitions);
@@ -242,10 +228,7 @@ namespace T3.Core.Operator
             }
 
             // check if outputs have changed
-            var outputs = (from field in _fieldInfos
-                           let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
-                           where attributes.Any()
-                           select (field, (OutputAttribute)attributes[0])).ToArray();
+            var outputs = SymbolPackage.AssemblyInformation.OutputFields[instanceType];
             var oldOutputDefinitions = new List<OutputDefinition>(OutputDefinitions);
             OutputDefinitions.Clear();
             foreach (var (output, attribute) in outputs)
@@ -742,11 +725,6 @@ namespace T3.Core.Operator
             Children.Remove(childToRemove);
         }
 
-        void DeleteInstance(Instance op)
-        {
-            InstancesOfSymbol.Remove(op);
-        }
-
         public InputDefinition GetInputMatchingType(Type type)
         {
             foreach (var inputDefinition in InputDefinitions)
@@ -767,16 +745,6 @@ namespace T3.Core.Operator
             }
 
             return null;
-        }
-
-        public Connection GetConnectionForInput(InputDefinition input)
-        {
-            return Connections.FirstOrDefault(c => c.TargetParentOrChildId == input.Id);
-        }
-
-        public Connection GetConnectionForOutput(OutputDefinition output)
-        {
-            return Connections.FirstOrDefault(c => c.SourceParentOrChildId == output.Id);
         }
         #endregion
 
@@ -878,7 +846,5 @@ namespace T3.Core.Operator
                 slot.DirtyFlag.Invalidate();
             }
         }
-        
-        private readonly List<FieldInfo> _fieldInfos = new(4);
     }
 }

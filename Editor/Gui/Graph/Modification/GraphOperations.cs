@@ -36,7 +36,7 @@ namespace T3.Editor.Gui.Graph.Modification
                                              List<Annotation> selectedAnnotations)
         {
             var resultJsonString = string.Empty;
-            var containerOp = new Symbol(typeof(object), Guid.NewGuid());
+            var containerOp = new Symbol(typeof(object), Guid.NewGuid(), null);
             var newContainerUi = new SymbolUi(containerOp);
             
             if(!SymbolUiRegistry.EntriesEditable.TryAdd(newContainerUi.Symbol.Id, newContainerUi))
