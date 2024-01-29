@@ -33,7 +33,7 @@ internal static class ProjectSetup
                 EditableSymbolProjectsRw.Add(project);
             }
         }
-        else 
+        else
         {
             //var oldUserNamespace = $"user.{nameArgs.OldName}";
             //var newUserNamespace = $"user.{nameArgs.NewName}";
@@ -101,7 +101,12 @@ internal static class ProjectSetup
 
             stopwatch.Start();
             var coreAssemblyDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators"); // theoretically where the core libs assemblies will be
-            var projectSearchDirectories = new[] { coreAssemblyDirectory, UserSettings.Config.DefaultNewProjectDirectory };
+            var exportPath = Path.Combine("T3Projects", "Exports");
+            var topDirectories = new[] { coreAssemblyDirectory, UserSettings.Config.DefaultNewProjectDirectory };
+            var projectSearchDirectories = topDirectories
+                                          .Where(Directory.Exists)
+                                          .SelectMany(Directory.EnumerateDirectories)
+                                          .Where(dirName => !dirName.Contains(exportPath)).ToArray();
 
             Log.Debug($"Core directories initialized in {stopwatch.ElapsedMilliseconds}ms");
 
@@ -110,9 +115,9 @@ internal static class ProjectSetup
 
             var operatorFolder = Path.Combine(GetT3ParentDirectory(), "Operators");
             projectSearchDirectories = Directory.EnumerateDirectories(operatorFolder)
-                                       .Where(path => !path.EndsWith("user"))
-                                       .Concat(projectSearchDirectories)
-                                       .ToArray();
+                                                .Where(path => !path.EndsWith("user"))
+                                                .Concat(projectSearchDirectories)
+                                                .ToArray();
 
             stopwatch.Stop();
             Log.Debug($"Found {projectSearchDirectories.Length} root directories in {stopwatch.ElapsedMilliseconds}ms");
@@ -145,7 +150,6 @@ internal static class ProjectSetup
 
             stopwatch.Restart();
             var csProjFiles = projectSearchDirectories
-                             .Where(Directory.Exists)
                              .SelectMany(dir => Directory.EnumerateFiles(dir, "*.csproj", SearchOption.AllDirectories))
                              .Where(filePath => !filePath.Contains(CsProjectFile.ProjectNamePlaceholder))
                              .ToArray();
@@ -157,30 +161,30 @@ internal static class ProjectSetup
             csProjFiles
                .AsParallel()
                .ForAll(path =>
-                        {
-                            stopwatch.Restart();
-                            var csProjFile = new CsProjectFile(new FileInfo(path));
-                            if (!csProjFile.TryLoadLatestAssembly())
-                            {
-                                if (!csProjFile.TryRecompile())
-                                {
-                                    Log.Info($"Failed to load {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
-                                    return;
-                                }
-                            }
+                       {
+                           stopwatch.Restart();
+                           var csProjFile = new CsProjectFile(new FileInfo(path));
+                           if (!csProjFile.TryLoadLatestAssembly())
+                           {
+                               if (!csProjFile.TryRecompile())
+                               {
+                                   Log.Info($"Failed to load {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
+                                   return;
+                               }
+                           }
 
-                            if (csProjFile.IsOperatorAssembly)
-                            {
-                                var project = new EditableSymbolProject(csProjFile);
-                                projects.Add(project);
-                            }
-                            else
-                            {
-                                nonOperatorAssemblies.Add(csProjFile.Assembly);
-                            }
+                           if (csProjFile.IsOperatorAssembly)
+                           {
+                               var project = new EditableSymbolProject(csProjFile);
+                               projects.Add(project);
+                           }
+                           else
+                           {
+                               nonOperatorAssemblies.Add(csProjFile.Assembly);
+                           }
 
-                            Log.Info($"Loaded {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
-                        });
+                           Log.Info($"Loaded {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
+                       });
 
             #if DEBUG
             Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {totalStopwatch.ElapsedMilliseconds}ms");
@@ -209,12 +213,12 @@ internal static class ProjectSetup
             #endif
 
             stopwatch.Restart();
-            
+
             var exampleLib = allSymbolPackages.Single(x => x.AssemblyInformation.Name == "examples");
             EditorSymbolPackage.InitializeRoot(exampleLib);
-            
+
             Log.Debug($"Created root symbol in {stopwatch.ElapsedMilliseconds}ms");
-            
+
             var createdHome = false;
             foreach (var project in projectList)
             {
@@ -355,7 +359,7 @@ internal static class ProjectSetup
             symbolPackage.RegisterUiSymbols(enableLog: false, symbolUis.NewlyLoaded, symbolUis.PreExisting);
         }
     }
-    
+
     readonly struct SymbolUiLoadInfo(IReadOnlyCollection<SymbolUi> newlyLoaded, IReadOnlyCollection<SymbolUi> preExisting)
     {
         public readonly IReadOnlyCollection<SymbolUi> NewlyLoaded = newlyLoaded;

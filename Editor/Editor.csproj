@@ -10,9 +10,8 @@
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
         <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
-        <Configurations>Debug;Release</Configurations>
+        <Configurations>Debug;Release;IDE</Configurations>
         <Platforms>AnyCPU</Platforms>
-        <!--<AssemblyName>T3Editor</AssemblyName>-->
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -20,7 +19,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'IDE' ">
-        <DefineConstants>IDE;TRACE</DefineConstants>
+        <DefineConstants>IDE;TRACE;DEBUG</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>

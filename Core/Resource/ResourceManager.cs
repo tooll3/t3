@@ -20,16 +20,15 @@ namespace T3.Core.Resource
         public static Device Device => _instance._device;
 
         public static ResourceManager Instance() => _instance;
-        private static ResourceManager _instance;
+        private static readonly ResourceManager _instance = new();
 
         static ResourceManager()
         {
         }
 
-        public static void Init(Device device)
+        public void Init(Device device)
         {
-            _instance ??= new ResourceManager();
-            _instance.InitializeDevice(device);
+            InitializeDevice(device);
         }
 
         private static void CreateTexture2d(string filename, ref Texture2D? texture)

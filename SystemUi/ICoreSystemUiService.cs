@@ -12,6 +12,7 @@ public interface ICoreSystemUiService
     public void ExitThread();
     
     public ICursor Cursor { get; }
+    void SetUnhandledExceptionMode(bool throwException);
 }
 
 public interface ICursor

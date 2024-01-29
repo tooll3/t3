@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Numerics;
 using System.Threading;
-using System.Windows.Forms;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Compilation;

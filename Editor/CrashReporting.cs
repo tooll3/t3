@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Management;
-using System.Windows.Forms;
 using ImGuiNET;
 using Sentry;
 using T3.Core.Animation;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.AutoBackup;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph;
@@ -13,6 +13,7 @@ using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
+using T3.SystemUi;
 
 namespace T3.Editor;
 
@@ -42,9 +43,6 @@ internal static class CrashReporting
         #endif
 
         SentrySdk.ConfigureScope(scope => { scope.SetTag("Configuration", configuration); });
-
-        // Configure WinForms to throw exceptions so Sentry can capture them.
-        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
     }
 
     private static SentryEvent CrashHandler(SentryEvent sentryEvent, Hint hint)
@@ -52,7 +50,8 @@ internal static class CrashReporting
         var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
         var timeSpan = THelpers.GetReadableRelativeTime(timeOfLastBackup);
 
-        var result = MessageBox.Show(string.Join("\n",
+        CoreUi.Instance.SetUnhandledExceptionMode(true);
+        var result = CoreUi.Instance.ShowMessageBox(string.Join("\n",
                                                  "Oh noooo, how embarrassing! T3 just crashed.",
                                                  $"Last backup was saved {timeSpan} to .t3/backups/",
                                                  "We copied the current operator to your clipboard.",
@@ -62,7 +61,7 @@ internal static class CrashReporting
                                                  "This will hopefully help us to fix this issue."
                                                 ),
                                      @"☠🙈 Damn!",
-                                     MessageBoxButtons.YesNo);
+                                     PopUpButtons.YesNo);
 
 
         sentryEvent.SetTag("Nickname", "anonymous");
@@ -94,7 +93,7 @@ internal static class CrashReporting
             sentryEvent.SetExtra("CurrentOpExportFailed", e.Message);
         }
 
-        return result == DialogResult.Yes ? sentryEvent : null;
+        return result == PopUpResult.Yes ? sentryEvent : null;
     }
 
     private static void GetGraphicsCardAdapter()

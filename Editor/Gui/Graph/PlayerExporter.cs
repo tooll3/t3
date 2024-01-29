@@ -29,7 +29,7 @@ namespace T3.Editor.Gui.Graph
     {
         public static void ExportInstance(GraphCanvas graphCanvas, SymbolChildUi childUi)
         {
-            T3Ui.Save(true);
+            T3Ui.Save(false);
 
             // Collect all ops and types
             var instance = graphCanvas.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
@@ -62,7 +62,10 @@ namespace T3.Editor.Gui.Graph
 
             try
             {
-                Directory.Delete(exportDir, true);
+                if(Directory.Exists(exportDir))
+                {
+                    Directory.Delete(exportDir, true);
+                }
             }
             catch (Exception e)
             {
@@ -91,6 +94,7 @@ namespace T3.Editor.Gui.Graph
                                   foreach (var assemblyPath in assemblyInfo.AssemblyPaths)
                                   {
                                       var fileName = Path.GetFileName(assemblyPath);
+                                      
                                       var outputPath = Path.Combine(exportDir, fileName);
                                       
                                       try

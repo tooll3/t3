@@ -1,9 +1,12 @@
+#define FORCE_D3D_DEBUG
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 using CommandLine;
 using CommandLine.Text;
 using ManagedBass;
@@ -27,11 +30,9 @@ using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
 using Resource = SharpDX.Direct3D11.Resource;
 using Vector2 = System.Numerics.Vector2;
-using System.Windows.Forms;
 using SharpDX.Windows;
 using T3.SystemUi;
 using ResourceManager = T3.Core.Resource.ResourceManager;
-using T3.MsForms;
 
 namespace T3.Player
 {
@@ -53,32 +54,44 @@ namespace T3.Player
                 _commandLineOptions = ParseCommandLine(args);
                 if (_commandLineOptions == null)
                     return;
+                
 
                 _vsync = !_commandLineOptions.NoVsync;
                 Log.Debug($"using vsync: {_vsync}, windowed: {_commandLineOptions.Windowed}, size: {_commandLineOptions.Size}, loop: {_commandLineOptions.Loop}, logging: {_commandLineOptions.Logging}");
                 
-                var gotIcon = ResourceManager.TryResolvePath("Resources/t3-editor/images/t3.ico", out var iconPath, Array.Empty<string>());
+                var resolution = _commandLineOptions.Size;             
                 
+                var iconPath = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources", "t3-editor", "images", "t3.ico");
+                var gotIcon = File.Exists(iconPath);
+                
+                Icon icon;
                 if (!gotIcon)
                 {
                     Log.Warning("Failed to load icon");
+                    icon = null;
+                }
+                else
+                {
+                    icon = new Icon(iconPath);
                 }
 
                 _renderForm = new RenderForm(ProjectSettings.Config.MainOperatorName)
                                   {
-                                      ClientSize = _commandLineOptions.Size,
+                                      ClientSize = resolution,
                                       AllowUserResizing = false,
-                                      Icon = gotIcon ? new System.Drawing.Icon(iconPath) : null,
+                                      Icon = icon,
                                   };
+                
+                var handle = _renderForm.Handle;
 
                 // SwapChain description
-                var desc = new SwapChainDescription()
+                var desc = new SwapChainDescription
                                {
                                    BufferCount = 3,
-                                   ModeDescription = new ModeDescription(_renderForm.ClientSize.Width, _renderForm.ClientSize.Height,
+                                   ModeDescription = new ModeDescription(resolution.Width, resolution.Height,
                                                                          new Rational(60, 1), Format.R8G8B8A8_UNorm),
                                    IsWindowed = _commandLineOptions.Windowed,
-                                   OutputHandle = _renderForm.Handle,
+                                   OutputHandle = handle,
                                    SampleDescription = new SampleDescription(1, 0),
                                    SwapEffect = SwapEffect.FlipDiscard,
                                    Flags = SwapChainFlags.AllowModeSwitch,
@@ -93,6 +106,8 @@ namespace T3.Player
                 #endif
                 Device.CreateWithSwapChain(DriverType.Hardware, deviceCreationFlags, desc, out _device, out _swapChain);
                 _deviceContext = _device.ImmediateContext;
+                ResourceManager.Instance().Init(_device);
+                SharedResources.Initialize();
 
                 var cursor = CoreUi.Instance.Cursor;
 
@@ -118,18 +133,19 @@ namespace T3.Player
                                              cursor.SetVisible(!_swapChain.IsFullScreen);
                                          }
 
+                                         var currentPlayback = Playback.Current;
                                          if (ProjectSettings.Config.EnablePlaybackControlWithKeyboard)
                                          {
                                              switch (keyArgs.KeyCode)
                                              {
                                                  case Keys.Left:
-                                                     Playback.Current.TimeInBars -= 4;
+                                                     currentPlayback.TimeInBars -= 4;
                                                      break;
                                                  case Keys.Right:
-                                                     Playback.Current.TimeInBars += 4;
+                                                     currentPlayback.TimeInBars += 4;
                                                      break;
                                                  case Keys.Space:
-                                                     Playback.Current.PlaybackSpeed = Math.Abs(Playback.Current.PlaybackSpeed) > 0.01f ? 0 : 1;
+                                                     currentPlayback.PlaybackSpeed = Math.Abs(currentPlayback.PlaybackSpeed) > 0.01f ? 0 : 1;
                                                      break;
                                              }
                                          }
@@ -152,8 +168,6 @@ namespace T3.Player
                                              Device = _device
                                          };
                 ShaderCompiler.Instance = shaderCompiler;
-                ResourceManager.Init(_device);
-                SharedResources.Initialize(ResourceManager.Instance());
                 _fullScreenPixelShaderResource = SharedResources.FullScreenPixelShaderResource;
                 _fullScreenVertexShaderResource = SharedResources.FullScreenVertexShaderResource;
 
@@ -267,6 +281,7 @@ namespace T3.Player
         private static void LoadOperators()
         {
             var assemblies = Directory.GetFiles(RuntimeAssemblies.CoreDirectory, "*.dll")
+                                      .Where(path => Path.GetFileName(path) != "System.Windows.Forms.dll")
                                       .Select(file =>
                                               {
                                                   RuntimeAssemblies.TryLoadAssemblyInformation(file, out var info);
@@ -357,7 +372,7 @@ namespace T3.Player
             _swapChain.Present(_vsync ? 1 : 0, PresentFlags.None);
         }
 
-        private static void MouseMoveHandler(object sender, MouseEventArgs e)
+        private static void MouseMoveHandler(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (sender is not Form form)
                 return;

@@ -7,6 +7,13 @@ public class MsForms : ICoreSystemUiService
     public MsForms()
     {
     }
+    
+    public void SetUnhandledExceptionMode(bool throwException)
+    {
+        System.Windows.Forms.Application.SetUnhandledExceptionMode(throwException
+                                                                        ? UnhandledExceptionMode.ThrowException
+                                                                        : UnhandledExceptionMode.CatchException);
+    }
 
     void ICoreSystemUiService.ShowMessageBox(string text, string caption)
     {

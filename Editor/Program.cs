@@ -52,13 +52,18 @@ namespace T3.Editor
         private static void Main()
         {
             // Not calling this first will cause exceptions...
+            Console.WriteLine("Starting T3 Editor");
+            Console.WriteLine("Creating EditorUi");
             EditorUi.Instance = new MsFormsEditor();
             CoreUi.Instance = EditorUi.Instance;
 
+            Console.WriteLine("Creating DX11ShaderCompiler");
             ShaderCompiler.Instance = new DX11ShaderCompiler();
 
+            Console.WriteLine("Validating startup location");
             StartupValidation.ValidateNotRunningFromSystemFolder();
 
+            Console.WriteLine("Enabling DPI aware scaling");
             EditorUi.Instance.EnableDpiAwareScaling();
 
             var startupStopWatch = new Stopwatch();
@@ -66,11 +71,13 @@ namespace T3.Editor
 
             //CrashReporting.InitializeCrashReporting();
 
+            Console.WriteLine("Creating SplashScreen");
             ISplashScreen splashScreen = new SplashScreen.SplashScreen();
 
             var path = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources", "t3-editor", "images", "t3-SplashScreen.png");
             splashScreen.Show(path);
 
+            Console.WriteLine("Initializing logging");
             var logDirectory = Path.Combine(UserData.SettingsFolder, "log");
             Log.AddWriter(splashScreen);
             Log.AddWriter(new ConsoleWriter());
@@ -119,9 +126,8 @@ namespace T3.Editor
             ProgramWindows.SetInteractionDevices(spaceMouse);
 
             Log.Debug($"About to initialize Resource Manager");
-            ResourceManager.Init(device);
-            var resourceManager = ResourceManager.Instance();
-            SharedResources.Initialize(resourceManager);
+            ResourceManager.Instance().Init(device);
+            SharedResources.Initialize();
 
             Log.Debug($"About to initialize T3 UI");
 

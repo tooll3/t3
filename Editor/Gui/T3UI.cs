@@ -163,7 +163,7 @@ public static class T3Ui
         }
         else if (KeyboardBinding.Triggered(UserActions.Save))
         {
-            SaveInBackground(saveAll: true);
+            SaveInBackground(saveAll: false);
         }
         else if (KeyboardBinding.Triggered(UserActions.ToggleAllUiElements))
         {
@@ -243,7 +243,7 @@ public static class T3Ui
 
                 if (ImGui.MenuItem("Save", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
                 {
-                    SaveInBackground(saveAll: true);
+                    SaveInBackground(saveAll: false);
                 }
 
                 if (ImGui.MenuItem("Quit", !IsCurrentlySaving))

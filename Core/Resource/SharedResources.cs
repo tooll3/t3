@@ -19,10 +19,11 @@ namespace T3.Editor.App
             _commonResourceWatcher = new ResourceFileWatcher(commonResourcesFolder, true);
         }
         
-        public static void Initialize(ResourceManager resourceManager)
+        public static void Initialize()
         {
             const string errorHeader = $"{nameof(SharedResources)} error: ";
-            
+
+            var resourceManager = ResourceManager.Instance();
             var gotFullscreenVertexShader = resourceManager.TryCreateShaderResource<VertexShader>(
                  relativePath: @"dx11\fullscreen-texture.hlsl",
                  watcher: null,
