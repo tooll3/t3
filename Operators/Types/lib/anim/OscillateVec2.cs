@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -50,12 +51,12 @@ namespace T3.Operators.Types.Id_49796f63_27a8_4714_ba69_2073488ca833
         public readonly InputSlot<float> AmplitudeScale = new();
         
         [Input(Guid = "4959c4c7-e216-4c3d-9b51-228fe4a0b0f9")]
-        public readonly InputSlot<Vector3> Period = new();
+        public readonly InputSlot<Vector2> Period = new();
         
         [Input(Guid = "48a94f9e-32fc-46d0-9e06-8f7cbe1d40f3")]
-        public readonly InputSlot<Vector3> Phase = new();
+        public readonly InputSlot<Vector2> Phase = new();
         
         [Input(Guid = "63c0681d-eb5a-45bb-b0df-be868e236c1e")]
-        public readonly InputSlot<Vector3> Offset = new();
+        public readonly InputSlot<Vector2> Offset = new();
     }
 }

@@ -13,10 +13,9 @@ cbuffer ParamConstants : register(b0)
 
     float Scale;
     float Phase;
-
     float2 Clamping;
-    float2 BiasAndGain;
 
+    float2 BiasAndGain;
     float Method;
 }
 

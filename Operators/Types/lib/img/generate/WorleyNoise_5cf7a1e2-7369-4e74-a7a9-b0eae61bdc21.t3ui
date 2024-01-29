@@ -22,8 +22,9 @@
         "X": -217.45303,
         "Y": -10.672493
       },
-      "Min": -0.5,
-      "Max": 0.5
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "1607d859-89e9-44b3-a92e-135c562d302e"/*Stretch*/,
@@ -31,8 +32,9 @@
         "X": -217.45303,
         "Y": 34.327507
       },
-      "Min": 0.0,
-      "Max": 10.0
+      "Min": -2.0,
+      "Max": 2.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "f4a32527-da4d-49af-aeb0-ed9c5c28ac04"/*Scale*/,
@@ -63,7 +65,8 @@
       },
       "Min": 0.0,
       "Max": 1.0,
-      "Clamp": true
+      "Clamp": true,
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "b4277cab-d286-410f-81be-ff4d53a9eca9"/*Method*/,

@@ -108,29 +108,26 @@
         },
         {
           "Id": "4959c4c7-e216-4c3d-9b51-228fe4a0b0f9"/*Period*/,
-          "Type": "System.Numerics.Vector3",
+          "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 1.0,
-            "Y": 1.0,
-            "Z": 0.0
+            "Y": 1.0
           }
         },
         {
           "Id": "48a94f9e-32fc-46d0-9e06-8f7cbe1d40f3"/*Phase*/,
-          "Type": "System.Numerics.Vector3",
+          "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 1.571,
-            "Y": 0.0,
-            "Z": 0.0
+            "Y": 0.0
           }
         },
         {
           "Id": "63c0681d-eb5a-45bb-b0df-be868e236c1e"/*Offset*/,
-          "Type": "System.Numerics.Vector3",
+          "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0
+            "Y": 0.0
           }
         }
       ],

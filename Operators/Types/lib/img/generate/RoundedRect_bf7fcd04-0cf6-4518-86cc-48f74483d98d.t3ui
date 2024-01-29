@@ -33,7 +33,10 @@
         "Y": 77.20885
       },
       "GroupTitle": "Position",
-      "Description": "Center position."
+      "Description": "Center position.",
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "c608e4c4-c545-45ed-8e37-95a53f6871d0"/*Stretch*/,
@@ -41,7 +44,10 @@
         "X": -212.96689,
         "Y": 122.20885
       },
-      "Description": "Stretches the shape non-uniformly."
+      "Description": "Stretches the shape non-uniformly.",
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "d2401798-593b-4cc3-85d8-3570ddec1f2a"/*Scale*/,
