@@ -30,6 +30,8 @@ namespace T3.Core.Operator.Slots
             return GetCollectedTypedInputs();
         }
 
+        public List<int> LimitMultiInputInvalidationToIndices { get; } = new();
+
         public void GetValues(ref T[] resources, EvaluationContext context, bool clearDirty= true)
         {
             var connectedInputs = GetCollectedTypedInputs();

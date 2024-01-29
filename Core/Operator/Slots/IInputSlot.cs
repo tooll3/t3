@@ -7,7 +7,6 @@ namespace T3.Core.Operator.Slots
     {
         SymbolChild.Input Input { get; set; }
         Type MappedType { get; set; }
-        List<int> LimitMultiInputInvalidationToIndices { get; set; }
         bool IsMultiInput { get; }
         void RestoreUpdateAction();
         bool TryGetAsMultiInput(out IMultiInputSlot multiInput);

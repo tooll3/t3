@@ -2,7 +2,7 @@ using System;
 
 namespace T3.Core.Operator.Slots
 {
-    public class DirtyFlag
+    public sealed class DirtyFlag
     {
         private const int GLOBAL_TICK_DIFF_PER_FRAME = 100; // each frame differs with 100 ticks to last one
         private static int _globalTickCount = 0;

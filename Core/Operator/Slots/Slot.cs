@@ -78,11 +78,6 @@ namespace T3.Core.Operator.Slots
             DirtyFlag.Invalidate();
         }
         
-        public Action<EvaluationContext> GetUpdateAction()
-        {
-            return _updateAction;
-        }
-        
         public virtual void RestoreUpdateAction()
         {
             // This will happen when operators are recompiled and output slots are disconnected
@@ -230,10 +225,13 @@ namespace T3.Core.Operator.Slots
         {
             if (DirtyFlag.IsAlreadyInvalidated || DirtyFlag.HasBeenVisited)
                 return DirtyFlag.Target;
+
+            // reduce the number of method (property) calls
+            var connected = IsConnected;
             
             if (_isInputSlot)
             {
-                if (IsConnected)
+                if (connected)
                 {
                     DirtyFlag.Target = GetConnection(0).Invalidate();
                 }
@@ -242,7 +240,7 @@ namespace T3.Core.Operator.Slots
                     DirtyFlag.Invalidate();
                 }
             }
-            else if (IsConnected)
+            else if (connected)
             {
                 // slot is an output of an composition op
                 DirtyFlag.Target = GetConnection(0).Invalidate();
@@ -264,14 +262,15 @@ namespace T3.Core.Operator.Slots
                             // invalidation can become bottle neck. In these cases it might be justified
                             // to limit the invalidation to "active" parts of the subgraph. The [Switch]
                             // operator defines this list.
-                            if (input.LimitMultiInputInvalidationToIndices != null)
+                            var multiInputLimitList = multiInput.LimitMultiInputInvalidationToIndices;
+                            if (multiInputLimitList.Count > 0)
                             {
                                 var dirtySum = 0;
                                 var index = 0;
                                 
                                 foreach (var entry in multiInput.GetCollectedInputs())
                                 {
-                                    if (!input.LimitMultiInputInvalidationToIndices.Contains(index++))
+                                    if (!multiInputLimitList.Contains(index++))
                                         continue;
                                     
                                     dirtySum += entry.Invalidate();
