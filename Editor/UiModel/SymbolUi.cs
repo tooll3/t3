@@ -47,8 +47,8 @@ namespace T3.Editor.UiModel
 
         internal SymbolUi CloneForNewSymbol(Symbol newSymbol, Dictionary<Guid, Guid> oldToNewIds)
         {
-            HasBeenModified = true;
-
+            FlagAsModified();
+            
             var childUis = new List<SymbolChildUi>(ChildUis.Count);
             // foreach (var sourceChildUi in ChildUis)
             // {
@@ -253,7 +253,7 @@ namespace T3.Editor.UiModel
 
         internal Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size, string name = null)
         {
-            HasBeenModified = true;
+            FlagAsModified();
             Symbol.AddChild(symbolToAdd, addedChildId, name);
             var childUi = new SymbolChildUi
                               {
@@ -269,7 +269,7 @@ namespace T3.Editor.UiModel
         internal SymbolChild AddChildAsCopyFromSource(Symbol symbolToAdd, SymbolChild sourceChild, SymbolUi sourceCompositionSymbolUi, Vector2 posInCanvas,
                                                       Guid newChildId)
         {
-            HasBeenModified = true;
+            FlagAsModified();
             var newChild = Symbol.AddChild(symbolToAdd, newChildId);
             newChild.Name = sourceChild.Name;
 
@@ -286,7 +286,7 @@ namespace T3.Editor.UiModel
 
         internal void RemoveChild(Guid id)
         {
-            HasBeenModified = true;
+            FlagAsModified();
 
             Symbol.RemoveChild(id); // remove from symbol
 
@@ -297,22 +297,29 @@ namespace T3.Editor.UiModel
 
         internal void FlagAsModified()
         {
-            HasBeenModified = true;
+            _hasBeenModified = true;
         }
 
         internal void ClearModifiedFlag()
         {
-            HasBeenModified = false;
+            _hasBeenModified = false;
         }
 
         public string Description { get; set; }
         public OrderedDictionary<Guid, ExternalLink> Links { get; } = new();
 
-        public bool HasBeenModified { get; private set; }
+        private bool _forceUnmodified = false;
+        private bool _hasBeenModified = false;
+        public bool HasBeenModified => _hasBeenModified && !_forceUnmodified;
         public readonly List<SymbolChildUi> ChildUis = new(); // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
         public OrderedDictionary<Guid, IInputUi> InputUis { get; } = new();
         public OrderedDictionary<Guid, IOutputUi> OutputUis { get; } = new();
         public OrderedDictionary<Guid, Annotation> Annotations { get; } = new();
+
+        public void ForceUnmodified()
+        {
+            _forceUnmodified = true;
+        }
     }
 
     public static class SymbolUiRegistry

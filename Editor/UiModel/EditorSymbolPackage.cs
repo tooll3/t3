@@ -138,6 +138,8 @@ internal class EditorSymbolPackage : StaticSymbolPackage
         }
         
         SymbolUiRegistry.Entries.TryGetValue(rootSymbolId, out RootSymbolUi);
+        
+        RootSymbolUi!.ForceUnmodified();
 
         RootInstance = rootInstance;
     }
