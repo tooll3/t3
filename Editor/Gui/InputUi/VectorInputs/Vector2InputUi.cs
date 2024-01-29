@@ -26,16 +26,6 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             return CloneWithType<Vector2InputUi>();
         }
 
-        private float GetBiasAndGain(float x, float s, float t)
-        {
-            const float eps = 0.0001f;
-            const float r = 200;
-            s *= 2;
-            s = s < 1 ? (MathF.Pow(r, 1 - s)) : 1 / MathF.Pow(r, s - 1);
-            return x < t
-                       ? (t * x) / (x + s * (t - x) + eps)
-                       : ((1 - t) * (x - 1)) / (1 - x - s * (t - x) + eps) + 1;
-        }
 
         protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Vector2 float2Value, bool readOnly)
         {
@@ -86,7 +76,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
                     drawList.AddLine(new Vector2(center.X, min.Y), new Vector2(center.X, max.Y), UiColors.ForegroundFull.Fade(0.06f), 1);
                     drawList.AddLine(new Vector2(min.X, center.Y), new Vector2(max.X, center.Y), UiColors.ForegroundFull.Fade(0.06f), 1);
                 }
-                else if (UseVec2Control == Vec2Controls.BiasAndGain)
+                else if (UseVec2Control == Vec2Controls.GainBias)
                 {
                     shouldClamp = true;
                     drawList.AddCircleFilled(controlPointScreenPos, 2, color);
@@ -98,7 +88,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
                     for(var i=0; i < steps ; i ++)
                     {
                         var t = (float)i / (steps-1); 
-                        var f = GetBiasAndGain(t, float2Value.X, float2Value.Y);
+                        var f = t.ApplyGainBias(float2Value.X, float2Value.Y);
                         var x = MathUtils.Lerp(min.X, max.X, f);
                         drawList.AddLine(new Vector2(x, min.Y), new Vector2(x, max.Y),
                                          UiColors.ForegroundFull.Fade(0.1f), 1);
@@ -194,7 +184,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         {
             None,
             Position,
-            BiasAndGain,
+            GainBias,
             Range,
         }
     }

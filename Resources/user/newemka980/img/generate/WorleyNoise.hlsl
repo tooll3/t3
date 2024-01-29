@@ -15,7 +15,7 @@ cbuffer ParamConstants : register(b0)
     float Phase;
     float2 Clamping;
 
-    float2 BiasAndGain;
+    float2 GainAndBias;
     float Method;
 }
 
@@ -142,6 +142,6 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     uv += offset;
     uv.x *= aspectRatio;
 
-    float worley = GetBiasGain( Worley(uv, 32.0), BiasAndGain.x, BiasAndGain.y);
+    float worley = ApplyGainBias( Worley(uv, 32.0), GainAndBias.x, GainAndBias.y);
     return lerp(ColorB, ColorA, clamp(worley, Clamping.x, Clamping.y ) );
 }

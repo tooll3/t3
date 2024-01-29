@@ -23,7 +23,7 @@ cbuffer Params : register(b1)
     float4x4 TransformVolume;
     float FallOff;
     float Strength;
-    float2 BiasAndGain;
+    float2 GainAndBias;
     float Phase;
     float Threshold;
 }
@@ -121,7 +121,7 @@ inline float LinearStep(float min, float max, float t)
         s = LinearStep(Threshold + FallOff, Threshold, noise);
     }
 
-    s = GetBiasGain(s, BiasAndGain.x, BiasAndGain.y);
+    s = ApplyGainBias(s, GainAndBias.x, GainAndBias.y);
 
     float w = p.W;
     if (SelectMode == ModeOverride)

@@ -9,11 +9,6 @@
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
-          "Type": "System.Single",
-          "Value": 0.39
-        },
-        {
           "Id": "8f439130-529c-42ff-a5c0-255476120f03"/*Direction*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -21,6 +16,11 @@
             "Y": 0.77,
             "Z": 0.0
           }
+        },
+        {
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Type": "System.Single",
+          "Value": 0.39
         },
         {
           "Id": "af75835a-04c9-4721-8c7a-a31ef8012f06"/*Pivot*/,

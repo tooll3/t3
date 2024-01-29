@@ -58,7 +58,7 @@
       "GroupTitle": "Volume"
     },
     {
-      "InputId": "418d7362-3c4b-4749-8f11-62a953065689"/*BiasAndGain*/,
+      "InputId": "418d7362-3c4b-4749-8f11-62a953065689"/*GainBias*/,
       "Position": {
         "X": -1027.1545,
         "Y": 2283.6282

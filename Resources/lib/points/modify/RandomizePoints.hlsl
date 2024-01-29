@@ -18,7 +18,7 @@ cbuffer Params : register(b0)
     float RandomSeed;
 
 
-    float2 BiasAndGain;
+    float2 GainAndBias;
     float UseSelection;
 
 }
@@ -52,8 +52,8 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float t = fmod (phase,1);
     t = Interpolation == 0 ? 0 : (Interpolation == 1 ? t : smoothstep(0,1,t));
-    float4 biasedA = GetBiasGain(lerp(hash41u(phaseIndex ), hash41u(phaseIndex + 1), t), BiasAndGain.x, BiasAndGain.y);
-    float4 biasedB = GetBiasGain(lerp(hash41u(phaseIndex + _PRIME0 ), hash41u(phaseIndex + _PRIME0 + 1), t), BiasAndGain.x, BiasAndGain.y);
+    float4 biasedA = ApplyGainBias(lerp(hash41u(phaseIndex ), hash41u(phaseIndex + 1), t), GainAndBias.x, GainAndBias.y);
+    float4 biasedB = ApplyGainBias(lerp(hash41u(phaseIndex + _PRIME0 ), hash41u(phaseIndex + _PRIME0 + 1), t), GainAndBias.x, GainAndBias.y);
 
     float amount = Amount * lerp( UseSelection, p.Selected,1);
     float4 rot = p.Rotation;

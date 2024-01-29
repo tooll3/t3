@@ -25,7 +25,7 @@ float GetSchlickBias(float x, float gain)
 
 // based on: https://arxiv.org/pdf/2010.09714.pdf
 // but s remapped from [-64 .. 64] -> [0 .. 1] 
-float GetBiasGain(float x, float s, float t) 
+float ApplyGainBias(float x, float t, float s) 
 {
     float eps = 0.0001;
     float r = 200;
@@ -36,7 +36,7 @@ float GetBiasGain(float x, float s, float t)
     : (((1-t)*(x-1))/(1-x-s*(t-x)+eps)+1);
 }
 
-float4 GetBiasGain(float4 x, float s, float t) 
+float4 ApplyGainBias(float4 x, float t, float s) 
 {
     float eps = 0.0001;
     float r = 200;

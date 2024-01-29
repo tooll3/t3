@@ -16,10 +16,6 @@
       }
     },
     {
-      "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
-      "DefaultValue": 1.0
-    },
-    {
       "Id": "8f439130-529c-42ff-a5c0-255476120f03"/*Direction*/,
       "DefaultValue": {
         "X": 1.0,
@@ -28,8 +24,19 @@
       }
     },
     {
+      "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+      "DefaultValue": 1.0
+    },
+    {
       "Id": "af75835a-04c9-4721-8c7a-a31ef8012f06"/*Pivot*/,
       "DefaultValue": 0.5
+    },
+    {
+      "Id": "28081e5f-da01-46dc-81ad-699df29a49a4"/*GainBias*/,
+      "DefaultValue": {
+        "X": 0.5,
+        "Y": 0.5
+      }
     },
     {
       "Id": "d120d8f7-aff6-4e30-b0d2-c45e3e477fde"/*W*/,
@@ -38,30 +45,6 @@
     {
       "Id": "41ed1339-c762-4979-9c89-b1a347eb3d06"/*WOffset*/,
       "DefaultValue": 0.0
-    },
-    {
-      "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "83986e05-af3e-469f-a656-9956d37d12ba"/*Orientation*/,
-      "DefaultValue": 1
-    },
-    {
-      "Id": "a8dfe0e7-ad33-47cf-ab78-726385e38434"/*OrientationAxis*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 1.0
-      }
-    },
-    {
-      "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "ddc2ea6a-d356-46c9-b333-4cce69c02570"/*AddSeparator*/,
-      "DefaultValue": false
     },
     {
       "Id": "6f46bd61-422f-4715-9219-3d2e1dff1d90"/*ColorA*/,
@@ -82,11 +65,28 @@
       }
     },
     {
-      "Id": "28081e5f-da01-46dc-81ad-699df29a49a4"/*BiasAndGain*/,
+      "Id": "83986e05-af3e-469f-a656-9956d37d12ba"/*Orientation*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "a8dfe0e7-ad33-47cf-ab78-726385e38434"/*OrientationAxis*/,
       "DefaultValue": {
-        "X": 0.5,
-        "Y": 0.5
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 1.0
       }
+    },
+    {
+      "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "ddc2ea6a-d356-46c9-b333-4cce69c02570"/*AddSeparator*/,
+      "DefaultValue": false
     }
   ],
   "Children": [

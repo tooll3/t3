@@ -9,7 +9,7 @@ cbuffer ParamConstants : register(b0)
     float4 MapWhiteTo;
     float4 ChannelWeights;
     float Amount;
-    float2 BiasAndGain;
+    float2 GainAndBias;
 }
 
 
@@ -49,7 +49,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     //     ? pow( t, Bias+1)
     //     : 1-pow( 1-t, -Bias+1);
     //t = GetSchlickBias(t, clamp(Bias, 0.001, 0.999));
-    t= GetBiasGain(t, BiasAndGain.x, BiasAndGain.y); 
+    t= ApplyGainBias(t, GainAndBias.x, GainAndBias.y); 
     float4 mapped = lerp(MapBlackTo, MapWhiteTo, t); 
     //return float4(t,0,0,1);
     float4 cout = lerp(c, mapped, Amount);

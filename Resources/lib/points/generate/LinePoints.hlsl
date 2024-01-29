@@ -62,7 +62,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     int seperatorOffset = AddSeparator > 0.5 ? 1 :0;
     int steps = (pointCount - 1 - seperatorOffset);
-    float f1 = GetBiasGain(steps > 0 ? (float)(index)/steps : 0.5, BiasGain.x, BiasGain.y);
+    float f1 = ApplyGainBias(steps > 0 ? (float)(index)/steps : 0.5, BiasGain.x, BiasGain.y);
     float f =  f1 - Pivot;
     
     ResultPoints[index].Position = lerp(Center, Center + Direction * LengthFactor, f);

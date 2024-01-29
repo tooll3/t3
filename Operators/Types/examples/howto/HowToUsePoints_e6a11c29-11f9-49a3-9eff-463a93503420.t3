@@ -969,11 +969,6 @@
           "Value": -0.0
         },
         {
-          "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
-          "Type": "System.Single",
-          "Value": 360.0
-        },
-        {
           "Id": "a8dfe0e7-ad33-47cf-ab78-726385e38434"/*OrientationAxis*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -981,6 +976,11 @@
             "Y": 1.0,
             "Z": 0.0
           }
+        },
+        {
+          "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
+          "Type": "System.Single",
+          "Value": 360.0
         }
       ],
       "Outputs": []
@@ -1018,7 +1018,7 @@
           "Value": 0.5
         },
         {
-          "Id": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*BiasAndGain*/,
+          "Id": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*GainBias*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.61,
@@ -1077,11 +1077,6 @@
           }
         },
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
-          "Type": "System.Single",
-          "Value": 2.0
-        },
-        {
           "Id": "8f439130-529c-42ff-a5c0-255476120f03"/*Direction*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -1089,6 +1084,11 @@
             "Y": 1.0,
             "Z": 0.0
           }
+        },
+        {
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Type": "System.Single",
+          "Value": 2.0
         }
       ],
       "Outputs": []

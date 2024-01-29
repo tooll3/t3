@@ -19,7 +19,7 @@ cbuffer ParamConstants : register(b0)
     float Rate;
     
     float Method;
-    float2 BiasAndGain;
+    float2 GainAndBias;
 
     float2 Offset;
   
@@ -96,7 +96,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float c = 0;
 
     //Shard Noise + Bias and Gain 
-    float sn = GetBiasGain(shard_noise(Scale * uv, _sharpness), BiasAndGain.x, BiasAndGain.y);
+    float sn = ApplyGainBias(shard_noise(Scale * uv, _sharpness), GainAndBias.x, GainAndBias.y);
 
     // repetition in the methods is an attempt of optimisation because octaves are exenpsive
     
@@ -109,25 +109,25 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         break;
         case 1:
             // Cubism * octaves
-            float o = GetBiasGain(
+            float o = ApplyGainBias(
                 (shard_noise(64.0*uv,4) * .03125) +
                 (shard_noise(32.0*uv,4) * .0625) +
                 (shard_noise(16.0*uv,4) * .125) +
                 (shard_noise(8.0*uv,4) * .25) +
                 (shard_noise(4.0*uv,4) * .5)
-            , BiasAndGain.x, BiasAndGain.y); 
+            , GainAndBias.x, GainAndBias.y); 
         c = sn*o; //ShardNoise multiplied by octaves
         //c = 1 - (1-o) * (1-sn); //trying a screen blend
         break;
         case 2: 
             // Octaves
-            float oc = GetBiasGain(
+            float oc = ApplyGainBias(
                 (shard_noise(64.0*uv,4) * .03125) +
                 (shard_noise(32.0*uv,4) * .0625) +
                 (shard_noise(16.0*uv,4) * .125) +
                 (shard_noise(8.0*uv,4) * .25) +
                 (shard_noise(4.0*uv,4) * .5)
-            , BiasAndGain.x, BiasAndGain.y); 
+            , GainAndBias.x, GainAndBias.y); 
         c = oc;
         break;
     } 

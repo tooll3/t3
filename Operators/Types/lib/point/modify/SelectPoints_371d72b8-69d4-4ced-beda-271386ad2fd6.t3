@@ -44,7 +44,7 @@
       "DefaultValue": 0
     },
     {
-      "Id": "418d7362-3c4b-4749-8f11-62a953065689"/*BiasAndGain*/,
+      "Id": "418d7362-3c4b-4749-8f11-62a953065689"/*GainBias*/,
       "DefaultValue": {
         "X": 0.5,
         "Y": 0.5
@@ -415,11 +415,6 @@
           "Value": 5
         },
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
-          "Type": "System.Single",
-          "Value": 4.0
-        },
-        {
           "Id": "8f439130-529c-42ff-a5c0-255476120f03"/*Direction*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -427,6 +422,11 @@
             "Y": 1.0,
             "Z": 0.0
           }
+        },
+        {
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Type": "System.Single",
+          "Value": 4.0
         }
       ],
       "Outputs": []

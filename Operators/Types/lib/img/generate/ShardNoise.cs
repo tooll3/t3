@@ -41,7 +41,7 @@ namespace T3.Operators.Types.Id_dc34c54b_f856_4fd2_a182_68fd75189d7d
         public readonly InputSlot<int> Method = new InputSlot<int>();
 
         [Input(Guid = "bff37ed2-cc5a-47fa-9363-65bb1d5eb2fa")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> GainBias = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "d2e58300-b054-4df5-b3e8-5d7fb36d1ebc")]
         public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();

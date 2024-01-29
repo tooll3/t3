@@ -30,7 +30,7 @@ namespace T3.Operators.Types.Id_d9a71078_8296_4a07_b7de_250d4e2b95ac
         public readonly InputSlot<float> Bias = new();
 
         [Input(Guid = "7db67f48-5947-422b-8eb3-33d641cc276e")]
-        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> GainBias = new InputSlot<System.Numerics.Vector2>();
 
     }
 }

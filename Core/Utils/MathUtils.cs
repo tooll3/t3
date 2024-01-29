@@ -39,6 +39,18 @@ namespace T3.Core.Utils
             n = (n << 13) ^ n;
             return (float)(1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
         }
+
+        public static float  ApplyGainBias(this float x, float t, float s)
+        {
+            const float eps = 0.0001f;
+            const float r = 200;
+            s *= 2;
+            s = s < 1 ? (MathF.Pow(r, 1 - s)) : 1 / MathF.Pow(r, s - 1);
+            return x < t
+                       ? (t * x) / (x + s * (t - x) + eps)
+                       : ((1 - t) * (x - 1)) / (1 - x - s * (t - x) + eps) + 1;
+        }
+        
         
         public static uint XxHash(uint p)
         {

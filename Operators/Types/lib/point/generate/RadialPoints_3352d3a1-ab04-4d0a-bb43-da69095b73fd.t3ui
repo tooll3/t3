@@ -128,7 +128,7 @@
       "Format": "{0:0.000}°"
     },
     {
-      "InputId": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*BiasAndGain*/,
+      "InputId": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*GainBias*/,
       "Position": {
         "X": -153.38249,
         "Y": 1561.6694
