@@ -212,10 +212,7 @@ namespace T3.Core.Operator.Slots
 
         public bool IsConnected => InputConnection.Count > 0;
 
-        public ISlot GetConnection(int index)
-        {
-            return InputConnection[index];
-        }
+        public ISlot FirstConnection => _inputConnection[0];
 
         private List<Slot<T>> _inputConnection = new();
 
@@ -223,39 +220,37 @@ namespace T3.Core.Operator.Slots
 
         public virtual int Invalidate()
         {
-            if (DirtyFlag.IsAlreadyInvalidated || DirtyFlag.HasBeenVisited)
-                return DirtyFlag.Target;
+            // reduce the number of method (property) calls
+            var dirtyFlag = DirtyFlag;
+            if (dirtyFlag.IsAlreadyInvalidated || dirtyFlag.HasBeenVisited)
+                return dirtyFlag.Target;
 
             // reduce the number of method (property) calls
             var connected = IsConnected;
-            
-            if (_isInputSlot)
+            var trigger = dirtyFlag.Trigger;
+
+            if (connected)
             {
-                if (connected)
-                {
-                    DirtyFlag.Target = GetConnection(0).Invalidate();
-                }
-                else if (DirtyFlag.Trigger != DirtyFlagTrigger.None)
-                {
-                    DirtyFlag.Invalidate();
-                }
+                dirtyFlag.Target = FirstConnection.Invalidate();
             }
-            else if (connected)
+            else if (_isInputSlot)
             {
-                // slot is an output of an composition op
-                DirtyFlag.Target = GetConnection(0).Invalidate();
+                if(trigger != DirtyFlagTrigger.None)
+                    dirtyFlag.Invalidate();
             }
-            
             else
             {
-                Instance parent = Parent;
+                var parentInputs = Parent.Inputs;
                 
                 
-                bool outputDirty = DirtyFlag.IsDirty;
-                foreach (var input in parent.Inputs)
+                bool outputDirty = dirtyFlag.IsDirty;
+                foreach (var input in parentInputs)
                 {
+                    // reduce the number of method (property) calls
+                    var inputFlag = input.DirtyFlag;
                     if (input.IsConnected)
                     {
+                        int target;
                         if (input.TryGetAsMultiInput(out var multiInput))
                         {
                             // NOTE: In situations with extremely large graphs (1000 of instances)
@@ -263,55 +258,43 @@ namespace T3.Core.Operator.Slots
                             // to limit the invalidation to "active" parts of the subgraph. The [Switch]
                             // operator defines this list.
                             var multiInputLimitList = multiInput.LimitMultiInputInvalidationToIndices;
-                            if (multiInputLimitList.Count > 0)
-                            {
-                                var dirtySum = 0;
-                                var index = 0;
-                                
-                                foreach (var entry in multiInput.GetCollectedInputs())
-                                {
-                                    if (!multiInputLimitList.Contains(index++))
-                                        continue;
-                                    
-                                    dirtySum += entry.Invalidate();
-                                }
+                            var hasLimitList = multiInputLimitList.Count > 0;
 
-                                input.DirtyFlag.Target = dirtySum;
-                                
-                            }
-                            else
+                            var collectedInputs = multiInput.GetCollectedInputs();
+                            var collectedCount = collectedInputs.Count;
+                            target = 0;
+                            for (var i = 0; i < collectedCount; i++)
                             {
-                                int dirtySum = 0;
-                                foreach (var entry in multiInput.GetCollectedInputs())
-                                {
-                                    dirtySum += entry.Invalidate();
-                                }
+                                if (hasLimitList && !multiInputLimitList.Contains(i))
+                                    continue;
 
-                                input.DirtyFlag.Target = dirtySum;
+                                target += collectedInputs[i].Invalidate();
                             }
                         }
                         else
                         {
-                            input.DirtyFlag.Target = input.GetConnection(0).Invalidate();
+                            target = input.FirstConnection.Invalidate();
                         }
+                        
+                        inputFlag.Target = target;
                     }
-                    else if ((input.DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
+                    else if ((inputFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
                     {
-                        input.DirtyFlag.Invalidate();
+                        inputFlag.Invalidate();
                     }
 
-                    input.DirtyFlag.SetVisited();
-                    outputDirty |= input.DirtyFlag.IsDirty;
+                    inputFlag.SetVisited();
+                    outputDirty |= inputFlag.IsDirty;
                 }
 
-                if (outputDirty || (DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
+                if (outputDirty || (trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
                 {
                     DirtyFlag.Invalidate();
                 }
             }
 
-            DirtyFlag.SetVisited();
-            return DirtyFlag.Target;
+            dirtyFlag.SetVisited();
+            return dirtyFlag.Target;
         }
 
         private Action<EvaluationContext> _updateAction;

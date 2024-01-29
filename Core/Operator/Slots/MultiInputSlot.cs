@@ -25,7 +25,7 @@ namespace T3.Core.Operator.Slots
             return CollectedInputs;
         }
 
-        public IEnumerable<ISlot> GetCollectedInputs()
+        public IReadOnlyList<ISlot> GetCollectedInputs()
         {
             return GetCollectedTypedInputs();
         }

@@ -207,11 +207,11 @@ internal static class Structure
             if (!slot.IsConnected)
                 return;
 
-            CollectSlotDependencies(slot.GetConnection(0), all);
+            CollectSlotDependencies(slot.FirstConnection, all);
         }
         else if (slot.IsConnected)
         {
-            CollectSlotDependencies(slot.GetConnection(0), all);
+            CollectSlotDependencies(slot.FirstConnection, all);
         }
         else
         {
@@ -229,7 +229,7 @@ internal static class Structure
                     }
                     else
                     {
-                        var target = input.GetConnection(0);
+                        var target = input.FirstConnection;
                         CollectSlotDependencies(target, all);
                     }
                 }

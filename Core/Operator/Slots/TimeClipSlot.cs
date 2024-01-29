@@ -105,7 +105,7 @@ namespace T3.Core.Operator.Slots
             // Slot is an output of an composition op
             if (IsConnected)
             {
-                DirtyFlag.Target = GetConnection(0).Invalidate();
+                DirtyFlag.Target = FirstConnection.Invalidate();
             }
             else
             {
@@ -117,7 +117,7 @@ namespace T3.Core.Operator.Slots
                     {
                         if (inputSlot.IsConnected)
                         {
-                            inputSlot.DirtyFlag.Target = inputSlot.GetConnection(0).Invalidate();
+                            inputSlot.DirtyFlag.Target = inputSlot.FirstConnection.Invalidate();
                         }
                         else if ((inputSlot.DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
                         {

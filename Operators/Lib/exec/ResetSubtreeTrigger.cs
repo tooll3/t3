@@ -34,7 +34,7 @@ namespace lib.exec
             if (slot.IsConnected)
             {
                 // slot is an output of an composition op
-                slot.DirtyFlag.Target = Invalidate(slot.GetConnection(0));
+                slot.DirtyFlag.Target = Invalidate(slot.FirstConnection);
             }
             else
             {
@@ -44,9 +44,8 @@ namespace lib.exec
                 {
                     if (input.IsConnected)
                     {
-                        if (input.IsMultiInput)
+                        if (input.TryGetAsMultiInput(out var multiInput))
                         {
-                            var multiInput = (IMultiInputSlot)input;
                             int dirtySum = 0;
                             foreach (var entry in multiInput.GetCollectedInputs())
                             {
@@ -57,7 +56,7 @@ namespace lib.exec
                         }
                         else
                         {
-                            input.DirtyFlag.Target = Invalidate(input.GetConnection(0));
+                            input.DirtyFlag.Target = Invalidate(input.FirstConnection);
                         }
                     }
                     else

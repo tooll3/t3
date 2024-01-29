@@ -245,7 +245,7 @@ namespace T3.Editor.Gui.Graph
             {
                 if (slot.IsConnected)
                 {
-                    RecursivelyCollectExportData(slot.GetConnection(0), exportInfo);
+                    RecursivelyCollectExportData(slot.FirstConnection, exportInfo);
                 }
 
                 CheckInputForResourcePath(slot, exportInfo);
@@ -255,7 +255,7 @@ namespace T3.Editor.Gui.Graph
             if (slot.IsConnected)
             {
                 // slot is an output of an composition op
-                RecursivelyCollectExportData(slot.GetConnection(0), exportInfo);
+                RecursivelyCollectExportData(slot.FirstConnection, exportInfo);
                 exportInfo.TryAddInstance(slot.Parent);
                 return;
             }
@@ -281,7 +281,7 @@ namespace T3.Editor.Gui.Graph
                 }
                 else
                 {
-                    RecursivelyCollectExportData(input.GetConnection(0), exportInfo);
+                    RecursivelyCollectExportData(input.FirstConnection, exportInfo);
                 }
             }
         }
