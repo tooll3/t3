@@ -15,7 +15,7 @@ StructuredBuffer<Point> RailPoints : t0;
 StructuredBuffer<Point> ShapePoints : t1;
 
 RWStructuredBuffer<PbrVertex> Vertices : u0;
-RWStructuredBuffer<int3> TriangleIndices : u1;
+RWStructuredBuffer<int4> TriangleIndices : u1;
 
 
 
@@ -83,16 +83,16 @@ void main(uint3 i : SV_DispatchThreadID)
         {
             if (columnIndex < columns - 1 && rowIndex < rows - 1) 
             {
-                TriangleIndices[faceIndex + 0] = int3(0, 0, 0);
-                TriangleIndices[faceIndex + 1] = int3(0, 0, 0);
-                TriangleIndices[faceIndex + 1] = int3(0, 0, 0);
+                TriangleIndices[faceIndex + 0] = int4(0, 0, 0, 0);
+                TriangleIndices[faceIndex + 1] = int4(0, 0, 0, 0);
+                //TriangleIndices[faceIndex + 1] = int4(0, 0, 0, 0); //commented duplicate line
             }
              if(isnan(railPoint.W ) || isnan(shapePoint.W) )
                  Vertices[vertexIndex].Position = float3(0,0,0);
             return;
         }        
-        TriangleIndices[faceIndex + 0] = int3(vertexIndex+1, vertexIndex + rows, vertexIndex );
-        TriangleIndices[faceIndex + 1] = int3(vertexIndex + 1, vertexIndex + rows+1, vertexIndex + rows);
+        TriangleIndices[faceIndex + 0] = int4(vertexIndex + 1, vertexIndex + rows, vertexIndex, 0);
+        TriangleIndices[faceIndex + 1] = int4(vertexIndex + 1, vertexIndex + rows + 1, vertexIndex + rows, 0);
     }
 }
 
