@@ -320,6 +320,11 @@ namespace T3.Editor.UiModel
         {
             _forceUnmodified = true;
         }
+        
+        public void DisableForceUnmodified()
+        {
+            _forceUnmodified = false;
+        }
     }
 
     public static class SymbolUiRegistry
