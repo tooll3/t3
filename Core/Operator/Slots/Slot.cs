@@ -214,9 +214,8 @@ namespace T3.Core.Operator.Slots
 
         public ISlot FirstConnection => _inputConnection[0];
 
-        private List<Slot<T>> _inputConnection = new();
-
-        public List<Slot<T>> InputConnection => _inputConnection;
+        private readonly List<Slot<T>> _inputConnection = new();
+        protected List<Slot<T>> InputConnection => _inputConnection;
 
         public virtual int Invalidate()
         {
