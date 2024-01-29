@@ -47,7 +47,10 @@
         "X": -406.7303,
         "Y": 436.7386
       },
-      "Scale": 0.001
+      "Min": -1.0,
+      "Max": 1.0,
+      "Scale": 0.001,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,

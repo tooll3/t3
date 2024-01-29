@@ -569,11 +569,6 @@
           }
         },
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
-          "Type": "System.Single",
-          "Value": 76.6
-        },
-        {
           "Id": "8f439130-529c-42ff-a5c0-255476120f03"/*Direction*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -583,14 +578,14 @@
           }
         },
         {
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Type": "System.Single",
+          "Value": 76.6
+        },
+        {
           "Id": "d120d8f7-aff6-4e30-b0d2-c45e3e477fde"/*W*/,
           "Type": "System.Single",
           "Value": 3.1999998
-        },
-        {
-          "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
-          "Type": "System.Single",
-          "Value": 0.0
         },
         {
           "Id": "83986e05-af3e-469f-a656-9956d37d12ba"/*Orientation*/,
@@ -610,6 +605,11 @@
           "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
           "Type": "System.Single",
           "Value": -90.0
+        },
+        {
+          "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
+          "Type": "System.Single",
+          "Value": 0.0
         }
       ],
       "Outputs": []

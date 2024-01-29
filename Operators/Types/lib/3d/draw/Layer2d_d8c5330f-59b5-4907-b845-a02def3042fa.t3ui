@@ -6,7 +6,10 @@
       "Position": {
         "X": -445.3646,
         "Y": 644.05896
-      }
+      },
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "4ac0a4d8-367c-4ece-9c1d-7abfbb2bfe27"/*PositionZ*/,
@@ -31,7 +34,8 @@
         "X": -455.79684,
         "Y": 857.9977
       },
-      "AddPadding": "True"
+      "AddPadding": "True",
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "38f34034-b36f-4351-84e1-1a4f96e03fc6"/*Scale*/,

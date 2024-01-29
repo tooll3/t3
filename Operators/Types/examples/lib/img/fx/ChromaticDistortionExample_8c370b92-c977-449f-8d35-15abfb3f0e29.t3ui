@@ -10,7 +10,7 @@
       }
     },
     {
-      "ChildId": "205400b5-7d79-4ae6-b1fa-3d9ae6501e16"/*FractalNoise*/,
+      "ChildId": "205400b5-7d79-4ae6-b1fa-3d9ae6501e16"/*_FractalNoiseOld*/,
       "Position": {
         "X": 130.0,
         "Y": 0.0

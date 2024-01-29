@@ -3,51 +3,48 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_97eb35ec_2825_4f63_8fdf_3fe38fa9e652
+namespace T3.Operators.Types.Id_5a0b0485_7a55_4bf4_ae23_04f51d890334
 {
     public class FractalNoise : Instance<FractalNoise>
     {
-        [Output(Guid = "bfce8bf6-9ef3-4fdb-8c6e-21aa65485f14")]
+        [Output(Guid = "c85e033e-794c-4943-bf5d-545555df9360")]
         public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
 
-        [Input(Guid = "3b2533d8-b929-4367-8418-cba3f9c3db43")]
-        public readonly InputSlot<string> PixelShaderPath = new();
+        [Input(Guid = "091aaf77-46f4-4aeb-aaa8-f11fe34e8a7f")]
+        public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();
 
-        [Input(Guid = "6fe3a975-6bb5-4cf1-9a24-6cf04ac800b6")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorA = new();
+        [Input(Guid = "1c5670bf-c794-4bad-bf52-94a1c715f04c")]
+        public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();
 
-        [Input(Guid = "a966d9a1-b36f-4f85-b918-8651ea7d055d")]
-        public readonly InputSlot<System.Numerics.Vector4> ColorB = new();
+        [Input(Guid = "ca5da68e-9c64-4331-b434-79bb139c6d3e")]
+        public readonly InputSlot<System.Numerics.Vector2> GainBias = new InputSlot<System.Numerics.Vector2>();
 
-        [Input(Guid = "06241d83-1ff8-460a-b363-db3204384838")]
-        public readonly InputSlot<System.Numerics.Vector2> Offset = new();
+        [Input(Guid = "751f9a41-d97f-4e04-8338-cebe9be88c5a")]
+        public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();
 
-        [Input(Guid = "2381e8e4-a4e5-4691-9059-3b2096146970")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
+        [Input(Guid = "31e06af8-15be-4923-b5c6-c0e4bedc3347")]
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
 
-        [Input(Guid = "59bde7a3-0952-46a8-8285-40f0a00488e6")]
-        public readonly InputSlot<float> Scale = new();
+        [Input(Guid = "34c1dc46-8001-47d4-b9d1-b4d0816a2294")]
+        public readonly InputSlot<float> Scale = new InputSlot<float>();
 
-        [Input(Guid = "4de046cc-26d7-466f-90b4-3a3bdd59acb3")]
-        public readonly InputSlot<float> Phase = new();
+        [Input(Guid = "2238e8c8-6bf8-4d3f-be5e-3291b6dc1441")]
+        public readonly InputSlot<float> Phase = new InputSlot<float>();
 
-        [Input(Guid = "0e3d1c9f-d0aa-4765-a0ab-d8292a981368")]
-        public readonly InputSlot<float> Bias = new();
+        [Input(Guid = "c5f42436-432c-4d18-8bc2-f7f0772442f8")]
+        public readonly InputSlot<int> Iterations = new InputSlot<int>();
 
-        [Input(Guid = "37b24ceb-2d25-43e8-a31c-7caf62c2b7ee")]
-        public readonly InputSlot<Int2> Resolution = new();
+        [Input(Guid = "6252840d-113a-416d-af7d-7c39e435f068")]
+        public readonly InputSlot<System.Numerics.Vector2> WarpXY = new InputSlot<System.Numerics.Vector2>();
 
-        [Input(Guid = "120f0ce7-8560-477d-8e71-5bcbeae932c0")]
-        public readonly InputSlot<System.Numerics.Vector3> WarpOffset = new();
+        [Input(Guid = "c8eda097-f139-464c-8573-b08220b3b2c8")]
+        public readonly InputSlot<float> WarpZ = new InputSlot<float>();
 
-        [Input(Guid = "6ae1817e-eeeb-4bc9-802f-00fc26303023")]
-        public readonly InputSlot<int> Iterations = new();
+        [Input(Guid = "1d7d99e6-4306-4ebc-97b4-40fcb2abb4d0")]
+        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
 
-        [Input(Guid = "270f9603-1d9b-412b-9c76-330eafc8a958", MappedType = typeof(Methods))]
-        public readonly InputSlot<int> Method = new();
-
-        [Input(Guid = "0512491d-3022-48c2-b79d-4688ff18fd0e")]
-        public readonly InputSlot<bool> GenerateMips = new();
+        [Input(Guid = "41fc212b-d221-4467-a955-4f8ea63a776f")]
+        public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
 
 
         private enum Methods

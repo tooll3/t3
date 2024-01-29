@@ -451,11 +451,6 @@
           "Value": 0.0
         },
         {
-          "Id": "ddc2ea6a-d356-46c9-b333-4cce69c02570"/*AddSeparator*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
           "Id": "4d45a633-ac00-4cbe-83a3-43c419c3da97"/*ColorB*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -464,6 +459,11 @@
             "Z": 1.0,
             "W": 0.0
           }
+        },
+        {
+          "Id": "ddc2ea6a-d356-46c9-b333-4cce69c02570"/*AddSeparator*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []

@@ -26,10 +26,22 @@
     {
       "InputId": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
       "Position": {
+        "X": -438.90158,
+        "Y": 425.33575
+      },
+      "AddPadding": "True",
+      "Scale": 0.01,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
+      "Position": {
         "X": -437.7634,
         "Y": 492.487
       },
-      "Scale": 0.01
+      "GroupTitle": "Font & Size",
+      "Usage": "FilePath",
+      "FileFilter": "Fonts (*.fnt)|*.fnt"
     },
     {
       "InputId": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
@@ -42,55 +54,50 @@
       "Scale": 1.0
     },
     {
+      "InputId": "835d7f17-9de4-4612-a2f0-01c1346cdf1a"/*Spacing*/,
+      "Position": {
+        "X": -440.03976,
+        "Y": 613.9148
+      },
+      "Min": -10.0,
+      "Max": 10.0,
+      "Scale": 0.1
+    },
+    {
       "InputId": "eaf9dc37-e70f-4197-895c-b5607456b4a2"/*LineHeight*/,
       "Position": {
-        "X": -437.7634,
-        "Y": 582.487
+        "X": -448.00687,
+        "Y": 698.57904
       }
     },
     {
       "InputId": "ae7f7e83-fa18-44fd-b639-3bd0dbd3ac06"/*VerticalAlign*/,
       "Position": {
-        "X": -437.7634,
-        "Y": 627.487
-      }
+        "X": -448.00687,
+        "Y": 743.57904
+      },
+      "GroupTitle": "Alignment"
     },
     {
       "InputId": "82cc31ff-3307-4b6d-be70-16e471c2ffc9"/*HorizontalAlign*/,
       "Position": {
-        "X": -437.7634,
-        "Y": 672.4871
+        "X": -448.00687,
+        "Y": 788.57916
       }
-    },
-    {
-      "InputId": "835d7f17-9de4-4612-a2f0-01c1346cdf1a"/*Spacing*/,
-      "Position": {
-        "X": -437.7634,
-        "Y": 717.4871
-      },
-      "Scale": 0.1
-    },
-    {
-      "InputId": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-      "Position": {
-        "X": -437.7634,
-        "Y": 762.48706
-      },
-      "Usage": "FilePath",
-      "FileFilter": "Fonts (*.fnt)|*.fnt"
     },
     {
       "InputId": "28be4e86-6761-4d07-80bf-abf6f82897e4"/*CullMode*/,
       "Position": {
-        "X": -437.7634,
-        "Y": 807.48706
-      }
+        "X": -425.24368,
+        "Y": 989.59216
+      },
+      "GroupTitle": "Draw Options"
     },
     {
       "InputId": "7a76d5aa-1f44-4238-9333-7c2951becc31"/*EnableZTest*/,
       "Position": {
-        "X": -437.7634,
-        "Y": 852.48706
+        "X": -425.24368,
+        "Y": 1034.5922
       }
     }
   ],

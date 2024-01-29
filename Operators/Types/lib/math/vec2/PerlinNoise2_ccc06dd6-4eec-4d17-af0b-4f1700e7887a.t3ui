@@ -3,10 +3,10 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "c1ffdc20-7c90-49f9-8deb-f0a415e130c8"/*Seed*/,
+      "InputId": "f294c517-7427-4c14-a397-4605bffc52a4"/*OverrideTime*/,
       "Position": {
         "X": -2.7436478,
-        "Y": -99.55521
+        "Y": -144.5552
       }
     },
     {
@@ -14,7 +14,8 @@
       "Position": {
         "X": -2.7436478,
         "Y": -54.555206
-      }
+      },
+      "GroupTitle": "Complexity"
     },
     {
       "InputId": "cbcbce93-8c8d-41ed-b91b-9e3583c5a3b5"/*Octaves*/,
@@ -28,7 +29,8 @@
       "Position": {
         "X": -2.7436478,
         "Y": 35.444794
-      }
+      },
+      "GroupTitle": "Output Range"
     },
     {
       "InputId": "dae5b55c-0c30-4ee9-a535-7654b8357669"/*RangeMax*/,
@@ -52,11 +54,23 @@
       }
     },
     {
-      "InputId": "f294c517-7427-4c14-a397-4605bffc52a4"/*OverrideTime*/,
+      "InputId": "c6e1170e-ae4f-44ae-aaab-e1aeb8f86997"/*GainBias*/,
       "Position": {
         "X": -2.7436478,
-        "Y": -144.5552
-      }
+        "Y": 170.4448
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "UseVec2Control": "GainBias"
+    },
+    {
+      "InputId": "c1ffdc20-7c90-49f9-8deb-f0a415e130c8"/*Seed*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": -99.55521
+      },
+      "GroupTitle": "Options"
     }
   ],
   "SymbolChildUis": [],

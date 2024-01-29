@@ -3,14 +3,6 @@
   "Description": "Generates a procedural three-dimensional mesh which can be rendered with [DrawMesh] , [DrawMeshUnlit] and [DrawMeshHatched] among others.\n\nThis mesh can be generated with or without closing caps. You can use the Height, Fill, and RadiusOffset parameters to generate things like pie charts, torus diagrams, cones, and other shapes.\nCheck the presets.\n\nTip:\n- set the cap segments to 0 to skip drawing caps.\nAlso see [NGonMesh]\n\nFor a simple and interactive tutorial on the Tooll3 rendering pipeline, see [HowToDrawThings].\n\nIt can also become the source for a particle system with [MeshVerticesToPoints] or [PointsOnMesh].\nTo import static 3D meshes from other programs refer to [LoadObj].\n\n",
   "InputUis": [
     {
-      "InputId": "66332a91-e0c2-442a-99f6-347dedaed72e"/*Center*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      },
-      "AddPadding": "True"
-    },
-    {
       "InputId": "8d290afb-2574-4afa-a545-a0d3588f89f6"/*Radius*/,
       "Position": {
         "X": -200.0,
@@ -55,6 +47,15 @@
       "Description": "Defines the subdivisions of the outer surface"
     },
     {
+      "InputId": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      },
+      "Description": "Creates subdivisions on the top and bottom sides",
+      "AddPadding": "True"
+    },
+    {
       "InputId": "c29b5881-85bc-4d29-bc72-6dd36730fa8f"/*Spin*/,
       "Position": {
         "X": -200.0,
@@ -92,6 +93,14 @@
       "Format": "{0:0.0}°"
     },
     {
+      "InputId": "66332a91-e0c2-442a-99f6-347dedaed72e"/*Center*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "AddPadding": "True"
+    },
+    {
       "InputId": "6ddf5966-9140-4bea-a56b-20690f9f436f"/*BasePivot*/,
       "Position": {
         "X": -200.0,
@@ -101,15 +110,6 @@
       "Description": "Offsets the position of the pivotpoint (center).\n\nThis is helpful to change the point around which the cube rotates / along which it is scaled.",
       "Min": 0.0,
       "Max": 1.0
-    },
-    {
-      "InputId": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 315.0
-      },
-      "Description": "Creates subdivisions on the top and bottom sides",
-      "AddPadding": "True"
     },
     {
       "InputId": "4c7e0f67-a35b-4a23-b640-b0375c1a3259"/*Rotation*/,

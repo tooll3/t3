@@ -191,7 +191,7 @@
       "Outputs": []
     },
     {
-      "Id": "69f29f5a-4993-428a-8367-ec93d4700f8e"/*FractalNoise*/,
+      "Id": "69f29f5a-4993-428a-8367-ec93d4700f8e"/*_FractalNoiseOld*/,
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [
         {
@@ -1939,7 +1939,7 @@
       "Outputs": []
     },
     {
-      "Id": "b1fa2da6-d068-49d1-8515-f9bcf2faaa97"/*FractalNoise*/,
+      "Id": "b1fa2da6-d068-49d1-8515-f9bcf2faaa97"/*_FractalNoiseOld*/,
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [
         {

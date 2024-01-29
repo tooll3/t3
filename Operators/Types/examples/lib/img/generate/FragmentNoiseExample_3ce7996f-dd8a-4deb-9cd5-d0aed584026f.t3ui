@@ -3,7 +3,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "59b00117-0a8f-4f2a-a0c3-2466409368ee"/*FractalNoise*/,
+      "ChildId": "59b00117-0a8f-4f2a-a0c3-2466409368ee"/*_FractalNoiseOld*/,
       "Position": {
         "X": 130.37823,
         "Y": 0.0
@@ -31,7 +31,7 @@
       }
     },
     {
-      "ChildId": "3ddef1f6-15f9-46e3-9f51-2b3ea47ae62e"/*FractalNoise*/,
+      "ChildId": "3ddef1f6-15f9-46e3-9f51-2b3ea47ae62e"/*_FractalNoiseOld*/,
       "Position": {
         "X": 129.99997,
         "Y": 126.0961

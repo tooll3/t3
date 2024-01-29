@@ -19,60 +19,63 @@
       "Description": "Additional color that gets multiplied on result of mesh material settings."
     },
     {
-      "InputId": "9c17fa15-35f1-49d4-802f-a3a796cad96a"/*BlendMode*/,
+      "InputId": "4748d9ab-58a4-41d7-a2ee-6f7dfed86211"/*AlphaCutOff*/,
       "Position": {
         "X": 1359.0396,
         "Y": 4125.268
+      },
+      "GroupTitle": "Blending"
+    },
+    {
+      "InputId": "9c17fa15-35f1-49d4-802f-a3a796cad96a"/*BlendMode*/,
+      "Position": {
+        "X": 1368.9131,
+        "Y": 4173.2256
       }
+    },
+    {
+      "InputId": "2c4b5f3a-e9ec-432e-b1ae-6d999ae44f1b"/*FillMode*/,
+      "Position": {
+        "X": 1368.9131,
+        "Y": 4263.2256
+      },
+      "GroupTitle": "Draw Style"
     },
     {
       "InputId": "9e957f4a-6502-4905-8d97-331f8b54097c"/*Culling*/,
       "Position": {
-        "X": 1359.0396,
-        "Y": 4170.268
+        "X": 1361.8606,
+        "Y": 4324.013
       }
     },
     {
       "InputId": "b50b3fc7-35e1-421d-be0a-b3008a54c33c"/*EnableZTest*/,
       "Position": {
-        "X": 1359.0396,
-        "Y": 4215.268
+        "X": 1361.8606,
+        "Y": 4369.013
       },
       "Description": "If enabled discards fragments sorted out by by z-buffer."
     },
     {
       "InputId": "dfad3400-885a-4f83-8c39-ec6520f4e2aa"/*EnableZWrite*/,
       "Position": {
-        "X": 1359.0396,
-        "Y": 4260.268
-      }
-    },
-    {
-      "InputId": "4748d9ab-58a4-41d7-a2ee-6f7dfed86211"/*AlphaCutOff*/,
-      "Position": {
-        "X": 1359.0396,
-        "Y": 4305.268
-      }
-    },
-    {
-      "InputId": "2c4b5f3a-e9ec-432e-b1ae-6d999ae44f1b"/*FillMode*/,
-      "Position": {
-        "X": 1359.0396,
-        "Y": 4350.268
+        "X": 1361.8606,
+        "Y": 4414.013
       }
     },
     {
       "InputId": "155c2396-0e05-4437-8171-288048b1158a"/*Filter*/,
       "Position": {
-        "X": 1359.0396,
-        "Y": 4395.268
-      }
+        "X": 1361.8606,
+        "Y": 4549.013
+      },
+      "GroupTitle": "Texture Options"
     },
     {
-      "InputId": "d1db33ea-1739-4323-9105-7b236a0e240f"/*AddressU*/,
+      "InputId": "d1db33ea-1739-4323-9105-7b236a0e240f"/*TextureWrap*/,
       "Position": {
-        "X": 1359.0396,
-        "Y": 4440.268
+        "X": 1361.8606,
+        "Y": 4594.013
       }
     }
   ],

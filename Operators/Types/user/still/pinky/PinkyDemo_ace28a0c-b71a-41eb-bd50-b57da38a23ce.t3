@@ -3904,11 +3904,6 @@
           "Value": 31
         },
         {
-          "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
-          "Type": "System.Single",
-          "Value": -288.0
-        },
-        {
           "Id": "a8dfe0e7-ad33-47cf-ab78-726385e38434"/*OrientationAxis*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -3921,6 +3916,11 @@
           "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
           "Type": "System.Single",
           "Value": -208.0
+        },
+        {
+          "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
+          "Type": "System.Single",
+          "Value": -288.0
         }
       ],
       "Outputs": []

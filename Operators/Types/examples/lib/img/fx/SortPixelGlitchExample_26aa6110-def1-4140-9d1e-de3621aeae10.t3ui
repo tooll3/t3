@@ -11,7 +11,7 @@
       }
     },
     {
-      "ChildId": "10805a87-b1d0-440d-b6de-39dc998e6e5b"/*FractalNoise*/,
+      "ChildId": "10805a87-b1d0-440d-b6de-39dc998e6e5b"/*_FractalNoiseOld*/,
       "Position": {
         "X": 1116.6802,
         "Y": 916.4739
@@ -172,7 +172,7 @@
       }
     },
     {
-      "ChildId": "c5c36aea-ed63-4f84-98ab-a33de3581392"/*FractalNoise*/,
+      "ChildId": "c5c36aea-ed63-4f84-98ab-a33de3581392"/*_FractalNoiseOld*/,
       "Position": {
         "X": 966.6802,
         "Y": 537.4739
@@ -305,7 +305,7 @@
       }
     },
     {
-      "ChildId": "0e463813-aa5e-4818-9d39-c0bec21e7f38"/*FractalNoise*/,
+      "ChildId": "0e463813-aa5e-4818-9d39-c0bec21e7f38"/*_FractalNoiseOld*/,
       "Position": {
         "X": 1618.5869,
         "Y": 178.49066

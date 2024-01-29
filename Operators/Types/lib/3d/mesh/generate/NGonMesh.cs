@@ -167,6 +167,12 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
 
         private readonly MeshBuffers _data = new();
 
+        [Input(Guid = "33921c65-61bc-4229-af8c-c89db9a874bf")]
+        public readonly InputSlot<int> Segments = new();
+        
+        [Input(Guid = "9dbf0c3d-4762-41f6-94b8-26acbd1531c1")]
+        public readonly InputSlot<float> Radius = new();
+        
         [Input(Guid = "deee0efc-949e-41da-bdb1-d80dbb6ac6e2")]
         public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
 
@@ -175,12 +181,6 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
 
         [Input(Guid = "b819ad07-6229-4b8d-b8b6-a2a89b7c81d8")]
         public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
-
-        [Input(Guid = "33921c65-61bc-4229-af8c-c89db9a874bf")]
-        public readonly InputSlot<int> Segments = new();
-
-        [Input(Guid = "9dbf0c3d-4762-41f6-94b8-26acbd1531c1")]
-        public readonly InputSlot<float> Radius = new();
 
         [Input(Guid = "d85761fb-3c82-4785-a2a2-4b111230e4ee", MappedType = typeof(NGonMesh.TextureModes))]
         public readonly InputSlot<int> TextureMode = new();

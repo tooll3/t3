@@ -1,12 +1,8 @@
 {
-  "Name": "FractalNoise",
+  "Name": "_FractalNoiseOld",
   "Id": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
   "Namespace": "lib.img.generate",
   "Inputs": [
-    {
-      "Id": "3b2533d8-b929-4367-8418-cba3f9c3db43"/*PixelShaderPath*/,
-      "DefaultValue": "Resources\\lib\\img\\generate\\noiseLab.hlsl"
-    },
     {
       "Id": "6fe3a975-6bb5-4cf1-9a24-6cf04ac800b6"/*ColorA*/,
       "DefaultValue": {
@@ -111,7 +107,7 @@
         {
           "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\noiseLab.hlsl"
+          "Value": "Resources\\lib\\img\\generate\\FractalNoiseOld.hlsl"
         },
         {
           "Id": "480d6c19-a33c-48b3-b9fa-aaf8bd31e6d9"/*GenerateMips*/,

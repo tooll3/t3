@@ -1,15 +1,7 @@
 {
-  "Id": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652"/*FractalNoise*/,
+  "Id": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652"/*_FractalNoiseOld*/,
   "Description": "Generates animated 2D Perlin noise. \n\nNOTE: The legacy version is very resource-intensive at higher resolutions and might not run in real-time at 1080p.\nThe OpenSimplex is a faster implementation from 'https://www.shadertoy.com/view/ttdGR8'.",
   "InputUis": [
-    {
-      "InputId": "3b2533d8-b929-4367-8418-cba3f9c3db43"/*PixelShaderPath*/,
-      "Position": {
-        "X": -141.47092,
-        "Y": -112.28263
-      },
-      "Usage": "FilePath"
-    },
     {
       "InputId": "6fe3a975-6bb5-4cf1-9a24-6cf04ac800b6"/*ColorA*/,
       "Position": {
@@ -31,7 +23,8 @@
         "Y": 147.01015
       },
       "Min": -0.5,
-      "Max": 0.5
+      "Max": 0.5,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "2381e8e4-a4e5-4691-9059-3b2096146970"/*Stretch*/,
@@ -40,14 +33,18 @@
         "Y": 192.01015
       },
       "Min": 0.0,
-      "Max": 10.0
+      "Max": 10.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "59bde7a3-0952-46a8-8285-40f0a00488e6"/*Scale*/,
       "Position": {
         "X": -164.5605,
         "Y": 231.61404
-      }
+      },
+      "Min": 0.0,
+      "Max": 5.0,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "4de046cc-26d7-466f-90b4-3a3bdd59acb3"/*Phase*/,
