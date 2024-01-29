@@ -5,8 +5,7 @@ namespace T3.Core.Model;
 
 public class StaticSymbolPackage : SymbolPackage
 {
-    
-    public StaticSymbolPackage(AssemblyInformation assembly, bool initializeFileWatcher)
+    protected StaticSymbolPackage(AssemblyInformation assembly, bool initializeFileWatcher)
     {
         AssemblyInformation = assembly;
         if (initializeFileWatcher)

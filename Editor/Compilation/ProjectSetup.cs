@@ -26,11 +26,14 @@ internal static class ProjectSetup
 
         if (NeedsUserProject)
         {
-            var success = !TryCreateProject(name, out var project);
-            NeedsUserProject = success;
-            if (success)
+            if (TryCreateProject(name, out var project))
             {
                 EditableSymbolProjectsRw.Add(project);
+                NeedsUserProject = false;
+            }
+            else
+            {
+                NeedsUserProject = true;
             }
         }
         else
