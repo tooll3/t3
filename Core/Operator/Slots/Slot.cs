@@ -14,7 +14,6 @@ namespace T3.Core.Operator.Slots
         public DirtyFlag DirtyFlag { get; set; } = new();
         
         public T Value; // { get; set; }
-        public bool IsMultiInput { get; protected set; } = false;
 
         protected bool _isDisabled;
 
@@ -42,6 +41,12 @@ namespace T3.Core.Operator.Slots
             }
 
             _isDisabled = shouldBeDisabled;
+        }
+        
+        public bool TryGetAsMultiInputTyped(out MultiInputSlot<T> multiInput)
+        {
+            multiInput = _thisAsMultiInputSlot;
+            return IsMultiInput;
         }
 
         public virtual bool TrySetBypassToInput(Slot<T> targetSlot)
@@ -105,22 +110,27 @@ namespace T3.Core.Operator.Slots
         {
             // UpdateAction = Update;
             ValueType = typeof(T);
-        }
-
-        public Slot(Action<EvaluationContext> updateAction) : this()
-        {
-            UpdateAction = updateAction;
-        }
-
-        public Slot(Action<EvaluationContext> updateAction, T defaultValue) : this()
-        {
-            UpdateAction = updateAction;
-            Value = defaultValue;
+            if (this is IInputSlot)
+            {
+                _isInputSlot = true;
+            }
         }
 
         public Slot(T defaultValue) : this()
         {
             Value = defaultValue;
+        }
+        
+        // dummy constructor to initialize input slot values
+        // ReSharper disable once UnusedParameter.Local
+        protected Slot(bool _) : this()
+        {
+            _isInputSlot = true;
+            if (this is MultiInputSlot<T> multiInputSlot)
+            {
+                IsMultiInput = true;
+                _thisAsMultiInputSlot = multiInputSlot;
+            }
         }
 
         public void Update(EvaluationContext context)
@@ -221,7 +231,7 @@ namespace T3.Core.Operator.Slots
             if (DirtyFlag.IsAlreadyInvalidated || DirtyFlag.HasBeenVisited)
                 return DirtyFlag.Target;
             
-            if (this is IInputSlot)
+            if (_isInputSlot)
             {
                 if (IsConnected)
                 {
@@ -248,7 +258,7 @@ namespace T3.Core.Operator.Slots
                 {
                     if (input.IsConnected)
                     {
-                        if (input.IsMultiInput)
+                        if (input.TryGetAsMultiInput(out var multiInput))
                         {
                             // NOTE: In situations with extremely large graphs (1000 of instances)
                             // invalidation can become bottle neck. In these cases it might be justified
@@ -256,7 +266,6 @@ namespace T3.Core.Operator.Slots
                             // operator defines this list.
                             if (input.LimitMultiInputInvalidationToIndices != null)
                             {
-                                var multiInput = (IMultiInputSlot)input;
                                 var dirtySum = 0;
                                 var index = 0;
                                 
@@ -273,7 +282,6 @@ namespace T3.Core.Operator.Slots
                             }
                             else
                             {
-                                var multiInput = (IMultiInputSlot)input;
                                 int dirtySum = 0;
                                 foreach (var entry in multiInput.GetCollectedInputs())
                                 {
@@ -313,8 +321,9 @@ namespace T3.Core.Operator.Slots
         protected Action<EvaluationContext> _keepOriginalUpdateAction;
         private DirtyFlagTrigger _keepDirtyFlagTrigger;
         protected Slot<T> _targetInputForBypass;
+        
+        private readonly bool _isInputSlot;
+        public bool IsMultiInput { get; private set; }
+        protected readonly MultiInputSlot<T> _thisAsMultiInputSlot;
     }
-
-    
-    
 }

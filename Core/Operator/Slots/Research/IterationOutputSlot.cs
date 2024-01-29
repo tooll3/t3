@@ -2,7 +2,7 @@
 
 namespace T3.Core.Operator.Slots.Research
 {
-    public class IterationOutputSlot<T> : Slot<T>
+    public sealed class IterationOutputSlot<T> : Slot<T>
     {
         private void UpdateForIteration(EvaluationContext context)
         {

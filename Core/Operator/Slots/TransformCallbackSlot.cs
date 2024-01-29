@@ -4,7 +4,7 @@ using T3.Core.Operator.Interfaces;
 
 namespace T3.Core.Operator.Slots
 {
-    public class TransformCallbackSlot<T> : Slot<T>
+    public sealed class TransformCallbackSlot<T> : Slot<T>
     {
         public ITransformable TransformableOp { get; set; }
 

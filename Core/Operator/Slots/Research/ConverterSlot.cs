@@ -2,7 +2,7 @@ using System;
 
 namespace T3.Core.Operator.Slots.Research
 {
-    public class ConverterSlot<TFrom, TTo> : Slot<TTo>
+    public sealed class ConverterSlot<TFrom, TTo> : Slot<TTo>
     {
         readonly Func<TFrom, TTo> _converterFunc;
 

@@ -8,7 +8,7 @@ namespace T3.Core.Operator.Slots
         public Type MappedType { get; set; }
         public List<int> LimitMultiInputInvalidationToIndices { get; set; }
 
-        public InputSlot(InputValue<T> typedInputValue)
+        public InputSlot(InputValue<T> typedInputValue) : base(true)
         {
             UpdateAction = InputUpdate;
             _keepOriginalUpdateAction = UpdateAction;
@@ -16,14 +16,14 @@ namespace T3.Core.Operator.Slots
             Value = typedInputValue.Value;
         }
 
+        public InputSlot(T value) : this(new InputValue<T>(value))
+        {
+        }
+
         public InputSlot() : this(default(T))
         {
             UpdateAction = InputUpdate;
             _keepOriginalUpdateAction = UpdateAction;
-        }
-
-        public InputSlot(T value) : this(new InputValue<T>(value))
-        {
         }
 
         public void InputUpdate(EvaluationContext context)
@@ -62,6 +62,12 @@ namespace T3.Core.Operator.Slots
             TypedInputValue.Value = newValue;
             Value = newValue;
             DirtyFlag.Invalidate();
+        }
+        
+        public bool TryGetAsMultiInput(out IMultiInputSlot multiInput)
+        {
+            multiInput = _thisAsMultiInputSlot;
+            return IsMultiInput;
         }
 
         public InputValue<T> TypedInputValue;

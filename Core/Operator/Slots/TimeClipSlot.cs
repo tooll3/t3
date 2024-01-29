@@ -20,7 +20,7 @@ namespace T3.Core.Operator.Slots
     {
     }
 
-    public class TimeClipSlot<T> : Slot<T>, ITimeClipProvider, IOutputDataUser<TimeClip>
+    public sealed class TimeClipSlot<T> : Slot<T>, ITimeClipProvider, IOutputDataUser<TimeClip>
     {
         public TimeClip TimeClip { get; private set; }
 

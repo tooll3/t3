@@ -220,10 +220,8 @@ internal static class Structure
             {
                 if (input.IsConnected)
                 {
-                    if (input.IsMultiInput)
+                    if (input.TryGetAsMultiInput(out var multiInput))
                     {
-                        var multiInput = (IMultiInputSlot)input;
-
                         foreach (var entry in multiInput.GetCollectedInputs())
                         {
                             CollectSlotDependencies(entry, all);
