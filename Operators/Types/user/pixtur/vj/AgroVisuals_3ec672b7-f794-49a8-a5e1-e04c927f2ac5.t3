@@ -211,7 +211,7 @@
       "SymbolId": "436e93a8-03c0-4366-8d9a-2245e5bcaa6c",
       "InputValues": [
         {
-          "Id": "e704cf6c-963e-4701-ba3d-127b880676fa"/*Scale*/,
+          "Id": "e704cf6c-963e-4701-ba3d-127b880676fa"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 14.9
         }

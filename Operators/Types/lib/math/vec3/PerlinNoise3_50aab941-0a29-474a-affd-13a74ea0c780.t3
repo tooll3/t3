@@ -8,6 +8,14 @@
       "DefaultValue": 0.0
     },
     {
+      "Id": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "2693cb7d-33b3-4a0c-929f-e6911d2d4a0c"/*Octaves*/,
+      "DefaultValue": 4
+    },
+    {
       "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
       "DefaultValue": 1.0
     },
@@ -18,18 +26,6 @@
         "Y": 1.0,
         "Z": 1.0
       }
-    },
-    {
-      "Id": "1cd2174e-aeb2-4258-8395-a9cc16f276b5"/*Seed*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "2693cb7d-33b3-4a0c-929f-e6911d2d4a0c"/*Octaves*/,
-      "DefaultValue": 4
     },
     {
       "Id": "b4b38d87-f661-4b8b-b978-70bf34152422"/*RangeMin*/,
@@ -46,6 +42,17 @@
         "Y": 1.0,
         "Z": 1.0
       }
+    },
+    {
+      "Id": "b7b95fc2-c73f-4db1-bdab-2445fe62f032"/*GainBias*/,
+      "DefaultValue": {
+        "X": 0.5,
+        "Y": 0.5
+      }
+    },
+    {
+      "Id": "1cd2174e-aeb2-4258-8395-a9cc16f276b5"/*Seed*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

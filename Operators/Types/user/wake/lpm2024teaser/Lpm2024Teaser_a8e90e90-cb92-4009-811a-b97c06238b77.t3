@@ -566,7 +566,7 @@
           "Value": 2
         },
         {
-          "Id": "0abcff87-ace5-4a06-9217-b2caf831ecae"/*Scale*/,
+          "Id": "0abcff87-ace5-4a06-9217-b2caf831ecae"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 4.46
         }
@@ -933,7 +933,7 @@
           "Value": -1.0
         },
         {
-          "Id": "e704cf6c-963e-4701-ba3d-127b880676fa"/*Scale*/,
+          "Id": "e704cf6c-963e-4701-ba3d-127b880676fa"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 0.17
         }

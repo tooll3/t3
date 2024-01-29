@@ -3279,6 +3279,11 @@
           "Value": 160
         },
         {
+          "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
+          "Type": "System.Int32",
+          "Value": 2
+        },
+        {
           "Id": "c29b5881-85bc-4d29-bc72-6dd36730fa8f"/*Spin*/,
           "Type": "System.Single",
           "Value": -710.0
@@ -3287,11 +3292,6 @@
           "Id": "1d1ce8c4-fd3c-4d69-be0e-679247a811c9"/*Twist*/,
           "Type": "System.Single",
           "Value": -339.99997
-        },
-        {
-          "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
-          "Type": "System.Int32",
-          "Value": 2
         }
       ],
       "Outputs": []

@@ -955,7 +955,7 @@
           "Value": 10.0
         },
         {
-          "Id": "e704cf6c-963e-4701-ba3d-127b880676fa"/*Scale*/,
+          "Id": "e704cf6c-963e-4701-ba3d-127b880676fa"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 28.6
         }

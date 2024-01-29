@@ -25,6 +25,20 @@
       }
     },
     {
+      "InputId": "a5731884-2efc-4cfd-a098-4a0b4b6bdd6b"/*AmplitudeXY*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 125.44479
+      }
+    },
+    {
+      "InputId": "0abcff87-ace5-4a06-9217-b2caf831ecae"/*Amplitude*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 125.44479
+      }
+    },
+    {
       "InputId": "d72d0dcf-62d6-498a-838d-88d33d798d4f"/*RangeMin*/,
       "Position": {
         "X": -2.7436478,
@@ -37,20 +51,6 @@
       "Position": {
         "X": -2.7436478,
         "Y": 80.44479
-      }
-    },
-    {
-      "InputId": "a5731884-2efc-4cfd-a098-4a0b4b6bdd6b"/*ScaleXY*/,
-      "Position": {
-        "X": -2.7436478,
-        "Y": 125.44479
-      }
-    },
-    {
-      "InputId": "0abcff87-ace5-4a06-9217-b2caf831ecae"/*Scale*/,
-      "Position": {
-        "X": -2.7436478,
-        "Y": 125.44479
       }
     },
     {

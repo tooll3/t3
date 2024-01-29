@@ -4,8 +4,8 @@
   "Namespace": "lib.math.float",
   "Inputs": [
     {
-      "Id": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
-      "DefaultValue": 0
+      "Id": "eabbaf77-5f74-4303-9453-6fa44facc5db"/*OverrideTime*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "b7434932-aeea-407e-bb00-22337a21f293"/*Frequency*/,
@@ -16,6 +16,10 @@
       "DefaultValue": 4
     },
     {
+      "Id": "e704cf6c-963e-4701-ba3d-127b880676fa"/*Amplitude*/,
+      "DefaultValue": 1.0
+    },
+    {
       "Id": "b112705e-3ec3-4904-b978-bc784d9b2f94"/*RangeMin*/,
       "DefaultValue": 0.0
     },
@@ -24,12 +28,15 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "eabbaf77-5f74-4303-9453-6fa44facc5db"/*OverrideTime*/,
-      "DefaultValue": 0.0
+      "Id": "296d0f7f-d484-4781-b01f-48839def0324"/*GainBias*/,
+      "DefaultValue": {
+        "X": 0.5,
+        "Y": 0.5
+      }
     },
     {
-      "Id": "e704cf6c-963e-4701-ba3d-127b880676fa"/*Scale*/,
-      "DefaultValue": 1.0
+      "Id": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

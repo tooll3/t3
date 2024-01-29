@@ -1038,11 +1038,6 @@
       "SymbolId": "436e93a8-03c0-4366-8d9a-2245e5bcaa6c",
       "InputValues": [
         {
-          "Id": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
-          "Type": "System.Int32",
-          "Value": 20
-        },
-        {
           "Id": "b7434932-aeea-407e-bb00-22337a21f293"/*Frequency*/,
           "Type": "System.Single",
           "Value": 2.0
@@ -1051,6 +1046,11 @@
           "Id": "557ae817-ec36-4866-8fed-64490e9255be"/*RangeMax*/,
           "Type": "System.Single",
           "Value": 3.0
+        },
+        {
+          "Id": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
+          "Type": "System.Int32",
+          "Value": 20
         }
       ],
       "Outputs": []

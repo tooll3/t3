@@ -3000,6 +3000,11 @@
           "Value": 80
         },
         {
+          "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
+          "Type": "System.Int32",
+          "Value": 0
+        },
+        {
           "Id": "c29b5881-85bc-4d29-bc72-6dd36730fa8f"/*Spin*/,
           "Type": "System.Single",
           "Value": 500.0
@@ -3008,11 +3013,6 @@
           "Id": "1d1ce8c4-fd3c-4d69-be0e-679247a811c9"/*Twist*/,
           "Type": "System.Single",
           "Value": -1.2
-        },
-        {
-          "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
-          "Type": "System.Int32",
-          "Value": 0
         },
         {
           "Id": "4c7e0f67-a35b-4a23-b640-b0375c1a3259"/*Rotation*/,
@@ -3763,15 +3763,6 @@
       "SymbolId": "5777a005-bbae-48d6-b633-5e998ca76c91",
       "InputValues": [
         {
-          "Id": "66332a91-e0c2-442a-99f6-347dedaed72e"/*Center*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": -5.0
-          }
-        },
-        {
           "Id": "8d290afb-2574-4afa-a545-a0d3588f89f6"/*Radius*/,
           "Type": "System.Single",
           "Value": 0.29
@@ -3797,14 +3788,23 @@
           "Value": 64
         },
         {
+          "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
+          "Type": "System.Int32",
+          "Value": 0
+        },
+        {
           "Id": "c29b5881-85bc-4d29-bc72-6dd36730fa8f"/*Spin*/,
           "Type": "System.Single",
           "Value": 180.0
         },
         {
-          "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
-          "Type": "System.Int32",
-          "Value": 0
+          "Id": "66332a91-e0c2-442a-99f6-347dedaed72e"/*Center*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": -5.0
+          }
         },
         {
           "Id": "4c7e0f67-a35b-4a23-b640-b0375c1a3259"/*Rotation*/,
@@ -4933,14 +4933,14 @@
           "Value": 4
         },
         {
-          "Id": "c29b5881-85bc-4d29-bc72-6dd36730fa8f"/*Spin*/,
-          "Type": "System.Single",
-          "Value": 45.0
-        },
-        {
           "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
           "Type": "System.Int32",
           "Value": 0
+        },
+        {
+          "Id": "c29b5881-85bc-4d29-bc72-6dd36730fa8f"/*Spin*/,
+          "Type": "System.Single",
+          "Value": 45.0
         },
         {
           "Id": "4c7e0f67-a35b-4a23-b640-b0375c1a3259"/*Rotation*/,
@@ -7538,14 +7538,14 @@
           "Value": 64
         },
         {
-          "Id": "91fd4fbf-1cec-4d89-8014-ceed0021a5ee"/*Fill*/,
-          "Type": "System.Single",
-          "Value": 180.0
-        },
-        {
           "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
           "Type": "System.Int32",
           "Value": 0
+        },
+        {
+          "Id": "91fd4fbf-1cec-4d89-8014-ceed0021a5ee"/*Fill*/,
+          "Type": "System.Single",
+          "Value": 180.0
         },
         {
           "Id": "4c7e0f67-a35b-4a23-b640-b0375c1a3259"/*Rotation*/,
