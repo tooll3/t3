@@ -37,6 +37,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         RootSymbolUi.AddChild(homeSymbol, Guid.NewGuid(), new Vector2(0, _newProjectPosition), SymbolChildUi.DefaultOpSize, "");
         _newProjectPosition += (int)SymbolChildUi.DefaultOpSize.Y + 20;
 
+        RootSymbolUi.ClearModifiedFlag();
         return true;
     }
 
