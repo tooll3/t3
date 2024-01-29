@@ -1,6 +1,6 @@
 {
   "Id": "3352d3a1-ab04-4d0a-bb43-da69095b73fd"/*RadialPoints*/,
-  "Description": "A versatile generator of circular point sets that can create a variety of circles, spirals, helixes, etc.\n\nTry the presets to get an overview.\n\nThe CloseCircleLine option is only required when drawing lines. It will add an overlapping point and a separator, so the number of corners will be Count - 2.",
+  "Description": "A versatile generator of circular point sets that can create a variety of circles, spirals, helixes, etc.\n\nTry the presets to get an overview.",
   "InputUis": [
     {
       "InputId": "b654ffe2-d46e-4a62-89b3-a9692d5c6481"/*Count*/,
@@ -77,7 +77,8 @@
       "Position": {
         "X": -150.41754,
         "Y": 1170.569
-      }
+      },
+      "Description": "When drawing the radial points as a close line, two additional points have to be appended: One at the start position and one as separator.\n\nIt will add an overlapping point and a separator, so the number of corners will be Count - 2."
     },
     {
       "InputId": "6df5829e-a534-4620-bcd5-9324f94b4f54"/*Axis*/,
@@ -135,7 +136,8 @@
       },
       "Min": 0.0,
       "Max": 1.0,
-      "Clamp": true
+      "Clamp": true,
+      "UseVec2Control": "GainBias"
     }
   ],
   "SymbolChildUis": [
