@@ -11,10 +11,10 @@ namespace T3.Operators.Types.Id_c757cde3_511c_44cb_af62_39156557daa6
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "42042144-1ca7-41c7-92b8-21ea1136698a")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<System.Numerics.Vector4> ColorHighlight = new();
 
         [Input(Guid = "204a3776-c191-48b1-b502-2efc45adec67")]
-        public readonly InputSlot<System.Numerics.Vector4> Background = new();
+        public readonly InputSlot<System.Numerics.Vector4> ColorShade = new();
 
         [Input(Guid = "61eb78f5-d36e-479e-938f-a4fa4b31a1b6")]
         public readonly InputSlot<float> LineWidth = new();
