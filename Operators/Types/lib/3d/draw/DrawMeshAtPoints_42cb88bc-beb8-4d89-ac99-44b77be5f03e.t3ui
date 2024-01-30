@@ -8,42 +8,52 @@
       "Position": {
         "X": 665.8075,
         "Y": 3860.1191
-      }
+      },
+      "GroupTitle": "Input",
+      "Description": "Input for incoming Points which are used to spawn meshes."
     },
     {
       "InputId": "ba7befdf-270b-4ac0-bfc2-7543e2c3097b"/*Color*/,
       "Position": {
         "X": 711.3174,
         "Y": 4162.455
-      }
+      },
+      "GroupTitle": "Settings",
+      "Description": "Defines the shading color of the mesh.\nIf a [SetMaterial] is used, these colors are multiplied with its settings."
     },
     {
       "InputId": "0af05ab4-0d77-4f01-a79b-691f58f702ef"/*Size*/,
       "Position": {
         "X": 711.3174,
         "Y": 4207.455
-      }
+      },
+      "Description": "Uniformly scales the meshes using the Points as center of scaling."
     },
     {
       "InputId": "dd511aab-0472-4109-9c10-cc1ab5042499"/*EnableZWrite*/,
       "Position": {
         "X": 711.3174,
         "Y": 4297.455
-      }
+      },
+      "GroupTitle": "Z-Buffer",
+      "Description": "This defines whether the mesh covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "70f4cc27-f901-4faa-aa2e-b4cd2a50ff73"/*EnableZTest*/,
       "Position": {
         "X": 711.3174,
         "Y": 4342.455
-      }
+      },
+      "Description": "This defines whether the mesh covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "6c36bf68-e22f-419d-9ec0-f60a83d6a560"/*BlendMode*/,
       "Position": {
         "X": 711.3174,
         "Y": 4387.455
-      }
+      },
+      "GroupTitle": "Seetings",
+      "Description": "Selects the Blendmode."
     },
     {
       "InputId": "329d8248-5f9f-4ad3-9b97-0f142e91ba05"/*Mesh*/,
@@ -51,42 +61,53 @@
       "Position": {
         "X": 678.3147,
         "Y": 4757.4434
-      }
+      },
+      "GroupTitle": "Input",
+      "Description": "Input for Incoming Mesh Geometry"
     },
     {
       "InputId": "c0351f55-ad27-4fbd-b3d5-668ff49f0ea0"/*CullMode*/,
       "Position": {
         "X": 678.3147,
         "Y": 4802.4434
-      }
+      },
+      "GroupTitle": "Advanced Settings",
+      "Description": "Defines the transparency of the surfaces.\n\nNone: All surfaces are \"bothsided\" or always visible from all sides\n\nFront: The normals are flipped (frontside is transparent / backside visible)\n\nBack: Default (Frontside is visible / backside is invisible)"
     },
     {
       "InputId": "f5ec8952-01e0-42db-8c8d-29db44cc3151"/*UseWForSize*/,
       "Position": {
         "X": 678.3147,
         "Y": 4847.4434
-      }
+      },
+      "Description": "Defines whether the \"W\" value determines how large the meshes are displayed.",
+      "AddPadding": "True"
     },
     {
       "InputId": "a8590e4f-2edf-42c9-8bc2-e7b521f8cafc"/*AlphaCutOff*/,
       "Position": {
         "X": 678.3147,
         "Y": 4892.4434
-      }
+      },
+      "Description": "This value controls transparency if a texture containing an alpha channel is used.",
+      "AddPadding": "True"
     },
     {
       "InputId": "22b0817f-3149-4713-b87b-89c54300cde8"/*FillMode*/,
       "Position": {
         "X": 678.3147,
         "Y": 4937.4434
-      }
+      },
+      "Description": "Toggles between colored Wireframe Rendering or default shading method."
     },
     {
       "InputId": "69e1f021-4db2-43a1-a4e6-837024350dc1"/*UseStretch*/,
       "Position": {
         "X": 678.3147,
         "Y": 4982.4434
-      }
+      },
+      "Description": "Defines whether the meshes are influenced / non-uniformly stretched by their points.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
