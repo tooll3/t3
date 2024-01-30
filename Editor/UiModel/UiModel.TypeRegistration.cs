@@ -108,8 +108,11 @@ public partial class UiSymbolData
                        () => new ValueOutputUi<Curve>());
         RegisterUiType(typeof(T3.Core.Operator.GizmoVisibility), new FallBackUiProperties(), () => new EnumInputUi<T3.Core.Operator.GizmoVisibility>(),
                        () => new ValueOutputUi<T3.Core.Operator.GizmoVisibility>());
+
         RegisterUiType(typeof(T3.Core.DataTypes.Gradient), new ValueUiProperties(), () => new GradientInputUi(),
                        () => new ValueOutputUi<T3.Core.DataTypes.Gradient>());
+        
+        
         RegisterUiType(typeof(T3.Core.DataTypes.LegacyParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<T3.Core.DataTypes.LegacyParticleSystem>(),
                        () => new ValueOutputUi<T3.Core.DataTypes.LegacyParticleSystem>());
         RegisterUiType(typeof(T3.Core.DataTypes.ParticleSystem), new FallBackUiProperties(), 
@@ -138,7 +141,7 @@ public partial class UiSymbolData
                        () => new FallbackInputUi<DataSet>(), () => new DataSetOutputUi());
 
         RegisterUiType(typeof(SceneSetup), new FallBackUiProperties(),
-                       () => new FallbackInputUi<SceneSetup>(), () => new SceneSetupOutputUi());
+                       () => new SceneSetupInputUi(), () => new SceneSetupOutputUi());
 
         // sharpdx types
         RegisterUiType(typeof(Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
