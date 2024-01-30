@@ -21,16 +21,8 @@ namespace T3.Editor.Gui.ChildUi
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
-            //screenRect.Max.X -= screenRect.GetWidth() * 0.15f; // Leave some padding at right for mode-label
-
-            var size = screenRect.GetSize();
-
-            //var center = screenRect.GetCenter();
             screenRect.Expand(-2);
-
             var biasGraphRect = screenRect;
-            //biasGraphRect.Min.X += size.Y;
-            //biasGraphRect.Min.X = biasGraphRect.Max.X - biasGraphRect.GetHeight();
 
             // Draw interaction
             ImGui.SetCursorScreenPos(biasGraphRect.Min);
@@ -45,50 +37,50 @@ namespace T3.Editor.Gui.ChildUi
             var outFragment = Math.Abs(outMin - outMax) < 0.001f ? 0 : (remap.Result.Value - outMin) / (outMax - outMin);
 
             // ill-fated attempt to visualize range mapping
-            if (false)
-            {
-                var inGraphRect = screenRect;
-                inGraphRect.Max.X = biasGraphRect.Min.X - size.Y * 0.2f;
-                var minRange = MathF.Min(MathF.Min(outMin, outMax), MathF.Min(inMin, inMax));
-                var maxRange = MathF.Max(MathF.Max(outMin, outMax), MathF.Max(inMin, inMax));
-
-                var normalizedIn = (value - minRange) / (maxRange - minRange);
-                var normalizedOut = MathUtils.Remap(remap.Result.Value, minRange, maxRange, 0, 1);
-                var padding1 = inGraphRect.GetHeight() * 0.25f;
-                var pIn = new Vector2(inGraphRect.Min.X + 2 + padding1,
-                                      MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedIn));
-
-                var pOut = new Vector2(inGraphRect.Min.X + 2 * padding1,
-                                       MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedOut));
-                drawList.AddLine(new Vector2(inGraphRect.Min.X, pIn.Y),
-                                 pIn,
-                                 UiColors.StatusAnimated, 1);
-
-                var normalizedInMin = (inMin - minRange) / (maxRange - minRange);
-                var normalizedInMax = (inMax - minRange) / (maxRange - minRange);
-                var normalizedOutMin = (outMin - minRange) / (maxRange - minRange);
-                var normalizedOutMax = (outMax - minRange) / (maxRange - minRange);
-
-                drawList.AddRectFilled(new Vector2(inGraphRect.Min.X, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedInMax)),
-                                       new Vector2(inGraphRect.Min.X + padding1, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedInMin)),
-                                       UiColors.ForegroundFull.Fade(0.1f));
-
-                drawList.AddRectFilled(new Vector2(inGraphRect.Min.X + 2 * padding1, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedOutMax)),
-                                       new Vector2(inGraphRect.Min.X + 3 * padding1, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedOutMin)),
-                                       UiColors.ForegroundFull.Fade(0.1f));
-
-                drawList.AddBezierCubic(
-                                        pIn,
-                                        pIn + new Vector2(padding1 * 0.5f, 0),
-                                        pOut - new Vector2(padding1 * 0.5f, 0),
-                                        pOut,
-                                        UiColors.StatusAnimated.Fade(0.5f),
-                                        1);
-
-                drawList.AddLine(pOut,
-                                 pOut + new Vector2(padding1, 0),
-                                 UiColors.StatusAnimated, 1);
-            }
+            // if (false)
+            // {
+            //     var inGraphRect = screenRect;
+            //     inGraphRect.Max.X = biasGraphRect.Min.X - size.Y * 0.2f;
+            //     var minRange = MathF.Min(MathF.Min(outMin, outMax), MathF.Min(inMin, inMax));
+            //     var maxRange = MathF.Max(MathF.Max(outMin, outMax), MathF.Max(inMin, inMax));
+            //
+            //     var normalizedIn = (value - minRange) / (maxRange - minRange);
+            //     var normalizedOut = MathUtils.Remap(remap.Result.Value, minRange, maxRange, 0, 1);
+            //     var padding1 = inGraphRect.GetHeight() * 0.25f;
+            //     var pIn = new Vector2(inGraphRect.Min.X + 2 + padding1,
+            //                           MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedIn));
+            //
+            //     var pOut = new Vector2(inGraphRect.Min.X + 2 * padding1,
+            //                            MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedOut));
+            //     drawList.AddLine(new Vector2(inGraphRect.Min.X, pIn.Y),
+            //                      pIn,
+            //                      UiColors.StatusAnimated, 1);
+            //
+            //     var normalizedInMin = (inMin - minRange) / (maxRange - minRange);
+            //     var normalizedInMax = (inMax - minRange) / (maxRange - minRange);
+            //     var normalizedOutMin = (outMin - minRange) / (maxRange - minRange);
+            //     var normalizedOutMax = (outMax - minRange) / (maxRange - minRange);
+            //
+            //     drawList.AddRectFilled(new Vector2(inGraphRect.Min.X, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedInMax)),
+            //                            new Vector2(inGraphRect.Min.X + padding1, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedInMin)),
+            //                            UiColors.ForegroundFull.Fade(0.1f));
+            //
+            //     drawList.AddRectFilled(new Vector2(inGraphRect.Min.X + 2 * padding1, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedOutMax)),
+            //                            new Vector2(inGraphRect.Min.X + 3 * padding1, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedOutMin)),
+            //                            UiColors.ForegroundFull.Fade(0.1f));
+            //
+            //     drawList.AddBezierCubic(
+            //                             pIn,
+            //                             pIn + new Vector2(padding1 * 0.5f, 0),
+            //                             pOut - new Vector2(padding1 * 0.5f, 0),
+            //                             pOut,
+            //                             UiColors.StatusAnimated.Fade(0.5f),
+            //                             1);
+            //
+            //     drawList.AddLine(pOut,
+            //                      pOut + new Vector2(padding1, 0),
+            //                      UiColors.StatusAnimated, 1);
+            // }
 
             drawList.PushClipRect(biasGraphRect.Min, biasGraphRect.Max, true);
 
@@ -154,8 +146,7 @@ namespace T3.Editor.Gui.ChildUi
                    SymbolChildUi.CustomUiResult.PreventTooltip;
         }
 
-        private const float TriangleSize = 4;
-
-        private static readonly Vector2[] GraphLinePoints = new Vector2[4];
+        // private const float TriangleSize = 4;
+        // private static readonly Vector2[] GraphLinePoints = new Vector2[4];
     }
 }
