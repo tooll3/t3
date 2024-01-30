@@ -1,28 +1,30 @@
 using System.Collections.Generic;
+// ReSharper disable ConvertToAutoProperty
 
 namespace T3.Core.Operator.Slots
 {
     public sealed class MultiInputSlot<T> : InputSlot<T>, IMultiInputSlot
     {
-        public List<Slot<T>> CollectedInputs { get; } = new(10);
+        public List<Slot<T>> CollectedInputs => _collectedInputs;
+        private readonly List<Slot<T>> _collectedInputs = new(10);
 
         public List<Slot<T>> GetCollectedTypedInputs()
         {
-            CollectedInputs.Clear();
+            _collectedInputs.Clear();
 
-            foreach (var slot in InputConnection)
+            foreach (var slot in InputConnections)
             {
                 if (slot.TryGetAsMultiInputTyped(out var multiInput) && slot.IsConnected)
                 {
-                    CollectedInputs.AddRange(multiInput.GetCollectedTypedInputs());
+                    _collectedInputs.AddRange(multiInput.GetCollectedTypedInputs());
                 }
                 else
                 {
-                    CollectedInputs.Add(slot);
+                    _collectedInputs.Add(slot);
                 }
             }
 
-            return CollectedInputs;
+            return _collectedInputs;
         }
 
         public IReadOnlyList<ISlot> GetCollectedInputs()
@@ -30,7 +32,8 @@ namespace T3.Core.Operator.Slots
             return GetCollectedTypedInputs();
         }
 
-        public List<int> LimitMultiInputInvalidationToIndices { get; } = new();
+        List<int> IMultiInputSlot.LimitMultiInputInvalidationToIndices => LimitMultiInputInvalidationToIndices;
+        public readonly List<int> LimitMultiInputInvalidationToIndices = [];
 
         public void GetValues(ref T[] resources, EvaluationContext context, bool clearDirty= true)
         {

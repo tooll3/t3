@@ -99,48 +99,51 @@ namespace T3.Core.Operator.Slots
 
         public override int Invalidate()
         {
-            if (DirtyFlag.IsAlreadyInvalidated || DirtyFlag.HasBeenVisited)
-                return DirtyFlag.Target;
+            // ReSharper disable once InlineTemporaryVariable
+            var dirtyFlag = DirtyFlag;
+            if (dirtyFlag.IsAlreadyInvalidated || dirtyFlag.HasBeenVisited)
+                return dirtyFlag.Target;
 
             // Slot is an output of an composition op
             if (IsConnected)
             {
-                DirtyFlag.Target = FirstConnection.Invalidate();
+                dirtyFlag.Target = FirstConnection.Invalidate();
             }
             else
             {
-                if (LastUpdateStatus != UpdateStates.Suspended)
+                if (LastUpdateStatus == UpdateStates.Suspended)
                 {
-                    var parentInstance = Parent;
-                    var isOutputDirty = DirtyFlag.IsDirty;
-                    foreach (var inputSlot in parentInstance.Inputs)
-                    {
-                        if (inputSlot.IsConnected)
-                        {
-                            inputSlot.DirtyFlag.Target = inputSlot.FirstConnection.Invalidate();
-                        }
-                        else if ((inputSlot.DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
-                        {
-                            inputSlot.DirtyFlag.Invalidate();
-                        }
-
-                        inputSlot.DirtyFlag.SetVisited();
-                        isOutputDirty |= inputSlot.DirtyFlag.IsDirty;
-                    }
-
-                    if (isOutputDirty || (DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
-                    {
-                        DirtyFlag.Invalidate();
-                    }
+                    dirtyFlag.Invalidate();
                 }
                 else
                 {
-                    DirtyFlag.Invalidate();
+                    var parentInstance = Parent;
+                    var isOutputDirty = dirtyFlag.IsDirty;
+                    foreach (var inputSlot in parentInstance.Inputs)
+                    {
+                        var inputDirtyFlag = inputSlot.DirtyFlag;
+                        if (inputSlot.IsConnected)
+                        {
+                            inputDirtyFlag.Target = inputSlot.FirstConnection.Invalidate();
+                        }
+                        else if ((inputDirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
+                        {
+                            inputDirtyFlag.Invalidate();
+                        }
+
+                        inputDirtyFlag.SetVisited();
+                        isOutputDirty |= inputDirtyFlag.IsDirty;
+                    }
+
+                    if (isOutputDirty || (dirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
+                    {
+                        dirtyFlag.Invalidate();
+                    }
                 }
             }
 
-            DirtyFlag.SetVisited();
-            return DirtyFlag.Target;
+            dirtyFlag.SetVisited();
+            return dirtyFlag.Target;
         }
     }
 }

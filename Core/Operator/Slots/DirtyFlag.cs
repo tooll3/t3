@@ -14,7 +14,7 @@ namespace T3.Core.Operator.Slots
 
         public bool IsDirty => Reference != Target || Trigger == DirtyFlagTrigger.Always;
 
-        public static int InvalidationRefFrame { get; set; } = 0;
+        public static int InvalidationRefFrame = 0;
         private int _invalidatedWithRefFrame = -1;
         private int _visitedAtFrame = -1;
         public bool IsAlreadyInvalidated => InvalidationRefFrame == _invalidatedWithRefFrame;

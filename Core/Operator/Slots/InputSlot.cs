@@ -6,7 +6,7 @@ namespace T3.Core.Operator.Slots
     {
         public Type MappedType { get; set; }
 
-        public InputSlot(InputValue<T> typedInputValue) : base(true)
+        private InputSlot(InputValue<T> typedInputValue) : base(true)
         {
             UpdateAction = InputUpdate;
             _keepOriginalUpdateAction = UpdateAction;
@@ -64,11 +64,13 @@ namespace T3.Core.Operator.Slots
         
         public bool TryGetAsMultiInput(out IMultiInputSlot multiInput)
         {
-            multiInput = _thisAsMultiInputSlot;
+            multiInput = ThisAsMultiInputSlot;
             return IsMultiInput;
         }
 
         public InputValue<T> TypedInputValue;
         public InputValue<T> TypedDefaultValue;
+        
+        bool IInputSlot.IsMultiInput => IsMultiInput;
     }
 }
