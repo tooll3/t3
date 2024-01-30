@@ -43,7 +43,7 @@ namespace T3.Operators.Types.Id_371d72b8_69d4_4ced_beda_271386ad2fd6
         public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
 
         [Input(Guid = "418d7362-3c4b-4749-8f11-62a953065689")]
-        public readonly InputSlot<System.Numerics.Vector2> GainBias = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "62119baf-5e02-4d2e-82bb-f82a149ccfb7")]
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();

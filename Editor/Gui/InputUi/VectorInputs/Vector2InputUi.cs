@@ -76,7 +76,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
                     drawList.AddLine(new Vector2(center.X, min.Y), new Vector2(center.X, max.Y), UiColors.ForegroundFull.Fade(0.06f), 1);
                     drawList.AddLine(new Vector2(min.X, center.Y), new Vector2(max.X, center.Y), UiColors.ForegroundFull.Fade(0.06f), 1);
                 }
-                else if (UseVec2Control == Vec2Controls.GainBias)
+                else if (UseVec2Control == Vec2Controls.BiasAndGain)
                 {
                     shouldClamp = true;
                     drawList.AddCircleFilled(controlPointScreenPos, 2, color);
@@ -88,11 +88,18 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
                     for(var i=0; i < steps ; i ++)
                     {
                         var t = (float)i / (steps-1); 
-                        var f = t.ApplyGainBias(float2Value.X, float2Value.Y);
+                        var f = t.ApplyBiasAndGain(float2Value.X, float2Value.Y);
                         var x = MathUtils.Lerp(min.X, max.X, f);
-                        drawList.AddLine(new Vector2(x, min.Y), new Vector2(x, max.Y),
-                                         UiColors.ForegroundFull.Fade(0.1f), 1);
+                        var y = MathUtils.Lerp(max.Y, min.Y, f);
+                        // drawList.AddLine(new Vector2(x, min.Y), new Vector2(x, max.Y),
+                        //                  UiColors.ForegroundFull.Fade(0.1f), 1);
 
+                        
+                        drawList.AddLine(new Vector2(min.X, y), new 
+                                             Vector2(max.X, y),
+                                         UiColors.ForegroundFull.Fade(0.1f), 1);
+                        
+                        
                         points[i] = new Vector2(MathUtils.Lerp(min.X, max.X, t), 
                                                 MathUtils.Lerp(min.Y, max.Y, 1-f));
                     }
@@ -184,7 +191,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         {
             None,
             Position,
-            GainBias,
+            BiasAndGain,
             Range,
         }
     }

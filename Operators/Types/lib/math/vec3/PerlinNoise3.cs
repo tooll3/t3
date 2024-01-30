@@ -29,14 +29,14 @@ namespace T3.Operators.Types.Id_50aab941_0a29_474a_affd_13a74ea0c780
             var rangeMax = RangeMax.GetValue(context);
             var scale = Amplitude.GetValue(context);
             var scaleXYZ = AmplitudeXYZ.GetValue(context);
-            var gainBias = GainBias.GetValue(context);
+            var biasAndGain = BiasAndGain.GetValue(context);
             
             var scaleToUniformFactor = 1.37f;
-            var x = ((MathUtils.PerlinNoise(value, period, octaves, seed)*scaleToUniformFactor + 1f) * 0.5f).ApplyGainBias(gainBias.X,gainBias.Y) 
+            var x = ((MathUtils.PerlinNoise(value, period, octaves, seed)*scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X,biasAndGain.Y) 
                     * (rangeMax.X - rangeMin.X) + rangeMin.X;
-            var y = ((MathUtils.PerlinNoise(value, period, octaves, seed + 123)*scaleToUniformFactor + 1f) * 0.5f).ApplyGainBias(gainBias.X,gainBias.Y)
+            var y = ((MathUtils.PerlinNoise(value, period, octaves, seed + 123)*scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X,biasAndGain.Y)
                     * (rangeMax.Y - rangeMin.Y) + rangeMin.Y;
-            var z = ((MathUtils.PerlinNoise(value, period, octaves, seed + 234)*scaleToUniformFactor + 1f) * 0.5f).ApplyGainBias(gainBias.X,gainBias.Y)
+            var z = ((MathUtils.PerlinNoise(value, period, octaves, seed + 234)*scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X,biasAndGain.Y)
                     * (rangeMax.Z - rangeMin.Z) + rangeMin.Z;
             
             Result.Value  = new Vector3(x, y, z) * scaleXYZ  * scale;
@@ -65,7 +65,7 @@ namespace T3.Operators.Types.Id_50aab941_0a29_474a_affd_13a74ea0c780
         public readonly InputSlot<Vector3> RangeMax = new();
         
         [Input(Guid = "B7B95FC2-C73F-4DB1-BDAB-2445FE62F032")]
-        public readonly InputSlot<Vector2> GainBias = new();        
+        public readonly InputSlot<Vector2> BiasAndGain = new();        
 
         [Input(Guid = "1cd2174e-aeb2-4258-8395-a9cc16f276b5")]
         public readonly InputSlot<int> Seed = new();

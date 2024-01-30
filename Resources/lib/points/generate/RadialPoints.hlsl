@@ -67,7 +67,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float angleStepCount = closeCircle ? (pointCount -2) : pointCount;
 
     float ff = (float)(index)/angleStepCount;
-    float f = ApplyGainBias(ff, GainAndBias.x, GainAndBias.y);
+    float f = ApplyBiasAndGain(ff, GainAndBias.x, GainAndBias.y);
 
     float l = Radius + RadiusOffset * f;
     float angle = (StartAngle * 3.141578/180 + Cycles * 2 *3.141578 * f);

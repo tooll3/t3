@@ -29,14 +29,14 @@ namespace T3.Operators.Types.Id_436e93a8_03c0_4366_8d9a_2245e5bcaa6c
             var rangeMin = RangeMin.GetValue(context);
             var rangeMax = RangeMax.GetValue(context);
             var scale = Amplitude.GetValue(context);
-            var gainBias = GainBias.GetValue(context);
+            var biasAndGain = BiasAndGain.GetValue(context);
 
             //var noiseSum = ComputePerlinNoise(value, period, octaves, seed);
             var noiseSum  = MathUtils.PerlinNoise(value, period, octaves, seed);
             var dist = rangeMax - rangeMin;
             var scaleToUniformFactor = 1.37f;
             
-            Result.Value = ((scale * noiseSum * scaleToUniformFactor + 1f) * 0.5f).ApplyGainBias(gainBias.X, gainBias.Y) * dist + rangeMin;
+            Result.Value = ((scale * noiseSum * scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y) * dist + rangeMin;
         }
 
         
@@ -62,7 +62,7 @@ namespace T3.Operators.Types.Id_436e93a8_03c0_4366_8d9a_2245e5bcaa6c
         
 
         [Input(Guid = "296D0F7F-D484-4781-B01F-48839DEF0324")]
-        public readonly InputSlot<Vector2> GainBias = new();
+        public readonly InputSlot<Vector2> BiasAndGain = new();
 
         [Input(Guid = "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f")]
         public readonly InputSlot<int> Seed = new();

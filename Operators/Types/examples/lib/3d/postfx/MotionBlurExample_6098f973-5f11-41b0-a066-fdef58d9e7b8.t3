@@ -60,6 +60,11 @@
       "SymbolId": "50aab941-0a29-474a-affd-13a74ea0c780",
       "InputValues": [
         {
+          "Id": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
+          "Type": "System.Single",
+          "Value": 1.1999999
+        },
+        {
           "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 9.2
@@ -72,11 +77,6 @@
             "Y": 1.0,
             "Z": 1.0
           }
-        },
-        {
-          "Id": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
-          "Type": "System.Single",
-          "Value": 1.1999999
         }
       ],
       "Outputs": []
@@ -249,11 +249,6 @@
       "SymbolId": "436e93a8-03c0-4366-8d9a-2245e5bcaa6c",
       "InputValues": [
         {
-          "Id": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
-          "Type": "System.Int32",
-          "Value": 83
-        },
-        {
           "Id": "c6286f1c-00a3-40af-94dd-66375ed0343f"/*Octaves*/,
           "Type": "System.Int32",
           "Value": 2
@@ -267,6 +262,11 @@
           "Id": "557ae817-ec36-4866-8fed-64490e9255be"/*RangeMax*/,
           "Type": "System.Single",
           "Value": 22.6
+        },
+        {
+          "Id": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
+          "Type": "System.Int32",
+          "Value": 83
         }
       ],
       "Outputs": []

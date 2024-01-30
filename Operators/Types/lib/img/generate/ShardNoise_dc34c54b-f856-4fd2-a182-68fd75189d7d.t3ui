@@ -77,7 +77,7 @@
       }
     },
     {
-      "InputId": "bff37ed2-cc5a-47fa-9363-65bb1d5eb2fa"/*GainBias*/,
+      "InputId": "bff37ed2-cc5a-47fa-9363-65bb1d5eb2fa"/*BiasAndGain*/,
       "Position": {
         "X": -163.45872,
         "Y": 414.3106

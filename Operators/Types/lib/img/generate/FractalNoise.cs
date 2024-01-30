@@ -17,7 +17,7 @@ namespace T3.Operators.Types.Id_5a0b0485_7a55_4bf4_ae23_04f51d890334
         public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "ca5da68e-9c64-4331-b434-79bb139c6d3e")]
-        public readonly InputSlot<System.Numerics.Vector2> GainBias = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "751f9a41-d97f-4e04-8338-cebe9be88c5a")]
         public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();

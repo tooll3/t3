@@ -29,13 +29,13 @@ namespace T3.Operators.Types.Id_ccc06dd6_4eec_4d17_af0b_4f1700e7887a
             var rangeMax = RangeMax.GetValue(context);
             var scale = Amplitude.GetValue(context);
             var scaleXY = AmplitudeXY.GetValue(context);
-            var gainBias = GainBias.GetValue(context);
+            var biasAndGain = BiasAndGain.GetValue(context);
 
             var scaleToUniformFactor = 1.37f;
-            var x = ((MathUtils.PerlinNoise(value, period, octaves, seed) * scaleToUniformFactor + 1f) * 0.5f).ApplyGainBias(gainBias.X, gainBias.Y) 
+            var x = ((MathUtils.PerlinNoise(value, period, octaves, seed) * scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y) 
                     * (rangeMax.X - rangeMin.X) + rangeMin.X;
 
-                    var y = ((MathUtils.PerlinNoise(value, period, octaves, seed + 123) * scaleToUniformFactor + 1f) * 0.5f).ApplyGainBias(gainBias.X, gainBias.Y) 
+                    var y = ((MathUtils.PerlinNoise(value, period, octaves, seed + 123) * scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y) 
                     * (rangeMax.Y - rangeMin.Y) + rangeMin.Y;
             
             Result.Value  = new Vector2(x, y) * scaleXY  * scale;
@@ -66,7 +66,7 @@ namespace T3.Operators.Types.Id_ccc06dd6_4eec_4d17_af0b_4f1700e7887a
 
 
         [Input(Guid = "C6E1170E-AE4F-44AE-AAAB-E1AEB8F86997")]
-        public readonly InputSlot<Vector2> GainBias = new();
+        public readonly InputSlot<Vector2> BiasAndGain = new();
 
         [Input(Guid = "c1ffdc20-7c90-49f9-8deb-f0a415e130c8")]
         public readonly InputSlot<int> Seed = new();

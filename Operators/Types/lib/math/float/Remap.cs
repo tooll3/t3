@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -23,9 +24,17 @@ namespace T3.Operators.Types.Id_f0acd1a4_7a98_43ab_a807_6d1bd3e92169
             var inMax = RangeInMax.GetValue(context);
             var outMin = RangeOutMin.GetValue(context);
             var outMax = RangeOutMax.GetValue(context);
+            var biasAndGain = BiasAndGain.GetValue(context);
 
-            var factor = (value - inMin) / (inMax - inMin);
-            var v = factor * (outMax - outMin) + outMin;
+            
+            
+            var normalized = (value - inMin) / (inMax - inMin);
+            if (normalized > 0 && normalized < 1)
+            {
+                normalized = normalized.ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y);
+            }
+            
+            var v = normalized * (outMax - outMin) + outMin;
 
             switch ((Modes)Mode.GetValue(context))
             {
@@ -71,7 +80,10 @@ namespace T3.Operators.Types.Id_f0acd1a4_7a98_43ab_a807_6d1bd3e92169
 
         [Input(Guid = "252276FB-8DE1-42CC-BA41-07D6862015BD")]
         public readonly InputSlot<float> RangeOutMax = new();
-        
+
+        [Input(Guid = "23548048-E373-4FD6-9C83-1CF7398F952D")]
+        public readonly InputSlot<Vector2> BiasAndGain = new();
+
         [Input(Guid = "406F6476-EB25-4493-AAEA-3899E84DE50F", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new();        
     }

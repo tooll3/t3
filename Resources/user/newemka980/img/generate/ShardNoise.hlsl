@@ -96,7 +96,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float c = 0;
 
     //Shard Noise + Bias and Gain 
-    float sn = ApplyGainBias(shard_noise(Scale * uv, _sharpness), GainAndBias.x, GainAndBias.y);
+    float sn = ApplyBiasAndGain(shard_noise(Scale * uv, _sharpness), GainAndBias.x, GainAndBias.y);
 
     // repetition in the methods is an attempt of optimisation because octaves are exenpsive
     
@@ -109,7 +109,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         break;
         case 1:
             // Cubism * octaves
-            float o = ApplyGainBias(
+            float o = ApplyBiasAndGain(
                 (shard_noise(64.0*uv,4) * .03125) +
                 (shard_noise(32.0*uv,4) * .0625) +
                 (shard_noise(16.0*uv,4) * .125) +
@@ -121,7 +121,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         break;
         case 2: 
             // Octaves
-            float oc = ApplyGainBias(
+            float oc = ApplyBiasAndGain(
                 (shard_noise(64.0*uv,4) * .03125) +
                 (shard_noise(32.0*uv,4) * .0625) +
                 (shard_noise(16.0*uv,4) * .125) +

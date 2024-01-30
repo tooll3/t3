@@ -48,7 +48,7 @@
       "Max": 1.0
     },
     {
-      "InputId": "28081e5f-da01-46dc-81ad-699df29a49a4"/*GainBias*/,
+      "InputId": "28081e5f-da01-46dc-81ad-699df29a49a4"/*BiasAndGain*/,
       "Position": {
         "X": -369.17166,
         "Y": 1068.9779
@@ -56,7 +56,7 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true,
-      "UseVec2Control": "GainBias"
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "d120d8f7-aff6-4e30-b0d2-c45e3e477fde"/*W*/,

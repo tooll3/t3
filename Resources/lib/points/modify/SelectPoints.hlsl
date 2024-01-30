@@ -121,7 +121,7 @@ inline float LinearStep(float min, float max, float t)
         s = LinearStep(Threshold + FallOff, Threshold, noise);
     }
 
-    s = ApplyGainBias(s, GainAndBias.x, GainAndBias.y);
+    s = ApplyBiasAndGain(s, GainAndBias.x, GainAndBias.y);
 
     float w = p.W;
     if (SelectMode == ModeOverride)

@@ -68,7 +68,7 @@
       "GroupTitle": "Seed"
     },
     {
-      "InputId": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*GainBias*/,
+      "InputId": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*BiasAndGain*/,
       "Position": {
         "X": -533.79504,
         "Y": 1404.0837
@@ -78,7 +78,7 @@
       "Max": 1.0,
       "Clamp": true,
       "Format": "{0:0.000} ×",
-      "UseVec2Control": "GainBias"
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "362fcd1a-444a-417b-b49f-ee1babaee998"/*UseSelection*/,

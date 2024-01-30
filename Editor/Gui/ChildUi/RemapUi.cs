@@ -17,26 +17,23 @@ namespace T3.Editor.Gui.ChildUi
 
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
-            if (!(instance is Remap remap)
+            if (instance is not Remap remap
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
-            screenRect.Max.X -= screenRect.GetWidth() * 0.15f; // Leave some padding at right for mode-label
+            //screenRect.Max.X -= screenRect.GetWidth() * 0.15f; // Leave some padding at right for mode-label
 
             var size = screenRect.GetSize();
 
-            var center = screenRect.GetCenter();
-            var graphRect = screenRect;
-            graphRect.Min.Y = center.Y - size.Y * 0.15f;
-            graphRect.Max.Y = center.Y + size.Y * 0.15f;
+            //var center = screenRect.GetCenter();
+            screenRect.Expand(-2);
 
-            ValueLabel.Draw(drawList, screenRect, new Vector2(GraphRangePadding / 2, 0), remap.RangeInMin);
-            ValueLabel.Draw(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 0), remap.RangeInMax);
-            ValueLabel.Draw(drawList, screenRect, new Vector2(GraphRangePadding / 2, 1), remap.RangeOutMin);
-            ValueLabel.Draw(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 1), remap.RangeOutMax);
+            var biasGraphRect = screenRect;
+            //biasGraphRect.Min.X += size.Y;
+            //biasGraphRect.Min.X = biasGraphRect.Max.X - biasGraphRect.GetHeight();
 
             // Draw interaction
-            ImGui.SetCursorScreenPos(graphRect.Min);
+            ImGui.SetCursorScreenPos(biasGraphRect.Min);
 
             var value = remap.Value.Value;
             var inMin = remap.RangeInMin.TypedInputValue.Value;
@@ -47,63 +44,118 @@ namespace T3.Editor.Gui.ChildUi
             var inFragment = Math.Abs(inMin - inMax) < 0.001f ? 0 : (value - inMin) / (inMax - inMin);
             var outFragment = Math.Abs(outMin - outMax) < 0.001f ? 0 : (remap.Result.Value - outMin) / (outMax - outMin);
 
-            // Draw graph
-            //
-            //       lv1       lv2
-            //    0  
-            //    #   |         |
-            // lh 1######2------+---  [C]
-            //       |   #      |
-            //           3
-            //            
-            drawList.PushClipRect(graphRect.Min, graphRect.Max, true);
+            // ill-fated attempt to visualize range mapping
+            if (false)
+            {
+                var inGraphRect = screenRect;
+                inGraphRect.Max.X = biasGraphRect.Min.X - size.Y * 0.2f;
+                var minRange = MathF.Min(MathF.Min(outMin, outMax), MathF.Min(inMin, inMax));
+                var maxRange = MathF.Max(MathF.Max(outMin, outMax), MathF.Max(inMin, inMax));
 
-            var h = graphRect.GetHeight();
+                var normalizedIn = (value - minRange) / (maxRange - minRange);
+                var normalizedOut = MathUtils.Remap(remap.Result.Value, minRange, maxRange, 0, 1);
+                var padding1 = inGraphRect.GetHeight() * 0.25f;
+                var pIn = new Vector2(inGraphRect.Min.X + 2 + padding1,
+                                      MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedIn));
 
-            // Horizontal line
-            var lhMin = graphRect.Min + Vector2.UnitY * h / 2;
-            var lhMax = new Vector2(graphRect.Max.X, lhMin.Y + 1);
-            drawList.AddRectFilled(lhMin, lhMax, UiColors.WidgetAxis);
+                var pOut = new Vector2(inGraphRect.Min.X + 2 * padding1,
+                                       MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedOut));
+                drawList.AddLine(new Vector2(inGraphRect.Min.X, pIn.Y),
+                                 pIn,
+                                 UiColors.StatusAnimated, 1);
 
-            // Vertical start line
-            var lv1Min = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * GraphRangePadding);
-            var lv1Max = new Vector2(lv1Min.X + 1, graphRect.Max.Y);
-            drawList.AddRectFilled(lv1Min, lv1Max, UiColors.WidgetAxis);
+                var normalizedInMin = (inMin - minRange) / (maxRange - minRange);
+                var normalizedInMax = (inMax - minRange) / (maxRange - minRange);
+                var normalizedOutMin = (outMin - minRange) / (maxRange - minRange);
+                var normalizedOutMax = (outMax - minRange) / (maxRange - minRange);
 
-            // Vertical end line
-            var lv2Min = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * (1 - GraphRangePadding));
-            var lv2Max = new Vector2(lv2Min.X + 1, graphRect.Max.Y);
-            drawList.AddRectFilled(lv2Min, lv2Max, UiColors.WidgetAxis);
+                drawList.AddRectFilled(new Vector2(inGraphRect.Min.X, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedInMax)),
+                                       new Vector2(inGraphRect.Min.X + padding1, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedInMin)),
+                                       UiColors.ForegroundFull.Fade(0.1f));
 
-            var inputX = MathUtils.Lerp(lv1Min.X, lv2Min.X, inFragment);
-            GraphLinePoints[0].X = inputX;
-            GraphLinePoints[0].Y = graphRect.Min.Y;
+                drawList.AddRectFilled(new Vector2(inGraphRect.Min.X + 2 * padding1, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedOutMax)),
+                                       new Vector2(inGraphRect.Min.X + 3 * padding1, MathUtils.Lerp(inGraphRect.Max.Y, inGraphRect.Min.Y, normalizedOutMin)),
+                                       UiColors.ForegroundFull.Fade(0.1f));
 
-            GraphLinePoints[1].X = inputX;
-            GraphLinePoints[1].Y = graphRect.GetCenter().Y;
+                drawList.AddBezierCubic(
+                                        pIn,
+                                        pIn + new Vector2(padding1 * 0.5f, 0),
+                                        pOut - new Vector2(padding1 * 0.5f, 0),
+                                        pOut,
+                                        UiColors.StatusAnimated.Fade(0.5f),
+                                        1);
 
-            var outputX = MathUtils.Lerp(lv1Min.X, lv2Min.X, outFragment);
-            GraphLinePoints[2].X = outputX;
-            GraphLinePoints[2].Y = graphRect.GetCenter().Y;
+                drawList.AddLine(pOut,
+                                 pOut + new Vector2(padding1, 0),
+                                 UiColors.StatusAnimated, 1);
+            }
 
-            GraphLinePoints[3].X = outputX;
-            GraphLinePoints[3].Y = graphRect.Max.Y;
+            drawList.PushClipRect(biasGraphRect.Min, biasGraphRect.Max, true);
 
-            drawList.AddPolyline(ref GraphLinePoints[0], 4, UiColors.StatusAnimated, ImDrawFlags.None, 1);
+            // Draw mapping graph...
+            {
+                const int steps = 35;
+                var points = new Vector2[steps];
+                var biasAndGain = remap.BiasAndGain.Value;
 
-            var triangleSize = TriangleSize;
-            drawList.AddTriangleFilled(GraphLinePoints[3],
-                                       GraphLinePoints[3] + new Vector2(-triangleSize / 2, -triangleSize),
-                                       GraphLinePoints[3] + new Vector2(+triangleSize / 2, -triangleSize),
-                                       UiColors.StatusAnimated
-                                      );
-            drawList.PopClipRect();
+                var p = new Vector2(MathUtils.Lerp(biasGraphRect.Min.X, biasGraphRect.Max.X, inFragment),
+                                    MathUtils.Lerp(biasGraphRect.Max.Y, biasGraphRect.Min.Y, outFragment));
+                drawList.AddCircleFilled(p,
+                                         3,
+                                         UiColors.StatusAnimated);
 
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph | SymbolChildUi.CustomUiResult.PreventTooltip;
+                // Distribution...
+                for (var i = 0; i < steps; i++)
+                {
+                    var t = (float)i / (steps - 1);
+                    var f = t.ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y);
+                    var x = MathUtils.Lerp(biasGraphRect.Min.X, biasGraphRect.Max.X, f);
+                    var y = MathUtils.Lerp(biasGraphRect.Max.Y, biasGraphRect.Min.Y, f);
+                    drawList.AddLine(new Vector2(biasGraphRect.Min.X, y), new
+                                         Vector2(biasGraphRect.Max.X, y),
+                                     UiColors.BackgroundFull.Fade(0.2f), 1);
+
+                    points[i] = new Vector2(MathUtils.Lerp(biasGraphRect.Min.X, biasGraphRect.Max.X, t),
+                                            MathUtils.Lerp(biasGraphRect.Min.Y, biasGraphRect.Max.Y, 1 - f));
+                }
+
+                drawList.AddLine(new Vector2(p.X, biasGraphRect.Min.Y),
+                                 new Vector2(p.X, biasGraphRect.Max.Y), UiColors.StatusAnimated.Fade(0.5f), 0.5f);
+                
+                drawList.AddLine(p, new Vector2(biasGraphRect.Max.X -5 , p.Y), UiColors.StatusAnimated.Fade(0.5f), 1);
+                drawList.AddRectFilled(new Vector2(biasGraphRect.Max.X -3 , p.Y),
+                                       biasGraphRect.Max, UiColors.StatusAnimated);
+
+                drawList.AddPolyline(ref points[0], steps, UiColors.TextMuted, ImDrawFlags.None, 1);
+                drawList.PopClipRect();
+            }
+            
+            if (inFragment > 1)
+            {
+                drawList.AddCircleFilled(new Vector2( biasGraphRect.Max.X-4, biasGraphRect.Max.Y-4), 4, UiColors.StatusAnimated, 3);
+            }
+            
+            if (inFragment < 0)
+            {
+                drawList.AddTriangleFilled(new Vector2( biasGraphRect.Min.X+7, biasGraphRect.Max.Y-9.5f),
+                                           new Vector2( biasGraphRect.Min.X+2, biasGraphRect.Max.Y-6.5f),
+                                           new Vector2( biasGraphRect.Min.X+7, biasGraphRect.Max.Y-3.5f),
+                                           UiColors.StatusAnimated
+                                           );
+            }
+            
+            ValueLabel.Draw(drawList, screenRect, new Vector2(GraphRangePadding / 2, 0), remap.RangeInMax);
+            ValueLabel.Draw(drawList, screenRect, new Vector2(GraphRangePadding / 2, 1), remap.RangeInMin);
+
+            ValueLabel.Draw(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 0), remap.RangeOutMax);
+            ValueLabel.Draw(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 1), remap.RangeOutMin);
+
+            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph |
+                   SymbolChildUi.CustomUiResult.PreventTooltip;
         }
 
         private const float TriangleSize = 4;
-        
+
         private static readonly Vector2[] GraphLinePoints = new Vector2[4];
     }
 }
