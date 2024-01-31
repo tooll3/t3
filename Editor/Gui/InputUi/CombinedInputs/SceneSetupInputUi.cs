@@ -52,13 +52,13 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
             if (ImGui.BeginPopup(EditSceneStructure))
             {
-                if (setup.Nodes == null)
+                if (setup.RootNodes == null)
                 {
                     ImGui.TextUnformatted("node structure undefined");
                 }
                 else
                 {
-                    foreach (var node in setup.Nodes)
+                    foreach (var node in setup.RootNodes)
                     {
                         DrawNode(node);
                     }   

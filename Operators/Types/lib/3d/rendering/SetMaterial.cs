@@ -49,9 +49,9 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
                 _pbrMaterial.UpdateParameterBuffer();
             }
 
-            UpdateSrv(BaseColorMap, context, ref _pbrMaterial.AlbedoColorSrv, PbrMaterial.DefaultAlbedoColorSrv);
+            UpdateSrv(BaseColorMap, context, ref _pbrMaterial.AlbedoMapSrv, PbrMaterial.DefaultAlbedoColorSrv);
             UpdateSrv(NormalMap, context, ref _pbrMaterial.NormalSrv, PbrMaterial.DefaultNormalSrv);
-            UpdateSrv(EmissiveColorMap, context, ref _pbrMaterial.EmissiveColorSrv, PbrMaterial.DefaultEmissiveColorSrv);
+            UpdateSrv(EmissiveColorMap, context, ref _pbrMaterial.EmissiveMapSrv, PbrMaterial.DefaultEmissiveColorSrv);
             UpdateSrv(RoughnessMetallicOcclusionMap, context, ref _pbrMaterial.RoughnessMetallicOcclusionSrv, PbrMaterial.DefaultRoughnessMetallicOcclusionSrv);
 
             var previousMaterial = context.PbrMaterial;

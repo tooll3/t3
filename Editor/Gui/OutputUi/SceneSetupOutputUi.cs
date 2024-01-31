@@ -29,23 +29,16 @@ public class SceneSetupOutputUi : OutputUi<float>
             return;
         }
 
-        if (setup.Nodes == null)
+        if (setup.RootNodes == null)
         {
             ImGui.TextUnformatted("node structure undefined");
             return;
             
         }
 
-        FormInputs.AddSectionHeader("Materials");
-        foreach (var m in setup.Materials)
-        {
-            ImGui.TextUnformatted(string.IsNullOrEmpty(m.Name) ? "unnamed" : m.Name);
-        }
-
-        
         FormInputs.AddSectionHeader("Structure");
 
-        foreach (var node in setup.Nodes)
+        foreach (var node in setup.RootNodes)
         {
             DrawNode(node);
         }

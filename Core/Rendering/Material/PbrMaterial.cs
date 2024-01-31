@@ -11,8 +11,8 @@ namespace T3.Core.Rendering.Material;
 public class PbrMaterial
 {
     public string Name;
-    public ShaderResourceView AlbedoColorSrv;
-    public ShaderResourceView EmissiveColorSrv;
+    public ShaderResourceView AlbedoMapSrv;
+    public ShaderResourceView EmissiveMapSrv;
     public ShaderResourceView RoughnessMetallicOcclusionSrv;
     public ShaderResourceView NormalSrv;
 
@@ -63,8 +63,8 @@ public class PbrMaterial
                              {
                                  Name = "Default",
                                  Parameters = DefaultParameters,
-                                 AlbedoColorSrv = DefaultAlbedoColorSrv,
-                                 EmissiveColorSrv = DefaultEmissiveColorSrv,
+                                 AlbedoMapSrv = DefaultAlbedoColorSrv,
+                                 EmissiveMapSrv = DefaultEmissiveColorSrv,
                                  RoughnessMetallicOcclusionSrv = DefaultRoughnessMetallicOcclusionSrv,
                                  NormalSrv = DefaultNormalSrv,
 

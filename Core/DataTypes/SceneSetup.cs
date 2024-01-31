@@ -17,14 +17,36 @@ namespace T3.Core.DataTypes;
 /// </summary>
 public class SceneSetup : IEditableInputType
 {
-    // private List<MeshBuffers> _meshBuffers;
-    // private Point[] Positions;
-    // private List<PbrMaterial> Materials;
-
+    // TODO: Implement UI and serialize 
     // private Dictionary<string, string> MaterialAssignments;
 
-    public List<SceneNode> Nodes = new List<SceneNode>();
+    /// <summary>
+    /// Flattens the node structure
+    /// </summary>
+    public void GenerateSceneDrawDispatch()
+    {
+        
+    }
+    
+    /// <summary>
+    /// Flattened structure used by _DispatchSceneDraws to dispatch draw commands.
+    /// </summary>
+    public class SceneDrawDispatch
+    {
+        public MeshBuffers MeshBuffers;
+        public int VertexCount;
+        public int VertexStartIndex;
+        public PbrMaterial Material;
+        
+        public Matrix4x4 CombinedTransform;
+    //     public int[] PointIndices;
+    //     public Buffer PointIndexBuffer;
+    }
 
+
+    
+    public List<SceneDrawDispatch> DrawDispatches = new();
+    
     /// <summary>
     /// Recursive description of the loaded nodes...
     /// This can be translated into a list of draw dispatches.
@@ -32,6 +54,8 @@ public class SceneSetup : IEditableInputType
     /// <remarks>
     /// This closely follows the gltf format structure but should be
     /// agnostic to other multi-node formats like obj.</remarks>
+    public List<SceneNode> RootNodes = new();
+    
     public class SceneNode
     {
         public string Name;
@@ -81,20 +105,8 @@ public class SceneSetup : IEditableInputType
         }
     }
 
-    public List<PbrMaterial> Materials { get; set; } = new List<PbrMaterial>();
-
-    // private List<DrawBatch> _drawBatches;
-
-    // struct DrawBatch
-    // {
-    //     public PbrMaterial Material;
-    //     public MeshBuffers Mesh;
-    //     public int StartFaceIndex;
-    //     public int FaceCount;
-    //     public int[] PointIndices;
-    //     public Buffer PointIndexBuffer;
-    // }
-
+    //public List<PbrMaterial> Materials { get; set; } = new List<PbrMaterial>();
+    
     #region serialization
     public void Write(JsonTextWriter writer)
     {
