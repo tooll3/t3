@@ -3,11 +3,21 @@
   "Description": "Accelerate particles from a signed normal map. The map is stretched to the camera clip space.\n\nThis force can be very powerful in creating effects, such as particles flowing along images or tracing contours. It utilizes the R and G channels of the signed normal map to accelerate along the X and Y axes.\n\nImportant: This implies that the normal map needs to have negative values. One option is using [NormalMap] with the Gray_ToNormalizedRGBSigned mode. This can be especially potent when combined with the Rotation parameter.\n\nTip: You can also use the [ImageLevels] operator to verify that the texture contains negative values.\n\nYou can use the ViewConfinement and DepthConcentration parameters to keep the particles within the visible area for the camera view.\n\nPlease also check the example.",
   "InputUis": [
     {
+      "InputId": "fcb4c9ff-b8b7-4fa3-b1ab-d8af6dbedc96"/*SignedNormalMap*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -58.33496,
+        "Y": 513.21466
+      }
+    },
+    {
       "InputId": "eddf467a-d96e-4639-aa09-b49dc1775c1b"/*Amount*/,
       "Position": {
         "X": -58.33496,
         "Y": 558.21466
       },
+      "GroupTitle": "Amount",
+      "Description": "How much are the particles accelerated by the signed normal map.\nYou can use negative values to invert the direction.",
       "Min": -5.0,
       "Max": 5.0,
       "Scale": 0.001
@@ -17,62 +27,91 @@
       "Position": {
         "X": -58.33496,
         "Y": 603.21466
-      }
+      },
+      "Min": -5.0,
+      "Max": 5.0,
+      "Format": "{0:0.000} ×",
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "faad9c30-9500-49bd-9b62-3f00ab536f35"/*AmountVariation*/,
+      "Position": {
+        "X": -58.33496,
+        "Y": 648.21466
+      },
+      "Description": "Add random variation to the amount of the effect. \nYou can use the BiasAndGain parameter to control the variation distribution."
+    },
+    {
+      "InputId": "a63a10bb-b0c5-46bc-8f9d-8b0b3f4cd037"/*TwistAngle*/,
+      "Position": {
+        "X": -50.516357,
+        "Y": 864.0927
+      },
+      "GroupTitle": "Spin",
+      "Description": "Applies a rotation along the view direction.",
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "b61b695e-593d-4d7a-bb76-b15cbc0913d9"/*TwistVariation*/,
+      "Position": {
+        "X": -50.516357,
+        "Y": 909.0927
+      },
+      "Description": "Add a random offset to the twist rotation. Use BiasAndGain to control the amount of random distribution",
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "41491794-082d-4394-b6c2-efb4780623ea"/*VariationBiasGain*/,
+      "Position": {
+        "X": -50.516357,
+        "Y": 954.0927
+      },
+      "Description": "Controls the random distribution. Please check [BiasAndGainExample] and read the documentation on Wiki -> Rendering for Artists.",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "0de3d1e6-63d4-4dbf-a426-cbd4e6019c45"/*ViewConfinement*/,
       "Position": {
-        "X": -58.33496,
-        "Y": 648.21466
-      }
+        "X": -53.12256,
+        "Y": 1118.3694
+      },
+      "GroupTitle": "Push into view",
+      "Description": "Applies a force to push particles back into view."
     },
     {
       "InputId": "87264af4-0939-4aad-9a15-b79d067b9fcb"/*DepthConcentration*/,
       "Position": {
-        "X": -58.33496,
-        "Y": 693.21466
+        "X": -53.12256,
+        "Y": 1163.3694
       },
+      "Description": "Applies force to push particles towards distanced from the camera that is defined by CenterDepth.",
       "Min": -1.0,
       "Max": 1.0
     },
     {
       "InputId": "d5038c16-3920-48fc-8cd8-9346b63dad7a"/*CenterDepth*/,
       "Position": {
-        "X": -58.33496,
-        "Y": 738.21466
-      }
+        "X": -53.12256,
+        "Y": 1208.3694
+      },
+      "Description": "Target distance from the camera plane when applying DepthConcentration."
     },
     {
       "InputId": "b79534be-d4ab-4a9b-93ac-3652f3ccf19d"/*ShowGizmo*/,
       "Position": {
-        "X": -58.33496,
-        "Y": 783.21466
-      }
-    },
-    {
-      "InputId": "fcb4c9ff-b8b7-4fa3-b1ab-d8af6dbedc96"/*SignedNormalMap*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -58.33496,
-        "Y": 828.2144
-      }
-    },
-    {
-      "InputId": "a63a10bb-b0c5-46bc-8f9d-8b0b3f4cd037"/*TwistAngle*/,
-      "Position": {
-        "X": -58.33496,
-        "Y": 873.2144
+        "X": -49.213257,
+        "Y": 1344.5865
       },
-      "Min": -180.0,
-      "Max": 180.0,
-      "Format": "{0:0.0}°"
-    },
-    {
-      "InputId": "47e77938-5132-4162-ab6f-e7b7ff72af3f"/*Debug*/,
-      "Position": {
-        "X": -58.33496,
-        "Y": 918.2144
-      }
+      "GroupTitle": "Options"
     }
   ],
   "SymbolChildUis": [
@@ -114,8 +153,8 @@
     {
       "ChildId": "73f20e66-9144-4268-9e72-ee0c1147ea71"/*VisibleGizmos*/,
       "Position": {
-        "X": 898.9707,
-        "Y": 1025.228
+        "X": 978.25745,
+        "Y": 1502.0735
       }
     },
     {
@@ -150,49 +189,49 @@
       "ChildId": "b9cfe6eb-d521-48ec-acbe-e78404ea7ffa"/*SrvFromTexture2d*/,
       "Position": {
         "X": 602.3083,
-        "Y": 741.10626
+        "Y": 780.10626
       }
     },
     {
       "ChildId": "ac85cf99-4b73-4f00-aa21-2cb50449e649"/*Layer2d*/,
       "Position": {
-        "X": 439.98303,
-        "Y": 1213.0679
+        "X": 519.27,
+        "Y": 1689.9133
       }
     },
     {
       "ChildId": "9054203a-1fe9-4ce3-b1fd-d81d5c0dca30"/*Camera*/,
       "Position": {
-        "X": 739.98303,
-        "Y": 1195.7034
+        "X": 819.2699,
+        "Y": 1672.5488
       }
     },
     {
       "ChildId": "c95137eb-31d1-47bb-a8be-32b1993347bc"/*Displace*/,
       "Position": {
-        "X": 289.98303,
-        "Y": 1213.0679
+        "X": 369.26996,
+        "Y": 1689.9133
       }
     },
     {
       "ChildId": "95552486-1a94-4ad5-be83-2a6dff0be04e"/*Group*/,
       "Position": {
-        "X": 589.98303,
-        "Y": 1213.0679
+        "X": 669.2699,
+        "Y": 1689.9133
       }
     },
     {
       "ChildId": "d2cdb2b9-f2f6-4fb2-a7d9-78dd5c4f4f9a"/*Raster*/,
       "Position": {
-        "X": 139.98303,
-        "Y": 1213.0679
+        "X": 219.26996,
+        "Y": 1689.9133
       }
     },
     {
       "ChildId": "cc4d654e-8b0c-4474-ba6c-ac0f5bb4cbd7"/*Multiply*/,
       "Position": {
-        "X": 139.98303,
-        "Y": 1256.0679
+        "X": 219.26996,
+        "Y": 1732.9133
       }
     },
     {
@@ -200,6 +239,13 @@
       "Position": {
         "X": 91.66504,
         "Y": 603.21466
+      }
+    },
+    {
+      "ChildId": "2f648aaf-f16f-4526-9f89-90feb8c2a27c"/*Vector2Components*/,
+      "Position": {
+        "X": 219.55301,
+        "Y": 1238.7299
       }
     }
   ],
@@ -223,8 +269,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 79.98303,
-        "Y": 965.228
+        "X": 159.26996,
+        "Y": 1442.0735
       },
       "Size": {
         "X": 988.9877,
