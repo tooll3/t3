@@ -256,14 +256,14 @@
           "Value": 2.3999999
         },
         {
-          "Id": "353ac2ee-aed3-4614-adf5-e1328768fd0b"/*Samples*/,
-          "Type": "System.Single",
-          "Value": 16.0
-        },
-        {
           "Id": "03f2bd5c-b599-47f5-b697-9f881639a598"/*AmplifyCore*/,
           "Type": "System.Single",
           "Value": -0.19999981
+        },
+        {
+          "Id": "353ac2ee-aed3-4614-adf5-e1328768fd0b"/*Samples*/,
+          "Type": "System.Single",
+          "Value": 16.0
         }
       ],
       "Outputs": []

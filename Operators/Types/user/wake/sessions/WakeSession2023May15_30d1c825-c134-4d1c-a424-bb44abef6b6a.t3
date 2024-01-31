@@ -1414,11 +1414,6 @@
           "Value": 1.0
         },
         {
-          "Id": "353ac2ee-aed3-4614-adf5-e1328768fd0b"/*Samples*/,
-          "Type": "System.Single",
-          "Value": 70.0
-        },
-        {
           "Id": "7f6dba80-bf4e-4e55-bd9a-ac1e2a077898"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -1427,6 +1422,11 @@
             "Z": 2.6714995,
             "W": 1.0
           }
+        },
+        {
+          "Id": "353ac2ee-aed3-4614-adf5-e1328768fd0b"/*Samples*/,
+          "Type": "System.Single",
+          "Value": 70.0
         }
       ],
       "Outputs": []
