@@ -24,21 +24,13 @@ namespace T3.Operators.Types.Id_fc0a5e68_9915_4323_b2a4_2491fa5d59a9
         private void Update(EvaluationContext context)
         {
             string searchPattern = SearchPattern.GetValue(context);
-            string originalString = OriginalString.GetValue(context);
-            if (string.IsNullOrEmpty(searchPattern) || string.IsNullOrEmpty(originalString))
+            if (string.IsNullOrEmpty(searchPattern))
             {
                 Index.Value = -1;
                 return;
             }
-
-            try
-            {
-                Index.Value = originalString.IndexOf(searchPattern);
-            }
-            catch (Exception)
-            {
-                Log.Error($"'{originalString}' or '{searchPattern}' is incorrect", this);
-            }
+            string originalString = OriginalString.GetValue(context);
+            Index.Value = originalString.IndexOf(searchPattern);
         }
 
         [Output(Guid = "4bb4bb23-4c3f-4d7d-9dab-c37ac63dd1c9")]
