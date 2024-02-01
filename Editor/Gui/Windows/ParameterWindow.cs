@@ -180,7 +180,7 @@ internal class ParameterWindow : Window
             ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
             var namespaceForEdit = op.Symbol.Namespace ?? "";
 
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 42);
+            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 29); // the question mark is now aligned to the right
             if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
                                               SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
             {
@@ -197,7 +197,7 @@ internal class ParameterWindow : Window
         if (symbolChildUi != null)
         {
             ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 205);
+            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 180); //we close the gap after Bypass button 
 
             var nameForEdit = symbolChildUi.SymbolChild.Name;
 
