@@ -56,9 +56,9 @@ public class RenderVideoWindow : RenderHelperWindow
             CustomComponents.TooltipForLastItem(q.Description);
         }
 
-        FormInputs.AddStringInput("File", ref _targetFile);
+        FormInputs.AddStringInput("File", ref UserSettings.Config.RenderVideoFilePath);
         ImGui.SameLine();
-        FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref _targetFile);
+        FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref UserSettings.Config.RenderVideoFilePath);
 
         if (IsFilenameIncrementible())
         {
@@ -73,7 +73,7 @@ public class RenderVideoWindow : RenderHelperWindow
         {
             if (ImGui.Button("Start Export"))
             {
-                if (ValidateOrCreateTargetFolder(_targetFile))
+                if (ValidateOrCreateTargetFolder(UserSettings.Config.RenderVideoFilePath))
                 {
                     _previousPlaybackSpeed = Playback.Current.PlaybackSpeed;
                     Playback.Current.PlaybackSpeed = 0;
@@ -84,7 +84,7 @@ public class RenderVideoWindow : RenderHelperWindow
 
                     if (_videoWriter == null)
                     {
-                        _videoWriter = new Mp4VideoWriter(_targetFile, size);
+                        _videoWriter = new Mp4VideoWriter(UserSettings.Config.RenderVideoFilePath, size);
                         _videoWriter.Bitrate = _bitrate;
 
                         // FIXME: Allow floating point FPS in a future version
@@ -142,7 +142,7 @@ public class RenderVideoWindow : RenderHelperWindow
     
     private static bool IsFilenameIncrementible()
     {
-        var filename = Path.GetFileName(_targetFile);
+        var filename = Path.GetFileName(UserSettings.Config.RenderVideoFilePath);
         if (string.IsNullOrEmpty(filename))
             return false;
         
@@ -155,7 +155,7 @@ public class RenderVideoWindow : RenderHelperWindow
         if (!_autoIncrementVersionNumber)
             return;
         
-        var filename = Path.GetFileName(_targetFile);
+        var filename = Path.GetFileName(UserSettings.Config.RenderVideoFilePath);
         if (string.IsNullOrEmpty(filename))
             return;
         
@@ -171,8 +171,10 @@ public class RenderVideoWindow : RenderHelperWindow
         var newVersionString = "v"+ (versionNumber +1).ToString("D"+digits);
         var newFilename = filename.Replace("v" + versionString, newVersionString);
 
-        var directoryName = Path.GetDirectoryName(_targetFile);
-        _targetFile = directoryName == null ? newFilename : Path.Combine(directoryName, newFilename);
+        var directoryName = Path.GetDirectoryName(UserSettings.Config.RenderVideoFilePath);
+        UserSettings.Config.RenderVideoFilePath = directoryName == null 
+                                                      ? newFilename 
+                                                      : Path.Combine(directoryName, newFilename);
     }
 
     private string HumanReadableDurationFromSeconds(double seconds)
@@ -225,9 +227,9 @@ public class RenderVideoWindow : RenderHelperWindow
     private QualityLevel GetQualityLevelFromRate(float bitsPerPixelSecond)
     {
         QualityLevel q = default;
-        for (var index = QualityLevels.Length - 1; index >= 0; index--)
+        for (var index = _qualityLevels.Length - 1; index >= 0; index--)
         {
-            q = QualityLevels[index];
+            q = _qualityLevels[index];
             if (q.MinBitsPerPixelSecond < bitsPerPixelSecond)
                 break;
         }
@@ -252,22 +254,21 @@ public class RenderVideoWindow : RenderHelperWindow
         public readonly string Description;
     }
 
-    private QualityLevel[] QualityLevels = new[]
-                                               {
-                                                   new QualityLevel(0.01, "Poor", "Very low quality. Consider lower resolution."),
-                                                   new QualityLevel(0.02, "Low", "Probable strong artifacts"),
-                                                   new QualityLevel(0.05, "Medium", "Will exhibit artifacts in noisy regions"),
-                                                   new QualityLevel(0.08, "Okay", "Compromise between filesize and quality"),
-                                                   new QualityLevel(0.12, "Good", "Good quality. Probably sufficient for YouTube."),
-                                                   new QualityLevel(0.5, "Very good", "Excellent quality, but large."),
-                                                   new QualityLevel(1, "Reference", "Indistinguishable. Very large files."),
-                                               };
+    private readonly QualityLevel[] _qualityLevels = new[]
+                                                        {
+                                                            new QualityLevel(0.01, "Poor", "Very low quality. Consider lower resolution."),
+                                                            new QualityLevel(0.02, "Low", "Probable strong artifacts"),
+                                                            new QualityLevel(0.05, "Medium", "Will exhibit artifacts in noisy regions"),
+                                                            new QualityLevel(0.08, "Okay", "Compromise between filesize and quality"),
+                                                            new QualityLevel(0.12, "Good", "Good quality. Probably sufficient for YouTube."),
+                                                            new QualityLevel(0.5, "Very good", "Excellent quality, but large."),
+                                                            new QualityLevel(1, "Reference", "Indistinguishable. Very large files."),
+                                                        };
     
     private static int _bitrate = 25000000;
-    private static string _targetFile = "./Render/render-v01.mp4";
 
     private static bool _autoIncrementVersionNumber = true;
-    private static Mp4VideoWriter _videoWriter = null;
+    private static Mp4VideoWriter _videoWriter;
     private static string _lastHelpString = string.Empty;
     private double _previousPlaybackSpeed;
 }
