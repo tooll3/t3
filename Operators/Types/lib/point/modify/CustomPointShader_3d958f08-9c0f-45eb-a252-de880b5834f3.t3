@@ -9,7 +9,7 @@
     },
     {
       "Id": "e9712b03-e7aa-4fe5-b5cf-f2c5d0c0b0df"/*ShaderCode*/,
-      "DefaultValue": "p.position += Center;\np.position.y += sin(6*f * A+B);"
+      "DefaultValue": "p.Position += Center;\np.Position.y += sin(6*f * A+B);"
     },
     {
       "Id": "01898885-4140-4435-bb44-a7a6f6f32657"/*Center*/,
