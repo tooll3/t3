@@ -1,0 +1,44 @@
+{
+  "Id": "37794826-a099-4af3-90f4-1e49092a09e1"/*GetListItemAttribute*/,
+  "InputUis": [
+    {
+      "InputId": "9cf1ae77-1e80-443a-bb07-f545c3d2e71d"/*DataList*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "09f5501d-5f51-4406-b0cd-4c3e572a376f"/*ItemIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "6a988c18-dfe1-4f52-9019-ed97bd61a6e8"/*FieldIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "c6b58ab1-7311-4cf9-b013-c021683fa159"/*OrFieldName*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "0c83599f-1e0f-4bbf-b662-56b4ca5099b0"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

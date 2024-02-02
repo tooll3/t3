@@ -1,0 +1,13 @@
+{
+  "Name": "GetIteratedFloat",
+  "Id": "f83bd8ce-ca66-4d31-9f2f-65066f15a3b2",
+  "Namespace": "lib.io.data",
+  "Inputs": [
+    {
+      "Id": "d09ec35b-6f02-424f-87cf-51c0c9f56857"/*FieldName*/,
+      "DefaultValue": ""
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

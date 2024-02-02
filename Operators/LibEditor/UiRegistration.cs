@@ -6,7 +6,9 @@ using lib.dx11.compute;
 using lib.dx11.draw;
 using lib.exec.context;
 using lib.io.audio;
+using lib.io.data;
 using lib.io.midi;
+using lib.io.time;
 using lib.math.@bool;
 using lib.math.curve;
 using lib.math.@float;
@@ -60,6 +62,8 @@ public class UiRegistration : IOperatorUIInitializer
         CustomChildUiRegistry.Entries.Add(typeof(SetFloatVar), SetFloatVarUi.DrawChildUi);
 
         CustomChildUiRegistry.Entries.Add(typeof(AudioReaction), AudioReactionUi.DrawChildUi);
+        CustomChildUiRegistry.Entries.Add(typeof(GpuMeasure), GpuMeasureUi.DrawChildUi);
+        CustomChildUiRegistry.Entries.Add(typeof(DataList), DataListUi.DrawChildUi);
 
         PlaybackUtils.BpmProvider = BpmProvider.Instance;
         PlaybackUtils.TapProvider = TapProvider.Instance;

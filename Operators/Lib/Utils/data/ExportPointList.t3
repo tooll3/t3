@@ -1,0 +1,25 @@
+{
+  "Name": "ExportPointList",
+  "Id": "d5607e3b-15e8-402c-8d54-b29e40415ab0",
+  "Namespace": "user.cynic.research.data",
+  "Inputs": [
+    {
+      "Id": "b0dceb47-4ee5-481f-a310-173c336f4fbe"/*TriggerSave*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "043e9707-98fe-420c-a546-292459c2fcca"/*FilePath*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "b2158c69-e671-4110-b398-59c323359d2d"/*FilterDoubleNaN*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "b3d57d74-ac47-4287-b42a-d85e64501eb5"/*InputList*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

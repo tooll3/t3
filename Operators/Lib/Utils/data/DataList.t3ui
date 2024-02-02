@@ -1,0 +1,22 @@
+{
+  "Id": "bfe540ef-f8ad-45a2-b557-cd419d9c8e44"/*DataList*/,
+  "InputUis": [
+    {
+      "InputId": "669ae1e4-dd47-4369-83c6-26d2705abf7b"/*InputList*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d117b613-c41b-42ce-889d-502a8c779fff"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}
