@@ -6,15 +6,15 @@
       "InputId": "f6bdd487-c16e-4fb0-bfba-b3801f121314"/*Texture*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -673.6466,
-        "Y": -49.818146
+        "X": -679.1573,
+        "Y": 210.47568
       }
     },
     {
-      "InputId": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+      "InputId": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
       "Position": {
-        "X": -673.6466,
-        "Y": -4.818144
+        "X": -650.3265,
+        "Y": 844.8617
       },
       "Description": "Controls how much the glow effect is blurred.\n\nWhen heavily blurred, the effect consequently loses intensity.",
       "AddPadding": "True",
@@ -24,21 +24,10 @@
       "Clamp": true
     },
     {
-      "InputId": "353ac2ee-aed3-4614-adf5-e1328768fd0b"/*Samples*/,
+      "InputId": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*Intensity*/,
       "Position": {
-        "X": -673.6466,
-        "Y": 40.181854
-      },
-      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed.",
-      "AddPadding": "True",
-      "Min": 1.0,
-      "Max": 64.0
-    },
-    {
-      "InputId": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
-      "Position": {
-        "X": -673.6466,
-        "Y": 85.181854
+        "X": -650.3265,
+        "Y": 934.8617
       },
       "Description": "Controls the intensity of the bloom effect.",
       "AddPadding": "True",
@@ -48,10 +37,22 @@
       "Clamp": true
     },
     {
-      "InputId": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,
+      "InputId": "03f2bd5c-b599-47f5-b697-9f881639a598"/*AmplifyCore*/,
       "Position": {
-        "X": -673.6466,
-        "Y": 130.18185
+        "X": -650.3265,
+        "Y": 979.8617
+      },
+      "Description": "Further controls the intensity of the glow effect.",
+      "Min": 0.0,
+      "Max": 10.0,
+      "Scale": 0.1,
+      "Format": "{0:0.000}"
+    },
+    {
+      "InputId": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Threshold*/,
+      "Position": {
+        "X": -645.9177,
+        "Y": 1028.3584
       },
       "Description": "Controls the brightness of the image and helps to control which areas of the image are included in the effect.",
       "Min": -0.2,
@@ -61,154 +62,153 @@
     {
       "InputId": "7f6dba80-bf4e-4e55-bd9a-ac1e2a077898"/*Color*/,
       "Position": {
-        "X": -673.6466,
-        "Y": 175.18185
+        "X": -645.9177,
+        "Y": 1073.3584
       },
       "Description": "Colorizes the Bloom effect.",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
     },
     {
-      "InputId": "03f2bd5c-b599-47f5-b697-9f881639a598"/*AmplifyFineBlur*/,
+      "InputId": "353ac2ee-aed3-4614-adf5-e1328768fd0b"/*Samples*/,
       "Position": {
-        "X": -673.6466,
-        "Y": 220.18185
+        "X": -645.9177,
+        "Y": 1118.3584
       },
-      "Description": "Further controls the intensity of the glow effect.",
-      "Min": 0.0,
-      "Max": 10.0,
-      "Scale": 0.1,
-      "Format": "{0:0.000}"
+      "GroupTitle": "Options",
+      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed.",
+      "Min": 1.0,
+      "Max": 64.0
     },
     {
       "InputId": "53fe4db2-128c-43e3-8c58-8f01694d13ac"/*BlendMode*/,
       "Position": {
-        "X": -673.6466,
-        "Y": 265.18185
+        "X": -645.9177,
+        "Y": 1163.3584
       },
-      "Description": "Selects how the effect is blended into the image.",
-      "AddPadding": "True"
+      "Description": "Selects how the effect is blended into the image."
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "934e7c46-a81f-4d13-9986-40e279c5bb93"/*Layer2d*/,
       "Position": {
-        "X": 146.56227,
-        "Y": -146.16006
+        "X": 1014.82294,
+        "Y": 194.46417
       }
     },
     {
       "ChildId": "a134d021-703f-42c5-82b0-a71b9f6b6919"/*Blur*/,
       "Position": {
-        "X": -202.96918,
-        "Y": -260.29904
+        "X": -277.20142,
+        "Y": 388.13406
       }
     },
     {
       "ChildId": "e230294b-3953-42b8-93d9-a62b8d95ae49"/*Layer2d*/,
       "Position": {
-        "X": 485.02008,
-        "Y": -44.63665
+        "X": 221.79895,
+        "Y": 269.39166
       }
     },
     {
       "ChildId": "c1c3ffbd-5011-4227-a7e8-a3d746996a8f"/*Execute*/,
       "Position": {
-        "X": 1294.5593,
-        "Y": 50.38298
+        "X": 1299.9756,
+        "Y": 153.2924
       }
     },
     {
       "ChildId": "fd0c7c41-df17-4b95-88dc-133f2b007a17"/*Blur*/,
       "Position": {
-        "X": 480.19107,
-        "Y": 207.92017
+        "X": 484.70462,
+        "Y": 453.9099
       }
     },
     {
       "ChildId": "772d9c94-42b1-49c5-ba3c-4044e3fa9c1c"/*Layer2d*/,
       "Position": {
-        "X": 610.19104,
-        "Y": 207.92017
+        "X": 623.4113,
+        "Y": 387.52106
       }
     },
     {
       "ChildId": "706d3095-9cd6-4c92-881a-ef1ed5ffc046"/*Multiply*/,
       "Position": {
-        "X": -80.89826,
-        "Y": 495.92252
+        "X": -76.38471,
+        "Y": 741.91223
       }
     },
     {
       "ChildId": "06822703-8108-425c-bfb5-993bc068071b"/*GetTextureSize*/,
       "Position": {
-        "X": -8.134619,
-        "Y": 286.29364
+        "X": 1.6029587,
+        "Y": 521.8353
       }
     },
     {
       "ChildId": "bdd97d58-627f-4132-849b-49d7bbae86ac"/*ResolutionFactor*/,
       "Position": {
-        "X": -44.16444,
-        "Y": 863.7301
+        "X": -86.66725,
+        "Y": 974.31274
       }
     },
     {
       "ChildId": "71477356-8d45-40f7-a7ff-8748d2ca5749"/*ScaleSize*/,
       "Position": {
-        "X": 200.26637,
-        "Y": 413.8301
+        "X": 204.77992,
+        "Y": 659.8198
       }
     },
     {
       "ChildId": "400c134b-4ffa-4614-b084-e07f1432d6d8"/*Blur*/,
       "Position": {
-        "X": 652.2983,
-        "Y": 384.52075
+        "X": 656.8118,
+        "Y": 630.5105
       }
     },
     {
       "ChildId": "e6c60d0a-2382-4fbb-a104-36b14461a490"/*Layer2d*/,
       "Position": {
-        "X": 782.2982,
-        "Y": 384.52075
+        "X": 799.9776,
+        "Y": 549.6078
       }
     },
     {
       "ChildId": "ddc8437f-cf19-4c87-a53e-66867a7de317"/*ScaleSize*/,
       "Position": {
-        "X": 429.21863,
-        "Y": 535.8537
+        "X": 433.73218,
+        "Y": 781.84344
       }
     },
     {
       "ChildId": "f7858e12-0b74-47a2-9fa9-c9d3f30f1e59"/*Multiply*/,
       "Position": {
-        "X": -80.89826,
-        "Y": 426.92252
+        "X": -76.38471,
+        "Y": 672.91223
       }
     },
     {
       "ChildId": "57373a22-c173-448b-95a7-3e007b4c8a76"/*Blur*/,
       "Position": {
-        "X": 837.4802,
-        "Y": 586.2337
+        "X": 841.9938,
+        "Y": 832.22345
       }
     },
     {
       "ChildId": "e2fe8ee3-050e-464b-b13f-252512a869e7"/*Layer2d*/,
       "Position": {
-        "X": 1029.709,
-        "Y": 613.4326
+        "X": 1013.84875,
+        "Y": 723.07495
       }
     },
     {
       "ChildId": "522919c2-ccc0-411f-bbe5-a7a38f97aaaa"/*ScaleSize*/,
       "Position": {
-        "X": 634.6941,
-        "Y": 685.5599
+        "X": 639.20764,
+        "Y": 931.5496
       }
     },
     {
@@ -221,8 +221,8 @@
     {
       "ChildId": "eee08a1f-ccb5-428f-bd2f-791a5f95094b"/*BlendColors*/,
       "Position": {
-        "X": 178.63844,
-        "Y": -79.099304
+        "X": -64.68744,
+        "Y": 276.41086
       }
     }
   ],

@@ -36,6 +36,9 @@ namespace T3.Operators.Types.Id_dd586355_64b3_4e96_af6d_b4927595dee7
 
         [Input(Guid = "2d229dc7-a7ec-4fae-b84c-5eea6b91e18a")]
         public readonly InputSlot<System.Numerics.Vector3> NoiseOffset = new();
+
+        [Input(Guid = "30ceafce-455a-449c-9ffd-928280d7a862")]
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
     }
 }
 

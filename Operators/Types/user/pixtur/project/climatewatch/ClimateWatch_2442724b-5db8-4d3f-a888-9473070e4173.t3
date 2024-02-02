@@ -1909,7 +1909,7 @@
       "SymbolId": "c757cde3-511c-44cb-af62-39156557daa6",
       "InputValues": [
         {
-          "Id": "42042144-1ca7-41c7-92b8-21ea1136698a"/*Color*/,
+          "Id": "42042144-1ca7-41c7-92b8-21ea1136698a"/*ColorHighlight*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 1.0,

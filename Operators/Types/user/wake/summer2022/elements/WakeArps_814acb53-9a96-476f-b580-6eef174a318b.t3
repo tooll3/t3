@@ -280,7 +280,7 @@
       "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
       "InputValues": [
         {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
           "Type": "System.Single",
           "Value": 1.4
         }
@@ -458,14 +458,14 @@
           "Value": 2
         },
         {
-          "Id": "b112705e-3ec3-4904-b978-bc784d9b2f94"/*RangeMin*/,
-          "Type": "System.Single",
-          "Value": -1.0
-        },
-        {
           "Id": "e704cf6c-963e-4701-ba3d-127b880676fa"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 1.0
+        },
+        {
+          "Id": "b112705e-3ec3-4904-b978-bc784d9b2f94"/*RangeMin*/,
+          "Type": "System.Single",
+          "Value": -1.0
         }
       ],
       "Outputs": []

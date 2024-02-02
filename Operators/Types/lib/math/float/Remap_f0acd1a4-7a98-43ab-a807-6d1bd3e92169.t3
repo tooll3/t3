@@ -24,6 +24,13 @@
       "DefaultValue": 1.0
     },
     {
+      "Id": "23548048-e373-4fd6-9c83-1cf7398f952d"/*BiasAndGain*/,
+      "DefaultValue": {
+        "X": 0.5,
+        "Y": 0.5
+      }
+    },
+    {
       "Id": "406f6476-eb25-4493-aaea-3899e84de50f"/*Mode*/,
       "DefaultValue": 0
     }

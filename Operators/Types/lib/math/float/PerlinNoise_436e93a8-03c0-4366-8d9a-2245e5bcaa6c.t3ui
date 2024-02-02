@@ -47,12 +47,12 @@
       }
     },
     {
-      "InputId": "296d0f7f-d484-4781-b01f-48839def0324"/*GainBias*/,
+      "InputId": "296d0f7f-d484-4781-b01f-48839def0324"/*BiasAndGain*/,
       "Position": {
         "X": -2.7436478,
         "Y": -54.555206
       },
-      "UseVec2Control": "GainBias"
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,

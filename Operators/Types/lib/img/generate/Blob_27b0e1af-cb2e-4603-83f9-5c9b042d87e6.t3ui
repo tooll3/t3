@@ -34,7 +34,8 @@
       },
       "Description": "X/Y position, in relative units.",
       "Min": -1.0,
-      "Max": 1.0
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "37da22d0-56ca-444a-9c9d-27a70283b7c0"/*Stretch*/,
@@ -44,7 +45,8 @@
       },
       "Description": "Stretches the blob unevenly.",
       "Min": -1.0,
-      "Max": 1.0
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "33f31c62-b0ea-42f9-a226-d0f5154731ee"/*Scale*/,

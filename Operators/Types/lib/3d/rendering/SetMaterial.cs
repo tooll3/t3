@@ -5,7 +5,6 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Rendering;
 using T3.Core.Rendering.Material;
 using T3.Core.Resource;
 using Utilities = T3.Core.Utils.Utilities;
@@ -19,21 +18,23 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
         [Output(Guid = "d80e1028-a48d-4171-8c8c-e6856bd2143d")]
         public readonly Slot<Command> Output = new();
 
+        [Output(Guid = "51612678-3573-4D40-A423-9E23FC72EA44")]
+        public readonly Slot<PbrMaterial> Reference = new();
+        
         public SetMaterial()
         {
             Output.UpdateAction = Update;
+            Reference.UpdateAction = Update;
         }
-
-
+        
         private void Update(EvaluationContext context)
         {
-
             var parameterBufferNeedsUpdate = BaseColor.DirtyFlag.IsDirty ||
-                              EmissiveColor.DirtyFlag.IsDirty ||
-                              Roughness.DirtyFlag.IsDirty ||
-                              Specular.DirtyFlag.IsDirty ||
-                              Metal.DirtyFlag.IsDirty ||
-            _pbrMaterial == null;
+                                             EmissiveColor.DirtyFlag.IsDirty ||
+                                             Roughness.DirtyFlag.IsDirty ||
+                                             Specular.DirtyFlag.IsDirty ||
+                                             Metal.DirtyFlag.IsDirty ||
+                                             _pbrMaterial == null;
             
             _pbrMaterial ??= new PbrMaterial();
             
@@ -48,16 +49,32 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
                 _pbrMaterial.UpdateParameterBuffer();
             }
 
-            UpdateSrv(BaseColorMap, context, ref _pbrMaterial.AlbedoColorSrv, PbrMaterial.DefaultAlbedoColorSrv);
+            UpdateSrv(BaseColorMap, context, ref _pbrMaterial.AlbedoMapSrv, PbrMaterial.DefaultAlbedoColorSrv);
             UpdateSrv(NormalMap, context, ref _pbrMaterial.NormalSrv, PbrMaterial.DefaultNormalSrv);
-            UpdateSrv(EmissiveColorMap, context, ref _pbrMaterial.EmissiveColorSrv, PbrMaterial.DefaultEmissiveColorSrv);
+            UpdateSrv(EmissiveColorMap, context, ref _pbrMaterial.EmissiveMapSrv, PbrMaterial.DefaultEmissiveColorSrv);
             UpdateSrv(RoughnessMetallicOcclusionMap, context, ref _pbrMaterial.RoughnessMetallicOcclusionSrv, PbrMaterial.DefaultRoughnessMetallicOcclusionSrv);
 
             var previousMaterial = context.PbrMaterial;
             context.PbrMaterial = _pbrMaterial;
+            
+            var isValid = _pbrMaterial != null;
+
+            if (isValid)
+            {
+                _pbrMaterial.Name = MaterialId.GetValue(context);
+                context.Materials.Add(_pbrMaterial);
+            } 
 
             SubTree.GetValue(context);
+            
+            if(isValid)
+                context.Materials.RemoveAt(context.Materials.Count - 1);
+            
+            // TODO: replace with stack
             context.PbrMaterial = previousMaterial;
+
+            Reference.Value = _pbrMaterial;
+            Reference.DirtyFlag.Clear();
         }
 
         private void UpdateSrv(InputSlot<Texture2D> textureInputSlot, EvaluationContext context, ref ShaderResourceView currentSrv, ShaderResourceView defaultSrv)
@@ -123,6 +140,10 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
 
         [Input(Guid = "C8003FBD-C6CE-440C-9F1F-6B15B5EE5274")]
         public readonly InputSlot<Texture2D> RoughnessMetallicOcclusionMap = new();
+
+        [Input(Guid = "71E289F0-382B-4D0F-A2E0-701C7019A360")]
+        public readonly InputSlot<string> MaterialId = new();
+
 
     }
 }

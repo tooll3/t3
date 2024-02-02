@@ -64,6 +64,17 @@
         "X": -351.6601,
         "Y": 1304.9845
       }
+    },
+    {
+      "InputId": "30ceafce-455a-449c-9ffd-928280d7a862"/*BiasAndGain*/,
+      "Position": {
+        "X": -351.6601,
+        "Y": 1349.9845
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "UseVec2Control": "BiasAndGain"
     }
   ],
   "SymbolChildUis": [
@@ -140,6 +151,13 @@
       "Position": {
         "X": 46.52594,
         "Y": 1238.5292
+      }
+    },
+    {
+      "ChildId": "1ba7d170-1f30-4b65-80c6-f66e613e31a4"/*Vector2Components*/,
+      "Position": {
+        "X": 70.32176,
+        "Y": 1330.553
       }
     }
   ],

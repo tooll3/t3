@@ -129,7 +129,7 @@
       "Format": "{0:0.000}°"
     },
     {
-      "InputId": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*GainBias*/,
+      "InputId": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*BiasAndGain*/,
       "Position": {
         "X": -153.38249,
         "Y": 1561.6694
@@ -137,7 +137,7 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true,
-      "UseVec2Control": "GainBias"
+      "UseVec2Control": "BiasAndGain"
     }
   ],
   "SymbolChildUis": [

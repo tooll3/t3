@@ -7,16 +7,16 @@ cbuffer ParamConstants : register(b0)
     float4 ColorA;
     float4 ColorB;
 
-    float2 Offset;
+    float2 Offset;  //8
     float2 Stretch;
 
-    float Scale;
+    float Scale;   // 12
     float Phase;
     float Iterations;
     float __padding;
 
-    float2 GainBias;
-    float2 WarpOffsetXY;
+    float2 BiasAndGain; //16
+    float2 WarpOffsetXY; 
 
     float WarpOffsetZ;
 }
@@ -113,7 +113,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     f = 2 * f - 1;
 
     //float fBiased = f;
-    float fBiased = ApplyGainBias(f, GainBias.x, GainBias.y);
+    float fBiased = ApplyBiasAndGain(f, BiasAndGain.x, BiasAndGain.y);
 
     return lerp(ColorA, ColorB, saturate(fBiased));
 

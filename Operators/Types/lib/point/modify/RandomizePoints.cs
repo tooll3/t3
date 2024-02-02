@@ -36,7 +36,7 @@ namespace T3.Operators.Types.Id_ec0675d7_6b72_4b15_b141_80bdd2367cd8
         public readonly InputSlot<float> RandomSeed = new InputSlot<float>();
 
         [Input(Guid = "5282AD12-AACF-4A62-8FDE-DF0148AB0F1F")]
-        public readonly InputSlot<System.Numerics.Vector2> GainBias = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "362FCD1A-444A-417B-B49F-EE1BABAEE998")]
         public readonly MultiInputSlot<float> UseSelection = new MultiInputSlot<float>();

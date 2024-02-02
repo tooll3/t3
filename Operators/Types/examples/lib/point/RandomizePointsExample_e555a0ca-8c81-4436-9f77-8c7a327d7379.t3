@@ -80,6 +80,11 @@
       "SymbolId": "ec0675d7-6b72-4b15-b141-80bdd2367cd8",
       "InputValues": [
         {
+          "Id": "82384eba-1d7a-41c8-a703-9184c961d766"/*Amount*/,
+          "Type": "System.Single",
+          "Value": 0.99
+        },
+        {
           "Id": "270bcf23-35ee-4c4f-aae5-192435b1aee3"/*Position*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -168,7 +173,7 @@
           "Value": 2.33
         },
         {
-          "Id": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*GainBias*/,
+          "Id": "ef8d1fe2-8470-4113-8d20-40a92d0dab97"/*BiasAndGain*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.588,
@@ -212,7 +217,7 @@
           }
         },
         {
-          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*GainBias*/,
+          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*BiasAndGain*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.57,
@@ -478,7 +483,7 @@
           "Value": -0.2
         },
         {
-          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*GainBias*/,
+          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*BiasAndGain*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 1.0,
@@ -653,7 +658,7 @@
           }
         },
         {
-          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*GainBias*/,
+          "Id": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*BiasAndGain*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.3,
@@ -695,6 +700,7 @@
     },
     {
       "Id": "5e7bbe16-5465-45fb-b767-3d4c95b9ac24"/*Blur*/,
+      "IsBypassed": true,
       "SymbolId": "946da16c-f536-4887-b764-af9468f22c0f",
       "InputValues": [
         {
@@ -872,7 +878,7 @@
           "Value": 2
         },
         {
-          "Id": "418d7362-3c4b-4749-8f11-62a953065689"/*GainBias*/,
+          "Id": "418d7362-3c4b-4749-8f11-62a953065689"/*BiasAndGain*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.45,

@@ -18,6 +18,10 @@
           "NodeSettings": []
         }
       }
+    },
+    {
+      "Id": "ef7075e9-4bc2-442e-8e0c-e03667ff2e0a"/*TriggerUpdate*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

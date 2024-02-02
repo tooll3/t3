@@ -98,6 +98,7 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
                         = (new Vector3(point.X, 1 - point.Y, 0) + centerOffset) * scale;
                     _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].W = 1;
                     _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].Orientation = Quaternion.Identity;
+                    _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].Color = new Vector4(1.0f); // We need a better fix, maybe with the colors from the SVG file
                 }
 
                 // Calculate normals

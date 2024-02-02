@@ -42,8 +42,8 @@ namespace T3.Operators.Types.Id_ca4fe8c4_cf61_4196_84e4_d69dc8869a25
 
         
         private void UpdatePbrParameterBuffer(EvaluationContext context) => PbrParameterBuffer.Value = context.PbrMaterial.ParameterBuffer;
-        private void UpdateAlbedoColorMap(EvaluationContext context) => AlbedoColorMap.Value = context.PbrMaterial.AlbedoColorSrv;
-        private void UpdateEmissiveColorMap(EvaluationContext context) => EmissiveColorMap.Value = context.PbrMaterial.EmissiveColorSrv;
+        private void UpdateAlbedoColorMap(EvaluationContext context) => AlbedoColorMap.Value = context.PbrMaterial.AlbedoMapSrv;
+        private void UpdateEmissiveColorMap(EvaluationContext context) => EmissiveColorMap.Value = context.PbrMaterial.EmissiveMapSrv;
         private void UpdateRoughnessMetallicOcclusionMap(EvaluationContext context) => RoughnessMetallicOcclusionMap.Value = context.PbrMaterial.RoughnessMetallicOcclusionSrv;
         private void UpdateNormalMap(EvaluationContext context) => NormalMap.Value = context.PbrMaterial.NormalSrv;
         private void UpdateBrdfLookupMap(EvaluationContext context) => BrdfLookupMap.Value = PbrContextSettings.PbrLookUpTextureSrv;

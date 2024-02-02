@@ -134,6 +134,15 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
                         CustomFormat = "{0:0.000} ×",
                         ClampRange = false,
                     },
+                new()
+                    {
+                        Scale = 0,
+                        Title = "Bias&Gain",
+                        MinValue = 0,
+                        MaxValue = 1,
+                        CustomFormat = "{0:0.000}",
+                        ClampRange = true,
+                    },                
             };
 
         public override void DrawSettings()

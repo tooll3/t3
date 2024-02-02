@@ -1,7 +1,8 @@
 #include "lib/shared/hash-functions.hlsl"
-#include "lib/shared/noise-functions.hlsl"
+//#include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
 #include "lib/shared/quat-functions.hlsl"
+#include "lib/shared/bias-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -11,9 +12,11 @@ cbuffer Params : register(b0)
     float Confinment;
     float DepthConcentration;
     float CenterDepth;
-
     float TwistAngle;
-    float Debug;
+
+    float TwistVariation;
+    float AmountVariation;
+    float2 VariationBiasAndGain;
 }
 
 cbuffer Transforms : register(b1)
@@ -45,6 +48,8 @@ void main(uint3 i : SV_DispatchThreadID)
     if(i.x >= maxParticleCount)
         return;
 
+    float randomHash = ApplyBiasAndGain( hash11u(i.x), VariationBiasAndGain.x, VariationBiasAndGain.y);
+
     float4 posInObject = float4(Particles[i.x].Position,1);
     float4 posInCamera = mul(posInObject, ObjectToCamera);
     float4 pos = mul(float4(posInCamera.xyz, 1), CameraToClipSpace);
@@ -52,14 +57,11 @@ void main(uint3 i : SV_DispatchThreadID)
     pos.xyz /= pos.w;
     
     float4 normalMap = FxTexture.SampleLevel(texSampler, (pos.xy * float2(1, -1)  + 1) / 2, 0);
-    float3 offset = normalMap.rgb * float3(1,-1,1) * Amount * float3( AmountXY,0) * normalMap.a;
 
-    // float lengthXY = length(offset.xy);
-    // if(lengthXY > 0.0001) 
-    // {
-    //     float angle = atan2( offset.x, offset.y) + TwistAngle / 180 * PI;
-    //     offset.xy = float2(sin(angle), cos(angle)) * lengthXY;
-    // }
+    float randomAmount = (randomHash- 0.5) * AmountVariation;
+
+    float3 offset = normalMap.rgb * float3(1,-1,1) * (Amount + randomAmount) * float3( AmountXY,0) * normalMap.a;
+
 
     // Confine particles outside of view
     float2 dXYFromCenter = abs(pos.xy);
@@ -81,7 +83,7 @@ void main(uint3 i : SV_DispatchThreadID)
     if(lengthXY > 0.0001) 
     {
         
-        float angle = atan2( v.x, v.y) + TwistAngle / 180 * PI;
+        float angle = atan2( v.x, v.y) + (TwistAngle + TwistVariation * (randomHash-0.5) ) / 180 * PI;
         v.xy = float2(sin(angle), cos(angle)) * lengthXY;
     }
 

@@ -8,6 +8,7 @@ using SharpDX.Mathematics.Interop;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Rendering.Material;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
@@ -108,8 +109,11 @@ public partial class UiSymbolData
                        () => new ValueOutputUi<Curve>());
         RegisterUiType(typeof(T3.Core.Operator.GizmoVisibility), new FallBackUiProperties(), () => new EnumInputUi<T3.Core.Operator.GizmoVisibility>(),
                        () => new ValueOutputUi<T3.Core.Operator.GizmoVisibility>());
+
         RegisterUiType(typeof(T3.Core.DataTypes.Gradient), new ValueUiProperties(), () => new GradientInputUi(),
                        () => new ValueOutputUi<T3.Core.DataTypes.Gradient>());
+        
+        
         RegisterUiType(typeof(T3.Core.DataTypes.LegacyParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<T3.Core.DataTypes.LegacyParticleSystem>(),
                        () => new ValueOutputUi<T3.Core.DataTypes.LegacyParticleSystem>());
         RegisterUiType(typeof(T3.Core.DataTypes.ParticleSystem), new FallBackUiProperties(), 
@@ -131,6 +135,7 @@ public partial class UiSymbolData
                        () => new FallbackInputUi<T3.Core.DataTypes.Texture3dWithViews>(),
                        () => new Texture3dOutputUi());
 
+        // Rendering
         RegisterUiType(typeof(MeshBuffers), new FallBackUiProperties(), () => new FallbackInputUi<MeshBuffers>(),
                        () => new ValueOutputUi<MeshBuffers>());
 
@@ -138,8 +143,13 @@ public partial class UiSymbolData
                        () => new FallbackInputUi<DataSet>(), () => new DataSetOutputUi());
 
         RegisterUiType(typeof(SceneSetup), new FallBackUiProperties(),
-                       () => new FallbackInputUi<SceneSetup>(), () => new SceneSetupOutputUi());
+                       () => new SceneSetupInputUi(), () => new SceneSetupOutputUi());
 
+        RegisterUiType(typeof(PbrMaterial), new FallBackUiProperties(),
+                       () => new FallbackInputUi<PbrMaterial>(), 
+                       () => new ValueOutputUi<PbrMaterial>());
+
+        
         // sharpdx types
         RegisterUiType(typeof(Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
         RegisterUiType(typeof(Int2), new ValueUiProperties(), () => new Int2InputUi(), () => new ValueOutputUi<Int2>());

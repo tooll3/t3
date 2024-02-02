@@ -142,6 +142,6 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     uv += offset;
     uv.x *= aspectRatio;
 
-    float worley = ApplyGainBias( Worley(uv, 32.0), GainAndBias.x, GainAndBias.y);
+    float worley = ApplyBiasAndGain( Worley(uv, 32.0), GainAndBias.x, GainAndBias.y);
     return lerp(ColorB, ColorA, clamp(worley, Clamping.x, Clamping.y ) );
 }

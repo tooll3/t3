@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_5cf7a1e2_7369_4e74_a7a9_b0eae61bdc21
         public readonly InputSlot<System.Numerics.Vector2> Clamping = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "dce72235-839e-41f1-a2a4-e19f0ef66e5c")]
-        public readonly InputSlot<System.Numerics.Vector2> GainBias = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "b4277cab-d286-410f-81be-ff4d53a9eca9", MappedType = typeof(Methods))]
         public readonly InputSlot<int> Method = new InputSlot<int>();

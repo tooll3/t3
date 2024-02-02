@@ -86,8 +86,15 @@
       "Position": {
         "X": -200.0,
         "Y": 360.0
+      }
+    },
+    {
+      "InputId": "71e289f0-382b-4d0f-a2e0-701c7019a360"/*MaterialId*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
       },
-      "Description": "Designated input for the [CombineMaterialChannels] Operator which can be used for Roughness and / or Metallic and / or Occlusion Maps.\n"
+      "Usage": "Default"
     }
   ],
   "SymbolChildUis": [],
@@ -97,6 +104,13 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "51612678-3573-4d40-a423-9e23fc72ea44"/*Reference*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
       }
     }
   ]

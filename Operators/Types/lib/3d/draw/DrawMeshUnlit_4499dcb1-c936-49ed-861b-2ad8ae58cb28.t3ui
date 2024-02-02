@@ -1,6 +1,6 @@
 {
   "Id": "4499dcb1-c936-49ed-861b-2ad8ae58cb28"/*DrawMeshUnlit*/,
-  "Description": "Draws a mesh without any shading.",
+  "Description": "Draws incoming geometry and meshnodes without any shading and according to the desired settings.\n\nAn interactive tutorial for the complete Tooll3 render pipeline can be found at [HowToDrawThings].\n\nThe most commonly used render methods are [Drawmesh], [DrawMeshUnlit] and [DrawMeshHatched] and [DrawMeshAtPoints].\n\nThey can then be combined with [SetMaterial], [SetFog], [SetPointLight] and many others to create the look of scenes.",
   "InputUis": [
     {
       "InputId": "be057b0a-1302-4076-bde1-6ae453815642"/*Mesh*/,
@@ -8,42 +8,50 @@
       "Position": {
         "X": 545.7166,
         "Y": 4113.189
-      }
+      },
+      "Description": "Input for Incoming Mesh Geometry"
     },
     {
       "InputId": "5100a9db-ee56-4023-9fb0-36cbfb439734"/*Color*/,
       "Position": {
         "X": 558.0586,
         "Y": 4205.1455
-      }
+      },
+      "Description": "Defines the shading color of the mesh.\nIf a [SetMaterial] is used it will be ignored.",
+      "AddPadding": "True"
     },
     {
       "InputId": "922cf855-2676-4a96-9d90-622791a6a423"/*BlendMode*/,
       "Position": {
         "X": 551.0433,
         "Y": 4425.6885
-      }
+      },
+      "Description": "Selects the Blendmode."
     },
     {
       "InputId": "8d223463-edff-45fb-9ead-6650a911cebd"/*Culling*/,
       "Position": {
         "X": 551.0433,
         "Y": 4470.6885
-      }
+      },
+      "GroupTitle": "Z-Buffer",
+      "Description": "Defines the transparency of the surfaces.\nNone: All surfaces are \"bothsided\" or always visible from all sides\nFront: The normals are flipped (frontside is transparent / backside visible)\nBack: Default (Frontside is visible / backside is invisible)"
     },
     {
       "InputId": "c004d3c2-de74-48ee-9504-d7de7fe1e554"/*EnableZTest*/,
       "Position": {
         "X": 551.0433,
         "Y": 4515.6885
-      }
+      },
+      "Description": "This defines whether the mesh covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "2c88e7c4-04f8-4e45-94d8-214775c5609c"/*EnableZWrite*/,
       "Position": {
         "X": 551.0433,
         "Y": 4560.6885
-      }
+      },
+      "Description": "This defines whether the mesh covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "a02180a6-7778-4fa2-9a69-228a26936755"/*Texture*/,
@@ -51,21 +59,25 @@
       "Position": {
         "X": 550.2577,
         "Y": 4643.765
-      }
+      },
+      "GroupTitle": "Texture Settings",
+      "Description": "Texture Input from [LoadImage]."
     },
     {
       "InputId": "a0b6601e-4fbb-4489-9e15-59e80db0d26c"/*UseCubeMap*/,
       "Position": {
         "X": 550.2577,
         "Y": 4705.0693
-      }
+      },
+      "Description": "Toggles wheter a Cubemap with [SetEnvironment] is used."
     },
     {
       "InputId": "72060e5d-090f-4c84-890a-ca9ee238fe82"/*AlphaCutOff*/,
       "Position": {
         "X": 550.2577,
         "Y": 4750.0693
-      }
+      },
+      "Description": "This value controls transparency if a texture containing an alpha channel is used."
     },
     {
       "InputId": "44b31261-df87-4289-bc64-db349476e418"/*BlurLevel*/,
@@ -73,6 +85,7 @@
         "X": 550.2577,
         "Y": 4795.0693
       },
+      "Description": "Defines how intensely the used texture is blurred.",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true

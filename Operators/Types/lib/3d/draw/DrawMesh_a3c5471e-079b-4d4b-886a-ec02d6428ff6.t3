@@ -45,8 +45,12 @@
       "DefaultValue": "MinMagMipLinear"
     },
     {
-      "Id": "d1db33ea-1739-4323-9105-7b236a0e240f"/*TextureWrap*/,
+      "Id": "d1db33ea-1739-4323-9105-7b236a0e240f"/*WrapMode*/,
       "DefaultValue": "Wrap"
+    },
+    {
+      "Id": "d7bd3003-8589-4537-92e8-e95c5eb2bfab"/*UseMaterialId*/,
+      "DefaultValue": ""
     }
   ],
   "Children": [

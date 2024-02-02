@@ -68,14 +68,17 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             //     UpdateBuffers(model, childIndex);
             
             var rootNode = ParseStructure(model.DefaultScene);
-            _sceneSetup.Nodes.Clear();
-            _sceneSetup.Nodes.Add(rootNode);
+            _sceneSetup.RootNodes.Clear();
+            _sceneSetup.RootNodes.Add(rootNode);
 
             ResultSetup.Value = _sceneSetup;
         }
-        
-        
-        
+
+        if (_sceneSetup != null)
+        {
+            Log.Debug($"LoadGltfScene.Update " + context.Materials.Count,this);
+            //_sceneSetup.Materials = context.Materials;
+        }
     }
 
     private void ShowError(string message)
@@ -95,9 +98,6 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         
         _allMeshes.Clear();
         ParseChildren(modelDefaultScene.VisualChildren, rootNode, _allMeshes);
-
-        // var totalFaceCount = 0;
-        // var totalIndicesCount = 0;
         
         foreach (var mesh in _allMeshes)
         {
@@ -121,15 +121,15 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         return rootNode;
     }
 
-    
-    public class MeshFragment
-    {
-        public int StartTriangleIndex;
-        public int TriangleCount;
-        public Mesh Mesh;
-        public int MeshPrimitiveIndex;
-        public int MaterialIndex;
-    } 
+    // stub for future implementation
+    // public class MeshFragment
+    // {
+    //     public int StartTriangleIndex;
+    //     public int TriangleCount;
+    //     public Mesh Mesh;
+    //     public int MeshPrimitiveIndex;
+    //     public int MaterialIndex;
+    // } 
     
     
     private static void ParseChildren(IEnumerable<Node> visualChildren, SceneSetup.SceneNode rootNode, HashSet<Mesh> allMeshes)
@@ -333,6 +333,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
     [Input(Guid = "D02F41A6-1A6B-4A6E-8D6C-A28873C79F2C")]
     public readonly InputSlot<SceneSetup> Setup = new();
+
+    
+    [Input(Guid = "EF7075E9-4BC2-442E-8E0C-E03667FF2E0A")]
+    public readonly InputSlot<bool> TriggerUpdate = new();
+
 
     public IStatusProvider.StatusLevel GetStatusLevel()
     {
