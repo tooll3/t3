@@ -64,11 +64,11 @@ internal static class GraphUtils
 
     public static bool IsIdentifierValid(string className) => !string.IsNullOrWhiteSpace(className)
                                                               && IdentifierValidator.Value.IsValidIdentifier(className);
-
-
-    private static readonly Regex _validTypeNameSpacePattern = new(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
-
     public static bool IsValidProjectName(string userName) => IdentifierValidator.Value.IsValidIdentifier(userName);
+
+    public static bool IsNamespaceValid(string namespaceName) => ValidTypeNameSpacePattern.IsMatch(namespaceName);
+
+    private static readonly Regex ValidTypeNameSpacePattern = new(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
 
     private static readonly Lazy<CodeDomProvider> IdentifierValidator = new(() => CodeDomProvider.CreateProvider("C#"));
 }

@@ -228,7 +228,7 @@ internal class CsProjectFile
     }
 
     // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation
-    public static CsProjectFile CreateNewProject(string projectName, string parentDirectory)
+    public static CsProjectFile CreateNewProject(string projectName, string nameSpace, string parentDirectory)
     {
         var defaultHomeDir = Path.Combine(UserData.SettingsFolderInApplicationDirectory, "default-home");
         var files = System.IO.Directory.EnumerateFiles(defaultHomeDir, "*");
@@ -247,6 +247,7 @@ internal class CsProjectFile
 
         const string guidPlaceholder = "{{GUID}}";
         const string defaultReferencesPlaceholder = "{{DEFAULT_REFS}}";
+        const string nameSpacePlaceholder = "{{NAMESPACE}}";
 
         var homeGuid = Guid.NewGuid().ToString();
         string csprojPath = null;
@@ -255,7 +256,8 @@ internal class CsProjectFile
             var text = File.ReadAllText(file)
                            .Replace(ProjectNamePlaceholder, projectName)
                            .Replace(guidPlaceholder, homeGuid)
-                           .Replace(defaultReferencesPlaceholder, CoreReferences);
+                           .Replace(defaultReferencesPlaceholder, CoreReferences)
+                           .Replace(nameSpacePlaceholder, nameSpace);
 
             var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file))
                                           .Replace(ProjectNamePlaceholder, projectName)

@@ -164,7 +164,7 @@ namespace T3.Editor.Gui.Templates
         
         private string NameSpace => string.IsNullOrEmpty(_newNameSpace) ? $"user.{CurrentProjectName}.{_newSymbolName}" : _newNameSpace;
         private string ResourceDirectory => string.IsNullOrEmpty(_resourceFolder) ? $"Resources\\user\\{CurrentProjectName}\\{_newSymbolName}\\" : _resourceFolder;
-        private string CurrentProjectName => GraphCanvas.Current.CompositionOp.Symbol.SymbolPackage.AssemblyInformation.Name;
+        private string CurrentProjectName => GraphWindow.GetMainComposition().Symbol.SymbolPackage.AssemblyInformation.Name;
 
         private string _newSymbolName = "MyNewOp";
         private string _newNameSpace = null;

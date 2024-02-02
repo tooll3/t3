@@ -5,10 +5,9 @@ using T3.Core.DataTypes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace user.{{PROJ}}
+namespace {{NAMESPACE}};
+
+[Guid("{{GUID}}"), Home]
+public class {{PROJ}} : Instance<{{PROJ}}>
 {
-    [Guid("{{GUID}}"), Home]
-    public class {{PROJ}} : Instance<{{PROJ}}>
-    {
-    }
 }

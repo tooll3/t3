@@ -16,6 +16,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
+using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
@@ -40,7 +41,7 @@ public static class T3Ui
 {
     static T3Ui()
     {
-        _userNameDialog.ProjectNameChanged += ProjectSetup.CreateOrMigrateProject;
+        //_userNameDialog.ProjectNameChanged += ProjectSetup.CreateOrMigrateProject;
     }
 
     public static void InitializeEnvironment()
@@ -138,12 +139,8 @@ public static class T3Ui
         _userNameDialog.Draw();
         _searchDialog.Draw();
         _importDialog.Draw();
+        _newProjectDialog.Draw();
         _createFromTemplateDialog.Draw();
-
-        if (ProjectSetup.NeedsUserProject)
-        {
-            _userNameDialog.ShowNextFrame();
-        }
 
         KeyboardAndMouseOverlay.Draw();
 
@@ -227,6 +224,11 @@ public static class T3Ui
                 if (ImGui.MenuItem("New...", KeyboardBinding.ListKeyboardShortcuts(UserActions.New, false), false, !IsCurrentlySaving))
                 {
                     _createFromTemplateDialog.ShowNextFrame();
+                }
+
+                if (ImGui.MenuItem("New Project"))
+                {
+                    _newProjectDialog.ShowNextFrame();
                 }
 
                 if (ImGui.MenuItem("Import Operators", null, false, !IsCurrentlySaving))
@@ -482,6 +484,7 @@ public static class T3Ui
     private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
     private static readonly UserNameDialog _userNameDialog = new();
     private static readonly SearchDialog _searchDialog = new();
+    private static readonly NewProjectDialog _newProjectDialog = new();
     
     private static readonly MigrateOperatorsDialog _importDialog = new();
 

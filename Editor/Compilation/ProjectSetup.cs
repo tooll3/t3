@@ -18,36 +18,18 @@ internal static class ProjectSetup
 {
     private static readonly List<EditableSymbolProject> EditableSymbolProjectsRw = new();
     public static readonly IReadOnlyList<EditableSymbolProject> EditableSymbolPackages = EditableSymbolProjectsRw;
-    internal static bool NeedsUserProject;
 
-    internal static void CreateOrMigrateProject(object sender, string nameArgs)
+    internal static void CreateOrMigrateProject(string newName, string newNamespace)
     {
-        var name = nameArgs;
-
-        if (NeedsUserProject)
+        if (TryCreateProject(newName, newNamespace, out var project))
         {
-            if (TryCreateProject(name, out var project))
-            {
-                EditableSymbolProjectsRw.Add(project);
-                NeedsUserProject = false;
-            }
-            else
-            {
-                NeedsUserProject = true;
-            }
-        }
-        else
-        {
-            //var oldUserNamespace = $"user.{nameArgs.OldName}";
-            //var newUserNamespace = $"user.{nameArgs.NewName}";
-
-            Log.Warning($"Have not implemented project rename yet: {name}");
+            EditableSymbolProjectsRw.Add(project);
         }
     }
 
-    private static bool TryCreateProject(string name, out EditableSymbolProject newProject)
+    private static bool TryCreateProject(string name, string nameSpace,  out EditableSymbolProject newProject)
     {
-        var newCsProj = CsProjectFile.CreateNewProject(name, UserSettings.Config.DefaultNewProjectDirectory);
+        var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, UserSettings.Config.DefaultNewProjectDirectory);
         if (newCsProj == null)
         {
             Log.Error("Failed to create new project");
@@ -140,7 +122,6 @@ internal static class ProjectSetup
                                     Log.Error($"Could not load assembly at \"{file.FullName}\"");
                                     continue;
                                 }
-                                
 
                                 if (assembly.IsOperatorAssembly)
                                     readOnlyPackages.Add(new EditorSymbolPackage(assembly, true));
@@ -222,20 +203,12 @@ internal static class ProjectSetup
 
             Log.Debug($"Created root symbol in {stopwatch.ElapsedMilliseconds}ms");
 
-            var createdHome = false;
             foreach (var project in projectList)
             {
-                createdHome |= project.TryCreateHome();
-            }
-
-            if (!createdHome)
-            {
-                NeedsUserProject = true;
+                _ = project.TryCreateHome();
             }
 
             stopwatch.Stop();
-            if (!NeedsUserProject)
-                Log.Debug($"Created home in {stopwatch.ElapsedMilliseconds}ms");
 
             exception = null;
             return true;
