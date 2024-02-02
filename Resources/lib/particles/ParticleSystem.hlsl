@@ -4,17 +4,16 @@
 cbuffer Params : register(b0)
 {
     float TriggerEmit;    
-    float AgingRate;
-    float MaxAge; 
     float Reset;
-
     float Speed; 
     float Drag;
+
     float InitialVelocity;
     float Time;
-
     float OrientTowardsVelocity;
     float RadiusFromW;
+
+    float LifeTime;
 }
 
 
@@ -112,9 +111,10 @@ void main(uint3 i : SV_DispatchThreadID)
     // ResultPoints[gi].position = lerp(Particles[gi].p.position, ResultPoints[gi].position, 0);
     // ResultPoints[gi].rotation = Particles[gi].p.rotation;
     // ResultPoints[gi].w = Particles[gi].p.w;
+    float lifeTime = LifeTime < 0.0 ? (float)(maxParticleCount/(newPointCount*60)) : LifeTime; 
     
-    float age = (Time - Particles[gi].BirthTime) * AgingRate;
-    bool tooOld =  age >= MaxAge;
+    float normalizedAge = (Time - Particles[gi].BirthTime) / lifeTime;
+    bool tooOld =  normalizedAge >= 1;
 
     if(WMode == W_KEEP_ORIGINAL) {
         if(tooOld) {
@@ -126,19 +126,14 @@ void main(uint3 i : SV_DispatchThreadID)
     }
     else if (WMode == W_PARTICLE_AGE) 
     {
-        ResultPoints[gi].W = (isnan(Particles[gi].BirthTime) || tooOld) ? NAN : age;
+        ResultPoints[gi].W = (isnan(Particles[gi].BirthTime) || tooOld) ? NAN : normalizedAge;
     } 
     else if(WMode == W_PARTICLE_SPEED) 
     {
-        ResultPoints[gi].W = tooOld ? NAN : speed * AgingRate;
+        ResultPoints[gi].W = tooOld ? NAN : speed * 100;
     }
 
     ResultPoints[gi].Selected = 1;
     ResultPoints[gi].Stretch = 1;
-
-    //ResultPoints[gi].Color = 1;
-    //ResultPoints[gi].Rotation = QUATERNION_IDENTITY;
-
-    //ResultPoints[gi].Position = 1;
 
 }
