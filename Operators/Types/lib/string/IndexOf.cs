@@ -24,6 +24,14 @@ namespace T3.Operators.Types.Id_fc0a5e68_9915_4323_b2a4_2491fa5d59a9
         private void Update(EvaluationContext context)
         {
             string searchPattern = SearchPattern.GetValue(context);
+            string originalString = OriginalString.GetValue(context);
+            if (string.IsNullOrEmpty(searchPattern) || string.IsNullOrEmpty(originalString))
+            {
+                Index.Value = -1;
+                return;
+            }
+
+            Index.Value = originalString.IndexOf(searchPattern);
             if (string.IsNullOrEmpty(searchPattern))
             {
                 Index.Value = -1;
