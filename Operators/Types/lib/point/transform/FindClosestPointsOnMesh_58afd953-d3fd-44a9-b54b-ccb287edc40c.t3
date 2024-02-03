@@ -72,7 +72,7 @@
         {
           "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
           "Type": "System.Int32",
-          "Value": 32
+          "Value": 64
         }
       ],
       "Outputs": []
