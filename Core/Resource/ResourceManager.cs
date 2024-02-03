@@ -6,12 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using T3.Core.Logging;
+using T3.Core.Operator;
 
 namespace T3.Core.Resource
 {
     public sealed partial class ResourceManager
     {
         public static readonly ConcurrentDictionary<uint, AbstractResource> ResourcesById = new();
+        public static IEnumerable<string> SharedResourceFolders => SharedResourceFileWatchers.Select(x => x.WatchedFolder);
 
         public static ResourceManager Instance() => _instance;
         private static readonly ResourceManager _instance = new();
@@ -20,8 +22,7 @@ namespace T3.Core.Resource
         {
         }
 
-        #region Shaders
-        private static bool TryGetResourcePath(ResourceFileWatcher? watcher, string relativePath, out string path,
+        private static bool TryGetResourcePath(Instance? instance, string relativePath, out string path,
                                                out ResourceFileWatcher? relevantFileWatcher)
         {
             // keep backwards compatibility
@@ -35,14 +36,14 @@ namespace T3.Core.Resource
             }
 
             relativePath = RelativePathBackwardsCompatibility(relativePath, false);
+            
 
             // prioritize project-local resources
-            if (watcher != null)
+            if (TryResolvePath(relativePath, instance, out var absolutePath, out var watcher))
             {
-                var firstPath = Path.Combine(watcher.WatchedFolder, relativePath);
-                if (File.Exists(firstPath))
+                if (File.Exists(absolutePath))
                 {
-                    path = firstPath;
+                    path = absolutePath;
                     relevantFileWatcher = watcher;
                     return true;
                 }
@@ -51,19 +52,6 @@ namespace T3.Core.Resource
             bool found = false;
             path = relativePath;
             relevantFileWatcher = null;
-
-            foreach (var sharedWatcher in SharedResourceFileWatchers)
-            {
-                var sharedPath = Path.Combine(sharedWatcher.WatchedFolder, relativePath);
-                if (!File.Exists(sharedPath))
-                    continue;
-
-                path = sharedPath;
-                relevantFileWatcher = sharedWatcher;
-                found = true;
-                break;
-            }
-
             return found;
         }
 
@@ -71,7 +59,8 @@ namespace T3.Core.Resource
         {
             if (checkRoot && Path.IsPathRooted(relativePath))
             {
-                Log.Warning($"AudioClip path '{relativePath}' is not relative. This is deprecated and should be relative to the project Resources folder. Please update your project settings.");
+                Log.Warning($"Path '{relativePath}' is not relative. This is deprecated and should be relative to the project Resources folder as " +
+                            $"live updates will not occur. Please update your project settings.");
                 return relativePath;
             }
 
@@ -116,6 +105,38 @@ namespace T3.Core.Resource
             return relativePath;
         }
 
+        private static bool TryResolvePath(string relativeFileName, Instance? instance, out string absolutePath, out ResourceFileWatcher? relevantFileWatcher)
+        {
+            var parent = instance;
+            while (parent != null)
+            {
+                if (TryResolvePath(relativeFileName, parent, out absolutePath))
+                {
+                    relevantFileWatcher = parent.ResourceFileWatcher;
+                    return true;
+                }
+
+                parent = parent.Parent;
+            }
+            
+            return CheckSharedResources(relativeFileName, out absolutePath, out relevantFileWatcher);
+            
+        }
+
+        public static bool TryResolvePath(string relativeFileName, Instance instance, out string absolutePath)
+        {
+            relativeFileName = RelativePathBackwardsCompatibility(relativeFileName);
+
+            foreach (var directory in instance.ResourceFolders)
+            {
+                absolutePath = Path.Combine(directory, relativeFileName);
+                if (File.Exists(absolutePath))
+                    return true; // warning - this will not warn if the file can be found in multiple directories.
+            }
+
+            return CheckSharedResources(relativeFileName, out absolutePath, out _);
+        }
+
         public static bool TryResolvePath(string relativeFileName, out string absolutePath, IEnumerable<string> directories)
         {
             relativeFileName = RelativePathBackwardsCompatibility(relativeFileName);
@@ -124,10 +145,10 @@ namespace T3.Core.Resource
             {
                 absolutePath = Path.Combine(directory, relativeFileName);
                 if (File.Exists(absolutePath))
-                    return true; // warning - this will not warn if the file can be found in multiple directories.
+                    return true;
             }
-
-            return CheckSharedResources(relativeFileName, out absolutePath);
+            
+            return CheckSharedResources(relativeFileName, out absolutePath, out _);
         }
 
         public static bool TryResolvePath(string relativeFileName, out string absolutePath, string? directory)
@@ -141,27 +162,31 @@ namespace T3.Core.Resource
                     return true;
             }
 
-            return CheckSharedResources(relativeFileName, out absolutePath);
+            return CheckSharedResources(relativeFileName, out absolutePath, out _);
         }
 
-        private static bool CheckSharedResources(string relativeFileName, out string path)
+        private static bool CheckSharedResources(string relativeFileName, out string path, out ResourceFileWatcher? relevantFileWatcher)
         {
-            foreach (var folder in SharedResourceFolders)
+            foreach (var fileWatcher in SharedResourceFileWatchers)
             {
-                path = Path.Combine(folder, relativeFileName);
+                path = Path.Combine(fileWatcher.WatchedFolder, relativeFileName);
                 if (File.Exists(path))
+                {
+                    relevantFileWatcher = fileWatcher;
                     return true;
+                }
             }
-
+            
             path = string.Empty;
+            relevantFileWatcher = null;
             return false;
         }
 
-        public static bool TryResolveDirectory(string relativeDirectory, out string absoluteDirectory, IEnumerable<string> parentResourceFolders)
+        public static bool TryResolveDirectory(string relativeDirectory, Instance parent, out string absoluteDirectory)
         {
             relativeDirectory = RelativePathBackwardsCompatibility(relativeDirectory);
             
-            foreach(var parentResourceFolder in parentResourceFolders)
+            foreach(var parentResourceFolder in parent.ResourceFolders)
             {
                 var directory = Path.Combine(parentResourceFolder, relativeDirectory);
                 if(Directory.Exists(directory))
@@ -173,8 +198,9 @@ namespace T3.Core.Resource
             
             absoluteDirectory = string.Empty;
             
-            foreach(var sharedResourceFolder in SharedResourceFolders)
+            foreach(var fileWatcher in SharedResourceFileWatchers)
             {
+                var sharedResourceFolder = fileWatcher.WatchedFolder;
                 var directory = Path.Combine(sharedResourceFolder, relativeDirectory);
                 if(Directory.Exists(directory))
                 {
@@ -188,12 +214,10 @@ namespace T3.Core.Resource
 
         public static string CleanRelativePath(string relativePath) => RelativePathBackwardsCompatibility(relativePath, true);
         
-        #endregion
 
         private uint GetNextResourceId() => Interlocked.Increment(ref _resourceIdCounter);
 
         private uint _resourceIdCounter = 1;
         internal static readonly List<ResourceFileWatcher> SharedResourceFileWatchers = new(4);
-        public static IEnumerable<string> SharedResourceFolders => SharedResourceFileWatchers.Select(x => x.WatchedFolder);
     }
 }

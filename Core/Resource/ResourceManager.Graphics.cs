@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +12,7 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
 using T3.Core.Logging;
+using T3.Core.Operator;
 using T3.Core.Resource.Dds;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
@@ -26,7 +28,7 @@ public sealed partial class ResourceManager
         InitializeDevice(device);
     }
 
-    public void CreateRenderTargetView(uint textureId, string name, ref RenderTargetView renderTargetView)
+    public void CreateRenderTargetView(uint textureId, string name, ref RenderTargetView? renderTargetView)
     {
         if (!ResourcesById.TryGetValue(textureId, out var resource))
         {
@@ -78,7 +80,7 @@ public sealed partial class ResourceManager
         }
     }
 
-    public void CreateUnorderedAccessView(uint textureId, string name, ref UnorderedAccessView unorderedAccessView)
+    public void CreateUnorderedAccessView(uint textureId, string name, ref UnorderedAccessView? unorderedAccessView)
     {
         if (!ResourcesById.TryGetValue(textureId, out var resource))
         {
@@ -105,11 +107,11 @@ public sealed partial class ResourceManager
     }
 
     /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
-    public (uint textureId, uint srvResourceId) CreateTextureFromFile(string relativePath, ResourceFileWatcher? watcher, Action? fileChangeAction)
+    public (uint textureId, uint srvResourceId) CreateTextureFromFile(string relativePath, Instance instance, Action? fileChangeAction)
     {
         const uint nullResource = 0;
         
-        if (!TryGetResourcePath(watcher, relativePath, out var path, out var relevantFileWatcher))
+        if (!TryGetResourcePath(instance, relativePath, out var path, out var relevantFileWatcher))
         {
             // todo - search other packages? common?
             Log.Warning($"Couldn't find texture '{relativePath} (Resolved to '{path}'.");
@@ -128,7 +130,7 @@ public sealed partial class ResourceManager
 
         Texture2D? texture = null;
         ShaderResourceView? srv = null;
-        if (path!.EndsWith(".dds", StringComparison.OrdinalIgnoreCase))
+        if (path.EndsWith(".dds", StringComparison.OrdinalIgnoreCase))
         {
             var ddsFile = DdsFile.FromFile(path);
             DdsDirectX.CreateTexture(ddsFile, Device, Device.ImmediateContext, out var resource, out srv);
@@ -166,7 +168,7 @@ public sealed partial class ResourceManager
         return (textureResourceEntry.Id, srvResourceId);
     }
 
-    public static void UpdateTextureFromFile(uint textureId, string path, ref Texture2D texture)
+    public static void UpdateTextureFromFile(uint textureId, string path, ref Texture2D? texture)
     {
         ResourcesById.TryGetValue(textureId, out var resource);
         if (resource is Texture2dResource textureResource)
@@ -181,7 +183,7 @@ public sealed partial class ResourceManager
          */
     private uint CreateShaderResourceView(uint textureId, string name)
     {
-        ShaderResourceView textureView = null;
+        ShaderResourceView? textureView = null;
         CreateShaderResourceView(textureId, name, ref textureView);
         var textureViewResourceEntry = new ShaderResourceViewResource(GetNextResourceId(), name, textureView, textureId);
         ResourcesById.TryAdd(textureViewResourceEntry.Id, textureViewResourceEntry);
@@ -189,7 +191,7 @@ public sealed partial class ResourceManager
         return textureViewResourceEntry.Id;
     }
 
-    public static void CreateStructuredBufferUav(Buffer buffer, UnorderedAccessViewBufferFlags bufferFlags, ref UnorderedAccessView uav)
+    public static void CreateStructuredBufferUav(Buffer? buffer, UnorderedAccessViewBufferFlags bufferFlags, ref UnorderedAccessView? uav)
     {
         if (buffer == null)
             return;
@@ -222,7 +224,7 @@ public sealed partial class ResourceManager
         }
     }
 
-    public static void CreateStructuredBufferSrv(Buffer buffer, ref ShaderResourceView srv)
+    public static void CreateStructuredBufferSrv(Buffer? buffer, ref ShaderResourceView? srv)
     {
         if (buffer == null)
             return;
@@ -254,7 +256,7 @@ public sealed partial class ResourceManager
         }
     }
 
-    public static void SetupStructuredBuffer(int sizeInBytes, int stride, ref Buffer buffer)
+    public static void SetupStructuredBuffer(int sizeInBytes, int stride, ref Buffer? buffer)
     {
         try
         {
@@ -285,7 +287,7 @@ public sealed partial class ResourceManager
         }
     }
 
-    public static void SetupStructuredBuffer(DataStream data, int sizeInBytes, int stride, ref Buffer buffer)
+    public static void SetupStructuredBuffer(DataStream data, int sizeInBytes, int stride, ref Buffer? buffer)
     {
         if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
         {
@@ -306,7 +308,7 @@ public sealed partial class ResourceManager
         }
     }
 
-    public static void SetupStructuredBuffer<T>(T[] bufferData, int sizeInBytes, int stride, ref Buffer buffer) where T : struct
+    public static void SetupStructuredBuffer<T>(T[] bufferData, int sizeInBytes, int stride, ref Buffer? buffer) where T : struct
     {
         using var data = new DataStream(sizeInBytes, true, true);
 
@@ -316,14 +318,14 @@ public sealed partial class ResourceManager
         SetupStructuredBuffer(data, sizeInBytes, stride, ref buffer);
     }
 
-    public static void SetupStructuredBuffer<T>(T[] bufferData, ref Buffer buffer) where T : struct
+    public static void SetupStructuredBuffer<T>(T[] bufferData, ref Buffer? buffer) where T : struct
     {
         int stride = Marshal.SizeOf(typeof(T));
         int sizeInBytes = stride * bufferData.Length;
         SetupStructuredBuffer(bufferData, sizeInBytes, stride, ref buffer);
     }
 
-    public static void CreateBufferUav<T>(Buffer buffer, Format format, ref UnorderedAccessView uav)
+    public static void CreateBufferUav<T>(Buffer? buffer, Format format, ref UnorderedAccessView? uav)
     {
         if (buffer == null)
             return;
@@ -349,7 +351,7 @@ public sealed partial class ResourceManager
         uav = new UnorderedAccessView(Device, buffer, desc);
     }
 
-    public static void SetupIndirectBuffer(int sizeInBytes, ref Buffer buffer)
+    public static void SetupIndirectBuffer(int sizeInBytes, ref Buffer? buffer)
     {
         var bufferDesc = new BufferDescription
                              {
@@ -361,12 +363,12 @@ public sealed partial class ResourceManager
         SetupBuffer(bufferDesc, ref buffer);
     }
 
-    public static void SetupBuffer(BufferDescription bufferDesc, ref Buffer buffer)
+    public static void SetupBuffer(BufferDescription bufferDesc, ref Buffer? buffer)
     {
         buffer ??= new Buffer(Device, bufferDesc);
     }
 
-    public static void SetupConstBuffer<T>(T bufferData, ref Buffer buffer) where T : struct
+    public static void SetupConstBuffer<T>(T bufferData, ref Buffer? buffer) where T : struct
     {
         using var data = new DataStream(Marshal.SizeOf(typeof(T)), true, true);
 
@@ -409,7 +411,7 @@ public sealed partial class ResourceManager
         DefaultSamplerState = new SamplerState(device, samplerDesc);
     }
 
-    public static void CreateShaderResourceView(uint textureId, string name, ref ShaderResourceView shaderResourceView)
+    public static void CreateShaderResourceView(uint textureId, string name, ref ShaderResourceView? shaderResourceView)
     {
         if (!ResourcesById.TryGetValue(textureId, out var resource))
         {
@@ -435,7 +437,7 @@ public sealed partial class ResourceManager
         }
     }
 
-    public bool CreateTexture2d(Texture2DDescription description, string name, ref uint id, ref Texture2D texture)
+    public bool CreateTexture2d(Texture2DDescription description, string name, ref uint id, ref Texture2D? texture)
     {
         if (texture != null)
         {
@@ -456,9 +458,8 @@ public sealed partial class ResourceManager
         }
 
         ResourcesById.TryGetValue(id, out var resource);
-        Texture2dResource texture2dResource = resource as Texture2dResource;
 
-        if (texture2dResource == null)
+        if (resource is not Texture2dResource texture2dResource)
         {
             // no entry so far, if texture is also null then create a new one
             texture ??= new Texture2D(Device, description);
@@ -479,7 +480,7 @@ public sealed partial class ResourceManager
         return true;
     }
 
-    public bool CreateTexture3d(Texture3DDescription description, string name, ref uint id, ref Texture3D texture)
+    public bool CreateTexture3d(Texture3DDescription description, string name, ref uint id, ref Texture3D? texture)
     {
         if (texture != null && texture.Description.Equals(description))
         {
@@ -487,9 +488,8 @@ public sealed partial class ResourceManager
         }
 
         ResourcesById.TryGetValue(id, out var resource);
-        Texture3dResource texture3dResource = resource as Texture3dResource;
 
-        if (texture3dResource == null)
+        if (resource is not Texture3dResource texture3dResource)
         {
             // no entry so far, if texture is also null then create a new one
             texture ??= new Texture3D(Device, description);
@@ -511,8 +511,8 @@ public sealed partial class ResourceManager
     }
 
     private static readonly List<ShaderResourceViewResource> ShaderResourceViews = new();
-    private Device _device;
-    public SamplerState DefaultSamplerState { get; private set; }
+    private Device _device = null!;
+    public SamplerState DefaultSamplerState { get; private set; } = null!;
 
     public static Texture2D CreateTexture2DFromBitmap(Device device, BitmapSource bitmapSource)
     {

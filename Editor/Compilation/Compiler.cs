@@ -9,11 +9,11 @@ namespace T3.Editor.Compilation;
 
 internal static class Compiler
 {
-    static readonly Stopwatch _stopwatch = new();
     
     public static bool TryCompile(CsProjectFile projectFile, string? targetDirectory = null, Verbosity verbosity = Verbosity.Quiet)
     {
-        _stopwatch.Restart();
+        Stopwatch stopwatch = new();
+        stopwatch.Start();
         var workingDirectory = projectFile.Directory;
         
         const string configurationArgFmt = "--configuration {0}";
@@ -52,7 +52,9 @@ internal static class Compiler
         process.BeginOutputReadLine();
         process.WaitForExit();
         
-        Log.Info($"{projectFile.Name}: Build process took {_stopwatch.ElapsedMilliseconds} ms");
+        stopwatch.Stop();
+        
+        Log.Info($"{projectFile.Name}: Build process took {stopwatch.ElapsedMilliseconds} ms");
 
         if (process.ExitCode != 0)
         {
@@ -71,13 +73,11 @@ internal static class Compiler
         
         if (!success)
         {
-            Log.Error($"{projectFile.Name}: Build failed based on output in {_stopwatch.ElapsedMilliseconds}");
-            _stopwatch.Stop();
+            Log.Error($"{projectFile.Name}: Build failed based on output in {stopwatch.ElapsedMilliseconds}");
             return false;
         }
         
-        _stopwatch.Stop();
-        Log.Info($"{projectFile.Name}: Total build time took {_stopwatch.ElapsedMilliseconds} ms");
+        stopwatch.Stop();
 
         return true;
     }

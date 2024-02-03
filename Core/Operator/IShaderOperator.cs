@@ -127,7 +127,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
             {
                 updated = resourceManager.TryCreateShaderResourceFromSource(out shaderResource,
                                                                             shaderSource: source,
-                                                                            directories: instance.ResourceFolders,
+                                                                            instance: instance,
                                                                             entryPoint: entryPoint,
                                                                             name: debugName,
                                                                             errorMessage: out errorMessage);
@@ -135,8 +135,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
             else
             {
                 updated = resourceManager.TryCreateShaderResource(out shaderResource,
-                                                                  watcher: instance.ResourceFileWatcher,
-                                                                  resourceFolders: instance.ResourceFolders,
+                                                                  instance: instance,
                                                                   relativePath: source,
                                                                   entryPoint: entryPoint,
                                                                   name: debugName,

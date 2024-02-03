@@ -1,13 +1,15 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
 using T3.Core.Logging;
+using T3.Core.Operator;
 
 namespace T3.Core.Resource;
 
 public sealed partial class ResourceManager
 {
-    public bool TryCreateShaderResourceFromSource<TShader>(out ShaderResource<TShader> resource, string shaderSource, IReadOnlyList<string> directories,
+    public bool TryCreateShaderResourceFromSource<TShader>(out ShaderResource<TShader> resource, string shaderSource, Instance instance,
                                                            out string errorMessage,
                                                            string name = "", string entryPoint = "main")
         where TShader : class, IDisposable
@@ -20,7 +22,7 @@ public sealed partial class ResourceManager
 
         var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromSource<TShader>(shaderSource: shaderSource,
                                                                                           name: name,
-                                                                                          directory: directories,
+                                                                                          directory: instance.ResourceFolders,
                                                                                           entryPoint: entryPoint,
                                                                                           resourceId: resourceId,
                                                                                           resource: out var newResource,
@@ -39,9 +41,9 @@ public sealed partial class ResourceManager
         return compiled;
     }
 
-    public bool TryCreateShaderResource<TShader>(out ShaderResource<TShader> resource, ResourceFileWatcher watcher, string relativePath,
-                                                 out string errorMessage, IEnumerable<string> resourceFolders,
-                                                 string name = "", string entryPoint = "main", Action fileChangedAction = null)
+    public bool TryCreateShaderResource<TShader>(out ShaderResource<TShader>? resource, Instance? instance, string relativePath,
+                                                 out string errorMessage,
+                                                 string name = "", string entryPoint = "main", Action? fileChangedAction = null)
         where TShader : class, IDisposable
     {
         if (string.IsNullOrWhiteSpace(relativePath))
@@ -51,18 +53,18 @@ public sealed partial class ResourceManager
             return false;
         }
 
-        if (!TryGetResourcePath(watcher, relativePath, out var path, out var relevantFileWatcher))
+        if (!TryGetResourcePath(instance, relativePath, out var path, out var relevantFileWatcher))
         {
             resource = null;
             errorMessage = $"Path not found: '{relativePath}' (Resolved to '{path}').";
             return false;
         }
 
-        var fileInfo = new FileInfo(path!);
+        var fileInfo = new FileInfo(path);
         if (string.IsNullOrWhiteSpace(name))
             name = fileInfo.Name;
 
-        ResourceFileHook fileHook = null;
+        ResourceFileHook? fileHook = null;
         var hookExists = relevantFileWatcher != null && relevantFileWatcher.HooksForResourceFilePaths.TryGetValue(relativePath, out fileHook);
         if (hookExists)
         {
@@ -88,8 +90,8 @@ public sealed partial class ResourceManager
         var resourceId = GetNextResourceId();
         List<string> compilationReferences = new();
 
-        if (resourceFolders != null)
-            compilationReferences.AddRange(resourceFolders);
+        if (instance != null)
+            compilationReferences.AddRange(instance.ResourceFolders);
         else if (relevantFileWatcher != null)
             compilationReferences.Add(relevantFileWatcher.WatchedFolder);
 
@@ -107,7 +109,7 @@ public sealed partial class ResourceManager
             return false;
         }
 
-        ResourcesById.TryAdd(resource.Id, resource);
+        ResourcesById.TryAdd(resource!.Id, resource);
         if (relevantFileWatcher == null)
             return true;
 

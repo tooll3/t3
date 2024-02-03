@@ -74,14 +74,14 @@
           "Value": 10.0
         },
         {
+          "Id": "e704cf6c-963e-4701-ba3d-127b880676fa"/*Amplitude*/,
+          "Type": "System.Single",
+          "Value": 0.31333336
+        },
+        {
           "Id": "b112705e-3ec3-4904-b978-bc784d9b2f94"/*RangeMin*/,
           "Type": "System.Single",
           "Value": -1.0
-        },
-        {
-          "Id": "e704cf6c-963e-4701-ba3d-127b880676fa"/*Scale*/,
-          "Type": "System.Single",
-          "Value": 0.31333336
         }
       ],
       "Outputs": []

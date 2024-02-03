@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -41,13 +43,12 @@ namespace T3.Core.Operator
 
         public Type InstanceType { get; private set; }
 
-
         public Animator Animator { get; } = new();
 
         public PlaybackSettings PlaybackSettings { get; set; } = new();
 
         #region public API =======================================================================
-        internal void SetChildren (IReadOnlyCollection<SymbolChild> children, bool setChildrensParent)
+        internal void SetChildren(IReadOnlyCollection<SymbolChild> children, bool setChildrensParent)
         {
             Children.AddRange(children);
 
@@ -79,16 +80,15 @@ namespace T3.Core.Operator
             Id = symbolId;
 
             UpdateType(instanceType, symbolPackage, out var isObject);
-            
+
             if (isObject)
                 return;
-            
+
             if (symbolPackage != null)
             {
                 UpdateInstanceType();
                 return;
             }
-            
 
             // input identified by base interface
 
@@ -102,12 +102,13 @@ namespace T3.Core.Operator
                 var attribute = (InputAttribute)customAttributes[0];
                 var isMultiInput = inputInfo.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
                 var valueType = inputInfo.FieldType.GetGenericArguments()[0];
-                
+
                 if (!TypeNameRegistry.Entries.ContainsKey(valueType))
                 {
                     Log.Error($"Skipping input {Name}.{inputInfo.Name} with undefined type {valueType}...");
                     continue;
                 }
+
                 var inputDef = CreateInputDefinition(attribute.Id, inputInfo.Name, isMultiInput, valueType);
                 inputDefs.Add(inputDef);
             }
@@ -118,7 +119,7 @@ namespace T3.Core.Operator
                 foreach (Guid id in orderedInputIds)
                 {
                     var inputDefinition = inputDefs.Find(inputDef => inputDef != null && inputDef.Id == id);
-                    
+
                     if (inputDefinition != null)
                     {
                         InputDefinitions.Add(inputDefinition);
@@ -140,7 +141,7 @@ namespace T3.Core.Operator
                 var valueType = output.FieldType.GenericTypeArguments[0];
                 var attribute = (OutputAttribute)attributes.First();
                 var outputDataType = GetOutputDataType(output);
-                
+
                 if (!TypeNameRegistry.Entries.ContainsKey(valueType))
                 {
                     Log.Error($"Skipping output {Name}.{output.Name} with undefined type {valueType}...");
@@ -157,7 +158,7 @@ namespace T3.Core.Operator
                                           });
             }
         }
-        
+
         public void UpdateType(Type instanceType, SymbolPackage symbolPackage, out bool isObject)
         {
             InstanceType = instanceType;
@@ -167,7 +168,7 @@ namespace T3.Core.Operator
             isObject = instanceType == typeof(object);
             if (isObject || symbolPackage == null)
                 return;
-            
+
             // set the static TypeSymbol field so that instances can access their resources in their constructor
             var genericType = symbolPackage.AssemblyInformation.GenericTypes[instanceType];
             var staticFieldInfos = genericType.GetFields(BindingFlags.Static | BindingFlags.NonPublic);
@@ -200,11 +201,11 @@ namespace T3.Core.Operator
                                             && c.TargetSlotId == con.TargetSlotId)
                               .FindIndex(cc => cc == con); // todo: fix this mess! connection rework!
         }
-        
+
         public void UpdateInstanceType()
         {
             var instanceType = InstanceType;
-            
+
             var newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<ConnectionEntry>)>();
 
             // check if inputs have changed
@@ -362,10 +363,10 @@ namespace T3.Core.Operator
                 foreach (var inputDefinition in InputDefinitions)
                 {
                     var inputId = inputDefinition.Id;
-                    var inputToAdd = oldChildInputs.TryGetValue(inputId, out var oldInput) 
-                                         ? oldInput 
+                    var inputToAdd = oldChildInputs.TryGetValue(inputId, out var oldInput)
+                                         ? oldInput
                                          : new SymbolChild.Input(inputDefinition);
-                    
+
                     symbolChild.Inputs.Add(inputId, inputToAdd);
                 }
 
@@ -376,12 +377,10 @@ namespace T3.Core.Operator
                 {
                     if (!oldChildOutputs.TryGetValue(outputDefinition.Id, out var output))
                     {
-                        var outputData = (outputDefinition.OutputDataType != null)
-                                             ? (Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData) // todo- optimize creation
-                                             : null;
+                        OutputDefinition.TryGetNewValueType(outputDefinition, out var outputData);
                         output = new SymbolChild.Output(outputDefinition, outputData);
                     }
-                    
+
                     symbolChild.Outputs.Add(outputDefinition.Id, output);
                 }
 
@@ -511,7 +510,7 @@ namespace T3.Core.Operator
                         index--;
                         continue;
                     }
-                    
+
                     conHashToCount[hash] = count + 1;
                 }
             }
@@ -656,9 +655,9 @@ namespace T3.Core.Operator
         public void RemoveConnection(Connection connection, int multiInputIndex = 0)
         {
             var connectionsAtInput = Connections.FindAll(c =>
-                                                              c.TargetParentOrChildId == connection.TargetParentOrChildId &&
-                                                              c.TargetSlotId == connection.TargetSlotId);
-            
+                                                             c.TargetParentOrChildId == connection.TargetParentOrChildId &&
+                                                             c.TargetSlotId == connection.TargetSlotId);
+
             if (connectionsAtInput.Count == 0 || multiInputIndex >= connectionsAtInput.Count)
             {
                 Log.Error($"Trying to remove a connection that doesn't exist. Index {multiInputIndex} of {connectionsAtInput.Count}");
@@ -666,12 +665,12 @@ namespace T3.Core.Operator
             }
 
             var existingConnection = connectionsAtInput[multiInputIndex];
-            
+
             // ReSharper disable once PossibleUnintendedReferenceComparison
             var connectionIndex = Connections.FindIndex(c => c == existingConnection); // == is intended
             if (connectionIndex == -1)
                 return;
-            
+
             //Log.Info($"Remove  MI with index {multiInputIndex} at existing index {connectionsIndex}");
             Connections.RemoveAt(connectionIndex);
             foreach (var instance in InstancesOfSymbol)
@@ -777,6 +776,45 @@ namespace T3.Core.Operator
             public Type ValueType { get; set; }
             public Type OutputDataType { get; set; }
             public DirtyFlagTrigger DirtyFlagTrigger { get; set; }
+
+            private static readonly ConcurrentDictionary<Type, Func<object>> OutputValueConstructors = new();
+
+            public static bool TryGetNewValueType(OutputDefinition def, out IOutputData newData)
+            {
+                return TryCreateOutputType(def, out newData, def.ValueType);
+            }
+            
+            public static bool TryGetNewOutputDataType(OutputDefinition def, out IOutputData newData)
+            {
+                return TryCreateOutputType(def, out newData, def.OutputDataType);
+            }
+
+            private static bool TryCreateOutputType(OutputDefinition def, out IOutputData newData, Type valueType)
+            {
+                if (valueType == null)
+                {
+                    newData = null;
+                    return false;
+                }
+                
+                if (OutputValueConstructors.TryGetValue(valueType, out var constructor))
+                {
+                    newData = (IOutputData)constructor();
+                    return true;
+                }
+
+                if (!valueType.IsAssignableTo(typeof(IOutputData)))
+                {
+                    Log.Warning($"Value type {valueType} for output {def.Name} is not an {nameof(IOutputData)}");
+                    newData = null;
+                    return false;
+                }
+
+                constructor = Expression.Lambda<Func<object>>(Expression.New(valueType)).Compile();
+                OutputValueConstructors[valueType] = constructor;
+                newData = (IOutputData)constructor();
+                return true;
+            }
         }
 
         public class Connection
@@ -840,7 +878,6 @@ namespace T3.Core.Operator
             }
         }
 
-        
         /// <summary>
         /// Invalidates all instances of a symbol input (e.g. if that input's default was modified)
         /// </summary>
@@ -852,7 +889,7 @@ namespace T3.Core.Operator
                 var slot = symbolInstance.Inputs.Single(i => i.Id == inputId);
                 if (!slot.Input.IsDefault)
                     continue;
-                
+
                 slot.DirtyFlag.Invalidate();
             }
         }

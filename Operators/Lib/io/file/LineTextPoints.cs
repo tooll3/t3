@@ -48,7 +48,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             var cornerBalance = CornerWeightBalance.GetValue(context);
             
             var filepath = FilePath.GetValue(context);
-            if (!ResourceManager.TryResolvePath(filepath, out filepath, ResourceFolders))
+            if (!ResourceManager.TryResolvePath(filepath, this, out filepath))
             {
                 Log.Debug($"File {filepath} doesn't exist", this);
                 return;

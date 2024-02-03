@@ -57,6 +57,8 @@ public class DX11ShaderCompiler : ShaderCompiler
     {
         // As shader type is generic we've to use Activator and PropertyInfo to create/set the shader object
         var shaderType = typeof(TShader);
+
+        // todo - optimize and cache constructors similar to AssemblyInformation.cs and Symbol.OutputDefinition
         shader = (TShader)Activator.CreateInstance(shaderType, Device, blob.Data, null);
 
         var debugNameInfo = shaderType.GetProperty("DebugName");

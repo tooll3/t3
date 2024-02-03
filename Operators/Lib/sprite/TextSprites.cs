@@ -57,7 +57,7 @@ namespace lib.sprite
 
             try
             {
-                (_textureResId, _srvResId) = ResourceManager.Instance().CreateTextureFromFile(imageFilePath, ResourceFileWatcher, () => { Texture.DirtyFlag.Invalidate(); });
+                (_textureResId, _srvResId) = ResourceManager.Instance().CreateTextureFromFile(imageFilePath, this, () => { Texture.DirtyFlag.Invalidate(); });
 
                 if (ResourceManager.ResourcesById.TryGetValue(_textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
                     Texture.Value = textureResource.Texture;

@@ -222,8 +222,7 @@ namespace lib.img.generate
                 var resourceManager = ResourceManager.Instance();
                 var success = resourceManager.TryCreateShaderResource(out _resolveComputeShaderResource, 
                                                                       relativePath: sourcePath, 
-                                                                      watcher: ResourceFileWatcher,
-                                                                      resourceFolders: null,
+                                                                      instance: this,
                                                                       entryPoint: entryPoint, 
                                                                       name: debugName,
                                                                       errorMessage: out var errorMessage);

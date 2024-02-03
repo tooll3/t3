@@ -22,8 +22,7 @@ namespace T3.Editor.Gui.OutputUi
             var resourceManager = ResourceManager.Instance();
             var success= resourceManager.TryCreateShaderResource(resource: out _shaderResource, 
                                                                                 relativePath: sourcePath, 
-                                                                                watcher: null,
-                                                                                resourceFolders: null,
+                                                                                instance: null,
                                                                                 errorMessage: out var errorMessage, 
                                                                                 name: debugName, 
                                                                                 entryPoint: entryPoint, 

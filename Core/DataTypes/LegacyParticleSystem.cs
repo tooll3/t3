@@ -39,8 +39,7 @@ namespace T3.Core.DataTypes
                 var resourceManager = ResourceManager.Instance();
                 resourceManager.TryCreateShaderResource(resource: out _initDeadListShaderResource, 
                                                         relativePath: sourcePath, 
-                                                        watcher: null,
-                                                        resourceFolders: null,
+                                                        instance: null,
                                                         errorMessage: out var errorMessage, 
                                                         name: entryPoint, 
                                                         entryPoint: debugName, 

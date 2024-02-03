@@ -26,7 +26,7 @@ namespace T3.Core.Operator.Slots
 
         public void SetOutputData(IOutputData data)
         {
-            TimeClip = data as TimeClip;
+            TimeClip = (TimeClip)data;
             TimeClip.Id = Parent.SymbolChildId;
         }
 

@@ -43,7 +43,7 @@ namespace lib.img.generate
                 string imagePath = Path.GetValue(context);
                 try
                 {
-                    (_textureResId, _srvResId) = resourceManager.CreateTextureFromFile(imagePath, ResourceFileWatcher, () =>
+                    (_textureResId, _srvResId) = resourceManager.CreateTextureFromFile(imagePath, this, () =>
                                                                                                   {
                                                                                                       Texture.DirtyFlag.Invalidate();
                                                                                                       ShaderResourceView.DirtyFlag.Invalidate();

@@ -15,6 +15,16 @@
       "SymbolId": "4f89b41b-1643-442b-bec8-9f9ef2173baa",
       "InputValues": [
         {
+          "Id": "52d36eba-d789-41a0-bdf4-9ca6b3e32530"/*Rotate*/,
+          "Type": "System.Single",
+          "Value": 45.0
+        },
+        {
+          "Id": "2221e831-12dd-4c9f-8533-48b9f96e60ab"/*Scale*/,
+          "Type": "System.Single",
+          "Value": 2.6
+        },
+        {
           "Id": "0d0944a4-b5f6-4df5-8ef6-cbfe70fbae94"/*Background*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -23,16 +33,6 @@
             "Z": 1.0,
             "W": 0.0
           }
-        },
-        {
-          "Id": "2221e831-12dd-4c9f-8533-48b9f96e60ab"/*Scale*/,
-          "Type": "System.Single",
-          "Value": 2.6
-        },
-        {
-          "Id": "52d36eba-d789-41a0-bdf4-9ca6b3e32530"/*Rotate*/,
-          "Type": "System.Single",
-          "Value": 45.0
         },
         {
           "Id": "27ce4875-b4da-4a44-a959-37c81c1600b8"/*DotSize*/,
@@ -50,17 +50,17 @@
           "Value": 0.83
         },
         {
-          "Id": "c1378bbd-70df-4b6e-876f-5f1f1c59a617"/*RAffects_DotSize*/,
+          "Id": "c1378bbd-70df-4b6e-876f-5f1f1c59a617"/*RedToDotSize*/,
           "Type": "System.Single",
           "Value": 0.83
         },
         {
-          "Id": "3329cd25-e7b9-47da-88e0-5dd7b6e324fa"/*GAffects_LineWidth*/,
+          "Id": "3329cd25-e7b9-47da-88e0-5dd7b6e324fa"/*GreenToLineWidth*/,
           "Type": "System.Single",
           "Value": 3.05
         },
         {
-          "Id": "92f52517-8ebc-4c89-af0a-b0bc5abc0439"/*BAffects_LineRatio*/,
+          "Id": "92f52517-8ebc-4c89-af0a-b0bc5abc0439"/*BlueToLineRatio*/,
           "Type": "System.Single",
           "Value": -0.5
         }
@@ -608,7 +608,7 @@
       "Outputs": []
     },
     {
-      "Id": "d5c0027d-2a90-4539-a0e5-bbbfcb9f468a"/*FractalNoise*/,
+      "Id": "d5c0027d-2a90-4539-a0e5-bbbfcb9f468a"/*_FractalNoiseOld*/,
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [
         {

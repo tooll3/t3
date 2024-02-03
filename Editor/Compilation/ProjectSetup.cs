@@ -336,13 +336,13 @@ internal static class ProjectSetup
         }
     }
 
-    readonly struct SymbolUiLoadInfo(IReadOnlyCollection<SymbolUi> newlyLoaded, IReadOnlyCollection<SymbolUi> preExisting)
+    private readonly struct SymbolUiLoadInfo(IReadOnlyCollection<SymbolUi> newlyLoaded, IReadOnlyCollection<SymbolUi> preExisting)
     {
         public readonly IReadOnlyCollection<SymbolUi> NewlyLoaded = newlyLoaded;
         public readonly IReadOnlyCollection<SymbolUi> PreExisting = preExisting;
     }
 
-    readonly struct AssemblyConstructorInfo(AssemblyInformation assemblyInformation, Type instanceType)
+    private readonly struct AssemblyConstructorInfo(AssemblyInformation assemblyInformation, Type instanceType)
     {
         public readonly AssemblyInformation AssemblyInformation = assemblyInformation;
         public readonly Type InstanceType = instanceType;

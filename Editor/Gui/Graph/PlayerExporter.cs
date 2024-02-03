@@ -333,7 +333,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     var relativeDirectory = stringValue.Value;
 
-                    if (!ResourceManager.TryResolveDirectory(relativeDirectory, out var absoluteDirectory, parent.ResourceFolders))
+                    if (!ResourceManager.TryResolveDirectory(relativeDirectory, parent, out var absoluteDirectory))
                     {
                         Log.Warning($"Directory '{relativeDirectory}' was not found in any resource folder");
                     }

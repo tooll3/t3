@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -293,7 +295,7 @@ namespace T3.Core.DataTypes
         }        
     }
 
-    public class StructuredListConverter : JsonConverter
+    public sealed class StructuredListConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
@@ -311,20 +313,45 @@ namespace T3.Core.DataTypes
             if (reader is not JsonTextReader textReader)
                 return null;
 
-            var obj = Activator.CreateInstance(objectType) as StructuredList;
-            if (obj == null)
+            if (!TryCreateStructuredList(objectType, out var list))
             {
                 Log.Warning($"Can't create instance of {objectType}");
                 return null;
             }
             
-            obj.Read(textReader);
-            return obj;
+            list.Read(textReader);
+            return list;
         }
 
         public override bool CanConvert(Type objectType)
         {
             return true;
         }
+
+        private static bool TryCreateStructuredList(Type objectType, out StructuredList list)
+        {
+            Func<object> func;
+            lock (OutputValueConstructors)
+            {
+                if (!OutputValueConstructors.TryGetValue(objectType, out func))
+                {
+                    func = Expression.Lambda<Func<object>>(Expression.New(objectType)).Compile();
+                    OutputValueConstructors[objectType] = func;
+                }
+            }
+
+            try
+            {
+                list = (StructuredList)func();
+                return true;
+            }
+            catch
+            {
+                list = null;
+                return false;
+            }
+        }
+        
+        private static readonly Dictionary<Type, Func<object>> OutputValueConstructors = new();
     }
 }

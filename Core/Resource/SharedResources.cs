@@ -26,8 +26,7 @@ namespace T3.Editor.App
             var resourceManager = ResourceManager.Instance();
             var gotFullscreenVertexShader = resourceManager.TryCreateShaderResource<VertexShader>(
                  relativePath: @"dx11\fullscreen-texture.hlsl",
-                 watcher: null,
-                 resourceFolders: null,
+                 instance: null,
                  entryPoint: "vsMain",
                  name: "vs-fullscreen-texture",
                  fileChangedAction: () => { },
@@ -41,8 +40,7 @@ namespace T3.Editor.App
             
             var gotFullscreenPixelShader = resourceManager.TryCreateShaderResource<PixelShader>(
                 relativePath: @"dx11\fullscreen-texture.hlsl",
-                watcher: null,
-                resourceFolders: null,
+                instance: null,
                 entryPoint: "psMain",
                 name: "ps-fullscreen-texture",
                 fileChangedAction: () => { },

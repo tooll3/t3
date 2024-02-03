@@ -30,7 +30,7 @@ namespace lib._3d.@_
             {
                 var filepath = Filepath.GetValue(context);
 
-                if (ResourceManager.TryResolvePath(filepath, out filepath, ResourceFolders))
+                if (ResourceManager.TryResolvePath(filepath, this, out filepath))
                 {
                     ResourceFileWatcher.AddFileHook(filepath, () => { Filepath.DirtyFlag.Invalidate(); });
                     _font = BmFontDescription.InitializeFromFile(filepath);

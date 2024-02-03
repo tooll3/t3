@@ -50,7 +50,7 @@ namespace T3.Core.Operator
 
             foreach (var outputDefinition in symbol.OutputDefinitions)
             {
-                var outputData = (outputDefinition.OutputDataType != null) ? (Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData) : null;
+                Symbol.OutputDefinition.TryGetNewOutputDataType(outputDefinition, out var outputData);
                 var output = new Output(outputDefinition, outputData) { DirtyFlagTrigger = outputDefinition.DirtyFlagTrigger };
                 if (!Outputs.TryAdd(outputDefinition.Id, output))
                 {
