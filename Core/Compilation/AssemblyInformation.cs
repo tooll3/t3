@@ -90,11 +90,10 @@ public class AssemblyInformation
     private void LoadTypes(string path, Assembly assembly, out bool shouldShareResources)
     {
         TryResolveReferences(path);
-
+        Type[] types;
         try
         {
-            var types = assembly.GetExportedTypes();
-            _types = types.ToDictionary(type => type.FullName, type => type);
+            types = assembly.GetExportedTypes();
         }
         catch (Exception e)
         {
@@ -104,6 +103,8 @@ public class AssemblyInformation
             shouldShareResources = false;
             return;
         }
+        
+        _types = types.ToDictionary(type => type.FullName, type => type);
 
         ConcurrentBag<Type> nonOperatorTypes = new();
         _operatorTypes = _types.Values
@@ -269,7 +270,17 @@ public class AssemblyInformation
             }
         }
 
-        bool NamesMatch(RuntimeLibrary runtime) => string.Equals(runtime.Name, name.Name, StringComparison.OrdinalIgnoreCase);
+        bool NamesMatch(RuntimeLibrary runtime)
+        {
+            return string.Equals(runtime.Name, name.Name, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(RemovePackageSuffixes(runtime.Name), name.Name, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+    
+    private static string RemovePackageSuffixes(string name)
+    {
+        string removed = name.Replace(".api", string.Empty);
+        return removed;
     }
 
     private static bool TryGetGuidOfType(Type newType, out Guid guid)
