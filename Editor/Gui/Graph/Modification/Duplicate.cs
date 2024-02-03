@@ -133,8 +133,6 @@ internal static class Duplicate
             newSelectables[i].PosOnCanvas = sourceSelectables[i].PosOnCanvas; // todo: check if this is enough or if id check needed
         }
         
-        newSymbol.UpdateInstanceType(newSymbol.InstanceType);
-        compositionUi.UpdateConsistencyWithSymbol();
         Log.Debug($"Created new symbol '{newTypeName}'");
 
         return newSymbol;

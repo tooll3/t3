@@ -47,19 +47,26 @@ public abstract partial class SymbolPackage
         Dictionary<Guid, Type> newTypes = new();
 
         var removedSymbolIds = new HashSet<Guid>(Symbols.Keys);
+        List<Symbol> updatedSymbols = new();
         foreach (var (guid, type) in AssemblyInformation.OperatorTypes)
         {
             if (Symbols.Count > 0 && Symbols.TryGetValue(guid, out var symbol))
             {
                 removedSymbolIds.Remove(guid);
-                symbol.UpdateInstanceType(type);
-                symbol.CreateAnimationUpdateActionsForSymbolInstances();
+                symbol.UpdateType(type, this, out _);
+                updatedSymbols.Add(symbol);
             }
             else
             {
                 // it's a new type!!
                 newTypes.Add(guid, type);
             }
+        }
+
+        foreach (var symbol in updatedSymbols)
+        {
+            symbol.UpdateInstanceType();
+            symbol.CreateAnimationUpdateActionsForSymbolInstances();
         }
 
         // remaining symbols have been removed from the assembly
@@ -75,7 +82,7 @@ public abstract partial class SymbolPackage
         {
             var symbolFiles = Directory.EnumerateFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
             var symbolsRead = symbolFiles
-                             //.AsParallel()
+                              //.AsParallel()
                              .Select(JsonFileResult<Symbol>.ReadAndCreate)
                              .Where(result => newTypes.ContainsKey(result.Guid))
                              .Select(ReadSymbolFromJsonFileResult)
@@ -177,7 +184,7 @@ public abstract partial class SymbolPackage
 
         return removed;
     }
-    
+
     protected abstract void OnSymbolRemoved(Symbol symbol);
 
     public void ApplySymbolChildren(List<SymbolJson.SymbolReadResult> symbolsRead)

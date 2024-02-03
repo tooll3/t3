@@ -59,14 +59,11 @@ public class AssemblyInformation
     public bool HasHome => HomeGuid != Guid.Empty;
 
     public IEnumerable<Assembly> AllAssemblies => _loadContext.Assemblies;
-    private AssemblyLoadContext _loadContext;
-    private CompositeCompilationAssemblyResolver _assemblyResolver;
     public IReadOnlyDictionary<Type, Func<object>> Constructors => _constructors;
-    private readonly ConcurrentDictionary<Type, Func<object>> _constructors = new();
+    public IReadOnlyDictionary<Type,Type> GenericTypes => _genericTypes;
     public IReadOnlyDictionary<Type, IReadOnlyList<InputSlotInfo>> InputFields => _inputFields;
-    private readonly ConcurrentDictionary<Type, IReadOnlyList<InputSlotInfo>> _inputFields = new();
     public IReadOnlyDictionary<Type, IReadOnlyList<OutputSlotInfo>> OutputFields => _outputFields;
-    private readonly ConcurrentDictionary<Type, IReadOnlyList<OutputSlotInfo>> _outputFields = new();
+    public bool IsOperatorAssembly => _operatorTypes.Count > 0;
 
     private readonly List<string> _assemblyPaths = new();
     public IReadOnlyCollection<string> AssemblyPaths;
@@ -163,7 +160,9 @@ public class AssemblyInformation
 
     private void SetUpOperatorType(Type type)
     {
+        _genericTypes[type] = typeof(Instance<>).MakeGenericType(type);
         _constructors[type] = Expression.Lambda<Func<object>>(Expression.New(type)).Compile();
+        
 
         var bindFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
         var slots = type.GetFields(bindFlags)
@@ -319,11 +318,6 @@ public class AssemblyInformation
         public readonly Type Type = type;
     }
 
-    private DependencyContext DependencyContext => _dependencyContext ??= DependencyContext.Load(_assembly);
-    public bool IsOperatorAssembly => _operatorTypes.Count > 0;
-    public readonly bool ShouldShareResources;
-    private DependencyContext _dependencyContext;
-
     public void Unload()
     {
         _operatorTypes.Clear();
@@ -332,4 +326,14 @@ public class AssemblyInformation
         _loadContext.Unload();
         _loadContext = null;
     }
+
+    private DependencyContext DependencyContext => _dependencyContext ??= DependencyContext.Load(_assembly);
+    public readonly bool ShouldShareResources;
+    private DependencyContext _dependencyContext;
+    private readonly ConcurrentDictionary<Type, Func<object>> _constructors = new();
+    private AssemblyLoadContext _loadContext;
+    private CompositeCompilationAssemblyResolver _assemblyResolver;
+    private readonly ConcurrentDictionary<Type, Type> _genericTypes = new();
+    private readonly ConcurrentDictionary<Type, IReadOnlyList<InputSlotInfo>> _inputFields = new();
+    private readonly ConcurrentDictionary<Type, IReadOnlyList<OutputSlotInfo>> _outputFields = new();
 }

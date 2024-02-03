@@ -78,14 +78,17 @@ namespace T3.Core.Operator
             Name = instanceType.Name;
             Id = symbolId;
 
-            UpdateType(instanceType);
-
+            UpdateType(instanceType, symbolPackage, out var isObject);
+            
+            if (isObject)
+                return;
+            
             if (symbolPackage != null)
             {
-                SymbolPackage = symbolPackage;
-                UpdateInstanceType(instanceType);
+                UpdateInstanceType();
                 return;
             }
+            
 
             // input identified by base interface
 
@@ -155,15 +158,18 @@ namespace T3.Core.Operator
             }
         }
         
-        private void UpdateType(Type instanceType)
+        public void UpdateType(Type instanceType, SymbolPackage symbolPackage, out bool isObject)
         {
             InstanceType = instanceType;
+            SymbolPackage = symbolPackage;
+            Name = instanceType.Name;
 
-            if (instanceType == typeof(object))
+            isObject = instanceType == typeof(object);
+            if (isObject || symbolPackage == null)
                 return;
             
             // set the static TypeSymbol field so that instances can access their resources in their constructor
-            var genericType = typeof(Instance<>).MakeGenericType(instanceType);
+            var genericType = symbolPackage.AssemblyInformation.GenericTypes[instanceType];
             var staticFieldInfos = genericType.GetFields(BindingFlags.Static | BindingFlags.NonPublic);
             var staticSymbolField = staticFieldInfos.Single(x => x.Name == "_typeSymbol");
             staticSymbolField.SetValue(null, this);
@@ -195,11 +201,10 @@ namespace T3.Core.Operator
                               .FindIndex(cc => cc == con); // todo: fix this mess! connection rework!
         }
         
-        public void UpdateInstanceType(Type instanceType)
+        public void UpdateInstanceType()
         {
-            UpdateType(instanceType);
+            var instanceType = InstanceType;
             
-            Name = instanceType.Name;
             var newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<ConnectionEntry>)>();
 
             // check if inputs have changed
@@ -372,7 +377,7 @@ namespace T3.Core.Operator
                     if (!oldChildOutputs.TryGetValue(outputDefinition.Id, out var output))
                     {
                         var outputData = (outputDefinition.OutputDataType != null)
-                                             ? (Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData)
+                                             ? (Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData) // todo- optimize creation
                                              : null;
                         output = new SymbolChild.Output(outputDefinition, outputData);
                     }
@@ -383,14 +388,15 @@ namespace T3.Core.Operator
                 newInstanceSymbolChildren.Add((symbolChild, parent, connectionEntriesToReplace));
             }
 
+            var instanceList = InstancesOfSymbol;
             // now remove the old instances itself...
-            foreach (var instance in InstancesOfSymbol)
+            for (var index = instanceList.Count - 1; index >= 0; index--)
             {
+                var instance = instanceList[index];
                 instance.Parent?.Children.Remove(instance);
                 instance.Dispose();
+                instanceList.RemoveAt(index);
             }
-
-            InstancesOfSymbol.Clear();
 
             // ... and create the new ones...
             foreach (var (symbolChild, parent, _) in newInstanceSymbolChildren)
@@ -447,10 +453,11 @@ namespace T3.Core.Operator
             // order the inputs by the given input definitions. original order is coming from code, but input def order is the relevant one
             int numInputs = inputs.Count;
             var lastIndex = numInputs - 1;
-            
+
+            var inputDefinitions = InputDefinitions;
             for (int i = 0; i < lastIndex; i++)
             {
-                Guid inputId = InputDefinitions[i].Id;
+                Guid inputId = inputDefinitions[i].Id;
                 if (inputs[i].Id != inputId)
                 {
                     int index = inputs.FindIndex(i + 1, input => input.Id == inputId);
@@ -463,7 +470,7 @@ namespace T3.Core.Operator
             #if DEBUG
             if (numInputs > 0)
             {
-                Debug.Assert(InputDefinitions[lastIndex].Id == inputs[lastIndex].Id);
+                Debug.Assert(inputs.Count == InputDefinitions.Count);
             }
             #endif
         }
