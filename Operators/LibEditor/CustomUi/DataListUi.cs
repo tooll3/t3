@@ -5,7 +5,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
-namespace Operator.User.cynic.Editor
+namespace libEditor.CustomUi
 {
     public static class DataListUi
     {
