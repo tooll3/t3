@@ -2,7 +2,6 @@ cbuffer ParamConstants : register(b0)
 {
     float4 Fill;
     float4 Background;
-    float2 Size;
     float2 Position;
     float Round;
     float Feather;
