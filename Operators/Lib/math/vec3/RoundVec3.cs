@@ -25,15 +25,15 @@ namespace lib.math.vec3
             var result = Mode.GetEnumValue<Modes>(context) switch
                          {
                              Modes.Round => new System.Numerics.Vector3(
-                                                                        MathF.Round(v.X * precision.X) / precision.X,
-                                                                        MathF.Round(v.Y * precision.Y) / precision.Y,
-                                                                        MathF.Round(v.Z * precision.Z) / precision.Z),
+                                                        MathF.Round(v.X * precision.X) / precision.X,
+                                                        MathF.Round(v.Y * precision.Y) / precision.Y,
+                                                        MathF.Round(v.Z * precision.Z) / precision.Z),
                              Modes.Floor => new System.Numerics.Vector3(MathF.Floor(v.X * precision.X) / precision.X,
-                                                                        MathF.Floor(v.Y * precision.Y) / precision.Y,
-                                                                        MathF.Floor(v.Z * precision.Z) / precision.Z),
+                                                        MathF.Floor(v.Y * precision.Y) / precision.Y,
+                                                        MathF.Floor(v.Z * precision.Z) / precision.Z),
                              Modes.Ceiling => new System.Numerics.Vector3(MathF.Ceiling(v.X * precision.X) / precision.X,
-                                                                          MathF.Ceiling(v.Y * precision.Y) / precision.Y,
-                                                                          MathF.Ceiling(v.Z * precision.Z) / precision.Z),
+                                                          MathF.Ceiling(v.Y * precision.Y) / precision.Y,
+                                                          MathF.Ceiling(v.Z * precision.Z) / precision.Z),
                              _ => System.Numerics.Vector3.Zero
                          };
 

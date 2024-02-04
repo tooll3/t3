@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -11,7 +11,7 @@ namespace lib.math.@float
     public class DampVec3 : Instance<DampVec3>
     {
         [Output(Guid = "87C0CCAE-46DA-460E-BE9D-C4B4E5753D0B", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector3> Result = new();
+        public readonly Slot<System.Numerics.Vector3> Result = new();
 
         
         public DampVec3()
@@ -48,7 +48,7 @@ namespace lib.math.@float
         private readonly float minTimeElapsedBeforeEvaluation = 1 / 1000f;
         
         [Input(Guid = "7E5DDFA7-B305-4744-A7EF-0F70C2B9741E")]
-        public readonly InputSlot<Vector3> Value = new();
+        public readonly InputSlot<System.Numerics.Vector3> Value = new();
 
         [Input(Guid = "490fc348-1b5d-47da-852b-8fd6d272b0b5")]
         public readonly InputSlot<float> Damping = new();

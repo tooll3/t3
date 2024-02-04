@@ -15,7 +15,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
     public InputSlot<string> DebugName { get; }
     public Instance Instance { get; }
     bool SourceIsSourceCode { get; }
-    protected internal ShaderResource<T> ShaderResource { get; set; }
+    public ShaderResource<T> ShaderResource { get; set; }
 
     public bool TryUpdateShader(EvaluationContext context, ref string cachedSource, out string message)
     {

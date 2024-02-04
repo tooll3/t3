@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -9,7 +9,7 @@ using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace lib._3d.@_
+namespace lib._3d._
 {
 	[Guid("947ad81e-47da-46c3-9b1d-8e578174d876")]
     public class _LenseFlareSprites : Instance<_LenseFlareSprites>
@@ -29,6 +29,7 @@ namespace lib._3d.@_
             //var worldToClipSpace = context.WorldToCamera
             //var viewToWorld = Matrix.Invert(worldToClipSpace);
 
+            
             var brightness = Brightness.GetValue(context);
 
             var color = Color.GetValue(context);
@@ -60,140 +61,146 @@ namespace lib._3d.@_
             var rotationSpread = RotationSpread.GetValue(context);
 
             var rotateTowards = (Categories)RotateTowards.GetValue(context);
+            var spriteCount = SpriteCount.GetValue(context).Clamp(0, 1000);
 
-            int startLightIndex = 0;
-            int endLightIndex = context.PointLights.Count;
+            var startLightIndex = 0;
+            var endLightIndex = context.PointLights.Count;
 
             _tempList.Clear();
 
-            
-            if (brightness > 0.00001f)
+            if (!(brightness > 0.00001f))
             {
-            
-                if (referencedLightIndex >= 0)
+                OutBuffer.Value = null;
+                return;
+            }
+
+            if (referencedLightIndex >= 0)
+            {
+                startLightIndex = referencedLightIndex;
+                endLightIndex = referencedLightIndex + 1;
+            }
+
+            var aspectRatio = (float)context.RequestedResolution.Width / (float)context.RequestedResolution.Height;
+
+            for (int lightIndex = startLightIndex; lightIndex < endLightIndex; lightIndex++)
+            {
+                var pointLight = context.PointLights.GetPointLight(lightIndex);
+                var lightPosDx = new Vector4(pointLight.Position, 1);
+
+                var posInViewDx = Vector4.Transform(lightPosDx, worldToClipSpace);
+                posInViewDx /= posInViewDx.W;
+
+                // Ignore light sources behind
+                var hideFactor = posInViewDx.Z < 0 ? 0 : 1;
+
+                posInViewDx /= posInViewDx.W;
+                var lightPosInView2D = new Vector2(posInViewDx.X, posInViewDx.Y);
+
+                if (spriteCount != _sprites.NumElements)
                 {
-                    startLightIndex = referencedLightIndex;
-                    endLightIndex = referencedLightIndex + 1;
+                    _sprites = new StructuredList<Sprite>(spriteCount);
                 }
 
-                var aspectRatio = (float)context.RequestedResolution.Width / (float)context.RequestedResolution.Height;
-
-                for (int lightIndex = startLightIndex; lightIndex < endLightIndex; lightIndex++)
+                // Render Planes
+                for (var i = 0; i < spriteCount; ++i)
                 {
-                    var pointLight = context.PointLights.GetPointLight(lightIndex);
-                    var lightPosDx = new Vector4(pointLight.Position, 1);
+                    var f = spriteCount <= 1 ? 0 : ((float)i / (spriteCount - 1) - 0.5f);
+                    var positionOnLine = (float)((-distanceFromLight
+                                                  + f * spread * 2
+                                                  + randomizeSpread * (rand.NextDouble() - 0.5) + 1));
 
-                    var posInViewDx = Vector4.Transform(lightPosDx, worldToClipSpace);
-                    posInViewDx /= posInViewDx.W;
+                    Vector2 objectScreenPos = lightPosInView2D * positionOnLine * positionFactor + (new Vector2(1, 1) - positionFactor) * lightPosInView2D;
 
-                    // Ignore light sources behind
-                    var hideFactor = posInViewDx.Z < 0 ? 0 : 1;
+                    objectScreenPos += new Vector2((float)(randomizePosition.X * (rand.NextDouble() - 0.5)),
+                                                   (float)(randomizePosition.Y * (rand.NextDouble() - 0.5)));
 
-                    posInViewDx /= posInViewDx.W;
-                    var lightPosInView2D = new Vector2(posInViewDx.X, posInViewDx.Y);
+                    var sizeWithRandom = size * (float)(1.0 + randomizeSize * (rand.NextDouble() - 0.5)) / 0.2f;
 
-                    var count = SpriteCount.GetValue(context).Clamp(0, 1000);
-                    if (count != _sprites.NumElements)
+                    var colorWithLight =
+                        new
+                            Vector4((color.X + randomizeColor.X * (float)(rand.NextDouble() - 0.5) * 4) * MathUtils.Lerp(1f, pointLight.Color.X, mixPointLightColor),
+                                    (color.Y + randomizeColor.Y * (float)(rand.NextDouble() - 0.5) * 4) *
+                                    MathUtils.Lerp(1f, pointLight.Color.Y, mixPointLightColor),
+                                    (color.Z + randomizeColor.Z * (float)(rand.NextDouble() - 0.5) * 4) *
+                                    MathUtils.Lerp(1f, pointLight.Color.Z, mixPointLightColor),
+                                    color.W * (1 - randomizeColor.W * (float)(rand.NextDouble() * 2)));
+                    var spriteColor = Vector4.Clamp(colorWithLight, Vector4.Zero, new Vector4(100, 100, 100, 1));
+
+                    var triggerPosition = fxZoneMode == ZoneFxModes.Lights
+                                              ? lightPosInView2D
+                                              : objectScreenPos;
+
+                    var d = GetDistanceToEdge(triggerPosition);
+                    var cInnerZone = MathUtils.SmootherStep(innerFxZone.Y, innerFxZone.X, 1 - d);
+                    var cEdgeZone = MathUtils.SmootherStep(edgeFxZone.X, edgeFxZone.Y, 1 - d);
+                    var cMatteBox = MathUtils.SmootherStep(matteBoxZone.Y, matteBoxZone.X, 1 - d);
+
+                    var totalTriggerAmount = (cInnerZone + cEdgeZone) * cMatteBox;
+
+                    sizeWithRandom *= (1 + zoneFxScale * totalTriggerAmount).Clamp(0, 100);
+
+                    var brightnessEffect = (zoneFxBrightness * totalTriggerAmount).Clamp(0, 100);
+                    spriteColor.X += brightnessEffect;
+                    spriteColor.Y += brightnessEffect;
+                    spriteColor.Z += brightnessEffect;
+                    spriteColor.W = ((spriteColor.W + brightnessEffect)).Clamp(0, 1);
+
+                    spriteColor.W *= cMatteBox * pointLight.Color.W;
+
+                    // This might actually be a good idea. Maybe we should do this later..
+                    // Fade with incoming alpha from FlatShaders and Materials
+                    //color.W *= materialAlpha;
+
+                    float spriteRotation = rotation;
+
+                    switch (rotateTowards)
                     {
-                        _sprites = new StructuredList<Sprite>(count);
+                        case Categories.Object:
+                            break;
+                        case Categories.Light:
+                            spriteRotation -=
+                                (float)(Math.Atan2((objectScreenPos.X - lightPosInView2D.X) * aspectRatio, objectScreenPos.Y - lightPosInView2D.Y) +
+                                        MathF.PI) * (180 / MathF.PI);
+                            break;
+                        case Categories.ScreenCenter:
+                            spriteRotation -= (float)(Math.Atan2(objectScreenPos.X, objectScreenPos.Y) + MathF.PI) * 180f / MathF.PI;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
 
-                    // Render Planes
-                    for (var i = 0; i < count; ++i)
-                    {
-                        var f = count <= 1 ? 0 : ((float)i / (count - 1) - 0.5f);
-                        var positionOnLine = (float)((-distanceFromLight
-                                                      + f * spread * 2
-                                                      + randomizeSpread * (rand.NextDouble() - 0.5) + 1));
+                    // // Transforom UV to pick correct texture cell
+                    // if (TextureCellsRows == 0)
+                    //     TextureCellsRows = 1;
+                    //
+                    // if (TextureCellsColumns == 0)
+                    //     TextureCellsColumns = 1;
 
-                        Vector2 objectScreenPos = lightPosInView2D * positionOnLine * positionFactor + (new Vector2(1, 1) - positionFactor) * lightPosInView2D;
+                    // int row = (int)(Math.Floor(i / TextureCellsColumns) % TextureCellsRows);
+                    // int column = (int)(i % TextureCellsRows);
+                    //
+                    // var translationUV = new Vector3(1 / TextureCellsColumns * column, 1 / TextureCellsRows * row, 0);
+                    // var rotationUV = new Quaternion();
+                    // var scaleUV = new Vector3(1 / TextureCellsColumns, 1 / TextureCellsRows, 0);
+                    // var pivotUV = new Vector3(0, 0, 0);
+                    //
+                    // var transformUV = Matrix.Transformation(pivotUV, new Quaternion(), scaleUV, pivotUV, rotationUV, translationUV);
+                    // var prevTransformUV = context.TextureMatrix;
+                    // context.TextureMatrix = transformUV * prevTransformUV;
+                    spriteColor.W *= brightness;
 
-                        objectScreenPos += new Vector2((float)(randomizePosition.X * (rand.NextDouble() - 0.5)),
-                                                       (float)(randomizePosition.Y * (rand.NextDouble() - 0.5)));
-
-                        var sizeWithRandom = size * (float)(1.0 + randomizeSize * (rand.NextDouble() - 0.5)) / 0.2f;
-
-                        var colorWithLight = new Vector4((color.X + randomizeColor.X * (float)(rand.NextDouble() - 0.5) * 4)* MathUtils.Lerp(1f, pointLight.Color.X, mixPointLightColor),
-                                                 (color.Y + randomizeColor.Y * (float)(rand.NextDouble() - 0.5) * 4) * MathUtils.Lerp(1f, pointLight.Color.Y, mixPointLightColor),
-                                                 (color.Z + randomizeColor.Z * (float)(rand.NextDouble() - 0.5) * 4) * MathUtils.Lerp(1f, pointLight.Color.Z, mixPointLightColor),
-                                                 color.W * (1 - randomizeColor.W * (float)(rand.NextDouble() * 2)));
-                        var spriteColor = Vector4.Clamp(colorWithLight, Vector4.Zero, new Vector4(100, 100, 100, 1));
-
-                        var triggerPosition = fxZoneMode == ZoneFxModes.Lights
-                                                  ? lightPosInView2D
-                                                  : objectScreenPos;
-
-                        var d = GetDistanceToEdge(triggerPosition);
-                        var cInnerZone = MathUtils.SmootherStep(innerFxZone.Y, innerFxZone.X, 1 - d);
-                        var cEdgeZone = MathUtils.SmootherStep(edgeFxZone.X, edgeFxZone.Y, 1 - d);
-                        var cMatteBox = MathUtils.SmootherStep(matteBoxZone.Y, matteBoxZone.X, 1 - d);
-
-                        var totalTriggerAmount = (cInnerZone + cEdgeZone) * cMatteBox;
-
-                        sizeWithRandom *= (1 + zoneFxScale * totalTriggerAmount).Clamp(0, 100);
-
-                        var brightnessEffect = (zoneFxBrightness * totalTriggerAmount).Clamp(0, 100);
-                        spriteColor.X += brightnessEffect;
-                        spriteColor.Y += brightnessEffect;
-                        spriteColor.Z += brightnessEffect;
-                        spriteColor.W = ((spriteColor.W + brightnessEffect)) .Clamp(0, 1);
-
-                        spriteColor.W *= cMatteBox * pointLight.Color.W;
-
-                        // This might actually be a good idea. Maybe we should do this later..
-                        // Fade with incoming alpha from FlatShaders and Materials
-                        //color.W *= materialAlpha;
-
-                        float spriteRotation = rotation;
-
-                        switch (rotateTowards)
-                        {
-                            case Categories.Object:
-                                break;
-                            case Categories.Light:
-                                spriteRotation -=
-                                    (float)(Math.Atan2((objectScreenPos.X - lightPosInView2D.X) * aspectRatio, objectScreenPos.Y - lightPosInView2D.Y) +
-                                            MathF.PI) * (180 / MathF.PI);
-                                break;
-                            case Categories.ScreenCenter:
-                                spriteRotation -= (float)(Math.Atan2(objectScreenPos.X, objectScreenPos.Y) + MathF.PI) * 180f / MathF.PI;
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-
-                        // // Transforom UV to pick correct texture cell
-                        // if (TextureCellsRows == 0)
-                        //     TextureCellsRows = 1;
-                        //
-                        // if (TextureCellsColumns == 0)
-                        //     TextureCellsColumns = 1;
-
-                        // int row = (int)(Math.Floor(i / TextureCellsColumns) % TextureCellsRows);
-                        // int column = (int)(i % TextureCellsRows);
-                        //
-                        // var translationUV = new Vector3(1 / TextureCellsColumns * column, 1 / TextureCellsRows * row, 0);
-                        // var rotationUV = new Quaternion();
-                        // var scaleUV = new Vector3(1 / TextureCellsColumns, 1 / TextureCellsRows, 0);
-                        // var pivotUV = new Vector3(0, 0, 0);
-                        //
-                        // var transformUV = Matrix.Transformation(pivotUV, new Quaternion(), scaleUV, pivotUV, rotationUV, translationUV);
-                        // var prevTransformUV = context.TextureMatrix;
-                        // context.TextureMatrix = transformUV * prevTransformUV;
-                        spriteColor.W *= brightness;
-
-                        _tempList.Add(new Sprite
-                                          {
-                                              PosInClipSpace = objectScreenPos,
-                                              Size = sizeWithRandom * stretch * hideFactor,
-                                              Color = spriteColor,
-                                              RotationDeg = spriteRotation + f * rotationSpread * 180,
-                                              UvMin = Vector2.Zero,
-                                              UvMax = Vector2.One,
-                                          });
-                    }
+                    _tempList.Add(new Sprite
+                                      {
+                                          PosInClipSpace = objectScreenPos,
+                                          Size = sizeWithRandom * stretch * hideFactor,
+                                          Color = spriteColor,
+                                          RotationDeg = spriteRotation + f * rotationSpread * 180,
+                                          UvMin = System.Numerics.Vector2.Zero,
+                                          UvMax = Vector2.One,
+                                      });
                 }
             }
+
             // Copy to structured array
             if (_tempList.Count != _sprites.NumElements)
             {
@@ -204,6 +211,7 @@ namespace lib._3d.@_
             {
                 _sprites.TypedElements[spriteIndex] = _tempList[spriteIndex];
             }
+
             OutBuffer.Value = _sprites;
         }
 
@@ -286,7 +294,7 @@ namespace lib._3d.@_
         public readonly InputSlot<float> Size = new();
 
         [Input(Guid = "C8347CA9-C700-4195-A23F-0F220F5823E2")]
-        public readonly InputSlot<Vector2> Stretch = new();
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
 
         [Input(Guid = "000A17CA-36A2-43EF-8FDA-314366C9E204")]
         public readonly InputSlot<float> Rotation = new();
@@ -307,34 +315,34 @@ namespace lib._3d.@_
         public readonly InputSlot<float> MixPointLightColor = new();
         
         [Input(Guid = "7D9DA46C-2D1F-48F8-BDC5-BB7E29C363C7")]
-        public readonly InputSlot<Vector4> Color = new();
+        public readonly InputSlot<System.Numerics.Vector4> Color = new();
 
         [Input(Guid = "53351CF3-71A5-4CB3-AD81-60ABC7718D4B")]
-        public readonly InputSlot<Vector4> RandomizeColor = new();
+        public readonly InputSlot<System.Numerics.Vector4> RandomizeColor = new();
 
         // [Input(Guid = "77EAC715-D2EE-4BD5-93F5-1E9E7119A0E6")]
-        // public readonly InputSlot<Vector2> TextureCells = new();
+        // public readonly InputSlot<System.Numerics.Vector2> TextureCells = new();
 
         [Input(Guid = "9CFFFB1A-675E-410C-96DA-C02BD6B3A81A")]
         public readonly InputSlot<int> RandomSeed = new();
 
         [Input(Guid = "1C250003-CF16-44DF-9A5E-F9FCF331617C")]
-        public readonly InputSlot<Vector2> PositionFactor = new();
+        public readonly InputSlot<System.Numerics.Vector2> PositionFactor = new();
 
         [Input(Guid = "D314C572-71C7-4A67-921B-DF369817DD4A")]
-        public readonly InputSlot<Vector2> RandomizePosition = new();
+        public readonly InputSlot<System.Numerics.Vector2> RandomizePosition = new();
 
         [Input(Guid = "C1B5F49F-3538-48AA-8D16-92D48FCF08CB", MappedType = typeof(ZoneFxModes))]
         public readonly InputSlot<int> FxZoneMode = new();
 
         [Input(Guid = "1C11CB25-05F8-4422-AA16-DB57E8CD2E0B")]
-        public readonly InputSlot<Vector2> EdgeFxZone = new();
+        public readonly InputSlot<System.Numerics.Vector2> EdgeFxZone = new();
 
         [Input(Guid = "00ED2D51-4CF0-43D6-ADAA-CE42E5EB8439")]
-        public readonly InputSlot<Vector2> InnerFxZone = new();
+        public readonly InputSlot<System.Numerics.Vector2> InnerFxZone = new();
 
         [Input(Guid = "BE4366C5-9E1C-430A-8F34-F31321A7DF2C")]
-        public readonly InputSlot<Vector2> MattBoxZone = new();
+        public readonly InputSlot<System.Numerics.Vector2> MattBoxZone = new();
 
         [Input(Guid = "0D98C14C-3F62-47E2-8FE8-A85208D9C02D")]
         public readonly InputSlot<float> FxZoneScale = new();

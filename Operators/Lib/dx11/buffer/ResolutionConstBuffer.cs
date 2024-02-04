@@ -1,8 +1,8 @@
 using System.Runtime.InteropServices;
-using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Resource;
 
 namespace lib.dx11.buffer

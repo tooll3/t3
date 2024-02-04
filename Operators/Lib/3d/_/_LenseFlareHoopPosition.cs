@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -7,7 +7,7 @@ using T3.Core.Utils;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
 
-namespace lib._3d.@_
+namespace lib._3d._
 {
 	[Guid("1cfe41c7-972e-4243-9ae4-a510ac038191")]
     public class _LenseFlareHoopPosition : Instance<_LenseFlareHoopPosition>
@@ -16,13 +16,13 @@ namespace lib._3d.@_
         // public readonly Slot<StructuredList> OutBuffer = new Slot<StructuredList>();
 
         [Output(Guid = "1FC7D2A4-AB6C-433E-BE07-943560103C18", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector2> LightPosition = new();
+        public readonly Slot<System.Numerics.Vector2> LightPosition = new();
 
         [Output(Guid = "2DF9C5B9-22CB-413B-A753-03FD0137488A", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector2> TargetPosition = new();
+        public readonly Slot<System.Numerics.Vector2> TargetPosition = new();
 
         [Output(Guid = "87694759-9CF4-4E7F-85E0-AF7C42D46750", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector4> LightColor = new();
+        public readonly Slot<System.Numerics.Vector4> LightColor = new();
 
         public _LenseFlareHoopPosition()
         {
@@ -136,25 +136,25 @@ namespace lib._3d.@_
         public readonly InputSlot<float> RandomizeSize = new();
 
         [Input(Guid = "b6163e2d-1344-4ac5-9704-98e849d3248e")]
-        public readonly InputSlot<Vector4> Color = new();
+        public readonly InputSlot<System.Numerics.Vector4> Color = new();
 
         [Input(Guid = "92dec9db-e1b0-4f9e-aba5-b7e8900d5bc8")]
-        public readonly InputSlot<Vector4> RandomizeColor = new();
+        public readonly InputSlot<System.Numerics.Vector4> RandomizeColor = new();
 
         [Input(Guid = "e658e0ac-282b-4a56-bdf0-9b7efadc7e02")]
         public readonly InputSlot<int> RandomSeed = new();
 
         [Input(Guid = "0ebf8ac6-e075-47c9-ba7a-8a2fd7b0e342")]
-        public readonly InputSlot<Vector2> PositionFactor = new();
+        public readonly InputSlot<System.Numerics.Vector2> PositionFactor = new();
         
         [Input(Guid = "937e6cd3-ea96-4d93-aa1d-32cf86180b4d")]
         public readonly InputSlot<int> FxZoneMode = new();
 
         [Input(Guid = "9aa570b6-06e6-4d92-8f5b-c9bba86a108e")]
-        public readonly InputSlot<Vector2> EdgeFxZone = new();
+        public readonly InputSlot<System.Numerics.Vector2> EdgeFxZone = new();
 
         [Input(Guid = "f080db28-3d87-4525-8807-619a7a1c72fc")]
-        public readonly InputSlot<Vector2> InnerFxZone = new();
+        public readonly InputSlot<System.Numerics.Vector2> InnerFxZone = new();
 
         [Input(Guid = "a2f601e5-1b11-49ea-8d5e-d98dfea91ae5")]
         public readonly InputSlot<float> FxZoneScale = new();

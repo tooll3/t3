@@ -10,7 +10,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace lib.io.midi 
+namespace lib.io.midi
 {
 	[Guid("f9f4281b-92ee-430d-a930-6b588a5cb9a9")]
     public class MidiOutput : Instance<MidiOutput>

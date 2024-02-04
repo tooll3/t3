@@ -13,13 +13,13 @@ namespace lib.io.data
     public class GetPointDataFromList : Instance<GetPointDataFromList>
     {
         [Output(Guid = "84FDAB7B-E9DA-4A15-8EA6-D5E9593C924F")]
-        public readonly Slot<Vector3> Position = new ();
+        public readonly Slot<System.Numerics.Vector3> Position = new ();
 
         [Output(Guid = "c57f6e99-2a0c-4394-90a9-ebbf2f0e0c38")]
         public readonly Slot<float> W = new();
 
         [Output(Guid = "46BB03A9-A31E-4416-B38B-7B06D7BCBC47")]
-        public readonly Slot<Vector4> Orientation = new ();
+        public readonly Slot<System.Numerics.Vector4> Orientation = new ();
         
         public GetPointDataFromList()
         {

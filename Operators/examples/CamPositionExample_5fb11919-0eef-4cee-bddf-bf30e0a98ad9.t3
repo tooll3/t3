@@ -1,7 +1,7 @@
 {
   "Name": "CamPositionExample",
   "Id": "5fb11919-0eef-4cee-bddf-bf30e0a98ad9",
-  "Namespace": "examples",
+  "Namespace": "user.t3",
   "Inputs": [],
   "Children": [
     {
@@ -71,11 +71,6 @@
           "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
           "Type": "System.Single",
           "Value": 0.0201
-        },
-        {
-          "Id": "3cee4aa6-2ae3-4b4d-89c7-4c60c8f8b10e"/*AgingRate*/,
-          "Type": "System.Single",
-          "Value": 0.23
         },
         {
           "Id": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,

@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib.img.fx.@_
+namespace lib.img.fx._
 {
 	[Guid("fd5ac393-02a4-43ae-8cdf-64a947abbafa")]
     public class UseRenderTarget : Instance<UseRenderTarget>

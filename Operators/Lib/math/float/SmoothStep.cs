@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace lib.math.@float 
+namespace lib.math.@float
 {
 	[Guid("549ec76b-cc65-47b7-ad41-0abe93e86fe3")]
     public class SmoothStep : Instance<SmoothStep>

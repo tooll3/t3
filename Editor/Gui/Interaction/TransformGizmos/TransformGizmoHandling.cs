@@ -409,8 +409,8 @@ namespace T3.Editor.Gui.Interaction.TransformGizmos
         {
             return input switch
                        {
-                           InputSlot<Vector3> vec3Input => vec3Input.Value,
-                           InputSlot<Vector2> vec2Input => new Vector3(vec2Input.Value.X, vec2Input.Value.Y, defaultValue),
+                           InputSlot<System.Numerics.Vector3> vec3Input => vec3Input.Value,
+                           InputSlot<System.Numerics.Vector2> vec2Input => new Vector3(vec2Input.Value.X, vec2Input.Value.Y, defaultValue),
                            _                            => new Vector3(defaultValue, defaultValue, defaultValue)
                        };
         }
@@ -419,10 +419,10 @@ namespace T3.Editor.Gui.Interaction.TransformGizmos
         {
             switch (input)
             {
-                case InputSlot<Vector3> vec3Input:
+                case InputSlot<System.Numerics.Vector3> vec3Input:
                     vec3Input.SetTypedInputValue(vector3);
                     break;
-                case InputSlot<Vector2> vec2Input:
+                case InputSlot<System.Numerics.Vector2> vec2Input:
                     vec2Input.SetTypedInputValue(new Vector2(vector3.X, vector3.Y));
                     break;
             }

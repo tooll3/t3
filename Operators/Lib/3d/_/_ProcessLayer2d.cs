@@ -12,13 +12,13 @@ using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace lib._3d.@_ 
+namespace lib._3d._
 {
 	[Guid("d8699da1-13aa-42f7-816a-88abb1d0ba06")]
     public class _ProcessLayer2d : Instance<_ProcessLayer2d>
     {
         [Output(Guid = "D81A2DB8-D72D-48B1-9201-0EE87822097E", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector4[]> Result = new();
+        public readonly Slot<System.Numerics.Vector4[]> Result = new();
         
         public _ProcessLayer2d()
         {
@@ -138,7 +138,7 @@ namespace lib._3d.@_
         public readonly InputSlot<float> PositionZ = new();
         
         [Input(Guid = "28D90F8C-CEAE-46B8-9711-E62BA7826CE1")]
-        public readonly InputSlot<Vector2> Stretch = new();
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
 
         [Input(Guid = "91191320-FB10-4AE7-908C-2E2A03027F9E")]
         public readonly InputSlot<float> Scale = new();

@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib.@string.buffers 
+namespace lib.@string.buffers
 {
 	[Guid("fcdc3089-2df5-467b-841b-7745efaf13db")]
     public class StringBuilder : Instance<StringBuilder>

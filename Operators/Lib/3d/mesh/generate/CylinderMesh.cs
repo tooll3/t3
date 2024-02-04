@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
@@ -256,16 +256,16 @@ namespace lib._3d.mesh.generate
                 }
 
                 // Write Data
-                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 ResourceManager.SetupStructuredBuffer(_vertexBufferData, PbrVertex.Stride * totalVertexCount, PbrVertex.Stride, ref _vertexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_vertexBuffer, ref _vertexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_vertexBuffer, UnorderedAccessViewBufferFlags.None, ref _vertexBufferWithViews.Uav);
+                _vertexBufferWithViews.Buffer = _vertexBuffer;
 
-                _indexBufferWithViews.Buffer = _indexBuffer;
                 const int stride = 3 * 4;
                 ResourceManager.SetupStructuredBuffer(_indexBufferData, stride * totalTriangleCount, stride, ref _indexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_indexBuffer, ref _indexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_indexBuffer, UnorderedAccessViewBufferFlags.None, ref _indexBufferWithViews.Uav);
+                _indexBufferWithViews.Buffer = _indexBuffer;
 
                 _data.VertexBuffer = _vertexBufferWithViews;
                 _data.IndicesBuffer = _indexBufferWithViews;
@@ -288,9 +288,6 @@ namespace lib._3d.mesh.generate
 
         private readonly MeshBuffers _data = new();
 
-        [Input(Guid = "66332A91-E0C2-442A-99F6-347DEDAED72E")]
-        public readonly InputSlot<Vector3> Center = new();
-
         [Input(Guid = "8d290afb-2574-4afa-a545-a0d3588f89f6")]
         public readonly InputSlot<float> Radius = new();
 
@@ -306,6 +303,9 @@ namespace lib._3d.mesh.generate
         [Input(Guid = "321693A5-4E2C-47A0-A42E-95CBDC6EBF80")]
         public readonly InputSlot<int> Columns = new();
 
+        [Input(Guid = "DB5E3C51-5765-44D8-A61B-A7B552FCE5B3")]
+        public readonly InputSlot<int> CapSegments = new();
+        
         [Input(Guid = "C29B5881-85BC-4D29-BC72-6DD36730FA8F")]
         public readonly InputSlot<float> Spin = new();
 
@@ -315,14 +315,15 @@ namespace lib._3d.mesh.generate
         [Input(Guid = "91FD4FBF-1CEC-4D89-8014-CEED0021A5EE")]
         public readonly InputSlot<float> Fill = new();
 
+        [Input(Guid = "66332A91-E0C2-442A-99F6-347DEDAED72E")]
+        public readonly InputSlot<System.Numerics.Vector3> Center = new();
+
+        
         [Input(Guid = "6DDF5966-9140-4BEA-A56B-20690F9F436F")]
         public readonly InputSlot<float> BasePivot = new();
 
-        [Input(Guid = "DB5E3C51-5765-44D8-A61B-A7B552FCE5B3")]
-        public readonly InputSlot<int> CapSegments = new();
-        
         [Input(Guid = "4C7E0F67-A35B-4A23-B640-B0375C1A3259")]
-        public readonly InputSlot<Vector3> Rotation = new();
+        public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
 
     }
 }

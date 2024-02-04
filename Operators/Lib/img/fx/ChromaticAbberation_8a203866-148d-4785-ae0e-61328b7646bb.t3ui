@@ -1,6 +1,6 @@
 {
   "Id": "8a203866-148d-4785-ae0e-61328b7646bb"/*ChromaticAbberation*/,
-  "Description": "",
+  "Description": "Simulates an imaging error of optical camera lenses that manifests itself as blurring or discoloration at the outer edges.\n\nAlso see [ChromaticDistortion]",
   "InputUis": [
     {
       "InputId": "b62aece4-8098-475b-a4d3-469f81a58207"/*Image*/,
@@ -15,7 +15,11 @@
       "Position": {
         "X": 132.69783,
         "Y": 29.375793
-      }
+      },
+      "Description": "Controls how far the individual colors are shifted away from each other at the edges of the image.",
+      "Min": 0.1,
+      "Max": 20.0,
+      "Clamp": true
     },
     {
       "InputId": "361a838a-7bf1-4fd2-8e0e-77edcef11965"/*Strength*/,
@@ -23,8 +27,10 @@
         "X": 132.69783,
         "Y": 74.37579
       },
-      "Min": 0.0,
-      "Max": 1.0
+      "Description": "Controls the intensity of discoloration at the edges of the image.",
+      "Min": -2.0,
+      "Max": 2.0,
+      "Clamp": true
     },
     {
       "InputId": "4e03d06a-d19b-463f-bbbd-b64d24c04b9e"/*SampleCount*/,
@@ -32,6 +38,7 @@
         "X": 120.10747,
         "Y": 145.95874
       },
+      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed.",
       "Min": 3,
       "Max": 60,
       "Clamp": true
@@ -41,7 +48,11 @@
       "Position": {
         "X": 120.10747,
         "Y": 190.95874
-      }
+      },
+      "Description": "Simulates lense distortion.\nNegative values stretch the edges of the image outwards. Positive values pull them inwards.",
+      "Min": -2.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [

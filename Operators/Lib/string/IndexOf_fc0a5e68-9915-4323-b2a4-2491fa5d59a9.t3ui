@@ -1,0 +1,32 @@
+{
+  "Id": "fc0a5e68-9915-4323-b2a4-2491fa5d59a9"/*IndexOf*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "841784c4-0ca7-41cd-8d79-bbe4989e0842"/*OriginalString*/,
+      "Position": {
+        "X": -91.13745,
+        "Y": 54.28253
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "81a7aa30-eab9-4637-bb11-7c0940460afb"/*SearchPattern*/,
+      "Position": {
+        "X": -91.13745,
+        "Y": 99.28253
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "4bb4bb23-4c3f-4d7d-9dab-c37ac63dd1c9"/*Index*/,
+      "Position": {
+        "X": 103.37944,
+        "Y": 54.011322
+      }
+    }
+  ]
+}

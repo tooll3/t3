@@ -13,6 +13,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Commands.Variations;
+using T3.Serialization;
 
 namespace T3.Editor.Gui.Interaction.Variations.Model
 {

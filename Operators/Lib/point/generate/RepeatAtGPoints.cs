@@ -30,11 +30,18 @@ namespace lib.point.generate
         [Input(Guid = "9df1f57c-a079-49c1-b537-d8eb08f2d0d3")]
         public readonly InputSlot<float> Scale = new();
 
-        [Input(Guid = "796d3d55-32b3-436e-a4c3-f15e1585a914")]
+        [Input(Guid = "796d3d55-32b3-436e-a4c3-f15e1585a914", MappedType = typeof(ConnectionModes))]
         public readonly InputSlot<int> ConnectLines = new();
 
         [Input(Guid = "6026d26d-b958-4508-b543-92fbdf8950d6")]
-        public readonly InputSlot<bool> AddSeperators = new();
+        public readonly InputSlot<bool> AddSeparators = new();
+
+
+        private enum ConnectionModes
+        {
+            Linear,
+            Interwoven,
+        }
     }
 }
 

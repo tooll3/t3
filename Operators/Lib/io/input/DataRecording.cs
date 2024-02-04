@@ -21,15 +21,14 @@ namespace lib.io.input
 
         private void Update(EvaluationContext context)
         {
-            var dataSetsById = DataRecordingBucket.DataSetsById;
-            if (dataSetsById.Count == 0)
+            if (DataSetsById.Count == 0)
             {
                 _lastErrorMessage = "No active datasets to chose from";
                 return;
             }
 
             var id = ActiveDataSetId.GetValue(context);
-            if (!dataSetsById.TryGetValue(id, out var activeDataSet))
+            if (!DataSetsById.TryGetValue(id, out var activeDataSet))
             {
                 _lastErrorMessage = $"Can't find dataset {id}";
                 return;
@@ -41,6 +40,7 @@ namespace lib.io.input
 
         private string _lastErrorMessage;
         
+        public static readonly Dictionary<string, DataSet> DataSetsById = new();
         public IStatusProvider.StatusLevel GetStatusLevel()
         {
             return string.IsNullOrEmpty(_lastErrorMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
@@ -70,9 +70,8 @@ namespace lib.io.input
                 yield return "undefined";
                 yield break;
             }
-       
-            var dataSetsById = DataRecordingBucket.DataSetsById;
-            foreach (var s in dataSetsById.Keys)
+        
+            foreach (var s in DataSetsById.Keys)
             {
                 yield return s;
             }

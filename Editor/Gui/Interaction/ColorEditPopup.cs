@@ -780,7 +780,7 @@ namespace T3.Editor.Gui.Interaction
 
                     switch (input)
                     {
-                        case InputSlot<Vector4> vec4Input:
+                        case InputSlot<System.Numerics.Vector4> vec4Input:
                             SaveUse(vec4Input.TypedInputValue.Value,
                                     new ParameterColorUse
                                         {
@@ -848,7 +848,7 @@ namespace T3.Editor.Gui.Interaction
 
         public class ParameterColorUse : ColorUse
         {
-            public InputSlot<Vector4> ColorParameter;
+            public InputSlot<System.Numerics.Vector4> ColorParameter;
         }
 
         /// <summary>

@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using T3.Core.Resource;
 // ReSharper disable UnusedType.Global
 

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.alex1x.mars_epress
+namespace user.alex1x.@mars_epress
 {
 	[Guid("df176113-ccc4-43e7-a462-5f37fff72fd2")]
     public class MarsAsciiMirrorScene : Instance<MarsAsciiMirrorScene>

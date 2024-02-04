@@ -213,16 +213,6 @@
       "SymbolId": "4f89b41b-1643-442b-bec8-9f9ef2173baa",
       "InputValues": [
         {
-          "Id": "a4350111-7ca8-4ce7-b494-3e82cc679999"/*Fill*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 1.0
-          }
-        },
-        {
           "Id": "b32e1383-07c4-4dc4-859d-e7fb19261bce"/*Offset*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
@@ -234,6 +224,16 @@
           "Id": "2221e831-12dd-4c9f-8533-48b9f96e60ab"/*Scale*/,
           "Type": "System.Single",
           "Value": 3.0
+        },
+        {
+          "Id": "a4350111-7ca8-4ce7-b494-3e82cc679999"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
         },
         {
           "Id": "81b697d6-64b4-47ae-beee-84445b1e7240"/*LineWidth*/,

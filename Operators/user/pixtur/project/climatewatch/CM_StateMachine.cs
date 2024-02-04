@@ -1,4 +1,6 @@
 using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;

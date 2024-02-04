@@ -42,8 +42,9 @@ namespace lib.img.adjust
         private enum Modes
         {
             RemoveKeyed,
-            KeepKeyed,
-            KeyedWhiteOnBackground
+            FillKeyed,
+            KeyedWhiteOnBackground,
+            ReturnKeyed,
         }
     }
 }

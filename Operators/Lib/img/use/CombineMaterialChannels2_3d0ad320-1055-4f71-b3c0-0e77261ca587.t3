@@ -95,7 +95,7 @@
         {
           "Id": "58dd103d-4172-4cea-9c78-c9f6db9be41e"/*ShaderPath*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\img-combine-3.hlsl"
+          "Value": "Resources\\user\\screendream\\img-combine-3.hlsl"
         }
       ],
       "Outputs": []

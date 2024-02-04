@@ -1,4 +1,3 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
@@ -53,6 +52,6 @@ namespace lib._3d.rendering
         public readonly InputSlot<float> Bias = new();
 
         [Input(Guid = "EF8C86EE-16C0-446E-9CE0-C6342ADBF32A")]
-        public readonly InputSlot<Vector4> Color = new();
+        public readonly InputSlot<System.Numerics.Vector4> Color = new();
     }
 }

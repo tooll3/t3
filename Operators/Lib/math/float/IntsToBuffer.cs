@@ -5,11 +5,10 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-
 //using Buffer = SharpDX.Direct3D11.Buffer;
 //using Utilities = T3.Core.Utils.Utilities;
 
-namespace lib.math.@float 
+namespace lib.math.@float
 {
 	[Guid("2eb20a76-f8f7-49e9-93a5-1e5981122b50")]
     public class IntsToBuffer : Instance<IntsToBuffer>

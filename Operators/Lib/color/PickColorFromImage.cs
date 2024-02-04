@@ -1,15 +1,14 @@
 using System.Runtime.InteropServices;
+using T3.Core.Operator;
+using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Slots;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
-using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
 
 namespace lib.color
@@ -18,7 +17,7 @@ namespace lib.color
     public class PickColorFromImage : Instance<PickColorFromImage>
     {
         [Output(Guid = "4f0c5c55-74b3-46d9-bbbc-4aad5dc14ea3")]
-        public readonly Slot<Vector4> Output = new();
+        public readonly Slot<System.Numerics.Vector4> Output = new();
 
         public PickColorFromImage()
         {
@@ -179,7 +178,7 @@ namespace lib.color
         public readonly InputSlot<Texture2D> InputImage = new();
 
         [Input(Guid = "27C1B604-4883-4B20-83E1-C435BF9D5499")]
-        public readonly InputSlot<Vector2> Position = new();
+        public readonly InputSlot<System.Numerics.Vector2> Position = new();
 
         [Input(Guid = "84FF0CE4-443D-438D-8FC7-6D6EDE75D67B")]
         public readonly InputSlot<bool> AlwaysUpdate = new();

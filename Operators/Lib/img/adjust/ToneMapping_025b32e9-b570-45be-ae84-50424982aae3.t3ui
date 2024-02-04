@@ -1,6 +1,6 @@
 {
   "Id": "025b32e9-b570-45be-ae84-50424982aae3"/*ToneMapping*/,
-  "Description": "",
+  "Description": "Tone mapping is the process of converting high dynamic range (HDR) imagery to a displayable format, adjusting the contrast and brightness to make it visually appealing while preserving details in both highlights and shadows.",
   "InputUis": [
     {
       "InputId": "72e51856-bc8f-4bcf-a6d8-6c7b4f8b0583"/*Texture2d*/,
@@ -22,6 +22,13 @@
       "Position": {
         "X": 153.79459,
         "Y": 476.2435
+      }
+    },
+    {
+      "InputId": "dfd590f5-a930-42df-aecd-52f8d0195369"/*Gamma*/,
+      "Position": {
+        "X": 153.79459,
+        "Y": 521.2435
       }
     }
   ],
@@ -60,6 +67,15 @@
         "X": 939.8677,
         "Y": 642.9786
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "3fc4f58d-29d2-4f43-ac50-59a323f49038",
+      "Title": "Wikipedia",
+      "Description": "",
+      "LinkUrl": "https://en.wikipedia.org/wiki/Tone_mapping",
+      "LinkType": "Documentation"
     }
   ]
 }

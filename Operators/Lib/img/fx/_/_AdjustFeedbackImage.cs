@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib.img.fx.@_
+namespace lib.img.fx._
 {
 	[Guid("d31a8463-0699-46d7-8e96-9abc6adb997d")]
     public class _AdjustFeedbackImage : Instance<_AdjustFeedbackImage>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib._3d.@_
+namespace lib._3d._
 {
 	[Guid("08d526d0-d5e5-4fc9-a039-98189721d2b8")]
     public class _ComputeBRDFLookup : Instance<_ComputeBRDFLookup>

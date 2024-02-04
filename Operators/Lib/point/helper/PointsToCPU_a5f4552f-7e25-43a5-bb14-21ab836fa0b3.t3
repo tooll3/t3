@@ -9,11 +9,11 @@
     },
     {
       "Id": "eff239da-39e9-41d3-968b-c74723ec2545"/*TriggerUpdate*/,
-      "DefaultValue": false
+      "DefaultValue": true
     },
     {
       "Id": "77ee7ca9-a2db-4de9-bb9c-21ec4f1bbeaf"/*UpdateContinuously*/,
-      "DefaultValue": false
+      "DefaultValue": true
     }
   ],
   "Children": [],

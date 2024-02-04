@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib._3d.@_
+namespace lib._3d._
 {
 	[Guid("ad28819d-be62-4ed7-932a-fc861562983d")]
     public class TextGrid : Instance<TextGrid>

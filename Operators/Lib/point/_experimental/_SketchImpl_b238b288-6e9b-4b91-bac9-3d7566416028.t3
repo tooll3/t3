@@ -25,6 +25,15 @@
     {
       "Id": "0fa40e27-c7ca-4bb9-88c6-ced917dfec12"/*OverridePageIndex*/,
       "DefaultValue": -1
+    },
+    {
+      "Id": "ae7fb135-c216-4f34-b73f-5115417e916b"/*BrushColor*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
     }
   ],
   "Children": [],

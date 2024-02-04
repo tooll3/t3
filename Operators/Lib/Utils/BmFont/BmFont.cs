@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+using System.Runtime.InteropServices;
+using System.Xml.Serialization;
 
 /*
 Copyright (C) 2019 Antoine Guilbaud (IronPowerTga)

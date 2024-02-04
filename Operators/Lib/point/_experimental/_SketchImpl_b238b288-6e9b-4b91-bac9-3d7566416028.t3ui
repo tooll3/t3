@@ -37,6 +37,16 @@
         "X": -200.0,
         "Y": 270.0
       }
+    },
+    {
+      "InputId": "ae7fb135-c216-4f34-b73f-5115417e916b"/*BrushColor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [],

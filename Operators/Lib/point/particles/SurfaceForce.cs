@@ -69,6 +69,7 @@ namespace lib.point.particles
             Sphere,
             Box,
             Plane,
+            Cylinder
         }
     }
 }

@@ -1,11 +1,13 @@
 using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace user.still.worksforeverybody 
+namespace user.still.worksforeverybody
 {
 	[Guid("1dfc9f6d-effa-407b-8f8d-5adf62504205")]
     public class _WFEGameState : Instance<_WFEGameState>

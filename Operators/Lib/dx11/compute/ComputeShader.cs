@@ -13,14 +13,14 @@ namespace lib.dx11.compute
     public class ComputeShader : Instance<ComputeShader>, IDescriptiveFilename, IStatusProvider, IShaderOperator<ComputeShaderD3D>
     {
         [Output(Guid = "{6C118567-8827-4422-86CC-4D4D00762D87}")]
-        public readonly Slot<ComputeShaderD3D> ComputerShader = new();
+        public readonly Slot<ComputeShaderD3D> Shader = new();
 
         [Output(Guid = "a6fe06e0-b6a9-463c-9e62-930c58b0a0a1")]
         public readonly Slot<Int3> ThreadCount = new();
 
         public ComputeShader()
         {
-            ComputerShader.UpdateAction = Update;
+            Shader.UpdateAction = Update;
             ThreadCount.UpdateAction = Update;
         }
 
@@ -35,11 +35,11 @@ namespace lib.dx11.compute
 
             if (updated)
             {
-                if (ShaderOperatorImpl.TryGetThreadGroups(out var threadCount))
+                if (ShaderOperatorImpl.ShaderResource.TryGetThreadGroups(out var threadCount))
                     ThreadCount.Value = threadCount;
             }
 
-            ComputerShader.DirtyFlag.Clear();
+            Shader.DirtyFlag.Clear();
             ThreadCount.DirtyFlag.Clear();
         }
 
@@ -69,7 +69,7 @@ namespace lib.dx11.compute
         InputSlot<string> IShaderOperator<ComputeShaderD3D>.Source => Source;
         InputSlot<string> IShaderOperator<ComputeShaderD3D>.EntryPoint => EntryPoint;
         InputSlot<string> IShaderOperator<ComputeShaderD3D>.DebugName => DebugName;
-        Slot<ComputeShaderD3D> IShaderOperator<ComputeShaderD3D>.Shader => ComputerShader;
+        Slot<ComputeShaderD3D> IShaderOperator<ComputeShaderD3D>.Shader => Shader;
         ShaderResource<ComputeShaderD3D> IShaderOperator<ComputeShaderD3D>.ShaderResource { get; set; }
         bool IShaderOperator<ComputeShaderD3D>.SourceIsSourceCode => false;
         Instance IShaderOperator<ComputeShaderD3D>.Instance => this;

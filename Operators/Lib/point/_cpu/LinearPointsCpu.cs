@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -64,13 +64,13 @@ namespace lib.point._cpu
         private readonly StructuredList<Point> _pointList = new(10);
 
         [Input(Guid = "A32B0085-4F83-4240-845C-D663240A738C")]
-        public readonly InputSlot<Vector3> Start = new();
+        public readonly InputSlot<System.Numerics.Vector3> Start = new();
 
         [Input(Guid = "4E3863D3-E295-472A-99BB-4C579A4FFD7B")]
         public readonly InputSlot<float> StartW = new();
 
         [Input(Guid = "91D2F5B3-D2C4-406B-AB4C-EBB09951538A")]
-        public readonly InputSlot<Vector3> Offset = new();
+        public readonly InputSlot<System.Numerics.Vector3> Offset = new();
 
         [Input(Guid = "668C5640-A212-40E0-B68E-D78DBCDDE33A")]
         public readonly InputSlot<float> OffsetW = new();

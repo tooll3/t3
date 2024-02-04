@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
 using T3.Core.DataTypes;
@@ -69,8 +69,8 @@ namespace lib._3d.transform
             if (repeatView)
             {
                 var viewPortStretch = new Vector2(cells.Width/(float)cells.Height,1);
-                m.M31 += Vector2.Zero.X;
-                m.M32 += Vector2.Zero.Y;
+                m.M31 += System.Numerics.Vector2.Zero.X;
+                m.M32 += System.Numerics.Vector2.Zero.Y;
                 m.M11 *= viewPortStretch.X / stretch.X;
                 m.M22 *= viewPortStretch.Y / stretch.Y;
             }
@@ -112,7 +112,7 @@ namespace lib._3d.transform
         public readonly InputSlot<Int2> CellCounts = new ();
 
         [Input(Guid = "AA060596-BA04-4862-B123-E328F1EF58E1")]
-        public readonly InputSlot<Vector2> Stretch = new ();
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new ();
 
         [Input(Guid = "354EB18C-ABA0-43E6-B534-C119176547FF", MappedType = typeof(ViewModes))]
         public readonly InputSlot<int> Mode = new ();

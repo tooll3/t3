@@ -4,7 +4,7 @@
   "Namespace": "lib.3d.draw",
   "Inputs": [
     {
-      "Id": "42042144-1ca7-41c7-92b8-21ea1136698a"/*Color*/,
+      "Id": "42042144-1ca7-41c7-92b8-21ea1136698a"/*ColorHighlight*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0,
@@ -13,7 +13,7 @@
       }
     },
     {
-      "Id": "204a3776-c191-48b1-b502-2efc45adec67"/*Background*/,
+      "Id": "204a3776-c191-48b1-b502-2efc45adec67"/*ColorShade*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,

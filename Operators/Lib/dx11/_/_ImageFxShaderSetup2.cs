@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace lib.dx11.@_
+namespace lib.dx11._
 {
 	[Guid("2b20afce-2b54-4bcc-ba0e-e456a0d92833")]
     public class _ImageFxShaderSetup2 : Instance<_ImageFxShaderSetup2>

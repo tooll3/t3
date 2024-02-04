@@ -32,7 +32,7 @@
       }
     },
     {
-      "InputId": "8c1d41ff-02e8-481b-a21a-56d1c519d920"/*Thresold*/,
+      "InputId": "8c1d41ff-02e8-481b-a21a-56d1c519d920"/*Threshold*/,
       "Position": {
         "X": 132.69783,
         "Y": 74.37579
@@ -54,6 +54,21 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "943f048f-4938-4cde-9ac3-c7de5242450e"/*Quality*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 299.3758
+      },
+      "Description": "Experimental! 0 = Best quality , 7  = Lowest quality \nYou need to activate GenerateMips on the RenderTarget if you want to use the lower qualities.\nAs it's based on MipMaps, a lower quality should be less expensive. \n"
+    },
+    {
+      "InputId": "069a3776-3084-4a13-aee3-dd9fe6c6c9e1"/*GlareModes*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 344.3758
+      }
     }
   ],
   "SymbolChildUis": [
@@ -79,15 +94,29 @@
     {
       "ChildId": "487e4161-8905-45e1-8c46-0e328034e341"/*IntToFloat*/,
       "Position": {
-        "X": 367.1413,
-        "Y": 228.72662
+        "X": 323.30304,
+        "Y": 114.000946
       }
     },
     {
       "ChildId": "602a2411-2586-473a-9adf-a58481f53ebd"/*Vector4Components*/,
       "Position": {
-        "X": 361.00732,
-        "Y": 306.42355
+        "X": 323.30304,
+        "Y": 170.00095
+      }
+    },
+    {
+      "ChildId": "376c5ecf-a87b-434e-9eef-d6c6b2cfbd1a"/*IntToFloat*/,
+      "Position": {
+        "X": 323.30304,
+        "Y": 226.00095
+      }
+    },
+    {
+      "ChildId": "1ca64aaa-f551-43e5-ab8a-15500a780e57"/*IntToFloat*/,
+      "Position": {
+        "X": 323.30304,
+        "Y": 282.00095
       }
     }
   ],

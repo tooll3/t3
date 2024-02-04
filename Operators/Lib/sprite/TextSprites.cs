@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using lib.Utils.BmFont;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
@@ -118,7 +118,7 @@ namespace lib.sprite
             float textureHeight = _bmFont.BmFont.Common.ScaleH;
             float cursorX = 0;
             float cursorY = 0;
-            var verticalCenterOffset = _bmFont.Padding.Up + _bmFont.BmFont.Common.Base + _bmFont.Padding.Down - _bmFont.BmFont.Info.Size /2f;
+            var verticalCenterOffset = _bmFont.Padding.Up + _bmFont.BmFont.Common.Base + _bmFont.Padding.Down - _bmFont.BmFont.Info.Size / 2f;
 
             switch (verticalAlign)
             {
@@ -203,7 +203,10 @@ namespace lib.sprite
                                     {
                                         Position = center,
                                         W = 1,
-                                        Orientation = Quaternion.Identity
+                                        Orientation = Quaternion.Identity,
+                                        Selected = 1,
+                                        Stretch = Vector3.One,
+                                        Color = Vector4.One,
                                     });
                     outputIndex++;
                     currentLineCharacterCount++;
@@ -252,7 +255,9 @@ namespace lib.sprite
                                                                Position = Vector3.Zero,
                                                                W= float.NaN,
                                                                Orientation =  Quaternion.Identity,
-                                                             
+                                                               Color = Vector4.One,
+                                                               Selected = 1,
+                                                               Stretch = Vector3.One,
                                                            } };
 
         private void OffsetLineCharacters(float offset, int currentLineCharacterCount, int outputIndex)
@@ -282,7 +287,7 @@ namespace lib.sprite
         public readonly InputSlot<string> Filepath = new();
 
         [Input(Guid = "1CDE902D-5EAA-4144-B579-85F54717356B")]
-        public readonly InputSlot<Vector4> Color = new();
+        public readonly InputSlot<System.Numerics.Vector4> Color = new();
 
         [Input(Guid = "5008E9B4-083A-4494-8F7C-50FE5D80FC35")]
         public readonly InputSlot<float> Size = new();
@@ -294,7 +299,7 @@ namespace lib.sprite
         public readonly InputSlot<float> LineHeight = new();
 
         [Input(Guid = "77A79A37-6151-4A35-BE4D-415A91B0E651")]
-        public readonly InputSlot<Vector3> Position = new();
+        public readonly InputSlot<System.Numerics.Vector3> Position = new();
 
         [Input(Guid = "14829EAC-BA59-4D31-90DC-53C7FC56CC30", MappedType = typeof(BmFontDescription.VerticalAligns))]
         public readonly InputSlot<int> VerticalAlign = new();

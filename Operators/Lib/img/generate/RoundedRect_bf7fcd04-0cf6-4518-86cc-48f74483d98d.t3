@@ -8,7 +8,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Fill*/,
+      "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Color*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0,
@@ -26,7 +26,7 @@
       }
     },
     {
-      "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Center*/,
+      "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Position*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0

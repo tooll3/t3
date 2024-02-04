@@ -33,9 +33,8 @@ namespace lib.dx11.draw
             //Log.Debug("Draw2", this);
             var vertexCount = VertexCount.GetValue(context);
             var startVertexLocation = VertexStartLocation.GetValue(context);
-            
-            var device = ResourceManager.Device;
-            var deviceContext = device.ImmediateContext;
+
+            var deviceContext = ResourceManager.Device.ImmediateContext;
 
             var setVs = deviceContext.VertexShader.Get();
             var setPs = deviceContext.PixelShader.Get();

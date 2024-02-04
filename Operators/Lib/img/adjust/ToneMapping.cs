@@ -22,6 +22,9 @@ namespace lib.img.adjust
         [Input(Guid = "be44974c-2685-40ff-86b6-bdf1cc38eee4")]
         public readonly InputSlot<bool> CorrectGamma = new();
 
+        [Input(Guid = "dfd590f5-a930-42df-aecd-52f8d0195369")]
+        public readonly InputSlot<float> Gamma = new InputSlot<float>();
+
         private enum Modes
         {
             Aces,

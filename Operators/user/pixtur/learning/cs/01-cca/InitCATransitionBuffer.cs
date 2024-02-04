@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
@@ -9,7 +10,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace user.pixtur.learning.cs._01_cca 
+namespace user.pixtur.learning.cs._01_cca
 {
 	[Guid("8f696d89-a23f-42ae-b382-8670febb546b")]
     public class InitCATransitionBuffer : Instance<InitCATransitionBuffer>

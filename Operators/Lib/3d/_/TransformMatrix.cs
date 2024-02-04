@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,17 +9,17 @@ using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace lib._3d.@_ 
+namespace lib._3d._
 {
 	[Guid("17324ce1-8920-4653-ac67-c211ad507a81")]
     public class TransformMatrix : Instance<TransformMatrix>
     {
         [Output(Guid = "751E97DE-C418-48C7-823E-D4660073A559")]
-        public readonly Slot<Vector4[]> Result = new();
+        public readonly Slot<System.Numerics.Vector4[]> Result = new();
         
 
         [Output(Guid = "ECA8121B-2A7F-4ECC-9143-556DCF78BA33")]
-        public readonly Slot<Vector4[]> ResultInverted = new();
+        public readonly Slot<System.Numerics.Vector4[]> ResultInverted = new();
         
         public TransformMatrix()
         {

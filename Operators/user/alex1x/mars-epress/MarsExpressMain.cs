@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.alex1x.mars_epress
+namespace user.alex1x.@mars_epress
 {
 	[Guid("ee4065db-3b30-4b1f-95e1-127c41a9d185")]
     public class MarsExpressMain : Instance<MarsExpressMain>

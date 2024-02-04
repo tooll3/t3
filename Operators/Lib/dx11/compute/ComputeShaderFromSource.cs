@@ -29,7 +29,7 @@ namespace lib.dx11.compute
 
             if (updated)
             {
-                if (ShaderOperatorImpl.TryGetThreadGroups(out var threadCount))
+                if (ShaderOperatorImpl.ShaderResource.TryGetThreadGroups(out var threadCount))
                     ThreadCount.Value = threadCount;
             }
         }

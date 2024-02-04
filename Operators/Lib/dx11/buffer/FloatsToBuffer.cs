@@ -7,7 +7,6 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
-using Vector4 = System.Numerics.Vector4;
 using Utilities = T3.Core.Utils.Utilities;
 
 namespace lib.dx11.buffer
@@ -97,7 +96,7 @@ namespace lib.dx11.buffer
         }
         
         [Input(Guid = "914EA6E8-ABC6-4294-B895-8BFBE5AFEA0E")]
-        public readonly MultiInputSlot<Vector4[]> Vec4Params = new();
+        public readonly MultiInputSlot<System.Numerics.Vector4[]> Vec4Params = new();
 
         [Input(Guid = "49556D12-4CD1-4341-B9D8-C356668D296C")]
         public readonly MultiInputSlot<float> Params = new();

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib.img.fx.@_
+namespace lib.img.fx._
 {
 	[Guid("cc34a183-3978-4b6b-8ef1-dd8102410816")]
     public class _multiImageFxSetupStatic : Instance<_multiImageFxSetupStatic>
@@ -32,6 +32,9 @@ namespace lib.img.fx.@_
 
         [Input(Guid = "e31b78eb-940b-41df-93fa-d0c1c9f864f4")]
         public readonly InputSlot<bool> GenerateMips = new();
+
+        [Input(Guid = "35f3b28b-2210-4f27-813a-5c857940d09c")]
+        public readonly InputSlot<SharpDX.DXGI.Format> TextureFormat = new InputSlot<SharpDX.DXGI.Format>();
     }
 }
 

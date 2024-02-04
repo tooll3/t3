@@ -1,64 +1,88 @@
 {
   "Id": "79c01289-f3a9-4bea-8e95-a6b5f89b752d"/*DisplaceMesh*/,
-  "Description": "",
+  "Description": "Distorts the input mesh by displacing its vertices by an amount controlled by the connected input texture. ",
   "InputUis": [
     {
       "InputId": "f6726946-8ba0-4753-b37a-805c9246d236"/*InputMesh*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -490.75208,
-        "Y": 1586.3334
+        "X": 10.543701,
+        "Y": 1584.6283
       }
     },
     {
       "InputId": "bbb330cb-6f13-445a-8e7c-c5610380f1ff"/*Mode*/,
       "Position": {
-        "X": -490.75208,
-        "Y": 1631.3334
+        "X": 10.543701,
+        "Y": 1629.6283
       }
     },
     {
       "InputId": "ea2df434-7963-4266-bef3-8f71ccfa95c0"/*Amount*/,
       "Position": {
-        "X": -490.75208,
-        "Y": 1676.3334
-      }
+        "X": 10.543701,
+        "Y": 1674.6283
+      },
+      "Min": -1.0,
+      "Max": 1.0,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "84c2b0ee-c67d-4eab-88ea-fd95c332da07"/*AmountDistribution*/,
       "Position": {
-        "X": -493.74194,
-        "Y": 1897.9578
-      }
+        "X": 7.553833,
+        "Y": 1896.2527
+      },
+      "Description": "Applies a channel weight to the axis."
     },
     {
-      "InputId": "7c6fa9b0-1c70-4865-8f01-d22c41ff9b6b"/*UseVertexSelection*/,
+      "InputId": "d401f34b-bcea-4374-8a67-25cfc7938593"/*Offset*/,
       "Position": {
-        "X": -498.13864,
-        "Y": 1985.2917
-      }
+        "X": 20.624084,
+        "Y": 1994.5707
+      },
+      "Description": "Additional offsets to the displacement without applying the displacement map.",
+      "AddPadding": "True",
+      "Min": -1.0,
+      "Max": 1.0,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "0211ebf0-d4b6-45aa-8c75-6e745941aa93"/*Texture*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -491.52582,
-        "Y": 2136.1863
-      }
+        "X": 9.7699585,
+        "Y": 2134.4812
+      },
+      "GroupTitle": "Displacement Map",
+      "Description": "The displacement texture. Depending the color channels will be applied as average or individually.\nThe alpha is always applied as factor."
     },
     {
       "InputId": "c7e1c790-8e52-4064-9ffb-c0b8c2a50320"/*ScaleUV*/,
       "Position": {
-        "X": -491.52582,
-        "Y": 2181.1863
-      }
+        "X": 9.7699585,
+        "Y": 2179.4812
+      },
+      "Description": "Scales the displacement map.",
+      "Min": 0.0,
+      "Max": 5.0,
+      "Format": "{0:0.000} ×"
     },
     {
-      "InputId": "d401f34b-bcea-4374-8a67-25cfc7938593"/*Offset*/,
+      "InputId": "7c6fa9b0-1c70-4865-8f01-d22c41ff9b6b"/*UseVertexSelection*/,
       "Position": {
-        "X": -491.52582,
-        "Y": 2226.1863
-      }
+        "X": 8.913116,
+        "Y": 2339.6355
+      },
+      "GroupTitle": "Options"
+    },
+    {
+      "InputId": "ec50aedf-5c2d-4f32-ad7e-205dd435e1fd"/*RecomputeNormals_*/,
+      "Position": {
+        "X": 3.1917114,
+        "Y": 2421.6038
+      },
+      "Description": "Will apply [RecomputeNormals] after displacement. This operator is experimental and like to add artifacts to complex meshes."
     }
   ],
   "SymbolChildUis": [
@@ -77,64 +101,57 @@
     {
       "ChildId": "5526e173-bdcd-4b34-aa73-72be98753f75"/*Vector3Components*/,
       "Position": {
-        "X": -343.74194,
-        "Y": 1897.9578
+        "X": 157.55383,
+        "Y": 1896.2527
       }
     },
     {
       "ChildId": "228171c4-306b-43f9-b256-407ca726bde6"/*ComputeShader*/,
       "Position": {
-        "X": 920.6924,
-        "Y": 1415.672
+        "X": 738.5891,
+        "Y": 1444.3175
       }
     },
     {
       "ChildId": "a25ebf8d-7f36-4d68-af4f-8f2492214d63"/*ComputeShaderStage*/,
       "Position": {
-        "X": 1395.9492,
-        "Y": 1386.0847
-      }
-    },
-    {
-      "ChildId": "71b523ad-e350-4d8f-98d0-4aadbe683782"/*GetSRVProperties*/,
-      "Position": {
-        "X": 920.6924,
-        "Y": 1458.672
+        "X": 1213.846,
+        "Y": 1414.7302
       }
     },
     {
       "ChildId": "61bc4af3-a00c-4f35-93e1-3cc618c30851"/*ExecuteBufferUpdate*/,
       "Position": {
-        "X": 1873.959,
-        "Y": 1440.0239
+        "X": 1393.6223,
+        "Y": 1472.3699
       }
     },
     {
       "ChildId": "aa562184-9e36-4ecf-9ef7-5758b5146f90"/*CalcDispatchCount*/,
       "Position": {
-        "X": 1091.1637,
-        "Y": 1432.846
+        "X": 909.0604,
+        "Y": 1461.4915
       }
     },
     {
       "ChildId": "3914f194-be6a-45a0-a21a-756ae945b0a5"/*StructuredBufferWithViews*/,
       "Position": {
-        "X": 1083.1885,
-        "Y": 1683.1053
+        "X": 902.2273,
+        "Y": 1652.3636
       }
     },
     {
       "ChildId": "fededd9e-e1c5-4719-a972-5850cffdaae6"/*GetBufferComponents*/,
       "Position": {
-        "X": 696.18835,
-        "Y": 1541.249
+        "X": 742.65955,
+        "Y": 1521.1729
       }
     },
     {
       "ChildId": "83a6aeb5-1ce5-4814-9347-0034ed0c4665"/*GetBufferComponents*/,
       "Position": {
-        "X": 1237.7074,
-        "Y": 1631.2255
+        "X": 1032.5802,
+        "Y": 1579.2375
       }
     },
     {
@@ -147,71 +164,78 @@
     {
       "ChildId": "218cddd3-f6ff-4e3f-b931-a43c68f2e832"/*_AssembleMeshBuffers*/,
       "Position": {
-        "X": 2023.959,
-        "Y": 1440.0239
+        "X": 1543.6223,
+        "Y": 1472.3699
       }
     },
     {
       "ChildId": "16cac4b3-84e5-4572-aedc-82ee99dc28f2"/*IntValue*/,
       "Position": {
-        "X": 928.6364,
-        "Y": 1714.353
+        "X": 747.67523,
+        "Y": 1683.6113
       }
     },
     {
       "ChildId": "b30b8ab9-85fd-4066-a122-eeaf6515d79e"/*BoolToFloat*/,
       "Position": {
-        "X": -348.13864,
-        "Y": 1985.2917
+        "X": 158.91312,
+        "Y": 2339.6355
       }
     },
     {
       "ChildId": "3af22afa-deff-4c5d-8b26-466b7bb10da8"/*IntToFloat*/,
       "Position": {
-        "X": -340.75208,
-        "Y": 1631.3334
+        "X": 160.5437,
+        "Y": 1629.6283
       }
     },
     {
       "ChildId": "b34e8951-af60-4ded-bea6-ca13559064ee"/*SrvFromTexture2d*/,
       "Position": {
-        "X": 913.54376,
-        "Y": 1871.0562
-      }
-    },
-    {
-      "ChildId": "11bbf98f-f54d-459f-ad93-379fdea548ed"/*Execute*/,
-      "Position": {
-        "X": 1691.3508,
-        "Y": 1443.6755
+        "X": 159.76996,
+        "Y": 2123.4812
       }
     },
     {
       "ChildId": "2a71171b-6824-4b6c-958d-a9fe3d368a39"/*RecomputeNormals*/,
       "Position": {
-        "X": 2173.959,
-        "Y": 1440.0239
+        "X": 1732.6808,
+        "Y": 1570.3586
       }
     },
     {
       "ChildId": "2c4bf192-811f-4e75-a098-92a58ff6f5ed"/*SamplerStateOp*/,
       "Position": {
-        "X": 1022.27637,
-        "Y": 2134.9246
+        "X": 1032.5802,
+        "Y": 1523.2375
       }
     },
     {
       "ChildId": "e33b4e8f-44bb-45aa-a4a2-03858194be3e"/*Vector2Components*/,
       "Position": {
-        "X": -185.67413,
-        "Y": 2197.34
+        "X": 159.76996,
+        "Y": 2179.4812
       }
     },
     {
       "ChildId": "01fd2326-cd66-4b7a-8ce2-847b0e583368"/*Vector3Components*/,
       "Position": {
-        "X": -288.64435,
-        "Y": 2305.4998
+        "X": 170.62408,
+        "Y": 2005.5707
+      }
+    },
+    {
+      "ChildId": "a534aec6-4df6-45f6-9233-3b1223500162"/*PickMeshBuffer*/,
+      "Position": {
+        "X": 1888.163,
+        "Y": 1464.1471
+      }
+    },
+    {
+      "ChildId": "f7116530-221d-450e-bc77-6c7caba9b17c"/*BoolToInt*/,
+      "Position": {
+        "X": 153.19171,
+        "Y": 2421.6038
       }
     }
   ],
@@ -219,8 +243,8 @@
     {
       "OutputId": "d2e47ad5-8830-4e55-97f0-302358b46358"/*Result*/,
       "Position": {
-        "X": 2323.959,
-        "Y": 1440.0239
+        "X": 2038.1638,
+        "Y": 1464.1471
       }
     }
   ]

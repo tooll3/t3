@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -172,10 +173,10 @@ internal static class InputsAndOutputs
     {
         public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
         {
-            if (!(node.Declaration.Type is GenericNameSyntax nameSyntax))
+            if (node.Declaration.Type is not GenericNameSyntax nameSyntax)
                 return node;
 
-            string idValue = nameSyntax.Identifier.ValueText;
+            var idValue = nameSyntax.Identifier.ValueText;
             if (idValue == "InputSlot" || idValue == "MultiInputSlot")
             {
                 return ReplacementNodes[_index++];
@@ -393,5 +394,56 @@ internal static class InputsAndOutputs
         {
             Log.Error("Compilation after reordering inputs failed, aborting the add.");
         }
+    }
+    
+    
+    public static bool RenameInput(Symbol symbol, Guid inputId, string newName, bool dryRun, out string warning)
+    {
+        warning = null;
+
+        var isValid = GraphUtils.IsNewSymbolNameValid(symbol.SymbolPackage, newName);
+        if (!isValid)
+        {
+            warning= $"{newName} is not a valid input name.";
+            return false;
+        }
+        var syntaxTree = GraphUtils.GetSyntaxTree(symbol);
+        if (syntaxTree == null)
+        {
+            warning= $"Error getting syntax tree from symbol '{symbol.Name}' source.";
+            return false;
+        }
+            
+        var root = syntaxTree.GetRoot();
+        var sourceCode = root.GetText().ToString();
+        
+        var alreadyExistsResult = Regex.Match(sourceCode, $"\b{newName}\b");
+        if (alreadyExistsResult.Success)
+        {
+            warning= $"{newName} is already used within the operators source code.";
+            return false;
+        }
+
+        var inputDef = symbol.InputDefinitions.FirstOrDefault(i => i.Id == inputId);
+        if (inputDef == null)
+        {
+            warning= $"{inputId} input definition not found.";
+            return false;
+        }
+
+        var newSource = Regex.Replace(sourceCode, @$"\b{inputDef.Name}\b", newName);
+
+        if (dryRun)
+            return true;
+        
+        var success = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
+
+        if (success)
+        {
+            FlagDependentOpsAsModified(symbol);
+            return true;
+        }
+
+        return false;
     }
 }

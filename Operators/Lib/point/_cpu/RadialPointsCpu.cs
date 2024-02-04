@@ -87,10 +87,10 @@ namespace lib.point._cpu
         public readonly InputSlot<float> RadiusOffset = new();
 
         [Input(Guid = "D68DCBA4-D713-4BC7-A418-85042EFC26D3")]
-        public readonly InputSlot<Vector3> Center = new();
+        public readonly InputSlot<System.Numerics.Vector3> Center = new();
 
         [Input(Guid = "03A54164-8EF9-4CC8-88F3-55AA5DB3640C")]
-        public readonly InputSlot<Vector3> Offset = new();
+        public readonly InputSlot<System.Numerics.Vector3> Offset = new();
 
         [Input(Guid = "E3736CED-D10D-41F3-92ED-DDFC3EDD1BC6")]
         public readonly InputSlot<float> StartAngle = new();
@@ -99,7 +99,7 @@ namespace lib.point._cpu
         public readonly InputSlot<float> Cycles = new();
 
         [Input(Guid = "D1E78447-E110-4CDF-B761-DFF32F05140D")]
-        public readonly InputSlot<Vector3> Axis = new(Vector3.UnitZ);
+        public readonly InputSlot<System.Numerics.Vector3> Axis = new(Vector3.UnitZ);
 
         [Input(Guid = "DEE89AD4-1516-40D0-A682-98E05A8B7C12")]
         public readonly InputSlot<float> W = new();

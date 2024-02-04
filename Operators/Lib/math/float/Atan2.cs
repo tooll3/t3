@@ -1,10 +1,9 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib.math.@float 
+namespace lib.math.@float
 {
 	[Guid("7636bb3c-9f12-4323-b9be-e05f0eb561c5")]
     public class Atan2 : Instance<Atan2>
@@ -24,7 +23,7 @@ namespace lib.math.@float
         }
         
         [Input(Guid = "00770DC9-40A7-421C-A2FB-2D6BC1845387")]
-        public readonly InputSlot<Vector2> Vector = new();
+        public readonly InputSlot<System.Numerics.Vector2> Vector = new();
 
     }
 }

@@ -46,6 +46,9 @@ namespace lib._3d.draw
 
         [Input(Guid = "22b0817f-3149-4713-b87b-89c54300cde8", MappedType = typeof(FillMode))]
         public readonly InputSlot<int> FillMode = new();
+
+        [Input(Guid = "69e1f021-4db2-43a1-a4e6-837024350dc1")]
+        public readonly InputSlot<bool> UseStretch = new InputSlot<bool>();
     }
 }
 

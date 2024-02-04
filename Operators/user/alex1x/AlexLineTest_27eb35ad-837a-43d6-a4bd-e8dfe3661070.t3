@@ -1,7 +1,7 @@
 {
   "Name": "AlexLineTest",
   "Id": "27eb35ad-837a-43d6-a4bd-e8dfe3661070",
-  "Namespace": "user.alex1x",
+  "Namespace": "user.1x",
   "Inputs": [],
   "Children": [
     {
@@ -459,7 +459,7 @@
       "Outputs": []
     },
     {
-      "Id": "1a42d88f-900a-4df2-adf7-31bad14adcb3"/*RandomizePoints*/,
+      "Id": "1a42d88f-900a-4df2-adf7-31bad14adcb3"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -999,12 +999,12 @@
       "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
       "InputValues": [
         {
-          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
+          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
           "Type": "System.Boolean",
           "Value": true
         },
         {
-          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
+          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
           "Type": "System.Boolean",
           "Value": true
         },
@@ -1046,7 +1046,7 @@
       "SymbolId": "bf7fcd04-0cf6-4518-86cc-48f74483d98d",
       "InputValues": [
         {
-          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Fill*/,
+          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.96533334,
@@ -1447,7 +1447,7 @@
       "Outputs": []
     },
     {
-      "Id": "2f965361-3d91-4f48-8355-27a9cb51f126"/*RandomizePoints*/,
+      "Id": "2f965361-3d91-4f48-8355-27a9cb51f126"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -1759,7 +1759,7 @@
       "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
       "InputValues": [
         {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
           "Type": "System.Single",
           "Value": 2.1
         }

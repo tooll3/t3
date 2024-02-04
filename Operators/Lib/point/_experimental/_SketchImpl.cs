@@ -1,9 +1,8 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using Newtonsoft.Json;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
-using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -26,7 +25,7 @@ namespace lib.point._experimental
         public readonly Slot<object> OutPages = new();
 
         [Output(Guid = "974F46E5-B1DC-40AE-AC28-BBB1FB032EFE")]
-        public readonly Slot<Vector3> CursorPosInWorld = new();
+        public readonly Slot<System.Numerics.Vector3> CursorPosInWorld = new();
 
         [Output(Guid = "532B35D1-4FEE-41E6-AA6A-D42152DCE4A0")]
         public readonly Slot<float> CurrentBrushSize = new();
@@ -209,9 +208,13 @@ namespace lib.point._experimental
                         _currentStrokeLength = 1;
                     }
 
+                    var color = BrushColor.GetValue(context);
+
                     AppendPoint(new Point()
                                     {
                                         Position = posInWorld,
+                                        Color = color,
+                                        
                                         // Orientation = new Quaternion(
                                         //                              BrushColor.GetValue(context).X,
                                         //                              BrushColor.GetValue(context).Y,
@@ -372,28 +375,36 @@ namespace lib.point._experimental
 
             public void LoadPages(string filepath)
             {
-                Pages = JsonUtils.TryLoadingJson<List<Page>>(filepath);
-
-                if (Pages != null)
+                Pages = new List<Page>();
+                try
                 {
-                    foreach (var page in Pages)
+                    Pages = JsonUtils.TryLoadingJson<List<Page>>(filepath);
+
+                    if (Pages != null)
                     {
-                        if (page.PointsList == null)
+                        foreach (var page in Pages)
                         {
-                            page.PointsList = new StructuredList<Point>(BufferIncreaseStep);
-                            continue;
+                            if (page.PointsList == null)
+                            {
+                                page.PointsList = new StructuredList<Point>(BufferIncreaseStep);
+                                continue;
+                            }
+
+                            if (page.PointsList.NumElements > page.WriteIndex)
+                                continue;
+
+                            //Log.Warning($"Adjusting writing index {page.WriteIndex} -> {page.PointsList.NumElements}", this);
+                            page.WriteIndex = page.PointsList.NumElements + 1;
                         }
-
-                        if (page.PointsList.NumElements > page.WriteIndex)
-                            continue;
-
-                        //Log.Warning($"Adjusting writing index {page.WriteIndex} -> {page.PointsList.NumElements}", this);
-                        page.WriteIndex = page.PointsList.NumElements + 1;
+                    }
+                    else
+                    {
+                        Pages = new List<Page>();
                     }
                 }
-                else
+                catch(Exception e)
                 {
-                    Pages = new List<Page>();
+                    Log.Warning($"Failed to load pages in {filepath}: {e.Message}", this);
                 }
             }
 
@@ -462,13 +473,16 @@ namespace lib.point._experimental
         }
 
         [Input(Guid = "C427F009-7E04-4168-82E6-5EBE2640204D")]
-        public readonly InputSlot<Vector2> MousePos = new();
+        public readonly InputSlot<System.Numerics.Vector2> MousePos = new();
 
         [Input(Guid = "520A2023-7450-4314-9CAC-850D6D692461")]
         public readonly InputSlot<bool> IsMouseButtonDown = new();
 
         [Input(Guid = "1057313C-006A-4F12-8828-07447337898B")]
         public readonly InputSlot<float> BrushSize = new();
+
+        [Input(Guid = "AE7FB135-C216-4F34-B73F-5115417E916B")]
+        public readonly InputSlot<System.Numerics.Vector4> BrushColor = new();
 
         [Input(Guid = "51641425-A2C6-4480-AC8F-2E6D2CBC300A")]
         public readonly InputSlot<string> FilePath = new();

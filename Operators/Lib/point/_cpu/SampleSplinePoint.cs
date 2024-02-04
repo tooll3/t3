@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -19,7 +19,7 @@ namespace lib.point._cpu
         public readonly Slot<Command> Output = new();
         
         [Output(Guid = "E978692F-FE00-4D59-81B9-C71F78C19151")]
-        public readonly Slot<Vector3> Position = new();
+        public readonly Slot<System.Numerics.Vector3> Position = new();
         
         public SampleSplinePoint()
         {

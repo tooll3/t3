@@ -61,7 +61,7 @@
       "Outputs": []
     },
     {
-      "Id": "6a688dab-8dab-4667-9a33-4113f8ec28cd"/*FractalNoise*/,
+      "Id": "6a688dab-8dab-4667-9a33-4113f8ec28cd"/*_FractalNoiseOld*/,
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [
         {
@@ -288,7 +288,7 @@
       "SymbolId": "ccc06dd6-4eec-4d17-af0b-4f1700e7887a",
       "InputValues": [
         {
-          "Id": "0abcff87-ace5-4a06-9217-b2caf831ecae"/*Scale*/,
+          "Id": "0abcff87-ace5-4a06-9217-b2caf831ecae"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 0.005
         }
@@ -317,14 +317,14 @@
       "SymbolId": "436e93a8-03c0-4366-8d9a-2245e5bcaa6c",
       "InputValues": [
         {
-          "Id": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
-          "Type": "System.Int32",
-          "Value": 4
-        },
-        {
           "Id": "557ae817-ec36-4866-8fed-64490e9255be"/*RangeMax*/,
           "Type": "System.Single",
           "Value": 0.014000019
+        },
+        {
+          "Id": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
+          "Type": "System.Int32",
+          "Value": 4
         }
       ],
       "Outputs": []

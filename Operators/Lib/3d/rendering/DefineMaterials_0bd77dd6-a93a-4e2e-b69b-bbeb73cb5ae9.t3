@@ -1,0 +1,17 @@
+{
+  "Name": "DefineMaterials",
+  "Id": "0bd77dd6-a93a-4e2e-b69b-bbeb73cb5ae9",
+  "Namespace": "lib.3d.rendering",
+  "Inputs": [
+    {
+      "Id": "ab03556d-02a5-4329-94af-58563f93e159"/*SubGraph*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "6299a306-d96c-425d-b44c-0340358439cb"/*Materials*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

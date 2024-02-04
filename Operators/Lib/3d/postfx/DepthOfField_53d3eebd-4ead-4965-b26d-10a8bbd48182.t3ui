@@ -23,42 +23,55 @@
       "Position": {
         "X": -416.71564,
         "Y": 14.203831
-      }
+      },
+      "Description": "Controls the intensity of the blur.\n\nAreas that are further away from the focus point are proportionally more blurred.",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 20.0,
+      "Clamp": true
     },
     {
       "InputId": "97b76d02-e735-4e93-88ad-5c9b8766a63c"/*FocusDistance*/,
       "Position": {
         "X": -416.71564,
         "Y": 59.20383
-      }
+      },
+      "Description": "Controls how far away from the camera the area is which is not affected by the blur.\n\nProTip: Use a higher \"Amount\" to make it easier to identify the area of your scene that are in focus. Or use a [Locator] to have a visual helper to define the FocusPoint."
     },
     {
       "InputId": "1592e94b-a20d-463c-baec-5fb5dfa85532"/*BackgroundColor*/,
       "Position": {
         "X": -416.71564,
         "Y": 104.20382
-      }
+      },
+      "Description": "Defines the BackgroundColor.",
+      "AddPadding": "True"
     },
     {
       "InputId": "493c40f0-21e6-466b-afc2-eff570229c86"/*MaxSamples*/,
       "Position": {
         "X": -416.71564,
         "Y": 149.20383
-      }
+      },
+      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed.",
+      "AddPadding": "True"
     },
     {
       "InputId": "40de51d8-91dd-461d-a7be-d4096313eec2"/*NearFarRange*/,
       "Position": {
         "X": -416.71564,
         "Y": 194.20383
-      }
+      },
+      "Description": "Defines the near and far range of the scene which is affected by the effect."
     },
     {
       "InputId": "22f5e8db-0b80-47dc-b30b-4bc49d9fad59"/*Command*/,
       "Position": {
         "X": -422.11786,
         "Y": 794.3843
-      }
+      },
+      "Description": "Internal Input.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [

@@ -11,96 +11,13 @@
       }
     }
   ],
-  "SymbolChildUis": [
-    {
-      "ChildId": "0d3437c7-88e3-4bc7-adb5-53d44485e6c7"/*ComputeShader*/,
-      "Position": {
-        "X": 122.01576,
-        "Y": 552.8011
-      }
-    },
-    {
-      "ChildId": "abda36ac-ff98-4bdc-b95f-55f555906f22"/*ComputeShaderStage*/,
-      "Position": {
-        "X": 471.04163,
-        "Y": 587.7994
-      }
-    },
-    {
-      "ChildId": "13a18157-db03-4ebc-a0e0-1b9e44c6b870"/*FloatsToBuffer*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 138.28679,
-        "Y": 135.58852
-      },
-      "Position": {
-        "X": 82.63007,
-        "Y": 908.67883
-      }
-    },
-    {
-      "ChildId": "278b9322-f769-4fcc-bf75-8dc62779118b"/*ExecuteBufferUpdate*/,
-      "Position": {
-        "X": 641.2465,
-        "Y": 646.7957
-      }
-    },
-    {
-      "ChildId": "89a16cf9-9fbb-40a0-99ce-1a8988b75e25"/*CalcDispatchCount*/,
-      "Position": {
-        "X": 273.14893,
-        "Y": 590.2168
-      }
-    },
-    {
-      "ChildId": "8b762355-cbe2-405c-85cb-3adc195b4e61"/*StructuredBufferWithViews*/,
-      "Position": {
-        "X": 77.5927,
-        "Y": 799.58417
-      }
-    },
-    {
-      "ChildId": "5c7cefbe-3fb5-4629-8b81-73ed5825e483"/*GetBufferComponents*/,
-      "Position": {
-        "X": -213.77097,
-        "Y": 700.4401
-      }
-    },
-    {
-      "ChildId": "bd7cc7d2-474b-4e67-a00a-8a36077b990f"/*GetBufferComponents*/,
-      "Position": {
-        "X": 273.14893,
-        "Y": 659.2168
-      }
-    },
-    {
-      "ChildId": "0f1b0960-cc9b-4e65-89ed-59c8e165404c"/*IntToFloat*/,
-      "Position": {
-        "X": -47.369926,
-        "Y": 908.67883
-      }
-    },
-    {
-      "ChildId": "1f168f47-db2a-4552-ab66-4a08186ae827"/*ClampInt*/,
-      "Position": {
-        "X": -182.01859,
-        "Y": 759.8851
-      }
-    },
-    {
-      "ChildId": "3941f6f7-fb08-470d-b1e0-9cecfac69701"/*IntToFloat*/,
-      "Position": {
-        "X": -46.684986,
-        "Y": 1006.406
-      }
-    }
-  ],
+  "SymbolChildUis": [],
   "OutputUis": [
     {
       "OutputId": "3d3d2dbd-dadc-492d-bf03-b780b21e738e"/*Output*/,
       "Position": {
-        "X": 771.2465,
-        "Y": 846.7957
+        "X": -1.6705322,
+        "Y": 0.21951294
       }
     }
   ]

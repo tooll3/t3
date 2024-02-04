@@ -21,10 +21,10 @@ namespace lib._3d.rendering
         {
             var pointLights = context.PointLights;
             var light = new T3.Core.Rendering.PointLight(Position.GetValue(context),
-                                                         Intensity.GetValue(context),
-                                                         Color.GetValue(context),
-                                                         Range.GetValue(context),
-                                                         Decay.GetValue(context));
+                                                           Intensity.GetValue(context),
+                                                           Color.GetValue(context),
+                                                           Range.GetValue(context),
+                                                           Decay.GetValue(context));
             pointLights.Push(light);
 
             Command.GetValue(context); // Evaluate sub-tree

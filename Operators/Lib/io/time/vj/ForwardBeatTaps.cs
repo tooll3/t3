@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using lib.Utils;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -21,15 +20,15 @@ namespace lib.io.time.vj
         
         private void Update(EvaluationContext context)
         {
-            _tapProvider.BeatTapTriggered = MathUtils.WasTriggered(TriggerBeatTap.GetValue(context), ref _wasBeatTriggered);
-            _tapProvider.ResyncTriggered = MathUtils.WasTriggered(TriggerResync.GetValue(context), ref _wasResyncTriggered);
+            BeatTapTriggered = MathUtils.WasTriggered(TriggerBeatTap.GetValue(context), ref _wasBeatTriggered);
+            ResyncTriggered = MathUtils.WasTriggered(TriggerResync.GetValue(context), ref _wasResyncTriggered);
             
             
             var offset = SlideSyncTimeOffset.GetValue(context);
             if (!float.IsNaN(offset))
             {
                 //Log.Debug($"Set Slide time {offset}", this);
-                _tapProvider.SlideSyncTime = offset; 
+                SlideSyncTime = offset; 
             }
             
             // Evaluate subtree
@@ -41,6 +40,9 @@ namespace lib.io.time.vj
         
         
         // These will be process every frame by the editor
+        public static bool BeatTapTriggered { get; private set; }
+        public static bool ResyncTriggered { get; private set; }
+        public static float SlideSyncTime { get; private set; }
         
         
         [Input(Guid = "89576f05-3f3d-48d1-ab63-f3c16c85db63")]
@@ -55,6 +57,5 @@ namespace lib.io.time.vj
         [Input(Guid = "2E18AE65-044E-443D-9288-7A9BB6864514")]
         public readonly InputSlot<float> SlideSyncTimeOffset = new();
 
-        private readonly TapProvider _tapProvider = TapProvider.Instance;
     }
 }

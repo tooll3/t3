@@ -73,6 +73,7 @@ namespace lib._3d.transform
                 commands[index].Value?.RestoreAction?.Invoke(context);
             }
 
+           
             var switchList = Commands.LimitMultiInputInvalidationToIndices;
             switchList.Clear();
             

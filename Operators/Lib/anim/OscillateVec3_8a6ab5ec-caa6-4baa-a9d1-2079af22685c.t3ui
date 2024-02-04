@@ -35,7 +35,8 @@
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "b3b06a36-ea91-4b26-88ac-dede32123ee6"/*Phase*/,

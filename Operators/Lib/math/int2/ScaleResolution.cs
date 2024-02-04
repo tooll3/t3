@@ -23,8 +23,8 @@ namespace lib.math.int2
             // Log.Debug(" " + r);
             var f = Factor.GetValue(context);
             var newSize =new T3.Core.DataTypes.Vector.Int2(
-                                                           (int)(r.Width * f.X),
-                                                           (int)(r.Height * f.Y));
+                                   (int)(r.Width * f.X),
+                                   (int)(r.Height * f.Y));
 
             if (ClampToValidTextureSize.GetValue(context))
             {

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib._3d.gizmo.@_
+namespace lib._3d.gizmo._
 {
 	[Guid("b601be85-fa85-4358-9541-7e97341bf6b3")]
     public class _CameraGizmo : Instance<_CameraGizmo>

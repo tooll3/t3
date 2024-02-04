@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib._3d.rendering.@_
+namespace lib._3d.rendering._
 {
 	[Guid("dee8f2de-5cbd-4ca7-9449-d6c74197546e")]
     public class GetTextureFromContext : Instance<GetTextureFromContext>

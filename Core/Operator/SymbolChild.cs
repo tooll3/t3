@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
@@ -178,17 +179,27 @@ namespace T3.Core.Operator
 
         private void SetBypassed(bool shouldBypass)
         {
+            if (shouldBypass == _isBypassed)
+                return;
+            
             if(!IsBypassable())
                 return;
 
             if (Parent == null)
             {
-                _isBypassed = true;  // during loading parents are not yet assigned. This flag will later be used when creating instances
+                // Clarify: shouldn't this be shouldBypass?
+                _isBypassed = shouldBypass;  // during loading parents are not yet assigned. This flag will later be used when creating instances
                 return;
             }
             
             
             var parentInstancesOfSymbol = Parent.InstancesOfSymbol;
+            if (parentInstancesOfSymbol.Count == 0)
+            {
+                _isBypassed = shouldBypass;  // while duplicating / cloning as new symbol there are no instances yet.
+                return;
+            }
+            
             foreach (var parentInstance in parentInstancesOfSymbol)
             {
                 var instance = parentInstance.Children.First(child => child.SymbolChildId == Id);
@@ -196,6 +207,7 @@ namespace T3.Core.Operator
                 var mainInputSlot = instance.Inputs[0];
                 var mainOutputSlot = instance.Outputs[0];
 
+                
                 var wasByPassed = false;
                 
                 switch (mainOutputSlot)
@@ -209,6 +221,7 @@ namespace T3.Core.Operator
                         {
                             commandOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(commandInput);
                         break;
                     
                     case Slot<BufferWithViews> bufferOutput when mainInputSlot is Slot<BufferWithViews> bufferInput:
@@ -220,6 +233,7 @@ namespace T3.Core.Operator
                         {
                             bufferOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(bufferInput);
                         break;
                     case Slot<MeshBuffers> bufferOutput when mainInputSlot is Slot<MeshBuffers> bufferInput:
                         if (shouldBypass)
@@ -230,6 +244,8 @@ namespace T3.Core.Operator
                         {
                             bufferOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(bufferInput);
+
                         break;
                     case Slot<Texture2D> texture2dOutput when mainInputSlot is Slot<Texture2D> texture2dInput:
                         if (shouldBypass)
@@ -240,6 +256,8 @@ namespace T3.Core.Operator
                         {
                             texture2dOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(texture2dInput);
+
                         break;
                     case Slot<float> floatOutput when mainInputSlot is Slot<float> floatInput:
                         if (shouldBypass)
@@ -250,9 +268,11 @@ namespace T3.Core.Operator
                         {
                             floatOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(floatInput);
+
                         break;
                     
-                    case Slot<Vector2> vec2Output when mainInputSlot is Slot<Vector2> vec2Input:
+                    case Slot<System.Numerics.Vector2> vec2Output when mainInputSlot is Slot<System.Numerics.Vector2> vec2Input:
                         if (shouldBypass)
                         {
                             wasByPassed= vec2Output.TrySetBypassToInput(vec2Input);
@@ -261,8 +281,10 @@ namespace T3.Core.Operator
                         {
                             vec2Output.RestoreUpdateAction();
                         }
+                        InvalidateConnected(vec2Input);
+
                         break;
-                    case Slot<Vector3> vec3Output when mainInputSlot is Slot<Vector3> vec3Input:
+                    case Slot<System.Numerics.Vector3> vec3Output when mainInputSlot is Slot<System.Numerics.Vector3> vec3Input:
                         if (shouldBypass)
                         {
                             wasByPassed= vec3Output.TrySetBypassToInput(vec3Input);
@@ -271,6 +293,8 @@ namespace T3.Core.Operator
                         {
                             vec3Output.RestoreUpdateAction();
                         }
+                        InvalidateConnected(vec3Input);
+
                         break;
                     case Slot<string> stringOutput when mainInputSlot is Slot<string> stringInput:
                         if (shouldBypass)
@@ -281,11 +305,36 @@ namespace T3.Core.Operator
                         {
                             stringOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(stringInput);
                         break;
-
                 }
 
                 _isBypassed = wasByPassed;
+            }
+        }
+
+        private static void InvalidateConnected<T>(Slot<T> bufferInput)
+        {
+            if (bufferInput.TryGetAsMultiInputTyped(out var multiInput))
+            {
+                foreach (var connection in multiInput.CollectedInputs)
+                {
+                    InvalidateParentInputs(connection);
+                }
+            }
+            else
+            {
+                var connection = bufferInput.FirstConnection;
+                InvalidateParentInputs(connection);
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            void InvalidateParentInputs(ISlot connection)
+            {
+                if(connection.ValueType == typeof(string))
+                    return;
+
+                connection.DirtyFlag.Invalidate();
             }
         }
 

@@ -87,6 +87,10 @@ namespace T3.Editor.Gui.Windows.Output
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
+                // Very ugly hack to prevent scaling the output above window size
+                var keepScale = T3Ui.UiScaleFactor;
+                T3Ui.UiScaleFactor = 1;
+                
                 // Draw output
                 _imageCanvas.SetAsCurrent();
 
@@ -100,6 +104,8 @@ namespace T3.Editor.Gui.Windows.Output
                 _camSelectionHandling.Update(drawnInstance, drawnType);
                 _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction;
                 _imageCanvas.Update();
+
+                T3Ui.UiScaleFactor = keepScale;
                 DrawToolbar(drawnType);
                 CustomComponents.DrawWindowFocusFrame();
             }
@@ -175,7 +181,7 @@ namespace T3.Editor.Gui.Windows.Output
 
                 if (CustomComponents.IconButton(Icon.Snapshot, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight())))
                 {
-                    var folder = @"Screenshots/";
+                    const string folder = @"Screenshots/";
                     if (!Directory.Exists(folder))
                     {
                         Directory.CreateDirectory(folder);
@@ -186,8 +192,6 @@ namespace T3.Editor.Gui.Windows.Output
                 }
 
                 CustomComponents.TooltipForLastItem("Save screenshot");
-                if (!RenderHelperWindow.IsExporting)
-                    ScreenshotWriter.UpdateSaving();
             }
 
             ImGui.SameLine();

@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -14,7 +14,7 @@ namespace lib.io.input
     public class MouseInput : Instance<MouseInput>
     {
         [Output(Guid = "CDC87CE1-FAB8-4B96-9137-9965E064BFA3", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector2> Position = new();
+        public readonly Slot<System.Numerics.Vector2> Position = new();
 
         [Output(Guid = "78CAABCF-9C3B-4E50-9D80-BDCBABAEB003", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> IsLeftButtonDown = new();

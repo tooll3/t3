@@ -14,8 +14,8 @@
     {
       "Id": "a16ccad1-00b7-4779-8346-52b03b81249f"/*Resolution*/,
       "DefaultValue": {
-        "X": 0,
-        "Y": 0
+        "X": 256,
+        "Y": 256
       }
     }
   ],
@@ -73,12 +73,12 @@
           }
         },
         {
-          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
+          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
           "Type": "System.Boolean",
           "Value": false
         },
         {
-          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
+          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
           "Type": "System.Boolean",
           "Value": false
         },
@@ -137,11 +137,6 @@
           }
         },
         {
-          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
           "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
           "Type": "System.Boolean",
           "Value": true
@@ -150,6 +145,11 @@
           "Id": "e882e0f0-03f9-46e6-ac7a-709e6fa66613"/*Multisampling*/,
           "Type": "System.Int32",
           "Value": 1
+        },
+        {
+          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []
@@ -209,6 +209,15 @@
           "Id": "ce649059-f136-4d32-81c6-23d7b55f3378"/*Format*/,
           "Type": "SharpDX.DXGI.Format",
           "Value": "R32_Float"
+        },
+        {
+          "Id": "dca953d6-bdc1-42eb-9a4d-5974c42cf45b"/*Size*/,
+          "Type": "T3.Core.DataTypes.Vector.Int3",
+          "Value": {
+            "X": 256,
+            "Y": 256,
+            "Z": 256
+          }
         }
       ],
       "Outputs": []

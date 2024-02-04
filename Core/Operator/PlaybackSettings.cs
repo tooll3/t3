@@ -3,7 +3,6 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Audio;
-using T3.Core.Model;
 using T3.Serialization;
 
 namespace T3.Core.Operator
@@ -64,13 +63,13 @@ namespace T3.Core.Operator
             {
                 //writer.WriteEndArray();
 
-                JsonExtensions.WriteValue(writer, nameof(Enabled), Enabled);
-                JsonExtensions.WriteValue(writer, nameof(Bpm), Bpm);
-                JsonExtensions.WriteValue(writer, nameof(AudioSource), AudioSource);
-                JsonExtensions.WriteValue(writer, nameof(Syncing), Syncing);
-                JsonExtensions.WriteValue(writer, nameof(AudioDecayFactor), AudioDecayFactor);
-                JsonExtensions.WriteValue(writer, nameof(AudioGainFactor), AudioGainFactor);
-                JsonExtensions.WriteObject(writer, nameof(AudioInputDeviceName), AudioInputDeviceName);
+                writer.WriteValue(nameof(Enabled), Enabled);
+                writer.WriteValue(nameof(Bpm), Bpm);
+                writer.WriteValue(nameof(AudioSource), AudioSource);
+                writer.WriteValue(nameof(Syncing), Syncing);
+                writer.WriteValue(nameof(AudioDecayFactor), AudioDecayFactor);
+                writer.WriteValue(nameof(AudioGainFactor), AudioGainFactor);
+                writer.WriteObject(nameof(AudioInputDeviceName), AudioInputDeviceName);
 
                 // Write audio clips
                 var audioClips = AudioClips;

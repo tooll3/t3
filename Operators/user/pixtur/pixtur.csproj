@@ -15,4 +15,8 @@
         <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.DXGI.dll"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AssetRipper.SharpGLTF.Runtime" Version="1.0.2" />
+    </ItemGroup>
+
 </Project>

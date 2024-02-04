@@ -6,7 +6,7 @@ using T3.Core.Operator.Slots;
 using Unsplasharp;
 using Unsplasharp.Models;
 
-namespace UnsplashLoader 
+namespace user.UnsplashLoader
 {
     [Guid("89162b9f-75f5-4d32-9d28-8259cf47cf58")]
     public class UnsplashAPI : Instance<UnsplashAPI>

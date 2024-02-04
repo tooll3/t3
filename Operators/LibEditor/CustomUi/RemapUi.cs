@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+using ImGuiNET;
 using lib.math.@float;
 using T3.Core.Operator;
 using T3.Core.Utils;

@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+using System.Runtime.InteropServices;
+using System.Xml.Serialization;
 using T3.Core.Logging;
 
 namespace lib.Utils.BmFont

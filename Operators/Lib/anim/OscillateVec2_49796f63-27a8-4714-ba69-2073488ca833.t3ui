@@ -21,7 +21,11 @@
       "Position": {
         "X": -200.0,
         "Y": 270.0
-      }
+      },
+      "AddPadding": "True",
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "031bf887-e45e-45aa-ba17-214aecf155da"/*AmplitudeScale*/,
@@ -35,21 +39,26 @@
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "48a94f9e-32fc-46d0-9e06-8f7cbe1d40f3"/*Phase*/,
       "Position": {
         "X": -200.0,
         "Y": 180.0
-      }
+      },
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "63c0681d-eb5a-45bb-b0df-be868e236c1e"/*Offset*/,
       "Position": {
         "X": -200.0,
         "Y": 225.0
-      }
+      },
+      "UseVec2Control": "Position"
     }
   ],
   "SymbolChildUis": [],

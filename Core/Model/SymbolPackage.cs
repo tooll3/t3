@@ -100,7 +100,7 @@ public abstract partial class SymbolPackage
 
                 if (!added)
                 {
-                    Log.Error($"Can't load symbol for [{symbol.Name}]. Registry already contains id {symbol.Id}.");
+                    Log.Error($"Can't load symbol for [{symbol.Name}]. Registry already contains id {symbol.Id}: [{SymbolRegistry.EntriesEditable[symbol.Id].Name}]");
                     continue;
                 }
 

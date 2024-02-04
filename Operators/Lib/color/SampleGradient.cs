@@ -1,4 +1,3 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
@@ -8,11 +7,11 @@ using T3.Core.Operator.Slots;
 namespace lib.color
 {
 	[Guid("8211249d-7a26-4ad0-8d84-56da72a5c536")]
-    public class SampleGradient : Instance<SampleGradient>, IExtractable
+    public class SampleGradient : Instance<SampleGradient>
     {
         
         [Output(Guid = "963611E7-F55E-4C94-96E6-34E195558A2B")]
-        public readonly Slot<Vector4> Color = new();
+        public readonly Slot<System.Numerics.Vector4> Color = new();
 
         
         [Output(Guid = "9F3D0701-86E8-436E-8652-918BA23B2CEF")]
@@ -45,16 +44,5 @@ namespace lib.color
         [Input(Guid = "76CF4A72-2D25-48CB-A1EC-08D0DDABB053", MappedType = typeof(Gradient.Interpolations))]
         public readonly InputSlot<int> Interpolation = new();
 
-        public bool TryExtractInputsFor(IInputSlot inputSlot, out IEnumerable<ExtractedInput> inputParameters)
-        {
-            if(inputSlot is not InputSlot<Gradient> gradientSlot)
-            {
-                inputParameters = Array.Empty<ExtractedInput>();
-                return false;
-            }
-            
-            inputParameters = new[] { new ExtractedInput(Gradient.Input, gradientSlot.TypedInputValue) };
-            return true;
-        }
     }
 }

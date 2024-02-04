@@ -100,11 +100,20 @@ public class AssemblyInformation
             shouldShareResources = false;
             return;
         }
+
+        var typeDict = new Dictionary<string, Type>();
+        foreach (var type in types)
+        {
+            if (!typeDict.TryAdd(type.FullName, type))
+            {
+                Log.Warning($"Duplicate type {type.FullName} in assembly {assembly.FullName}");
+            }
+        }
         
-        _types = types.ToDictionary(type => type.FullName, type => type);
+        _types = typeDict;
 
         ConcurrentBag<Type> nonOperatorTypes = new();
-        _operatorTypes = _types.Values
+        var opGuidInfoEnumerable = _types.Values
                                .Where(type =>
                                       {
                                           var isOperator = type.IsAssignableTo(typeof(Instance));
@@ -126,8 +135,19 @@ public class AssemblyInformation
 
                                            return new GuidInfo(gotGuid, id, type);
                                        })
-                               .Where(x => x.HasGuid)
-                               .ToDictionary(x => x.Guid, x => x.Type);
+                               .Where(x => x.HasGuid);
+
+        _operatorTypes = new Dictionary<Guid, Type>(_types.Count);
+        foreach (var op in opGuidInfoEnumerable)
+        {
+            if (!_operatorTypes.TryAdd(op.Guid, op.Type))
+            {
+                var existingType = _operatorTypes[op.Guid];
+                Log.Error($"Duplicate operator type {op.Type.FullName} with guid {op.Guid}. Existing type: {existingType.FullName}");
+            }
+        }
+        
+        _operatorTypes.TrimExcess();
 
         shouldShareResources = nonOperatorTypes
                               .Where(type =>
@@ -234,7 +254,8 @@ public class AssemblyInformation
 
     private Assembly OnResolving(AssemblyLoadContext context, AssemblyName name)
     {
-        var library = DependencyContext.RuntimeLibraries.FirstOrDefault(NamesMatch);
+        var library = DependencyContext.RuntimeLibraries
+                                       .FirstOrDefault(lib => NamesMatch(lib, name));
 
         if (library == null)
         {
@@ -269,10 +290,13 @@ public class AssemblyInformation
             }
         }
 
-        bool NamesMatch(RuntimeLibrary runtime)
+        static bool NamesMatch(RuntimeLibrary runtime, AssemblyName nameToSearchFor)
         {
-            return string.Equals(runtime.Name, name.Name, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(RemovePackageSuffixes(runtime.Name), name.Name, StringComparison.OrdinalIgnoreCase);
+            var name = nameToSearchFor.Name;
+            return string.Equals(runtime.Name, name, StringComparison.OrdinalIgnoreCase)
+                || runtime.RuntimeAssemblyGroups
+                          .Any(x => x.RuntimeFiles
+                                     .Any(runtimeFile => System.IO.Path.GetFileNameWithoutExtension(runtimeFile.Path) == name));
         }
     }
     

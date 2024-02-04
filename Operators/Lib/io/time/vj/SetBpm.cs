@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using lib.Utils;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
@@ -26,7 +25,7 @@ namespace lib.io.time.vj
             
             var bpm = BpmRate.GetValue(context);
 
-            var wasTriggered = MathUtils.WasTriggered(TriggerUpdate.GetValue(context), ref _bpmProvider.TriggerUpdate);
+            var wasTriggered = MathUtils.WasTriggered(TriggerUpdate.GetValue(context), ref _triggerUpdate);
             
             var clampedRate = bpm.Clamp(54, 240);
             if (wasTriggered && bpm > 1)
@@ -38,14 +37,31 @@ namespace lib.io.time.vj
                 }
                 Log.Debug($"Setting BPM rate to {clampedRate}", this);
                 //Playback.Current.Bpm = clampedRate;
-                _bpmProvider.SetBpmTriggered = true;
-                _bpmProvider.NewBpmRate = clampedRate;
+                _setBpmTriggered = true;
+                _newBpmRate = clampedRate;
             }
             
             SubGraph.GetValue(context);
         }
 
         
+        // This will be process every frame by the editor
+        public static bool TryGetNewBpmRate(out float bpm)
+        {
+            if (!_setBpmTriggered)
+            {
+                bpm = _newBpmRate;
+                return false;
+            }
+
+            _setBpmTriggered = false;
+            bpm = _newBpmRate;
+            return true;
+        }
+        
+        private static bool _setBpmTriggered;
+        private static float _newBpmRate;
+        private bool _triggerUpdate;
         
         [Input(Guid = "9CC32DA8-F939-4AD3-B381-6DF8338A371B")]
         public readonly InputSlot<Command> SubGraph = new();
@@ -55,7 +71,6 @@ namespace lib.io.time.vj
         
         [Input(Guid = "FBF10760-B559-4E9C-B8DC-CE61D3F21C82")]
         public readonly InputSlot<bool> TriggerUpdate = new();
-        
-        private readonly BpmProvider _bpmProvider = BpmProvider.Instance;
+
     }
 }

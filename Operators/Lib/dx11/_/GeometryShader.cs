@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using GeometryShaderD3D = SharpDX.Direct3D11.GeometryShader;
 
-namespace lib.dx11.@_
+namespace lib.dx11._
 {
 	[Guid("a908cc64-e8cb-490c-ae45-c2c5fbfcedfb")]
     public class GeometryShader : Instance<GeometryShader>, IShaderOperator<GeometryShaderD3D>

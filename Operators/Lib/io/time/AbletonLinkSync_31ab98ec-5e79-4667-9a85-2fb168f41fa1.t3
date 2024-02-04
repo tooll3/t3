@@ -1,0 +1,33 @@
+{
+  "Name": "AbletonLinkSync",
+  "Id": "31ab98ec-5e79-4667-9a85-2fb168f41fa1",
+  "Namespace": "lib.io.time",
+  "Inputs": [
+    {
+      "Id": "cd977dbc-3340-4542-8e0f-01bde3882d6a"/*OutputType*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "3dc1fc6b-d17f-4939-a1e6-6d3db042af36"/*TriggerStartPlaying*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "bf2ca9e8-6365-453f-b8c3-2428ccd9d23d"/*TriggerStopPlaying*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "f4e75e75-5113-4f22-a1dd-b897a5745f1d"/*TriggerReconnect*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "4da6ebcc-0312-4846-88b0-a0682a59f97f"/*AutoConnect*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "ecf5d5ab-bb9f-4c48-9b33-8827e94dd286"/*PauseIfDisconnected*/,
+      "DefaultValue": true
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

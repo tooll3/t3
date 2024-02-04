@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -52,7 +52,7 @@ namespace lib.point._internal
         private Point[] _points = new Point[0];
 
         [Input(Guid = "52953760-435e-4f11-8e65-c9d46bc40076")]
-        public readonly InputSlot<Vector3> Scale = new();
+        public readonly InputSlot<System.Numerics.Vector3> Scale = new();
         
         [Input(Guid = "7c35053c-bd51-421b-9a6d-ddb8c150abc9")]
         public readonly InputSlot<float> Frequency = new();

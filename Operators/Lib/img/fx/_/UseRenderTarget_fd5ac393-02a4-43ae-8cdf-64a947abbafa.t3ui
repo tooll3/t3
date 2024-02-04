@@ -1,6 +1,6 @@
 {
   "Id": "fd5ac393-02a4-43ae-8cdf-64a947abbafa"/*UseRenderTarget*/,
-  "Description": "Used a reference to a RenderTarget to implement feedback effects.",
+  "Description": "Used a reference to a [RenderTarget] to implement feedback effects.",
   "InputUis": [],
   "SymbolChildUis": [],
   "OutputUis": [

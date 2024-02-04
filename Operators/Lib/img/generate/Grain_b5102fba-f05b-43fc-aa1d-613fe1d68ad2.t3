@@ -57,16 +57,11 @@
           "Id": "499e7ff0-3b6a-414b-be19-03c615931ab8"/*BufferColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.5,
-            "Y": 0.5,
-            "Z": 0.5,
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
             "W": 0.0
           }
-        },
-        {
-          "Id": "9911dc7e-cd3b-4c58-a5d0-2e9abc8e528a"/*BlendMode*/,
-          "Type": "System.Int32",
-          "Value": 4
         }
       ],
       "Outputs": []

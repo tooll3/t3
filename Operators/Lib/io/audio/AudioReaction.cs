@@ -30,6 +30,15 @@ namespace lib.io.audio
         
         private void Update(EvaluationContext context)
         {
+            if (context.IntVariables.TryGetValue("__MotionBlurPass", out var motionBlurPass))
+            {
+                if (motionBlurPass > 0)
+                {
+                    //Log.Debug($"Skip motion blur pass {motionBlurPass}");
+                    return;
+                }                
+            } 
+            
             if (Math.Abs(context.LocalFxTime - _lastEvalTime) < 0.001f)
             {
                 return;
@@ -54,44 +63,20 @@ namespace lib.io.audio
             }
 
 
-            List<float> bins = default;
             var mode = (InputModes)InputBand.GetValue(context).Clamp(0, Enum.GetNames(typeof(InputModes)).Length - 1);
-            switch (mode)
-            {
-                case InputModes.RawFft:
-                    bins = AudioAnalysis.FftGainBuffer == null
-                                ? _emptyList
-                                : AudioAnalysis.FftGainBuffer.ToList();
 
-                    break;
+            var bins2 = mode switch
+                            {
+                                InputModes.RawFft                => AudioAnalysis.FftGainBuffer,
+                                InputModes.NormalizedFft         => AudioAnalysis.FftNormalizedBuffer,
+                                InputModes.FrequencyBands        => AudioAnalysis.FrequencyBands,
+                                InputModes.FrequencyBandsPeaks   => AudioAnalysis.FrequencyBandPeaks,
+                                InputModes.FrequencyBandsAttacks => AudioAnalysis.FrequencyBandAttacks,
+                                _                                => null
+                            };
 
-                case InputModes.NormalizedFft:
-                    bins = AudioAnalysis.FftNormalizedBuffer == null
-                                ? _emptyList
-                                : AudioAnalysis.FftNormalizedBuffer.ToList();
-                    break;
-
-                case InputModes.FrequencyBands:
-                    bins = AudioAnalysis.FrequencyBands == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBands.ToList();
-                    break;
-
-                case InputModes.FrequencyBandsPeaks:
-                    bins = AudioAnalysis.FrequencyBandPeaks == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBandPeaks.ToList();
-
-                    break;
-
-                case InputModes.FrequencyBandsAttacks:
-                    bins = AudioAnalysis.FrequencyBandAttacks == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBandAttacks.ToList();
-
-                    break;
-            }
-
+            var bins = bins2 == null ? _emptyList : bins2.ToList();
+            
             var threshold = Threshold.GetValue(context);
             var minTimeBetweenHits = MinTimeBetweenHits.GetValue(context);
             
@@ -135,7 +120,7 @@ namespace lib.io.audio
                         _isHitActive = couldBeHit;
                     }
                 }
-                
+
                 AccumulatedLevel +=  MathF.Pow((Sum * 2) / threshold, 2) * 0.001 * amplitude;
                 _dampedTimeBetweenHits = MathUtils.Lerp((float)timeSinceLastHit, _dampedTimeBetweenHits, 0.94f);
             }

@@ -1,6 +1,6 @@
 {
   "Id": "085b7841-9502-4b49-896e-3b1fa023f1bf"/*CombineMaterialChannels*/,
-  "Description": "Combines roughness, metallic, and ambient occlusion texture maps into a single texture for [SetMaterial].",
+  "Description": "Combines roughness, metallic, and ambient occlusion texture maps that are loaded with [LoadImage] into a single texture for [SetMaterial] to create PBR Materials.",
   "InputUis": [
     {
       "InputId": "c697d838-f9a3-4ee7-af3d-713494f0ae93"/*Roughness*/,
@@ -8,7 +8,8 @@
       "Position": {
         "X": -515.9635,
         "Y": 373.74335
-      }
+      },
+      "Description": "Input for a RoughnessMap via a [LoadImage] Operator."
     },
     {
       "InputId": "ae7df1c8-ffd1-4a32-9f25-769fc7630f6f"/*Metallic*/,
@@ -16,7 +17,8 @@
       "Position": {
         "X": -515.9635,
         "Y": 418.74335
-      }
+      },
+      "Description": "Input for a MetallicMap via a [LoadImage] Operator."
     },
     {
       "InputId": "55ee3c9c-ffbc-4322-bb44-69d1b7001ff8"/*Occlusion*/,
@@ -24,28 +26,32 @@
       "Position": {
         "X": -515.9635,
         "Y": 463.74335
-      }
+      },
+      "Description": "Input for a AmbientOcclusionMap via a [LoadImage] Operator."
     },
     {
       "InputId": "34ba88b4-7fe0-4f40-9433-feab3b6e81f0"/*Resolution*/,
       "Position": {
         "X": -514.44653,
         "Y": 565.6531
-      }
+      },
+      "Description": "Overwrite the resolution of the input image."
     },
     {
       "InputId": "16522565-e9aa-4295-b219-9724d656ced3"/*GenerateMips*/,
       "Position": {
         "X": -514.44653,
         "Y": 745.6531
-      }
+      },
+      "Description": "Enables the generation of Mipmaps which ensure that textures also look good from different distances and angles."
     },
     {
       "InputId": "099eae25-7cca-4da2-956f-c1a5bd67e764"/*RemapRoughness*/,
       "Position": {
         "X": -514.44653,
         "Y": 790.6531
-      }
+      },
+      "Description": "Hold the \"Alt\" key and left click to create points on the curve to fine tune how the loaded roughness map is used.\nRight click on the points opens more options such as interpolation etc."
     }
   ],
   "SymbolChildUis": [

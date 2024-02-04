@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using ImGuiNET;
 using lib.io.time;
 using T3.Core.DataTypes.Vector;

@@ -4,10 +4,9 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
-using T3.Core.Model;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Core.Utils.CubicSplines;
+using T3.Serialization;
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.DataTypes
@@ -16,7 +15,7 @@ namespace T3.Core.DataTypes
     {
         public void Write(JsonTextWriter writer)
         {
-            writer.WritePropertyName(typeof(Gradient).Name);
+            writer.WritePropertyName(nameof(Gradient));
             writer.WriteStartObject();
 
             writer.WriteObject("Interpolation", Interpolation);
@@ -258,7 +257,7 @@ namespace T3.Core.DataTypes
         /// to flag a gradient as modified.
         /// </summary>
         /// <remarks>
-        /// Sampling sampling 30K points takes roughly 5ms. 
+        /// Sampling 30K points takes roughly 5ms. 
         /// </remarks>
         public override int GetHashCode()
         {

@@ -1,34 +1,41 @@
 {
   "Id": "eb4d5014-2619-4368-a1b8-521db8372243"/*LenseFlareSetup*/,
-  "Description": "Pre-made complex light flare setups with various styles.\n\nRequire at least one [PointLight] on the left side.",
+  "Description": "Pre-made complex light flare setups with various styles.\n\nRequire at least one [PointLight] on the left side or within the same group / graph.",
   "InputUis": [
     {
       "InputId": "6485746d-1f22-4c39-bbc5-773e29feb4c0"/*Brightness*/,
       "Position": {
         "X": -393.9452,
         "Y": 271.34497
-      }
+      },
+      "Description": "Controls the brightness of the Lenseflare in relation to the intensity of the light source."
     },
     {
       "InputId": "5dd9abed-da33-4f80-ba83-a817d2105add"/*RandomSeed*/,
       "Position": {
         "X": -393.9452,
         "Y": 316.34497
-      }
+      },
+      "Description": "Automatically creates different combinations / styles of LenseFlares.\n\nElements include: Centerglow, Star, Color, Sprites, Iris, Sparkle and Shimmer settings.",
+      "AddPadding": "True"
     },
     {
       "InputId": "ba661368-fae7-4a7b-b70c-30e21250e1eb"/*LightIndex*/,
       "Position": {
         "X": -393.9452,
         "Y": 361.34497
-      }
+      },
+      "Description": "Select the Index / ID of the Pointlight to which the Lenseflare is attached.",
+      "AddPadding": "True"
     },
     {
       "InputId": "aab1250a-de9c-4bfd-ab0f-8d4eed8b57e2"/*RandomizeColor*/,
       "Position": {
         "X": -393.9452,
         "Y": 406.34497
-      }
+      },
+      "Description": "Select a color to tint various elements.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [

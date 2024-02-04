@@ -1,90 +1,130 @@
 {
   "Id": "c757cde3-511c-44cb-af62-39156557daa6"/*DrawMeshHatched*/,
-  "Description": "A more abstract shading style",
+  "Description": "Draws incoming geometry and meshnodes in an abstract shading style.\n\nAn interactive tutorial for the complete Tooll3 render pipeline can be found at [HowToDrawThings].\n\nThe most commonly used render methods are [Drawmesh], [DrawMeshUnlit] and [DrawMeshHatched] and [DrawMeshAtPoints].\n\nThey can then be combined with [SetMaterial], [SetFog], [SetPointLight] and many others to create the look of scenes.",
   "InputUis": [
     {
-      "InputId": "42042144-1ca7-41c7-92b8-21ea1136698a"/*Color*/,
+      "InputId": "42042144-1ca7-41c7-92b8-21ea1136698a"/*ColorHighlight*/,
       "Position": {
         "X": 639.3811,
         "Y": 4680.332
-      }
+      },
+      "GroupTitle": "Colors",
+      "Description": "Defines the color in which the bright areas / lines are displayed.",
+      "AddPadding": "True"
     },
     {
-      "InputId": "204a3776-c191-48b1-b502-2efc45adec67"/*Background*/,
+      "InputId": "204a3776-c191-48b1-b502-2efc45adec67"/*ColorShade*/,
       "Position": {
         "X": 639.3811,
         "Y": 4725.332
-      }
+      },
+      "Description": "Defines the color in which the dark / shaded areas are displayed"
     },
     {
       "InputId": "61eb78f5-d36e-479e-938f-a4fa4b31a1b6"/*LineWidth*/,
       "Position": {
         "X": 633.7131,
         "Y": 4840.601
-      }
+      },
+      "GroupTitle": "Hatched Lines Settings",
+      "Description": "Thickness of the Lines / Highlighted areas",
+      "Min": 0.1,
+      "Max": 100.0,
+      "Scale": 0.1,
+      "Clamp": true
     },
     {
       "InputId": "ce4cc48f-07bb-4aa8-a410-2042732aaa25"/*FollowSurface*/,
       "Position": {
         "X": 633.7131,
         "Y": 4885.601
-      }
+      },
+      "Description": "Defines how strongly the lines follow the surface of the mesh.\n\nLow values: The lines mainly follow the angle of the view.\nHigh values: Lines also increasingly flow along the surfaces of the mesh",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 180.0,
+      "Scale": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "603078ef-e7bc-4ba8-87b2-81574a04cfb6"/*OffsetDirection*/,
       "Position": {
         "X": 633.7131,
         "Y": 4930.601
-      }
+      },
+      "Description": "Rotates the alignment of the lines.",
+      "Min": 0.0,
+      "Max": 180.0,
+      "Scale": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "e069cd71-547b-4231-a6ff-33036337f805"/*RandomFaceDirection*/,
       "Position": {
         "X": 635.04663,
         "Y": 4993.9478
-      }
+      },
+      "GroupTitle": "Face Extras",
+      "Description": "Randomly rotates all lines on all faces.",
+      "Min": 0.0,
+      "Max": 666.0,
+      "Clamp": true
     },
     {
       "InputId": "50935c43-666f-4c31-825b-667bc83c327a"/*RandomFaceLighting*/,
       "Position": {
         "X": 635.04663,
         "Y": 5038.9478
-      }
+      },
+      "Description": "Brightens random faces to varying degrees.",
+      "Min": 0.0,
+      "Max": 8.0,
+      "Scale": 0.01,
+      "Clamp": true
     },
     {
       "InputId": "d84bd197-8788-4787-9883-c43bc0e285e7"/*Shading*/,
       "Position": {
         "X": 635.04663,
         "Y": 5083.9478
-      }
+      },
+      "Description": "Defines the gradient between highlight and shade-colors",
+      "AddPadding": "True"
     },
     {
       "InputId": "a9021b39-f236-4e29-98d7-e7805ceaa82f"/*Culling*/,
       "Position": {
         "X": 635.04663,
         "Y": 5128.9478
-      }
+      },
+      "GroupTitle": "Z-Buffer",
+      "Description": "Defines the transparency of the surfaces.\nNone: All surfaces are \"bothsided\" or always visible from all sides\nFront: The normals are flipped (frontside is transparent / backside visible)\nBack: Default (Frontside is visible / backside is invisible)"
     },
     {
       "InputId": "db54450a-2648-4cea-99ef-d2e0a083a4de"/*EnableZTest*/,
       "Position": {
         "X": 635.04663,
         "Y": 5173.9478
-      }
+      },
+      "Description": "This defines whether the mesh covers itself or is covered by or covers other meshes.",
+      "AddPadding": "True"
     },
     {
       "InputId": "c74dbffa-cea8-4ab7-a3b9-0bc6009041f3"/*EnableZWrite*/,
       "Position": {
         "X": 635.04663,
         "Y": 5218.9478
-      }
+      },
+      "Description": "This defines whether the mesh covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "120e2a56-c7fa-4eb8-80b0-ff75cc924960"/*ColorMap*/,
       "Position": {
         "X": 628.75635,
         "Y": 5276.926
-      }
+      },
+      "GroupTitle": "Inputs",
+      "Description": "Texture Input from [LoadImage]."
     },
     {
       "InputId": "f5037611-c425-4097-927f-08041dfee27f"/*Mesh*/,
@@ -92,7 +132,8 @@
       "Position": {
         "X": 628.75635,
         "Y": 5321.926
-      }
+      },
+      "Description": "Input for Incoming Mesh Geometry"
     }
   ],
   "SymbolChildUis": [

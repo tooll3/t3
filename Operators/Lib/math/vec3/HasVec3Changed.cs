@@ -44,9 +44,9 @@ namespace lib.math.vec3
             var hasChanged = false;
             
             var delta = new System.Numerics.Vector3(
-                                                    Math.Abs(newValue.X - _lastValue.X),
-                                                    Math.Abs(newValue.Y - _lastValue.Y),
-                                                    Math.Abs(newValue.Z - _lastValue.Z))
+                                    Math.Abs(newValue.X - _lastValue.X),
+                                    Math.Abs(newValue.Y - _lastValue.Y),
+                                    Math.Abs(newValue.Z - _lastValue.Z))
                                     ;
 
             switch ((Modes)Mode.GetValue(context).Clamp(0, Enum.GetNames(typeof(Modes)).Length -1))

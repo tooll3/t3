@@ -249,7 +249,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 
 
                 // Input meter
-                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
                 FormInputs.DrawInputLabel("Input Level");
                 ImGui.PopStyleVar();
                 ImGui.InvisibleButton("##gainMeter", new Vector2(-1, ImGui.GetFrameHeight()));

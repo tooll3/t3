@@ -1,7 +1,7 @@
 {
   "Name": "MarsExpressMain",
   "Id": "ee4065db-3b30-4b1f-95e1-127c41a9d185",
-  "Namespace": "user.alex1x.mars-epress",
+  "Namespace": "user.1x.mars-epress",
   "Inputs": [],
   "Children": [
     {

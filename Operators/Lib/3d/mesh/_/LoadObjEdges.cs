@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -8,7 +8,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 
-namespace lib._3d.mesh.@_
+namespace lib._3d.mesh._
 {
 	[Guid("dd3d7e16-f33e-4fb0-89c6-4d8cbc9d702f")]
     public class LoadObjEdges : Instance<LoadObjEdges>, IDescriptiveFilename
@@ -26,7 +26,7 @@ namespace lib._3d.mesh.@_
             var path = Path.GetValue(context);
             if (path != _lastFilePath)
             {
-                var mesh = ObjMesh.LoadFromFile(path, ResourceFolders);
+                var mesh = ObjMesh.LoadFromFile(path, this);
                 if (mesh == null)
                 {
                     Log.Error($"Failed to extract edge line points from obj {path}", this);
@@ -46,7 +46,7 @@ namespace lib._3d.mesh.@_
                 {
                     if (from < to)
                     {
-                        (from, to) = (to, from);
+                        (@from, to) = (to, @from);
                     }
 
                     var combined = (to << 16) + from;

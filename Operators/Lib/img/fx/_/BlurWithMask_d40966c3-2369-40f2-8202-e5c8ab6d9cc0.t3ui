@@ -3,6 +3,22 @@
   "Description": "Applying a masked blur can be a very powerful effect for simulating tilt-shift cameras (with [LinearRamp] or depth of field (with [Blob]). \nIt can be also useful for fade-in transitions.\n\nTips:\n- Also try to apply it with animated patterns like [FractalNoise].\n- Some additional effects can be achieved by increasing .MaskContrast and animating .MaskOffset.\n- MaskContrast of -1 will invert the mask.\n\n",
   "InputUis": [
     {
+      "InputId": "29f6bc05-de55-4336-a275-f06b835c66f8"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -611.86176,
+        "Y": 53.076843
+      }
+    },
+    {
+      "InputId": "4837051f-033c-4e9e-9d1c-0fe85c1467cb"/*Mask*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -611.86176,
+        "Y": 98.07684
+      }
+    },
+    {
       "InputId": "fa5bb047-7466-4d68-9977-7a86815ca0f2"/*Size*/,
       "Position": {
         "X": -611.86176,
@@ -72,22 +88,6 @@
       "Position": {
         "X": -615.22235,
         "Y": 631.74036
-      }
-    },
-    {
-      "InputId": "29f6bc05-de55-4336-a275-f06b835c66f8"/*Image*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -615.22235,
-        "Y": 676.74036
-      }
-    },
-    {
-      "InputId": "4837051f-033c-4e9e-9d1c-0fe85c1467cb"/*Mask*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -615.22235,
-        "Y": 721.74036
       }
     }
   ],

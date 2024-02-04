@@ -6,6 +6,10 @@
     {
       "Id": "7a13b834-21e5-4cef-ad5b-23c3770ea763"/*BufferWithViews*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "ac0f9d07-b93d-45d3-8b3f-a4b2f7240ae0"/*LogWarnings*/,
+      "DefaultValue": true
     }
   ],
   "Children": [],

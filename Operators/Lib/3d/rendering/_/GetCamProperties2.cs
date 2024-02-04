@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -9,19 +9,19 @@ using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Vector3 = System.Numerics.Vector3;
 
-namespace lib._3d.rendering.@_
+namespace lib._3d.rendering._
 {
 	[Guid("5b538cf5-e3b6-4674-b23e-ab55fc59ada6")]
     public class GetCamProperties2 : Instance<GetCamProperties2>
     {
         [Output(Guid = "013B08CB-AF63-4FAC-BA28-DE5D1F5A869C")]
-        public readonly Slot<Vector3> Position = new();
+        public readonly Slot<System.Numerics.Vector3> Position = new();
 
         [Output(Guid = "F9A31409-323C-43C8-B850-624050EA229E")]
-        public readonly Slot<Vector4[]> CamToWorldRows = new();
+        public readonly Slot<System.Numerics.Vector4[]> CamToWorldRows = new();
 
         [Output(Guid = "40BD0840-10AD-46CD-B8E7-0BAD72222C32")]
-        public readonly Slot<Vector4[]> WorldToClipSpaceRows = new();
+        public readonly Slot<System.Numerics.Vector4[]> WorldToClipSpaceRows = new();
 
         [Output(Guid = "0FDF4500-9582-49A5-B383-6ECAE14D8DD5")]
         public readonly Slot<int> CameraCount = new();

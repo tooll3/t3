@@ -94,8 +94,8 @@
     {
       "ChildId": "2e6a66d1-106d-4247-bc09-d994e3ada9eb"/*PixelShader*/,
       "Position": {
-        "X": 737.8436,
-        "Y": 174.42192
+        "X": 722.4485,
+        "Y": 160.838
       }
     },
     {
@@ -108,15 +108,15 @@
     {
       "ChildId": "11777e58-4105-416e-8da3-89d455f5f247"/*PixelShaderStage*/,
       "Position": {
-        "X": 1008.0199,
-        "Y": 148.23428
+        "X": 929.7763,
+        "Y": -704.62146
       }
     },
     {
       "ChildId": "a1068b4b-cf3d-4c8f-ad04-614723f1f908"/*VertexShaderStage*/,
       "Position": {
-        "X": 1008.0199,
-        "Y": -119.76574
+        "X": 929.7763,
+        "Y": -972.6215
       }
     },
     {
@@ -242,22 +242,22 @@
     {
       "ChildId": "0ebc1c3b-19c4-4b3d-8607-0c971c8875d2"/*GetPbrParameters*/,
       "Position": {
-        "X": 472.48523,
-        "Y": 2.4261208
+        "X": 443.72406,
+        "Y": -271.95743
       }
     },
     {
       "ChildId": "5fe82f52-8a36-4fcd-832b-e1be2ae3b4b5"/*GetTextureFromContext*/,
       "Position": {
-        "X": 243.98822,
-        "Y": -245.20848
+        "X": 220.59363,
+        "Y": -181.81662
       }
     },
     {
       "ChildId": "4dd036ad-8b04-4a00-83dd-a4a81c6a4862"/*SrvFromTexture2d*/,
       "Position": {
-        "X": 393.98822,
-        "Y": -245.20848
+        "X": 649.2117,
+        "Y": -233.67888
       }
     },
     {
@@ -272,6 +272,13 @@
       "Position": {
         "X": -38.348885,
         "Y": 98.49768
+      }
+    },
+    {
+      "ChildId": "b7ad25d8-317f-442b-a681-6943903ea9cd"/*SetPixelAndVertexShaderStage*/,
+      "Position": {
+        "X": 1019.8002,
+        "Y": -24.878448
       }
     }
   ],

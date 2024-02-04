@@ -4,6 +4,14 @@
   "Namespace": "lib.3d.mesh.generate",
   "Inputs": [
     {
+      "Id": "33921c65-61bc-4229-af8c-c89db9a874bf"/*Segments*/,
+      "DefaultValue": 5
+    },
+    {
+      "Id": "9dbf0c3d-4762-41f6-94b8-26acbd1531c1"/*Radius*/,
+      "DefaultValue": 1.0
+    },
+    {
       "Id": "deee0efc-949e-41da-bdb1-d80dbb6ac6e2"/*Stretch*/,
       "DefaultValue": {
         "X": 1.0,
@@ -25,14 +33,6 @@
         "Y": 0.0,
         "Z": 0.0
       }
-    },
-    {
-      "Id": "33921c65-61bc-4229-af8c-c89db9a874bf"/*Segments*/,
-      "DefaultValue": 5
-    },
-    {
-      "Id": "9dbf0c3d-4762-41f6-94b8-26acbd1531c1"/*Radius*/,
-      "DefaultValue": 1.0
     },
     {
       "Id": "d85761fb-3c82-4785-a2a2-4b111230e4ee"/*TextureMode*/,

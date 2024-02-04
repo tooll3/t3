@@ -1,15 +1,15 @@
+using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Numerics;
-using System.Runtime.InteropServices;
-using Svg;
-using Svg.Pathing;
-using Svg.Transforms;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using Svg;
+using Svg.Pathing;
+using Svg.Transforms;
+using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
@@ -37,12 +37,14 @@ namespace lib.io.file
         private void Update(EvaluationContext context)
         {
             var filepath = FilePath.GetValue(context);
-            if (!ResourceManager.TryResolvePath(filepath, this, out filepath))
+            
+            if (!ResourceManager.TryResolvePath(filepath, this, out var resolved))
             {
                 Log.Debug($"File {filepath} doesn't exist", this);
                 return;
             }
             
+            filepath = resolved;
             ResourceFileWatcher.AddFileHook(filepath, () => {FilePath.DirtyFlag.Invalidate();});
 
             var centerToBounds = CenterToBounds.GetValue(context);
@@ -97,6 +99,7 @@ namespace lib.io.file
                         = (new Vector3(point.X, 1 - point.Y, 0) + centerOffset) * scale;
                     _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].W = 1;
                     _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].Orientation = Quaternion.Identity;
+                    _pointListWithSeparator.TypedElements[startIndex + pathPointIndex].Color = new Vector4(1.0f); // We need a better fix, maybe with the colors from the SVG file
                 }
 
                 // Calculate normals

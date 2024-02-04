@@ -1,11 +1,10 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace lib._3d.@_
+namespace lib._3d._
 {
 	[Guid("a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b")]
     public class PickSDXVector4 : Instance<PickSDXVector4>
@@ -55,7 +54,7 @@ namespace lib._3d.@_
         }
 
         [Input(Guid = "0f9eebb0-6f13-4751-abac-15a467ad56c2")]
-        public readonly InputSlot<Vector4[]> Input = new();
+        public readonly InputSlot<System.Numerics.Vector4[]> Input = new();
 
         [Input(Guid = "dbc92e88-cae2-44a8-b291-1a6168624244")]
         public readonly InputSlot<int> Index = new(0);

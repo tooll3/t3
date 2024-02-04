@@ -1,10 +1,6 @@
 using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
-using System.Linq;
 using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
@@ -21,7 +17,7 @@ using Point = T3.Core.DataTypes.Point;
 // ReSharper disable TooWideLocalVariableScope
 // ReSharper disable CheckNamespace
 
-namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
+namespace lib.io.file
 {
 	[Guid("3d862455-6a7b-4bf6-a159-e4f7cdba6062")]
     /**
@@ -48,7 +44,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             var cornerBalance = CornerWeightBalance.GetValue(context);
             
             var filepath = FilePath.GetValue(context);
-            if (!ResourceManager.TryResolvePath(filepath, this, out filepath))
+            if (!File.Exists(filepath))
             {
                 Log.Debug($"File {filepath} doesn't exist", this);
                 return;
@@ -246,7 +242,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
         public readonly InputSlot<string> Text = new();
 
         [Input(Guid = "1077857C-93FA-403A-BBD1-FD5B2B402AE6")]
-        public readonly InputSlot<Vector3> Position = new();
+        public readonly InputSlot<System.Numerics.Vector3> Position = new();
 
         [Input(Guid = "FB14EABB-B3C8-437C-B083-EBC5E0A46F7B")]
         public readonly InputSlot<float> Size = new();
@@ -429,7 +425,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             var pathElements = GraphicsPathEntry.CreateFromSvgElements(svgElements, true);
 
             // Flatten and sum total point count including separators 
-            Point newPoint;
+            
 
             _tempPoints.Clear();
             foreach (var pathElement in pathElements)
@@ -450,7 +446,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                 var pathPointCount = path.PathPoints.Length;
 
                 var loopStartIndex = _tempPoints.Count;
-                Vector3 lastPos = new Vector3(-9999f, 0f, 0f);
+                var lastPos = new Vector3(-9999f, 0f, 0f);
 
                 for (var pathPointIndex = 0; pathPointIndex < pathPointCount; pathPointIndex++)
                 {
@@ -465,10 +461,15 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                         continue;
                     }
 
-                    newPoint.Position = position;
-                    newPoint.W = 1;
-                    newPoint.Orientation = Quaternion.Identity;
-                    _tempPoints.Add(newPoint);
+                    _tempPoints.Add(new Point
+                                        {
+                                            Position = position,
+                                            W = 1,
+                                            Orientation = Quaternion.Identity,
+                                            Color = Vector4.One,
+                                            Stretch = Vector3.One,
+                                            Selected = 1,
+                                        });
                 }
 
                 // Close loop?

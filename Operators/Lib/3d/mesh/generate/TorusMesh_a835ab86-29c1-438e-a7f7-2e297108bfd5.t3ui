@@ -1,27 +1,32 @@
 {
   "Id": "a835ab86-29c1-438e-a7f7-2e297108bfd5"/*TorusMesh*/,
-  "Description": "Generates a torus mesh with the given size and tessellation.\n\nYou can use [TransformMesh] to rotate or translate the geometry. \nPlease also check out the presets.",
+  "Description": "Generates a procedural three-dimensional torus mesh which can be rendered with [DrawMesh] , [DrawMeshUnlit] and [DrawMeshHatched] among others.\nAlso known as: Donut\n\nFor a simple and interactive tutorial on the Tooll3 rendering pipeline, see [HowToDrawThings].\n\nIt can also become the source for a particle system with [MeshVerticesToPoints] or [PointsOnMesh].\nTo import static 3D meshes from other programs refer to [LoadObj].",
   "InputUis": [
     {
       "InputId": "608de038-6c7a-43fc-ba89-374c7b1a318e"/*Radius*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "GroupTitle": "Torus Parameters",
+      "Description": "Ring size."
     },
     {
       "InputId": "fdbad44a-2504-453b-bfae-976828372cc0"/*Thickness*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Ring thickness."
     },
     {
       "InputId": "99f5d952-8490-4930-b8ab-9d8e968183c6"/*Segments*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "GroupTitle": "Tesselation",
+      "Description": "Controls the tesselation.\n1. Along the Radius.\n2. Along the Thickness."
     },
     {
       "InputId": "770a164b-10e7-4145-b1c9-dad1f564ec6b"/*Spin*/,
@@ -29,6 +34,8 @@
         "X": -200.0,
         "Y": 135.0
       },
+      "Description": "Slides the geometry.\n1. Along the Radius.\n2. Around the Thickness.",
+      "AddPadding": "True",
       "Scale": 0.1
     },
     {
@@ -37,6 +44,7 @@
         "X": -200.0,
         "Y": 180.0
       },
+      "Description": "Cuts and compresses / slides the geometry.\nX. Along the Radius.\nY. Along the Thickness.",
       "Scale": 0.1
     },
     {
@@ -45,6 +53,8 @@
         "X": -200.0,
         "Y": 270.0
       },
+      "GroupTitle": "Smoothing groups",
+      "Description": "Defines at what angle two adjacent faces share a smoothing group.",
       "Scale": 1.0
     }
   ],

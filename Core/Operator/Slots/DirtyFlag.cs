@@ -1,22 +1,19 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace T3.Core.Operator.Slots
 {
     public sealed class DirtyFlag
     {
-        private const int GLOBAL_TICK_DIFF_PER_FRAME = 100; // each frame differs with 100 ticks to last one
-        private static int _globalTickCount = 0;
 
         public static void IncrementGlobalTicks()
         {
-            _globalTickCount += GLOBAL_TICK_DIFF_PER_FRAME;
+            _globalTickCount += GlobalTickDiffPerFrame;
         }
 
         public bool IsDirty => Reference != Target || Trigger == DirtyFlagTrigger.Always;
 
         public static int InvalidationRefFrame = 0;
-        private int _invalidatedWithRefFrame = -1;
-        private int _visitedAtFrame = -1;
         public bool IsAlreadyInvalidated => InvalidationRefFrame == _invalidatedWithRefFrame;
 
         public void SetVisited() 
@@ -41,38 +38,45 @@ namespace T3.Core.Operator.Slots
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clear()
         {
             Reference = Target;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetUpdated()
         {
-            if (LastUpdate >= _globalTickCount && LastUpdate < _globalTickCount + GLOBAL_TICK_DIFF_PER_FRAME - 1)
+            if (_lastUpdateTick >= _globalTickCount && _lastUpdateTick < _globalTickCount + GlobalTickDiffPerFrame - 1)
             {
-                LastUpdate++;
+                _lastUpdateTick++;
             }
             else
             {
-                LastUpdate = _globalTickCount;
+                _lastUpdateTick = _globalTickCount;
             }
         }
 
-        public int Reference = 0;
+        public int Reference;
         public int Target = 1; // initially dirty
-        public int LastUpdate = 0;
-        public int FramesSinceLastUpdate => (_globalTickCount - 1 - LastUpdate) / GLOBAL_TICK_DIFF_PER_FRAME;
+        public int FramesSinceLastUpdate => (_globalTickCount - 1 - _lastUpdateTick) / GlobalTickDiffPerFrame;
+        public DirtyFlagTrigger Trigger;
 
         public int NumUpdatesWithinFrame
         {
             get
             {
-                int diff = LastUpdate - _globalTickCount;
-                int shift = (-diff >= GLOBAL_TICK_DIFF_PER_FRAME) ? GLOBAL_TICK_DIFF_PER_FRAME : 0;
-                return Math.Max(diff + shift + 1, 0); // shift corrects if update was one frame ago
+                var updatesSinceLastFrame = _lastUpdateTick - _globalTickCount;
+                var shift = (-updatesSinceLastFrame >= GlobalTickDiffPerFrame) ? GlobalTickDiffPerFrame : 0;
+                return Math.Max(updatesSinceLastFrame + shift + 1, 0); // shift corrects if update was one frame ago
             }
         }
 
-        public DirtyFlagTrigger Trigger;
+        
+        private int _invalidatedWithRefFrame = -1;
+        private int _visitedAtFrame = -1;
+        private const int GlobalTickDiffPerFrame = 100; // each frame differs with 100 ticks to last one
+        private static int _globalTickCount;
+        private int _lastUpdateTick;
     }
 }

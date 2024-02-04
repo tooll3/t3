@@ -1,4 +1,3 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,7 +9,7 @@ namespace lib.exec.context
     public class GetForegroundColor : Instance<GetForegroundColor>
     {
         [Output(Guid = "F962854B-00D6-4EB3-AA4C-E5D4BD500672", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<Vector4> Result = new();
+        public readonly Slot<System.Numerics.Vector4> Result = new();
 
         public GetForegroundColor()
         {

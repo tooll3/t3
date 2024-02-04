@@ -4,6 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
+
 namespace user.pixtur.research
 {
 	[Guid("15ec2cc2-8c9e-41b7-8b55-0f39532a0882")]

@@ -200,7 +200,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, padding);
             ImGui.SetNextItemWidth(size.X);
 
-            ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 10);
+            ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 20);
 
             // Search input outline
             _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.Gray);
@@ -269,7 +269,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
             
             ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundPopup.Rgba);
-            //var itemForHelpIsHovered = false;
 
             if (ImGui.BeginChildFrame(999, size))
             {
@@ -542,7 +541,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (!ExampleSymbolLinking.ExampleSymbols.TryGetValue(itemForHelp.Symbol.Id, out var examples))
                 return;
 
-            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
             foreach (var guid in examples)
             {
                 const string label = "Example";
@@ -565,13 +564,20 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
 
             ImGui.SameLine();
+
+            var restSpace = ImGui.GetWindowWidth() - ImGui.GetCursorPos().X;
+            if (restSpace < 100)
+            {
+                ImGui.Dummy(new Vector2(10,10));
+            }
+
             ImGui.Button(label);
             SymbolTreeMenu.HandleDragAndDropForSymbolItem(symbolUi.Symbol);
             if (ImGui.IsItemHovered())
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
             }
-
+            
             if (!string.IsNullOrEmpty(symbolUi.Description))
             {
                 CustomComponents.TooltipForLastItem(symbolUi.Description);

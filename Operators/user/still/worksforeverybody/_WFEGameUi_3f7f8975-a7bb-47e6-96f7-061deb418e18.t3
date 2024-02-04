@@ -70,14 +70,14 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
-          "Type": "System.Single",
-          "Value": 280.0
-        },
-        {
           "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
           "Type": "System.String",
           "Value": "Resources\\fonts\\PlayfairDisplay-Black.fnt"
+        },
+        {
+          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
+          "Type": "System.Single",
+          "Value": 280.0
         },
         {
           "Id": "7a76d5aa-1f44-4238-9333-7c2951becc31"/*EnableZTest*/,
@@ -523,12 +523,6 @@
       "SourceSlotId": "4ccce7c0-b23f-44d2-bdae-d88b6df2f7b7",
       "TargetParentOrChildId": "9e60afcb-92bf-4820-9593-2f092699296f",
       "TargetSlotId": "62949257-adb3-4c67-ac0a-d37ee28da81b"
-    },
-    {
-      "SourceParentOrChildId": "3a5e9b99-363d-466d-9b51-a0cad7884e3d",
-      "SourceSlotId": "301463a0-75c1-4b1a-8af2-1048421a8bfe",
-      "TargetParentOrChildId": "a47a533c-c851-450a-aaee-8cda48877de2",
-      "TargetSlotId": "491bba32-90df-477c-b9d6-0b22bad8b94e"
     },
     {
       "SourceParentOrChildId": "d14cbe0b-ff30-4e1a-8669-98749512fc8c",

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib.@string.buffers._obsolete 
+namespace lib.@string.buffers._obsolete
 {
 	[Guid("bf76bc78-74e1-45c3-9c67-de50262a48ae")]
     public class ScrambleBuffer : Instance<ScrambleBuffer>
@@ -20,7 +20,7 @@ namespace lib.@string.buffers._obsolete
 
         private void Update(EvaluationContext context)
         {
-            var stringBuilder = StringBuilder.GetValue(context);
+            System.Text.StringBuilder stringBuilder = StringBuilder.GetValue(context);
             Builder.Value = stringBuilder;
             if (stringBuilder == null)
                 return;

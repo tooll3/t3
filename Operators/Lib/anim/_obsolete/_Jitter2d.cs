@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -11,7 +11,7 @@ namespace lib.anim._obsolete
     public class _Jitter2d : Instance<_Jitter2d>
     {
         [Output(Guid = "4f1fa28e-f010-48d5-bef1-51bceac17649", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector2> NewPosition = new();
+        public readonly Slot<System.Numerics.Vector2> NewPosition = new();
 
         public _Jitter2d()
         {
@@ -33,7 +33,7 @@ namespace lib.anim._obsolete
             {
                 _random = new Random(seed);
                 _seed = seed;
-                _offset = Vector2.Zero;
+                _offset = System.Numerics.Vector2.Zero;
                 _initialized = true;
                 jump = true;
             }
@@ -110,7 +110,7 @@ namespace lib.anim._obsolete
         private Vector2 _jumpTargetOffset;
 
         [Input(Guid = "8F17B67C-2D55-4148-B880-1DD948CE9808")]
-        public readonly InputSlot<Vector2> Position = new();
+        public readonly InputSlot<System.Numerics.Vector2> Position = new();
         
         [Input(Guid = "F101AF0C-DE31-4AFB-ACB4-8166C62C2EC8")]
         public readonly InputSlot<float> JumpDistance = new();

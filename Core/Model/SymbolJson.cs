@@ -8,29 +8,12 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.SystemUi;
+using T3.Serialization;
 
 // ReSharper disable AssignNullToNotNullAttribute
 
 namespace T3.Core.Model
 {
-    public static class JsonExtensions
-    {
-        public static void WriteValue<T>(this JsonTextWriter writer, string name, T value) where T : struct
-        {
-            writer.WritePropertyName(name);
-            writer.WriteValue(value);
-        }
-
-        public static void WriteObject(this JsonTextWriter writer, string name, object value)
-        {
-            if (value != null)
-            {
-                writer.WritePropertyName(name);
-                writer.WriteValue(value.ToString());
-            }
-        }
-    }
-
     public static class SymbolJson
     {
         #region writing
@@ -277,14 +260,21 @@ namespace T3.Core.Model
         {
             var id = Guid.Parse(inputJson[JsonKeys.Id].Value<string>());
             var jsonValue = inputJson[JsonKeys.Value];
+            var gotInput = symbolChild.Inputs.TryGetValue(id, out var input);
+            if (!gotInput)
+            {
+                Log.Warning($"Skipping definition of obsolete input in [{symbolChild.Symbol.Name}]: " + id);
+                return;
+            }
+
             try
             {
-                symbolChild.Inputs[id].Value.SetValueFromJson(jsonValue);
-                symbolChild.Inputs[id].IsDefault = false;
+                input.Value.SetValueFromJson(jsonValue);
+                input.IsDefault = false;
             }
             catch
             {
-                Log.Error("Failed to read input value");
+                Log.Error($"Failed to read input value ({input.InputDefinition.DefaultValue.ValueType}) for {symbolChild.Symbol.Id}: " + jsonValue);
             }
         }
 

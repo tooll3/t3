@@ -134,7 +134,9 @@ namespace T3.Editor.Gui.Commands.Graph
 
                     newOutput.DirtyFlagTrigger = output.DirtyFlagTrigger;
                     newOutput.IsDisabled = output.IsDisabled;
+                    
                 }
+                newSymbolChild.IsBypassed = symbolChildToCopy.IsBypassed;
             }
 
             // add connections between copied children

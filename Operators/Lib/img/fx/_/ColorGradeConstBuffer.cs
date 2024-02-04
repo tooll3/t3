@@ -1,12 +1,12 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace lib.img.fx.@_
+namespace lib.img.fx._
 {
 	[Guid("1ba08d52-c8ec-479a-8dc0-95d92da36577")]
     public class ColorGradeConstBuffer : Instance<ColorGradeConstBuffer>
@@ -48,12 +48,12 @@ namespace lib.img.fx.@_
         }       
 
         [Input(Guid = "7834D068-E09F-4A10-8FCA-AE73692836FC")]
-        public readonly InputSlot<Vector4> Param1 = new();
+        public readonly InputSlot<System.Numerics.Vector4> Param1 = new();
         [Input(Guid = "49B2F2C5-C170-4AFC-99CA-0487D2FA66E4")]
-        public readonly InputSlot<Vector4> Param2 = new();
+        public readonly InputSlot<System.Numerics.Vector4> Param2 = new();
         [Input(Guid = "E0E761AF-2541-47E1-9BBC-4364489A5334")]
-        public readonly InputSlot<Vector4> Param3 = new();
+        public readonly InputSlot<System.Numerics.Vector4> Param3 = new();
         [Input(Guid = "D2C37218-81B7-45F5-AD56-DADDA3C37197")]
-        public readonly InputSlot<Vector4> Param4 = new();
+        public readonly InputSlot<System.Numerics.Vector4> Param4 = new();
     }
 }

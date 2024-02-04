@@ -1,10 +1,11 @@
 using System.Runtime.InteropServices;
-using NAudio.Midi;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using NAudio.Midi;
+
 
 namespace lib.io.midi
 {

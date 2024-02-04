@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,7 +10,7 @@ namespace lib.color
     public class HSBToColor : Instance<HSBToColor>
     {
         [Output(Guid = "A73DC8D3-ECC5-454A-999A-1C79442FF2E2")]
-        public readonly Slot<Vector4> Color = new();
+        public readonly Slot<System.Numerics.Vector4> Color = new();
 
         public HSBToColor()
         {

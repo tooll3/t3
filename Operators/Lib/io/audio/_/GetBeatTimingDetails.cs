@@ -1,12 +1,12 @@
-using System.Reflection;
 using System.Runtime.InteropServices;
-using T3.Core.Audio;
+using System.Reflection;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Audio;
 
-namespace lib.io.audio.@_
+namespace lib.io.audio._
 {
 	[Guid("712c50e8-7cba-4b29-bde4-1d860ab6b701")]
     public class GetBeatTimingDetails : Instance<GetBeatTimingDetails>

@@ -24,27 +24,26 @@ namespace lib.dx11.tex
             if (!Texture.DirtyFlag.IsDirty)
                 return; // nothing to do
 
-            var resourceManager = ResourceManager.Instance();
-            Texture2D texture = Texture.GetValue(context);
-            if (texture != null)
+            var texture = Texture.GetValue(context);
+            if (texture == null || texture.IsDisposed)
+                return;
+            
+            try
             {
-                try
+                if (texture.Description.BindFlags.HasFlag(BindFlags.UnorderedAccess))
                 {
-                    if (((int)texture.Description.BindFlags & (int)BindFlags.UnorderedAccess) > 0)
-                    {
-                        UnorderedAccessView.Value?.Dispose();
-                        UnorderedAccessView.Value = new UnorderedAccessView(ResourceManager.Device, texture); // todo: create via resource manager
-                    }
-                    else
-                    {
-                        Log.Warning("Trying to create an unordered access view for resource which doesn't have the uav bind flag set", this);
-                    }
+                    UnorderedAccessView.Value?.Dispose();
+                    UnorderedAccessView.Value = new UnorderedAccessView(ResourceManager.Device, texture); // todo: create via resource manager
                 }
-                catch (Exception e)
-                {   
-                    Log.Error("UavFromTexture2d exception: " + e.Message, this);
-                    UnorderedAccessView.Value = null;
+                else
+                {
+                    Log.Warning("Trying to create an unordered access view for resource which doesn't have the uav bind flag set", this);
                 }
+            }
+            catch (Exception e)
+            {   
+                Log.Error("UavFromTexture2d exception: " + e.Message, this);
+                UnorderedAccessView.Value = null;
             }
         }
 

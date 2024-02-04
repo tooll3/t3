@@ -3,19 +3,19 @@
   "Description": "A simple helper to verify an image effect before and after. It shows...",
   "InputUis": [
     {
-      "InputId": "78c3486a-3a82-4e61-81fd-3da904fd7aed"/*Texture2d2*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -1086.1727,
-        "Y": -73.2712
-      }
-    },
-    {
       "InputId": "5537a990-0d27-4e91-912e-8f913a734722"/*Texture2d*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -1086.1727,
-        "Y": -28.271202
+        "X": -680.5391,
+        "Y": -140.30246
+      }
+    },
+    {
+      "InputId": "78c3486a-3a82-4e61-81fd-3da904fd7aed"/*Texture2d2*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -680.5391,
+        "Y": -95.30245
       }
     },
     {
@@ -57,43 +57,99 @@
     {
       "ChildId": "d913c37f-f329-45d0-bc0a-2d608b2407ec"/*LinearGradient*/,
       "Position": {
-        "X": 396.9453,
-        "Y": 233.0386
+        "X": 396.1953,
+        "Y": 168.54086
       }
     },
     {
       "ChildId": "6e8977c1-a074-43d3-bf04-03b0e652ea7d"/*ImageLevels*/,
       "Position": {
-        "X": 212.78096,
-        "Y": -218.79279
+        "X": 225.08046,
+        "Y": -318.0892
       }
     },
     {
       "ChildId": "5ace9239-b6e9-4af5-bc3d-ce792e60a42a"/*ImageLevels*/,
       "Position": {
-        "X": 211.52359,
-        "Y": 40.612865
+        "X": 254.76392,
+        "Y": -40.306664
       }
     },
     {
       "ChildId": "64bb700f-e972-417c-aacc-e7aea17960cb"/*Add*/,
       "Position": {
-        "X": 62.78096,
-        "Y": -218.79279
+        "X": -158.2528,
+        "Y": -210.45973
       }
     },
     {
       "ChildId": "2a350f7f-e7f5-49c3-a958-fd23bd3d6f03"/*LinearGradient*/,
       "Position": {
-        "X": 722.82794,
-        "Y": 148.27399
+        "X": 693.1086,
+        "Y": -184.26198
       }
     },
     {
       "ChildId": "9adef827-09cc-4193-8e22-e999dcfcfeb6"/*ExecuteTextureUpdate*/,
       "Position": {
-        "X": 913.13495,
-        "Y": 127.384155
+        "X": 878.06573,
+        "Y": -429.61884
+      }
+    },
+    {
+      "ChildId": "d367341d-8182-459d-bdb5-bf77bc6b6e64"/*Multiply*/,
+      "Position": {
+        "X": -60.207153,
+        "Y": 202.0401
+      }
+    },
+    {
+      "ChildId": "cc365cd7-c07d-4f4d-a00b-d55614cd3dd3"/*GetTextureSize*/,
+      "Position": {
+        "X": -642.37036,
+        "Y": 56.661514
+      }
+    },
+    {
+      "ChildId": "441c22af-90ee-451d-bd69-dd3d7a67368e"/*GetTextureSize*/,
+      "Position": {
+        "X": -667.38916,
+        "Y": 160.60776
+      }
+    },
+    {
+      "ChildId": "c44f0322-c14c-492f-991e-e3002147af79"/*Int2Components*/,
+      "Position": {
+        "X": -492.37027,
+        "Y": 56.661514
+      }
+    },
+    {
+      "ChildId": "c0cdf21d-f70c-4ffe-8d22-da287f921dae"/*Int2Components*/,
+      "Position": {
+        "X": -517.38904,
+        "Y": 160.60776
+      }
+    },
+    {
+      "ChildId": "879cf494-8ab7-4d11-bf20-43a8600dd584"/*IntToFloat*/,
+      "Position": {
+        "X": -344.25073,
+        "Y": 56.036438
+      }
+    },
+    {
+      "ChildId": "63b96d8a-20b0-49d0-bb77-8d4bd7ba68b3"/*IntToFloat*/,
+      "Position": {
+        "X": -352.24088,
+        "Y": 126.86246
+      }
+    },
+    {
+      "ChildId": "f0e88957-0de8-4541-bf36-d0d8a4ea7f19"/*Div*/,
+      "Position": {
+        "X": -203.0058,
+        "Y": 92.910126
       }
     }
   ],
@@ -101,8 +157,8 @@
     {
       "OutputId": "2d59fec4-af4e-4db2-bc11-3685f31e9de5"/*TextureOutput*/,
       "Position": {
-        "X": 1218.2328,
-        "Y": 11.092072
+        "X": 988.741,
+        "Y": -185.10095
       }
     }
   ]

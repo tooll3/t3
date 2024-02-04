@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -87,25 +87,25 @@ namespace lib.point.generate
 
         
         [Input(Guid = "4213911b-4103-481f-85c6-9bccac116264")]
-        public readonly InputSlot<Vector3> StartPosition = new();
+        public readonly InputSlot<System.Numerics.Vector3> StartPosition = new();
 
         [Input(Guid = "2f1383f3-f5ae-4f2d-bb8e-0ad8e35dd621")]
         public readonly InputSlot<float> StartW = new();
 
         [Input(Guid = "3A1A829D-D273-4EC0-B327-30BE0E0463C4")]
-        public readonly InputSlot<Vector3> Translate = new();
+        public readonly InputSlot<System.Numerics.Vector3> Translate = new();
 
         // [Input(Guid = "F5B3C1BC-3A79-40F4-8007-6AC98C16A9AA")]
-        // public readonly InputSlot<Vector3> Scale = new();
+        // public readonly InputSlot<System.Numerics.Vector3> Scale = new();
 
         [Input(Guid = "5956A2C7-ADDC-409A-87D8-62E67DA212F4")]
         public readonly InputSlot<float> Scale = new();
 
         [Input(Guid = "AF208E67-43BB-4C09-8076-859E7FEFA93F")]
-        public readonly InputSlot<Vector3> Rotate = new();
+        public readonly InputSlot<System.Numerics.Vector3> Rotate = new();
         
         [Input(Guid = "283f9939-7b04-4733-8130-edcf34305fe5")]
-        public readonly InputSlot<Vector3> Pivot = new();
+        public readonly InputSlot<System.Numerics.Vector3> Pivot = new();
 
         [Input(Guid = "AF3C87E3-889D-410F-B4BC-62BD29BEE8FA")]
         public readonly InputSlot<float> Phase = new();

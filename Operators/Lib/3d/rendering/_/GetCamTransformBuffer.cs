@@ -8,7 +8,7 @@ using T3.Core.Rendering;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace lib._3d.rendering.@_
+namespace lib._3d.rendering._
 {
 	[Guid("843c9378-6836-4f39-b676-06fd2828af3e")]
     public class GetCamTransformBuffer : Instance<GetCamTransformBuffer>

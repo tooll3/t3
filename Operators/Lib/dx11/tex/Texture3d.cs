@@ -49,7 +49,7 @@ namespace lib.dx11.tex
             var rm = ResourceManager.Instance();
             rm.CreateTexture3d(texDesc, "Texture3D", ref _textureResId, ref OutputTexture.Value.Texture);
             if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.ShaderResource) > 0)
-                ResourceManager.CreateShaderResourceView(_textureResId, "", ref OutputTexture.Value.Srv);
+                rm.CreateShaderResourceView(_textureResId, "", ref OutputTexture.Value.Srv);
             if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.RenderTarget) > 0)
                 rm.CreateRenderTargetView(_textureResId, "", ref OutputTexture.Value.Rtv);
             if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.UnorderedAccess) > 0)

@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -11,7 +11,7 @@ namespace lib.color
     public class BlendColors : Instance<BlendColors>
     {
         [Output(Guid = "66ce8660-253c-4a0b-8aec-f7a56751a1e4")]
-        public readonly Slot<Vector4> Color = new();
+        public readonly Slot<System.Numerics.Vector4> Color = new();
 
         public BlendColors()
         {
@@ -63,10 +63,10 @@ namespace lib.color
         }
         
         [Input(Guid = "EB601C57-2025-4135-8292-223EAEDAF187")]
-        public readonly InputSlot<Vector4> ColorA = new();
+        public readonly InputSlot<System.Numerics.Vector4> ColorA = new();
         
         [Input(Guid = "B9E5C6F3-7052-456F-9D1B-C182B4412433")]
-        public readonly InputSlot<Vector4> ColorB = new();
+        public readonly InputSlot<System.Numerics.Vector4> ColorB = new();
         
         [Input(Guid = "40803D0E-C37C-4B5D-B64B-FD1EF090A4F7")]
         public readonly InputSlot<float> Factor = new();

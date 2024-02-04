@@ -34,7 +34,7 @@ namespace lib.img.generate
         {
             ColorBuffer.UpdateAction = Update;
             DepthBuffer.UpdateAction = Update;
-            SetupShaderResources();
+            SetupResolveShaderResources();
 
             lock (_lock)
             {
@@ -212,29 +212,29 @@ namespace lib.img.generate
             
         }
         
-        private void SetupShaderResources()
+        private static void SetupResolveShaderResources()
         {
-            if (_resolveComputeShaderResource == null)
-            {
-                string sourcePath = @"img\internal\resolve-multisampled-depth-buffer-cs.hlsl";
-                string entryPoint = "main";
-                string debugName = "resolve-multisampled-depth-buffer";
-                var resourceManager = ResourceManager.Instance();
-                var success = resourceManager.TryCreateShaderResource(out _resolveComputeShaderResource, 
-                                                                      relativePath: sourcePath, 
-                                                                      instance: this,
-                                                                      entryPoint: entryPoint, 
-                                                                      name: debugName,
-                                                                      errorMessage: out var errorMessage);
-                
-                if(!string.IsNullOrWhiteSpace(errorMessage))
-                    Log.Error($"{nameof(RenderTarget)}: {errorMessage}");
-            }
+            if (_resolveComputeShaderResource != null)
+                return;
+            
+            const string sourcePath = @"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl";
+            const string entryPoint = "main";
+            const string debugName = "resolve-multisampled-depth-buffer";
+            var resourceManager = ResourceManager.Instance();
+            
+            var success = resourceManager.TryCreateShaderResource(out _resolveComputeShaderResource, 
+                                                                  relativePath: sourcePath, 
+                                                                  instance: null,
+                                                                  entryPoint: entryPoint, 
+                                                                  name: debugName,
+                                                                  errorMessage: out var errorMessage);
+
+            if(!success || !string.IsNullOrWhiteSpace(errorMessage))
+                Log.Error($"Failed to initialize {nameof(RenderTarget)}: {errorMessage}");
         }
         
         private void ResolveDepthBuffer()
         {
-            var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
@@ -504,9 +504,15 @@ namespace lib.img.generate
         [Input(Guid = "03749b41-cc3c-4f38-aea6-d7cea19fc073")]
         public readonly InputSlot<Int2> Resolution = new();
 
+        [Input(Guid = "aacafc4d-f47f-4893-9a6e-98db306a8901")]
+        public readonly InputSlot<bool> Clear = new();
+        
         [Input(Guid = "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f")]
         public readonly InputSlot<System.Numerics.Vector4> ClearColor = new();
-
+        
+        [Input(Guid = "E882E0F0-03F9-46E6-AC7A-709E6FA66613", MappedType = typeof(Samples))]
+        public readonly InputSlot<int> Multisampling = new();
+        
         [Input(Guid = "ec46bef4-8dce-4eb4-bfe8-e35a5ac416ec")]
         public readonly InputSlot<SharpDX.DXGI.Format> TextureFormat = new();
 
@@ -516,19 +522,14 @@ namespace lib.img.generate
         [Input(Guid = "6EA4F801-FF52-4266-A41F-B9EF02C68510")]
         public readonly InputSlot<bool> WithDepthBuffer = new();
         
-        [Input(Guid = "aacafc4d-f47f-4893-9a6e-98db306a8901")]
-        public readonly InputSlot<bool> Clear = new();
 
         [Input(Guid = "f0cf3325-4967-4419-9beb-036cd6dbfd6a")]
         public readonly InputSlot<bool> GenerateMips = new();
 
         [Input(Guid = "07AD28AD-FF5F-4CA9-B7BB-F7F8B16A6434")]
         public readonly InputSlot<RenderTargetReference> TextureReference = new();
-
-        [Input(Guid = "E882E0F0-03F9-46E6-AC7A-709E6FA66613", MappedType = typeof(Samples))]
-        public readonly InputSlot<int> Multisampling = new();
         
-        [Input(Guid = "ABEBB02B-BCAA-42C7-8EB8-DA3C1B2FC840", MappedType = typeof(Samples))]
+        [Input(Guid = "ABEBB02B-BCAA-42C7-8EB8-DA3C1B2FC840")]
         public readonly InputSlot<bool> EnableUpdate = new();
 
         public IEnumerable<(string, int)> GetStats()
@@ -552,6 +553,6 @@ namespace lib.img.generate
         private static int _statsCountPixels;
         private static bool _registeredStats;
 
-        private ShaderResource<SharpDX.Direct3D11.ComputeShader> _resolveComputeShaderResource;
+        private static ShaderResource<SharpDX.Direct3D11.ComputeShader> _resolveComputeShaderResource;
     }
 }

@@ -25,6 +25,9 @@ namespace lib._3d.mesh.generate
 
         [Input(Guid = "13852947-11aa-4f54-b415-6867421f3bc0")]
         public readonly InputSlot<System.Numerics.Vector3> WStretchAmount = new();
+
+        [Input(Guid = "631a4691-0774-40c7-a8fa-4b9ee76854d6")]
+        public readonly InputSlot<bool> UseStretch = new InputSlot<bool>();
         
     }
 }

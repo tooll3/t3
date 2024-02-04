@@ -1,4 +1,6 @@
 using System.Runtime.InteropServices;
+using System.Numerics;
+//using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
@@ -7,7 +9,6 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
-//using SharpDX;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
 using Vector3 = System.Numerics.Vector3;
@@ -57,6 +58,9 @@ namespace lib.point.helper
                 for (var pointIndex = 0; pointIndex < definitionPoints.Length; pointIndex++)
                 {
                     var p = definitionPoints[pointIndex];
+                    p.Orientation = Quaternion.Identity;
+                    p.Color = Vector4.One;
+                    p.Stretch = Vector3.One;
                     tmpBuffer.TypedElements[pointIndex] = p;
                 }
 
@@ -68,20 +72,29 @@ namespace lib.point.helper
             {
                 for (var bufferIndex = 0; bufferIndex < bufferCount; bufferIndex++)
                 {
-                    _gpuBuffersWithViews[bufferIndex] = new BufferWithViews();
-                    
-                    const int strideOfPointStructure = 2 * 16;
+                    Buffer gpuBuffer = null;
+                    ShaderResourceView srv = null;
+                    UnorderedAccessView uav = null;
                     
                     var pointBuffer = _cpuPointBuffers[bufferIndex];
                     
                     ResourceManager.SetupStructuredBuffer(pointBuffer.TypedElements, 
-                                                          strideOfPointStructure * pointBuffer.NumElements, 
-                                                          strideOfPointStructure, 
-                                                          ref _gpuBuffers[bufferIndex]);
+                                                          Point.Stride * pointBuffer.NumElements, 
+                                                          Point.Stride, 
+                                                          ref gpuBuffer);
                     
+                    ResourceManager.CreateStructuredBufferSrv(gpuBuffer, 
+                                                              ref srv);
+                    ResourceManager.CreateStructuredBufferUav(gpuBuffer, 
+                                                              UnorderedAccessViewBufferFlags.None, 
+                                                              ref uav); 
                     
-                    ResourceManager.CreateStructuredBufferSrv(_gpuBuffers[bufferIndex], ref _gpuBuffersWithViews[bufferIndex].Srv);
-                    ResourceManager.CreateStructuredBufferUav(_gpuBuffers[bufferIndex], UnorderedAccessViewBufferFlags.None, ref _gpuBuffersWithViews[bufferIndex].Uav);
+                    _gpuBuffersWithViews[bufferIndex] = new BufferWithViews
+                                                            {
+                                                                Buffer = gpuBuffer,
+                                                                Srv = srv,
+                                                                Uav = uav
+                                                            };
                 }
             }
             catch (Exception e)
@@ -107,108 +120,108 @@ namespace lib.point.helper
 
         private static readonly Point[] CrossPoints =
             {
-                new() { Position = new Vector3(0, -S, 0), W = 1 },
-                new() { Position = new Vector3(0, S, 0), W = 1 },
+                new() { Position = new Vector3(0, -S, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(0, S, 0), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(-S, 0, 0), W = 1 },
-                new() { Position = new Vector3(S, 0, 0), W = 1 },
+                new() { Position = new Vector3(-S, 0, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S, 0, 0), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(0, 0, -S), W = 1 },
-                new() { Position = new Vector3(0, 0, S), W = 1 },
+                new() { Position = new Vector3(0, 0, -S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(0, 0, S), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
             };
 
         private static readonly Point[] CrossXYPoints =
             {
-                new() { Position = new Vector3(0, -S, 0), W = 1 },
-                new() { Position = new Vector3(0, S, 0), W = 1 },
+                new() { Position = new Vector3(0, -S, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(0, S, 0), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(-S, 0, 0), W = 1 },
-                new() { Position = new Vector3(S, 0, 0), W = 1 },
+                new() { Position = new Vector3(-S, 0, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S, 0, 0), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
             };
 
         private static readonly Point[] CubePoints =
             {
-                new() { Position = new Vector3(-S, -S, S), W = 1 },
-                new() { Position = new Vector3(S, -S, S), W = 1 },
+                new() { Position = new Vector3(-S, -S, S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S, -S, S), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(-S, S, S), W = 1 },
-                new() { Position = new Vector3(S, S, S), W = 1 },
+                new() { Position = new Vector3(-S, S, S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S, S, S), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(-S, -S, -S), W = 1 },
-                new() { Position = new Vector3(S, -S, -S), W = 1 },
+                new() { Position = new Vector3(-S, -S, -S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S, -S, -S), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(-S, S, -S), W = 1 },
-                new() { Position = new Vector3(S, S, -S), W = 1 },
-                new() { W = float.NaN },
-
-                new() { Position = new Vector3(-S, -S, S), W = 1 },
-                new() { Position = new Vector3(-S, S, S), W = 1 },
-                new() { W = float.NaN },
-                new() { Position = new Vector3(S, -S, S), W = 1 },
-                new() { Position = new Vector3(S, S, S), W = 1 },
-                new() { W = float.NaN },
-                new() { Position = new Vector3(-S, -S, -S), W = 1 },
-                new() { Position = new Vector3(-S, S, -S), W = 1 },
-                new() { W = float.NaN },
-                new() { Position = new Vector3(S, -S, -S), W = 1 },
-                new() { Position = new Vector3(S, S, -S), W = 1 },
+                new() { Position = new Vector3(-S, S, -S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S, S, -S), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
 
-                new() { Position = new Vector3(-S, -S, -S), W = 1 },
-                new() { Position = new Vector3(-S, -S, S), W = 1 },
+                new() { Position = new Vector3(-S, -S, S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(-S, S, S), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(S, -S, -S), W = 1 },
-                new() { Position = new Vector3(S, -S, S), W = 1 },
+                new() { Position = new Vector3(S, -S, S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S, S, S), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(-S, S, -S), W = 1 },
-                new() { Position = new Vector3(-S, S, S), W = 1 },
+                new() { Position = new Vector3(-S, -S, -S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(-S, S, -S), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(S, S, -S), W = 1 },
-                new() { Position = new Vector3(S, S, S), W = 1 },
+                new() { Position = new Vector3(S, -S, -S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S, S, -S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { W = float.NaN },
+
+                new() { Position = new Vector3(-S, -S, -S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(-S, -S, S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { W = float.NaN },
+                new() { Position = new Vector3(S, -S, -S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S, -S, S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { W = float.NaN },
+                new() { Position = new Vector3(-S, S, -S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(-S, S, S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { W = float.NaN },
+                new() { Position = new Vector3(S, S, -S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S, S, S), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
             };
 
         private static readonly Point[] QuadPoints =
             {
-                new() { Position = new Vector3(-S, -S, 0), W = 1 },
-                new() { Position = new Vector3(+S, -S, 0), W = 1 },
-                new() { Position = new Vector3(+S, +S, 0), W = 1 },
-                new() { Position = new Vector3(-S, +S, 0), W = 1 },
-                new() { Position = new Vector3(-S, -S, 0), W = 1 },
+                new() { Position = new Vector3(-S, -S, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(+S, -S, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(+S, +S, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(-S, +S, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(-S, -S, 0), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
             };
         
         private static readonly Point[] ArrowXPoints =
             {
-                new() { Position = new Vector3(-S, 0, 0), W = 1 },
-                new() { Position = new Vector3(+S, 0, 0), W = 1 },
+                new() { Position = new Vector3(-S, 0, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(+S, 0, 0), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(S/1.5f, -S/4, 0), W = 1 },
-                new() { Position = new Vector3(+S, 0, 0), W = 1 },
-                new() { Position = new Vector3(S/1.5f, S/4, 0), W = 1 },
+                new() { Position = new Vector3(S/1.5f, -S/4, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(+S, 0, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S/1.5f, S/4, 0), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
             };       
         private static readonly Point[] ArrowYPoints =
             {
-                new() { Position = new Vector3(0, -S, 0), W = 1 },
-                new() { Position = new Vector3(0,+S,  0), W = 1 },
+                new() { Position = new Vector3(0, -S, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(0,+S,  0), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(-S/4, S/1.5f, 0), W = 1 },
-                new() { Position = new Vector3(0, +S, 0), W = 1 },
-                new() { Position = new Vector3(S/4,S/1.5f,  0), W = 1 },
+                new() { Position = new Vector3(-S/4, S/1.5f, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(0, +S, 0), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S/4,S/1.5f,  0), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
             };   
 
         private static readonly Point[] ArrowZPoints =
             {
-                new() { Position = new Vector3(0, 0, -S), W = 1 },
-                new() { Position = new Vector3(0, 0, +S), W = 1 },
+                new() { Position = new Vector3(0, 0, -S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(0, 0, +S), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
-                new() { Position = new Vector3(-S/4,0 , S/1.5f), W = 1 },
-                new() { Position = new Vector3(0, 0, +S), W = 1 },
-                new() { Position = new Vector3(S/4,0,  S/1.5f), W = 1 },
+                new() { Position = new Vector3(-S/4,0 , S/1.5f), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(0, 0, +S), W = 1, Color=Vector4.One, Selected = 1},
+                new() { Position = new Vector3(S/4,0,  S/1.5f), W = 1, Color=Vector4.One, Selected = 1},
                 new() { W = float.NaN },
             };   
 

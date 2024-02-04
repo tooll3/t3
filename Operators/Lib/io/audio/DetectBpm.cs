@@ -8,7 +8,7 @@ namespace lib.io.audio
 	[Guid("e712e801-863d-45c5-9ef8-fbe90dcb8375")]
     /// <summary>
     /// This is an older implementation. A slighted updated
-    /// algorithm can be found in <see cref="Editor.Gui.Interaction.Timing.BpmDetection"/>
+    /// algorithm can be found in <see cref="Interaction.Timing.BpmDetection"/>
     /// </summary>
     public class DetectBpm : Instance<DetectBpm>
     {

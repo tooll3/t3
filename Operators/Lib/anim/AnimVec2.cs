@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -11,7 +11,7 @@ namespace lib.anim
     public class AnimVec2 : Instance<AnimVec2>
     {
         [Output(Guid = "7757A3F5-EA71-488E-9CEC-0151FFD332CC", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector2> Result = new();
+        public readonly Slot<System.Numerics.Vector2> Result = new();
 
         public AnimVec2()
         {
@@ -49,22 +49,22 @@ namespace lib.anim
         public readonly InputSlot<int> Shape = new(); 
         
         [Input(Guid = "8923F351-7F6B-46F1-8DF6-9559534278BE")]
-        public readonly InputSlot<Vector2> Rates = new();
+        public readonly InputSlot<System.Numerics.Vector2> Rates = new();
 
         [Input(Guid = "97530728-a2a8-4d29-8ea4-e2170be70f18")]
         public readonly InputSlot<float> RateFactor = new();
 
         [Input(Guid = "62165CC4-9DA8-47DC-89AE-8B6CDE8DDA49")]
-        public readonly InputSlot<Vector2> Phases = new();
+        public readonly InputSlot<System.Numerics.Vector2> Phases = new();
 
         [Input(Guid = "140CBA08-E712-4C2B-A625-F270F1B72B54")]
-        public readonly InputSlot<Vector2> Amplitudes = new();
+        public readonly InputSlot<System.Numerics.Vector2> Amplitudes = new();
 
         [Input(Guid = "D1FCDD1F-763B-4D25-9AB2-9240508EC4F6")]
         public readonly InputSlot<float> AmplitudeFactor = new();
         
         [Input(Guid = "304124E6-1FA1-4F6B-86DE-EF7769CDE1F6")]
-        public readonly InputSlot<Vector2> Offsets = new();
+        public readonly InputSlot<System.Numerics.Vector2> Offsets = new();
         
         [Input(Guid = "7FD2EC56-05B3-4D19-8CC7-EB4144B7097D")]
         public readonly InputSlot<float> Bias = new();

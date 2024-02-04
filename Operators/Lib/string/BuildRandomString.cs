@@ -371,6 +371,6 @@ namespace lib.@string
         
         
         [Input(Guid = "CCFAC8A9-0954-4869-A47C-B66C714F6545")]
-        public readonly InputSlot<StringBuilder> OverrideBuilder = new();
+        public readonly InputSlot<System.Text.StringBuilder> OverrideBuilder = new();
     }
 }

@@ -10,7 +10,7 @@ namespace lib.point._internal
     public class _ExecuteParticleUpdate : Instance<_ExecuteParticleUpdate>
     {
         [Output(Guid = "8788AEB6-E339-43D9-930B-8AF3BF703B7A")]
-        public readonly Slot<ParticleSystem> Output2 = new ();
+        public readonly Slot<T3.Core.DataTypes.ParticleSystem> Output2 = new ();
 
         
         public _ExecuteParticleUpdate()

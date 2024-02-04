@@ -1,13 +1,12 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils.Geometry;
-using Vector4 = System.Numerics.Vector4;
 
-namespace lib._3d.@_
+namespace lib._3d._
 {
 	[Guid("195afff5-13f6-4c5d-af49-655a4f92c2f8")]
     public class ApplyTransformMatrix : Instance<ApplyTransformMatrix>
@@ -43,7 +42,7 @@ namespace lib._3d.@_
         public readonly InputSlot<Command> Command = new();
 
         [Input(Guid = "c3b1ba6c-4306-4ae4-9429-d1f2461e2e8c")]
-        public readonly InputSlot<Vector4[]> TransformRows = new();
+        public readonly InputSlot<System.Numerics.Vector4[]> TransformRows = new();
         
     }
 }

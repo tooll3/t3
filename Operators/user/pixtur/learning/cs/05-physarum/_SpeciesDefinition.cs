@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
@@ -9,7 +10,7 @@ using T3.Core.Utils;
 namespace user.pixtur.learning.cs._05_physarum
 {
     using BreedList = StructuredList<_SpeciesDefinition.Breed>;
-    
+
 	[Guid("924b8cc0-5b4b-41d0-a71b-b26465683910")]
     public class _SpeciesDefinition : Instance<_SpeciesDefinition>
     {

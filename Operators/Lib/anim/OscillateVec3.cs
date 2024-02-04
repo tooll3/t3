@@ -44,18 +44,18 @@ namespace lib.anim
         public readonly InputSlot<float> OverrideTime = new();
 
         [Input(Guid = "4C94A39E-88D9-4B7F-BBBF-42E80F9627EF")]
-        public readonly InputSlot<Vector3> Amplitude = new();
+        public readonly InputSlot<System.Numerics.Vector3> Amplitude = new();
 
         [Input(Guid = "9505B4AA-0EE1-4D0A-B215-F17194C71BE4")]
         public readonly InputSlot<float> AmplitudeScale = new();
 
         [Input(Guid = "8CE12440-49A0-4B0B-AFEA-BFBBAA4F899D")]
-        public readonly InputSlot<Vector3> Period = new();
+        public readonly InputSlot<System.Numerics.Vector3> Period = new();
 
         [Input(Guid = "B3B06A36-EA91-4B26-88AC-DEDE32123EE6")]
-        public readonly InputSlot<Vector3> Phase = new();
+        public readonly InputSlot<System.Numerics.Vector3> Phase = new();
 
         [Input(Guid = "0C53C29E-7E33-40B3-8825-945E55C84AD5")]
-        public readonly InputSlot<Vector3> Offset = new();
+        public readonly InputSlot<System.Numerics.Vector3> Offset = new();
     }
 }

@@ -21,7 +21,7 @@ internal static class GraphUtils
             return null;
 
         var sourceCode = symbol.PendingSource; // there's intermediate source, so use this
-        if (string.IsNullOrEmpty(sourceCode))
+        if (string.IsNullOrWhiteSpace(sourceCode))
         {
             if (!project.TryGetSourceCodePath(symbol, out var sourceCodePath))
             {
@@ -53,7 +53,8 @@ internal static class GraphUtils
     public static bool IsNewSymbolNameValid(SymbolPackage symbolPackage, string newSymbolName)
     {
         return IsIdentifierValid(newSymbolName)
-               && !symbolPackage.ContainsSymbolName(newSymbolName);
+        		&& !ReservedWords.Contains(newSymbolName)
+               	&& !symbolPackage.ContainsSymbolName(newSymbolName);
     }
 
     public static bool IsNewSymbolNameValid(IEnumerable<SymbolPackage> symbolPackages, string newSymbolName)
@@ -69,6 +70,6 @@ internal static class GraphUtils
     public static bool IsNamespaceValid(string namespaceName) => ValidTypeNameSpacePattern.IsMatch(namespaceName);
 
     private static readonly Regex ValidTypeNameSpacePattern = new(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
-
+    private static readonly string[] ReservedWords = new string[] { "value", "Var", "instance", "item", "Input", "slot" };
     private static readonly Lazy<CodeDomProvider> IdentifierValidator = new(() => CodeDomProvider.CreateProvider("C#"));
 }

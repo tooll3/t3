@@ -15,6 +15,10 @@
       }
     },
     {
+      "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
+      "DefaultValue": true
+    },
+    {
       "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
       "DefaultValue": {
         "X": 0.0,
@@ -22,6 +26,10 @@
         "Z": 0.0,
         "W": 1.0
       }
+    },
+    {
+      "Id": "e882e0f0-03f9-46e6-ac7a-709e6fa66613"/*Multisampling*/,
+      "DefaultValue": 4
     },
     {
       "Id": "ec46bef4-8dce-4eb4-bfe8-e35a5ac416ec"/*TextureFormat*/,
@@ -32,20 +40,12 @@
       "DefaultValue": true
     },
     {
-      "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
-      "DefaultValue": true
-    },
-    {
       "Id": "f0cf3325-4967-4419-9beb-036cd6dbfd6a"/*GenerateMips*/,
       "DefaultValue": false
     },
     {
       "Id": "07ad28ad-ff5f-4ca9-b7bb-f7f8b16a6434"/*TextureReference*/,
       "DefaultValue": null
-    },
-    {
-      "Id": "e882e0f0-03f9-46e6-ac7a-709e6fa66613"/*Multisampling*/,
-      "DefaultValue": 4
     },
     {
       "Id": "abebb02b-bcaa-42c7-8eb8-da3c1b2fc840"/*EnableUpdate*/,

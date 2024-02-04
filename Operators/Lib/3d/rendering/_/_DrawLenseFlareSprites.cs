@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib._3d.rendering.@_
+namespace lib._3d.rendering._
 {
 	[Guid("95558338-81a5-4ecc-9d5c-1c6fb5f6f4fa")]
     public class _DrawLenseFlareSprites : Instance<_DrawLenseFlareSprites>

@@ -8,9 +8,8 @@ using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
+using T3.Serialization;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Int3 = T3.Core.DataTypes.Vector.Int3;
@@ -92,11 +91,11 @@ namespace T3.Core.Operator
             {
                 case Slot<float> floatInputSlot:
                     return AddCurvesForFloatValue(inputSlot, new[] { floatInputSlot.Value }, originalCurves);
-                case Slot<Vector2> vector2InputSlot:
+                case Slot<System.Numerics.Vector2> vector2InputSlot:
                     return AddCurvesForFloatValue(inputSlot, vector2InputSlot.Value.ToArray(), originalCurves);
-                case Slot<Vector3> vector3InputSlot:
+                case Slot<System.Numerics.Vector3> vector3InputSlot:
                     return AddCurvesForFloatValue(inputSlot, vector3InputSlot.Value.ToArray(), originalCurves);
-                case Slot<Vector4> vector4InputSlot:
+                case Slot<System.Numerics.Vector4> vector4InputSlot:
                     return AddCurvesForFloatValue(inputSlot, vector4InputSlot.Value.ToArray(), originalCurves);
                 case Slot<int> intInputSlot:
                     return AddCurvesForIntValue(inputSlot, new []{intInputSlot.Value}, originalCurves);
@@ -190,7 +189,7 @@ namespace T3.Core.Operator
                 {
                     var entries = groupEntry.ToArray();
                     var inputSlot = entries[0].inputSlot;
-                    if (inputSlot is Slot<Vector2> vector2InputSlot)
+                    if (inputSlot is Slot<System.Numerics.Vector2> vector2InputSlot)
                     {
                         vector2InputSlot.OverrideWithAnimationAction(context =>
                                                         {
@@ -213,7 +212,7 @@ namespace T3.Core.Operator
                 {
                     var entries = groupEntry.ToArray();
                     var inputSlot = entries[0].inputSlot;
-                    if (inputSlot is Slot<Vector3> vector3InputSlot)
+                    if (inputSlot is Slot<System.Numerics.Vector3> vector3InputSlot)
                     {
                         vector3InputSlot.OverrideWithAnimationAction(context =>
                                                         {
@@ -238,7 +237,7 @@ namespace T3.Core.Operator
                 {
                     var entries = groupEntry.ToArray();
                     var inputSlot = entries[0].inputSlot;
-                    if (inputSlot is Slot<Vector4> vector4InputSlot)
+                    if (inputSlot is Slot<System.Numerics.Vector4> vector4InputSlot)
                     {
                         vector4InputSlot.OverrideWithAnimationAction(context =>
                                                         {
@@ -440,7 +439,7 @@ namespace T3.Core.Operator
         
         private readonly Dictionary<CurveId, Curve> _animatedInputCurves = new();
         
-        public static void UpdateVector3InputValue(InputSlot<Vector3> inputSlot, Vector3 value)
+        public static void UpdateVector3InputValue(InputSlot<System.Numerics.Vector3> inputSlot, Vector3 value)
         {
             var animator = inputSlot.Parent.Parent.Symbol.Animator;
             if (animator.IsInputSlotAnimated(inputSlot))

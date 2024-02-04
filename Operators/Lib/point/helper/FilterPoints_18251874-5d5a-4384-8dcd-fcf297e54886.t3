@@ -26,10 +26,6 @@
     {
       "Id": "af0758b6-3876-4c95-a80f-0233b96bc1a7"/*Step*/,
       "DefaultValue": 1.0
-    },
-    {
-      "Id": "5171f411-42de-4701-acec-eb8ab69f21c5"/*StepInt*/,
-      "DefaultValue": 0
     }
   ],
   "Children": [
@@ -92,7 +88,7 @@
         {
           "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
           "Type": "System.Int32",
-          "Value": 32
+          "Value": 64
         }
       ],
       "Outputs": []

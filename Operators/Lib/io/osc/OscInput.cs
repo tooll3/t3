@@ -1,5 +1,7 @@
 using System.Runtime.InteropServices;
 using lib.Utils;
+//using System.Threading.Channels;
+//using System.Windows.Forms;
 using Rug.Osc;
 using T3.Core.Animation;
 using T3.Core.Logging;
@@ -8,10 +10,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-//using System.Threading.Channels;
-//using System.Windows.Forms;
-
-namespace lib.io.osc 
+namespace lib.io.osc
 {
 	[Guid("3a1d7ea0-5445-4df0-b08a-6596e53f815a")]
     public class OscInput : Instance<OscInput>, OscConnectionManager.IOscConsumer, IDisposable
@@ -146,8 +145,7 @@ namespace lib.io.osc
             if (!isDisposing)
                 return;
 
-            if(_registeredPort != NotRegistered)
-                OscConnectionManager.UnregisterConsumer(this);
+            OscConnectionManager.UnregisterConsumer(this);
         }
         
         

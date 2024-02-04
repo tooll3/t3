@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
@@ -141,16 +141,16 @@ namespace lib._3d.mesh.generate
                 }
 
                 // Write Data
-                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 ResourceManager.SetupStructuredBuffer(_vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride, ref _vertexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_vertexBuffer, ref _vertexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_vertexBuffer, UnorderedAccessViewBufferFlags.None, ref _vertexBufferWithViews.Uav);
+                _vertexBufferWithViews.Buffer = _vertexBuffer;
 
-                _indexBufferWithViews.Buffer = _indexBuffer;
                 const int stride = 3 * 4;
                 ResourceManager.SetupStructuredBuffer(_indexBufferData, stride * faceCount, stride, ref _indexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_indexBuffer, ref _indexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_indexBuffer, UnorderedAccessViewBufferFlags.None, ref _indexBufferWithViews.Uav);
+                _indexBufferWithViews.Buffer = _indexBuffer;
 
                 _data.VertexBuffer = _vertexBufferWithViews;
                 _data.IndicesBuffer = _indexBufferWithViews;
@@ -216,7 +216,7 @@ namespace lib._3d.mesh.generate
                         Tangent = VectorT3.Right,
                         Binormal = VectorT3.Up,
                         UvScale = Vector2.One,
-                        UvOffset = Vector2.Zero,
+                        UvOffset = System.Numerics.Vector2.Zero,
                         ColumnAxis = SegmentAxis.X,
                         RowAxis = SegmentAxis.Y,
                         DepthAxis = SegmentAxis.Z,
@@ -229,7 +229,7 @@ namespace lib._3d.mesh.generate
                         Tangent = default,
                         Binormal = default,
                         UvScale = Vector2.One,
-                        UvOffset = Vector2.Zero,
+                        UvOffset = System.Numerics.Vector2.Zero,
                         ColumnAxis = SegmentAxis.Z,
                         RowAxis = SegmentAxis.Y,
                         DepthAxis = SegmentAxis.X,
@@ -255,7 +255,7 @@ namespace lib._3d.mesh.generate
                         Tangent = default,
                         Binormal = default,
                         UvScale = Vector2.One,
-                        UvOffset = Vector2.Zero,
+                        UvOffset = System.Numerics.Vector2.Zero,
                         ColumnAxis = SegmentAxis.Z,
                         RowAxis = SegmentAxis.Y,
                         DepthAxis = SegmentAxis.X,
@@ -268,7 +268,7 @@ namespace lib._3d.mesh.generate
                         Tangent = default,
                         Binormal = default,
                         UvScale = Vector2.One,
-                        UvOffset = Vector2.Zero,
+                        UvOffset = System.Numerics.Vector2.Zero,
                         ColumnAxis = SegmentAxis.X,
                         RowAxis = SegmentAxis.Z,
                         DepthAxis = SegmentAxis.Y,
@@ -281,7 +281,7 @@ namespace lib._3d.mesh.generate
                         Tangent = default,
                         Binormal = default,
                         UvScale = Vector2.One,
-                        UvOffset = Vector2.Zero,
+                        UvOffset = System.Numerics.Vector2.Zero,
                         ColumnAxis = SegmentAxis.X,
                         RowAxis = SegmentAxis.Z,
                         DepthAxis = SegmentAxis.Y,
@@ -303,18 +303,18 @@ namespace lib._3d.mesh.generate
         public readonly InputSlot<Int3> Segments = new();
 
         [Input(Guid = "97C9849E-751C-49A9-823D-0AF839FA503E")]
-        public readonly InputSlot<Vector3> Stretch = new();
+        public readonly InputSlot<System.Numerics.Vector3> Stretch = new();
 
         [Input(Guid = "9a7d34a1-ca39-48bc-b977-9a786d23f3b1")]
         public readonly InputSlot<float> Scale = new();
 
         [Input(Guid = "FEBFAE90-13E8-4F0A-8CCF-B8825EA525F8")]
-        public readonly InputSlot<Vector3> Pivot = new();
+        public readonly InputSlot<System.Numerics.Vector3> Pivot = new();
 
         [Input(Guid = "f4a78f77-8d8c-4b7b-8545-ea80947b428d")]
-        public readonly InputSlot<Vector3> Center = new();
+        public readonly InputSlot<System.Numerics.Vector3> Center = new();
 
         [Input(Guid = "e641c244-9dc8-444d-8dee-c3e9b710f9db")]
-        public readonly InputSlot<Vector3> Rotation = new();
+        public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
     }
 }

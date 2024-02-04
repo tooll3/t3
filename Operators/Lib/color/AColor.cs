@@ -1,4 +1,3 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,7 +9,7 @@ namespace lib.color
     public class AColor : Instance<AColor>
     {
         [Output(Guid = "fae78369-9db9-4b00-94f2-89e7581db426")]
-        public readonly Slot<Vector4> Output = new();
+        public readonly Slot<System.Numerics.Vector4> Output = new();
 
         public AColor()
         {
@@ -23,7 +22,7 @@ namespace lib.color
         }
         
         [Input(Guid = "03dc1ef1-d75a-4f65-a607-d5dc4de56a2c")]
-        public readonly InputSlot<Vector4> RGBA = new();
+        public readonly InputSlot<System.Numerics.Vector4> RGBA = new();
         
 
     }

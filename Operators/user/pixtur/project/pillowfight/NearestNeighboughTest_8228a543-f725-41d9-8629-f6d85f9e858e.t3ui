@@ -147,7 +147,7 @@
       }
     },
     {
-      "ChildId": "2b7e849d-fac8-45ae-bc4e-62351aedd7c4"/*SnapPointsToGird*/,
+      "ChildId": "2b7e849d-fac8-45ae-bc4e-62351aedd7c4"/*SnapPointsToGrid*/,
       "Position": {
         "X": 2410.4592,
         "Y": -1.2914124

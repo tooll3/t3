@@ -133,29 +133,6 @@
           }
         },
         {
-          "Id": "4ac28e13-fac9-4f1a-9aa7-e564a0d57e93"/*Round*/,
-          "Type": "System.Single",
-          "Value": 0.14
-        },
-        {
-          "Id": "4d9bfddb-901e-4524-a99c-ba594d317e8a"/*Feather*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        },
-        {
-          "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
-          "Type": "T3.Core.DataTypes.Vector.Int2",
-          "Value": {
-            "X": 512,
-            "Y": 512
-          }
-        },
-        {
-          "Id": "7613bc20-d400-440d-b6a5-5f60ce61a33c"/*Rotate*/,
-          "Type": "System.Single",
-          "Value": 126.0
-        },
-        {
           "Id": "e7a99144-1f59-42ae-bdac-906ca1e54e0d"/*Sides*/,
           "Type": "System.Single",
           "Value": 18.3
@@ -174,6 +151,29 @@
           "Id": "9a857159-9593-490a-9ef5-1c66c6c6b68d"/*Blades*/,
           "Type": "System.Single",
           "Value": 0.12
+        },
+        {
+          "Id": "4d9bfddb-901e-4524-a99c-ba594d317e8a"/*Feather*/,
+          "Type": "System.Single",
+          "Value": 1.0
+        },
+        {
+          "Id": "4ac28e13-fac9-4f1a-9aa7-e564a0d57e93"/*Round*/,
+          "Type": "System.Single",
+          "Value": 0.14
+        },
+        {
+          "Id": "7613bc20-d400-440d-b6a5-5f60ce61a33c"/*Rotate*/,
+          "Type": "System.Single",
+          "Value": 126.0
+        },
+        {
+          "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
+          "Type": "T3.Core.DataTypes.Vector.Int2",
+          "Value": {
+            "X": 512,
+            "Y": 512
+          }
         }
       ],
       "Outputs": []
@@ -822,32 +822,6 @@
           }
         },
         {
-          "Id": "92e7fb1f-73b0-4960-b359-ee0e45e59817"/*Size*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.08,
-            "Y": 0.0
-          }
-        },
-        {
-          "Id": "4ac28e13-fac9-4f1a-9aa7-e564a0d57e93"/*Round*/,
-          "Type": "System.Single",
-          "Value": 0.07
-        },
-        {
-          "Id": "4d9bfddb-901e-4524-a99c-ba594d317e8a"/*Feather*/,
-          "Type": "System.Single",
-          "Value": 0.03
-        },
-        {
-          "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
-          "Type": "T3.Core.DataTypes.Vector.Int2",
-          "Value": {
-            "X": 512,
-            "Y": 512
-          }
-        },
-        {
           "Id": "e7a99144-1f59-42ae-bdac-906ca1e54e0d"/*Sides*/,
           "Type": "System.Single",
           "Value": 4.0
@@ -866,6 +840,24 @@
           "Id": "9a857159-9593-490a-9ef5-1c66c6c6b68d"/*Blades*/,
           "Type": "System.Single",
           "Value": 0.09
+        },
+        {
+          "Id": "4d9bfddb-901e-4524-a99c-ba594d317e8a"/*Feather*/,
+          "Type": "System.Single",
+          "Value": 0.03
+        },
+        {
+          "Id": "4ac28e13-fac9-4f1a-9aa7-e564a0d57e93"/*Round*/,
+          "Type": "System.Single",
+          "Value": 0.07
+        },
+        {
+          "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
+          "Type": "T3.Core.DataTypes.Vector.Int2",
+          "Value": {
+            "X": 512,
+            "Y": 512
+          }
         }
       ],
       "Outputs": []
@@ -1076,32 +1068,6 @@
           }
         },
         {
-          "Id": "92e7fb1f-73b0-4960-b359-ee0e45e59817"/*Size*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.08,
-            "Y": 0.0
-          }
-        },
-        {
-          "Id": "4ac28e13-fac9-4f1a-9aa7-e564a0d57e93"/*Round*/,
-          "Type": "System.Single",
-          "Value": 0.07
-        },
-        {
-          "Id": "4d9bfddb-901e-4524-a99c-ba594d317e8a"/*Feather*/,
-          "Type": "System.Single",
-          "Value": 0.14
-        },
-        {
-          "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
-          "Type": "T3.Core.DataTypes.Vector.Int2",
-          "Value": {
-            "X": 512,
-            "Y": 512
-          }
-        },
-        {
           "Id": "e7a99144-1f59-42ae-bdac-906ca1e54e0d"/*Sides*/,
           "Type": "System.Single",
           "Value": 5.0
@@ -1120,6 +1086,24 @@
           "Id": "9a857159-9593-490a-9ef5-1c66c6c6b68d"/*Blades*/,
           "Type": "System.Single",
           "Value": 0.09
+        },
+        {
+          "Id": "4d9bfddb-901e-4524-a99c-ba594d317e8a"/*Feather*/,
+          "Type": "System.Single",
+          "Value": 0.14
+        },
+        {
+          "Id": "4ac28e13-fac9-4f1a-9aa7-e564a0d57e93"/*Round*/,
+          "Type": "System.Single",
+          "Value": 0.07
+        },
+        {
+          "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
+          "Type": "T3.Core.DataTypes.Vector.Int2",
+          "Value": {
+            "X": 512,
+            "Y": 512
+          }
         }
       ],
       "Outputs": []

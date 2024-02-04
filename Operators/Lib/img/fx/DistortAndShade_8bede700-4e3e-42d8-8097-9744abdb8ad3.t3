@@ -1,7 +1,7 @@
 {
   "Name": "DistortAndShade",
   "Id": "8bede700-4e3e-42d8-8097-9744abdb8ad3",
-  "Namespace": "lib.img.fx.",
+  "Namespace": "lib.img.fx",
   "Inputs": [
     {
       "Id": "824e1ad4-0d33-458f-aefe-f3780ab06529"/*ImageA*/,

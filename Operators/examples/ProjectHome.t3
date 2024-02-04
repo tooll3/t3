@@ -5,13 +5,6 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "0859454c-befe-4b9b-ac75-d43f1ed0ccb8"/*Dom*/,
-      "SymbolId": "72025c5a-5bc5-4c9c-bb27-d65d54f0248d",
-      "Name": "Dom",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "a9c45eef-7e6e-4d40-bf9f-fa2c814de852"/*ThereDemo*/,
       "SymbolId": "5ea8bc54-d1f6-4748-9839-e3e4415a5608",
       "InputValues": [],

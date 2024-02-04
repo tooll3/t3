@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -15,13 +15,13 @@ namespace lib.exec.context
         public readonly Slot<Command> UpdateCommand = new();
 
         [Output(Guid = "BB81C71D-9E19-4371-8995-BD61AE426A16")]
-        public readonly Slot<Vector3> Position = new();
+        public readonly Slot<System.Numerics.Vector3> Position = new();
 
         [Output(Guid = "ACE050AC-8E49-409A-A194-4CB3192148CA")]
-        public readonly Slot<Vector3> Scale = new();
+        public readonly Slot<System.Numerics.Vector3> Scale = new();
         
         [Output(Guid = "751E97DE-C418-48C7-823E-D4660073A559")]
-        public readonly Slot<Vector4[]> ObjectToWorld = new();
+        public readonly Slot<System.Numerics.Vector4[]> ObjectToWorld = new();
         
         public GetPosition()
         {

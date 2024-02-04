@@ -1,4 +1,5 @@
-﻿namespace lib.Utils
+using System.Runtime.InteropServices;
+namespace lib.Utils
 {
     public static class AudioAnalysisResult
     {

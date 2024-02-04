@@ -1,5 +1,6 @@
 ﻿using System;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Utils;
 
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -32,8 +33,8 @@ public struct ColorVariation : IEquatable<ColorVariation>
         return Color.FromHSV(
                              h,
                              s * Saturation,
-                             v * Brightness,
-                             originalColor.Rgba.W * Opacity);
+                             (v * Brightness).Clamp(0,1),
+                             (originalColor.Rgba.W * Opacity).Clamp(0,1));
     }
 
     public ColorVariation Clone()

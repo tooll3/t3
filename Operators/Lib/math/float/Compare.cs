@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace lib.math.@float 
+namespace lib.math.@float
 {
 	[Guid("026869ee-b62f-481e-aadf-f8a1db77fe65")]
     public class Compare : Instance<Compare>

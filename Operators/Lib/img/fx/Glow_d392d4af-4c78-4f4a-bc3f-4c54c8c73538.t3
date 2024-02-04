@@ -8,19 +8,19 @@
       "DefaultValue": null
     },
     {
-      "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+      "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
       "DefaultValue": 0.5
     },
     {
-      "Id": "353ac2ee-aed3-4614-adf5-e1328768fd0b"/*Samples*/,
-      "DefaultValue": 12.0
+      "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*Intensity*/,
+      "DefaultValue": 0.5
     },
     {
-      "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
-      "DefaultValue": 0.55
+      "Id": "03f2bd5c-b599-47f5-b697-9f881639a598"/*AmplifyCore*/,
+      "DefaultValue": 0.0
     },
     {
-      "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,
+      "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Threshold*/,
       "DefaultValue": 0.0
     },
     {
@@ -33,8 +33,8 @@
       }
     },
     {
-      "Id": "03f2bd5c-b599-47f5-b697-9f881639a598"/*AmplifyFineBlur*/,
-      "DefaultValue": 0.0
+      "Id": "353ac2ee-aed3-4614-adf5-e1328768fd0b"/*Samples*/,
+      "DefaultValue": 12.0
     },
     {
       "Id": "53fe4db2-128c-43e3-8c58-8f01694d13ac"/*BlendMode*/,
@@ -366,14 +366,14 @@
           }
         },
         {
-          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
           "Id": "e882e0f0-03f9-46e6-ac7a-709e6fa66613"/*Multisampling*/,
           "Type": "System.Int32",
           "Value": 1
+        },
+        {
+          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []

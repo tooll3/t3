@@ -6,6 +6,7 @@ using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Rendering;
+using T3.Core.Rendering.Material;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Vector3 = System.Numerics.Vector3;
@@ -36,6 +37,8 @@ namespace T3.Core.Operator
             LocalTime = Playback.TimeInBars;
             LocalFxTime = Playback.FxTimeInBars;
             PointLights.Clear();
+            
+            
             PbrContextSettings.SetDefaultToContext(this);
         }
 
@@ -94,14 +97,16 @@ namespace T3.Core.Operator
         
         // Render settings
         public Buffer FogParameters { get; set; } = FogSettings.DefaultSettingsBuffer;
-        public Buffer PbrMaterialParams { get; set; }
-        public PbrMaterialTextures PbrMaterialTextures { get; set; } = new();
+        
+        //public PbrMaterialTextures PbrMaterialTextures { get; set; } = new();
+        public PbrMaterial PbrMaterial { get; set; }
+        public List<PbrMaterial> Materials { get; set; } = new(8);
         
         /// <summary>
         /// A structure that is used by SetTexture  
         /// </summary>
         public Dictionary<string, Texture2D> ContextTextures { get; set; } = new(10);
-        public Texture2D PrbPrefilteredSpecular { get; set; }
+        // public Texture2D PrbPrefilteredSpecular { get; set; }
         public PointLightStack PointLights { get; } = new();
         
         /// <summary>

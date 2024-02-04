@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -11,10 +11,10 @@ namespace lib.point.generate
     public class _DoyleSpiralRoot : Instance<_DoyleSpiralRoot>
     {
         [Output(Guid = "CA14BDE7-B1A4-4E42-B685-6126AE724D64")]
-        public readonly Slot<Vector2> A = new();
+        public readonly Slot<System.Numerics.Vector2> A = new();
 
         [Output(Guid = "97441B22-FD51-4438-BE6A-3533E4FF81B5")]
-        public readonly Slot<Vector2> B = new();
+        public readonly Slot<System.Numerics.Vector2> B = new();
 
         [Output(Guid = "B750BB07-9820-4E6B-BCD9-1935598ECC05")]
         public readonly Slot<float> R = new();

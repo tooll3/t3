@@ -205,7 +205,7 @@
       "Outputs": []
     },
     {
-      "Id": "2b7e849d-fac8-45ae-bc4e-62351aedd7c4"/*SnapPointsToGird*/,
+      "Id": "2b7e849d-fac8-45ae-bc4e-62351aedd7c4"/*SnapPointsToGrid*/,
       "SymbolId": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de",
       "InputValues": [
         {

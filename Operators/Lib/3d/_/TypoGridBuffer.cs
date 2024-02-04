@@ -1,12 +1,12 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace lib._3d.@_
+namespace lib._3d._
 {
 	[Guid("fa45d013-5a1c-45a0-9b05-a4a4edfb06f9")]
     public class TypoGridBuffer : Instance<TypoGridBuffer>

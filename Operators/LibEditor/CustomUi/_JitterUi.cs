@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+using ImGuiNET;
 using lib.anim._obsolete;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;

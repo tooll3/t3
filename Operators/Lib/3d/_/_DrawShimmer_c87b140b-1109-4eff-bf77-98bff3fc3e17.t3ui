@@ -6,8 +6,8 @@
       "InputId": "3ff3dc96-90a3-426f-a660-762de6cb54b0"/*GPoints*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -625.3908,
-        "Y": 63.0006
+        "X": -626.6779,
+        "Y": -39.969677
       }
     },
     {
@@ -256,8 +256,8 @@
     {
       "ChildId": "e131a540-68da-4cdc-98d2-13df41e2a0d7"/*GetBufferComponents*/,
       "Position": {
-        "X": -475.3908,
-        "Y": 63.0006
+        "X": -124.00476,
+        "Y": -34.82118
       }
     },
     {

@@ -31,6 +31,7 @@ using T3.Editor.Gui.UiHelpers.Wiki;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.SystemUi;
@@ -39,10 +40,7 @@ namespace T3.Editor.Gui;
 
 public static class T3Ui
 {
-    static T3Ui()
-    {
-        //_userNameDialog.ProjectNameChanged += ProjectSetup.CreateOrMigrateProject;
-    }
+
 
     public static void InitializeEnvironment()
     {
@@ -80,10 +78,12 @@ public static class T3Ui
         RenderStatsCollector.StartNewFrame();
 
         PlaybackUtils.UpdatePlaybackAndSyncing();
-
+        TextureReadAccess.Update();
+        
         //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
-
-        AudioEngine.CompleteFrame(Playback.Current); // Update
+        
+        AudioEngine.CompleteFrame(Playback.Current);    // Update
+        
 
         AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
 
@@ -127,6 +127,7 @@ public static class T3Ui
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
+
 
         FrameStats.CompleteFrame();
         TriggerGlobalActionsFromKeyBindings();

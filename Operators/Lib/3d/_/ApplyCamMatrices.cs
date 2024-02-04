@@ -1,13 +1,12 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils.Geometry;
-using Vector4 = System.Numerics.Vector4;
 
-namespace lib._3d.@_
+namespace lib._3d._
 {
 	[Guid("3dae14a8-3d0b-432f-b951-bdd7afd7e5f8")]
     public class ApplyCamMatrices : Instance<ApplyCamMatrices>
@@ -43,10 +42,10 @@ namespace lib._3d.@_
         public readonly InputSlot<Command> Command = new();
 
         [Input(Guid = "86FA7A95-C6DF-4BB8-A447-E92882A99037")]
-        public readonly InputSlot<Vector4[]> WorldToCamRows = new();
+        public readonly InputSlot<System.Numerics.Vector4[]> WorldToCamRows = new();
         
         [Input(Guid = "6DD0EC68-5B73-4C19-8043-1CA91BBD0AF3")]
-        public readonly InputSlot<Vector4[]> CamToClipSpaceRows = new();
+        public readonly InputSlot<System.Numerics.Vector4[]> CamToClipSpaceRows = new();
         
     }
 }

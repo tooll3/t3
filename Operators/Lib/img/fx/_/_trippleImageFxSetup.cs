@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib.img.fx.@_
+namespace lib.img.fx._
 {
 	[Guid("5b999887-19df-4e91-9f58-1df2d8f1440b")]
     public class _trippleImageFxSetup : Instance<_trippleImageFxSetup>

@@ -1,0 +1,17 @@
+{
+  "Name": "LoadSoundtrack",
+  "Id": "72b6327d-4304-48bb-b9b5-15705352c225",
+  "Namespace": "lib.exec",
+  "Inputs": [
+    {
+      "Id": "c321b833-d42f-46f7-b576-046f114f3d54"/*Command*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "21de464d-2abf-405c-9b48-8c7705b98b9d"/*IsEnabled*/,
+      "DefaultValue": true
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

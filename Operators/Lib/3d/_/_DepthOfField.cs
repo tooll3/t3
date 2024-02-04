@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib._3d.@_
+namespace lib._3d._
 {
 	[Guid("2cd650a1-5b77-4040-895b-6049dc09206e")]
     public class _DepthOfField : Instance<_DepthOfField>

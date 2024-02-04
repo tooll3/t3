@@ -1,6 +1,6 @@
 {
   "Id": "10507c42-1240-47cc-9569-5e3f1c733e99"/*PointSimulation*/,
-  "Description": "Creates a simulation buffer for applying simulation-like force fields, curl noise, or flocking simulation. It initially creates a copy of the connected source point buffer. You can then reset to this initial state or constantly blend towards this original state. This can be very helpful to \"mix in\" a valid state and thus keep a simulation under control.\n\nThe mix-in factor controls how much of the original state is being restored:\n\n- 0: The simulation runs completely free.\n- 0.03: A small percentage is constantly mixed into the simulation, thus avoiding too extreme deviations.\n- 1: Equivalent to resetting to the source.\n\nFor experimental effects, you can use mix values exceeding the range between 0 and 1.\n\nAlso see: [ParticleSystem] [SimulateBoidsExample], [HowToUsePoints].",
+  "Description": "Creates a simulation buffer for applying simulation-like force fields, curl noise, or flocking simulation. \n\nIt initially creates a copy of the connected source point buffer. You can then reset to this initial state or constantly blend towards this original state. This can be very helpful to \"mix in\" a valid state and thus keep a simulation under control.\n\nAlthough the operators in the namespace lib.point.sim are optimized to apply modifications onto this \"simulated\" buffer, the [ParticleSystem] provides a more convenient setup for this.\n\nAlso see: [SimulateBoidsExample], [HowToUsePoints].",
   "InputUis": [
     {
       "InputId": "76263857-27ea-40f5-856f-983c6ddcbfe8"/*GPoints*/,
@@ -16,6 +16,7 @@
         "X": -663.8243,
         "Y": 551.9816
       },
+      "Description": "Controls how much of the original state is being restored:\n\n- 0: The simulation runs completely free.\n- 0.03: A small percentage is constantly mixed into the simulation, thus avoiding too extreme deviations.\n- 1: Equivalent to resetting to the source.\n\nFor experimental effects, you can use mix values exceeding the range between 0 and 1.",
       "Scale": 0.001
     },
     {
@@ -23,21 +24,24 @@
       "Position": {
         "X": -663.8243,
         "Y": 596.9816
-      }
+      },
+      "Description": "Completely restores the buffer with the input buffer. This is equivilant to setting MixRate to 1.\n"
     },
     {
       "InputId": "5b9dcd2e-36b6-46f3-bded-0cba148cf628"/*Update*/,
       "Position": {
         "X": -636.6333,
         "Y": 819.8082
-      }
+      },
+      "Description": "Restore input buffer with the MixRate."
     },
     {
       "InputId": "2f883ce2-421a-45f5-8de2-9e05d984b551"/*MinCapacity*/,
       "Position": {
         "X": -398.00934,
         "Y": 1076.802
-      }
+      },
+      "Description": "If the size of the input buffer changes, the simulation will start from scratch.\nSetting this optional initial size will only reset the simulation if the new input buffer exceeds the reserved size."
     }
   ],
   "SymbolChildUis": [

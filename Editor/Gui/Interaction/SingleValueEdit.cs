@@ -3,7 +3,6 @@ using System.Data;
 using System.Globalization;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.InputUi;
@@ -119,7 +118,7 @@ namespace T3.Editor.Gui.Interaction
                             break;
                         }
                         var restarted = (float)(ImGui.GetTime() - _timeOpened) < 0.1f;
-                        DrawValueEditGizmo(ref _editValue, restarted,_center, min, max, clamp, scale);
+                        DrawValueEditMethod(ref _editValue, restarted,_center, min, max, clamp, scale);
 
                         break;
 
@@ -255,20 +254,20 @@ namespace T3.Editor.Gui.Interaction
             return InputEditStateFlags.Nothing;
         }
 
-        public static void DrawValueEditGizmo(ref double editValue, bool restarted, Vector2 center, double min, double max, bool clamp, float scale)
+        public static void DrawValueEditMethod(ref double editValue, bool restarted, Vector2 center, double min, double max, bool clamp, float scale)
         {
-            switch (UserSettings.Config.ValueEditGizmo)
+            switch (UserSettings.Config.ValueEditMethod)
             {
-                case UserSettings.ValueEditGizmos.InfinitySlider:
+                case UserSettings.ValueEditMethods.InfinitySlider:
                     InfinitySliderOverlay.Draw(ref editValue, restarted, center, min, max, scale, clamp);
                     break;
-                case UserSettings.ValueEditGizmos.RadialSlider:
+                case UserSettings.ValueEditMethods.RadialSlider:
                     RadialSliderOverlay.Draw(ref editValue, restarted, center, min, max, scale, clamp);
                     break;
-                case UserSettings.ValueEditGizmos.JogDial:
+                case UserSettings.ValueEditMethods.JogDial:
                     JogDialOverlay.Draw(ref editValue, restarted, center, min, max, scale, clamp);
                     break;
-                case UserSettings.ValueEditGizmos.ValueLadder:
+                case UserSettings.ValueEditMethods.ValueLadder:
                 default:
                     SliderLadder.Draw(ref editValue, min, max, scale, (float)(ImGui.GetTime() - _timeOpened), clamp, center);
                     break;

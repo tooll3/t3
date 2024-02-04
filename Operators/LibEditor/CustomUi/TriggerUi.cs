@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using ImGuiNET;
 using lib.math.@bool;
 using T3.Core.DataTypes.Vector;

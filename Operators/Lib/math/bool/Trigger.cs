@@ -1,4 +1,3 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -54,6 +53,6 @@ namespace lib.math.@bool
         public readonly InputSlot<bool> OnlyOnDown = new();
         
         [Input(Guid = "FA14AC1D-3247-4D36-BC96-14FF7356720A")]
-        public readonly InputSlot<Vector4> ColorInGraph = new();
+        public readonly InputSlot<System.Numerics.Vector4> ColorInGraph = new();
     }
 }

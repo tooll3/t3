@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib._3d.@_
+namespace lib._3d._
 {
 	[Guid("ade1d03d-db80-41ad-bcfa-8a2b900e9d41")]
     public class _ComputeDepthToLinear : Instance<_ComputeDepthToLinear>

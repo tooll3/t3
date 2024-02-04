@@ -57,7 +57,7 @@ namespace lib.point._internal
         public readonly InputSlot<float> InitializeVelocityFactor = new();
         
         [Input(Guid = "73128257-D731-4065-B19A-C8FA21803CD4")]
-        public readonly MultiInputSlot<ParticleSystem> Effects = new();
+        public readonly MultiInputSlot<T3.Core.DataTypes.ParticleSystem> Effects = new();
     }
 }
 

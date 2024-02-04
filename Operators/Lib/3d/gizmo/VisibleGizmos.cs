@@ -1,10 +1,8 @@
 using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
-using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.SystemUi;
 
 namespace lib._3d.gizmo
 {
@@ -43,7 +41,7 @@ namespace lib._3d.gizmo
                 Instance op = this;
                 while (op != null)
                 {
-                    if (MouseInput.SelectedChildId == op.SymbolChildId)
+                    if (T3.SystemUi.MouseInput.SelectedChildId == op.SymbolChildId)
                     {
                         showIfSelected = true;
                         break;

@@ -44,8 +44,9 @@ namespace lib.exec
                 {
                     if (input.IsConnected)
                     {
-                        if (input.TryGetAsMultiInput(out var multiInput))
+                        if (input.IsMultiInput)
                         {
+                            var multiInput = (IMultiInputSlot)input;
                             int dirtySum = 0;
                             foreach (var entry in multiInput.GetCollectedInputs())
                             {

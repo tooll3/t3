@@ -129,16 +129,16 @@ namespace lib._3d.mesh.generate
                 }
                 
                 // Write Data
-                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 ResourceManager.SetupStructuredBuffer(_vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride, ref _vertexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_vertexBuffer, ref _vertexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_vertexBuffer, UnorderedAccessViewBufferFlags.None, ref _vertexBufferWithViews.Uav);
+                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 
-                _indexBufferWithViews.Buffer = _indexBuffer;
                 const int stride = 3 * 4;
                 ResourceManager.SetupStructuredBuffer(_indexBufferData, stride * faceCount, stride, ref _indexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_indexBuffer, ref _indexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_indexBuffer, UnorderedAccessViewBufferFlags.None, ref _indexBufferWithViews.Uav);
+                _indexBufferWithViews.Buffer = _indexBuffer;
 
                 _data.VertexBuffer = _vertexBufferWithViews;
                 _data.IndicesBuffer = _indexBufferWithViews;
@@ -171,10 +171,10 @@ namespace lib._3d.mesh.generate
         public readonly InputSlot<Int2> Segments = new();
 
         [Input(Guid = "770A164B-10E7-4145-B1C9-DAD1F564EC6B")]
-        public readonly InputSlot<Vector2> Spin = new();
+        public readonly InputSlot<System.Numerics.Vector2> Spin = new();
 
         [Input(Guid = "F3E7341C-0C81-42AF-BA48-B43D345188C1")]
-        public readonly InputSlot<Vector2> Fill = new();
+        public readonly InputSlot<System.Numerics.Vector2> Fill = new();
 
         // [Input(Guid = "1457EDC2-5F9B-4F72-9CB2-4CA40066F177")]
         // public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();

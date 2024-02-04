@@ -1,0 +1,95 @@
+{
+  "Id": "31ab98ec-5e79-4667-9a85-2fb168f41fa1"/*AbletonLinkSync*/,
+  "Description": "An experimental implementation of the AbletonLink synchronization.\n\nThis operator uses the library provided by Ableton to identify available Ableton Link sources and automatically connects to them.\nAll instances of this operator share the same connection. To align the timing information provided by Link with Tooll's time units, we also provide a various output timing formats.\n\nThis operator can by combined with [SetPlaybackTime] or [SetBpm]. \n\nNote: if the connection is cancelled by the host or client, it might be necessary to trigger reconnect.",
+  "InputUis": [
+    {
+      "InputId": "cd977dbc-3340-4542-8e0f-01bde3882d6a"/*OutputType*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "We attempt to map the incoming timing signals to Tooll's measure units.\n\n- Measure: 1 unit per bar (e.g. per 4 beats)\n- Phase: Phase returned by Link\n- Beats: Beats returned by Link offset by start measure\n- Time: Time returned by Link / 1000\n- Quantum: In order to enable the desired bar and loop alignment, an application provides a quantum value to Link that specifies, in beats, the desired unit of phase synchronization. Link guarantees that session participants with the same quantum value will be phase aligned, meaning that if two participants have a 4 beat quantum, beat 3 on one participant’s timeline could correspond to beat 11 on another’s, but not beat 12 (see link documentation)\n"
+    },
+    {
+      "InputId": "3dc1fc6b-d17f-4939-a1e6-6d3db042af36"/*TriggerStartPlaying*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Description": "Sends a start signal"
+    },
+    {
+      "InputId": "bf2ca9e8-6365-453f-b8c3-2428ccd9d23d"/*TriggerStopPlaying*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Description": "Sends a stop signal"
+    },
+    {
+      "InputId": "f4e75e75-5113-4f22-a1dd-b897a5745f1d"/*TriggerReconnect*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Description": "Closes and restarts the connection. This my be necessary if the host cancelles the connection."
+    },
+    {
+      "InputId": "4da6ebcc-0312-4846-88b0-a0682a59f97f"/*AutoConnect*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      },
+      "GroupTitle": "Additional options",
+      "Description": "If there are no peers found, we try to reconnect every 3 seconds."
+    },
+    {
+      "InputId": "ecf5d5ab-bb9f-4c48-9b33-8827e94dd286"/*PauseIfDisconnected*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "Description": "Normally Ableton link would keep playing even if connection gets lost. If this option is enabled the output will be paused if there are no other peers."
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e1cfd42c-81fa-4820-91df-f1bad27b3a7f"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    },
+    {
+      "OutputId": "d6e453e6-1d3f-4765-a427-dd9967bfbc34"/*Tempo*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 138.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "1f7641e7-b934-4899-b67e-968148fd29c4",
+      "Title": "Reference Manual",
+      "Description": "The Ableton Link Documentation",
+      "LinkUrl": "https://ableton.github.io/link/",
+      "LinkType": "Documentation"
+    },
+    {
+      "Id": "d0dc4dd7-f8d3-4579-a026-8300d6a52e82",
+      "Title": "Based on VVVV",
+      "Description": "This operator is based to the VVVV gamma implementation.",
+      "LinkUrl": "https://github.com/SpaceMusicZH/VL.IO.AbletonLink",
+      "LinkType": "Source"
+    },
+    {
+      "Id": "d3c1e4d4-ddd1-4cd9-80d9-e42b5449d63c",
+      "Title": "UnityAbletonLink by Akihiro Komori",
+      "Description": "CPP wrapper code taken from UnityAbletonLink by Akihiro Komori.",
+      "LinkUrl": "https://github.com/comoc/UnityAbletonLink/tree/master",
+      "LinkType": "Source"
+    }
+  ]
+}

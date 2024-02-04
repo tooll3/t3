@@ -18,9 +18,8 @@ namespace T3.Editor.Gui.UiHelpers
     /// </summary>
     public class UserSettings : Settings<UserSettings.ConfigData>
     {
-        public UserSettings(bool saveOnQuit, string fileName) : base(fileName, saveOnQuit)
+        public UserSettings(bool saveOnQuit) : base("userSettings.json", saveOnQuit:saveOnQuit)
         {
-
         }
 
         
@@ -58,7 +57,7 @@ namespace T3.Editor.Gui.UiHelpers
             public bool UseArcConnections = true;
             public bool ResetTimeAfterPlayback;
             public float SnapStrength = 5;
-            public ValueEditGizmos ValueEditGizmo;
+            public ValueEditMethods ValueEditMethod;
             public float ScrollSmoothing = 0.1f;
 
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
@@ -75,14 +74,18 @@ namespace T3.Editor.Gui.UiHelpers
 
             public bool VariationLiveThumbnails = true;
             public bool VariationHoverPreview = true;
+
+            public bool EditorHoverPreview = true;
             
             // Load Save
+            public string UserName = UndefinedUserName;
             public bool EnableAutoBackup = true;
 
             // Other settings
             public float GizmoSize = 100;
             public int FullScreenIndexMain = 0;
             public int FullScreenIndexViewer = 0;
+            
 
 
             // Timeline
@@ -93,9 +96,11 @@ namespace T3.Editor.Gui.UiHelpers
             public float SpaceMouseMoveSpeedFactor = 1f;
             public float SpaceMouseDamping = 0.5f;
             
-            public bool ExpandSpectrumVisualizerVertically = true;
-            
 
+            // Rendering (controlled from render windows)
+            public string RenderVideoFilePath = "./Render/render-v01.mp4";
+
+            
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
@@ -103,20 +108,29 @@ namespace T3.Editor.Gui.UiHelpers
             public List<Gradient> GradientPresets = new();
 
             public string ColorThemeName;
-
+            
+            public bool ExpandSpectrumVisualizerVertically = true;
+            
             private string _defaultNewProjectDirectory = DefaultProjectFolder;
             public string DefaultNewProjectDirectory => _defaultNewProjectDirectory ??= DefaultProjectFolder;
 
             private static readonly string DefaultProjectFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "T3Projects");
         }
 
-        public enum ValueEditGizmos
+        public enum ValueEditMethods
         {
             InfinitySlider,
             RadialSlider,
             JogDial,
             ValueLadder,
         }
+        
+        public static bool IsUserNameDefined()
+        {
+            return !string.IsNullOrEmpty(Config.UserName) && Config.UserName != UndefinedUserName;
+        }
+
+        private const string UndefinedUserName = "unknown";
 
         public static Guid GetLastOpenOpForWindow(string windowTitle)
         {

@@ -1,5 +1,5 @@
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
@@ -114,7 +114,7 @@ namespace lib.dx11.buffer
         public readonly InputSlot<int> PreSampleSteps = new();
 
         [Input(Guid = "336F26E1-853F-41A3-AFE0-E2402A9D7452")]
-        public readonly InputSlot<Vector3> UpVector = new();
+        public readonly InputSlot<System.Numerics.Vector3> UpVector = new();
 
         [Input(Guid = "2AB21E92-6838-4AC7-8D10-6F8B3C8B5612")]
         public readonly InputSlot<float> Curvature = new();

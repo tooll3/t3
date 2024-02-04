@@ -4,6 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace lib.dx11.draw
 {
@@ -20,7 +21,7 @@ namespace lib.dx11.draw
 
         private void Update(EvaluationContext context)
         {
-            var buffer = Buffer.GetValue(context);
+            Buffer buffer = Buffer.GetValue(context);
             if (buffer == null)
                 return;
             
@@ -31,7 +32,7 @@ namespace lib.dx11.draw
         }
 
         [Input(Guid = "6C87816C-DA1D-4429-A1F6-61233AA3D7B1")]
-        public readonly InputSlot<SharpDX.Direct3D11.Buffer> Buffer = new ();
+        public readonly InputSlot<SharpDX.Direct3D11.Buffer> Buffer = new InputSlot<Buffer>();
         [Input(Guid = "BC874135-45F2-45E2-8005-244B9123ED20")]
         public readonly InputSlot<int> AlignedByteOffsetForArgs = new();
     }

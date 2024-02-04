@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -11,7 +11,7 @@ namespace lib.math.floats
     public class ComposeVec3FromList : Instance<ComposeVec3FromList>
     {
         [Output(Guid = "78B4E13F-78BD-4478-9263-2C77D9284A07")]
-        public readonly Slot<Vector3> Result = new();
+        public readonly Slot<System.Numerics.Vector3> Result = new();
 
         public ComposeVec3FromList()
         {
@@ -79,10 +79,10 @@ namespace lib.math.floats
         public readonly InputSlot<int> IndexForZ = new(2);
         
         [Input(Guid = "8D5B71AC-5829-44F1-800C-E27A37EAB60F")]
-        public readonly InputSlot<Vector2> InputRange = new();
+        public readonly InputSlot<System.Numerics.Vector2> InputRange = new();
 
         [Input(Guid = "A9B1EDDE-AD70-4C65-8ED6-473577FE59A7")]
-        public readonly InputSlot<Vector2> OutputRange = new();
+        public readonly InputSlot<System.Numerics.Vector2> OutputRange = new();
 
         [Input(Guid = "B529D322-B7A4-4711-8391-E71F196B90B5")]
         public readonly InputSlot<float> SpringDamping = new();

@@ -107,7 +107,7 @@ public sealed partial class ResourceManager
     }
 
     /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
-    public (uint textureId, uint srvResourceId) CreateTextureFromFile(string relativePath, Instance instance, Action? fileChangeAction)
+    public (uint textureId, uint srvResourceId) CreateTextureFromFile(string relativePath, Instance? instance, Action? fileChangeAction)
     {
         const uint nullResource = 0;
         
@@ -168,7 +168,7 @@ public sealed partial class ResourceManager
         return (textureResourceEntry.Id, srvResourceId);
     }
 
-    public static void UpdateTextureFromFile(uint textureId, string path, ref Texture2D? texture)
+    public void UpdateTextureFromFile(uint textureId, string path, ref Texture2D? texture)
     {
         ResourcesById.TryGetValue(textureId, out var resource);
         if (resource is Texture2dResource textureResource)
@@ -411,7 +411,7 @@ public sealed partial class ResourceManager
         DefaultSamplerState = new SamplerState(device, samplerDesc);
     }
 
-    public static void CreateShaderResourceView(uint textureId, string name, ref ShaderResourceView? shaderResourceView)
+    public void CreateShaderResourceView(uint textureId, string name, ref ShaderResourceView? shaderResourceView)
     {
         if (!ResourcesById.TryGetValue(textureId, out var resource))
         {

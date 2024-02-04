@@ -11,21 +11,24 @@
       }
     },
     {
-      "InputId": "0a3e1e60-39c1-4cb7-a6c1-6442ef0fe9cd"/*Black*/,
+      "InputId": "0a3e1e60-39c1-4cb7-a6c1-6442ef0fe9cd"/*ShadowColor*/,
       "Position": {
         "X": 131.75464,
         "Y": 46.275253
       },
+      "Description": "Color selection for all dark pixels.",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
     },
     {
-      "InputId": "703cf883-ece6-42d6-9e8c-0248b58eca2d"/*White*/,
+      "InputId": "703cf883-ece6-42d6-9e8c-0248b58eca2d"/*HighlightColor*/,
       "Position": {
         "X": 131.75464,
         "Y": 102.27525
       },
+      "Description": "Color selection for all bright pixels.",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -36,6 +39,8 @@
         "X": 131.75464,
         "Y": 159.48845
       },
+      "GroupTitle": "Advanced Settings",
+      "Description": "Defines which color channels are used to determine the light-dark distinction.\n",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -45,21 +50,31 @@
       "Position": {
         "X": 131.75464,
         "Y": 204.48845
-      }
+      },
+      "Description": "Defines how many pixels are added to the light or dark coloring.",
+      "Min": 0.0,
+      "Max": 5.0,
+      "Clamp": true
     },
     {
       "InputId": "9364f41d-0700-4c43-ad16-569081f510cf"/*Method*/,
       "Position": {
         "X": 127.76198,
         "Y": 395.89905
-      }
+      },
+      "Description": "Setting is currently ignored."
     },
     {
       "InputId": "41d59091-a974-43ed-b45b-0849fb91f6d1"/*Scale*/,
       "Position": {
         "X": 131.75464,
         "Y": 249.48845
-      }
+      },
+      "GroupTitle": "Size",
+      "Description": "Uniformly scales the size of the effect.",
+      "Min": 1.0,
+      "Max": 15.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [

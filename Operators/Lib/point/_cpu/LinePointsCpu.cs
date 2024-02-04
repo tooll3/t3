@@ -47,10 +47,10 @@ namespace lib.point._cpu
         //private readonly Point Separator;
 
         [Input(Guid = "CD2B1F6F-1964-4D15-92E0-57B77584301B")]
-        public readonly InputSlot<Vector3> From = new();
+        public readonly InputSlot<System.Numerics.Vector3> From = new();
 
         [Input(Guid = "37B9A120-F79D-481C-BEA2-A48E3B2A05B7")]
-        public readonly InputSlot<Vector3> To = new();
+        public readonly InputSlot<System.Numerics.Vector3> To = new();
         
         [Input(Guid = "A670BD01-B3BB-4795-9F86-2AB9010F2BEC")]
         public readonly InputSlot<float> W = new();

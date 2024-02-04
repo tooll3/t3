@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -41,7 +41,7 @@ namespace lib.point.helper
         private void Update(EvaluationContext context)
         {
             var path = Path.GetValue(context);
-            var mesh = ObjMesh.LoadFromFile(path, ResourceFolders);
+            var mesh = ObjMesh.LoadFromFile(path, this);
 
             if (mesh == null)
             {
@@ -75,8 +75,8 @@ namespace lib.point.helper
                     Log.Warning("Object mode not implemented", this);
                     break;
                 }
-                case Modes.Vertices_ColorInOrientation:
-                case Modes.Vertices_GrayscaleInOrientation:
+                case Modes.Vertices_WithColor:
+                case Modes.Vertices_ColorAsGrayScale:
                 case Modes.Vertices_GrayscaleAsW:
                 {
                     if (mesh.Colors.Count == 0)
@@ -108,11 +108,11 @@ namespace lib.point.helper
                                                                                                     mesh.Positions[sortedVertexIndex].X,
                                                                                                     mesh.Positions[sortedVertexIndex].Y,
                                                                                                     mesh.Positions[sortedVertexIndex].Z),
-                                                                             Orientation = Quaternion.Identity,
                                                                              W = (c.X + c.Y + c.Z) / 3,
+                                                                             Color = c,
                                                                          };
                             }
-                            else if (exportMode == Modes.Vertices_GrayscaleInOrientation)
+                            else if (exportMode == Modes.Vertices_ColorAsGrayScale)
                             {
                                 var gray = (c.X + c.Y + c.Z) / 3;
                                 _points.TypedElements[vertexIndex] = new Point()
@@ -121,8 +121,8 @@ namespace lib.point.helper
                                                                                                     mesh.Positions[sortedVertexIndex].X,
                                                                                                     mesh.Positions[sortedVertexIndex].Y,
                                                                                                     mesh.Positions[sortedVertexIndex].Z),
-                                                                             Orientation = new Quaternion(gray, gray, gray, 1),
                                                                              W = 1,
+                                                                             Color = new Vector4(gray),
                                                                          };
                             }
                             else
@@ -134,7 +134,8 @@ namespace lib.point.helper
                                                                                                     mesh.Positions[sortedVertexIndex].Y,
                                                                                                     mesh.Positions[sortedVertexIndex].Z),
                                                                              Orientation = new Quaternion(c.X, c.Y, c.Z, c.W),
-                                                                             W = 1
+                                                                             W = 1,
+                                                                             Color = c,
                                                                          };
                             }
                         }
@@ -324,8 +325,8 @@ namespace lib.point.helper
         {
             AllVertices,
             LinesVertices,
-            Vertices_ColorInOrientation,
-            Vertices_GrayscaleInOrientation,
+            Vertices_WithColor,
+            Vertices_ColorAsGrayScale,
             Vertices_GrayscaleAsW,
             WireframeLines,
         }

@@ -34,6 +34,30 @@
       }
     },
     {
+      "InputId": "34ad759e-9a81-4d7e-9024-5abacc279895"/*Color*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "130b5c11-66dd-4c0e-ac67-924554bad2d8"/*Extend*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "ca12df13-7529-4ede-b6fc-ce8aeba4f33e"/*Selected*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
       "InputId": "53cde701-435f-42e4-b598-db0e607a238c"/*AddSeparator*/,
       "Position": {
         "X": -200.0,

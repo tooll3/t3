@@ -1,51 +1,22 @@
 {
   "Id": "4f89b41b-1643-442b-bec8-9f9ef2173baa"/*Raster*/,
-  "Description": "Generates a wide range of different raster patterns. You can also connect an input texture to drive various aspects of the pattern.",
+  "Description": "Generates a wide range of patterns of dots and lines.\n\nConnecting a texture to the Image input will allow the pattern to be influenced differently at different parts of the texture.\n\nAKA: polkadot, pattern, grid, crosshair",
   "InputUis": [
     {
-      "InputId": "cce27287-9774-436c-9e90-1becb42d8f95"/*Image*/,
+      "InputId": "fd22eaf6-ed3c-4e63-985c-3a3756ecaef2"/*Resolution*/,
       "Position": {
-        "X": -198.16037,
-        "Y": -12.877563
-      }
-    },
-    {
-      "InputId": "a4350111-7ca8-4ce7-b494-3e82cc679999"/*Fill*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 32.122437
-      }
-    },
-    {
-      "InputId": "0d0944a4-b5f6-4df5-8ef6-cbfe70fbae94"/*Background*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 77.12242
-      }
-    },
-    {
-      "InputId": "9cc926c7-ad28-4f49-a662-46584ae8ad9f"/*Size*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 122.12245
-      }
+        "X": -124.72741,
+        "Y": 726.83594
+      },
+      "Description": "Output resolution. Set to 0 for dynamic scaling."
     },
     {
       "InputId": "b32e1383-07c4-4dc4-859d-e7fb19261bce"/*Offset*/,
       "Position": {
         "X": -198.16037,
         "Y": 167.12245
-      }
-    },
-    {
-      "InputId": "2221e831-12dd-4c9f-8533-48b9f96e60ab"/*Scale*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 212.12245
       },
-      "Min": -10.0,
-      "Max": 10.0,
-      "Scale": 0.1
+      "Description": "Offsets the position of the raster texture.\nAn offset of 1 is equivalent to the distance between dots."
     },
     {
       "InputId": "52d36eba-d789-41a0-bdf4-9ca6b3e32530"/*Rotate*/,
@@ -53,9 +24,46 @@
         "X": -198.16037,
         "Y": 257.1225
       },
+      "Description": "Rotates the pattern. Measured in degrees.",
       "Min": -180.0,
       "Max": 180.0,
       "Scale": 0.5
+    },
+    {
+      "InputId": "9cc926c7-ad28-4f49-a662-46584ae8ad9f"/*Stretch*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 122.12245
+      },
+      "Description": "Stretches the pattern unevenly."
+    },
+    {
+      "InputId": "2221e831-12dd-4c9f-8533-48b9f96e60ab"/*Scale*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 212.12245
+      },
+      "Description": "Scales the pattern evenly.",
+      "Min": -10.0,
+      "Max": 10.0,
+      "Scale": 0.1
+    },
+    {
+      "InputId": "a4350111-7ca8-4ce7-b494-3e82cc679999"/*Color*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 32.122437
+      },
+      "GroupTitle": "Pattern",
+      "Description": "Main color of the raster pattern, used by dots and lines."
+    },
+    {
+      "InputId": "0d0944a4-b5f6-4df5-8ef6-cbfe70fbae94"/*Background*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 77.12242
+      },
+      "Description": "Color of the background behind the raster pattern."
     },
     {
       "InputId": "27ce4875-b4da-4a44-a959-37c81c1600b8"/*DotSize*/,
@@ -63,6 +71,7 @@
         "X": -198.16037,
         "Y": 302.12262
       },
+      "Description": "Size of the dots in the pattern.",
       "Min": -1.0,
       "Max": 1.0
     },
@@ -72,6 +81,7 @@
         "X": -198.16037,
         "Y": 347.12256
       },
+      "Description": "Width of the lines in the pattern.",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -81,42 +91,7 @@
         "X": -198.16037,
         "Y": 392.12256
       },
-      "Min": 0.0,
-      "Max": 1.0
-    },
-    {
-      "InputId": "c1378bbd-70df-4b6e-876f-5f1f1c59a617"/*RAffects_DotSize*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 437.12256
-      },
-      "Min": 0.0,
-      "Max": 2.0
-    },
-    {
-      "InputId": "3329cd25-e7b9-47da-88e0-5dd7b6e324fa"/*GAffects_LineWidth*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 482.12247
-      },
-      "Min": 0.0,
-      "Max": 2.0
-    },
-    {
-      "InputId": "92f52517-8ebc-4c89-af0a-b0bc5abc0439"/*BAffects_LineRatio*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 527.12244
-      },
-      "Min": 0.0,
-      "Max": 2.0
-    },
-    {
-      "InputId": "6b0bdd9a-248d-410f-9b0e-de20df937775"/*MixOriginal*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": 572.12244
-      },
+      "Description": "At values below 0.5, creates a gap in the middle of the lines.\nAt values above 0.5, creates a gap where lines intersect.\n\nUses a circular crop to create these gaps, so high line widths with a low ratio will cause the lines to look like circles.",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -126,16 +101,59 @@
         "X": -198.16037,
         "Y": 617.12244
       },
+      "Description": "Feathers (blurs) the raster pattern. Useful for smoothing out pixelated edges.\nAffected by the background color, even when it's transparent!",
       "Min": -2.0,
       "Max": 2.0,
       "Scale": 0.02
     },
     {
-      "InputId": "fd22eaf6-ed3c-4e63-985c-3a3756ecaef2"/*Resolution*/,
+      "InputId": "cce27287-9774-436c-9e90-1becb42d8f95"/*Image*/,
       "Position": {
-        "X": -124.72741,
-        "Y": 726.83594
-      }
+        "X": -198.16037,
+        "Y": -12.877563
+      },
+      "GroupTitle": "Image Input",
+      "Description": "Adds an image to the background.\nThis image can also be used to control other parameters dynamically."
+    },
+    {
+      "InputId": "c1378bbd-70df-4b6e-876f-5f1f1c59a617"/*RedToDotSize*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 437.12256
+      },
+      "Description": "Strength of the input texture's red color channel on the dot size.\nRequires a texture to be connected to the Image input.",
+      "Min": 0.0,
+      "Max": 2.0
+    },
+    {
+      "InputId": "3329cd25-e7b9-47da-88e0-5dd7b6e324fa"/*GreenToLineWidth*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 482.12247
+      },
+      "Description": "Strength of the input texture's green color channel on the line width.\nRequires a texture to be connected to the Image input.",
+      "Min": 0.0,
+      "Max": 2.0
+    },
+    {
+      "InputId": "92f52517-8ebc-4c89-af0a-b0bc5abc0439"/*BlueToLineRatio*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 527.12244
+      },
+      "Description": "Strength of the input texture's blue color channel on the line ratio.\nRequires a texture to be connected to the Image input.",
+      "Min": 0.0,
+      "Max": 2.0
+    },
+    {
+      "InputId": "6b0bdd9a-248d-410f-9b0e-de20df937775"/*MixOriginal*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 572.12244
+      },
+      "Description": "Blends the image in with the background color.\nNote that the image will only be visible if the background color has transparency.",
+      "Min": 0.0,
+      "Max": 1.0
     }
   ],
   "SymbolChildUis": [

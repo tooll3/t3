@@ -1,0 +1,166 @@
+{
+  "Id": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de"/*SnapPointsToGrid*/,
+  "Description": "Rounds (floors) the position of points onto a grid, i.e., snaps them to the position of a grid.\n\nThis can be useful to debug compute shader effects that rely on a spatial grid.",
+  "InputUis": [
+    {
+      "InputId": "953a95d0-5226-46bb-80c3-f20b27a32064"/*Points*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -428.19647,
+        "Y": 888.3568
+      }
+    },
+    {
+      "InputId": "4d7f1f34-ca1b-43ee-803f-cbc14bcc8679"/*Scale*/,
+      "Position": {
+        "X": -428.19647,
+        "Y": 933.3568
+      }
+    },
+    {
+      "InputId": "eacc6bf8-1e12-44fb-8541-91ac4a557745"/*GridStretch*/,
+      "Position": {
+        "X": -428.19647,
+        "Y": 978.3568
+      }
+    },
+    {
+      "InputId": "04c5ee70-9f9a-4236-8871-772814b8b2ab"/*Offset*/,
+      "Position": {
+        "X": -428.19647,
+        "Y": 1023.3568
+      }
+    },
+    {
+      "InputId": "a7d80f3e-298d-4eb5-9751-ec432cda4065"/*SnapFraction*/,
+      "Position": {
+        "X": -428.19647,
+        "Y": 1068.3568
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "dc5e2101-e4d5-495a-8291-58aef1876657"/*FractionBlend*/,
+      "Position": {
+        "X": -428.19647,
+        "Y": 1113.3568
+      }
+    },
+    {
+      "InputId": "bf7fef5e-a9d5-41e6-8025-0f74a9e07373"/*UseWAsWeight*/,
+      "Position": {
+        "X": -428.19647,
+        "Y": 1158.3568
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "c86327bc-e2d2-4471-9730-0eb23d8285d9"/*TimeConstBuffer*/,
+      "Position": {
+        "X": 282.37137,
+        "Y": 609.5573
+      }
+    },
+    {
+      "ChildId": "42b66a7b-c870-4b51-8d7d-e0906985b173"/*ComputeShader*/,
+      "Position": {
+        "X": 123.71759,
+        "Y": 503.57254
+      }
+    },
+    {
+      "ChildId": "9178c7bc-1811-4307-837e-fff2bd31fcc9"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 465.65698,
+        "Y": 496.97137
+      }
+    },
+    {
+      "ChildId": "f1f1df6d-a9bf-40db-aa68-43e6dc26a9a5"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 157.6828,
+        "Y": 345.16904
+      },
+      "Position": {
+        "X": 99.293335,
+        "Y": 891.93994
+      }
+    },
+    {
+      "ChildId": "7efe46d6-8479-49ec-bb91-3833cf040da5"/*GetSRVProperties*/,
+      "Position": {
+        "X": -37.987556,
+        "Y": 682.4186
+      }
+    },
+    {
+      "ChildId": "8f1d5616-21f1-48af-9a03-62f8d23c53ad"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 641.2465,
+        "Y": 646.7957
+      }
+    },
+    {
+      "ChildId": "303af702-6182-4b4e-849c-ea2e5ba1b42b"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 282.37137,
+        "Y": 540.5573
+      }
+    },
+    {
+      "ChildId": "69a97ed6-7ad6-47a6-b584-e4d998f03cb4"/*Vector3Components*/,
+      "Position": {
+        "X": -156.32031,
+        "Y": 972.909
+      }
+    },
+    {
+      "ChildId": "442bc6e2-dd6e-4a89-8b94-587309fa37af"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 117.003,
+        "Y": 719.6992
+      }
+    },
+    {
+      "ChildId": "2ca7664c-2a38-4fa1-9379-caa14036b488"/*GetBufferComponents*/,
+      "Position": {
+        "X": -197.48755,
+        "Y": 751.8842
+      }
+    },
+    {
+      "ChildId": "0d05c5f3-60bc-4c88-804d-c5fc9d8e7072"/*GetBufferComponents*/,
+      "Position": {
+        "X": 282.37137,
+        "Y": 652.5573
+      }
+    },
+    {
+      "ChildId": "2a34997c-da14-4804-91c8-f71145d2551b"/*Vector3Components*/,
+      "Position": {
+        "X": -156.32031,
+        "Y": 1028.9089
+      }
+    },
+    {
+      "ChildId": "c70caa98-6538-46be-a17d-637188973c14"/*BoolToFloat*/,
+      "Position": {
+        "X": -228.99658,
+        "Y": 1194.3978
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "b7bc82a2-f095-490a-91e3-276431d5eb87"/*Output*/,
+      "Position": {
+        "X": 771.2465,
+        "Y": 646.7957
+      }
+    }
+  ]
+}

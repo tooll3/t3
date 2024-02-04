@@ -48,6 +48,7 @@ internal static class Duplicate
         var root = syntaxTree.GetRoot();
         var classRenamer = new ClassRenameRewriter(newTypeName);
         root = classRenamer.Visit(root);
+        
         var memberRewriter = new Duplicate.MemberDuplicateRewriter(newTypeName);
         root = memberRewriter.Visit(root);
         var oldToNewIdMap = memberRewriter.OldToNewGuidDict;
@@ -187,20 +188,33 @@ internal static class Duplicate
                 return node;
 
             var idValue = nameSyntax.Identifier.ValueText;
-            if (!(idValue == "InputSlot" || idValue == "MultiInputSlot" || idValue == "Slot" || idValue == "TimeClipSlot" ||
-                  idValue == "TransformCallbackSlot"))
+            
+            // Todo: Would be great to use nameof() here.
+            if (idValue is not ("InputSlot" or "MultiInputSlot" or "Slot" or "TimeClipSlot" or "TransformCallbackSlot"))
                 return node; // no input / multi-input / slot / timeClip-slot (output)
 
             var attrList = node.AttributeLists[0];
-            var attribute = attrList.Attributes[0];
-            var match = _guidRegex.Match(attribute.ToString());
-            var oldGuid = Guid.Parse(match.Value);
+            var firstAttribute = attrList.Attributes[0];
+            
+            var match = _guidRegex.Match(firstAttribute.ToString());
+            var oldGuiString = match.Value;
+            var oldGuid = Guid.Parse(oldGuiString);
             var newGuid = Guid.NewGuid();
             OldToNewGuidDict[oldGuid] = newGuid;
-            var attributeArg = "(Guid = \"" + newGuid + "\")";
-            var argList = SyntaxFactory.ParseAttributeArgumentList(attributeArg);
-
-            node = node.ReplaceNode(attribute.ArgumentList, argList);
+            if (firstAttribute.ArgumentList == null)
+            {
+                Log.Debug("Skipping input with inconsistent format: " + node);
+                return node;
+            }
+            
+            var attributesWithNewGui = firstAttribute.ArgumentList.ToString().Replace(oldGuiString, newGuid.ToString());
+            var argList = SyntaxFactory.ParseAttributeArgumentList(attributesWithNewGui);
+            if (argList == null)
+            {
+                Log.Debug("Skipping input with inconsistent format: " + node);
+                return node;
+            }
+            node = node.ReplaceNode(firstAttribute.ArgumentList, argList);
 
             return node;
         }

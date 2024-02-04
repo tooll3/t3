@@ -62,6 +62,9 @@ namespace lib.point.generate
         [Input(Guid = "4686AA6E-C8E0-45EE-B9C3-1CC7294F305E", MappedType = typeof(Tilings))]
         public readonly InputSlot<int> Tiling = new();
 
+        [Input(Guid = "aa19b556-660b-4267-be44-30c30d85314e")]
+        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+
         private enum SizeModes
         {
             Cell,

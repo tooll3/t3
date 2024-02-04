@@ -1,5 +1,5 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
@@ -122,16 +122,16 @@ namespace lib._3d.mesh.generate
                 }
                 
                 // Write Data
-                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 ResourceManager.SetupStructuredBuffer(_vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride, ref _vertexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_vertexBuffer, ref _vertexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_vertexBuffer, UnorderedAccessViewBufferFlags.None, ref _vertexBufferWithViews.Uav);
+                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 
-                _indexBufferWithViews.Buffer = _indexBuffer;
                 const int stride = 3 * 4;
                 ResourceManager.SetupStructuredBuffer(_indexBufferData, stride * faceCount, stride, ref _indexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_indexBuffer, ref _indexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_indexBuffer, UnorderedAccessViewBufferFlags.None, ref _indexBufferWithViews.Uav);
+                _indexBufferWithViews.Buffer = _indexBuffer;
 
                 _data.VertexBuffer = _vertexBufferWithViews;
                 _data.IndicesBuffer = _indexBufferWithViews;
@@ -158,19 +158,19 @@ namespace lib._3d.mesh.generate
         public readonly InputSlot<Int2> Segments = new();
         
         [Input(Guid = "0295DD65-95B4-4E02-8D61-4622F59D4FC4")]
-        public readonly InputSlot<Vector2> Stretch = new();
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new();
         
         [Input(Guid = "44fc1e7b-b1d1-4199-b373-8b7c4cc060d2")]
         public readonly InputSlot<float> Scale = new();
         
         [Input(Guid = "7F01D9B9-C612-4A2D-A52F-B56C54FB62AF")]
-        public readonly InputSlot<Vector2> Pivot = new();
+        public readonly InputSlot<System.Numerics.Vector2> Pivot = new();
         
         [Input(Guid = "B2A1C96A-4AEF-412A-B006-2EF285DD2479")]
-        public readonly InputSlot<Vector3> Center = new();
+        public readonly InputSlot<System.Numerics.Vector3> Center = new();
         
         [Input(Guid = "A89E41BF-5395-41F0-9804-A782ED4C0F30")]
-        public readonly InputSlot<Vector3> Rotation = new();
+        public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
         
     }
 }

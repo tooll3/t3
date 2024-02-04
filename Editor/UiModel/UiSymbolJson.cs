@@ -12,6 +12,7 @@ using T3.Editor.External.Truncon.Collections;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
+using T3.Serialization;
 
 // ReSharper disable AssignNullToNotNullAttribute
 

@@ -10,8 +10,10 @@ using T3.Core.Rendering;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Utilities = T3.Core.Utils.Utilities;
+using VertexShaderD3D = SharpDX.Direct3D11.VertexShader;
+using PixelShaderD3D = SharpDX.Direct3D11.PixelShader;
 
-namespace lib.img.fx.@_
+namespace lib.img.fx._
 {
 	[Guid("cc3cc712-9e87-49c6-b04b-49a12cf2ba75")]
     public class _SpecularPrefilter : Instance<_SpecularPrefilter>
@@ -370,13 +372,13 @@ namespace lib.img.fx.@_
         
 
         [Input(Guid = "D7C5E69E-9DA0-44F1-BAF7-A9D2A91CA41C")]
-        public readonly InputSlot<VertexShader> VertexShader = new();
+        public readonly InputSlot<VertexShaderD3D> VertexShader = new();
 
         [Input(Guid = "2A217F9D-2F9F-418A-8568-F767905384D5")]
         public readonly InputSlot<GeometryShader> GeometryShader = new();
 
         [Input(Guid = "04D1B56F-8655-4D6C-9BDC-A84057A199D0")]
-        public readonly InputSlot<PixelShader> PixelShader = new();
+        public readonly InputSlot<PixelShaderD3D> PixelShader = new();
 
 
         [Input(Guid = "26459A4A-1BD8-4987-B41B-6C354CC48D47")]

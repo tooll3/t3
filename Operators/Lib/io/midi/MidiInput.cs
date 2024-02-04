@@ -1,15 +1,14 @@
 using System.Runtime.InteropServices;
+using T3.Core.Operator;
+using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Slots;
 using NAudio.Midi;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
 using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
-using Vector2 = System.Numerics.Vector2;
 
 namespace lib.io.midi
 {
@@ -53,7 +52,7 @@ namespace lib.io.midi
             _trainedDeviceName = Device.GetValue(context);
 
             var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(_trainedDeviceName.GetHashCode());
-            _warningMessage = midiIn == null ? $"Midi device '{_trainedDeviceName}' is not captured" : null;
+            _warningMessage = midiIn == null ? $"Midi device '{_trainedDeviceName}' is not captured.\nYou can try Windows » Settings » Midi » Rescan Devices." : null;
             
             _trainedChannel = Channel.GetValue(context);
             _trainedControllerId = Control.GetValue(context);
@@ -303,7 +302,13 @@ namespace lib.io.midi
                 }
             }
         }
-        
+
+        void IMidiConsumer.OnSettingsChanged()
+        {
+            Result.DirtyFlag.Invalidate();
+            Range.DirtyFlag.Invalidate();
+            WasHit.DirtyFlag.Invalidate();
+        }
         
         public IStatusProvider.StatusLevel GetStatusLevel()
         {
@@ -357,7 +362,7 @@ namespace lib.io.midi
         }
         
         [Input(Guid = "AAD1E576-F144-423F-83B5-5694B1119C23")]
-        public readonly InputSlot<Vector2> OutputRange = new();
+        public readonly InputSlot<System.Numerics.Vector2> OutputRange = new();
 
         [Input(Guid = "4636D6CF-8233-4281-8840-5BA079B5F1A6")]
         public readonly InputSlot<float> DefaultOutputValue = new();

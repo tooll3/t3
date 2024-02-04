@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace lib.img.fx.@_
+namespace lib.img.fx._
 {
 	[Guid("49549c3e-b09e-4633-86c6-1ac075f56b69")]
     public class UseFallbackBuffer : Instance<UseFallbackBuffer>

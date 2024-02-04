@@ -1,11 +1,11 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Numerics;
+//using SharpDX;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
-//using SharpDX;
 using Point = T3.Core.DataTypes.Point;
 
 namespace lib.point._cpu
@@ -17,7 +17,7 @@ namespace lib.point._cpu
         public readonly Slot<StructuredList> ResultPoint = new();
 
         [Output(Guid = "B1EE31B8-5D02-4B05-8F52-051180FA9A4D")]
-        public readonly Slot<Vector3> Position = new();
+        public readonly Slot<System.Numerics.Vector3> Position = new();
 
         
         // [Output(Guid = "71325a3c-64fc-4775-91de-a55f397cefa8")]
@@ -85,10 +85,10 @@ namespace lib.point._cpu
         }
 
         [Input(Guid = "95B26A7E-2360-4830-B605-DA1BD8AE882A")]
-        public readonly InputSlot<Vector3> Translation = new ();
+        public readonly InputSlot<System.Numerics.Vector3> Translation = new ();
         
         [Input(Guid = "3E7BA85D-48D0-413E-99C7-9A8742C2653E")]
-        public readonly InputSlot<Vector3> Rotation = new ();
+        public readonly InputSlot<System.Numerics.Vector3> Rotation = new ();
 
         
         [Input(Guid = "A5E1FDF0-CE29-4370-A91A-AD41E04BDE4E", MappedType = typeof(Spaces))]

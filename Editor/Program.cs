@@ -99,7 +99,7 @@ namespace T3.Editor
 
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
             
-            var userSettings = new UserSettings(saveOnQuit: true, "userSettings.json");
+            var userSettings = new UserSettings(saveOnQuit: true);
             var projectSettings = new ProjectSettings(saveOnQuit: true);
             
             #if IDE

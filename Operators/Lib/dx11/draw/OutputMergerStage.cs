@@ -8,7 +8,8 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 
-namespace lib.dx11.draw {
+namespace lib.dx11.draw
+{
 	[Guid("5efaf208-ba62-42ce-b3df-059b37fc1382")]
     public class OutputMergerStage : Instance<OutputMergerStage> {
         [Output(Guid = "CEE8C3F0-64EA-4E4D-B967-EC7E3688DD03")]

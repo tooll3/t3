@@ -1,42 +1,53 @@
 {
   "Id": "bf7fcd04-0cf6-4518-86cc-48f74483d98d"/*RoundedRect*/,
-  "Description": "",
+  "Description": "Generates a rounded rectangle.\n\nCan be customised to create a variety of shapes, similarly to [Blob].\n\nAKA: rectangle, square, ellipse, circle, rings, blob, vignette\n\nTips:",
   "InputUis": [
     {
       "InputId": "6b6887d4-ebaa-4489-b993-5027789ce1c7"/*Image*/,
       "Position": {
         "X": -195.9,
         "Y": -128.16379
-      }
+      },
+      "Description": "Image to use as a background for the shape.\nDrawn behind the background color."
     },
     {
-      "InputId": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Fill*/,
+      "InputId": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Color*/,
       "Position": {
         "X": -195.9,
         "Y": -83.16377
-      }
+      },
+      "Description": "Fill color of the shape."
     },
     {
       "InputId": "d4c20bfc-3943-4c5d-a8f8-5175fa152e91"/*Background*/,
       "Position": {
         "X": -195.9,
         "Y": 6.8362274
-      }
+      },
+      "Description": "Background color of the shape."
     },
     {
-      "InputId": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Center*/,
+      "InputId": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Position*/,
       "Position": {
         "X": -212.96689,
         "Y": 77.20885
       },
-      "GroupTitle": "Position"
+      "GroupTitle": "Position",
+      "Description": "Center position.",
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "c608e4c4-c545-45ed-8e37-95a53f6871d0"/*Stretch*/,
       "Position": {
         "X": -212.96689,
         "Y": 122.20885
-      }
+      },
+      "Description": "Stretches the shape non-uniformly.",
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "d2401798-593b-4cc3-85d8-3570ddec1f2a"/*Scale*/,
@@ -44,6 +55,7 @@
         "X": -212.96689,
         "Y": 167.20885
       },
+      "Description": "Scales the shape uniformly.",
       "Format": "{0:0.000} ×"
     },
     {
@@ -52,6 +64,7 @@
         "X": -215.65707,
         "Y": 250.36179
       },
+      "Description": "Rotates the shape.",
       "Min": -90.0,
       "Max": 90.0,
       "Scale": 2.0,
@@ -64,6 +77,7 @@
         "Y": 377.50833
       },
       "GroupTitle": "Shape",
+      "Description": "Rounds corners of the shape.\nA value of 0 will create sharp corners, and 1 will create a pill shape.",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -72,7 +86,8 @@
       "Position": {
         "X": -213.01299,
         "Y": 422.50833
-      }
+      },
+      "Description": "Color used by the shape stroke."
     },
     {
       "InputId": "80bd2460-c28d-490c-981b-77a6e89f3983"/*Stroke*/,
@@ -80,6 +95,7 @@
         "X": -213.01299,
         "Y": 467.50833
       },
+      "Description": "Stroke (outline) thickness.",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -89,6 +105,7 @@
         "X": -207.812,
         "Y": 520.39954
       },
+      "Description": "Feather edges to reduce pixel artifacts.\nCan also be used to blur the shape.\nSet to a negative value to create a vignette.",
       "Min": -1.0,
       "Max": 1.0
     },
@@ -99,6 +116,7 @@
         "Y": 565.39954
       },
       "GroupTitle": "Additional...",
+      "Description": "Weights the feathering towards one edge or the other of the blurred region.",
       "Min": -10.0,
       "Max": 10.0,
       "Scale": 0.1
@@ -108,14 +126,16 @@
       "Position": {
         "X": -202.27362,
         "Y": 731.44977
-      }
+      },
+      "Description": "Output resolution in pixels. Set to 0 for dynamic resolution."
     },
     {
       "InputId": "c9c66f57-5c8c-4481-9b9d-a8aa8569ac12"/*GenerateMips*/,
       "Position": {
         "X": -202.27362,
         "Y": 776.44977
-      }
+      },
+      "Description": "Generate mipmaps (scaled-down versions of this image for use in situations where many small copies are shown on screen.)\nWill increase memory usage."
     }
   ],
   "SymbolChildUis": [
@@ -174,6 +194,15 @@
         "X": 577.0464,
         "Y": -29.479145
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "2ba1aa5e-48ee-4a01-a4b5-b715dec7d195",
+      "Title": "More info on mipmaps",
+      "Description": "",
+      "LinkUrl": "https://github.com/tooll3/t3/wiki/help.RealtimeRendering",
+      "LinkType": "Reference"
     }
   ]
 }

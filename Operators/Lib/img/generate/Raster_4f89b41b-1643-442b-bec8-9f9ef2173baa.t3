@@ -4,11 +4,36 @@
   "Namespace": "lib.img.generate",
   "Inputs": [
     {
-      "Id": "cce27287-9774-436c-9e90-1becb42d8f95"/*Image*/,
-      "DefaultValue": null
+      "Id": "fd22eaf6-ed3c-4e63-985c-3a3756ecaef2"/*Resolution*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
     },
     {
-      "Id": "a4350111-7ca8-4ce7-b494-3e82cc679999"/*Fill*/,
+      "Id": "b32e1383-07c4-4dc4-859d-e7fb19261bce"/*Offset*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "52d36eba-d789-41a0-bdf4-9ca6b3e32530"/*Rotate*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "9cc926c7-ad28-4f49-a662-46584ae8ad9f"/*Stretch*/,
+      "DefaultValue": {
+        "X": 32.0,
+        "Y": 32.0
+      }
+    },
+    {
+      "Id": "2221e831-12dd-4c9f-8533-48b9f96e60ab"/*Scale*/,
+      "DefaultValue": 4.0
+    },
+    {
+      "Id": "a4350111-7ca8-4ce7-b494-3e82cc679999"/*Color*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0,
@@ -26,28 +51,6 @@
       }
     },
     {
-      "Id": "9cc926c7-ad28-4f49-a662-46584ae8ad9f"/*Size*/,
-      "DefaultValue": {
-        "X": 32.0,
-        "Y": 32.0
-      }
-    },
-    {
-      "Id": "b32e1383-07c4-4dc4-859d-e7fb19261bce"/*Offset*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "Id": "2221e831-12dd-4c9f-8533-48b9f96e60ab"/*Scale*/,
-      "DefaultValue": 4.0
-    },
-    {
-      "Id": "52d36eba-d789-41a0-bdf4-9ca6b3e32530"/*Rotate*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "27ce4875-b4da-4a44-a959-37c81c1600b8"/*DotSize*/,
       "DefaultValue": 0.05333333
     },
@@ -60,31 +63,28 @@
       "DefaultValue": 0.75
     },
     {
-      "Id": "c1378bbd-70df-4b6e-876f-5f1f1c59a617"/*RAffects_DotSize*/,
+      "Id": "54252e04-8f91-4ea5-91a6-f1f66f6da0a6"/*Feather*/,
+      "DefaultValue": 0.02
+    },
+    {
+      "Id": "cce27287-9774-436c-9e90-1becb42d8f95"/*Image*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "c1378bbd-70df-4b6e-876f-5f1f1c59a617"/*RedToDotSize*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "3329cd25-e7b9-47da-88e0-5dd7b6e324fa"/*GAffects_LineWidth*/,
+      "Id": "3329cd25-e7b9-47da-88e0-5dd7b6e324fa"/*GreenToLineWidth*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "92f52517-8ebc-4c89-af0a-b0bc5abc0439"/*BAffects_LineRatio*/,
+      "Id": "92f52517-8ebc-4c89-af0a-b0bc5abc0439"/*BlueToLineRatio*/,
       "DefaultValue": 0.0
     },
     {
       "Id": "6b0bdd9a-248d-410f-9b0e-de20df937775"/*MixOriginal*/,
       "DefaultValue": 1.0
-    },
-    {
-      "Id": "54252e04-8f91-4ea5-91a6-f1f66f6da0a6"/*Feather*/,
-      "DefaultValue": 0.02
-    },
-    {
-      "Id": "fd22eaf6-ed3c-4e63-985c-3a3756ecaef2"/*Resolution*/,
-      "DefaultValue": {
-        "X": 0,
-        "Y": 0
-      }
     }
   ],
   "Children": [

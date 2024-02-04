@@ -10,6 +10,7 @@ using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
+using T3.Serialization;
 
 namespace T3.Core.Audio
 {
@@ -115,8 +116,8 @@ namespace T3.Core.Audio
 
         private static void UpdateFftBuffer(int soundStreamHandle, Playback playback)
         {
-            const int get256FftValues = (int)DataFlags.FFT512;
-
+            const int get256FftValues = (int)DataFlags.FFT2048;
+            
             if (playback.Settings != null && playback.Settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
             {
                 Bass.ChannelGetData(soundStreamHandle, AudioAnalysis.FftGainBuffer, get256FftValues);

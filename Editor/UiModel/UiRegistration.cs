@@ -8,6 +8,8 @@ using SharpDX.Mathematics.Interop;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Operator.Slots;
+using T3.Core.Rendering.Material;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
@@ -89,11 +91,19 @@ internal sealed class UiRegistration
                        () => new FallbackInputUi<T3.Core.DataTypes.Texture3dWithViews>(),
                        () => new Texture3dOutputUi());
 
+        // Rendering
         RegisterUiType(typeof(MeshBuffers), new FallBackUiProperties(), () => new FallbackInputUi<MeshBuffers>(),
                        () => new ValueOutputUi<MeshBuffers>());
 
         RegisterUiType(typeof(DataSet), new FallBackUiProperties(),
                        () => new FallbackInputUi<DataSet>(), () => new DataSetOutputUi());
+
+        RegisterUiType(typeof(SceneSetup), new FallBackUiProperties(),
+                       () => new SceneSetupInputUi(), () => new SceneSetupOutputUi());
+
+        RegisterUiType(typeof(PbrMaterial), new FallBackUiProperties(),
+                       () => new FallbackInputUi<PbrMaterial>(), 
+                       () => new ValueOutputUi<PbrMaterial>());
         
         // sharpdx types
         RegisterUiType(typeof(Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());

@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace lib.math.@int 
+namespace lib.math.@int
 {
 	[Guid("5f734c25-9f1a-436c-b56c-7e0a1e07fdda")]
     public class ClampInt : Instance<ClampInt>

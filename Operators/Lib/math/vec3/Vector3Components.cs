@@ -24,7 +24,7 @@ namespace lib.math.vec3
 
         private void Update(EvaluationContext context)
         {
-            System.Numerics.Vector3 value = Value.GetValue(context);
+            var value = Value.GetValue(context);
             X.Value = value.X;
             Y.Value = value.Y;
             Z.Value = value.Z;

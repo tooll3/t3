@@ -210,6 +210,7 @@ namespace T3.Editor.Gui.Graph
                     
                     // Tooltip
                     if (isNodeHovered
+                        && UserSettings.Config.EditorHoverPreview
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
                         )
                     {
@@ -361,7 +362,7 @@ namespace T3.Editor.Gui.Graph
                         var fade = MathUtils.SmootherStep(0.2f, 0.6f, GraphCanvas.Current.Scale.X);
                         
                         drawList.AddText(font,
-                                         font.FontSize * ( useSmallFont ?  GraphCanvas.Current.Scale.X : 1) * T3Ui.UiScaleFactor,
+                                         font.FontSize * ( useSmallFont ?  GraphCanvas.Current.Scale.X : 1) ,
                                                         _usableScreenRect.Min + LabelPos,
                                                         ColorVariations.OperatorLabel.Apply(typeColor).Fade(fade),
                                                         isRenamed ? $"\"{childUi.SymbolChild.ReadableName}\"" : childUi.SymbolChild.ReadableName);
@@ -503,7 +504,7 @@ namespace T3.Editor.Gui.Graph
                             if (_isVisible && socketHeight > 10)
                             {
                                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha,
-                                                   MathUtils.RemapAndClamp(socketHeight, 10, 20, 0, 0.5f).Clamp(0, 0.5f));
+                                                   MathUtils.RemapAndClamp(socketHeight, 10, 20, 0, 0.5f).Clamp(0, 0.5f) * ImGui.GetStyle().Alpha);
                                 ImGui.PushFont(Fonts.FontSmall);
                                 //ImGui.SetCursorScreenPos(targetPos +  new Vector2(0, -ImGui.GetFontSize()/2));
                                 //ImGui.Value(socketIndex % 4 == 0 ? ">" : "", socketIndex);
@@ -970,7 +971,7 @@ namespace T3.Editor.Gui.Graph
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
-            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1.2f, (int)(UsableSlotThickness * 0.5f), UsableSlotThickness);
+            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1.2f, (int)(UsableSlotThickness * 0.5f), UsableSlotThickness ) * T3Ui.UiScaleFactor ;
 
             var opRect = _usableScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
@@ -1240,8 +1241,8 @@ namespace T3.Editor.Gui.Graph
                            InputSlot<int> i      => $"{i.GetCurrentValue():G3}",
                            InputSlot<Int3> i     => $"{i.GetCurrentValue():G3}",
                            InputSlot<bool> b     => $"{b.GetCurrentValue()}",
-                           InputSlot<Vector3> v3 => $"{v3.GetCurrentValue():0.0}",
-                           InputSlot<Vector2> v2 => $"{v2.GetCurrentValue():0.0}",
+                           InputSlot<System.Numerics.Vector3> v3 => $"{v3.GetCurrentValue():0.0}",
+                           InputSlot<System.Numerics.Vector2> v2 => $"{v2.GetCurrentValue():0.0}",
                            InputSlot<string> s   => Truncate(s.GetCurrentValue()),
                            _                     => ""
                        };
@@ -1255,8 +1256,8 @@ namespace T3.Editor.Gui.Graph
                            Slot<int> i      => $"{i.Value:G3}",
                            Slot<Int3> i     => $"{i.Value:G3}",
                            Slot<bool> b     => $"{b.Value}",
-                           Slot<Vector3> v3 => $"{v3.Value:0.0}",
-                           Slot<Vector2> v2 => $"{v2.Value:0.0}",
+                           Slot<System.Numerics.Vector3> v3 => $"{v3.Value:0.0}",
+                           Slot<System.Numerics.Vector2> v2 => $"{v2.Value:0.0}",
                            Slot<string> s   => Truncate(s.Value),
                            _                => ""
                        };

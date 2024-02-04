@@ -42,6 +42,9 @@ namespace lib._3d.draw
         [Input(Guid = "0f7305c9-4372-4e62-82ff-a377bcbffc12")]
         public readonly InputSlot<int> ScaleMode = new();
 
+        [Input(Guid = "fcf2c4d0-4e36-473e-8c67-66cc1048dc06")]
+        public readonly InputSlot<bool> TriggerUpdate = new InputSlot<bool>();
+
     }
 }
 

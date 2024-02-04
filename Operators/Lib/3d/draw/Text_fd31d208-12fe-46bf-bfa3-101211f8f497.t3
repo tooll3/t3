@@ -33,8 +33,16 @@
       }
     },
     {
+      "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
+      "DefaultValue": "Resources\\fonts\\Roboto-Black.fnt"
+    },
+    {
       "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
       "DefaultValue": 50.0
+    },
+    {
+      "Id": "835d7f17-9de4-4612-a2f0-01c1346cdf1a"/*Spacing*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "eaf9dc37-e70f-4197-895c-b5607456b4a2"/*LineHeight*/,
@@ -47,14 +55,6 @@
     {
       "Id": "82cc31ff-3307-4b6d-be70-16e471c2ffc9"/*HorizontalAlign*/,
       "DefaultValue": 1
-    },
-    {
-      "Id": "835d7f17-9de4-4612-a2f0-01c1346cdf1a"/*Spacing*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-      "DefaultValue": "Resources\\fonts\\Roboto-Black.fnt"
     },
     {
       "Id": "28be4e86-6761-4d07-80bf-abf6f82897e4"/*CullMode*/,

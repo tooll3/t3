@@ -139,13 +139,13 @@ namespace lib.point._internal
 
         
         // [Input(Guid = "6bcc7eb9-fd84-4eed-9817-ab43710425cf")]
-        // public readonly InputSlot<Vector3> Start = new InputSlot<Vector3>();
+        // public readonly InputSlot<System.Numerics.Vector3> Start = new InputSlot<System.Numerics.Vector3>();
         //
         // [Input(Guid = "49622fdc-a9eb-419c-8163-5a333e9dc543")]
         // public readonly InputSlot<float> StartW = new InputSlot<float>();
         //
         // [Input(Guid = "96dfec6b-fbc4-4fb8-86fd-99a3796c8866")]
-        // public readonly InputSlot<Vector3> Scale = new InputSlot<Vector3>();
+        // public readonly InputSlot<System.Numerics.Vector3> Scale = new InputSlot<System.Numerics.Vector3>();
         //
         // [Input(Guid = "e020a2ba-3233-450a-a90b-39a47b8f0f7f")]
         // public readonly InputSlot<float> ScaleW = new InputSlot<float>();

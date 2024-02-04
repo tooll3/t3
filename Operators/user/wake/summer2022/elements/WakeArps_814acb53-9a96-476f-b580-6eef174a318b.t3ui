@@ -92,7 +92,7 @@
       "SnapshotGroupIndex": "1"
     },
     {
-      "ChildId": "357697a7-ea2e-4678-a03e-b4ecd282d150"/*RandomizePoints*/,
+      "ChildId": "357697a7-ea2e-4678-a03e-b4ecd282d150"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": -1451.1622,
         "Y": -65.02118
@@ -833,7 +833,7 @@
       }
     },
     {
-      "ChildId": "3bba083c-aa87-444e-af4a-edb54b62c784"/*RandomizePoints*/,
+      "ChildId": "3bba083c-aa87-444e-af4a-edb54b62c784"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": -1359.5555,
         "Y": -892.8637

@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace lib._3d.rendering.@_
+namespace lib._3d.rendering._
 {
 	[Guid("b89c5923-cc58-4d7a-8dce-eb1f8cdfc6e8")]
     public class RenderQuad : Instance<RenderQuad>

@@ -1,4 +1,3 @@
-using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
@@ -33,7 +32,7 @@ namespace lib._3d.gizmo
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
         
         [Input(Guid = "53aeef4f-37f8-40a6-b552-cb35f5fb887c")]
-        public readonly InputSlot<Vector3> Position = new();
+        public readonly InputSlot<System.Numerics.Vector3> Position = new();
 
         [Input(Guid = "43f63f2d-72f0-4d73-9311-fba7e4e32b31")]
         public readonly InputSlot<float> Size = new();

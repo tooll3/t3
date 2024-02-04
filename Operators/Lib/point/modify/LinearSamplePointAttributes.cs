@@ -75,6 +75,9 @@ namespace lib.point.modify
             Rotate_X =5,
             Rotate_Y =6 ,
             Rotate_Z =7,
+            Stretch_X = 8,
+            Stretch_Y = 9,
+            Stretch_Z = 10,
         }
 
         private enum Modes

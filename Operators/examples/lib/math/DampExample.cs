@@ -10,7 +10,7 @@ namespace examples.lib.math
     public class DampExample : Instance<DampExample>
     {
         [Output(Guid = "00f191f6-1377-42e3-8494-b9b5235c1a37")]
-        public readonly Slot<Vector3> Result = new();
+        public readonly Slot<System.Numerics.Vector3> Result = new();
 
 
     }
