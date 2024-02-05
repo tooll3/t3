@@ -1697,11 +1697,6 @@
           "Id": "98155900-1bb9-427a-9c4e-0988fec806cd"/*Intensity*/,
           "Type": "System.Single",
           "Value": 2.25
-        },
-        {
-          "Id": "81962c9b-2fcd-432a-b2e7-c31b743ecd02"/*Range*/,
-          "Type": "System.Single",
-          "Value": 1.0
         }
       ],
       "Outputs": []

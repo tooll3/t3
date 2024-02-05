@@ -283,11 +283,6 @@
             "Z": 1.0,
             "W": 0.0
           }
-        },
-        {
-          "Id": "9756e240-6527-4cda-accd-e8096682b6bd"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 0.5
         }
       ],
       "Outputs": []

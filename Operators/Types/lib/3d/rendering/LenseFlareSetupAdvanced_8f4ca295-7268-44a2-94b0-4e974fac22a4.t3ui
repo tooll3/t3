@@ -146,7 +146,7 @@
       }
     },
     {
-      "ChildId": "199b21b5-41ee-4cc4-bca3-8e29a32666db"/*_DrawLenseFlareSprites*/,
+      "ChildId": "199b21b5-41ee-4cc4-bca3-8e29a32666db"/*_DrawLenseFlare_Old*/,
       "Position": {
         "X": 401.09473,
         "Y": 492.85422
@@ -167,7 +167,7 @@
       }
     },
     {
-      "ChildId": "e12e20fe-28e7-4beb-a3a6-7a2945df21b7"/*_DrawShimmer*/,
+      "ChildId": "e12e20fe-28e7-4beb-a3a6-7a2945df21b7"/*DrawLensShimmer*/,
       "Position": {
         "X": 399.4942,
         "Y": 1234.3978
@@ -183,8 +183,8 @@
     {
       "ChildId": "4c2a8f3e-d791-4fcf-b6d9-069b2897d7a9"/*ListToBuffer*/,
       "Position": {
-        "X": 249.4942,
-        "Y": 1234.3978
+        "X": 172.18951,
+        "Y": 1253.0869
       }
     },
     {
@@ -195,7 +195,7 @@
       }
     },
     {
-      "ChildId": "2c41db4e-d018-4f56-bf4f-7c4aec1f497a"/*_DrawShimmer*/,
+      "ChildId": "2c41db4e-d018-4f56-bf4f-7c4aec1f497a"/*DrawLensShimmer*/,
       "Position": {
         "X": 401.09473,
         "Y": 1145.8547
@@ -230,7 +230,7 @@
       }
     },
     {
-      "ChildId": "c9c07696-3764-446b-8a48-ed8f84bd71a9"/*_DrawLenseFlareSprites*/,
+      "ChildId": "c9c07696-3764-446b-8a48-ed8f84bd71a9"/*_DrawLenseFlare_Old*/,
       "Position": {
         "X": 401.09473,
         "Y": 250.85422
@@ -265,7 +265,7 @@
       }
     },
     {
-      "ChildId": "c1d68ce2-6811-46d5-aee7-0d81b0441daa"/*_DrawLenseFlareSprites*/,
+      "ChildId": "c1d68ce2-6811-46d5-aee7-0d81b0441daa"/*_DrawLenseFlare_Old*/,
       "Position": {
         "X": 401.09473,
         "Y": 903.854
@@ -279,7 +279,7 @@
       }
     },
     {
-      "ChildId": "560c8134-29e4-4d0c-8245-1609e62bb326"/*_LenseFlareSprites*/,
+      "ChildId": "560c8134-29e4-4d0c-8245-1609e62bb326"/*DefineLensFlare*/,
       "Position": {
         "X": 9.552155,
         "Y": 786.6787

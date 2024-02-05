@@ -13,12 +13,12 @@ using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
 {
-    public class _LenseFlareSprites : Instance<_LenseFlareSprites>
+    public class DefineLensFlare : Instance<DefineLensFlare>
     {
         [Output(Guid = "B26730FF-B1FF-40A7-91AF-B10026ED4C32", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<StructuredList> OutBuffer = new();
 
-        public _LenseFlareSprites()
+        public DefineLensFlare()
         {
             OutBuffer.UpdateAction = Update;
         }
@@ -38,10 +38,10 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             var size = Size.GetValue(context);
             var randomizeSize = RandomizeSize.GetValue(context);
             var stretch = Stretch.GetValue(context);
-            var distanceFromLight = DistanceFromLight.GetValue(context);
+            var distanceFromLight = OffsetTowardsCenter.GetValue(context);
             var spread = Spread.GetValue(context);
             var randomizeSpread = RandomizeSpread.GetValue(context);
-            var positionFactor = PositionFactor.GetValue(context);
+            var positionFactor = DistributeSpread.GetValue(context);
             var randomizePosition = RandomizePosition.GetValue(context);
 
             var mixPointLightColor = MixPointLightColor.GetValue(context);
@@ -152,7 +152,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
                     // Fade with incoming alpha from FlatShaders and Materials
                     //color.W *= materialAlpha;
 
-                    float spriteRotation = rotation;
+                    var spriteRotation = rotation;
 
                     switch (rotateTowards)
                     {
@@ -169,25 +169,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-
-                    // // Transforom UV to pick correct texture cell
-                    // if (TextureCellsRows == 0)
-                    //     TextureCellsRows = 1;
-                    //
-                    // if (TextureCellsColumns == 0)
-                    //     TextureCellsColumns = 1;
-
-                    // int row = (int)(Math.Floor(i / TextureCellsColumns) % TextureCellsRows);
-                    // int column = (int)(i % TextureCellsRows);
-                    //
-                    // var translationUV = new Vector3(1 / TextureCellsColumns * column, 1 / TextureCellsRows * row, 0);
-                    // var rotationUV = new Quaternion();
-                    // var scaleUV = new Vector3(1 / TextureCellsColumns, 1 / TextureCellsRows, 0);
-                    // var pivotUV = new Vector3(0, 0, 0);
-                    //
-                    // var transformUV = Matrix.Transformation(pivotUV, new Quaternion(), scaleUV, pivotUV, rotationUV, translationUV);
-                    // var prevTransformUV = context.TextureMatrix;
-                    // context.TextureMatrix = transformUV * prevTransformUV;
+                    
                     spriteColor.W *= brightness;
 
                     _tempList.Add(new Sprite
@@ -216,7 +198,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             OutBuffer.Value = _sprites;
         }
 
-        private float GetDistanceToEdge(Vector2 posInClipSpace)
+        private static float GetDistanceToEdge(Vector2 posInClipSpace)
         {
             var p = (posInClipSpace / 2 + Vector2.One * 0.5f);
             var dToRight = 1 - p.X;
@@ -232,7 +214,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             return d;
         }
 
-        private List<Sprite> _tempList = new(100);
+        private readonly List<Sprite> _tempList = new(100);
 
         [StructLayout(LayoutKind.Explicit, Size = SizeInBytes)]
         public struct Sprite
@@ -262,13 +244,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
         }
 
         private StructuredList<Sprite> _sprites = new(10);
-
-        // private enum ColorSources
-        // {
-        //     Light,
-        //     Global,
-        // }
-
+        
         private enum ZoneFxModes
         {
             Off,
@@ -285,14 +261,28 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
         [Input(Guid = "9F85D1F1-37D2-4F7E-9EFD-70CB415C4CEE")]
         public readonly InputSlot<float> Brightness = new();
 
-        [Input(Guid = "F21DBEFD-EA54-4901-A806-B1A2C5EE140F")]
-        public readonly InputSlot<float> DistanceFromLight = new();
 
         [Input(Guid = "792E9B7E-9094-4BF9-8AED-D8B3FCDEE358")]
         public readonly InputSlot<float> Spread = new();
+        
+        [Input(Guid = "F21DBEFD-EA54-4901-A806-B1A2C5EE140F")]
+        public readonly InputSlot<float> OffsetTowardsCenter = new();
 
+        [Input(Guid = "BC1D9FDC-EA07-4C0D-BE2D-02FA955F9E5A")]
+        public readonly InputSlot<float> RandomizeSpread = new();
+
+        [Input(Guid = "1C250003-CF16-44DF-9A5E-F9FCF331617C")]
+        public readonly InputSlot<Vector2> DistributeSpread = new();
+
+        [Input(Guid = "D314C572-71C7-4A67-921B-DF369817DD4A")]
+        public readonly InputSlot<Vector2> RandomizePosition = new();
+
+        
         [Input(Guid = "CCF77198-7682-4F6B-96F2-986E6827A4DF")]
         public readonly InputSlot<float> Size = new();
+
+        [Input(Guid = "2A1285B1-63EA-46A5-8D96-B7BA33EDD88B")]
+        public readonly InputSlot<float> RandomizeSize = new();
 
         [Input(Guid = "C8347CA9-C700-4195-A23F-0F220F5823E2")]
         public readonly InputSlot<Vector2> Stretch = new();
@@ -303,14 +293,11 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
         [Input(Guid = "93728B1F-CBFA-4065-9DE1-BF8641FADE7E")]
         public readonly InputSlot<float> RotationSpread = new();
 
-        [Input(Guid = "2A1285B1-63EA-46A5-8D96-B7BA33EDD88B")]
-        public readonly InputSlot<float> RandomizeSize = new();
-
-        [Input(Guid = "BC1D9FDC-EA07-4C0D-BE2D-02FA955F9E5A")]
-        public readonly InputSlot<float> RandomizeSpread = new();
-
         // [Input(Guid = "7244CC40-8F0A-4381-80A3-EB818E262C88", MappedType = typeof(ColorSources))]
         // public readonly InputSlot<int> ColorSource = new();
+        
+        [Input(Guid = "205ED310-E01C-4B0C-9C24-E404476CE036", MappedType = typeof(Categories))]
+        public readonly InputSlot<int> RotateTowards = new();
         
         [Input(Guid = "D6554B75-F320-4E8B-BCB0-6B484C29F6D3")]
         public readonly InputSlot<float> MixPointLightColor = new();
@@ -324,15 +311,6 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
         // [Input(Guid = "77EAC715-D2EE-4BD5-93F5-1E9E7119A0E6")]
         // public readonly InputSlot<Vector2> TextureCells = new();
 
-        [Input(Guid = "9CFFFB1A-675E-410C-96DA-C02BD6B3A81A")]
-        public readonly InputSlot<int> RandomSeed = new();
-
-        [Input(Guid = "1C250003-CF16-44DF-9A5E-F9FCF331617C")]
-        public readonly InputSlot<Vector2> PositionFactor = new();
-
-        [Input(Guid = "D314C572-71C7-4A67-921B-DF369817DD4A")]
-        public readonly InputSlot<Vector2> RandomizePosition = new();
-
         [Input(Guid = "C1B5F49F-3538-48AA-8D16-92D48FCF08CB", MappedType = typeof(ZoneFxModes))]
         public readonly InputSlot<int> FxZoneMode = new();
 
@@ -342,8 +320,6 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
         [Input(Guid = "00ED2D51-4CF0-43D6-ADAA-CE42E5EB8439")]
         public readonly InputSlot<Vector2> InnerFxZone = new();
 
-        [Input(Guid = "BE4366C5-9E1C-430A-8F34-F31321A7DF2C")]
-        public readonly InputSlot<Vector2> MattBoxZone = new();
 
         [Input(Guid = "0D98C14C-3F62-47E2-8FE8-A85208D9C02D")]
         public readonly InputSlot<float> FxZoneScale = new();
@@ -351,6 +327,14 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
         [Input(Guid = "520EE127-F542-4AD8-A6EA-4A24A70ADE4D")]
         public readonly InputSlot<float> FxZoneBrightness = new();
 
+        [Input(Guid = "BE4366C5-9E1C-430A-8F34-F31321A7DF2C")]
+        public readonly InputSlot<Vector2> MattBoxZone = new();
+
+        [Input(Guid = "9CFFFB1A-675E-410C-96DA-C02BD6B3A81A")]
+        public readonly InputSlot<int> RandomSeed = new();
+
+
+        
         private enum Categories
         {
             Object,
@@ -358,7 +342,6 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             ScreenCenter,
         }
 
-        [Input(Guid = "205ED310-E01C-4B0C-9C24-E404476CE036", MappedType = typeof(Categories))]
-        public readonly InputSlot<int> RotateTowards = new();
+
     }
 }

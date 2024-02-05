@@ -1,5 +1,5 @@
 {
-  "Name": "_DrawLenseFlareSprites",
+  "Name": "_DrawLenseFlare_Old",
   "Id": "95558338-81a5-4ecc-9d5c-1c6fb5f6f4fa",
   "Namespace": "lib.3d.rendering._",
   "Inputs": [
@@ -30,7 +30,7 @@
     },
     {
       "Id": "fdd797b2-f02a-4f92-a97f-c2c361758c48"/*EnableDepthWrite*/,
-      "DefaultValue": true
+      "DefaultValue": false
     }
   ],
   "Children": [

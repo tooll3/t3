@@ -35,9 +35,6 @@ namespace T3.Operators.Types.Id_9c67a8c8_839f_4f67_a949_08cb38b9dffd
         [Input(Guid = "ff3442c5-95c8-4bd6-a492-cb4a9a597ea1")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new();
 
-        [Input(Guid = "81962c9b-2fcd-432a-b2e7-c31b743ecd02")]
-        public readonly InputSlot<float> Range = new();
-
         [Input(Guid = "f3ca8d13-4e24-4718-a59c-6a1b9a2a3c04")]
         public readonly InputSlot<bool> IsEnabled = new();
         

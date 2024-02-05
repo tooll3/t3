@@ -463,7 +463,10 @@ public class T3Ui
 
         var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
         var sourceSymbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == symbolChildId);
-        var selectionTargetInstance = compositionOp.Children.Single(instance => instance.SymbolChildId == symbolChildId);
+        var selectionTargetInstance = compositionOp.Children.SingleOrDefault(instance => instance.SymbolChildId == symbolChildId);
+        if (selectionTargetInstance == null)
+            return;
+        
         NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
         FitViewToSelectionHandling.FitViewToSelection();
     }

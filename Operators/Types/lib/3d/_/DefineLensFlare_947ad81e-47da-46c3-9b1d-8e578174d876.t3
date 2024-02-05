@@ -1,5 +1,5 @@
 {
-  "Name": "_LenseFlareSprites",
+  "Name": "DefineLensFlare",
   "Id": "947ad81e-47da-46c3-9b1d-8e578174d876",
   "Namespace": "lib.3d._",
   "Inputs": [
@@ -16,16 +16,38 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "f21dbefd-ea54-4901-a806-b1a2c5ee140f"/*DistanceFromLight*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "792e9b7e-9094-4bf9-8aed-d8b3fcdee358"/*Spread*/,
       "DefaultValue": 0.0
     },
     {
+      "Id": "f21dbefd-ea54-4901-a806-b1a2c5ee140f"/*OffsetTowardsCenter*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "bc1d9fdc-ea07-4c0d-be2d-02fa955f9e5a"/*RandomizeSpread*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "1c250003-cf16-44df-9a5e-f9fcf331617c"/*DistributeSpread*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0
+      }
+    },
+    {
+      "Id": "d314c572-71c7-4a67-921b-df369817dd4a"/*RandomizePosition*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
       "Id": "ccf77198-7682-4f6b-96f2-986e6827a4df"/*Size*/,
       "DefaultValue": 0.04
+    },
+    {
+      "Id": "2a1285b1-63ea-46a5-8d96-b7ba33edd88b"/*RandomizeSize*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "c8347ca9-c700-4195-a23f-0f220f5823e2"/*Stretch*/,
@@ -43,16 +65,12 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "2a1285b1-63ea-46a5-8d96-b7ba33edd88b"/*RandomizeSize*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "bc1d9fdc-ea07-4c0d-be2d-02fa955f9e5a"/*RandomizeSpread*/,
-      "DefaultValue": 0.0
+      "Id": "205ed310-e01c-4b0c-9c24-e404476ce036"/*RotateTowards*/,
+      "DefaultValue": 0
     },
     {
       "Id": "d6554b75-f320-4e8b-bcb0-6b484c29f6d3"/*MixPointLightColor*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.5
     },
     {
       "Id": "7d9da46c-2d1f-48f8-bdc5-bb7e29c363c7"/*Color*/,
@@ -70,24 +88,6 @@
         "Y": 0.0,
         "Z": 0.0,
         "W": 0.0
-      }
-    },
-    {
-      "Id": "9cfffb1a-675e-410c-96da-c02bd6b3a81a"/*RandomSeed*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "1c250003-cf16-44df-9a5e-f9fcf331617c"/*PositionFactor*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0
-      }
-    },
-    {
-      "Id": "d314c572-71c7-4a67-921b-df369817dd4a"/*RandomizePosition*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
       }
     },
     {
@@ -109,13 +109,6 @@
       }
     },
     {
-      "Id": "be4366c5-9e1c-430a-8f34-f31321a7df2c"/*MattBoxZone*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.5
-      }
-    },
-    {
       "Id": "0d98c14c-3f62-47e2-8fe8-a85208d9c02d"/*FxZoneScale*/,
       "DefaultValue": 0.0
     },
@@ -124,7 +117,14 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "205ed310-e01c-4b0c-9c24-e404476ce036"/*RotateTowards*/,
+      "Id": "be4366c5-9e1c-430a-8f34-f31321a7df2c"/*MattBoxZone*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.5
+      }
+    },
+    {
+      "Id": "9cfffb1a-675e-410c-96da-c02bd6b3a81a"/*RandomSeed*/,
       "DefaultValue": 0
     }
   ],
