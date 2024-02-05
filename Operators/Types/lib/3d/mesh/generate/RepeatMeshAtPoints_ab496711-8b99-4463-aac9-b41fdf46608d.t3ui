@@ -53,7 +53,7 @@
         "X": -515.573,
         "Y": 1671.2544
       },
-      "Description": "Enables / Disables stretching"
+      "Description": "Controls whether the \"Stretching\" values from operators such as [RandomizePoints] or [TransformPoints] are used."
     }
   ],
   "SymbolChildUis": [
