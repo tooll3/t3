@@ -2390,19 +2390,6 @@
           }
         },
         {
-          "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
-          "Type": "T3.Core.DataTypes.Vector.Int2",
-          "Value": {
-            "X": 512,
-            "Y": 512
-          }
-        },
-        {
-          "Id": "7613bc20-d400-440d-b6a5-5f60ce61a33c"/*Rotate*/,
-          "Type": "System.Single",
-          "Value": 30.0
-        },
-        {
           "Id": "e7a99144-1f59-42ae-bdac-906ca1e54e0d"/*Sides*/,
           "Type": "System.Single",
           "Value": 6.05
@@ -2411,6 +2398,19 @@
           "Id": "c6c3d50e-9731-42cc-a0fc-ee8d15ac6cca"/*Radius*/,
           "Type": "System.Single",
           "Value": 0.35
+        },
+        {
+          "Id": "7613bc20-d400-440d-b6a5-5f60ce61a33c"/*Rotate*/,
+          "Type": "System.Single",
+          "Value": 30.0
+        },
+        {
+          "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
+          "Type": "T3.Core.DataTypes.Vector.Int2",
+          "Value": {
+            "X": 512,
+            "Y": 512
+          }
         }
       ],
       "Outputs": []
