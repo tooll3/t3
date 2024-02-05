@@ -24,14 +24,14 @@
           "Value": 0.12
         },
         {
-          "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
-          "Type": "System.Single",
-          "Value": 0.019
-        },
-        {
           "Id": "21c666bb-a28f-498c-a834-a2ba4aca78a7"/*EmitMode*/,
           "Type": "System.Int32",
           "Value": 1
+        },
+        {
+          "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
+          "Type": "System.Single",
+          "Value": 0.019
         }
       ],
       "Outputs": []

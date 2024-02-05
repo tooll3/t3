@@ -1485,11 +1485,6 @@
             "Z": 0.1574591,
             "W": 1.0
           }
-        },
-        {
-          "Id": "81962c9b-2fcd-432a-b2e7-c31b743ecd02"/*Range*/,
-          "Type": "System.Single",
-          "Value": 1.7700002
         }
       ],
       "Outputs": []

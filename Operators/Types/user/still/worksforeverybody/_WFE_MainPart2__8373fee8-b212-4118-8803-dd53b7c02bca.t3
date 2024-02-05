@@ -8164,14 +8164,14 @@
           }
         },
         {
-          "Id": "7777f86d-dbf7-44d4-9da4-99a819038095"/*DontColorAlpha*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
           "Id": "e3363c0e-819a-45e2-8202-439bcce64d69"/*Mode*/,
           "Type": "System.Int32",
           "Value": 0
+        },
+        {
+          "Id": "7777f86d-dbf7-44d4-9da4-99a819038095"/*DontColorAlpha*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []
