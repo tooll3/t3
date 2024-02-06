@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -66,6 +67,8 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
 
             var startLightIndex = 0;
             var endLightIndex = context.PointLights.Count;
+            var textureStart = TextureIndex.GetValue(context);
+
 
             _tempList.Clear();
 
@@ -180,6 +183,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
                                           RotationDeg = spriteRotation + f * rotationSpread * 180,
                                           UvMin = Vector2.Zero,
                                           UvMax = Vector2.One,
+                                          TextureIndex = (int)(rand.NextDouble() * 65535) //Fixme: implement correct number
                                       });
                 }
             }
@@ -238,7 +242,10 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             public Vector2 UvMax;
 
             [FieldOffset(13 * 4)]
-            public Vector3 __padding;
+            public int TextureIndex;
+            
+            [FieldOffset(14 * 4)]
+            public Vector2 __padding;
 
             private const int SizeInBytes = 16 * 4;
         }
@@ -333,15 +340,14 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
         [Input(Guid = "9CFFFB1A-675E-410C-96DA-C02BD6B3A81A")]
         public readonly InputSlot<int> RandomSeed = new();
 
+        [Input(Guid = "A5AD260C-9341-4E43-923C-86F12974DF97")]
+        public readonly InputSlot<Int2> TextureIndex = new();
 
-        
         private enum Categories
         {
             Object,
             Light,
             ScreenCenter,
         }
-
-
     }
 }

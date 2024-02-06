@@ -32,6 +32,7 @@ cbuffer Params : register(b2)
 {
     float4 Color;
     float Size;
+    float2 TextureCells;
 };
 
 struct psInput
@@ -50,7 +51,8 @@ struct Sprite
     float4 Color;
     float2 UvMin;
     float2 UvMax;
-    float3 __padding;
+    int TextureIndex;
+    float2 __padding;
 };
 
 sampler texSampler : register(s0);
@@ -90,7 +92,28 @@ psInput vsMain(uint id: SV_VertexID)
 
     output.position = float4(p, 0,1);
 
-    output.texCoord = lerp(sprite.UvMin, sprite.UvMax, cornerFactors.zw);
+    // float2 uvMin = 0;
+    // float2 uvMax = 1;
+
+    // Texture
+    int2 atlasSize = (int2)TextureCells;
+    int textureIndex = sprite.TextureIndex % (atlasSize.x * atlasSize.y);
+    float2 uvMin = float2(textureIndex % atlasSize.x, textureIndex / atlasSize.x) / atlasSize;
+    float2 uvMax = uvMin + 1.0/atlasSize;
+
+    // float textureUx = sprite.TextureIndex;
+    // float textureUy = GetUFromMode(TextureAtlasMode, pointId, f, normalizedScatter.wxyz, p.W, output.fog); 
+    
+    // int textureCelX =  textureUx * atlasSize.x;
+    // int textureCelY =  textureUy * atlasSize.y;
+
+    // output.texCoord = (cornerFactors.xy * float2(-1, 1) * 0.5 + 0.5);
+    // output.texCoord /= atlasSize;
+    // output.texCoord += float2(textureCelX, textureCelY) / atlasSize;    
+
+
+    output.texCoord = lerp(uvMin, uvMax, cornerFactors.zw);
+
     output.color = sprite.Color;
     return output;    
 }

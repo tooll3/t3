@@ -126,6 +126,13 @@
     {
       "Id": "9cfffb1a-675e-410c-96da-c02bd6b3a81a"/*RandomSeed*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "a5ad260c-9341-4e43-923c-86f12974df97"/*TextureIndex*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
     }
   ],
   "Children": [],

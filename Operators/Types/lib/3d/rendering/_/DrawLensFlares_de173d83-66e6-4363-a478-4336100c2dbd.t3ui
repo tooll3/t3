@@ -5,45 +5,52 @@
     {
       "InputId": "3c028f98-5130-4cb0-b09b-eca193a8382b"/*Color*/,
       "Position": {
-        "X": -756.70294,
-        "Y": 150.58934
+        "X": -93.12924,
+        "Y": 172.22752
       }
     },
     {
       "InputId": "b84b107c-5179-48b2-ab2e-eb0b847fbb1e"/*Size*/,
       "Position": {
-        "X": -756.70294,
-        "Y": 195.58934
+        "X": -93.12924,
+        "Y": 217.22752
       }
     },
     {
       "InputId": "ce9153c5-d9f6-45b7-8132-180a36dce18c"/*BlendMod*/,
       "Position": {
-        "X": -750.67535,
-        "Y": 580.582
+        "X": -87.101654,
+        "Y": 602.22015
       }
     },
     {
       "InputId": "01ba26e4-46a2-453e-a29f-3ae0ddf463a6"/*EnableDepthWrite*/,
       "Position": {
-        "X": -750.67535,
-        "Y": 625.582
+        "X": -87.101654,
+        "Y": 647.22015
+      }
+    },
+    {
+      "InputId": "2366c1cb-3d0d-4b76-8d21-648c05fcc996"/*TextureCells*/,
+      "Position": {
+        "X": -92.402435,
+        "Y": 982.2465
       }
     },
     {
       "InputId": "6800d879-88fb-4e66-97dc-f0e63e0bdd17"/*LenseFlareDefinitions*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -753.2469,
-        "Y": 1118.2045
+        "X": -89.67319,
+        "Y": 1139.8427
       }
     },
     {
       "InputId": "8e1ceafe-4697-45a2-9464-9f0797cb6de5"/*Texture_*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -759.31537,
-        "Y": 1356.3878
+        "X": -95.74167,
+        "Y": 1378.026
       },
       "Description": "Texture used for the sprites. Good options for generating them are [RadialGradient], [Blob] and [NGon].\nMake sure to set their Resolution to a fixed square size like 256x256 pixels.."
     }
@@ -132,17 +139,12 @@
         "Y": 59.905018
       },
       "Position": {
-        "X": 313.81396,
-        "Y": 159.61496
+        "X": 326.4362,
+        "Y": 134.57576
       }
     },
     {
       "ChildId": "4f679a02-0ea8-424a-993a-a1464db0c62a"/*FloatsToBuffer*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 138.04747,
-        "Y": 340.20267
-      },
       "Position": {
         "X": 476.4362,
         "Y": 134.57576
@@ -158,22 +160,22 @@
     {
       "ChildId": "ffd2243e-c096-4568-ba63-f32d1e82e724"/*Draw*/,
       "Position": {
-        "X": 189.08524,
-        "Y": 1025.6057
+        "X": 715.7501,
+        "Y": 1048.9136
       }
     },
     {
       "ChildId": "55051fed-a365-4b2c-8246-cb957cf3775f"/*SrvFromTexture2d*/,
       "Position": {
-        "X": 57.129868,
-        "Y": 1417.7345
+        "X": 720.7036,
+        "Y": 1439.3727
       }
     },
     {
       "ChildId": "46d752aa-07dd-4fc8-b307-eff32508d3d5"/*UseFallbackTexture*/,
       "Position": {
-        "X": -92.87013,
-        "Y": 1417.7345
+        "X": 570.7036,
+        "Y": 1439.3727
       }
     },
     {
@@ -186,29 +188,22 @@
     {
       "ChildId": "e6cc1fdf-7662-482f-9c87-2a8731290864"/*MultiplyInt*/,
       "Position": {
-        "X": 59.085266,
-        "Y": 1025.6057
-      }
-    },
-    {
-      "ChildId": "7ccf39c7-22a0-4c34-834f-aa9ffb4821b5"/*GetSRVProperties*/,
-      "Position": {
-        "X": -200.91473,
-        "Y": 1025.6057
+        "X": 585.7501,
+        "Y": 1048.9136
       }
     },
     {
       "ChildId": "e0f7eef4-7dd8-4fc8-b960-1ff8a12fc293"/*ClampInt*/,
       "Position": {
-        "X": -70.914734,
-        "Y": 1025.6057
+        "X": 455.75015,
+        "Y": 1048.9136
       }
     },
     {
       "ChildId": "55355742-c77f-45fa-a051-12307d75d0cb"/*GetBufferComponents*/,
       "Position": {
-        "X": -400.39957,
-        "Y": 1105.9019
+        "X": 263.17413,
+        "Y": 1127.54
       }
     },
     {
@@ -228,15 +223,36 @@
     {
       "ChildId": "4c0c6744-06ee-47b2-bb2a-dda1f9cd5db1"/*ListToBuffer*/,
       "Position": {
-        "X": -550.39954,
-        "Y": 1105.9019
+        "X": 113.174164,
+        "Y": 1127.54
       }
     },
     {
       "ChildId": "9862a59d-e326-481e-8d26-8d0519259f86"/*Blob*/,
       "Position": {
-        "X": -362.17462,
-        "Y": 1522.1848
+        "X": 301.39908,
+        "Y": 1543.823
+      }
+    },
+    {
+      "ChildId": "4a74eef9-a283-4dd3-a124-928d883ddc37"/*Int2Components*/,
+      "Position": {
+        "X": 205.31226,
+        "Y": 965.7039
+      }
+    },
+    {
+      "ChildId": "02a37c22-72ff-4e40-aabc-d044efff2f40"/*IntToFloat*/,
+      "Position": {
+        "X": 386.72882,
+        "Y": 914.2625
+      }
+    },
+    {
+      "ChildId": "8c98e870-2f7f-4ea3-882d-213c64f4e709"/*IntToFloat*/,
+      "Position": {
+        "X": 386.72882,
+        "Y": 970.2625
       }
     }
   ],

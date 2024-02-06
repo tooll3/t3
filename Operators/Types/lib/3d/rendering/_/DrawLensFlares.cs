@@ -22,6 +22,9 @@ namespace T3.Operators.Types.Id_de173d83_66e6_4363_a478_4336100c2dbd
         [Input(Guid = "01ba26e4-46a2-453e-a29f-3ae0ddf463a6")]
         public readonly InputSlot<bool> EnableDepthWrite = new InputSlot<bool>();
 
+        [Input(Guid = "2366c1cb-3d0d-4b76-8d21-648c05fcc996")]
+        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> TextureCells = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+
         [Input(Guid = "6800d879-88fb-4e66-97dc-f0e63e0bdd17")]
         public readonly MultiInputSlot<T3.Core.DataTypes.StructuredList> LenseFlareDefinitions = new MultiInputSlot<T3.Core.DataTypes.StructuredList>();
 
