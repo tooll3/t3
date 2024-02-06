@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Rendering.Material;
 using T3.Core.Resource;
@@ -23,10 +24,43 @@ public class SceneSetup : IEditableInputType
     /// <summary>
     /// Flattens the node structure
     /// </summary>
-    public void GenerateSceneDrawDispatch()
+    public void GenerateSceneDrawDispatches()
     {
+        DrawDispatches.Clear();
+        if (RootNodes == null || RootNodes.Count != 1)
+        {
+            Log.Warning("Gltf scene requires a single root node");
+            return;
+        }
+        
+        InsertNodeToDrawList(RootNodes[0]);
         
     }
+
+    public void InsertNodeToDrawList(SceneNode node)
+    {
+        if (node.MeshBuffers == null)
+            return;
+        
+        var vertexCount = node.MeshBuffers.IndicesBuffer.Srv.Description.Buffer.ElementCount * 3;
+        var newDispatch = new SceneDrawDispatch
+                              {
+                                  MeshBuffers = node.MeshBuffers,
+                                  VertexCount = vertexCount,
+                                  VertexStartIndex = 0,
+                                  Material = null,
+                                  CombinedTransform = default
+                              };
+        
+        DrawDispatches.Add(newDispatch);
+
+        foreach (var childNode in node.ChildNodes)
+        {
+            InsertNodeToDrawList(childNode);
+        }
+    }
+    
+    
     
     /// <summary>
     /// Flattened structure used by _DispatchSceneDraws to dispatch draw commands.
@@ -63,6 +97,7 @@ public class SceneSetup : IEditableInputType
         public Matrix4x4 CombinedTransform;
         public Transform Transform;
         public string MeshName;
+        public MeshBuffers MeshBuffers;
     }
 
     public struct Transform

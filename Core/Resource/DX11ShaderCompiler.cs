@@ -86,9 +86,16 @@ public class DX11ShaderCompiler : ShaderCompiler
         {
             const string resourcesFolder = ResourceManager.ResourcesFolder;
 
+            var path = Path.Combine(resourcesFolder, fileName);
+            if (!File.Exists(path))
+            {
+                Log.Warning($"Shader compiler can't {path}");
+                return null;
+            }
+            
             try
             {
-                _streamReader = new StreamReader(Path.Combine(resourcesFolder, fileName));
+                _streamReader = new StreamReader(path);
             }
             catch (DirectoryNotFoundException rs_e)
             {

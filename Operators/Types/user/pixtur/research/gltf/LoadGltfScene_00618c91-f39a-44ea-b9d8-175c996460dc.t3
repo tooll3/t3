@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "292e80cf-ba31-4a50-9bf4-83712430f811"/*Path*/,
-      "DefaultValue": ""
+      "DefaultValue": "Resources\\common\\test-footage\\gltf-scene-test-01.glb"
     },
     {
       "Id": "a82b725b-5a2b-4679-85be-2641c45d3687"/*ChildIndex*/,

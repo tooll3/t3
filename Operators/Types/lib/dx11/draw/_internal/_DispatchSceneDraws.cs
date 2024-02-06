@@ -64,7 +64,7 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
             }
             else
             {
-                TryDrawNodes(SceneSetup.GetValue(context));
+                TryDrawNodes(context, psStage,vsStage);
             }
             
             // Restore
@@ -79,18 +79,23 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
         }
         
         [SuppressMessage("Performance", "CA1822:Mark members as static")]
-        private void TryDrawNodes(SceneSetup sceneSetup)
+        private void TryDrawNodes(EvaluationContext context, PixelShaderStage psStage, VertexShaderStage vsStage)
         {
+            var sceneSetup = SceneSetup.GetValue(context);
             if (sceneSetup?.DrawDispatches == null)
             {
                 Log.Warning("undefined or empty scene setup");
                 return;
             }
 
+            int index = 0;
+            
             foreach (var dispatch in sceneSetup.DrawDispatches)
             {
-                var material = dispatch.Material;
+                Log.Debug($"Trying to draw {index}...");
                 
+                var material = dispatch.Material ?? context.PbrMaterial;
+
                 // Resources changing with each draw call
                 var resourcesMissing = false;
                 resourcesMissing |= TestAndSet(dispatch.MeshBuffers?.VertexBuffer?.Srv, MeshVerticesIndex);
@@ -107,6 +112,10 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
                     continue;
                 }
                 
+                vsStage.SetShaderResources(0, ShaderResourceViews.Length, ShaderResourceViews);
+                psStage.SetShaderResources(0, ShaderResourceViews.Length, ShaderResourceViews);
+
+                Log.Debug($"Dispatching draw for {dispatch.VertexCount} vertices...");
                 ResourceManager.Device.ImmediateContext.Draw(dispatch.VertexCount, dispatch.VertexStartIndex);
             }
         }
@@ -115,13 +124,13 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
         private bool TryGetAndApplySrv(EvaluationContext context, InputSlot<ShaderResourceView> srvInput, int index)
         {
             var srv = srvInput.GetValue(context);
-            _prevShaderResourceViews[index] = srv;
+            ShaderResourceViews[index] = srv;
             return srv == null;
         }
 
         private bool TestAndSet(ShaderResourceView srv, int index)
         {
-            _prevShaderResourceViews[index] = srv;
+            ShaderResourceViews[index] = srv;
             return srv == null;
         }
         
@@ -152,7 +161,7 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
         
         [Input(Guid = "7a9ae929-7001-42ef-b7f2-f2e03bbb7206")]
         public readonly InputSlot<VertexShader> VertexShader = new();
-
+        
         [Input(Guid = "59864DA4-3658-4D7D-830E-6EF0D3CBB505")]
         public readonly InputSlot<PixelShader> PixelShader = new();
         
@@ -162,32 +171,29 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
         // [Input(Guid = "83fdb275-3018-46a9-b75e-e9ee3d8660f4")]
         // public readonly MultiInputSlot<ShaderResourceView> ShaderResources = new();
 
-        [Input(Guid = "ED6773A0-7666-4053-9415-AD76AAA2E1D5")]
-        public readonly InputSlot<ShaderResourceView> MeshVertices = new();
-
-        [Input(Guid = "4FD00D02-A9A0-4BF7-B2B0-754BD904D1EB")]
-        public readonly InputSlot<ShaderResourceView> MeshIndices = new();
-        
-        [Input(Guid = "912F1A3E-534A-4712-AE01-27768FCE2696")]
-        public readonly InputSlot<ShaderResourceView> AlbedoColorMap = new();
-
-        [Input(Guid = "30A2CA5D-0AAE-4DA5-BF6B-336526C46871")]
-        public readonly InputSlot<ShaderResourceView> EmissiveColorMap = new();
-
-        [Input(Guid = "CED29224-57F5-4CB4-97B4-E03E9B35EAB5")]
-        public readonly InputSlot<ShaderResourceView> RmoColorMap = new();
-
-        [Input(Guid = "C65AB173-FBD0-4960-AF05-620C5CF0404A")]
-        public readonly InputSlot<ShaderResourceView> NormalColorMap = new();
+        // [Input(Guid = "ED6773A0-7666-4053-9415-AD76AAA2E1D5")]
+        // public readonly InputSlot<ShaderResourceView> MeshVertices = new();
+        //
+        // [Input(Guid = "4FD00D02-A9A0-4BF7-B2B0-754BD904D1EB")]
+        // public readonly InputSlot<ShaderResourceView> MeshIndices = new();
+        //
+        // [Input(Guid = "912F1A3E-534A-4712-AE01-27768FCE2696")]
+        // public readonly InputSlot<ShaderResourceView> AlbedoColorMap = new();
+        //
+        // [Input(Guid = "30A2CA5D-0AAE-4DA5-BF6B-336526C46871")]
+        // public readonly InputSlot<ShaderResourceView> EmissiveColorMap = new();
+        //
+        // [Input(Guid = "CED29224-57F5-4CB4-97B4-E03E9B35EAB5")]
+        // public readonly InputSlot<ShaderResourceView> RmoColorMap = new();
+        //
+        // [Input(Guid = "C65AB173-FBD0-4960-AF05-620C5CF0404A")]
+        // public readonly InputSlot<ShaderResourceView> NormalColorMap = new();
 
         [Input(Guid = "27405ECF-4994-4E67-8604-D86426345344")]
         public readonly InputSlot<ShaderResourceView> PrefilteredSpecular = new();
 
         [Input(Guid = "3C19533B-C59A-470B-8712-073E71813C0C")]
         public readonly InputSlot<ShaderResourceView> BrdfLookup = new();
-
-
-        
         
         [Input(Guid = "60bae25c-64fe-40df-a2e6-a99297a92e0b")]
         public readonly MultiInputSlot<SamplerState> SamplerStates = new();        
