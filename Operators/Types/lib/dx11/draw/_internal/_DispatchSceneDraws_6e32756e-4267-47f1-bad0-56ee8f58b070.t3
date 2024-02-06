@@ -20,10 +20,6 @@
       "DefaultValue": null
     },
     {
-      "Id": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"/*ConstantBuffers*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "27405ecf-4994-4e67-8604-d86426345344"/*PrefilteredSpecular*/,
       "DefaultValue": null
     },
@@ -33,6 +29,22 @@
     },
     {
       "Id": "60bae25c-64fe-40df-a2e6-a99297a92e0b"/*SamplerStates*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "af6c8349-f48e-4c5a-87fc-33421e255117"/*TransformBuffer*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "883aeabc-19c8-4754-bb3b-9152b491ffa7"/*FloatParameterBuffer*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "8dc3e6e7-0eef-4082-9dc8-4379a901e56b"/*FogParameterBuffer*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "db81ba63-8b7b-425c-9d6a-8f3caf0be70f"/*PointLightBuffer*/,
       "DefaultValue": null
     }
   ],

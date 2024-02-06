@@ -11,13 +11,6 @@
       "Usage": "FilePath"
     },
     {
-      "InputId": "a82b725b-5a2b-4679-85be-2641c45d3687"/*ChildIndex*/,
-      "Position": {
-        "X": 51.512096,
-        "Y": 181.99597
-      }
-    },
-    {
       "InputId": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
       "Position": {
         "X": 51.512096,
@@ -35,17 +28,10 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "c830b31a-b0d9-4a12-8883-da7734541e54"/*Data*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
       "OutputId": "c2d28ebe-e235-4234-8234-eb56e87ed9af"/*ResultSetup*/,
       "Position": {
-        "X": 0.0,
-        "Y": 100.0
+        "X": 300.0,
+        "Y": 200.0
       }
     }
   ]

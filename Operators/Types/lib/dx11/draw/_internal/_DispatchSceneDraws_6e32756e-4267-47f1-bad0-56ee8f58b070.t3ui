@@ -27,14 +27,6 @@
       }
     },
     {
-      "InputId": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"/*ConstantBuffers*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
-    },
-    {
       "InputId": "27405ecf-4994-4e67-8604-d86426345344"/*PrefilteredSpecular*/,
       "Relevancy": "Required",
       "Position": {
@@ -56,6 +48,38 @@
       "Position": {
         "X": -200.0,
         "Y": 630.0
+      }
+    },
+    {
+      "InputId": "af6c8349-f48e-4c5a-87fc-33421e255117"/*TransformBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 675.0
+      }
+    },
+    {
+      "InputId": "883aeabc-19c8-4754-bb3b-9152b491ffa7"/*FloatParameterBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 720.0
+      }
+    },
+    {
+      "InputId": "8dc3e6e7-0eef-4082-9dc8-4379a901e56b"/*FogParameterBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 765.0
+      }
+    },
+    {
+      "InputId": "db81ba63-8b7b-425c-9d6a-8f3caf0be70f"/*PointLightBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 810.0
       }
     }
   ],

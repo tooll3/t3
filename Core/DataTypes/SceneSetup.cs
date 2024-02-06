@@ -21,65 +21,8 @@ public class SceneSetup : IEditableInputType
     // TODO: Implement UI and serialize 
     // private Dictionary<string, string> MaterialAssignments;
 
-    /// <summary>
-    /// Flattens the node structure
-    /// </summary>
-    public void GenerateSceneDrawDispatches()
-    {
-        DrawDispatches.Clear();
-        if (RootNodes == null || RootNodes.Count != 1)
-        {
-            Log.Warning("Gltf scene requires a single root node");
-            return;
-        }
-        
-        InsertNodeToDrawList(RootNodes[0]);
-        
-    }
-
-    public void InsertNodeToDrawList(SceneNode node)
-    {
-        if (node.MeshBuffers == null)
-            return;
-        
-        var vertexCount = node.MeshBuffers.IndicesBuffer.Srv.Description.Buffer.ElementCount * 3;
-        var newDispatch = new SceneDrawDispatch
-                              {
-                                  MeshBuffers = node.MeshBuffers,
-                                  VertexCount = vertexCount,
-                                  VertexStartIndex = 0,
-                                  Material = null,
-                                  CombinedTransform = default
-                              };
-        
-        DrawDispatches.Add(newDispatch);
-
-        foreach (var childNode in node.ChildNodes)
-        {
-            InsertNodeToDrawList(childNode);
-        }
-    }
-    
-    
-    
-    /// <summary>
-    /// Flattened structure used by _DispatchSceneDraws to dispatch draw commands.
-    /// </summary>
-    public class SceneDrawDispatch
-    {
-        public MeshBuffers MeshBuffers;
-        public int VertexCount;
-        public int VertexStartIndex;
-        public PbrMaterial Material;
-        
-        public Matrix4x4 CombinedTransform;
-    //     public int[] PointIndices;
-    //     public Buffer PointIndexBuffer;
-    }
 
 
-    
-    public List<SceneDrawDispatch> DrawDispatches = new();
     
     /// <summary>
     /// Recursive description of the loaded nodes...
@@ -88,22 +31,24 @@ public class SceneSetup : IEditableInputType
     /// <remarks>
     /// This closely follows the gltf format structure but should be
     /// agnostic to other multi-node formats like obj.</remarks>
-    public List<SceneNode> RootNodes = new();
+    public readonly List<SceneNode> RootNodes = new();
     
     public class SceneNode
     {
         public string Name;
-        public List<SceneNode> ChildNodes = new();
+        public readonly List<SceneNode> ChildNodes = new();
         public Matrix4x4 CombinedTransform;
         public Transform Transform;
         public string MeshName;
         public MeshBuffers MeshBuffers;
     }
 
+    // FIXME: This should probably be moved to somewhere in core -> Rendering
     public struct Transform
     {
         public Vector3 Translation;
-        public Vector3 RotationYawPitchRoll;
+        //public Vector3 RotationYawPitchRoll;
+        public Quaternion Rotation;
         public Vector3 Scale;
 
         public Matrix4x4 ToTransform()
@@ -113,9 +58,10 @@ public class SceneSetup : IEditableInputType
                                                            scalingRotation: Quaternion.Identity,
                                                            scaling: Scale,
                                                            rotationCenter: Vector3.Zero,
-                                                           rotation: Quaternion.CreateFromYawPitchRoll(RotationYawPitchRoll.Y,
-                                                                                                       RotationYawPitchRoll.X,
-                                                                                                       RotationYawPitchRoll.Z),
+                                                           rotation: Rotation,
+                                                           // rotation: Quaternion.CreateFromYawPitchRoll(RotationYawPitchRoll.Y,
+                                                           //                                             RotationYawPitchRoll.X,
+                                                           //                                             RotationYawPitchRoll.Z),
                                                            translation: Translation);
         }
     }
@@ -140,7 +86,61 @@ public class SceneSetup : IEditableInputType
         }
     }
 
-    //public List<PbrMaterial> Materials { get; set; } = new List<PbrMaterial>();
+    
+        
+    #region dispatch preprocessing 
+    /// <summary>
+    /// Flattens the node structure
+    /// </summary>
+    public void GenerateSceneDrawDispatches()
+    {
+        Dispatches.Clear();
+        if (RootNodes == null || RootNodes.Count != 1)
+        {
+            Log.Warning("Gltf scene requires a single root node");
+            return;
+        }
+        
+        FlattenNodeTreeForDispatching(RootNodes[0]);
+    }
+    
+    private void FlattenNodeTreeForDispatching(SceneNode node)
+    {
+        if (node.MeshBuffers != null)
+        {
+            var vertexCount = node.MeshBuffers.IndicesBuffer.Srv.Description.Buffer.ElementCount *3;
+            var newDispatch = new SceneDrawDispatch
+                                  {
+                                      MeshBuffers = node.MeshBuffers,
+                                      VertexCount = vertexCount,
+                                      VertexStartIndex = 0,
+                                      Material = null,
+                                      CombinedTransform = node.CombinedTransform,
+                                  };
+            
+            Dispatches.Add(newDispatch);
+        }
+        
+        foreach (var childNode in node.ChildNodes)
+        {
+            FlattenNodeTreeForDispatching(childNode);
+        }
+    }
+    
+    /// <summary>
+    /// Flattened structure used by _DispatchSceneDraws to dispatch draw commands.
+    /// </summary>
+    public class SceneDrawDispatch
+    {
+        public MeshBuffers MeshBuffers;
+        public int VertexCount;
+        public int VertexStartIndex;
+        public PbrMaterial Material;
+        public Matrix4x4 CombinedTransform;
+    }
+    
+    public readonly List<SceneDrawDispatch> Dispatches = new();
+    #endregion
     
     #region serialization
     public void Write(JsonTextWriter writer)
@@ -148,7 +148,6 @@ public class SceneSetup : IEditableInputType
         writer.WritePropertyName(nameof(SceneSetup));
         writer.WriteStartObject();
 
-        // writer.WriteObject("Interpolation", Interpolation);
         writer.WritePropertyName("NodeSettings");
         writer.WriteStartArray();
 
@@ -160,7 +159,6 @@ public class SceneSetup : IEditableInputType
                 {
                     writer.WriteStartObject();
                     writer.WriteValue(nameof(setting.NodeHashId), setting.NodeHashId);
-                    //writer.WriteObject(nameof(setting.Visibility), (int)setting.Visibility);
 
                     if (setting.Visibility != NodeSetting.NodeVisibilities.Default)
                         writer.WriteObject(nameof(setting.Visibility), setting.Visibility.ToString());
