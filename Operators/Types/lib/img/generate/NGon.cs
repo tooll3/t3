@@ -1,3 +1,4 @@
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -48,6 +49,9 @@ namespace T3.Operators.Types.Id_22a3cd4e_02b3_44d7_ad2b_aab5810c5e88
 
         [Input(Guid = "276431d2-e689-41f9-9f73-5544f9368a53")]
         public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+
+        [Input(Guid = "f315a8c4-9d9b-41a4-a4b8-81d7fc667dee", MappedType = typeof(SharedEnums.RgbBlendModes))]
+        public readonly InputSlot<int> BlendMode = new InputSlot<int>();
     }
 }
 
