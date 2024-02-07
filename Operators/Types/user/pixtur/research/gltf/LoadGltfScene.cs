@@ -47,6 +47,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
         if (path != _lastFilePath || TriggerUpdate.GetValue(context))
         {
+            _sceneSetup = new SceneSetup();
+            Setup.SetTypedInputValue(_sceneSetup);
+            
             _lastFilePath = path;
 
             if (!File.Exists(path))

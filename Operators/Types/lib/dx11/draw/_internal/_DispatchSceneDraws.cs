@@ -120,7 +120,7 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
                 }
                 
                 // Compute local transform matrix
-                var m = Matrix4x4.Multiply(context.ObjectToWorld, dispatch.CombinedTransform);
+                var m = Matrix4x4.Multiply(dispatch.CombinedTransform,context.ObjectToWorld);
                 var transformBufferContent = new TransformBufferLayout(context.CameraToClipSpace, context.WorldToCamera, m);
                 //var transformBufferContent = new TransformBufferLayout(context.CameraToClipSpace, context.WorldToCamera, context.ObjectToWorld);
                 ResourceManager.SetupConstBuffer(transformBufferContent, ref _constantBuffers[TransformBufferIndex]);
@@ -145,21 +145,21 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
             }
         }
 
-        private static bool TryGetAndApplySrv(EvaluationContext context, InputSlot<ShaderResourceView> srvInput, int index)
+        private  bool TryGetAndApplySrv(EvaluationContext context, InputSlot<ShaderResourceView> srvInput, int index)
         {
             var srv = srvInput.GetValue(context);
             _shaderResourceViews[index] = srv;
             return srv == null;
         }
 
-        private static bool TryGetAndApplyBuffer(EvaluationContext context, InputSlot<Buffer> bufferInput, int index)
+        private  bool TryGetAndApplyBuffer(EvaluationContext context, InputSlot<Buffer> bufferInput, int index)
         {
             var buffer = bufferInput.GetValue(context);
             _constantBuffers[index] = buffer;
             return buffer == null;
         }
 
-        private static bool TestAndSet(ShaderResourceView srv, int index)
+        private  bool TestAndSet(ShaderResourceView srv, int index)
         {
             _shaderResourceViews[index] = srv;
             return srv == null;
@@ -182,8 +182,8 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
         private const int PbrParameterBufferIndex = 4; // Coming from PbrMaterial
         private const int ConstantBufferIndexCount = 5; 
 
-        private static readonly ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[SrvIndexCount];
-        private static readonly Buffer[] _constantBuffers = new Buffer[ConstantBufferIndexCount];
+        private readonly ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[SrvIndexCount];
+        private readonly Buffer[] _constantBuffers = new Buffer[ConstantBufferIndexCount];
         private SamplerState[] _samplerStates = Array.Empty<SamplerState>();
         private PixelShader _prevPixelShader;
         private VertexShader _prevVertexShader;
