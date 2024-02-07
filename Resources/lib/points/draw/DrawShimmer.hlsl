@@ -33,6 +33,8 @@ cbuffer Params : register(b0)
 
     float TargetWidth;
     float TargetHeight;
+
+    float CompletionAffectsLength;
 };
 
 cbuffer Transforms : register(b1)
@@ -197,7 +199,6 @@ float4 ComputeShimmer(float2 p, float spriteIndex) {
 float4 ComputeSparkle(float2 p, float spriteIndex) {
     float2 Center = 0;
 
-    float d = length(p) * 2;
     float angle = (atan2(p.x, p.y)) / (2*PI)+0.5;
 
     float2 noisePos = float2(angle * Complexity/64 +  spriteIndex*0.1, 
@@ -209,7 +210,12 @@ float4 ComputeSparkle(float2 p, float spriteIndex) {
     
     float c2 = CircularCompletion/720;
     float cEdge = CircularCompletionEdge/720;
-    float cc= smoothstep(c2+cEdge/2, c2-cEdge/2, angle) + smoothstep(1-c2- cEdge/2, 1-c2+cEdge/2, angle);
+    float cc= (smoothstep(c2+cEdge/2, c2-cEdge/2, angle) + smoothstep(1-c2- cEdge/2, 1-c2+cEdge/2, angle));
+    
+    // return float4(
+    //     smoothstep(c2+cEdge/2, c2-cEdge/2, angle),
+    //     smoothstep(1-c2- cEdge/2, 1-c2+cEdge/2, angle),
+    //     0,1);
 
     float repeatFraction = 1/Complexity;
 
@@ -218,7 +224,9 @@ float4 ComputeSparkle(float2 p, float spriteIndex) {
     float segmentIndex = segments - segmentF;
 
     float mappedGamma = 0.8- Gamma /2;
-    float constantLineWidthOffset =  0.5-  + mappedGamma/d;
+
+    float d = length(p) * 2;
+    float constantLineWidthOffset =  0.5-  mappedGamma/d;
     float segmentFill = abs(segmentF - 0.5) * 2 + constantLineWidthOffset;
 
     float filled = smoothstep(mappedGamma + 0.4, mappedGamma, segmentFill);
@@ -228,7 +236,8 @@ float4 ComputeSparkle(float2 p, float spriteIndex) {
                          Time*0.2 + segmentIndex *0.14
                          ), 0.0);
                     
-    float segmentD = d + (segmentNoise.r-0.5) * ScatterLength;
+    float segmentD = (d + (segmentNoise.r-0.5) * ScatterLength) / lerp(1, cc, CompletionAffectsLength);
+    
 
     float4 gradient= Gradient.Sample(clampedTexSampler, float2(1-segmentD, 0.25));
     filled *= 1+ (segmentNoise.r - 0.5) * ScatterBrightness;

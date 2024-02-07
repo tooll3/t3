@@ -1,6 +1,6 @@
 {
   "Id": "ab496711-8b99-4463-aac9-b41fdf46608d"/*RepeatMeshAtPoints*/,
-  "Description": "Creates a new mesh that repeats the incoming mesh at each point.\nNote: With large meshes or point sets, this can quickly result in excessively large meshes.\n\nAlso see: [DrawMeshAtPoints]",
+  "Description": "Creates a new mesh that repeats the incoming mesh at each point.\nNote: \nWarning: With detailed meshes, or very large scaled meshes and or a very high number of points, this Operator can take up a lot of resources.\n\nAlso see: [DrawMeshAtPoints]",
   "InputUis": [
     {
       "InputId": "f8fb6e15-00dd-485e-a7fe-fa75c77182c2"/*InputMesh*/,
@@ -8,7 +8,9 @@
       "Position": {
         "X": -512.05237,
         "Y": 1385.2515
-      }
+      },
+      "GroupTitle": "Input",
+      "Description": "Input for Meshes like [LoadObj], [TorusMesh] etc."
     },
     {
       "InputId": "a7960188-ff39-4176-9d22-bc9d7e0cb2b5"/*Points*/,
@@ -16,35 +18,42 @@
       "Position": {
         "X": -512.05237,
         "Y": 1430.2515
-      }
+      },
+      "Description": "Input for Points such as [SpherePoints], [GridPoints] or [PointsOnMesh] etc."
     },
     {
       "InputId": "abd961af-e76f-415b-a6ac-afb1cf08a1de"/*Scale*/,
       "Position": {
         "X": -515.573,
         "Y": 1581.2544
-      }
+      },
+      "GroupTitle": "Settings",
+      "Description": "Defines the size of the meshes that are distributed at the points."
     },
     {
       "InputId": "adfa0cb7-257f-4f03-b847-99a6bb317992"/*UseWForSize*/,
       "Position": {
         "X": -512.05237,
         "Y": 1475.2515
-      }
+      },
+      "Description": "Defines whether the \"W\" value will influence the scaling of the incoming meshes."
     },
     {
       "InputId": "13852947-11aa-4f54-b415-6867421f3bc0"/*WStretchAmount*/,
       "Position": {
         "X": -515.573,
         "Y": 1626.2544
-      }
+      },
+      "Description": "Non-Uniformly scales the Meshes.",
+      "AddPadding": "True"
     },
     {
       "InputId": "631a4691-0774-40c7-a8fa-4b9ee76854d6"/*UseStretch*/,
       "Position": {
         "X": -515.573,
         "Y": 1671.2544
-      }
+      },
+      "Description": "Controls whether the \"Stretching\" values from operators such as [RandomizePoints] or [TransformPoints] are used."
     }
   ],
   "SymbolChildUis": [

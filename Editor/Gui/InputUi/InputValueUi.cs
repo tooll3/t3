@@ -122,6 +122,11 @@ namespace T3.Editor.Gui.InputUi
             if ((inputSlot.IsConnected || inputSlot.IsMultiInput) && hideNonEssentials)
                 return editState;
 
+            if (inputSlot.Input == null)
+            {
+                return InputEditStateFlags.Nothing;
+            }
+            
             var name = inputSlot.Input.Name;
             var typeColor = TypeUiRegistry.Entries[Type].Color;
             var compositionSymbol = compositionUi.Symbol;

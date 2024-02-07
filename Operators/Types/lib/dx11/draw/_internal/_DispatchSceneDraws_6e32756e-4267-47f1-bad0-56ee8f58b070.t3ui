@@ -12,6 +12,7 @@
     },
     {
       "InputId": "7a9ae929-7001-42ef-b7f2-f2e03bbb7206"/*VertexShader*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
@@ -19,69 +20,15 @@
     },
     {
       "InputId": "59864da4-3658-4d7d-830e-6ef0d3cbb505"/*PixelShader*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 90.0
       }
     },
     {
-      "InputId": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"/*ConstantBuffers*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
-    },
-    {
-      "InputId": "60bae25c-64fe-40df-a2e6-a99297a92e0b"/*SamplerStates*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 225.0
-      }
-    },
-    {
-      "InputId": "ed6773a0-7666-4053-9415-ad76aaa2e1d5"/*MeshVertices*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 270.0
-      }
-    },
-    {
-      "InputId": "4fd00d02-a9a0-4bf7-b2b0-754bd904d1eb"/*MeshIndices*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 315.0
-      }
-    },
-    {
-      "InputId": "912f1a3e-534a-4712-ae01-27768fce2696"/*AlbedoColorMap*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 360.0
-      }
-    },
-    {
-      "InputId": "30a2ca5d-0aae-4da5-bf6b-336526c46871"/*EmissiveColorMap*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 405.0
-      }
-    },
-    {
-      "InputId": "ced29224-57f5-4cb4-97b4-e03e9b35eab5"/*RmoColorMap*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 450.0
-      }
-    },
-    {
-      "InputId": "c65ab173-fbd0-4960-af05-620c5cf0404a"/*NormalColorMap*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 495.0
-      }
-    },
-    {
       "InputId": "27405ecf-4994-4e67-8604-d86426345344"/*PrefilteredSpecular*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 540.0
@@ -89,9 +36,50 @@
     },
     {
       "InputId": "3c19533b-c59a-470b-8712-073e71813c0c"/*BrdfLookup*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 585.0
+      }
+    },
+    {
+      "InputId": "60bae25c-64fe-40df-a2e6-a99297a92e0b"/*SamplerStates*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 630.0
+      }
+    },
+    {
+      "InputId": "af6c8349-f48e-4c5a-87fc-33421e255117"/*TransformBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 675.0
+      }
+    },
+    {
+      "InputId": "883aeabc-19c8-4754-bb3b-9152b491ffa7"/*FloatParameterBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 720.0
+      }
+    },
+    {
+      "InputId": "8dc3e6e7-0eef-4082-9dc8-4379a901e56b"/*FogParameterBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 765.0
+      }
+    },
+    {
+      "InputId": "db81ba63-8b7b-425c-9d6a-8f3caf0be70f"/*PointLightBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 810.0
       }
     }
   ],

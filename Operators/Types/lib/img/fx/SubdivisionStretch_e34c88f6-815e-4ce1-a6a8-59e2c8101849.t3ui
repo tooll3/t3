@@ -1,0 +1,151 @@
+{
+  "Id": "e34c88f6-815e-4ce1-a6a8-59e2c8101849"/*SubdivisionStretch*/,
+  "Description": "An experimental effect that subdivides and stretch an image recursively.",
+  "InputUis": [
+    {
+      "InputId": "40bc83fb-a3a4-4bfd-b131-8ecf2908b1a3"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 132.69783,
+        "Y": -84.86365
+      }
+    },
+    {
+      "InputId": "8a571283-e4a6-4707-a8b9-a09b4781160a"/*FxTextures*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": -39.863647
+      }
+    },
+    {
+      "InputId": "639c698e-328b-4acd-ae48-bbd1ba32f31b"/*Center*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 29.375793
+      },
+      "Scale": 0.01
+    },
+    {
+      "InputId": "c91a5c04-34c8-4d89-8381-0c93066cc81d"/*Stretch*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 74.37579
+      }
+    },
+    {
+      "InputId": "2c310da5-3e00-48cb-a073-9b79324eca17"/*Size*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 119.37579
+      },
+      "Min": 0.0,
+      "Max": 2.0,
+      "Scale": 0.001
+    },
+    {
+      "InputId": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*SubdivisionThreshold*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 164.3758
+      }
+    },
+    {
+      "InputId": "82a8fbb3-c1be-494e-8a8d-e7ccf5440556"/*Padding*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 209.3758
+      }
+    },
+    {
+      "InputId": "3e164af6-1cb3-45b3-a319-e562789d73f7"/*Feather*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 254.3758
+      }
+    },
+    {
+      "InputId": "5cae4d6e-d441-42f7-8e17-3aeb58719f08"/*GapColor*/,
+      "Position": {
+        "X": 128.79921,
+        "Y": 341.92877
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "8597dfcf-5697-437d-91e2-664540766806"/*MixOriginal*/,
+      "Position": {
+        "X": 128.79921,
+        "Y": 386.92877
+      }
+    },
+    {
+      "InputId": "32d082f5-d6e1-4068-bcd9-a01977ed72df"/*MaxSubdivisions*/,
+      "Position": {
+        "X": 128.79921,
+        "Y": 431.92877
+      }
+    },
+    {
+      "InputId": "7a8684c9-ee81-49c1-ad13-d91d62799efb"/*Randomize*/,
+      "Position": {
+        "X": 128.79921,
+        "Y": 476.92877
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "6f157f43-25fb-4873-b1b9-fe82734fc535"/*Vector2Components*/,
+      "Position": {
+        "X": 321.91418,
+        "Y": 37.956757
+      }
+    },
+    {
+      "ChildId": "cc0e3e4c-213d-4e38-b8ad-b8643f4f30ab"/*Vector2Components*/,
+      "Position": {
+        "X": 321.91418,
+        "Y": 93.95676
+      }
+    },
+    {
+      "ChildId": "ffc5ada5-8129-48ad-8196-1e5d3eff2a74"/*Vector4Components*/,
+      "Position": {
+        "X": 321.74207,
+        "Y": 328.45667
+      }
+    },
+    {
+      "ChildId": "06b70633-676e-4f08-b501-be1982f0c3be"/*IntToFloat*/,
+      "Position": {
+        "X": 320.84106,
+        "Y": 428.41513
+      }
+    },
+    {
+      "ChildId": "8229aec5-9664-485b-ac36-4ace21a8e29a"/*_multiImageFxSetup*/,
+      "Position": {
+        "X": 688.4922,
+        "Y": 192.03278
+      }
+    },
+    {
+      "ChildId": "0f0073ed-6ec7-46ae-8af5-43d6cf0c2e45"/*FirstValidTexture*/,
+      "Position": {
+        "X": 336.12442,
+        "Y": -173.25787
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "d8ec6fe5-ee96-4eaa-ba1f-05c67cdf0f0b"/*TextureOutput*/,
+      "Position": {
+        "X": 803.0859,
+        "Y": -104.23233
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "Name": "SwitchParticleForce",
+  "Id": "87f68a6d-e13d-49b7-ab0c-c24c0cefd453",
+  "Namespace": "lib.point.particle",
+  "Inputs": [
+    {
+      "Id": "0e7ba3ea-d20a-41d6-9fd9-00a81d39f112"/*Input*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "1babcb7f-7d74-4133-83b9-f3e47777beeb"/*Index*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -27,6 +27,9 @@ namespace T3.Operators.Types.Id_31ab98ec_5e79_4667_9a85_2fb168f41fa1
 
         private void Update(EvaluationContext context)
         {
+            if (_nativeLinkInstance == IntPtr.Zero)
+                return;
+            
             if (MathUtils.WasTriggered(TriggerStartPlaying.GetValue(context), ref _triggerStart))
             {
                 StartPlaying();
@@ -105,9 +108,18 @@ namespace T3.Operators.Types.Id_31ab98ec_5e79_4667_9a85_2fb168f41fa1
                     return;
 
                 // Log.Debug("Initializing AbletonLink...");
-                _nativeLinkInstance = CreateAbletonLink();
-                Setup(InitialTempo);
-                EnableStartStopSync(true);
+                try
+                {
+                    _nativeLinkInstance = CreateAbletonLink();
+                    Setup(InitialTempo);
+                    EnableStartStopSync(true);
+                }
+                catch (Exception e)
+                {
+                    var message = "Failed to initialize AbletonLink. Probably can't find dll. Did you run install.bat? " + e.Message;
+                    Log.Warning(message);
+                    _lastErrorMessage = message;
+                }
                 _initialized = true;
             }
         }

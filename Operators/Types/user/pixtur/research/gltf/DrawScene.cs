@@ -33,9 +33,6 @@ namespace T3.Operators.Types.Id_2fcdea21_18f1_4006_a2fe_aab40893fed8
         [Input(Guid = "22ad6256-f741-4e8f-9a47-4b5b82e2cecf")]
         public readonly InputSlot<T3.Core.DataTypes.SceneSetup> Scene = new InputSlot<T3.Core.DataTypes.SceneSetup>();
 
-        [Input(Guid = "d7b086be-46c5-4021-8e7a-571236495594")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
-
         [Input(Guid = "dd74d2b9-8c91-4a2a-adca-5ca187d433a3")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 

@@ -54,7 +54,7 @@
       }
     },
     {
-      "ChildId": "4a7a13d2-1e62-414b-a7c9-23ccea87d168"/*_DrawLenseFlareSprites*/,
+      "ChildId": "4a7a13d2-1e62-414b-a7c9-23ccea87d168"/*_DrawLenseFlare_Old*/,
       "Position": {
         "X": 401.09473,
         "Y": 492.85422
@@ -75,7 +75,7 @@
       }
     },
     {
-      "ChildId": "872fddb4-3be5-4d32-a732-a435e3fdadff"/*_DrawShimmer*/,
+      "ChildId": "872fddb4-3be5-4d32-a732-a435e3fdadff"/*DrawLensShimmer*/,
       "Position": {
         "X": 399.4942,
         "Y": 1234.3978
@@ -89,13 +89,6 @@
       }
     },
     {
-      "ChildId": "e40bf8bc-1758-45be-86ec-9ee051983c5b"/*ListToBuffer*/,
-      "Position": {
-        "X": 249.4942,
-        "Y": 1234.3978
-      }
-    },
-    {
       "ChildId": "b347602a-ca45-433d-8138-74ac824adb56"/*Digital*/,
       "Position": {
         "X": -48.905273,
@@ -103,7 +96,7 @@
       }
     },
     {
-      "ChildId": "a863ba36-42ef-4e9e-be16-f4f6f68918ba"/*_DrawShimmer*/,
+      "ChildId": "a863ba36-42ef-4e9e-be16-f4f6f68918ba"/*DrawLensShimmer*/,
       "Position": {
         "X": 401.09473,
         "Y": 1145.8547
@@ -114,13 +107,6 @@
       "Position": {
         "X": 41.97116,
         "Y": 1147.7883
-      }
-    },
-    {
-      "ChildId": "9bfb7d7b-21f9-4cdd-b1f6-f7143fc1ff3f"/*ListToBuffer*/,
-      "Position": {
-        "X": 251.09473,
-        "Y": 1145.8547
       }
     },
     {
@@ -138,7 +124,7 @@
       }
     },
     {
-      "ChildId": "9ee829e0-3ddd-4f94-863b-dda916768d14"/*_DrawLenseFlareSprites*/,
+      "ChildId": "9ee829e0-3ddd-4f94-863b-dda916768d14"/*_DrawLenseFlare_Old*/,
       "Position": {
         "X": 401.09473,
         "Y": 250.85422
@@ -173,7 +159,7 @@
       }
     },
     {
-      "ChildId": "ed761a73-0583-47db-9853-6f9d731a1b59"/*_DrawLenseFlareSprites*/,
+      "ChildId": "ed761a73-0583-47db-9853-6f9d731a1b59"/*_DrawLenseFlare_Old*/,
       "Position": {
         "X": 401.09473,
         "Y": 903.854
@@ -187,7 +173,7 @@
       }
     },
     {
-      "ChildId": "ab9722f0-94b8-48d3-a22f-792201b60815"/*_LenseFlareSprites*/,
+      "ChildId": "ab9722f0-94b8-48d3-a22f-792201b60815"/*DefineLensFlare*/,
       "Position": {
         "X": -48.905273,
         "Y": 738.8541

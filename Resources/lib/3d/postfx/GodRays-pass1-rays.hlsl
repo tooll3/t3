@@ -81,6 +81,10 @@ sampler samPoint : register(s1);
 
 float4 psMain(vsOutput input) : SV_TARGET
 {
+    int height, width;
+    Depth.GetDimensions(width, height);
+    float aspectRatio = (float)width / height;
+
     //float4 c = Image.Sample(samPoint, input.texCoord);
     float depth = Depth.SampleLevel(samPoint, input.texCoord, 0).r;
     float4 viewTFragPos = float4(input.texCoord.x*2.0 - 1.0, -input.texCoord.y*2.0 + 1.0, depth, 1.0);
@@ -89,6 +93,10 @@ float4 psMain(vsOutput input) : SV_TARGET
 
     float sampleStep = 1;
     float2 sampleDir = viewTFragPos.xy - input.lightPosInCam.xy; 
+    float2 normalizedDir = normalize(sampleDir);
+    float length1= abs(dot(normalizedDir, float2(1,0)));
+    sampleDir *=  lerp(1.1,  aspectRatio, pow(length1,1.3)); 
+    //sampleDir.x *= aspectRatio;
     sampleDir.x = -sampleDir.x;
     float2 dir = sampleStep * Size / Samples * sampleDir;
 

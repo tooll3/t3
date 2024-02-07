@@ -466,9 +466,19 @@
           }
         },
         {
+          "Id": "c6c3d50e-9731-42cc-a0fc-ee8d15ac6cca"/*Radius*/,
+          "Type": "System.Single",
+          "Value": 0.33
+        },
+        {
           "Id": "4ac28e13-fac9-4f1a-9aa7-e564a0d57e93"/*Round*/,
           "Type": "System.Single",
           "Value": 0.0
+        },
+        {
+          "Id": "7613bc20-d400-440d-b6a5-5f60ce61a33c"/*Rotate*/,
+          "Type": "System.Single",
+          "Value": 60.000004
         },
         {
           "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
@@ -477,16 +487,6 @@
             "X": 32,
             "Y": 32
           }
-        },
-        {
-          "Id": "7613bc20-d400-440d-b6a5-5f60ce61a33c"/*Rotate*/,
-          "Type": "System.Single",
-          "Value": 60.000004
-        },
-        {
-          "Id": "c6c3d50e-9731-42cc-a0fc-ee8d15ac6cca"/*Radius*/,
-          "Type": "System.Single",
-          "Value": 0.33
         }
       ],
       "Outputs": []

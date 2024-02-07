@@ -20,7 +20,11 @@
       "DefaultValue": null
     },
     {
-      "Id": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"/*ConstantBuffers*/,
+      "Id": "27405ecf-4994-4e67-8604-d86426345344"/*PrefilteredSpecular*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "3c19533b-c59a-470b-8712-073e71813c0c"/*BrdfLookup*/,
       "DefaultValue": null
     },
     {
@@ -28,35 +32,19 @@
       "DefaultValue": null
     },
     {
-      "Id": "ed6773a0-7666-4053-9415-ad76aaa2e1d5"/*MeshVertices*/,
+      "Id": "af6c8349-f48e-4c5a-87fc-33421e255117"/*TransformBuffer*/,
       "DefaultValue": null
     },
     {
-      "Id": "4fd00d02-a9a0-4bf7-b2b0-754bd904d1eb"/*MeshIndices*/,
+      "Id": "883aeabc-19c8-4754-bb3b-9152b491ffa7"/*FloatParameterBuffer*/,
       "DefaultValue": null
     },
     {
-      "Id": "912f1a3e-534a-4712-ae01-27768fce2696"/*AlbedoColorMap*/,
+      "Id": "8dc3e6e7-0eef-4082-9dc8-4379a901e56b"/*FogParameterBuffer*/,
       "DefaultValue": null
     },
     {
-      "Id": "30a2ca5d-0aae-4da5-bf6b-336526c46871"/*EmissiveColorMap*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "ced29224-57f5-4cb4-97b4-e03e9b35eab5"/*RmoColorMap*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "c65ab173-fbd0-4960-af05-620c5cf0404a"/*NormalColorMap*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "27405ecf-4994-4e67-8604-d86426345344"/*PrefilteredSpecular*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "3c19533b-c59a-470b-8712-073e71813c0c"/*BrdfLookup*/,
+      "Id": "db81ba63-8b7b-425c-9d6a-8f3caf0be70f"/*PointLightBuffer*/,
       "DefaultValue": null
     }
   ],

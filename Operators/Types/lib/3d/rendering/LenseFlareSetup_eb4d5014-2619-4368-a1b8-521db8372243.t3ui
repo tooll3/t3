@@ -54,7 +54,7 @@
       }
     },
     {
-      "ChildId": "d24a89aa-626b-40af-8f49-9e7da61e7db7"/*_DrawLenseFlareSprites*/,
+      "ChildId": "d24a89aa-626b-40af-8f49-9e7da61e7db7"/*_DrawLenseFlare_Old*/,
       "Position": {
         "X": 401.09473,
         "Y": 492.85422
@@ -75,7 +75,7 @@
       }
     },
     {
-      "ChildId": "61116fd9-ea0d-4622-b147-2fdf2266cfd1"/*_DrawShimmer*/,
+      "ChildId": "61116fd9-ea0d-4622-b147-2fdf2266cfd1"/*DrawLensShimmer*/,
       "Position": {
         "X": 399.4942,
         "Y": 1234.3978
@@ -89,13 +89,6 @@
       }
     },
     {
-      "ChildId": "f9eb11aa-552f-4ac2-9614-06b69c00b2a4"/*ListToBuffer*/,
-      "Position": {
-        "X": 249.4942,
-        "Y": 1234.3978
-      }
-    },
-    {
       "ChildId": "78d1c6aa-1983-40ff-a753-23f5780b7aa7"/*Digital*/,
       "Position": {
         "X": -48.905273,
@@ -103,7 +96,7 @@
       }
     },
     {
-      "ChildId": "a3e83f55-4e52-4f9b-adc9-75dc9f9aecdf"/*_DrawShimmer*/,
+      "ChildId": "a3e83f55-4e52-4f9b-adc9-75dc9f9aecdf"/*DrawLensShimmer*/,
       "Position": {
         "X": 401.09473,
         "Y": 1145.8547
@@ -113,13 +106,6 @@
       "ChildId": "740c40f1-c864-4cc2-bb5c-af8c4bc1a4c3"/*Sparkle*/,
       "Position": {
         "X": -48.905273,
-        "Y": 1145.8547
-      }
-    },
-    {
-      "ChildId": "4283f099-6176-43e5-9a50-0136e58f2523"/*ListToBuffer*/,
-      "Position": {
-        "X": 251.09473,
         "Y": 1145.8547
       }
     },
@@ -138,7 +124,7 @@
       }
     },
     {
-      "ChildId": "dd4b42b7-6681-4270-b9bb-b68f6cf745f2"/*_DrawLenseFlareSprites*/,
+      "ChildId": "dd4b42b7-6681-4270-b9bb-b68f6cf745f2"/*_DrawLenseFlare_Old*/,
       "Position": {
         "X": 401.09473,
         "Y": 250.85422
@@ -173,7 +159,7 @@
       }
     },
     {
-      "ChildId": "edc35dcf-81a3-40e4-b6e7-ac0c05c95146"/*_DrawLenseFlareSprites*/,
+      "ChildId": "edc35dcf-81a3-40e4-b6e7-ac0c05c95146"/*_DrawLenseFlare_Old*/,
       "Position": {
         "X": 401.09473,
         "Y": 903.854
@@ -187,7 +173,7 @@
       }
     },
     {
-      "ChildId": "c4b0dc54-87d5-4f86-9f9d-a089a03ac10c"/*_LenseFlareSprites*/,
+      "ChildId": "c4b0dc54-87d5-4f86-9f9d-a089a03ac10c"/*DefineLensFlare*/,
       "Position": {
         "X": -48.905273,
         "Y": 738.8541

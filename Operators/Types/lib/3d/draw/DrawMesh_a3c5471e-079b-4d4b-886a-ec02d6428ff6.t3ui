@@ -307,6 +307,13 @@
         "X": 2128.127,
         "Y": 3946.9358
       }
+    },
+    {
+      "ChildId": "a3909a56-9592-4218-8b62-28d6eff864fc"/*DrawInstancedIndirect*/,
+      "Position": {
+        "X": 2584.355,
+        "Y": 4416.454
+      }
     }
   ],
   "OutputUis": [

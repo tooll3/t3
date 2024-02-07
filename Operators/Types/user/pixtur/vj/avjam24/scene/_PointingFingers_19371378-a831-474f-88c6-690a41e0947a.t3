@@ -368,11 +368,6 @@
           "Value": 0.012
         },
         {
-          "Id": "3cee4aa6-2ae3-4b4d-89c7-4c60c8f8b10e"/*AgingRate*/,
-          "Type": "System.Single",
-          "Value": 0.01
-        },
-        {
           "Id": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
           "Type": "System.Int32",
           "Value": 1
@@ -447,7 +442,7 @@
       "Outputs": []
     },
     {
-      "Id": "04951a6d-0751-4480-9845-b169a54e1ed7"/*SurfaceForce*/,
+      "Id": "04951a6d-0751-4480-9845-b169a54e1ed7"/*VolumeForce*/,
       "SymbolId": "fbe1a703-f372-4236-9f20-5d0b69183843",
       "InputValues": [
         {

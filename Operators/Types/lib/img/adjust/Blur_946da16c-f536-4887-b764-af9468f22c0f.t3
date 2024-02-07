@@ -20,7 +20,7 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Glow*/,
+      "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Opacity*/,
       "DefaultValue": 1.0
     },
     {
