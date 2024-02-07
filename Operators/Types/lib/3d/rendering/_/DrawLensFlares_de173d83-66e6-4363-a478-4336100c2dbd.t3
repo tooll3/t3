@@ -27,8 +27,8 @@
     {
       "Id": "2366c1cb-3d0d-4b76-8d21-648c05fcc996"/*TextureCells*/,
       "DefaultValue": {
-        "X": 0,
-        "Y": 0
+        "X": 1,
+        "Y": 1
       }
     },
     {
@@ -625,12 +625,6 @@
       "SourceSlotId": "49b28dc3-fcd1-4067-bc83-e1cc848ae55c",
       "TargetParentOrChildId": "fd3a3f62-ab4a-46e2-a80b-5d5566d63364",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
-    },
-    {
-      "SourceParentOrChildId": "55355742-c77f-45fa-a051-12307d75d0cb",
-      "SourceSlotId": "5dcc43ac-4fb9-49c3-a093-0a59a002fb6c",
-      "TargetParentOrChildId": "fd3a3f62-ab4a-46e2-a80b-5d5566d63364",
-      "TargetSlotId": "d68b5569-b43d-4a0d-9524-35289ce08098"
     },
     {
       "SourceParentOrChildId": "e6cc1fdf-7662-482f-9c87-2a8731290864",
