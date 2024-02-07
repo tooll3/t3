@@ -49,7 +49,7 @@
       }
     },
     {
-      "ChildId": "f29ca9cb-6fa8-419c-9de3-50f4dcd55a3c"/*TurbulenceForce*/,
+      "ChildId": "f29ca9cb-6fa8-419c-9de3-50f4dcd55a3c"/*ParticleForceTurbulence*/,
       "Comment": "We add a little bit of noise to make things more interesting.",
       "Position": {
         "X": 828.4601,

@@ -110,7 +110,7 @@
       }
     },
     {
-      "ChildId": "b7db7672-a710-4120-8f2b-30321b703e8d"/*TurbulenceForce*/,
+      "ChildId": "b7db7672-a710-4120-8f2b-30321b703e8d"/*ParticleForceTurbulence*/,
       "Position": {
         "X": 652.70764,
         "Y": 83.35791
@@ -146,7 +146,7 @@
       }
     },
     {
-      "ChildId": "04951a6d-0751-4480-9845-b169a54e1ed7"/*SurfaceForce*/,
+      "ChildId": "04951a6d-0751-4480-9845-b169a54e1ed7"/*ParticleForceSurface*/,
       "Position": {
         "X": 650.0565,
         "Y": 160.21753
