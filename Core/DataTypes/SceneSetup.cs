@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Rendering.Material;
 using T3.Core.Resource;
 using T3.Core.Utils.Geometry;
-using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Core.DataTypes;
 
