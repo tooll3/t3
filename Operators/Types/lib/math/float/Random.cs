@@ -1,4 +1,5 @@
-﻿using T3.Core.Operator;
+﻿using System.Numerics;
+using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
@@ -17,9 +18,21 @@ namespace T3.Operators.Types.Id_10673c38_8c7e_4aa1_8dcd_3f2711c709b5
 
         private void Update(EvaluationContext context)
         {
-            var random = new System.Random(Seed.GetValue(context));
-            var firstIsGarbage = (float)random.NextDouble();
-            Result.Value = (float)MathUtils.RemapAndClamp((double)(float)random.NextDouble(), 0f,1f,Min.GetValue(context), Max.GetValue(context));
+            var seed = (uint)Seed.GetValue(context);
+
+            var makeUniqueForChild = UniqueForChild.GetValue(context);
+            
+            var childId = this.SymbolChildId;
+            var bigInteger= new BigInteger(childId.ToByteArray());
+            var childSeed = makeUniqueForChild 
+                                ? (uint)(bigInteger & 0xFFFFFFFF) 
+                                : 0;
+            
+            var randomValue = MathUtils.Hash01(childSeed + seed);
+            
+            Result.Value = MathUtils.RemapAndClamp(randomValue, 
+                                                   0f,1f,
+                                                   Min.GetValue(context), Max.GetValue(context));
         }
 
         [Input(Guid = "{F2513EAD-7022-4774-8767-7F33D1B92B26}")]
@@ -31,5 +44,7 @@ namespace T3.Operators.Types.Id_10673c38_8c7e_4aa1_8dcd_3f2711c709b5
         [Input(Guid = "5755454F-98FE-49EF-9611-A7C3750C4F9A")]
         public readonly InputSlot<float> Max = new();
 
+        [Input(Guid = "A16F6862-868B-4D83-88F5-C7AAC7616A38")]
+        public readonly InputSlot<bool> UniqueForChild = new();
     }
 }
