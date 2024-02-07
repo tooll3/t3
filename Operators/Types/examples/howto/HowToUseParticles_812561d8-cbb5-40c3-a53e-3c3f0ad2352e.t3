@@ -37,7 +37,7 @@
       "Outputs": []
     },
     {
-      "Id": "3727ea90-2f55-4634-aaf3-7369b369135e"/*ParticleForceTurbulence*/,
+      "Id": "3727ea90-2f55-4634-aaf3-7369b369135e"/*TurbulenceForce*/,
       "SymbolId": "3f8376f2-b89a-4ab4-b6dc-a3e8bf88c0a5",
       "InputValues": [
         {
@@ -49,7 +49,7 @@
       "Outputs": []
     },
     {
-      "Id": "e5eeee16-5e4f-45ce-a0d0-21fd21fac3ee"/*ParticleForceAxisStep*/,
+      "Id": "e5eeee16-5e4f-45ce-a0d0-21fd21fac3ee"/*AxisStepForce*/,
       "SymbolId": "2cc44046-2702-40d5-ab42-8b36ff3d6ca7",
       "InputValues": [
         {
@@ -127,7 +127,7 @@
       "Outputs": []
     },
     {
-      "Id": "b8729c32-9439-4651-abcd-1a7675d8baff"/*ParticleForceSurface*/,
+      "Id": "b8729c32-9439-4651-abcd-1a7675d8baff"/*VolumeForce*/,
       "SymbolId": "fbe1a703-f372-4236-9f20-5d0b69183843",
       "InputValues": [
         {
@@ -177,7 +177,7 @@
       "Outputs": []
     },
     {
-      "Id": "b15f986a-9222-4b8a-b8ef-7a6dbe336441"/*ParticleForceDirectional*/,
+      "Id": "b15f986a-9222-4b8a-b8ef-7a6dbe336441"/*DirectionalForce*/,
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {
@@ -210,7 +210,7 @@
       "Outputs": []
     },
     {
-      "Id": "ce57c1de-b755-4b5d-b31a-50bd9156892f"/*ParticleForceSurface*/,
+      "Id": "ce57c1de-b755-4b5d-b31a-50bd9156892f"/*VolumeForce*/,
       "SymbolId": "fbe1a703-f372-4236-9f20-5d0b69183843",
       "InputValues": [
         {
@@ -416,7 +416,7 @@
       "Outputs": []
     },
     {
-      "Id": "aa2f90b8-26e9-4699-92ca-7b3a22d30551"/*ParticleForceDirectional*/,
+      "Id": "aa2f90b8-26e9-4699-92ca-7b3a22d30551"/*DirectionalForce*/,
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {
@@ -428,7 +428,7 @@
       "Outputs": []
     },
     {
-      "Id": "dff2e37e-6a76-4112-a785-42dde6c519c8"/*ParticleForceSurface*/,
+      "Id": "dff2e37e-6a76-4112-a785-42dde6c519c8"/*VolumeForce*/,
       "SymbolId": "fbe1a703-f372-4236-9f20-5d0b69183843",
       "InputValues": [
         {
@@ -457,7 +457,7 @@
       "Outputs": []
     },
     {
-      "Id": "d1c36ea3-7e86-4b3d-8adf-fae436108a9e"/*ParticleForceDirectional*/,
+      "Id": "d1c36ea3-7e86-4b3d-8adf-fae436108a9e"/*DirectionalForce*/,
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {
@@ -547,7 +547,7 @@
       "Outputs": []
     },
     {
-      "Id": "4a3bfcd5-bab6-492c-818e-8b5ea327c90f"/*ParticleForceDirectional*/,
+      "Id": "4a3bfcd5-bab6-492c-818e-8b5ea327c90f"/*DirectionalForce*/,
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {
@@ -827,7 +827,7 @@
       "Outputs": []
     },
     {
-      "Id": "fc7559df-10ef-4203-be0d-198fdafd850c"/*ParticleForceDirectional*/,
+      "Id": "fc7559df-10ef-4203-be0d-198fdafd850c"/*DirectionalForce*/,
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [],
       "Outputs": []
@@ -1097,7 +1097,7 @@
       "Outputs": []
     },
     {
-      "Id": "6ae25dc8-48b7-4e70-9c52-4536d392a9cf"/*ParticleForceDirectional*/,
+      "Id": "6ae25dc8-48b7-4e70-9c52-4536d392a9cf"/*DirectionalForce*/,
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {
@@ -1264,7 +1264,7 @@
       "Outputs": []
     },
     {
-      "Id": "9917a374-3d0f-4ac7-b8af-e8e8ab2724ca"/*ParticleForceTurbulence*/,
+      "Id": "9917a374-3d0f-4ac7-b8af-e8e8ab2724ca"/*TurbulenceForce*/,
       "SymbolId": "3f8376f2-b89a-4ab4-b6dc-a3e8bf88c0a5",
       "InputValues": [],
       "Outputs": []
@@ -1399,7 +1399,7 @@
       "Outputs": []
     },
     {
-      "Id": "03041eed-99b6-47f2-8b55-5d5471202045"/*ParticleForceAxisStep*/,
+      "Id": "03041eed-99b6-47f2-8b55-5d5471202045"/*AxisStepForce*/,
       "SymbolId": "2cc44046-2702-40d5-ab42-8b36ff3d6ca7",
       "InputValues": [
         {
@@ -1705,7 +1705,7 @@
       "Outputs": []
     },
     {
-      "Id": "8b4daadc-5cf6-4a95-b2e3-10d516a7439f"/*ParticleForceCollisionExample*/,
+      "Id": "8b4daadc-5cf6-4a95-b2e3-10d516a7439f"/*CollisionForceExample*/,
       "SymbolId": "54bea221-f2db-4ff8-afeb-200bcfd37871",
       "InputValues": [],
       "Outputs": []
@@ -2272,6 +2272,6 @@
     "Syncing": 0,
     "AudioDecayFactor": 0.9,
     "AudioGainFactor": 1.0,
-    "AudioInputDeviceName": "Speakers (Realtek(R) Audio)"
+    "AudioInputDeviceName": "t-Bone (USB MICROPHONE )"
   }
 }

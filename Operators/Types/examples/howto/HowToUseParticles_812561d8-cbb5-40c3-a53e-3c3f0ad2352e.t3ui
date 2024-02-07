@@ -11,7 +11,7 @@
       }
     },
     {
-      "ChildId": "3727ea90-2f55-4634-aaf3-7369b369135e"/*ParticleForceTurbulence*/,
+      "ChildId": "3727ea90-2f55-4634-aaf3-7369b369135e"/*TurbulenceForce*/,
       "Comment": "This is a very simple particle force. We animate its force with the current time.",
       "Position": {
         "X": -114.58609,
@@ -19,7 +19,7 @@
       }
     },
     {
-      "ChildId": "e5eeee16-5e4f-45ce-a0d0-21fd21fac3ee"/*ParticleForceAxisStep*/,
+      "ChildId": "e5eeee16-5e4f-45ce-a0d0-21fd21fac3ee"/*AxisStepForce*/,
       "Position": {
         "X": -114.58609,
         "Y": -298.18652
@@ -56,7 +56,7 @@
       }
     },
     {
-      "ChildId": "b8729c32-9439-4651-abcd-1a7675d8baff"/*ParticleForceSurface*/,
+      "ChildId": "b8729c32-9439-4651-abcd-1a7675d8baff"/*VolumeForce*/,
       "Comment": "This is also nice.",
       "Position": {
         "X": -114.58609,
@@ -64,7 +64,7 @@
       }
     },
     {
-      "ChildId": "b15f986a-9222-4b8a-b8ef-7a6dbe336441"/*ParticleForceDirectional*/,
+      "ChildId": "b15f986a-9222-4b8a-b8ef-7a6dbe336441"/*DirectionalForce*/,
       "Position": {
         "X": 35.41391,
         "Y": -510.18652
@@ -78,7 +78,7 @@
       }
     },
     {
-      "ChildId": "ce57c1de-b755-4b5d-b31a-50bd9156892f"/*ParticleForceSurface*/,
+      "ChildId": "ce57c1de-b755-4b5d-b31a-50bd9156892f"/*VolumeForce*/,
       "Comment": "The [SurfaceForce] can be used as an attractor, a container, or a reflective surface. Also, see the examples further below.",
       "Position": {
         "X": -114.58609,
@@ -129,14 +129,14 @@
       }
     },
     {
-      "ChildId": "aa2f90b8-26e9-4699-92ca-7b3a22d30551"/*ParticleForceDirectional*/,
+      "ChildId": "aa2f90b8-26e9-4699-92ca-7b3a22d30551"/*DirectionalForce*/,
       "Position": {
         "X": -252.22223,
         "Y": 72.6615
       }
     },
     {
-      "ChildId": "dff2e37e-6a76-4112-a785-42dde6c519c8"/*ParticleForceSurface*/,
+      "ChildId": "dff2e37e-6a76-4112-a785-42dde6c519c8"/*VolumeForce*/,
       "Position": {
         "X": -252.22223,
         "Y": 115.6615
@@ -157,7 +157,7 @@
       }
     },
     {
-      "ChildId": "d1c36ea3-7e86-4b3d-8adf-fae436108a9e"/*ParticleForceDirectional*/,
+      "ChildId": "d1c36ea3-7e86-4b3d-8adf-fae436108a9e"/*DirectionalForce*/,
       "Position": {
         "X": -163.73543,
         "Y": -645.9996
@@ -186,7 +186,7 @@
       }
     },
     {
-      "ChildId": "4a3bfcd5-bab6-492c-818e-8b5ea327c90f"/*ParticleForceDirectional*/,
+      "ChildId": "4a3bfcd5-bab6-492c-818e-8b5ea327c90f"/*DirectionalForce*/,
       "Position": {
         "X": 1072.6843,
         "Y": -295.54547
@@ -357,7 +357,7 @@
       }
     },
     {
-      "ChildId": "fc7559df-10ef-4203-be0d-198fdafd850c"/*ParticleForceDirectional*/,
+      "ChildId": "fc7559df-10ef-4203-be0d-198fdafd850c"/*DirectionalForce*/,
       "Position": {
         "X": 724.36475,
         "Y": 460.20554
@@ -497,7 +497,7 @@
       }
     },
     {
-      "ChildId": "6ae25dc8-48b7-4e70-9c52-4536d392a9cf"/*ParticleForceDirectional*/,
+      "ChildId": "6ae25dc8-48b7-4e70-9c52-4536d392a9cf"/*DirectionalForce*/,
       "Position": {
         "X": 752.2478,
         "Y": 1038.8801
@@ -512,7 +512,7 @@
       }
     },
     {
-      "ChildId": "9917a374-3d0f-4ac7-b8af-e8e8ab2724ca"/*ParticleForceTurbulence*/,
+      "ChildId": "9917a374-3d0f-4ac7-b8af-e8e8ab2724ca"/*TurbulenceForce*/,
       "Position": {
         "X": 752.2478,
         "Y": 1081.8804
@@ -565,7 +565,7 @@
       }
     },
     {
-      "ChildId": "03041eed-99b6-47f2-8b55-5d5471202045"/*ParticleForceAxisStep*/,
+      "ChildId": "03041eed-99b6-47f2-8b55-5d5471202045"/*AxisStepForce*/,
       "Comment": "...40% of the particles are accelerated along the x,y, or z-axis.\n\nNotice the y-axis: \n- it's chosen only 5% of the time, but then with 4x the velocity.",
       "Position": {
         "X": 752.1406,
@@ -670,7 +670,7 @@
       }
     },
     {
-      "ChildId": "8b4daadc-5cf6-4a95-b2e3-10d516a7439f"/*ParticleForceCollisionExample*/,
+      "ChildId": "8b4daadc-5cf6-4a95-b2e3-10d516a7439f"/*CollisionForceExample*/,
       "Position": {
         "X": 560.299,
         "Y": 1771.587

@@ -376,7 +376,7 @@
       "Outputs": []
     },
     {
-      "Id": "b7db7672-a710-4120-8f2b-30321b703e8d"/*ParticleForceTurbulence*/,
+      "Id": "b7db7672-a710-4120-8f2b-30321b703e8d"/*TurbulenceForce*/,
       "SymbolId": "3f8376f2-b89a-4ab4-b6dc-a3e8bf88c0a5",
       "InputValues": [
         {
@@ -442,7 +442,7 @@
       "Outputs": []
     },
     {
-      "Id": "04951a6d-0751-4480-9845-b169a54e1ed7"/*ParticleForceSurface*/,
+      "Id": "04951a6d-0751-4480-9845-b169a54e1ed7"/*VolumeForce*/,
       "SymbolId": "fbe1a703-f372-4236-9f20-5d0b69183843",
       "InputValues": [
         {
