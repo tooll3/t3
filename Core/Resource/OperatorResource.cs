@@ -39,33 +39,38 @@ namespace T3.Core.Resource
         public static List<Symbol> UpdateChangedOperatorTypes()
         {
             _modifiedSymbols.Clear();
-            foreach (var opResource in _operators)
+            
+            // In various situations like saving backup, the _operators list could be modified.
+            // This could lead to crashes
+            lock (_operators)
             {
-                if (!opResource.Updated)
-                    continue;
+                foreach (var opResource in _operators)
+                {
+                    if (!opResource.Updated)
+                        continue;
 
-                var type = opResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
-                if (type == null)
-                {
-                    Log.Error("Error updatable operator had not exported type");
-                    continue;
+                    var type = opResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
+                    if (type == null)
+                    {
+                        Log.Error("Error updatable operator had not exported type");
+                        continue;
+                    }
+                    
+                    if (!SymbolRegistry.Entries.TryGetValue(opResource.SymbolId, out var symbol))
+                    {
+                        Log.Info($"Error replacing symbol type '{opResource.Name}");
+                        continue;
+                    }
+                    
+                    _operatorUpdateStopwatch.Restart();
+                    symbol.UpdateInstanceType(type);
+                    opResource.Updated = false;
+                    _operatorUpdateStopwatch.Stop();
+                    //Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
+                    _modifiedSymbols.Add(symbol);
+                    
                 }
-                
-                if (!SymbolRegistry.Entries.TryGetValue(opResource.SymbolId, out var symbol))
-                {
-                    Log.Info($"Error replacing symbol type '{opResource.Name}");
-                    continue;
-                }
-                
-                _operatorUpdateStopwatch.Restart();
-                symbol.UpdateInstanceType(type);
-                opResource.Updated = false;
-                _operatorUpdateStopwatch.Stop();
-                //Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
-                _modifiedSymbols.Add(symbol);
-                
             }
-
             return _modifiedSymbols;
         }
         
