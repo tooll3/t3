@@ -35,6 +35,7 @@ internal abstract class MfVideoWriter : IDisposable
         FilePath = filePath;
         _videoPixelSize = videoPixelSize;
         _videoInputFormat = videoInputFormat;
+        _supportAudio = supportAudio;
         Bitrate = 2000000;
         Framerate = 60; //TODO: is this actually used?
         _frameIndex = -1;
@@ -42,15 +43,22 @@ internal abstract class MfVideoWriter : IDisposable
     
     public string FilePath { get; }
 
-    protected MfVideoWriter(string filePath, Int2 videoPixelSize)
-        : this(filePath, videoPixelSize, _videoInputFormatId)
+    // skip a certain number of images at the beginning since the
+    // final content will only appear after several buffer flips
+    public const int SkipImages = 1;
+
+    protected MfVideoWriter(string filePath, Int2 videoPixelSize, bool supportAudio = false)
+        : this(filePath, videoPixelSize, _videoInputFormatId, supportAudio)
     {
     }
+
+    public static readonly List<SharpDX.DXGI.Format> SupportedFormats = new List<SharpDX.DXGI.Format>
+        { SharpDX.DXGI.Format.R8G8B8A8_UNorm };
 
     /// <summary>
     /// Returns true if a frame has been written
     /// </summary>
-    public bool ProcessFrames(ref Texture2D gpuTexture)
+    public bool ProcessFrames(ref Texture2D gpuTexture, ref byte[] audioFrame, int channels, int sampleRate)
     {
         try
         {
@@ -82,6 +90,20 @@ internal abstract class MfVideoWriter : IDisposable
                     SinkWriter.SetInputMediaType(_streamIndex, mediaTypeIn, null);
                 }
 
+                // Create audio support?
+                if (_supportAudio)
+                {
+                    // initialize audio writer
+                    var waveFormat = WaveFormatExtension.DefaultIeee;
+                    //var waveFormat = WaveFormatExtension.DefaultPcm;
+                    waveFormat._nChannels = (ushort)channels;
+                    waveFormat._nSamplesPerSec = (uint)sampleRate;
+                    waveFormat._nBlockAlign = (ushort)(waveFormat._nChannels * waveFormat._wBitsPerSample / 8);
+                    waveFormat._nAvgBytesPerSec = waveFormat._nSamplesPerSec * waveFormat._nBlockAlign;
+                    //_audioWriter = new FlacAudioWriter(SinkWriter, ref waveFormat);
+                    _audioWriter = new Mp3AudioWriter(SinkWriter, ref waveFormat);
+                }
+
                 // Start writing the video file. MUST be called before write operations.
                 SinkWriter.BeginWriting();
             }
@@ -94,15 +116,34 @@ internal abstract class MfVideoWriter : IDisposable
                                                 "(image size may be unsupported with the requested codec)");
         }
 
+        Sample audioSample = null;
+        if (_audioWriter != null)
+        {
+            if (audioFrame != null && audioFrame.Length != 0)
+            {
+                //Log.Debug("adding audio");
+                audioSample = _audioWriter.CreateSampleFromFrame(ref audioFrame);
+            }
+            else
+            {
+                Log.Debug("audio missing");
+            }
+        }
+
         // Save last sample (includes image and timing information)
         var savedFrame = false;
-        if (_lastSample != null)
+        if (_lastSample != null &&
+            (!_supportAudio || audioSample != null))
         {
             try
             {
                 // Write to stream
                 var samples = new Dictionary<int, Sample>();
-                samples.Add(StreamIndex, _lastSample);
+                if (_lastSample != null)
+                    samples.Add(StreamIndex, _lastSample);
+                if (_audioWriter != null && audioSample != null)
+                    samples.Add(_audioWriter.StreamIndex, audioSample);
+
                 WriteSamples(samples);
                 savedFrame = true;
             }
@@ -113,11 +154,15 @@ internal abstract class MfVideoWriter : IDisposable
             }
             finally
             {
-                _lastSample.Dispose();
-                _lastSample = null;
+                if (_lastSample != null)
+                {
+                    _lastSample?.Dispose();
+                    _lastSample = null;
+                }
+                audioSample?.Dispose();
             }
         }
-        
+
         // Initiate reading next frame
         if (!TextureReadAccess.InitiateRead(gpuTexture, SaveSampleAfterReadback))
         {
@@ -131,12 +176,12 @@ internal abstract class MfVideoWriter : IDisposable
 
     private void SaveSampleAfterReadback(TextureReadAccess.ReadRequestItem readRequestItem)
     {
-        // if (_lastSample != null)
-        // {
-        //     //Log.Warning("Discarding previous video sample...");
-        //     _lastSample = null;
-        // }
-        _lastSample = null;
+        if (_lastSample != null)
+        {
+             Log.Warning("Discarding previous video sample...");
+             _lastSample?.Dispose();
+             _lastSample = null;
+        }
 
         var cpuAccessTexture = readRequestItem.CpuAccessTexture;
         if (cpuAccessTexture == null || cpuAccessTexture.IsDisposed)
@@ -222,16 +267,17 @@ internal abstract class MfVideoWriter : IDisposable
     }
 
 
-
     /// <summary>
     /// get minimum image buffer size in bytes if imager is RGBA converted
     /// </summary>
-    private static int RgbaSizeInBytes(ref Texture2D frame)
+    /// <param name="frame">texture to get information from</param>
+    public static int RgbaSizeInBytes(ref Texture2D frame)
     {
         var currentDesc = frame.Description;
         const int bitsPerPixel = 32;
         return (currentDesc.Width * currentDesc.Height * bitsPerPixel + 7) / 8;
     }
+
 
     // FIXME: Would possibly need some refactoring not to duplicate code from ScreenshotWriter
     private static float Read2BytesToHalf(DataStream imageStream)
@@ -241,53 +287,23 @@ internal abstract class MfVideoWriter : IDisposable
         return FormatConversion.ToTwoByteFloat(low, high);
     }
 
-    // Kept for later reference
-    // public void AddVideoAndAudioFrame(ref Texture2D frame, byte[] audioFrame)
-    // {
-    //     Debug.Assert(frame != null);
-    //     var currentDesc = frame.Description;
-    //     Debug.Assert(currentDesc.Width != 0 &&
-    //                  currentDesc.Height != 0 &&
-    //                  audioFrame != null &&
-    //                  audioFrame.Length != 0);
-    //
-    //     var videoSample = CreateSampleFromFrame(ref frame);
-    //     var audioSample = _audioWriter.CreateSampleFromFrame(audioFrame);
-    //     try
-    //     {
-    //         var samples = new Dictionary<int, Sample>();
-    //         samples.Add(StreamIndex, videoSample);
-    //         samples.Add(_audioWriter.StreamIndex, audioSample);
-    //
-    //         WriteSamples(samples);
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         Debug.WriteLine(e.Message);
-    //         throw new InvalidOperationException(e.Message);
-    //     }
-    //     finally
-    //     {
-    //         videoSample.Dispose();
-    //         audioSample.Dispose();
-    //     }
-    // }
-
     private void WriteSamples(Dictionary<int, Sample> samples)
     {
         ++_frameIndex;
 
-        MediaFactory.FrameRateToAverageTimePerFrame(Framerate, 1, out var frameDuration);
+        long frameDuration;
+        MediaFactory.FrameRateToAverageTimePerFrame(Framerate, 1, out frameDuration);
 
         foreach (var item in samples)
         {
             var streamIndex = item.Key;
             var sample = item.Value;
-
-            sample.SampleTime = frameDuration * _frameIndex;
-            sample.SampleDuration = frameDuration;
-
-            SinkWriter.WriteSample(streamIndex, sample);
+            if (sample != null)
+            {
+                sample.SampleTime = frameDuration * _frameIndex;
+                sample.SampleDuration = frameDuration;
+                SinkWriter.WriteSample(streamIndex, sample);
+            }
         }
     }
 
@@ -349,9 +365,10 @@ internal abstract class MfVideoWriter : IDisposable
     private int StreamIndex => _streamIndex;
 
     private MF.SinkWriter SinkWriter { get; set; }
-    //private MediaFoundationAudioWriter _audioWriter;
+    private MediaFoundationAudioWriter _audioWriter;
 
     private static readonly Guid _videoInputFormatId = MF.VideoFormatGuids.Rgb32;
+    private bool _supportAudio;
     private static bool _mfInitialized = false;
     private readonly Guid _videoInputFormat;
 }
@@ -360,8 +377,8 @@ internal class Mp4VideoWriter : MfVideoWriter
 {
     private static readonly Guid _h264EncodingFormatId = MF.VideoFormatGuids.H264;
 
-    public Mp4VideoWriter(string filePath, Int2 videoPixelSize)
-        : base(filePath, videoPixelSize)
+    public Mp4VideoWriter(string filePath, Int2 videoPixelSize, bool supportAudio = false)
+        : base(filePath, videoPixelSize, supportAudio)
     {
     }
 

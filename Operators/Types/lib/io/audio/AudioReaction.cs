@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualBasic.Logging;
+using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -39,7 +40,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
                 {
                     //Log.Debug($"Skip motion blur pass {motionBlurPass}");
                     return;
-                }                
+                }
             } 
             
             if (Math.Abs(context.LocalFxTime - _lastEvalTime) < 0.001f)
@@ -47,7 +48,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
                 return;
             }
 
-            _lastEvalTime = context.LocalFxTime;
+            _lastEvalTime = PlaybackTimeInSecs;
             var timeSinceLastHit = _lastEvalTime - _lastHitTime;
             if (timeSinceLastHit < -1)
             {
@@ -110,7 +111,8 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
 
                 if (couldBeHit != _isHitActive)
                 {
-                    if (!_isHitActive && timeSinceLastHit > minTimeBetweenHits)
+                    // changed this to >= minTimeBetweenHits to enable more steady beats
+                    if (!_isHitActive && timeSinceLastHit >= minTimeBetweenHits)
                     {
                         wasHit = true;
                         _isHitActive = couldBeHit;
@@ -240,7 +242,9 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         public readonly InputSlot<bool> Reset = new();
         
         private static readonly List<float> _emptyList = new();
-        
+        public double PlaybackTimeInSecs =>
+            (Playback.Current.IsLive) ? Playback.RunTimeInSecs : Playback.Current.TimeInSecs;
+
         /// <summary>
         /// This is used only for visualization
         /// </summary>
