@@ -68,7 +68,7 @@ public class SceneSetup : IEditableInputType
     /// <summary>
     /// Holds settings for a node inside the scene
     /// </summary>
-    public struct NodeSetting
+    public class NodeSetting
     {
         public int NodeHashId;
         public string PbrMaterialId;
