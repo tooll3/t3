@@ -280,12 +280,12 @@ public abstract class RenderHelperWindow : Window
             return true;
         }
 
-        if (!supportedInputFormats.Contains(texture.Description.Format))
-        {
-            warning = $"Texture format {texture.Description.Format} is not supported. Please use [ConvertFormat] with "
-                      + string.Join(", ", supportedInputFormats);
-            return true;
-        }
+        // if (!supportedInputFormats.Contains(texture.Description.Format))
+        // {
+        //     warning = $"Texture format {texture.Description.Format} is not supported. Please use [ConvertFormat] with "
+        //               + string.Join(", ", supportedInputFormats);
+        //     return true;
+        // }
 
         warning = string.Empty;
         return false;
