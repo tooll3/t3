@@ -35,7 +35,7 @@ public class SceneSetupInputUi : InputValueUi<SceneSetup>
             ImGui.OpenPopup(SceneSetupPopup.EditSceneStructureId);
             return InputEditStateFlags.Modified;
         }
-            
+
         SceneSetupPopup.DrawPopup(value);
 
         return InputEditStateFlags.Nothing;
@@ -46,13 +46,12 @@ public class SceneSetupInputUi : InputValueUi<SceneSetup>
     {
         ImGui.NewLine();
     }
-
-        
 }
 
 public static class SceneSetupPopup
 {
     public const string EditSceneStructureId = "Edit Scene Structure";
+
     public static void DrawPopup(SceneSetup setup)
     {
         if (setup == null)
@@ -70,14 +69,14 @@ public static class SceneSetupPopup
                 foreach (var node in setup.RootNodes)
                 {
                     DrawNode(node, setup);
-                }   
+                }
             }
 
             ImGui.EndPopup();
         }
     }
 
-    private static void DrawNode(SceneSetup.SceneNode node, SceneSetup sceneSetup)
+    private static void DrawNode(SceneSetup.SceneNode node, SceneSetup sceneSetup, bool parentVisible = true)
     {
         var label = string.IsNullOrEmpty(node.Name) ? "???" : node.Name;
 
@@ -85,22 +84,28 @@ public static class SceneSetupPopup
         {
             sceneSetup.NodeSettings = new List<SceneSetup.NodeSetting>();
         }
-        
+
         var nodeSettings = sceneSetup.NodeSettings.SingleOrDefault(s => s.NodeHashId == node.Name.GetHashCode());
-        
+
         if (nodeSettings == null)
         {
-            
         }
+
+        var isNodeVisible = parentVisible && (nodeSettings == null || nodeSettings.Visibility == SceneSetup.NodeSetting.NodeVisibilities.Visible);
+        var fade = isNodeVisible ? 1 : 0.5f;
+        var icon = isNodeVisible
+                       ? Icon.Visible
+                       : Icon.Hidden;
+
+        parentVisible &= isNodeVisible;
         
+        ImGui.PushStyleVar(ImGuiStyleVar.Alpha, fade);
+
         // ImGui.SetNextItemOpen(true);
         var isOpen = ImGui.TreeNodeEx(label, ImGuiTreeNodeFlags.DefaultOpen);
         ImGui.SameLine(1);
-        
-        var icon = nodeSettings== null || nodeSettings.Visibility == SceneSetup.NodeSetting.NodeVisibilities.Visible
-            ? Icon.Camera
-            : Icon.Flame;
-        
+
+
         if (CustomComponents.IconButton(icon, new Vector2(16, 16), CustomComponents.ButtonStates.Dimmed))
         {
             if (nodeSettings == null)
@@ -114,26 +119,26 @@ public static class SceneSetupPopup
             }
             else
             {
-                nodeSettings.Visibility = nodeSettings.Visibility == SceneSetup.NodeSetting.NodeVisibilities.Visible 
-                                              ? SceneSetup.NodeSetting.NodeVisibilities.HiddenBranch 
+                nodeSettings.Visibility = nodeSettings.Visibility == SceneSetup.NodeSetting.NodeVisibilities.Visible
+                                              ? SceneSetup.NodeSetting.NodeVisibilities.HiddenBranch
                                               : SceneSetup.NodeSetting.NodeVisibilities.Visible;
             }
         }
-        
-        if (!isOpen)
-            return;
-        
-        var meshLabel = string.IsNullOrEmpty(node.MeshName) ? "-" : "Mesh:" + node.MeshName;
-            
-        ImGui.SameLine(200);
-        ImGui.TextUnformatted(meshLabel);
-            
 
-        foreach (var child in node.ChildNodes)
+        if (isOpen)
         {
-            DrawNode(child, sceneSetup);
-        }
+            var meshLabel = string.IsNullOrEmpty(node.MeshName) ? "-" : "Mesh:" + node.MeshName;
 
-        ImGui.TreePop();
-    }    
+            ImGui.SameLine(200);
+            ImGui.TextUnformatted(meshLabel);
+
+            foreach (var child in node.ChildNodes)
+            {
+                DrawNode(child, sceneSetup, parentVisible);
+            }
+
+            ImGui.TreePop();
+        }
+        ImGui.PopStyleVar();
+    }
 }
