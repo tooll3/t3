@@ -11,26 +11,37 @@ namespace T3.Core.Logging
 
         public FileWriter(string filename)
         {
-            _fileWriter = new StreamWriter(filename);
+            _streamWriter = new StreamWriter(filename);
             //#if DEBUG
-            _fileWriter.AutoFlush = true;
+            _streamWriter.AutoFlush = true;
             //#endif
         }
 
         public void Dispose()
         {
-            _fileWriter.Flush();
-            _fileWriter.Close();
-            _fileWriter.Dispose();
+            _streamWriter.Flush();
+            _streamWriter.Close();
+            _streamWriter.Dispose();
+        }
+
+        public static void Flush()
+        {
+            if (Instance == null)
+                return;
+            
+            lock (Instance._streamWriter)
+            {
+                Instance._streamWriter.Flush();
+            }
         }
 
         public void ProcessEntry(ILogEntry entry)
         {
-            lock (_fileWriter)
+            lock (_streamWriter)
             {
                 try
                 {
-                    _fileWriter.Write("{0:HH:mm:ss.fff} ({1}): {2}", entry.TimeStamp, entry.Level.ToString(), entry.Message + "\n");
+                    _streamWriter.Write("{0:HH:mm:ss.fff} ({1}): {2}", entry.TimeStamp, entry.Level.ToString(), entry.Message + "\n");
                 }
                 catch (Exception)
                 {
@@ -39,15 +50,23 @@ namespace T3.Core.Logging
             }
         }
 
-        private readonly StreamWriter _fileWriter;
+        private readonly StreamWriter _streamWriter;
+        private static FileWriter? Instance { get; set; }
 
         public static ILogWriter CreateDefault()
         {
-            Directory.CreateDirectory(@".t3\log");
-            return new FileWriter($@".t3\log\{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.log")
-                       {
-                           Filter = ILogEntry.EntryLevel.All
-                       };
+            
+            Directory.CreateDirectory(LogDirectory);
+            if (Instance != null)
+                return Instance;
+            
+            Instance = new FileWriter($@".t3\log\{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.log")
+                           {
+                               Filter = ILogEntry.EntryLevel.All
+                           };
+            return Instance;
         }
+        
+        public const string LogDirectory = @".t3\log\";
     }
 }
