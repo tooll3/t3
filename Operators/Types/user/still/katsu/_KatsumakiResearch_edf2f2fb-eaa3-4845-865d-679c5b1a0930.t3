@@ -5705,7 +5705,7 @@
           }
         },
         {
-          "Id": "70c4ecc7-72a2-42ee-8546-cbff2c08aa27"/*Size*/,
+          "Id": "70c4ecc7-72a2-42ee-8546-cbff2c08aa27"/*Stretch*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.261,
