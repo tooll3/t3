@@ -1,0 +1,31 @@
+{
+  "Id": "179093f6-d3ef-43bc-a5af-1df2379ec081"/*SwitchBlendState*/,
+  "Description": "Switches between different blend state operations.",
+  "InputUis": [
+    {
+      "InputId": "a737bb60-d98b-4405-914c-7df91a58d8bc"/*BlendStates*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "232a10e8-0357-4adc-935b-9cb1b7938730"/*Index*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "0608b46b-4778-4f95-b688-3a749f9664ae"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

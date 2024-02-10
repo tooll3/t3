@@ -1,0 +1,22 @@
+{
+  "Name": "Boolean",
+  "Id": "ed0f5188-8888-453e-8db4-20d87d18e9f4",
+  "Namespace": "lib.math.bool",
+  "Inputs": [
+    {
+      "Id": "e7c1f0af-da6d-4e33-ac86-7dc96bfe7eb3"/*BoolValue*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*ColorInGraph*/,
+      "DefaultValue": {
+        "X": 0.15294118,
+        "Y": 0.15294118,
+        "Z": 0.15294118,
+        "W": 1.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

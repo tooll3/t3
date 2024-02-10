@@ -1,0 +1,95 @@
+{
+  "Id": "c5707b79-859b-4d53-92e0-cbed53aae648"/*_RenderFontBuffer*/,
+  "Description": "An internal implementation of the Text operator that generates a sprite buffer that is then being rendered.",
+  "InputUis": [
+    {
+      "InputId": "f2dd87b1-7f37-4b02-871b-b2e35972f246"/*Text*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Multiline"
+    },
+    {
+      "InputId": "e827fdd1-20ca-473c-99ee-b839563690e9"/*Filepath*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "FilePath"
+    },
+    {
+      "InputId": "1cde902d-5eaa-4144-b579-85f54717356b"/*Color*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "5008e9b4-083a-4494-8f7c-50fe5d80fc35"/*Size*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
+    },
+    {
+      "InputId": "e05e143e-8d4c-4de7-8c9c-7fa7755009d3"/*Spacing*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "9eb4e13f-0fe3-4ed9-9df1-814f075a05da"/*LineHeight*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "c4f03392-ff7e-4b4a-8740-f93a581b2b6b"/*Position*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
+      "InputId": "ffd2233a-8f3e-426b-815b-8071e4c779ab"/*Slant*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
+      "InputId": "14829eac-ba59-4d31-90dc-53c7fc56cc30"/*VerticalAlign*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      }
+    },
+    {
+      "InputId": "e43bc887-d425-4f9c-8a86-a32c761de0cc"/*HorizontalAlign*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "3d2f53a3-f1f0-489b-b20b-badb09cdaebe"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "a0eca9ce-35aa-497d-b5c9-cde52a7c8d58"/*VertexCount*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

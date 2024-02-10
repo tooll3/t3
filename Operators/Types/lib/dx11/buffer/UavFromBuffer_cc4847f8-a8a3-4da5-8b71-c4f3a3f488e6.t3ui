@@ -1,0 +1,22 @@
+{
+  "Id": "cc4847f8-a8a3-4da5-8b71-c4f3a3f488e6"/*UavFromBuffer*/,
+  "InputUis": [
+    {
+      "InputId": "58ebae6e-7d8c-45a0-8266-8b71f601da0a"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d7cf0dae-ffb7-4408-a1ea-b0c1b4bc60c2"/*UnorderedAccessView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

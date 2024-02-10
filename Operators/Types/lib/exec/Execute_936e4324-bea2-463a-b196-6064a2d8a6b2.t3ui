@@ -1,0 +1,31 @@
+{
+  "Id": "936e4324-bea2-463a-b196-6064a2d8a6b2"/*Execute*/,
+  "Description": "Performs a sequence of drawing operations and then restores the graphics context. You can use it for grouping or activating and deactivating parts of your graphs.\n\nSince [Execute] itself does nothing, you can also use it to name things by inserting it into the graph and setting the instance name by pressing Enter.\n\nAn alternative to [Execute] is [Group], which can also have a translation and multiple input connections.\n",
+  "InputUis": [
+    {
+      "InputId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"/*Command*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "d68b5569-b43d-4a0d-9524-35289ce08098"/*IsEnabled*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

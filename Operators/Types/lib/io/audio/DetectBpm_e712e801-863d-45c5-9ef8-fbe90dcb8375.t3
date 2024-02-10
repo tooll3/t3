@@ -1,0 +1,42 @@
+{
+  "Name": "DetectBpm",
+  "Id": "e712e801-863d-45c5-9ef8-fbe90dcb8375",
+  "Namespace": "lib.io.audio",
+  "Inputs": [
+    {
+      "Id": "3d2d523e-6578-488c-92fa-9e2a3a773e11"/*LowerLimit*/,
+      "DefaultValue": 2
+    },
+    {
+      "Id": "25920975-44fd-4959-be50-b895dd3a6493"/*UpperLimit*/,
+      "DefaultValue": 199
+    },
+    {
+      "Id": "a4763489-0977-4c7e-bacb-89c010d4a12d"/*BufferDurationSec*/,
+      "DefaultValue": 15.0
+    },
+    {
+      "Id": "d68c056d-7e66-4fe7-8260-7ba43f272dc6"/*LowestBpm*/,
+      "DefaultValue": 120
+    },
+    {
+      "Id": "17208fff-ab9a-46aa-ab1c-a1ae426ca5df"/*HighestBpm*/,
+      "DefaultValue": 180
+    },
+    {
+      "Id": "f50cd488-9914-491d-9861-621a9c93019d"/*LockItFactor*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "7ba20a6a-13f9-47a2-9d46-b8ac59210f08"/*FftInput*/,
+      "DefaultValue": {
+        "Values": [
+          5.0,
+          17.0
+        ]
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

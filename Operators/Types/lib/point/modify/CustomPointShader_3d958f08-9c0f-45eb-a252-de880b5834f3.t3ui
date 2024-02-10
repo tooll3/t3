@@ -1,0 +1,199 @@
+{
+  "Id": "3d958f08-9c0f-45eb-a252-de880b5834f3"/*CustomPointShader*/,
+  "Description": "A very fast method of writing simple compute shaders to manipulate the connected points.\n\nEach point has the following properties:\n\np.Position  // as float3\np.Rotation // as quaternion\np.W  // for scaling and other effects.\n\nThe following float values are initialized:\n\ni - index of the point\nf - a normalized float value of the index 0 ... 1.",
+  "InputUis": [
+    {
+      "InputId": "e77660e2-0fd0-45ea-8e0b-c607a757bb49"/*Points*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -679.7711,
+        "Y": 196.40546
+      }
+    },
+    {
+      "InputId": "e9712b03-e7aa-4fe5-b5cf-f2c5d0c0b0df"/*ShaderCode*/,
+      "Position": {
+        "X": -654.178,
+        "Y": 629.22577
+      },
+      "Usage": "Multiline"
+    },
+    {
+      "InputId": "01898885-4140-4435-bb44-a7a6f6f32657"/*Center*/,
+      "Position": {
+        "X": -655.644,
+        "Y": 716.5865
+      }
+    },
+    {
+      "InputId": "a5c7863e-9c26-4109-9851-3244086b0ccc"/*A*/,
+      "Position": {
+        "X": -655.644,
+        "Y": 761.5865
+      }
+    },
+    {
+      "InputId": "e5a7649f-684e-4938-8ae3-7289f5b9ff45"/*B*/,
+      "Position": {
+        "X": -655.644,
+        "Y": 806.5866
+      }
+    },
+    {
+      "InputId": "b909844f-cff7-4907-9bc8-e9c2281582bf"/*C*/,
+      "Position": {
+        "X": -655.644,
+        "Y": 851.5865
+      }
+    },
+    {
+      "InputId": "20226539-a481-4df6-8dc7-cc65de915ea9"/*D*/,
+      "Position": {
+        "X": -655.644,
+        "Y": 896.58636
+      }
+    },
+    {
+      "InputId": "dfbb9327-6cd2-41d3-8b2b-0abd7716471b"/*IgnoreTemplate*/,
+      "Position": {
+        "X": -655.644,
+        "Y": 941.5861
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "39438d7f-efd6-4508-8daf-6c1476ebcd33"/*TimeConstBuffer*/,
+      "Position": {
+        "X": 266.2947,
+        "Y": 391.98727
+      }
+    },
+    {
+      "ChildId": "17e7fcf4-6504-46d6-8867-76054bd7e50d"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 461.39575,
+        "Y": 299.49237
+      }
+    },
+    {
+      "ChildId": "923b292d-3deb-4321-9c6e-bfd707c0e4a4"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 247.90558,
+        "Y": 666.08746
+      }
+    },
+    {
+      "ChildId": "80aa8d51-03a2-4125-a1d9-2d98c6903255"/*GetSRVProperties*/,
+      "Position": {
+        "X": -62.478973,
+        "Y": 342.8147
+      }
+    },
+    {
+      "ChildId": "02b1203f-262e-4dc8-9afb-8fa41805ae0c"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 626.24164,
+        "Y": 477.45538
+      }
+    },
+    {
+      "ChildId": "5f6c7847-eb6e-4e25-9dcc-92ec20282a79"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 266.2947,
+        "Y": 322.98734
+      }
+    },
+    {
+      "ChildId": "bec21040-6f05-4470-8e03-1e410a7c1f29"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 94.17692,
+        "Y": 512.8118
+      }
+    },
+    {
+      "ChildId": "b9c402df-567e-4b3e-be14-d79991ebabef"/*GetBufferComponents*/,
+      "Position": {
+        "X": -529.7711,
+        "Y": 196.40546
+      }
+    },
+    {
+      "ChildId": "1265512f-1090-4c86-a676-582cecb0652e"/*GetBufferComponents*/,
+      "Position": {
+        "X": 266.29468,
+        "Y": 464.6656
+      }
+    },
+    {
+      "ChildId": "f7af296d-a1ff-424e-9980-5742352f90ad"/*TransformsConstBuffer*/,
+      "Position": {
+        "X": 266.2947,
+        "Y": 434.9871
+      }
+    },
+    {
+      "ChildId": "f4ca3a15-0bf3-4944-9db4-6c6dc8e88c24"/*ComputeShaderFromSource*/,
+      "Position": {
+        "X": -62.478973,
+        "Y": 286.8147
+      }
+    },
+    {
+      "ChildId": "af172f9d-4244-4c81-8cb5-261dfd40a332"/*AString*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 250.1877,
+        "Y": 267.22427
+      },
+      "Position": {
+        "X": -665.7408,
+        "Y": 292.08395
+      }
+    },
+    {
+      "ChildId": "312b9084-61d9-402b-b0b2-53db34287232"/*AString*/,
+      "Position": {
+        "X": -504.17798,
+        "Y": 629.22577
+      }
+    },
+    {
+      "ChildId": "1c79c2d7-3fa5-41f7-8b3d-a379a1fb1be2"/*SearchAndReplace*/,
+      "Position": {
+        "X": -362.47897,
+        "Y": 286.8147
+      }
+    },
+    {
+      "ChildId": "00233c4e-712c-4ae7-a884-5038193374ce"/*Vector3Components*/,
+      "Position": {
+        "X": -505.64398,
+        "Y": 716.5865
+      }
+    },
+    {
+      "ChildId": "86162a63-b1ec-4eeb-bc0a-4d243c4c5a7f"/*BoolToInt*/,
+      "Position": {
+        "X": -505.64398,
+        "Y": 952.5861
+      }
+    },
+    {
+      "ChildId": "434dc073-61f8-4ac7-b3a3-1a878844e6cf"/*PickString*/,
+      "Position": {
+        "X": -212.47897,
+        "Y": 286.8147
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "e0097148-4395-4441-83d2-c5cf5b76bb61"/*Output*/,
+      "Position": {
+        "X": 756.24164,
+        "Y": 477.45538
+      }
+    }
+  ]
+}

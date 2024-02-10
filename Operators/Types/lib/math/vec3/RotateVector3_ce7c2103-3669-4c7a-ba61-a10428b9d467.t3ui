@@ -1,0 +1,44 @@
+{
+  "Id": "ce7c2103-3669-4c7a-ba61-a10428b9d467"/*RotateVector3*/,
+  "Description": "Rotates a vector around an axis.",
+  "InputUis": [
+    {
+      "InputId": "56229f73-cbe2-4279-a659-d70d32e0df59"/*VectorA*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "991f39df-e4c1-4d43-aa5b-09b223aa14d2"/*Angle*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "351b4e46-397d-41dd-ad89-6ce200e36e2d"/*Axis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "f23112f4-265a-4cca-9eea-d701d9fe447f"/*Scale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "473ef336-d525-4d33-921b-d4cdaf11c73b"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "Id": "08d526d0-d5e5-4fc9-a039-98189721d2b8"/*_ComputeBRDFLookup*/,
+  "Description": "Pre-integrates Cook-Torrance specular BRDF for varying roughness and viewing directions.",
+  "InputUis": [
+    {
+      "InputId": "e22057e4-1aae-4698-b7f6-120dde027a5d"/*Size*/,
+      "Position": {
+        "X": -420.40683,
+        "Y": 162.29959
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "85a5c91b-0531-4e68-9dd5-f2bbc0ccd7e8"/*ComputeShader*/,
+      "Position": {
+        "X": 14.589912,
+        "Y": 74.043884
+      }
+    },
+    {
+      "ChildId": "1ae5cbfa-5887-4059-a134-10749e67ec3e"/*ComputeShaderStage*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 95.38757,
+        "Y": 177.20645
+      },
+      "Position": {
+        "X": 350.31635,
+        "Y": 39.86669
+      }
+    },
+    {
+      "ChildId": "26f76886-eff3-406f-bd30-3fefd23d7144"/*CalcInt2DispatchCount*/,
+      "Position": {
+        "X": 185.80084,
+        "Y": 121.20065
+      }
+    },
+    {
+      "ChildId": "a4b1ca57-3583-4f42-aec8-45711e313a08"/*Texture2d*/,
+      "Position": {
+        "X": -154.66321,
+        "Y": 253.57977
+      }
+    },
+    {
+      "ChildId": "578b2323-856f-4c06-a720-6e358e95baa7"/*UavFromTexture2d*/,
+      "Position": {
+        "X": 185.80084,
+        "Y": 177.20065
+      }
+    },
+    {
+      "ChildId": "658d89e8-3dc8-4430-80c6-b547bc5500ac"/*ExecuteTextureUpdate*/,
+      "Position": {
+        "X": 543.7523,
+        "Y": 44.14441
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "21e0ee79-8e98-45aa-86e9-194ca6d70989"/*BRDF*/,
+      "Position": {
+        "X": 693.7523,
+        "Y": 44.14441
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "d5709ff5-92ba-4103-b75e-505443c4c277",
+      "Title": "Original Source",
+      "Description": "Michal Siejak (@Nadrin)",
+      "LinkUrl": "https://github.com/Nadrin/PBR/tree/master",
+      "LinkType": "Source"
+    }
+  ]
+}

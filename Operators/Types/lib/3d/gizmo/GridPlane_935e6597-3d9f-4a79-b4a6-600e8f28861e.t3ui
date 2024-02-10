@@ -1,0 +1,174 @@
+{
+  "Id": "935e6597-3d9f-4a79-b4a6-600e8f28861e"/*GridPlane*/,
+  "Description": "A helper gizmo that can uses a fragment shader to draw smooth grid lines.",
+  "InputUis": [
+    {
+      "InputId": "c0f652b8-80fb-4bd2-b6cd-cfc459f9fcc5"/*Color*/,
+      "Position": {
+        "X": -271.31342,
+        "Y": 173.57768
+      }
+    },
+    {
+      "InputId": "39a74407-5447-45fd-8fc5-5f96bd8bbdfb"/*Size*/,
+      "Position": {
+        "X": -272.47134,
+        "Y": 292.00134
+      }
+    },
+    {
+      "InputId": "7096708e-4b56-4b57-b86c-576540434626"/*Scale*/,
+      "Position": {
+        "X": -272.47134,
+        "Y": 337.00134
+      }
+    },
+    {
+      "InputId": "a8e8da31-b4e0-4710-8292-2f27175c5f6b"/*Rotation*/,
+      "Position": {
+        "X": -283.07867,
+        "Y": 706.9708
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "f88d926a-4dfa-4160-9ca9-4a882eabcc74"/*VertexShader*/,
+      "Position": {
+        "X": 44.91298,
+        "Y": 2.3654957
+      }
+    },
+    {
+      "ChildId": "6a42140e-ba87-4aa3-adcf-5a04ba183257"/*TransformsConstBuffer*/,
+      "Position": {
+        "X": -91.41687,
+        "Y": 74.11656
+      }
+    },
+    {
+      "ChildId": "e9ca366b-32e7-4c81-a1b4-19053e89d99c"/*RasterizerStateOp*/,
+      "Position": {
+        "X": 203.7669,
+        "Y": 125.0
+      }
+    },
+    {
+      "ChildId": "2b4af537-801c-48dd-872a-9683bca4e2d6"/*Rasterizer*/,
+      "Position": {
+        "X": 333.7669,
+        "Y": 125.0
+      }
+    },
+    {
+      "ChildId": "c5e54bdf-21f9-437a-8b89-36ec3269fc81"/*VertexShaderStage*/,
+      "Position": {
+        "X": 329.06284,
+        "Y": -13.448727
+      }
+    },
+    {
+      "ChildId": "f8c4bac9-9344-4db9-83a0-10004e665cb6"/*PixelShaderStage*/,
+      "Position": {
+        "X": 333.7669,
+        "Y": 181.0
+      }
+    },
+    {
+      "ChildId": "f968037a-e683-4707-b9bf-837189c478a3"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 329.06284,
+        "Y": -56.448727
+      }
+    },
+    {
+      "ChildId": "941c9370-ae5c-492c-93af-ac8952de3a29"/*PixelShader*/,
+      "Position": {
+        "X": 203.7669,
+        "Y": 181.0
+      }
+    },
+    {
+      "ChildId": "a36689fc-c69b-452a-890c-f44439f6f20d"/*OutputMergerStage*/,
+      "Position": {
+        "X": 18.633587,
+        "Y": 396.4303
+      }
+    },
+    {
+      "ChildId": "7d616c65-2354-433d-9e88-994da512c3a4"/*BlendStateOp*/,
+      "Position": {
+        "X": -111.366425,
+        "Y": 396.4303
+      }
+    },
+    {
+      "ChildId": "6d9f2c25-008e-41ea-abd6-be36ab58afc8"/*RenderTargetBlendDesc*/,
+      "Position": {
+        "X": -242.65402,
+        "Y": 409.7088
+      }
+    },
+    {
+      "ChildId": "0586daed-b34a-46bf-951b-b32869cd0a29"/*Draw*/,
+      "Position": {
+        "X": 92.97354,
+        "Y": 512.5575
+      }
+    },
+    {
+      "ChildId": "03ef5880-fb89-4796-a021-cc35803bf57b"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 114.093414,
+        "Y": 496.73483
+      },
+      "Position": {
+        "X": 522.5306,
+        "Y": -61.082287
+      }
+    },
+    {
+      "ChildId": "20c6ab84-17d5-4cc1-a281-4f239c6d2cea"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 116.1401,
+        "Y": 128.82043
+      },
+      "Position": {
+        "X": 8.686496,
+        "Y": 173.57768
+      }
+    },
+    {
+      "ChildId": "b3a0b21b-77a1-494a-86f4-707730bff4fd"/*Vector4Components*/,
+      "Position": {
+        "X": -141.3135,
+        "Y": 173.57768
+      }
+    },
+    {
+      "ChildId": "389a3707-f861-465d-8035-b11b725adacb"/*Transform*/,
+      "Position": {
+        "X": 718.67993,
+        "Y": 237.36185
+      }
+    },
+    {
+      "ChildId": "4b8041c3-0d36-4ef0-bd03-7e8e2376237d"/*DepthStencilStateOp*/,
+      "Position": {
+        "X": -15.64028,
+        "Y": 604.9596
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "1eb82dc0-2e66-4c3c-a3e8-1b246886e59f"/*Output*/,
+      "Position": {
+        "X": 917.08673,
+        "Y": 242.84541
+      }
+    }
+  ]
+}

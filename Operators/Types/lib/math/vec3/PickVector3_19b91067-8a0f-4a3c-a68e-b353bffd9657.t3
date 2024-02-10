@@ -1,0 +1,21 @@
+{
+  "Name": "PickVector3",
+  "Id": "19b91067-8a0f-4a3c-a68e-b353bffd9657",
+  "Namespace": "lib.math.vec3",
+  "Inputs": [
+    {
+      "Id": "0aef2a2e-df91-4a03-a59e-e87ed0b916cb"/*Input*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "ea7a0ae7-2f4b-4952-9da4-45b9691c154e"/*Index*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

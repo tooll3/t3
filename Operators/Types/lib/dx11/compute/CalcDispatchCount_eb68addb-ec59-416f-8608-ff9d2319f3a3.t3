@@ -1,0 +1,21 @@
+{
+  "Name": "CalcDispatchCount",
+  "Id": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
+  "Namespace": "lib.dx11.compute",
+  "Inputs": [
+    {
+      "Id": "3979e440-7888-4249-9975-74b21c6b813c"/*ThreadGroupSize*/,
+      "DefaultValue": {
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+      }
+    },
+    {
+      "Id": "f79ccc37-05fd-4f81-97d6-6c1cafca180c"/*Count*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

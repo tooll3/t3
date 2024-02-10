@@ -1,0 +1,27 @@
+{
+  "Name": "GridPosition",
+  "Id": "310e174e-ea52-4c54-90e6-72dc8320118a",
+  "Namespace": "lib.math.vec2",
+  "Inputs": [
+    {
+      "Id": "854731fb-bbc9-48e7-9bcb-45bc53340945"/*A*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "2fa305b7-42fc-44fa-bfcf-219916f93eef"/*RasterSize*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
+    },
+    {
+      "Id": "938103ee-65bd-4f5e-ae5e-5635dc53e3e6"/*Index*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

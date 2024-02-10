@@ -1,0 +1,13 @@
+{
+  "Name": "LoadObjEdges",
+  "Id": "dd3d7e16-f33e-4fb0-89c6-4d8cbc9d702f",
+  "Namespace": "lib.3d.mesh._",
+  "Inputs": [
+    {
+      "Id": "b6932cbd-e6b6-447b-b416-701326227864"/*Path*/,
+      "DefaultValue": "Resources\\common\\meshes\\marblePlayer.obj"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

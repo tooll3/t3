@@ -1,0 +1,23 @@
+{
+  "Id": "0bee3ec6-7e0d-471b-9ef7-ab9c22c6883b"/*DateTimeInSecs*/,
+  "Description": "Returns the seconds since 1970.",
+  "InputUis": [
+    {
+      "InputId": "d81a3ecb-5718-48a9-9a50-85820e18957c"/*Freeze*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "111e179b-8c9e-4084-91ec-dd0d02eb3973"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

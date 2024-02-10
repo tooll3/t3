@@ -1,0 +1,275 @@
+{
+  "Id": "6c22e96f-bd1f-486a-a10f-a174a057f721"/*PulseLaserTest*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "72c67836-5ab6-44bc-8861-aea093283761"/*DrawMesh*/,
+      "Position": {
+        "X": 491.7832,
+        "Y": 169.13818
+      }
+    },
+    {
+      "ChildId": "7fc27817-1a9c-476f-83db-33f53d141ed3"/*Transform*/,
+      "Position": {
+        "X": 641.78125,
+        "Y": 245.13818
+      }
+    },
+    {
+      "ChildId": "2a977407-ac46-4ffe-b59e-0a92e9bdd55d"/*SetFog*/,
+      "Position": {
+        "X": 1126.8823,
+        "Y": 147.06934
+      }
+    },
+    {
+      "ChildId": "a5e99256-aecb-4011-b91f-fce196eaeb77"/*PointLight*/,
+      "Position": {
+        "X": 1940.9146,
+        "Y": 153.61182
+      }
+    },
+    {
+      "ChildId": "806f224c-bb96-4e04-9f3d-02c051d8f7a6"/*SetMaterial*/,
+      "Position": {
+        "X": 1426.8823,
+        "Y": 147.06934
+      }
+    },
+    {
+      "ChildId": "728c2ff2-f261-4c99-8d6d-a007cd586d37"/*LoadObj*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 134.91797
+      }
+    },
+    {
+      "ChildId": "effe8aa4-5ce2-47a2-8ff0-d068c9d2e51c"/*DrawMeshAtPoints*/,
+      "Position": {
+        "X": 491.7832,
+        "Y": 245.13818
+      }
+    },
+    {
+      "ChildId": "67477888-f17a-4cbf-870d-47e32b3bf87c"/*RadialPoints*/,
+      "Position": {
+        "X": 341.7832,
+        "Y": 245.13818
+      }
+    },
+    {
+      "ChildId": "3ba70f02-7e42-4c29-a312-3e2d476b7ceb"/*RenderTarget*/,
+      "Position": {
+        "X": 2347.6875,
+        "Y": 138.89062
+      }
+    },
+    {
+      "ChildId": "c285f3a9-e18b-4df1-b701-49d365ba0b8d"/*Camera*/,
+      "Position": {
+        "X": 2163.8164,
+        "Y": 132.11523
+      }
+    },
+    {
+      "ChildId": "98774cc3-cd79-463a-b7e6-17d615d3b38b"/*Execute*/,
+      "Position": {
+        "X": 1276.8823,
+        "Y": 147.06934
+      }
+    },
+    {
+      "ChildId": "5aab003c-d093-428f-bf0e-29ad5df0a6cd"/*Execute*/,
+      "Position": {
+        "X": 791.78076,
+        "Y": 126.13818
+      }
+    },
+    {
+      "ChildId": "9c8f32f5-58b5-48aa-82a9-9e8b12a837d1"/*Transform*/,
+      "Position": {
+        "X": 641.78125,
+        "Y": 169.13818
+      }
+    },
+    {
+      "ChildId": "d9b1163c-cf47-4b91-b530-29b6e20b82ae"/*PointLight*/,
+      "Position": {
+        "X": 1576.8823,
+        "Y": 147.06934
+      }
+    },
+    {
+      "ChildId": "318d3179-c623-43a8-8649-9f6d5b070455"/*SetMaterial*/,
+      "Position": {
+        "X": 976.8823,
+        "Y": 147.06934
+      }
+    },
+    {
+      "ChildId": "2764150a-7eba-4c70-990a-d57a332ea6f3"/*DepthOfField*/,
+      "Position": {
+        "X": 2244.123,
+        "Y": 285.9292
+      }
+    },
+    {
+      "ChildId": "ef3f29fe-ee40-477c-8268-7b4038d1d5dc"/*LoadObj*/,
+      "Position": {
+        "X": 341.7832,
+        "Y": 474.13818
+      }
+    },
+    {
+      "ChildId": "db453a6d-1527-4bfd-b5de-de496d8fe9a4"/*DrawMeshAtPoints*/,
+      "Position": {
+        "X": 491.7832,
+        "Y": 348.13818
+      }
+    },
+    {
+      "ChildId": "008f2a7b-236c-4453-baa7-0540d016cfff"/*RadialPoints*/,
+      "Position": {
+        "X": 191.7832,
+        "Y": 348.13818
+      }
+    },
+    {
+      "ChildId": "ac0ec324-9855-4fa4-845a-3961d2903321"/*Transform*/,
+      "Position": {
+        "X": 641.78125,
+        "Y": 348.13818
+      }
+    },
+    {
+      "ChildId": "ca0cb68b-85a5-48ab-b8e8-e17508454947"/*OscillateVec3*/,
+      "Position": {
+        "X": 191.7832,
+        "Y": 245.13818
+      }
+    },
+    {
+      "ChildId": "1c7f750c-994a-4d9a-9fee-c41cecd731c6"/*RadialPoints*/,
+      "Position": {
+        "X": 191.7832,
+        "Y": 411.13818
+      }
+    },
+    {
+      "ChildId": "464f5a33-9b27-4b43-84ee-0979376ccde0"/*_AppendPoints*/,
+      "Position": {
+        "X": 341.7832,
+        "Y": 348.13818
+      }
+    },
+    {
+      "ChildId": "fbe7e6dd-a025-4ae3-99b8-c0cf3b9d3bf3"/*DustParticles*/,
+      "Position": {
+        "X": 641.78125,
+        "Y": 126.13818
+      }
+    },
+    {
+      "ChildId": "83516f98-7433-4f98-bd1b-89dccd2c802d"/*Counter*/,
+      "Position": {
+        "X": 1214.5913,
+        "Y": 476.01953
+      }
+    },
+    {
+      "ChildId": "5edae0aa-28dc-414a-85c5-aebf3c4f41f2"/*PerlinNoise3*/,
+      "Position": {
+        "X": 1344.5913,
+        "Y": 476.01953
+      }
+    },
+    {
+      "ChildId": "34c3d785-4a3a-4b86-910c-534923c71fa5"/*Glow*/,
+      "Position": {
+        "X": 2437.651,
+        "Y": 306.22754
+      }
+    },
+    {
+      "ChildId": "184eae12-b8b9-4162-8d63-79f3e3913be3"/*Time*/,
+      "Position": {
+        "X": 41.783203,
+        "Y": 348.13818
+      }
+    },
+    {
+      "ChildId": "841b81a9-9114-499c-9c10-a4942a59800e"/*LoadObj*/,
+      "Position": {
+        "X": 191.7832,
+        "Y": 557.1382
+      }
+    },
+    {
+      "ChildId": "db05cd4f-9f3a-4167-b3cf-ac031d71d98e"/*DrawMesh*/,
+      "Position": {
+        "X": 341.7832,
+        "Y": 557.1382
+      }
+    },
+    {
+      "ChildId": "d2f1dba6-271b-4601-9c06-345c56a01efd"/*Transform*/,
+      "Position": {
+        "X": 491.7832,
+        "Y": 557.1382
+      }
+    },
+    {
+      "ChildId": "3dd9840a-8a62-4f59-84f2-69c07353bf11"/*SetMaterial*/,
+      "Position": {
+        "X": 641.78125,
+        "Y": 557.1382
+      }
+    },
+    {
+      "ChildId": "5edda095-214e-4382-9451-561026dde515"/*Vector3*/,
+      "Position": {
+        "X": 341.7832,
+        "Y": 620.1382
+      }
+    },
+    {
+      "ChildId": "a2955c51-1d93-4a9c-9e1a-8e6d5e0ca8d0"/*_AnimValueOld*/,
+      "Position": {
+        "X": 191.7832,
+        "Y": 620.1382
+      }
+    },
+    {
+      "ChildId": "abc98750-56d0-4323-9e5e-6e2be3d029a5"/*OrbitCamera*/,
+      "Position": {
+        "X": 2140.54,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "0ea8e4e6-86c6-4143-b877-e96010680435"/*_AnimValueOld*/,
+      "Position": {
+        "X": 981.70654,
+        "Y": 294.00684
+      }
+    },
+    {
+      "ChildId": "0349fed3-56fd-4c8a-964f-0cce1be20583"/*PointLight*/,
+      "Position": {
+        "X": 1775.4014,
+        "Y": 191.27197
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "bc4d8742-0952-4620-8404-1ed46a75da9e"/*ImgOutput*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "Id": "7a09136e-18b2-46b7-afff-8ef999e3965d"/*ExecuteOnce*/,
+  "Description": "Executes the subgraph only once. This can be useful for initializing buffers or resetting states.",
+  "InputUis": [
+    {
+      "InputId": "7450033d-5797-40c9-b6c4-b6e8d27fe501"/*Command*/,
+      "Position": {
+        "X": -65.335785,
+        "Y": -64.29319
+      }
+    },
+    {
+      "InputId": "2049d44d-81a4-493b-a630-a1b273a4e6f9"/*Trigger*/,
+      "Position": {
+        "X": -60.470352,
+        "Y": 41.356163
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"/*Output*/,
+      "Position": {
+        "X": 145.26787,
+        "Y": -20.851847
+      }
+    },
+    {
+      "OutputId": "cf2cc2a9-9db1-47ca-b68f-b894140d8481"/*OutputTrigger*/,
+      "Position": {
+        "X": 152.53543,
+        "Y": 60.653854
+      }
+    }
+  ]
+}

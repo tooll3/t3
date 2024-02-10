@@ -1,0 +1,141 @@
+{
+  "Id": "e14af8a3-8672-4348-af9e-735714c31c92"/*SetVJVariables*/,
+  "Description": "A small helper that sets LFO speed factor variables from MidiControllers into context. This setup is highly customized for WAKE performances and probably not applicable to your situation. But it might be a good starting point for tweaking your own setups.",
+  "InputUis": [
+    {
+      "InputId": "693345bd-0cd8-4dca-9416-42a9bdcbc293"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -547.9109,
+        "Y": -361.8471
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "0fbc2d52-b596-4a68-9904-034a9ca31883"/*SetSpeedFactorA*/,
+      "Position": {
+        "X": 8.340027,
+        "Y": 11.473755
+      }
+    },
+    {
+      "ChildId": "b6fe4c79-da43-444a-94d9-c3ebed7e3354"/*Midi SignalA*/,
+      "Position": {
+        "X": -291.65997,
+        "Y": 11.473755
+      }
+    },
+    {
+      "ChildId": "6c8ae24c-f800-4394-8b47-4971cde45532"/*ValueToRate*/,
+      "Position": {
+        "X": -141.65997,
+        "Y": 11.473755
+      }
+    },
+    {
+      "ChildId": "dd97c14c-205f-4ead-80ac-116aa0bdd7ec"/*SetSpeedFactorB*/,
+      "Position": {
+        "X": 8.340027,
+        "Y": -71.526245
+      }
+    },
+    {
+      "ChildId": "c80255ff-4885-4493-8750-df548447b4a2"/*Midi SignalB*/,
+      "Position": {
+        "X": -291.65997,
+        "Y": -71.526245
+      }
+    },
+    {
+      "ChildId": "15ff0080-5986-4c4f-a4ad-d99395788d33"/*ValueToRate*/,
+      "Position": {
+        "X": -141.65997,
+        "Y": -71.526245
+      }
+    },
+    {
+      "ChildId": "71f6614e-aed8-4de8-b279-214b0c5a408c"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 76.353,
+        "Y": 211.83112
+      },
+      "Position": {
+        "X": 158.34003,
+        "Y": -71.526245
+      }
+    },
+    {
+      "ChildId": "e9d0e6f2-05ff-402f-acb1-d2c249641799"/*ForwardBeatTaps*/,
+      "Position": {
+        "X": 8.340027,
+        "Y": 80.473755
+      }
+    },
+    {
+      "ChildId": "4e7ff83d-fea7-4c55-ba7c-d5f992c0ba38"/*Beat Tapping*/,
+      "Position": {
+        "X": -291.65997,
+        "Y": 80.473755
+      }
+    },
+    {
+      "ChildId": "9ea76be6-91d8-4b55-9909-f1266acea5d8"/*HasValueIncreased*/,
+      "Position": {
+        "X": -141.65997,
+        "Y": 80.473755
+      }
+    },
+    {
+      "ChildId": "196fdbc3-2a93-4c33-9c7c-04af058146ad"/*Sync Beat*/,
+      "Position": {
+        "X": -291.65997,
+        "Y": 143.47375
+      }
+    },
+    {
+      "ChildId": "e209cd98-a57f-4b43-8508-039139cdb3d3"/*HasValueIncreased*/,
+      "Position": {
+        "X": -141.65997,
+        "Y": 143.47375
+      }
+    },
+    {
+      "ChildId": "5de123d1-764d-4f5f-806f-aa027fc9f699"/*ExecuteTextureUpdate*/,
+      "Position": {
+        "X": 1821.2683,
+        "Y": -189.55042
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "a8127182-4b8d-4be2-8c50-9ce475d2699d"/*Output2*/,
+      "Position": {
+        "X": 2025.7756,
+        "Y": -188.3042
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "cc77db97-a906-4175-b1ef-1d31239648f3",
+      "Title": "Set Input midi input controls for LFO speed overrides and Beat Tapping",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -351.65997,
+        "Y": -131.52625
+      },
+      "Size": {
+        "X": 646.353,
+        "Y": 371.0
+      }
+    }
+  ]
+}

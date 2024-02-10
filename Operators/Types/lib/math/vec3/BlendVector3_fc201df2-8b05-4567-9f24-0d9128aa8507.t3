@@ -1,0 +1,21 @@
+{
+  "Name": "BlendVector3",
+  "Id": "fc201df2-8b05-4567-9f24-0d9128aa8507",
+  "Namespace": "lib.math.vec3",
+  "Inputs": [
+    {
+      "Id": "83c7b887-e1af-4b9f-ad2f-469867940bda"/*Vectors*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "f5f12cf3-5750-4a3c-807e-9da29f950c29"/*F*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

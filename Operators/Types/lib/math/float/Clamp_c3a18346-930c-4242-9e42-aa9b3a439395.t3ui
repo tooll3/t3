@@ -1,0 +1,41 @@
+{
+  "Id": "c3a18346-930c-4242-9e42-aa9b3a439395"/*Clamp*/,
+  "Description": "This is the Min and Max thing you are looking for. \n\nIn other words: \nThe term \"clamp\" in mathematics typically refers to a function that restricts a value to a specified range. The clamp function takes three arguments: a value, a minimum bound, and a maximum bound. It returns the original value if it falls within the specified range; otherwise, it returns the nearest bound. (ChatGPT 3.5)",
+  "InputUis": [
+    {
+      "InputId": "eb002b5d-b938-4b03-b2ea-26252ae051cd"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "7224ad5c-d179-4eab-b52d-72e277d007ae"/*Min*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 328.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "54c0e659-7fda-459f-9938-deeee0cfa11c"/*Max*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "7267b39a-bc11-450c-950e-e87701156546"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

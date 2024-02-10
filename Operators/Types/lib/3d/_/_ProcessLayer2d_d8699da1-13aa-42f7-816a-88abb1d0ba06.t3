@@ -1,0 +1,43 @@
+{
+  "Name": "_ProcessLayer2d",
+  "Id": "d8699da1-13aa-42f7-816a-88abb1d0ba06",
+  "Namespace": "lib.3d._",
+  "Inputs": [
+    {
+      "Id": "674e048e-5a6c-4d3e-b1e0-e44603775e02"/*PositionXy*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "0060afe4-642b-4da4-b6a5-acfab84de205"/*PositionZ*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "28d90f8c-ceae-46b8-9711-e62ba7826ce1"/*Stretch*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "91191320-fb10-4ae7-908c-2e2a03027f9e"/*Scale*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "1ecd57a7-f5dd-49ea-b950-acb86af78ff9"/*RotationZ*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "4d8e40c0-f4e4-4fdf-a4e0-24eb12c518d6"/*ScaleMode*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "39122251-dbc0-449e-8a56-5305cbbc3daa"/*ImageTexture*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

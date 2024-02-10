@@ -1,0 +1,39 @@
+{
+  "Id": "b724ea74-d5d7-4928-9cd1-7a7850e4e179"/*SampleCurve*/,
+  "InputUis": [
+    {
+      "InputId": "108cb829-5f9e-4a45-bc6b-7cf40a0a0f89"/*Curve*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      }
+    },
+    {
+      "InputId": "2c24d4fe-6c96-4502-bf76-dac756a16215"/*U*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "fc51bee8-091c-4c66-a7df-12f6f69e3783"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    },
+    {
+      "OutputId": "1a20c791-a1fe-4a14-a9cf-615691948f2d"/*CurveOutput*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

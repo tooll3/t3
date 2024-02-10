@@ -1,0 +1,391 @@
+{
+  "Id": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1"/*_DrawBillboardsOld*/,
+  "Description": "Draws points as animated camera-aligned sprites. \nThe point's .W attributes control the lookup within the \"animation\" tracks for color and size.\n\nThis can be used for particle-like animations or to generate procedural designs.\n\nThis operator has been deprecated. Consider using [DrawBillboards] instead.\n",
+  "InputUis": [
+    {
+      "InputId": "2548a5d8-b2ab-4783-9298-c2e261d390f0"/*Color*/,
+      "Position": {
+        "X": -304.63986,
+        "Y": 187.55
+      }
+    },
+    {
+      "InputId": "1a9e522a-38fb-478f-9f45-d3846cf401c2"/*Stretch*/,
+      "Position": {
+        "X": -299.79587,
+        "Y": 274.77905
+      }
+    },
+    {
+      "InputId": "0e4e5d78-8fe1-4b84-a0ab-d21f9704ccda"/*Scale*/,
+      "Position": {
+        "X": -299.79587,
+        "Y": 319.77905
+      }
+    },
+    {
+      "InputId": "43d1169f-e6db-4229-882c-ca912e1cb6fd"/*ScaleRandomly*/,
+      "Position": {
+        "X": -299.79587,
+        "Y": 364.77905
+      }
+    },
+    {
+      "InputId": "cc9cd2a7-70ec-4dbe-a151-c23ea08bce56"/*ApplyPointOrientation*/,
+      "Position": {
+        "X": -299.79587,
+        "Y": 409.77905
+      }
+    },
+    {
+      "InputId": "4e02b0c1-8a71-480b-8e9b-1a2b38641e1e"/*Rotate*/,
+      "Position": {
+        "X": -299.44247,
+        "Y": 497.9358
+      }
+    },
+    {
+      "InputId": "407b79be-13da-477d-8123-90e6408de354"/*RotateRandomly*/,
+      "Position": {
+        "X": -299.44247,
+        "Y": 542.9358
+      }
+    },
+    {
+      "InputId": "0555c899-3049-4d47-a2da-0febf6871754"/*BlendMod*/,
+      "Position": {
+        "X": -320.38028,
+        "Y": 881.3534
+      }
+    },
+    {
+      "InputId": "6176e442-a1b5-4762-be92-3f65df4ccdae"/*EnableDepthWrite*/,
+      "Position": {
+        "X": -313.3364,
+        "Y": 956.615
+      }
+    },
+    {
+      "InputId": "059554d5-bee7-4724-bf62-3d492aaae62c"/*WSpeed*/,
+      "Position": {
+        "X": -299.44247,
+        "Y": 452.9358
+      }
+    },
+    {
+      "InputId": "7d0f3c5d-4860-4dde-ad33-22376520b59d"/*GradientForW*/,
+      "Position": {
+        "X": -326.77213,
+        "Y": 1021.1066
+      }
+    },
+    {
+      "InputId": "81e652c3-d12c-4b45-afd2-f6de9de20df1"/*ScaleForW*/,
+      "Position": {
+        "X": -314.63342,
+        "Y": 1092.3771
+      }
+    },
+    {
+      "InputId": "c82b7f84-508e-4a04-905e-39b55f75f4e6"/*GPoints*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -292.34137,
+        "Y": 78.64842
+      }
+    },
+    {
+      "InputId": "957c9ece-5e66-4aee-b0c6-03421cbaf075"/*Texture_*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -315.33246,
+        "Y": 813.9147
+      }
+    },
+    {
+      "InputId": "2c2337ce-9890-4cb3-b85b-5d1edce66671"/*AlphaCut*/,
+      "Position": {
+        "X": -309.7535,
+        "Y": 1164.4214
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "6d5f954c-2440-4878-85db-3ecc5ccb15fb"/*TransformsConstBuffer*/,
+      "Position": {
+        "X": 659.0871,
+        "Y": 35.71116
+      }
+    },
+    {
+      "ChildId": "70abfdc9-0d62-4dee-92db-c95ff3ad3b17"/*VertexShader*/,
+      "Position": {
+        "X": 670.15027,
+        "Y": -39.43235
+      }
+    },
+    {
+      "ChildId": "54e8751f-26ec-4bfe-8655-adec6a021318"/*RasterizerStateOp*/,
+      "Position": {
+        "X": 693.96436,
+        "Y": 450.68475
+      }
+    },
+    {
+      "ChildId": "5b16b781-9745-4ad2-8896-278f784a3c98"/*PixelShader*/,
+      "Position": {
+        "X": 648.6097,
+        "Y": 131.09729
+      }
+    },
+    {
+      "ChildId": "c7f21738-c2b6-4d46-8d69-0dcb3f87c624"/*Rasterizer*/,
+      "Position": {
+        "X": 883.8529,
+        "Y": 456.79578
+      }
+    },
+    {
+      "ChildId": "584af601-1226-426f-8b3f-e25dfb88a79b"/*PixelShaderStage*/,
+      "Position": {
+        "X": 914.2769,
+        "Y": 146.133
+      }
+    },
+    {
+      "ChildId": "40843fdf-c119-4e2f-8000-cb6ce1e8e81f"/*VertexShaderStage*/,
+      "Position": {
+        "X": 914.2769,
+        "Y": -26.867008
+      }
+    },
+    {
+      "ChildId": "88e1fda0-bbf6-407c-b999-bfd6d0a74b3c"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 928.6103,
+        "Y": -133.03604
+      }
+    },
+    {
+      "ChildId": "b761b17a-d3f5-450c-9c4a-59aadf950842"/*SamplerStateOp*/,
+      "Position": {
+        "X": 648.6097,
+        "Y": 174.09729
+      }
+    },
+    {
+      "ChildId": "e0737add-d516-4875-8c9a-61f689f3621f"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 83.240456,
+        "Y": 833.34656
+      },
+      "Position": {
+        "X": 1148.1035,
+        "Y": -120.59539
+      }
+    },
+    {
+      "ChildId": "b97bda13-47d3-4d00-83f7-332034d9aa71"/*Vector4Components*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 111.079544,
+        "Y": 59.905018
+      },
+      "Position": {
+        "X": -154.63995,
+        "Y": 187.55
+      }
+    },
+    {
+      "ChildId": "f914f44f-54bc-49f7-aefa-0f391aa8c938"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 136.75504,
+        "Y": 456.52213
+      },
+      "Position": {
+        "X": 164.54166,
+        "Y": 155.67561
+      }
+    },
+    {
+      "ChildId": "bab6012a-90bf-48f7-9b90-1a539cd3b9f9"/*TimeConstBuffer*/,
+      "Position": {
+        "X": 486.61847,
+        "Y": 63.167133
+      }
+    },
+    {
+      "ChildId": "c2071334-0705-4904-9bdd-9b5455bf0b5c"/*Draw*/,
+      "Position": {
+        "X": 519.59937,
+        "Y": 1331.65
+      }
+    },
+    {
+      "ChildId": "12ebd4ab-b86b-4300-a70a-57fb414329af"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 507.60602,
+        "Y": 738.3572
+      }
+    },
+    {
+      "ChildId": "32989ac3-e4d0-4317-a82a-5611d1083eaf"/*UseFallbackTexture*/,
+      "Position": {
+        "X": 377.60577,
+        "Y": 738.3572
+      }
+    },
+    {
+      "ChildId": "6d6e8cce-7381-433a-bc80-652136fb4af4"/*PickBlendMode*/,
+      "Position": {
+        "X": 693.96436,
+        "Y": 562.6848
+      }
+    },
+    {
+      "ChildId": "7f1d50d3-f4c7-492b-8dc7-f1c172185c8d"/*MultiplyInt*/,
+      "Position": {
+        "X": 389.59906,
+        "Y": 1331.65
+      }
+    },
+    {
+      "ChildId": "350ba145-5354-41e9-8863-153f39aac728"/*GetSRVProperties*/,
+      "Position": {
+        "X": 129.59892,
+        "Y": 1331.65
+      }
+    },
+    {
+      "ChildId": "fbe4fd06-050b-4d9c-b9ea-f0f1d45be6a1"/*ClampInt*/,
+      "Position": {
+        "X": 259.59894,
+        "Y": 1331.65
+      }
+    },
+    {
+      "ChildId": "d84fe432-b140-44c3-87f3-425099a8f960"/*GetBufferComponents*/,
+      "Position": {
+        "X": -142.34145,
+        "Y": 78.64842
+      }
+    },
+    {
+      "ChildId": "363c293c-a010-4064-a3fc-b6771b356f77"/*Vector2Components*/,
+      "Position": {
+        "X": -154.63995,
+        "Y": 267.45508
+      }
+    },
+    {
+      "ChildId": "cc24a1df-7890-4d9e-9a72-7875ed574e6c"/*OutputMergerStage*/,
+      "Position": {
+        "X": 883.8529,
+        "Y": 512.7958
+      }
+    },
+    {
+      "ChildId": "1db9c018-a463-4d23-a655-259291c5913f"/*DepthStencilStateOp*/,
+      "Position": {
+        "X": 693.96436,
+        "Y": 506.6848
+      }
+    },
+    {
+      "ChildId": "c23c4a14-31a7-4532-9f6d-6b1b7a0f8029"/*LoadImage*/,
+      "Position": {
+        "X": 208.3432,
+        "Y": 783.8701
+      }
+    },
+    {
+      "ChildId": "02b08334-d106-4086-9a9f-f5a8752d3327"/*GradientsToTexture*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 418.71185,
+        "Y": 989.15466
+      }
+    },
+    {
+      "ChildId": "17185553-aae3-4780-a7ee-e45738f84b47"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 568.7119,
+        "Y": 989.15466
+      }
+    },
+    {
+      "ChildId": "be081cc3-b485-4a3a-8621-59104c698e11"/*CurvesToTexture*/,
+      "Position": {
+        "X": 418.71185,
+        "Y": 1058.1543
+      }
+    },
+    {
+      "ChildId": "5da36661-863a-4b93-ab6c-60ef7f804fec"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 568.7119,
+        "Y": 1058.1543
+      }
+    },
+    {
+      "ChildId": "4f920c4a-3c4f-4617-8728-d11971da7bc1"/*IntToFloat*/,
+      "Position": {
+        "X": -123.74605,
+        "Y": 622.7495
+      }
+    },
+    {
+      "ChildId": "1c7f6ec2-08fa-40e8-b892-d69fd2028ee2"/*ContextCBuffers*/,
+      "Position": {
+        "X": 620.08356,
+        "Y": 223.4418
+      }
+    },
+    {
+      "ChildId": "86852d52-3e74-484d-8031-feb878fac096"/*CurvesToTexture*/,
+      "Position": {
+        "X": 471.84375,
+        "Y": 1623.626
+      }
+    },
+    {
+      "ChildId": "687f69ff-ab79-40d4-901c-70b9b972fd96"/*ImageLevels*/,
+      "Position": {
+        "X": 921.84375,
+        "Y": 1623.626
+      }
+    },
+    {
+      "ChildId": "20028ece-817d-4599-af9a-8db5b8034862"/*Layer2d*/,
+      "Position": {
+        "X": 621.84375,
+        "Y": 1623.626
+      }
+    },
+    {
+      "ChildId": "c6a2ad6d-b7d9-4081-807e-8761ef111f16"/*RenderTarget*/,
+      "Position": {
+        "X": 771.84375,
+        "Y": 1623.626
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "b90aed8c-8c65-4dca-9ed3-fc2f08fc2cd1"/*Output*/,
+      "Position": {
+        "X": 1693.3767,
+        "Y": 109.5778
+      }
+    }
+  ]
+}

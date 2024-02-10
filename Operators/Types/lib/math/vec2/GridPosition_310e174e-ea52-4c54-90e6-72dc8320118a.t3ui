@@ -1,0 +1,45 @@
+{
+  "Id": "310e174e-ea52-4c54-90e6-72dc8320118a"/*GridPosition*/,
+  "Description": "Converts an index to a grid raster position and sizes that can be used to draw a [Layer2d].\nThis can be helpful for procedural graphical designs.\nPlease check the example below.",
+  "InputUis": [
+    {
+      "InputId": "854731fb-bbc9-48e7-9bcb-45bc53340945"/*A*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "2fa305b7-42fc-44fa-bfcf-219916f93eef"/*RasterSize*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "938103ee-65bd-4f5e-ae5e-5635dc53e3e6"/*Index*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "bf470007-4c7c-4915-a402-98bf6cead2dc"/*Position*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "d11a64d7-f8d3-4a97-ad51-2b80200a6e1a"/*Size*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

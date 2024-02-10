@@ -1,0 +1,602 @@
+{
+  "Id": "40757a26-1cd8-477c-a774-7463aadd6f0f"/*HowToDrawThings*/,
+  "Description": "An interactive tutorial on how to render content with Tooll's rendering pipeline.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "114f1697-de7a-4479-afef-4f0e75473c55"/*RenderTarget*/,
+      "Comment": "... into an image buffer ...",
+      "Position": {
+        "X": -1566.8398,
+        "Y": -1049.8147
+      }
+    },
+    {
+      "ChildId": "5f06349f-20f9-4c08-9080-73cab767ec56"/*TorusMesh*/,
+      "Comment": "Some \"content\" like buffers or textures...\n\nYou can discover numerous additional Mesh generators in the symbol browser within the lib.3d.mesh.generate namespace.",
+      "Position": {
+        "X": -2016.8398,
+        "Y": -1049.8147
+      }
+    },
+    {
+      "ChildId": "8db2355a-03dd-463f-850c-e7c46f2e2542"/*DrawMesh*/,
+      "Comment": "... it's now drawn...",
+      "Position": {
+        "X": -1866.8398,
+        "Y": -1049.8147
+      }
+    },
+    {
+      "ChildId": "0823549b-0920-4918-914a-6b5dd46ee73b"/*OrbitCamera*/,
+      "Comment": "... with a \"setup\" ...",
+      "Position": {
+        "X": -1716.8398,
+        "Y": -1049.8147
+      }
+    },
+    {
+      "ChildId": "83cfdd8a-5ad0-4963-933a-3350c723da68"/*Raster*/,
+      "Comment": "... and finally, we can apply a post-effect.\n\nPlease select this operator (and pin it in the output window) to see the result.\n\nAlso, check the video tutorial for the Raster effect linked in the description of this operator.",
+      "Position": {
+        "X": -1416.8398,
+        "Y": -1049.8147
+      }
+    },
+    {
+      "ChildId": "c60d8bbe-4d2d-41a3-a8cd-6d2909cc6d6d"/*LoadObj*/,
+      "Comment": "Load and distort a mesh...",
+      "Position": {
+        "X": -1990.8727,
+        "Y": -610.2674
+      }
+    },
+    {
+      "ChildId": "fadf444e-7fa3-4a8f-b8f9-826dcc887a54"/*DisplaceMeshNoise*/,
+      "Comment": "... we add a displacement effect and animate its phase over time ...\n\nYou can select this operator and press Shift-B to bypass this effect.",
+      "Position": {
+        "X": -1840.873,
+        "Y": -610.2674
+      }
+    },
+    {
+      "ChildId": "d16957f5-2a78-4df6-b26d-50cdc991610a"/*DrawMesh*/,
+      "Comment": "Now we draw the mesh. ",
+      "Position": {
+        "X": -1540.873,
+        "Y": -610.2674
+      }
+    },
+    {
+      "ChildId": "cf44730d-4b94-41d8-8daa-77a3cdc8dfa8"/*SetFog*/,
+      "Comment": "A bit of colored fog for depth.",
+      "Position": {
+        "X": -1240.873,
+        "Y": -610.2674
+      }
+    },
+    {
+      "ChildId": "b30e8746-c3cb-4bb7-88ec-871796fd66d6"/*SetEnvironment*/,
+      "Position": {
+        "X": -559.8143,
+        "Y": -358.55017
+      }
+    },
+    {
+      "ChildId": "0abc263f-1c0c-4405-a803-5b3c4fa09649"/*RenderTarget*/,
+      "Comment": "Render to an image buffer using anti-aliasing.",
+      "Position": {
+        "X": -259.81427,
+        "Y": -358.55017
+      }
+    },
+    {
+      "ChildId": "df8b434b-a61b-4927-b6f8-f6cb293e716f"/*OrbitCamera*/,
+      "Position": {
+        "X": -409.81427,
+        "Y": -358.55017
+      }
+    },
+    {
+      "ChildId": "a887a0b1-a520-480f-951c-21fe157d48d7"/*_BlobOld*/,
+      "Position": {
+        "X": -900.3792,
+        "Y": -300.6931
+      }
+    },
+    {
+      "ChildId": "5018e654-335b-4200-92c3-d13f3286d606"/*TextureToCubeMap*/,
+      "Position": {
+        "X": -750.3792,
+        "Y": -300.6931
+      }
+    },
+    {
+      "ChildId": "30d0ea55-fdfe-4fbd-8aef-f5978f02897a"/*SetMaterial*/,
+      "Comment": "Setting the material with a generative texture for the emissive color.\n\nNotice how the pattern highlight color is brighter than 1 so it glows nicely.\n",
+      "Position": {
+        "X": -1390.873,
+        "Y": -610.2674
+      }
+    },
+    {
+      "ChildId": "4eb05d75-64e7-436b-a35b-59646e69627d"/*Time*/,
+      "Position": {
+        "X": -1990.8727,
+        "Y": -567.2674
+      }
+    },
+    {
+      "ChildId": "e069a7da-016d-475c-952b-0f69a551ef9d"/*SSAO*/,
+      "Comment": "Apply post-processing ambient occlusion to darken creases.\n\nNote how we also have to connect the RenderTarget.DepthOutput for this effect to work.",
+      "Position": {
+        "X": -109.81427,
+        "Y": -358.55017
+      }
+    },
+    {
+      "ChildId": "da8c1027-7fe4-476b-9554-9a5def4a2acb"/*SplitMeshVertices*/,
+      "Comment": "Split vertices for flat shading.",
+      "Position": {
+        "X": -1690.873,
+        "Y": -610.2674
+      }
+    },
+    {
+      "ChildId": "f4cab9da-00e0-48d5-b6c0-2bdfdb2e30ac"/*Glow*/,
+      "Comment": "Apply glow to HDR colors in the emissive texture and environment.\n",
+      "Position": {
+        "X": 40.18573,
+        "Y": -358.55017
+      }
+    },
+    {
+      "ChildId": "6a465a04-8cf1-4196-b673-324c14dc484e"/*OscillateVec3*/,
+      "Position": {
+        "X": -1090.873,
+        "Y": -515.2674
+      }
+    },
+    {
+      "ChildId": "db413f53-2fa5-4eec-87cb-3d5f4bf285c0"/*Group*/,
+      "Position": {
+        "X": -1090.873,
+        "Y": -610.2674
+      }
+    },
+    {
+      "ChildId": "e13af1a0-015d-4c9e-93c8-27c39bdcb076"/*LenseFlareSetup*/,
+      "Comment": "A lens flare setup that follows the point light position.",
+      "Position": {
+        "X": -1240.873,
+        "Y": -511.2674
+      }
+    },
+    {
+      "ChildId": "9fab0cbe-51e6-4cd5-95db-7688cb1aa95c"/*DustParticles*/,
+      "Comment": "Some dust particles that wiggle around.",
+      "Position": {
+        "X": -1240.873,
+        "Y": -554.2674
+      }
+    },
+    {
+      "ChildId": "ae38c453-6d05-4548-b6a8-f346081eac14"/*RyojiPattern2*/,
+      "Position": {
+        "X": -1540.873,
+        "Y": -354.2674
+      }
+    },
+    {
+      "ChildId": "35b60bb9-6e7e-4077-9862-926a35be6116"/*ColorGrade*/,
+      "Comment": "Finally, we apply some color grading and a vignette.",
+      "Position": {
+        "X": 190.18573,
+        "Y": -358.55017
+      }
+    },
+    {
+      "ChildId": "77eabcd8-9cec-43a6-be9f-bb1a19c7fb21"/*LoadObj*/,
+      "Position": {
+        "X": -1172.7996,
+        "Y": -1103.6382
+      }
+    },
+    {
+      "ChildId": "195fc78a-57a1-4e9e-b9ce-515d69f6d67d"/*DrawAsSplitView*/,
+      "Comment": "This is a fancy operator isn't it? If you are curious, you can double click it to look inside and learn how this is made.",
+      "Position": {
+        "X": -691.8727,
+        "Y": -1180.2421
+      }
+    },
+    {
+      "ChildId": "4e98f2cd-6a52-433e-90bd-52a8e9d44a4c"/*DrawMesh*/,
+      "Position": {
+        "X": -841.8727,
+        "Y": -1180.2421
+      }
+    },
+    {
+      "ChildId": "444fac4f-e84b-4ac7-9edf-7d6fbe27d543"/*DrawMesh as Wireframe*/,
+      "Comment": "Note how we adjust the culling to None so we also render backfacing triangles.",
+      "Position": {
+        "X": -845.4242,
+        "Y": -982.20667
+      }
+    },
+    {
+      "ChildId": "dfd46496-c4d4-47d5-9580-cbc377fe662d"/*DrawMeshHatched*/,
+      "Position": {
+        "X": -841.8727,
+        "Y": -1124.2421
+      }
+    },
+    {
+      "ChildId": "765e11b2-9c1a-4e91-9bbf-53cae74656c8"/*Camera*/,
+      "Position": {
+        "X": -541.8727,
+        "Y": -1180.2421
+      }
+    },
+    {
+      "ChildId": "badf9e48-e789-42de-8fea-6af901d453e1"/*DrawMeshUnlit*/,
+      "Position": {
+        "X": -845.4242,
+        "Y": -1051.2067
+      }
+    },
+    {
+      "ChildId": "859c196d-7fb8-4b49-aa21-37f5a44e4f3d"/*LoadImage*/,
+      "Position": {
+        "X": -995.4242,
+        "Y": -982.20667
+      }
+    },
+    {
+      "ChildId": "87709f46-6143-4860-a9b5-fdeec94083c1"/*PerlinNoise3*/,
+      "Position": {
+        "X": -691.8727,
+        "Y": -1033.2421
+      }
+    },
+    {
+      "ChildId": "cecfc09f-2f16-4866-afe0-96bf34184e7d"/*PointsOnMesh*/,
+      "Position": {
+        "X": -995.4242,
+        "Y": -870.20667
+      }
+    },
+    {
+      "ChildId": "0ce659d0-dee1-4afc-b87c-a36b493cd6b8"/*DrawPoints*/,
+      "Position": {
+        "X": -845.4242,
+        "Y": -870.20667
+      }
+    },
+    {
+      "ChildId": "457fa1a6-846e-44d5-a3ce-d55baeb52c16"/*MeshVerticesToPoints*/,
+      "Position": {
+        "X": -995.4242,
+        "Y": -928.20667
+      }
+    },
+    {
+      "ChildId": "b49749e6-178d-44c8-9065-2f62f9037251"/*DrawPoints*/,
+      "Position": {
+        "X": -845.4242,
+        "Y": -926.20667
+      }
+    },
+    {
+      "ChildId": "e7b67aef-ad0e-4830-95a9-61bea7e9228e"/*_VisualizeTBN*/,
+      "Position": {
+        "X": -845.4242,
+        "Y": -814.20667
+      }
+    },
+    {
+      "ChildId": "051f0cfc-b352-4733-9bd7-fadf23ad904e"/*LoadObj*/,
+      "Comment": "We use the geometry as OBJ (see the link in the description)...",
+      "Position": {
+        "X": -1970.3827,
+        "Y": -45.644653
+      }
+    },
+    {
+      "ChildId": "7b3387ab-9153-4d44-99c6-e62c9dff7131"/*SetMaterial*/,
+      "Comment": "We're using CombineMaterialMaps to create the combined texture.\nThat's the reason we change the roughness-offset to 0.",
+      "Position": {
+        "X": -1520.3827,
+        "Y": -45.644653
+      }
+    },
+    {
+      "ChildId": "380a3faa-8c55-4a6a-854f-4d65c0b18c65"/*LoadImage*/,
+      "Position": {
+        "X": -1670.3827,
+        "Y": 246.35535
+      }
+    },
+    {
+      "ChildId": "7241eb50-c918-457c-a2ba-0299b9d24281"/*CombineMaterialChannels*/,
+      "Comment": "Note how we adjusted the Roughness Remap curve to make the gun slightly less shiny.",
+      "Position": {
+        "X": -1670.3827,
+        "Y": 552.3567
+      }
+    },
+    {
+      "ChildId": "e935f2d3-726e-4577-abad-176d02ca1c07"/*DrawMesh*/,
+      "Comment": "Normally you draw a single mesh...",
+      "Position": {
+        "X": -1820.3827,
+        "Y": -45.644653
+      }
+    },
+    {
+      "ChildId": "f71f7807-9d5c-4b87-81f9-012fdda4a0e7"/*LoadImage*/,
+      "Position": {
+        "X": -1820.3827,
+        "Y": 705.3567
+      }
+    },
+    {
+      "ChildId": "524dfd98-efb7-49ef-b802-2b75d6b45a99"/*LoadImage*/,
+      "Position": {
+        "X": -1820.3827,
+        "Y": 552.3567
+      }
+    },
+    {
+      "ChildId": "583ccf3e-c9f5-41d5-b805-48e44acbcb2d"/*LoadImage*/,
+      "Position": {
+        "X": -1670.3827,
+        "Y": 399.3556
+      }
+    },
+    {
+      "ChildId": "3c854ec7-5b82-41f5-a3be-5e868217a7d6"/*DrawMeshAtPoints*/,
+      "Comment": "...but you can also use a list of Points to draw instances.",
+      "Position": {
+        "X": -1820.3827,
+        "Y": 10.355347
+      }
+    },
+    {
+      "ChildId": "34df234c-142c-4d14-be66-9a6066f4914d"/*RadialPoints*/,
+      "Position": {
+        "X": -1970.3827,
+        "Y": 10.355347
+      }
+    },
+    {
+      "ChildId": "3b9b108e-e00e-4a85-9aa1-a6d181f756ce"/*Group*/,
+      "Position": {
+        "X": -1670.3827,
+        "Y": -45.644653
+      }
+    },
+    {
+      "ChildId": "4c7d07bb-5677-4b81-b936-22d941c6bdc1"/*OrbitCamera*/,
+      "Position": {
+        "X": -867.5952,
+        "Y": -48.2782
+      }
+    },
+    {
+      "ChildId": "24bb70f4-6ce4-4e1b-8de6-f1f93bd73e8f"/*RenderTarget*/,
+      "Comment": "Notices how we increased the MultiSampling to 8 samples to reduce some of aliasing on the finer details of the gun.\n\nThese samples are ONLY computed at the edges of the geometry, not of the surfaces.",
+      "Position": {
+        "X": -717.5952,
+        "Y": -48.2782
+      }
+    },
+    {
+      "ChildId": "9f1f826c-9b24-40cf-ade1-ed4dfc692dbd"/*SetEnvironment*/,
+      "Comment": "SetEnvironment without a connected connected texture allows us to enable the default background and adjust is brightness.\n\nAlso check the documentation fo this operator.",
+      "Position": {
+        "X": -1220.3827,
+        "Y": -45.644653
+      }
+    },
+    {
+      "ChildId": "ef910487-9930-4bc9-afd2-c01c3821e1c8"/*DepthOfField*/,
+      "Position": {
+        "X": -567.5952,
+        "Y": -48.2782
+      }
+    },
+    {
+      "ChildId": "7042bd32-e3a9-4ee2-bf34-5214f8ee0515"/*Execute*/,
+      "Position": {
+        "X": -1370.3827,
+        "Y": -45.644653
+      }
+    },
+    {
+      "ChildId": "5ec89390-974c-4841-b585-71fbe0fb4561"/*Locator*/,
+      "Comment": "We use this \"Null\"-object as a reference for the center of our scene, so we don't have to guess the depth of field's focus center.",
+      "Position": {
+        "X": -1520.3827,
+        "Y": 49.355347
+      }
+    },
+    {
+      "ChildId": "9117a6bb-1111-4c9a-be44-627211c9f307"/*PointLight*/,
+      "Comment": "We also add a rotating point light just for completeness.",
+      "Position": {
+        "X": -1070.3827,
+        "Y": -45.644653
+      }
+    },
+    {
+      "ChildId": "c7871b37-6d17-4099-9e56-db2b426b1e7e"/*OscillateVec3*/,
+      "Position": {
+        "X": -1220.3827,
+        "Y": 23.355347
+      }
+    },
+    {
+      "ChildId": "93dc2607-bf39-4f76-bc53-416adec48b17"/*PointLight*/,
+      "Comment": "We add a point light and animated it.",
+      "Position": {
+        "X": -940.87305,
+        "Y": -610.2674
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "85adcfb7-480a-4f41-87cb-bd7819467a68"/*Texture*/,
+      "Position": {
+        "X": -417.5952,
+        "Y": -48.2782
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "9fc74122-1bcb-42fd-aab5-70a85494da34",
+      "Title": "Tooll is all about drawing (or \"rendering\") realtime content. \nThis playground will give you an introduction. ",
+      "Color": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2030.3168,
+        "Y": -1383.367
+      },
+      "Size": {
+        "X": 803.09424,
+        "Y": 50.278114
+      }
+    },
+    {
+      "Id": "d8d8b8bf-155c-442f-8803-33d1adb4f4fa",
+      "Title": "Here is a typical setup of the basic steps.\n\nFor each of these steps, there are many operators to achieve different effects.\nPlease check out the [HowToUseOperators] for more details.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 0.8627451
+      },
+      "Position": {
+        "X": -2032.6614,
+        "Y": -1207.3701
+      },
+      "Size": {
+        "X": 807.62213,
+        "Y": 484.43704
+      }
+    },
+    {
+      "Id": "172298dc-5619-4b11-9fd1-759b82cd840a",
+      "Title": "Generate and apply environment texture and\nshow it in the background. The Camera \nhas to follow later so the background \nmatches the camera movement..",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -936.1684,
+        "Y": -504.61115
+      },
+      "Size": {
+        "X": 511.2872,
+        "Y": 251.84232
+      }
+    },
+    {
+      "Id": "52f96e30-a573-452c-8454-b71544dd9cd1",
+      "Title": "This is an advanced setup that illustrates many components required for a PBR light setup.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2031.759,
+        "Y": -702.67834
+      },
+      "Size": {
+        "X": 2420.5945,
+        "Y": 497.51797
+      }
+    },
+    {
+      "Id": "297fac84-de17-4b6c-87b2-08935862abaf",
+      "Title": "Many draw operators allow setting specific draw styles.\nHere are some examples of the results you can achieve \nby adjusting the parameters of [DrawMesh]...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1206.996,
+        "Y": -1206.998
+      },
+      "Size": {
+        "X": 815.6311,
+        "Y": 484.60632
+      }
+    },
+    {
+      "Id": "ad01e43b-9c5d-4b80-944e-34349b66ea9c",
+      "Title": "Here is an example of loading and setting up PBR Assets with complex textures.\nThe awesome \"Cerberus\" gun is made by Andrew Maximov (see link in the description).",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2033.807,
+        "Y": -176.55017
+      },
+      "Size": {
+        "X": 2424.0684,
+        "Y": 934.6439
+      }
+    },
+    {
+      "Id": "f54d92fe-a9ba-4a15-847f-235451f65431",
+      "Title": "Some tips:\n- Select and pin the final operator on the right to the output window to see the results.\n- Enable Idle-Motion on the timeline toolbar to see some animations.\n- Hover over the comment-icons to learn more.",
+      "Color": {
+        "X": 0.6205674,
+        "Y": 0.6205674,
+        "Z": 0.16064332,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2031.2312,
+        "Y": -1321.1847
+      },
+      "Size": {
+        "X": 806.0797,
+        "Y": 92.680504
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "e6786108-3c2f-4b4b-8a46-cdde04732830",
+      "Title": "Gun model by Andrew Maximov.",
+      "Description": "\"Cerberus\" gun model by Andrew Maximov.",
+      "LinkUrl": "http://artisaverb.info/",
+      "LinkType": "Source"
+    },
+    {
+      "Id": "5c347142-fa5d-4e1a-a8bd-087013dfc8c1",
+      "Title": "PBR Reference",
+      "Description": "The PBR-rendering is based on Michal Siejak (@Nadrin)",
+      "LinkUrl": "https://github.com/Nadrin/PBR/tree/master",
+      "LinkType": "Source"
+    }
+  ]
+}

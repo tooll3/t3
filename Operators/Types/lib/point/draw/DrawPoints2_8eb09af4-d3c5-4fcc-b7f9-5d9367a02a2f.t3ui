@@ -1,0 +1,306 @@
+{
+  "Id": "8eb09af4-d3c5-4fcc-b7f9-5d9367a02a2f"/*DrawPoints2*/,
+  "Description": "A new version of [DrawPoints] that uses are Radius parameter instead of Size.\n\nIt draws a point buffer with the set camera, transform, and fog. The points are drawn as camera-facing billboards, ignoring the point orientation. The W attribute of the points is used for scaling. This can be controlled with the UseWForSize parameter.\n\nYou can connect a texture to override the round shape.\n\nThere are many Operators allowing you to create and manipulate point buffers in countless ways. Please have a look at the examples listed below.\n\nFor additional effects, you can experiment with different blend modes or disable depth testing. Note, however, that the points are drawn in the order they are defined in the buffer and not sorted by distance to the camera. This can introduce unwanted artifacts with transparent blending.\n\nAlthough drawing points is fast, drawing very large points can lead to high fill rates and can drastically impact render performance.\n\nAlso see: [HowToDrawThings], [HowToUsePoints]",
+  "InputUis": [
+    {
+      "InputId": "57abf18b-7e93-4c59-acbc-9d4bb04a8ae3"/*GPoints*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 610.5747,
+        "Y": 3899.9446
+      }
+    },
+    {
+      "InputId": "2664b05a-9fb3-4c59-b85a-8f460c60df45"/*Color*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4164.768
+      }
+    },
+    {
+      "InputId": "2a4c93e7-674b-4046-9c0d-2397e9a2d8dd"/*Radius*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4209.768
+      },
+      "Min": 0.0,
+      "Max": 0.5
+    },
+    {
+      "InputId": "df0ed524-d094-47e0-b974-c936a7ea8ee1"/*Texture_*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4254.768
+      }
+    },
+    {
+      "InputId": "84e512f6-6dca-4c56-bcd8-a08e596a42bf"/*EnableZWrite*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4299.768
+      }
+    },
+    {
+      "InputId": "8079d0b6-728d-4d04-a7c4-5d38da6663ac"/*EnableZTest*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4344.768
+      }
+    },
+    {
+      "InputId": "05e30609-d380-446b-8fba-f930e95e2281"/*BlendMode*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4389.768
+      }
+    },
+    {
+      "InputId": "57343cad-5b79-4b1d-be83-03c5debdf504"/*FadeNearest*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4434.768
+      }
+    },
+    {
+      "InputId": "6b9f85bc-b9d4-4285-bd9f-f2fcc3130835"/*UseWForSize*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4479.768
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "66bacc5d-64b6-4e67-987d-09a5e37f5a0e"/*TransformsConstBuffer*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1852.2701,
+        "Y": 3831.2249
+      }
+    },
+    {
+      "ChildId": "50b195d3-c2d4-45c8-a3dd-95e2c7b55871"/*VertexShader*/,
+      "Position": {
+        "X": 1852.4797,
+        "Y": 3749.7324
+      }
+    },
+    {
+      "ChildId": "302427bf-9a8d-4b61-a8ba-da84781e0fd5"/*RasterizerStateOp*/,
+      "Position": {
+        "X": 1908.6821,
+        "Y": 4059.4917
+      }
+    },
+    {
+      "ChildId": "6d5591f0-fdb8-4b3e-a5c3-7935ebe38f96"/*PixelShader*/,
+      "Position": {
+        "X": 1921.5166,
+        "Y": 4202.8975
+      }
+    },
+    {
+      "ChildId": "76c91d6a-7321-4fd6-8b6b-b8d7f053585b"/*Rasterizer*/,
+      "Position": {
+        "X": 2134.2188,
+        "Y": 4043.1729
+      }
+    },
+    {
+      "ChildId": "e4b305de-e34d-4bf6-9fc6-a33d0417b5a9"/*PixelShaderStage*/,
+      "Position": {
+        "X": 2134.3772,
+        "Y": 4162.3833
+      }
+    },
+    {
+      "ChildId": "d57fea8d-cbcc-44cd-8af9-d1ed2de0d87a"/*VertexShaderStage*/,
+      "Position": {
+        "X": 2139.7566,
+        "Y": 3809.9434
+      }
+    },
+    {
+      "ChildId": "24959ec2-b419-43ef-b94b-397f00d5ac1b"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 2139.7566,
+        "Y": 3777.9434
+      }
+    },
+    {
+      "ChildId": "ac3c70dd-14ae-4569-a359-76af02d8c3a1"/*SamplerStateOp*/,
+      "Position": {
+        "X": 1918.6431,
+        "Y": 4318.739
+      }
+    },
+    {
+      "ChildId": "6a80d5ce-6bdb-45bf-a960-86f7667e144c"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 81.28825,
+        "Y": 890.9817
+      },
+      "Position": {
+        "X": 2335.999,
+        "Y": 3778.0747
+      }
+    },
+    {
+      "ChildId": "2b29136d-2164-4879-a8ad-4596e2882520"/*Vector4Components*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 111.079544,
+        "Y": 59.905018
+      },
+      "Position": {
+        "X": 1466.085,
+        "Y": 4098.1055
+      }
+    },
+    {
+      "ChildId": "4658a295-ece2-4a6f-9e6f-06d49f2a19f0"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 125.808426,
+        "Y": 241.31604
+      },
+      "Position": {
+        "X": 1658.2855,
+        "Y": 4065.7842
+      }
+    },
+    {
+      "ChildId": "22ab4a5b-5ee8-4f57-86d9-669e42f9f23e"/*TimeConstBuffer*/,
+      "Position": {
+        "X": 1852.2701,
+        "Y": 3874.2249
+      }
+    },
+    {
+      "ChildId": "75538cde-0272-4371-a465-1b8018554885"/*Draw*/,
+      "Position": {
+        "X": 2039.7183,
+        "Y": 4571.755
+      }
+    },
+    {
+      "ChildId": "bc1ef5aa-d3ce-4cbe-b89e-c5c52f1a7964"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 1291.7802,
+        "Y": 4565.558
+      }
+    },
+    {
+      "ChildId": "c2ea2b43-b271-4615-b5ee-4d9e95981875"/*UseFallbackTexture*/,
+      "Position": {
+        "X": 1141.7802,
+        "Y": 4565.558
+      }
+    },
+    {
+      "ChildId": "0ef872dc-cbe3-4e18-a436-89329c4416bb"/*PickBlendMode*/,
+      "Position": {
+        "X": 1999.4204,
+        "Y": 4515.408
+      }
+    },
+    {
+      "ChildId": "043003f3-0e92-42f6-b402-755f6e0e0f01"/*MultiplyInt*/,
+      "Position": {
+        "X": 1909.7183,
+        "Y": 4571.755
+      }
+    },
+    {
+      "ChildId": "6abf1a2c-6aee-4981-b3e9-19cccc71e102"/*IntToFloat*/,
+      "Position": {
+        "X": 1468.5548,
+        "Y": 4240.544
+      }
+    },
+    {
+      "ChildId": "bbae5e74-f407-46e4-b79c-6130e69b5c49"/*GetBufferComponents*/,
+      "Position": {
+        "X": 1081.5444,
+        "Y": 3879.5806
+      }
+    },
+    {
+      "ChildId": "b63744e8-c6bf-4ddf-8345-f4c0e598cc5e"/*ContextCBuffers*/,
+      "Position": {
+        "X": 1852.2701,
+        "Y": 3917.2249
+      }
+    },
+    {
+      "ChildId": "3f598a08-9818-405d-8f81-856f2c8e31c7"/*OutputMergerStage*/,
+      "Position": {
+        "X": 2152.005,
+        "Y": 4456.2124
+      }
+    },
+    {
+      "ChildId": "c59544ea-5e9c-41f5-b9ba-b580ff0cfc9a"/*BoolToFloat*/,
+      "Position": {
+        "X": 1468.5548,
+        "Y": 4296.544
+      }
+    },
+    {
+      "ChildId": "80f5dcac-3355-46ab-a076-068c14d885fb"/*LoadImage*/,
+      "Position": {
+        "X": 910.15625,
+        "Y": 4626.4653
+      }
+    },
+    {
+      "ChildId": "4d450f42-b766-427c-8143-0d52abe5888d"/*DepthStencilStateOp*/,
+      "Position": {
+        "X": 1999.4204,
+        "Y": 4446.408
+      }
+    },
+    {
+      "ChildId": "feb8221b-499c-4c66-9075-4b4ca2faed79"/*BoolToFloat*/,
+      "Position": {
+        "X": 1252.2148,
+        "Y": 4791.9507
+      }
+    },
+    {
+      "ChildId": "49e3140f-323b-4fdf-affa-279d5364d6bb"/*BlendColors*/,
+      "Position": {
+        "X": 1126.8871,
+        "Y": 4039.9224
+      }
+    },
+    {
+      "ChildId": "7ec4e53d-1ae3-4f63-acee-d92e6fd6ee9f"/*GetForegroundColor*/,
+      "Position": {
+        "X": 1002.66223,
+        "Y": 4105.8643
+      }
+    },
+    {
+      "ChildId": "8fd27eda-8037-4200-8b02-a467ba0eb102"/*Multiply*/,
+      "Position": {
+        "X": 1049.9648,
+        "Y": 4192.118
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "d5f9af38-0b67-42e3-b175-40a34a4dce00"/*Output*/,
+      "Position": {
+        "X": 2662.6118,
+        "Y": 4184.992
+      }
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+{
+  "Id": "6820b166-1782-43b9-bc5c-6b4f63b16f86"/*FakeLight*/,
+  "Description": "Applies fake shading to the image.",
+  "InputUis": [
+    {
+      "InputId": "00c53b57-7347-4ebc-97d7-1ab48483f09b"/*HeightMap*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -764.6415,
+        "Y": 5.323948
+      }
+    },
+    {
+      "InputId": "56eccacb-65ac-4813-ad7e-fad8e581f570"/*LightMap*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -761.0598,
+        "Y": 140.2838
+      }
+    },
+    {
+      "InputId": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
+      "Position": {
+        "X": -406.7303,
+        "Y": 301.7386
+      },
+      "Scale": 0.01
+    },
+    {
+      "InputId": "4aa128ab-d0a8-42d5-800f-6992959bd0cf"/*Shade*/,
+      "Position": {
+        "X": -406.7303,
+        "Y": 346.7386
+      }
+    },
+    {
+      "InputId": "7f0c127b-ee60-44c8-8490-2d3599cde4a2"/*Twist*/,
+      "Position": {
+        "X": -406.7303,
+        "Y": 391.7386
+      },
+      "Scale": 2.0
+    },
+    {
+      "InputId": "03298545-a5d6-44d5-bb7c-4747172d2667"/*Direction*/,
+      "Position": {
+        "X": -406.7303,
+        "Y": 436.7386
+      },
+      "Min": -1.0,
+      "Max": 1.0,
+      "Scale": 0.001,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
+      "Position": {
+        "X": -975.6439,
+        "Y": 462.92966
+      }
+    },
+    {
+      "InputId": "9d5e3055-c17e-4013-963d-e17c76b707c1"/*HighlightColor*/,
+      "Position": {
+        "X": -975.5961,
+        "Y": 536.4494
+      }
+    },
+    {
+      "InputId": "9c9e9e49-2f3a-4746-ac1f-c5fb1b3dd96b"/*MidColor*/,
+      "Position": {
+        "X": -982.101,
+        "Y": 817.13007
+      }
+    },
+    {
+      "InputId": "d162a7e1-1906-45bc-a896-10ee2c2483fe"/*BlurRadius*/,
+      "Position": {
+        "X": -982.101,
+        "Y": 862.13007
+      },
+      "Min": 0.0,
+      "Max": 100.0,
+      "Scale": 0.01,
+      "Clamp": true
+    },
+    {
+      "InputId": "f93db0c6-c5ed-40da-9677-0c284618f5bb"/*SampleRadius*/,
+      "Position": {
+        "X": -979.275,
+        "Y": 1207.9349
+      }
+    },
+    {
+      "InputId": "3c615aa0-61b7-43c5-bea3-8d1110b4f5cd"/*Resolution*/,
+      "Position": {
+        "X": -979.275,
+        "Y": 1252.9349
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "7cb20847-8668-45ef-9068-99138d1a2d19"/*_multiImageFxSetup*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 128.4052,
+        "Y": 541.74316
+      },
+      "Position": {
+        "X": 100.243034,
+        "Y": -1.1445081
+      }
+    },
+    {
+      "ChildId": "a6d895fd-16c0-4fa6-83d1-bdbd7dc5c01f"/*Vector2Components*/,
+      "Position": {
+        "X": -276.7303,
+        "Y": 436.7386
+      }
+    },
+    {
+      "ChildId": "6043d431-f383-43f5-9a2c-a8a0ceb2e2bd"/*UseFallbackTexture*/,
+      "Position": {
+        "X": -199.66461,
+        "Y": 181.23804
+      }
+    },
+    {
+      "ChildId": "d8b232b7-711b-440e-8e4f-20562e2697f9"/*_BlobOld*/,
+      "Position": {
+        "X": -278.88748,
+        "Y": 773.77454
+      }
+    },
+    {
+      "ChildId": "fca0aad7-e4f4-408a-a4f6-4ccc1e5a55d8"/*_BlobOld*/,
+      "Position": {
+        "X": -615.89795,
+        "Y": 674.1929
+      }
+    },
+    {
+      "ChildId": "64c08db3-03e8-4951-a95f-39da0ec4637b"/*_BlobOld*/,
+      "Position": {
+        "X": -451.58862,
+        "Y": 753.622
+      }
+    },
+    {
+      "ChildId": "a87c1bdb-aa97-4b3a-bfe4-759ac4baa77b"/*BlendColors*/,
+      "Position": {
+        "X": -792.0448,
+        "Y": 904.53876
+      }
+    },
+    {
+      "ChildId": "67c9ad24-252d-4a95-87ab-6847cd2d8958"/*Blur*/,
+      "Position": {
+        "X": -444.3788,
+        "Y": -70.918106
+      }
+    },
+    {
+      "ChildId": "7f44e678-010a-4efc-92f4-e4f522df15f6"/*Multiply*/,
+      "Position": {
+        "X": -498.37506,
+        "Y": 98.59154
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "27e1e1b6-89e0-4dca-98e1-5989286f6331"/*Output*/,
+      "Position": {
+        "X": 414.51212,
+        "Y": 252.2998
+      }
+    }
+  ]
+}

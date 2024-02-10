@@ -1,0 +1,25 @@
+{
+  "Id": "24b56330-b9c5-4454-a398-0500b0422ce1"/*Sqrt*/,
+  "Description": "Computes the square root of a float value.\nTIP: You can use the [Pow] operator to compute roots for other bases by using 1/base for the exponent.",
+  "InputUis": [
+    {
+      "InputId": "a91ef6c9-4d5d-4fb5-9e83-c2f4fbb9769f"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "915a7042-4bdc-4238-a59e-04eed3020f12"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

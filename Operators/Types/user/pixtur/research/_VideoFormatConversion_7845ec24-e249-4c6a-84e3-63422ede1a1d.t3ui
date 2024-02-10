@@ -1,0 +1,114 @@
+{
+  "Id": "7845ec24-e249-4c6a-84e3-63422ede1a1d"/*_VideoFormatConversion*/,
+  "Description": "An early exploration on how to convert YUV to RGB",
+  "InputUis": [
+    {
+      "InputId": "4454891b-ddd0-41f2-80c3-75074df8320b"/*Texture*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -431.6489,
+        "Y": 149.08763
+      }
+    },
+    {
+      "InputId": "b0c4ceaa-5101-42c6-bf71-230a01918916"/*Format*/,
+      "Position": {
+        "X": -431.6489,
+        "Y": 194.08763
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "c7ac6729-fb17-4e8e-88ef-df9a92a345c4"/*ComputeShaderStage*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 145.98775,
+        "Y": 323.73776
+      },
+      "Position": {
+        "X": 773.83105,
+        "Y": 68.32178
+      }
+    },
+    {
+      "ChildId": "14a39e6d-6847-4a57-8aa1-9329e2bd98fa"/*SamplerStateOp*/,
+      "Position": {
+        "X": 450.29614,
+        "Y": 219.5039
+      }
+    },
+    {
+      "ChildId": "f4f6123c-4bd0-463b-bd4f-9f1ec216b480"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 450.29614,
+        "Y": 111.50391
+      }
+    },
+    {
+      "ChildId": "014998dd-3b42-43b9-9ee8-b9d60ed95470"/*ComputeShader*/,
+      "Position": {
+        "X": 450.29614,
+        "Y": 55.503906
+      }
+    },
+    {
+      "ChildId": "1c7ed74c-4ee2-4bba-ad85-5d63cf635aa0"/*Vector4Components*/,
+      "Position": {
+        "X": 296.2307,
+        "Y": 134.93848
+      }
+    },
+    {
+      "ChildId": "4832c6ed-11b1-4e90-96a3-09d91eaa08c6"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 9.353027,
+        "Y": 314.90723
+      }
+    },
+    {
+      "ChildId": "dce42014-be5f-450e-809d-f7594572b48a"/*UavFromTexture2d*/,
+      "Position": {
+        "X": 456.6272,
+        "Y": 521.84717
+      }
+    },
+    {
+      "ChildId": "35c2260c-b5b2-4dd0-b93a-adb08cf6f385"/*ExecuteTextureUpdate*/,
+      "Position": {
+        "X": 1083.7759,
+        "Y": 184.58252
+      }
+    },
+    {
+      "ChildId": "30de0b1e-7c1d-4efd-b6e2-58ec929a305c"/*GetTextureSize*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 376.31104
+      }
+    },
+    {
+      "ChildId": "6d97517f-50cb-4174-84da-f5076cb72a94"/*Texture2d*/,
+      "Position": {
+        "X": 272.44067,
+        "Y": 574.06055
+      }
+    },
+    {
+      "ChildId": "b4c81a44-0891-4d51-85a0-553e8a210c94"/*CalcInt2DispatchCount*/,
+      "Position": {
+        "X": 600.29614,
+        "Y": 55.503906
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "a722cd4f-82da-4532-a7bc-7a6bdc30b06e"/*Output*/,
+      "Position": {
+        "X": 1493.7759,
+        "Y": 305.03027
+      }
+    }
+  ]
+}

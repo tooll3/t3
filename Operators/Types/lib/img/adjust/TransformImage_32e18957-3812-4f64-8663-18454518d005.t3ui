@@ -1,0 +1,123 @@
+{
+  "Id": "32e18957-3812-4f64-8663-18454518d005"/*TransformImage*/,
+  "Description": "Rotates, offsets, and scales the incoming image.\nIt includes texture wrapping modes: Repeat, Mirror, Clamp, Border...\nIt's a powerful and versatile operator with many use cases such as tiling textures, patterns, decals...",
+  "InputUis": [
+    {
+      "InputId": "3aab9b12-1e02-4d7a-83b6-da1500a6bcbf"/*Image*/,
+      "Position": {
+        "X": -246.7284,
+        "Y": -38.124565
+      }
+    },
+    {
+      "InputId": "6f4184f1-6017-4bcc-ac1f-5ea4862bfb0c"/*Offset*/,
+      "Position": {
+        "X": -214.98917,
+        "Y": 172.78781
+      }
+    },
+    {
+      "InputId": "53538db0-2b65-4c92-80b1-ea6aecbc49ae"/*Stretch*/,
+      "Position": {
+        "X": -214.98917,
+        "Y": 228.78781
+      }
+    },
+    {
+      "InputId": "5b8ff5d7-e4d6-4631-8f0a-afb8086383e7"/*Scale*/,
+      "Position": {
+        "X": -214.98917,
+        "Y": 273.7878
+      }
+    },
+    {
+      "InputId": "6a786aa9-edf4-4363-9e34-0ddc7e763f0b"/*Rotation*/,
+      "Position": {
+        "X": -214.98917,
+        "Y": 318.7878
+      },
+      "Min": -1.0,
+      "Max": 42.0,
+      "Scale": 0.5
+    },
+    {
+      "InputId": "5c76dc8d-3a28-4b93-b3a0-e008c1ff14e9"/*Resolution*/,
+      "Position": {
+        "X": -214.98917,
+        "Y": 363.7878
+      }
+    },
+    {
+      "InputId": "c31a95a9-2cfb-4eea-8006-97f883d11847"/*GenerateMips*/,
+      "Position": {
+        "X": -214.98917,
+        "Y": 408.7878
+      }
+    },
+    {
+      "InputId": "64e5cdf2-19b0-461c-b936-ea46ee58028f"/*Filter*/,
+      "Position": {
+        "X": -214.98917,
+        "Y": 453.7878
+      }
+    },
+    {
+      "InputId": "43eb4d4e-2bb5-4c97-a5dd-91539b8258cd"/*WrapMode*/,
+      "Position": {
+        "X": -214.98917,
+        "Y": 498.7878
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "bf478418-fbc1-4e6c-a85b-c53129d432e9"/*Vector2Components*/,
+      "Position": {
+        "X": -64.98916,
+        "Y": 172.78781
+      }
+    },
+    {
+      "ChildId": "25acd8a3-db12-457a-98a9-f70e51be66d5"/*Vector2Components*/,
+      "Position": {
+        "X": -64.98916,
+        "Y": 228.78781
+      }
+    },
+    {
+      "ChildId": "31adbf53-34ea-4f3a-981b-cf1757e60933"/*Wrap*/,
+      "Position": {
+        "X": 464.82666,
+        "Y": 145.95316
+      }
+    },
+    {
+      "ChildId": "a4d78db8-f0a6-4ed3-b4f8-39eae5c464b3"/*IntToWrapmode*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 203.40295,
+        "Y": 489.62747
+      }
+    },
+    {
+      "ChildId": "401e51a0-e6cc-4132-9b19-a593e406c1a0"/*AddInts*/,
+      "Position": {
+        "X": -22.272385,
+        "Y": 510.22302
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "54831ac3-d747-4cdf-9520-3cfd651158bf"/*TextureOutput*/,
+      "Position": {
+        "X": 647.9629,
+        "Y": 225.78851
+      }
+    }
+  ]
+}

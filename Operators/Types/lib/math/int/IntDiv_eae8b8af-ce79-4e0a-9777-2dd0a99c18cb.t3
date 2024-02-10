@@ -1,0 +1,17 @@
+{
+  "Name": "IntDiv",
+  "Id": "eae8b8af-ce79-4e0a-9777-2dd0a99c18cb",
+  "Namespace": "lib.math.int",
+  "Inputs": [
+    {
+      "Id": "95aaaa60-5582-40b0-907d-74a39710c006"/*Numerator*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "996cc728-62ab-4c77-b454-59f0d2f25c00"/*Denominator*/,
+      "DefaultValue": 1
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

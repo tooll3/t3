@@ -1,0 +1,51 @@
+{
+  "Id": "bdd982c4-dfc4-48d6-888a-f067081dbe8e"/*_MixPoints*/,
+  "Description": "This is an early internal implementation that has been deprecated. Consider using [MixPoints].",
+  "InputUis": [
+    {
+      "InputId": "57f1d1d3-b437-4761-a5f5-0520cf820f58"/*A*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "3119875e-a6ea-4d19-b536-513459a0db98"/*B*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "e8e8d26f-ccd1-4c15-b215-9c5bcfc133fb"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "41bf7407-d81f-433c-9c73-41d2c831fe02"/*Factor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "cacfc7ce-19aa-41b8-81fe-79e2d211c8f5"/*Combination*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "5bf5f55e-9099-4413-b17a-f49d042cb4ca"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

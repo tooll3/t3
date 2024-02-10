@@ -1,0 +1,63 @@
+{
+  "Id": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d"/*PickStringPart*/,
+  "Description": "Gets a lines, words, or characters from the input string. Good for typewriter effects, etc.",
+  "InputUis": [
+    {
+      "InputId": "05d7962b-a02e-4ab5-9927-865375348ccd"/*InputText*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Multiline"
+    },
+    {
+      "InputId": "5d7184f6-cf46-4cb0-b29f-b3c52b34b634"/*SplitInto*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "9cb908ad-0800-4b88-b256-c6cc2b84ab6c"/*FragmentStart*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "7520db6d-7855-40e1-bb81-ead290815435"/*FragmentCount*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "62368c06-7815-47bc-9b0d-3024a2907e01"/*Fragments*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "88888c06-7815-47bc-9b0d-3024a2907e01"/*TotalCount*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "6db2bbfb-4c1f-439b-9796-feb60184d044",
+      "Title": "Example",
+      "Description": "Example video on how to animate strings.",
+      "LinkUrl": "https://www.youtube.com/watch?v=854OSxXzMDM",
+      "LinkType": "TutorialVideo"
+    }
+  ]
+}

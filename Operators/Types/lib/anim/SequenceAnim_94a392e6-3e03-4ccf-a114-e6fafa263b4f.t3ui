@@ -1,0 +1,98 @@
+{
+  "Id": "94a392e6-3e03-4ccf-a114-e6fafa263b4f"/*SequenceAnim*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "7bdfb9a8-87b3-4603-890c-fe755f4c4492"/*Sequence*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Multiline"
+    },
+    {
+      "InputId": "f8afee64-627d-48e4-b4ea-a15601a01aa1"/*SequenceIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
+    },
+    {
+      "InputId": "e3ad4e64-f7cf-49a1-b3ae-4d285c05103a"/*UpdateMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      }
+    },
+    {
+      "InputId": "f0ae47ae-5849-4d81-bae0-9b6ec44949ef"/*Rate*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "5b86b2ec-1043-4a90-9a45-f629cfb7f713"/*OutputMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 495.0
+      }
+    },
+    {
+      "InputId": "3ad1c6ab-c91a-4261-aea5-29394d2926df"/*MinValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "c5ffcf77-14fe-4a59-b41a-26579ef39326"/*MaxValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "1c9afc39-7bab-4042-86eb-c7e30595af8e"/*Bias*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      },
+      "Min": 0.01,
+      "Max": 0.99,
+      "Scale": 0.01,
+      "Clamp": true
+    },
+    {
+      "InputId": "3ce54ca0-cd50-4dc2-bd3d-51e26ebf05ce"/*RecordValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
+    },
+    {
+      "InputId": "0e2fb821-460a-4147-99c0-5f6c696e7847"/*OverrideTime*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "99f24d0d-bda5-44a5-afd1-cb144ba313e6"/*Result*/,
+      "Position": {
+        "X": 149.09799,
+        "Y": -6.8220024
+      }
+    },
+    {
+      "OutputId": "1303bdf7-e547-44bb-84fc-1de0df50f1af"/*WasStep*/,
+      "Position": {
+        "X": 149.09799,
+        "Y": 93.17799
+      }
+    }
+  ]
+}

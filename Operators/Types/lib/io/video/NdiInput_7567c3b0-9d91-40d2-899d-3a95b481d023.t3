@@ -1,0 +1,13 @@
+{
+  "Name": "NdiInput",
+  "Id": "7567c3b0-9d91-40d2-899d-3a95b481d023",
+  "Namespace": "lib.io.video",
+  "Inputs": [
+    {
+      "Id": "fd1fca6b-a3be-440b-86ba-6b7b1bbd2a8c"/*SourceName*/,
+      "DefaultValue": "0"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

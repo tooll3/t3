@@ -1,0 +1,13 @@
+{
+  "Name": "Sqrt",
+  "Id": "24b56330-b9c5-4454-a398-0500b0422ce1",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "a91ef6c9-4d5d-4fb5-9e83-c2f4fbb9769f"/*Value*/,
+      "DefaultValue": 1.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

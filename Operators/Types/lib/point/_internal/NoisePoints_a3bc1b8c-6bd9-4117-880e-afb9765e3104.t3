@@ -1,0 +1,37 @@
+{
+  "Name": "NoisePoints",
+  "Id": "a3bc1b8c-6bd9-4117-880e-afb9765e3104",
+  "Namespace": "lib.point._internal",
+  "Inputs": [
+    {
+      "Id": "52953760-435e-4f11-8e65-c9d46bc40076"/*Scale*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      }
+    },
+    {
+      "Id": "7c35053c-bd51-421b-9a6d-ddb8c150abc9"/*Frequency*/,
+      "DefaultValue": 17.7
+    },
+    {
+      "Id": "9d4e1103-94f6-49a0-a00e-07668eb708df"/*Amplitude*/,
+      "DefaultValue": 8.4
+    },
+    {
+      "Id": "2d2087bc-29a1-4b7f-909d-17d412fe1da5"/*Phase*/,
+      "DefaultValue": 0.98
+    },
+    {
+      "Id": "dee89ad4-1516-40d0-a682-98e05a8b7c12"/*Thickness*/,
+      "DefaultValue": 10.0
+    },
+    {
+      "Id": "cb697476-36df-44ae-bd1d-138cc49467c2"/*Count*/,
+      "DefaultValue": 137
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

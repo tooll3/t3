@@ -1,0 +1,13 @@
+{
+  "Name": "Ceil",
+  "Id": "7129684e-bf84-4c8b-996e-baba68094585",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "a0f6f860-9561-4af8-9660-05cfb2f995a0"/*Value*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

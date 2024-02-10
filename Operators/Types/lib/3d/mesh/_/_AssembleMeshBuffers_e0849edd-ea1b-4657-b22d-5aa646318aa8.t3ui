@@ -1,0 +1,39 @@
+{
+  "Id": "e0849edd-ea1b-4657-b22d-5aa646318aa8"/*_AssembleMeshBuffers*/,
+  "Description": "An internal operator that combines structured buffers for Vertices and Face Indices into a MeshBuffer definition.\n\nIt's the reversal of [_MeshBufferComponents].",
+  "InputUis": [
+    {
+      "InputId": "5e82e351-e8a8-4594-83e3-e86c888d0588"/*PrepareCommand*/,
+      "Position": {
+        "X": -196.4151,
+        "Y": -58.396233
+      }
+    },
+    {
+      "InputId": "ba53b274-62ca-40a2-b8d2-87d08f0bc259"/*Vertices*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "892838c5-fa5a-418e-81d6-a3a523819324"/*Indices*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d71893dd-6ca2-4ab7-9e04-0bd7285eccfb"/*MeshBuffers*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

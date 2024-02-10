@@ -1,0 +1,34 @@
+{
+  "Id": "5202d3f6-c970-4006-933d-3c60d6c202dc"/*Modulo*/,
+  "InputUis": [
+    {
+      "InputId": "8a401e5d-295d-4403-a3af-1d6b91ce3dba"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "62a8185f-32c0-41d2-b8be-d8c1d7178c00"/*ModuloValue*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 328.0
+      },
+      "Min": -100.0,
+      "Max": 100.0,
+      "Scale": 0.01
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "4e4ebbcf-6b12-4ce7-9bec-78cd9049e239"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

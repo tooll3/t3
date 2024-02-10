@@ -1,0 +1,22 @@
+{
+  "Id": "35dd9888-dea5-4ca4-8e1d-b8f0a59ec0ea"/*ExecuteFloat*/,
+  "InputUis": [
+    {
+      "InputId": "baf213d5-a441-4bcd-a261-c873cb8353cb"/*Distance*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "30fe17a0-1825-47f3-806d-c3d74a75d691"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

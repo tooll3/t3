@@ -1,0 +1,44 @@
+{
+  "Id": "485af23d-543e-44a7-b29f-693ed9533ab5"/*StopWatch*/,
+  "Description": "A stopwatch that can stop, measure, and keep time and thus measure durations.",
+  "InputUis": [
+    {
+      "InputId": "38754151-704a-4374-817e-98dfaca62e49"/*ResetTrigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "c19343b2-7534-43a9-a9a6-ce9019437c62"/*DurationIn*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "bf89d8b2-d8fe-4a3c-9255-67944ec831cb"/*PauseWithPlayback*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "617afbbc-8199-43c0-b630-4563e65959ef"/*Delta*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "195cdcd3-6f02-471a-96e4-3f44a1d03cc2"/*LastDuration*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

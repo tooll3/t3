@@ -1,0 +1,48 @@
+{
+  "Id": "af9c5db8-7144-4164-b605-b287aaf71bf6"/*Damp*/,
+  "Description": "Damps (i.e., smooths or filters) an incoming value with the following methods: Linear interpolation: Damping 0 -> instant ... 1 -> value frozen / Target will never be reached. Spring Damp: Uses a \"critically damped spring\" that will provide a very smooth interpolation that will never overshoot. The ideal damping value depends on your value range (lower spring for very large changes in value). The spring damp method is also used by Unity's SmoothDamp method. Have a look at the example.",
+  "InputUis": [
+    {
+      "InputId": "795aca79-dd10-4f28-a290-a30e7b27b436"/*Value*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      }
+    },
+    {
+      "InputId": "f29d5426-5e31-4c7c-be77-5e45bfb9daa9"/*Damping*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 379.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "76d52df1-597e-4429-9916-13e6e0d93248"/*Method*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 424.0
+      }
+    },
+    {
+      "InputId": "8909933c-79a8-4127-987b-7b23940a0052"/*UseAppRunTime*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 469.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "aacea92a-c166-46dc-b775-d28baf9820f5"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "Id": "0b3436db-e283-436e-ba85-2f3a1de76a9d"/*LoadImage*/,
+  "Description": "Loads an image file as a Texture2D.\n\nSome notes:\n- Resources are cached, so accessing the same filename again will be much faster.\n- An ImageBuffer will forward its size so that image FX operators will produce buffers of identical sizes.\n- Mipmaps are created automatically.\n\nMost image types are supported, but only in 8-bit.",
+  "InputUis": [
+    {
+      "InputId": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 46.995968
+      },
+      "Usage": "FilePath",
+      "FileFilter": "All Files|*.*|Image files (png,jpg,jpeg,tga,gif,dds)bmp|*.png;*.jpg;*.jpeg;*.tga;*.gif;*.dds;*.bmp"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a4a46c04-ff03-48ce-83c9-0c0baa0f72e7"/*ShaderResourceView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037"/*Texture*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

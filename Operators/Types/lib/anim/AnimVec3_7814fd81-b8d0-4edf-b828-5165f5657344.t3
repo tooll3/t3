@@ -1,0 +1,69 @@
+{
+  "Name": "AnimVec3",
+  "Id": "7814fd81-b8d0-4edf-b828-5165f5657344",
+  "Namespace": "lib.anim",
+  "Inputs": [
+    {
+      "Id": "fa1b36a1-4ed9-4187-aeb6-f7ba893cf3b2"/*OverrideTime*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "c8faaeca-c153-4d7c-a66b-6916dc7750e3"/*Shape*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "9f71c196-4c4c-4083-8c27-3047c059f998"/*Rates*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      }
+    },
+    {
+      "Id": "754456d0-1ac8-4e31-8d0b-bf1b45db48de"/*RateFactor*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "a04bb5a4-a7af-493b-8509-4e9c8b6a94a9"/*Phases*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "aad62703-647d-437b-879b-08793ac8802f"/*Amplitudes*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      }
+    },
+    {
+      "Id": "6086f33d-e8aa-4f66-830e-8624e19e186c"/*AmplitudeFactor*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "2384604d-6563-4af7-8799-9666a6d94171"/*Offsets*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "42abbd5c-5ae3-41c1-bebd-ce19d2ce0e25"/*Bias*/,
+      "DefaultValue": 0.5
+    },
+    {
+      "Id": "ff71a701-802f-44ec-966d-4e04557cdbe6"/*Ratio*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "2d400a08-8926-46bd-b9ba-75ec69fec9dd"/*AllowSpeedFactor*/,
+      "DefaultValue": 1
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

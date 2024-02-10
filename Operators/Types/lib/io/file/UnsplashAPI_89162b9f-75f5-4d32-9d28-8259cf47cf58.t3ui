@@ -1,0 +1,75 @@
+{
+  "Id": "89162b9f-75f5-4d32-9d28-8259cf47cf58"/*UnsplashAPI*/,
+  "Description": "Fetch image URLs from Unsplash API. Use [LoadImageFromUrl] to load the results.",
+  "InputUis": [
+    {
+      "InputId": "6d3f829b-c64e-45f2-9e8d-3844f4864c3a"/*GetPhotoIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "8f164aa3-962a-4b08-970e-cb730ca10f9b"/*ApiToken*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "8f879a22-186d-45c3-b30c-af909cc8e609"/*TriggerRequest*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "6ee4be4b-e0e9-40aa-afec-088b425791f1"/*Search*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "a506693e-2859-4d9d-ab85-0a0f51cc2da9"/*CollectionId*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "b3b90281-2d2a-4d79-8a0d-5d902cfaaa35"/*MaxResultCount*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "b4c9e528-a173-4ce4-8eaf-77a05e004d5d"/*ResultList*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "487c1fe8-5b7c-43fb-855d-cc2b3ca70566"/*PhotoUrl*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "99282081-c93a-4e12-b4a1-08062a762293"/*PhotoAuthor*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "Id": "a60adc26-d7c6-4615-af78-8d2d6da46b79"/*TransformsConstBuffer*/,
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "7a76d147-4b8e-48cf-aa3e-aac3aa90e888"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

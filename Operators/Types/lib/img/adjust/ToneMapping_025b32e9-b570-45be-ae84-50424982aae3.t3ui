@@ -1,0 +1,81 @@
+{
+  "Id": "025b32e9-b570-45be-ae84-50424982aae3"/*ToneMapping*/,
+  "Description": "Tone mapping is the process of converting high dynamic range (HDR) imagery to a displayable format, adjusting the contrast and brightness to make it visually appealing while preserving details in both highlights and shadows.",
+  "InputUis": [
+    {
+      "InputId": "72e51856-bc8f-4bcf-a6d8-6c7b4f8b0583"/*Texture2d*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 122.85706,
+        "Y": 276.69968
+      }
+    },
+    {
+      "InputId": "37d4e1e6-e5a0-40b6-ada9-9481f5a807de"/*Mode*/,
+      "Position": {
+        "X": 153.79459,
+        "Y": 431.24347
+      }
+    },
+    {
+      "InputId": "be44974c-2685-40ff-86b6-bdf1cc38eee4"/*CorrectGamma*/,
+      "Position": {
+        "X": 153.79459,
+        "Y": 476.2435
+      }
+    },
+    {
+      "InputId": "dfd590f5-a930-42df-aecd-52f8d0195369"/*Gamma*/,
+      "Position": {
+        "X": 153.79459,
+        "Y": 521.2435
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "d90b4269-312f-4378-930f-0447533c7977"/*_ImageFxShaderSetup2*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 134.97804,
+        "Y": 481.95227
+      },
+      "Position": {
+        "X": 566.4485,
+        "Y": 145.9968
+      }
+    },
+    {
+      "ChildId": "5e4ffbe2-74e8-440c-9939-6cefd81665db"/*IntToFloat*/,
+      "Position": {
+        "X": 303.7946,
+        "Y": 420.24344
+      }
+    },
+    {
+      "ChildId": "b5befc31-b387-40f0-8866-1804e4565e92"/*BoolToFloat*/,
+      "Position": {
+        "X": 303.7946,
+        "Y": 476.2435
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "05c886f7-2c2c-4fe8-8b66-d6967dc43367"/*Output*/,
+      "Position": {
+        "X": 939.8677,
+        "Y": 642.9786
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "3fc4f58d-29d2-4f43-ac50-59a323f49038",
+      "Title": "Wikipedia",
+      "Description": "",
+      "LinkUrl": "https://en.wikipedia.org/wiki/Tone_mapping",
+      "LinkType": "Documentation"
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "Id": "b60f2321-0df5-42a7-bdcf-4660bbe549d6"/*WipOverlay*/,
+  "Description": "Shows an overlay with timecode and title that can be useful to annotate WIP versions.",
+  "InputUis": [
+    {
+      "InputId": "2095ce9d-2b92-45cb-bf30-91c32d8ebd90"/*InputString*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Multiline"
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "72ff6f53-e073-4bf1-9616-4a24a4e2fec7"/*Text*/,
+      "Position": {
+        "X": 931.8579,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "1df0c975-8aa2-4a51-be09-010c20c42ce5"/*Time*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 42.16266
+      }
+    },
+    {
+      "ChildId": "782a23dd-fcf5-41e9-a0c8-e859b8cf9072"/*Div*/,
+      "Position": {
+        "X": 181.85791,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "c932a54a-ad3f-4303-a98b-b1edffd0e87f"/*FloatToString*/,
+      "Position": {
+        "X": 481.8579,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "d2d1beea-8b98-4838-bb7d-bb8273c25454"/*CombineStrings*/,
+      "Position": {
+        "X": 631.8579,
+        "Y": 56.0
+      }
+    },
+    {
+      "ChildId": "ef729098-4b5f-4aff-89b6-7c335424dc07"/*Modulo*/,
+      "Position": {
+        "X": 181.85791,
+        "Y": 139.0
+      }
+    },
+    {
+      "ChildId": "17b7ca18-cd67-4568-8704-a3e05b0d2ad5"/*FloatToString*/,
+      "Position": {
+        "X": 481.8579,
+        "Y": 139.0
+      }
+    },
+    {
+      "ChildId": "9b2c9548-9c2b-43e3-8656-e71ce805d21f"/*Multiply*/,
+      "Position": {
+        "X": 331.8579,
+        "Y": 235.0
+      }
+    },
+    {
+      "ChildId": "bfe8812d-6284-4007-91da-95494f1daa0b"/*Modulo*/,
+      "Position": {
+        "X": 181.85791,
+        "Y": 235.0
+      }
+    },
+    {
+      "ChildId": "bb91c8c5-264a-487b-95a4-afedb72845fb"/*FloatToString*/,
+      "Position": {
+        "X": 481.8579,
+        "Y": 235.0
+      }
+    },
+    {
+      "ChildId": "ce4c218a-476d-4317-a307-2b08d043c52b"/*Floor*/,
+      "Position": {
+        "X": 331.8579,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "e84efcc2-c429-4a4d-b803-b3233b6fa9b1"/*Floor*/,
+      "Position": {
+        "X": 331.8579,
+        "Y": 139.0
+      }
+    },
+    {
+      "ChildId": "f8efe9d7-dada-4104-9692-ed48bbdd376a"/*Group*/,
+      "Position": {
+        "X": 1081.8579,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "f17f7422-8e91-49f6-b2e1-916deb6b5d3a"/*AString*/,
+      "Position": {
+        "X": 631.8579,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "892672cd-90c4-4840-b549-61b8a76ede01"/*CombineStrings*/,
+      "Position": {
+        "X": 781.8579,
+        "Y": 0.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "434a3d5c-96c3-4f5e-962e-b88a4415fce3"/*Output*/,
+      "Position": {
+        "X": 1491.8579,
+        "Y": 135.5
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "Id": "6535edc3-a4ed-46c7-ae71-d3974612b448"/*RequestUrl*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "8c7a6493-af56-4a03-a41f-796e30902cfd"/*Url*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 46.995968
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "4dc9def5-958b-4a9c-8755-827bf4e5eaa6"/*TriggerRequest*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 91.99597
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "664c217c-8c7e-4bc8-870e-409f6f67ad33"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

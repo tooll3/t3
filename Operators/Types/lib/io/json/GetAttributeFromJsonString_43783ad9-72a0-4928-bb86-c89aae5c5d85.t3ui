@@ -1,0 +1,53 @@
+{
+  "Id": "43783ad9-72a0-4928-bb86-c89aae5c5d85"/*GetAttributeFromJsonString*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "918d69a9-c29a-43fe-9961-c1dcde31e2ec"/*JsonString*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 46.995968
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "dadd353a-2195-4b52-80d2-88288c55b0e4"/*ColumnName*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 91.99597
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "d7820c58-22fd-492a-81fe-870ab1912b0a"/*RowIndex*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 136.99597
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "6fd32e9f-4d75-4243-ad8e-314ff738f76d"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "00f51b94-8ac0-4300-917a-edc952726c5f"/*Columns*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "c0f9495f-659b-4849-ab9f-a82376c59371"/*RowCount*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    }
+  ]
+}

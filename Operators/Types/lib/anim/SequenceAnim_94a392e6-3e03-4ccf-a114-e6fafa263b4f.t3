@@ -1,0 +1,49 @@
+{
+  "Name": "SequenceAnim",
+  "Id": "94a392e6-3e03-4ccf-a114-e6fafa263b4f",
+  "Namespace": "lib.anim",
+  "Inputs": [
+    {
+      "Id": "7bdfb9a8-87b3-4603-890c-fe755f4c4492"/*Sequence*/,
+      "DefaultValue": "1101"
+    },
+    {
+      "Id": "f8afee64-627d-48e4-b4ea-a15601a01aa1"/*SequenceIndex*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "e3ad4e64-f7cf-49a1-b3ae-4d285c05103a"/*UpdateMode*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "f0ae47ae-5849-4d81-bae0-9b6ec44949ef"/*Rate*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "5b86b2ec-1043-4a90-9a45-f629cfb7f713"/*OutputMode*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "3ad1c6ab-c91a-4261-aea5-29394d2926df"/*MinValue*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "c5ffcf77-14fe-4a59-b41a-26579ef39326"/*MaxValue*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "1c9afc39-7bab-4042-86eb-c7e30595af8e"/*Bias*/,
+      "DefaultValue": 0.5
+    },
+    {
+      "Id": "3ce54ca0-cd50-4dc2-bd3d-51e26ebf05ce"/*RecordValue*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "0e2fb821-460a-4147-99c0-5f6c696e7847"/*OverrideTime*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

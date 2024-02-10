@@ -1,0 +1,106 @@
+{
+  "Id": "ba059fe1-3397-4950-9ddd-e328f0c2e0bd"/*VoronoiCells*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "f5bad014-1895-4490-8c00-4c775db54716"/*Image*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": -12.877563
+      }
+    },
+    {
+      "InputId": "fd554dbb-113f-4722-af28-4e1ec39852cc"/*EdgeColor*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 32.12242
+      }
+    },
+    {
+      "InputId": "c81900c4-3478-4a53-b6e6-4e9a09c81a91"/*Background*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 77.12242
+      }
+    },
+    {
+      "InputId": "2bd55eb6-8bca-4f34-bc0e-d1223f47b410"/*Inverted*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 122.12242
+      }
+    },
+    {
+      "InputId": "b0e1cd04-9377-4ab0-9c4e-8780f4efa271"/*Scale*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 167.12242
+      }
+    },
+    {
+      "InputId": "485ea866-3764-402b-8bb5-ade85efde0c1"/*Resolution*/,
+      "Position": {
+        "X": -198.16037,
+        "Y": 212.12244
+      }
+    },
+    {
+      "InputId": "55c3fe18-be3c-479b-b9cf-4473c4696f2e"/*Radius*/,
+      "Position": {
+        "X": -220.46773,
+        "Y": 441.15887
+      }
+    },
+    {
+      "InputId": "7328bfec-fad5-4262-9c10-fad57bd39e2e"/*LineWidth*/,
+      "Position": {
+        "X": -220.46773,
+        "Y": 486.15887
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "ac5f45de-7b15-4563-8d92-cb54f065a808"/*Vector4Components*/,
+      "Position": {
+        "X": -20.37726,
+        "Y": 12.897135
+      }
+    },
+    {
+      "ChildId": "513b1255-f9c5-4a08-bf30-db3a1641ade0"/*Vector4Components*/,
+      "Position": {
+        "X": -20.37726,
+        "Y": 68.89713
+      }
+    },
+    {
+      "ChildId": "5ab3e928-5018-479d-834a-1ef081c7563c"/*_ImageFxShaderSetup2*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 82.769646,
+        "Y": 618.80396
+      },
+      "Position": {
+        "X": 272.25522,
+        "Y": -197.63123
+      }
+    },
+    {
+      "ChildId": "558e8dd4-f524-4798-817b-743837996458"/*BoolToFloat*/,
+      "Position": {
+        "X": -20.37726,
+        "Y": 124.89713
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "3c91677f-ceb1-4c14-9eda-90ccb70f12a1"/*TextureOutput*/,
+      "Position": {
+        "X": 577.0464,
+        "Y": -29.479145
+      }
+    }
+  ]
+}

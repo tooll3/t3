@@ -1,0 +1,100 @@
+{
+  "Id": "25d26231-730e-4376-b256-e34eca6290ce"/*GetPointDataFromListExample*/,
+  "Description": "Illustrates how to read back point information from the gpu and use them in CPU operators.\nIn this case we set the camera's target to a point position.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "0276f919-3c06-4d78-87dc-8f3986a4999a"/*SpherePoints*/,
+      "Position": {
+        "X": 147.63406,
+        "Y": 27.972168
+      }
+    },
+    {
+      "ChildId": "c5160e61-bee2-42eb-818e-089a9ef0ae5d"/*DrawPoints*/,
+      "Position": {
+        "X": 633.35236,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "c1a51960-b649-46d4-9589-dddc6f3ef7f9"/*FilterPoints*/,
+      "Position": {
+        "X": 299.9999,
+        "Y": 83.569336
+      }
+    },
+    {
+      "ChildId": "7cb227e5-c654-4e6e-af7e-feea20aec4f0"/*PointsToCPU*/,
+      "Position": {
+        "X": 483.35236,
+        "Y": 186.0
+      }
+    },
+    {
+      "ChildId": "8705f675-cc45-4587-b6e8-c1459bf858e2"/*GetPointDataFromList*/,
+      "Position": {
+        "X": 633.35236,
+        "Y": 186.0
+      }
+    },
+    {
+      "ChildId": "14d045a5-25e2-4ebf-9116-f22f6f51b5c5"/*Camera*/,
+      "Position": {
+        "X": 933.35236,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "8017e708-b07a-4534-a57d-fb3b365c7e43"/*DampVec3*/,
+      "Position": {
+        "X": 783.35236,
+        "Y": 186.0
+      }
+    },
+    {
+      "ChildId": "6f5e5a09-3f24-4495-949f-b828a1cec20e"/*DrawPoints*/,
+      "Position": {
+        "X": 633.35236,
+        "Y": 63.0
+      }
+    },
+    {
+      "ChildId": "4bfca9eb-9373-44bc-92dc-835cb3548701"/*Execute*/,
+      "Position": {
+        "X": 783.35236,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "95232ee6-52f5-4223-9531-7a820bbd88dd"/*AnimValue*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 126.569336
+      }
+    },
+    {
+      "ChildId": "b6ddb224-e30a-47d0-af14-278c8eb6f65a"/*CountInt*/,
+      "Position": {
+        "X": 149.99991,
+        "Y": 126.569336
+      }
+    },
+    {
+      "ChildId": "75458cd6-2d25-4bb9-a667-dfb2c6caf577"/*RenderTarget*/,
+      "Position": {
+        "X": 1099.0173,
+        "Y": 11.404541
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "ca72b890-96df-40ee-bb64-240b54edf483"/*ColorBuffer*/,
+      "Position": {
+        "X": 1509.0173,
+        "Y": 111.0
+      }
+    }
+  ]
+}

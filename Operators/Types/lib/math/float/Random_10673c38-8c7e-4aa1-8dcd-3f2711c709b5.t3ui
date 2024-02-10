@@ -1,0 +1,43 @@
+{
+  "Id": "10673c38-8c7e-4aa1-8dcd-3f2711c709b5"/*Random*/,
+  "InputUis": [
+    {
+      "InputId": "f2513ead-7022-4774-8767-7f33d1b92b26"/*Seed*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "48762e06-8377-464b-8fb9-c7d3b51c3f8e"/*Min*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "5755454f-98fe-49ef-9611-a7c3750c4f9a"/*Max*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "a16f6862-868b-4d83-88f5-c7aac7616a38"/*UniqueForChild*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "dfb39f6e-7b1c-41f3-9f31-b71caee629f9"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

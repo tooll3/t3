@@ -1,0 +1,25 @@
+{
+  "Name": "AddVec3",
+  "Id": "15ac7153-69af-45f8-bcdd-50cdef0c9ae1",
+  "Namespace": "lib.math.vec3",
+  "Inputs": [
+    {
+      "Id": "f933c566-cbb2-4d2c-9e3b-f7ad3b2f7292"/*Input1*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "08624ca6-8b69-48f5-8896-a483b403778e"/*Input2*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

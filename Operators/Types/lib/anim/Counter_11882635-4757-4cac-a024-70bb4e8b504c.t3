@@ -1,0 +1,49 @@
+{
+  "Name": "Counter",
+  "Id": "11882635-4757-4cac-a024-70bb4e8b504c",
+  "Namespace": "lib.anim",
+  "Inputs": [
+    {
+      "Id": "eefdb8ca-68e7-4e39-b302-22eb8930fb8c"/*TriggerIncrement*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "7bfbae6b-fa0b-4e5a-8040-e0be3600afeb"/*TriggerReset*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "754cebe3-ab6c-4877-9c32-c67fbae9e4c2"/*StartValue*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "bca3f7b2-a093-4cb3-89a5-0e2681760607"/*Increment*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "73b493cb-91d1-4d4f-b9a8-005017ecac8f"/*Modulo*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "286cbbfb-796d-499f-93d3-d467512110be"/*Rate*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "701e7534-fab2-4204-a68f-66d467e39f66"/*Phase*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "b04d475b-a898-421b-bf26-ae5cf982a351"/*Blending*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "e0c386b9-a987-4d11-9171-2971fa759827"/*SmoothBlending*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "c386b9e0-a987-4d11-9171-2971fa759827"/*AllowSpeedFactor*/,
+      "DefaultValue": 2
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,0 +1,36 @@
+{
+  "Id": "04858a08-f0fe-4536-9152-686659f0ab58"/*DepthStencilStateOp*/,
+  "InputUis": [
+    {
+      "InputId": "956b735b-c38a-4e8e-8186-caf4d36d4d20"/*EnableZTest*/,
+      "Position": {
+        "X": -166.93767,
+        "Y": -30.352303
+      }
+    },
+    {
+      "InputId": "2342df71-a162-4db7-afc3-514916239897"/*EnableZWrite*/,
+      "Position": {
+        "X": -166.93767,
+        "Y": 14.647697
+      }
+    },
+    {
+      "InputId": "27f1f703-7333-49e5-a024-4606e34e8427"/*Comparison*/,
+      "Position": {
+        "X": -185.36584,
+        "Y": 54.21409
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "26e300cd-2dbe-49f2-aab5-a60317df5434"/*DepthState*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

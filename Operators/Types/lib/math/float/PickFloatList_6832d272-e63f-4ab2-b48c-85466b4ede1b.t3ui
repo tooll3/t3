@@ -1,0 +1,31 @@
+{
+  "Id": "6832d272-e63f-4ab2-b48c-85466b4ede1b"/*PickFloatList*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "5a70a1af-d6c5-43bf-acb8-fce2c9a2de3c"/*Input*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b22e2055-ccfd-4379-a3ef-d9b21d347f3d"/*Index*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "32a7d943-e6af-4186-9e1a-0800a62523c2"/*Selected*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

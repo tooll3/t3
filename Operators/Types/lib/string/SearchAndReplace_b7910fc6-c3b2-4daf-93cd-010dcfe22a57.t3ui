@@ -1,0 +1,40 @@
+{
+  "Id": "b7910fc6-c3b2-4daf-93cd-010dcfe22a57"/*SearchAndReplace*/,
+  "Description": "Looks for characters or strings within another string and returns a new string with the matches replaced.",
+  "InputUis": [
+    {
+      "InputId": "3ca66cbd-a16a-479c-b858-84732e5023ad"/*OriginalString*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "4fe3f641-1c36-4970-be71-dafb5632fb53"/*SearchPattern*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "de8297ae-c7d8-414a-8825-d0ff9c2e3d78"/*Replace*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "15672e8f-c483-432e-8ced-f2bd18c1be67"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

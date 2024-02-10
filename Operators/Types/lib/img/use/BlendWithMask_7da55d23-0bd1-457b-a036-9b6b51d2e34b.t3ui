@@ -1,0 +1,216 @@
+{
+  "Id": "7da55d23-0bd1-457b-a036-9b6b51d2e34b"/*BlendWithMask*/,
+  "Description": "Blends two images by the brightness of a 3rd mask image.\n\nIn the mask, fully black areas will only render that portion of image A, and fully white areas will only render that of image B. Values in between will interpolate between the two.",
+  "InputUis": [
+    {
+      "InputId": "7d878133-43cf-44a3-87a2-18d44f74f17d"/*ImageA*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -26.319008,
+        "Y": 399.57715
+      }
+    },
+    {
+      "InputId": "0f542667-8b2c-4fd7-9f9a-d63f1573d25a"/*ColorA*/,
+      "Position": {
+        "X": -26.319008,
+        "Y": 444.57715
+      }
+    },
+    {
+      "InputId": "c68c887c-16f1-4fa2-89a4-4a07d44a0df6"/*ImageB*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -26.319008,
+        "Y": 489.57715
+      }
+    },
+    {
+      "InputId": "f551d82e-bbd5-40fd-9d84-e08d97f06c46"/*ColorB*/,
+      "Position": {
+        "X": -26.319008,
+        "Y": 534.57715
+      }
+    },
+    {
+      "InputId": "d08813be-bd43-4229-86b7-4e53b62b8561"/*Mask*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -26.319008,
+        "Y": 669.57715
+      }
+    },
+    {
+      "InputId": "ff0e3f81-1340-40e7-9c95-b88938d63901"/*Resolution*/,
+      "Position": {
+        "X": -26.319008,
+        "Y": 714.57715
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "d86c6e46-5cbd-4801-98e0-199cef828843"/*Vector4Components*/,
+      "Position": {
+        "X": 148.73776,
+        "Y": 451.9237
+      }
+    },
+    {
+      "ChildId": "ff64625a-fc9c-4919-9eae-b838cecdc3a4"/*Vector4Components*/,
+      "Position": {
+        "X": 148.73776,
+        "Y": 507.92365
+      }
+    },
+    {
+      "ChildId": "202963b2-61ce-48b1-9c4c-cf5a0477932a"/*VertexShader*/,
+      "Position": {
+        "X": 893.95447,
+        "Y": 678.96387
+      }
+    },
+    {
+      "ChildId": "889f8211-ec9e-4fe0-9810-37f99ffa5811"/*RasterizerStateOp*/,
+      "Position": {
+        "X": 896.5825,
+        "Y": 781.20386
+      }
+    },
+    {
+      "ChildId": "1d8662a0-2556-4a94-8879-643514f4f828"/*PixelShader*/,
+      "Position": {
+        "X": 896.5825,
+        "Y": 824.2036
+      }
+    },
+    {
+      "ChildId": "14605cc9-bbf3-43ba-9937-d54c0377c923"/*SamplerStateOp*/,
+      "Position": {
+        "X": 892.41565,
+        "Y": 1160.4324
+      }
+    },
+    {
+      "ChildId": "cbb789b8-c99e-4b6d-ada0-a4babf2f3160"/*BlendStateOp*/,
+      "Position": {
+        "X": 892.41565,
+        "Y": 1203.4324
+      }
+    },
+    {
+      "ChildId": "8d93274d-1cb8-4227-baef-1f6ad48e9496"/*Rasterizer*/,
+      "Position": {
+        "X": 1342.5691,
+        "Y": 848.6929
+      }
+    },
+    {
+      "ChildId": "1bc9e608-ea29-443e-9b01-8b41394ef63b"/*PixelShaderStage*/,
+      "Position": {
+        "X": 1342.5691,
+        "Y": 904.6929
+      }
+    },
+    {
+      "ChildId": "2a968224-41dd-4287-b77b-edd059d01993"/*VertexShaderStage*/,
+      "Position": {
+        "X": 1342.5691,
+        "Y": 756.6926
+      }
+    },
+    {
+      "ChildId": "a43d74bf-48d7-4c62-939c-2f425fdf697e"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 1342.5691,
+        "Y": 700.6926
+      }
+    },
+    {
+      "ChildId": "4cc47435-94fd-4e57-a197-f3c4333a6346"/*OutputMergerStage*/,
+      "Position": {
+        "X": 1342.5691,
+        "Y": 1077.6929
+      }
+    },
+    {
+      "ChildId": "b20b8517-d563-428a-82c3-5da9e05af41a"/*Execute*/,
+      "Position": {
+        "X": 1543.8115,
+        "Y": 703.82446
+      }
+    },
+    {
+      "ChildId": "4ec14438-aa3b-4a99-852c-4f6fb3097bed"/*RenderTarget*/,
+      "Position": {
+        "X": 1784.5686,
+        "Y": 517.42786
+      }
+    },
+    {
+      "ChildId": "9df55df1-8d0f-489d-b08f-0e5c9fc3db32"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 926.88116,
+        "Y": 956.49274
+      }
+    },
+    {
+      "ChildId": "28a1db99-6da8-4d78-a708-97dad6d02598"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 622.8882,
+        "Y": 833.2615
+      }
+    },
+    {
+      "ChildId": "1bf5eec8-010c-456a-be78-126b790f17cc"/*Draw*/,
+      "Position": {
+        "X": 1339.288,
+        "Y": 1138.4858
+      }
+    },
+    {
+      "ChildId": "706f35fd-7ea0-4ab8-8e23-2e2e2febb9b4"/*RenderTargetBlendDesc*/,
+      "Position": {
+        "X": 721.4801,
+        "Y": 1205.5017
+      }
+    },
+    {
+      "ChildId": "2eeca0f6-767a-40f3-91fc-2b04fcc6673a"/*GetTextureSize*/,
+      "Position": {
+        "X": 968.42584,
+        "Y": 387.0159
+      }
+    },
+    {
+      "ChildId": "e8f720be-f254-4cb8-b7ad-9eb842a95a60"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 892.41565,
+        "Y": 1013.87134
+      }
+    },
+    {
+      "ChildId": "4417f6a1-8d56-4bd3-bb6c-f9fabb592689"/*ResolutionConstBuffer*/,
+      "Position": {
+        "X": 1134.2236,
+        "Y": 548.2738
+      }
+    },
+    {
+      "ChildId": "d2c3a258-5a0d-41dd-a40e-012eac31c67e"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 902.37415,
+        "Y": 1073.4302
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "dcf13066-95dc-4c0f-8c8c-379f396502ce"/*Output*/,
+      "Position": {
+        "X": 2053.2158,
+        "Y": 495.20786
+      }
+    }
+  ]
+}

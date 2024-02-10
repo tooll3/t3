@@ -1,0 +1,79 @@
+{
+  "Id": "3096f86e-e850-4f76-80de-1996fc811285"/*LoadObjAsPointsExample*/,
+  "Description": "Shows how to load a point cloud with color information.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "0ca6a0b1-108d-4ca9-86c5-231ce357be14"/*ListToBuffer*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "4463778d-bb71-4bba-8b7b-81163e369ec0"/*LoadObjAsPoints*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "3f7b5aa5-bbf2-4a3e-99b6-ecc8c068bab6"/*SoftTransformPoints*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "68f82425-6764-47d7-a9ea-74daca6f230c"/*OrbitCamera*/,
+      "Position": {
+        "X": 626.49023,
+        "Y": 3.9899902
+      }
+    },
+    {
+      "ChildId": "e327c066-9d5f-48eb-8423-ba0dcb6a4ca8"/*RenderTarget*/,
+      "Position": {
+        "X": 776.49023,
+        "Y": 3.9899902
+      }
+    },
+    {
+      "ChildId": "2b0b88d7-dae5-4ee8-bb75-de94ece27af4"/*_AnimValueOld*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 67.0
+      }
+    },
+    {
+      "ChildId": "2c95bd87-1eef-48d8-bd2b-627422f1bf75"/*Vector3*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 69.0
+      }
+    },
+    {
+      "ChildId": "ad5ad6d8-aeb2-4073-b718-eef07d9399ee"/*_AnimValueOld*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 132.0
+      }
+    },
+    {
+      "ChildId": "ff3b4619-656b-4dee-b4f6-0301830c8790"/*DrawBillboards*/,
+      "Position": {
+        "X": 476.49023,
+        "Y": 3.9899902
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "ee4e55ae-e740-430c-82e7-4c3bdb98062d"/*ColorBuffer*/,
+      "Position": {
+        "X": 1186.4902,
+        "Y": 77.5
+      }
+    }
+  ]
+}

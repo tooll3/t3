@@ -1,0 +1,39 @@
+{
+  "Id": "ad651447-75e7-4491-a56a-f737d70c0522"/*LoadObjAsPoints*/,
+  "Description": "Loads an OBJ point cloud file. These files can be generated with Blender or MeshLab and can contain color information.\n\nYou can use selected operators like [DrawBillboards] that can use the point rotation attribute (XYZW) as RGBA. This is a hack.\n\nYou can also use the [LineVertices] mode to import OBJ files with line definitions and draw them as lines like so:\n[LoadObjAsPoints]->[PrepareSvgLineTransition]->[ListToBuffer]->[DrawLinesBuildup]\n",
+  "InputUis": [
+    {
+      "InputId": "895dab2c-e3be-4e73-9c96-0f6101cea113"/*Path*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 46.995968
+      },
+      "Usage": "FilePath",
+      "FileFilter": "Obj-Files|*.obj"
+    },
+    {
+      "InputId": "dcacd412-1885-4a10-b073-54192f074ae8"/*Mode*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 91.99597
+      }
+    },
+    {
+      "InputId": "0ae6b6c5-80fa-4229-b06b-d9c2ac8c2a3f"/*Sorting*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 136.99597
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "2caeeb72-f67d-4101-9a85-24ab8deeb1c7"/*Points*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

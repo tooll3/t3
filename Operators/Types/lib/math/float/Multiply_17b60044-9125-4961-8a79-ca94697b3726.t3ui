@@ -1,0 +1,35 @@
+{
+  "Id": "17b60044-9125-4961-8a79-ca94697b3726"/*Multiply*/,
+  "Description": "Multiplies two floats.",
+  "InputUis": [
+    {
+      "InputId": "372288fa-3794-47ba-9f91-59240513217a"/*A*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"/*B*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 328.0
+      },
+      "Min": -100.0,
+      "Max": 100.0,
+      "Scale": 0.01
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e011dd8c-1b9c-458f-8960-e6c38e83ca74"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

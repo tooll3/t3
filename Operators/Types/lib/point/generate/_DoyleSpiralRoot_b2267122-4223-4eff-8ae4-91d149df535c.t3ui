@@ -1,0 +1,49 @@
+{
+  "Id": "b2267122-4223-4eff-8ae4-91d149df535c"/*_DoyleSpiralRoot*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "e0ee8c5d-d8c2-4856-858c-d25570a71679"/*P*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "8a4c30b3-a189-4fa1-adc5-66e7a68c75ba"/*Q*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 328.0
+      },
+      "Min": -100.0,
+      "Max": 100.0,
+      "Scale": 0.01
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ca14bde7-b1a4-4e42-b685-6126ae724d64"/*A*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 138.0
+      }
+    },
+    {
+      "OutputId": "97441b22-fd51-4438-be6a-3533e4ff81b5"/*B*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 238.0
+      }
+    },
+    {
+      "OutputId": "b750bb07-9820-4e6b-bcd9-1935598ecc05"/*R*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 338.0
+      }
+    }
+  ]
+}

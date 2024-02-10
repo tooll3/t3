@@ -1,0 +1,54 @@
+{
+  "Id": "4def850e-3627-46d8-ae2b-58b513843885"/*AmplifyValues*/,
+  "Description": "A helper that smooths or amplifies a value list over time. This can be used to extract beats in an audio spectrum.",
+  "InputUis": [
+    {
+      "InputId": "2c6c16e9-2037-4b5e-a4ac-6c5aab0fc582"/*Smoothing*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "dcf2d659-7b51-4a87-8378-ca01419e4b7c"/*MixAverage*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "38d415d3-2ac1-4256-929d-cfdb3fa5c7a9"/*MixCurrent*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "c8f0b975-676f-46a4-b7ef-39d385c82cef"/*MixAboveAverage*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "813a6eab-947d-47a0-af8e-7a92c880d338"/*Input*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "341496d9-d292-41ba-b2e7-468f03fe0bbb"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

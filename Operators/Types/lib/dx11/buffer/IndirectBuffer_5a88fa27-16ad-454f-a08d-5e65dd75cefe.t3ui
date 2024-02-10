@@ -1,0 +1,29 @@
+{
+  "Id": "5a88fa27-16ad-454f-a08d-5e65dd75cefe"/*IndirectBuffer*/,
+  "InputUis": [
+    {
+      "InputId": "38d649d2-861b-4302-a879-973d6405a4de"/*Stride*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "70586a37-4b69-493e-bb47-98d7783db16d"/*Count*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "837133d3-308c-48aa-9afe-b9eb09e76a69"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

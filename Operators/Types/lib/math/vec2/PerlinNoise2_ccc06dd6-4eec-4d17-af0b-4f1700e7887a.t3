@@ -1,0 +1,57 @@
+{
+  "Name": "PerlinNoise2",
+  "Id": "ccc06dd6-4eec-4d17-af0b-4f1700e7887a",
+  "Namespace": "lib.math.vec2",
+  "Inputs": [
+    {
+      "Id": "f294c517-7427-4c14-a397-4605bffc52a4"/*OverrideTime*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "463d2c27-721f-41ad-ba76-5db138d92bf4"/*Frequency*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "cbcbce93-8c8d-41ed-b91b-9e3583c5a3b5"/*Octaves*/,
+      "DefaultValue": 4
+    },
+    {
+      "Id": "a5731884-2efc-4cfd-a098-4a0b4b6bdd6b"/*AmplitudeXY*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0
+      }
+    },
+    {
+      "Id": "0abcff87-ace5-4a06-9217-b2caf831ecae"/*Amplitude*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "d72d0dcf-62d6-498a-838d-88d33d798d4f"/*RangeMin*/,
+      "DefaultValue": {
+        "X": -1.0,
+        "Y": -1.0
+      }
+    },
+    {
+      "Id": "dae5b55c-0c30-4ee9-a535-7654b8357669"/*RangeMax*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0
+      }
+    },
+    {
+      "Id": "c6e1170e-ae4f-44ae-aaab-e1aeb8f86997"/*BiasAndGain*/,
+      "DefaultValue": {
+        "X": 0.5,
+        "Y": 0.5
+      }
+    },
+    {
+      "Id": "c1ffdc20-7c90-49f9-8deb-f0a415e130c8"/*Seed*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
