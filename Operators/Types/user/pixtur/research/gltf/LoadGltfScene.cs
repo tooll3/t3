@@ -32,13 +32,18 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     [Output(Guid = "C2D28EBE-E235-4234-8234-EB56E87ED9AF")]
     public readonly Slot<SceneSetup> ResultSetup = new();
 
+    [Output(Guid = "9891EA8D-7DE7-4DD1-A61E-337ADC569EF3")]
+    public readonly Slot<MeshBuffers> Mesh = new();
+
+    [Output(Guid = "F33EC4C1-F07B-46B3-BEC7-34E91B8312EF")]
+    public readonly Slot<PbrMaterial> Material = new();
+    
     public LoadGltfScene()
     {
         ResultSetup.UpdateAction = Update;
+        Mesh.UpdateAction = Update;
     }
-
-    private SceneSetup _sceneSetup;
-
+    
     private void Update(EvaluationContext context)
     {
         _lastErrorMessage = null;
@@ -46,49 +51,81 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         _offsetRoughness = OffsetRoughness.GetValue(context);
         _offsetMetallic = OffsetMetallic.GetValue(context);
 
-        _sceneSetup = Setup.GetValue(context);
-        if (_sceneSetup == null)
+        var meshChildIndex = MeshChildIndex.GetValue(context);
+        
+        var sceneSetup = Setup.GetValue(context);
+        if ( sceneSetup == null || Setup.Input.IsDefault)
         {
-            _sceneSetup = new SceneSetup();
-            Setup.SetTypedInputValue(_sceneSetup);
+            sceneSetup = new SceneSetup();
+            Setup.SetTypedInputValue(sceneSetup);
         }
 
-        var path = Path.GetValue(context);
+        var filePath = Path.GetValue(context);
 
         _updateTriggered = TriggerUpdate.GetValue(context);
         TriggerUpdate.SetTypedInputValue(false);
-        if (path != _lastFilePath || _updateTriggered)
+
+        if (LoadFileIfRequired(filePath, out var newSetup))
         {
-            _sceneMaterialsByName.Clear();
-            _sceneSetup = new SceneSetup();
-            Setup.SetTypedInputValue(_sceneSetup);
-
-            _lastFilePath = path;
-
-            if (!File.Exists(path))
-            {
-                ShowError($"Gltf File not found: {path}");
-                return;
-            }
-
-            var fullPath = System.IO.Path.GetFullPath(path);
-            try
-            {
-                var model = ModelRoot.Load(fullPath);
-                var rootNode = ConvertToNodeStructure(model.DefaultScene);
-
-                _sceneSetup.RootNodes.Clear();
-                _sceneSetup.RootNodes.Add(rootNode);
-                _sceneSetup.GenerateSceneDrawDispatches();
-            }
-            catch (Exception e)
-            {
-                ShowError($"Failed to load gltf file: {path} \n{e.Message}");
-                return;
-            }
-
-            ResultSetup.Value = _sceneSetup;
+            ResultSetup.Value?.Dispose();
+            Setup.SetTypedInputValue(newSetup); //TODO: this is weird. 
+            ResultSetup.Value = newSetup;
         }
+
+        if (ResultSetup?.Value?.Dispatches != null && ResultSetup.Value.Dispatches.Count > 0)
+        {
+            var dispatchCount = ResultSetup.Value.Dispatches.Count;
+            var index = meshChildIndex.Mod(dispatchCount);
+            Mesh.Value = ResultSetup.Value.Dispatches[index].MeshBuffers;
+            Material.Value = ResultSetup.Value.Dispatches[index].Material;
+        }
+    } 
+    
+    protected override void Dispose(bool isDisposing)
+    {
+        if (!isDisposing)
+            return;
+        
+        ResultSetup.Value?.Dispose();
+ 
+        Log.Debug("Destroying LoadGltfScene");
+    }
+    private bool LoadFileIfRequired(string path, out SceneSetup sceneSetup)
+    {
+        sceneSetup = null;
+        
+        if (!_updateTriggered && path == _lastFilePath)
+            return false;
+
+        _lastFilePath = path;
+
+        _sceneMaterialsByName.Clear();
+        _meshBuffersForPrimitives.Clear();
+        sceneSetup = new SceneSetup();
+
+        if (!File.Exists(path))
+        {
+            ShowError($"Gltf File not found: {path}");
+            return true;
+        }
+
+        var fullPath = System.IO.Path.GetFullPath(path);
+        try
+        {
+            var model = ModelRoot.Load(fullPath);
+            var rootNode = ConvertToNodeStructure(model.DefaultScene);
+            
+            sceneSetup.RootNodes.Clear();
+            sceneSetup.RootNodes.Add(rootNode);
+            sceneSetup.GenerateSceneDrawDispatches();
+        }
+        catch (Exception e)
+        {
+            ShowError($"Failed to load gltf file: {path} \n{e.Message}");
+            return false;
+        }
+        return true;
+
     }
 
     private SceneSetup.SceneNode ConvertToNodeStructure(Scene modelDefaultScene)
@@ -134,8 +171,10 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
             if (child.Mesh != null)
             {
+                var meshIndex = 0;
                 foreach (var meshPrimitive in child.Mesh.Primitives)
                 {
+                    meshIndex++;
                     if (!TryGenerateMeshBuffersFromGltfChild(meshPrimitive, out var meshBuffers, out var errorMessage))
                     {
                         ShowError(errorMessage);
@@ -144,8 +183,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
                     if (meshBuffers == null)
                         continue;
+                    
+                    Log.Debug($" mesh:{child.Name} {child?.Mesh?.Name}  {meshIndex}");
+                    _meshBuffersForPrimitives[meshPrimitive] = meshBuffers;
 
-                    var materialDef = GetOrCreateMaterialDefinition(meshPrimitive.Material);
+                    SceneSetup.SceneMaterial materialDef = GetOrCreateMaterialDefinition(meshPrimitive.Material);
 
                     //Log.Debug("Material: " + materialDef);
 
@@ -289,6 +331,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                                    occlusionTexture, occlusionSrv,
                                                    out var roughnessMetallicOcclusionSrv);
 
+        metallicRoughnessTexture?.Dispose();
+        metallicRoughnessSrv?.Dispose();
+        occlusionTexture?.Dispose();
+        occlusionSrv?.Dispose();
+        
         var newMaterialDef = new SceneSetup.SceneMaterial
                                  {
                                      Name = name,
@@ -472,11 +519,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         {
             using var memStream = new MemoryStream(imageContent.ToArray());
             memStream.Position = 0;
-            var imagingFactory = new ImagingFactory();
+            using var imagingFactory = new ImagingFactory();
 
-            var bitmapDecoder = new BitmapDecoder(imagingFactory, memStream, DecodeOptions.CacheOnDemand);
-            var formatConverter = new FormatConverter(imagingFactory);
-            var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
+            using var bitmapDecoder = new BitmapDecoder(imagingFactory, memStream, DecodeOptions.CacheOnDemand);
+            using var formatConverter = new FormatConverter(imagingFactory);
+            using var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
             formatConverter.Initialize(bitmapFrameDecode, SharpDX.WIC.PixelFormat.Format32bppRGBA, BitmapDitherType.None, null, 0.0,
                                        BitmapPaletteType.Custom);
 
@@ -484,10 +531,10 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             texture.DebugName = channel.Key;
 
             Log.Debug($" Created {gltfMaterial.Name}.{channel.Key} with {texture.Description.Width}×{texture.Description.Height}");
-            bitmapFrameDecode.Dispose();
-            bitmapDecoder.Dispose();
-            formatConverter.Dispose();
-            imagingFactory.Dispose();
+            // bitmapFrameDecode.Dispose();
+            // bitmapDecoder.Dispose();
+            // formatConverter.Dispose();
+            // imagingFactory.Dispose();
 
             srv = new ShaderResourceView(ResourceManager.Device, texture);
             if (srv == null)
@@ -523,9 +570,6 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             {
                 // TODO: Iterate over all primitives
                 var vertexAccessors = meshPrimitive.VertexAccessors;
-                var keys = vertexAccessors.Keys;
-                var keys2 = string.Join(",", keys);
-                // Log.Debug($"found attributes :{keys2}", this);
 
                 // Collect positions
                 if (!vertexAccessors.TryGetValue("POSITION", out var positionAccessor))
@@ -637,8 +681,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                     // tDir =  Vector3.Cross(n1, sDir);
 
                     // Todo: Sadly this fill add significant artifacts to complex meshes
-                    vertexBufferData[a].Tangent = sDir;
-                    vertexBufferData[a].Bitangent = tDir;
+                     
+                    vertexBufferData[a].Tangent = Vector3.Normalize(sDir); 
+                    vertexBufferData[a].Bitangent = Vector3.Normalize(tDir);   
 
                     updatedTangentCount++;
                 }
@@ -681,11 +726,13 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     #endregion
 
     private readonly Dictionary<string, SceneSetup.SceneMaterial> _sceneMaterialsByName = new();
+    private readonly Dictionary<MeshPrimitive, MeshBuffers> _meshBuffersForPrimitives = new();
 
     private float _offsetRoughness;
     private float _offsetMetallic;
     private static SamplerState _combineChannelsSampler;
-    private bool _updateTriggered;
+    private bool _updateTriggered;    
+
 
     #region implement graph node interfaces
     InputSlot<string> IDescriptiveFilename.GetSourcePathSlot()
@@ -728,4 +775,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
     [Input(Guid = "49237499-9B1E-4371-AFAC-4E3394868370")]
     public readonly InputSlot<float> OffsetMetallic = new();
+    
+    [Input(Guid = "FB325383-754A-4702-AFF2-C19E16363460")]
+    public readonly InputSlot<int> MeshChildIndex = new();
 }

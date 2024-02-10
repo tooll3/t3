@@ -1,0 +1,31 @@
+{
+  "Id": "11c5b420-d20b-42df-bc96-8a9e851521e5"/*UseMaterial*/,
+  "Description": "Applies the connected material definition to the context and it will be used by Draw operators further down (left) in the graph.",
+  "InputUis": [
+    {
+      "InputId": "61613a9e-a67c-4a68-9668-c986895f0945"/*SubTree*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "e3a3bc6c-149b-47ae-a73c-a2c5ee571253"/*MaterialReference*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "82d08a85-69ce-4fe9-a1cc-cc211456719e"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

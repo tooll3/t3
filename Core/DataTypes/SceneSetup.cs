@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Rendering.Material;
 using T3.Core.Resource;
@@ -15,7 +14,7 @@ namespace T3.Core.DataTypes;
 /// Combines buffers required for mesh rendering. Eventually this will be an abstraction from
 /// format specific details, so it can be created from gltf, obj, fbx, etc.
 /// </summary>
-public class SceneSetup : IEditableInputType
+public class SceneSetup : IEditableInputType, IDisposable
 {
     // TODO: Implement UI and serialize 
     // private Dictionary<string, string> MaterialAssignments;
@@ -224,4 +223,27 @@ public class SceneSetup : IEditableInputType
                    };
     }
     #endregion
+
+    public void Dispose() => Dispose(true);
+    
+    public void Dispose(bool isDisposing)
+    {
+        if (isDisposing)
+            return;
+        
+        foreach(var dispatch in Dispatches)
+        {
+            dispatch.MeshBuffers.IndicesBuffer.Dispose();
+            dispatch.MeshBuffers.VertexBuffer.Dispose();
+
+            if (dispatch.Material != null)
+            {
+                dispatch.Material.Dispose();
+                dispatch.Material = null;
+            }
+        }
+
+        
+        
+    }
 }

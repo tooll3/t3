@@ -26,6 +26,10 @@
     {
       "Id": "49237499-9b1e-4371-afac-4e3394868370"/*OffsetMetallic*/,
       "DefaultValue": -1.0
+    },
+    {
+      "Id": "fb325383-754a-4702-aff2-c19e16363460"/*MeshChildIndex*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],
