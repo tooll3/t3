@@ -37,7 +37,7 @@ internal static class TextureUtils
         var resourceManager = ResourceManager.Instance();
         try
         {
-            var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, null, () => { });
+            var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
 
             if (ResourceManager.ResourcesById.TryGetValue(srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
                 return srvResource.ShaderResourceView;
@@ -57,7 +57,7 @@ internal static class TextureUtils
         var resourceManager = ResourceManager.Instance();
         try
         {
-            var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, null, () => { });
+            var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
             if (ResourceManager.ResourcesById.TryGetValue(textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
                 return textureResource.Texture;
 

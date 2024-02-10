@@ -3,6 +3,7 @@ using System.IO;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
+using T3.Core.Audio;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -41,7 +42,7 @@ public class RenderSequenceWindow : RenderHelperWindow
                     _isExporting = true;
                     _exportStartedTime = Playback.RunTimeInSecs;
                     FrameIndex = 0;
-                    SetPlaybackTimeForNextFrame();
+                    SetPlaybackTimeForThisFrame();
                     TextureReadAccess.ClearQueue();
                 }
             }
@@ -52,14 +53,15 @@ public class RenderSequenceWindow : RenderHelperWindow
             // with precise frame positioning will be required for exporting audio-reactivity...
             if(FrameIndex>0)
                 Playback.Current.PlaybackSpeed = 1;
-            
+                
+            // handle audio although we do not save it
+            var audioFrame = AudioEngine.LastMixDownBuffer(Playback.LastFrameDuration);
             var success = SaveCurrentFrameAndAdvance(mainTexture);
-            ImGui.ProgressBar(Progress, new Vector2(-1, 4));
+            ImGui.ProgressBar((float) Progress, new Vector2(-1, 4));
 
             var currentTime = Playback.RunTimeInSecs;
             var durationSoFar = currentTime - _exportStartedTime;
-            
-            if (FrameIndex  >= FrameCount +2 || !success)
+            if (FrameIndex >= FrameCount + 2 || !success)
             {
                 var successful = success ? "successfully" : "unsuccessfully";
                 _lastHelpString = $"Sequence export finished {successful} in {durationSoFar:0.00}s";
@@ -74,15 +76,23 @@ public class RenderSequenceWindow : RenderHelperWindow
             {
                 var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
                 _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {FrameIndex+1}/{FrameCount}  ";
-                _lastHelpString += $"{Progress * 100.0:0} %%  {estimatedTimeLeft:0}s left";            }
-
-            if (!_isExporting)
-            {
-                Playback.Current.PlaybackSpeed = _previousPlaybackSpeed;
+                _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0}s left";
+                
+                if (!_isExporting)
+                {
+                    Playback.Current.PlaybackSpeed = _previousPlaybackSpeed;
+                }
             }
         }
 
         CustomComponents.HelpText(_lastHelpString);
+    }
+
+    private static int GetRealFrame()
+    {
+        // since we are double-buffering and discarding the first few frames,
+        // we have to subtract these frames to get the currently really shown framenumber...
+        return FrameIndex - ScreenshotWriter.SkipImages;
     }
 
     private static string GetFilePath()
@@ -96,7 +106,7 @@ public class RenderSequenceWindow : RenderHelperWindow
         {
             var success = ScreenshotWriter.StartSavingToFile(mainTexture, GetFilePath(), _fileFormat);
             FrameIndex++;
-            SetPlaybackTimeForNextFrame();
+            SetPlaybackTimeForThisFrame();
             return success;
         }
         catch (Exception e)

@@ -1,0 +1,86 @@
+{
+  "Id": "9d6dbf28-9983-4584-abba-6281ce51d583",
+  "Variations": [
+    {
+      "Id": "eddeae1d-9fc7-43e9-93b6-ae1fd598316f",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Default",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {}
+      }
+    },
+    {
+      "Id": "135501df-a2ad-4608-a942-29a0d23d4e49",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Ground",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "44fc1e7b-b1d1-4199-b373-8b7c4cc060d2": 10.0,
+          "a89e41bf-5395-41f0-9804-a782ed4c0f30": {
+            "X": -90.0,
+            "Y": 0.0,
+            "Z": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "d85697f6-929e-4bb3-9860-051395632d9c",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Ground tesselated",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "18a5f3be-92a7-438c-b32b-e0da7c7a5736": {
+            "X": 10,
+            "Y": 10
+          },
+          "44fc1e7b-b1d1-4199-b373-8b7c4cc060d2": 10.0,
+          "a89e41bf-5395-41f0-9804-a782ed4c0f30": {
+            "X": -90.0,
+            "Y": 0.0,
+            "Z": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "7fe2f36e-47a2-429c-ad9e-6f7afbd208d0",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Terrain Base",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "18a5f3be-92a7-438c-b32b-e0da7c7a5736": {
+            "X": 100,
+            "Y": 100
+          },
+          "44fc1e7b-b1d1-4199-b373-8b7c4cc060d2": 100.0,
+          "a89e41bf-5395-41f0-9804-a782ed4c0f30": {
+            "X": -90.0,
+            "Y": 0.0,
+            "Z": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

@@ -443,7 +443,8 @@ internal static class InputsAndOutputs
             FlagDependentOpsAsModified(symbol);
             return true;
         }
-
+            
+        warning = "Compilation after reordering inputs failed, aborting the add.";
         return false;
     }
 }

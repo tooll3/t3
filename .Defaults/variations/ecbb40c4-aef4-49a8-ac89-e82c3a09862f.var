@@ -10,9 +10,7 @@
         "X": 163.0,
         "Y": 0.0
       },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {}
-      }
+      "ParameterSetsForChildIds": {}
     },
     {
       "Id": "bca84101-f58d-4fb7-8eb8-f35d9e0e75bd",
@@ -136,6 +134,30 @@
             "Z": 0.31053942,
             "W": 1.0
           }
+        }
+      }
+    },
+    {
+      "Id": "04a901e7-d5d4-4476-8e75-97c6b259eb8c",
+      "IsPreset": true,
+      "ActivationIndex": 7,
+      "Title": "JJ Abrams StarTrek",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c643292c-5612-408a-9fd6-ce31e4de3f56": 0.25,
+          "68e16fd7-fabf-446e-9553-a737422c026b": 3.51,
+          "6bc1a296-1a17-44a2-ba41-2c51c192090c": {
+            "X": 1.0,
+            "Y": 0.9998608,
+            "Z": 0.9994434,
+            "W": 1.0
+          },
+          "943f048f-4938-4cde-9ac3-c7de5242450e": 0,
+          "069a3776-3084-4a13-aee3-dd9fe6c6c9e1": 3
         }
       }
     }

@@ -29,5 +29,10 @@
                 return "???";
             }
         }
+
+        public int FaceCount =>
+            IndicesBuffer?.Srv != null
+                ? IndicesBuffer.Srv.Description.Buffer.ElementCount
+                : 0;
     }
 }

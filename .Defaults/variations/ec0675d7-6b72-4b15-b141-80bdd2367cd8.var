@@ -1,0 +1,131 @@
+{
+  "Id": "ec0675d7-6b72-4b15-b141-80bdd2367cd8",
+  "Variations": [
+    {
+      "Id": "469219af-ce76-44cc-95ae-d5f57316a8b1",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Default",
+      "PosOnCanvas": {
+        "X": 146.54701,
+        "Y": -126.68091
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {}
+      }
+    },
+    {
+      "Id": "8af25446-8777-485c-b202-13eae4e74842",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Squiggly",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "270bcf23-35ee-4c4f-aae5-192435b1aee3": {
+            "X": 0.51,
+            "Y": 0.09,
+            "Z": 0.0
+          },
+          "2cf68ba3-0665-43c8-88ab-64a9fb668ecc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 90.0
+          },
+          "dd46595e-01e5-4616-9682-3a4eb7f63016": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 0.0
+          },
+          "4dffb439-da81-477c-8100-34a9ba59b0ee": 1.1,
+          "5282ad12-aacf-4a62-8fde-df0148ab0f1f": {
+            "X": 0.77,
+            "Y": 0.21
+          }
+        }
+      }
+    },
+    {
+      "Id": "e5e61e0e-6687-4946-83d8-3c992d9be331",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Dust Particles",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "270bcf23-35ee-4c4f-aae5-192435b1aee3": {
+            "X": 0.85,
+            "Y": 0.79,
+            "Z": 0.0
+          },
+          "e5b7c7b0-a207-44c2-b5d4-ef393c5dccb2": 0.88,
+          "dd46595e-01e5-4616-9682-3a4eb7f63016": {
+            "X": 0.86,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          },
+          "5282ad12-aacf-4a62-8fde-df0148ab0f1f": {
+            "X": 0.54,
+            "Y": 0.5
+          }
+        }
+      }
+    },
+    {
+      "Id": "337ec4f2-b438-4d41-8fe2-998731c0ba2c",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "ColorPattern",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "dd46595e-01e5-4616-9682-3a4eb7f63016": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 0.07,
+            "W": 1.0
+          },
+          "5282ad12-aacf-4a62-8fde-df0148ab0f1f": {
+            "X": 0.54,
+            "Y": 0.5
+          },
+          "e86074d8-f77f-4716-9eb9-bb3948c21e68": 11
+        }
+      }
+    },
+    {
+      "Id": "1fb4f087-67bc-44ae-928b-a486419fa74b",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "Flip Stretched Billboards",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "2cf68ba3-0665-43c8-88ab-64a9fb668ecc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 90.0
+          },
+          "5282ad12-aacf-4a62-8fde-df0148ab0f1f": {
+            "X": 0.03,
+            "Y": 0.5
+          }
+        }
+      }
+    }
+  ]
+}

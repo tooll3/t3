@@ -72,11 +72,11 @@ namespace T3.Editor.Gui.Windows
                                                           ref UserSettings.Config.SmartGroupDragging,
                                                           "An experimental features that will drag neighbouring snapped operators",
                                                           UserSettings.Defaults.SmartGroupDragging);
+                                                          
 						changed |= FormInputs.AddCheckBox("Balance soundtrack visualizer",
                                                           ref UserSettings.Config.ExpandSpectrumVisualizerVertically,
                                                           "If true, changes the visualized pitch's logarithmic scale from base 'e' to base 10.\nLower frequencies will become more visible, making the frequency spectrum\n appear more \"balanced\"",
                                                           UserSettings.Defaults.ExpandSpectrumVisualizerVertically);
-                        
                         FormInputs.AddVerticalSpace();
                         FormInputs.SetIndentToParameters();
                         changed |= FormInputs.AddFloat("UI Scale",

@@ -103,4 +103,8 @@ public static class ScreenshotWriter
             LastFilename = request.Filepath;
         }
     }
+
+    // skip a certain number of images at the beginning since the
+    // final content will only appear after several buffer flips
+    public const int SkipImages = 2;
 }

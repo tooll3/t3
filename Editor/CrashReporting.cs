@@ -1,10 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Management;
+using System.Text;
+using System.Text.Json;
+using System.Windows.Forms;
 using ImGuiNET;
 using Sentry;
 using T3.Core.Animation;
-using T3.Core.SystemUi;
+using T3.Core.Logging;
 using T3.Editor.Gui.AutoBackup;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph;
@@ -39,7 +43,7 @@ internal static class CrashReporting
 
         var configuration = "Release";
         #if DEBUG
-                configuration = "Debug";
+        configuration = "Debug";
         #endif
 
         SentrySdk.ConfigureScope(scope => { scope.SetTag("Configuration", configuration); });
@@ -55,7 +59,7 @@ internal static class CrashReporting
                                                  "Oh noooo, how embarrassing! T3 just crashed.",
                                                  $"Last backup was saved {timeSpan} to .t3/backups/",
                                                  "We copied the current operator to your clipboard.",
-                                                 "Check the FAQ on what to do next.",
+                                                 "Please read the Wiki on what to do next.",
                                                  "",
                                                  "Click Yes to send a crash report to tooll.sentry.io.",
                                                  "This will hopefully help us to fix this issue."
@@ -63,6 +67,7 @@ internal static class CrashReporting
                                      @"☠🙈 Damn!",
                                      PopUpButtons.YesNo);
 
+        var sendingEnabled = result == DialogResult.Yes;
 
         sentryEvent.SetTag("Nickname", "anonymous");
         sentryEvent.Contexts["tooll3"]= new
@@ -93,24 +98,53 @@ internal static class CrashReporting
             sentryEvent.SetExtra("CurrentOpExportFailed", e.Message);
         }
 
-        return result == PopUpResult.Yes ? sentryEvent : null;
-    }
-
-    private static void GetGraphicsCardAdapter()
-    {
-        ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController");
-        foreach (ManagementObject mo in searcher.Get())
-        {
-            PropertyData currentBitsPerPixel = mo.Properties["CurrentBitsPerPixel"];
-            PropertyData description = mo.Properties["Description"];
-            if (currentBitsPerPixel != null && description != null)
-            {
-                if (currentBitsPerPixel.Value != null)
-                    System.Console.WriteLine(description.Value);
-            }
-        }
-        //IDirect3D9::GetAdapterIdentifier
-
+        WriteReportToLog(sentryEvent, sendingEnabled);
+        WriteCrashReportFile(sentryEvent);
+        return sendingEnabled ? sentryEvent : null;
     }
     
+    private static void WriteReportToLog(SentryEvent sentryEvent, bool sendingEnabled)
+    {
+        // Write formatted stacktrace for readability
+        if (sentryEvent.Exception != null)
+        {
+            Log.Warning($"{sentryEvent.Exception.Message}\n{sentryEvent.Exception}");
+        }
+
+        // Dump report as json
+        using var stream = new MemoryStream();
+        using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true });
+
+        sentryEvent.WriteTo(writer, null);
+        writer.Flush();
+
+        var eventJson = Encoding.UTF8.GetString(stream.ToArray());
+        Log.Warning($"Encountered crash reported:{sendingEnabled}\n" + eventJson);
+        
+        // Force writing
+        FileWriter.Flush();
+    }
+    
+    /** Additional to logging the crash we also write a copy to a dedicated crash file. */
+    private static void WriteCrashReportFile(SentryEvent sentryEvent)
+    {
+        if (sentryEvent?.Exception == null)
+            return;
+        
+        var exceptionTitle = sentryEvent.Exception.GetType().Name;
+        Directory.CreateDirectory(FileWriter.LogDirectory);
+        var filepath= ($@"{FileWriter.LogDirectory}/crash {exceptionTitle} - {DateTime.Now:yyyy-MM-dd  HH-mm-ss}.txt");
+        
+        using var streamFileWriter = new StreamWriter(filepath);
+        streamFileWriter.WriteLine($"{sentryEvent.Exception.Message}\n{sentryEvent.Exception}");
+        
+        using var memoryStream = new MemoryStream();
+        using var jsonWriter = new Utf8JsonWriter(memoryStream, new JsonWriterOptions { Indented = true });
+
+        sentryEvent.WriteTo(jsonWriter, null);
+        jsonWriter.Flush();
+
+        streamFileWriter.WriteLine(Encoding.UTF8.GetString(memoryStream.ToArray()));
+        streamFileWriter.Flush();
+    }
 }

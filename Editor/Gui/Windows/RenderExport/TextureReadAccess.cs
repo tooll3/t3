@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -182,8 +182,7 @@ internal static class TextureReadAccess
         var resourceManager = ResourceManager.Instance();
 
         var success = resourceManager.TryCreateShaderResource(out _convertComputeShaderResource,
-                                                              relativePath: sourcePath,
-                                                              instance: null,
+                                                              fileName: sourcePath,
                                                               entryPoint: entryPoint,
                                                               name: debugName,
                                                               errorMessage: out var errorMessage);

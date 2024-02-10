@@ -24,6 +24,8 @@
             UseImageB_RGB = 6,
             ColorDodge = 7,
             LinearDodge = 8,
+            MultiplyA = 9,
+
         }
     }
 }

@@ -93,7 +93,7 @@
       "Id": "5f0f2af2-9f91-4cc7-b126-e2a394df6d94",
       "IsPreset": true,
       "ActivationIndex": 4,
-      "Title": "Negative",
+      "Title": "Color boost",
       "PosOnCanvas": {
         "X": 346.9055,
         "Y": 87.34972
@@ -179,6 +179,84 @@
             "W": 0.0
           },
           "9756e240-6527-4cda-accd-e8096682b6bd": 0.76
+        }
+      }
+    },
+    {
+      "Id": "b89ade39-1d03-4f7c-9d39-566ee14550fe",
+      "IsPreset": true,
+      "ActivationIndex": 7,
+      "Title": "Threshold Mask",
+      "PosOnCanvas": {
+        "X": 20.90538,
+        "Y": 180.34972
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "7db67f48-5947-422b-8eb3-33d641cc276e": {
+            "X": 0.0,
+            "Y": 0.525
+          }
+        }
+      }
+    },
+    {
+      "Id": "58eb845f-4342-4363-af7e-bca26e38740f",
+      "IsPreset": true,
+      "ActivationIndex": 8,
+      "Title": "Vibrant Reds",
+      "PosOnCanvas": {
+        "X": 346.9055,
+        "Y": 180.34972
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "7307d198-d2d5-41d4-b8b8-d2ece26dade8": -1.0,
+          "d09c7a75-d02d-421b-ba0f-17b345f523ec": {
+            "X": 0.8367279,
+            "Y": 0.9131716,
+            "Z": 1.0,
+            "W": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "f861f801-07ed-4c19-8ee6-f02ababcca0e",
+      "IsPreset": true,
+      "ActivationIndex": 9,
+      "Title": "Colors!",
+      "PosOnCanvas": {
+        "X": 183.90549,
+        "Y": 180.34972
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "7307d198-d2d5-41d4-b8b8-d2ece26dade8": -0.76
+        }
+      }
+    },
+    {
+      "Id": "9e2d17f1-443c-4eb9-b87a-3b91a200e27a",
+      "IsPreset": true,
+      "ActivationIndex": 10,
+      "Title": "B&W Portrait",
+      "PosOnCanvas": {
+        "X": 346.9055,
+        "Y": 273.34973
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "d09c7a75-d02d-421b-ba0f-17b345f523ec": {
+            "X": 1.0,
+            "Y": 0.8716727,
+            "Z": 0.76290405,
+            "W": 0.0
+          },
+          "7db67f48-5947-422b-8eb3-33d641cc276e": {
+            "X": 0.445,
+            "Y": 0.455
+          }
         }
       }
     }

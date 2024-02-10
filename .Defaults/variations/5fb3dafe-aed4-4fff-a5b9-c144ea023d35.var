@@ -1,0 +1,175 @@
+{
+  "Id": "5fb3dafe-aed4-4fff-a5b9-c144ea023d35",
+  "Variations": [
+    {
+      "Id": "88455bb8-1f60-463b-862c-6ecd6a0b9266",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Default",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {}
+      }
+    },
+    {
+      "Id": "b39c6fa4-63b8-4c9b-b804-1820e761499b",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Tetra",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6f327667-9054-4952-9f8f-570fa5497b13": {
+            "X": 3,
+            "Y": 2
+          }
+        }
+      }
+    },
+    {
+      "Id": "2b0f777a-a869-4961-8bde-316bde34796a",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Oktaeder",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6f327667-9054-4952-9f8f-570fa5497b13": {
+            "X": 4,
+            "Y": 2
+          }
+        }
+      }
+    },
+    {
+      "Id": "9dd2439a-adc0-440d-97ba-6ee234de5080",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Dekaeder",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6f327667-9054-4952-9f8f-570fa5497b13": {
+            "X": 5,
+            "Y": 1
+          }
+        }
+      }
+    },
+    {
+      "Id": "1a470d65-92a3-47a7-926c-eb7778b49608",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "Pentadekaeder",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6f327667-9054-4952-9f8f-570fa5497b13": {
+            "X": 5,
+            "Y": 3
+          }
+        }
+      }
+    },
+    {
+      "Id": "9d940b5f-04cf-421f-bb1a-89bd97c51cf6",
+      "IsPreset": true,
+      "ActivationIndex": 7,
+      "Title": "Sphere lowest",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6f327667-9054-4952-9f8f-570fa5497b13": {
+            "X": 6,
+            "Y": 5
+          }
+        }
+      }
+    },
+    {
+      "Id": "9d3f6ddc-fc3c-4d2c-9c20-965ec12af139",
+      "IsPreset": true,
+      "ActivationIndex": 8,
+      "Title": "Sphere low",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6f327667-9054-4952-9f8f-570fa5497b13": {
+            "X": 8,
+            "Y": 6
+          }
+        }
+      }
+    },
+    {
+      "Id": "12a82cea-11a1-4834-a834-52e2dfd107eb",
+      "IsPreset": true,
+      "ActivationIndex": 9,
+      "Title": "Sphere mid",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 279.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6f327667-9054-4952-9f8f-570fa5497b13": {
+            "X": 12,
+            "Y": 8
+          }
+        }
+      }
+    },
+    {
+      "Id": "c4e3c175-54c5-46c5-9f3e-2535a2501ef2",
+      "IsPreset": true,
+      "ActivationIndex": 10,
+      "Title": "Sphere high",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 279.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {}
+      }
+    },
+    {
+      "Id": "03c298c0-9514-4840-b8c2-5026a199c7f2",
+      "IsPreset": true,
+      "ActivationIndex": 11,
+      "Title": "Sphere detailed",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 279.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6f327667-9054-4952-9f8f-570fa5497b13": {
+            "X": 128,
+            "Y": 64
+          }
+        }
+      }
+    }
+  ]
+}
