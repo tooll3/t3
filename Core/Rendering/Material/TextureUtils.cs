@@ -8,7 +8,7 @@ using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.Rendering.Material;
 
-internal static class TextureUtils
+public static class TextureUtils
 {
     public static Texture2D CreateColorTexture(Vector4 c)
     {

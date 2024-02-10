@@ -23,6 +23,22 @@
         "X": 51.512096,
         "Y": 271.99597
       }
+    },
+    {
+      "InputId": "d7ae3173-c490-47cf-8d4b-4c25102f6904"/*OffsetRoughness*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 316.99597
+      },
+      "Description": "This is a temporary offset that probably will become obsolete soon."
+    },
+    {
+      "InputId": "49237499-9b1e-4371-afac-4e3394868370"/*OffsetMetallic*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 361.99597
+      },
+      "Description": "This is a temporary offset that probably will become obsolete soon."
     }
   ],
   "SymbolChildUis": [],

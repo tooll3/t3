@@ -19,6 +19,7 @@ public static class PbrContextSettings
     private static void InitDefaultMaterialAndResources()
     {
         WhitePixelTexture = TextureUtils.CreateColorTexture(new Vector4(1, 1, 1, 1));
+        BlackPixelTexture = TextureUtils.CreateColorTexture(new Vector4(0, 0, 0, 0));
 
         PbrLookUpTextureSrv = TextureUtils.LoadTextureAsSrv(@"Resources\common\images\BRDF-LookUp.dds");
         _prefilteredBrdfTexture = TextureUtils.LoadTexture(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
@@ -29,7 +30,8 @@ public static class PbrContextSettings
 
     private static PbrMaterial _defaultMaterial;
 
-    public static Texture2D WhitePixelTexture;
+    public static Texture2D WhitePixelTexture; // TODO: move to something like shared resource
+    public static Texture2D BlackPixelTexture; // TODO: move to something like shared resource
     
     public static ShaderResourceView PbrLookUpTextureSrv;
     
