@@ -163,7 +163,7 @@ namespace T3.Core.Operator.Slots
                     _actionBeforeAddingConnecting = UpdateAction;
                     if (Parent.Children.Count > 0 && Parent is ICompoundWithUpdate compoundWithUpdate && this is not IInputSlot)
                     {
-                        Log.Debug($"Skipping connection for compound op with update method for {Parent.Symbol} {this}", compoundWithUpdate);
+                        //Log.Debug($"Skipping connection for compound op with update method for {Parent.Symbol} {this}", compoundWithUpdate);
                         //compoundWithUpdate.RegisterOutputUpdateAction(this, ConnectedUpdate);
                         InputConnection.Insert(index, (Slot<T>)sourceSlot);
                         DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
