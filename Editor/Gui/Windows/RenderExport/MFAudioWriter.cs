@@ -41,13 +41,13 @@ namespace T3.Editor.Gui.Windows.RenderExport;
 
 internal struct WaveFormatExtension
 {
-    private SharpDX.Multimedia.WaveFormatEncoding _wFormatTag;
-    private ushort _nChannels;
-    private uint _nSamplesPerSec;
-    private uint _nAvgBytesPerSec;
-    private ushort _nBlockAlign;
-    private ushort _wBitsPerSample;
-    //public ushort cbSize;
+    public SharpDX.Multimedia.WaveFormatEncoding _wFormatTag;
+    public ushort _nChannels;
+    public uint _nSamplesPerSec;
+    public uint _nAvgBytesPerSec;
+    public ushort _nBlockAlign;
+    public ushort _wBitsPerSample;
+    public ushort _cbSize;
 
     public static WaveFormatExtension DefaultPcm
     {
@@ -56,13 +56,13 @@ internal struct WaveFormatExtension
             var waveFormatEx = new WaveFormatExtension
                                    {
                                        _wFormatTag = SharpDX.Multimedia.WaveFormatEncoding.Pcm,
-                                       _nChannels = 1,
-                                       _nSamplesPerSec = 16000,
-                                       _wBitsPerSample = 32
+                                       _nChannels = 2,
+                                       _nSamplesPerSec = 48000,
+                                       _wBitsPerSample = 24
                                    };
             waveFormatEx._nBlockAlign = (ushort)(waveFormatEx._nChannels * waveFormatEx._wBitsPerSample / 8);
             waveFormatEx._nAvgBytesPerSec = waveFormatEx._nSamplesPerSec * waveFormatEx._nBlockAlign;
-            //waveFormatEx.cbSize = 0;
+            waveFormatEx._cbSize = 0;
 
             return waveFormatEx;
         }
@@ -75,13 +75,14 @@ internal struct WaveFormatExtension
             var waveFormatEx = new WaveFormatExtension
                                    {
                                        _wFormatTag = SharpDX.Multimedia.WaveFormatEncoding.IeeeFloat,
-                                       _nChannels = 1,
-                                       _nSamplesPerSec = 16000,
+                                       _nChannels = 2,
+                                       _nSamplesPerSec = 48000,
                                        _wBitsPerSample = 32
                                    };
             waveFormatEx._nBlockAlign = (ushort)(waveFormatEx._nChannels * waveFormatEx._wBitsPerSample / 8);
             waveFormatEx._nAvgBytesPerSec = waveFormatEx._nSamplesPerSec * waveFormatEx._nBlockAlign;
-            //waveFormatEx.cbSize = 0;
+            waveFormatEx._cbSize = 0;
+
             return waveFormatEx;
         }
     }
@@ -118,6 +119,7 @@ internal class MediaFoundationAudioWriter
             if (c.ResultCode.Code == MF.ResultCode.NotFound.Code)
             {
                 // Don't worry if we didn't find any - just means no encoder available for this type
+                //return new MF.MediaType[0];
                 return Array.Empty<MF.MediaType>();
             }
             throw;
@@ -127,9 +129,8 @@ internal class MediaFoundationAudioWriter
         var mediaTypes = new List<MF.MediaType>(count);
         for (var n = 0; n < count; n++)
         {
-            var mediaTypeObject = availableTypes.GetElement(n);
-            mediaTypes.Add(new MF.MediaType((System.IntPtr)(mediaTypeObject.AddReference())));
-            mediaTypeObject.Release();
+            ComObject mediaTypeObject = (ComObject)availableTypes.GetElement(n);
+            mediaTypes.Add(new MF.MediaType(mediaTypeObject.NativePointer));
         }
         availableTypes.Dispose();
         return mediaTypes.ToArray();
@@ -163,12 +164,12 @@ internal class MediaFoundationAudioWriter
     private static MF.MediaType SelectMediaType(Guid audioSubtype, SharpDX.Multimedia.WaveFormat inputFormat, int desiredBitRate)
     {
         return GetOutputMediaTypes(audioSubtype)
-              .Where(mt => mt.Get(MF.MediaTypeAttributeKeys.AudioSamplesPerSecond) == inputFormat.SampleRate &&
-                           mt.Get(MF.MediaTypeAttributeKeys.AudioNumChannels) == inputFormat.Channels)
-              .Select(mt => new { MediaType = mt, Delta = Math.Abs(desiredBitRate - mt.Get(MF.MediaTypeAttributeKeys.AudioAvgBytesPerSecond) * 8) })
-              .OrderBy(mt => mt.Delta)
-              .Select(mt => mt.MediaType)
-              .FirstOrDefault();
+            .Where(mt => mt.Get(MF.MediaTypeAttributeKeys.AudioSamplesPerSecond) == inputFormat.SampleRate &&
+                mt.Get(MF.MediaTypeAttributeKeys.AudioNumChannels) == inputFormat.Channels)
+            .Select(mt => new { MediaType = mt, Delta = Math.Abs(desiredBitRate - mt.Get(MF.MediaTypeAttributeKeys.AudioAvgBytesPerSecond) * 8) })
+            .OrderBy(mt => mt.Delta)
+            .Select(mt => mt.MediaType)
+            .FirstOrDefault();
     }
 
     private readonly int _streamIndex;
@@ -194,12 +195,15 @@ internal class MediaFoundationAudioWriter
         sinkWriter.SetInputMediaType(_streamIndex, inputMediaType, null);
     }
 
-    public MF.Sample CreateSampleFromFrame(byte[] data)
+    public MF.Sample CreateSampleFromFrame(ref byte[] data)
     {
         var mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(data.Length);
 
         // Write all contents to the MediaBuffer for media foundation
-        var mediaBufferPointer = mediaBuffer.Lock(out _, out _);
+        int cbMaxLength = 0;
+        int cbCurrentLength = 0;
+        IntPtr mediaBufferPointer = mediaBuffer.Lock(out cbMaxLength, out cbCurrentLength);
+        //var mediaBufferPointer = mediaBuffer.Lock(out _, out _);
         try
         {
             Marshal.Copy(data, 0, mediaBufferPointer, data.Length);
@@ -227,3 +231,14 @@ internal class Mp3AudioWriter : MediaFoundationAudioWriter
 
     public override Guid AudioFormat => MF.AudioFormatGuids.Mp3;
 }
+
+class FlacAudioWriter : MediaFoundationAudioWriter
+{
+    public FlacAudioWriter(MF.SinkWriter sinkWriter, ref WaveFormatExtension waveFormat, int desiredBitRate = 192000)
+        : base(sinkWriter, ref waveFormat, desiredBitRate)
+    {
+    }
+
+    public override Guid AudioFormat => MF.AudioFormatGuids.Flac;
+}
+

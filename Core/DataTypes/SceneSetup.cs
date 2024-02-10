@@ -38,6 +38,16 @@ public class SceneSetup : IEditableInputType
         public Transform Transform;
         public string MeshName;
         public MeshBuffers MeshBuffers;
+        public SceneMaterial Material;
+    }
+
+    /// <summary>
+    /// Holds information required for building a T3 PbrMaterial.
+    /// </summary>
+    public class SceneMaterial
+    {
+        public string Name;
+        public PbrMaterial.PbrParameters PbrParameters;
     }
 
     // FIXME: This should probably be moved to somewhere in core -> Rendering
@@ -68,7 +78,7 @@ public class SceneSetup : IEditableInputType
     /// <summary>
     /// Holds settings for a node inside the scene
     /// </summary>
-    public struct NodeSetting
+    public class NodeSetting
     {
         public int NodeHashId;
         public string PbrMaterialId;

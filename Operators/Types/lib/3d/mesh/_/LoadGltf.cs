@@ -133,7 +133,7 @@ public class LoadGltf : Instance<LoadGltf>
                                                                     Texcoord = texCoords == null
                                                                                    ? Vector2.Zero
                                                                                    : new Vector2(texCoords[vertexIndex].X,
-                                                                                                 texCoords[vertexIndex].Y),
+                                                                                                 1-texCoords[vertexIndex].Y),
                                                                     Selection = 1,
                                                                 };
                 }
