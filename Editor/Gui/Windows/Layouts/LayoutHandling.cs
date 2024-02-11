@@ -10,6 +10,8 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
 
+#nullable enable
+
 namespace T3.Editor.Gui.Windows.Layouts
 {
     /// <summary>
@@ -72,14 +74,16 @@ namespace T3.Editor.Gui.Windows.Layouts
 
             ApplyLayout(new Layout
                             {
-                                WindowConfigs = WindowManager.GetAllWindows().Select(window => window.Config).ToList()
+                                WindowConfigs = WindowManager
+                                               .GetAllWindows()
+                                               .Select(window => window.Config)
+                                               .Where(config => config != null)
+                                               .ToList()
                             });
         }
 
         private static void ApplyLayout(Layout layout)
         {
-            layout.WindowConfigs ??= new List<Window.WindowConfig>();
-
             // First update windows settings
             foreach (var config in layout.WindowConfigs)
             {
@@ -229,8 +233,8 @@ namespace T3.Editor.Gui.Windows.Layouts
         /// </summary>
         private class Layout
         {
-            public List<Window.WindowConfig> WindowConfigs;
-            public string ImGuiSettings;
+            public List<Window.WindowConfig> WindowConfigs = new();
+            public string? ImGuiSettings;
         }
 
         private const string LayoutFileNameFormat = "layout{0}.json";

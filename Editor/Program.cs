@@ -174,6 +174,7 @@ namespace T3.Editor
             T3Style.Apply();
 
             ProgramWindows.Main.RunRenderLoop(UiContentUpdate.RenderCallback);
+            IsShuttingDown = true;
 
             try
             {
@@ -203,5 +204,6 @@ namespace T3.Editor
         public static readonly ConsoleLogWindow ConsoleLogWindow = new();
         public static T3Ui T3Ui;
         public static string RequestImGuiLayoutUpdate;
+        public static bool IsShuttingDown;
     }
 }

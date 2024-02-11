@@ -181,8 +181,11 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
         private void SetupTexture(Int2 size)
         {
-            if (size.Width <= 0 || size.Height <= 0)
+            if (size.Width <= 0 || size.Height <= 0 || size.Width > 16383 || size.Height > 16383)
+            {
+                Log.Warning($"Texture size {size} is invalid, using 512x512 instead.");
                 size = new Int2(512, 512);
+            }
 
             Texture.DirtyFlag.Clear();
 

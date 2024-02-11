@@ -60,11 +60,10 @@ namespace T3.Editor.Gui.Templates
                               TemplateSymbolId = Guid.Parse("0db659a4-d0ba-4d23-acac-aea5ba5b57dc"),
                               AfterSetupAction = (newInstance, name, nameSpace, description, resourceFolder) =>
                                                  {
-                                                     Directory.CreateDirectory(Path.Combine(resourceFolder, "shader"));
-
                                                      // Duplicate and assign new shader source file
                                                      try
                                                      {
+                                                         Directory.CreateDirectory(Path.Combine(resourceFolder, "shader"));
                                                          var newShaderFilename = $@"{resourceFolder}shader\{name}.hlsl";
                                                          var shaderInstance = newInstance.Children.SingleOrDefault(c => c.Symbol.Id ==
                                                              Guid.Parse("a256d70f-adb3-481d-a926-caf35bd3e64c"));
@@ -102,18 +101,17 @@ namespace T3.Editor.Gui.Templates
                               TemplateSymbolId = Guid.Parse("fdd58452-ecb4-458d-9f5b-9bce356d5125"),
                               AfterSetupAction = (newInstance, name, nameSpace, description, resourceFolder) =>
                                                  {
-                                                     Directory.CreateDirectory(Path.Combine(resourceFolder, "shader"));
-                      
                                                      // Duplicate and assign new shader source file
                                                      try
                                                      {
+                                                         Directory.CreateDirectory(Path.Combine(resourceFolder, "shader"));
                                                          var newShaderFilename = $@"{resourceFolder}shader\{name}.hlsl";
                                                          var shaderSetupInstance = newInstance.Children.SingleOrDefault(c => c.Symbol.Id ==
                                                              Guid.Parse("bd0b9c5b-c611-42d0-8200-31af9661f189"));
 
                                                          File.Copy(@"Resources\examples\templates\ImgFxShaderTemplate.hlsl",
                                                                    newShaderFilename);
-                      
+
                                                          if (shaderSetupInstance is _ImageFxShaderSetupStatic shaderSetup)
                                                          {
                                                              shaderSetup.Source.TypedInputValue.Value = newShaderFilename;
@@ -124,7 +122,7 @@ namespace T3.Editor.Gui.Templates
                                                          {
                                                              Log.Warning("Can't find pixel shader for source file");
                                                          }
-                      
+
                                                          // Open editor
                                                          Process.Start(new ProcessStartInfo(newShaderFilename) { UseShellExecute = true });
                                                      }
@@ -133,7 +131,7 @@ namespace T3.Editor.Gui.Templates
                                                          Log.Warning("Assigning new shader failed: " + e.Message);
                                                      }
                                                  }
-                          },                      
+                          },
                   };
     }
 }

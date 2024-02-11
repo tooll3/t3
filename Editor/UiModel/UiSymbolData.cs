@@ -87,8 +87,8 @@ public partial class UiSymbolData : SymbolData
                 continue;
             }
 
-            if (enableLog)
-                Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
+            // if (enableLog)
+            //     Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
         }
     }
 

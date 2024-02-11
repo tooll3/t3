@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using T3.Core.Logging;
 using T3.Editor.Gui.Selection;
 using T3.Editor.UiModel;
 
@@ -76,6 +77,12 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Undo()
         {
+            if (_entries == null)
+            {
+                Log.Warning("Undoing ModifyCanvasElementsCommand without stored values?");
+                return;    
+            }
+            
             foreach (var entry in _entries)
             {
                 var selectable = GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);

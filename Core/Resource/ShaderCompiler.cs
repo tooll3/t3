@@ -102,7 +102,17 @@ public abstract class ShaderCompiler
             return false;
         }
 
-        var fileText = File.ReadAllText(srcFile);
+        string fileText;
+        try
+        {
+            fileText = File.ReadAllText(srcFile);
+        }
+        catch (Exception e)
+        {
+            errorMessage = $"Failed to read shader file '{srcFile}'.\n{e.Message}";
+            Log.Error(errorMessage);
+            return false;
+        }
         return TryCompileShaderFromSource(fileText, entryPoint, name, ref shader, ref blob, out errorMessage);
     }
 

@@ -21,6 +21,10 @@ internal static class UiContentUpdate
 {
     public static void RenderCallback()
     {
+        // An attempt to prevent System.ObjectDisposedException
+        if (Program.IsShuttingDown)
+            return;
+        
         var cursorPos = Cursor.Position;
         CursorPosOnScreen = new Vector2(cursorPos.X, cursorPos.Y);
         IsCursorInsideAppWindow = ProgramWindows.Main.IsCursorOverWindow;
