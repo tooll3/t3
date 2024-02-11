@@ -664,7 +664,7 @@
           }
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 1.3666667
         },
@@ -1034,14 +1034,9 @@
           }
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 0.49
-        },
-        {
-          "Id": "fbe7e415-5740-4f44-ad4e-32e01c6eb1ad"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 0.013333334
         }
       ],
       "Outputs": []
