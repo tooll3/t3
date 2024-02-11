@@ -182,9 +182,10 @@ internal static class TextureReadAccess
         var resourceManager = ResourceManager.Instance();
 
         var success = resourceManager.TryCreateShaderResource(out _convertComputeShaderResource,
-                                                              fileName: sourcePath,
+                                                              relativePath: sourcePath,
                                                               entryPoint: entryPoint,
                                                               name: debugName,
+                                                              instance: null,
                                                               errorMessage: out var errorMessage);
 
         if (!success || !string.IsNullOrWhiteSpace(errorMessage))

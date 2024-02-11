@@ -53,20 +53,21 @@ namespace T3.Core.Logging
         private readonly StreamWriter _streamWriter;
         private static FileWriter? Instance { get; set; }
 
-        public static ILogWriter CreateDefault()
+        public static ILogWriter CreateDefault(string rootDirectory)
         {
-            
-            Directory.CreateDirectory(LogDirectory);
+            var logDirectory = Path.Combine(rootDirectory, LogSubDirectory);
+            Directory.CreateDirectory(logDirectory);
             if (Instance != null)
                 return Instance;
             
-            Instance = new FileWriter($@".t3\log\{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.log")
+            var path = Path.Combine(logDirectory, $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss_fff}.log");
+            Instance = new FileWriter(path)
                            {
                                Filter = ILogEntry.EntryLevel.All
                            };
             return Instance;
         }
         
-        public const string LogDirectory = @".t3\log\";
+        public const string LogSubDirectory = "log";
     }
 }

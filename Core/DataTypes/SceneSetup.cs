@@ -7,6 +7,7 @@ using T3.Core.Logging;
 using T3.Core.Rendering.Material;
 using T3.Core.Resource;
 using T3.Core.Utils.Geometry;
+using T3.Serialization;
 
 namespace T3.Core.DataTypes;
 

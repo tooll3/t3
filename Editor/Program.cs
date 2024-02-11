@@ -78,10 +78,9 @@ namespace T3.Editor
             splashScreen.Show(path);
 
             Console.WriteLine("Initializing logging");
-            var logDirectory = Path.Combine(UserData.SettingsFolder, "log");
             Log.AddWriter(splashScreen);
             Log.AddWriter(new ConsoleWriter());
-            Log.AddWriter(FileWriter.CreateDefault(logDirectory));
+            Log.AddWriter(FileWriter.CreateDefault(UserData.SettingsFolder));
             Log.AddWriter(StatusErrorLine);
             Log.AddWriter(ConsoleLogWindow);
             Log.Debug($"Starting {Version}");

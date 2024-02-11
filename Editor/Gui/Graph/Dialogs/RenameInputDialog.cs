@@ -61,7 +61,7 @@ public class RenameInputDialog : ModalDialog
         // ImGui.SetNextItemWidth(150);
 
         //var warning = String.Empty;
-        var isValid = GraphUtils.IsNewSymbolNameValid(_newInputName);
+        var isValid = GraphUtils.IsNewSymbolNameValid(symbol.SymbolPackage, _newInputName);
         if (!isValid)
         {
             _lastWarning = "Invalid name";

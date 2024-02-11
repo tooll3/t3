@@ -22,12 +22,11 @@ using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Editor.UiModel;
 
-public partial class UiSymbolData
+static class UiRegistration
 {
-    static UiSymbolData()
+    static UiRegistration()
     {
         RegisterUiTypes();
-        RegisterCustomChildUis();
     }
 
     public static class TypeByNameRegistry
@@ -37,6 +36,11 @@ public partial class UiSymbolData
 
     private static void RegisterCustomChildUis()
     {
+        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227.LoadObj), DescriptiveUi.DrawChildUi);
+        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c.ComputeShader), DescriptiveUi.DrawChildUi);
+        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad.VertexShader), DescriptiveUi.DrawChildUi);
+        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985.PixelShader), DescriptiveUi.DrawChildUi);
+
         // register custom UIs for symbol children
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c.Counter), CounterUi.DrawChildUi);
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05.GpuMeasure), GpuMeasureUi.DrawChildUi);
@@ -58,11 +62,6 @@ public partial class UiSymbolData
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4.Boolean), BooleanUi.DrawChildUi);
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_0bec016a_5e1b_467a_8273_368d4d6b9935.Trigger), TriggerUi.DrawChildUi);
 
-        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227.LoadObj), DescriptiveUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c.ComputeShader), DescriptiveUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad.VertexShader), DescriptiveUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985.PixelShader), DescriptiveUi.DrawChildUi);
-
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_470db771_c7f2_4c52_8897_d3a9b9fc6a4e.GetIntVar), GetIntVarUi.DrawChildUi);
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_e6072ecf_30d2_4c52_afa1_3b195d61617b.GetFloatVar), GetFloatVarUi.DrawChildUi);
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789.SetFloatVar), SetFloatVarUi.DrawChildUi);
@@ -70,7 +69,7 @@ public partial class UiSymbolData
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c.AudioReaction), AudioReactionUi.DrawChildUi);
     }
 
-    private static void RegisterUiTypes()
+    public static void RegisterUiTypes()
     {
         // build-in types
         RegisterUiType(typeof(float), new ValueUiProperties(), () => new FloatInputUi(), () => new FloatOutputUi());
@@ -78,7 +77,7 @@ public partial class UiSymbolData
         RegisterUiType(typeof(bool), new ValueUiProperties(), () => new BoolInputUi(), () => new ValueOutputUi<bool>());
         RegisterUiType(typeof(double), new ValueUiProperties(), () => new FloatInputUi(), () => new FloatOutputUi());
         RegisterUiType(typeof(string), new StringUiProperties(), () => new StringInputUi(), () => new ValueOutputUi<string>());
-        
+
         // system types
         RegisterUiType(typeof(System.Numerics.Vector2), new ValueUiProperties(), () => new Vector2InputUi(),
                        () => new VectorOutputUi<System.Numerics.Vector2>());
@@ -89,12 +88,11 @@ public partial class UiSymbolData
         RegisterUiType(typeof(System.Numerics.Quaternion), new ValueUiProperties(), () => new Vector4InputUi(),
                        () => new VectorOutputUi<System.Numerics.Quaternion>());
 
-        
         RegisterUiType(typeof(System.Collections.Generic.List<float>), new ValueUiProperties(), () => new FloatListInputUi(),
                        () => new FloatListOutputUi());
         RegisterUiType(typeof(System.Collections.Generic.List<string>), new StringUiProperties(), () => new StringListInputUi(),
                        () => new StringListOutputUi());
-        
+
         RegisterUiType(typeof(System.Text.StringBuilder), new StringUiProperties(), () => new FallbackInputUi<StringBuilder>(),
                        () => new ValueOutputUi<System.Text.StringBuilder>());
 
@@ -112,11 +110,11 @@ public partial class UiSymbolData
 
         RegisterUiType(typeof(T3.Core.DataTypes.Gradient), new ValueUiProperties(), () => new GradientInputUi(),
                        () => new ValueOutputUi<T3.Core.DataTypes.Gradient>());
-        
-        
-        RegisterUiType(typeof(T3.Core.DataTypes.LegacyParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<T3.Core.DataTypes.LegacyParticleSystem>(),
+
+        RegisterUiType(typeof(T3.Core.DataTypes.LegacyParticleSystem), new FallBackUiProperties(),
+                       () => new FallbackInputUi<T3.Core.DataTypes.LegacyParticleSystem>(),
                        () => new ValueOutputUi<T3.Core.DataTypes.LegacyParticleSystem>());
-        RegisterUiType(typeof(T3.Core.DataTypes.ParticleSystem), new FallBackUiProperties(), 
+        RegisterUiType(typeof(T3.Core.DataTypes.ParticleSystem), new FallBackUiProperties(),
                        () => new FallbackInputUi<T3.Core.DataTypes.ParticleSystem>(),
                        () => new ValueOutputUi<T3.Core.DataTypes.ParticleSystem>());
         RegisterUiType(typeof(Point[]), new PointListUiProperties(), () => new FallbackInputUi<Point[]>(),
@@ -130,7 +128,7 @@ public partial class UiSymbolData
 
         RegisterUiType(typeof(T3.Core.DataTypes.StructuredList), new ValueUiProperties(), () => new StructuredListInputUi(),
                        () => new StructuredListOutputUi());
-        
+
         RegisterUiType(typeof(T3.Core.DataTypes.Texture3dWithViews), new FallBackUiProperties(),
                        () => new FallbackInputUi<T3.Core.DataTypes.Texture3dWithViews>(),
                        () => new Texture3dOutputUi());
@@ -146,10 +144,9 @@ public partial class UiSymbolData
                        () => new SceneSetupInputUi(), () => new SceneSetupOutputUi());
 
         RegisterUiType(typeof(PbrMaterial), new FallBackUiProperties(),
-                       () => new FallbackInputUi<PbrMaterial>(), 
+                       () => new FallbackInputUi<PbrMaterial>(),
                        () => new ValueOutputUi<PbrMaterial>());
 
-        
         // sharpdx types
         RegisterUiType(typeof(Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
         RegisterUiType(typeof(Int2), new ValueUiProperties(), () => new Int2InputUi(), () => new ValueOutputUi<Int2>());

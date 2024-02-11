@@ -9,6 +9,7 @@ using ImGuiNET;
 using Sentry;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.AutoBackup;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph;
@@ -67,7 +68,7 @@ internal static class CrashReporting
                                      @"☠🙈 Damn!",
                                      PopUpButtons.YesNo);
 
-        var sendingEnabled = result == DialogResult.Yes;
+        var sendingEnabled = result == PopUpResult.Yes;
 
         sentryEvent.SetTag("Nickname", "anonymous");
         sentryEvent.Contexts["tooll3"]= new
@@ -132,8 +133,8 @@ internal static class CrashReporting
             return;
         
         var exceptionTitle = sentryEvent.Exception.GetType().Name;
-        Directory.CreateDirectory(FileWriter.LogDirectory);
-        var filepath= ($@"{FileWriter.LogDirectory}/crash {exceptionTitle} - {DateTime.Now:yyyy-MM-dd  HH-mm-ss}.txt");
+        Directory.CreateDirectory(FileWriter.LogSubDirectory);
+        var filepath= ($@"{FileWriter.LogSubDirectory}/crash {exceptionTitle} - {DateTime.Now:yyyy-MM-dd  HH-mm-ss}.txt");
         
         using var streamFileWriter = new StreamWriter(filepath);
         streamFileWriter.WriteLine($"{sentryEvent.Exception.Message}\n{sentryEvent.Exception}");
