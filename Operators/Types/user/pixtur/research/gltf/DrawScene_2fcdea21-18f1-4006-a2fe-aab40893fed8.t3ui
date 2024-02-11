@@ -79,6 +79,13 @@
         "Y": 4485.268
       },
       "Usage": "CustomDropdown"
+    },
+    {
+      "InputId": "5f63b525-5da3-44a3-8875-11a82c37b0a5"/*UseSceneMaterials*/,
+      "Position": {
+        "X": 1093.4034,
+        "Y": 4543.1616
+      }
     }
   ],
   "SymbolChildUis": [

@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Editor.Gui.Graph.Rendering;
@@ -162,12 +160,7 @@ internal static class TextureReadAccess
                                                 ArraySize = 1
                                             };
         _conversionTexture = new Texture2D(ResourceManager.Device, convertTextureDescription);
-        //_conversionSrv = SrvManager.GetSrvForTexture(_conversionTexture);
         _conversionUav = new UnorderedAccessView(ResourceManager.Device, _conversionTexture);
-
-        // Skip the first two frames since they will only appear after buffers have been swapped.
-        //_currentIndex = 0;
-        //_currentUsageIndex = -SkipImages;
     }
 
     #region conversion shader
@@ -176,7 +169,7 @@ internal static class TextureReadAccess
         if (_convertComputeShaderResource != null)
             return;
 
-        const string sourcePath = @"Resources\lib\img\ConvertFormat-cs.hlsl ";
+        const string sourcePath = @"Resources\lib\img\ConvertFormat-cs.hlsl";
         const string entryPoint = "main";
         const string debugName = "resolve-convert-texture-format";
         var resourceManager = ResourceManager.Instance();

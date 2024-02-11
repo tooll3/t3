@@ -35,10 +35,9 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             var drawList = ImGui.GetWindowDrawList();
 
             var cloneIfModified = input.IsDefault;
-            var modified1= GradientEditor.Draw(ref gradient, drawList, area, cloneIfModified);
+            var modified= GradientEditor.Draw(ref gradient, drawList, area, cloneIfModified);
 
-            var modified= modified1 ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
-            if (cloneIfModified && (modified & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
+            if (cloneIfModified && modified.HasFlag(InputEditStateFlags.Modified))
             {
                 input.IsDefault = false;
             } 

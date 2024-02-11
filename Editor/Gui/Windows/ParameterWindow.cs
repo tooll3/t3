@@ -337,14 +337,14 @@ internal class ParameterWindow : Window
             var skipIfDefault = groupState == GroupState.InsideClosed;
             var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials: hideNonEssentials, skipIfDefault);
 
-            if ((editState & InputEditStateFlags.Started) != InputEditStateFlags.Nothing)
+            if (editState.HasFlag(InputEditStateFlags.Started) )
             {
                 _inputSlotForActiveCommand = inputSlot;
                 _inputValueCommandInFlight =
                     new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
             }
 
-            if ((editState & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
+            if (editState.HasFlag(InputEditStateFlags.Modified))
             {
                 if (_inputValueCommandInFlight == null || _inputSlotForActiveCommand != inputSlot)
                 {
@@ -357,7 +357,7 @@ internal class ParameterWindow : Window
                 inputSlot.DirtyFlag.Invalidate();
             }
 
-            if ((editState & InputEditStateFlags.Finished) != InputEditStateFlags.Nothing)
+            if (editState.HasFlag(InputEditStateFlags.Finished))
             {
                 if (_inputValueCommandInFlight != null && _inputSlotForActiveCommand == inputSlot)
                 {

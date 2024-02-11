@@ -355,8 +355,12 @@ namespace T3.Core.Operator
 
                 connectionEntriesToReplace.Reverse(); // restore original order
 
-                var symbolChild = parentSymbol.Children.Single(child => child.Id == instance.SymbolChildId);
-
+                var symbolChild = parentSymbol.Children.SingleOrDefault(child => child.Id == instance.SymbolChildId);
+                if (symbolChild == null)
+                {
+                    Log.Error($"Can't find SymnbolChild with id {instance.SymbolChildId} in {parentSymbol}");
+                    continue;
+                }
                 // update inputs of symbol child
                 var oldChildInputs = new Dictionary<Guid, SymbolChild.Input>(symbolChild.Inputs);
                 symbolChild.Inputs.Clear();
@@ -476,7 +480,14 @@ namespace T3.Core.Operator
 
         public Instance CreateInstance(Guid id, Instance parent)
         {
-            var newInstance = SymbolPackage.AssemblyInformation.Constructors[InstanceType].Invoke() as Instance;
+        
+        	if(!SymbolPackage.AssemblyInformation.Constructors.TryGetValue(InstanceType, out var constructor))
+        	{
+        		Log.Error($"Failed to create instance of " + InstanceType + " for symbol " + Name + " with id " + id + ": " + e.InnerException.Message);
+                return null;
+        	}
+        	
+            var newInstance = (Instance)constructor.Invoke();
             Debug.Assert(newInstance != null);
             newInstance.SymbolChildId = id;
             newInstance.Parent = parent;

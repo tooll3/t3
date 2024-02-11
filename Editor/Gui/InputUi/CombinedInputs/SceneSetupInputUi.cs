@@ -92,7 +92,8 @@ public static class SceneSetupPopup
             sceneSetup.NodeSettings = new List<SceneSetup.NodeSetting>();
         }
 
-        var nodeSettings = sceneSetup.NodeSettings.SingleOrDefault(s => s.NodeHashId == node.Name.GetHashCode());
+        var nodeHash = string.IsNullOrEmpty(node?.Name) ? 1 : node.Name.GetHashCode();
+        var nodeSettings = sceneSetup.NodeSettings.SingleOrDefault(s => s.NodeHashId == nodeHash);
 
         if (nodeSettings == null)
         {

@@ -109,7 +109,19 @@ public abstract class ShaderCompiler
         if (resourceDirs != null)
             directories.AddRange(resourceDirs);
 
-        var fileText = File.ReadAllText(srcFile);
+		string fileText;
+		
+		try
+		{
+			fileText = File.ReadAllText(srcFile); 
+		}
+		catch (Exception e)
+		{
+			errorMessage = $"Failed to read shader file '{srcFile}'.\n{e.Message}";
+            Log.Error(errorMessage);
+            return false;
+		}
+
         return TryCompileShaderFromSource(shaderSource: fileText,
                                           entryPoint: entryPoint,
                                           name: name,

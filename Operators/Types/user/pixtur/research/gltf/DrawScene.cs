@@ -63,7 +63,10 @@ namespace T3.Operators.Types.Id_2fcdea21_18f1_4006_a2fe_aab40893fed8
         [Input(Guid = "07089671-d27e-4eec-9719-8f6db7479b0b")]
         public readonly InputSlot<string> UseMaterialId = new InputSlot<string>();
 
-        
+        [Input(Guid = "5F63B525-5DA3-44A3-8875-11A82C37B0A5")]
+        public readonly InputSlot<bool> UseSceneMaterials = new InputSlot<bool>();
+
+        // Fixme: Why do we need this?
         public string GetValueForInput(Guid inputId)
         {
             if (inputId != UseMaterialId.Input.InputDefinition.Id)
