@@ -1,6 +1,6 @@
 {
   "Id": "00618c91-f39a-44ea-b9d8-175c996460dc"/*LoadGltfScene*/,
-  "Description": "Experimental op for loading complex scene setups.",
+  "Description": "Experimental op for loading complex scene setups.\n\nAlso see [DrawScene]",
   "InputUis": [
     {
       "InputId": "292e80cf-ba31-4a50-9bf4-83712430f811"/*Path*/,
@@ -45,7 +45,8 @@
       "Position": {
         "X": 51.512096,
         "Y": 406.99597
-      }
+      },
+      "Description": "Defines which visible child will be used for Mesh and Material output."
     }
   ],
   "SymbolChildUis": [],

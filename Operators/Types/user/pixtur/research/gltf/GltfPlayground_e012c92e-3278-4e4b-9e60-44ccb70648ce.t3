@@ -230,6 +230,11 @@
       "SymbolId": "2fcdea21-18f1-4006-a2fe-aab40893fed8",
       "InputValues": [
         {
+          "Id": "5f63b525-5da3-44a3-8875-11a82c37b0a5"/*UseSceneMaterials*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
           "Id": "69151dfb-59cf-4618-8642-c9dc88260786"/*BlendMode*/,
           "Type": "System.Int32",
           "Value": 0
@@ -243,11 +248,6 @@
           "Id": "d517b62c-0f11-4d76-a945-4dabb7d84d74"/*EnableZWrite*/,
           "Type": "System.Boolean",
           "Value": true
-        },
-        {
-          "Id": "5f63b525-5da3-44a3-8875-11a82c37b0a5"/*UseSceneMaterials*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []
@@ -423,6 +423,11 @@
           }
         },
         {
+          "Id": "5f63b525-5da3-44a3-8875-11a82c37b0a5"/*UseSceneMaterials*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
           "Id": "69151dfb-59cf-4618-8642-c9dc88260786"/*BlendMode*/,
           "Type": "System.Int32",
           "Value": 0
@@ -434,11 +439,6 @@
         },
         {
           "Id": "d517b62c-0f11-4d76-a945-4dabb7d84d74"/*EnableZWrite*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "5f63b525-5da3-44a3-8875-11a82c37b0a5"/*UseSceneMaterials*/,
           "Type": "System.Boolean",
           "Value": true
         }
