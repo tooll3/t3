@@ -5,175 +5,206 @@
     {
       "InputId": "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3"/*Image*/,
       "Position": {
-        "X": -302.90216,
-        "Y": -81.20439
-      }
+        "X": -303.9837,
+        "Y": -180.70207
+      },
+      "Description": "An optional background image. If connected allows to apply different BlendingModes."
     },
     {
       "InputId": "e47e9e63-9c94-4c29-9555-2452fa498d57"/*Gradient*/,
       "Position": {
+        "X": -303.9837,
+        "Y": -135.70207
+      },
+      "GroupTitle": "Gradient",
+      "Description": "The gradient applied over width left and right from the Center position.\nTip: You can use the context menu to change gradient interpolation to Spline, Hold or Smooth.\nTip: You can also connect this an an input and to generate procedural gradients and switch between gradietn definitions."
+    },
+    {
+      "InputId": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
+      "Position": {
         "X": -302.90216,
-        "Y": -36.20439
-      }
-    },
-    {
-      "InputId": "abf3456d-35bc-49ec-9aa6-c5571fbb209a"/*Center*/,
-      "Position": {
-        "X": -287.06445,
-        "Y": 95.90442
+        "Y": -56.094162
       },
-      "Min": -0.5,
-      "Max": 0.5
-    },
-    {
-      "InputId": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
-      "Position": {
-        "X": -287.06445,
-        "Y": 140.90442
-      },
-      "Min": -90.0,
-      "Max": 90.0,
-      "Format": "{0:0.0}°"
-    },
-    {
-      "InputId": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
-      "Position": {
-        "X": -285.97455,
-        "Y": 185.5893
-      },
+      "Description": "The width of the gradient with 1 being the extend defined by the SizeMode parameter.",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Format": "{0:0.000} ×"
     },
     {
-      "InputId": "c38647f6-c6ea-40a0-b872-0df6d4168c05"/*Offset*/,
+      "InputId": "e4739314-4075-4d14-a80d-79e149081dac"/*SizeMode*/,
       "Position": {
-        "X": -285.97455,
-        "Y": 230.5893
+        "X": -302.90216,
+        "Y": -11.094162
       },
-      "Min": -0.5,
-      "Max": 0.5
+      "Description": "Defines what defines a unit of gradient width: The current image width or height."
     },
     {
       "InputId": "5774969c-ef4d-482e-ab37-b3a84b09debb"/*PingPong*/,
       "Position": {
-        "X": -285.97455,
-        "Y": 320.5893
-      }
+        "X": -304.36,
+        "Y": 188.64664
+      },
+      "Description": "If enabled the gradient is mirrored resulting in a seamless image."
     },
     {
       "InputId": "7f3fe86d-f259-458a-908a-0a71d39ca678"/*Repeat*/,
       "Position": {
-        "X": -285.97455,
-        "Y": 365.5893
-      }
-    },
-    {
-      "InputId": "fbe7e415-5740-4f44-ad4e-32e01c6eb1ad"/*Bias*/,
-      "Position": {
-        "X": -289.5603,
-        "Y": 506.67175
+        "X": -304.36,
+        "Y": 233.64667
       },
-      "GroupTitle": "Additional Settings..."
+      "Description": "Repeats the gradient. This can be effective with the Offset parameter."
     },
     {
-      "InputId": "53afc8d9-f417-4628-9a97-220bec62919f"/*Resolution*/,
+      "InputId": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
       "Position": {
-        "X": -289.5603,
-        "Y": 596.67175
-      }
+        "X": -304.36,
+        "Y": 278.64667
+      },
+      "GroupTitle": "Position",
+      "Description": "Rotates the gradient counter-clockwise.",
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.0}°"
     },
     {
-      "InputId": "e4739314-4075-4d14-a80d-79e149081dac"/*SizeMode*/,
+      "InputId": "abf3456d-35bc-49ec-9aa6-c5571fbb209a"/*Center*/,
       "Position": {
-        "X": -289.5603,
-        "Y": 641.67175
-      }
+        "X": -304.96915,
+        "Y": 322.7738
+      },
+      "Description": "Defines the center of the gradient. Sadly the y-axis points downwards.",
+      "Min": -0.5,
+      "Max": 0.5,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "c38647f6-c6ea-40a0-b872-0df6d4168c05"/*Offset*/,
+      "Position": {
+        "X": -299.13272,
+        "Y": 402.4781
+      },
+      "Description": "Offset the gradient with the amount defined by the OffsetMode parameter.",
+      "AddPadding": "True",
+      "Min": -0.5,
+      "Max": 0.5
     },
     {
       "InputId": "29587763-5456-4d33-bfd4-5d47b133f1cd"/*OffsetMode*/,
       "Position": {
-        "X": -301.23572,
-        "Y": 749.9146
-      }
+        "X": -299.13272,
+        "Y": 447.4781
+      },
+      "Description": "Defines wether the offset delta is a factor of the screen width or the gradient width. "
     },
     {
-      "InputId": "a3999108-9915-43cc-a18e-6ad2c203439f"/*GenerateMips*/,
+      "InputId": "1c70e502-90cc-4285-92ca-ec3d200967eb"/*BiasAndGain*/,
       "Position": {
-        "X": -301.23572,
-        "Y": 794.9146
-      }
+        "X": -356.7525,
+        "Y": 727.2588
+      },
+      "GroupTitle": "Options",
+      "Description": "Applies bias and gain mapping. See the Wiki \"Realtime Rendering for Artists\"  for more details.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "1d0cf561-858d-4510-95c4-f3ad9148355d"/*BlendMode*/,
       "Position": {
-        "X": -300.60208,
-        "Y": 979.9955
-      }
+        "X": -299.52054,
+        "Y": 1082.7375
+      },
+      "Description": "Defines how the gradient is blended onto the connected background image."
+    },
+    {
+      "InputId": "53afc8d9-f417-4628-9a97-220bec62919f"/*Resolution*/,
+      "Position": {
+        "X": -299.52054,
+        "Y": 1127.7375
+      },
+      "Description": "Overrides the resolution. Make sure to read to documentation on how Tooll handles resolutions."
+    },
+    {
+      "InputId": "a3999108-9915-43cc-a18e-6ad2c203439f"/*GenerateMips*/,
+      "Position": {
+        "X": -292.9442,
+        "Y": 1201.377
+      },
+      "Description": "Enables generating mip maps. See the Wiki \"Realtime Rendering for Artists\"  for more details."
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "de66c2b3-8e69-4534-bdbe-5f756169a7ad"/*Vector2Components*/,
       "Position": {
-        "X": -46.264427,
-        "Y": 43.813797
+        "X": -154.96915,
+        "Y": 322.7738
       }
     },
     {
       "ChildId": "6e9cfe0c-c7ea-45d6-8b35-140208425b6c"/*GradientsToTexture*/,
       "Position": {
-        "X": -38.132706,
-        "Y": -48.742477
+        "X": -39.21425,
+        "Y": -148.24016
       }
     },
     {
       "ChildId": "693baad7-d351-44de-af5c-cd0212003e35"/*BoolToFloat*/,
       "Position": {
-        "X": -3.5769958,
-        "Y": 266.08337
+        "X": -19.799469,
+        "Y": 175.23752
       }
     },
     {
       "ChildId": "67faeb1c-65dc-4b2c-9a33-2c99f979dfc3"/*BoolToFloat*/,
       "Position": {
-        "X": -3.5769958,
-        "Y": 322.08337
+        "X": -19.799469,
+        "Y": 231.23749
       }
     },
     {
       "ChildId": "6f71bad8-200a-4638-a8d5-e9966f6820a3"/*IntToFloat*/,
       "Position": {
-        "X": -30.29837,
-        "Y": 643.6305
+        "X": -43.64023,
+        "Y": -9.135422
       }
     },
     {
       "ChildId": "58c8c801-c758-41dc-bc6d-52a901b0583a"/*_multiImageFxSetupStatic*/,
       "Position": {
-        "X": 259.04932,
-        "Y": 96.50137
+        "X": 288.89868,
+        "Y": -153.97318
       }
     },
     {
       "ChildId": "3cf139ae-0d71-4a68-bb75-2276154b988a"/*PickFloat*/,
       "Position": {
-        "X": 45.691803,
-        "Y": 727.37524
+        "X": 27.831451,
+        "Y": 501.42258
       }
     },
     {
       "ChildId": "3c0c9eae-d119-4fbc-96d0-154cce0b8989"/*Multiply*/,
       "Position": {
-        "X": -102.627594,
-        "Y": 859.9049
+        "X": -107.74863,
+        "Y": 442.84158
       }
     },
     {
       "ChildId": "622d64d8-d845-47a9-a87f-31be42832aa6"/*IntToFloat*/,
       "Position": {
-        "X": -132.10107,
-        "Y": 990.65155
+        "X": -131.01953,
+        "Y": 1093.3936
+      }
+    },
+    {
+      "ChildId": "9b1378ec-a83d-432b-8f40-ecb21618087a"/*Vector2Components*/,
+      "Position": {
+        "X": -73.89349,
+        "Y": 741.22876
       }
     }
   ],
@@ -181,8 +212,8 @@
     {
       "OutputId": "d140f068-d71e-4af5-a563-ab599dae5dbf"/*TextureOutput*/,
       "Position": {
-        "X": 507.50885,
-        "Y": -20.51485
+        "X": 503.61542,
+        "Y": -91.89357
       }
     }
   ]
