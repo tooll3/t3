@@ -95,6 +95,18 @@
         "X": -51.309982,
         "Y": 1327.891
       }
+    },
+    {
+      "InputId": "a842bd72-abb2-4207-8397-7e727aaa6c63"/*BiasAndGain*/,
+      "Position": {
+        "X": -51.309982,
+        "Y": 1372.891
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
     }
   ],
   "SymbolChildUis": [
@@ -130,7 +142,7 @@
       "ChildId": "533882ba-0e49-49a3-8108-90896b2fb1a6"/*TimeConstBuffer*/,
       "Position": {
         "X": 589.014,
-        "Y": 723.92316
+        "Y": 736.92316
       }
     },
     {
@@ -320,6 +332,13 @@
       "Position": {
         "X": 167.61693,
         "Y": 1071.8959
+      }
+    },
+    {
+      "ChildId": "1036ffbc-50f1-4b78-95d5-d3b30ceadfd0"/*Vector2Components*/,
+      "Position": {
+        "X": 102.39926,
+        "Y": 1393.4424
       }
     }
   ],
