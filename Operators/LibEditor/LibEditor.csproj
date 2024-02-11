@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Editor\Editor.csproj" />
+      <ProjectReference Include="..\lib\lib.csproj" >
+          <ExcludeAssets>All</ExcludeAssets>
+      </ProjectReference>
+    </ItemGroup>
+
+</Project>

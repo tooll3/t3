@@ -371,7 +371,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     /// <summary>
     /// Setup shaders and textures required for combining roughness, metallic and occlusion textures.
     /// </summary>
-    private static void PrepareCombineShaderResources(bool forceUpdate = false)
+    private static void PrepareCombineShaderResources(Instance instance, bool forceUpdate = false)
     {
         if (!forceUpdate && _combineChannelsComputeShaderResource != null)
             return;
@@ -382,8 +382,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         var resourceManager = ResourceManager.Instance();
 
         var success = resourceManager.TryCreateShaderResource(out _combineChannelsComputeShaderResource,
-                                                              fileName: sourcePath,
+                                                              relativePath: sourcePath,
                                                               entryPoint: entryPoint,
+                                                              instance: instance,
                                                               name: debugName,
                                                               errorMessage: out var errorMessage);
 
@@ -421,7 +422,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             return;
         }
 
-        PrepareCombineShaderResources(_updateTriggered);
+        PrepareCombineShaderResources(this, _updateTriggered);
 
         var device = ResourceManager.Device;
         var deviceContext = device.ImmediateContext;
