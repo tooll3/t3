@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_38b85057_fbcb_4ab1_9b40_cfb090750150
             if (slot.IsConnected)
             {
                 // slot is an output of an composition op
-                slot.DirtyFlag.Target = Invalidate(slot.GetConnection(0));
+                slot.DirtyFlag.Target = Invalidate(slot.FirstConnection);
             }
             else
             {
@@ -55,7 +55,7 @@ namespace T3.Operators.Types.Id_38b85057_fbcb_4ab1_9b40_cfb090750150
                         }
                         else
                         {
-                            input.DirtyFlag.Target = Invalidate(input.GetConnection(0));
+                            input.DirtyFlag.Target = Invalidate(input.FirstConnection);
                         }
                     }
                     else

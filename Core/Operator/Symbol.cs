@@ -480,14 +480,24 @@ namespace T3.Core.Operator
 
         public Instance CreateInstance(Guid id, Instance parent)
         {
-        
         	if(!SymbolPackage.AssemblyInformation.Constructors.TryGetValue(InstanceType, out var constructor))
         	{
-        		Log.Error($"Failed to create instance of " + InstanceType + " for symbol " + Name + " with id " + id + ": " + e.InnerException.Message);
+        		Log.Error($"No constructor found for {InstanceType}");
                 return null;
         	}
+            
+            Instance newInstance = null;
+
+            try
+            {
+                newInstance = (Instance)constructor.Invoke();
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to create instance of type {InstanceType} with id {id}: {e.Message}");
+                return null;
+            }
         	
-            var newInstance = (Instance)constructor.Invoke();
             Debug.Assert(newInstance != null);
             newInstance.SymbolChildId = id;
             newInstance.Parent = parent;

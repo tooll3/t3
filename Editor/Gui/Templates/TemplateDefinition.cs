@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using SharpDX.Direct3D11;
+using T3.Core.Logging;
 using T3.Core.Operator;
 
 namespace T3.Editor.Gui.Templates
@@ -49,7 +54,7 @@ namespace T3.Editor.Gui.Templates
                               Documentation =
                                   "This will create a new Symbol with a basic template to get you started. It will also setup a folder structure for project related files like soundtrack or images.",
                               TemplateSymbolId = Guid.Parse("38fd2e32-53f6-49ce-9aa7-28f3ac433dd8"),
-                          }
+                          },
 
                       new TemplateDefinition
                           {

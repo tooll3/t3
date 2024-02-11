@@ -1,4 +1,3 @@
-using Operators.Utils;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -41,6 +40,7 @@ namespace T3.Operators.Types.Id_9f784a4a_857f_41ad_afc1_0de08c1cfec6
         Slot<PixelShaderD3D> IShaderOperator<PixelShaderD3D>.Shader => PixelShader;
         ShaderResource<PixelShaderD3D> IShaderOperator<PixelShaderD3D>.ShaderResource { get; set; }
         bool IShaderOperator<PixelShaderD3D>.SourceIsSourceCode => true;
+        Instance IShaderOperator<PixelShaderD3D>.Instance => this;
         #endregion
     }
 }

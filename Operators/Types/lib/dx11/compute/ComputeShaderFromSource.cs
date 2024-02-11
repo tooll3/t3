@@ -1,4 +1,3 @@
-using Operators.Utils;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -63,6 +62,7 @@ namespace T3.Operators.Types.Id_4e5bc624_9cda_46a8_9681_7fd412ea3893
         Slot<ComputeShaderD3D> IShaderOperator<ComputeShaderD3D>.Shader => ComputerShader;
         ShaderResource<ComputeShaderD3D> IShaderOperator<ComputeShaderD3D>.ShaderResource { get; set; }
         bool IShaderOperator<ComputeShaderD3D>.SourceIsSourceCode => true;
+        Instance IShaderOperator<ComputeShaderD3D>.Instance => this;
         #endregion
     }
 }

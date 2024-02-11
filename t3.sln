@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libEditor", "Operators\libE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "examples", "Operators\examples\examples.csproj", "{C1A78F9B-C658-4512-BA04-8CC1C9F076EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators", "Operators\Types\Operators.csproj", "{A7C8E633-74A9-48C2-8F31-88EA50D33D4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,12 @@ Global
 		{C1A78F9B-C658-4512-BA04-8CC1C9F076EF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C1A78F9B-C658-4512-BA04-8CC1C9F076EF}.IDE|Any CPU.ActiveCfg = Debug|Any CPU
 		{C1A78F9B-C658-4512-BA04-8CC1C9F076EF}.IDE|Any CPU.Build.0 = Debug|Any CPU
+		{A7C8E633-74A9-48C2-8F31-88EA50D33D4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7C8E633-74A9-48C2-8F31-88EA50D33D4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7C8E633-74A9-48C2-8F31-88EA50D33D4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7C8E633-74A9-48C2-8F31-88EA50D33D4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7C8E633-74A9-48C2-8F31-88EA50D33D4E}.IDE|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7C8E633-74A9-48C2-8F31-88EA50D33D4E}.IDE|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

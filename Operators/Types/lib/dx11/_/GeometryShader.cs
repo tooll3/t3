@@ -1,4 +1,3 @@
-using Operators.Utils;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -41,6 +40,7 @@ namespace T3.Operators.Types.Id_a908cc64_e8cb_490c_ae45_c2c5fbfcedfb
         Slot<GeometryShaderD3D> IShaderOperator<GeometryShaderD3D>.Shader => Shader;
         ShaderResource<GeometryShaderD3D> IShaderOperator<GeometryShaderD3D>.ShaderResource { get; set; }
         bool IShaderOperator<GeometryShaderD3D>.SourceIsSourceCode => false;
+        Instance IShaderOperator<GeometryShaderD3D>.Instance => this;
         #endregion
     }
 }

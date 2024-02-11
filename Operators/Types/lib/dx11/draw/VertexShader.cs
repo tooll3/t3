@@ -1,5 +1,4 @@
-﻿using Operators.Utils;
-using T3.Core.Operator;
+﻿using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
@@ -57,6 +56,7 @@ namespace T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad
         Slot<VertexShaderD3D> IShaderOperator<VertexShaderD3D>.Shader => Shader;
         ShaderResource<VertexShaderD3D> IShaderOperator<VertexShaderD3D>.ShaderResource { get; set; }
         bool IShaderOperator<VertexShaderD3D>.SourceIsSourceCode => false;
+        Instance IShaderOperator<VertexShaderD3D>.Instance => this;
         #endregion
     }
 }
