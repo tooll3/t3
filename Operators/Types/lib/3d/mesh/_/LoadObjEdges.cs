@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
             var path = Path.GetValue(context);
             if (path != _lastFilePath)
             {
-                var mesh = ObjMesh.LoadFromFile(path);
+                var mesh = ObjMesh.LoadFromFile(path, this);
                 if (mesh == null)
                 {
                     Log.Error($"Failed to extract edge line points from obj {path}", this);

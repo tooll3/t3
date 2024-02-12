@@ -160,7 +160,8 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
                 string entryPoint = "bitonicSort";
                 string debugName = "bitonic-sort";
                 resourceManager.TryCreateShaderResource(resource: out _sortShaderResource, 
-                                                        fileName: sourcePath, 
+                                                        relativePath: sourcePath, 
+                                                        instance: this,
                                                         errorMessage: out var errorMessage, 
                                                         name: debugName, 
                                                         entryPoint: entryPoint);
@@ -172,7 +173,8 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
                 string entryPoint = "transpose";
                 string debugName = "bitonic-transpose";
                 resourceManager.TryCreateShaderResource(resource: out _transposeShaderResource, 
-                                                        fileName: sourcePath, 
+                                                        relativePath: sourcePath, 
+                                                        instance: this,
                                                         errorMessage: out var errorMessage, 
                                                         name: debugName, 
                                                         entryPoint: entryPoint);

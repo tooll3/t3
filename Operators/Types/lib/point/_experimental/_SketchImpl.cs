@@ -11,6 +11,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Serialization;
+using T3.SystemUi;
 using Point = T3.Core.DataTypes.Point;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;

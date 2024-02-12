@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using NAudio.Midi;
+using T3.Core.IO;
 using T3.Core.Logging;
 
-namespace T3.Core.IO
+namespace Operators.Utils
 {
     public static class MidiInConnectionManager
     {

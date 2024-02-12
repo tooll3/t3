@@ -21,7 +21,6 @@ using T3.Editor.Compilation;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Templates;
-using Boolean = System.Boolean;
 
 namespace libEditor;
 

@@ -4,6 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Logging;
+using T3.SystemUi;
 
 namespace T3.Operators.Types.Id_2b00bb7a_92cc_41e5_a5f6_bc3e8b16c5eb
 {
@@ -22,14 +23,7 @@ namespace T3.Operators.Types.Id_2b00bb7a_92cc_41e5_a5f6_bc3e8b16c5eb
             var keyIndex = Key.GetValue(context);
             var mode = (Modes)Mode.GetValue(context);
 
-
-            if (keyIndex >= KeyHandler.PressedKeys.Length)
-            {
-                Log.Warning($"keyIndex {keyIndex} out of range", this);
-                return;
-            } 
-            
-            var isDown = KeyHandler.PressedKeys[keyIndex];
+            var isDown = KeyHandler.IsKeyPressed(keyIndex);
             var justPressed = !_wasDown && isDown;
             var justReleased = !isDown && _wasDown;
             _wasDown = isDown;

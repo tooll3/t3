@@ -4,9 +4,9 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using NAudio.Midi;
-using Operators.Utils;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
+using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
@@ -14,7 +14,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 {
-    public class MidiInput : Instance<MidiInput>, MidiInConnectionManager.IMidiConsumer, IStatusProvider
+    public class MidiInput : Instance<MidiInput>, IMidiConsumer, IStatusProvider
     {
         [Output(Guid = "01706780-D25B-4C30-A741-8B7B81E04D82")]
         public readonly Slot<float> Result = new();
@@ -304,7 +304,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             }
         }
 
-        void MidiInConnectionManager.IMidiConsumer.OnSettingsChanged()
+        void IMidiConsumer.OnSettingsChanged()
         {
             Result.DirtyFlag.Invalidate();
             Range.DirtyFlag.Invalidate();

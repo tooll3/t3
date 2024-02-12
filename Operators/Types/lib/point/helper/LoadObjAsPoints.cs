@@ -42,7 +42,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
         private void Update(EvaluationContext context)
         {
             var path = Path.GetValue(context);
-            var mesh = ObjMesh.LoadFromFile(path);
+            var mesh = ObjMesh.LoadFromFile(path, this);
 
             if (mesh == null)
             {

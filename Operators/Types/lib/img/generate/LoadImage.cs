@@ -42,7 +42,7 @@ namespace T3.Operators.Types.Id_0b3436db_e283_436e_ba85_2f3a1de76a9d
                 string imagePath = Path.GetValue(context);
                 try
                 {
-                    (_textureResId, _srvResId) = resourceManager.CreateTextureFromFile(imagePath, () =>
+                    (_textureResId, _srvResId) = resourceManager.CreateTextureFromFile(imagePath, this, () =>
                                                                                                   {
                                                                                                       Texture.DirtyFlag.Invalidate();
                                                                                                       ShaderResourceView.DirtyFlag.Invalidate();

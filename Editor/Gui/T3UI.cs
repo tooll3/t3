@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
+using Operators.Utils.Recording;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.DataTypes.DataSet;

@@ -1,6 +1,7 @@
 ﻿using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Rendering;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 

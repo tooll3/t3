@@ -213,7 +213,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             
         }
         
-        private static void SetupResolveShaderResources()
+        private void SetupResolveShaderResources()
         {
             if (_resolveComputeShaderResource != null)
                 return;
@@ -222,9 +222,10 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             const string entryPoint = "main";
             const string debugName = "resolve-multisampled-depth-buffer";
             var resourceManager = ResourceManager.Instance();
-            
-            var success = resourceManager.TryCreateShaderResource(out _resolveComputeShaderResource, 
-                                                                  fileName: sourcePath, 
+
+            var success = resourceManager.TryCreateShaderResource(out _resolveComputeShaderResource,
+                                                                  relativePath: sourcePath,
+                                                                  instance: this,
                                                                   entryPoint: entryPoint, 
                                                                   name: debugName,
                                                                   errorMessage: out var errorMessage);
