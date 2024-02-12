@@ -6,10 +6,10 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
+using BreedList = StructuredList<_SpeciesDefinition.Breed>;
 
 namespace T3.Operators.Types.Id_924b8cc0_5b4b_41d0_a71b_b26465683910
 {
-    using BreedList = StructuredList<_SpeciesDefinition.Breed>;
 
     public class _SpeciesDefinition : Instance<_SpeciesDefinition>
     {
