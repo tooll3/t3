@@ -79,22 +79,26 @@ public static partial class Conversion
         var pixelShaderClassDecl = string.Format(classFmt, pixelShader);
         if (!code.Contains(pixelShaderClassDecl))
         {
-            Replace(ref code, pixelShader, pixelShaderReplacement, CanReplaceShaderReference);
-            AddShaderUsingStatement(ref code, pixelShader, pixelShaderReplacement);
+            var replaced = Replace(ref code, pixelShader, pixelShaderReplacement, CanReplaceShaderReference);
+            if(replaced)
+                AddShaderUsingStatement(ref code, pixelShader, pixelShaderReplacement);
         }
 
         var vertexShaderClassDecl = string.Format(classFmt, vertexShader);
         if (!code.Contains(vertexShaderClassDecl))
         {
-            Replace(ref code, vertexShader, vertexShaderReplacement, CanReplaceShaderReference);
-            AddShaderUsingStatement(ref code, vertexShader, vertexShaderReplacement);
+            var replaced = Replace(ref code, vertexShader, vertexShaderReplacement, CanReplaceShaderReference);
+            if(replaced)
+                AddShaderUsingStatement(ref code, vertexShader, vertexShaderReplacement);
         }
 
         var computeShaderClassDecl = string.Format(classFmt, computeShader);
         if (!code.Contains(computeShaderClassDecl))
         {
-            Replace(ref code, computeShader, computeShaderReplacement, CanReplaceShaderReference);
-            AddShaderUsingStatement(ref code, computeShader, computeShaderReplacement);
+            var replaced = Replace(ref code, computeShader, computeShaderReplacement, CanReplaceShaderReference);
+            
+            if(replaced)
+                AddShaderUsingStatement(ref code, computeShader, computeShaderReplacement);
         }
 
         Replace(ref code, "Core.DataTypes.", "T3.Core.DataTypes.", (code, index) =>
@@ -123,28 +127,34 @@ public static partial class Conversion
             if (!s.Contains(usingStatement))
                 s = usingStatement + Environment.NewLine + s;
         }
-
-        static void Replace(ref string code, string vec, string vecReplacement,
+        
+        // returns true if something was replaced;
+        static bool Replace(ref string code, string term, string termReplacement,
             Func<string, int, bool>? isValidRemoval = null)
         {
             int startIndex = 0;
-            int foundIndex = code.IndexOf(vec, startIndex, StringComparison.Ordinal);
+            int foundIndex = code.IndexOf(term, startIndex, StringComparison.Ordinal);
+            bool wasReplaced = false;
             while (foundIndex != -1)
             {
                 if (isValidRemoval != null && !isValidRemoval(code, foundIndex))
                 {
-                    startIndex = foundIndex + vec.Length;
-                    foundIndex = code.IndexOf(vec, startIndex, StringComparison.Ordinal);
+                    startIndex = foundIndex + term.Length;
+                    foundIndex = code.IndexOf(term, startIndex, StringComparison.Ordinal);
                     continue;
                 }
 
                 // replace
-                code = code.Remove(foundIndex, vec.Length);
-                code = code.Insert(foundIndex, vecReplacement);
+                code = code.Remove(foundIndex, term.Length);
+                code = code.Insert(foundIndex, termReplacement);
 
-                startIndex = foundIndex + vecReplacement.Length;
-                foundIndex = code.IndexOf(vec, startIndex, StringComparison.Ordinal);
+                startIndex = foundIndex + termReplacement.Length;
+                foundIndex = code.IndexOf(term, startIndex, StringComparison.Ordinal);
+
+                wasReplaced = true;
             }
+            
+            return wasReplaced;
         }
     }
 
