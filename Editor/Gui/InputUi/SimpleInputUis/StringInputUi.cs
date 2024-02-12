@@ -160,7 +160,8 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             }
             else
             {
-                Log.Warning($"{instance?.Parent?.Symbol?.Name} doesn't support custom inputs");
+                ImGui.NewLine();
+                //Log.Warning($"{instance?.Parent?.Symbol?.Name} doesn't support custom inputs");
                 return InputEditStateFlags.Nothing;
             }
         }

@@ -1,28 +1,23 @@
 {
   "Id": "82ad8911-c930-4851-803d-3f24422445bc"/*RadialGradient*/,
+  "Description": "Generates an image with a radial gradient.",
   "InputUis": [
     {
       "InputId": "54bca43c-fc2b-4a40-b991-8b76e35eee01"/*Image*/,
       "Position": {
         "X": -292.81934,
         "Y": -397.5083
-      }
+      },
+      "Description": "An optional background image. If connected allows to apply different BlendingModes."
     },
     {
       "InputId": "3f5a284b-e2f0-47e2-bf79-2a7fe8949519"/*Gradient*/,
       "Position": {
         "X": -291.90814,
         "Y": -66.74634
-      }
-    },
-    {
-      "InputId": "1cf83367-7a34-4369-86d8-77dd4fe48d63"/*Center*/,
-      "Position": {
-        "X": -270.7163,
-        "Y": 127.8259
       },
-      "Min": -0.5,
-      "Max": 0.5
+      "GroupTitle": "Gradient",
+      "Description": "The gradient from the center towards to outer edge defined by Radius.\n\nTip: You can use the context menu to change gradient interpolation to Spline, Hold or Smooth.\nTip: You can also connect this an an input and to generate procedural gradients and switch between gradietn definitions."
     },
     {
       "InputId": "bfdcfed4-263f-4115-a1a8-291088e34c0a"/*Width*/,
@@ -30,6 +25,8 @@
         "X": -270.7163,
         "Y": 172.82591
       },
+      "Description": "Radius or Width of the gradient (depending wether in Polar Coordinates mode)",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -39,88 +36,110 @@
         "X": -270.7163,
         "Y": 217.82591
       },
+      "Description": "Offsets the gradient. One 1 unit per width.",
       "Min": -0.5,
       "Max": 0.5
     },
     {
+      "InputId": "5e93ba7d-a33d-4574-a438-a13c03361c29"/*BiasAndGain*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 262.82593
+      },
+      "Description": "Applies bias and gain mapping. See the Wiki \"Realtime Rendering for Artists\"  for more details.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
+    },
+    {
       "InputId": "6c1dc695-1c0a-47fe-aea1-e3abec904883"/*PingPong*/,
       "Position": {
-        "X": -269.2622,
-        "Y": 325.3521
-      }
+        "X": -270.7163,
+        "Y": 318.82593
+      },
+      "Description": "If enabled the gradient is mirrored resulting in a seamless image."
     },
     {
       "InputId": "eab31c38-0e6f-432a-9f15-04bfb0aae28c"/*Repeat*/,
       "Position": {
-        "X": -269.2622,
-        "Y": 370.3521
-      }
+        "X": -270.7163,
+        "Y": 374.82593
+      },
+      "Description": "Repeats the gradient. This can be effective with the Offset parameter."
+    },
+    {
+      "InputId": "1cf83367-7a34-4369-86d8-77dd4fe48d63"/*Center*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 430.82593
+      },
+      "AddPadding": "True",
+      "Min": -0.5,
+      "Max": 0.5,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "dc383dbd-9dab-4bb2-8c6e-7f094e28d8a9"/*PolarOrientation*/,
       "Position": {
-        "X": -259.1154,
-        "Y": 444.16974
-      }
-    },
-    {
-      "InputId": "945d14de-62aa-47cf-81e3-a91c52811d8e"/*Bias*/,
-      "Position": {
-        "X": -259.1154,
-        "Y": 489.16974
+        "X": -258.18066,
+        "Y": 531.1108
       },
-      "Min": 0.0,
-      "Max": 1.0
-    },
-    {
-      "InputId": "cf2e1698-f996-4b83-8b59-3150e75d59c6"/*Resolution*/,
-      "Position": {
-        "X": -288.13916,
-        "Y": 664.9001
-      }
+      "GroupTitle": "Options",
+      "Description": "If enabled the gradient will be apply in a clockwise sweep around the center."
     },
     {
       "InputId": "7270a7df-744e-4b66-8f85-71fbdf0848d6"/*BlendMode*/,
       "Position": {
-        "X": -288.13916,
-        "Y": 709.9001
-      }
+        "X": -263.44446,
+        "Y": 616.8738
+      },
+      "Description": "Defines how the gradient is blended onto the connected background image."
+    },
+    {
+      "InputId": "cf2e1698-f996-4b83-8b59-3150e75d59c6"/*Resolution*/,
+      "Position": {
+        "X": -265.4931,
+        "Y": 711.91315
+      },
+      "Description": "Overrides the resolution. Make sure to read to documentation on how Tooll handles resolutions."
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "9f880085-efe7-412e-95bc-0c4fd35d8c94"/*Vector2Components*/,
       "Position": {
-        "X": -33.307365,
-        "Y": 66.955154
+        "X": -120.71631,
+        "Y": 430.82593
       }
     },
     {
       "ChildId": "ae5ed14b-b7b8-4e0c-88ee-523a53222483"/*GradientsToTexture*/,
       "Position": {
-        "X": 13.391716,
-        "Y": -75.90698
+        "X": -141.90814,
+        "Y": -66.74634
       }
     },
     {
       "ChildId": "4d0ab555-cf47-4172-90d6-e35017397d52"/*BoolToFloat*/,
       "Position": {
-        "X": -50.534206,
-        "Y": 324.10617
+        "X": -120.71631,
+        "Y": 318.82593
       }
     },
     {
       "ChildId": "24f930f0-81b7-4bba-92dd-14b857be4ad2"/*BoolToFloat*/,
       "Position": {
-        "X": -50.534206,
-        "Y": 380.10617
+        "X": -120.71631,
+        "Y": 374.82593
       }
     },
     {
       "ChildId": "228e10b6-12f3-4efd-92b0-385770811902"/*BoolToFloat*/,
       "Position": {
-        "X": -50.534206,
-        "Y": 436.10617
+        "X": -49.599487,
+        "Y": 523.0473
       }
     },
     {
@@ -133,8 +152,15 @@
     {
       "ChildId": "2051c4b4-e5a3-463b-9318-978d29ecd85d"/*IntToFloat*/,
       "Position": {
-        "X": 135.17828,
-        "Y": 709.8461
+        "X": -113.44446,
+        "Y": 616.8738
+      }
+    },
+    {
+      "ChildId": "3aa09f38-f3c9-4fee-9a54-3f135ec354f7"/*Vector2Components*/,
+      "Position": {
+        "X": -120.71631,
+        "Y": 262.82593
       }
     }
   ],

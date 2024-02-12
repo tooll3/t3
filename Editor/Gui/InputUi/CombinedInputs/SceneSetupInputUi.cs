@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
@@ -60,7 +62,7 @@ public static class SceneSetupPopup
             return;
 
 
-        ImGui.SetNextWindowSize(new Vector2(600, 600));
+        ImGui.SetNextWindowSize(new Vector2(800, 300));
         if (ImGui.BeginPopup(EditSceneStructureId))
         {
             drawList = ImGui.GetWindowDrawList();
@@ -85,7 +87,7 @@ public static class SceneSetupPopup
 
     private static void DrawNode(SceneSetup.SceneNode node, SceneSetup sceneSetup, bool parentVisible = true)
     {
-        var label = string.IsNullOrEmpty(node.Name) ? "???" : node.Name;
+        var label = string.IsNullOrEmpty(node.Name) ? "???" : node.Name.Truncate(25);
 
         if (sceneSetup.NodeSettings == null)
         {
@@ -136,14 +138,23 @@ public static class SceneSetupPopup
         if (isOpen)
         {
             // Mesh Label
-            var meshLabel = string.IsNullOrEmpty(node.MeshName) ? "-" : $"  {node.MeshName} ({node.MeshBuffers.FaceCount.FormatCount()})";
-            ImGui.SameLine(200);
+            var meshLabel = string.IsNullOrEmpty(node.MeshName) ? "-" : $"  {node.MeshName.Truncate(25)} ({node.MeshBuffers.FaceCount.FormatCount()})";
+            ImGui.SameLine(300);
             ImGui.TextColored(UiColors.TextMuted, meshLabel);
+            if (ImGui.IsItemHovered())
+            {
+                var meshInfo = node.MeshBuffers != null?  node.MeshBuffers.ToString() : "no mesh";
+                ImGui.BeginTooltip();
+                ImGui.TextUnformatted($"{node.MeshName}\n{meshInfo}");
+                ImGui.EndTooltip();
+            }
+            
+            //CustomComponents.TooltipForLastItem($"{node.MeshName}\n{node.MeshBuffers.ToString()}");
             
             // Material
             if (node.Material != null)
             {
-                ImGui.SameLine(430);
+                ImGui.SameLine(630);
                 ImGui.TextColored(UiColors.TextMuted, node.Material.Name);
                 
                 var h = ImGui.GetFrameHeight();
@@ -162,10 +173,29 @@ public static class SceneSetupPopup
                                              r* 0.5f* (node.Material.PbrParameters.Roughness * f + 0.6f), 
                                              spec);
                 }
+                
+                if (ImGui.IsItemHovered())
+                {
+                    //var meshInfo = node.MeshBuffers != null?  node.MeshBuffers.ToString() : "no mesh";
+                    ImGui.BeginTooltip();
+                    ImGui.TextUnformatted("Material!");
+                    DrawTextureThumbnail(node.Material.PbrMaterial.AlbedoMapSrv);
+                    
+                    ImGui.SameLine();
+                    DrawTextureThumbnail(node.Material.PbrMaterial.NormalSrv);
+                    
+                    ImGui.SameLine();
+                    DrawTextureThumbnail(node.Material.PbrMaterial.EmissiveMapSrv);
+
+                    ImGui.SameLine();
+                    DrawTextureThumbnail(node.Material.PbrMaterial.RoughnessMetallicOcclusionSrv);
+                    
+                    ImGui.EndTooltip();
+                }
             }
             else
             {
-                ImGui.SameLine(400);
+                ImGui.SameLine(630);
                 ImGui.TextUnformatted("no material");
             }
 
@@ -177,6 +207,22 @@ public static class SceneSetupPopup
             ImGui.TreePop();
         }
         ImGui.PopStyleVar();
+    }
+
+    private static void DrawTextureThumbnail(ShaderResourceView srv)
+    {
+        if (srv == null)
+            return;
+        
+        ImGui.Image((IntPtr)srv, new Vector2(100, 100));
+    }
+
+    #nullable enable
+    private static string? Truncate(this string? value, int maxLength, string truncationSuffix = "...")
+    {
+        return value?.Length > maxLength
+                   ? value.Substring(0, maxLength) + truncationSuffix
+                   : value;
     }
     
     static string FormatCount(this int num)

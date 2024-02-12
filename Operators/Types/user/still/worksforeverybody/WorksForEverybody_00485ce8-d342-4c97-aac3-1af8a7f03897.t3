@@ -910,7 +910,7 @@
           "Value": -45.0
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 0.217
         },
@@ -1011,7 +1011,7 @@
           "Value": -45.0
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 0.31
         },
@@ -1317,7 +1317,7 @@
           "Value": -45.0
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 0.32000002
         },
@@ -1743,7 +1743,7 @@
           }
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 1.09
         },
@@ -3169,7 +3169,7 @@
           "Value": 180.0
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 0.0
         }
@@ -3991,7 +3991,7 @@
           "Value": 0.0
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 0.47
         },
@@ -4839,7 +4839,7 @@
           "Value": 13.0
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 0.46
         }
@@ -6362,7 +6362,7 @@
           "Value": 180.0
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 0.0
         }

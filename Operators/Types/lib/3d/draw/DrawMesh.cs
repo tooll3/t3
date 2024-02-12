@@ -20,28 +20,16 @@ namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
         
         public DrawMesh()
         {
-            //Log.Debug("Construct DrawMesh[]", this);
             Output.UpdateAction = Update;
         }
 
-        // public void RegisterOutputUpdateAction(ISlot slot, Action<EvaluationContext> connectedUpdate)
-        // {
-        //     Log.Debug("Register update action");
-        //     _connectedUpdates.Add(connectedUpdate);
-        // }
-        // private readonly List<Action<EvaluationContext>> _connectedUpdates = new ();
-        
-        
         private void Update(EvaluationContext context)
         {
-            // Log.Debug("Update() " + context.Materials.Count, this);
-
             if (context.Materials != null)
             {
                 _pbrMaterials.Clear();
                 _pbrMaterials.AddRange(context.Materials);
             }
-
 
             var previousMaterial = context.PbrMaterial;
             
@@ -61,11 +49,41 @@ namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
             
             // Inner update
             Output.ConnectedUpdate(context);
-
             context.PbrMaterial = previousMaterial;
         }
-        
 
+        #region custom material dropdown
+        string ICustomDropdownHolder.GetValueForInput(Guid inputId)
+        {
+            return inputId != UseMaterialId.Input.InputDefinition.Id 
+                       ? "Undefined input" 
+                       : UseMaterialId.TypedInputValue.Value;
+        }
+
+        IEnumerable<string> ICustomDropdownHolder.GetOptionsForInput(Guid inputId)
+        {
+            yield return "Default";
+            
+            if(_pbrMaterials == null)
+                yield break;
+
+            foreach (var m in _pbrMaterials)
+            {
+                yield return string.IsNullOrEmpty(m.Name) ? "undefined" : m.Name;
+            }
+        }
+
+        void ICustomDropdownHolder.HandleResultForInput(Guid inputId, string result)
+        {
+            if (inputId != UseMaterialId.Input.InputDefinition.Id)
+                return;
+            
+            UseMaterialId.SetTypedInputValue(result);
+        }
+
+        private readonly List<PbrMaterial> _pbrMaterials = new(8);
+        #endregion
+        
 
         [Input(Guid = "97429e1f-3f30-4789-89a6-8e930e356ee6")]
         public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
@@ -100,36 +118,6 @@ namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
         [Input(Guid = "D7BD3003-8589-4537-92E8-E95C5EB2BFAB")]
         public readonly InputSlot<string> UseMaterialId = new ();
 
-        
-        public string GetValueForInput(Guid inputId)
-        {
-            return inputId != UseMaterialId.Input.InputDefinition.Id 
-                       ? "Undefined input" 
-                       : UseMaterialId.TypedInputValue.Value;
-        }
-
-        public IEnumerable<string> GetOptionsForInput(Guid inputId)
-        {
-            yield return "Default";
-            
-            if(_pbrMaterials == null)
-                yield break;
-
-            foreach (var m in _pbrMaterials)
-            {
-                yield return string.IsNullOrEmpty(m.Name) ? "undefined" : m.Name;
-            }
-        }
-
-        public void HandleResultForInput(Guid inputId, string result)
-        {
-            if (inputId != UseMaterialId.Input.InputDefinition.Id)
-                return;
-            
-            UseMaterialId.SetTypedInputValue(result);
-        }
-
-        private readonly List<PbrMaterial> _pbrMaterials = new(8);
 
     }
 }
