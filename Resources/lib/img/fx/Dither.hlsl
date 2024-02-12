@@ -1,10 +1,21 @@
+#include "lib/shared/bias-functions.hlsl"
+#include "lib/shared/blend-functions.hlsl"
+#include "lib/shared/hash-functions.hlsl"
+
 cbuffer ParamConstants : register(b0)
 {
     float4 Black;
     float4 White;
     float4 GrayScaleWeights;
-    float Bias;
+
+    float2 BiasAndGain;
     float Scale;
+    float Method;
+
+    float2 Offset;
+    float BlendMode;
+
+    float IsTextureValid;
 }
 
 cbuffer Resolution : register(b1)
@@ -44,11 +55,19 @@ float4 psMain(vsOutput input) : SV_TARGET
     float grayScale = (t.r + t.g + t.b + t.a) / 
     (GrayScaleWeights.r + GrayScaleWeights.g + GrayScaleWeights.b + GrayScaleWeights.a);
     
-    grayScale = pow(grayScale, Bias);
+    grayScale = ApplyBiasAndGain(saturate( grayScale), BiasAndGain.x, BiasAndGain.y);
 
-    float2 fragCoord = input.texCoord * res;
-    float dithering = (Bayer64(fragCoord / Scale) * 2.0 - 1.0) * 0.5;
+    float2 fragCoord = (input.texCoord * res - Offset *float2(1,-1  ) * Scale * 4);
+
+    float n = Method < 0.5 ? Bayer64(fragCoord / Scale)
+    : hash11u( (int)(fragCoord.x / Scale)  + (int)(fragCoord.y / Scale) * 123312);
+
+    // float dithering = (Bayer64(fragCoord / Scale) * 2.0 - 1.0) * 0.5;
+    // dithering = ((hash11u( (int)(fragCoord.x / Scale)  + (int)(fragCoord.y / Scale) * 123312))  * 2.0 - 1.0) * 0.5;
+    float dithering = (n * 2.0 - 1.0) * 0.5;
 
     float blackOrWhite = dithering + grayScale < 0.5 ? 0 : 1;
-    return lerp(Black,White, blackOrWhite);
+
+    float4 c= lerp(Black,White, blackOrWhite);
+        return (IsTextureValid < 0.5) ? c : BlendColors(color, c, (int)BlendMode);
 }  

@@ -5743,11 +5743,6 @@
           "Id": "eab31c38-0e6f-432a-9f15-04bfb0aae28c"/*Repeat*/,
           "Type": "System.Boolean",
           "Value": true
-        },
-        {
-          "Id": "945d14de-62aa-47cf-81e3-a91c52811d8e"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 4.6
         }
       ],
       "Outputs": []
@@ -5902,7 +5897,7 @@
           "Value": 0.0
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 0.18
         },

@@ -49,6 +49,9 @@ namespace T3.Operators.Types.Id_42e6319e_669c_4524_8d0d_9416a86afdb3
         [Input(Guid = "03d335bb-e4c6-4154-a53b-ab1af64e301f")]
         public readonly InputSlot<bool> GenerateMips = new();
 
+        [Input(Guid = "a842bd72-abb2-4207-8397-7e727aaa6c63")]
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+
     }
 }
 

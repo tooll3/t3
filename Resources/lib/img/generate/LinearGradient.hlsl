@@ -1,17 +1,19 @@
 #include "lib/shared/blend-functions.hlsl"
+#include "lib/shared/bias-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {
     float2 Center;
     float Width;
     float Rotation;
+
     float PingPong;
     float Repeat;
-    float Bias;
+    float2 BiasAndGain;
+
     float Offset;
     float SizeMode;
     float BlendMode;
-
     float IsTextureValid; // Automatically added by _FxShaderSetup
 }
 
@@ -69,9 +71,10 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             ? fmod(c, 1)
             : saturate(c);
 
-    float dBiased = Bias >= 0
-                        ? pow(c, Bias + 1)
-                        : 1 - pow(clamp(1 - c, 0, 10), -Bias + 1);
+    float dBiased = ApplyBiasAndGain(saturate(c), BiasAndGain.x, BiasAndGain.y);
+    // float dBiased = Bias >= 0
+    //                     ? pow(c, Bias + 1)
+    //                     : 1 - pow(clamp(1 - c, 0, 10), -Bias + 1);
 
     dBiased = clamp(dBiased, 0.000001, 0.99999);
     // dBiased = c;

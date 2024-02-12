@@ -1,4 +1,5 @@
 #include "lib/shared/hash-functions.hlsl"
+#include "lib/shared/bias-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {
@@ -7,8 +8,9 @@ cbuffer ParamConstants : register(b0)
     float2 Offset;
     float2 FontCharSize;
     float ScaleFactor;
-    float Bias;
     float MaxInColors;
+    float2 BiasAndGain;
+
     float Scatter;
 }
 
@@ -65,10 +67,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float4 colFromImageA = ImageA.Sample(texSampler, cellTiles);     
     float grayScale = (colFromImageA.r + colFromImageA.g + colFromImageA.b)/3;
 
-    float dBiased = Bias>= 0 
-        ? pow( grayScale, Bias+1)
-        : 1-pow( clamp(1-grayScale,0,10), -Bias+1);    
-
+    float dBiased = ApplyBiasAndGain(grayScale, BiasAndGain.x, BiasAndGain.y);    
 
     //float cellId = 
     float randomOffset = hash11u((uint)(cellIds.x * TargetWidth) + (uint)(cellIds.y  * TargetHeight) * 73939133 );
@@ -79,8 +78,6 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float4 letter = FontSortingOrder.SampleLevel(texSamplerPoint, float2( dBiased ,0.4),0);
     //return float4(letter.x * 1, 0,0,1);
     
-
-
     float letterIndex = letter * 256;
     float rowIndex = floor(letterIndex / 16);
     float columnIndex = floor(letterIndex % 16);
@@ -89,7 +86,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 uv = pInCell / 16 + letterPos;
     
     float4 colorFromFont = ImageB.SampleLevel(texSamplerPoint, uv,0);    
-    colorFromFont.rgb *= 0.6;
+    //colorFromFont.rgb *= 0.6;
 
     if(Background.a  < 1) {
         float4 orgColor =  ImageA.Sample(texSampler, psInput.texCoord);

@@ -34,10 +34,19 @@
       "Clamp": true
     },
     {
-      "InputId": "1c8ca868-0d54-4776-92bd-5c4183660216"/*GrayScaleWeights*/,
+      "InputId": "9364f41d-0700-4c43-ad16-569081f510cf"/*Method*/,
       "Position": {
         "X": 131.75464,
-        "Y": 159.48845
+        "Y": 147.27525
+      },
+      "Description": "Setting is currently ignored.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "1c8ca868-0d54-4776-92bd-5c4183660216"/*GrayScaleWeights*/,
+      "Position": {
+        "X": 132.46725,
+        "Y": 252.84007
       },
       "GroupTitle": "Advanced Settings",
       "Description": "Defines which color channels are used to determine the light-dark distinction.\n",
@@ -46,35 +55,45 @@
       "Clamp": true
     },
     {
-      "InputId": "cf54ed0a-b576-4d52-8c2a-fbdb717c297c"/*Bias*/,
+      "InputId": "3a6f87d6-913b-4200-807c-bb4da3f64fb7"/*BiasAndGain*/,
       "Position": {
-        "X": 131.75464,
-        "Y": 204.48845
+        "X": 128.1916,
+        "Y": 315.1541
       },
-      "Description": "Defines how many pixels are added to the light or dark coloring.",
       "Min": 0.0,
-      "Max": 5.0,
-      "Clamp": true
-    },
-    {
-      "InputId": "9364f41d-0700-4c43-ad16-569081f510cf"/*Method*/,
-      "Position": {
-        "X": 127.76198,
-        "Y": 395.89905
-      },
-      "Description": "Setting is currently ignored."
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "41d59091-a974-43ed-b45b-0849fb91f6d1"/*Scale*/,
       "Position": {
-        "X": 131.75464,
-        "Y": 249.48845
+        "X": 132.46725,
+        "Y": 404.83698
       },
       "GroupTitle": "Size",
       "Description": "Uniformly scales the size of the effect.",
       "Min": 1.0,
       "Max": 15.0,
       "Clamp": true
+    },
+    {
+      "InputId": "50335511-3b96-4c23-a604-3bc3dacae062"/*Offset*/,
+      "Position": {
+        "X": 132.46725,
+        "Y": 449.83698
+      },
+      "Min": -2.0,
+      "Max": 2.0,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "0fb3a599-897f-4d38-a284-50374118810f"/*BlendMethod*/,
+      "Position": {
+        "X": 120.35292,
+        "Y": 718.9912
+      }
     }
   ],
   "SymbolChildUis": [
@@ -100,8 +119,8 @@
     {
       "ChildId": "674834e4-75bf-4b83-b477-a816ca3fa914"/*IntToFloat*/,
       "Position": {
-        "X": 317.80673,
-        "Y": 389.98572
+        "X": 281.75458,
+        "Y": 147.27525
       }
     },
     {
@@ -114,8 +133,29 @@
     {
       "ChildId": "7d74437e-b5ad-4caf-939f-ea0f79fe7047"/*Vector4Components*/,
       "Position": {
-        "X": 281.75464,
-        "Y": 158.27525
+        "X": 282.46725,
+        "Y": 251.62688
+      }
+    },
+    {
+      "ChildId": "c633a809-71f5-49c4-9e25-a63d927d11aa"/*Vector2Components*/,
+      "Position": {
+        "X": 318.12875,
+        "Y": 319.93036
+      }
+    },
+    {
+      "ChildId": "238dc22f-8b2b-41ac-8940-3290676b8bc0"/*IntToFloat*/,
+      "Position": {
+        "X": 263.2812,
+        "Y": 731.94055
+      }
+    },
+    {
+      "ChildId": "4481713e-e7b7-4f01-b154-7e9d01bb0a52"/*Vector2Components*/,
+      "Position": {
+        "X": 321.69183,
+        "Y": 459.18488
       }
     }
   ],

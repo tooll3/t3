@@ -21,8 +21,20 @@
       }
     },
     {
+      "Id": "5f63b525-5da3-44a3-8875-11a82c37b0a5"/*UseSceneMaterials*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "07089671-d27e-4eec-9719-8f6db7479b0b"/*UseMaterialId*/,
+      "DefaultValue": ""
+    },
+    {
       "Id": "69151dfb-59cf-4618-8642-c9dc88260786"/*BlendMode*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "49e57c71-cbd3-4f8a-9a96-8fb116c947b0"/*FillMode*/,
+      "DefaultValue": 3
     },
     {
       "Id": "42e7cc49-5102-4e74-8bea-c7698cb4abca"/*Culling*/,
@@ -41,24 +53,12 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "49e57c71-cbd3-4f8a-9a96-8fb116c947b0"/*FillMode*/,
-      "DefaultValue": 3
-    },
-    {
       "Id": "a5ba01f8-5176-4f2f-aac3-ba7d8ede4c20"/*Filter*/,
       "DefaultValue": "MinMagMipLinear"
     },
     {
       "Id": "b17800d2-cdf3-4334-90a0-d10b8cc27445"/*WrapMode*/,
       "DefaultValue": "Wrap"
-    },
-    {
-      "Id": "07089671-d27e-4eec-9719-8f6db7479b0b"/*UseMaterialId*/,
-      "DefaultValue": ""
-    },
-    {
-      "Id": "5f63b525-5da3-44a3-8875-11a82c37b0a5"/*UseSceneMaterials*/,
-      "DefaultValue": true
     }
   ],
   "Children": [

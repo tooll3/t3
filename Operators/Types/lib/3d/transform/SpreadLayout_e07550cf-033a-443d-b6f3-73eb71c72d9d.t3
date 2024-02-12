@@ -44,6 +44,10 @@
       "DefaultValue": 1.0
     },
     {
+      "Id": "5f2c1b38-4b0c-45e4-810f-8f126084b285"/*Pivot*/,
+      "DefaultValue": 0.5
+    },
+    {
       "Id": "d0e0058c-5d46-41f4-a280-42befd5a5570"/*IsEnabled*/,
       "DefaultValue": true
     },

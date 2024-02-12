@@ -29,6 +29,9 @@ namespace T3.Operators.Types.Id_92f3193e_a7dd_4417_b569_129823607fbe
         [Input(Guid = "12a0a526-6255-49ee-a532-0e774dab91f8")]
         public readonly InputSlot<bool> Reset = new();
 
+        [Input(Guid = "932d5873-a16d-447f-a93a-6fb456c76256")]
+        public readonly InputSlot<int> BufferLength = new InputSlot<int>();
+
     }
 }
 

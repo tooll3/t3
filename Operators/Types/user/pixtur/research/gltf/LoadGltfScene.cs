@@ -37,24 +37,26 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
     [Output(Guid = "F33EC4C1-F07B-46B3-BEC7-34E91B8312EF")]
     public readonly Slot<PbrMaterial> Material = new();
-    
+
     public LoadGltfScene()
     {
         ResultSetup.UpdateAction = Update;
         Mesh.UpdateAction = Update;
     }
-    
+
     private void Update(EvaluationContext context)
     {
         _lastErrorMessage = null;
+
+        var materialNeedsUpdate = OffsetRoughness.DirtyFlag.IsDirty || OffsetMetallic.DirtyFlag.IsDirty;
 
         _offsetRoughness = OffsetRoughness.GetValue(context);
         _offsetMetallic = OffsetMetallic.GetValue(context);
 
         var meshChildIndex = MeshChildIndex.GetValue(context);
-        
+
         var sceneSetup = Setup.GetValue(context);
-        if ( sceneSetup == null || Setup.Input.IsDefault)
+        if (sceneSetup == null || Setup.Input.IsDefault)
         {
             sceneSetup = new SceneSetup();
             Setup.SetTypedInputValue(sceneSetup);
@@ -79,21 +81,35 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             Mesh.Value = ResultSetup.Value.Dispatches[index].MeshBuffers;
             Material.Value = ResultSetup.Value.Dispatches[index].Material;
         }
-    } 
-    
+
+        if (materialNeedsUpdate && ResultSetup?.Value?.Dispatches != null && ResultSetup.Value.Dispatches.Count > 0)
+        {
+            foreach (var dispatch in ResultSetup.Value.Dispatches)
+            {
+                if (dispatch.Material == null)
+                    continue;
+
+                dispatch.Material.Parameters.Roughness = _offsetRoughness;
+                dispatch.Material.Parameters.Metal = _offsetMetallic;
+                dispatch.Material.UpdateParameterBuffer();
+            }
+        }
+    }
+
     protected override void Dispose(bool isDisposing)
     {
         if (!isDisposing)
             return;
-        
+
         ResultSetup.Value?.Dispose();
- 
+
         Log.Debug("Destroying LoadGltfScene");
     }
+
     private bool LoadFileIfRequired(string path, out SceneSetup sceneSetup)
     {
         sceneSetup = null;
-        
+
         if (!_updateTriggered && path == _lastFilePath)
             return false;
 
@@ -114,7 +130,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         {
             var model = ModelRoot.Load(fullPath);
             var rootNode = ConvertToNodeStructure(model.DefaultScene);
-            
+
             sceneSetup.RootNodes.Clear();
             sceneSetup.RootNodes.Add(rootNode);
             sceneSetup.GenerateSceneDrawDispatches();
@@ -124,8 +140,8 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             ShowError($"Failed to load gltf file: {path} \n{e.Message}");
             return false;
         }
-        return true;
 
+        return true;
     }
 
     private SceneSetup.SceneNode ConvertToNodeStructure(Scene modelDefaultScene)
@@ -183,7 +199,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
                     if (meshBuffers == null)
                         continue;
-                    
+
                     Log.Debug($" mesh:{child.Name} {child?.Mesh?.Name}  {meshIndex}");
                     _meshBuffersForPrimitives[meshPrimitive] = meshBuffers;
 
@@ -335,7 +351,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         metallicRoughnessSrv?.Dispose();
         occlusionTexture?.Dispose();
         occlusionSrv?.Dispose();
-        
+
         var newMaterialDef = new SceneSetup.SceneMaterial
                                  {
                                      Name = name,
@@ -345,9 +361,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                                          {
                                                              BaseColor = baseColor,
                                                              EmissiveColor = emissiveColor,
-                                                             Roughness = roughness + _offsetRoughness,
+                                                             Roughness = roughness - 1 + _offsetRoughness, // glTF standard uses roughness factor?!
                                                              Specular = 1,
-                                                             Metal = metallic + _offsetMetallic,
+                                                             Metal = metallic -1 + _offsetMetallic, // glTF standard uses metallic factor?!
                                                          }
                                  };
 
@@ -681,9 +697,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                     // tDir =  Vector3.Cross(n1, sDir);
 
                     // Todo: Sadly this fill add significant artifacts to complex meshes
-                     
-                    vertexBufferData[a].Tangent = Vector3.Normalize(sDir); 
-                    vertexBufferData[a].Bitangent = Vector3.Normalize(tDir);   
+
+                    vertexBufferData[a].Tangent = Vector3.Normalize(sDir);
+                    vertexBufferData[a].Bitangent = Vector3.Normalize(tDir);
 
                     updatedTangentCount++;
                 }
@@ -731,8 +747,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     private float _offsetRoughness;
     private float _offsetMetallic;
     private static SamplerState _combineChannelsSampler;
-    private bool _updateTriggered;    
-
+    private bool _updateTriggered;
 
     #region implement graph node interfaces
     InputSlot<string> IDescriptiveFilename.GetSourcePathSlot()
@@ -775,7 +790,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
     [Input(Guid = "49237499-9B1E-4371-AFAC-4E3394868370")]
     public readonly InputSlot<float> OffsetMetallic = new();
-    
+
     [Input(Guid = "FB325383-754A-4702-AFF2-C19E16363460")]
     public readonly InputSlot<int> MeshChildIndex = new();
 }
