@@ -57,7 +57,7 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
 
             try
             {
-                (_textureResId, _srvResId) = ResourceManager.Instance().CreateTextureFromFile(imageFilePath, () => { Texture.DirtyFlag.Invalidate(); });
+                (_textureResId, _srvResId) = ResourceManager.Instance().CreateTextureFromFile(imageFilePath, this, () => { Texture.DirtyFlag.Invalidate(); });
 
                 if (ResourceManager.ResourcesById.TryGetValue(_textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
                     Texture.Value = textureResource.Texture;

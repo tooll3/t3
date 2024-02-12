@@ -72,9 +72,12 @@ namespace T3.Operators.Types.Id_e64f95e4_c045_400f_98ca_7c020ad46174
                 commands[index].Value?.RestoreAction?.Invoke(context);
             }
 
-            Commands.LimitMultiInputInvalidationToIndices = OptimizeInvalidation.GetValue(context) 
-                                                                ? _activeIndices 
-                                                                : null;
+            var switchList = Commands.LimitMultiInputInvalidationToIndices;
+            switchList.Clear();
+            
+            if(OptimizeInvalidation.GetValue(context))
+                switchList.AddRange(_activeIndices);
+            
             Count.Value = commands.Count;
         }
 

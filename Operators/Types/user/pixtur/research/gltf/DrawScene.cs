@@ -8,6 +8,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering.Material;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_2fcdea21_18f1_4006_a2fe_aab40893fed8
 {
