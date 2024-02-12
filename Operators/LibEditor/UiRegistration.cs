@@ -6,9 +6,7 @@ using lib.dx11.compute;
 using lib.dx11.draw;
 using lib.exec.context;
 using lib.io.audio;
-using lib.io.data;
 using lib.io.midi;
-using lib.io.time;
 using lib.math.@bool;
 using lib.math.curve;
 using lib.math.@float;
@@ -21,6 +19,9 @@ using T3.Editor.Compilation;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Templates;
+using user.cynic.research;
+using user.cynic.research.data;
+using Boolean = lib.math.@bool.Boolean;
 
 namespace libEditor;
 

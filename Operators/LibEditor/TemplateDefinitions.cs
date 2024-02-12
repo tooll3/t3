@@ -4,7 +4,6 @@ using lib.dx11._;
 using lib.dx11.compute;
 using T3.Core.Logging;
 using T3.Editor.Gui.Templates;
-using T3.Operators.Types.Id_bd0b9c5b_c611_42d0_8200_31af9661f189;
 
 namespace libEditor;
 
