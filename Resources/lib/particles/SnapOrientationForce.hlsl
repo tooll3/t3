@@ -6,8 +6,8 @@
 cbuffer Params : register(b0)
 {
     float Amount;
-    float Subdivisions;
-    float Phase;
+    float SnapAngle;
+    float PhaseAngle;
     float Variation;
 }
 
@@ -34,19 +34,24 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 v = Particles[i.x].Velocity;
 
     float lengthXY = length(v.xy);
+    if(lengthXY < 0.00001)
+        return;
 
     float2 normalizedV = normalize(v.xy);
 
     float a = atan2(normalizedV.x, normalizedV.y);
 
-    float aNormalized = (a + PI) / (PI*2);
-    aNormalized += (hash.x - 0.5) * Variation + Phase * 0.01;
-    float t = aNormalized * Subdivisions;
-    float tRounded = ((int)(t + 0.5)) / Subdivisions;
+    float aNormalized = ((a + PI) / (PI*2)) %1;
+    float subdivisions = 360 / SnapAngle;
+
+    aNormalized += (hash.x - 0.5) * Variation ;
+    float t = aNormalized * subdivisions;
+
+    float tRounded = ((int)(t + 0.5)) / subdivisions;
     
     float newAngle = lerp(aNormalized, tRounded, Amount);
 
-    float alignedRotation = (newAngle - 0.5) * 2 * PI;
+    float alignedRotation = (newAngle - 0.5) * 2 * PI + (PhaseAngle/360);
 
     float2 newXY = float2(sin(alignedRotation), cos(alignedRotation)) * lengthXY;
 

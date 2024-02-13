@@ -1,5 +1,5 @@
 {
-  "Name": "SnapVelocityForce",
+  "Name": "SnapToAnglesForce",
   "Id": "7eefe668-d290-4673-b766-39c98b9ba12e",
   "Namespace": "lib.point.particle.force",
   "Inputs": [
@@ -8,8 +8,8 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "1ad4c103-a0ab-4477-94ec-520d5bf16903"/*Frequency*/,
-      "DefaultValue": 8.0
+      "Id": "1ad4c103-a0ab-4477-94ec-520d5bf16903"/*AngleCount*/,
+      "DefaultValue": 45.0
     },
     {
       "Id": "8dabcbb3-2aa6-4213-82c9-e92c774c13f7"/*Phase*/,
@@ -18,14 +18,6 @@
     {
       "Id": "afd8fd12-8b3b-462b-a117-90981ddfccc6"/*Variation*/,
       "DefaultValue": 0.0
-    },
-    {
-      "Id": "682ea7e0-0c5e-4d01-9c29-042e39e70ffb"/*AmountDistribution*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0,
-        "Z": 1.0
-      }
     }
   ],
   "Children": [

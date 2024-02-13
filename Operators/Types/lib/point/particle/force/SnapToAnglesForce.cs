@@ -4,7 +4,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_7eefe668_d290_4673_b766_39c98b9ba12e
 {
-    public class SnapVelocityForce : Instance<SnapVelocityForce>
+    public class SnapToAnglesForce : Instance<SnapToAnglesForce>
     {
 
         [Output(Guid = "501b3c20-3998-4f7d-ae0c-76d7f879954f")]
@@ -14,16 +14,13 @@ namespace T3.Operators.Types.Id_7eefe668_d290_4673_b766_39c98b9ba12e
         public readonly InputSlot<float> Amount = new();
 
         [Input(Guid = "1ad4c103-a0ab-4477-94ec-520d5bf16903")]
-        public readonly InputSlot<float> Frequency = new();
+        public readonly InputSlot<float> AngleCount = new();
 
         [Input(Guid = "8dabcbb3-2aa6-4213-82c9-e92c774c13f7")]
         public readonly InputSlot<float> Phase = new();
 
         [Input(Guid = "afd8fd12-8b3b-462b-a117-90981ddfccc6")]
         public readonly InputSlot<float> Variation = new();
-
-        [Input(Guid = "682ea7e0-0c5e-4d01-9c29-042e39e70ffb")]
-        public readonly InputSlot<System.Numerics.Vector3> AmountDistribution = new();
     }
 }
 
