@@ -308,7 +308,7 @@
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
-          "Id": "acf14901-3373-4b0c-8567-03ea0051a21f"/*Center*/,
+          "Id": "acf14901-3373-4b0c-8567-03ea0051a21f"/*CameraTargetPosition*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
@@ -317,7 +317,7 @@
           }
         },
         {
-          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*Radius*/,
+          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*DistanceToTarget*/,
           "Type": "System.Single",
           "Value": 2.95
         },
@@ -335,7 +335,7 @@
           }
         },
         {
-          "Id": "21f595ad-0808-48f1-bdd8-118d1527944c"/*Fov*/,
+          "Id": "21f595ad-0808-48f1-bdd8-118d1527944c"/*FOV*/,
           "Type": "System.Single",
           "Value": 45.0
         }

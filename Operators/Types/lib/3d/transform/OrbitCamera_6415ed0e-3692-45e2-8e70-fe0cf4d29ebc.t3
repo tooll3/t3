@@ -8,7 +8,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "acf14901-3373-4b0c-8567-03ea0051a21f"/*Center*/,
+      "Id": "acf14901-3373-4b0c-8567-03ea0051a21f"/*CameraTargetPosition*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
@@ -16,12 +16,16 @@
       }
     },
     {
-      "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*Radius*/,
+      "Id": "21f595ad-0808-48f1-bdd8-118d1527944c"/*FOV*/,
+      "DefaultValue": 45.0
+    },
+    {
+      "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*DistanceToTarget*/,
       "DefaultValue": 3.0
     },
     {
       "Id": "df65e717-e2fd-4e4f-9e41-d6bcd3fe67f1"/*SpinRate*/,
-      "DefaultValue": 0.03
+      "DefaultValue": 0.05
     },
     {
       "Id": "8c4dab88-68cb-40cc-b576-ca3f3ea8461f"/*SpinOffset*/,
@@ -30,15 +34,15 @@
     {
       "Id": "8b75047f-03b7-4619-8869-2906e66731d1"/*OrbitAngleAndWobble*/,
       "DefaultValue": {
-        "X": 25.0,
-        "Y": 0.0
+        "X": 30.0,
+        "Y": 5.0
       }
     },
     {
-      "Id": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
+      "Id": "1af76b2e-cffe-4e3f-8793-c7a59d00430b"/*AimRollAngleAndWobble*/,
       "DefaultValue": {
         "X": 0.0,
-        "Y": 0.0
+        "Y": 5.0
       }
     },
     {
@@ -56,18 +60,10 @@
       }
     },
     {
-      "Id": "1af76b2e-cffe-4e3f-8793-c7a59d00430b"/*AimRollAngleAndWobble*/,
+      "Id": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0
-      }
-    },
-    {
-      "Id": "c81b91c6-2d06-4e3e-97bd-01d60f5f0f7d"/*RotationOffset*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
       }
     },
     {
@@ -79,20 +75,12 @@
       "DefaultValue": 2
     },
     {
+      "Id": "fb113fd1-3edf-4db6-9dfb-800c62070d69"/*Damping*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "dd81b2aa-3252-4130-8def-a5b399d3e283"/*Seed*/,
       "DefaultValue": 0
-    },
-    {
-      "Id": "f51b38d7-2380-457f-897d-2429b2ad6ac3"/*Up*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 1.0,
-        "Z": 0.0
-      }
-    },
-    {
-      "Id": "bd1bc8a5-72ce-42b0-8914-4f6e124a18ae"/*AspectRatio*/,
-      "DefaultValue": 0.0
     },
     {
       "Id": "353e2f08-a55f-48ce-ae65-53d5d081b6f0"/*NearFarClip*/,
@@ -102,12 +90,24 @@
       }
     },
     {
-      "Id": "21f595ad-0808-48f1-bdd8-118d1527944c"/*Fov*/,
-      "DefaultValue": 45.0
+      "Id": "c81b91c6-2d06-4e3e-97bd-01d60f5f0f7d"/*RotationOffset*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
     },
     {
-      "Id": "fb113fd1-3edf-4db6-9dfb-800c62070d69"/*Damping*/,
+      "Id": "bd1bc8a5-72ce-42b0-8914-4f6e124a18ae"/*AspectRatio*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "f51b38d7-2380-457f-897d-2429b2ad6ac3"/*Up*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 1.0,
+        "Z": 0.0
+      }
     }
   ],
   "Children": [],
