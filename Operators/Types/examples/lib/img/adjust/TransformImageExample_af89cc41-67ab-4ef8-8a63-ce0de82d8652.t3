@@ -189,17 +189,17 @@
           }
         },
         {
+          "Id": "1d0cf561-858d-4510-95c4-f3ad9148355d"/*BlendMode*/,
+          "Type": "System.Int32",
+          "Value": 2
+        },
+        {
           "Id": "53afc8d9-f417-4628-9a97-220bec62919f"/*Resolution*/,
           "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
             "X": 512,
             "Y": 512
           }
-        },
-        {
-          "Id": "1d0cf561-858d-4510-95c4-f3ad9148355d"/*BlendMode*/,
-          "Type": "System.Int32",
-          "Value": 2
         }
       ],
       "Outputs": []
@@ -452,19 +452,6 @@
           }
         },
         {
-          "Id": "abf3456d-35bc-49ec-9aa6-c5571fbb209a"/*Center*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.03
-          }
-        },
-        {
-          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
           "Id": "5774969c-ef4d-482e-ab37-b3a84b09debb"/*PingPong*/,
           "Type": "System.Boolean",
           "Value": true
@@ -473,6 +460,19 @@
           "Id": "7f3fe86d-f259-458a-908a-0a71d39ca678"/*Repeat*/,
           "Type": "System.Boolean",
           "Value": false
+        },
+        {
+          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
+          "Type": "System.Single",
+          "Value": 0.0
+        },
+        {
+          "Id": "abf3456d-35bc-49ec-9aa6-c5571fbb209a"/*Center*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.03
+          }
         }
       ],
       "Outputs": []

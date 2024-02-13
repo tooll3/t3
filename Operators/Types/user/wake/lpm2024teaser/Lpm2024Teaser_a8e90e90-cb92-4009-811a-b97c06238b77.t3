@@ -335,14 +335,14 @@
           }
         },
         {
-          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
-          "Type": "System.Single",
-          "Value": -16.0
-        },
-        {
           "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 1.65
+        },
+        {
+          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
+          "Type": "System.Single",
+          "Value": -16.0
         },
         {
           "Id": "c38647f6-c6ea-40a0-b872-0df6d4168c05"/*Offset*/,

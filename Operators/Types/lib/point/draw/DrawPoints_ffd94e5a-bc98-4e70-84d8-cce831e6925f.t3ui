@@ -23,50 +23,54 @@
         "X": 606.7909,
         "Y": 4209.768
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 0.5
     },
     {
-      "InputId": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"/*Texture_*/,
+      "InputId": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
       "Position": {
         "X": 606.7909,
         "Y": 4254.768
       }
     },
     {
-      "InputId": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
-      "Position": {
-        "X": 606.7909,
-        "Y": 4299.768
-      }
-    },
-    {
-      "InputId": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
-      "Position": {
-        "X": 606.7909,
-        "Y": 4344.768
-      }
-    },
-    {
       "InputId": "8fab9161-48d4-43b0-a18f-5942b7071a49"/*BlendMode*/,
       "Position": {
-        "X": 606.7909,
-        "Y": 4389.768
-      }
+        "X": 605.939,
+        "Y": 4315.253
+      },
+      "GroupTitle": "Draw options"
     },
     {
       "InputId": "3fbad175-6060-40f2-a675-bdae20107698"/*FadeNearest*/,
       "Position": {
-        "X": 606.7909,
-        "Y": 4434.768
+        "X": 610.02814,
+        "Y": 4361.2554
       }
     },
     {
-      "InputId": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
+      "InputId": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
       "Position": {
-        "X": 606.7909,
-        "Y": 4479.768
+        "X": 610.02814,
+        "Y": 4406.2554
+      },
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
+      "Position": {
+        "X": 610.02814,
+        "Y": 4451.2554
       }
+    },
+    {
+      "InputId": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"/*Texture_*/,
+      "Position": {
+        "X": 606.9613,
+        "Y": 4603.536
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [

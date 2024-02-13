@@ -68,7 +68,7 @@
         "X": 628.21533,
         "Y": 1099.5239
       },
-      "AddPadding": "True"
+      "GroupTitle": "Draw Options"
     },
     {
       "InputId": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableDepthWrite*/,

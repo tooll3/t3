@@ -720,11 +720,6 @@
           }
         },
         {
-          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
-          "Type": "System.Single",
-          "Value": 27.000002
-        },
-        {
           "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 0.23
@@ -738,6 +733,11 @@
           "Id": "7f3fe86d-f259-458a-908a-0a71d39ca678"/*Repeat*/,
           "Type": "System.Boolean",
           "Value": true
+        },
+        {
+          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
+          "Type": "System.Single",
+          "Value": 27.000002
         },
         {
           "Id": "53afc8d9-f417-4628-9a97-220bec62919f"/*Resolution*/,
