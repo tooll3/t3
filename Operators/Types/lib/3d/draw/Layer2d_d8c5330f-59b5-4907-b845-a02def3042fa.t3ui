@@ -1,5 +1,6 @@
 {
   "Id": "d8c5330f-59b5-4907-b845-a02def3042fa"/*Layer2d*/,
+  "Description": "Creates a 2D plane in 3D space onto which the incoming image is rendered.\nThis op automatically adjusts to the correct aspect ratio and is usually always the last op in every render pipeline.\n\nIn addition to this essential function, it can also be used for other purposes due to its versatile options.\n\nA possible alternative [QuadMesh] -> [DrawMesh] -> [SetMaterial] in combination with [RenderTarget].",
   "InputUis": [
     {
       "InputId": "a384be77-c5fc-47b3-9ec3-960db9f9bae9"/*Position*/,
@@ -7,6 +8,7 @@
         "X": -445.3646,
         "Y": 644.05896
       },
+      "Description": "X / Y Position of the plane in 3D space.\nX: Left / Right\nY: Up / Down",
       "Min": -1.0,
       "Max": 1.0,
       "UseVec2Control": "Position"
@@ -16,7 +18,8 @@
       "Position": {
         "X": -445.3646,
         "Y": 689.05896
-      }
+      },
+      "Description": "Distance to the viewport.\nPositive values reduce the distance. Negative values increase it."
     },
     {
       "InputId": "da0941c9-c700-4552-9d8a-799bf7a08826"/*Rotate*/,
@@ -24,6 +27,7 @@
         "X": -455.0904,
         "Y": 943.4808
       },
+      "Description": "Positive values turn the plane counterclockwise, negative values turn it clockwise.",
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.0}°"
@@ -34,6 +38,7 @@
         "X": -455.79684,
         "Y": 857.9977
       },
+      "Description": "Non-Uniform scaling of the plane.\nX = Width\nY = Height",
       "AddPadding": "True",
       "UseVec2Control": "Position"
     },
@@ -43,9 +48,11 @@
         "X": -455.79684,
         "Y": 812.9977
       },
-      "Min": 0.0,
+      "Description": "Uniformly scales the Plane.",
+      "Min": 0.01,
       "Max": 10.0,
       "Scale": 0.001,
+      "Clamp": true,
       "Format": "{0:0.000} ×"
     },
     {
@@ -53,7 +60,8 @@
       "Position": {
         "X": -455.79684,
         "Y": 767.9977
-      }
+      },
+      "Description": "Selects the mode in which the Plane should dynamically adapt to the aspect ratio of the viewport."
     },
     {
       "InputId": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
@@ -61,6 +69,7 @@
         "X": -455.0904,
         "Y": 1033.4807
       },
+      "Description": "Selects a color which will be multiplied with the incoming image.",
       "AddPadding": "True"
     },
     {
@@ -69,21 +78,24 @@
         "X": -455.0904,
         "Y": 1078.4807
       },
-      "GroupTitle": "Additional Options"
+      "GroupTitle": "Additional Options",
+      "Description": "Selects the Blendmode."
     },
     {
       "InputId": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,
       "Position": {
         "X": -455.67914,
         "Y": 1216.7563
-      }
+      },
+      "Description": "This defines whether the mesh / plane covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "022f1959-a62b-49de-817a-3930bc8ec32b"/*EnableDepthWrite*/,
       "Position": {
         "X": -455.67914,
         "Y": 1261.7563
-      }
+      },
+      "Description": "This defines whether the mesh / plane covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"/*Texture*/,
@@ -91,7 +103,8 @@
       "Position": {
         "X": -455.67914,
         "Y": 1306.7563
-      }
+      },
+      "Description": "Texture Input for any 2D Op.\ne.g. [RenderTarget], [Loadimage] etc."
     }
   ],
   "SymbolChildUis": [
