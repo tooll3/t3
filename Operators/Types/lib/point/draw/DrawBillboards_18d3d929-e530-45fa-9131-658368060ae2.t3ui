@@ -15,14 +15,16 @@
         "X": -781.3351,
         "Y": 291.5584
       },
-      "GroupTitle": "Shapes"
+      "GroupTitle": "Shapes",
+      "Description": "Non-uniformly scales the billboards\nX = Width\nY = Length"
     },
     {
       "InputId": "3247ff54-e470-466a-a70c-cdba1e264f6b"/*UseWForScale*/,
       "Position": {
         "X": -816.74774,
         "Y": 355.61105
-      }
+      },
+      "Description": "Defines whether the \"W\"-Value of the Gpoints used has an influence on the size of the rendered Billboards"
     },
     {
       "InputId": "542832d1-fc70-4eaa-a003-7fdd9062dc05"/*UseExtend*/,
@@ -37,6 +39,7 @@
         "X": -784.04156,
         "Y": 525.03925
       },
+      "Description": "Moves the Billboards away from the Position of their respective GPoints",
       "AddPadding": "True"
     },
     {
@@ -45,6 +48,7 @@
         "X": -784.04156,
         "Y": 570.03925
       },
+      "Description": "Defines how a billboard is aligned",
       "AddPadding": "True"
     },
     {
@@ -53,6 +57,7 @@
         "X": -784.04156,
         "Y": 615.03925
       },
+      "Description": "Rotates a billboard around its own axis without affecting the Orientation.",
       "Min": -90.0,
       "Max": 90.0
     },
@@ -61,7 +66,8 @@
       "Position": {
         "X": -784.04156,
         "Y": 660.03925
-      }
+      },
+      "Description": "Defines how strongly the rotation influences the individual axis."
     },
     {
       "InputId": "a9e64a2e-6a88-4c36-9e02-95ca710ea86e"/*Randomize*/,
@@ -69,14 +75,16 @@
         "X": -824.86597,
         "Y": 740.66797
       },
-      "GroupTitle": "Randomize..."
+      "GroupTitle": "Randomize...",
+      "Description": "Multiplier for controlling the following random values"
     },
     {
       "InputId": "8cd25011-5305-4bdf-9307-a46e52b5c503"/*RandomPhase*/,
       "Position": {
         "X": -786.8831,
         "Y": 785.66797
-      }
+      },
+      "Description": "Phase value for changing the randomness. Can be animated with [Time], for example."
     },
     {
       "InputId": "76c52e1f-1767-4635-86a1-93e44cc2a487"/*RandomPosition*/,
@@ -84,6 +92,7 @@
         "X": -783.96234,
         "Y": 836.94696
       },
+      "Description": "Multiplier for the random distribution along X, Y and Z.",
       "AddPadding": "True"
     },
     {
@@ -92,6 +101,7 @@
         "X": -783.96234,
         "Y": 881.94696
       },
+      "Description": "Multiplier for random rotation",
       "Min": -90.0,
       "Max": 90.0
     },
@@ -100,7 +110,8 @@
       "Position": {
         "X": -783.96234,
         "Y": 926.94696
-      }
+      },
+      "Description": "Multiplier for random uniform scaling"
     },
     {
       "InputId": "211c4e91-e667-4cb7-a7b2-81081cd780cb"/*Color*/,
@@ -108,7 +119,8 @@
         "X": -782.7925,
         "Y": 1047.1528
       },
-      "GroupTitle": "Color Variation..."
+      "GroupTitle": "Color Variation...",
+      "Description": "Defines the color of the Billboards.\nIf a Texture is used this color will be multiplied."
     },
     {
       "InputId": "6ac9265b-c6ae-47dc-a605-993d685edf90"/*ColorVariationMode*/,
@@ -228,14 +240,16 @@
         "X": -779.42163,
         "Y": 2082.4014
       },
-      "GroupTitle": "Draw Settings..."
+      "GroupTitle": "Draw Settings...",
+      "Description": "Selects the Blendmode"
     },
     {
       "InputId": "62c511b9-ca36-48db-a9cf-13c929f81db6"/*EnableDepthWrite*/,
       "Position": {
         "X": -759.1295,
         "Y": 2128.3306
-      }
+      },
+      "Description": "Defines whether Billboards cover themselves or are covered by or cover other 3D elements."
     },
     {
       "InputId": "c676823b-97d0-4e3e-a59e-e2297816ec69"/*AlphaCut*/,
@@ -243,6 +257,7 @@
         "X": -759.1295,
         "Y": 2173.3306
       },
+      "Description": "Bias value that can be used to influence how partially transparent pixels behave. It can be used to fine-tune the boundary to full transparency if an alpha mask is used",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -260,7 +275,8 @@
       "Position": {
         "X": -757.86597,
         "Y": 2319.6323
-      }
+      },
+      "Description": "Input for GPoints"
     }
   ],
   "SymbolChildUis": [

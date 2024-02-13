@@ -48,7 +48,7 @@
     },
     {
       "Id": "a9e64a2e-6a88-4c36-9e02-95ca710ea86e"/*Randomize*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 0.0
     },
     {
       "Id": "8cd25011-5305-4bdf-9307-a46e52b5c503"/*RandomPhase*/,
@@ -57,18 +57,18 @@
     {
       "Id": "76c52e1f-1767-4635-86a1-93e44cc2a487"/*RandomPosition*/,
       "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
+        "X": 0.01,
+        "Y": 0.01,
+        "Z": 0.01
       }
     },
     {
       "Id": "80edea41-7f4e-492e-bf73-270df9b225be"/*RandomRotate*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 180.0
     },
     {
       "Id": "640e0f51-e636-406b-ba64-8746096fee36"/*RandomScale*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "211c4e91-e667-4cb7-a7b2-81081cd780cb"/*Color*/,
