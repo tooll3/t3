@@ -14,6 +14,9 @@ namespace T3.Operators.Types.Id_191e5057_4da4_447e_b7cf_e9e0ed8c5dd8
         [Input(Guid = "d504c3f9-290f-4a73-bf9d-f9266ea955f6")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
+        [Input(Guid = "7634c477-6891-4fac-8f8a-3e580cb02277", MappedType = typeof(SpreadModes))]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
+
         [Input(Guid = "d5a5862b-d3a2-4e6e-ad54-32cff7ced0fd")]
         public readonly InputSlot<float> Amount = new InputSlot<float>();
 
@@ -21,7 +24,7 @@ namespace T3.Operators.Types.Id_191e5057_4da4_447e_b7cf_e9e0ed8c5dd8
         public readonly InputSlot<int> Mapping = new InputSlot<int>();
 
         [Input(Guid = "ba00fa7a-fcda-48da-a4c7-f2fe97997e50", MappedType = typeof(Modes))]
-        public readonly InputSlot<int> Mode = new InputSlot<int>();
+        public readonly InputSlot<int> ApplyMode = new InputSlot<int>();
 
         [Input(Guid = "38046ede-e786-4cb1-ac17-de6cb7b91c32")]
         public readonly InputSlot<float> Range = new InputSlot<float>();
@@ -38,6 +41,12 @@ namespace T3.Operators.Types.Id_191e5057_4da4_447e_b7cf_e9e0ed8c5dd8
         [Input(Guid = "7c944690-d5b2-4894-a178-97593ecd797a")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
 
+        private enum SpreadModes
+        {
+            UseBufferOrder,
+            UseW,
+        }
+        
 
         private enum MappingModes
         {

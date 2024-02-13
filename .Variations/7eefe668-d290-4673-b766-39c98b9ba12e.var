@@ -2,101 +2,128 @@
   "Id": "7eefe668-d290-4673-b766-39c98b9ba12e",
   "Variations": [
     {
-      "Id": "8cc2e5a2-dfcb-4731-809c-060191d64c6f",
+      "Id": "1bf0a49a-a0c5-41e8-8be0-45808be5debf",
       "IsPreset": true,
-      "ActivationIndex": 1,
-      "Title": "Triangular",
+      "ActivationIndex": 7,
+      "Title": "Neural",
       "PosOnCanvas": {
-        "X": 163.0,
-        "Y": 0.0
+        "X": -0.58584595,
+        "Y": 283.35413
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
-          "e596a8ec-3681-4f45-b72c-d50a97240270": 0.99,
-          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 6.0,
-          "8dabcbb3-2aa6-4213-82c9-e92c774c13f7": -0.29,
+          "e596a8ec-3681-4f45-b72c-d50a97240270": 0.35,
+          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 60.0,
+          "afd8fd12-8b3b-462b-a117-90981ddfccc6": 0.09
+        }
+      }
+    },
+    {
+      "Id": "a76bad2b-6568-4a92-a57c-f0f641909541",
+      "IsPreset": true,
+      "ActivationIndex": 8,
+      "Title": "Straight 60s",
+      "PosOnCanvas": {
+        "X": 162.41415,
+        "Y": 283.35413
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "e596a8ec-3681-4f45-b72c-d50a97240270": 0.35,
+          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 60.0
+        }
+      }
+    },
+    {
+      "Id": "67715940-e197-4121-ba12-a2e184def108",
+      "IsPreset": true,
+      "ActivationIndex": 9,
+      "Title": "Iso 6",
+      "PosOnCanvas": {
+        "X": 325.41415,
+        "Y": 283.35413
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 60.0
+        }
+      }
+    },
+    {
+      "Id": "c1dcd3a8-1bcb-4516-b1c8-3577c3bb04f2",
+      "IsPreset": true,
+      "ActivationIndex": 10,
+      "Title": "Arabesce",
+      "PosOnCanvas": {
+        "X": -0.58584595,
+        "Y": 376.35413
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 30.0
+        }
+      }
+    },
+    {
+      "Id": "62cd32e5-247a-452d-80d7-5d8bffa9dc03",
+      "IsPreset": true,
+      "ActivationIndex": 11,
+      "Title": "Squares!",
+      "PosOnCanvas": {
+        "X": 162.41415,
+        "Y": 376.35413
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 90.0
+        }
+      }
+    },
+    {
+      "Id": "87e963a1-d431-49ed-9959-deeebfcc3778",
+      "IsPreset": true,
+      "ActivationIndex": 12,
+      "Title": "Learning to weave",
+      "PosOnCanvas": {
+        "X": 325.41415,
+        "Y": 376.35413
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "e596a8ec-3681-4f45-b72c-d50a97240270": 0.21,
+          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 90.0
+        }
+      }
+    },
+    {
+      "Id": "c865a8f7-4ab9-455d-a124-ef60c7e7c2f5",
+      "IsPreset": true,
+      "ActivationIndex": 13,
+      "Title": "Coffeine Spiders ",
+      "PosOnCanvas": {
+        "X": -0.58584595,
+        "Y": 469.35413
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "e596a8ec-3681-4f45-b72c-d50a97240270": 0.21,
+          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 90.0,
           "afd8fd12-8b3b-462b-a117-90981ddfccc6": 0.12
         }
       }
     },
     {
-      "Id": "c73778b5-5487-4511-86f3-5fcd68bb60d5",
+      "Id": "2d672deb-c621-4e64-afa4-032c9af651ff",
       "IsPreset": true,
-      "ActivationIndex": 2,
-      "Title": "HexTwister",
+      "ActivationIndex": 8,
+      "Title": "Cyberia!",
       "PosOnCanvas": {
-        "X": 326.0,
-        "Y": 0.0
+        "X": -0.58584595,
+        "Y": 190.35413
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
-          "e596a8ec-3681-4f45-b72c-d50a97240270": 0.17,
-          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 6.0,
-          "8dabcbb3-2aa6-4213-82c9-e92c774c13f7": -0.24,
-          "afd8fd12-8b3b-462b-a117-90981ddfccc6": 0.12
-        }
-      }
-    },
-    {
-      "Id": "f53b73f6-5008-492c-a20d-b07c3179264c",
-      "IsPreset": true,
-      "ActivationIndex": 3,
-      "Title": "Icy",
-      "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 93.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 6.0,
-          "afd8fd12-8b3b-462b-a117-90981ddfccc6": 0.12
-        }
-      }
-    },
-    {
-      "Id": "dce2272c-91e5-423d-97b6-ab66fd482f40",
-      "IsPreset": true,
-      "ActivationIndex": 4,
-      "Title": "Choas",
-      "PosOnCanvas": {
-        "X": 163.0,
-        "Y": 93.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 3.0,
-          "afd8fd12-8b3b-462b-a117-90981ddfccc6": 0.37
-        }
-      }
-    },
-    {
-      "Id": "32ff4687-cad8-447d-847d-90676bcd4189",
-      "IsPreset": true,
-      "ActivationIndex": 5,
-      "Title": "Walker",
-      "PosOnCanvas": {
-        "X": 326.0,
-        "Y": 93.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 4.0,
-          "afd8fd12-8b3b-462b-a117-90981ddfccc6": 0.37
-        }
-      }
-    },
-    {
-      "Id": "bfcdceaf-9926-46c2-a348-3d362d288b10",
-      "IsPreset": true,
-      "ActivationIndex": 6,
-      "Title": "DigitalExplosion",
-      "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 186.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 8.0,
+          "1ad4c103-a0ab-4477-94ec-520d5bf16903": 45.0,
           "afd8fd12-8b3b-462b-a117-90981ddfccc6": 0.14
         }
       }
