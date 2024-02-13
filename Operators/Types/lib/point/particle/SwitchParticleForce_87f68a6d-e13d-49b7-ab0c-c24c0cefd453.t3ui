@@ -15,7 +15,9 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "GroupTitle": "Switch",
+      "Description": "Defines which of the incoming Forces is active\n-1 disables all forces\n-2 activates all forces"
     }
   ],
   "SymbolChildUis": [],
