@@ -172,8 +172,10 @@ namespace T3.Editor.Gui.Graph
 
                 resourcePaths.Add(@"Resources\lib\dx11\fullscreen-texture.hlsl");
                 resourcePaths.Add(@"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl");
+                resourcePaths.Add(@"Resources\lib\cs\CombineGltfChannels-cs.hlsl");
 
                 resourcePaths.Add(@"Resources\common\images\BRDF-LookUp.png");
+                resourcePaths.Add(@"Resources\common\images\BRDF-LookUp.dds");
                 resourcePaths.Add(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
 
                 resourcePaths.Add(@"Resources\t3-editor\images\t3.ico");

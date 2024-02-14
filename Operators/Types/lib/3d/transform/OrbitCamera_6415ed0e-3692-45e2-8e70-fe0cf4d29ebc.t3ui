@@ -17,8 +17,8 @@
         "X": -224.62245,
         "Y": -519.9833
       },
-      "GroupTitle": "Main Settings",
-      "Description": "Position of the camera target"
+      "Description": "Position of the camera target",
+      "AddPadding": "True"
     },
     {
       "InputId": "21f595ad-0808-48f1-bdd8-118d1527944c"/*FOV*/,
@@ -26,8 +26,7 @@
         "X": -224.62245,
         "Y": -474.98328
       },
-      "Description": "Defines the field of view (fov) or focal length of the camera in degrees",
-      "AddPadding": "True"
+      "Description": "Defines the field of view (fov) or focal length of the camera in degrees"
     },
     {
       "InputId": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*DistanceToTarget*/,
@@ -36,7 +35,6 @@
         "Y": -399.46722
       },
       "Description": "Distance of the camera to the target",
-      "AddPadding": "True",
       "Scale": 0.01
     },
     {
@@ -57,7 +55,6 @@
         "Y": -309.46722
       },
       "Description": "Value in degrees that is added to the \"SpinRate\"",
-      "AddPadding": "True",
       "Min": -360.0,
       "Max": 360.0,
       "Scale": 1.0,
@@ -84,7 +81,9 @@
         "Y": -219.46722
       },
       "Description": "X = Rolls the camera to the right or left\nY = Defines how much may be deviated from the first value at random",
-      "Scale": 0.5
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "4d2d2d2d-00bd-4df9-b209-62f0c7926c38"/*AimPitchAngleAndWobble*/,
@@ -93,7 +92,9 @@
         "Y": -174.46722
       },
       "Description": "X = Camera Pitch\nY = Defines how much may be deviated from the first value at random",
-      "Scale": 0.5
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "066cd0e7-de72-4e04-bf13-686ccc301c5a"/*AimYawAngleAndWobble*/,
@@ -102,7 +103,9 @@
         "Y": -129.46722
       },
       "Description": "X = Turns the camera view to the left or right\nY = Defines how much may be deviated from the first value at random",
-      "Scale": 0.5
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
@@ -111,7 +114,9 @@
         "Y": -84.467224
       },
       "Description": "X = Same as \"SpinOffset\"\nY = Defines how much may be deviated from the first value at random",
-      "Scale": 0.5
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "b6bf6fe1-6733-46c0-a274-fab2a950f606"/*WobbleSpeed*/,

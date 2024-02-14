@@ -362,7 +362,7 @@ namespace T3.Player
 
                     if (_outputTextureSrv == null || textureChanged)
                     {
-                        Log.Debug("Creating new srv...");
+                        Log.Debug("Creating new player render srv...");
                         _outputTextureSrv = new ShaderResourceView(_device, _outputTexture);
                     }
                     
