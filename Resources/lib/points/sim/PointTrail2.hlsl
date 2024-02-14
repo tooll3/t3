@@ -25,7 +25,7 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
 
     int targetIndex = i.x;
-    int sourceIndex =   (i.x + CycleIndex +1) % pointCount ;
+    int sourceIndex =   (i.x + CycleIndex +1) % pointCount;
 
     int bufferLength = pointCount * TrailLength;
 
@@ -33,8 +33,22 @@ void main(uint3 i : SV_DispatchThreadID)
 
     TrailPoints[pointCount-targetIndex-1] = CyclePoints[sourceIndex];
     
-    if(fInBuffer == 0)
+    // Todo: This should be an optional parameter
+    if(fInBuffer <= 0)
          fInBuffer = NAN;
          
+    if(AddSeparatorThreshold > 0) 
+    {
+        int sourceIndexLast =   (i.x + CycleIndex +2) % pointCount ;
+        float3 lastPos = CyclePoints[sourceIndexLast].Position;
+        float3 pos = CyclePoints[sourceIndex].Position;
+        if( length(lastPos - pos) > AddSeparatorThreshold)  
+        {
+            TrailPoints[pointCount-targetIndex-1].Position.z+= 0.1;
+            fInBuffer = NAN;
+        }
+            //TrailPoints[pointCount-targetIndex-1].W = 10; //sqrt(-1);
+    }
+
     TrailPoints[pointCount-targetIndex-1].W = fInBuffer;
 }

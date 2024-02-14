@@ -34,24 +34,14 @@ void main(uint3 i : SV_DispatchThreadID)
 
     TrailPoints[targetIndex] = SourcePoints[sourceIndex];
 
-    float3 lastPos = TrailPoints[(targetIndex-1) % bufferLength ].Position;
-    float3 pos = SourcePoints[sourceIndex].Position;
-    if(AddSeparatorThreshold > 0) {
-        if( length(lastPos - pos) > 0.5) 
+    if(AddSeparatorThreshold > 0) 
+    {
+        float3 lastPos = TrailPoints[(targetIndex-1) % bufferLength ].Position;
+        float3 pos = SourcePoints[sourceIndex].Position;
+        if( length(lastPos - pos) > AddSeparatorThreshold) 
             TrailPoints[targetIndex].W = sqrt(-1);
     }
 
-    //TrailPoints[targetIndex].rotation = normalize(qLookAt(SourcePoints[sourceIndex].position, lastPos));
-
-    //Point p = SourcePoints[i.x];
-    //TrailPoints[targetIndex].w = 0.4;
-
     // Flag follow position W as NaN line seperator
     TrailPoints[(targetIndex + 1) % bufferLength].W = sqrt(-1);
-
-    // // Flag too small w as separator
-    // if(TrailPoints[targetIndex].w < 0.001 ) 
-    // {
-    //     TrailPoints[targetIndex].w = sqrt(-1);
-    // }
 }

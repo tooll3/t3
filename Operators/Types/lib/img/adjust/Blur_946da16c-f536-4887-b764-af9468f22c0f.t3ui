@@ -24,7 +24,9 @@
         "X": -308.4377,
         "Y": 148.1156
       },
-      "Min": 0.0
+      "Min": 0.0,
+      "Max": 100.0,
+      "Clamp": true
     },
     {
       "InputId": "03e6c20c-6b8a-422e-bba1-1cefddc645fd"/*Offset*/,

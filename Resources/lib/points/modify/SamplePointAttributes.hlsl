@@ -41,6 +41,11 @@ cbuffer Params : register(b0)
     float Mode;
     float TranslationSpace;
     float RotationSpace;
+
+    float A;
+    float AFactor;
+    float AOffset;
+   
 }
 
 StructuredBuffer<Point> Points : t0;
@@ -158,6 +163,38 @@ sampler texSampler : register(s0);
 
     p.W = Mode < 0.5 ? (p.W + ff.w)
                                        : (p.W * (1 + ff.w));
+
+    //Color attempt
+    float4 Color = p.Color;
+    float colRFactor = (R == 11 ? (c.r * RFactor + ROffset) : 0) +
+                       (G == 11 ? (c.g * GFactor + GOffset) : 0) +
+                       (B == 11 ? (c.b * BFactor + BOffset) : 0) +
+                       (A == 11 ? (c.a * AFactor - AOffset) : 0) +
+                       (L == 11 ? (gray * LFactor + LOffset) : 0);
+
+    float colGFactor = (R == 12 ? (c.r * RFactor + ROffset) : 0) +
+                       (G == 12 ? (c.g * GFactor + GOffset) : 0) +
+                       (B == 12 ? (c.b * BFactor + BOffset) : 0) +
+                       (A == 12 ? (c.a * AFactor - AOffset) : 0) +
+                       (L == 12 ? (gray * LFactor + LOffset) : 0);
+
+    float colBFactor = (R == 13 ? (c.r * RFactor + ROffset) : 0) +
+                       (G == 13 ? (c.g * GFactor + GOffset) : 0) +
+                       (B == 13 ? (c.b * BFactor + BOffset) : 0) +
+                       (A == 13 ? (c.a * AFactor - AOffset) : 0) +
+                       (L == 13 ? (gray * LFactor + LOffset) : 0);
+
+     float colAFactor = (R == 14 ? (c.r * RFactor + ROffset) : 0) +
+                        (G == 14 ? (c.g * GFactor + GOffset) : 0) +
+                        (B == 14 ? (c.b * BFactor + BOffset) : 0) +
+                        (A == 14 ? (c.a * AFactor - AOffset) : 0) +
+                        (L == 14 ? (gray * LFactor + LOffset) : 0);
+
+    
+    float4 newCol = float4(p.Color.rgb - p.Color.rgb, 1) + float4(colRFactor,colGFactor,colBFactor, colAFactor-1);
+ 
+    p.Color = Mode < 0.5 ? (newCol): (p.Color) ;
+                                       
 
     ResultPoints[index] = p;
 }

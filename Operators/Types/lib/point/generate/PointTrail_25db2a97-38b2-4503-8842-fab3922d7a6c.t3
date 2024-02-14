@@ -223,12 +223,6 @@
       "SymbolId": "2eb20a76-f8f7-49e9-93a5-1e5981122b50",
       "InputValues": [],
       "Outputs": []
-    },
-    {
-      "Id": "c6f80fad-32ed-4b5c-9f6b-a8234551bfa6"/*ModInt*/,
-      "SymbolId": "cf3268d7-4f3d-47bd-8cb5-0214c75432ec",
-      "InputValues": [],
-      "Outputs": []
     }
   ],
   "Connections": [

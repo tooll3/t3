@@ -35,10 +35,10 @@ namespace T3.Operators.Types.Id_836f211f_b387_417c_8316_658e0dc6e117
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new();
 
         [Input(Guid = "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa")]
-        public readonly InputSlot<bool> EnableTest = new();
+        public readonly InputSlot<bool> EnableZTest = new();
 
         [Input(Guid = "c9cf2182-1297-463c-b5c1-d4ee7ad0895c")]
-        public readonly InputSlot<bool> EnableDepthWrite = new();
+        public readonly InputSlot<bool> EnableZWrite = new();
 
         [Input(Guid = "d90ff4e6-7d70-441f-a064-b40401025c36", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMod = new();
@@ -47,7 +47,7 @@ namespace T3.Operators.Types.Id_836f211f_b387_417c_8316_658e0dc6e117
         public readonly InputSlot<float> UvScale = new();
 
         [Input(Guid = "ba83a66f-5a4c-4355-abb2-d4b7cd55d542")]
-        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> AddressU = new();
+        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new();
     }
 }
 

@@ -1,6 +1,6 @@
 {
   "Id": "d8c5330f-59b5-4907-b845-a02def3042fa"/*Layer2d*/,
-  "Description": "Draws the connected image. This is the primary method of converting images (pink data type) to \"commands\" (cyan data type).\n\nWith the default camera and scale settings the image is perfectly scaled so the upper and lower edges align with the screen. Use the scale mode parameter to override this.\n ",
+  "Description": "Creates a 2D plane in 3D space onto which the incoming image is rendered.\nThis op automatically adjusts to the correct aspect ratio and is usually always the last op in every render pipeline.\n\nIn addition to this essential function, it can also be used for other purposes due to its versatile options.\n\nA possible alternative [QuadMesh] -> [DrawMesh] -> [SetMaterial] in combination with [RenderTarget].",
   "InputUis": [
     {
       "InputId": "a384be77-c5fc-47b3-9ec3-960db9f9bae9"/*Position*/,
@@ -8,7 +8,7 @@
         "X": -445.3646,
         "Y": 644.05896
       },
-      "Description": "The horizontal and vertical position of the layer in world space. \nWith the default camera the viewport at that distance is precisely two units high. So setting y to 1 wil align the lower layer border to the screen center.\n",
+      "Description": "The horizontal and vertical position of the layer in world space. \\nWith the default camera the viewport at that distance is precisely two units high. So setting y to 1 will align the lower layer border to the screen center.",
       "Min": -1.0,
       "Max": 1.0,
       "UseVec2Control": "Position"
@@ -19,7 +19,7 @@
         "X": -445.3646,
         "Y": 689.05896
       },
-      "Description": "The depth position. Increasing this will move the plane towards the camera."
+      "Description": "Distance to the viewport.\nPositive values reduce the distance. Negative values increase it."
     },
     {
       "InputId": "da0941c9-c700-4552-9d8a-799bf7a08826"/*Rotate*/,
@@ -27,7 +27,7 @@
         "X": -455.0904,
         "Y": 943.4808
       },
-      "Description": "Counter clockwise rotation.",
+      "Description": "Positive values turn the plane counterclockwise, negative values turn it clockwise.",
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.0}°"
@@ -38,8 +38,8 @@
         "X": -455.79684,
         "Y": 857.9977
       },
-      "GroupTitle": "Size",
-      "Description": "Allows to apply additional non-uniform scaling.",
+      "Description": "Non-Uniform scaling of the plane.\nX = Width\nY = Height",
+      "AddPadding": "True",
       "UseVec2Control": "Position"
     },
     {
@@ -48,9 +48,11 @@
         "X": -455.79684,
         "Y": 812.9977
       },
-      "Min": 0.0,
+      "Description": "Uniformly scales the Plane.",
+      "Min": 0.01,
       "Max": 10.0,
       "Scale": 0.001,
+      "Clamp": true,
       "Format": "{0:0.000} ×"
     },
     {
@@ -59,7 +61,7 @@
         "X": -455.79684,
         "Y": 767.9977
       },
-      "Description": "By default, the Layer will adjust its width to the aspect ratio of the connected image. This parameter allows various other methods for computing the size."
+      "Description": "Selects the mode in which the Plane should dynamically adapt to the aspect ratio of the viewport."
     },
     {
       "InputId": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
@@ -67,7 +69,7 @@
         "X": -455.0904,
         "Y": 1033.4807
       },
-      "Description": "A color multiplied onto the connected image. This can be used to fade out or colorize the image, but a black image will always remain black.\n\nAdditionally the [Group] color is also applied.\n",
+      "Description": "Selects a color which will be multiplied with the incoming image.",
       "AddPadding": "True"
     },
     {
@@ -77,7 +79,7 @@
         "Y": 1078.4807
       },
       "GroupTitle": "Additional Options",
-      "Description": "Please check the wiki page \"Realtime Rendering for Artist\" for more information on blend mode.s"
+      "Description": "Selects the Blendmode."
     },
     {
       "InputId": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,
@@ -85,7 +87,7 @@
         "X": -455.67914,
         "Y": 1216.7563
       },
-      "Description": "If enabled will use the z-buffer to hide the layer behind earlier drawn geometry in front of it.\nYou can disable this setting and draw the layer last to always draw the Layer on on front.\n\nYou can enable it and draw the layer first to render onto the background."
+      "Description": "This defines whether the mesh / plane covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "022f1959-a62b-49de-817a-3930bc8ec32b"/*EnableDepthWrite*/,
@@ -93,7 +95,7 @@
         "X": -455.67914,
         "Y": 1261.7563
       },
-      "Description": "If enabled will write on depth. Note that this is also the case for transparent pixels."
+      "Description": "This defines whether the mesh / plane covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"/*Texture*/,
@@ -102,7 +104,7 @@
         "X": -455.67914,
         "Y": 1306.7563
       },
-      "Description": "The image to draw. If nothing is connected Layer2d will use a square white tetxure."
+      "Description": "Texture Input for any 2D Op.\ne.g. [RenderTarget], [Loadimage] etc."
     }
   ],
   "SymbolChildUis": [

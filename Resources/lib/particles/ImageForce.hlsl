@@ -12,11 +12,15 @@ cbuffer Params : register(b0)
     float Confinment;
     float DepthConcentration;
     float CenterDepth;
-    float TwistAngle;
+    float SpinAngle;
 
-    float TwistVariation;
+    float SpinVariation;
     float AmountVariation;
     float2 VariationBiasAndGain;
+
+    float Twist;
+    float TwistVariation;
+    
 }
 
 cbuffer Transforms : register(b1)
@@ -58,6 +62,19 @@ void main(uint3 i : SV_DispatchThreadID)
     
     float4 normalMap = FxTexture.SampleLevel(texSampler, (pos.xy * float2(1, -1)  + 1) / 2, 0);
 
+    float phaseOffset = 0;//- 3.141578/2;
+    float twist = Twist + (randomHash - 0.5) * TwistVariation;
+    float sina = sin(-twist /180*PI + phaseOffset);
+    float cosa = cos(-twist /180*PI + phaseOffset);
+
+    normalMap.xy = float2(
+        cosa * normalMap.x - sina * normalMap.y,
+        cosa * normalMap.y + sina * normalMap.x 
+    );
+
+    // Should add more twist here...
+
+
     float randomAmount = (randomHash- 0.5) * AmountVariation;
 
     float3 offset = normalMap.rgb * float3(1,-1,1) * (Amount + randomAmount) * float3( AmountXY,0) * normalMap.a;
@@ -76,14 +93,12 @@ void main(uint3 i : SV_DispatchThreadID)
     offset.z += accelerationToDepthCenter * DepthConcentration;
     offset = mul(float4(offset.xyz, 0), CameraToWorld);
 
-
     float3 v = Particles[i.x].Velocity + offset;
 
     float lengthXY = length(v.xy);
     if(lengthXY > 0.0001) 
-    {
-        
-        float angle = atan2( v.x, v.y) + (TwistAngle + TwistVariation * (randomHash-0.5) ) / 180 * PI;
+    {        
+        float angle = atan2( v.x, v.y) + (SpinAngle + SpinVariation * (randomHash-0.5) ) / 180 * PI;
         v.xy = float2(sin(angle), cos(angle)) * lengthXY;
     }
 

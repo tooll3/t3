@@ -7,14 +7,19 @@
       "Position": {
         "X": -1348.7484,
         "Y": 198.4042
-      }
+      },
+      "Min": 0.0,
+      "Max": 5.0,
+      "Clamp": true,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "f0345217-29f4-48f8-babd-8aed134cb0d5"/*Frequency*/,
       "Position": {
         "X": -1348.7484,
         "Y": 243.40396
-      }
+      },
+      "GroupTitle": "Group Title"
     },
     {
       "InputId": "419b5ec5-8f6d-4c2d-a633-37d125cfcf07"/*Phase*/,
@@ -28,21 +33,28 @@
       "Position": {
         "X": -1348.7484,
         "Y": 333.4038
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Format": "{0:0.000} ±"
     },
     {
       "InputId": "dfa6e67f-140b-4f96-bfb7-a8897edce28f"/*AmountDistribution*/,
       "Position": {
         "X": -1348.7484,
         "Y": 378.40393
-      }
+      },
+      "Min": 0.0,
+      "Max": 5.0,
+      "Format": "{0:0.000}"
     },
     {
       "InputId": "ebf8276f-2df8-4e70-ba57-30288fb184d1"/*UseCurlNoise*/,
       "Position": {
         "X": -1348.7484,
         "Y": 468.40387
-      }
+      },
+      "GroupTitle": "Additional options"
     },
     {
       "InputId": "d1ebfcaa-ce47-4064-9169-7afa64f942f5"/*ShowGizmo*/,
@@ -56,7 +68,8 @@
       "Position": {
         "X": -1348.7484,
         "Y": 558.4038
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [

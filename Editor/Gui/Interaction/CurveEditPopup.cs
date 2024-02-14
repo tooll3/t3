@@ -45,8 +45,8 @@ public static class CurveEditPopup
         
         var edited = InputEditStateFlags.Nothing;
         //var componentId = ImGui.GetID("curveEditor");
-        
-        if (ImGui.BeginPopup(CurvePopupId))
+        ImGui.SetNextWindowSize(new Vector2(500, 400));
+        if (ImGui.BeginPopup(CurvePopupId, ImGuiWindowFlags.Popup))
         {
             // if (_activatedComponentId != componentId)
             // {

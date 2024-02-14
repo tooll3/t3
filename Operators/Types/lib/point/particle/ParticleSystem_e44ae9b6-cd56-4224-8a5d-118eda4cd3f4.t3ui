@@ -8,7 +8,8 @@
       "Position": {
         "X": -910.9964,
         "Y": 362.44974
-      }
+      },
+      "Description": "Input for GPoints"
     },
     {
       "InputId": "7a320c47-14ed-4637-928b-25f87bd32c26"/*Emit*/,
@@ -16,7 +17,8 @@
         "X": -910.9964,
         "Y": 407.4497
       },
-      "Description": "Enables emitting of the connected emit points. \n\nTip: For simulations of a fixed number of emitted points, you can set the MaxPointCount to -1 and use [Once] or [Trigger] to only trigger an initial emit burst."
+      "Description": "Enables emitting of the connected emit points. \n\nTip: For simulations of a fixed number of emitted points, you can set the MaxPointCount to -1 and use [Once] or [Trigger] to only trigger an initial emit burst.",
+      "AddPadding": "True"
     },
     {
       "InputId": "c6bdbb07-6996-4e5b-a058-37c9cbeca6fe"/*Reset*/,
@@ -32,6 +34,7 @@
         "X": -910.9822,
         "Y": 488.89868
       },
+      "GroupTitle": "Particle Settings",
       "Description": "The length of the cycle buffer holding the simulated particles. Depending of the number of emitted particles it defines the maximum possible particle lifetime.\n\nIf set to -1 it will use the count of emit points."
     },
     {
@@ -40,7 +43,8 @@
         "X": -910.9822,
         "Y": 578.8987
       },
-      "Description": "An initial velocity that is set for emitted particles along their z-axis."
+      "Description": "An initial velocity that is set for emitted particles along their z-axis.",
+      "AddPadding": "True"
     },
     {
       "InputId": "b2c8f7cf-fdf5-4819-98ec-2c70ee9e8bc6"/*RadiusFromW*/,
@@ -80,7 +84,8 @@
       "Position": {
         "X": -917.34973,
         "Y": 785.29767
-      }
+      },
+      "Description": "Rotates the particles in relation to their velocity"
     },
     {
       "InputId": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
@@ -101,12 +106,14 @@
       "Description": "Can be used for custimizing the rendering of the particles.\n\nNote that many operators like [DrawPoints] use the W attribute to control the size of the points.\nWith other operators like [DrawBillboards] you can use the W parameter to colorize particles over their lifetime.\n\nKeep Original W -> no change\nParticle Age -> Normalized age between 0 ... 1\nVelocity -> A representation of the particle's velocity."
     },
     {
-      "InputId": "c41d9633-1397-4602-a5f8-7808c3d63108"/*ParticleEffects*/,
+      "InputId": "c41d9633-1397-4602-a5f8-7808c3d63108"/*ParticleForces*/,
       "Relevancy": "Relevant",
       "Position": {
         "X": -896.4389,
         "Y": 1143.6881
-      }
+      },
+      "GroupTitle": "Forces",
+      "Description": "Input for Forces or [SwitchParticleForce]"
     }
   ],
   "SymbolChildUis": [
