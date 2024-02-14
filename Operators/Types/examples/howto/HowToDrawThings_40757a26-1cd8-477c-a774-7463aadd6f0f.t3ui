@@ -299,142 +299,142 @@
       "ChildId": "051f0cfc-b352-4733-9bd7-fadf23ad904e"/*LoadObj*/,
       "Comment": "We use the geometry as OBJ (see the link in the description)...",
       "Position": {
-        "X": -1970.3827,
-        "Y": -45.644653
+        "X": -1978.1232,
+        "Y": 315.10266
       }
     },
     {
       "ChildId": "7b3387ab-9153-4d44-99c6-e62c9dff7131"/*SetMaterial*/,
       "Comment": "We're using CombineMaterialMaps to create the combined texture.\nThat's the reason we change the roughness-offset to 0.",
       "Position": {
-        "X": -1520.3827,
-        "Y": -45.644653
+        "X": -1528.1232,
+        "Y": 315.10266
       }
     },
     {
       "ChildId": "380a3faa-8c55-4a6a-854f-4d65c0b18c65"/*LoadImage*/,
       "Position": {
-        "X": -1670.3827,
-        "Y": 246.35535
+        "X": -1678.1232,
+        "Y": 607.10266
       }
     },
     {
       "ChildId": "7241eb50-c918-457c-a2ba-0299b9d24281"/*CombineMaterialChannels*/,
       "Comment": "Note how we adjusted the Roughness Remap curve to make the gun slightly less shiny.",
       "Position": {
-        "X": -1670.3827,
-        "Y": 552.3567
+        "X": -1678.1232,
+        "Y": 913.104
       }
     },
     {
       "ChildId": "e935f2d3-726e-4577-abad-176d02ca1c07"/*DrawMesh*/,
       "Comment": "Normally you draw a single mesh...",
       "Position": {
-        "X": -1820.3827,
-        "Y": -45.644653
+        "X": -1828.1232,
+        "Y": 315.10266
       }
     },
     {
       "ChildId": "f71f7807-9d5c-4b87-81f9-012fdda4a0e7"/*LoadImage*/,
       "Position": {
-        "X": -1820.3827,
-        "Y": 705.3567
+        "X": -1828.1232,
+        "Y": 1066.104
       }
     },
     {
       "ChildId": "524dfd98-efb7-49ef-b802-2b75d6b45a99"/*LoadImage*/,
       "Position": {
-        "X": -1820.3827,
-        "Y": 552.3567
+        "X": -1828.1232,
+        "Y": 913.104
       }
     },
     {
       "ChildId": "583ccf3e-c9f5-41d5-b805-48e44acbcb2d"/*LoadImage*/,
       "Position": {
-        "X": -1670.3827,
-        "Y": 399.3556
+        "X": -1678.1232,
+        "Y": 760.1029
       }
     },
     {
       "ChildId": "3c854ec7-5b82-41f5-a3be-5e868217a7d6"/*DrawMeshAtPoints*/,
       "Comment": "...but you can also use a list of Points to draw instances.",
       "Position": {
-        "X": -1820.3827,
-        "Y": 10.355347
+        "X": -1828.1232,
+        "Y": 371.10266
       }
     },
     {
       "ChildId": "34df234c-142c-4d14-be66-9a6066f4914d"/*RadialPoints*/,
       "Position": {
-        "X": -1970.3827,
-        "Y": 10.355347
+        "X": -1978.1232,
+        "Y": 371.10266
       }
     },
     {
       "ChildId": "3b9b108e-e00e-4a85-9aa1-a6d181f756ce"/*Group*/,
       "Position": {
-        "X": -1670.3827,
-        "Y": -45.644653
+        "X": -1678.1232,
+        "Y": 315.10266
       }
     },
     {
       "ChildId": "4c7d07bb-5677-4b81-b936-22d941c6bdc1"/*OrbitCamera*/,
       "Position": {
-        "X": -867.5952,
-        "Y": -48.2782
+        "X": -875.3357,
+        "Y": 312.46912
       }
     },
     {
       "ChildId": "24bb70f4-6ce4-4e1b-8de6-f1f93bd73e8f"/*RenderTarget*/,
       "Comment": "Notices how we increased the MultiSampling to 8 samples to reduce some of aliasing on the finer details of the gun.\n\nThese samples are ONLY computed at the edges of the geometry, not of the surfaces.",
       "Position": {
-        "X": -717.5952,
-        "Y": -48.2782
+        "X": -725.3357,
+        "Y": 312.46912
       }
     },
     {
       "ChildId": "9f1f826c-9b24-40cf-ade1-ed4dfc692dbd"/*SetEnvironment*/,
       "Comment": "SetEnvironment without a connected connected texture allows us to enable the default background and adjust is brightness.\n\nAlso check the documentation fo this operator.",
       "Position": {
-        "X": -1220.3827,
-        "Y": -45.644653
+        "X": -1228.1232,
+        "Y": 315.10266
       }
     },
     {
       "ChildId": "ef910487-9930-4bc9-afd2-c01c3821e1c8"/*DepthOfField*/,
       "Position": {
-        "X": -567.5952,
-        "Y": -48.2782
+        "X": -575.3357,
+        "Y": 312.46912
       }
     },
     {
       "ChildId": "7042bd32-e3a9-4ee2-bf34-5214f8ee0515"/*Execute*/,
       "Position": {
-        "X": -1370.3827,
-        "Y": -45.644653
+        "X": -1378.1232,
+        "Y": 315.10266
       }
     },
     {
       "ChildId": "5ec89390-974c-4841-b585-71fbe0fb4561"/*Locator*/,
       "Comment": "We use this \"Null\"-object as a reference for the center of our scene, so we don't have to guess the depth of field's focus center.",
       "Position": {
-        "X": -1520.3827,
-        "Y": 49.355347
+        "X": -1528.1232,
+        "Y": 410.10266
       }
     },
     {
       "ChildId": "9117a6bb-1111-4c9a-be44-627211c9f307"/*PointLight*/,
       "Comment": "We also add a rotating point light just for completeness.",
       "Position": {
-        "X": -1070.3827,
-        "Y": -45.644653
+        "X": -1078.1232,
+        "Y": 315.10266
       }
     },
     {
       "ChildId": "c7871b37-6d17-4099-9e56-db2b426b1e7e"/*OscillateVec3*/,
       "Position": {
-        "X": -1220.3827,
-        "Y": 23.355347
+        "X": -1228.1232,
+        "Y": 384.10266
       }
     },
     {
@@ -444,14 +444,73 @@
         "X": -940.87305,
         "Y": -610.2674
       }
+    },
+    {
+      "ChildId": "574ed504-4b1b-489b-b2c6-ccd23ef736e4"/*LoadGltfScene*/,
+      "Position": {
+        "X": -1812.198,
+        "Y": -41.1568
+      }
+    },
+    {
+      "ChildId": "b3f6b3fc-da9c-40ed-857f-fdbf279968df"/*OrbitCamera*/,
+      "Position": {
+        "X": -1212.198,
+        "Y": -41.1568
+      }
+    },
+    {
+      "ChildId": "4af260fa-2660-48af-824f-fec5b990582f"/*RenderTarget*/,
+      "Comment": "Notices how we increased the MultiSampling to 8 samples to reduce some of aliasing on the finer details of the gun.\n\nThese samples are ONLY computed at the edges of the geometry, not of the surfaces.",
+      "Position": {
+        "X": -1062.198,
+        "Y": -41.1568
+      }
+    },
+    {
+      "ChildId": "53c914fb-e460-4144-9737-884190a58651"/*SetEnvironment*/,
+      "Comment": "SetEnvironment without a connected connected texture allows us to enable the default background and adjust is brightness.\n\nAlso check the documentation fo this operator.",
+      "Position": {
+        "X": -1512.198,
+        "Y": -41.1568
+      }
+    },
+    {
+      "ChildId": "68b3dc43-c734-4b38-8dc2-fcea25ac74fd"/*DepthOfField*/,
+      "Position": {
+        "X": -912.198,
+        "Y": -41.1568
+      }
+    },
+    {
+      "ChildId": "2994f0ff-e918-48a2-92dc-4f768f2a0d8a"/*PointLight*/,
+      "Comment": "We also add a rotating point light just for completeness.",
+      "Position": {
+        "X": -1362.198,
+        "Y": -41.1568
+      }
+    },
+    {
+      "ChildId": "bbced8d4-6f66-4ae5-a60a-72c60ae13286"/*OscillateVec3*/,
+      "Position": {
+        "X": -1512.198,
+        "Y": 27.8432
+      }
+    },
+    {
+      "ChildId": "728d0b53-cfe1-42f4-995a-ebb1ddd4b90a"/*DrawScene*/,
+      "Position": {
+        "X": -1662.198,
+        "Y": -41.1568
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "85adcfb7-480a-4f41-87cb-bd7819467a68"/*Texture*/,
       "Position": {
-        "X": -417.5952,
-        "Y": -48.2782
+        "X": -631.39905,
+        "Y": -28.39441
       }
     }
   ],
@@ -512,7 +571,7 @@
     },
     {
       "Id": "52f96e30-a573-452c-8454-b71544dd9cd1",
-      "Title": "This is an advanced setup that illustrates many components required for a PBR light setup.",
+      "Title": "# This is an advanced setup that illustrates many components required for a PBR light setup.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -548,7 +607,7 @@
     },
     {
       "Id": "ad01e43b-9c5d-4b80-944e-34349b66ea9c",
-      "Title": "Here is an example of loading and setting up PBR Assets with complex textures.\nThe awesome \"Cerberus\" gun is made by Andrew Maximov (see link in the description).",
+      "Title": "# Here is an example of loading and setting up PBR Assets with complex textures.\nThe awesome \"Cerberus\" gun is made by Andrew Maximov (see link in the description).",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -556,8 +615,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -2033.807,
-        "Y": -176.55017
+        "X": -2041.5475,
+        "Y": 184.19714
       },
       "Size": {
         "X": 2424.0684,
@@ -580,6 +639,24 @@
       "Size": {
         "X": 806.0797,
         "Y": 92.680504
+      }
+    },
+    {
+      "Id": "3a8bdb04-1d08-4008-b185-062af61f0302",
+      "Title": "# An example how to load a textured PBR object as gltf",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2030.3627,
+        "Y": -189.46222
+      },
+      "Size": {
+        "X": 2418.5632,
+        "Y": 349.15057
       }
     }
   ],
