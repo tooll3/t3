@@ -44,28 +44,41 @@ inline float Bayer2(float2 a) {
     return frac(a.x / 2. + a.y * a.y * .75);
 }
 
-float4 psMain(vsOutput input) : SV_TARGET
+#define mod(x,y) ((x)-(y)*floor((x)/(y)))
+
+float4 psMain(vsOutput psInput) : SV_TARGET
 {
-    float width, height;
-    Image.GetDimensions(width, height);
-    float2 res = float2(width,height);
+    float aspectRatio = TargetWidth/TargetHeight;
+    float2 p = psInput.texCoord;
+    p-= 0.5;
 
-    float4 color = Image.Sample(texSampler, (int2)(input.texCoord * res / Scale) / res * Scale ); 
-    float4 t = color * GrayScaleWeights;
-    float grayScale = (t.r + t.g + t.b + t.a) / 
-    (GrayScaleWeights.r + GrayScaleWeights.g + GrayScaleWeights.b + GrayScaleWeights.a);
-    
-    grayScale = ApplyBiasAndGain(saturate( grayScale), BiasAndGain.x, BiasAndGain.y);
+    int round = 1;
+    int2 res = int2((int)TargetWidth/round, (int)TargetHeight/round) * round;
 
-    float2 fragCoord = (input.texCoord * res - Offset *float2(1,-1  ) * Scale * 4);
+    // This will prevent repetitive artifacts in the pattern
+    float epsilonScale = Scale - 0.0001f;
 
-    float n = Method < 0.5 ? Bayer64(fragCoord / Scale)
-    : hash11u( (int)(fragCoord.x / Scale)  + (int)(fragCoord.y / Scale) * 123312);
+    float2 divisions = res / epsilonScale;
+    float2 fixOffset = Offset * float2(-1,1)  / divisions;
+    p+= fixOffset;
 
-    // float dithering = (Bayer64(fragCoord / Scale) * 2.0 - 1.0) * 0.5;
-    // dithering = ((hash11u( (int)(fragCoord.x / Scale)  + (int)(fragCoord.y / Scale) * 123312))  * 2.0 - 1.0) * 0.5;
+    float2 p1 = p;
+    float2 gridSize = float2( 1/divisions.x, 1/divisions.y);
+    float2 pInCell = mod(p1, gridSize);
+    float2 cellIds = (p1 - pInCell + 0.5);
+    float2 cellTiles = cellIds - fixOffset;
+
+    pInCell *= divisions;
+
+    float4 color = Image.Sample(texSampler, cellTiles);     
+    float grayScale = ApplyBiasAndGain(saturate( color), BiasAndGain.x, BiasAndGain.y);    
+    float2 fragCoord = cellIds * res;
+
+    float n = Method < 0.5 
+            ? Bayer64(fragCoord / epsilonScale)
+            : hash11u( (int)(fragCoord.x) * 21  + (int)(fragCoord.y) * 12112);
+
     float dithering = (n * 2.0 - 1.0) * 0.5;
-
     float blackOrWhite = dithering + grayScale < 0.5 ? 0 : 1;
 
     float4 c= lerp(Black,White, blackOrWhite);
