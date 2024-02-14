@@ -1,0 +1,32 @@
+{
+  "Id": "bdb41a6d-e225-4a8a-8348-820d45153e3f"/*TextPoints*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "7432f063-9957-47f7-8250-c3e6456ec7c6"/*InputText*/,
+      "Position": {
+        "X": -427.4357,
+        "Y": 477.05084
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "abe3f777-a33b-4e39-9eee-07cc729acf32"/*InputFont*/,
+      "Position": {
+        "X": -427.4357,
+        "Y": 522.05084
+      },
+      "Usage": "FilePath"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c65da6e8-3eb7-4152-9b79-34fcaaa31807"/*OutputList*/,
+      "Position": {
+        "X": -210.21616,
+        "Y": 480.16382
+      }
+    }
+  ]
+}

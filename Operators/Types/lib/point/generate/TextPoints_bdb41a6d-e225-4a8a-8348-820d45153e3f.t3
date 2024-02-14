@@ -1,0 +1,17 @@
+{
+  "Name": "TextPoints",
+  "Id": "bdb41a6d-e225-4a8a-8348-820d45153e3f",
+  "Namespace": "lib.point.generate",
+  "Inputs": [
+    {
+      "Id": "7432f063-9957-47f7-8250-c3e6456ec7c6"/*InputText*/,
+      "DefaultValue": "Test"
+    },
+    {
+      "Id": "abe3f777-a33b-4e39-9eee-07cc729acf32"/*InputFont*/,
+      "DefaultValue": "Resources\\fonts\\TeknoTwo.ttf"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
