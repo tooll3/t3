@@ -1,6 +1,6 @@
 {
   "Id": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe"/*Value*/,
-  "Description": "Helpful to animate or control the setting of multiple nodes.\n\nCan be combined with [add], [multiply], [divide] etc. to create complex and helpful combinations.",
+  "Description": "Helpful to animate or control the setting of one or multiple nodes.\n\nCan be combined with [Add], [Multiply], [Divide], [Modulo], [Damp], [Div], [Remap] and many other Math Operators to create complex and helpful rigs and combinations.",
   "InputUis": [
     {
       "InputId": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
@@ -8,6 +8,8 @@
         "X": 36.0,
         "Y": 334.0
       },
+      "GroupTitle": "Setting",
+      "Description": "Value that can be defined or animated, among other things, and is then sent out.",
       "Min": -1.0,
       "Max": 1.0
     }

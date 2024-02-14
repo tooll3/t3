@@ -1,6 +1,6 @@
 {
   "Id": "3036067a-a4c2-434b-b0e3-ac95c5c943f4"/*TimeClip*/,
-  "Description": "Enables the sub graph on the left side only with the playback time is within the timeclips region allowing you to cut from scene to scene.\n\nThis allows you to edit sequences similar to non-linear editing applications with timeclips in the timeline.",
+  "Description": "Creates a time clip bar within the timeline similar to a program for editing films.\nTheese TimeClips can be moved by drag and drop and arranged next to and on top of each other, similar to common non-linear editors (NLE).\n\nOnly when the time marker is over the time clip it is activated and rendered.\n\nIt can be helpful to give the time clip a suitable name in the name field (which is \"Untitled Instance\" by defaut).\n\nAlso see [Switch] for a way to cut between scenes without the bars in den Timeline.",
   "InputUis": [
     {
       "InputId": "35f501f4-5c79-4628-9441-8b3782544bf6"/*Command*/,
@@ -8,7 +8,8 @@
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Scene Input"
     }
   ],
   "SymbolChildUis": [],

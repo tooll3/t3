@@ -1,0 +1,232 @@
+{
+  "Id": "947ad81e-47da-46c3-9b1d-8e578174d876"/*DefineLensFlare*/,
+  "Description": "Generates a list of Sprite positions that can be joined and rendered as sprites. ",
+  "InputUis": [
+    {
+      "InputId": "50fda27a-bd94-4438-9cef-0aaa16fae12b"/*LightIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "Restrict the lense flare to the single light.  Use -1 to apply to all."
+    },
+    {
+      "InputId": "59ba312f-c74f-4e76-8830-57c2effa0ff1"/*SpriteCount*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Description": "Number of sprite definitions."
+    },
+    {
+      "InputId": "9f85d1f1-37d2-4f7e-9efd-70cb415c4cee"/*Brightness*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 10.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "792e9b7e-9094-4bf9-8aed-d8b3fcdee358"/*Spread*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "GroupTitle": "Positioning",
+      "Description": "The spreading of the points on a line between light position on the screen and the screen center.\n"
+    },
+    {
+      "InputId": "f21dbefd-ea54-4901-a806-b1a2c5ee140f"/*OffsetTowardsCenter*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Description": "Moves the spreads sprites on the light/screen center line. \n0 - the center of light\n1 - the screen center\n"
+    },
+    {
+      "InputId": "bc1d9fdc-ea07-4c0d-be2d-02fa955f9e5a"/*RandomizeSpread*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 495.0
+      },
+      "Description": "Offsets the sprites randomly on the light/screen center line."
+    },
+    {
+      "InputId": "1c250003-cf16-44df-9a5e-f9fcf331617c"/*DistributeSpread*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 540.0
+      },
+      "Description": "A factor that is applied on the horizontal and vertical spread. \n\nThis can be useful for creating vertical or horizontal spreads.",
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "d314c572-71c7-4a67-921b-df369817dd4a"/*RandomizePosition*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 585.0
+      },
+      "Description": "Additional random offset to the spreaded sprite position horizontally and vertically.",
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "ccf77198-7682-4f6b-96f2-986e6827a4df"/*Size*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      },
+      "GroupTitle": "Size and Rotation",
+      "Description": "The overall size of the sprites. This should be large for [DrawLenseShimmer] ",
+      "Min": 0.0,
+      "Max": 0.1
+    },
+    {
+      "InputId": "2a1285b1-63ea-46a5-8d96-b7ba33edd88b"/*RandomizeSize*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      },
+      "Description": "Randomizes the size of the generated sprites."
+    },
+    {
+      "InputId": "c8347ca9-c700-4195-a23f-0f220f5823e2"/*Stretch*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "Description": "Stretches the sprite. This works well when combined with rotate towards.",
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "000a17ca-36a2-43ef-8fda-314366c9e204"/*Rotation*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      },
+      "AddPadding": "True",
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "93728b1f-cbfa-4065-9de1-bf8641fade7e"/*RotationSpread*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      },
+      "Description": "Distributes the rotation. This be really useful for definiting stars.\n\nUse...\n- 3 sprites and 0.66 for 6 lines\n- 2 sprites and 0.5 for 4 lines",
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "205ed310-e01c-4b0c-9c24-e404476ce036"/*RotateTowards*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 855.0
+      },
+      "Description": "Controls each sprite is oriented on the screen."
+    },
+    {
+      "InputId": "d6554b75-f320-4e8b-bcb0-6b484c29f6d3"/*MixPointLightColor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 540.0
+      },
+      "GroupTitle": "Color",
+      "Description": "Mix in the color of the [PointLight]."
+    },
+    {
+      "InputId": "7d9da46c-2d1f-48f8-bdc5-bb7e29c363c7"/*Color*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      },
+      "Description": "Overall color of the sprite."
+    },
+    {
+      "InputId": "53351cf3-71a5-4cb3-ad81-60abc7718d4b"/*RandomizeColor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      },
+      "Description": "Randomization applied the original color. Black adds no variation.\nIncrease Alpha channel to add variation to the opacity."
+    },
+    {
+      "InputId": "c1b5f49f-3538-48aa-8d16-92d48fcf08cb"/*FxZoneMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 630.0
+      },
+      "GroupTitle": "FX Zones",
+      "Description": "Effect zones define screen regions (e.g. on the center or edges) that can trigger effects defined further below."
+    },
+    {
+      "InputId": "1c11cb25-05f8-4422-aa16-db57e8cd2e0b"/*EdgeFxZone*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 675.0
+      },
+      "Description": "Defines the edge region with distance from center and width towards both side of. Examples:\n\n1.0 + 0.1 (a very thin border at the edge)\n0.8  + 2.0 (a very wied border mostly outside of the screen)\n\n"
+    },
+    {
+      "InputId": "00ed2d51-4cf0-43d6-adaa-ce42e5eb8439"/*InnerFxZone*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 720.0
+      },
+      "Description": "Controls the size of the center region with Size (from center) and fall off."
+    },
+    {
+      "InputId": "0d98c14c-3f62-47e2-8fe8-a85208d9c02d"/*FxZoneScale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 765.0
+      },
+      "GroupTitle": "Effects for Zones",
+      "Description": "A effect that is added to the brightness if the sprites or light are inside one of the defined effect zones)."
+    },
+    {
+      "InputId": "520ee127-f542-4ad8-a6ea-4a24a70ade4d"/*FxZoneBrightness*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 810.0
+      }
+    },
+    {
+      "InputId": "be4366c5-9e1c-430a-8f34-f31321a7df2c"/*MattBoxZone*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 765.0
+      },
+      "GroupTitle": "Options",
+      "Description": "Controls how quickly sprites are faded out when outside of the screen:\n\nThe first parameter is the distance from center. The second the fall off width."
+    },
+    {
+      "InputId": "9cfffb1a-675e-410c-96da-c02bd6b3a81a"/*RandomSeed*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      }
+    },
+    {
+      "InputId": "a5ad260c-9341-4e43-923c-86f12974df97"/*TextureIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 495.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "b26730ff-b1ff-40a7-91af-b10026ed4c32"/*OutBuffer*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

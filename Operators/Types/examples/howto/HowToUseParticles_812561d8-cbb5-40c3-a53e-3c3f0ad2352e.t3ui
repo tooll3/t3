@@ -33,7 +33,7 @@
       }
     },
     {
-      "ChildId": "9502243e-7360-4c55-807f-4361a5914813"/*PickParticleForce*/,
+      "ChildId": "9502243e-7360-4c55-807f-4361a5914813"/*SwitchParticleForce*/,
       "Comment": "Here we only pick a single force. But the particle system can be connected to many.",
       "Position": {
         "X": 35.41391,
@@ -56,7 +56,7 @@
       }
     },
     {
-      "ChildId": "b8729c32-9439-4651-abcd-1a7675d8baff"/*SurfaceForce*/,
+      "ChildId": "b8729c32-9439-4651-abcd-1a7675d8baff"/*VolumeForce*/,
       "Comment": "This is also nice.",
       "Position": {
         "X": -114.58609,
@@ -78,7 +78,7 @@
       }
     },
     {
-      "ChildId": "ce57c1de-b755-4b5d-b31a-50bd9156892f"/*SurfaceForce*/,
+      "ChildId": "ce57c1de-b755-4b5d-b31a-50bd9156892f"/*VolumeForce*/,
       "Comment": "The [SurfaceForce] can be used as an attractor, a container, or a reflective surface. Also, see the examples further below.",
       "Position": {
         "X": -114.58609,
@@ -136,7 +136,7 @@
       }
     },
     {
-      "ChildId": "dff2e37e-6a76-4112-a785-42dde6c519c8"/*SurfaceForce*/,
+      "ChildId": "dff2e37e-6a76-4112-a785-42dde6c519c8"/*VolumeForce*/,
       "Position": {
         "X": -252.22223,
         "Y": 115.6615
@@ -670,7 +670,7 @@
       }
     },
     {
-      "ChildId": "8b4daadc-5cf6-4a95-b2e3-10d516a7439f"/*ParticleCollisionForceExample*/,
+      "ChildId": "8b4daadc-5cf6-4a95-b2e3-10d516a7439f"/*CollisionForceExample*/,
       "Position": {
         "X": 560.299,
         "Y": 1771.587

@@ -22,19 +22,19 @@
       }
     },
     {
-      "Id": "70c4ecc7-72a2-42ee-8546-cbff2c08aa27"/*Size*/,
+      "Id": "70c4ecc7-72a2-42ee-8546-cbff2c08aa27"/*Stretch*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0
       }
     },
     {
-      "Id": "48d5cd1d-3ca1-4075-a55e-21cec39b4525"/*UseAspectRatio*/,
-      "DefaultValue": true
-    },
-    {
       "Id": "e367bd72-c37c-4a7f-8441-698161ba75f8"/*Scale*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "48d5cd1d-3ca1-4075-a55e-21cec39b4525"/*UseAspectRatio*/,
+      "DefaultValue": true
     },
     {
       "Id": "cb36f66b-99d7-4468-adbf-86e168a76ade"/*Offset*/,

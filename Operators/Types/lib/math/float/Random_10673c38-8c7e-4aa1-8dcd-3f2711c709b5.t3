@@ -14,6 +14,10 @@
     {
       "Id": "5755454f-98fe-49ef-9611-a7c3750c4f9a"/*Max*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "a16f6862-868b-4d83-88f5-c7aac7616a38"/*UniqueForChild*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

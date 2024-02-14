@@ -146,7 +146,7 @@
       }
     },
     {
-      "ChildId": "04951a6d-0751-4480-9845-b169a54e1ed7"/*SurfaceForce*/,
+      "ChildId": "04951a6d-0751-4480-9845-b169a54e1ed7"/*VolumeForce*/,
       "Position": {
         "X": 650.0565,
         "Y": 160.21753

@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
+using T3.Core.Audio;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Utils;
@@ -35,11 +36,11 @@ public class RenderVideoWindow : RenderHelperWindow
     {
         var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
 
-        // if (FindIssueWithTexture(mainTexture, MfVideoWriter.SupportedFormats, out var warning))
-        // {
-        //     CustomComponents.HelpText(warning);
-        //     return;
-        // }
+        if (FindIssueWithTexture(mainTexture, MfVideoWriter.SupportedFormats, out var warning))
+        {
+            CustomComponents.HelpText(warning);
+            return;
+        }
 
         Int2 size = default;
         var currentDesc = mainTexture!.Description;
@@ -56,9 +57,9 @@ public class RenderVideoWindow : RenderHelperWindow
             CustomComponents.TooltipForLastItem(q.Description);
         }
 
-        FormInputs.AddStringInput("File", ref _targetFile);
+        FormInputs.AddStringInput("File", ref UserSettings.Config.RenderVideoFilePath);
         ImGui.SameLine();
-        FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref _targetFile);
+        FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref UserSettings.Config.RenderVideoFilePath);
 
         if (IsFilenameIncrementible())
         {
@@ -67,24 +68,24 @@ public class RenderVideoWindow : RenderHelperWindow
             ImGui.PopStyleVar();
         }
 
+        FormInputs.AddCheckBox("Export Audio (experimental)", ref _exportAudio);
+
         ImGui.Separator();
 
         if (!_isExporting)
         {
             if (ImGui.Button("Start Export"))
             {
-                if (ValidateOrCreateTargetFolder(_targetFile))
+                if (ValidateOrCreateTargetFolder(UserSettings.Config.RenderVideoFilePath))
                 {
-                    _previousPlaybackSpeed = Playback.Current.PlaybackSpeed;
-                    Playback.Current.PlaybackSpeed = 0;
                     _isExporting = true;
                     _exportStartedTime = Playback.RunTimeInSecs;
                     FrameIndex = 0;
-                    SetPlaybackTimeForNextFrame();
+                    SetPlaybackTimeForThisFrame();
 
                     if (_videoWriter == null)
                     {
-                        _videoWriter = new Mp4VideoWriter(_targetFile, size);
+                        _videoWriter = new Mp4VideoWriter(UserSettings.Config.RenderVideoFilePath, size, _exportAudio);
                         _videoWriter.Bitrate = _bitrate;
 
                         // FIXME: Allow floating point FPS in a future version
@@ -97,33 +98,30 @@ public class RenderVideoWindow : RenderHelperWindow
         }
         else
         {
-            // This is a very unfortunate hack. Sadly, activating playback can interfer
-            // with precise frame positioning will be required for exporting audio-reactivity...
-            if(FrameIndex>0)
-                Playback.Current.PlaybackSpeed = 1;
-            
-            var success = SaveCurrentFrameAndAdvance(ref mainTexture);
-            ImGui.ProgressBar(Progress, new Vector2(-1, 4));
+            var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / Fps);
+            var success = SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
+                                                     soundtrackChannels(), soundtrackSampleRate());
+            ImGui.ProgressBar((float)Progress, new Vector2(-1, 4));
 
             var currentTime = Playback.RunTimeInSecs;
             var durationSoFar = currentTime - _exportStartedTime;
-            
-            if (FrameIndex  >= FrameCount +2 || !success)
+
+            if (GetRealFrame() >= FrameCount || !success)
             {
                 var successful = success ? "successfully" : "unsuccessfully";
-                _lastHelpString = $"Sequence export finished {successful} in {durationSoFar:0.00}s";
+                _lastHelpString = $"Sequence export finished {successful} in {HumanReadableDurationFromSeconds(durationSoFar)}";
                 _isExporting = false;
                 TryIncrementingFileName();
             }
             else if (ImGui.Button("Cancel"))
             {
-                _lastHelpString = $"Sequence export cancelled after {durationSoFar:0.00}s";
+                _lastHelpString = $"Sequence export cancelled after {HumanReadableDurationFromSeconds(durationSoFar)}";
                 _isExporting = false;
             }
             else
             {
                 var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
-                _lastHelpString = $"Saved {_videoWriter.FilePath} frame {FrameIndex}/{FrameCount}  ";
+                _lastHelpString = $"Saved {_videoWriter.FilePath} frame {GetRealFrame()}/{FrameCount}  ";
                 _lastHelpString += $"{Progress * 100.0:0}%%  {HumanReadableDurationFromSeconds(estimatedTimeLeft)} left";
             }
 
@@ -131,7 +129,7 @@ public class RenderVideoWindow : RenderHelperWindow
             {
                 _videoWriter?.Dispose();
                 _videoWriter = null;
-                Playback.Current.PlaybackSpeed = _previousPlaybackSpeed;
+                ReleasePlaybackTime();
             }
         }
 
@@ -142,7 +140,7 @@ public class RenderVideoWindow : RenderHelperWindow
     
     private static bool IsFilenameIncrementible()
     {
-        var filename = Path.GetFileName(_targetFile);
+        var filename = Path.GetFileName(UserSettings.Config.RenderVideoFilePath);
         if (string.IsNullOrEmpty(filename))
             return false;
         
@@ -155,7 +153,7 @@ public class RenderVideoWindow : RenderHelperWindow
         if (!_autoIncrementVersionNumber)
             return;
         
-        var filename = Path.GetFileName(_targetFile);
+        var filename = Path.GetFileName(UserSettings.Config.RenderVideoFilePath);
         if (string.IsNullOrEmpty(filename))
             return;
         
@@ -171,26 +169,26 @@ public class RenderVideoWindow : RenderHelperWindow
         var newVersionString = "v"+ (versionNumber +1).ToString("D"+digits);
         var newFilename = filename.Replace("v" + versionString, newVersionString);
 
-        var directoryName = Path.GetDirectoryName(_targetFile);
-        _targetFile = directoryName == null ? newFilename : Path.Combine(directoryName, newFilename);
+        var directoryName = Path.GetDirectoryName(UserSettings.Config.RenderVideoFilePath);
+        UserSettings.Config.RenderVideoFilePath = directoryName == null 
+                                                      ? newFilename 
+                                                      : Path.Combine(directoryName, newFilename);
     }
 
     private string HumanReadableDurationFromSeconds(double seconds)
     {
-        if (seconds < 60)
-        {
-            return $"{seconds:0.0}s";
-        }
-
-        if (seconds < 60 * 60)
-        {
-            return $"{(int)(seconds/60):0}:{(int)(seconds%60):00}s";
-        }
-
-        return $"{(int)(seconds / 60 / 60):0}h {seconds/60%60:0}:{seconds%60:00}s";
+        return $"{(int)(seconds / 60 / 60):00}:{(seconds / 60)%60:00}:{seconds%60:00}";
     }
-    
-    private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture)
+
+    private static int GetRealFrame()
+    {
+        // since we are double-buffering and discarding the first few frames,
+        // we have to subtract these frames to get the currently really shown framenumber...
+        return FrameIndex - MfVideoWriter.SkipImages;
+    }
+
+    private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture, ref byte[] audioFrame,
+                                                   int channels, int sampleRate)
     {
         if (Playback.OpNotReady)
         {
@@ -199,16 +197,13 @@ public class RenderVideoWindow : RenderHelperWindow
         }
         try
         {
-            var savedFrame = _videoWriter.ProcessFrames(ref mainTexture);
-            if (savedFrame || FrameIndex ==0)
-            {
-                FrameIndex++;
-                SetPlaybackTimeForNextFrame();
-            }
-            else
+            var savedFrame = _videoWriter.ProcessFrames(ref mainTexture, ref audioFrame, channels, sampleRate);
+            if (!savedFrame)
             {
                 Log.Debug($"Skipping {FrameIndex}");
             }
+            FrameIndex++;
+            SetPlaybackTimeForThisFrame();
         }
         catch (Exception e)
         {
@@ -216,6 +211,7 @@ public class RenderVideoWindow : RenderHelperWindow
             _isExporting = false;
             _videoWriter?.Dispose();
             _videoWriter = null;
+            ReleasePlaybackTime();
             return false;
         }
 
@@ -225,9 +221,9 @@ public class RenderVideoWindow : RenderHelperWindow
     private QualityLevel GetQualityLevelFromRate(float bitsPerPixelSecond)
     {
         QualityLevel q = default;
-        for (var index = QualityLevels.Length - 1; index >= 0; index--)
+        for (var index = _qualityLevels.Length - 1; index >= 0; index--)
         {
-            q = QualityLevels[index];
+            q = _qualityLevels[index];
             if (q.MinBitsPerPixelSecond < bitsPerPixelSecond)
                 break;
         }
@@ -252,22 +248,21 @@ public class RenderVideoWindow : RenderHelperWindow
         public readonly string Description;
     }
 
-    private QualityLevel[] QualityLevels = new[]
-                                               {
-                                                   new QualityLevel(0.01, "Poor", "Very low quality. Consider lower resolution."),
-                                                   new QualityLevel(0.02, "Low", "Probable strong artifacts"),
-                                                   new QualityLevel(0.05, "Medium", "Will exhibit artifacts in noisy regions"),
-                                                   new QualityLevel(0.08, "Okay", "Compromise between filesize and quality"),
-                                                   new QualityLevel(0.12, "Good", "Good quality. Probably sufficient for YouTube."),
-                                                   new QualityLevel(0.5, "Very good", "Excellent quality, but large."),
-                                                   new QualityLevel(1, "Reference", "Indistinguishable. Very large files."),
-                                               };
+    private readonly QualityLevel[] _qualityLevels = new[]
+                                                        {
+                                                            new QualityLevel(0.01, "Poor", "Very low quality. Consider lower resolution."),
+                                                            new QualityLevel(0.02, "Low", "Probable strong artifacts"),
+                                                            new QualityLevel(0.05, "Medium", "Will exhibit artifacts in noisy regions"),
+                                                            new QualityLevel(0.08, "Okay", "Compromise between filesize and quality"),
+                                                            new QualityLevel(0.12, "Good", "Good quality. Probably sufficient for YouTube."),
+                                                            new QualityLevel(0.5, "Very good", "Excellent quality, but large."),
+                                                            new QualityLevel(1, "Reference", "Indistinguishable. Very large files."),
+                                                        };
     
     private static int _bitrate = 25000000;
-    private static string _targetFile = "./Render/render-v01.mp4";
 
     private static bool _autoIncrementVersionNumber = true;
-    private static Mp4VideoWriter _videoWriter = null;
+    private static bool _exportAudio = true;
+    private static Mp4VideoWriter _videoWriter;
     private static string _lastHelpString = string.Empty;
-    private double _previousPlaybackSpeed;
 }

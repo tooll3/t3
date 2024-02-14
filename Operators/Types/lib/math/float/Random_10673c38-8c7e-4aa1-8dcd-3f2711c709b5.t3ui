@@ -21,6 +21,13 @@
         "X": 0.0,
         "Y": 90.0
       }
+    },
+    {
+      "InputId": "a16f6862-868b-4d83-88f5-c7aac7616a38"/*UniqueForChild*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
     }
   ],
   "SymbolChildUis": [],

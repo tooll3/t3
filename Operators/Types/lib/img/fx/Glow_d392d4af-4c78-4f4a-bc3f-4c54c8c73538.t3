@@ -84,7 +84,7 @@
           "Value": -0.09666665
         },
         {
-          "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Glow*/,
+          "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Opacity*/,
           "Type": "System.Single",
           "Value": 0.9266667
         }
@@ -139,7 +139,7 @@
           "Value": 0.0
         },
         {
-          "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Glow*/,
+          "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Opacity*/,
           "Type": "System.Single",
           "Value": 0.9266667
         },
@@ -233,7 +233,7 @@
           "Value": 0.0
         },
         {
-          "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Glow*/,
+          "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Opacity*/,
           "Type": "System.Single",
           "Value": 1.3266667
         },
@@ -308,7 +308,7 @@
           "Value": 0.0
         },
         {
-          "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Glow*/,
+          "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Opacity*/,
           "Type": "System.Single",
           "Value": 1.3266667
         },

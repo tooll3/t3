@@ -36,7 +36,7 @@ float ApplyBiasAndGain(float x, float s, float t)
     : (((1-t)*(x-1))/(1-x-s*(t-x)+eps)+1);
 }
 
-float4 ApplyBiasAndGain(float4 x, float t, float s) 
+float4 ApplyBiasAndGain(float4 x, float s, float t) 
 {
     float eps = 0.0001;
     float r = 200;

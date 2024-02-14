@@ -1,19 +1,12 @@
 {
   "Id": "da93f7d1-ef91-4b4a-9708-2d9b1baa4c14"/*RemapColor*/,
-  "Description": "Replaces the colors of an image with a gradient based on its brightness. This can be used to emulate gradient curves or level adjustments.\n\nNote: The gradient's alpha channel can control the intensity of the effect.\n\nAlso consider using [Tint].",
+  "Description": "Replaces the colors of an image with a gradient based on its brightness. This can be used to emulate gradient curves or level adjustments or color cycling effects.\n\nTip: This operator can be used to simulate \"adjustment curves\" from image manipulation software when gradient interpolation is set to spline. \n\nNote: The gradient's alpha channel can control the intensity of the effect.\n\nAlso consider using [Tint].",
   "InputUis": [
     {
       "InputId": "876f6f64-7cb4-4060-8571-e0b78b437d41"/*Image*/,
       "Position": {
         "X": -298.18713,
         "Y": 344.4582
-      }
-    },
-    {
-      "InputId": "cb52ff49-17de-4e36-b918-5de6973a234a"/*Resolution*/,
-      "Position": {
-        "X": -314.36774,
-        "Y": 435.13806
       }
     },
     {
@@ -24,13 +17,6 @@
       }
     },
     {
-      "InputId": "7777f86d-dbf7-44d4-9da4-99a819038095"/*DontColorAlpha*/,
-      "Position": {
-        "X": -314.36774,
-        "Y": 570.138
-      }
-    },
-    {
       "InputId": "e3363c0e-819a-45e2-8202-439bcce64d69"/*Mode*/,
       "Position": {
         "X": -314.36774,
@@ -38,27 +24,53 @@
       }
     },
     {
-      "InputId": "8dda3b42-a5de-47b6-aded-159eb896f65a"/*Bias*/,
+      "InputId": "8a2cc68c-ec38-4bb5-a201-e5c06f0a38d1"/*Exposure*/,
       "Position": {
         "X": -314.36774,
         "Y": 660.138
       },
       "Min": 0.0,
+      "Max": 5.0
+    },
+    {
+      "InputId": "97771732-56fb-4e0c-915d-c79321ba27b5"/*BiasAndGain*/,
+      "Position": {
+        "X": -314.36774,
+        "Y": 705.138
+      },
+      "Min": 0.0,
       "Max": 1.0,
-      "Clamp": true
+      "Clamp": true,
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "b1763a8b-aa98-4e00-a47c-a5d0d750ae6e"/*Cycle*/,
       "Position": {
-        "X": -314.36774,
-        "Y": 705.138
-      }
+        "X": -315.0554,
+        "Y": 763.58856
+      },
+      "GroupTitle": "Wrap and Cyle"
     },
     {
       "InputId": "eb070a0b-703d-43cc-a877-cf9e371ebd05"/*WrapMode*/,
       "Position": {
-        "X": -314.36774,
-        "Y": 795.138
+        "X": -315.0554,
+        "Y": 853.58856
+      }
+    },
+    {
+      "InputId": "7777f86d-dbf7-44d4-9da4-99a819038095"/*DontColorAlpha*/,
+      "Position": {
+        "X": -328.12082,
+        "Y": 1023.3022
+      },
+      "GroupTitle": "Options"
+    },
+    {
+      "InputId": "cb52ff49-17de-4e36-b918-5de6973a234a"/*Resolution*/,
+      "Position": {
+        "X": -331.55908,
+        "Y": 1086.3468
       }
     }
   ],
@@ -73,15 +85,15 @@
     {
       "ChildId": "0ea5f0cd-02af-4872-8d07-3fc4ce0c4330"/*BoolToFloat*/,
       "Position": {
-        "X": -24.259338,
-        "Y": 550.3135
+        "X": -195.4035,
+        "Y": 1021.70715
       }
     },
     {
       "ChildId": "05aef49e-71e0-4f76-b01f-536dc193d0dd"/*IntToFloat*/,
       "Position": {
-        "X": -142.40942,
-        "Y": 635.2346
+        "X": -70.93808,
+        "Y": 599.4874
       }
     },
     {
@@ -89,6 +101,13 @@
       "Position": {
         "X": 247.56537,
         "Y": 431.1441
+      }
+    },
+    {
+      "ChildId": "06c9a212-c48b-4ff1-8882-a309fd0f9d7d"/*Vector2Components*/,
+      "Position": {
+        "X": -122.153625,
+        "Y": 697.2929
       }
     }
   ],
@@ -99,6 +118,15 @@
         "X": 471.04095,
         "Y": 338.5982
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "8294c6f7-f265-4404-a824-f989fde65f0b",
+      "Title": "Gradients and Remap Color",
+      "Description": "A short tutorial on how to use remap color to simulate Color cuves.",
+      "LinkUrl": "https://www.youtube.com/watch?v=WK4j0H-oM3g&t=61s",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

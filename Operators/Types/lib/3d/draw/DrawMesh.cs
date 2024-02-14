@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
         
         public DrawMesh()
         {
-            Log.Debug("Construct DrawMesh[]", this);
+            //Log.Debug("Construct DrawMesh[]", this);
             Output.UpdateAction = Update;
         }
 

@@ -107,6 +107,17 @@ namespace T3.Core.Utils
         public static float ToRadians(this float val)
         {
             return val * MathF.PI / 180;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool _IsFinite(this float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
+        }        
+        
+        public static bool _IsFinite(this Vector3 value)
+        {
+            return value.X._IsFinite() && value.Y._IsFinite() && value.Z._IsFinite();
         }        
         
         public static Vector2 Clamp(Vector2 v, Vector2 mn, Vector2 mx)

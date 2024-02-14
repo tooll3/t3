@@ -44,11 +44,6 @@
           "Value": "C:\\Users\\pixtur\\Framefield Dropbox\\Thomas Mann\\_projects\\2024-01-08 GltfFormat\\torus-fracture-v01.glb"
         },
         {
-          "Id": "a82b725b-5a2b-4679-85be-2641c45d3687"/*ChildIndex*/,
-          "Type": "System.Int32",
-          "Value": 0
-        },
-        {
           "Id": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
           "Type": "T3.Core.DataTypes.SceneSetup",
           "Value": {

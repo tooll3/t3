@@ -87,6 +87,7 @@ namespace T3.Editor.Gui.Windows.Output
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
+                // Very ugly hack to prevent scaling the output above window size
                 var keepScale = T3Ui.UiScaleFactor;
                 T3Ui.UiScaleFactor = 1;
                 

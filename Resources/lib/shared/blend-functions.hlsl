@@ -62,6 +62,10 @@ float4 BlendColors(float4 tA, float4 tB, int blendMode)
     case 8: 
         rgb = tA.rgb + tB.rgb;
         break;
+    case 9: 
+        a = tA.a * tB.a;
+        break;
+
     }
 
     return float4(rgb, a);

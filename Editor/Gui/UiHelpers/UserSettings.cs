@@ -84,6 +84,7 @@ namespace T3.Editor.Gui.UiHelpers
             public float GizmoSize = 100;
             public int FullScreenIndexMain = 0;
             public int FullScreenIndexViewer = 0;
+            
 
 
             // Timeline
@@ -95,6 +96,10 @@ namespace T3.Editor.Gui.UiHelpers
             public float SpaceMouseDamping = 0.5f;
             
 
+            // Rendering (controlled from render windows)
+            public string RenderVideoFilePath = "./Render/render-v01.mp4";
+
+            
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
