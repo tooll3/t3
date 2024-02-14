@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Diagnostics;
+using System.Linq;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -28,12 +29,9 @@ namespace T3.Operators.Types.Id_c30ba288_9e40_4636_beb5_68401d91fe37
 
         private void Update(EvaluationContext context)
         {
-            var inputList = Values.GetValue(context); //get input list - within the loop, cycle between index points in the list
-            var damping = Damping.GetValue(context); //get damping amount - doesn't need to be repeated
+            var inputList = Values.GetValue(context);
+            var damping = Damping.GetValue(context);
 
-
-
-            //timing stuff, doesn't need to be repeated
             var currentTime = UseAppRunTime.GetValue(context) ? Playback.RunTimeInSecs : context.LocalFxTime; 
             if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
                 return;
@@ -43,59 +41,62 @@ namespace T3.Operators.Types.Id_c30ba288_9e40_4636_beb5_68401d91fe37
             {
                 return;
             }
-            //Log.Debug("Input list count: " + inputList.Count);
-            //Log.Debug("Damped values count: " + _dampedValues.Count);
             if (Result.Value == null || Result.Value.Count != inputList.Count)
             {
                 Result.Value = new List<float>();
             }
             Result.Value.Clear();
 
-            //clean up internal damped values list
-            while(_dampedValues.Count < inputList.Count) //if too small, make bigger
-            {
-                _dampedValues.Add(0);
-            }
-            while(_dampedValues.Count > inputList.Count) //if too big, make smaller
-            {
-                //Log.Debug("List too long, attempting to remove item " + (_dampedValues.Count - 1) + "...");
-                _dampedValues.RemoveAt(_dampedValues.Count - 1); 
-            }
 
-            //no idea what this is for, best not to touch
-            if (context.IntVariables.TryGetValue("__MotionBlurPass", out var motionBlurPass))
+            //clean up internal lists
+            matchListLength(ref _dampedValues, inputList.Count);
+            matchListLength(ref _velocities, inputList.Count);
+
+            void matchListLength(ref List<float> list, int length)
             {
-                if (motionBlurPass > 0)
+                while(list.Count < length)
                 {
-                    //Log.Debug($"Skip motion blur pass {motionBlurPass}");
-                    return;
-                }                
-            } 
+                    list.Add(0);
+                }
+                while(list.Count > length)
+                {
+                    list.RemoveAt(list.Count - 1);
+                }
+            }
 
-            _lastEvalTime = currentTime; //don't repeat
+            // The below is present in Damp.cs, but I'm unsure what it does. Commenting it out doesn't seem to break anything, but will leave it here just in case
 
-            var method = (DampFunctions.Methods)Method.GetValue(context).Clamp(0, 1); //don't repeat
+            //if (context.IntVariables.TryGetValue("__MotionBlurPass", out var motionBlurPass))
+            //{
+            //    if (motionBlurPass > 0)
+            //    {
+            //        //Log.Debug($"Skip motion blur pass {motionBlurPass}");
+            //        return;
+            //    }                
+            //} 
 
-            //Log.Debug("List length: " + inputList.Count);
-            //Log.Debug("Damped values list length: " + _dampedValues.Count);
+            _lastEvalTime = currentTime;
+
+            var method = (DampFunctions.Methods)Method.GetValue(context).Clamp(0, 1);
 
             for(var i = 0; i < inputList.Count; i++)
             {
-                //Log.Debug("Damping value " +  i + "...");
+                var velocity = _velocities[i];
                 var value = inputList[i];
-                var dampedValue = DampFunctions.DampenFloat(value, _dampedValues[i], damping, ref _velocity, method);
+                var dampedValue = DampFunctions.DampenFloat(value, _dampedValues[i], damping, ref velocity, method);
 
-                MathUtils.ApplyDefaultIfInvalid(ref dampedValue, 0); 
-                MathUtils.ApplyDefaultIfInvalid(ref _velocity, 0);
+                MathUtils.ApplyDefaultIfInvalid(ref dampedValue, 0);
+                MathUtils.ApplyDefaultIfInvalid(ref velocity, 0);
 
                 _dampedValues[i] = dampedValue;
+                _velocities[i] = velocity;
             }
-
-            Result.Value = _dampedValues; //do for list
+            Result.Value.AddRange(_dampedValues);
         }
 
         private List<float> _dampedValues = new List<float>(1);
-        private float _velocity;
+        private List<float> _velocities = new List<float>(1);
+        //private float _velocity; //AHHH each item needs its own velocity parameter! they're tangling each other up!
         private double _lastEvalTime;
         
         [Input(Guid = "491cc9cd-28fc-4ec4-8d98-5a7e0d17082a")]
