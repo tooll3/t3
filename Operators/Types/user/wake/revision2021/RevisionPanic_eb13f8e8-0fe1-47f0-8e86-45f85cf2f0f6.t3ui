@@ -363,7 +363,7 @@
       }
     },
     {
-      "ChildId": "127bb577-7f0c-48e4-a68f-e4ec68b1796d"/*SetPointsW*/,
+      "ChildId": "127bb577-7f0c-48e4-a68f-e4ec68b1796d"/*SpreadPointAttributes*/,
       "Position": {
         "X": 885.77136,
         "Y": 1594.6132
@@ -496,7 +496,7 @@
       }
     },
     {
-      "ChildId": "7110454b-84c2-4f8a-8480-8156655f6773"/*RandomizePoints*/,
+      "ChildId": "7110454b-84c2-4f8a-8480-8156655f6773"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": 244.19232,
         "Y": 1198.6224

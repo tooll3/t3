@@ -15,7 +15,9 @@
       "Position": {
         "X": -671.0575,
         "Y": 274.6548
-      }
+      },
+      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed.",
+      "AddPadding": "True"
     },
     {
       "InputId": "5305a99b-c9ee-41d8-b3e8-918b17ed2107"/*Strength*/,
@@ -23,7 +25,11 @@
         "X": -524.4759,
         "Y": 422.50494
       },
-      "Scale": 0.001
+      "Description": "Controls the strength of the blur.\n\nProTip: For precise adjustment, it can be helpful to reduce the passes to \"2\". The strength is then most clearly visible.",
+      "Min": 0.1,
+      "Max": 3.0,
+      "Scale": 0.001,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [

@@ -1,8 +1,4 @@
 using System;
-using System.Text;
-using System.Text.RegularExpressions;
-using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -12,7 +8,7 @@ namespace T3.Operators.Types.Id_3af25959_fd3f_4608_b521_5860d82554df
     public class MockStrings : Instance<MockStrings>
     {
         [Output(Guid = "461d8e3a-b4db-4a12-94c5-c791e347e51f")]
-        public readonly Slot<string> Result = new Slot<string>();
+        public readonly Slot<string> Result = new();
 
         public MockStrings()
         {
@@ -53,6 +49,6 @@ namespace T3.Operators.Types.Id_3af25959_fd3f_4608_b521_5860d82554df
         }
 
         [Input(Guid = "054ADE21-C08E-4633-9725-6168FD7806F9", MappedType = typeof(Categories))]
-        public readonly InputSlot<int> Category = new InputSlot<int>();
+        public readonly InputSlot<int> Category = new();
     }
 }

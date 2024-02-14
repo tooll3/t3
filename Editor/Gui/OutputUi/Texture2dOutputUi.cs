@@ -5,6 +5,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Editor.App;
 using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.Gui.OutputUi
@@ -42,7 +43,7 @@ namespace T3.Editor.Gui.OutputUi
                     Log.Warning("Failed to access texture description:" + e.Message);
                 }
                 ImageOutputCanvas.Current.DrawTexture(texture);
-                ResourceManager.Instance().SecondRenderWindowTexture = texture;
+                ProgramWindows.Viewer?.SetTexture(texture);
             }
             else
             {

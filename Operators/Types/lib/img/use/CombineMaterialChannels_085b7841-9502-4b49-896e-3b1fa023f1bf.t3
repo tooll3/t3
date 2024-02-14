@@ -18,8 +18,8 @@
     {
       "Id": "34ba88b4-7fe0-4f40-9433-feab3b6e81f0"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {
@@ -218,11 +218,16 @@
       "InputValues": [
         {
           "Id": "03749b41-cc3c-4f38-aea6-d7cea19fc073"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 0,
-            "Height": 0
+            "X": 0,
+            "Y": 0
           }
+        },
+        {
+          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
+          "Type": "System.Boolean",
+          "Value": false
         },
         {
           "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
@@ -235,19 +240,14 @@
           }
         },
         {
-          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
           "Id": "e882e0f0-03f9-46e6-ac7a-709e6fa66613"/*Multisampling*/,
           "Type": "System.Int32",
           "Value": 1
+        },
+        {
+          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
+          "Type": "System.Boolean",
+          "Value": false
         },
         {
           "Id": "abebb02b-bcaa-42c7-8eb8-da3c1b2fc840"/*EnableUpdate*/,
@@ -323,17 +323,17 @@
       "InputValues": [
         {
           "Id": "52b2f067-5619-4d8d-a982-58668a8dc6a4"/*OverrideSize*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1,
-            "Height": 1
+            "X": 1,
+            "Y": 1
           }
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "d29baa5a-b8ea-421f-b43f-ba5e331074e6"/*MaxSize2*/,
+      "Id": "d29baa5a-b8ea-421f-b43f-ba5e331074e6"/*MaxInt2*/,
       "SymbolId": "8e9a45db-a631-4c92-aea9-c252ea6e9708",
       "InputValues": [],
       "Outputs": []

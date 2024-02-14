@@ -1,12 +1,8 @@
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
@@ -24,6 +20,9 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
 
         [Output(Guid = "0702a722-0b93-4840-9abd-f8ee348c3647")]
         public readonly Slot<int> TotalSize = new();
+        
+        [Output(Guid = "79FE54BE-6841-4F4D-8216-0FA26FF21F21")]
+        public readonly Slot<int> Stride = new();
 
         public AnalyzeBuffers()
         {
@@ -31,6 +30,7 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
             StartPositionForSelected.UpdateAction = Update;
             TotalSize.UpdateAction = Update;
             SelectedBuffer.UpdateAction = Update;
+            Stride.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
@@ -69,26 +69,30 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
                 else
                 {
                     hadErrors = true;
-                    if (_complainedOnces)
+                    if (_complainedOnce)
                         continue;
                     
                     Log.Warning($"Undefined BufferWithViews at index {connectionIndex}", this);
-                    _complainedOnces = true;
+                    _complainedOnce = true;
                 }
             }
 
             if (!hadErrors)
             {
-                _complainedOnces = false;
+                _complainedOnce = false;
             }
 
             SelectedBuffer.Value = selectedBuffer;
             StartPositionForSelected.Value = startPosition;
             BufferCount.Value = connections.Count; 
             TotalSize.Value = totalSize;
+            if (selectedBuffer?.Buffer != null)
+            {
+                Stride.Value = selectedBuffer.Buffer.Description.StructureByteStride;
+            }
         }
 
-        private bool _complainedOnces;
+        private bool _complainedOnce;
         
         [Input(Guid = "c8a5769e-2536-4caa-8380-22fbeed1ef12")]
         public readonly MultiInputSlot<BufferWithViews> Input = new();

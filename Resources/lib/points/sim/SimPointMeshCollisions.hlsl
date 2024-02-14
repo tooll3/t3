@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
@@ -12,7 +13,7 @@ cbuffer Params : register(b0)
     // float Mode;
 }
 
-RWStructuredBuffer<Point> Points : u0;
+RWStructuredBuffer<Particle> Particles : u0;
 
 StructuredBuffer<PbrVertex> Vertices: t0;
 StructuredBuffer<int3> Indices: t1;
@@ -146,7 +147,6 @@ void findClosestPointAndDistance(
     }
 }
 
-
 float4 q_from_tangentAndNormal(float3 dx, float3 dz)
 {
     dx = normalize(dx);
@@ -159,15 +159,14 @@ float4 q_from_tangentAndNormal(float3 dx, float3 dz)
         dz
         );
     
-    return normalize( quaternion_from_matrix_precise( transpose( orientationDest)));
+    return normalize( qFromMatrix3Precise( transpose( orientationDest)));
 }
-
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-    uint pointCount, pointStride;
-    Points.GetDimensions(pointCount, pointStride);
+    uint pointCount, Particlestride;
+    Particles.GetDimensions(pointCount, Particlestride);
 
     if(i.x >= pointCount) 
         return;
@@ -178,26 +177,26 @@ void main(uint3 i : SV_DispatchThreadID)
     uint faceCount, faceStride; 
     Indices.GetDimensions(faceCount, faceStride);
 
-    Point p = Points[i.x];
+    Particle p = Particles[i.x];
 
-    float3 pos = p.position;
-    float4 rot = p.rotation;
-    float pW = p.w;
+    float3 pos = p.Position;
+    float4 rot = p.Rotation;
+    float pW = p.Radius;
     float3 pos2 = pos;     // TODO: Implement       //   + forward * usedSpeed;
 
     int closestFaceIndex;
     float3 closestSurfacePoint;
     findClosestPointAndDistance(faceCount, pos2,  closestFaceIndex, closestSurfacePoint);
 
-    float4 normalizedRot;
-    float v = q_separate_v(rot, normalizedRot);
-    float3 direction = pos - closestSurfacePoint;
+    //float4 normalizedRot;
+    //float v = q_separate_v(rot, normalizedRot);
+    float3 vToSurface = pos - closestSurfacePoint;
 
-    //direction = float3(0,-1,0);
-    float distance = length(direction);
+    //vToSurface = float3(0,-1,0);
+    float distance = length(vToSurface);
     if(isnan(distance) || distance < 0.001) 
     {
-        //Points[i.x].w = 2;
+        //Particles[i.x].w = 2;
         return;
     }
 
@@ -205,93 +204,15 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
 
 
-    float3 forward = rotate_vector(float3(0,0, v * Damping), normalizedRot);
-    forward += normalize(direction) * Bounciness;
+    //float3 forward = qRotateVec3(float3(0,0, v * Damping), p.Rotation);
+    
+    Particles[i.x].Velocity = p.Velocity + normalize(vToSurface) * Bounciness;
 
-    float newV =length(forward);
-    float4 newRotation = q_look_at(normalize(forward), float3(0,0,1));
-    Points[i.x].rotation = q_encode_v(newRotation, newV);    
-
-
-
+    // float newV =length(forward);
+    // float4 newRotation = qLookAt(normalize(forward), float3(0,0,1));
+    //Particles[i.x].Rotation = q_encode_v(newRotation, newV);    
 
 
-
-
-
-
-
-
-    //Points[i.x].position.x += 1;
-
-    // // Keep outside
-    // float3 distanceFromSurface= normalize(pos2 - closestSurfacePoint) * (SurfaceDistance + signedPointHash * RandomSurfaceDistance);
-    // distanceFromSurface *= dot(distanceFromSurface, Vertices[Indices[closestFaceIndex].x].Normal) > 0 
-    //     ? 1 : -1;
-
-    // float3 targetPosWithDistance = closestSurfacePoint + distanceFromSurface;
-
-    // float3 movement = targetPosWithDistance - p.position;
-    // float requiredSpeed= clamp(length(movement), 0.001,99999);
-    // float clampedSpeed = min(requiredSpeed, usedSpeed );
-    // float speedFactor = clampedSpeed / requiredSpeed;
-    // movement *= speedFactor;
-    // if(!isnan(movement.x) ) 
-    // {
-    //     p.position += movement;
-    //     float4 orientation = normalize(q_from_tangentAndNormal(movement, distanceFromSurface));
-    //     float4 mixedOrientation = q_slerp(orientation, p.rotation, 0.96);
-
-    //     float usedSpin = (Spin + RandomSpin) * signedNoise;
-    //     if(abs(usedSpin) > 0.001) 
-    //     {
-    //         float randomAngle = signedPointHash  * usedSpin;
-    //         mixedOrientation = normalize(qmul( mixedOrientation, rotate_angle_axis(randomAngle, distanceFromSurface )));
-    //     }
-            
-    //     p.rotation = mixedOrientation;
-    // }
-    // Points[i.x] = p;
-    //Points[i.x].position += float3(0,0.01,0);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// [numthreads(64,1,1)]
-// void main(uint3 i : SV_DispatchThreadID)
-// {
-
-//     float3 offset = Direction * Amount * (1 + hash11(i.x) * RandomAmount);
-
-//     if(Mode < 0.5) 
-//     {
-//         Points[i.x].position += offset;
-//         return;
-//     }
-
-//     float4 rot = Points[i.x].rotation;
-//     float4 normalizedRot;
-
-//     float v = q_separate_v(rot, normalizedRot);
-
-//     float3 forward = rotate_vector(float3(0,0,1), normalizedRot) * v;    
-//     forward += offset;
-
-//     float newV = length(forward);
-//     float4 newRotation = q_look_at(normalize(forward), float3(0,0,1));
-
-//     Points[i.x].rotation = q_encode_v(newRotation, newV);    
-// }
 

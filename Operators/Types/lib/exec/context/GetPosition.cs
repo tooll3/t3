@@ -1,9 +1,9 @@
 using System.Numerics;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils.Geometry;
 
 namespace T3.Operators.Types.Id_b7731197_b922_4ed8_8e22_bc7596c64f6c
 {
@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_b7731197_b922_4ed8_8e22_bc7596c64f6c
         public readonly Slot<Vector3> Scale = new();
         
         [Output(Guid = "751E97DE-C418-48C7-823E-D4660073A559")]
-        public readonly Slot<SharpDX.Vector4[]> ObjectToWorld = new();
+        public readonly Slot<Vector4[]> ObjectToWorld = new();
         
         public GetPosition()
         {
@@ -38,21 +38,21 @@ namespace T3.Operators.Types.Id_b7731197_b922_4ed8_8e22_bc7596c64f6c
 
         private void Update(EvaluationContext context)
         {
-            var p = new SharpDX.Vector4(0, 0, 0, 1);
-            var pInWorld = SharpDX.Vector4.Transform(p, context.ObjectToWorld);
+            var p = new Vector4(0, 0, 0, 1);
+            var pInWorld = Vector4.Transform(p, context.ObjectToWorld);
             _lastPosition = new Vector3(pInWorld.X, pInWorld.Y, pInWorld.Z);
             
-            var s = new SharpDX.Vector4(1, 1, 1, 0);
-            var sInWorld = SharpDX.Vector4.Transform(s, context.ObjectToWorld);
+            var s = new Vector4(1, 1, 1, 0);
+            var sInWorld = Vector4.Transform(s, context.ObjectToWorld);
             _lastScale = new Vector3(sInWorld.X, sInWorld.Y, sInWorld.Z);
             
-            _matrix[0] = context.ObjectToWorld.Row1;
-            _matrix[1] = context.ObjectToWorld.Row2;
-            _matrix[2] = context.ObjectToWorld.Row3;
-            _matrix[3] = context.ObjectToWorld.Row4;
+            _matrix[0] = context.ObjectToWorld.Row1();
+            _matrix[1] = context.ObjectToWorld.Row2();
+            _matrix[2] = context.ObjectToWorld.Row3();
+            _matrix[3] = context.ObjectToWorld.Row4();
         }
 
-        private readonly SharpDX.Vector4[] _matrix = new SharpDX.Vector4[4] ;
+        private readonly Vector4[] _matrix = new Vector4[4] ;
         private Vector3 _lastPosition;
         private Vector3 _lastScale;
         

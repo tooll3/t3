@@ -11,6 +11,5 @@ namespace T3.Editor.Gui.Interaction.Camera
         public const float ZoomSpeed = 10f;
         public const float MaxMoveVelocity = 1;
         public const float CameraAcceleration = 1;
-        public const float DefaultCameraPositionZ = 2.416f;
     }
 }

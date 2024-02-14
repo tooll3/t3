@@ -1,5 +1,6 @@
 using System.Numerics;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Utils.Geometry;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.Camera
@@ -12,12 +13,12 @@ namespace T3.Editor.Gui.Interaction.Camera
     /// clearer but is too long.</remarks>
     public class CameraSetup
     {
-        public Vector3 Position = new Vector3(0, 0, CameraInteractionParameters.DefaultCameraPositionZ);
+        public Vector3 Position = new(0, 0, GraphicsMath.DefaultCameraDistance);
         public Vector3 Target;
 
         public void Reset()
         {
-            Position = new Vector3(0, 0, CameraInteractionParameters.DefaultCameraPositionZ);
+            Position = new Vector3(0, 0, GraphicsMath.DefaultCameraDistance);
             Target = Vector3.Zero;
             UserSettings.Config.CameraSpeed = 1;
         }

@@ -1,6 +1,5 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -12,7 +11,7 @@ namespace T3.Operators.Types.Id_1ba08d52_c8ec_479a_8dc0_95d92da36577
     public class ColorGradeConstBuffer : Instance<ColorGradeConstBuffer>
     {
         [Output(Guid = "c63a8582-726d-4a18-a256-48ccf13f1289", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<Buffer> Buffer = new Slot<Buffer>();
+        public readonly Slot<Buffer> Buffer = new();
 
         public ColorGradeConstBuffer()
         {
@@ -48,12 +47,12 @@ namespace T3.Operators.Types.Id_1ba08d52_c8ec_479a_8dc0_95d92da36577
         }       
 
         [Input(Guid = "7834D068-E09F-4A10-8FCA-AE73692836FC")]
-        public readonly InputSlot<Vector4> Param1 = new InputSlot<Vector4>();
+        public readonly InputSlot<Vector4> Param1 = new();
         [Input(Guid = "49B2F2C5-C170-4AFC-99CA-0487D2FA66E4")]
-        public readonly InputSlot<Vector4> Param2 = new InputSlot<Vector4>();
+        public readonly InputSlot<Vector4> Param2 = new();
         [Input(Guid = "E0E761AF-2541-47E1-9BBC-4364489A5334")]
-        public readonly InputSlot<Vector4> Param3 = new InputSlot<Vector4>();
+        public readonly InputSlot<Vector4> Param3 = new();
         [Input(Guid = "D2C37218-81B7-45F5-AD56-DADDA3C37197")]
-        public readonly InputSlot<Vector4> Param4 = new InputSlot<Vector4>();
+        public readonly InputSlot<Vector4> Param4 = new();
     }
 }

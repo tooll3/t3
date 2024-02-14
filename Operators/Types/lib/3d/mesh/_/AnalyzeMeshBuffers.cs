@@ -5,6 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
+
 namespace T3.Operators.Types.Id_e43370a7_dafd_48b0_bac6_f30ea1bcf4cb
 {
     public class AnalyzeMeshBuffers : Instance<AnalyzeMeshBuffers>
@@ -66,7 +67,10 @@ namespace T3.Operators.Types.Id_e43370a7_dafd_48b0_bac6_f30ea1bcf4cb
                     && meshBuffer.IndicesBuffer != null 
                     && meshBuffer.VertexBuffer != null 
                     && meshBuffer.IndicesBuffer.Srv != null
-                    && meshBuffer.VertexBuffer.Srv != null)
+                    && meshBuffer.VertexBuffer.Srv != null
+                    && !meshBuffer.IndicesBuffer.Srv.IsDisposed
+                    && !meshBuffer.VertexBuffer.Srv.IsDisposed
+                    )
                 {
                     var indexBuffer = meshBuffer.IndicesBuffer;
                     var vertexBuffer = meshBuffer.VertexBuffer;

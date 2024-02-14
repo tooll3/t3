@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_baa8cd75_5621_42ba_a79c_b008b7caa141
     public class RoundVec3 : Instance<RoundVec3>
     {
         [Output(Guid = "610e09be-54e8-40a6-9cef-e4da953a4e78")]
-        public readonly Slot<Vector3> Result = new Slot<Vector3>();
+        public readonly Slot<Vector3> Result = new();
 
         public RoundVec3()
         {
@@ -48,10 +48,10 @@ namespace T3.Operators.Types.Id_baa8cd75_5621_42ba_a79c_b008b7caa141
         }
 
         [Input(Guid = "158ff4f8-7470-4402-b16e-54a3a252fe7a")]
-        public readonly InputSlot<Vector3> Value = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Value = new();
 
         [Input(Guid = "93a69b1c-365f-495f-8cdf-7ca1e78407e2")]
-        public readonly InputSlot<Vector3> Precision = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Precision = new();
 
         [Input(Guid = "ACB38B7F-D466-40B4-9D59-201BABFF00AA", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new();

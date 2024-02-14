@@ -1,11 +1,9 @@
 using System;
 using System.Globalization;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_8171c2f5_96df_41f6_884c_dbd004ae8a17
@@ -13,7 +11,7 @@ namespace T3.Operators.Types.Id_8171c2f5_96df_41f6_884c_dbd004ae8a17
     public class ValueToRate : Instance<ValueToRate>
     {
         [Output(Guid = "c21800d0-ee83-43f6-8f1c-9cee2e495056")]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
         public ValueToRate()
         {
@@ -54,9 +52,9 @@ namespace T3.Operators.Types.Id_8171c2f5_96df_41f6_884c_dbd004ae8a17
         }
 
         [Input(Guid = "4f2dad75-0f45-498a-9a1a-7571dc9f0b09")]
-        public readonly InputSlot<float> Value = new InputSlot<float>();
+        public readonly InputSlot<float> Value = new();
 
         [Input(Guid = "1AD90698-0D84-488B-B969-4D727E173AFF")]
-        public readonly InputSlot<string> Rates = new InputSlot<string>();
+        public readonly InputSlot<string> Rates = new();
     }
 }

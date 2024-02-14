@@ -1,4 +1,4 @@
-using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -20,13 +20,13 @@ namespace T3.Operators.Types.Id_085b7841_9502_4b49_896e_3b1fa023f1bf
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Occlusion = new();
 
         [Input(Guid = "34ba88b4-7fe0-4f40-9433-feab3b6e81f0")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new();
+        public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "16522565-e9aa-4295-b219-9724d656ced3")]
         public readonly InputSlot<bool> GenerateMips = new();
 
         [Input(Guid = "099eae25-7cca-4da2-956f-c1a5bd67e764")]
-        public readonly InputSlot<T3.Core.DataTypes.Curve> RemapRoughness = new InputSlot<T3.Core.DataTypes.Curve>();
+        public readonly InputSlot<T3.Core.DataTypes.Curve> RemapRoughness = new();
     }
 }
 

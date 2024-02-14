@@ -1,12 +1,9 @@
 using System;
 using System.Text;
-using SharpDX;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
@@ -14,10 +11,10 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
     public class BuildRandomString : Instance<BuildRandomString>
     {
         [Output(Guid = "ABA9EB42-5AF0-4165-A2BD-FDFCD4340484", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<string> Result = new Slot<string>();
+        public readonly Slot<string> Result = new();
 
         [Output(Guid = "8116d50e-0220-4bb7-b09d-881f722804cd")]
-        public readonly Slot<System.Text.StringBuilder> Builder = new Slot<System.Text.StringBuilder>();
+        public readonly Slot<System.Text.StringBuilder> Builder = new();
 
         public BuildRandomString()
         {
@@ -326,41 +323,41 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
         private StringBuilder _fallbackBuffer = new();
 
         private int _index = 0;
-        private Random _random = new Random();
+        private Random _random = new();
 
         [Input(Guid = "CE436E27-05A5-431D-9AA2-920DBFF639A7", MappedType = typeof(Modes))]
-        public readonly InputSlot<int> WriteMode = new InputSlot<int>();
+        public readonly InputSlot<int> WriteMode = new();
         
         [Input(Guid = "77A5604A-034A-4352-BD46-BE3CB57F90B7")]
-        public readonly InputSlot<bool> Clear = new InputSlot<bool>();
+        public readonly InputSlot<bool> Clear = new();
         
         [Input(Guid = "095202BF-118F-4C4C-802E-7916BC290A60")]
-        public readonly InputSlot<bool> Insert = new InputSlot<bool>();
+        public readonly InputSlot<bool> Insert = new();
 
 
 
         [Input(Guid = "F977FAAF-1840-4A75-9BC5-43176F2E88E9")]
-        public readonly InputSlot<bool> JumpToRandomPos = new InputSlot<bool>();
+        public readonly InputSlot<bool> JumpToRandomPos = new();
 
 
 
         [Input(Guid = "960179BD-286F-4629-BBCB-CD31AA9C9AE2")]
-        public readonly InputSlot<string> InsertString = new InputSlot<string>();
+        public readonly InputSlot<string> InsertString = new();
 
         [Input(Guid = "8EEE8067-1A4E-4372-93D0-2DBC368AA45A")]
-        public readonly InputSlot<string> Separator = new InputSlot<string>();
+        public readonly InputSlot<string> Separator = new();
 
         [Input(Guid = "1559C0E9-BA56-447F-8241-03D8D59AC205")]
-        public readonly InputSlot<int> OverwriteOffset = new InputSlot<int>();
+        public readonly InputSlot<int> OverwriteOffset = new();
 
         [Input(Guid = "38CE7F47-C117-47A2-AEEA-609716C60555")]
-        public readonly InputSlot<int> MaxLength = new InputSlot<int>();
+        public readonly InputSlot<int> MaxLength = new();
 
         [Input(Guid = "875CBFA9-FFA8-4204-810C-C04F5F421441", MappedType = typeof(WrapLinesModes))]
-        public readonly InputSlot<int> WrapLines = new InputSlot<int>();
+        public readonly InputSlot<int> WrapLines = new();
 
         [Input(Guid = "BD941C4B-18A8-4687-85A8-3FE53B4F6213")]
-        public readonly InputSlot<int> WrapLineColumn = new InputSlot<int>();
+        public readonly InputSlot<int> WrapLineColumn = new();
 
         [Input(Guid = "7DABD7C8-5C2B-4BE2-B1B6-BF8B8FCBFD8D")]
         public readonly InputSlot<float> ScrambleRatio = new();

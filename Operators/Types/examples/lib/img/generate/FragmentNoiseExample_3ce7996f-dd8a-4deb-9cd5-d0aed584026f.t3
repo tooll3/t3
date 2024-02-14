@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "59b00117-0a8f-4f2a-a0c3-2466409368ee"/*FractalNoise*/,
+      "Id": "59b00117-0a8f-4f2a-a0c3-2466409368ee"/*_FractalNoiseOld*/,
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [
         {
@@ -35,10 +35,10 @@
         },
         {
           "Id": "37b24ceb-2d25-43e8-a31c-7caf62c2b7ee"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 0,
-            "Height": 0
+            "X": 0,
+            "Y": 0
           }
         }
       ],
@@ -139,7 +139,7 @@
       "Outputs": []
     },
     {
-      "Id": "3ddef1f6-15f9-46e3-9f51-2b3ea47ae62e"/*FractalNoise*/,
+      "Id": "3ddef1f6-15f9-46e3-9f51-2b3ea47ae62e"/*_FractalNoiseOld*/,
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [
         {
@@ -185,10 +185,10 @@
         },
         {
           "Id": "37b24ceb-2d25-43e8-a31c-7caf62c2b7ee"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 512,
-            "Height": 512
+            "X": 512,
+            "Y": 512
           }
         }
       ],

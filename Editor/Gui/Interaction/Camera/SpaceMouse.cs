@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Numerics;
 using System.Windows.Forms;
-using SharpDX;
-using T3.Core.Utils;
 using T3.Editor.App;
 using T3.Editor.Gui.UiHelpers;
 
@@ -53,7 +52,7 @@ namespace T3.Editor.Gui.Interaction.Camera
             _rotationSum = new Vector3(0, 0, 0);
 
             
-            var viewDir = intendedSetup.Target.ToSharpDxVector3() - intendedSetup.Position.ToSharpDxVector3();
+            var viewDir = intendedSetup.Target - intendedSetup.Position;
             
             
             
@@ -75,7 +74,7 @@ namespace T3.Editor.Gui.Interaction.Camera
 
             float translationVelocity = _dampedTranslation.Length() / 2000.0f;
             var direction = _dampedTranslation;
-            direction.Normalize();
+            direction = Vector3.Normalize(direction);
 
             if (translationVelocity <  CameraInteractionParameters.MaxMoveVelocity)
                 direction *= translationVelocity;
@@ -84,16 +83,16 @@ namespace T3.Editor.Gui.Interaction.Camera
 
             var moveDir = direction.X * sideDir - direction.Y * viewDir - direction.Z * upDir;
 
-            var rotAroundX = Matrix.RotationAxis(sideDir, -_dampedRotation.X / 8000.0f);
-            var rotAroundY = Matrix.RotationAxis(upDir, -_dampedRotation.Y / 8000.0f);
-            var rot = Matrix.Multiply(rotAroundX, rotAroundY);
+            var rotAroundX = Matrix4x4.CreateFromAxisAngle(sideDir, -_dampedRotation.X / 8000.0f);
+            var rotAroundY = Matrix4x4.CreateFromAxisAngle(upDir, -_dampedRotation.Y / 8000.0f);
+            var rot = Matrix4x4.Multiply(rotAroundX, rotAroundY);
             var newViewDir = Vector3.Transform(viewDir, rot);
-            newViewDir.Normalize();
+            newViewDir = Vector3.Normalize(newViewDir);
 
             var oldPosition = intendedSetup.Position;
-            intendedSetup.Position += moveDir.ToNumerics();
-            
-            intendedSetup.Target = oldPosition + (moveDir + newViewDir.ToVector3() * viewDirLength).ToNumerics();
+            intendedSetup.Position += moveDir;
+
+            intendedSetup.Target = oldPosition + (moveDir + newViewDir * viewDirLength);
             //Log.Debug($"space mouse move: {moveDir}  eventCount:{_eventCount}");
 
         }

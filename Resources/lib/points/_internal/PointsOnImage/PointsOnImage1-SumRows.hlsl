@@ -1,7 +1,7 @@
 Texture2D<float> InputTexture : register(t0);
 RWTexture2D<float> summedRows : register (u0);
 
-[numthreads(1, 128, 1)]
+[numthreads(1, 8, 1)]
 void SumRows(uint3 threadID : SV_DispatchThreadID)
 {
     float sum = 0;

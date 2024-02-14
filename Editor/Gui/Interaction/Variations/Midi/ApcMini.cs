@@ -177,29 +177,29 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
             YellowBlinking,
         }
 
-        private static readonly ButtonRange SceneTrigger1To64 = new ButtonRange(0, 63);
-        private static readonly ButtonRange Sliders1To9 = new ButtonRange(48, 48 + 8);
-        private static readonly ButtonRange Sliders1To8 = new ButtonRange(48, 48 + 7);
-        private static readonly ButtonRange Slider9 = new ButtonRange(48+8, 48 + 8);
+        private static readonly ButtonRange SceneTrigger1To64 = new(0, 63);
+        private static readonly ButtonRange Sliders1To9 = new(48, 48 + 8);
+        private static readonly ButtonRange Sliders1To8 = new(48, 48 + 7);
+        private static readonly ButtonRange Slider9 = new(48+8, 48 + 8);
 
-        private static readonly ButtonRange ChannelButtons1To8 = new ButtonRange(64, 71);
-        private static readonly ButtonRange ButtonUp = new ButtonRange(64);
-        private static readonly ButtonRange ButtonDown = new ButtonRange(65);
-        private static readonly ButtonRange ButtonLeft = new ButtonRange(66);
-        private static readonly ButtonRange ButtonRight = new ButtonRange(67);
-        private static readonly ButtonRange ButtonVolume = new ButtonRange(68);
-        private static readonly ButtonRange ButtonPan = new ButtonRange(69);
-        private static readonly ButtonRange ButtonSend = new ButtonRange(70);
-        private static readonly ButtonRange ButtonDevice = new ButtonRange(71);
+        private static readonly ButtonRange ChannelButtons1To8 = new(64, 71);
+        private static readonly ButtonRange ButtonUp = new(64);
+        private static readonly ButtonRange ButtonDown = new(65);
+        private static readonly ButtonRange ButtonLeft = new(66);
+        private static readonly ButtonRange ButtonRight = new(67);
+        private static readonly ButtonRange ButtonVolume = new(68);
+        private static readonly ButtonRange ButtonPan = new(69);
+        private static readonly ButtonRange ButtonSend = new(70);
+        private static readonly ButtonRange ButtonDevice = new(71);
 
-        private static readonly ButtonRange SceneLaunch1To8 = new ButtonRange(82, 89);
-        private static readonly ButtonRange SceneLaunch1ClipStop = new ButtonRange(82);
-        private static readonly ButtonRange SceneLaunch2ClipSolo = new ButtonRange(83);
-        private static readonly ButtonRange SceneLaunch3ClipRecArm = new ButtonRange(84);
-        private static readonly ButtonRange SceneLaunch4ClipMute = new ButtonRange(85);
-        private static readonly ButtonRange SceneLaunch5ClipSelect = new ButtonRange(86);
-        private static readonly ButtonRange SceneLaunch8ClipStopAll = new ButtonRange(89);
+        private static readonly ButtonRange SceneLaunch1To8 = new(82, 89);
+        private static readonly ButtonRange SceneLaunch1ClipStop = new(82);
+        private static readonly ButtonRange SceneLaunch2ClipSolo = new(83);
+        private static readonly ButtonRange SceneLaunch3ClipRecArm = new(84);
+        private static readonly ButtonRange SceneLaunch4ClipMute = new(85);
+        private static readonly ButtonRange SceneLaunch5ClipSelect = new(86);
+        private static readonly ButtonRange SceneLaunch8ClipStopAll = new(89);
 
-        private static readonly ButtonRange Shift = new ButtonRange(98);
+        private static readonly ButtonRange Shift = new(98);
     }
 }

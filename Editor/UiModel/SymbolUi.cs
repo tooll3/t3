@@ -136,7 +136,7 @@ namespace T3.Editor.UiModel
                 var existingInputUi = existingInputs.SingleOrDefault(inputUi => inputUi.Id == input.Id);
                 if (existingInputUi == null || existingInputUi.Type != input.DefaultValue.ValueType)
                 {
-                    Log.Debug($"Found no input ui entry for symbol child input '{input.Name}' - creating a new one");
+                    Log.Debug($"Found no input ui entry for symbol child input '{Symbol.Name}.{input.Name}' - creating a new one");
                     InputUis.Remove(input.Id);
                     var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
                     IInputUi newInputUi = inputCreator();
@@ -164,7 +164,7 @@ namespace T3.Editor.UiModel
             {
                 if (!OutputUis.TryGetValue(output.Id, out var value) || (value.Type != output.ValueType))
                 {
-                    Log.Debug($"Found no output ui for '{output.Name}' in {Symbol.Name}  - creating a new one");
+                    Log.Debug($"Found no output ui for '{Symbol.Name}.{output.Name}' - creating a new one");
                     OutputUis.Remove(output.Id); // if type has changed remove the old entry
 
                     if (!outputUiFactory.TryGetValue(output.ValueType, out var outputUiCreator))
@@ -177,6 +177,7 @@ namespace T3.Editor.UiModel
                     newOutputUi.OutputDefinition = output;
                     newOutputUi.PosOnCanvas = ComputeNewOutputUiPositionOnCanvas(ChildUis, OutputUis);
                     OutputUis.Add(output.Id, newOutputUi);
+                    FlagAsModified();
                 }
             }
 

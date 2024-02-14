@@ -1,0 +1,32 @@
+{
+  "Id": "0bd77dd6-a93a-4e2e-b69b-bbeb73cb5ae9"/*DefineMaterials*/,
+  "Description": "Defines Materials for later use when drawing content or scenes.",
+  "InputUis": [
+    {
+      "InputId": "ab03556d-02a5-4329-94af-58563f93e159"/*SubGraph*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "6299a306-d96c-425d-b44c-0340358439cb"/*Materials*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "9e5f90f2-370c-4aef-8819-c3c5c7e5edc2"/*Output*/,
+      "Position": {
+        "X": 15.503039,
+        "Y": -76.40784
+      }
+    }
+  ]
+}

@@ -5,6 +5,7 @@ using System.Numerics;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
@@ -12,7 +13,6 @@ using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -668,7 +668,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private static MoveTimeClipsCommand _moveClipsCommand;
         private const int LayerHeight = 18;
         private const float HandleWidth = 7;
-        private readonly Vector2 _handleOffset = new Vector2(HandleWidth, 0);
+        private readonly Vector2 _handleOffset = new(HandleWidth, 0);
 
         private ImDrawListPtr _drawList;
         private Instance _compositionOp;
@@ -769,8 +769,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
             /// <summary>
             /// Reusing static collections to avoid GC leaks
             /// </summary>
-            private static readonly Dictionary<Guid, ITimeClip> _compositionTimeClips = new Dictionary<Guid, ITimeClip>(100);
-            private static readonly List<ITimeClip> _selectedClips = new List<ITimeClip>(100);
+            private static readonly Dictionary<Guid, ITimeClip> _compositionTimeClips = new(100);
+            private static readonly List<ITimeClip> _selectedClips = new(100);
             private static Instance _compositionOp;
         }
     }

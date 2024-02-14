@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -13,7 +12,7 @@ namespace T3.Operators.Types.Id_064ca51f_47ab_4cb7_95f2_e537b68e137e
     public class BlendStateOp : Instance<BlendStateOp>
     {
         [Output(Guid = "6EF6C44B-EE22-4C64-9910-4F7595C41897")]
-        public readonly Slot<BlendState> BlendState = new Slot<BlendState>();
+        public readonly Slot<BlendState> BlendState = new();
 
         public BlendStateOp()
         {
@@ -53,10 +52,10 @@ namespace T3.Operators.Types.Id_064ca51f_47ab_4cb7_95f2_e537b68e137e
         private List<Slot<RenderTargetBlendDescription>> _connectedDescriptions;
 
         [Input(Guid = "63D0E4E8-FA00-4059-A11B-6A31E66757DC")]
-        public readonly MultiInputSlot<RenderTargetBlendDescription> RenderTargets = new MultiInputSlot<RenderTargetBlendDescription>();
+        public readonly MultiInputSlot<RenderTargetBlendDescription> RenderTargets = new();
         [Input(Guid = "3CA79807-00C9-471A-AC44-525A05740FED")]
-        public readonly InputSlot<bool> AlphaToCoverageEnable = new InputSlot<bool>();
+        public readonly InputSlot<bool> AlphaToCoverageEnable = new();
         [Input(Guid = "873AD863-DEC6-4B4B-9D81-89D5FA11BEEC")]
-        public readonly InputSlot<bool> IndependentBlendEnable = new InputSlot<bool>();
+        public readonly InputSlot<bool> IndependentBlendEnable = new();
     }
 }

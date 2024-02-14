@@ -10,8 +10,8 @@
     {
       "Id": "00b52213-7d87-457a-8a17-f33d471cdafe"/*BufferSize*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {

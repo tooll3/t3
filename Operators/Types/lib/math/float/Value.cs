@@ -1,4 +1,3 @@
-using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -8,7 +7,7 @@ namespace T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe
     public class Value : Instance<Value>
     {
         [Output(Guid = "f83f1835-477e-4bb6-93f0-14bf273b8e94")]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
         public Value()
         {

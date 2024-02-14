@@ -1,11 +1,8 @@
 using System;
-using SharpDX;
-using T3.Core;
-using T3.Core.Logging;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
@@ -33,7 +30,7 @@ namespace T3.Operators.Types.Id_1cfe41c7_972e_4243_9ae4_a510ac038191
 
         private void Update(EvaluationContext context)
         {
-            var worldToClipSpace = Matrix.Multiply(context.WorldToCamera, context.CameraToClipSpace);
+            var worldToClipSpace = Matrix4x4.Multiply(context.WorldToCamera, context.CameraToClipSpace);
             var color = Color.GetValue(context);
             var randomizeColor = RandomizeColor.GetValue(context);
             var size = Size.GetValue(context);
@@ -53,9 +50,9 @@ namespace T3.Operators.Types.Id_1cfe41c7_972e_4243_9ae4_a510ac038191
             var fxZoneMode = (ZoneFxModes)FxZoneMode.GetValue(context);
 
             var pointLight = context.PointLights.GetPointLight(referencedLightIndex);
-            var lightPosDx = pointLight.Position.ToSharpDxVector4(1);
+            var lightPosDx = new Vector4(pointLight.Position, 1);
 
-            var posInViewDx = SharpDX.Vector4.Transform(lightPosDx, worldToClipSpace);
+            var posInViewDx = System.Numerics.Vector4.Transform(lightPosDx, worldToClipSpace);
             posInViewDx /= posInViewDx.W;
 
             

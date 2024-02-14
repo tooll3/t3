@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -31,7 +32,7 @@ void main(uint3 i : SV_DispatchThreadID)
     int lineIndex = i.x;
     int lineStartPointIndex = lineIndex * lineLength;
 
-    float3 pos = SourcePoints[lineStartPointIndex].position;
+    float3 pos = SourcePoints[lineStartPointIndex].Position;
 
     for(int pointOnLineIndex = 0; pointOnLineIndex < lineLength; pointOnLineIndex++) 
     {
@@ -45,11 +46,11 @@ void main(uint3 i : SV_DispatchThreadID)
             cos (pointOnLineIndex * C + phase) * fx.g,
             0 ) * MagnitudeA;
 
-        ResultPoints[pointIndex].position = pos + sinOffset + float3(0.1,0,0);
+        ResultPoints[pointIndex].Position = pos + sinOffset + float3(0.1,0,0);
         pos += float3(0,A/LineLength,0);
 
-        ResultPoints[pointIndex].rotation = SourcePoints[pointIndex].rotation;
-        ResultPoints[pointIndex].w = SourcePoints[pointIndex].w;
+        ResultPoints[pointIndex].Rotation = SourcePoints[pointIndex].Rotation;
+        ResultPoints[pointIndex].W = SourcePoints[pointIndex].W;
     }
 }
 

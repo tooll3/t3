@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 // #include "lib/shared/hash-functions.hlsl"
 // #include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
 
@@ -76,7 +77,7 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
         return;
         
 
-    float3 position = points[pointIndex].position;
+    float3 position = points[pointIndex].Position;
     float3 jitter =  (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + position * 100 + Time % 123.1 ) -0.5f)  * CellSize ;
     position+= jitter;
 
@@ -96,7 +97,7 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
             if( otherIndex <= DTid.x)
                 continue;
 
-            float3 otherPos = points[otherIndex].position;
+            float3 otherPos = points[otherIndex].Position;
 
             float3 direction = position - otherPos;
             float distance = length(position - otherPos);

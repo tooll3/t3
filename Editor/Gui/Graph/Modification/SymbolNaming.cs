@@ -90,15 +90,30 @@ internal class ClassRenameRewriter : CSharpSyntaxRewriter
         var classDeclaration = SyntaxFactory.ClassDeclaration(node.AttributeLists, node.Modifiers, node.Keyword, identifier, node.TypeParameterList,
                                                               null, node.ConstraintClauses, node.OpenBraceToken, node.Members, node.CloseBraceToken,
                                                               node.SemicolonToken);
-        var genericName = SyntaxFactory.GenericName(SyntaxFactory.Identifier("Instance"))
-                                       .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList<TypeSyntax>(SyntaxFactory.IdentifierName(_newSymbolName)))
-                                                                          .WithGreaterThanToken(SyntaxFactory.Token(SyntaxFactory.TriviaList(), SyntaxKind.GreaterThanToken, SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))));
+        try
+        {
+            var genericName = SyntaxFactory.GenericName(SyntaxFactory.Identifier("Instance"))
+                                           .WithTypeArgumentList(SyntaxFactory
+                                                                .TypeArgumentList(SyntaxFactory
+                                                                                     .SingletonSeparatedList<
+                                                                                          TypeSyntax>(SyntaxFactory.IdentifierName(_newSymbolName)))
+                                                                .WithGreaterThanToken(SyntaxFactory.Token(SyntaxFactory.TriviaList(),
+                                                                                                              SyntaxKind.GreaterThanToken,
+                                                                                                              SyntaxFactory
+                                                                                                                 .TriviaList(SyntaxFactory.LineFeed))));
 
-        var baseInterfaces = node.BaseList?.Types.RemoveAt(0).Select((e) => e).ToArray();
-        var baseList = SyntaxFactory.BaseList(SyntaxFactory.SingletonSeparatedList<BaseTypeSyntax>(SyntaxFactory.SimpleBaseType(genericName)));
-        baseList = baseList.AddTypes(baseInterfaces);
-        baseList = baseList.WithColonToken(SyntaxFactory.Token(SyntaxFactory.TriviaList(), SyntaxKind.ColonToken, SyntaxFactory.TriviaList(SyntaxFactory.Space)));
-        classDeclaration = classDeclaration.WithBaseList(baseList);
+            var baseInterfaces = node.BaseList?.Types.RemoveAt(0).Select((e) => e).ToArray();
+            var baseList = SyntaxFactory.BaseList(SyntaxFactory.SingletonSeparatedList<BaseTypeSyntax>(SyntaxFactory.SimpleBaseType(genericName)));
+            baseList = baseList.AddTypes(baseInterfaces);
+            baseList = baseList.WithColonToken(SyntaxFactory.Token(SyntaxFactory.TriviaList(), SyntaxKind.ColonToken,
+                                                                   SyntaxFactory.TriviaList(SyntaxFactory.Space)));
+            classDeclaration = classDeclaration.WithBaseList(baseList);
+        }
+        catch (System.Exception e)
+        {
+            Log.Error($"Failed to rename to {_newSymbolName} + {e.Message}");
+        }
+
         return classDeclaration;
     }
 }

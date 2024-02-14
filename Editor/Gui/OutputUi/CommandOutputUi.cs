@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -39,7 +39,7 @@ namespace T3.Editor.Gui.OutputUi
             var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
 
-            Size2 size = context.RequestedResolution;
+            Int2 size = context.RequestedResolution;
             var wasRebuild = UpdateTextures(device, size, Format.R16G16B16A16_Float);
             var deviceContext = device.ImmediateContext;
             var prevViewports = deviceContext.Rasterizer.GetViewports<RawViewportF>();
@@ -102,7 +102,7 @@ namespace T3.Editor.Gui.OutputUi
             }
         }
 
-        private bool UpdateTextures(Device device, Size2 size, Format format)
+        private bool UpdateTextures(Device device, Int2 size, Format format)
         {
             try
             {

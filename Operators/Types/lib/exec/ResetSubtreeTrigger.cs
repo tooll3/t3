@@ -1,18 +1,14 @@
-﻿using System;
-using SharpDX;
-using T3.Core;
-using T3.Core.DataTypes;
+﻿using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_38b85057_fbcb_4ab1_9b40_cfb090750150
 {
     public class ResetSubtreeTrigger : Instance<ResetSubtreeTrigger>
     {
         [Output(Guid = "0CF2EF2A-D47A-461A-A7EF-7279C5A17883", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        public readonly Slot<Command> Output = new();
 
         public ResetSubtreeTrigger()
         {
@@ -75,8 +71,8 @@ namespace T3.Operators.Types.Id_38b85057_fbcb_4ab1_9b40_cfb090750150
         }
 
         [Input(Guid = "7CC4E43B-18A2-4564-A511-05EB0D8EC7D2")]
-        public readonly InputSlot<Command> Command = new InputSlot<Command>();
+        public readonly InputSlot<Command> Command = new();
         [Input(Guid = "2975F7BE-F21F-4FF4-B477-8FCC19D5F808")]
-        public readonly InputSlot<bool> Trigger = new InputSlot<bool>();
+        public readonly InputSlot<bool> Trigger = new();
     }
 }

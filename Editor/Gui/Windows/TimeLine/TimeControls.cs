@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
@@ -327,7 +328,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     }
                 }
 
-                CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.");
+                CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.",
+                                                    $"Tap: {KeyboardBinding.ListKeyboardShortcuts(UserActions.TapBeatSync)}\n"
+                                                    + $"Resync: {KeyboardBinding.ListKeyboardShortcuts(UserActions.TapBeatSyncMeasure)}");
 
                 ImGui.SameLine();
 
@@ -487,7 +490,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 // Curve Mode
                 var hasKeyframes = FrameStats.Current.HasKeyframesAfterCurrentTime || FrameStats.Current.HasKeyframesAfterCurrentTime;
                 ImGui.PushStyleColor(ImGuiCol.Text, hasKeyframes ? UiColors.Text.Rgba : UiColors.TextMuted);
-                if (ImGui.Button(timeLineCanvas.Mode.ToString(), ControlSize))
+                if (ImGui.Button(timeLineCanvas.Mode.ToString(), DopeCurve)) //
                 {
                     timeLineCanvas.Mode = (TimeLineCanvas.Modes)(((int)timeLineCanvas.Mode + 1) % Enum.GetNames(typeof(TimeLineCanvas.Modes)).Length);
                 }
@@ -573,6 +576,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         public static double _lastPlaybackStartTime;
 
         public static Vector2 ControlSize => new Vector2(45, 28) * T3Ui.UiScaleFactor;
+        public static Vector2 DopeCurve => new Vector2(95, 28) * T3Ui.UiScaleFactor;
 
         private static readonly DataSetViewCanvas _dataSetView = new()
                                                                      {

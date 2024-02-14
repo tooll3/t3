@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using SharpDX;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
+using Int3 = T3.Core.DataTypes.Vector.Int3;
 using Quaternion = System.Numerics.Quaternion;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
@@ -79,29 +80,29 @@ namespace T3.Core.Utils
                     },
 
                     {
-                        typeof(SharpDX.Int3), (a, b, t) =>
+                        typeof(Int3), (a, b, t) =>
                                               {
-                                                  if (a is not InputValue<SharpDX.Int3> aValue || b is not InputValue<SharpDX.Int3> bValue)
+                                                  if (a is not InputValue<Int3> aValue || b is not InputValue<Int3> bValue)
                                                       return null;
 
-                                                  var r = new SharpDX.Int3(MathUtils.Lerp(aValue.Value.X, bValue.Value.X, t),
+                                                  var r = new Int3(MathUtils.Lerp(aValue.Value.X, bValue.Value.X, t),
                                                                            MathUtils.Lerp(aValue.Value.Y, bValue.Value.Y, t),
                                                                            MathUtils.Lerp(aValue.Value.Z, bValue.Value.Z, t)
                                                                           );
-                                                  return new InputValue<SharpDX.Int3>(r);
+                                                  return new InputValue<Int3>(r);
                                               }
                     },
 
                     {
-                        typeof(SharpDX.Size2), (a, b, t) =>
+                        typeof(Int2), (a, b, t) =>
                                                {
-                                                   if (a is not InputValue<SharpDX.Size2> aValue || b is not InputValue<SharpDX.Size2> bValue)
+                                                   if (a is not InputValue<Int2> aValue || b is not InputValue<Int2> bValue)
                                                        return null;
 
-                                                   var r = new SharpDX.Size2(MathUtils.Lerp(aValue.Value.Width, bValue.Value.Width, t),
+                                                   var r = new Int2(MathUtils.Lerp(aValue.Value.Width, bValue.Value.Width, t),
                                                                              MathUtils.Lerp(aValue.Value.Height, bValue.Value.Height, t)
                                                                             );
-                                                   return new InputValue<SharpDX.Size2>(r);
+                                                   return new InputValue<Int2>(r);
                                                }
                     },
 
@@ -234,31 +235,31 @@ namespace T3.Core.Utils
                                      }
                     },
                     {
-                        typeof(SharpDX.Size2), (values, weights) =>
+                        typeof(Int2), (values, weights) =>
                                                {
                                                    var sum = new Vector2();
                                                    for (var index = 0; index < values.Length; index++)
                                                    {
                                                        var inputV = values[index];
-                                                       if (inputV is not InputValue<SharpDX.Size2> v)
+                                                       if (inputV is not InputValue<Int2> v)
                                                            continue;
 
                                                        sum += new Vector2(v.Value.Width * weights[index],
                                                                           v.Value.Height * weights[index]);
                                                    }
 
-                                                   return new InputValue<SharpDX.Size2>(new Size2((int)(sum.X + 0.5f),
+                                                   return new InputValue<Int2>(new Int2((int)(sum.X + 0.5f),
                                                                                                   (int)(sum.Y + 0.5f)));
                                                }
                     },
                     {
-                        typeof(SharpDX.Int3), (values, weights) =>
+                        typeof(Int3), (values, weights) =>
                                               {
                                                   var sum = new Vector3();
                                                   for (var index = 0; index < values.Length; index++)
                                                   {
                                                       var inputV = values[index];
-                                                      if (inputV is not InputValue<SharpDX.Int3> v)
+                                                      if (inputV is not InputValue<Int3> v)
                                                           continue;
 
                                                       sum += new Vector3(v.Value.X * weights[index],
@@ -266,7 +267,7 @@ namespace T3.Core.Utils
                                                                          v.Value.Z * weights[index]);
                                                   }
 
-                                                  return new InputValue<SharpDX.Int3>(new Int3((int)(sum.X + 0.5f),
+                                                  return new InputValue<Int3>(new Int3((int)(sum.X + 0.5f),
                                                                                                (int)(sum.Y + 0.5f),
                                                                                                (int)(sum.Z + 0.5f)));
                                               }
@@ -333,9 +334,9 @@ namespace T3.Core.Utils
                     },
 
                     {
-                        typeof(SharpDX.Int3), (a, b) =>
+                        typeof(Int3), (a, b) =>
                                               {
-                                                  if (a is not InputValue<SharpDX.Int3> aValue || b is not InputValue<SharpDX.Int3> bValue)
+                                                  if (a is not InputValue<Int3> aValue || b is not InputValue<Int3> bValue)
                                                       return false;
 
                                                   return aValue.Value == bValue.Value;
@@ -343,9 +344,9 @@ namespace T3.Core.Utils
                     },
 
                     {
-                        typeof(SharpDX.Size2), (a, b) =>
+                        typeof(Int2), (a, b) =>
                                                {
-                                                   if (a is not InputValue<SharpDX.Size2> aValue || b is not InputValue<SharpDX.Size2> bValue)
+                                                   if (a is not InputValue<Int2> aValue || b is not InputValue<Int2> bValue)
                                                        return false;
 
                                                    return aValue.Value == bValue.Value;

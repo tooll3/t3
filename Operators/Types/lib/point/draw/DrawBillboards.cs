@@ -1,17 +1,15 @@
-using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-
 
 namespace T3.Operators.Types.Id_18d3d929_e530_45fa_9131_658368060ae2
 {
     public class DrawBillboards : Instance<DrawBillboards>
     {
         [Output(Guid = "363d4ef2-c8c9-4785-8848-2ea930457959")]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        public readonly Slot<Command> Output = new();
 
         [Input(Guid = "8f203c5f-6eb8-42a1-bfea-9ca52a49e132")]
         public readonly InputSlot<float> Scale = new InputSlot<float>();
@@ -21,6 +19,9 @@ namespace T3.Operators.Types.Id_18d3d929_e530_45fa_9131_658368060ae2
 
         [Input(Guid = "3247ff54-e470-466a-a70c-cdba1e264f6b")]
         public readonly InputSlot<bool> UseWForScale = new InputSlot<bool>();
+
+        [Input(Guid = "542832d1-fc70-4eaa-a003-7fdd9062dc05")]
+        public readonly InputSlot<bool> UseExtend = new InputSlot<bool>();
 
         [Input(Guid = "4763d03c-7fae-4466-870c-693bb1acb9a0")]
         public readonly InputSlot<System.Numerics.Vector3> Offset = new InputSlot<System.Numerics.Vector3>();
@@ -58,9 +59,6 @@ namespace T3.Operators.Types.Id_18d3d929_e530_45fa_9131_658368060ae2
         [Input(Guid = "dd345d58-09e4-4353-93e7-c20e576f0e82")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> ColorVariations = new InputSlot<T3.Core.DataTypes.Gradient>();
 
-        [Input(Guid = "975f7ed8-fc7f-41c7-9d90-d022efdf4b6b")]
-        public readonly InputSlot<bool> UseRotationAsRgba = new InputSlot<bool>();
-
         [Input(Guid = "d9dd77b2-cfa6-429c-b87d-f6e3c602be23", MappedType = typeof(DistributionModes))]
         public readonly InputSlot<int> ScaleDistribution = new InputSlot<int>();
 
@@ -86,7 +84,7 @@ namespace T3.Operators.Types.Id_18d3d929_e530_45fa_9131_658368060ae2
         public readonly InputSlot<int> AtlasMode = new InputSlot<int>();
 
         [Input(Guid = "261faf50-c63e-4d4a-a496-648bbb3ea2c5")]
-        public readonly InputSlot<SharpDX.Size2> AtlasSize = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> AtlasSize = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
 
         [Input(Guid = "789900fa-6d0e-406f-936e-162834155c83")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTexture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
@@ -105,6 +103,9 @@ namespace T3.Operators.Types.Id_18d3d929_e530_45fa_9131_658368060ae2
 
         [Input(Guid = "c676823b-97d0-4e3e-a59e-e2297816ec69")]
         public readonly InputSlot<float> AlphaCut = new InputSlot<float>();
+
+        [Input(Guid = "9c25f805-ae1c-42a5-a4e4-390bb7ea33bb")]
+        public readonly InputSlot<bool> TooCloseFadeOut = new InputSlot<bool>();
 
         [Input(Guid = "a129bf5c-e549-4f7c-b30b-5199ffd38f8c")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();

@@ -47,7 +47,10 @@
         "X": -406.7303,
         "Y": 436.7386
       },
-      "Scale": 0.001
+      "Min": -1.0,
+      "Max": 1.0,
+      "Scale": 0.001,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
@@ -77,7 +80,7 @@
         "Y": 862.13007
       },
       "Min": 0.0,
-      "Max": 5.0,
+      "Max": 100.0,
       "Scale": 0.01,
       "Clamp": true
     },
@@ -110,7 +113,7 @@
       }
     },
     {
-      "ChildId": "a6d895fd-16c0-4fa6-83d1-bdbd7dc5c01f"/*Vector2ToFloat2*/,
+      "ChildId": "a6d895fd-16c0-4fa6-83d1-bdbd7dc5c01f"/*Vector2Components*/,
       "Position": {
         "X": -276.7303,
         "Y": 436.7386

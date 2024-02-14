@@ -52,6 +52,10 @@
     {
       "Id": "c8003fbd-c6ce-440c-9f1f-6b15b5ee5274"/*RoughnessMetallicOcclusionMap*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "71e289f0-382b-4d0f-a2e0-701c7019a360"/*MaterialId*/,
+      "DefaultValue": ""
     }
   ],
   "Children": [],

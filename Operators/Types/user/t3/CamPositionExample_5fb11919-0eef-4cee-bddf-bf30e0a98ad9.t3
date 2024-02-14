@@ -73,11 +73,6 @@
           "Value": 0.0201
         },
         {
-          "Id": "3cee4aa6-2ae3-4b4d-89c7-4c60c8f8b10e"/*AgingRate*/,
-          "Type": "System.Single",
-          "Value": 0.23
-        },
-        {
           "Id": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
           "Type": "System.Int32",
           "Value": 1
@@ -144,7 +139,7 @@
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
-          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*Radius*/,
+          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*DistanceToTarget*/,
           "Type": "System.Single",
           "Value": 10.0
         },
@@ -157,19 +152,19 @@
           }
         },
         {
-          "Id": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 23.0,
-            "Y": 49.0
-          }
-        },
-        {
           "Id": "1af76b2e-cffe-4e3f-8793-c7a59d00430b"/*AimRollAngleAndWobble*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.0,
             "Y": 16.0
+          }
+        },
+        {
+          "Id": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 23.0,
+            "Y": 49.0
           }
         }
       ],
@@ -309,7 +304,7 @@
       "Outputs": []
     },
     {
-      "Id": "1a5c02ab-b5dc-41d1-9645-328e66d16466"/*Vector3ToFloat3*/,
+      "Id": "1a5c02ab-b5dc-41d1-9645-328e66d16466"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
@@ -341,7 +336,7 @@
       "Outputs": []
     },
     {
-      "Id": "0a942c31-7d58-4bbb-8da5-c8bacc7b3d9c"/*Float3ToVector3*/,
+      "Id": "0a942c31-7d58-4bbb-8da5-c8bacc7b3d9c"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []
@@ -445,12 +440,12 @@
           }
         },
         {
-          "Id": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableTest*/,
+          "Id": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableZTest*/,
           "Type": "System.Boolean",
           "Value": false
         },
         {
-          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableDepthWrite*/,
+          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableZWrite*/,
           "Type": "System.Boolean",
           "Value": true
         }

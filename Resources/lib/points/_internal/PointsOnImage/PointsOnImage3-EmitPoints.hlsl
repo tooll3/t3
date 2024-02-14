@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 
 cbuffer EmitParameter : register(b0)
@@ -34,9 +35,10 @@ uint wang_hash(in out uint seed)
 
 int NumSamples;
 Texture2D<float> CDF : register (t0);
+Texture2D<float4> Image : register (t1);
 RWStructuredBuffer<Point> ResultPoints : u0;
-//Texture2D<float> cdfColumn : register (t1);
-//RWByteAddressBuffer outputSampleBuffer : register (u2);
+
+sampler texSampler : register(s0);
 
 [numthreads(256,1,1)]
 void GeneratePoints(uint3 threadID : SV_DispatchThreadID)
@@ -123,9 +125,10 @@ void GeneratePoints(uint3 threadID : SV_DispatchThreadID)
 
     
     //ResultPoints[threadID.x].position = float3(samplePosInUV * float2(2, 2/ aspectRatio) + float2(0,-0.5) - 2 ,0);
-    float2 uv = (samplePosInUV -0.5) * 2 * float2(1/aspectRatio,1);
-    ResultPoints[threadID.x].position = float3(uv ,0);
-    ResultPoints[threadID.x].w = 1;
-    ResultPoints[threadID.x].rotation = float4(0,0,0,1);
-
+    float2 posXY = (samplePosInUV -0.5) * 2 * float2(1/aspectRatio,1);
+    ResultPoints[threadID.x].Position = float3(posXY ,0);
+    ResultPoints[threadID.x].W = 1;
+    ResultPoints[threadID.x].Rotation = float4(0,0,0,1);
+    ResultPoints[threadID.x].Color = Image.SampleLevel(texSampler,  samplePosInUV * float2(1, -1) + float2(0,1), 0);
+    ResultPoints[threadID.x].Selected = 1;
 }

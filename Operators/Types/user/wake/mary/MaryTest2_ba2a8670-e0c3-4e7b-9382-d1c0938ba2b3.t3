@@ -1417,10 +1417,10 @@
       "InputValues": [
         {
           "Id": "99f5d952-8490-4930-b8ab-9d8e968183c6"/*Segments*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 41,
-            "Height": 14
+            "X": 41,
+            "Y": 14
           }
         }
       ],
@@ -1502,7 +1502,7 @@
       "Outputs": []
     },
     {
-      "Id": "f61dbb09-f6a8-46fc-89cb-6df0e620c63c"/*FractalNoise*/,
+      "Id": "f61dbb09-f6a8-46fc-89cb-6df0e620c63c"/*_FractalNoiseOld*/,
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [],
       "Outputs": []
@@ -1681,14 +1681,14 @@
       "Name": "PositionShake",
       "InputValues": [
         {
-          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
-          "Type": "System.Single",
-          "Value": -0.029999971
-        },
-        {
           "Id": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
           "Type": "System.Single",
           "Value": 31.8
+        },
+        {
+          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
+          "Type": "System.Single",
+          "Value": -0.029999971
         }
       ],
       "Outputs": []
@@ -1788,6 +1788,11 @@
           }
         },
         {
+          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
+          "Type": "System.String",
+          "Value": "Resources\\fonts\\Roboto-Light.fnt"
+        },
+        {
           "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
           "Type": "System.Single",
           "Value": 24.0
@@ -1796,11 +1801,6 @@
           "Id": "eaf9dc37-e70f-4197-895c-b5607456b4a2"/*LineHeight*/,
           "Type": "System.Single",
           "Value": 1.15
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Roboto-Light.fnt"
         }
       ],
       "Outputs": []
@@ -1958,10 +1958,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 256
+            "X": 256,
+            "Y": 256
           }
         }
       ],
@@ -2157,12 +2157,12 @@
           "Value": true
         },
         {
-          "Id": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableTest*/,
+          "Id": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableZTest*/,
           "Type": "System.Boolean",
           "Value": true
         },
         {
-          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableDepthWrite*/,
+          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableZWrite*/,
           "Type": "System.Boolean",
           "Value": false
         },
@@ -2289,10 +2289,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 128,
-            "Height": 128
+            "X": 128,
+            "Y": 128
           }
         }
       ],
@@ -2340,10 +2340,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 128,
-            "Height": 128
+            "X": 128,
+            "Y": 128
           }
         }
       ],
@@ -2393,10 +2393,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 128,
-            "Height": 128
+            "X": 128,
+            "Y": 128
           }
         },
         {
@@ -2447,7 +2447,7 @@
       "Outputs": []
     },
     {
-      "Id": "972a1ad0-1bfc-4157-ac16-49cf56e5a879"/*WaveForm2*/,
+      "Id": "972a1ad0-1bfc-4157-ac16-49cf56e5a879"/*WaveForm*/,
       "SymbolId": "92e28e50-bd40-4f93-ba92-8f69cded6ec1",
       "InputValues": [],
       "Outputs": []
@@ -2567,6 +2567,11 @@
           }
         },
         {
+          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
+          "Type": "System.String",
+          "Value": "Resources\\fonts\\Roboto-Light.fnt"
+        },
+        {
           "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
           "Type": "System.Single",
           "Value": 19.7
@@ -2575,11 +2580,6 @@
           "Id": "eaf9dc37-e70f-4197-895c-b5607456b4a2"/*LineHeight*/,
           "Type": "System.Single",
           "Value": 1.15
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Roboto-Light.fnt"
         }
       ],
       "Outputs": []
@@ -2595,17 +2595,17 @@
       "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
       "InputValues": [
         {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
           "Type": "System.Single",
           "Value": 2.93
         },
         {
-          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
+          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*Intensity*/,
           "Type": "System.Single",
           "Value": 0.94
         },
         {
-          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,
+          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Threshold*/,
           "Type": "System.Single",
           "Value": -0.04
         }

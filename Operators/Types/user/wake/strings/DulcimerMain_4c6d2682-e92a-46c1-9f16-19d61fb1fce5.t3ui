@@ -289,7 +289,7 @@
       }
     },
     {
-      "ChildId": "74238a1c-fe72-4a93-8aea-9fd9c57e61ed"/*Float3ToVector3*/,
+      "ChildId": "74238a1c-fe72-4a93-8aea-9fd9c57e61ed"/*Vector3*/,
       "Position": {
         "X": 2881.815,
         "Y": -412.7597
@@ -512,6 +512,7 @@
     },
     {
       "ChildId": "e491a157-975d-4477-99cc-34f2fb51275d"/*AddNoise*/,
+      "Comment": "Note how UseWAsWeight is -1 so that with increasing age the noise amount is reduced to zero.",
       "Position": {
         "X": -1622.3105,
         "Y": -3127.8184
@@ -520,8 +521,8 @@
     {
       "ChildId": "82e74edf-b089-4502-aa1b-17151b5e7441"/*Time*/,
       "Position": {
-        "X": -1790.5852,
-        "Y": -2956.1023
+        "X": -1866.4565,
+        "Y": -3490.5981
       }
     },
     {
@@ -569,15 +570,15 @@
     {
       "ChildId": "8803f039-170f-4e8a-963e-62153f3e6d07"/*_BlobOld*/,
       "Position": {
-        "X": -1615.4246,
-        "Y": -2481.2593
+        "X": -1558.0236,
+        "Y": -2483.3013
       }
     },
     {
       "ChildId": "12805ae3-2d04-490e-bbaa-21d7b5412724"/*DefineGradient*/,
       "Position": {
-        "X": -1790.5852,
-        "Y": -2913.1023
+        "X": -1772.3105,
+        "Y": -2978.8184
       }
     },
     {
@@ -994,7 +995,7 @@
     {
       "ChildId": "94d30dc0-a9a6-4eba-86c6-a37ddeed3d50"/*GridPoints*/,
       "Position": {
-        "X": -1558.0237,
+        "X": -1558.0236,
         "Y": -2427.3013
       }
     },
@@ -1008,8 +1009,8 @@
     {
       "ChildId": "ee3561f2-e9ed-4516-97aa-d17976fa503f"/*TransformPoints*/,
       "Position": {
-        "X": -2674.9067,
-        "Y": -3431.0444
+        "X": -2628.694,
+        "Y": -3441.3552
       }
     },
     {
@@ -1431,7 +1432,7 @@
       }
     },
     {
-      "ChildId": "c00d57e5-05bc-4a92-918e-34f44ce2a575"/*Float3ToVector3*/,
+      "ChildId": "c00d57e5-05bc-4a92-918e-34f44ce2a575"/*Vector3*/,
       "Position": {
         "X": -458.67963,
         "Y": 2866.5225
@@ -1697,7 +1698,7 @@
       }
     },
     {
-      "ChildId": "74058a64-09d0-459a-b436-602bd8285062"/*Float3ToVector3*/,
+      "ChildId": "74058a64-09d0-459a-b436-602bd8285062"/*Vector3*/,
       "Position": {
         "X": 1257.409,
         "Y": 337.29507
@@ -1865,13 +1866,6 @@
       }
     },
     {
-      "ChildId": "74a0544b-df26-4018-bde7-23299b2b24ff"/*VisualizePoints*/,
-      "Position": {
-        "X": -1400.9868,
-        "Y": -3362.6277
-      }
-    },
-    {
       "ChildId": "e29d1db2-1683-4563-9b85-ad96abea54ec"/*HasTimeChanged*/,
       "Position": {
         "X": -2868.2732,
@@ -1995,6 +1989,69 @@
       "Position": {
         "X": -3145.1428,
         "Y": -3120.2368
+      }
+    },
+    {
+      "ChildId": "6320ed04-18e5-492f-84d9-f0baa8f0e55f"/*Execute*/,
+      "Position": {
+        "X": -835.2595,
+        "Y": -2491.8867
+      }
+    },
+    {
+      "ChildId": "167d3b6d-7919-444a-9bb0-4ff90bb5c412"/*VisualizePoints*/,
+      "Position": {
+        "X": -1381.1235,
+        "Y": -3405.4146
+      }
+    },
+    {
+      "ChildId": "73aad582-5a44-44a7-933c-cf8e1877e522"/*DrawPoints*/,
+      "Position": {
+        "X": -2006.0234,
+        "Y": -3323.5034
+      }
+    },
+    {
+      "ChildId": "8ef6814c-4d3e-4d88-a37c-9c4d3e7d8027"/*PointsToCPU*/,
+      "Position": {
+        "X": -1589.1082,
+        "Y": -3559.5774
+      }
+    },
+    {
+      "ChildId": "0540bf84-cef4-460c-9437-721ec4ebde6f"/*GridPoints*/,
+      "Position": {
+        "X": -2262.6577,
+        "Y": -3674.3596
+      }
+    },
+    {
+      "ChildId": "4bbc26ee-0194-4616-a9e9-9402c912df4c"/*FilterPoints*/,
+      "Position": {
+        "X": -2059.4346,
+        "Y": -3627.931
+      }
+    },
+    {
+      "ChildId": "b97c5274-88dc-4c65-9421-ba96cf5aa9da"/*AddNoise*/,
+      "Position": {
+        "X": -1937.6791,
+        "Y": -3716.2046
+      }
+    },
+    {
+      "ChildId": "e07a0379-4520-4cf5-8a38-e1f61ac95d54"/*DrawLines*/,
+      "Position": {
+        "X": -1540.2042,
+        "Y": -3722.9988
+      }
+    },
+    {
+      "ChildId": "ed35b205-f5c6-48c2-88f1-b795022f9451"/*_RandomizePoints_Legacy1*/,
+      "Position": {
+        "X": -1716.081,
+        "Y": -3848.1104
       }
     }
   ],

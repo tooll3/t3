@@ -1,0 +1,17 @@
+{
+  "Name": "IndexOf",
+  "Id": "fc0a5e68-9915-4323-b2a4-2491fa5d59a9",
+  "Namespace": "lib.string",
+  "Inputs": [
+    {
+      "Id": "841784c4-0ca7-41cd-8d79-bbe4989e0842"/*OriginalString*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "81a7aa30-eab9-4637-bb11-7c0940460afb"/*SearchPattern*/,
+      "DefaultValue": ""
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

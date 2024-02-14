@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
-using SharpDX;
+using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Styling;
 using T3.Serialization;
 
@@ -92,10 +92,10 @@ namespace T3.Editor.Gui.Windows.Output
             }
 
             public string Title;
-            public Size2 Size;
+            public Int2 Size;
             public bool UseAsAspectRatio;
 
-            public Size2 ComputeResolution()
+            public Int2 ComputeResolution()
             {
                 if (!UseAsAspectRatio)
                     return Size;
@@ -104,7 +104,7 @@ namespace T3.Editor.Gui.Windows.Output
                 if (Size.Width <= 0 || Size.Height <= 0)
                 {
                     var borderSize = (int)ImGui.GetStyle().WindowBorderSize;
-                    return new Size2((int)windowSize.X - 2 * borderSize,
+                    return new Int2((int)windowSize.X - 2 * borderSize,
                                      (int)windowSize.Y - 2 * borderSize);
                 }
 
@@ -112,8 +112,8 @@ namespace T3.Editor.Gui.Windows.Output
                 var requestedAspectRatio = (float)Size.Width / Size.Height;
 
                 return (requestedAspectRatio > windowAspectRatio)
-                           ? new Size2((int)windowSize.X, (int)(windowSize.X / requestedAspectRatio))
-                           : new Size2((int)(windowSize.Y * requestedAspectRatio), (int)windowSize.Y);
+                           ? new Int2((int)windowSize.X, (int)(windowSize.X / requestedAspectRatio))
+                           : new Int2((int)(windowSize.Y * requestedAspectRatio), (int)windowSize.Y);
             }
 
             public bool IsValid

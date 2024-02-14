@@ -80,7 +80,7 @@
       }
     },
     {
-      "ChildId": "48299422-55cf-473a-be65-d590135876a3"/*Vector3ToFloat3*/,
+      "ChildId": "48299422-55cf-473a-be65-d590135876a3"/*Vector3Components*/,
       "Position": {
         "X": 47.703575,
         "Y": 922.8412
@@ -96,8 +96,8 @@
     {
       "ChildId": "830f9d44-c33d-4638-bcbc-32db47d756e7"/*GetBufferComponents*/,
       "Position": {
-        "X": -197.48755,
-        "Y": 751.8842
+        "X": -204.24408,
+        "Y": 776.3765
       }
     },
     {

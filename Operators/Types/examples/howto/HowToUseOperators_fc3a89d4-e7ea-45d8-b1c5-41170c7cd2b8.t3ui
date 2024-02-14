@@ -179,14 +179,14 @@
       }
     },
     {
-      "ChildId": "b3cbb0e7-2ddd-41a5-b8d2-28c393f0cad2"/*Float2ToVector2*/,
+      "ChildId": "b3cbb0e7-2ddd-41a5-b8d2-28c393f0cad2"/*Vector2*/,
       "Position": {
         "X": -1916.0188,
         "Y": -292.99164
       }
     },
     {
-      "ChildId": "25cb45d4-6540-49fc-ad2a-20a71ae048da"/*Float3ToVector3*/,
+      "ChildId": "25cb45d4-6540-49fc-ad2a-20a71ae048da"/*Vector3*/,
       "Position": {
         "X": -1916.0188,
         "Y": -223.99164

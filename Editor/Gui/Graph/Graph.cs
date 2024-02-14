@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
@@ -305,7 +306,7 @@ namespace T3.Editor.Gui.Graph
                 }
             }
 
-            private static readonly List<ConnectionLineUi> _resultConnection = new List<ConnectionLineUi>(20);
+            private static readonly List<ConnectionLineUi> _resultConnection = new(20);
 
             public List<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
             {
@@ -360,13 +361,13 @@ namespace T3.Editor.Gui.Graph
                            : NoLines;
             }
 
-            private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesFromNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>(50);
-            private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesIntoNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>(50);
-            private Dictionary<IOutputUi, List<ConnectionLineUi>> _linesToOutputNodes = new Dictionary<IOutputUi, List<ConnectionLineUi>>(50);
-            private Dictionary<IInputUi, List<ConnectionLineUi>> _linesFromInputNodes = new Dictionary<IInputUi, List<ConnectionLineUi>>(50);
+            private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesFromNodes = new(50);
+            private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesIntoNodes = new(50);
+            private Dictionary<IOutputUi, List<ConnectionLineUi>> _linesToOutputNodes = new(50);
+            private Dictionary<IInputUi, List<ConnectionLineUi>> _linesFromInputNodes = new(50);
 
             // Reuse empty list instead of null check
-            private static readonly List<ConnectionLineUi> NoLines = new List<ConnectionLineUi>();
+            private static readonly List<ConnectionLineUi> NoLines = new();
         }
 
         internal class ConnectionLineUi
@@ -456,6 +457,6 @@ namespace T3.Editor.Gui.Graph
         private static OrderedDictionary<Guid, IInputUi> _inputUisById;
 
         // Try to avoid allocations
-        private static readonly List<Symbol.Connection> AllConnections = new List<Symbol.Connection>(100);
+        private static readonly List<Symbol.Connection> AllConnections = new(100);
     }
 }

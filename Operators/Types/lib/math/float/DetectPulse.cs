@@ -1,13 +1,9 @@
 using System;
-using System.Diagnostics;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6;
 
 namespace T3.Operators.Types.Id_7ff47023_622e_4834_8de5_2438d56c09bd
 {

@@ -45,10 +45,10 @@
       "InputValues": [
         {
           "Id": "99f5d952-8490-4930-b8ab-9d8e968183c6"/*Segments*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 32,
-            "Height": 100
+            "X": 32,
+            "Y": 100
           }
         }
       ],
@@ -78,10 +78,10 @@
       "InputValues": [
         {
           "Id": "99f5d952-8490-4930-b8ab-9d8e968183c6"/*Segments*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 57,
-            "Height": 62
+            "X": 57,
+            "Y": 62
           }
         }
       ],

@@ -5,6 +5,7 @@
         <UseWindowsForms>true</UseWindowsForms>
 	<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
 	<RootNamespace>T3.Core</RootNamespace>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,6 +1,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
 
@@ -22,7 +23,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             drawList.AddRectFilled(p, p + new Vector2(1, y+ windowHeight), UiColors.StatusAnimated);
         }
 
-        private static readonly Color _shadowColor = new Color(0, 0, 0, 0.4f);
+        private static readonly Color _shadowColor = new(0, 0, 0, 0.4f);
         
         public SnapResult CheckForSnap(double time, float canvasScale)
         {

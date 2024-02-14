@@ -12,7 +12,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
     public class GpuSorter : Instance<GpuSorter>
     {
         [Output(Guid = "14e52376-e375-495d-a466-74731457b189")]
-        public readonly Slot<Command> Command = new Slot<Command>();
+        public readonly Slot<Command> Command = new();
 
         public GpuSorter()
         {
@@ -43,8 +43,8 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
 
             var prevShader = csStage.Get();
             var prevConstBuffer = csStage.GetConstantBuffers(0, 1)[0];
-            ComputeShader sortShader = resourceManager.GetComputeShader(_sortShaderId);
-            ComputeShader transposeShader = resourceManager.GetComputeShader(_transposeShaderId);
+            ComputeShader sortShader = _sortShaderResource.Shader;
+            ComputeShader transposeShader = _transposeShaderResource.Shader;
             csStage.Set(sortShader);
             csStage.SetConstantBuffer(0, _parameterConstBuffer);
             csStage.SetUnorderedAccessView(0, uav1);
@@ -154,20 +154,28 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
         {
             var resourceManager = ResourceManager.Instance();
 
-            if (_sortShaderId == ResourceManager.NullResource)
+            if (_sortShaderResource == null)
             {
                 string sourcePath = @"Resources\proj-partial\particle\bitonic-sort.hlsl";
                 string entryPoint = "bitonicSort";
                 string debugName = "bitonic-sort";
-                resourceManager.CreateComputeShaderFromFile(out _sortShaderId,sourcePath, entryPoint, debugName, null);
+                resourceManager.TryCreateShaderResource(resource: out _sortShaderResource, 
+                                                        fileName: sourcePath, 
+                                                        errorMessage: out var errorMessage, 
+                                                        name: debugName, 
+                                                        entryPoint: entryPoint);
             }
 
-            if (_transposeShaderId == ResourceManager.NullResource)
+            if (_transposeShaderResource == null)
             {
                 string sourcePath = @"Resources\proj-partial\particle\bitonic-transpose.hlsl";
                 string entryPoint = "transpose";
                 string debugName = "bitonic-transpose";
-                resourceManager.CreateComputeShaderFromFile(out _transposeShaderId,sourcePath, entryPoint, debugName, null);
+                resourceManager.TryCreateShaderResource(resource: out _transposeShaderResource, 
+                                                        fileName: sourcePath, 
+                                                        errorMessage: out var errorMessage, 
+                                                        name: debugName, 
+                                                        entryPoint: entryPoint);
             }
 
             InitConstBuffer();
@@ -180,23 +188,23 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
         }
 
         private Buffer _parameterConstBuffer;
-        private uint _sortShaderId;
-        private uint _transposeShaderId;
+        private ShaderResource<ComputeShader> _sortShaderResource;
+        private ShaderResource<ComputeShader> _transposeShaderResource;
 
         [Input(Guid = "37dddd93-2b54-4598-aaca-40710ed06417")]
-        public readonly InputSlot<SharpDX.Direct3D11.UnorderedAccessView> BufferUav = new InputSlot<SharpDX.Direct3D11.UnorderedAccessView>();
+        public readonly InputSlot<SharpDX.Direct3D11.UnorderedAccessView> BufferUav = new();
 
         [Input(Guid = "79d7bbd1-37a3-49eb-b705-e39345b50568")]
-        public readonly InputSlot<SharpDX.Direct3D11.UnorderedAccessView> BufferUav2 = new InputSlot<SharpDX.Direct3D11.UnorderedAccessView>();
+        public readonly InputSlot<SharpDX.Direct3D11.UnorderedAccessView> BufferUav2 = new();
 
         [Input(Guid = "187b350b-71da-4cad-9e44-6f536e647e97")]
-        public readonly InputSlot<SharpDX.Direct3D11.ShaderResourceView> BufferSrv = new InputSlot<SharpDX.Direct3D11.ShaderResourceView>();
+        public readonly InputSlot<SharpDX.Direct3D11.ShaderResourceView> BufferSrv = new();
 
         [Input(Guid = "5dfdc602-00c9-4125-b49d-ca15c769f43e")]
-        public readonly InputSlot<SharpDX.Direct3D11.ShaderResourceView> BufferSrv2 = new InputSlot<SharpDX.Direct3D11.ShaderResourceView>();
+        public readonly InputSlot<SharpDX.Direct3D11.ShaderResourceView> BufferSrv2 = new();
 
         [Input(Guid = "8c4e6ec3-5de6-4477-9ea1-6a5fd173e784")]
-        public readonly InputSlot<bool> SpreadOverFrames = new InputSlot<bool>();
+        public readonly InputSlot<bool> SpreadOverFrames = new();
 
         private int _level = 2;
     }

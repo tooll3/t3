@@ -1,0 +1,17 @@
+{
+  "Name": "ToggleBoolean",
+  "Id": "3f6a85be-a837-4681-9c2d-5c87e838f25a",
+  "Namespace": "lib.math.bool",
+  "Inputs": [
+    {
+      "Id": "2216ea9a-a6fb-446e-b4be-0b9a111be745"/*TriggerToggle*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "f8416220-11c9-4d60-ac45-406822690754"/*TriggerReset*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

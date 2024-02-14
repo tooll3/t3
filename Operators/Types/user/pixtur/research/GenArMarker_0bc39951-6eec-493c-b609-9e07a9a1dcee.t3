@@ -203,10 +203,10 @@
       "InputValues": [
         {
           "Id": "03749b41-cc3c-4f38-aea6-d7cea19fc073"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1500,
-            "Height": 2000
+            "X": 1500,
+            "Y": 2000
           }
         },
         {
@@ -315,7 +315,7 @@
       "Outputs": []
     },
     {
-      "Id": "942df93f-104b-4e92-8128-5e7ce3268a71"/*Float2ToVector2*/,
+      "Id": "942df93f-104b-4e92-8128-5e7ce3268a71"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [
         {
@@ -503,7 +503,7 @@
       "Outputs": []
     },
     {
-      "Id": "c09b712c-c852-4ee5-8314-aff129cbadc9"/*Float2ToVector2*/,
+      "Id": "c09b712c-c852-4ee5-8314-aff129cbadc9"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [
         {
@@ -520,7 +520,7 @@
       "Outputs": []
     },
     {
-      "Id": "3cf092df-bb4c-4309-83a9-c3414dfa0eea"/*Float2ToVector2*/,
+      "Id": "3cf092df-bb4c-4309-83a9-c3414dfa0eea"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -576,14 +576,14 @@
           }
         },
         {
-          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
-          "Type": "System.Single",
-          "Value": 30.0
-        },
-        {
           "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
           "Type": "System.String",
           "Value": "Resources\\fonts\\Roboto-Light.fnt"
+        },
+        {
+          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
+          "Type": "System.Single",
+          "Value": 30.0
         }
       ],
       "Outputs": []

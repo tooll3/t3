@@ -258,15 +258,15 @@
     {
       "ChildId": "79b20c1d-8767-40f8-9dd3-39353b83b7db"/*Execute*/,
       "Position": {
-        "X": 512.281,
-        "Y": 1177.7445
+        "X": 559.3922,
+        "Y": 1052.1147
       }
     },
     {
       "ChildId": "f744d996-a32f-4da4-bc82-58b302e1cf85"/*GridPoints*/,
       "Position": {
-        "X": -327.06866,
-        "Y": 1123.776
+        "X": -303.91504,
+        "Y": 1122.3287
       }
     },
     {
@@ -300,15 +300,8 @@
     {
       "ChildId": "6996114d-097e-4bea-8c89-23aaf5e3acb1"/*TransformFromClipSpace*/,
       "Position": {
-        "X": -97.830444,
-        "Y": 1188.4806
-      }
-    },
-    {
-      "ChildId": "4af55da0-c292-4ee2-8140-33115c233766"/*_DrawPointInfo*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": -153.91504,
+        "Y": 1122.3287
       }
     },
     {
@@ -368,7 +361,7 @@
       }
     },
     {
-      "ChildId": "0b8c61f7-d8cf-4b7a-8c6f-f64ea7ed25c1"/*Float3ToVector3*/,
+      "ChildId": "0b8c61f7-d8cf-4b7a-8c6f-f64ea7ed25c1"/*Vector3*/,
       "Position": {
         "X": -826.5404,
         "Y": 871.40076
@@ -419,8 +412,8 @@
     {
       "ChildId": "05a365fb-7438-4060-a5ad-319dcb8e26ca"/*CommonPointSets*/,
       "Position": {
-        "X": -527.4685,
-        "Y": 1865.3286
+        "X": -352.98257,
+        "Y": 1827.5791
       }
     },
     {
@@ -433,8 +426,8 @@
     {
       "ChildId": "3aade23d-e946-4d47-ace2-ade99dd5b846"/*TransformPoints*/,
       "Position": {
-        "X": -377.4685,
-        "Y": 1865.3286
+        "X": -202.98257,
+        "Y": 1827.5791
       }
     },
     {
@@ -526,6 +519,13 @@
       "Position": {
         "X": -976.5404,
         "Y": 873.7326
+      }
+    },
+    {
+      "ChildId": "db4d71b7-873a-4e30-a9f0-f531da253c09"/*SetPointAttributes*/,
+      "Position": {
+        "X": -172.88715,
+        "Y": -33.18112
       }
     }
   ],

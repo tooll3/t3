@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Newtonsoft.Json;
-using SharpDX;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.IO;
@@ -12,9 +12,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Serialization;
 using Point = T3.Core.DataTypes.Point;
-using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable RedundantNameQualifier
 
@@ -209,9 +209,13 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                         _currentStrokeLength = 1;
                     }
 
+                    var color = BrushColor.GetValue(context);
+
                     AppendPoint(new Point()
                                     {
                                         Position = posInWorld,
+                                        Color = color,
+                                        
                                         // Orientation = new Quaternion(
                                         //                              BrushColor.GetValue(context).X,
                                         //                              BrushColor.GetValue(context).Y,
@@ -250,18 +254,16 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
         private static Vector3 CalcPosInWorld(EvaluationContext context, Vector2 mousePos)
         {
             const float offsetFromCamPlane = 0.99f;
-            var posInClipSpace = new SharpDX.Vector4((mousePos.X - 0.5f) * 2, (-mousePos.Y + 0.5f) * 2, offsetFromCamPlane, 1);
-            Matrix clipSpaceToCamera = context.CameraToClipSpace;
-            clipSpaceToCamera.Invert();
-            Matrix cameraToWorld = context.WorldToCamera;
-            cameraToWorld.Invert();
-            Matrix worldToObject = context.ObjectToWorld;
-            worldToObject.Invert();
+            var posInClipSpace = new Vector4((mousePos.X - 0.5f) * 2, (-mousePos.Y + 0.5f) * 2, offsetFromCamPlane, 1);
+            Matrix4x4.Invert(context.CameraToClipSpace, out var clipSpaceToCamera);
+            Matrix4x4.Invert(context.WorldToCamera, out var cameraToWorld);
+            Matrix4x4.Invert(context.ObjectToWorld, out var worldToObject);
 
-            var clipSpaceToWorld = Matrix.Multiply(clipSpaceToCamera, cameraToWorld);
-            var m = Matrix.Multiply(cameraToWorld, clipSpaceToCamera);
-            m.Invert();
-            var p = SharpDX.Vector4.Transform(posInClipSpace, clipSpaceToWorld);
+            var clipSpaceToWorld = Matrix4x4.Multiply(clipSpaceToCamera, cameraToWorld);
+            var m = Matrix4x4.Multiply(cameraToWorld, clipSpaceToCamera);
+            Matrix4x4.Invert(m, out m);
+            
+            var p = Vector4.Transform(posInClipSpace, clipSpaceToWorld);
             return new Vector3(p.X, p.Y, p.Z) / p.W;
         }
 
@@ -374,28 +376,36 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
             public void LoadPages(string filepath)
             {
-                Pages = JsonUtils.TryLoadingJson<List<Page>>(filepath);
-
-                if (Pages != null)
+                Pages = new List<Page>();
+                try
                 {
-                    foreach (var page in Pages)
+                    Pages = JsonUtils.TryLoadingJson<List<Page>>(filepath);
+
+                    if (Pages != null)
                     {
-                        if (page.PointsList == null)
+                        foreach (var page in Pages)
                         {
-                            page.PointsList = new StructuredList<Point>(BufferIncreaseStep);
-                            continue;
+                            if (page.PointsList == null)
+                            {
+                                page.PointsList = new StructuredList<Point>(BufferIncreaseStep);
+                                continue;
+                            }
+
+                            if (page.PointsList.NumElements > page.WriteIndex)
+                                continue;
+
+                            //Log.Warning($"Adjusting writing index {page.WriteIndex} -> {page.PointsList.NumElements}", this);
+                            page.WriteIndex = page.PointsList.NumElements + 1;
                         }
-
-                        if (page.PointsList.NumElements > page.WriteIndex)
-                            continue;
-
-                        //Log.Warning($"Adjusting writing index {page.WriteIndex} -> {page.PointsList.NumElements}", this);
-                        page.WriteIndex = page.PointsList.NumElements + 1;
+                    }
+                    else
+                    {
+                        Pages = new List<Page>();
                     }
                 }
-                else
+                catch(Exception e)
                 {
-                    Pages = new List<Page>();
+                    Log.Warning($"Failed to load pages in {filepath}: {e.Message}", this);
                 }
             }
 
@@ -471,6 +481,9 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
         [Input(Guid = "1057313C-006A-4F12-8828-07447337898B")]
         public readonly InputSlot<float> BrushSize = new();
+
+        [Input(Guid = "AE7FB135-C216-4F34-B73F-5115417E916B")]
+        public readonly InputSlot<Vector4> BrushColor = new();
 
         [Input(Guid = "51641425-A2C6-4480-AC8F-2E6D2CBC300A")]
         public readonly InputSlot<string> FilePath = new();

@@ -13,13 +13,13 @@ namespace T3.Operators.Types.Id_89162b9f_75f5_4d32_9d28_8259cf47cf58
     public class UnsplashAPI : Instance<UnsplashAPI>
     {
         [Output(Guid = "487C1FE8-5B7C-43FB-855D-CC2B3CA70566")]
-        public readonly Slot<string> PhotoUrl = new Slot<string>();
+        public readonly Slot<string> PhotoUrl = new();
         
         [Output(Guid = "99282081-C93A-4E12-B4A1-08062A762293")]
-        public readonly Slot<string> PhotoAuthor = new Slot<string>();
+        public readonly Slot<string> PhotoAuthor = new();
         
         [Output(Guid = "B4C9E528-A173-4CE4-8EAF-77A05E004D5D")]
-        public readonly Slot<List<string>> ResultList = new Slot<List<string>>();
+        public readonly Slot<List<string>> ResultList = new();
 
         public UnsplashAPI()
         {
@@ -91,30 +91,30 @@ namespace T3.Operators.Types.Id_89162b9f_75f5_4d32_9d28_8259cf47cf58
             ResultList.DirtyFlag.Invalidate();
         }
 
-        private List<Photo> _photos = new List<Photo>();
+        private List<Photo> _photos = new();
         private string _searchQuery = String.Empty;
-        private List<string> _urls = new List<string>();
+        private List<string> _urls = new();
         private int _maxResultCount = 100;
         private Task _request;
         private string _apiToken;
         
         [Input(Guid = "6D3F829B-C64E-45F2-9E8D-3844F4864C3A")]
-        public readonly InputSlot<int> GetPhotoIndex = new InputSlot<int>();
+        public readonly InputSlot<int> GetPhotoIndex = new();
 
         [Input(Guid = "8F164AA3-962A-4B08-970E-CB730CA10F9B")]
-        public readonly InputSlot<string> ApiToken = new InputSlot<string>();
+        public readonly InputSlot<string> ApiToken = new();
 
         [Input(Guid = "8F879A22-186D-45C3-B30C-AF909CC8E609")]
-        public readonly InputSlot<bool> TriggerRequest = new InputSlot<bool>();
+        public readonly InputSlot<bool> TriggerRequest = new();
         
         [Input(Guid = "6EE4BE4B-E0E9-40AA-AFEC-088B425791F1")]
-        public readonly InputSlot<string> Search = new InputSlot<string>();
+        public readonly InputSlot<string> Search = new();
 
         [Input(Guid = "A506693E-2859-4D9D-AB85-0A0F51CC2DA9")]
-        public readonly InputSlot<string> CollectionId = new InputSlot<string>();
+        public readonly InputSlot<string> CollectionId = new();
         
         [Input(Guid = "B3B90281-2D2A-4D79-8A0D-5D902CFAAA35")]
-        public readonly InputSlot<int> MaxResultCount = new InputSlot<int>(100);
+        public readonly InputSlot<int> MaxResultCount = new(100);
 
     }
 }

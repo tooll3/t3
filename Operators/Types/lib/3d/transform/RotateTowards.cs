@@ -1,9 +1,12 @@
-using SharpDX;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
+using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_8373c170_a140_4ce4_b59b_47f42fb71700
 {
@@ -26,31 +29,30 @@ namespace T3.Operators.Types.Id_8373c170_a140_4ce4_b59b_47f42fb71700
             if (targetMode == Modes.TowardsCamera)
             {
                 //TransformCallback?.Invoke(this, context); // this this is stupid stupid
-                SharpDX.Matrix camToWorld = context.WorldToCamera;
-                camToWorld.Invert();
-                targetPosDx = SharpDX.Vector4.Transform(new SharpDX.Vector4(0f, 0f, 0f, 1f), camToWorld).ToVector3();
+                Matrix4x4.Invert(context.WorldToCamera, out var camToWorld);
+                targetPosDx = Vector4.Transform(new Vector4(0f, 0f, 0f, 1f), camToWorld).ToVector3();
             }
             else
             {
-                targetPosDx = targetPos.ToSharpDx();
+                targetPosDx = targetPos;
             }
             
-            var sourcePos = SharpDX.Vector4.Transform( new Vector4(0,0,0,1), context.ObjectToWorld).ToVector3();
+            var sourcePos = Vector4.Transform( new Vector4(0,0,0,1), context.ObjectToWorld).ToVector3();
             
-            var lookAt = Matrix.LookAtRH(Vector3.Zero , -targetPosDx + sourcePos, Vector3.Up);
-            lookAt.Invert();
+            var lookAt = GraphicsMath.LookAtRH(Vector3.Zero , -targetPosDx + sourcePos, VectorT3.Up);
+            Matrix4x4.Invert(lookAt, out lookAt);
 
             var rotationOffset = RotationOffset.GetValue(context);
-            var rotateOffset = Matrix.RotationYawPitchRoll(
+            var rotateOffset = Matrix4x4.CreateFromYawPitchRoll(
                                                            rotationOffset.Y.ToRadians(),
                                                            rotationOffset.X.ToRadians(),
                                                            rotationOffset.Z.ToRadians());
 
-            lookAt = Matrix.Multiply( rotateOffset, lookAt);
+            lookAt = Matrix4x4.Multiply( rotateOffset, lookAt);
             
             
             var previousWorldTobject = context.ObjectToWorld;
-            context.ObjectToWorld = Matrix.Multiply(lookAt, context.ObjectToWorld);
+            context.ObjectToWorld = Matrix4x4.Multiply(lookAt, context.ObjectToWorld);
             Command.GetValue(context);
             context.ObjectToWorld = previousWorldTobject;
         }

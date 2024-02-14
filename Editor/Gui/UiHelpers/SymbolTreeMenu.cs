@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Editor.Gui.Commands;
-using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
@@ -121,7 +117,7 @@ namespace T3.Editor.Gui.UiHelpers
                 if (ExampleSymbolLinking.ExampleSymbols.TryGetValue(symbol.Id, out var examples))
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+                    ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
                     for (var index = 0; index < examples.Count; index++)
                     {
                         var exampleId = examples[index];
@@ -245,7 +241,7 @@ namespace T3.Editor.Gui.UiHelpers
 
         private static readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
 
-        private static IntPtr _dropData = new IntPtr(0);
+        private static IntPtr _dropData = new(0);
         private static string _guidSting;
     }
 }

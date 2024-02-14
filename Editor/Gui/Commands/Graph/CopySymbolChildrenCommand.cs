@@ -15,7 +15,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public bool IsUndoable => true;
 
-        public Dictionary<Guid, Guid> OldToNewIdDict { get; } = new Dictionary<Guid, Guid>();
+        public Dictionary<Guid, Guid> OldToNewIdDict { get; } = new();
 
         public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi,
                                          IEnumerable<SymbolChildUi> symbolChildrenToCopy,
@@ -134,7 +134,9 @@ namespace T3.Editor.Gui.Commands.Graph
 
                     newOutput.DirtyFlagTrigger = output.DirtyFlagTrigger;
                     newOutput.IsDisabled = output.IsDisabled;
+                    
                 }
+                newSymbolChild.IsBypassed = symbolChildToCopy.IsBypassed;
             }
 
             // add connections between copied children
@@ -173,9 +175,9 @@ namespace T3.Editor.Gui.Commands.Graph
         private readonly Vector2 _targetPosition;
         private readonly Guid _sourceSymbolId;
         private readonly Guid _targetSymbolId;
-        private readonly List<Entry> _childrenToCopy = new List<Entry>();
+        private readonly List<Entry> _childrenToCopy = new();
         private readonly List<Annotation> _annotationsToCopy = new();
-        private readonly List<Symbol.Connection> _connectionsToCopy = new List<Symbol.Connection>();
+        private readonly List<Symbol.Connection> _connectionsToCopy = new();
         public Vector2 PositionOffset;
     }
 }

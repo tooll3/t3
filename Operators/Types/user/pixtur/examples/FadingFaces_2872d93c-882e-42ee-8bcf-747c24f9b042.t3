@@ -207,7 +207,7 @@
       "Outputs": []
     },
     {
-      "Id": "3e02263f-8ebf-4e87-877e-3e9e61a51d03"/*Float2ToVector2*/,
+      "Id": "3e02263f-8ebf-4e87-877e-3e9e61a51d03"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -255,7 +255,7 @@
       "Outputs": []
     },
     {
-      "Id": "f3de8f5f-06e1-49d7-b0f2-dc4ab61748a6"/*Float4ToVector4*/,
+      "Id": "f3de8f5f-06e1-49d7-b0f2-dc4ab61748a6"/*Vector4*/,
       "SymbolId": "f2e323bd-f881-41a8-81e2-e8f2ac1984dc",
       "InputValues": [
         {
@@ -356,6 +356,16 @@
       "Id": "9c32d1bc-3e11-4bc9-bd30-bedaae9abd9f"/*Blend*/,
       "SymbolId": "9f43f769-d32a-4f49-92ac-e0be3ba250cf",
       "InputValues": [
+        {
+          "Id": "70dc133e-800a-4cd0-a159-2cbab4c322cb"/*ColorB*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 0.09
+          }
+        },
         {
           "Id": "fc5f1d08-3997-4ba3-ac59-d86e4e501fb0"/*BlendMode*/,
           "Type": "System.Int32",

@@ -1,48 +1,17 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 
 namespace T3.Core.Resource;
 
-public class VertexShaderResource : ShaderResource
-{
-    public VertexShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob, VertexShader vertexShader)
-        : base(id, name, entryPoint, blob)
-    {
-        VertexShader = vertexShader;
-    }
-
-    public void UpdateFromFile(string path)
-    {
-        if (UpToDate)
-            return;
-
-        ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "vs_5_0", ref VertexShader, ref _blob);
-        UpToDate = true;
-    }
-
-    public VertexShader VertexShader;
-}
-
 public abstract class ShaderResource : AbstractResource
 {
-    protected ShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob)
-        : base(id, name)
-    {
-        EntryPoint = entryPoint;
-        Blob = blob;
-    }
-
-    public string EntryPoint { get; }
-    protected ShaderBytecode _blob;
-    public ShaderBytecode Blob { get => _blob; private init => _blob = value; }
-
     public static string ExtractMeaningfulShaderErrorMessage(string message)
     {
-        var t = new Regex(@"(.*?)\((.*)\):(.*)");
-
-        var shaderErrorMatch = t.Match(message);
+        var shaderErrorMatch = ShaderErrorPattern.Match(message);
         if (!shaderErrorMatch.Success)
             return message;
 
@@ -50,83 +19,62 @@ public abstract class ShaderResource : AbstractResource
         var lineNumber = shaderErrorMatch.Groups[2].Value;
         var errorMessage = shaderErrorMatch.Groups[3].Value;
 
-        errorMessage = Enumerable.First<string>(errorMessage.Split('\n'));
+        errorMessage = errorMessage.Split('\n').First();
         return $"Line {lineNumber}: {errorMessage}\n\n{shaderName}";
     }
-
+    
     /// <summary>
     /// Matches errors like....
     ///
     /// Failed to compile shader 'ComputeWobble': C:\Users\pixtur\coding\t3\Resources\compute-ColorGrade.hlsl(32,12-56): warning X3206: implicit truncation of vector type
     /// </summary>
-    private static readonly Regex ShaderErrorPattern = new(@".*?\((.*)\):(.*)");
+    private static readonly Regex ShaderErrorPattern = new(@"(.*?)\((.*)\):(.*)");
 }
 
-public class PixelShaderResource : ShaderResource
+public class ShaderResource<T> : ShaderResource where T : class, IDisposable
 {
-    public PixelShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob, PixelShader pixelShader)
-        : base(id, name, entryPoint, blob)
+    private T _shader;
+    public T Shader { get => _shader; init => _shader = value; }
+
+    private ShaderBytecode _blob;
+    public ShaderBytecode Blob {get => _blob; init => _blob = value; }
+    
+    private string _entryPoint;
+    public string EntryPoint { get => _entryPoint; init => _entryPoint = value; }
+
+    public void UpdateDebugName(string newDebugName) => UpdateName(newDebugName);
+
+    public bool TryUpdateFromFile(string path, string entryPoint, out string errorMessage)
     {
-        PixelShader = pixelShader;
+        var success = ShaderCompiler.Instance.TryCompileShaderFromFile(path, entryPoint, Name, ref _shader, ref _blob, out errorMessage);
+        if(success)
+            _entryPoint = entryPoint;
+        return success;
     }
-
-    public PixelShader PixelShader;
-
-    public virtual bool UpdateFromFile(string path)
+    
+    public bool TryUpdateFromSource(string source, string entryPoint, out string errorMessage)
     {
-        if (UpToDate)
-            return true;
-
-        var success = ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref _blob);
-        UpToDate = true;
+        var success = ShaderCompiler.Instance.TryCompileShaderFromSource(source, entryPoint, Name, ref _shader, ref _blob, out errorMessage);
+        if(success)
+            _entryPoint = entryPoint;
         return success;
     }
 }
 
-public class ComputeShaderResource : ShaderResource
+public static class Extensions
 {
-    public ComputeShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob, ComputeShader computeShader) :
-        base(id, name, entryPoint, blob)
+    public static bool TryGetThreadGroups(this ShaderResource<ComputeShader> computeShader, out Int3 threadGroups)
     {
-        ComputeShader = computeShader;
-    }
+        
+        threadGroups = default;
+        if (computeShader.Blob == null)
+            return false;
 
-    public ComputeShader ComputeShader;
+        var reflection = new ShaderReflection(computeShader.Blob);
+        _ = reflection.GetThreadGroupSize(out var x, out var y, out var z);
 
-    public bool UpdateFromFile(string path)
-    {
-        if (UpToDate)
-            return true;
-
-        var success =ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
-        UpToDate = true;
-        return success;
-    }
-
-    // public void UpdateFromSourceString(string source)
-    // {
-    //     ResourceManager.Instance().CompileShaderFromSource(source, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
-    //     UpToDate = true;
-    // }
-}
-
-public class GeometryShaderResource : ShaderResource
-{
-    public GeometryShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob, GeometryShader geometryShader) :
-        base(id, name, entryPoint, blob)
-    {
-        GeometryShader = geometryShader;
-    }
-
-    public GeometryShader GeometryShader;
-
-    public virtual void UpdateFromFile(string path)
-    {
-        if (UpToDate)
-            return;
-
-        ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "gs_5_0", ref GeometryShader, ref _blob);
-        UpToDate = true;
+        threadGroups = new Int3(x, y, z);
+        return true;
     }
 }
 

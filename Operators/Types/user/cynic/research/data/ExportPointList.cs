@@ -6,8 +6,6 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Operators.Types.Id_d5607e3b_15e8_402c_8d54_b29e40415ab0
@@ -15,7 +13,7 @@ namespace T3.Operators.Types.Id_d5607e3b_15e8_402c_8d54_b29e40415ab0
     public class ExportPointList : Instance<ExportPointList>
     {
         [Output(Guid = "ba3d861e-3e22-4cea-9070-b7f53059cf87")]
-        public readonly Slot<StructuredList> Result = new Slot<StructuredList>();
+        public readonly Slot<StructuredList> Result = new();
 
         
         public ExportPointList()

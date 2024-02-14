@@ -73,6 +73,20 @@ float SCurve (float value, float amount, float correction)
 }
 
 
+float DeltaAngle(float angle1, float angle2) 
+{
+            angle1 = (angle1 + PI) % (2 * PI) - PI;
+            angle2 = (angle2 + PI) % (2 * PI) - PI;
+
+            float delta = angle2 - angle1;
+            if(delta > PI)
+                return delta - 2 * PI;
+            if(delta < -PI)
+                return delta + 2 * PI;
+
+            return delta;
+}
+
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
     float2 uv = psInput.texCoord;
@@ -80,15 +94,41 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float3 hsb = rgb2hsb(c.rgb);
 
-    //return float4(hsb.yyy,1);
-
     float3 keyColor = rgb2hsb(KeyColor.rgb);
-    float3 weights = float3(WeightHue, WeightSaturation, WeightBrightness);
-    float distance = saturate(length(hsb * weights - keyColor * weights) * Exposure - Amplify );
-    //return float4(distance.xxx,1);
-    //float k = Exposure- distance;
+
+    //return float4(hsb ,1);
+    // if(hsb.y < 0.01) 
+    //     WeightHue =0;
+
+    //float3 weights = float3(hsb.y < 0.01 ? 0 : WeightHue, WeightSaturation, WeightBrightness);
+    float3 weights = float3(smoothstep(0,1, hsb.y* 10) * WeightHue, WeightSaturation, WeightBrightness);
+    //float3 weights = float3(WeightHue, WeightSaturation, WeightBrightness);
+
+    float distance = saturate(length( float3( abs( DeltaAngle(hsb.x/ (2*PI), keyColor.x/ (2*PI) )),  (hsb.yz - keyColor.yz)) * weights) * Exposure - Amplify );
+    //float distance = saturate(length(hsb * weights - keyColor * weights) * Exposure - Amplify );
+
     float f = saturate(c.a * distance);
-    return Mode < 0.5 ? float4(c.rgb, distance * c.a)
-                      : lerp( (Mode>1.5 ? 1:  KeyColor), Background, distance);
+
+    if(Mode < 0.5) 
+    {
+        return float4(c.rgb, saturate(distance * c.a));
+    }
+
+    if(Mode < 1.5) 
+    {
+        return lerp(KeyColor, Background, distance);
+    }
+
+    if(Mode < 2.5) 
+    {
+        return lerp(1, Background, distance);
+    }
+    
+
+    return lerp(
+        float4(c.rgb, saturate(1- distance * c.a)),
+        lerp(Background, c, saturate(1-distance * c.a)),
+        Background.a); 
+    
 
 }

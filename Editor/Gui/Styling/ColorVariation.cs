@@ -1,5 +1,7 @@
 ﻿using System;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
+using T3.Core.Utils;
 
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -28,17 +30,12 @@ public struct ColorVariation : IEquatable<ColorVariation>
 
     public Color Apply(Color originalColor)
     {
-        ImGui.ColorConvertRGBtoHSV(
-                                   originalColor.Rgba.X,
-                                   originalColor.Rgba.Y,
-                                   originalColor.Rgba.Z,
-                                   out var h, out var s, out var v);
-
+        originalColor.GetHSV(out var h, out var s, out var v);
         return Color.FromHSV(
                              h,
                              s * Saturation,
-                             v * Brightness,
-                             originalColor.Rgba.W * Opacity);
+                             (v * Brightness).Clamp(0,1),
+                             (originalColor.Rgba.W * Opacity).Clamp(0,1));
     }
 
     public ColorVariation Clone()

@@ -26,7 +26,7 @@
       }
     },
     {
-      "ChildId": "6a688dab-8dab-4667-9a33-4113f8ec28cd"/*FractalNoise*/,
+      "ChildId": "6a688dab-8dab-4667-9a33-4113f8ec28cd"/*_FractalNoiseOld*/,
       "Position": {
         "X": 300.0,
         "Y": 468.0

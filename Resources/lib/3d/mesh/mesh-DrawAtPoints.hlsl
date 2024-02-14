@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
 
@@ -23,6 +24,7 @@ cbuffer Params : register(b1)
     float SegmentCount;
     float UseWForSize;
     float AlphaCutOff;
+    float UseStretch;
 };
 
 cbuffer FogParams : register(b2)
@@ -51,6 +53,7 @@ struct psInput
 {
     float2 texCoord : TEXCOORD;
     float4 pixelPosition : SV_POSITION;
+    float4 color : COLOR;
     float3 worldPosition : POSITION;
     float3x3 tbnToWorld : TBASIS;
     float fog : VPOS;
@@ -91,12 +94,14 @@ psInput vsMain(uint id
     PbrVertex vertex = PbrVertices[FaceIndices[faceIndex][faceVertexIndex]];
     float4 posInObject = float4(vertex.Position, 1);
 
-    float resize = (UseWForSize ? Points[instanceIndex].w : 1);
-    posInObject.xyz *= max(0, resize) * Size;
-    float4x4 orientationMatrix = transpose(quaternion_to_matrix(normalize(Points[instanceIndex].rotation)));
+    float resizeFromW = UseWForSize ? Points[instanceIndex].W : 1;
+    float3 resizeFromStretch = UseStretch ? Points[instanceIndex].Stretch : 1;
+    posInObject.xyz *= max(0, resizeFromW) * Size * resizeFromStretch;
+    float4x4 orientationMatrix = transpose(qToMatrix(normalize(Points[instanceIndex].Rotation)));
     posInObject = mul(float4(posInObject.xyz, 1), orientationMatrix);
 
-    posInObject += float4(Points[instanceIndex].position, 0);
+    posInObject += float4(Points[instanceIndex].Position, 0);
+    output.color = Points[instanceIndex].Color;
 
     float4 posInClipSpace = mul(posInObject, ObjectToClipSpace);
     output.pixelPosition = posInClipSpace;
@@ -130,7 +135,7 @@ psInput vsMain(uint id
 float4 psMain(psInput pin) : SV_TARGET
 {
     // Sample input textures to get shading model params.
-    float4 albedo = BaseColorMap.Sample(texSampler, pin.texCoord);
+    float4 albedo = BaseColorMap.Sample(texSampler, pin.texCoord) * pin.color;
     if (AlphaCutOff > 0 && albedo.a < AlphaCutOff)
         discard;
 

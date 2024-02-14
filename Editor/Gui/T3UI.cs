@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -31,6 +31,7 @@ using T3.Editor.Gui.UiHelpers.Wiki;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
@@ -42,7 +43,14 @@ public class T3Ui
     static T3Ui()
     {
         var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
-        UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: false);
+
+        #if DEBUG
+        var log = true;
+        #else
+        var log = false;
+        #endif
+        
+        UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: log);
 
         //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
@@ -53,7 +61,7 @@ public class T3Ui
     }
 
     public static readonly Playback DefaultTimelinePlayback = new();
-    public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new BeatTimingPlayback();
+    public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new();
         
     private void InitializeAfterAppWindowReady()
     {
@@ -78,13 +86,14 @@ public class T3Ui
         // Prepare the current frame 
         RenderStatsCollector.StartNewFrame();
             
-        PlaybackUtils.UpdatePlaybackAndSyncing();
+        if (Playback.Current.IsLive)
+        {
+            PlaybackUtils.UpdatePlaybackAndSyncing();
+            //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
+            AudioEngine.CompleteFrame(Playback.Current, Playback.LastFrameDuration);    // Update
+        }
+        TextureReadAccess.Update();
 
-
-        //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
-            
-        AudioEngine.CompleteFrame(Playback.Current);    // Update
-            
         AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
 
         VariationHandling.Update();
@@ -128,6 +137,7 @@ public class T3Ui
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
+
 
         FrameStats.CompleteFrame();
         TriggerGlobalActionsFromKeyBindings();
@@ -393,8 +403,8 @@ public class T3Ui
             
     }
         
-    private static readonly object _saveLocker = new object();
-    private static readonly Stopwatch _saveStopwatch = new Stopwatch();
+    private static readonly object _saveLocker = new();
+    private static readonly Stopwatch _saveStopwatch = new();
 
     private static void SaveInBackground(bool saveAll)
     {
@@ -453,7 +463,10 @@ public class T3Ui
 
         var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
         var sourceSymbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == symbolChildId);
-        var selectionTargetInstance = compositionOp.Children.Single(instance => instance.SymbolChildId == symbolChildId);
+        var selectionTargetInstance = compositionOp.Children.SingleOrDefault(instance => instance.SymbolChildId == symbolChildId);
+        if (selectionTargetInstance == null)
+            return;
+        
         NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
         FitViewToSelectionHandling.FitViewToSelection();
     }
@@ -491,7 +504,7 @@ public class T3Ui
 
     public static readonly UiSymbolData UiSymbolData;
     
-    public static IntPtr NotDroppingPointer = new IntPtr(0);
+    public static IntPtr NotDroppingPointer = new(0);
     public static bool DraggingIsInProgress = false;
     public static bool MouseWheelFieldHovered { private get; set; }
     public static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }

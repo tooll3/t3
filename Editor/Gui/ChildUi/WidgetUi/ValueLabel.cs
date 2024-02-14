@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction;
@@ -56,7 +57,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
                     {
                         if (ImGui.IsItemActive())
                         {
-                            SingleValueEdit.DrawValueEditGizmo(ref value,  restarted, _jogDailCenter,double.NegativeInfinity, double.PositiveInfinity, false, 0.025f);
+                            SingleValueEdit.DrawValueEditMethod(ref value,  restarted, _jogDailCenter,double.NegativeInfinity, double.PositiveInfinity, false, 0.025f);
                             inputSlot.SetTypedInputValue((float)value);
                             modified = true;
                         }
@@ -81,7 +82,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
             return modified;
         }
 
-        private static readonly Color _hoverRegionColor = new Color(0, 0, 0, 0.2f);
+        private static readonly Color _hoverRegionColor = new(0, 0, 0, 0.2f);
         private static Vector2 _jogDailCenter;
         private static InputSlot<float> _jogDialValue;        
     }

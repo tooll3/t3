@@ -1,25 +1,19 @@
-using System;
 using System.Linq;
-using SharpDX;
-using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_0b99ab8b_5d61_49da_9851_9ad723cad3ae
 {
     public class JoinLists : Instance<JoinLists>
     {
         [Output(Guid = "35C71BF9-4636-46CB-BB99-387653755044")]
-        public readonly Slot<StructuredList> Result = new Slot<StructuredList>();
+        public readonly Slot<StructuredList> Result = new();
 
         
         [Output(Guid = "215CE4F0-8B90-4A4E-8385-B4870DF6A14D")]
-        public readonly Slot<int> Length = new Slot<int>();
+        public readonly Slot<int> Length = new();
         
         public JoinLists()
         {
@@ -52,6 +46,6 @@ namespace T3.Operators.Types.Id_0b99ab8b_5d61_49da_9851_9ad723cad3ae
 
 
         [Input(Guid = "f0eb99fd-5782-4a97-93cb-bed93394184c")]
-        public readonly MultiInputSlot<StructuredList> Lists = new MultiInputSlot<StructuredList>();
+        public readonly MultiInputSlot<StructuredList> Lists = new();
     }
 }

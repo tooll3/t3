@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_7dff2da3_30e3_4ad9_bfc6_d6800f90fca8
     public class StringInsert : Instance<StringInsert>
     {
         [Output(Guid = "3f9aa46b-e9d5-43fd-b463-fcdd48ded406")]
-        public readonly Slot<string> Result = new Slot<string>();
+        public readonly Slot<string> Result = new();
 
         public StringInsert()
         {
@@ -51,16 +51,16 @@ namespace T3.Operators.Types.Id_7dff2da3_30e3_4ad9_bfc6_d6800f90fca8
         }
         
         [Input(Guid = "11d0a66a-e2e9-4267-9458-f9844a482235")]
-        public readonly InputSlot<string> Original = new InputSlot<string>();
+        public readonly InputSlot<string> Original = new();
         
         [Input(Guid = "b00a60d3-c525-4e65-8b84-2084521d0d2d")]
-        public readonly InputSlot<string> Insertion = new InputSlot<string>();
+        public readonly InputSlot<string> Insertion = new();
         
         [Input(Guid = "B5709B52-E755-4046-8E71-EEAD5A01303A")]
-        public readonly InputSlot<int> Position = new InputSlot<int>();
+        public readonly InputSlot<int> Position = new();
         
         [Input(Guid = "C103C06D-BF68-4C5C-967E-DDD939221292")]
-        public readonly InputSlot<bool> UseModuloPosition = new InputSlot<bool>();
+        public readonly InputSlot<bool> UseModuloPosition = new();
         
     }
 }

@@ -6,28 +6,28 @@
     {
       "ChildId": "61958bca-08b9-4df5-839e-eba6460ad333"/*LinePoints*/,
       "Position": {
-        "X": -129.02905,
+        "X": -149.22406,
         "Y": 0.0
       }
     },
     {
-      "ChildId": "d59d88b3-b1b3-4bae-b09d-69d1bb7df960"/*RandomizePoints*/,
+      "ChildId": "d59d88b3-b1b3-4bae-b09d-69d1bb7df960"/*_RandomizePoints_Legacy1*/,
       "Position": {
-        "X": 20.970947,
+        "X": 0.77593994,
         "Y": 0.0
       }
     },
     {
       "ChildId": "1e8ce33d-f4b5-4366-9379-c5468de9e7c3"/*SimForceOffset*/,
       "Position": {
-        "X": 493.85938,
+        "X": 473.66437,
         "Y": 60.25244
       }
     },
     {
       "ChildId": "310c07e3-63b2-487e-afcb-f46377a68e8c"/*PointTrail*/,
       "Position": {
-        "X": 343.85913,
+        "X": 323.66412,
         "Y": 60.25244
       }
     },
@@ -41,22 +41,22 @@
     {
       "ChildId": "f3f08c29-a127-4bf7-bbff-3355424b0642"/*AddNoise*/,
       "Position": {
-        "X": 170.97095,
+        "X": 150.77594,
         "Y": 0.0
       }
     },
     {
       "ChildId": "e5dfac28-32dd-45be-9964-c76e1c0a2d43"/*Time*/,
       "Position": {
-        "X": 20.970947,
+        "X": 0.77593994,
         "Y": 63.0
       }
     },
     {
       "ChildId": "64d5dbb5-7e6a-44bf-add8-1416e4e8397a"/*SoftTransformPoints*/,
       "Position": {
-        "X": 787.94946,
-        "Y": 60.25244
+        "X": 738.2844,
+        "Y": 66.77841
       }
     },
     {
@@ -76,7 +76,7 @@
     {
       "ChildId": "0e297fda-b741-4096-9905-69c5b8a6090c"/*SoftTransformPoints*/,
       "Position": {
-        "X": 623.8594,
+        "X": 603.66437,
         "Y": 60.25244
       }
     },
@@ -99,6 +99,20 @@
       "Position": {
         "X": 1237.9495,
         "Y": 4.2524414
+      }
+    },
+    {
+      "ChildId": "c8a54f87-b046-42f6-9638-82a73d5f2953"/*SetPointAttributes*/,
+      "Position": {
+        "X": 994.2805,
+        "Y": 281.8319
+      }
+    },
+    {
+      "ChildId": "777c72ea-80af-475b-8750-d278fc7c32e3"/*PointsToCPU*/,
+      "Position": {
+        "X": 940.1893,
+        "Y": 384.21185
       }
     }
   ],

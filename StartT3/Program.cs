@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Resource;

@@ -1,14 +1,14 @@
 using System;
-using SharpDX;
-using T3.Core;
+using System.Numerics;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using Vector4 = System.Numerics.Vector4;
+using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
+using Quaternion = System.Numerics.Quaternion;
+using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
 {
@@ -16,7 +16,7 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
 ,ITransformable
     {
         [Output(Guid = "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b")]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        public readonly Slot<Command> Output = new();
         
         IInputSlot ITransformable.TranslationInput => Translation;
         IInputSlot ITransformable.RotationInput => Rotation;
@@ -35,12 +35,12 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
             // Build and set transform matrix
             var s = Scale.GetValue(context) * UniformScale.GetValue(context);
             var r = Rotation.GetValue(context);
-            var yaw = MathUtil.DegreesToRadians(r.Y);
-            var pitch = MathUtil.DegreesToRadians(r.X);
-            var roll = MathUtil.DegreesToRadians(r.Z);
+            var yaw = r.Y.ToRadians();
+            var pitch = r.X.ToRadians();
+            var roll = r.Z.ToRadians();
             var t = Translation.GetValue(context);
-            var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
-                                                             rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
+            var objectToParentObject = GraphicsMath.CreateTransformationMatrix(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
+                                                             rotation: Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
 
             var forceColorUpdate = ForceColorUpdate.GetValue(context);
             var previousColor = context.ForegroundColor;
@@ -50,7 +50,7 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
             context.ForegroundColor *= color;
             
             var previousWorldTobject = context.ObjectToWorld;
-            context.ObjectToWorld = Matrix.Multiply(objectToParentObject, context.ObjectToWorld);
+            context.ObjectToWorld = Matrix4x4.Multiply(objectToParentObject, context.ObjectToWorld);
             
             var commands = Commands.CollectedInputs;
             if (IsEnabled.GetValue(context))

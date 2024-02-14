@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -28,14 +29,14 @@ void main(uint3 i : SV_DispatchThreadID)
     if(pairElement == 1) {
         ResultPoints[i.x] = PointsB[pairIndex % (uint)CountB];
         if(InitWTo01 > 0.5)
-            ResultPoints[i.x].w = 1;
+            ResultPoints[i.x].W = 1;
     }
     else {
         ResultPoints[i.x] = PointsA[pairIndex % (uint)CountA];
         if(InitWTo01 > 0.5)
-            ResultPoints[i.x].w = 0;
+            ResultPoints[i.x].W = 0;
     }
 
     if( pairElement == 2)
-        ResultPoints[i.x].w = sqrt(-1); // NaN for divider
+        ResultPoints[i.x].W = sqrt(-1); // NaN for divider
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -12,9 +11,9 @@ using T3.Editor.UiModel;
 using T3.Operators.Types.Id_5880cbc3_a541_4484_a06a_0e6f77cdbe8e;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_8211249d_7a26_4ad0_8d84_56da72a5c536;
-using T3.Operators.Types.Id_926ab3fd_fbaf_4c4b_91bc_af277000dcb8;
-using T3.Operators.Types.Id_94a5de3b_ee6a_43d3_8d21_7b8fe94b042b;
 using T3.Operators.Types.Id_cc07b314_4582_4c2c_84b8_bb32f59fc09b;
+using Vector2 = T3.Operators.Types.Id_926ab3fd_fbaf_4c4b_91bc_af277000dcb8.Vector2;
+using Vector3 = T3.Operators.Types.Id_94a5de3b_ee6a_43d3_8d21_7b8fe94b042b.Vector3;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
@@ -107,14 +106,14 @@ internal static class ParameterExtraction
                 break;
             }
                 
-            case Float2ToVector2 float2ToVector2 when inputSlot is InputSlot<Vector2> vec2:
+            case Vector2 float2ToVector2 when inputSlot is InputSlot<System.Numerics.Vector2> vec2:
             {
                 inputsAndValues[float2ToVector2.X.Input] = new InputValue<float>(vec2.TypedInputValue.Value.X);
                 inputsAndValues[float2ToVector2.Y.Input] = new InputValue<float>(vec2.TypedInputValue.Value.Y);
                 break;
             }
                 
-            case Float3ToVector3 float3ToVector3 when inputSlot is InputSlot<Vector3> vec3:
+            case Vector3 float3ToVector3 when inputSlot is InputSlot<System.Numerics.Vector3> vec3:
             {
                 inputsAndValues[float3ToVector3.X.Input] = new InputValue<float>(vec3.TypedInputValue.Value.X);
                 inputsAndValues[float3ToVector3.Y.Input] = new InputValue<float>(vec3.TypedInputValue.Value.Y);
@@ -152,15 +151,15 @@ internal static class ParameterExtraction
     private static readonly Dictionary<Type, Guid> _symbolIdsForTypes = new()
                                                                             {
                                                                                 { typeof(float), Guid.Parse("5d7d61ae-0a41-4ffa-a51d-93bab665e7fe") },
-                                                                                { typeof(Vector2), Guid.Parse("926ab3fd-fbaf-4c4b-91bc-af277000dcb8") },
-                                                                                { typeof(Vector3), Guid.Parse("94a5de3b-ee6a-43d3-8d21-7b8fe94b042b") },
+                                                                                { typeof(System.Numerics.Vector2), Guid.Parse("926ab3fd-fbaf-4c4b-91bc-af277000dcb8") },
+                                                                                { typeof(System.Numerics.Vector3), Guid.Parse("94a5de3b-ee6a-43d3-8d21-7b8fe94b042b") },
                                                                                 { typeof(string), Guid.Parse("5880cbc3-a541-4484-a06a-0e6f77cdbe8e") },
                                                                                 { typeof(int), Guid.Parse("cc07b314-4582-4c2c-84b8-bb32f59fc09b") },
                                                                                 { typeof(Gradient), Guid.Parse("8211249d-7a26-4ad0-8d84-56da72a5c536") },
                                                                             };
 
-    private static readonly Dictionary<Type, Vector2> _sizesForTypes = new()
-                                                                           {
-                                                                               { typeof(string), new Vector2(120, 80) },
-                                                                           };
+    private static readonly Dictionary<Type, System.Numerics.Vector2> _sizesForTypes = new()
+                                                                                           {
+                                                                                               { typeof(string), new System.Numerics.Vector2(120, 80) },
+                                                                                           };
 }

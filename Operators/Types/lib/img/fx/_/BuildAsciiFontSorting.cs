@@ -1,21 +1,14 @@
 using System;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core.Animation;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
-using Color = SharpDX.Color;
 using Utilities = T3.Core.Utils.Utilities;
 
 namespace T3.Operators.Types.Id_b536f791_ae9a_45a7_a153_e2f36a65cfb3
@@ -23,7 +16,7 @@ namespace T3.Operators.Types.Id_b536f791_ae9a_45a7_a153_e2f36a65cfb3
     public class BuildAsciiFontSorting : Instance<BuildAsciiFontSorting>
     {
         [Output(Guid = "684a6260-5bc5-40e7-8610-b0aa24d9a23d")]
-        public readonly Slot<Texture2D> MappingTexture = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> MappingTexture = new();
 
         public BuildAsciiFontSorting()
         {
@@ -47,7 +40,7 @@ namespace T3.Operators.Types.Id_b536f791_ae9a_45a7_a153_e2f36a65cfb3
             var listSizeInBytes = sampleCount * entrySizeInBytes;
             var bufferSizeInBytes = 1 * listSizeInBytes;
 
-            using (var dataStream = new DataStream(bufferSizeInBytes, true, true))
+            using (var dataStream = new SharpDX.DataStream(bufferSizeInBytes, true, true))
             {
                 var texDesc = new Texture2DDescription()
                                   {
@@ -70,7 +63,7 @@ namespace T3.Operators.Types.Id_b536f791_ae9a_45a7_a153_e2f36a65cfb3
                 }
 
                 dataStream.Position = 0;
-                var dataRectangles = new DataRectangle[] { new DataRectangle(dataStream.DataPointer, listSizeInBytes) };
+                var dataRectangles = new SharpDX.DataRectangle[] { new(dataStream.DataPointer, listSizeInBytes) };
                 Utilities.Dispose(ref MappingTexture.Value);
 
                 MappingTexture.Value = new Texture2D(ResourceManager.Device, texDesc, dataRectangles);
@@ -155,9 +148,9 @@ namespace T3.Operators.Types.Id_b536f791_ae9a_45a7_a153_e2f36a65cfb3
         }
 
         [Input(Guid = "DAB66E97-0B79-41CE-B6C7-9B01A123746E")]
-        public readonly InputSlot<string> Filepath = new InputSlot<string>();
+        public readonly InputSlot<string> Filepath = new();
 
         [Input(Guid = "936F7D5E-8EAB-4A9D-ABEF-B941086B027D")]
-        public readonly InputSlot<string> FilterCharacters = new InputSlot<string>();
+        public readonly InputSlot<string> FilterCharacters = new();
     }
 }

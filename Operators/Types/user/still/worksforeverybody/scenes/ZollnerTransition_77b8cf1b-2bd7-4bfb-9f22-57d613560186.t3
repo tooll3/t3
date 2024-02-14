@@ -97,14 +97,14 @@
           }
         },
         {
-          "Id": "c38647f6-c6ea-40a0-b872-0df6d4168c05"/*Offset*/,
-          "Type": "System.Single",
-          "Value": -0.999
-        },
-        {
           "Id": "e4739314-4075-4d14-a80d-79e149081dac"/*SizeMode*/,
           "Type": "System.Int32",
           "Value": 1
+        },
+        {
+          "Id": "c38647f6-c6ea-40a0-b872-0df6d4168c05"/*Offset*/,
+          "Type": "System.Single",
+          "Value": -0.999
         }
       ],
       "Outputs": []

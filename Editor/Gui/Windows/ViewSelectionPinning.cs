@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Output;
@@ -188,7 +186,7 @@ namespace T3.Editor.Gui.Windows
         }
 
         private bool _isPinned;
-        private List<Guid> _pinnedInstancePath = new List<Guid>();
-        private List<Guid> _pinnedEvaluationInstancePath = new List<Guid>();
+        private List<Guid> _pinnedInstancePath = new();
+        private List<Guid> _pinnedEvaluationInstancePath = new();
     }
 }

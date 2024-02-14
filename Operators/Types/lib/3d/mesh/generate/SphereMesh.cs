@@ -1,8 +1,7 @@
 using System;
-using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,6 +9,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
     public class SphereMesh : Instance<SphereMesh>
     {
         [Output(Guid = "322717ef-3a76-4e23-845f-a12a03d73969")]
-        public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
+        public readonly Slot<MeshBuffers> Data = new();
 
         public SphereMesh()
         {
@@ -44,7 +44,7 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
                     _vertexBufferData = new PbrVertex[verticesCount];
 
                 if (_indexBufferData.Length != triangleCount)
-                    _indexBufferData = new SharpDX.Int3[triangleCount];
+                    _indexBufferData = new Int3[triangleCount];
 
                 // Initialize
                 var vAngleFraction = 1f / (vSegments - 1) * 1.0 * Math.PI;
@@ -63,8 +63,8 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
 
                     if (isTop || isBottom)
                     {
-                        var normalPol0 = radius > 0 ? SharpDX.Vector3.Up : SharpDX.Vector3.Down;
-                        var normalPol1 = radius > 0 ?SharpDX.Vector3.Down : SharpDX.Vector3.Up;
+                        var normalPol0 = radius > 0 ? VectorT3.Up : VectorT3.Down;
+                        var normalPol1 = radius > 0 ? VectorT3.Down : VectorT3.Up;
 
                         for (int uIndex = 0; uIndex < uSegments; ++uIndex)
                         {
@@ -72,18 +72,18 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
                             var uAngle = uIndex * uAngleFraction;
 
                             // top
-                            var tangentPol0 = SharpDX.Vector3.Normalize(new SharpDX.Vector3(MathF.Sin((float)uAngle),
+                            var tangentPol0 = Vector3.Normalize(new Vector3(MathF.Sin((float)uAngle),
                                                                                             0,
                                                                                             MathF.Cos((float)uAngle)));
-                            var binormalPol0 = SharpDX.Vector3.Normalize(new SharpDX.Vector3(MathF.Sin((float)uAngle + MathF.PI / 2),
+                            var binormalPol0 = Vector3.Normalize(new Vector3(MathF.Sin((float)uAngle + MathF.PI / 2),
                                                                                              0,
                                                                                              MathF.Cos((float)uAngle + MathF.PI / 2)));
 
-                            var pPol0 = new SharpDX.Vector3(0,
+                            var pPol0 = new Vector3(0,
                                                             radius,
                                                             0);
 
-                            var uv0 = new SharpDX.Vector2(u0, 1);
+                            var uv0 = new Vector2(u0, 1);
 
                             _vertexBufferData[0 + uIndex] = new PbrVertex
                                                                 {
@@ -97,18 +97,18 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
 
                             
                             // bottom
-                            var tangentPol1 = SharpDX.Vector3.Normalize(new SharpDX.Vector3(MathF.Sin((float)uAngle +  MathF.PI / 2),
+                            var tangentPol1 = Vector3.Normalize(new Vector3(MathF.Sin((float)uAngle +  MathF.PI / 2),
                                                                                             0,
                                                                                             MathF.Cos((float)uAngle + MathF.PI / 2)));
-                            var binormalPol1 = SharpDX.Vector3.Normalize(new SharpDX.Vector3(MathF.Sin((float)uAngle),
+                            var binormalPol1 = Vector3.Normalize(new Vector3(MathF.Sin((float)uAngle),
                                                                                              0,
                                                                                              MathF.Cos((float)uAngle )));
 
-                            var pPol1 = new SharpDX.Vector3(0,
+                            var pPol1 = new Vector3(0,
                                                             -radius,
                                                             0);
 
-                            var uv1 = new SharpDX.Vector2(u0, 0);
+                            var uv1 = new Vector2(u0, 0);
 
                             _vertexBufferData[ (vSegments - 1) * uSegments + uIndex] = new PbrVertex
                                                                 {
@@ -125,11 +125,11 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
                             if (uIndex >= uSegments - 1)
                                 continue;
 
-                            _indexBufferData[uIndex] = new SharpDX.Int3(uIndex,
+                            _indexBufferData[uIndex] = new Int3(uIndex,
                                                                         uIndex + uSegments,
                                                                         uIndex + uSegments + 1);
 
-                            _indexBufferData[uIndex] = new SharpDX.Int3(uIndex,
+                            _indexBufferData[uIndex] = new Int3(uIndex,
                                                                         uIndex + uSegments,
                                                                         uIndex + uSegments + 1);
                         }
@@ -144,16 +144,16 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
                             var u0 = (uIndex) / (float)(uSegments - 1);
                             var uAngle = uIndex * uAngleFraction;
 
-                            var p = new SharpDX.Vector3((float)(Math.Sin(uAngle) * radius1),
+                            var p = new Vector3((float)(Math.Sin(uAngle) * radius1),
                                                         (float)tubePosition1Y,
                                                         (float)(Math.Cos(uAngle) * radius1)
                                                        );
 
-                            var uv0 = new SharpDX.Vector2(u0, v0);
+                            var uv0 = new Vector2(u0, v0);
 
-                            var normal0 = SharpDX.Vector3.Normalize(p);
-                            var tangent0 = SharpDX.Vector3.Normalize(new SharpDX.Vector3(normal0.Z, 0, -normal0.X));
-                            var binormal0 = SharpDX.Vector3.Cross(normal0, tangent0);
+                            var normal0 = Vector3.Normalize(p);
+                            var tangent0 = Vector3.Normalize(new Vector3(normal0.Z, 0, -normal0.X));
+                            var binormal0 = Vector3.Cross(normal0, tangent0);
 
                             _vertexBufferData[vVertexIndex + uIndex] = new PbrVertex
                                                                            {
@@ -170,10 +170,10 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
 
                             var nextUIndex = (uIndex + 1) % uSegments;
 
-                            _indexBufferData[faceIndex + 0] = new SharpDX.Int3(vVertexIndex + nextUIndex,
+                            _indexBufferData[faceIndex + 0] = new Int3(vVertexIndex + nextUIndex,
                                                                                vVertexIndex + uIndex + 0,
                                                                                vVertexIndex + uIndex + uSegments);
-                            _indexBufferData[faceIndex + 1] = new SharpDX.Int3((vVertexIndex + nextUIndex + uSegments),
+                            _indexBufferData[faceIndex + 1] = new Int3((vVertexIndex + nextUIndex + uSegments),
                                                                                (vVertexIndex + nextUIndex),
                                                                                vVertexIndex + uIndex + uSegments + 0);
                         }
@@ -181,16 +181,16 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
                 }
 
                 // Write Data
-                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 ResourceManager.SetupStructuredBuffer(_vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride, ref _vertexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_vertexBuffer, ref _vertexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_vertexBuffer, UnorderedAccessViewBufferFlags.None, ref _vertexBufferWithViews.Uav);
+                _vertexBufferWithViews.Buffer = _vertexBuffer;
 
-                _indexBufferWithViews.Buffer = _indexBuffer;
                 const int stride = 3 * 4;
                 ResourceManager.SetupStructuredBuffer(_indexBufferData, stride * triangleCount, stride, ref _indexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_indexBuffer, ref _indexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_indexBuffer, UnorderedAccessViewBufferFlags.None, ref _indexBufferWithViews.Uav);
+                _indexBufferWithViews.Buffer = _indexBuffer;
 
                 _data.VertexBuffer = _vertexBufferWithViews;
                 _data.IndicesBuffer = _indexBufferWithViews;
@@ -208,7 +208,7 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
         private readonly BufferWithViews _vertexBufferWithViews = new();
 
         private Buffer _indexBuffer;
-        private SharpDX.Int3[] _indexBufferData = new SharpDX.Int3[0];
+        private Int3[] _indexBufferData = new Int3[0];
         private readonly BufferWithViews _indexBufferWithViews = new();
         private readonly MeshBuffers _data = new();
 
@@ -216,6 +216,6 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
         public readonly InputSlot<float> Radius = new();
 
         [Input(Guid = "6f327667-9054-4952-9f8f-570fa5497b13")]
-        public readonly InputSlot<Size2> Segments = new();
+        public readonly InputSlot<Int2> Segments = new();
     }
 }

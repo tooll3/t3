@@ -112,10 +112,10 @@
         },
         {
           "Id": "d010338b-9685-4256-bbc0-afeb16cb4363"/*PointGridRez*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 128,
-            "Height": 64
+            "X": 128,
+            "Y": 64
           }
         }
       ],
@@ -127,10 +127,10 @@
       "InputValues": [
         {
           "Id": "03749b41-cc3c-4f38-aea6-d7cea19fc073"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 64,
-            "Height": 128
+            "X": 64,
+            "Y": 128
           }
         }
       ],
@@ -142,11 +142,16 @@
       "InputValues": [
         {
           "Id": "03749b41-cc3c-4f38-aea6-d7cea19fc073"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 0,
-            "Height": 0
+            "X": 0,
+            "Y": 0
           }
+        },
+        {
+          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
+          "Type": "System.Boolean",
+          "Value": true
         },
         {
           "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
@@ -162,11 +167,6 @@
           "Id": "ec46bef4-8dce-4eb4-bfe8-e35a5ac416ec"/*TextureFormat*/,
           "Type": "SharpDX.DXGI.Format",
           "Value": "R16G16B16A16_Float"
-        },
-        {
-          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
-          "Type": "System.Boolean",
-          "Value": true
         },
         {
           "Id": "f0cf3325-4967-4419-9beb-036cd6dbfd6a"/*GenerateMips*/,
@@ -437,15 +437,15 @@
       "Outputs": []
     },
     {
-      "Id": "7ae14615-2e8b-4743-89a7-bf662ff109b1"/*FractalNoise*/,
+      "Id": "7ae14615-2e8b-4743-89a7-bf662ff109b1"/*_FractalNoiseOld*/,
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [
         {
           "Id": "37b24ceb-2d25-43e8-a31c-7caf62c2b7ee"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 128,
-            "Height": 64
+            "X": 128,
+            "Y": 64
           }
         }
       ],
@@ -497,10 +497,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 128,
-            "Height": 64
+            "X": 128,
+            "Y": 64
           }
         },
         {
@@ -552,10 +552,10 @@
       "InputValues": [
         {
           "Id": "69b5c584-f365-469c-bf08-b1a125f7d757"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 64,
-            "Height": 64
+            "X": 64,
+            "Y": 64
           }
         },
         {
@@ -645,10 +645,10 @@
       "InputValues": [
         {
           "Id": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 0,
-            "Height": 0
+            "X": 0,
+            "Y": 0
           }
         },
         {
@@ -682,10 +682,10 @@
       "InputValues": [
         {
           "Id": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1920,
-            "Height": 1080
+            "X": 1920,
+            "Y": 1080
           }
         },
         {
@@ -713,10 +713,10 @@
       "InputValues": [
         {
           "Id": "52b2f067-5619-4d8d-a982-58668a8dc6a4"/*OverrideSize*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": -1,
-            "Height": -1
+            "X": -1,
+            "Y": -1
           }
         }
       ],

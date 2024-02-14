@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 
 static const float4 Corners[] = 
@@ -31,6 +32,7 @@ cbuffer Params : register(b2)
 {
     float4 Color;
     float Size;
+    float2 TextureCells;
 };
 
 struct psInput
@@ -49,7 +51,8 @@ struct Sprite
     float4 Color;
     float2 UvMin;
     float2 UvMax;
-    float3 __padding;
+    int TextureIndex;
+    float2 __padding;
 };
 
 sampler texSampler : register(s0);
@@ -70,10 +73,6 @@ psInput vsMain(uint id: SV_VertexID)
     Sprite sprite = Sprites[particleId];
 
     float3 axis = cornerFactors;
-
-    // float2 atlasResolution = 1./float2(TextureCellsX, TextureCellsY);
-    // float atlasRatio = (float)TextureCellsX/TextureCellsY;
-
     float2 corner = float2(cornerFactors.x * sprite.Size.x, 
                           cornerFactors.y * sprite.Size.y) * Size;
 
@@ -83,52 +82,44 @@ psInput vsMain(uint id: SV_VertexID)
     float sina = sin(-imageRotationRad - PI/2);
     float cosa = cos(-imageRotationRad - PI/2);
 
-    //p.x *=aspectRatio;
-
     corner = float2(
         cosa * corner.x - sina * corner.y,
         cosa * corner.y + sina * corner.x 
     );                              
-
-    // float2 p = float2( cornerFactors.x * sprite.Size.x / aspect.x + sprite.PosInClipSpace.x,
-    //                           cornerFactors.y * sprite.Size.y + sprite.PosInClipSpace.y);
 
     float2 p = float2( corner.x / aspect.x + sprite.PosInClipSpace.x,
                        corner.y + sprite.PosInClipSpace.y);
 
     output.position = float4(p, 0,1);
 
-    output.texCoord = lerp(sprite.UvMin, sprite.UvMax, cornerFactors.zw);
+    // float2 uvMin = 0;
+    // float2 uvMax = 1;
 
-    // output.position = float4( cornerFactors.x * 0.1 + p.PosInClipSpace.x,
-    //                           cornerFactors.y * 0.1 + p.PosInClipSpace.y,
-    //                           0,1);                              
+    // Texture
+    int2 atlasSize = (int2)TextureCells;
+    int textureIndex = sprite.TextureIndex % (atlasSize.x * atlasSize.y);
+    float2 uvMin = float2(textureIndex % atlasSize.x, textureIndex / atlasSize.x) / atlasSize;
+    float2 uvMax = uvMin + 1.0/atlasSize;
 
-    // float4 rotation = qmul( normalize(p.rotation), rotate_angle_axis((Rotate + 180)/180*PI , RotateAxis));
-
-    // axis = rotate_vector(axis, rotation) * Size * lerp(1,p.w, UseWForSize);
-    // float3 pInObject = p.position + axis;
-    // output.position  = mul(float4(pInObject,1), ObjectToClipSpace);
+    // float textureUx = sprite.TextureIndex;
+    // float textureUy = GetUFromMode(TextureAtlasMode, pointId, f, normalizedScatter.wxyz, p.W, output.fog); 
     
-    // output.texCoord = cornerFactors.xy /2 +0.5;
+    // int textureCelX =  textureUx * atlasSize.x;
+    // int textureCelY =  textureUy * atlasSize.y;
 
-    // int randomParticleId = (int)(hash11((particleId + 13.2) * 123.17) * 12345.3);
+    // output.texCoord = (cornerFactors.xy * float2(-1, 1) * 0.5 + 0.5);
+    // output.texCoord /= atlasSize;
+    // output.texCoord += float2(textureCelX, textureCelY) / atlasSize;    
 
-    // float textureCelX = (float)randomParticleId % (TextureCellsX);
-    // float textureCelY = (int)(((float)randomParticleId / TextureCellsX) % (float)(TextureCellsY));
 
-    
-    // //output.texCoord = float2(textureCelX, textureCelY) * 1;
-    // output.texCoord *= atlasResolution;
-    // output.texCoord += atlasResolution * float2(textureCelX, textureCelY);
+    output.texCoord = lerp(uvMin, uvMax, cornerFactors.zw);
 
-    output.color = sprite.Color;// float4(1,1,1,1);// Color * sprite.Color;
+    output.color = sprite.Color;
     return output;    
 }
 
 float4 psMain(psInput input) : SV_TARGET
 {
-    //return float4(input.texCoord, 0,1);
     float4 imgColor = texture2.Sample(texSampler, input.texCoord);
     float4 color = input.color * imgColor * Color;
 

@@ -1,0 +1,52 @@
+{
+  "Id": "cba315e4-6113-4a2e-969e-e4c2e914c293"/*HasVec2Changed*/,
+  "Description": "Checks if the change of the incoming vector exceeded the given threshold.",
+  "InputUis": [
+    {
+      "InputId": "8c6af96b-c2eb-43b7-b3c3-eecc8e40117d"/*Value*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "5148453b-9ed1-49f9-b44a-8308c9993b33"/*Threshold*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "ad325a4a-63ca-455d-9ff6-13fe0727bc4c"/*MinTimeBetweenHits*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "36c294ef-3b4c-43fa-a21a-07393d888899"/*PreventContinuedChanges*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e8ab20a6-73c3-4fe5-b749-b664e258b3cf"/*HasChanged*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "6e03ae0a-4091-4921-8813-bd67fd2b0ad4"/*Delta*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 400.0
+      }
+    }
+  ]
+}

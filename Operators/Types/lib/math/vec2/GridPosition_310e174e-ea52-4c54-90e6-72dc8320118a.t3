@@ -13,8 +13,8 @@
     {
       "Id": "2fa305b7-42fc-44fa-bfcf-219916f93eef"/*RasterSize*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {

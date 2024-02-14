@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -29,28 +30,25 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
     Point p = SourcePoints[i.x];
-    ResultPoints[i.x].position = p.position;
-    ResultPoints[i.x].w = p.w;
+
+    p.Position = p.Position;
+    p.W = p.W;
 
     float weight = UseWAsWeight > 0.5   
-         ? p.w
+         ? p.W
          : 1;
 
     weight*= Amount;
 
 
     float sign = Flip > 0.5 ? -1 : 1;
-    float4 newRot = q_look_at( normalize(Center - p.position) * sign, normalize(UpVector));
+    float4 newRot = qLookAt( normalize(Center - p.Position) * sign, normalize(UpVector));
 
-    float3 forward = rotate_vector(float3(0,0,1), newRot);
-    float4 alignment= rotate_angle_axis(3.141578, forward);
-    newRot = qmul(alignment, newRot);
+    float3 forward = qRotateVec3(float3(0,0,1), newRot);
+    float4 alignment= qFromAngleAxis(3.141578, forward);
+    newRot = qMul(alignment, newRot);
+    p.Rotation = normalize(qSlerp(normalize(p.Rotation), normalize(newRot), weight));
 
-    ResultPoints[i.x].rotation = normalize(q_slerp(normalize(p.rotation), normalize(newRot), weight));
-    
-
-    return;
-
-
+    ResultPoints[i.x] = p;
 }
 

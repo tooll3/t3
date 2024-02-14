@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -29,14 +30,14 @@ static const float WorldSpace = 2;
         return;
     }
 
-    float w = SourcePoints[i.x].w;
-    float3 pOrg = SourcePoints[i.x].position;
+    float w = SourcePoints[i.x].W;
+    float3 pOrg = SourcePoints[i.x].Position;
     float3 p = pOrg;
 
-    float4 orgRot;
-    float v = q_separate_v(SourcePoints[i.x].rotation, orgRot);
+    //float4 orgRot;
+    //float v = q_separate_v(SourcePoints[i.x].rotation, orgRot);
 
-    //float4 orgRot = SourcePoints[i.x].rotation;
+    float4 orgRot = SourcePoints[i.x].Rotation;
     float4 rotation = orgRot;
 
     if (CoordinateSpace < 0.5)
@@ -58,16 +59,16 @@ static const float WorldSpace = 2;
             TransformMatrix._m10_m11_m12,
             TransformMatrix._m20_m21_m22);
 
-        newRotation = normalize(quaternion_from_matrix_precise(transpose(orientationDest)));
+        newRotation = normalize(qFromMatrix3Precise(transpose(orientationDest)));
 
         // Adjust rotation in point space
         if (CoordinateSpace < 0.5)
         {
-            newRotation = qmul(orgRot, newRotation);
+            newRotation = qMul(orgRot, newRotation);
         }
         else
         {
-            newRotation = qmul(newRotation, orgRot);
+            newRotation = qMul(newRotation, orgRot);
         }
     }
 
@@ -80,7 +81,7 @@ static const float WorldSpace = 2;
         weight = w;
 
         // newRotation *= w;
-        newRotation = q_slerp(orgRot, newRotation, w);
+        newRotation = qSlerp(orgRot, newRotation, w);
         // newRotation= orgRot ;
         // newRotation = float4(1,0,1,1);
         // p.y += 1;
@@ -88,13 +89,16 @@ static const float WorldSpace = 2;
 
     if (CoordinateSpace < 0.5)
     {
-        p.xyz = rotate_vector(p.xyz, orgRot).xyz;
+        p.xyz = qRotateVec3(p.xyz, orgRot).xyz;
         p += pOrg;
     }
 
-    ResultPoints[i.x].position = p.xyz;
-    ResultPoints[i.x].rotation = newRotation;
+    ResultPoints[i.x].Position = p.xyz;
+    ResultPoints[i.x].Rotation = newRotation;
+    ResultPoints[i.x].Color = SourcePoints[i.x].Color;
+    ResultPoints[i.x].Selected = SourcePoints[i.x].Selected;
+    ResultPoints[i.x].Stretch = SourcePoints[i.x].Stretch;
 
-    float orgW = SourcePoints[i.x].w;
-    ResultPoints[i.x].w = lerp(orgW, orgW * ScaleW + OffsetW, weight);
+    float orgW = SourcePoints[i.x].W;
+    ResultPoints[i.x].W = lerp(orgW, orgW * ScaleW + OffsetW, weight);
 }

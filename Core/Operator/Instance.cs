@@ -16,9 +16,9 @@ namespace T3.Core.Operator
         public Instance Parent { get; internal set; }
         public Symbol Symbol { get; internal set; }
 
-        public List<ISlot> Outputs { get; set; } = new List<ISlot>();
-        public List<Instance> Children { get; set; } = new List<Instance>();
-        public List<IInputSlot> Inputs { get; set; } = new List<IInputSlot>();
+        public List<ISlot> Outputs { get; set; } = new();
+        public List<Instance> Children { get; set; } = new();
+        public List<IInputSlot> Inputs { get; set; } = new();
 
         public Action<EvaluationContext> KeepUpdatedAction;
         

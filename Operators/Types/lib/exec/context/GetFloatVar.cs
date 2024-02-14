@@ -7,7 +7,7 @@ namespace T3.Operators.Types.Id_e6072ecf_30d2_4c52_afa1_3b195d61617b
     public class GetFloatVar : Instance<GetFloatVar>
     {
         [Output(Guid = "e368ba33-827e-4e08-aa19-ba894b40906a", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
         public GetFloatVar()
         {

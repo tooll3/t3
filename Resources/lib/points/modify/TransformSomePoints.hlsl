@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -79,23 +80,25 @@ void main(uint3 i : SV_DispatchThreadID)
             return;
         }
 
-        ResultPoints[resultIndex].w = indexInGroup;
+        ResultPoints[resultIndex].W = indexInGroup;
     }
                     
-    float w = SourcePoints[sourceIndex].w;
-    float3 pOrg = SourcePoints[sourceIndex].position;
-    float3 p = pOrg;
+    Point p = SourcePoints[sourceIndex];
 
-    float4 orgRot = SourcePoints[sourceIndex].rotation;
+    float w = p.W;
+    float3 pOrg = p.Position;
+    float3 pos = pOrg;
+
+    float4 orgRot = p.Rotation;
     float4 rotation = orgRot;
 
     if(CoordinateSpace < 0.5) {
-        p.xyz = 0;
+        pos.xyz = 0;
         rotation = float4(0,0,0,1);
     }
  
-    float3 pLocal = p;
-    p = mul(float4(p,1), TransformMatrix).xyz;
+    float3 pLocal = pos;
+    pos = mul(float4(pos, 1), TransformMatrix).xyz;
 
     float4 newRotation = rotation;
 
@@ -108,31 +111,32 @@ void main(uint3 i : SV_DispatchThreadID)
             TransformMatrix._m20_m21_m22);
 
 
-        newRotation = normalize(quaternion_from_matrix_precise(transpose(orientationDest)));        
+        newRotation = normalize(qFromMatrix3Precise(transpose(orientationDest)));        
 
         // Adjust rotation in point space
         if(CoordinateSpace  < 0.5) {
-            newRotation = qmul(orgRot, newRotation);
+            newRotation = qMul(orgRot, newRotation);
         }
         else {
-            newRotation = qmul(newRotation, orgRot);
+            newRotation = qMul(newRotation, orgRot);
         }
     }
 
     if(WIsWeight >= 0.5) {
-        float3 weightedOffset = (p - pLocal) * w;
-        p = pLocal + weightedOffset;
+        float3 weightedOffset = (pos - pLocal) * w;
+        pos = pLocal + weightedOffset;
 
-        newRotation = q_slerp(orgRot, newRotation, w);
+        newRotation = qSlerp(orgRot, newRotation, w);
     }
 
     if(CoordinateSpace < 0.5) {     
-        p.xyz = rotate_vector(p.xyz, orgRot).xyz;
-        p += pOrg;
+        pos.xyz = qRotateVec3(pos.xyz, orgRot).xyz;
+        pos += pOrg;
     } 
 
-    ResultPoints[resultIndex].position = p.xyz;
-    ResultPoints[resultIndex].rotation = newRotation;
-    ResultPoints[resultIndex].w = w * ScaleW + OffsetW;    
+    p.Position = pos.xyz;
+    p.Rotation = newRotation;
+    p.W = w * ScaleW + OffsetW;    
+    ResultPoints[resultIndex] = p;
 }
 

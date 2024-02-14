@@ -1,5 +1,6 @@
-﻿using SharpDX;
+﻿using System.Numerics;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Core.Operator.Interfaces
@@ -11,22 +12,22 @@ namespace T3.Core.Operator.Interfaces
         float CameraRoll { get; set; }
 
         CameraDefinition CameraDefinition { get; }
-        SharpDX.Matrix WorldToCamera { get; }
-        SharpDX.Matrix CameraToClipSpace { get; }
+        Matrix4x4 WorldToCamera { get; }
+        Matrix4x4 CameraToClipSpace { get; }
     }
 
     public struct CameraDefinition
     {
-        public System.Numerics.Vector2 NearFarClip;
-        public System.Numerics.Vector2 ViewPortShift;
-        public System.Numerics.Vector3 PositionOffset;
-        public System.Numerics.Vector3 Position;
-        public System.Numerics.Vector3 Target;
-        public System.Numerics.Vector3 Up;
+        public Vector2 NearFarClip;
+        public Vector2 ViewPortShift;
+        public Vector3 PositionOffset;
+        public Vector3 Position;
+        public Vector3 Target;
+        public Vector3 Up;
         public float AspectRatio;
         public float Fov;
         public float Roll;
-        public System.Numerics.Vector3 RotationOffset;
+        public Vector3 RotationOffset;
         public bool OffsetAffectsTarget;
 
         public static CameraDefinition Blend(CameraDefinition a, CameraDefinition b, float f)
@@ -47,9 +48,9 @@ namespace T3.Core.Operator.Interfaces
                        };
         }
 
-        public void BuildProjectionMatrices(out Matrix camToClipSpace, out Matrix worldToCamera)
+        public void BuildProjectionMatrices(out Matrix4x4 camToClipSpace, out Matrix4x4 worldToCamera)
         {
-            camToClipSpace = Matrix.PerspectiveFovRH(Fov, AspectRatio, NearFarClip.X, NearFarClip.Y);
+            camToClipSpace = GraphicsMath.PerspectiveFovRH(Fov, AspectRatio, NearFarClip.X, NearFarClip.Y);
             camToClipSpace.M31 = ViewPortShift.X;
             camToClipSpace.M32 = ViewPortShift.Y;
 
@@ -57,13 +58,13 @@ namespace T3.Core.Operator.Interfaces
             if (!OffsetAffectsTarget)
                 eye += PositionOffset;
 
-            var worldToCameraRoot = Matrix.LookAtRH(eye.ToSharpDx(), Target.ToSharpDx(), Up.ToSharpDx());
-            var rollRotation = Matrix.RotationAxis(new SharpDX.Vector3(0, 0, 1), -Roll * MathUtils.ToRad);
-            var additionalTranslation = OffsetAffectsTarget ? Matrix.Translation(PositionOffset.X, PositionOffset.Y, PositionOffset.Z) : Matrix.Identity;
+            var worldToCameraRoot = GraphicsMath.LookAtRH(eye, Target, Up);
+            var rollRotation = Matrix4x4.CreateFromAxisAngle(Vector3.UnitZ, -Roll * MathUtils.ToRad);
+            var additionalTranslation = OffsetAffectsTarget ? Matrix4x4.CreateTranslation(PositionOffset.X, PositionOffset.Y, PositionOffset.Z) : Matrix4x4.Identity;
 
-            var additionalRotation = Matrix.RotationYawPitchRoll(MathUtil.DegreesToRadians(RotationOffset.Y),
-                                                                 MathUtil.DegreesToRadians(RotationOffset.X),
-                                                                 MathUtil.DegreesToRadians(RotationOffset.Z));
+            var additionalRotation = Matrix4x4.CreateFromYawPitchRoll(MathUtils.ToRad * RotationOffset.Y,
+                                                                 MathUtils.ToRad * RotationOffset.X,
+                                                                 MathUtils.ToRad * RotationOffset.Z);
 
             worldToCamera = worldToCameraRoot * rollRotation * additionalRotation * additionalTranslation;
         }
@@ -73,11 +74,11 @@ namespace T3.Core.Operator.Interfaces
     // Todo: Find a better location of this class
     public class ViewCamera : ICamera
     {
-        public Vector3 CameraPosition { get; set; } = new Vector3(0, 0, 2.416f);
+        public Vector3 CameraPosition { get; set; } = new(0, 0, GraphicsMath.DefaultCameraDistance);
         public Vector3 CameraTarget { get; set; }
         public float CameraRoll { get; set; }
-        public Matrix WorldToCamera { get; }
-        public Matrix CameraToClipSpace { get; }
-        public CameraDefinition CameraDefinition => new();  // Not implemetned
+        public Matrix4x4 WorldToCamera { get; }
+        public Matrix4x4 CameraToClipSpace { get; }
+        public CameraDefinition CameraDefinition => new();  // Not implemented
     }
 }

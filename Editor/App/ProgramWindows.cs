@@ -38,8 +38,8 @@ internal static class ProgramWindows
         ImGuiDx11RenderForm.InputMethods = messageHandlers;
     }
 
-    public static void SetVertexShader(VertexShaderResource resource) => _deviceContext.VertexShader.Set(resource.VertexShader);
-    public static void SetPixelShader(PixelShaderResource resource) => _deviceContext.PixelShader.Set(resource.PixelShader);
+    public static void SetVertexShader(ShaderResource<VertexShader> resource) => _deviceContext.VertexShader.Set(resource.Shader);
+    public static void SetPixelShader(ShaderResource<PixelShader> resource) => _deviceContext.PixelShader.Set(resource.Shader);
 
     internal static void HandleFullscreenToggle()
     {
@@ -76,6 +76,12 @@ internal static class ProgramWindows
             _device = device;
             _deviceContext = device.ImmediateContext;
             _factory = swapchain.GetParent<Factory>();
+
+            foreach (var a in _factory.Adapters)
+            {
+                Log.Debug($"using {a.Description.Description}");
+                break;
+            }
 
             Main.SetDevice(device, _deviceContext, swapchain);
 
@@ -170,7 +176,7 @@ internal static class ProgramWindows
         _deviceContext.Rasterizer.State = viewWindowRasterizerState;
     }
 
-    public static void SetPixelShaderResource(ShaderResourceView viewWindowBackgroundSrv)
+    public static void SetPixelShaderSRV(ShaderResourceView viewWindowBackgroundSrv)
     {
         _deviceContext.PixelShader.SetShaderResource(0, viewWindowBackgroundSrv);
     }

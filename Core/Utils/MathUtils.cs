@@ -25,7 +25,7 @@ namespace T3.Core.Utils
                 var a = Noise((int)v, seed);
                 var b = Noise((int)v + 1, seed);
                 var t = Fade(v - (float)Math.Floor(v));
-                noiseSum += SharpDX.MathUtil.Lerp(a, b, t) * amplitude;
+                noiseSum += Lerp(a, b, t) * amplitude;
                 frequency *= 2;
                 amplitude *= 0.5f;
             }
@@ -39,6 +39,18 @@ namespace T3.Core.Utils
             n = (n << 13) ^ n;
             return (float)(1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
         }
+
+        public static float  ApplyBiasAndGain(this float x, float s, float t)
+        {
+            const float eps = 0.0001f;
+            const float r = 200;
+            s *= 2;
+            s = s < 1 ? (MathF.Pow(r, 1 - s)) : 1 / MathF.Pow(r, s - 1);
+            return x < t
+                       ? (t * x) / (x + s * (t - x) + eps)
+                       : ((1 - t) * (x - 1)) / (1 - x - s * (t - x) + eps) + 1;
+        }
+        
         
         public static uint XxHash(uint p)
         {
@@ -95,6 +107,17 @@ namespace T3.Core.Utils
         public static float ToRadians(this float val)
         {
             return val * MathF.PI / 180;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool _IsFinite(this float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
+        }        
+        
+        public static bool _IsFinite(this Vector3 value)
+        {
+            return value.X._IsFinite() && value.Y._IsFinite() && value.Z._IsFinite();
         }        
         
         public static Vector2 Clamp(Vector2 v, Vector2 mn, Vector2 mx)
@@ -126,6 +149,16 @@ namespace T3.Core.Utils
             else return val;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Mod(this int val, int repeat)
+        {
+            var x = val % repeat;
+            if (x < 0)
+                x = repeat + x;
+            
+            return x;
+        }
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] ToArray(this Vector2 vec2)
         {
@@ -312,48 +345,6 @@ namespace T3.Core.Utils
         public static Vector3 ToVector3(this Vector4 vec)
         {
             return new Vector3(vec.X / vec.W, vec.Y / vec.W, vec.Z / vec.W);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SharpDX.Vector3 ToVector3(this SharpDX.Vector4 vec)
-        {
-            return new SharpDX.Vector3(vec.X / vec.W, vec.Y / vec.W, vec.Z / vec.W);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SharpDX.Vector3 ToSharpDx(this Vector3 source)
-        {
-            return new SharpDX.Vector3(source.X, source.Y, source.Z);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 ToNumerics(this SharpDX.Vector3 source)
-        {
-            return new Vector3(source.X, source.Y, source.Z);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SharpDX.Vector4 ToSharpDx(this Vector4 source)
-        {
-            return new SharpDX.Vector4(source.X, source.Y, source.Z, source.W);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector4 ToNumerics(this SharpDX.Vector4 source)
-        {
-            return new Vector4(source.X, source.Y, source.Z, source.W);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SharpDX.Vector4 ToSharpDxVector4(this Vector3 source, float w)
-        {
-            return new SharpDX.Vector4(source.X, source.Y, source.Z, w);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SharpDX.Vector3 ToSharpDxVector3(this Vector3 source)
-        {
-            return new SharpDX.Vector3(source.X, source.Y, source.Z);
         }
 
         /// <summary>

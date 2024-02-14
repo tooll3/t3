@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 static const float4 Factors[] = 
 {
@@ -83,9 +84,9 @@ void main(uint3 i : SV_DispatchThreadID)
     
     Point P = Points[lineStartIndex];
 
-    float3 pos = P.position;
-    float4 rot = P.rotation;
-    float w = P.w;
+    float3 pos = P.Position;
+    float4 rot = P.Rotation;
+    float w = P.W;
 
     // Asign target Zonelevels to points
     int lineCount = pointCount / lineStepCount;
@@ -129,8 +130,8 @@ void main(uint3 i : SV_DispatchThreadID)
             adjustLevelFactor *= dLevel < 0 ? 1:-1;
             float adjustAngleOffset = adjustLevelFactor * 3.1415 / 2;
             float adjustedAngle = gradientAngle + adjustAngleOffset;
-            float4 newRot = rotate_angle_axis(adjustedAngle,float3(0,0,1));            
-            rot = q_slerp(newRot, rot, Smoothness);
+            float4 newRot = qFromAngleAxis(adjustedAngle,float3(0,0,1));            
+            rot = qSlerp(newRot, rot, Smoothness);
 
 
             // Smooth but strange offset
@@ -143,16 +144,16 @@ void main(uint3 i : SV_DispatchThreadID)
         }
 
 
-        Points[index].rotation = rot;
+        Points[index].Rotation = rot;
 
-        Points[index].w = w;
+        Points[index].W = w;
         if(stepIndex == lineStepCount - 1) {
-            Points[index].w = sqrt(-1);
+            Points[index].W = sqrt(-1);
         }
 
-        float3 foreward = rotate_vector(float3(1,0,0), rot) * Speed / 100 ;
+        float3 foreward = qRotateVec3(float3(1,0,0), rot) * Speed / 100 ;
         pos += foreward;
-        Points[index].position = pos;
+        Points[index].Position = pos;
         index++;
     }
 }

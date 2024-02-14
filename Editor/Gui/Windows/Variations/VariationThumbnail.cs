@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
@@ -303,9 +304,9 @@ namespace T3.Editor.Gui.Windows.Variations
         private static CanvasElementSelection Selection => _canvas.Selection;
         private static Guid _draggedNodeId;
         private static List<ISelectableCanvasObject> _draggedNodes = new();
-        public static readonly Vector2 ThumbnailSize = new Vector2(160, (int)(160 / 16f * 9));
+        public static readonly Vector2 ThumbnailSize = new(160, (int)(160 / 16f * 9));
 
-        public static readonly Vector2 SnapPadding = new Vector2(3, 3);
+        public static readonly Vector2 SnapPadding = new(3, 3);
 
         private static readonly Vector2[] _snapOffsetsInCanvas =
             {

@@ -1,0 +1,25 @@
+{
+  "Name": "DampAngle",
+  "Id": "9757618d-e72a-4507-8352-6f824b56cc58",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "49366f9d-0d85-4e87-ae54-6f048b1dc4b0"/*Value*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "eedfea53-3e92-455a-ab40-5d7660d0a837"/*Damping*/,
+      "DefaultValue": 0.95
+    },
+    {
+      "Id": "4b131e85-8c5f-410a-b91c-cfd87a613231"/*Method*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "0ff04a75-2f3b-4a80-80cb-e1c04cdadcfd"/*UseAppRunTime*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

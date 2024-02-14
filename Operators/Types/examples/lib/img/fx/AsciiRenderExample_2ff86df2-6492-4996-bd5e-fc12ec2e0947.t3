@@ -27,10 +27,10 @@
         },
         {
           "Id": "86bb9127-10fb-47cb-9aee-45be01567810"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 2048,
-            "Height": 2048
+            "X": 2048,
+            "Y": 2048
           }
         },
         {
@@ -141,7 +141,7 @@
       "Outputs": []
     },
     {
-      "Id": "4d6be10c-57af-4616-9457-2566ad22527d"/*Float2ToVector2*/,
+      "Id": "4d6be10c-57af-4616-9457-2566ad22527d"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -338,12 +338,7 @@
           }
         },
         {
-          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
-          "Type": "System.Single",
-          "Value": 24.0
-        },
-        {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 0.21
         },
@@ -351,6 +346,11 @@
           "Id": "5774969c-ef4d-482e-ab37-b3a84b09debb"/*PingPong*/,
           "Type": "System.Boolean",
           "Value": false
+        },
+        {
+          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
+          "Type": "System.Single",
+          "Value": 24.0
         }
       ],
       "Outputs": []

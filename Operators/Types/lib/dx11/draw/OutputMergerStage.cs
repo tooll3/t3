@@ -1,8 +1,6 @@
 ﻿using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
-using T3.Core;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -12,7 +10,7 @@ using T3.Core.Utils;
 namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
     public class OutputMergerStage : Instance<OutputMergerStage> {
         [Output(Guid = "CEE8C3F0-64EA-4E4D-B967-EC7E3688DD03")]
-        public readonly Slot<Command> Output = new Slot<Command>(new Command());
+        public readonly Slot<Command> Output = new(new Command());
 
         public OutputMergerStage() {
             Output.UpdateAction = Update;
@@ -78,27 +76,27 @@ namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
         private int _prevSampleMask;
 
         [Input(Guid = "394D374F-2125-4ECB-8A69-CC7B2C3C6CB7")]
-        public readonly InputSlot<DepthStencilView> DepthStencilView = new InputSlot<DepthStencilView>();
+        public readonly InputSlot<DepthStencilView> DepthStencilView = new();
 
         [Input(Guid = "9C131DA6-AD56-4E15-9730-754096B3B765")]
-        public readonly MultiInputSlot<RenderTargetView> RenderTargetViews = new MultiInputSlot<RenderTargetView>();
+        public readonly MultiInputSlot<RenderTargetView> RenderTargetViews = new();
 
         [Input(Guid = "0ED97939-643B-445E-879C-E18C4430AA03")]
-        public readonly MultiInputSlot<UnorderedAccessView> UnorderedAccessViews = new MultiInputSlot<UnorderedAccessView>();
+        public readonly MultiInputSlot<UnorderedAccessView> UnorderedAccessViews = new();
 
         [Input(Guid = "1D5FAAD5-3BE5-426C-B464-AD490EA3D1AA")]
-        public readonly InputSlot<DepthStencilState> DepthStencilState = new InputSlot<DepthStencilState>();
+        public readonly InputSlot<DepthStencilState> DepthStencilState = new();
 
         [Input(Guid = "6C7907D7-70F7-4DB7-83EA-22EE48610994")]
-        public readonly InputSlot<int> DepthStencilReference = new InputSlot<int>();
+        public readonly InputSlot<int> DepthStencilReference = new();
 
         [Input(Guid = "E0BC9CF8-42C8-4632-B958-7A96F6D03BA2")]
-        public readonly InputSlot<BlendState> BlendState = new InputSlot<BlendState>();
+        public readonly InputSlot<BlendState> BlendState = new();
 
         [Input(Guid = "CCEE2EC3-586F-4396-8B20-CC99484E1B64")]
-        public readonly InputSlot<System.Numerics.Vector4> BlendFactor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<System.Numerics.Vector4> BlendFactor = new();
 
         [Input(Guid = "03166157-1E18-4513-8AF5-398C6F4FCB1E")]
-        public readonly InputSlot<int> BlendSampleMask = new InputSlot<int>();
+        public readonly InputSlot<int> BlendSampleMask = new();
     }
 }

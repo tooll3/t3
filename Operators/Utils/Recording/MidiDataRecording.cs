@@ -4,7 +4,6 @@ using NAudio.Midi;
 using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.Model;
-using T3.Core.Resource;
 
 namespace Operators.Utils.Recording;
 
@@ -31,7 +30,7 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
         _channelsByHash.Clear();
     }
 
-    public void MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
+    void MidiInConnectionManager.IMidiConsumer.MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
         if (sender is not MidiIn midiIn || msg.MidiEvent == null || TypeNameRegistry.Entries.Values.Count == 0)
             return;
@@ -145,9 +144,12 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
         return newChannel;
     }
 
-    public void ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
+    void MidiInConnectionManager.IMidiConsumer.ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
-        //throw new System.NotImplementedException();
+    }
+    
+    void MidiInConnectionManager.IMidiConsumer.OnSettingsChanged()
+    {
     }
 
     private const string MidiNamespacePrefix = "Midi";

@@ -1,55 +1,79 @@
-using System;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_15f056a3_ee8b_41a2_92c9_eb85153f8200
+namespace T3.Operators.Types.Id_ec0675d7_6b72_4b15_b141_80bdd2367cd8
 {
     public class RandomizePoints : Instance<RandomizePoints>
     {
 
-        [Output(Guid = "92864bf1-5cc9-4e42-a136-e4f79282297a")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> Output = new Slot<T3.Core.DataTypes.BufferWithViews>();
+        [Output(Guid = "172dcbd2-a475-4514-8620-38f07a0ea4aa")]
+        public readonly Slot<T3.Core.DataTypes.BufferWithViews> Output = new();
 
-        [Input(Guid = "06332b65-36c9-4dc8-a3db-64b2ee116148")]
+        [Input(Guid = "cb157c8e-98f1-46e9-b197-d17dea896e30")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
-        [Input(Guid = "5fc7dd7c-6298-4f7e-9e4e-cec3506c19aa")]
+        [Input(Guid = "82384eba-1d7a-41c8-a703-9184c961d766")]
         public readonly InputSlot<float> Amount = new InputSlot<float>();
 
-        [Input(Guid = "72308bda-fe03-429e-8f42-a975b11ca8a4")]
+        [Input(Guid = "270bcf23-35ee-4c4f-aae5-192435b1aee3")]
         public readonly InputSlot<System.Numerics.Vector3> Position = new InputSlot<System.Numerics.Vector3>();
 
-        [Input(Guid = "dedd7211-21c2-4fa0-88d3-14e7a062e7ab")]
+        [Input(Guid = "2cf68ba3-0665-43c8-88ab-64a9fb668ecc")]
         public readonly InputSlot<System.Numerics.Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
 
-        [Input(Guid = "3d045aa7-9f4f-4a42-8f12-a9dc30c30410")]
-        public readonly InputSlot<float> RandomizeW = new InputSlot<float>();
+        [Input(Guid = "e5b7c7b0-a207-44c2-b5d4-ef393c5dccb2")]
+        public readonly InputSlot<float> W = new InputSlot<float>();
 
-        [Input(Guid = "8f8c14b3-e87e-4295-a591-9fa7ebcce8f3", MappedType = typeof(Spaces))]
+        [Input(Guid = "DD46595E-01E5-4616-9682-3A4EB7F63016")]
+        public readonly InputSlot<System.Numerics.Vector4> ColorHSB = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "1E2C9B94-B303-4454-BA08-5246C7336660")]
+        public readonly InputSlot<System.Numerics.Vector3> Stretch = new InputSlot<System.Numerics.Vector3>();
+
+        [Input(Guid = "4dffb439-da81-477c-8100-34a9ba59b0ee")]
+        public readonly InputSlot<float> RandomSeed = new InputSlot<float>();
+
+        [Input(Guid = "5282AD12-AACF-4A62-8FDE-DF0148AB0F1F")]
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "362FCD1A-444A-417B-B49F-EE1BABAEE998")]
+        public readonly MultiInputSlot<float> UseSelection = new MultiInputSlot<float>();
+
+        [Input(Guid = "9b4cc2f7-97f0-4b70-9773-d33ab4b893d1", MappedType = typeof(OffsetModes))]
+        public readonly InputSlot<int> OffsetMode = new InputSlot<int>();
+
+        [Input(Guid = "f06e85cc-a9b7-44c6-9f77-28c422db9f41", MappedType = typeof(Spaces))]
         public readonly InputSlot<int> Space = new InputSlot<int>();
 
-        [Input(Guid = "1503C058-E270-40CD-99E6-40325B9233A7")]
-        public readonly InputSlot<int> Seed = new InputSlot<int>();
+        [Input(Guid = "0ee3b20d-b11b-4009-b1e4-ba35c1050252", MappedType = typeof(Interpolations))]
+        public readonly InputSlot<int> Interpolation = new InputSlot<int>();
 
-        [Input(Guid = "07c73fd8-6126-4e03-8f10-05d28a3c7ef4")]
-        public readonly InputSlot<float> Gain = new InputSlot<float>();
+        [Input(Guid = "e86074d8-f77f-4716-9eb9-bb3948c21e68")]
+        public readonly InputSlot<int> Repeat = new InputSlot<int>();
 
-        [Input(Guid = "36e69f1c-412b-4a5c-8b17-d0f5d909f1cb")]
-        public readonly InputSlot<float> Offset = new InputSlot<float>();
-
-        [Input(Guid = "de5d13dd-6cdc-4639-95f8-34b6f91cfe78")]
-        public readonly MultiInputSlot<bool> UseWAsSelection = new MultiInputSlot<bool>();
-
-        [Input(Guid = "b2d8f5e0-56fc-4cb1-8bf2-b0f027749055")]
-        public readonly InputSlot<float> RandomPhase = new InputSlot<float>();
+        [Input(Guid = "002e8e48-2eb3-4450-aa37-e539f1157600")]
+        public readonly InputSlot<bool> ClampColorsEtc = new InputSlot<bool>();
 
 
         private enum Spaces
         {
             PointSpace,
             ObjectSpace,
-            WorldSpace,
+        }
+
+        private enum OffsetModes
+        {
+            Add,
+            Scatter,
+        }
+        
+        private enum Interpolations
+        {
+            None,
+            Linear,
+            Smooth,
         }
     }
 }

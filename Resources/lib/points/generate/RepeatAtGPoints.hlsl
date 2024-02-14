@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -38,26 +39,32 @@ void main(uint3 i : SV_DispatchThreadID)
         uint sourceIndex = i.x % (sourceLength);
         uint targetIndex = (i.x / sourceLength )  % targetPointCount;
         
-        if(addSeperators && sourceIndex == sourcePointCount) {
-            ResultPoints[i.x].position =  0;
-            ResultPoints[i.x].w = NAN;            
+        if(addSeperators && sourceIndex == sourcePointCount) 
+        {
+            ResultPoints[i.x].Position =  0;
+            ResultPoints[i.x].W = NAN;            
         }
-        else {
+        else 
+        {
             Point A = SourcePoints[sourceIndex];
             Point B = TargetPoints[targetIndex];
-            float4 rotA = normalize(A.rotation);
-            float4 rotB = normalize(B.rotation);
+            float4 rotA = normalize(A.Rotation);
+            float4 rotB = normalize(B.Rotation);
 
-            float s = ApplyTargetScaleW > 0.5 ? B.w : 1;
+            float s = ApplyTargetScaleW > 0.5 ? B.W : 1;
             s *= Scale;
             float3  pLocal = ApplyTargetOrientation  > 0.5
-                            ? rotate_vector(A.position, rotB)
-                            : A.position;
+                            ? qRotateVec3(A.Position, rotB)
+                            : A.Position;
 
-            ResultPoints[i.x].position = pLocal  * s + B.position;
-            ResultPoints[i.x].w = MultiplyTargetW > 0.5 ? A.w * B.w : A.w;
-            ResultPoints[i.x].rotation = ApplyTargetOrientation  > 0.5 ? qmul(rotB, rotA)
-                                                                    : rotA;
+            ResultPoints[i.x].Position = pLocal  * s + B.Position;
+            ResultPoints[i.x].W = MultiplyTargetW > 0.5 ? A.W * B.W : A.W;
+            ResultPoints[i.x].Rotation = ApplyTargetOrientation  > 0.5 ? qMul(rotB, rotA) : rotA;
+            ResultPoints[i.x].Color = SourcePoints[sourceIndex].Color * TargetPoints[targetIndex].Color;
+            ResultPoints[i.x].Selected = SourcePoints[sourceIndex].Selected * TargetPoints[targetIndex].Selected;
+            ResultPoints[i.x].Stretch = SourcePoints[sourceIndex].Stretch * TargetPoints[targetIndex].Stretch;
+            
+
         }
     }
     else {
@@ -66,29 +73,28 @@ void main(uint3 i : SV_DispatchThreadID)
         uint targetIndex = i.x % loopLength;
         
         if(targetIndex == loopLength - 1) {
-            ResultPoints[i.x].position =  0;
-            ResultPoints[i.x].w = NAN;
+            ResultPoints[i.x].Position =  0;
+            ResultPoints[i.x].W = NAN;
         }
         else {
             Point sourceP = SourcePoints[sourceIndex];
             Point targetP = TargetPoints[targetIndex];
 
-            float4 sourceRot = normalize(sourceP.rotation);
-            float4 targetRot = normalize(targetP.rotation);
+            float4 sourceRot = normalize(sourceP.Rotation);
+            float4 targetRot = normalize(targetP.Rotation);
 
-            float s = ApplyTargetScaleW > 0.5 ? targetP.w : 1;
+            float s = ApplyTargetScaleW > 0.5 ? targetP.W : 1;
             s *= Scale;
             
             float3  pLocal = ApplyTargetOrientation  > 0.5
-                            ? rotate_vector(sourceP.position, targetP.rotation)
-                            : sourceP.position;
+                            ? qRotateVec3(sourceP.Position, targetP.Rotation)
+                            : sourceP.Position;
 
-            ResultPoints[i.x].position = pLocal  * s  + targetP.position;
-            ResultPoints[i.x].w = MultiplyTargetW > 0.5 ? sourceP.w * targetP.w : sourceP.w;
-            ResultPoints[i.x].rotation = ApplyTargetOrientation  > 0.5 ? qmul(targetRot, sourceRot)
-                                                                    : sourceRot;
+            ResultPoints[i.x].Position = pLocal  * s  + targetP.Position;
+            ResultPoints[i.x].W = MultiplyTargetW > 0.5 ? sourceP.W * targetP.W : sourceP.W;
+            ResultPoints[i.x].Rotation = ApplyTargetOrientation  > 0.5 ? qMul(targetRot, sourceRot) : sourceRot;
+            ResultPoints[i.x].Color = SourcePoints[sourceIndex].Color * TargetPoints[targetIndex].Color;
+            ResultPoints[i.x].Selected = SourcePoints[sourceIndex].Selected * TargetPoints[targetIndex].Selected;
         }
-
     }
-
 }

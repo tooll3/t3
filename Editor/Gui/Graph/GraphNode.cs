@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
-using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Helpers;
@@ -24,7 +23,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
-using Color = T3.Editor.Gui.Styling.Color;
+using Color = T3.Core.DataTypes.Vector.Color;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
@@ -211,6 +210,7 @@ namespace T3.Editor.Gui.Graph
                     
                     // Tooltip
                     if (isNodeHovered
+                        && UserSettings.Config.EditorHoverPreview
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
                         )
                     {
@@ -237,7 +237,7 @@ namespace T3.Editor.Gui.Graph
                                         var firstOutput = instance.Outputs[0];
                                         IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
                                         _evaluationContext.Reset();
-                                        _evaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
+                                        _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
                                         outputUi.DrawValue(firstOutput, _evaluationContext,
                                                            recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
                                         
@@ -362,7 +362,7 @@ namespace T3.Editor.Gui.Graph
                         var fade = MathUtils.SmootherStep(0.2f, 0.6f, GraphCanvas.Current.Scale.X);
                         
                         drawList.AddText(font,
-                                         font.FontSize * ( useSmallFont ?  GraphCanvas.Current.Scale.X : 1) * T3Ui.UiScaleFactor,
+                                         font.FontSize * ( useSmallFont ?  GraphCanvas.Current.Scale.X : 1) ,
                                                         _usableScreenRect.Min + LabelPos,
                                                         ColorVariations.OperatorLabel.Apply(typeColor).Fade(fade),
                                                         isRenamed ? $"\"{childUi.SymbolChild.ReadableName}\"" : childUi.SymbolChild.ReadableName);
@@ -504,7 +504,7 @@ namespace T3.Editor.Gui.Graph
                             if (_isVisible && socketHeight > 10)
                             {
                                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha,
-                                                   MathUtils.RemapAndClamp(socketHeight, 10, 20, 0, 0.5f).Clamp(0, 0.5f));
+                                                   MathUtils.RemapAndClamp(socketHeight, 10, 20, 0, 0.5f).Clamp(0, 0.5f) * ImGui.GetStyle().Alpha);
                                 ImGui.PushFont(Fonts.FontSmall);
                                 //ImGui.SetCursorScreenPos(targetPos +  new Vector2(0, -ImGui.GetFontSize()/2));
                                 //ImGui.Value(socketIndex % 4 == 0 ? ">" : "", socketIndex);
@@ -666,7 +666,7 @@ namespace T3.Editor.Gui.Graph
             var pMin = new Vector2(_usableScreenRect.Max.X - 2 - s - dx,
                                    (_usableScreenRect.Max.Y - 2 - s).Clamp(_usableScreenRect.Min.Y + 2, _usableScreenRect.Max.Y));
             var pMax = new Vector2(_usableScreenRect.Max.X - 2 - dx, _usableScreenRect.Max.Y - 2);
-            _drawList.AddRectFilled(pMin, pMax, color * Graph.GraphOpacity);
+            _drawList.AddRectFilled(pMin, pMax, color.Fade(Graph.GraphOpacity));
             _drawList.AddRect(pMin-Vector2.One, 
                               pMax+Vector2.One, 
                               UiColors.WindowBackground.Fade(0.4f * Graph.GraphOpacity));
@@ -971,7 +971,7 @@ namespace T3.Editor.Gui.Graph
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
-            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1.2f, (int)(UsableSlotThickness * 0.5f), UsableSlotThickness);
+            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1.2f, (int)(UsableSlotThickness * 0.5f), UsableSlotThickness ) * T3Ui.UiScaleFactor ;
 
             var opRect = _usableScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
@@ -1392,7 +1392,7 @@ namespace T3.Editor.Gui.Graph
         }
 
         #region style variables
-        public static Vector2 LabelPos = new Vector2(4, 2);
+        public static Vector2 LabelPos = new(4, 2);
         public static float UsableSlotThickness = 10;
         public static float InputSlotThickness = 3;
         public static float InputSlotMargin = 1;

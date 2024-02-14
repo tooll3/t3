@@ -229,7 +229,7 @@
           }
         },
         {
-          "Id": "7bde5a5a-ce82-4903-92ff-14e540a605f0"/*Fov*/,
+          "Id": "7bde5a5a-ce82-4903-92ff-14e540a605f0"/*FOV*/,
           "Type": "System.Single",
           "Value": 36.203213
         }
@@ -247,24 +247,24 @@
       "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
       "InputValues": [
         {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
           "Type": "System.Single",
           "Value": 5.45
         },
         {
-          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
+          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*Intensity*/,
           "Type": "System.Single",
           "Value": 0.508
         },
         {
-          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,
-          "Type": "System.Single",
-          "Value": -0.0029999972
-        },
-        {
-          "Id": "03f2bd5c-b599-47f5-b697-9f881639a598"/*AmplifyFineBlur*/,
+          "Id": "03f2bd5c-b599-47f5-b697-9f881639a598"/*AmplifyCore*/,
           "Type": "System.Single",
           "Value": -0.6
+        },
+        {
+          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Threshold*/,
+          "Type": "System.Single",
+          "Value": -0.0029999972
         }
       ],
       "Outputs": []
@@ -398,10 +398,10 @@
       "InputValues": [
         {
           "Id": "18a5f3be-92a7-438c-b32b-e0da7c7a5736"/*Segments*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 3,
-            "Height": 3
+            "X": 3,
+            "Y": 3
           }
         },
         {
@@ -1706,7 +1706,7 @@
       "SymbolId": "bf7fcd04-0cf6-4518-86cc-48f74483d98d",
       "InputValues": [
         {
-          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Fill*/,
+          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.0,
@@ -1765,10 +1765,10 @@
         },
         {
           "Id": "07e57992-ea38-4e3b-8d69-cb4e99ae587c"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 256
+            "X": 256,
+            "Y": 256
           }
         },
         {
@@ -1836,7 +1836,7 @@
       "Outputs": []
     },
     {
-      "Id": "db9eeb24-c648-46d4-82ef-3cc707f8b3de"/*FractalNoise*/,
+      "Id": "db9eeb24-c648-46d4-82ef-3cc707f8b3de"/*_FractalNoiseOld*/,
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [
         {

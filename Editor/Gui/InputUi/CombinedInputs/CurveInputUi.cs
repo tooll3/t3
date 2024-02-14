@@ -3,7 +3,6 @@ using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Editor.Gui.Interaction;
-using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs
 {

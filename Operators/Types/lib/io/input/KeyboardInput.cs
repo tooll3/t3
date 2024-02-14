@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_2b00bb7a_92cc_41e5_a5f6_bc3e8b16c5eb
     public class KeyboardInput : Instance<KeyboardInput>, IDisposable
     {
         [Output(Guid = "55A1258C-3920-4F78-874A-B0652BAC885B", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<bool> Result = new Slot<bool>();
+        public readonly Slot<bool> Result = new();
 
         public KeyboardInput()
         {
@@ -65,9 +65,9 @@ namespace T3.Operators.Types.Id_2b00bb7a_92cc_41e5_a5f6_bc3e8b16c5eb
         }
 
         [Input(Guid = "A275FC1A-4036-483E-AF54-6546FA03699C", MappedType = typeof(Key))]
-        public readonly InputSlot<int> Key = new InputSlot<int>();
+        public readonly InputSlot<int> Key = new();
 
         [Input(Guid = "73ADAE59-A27D-4D93-8AA6-FB845784BEFD", MappedType = typeof(Modes))]
-        public readonly InputSlot<int> Mode = new InputSlot<int>();
+        public readonly InputSlot<int> Mode = new();
     }
 }

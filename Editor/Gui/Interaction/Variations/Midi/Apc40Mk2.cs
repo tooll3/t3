@@ -17,8 +17,8 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
         {
             CommandTriggerCombinations = new List<CommandTriggerCombination>()
                                              {
-                                                 new CommandTriggerCombination(VariationHandling.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 new CommandTriggerCombination(VariationHandling.SaveSnapshotAtIndex, InputModes.Save, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new(VariationHandling.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new(VariationHandling.SaveSnapshotAtIndex, InputModes.Save, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                                  //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { ClipStopButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                              };
         }
@@ -119,46 +119,46 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
         private readonly int _productNameHash = "APC40 mkII".GetHashCode();
 
         // Buttons
-        private static readonly ButtonRange SceneTrigger1To40 = new ButtonRange(0, 0 + 40);
-        private static readonly ButtonRange SceneLaunch1To5 = new ButtonRange(82, 82 + 5);
-        private static readonly ButtonRange ClipStopButtons1To8 = new ButtonRange(52, 52 + 8);
-        private static readonly ButtonRange ClipABButtons1To8 = new ButtonRange(66, 66 + 8);
-        private static readonly ButtonRange ClipNumberButtons1To8 = new ButtonRange(50, 50 + 8);
-        private static readonly ButtonRange ClipSButtons1To8 = new ButtonRange(49, 49 + 8);
-        private static readonly ButtonRange ClipRectButtons1To8 = new ButtonRange(49, 49 + 8);
-        private static readonly ButtonRange BankSelectTop = new ButtonRange(94);
-        private static readonly ButtonRange BankSelectRight = new ButtonRange(96);
-        private static readonly ButtonRange BankSelectBottom = new ButtonRange(95);
-        private static readonly ButtonRange Shift = new ButtonRange(98);
-        private static readonly ButtonRange Bank = new ButtonRange(103);
-        private static readonly ButtonRange DetailView = new ButtonRange(65);
-        private static readonly ButtonRange ClipDevView = new ButtonRange(64);
-        private static readonly ButtonRange DevLock = new ButtonRange(63);
-        private static readonly ButtonRange DevOnOff = new ButtonRange(62);
-        private static readonly ButtonRange BankRightArrow = new ButtonRange(61);
-        private static readonly ButtonRange BankLeftArrow = new ButtonRange(60);
-        private static readonly ButtonRange DeviceRightArrow = new ButtonRange(59);
-        private static readonly ButtonRange DeviceLeftArrow = new ButtonRange(58);
-        private static readonly ButtonRange NudgePlus = new ButtonRange(101);
-        private static readonly ButtonRange NudgeNegative = new ButtonRange(100);
-        private static readonly ButtonRange User = new ButtonRange(89);
-        private static readonly ButtonRange TapTempo = new ButtonRange(99);
-        private static readonly ButtonRange Metronome = new ButtonRange(90);
-        private static readonly ButtonRange Sends = new ButtonRange(88);
-        private static readonly ButtonRange Pan = new ButtonRange(87);
-        private static readonly ButtonRange Play = new ButtonRange(91);
-        private static readonly ButtonRange Record = new ButtonRange(93);
-        private static readonly ButtonRange Session = new ButtonRange(102);
+        private static readonly ButtonRange SceneTrigger1To40 = new(0, 0 + 40);
+        private static readonly ButtonRange SceneLaunch1To5 = new(82, 82 + 5);
+        private static readonly ButtonRange ClipStopButtons1To8 = new(52, 52 + 8);
+        private static readonly ButtonRange ClipABButtons1To8 = new(66, 66 + 8);
+        private static readonly ButtonRange ClipNumberButtons1To8 = new(50, 50 + 8);
+        private static readonly ButtonRange ClipSButtons1To8 = new(49, 49 + 8);
+        private static readonly ButtonRange ClipRectButtons1To8 = new(49, 49 + 8);
+        private static readonly ButtonRange BankSelectTop = new(94);
+        private static readonly ButtonRange BankSelectRight = new(96);
+        private static readonly ButtonRange BankSelectBottom = new(95);
+        private static readonly ButtonRange Shift = new(98);
+        private static readonly ButtonRange Bank = new(103);
+        private static readonly ButtonRange DetailView = new(65);
+        private static readonly ButtonRange ClipDevView = new(64);
+        private static readonly ButtonRange DevLock = new(63);
+        private static readonly ButtonRange DevOnOff = new(62);
+        private static readonly ButtonRange BankRightArrow = new(61);
+        private static readonly ButtonRange BankLeftArrow = new(60);
+        private static readonly ButtonRange DeviceRightArrow = new(59);
+        private static readonly ButtonRange DeviceLeftArrow = new(58);
+        private static readonly ButtonRange NudgePlus = new(101);
+        private static readonly ButtonRange NudgeNegative = new(100);
+        private static readonly ButtonRange User = new(89);
+        private static readonly ButtonRange TapTempo = new(99);
+        private static readonly ButtonRange Metronome = new(90);
+        private static readonly ButtonRange Sends = new(88);
+        private static readonly ButtonRange Pan = new(87);
+        private static readonly ButtonRange Play = new(91);
+        private static readonly ButtonRange Record = new(93);
+        private static readonly ButtonRange Session = new(102);
 
         // Knobs
         //private static readonly ButtonRange Sliders1To9 = new ButtonRange(48, 48 + 8);
-        private static readonly ButtonRange Fader1To8 = new ButtonRange(0, 7);
-        private static readonly ButtonRange RightPerBankKnobs = new ButtonRange(16, 16 + 7);
-        private static readonly ButtonRange MasterFader = new ButtonRange(14);
-        private static readonly ButtonRange AbFader = new ButtonRange(15);
-        private static readonly ButtonRange TopKnobs1To8 = new ButtonRange(48, 48 + 7);
-        private static readonly ButtonRange CueLevelKnob = new ButtonRange(47);
-        private static readonly ButtonRange TempoKnob = new ButtonRange(13);
+        private static readonly ButtonRange Fader1To8 = new(0, 7);
+        private static readonly ButtonRange RightPerBankKnobs = new(16, 16 + 7);
+        private static readonly ButtonRange MasterFader = new(14);
+        private static readonly ButtonRange AbFader = new(15);
+        private static readonly ButtonRange TopKnobs1To8 = new(48, 48 + 7);
+        private static readonly ButtonRange CueLevelKnob = new(47);
+        private static readonly ButtonRange TempoKnob = new(13);
 
         /// <summary>
         /// This is sub set of the original colors defined in reference

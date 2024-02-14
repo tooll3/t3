@@ -1,10 +1,8 @@
 using System;
 using System.Numerics;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_23794a1f_372d_484b_ac31_9470d0e77819
@@ -12,7 +10,7 @@ namespace T3.Operators.Types.Id_23794a1f_372d_484b_ac31_9470d0e77819
     public class _Jitter2d : Instance<_Jitter2d>
     {
         [Output(Guid = "4f1fa28e-f010-48d5-bef1-51bceac17649", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector2> NewPosition = new Slot<Vector2>();
+        public readonly Slot<Vector2> NewPosition = new();
 
         public _Jitter2d()
         {
@@ -102,7 +100,7 @@ namespace T3.Operators.Types.Id_23794a1f_372d_484b_ac31_9470d0e77819
         private float _rate;
         private double _beatTime;
 
-        private Random _random = new Random();
+        private Random _random = new();
         private bool _initialized = false;
         private int _lastActivationIndex = 0;
         private double _lastJumpTime;
@@ -111,30 +109,30 @@ namespace T3.Operators.Types.Id_23794a1f_372d_484b_ac31_9470d0e77819
         private Vector2 _jumpTargetOffset;
 
         [Input(Guid = "8F17B67C-2D55-4148-B880-1DD948CE9808")]
-        public readonly InputSlot<Vector2> Position = new InputSlot<Vector2>();
+        public readonly InputSlot<Vector2> Position = new();
         
         [Input(Guid = "F101AF0C-DE31-4AFB-ACB4-8166C62C2EC8")]
-        public readonly InputSlot<float> JumpDistance = new InputSlot<float>();
+        public readonly InputSlot<float> JumpDistance = new();
 
         [Input(Guid = "87DE02D8-A7AF-4E5C-A079-A70AF222F0BE")]
-        public readonly InputSlot<float> MaxRange = new InputSlot<float>();
+        public readonly InputSlot<float> MaxRange = new();
 
         [Input(Guid = "1DF95BEB-DA6D-4263-8273-7A180FD190F5")]
-        public readonly InputSlot<float> Rate = new InputSlot<float>();
+        public readonly InputSlot<float> Rate = new();
 
         [Input(Guid = "38086D8A-15E0-4F3E-B161-A46A79FC5CC3")]
-        public readonly InputSlot<float> Blending = new InputSlot<float>();
+        public readonly InputSlot<float> Blending = new();
 
         [Input(Guid = "227D36C5-E1AA-4F3F-AED1-AA92A25DBA8F")]
-        public readonly InputSlot<bool> SmoothBlending = new InputSlot<bool>();
+        public readonly InputSlot<bool> SmoothBlending = new();
 
         [Input(Guid = "34EA227B-13DB-42DD-ADE5-1B07D2F6BAD5")]
-        public readonly InputSlot<int> Seed = new InputSlot<int>();
+        public readonly InputSlot<int> Seed = new();
         
         [Input(Guid = "BF5E7465-7349-48BD-8358-CCE6E9983AA0")]
-        public readonly InputSlot<bool> Reset = new InputSlot<bool>();
+        public readonly InputSlot<bool> Reset = new();
 
         [Input(Guid = "CE65293A-E13E-427A-93D2-EFB0214AD274")]
-        public readonly InputSlot<bool> Jump = new InputSlot<bool>();
+        public readonly InputSlot<bool> Jump = new();
     }
 }

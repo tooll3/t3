@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.Operators.Types.Id_0bec016a_5e1b_467a_8273_368d4d6b9935;

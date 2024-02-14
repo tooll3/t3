@@ -53,8 +53,22 @@ namespace Operators.Utils
 
         public static void Rescan()
         { 
+            
             CloseMidiDevices();
             ScanAndRegisterToMidiDevices(logInformation: true);
+            
+            // TODO: Clean up later
+            foreach (var consumer in _midiConsumers)
+            {
+                foreach (var midiInputDevice in _midiInsWithDevices.Keys)
+                {
+                    midiInputDevice.MessageReceived -= consumer.MessageReceivedHandler;
+                    midiInputDevice.ErrorReceived -= consumer.ErrorReceivedHandler;
+                    midiInputDevice.MessageReceived += consumer.MessageReceivedHandler;
+                    midiInputDevice.ErrorReceived += consumer.ErrorReceivedHandler;
+                }
+                consumer.OnSettingsChanged();
+            }
         }
         
         
@@ -62,6 +76,12 @@ namespace Operators.Utils
         {
             void MessageReceivedHandler(object sender, MidiInMessageEventArgs msg);
             void ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg);
+            
+            /// <summary>
+            /// This will be called if the number of controllers or devices changed and the
+            /// listener should update its status.
+            /// </summary>
+            void OnSettingsChanged();
         }
         
         public static MidiInCapabilities GetDescriptionForMidiIn(MidiIn midiIn)
@@ -133,9 +153,9 @@ namespace Operators.Utils
                 
             }
 
-            if (ProjectSettings.Config.EnableMidiSnapshotIndication)
+            // MidiOut
+            if (!ProjectSettings.Config.EnableMidiSnapshotIndication)
             {
-
                 for (var index = 0; index < MidiOut.NumberOfDevices; index++)
                 {
                     var deviceOutputInfo = MidiOut.DeviceInfo(index);

@@ -182,10 +182,10 @@
       "InputValues": [
         {
           "Id": "4d4db9ad-b3a3-4da6-8716-23d21c5ffc4a"/*CellCounts*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 2,
-            "Height": 1
+            "X": 2,
+            "Y": 1
           }
         },
         {
@@ -221,10 +221,10 @@
         },
         {
           "Id": "4d4db9ad-b3a3-4da6-8716-23d21c5ffc4a"/*CellCounts*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 2,
-            "Height": 1
+            "X": 2,
+            "Y": 1
           }
         },
         {
@@ -467,7 +467,7 @@
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
-          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*Radius*/,
+          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*DistanceToTarget*/,
           "Type": "System.Single",
           "Value": 1.5
         }
@@ -479,12 +479,12 @@
       "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
       "InputValues": [
         {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
           "Type": "System.Single",
           "Value": 2.67
         },
         {
-          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,
+          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Threshold*/,
           "Type": "System.Single",
           "Value": -0.050000012
         },

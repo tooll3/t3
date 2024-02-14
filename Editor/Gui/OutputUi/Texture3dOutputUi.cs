@@ -6,7 +6,9 @@ using SharpDX.DXGI;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Editor.App;
 using T3.Editor.Gui.Windows;
+using ComputeShader = SharpDX.Direct3D11.ComputeShader;
 
 namespace T3.Editor.Gui.OutputUi
 {
@@ -14,11 +16,16 @@ namespace T3.Editor.Gui.OutputUi
     {
         public Texture3dOutputUi()
         {
-            string sourcePath = @"Resources\lib\img\internal\render-volume-slice-cs.hlsl";
-            string entryPoint = "main";
-            string debugName = "render-volume-slice";
+            const string sourcePath = @"lib\img\internal\render-volume-slice-cs.hlsl";
+            const string entryPoint = "main";
+            const string debugName = "render-volume-slice";
             var resourceManager = ResourceManager.Instance();
-            var success= resourceManager.CreateComputeShaderFromFile(out _shaderResourceId, sourcePath, entryPoint, debugName, null);
+            var success= resourceManager.TryCreateShaderResource(resource: out _shaderResource, 
+                                                                                fileName: sourcePath, 
+                                                                                errorMessage: out var errorMessage, 
+                                                                                name: debugName, 
+                                                                                entryPoint: entryPoint, 
+                                                                                fileChangedAction: null);
 
             var texDesc = new Texture2DDescription()
                               {
@@ -54,7 +61,7 @@ namespace T3.Editor.Gui.OutputUi
                 Texture3dWithViews texture3d = typedSlot.Value;
                 Texture2D texture = RenderTo2dTexture(texture3d);
                 ImageOutputCanvas.Current.DrawTexture(texture);
-                ResourceManager.Instance().SecondRenderWindowTexture = texture;
+                ProgramWindows.Viewer?.SetTexture(texture);
                 ImGui.SliderInt("z-pos", ref _zPosIndex, 0, texture3d?.Texture?.Description.Depth - 1 ?? 0);
             }
             else
@@ -77,7 +84,7 @@ namespace T3.Editor.Gui.OutputUi
             var prevSrvs = csStage.GetShaderResources(0, 1);
             var prevConstBuffer = csStage.GetConstantBuffers(0, 1);
 
-            ComputeShader resolveShader = resourceManager.GetComputeShader(_shaderResourceId);
+            ComputeShader resolveShader = _shaderResource.Shader;
             csStage.Set(resolveShader);
 
             Int4 parameter = new Int4(_zPosIndex, 0, 0, 0);
@@ -102,8 +109,8 @@ namespace T3.Editor.Gui.OutputUi
 
         private readonly Texture2D _viewTexture = null;
         private UnorderedAccessView _viewTextureUav = null;
-        private readonly uint _shaderResourceId = ResourceManager.NullResource;
         private int _zPosIndex = 0;
         private Buffer _paramBuffer = null;
+        private ShaderResource<ComputeShader> _shaderResource;
     }
 }

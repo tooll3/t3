@@ -1,69 +1,61 @@
-﻿using System.Runtime.InteropServices;
-using SharpDX;
+﻿using System.Numerics;
+using System.Runtime.InteropServices;
 
 [StructLayout(LayoutKind.Explicit, Size = 4 * 4 * 4 * 10)]
 public struct TransformBufferLayout
 {
-    public TransformBufferLayout(Matrix cameraToClipSpace, Matrix worldToCamera, Matrix objectToWorld)
+    public TransformBufferLayout(Matrix4x4 cameraToClipSpace, Matrix4x4 worldToCamera, Matrix4x4 objectToWorld)
     {
-        Matrix clipSpaceToCamera = cameraToClipSpace;
-        clipSpaceToCamera.Invert();
-        Matrix cameraToWorld = worldToCamera;
-        cameraToWorld.Invert();
-        Matrix worldToObject = objectToWorld;
-        worldToObject.Invert();
+        Matrix4x4.Invert(cameraToClipSpace, out var clipSpaceToCamera);
+        Matrix4x4.Invert(worldToCamera, out var cameraToWorld);
+        Matrix4x4.Invert(objectToWorld, out var worldToObject);
 
-        CameraToClipSpace = cameraToClipSpace;
-        ClipSpaceToCamera = clipSpaceToCamera;
-        WorldToCamera = worldToCamera;
-        CameraToWorld = cameraToWorld;
-        WorldToClipSpace = Matrix.Multiply(worldToCamera, cameraToClipSpace);
-        ClipSpaceToWorld = Matrix.Multiply(clipSpaceToCamera, cameraToWorld);
-        ObjectToWorld = objectToWorld;
-        WorldToObject = worldToObject;
-        ObjectToCamera = Matrix.Multiply(objectToWorld, worldToCamera);
-        ObjectToClipSpace = Matrix.Multiply(ObjectToCamera, cameraToClipSpace);
+        WorldToClipSpace = Matrix4x4.Multiply(worldToCamera, cameraToClipSpace);
+        ClipSpaceToWorld = Matrix4x4.Multiply(clipSpaceToCamera, cameraToWorld);
+        ObjectToCamera = Matrix4x4.Multiply(objectToWorld, worldToCamera);
+        ObjectToClipSpace = Matrix4x4.Multiply(ObjectToCamera, cameraToClipSpace);
 
+        CameraToClipSpace = Matrix4x4.Transpose(cameraToClipSpace);
         // transpose all as mem layout in hlsl constant buffer is row based
-        CameraToClipSpace.Transpose();
-        ClipSpaceToCamera.Transpose();
-        WorldToCamera.Transpose();
-        CameraToWorld.Transpose();
-        WorldToClipSpace.Transpose();
-        ClipSpaceToWorld.Transpose();
-        ObjectToWorld.Transpose();
-        WorldToObject.Transpose();
-        ObjectToCamera.Transpose();
-        ObjectToClipSpace.Transpose();
+        CameraToClipSpace = Matrix4x4.Transpose(cameraToClipSpace);
+        ClipSpaceToCamera = Matrix4x4.Transpose(clipSpaceToCamera);
+        WorldToCamera = Matrix4x4.Transpose(worldToCamera);
+        CameraToWorld = Matrix4x4.Transpose(cameraToWorld);
+        WorldToClipSpace = Matrix4x4.Transpose(WorldToClipSpace);
+        ClipSpaceToWorld = Matrix4x4.Transpose(ClipSpaceToWorld);
+        ObjectToWorld = Matrix4x4.Transpose(objectToWorld);
+        WorldToObject = Matrix4x4.Transpose(worldToObject);
+        ObjectToCamera = Matrix4x4.Transpose(ObjectToCamera);
+        ObjectToClipSpace = Matrix4x4.Transpose(ObjectToClipSpace);
     }
 
     [FieldOffset(0)]
-    public Matrix CameraToClipSpace;
+    public Matrix4x4 CameraToClipSpace;
 
     [FieldOffset(64)]
-    public Matrix ClipSpaceToCamera;
+    public Matrix4x4 ClipSpaceToCamera;
 
     [FieldOffset(128)]
-    public Matrix WorldToCamera;
+    public Matrix4x4 WorldToCamera;
 
     [FieldOffset(192)]
-    public Matrix CameraToWorld;
+    public Matrix4x4 CameraToWorld;
 
     [FieldOffset(256)]
-    public Matrix WorldToClipSpace;
+    public Matrix4x4 WorldToClipSpace;
 
     [FieldOffset(320)]
-    public Matrix ClipSpaceToWorld;
+    public Matrix4x4 ClipSpaceToWorld;
 
     [FieldOffset(384)]
-    public Matrix ObjectToWorld;
+    public Matrix4x4 ObjectToWorld;
 
     [FieldOffset(448)]
-    public Matrix WorldToObject;
+    public Matrix4x4 WorldToObject;
 
     [FieldOffset(512)]
-    public Matrix ObjectToCamera;
+    public Matrix4x4 ObjectToCamera;
 
     [FieldOffset(576)]
-    public Matrix ObjectToClipSpace;
+    public Matrix4x4 ObjectToClipSpace;
 }

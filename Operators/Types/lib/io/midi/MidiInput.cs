@@ -5,8 +5,8 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using NAudio.Midi;
 using Operators.Utils;
-using SharpDX;
 using T3.Core.Animation;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
@@ -53,7 +53,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             _trainedDeviceName = Device.GetValue(context);
 
             var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(_trainedDeviceName.GetHashCode());
-            _warningMessage = midiIn == null ? $"Midi device '{_trainedDeviceName}' is not captured" : null;
+            _warningMessage = midiIn == null ? $"Midi device '{_trainedDeviceName}' is not captured.\nYou can try Windows » Settings » Midi » Rescan Devices." : null;
             
             _trainedChannel = Channel.GetValue(context);
             _trainedControllerId = Control.GetValue(context);
@@ -90,17 +90,26 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                 {
                     if (_teachingActive)
                     {
-                        Device.SetTypedInputValue(_lastMessageDevice.ProductName);
-                        _trainedDeviceName = _lastMessageDevice.ProductName;
+                        // The teaching mode shouldn't override the connected nodes
+                        if (!Device.IsConnected) {
+                            Device.SetTypedInputValue(_lastMessageDevice.ProductName);
+                            _trainedDeviceName = _lastMessageDevice.ProductName;
+                        }
 
-                        Channel.SetTypedInputValue(signal.Channel);
-                        _trainedChannel = signal.Channel;
+                        if (!Channel.IsConnected) {
+                            Channel.SetTypedInputValue(signal.Channel);
+                            _trainedChannel = signal.Channel;
+                        }
 
-                        Control.SetTypedInputValue(signal.ControllerId);
-                        _trainedControllerId = signal.ControllerId;
+                        if (!Control.IsConnected) {
+                            Control.SetTypedInputValue(signal.ControllerId);
+                            _trainedControllerId = signal.ControllerId;
+                        }
 
-                        EventType.SetTypedInputValue((int)signal.EventType);
-                        _trainedEventType = signal.EventType;
+                        if (!EventType.IsConnected) {
+                            EventType.SetTypedInputValue((int)signal.EventType);
+                            _trainedEventType = signal.EventType;
+                        }
 
                         TeachTrigger.SetTypedInputValue(false);
                         _teachingActive = false;
@@ -120,8 +129,9 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                         _valuesForControlRange[index] = signal.ControllerValue;
                     }
 
-                    if (hasValueChanged && signal.ControllerValue > 0)
+                    if (hasValueChanged && signal.ControllerValue > 0 && !Control.IsConnected)
                     {
+                        Control.Value = _currentControllerId;
                         wasHit = true;
                     }
                     
@@ -293,7 +303,13 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                 }
             }
         }
-        
+
+        void MidiInConnectionManager.IMidiConsumer.OnSettingsChanged()
+        {
+            Result.DirtyFlag.Invalidate();
+            Range.DirtyFlag.Invalidate();
+            WasHit.DirtyFlag.Invalidate();
+        }
         
         public IStatusProvider.StatusLevel GetStatusLevel()
         {
@@ -308,7 +324,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
         private string _warningMessage;
         
 
-        private Size2 _controlRange;
+        private Int2 _controlRange;
         private bool UseControlRange => _controlRange.Width > 0 || _controlRange.Height > 0;
         private List<float> _valuesForControlRange;
 
@@ -372,7 +388,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
         public readonly InputSlot<int> Control = new();
 
         [Input(Guid = "F650985F-00A7-452A-B3E4-69A8E9A78C3F")]
-        public readonly InputSlot<Size2> ControlRange = new();
+        public readonly InputSlot<Int2> ControlRange = new();
 
         [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
         public readonly InputSlot<bool> PrintLogMessages = new();

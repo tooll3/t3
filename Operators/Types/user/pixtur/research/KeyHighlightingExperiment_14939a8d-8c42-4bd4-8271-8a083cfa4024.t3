@@ -168,12 +168,7 @@
           }
         },
         {
-          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
-          "Type": "System.Single",
-          "Value": 45.0
-        },
-        {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 1.37
         },
@@ -186,6 +181,11 @@
           "Id": "7f3fe86d-f259-458a-908a-0a71d39ca678"/*Repeat*/,
           "Type": "System.Boolean",
           "Value": true
+        },
+        {
+          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
+          "Type": "System.Single",
+          "Value": 45.0
         },
         {
           "Id": "29587763-5456-4d33-bfd4-5d47b133f1cd"/*OffsetMode*/,
@@ -328,7 +328,7 @@
       "Outputs": []
     },
     {
-      "Id": "3c08e898-b98a-483a-9bc8-80db72c93151"/*Vector4ToFloat4*/,
+      "Id": "3c08e898-b98a-483a-9bc8-80db72c93151"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -416,10 +416,10 @@
       "InputValues": [
         {
           "Id": "eff02108-2335-46b5-95ba-4235b9a26349"/*LeftRight*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": -100,
-            "Height": -100
+            "X": -100,
+            "Y": -100
           }
         }
       ],
@@ -431,17 +431,17 @@
       "InputValues": [
         {
           "Id": "eff02108-2335-46b5-95ba-4235b9a26349"/*LeftRight*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": -100,
-            "Height": -100
+            "X": -100,
+            "Y": -100
           }
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "8ffbd180-cd94-4310-83e7-ef48737f771e"/*Int2ToSize2*/,
+      "Id": "8ffbd180-cd94-4310-83e7-ef48737f771e"/*Int2*/,
       "SymbolId": "f1218934-f874-4f70-a077-0ebe7d12104d",
       "InputValues": [
         {

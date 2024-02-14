@@ -597,7 +597,7 @@ namespace T3.Editor.Gui.Graph
 
         private void DrawDropHandler()
         {
-            if (!T3Ui.DraggingIsInProgress)
+            if (!T3Ui.DraggingIsInProgress || CompositionOp == null)
                 return;
 
             ImGui.SetCursorPos(Vector2.Zero);
@@ -672,6 +672,8 @@ namespace T3.Editor.Gui.Graph
 
         private void DrawContextMenuContent()
         {
+            var clickPosition =ImGui.GetMousePosOnOpeningCurrentPopup();
+
             var selectedChildUis = GetSelectedChildUis();
             var nextUndoTitle = UndoRedoStack.CanUndo ? $" ({UndoRedoStack.GetNextUndoTitle()})" : string.Empty;
             if (ImGui.MenuItem("Undo" + nextUndoTitle,
@@ -886,7 +888,8 @@ namespace T3.Editor.Gui.Graph
             {
                 if (ImGui.MenuItem("Add Node...", "TAB", false, true))
                 {
-                    SymbolBrowser.OpenAt(InverseTransformPositionFloat(ImGui.GetMousePos()), null, null, false);
+
+                    SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
                 }
 
                 if (ImGui.MenuItem("Add input parameter..."))
@@ -1178,7 +1181,7 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private readonly List<ISelectableCanvasObject> _selectableItems = new List<ISelectableCanvasObject>();
+        private readonly List<ISelectableCanvasObject> _selectableItems = new();
         #endregion
 
         #region public API
@@ -1204,7 +1207,7 @@ namespace T3.Editor.Gui.Graph
         public static readonly LibWarningDialog LibWarningDialog = new();
 
         private List<SymbolChildUi> ChildUis { get; set; }
-        public readonly SymbolBrowser SymbolBrowser = new SymbolBrowser();
+        public readonly SymbolBrowser SymbolBrowser = new();
         private string _symbolNameForDialogEdits = "";
         private string _symbolDescriptionForDialog = "";
         private string _nameSpaceForDialogEdits = "";

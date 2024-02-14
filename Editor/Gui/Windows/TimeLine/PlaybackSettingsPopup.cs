@@ -10,7 +10,6 @@ using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
@@ -250,7 +249,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 
 
                 // Input meter
-                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
                 FormInputs.DrawInputLabel("Input Level");
                 ImGui.PopStyleVar();
                 ImGui.InvisibleButton("##gainMeter", new Vector2(-1, ImGui.GetFrameHeight()));

@@ -7,10 +7,8 @@ using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Interaction.Timing;
@@ -20,6 +18,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine.Raster;
 using T3.Editor.UiModel;
+// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 namespace T3.Editor.Gui.Windows.TimeLine
 {
@@ -184,30 +183,48 @@ namespace T3.Editor.Gui.Windows.TimeLine
         {
             if (UserActionRegistry.WasActionQueued(UserActions.PlaybackJumpToNextKeyframe))
             {
-                var nextKeyframeTime = Double.PositiveInfinity;
-                foreach (var next in SelectedAnimationParameters
-                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetNextU(Playback.TimeInBars + 0.001f))
-                                    .Where<double?>(next => next != null && next.Value < nextKeyframeTime))
+
+                var bestNextTime = double.PositiveInfinity;
+                var foundNext = false;
+                var time = Playback.TimeInBars + 0.001f;
+                foreach (var next in SelectedAnimationParameters)
                 {
-                    nextKeyframeTime = next.Value;
+                    foreach (var curve in next.Curves)
+                    {
+                        if (!curve.TryGetNextKey(time, out var key)
+                            || key.U > bestNextTime )
+                            continue;
+
+                        foundNext = true;
+                        bestNextTime = key.U;
+                    }
                 }
 
-                if (!Double.IsPositiveInfinity(nextKeyframeTime))
-                    Playback.TimeInBars = nextKeyframeTime;
+                if (foundNext)
+                    Playback.TimeInBars = bestNextTime;
             }
 
             if (UserActionRegistry.WasActionQueued(UserActions.PlaybackJumpToPreviousKeyframe))
             {
-                var prevKeyframeTime = Double.NegativeInfinity;
-                foreach (var next in SelectedAnimationParameters
-                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetPreviousU(Playback.TimeInBars - 0.001f))
-                                    .Where<double?>(previous => previous != null && previous.Value > prevKeyframeTime))
+                var bestPreviousTime = double.NegativeInfinity;
+                var foundNext = false;
+                
+                var time = Playback.TimeInBars - 0.001f;
+                foreach (var next in SelectedAnimationParameters)
                 {
-                    prevKeyframeTime = next.Value;
+                    foreach (var curve in next.Curves)
+                    {
+                        if (!curve.TryGetPreviousKey(time, out var key)
+                            || key.U < bestPreviousTime )
+                            continue;
+
+                        foundNext = true;
+                        bestPreviousTime = key.U;
+                    }
                 }
 
-                if (!Double.IsNegativeInfinity(prevKeyframeTime))
-                    Playback.TimeInBars = prevKeyframeTime;
+                if (foundNext)
+                    Playback.TimeInBars = bestPreviousTime;                
             }
         }
 

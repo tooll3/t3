@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
@@ -125,11 +126,11 @@ void main(uint3 i : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID)
 
     // Write ray start and seperator
     ResultPoints[rayGroupStartIndex + 0] = p;
-    ResultPoints[rayGroupStartIndex + stepCount -1].w = NaN;
+    ResultPoints[rayGroupStartIndex + stepCount -1].W = NaN;
 
-    float3 rayOrigin = p.position;
-    float3 rayDirection = rotate_vector( float3(0,0,1), p.rotation);
-    float w = p.w;
+    float3 rayOrigin = p.Position;
+    float3 rayDirection = qRotateVec3( float3(0,0,1), p.Rotation);
+    float w = p.W;
 
     int _bestHitIndex = -1;
     float3 _bestHitPosition = rayOrigin + rayDirection * Extend;
@@ -190,21 +191,21 @@ void main(uint3 i : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID)
         GroupMemoryBarrierWithGroupSync();
 
 
-        _bestHitIndex = BestHitIndices[rayThreadId]; // <----
-        //ResultPoints[rayGroupStartIndex + stepIndex] = p;
+        _bestHitIndex = BestHitIndices[rayThreadId]; 
+
 
         if(_bestHitIndex < 0)
         {
             rayOrigin += rayDirection * Extend;
-            ResultPoints[rayGroupStartIndex + stepIndex].rotation = p.rotation;
-            ResultPoints[rayGroupStartIndex + stepIndex].position = rayOrigin;
-            ResultPoints[rayGroupStartIndex + stepIndex].w = w;
+            ResultPoints[rayGroupStartIndex + stepIndex].Rotation = p.Rotation;
+            ResultPoints[rayGroupStartIndex + stepIndex].Position = rayOrigin;
+            ResultPoints[rayGroupStartIndex + stepIndex].W = w;
         }
         else {            
-            _bestHitPosition = BestHitPositions[rayThreadId];   // <----
+            _bestHitPosition = BestHitPositions[rayThreadId];  
             rayOrigin = _bestHitPosition;
-            ResultPoints[rayGroupStartIndex + stepIndex].position = rayOrigin;
-            ResultPoints[rayGroupStartIndex + stepIndex].w = w;
+            ResultPoints[rayGroupStartIndex + stepIndex].Position = rayOrigin;
+            ResultPoints[rayGroupStartIndex + stepIndex].W = w;
 
             float3 n0 = normalize(Vertices[Indices[_bestHitIndex][0]].Normal);
             float3 n1 = normalize(Vertices[Indices[_bestHitIndex][1]].Normal);

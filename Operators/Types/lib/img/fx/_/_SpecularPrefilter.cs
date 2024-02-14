@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -18,7 +17,7 @@ namespace T3.Operators.Types.Id_cc3cc712_9e87_49c6_b04b_49a12cf2ba75
     public class _SpecularPrefilter : Instance<_SpecularPrefilter>
     {
         [Output(Guid = "5dab6e1b-6136-45a9-bd63-1e18eafc20b7")]
-        public readonly Slot<Texture2D> FilteredCubeMap = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> FilteredCubeMap = new();
 
         public _SpecularPrefilter()
         {
@@ -313,12 +312,12 @@ namespace T3.Operators.Types.Id_cc3cc712_9e87_49c6_b04b_49a12cf2ba75
         
         SamplingParameter[] _samplingParameters =
             {
-                new SamplingParameter { roughness = 0, baseMip = 0, numSamples = 1 },
-                new SamplingParameter { roughness = 0.125f, baseMip = 2, numSamples = 500 }, // 500
-                new SamplingParameter { roughness = 0.375f, baseMip = 3, numSamples = 500 }, // 500
-                new SamplingParameter { roughness = 0.5f, baseMip = 6, numSamples = 200 }, // 200
-                new SamplingParameter { roughness = 0.75f, baseMip = 7, numSamples = 150 }, // 100
-                new SamplingParameter { roughness = 1.0f, baseMip = 8, numSamples = 20 }, // 20
+                new() { roughness = 0, baseMip = 0, numSamples = 1 },
+                new() { roughness = 0.125f, baseMip = 2, numSamples = 500 }, // 500
+                new() { roughness = 0.375f, baseMip = 3, numSamples = 500 }, // 500
+                new() { roughness = 0.5f, baseMip = 6, numSamples = 200 }, // 200
+                new() { roughness = 0.75f, baseMip = 7, numSamples = 150 }, // 100
+                new() { roughness = 1.0f, baseMip = 8, numSamples = 20 }, // 20
             };
         
         protected override void Dispose(bool disposing)
@@ -367,29 +366,29 @@ namespace T3.Operators.Types.Id_cc3cc712_9e87_49c6_b04b_49a12cf2ba75
         
         
         [Input(Guid = "9f7926aa-ac69-4963-af1d-342ad06fc278")]
-        public readonly InputSlot<Texture2D> CubeMap = new InputSlot<Texture2D>();
+        public readonly InputSlot<Texture2D> CubeMap = new();
         
 
         [Input(Guid = "D7C5E69E-9DA0-44F1-BAF7-A9D2A91CA41C")]
-        public readonly InputSlot<VertexShader> VertexShader = new InputSlot<VertexShader>();
+        public readonly InputSlot<VertexShader> VertexShader = new();
 
         [Input(Guid = "2A217F9D-2F9F-418A-8568-F767905384D5")]
-        public readonly InputSlot<GeometryShader> GeometryShader = new InputSlot<GeometryShader>();
+        public readonly InputSlot<GeometryShader> GeometryShader = new();
 
         [Input(Guid = "04D1B56F-8655-4D6C-9BDC-A84057A199D0")]
-        public readonly InputSlot<PixelShader> PixelShader = new InputSlot<PixelShader>();
+        public readonly InputSlot<PixelShader> PixelShader = new();
 
 
         [Input(Guid = "26459A4A-1BD8-4987-B41B-6C354CC48D47")]
-        public readonly MultiInputSlot<ShaderResourceView> ShaderResources = new MultiInputSlot<ShaderResourceView>();
+        public readonly MultiInputSlot<ShaderResourceView> ShaderResources = new();
 
         [Input(Guid = "86D3EEE1-A4B2-4F23-9C5E-39830C90D0DA")]
-        public readonly InputSlot<float> Exposure = new InputSlot<float>();
+        public readonly InputSlot<float> Exposure = new();
         
         [Input(Guid = "B994BFF4-D1AC-4A30-A6DC-DC7BBE05D15D")]
-        public readonly MultiInputSlot<SamplerState> SamplerStates = new MultiInputSlot<SamplerState>();
+        public readonly MultiInputSlot<SamplerState> SamplerStates = new();
 
         [Input(Guid = "9D792412-D1F0-45F9-ABD6-4EAB79719924")]
-        public readonly MultiInputSlot<bool> UpdateLive = new MultiInputSlot<bool>();
+        public readonly MultiInputSlot<bool> UpdateLive = new();
     }
 }

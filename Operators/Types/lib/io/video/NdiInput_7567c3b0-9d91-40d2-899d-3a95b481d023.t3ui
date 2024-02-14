@@ -3,26 +3,12 @@
   "Description": "NDI live video input",
   "InputUis": [
     {
-      "InputId": "306668f7-881d-4aeb-9aa0-0460013a05cb"/*Command*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "fd1fca6b-a3be-440b-86ba-6b7b1bbd2a8c"/*SourceName*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
       },
-      "Usage": "Default"
-    },
-    {
-      "InputId": "d2c24f47-4b24-4037-8b1c-a85378359d2d"/*SourceNumber*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
+      "Usage": "CustomDropdown"
     }
   ],
   "SymbolChildUis": [],
@@ -32,6 +18,13 @@
       "Position": {
         "X": 300.0,
         "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "85f1af38-074e-475d-94f5-f48079979545"/*UploadTime*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 300.0
       }
     }
   ]

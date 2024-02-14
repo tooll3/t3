@@ -3,10 +3,10 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "c1ffdc20-7c90-49f9-8deb-f0a415e130c8"/*Seed*/,
+      "InputId": "f294c517-7427-4c14-a397-4605bffc52a4"/*OverrideTime*/,
       "Position": {
         "X": -2.7436478,
-        "Y": -99.55521
+        "Y": -144.5552
       }
     },
     {
@@ -14,7 +14,8 @@
       "Position": {
         "X": -2.7436478,
         "Y": -54.555206
-      }
+      },
+      "GroupTitle": "Complexity"
     },
     {
       "InputId": "cbcbce93-8c8d-41ed-b91b-9e3583c5a3b5"/*Octaves*/,
@@ -24,11 +25,26 @@
       }
     },
     {
+      "InputId": "a5731884-2efc-4cfd-a098-4a0b4b6bdd6b"/*AmplitudeXY*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 125.44479
+      }
+    },
+    {
+      "InputId": "0abcff87-ace5-4a06-9217-b2caf831ecae"/*Amplitude*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 125.44479
+      }
+    },
+    {
       "InputId": "d72d0dcf-62d6-498a-838d-88d33d798d4f"/*RangeMin*/,
       "Position": {
         "X": -2.7436478,
         "Y": 35.444794
-      }
+      },
+      "GroupTitle": "Output Range"
     },
     {
       "InputId": "dae5b55c-0c30-4ee9-a535-7654b8357669"/*RangeMax*/,
@@ -38,25 +54,23 @@
       }
     },
     {
-      "InputId": "a5731884-2efc-4cfd-a098-4a0b4b6bdd6b"/*ScaleXY*/,
+      "InputId": "c6e1170e-ae4f-44ae-aaab-e1aeb8f86997"/*BiasAndGain*/,
       "Position": {
         "X": -2.7436478,
-        "Y": 125.44479
-      }
+        "Y": 170.4448
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "UseVec2Control": "BiasAndGain"
     },
     {
-      "InputId": "0abcff87-ace5-4a06-9217-b2caf831ecae"/*Scale*/,
+      "InputId": "c1ffdc20-7c90-49f9-8deb-f0a415e130c8"/*Seed*/,
       "Position": {
         "X": -2.7436478,
-        "Y": 125.44479
-      }
-    },
-    {
-      "InputId": "f294c517-7427-4c14-a397-4605bffc52a4"/*OverrideTime*/,
-      "Position": {
-        "X": -2.7436478,
-        "Y": -144.5552
-      }
+        "Y": -99.55521
+      },
+      "GroupTitle": "Options"
     }
   ],
   "SymbolChildUis": [],

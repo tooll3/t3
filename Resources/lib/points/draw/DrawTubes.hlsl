@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
 
@@ -112,19 +113,19 @@ psInput vsMain(uint id: SV_VertexID)
     int offset = cornerFactors.x < 0.5 ? 0 : 1; 
     Point p = Points[particleId+offset];
 
-    float4 pointRotation = p.rotation;
+    float4 pointRotation = p.Rotation;
 
-    float WidthFactor = UseWAsWeight || isnan(p.w)> 0.5 ? p.w  : 1;
+    float WidthFactor = UseWAsWeight || isnan(p.W)> 0.5 ? p.W  : 1;
     
     float fRing = (sideIndex + (cornerFactors.y / 2 + 0.5)) / SideCount;
     float spinRad = fRing * Tau;
 
     float3 side = float3(cos(spinRad), 0, sin(spinRad));
-    float3 radiusOffset = rotate_vector(side, pointRotation) * Width * WidthFactor;
+    float3 radiusOffset = qRotateVec3(side, pointRotation) * Width * WidthFactor;
 
-    float3 pInObject = p.position + radiusOffset;
+    float3 pInObject = p.Position + radiusOffset;
     //float3 normalTwisted =  float3(0, cos(spinRad + 3.141578/2), sin(spinRad + 3.141578/2));
-    //float3 normal = normalize(rotate_vector(normalTwisted, pointRotation));
+    //float3 normal = normalize(qRotateVec3(normalTwisted, pointRotation));
     //float4 normalInScreen = mul(float4(normal,0), ObjectToClipSpace);
 
 
@@ -135,8 +136,8 @@ psInput vsMain(uint id: SV_VertexID)
     // Pass tangent space basis vectors (for normal mapping).
     float3x3 TBN = float3x3(
         normalize(radiusOffset), //  vertex.Bitangent, 
-        normalize(rotate_vector(float3(1,0,0), pointRotation)), //  vertex.Bitangent, 
-        normalize(rotate_vector(float3(1,0,0), pointRotation)) //  vertex.Bitangent, 
+        normalize(qRotateVec3(float3(1,0,0), pointRotation)), //  vertex.Bitangent, 
+        normalize(qRotateVec3(float3(1,0,0), pointRotation)) //  vertex.Bitangent, 
         );
     //TBN = mul(TBN, (float3x3)ObjectToWorld);
     output.tbnToWorld = TBN;

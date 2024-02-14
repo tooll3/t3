@@ -110,7 +110,7 @@
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
-          "Id": "acf14901-3373-4b0c-8567-03ea0051a21f"/*Center*/,
+          "Id": "acf14901-3373-4b0c-8567-03ea0051a21f"/*CameraTargetPosition*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
@@ -119,7 +119,7 @@
           }
         },
         {
-          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*Radius*/,
+          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*DistanceToTarget*/,
           "Type": "System.Single",
           "Value": 6.5
         },
@@ -309,10 +309,10 @@
         },
         {
           "Id": "53afc8d9-f417-4628-9a97-220bec62919f"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 64,
-            "Height": 64
+            "X": 64,
+            "Y": 64
           }
         }
       ],
@@ -448,24 +448,24 @@
       "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
       "InputValues": [
         {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
           "Type": "System.Single",
           "Value": 3.0
         },
         {
-          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
+          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*Intensity*/,
           "Type": "System.Single",
           "Value": 0.46
         },
         {
-          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,
-          "Type": "System.Single",
-          "Value": -0.00999999
-        },
-        {
-          "Id": "03f2bd5c-b599-47f5-b697-9f881639a598"/*AmplifyFineBlur*/,
+          "Id": "03f2bd5c-b599-47f5-b697-9f881639a598"/*AmplifyCore*/,
           "Type": "System.Single",
           "Value": 0.79999995
+        },
+        {
+          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Threshold*/,
+          "Type": "System.Single",
+          "Value": -0.00999999
         }
       ],
       "Outputs": []
@@ -531,7 +531,7 @@
       "SymbolId": "bf7fcd04-0cf6-4518-86cc-48f74483d98d",
       "InputValues": [
         {
-          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Fill*/,
+          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 11.300031,
@@ -551,7 +551,7 @@
           }
         },
         {
-          "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Center*/,
+          "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": -0.79,
@@ -588,10 +588,10 @@
         },
         {
           "Id": "07e57992-ea38-4e3b-8d69-cb4e99ae587c"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 512,
-            "Height": 256
+            "X": 512,
+            "Y": 256
           }
         }
       ],
@@ -608,7 +608,7 @@
       "SymbolId": "bf7fcd04-0cf6-4518-86cc-48f74483d98d",
       "InputValues": [
         {
-          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Fill*/,
+          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 6.2873282,
@@ -628,7 +628,7 @@
           }
         },
         {
-          "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Center*/,
+          "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": -0.3,
@@ -775,10 +775,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 512,
-            "Height": 512
+            "X": 512,
+            "Y": 512
           }
         },
         {
@@ -1033,7 +1033,7 @@
       "SymbolId": "bf7fcd04-0cf6-4518-86cc-48f74483d98d",
       "InputValues": [
         {
-          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Fill*/,
+          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 9.362106,
@@ -1053,7 +1053,7 @@
           }
         },
         {
-          "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Center*/,
+          "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.35,
@@ -1101,7 +1101,7 @@
       "SymbolId": "bf7fcd04-0cf6-4518-86cc-48f74483d98d",
       "InputValues": [
         {
-          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Fill*/,
+          "Id": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 37.09023,
@@ -1121,7 +1121,7 @@
           }
         },
         {
-          "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Center*/,
+          "Id": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.88,
@@ -1158,10 +1158,10 @@
         },
         {
           "Id": "07e57992-ea38-4e3b-8d69-cb4e99ae587c"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 512,
-            "Height": 256
+            "X": 512,
+            "Y": 256
           }
         }
       ],
@@ -1238,10 +1238,10 @@
       "InputValues": [
         {
           "Id": "03749b41-cc3c-4f38-aea6-d7cea19fc073"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1920,
-            "Height": 1080
+            "X": 1920,
+            "Y": 1080
           }
         },
         {
@@ -1696,14 +1696,14 @@
           }
         },
         {
-          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
-          "Type": "System.Single",
-          "Value": 78.0
-        },
-        {
           "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
           "Type": "System.String",
           "Value": "Resources\\fonts\\Roboto-Thin.fnt"
+        },
+        {
+          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
+          "Type": "System.Single",
+          "Value": 78.0
         }
       ],
       "Outputs": []

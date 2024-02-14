@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -18,8 +19,8 @@ float3 SamplePosAtF(float f, out float weight)
     int index = (int)sourceF;
     float fraction = sourceF - index;    
     index = clamp(index,0, sourceCount -1);
-    weight = lerp(SourcePoints[index].w, SourcePoints[index+1].w, fraction );
-    return lerp(SourcePoints[index].position, SourcePoints[index+1].position, fraction );
+    weight = lerp(SourcePoints[index].W, SourcePoints[index+1].W, fraction );
+    return lerp(SourcePoints[index].Position, SourcePoints[index+1].Position, fraction );
 }
 
 float4 SampleRotationAtF(float f) 
@@ -28,7 +29,7 @@ float4 SampleRotationAtF(float f)
     int index = (int)sourceF;
     float fraction = sourceF - index;    
     index = clamp(index,0, sourceCount -1);
-    return q_slerp(SourcePoints[index].rotation, SourcePoints[index+1].rotation, fraction );
+    return qSlerp(SourcePoints[index].Rotation, SourcePoints[index+1].Rotation, fraction );
 }
 
 
@@ -55,15 +56,17 @@ void main(uint3 i : SV_DispatchThreadID)
     float f = (float)segmentPointIndex / subdiv;
 
     if(f <= 0.001)  {
-        ResultPoints[i.x].position = SourcePoints[segmentIndex].position;
-        ResultPoints[i.x].w =        SourcePoints[segmentIndex].w;
-        ResultPoints[i.x].rotation = SourcePoints[segmentIndex].rotation;   // use qlerp
+        ResultPoints[i.x] = SourcePoints[segmentIndex];
+
     }
     else {
-        ResultPoints[i.x].position = lerp( SourcePoints[segmentIndex].position,  SourcePoints[segmentIndex + 1].position, f);
-        ResultPoints[i.x].w = lerp( SourcePoints[segmentIndex].w,  SourcePoints[segmentIndex + 1].w, f);
-        ResultPoints[i.x].rotation = lerp( SourcePoints[segmentIndex].rotation,  SourcePoints[segmentIndex + 1].rotation, f);   // use qlerp
+        ResultPoints[i.x].Position = lerp( SourcePoints[segmentIndex].Position,  SourcePoints[segmentIndex + 1].Position, f);
+        ResultPoints[i.x].W = lerp( SourcePoints[segmentIndex].W,  SourcePoints[segmentIndex + 1].W, f);
+        ResultPoints[i.x].Rotation = qSlerp( SourcePoints[segmentIndex].Rotation,  SourcePoints[segmentIndex + 1].Rotation, f);
 
+        ResultPoints[i.x].Color = lerp( SourcePoints[segmentIndex].Color,  SourcePoints[segmentIndex + 1].Color, f);
+        ResultPoints[i.x].Selected = lerp( SourcePoints[segmentIndex].Selected,  SourcePoints[segmentIndex + 1].Selected, f);
+        ResultPoints[i.x].Stretch = lerp( SourcePoints[segmentIndex].Stretch,  SourcePoints[segmentIndex + 1].Stretch, f);
     }
     
 

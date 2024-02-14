@@ -203,6 +203,11 @@
           "Value": 0.38
         },
         {
+          "Id": "3fbad175-6060-40f2-a675-bdae20107698"/*FadeNearest*/,
+          "Type": "System.Single",
+          "Value": 0.15
+        },
+        {
           "Id": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
           "Type": "System.Boolean",
           "Value": true
@@ -211,11 +216,6 @@
           "Id": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
           "Type": "System.Boolean",
           "Value": true
-        },
-        {
-          "Id": "3fbad175-6060-40f2-a675-bdae20107698"/*FadeNearest*/,
-          "Type": "System.Single",
-          "Value": 0.15
         }
       ],
       "Outputs": []
@@ -284,12 +284,12 @@
           "Value": 1.0
         },
         {
-          "Id": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableTest*/,
+          "Id": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableZTest*/,
           "Type": "System.Boolean",
           "Value": true
         },
         {
-          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableDepthWrite*/,
+          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableZWrite*/,
           "Type": "System.Boolean",
           "Value": true
         }
@@ -358,7 +358,7 @@
       ]
     },
     {
-      "Id": "ce69b69b-a9e7-47a2-8cee-de1ab1653bb6"/*Float3ToVector3*/,
+      "Id": "ce69b69b-a9e7-47a2-8cee-de1ab1653bb6"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [
         {
@@ -588,10 +588,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 256
+            "X": 256,
+            "Y": 256
           }
         }
       ],
@@ -622,7 +622,7 @@
       "Outputs": []
     },
     {
-      "Id": "0653f54c-801d-47f6-a7ee-755b263d1fe9"/*Float3ToVector3*/,
+      "Id": "0653f54c-801d-47f6-a7ee-755b263d1fe9"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []

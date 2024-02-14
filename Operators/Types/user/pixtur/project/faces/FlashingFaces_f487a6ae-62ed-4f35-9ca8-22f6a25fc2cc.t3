@@ -15,10 +15,10 @@
         },
         {
           "Id": "3c615aa0-61b7-43c5-bea3-8d1110b4f5cd"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 0,
-            "Height": 0
+            "X": 0,
+            "Y": 0
           }
         }
       ],
@@ -76,10 +76,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1024,
-            "Height": 1024
+            "X": 1024,
+            "Y": 1024
           }
         }
       ],
@@ -131,7 +131,7 @@
       "Outputs": []
     },
     {
-      "Id": "36deb18f-e417-4ee3-88d9-d023475c9a90"/*Float2ToVector2*/,
+      "Id": "36deb18f-e417-4ee3-88d9-d023475c9a90"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -332,10 +332,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 2048,
-            "Height": 2048
+            "X": 2048,
+            "Y": 2048
           }
         }
       ],
@@ -536,17 +536,17 @@
           }
         },
         {
-          "Id": "f66e91a1-b991-48c3-a8c9-33bcad0c2f6f"/*AspectRatio*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
           "Id": "199d4ce0-aab1-403a-ad42-216ef1061a0e"/*NearFarClip*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.1,
             "Y": 1000.0
           }
+        },
+        {
+          "Id": "f66e91a1-b991-48c3-a8c9-33bcad0c2f6f"/*AspectRatio*/,
+          "Type": "System.Single",
+          "Value": 0.0
         }
       ],
       "Outputs": []
@@ -651,7 +651,7 @@
       "Outputs": []
     },
     {
-      "Id": "118c06bc-f982-47b3-a973-2930558df231"/*Float2ToVector2*/,
+      "Id": "118c06bc-f982-47b3-a973-2930558df231"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -674,7 +674,7 @@
       "Outputs": []
     },
     {
-      "Id": "931fa039-a460-452c-9893-c73ec237ae85"/*Float2ToVector2*/,
+      "Id": "931fa039-a460-452c-9893-c73ec237ae85"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -732,7 +732,7 @@
       "Outputs": []
     },
     {
-      "Id": "ffd3dafa-3ba5-4286-bde6-728f8227de8c"/*Float2ToVector2*/,
+      "Id": "ffd3dafa-3ba5-4286-bde6-728f8227de8c"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -930,10 +930,10 @@
         },
         {
           "Id": "86bb9127-10fb-47cb-9aee-45be01567810"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": -1,
-            "Height": 0
+            "X": -1,
+            "Y": 0
           }
         },
         {
@@ -965,10 +965,10 @@
         },
         {
           "Id": "9af9f8af-f7f6-465d-a35b-7b0d952a7db6"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": -1,
-            "Height": 0
+            "X": -1,
+            "Y": 0
           }
         },
         {
@@ -1002,7 +1002,7 @@
       "Outputs": []
     },
     {
-      "Id": "8fa36aed-d85a-4930-bf67-72020d3339f4"/*Float2ToVector2*/,
+      "Id": "8fa36aed-d85a-4930-bf67-72020d3339f4"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -1036,7 +1036,7 @@
       "Outputs": []
     },
     {
-      "Id": "e05119ad-3ce0-4c01-bb86-3f5e01923177"/*FractalNoise*/,
+      "Id": "e05119ad-3ce0-4c01-bb86-3f5e01923177"/*_FractalNoiseOld*/,
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [],
       "Outputs": []

@@ -7,6 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Vector4 = System.Numerics.Vector4;
 using Utilities = T3.Core.Utils.Utilities;
 
 namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
@@ -14,7 +15,7 @@ namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
     public class FloatsToBuffer : Instance<FloatsToBuffer>
     {
         [Output(Guid = "f5531ffb-dbde-45d3-af2a-bd90bcbf3710")]
-        public readonly Slot<Buffer> Buffer = new Slot<Buffer>();
+        public readonly Slot<Buffer> Buffer = new();
 
         public FloatsToBuffer()
         {
@@ -46,10 +47,10 @@ namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
                     var aaa = aInput.GetValue(context);
                     foreach (var vec4 in aaa)
                     {
-                        array[totalFloatIndex++] = vec4[0];
-                        array[totalFloatIndex++] = vec4[1];
-                        array[totalFloatIndex++] = vec4[2];
-                        array[totalFloatIndex++] = vec4[3];
+                        array[totalFloatIndex++] = vec4.X;
+                        array[totalFloatIndex++] = vec4.Y;
+                        array[totalFloatIndex++] = vec4.Z;
+                        array[totalFloatIndex++] = vec4.W;
                     }
                 }
 
@@ -95,7 +96,7 @@ namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
         }
         
         [Input(Guid = "914EA6E8-ABC6-4294-B895-8BFBE5AFEA0E")]
-        public readonly MultiInputSlot<SharpDX.Vector4[]> Vec4Params = new();
+        public readonly MultiInputSlot<Vector4[]> Vec4Params = new();
 
         [Input(Guid = "49556D12-4CD1-4341-B9D8-C356668D296C")]
         public readonly MultiInputSlot<float> Params = new();

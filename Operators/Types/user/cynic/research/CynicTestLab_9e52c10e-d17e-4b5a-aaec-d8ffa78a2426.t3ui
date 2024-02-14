@@ -17,7 +17,7 @@
       }
     },
     {
-      "ChildId": "8ab0491e-b9dd-494d-b727-6cad80bc4444"/*Float3ToVector3*/,
+      "ChildId": "8ab0491e-b9dd-494d-b727-6cad80bc4444"/*Vector3*/,
       "Position": {
         "X": 15.500905,
         "Y": 95.49899
@@ -191,7 +191,7 @@
       }
     },
     {
-      "ChildId": "ed3cda47-511f-4463-8bc3-f1b33f73c292"/*Float4ToVector4*/,
+      "ChildId": "ed3cda47-511f-4463-8bc3-f1b33f73c292"/*Vector4*/,
       "Position": {
         "X": 2973.5557,
         "Y": 23.518188
@@ -313,7 +313,7 @@
       }
     },
     {
-      "ChildId": "5f809216-e438-4ea5-be76-1d87c2a96bc8"/*Vector4ToFloat4*/,
+      "ChildId": "5f809216-e438-4ea5-be76-1d87c2a96bc8"/*Vector4Components*/,
       "Position": {
         "X": -243.54385,
         "Y": 2374.534

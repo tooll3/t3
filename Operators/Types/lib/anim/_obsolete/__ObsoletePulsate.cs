@@ -7,13 +7,13 @@ namespace T3.Operators.Types.Id_ffed6f9e_2495_4cf3_9cda_740ecec75d10
     public class __ObsoletePulsate : Instance<__ObsoletePulsate>
     {
         [Output (Guid = "CB128B17-6855-440D-8539-BFD437E4193C")]
-        public readonly Slot<float> Result = new Slot<float> ();
+        public readonly Slot<float> Result = new();
 
         [Output (Guid = "1FE51F05-F488-4DCB-98F3-B4321A991AFA")]
-        public readonly Slot<float> Counter = new Slot<float> ();
+        public readonly Slot<float> Counter = new();
         
         [Output (Guid = "853A932C-21BA-403A-A6C1-5707A6E98CE8")]
-        public readonly Slot<bool> Bang = new Slot<bool> ();
+        public readonly Slot<bool> Bang = new();
 
 
         public __ObsoletePulsate()
@@ -87,15 +87,15 @@ namespace T3.Operators.Types.Id_ffed6f9e_2495_4cf3_9cda_740ecec75d10
         private bool _lastBang;
 
         [Input(Guid = "3b60db67-3a12-44c3-91ba-5517f74879d6")]
-        public readonly InputSlot<float> BeatTime = new InputSlot<float>();
+        public readonly InputSlot<float> BeatTime = new();
 
         [Input(Guid = "c1e5ce4c-6780-414e-9596-703fa7cb0392")]
-        public readonly InputSlot<float> Frequency = new InputSlot<float>();
+        public readonly InputSlot<float> Frequency = new();
 
         [Input(Guid = "1154B0A7-E244-43FF-A80B-9D099BE85053")]
-        public readonly InputSlot<float> Speed = new InputSlot<float>();
+        public readonly InputSlot<float> Speed = new();
 
         [Input(Guid = "399c783c-7db2-4173-87c6-ffc2bb9cc859")]
-        public readonly InputSlot<float> Intensity = new InputSlot<float>();
+        public readonly InputSlot<float> Intensity = new();
     }
 }

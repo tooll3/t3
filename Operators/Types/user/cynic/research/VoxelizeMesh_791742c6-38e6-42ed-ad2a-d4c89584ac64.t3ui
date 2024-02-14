@@ -122,7 +122,7 @@
       }
     },
     {
-      "ChildId": "3af8db3a-9b47-42bc-82c9-244e2396a13f"/*Vector4ToFloat4*/,
+      "ChildId": "3af8db3a-9b47-42bc-82c9-244e2396a13f"/*Vector4Components*/,
       "Style": "Resizable",
       "Size": {
         "X": 111.079544,

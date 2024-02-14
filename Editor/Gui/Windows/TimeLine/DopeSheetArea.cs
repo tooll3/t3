@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
@@ -191,7 +192,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight)); // Next Line
         }
 
-        public readonly HashSet<int> PinnedParameters = new HashSet<int>();
+        public readonly HashSet<int> PinnedParameters = new();
 
         private void HandleCreateNewKeyframes(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea)
         {
@@ -240,13 +241,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 TimeLineCanvas.Current.Playback.TimeInBars = time;
         }
 
-        private static readonly Color GrayCurveColor = new Color(1f, 1f, 1.0f, 0.3f);
+        private static readonly Color GrayCurveColor = new(1f, 1f, 1.0f, 0.3f);
 
         internal static readonly Color[] CurveColors =
             {
-                new Color(1f, 0.2f, 0.2f, 0.3f),
-                new Color(0.1f, 1f, 0.2f, 0.3f),
-                new Color(0.1f, 0.4f, 1.0f, 0.5f),
+                new(1f, 0.2f, 0.2f, 0.3f),
+                new(0.1f, 1f, 0.2f, 0.3f),
+                new(0.1f, 0.4f, 1.0f, 0.5f),
                 GrayCurveColor,
             };
 
@@ -259,7 +260,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 "R", "G", "B", "A"
             };
 
-        private static readonly List<Vector2> Positions = new List<Vector2>(100);  // Reuse list to avoid allocations
+        private static readonly List<Vector2> Positions = new(100);  // Reuse list to avoid allocations
         
         private void DrawCurveLines(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea)
         {

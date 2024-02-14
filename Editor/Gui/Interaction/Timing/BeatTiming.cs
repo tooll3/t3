@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes.DataSet;
 using T3.Core.Logging;
+using T3.Operators.Types.Id_4023bcbf_74a6_4e50_a12e_4c22be5dbbdf;
+
 //using T3.Core.Utils;
 
 namespace T3.Editor.Gui.Interaction.Timing
@@ -28,15 +31,26 @@ namespace T3.Editor.Gui.Interaction.Timing
         public static void TriggerDelaySync() => _delayTriggered = true;
         public static void TriggerAdvanceSync() => _advanceTriggered = true;
         public static void TriggerResyncMeasure() => _syncMeasureTriggered = true;
-        
+
         public static float SlideSyncTime;
-        
+        private static bool _initialized;
+
+        private static void Initialize()
+        {
+            if (_initialized)
+                return;
+            
+            DataRecording.DataSetsById["BeatTiming"] = _syncTimingData;
+            _initialized = true;
+        }
         public static void Update()
         {
+            Initialize();
+            
             //BeatTime = (_measureCount + (_runTime - _measureStartTime) / MeasureDuration + _syncMeasureOffset) * BeatsPerBar;
-            
+
             _runTime = Playback.RunTimeInSecs;
-            
+
             BeatTimingDetails.WasResyncTriggered = _syncMeasureTriggered ? 1 : 0;
             BeatTimingDetails.WasTapTriggered = _tapTriggered ? 1 : 0;
 
@@ -49,11 +63,15 @@ namespace T3.Editor.Gui.Interaction.Timing
                 _syncMeasureOffset = 0;
                 _tapTimes.Clear();
             }
+            
 
             ProcessNewTaps();
 
             // Check for next measure               
             var timeInMeasure = _runTime - _measureStartTime;
+            _timingChannel.Events.Add(new DataEvent { Time = _runTime, Value = (float)timeInMeasure%1});
+            _bpmChannel.Events.Add(new DataEvent { Time = _runTime, Value = (float)Bpm});
+            
             if (timeInMeasure > MeasureDuration)
             {
                 _measureCount++;
@@ -62,7 +80,7 @@ namespace T3.Editor.Gui.Interaction.Timing
 
             if (_syncMeasureTriggered)
             {
-                _syncMeasureOffset = -(_runTime - _measureStartTime) / MeasureDuration;// + Playback.Current.BarsFromSeconds(0.03f);
+                _syncMeasureOffset = -(_runTime - _measureStartTime) / MeasureDuration; // + Playback.Current.BarsFromSeconds(0.03f);
                 _syncMeasureTriggered = false;
             }
 
@@ -71,16 +89,16 @@ namespace T3.Editor.Gui.Interaction.Timing
                 _syncMeasureOffset += 0.01;
                 _advanceTriggered = false;
             }
-            
+
             if (_delayTriggered)
             {
                 _syncMeasureOffset -= 0.01;
                 _delayTriggered = false;
             }
-            
+
             var tInMeasure = (_runTime - _measureStartTime) / MeasureDuration;
             BeatTime = (_measureCount + tInMeasure + _syncMeasureOffset) * BeatsPerBar;
-            
+
             BeatTimingDetails.Bpm = (float)Bpm;
             BeatTimingDetails.SyncMeasureOffset = (float)_syncMeasureOffset;
             BeatTimingDetails.BeatTime = (float)BeatTime;
@@ -91,60 +109,56 @@ namespace T3.Editor.Gui.Interaction.Timing
         {
             if (!_tapTriggered && !_syncMeasureTriggered)
                 return;
-            
-            var normalizedMeasureSync = (float)Math.Abs((BeatTime % 4)/4 - 0.5) * 2;
-            if (normalizedMeasureSync < 0.8 && _syncMeasureTriggered)
-                return;
-                
-            _tapTriggered = false;
 
+            var normalizedMeasureSync = (float)Math.Abs((BeatTime % 4) / 4 - 0.5) * 2;
+            var threshold = 0.3;
+            if (normalizedMeasureSync < threshold && _syncMeasureTriggered)
+            {
+                Log.Debug($"Skipping Sync as tap {normalizedMeasureSync:0.00} < {threshold:0.00}");
+                return;
+            }
+
+            _tapTriggered = false;
             DetectAndProcessOffSeriesTaps(_syncMeasureTriggered);
             KeepTap();
-            UpdatePhaseAndDurationFromMultipleTaps(_syncMeasureTriggered);
+            UpdatePhaseAndDurationFromMultipleTaps();
+            ActiveMidiRecording.ActiveRecordingSet ??= new DataSet();
         }
 
-        
-        private static void KeepTap()
-        {
-            while (_tapTimes.Count > MaxTapsCount)
-            {
-                _tapTimes.RemoveAt(0);
-            }
-            
-            _tapTimes.Add(_runTime);
-        }
-        
+        private static readonly DataChannel _tapsChannel = new(typeof(float)) { Path = new List<string> { "Tapping", "Taps" } };
+        private static readonly DataChannel _syncChannel = new(typeof(float)) { Path = new List<string> { "Tapping", "Resync" } };
+        private static readonly DataChannel _eventChannel = new(typeof(string)) { Path = new List<string> { "Tapping", "Event" } };
+        private static readonly DataChannel _timingChannel = new(typeof(float)) { Path = new List<string> { "Tapping", "Timing" } };
+        private static readonly DataChannel _bpmChannel = new(typeof(float)) { Path = new List<string> { "Tapping", "BPM" } };
+        private static readonly DataSet _syncTimingData = new() { Channels = new List<DataChannel>() { _tapsChannel, _syncChannel, _eventChannel, _timingChannel, _bpmChannel } };
         
         private static void DetectAndProcessOffSeriesTaps(bool wasResync)
         {
-            
-            var normalizedMeasureSync = (float)Math.Abs((BeatTime % 4)/4 - 0.5) * 2;            
+            var normalizedMeasureSync = (float)Math.Abs((BeatTime % 4) / 4 - 0.5) * 2;
             BeatTimingDetails.LastTapBarSync = normalizedMeasureSync;
-
 
             if (_tapTimes.Count == 0)
                 return;
-            
-            var beatsSinceLastTap = Math.Abs(_runTime - _tapTimes.Last()) / _lastBeatDuration;
-            
-            if (!(beatsSinceLastTap > 8) || !(beatsSinceLastTap < 128))
+
+            var timeSinceLastTap = _runTime - _tapTimes[^1];
+            var beatsSinceLastTap = timeSinceLastTap / _lastBeatDuration;
+
+            if (beatsSinceLastTap is < 8 or > 128*16)
+            {
                 return;
+            }
             
             var isTapOnSync = normalizedMeasureSync > 0.8;
             if (!isTapOnSync)
             {
                 Log.Debug($"Ignoring offset beat refine (at {normalizedMeasureSync:p1}. Try to sync closer to measure start.");
                 _tapTimes.Clear();
-                _tapTimes.Add(_runTime);
                 return;
             }
-
-                    
-            var timeSinceFirstTap = Math.Abs(_runTime - _tapTimes[0]);
-            var beatsSinceFirstTap = Math.Round(timeSinceFirstTap / _lastBeatDuration);
-                    
+            
             var originalBpm = Bpm;
-            var newBeatDuration = timeSinceFirstTap / beatsSinceFirstTap;
+            var roundBeatMeasureCount = (Math.Round(beatsSinceLastTap/16)*16);
+            var newBeatDuration = timeSinceLastTap / roundBeatMeasureCount;
             var newBpm = 60f / newBeatDuration;
             var newBpmIsValid = newBpm > 20f && newBpm < 200f;
             if (wasResync && !newBpmIsValid)
@@ -155,15 +169,41 @@ namespace T3.Editor.Gui.Interaction.Timing
             }
 
             _lastBeatDuration = newBeatDuration;
-            Log.Debug($"Refining BPM rate {originalBpm:0.0} -> {Bpm:0.0}.  ({beatsSinceFirstTap:0.0} over {timeSinceFirstTap:0.00s})");
+            Log.Debug($"Refining BPM rate {originalBpm:0.0} -> {Bpm:0.0}.  ({beatsSinceLastTap:0.0} {roundBeatMeasureCount}beats  over {timeSinceLastTap:0.00s}s)");
 
             // Also shift resync
             _syncMeasureOffset = -(_runTime - _measureStartTime) / MeasureDuration;
             _tapTimes.Clear();
+        }
+
+        private static void KeepEvent(string message)
+        {
+            _eventChannel.Events.Add(new DataEvent
+                                        {
+                                            Time = Playback.RunTimeInSecs,
+                                            TimeCode = Playback.RunTimeInSecs,
+                                            Value = message
+                                        });
+        }
+
+        private static void KeepTap()
+        {
+            _tapsChannel.Events.Add(new DataEvent
+                                        {
+                                            Time = Playback.RunTimeInSecs,
+                                            TimeCode = Playback.RunTimeInSecs,
+                                            Value = 100f
+                                        });
+            
+            while (_tapTimes.Count > MaxTapsCount)
+            {
+                _tapTimes.RemoveAt(0);
+            }
+
             _tapTimes.Add(_runTime);
         }
-        
-        private static void UpdatePhaseAndDurationFromMultipleTaps(bool wasResync)
+
+        private static void UpdatePhaseAndDurationFromMultipleTaps()
         {
             if (_tapTimes.Count < 4)
             {
@@ -171,7 +211,7 @@ namespace T3.Editor.Gui.Interaction.Timing
                 return;
             }
 
-            var lastTapTime = _tapTimes[_tapTimes.Count - 1];
+            var lastTapTime = _tapTimes[^1];
             if (_runTime - lastTapTime > 4)
             {
                 _lastPhaseOffset = 0;
@@ -214,10 +254,10 @@ namespace T3.Editor.Gui.Interaction.Timing
 
         private static double MeasureDuration => _lastBeatDuration * BeatsPerBar * BarsPerMeasure;
         private const int MaxTapsCount = 16;
-        private static readonly List<double> _tapTimes = new List<double>(MaxTapsCount + 1);
+        private static readonly List<double> _tapTimes = new(MaxTapsCount + 1);
         private static int BarsPerMeasure { get; set; } = 4;
         private static int BeatsPerBar { get; set; } = 4;
-        
+
         private static double _lastBeatDuration = 1;
 
         private static double _lastPhaseOffset;

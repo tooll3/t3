@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
@@ -71,10 +72,10 @@ void main(uint3 i : SV_DispatchThreadID)
     Point pointA = Points[aIndex];
     Point pointB = Points[bIndex];
 
-    orientationA = transpose(quaternion_to_matrix(pointA.rotation));
-    orientationB = transpose(quaternion_to_matrix(pointB.rotation));
-    posA = pointA.position;
-    posB = pointB.position;
+    orientationA = transpose(qToMatrix(pointA.Rotation));
+    orientationB = transpose(qToMatrix(pointB.Rotation));
+    posA = pointA.Position;
+    posB = pointB.Position;
 
     v.Position = TransformVector(v.Position);
 

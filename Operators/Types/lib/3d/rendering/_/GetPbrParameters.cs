@@ -1,8 +1,8 @@
 using SharpDX.Direct3D11;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Rendering.Material;
 
 namespace T3.Operators.Types.Id_ca4fe8c4_cf61_4196_84e4_d69dc8869a25
 {
@@ -41,34 +41,16 @@ namespace T3.Operators.Types.Id_ca4fe8c4_cf61_4196_84e4_d69dc8869a25
         }
 
         
-        private void UpdatePbrParameterBuffer(EvaluationContext context)
-        {
-            PbrParameterBuffer.Value = context.PbrMaterialParams;
-        }
-        private void UpdateAlbedoColorMap(EvaluationContext context) {
-            AlbedoColorMap.Value = context.PbrMaterialTextures.AlbedoColorMap;
-        }
-        private void UpdateEmissiveColorMap(EvaluationContext context)
-        {
-            EmissiveColorMap.Value = context.PbrMaterialTextures.EmissiveColorMap;
-        }
-        private void UpdateRoughnessMetallicOcclusionMap(EvaluationContext context)
-        {
-            RoughnessMetallicOcclusionMap.Value = context.PbrMaterialTextures.RoughnessMetallicOcclusionMap;
-        }
-        private void UpdateNormalMap(EvaluationContext context)
-        {
-            NormalMap.Value = context.PbrMaterialTextures.NormalMap;
-        }
-        private void UpdateBrdfLookupMap(EvaluationContext context)
-        {
-            BrdfLookupMap.Value = context.PbrMaterialTextures.BrdfLookUpMap;
-        }
-        
+        private void UpdatePbrParameterBuffer(EvaluationContext context) => PbrParameterBuffer.Value = context.PbrMaterial.ParameterBuffer;
+        private void UpdateAlbedoColorMap(EvaluationContext context) => AlbedoColorMap.Value = context.PbrMaterial.AlbedoMapSrv;
+        private void UpdateEmissiveColorMap(EvaluationContext context) => EmissiveColorMap.Value = context.PbrMaterial.EmissiveMapSrv;
+        private void UpdateRoughnessMetallicOcclusionMap(EvaluationContext context) => RoughnessMetallicOcclusionMap.Value = context.PbrMaterial.RoughnessMetallicOcclusionSrv;
+        private void UpdateNormalMap(EvaluationContext context) => NormalMap.Value = context.PbrMaterial.NormalSrv;
+        private void UpdateBrdfLookupMap(EvaluationContext context) => BrdfLookupMap.Value = PbrContextSettings.PbrLookUpTextureSrv;
+
         private void UpdatePrefilteredSpecularMap(EvaluationContext context)
         {
-            // Todo move constant to shared constants
-            context.ContextTextures.TryGetValue("PrefilteredSpecular", out var texture);
+            context.ContextTextures.TryGetValue(PbrContextSettings.PrefilteredSpecularId, out var texture);
             PrefilteredSpecularMap.Value = texture;
         }
     }

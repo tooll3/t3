@@ -118,6 +118,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             return symbolUpdated;
         }
         
-        private static readonly Dictionary<string, string> AssetFiles = new Dictionary<string, string>();
+        private static readonly Dictionary<string, string> AssetFiles = new();
     }
 }

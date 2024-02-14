@@ -24,8 +24,8 @@ namespace T3.Editor.Gui.UiHelpers
         
         public class ConfigData
         {
-            public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.Scope>();
-            public readonly Dictionary<string, Guid> LastOpsForWindows = new Dictionary<string, Guid>();
+            public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new();
+            public readonly Dictionary<string, Guid> LastOpsForWindows = new();
 
             [JsonConverter(typeof(StringEnumConverter))]
             public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.LastValue;
@@ -56,7 +56,7 @@ namespace T3.Editor.Gui.UiHelpers
             public bool UseArcConnections = true;
             public bool ResetTimeAfterPlayback;
             public float SnapStrength = 5;
-            public ValueEditGizmos ValueEditGizmo;
+            public ValueEditMethods ValueEditMethod;
             public float ScrollSmoothing = 0.1f;
 
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
@@ -73,6 +73,8 @@ namespace T3.Editor.Gui.UiHelpers
 
             public bool VariationLiveThumbnails = true;
             public bool VariationHoverPreview = true;
+
+            public bool EditorHoverPreview = true;
             
             // Load Save
             public string UserName = UndefinedUserName;
@@ -82,6 +84,7 @@ namespace T3.Editor.Gui.UiHelpers
             public float GizmoSize = 100;
             public int FullScreenIndexMain = 0;
             public int FullScreenIndexViewer = 0;
+            
 
 
             // Timeline
@@ -93,6 +96,10 @@ namespace T3.Editor.Gui.UiHelpers
             public float SpaceMouseDamping = 0.5f;
             
 
+            // Rendering (controlled from render windows)
+            public string RenderVideoFilePath = "./Render/render-v01.mp4";
+
+            
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
@@ -102,7 +109,7 @@ namespace T3.Editor.Gui.UiHelpers
             public string ColorThemeName;
         }
 
-        public enum ValueEditGizmos
+        public enum ValueEditMethods
         {
             InfinitySlider,
             RadialSlider,

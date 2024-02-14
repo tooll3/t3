@@ -147,8 +147,8 @@
     {
       "Id": "3522be02-01e2-4ac4-8e73-bf81eeb71cf0"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     }
   ],
@@ -317,6 +317,11 @@
       "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
       "InputValues": [
         {
+          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
           "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -330,11 +335,6 @@
           "Id": "ec46bef4-8dce-4eb4-bfe8-e35a5ac416ec"/*TextureFormat*/,
           "Type": "SharpDX.DXGI.Format",
           "Value": "R16G16B16A16_Float"
-        },
-        {
-          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
-          "Type": "System.Boolean",
-          "Value": true
         }
       ],
       "Outputs": []
@@ -443,7 +443,7 @@
           }
         },
         {
-          "Id": "7bde5a5a-ce82-4903-92ff-14e540a605f0"/*Fov*/,
+          "Id": "7bde5a5a-ce82-4903-92ff-14e540a605f0"/*FOV*/,
           "Type": "System.Single",
           "Value": 45.0
         }
@@ -451,13 +451,13 @@
       "Outputs": []
     },
     {
-      "Id": "5b240cad-306c-4b59-81c8-1f501edaa6af"/*Vector2ToFloat2*/,
+      "Id": "5b240cad-306c-4b59-81c8-1f501edaa6af"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "09e564a4-1bae-4e44-abef-26ddf5cd4688"/*Vector3ToFloat3*/,
+      "Id": "09e564a4-1bae-4e44-abef-26ddf5cd4688"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
@@ -470,61 +470,61 @@
       "Outputs": []
     },
     {
-      "Id": "b82f0f13-cf39-451f-9594-f67f24be9238"/*Vector3ToFloat3*/,
+      "Id": "b82f0f13-cf39-451f-9594-f67f24be9238"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "c7e27912-55ce-49c1-b948-5c6338c6508b"/*Vector4ToFloat4*/,
+      "Id": "c7e27912-55ce-49c1-b948-5c6338c6508b"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "6f1f6bdd-d2c0-4652-a5ba-eabfe6015c1b"/*Vector4ToFloat4*/,
+      "Id": "6f1f6bdd-d2c0-4652-a5ba-eabfe6015c1b"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "8060fe42-aedd-4eec-8585-bc292628b2f1"/*Vector4ToFloat4*/,
+      "Id": "8060fe42-aedd-4eec-8585-bc292628b2f1"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "0879c962-cc72-4282-a8dd-41492345aa6e"/*Vector4ToFloat4*/,
+      "Id": "0879c962-cc72-4282-a8dd-41492345aa6e"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "502b5d1e-c166-400e-80ce-d17b17665a79"/*Vector4ToFloat4*/,
+      "Id": "502b5d1e-c166-400e-80ce-d17b17665a79"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "f1046eea-278e-4441-a072-a17cb1318eab"/*Vector4ToFloat4*/,
+      "Id": "f1046eea-278e-4441-a072-a17cb1318eab"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "0b617b43-00a1-4400-ae0c-2cfa49c0526a"/*Vector3ToFloat3*/,
+      "Id": "0b617b43-00a1-4400-ae0c-2cfa49c0526a"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "5f25dd0c-081b-473e-979d-23cfef398882"/*Vector4ToFloat4*/,
+      "Id": "5f25dd0c-081b-473e-979d-23cfef398882"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "f600eeae-39f2-44bd-b42b-bffbb507398e"/*Vector2ToFloat2*/,
+      "Id": "f600eeae-39f2-44bd-b42b-bffbb507398e"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -628,7 +628,7 @@
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
-          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*Radius*/,
+          "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*DistanceToTarget*/,
           "Type": "System.Single",
           "Value": 0.5999997
         },
@@ -641,19 +641,19 @@
           }
         },
         {
-          "Id": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": -3.833333,
-            "Y": 47.833332
-          }
-        },
-        {
           "Id": "4d2d2d2d-00bd-4df9-b209-62f0c7926c38"/*AimPitchAngleAndWobble*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.3333333,
             "Y": 0.0
+          }
+        },
+        {
+          "Id": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": -3.833333,
+            "Y": 47.833332
           }
         },
         {
@@ -670,10 +670,10 @@
       "InputValues": [
         {
           "Id": "a5b86357-0d11-4034-b19a-5c2d617bb261"/*GridSize*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 48,
-            "Height": 33
+            "X": 48,
+            "Y": 33
           }
         },
         {

@@ -46,8 +46,8 @@
     {
       "Id": "01773066-ea85-488d-abb3-a08e4afcb95c"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     }
   ],
@@ -75,7 +75,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 120,
             "Y": 68,
@@ -138,7 +138,7 @@
       "Outputs": []
     },
     {
-      "Id": "c623e4a4-ed2b-4c53-9763-cfbf7401d6a2"/*CalcSize2DispatchCount*/,
+      "Id": "c623e4a4-ed2b-4c53-9763-cfbf7401d6a2"/*CalcInt2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []

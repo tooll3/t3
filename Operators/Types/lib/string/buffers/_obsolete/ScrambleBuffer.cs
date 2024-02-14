@@ -66,32 +66,32 @@ namespace T3.Operators.Types.Id_bf76bc78_74e1_45c3_9c67_de50262a48ae
             }
         }
 
-        private readonly Random _random = new Random();
+        private readonly Random _random = new();
         private int _fillIndex = 0;
         
         [Input(Guid = "c80a289a-e0d5-459f-b79e-fff72757b416")]
-        public readonly InputSlot<StringBuilder> StringBuilder = new InputSlot<StringBuilder>();
+        public readonly InputSlot<StringBuilder> StringBuilder = new();
 
         [Input(Guid = "2A078B1D-0115-467F-8625-6D36EF2FDAF9")]
-        public readonly InputSlot<int> MinLength = new InputSlot<int>();
+        public readonly InputSlot<int> MinLength = new();
 
         [Input(Guid = "7e68d5fd-f9be-4f23-bc1b-0bdb72e63137")]
-        public readonly InputSlot<int> MaxLength = new InputSlot<int>();
+        public readonly InputSlot<int> MaxLength = new();
         
         [Input(Guid = "B5DEEFF1-7188-4742-A438-CB3CE1AFDE59")]
-        public readonly InputSlot<bool> TriggerChop = new InputSlot<bool>();
+        public readonly InputSlot<bool> TriggerChop = new();
 
         [Input(Guid = "AA458C22-A874-4200-AF62-0DA94D82631F")]
-        public readonly InputSlot<bool> TriggerFill = new InputSlot<bool>();
+        public readonly InputSlot<bool> TriggerFill = new();
 
         [Input(Guid = "262511B2-3A96-4600-8325-0FE84568B42F")]
-        public readonly InputSlot<bool> TriggerFillJump = new InputSlot<bool>();
+        public readonly InputSlot<bool> TriggerFillJump = new();
 
         [Input(Guid = "EB856F4F-2B57-40CC-BF7E-EE6BFC955F34")]
-        public readonly InputSlot<string> FillString = new InputSlot<string>();
+        public readonly InputSlot<string> FillString = new();
         
         [Input(Guid = "10A1209A-15F1-42AC-B105-2CCBC0F4FF4D")]
-        public readonly InputSlot<int> FillDirection = new InputSlot<int>();
+        public readonly InputSlot<int> FillDirection = new();
 
     }
 }

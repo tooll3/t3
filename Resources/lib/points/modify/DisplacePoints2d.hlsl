@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 static const float4 Factors[] = 
 {
@@ -50,7 +51,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     Point P = Points[index];
     
-    float3 pos = P.position;
+    float3 pos = P.Position;
     pos -= Center;
     
     float3 posInObject = mul(float4(pos.xyz,0), WorldToObject).xyz;
@@ -99,6 +100,6 @@ void main(uint3 i : SV_DispatchThreadID)
     float len = length(d);
 
     if(len > 0.0001)
-        Points[index].position += float3(direction * DisplaceAmount/100,0);
+        Points[index].Position += float3(direction * DisplaceAmount/100,0);
 
 }

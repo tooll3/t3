@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,7 +8,7 @@ namespace T3.Operators.Types.Id_919beb6b_4798_45fc_83bd_8203a9b26e8e
     public class DeltaSinceLastFrame : Instance<DeltaSinceLastFrame>
     {
         [Output(Guid = "F2E21170-11CE-4FEE-BA2C-80AC2CDCE11A", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Change = new Slot<float>();
+        public readonly Slot<float> Change = new();
         
         public DeltaSinceLastFrame()
         {
@@ -33,10 +31,10 @@ namespace T3.Operators.Types.Id_919beb6b_4798_45fc_83bd_8203a9b26e8e
         private double _lastEvalTime;
 
         [Input(Guid = "0e8896e1-b98f-4ff3-9136-e55002c887d8")]
-        public readonly InputSlot<float> Value = new InputSlot<float>();
+        public readonly InputSlot<float> Value = new();
         
         [Input(Guid = "883f16e2-b4fc-4640-b5fe-6e39c7d3f28c")]
-        public readonly InputSlot<float> Threshold = new InputSlot<float>();
+        public readonly InputSlot<float> Threshold = new();
 
     }
 }

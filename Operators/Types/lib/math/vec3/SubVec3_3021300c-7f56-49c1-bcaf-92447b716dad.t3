@@ -1,0 +1,25 @@
+{
+  "Name": "SubVec3",
+  "Id": "3021300c-7f56-49c1-bcaf-92447b716dad",
+  "Namespace": "lib.math.vec3",
+  "Inputs": [
+    {
+      "Id": "b1fe7da6-169a-4c09-839d-0d494606d527"/*Input1*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "1c78d0e2-88b1-46d3-a575-ec088b293450"/*Input2*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -9,7 +8,7 @@ namespace T3.Operators.Types.Id_48ab9824_76ca_4238_800f_9cf95311e6c0
     public class CombineStrings : Instance<CombineStrings>
     {
         [Output(Guid = "{E47BF25E-351A-44E6-84C6-AD3ABC93531A}")]
-        public readonly Slot<string> Result = new Slot<string>();
+        public readonly Slot<string> Result = new();
 
         public CombineStrings()
         {
@@ -36,13 +35,13 @@ namespace T3.Operators.Types.Id_48ab9824_76ca_4238_800f_9cf95311e6c0
             Result.Value = _stringBuilder.ToString();
         }
 
-        private readonly StringBuilder _stringBuilder = new StringBuilder();
+        private readonly StringBuilder _stringBuilder = new();
 
         [Input(Guid = "{B5E72715-9339-484F-B197-5A28CD823798}")]
-        public readonly MultiInputSlot<string> Input = new MultiInputSlot<string>();
+        public readonly MultiInputSlot<string> Input = new();
         
         [Input(Guid = "C832BA89-F4AE-4C47-B62B-52DA52A09556")]
-        public readonly InputSlot<string> Separator = new InputSlot<string>();
+        public readonly InputSlot<string> Separator = new();
 
     }
 }

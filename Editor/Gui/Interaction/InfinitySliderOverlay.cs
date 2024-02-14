@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -31,6 +32,7 @@ namespace T3.Editor.Gui.Interaction
                 _dampedModifierScaleFactor = 1;
                 _lastXOffset = 0;
                 _originalValue = roundedValue;
+                _isManipulating = false;
             }
 
             var mouseYDistance = _center.Y - _io.MousePos.Y;
@@ -39,6 +41,11 @@ namespace T3.Editor.Gui.Interaction
             var mousePosX = (int)(_io.MousePos.X * 2)/2;
             var xOffset = mousePosX - _center.X;
             var deltaX = xOffset - _lastXOffset;
+            if(MathF.Abs(xOffset) > UserSettings.Config.ClickThreshold)
+            {
+                _isManipulating = true;
+            }
+            
             _lastXOffset = xOffset;
 
             _dampedAngleVelocity = MathUtils.Lerp(_dampedAngleVelocity, (float)deltaX, 0.06f);
@@ -208,6 +215,8 @@ namespace T3.Editor.Gui.Interaction
                                                UiColors.ForegroundFull);
                 }
             }
+            if (!_isManipulating)
+                roundedValue = _originalValue;
         }
 
         private static bool IsValueVisible(double value, double valueRange)
@@ -252,6 +261,7 @@ namespace T3.Editor.Gui.Interaction
         private static double _dampedModifierScaleFactor;
 
         private static double _originalValue;
+        private static bool _isManipulating;
 
         private static ImGuiIOPtr _io;
     }

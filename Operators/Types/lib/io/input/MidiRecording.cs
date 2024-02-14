@@ -31,7 +31,7 @@ namespace T3.Operators.Types.Id_2d1c9633_b66e_4958_913c_116ae36963a5
         }
 
         [Input(Guid = "9b844a51-d108-426e-a264-d570d30031c6")]
-        public readonly InputSlot<bool> ResetTrigger = new InputSlot<bool>();
+        public readonly InputSlot<bool> ResetTrigger = new();
 
         private bool _resetTrigger;
     }

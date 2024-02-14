@@ -21,12 +21,21 @@ internal static class UiContentUpdate
 {
     public static void RenderCallback()
     {
-        CursorPosOnScreen = new Vector2(Cursor.Position.X, Cursor.Position.Y);
+        // An attempt to prevent System.ObjectDisposedException
+        if (Program.IsShuttingDown)
+            return;
+        
+        var cursorPos = Cursor.Position;
+        CursorPosOnScreen = new Vector2(cursorPos.X, cursorPos.Y);
         IsCursorInsideAppWindow = ProgramWindows.Main.IsCursorOverWindow;
 
-        // Update font atlas texture if UI-Scale changed
         if (Math.Abs(UserSettings.Config.UiScaleFactor - _lastUiScale) > 0.005f)
         {
+            // Prevent scale factor from being "actually" 0.0
+            if (UserSettings.Config.UiScaleFactor < 0.1f) 
+                UserSettings.Config.UiScaleFactor = 0.1f;
+            
+            // Update font atlas texture if UI-Scale changed
             GenerateFontsWithScaleFactor(UserSettings.Config.UiScaleFactor);
             _lastUiScale = UserSettings.Config.UiScaleFactor;
         }
@@ -63,30 +72,28 @@ internal static class UiContentUpdate
 
         if (T3Ui.ShowSecondaryRenderWindow)
         {
+            var viewer = ProgramWindows.Viewer;
             ProgramWindows.Viewer.PrepareRenderingFrame();
 
-            if (ResourceManager.ResourcesById[SharedResources.FullScreenVertexShaderId] is VertexShaderResource vsr)
-                ProgramWindows.SetVertexShader(vsr);
+            ProgramWindows.SetVertexShader(SharedResources.FullScreenVertexShaderResource);
+            ProgramWindows.SetPixelShader(SharedResources.FullScreenPixelShaderResource);
 
-            if (ResourceManager.ResourcesById[SharedResources.FullScreenPixelShaderId] is PixelShaderResource psr)
-                ProgramWindows.SetPixelShader(psr);
-
-            if (ResourceManager.Instance().SecondRenderWindowTexture != null && !ResourceManager.Instance().SecondRenderWindowTexture.IsDisposed)
+            if (viewer.Texture is { IsDisposed: false })
             {
                 //Log.Debug($"using TextureId:{resourceManager.SecondRenderWindowTexture}, debug name:{resourceManager.SecondRenderWindowTexture.DebugName}");
                 if (_viewWindowBackgroundSrv == null ||
-                    _viewWindowBackgroundSrv.Resource.NativePointer != ResourceManager.Instance().SecondRenderWindowTexture.NativePointer)
+                    _viewWindowBackgroundSrv.Resource.NativePointer != viewer.Texture.NativePointer)
                 {
                     _viewWindowBackgroundSrv?.Dispose();
-                    _viewWindowBackgroundSrv = new ShaderResourceView(Program.Device, ResourceManager.Instance().SecondRenderWindowTexture);
+                    _viewWindowBackgroundSrv = new ShaderResourceView(Program.Device, viewer.Texture);
                 }
 
                 ProgramWindows.SetRasterizerState(SharedResources.ViewWindowRasterizerState);
-                ProgramWindows.SetPixelShaderResource(_viewWindowBackgroundSrv);
+                ProgramWindows.SetPixelShaderSRV(_viewWindowBackgroundSrv);
             }
             else if (ResourceManager.ResourcesById[SharedResources.ViewWindowDefaultSrvId] is ShaderResourceViewResource srvr)
             {
-                ProgramWindows.SetPixelShaderResource(srvr.ShaderResourceView);
+                ProgramWindows.SetPixelShaderSRV(srvr.ShaderResourceView);
             }
             else
             {

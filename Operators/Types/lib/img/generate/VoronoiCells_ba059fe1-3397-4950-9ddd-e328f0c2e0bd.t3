@@ -36,8 +36,8 @@
     {
       "Id": "485ea866-3764-402b-8bb5-ade85efde0c1"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {
@@ -51,13 +51,13 @@
   ],
   "Children": [
     {
-      "Id": "ac5f45de-7b15-4563-8d92-cb54f065a808"/*Vector4ToFloat4*/,
+      "Id": "ac5f45de-7b15-4563-8d92-cb54f065a808"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "513b1255-f9c5-4a08-bf30-db3a1641ade0"/*Vector4ToFloat4*/,
+      "Id": "513b1255-f9c5-4a08-bf30-db3a1641ade0"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []

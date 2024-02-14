@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NAudio.Midi;
 using Operators.Utils;
+using T3.Core.Logging;
 using T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations.Model;
 
@@ -130,7 +131,11 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
             }
         }
 
-        public void MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
+        void MidiInConnectionManager.IMidiConsumer.OnSettingsChanged()
+        {
+        }
+
+        void MidiInConnectionManager.IMidiConsumer.MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
         {
             lock (this)
             {
@@ -187,7 +192,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
             }
         }
 
-        public void ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
+        void MidiInConnectionManager.IMidiConsumer.ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
         {
             //throw new NotImplementedException();
         }
@@ -210,17 +215,25 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
         {
             if (CacheControllerColors[apcControlIndex] == colorCode)
                 return;
+            
             const int defaultChannel = 1;
             var noteOnEvent = new NoteOnEvent(0, defaultChannel, apcControlIndex, colorCode, 50);
-            midiOut.Send(noteOnEvent.GetAsShortMessage());
+            try
+            {
+                midiOut.Send(noteOnEvent.GetAsShortMessage());
+            }
+            catch(NAudio.MmException e) 
+            {
+                Log.Warning("Failed setting midi color message:" + e.Message);        
+            } 
             CacheControllerColors[apcControlIndex] = colorCode;
         }
 
         private static readonly int[] CacheControllerColors = Enumerable.Repeat(-1, 256).ToArray();
         #endregion
 
-        private readonly Dictionary<int, ButtonSignal> _combinedButtonSignals = new Dictionary<int, ButtonSignal>();
-        private readonly List<ButtonSignal> _buttonSignalsSinceLastUpdate = new List<ButtonSignal>();
-        private readonly List<ControlChangeSignal> _controlSignalsSinceLastUpdate = new List<ControlChangeSignal>();
+        private readonly Dictionary<int, ButtonSignal> _combinedButtonSignals = new();
+        private readonly List<ButtonSignal> _buttonSignalsSinceLastUpdate = new();
+        private readonly List<ControlChangeSignal> _controlSignalsSinceLastUpdate = new();
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
@@ -10,7 +11,6 @@ using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
-using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
@@ -455,7 +455,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             SnappedToLeft,
         }
 
-        public static readonly Vector2 SnapPadding = new Vector2(40, 20);
+        public static readonly Vector2 SnapPadding = new(40, 20);
         public static readonly Vector2 PaddedDefaultOpSize = SymbolChildUi.DefaultOpSize + SnapPadding;
 
         private static readonly Vector2[] _snapOffsetsInCanvas =

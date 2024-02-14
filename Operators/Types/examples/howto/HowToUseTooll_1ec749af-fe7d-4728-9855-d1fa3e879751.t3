@@ -42,10 +42,10 @@
         },
         {
           "Id": "86bb9127-10fb-47cb-9aee-45be01567810"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": -1,
-            "Height": 0
+            "X": -1,
+            "Y": 0
           }
         },
         {
@@ -71,7 +71,7 @@
           "Value": 3.74
         },
         {
-          "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Glow*/,
+          "Id": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Opacity*/,
           "Type": "System.Single",
           "Value": 1.32
         }
@@ -94,14 +94,14 @@
           "Value": "DOUBLE \nCLICK..."
         },
         {
-          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
-          "Type": "System.Single",
-          "Value": 360.0
-        },
-        {
           "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
           "Type": "System.String",
           "Value": "Resources\\fonts\\Roboto-Regular.fnt"
+        },
+        {
+          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
+          "Type": "System.Single",
+          "Value": 360.0
         }
       ],
       "Outputs": []

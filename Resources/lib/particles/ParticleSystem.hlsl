@@ -1,19 +1,19 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
     float TriggerEmit;    
-    float AgingRate;
-    float MaxAge; 
     float Reset;
-
     float Speed; 
     float Drag;
+
     float InitialVelocity;
     float Time;
-
     float OrientTowardsVelocity;
     float RadiusFromW;
+
+    float LifeTime;
 }
 
 
@@ -27,6 +27,10 @@ cbuffer IntParams : register(b1)
 StructuredBuffer<Point> EmitPoints : t0;
 RWStructuredBuffer<Particle> Particles : u0;
 RWStructuredBuffer<Point> ResultPoints : u1;
+
+#define W_KEEP_ORIGINAL 0
+#define W_PARTICLE_AGE 1
+#define W_PARTICLE_SPEED 2
 
 
 [numthreads(64,1,1)]
@@ -44,8 +48,8 @@ void main(uint3 i : SV_DispatchThreadID)
 
     if(Reset > 0.5)
     {
-        Particles[gi].birthTime = NAN;
-        Particles[gi].p.position =  NAN;
+        Particles[gi].BirthTime = NAN;
+        Particles[gi].Position =  NAN;
     }
 
     // Insert emit points
@@ -64,49 +68,72 @@ void main(uint3 i : SV_DispatchThreadID)
     if( TriggerEmit > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
     {
         if(EmitMode != 0) {
-            Particles[(gi-1) % maxParticleCount].birthTime = NAN;
-            Particles[(gi-1) % maxParticleCount].p.w = NAN;
+            Particles[(gi-1) % maxParticleCount].BirthTime = NAN;
+            Particles[(gi-1) % maxParticleCount].Radius = NAN;
         }
-        Particles[gi].p = EmitPoints[addIndex];
-        Particles[gi].birthTime = Time;
-        Particles[gi].velocity = rotate_vector(float3(0,0,1), normalize(Particles[gi].p.rotation)) * InitialVelocity;
-        Particles[gi].radius = Particles[gi].p.w * RadiusFromW;
+
+        Particles[gi].Position = EmitPoints[addIndex].Position;
+        Particles[gi].Rotation = EmitPoints[addIndex].Rotation;
+        Particles[gi].Radius = EmitPoints[addIndex].W * RadiusFromW;
+        Particles[gi].BirthTime = Time;
+        Particles[gi].Velocity = qRotateVec3(float3(0,0,1), normalize(Particles[gi].Rotation)) * InitialVelocity;
+        Particles[gi].Radius = EmitPoints[addIndex].W * RadiusFromW;
+
+        // These will not change over lifetime...
+        Particles[gi].Color = EmitPoints[addIndex].Color;
+        //ResultPoints[gi].Color = 1;//EmitPoints[addIndex].Color;
+        //Particles[gi].Selected = EmitPoints[addIndex].Selected;
     }
 
-    if(Particles[gi].birthTime == NAN)
+    if(Particles[gi].BirthTime == NAN)
         return;
 
-    float3 velocity = Particles[gi].velocity;
+    float3 velocity = Particles[gi].Velocity;
     velocity *= (1-Drag);
-    Particles[gi].velocity = velocity;
+    Particles[gi].Velocity = velocity;
     float speed = length(velocity);
 
-    float3 pos = Particles[gi].p.position;
+    float3 pos = Particles[gi].Position;
     pos += velocity * Speed * 0.01;
-    Particles[gi].p.position = pos;
+    Particles[gi].Position = pos;
 
     if(speed > 0.0001) 
     {
         float f = saturate(speed * OrientTowardsVelocity);
-        Particles[gi].p.rotation =  q_slerp(Particles[gi].p.rotation, q_look_at(velocity / speed, float3(0,1,0)),  f );
+        Particles[gi].Rotation =  qSlerp(Particles[gi].Rotation, qLookAt(velocity / speed, float3(0,1,0)),  f );
     }
 
     // Copy result
-    ResultPoints[gi] = Particles[gi].p;
+    // Todo: This could by optimized by not copying color 
+    ResultPoints[gi] = Particles[gi];
 
     // Attempt with lerping to smooth position updates
     // ResultPoints[gi].position = lerp(Particles[gi].p.position, ResultPoints[gi].position, 0);
     // ResultPoints[gi].rotation = Particles[gi].p.rotation;
     // ResultPoints[gi].w = Particles[gi].p.w;
+    float lifeTime = LifeTime < 0.0 ? (float)(maxParticleCount/(newPointCount*60)) : LifeTime; 
     
-    if(WMode == 1) 
-    {
-        ResultPoints[gi].w = isnan(Particles[gi].birthTime) 
-                                ?  NAN
-                                : clamp((Time - Particles[gi].birthTime) * AgingRate,0, MaxAge);
-    } 
-    else if(WMode == 2) 
-    {
-        ResultPoints[gi].w = speed * AgingRate;
+    float normalizedAge = (Time - Particles[gi].BirthTime) / lifeTime;
+    bool tooOld =  normalizedAge >= 1;
+
+    if(WMode == W_KEEP_ORIGINAL) {
+        if(tooOld) {
+          ResultPoints[gi].W = NAN;
+        }
+        else {
+          ResultPoints[gi].W = Particles[gi].Radius / RadiusFromW;
+        }
     }
+    else if (WMode == W_PARTICLE_AGE) 
+    {
+        ResultPoints[gi].W = (isnan(Particles[gi].BirthTime) || tooOld) ? NAN : normalizedAge;
+    } 
+    else if(WMode == W_PARTICLE_SPEED) 
+    {
+        ResultPoints[gi].W = tooOld ? NAN : speed * 100;
+    }
+
+    ResultPoints[gi].Selected = 1;
+    ResultPoints[gi].Stretch = 1;
+
 }

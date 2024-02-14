@@ -44,11 +44,10 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
                     }
                     
                     
-                    if (string.IsNullOrWhiteSpace(symbolUi.Description))
-                    {
-                        
-                        symbolUi.Description = DescriptionMissing;
-                    }
+                    // if (string.IsNullOrWhiteSpace(symbolUi.Description))
+                    // {
+                    //     symbolUi.Description = DescriptionMissing;
+                    // }
 
                     if (symbol.Namespace.EndsWith("."))
                     {
@@ -126,6 +125,29 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
             sb.AppendLine($"___");
             sb.AppendLine("");
             
+
+
+            if (symbolUi.Symbol.InputDefinitions.Count > 1)
+            {
+                sb.AppendLine($"## Input Parameters");
+                sb.AppendLine($"|Name (Relevancy & Type)|Description|");
+                sb.AppendLine($"|----|-----------|");
+                
+                foreach (var inputDef in symbolUi.Symbol.InputDefinitions)
+                {
+                    var uiInput = symbolUi.InputUis[inputDef.Id];
+
+                    sb.Append("|");
+                    sb.Append($"__{inputDef.Name}__");
+                    sb.Append(" (");
+                    sb.Append(inputDef.DefaultValue.ValueType.Name);
+                    sb.Append(uiInput.Relevancy != Relevancy.Optional ? uiInput.Relevancy : string.Empty);
+                    sb.Append(")|");
+                    sb.Append(string.IsNullOrEmpty(uiInput.Description) ? "-" : uiInput.Description.Replace("\n", "<BR/>"));
+                    sb.AppendLine("|");
+                }
+            }
+            
             {
                 sb.AppendLine($"## Outputs");
                 sb.AppendLine($"|Name|Type|");
@@ -134,19 +156,6 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
                 {
                     var uiOutput = symbolUi.OutputUis[outputDef.Id];
                     sb.AppendLine($"|__{outputDef.Name}__|{uiOutput.Type}|");
-                }
-            }
-
-            if (symbolUi.Symbol.InputDefinitions.Count > 1)
-            {
-                sb.AppendLine($"## Parameters");
-
-                sb.AppendLine($"|Name|Type|Relevancy|");
-                sb.AppendLine($"|----|---|---|");
-                foreach (var inputDef in symbolUi.Symbol.InputDefinitions)
-                {
-                    var uiInput = symbolUi.InputUis[inputDef.Id];
-                    sb.AppendLine($"|__{inputDef.Name}__|{inputDef.DefaultValue.ValueType}|{ (uiInput.Relevancy != Relevancy.Optional ? uiInput.Relevancy : string.Empty)}|");
                 }
             }
 

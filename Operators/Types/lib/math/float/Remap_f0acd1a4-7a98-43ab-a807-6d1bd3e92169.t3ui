@@ -1,5 +1,6 @@
 {
   "Id": "f0acd1a4-7a98-43ab-a807-6d1bd3e92169"/*Remap*/,
+  "Description": "Remaps a value range to a new value range. Optionally applies bias, clamping or modulo.",
   "InputUis": [
     {
       "InputId": "40606d4e-acaf-4f23-a845-16f0eb9b73cf"/*Value*/,
@@ -13,7 +14,8 @@
       "Position": {
         "X": 197.0,
         "Y": 328.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "cd369755-5062-4934-8f37-e3a5cc9963df"/*RangeInMax*/,
@@ -27,7 +29,8 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "252276fb-8de1-42cc-ba41-07d6862015bd"/*RangeOutMax*/,
@@ -35,6 +38,17 @@
         "X": 0.0,
         "Y": 0.0
       }
+    },
+    {
+      "InputId": "23548048-e373-4fd6-9c83-1cf7398f952d"/*BiasAndGain*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "406f6476-eb25-4493-aaea-3899e84de50f"/*Mode*/,

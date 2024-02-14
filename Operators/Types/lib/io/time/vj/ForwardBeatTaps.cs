@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using T3.Core;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d
@@ -15,7 +9,7 @@ namespace T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d
     public class ForwardBeatTaps : Instance<ForwardBeatTaps>
     {
         [Output(Guid = "71d05d91-d18b-44b3-a469-392739fd6941")]
-        public readonly Slot<Command> Result = new Slot<Command>();
+        public readonly Slot<Command> Result = new();
 
         public ForwardBeatTaps()
         {
@@ -50,7 +44,7 @@ namespace T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d
         
         
         [Input(Guid = "89576f05-3f3d-48d1-ab63-f3c16c85db63")]
-        public readonly InputSlot<Command> SubTree = new InputSlot<Command>();
+        public readonly InputSlot<Command> SubTree = new();
         
         [Input(Guid = "37DA48AC-A7C5-47C8-9FB3-82D4403B2BA0")]
         public readonly InputSlot<bool> TriggerBeatTap = new();

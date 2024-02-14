@@ -77,7 +77,7 @@ namespace T3.Operators.Types.Id_42c556fb_014b_4ac5_b390_f426ab415aa7
         private string _errorMessageForStatus;
 
         [Input(Guid = "04d5f714-4e38-4a1e-b245-f6f0b582b35a")]
-        public readonly InputSlot<string> FilePath = new InputSlot<string>();
+        public readonly InputSlot<string> FilePath = new();
 
 
     }

@@ -1,6 +1,6 @@
 {
   "Id": "c3a18346-930c-4242-9e42-aa9b3a439395"/*Clamp*/,
-  "Description": "This is the Min and Max thing you are looking for. \n\nIn other words: \nThe term \"clamp\" in mathematics typically refers to a function that restricts a value to a specified range. The clamp function takes three arguments: a value, a minimum bound, and a maximum bound. It returns the original value if it falls within the specified range; otherwise, it returns the nearest bound. (ChatGPT 3.5)",
+  "Description": "Clamps an input float between two values.\nCan be used to find minimum or maximum values.\n\nAKA: Min, Max\n\nTips:\n- ",
   "InputUis": [
     {
       "InputId": "eb002b5d-b938-4b03-b2ea-26252ae051cd"/*Value*/,
@@ -8,6 +8,7 @@
         "X": 36.0,
         "Y": 334.0
       },
+      "Description": "Input value to clamp. Will be output if it falls between the Min and Max values.",
       "Min": -100.0,
       "Max": 100.0
     },
@@ -17,6 +18,7 @@
         "X": 197.0,
         "Y": 328.0
       },
+      "Description": "Lower bound. If Value is below this, the operator will output this instead.",
       "Min": -100.0,
       "Max": 100.0
     },
@@ -25,7 +27,8 @@
       "Position": {
         "X": 197.0,
         "Y": 373.0
-      }
+      },
+      "Description": "Upper bound. If Value is above this, the operator will output this instead."
     }
   ],
   "SymbolChildUis": [],

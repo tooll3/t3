@@ -101,15 +101,14 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         private void InsertNewKeyframe(Curve curve, float u)
         {
             var value = curve.GetSampledValue(u);
-            var previousU = curve.GetPreviousU(u);
 
-            var key = (previousU != null)
-                          ? curve.GetV(previousU.Value).Clone()
-                          : new VDefinition();
+            var newKey = curve.TryGetPreviousKey(u, out var previousKey) 
+                             ? previousKey.Clone() 
+                             : new VDefinition();
 
-            key.Value = value;
-            key.U = u;
-            curve.AddOrUpdateV(u, key);
+            newKey.Value = value;
+            newKey.U = u;
+            curve.AddOrUpdateV(u, newKey);
         }
 
         #region implement ITimeObjectManipulation to forward interaction to children
@@ -130,7 +129,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         }
 
         private MacroCommand _macro;
-        private readonly List<ICommand> _commands = new List<ICommand>();
+        private readonly List<ICommand> _commands = new();
         
         public ICommand StartDragCommand()
         {
@@ -210,13 +209,13 @@ namespace T3.Editor.Gui.Interaction.WithCurves
             }
         }
 
-        protected readonly List<ITimeObjectManipulation> TimeObjectManipulators = new List<ITimeObjectManipulation>();
+        protected readonly List<ITimeObjectManipulation> TimeObjectManipulators = new();
         #endregion
         
         protected SelectionFence.States FenceState;
         
-        public readonly ValueSnapHandler SnapHandlerForU = new ValueSnapHandler();
-        public readonly ValueSnapHandler SnapHandlerForV = new ValueSnapHandler();
+        public readonly ValueSnapHandler SnapHandlerForU = new();
+        public readonly ValueSnapHandler SnapHandlerForV = new();
         protected ImDrawListPtr Drawlist;
     }
 }

@@ -1,6 +1,6 @@
 ﻿// ReSharper disable RedundantArgumentDefaultValue
 
-using System.Numerics;
+using Color = T3.Core.DataTypes.Vector.Color;
 
 namespace T3.Editor.Gui.Styling;
 

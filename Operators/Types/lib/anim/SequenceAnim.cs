@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
@@ -215,8 +212,7 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             }
             else
             {
-                var index = CurrentSequenceIndex.Clamp(0, _sequences.Count - 1);
-                CurrentSequence = _sequences[index];
+                CurrentSequence = _sequences[CurrentSequenceIndex.Mod(_sequences.Count)];
             }
         }
         

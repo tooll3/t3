@@ -46,14 +46,14 @@
     {
       "Id": "6809a355-47fc-4e27-98a2-956dcc7f41ef"/*Resolution*/,
       "DefaultValue": {
-        "Width": -1,
-        "Height": -1
+        "X": -1,
+        "Y": -1
       }
     }
   ],
   "Children": [
     {
-      "Id": "944097d1-2a7d-4654-a595-3e149eb8b725"/*Vector4ToFloat4*/,
+      "Id": "944097d1-2a7d-4654-a595-3e149eb8b725"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -81,13 +81,13 @@
       "Outputs": []
     },
     {
-      "Id": "fd6b29f1-326e-451b-af40-0f25a0df5cf5"/*Vector2ToFloat2*/,
+      "Id": "fd6b29f1-326e-451b-af40-0f25a0df5cf5"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "2ce8961c-0ed3-4006-9f56-3e0e9dc5086d"/*Vector2ToFloat2*/,
+      "Id": "2ce8961c-0ed3-4006-9f56-3e0e9dc5086d"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [
         {

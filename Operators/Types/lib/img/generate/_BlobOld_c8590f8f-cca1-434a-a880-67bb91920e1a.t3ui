@@ -1,6 +1,6 @@
 {
   "Id": "c8590f8f-cca1-434a-a880-67bb91920e1a"/*_BlobOld*/,
-  "Description": "A very versatile generator for rectangles, circles, blobs, vignettes, and many other things. It's using a round rectangle shape that was too awkward to control. Consider using the updated [Blob].",
+  "Description": "Generates rectangles, circles, blobs, vignettes and other things.\n\nThis is a legacy operator; consider using the updated [Blob] or [RoundedRect] instead.",
   "InputUis": [
     {
       "InputId": "630d4d0b-d4ca-4987-93ca-7eb782ebccc6"/*Image*/,
@@ -103,35 +103,35 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "44619228-581c-435d-a3e8-c3a5a8a2e98e"/*Vector4ToFloat4*/,
+      "ChildId": "44619228-581c-435d-a3e8-c3a5a8a2e98e"/*Vector4Components*/,
       "Position": {
         "X": -25.082056,
         "Y": 29.952059
       }
     },
     {
-      "ChildId": "31687085-b255-4b1e-a855-99b2727efda1"/*Vector4ToFloat4*/,
+      "ChildId": "31687085-b255-4b1e-a855-99b2727efda1"/*Vector4Components*/,
       "Position": {
         "X": -25.082056,
         "Y": 85.952194
       }
     },
     {
-      "ChildId": "67a09b70-b68c-4297-8625-1caad37a0387"/*Vector2ToFloat2*/,
+      "ChildId": "67a09b70-b68c-4297-8625-1caad37a0387"/*Vector2Components*/,
       "Position": {
         "X": -25.082056,
         "Y": 141.9522
       }
     },
     {
-      "ChildId": "b240cefd-caa4-4870-b9b9-ae5271a6c72e"/*Vector2ToFloat2*/,
+      "ChildId": "b240cefd-caa4-4870-b9b9-ae5271a6c72e"/*Vector2Components*/,
       "Position": {
         "X": -25.082056,
         "Y": 197.95222
       }
     },
     {
-      "ChildId": "639f7f5b-9010-4982-b8d5-6e3b7382630b"/*Vector2ToFloat2*/,
+      "ChildId": "639f7f5b-9010-4982-b8d5-6e3b7382630b"/*Vector2Components*/,
       "Position": {
         "X": -25.082056,
         "Y": 253.95222

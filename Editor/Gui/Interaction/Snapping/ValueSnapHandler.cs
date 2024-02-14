@@ -162,7 +162,7 @@ namespace T3.Editor.Gui.Interaction.Snapping
             VerticalLinesForU,
         }
         
-        private readonly List<IValueSnapAttractor> _snapAttractors = new List<IValueSnapAttractor>();
+        private readonly List<IValueSnapAttractor> _snapAttractors = new();
         private double _lastSnapPosition;
         private double _lastSnapTime;
     }

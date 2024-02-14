@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using T3.Core.Logging;
-
-namespace T3.Core.Logging
+﻿namespace T3.Core.Logging
 {
     public static class RenderStatsCollector
     {

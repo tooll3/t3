@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -11,7 +10,7 @@ namespace T3.Operators.Types.Id_c30542d5_609c_452a_9168_78964a3a0927
     public class ParamConstBuffer : Instance<ParamConstBuffer>
     {
         [Output(Guid = "{89957A76-09F1-4448-B23E-39DFDD0AA5B0}", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<Buffer> Buffer = new Slot<Buffer>();
+        public readonly Slot<Buffer> Buffer = new();
 
         public ParamConstBuffer()
         {
@@ -47,12 +46,12 @@ namespace T3.Operators.Types.Id_c30542d5_609c_452a_9168_78964a3a0927
         }       
 
         [Input(Guid = "{3BB4BAB9-96CD-4E08-BAB7-2A15FB4F11C0}")]
-        public readonly InputSlot<float> Param1 = new InputSlot<float>();
+        public readonly InputSlot<float> Param1 = new();
         [Input(Guid = "{A3E13E00-835D-4857-B804-A1E300EBCA2A}")]
-        public readonly InputSlot<float> Param2 = new InputSlot<float>();
+        public readonly InputSlot<float> Param2 = new();
         [Input(Guid = "{E3F6E24D-97D7-4679-8A4C-C7ADA2E01022}")]
-        public readonly InputSlot<float> Param3 = new InputSlot<float>();
+        public readonly InputSlot<float> Param3 = new();
         [Input(Guid = "{B2208D3A-F321-4F4B-81DE-6EB3026FE39C}")]
-        public readonly InputSlot<float> Param4 = new InputSlot<float>();
+        public readonly InputSlot<float> Param4 = new();
     }
 }

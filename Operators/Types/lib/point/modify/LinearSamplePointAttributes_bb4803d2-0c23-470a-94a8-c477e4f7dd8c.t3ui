@@ -36,7 +36,8 @@
       "Position": {
         "X": -1562.4236,
         "Y": 601.2689
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "159bf880-b6b7-413b-afc9-acdc1b87a9e4"/*RedFactor*/,
@@ -57,7 +58,8 @@
       "Position": {
         "X": -1562.4236,
         "Y": 736.2689
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "38484dbf-76b7-4eb9-a72e-2dd6a0d657fa"/*GreenFactor*/,
@@ -78,7 +80,8 @@
       "Position": {
         "X": -1562.4236,
         "Y": 871.2689
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "3deba352-f501-4d62-969d-826e5adbfa59"/*BlueFactor*/,
@@ -99,7 +102,8 @@
       "Position": {
         "X": -1562.4236,
         "Y": 1006.2689
-      }
+      },
+      "GroupTitle": "Operation"
     },
     {
       "InputId": "eee2abdd-56ec-47f2-8510-03f73722c3af"/*TranslationSpace*/,

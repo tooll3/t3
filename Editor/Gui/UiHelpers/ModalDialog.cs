@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using System.Windows.Forms.VisualStyles;
 using ImGuiNET;
 
 namespace T3.Editor.Gui.UiHelpers
@@ -82,7 +81,7 @@ namespace T3.Editor.Gui.UiHelpers
 
         private bool _shouldShowNextFrame;
         protected Vector2 DialogSize = new(500, 250);
-        protected Vector2 ItemSpacing = new Vector2(4, 10);
+        protected Vector2 ItemSpacing = new(4, 10);
         protected float Padding = 20;
         protected ImGuiWindowFlags Flags = ImGuiWindowFlags.None;
     }

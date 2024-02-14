@@ -1,4 +1,3 @@
-using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,7 +8,7 @@ namespace T3.Operators.Types.Id_93e2f11a_18a2_4dcb_86df_c452d340b409
     {
 
         [Output(Guid = "27258c56-6421-4800-a057-26c9c2ede324")]
-        public readonly Slot<T3.Core.DataTypes.MeshBuffers> BlendedMesh = new Slot<T3.Core.DataTypes.MeshBuffers>();
+        public readonly Slot<T3.Core.DataTypes.MeshBuffers> BlendedMesh = new();
 
         [Input(Guid = "add0fd7b-fa76-4788-8940-d1949a44b342")]
         public readonly InputSlot<float> BlendValue = new();
@@ -27,10 +26,10 @@ namespace T3.Operators.Types.Id_93e2f11a_18a2_4dcb_86df_c452d340b409
         public readonly InputSlot<float> Scatter = new();
 
         [Input(Guid = "a7ef92db-87c9-4cf3-bd62-f8cb858d9ed9")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> MeshA = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
+        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> MeshA = new();
 
         [Input(Guid = "44acb67a-a443-4c11-8939-2b76132f8dbf")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> MeshB = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
+        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> MeshB = new();
 
         
         private enum BlendModes

@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_abf1ec99_049d_474c_9023_5302d5a5c804
     public class FloatListToString : Instance<FloatListToString>
     {
         [Output(Guid = "fcd2597b-31cb-443e-a9a9-6647bc406763")]
-        public readonly Slot<string> Output = new Slot<string>();
+        public readonly Slot<string> Output = new();
 
         public FloatListToString()
         {
@@ -61,7 +61,7 @@ namespace T3.Operators.Types.Id_abf1ec99_049d_474c_9023_5302d5a5c804
             }
         }
 
-        private StringBuilder _stringBuilder = new StringBuilder();
+        private StringBuilder _stringBuilder = new();
 
         [Input(Guid = "010C814B-BE7D-4BF9-82BE-1869217BD1AD")]
         public readonly InputSlot<List<float>> Value = new();

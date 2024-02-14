@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 
@@ -84,8 +85,8 @@ namespace T3.Editor.Gui.Interaction
         private static Vector2 _center;
         private static float DistanceToCenter => Vector2.Distance(_io.MousePos, _center);
 
-        private static readonly Color _segmentColor = new Color(0.2f, 0.2f, 0.2f, 0.35f);
-        private static readonly Color _activeSegmentColor = new Color(1f, 1f, 1f, 0.5f);
+        private static readonly Color _segmentColor = new(0.2f, 0.2f, 0.2f, 0.35f);
+        private static readonly Color _activeSegmentColor = new(1f, 1f, 1f, 0.5f);
 
         private enum States
         {

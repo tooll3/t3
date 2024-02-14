@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -60,10 +61,13 @@ static const float ToRad = 3.141578 / 180;
     float3 pos = float3(x, y, 0);
 
     pos += Center;
-    ResultPoints[index].position = pos;
-    ResultPoints[index].w = pow(radius * W + CutOff2, Bias);
+    ResultPoints[index].Position = pos;
+    ResultPoints[index].W = pow(radius * W + CutOff2, Bias);
 
-    float4 rot = rotate_angle_axis(OrientationAngle * PI / 180, normalize(OrientationAxis));
-    rot = qmul(rot, rotate_angle_axis(ang, float3(0, 0, 1)));
-    ResultPoints[index].rotation = rot;
+    float4 rot = qFromAngleAxis(OrientationAngle * PI / 180, normalize(OrientationAxis));
+    rot = qMul(rot, qFromAngleAxis(ang, float3(0, 0, 1)));
+    ResultPoints[index].Rotation = rot;
+    ResultPoints[index].Color = 1;
+    ResultPoints[index].Selected = 1;
+
 }

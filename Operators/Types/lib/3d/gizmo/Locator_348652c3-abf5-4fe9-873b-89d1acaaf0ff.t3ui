@@ -111,7 +111,7 @@
       }
     },
     {
-      "ChildId": "2a9efde2-971e-494b-a6a7-a24cf70bb5fa"/*Vec3Distances*/,
+      "ChildId": "2a9efde2-971e-494b-a6a7-a24cf70bb5fa"/*Vec3Distance*/,
       "Position": {
         "X": 791.7852,
         "Y": 169.05078

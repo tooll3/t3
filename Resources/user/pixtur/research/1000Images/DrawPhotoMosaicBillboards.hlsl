@@ -1,5 +1,6 @@
 #include "lib/shared/point.hlsl"
 #include "lib/shared/hash-functions.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 static const float3 Corners[] =
     {
@@ -77,7 +78,7 @@ psInput vsMain(uint id: SV_VertexID)
     float f = pointId / (float)particleCount;
     output.texCoord = (cornerFactors.xy * float2(1, -1) * 0.5 + 0.5);
 
-    float4 posInObject = float4(p.position, 1);
+    float4 posInObject = float4(p.Position, 1);
     float4 quadPosInCamera = mul(posInObject, ObjectToCamera);
     float4 posInCamera = mul(posInObject, ObjectToCamera);
 
@@ -92,11 +93,11 @@ psInput vsMain(uint id: SV_VertexID)
     lch.x += hash11u(pointId) * 0.1;   // Add some variation to "dither"
     output.arrayIndex = IndexFromColorLookUp.SampleLevel(pointSampler, lch,0);
 
-    float hideUndefinedPoints = isnan(p.w) ? 0 : 1;
+    float hideUndefinedPoints = isnan(p.W) ? 0 : 1;
     float computedScale = hideUndefinedPoints * Scale;
 
     float3 axis = ( cornerFactors ) * 0.010;
-    axis = rotate_vector(axis, p.rotation) * computedScale;
+    axis = qRotateVec3(axis, p.Rotation) * computedScale;
     output.position = mul(posInObject + float4(axis, 0), ObjectToClipSpace);
     return output;
 }

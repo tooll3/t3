@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_fd873111_23b6_458a_918a_eefe990c6fa3
     public class ForEachCodeTest : Instance<ForEachCodeTest>
     {
         [Output(Guid = "b924240c-bf06-4844-82fd-ae1b90f73053")]
-        public readonly Slot<System.Collections.Generic.List<string>> OutputList = new Slot<System.Collections.Generic.List<string>>();
+        public readonly Slot<System.Collections.Generic.List<string>> OutputList = new();
 
         public ForEachCodeTest()
         {
@@ -44,7 +44,7 @@ namespace T3.Operators.Types.Id_fd873111_23b6_458a_918a_eefe990c6fa3
         public Func<int, double, string, string> ElementFunc;
 
         [Input(Guid = "91368258-c25d-4a5f-890a-96a1c6695d74")]
-        public readonly InputSlot<System.Collections.Generic.List<string>> Input = new InputSlot<System.Collections.Generic.List<string>>();
+        public readonly InputSlot<System.Collections.Generic.List<string>> Input = new();
     }
 
     // public class ForEachCodeTest : ForEachCodeTestBase

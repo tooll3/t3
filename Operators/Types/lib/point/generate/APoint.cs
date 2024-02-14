@@ -12,6 +12,7 @@ using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
 {
@@ -33,6 +34,7 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
             ResultList.UpdateAction = Update;
             OutPosition.UpdateAction = Update;
             _pointListWithSeparator.TypedElements[1] = Point.Separator();
+
         }
         
         IInputSlot ITransformable.TranslationInput => Position;
@@ -52,15 +54,17 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
         {
             TransformCallback?.Invoke(this, context);
             
-            var from = Position.GetValue(context);
-            var w = W.GetValue(context);
+            var pos = Position.GetValue(context);
             _addSeparator = AddSeparator.GetValue(context);
 
             var rot = Quaternion.CreateFromAxisAngle(Vector3.Normalize( RotationAxis.GetValue(context)), RotationAngle.GetValue(context) * MathUtils.ToRad);
             var array = _addSeparator ? _pointListWithSeparator : _pointList;
-            OutPosition.Value = from;
-            array.TypedElements[0].Position = from;
-            array.TypedElements[0].W = w;
+            OutPosition.Value = pos;
+            array.TypedElements[0].Position = pos;
+            array.TypedElements[0].W = W.GetValue(context);
+            array.TypedElements[0].Color = Color.GetValue(context);
+            array.TypedElements[0].Stretch = Extend.GetValue(context);
+            array.TypedElements[0].Selected = Selected.GetValue(context);
             array.TypedElements[0].Orientation = rot;
             ResultList.Value = array;
             
@@ -91,8 +95,10 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
 
             if (sizeChanged)
             {
+                Log.Debug("Updating Point buffer size....", this);
                 ResourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_buffer, UnorderedAccessViewBufferFlags.None, ref _bufferWithViews.Uav);
+                _bufferWithViews.Buffer = _buffer;
             }
         }
 
@@ -100,7 +106,7 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
         private readonly StructuredList<Point> _pointList = new(1);
         
         private SharpDX.Direct3D11.Buffer _buffer;
-        private readonly BufferWithViews _bufferWithViews = new();
+        private readonly BufferWithViews _bufferWithViews = new() ;
         private bool _addSeparator;
         
         [Input(Guid = "a0a453db-d8f1-415a-9a98-3c88a25b15e7")]
@@ -114,6 +120,15 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
 
         [Input(Guid = "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5")]
         public readonly InputSlot<float> W = new();
+        
+        [Input(Guid = "34AD759E-9A81-4D7E-9024-5ABACC279895")]
+        public readonly InputSlot<Vector4> Color = new();
+
+        [Input(Guid = "130B5C11-66DD-4C0E-AC67-924554BAD2D8")]
+        public readonly InputSlot<Vector3> Extend = new();
+        
+        [Input(Guid = "CA12DF13-7529-4EDE-B6FC-CE8AEBA4F33E")]
+        public readonly InputSlot<float> Selected = new();
         
         [Input(Guid = "53CDE701-435F-42E4-B598-DB0E607A238C")]
         public readonly InputSlot<bool> AddSeparator = new();

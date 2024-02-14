@@ -11,6 +11,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
 using ResourceManager = T3.Core.Resource.ResourceManager;
@@ -178,10 +179,13 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             _engine = new MediaEngine(factory, attributes, MediaEngineCreateFlags.None, EnginePlaybackEventHandler);
         }
 
-        private void SetupTexture(Size2 size)
+        private void SetupTexture(Int2 size)
         {
-            if (size.Width <= 0 || size.Height <= 0)
-                size = new Size2(512, 512);
+            if (size.Width <= 0 || size.Height <= 0 || size.Width > 16383 || size.Height > 16383)
+            {
+                Log.Warning($"Texture size {size} is invalid, using 512x512 instead.");
+                size = new Int2(512, 512);
+            }
 
             Texture.DirtyFlag.Clear();
 
@@ -189,23 +193,31 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 return;
 
             _texture?.Dispose();
-            
+
             var device = ResourceManager.Device;
-            _texture = new Texture2D(device,
-                                     new Texture2DDescription
-                                         {
-                                             ArraySize = 1,
-                                             BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource | BindFlags.UnorderedAccess,
-                                             CpuAccessFlags = CpuAccessFlags.None,
-                                             Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
-                                             Width = size.Width,
-                                             Height = size.Height,
-                                             MipLevels = 0,
-                                             OptionFlags = ResourceOptionFlags.None,
-                                             SampleDescription = new SampleDescription(1, 0),
-                                             Usage = ResourceUsage.Default
-                                         });
-            _textureSize = size;
+            try
+            {
+                _texture = new Texture2D(device,
+                                         new Texture2DDescription
+                                             {
+                                                 ArraySize = 1,
+                                                 BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource | BindFlags.UnorderedAccess,
+                                                 CpuAccessFlags = CpuAccessFlags.None,
+                                                 Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
+                                                 Width = size.Width,
+                                                 Height = size.Height,
+                                                 MipLevels = 0,
+                                                 OptionFlags = ResourceOptionFlags.None,
+                                                 SampleDescription = new SampleDescription(1, 0),
+                                                 Usage = ResourceUsage.Default
+                                             });
+                _textureSize = size;
+            }
+            catch (Exception e)
+            {
+                _errorMessageForStatus = $"Failed to create texture for {size}: {e.Message}";
+                _texture = null;
+            }
         }
 
         private void EnginePlaybackEventHandler(MediaEngineEvent mediaEvent, long param1, int param2)
@@ -329,7 +341,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 _invalidated = false;
 
                 _engine.GetNativeVideoSize(out var width, out var height);
-                SetupTexture(new Size2(width, height));
+                SetupTexture(new Int2(width, height));
 
                 // _SRGB doesn't work :/ Getting invalid argument exception in TransferVideoFrame
                 //_renderTarget = Texture.New2D(graphicsDevice, width, height, PixelFormat.B8G8R8A8_UNorm, TextureFlags.RenderTarget | TextureFlags.ShaderResource);
@@ -449,7 +461,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         private MediaEngineErr _lastMediaEngineError;
         private string _url;
         private Texture2D _texture;
-        private Size2 _textureSize = new(0, 0);
+        private Int2 _textureSize = new(0, 0);
         private bool _invalidated;
 
         /** Set to true to start playback, false to pause playback. */

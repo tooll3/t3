@@ -1,10 +1,9 @@
 using System;
-using SharpDX;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_a6e12383_09b6_4bbd_a4bb_8908598c3409
 {
@@ -24,10 +23,10 @@ namespace T3.Operators.Types.Id_a6e12383_09b6_4bbd_a4bb_8908598c3409
             var vector3 = Axis.GetValue(context);
             var angle = Angle.GetValue(context) / 180 * MathF.PI;
             
-            Matrix m = Matrix.RotationAxis(vector3.ToSharpDxVector3(), angle);
+            Matrix4x4 m = Matrix4x4.CreateFromAxisAngle(vector3, angle);
             
             var previousWorldTobject = context.ObjectToWorld;
-            context.ObjectToWorld = Matrix.Multiply(m, context.ObjectToWorld);
+            context.ObjectToWorld = Matrix4x4.Multiply(m, context.ObjectToWorld);
             Command.GetValue(context);
             context.ObjectToWorld = previousWorldTobject;
         }

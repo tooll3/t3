@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.InputUi;
@@ -17,7 +18,7 @@ namespace T3.Editor.Gui.UiHelpers
         /// <summary>
         /// Draw a gradient control that returns true, if gradient has been modified
         /// </summary>
-        public static bool Draw(ref Gradient gradientRef, ImDrawListPtr drawList, ImRect areaOnScreen, bool cloneIfModified = false)
+        public static InputEditStateFlags Draw(ref Gradient gradientRef, ImDrawListPtr drawList, ImRect areaOnScreen, bool cloneIfModified = false)
         {
             var gradientForEditing = gradientRef;
 
@@ -34,23 +35,27 @@ namespace T3.Editor.Gui.UiHelpers
             DrawGradient(gradientForEditing, drawList, areaOnScreen);
 
             if (!(areaOnScreen.GetHeight() >= RequiredHeightForHandles))
-                return false;
+                return InputEditStateFlags.Nothing;
 
             Gradient.Step hoveredStep = null;
 
             // Draw handles
-            var modified = false;
+            var modified = InputEditStateFlags.Nothing;
 
             Gradient.Step removedStep = null;
             foreach (var step in gradientForEditing.Steps)
             {
-                modified |= DrawHandle(step);
+                var result = DrawHandle(step);
+                if(result != InputEditStateFlags.Nothing)
+                {
+                    modified = result;
+                }
             }
 
             if (removedStep != null)
             {
                 gradientForEditing.Steps.Remove(removedStep);
-                modified = true;
+                modified = InputEditStateFlags.ModifiedAndFinished;
             }
             
             if (cloneIfModified && hoveredStep != null)
@@ -75,7 +80,7 @@ namespace T3.Editor.Gui.UiHelpers
                                                      Id = Guid.NewGuid(),
                                                      Color = gradientForEditing.Sample(normalizedPosition)
                                                  });
-                modified = true;
+                modified = InputEditStateFlags.ModifiedAndFinished;
             }
 
             if (canInsertNewStep && ImGui.IsItemHovered() && !ImGui.IsItemActive())
@@ -94,19 +99,23 @@ namespace T3.Editor.Gui.UiHelpers
                                                         }
 
                                                         gradientForEditing.SortHandles();
-                                                        modified = true;
+                                                        modified = InputEditStateFlags.ModifiedAndFinished;
                                                     }
 
                                                     if (ImGui.MenuItem("Distribute evenly", gradientForEditing.Steps.Count > 2))
                                                     {
+                                                        var stepsCount = (gradientForEditing.Steps.Count - 1);
+                                                        if (gradientForEditing.Interpolation == Gradient.Interpolations.Hold)
+                                                            stepsCount++;
+                                                        
                                                         for (var index = 0; index < gradientForEditing.Steps.Count; index++)
                                                         {
                                                             gradientForEditing.Steps[index].NormalizedPosition =
-                                                                (float)index / (gradientForEditing.Steps.Count - 1);
+                                                                (float)index / stepsCount;
                                                         }
 
                                                         gradientForEditing.SortHandles();
-                                                        modified = true;
+                                                        modified = InputEditStateFlags.Finished;
                                                     }
 
                                                     if (ImGui.BeginMenu("Gradient presets..."))
@@ -123,7 +132,7 @@ namespace T3.Editor.Gui.UiHelpers
                                                                 var clone = preset.TypedClone();
                                                                 gradientForEditing.Steps = clone.Steps;
                                                                 gradientForEditing.Interpolation = clone.Interpolation;
-                                                                modified = true;
+                                                                modified = InputEditStateFlags.ModifiedAndFinished;
                                                             }
 
                                                             var rect = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax());
@@ -159,7 +168,7 @@ namespace T3.Editor.Gui.UiHelpers
                                                             if (ImGui.MenuItem(value.ToString(), "", isSelected))
                                                             {
                                                                 gradientForEditing.Interpolation = value;
-                                                                modified = true;
+                                                                modified = InputEditStateFlags.ModifiedAndFinished;
                                                             }
                                                         }
 
@@ -167,7 +176,7 @@ namespace T3.Editor.Gui.UiHelpers
                                                     }
                                                 }, "Gradient");
 
-            if (modified && cloneIfModified)
+            if (modified != InputEditStateFlags.Nothing && cloneIfModified)
             {
                 gradientRef = gradientForEditing;
                 _hoveredGradientRef = null;
@@ -176,9 +185,9 @@ namespace T3.Editor.Gui.UiHelpers
 
             return modified;
 
-            bool DrawHandle(Gradient.Step step)
+            InputEditStateFlags DrawHandle(Gradient.Step step)
             {
-                var stepModified = false;
+                var stepModified = InputEditStateFlags.Nothing;
                 ImGui.PushID(step.Id.GetHashCode());
                 var handleArea = GetHandleAreaForPosition(step.NormalizedPosition);
 
@@ -218,7 +227,7 @@ namespace T3.Editor.Gui.UiHelpers
                     
                     drawList.AddRectFilled(new Vector2(areaOnScreen.Min.X, y), new Vector2(areaOnScreen.Max.X, y-1), UiColors.ForegroundFull.Fade(0.1f));
                     Icons.DrawIconAtScreenPosition(Icon.Trash, new Vector2(centerX, y+10), drawList, isDraggedOutside ? UiColors.StatusAttention: UiColors.ForegroundFull.Fade(0.2f));
-                    stepModified = true;
+                    stepModified = InputEditStateFlags.Modified;
                 }
 
                 // Draw handle
@@ -233,6 +242,8 @@ namespace T3.Editor.Gui.UiHelpers
                     var mouseOutsideThresholdAfterDrag = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + RemoveThreshold;
                     if (mouseOutsideThresholdAfterDrag && gradientForEditing.Steps.Count > 1)
                         removedStep = step;
+                    
+                    stepModified = InputEditStateFlags.ModifiedAndFinished;
                 }
 
                 var points = new[]
@@ -257,7 +268,10 @@ namespace T3.Editor.Gui.UiHelpers
                 }
 
                 var popUpResult = ColorEditPopup.DrawPopup(ref step.Color, step.Color);
-                stepModified |= popUpResult != InputEditStateFlags.Nothing;
+                if (popUpResult != InputEditStateFlags.Nothing)
+                {
+                    stepModified = popUpResult;
+                }
                 ImGui.PopID();
                 return stepModified;
             }

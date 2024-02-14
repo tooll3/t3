@@ -7,11 +7,13 @@ using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Windows;
+using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Styling;
 using Device = SharpDX.Direct3D11.Device;
 using Icon = System.Drawing.Icon;
 using Rectangle = System.Drawing.Rectangle;
 using Resource = SharpDX.Direct3D11.Resource;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.App
 {
@@ -21,18 +23,32 @@ namespace T3.Editor.App
     internal class AppWindow
     {
         public IntPtr HwndHandle => Form.Handle;
-        public System.Numerics.Vector2 Size => new(Width, Height);
+        public Int2 Size => new(Width, Height);
         public int Width => Form.ClientSize.Width;
         public int Height => Form.ClientSize.Height;
         public bool IsFullScreen => Form.FormBorderStyle == FormBorderStyle.None;
-        
+
         internal SwapChain SwapChain { get => _swapChain; private set => _swapChain = value; }
         internal RenderTargetView RenderTargetView { get => _renderTargetView; private set => _renderTargetView = value; }
         internal ImGuiDx11RenderForm Form { get; private set; }
-        internal SwapChainDescription SwapChainDescription { get; private set; }
+
+        internal SwapChainDescription SwapChainDescription => new()
+                                                                                       {
+                                                                                           BufferCount = 3,
+                                                                                           ModeDescription = new ModeDescription(Width,
+                                                                                               Height,
+                                                                                               new Rational(60, 1),
+                                                                                               Format.R8G8B8A8_UNorm),
+                                                                                           IsWindowed = true,
+                                                                                           OutputHandle = Form.Handle,
+                                                                                           SampleDescription = new SampleDescription(1, 0),
+                                                                                           SwapEffect = SwapEffect.Discard,
+                                                                                           Usage = Usage.RenderTargetOutput
+                                                                                       };
 
         internal bool IsMinimized => Form.WindowState == FormWindowState.Minimized;
         internal bool IsCursorOverWindow => Form.Bounds.Contains(Cursor.Position);
+        public Texture2D Texture { get; set; }
 
         internal AppWindow(string windowTitle, bool disableClose)
         {
@@ -54,7 +70,6 @@ namespace T3.Editor.App
         }
 
         public void Show() => Form.Show();
-        
 
         public Vector2 GetDpi()
         {
@@ -75,18 +90,21 @@ namespace T3.Editor.App
         internal void InitViewSwapChain(Factory factory)
         {
             SwapChain = new SwapChain(factory, _device, SwapChainDescription);
-            SwapChain.ResizeBuffers(bufferCount: 3, Form.ClientSize.Width, Form.ClientSize.Height,
+            SwapChain.ResizeBuffers(bufferCount: 3, Width, Height,
                                     SwapChain.Description.ModeDescription.Format, SwapChain.Description.Flags);
         }
 
         internal void PrepareRenderingFrame()
         {
             _deviceContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-            _deviceContext.Rasterizer.SetViewport(new Viewport(0, 0, Form.ClientSize.Width, Form.ClientSize.Height, 0.0f, 1.0f));
+            _deviceContext.Rasterizer.SetViewport(new Viewport(0, 0, Width, Height, 0.0f, 1.0f));
             _deviceContext.OutputMerger.SetTargets(RenderTargetView);
-            _deviceContext.ClearRenderTargetView(RenderTargetView, UiColors.WindowBackground.AsSharpDx);
+
+            var color = UiColors.WindowBackground.ToByte4();
+            var sharpDxColor = new SharpDX.Color(color.X, color.Y, color.Z, color.W);
+            _deviceContext.ClearRenderTargetView(RenderTargetView, sharpDxColor);
         }
-        
+
         internal void RunRenderLoop(RenderLoop.RenderCallback callback) => RenderLoop.Run(Form, callback);
 
         internal void SetSize(int width, int height) => Form.ClientSize = new Size(width, height);
@@ -141,20 +159,6 @@ namespace T3.Editor.App
                                  ClientSize = new Size(640, 480),
                                  Icon = new Icon(@"Resources\t3-editor\images\t3.ico", 48, 48)
                              };
-
-            SwapChainDescription = new SwapChainDescription()
-                                       {
-                                           BufferCount = 3,
-                                           ModeDescription = new ModeDescription(Form.ClientSize.Width,
-                                                                                 Form.ClientSize.Height,
-                                                                                 new Rational(60, 1),
-                                                                                 Format.R8G8B8A8_UNorm),
-                                           IsWindowed = true,
-                                           OutputHandle = Form.Handle,
-                                           SampleDescription = new SampleDescription(1, 0),
-                                           SwapEffect = SwapEffect.Discard,
-                                           Usage = Usage.RenderTargetOutput
-                                       };
         }
 
         private void InitRenderTargetsAndEventHandlers()
@@ -185,8 +189,8 @@ namespace T3.Editor.App
             swapChain.ResizeBuffers(3, form.ClientSize.Width, form.ClientSize.Height, Format.Unknown, 0);
             buffer = Resource.FromSwapChain<Texture2D>(swapChain, 0);
             rtv = new RenderTargetView(device, buffer);
-        }        
-        
+        }
+
         /// <summary>
         /// We prevent closing the secondary viewer window for now because
         /// this will cause a SwapChain related crash
@@ -209,7 +213,7 @@ namespace T3.Editor.App
             {
             }
         }
-        
+
         private bool _hasSetDevice;
         private Device _device;
         private DeviceContext _deviceContext;
@@ -218,5 +222,10 @@ namespace T3.Editor.App
         private Texture2D _backBufferTexture;
         private bool _isResizingRightNow;
         private Rectangle _boundsBeforeFullscreen;
+
+        public void SetTexture(Texture2D texture)
+        {
+            Texture = texture;
+        }
     }
 }

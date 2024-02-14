@@ -1,4 +1,4 @@
-using SharpDX;
+using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -61,16 +61,16 @@ namespace T3.Operators.Types.Id_688230de_a3fc_4740_a12d_9e2f98cad60a
             var q = Quaternion.Slerp(p1.Orientation, p2.Orientation, f);
 
             var rot = QuaternionToMatrix(q);
-            rot = Matrix.Transpose(rot);
+            rot = Matrix4x4.Transpose(rot);
             
-            var m = Matrix.Identity;
+            var m = Matrix4x4.Identity;
             
             var prevMatrix = context.ObjectToWorld;
 
             //m = Matrix.Translation(pos.ToSharpDxVector3();
-            m = Matrix.Multiply(m, rot);
-            m = Matrix.Multiply(m, Matrix.Translation(pos.ToSharpDxVector3()));
-            context.ObjectToWorld = Matrix.Multiply(m, context.ObjectToWorld);
+            m = Matrix4x4.Multiply(m, rot);
+            m = Matrix4x4.Multiply(m, Matrix4x4.CreateTranslation(pos));
+            context.ObjectToWorld = Matrix4x4.Multiply(m, context.ObjectToWorld);
 
             context.ObjectToWorld = m;
             
@@ -91,9 +91,9 @@ namespace T3.Operators.Types.Id_688230de_a3fc_4740_a12d_9e2f98cad60a
         
 
 
-        private static Matrix QuaternionToMatrix(Quaternion quat)
+        private static Matrix4x4 QuaternionToMatrix(in Quaternion quat)
         {
-            var m = Matrix.Identity; //float4x4(float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0));
+            var m = Matrix4x4.Identity; //float4x4(float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0));
 
             float x = quat.X, y = quat.Y, z = quat.Z, w = quat.W;
             float x2 = x + x, y2 = y + y, z2 = z + z;

@@ -1,0 +1,303 @@
+{
+  "Id": "e44ae9b6-cd56-4224-8a5d-118eda4cd3f4"/*ParticleSystem*/,
+  "Description": "Emits particles on emit points and applies the connected forces.\n\nPlease check the howto linked below [HowToUseParticles].",
+  "InputUis": [
+    {
+      "InputId": "ba08e719-a1d1-4ac6-9c8c-076478a65a81"/*EmitPoints*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -910.9964,
+        "Y": 362.44974
+      },
+      "Description": "Input for GPoints"
+    },
+    {
+      "InputId": "7a320c47-14ed-4637-928b-25f87bd32c26"/*Emit*/,
+      "Position": {
+        "X": -910.9964,
+        "Y": 407.4497
+      },
+      "Description": "Enables emitting of the connected emit points. \n\nTip: For simulations of a fixed number of emitted points, you can set the MaxPointCount to -1 and use [Once] or [Trigger] to only trigger an initial emit burst.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "c6bdbb07-6996-4e5b-a058-37c9cbeca6fe"/*Reset*/,
+      "Position": {
+        "X": -910.9964,
+        "Y": 452.4497
+      },
+      "Description": "Clears all emitted points.\n\nTip: You can connect [HasTimeChanged] the clean up on rewind or looping. "
+    },
+    {
+      "InputId": "1eb32e4c-6785-4649-b0bf-7c70cddee619"/*MaxParticleCount*/,
+      "Position": {
+        "X": -910.9822,
+        "Y": 488.89868
+      },
+      "GroupTitle": "Particle Settings",
+      "Description": "The length of the cycle buffer holding the simulated particles. Depending of the number of emitted particles it defines the maximum possible particle lifetime.\n\nIf set to -1 it will use the count of emit points."
+    },
+    {
+      "InputId": "38392c86-4a1b-4b6f-ac32-26920a73e1e2"/*InitialVelocity*/,
+      "Position": {
+        "X": -910.9822,
+        "Y": 578.8987
+      },
+      "Description": "An initial velocity that is set for emitted particles along their z-axis.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "b2c8f7cf-fdf5-4819-98ec-2c70ee9e8bc6"/*RadiusFromW*/,
+      "Position": {
+        "X": -910.9822,
+        "Y": 623.8987
+      },
+      "Description": "Some of the forces uses the partcile radius for collision calcuation. The radius is set on emit time by the emit point W attribute and the RadiusFromW factor.\nFor consistency we aligned that factor with the default point size for [DrawPoints] which renders points with a radius of 1/100 units.."
+    },
+    {
+      "InputId": "21c666bb-a28f-498c-a834-a2ba4aca78a7"/*EmitMode*/,
+      "Position": {
+        "X": -918.8434,
+        "Y": 656.9611
+      },
+      "Description": "This will effect how particles are inserted into the particle-buffer. This order will have an effect when drawing with lines.\nNote that switching this setting might require to reset the system."
+    },
+    {
+      "InputId": "4ca2f43a-ed90-4388-ae6f-2687e85db5a6"/*LifeTime*/,
+      "Position": {
+        "X": -918.8434,
+        "Y": 701.9611
+      },
+      "Description": "The lifetime of particles in bars (depending on the current BPM rate).\nA negative setting will compute the maximum lifetime from the MaxParticleCount and the number of currently emitted particles.\nThis will lead to flickering if changing the emit count during playback."
+    },
+    {
+      "InputId": "9642f5c6-5ad2-4d35-a5ed-a3fde10817ae"/*Speed*/,
+      "Position": {
+        "X": -918.8434,
+        "Y": 746.9611
+      },
+      "GroupTitle": "Simulation",
+      "Description": "The simulation speed. If set to 0 the simulation will be paused.\nNegative simulation speed can shortly look like rewinding but the simulation will quickly become inconsistent."
+    },
+    {
+      "InputId": "4b0ccec5-b72e-4834-80d4-77225f30d2a9"/*OrientTowardsVelocity*/,
+      "Position": {
+        "X": -917.34973,
+        "Y": 785.29767
+      },
+      "Description": "Rotates the particles in relation to their velocity"
+    },
+    {
+      "InputId": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
+      "Position": {
+        "X": -917.34973,
+        "Y": 875.29767
+      },
+      "Description": "A drag factor applied per simulation step. This can be useful for stabilizing simulations where forces insert too much energy (I.e. particle velocity) into the system.",
+      "Min": 0.0,
+      "Max": 0.1
+    },
+    {
+      "InputId": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
+      "Position": {
+        "X": -916.76886,
+        "Y": 1009.7168
+      },
+      "Description": "Can be used for custimizing the rendering of the particles.\n\nNote that many operators like [DrawPoints] use the W attribute to control the size of the points.\nWith other operators like [DrawBillboards] you can use the W parameter to colorize particles over their lifetime.\n\nKeep Original W -> no change\nParticle Age -> Normalized age between 0 ... 1\nVelocity -> A representation of the particle's velocity."
+    },
+    {
+      "InputId": "c41d9633-1397-4602-a5f8-7808c3d63108"/*ParticleForces*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -896.4389,
+        "Y": 1143.6881
+      },
+      "GroupTitle": "Forces",
+      "Description": "Input for Forces or [SwitchParticleForce]"
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "8bbbde76-3130-457c-9318-3e25a2382897"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 642.9297,
+        "Y": 75.39993
+      }
+    },
+    {
+      "ChildId": "2dbfb5f3-70e4-49e4-9968-906eef514efd"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 163.77017,
+        "Y": 617.0405
+      },
+      "Position": {
+        "X": 399.1821,
+        "Y": 325.72467
+      }
+    },
+    {
+      "ChildId": "af3d5d3d-71a7-4e17-8b5c-819d383f92e9"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 1172.509,
+        "Y": 73.69209
+      }
+    },
+    {
+      "ChildId": "cbc5699a-6a05-4997-b619-5d30489a0388"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 238.88719,
+        "Y": 150.80594
+      }
+    },
+    {
+      "ChildId": "78d0975b-1a25-4437-ba0e-3e9137af87d6"/*ResultPoints*/,
+      "Position": {
+        "X": -286.26044,
+        "Y": 1233.1288
+      }
+    },
+    {
+      "ChildId": "c1b1014e-3226-45fe-852b-b45300166682"/*GetBufferComponents*/,
+      "Position": {
+        "X": -86.24994,
+        "Y": 1268.8109
+      }
+    },
+    {
+      "ChildId": "49cc1f06-5eda-41e1-95cd-98a85d05a93a"/*GetBufferComponents*/,
+      "Position": {
+        "X": -681.0059,
+        "Y": 333.67487
+      }
+    },
+    {
+      "ChildId": "7ef64581-d672-4cd5-b5c6-0b94bd854822"/*CountInt*/,
+      "Position": {
+        "X": 18.06578,
+        "Y": 204.97968
+      }
+    },
+    {
+      "ChildId": "42d72297-3db1-4c3b-af6d-9bbc2771e8bb"/*ClampInt*/,
+      "Position": {
+        "X": -427.73944,
+        "Y": 524.07477
+      }
+    },
+    {
+      "ChildId": "1fc24197-c07f-4eaa-91aa-0867e9452295"/*BoolToFloat*/,
+      "Position": {
+        "X": 149.54022,
+        "Y": 368.9897
+      }
+    },
+    {
+      "ChildId": "0ca6f7ae-bf6a-4267-9011-f187fa4f6e66"/*BoolToFloat*/,
+      "Position": {
+        "X": 141.3581,
+        "Y": 491.69803
+      }
+    },
+    {
+      "ChildId": "0ea5cd85-6f28-45ba-8c87-634e8ee1148d"/*HasTimeChanged*/,
+      "Position": {
+        "X": 871.14417,
+        "Y": 217.19952
+      }
+    },
+    {
+      "ChildId": "066038e0-ee67-4252-9034-c5d877f9e4a5"/*Any*/,
+      "Position": {
+        "X": 1025.25,
+        "Y": 171.92615
+      }
+    },
+    {
+      "ChildId": "a913c47d-9023-45dc-a28d-4d74264b031b"/*IntsToBuffer*/,
+      "Position": {
+        "X": 376.81885,
+        "Y": 224.4258
+      }
+    },
+    {
+      "ChildId": "886dff75-130d-4903-8d11-435d8c673fef"/*Execute*/,
+      "Position": {
+        "X": 792.9297,
+        "Y": 75.39993
+      }
+    },
+    {
+      "ChildId": "11d59891-c071-4700-aa43-e8c8d42b199e"/*_SetParticleSystemComponents*/,
+      "Position": {
+        "X": 148.0174,
+        "Y": 1026.4409
+      }
+    },
+    {
+      "ChildId": "2bbb4e59-acea-4ea8-9025-a4e9e3fed4ca"/*Particles*/,
+      "Position": {
+        "X": -278.83887,
+        "Y": 1094.0166
+      }
+    },
+    {
+      "ChildId": "5f8b07fd-9e8f-4a56-be23-4260c67b44ea"/*GetBufferComponents*/,
+      "Position": {
+        "X": -88.39111,
+        "Y": 1181.9069
+      }
+    },
+    {
+      "ChildId": "48723393-26f6-48b1-bed6-28698cf88d56"/*Time*/,
+      "Position": {
+        "X": -49.358337,
+        "Y": 901.2102
+      }
+    },
+    {
+      "ChildId": "650753f3-c023-492d-9b41-6586450cc817"/*HasIntChanged*/,
+      "Position": {
+        "X": -353.56448,
+        "Y": 465.7908
+      }
+    },
+    {
+      "ChildId": "0dc49394-c5eb-4217-93cd-37d1eade95e8"/*Any*/,
+      "Position": {
+        "X": -156.27957,
+        "Y": 275.47333
+      }
+    },
+    {
+      "ChildId": "174bd467-28fd-426f-b32b-d44f1b281a0c"/*ComputeShader*/,
+      "Position": {
+        "X": 44.82202,
+        "Y": 36.604126
+      }
+    },
+    {
+      "ChildId": "ab61d21f-ab0a-4226-8389-e92af3871c3c"/*ConvertTime*/,
+      "Position": {
+        "X": 100.64166,
+        "Y": 901.2102
+      }
+    },
+    {
+      "ChildId": "ee3b01ae-c85b-46ee-a98c-d4ebbb76dace"/*CompareInt*/,
+      "Position": {
+        "X": -623.231,
+        "Y": 479.04382
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "51b9c6bd-b7cc-48a4-979b-3febcac914c2"/*OutBuffer*/,
+      "Position": {
+        "X": 1398.9834,
+        "Y": 71.526505
+      }
+    }
+  ]
+}

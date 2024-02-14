@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.DataSet;
+using T3.Core.DataTypes.Vector;
+using T3.Core.Rendering.Material;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
@@ -16,6 +17,7 @@ using T3.Editor.Gui.InputUi.SingleControl;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Int3 = T3.Core.DataTypes.Vector.Int3;
 using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Editor.UiModel;
@@ -57,6 +59,7 @@ public partial class UiSymbolData
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_0bec016a_5e1b_467a_8273_368d4d6b9935.Trigger), TriggerUi.DrawChildUi);
 
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227.LoadObj), DescriptiveUi.DrawChildUi);
+        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_00618c91_f39a_44ea_b9d8_175c996460dc.LoadGltfScene), DescriptiveUi.DrawChildUi);
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c.ComputeShader), DescriptiveUi.DrawChildUi);
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad.VertexShader), DescriptiveUi.DrawChildUi);
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985.PixelShader), DescriptiveUi.DrawChildUi);
@@ -78,13 +81,13 @@ public partial class UiSymbolData
         RegisterUiType(typeof(string), new StringUiProperties(), () => new StringInputUi(), () => new ValueOutputUi<string>());
         
         // system types
-        RegisterUiType(typeof(System.Numerics.Vector2), new ValueUiProperties(), () => new Float2InputUi(),
+        RegisterUiType(typeof(System.Numerics.Vector2), new ValueUiProperties(), () => new Vector2InputUi(),
                        () => new VectorOutputUi<System.Numerics.Vector2>());
-        RegisterUiType(typeof(System.Numerics.Vector3), new ValueUiProperties(), () => new Float3InputUi(),
+        RegisterUiType(typeof(System.Numerics.Vector3), new ValueUiProperties(), () => new Vector3InputUi(),
                        () => new VectorOutputUi<System.Numerics.Vector3>());
-        RegisterUiType(typeof(System.Numerics.Vector4), new ValueUiProperties(), () => new Float4InputUi(),
+        RegisterUiType(typeof(System.Numerics.Vector4), new ValueUiProperties(), () => new Vector4InputUi(),
                        () => new VectorOutputUi<System.Numerics.Vector4>());
-        RegisterUiType(typeof(System.Numerics.Quaternion), new ValueUiProperties(), () => new Float4InputUi(),
+        RegisterUiType(typeof(System.Numerics.Quaternion), new ValueUiProperties(), () => new Vector4InputUi(),
                        () => new VectorOutputUi<System.Numerics.Quaternion>());
 
         
@@ -107,8 +110,11 @@ public partial class UiSymbolData
                        () => new ValueOutputUi<Curve>());
         RegisterUiType(typeof(T3.Core.Operator.GizmoVisibility), new FallBackUiProperties(), () => new EnumInputUi<T3.Core.Operator.GizmoVisibility>(),
                        () => new ValueOutputUi<T3.Core.Operator.GizmoVisibility>());
+
         RegisterUiType(typeof(T3.Core.DataTypes.Gradient), new ValueUiProperties(), () => new GradientInputUi(),
                        () => new ValueOutputUi<T3.Core.DataTypes.Gradient>());
+        
+        
         RegisterUiType(typeof(T3.Core.DataTypes.LegacyParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<T3.Core.DataTypes.LegacyParticleSystem>(),
                        () => new ValueOutputUi<T3.Core.DataTypes.LegacyParticleSystem>());
         RegisterUiType(typeof(T3.Core.DataTypes.ParticleSystem), new FallBackUiProperties(), 
@@ -130,15 +136,24 @@ public partial class UiSymbolData
                        () => new FallbackInputUi<T3.Core.DataTypes.Texture3dWithViews>(),
                        () => new Texture3dOutputUi());
 
+        // Rendering
         RegisterUiType(typeof(MeshBuffers), new FallBackUiProperties(), () => new FallbackInputUi<MeshBuffers>(),
                        () => new ValueOutputUi<MeshBuffers>());
 
         RegisterUiType(typeof(DataSet), new FallBackUiProperties(),
                        () => new FallbackInputUi<DataSet>(), () => new DataSetOutputUi());
+
+        RegisterUiType(typeof(SceneSetup), new FallBackUiProperties(),
+                       () => new SceneSetupInputUi(), () => new SceneSetupOutputUi());
+
+        RegisterUiType(typeof(PbrMaterial), new FallBackUiProperties(),
+                       () => new FallbackInputUi<PbrMaterial>(), 
+                       () => new ValueOutputUi<PbrMaterial>());
+
         
         // sharpdx types
-        RegisterUiType(typeof(SharpDX.Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
-        RegisterUiType(typeof(SharpDX.Size2), new ValueUiProperties(), () => new Size2InputUi(), () => new ValueOutputUi<Size2>());
+        RegisterUiType(typeof(Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
+        RegisterUiType(typeof(Int2), new ValueUiProperties(), () => new Int2InputUi(), () => new ValueOutputUi<Int2>());
         RegisterUiType(typeof(SharpDX.Direct3D.PrimitiveTopology), new FallBackUiProperties(), () => new EnumInputUi<PrimitiveTopology>(),
                        () => new ValueOutputUi<PrimitiveTopology>());
         RegisterUiType(typeof(SharpDX.Direct3D11.BindFlags), new ShaderUiProperties(), () => new EnumInputUi<BindFlags>(),
@@ -207,8 +222,8 @@ public partial class UiSymbolData
                        () => new ValueOutputUi<RawViewportF>());
         RegisterUiType(typeof(SharpDX.Mathematics.Interop.RawRectangle), new ShaderUiProperties(), () => new FallbackInputUi<RawRectangle>(),
                        () => new ValueOutputUi<RawRectangle>());
-        RegisterUiType(typeof(SharpDX.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
-                       () => new ValueOutputUi<SharpDX.Vector4[]>());
+        RegisterUiType(typeof(System.Numerics.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<System.Numerics.Vector4[]>(),
+                       () => new ValueOutputUi<System.Numerics.Vector4[]>());
         RegisterUiType(typeof(Dict<float>), new ValueUiProperties(),
                        () => new FloatDictInputUi(), () => new FloatDictOutputUi());
     }

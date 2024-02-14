@@ -12,12 +12,12 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*Enabled*/,
-      "DefaultValue": false
-    },
-    {
       "Id": "61ad3f49-8188-45bd-8d72-bbb35c04ca3c"/*TriggerMode*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*Enabled*/,
+      "DefaultValue": false
     },
     {
       "Id": "16b2b1f5-4087-4e77-902b-3cdde1b22179"/*ShowLogMessages*/,

@@ -10,10 +10,10 @@
       "InputValues": [
         {
           "Id": "7eca4ec2-40f1-4699-8c1f-9e196917df67"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": -1,
-            "Height": -1
+            "X": -1,
+            "Y": -1
           }
         },
         {
@@ -116,7 +116,7 @@
       "Outputs": []
     },
     {
-      "Id": "c032dc02-cdcc-48f4-ba9e-d460dc1247aa"/*Float2ToVector2*/,
+      "Id": "c032dc02-cdcc-48f4-ba9e-d460dc1247aa"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -186,7 +186,7 @@
       "Outputs": []
     },
     {
-      "Id": "40f7d36d-35e6-43a7-9247-7dedbf60ed01"/*Float2ToVector2*/,
+      "Id": "40f7d36d-35e6-43a7-9247-7dedbf60ed01"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [
         {
@@ -383,12 +383,12 @@
       "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
       "InputValues": [
         {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
           "Type": "System.Single",
           "Value": 8.4
         },
         {
-          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
+          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*Intensity*/,
           "Type": "System.Single",
           "Value": 0.42
         }

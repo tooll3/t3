@@ -5,6 +5,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
@@ -88,10 +89,15 @@ public class DataSetViewCanvas
             for (var index = 0; index < channel.Events.Count; index++)
             {
                 var dataEvent = channel.Events[index];
-                if (dataEvent is not { Value: float f })
-                    continue;
+                var msg = dataEvent.Value.ToString();
+        
+                var height = 1 * (layerHeight -2);
+                if (dataEvent is { Value: float f })
+                {
+                    height = (1-(f / 127)) * (layerHeight -2) ;
+                    msg = $"{f:0.00}";
+                }
 
-                var height = (1-(f / 127)) * (layerHeight -2) ;
                     
                 if (dataEvent is DataIntervalEvent intervalEvent)
                 {
@@ -110,7 +116,7 @@ public class DataSetViewCanvas
                     if(ImGui.IsMouseHoveringRect(new Vector2(xStart, layerMin.Y), new Vector2(xEnd, layerMax.Y)))
                     {
                         ImGui.BeginTooltip();
-                        ImGui.Text($"{dataEvent.Time:0.000s} ... {endTime:0.000s} ->  {f:0.00}");
+                        ImGui.Text($"{dataEvent.Time:0.000s} ... {endTime:0.000s} ->  {msg}");
                         ImGui.EndTooltip();
                     }
                 }
@@ -123,7 +129,7 @@ public class DataSetViewCanvas
                     if(ImGui.IsMouseHoveringRect(new Vector2(xStart, layerMin.Y), new Vector2(xStart+2, layerMax.Y)))
                     {
                         ImGui.BeginTooltip();
-                        ImGui.Text($"{dataEvent.Time:0.000s} -> {f:0.00}");
+                        ImGui.Text($"{dataEvent.Time:0.000s} -> {msg}");
                         ImGui.EndTooltip();
                     }
                     lastEventTime = dataEvent.Time;

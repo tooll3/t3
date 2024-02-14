@@ -37,7 +37,7 @@ namespace T3.Operators.Types.Id_a78a07f8_cf75_4a72_8952_b9ba40d6983f
         // public readonly InputSlot<DateTime> Value = new InputSlot<DateTime>();
 
         [Input(Guid = "5F92445D-9234-420E-919D-21CDB6FB587D")]
-        public readonly InputSlot<string> DateString = new InputSlot<string>();
+        public readonly InputSlot<string> DateString = new();
         
         // [Input(Guid = "62d27f4c-ce64-497b-bca6-5a36bfd4232c")]
         // public readonly InputSlot<string> Format = new InputSlot<string>();

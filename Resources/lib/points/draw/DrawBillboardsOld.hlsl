@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 
 static const float3 Corners[] = 
@@ -85,10 +86,10 @@ psInput vsMain(uint id: SV_VertexID)
     output.texCoord = (quadPos.xy * 0.5 + 0.5);
 
     //float4 pRotation = ApplyPointOrientaiton > 0.5 ? p.rotation : float4(0,0,0,1);    
-    //float4 rotation = qmul(pRotation, rotate_angle_axis(Rotate/180*PI, RotateAxis));
+    //float4 rotation = qMul(pRotation, qFromAngleAxis(Rotate/180*PI, RotateAxis));
 
-    float4 posInObject = float4(p.position,1);
-    //float3 axis = rotate_vector(p.position, rotation) * Size * sizeFromW;
+    float4 posInObject = float4(p.Position,1);
+    //float3 axis = qRotateVec3(p.position, rotation) * Size * sizeFromW;
 
     float4 quadPosInCamera = mul(posInObject, ObjectToCamera);
     output.color = Color;
@@ -97,19 +98,19 @@ psInput vsMain(uint id: SV_VertexID)
     float4 posInCamera = mul(posInObject, ObjectToCamera);
     float tooCloseFactor =  saturate(-posInCamera.z/0.1 -1);
 
-    float sizeFromW = SizeOverW.SampleLevel(texSampler, float2(p.w * WMappingScale,0), 0);
+    float sizeFromW = SizeOverW.SampleLevel(texSampler, float2(p.W * WMappingScale,0), 0);
     float3 corner = float3(quadPos.xy*0.010 * Stretch,0) * float3(1,-1,1);
 
-    float4 rot = rotate_angle_axis((Rotate + RotateRandomly * scatter.x)  * 3.141578/180, float3(0,0,1));
+    float4 rot = qFromAngleAxis((Rotate + RotateRandomly * scatter.x)  * 3.141578/180, float3(0,0,1));
 
     if((int)UsePointOrientation == 1) {
-        rot = qmul(rot, p.rotation);
+        rot = qMul(rot, p.Rotation);
     }
-    corner = rotate_vector2(corner, rot);
-    // corner =  ApplyPointOrientaiton > 0.5 ? rotate_vector2(corner, p.rotation )
+    corner = qRotateVec3(corner, rot);
+    // corner =  ApplyPointOrientaiton > 0.5 ? qRotateVec3(corner, p.rotation )
     //                                     : corner; // flipping rotation to match default radial billboards
     
-    float hideUndefinedPoints = isnan(p.w) ? 0 : 1;
+    float hideUndefinedPoints = isnan(p.W) ? 0 : 1;
     quadPosInCamera.xy += corner  * Scale  * (ScaleRandomly * scatter.y + 1) * tooCloseFactor * sizeFromW * hideUndefinedPoints;
 
 
@@ -123,8 +124,8 @@ psInput vsMain(uint id: SV_VertexID)
     // float3 pInObject = p.position + axis;
     // output.position  = mul(float4(pInObject,1), ObjectToClipSpace);
     // output.texCoord = cornerFactors.xy /2 +0.5;
-    float4 colorFromPoint = ((int)UsePointOrientation == 2) ? p.rotation : 1;
-    output.color = Color * ColorOverW.SampleLevel(texSampler, float2(p.w * WMappingScale,0), 0) * colorFromPoint;    
+    float4 colorFromPoint = ((int)UsePointOrientation == 2) ? p.Rotation : 1;
+    output.color = Color * ColorOverW.SampleLevel(texSampler, float2(p.W * WMappingScale,0), 0) * colorFromPoint;    
 
     // Fog
     // if(FogDistance > 0) 

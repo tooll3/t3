@@ -1,10 +1,7 @@
-using T3.Core;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_dd201330_6eab_43b9_b601_2e491ab18feb
 {
@@ -14,7 +11,7 @@ namespace T3.Operators.Types.Id_dd201330_6eab_43b9_b601_2e491ab18feb
         //public readonly Slot<StructuredList> Result = new Slot<StructuredList>();
 
         [Output(Guid = "6f69d72f-5a89-436f-87c9-5c2085c2f69a")]
-        public readonly Slot<Command> Result = new Slot<Command>();
+        public readonly Slot<Command> Result = new();
 
         public Iterator()
         {
@@ -45,9 +42,9 @@ namespace T3.Operators.Types.Id_dd201330_6eab_43b9_b601_2e491ab18feb
         }
 
         [Input(Guid = "6cb78896-c571-4ee8-a624-46de9a917f4b")]
-        public readonly InputSlot<StructuredList> List = new InputSlot<StructuredList>();
+        public readonly InputSlot<StructuredList> List = new();
 
         [Input(Guid = "5802fa92-a8b2-44ec-b4cc-47e63d41b345")]
-        public readonly MultiInputSlot<Command> SubTree = new MultiInputSlot<Command>();
+        public readonly MultiInputSlot<Command> SubTree = new();
     }
 }

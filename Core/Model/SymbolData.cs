@@ -51,7 +51,7 @@ public partial class SymbolData
             if (!SymbolRegistry.Entries.TryAdd(symbol.Id, symbol))
             {
                 var existingSymbol = SymbolRegistry.Entries[symbol.Id];
-                Log.Error($"Symbol {existingSymbol.Name} exists multiple times in database.");
+                Log.Error($"Symbol {existingSymbol.Name} {symbol.Id} exists multiple times in database.");
                 continue;
             }
             
@@ -115,11 +115,11 @@ public partial class SymbolData
         }
     }
 
-    private readonly Regex _innerNamespace = new Regex(@".Id_(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
-                                                       RegexOptions.IgnoreCase);
+    private readonly Regex _innerNamespace = new(@".Id_(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
+                                                 RegexOptions.IgnoreCase);
 
-    private readonly Regex _idFromNamespace = new Regex(@"(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
-                                                        RegexOptions.IgnoreCase);
+    private readonly Regex _idFromNamespace = new(@"(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
+                                                  RegexOptions.IgnoreCase);
 
     public virtual void SaveAll()
     {
