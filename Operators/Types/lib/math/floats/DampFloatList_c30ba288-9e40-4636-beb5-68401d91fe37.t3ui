@@ -1,0 +1,48 @@
+{
+  "Id": "c30ba288-9e40-4636-beb5-68401d91fe37"/*DampFloatList*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "491cc9cd-28fc-4ec4-8d98-5a7e0d17082a"/*Values*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      }
+    },
+    {
+      "InputId": "3d63df3d-81c0-4e27-ae0c-acd3092d952c"/*Damping*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 379.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "ad97ae08-9aeb-4ed5-b5b1-e24d9af21cf7"/*Method*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 424.0
+      }
+    },
+    {
+      "InputId": "51bbb9f9-2895-4965-9f73-34d7dbae2ad1"/*UseAppRunTime*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 469.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "23c867c8-d175-463f-bcaa-18e6be5f20c2"/*Result*/,
+      "Position": {
+        "X": 364.96115,
+        "Y": 310.1802
+      }
+    }
+  ]
+}
