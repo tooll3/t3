@@ -317,6 +317,11 @@
           }
         },
         {
+          "Id": "21f595ad-0808-48f1-bdd8-118d1527944c"/*FOV*/,
+          "Type": "System.Single",
+          "Value": 45.0
+        },
+        {
           "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*DistanceToTarget*/,
           "Type": "System.Single",
           "Value": 2.95
@@ -333,11 +338,6 @@
             "X": 25.0,
             "Y": 0.0
           }
-        },
-        {
-          "Id": "21f595ad-0808-48f1-bdd8-118d1527944c"/*FOV*/,
-          "Type": "System.Single",
-          "Value": 45.0
         }
       ],
       "Outputs": []

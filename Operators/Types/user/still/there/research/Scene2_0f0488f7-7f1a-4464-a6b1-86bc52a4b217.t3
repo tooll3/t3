@@ -216,10 +216,10 @@
           }
         },
         {
-          "Id": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
+          "Id": "1af76b2e-cffe-4e3f-8793-c7a59d00430b"/*AimRollAngleAndWobble*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 78.0,
+            "X": 0.6666667,
             "Y": 0.0
           }
         },
@@ -240,12 +240,17 @@
           }
         },
         {
-          "Id": "1af76b2e-cffe-4e3f-8793-c7a59d00430b"/*AimRollAngleAndWobble*/,
+          "Id": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.6666667,
+            "X": 78.0,
             "Y": 0.0
           }
+        },
+        {
+          "Id": "b6bf6fe1-6733-46c0-a274-fab2a950f606"/*WobbleSpeed*/,
+          "Type": "System.Single",
+          "Value": 0.26333332
         },
         {
           "Id": "c81b91c6-2d06-4e3e-97bd-01d60f5f0f7d"/*RotationOffset*/,
@@ -255,11 +260,6 @@
             "Y": 0.033333343,
             "Z": -0.13
           }
-        },
-        {
-          "Id": "b6bf6fe1-6733-46c0-a274-fab2a950f606"/*WobbleSpeed*/,
-          "Type": "System.Single",
-          "Value": 0.26333332
         }
       ],
       "Outputs": []

@@ -138,11 +138,6 @@
           "Id": "8f203c5f-6eb8-42a1-bfea-9ca52a49e132"/*Scale*/,
           "Type": "System.Single",
           "Value": 5.6
-        },
-        {
-          "Id": "975f7ed8-fc7f-41c7-9d90-d022efdf4b6b"/*UseRotationAsRgba*/,
-          "Type": "System.Boolean",
-          "Value": true
         }
       ],
       "Outputs": []

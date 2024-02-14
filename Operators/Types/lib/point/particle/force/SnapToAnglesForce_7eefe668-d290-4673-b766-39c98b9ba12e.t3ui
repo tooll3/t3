@@ -1,6 +1,6 @@
 {
   "Id": "7eefe668-d290-4673-b766-39c98b9ba12e"/*SnapToAnglesForce*/,
-  "Description": "Slowly align particle velocity with repeated angles steps.",
+  "Description": "Slowly align particle velocity with repeated angles steps on the xy-plane. \n\nIt works well, when combined with [TurbulenceForce] and [PointTrail].\n\nNote: This will have no effect if the particles have no the default velocity or only along the z-axis.",
   "InputUis": [
     {
       "InputId": "e596a8ec-3681-4f45-b72c-d50a97240270"/*Amount*/,
@@ -18,29 +18,56 @@
         "X": -508.1693,
         "Y": 249.70999
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 360.0,
       "Format": "{0:0.0}°"
     },
     {
-      "InputId": "8dabcbb3-2aa6-4213-82c9-e92c774c13f7"/*Phase*/,
+      "InputId": "a54ed62a-a6a3-4b7b-a68c-82691467aa6f"/*VariationThreshold*/,
       "Position": {
         "X": -508.1693,
-        "Y": 294.70987
+        "Y": 339.70987
       },
-      "Min": -180.0,
-      "Max": 180.0,
-      "Format": "{0:0.0}°"
+      "GroupTitle": "Random turns",
+      "Description": "How frequent random rotation occur: 0 never. 1 always.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "afd8fd12-8b3b-462b-a117-90981ddfccc6"/*Variation*/,
       "Position": {
-        "X": -508.1693,
-        "Y": 339.70984
+        "X": -514.92114,
+        "Y": 398.39877
       },
+      "Description": "If a random threshold is exceeded define the amount of random rotation the particle will do.",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "098f4485-7aa7-4ae8-a2b5-e59fa2c2309c"/*KeepPlanar*/,
+      "Position": {
+        "X": -514.92114,
+        "Y": 443.39877
+      },
+      "GroupTitle": "Options",
+      "Description": "A factor that will keep the particle velocity planar to camera.\nThis might be useful to emphasize the angled direction, if camera rotation changes.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "8dabcbb3-2aa6-4213-82c9-e92c774c13f7"/*Twist*/,
+      "Position": {
+        "X": -516.99866,
+        "Y": 536.7369
+      },
+      "Description": "A twist angle, that is apply every frame. Might lead to unpredictable but interesting effects.",
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     }
   ],
   "SymbolChildUis": [
@@ -60,11 +87,6 @@
     },
     {
       "ChildId": "0c22b9b4-bfd8-4390-bba8-3d437ed577f3"/*FloatsToBuffer*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 133.98141,
-        "Y": 229.21771
-      },
       "Position": {
         "X": -148.55838,
         "Y": 203.31119
@@ -117,6 +139,13 @@
       "Position": {
         "X": -156.43707,
         "Y": 509.8526
+      }
+    },
+    {
+      "ChildId": "6ef76d3a-e819-4051-bb95-ddb238c07fe0"/*TransformsConstBuffer*/,
+      "Position": {
+        "X": -232.44641,
+        "Y": 433.15808
       }
     }
   ],

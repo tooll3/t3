@@ -4466,11 +4466,6 @@
           "Value": -1.0
         },
         {
-          "Id": "fcc59369-bb28-41e5-a7cf-452f0a844e77"/*Mode*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
           "Id": "7e86bf8f-1d9d-4212-bf9f-987a03b55565"/*Stretch*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
@@ -4487,6 +4482,11 @@
           "Id": "d5c1a82b-5633-446e-9836-a735a55c7a91"/*TextureMode*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "Clamp"
+        },
+        {
+          "Id": "fcc59369-bb28-41e5-a7cf-452f0a844e77"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 1
         }
       ],
       "Outputs": []
@@ -6944,6 +6944,16 @@
           "Value": -1.0
         },
         {
+          "Id": "3afdb344-0a09-4907-89f1-447c991273da"/*Scale*/,
+          "Type": "System.Single",
+          "Value": 4.0
+        },
+        {
+          "Id": "d5c1a82b-5633-446e-9836-a735a55c7a91"/*TextureMode*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Clamp"
+        },
+        {
           "Id": "fcc59369-bb28-41e5-a7cf-452f0a844e77"/*Mode*/,
           "Type": "System.Int32",
           "Value": 1
@@ -6957,16 +6967,6 @@
           "Id": "5225db75-5f9d-49f9-bceb-0cbc8a56a3f4"/*RotationSpace*/,
           "Type": "System.Int32",
           "Value": 0
-        },
-        {
-          "Id": "3afdb344-0a09-4907-89f1-447c991273da"/*Scale*/,
-          "Type": "System.Single",
-          "Value": 4.0
-        },
-        {
-          "Id": "d5c1a82b-5633-446e-9836-a735a55c7a91"/*TextureMode*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Clamp"
         }
       ],
       "Outputs": []
@@ -8090,11 +8090,6 @@
           "Value": -1.0
         },
         {
-          "Id": "fcc59369-bb28-41e5-a7cf-452f0a844e77"/*Mode*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
           "Id": "3afdb344-0a09-4907-89f1-447c991273da"/*Scale*/,
           "Type": "System.Single",
           "Value": 4.0
@@ -8103,6 +8098,11 @@
           "Id": "d5c1a82b-5633-446e-9836-a735a55c7a91"/*TextureMode*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "Clamp"
+        },
+        {
+          "Id": "fcc59369-bb28-41e5-a7cf-452f0a844e77"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 1
         }
       ],
       "Outputs": []

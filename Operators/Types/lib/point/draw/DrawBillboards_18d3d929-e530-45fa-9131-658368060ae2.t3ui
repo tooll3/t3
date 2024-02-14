@@ -7,7 +7,11 @@
       "Position": {
         "X": -820.6758,
         "Y": 242.09961
-      }
+      },
+      "Description": "The overall scale of the drawn sprites.",
+      "Min": 0.0,
+      "Max": 5.0,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "7df44a8d-af20-400f-b8a7-4b2200f55ec1"/*Stretch*/,
@@ -24,14 +28,15 @@
         "X": -816.74774,
         "Y": 355.61105
       },
-      "Description": "Defines whether the \"W\"-Value of the Gpoints used has an influence on the size of the rendered Billboards"
+      "Description": "Defines whether the \"W\"-attribute of the Points used has an influence on the size of the rendered Billboards"
     },
     {
       "InputId": "542832d1-fc70-4eaa-a003-7fdd9062dc05"/*UseExtend*/,
       "Position": {
         "X": -816.74774,
         "Y": 400.61105
-      }
+      },
+      "Description": "If enabled, the points stretch attribute will be applied to the drawn billboards."
     },
     {
       "InputId": "4763d03c-7fae-4466-870c-693bb1acb9a0"/*Offset*/,
@@ -39,7 +44,7 @@
         "X": -784.04156,
         "Y": 525.03925
       },
-      "Description": "Moves the Billboards away from the Position of their respective GPoints",
+      "Description": "Moves the Billboards local point space.",
       "AddPadding": "True"
     },
     {
@@ -48,7 +53,7 @@
         "X": -784.04156,
         "Y": 570.03925
       },
-      "Description": "Defines how a billboard is aligned",
+      "Description": "Defines how a billboard is aligned towards the camera:\n\nIf using point rotation, the orientation to the camera will be ignored.",
       "AddPadding": "True"
     },
     {
@@ -84,7 +89,7 @@
         "X": -786.8831,
         "Y": 785.66797
       },
-      "Description": "Phase value for changing the randomness. Can be animated with [Time], for example."
+      "Description": "Phase value for changing the randomness. Can be animated with [Time], for example.\nNote that this random seed is continuous and can be used for animations."
     },
     {
       "InputId": "76c52e1f-1767-4635-86a1-93e44cc2a487"/*RandomPosition*/,
@@ -92,7 +97,7 @@
         "X": -783.96234,
         "Y": 836.94696
       },
-      "Description": "Multiplier for the random distribution along X, Y and Z.",
+      "Description": "Amound of random offset along X, Y and Z axis.",
       "AddPadding": "True"
     },
     {
@@ -127,7 +132,8 @@
       "Position": {
         "X": -782.7926,
         "Y": 1127.0579
-      }
+      },
+      "Description": "Defines how colors from the gradient will be sampled: \n\n- RandomWithPhase will pick a random color. This will smoothly animate when changing RandomPhase.\n- Scatter will pick a random color. Each points gets a random position that will NOT change.\n- Spread will use the point's ordering in the buffer. 0 for the first point and 1 for the last. This spreading can be adjusted with the Spread options below.\n- W uses the \"w\" attribute of the points. This can be useful when combined with a [ParticleSystem] that returns particle age in the W attribute.\n- FogDistance can be combined with a [SetFog] operator to colorize points depending on their distance to the camera."
     },
     {
       "InputId": "dd345d58-09e4-4353-93e7-c20e576f0e82"/*ColorVariations*/,
@@ -137,26 +143,21 @@
       }
     },
     {
-      "InputId": "975f7ed8-fc7f-41c7-9d90-d022efdf4b6b"/*UseRotationAsRgba*/,
-      "Position": {
-        "X": -782.55634,
-        "Y": 1262.1677
-      }
-    },
-    {
       "InputId": "d9dd77b2-cfa6-429c-b87d-f6e3c602be23"/*ScaleDistribution*/,
       "Position": {
         "X": -782.55634,
         "Y": 1307.1677
       },
-      "GroupTitle": "Scale Variation..."
+      "GroupTitle": "Scale Variation...",
+      "Description": "Defines how the scale curve below will be sampled in the range between 0 .. 1. \n\n- RandomWithPhase will pick a random scale position. This will smoothly animate when changing RandomPhase.\n- Scatter will pick a random scale from the curve. Each points gets a random scale that will NOT change.\n- Spread will use the point's ordering in the buffer. 0 for the first point and 1 for the last. This spreading can be adjusted with the Spread options below.\n- W uses the \"w\" attribute of the points.\n- FogDistance can be combined with a [SetFog] operator to scale points depending on their distance to the camera."
     },
     {
       "InputId": "48440453-8b59-4e84-beec-8766713c5775"/*Scales*/,
       "Position": {
         "X": -768.06366,
         "Y": 1359.6821
-      }
+      },
+      "Description": "Scaling of the curve. Use the icon in the top right corner to edit this curve in a popup window.\n"
     },
     {
       "InputId": "19e10456-76bd-43a2-9c03-5f6dd93601cc"/*SpreadLength*/,
@@ -165,6 +166,7 @@
         "Y": 1420.8385
       },
       "GroupTitle": "Spreading...",
+      "Description": "If using the Spread mode in on of the parameters above, this will change the with of the slice that settings (e.g. Colors) is applied. ",
       "Min": 0.0,
       "Max": 10.0
     },
@@ -173,21 +175,24 @@
       "Position": {
         "X": -741.99115,
         "Y": 1465.8385
-      }
+      },
+      "Description": "Can offset the spreadding range. This can be useful for \"sliding\" through a gradient of colors or sizes."
     },
     {
       "InputId": "00331030-624f-47e4-b6ce-d24388bf8fb6"/*SpreadPingPong*/,
       "Position": {
         "X": -741.99115,
         "Y": 1510.8385
-      }
+      },
+      "Description": "If enabled, the grandients and curves are mirrored when spread mode is active."
     },
     {
       "InputId": "b32f7932-68a6-4a12-931b-a49d24951f27"/*SpreadRepeat*/,
       "Position": {
         "X": -741.99115,
         "Y": 1566.8385
-      }
+      },
+      "Description": "If enabled will repeat the speading slice. This can be especially useful when combined with smaller Spread length and Spread Offset."
     },
     {
       "InputId": "aff03303-8f28-4efb-a035-d0784790ee42"/*Texture_*/,
@@ -209,21 +214,25 @@
       "Position": {
         "X": -742.93713,
         "Y": 1733.2015
-      }
+      },
+      "Description": "Defines the number of cells in the connect texture atlas. This can be useful for distribution different random sprites with a single draw call."
     },
     {
       "InputId": "789900fa-6d0e-406f-936e-162834155c83"/*FxTexture*/,
       "Position": {
         "X": -799.742,
         "Y": 1914.0698
-      }
+      },
+      "Description": "The FX texture is an additional method of styling the sprites. It's applied in screenspace. \nAs an example: You coud connect a [Blob] image to fade out the sprites at the edges of the screen.",
+      "AddPadding": "True"
     },
     {
       "InputId": "b5477de9-4c59-47e8-89d6-93c9e2246dcd"/*FxTextureMode*/,
       "Position": {
         "X": -753.23395,
         "Y": 1960.5771
-      }
+      },
+      "Description": "Switches how the FX-Texture is used."
     },
     {
       "InputId": "2e116e07-ee18-4b2a-a708-b0dca510a8dd"/*FxTextureAmount*/,

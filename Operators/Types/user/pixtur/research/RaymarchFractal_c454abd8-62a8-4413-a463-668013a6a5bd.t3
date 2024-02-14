@@ -641,19 +641,19 @@
           }
         },
         {
-          "Id": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": -3.833333,
-            "Y": 47.833332
-          }
-        },
-        {
           "Id": "4d2d2d2d-00bd-4df9-b209-62f0c7926c38"/*AimPitchAngleAndWobble*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.3333333,
             "Y": 0.0
+          }
+        },
+        {
+          "Id": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": -3.833333,
+            "Y": 47.833332
           }
         },
         {

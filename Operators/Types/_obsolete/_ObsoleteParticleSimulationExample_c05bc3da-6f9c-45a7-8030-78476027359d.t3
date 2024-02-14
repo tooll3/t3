@@ -214,11 +214,6 @@
               ]
             }
           }
-        },
-        {
-          "Id": "975f7ed8-fc7f-41c7-9d90-d022efdf4b6b"/*UseRotationAsRgba*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []

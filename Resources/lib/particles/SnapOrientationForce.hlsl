@@ -9,12 +9,30 @@ cbuffer Params : register(b0)
     float SnapAngle;
     float PhaseAngle;
     float Variation;
+    float VariationRatio;
+
+    float KeepPlanar;
 }
 
 cbuffer Params : register(b1)
 {
     int RandomSeed;
 }
+
+cbuffer Transforms : register(b2)
+{
+    float4x4 CameraToClipSpace;
+    float4x4 ClipSpaceToCamera;
+    float4x4 WorldToCamera;
+    float4x4 CameraToWorld;
+    float4x4 WorldToClipSpace;
+    float4x4 ClipSpaceToWorld;
+    float4x4 ObjectToWorld;
+    float4x4 WorldToObject;
+    float4x4 ObjectToCamera;
+    float4x4 ObjectToClipSpace;
+};
+
 
 RWStructuredBuffer<Particle> Particles : u0; 
 
@@ -30,8 +48,10 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-    float4 hash = hash41u(id + RandomSeed);
-    float3 v = Particles[i.x].Velocity;
+    float3 vInObject = Particles[i.x].Velocity;
+
+    float4 vInCamera = mul(float4(vInObject, 0), WorldToCamera);
+    float3 v = vInCamera;
 
     float lengthXY = length(v.xy);
     if(lengthXY < 0.00001)
@@ -44,7 +64,10 @@ void main(uint3 i : SV_DispatchThreadID)
     float aNormalized = ((a + PI) / (PI*2)) %1;
     float subdivisions = 360 / SnapAngle;
 
-    aNormalized += (hash.x - 0.5) * Variation ;
+    float4 hash = hash41u(id + RandomSeed * _PRIME0);
+    if(hash.x < VariationRatio) {
+        aNormalized += (hash.y - 0.5) * Variation ;
+    }
     float t = aNormalized * subdivisions;
 
     float tRounded = ((int)(t + 0.5)) / subdivisions;
@@ -54,7 +77,9 @@ void main(uint3 i : SV_DispatchThreadID)
     float alignedRotation = (newAngle - 0.5) * 2 * PI + (PhaseAngle/360);
 
     float2 newXY = float2(sin(alignedRotation), cos(alignedRotation)) * lengthXY;
+    v.z *= (1-KeepPlanar);
 
-    Particles[i.x].Velocity = lerp(v, float3(newXY,v.z), 1);
+    float3 newVInObject = mul( float4(newXY,v.z, 0),  CameraToWorld);
+    Particles[i.x].Velocity = lerp(v, newVInObject, 1);
 }
 

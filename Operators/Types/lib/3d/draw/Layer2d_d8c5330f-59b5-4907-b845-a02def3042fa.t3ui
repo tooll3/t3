@@ -8,7 +8,7 @@
         "X": -445.3646,
         "Y": 644.05896
       },
-      "Description": "X / Y Position of the plane in 3D space.\nX: Left / Right\nY: Up / Down",
+      "Description": "The horizontal and vertical position of the layer in world space. \\nWith the default camera the viewport at that distance is precisely two units high. So setting y to 1 will align the lower layer border to the screen center.",
       "Min": -1.0,
       "Max": 1.0,
       "UseVec2Control": "Position"

@@ -1038,11 +1038,6 @@
           }
         },
         {
-          "Id": "975f7ed8-fc7f-41c7-9d90-d022efdf4b6b"/*UseRotationAsRgba*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
           "Id": "860b2023-9c77-47aa-9a9b-8fbc735835d4"/*BlendMode*/,
           "Type": "System.Int32",
           "Value": 1

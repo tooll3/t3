@@ -127,6 +127,23 @@
           "afd8fd12-8b3b-462b-a117-90981ddfccc6": 0.14
         }
       }
+    },
+    {
+      "Id": "f17a11eb-c5b7-4b18-aa09-a9b0b5c28c47",
+      "IsPreset": true,
+      "ActivationIndex": 9,
+      "Title": "AI is difficult",
+      "PosOnCanvas": {
+        "X": 162.41415,
+        "Y": 469.35413
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "a54ed62a-a6a3-4b7b-a68c-82691467aa6f": 0.24,
+          "afd8fd12-8b3b-462b-a117-90981ddfccc6": 0.26,
+          "098f4485-7aa7-4ae8-a2b5-e59fa2c2309c": 0.06
+        }
+      }
     }
   ]
 }
