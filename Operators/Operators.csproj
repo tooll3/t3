@@ -31,7 +31,7 @@
 
     <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
     <PackageReference Include="SharpDX.MediaFoundation" Version="4.2.0" />
-    <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0026" />
+    <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0031" />
     <PackageReference Include="Svg" Version="3.3.0" />
     <PackageReference Include="unsplasharp.api" Version="0.7.0" />
   </ItemGroup>
