@@ -1,5 +1,8 @@
+using CppSharp.Types.Std;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using T3.Core.Animation;
 using T3.Core.Logging;
@@ -28,16 +31,37 @@ namespace T3.Operators.Types.Id_c30ba288_9e40_4636_beb5_68401d91fe37
             var inputList = Values.GetValue(context); //get input list - within the loop, cycle between index points in the list
             var damping = Damping.GetValue(context); //get damping amount - doesn't need to be repeated
 
-            if (inputList.Count == 0)
-            {
-                return;
-            }
+
 
             //timing stuff, doesn't need to be repeated
             var currentTime = UseAppRunTime.GetValue(context) ? Playback.RunTimeInSecs : context.LocalFxTime; 
             if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
                 return;
-            
+
+            // Clean up result list
+            if (inputList == null || inputList.Count == 0)
+            {
+                return;
+            }
+            //Log.Debug("Input list count: " + inputList.Count);
+            //Log.Debug("Damped values count: " + _dampedValues.Count);
+            if (Result.Value == null || Result.Value.Count != inputList.Count)
+            {
+                Result.Value = new List<float>();
+            }
+            Result.Value.Clear();
+
+            //clean up internal damped values list
+            while(_dampedValues.Count < inputList.Count) //if too small, make bigger
+            {
+                _dampedValues.Add(0);
+            }
+            while(_dampedValues.Count > inputList.Count) //if too big, make smaller
+            {
+                //Log.Debug("List too long, attempting to remove item " + (_dampedValues.Count - 1) + "...");
+                _dampedValues.RemoveAt(_dampedValues.Count - 1); 
+            }
+
             //no idea what this is for, best not to touch
             if (context.IntVariables.TryGetValue("__MotionBlurPass", out var motionBlurPass))
             {
@@ -51,20 +75,13 @@ namespace T3.Operators.Types.Id_c30ba288_9e40_4636_beb5_68401d91fe37
             _lastEvalTime = currentTime; //don't repeat
 
             var method = (DampFunctions.Methods)Method.GetValue(context).Clamp(0, 1); //don't repeat
-            //_dampedValue = DampFunctions.DampenFloat(inputValue, _dampedValue, damping, ref _velocity, method); //do the damping - repeat this
 
             //Log.Debug("List length: " + inputList.Count);
+            //Log.Debug("Damped values list length: " + _dampedValues.Count);
 
             for(var i = 0; i < inputList.Count; i++)
             {
-                //Log.Debug("Current index: " + i.ToString());
-
-                if (i > _dampedValues.Count-1)
-                {
-                    //Log.Debug("Index does not exist in output list, appending...");
-                    _dampedValues.Add(0);
-                }
-                
+                //Log.Debug("Damping value " +  i + "...");
                 var value = inputList[i];
                 var dampedValue = DampFunctions.DampenFloat(value, _dampedValues[i], damping, ref _velocity, method);
 
@@ -82,7 +99,7 @@ namespace T3.Operators.Types.Id_c30ba288_9e40_4636_beb5_68401d91fe37
         private double _lastEvalTime;
         
         [Input(Guid = "491cc9cd-28fc-4ec4-8d98-5a7e0d17082a")]
-        public readonly InputSlot<List<float>> Values = new(new List<float>(20));
+        public readonly InputSlot<List<float>> Values = new(new List<float>(2));
 
         [Input(Guid = "3d63df3d-81c0-4e27-ae0c-acd3092d952c")]
         public readonly InputSlot<float> Damping = new();
