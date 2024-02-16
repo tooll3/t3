@@ -137,12 +137,21 @@ public static class T3Ui
         {
             DrawAppMenuBar();
         }
-
-        _userNameDialog.Draw();
+            
         _searchDialog.Draw();
         _importDialog.Draw();
         _newProjectDialog.Draw();
         _createFromTemplateDialog.Draw();
+        _userNameDialog.Draw();
+
+        if (IsWindowLayoutComplete())
+        {
+            if (!UserSettings.IsUserNameDefined() )
+            {
+                UserSettings.Config.UserName = Environment.UserName;
+                _userNameDialog.ShowNextFrame();
+            }
+        }
 
         KeyboardAndMouseOverlay.Draw();
 
@@ -150,7 +159,13 @@ public static class T3Ui
         AutoBackup.AutoBackup.CheckForSave();
     }
 
-    private static void TriggerGlobalActionsFromKeyBindings()
+    /// <summary>
+    /// This a bad work around to defer some ui actions until we have completed all
+    /// window initialization so they are not discarded by the setup process.
+    /// </summary>
+    private static bool IsWindowLayoutComplete() => ImGui.GetFrameCount() > 2;
+
+    private void TriggerGlobalActionsFromKeyBindings()
     {
         if (KeyboardBinding.Triggered(UserActions.Undo))
         {

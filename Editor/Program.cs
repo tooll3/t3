@@ -30,7 +30,7 @@ namespace T3.Editor
         public static IUiContentDrawer<SharpDX.Direct3D11.Device, ImDrawDataPtr> UiContentContentDrawer;
         public static Device Device { get; private set; }
 
-        public const string Version = "3.8.2";
+        public const string Version = "3.9.1";
 
         /// <summary>
         /// Generate a release string with 

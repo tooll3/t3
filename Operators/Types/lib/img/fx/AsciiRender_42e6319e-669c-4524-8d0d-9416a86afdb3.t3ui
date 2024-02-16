@@ -29,7 +29,10 @@
       "Position": {
         "X": -47.22516,
         "Y": 522.08215
-      }
+      },
+      "Min": -2.0,
+      "Max": 2.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "c7502cc9-bfe4-40d1-9b85-c6f59a15e675"/*FontCharSize*/,

@@ -113,10 +113,6 @@ namespace T3.Operators.Types.Id_b3de7a93_e921_4e43_8a56_6c84b2d18b74
             Stretch_X = 8,
             Stretch_Y = 9,
             Stretch_Z = 10,
-            Color_R = 11,
-            Color_G = 12,
-            Color_B = 13,
-            Color_A = 14,
         }
 
         private enum Modes
