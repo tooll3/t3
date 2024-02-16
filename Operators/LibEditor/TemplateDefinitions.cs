@@ -31,7 +31,7 @@ static class TemplateDefinitions
                                                      var shaderInstance = newInstance.Children.SingleOrDefault(c => c.Symbol.Id ==
                                                                       Guid.Parse("a256d70f-adb3-481d-a926-caf35bd3e64c"));
 
-                                                     File.Copy(@"Resources\examples\templates\PointShaderTemplate.hlsl",
+                                                     File.Copy(@"examples\templates\PointShaderTemplate.hlsl",
                                                                newShaderFilename);
 
                                                      if (shaderInstance is ComputeShader computeShader)
@@ -74,7 +74,7 @@ static class TemplateDefinitions
                                                      var shaderSetupInstance = newInstance.Children.SingleOrDefault(c => c.Symbol.Id ==
                                                                       Guid.Parse("bd0b9c5b-c611-42d0-8200-31af9661f189"));
 
-                                                     File.Copy(@"Resources\examples\templates\ImgFxShaderTemplate.hlsl",
+                                                     File.Copy(@"examples\templates\ImgFxShaderTemplate.hlsl",
                                                                newShaderFilename);
 
                                                      if (shaderSetupInstance is _ImageFxShaderSetupStatic shaderSetup)
