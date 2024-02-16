@@ -27,7 +27,7 @@ internal static class ProjectSetup
         }
     }
 
-    private static bool TryCreateProject(string name, string nameSpace,  out EditableSymbolProject newProject)
+    private static bool TryCreateProject(string name, string nameSpace, out EditableSymbolProject newProject)
     {
         var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, UserSettings.Config.DefaultNewProjectDirectory);
         if (newCsProj == null)
@@ -136,39 +136,44 @@ internal static class ProjectSetup
             var csProjFiles = projectSearchDirectories
                              .SelectMany(dir => Directory.EnumerateFiles(dir, "*.csproj", SearchOption.AllDirectories))
                              .Where(filePath => !filePath.Contains(CsProjectFile.ProjectNamePlaceholder))
+                             .Select(x => new FileInfo(x))
                              .ToArray();
 
             Log.Debug($"Found {csProjFiles.Length} csproj files in {stopwatch.ElapsedMilliseconds}ms");
 
             stopwatch.Restart();
+            
             ConcurrentBag<EditableSymbolProject> projects = new();
+            ConcurrentBag<CsProjectFile> projectsNeedingCompilation = new();
+
             csProjFiles
                .AsParallel()
-               .ForAll(path =>
+               .ForAll(fileInfo =>
                        {
                            stopwatch.Restart();
-                           var csProjFile = new CsProjectFile(new FileInfo(path));
-                           if (!csProjFile.TryLoadLatestAssembly())
+                           var csProjFile = new CsProjectFile(fileInfo);
+                           if (csProjFile.TryLoadLatestAssembly())
                            {
-                               if (!csProjFile.TryRecompile())
-                               {
-                                   Log.Info($"Failed to load {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
-                                   return;
-                               }
-                           }
-
-                           if (csProjFile.IsOperatorAssembly)
-                           {
-                               var project = new EditableSymbolProject(csProjFile);
-                               projects.Add(project);
+                               InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
                            }
                            else
                            {
-                               nonOperatorAssemblies.Add(csProjFile.Assembly);
+                               projectsNeedingCompilation.Add(csProjFile);
                            }
-
-                           Log.Info($"Loaded {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
                        });
+
+            foreach (var csProjFile in projectsNeedingCompilation)
+            {
+                // check again if assembly can be loaded as previous compilations could have compiled this project
+                if (csProjFile.TryLoadLatestAssembly() || csProjFile.TryRecompile())
+                {
+                    InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
+                }
+                else
+                {
+                    Log.Info($"Failed to load {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
+                }
+            }
 
             #if DEBUG
             Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {totalStopwatch.ElapsedMilliseconds}ms");
@@ -218,6 +223,22 @@ internal static class ProjectSetup
             exception = e;
             return false;
         }
+
+        static void InitializeLoadedProject(CsProjectFile csProjFile, ConcurrentBag<EditableSymbolProject> projects,
+                                            ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, Stopwatch stopwatch)
+        {
+            if (csProjFile.IsOperatorAssembly)
+            {
+                var project = new EditableSymbolProject(csProjFile);
+                projects.Add(project);
+            }
+            else
+            {
+                nonOperatorAssemblies.Add(csProjFile.Assembly);
+            }
+
+            Log.Info($"Loaded {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
+        }
     }
 
     #if IDE
@@ -240,7 +261,7 @@ internal static class ProjectSetup
             // ignore dotfiles, like .idea, .git, .vs, etc
             if (subDirectory.Name.StartsWith('.'))
                 continue;
-            
+
             //symlink to user project directory
             var linkName = Path.Combine(targetDirectory, subDirectory.Name);
             Log.Debug($"Target: {linkName} <- {subDirectory.FullName}");
