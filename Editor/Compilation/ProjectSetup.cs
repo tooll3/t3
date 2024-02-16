@@ -237,6 +237,10 @@ internal static class ProjectSetup
         Log.Debug($"Beginning enumerating subdirectories of {directoryInfo}");
         foreach (var subDirectory in directoryInfo.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
         {
+            // ignore dotfiles, like .idea, .git, .vs, etc
+            if (subDirectory.Name.StartsWith('.'))
+                continue;
+            
             //symlink to user project directory
             var linkName = Path.Combine(targetDirectory, subDirectory.Name);
             Log.Debug($"Target: {linkName} <- {subDirectory.FullName}");
