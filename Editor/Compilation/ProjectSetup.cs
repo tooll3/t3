@@ -175,6 +175,11 @@ internal static class ProjectSetup
                 }
             }
 
+            foreach (var project in projects)
+            {
+                project.CsProjectFile.RemoveOldBuilds();
+            }
+
             #if DEBUG
             Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {totalStopwatch.ElapsedMilliseconds}ms");
             #endif

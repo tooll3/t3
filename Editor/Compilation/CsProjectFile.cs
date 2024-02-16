@@ -280,16 +280,7 @@ internal class CsProjectFile
 
     public bool TryLoadLatestAssembly()
     {
-        var rootDir = new DirectoryInfo(GetRootDirectory());
-        if (!rootDir.Exists)
-            return false;
-
-        var compatibleDirectories = rootDir.EnumerateDirectories($"*{TargetFramework}", SearchOption.AllDirectories).ToArray();
-        if (compatibleDirectories.Length == 0)
-            return false;
-
-        var latestDll = compatibleDirectories.SelectMany(x => x.EnumerateFiles(DllName)).MaxBy(x => x.LastWriteTime);
-        if (latestDll == null)
+        if (!TryGetBuildDirectories(out var compatibleDirectories, out var latestDll))
             return false;
 
         var loaded = TryLoadAssembly(latestDll);
@@ -297,31 +288,52 @@ internal class CsProjectFile
         if (!loaded)
         {
             Log.Error($"Could not load latest assembly at \"{latestDll.FullName}\"");
+            return false;
         }
-        else
+
+        return true;
+    }
+
+    private bool TryGetBuildDirectories(out DirectoryInfo[] compatibleDirectories, out FileInfo latestDll)
+    {
+        var rootDir = new DirectoryInfo(GetRootDirectory());
+        if (!rootDir.Exists)
         {
-            var latestDir = latestDll.Directory!.FullName;
-
-            // delete all other dll directories
-            compatibleDirectories
-               .AsParallel()
-               .ForAll(directory =>
-                       {
-                           if (directory.FullName == latestDir)
-                               return;
-
-                           try
-                           {
-                               directory.Delete(recursive: true);
-                           }
-                           catch (Exception e)
-                           {
-                               Log.Error($"Could not delete directory \"{directory.FullName}\": {e}");
-                           }
-                       });
+            compatibleDirectories = Array.Empty<DirectoryInfo>();
+            latestDll = null;
+            return false;
         }
 
-        return loaded;
+        compatibleDirectories = rootDir.EnumerateDirectories($"*{TargetFramework}", SearchOption.AllDirectories).ToArray();
+
+        latestDll = compatibleDirectories.SelectMany(x => x.EnumerateFiles(DllName)).MaxBy(x => x.LastWriteTime);
+        return latestDll != null;
+    }
+
+    public void RemoveOldBuilds()
+    {
+        if (!TryGetBuildDirectories(out var compatibleDirectories, out var latestDll))
+            return;
+
+        var latestDir = Assembly != null ? Assembly.Directory : latestDll.Directory!.FullName;
+
+        // delete all other dll directories
+        compatibleDirectories
+           .AsParallel()
+           .ForAll(directory =>
+                   {
+                       if (directory.FullName == latestDir)
+                           return;
+
+                       try
+                       {
+                           directory.Delete(recursive: true);
+                       }
+                       catch (Exception e)
+                       {
+                           Log.Error($"Could not delete directory \"{directory.FullName}\": {e}");
+                       }
+                   });
     }
 
     private bool TryLoadAssembly(FileInfo assemblyFile)
