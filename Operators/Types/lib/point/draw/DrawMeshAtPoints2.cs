@@ -23,7 +23,7 @@ namespace T3.Operators.Types.Id_065f6edb_6d3d_414b_ab36_4620a957a18c
         [Input(Guid = "077a75d8-1928-4779-a587-9b8a1e5856ac")]
         public readonly InputSlot<System.Numerics.Vector3> Offset = new();
 
-        [Input(Guid = "8105e180-956a-4503-8ede-ac3c17e17e09")]
+        [Input(Guid = "8105e180-956a-4503-8ede-ac3c17e17e09", MappedType = typeof(Orientations))]
         public readonly InputSlot<int> Orientation = new();
 
         [Input(Guid = "ce0eef55-9242-479e-9592-2adff883ffd6")]
@@ -59,9 +59,6 @@ namespace T3.Operators.Types.Id_065f6edb_6d3d_414b_ab36_4620a957a18c
         [Input(Guid = "01288f85-aa38-4b63-b862-d40beacaeea2")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> ColorVariations = new();
 
-        [Input(Guid = "6c322352-2c2e-47c0-972c-561a4b4e2067")]
-        public readonly InputSlot<bool> UseRotationAsRgba = new();
-
         [Input(Guid = "44aa4ef1-15fd-4ab5-95e9-41a4ce6b42bf", MappedType = typeof(DistributionModes))]
         public readonly InputSlot<int> ScaleDistribution = new();
 
@@ -92,14 +89,11 @@ namespace T3.Operators.Types.Id_065f6edb_6d3d_414b_ab36_4620a957a18c
         [Input(Guid = "e71d2391-3ca3-4f04-b8d9-caefcb069285")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTexture = new();
 
-        [Input(Guid = "a56b7c1a-9bb9-4f3d-a98d-dee72fd9f599")]
+        [Input(Guid = "a56b7c1a-9bb9-4f3d-a98d-dee72fd9f599", MappedType = typeof(FxTextureModes))]
         public readonly InputSlot<int> FxTextureMode = new();
 
         [Input(Guid = "d2e7c5ab-733a-4d9c-9be3-f4cadf5469e9")]
         public readonly InputSlot<System.Numerics.Vector4> FxTextureAmount = new();
-
-        [Input(Guid = "86bababd-af68-4438-b0b7-59e076b2a315")]
-        public readonly InputSlot<int> BlendMode = new();
 
         [Input(Guid = "e9ff3d61-3d42-4591-8526-5ebf8c8c6806")]
         public readonly InputSlot<bool> EnableDepthWrite = new();

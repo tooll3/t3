@@ -41,11 +41,11 @@
       "DefaultValue": null
     },
     {
-      "Id": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableTest*/,
+      "Id": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableZTest*/,
       "DefaultValue": true
     },
     {
-      "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableDepthWrite*/,
+      "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableZWrite*/,
       "DefaultValue": true
     },
     {
@@ -57,7 +57,7 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "ba83a66f-5a4c-4355-abb2-d4b7cd55d542"/*AddressU*/,
+      "Id": "ba83a66f-5a4c-4355-abb2-d4b7cd55d542"/*WrapMode*/,
       "DefaultValue": "Clamp"
     }
   ],

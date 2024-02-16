@@ -21,11 +21,17 @@ namespace T3.Operators.Types.Id_4f5999c9_8ade_4e31_8379_afb7db56e170
         [Input(Guid = "faad9c30-9500-49bd-9b62-3f00ab536f35")]
         public readonly InputSlot<float> AmountVariation = new InputSlot<float>();
 
+        [Input(Guid = "331843a6-f634-45ef-b9ad-21baf8612642")]
+        public readonly InputSlot<float> Twist = new InputSlot<float>();
+
+        [Input(Guid = "b4ffa587-f6f0-47c2-af60-f8660ad1882e")]
+        public readonly InputSlot<float> TwistVariation = new InputSlot<float>();
+
         [Input(Guid = "a63a10bb-b0c5-46bc-8f9d-8b0b3f4cd037")]
-        public readonly InputSlot<float> TwistAngle = new InputSlot<float>();
+        public readonly InputSlot<float> Spin = new InputSlot<float>();
 
         [Input(Guid = "b61b695e-593d-4d7a-bb76-b15cbc0913d9")]
-        public readonly InputSlot<float> TwistVariation = new InputSlot<float>();
+        public readonly InputSlot<float> SpinVariation = new InputSlot<float>();
 
         [Input(Guid = "41491794-082d-4394-b6c2-efb4780623ea")]
         public readonly InputSlot<System.Numerics.Vector2> VariationBiasGain = new InputSlot<System.Numerics.Vector2>();

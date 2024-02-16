@@ -29,6 +29,11 @@ namespace T3.Operators.Types.Id_a5f4552f_7e25_43a5_bb14_21ab836fa0b3
             try
             {
                 var wasTriggered = MathUtils.WasTriggered(TriggerUpdate.GetValue(context), ref _triggerUpdate);
+
+                if (wasTriggered)
+                {
+                    TriggerUpdate.SetTypedInputValue(false);
+                }
                 var pointBuffer = PointBuffer.GetValue(context);
 
                 if (pointBuffer == null)

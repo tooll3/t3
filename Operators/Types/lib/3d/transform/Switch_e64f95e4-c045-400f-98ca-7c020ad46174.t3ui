@@ -19,7 +19,7 @@
         "Y": 45.0
       },
       "GroupTitle": "Scene Selection",
-      "Description": "Selects which connection is active starting from 0.\n-1 deactivates all incoming scenes.\n-2 activates all incoming scenes.\n\nNote that the index is wrapped: If you have to inputs connected, an index of 2 will route to the first."
+      "Description": "Selects which connection is active starting from 0.\n-1 deactivates all incoming scenes.\n-2 activates all incoming scenes.\n\nNote that the index is wrapped: If you have two inputs connected, an index of 2 will route to the first."
     },
     {
       "InputId": "e896b269-d17e-417f-be1f-2d6e9addae91"/*OptimizeInvalidation*/,

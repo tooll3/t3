@@ -15,56 +15,69 @@
       "Position": {
         "X": -158.25935,
         "Y": 219.10832
-      }
+      },
+      "Description": "Selects a color which will be multiplied with the incoming image.",
+      "AddPadding": "True"
     },
     {
       "InputId": "a680706a-3e0f-4b93-9953-05df8d32109a"/*Width*/,
       "Position": {
         "X": -158.25935,
         "Y": 269.10834
-      }
+      },
+      "Description": "Multiplier for Width"
     },
     {
       "InputId": "4ca612b7-a899-4567-98e4-8b6e96d5f251"/*Height*/,
       "Position": {
         "X": -158.25935,
         "Y": 319.10834
-      }
+      },
+      "Description": "Multiplier for Height"
     },
     {
       "InputId": "60cef5fb-b22a-4fa0-83bb-093d0f1d5b56"/*BlendMode*/,
       "Position": {
         "X": -158.25935,
         "Y": 364.10834
-      }
+      },
+      "GroupTitle": "Options",
+      "Description": "Selects the Blendmode"
     },
     {
       "InputId": "6a91ba46-257d-4c3c-94c5-72cbc06ee816"/*EnableDepthTest*/,
       "Position": {
         "X": -158.25935,
         "Y": 409.10834
-      }
+      },
+      "Description": "This defines whether the Quad covers itself or is covered by or covers other meshes.",
+      "AddPadding": "True"
     },
     {
       "InputId": "2680baf9-3dbd-4ade-b109-19b3b0f1d40f"/*EnableDepthWrite*/,
       "Position": {
         "X": -158.25935,
         "Y": 454.10834
-      }
+      },
+      "Description": "This defines whether the Quad covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "6fd86a21-d06c-4edb-bbe2-39d7411e46d1"/*Position*/,
       "Position": {
         "X": -158.25935,
         "Y": 499.10834
-      }
+      },
+      "Description": "Manipulates the position of the Quad\nX = Right / Left\nY = Up / Down",
+      "AddPadding": "True"
     },
     {
       "InputId": "81f7acd7-6704-404b-b8be-9e77d2117fcc"/*Filter*/,
       "Position": {
         "X": -158.25935,
         "Y": 544.10834
-      }
+      },
+      "GroupTitle": "Advanced Options",
+      "Description": "Selects which Filter is used for rendering the incoming texture"
     }
   ],
   "SymbolChildUis": [

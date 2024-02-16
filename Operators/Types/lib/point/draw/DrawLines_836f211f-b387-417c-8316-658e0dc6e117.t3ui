@@ -8,14 +8,17 @@
       "Position": {
         "X": -526.389,
         "Y": 76.167595
-      }
+      },
+      "Description": "Input for GPoints"
     },
     {
       "InputId": "75419a73-8a3e-4538-9a1d-e3b0ce7f8561"/*Color*/,
       "Position": {
         "X": -712.8036,
         "Y": 276.22565
-      }
+      },
+      "Description": "Defines the color of the Lines.\nIf a Texture is used this color will be multiplied.",
+      "AddPadding": "True"
     },
     {
       "InputId": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
@@ -23,6 +26,7 @@
         "X": -300.97974,
         "Y": 360.46448
       },
+      "Description": "Defines the width",
       "Scale": 0.001
     },
     {
@@ -45,7 +49,8 @@
       "Position": {
         "X": -300.97974,
         "Y": 495.4646
-      }
+      },
+      "Description": "Defines whether the \"W\"-Value of the Gpoints used has an influence on the size of the rendered Points"
     },
     {
       "InputId": "567794ab-b3d3-43f6-ae95-4d654f797577"/*UseWAsTexCoordV*/,
@@ -53,6 +58,7 @@
         "X": -297.12128,
         "Y": 595.0335
       },
+      "Description": "Defines whether the W value of the GPoints used is used to influence the mapping of the texture.",
       "AddPadding": "True"
     },
     {
@@ -60,22 +66,25 @@
       "Position": {
         "X": -308.91452,
         "Y": 1056.9216
-      }
+      },
+      "Description": "Texture Input."
     },
     {
-      "InputId": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableTest*/,
+      "InputId": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableZTest*/,
       "Position": {
         "X": 628.21533,
         "Y": 1099.5239
       },
-      "AddPadding": "True"
+      "GroupTitle": "Draw Options",
+      "Description": "Defines whether Lines cover themselves or are covered by or cover other 3D elements."
     },
     {
-      "InputId": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableDepthWrite*/,
+      "InputId": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableZWrite*/,
       "Position": {
         "X": 628.21533,
         "Y": 1144.5239
-      }
+      },
+      "Description": "Defines whether Lines cover themselves or are covered by or cover other 3D elements."
     },
     {
       "InputId": "d90ff4e6-7d70-441f-a064-b40401025c36"/*BlendMod*/,
@@ -83,6 +92,7 @@
         "X": 628.21533,
         "Y": 1189.5239
       },
+      "Description": "Selects the Blendmode",
       "AddPadding": "True"
     },
     {
@@ -90,14 +100,17 @@
       "Position": {
         "X": -131.46179,
         "Y": 1368.2145
-      }
+      },
+      "Description": "Uniformly scales the mapping of the used texture",
+      "AddPadding": "True"
     },
     {
-      "InputId": "ba83a66f-5a4c-4355-abb2-d4b7cd55d542"/*AddressU*/,
+      "InputId": "ba83a66f-5a4c-4355-abb2-d4b7cd55d542"/*WrapMode*/,
       "Position": {
         "X": -131.46179,
         "Y": 1413.2145
-      }
+      },
+      "Description": "Defines how the texture behaves when repeated.\n\nWrap: The texture repeats itself continuously\nMirror: The texture is mirrored and repeats infinitely.\nClamp: The texture is cut off at the edge\nBorder: Unclear\nMirrOnce: The texture is mirrored once, then cut off"
     }
   ],
   "SymbolChildUis": [

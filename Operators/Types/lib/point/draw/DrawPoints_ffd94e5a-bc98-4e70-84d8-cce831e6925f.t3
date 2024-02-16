@@ -21,15 +21,7 @@
       "DefaultValue": 0.1
     },
     {
-      "Id": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"/*Texture_*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
-      "DefaultValue": true
-    },
-    {
-      "Id": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
+      "Id": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
       "DefaultValue": true
     },
     {
@@ -41,8 +33,16 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
+      "Id": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
       "DefaultValue": true
+    },
+    {
+      "Id": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"/*Texture_*/,
+      "DefaultValue": null
     }
   ],
   "Children": [

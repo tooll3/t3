@@ -59,7 +59,7 @@
         "X": 1361.8606,
         "Y": 4369.013
       },
-      "Description": "If enabled discards fragments sorted out by by z-buffer.\n\nThis defines whether the mesh covers itself or is covered by or covers other meshes.",
+      "Description": "If enabled discards fragments sorted out by z-buffer.\n\nThis defines whether the mesh covers itself or is covered by or covers other meshes.",
       "AddPadding": "True"
     },
     {

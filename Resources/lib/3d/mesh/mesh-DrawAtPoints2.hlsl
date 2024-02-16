@@ -198,7 +198,7 @@ psInput vsMain(uint id : SV_VertexID)
     float4 colorFromPoint = (UseRotationAsRgba > 0.5) ? pRotation : 1;
 
     float colorFxU = GetUFromMode(ColorVariationMode, pointId, f, normalizedScatter, pW, output.fog);
-    output.color = Color * ColorOverW.SampleLevel(texSampler, float2(colorFxU, 0), 0) * colorFromPoint;
+    output.color = Color * ColorOverW.SampleLevel(clampedSampler, float2(colorFxU, 0), 0) * colorFromPoint;
 
     float adjustedRotate = Rotate;
     float adjustedScale = Scale;
@@ -209,7 +209,7 @@ psInput vsMain(uint id : SV_VertexID)
         float4 centerPos = mul(float4(pInCamera.xyz, 1), CameraToClipSpace);
         centerPos.xyz /= centerPos.w;
 
-        float4 fxColor = FxTexture.SampleLevel(texSampler, (centerPos.xy * float2(1, -1) + 1) / 2, 0);
+        float4 fxColor = FxTexture.SampleLevel(clampedSampler, (centerPos.xy * float2(1, -1) + 1) / 2, 0);
 
         if(FxTextureMode < 0.5) 
         {
@@ -224,7 +224,7 @@ psInput vsMain(uint id : SV_VertexID)
 
     // Scale and stretch
     float scaleFxU = GetUFromMode(ScaleDistribution, pointId, f, normalizedScatter, pW, output.fog);
-    float scaleFromCurve = SizeOverW.SampleLevel(texSampler, float2(scaleFxU, 0), 0).r;
+    float scaleFromCurve = SizeOverW.SampleLevel(clampedSampler, float2(scaleFxU, 0), 0).r;
     float hideUndefinedPoints = isnan(pW) ? 0 : (UseWFoScale > 0.5 ? max(pW, 0) : 1 );
     
     float r= (RandomScale * scatterForScale.y *adjustedRandomize + 1);
