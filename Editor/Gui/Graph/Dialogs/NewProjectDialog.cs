@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 using System.Windows.Forms;
 using ImGuiNET;
+using Microsoft.VisualBasic.ApplicationServices;
 using T3.Core.Operator;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
@@ -19,14 +21,20 @@ namespace T3.Editor.Gui.Graph.Dialogs
         {
             DialogSize = new Vector2(500, 300);
 
-            if (BeginDialog("Duplicate as new symbol"))
+            if (BeginDialog("Create new project"))
             {
                 // Name and namespace
+                _namespaceBuilder.Clear();
+                _namespaceBuilder.Append(UserSettings.Config.UserName).Append('.');
+
                 FormInputs.AddStringInput("Namespace", ref _newNamespace);
                 FormInputs.AddStringInput("Name", ref _newName);
-
+                FormInputs.EnforceStringStart(_namespaceBuilder.ToString(), ref _newNamespace, false);
+                
+                _namespaceBuilder.Append(_newNamespace);
+                
                 if (CustomComponents.DisablableButton(label: "Create",
-                                                      isEnabled: GraphUtils.IsIdentifierValid(_newName) && GraphUtils.IsNamespaceValid(_newNamespace),
+                                                      isEnabled: GraphUtils.IsIdentifierValid(_newName) && GraphUtils.IsNamespaceValid(_namespaceBuilder.ToString()),
                                                       enableTriggerWithReturn: false))
                 {
                     ProjectSetup.CreateOrMigrateProject(_newName, _newNamespace);
@@ -48,5 +56,6 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
         private static string _newName = string.Empty;
         private static string _newNamespace = string.Empty;
+        private static readonly StringBuilder _namespaceBuilder = new();
     }
 }

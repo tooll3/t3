@@ -29,6 +29,9 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.SetCursorPosX(250 + 20); // Not sure how else to layout this
                     ImGui.TextUnformatted("Name");
                     ImGui.PopFont();
+                    
+                    var userName = UserSettings.Config.UserName + '.';
+                    FormInputs.EnforceStringStart(userName, ref nameSpace, false);
 
                     ImGui.SetNextItemWidth(250);
                     InputWithTypeAheadSearch.Draw("##namespace2", ref nameSpace,

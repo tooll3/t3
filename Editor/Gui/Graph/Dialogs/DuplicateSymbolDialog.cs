@@ -29,6 +29,9 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.TextUnformatted("Name");
                     ImGui.PopFont();
 
+                    var userName = UserSettings.Config.UserName + '.';
+                    FormInputs.EnforceStringStart(userName, ref nameSpace, false);
+                    
                     ImGui.SetNextItemWidth(250);
                     //ImGui.InputText("##namespace", ref nameSpace, 255);
                     InputWithTypeAheadSearch.Draw("##namespace", ref nameSpace,

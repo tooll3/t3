@@ -1,6 +1,6 @@
 {
   "Id": "{{GUID}}"/*{{PROJ}}*/,
-  "Description": "Workspace for {{PROJ}}.",
+  "Description": "{{USER}}'s workspace for {{PROJ}}.",
   "InputUis": [],
   "SymbolChildUis": [
     {

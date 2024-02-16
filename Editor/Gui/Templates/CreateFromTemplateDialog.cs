@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Text.RegularExpressions;
 using ImGuiNET;
+using T3.Core.Model;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
@@ -162,9 +163,10 @@ namespace T3.Editor.Gui.Templates
         private TemplateDefinition _selectedTemplate = TemplateDefinition.TemplateDefinitions[0];
         private static readonly Regex _validResourceFolderPattern = new(@"^Resources\\([A-Za-z_][A-Za-z_\-\d]*)(\\([A-Za-z_][A-Za-z\-_\d]*))*\\?$");
         
-        private string NameSpace => string.IsNullOrEmpty(_newNameSpace) ? $"user.{CurrentProjectName}.{_newSymbolName}" : _newNameSpace;
+        private string NameSpace => string.IsNullOrEmpty(_newNameSpace) ? $"{UserSettings.Config.UserName}.{CurrentProjectName}.{_newSymbolName}" : _newNameSpace;
         private string ResourceDirectory => string.IsNullOrEmpty(_resourceFolder) ? $"Resources\\user\\{CurrentProjectName}\\{_newSymbolName}\\" : _resourceFolder;
-        private string CurrentProjectName => GraphWindow.GetMainComposition().Symbol.SymbolPackage.AssemblyInformation.Name;
+        private string CurrentProjectName => CurrentPackage.AssemblyInformation.Name;
+        private SymbolPackage CurrentPackage => GraphWindow.GetMainComposition().Symbol.SymbolPackage;
 
         private string _newSymbolName = "MyNewOp";
         private string _newNameSpace = null;
