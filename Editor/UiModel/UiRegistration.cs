@@ -24,11 +24,6 @@ namespace T3.Editor.UiModel;
 
 static class UiRegistration
 {
-    static UiRegistration()
-    {
-        RegisterUiTypes();
-    }
-
     public static class TypeByNameRegistry
     {
         public static Dictionary<string, Type> Entries { get; } = new();
