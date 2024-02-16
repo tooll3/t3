@@ -200,6 +200,50 @@ public partial class SymbolPackage
                          list.AddRange(entries.Select(entry => entry.Value<string>()));
                          return list;
                      });
+        
+        RegisterType(typeof(Int2), nameof(Int2),
+                     InputDefaultValueCreator<Int2>,
+                     (writer, obj) =>
+                     {
+                         Int2 vec = (Int2)obj;
+                         writer.WriteStartObject();
+                         writer.WriteValue("X", vec.X);
+                         writer.WriteValue("Y", vec.Y);
+                         writer.WriteEndObject();
+                     },
+                     jsonToken =>
+                     {
+                         var widthJson = jsonToken["Width"] ?? jsonToken["X"];
+                         var heightJson = jsonToken["Height"] ?? jsonToken["Y"];
+                         int width = widthJson.Value<int>();
+                         int height = heightJson.Value<int>();
+                         return new Int2(width, height);
+                     });
+        
+        RegisterType(typeof(Int3), "Int3",
+                     InputDefaultValueCreator<Int3>,
+                     (writer, obj) =>
+                     {
+                         Int3 vec = (Int3)obj;
+                         writer.WriteStartObject();
+                         writer.WriteValue("X", vec.X);
+                         writer.WriteValue("Y", vec.Y);
+                         writer.WriteValue("Z", vec.Z);
+                         writer.WriteEndObject();
+                     },
+                     jsonToken =>
+                     {
+                         int x = jsonToken["X"].Value<int>();
+                         int y = jsonToken["Y"].Value<int>();
+                         int z = jsonToken["Z"].Value<int>();
+                         return new Int3(x, y, z);
+                     });
+        
+        RegisterType(typeof(Vector4[]), "Vector4[]",
+                     () => new InputValue<Vector4[]>(Array.Empty<Vector4>()));
+        
+        RegisterType(typeof(Dict<float>), "Dict<float>",
+                     () => new InputValue<Dict<float>>());
 
 
         RegisterType(typeof(System.Text.StringBuilder), "StringBuilder",
@@ -343,9 +387,7 @@ public partial class SymbolPackage
 
                          return sceneSetup;
                      });        
-        
-        RegisterType(typeof(Dict<float>), "Dict<float>",
-                     () => new InputValue<Dict<float>>());
+
 
         
         // sharpdx types
@@ -443,49 +485,12 @@ public partial class SymbolPackage
                      InputDefaultValueCreator<Format>,
                      (writer, obj) => writer.WriteValue(obj.ToString()),
                      JsonToEnumValue<Format>);
-        RegisterType(typeof(Int3), "Int3",
-                     InputDefaultValueCreator<Int3>,
-                     (writer, obj) =>
-                     {
-                         Int3 vec = (Int3)obj;
-                         writer.WriteStartObject();
-                         writer.WriteValue("X", vec.X);
-                         writer.WriteValue("Y", vec.Y);
-                         writer.WriteValue("Z", vec.Z);
-                         writer.WriteEndObject();
-                     },
-                     jsonToken =>
-                     {
-                         int x = jsonToken["X"].Value<int>();
-                         int y = jsonToken["Y"].Value<int>();
-                         int z = jsonToken["Z"].Value<int>();
-                         return new Int3(x, y, z);
-                     });
         RegisterType(typeof(SharpDX.Mathematics.Interop.RawRectangle), "RawRectangle",
                      () => new InputValue<RawRectangle>(new RawRectangle { Left = -100, Right = 100, Bottom = -100, Top = 100 }));
         RegisterType(typeof(SharpDX.Mathematics.Interop.RawViewportF), "RawViewportF",
                      () => new InputValue<RawViewportF>(new RawViewportF
                                                             { X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f }));
-        RegisterType(typeof(Int2), nameof(Int2),
-                     InputDefaultValueCreator<Int2>,
-                     (writer, obj) =>
-                     {
-                         Int2 vec = (Int2)obj;
-                         writer.WriteStartObject();
-                         writer.WriteValue("X", vec.X);
-                         writer.WriteValue("Y", vec.Y);
-                         writer.WriteEndObject();
-                     },
-                     jsonToken =>
-                     {
-                         var widthJson = jsonToken["Width"] ?? jsonToken["X"];
-                         var heightJson = jsonToken["Height"] ?? jsonToken["Y"];
-                         int width = widthJson.Value<int>();
-                         int height = heightJson.Value<int>();
-                         return new Int2(width, height);
-                     });
-        RegisterType(typeof(Vector4[]), "Vector4[]",
-                     () => new InputValue<Vector4[]>(Array.Empty<Vector4>()));
+
         
     }
 
