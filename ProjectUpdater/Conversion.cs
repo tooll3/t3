@@ -6,13 +6,13 @@ namespace ProjectUpdater;
 
 public static partial class Conversion
 {
-    const string DeprecatedNamespacePrefix = "namespace T3.Operators.Types.Id_";
-    const string NamespacePrefix = "namespace ";
-    static readonly CodeDomProvider CodeDomProvider = CodeDomProvider.CreateProvider("C#");
+    private const string DeprecatedNamespacePrefix = "namespace T3.Operators.Types.Id_";
+    private const string NamespacePrefix = "namespace ";
+    private static readonly CodeDomProvider CodeDomProvider = CodeDomProvider.CreateProvider("C#");
 
-    static readonly ConcurrentDictionary<Guid, string> DestinationDirectories = new();
-    
-    static readonly List<NamespaceChanged> ChangedNamespaces = [];
+    private static readonly ConcurrentDictionary<Guid, string> DestinationDirectories = new();
+
+    private static readonly List<NamespaceChanged> ChangedNamespaces = [];
 
     public static void StartConversion(string rootDirectory, string newRootDirectory)
     {
@@ -39,7 +39,7 @@ public static partial class Conversion
             });
     }
 
-    static FileChangeInfo ConvertAndMoveT3File(string filepath, string fileContents, string originalRootDirectory, string newRootDirectory)
+    private static FileChangeInfo ConvertAndMoveT3File(string filepath, string fileContents, string originalRootDirectory, string newRootDirectory)
     {
         const string guidKey = "\"Id\": \"";
         var startGuidKeyIndex = fileContents.IndexOf(guidKey, StringComparison.Ordinal);
@@ -88,7 +88,7 @@ public static partial class Conversion
         return new FileChangeInfo(newFilePath, fileContents);
     }
 
-    static void EnumerateFileOperations(string rootDirectory, string newRootDirectory, string searchPattern, FileOperationDelegate action)
+    private static void EnumerateFileOperations(string rootDirectory, string newRootDirectory, string searchPattern, FileOperationDelegate action)
     {
         Directory.EnumerateFiles(rootDirectory, searchPattern, SearchOption.AllDirectories)
             .AsParallel()
@@ -131,7 +131,7 @@ public static partial class Conversion
             });
     }
 
-    static string[] GetSubfolderArray(string filePath, string parentDirectory, StringBuilder sb)
+    private static string[] GetSubfolderArray(string filePath, string parentDirectory, StringBuilder sb)
     {
         var fileDirectory = Path.GetDirectoryName(filePath)!;
         var dirWithoutRoot = fileDirectory[(parentDirectory.Length + 1)..];
@@ -149,7 +149,7 @@ public static partial class Conversion
         return subfolderComponents;
     }
 
-    static void ConvertLineEndingsOf(ref string text, bool useWindows)
+    private static void ConvertLineEndingsOf(ref string text, bool useWindows)
     {
         if (useWindows)
         {
@@ -162,12 +162,26 @@ public static partial class Conversion
             text = text.Replace("\r\n", "\n");
         }
     }
-    
-    delegate FileChangeInfo FileOperationDelegate(string filePath, string fileContents, string originalRootDirectory, string newRootDirectory);
 
+    private delegate FileChangeInfo FileOperationDelegate(string filePath, string fileContents, string originalRootDirectory, string newRootDirectory);
 
-    readonly struct FileChangeInfo(string newFilePath, string newFileContents)
+    private readonly struct FileChangeInfo(string newFilePath, string newFileContents)
     {
+        private bool Equals(FileChangeInfo other)
+        {
+            return NewFilePath == other.NewFilePath && NewFileContents == other.NewFileContents;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is FileChangeInfo other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(NewFilePath, NewFileContents);
+        }
+
         public readonly string NewFilePath = newFilePath;
         public readonly string NewFileContents = newFileContents;
         

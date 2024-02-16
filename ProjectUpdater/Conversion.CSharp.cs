@@ -4,7 +4,7 @@ namespace ProjectUpdater;
 
 public static partial class Conversion
 {
-    static FileChangeInfo ConvertAndMoveCSharp(string file, string text, string originalRootDirectory, string newRootDirectory)
+    private static FileChangeInfo ConvertAndMoveCSharp(string file, string text, string originalRootDirectory, string newRootDirectory)
     {
         StringBuilder stringBuilder = new(32);
 
@@ -39,7 +39,7 @@ public static partial class Conversion
     /// <summary>
     /// Converts code to new format, searching for things that would not work with new changes and replacing them
     /// </summary>
-    static void ConvertCode(ref string code)
+    private static void ConvertCode(ref string code)
     {
         const string vec = "Vector";
         const string vecReplacement = "System.Numerics.Vector";
@@ -161,7 +161,7 @@ public static partial class Conversion
     /// <summary>
     /// Returns true if the text namespace was changed
     /// </summary>
-    static bool ChangeNamespaceTo(ref string text, string[] namespaceComponents, StringBuilder sb, out string oldNamespace, out string newNamespace)
+    private static bool ChangeNamespaceTo(ref string text, string[] namespaceComponents, StringBuilder sb, out string oldNamespace, out string newNamespace)
     {
         var namespaceStartIndex = text.IndexOf(NamespacePrefix, StringComparison.Ordinal);
 
@@ -217,7 +217,7 @@ public static partial class Conversion
         return true;
     }
 
-    static bool TryConvertToModernOperator(ref string text, out Guid guid)
+    private static bool TryConvertToModernOperator(ref string text, out Guid guid)
     {
         int prefixLength = DeprecatedNamespacePrefix.Length;
         var prefixIndex = text.IndexOf(DeprecatedNamespacePrefix, StringComparison.Ordinal);
