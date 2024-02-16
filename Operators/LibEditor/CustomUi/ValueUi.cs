@@ -12,7 +12,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
-namespace T3.Editor.Gui.ChildUi
+namespace libEditor.CustomUi
 {
     public static class ValueUi
     {

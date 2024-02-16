@@ -1,14 +1,14 @@
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using lib.dx11;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using user.cynic.research;
 
-namespace T3.Editor.Gui.ChildUi
+namespace libEditor.CustomUi
 {
     public static class GpuMeasureUi
     {

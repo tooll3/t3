@@ -1,12 +1,6 @@
-using ComputeShaderD3D = SharpDX.Direct3D11.ComputeShader;
-using VertexShaderD3D = SharpDX.Direct3D11.VertexShader;
-using PixelShaderD3D = SharpDX.Direct3D11.PixelShader;
-using System;
-using System.Collections.Generic;
-using System.IO;
+
 using System.Xml.Serialization;
 using T3.Core.Logging;
-using T3.Operators.Utils.BmFont;
 
 namespace Utils
 {

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <RootNamespace>user.lucid</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll"/>
+    </ItemGroup>
+
+</Project>

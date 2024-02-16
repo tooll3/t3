@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <UserSecretsId>4ddcedc9-2c55-476d-9aeb-8e052ecd278a</UserSecretsId>
+        <RootNamespace>t3.unsplash</RootNamespace>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll" />
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll" />
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll" />
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Newtonsoft.Json.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="unsplasharp.api" Version="0.7.0" />
+    </ItemGroup>
+
+</Project>

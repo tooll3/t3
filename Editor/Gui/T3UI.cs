@@ -165,7 +165,7 @@ public static class T3Ui
     /// </summary>
     private static bool IsWindowLayoutComplete() => ImGui.GetFrameCount() > 2;
 
-    private void TriggerGlobalActionsFromKeyBindings()
+    private static void TriggerGlobalActionsFromKeyBindings()
     {
         if (KeyboardBinding.Triggered(UserActions.Undo))
         {
