@@ -264,6 +264,13 @@ public static class T3Ui
                 {
                     SaveInBackground(saveAll: false);
                 }
+                
+                #if DEBUG
+                if (ImGui.MenuItem("Save All", !IsCurrentlySaving))
+                {
+                    SaveInBackground(saveAll: true);
+                }
+                #endif
 
                 if (ImGui.MenuItem("Quit", !IsCurrentlySaving))
                 {
@@ -407,28 +414,25 @@ public static class T3Ui
 
     public static void Save(bool saveAll)
     {
-        lock (SaveLocker)
+        if (SaveStopwatch.IsRunning)
         {
-            if (SaveStopwatch.IsRunning)
-            {
-                Log.Debug("Can't save modified while saving is in progress");
-                return;
-            }
-
-            SaveStopwatch.Restart();
-
-            // Todo - parallelize? 
-            foreach (var package in ProjectSetup.EditableSymbolPackages)
-            {
-                if (saveAll)
-                    package.SaveAll();
-                else
-                    package.SaveModifiedSymbols();
-            }
-
-            SaveStopwatch.Stop();
-            Log.Debug($"Saving took {SaveStopwatch.ElapsedMilliseconds}ms.");
+            Log.Debug("Can't save modified while saving is in progress");
+            return;
         }
+
+        SaveStopwatch.Restart();
+
+        // Todo - parallelize? 
+        foreach (var package in ProjectSetup.EditableSymbolPackages)
+        {
+            if (saveAll)
+                package.SaveAll();
+            else
+                package.SaveModifiedSymbols();
+        }
+
+        SaveStopwatch.Stop();
+        Log.Debug($"Saving took {SaveStopwatch.ElapsedMilliseconds}ms.");
     }
 
     public static void SelectAndCenterChildIdInView(Guid symbolChildId)
@@ -488,7 +492,6 @@ public static class T3Ui
     public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
     public const string FloatNumberFormat = "{0:F2}";
 
-    private static readonly object SaveLocker = new();
     private static readonly Stopwatch SaveStopwatch = new();
 
     // ReSharper disable once InconsistentlySynchronizedField
