@@ -139,9 +139,21 @@ internal class EditorSymbolPackage : StaticSymbolPackage
         
         SymbolUiRegistry.Entries.TryGetValue(rootSymbolId, out RootSymbolUi);
         
-        RootSymbolUi!.ForceUnmodified();
+        EnableDisableRootSaving(false);
 
         RootInstance = rootInstance;
+    }
+
+    internal static void EnableDisableRootSaving(bool enabled)
+    {
+        if (enabled)
+        {
+            RootSymbolUi.DisableForceUnmodified();
+        }
+        else
+        {
+            RootSymbolUi.ForceUnmodified();
+        }
     }
 
     public static Instance RootInstance { get; private set; }

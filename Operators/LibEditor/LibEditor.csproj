@@ -13,7 +13,6 @@
       <ProjectReference Include="..\lib\lib.csproj" >
           <ExcludeAssets>All</ExcludeAssets>
       </ProjectReference>
-      <ProjectReference Include="..\Types\Operators.csproj" />
     </ItemGroup>
 
 </Project>

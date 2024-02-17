@@ -1,7 +1,7 @@
 {
-  "Name": "HomeCanvas",
+  "Name": "ProjectHome",
   "Id": "341992ea-6343-4485-9fef-3a84bb36199d",
-  "Namespace": "user.t3",
+  "Namespace": "examples",
   "Inputs": [],
   "Children": [
     {

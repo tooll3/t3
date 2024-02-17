@@ -1,7 +1,7 @@
 {
   "Name": "HomeCanvas",
   "Id": "dab61a12-9996-401e-9aa6-328dd6292beb",
-  "Namespace": "user.t3",
+  "Namespace": "examples.t3",
   "Inputs": [],
   "Children": [
     {

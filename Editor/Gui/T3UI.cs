@@ -41,8 +41,6 @@ namespace T3.Editor.Gui;
 
 public static class T3Ui
 {
-
-
     public static void InitializeEnvironment()
     {
         //WindowManager.TryToInitialize();
@@ -268,7 +266,12 @@ public static class T3Ui
                 #if DEBUG
                 if (ImGui.MenuItem("Save All", !IsCurrentlySaving))
                 {
-                    SaveInBackground(saveAll: true);
+                    Task.Run(() =>
+                             {
+                                 EditorSymbolPackage.EnableDisableRootSaving(true);
+                                 Save(true);
+                                 EditorSymbolPackage.EnableDisableRootSaving(false);
+                             });
                 }
                 #endif
 
