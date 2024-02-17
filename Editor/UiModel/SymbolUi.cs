@@ -305,7 +305,7 @@ namespace T3.Editor.UiModel
             _hasBeenModified = false;
         }
 
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         public OrderedDictionary<Guid, ExternalLink> Links { get; } = new();
 
         private bool _forceUnmodified = false;

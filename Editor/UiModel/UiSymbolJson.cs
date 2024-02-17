@@ -357,10 +357,12 @@ namespace T3.Editor.UiModel
             var linksDict = ReadLinks(mainObject);
 
 
-            symbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict, linksDict, false)
-                           {
-                               Description = mainObject[JsonKeys.Description]?.Value<string>()
-                           };
+            symbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict, linksDict, false);
+            
+            var descriptionEntry = mainObject[JsonKeys.Description];
+            if(descriptionEntry?.Value<string>() != null)
+                symbolUi.Description = descriptionEntry.Value<string>();
+
             return true;
         }
 
