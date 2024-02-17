@@ -1,0 +1,31 @@
+{
+  "Id": "eae8b8af-ce79-4e0a-9777-2dd0a99c18cb"/*IntDiv*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "95aaaa60-5582-40b0-907d-74a39710c006"/*Numerator*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "996cc728-62ab-4c77-b454-59f0d2f25c00"/*Denominator*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "3bb1068a-04ef-4804-83f8-3a3ee6922e2f"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

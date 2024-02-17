@@ -1,0 +1,21 @@
+{
+  "Name": "Vector3",
+  "Id": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
+  "Namespace": "lib.types",
+  "Inputs": [
+    {
+      "Id": "084d5d0d-8fd4-431d-bf6c-8f082cce1d3f"/*X*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "458891b9-0244-401a-b0a5-3a7ee365e7cb"/*Y*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "627f766e-056c-413e-8530-838d673bd031"/*Z*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

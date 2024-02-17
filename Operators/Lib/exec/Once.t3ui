@@ -1,0 +1,23 @@
+{
+  "Id": "e8d2b4ac-0ba2-400f-9c82-e5dd15a23d32"/*Once*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "1da5310b-ecad-4f5b-871f-b0321a521ef6"/*Trigger*/,
+      "Position": {
+        "X": -60.470352,
+        "Y": 41.356163
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "68389552-6d8a-433b-a75f-18e76435519b"/*OutputTrigger*/,
+      "Position": {
+        "X": 152.53543,
+        "Y": 60.653854
+      }
+    }
+  ]
+}

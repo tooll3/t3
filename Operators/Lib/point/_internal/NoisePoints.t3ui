@@ -1,0 +1,58 @@
+{
+  "Id": "a3bc1b8c-6bd9-4117-880e-afb9765e3104"/*NoisePoints*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "52953760-435e-4f11-8e65-c9d46bc40076"/*Scale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "7c35053c-bd51-421b-9a6d-ddb8c150abc9"/*Frequency*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "9d4e1103-94f6-49a0-a00e-07668eb708df"/*Amplitude*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "2d2087bc-29a1-4b7f-909d-17d412fe1da5"/*Phase*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "dee89ad4-1516-40d0-a682-98e05a8b7c12"/*Thickness*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "cb697476-36df-44ae-bd1d-138cc49467c2"/*Count*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "25c89e66-e8ee-4600-9d2f-009b7d9e75ca"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

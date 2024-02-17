@@ -1,0 +1,65 @@
+{
+  "Id": "fc1ef086-c160-4174-8e60-a4eda931163d"/*Texture3d*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "dca953d6-bdc1-42eb-9a4d-5974c42cf45b"/*Size*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "2e0fd6be-0c9e-4624-803c-178d1d80ea43"/*MipLevels*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "ce649059-f136-4d32-81c6-23d7b55f3378"/*Format*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "7db98a0e-2589-425b-95eb-d7614e82ed93"/*ResourceUsage*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b824dbd6-272d-4744-a20d-5afa5caa9209"/*BindFlags*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "cfd3cfbf-7429-42f9-abc9-0e0e173f0297"/*CpuAccessFlags*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "1884edfa-622b-4b96-a081-95dc361e79f3"/*ResourceOptionFlags*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "3cbfceaa-4fa1-44e9-8c43-aff7dba7f871"/*OutputTexture*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

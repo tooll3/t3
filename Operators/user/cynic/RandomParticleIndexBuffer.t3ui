@@ -1,0 +1,23 @@
+{
+  "Id": "6fae395d-c3a0-4693-a3dc-8959cda5a92b"/*RandomParticleIndexBuffer*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "26c21fa9-3788-42b5-a6ce-68f8907e98f3"/*Count*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "72f61c86-36bf-49cc-9263-0dcd9d617aa2"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "Id": "b238b288-6e9b-4b91-bac9-3d7566416028"/*_SketchImpl*/,
+  "Description": "Internal implementation for Sketching.",
+  "InputUis": [
+    {
+      "InputId": "c427f009-7e04-4168-82e6-5ebe2640204d"/*MousePos*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "520a2023-7450-4314-9cac-850d6d692461"/*IsMouseButtonDown*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "1057313c-006a-4f12-8828-07447337898b"/*BrushSize*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "ae7fb135-c216-4f34-b73f-5115417e916b"/*BrushColor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "51641425-a2c6-4480-ac8f-2e6d2cbc300a"/*FilePath*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "0fa40e27-c7ca-4bb9-88c6-ced917dfec12"/*OverridePageIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "974f46e5-b1dc-40ae-ac28-bbb1fb032efe"/*CursorPosInWorld*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "532b35d1-4fee-41e6-aa6a-d42152dce4a0"/*CurrentBrushSize*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "eb2272b3-8b4a-46b1-a193-8b10bdc2b038"/*OutPages*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "e1b35efa-3a49-4ab3-83ae-a2ded1cef908"/*ActivePageIndexOutput*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 400.0
+      }
+    },
+    {
+      "OutputId": "bd29c7d2-1296-48cb-ad85-f96c27a35b92"/*StatusMessage*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 500.0
+      }
+    }
+  ]
+}

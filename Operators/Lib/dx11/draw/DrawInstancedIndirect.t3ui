@@ -1,0 +1,30 @@
+{
+  "Id": "c676b9c7-06d7-4ee0-8ffc-9bee96c5dc18"/*DrawInstancedIndirect*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "6c87816c-da1d-4429-a1f6-61233aa3d7b1"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "bc874135-45f2-45e2-8005-244b9123ed20"/*AlignedByteOffsetForArgs*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "3a8880af-bbbf-4560-b0c7-6e643a20fc20"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

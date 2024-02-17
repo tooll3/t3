@@ -1,0 +1,31 @@
+{
+  "Id": "5f71d2f8-98c8-4502-8f40-2ea4a1e18cca"/*ReadFile*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "24b7e7e1-fe0b-46be-807e-0afacd4800f9"/*FilePath*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      },
+      "Usage": "FilePath"
+    },
+    {
+      "InputId": "5c6241f7-6a4f-4972-a314-98fd070f91dd"/*TriggerUpdate*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d792d3b4-b800-41f1-9d69-6ee55751ad37"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

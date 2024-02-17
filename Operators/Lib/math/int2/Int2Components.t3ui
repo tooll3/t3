@@ -1,0 +1,44 @@
+{
+  "Id": "f86358e0-2573-4acd-9a90-e95108e8a4da"/*Int2Components*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "425ba347-d82a-49ec-b8b4-d0f8f7e3a504"/*Resolution*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "cd0bd085-dd4a-46a5-bf00-39a199434b30"/*Width*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "dc835127-e03b-4afa-b91a-468781b5b599"/*Height*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "894e22a0-b3d0-425e-9bb9-a0cbb821d4de"/*Length*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 400.0
+      }
+    },
+    {
+      "OutputId": "dd31c09b-cb39-44ff-9cc8-2aedec4e758b"/*AspectRatio*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 500.0
+      }
+    }
+  ]
+}

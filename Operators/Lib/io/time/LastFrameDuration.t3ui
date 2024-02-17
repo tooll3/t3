@@ -1,0 +1,15 @@
+{
+  "Id": "5af2405c-35f4-46bf-90db-bb99b0c4a43e"/*LastFrameDuration*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "04c5cc91-5cfd-4ef5-9dd9-42cb048ce9b5"/*Duration*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "Id": "94a85a93-7d5c-401c-930c-c3a97a32932f"/*GpuSorter*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "37dddd93-2b54-4598-aaca-40710ed06417"/*BufferUav*/,
+      "Position": {
+        "X": -101.00001,
+        "Y": 92.0
+      }
+    },
+    {
+      "InputId": "79d7bbd1-37a3-49eb-b705-e39345b50568"/*BufferUav2*/,
+      "Position": {
+        "X": -101.00001,
+        "Y": 137.0
+      }
+    },
+    {
+      "InputId": "187b350b-71da-4cad-9e44-6f536e647e97"/*BufferSrv*/,
+      "Position": {
+        "X": -101.00001,
+        "Y": 182.0
+      }
+    },
+    {
+      "InputId": "5dfdc602-00c9-4125-b49d-ca15c769f43e"/*BufferSrv2*/,
+      "Position": {
+        "X": -101.00001,
+        "Y": 227.0
+      }
+    },
+    {
+      "InputId": "8c4e6ec3-5de6-4477-9ea1-6a5fd173e784"/*SpreadOverFrames*/,
+      "Position": {
+        "X": -101.00001,
+        "Y": 272.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "14e52376-e375-495d-a466-74731457b189"/*Command*/,
+      "Position": {
+        "X": 287.98605,
+        "Y": -5.0205083
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "Name": "Meteoriks23",
+  "Id": "71ac2f3c-c85f-43d1-9929-a8445b797e68",
+  "Namespace": "user.still.meteoriks23",
+  "Inputs": [],
+  "Children": [
+    {
+      "Id": "cb230429-fdaf-456f-851f-7834ba965762"/*MeteoriksEdit01*/,
+      "SymbolId": "351e27ae-cde8-4840-973c-2967023a254f",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "7f3680cb-c3fb-48f8-bbee-bd63b3542610"/*MeteoriksEdit02*/,
+      "SymbolId": "d90cce62-09e8-44da-a843-62a697b8e99a",
+      "InputValues": [],
+      "Outputs": []
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "cb230429-fdaf-456f-851f-7834ba965762",
+      "SourceSlotId": "85ad2be4-3e3d-489a-9ad2-61503f3198b7",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "1766c31a-2e17-488a-91e9-6a343e48b443"
+    }
+  ],
+  "PlaybackSettings": {
+    "Enabled": true,
+    "Bpm": 174.0,
+    "AudioSource": 0,
+    "Syncing": 0,
+    "AudioDecayFactor": 0.98,
+    "AudioGainFactor": 1.0,
+    "AudioInputDeviceName": "",
+    "AudioClips": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000000",
+        "StartTime": -0.11000001430511475,
+        "EndTime": 0.0,
+        "Bpm": 174.0,
+        "DiscardAfterUse": true,
+        "IsSoundtrack": true,
+        "FilePath": ""
+      }
+    ]
+  }
+}

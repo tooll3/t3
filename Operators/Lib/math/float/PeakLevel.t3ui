@@ -1,0 +1,58 @@
+{
+  "Id": "d3fb5baf-43f8-4983-a1d9-42f4005a3af0"/*PeakLevel*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "88ed25d3-ab67-47da-ad38-2f0126ce0492"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      }
+    },
+    {
+      "InputId": "279c4f32-2f8a-4679-afe4-bbf14cf6ba05"/*Threshold*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      }
+    },
+    {
+      "InputId": "d38d54b4-d15c-40c3-a5f1-6546f444965c"/*MinTimeBetweenPeaks*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "6fe37109-0177-4823-9466-eaa49adb19d4"/*AttackLevel*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    },
+    {
+      "OutputId": "80dcad3b-5e93-4991-855d-24176ec54f4d"/*FoundPeak*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "ec9b98cf-dd88-4b54-977e-960ddf3d5b32"/*TimeSincePeak*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "f0996ef5-39f0-4874-85a9-c3ac83c9d9e8"/*MovingSum*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

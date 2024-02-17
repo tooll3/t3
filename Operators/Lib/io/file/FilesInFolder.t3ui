@@ -1,0 +1,46 @@
+{
+  "Id": "f90fcd0a-eab9-4e2a-b393-e8d3a0380823"/*FilesInFolder*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "ca9778e7-072c-4304-9043-eeb2dc4ca5d7"/*Folder*/,
+      "Position": {
+        "X": 0.5290108,
+        "Y": -29.32594
+      },
+      "Usage": "DirectoryPath"
+    },
+    {
+      "InputId": "8b746651-16a5-4274-85db-0168d30c86b2"/*Filter*/,
+      "Position": {
+        "X": 15.221848,
+        "Y": 81.40785
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "e14a4aae-e253-4d14-80ef-a90271cd306a"/*TriggerUpdate*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 50.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "99bd5b48-7a28-44a7-91e4-98b33cfda20f"/*Files*/,
+      "Position": {
+        "X": 25.36493,
+        "Y": 4.600281
+      }
+    },
+    {
+      "OutputId": "a40ea23c-e64a-4cca-ae3c-d447dbf7ef93"/*NumberOfFiles*/,
+      "Position": {
+        "X": 15.221848,
+        "Y": 126.40785
+      }
+    }
+  ]
+}

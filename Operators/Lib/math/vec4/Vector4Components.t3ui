@@ -1,0 +1,47 @@
+{
+  "Id": "b15e4950-5c72-4655-84bc-c00647319030"/*Vector4Components*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "980ef785-6ae2-44d1-803e-febfc75791c5"/*Value*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "cfb58526-0053-4bca-aa85-d83823efba96"/*X*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "2f8e90dd-ba03-43dc-82a2-8d817df45cc7"/*Y*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "162bb4fe-3c59-45c2-97cc-ecba85c1b275"/*Z*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 400.0
+      }
+    },
+    {
+      "OutputId": "e1dede5f-6963-4bcc-aa12-abeb819bb5da"/*W*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 500.0
+      }
+    }
+  ]
+}

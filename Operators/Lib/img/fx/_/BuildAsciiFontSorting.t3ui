@@ -1,0 +1,32 @@
+{
+  "Id": "b536f791-ae9a-45a7-a153-e2f36a65cfb3"/*BuildAsciiFontSorting*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "dab66e97-0b79-41ce-b6c7-9b01a123746e"/*Filepath*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 379.0
+      },
+      "Usage": "FilePath"
+    },
+    {
+      "InputId": "936f7d5e-8eab-4a9d-abef-b941086b027d"/*FilterCharacters*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 424.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "684a6260-5bc5-40e7-8610-b0aa24d9a23d"/*MappingTexture*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

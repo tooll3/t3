@@ -1,0 +1,30 @@
+{
+  "Id": "9b28e6b9-1d1f-42d8-8a9e-33497b1df820"/*Draw*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "8716b11a-ef71-437e-9930-bb747da818a7"/*VertexCount*/,
+      "Position": {
+        "X": 0.46875006,
+        "Y": 41.093754
+      }
+    },
+    {
+      "InputId": "b381b3ed-f043-4001-9bbc-3e3915f38235"/*VertexStartLocation*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "49b28dc3-fcd1-4067-bc83-e1cc848ae55c"/*Output*/,
+      "Position": {
+        "X": 125.93762,
+        "Y": -1.0936643
+      }
+    }
+  ]
+}
