@@ -526,7 +526,7 @@ namespace T3.Core.Operator
                     var valid = newInstance.TryAddConnection(connection, count);
                     if (!valid)
                     {
-                        Log.Warning("Skipping connection to no longer existing targets");
+                        Log.Warning($"Removing obsolete connecting in {this}...");
                         Connections.RemoveAt(index);
                         index--;
                         continue;

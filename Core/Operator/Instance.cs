@@ -122,7 +122,7 @@ namespace T3.Core.Operator
             var connectionBelongsToThis = connection.SourceParentOrChildId == Guid.Empty;
             if (!gotSourceInstance && !connectionBelongsToThis)
             {
-                Log.Error($"Connection has incorrect source slot: {connection.SourceParentOrChildId}");
+                Log.Error($"Connection in {this} has incorrect source slot: {connection.SourceParentOrChildId}");
                 sourceSlot = null;
                 return false;
             }

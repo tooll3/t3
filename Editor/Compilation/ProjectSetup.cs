@@ -208,7 +208,13 @@ internal static class ProjectSetup
 
             stopwatch.Restart();
 
-            var exampleLib = allSymbolPackages.Single(x => x.AssemblyInformation.Name == "examples");
+            var exampleLib = allSymbolPackages.SingleOrDefault(x => x.AssemblyInformation.Name == "examples");
+            if (exampleLib == null)
+            {
+                Log.Error("ProjectSetup failed: Can't find examples library");
+                exception = new Exception("Can't find examples library");
+                return false;
+            }
             EditorSymbolPackage.InitializeRoot(exampleLib);
 
             Log.Debug($"Created root symbol in {stopwatch.ElapsedMilliseconds}ms");
