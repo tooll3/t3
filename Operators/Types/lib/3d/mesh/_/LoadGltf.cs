@@ -64,7 +64,7 @@ public class LoadGltf : Instance<LoadGltf>
     private void UpdateBuffers(ModelRoot model, int childIndex)
     {
         var children = model.DefaultScene.VisualChildren.ToList();
-        if (childIndex < 0 && childIndex >= children.Count)
+        if (childIndex < 0 || childIndex >= children.Count)
         {
             ShowError($"gltf child index {childIndex} exceeds visible children in default scene {children.Count}");
             return;

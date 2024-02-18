@@ -81,6 +81,13 @@
         "X": -200.0,
         "Y": 810.0
       }
+    },
+    {
+      "InputId": "46aee96f-a74e-491c-ae02-843ef62124f7"/*UseSceneMaterials*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 855.0
+      }
     }
   ],
   "SymbolChildUis": [],

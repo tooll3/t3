@@ -45,12 +45,16 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
             var vsStage = deviceContext.VertexShader;
             var psStage = deviceContext.PixelShader;
 
+            _useSceneMaterials = UseSceneMaterials.GetValue(context);
+            
             // Keep current state
             _prevConstantBuffers = vsStage.GetConstantBuffers(0, ConstantBufferIndexCount);
             _prevShaderResourceViews = vsStage.GetShaderResources(0, _shaderResourceViews.Length);
             _prevSamplerStates = vsStage.GetSamplers(0, _samplerStates.Length);
             _prevVertexShader = vsStage.Get();
             _prevPixelShader = psStage.Get();
+            
+            
 
             // Shared resources shared by all draw calls
             var resourcesMissing = false;
@@ -108,7 +112,8 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
             {
                 // Resources changing with each draw call
                 var resourcesMissing = false;
-                var material = dispatch.Material ?? context.PbrMaterial;
+                var material = (dispatch.Material == null || !_useSceneMaterials) ? context.PbrMaterial : dispatch.Material;
+                //var material =  context.PbrMaterial;
                 if (material != lastMaterial)
                 {
                     _constantBuffers[PbrParameterBufferIndex] = material.ParameterBuffer;
@@ -133,7 +138,7 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
 
                 if (resourcesMissing)
                 {
-                    Log.Debug("Skipping draw call because we're missing some resources");
+                    Log.Debug($"Skipping draw call for {dispatch.Material.Name} because we're missing some resources",this);
                     continue;
                 }
 
@@ -190,6 +195,8 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
         private SamplerState[] _prevSamplerStates = Array.Empty<SamplerState>();
         private Buffer[] _prevConstantBuffers;
         private ShaderResourceView[] _prevShaderResourceViews;
+        
+        private bool _useSceneMaterials;
 
         [Input(Guid = "DAD22148-B87F-439A-9219-785BEE63991C")]
         public readonly InputSlot<SceneSetup> SceneSetup = new();
@@ -220,5 +227,9 @@ namespace T3.Operators.Types.Id_6e32756e_4267_47f1_bad0_56ee8f58b070
 
         [Input(Guid = "DB81BA63-8B7B-425C-9D6A-8F3CAF0BE70F")]
         public readonly InputSlot<Buffer> PointLightBuffer = new();
+        
+        [Input(Guid = "46AEE96F-A74E-491C-AE02-843EF62124F7")]
+        public readonly InputSlot<bool> UseSceneMaterials = new();
+
     }
 }

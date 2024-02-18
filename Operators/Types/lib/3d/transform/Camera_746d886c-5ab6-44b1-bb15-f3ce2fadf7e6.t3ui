@@ -34,6 +34,7 @@
         "X": 0.0,
         "Y": 0.0
       },
+      "Description": "Defines the field of view (FOV) or focal length of the camera in degrees",
       "Min": 0.0,
       "Max": 180.0,
       "Clamp": true,
@@ -45,6 +46,7 @@
         "X": 0.0,
         "Y": 0.0
       },
+      "Description": "Rotates the camera right / left",
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.0}°"
@@ -84,7 +86,8 @@
         "X": 0.0,
         "Y": 0.0
       },
-      "GroupTitle": "Options"
+      "GroupTitle": "Options",
+      "Description": "Defines the start and end of the area in which objects are rendered by the camera."
     },
     {
       "InputId": "f66e91a1-b991-48c3-a8c9-33bcad0c2f6f"/*AspectRatio*/,

@@ -1,6 +1,6 @@
 {
   "Id": "37a747b0-ec0e-4ebc-83dd-2e03022ad100"/*DrawRibbons*/,
-  "Description": "",
+  "Description": "Draws a point buffer as ribbons. The lines will distance to the camera. You can override this with the ScaleWithDistance parameter. \nWe use the points W attribute as a scale factor for the line width. \nIf the W attribute of a point is NaN (Not a Number), that point is not being drawn and acts as a separator between the adjacent line segments.\n\nAlso see [DrawPoints], [DrawLines] and [DrawBillboards].\nFor a detailed interactive Tutorial about Toolls Renderpipeline see [HowToDrawThings].",
   "InputUis": [
     {
       "InputId": "bbec658b-84fa-4528-ad03-6b306531b152"/*GPoints*/,
@@ -8,14 +8,17 @@
       "Position": {
         "X": -226.24692,
         "Y": 43.842525
-      }
+      },
+      "Description": "Input for Points"
     },
     {
       "InputId": "22a23dbc-0222-441d-8435-b630dcd77acb"/*Color*/,
       "Position": {
         "X": -226.94064,
         "Y": 164.1991
-      }
+      },
+      "GroupTitle": "Options",
+      "Description": "Selects the color for the ribbons."
     },
     {
       "InputId": "d41169ee-4e53-4198-b56a-b4b771cc3dfd"/*Width*/,
@@ -23,7 +26,12 @@
         "X": -226.94064,
         "Y": 209.1991
       },
-      "Scale": 0.0001
+      "Description": "Width of the Ribbons",
+      "AddPadding": "True",
+      "Min": 0.01,
+      "Max": 10.0,
+      "Scale": 0.0001,
+      "Clamp": true
     },
     {
       "InputId": "3f8b336d-fb2b-4b8a-b13a-a229e7792f46"/*Spin*/,
@@ -31,9 +39,11 @@
         "X": -226.94064,
         "Y": 299.1991
       },
+      "Description": "Uniformly rotates the ribbon around its center",
       "Min": -180.0,
       "Max": 180.0,
-      "Scale": 1.0
+      "Scale": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "cdaf942a-a518-4dd0-aea7-737aa11436bb"/*Twist*/,
@@ -41,51 +51,63 @@
         "X": -226.94064,
         "Y": 344.1991
       },
-      "Min": -180.0,
-      "Max": 180.0,
-      "Scale": 1.0
+      "Description": "Rotates the end point of the Ribbon and thus twists it.",
+      "Min": -3600.0,
+      "Max": 3600.0,
+      "Scale": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "1e3af280-2f64-423d-b14d-630065659afc"/*TextureMode*/,
       "Position": {
         "X": -224.65475,
         "Y": 408.20538
-      }
+      },
+      "GroupTitle": "Texture Options",
+      "Description": "Defines the mode in which the texture is mapped to the tape. "
     },
     {
       "InputId": "3198a61e-94b3-42c4-a2ae-822456db8bdd"/*TextureRange*/,
       "Position": {
         "X": -224.65475,
         "Y": 453.20538
-      }
+      },
+      "Description": "Modifies the Start- and Endpoint of the used texture scaling / stretching it."
     },
     {
       "InputId": "1ce27f43-3664-44e6-9a0b-5fcca3a5b9fe"/*EnableDepthWrite*/,
       "Position": {
         "X": -228.65521,
         "Y": 616.3835
-      }
+      },
+      "GroupTitle": "Advanced Options",
+      "Description": "Defines whether Ribbons cover itself or is covered by or covers other 3D elements."
     },
     {
       "InputId": "5124b85d-5c09-4329-bf33-ef3cc13f30aa"/*BlendMod*/,
       "Position": {
         "X": -228.65521,
         "Y": 661.3835
-      }
+      },
+      "Description": "Selects the Blendmode.",
+      "AddPadding": "True"
     },
     {
       "InputId": "99252905-b0f0-48bb-aa92-39ffb5cd949c"/*Culling*/,
       "Position": {
         "X": -228.65521,
         "Y": 706.3835
-      }
+      },
+      "Description": "Defines the transparency of the surface.\nNone: All surfaces are \"bothsided\" or always visible from all sides\nFront: The normals are flipped (frontside is transparent / backside visible)\nBack: Default (Frontside is visible / backside is invisible)"
     },
     {
       "InputId": "31791971-8c6e-4f8f-8b04-a3abf02ad69b"/*UseWAsWeight*/,
       "Position": {
         "X": -228.65521,
         "Y": 751.3835
-      }
+      },
+      "Description": "Defines whether the \"W\" value of the points used has an influence on the width of the ribbon.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [

@@ -6,47 +6,103 @@
       "InputId": "33752356-8348-4938-8f73-6257e6bb1c1f"/*Command*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -200.38397,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "acf14901-3373-4b0c-8567-03ea0051a21f"/*Center*/,
-      "Position": {
-        "X": -228.15997,
-        "Y": 632.9252
-      }
-    },
-    {
-      "InputId": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*Radius*/,
-      "Position": {
-        "X": -200.38397,
-        "Y": 90.0
+        "X": -224.62245,
+        "Y": -564.9833
       },
+      "Description": "Scene input"
+    },
+    {
+      "InputId": "acf14901-3373-4b0c-8567-03ea0051a21f"/*CameraTargetPosition*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": -519.9833
+      },
+      "Description": "Position of the camera target",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "21f595ad-0808-48f1-bdd8-118d1527944c"/*FOV*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": -474.98328
+      },
+      "Description": "Defines the field of view (fov) or focal length of the camera in degrees"
+    },
+    {
+      "InputId": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*DistanceToTarget*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": -399.46722
+      },
+      "Description": "Distance of the camera to the target",
       "Scale": 0.01
     },
     {
       "InputId": "df65e717-e2fd-4e4f-9e41-d6bcd3fe67f1"/*SpinRate*/,
       "Position": {
-        "X": -200.38397,
-        "Y": 225.0
+        "X": -224.62245,
+        "Y": -354.46722
       },
+      "GroupTitle": "Rotation",
+      "Description": "Speed at which the camera rotates",
       "Min": -1.0,
       "Max": 1.0
     },
     {
       "InputId": "8c4dab88-68cb-40cc-b576-ca3f3ea8461f"/*SpinOffset*/,
       "Position": {
-        "X": -200.38397,
-        "Y": 270.0
-      }
+        "X": -224.62245,
+        "Y": -309.46722
+      },
+      "Description": "Value in degrees that is added to the \"SpinRate\"",
+      "Min": -360.0,
+      "Max": 360.0,
+      "Scale": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "8b75047f-03b7-4619-8869-2906e66731d1"/*OrbitAngleAndWobble*/,
       "Position": {
-        "X": -200.38397,
-        "Y": 135.0
+        "X": -224.62245,
+        "Y": -264.46722
       },
+      "GroupTitle": "Wobble Ranges",
+      "Description": "X = The height at which the camera rotates around the target\nY = Defines how much may be deviated from the first value at random",
+      "Min": -89.0,
+      "Max": 89.0,
+      "Scale": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "1af76b2e-cffe-4e3f-8793-c7a59d00430b"/*AimRollAngleAndWobble*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": -219.46722
+      },
+      "Description": "X = Rolls the camera to the right or left\nY = Defines how much may be deviated from the first value at random",
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "4d2d2d2d-00bd-4df9-b209-62f0c7926c38"/*AimPitchAngleAndWobble*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": -174.46722
+      },
+      "Description": "X = Camera Pitch\nY = Defines how much may be deviated from the first value at random",
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "066cd0e7-de72-4e04-bf13-686ccc301c5a"/*AimYawAngleAndWobble*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": -129.46722
+      },
+      "Description": "X = Turns the camera view to the left or right\nY = Defines how much may be deviated from the first value at random",
       "Min": -180.0,
       "Max": 180.0,
       "Format": "{0:0.0}°"
@@ -54,97 +110,81 @@
     {
       "InputId": "7412e22c-1f15-4471-883b-4fcd792146f7"/*SpinAngleAndWobble*/,
       "Position": {
-        "X": -200.38397,
-        "Y": 180.0
+        "X": -224.62245,
+        "Y": -84.467224
       },
-      "Scale": 0.5
-    },
-    {
-      "InputId": "4d2d2d2d-00bd-4df9-b209-62f0c7926c38"/*AimPitchAngleAndWobble*/,
-      "Position": {
-        "X": -200.38397,
-        "Y": 270.0
-      },
-      "Scale": 0.5
-    },
-    {
-      "InputId": "066cd0e7-de72-4e04-bf13-686ccc301c5a"/*AimYawAngleAndWobble*/,
-      "Position": {
-        "X": -200.38397,
-        "Y": 315.0
-      },
-      "Scale": 0.5
-    },
-    {
-      "InputId": "1af76b2e-cffe-4e3f-8793-c7a59d00430b"/*AimRollAngleAndWobble*/,
-      "Position": {
-        "X": -200.38397,
-        "Y": 360.0
-      },
-      "Scale": 0.5
-    },
-    {
-      "InputId": "c81b91c6-2d06-4e3e-97bd-01d60f5f0f7d"/*RotationOffset*/,
-      "Position": {
-        "X": -200.38397,
-        "Y": 405.0
-      }
+      "Description": "X = Same as \"SpinOffset\"\nY = Defines how much may be deviated from the first value at random",
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "b6bf6fe1-6733-46c0-a274-fab2a950f606"/*WobbleSpeed*/,
       "Position": {
-        "X": -200.38397,
-        "Y": 450.0
-      }
+        "X": -224.62245,
+        "Y": -39.467224
+      },
+      "GroupTitle": "Wobble Settings",
+      "Description": "Defines how quickly the Y values vary in the \"Wobble Settings\"."
     },
     {
       "InputId": "0ad10e15-06ef-4dde-8eb3-ed7fe989c88e"/*WobbleComplexity*/,
       "Position": {
-        "X": -200.38397,
-        "Y": 495.0
-      }
-    },
-    {
-      "InputId": "dd81b2aa-3252-4130-8def-a5b399d3e283"/*Seed*/,
-      "Position": {
-        "X": -441.77057,
-        "Y": -23.11731
-      }
-    },
-    {
-      "InputId": "f51b38d7-2380-457f-897d-2429b2ad6ac3"/*Up*/,
-      "Position": {
-        "X": -200.38397,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "bd1bc8a5-72ce-42b0-8914-4f6e124a18ae"/*AspectRatio*/,
-      "Position": {
-        "X": -200.38397,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "353e2f08-a55f-48ce-ae65-53d5d081b6f0"/*NearFarClip*/,
-      "Position": {
-        "X": -200.38397,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "21f595ad-0808-48f1-bdd8-118d1527944c"/*Fov*/,
-      "Position": {
-        "X": -200.38397,
-        "Y": 0.0
-      }
+        "X": -224.62245,
+        "Y": 5.532776
+      },
+      "Description": "Defines the complexity with which the random values fluctuate"
     },
     {
       "InputId": "fb113fd1-3edf-4db6-9dfb-800c62070d69"/*Damping*/,
       "Position": {
-        "X": -200.38397,
-        "Y": 45.0
-      }
+        "X": -224.62245,
+        "Y": 50.532776
+      },
+      "Description": "Smoothes the random wobbling"
+    },
+    {
+      "InputId": "dd81b2aa-3252-4130-8def-a5b399d3e283"/*Seed*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": 95.532776
+      },
+      "Description": "Random seed to manipulate random values",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "353e2f08-a55f-48ce-ae65-53d5d081b6f0"/*NearFarClip*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": 140.53278
+      },
+      "GroupTitle": "Advanced Camera Settings",
+      "Description": "Defines the start and end of the area in which objects are rendered by the camera."
+    },
+    {
+      "InputId": "c81b91c6-2d06-4e3e-97bd-01d60f5f0f7d"/*RotationOffset*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": 185.53278
+      },
+      "Description": "Camera Rotation offset",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "bd1bc8a5-72ce-42b0-8914-4f6e124a18ae"/*AspectRatio*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": 230.53278
+      },
+      "Description": "Defines the aspect ratio"
+    },
+    {
+      "InputId": "f51b38d7-2380-457f-897d-2429b2ad6ac3"/*Up*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": 275.53278
+      },
+      "Description": "Defines the Up-Vector of the camera"
     }
   ],
   "SymbolChildUis": [],
@@ -152,15 +192,15 @@
     {
       "OutputId": "14a63b62-5fbb-4f82-8cf3-d0faf279eff8"/*Output*/,
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 46.534637,
+        "Y": -529.58466
       }
     },
     {
       "OutputId": "451245e2-ac0b-435a-841e-7c9edc804606"/*Reference*/,
       "Position": {
-        "X": 0.0,
-        "Y": 100.0
+        "X": 126.08783,
+        "Y": 124.374084
       }
     }
   ],

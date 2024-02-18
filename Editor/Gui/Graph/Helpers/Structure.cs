@@ -74,6 +74,12 @@ internal static class Structure
 
     public static ITimeClip GetCompositionTimeClip(Instance compositionOp)
     {
+        if (compositionOp == null)
+        {
+            Log.Error("Can't get time clip from null composition op");
+            return null;
+        }
+        
         foreach (var clipProvider in compositionOp.Outputs.OfType<ITimeClipProvider>())
         {
             return clipProvider.TimeClip;

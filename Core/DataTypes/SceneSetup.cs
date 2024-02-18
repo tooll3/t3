@@ -11,15 +11,14 @@ using T3.Core.Utils.Geometry;
 namespace T3.Core.DataTypes;
 
 /// <summary>
-/// Combines buffers required for mesh rendering
+/// Combines buffers required for mesh rendering. Eventually this will be an abstraction from
+/// format specific details, so it can be created from gltf, obj, fbx, etc.
 /// </summary>
-public class SceneSetup : IEditableInputType
+public class SceneSetup : IEditableInputType, IDisposable
 {
     // TODO: Implement UI and serialize 
     // private Dictionary<string, string> MaterialAssignments;
-
-
-
+    
     
     /// <summary>
     /// Recursive description of the loaded nodes...
@@ -48,13 +47,13 @@ public class SceneSetup : IEditableInputType
     {
         public string Name;
         public PbrMaterial.PbrParameters PbrParameters;
+        public PbrMaterial PbrMaterial;
     }
 
     // FIXME: This should probably be moved to somewhere in core -> Rendering
     public struct Transform
     {
         public Vector3 Translation;
-        //public Vector3 RotationYawPitchRoll;
         public Quaternion Rotation;
         public Vector3 Scale;
 
@@ -66,9 +65,6 @@ public class SceneSetup : IEditableInputType
                                                            scaling: Scale,
                                                            rotationCenter: Vector3.Zero,
                                                            rotation: Rotation,
-                                                           // rotation: Quaternion.CreateFromYawPitchRoll(RotationYawPitchRoll.Y,
-                                                           //                                             RotationYawPitchRoll.X,
-                                                           //                                             RotationYawPitchRoll.Z),
                                                            translation: Translation);
         }
     }
@@ -121,7 +117,7 @@ public class SceneSetup : IEditableInputType
                                       MeshBuffers = node.MeshBuffers,
                                       VertexCount = vertexCount,
                                       VertexStartIndex = 0,
-                                      Material = null,
+                                      Material = node.Material?.PbrMaterial,
                                       CombinedTransform = node.CombinedTransform,
                                   };
             
@@ -178,7 +174,7 @@ public class SceneSetup : IEditableInputType
         writer.WriteEndObject();
     }
 
-    public virtual void Read(JToken inputToken)
+    public void Read(JToken inputToken)
     {
         if (NodeSettings == null)
         {
@@ -227,4 +223,27 @@ public class SceneSetup : IEditableInputType
                    };
     }
     #endregion
+
+    public void Dispose() => Dispose(true);
+    
+    public void Dispose(bool isDisposing)
+    {
+        if (isDisposing)
+            return;
+        
+        foreach(var dispatch in Dispatches)
+        {
+            dispatch.MeshBuffers.IndicesBuffer.Dispose();
+            dispatch.MeshBuffers.VertexBuffer.Dispose();
+
+            if (dispatch.Material != null)
+            {
+                dispatch.Material.Dispose();
+                dispatch.Material = null;
+            }
+        }
+
+        
+        
+    }
 }

@@ -46,6 +46,10 @@
     {
       "Id": "db81ba63-8b7b-425c-9d6a-8f3caf0be70f"/*PointLightBuffer*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "46aee96f-a74e-491c-ae02-843ef62124f7"/*UseSceneMaterials*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

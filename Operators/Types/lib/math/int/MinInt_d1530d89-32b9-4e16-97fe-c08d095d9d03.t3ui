@@ -1,13 +1,14 @@
 {
   "Id": "d1530d89-32b9-4e16-97fe-c08d095d9d03"/*MinInt*/,
-  "Description": "",
+  "Description": "Outputs the minimum integer of the connected inputs.\n\nTo find a minimum float value, use [Clamp].",
   "InputUis": [
     {
       "InputId": "6bb2b4eb-f5d9-43f0-8584-4ea3d38f6538"/*Ints*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Input ints to compare."
     }
   ],
   "SymbolChildUis": [],

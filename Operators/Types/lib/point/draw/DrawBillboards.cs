@@ -59,9 +59,6 @@ namespace T3.Operators.Types.Id_18d3d929_e530_45fa_9131_658368060ae2
         [Input(Guid = "dd345d58-09e4-4353-93e7-c20e576f0e82")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> ColorVariations = new InputSlot<T3.Core.DataTypes.Gradient>();
 
-        [Input(Guid = "975f7ed8-fc7f-41c7-9d90-d022efdf4b6b")]
-        public readonly InputSlot<bool> UseRotationAsRgba = new InputSlot<bool>();
-
         [Input(Guid = "d9dd77b2-cfa6-429c-b87d-f6e3c602be23", MappedType = typeof(DistributionModes))]
         public readonly InputSlot<int> ScaleDistribution = new InputSlot<int>();
 

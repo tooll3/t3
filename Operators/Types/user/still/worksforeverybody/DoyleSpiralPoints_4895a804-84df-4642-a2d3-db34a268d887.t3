@@ -89,7 +89,7 @@
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {
-          "Id": "ba00fa7a-fcda-48da-a4c7-f2fe97997e50"/*Mode*/,
+          "Id": "ba00fa7a-fcda-48da-a4c7-f2fe97997e50"/*ApplyMode*/,
           "Type": "System.Int32",
           "Value": 0
         },

@@ -24,7 +24,9 @@
         "X": -308.4377,
         "Y": 148.1156
       },
-      "Min": 0.0
+      "Min": 0.0,
+      "Max": 100.0,
+      "Clamp": true
     },
     {
       "InputId": "03e6c20c-6b8a-422e-bba1-1cefddc645fd"/*Offset*/,
@@ -76,8 +78,8 @@
         "Y": 203.54987
       },
       "Position": {
-        "X": 562.0887,
-        "Y": 242.17671
+        "X": 839.0502,
+        "Y": 269.40607
       }
     },
     {
@@ -97,22 +99,22 @@
     {
       "ChildId": "68b65d39-c6d1-4c23-8b5a-321640ed50ad"/*GetTextureSize*/,
       "Position": {
-        "X": -132.65497,
-        "Y": 503.24457
+        "X": -245.48831,
+        "Y": -70.23182
       }
     },
     {
       "ChildId": "a3bdc17e-c073-4df0-a204-b08df50ce0a4"/*Vector2Components*/,
       "Position": {
-        "X": -2.6549911,
-        "Y": 503.24457
+        "X": -53.872154,
+        "Y": -75.83326
       }
     },
     {
       "ChildId": "8a1e1b10-b102-4fd3-945c-09da4385f356"/*Div*/,
       "Position": {
-        "X": 163.76541,
-        "Y": 494.39966
+        "X": 112.54825,
+        "Y": -84.67817
       }
     },
     {
@@ -121,14 +123,28 @@
         "X": -73.05734,
         "Y": 262.62433
       }
+    },
+    {
+      "ChildId": "3d331fa5-2020-432f-8fc4-40fa10c23cec"/*Resources\lib\img\fx\Blur.hlsl*/,
+      "Position": {
+        "X": 526.80054,
+        "Y": 535.7032
+      }
+    },
+    {
+      "ChildId": "182b10f8-0d60-4d18-b442-75431f9beca4"/*Resources\lib\img\fx\Blur.hlsl*/,
+      "Position": {
+        "X": 793.38324,
+        "Y": 565.9022
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "fa46b9f0-46d6-4ab3-8406-409e1dc5e9a4"/*TextureOutput*/,
       "Position": {
-        "X": 683.74274,
-        "Y": 98.292076
+        "X": 1109.2988,
+        "Y": 273.33807
       }
     }
   ]

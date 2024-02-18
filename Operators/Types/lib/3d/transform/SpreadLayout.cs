@@ -32,6 +32,8 @@ namespace T3.Operators.Types.Id_e07550cf_033a_443d_b6f3_73eb71c72d9d
         {
             TransformCallback?.Invoke(this, context); // this this is stupid stupid
 
+            var pivot = Pivot.GetValue(context);
+            
             var spread = Spread.GetValue(context);
             
             var commands = Commands.CollectedInputs;
@@ -62,8 +64,8 @@ namespace T3.Operators.Types.Id_e07550cf_033a_443d_b6f3_73eb71c72d9d
                 {
                     var t1 = commands[spreadIndex];
                     
-                    float f =  1 - ((float)spreadIndex / (count-1) - 0.5f);
-                    var tSpreaded = t + spread * f;  
+                    var f =  0.5f - ((float)spreadIndex / (count-1) - 0.5f) - pivot;
+                    var tSpreaded = t - spread * f;  
 
                     // Build and set transform matrix
                     var objectToParentObject
@@ -123,6 +125,9 @@ namespace T3.Operators.Types.Id_e07550cf_033a_443d_b6f3_73eb71c72d9d
 
         [Input(Guid = "b89c93b7-2051-4458-9a86-fe51ba2c15d9")]
         public readonly InputSlot<float> UniformScale = new();
+
+        [Input(Guid = "5F2C1B38-4B0C-45E4-810F-8F126084B285")]
+        public readonly InputSlot<float> Pivot = new();
         
         [Input(Guid = "d0e0058c-5d46-41f4-a280-42befd5a5570")]
         public readonly InputSlot<bool> IsEnabled = new();

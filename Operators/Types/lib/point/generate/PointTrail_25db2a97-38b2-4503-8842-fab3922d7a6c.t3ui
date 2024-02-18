@@ -24,7 +24,8 @@
       "Position": {
         "X": -1162.7197,
         "Y": 533.0679
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "63621a98-874b-4d1a-9724-f4fa70b8ccf1"/*Reset*/,
@@ -38,7 +39,8 @@
       "Position": {
         "X": -1162.7197,
         "Y": 623.0679
-      }
+      },
+      "GroupTitle": "Options"
     }
   ],
   "SymbolChildUis": [
@@ -197,8 +199,8 @@
     {
       "ChildId": "a7679861-774f-4f51-a033-9df26d777121"/*CountInt*/,
       "Position": {
-        "X": -439.5008,
-        "Y": 392.44098
+        "X": -205.79492,
+        "Y": 393.69745
       }
     },
     {
@@ -206,13 +208,6 @@
       "Position": {
         "X": -55.79492,
         "Y": 393.69745
-      }
-    },
-    {
-      "ChildId": "c6f80fad-32ed-4b5c-9f6b-a8234551bfa6"/*ModInt*/,
-      "Position": {
-        "X": -349.05676,
-        "Y": 458.0498
       }
     }
   ],

@@ -1,6 +1,6 @@
 {
   "Id": "00618c91-f39a-44ea-b9d8-175c996460dc"/*LoadGltfScene*/,
-  "Description": "Experimental op for loading complex scene setups.",
+  "Description": "Experimental op for loading complex scene setups.\n\nAlso see [DrawScene]",
   "InputUis": [
     {
       "InputId": "292e80cf-ba31-4a50-9bf4-83712430f811"/*Path*/,
@@ -23,15 +23,53 @@
         "X": 51.512096,
         "Y": 271.99597
       }
+    },
+    {
+      "InputId": "d7ae3173-c490-47cf-8d4b-4c25102f6904"/*OffsetRoughness*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 316.99597
+      },
+      "Description": "This is a temporary offset that probably will become obsolete soon."
+    },
+    {
+      "InputId": "49237499-9b1e-4371-afac-4e3394868370"/*OffsetMetallic*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 361.99597
+      },
+      "Description": "This is a temporary offset that probably will become obsolete soon."
+    },
+    {
+      "InputId": "fb325383-754a-4702-aff2-c19e16363460"/*MeshChildIndex*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 406.99597
+      },
+      "Description": "Defines which visible child will be used for Mesh and Material output."
     }
   ],
   "SymbolChildUis": [],
   "OutputUis": [
     {
+      "OutputId": "9891ea8d-7de7-4dd1-a61e-337adc569ef3"/*Mesh*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 700.0
+      }
+    },
+    {
+      "OutputId": "f33ec4c1-f07b-46b3-bec7-34e91b8312ef"/*Material*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 900.0
+      }
+    },
+    {
       "OutputId": "c2d28ebe-e235-4234-8234-eb56e87ed9af"/*ResultSetup*/,
       "Position": {
         "X": 300.0,
-        "Y": 200.0
+        "Y": 1000.0
       }
     }
   ]

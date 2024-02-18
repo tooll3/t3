@@ -1,10 +1,21 @@
+#include "lib/shared/bias-functions.hlsl"
+#include "lib/shared/blend-functions.hlsl"
+#include "lib/shared/hash-functions.hlsl"
+
 cbuffer ParamConstants : register(b0)
 {
     float4 Black;
     float4 White;
     float4 GrayScaleWeights;
-    float Bias;
+
+    float2 BiasAndGain;
     float Scale;
+    float Method;
+
+    float2 Offset;
+    float BlendMode;
+
+    float IsTextureValid;
 }
 
 cbuffer Resolution : register(b1)
@@ -33,22 +44,43 @@ inline float Bayer2(float2 a) {
     return frac(a.x / 2. + a.y * a.y * .75);
 }
 
-float4 psMain(vsOutput input) : SV_TARGET
+#define mod(x,y) ((x)-(y)*floor((x)/(y)))
+
+float4 psMain(vsOutput psInput) : SV_TARGET
 {
-    float width, height;
-    Image.GetDimensions(width, height);
-    float2 res = float2(width,height);
+    float aspectRatio = TargetWidth/TargetHeight;
+    float2 p = psInput.texCoord;
+    p-= 0.5;
 
-    float4 color = Image.Sample(texSampler, (int2)(input.texCoord * res / Scale) / res * Scale ); 
-    float4 t = color * GrayScaleWeights;
-    float grayScale = (t.r + t.g + t.b + t.a) / 
-    (GrayScaleWeights.r + GrayScaleWeights.g + GrayScaleWeights.b + GrayScaleWeights.a);
-    
-    grayScale = pow(grayScale, Bias);
+    int round = 1;
+    int2 res = int2((int)TargetWidth/round, (int)TargetHeight/round) * round;
 
-    float2 fragCoord = input.texCoord * res;
-    float dithering = (Bayer64(fragCoord / Scale) * 2.0 - 1.0) * 0.5;
+    // This will prevent repetitive artifacts in the pattern
+    float epsilonScale = Scale - 0.0001f;
 
+    float2 divisions = res / epsilonScale;
+    float2 fixOffset = Offset * float2(-1,1)  / divisions;
+    p+= fixOffset;
+
+    float2 p1 = p;
+    float2 gridSize = float2( 1/divisions.x, 1/divisions.y);
+    float2 pInCell = mod(p1, gridSize);
+    float2 cellIds = (p1 - pInCell + 0.5);
+    float2 cellTiles = cellIds - fixOffset;
+
+    pInCell *= divisions;
+
+    float4 color = Image.Sample(texSampler, cellTiles);     
+    float grayScale = ApplyBiasAndGain(saturate( color), BiasAndGain.x, BiasAndGain.y);    
+    float2 fragCoord = cellIds * res;
+
+    float n = Method < 0.5 
+            ? Bayer64(fragCoord / epsilonScale)
+            : hash11u( (int)(fragCoord.x) * 21  + (int)(fragCoord.y) * 12112);
+
+    float dithering = (n * 2.0 - 1.0) * 0.5;
     float blackOrWhite = dithering + grayScale < 0.5 ? 0 : 1;
-    return lerp(Black,White, blackOrWhite);
+
+    float4 c= lerp(Black,White, blackOrWhite);
+        return (IsTextureValid < 0.5) ? c : BlendColors(color, c, (int)BlendMode);
 }  

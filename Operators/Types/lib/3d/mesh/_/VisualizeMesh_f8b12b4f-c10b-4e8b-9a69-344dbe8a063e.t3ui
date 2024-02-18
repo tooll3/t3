@@ -36,6 +36,25 @@
         "X": -164.67151,
         "Y": 279.03265
       }
+    },
+    {
+      "InputId": "5db2dd45-3581-4f92-80f3-b52681c94be5"/*MeshColor*/,
+      "Position": {
+        "X": -164.67151,
+        "Y": 324.03265
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "23a23cd6-95c5-4f0e-bb30-d14d6e4bf146"/*TBNAxisSize*/,
+      "Position": {
+        "X": -164.67151,
+        "Y": 369.03265
+      },
+      "Min": 0.0,
+      "Max": 0.01
     }
   ],
   "SymbolChildUis": [
@@ -50,14 +69,14 @@
       "ChildId": "7a1b0543-a70c-4a9f-84f8-119020c58e45"/*DrawMesh*/,
       "Position": {
         "X": 305.5337,
-        "Y": 62.774414
+        "Y": 75.774414
       }
     },
     {
       "ChildId": "58fc8769-054c-4cde-a35e-d89a617f4b9d"/*MeshVerticesToPoints*/,
       "Position": {
-        "X": 138.12827,
-        "Y": 111.557526
+        "X": 120.0096,
+        "Y": 98.549255
       }
     },
     {

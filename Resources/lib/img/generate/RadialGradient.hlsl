@@ -1,4 +1,5 @@
 #include "lib/shared/blend-functions.hlsl"
+#include "lib/shared/bias-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {
@@ -8,8 +9,8 @@ cbuffer ParamConstants : register(b0)
     float PingPong;
     float Repeat;
     float PolarOrientation;
-    float Bias;
     float BlendMode;
+    float2 BiasAndGain;
 
     float IsTextureValid; // Automatically added by _FxShaderSetup
 }
@@ -72,9 +73,10 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             ? fmod(c, 1)
             : saturate(c);
 
-    float dBiased = Bias >= 0
-                        ? pow(c, Bias + 1)
-                        : 1 - pow(clamp(1 - c, 0, 10), -Bias + 1);
+    float dBiased = ApplyBiasAndGain(c, BiasAndGain.x, BiasAndGain.y);
+    // float dBiased = Bias >= 0
+    //                     ? pow(c, Bias + 1)
+    //                     : 1 - pow(clamp(1 - c, 0, 10), -Bias + 1);
 
     dBiased = clamp(dBiased, 0.001, 0.999);
     float4 gradient = Gradient.Sample(clammpedSampler, float2(dBiased, 0));

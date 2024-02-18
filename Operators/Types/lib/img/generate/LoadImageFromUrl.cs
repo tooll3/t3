@@ -108,38 +108,36 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
             lock (this)
             {
                 _image = null;
-                using (var memStream = new MemoryStream())
+                using var memStream = new MemoryStream();
+                try
                 {
-                    try
+                    if (streamResponse != null)
                     {
-                        if (streamResponse != null)
-                        {
-                            streamResponse.CopyTo(memStream);
+                        streamResponse.CopyTo(memStream);
 
-                            Log.Debug($"Finished loading URL {_url}", this);
+                        Log.Debug($"Finished loading URL {_url}", this);
 
-                            ImagingFactory factory = new ImagingFactory();
-                            memStream.Position = 0;
-                            var bitmapDecoder = new BitmapDecoder(factory, memStream, DecodeOptions.CacheOnDemand);
-                            var formatConverter = new FormatConverter(factory);
-                            var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
-                            formatConverter.Initialize(bitmapFrameDecode, SharpDX.WIC.PixelFormat.Format32bppRGBA, BitmapDitherType.None, null, 0.0,
-                                                       BitmapPaletteType.Custom);
+                        ImagingFactory factory = new ImagingFactory();
+                        memStream.Position = 0;
+                        var bitmapDecoder = new BitmapDecoder(factory, memStream, DecodeOptions.CacheOnDemand);
+                        var formatConverter = new FormatConverter(factory);
+                        var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
+                        formatConverter.Initialize(bitmapFrameDecode, SharpDX.WIC.PixelFormat.Format32bppRGBA, BitmapDitherType.None, null, 0.0,
+                                                   BitmapPaletteType.Custom);
 
-                            _image?.Dispose();
-                            _image = ResourceManager.CreateTexture2DFromBitmap(ResourceManager.Device, formatConverter);
-                            _image.DebugName = _url;
-                            bitmapFrameDecode.Dispose();
-                            bitmapDecoder.Dispose();
-                            formatConverter.Dispose();
-                            factory.Dispose();
-                            Texture.DirtyFlag.Invalidate();
-                        }
+                        _image?.Dispose();
+                        _image = ResourceManager.CreateTexture2DFromBitmap(ResourceManager.Device, formatConverter);
+                        _image.DebugName = _url;
+                        bitmapFrameDecode.Dispose();
+                        bitmapDecoder.Dispose();
+                        formatConverter.Dispose();
+                        factory.Dispose();
+                        Texture.DirtyFlag.Invalidate();
                     }
-                    catch (Exception e)
-                    {
-                        Log.Info($"Failed to decode image data: {e.Message}", this);
-                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Info($"Failed to decode image data: {e.Message}", this);
                 }
             }
         }

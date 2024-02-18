@@ -20,7 +20,7 @@
       "Description": "How much are the particles accelerated by the signed normal map.\nYou can use negative values to invert the direction.",
       "Min": -5.0,
       "Max": 5.0,
-      "Scale": 0.001
+      "Scale": 0.01
     },
     {
       "InputId": "b04d0d69-f322-4481-9166-ca812eb35d99"/*AmountXY*/,
@@ -42,7 +42,27 @@
       "Description": "Add random variation to the amount of the effect. \nYou can use the BiasAndGain parameter to control the variation distribution."
     },
     {
-      "InputId": "a63a10bb-b0c5-46bc-8f9d-8b0b3f4cd037"/*TwistAngle*/,
+      "InputId": "331843a6-f634-45ef-b9ad-21baf8612642"/*Twist*/,
+      "Position": {
+        "X": -30.741852,
+        "Y": 737.6557
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "b4ffa587-f6f0-47c2-af60-f8660ad1882e"/*TwistVariation*/,
+      "Position": {
+        "X": -30.741852,
+        "Y": 782.6557
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "a63a10bb-b0c5-46bc-8f9d-8b0b3f4cd037"/*Spin*/,
       "Position": {
         "X": -50.516357,
         "Y": 864.0927
@@ -54,7 +74,7 @@
       "Format": "{0:0.0}°"
     },
     {
-      "InputId": "b61b695e-593d-4d7a-bb76-b15cbc0913d9"/*TwistVariation*/,
+      "InputId": "b61b695e-593d-4d7a-bb76-b15cbc0913d9"/*SpinVariation*/,
       "Position": {
         "X": -50.516357,
         "Y": 909.0927
@@ -94,8 +114,8 @@
         "Y": 1163.3694
       },
       "Description": "Applies force to push particles towards distanced from the camera that is defined by CenterDepth.",
-      "Min": -1.0,
-      "Max": 1.0
+      "Min": 0.0,
+      "Max": 0.1
     },
     {
       "InputId": "d5038c16-3920-48fc-8cd8-9346b63dad7a"/*CenterDepth*/,
@@ -189,7 +209,7 @@
       "ChildId": "b9cfe6eb-d521-48ec-acbe-e78404ea7ffa"/*SrvFromTexture2d*/,
       "Position": {
         "X": 602.3083,
-        "Y": 780.10626
+        "Y": 806.10626
       }
     },
     {

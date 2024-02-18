@@ -1410,16 +1410,24 @@
     },
     {
       "Title": "Render Video",
-      "Visible": false
+      "Visible": true
     },
     {
-      "Title": "Settings",
+      "Title": "Utilities",
       "Visible": false
     },
     {
       "Title": "Console",
       "Visible": false
+    },
+    {
+      "Title": "IO Events",
+      "Visible": false
+    },
+    {
+      "Title": "Settings",
+      "Visible": false
     }
   ],
-  "ImGuiSettings": "[Window][DockSpaceViewport_11111111]\nPos=0,26\nSize=2560,1391\nCollapsed=0\n\n[Window][Graph##1]\nPos=224,26\nSize=1435,1391\nCollapsed=0\nDockId=0x00000001,0\n\n[Window][Parameters##1]\nPos=1661,699\nSize=443,718\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Variations]\nPos=2106,699\nSize=454,718\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Output##0]\nPos=1661,26\nSize=899,671\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Explore Variations]\nPos=810,306\nSize=768,283\nCollapsed=0\n\n[Window][Console]\nPos=548,678\nSize=768,283\nCollapsed=0\n\n[Window][Output##1]\nPos=0,26\nSize=2304,712\nCollapsed=0\n\n[Window][Symbol Library]\nPos=0,26\nSize=222,1391\nCollapsed=0\nDockId=0x00000007,0\n\n[Docking][Data]\nDockSpace         ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,26 Size=2560,1391 Split=X Selected=0x1F46795C\n  DockNode        ID=0x00000007 Parent=0x8B93E3BD SizeRef=222,1391 Selected=0xCA18E6EB\n  DockNode        ID=0x00000008 Parent=0x8B93E3BD SizeRef=2336,1391 Split=X\n    DockNode      ID=0x00000001 Parent=0x00000008 SizeRef=1435,1391 CentralNode=1 Selected=0x1F46795C\n    DockNode      ID=0x00000002 Parent=0x00000008 SizeRef=899,1391 Split=Y Selected=0x9CE63BF6\n      DockNode    ID=0x00000003 Parent=0x00000002 SizeRef=768,497 Selected=0x75327DBA\n      DockNode    ID=0x00000004 Parent=0x00000002 SizeRef=768,532 Split=X Selected=0x9CE63BF6\n        DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=443,596 Selected=0x9CE63BF6\n        DockNode  ID=0x00000006 Parent=0x00000004 SizeRef=454,596 Selected=0x3BC11B9B\n\n"
+  "ImGuiSettings": "[Window][DockSpaceViewport_11111111]\nPos=0,26\nSize=1920,1151\nCollapsed=0\n\n[Window][Graph##1]\nPos=187,26\nSize=832,1151\nCollapsed=0\nDockId=0x00000001,0\n\n[Window][Parameters##1]\nPos=1021,583\nSize=443,594\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Variations]\nPos=1466,583\nSize=454,594\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Output##0]\nPos=1021,26\nSize=899,555\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Explore Variations]\nPos=810,306\nSize=768,283\nCollapsed=0\n\n[Window][Console]\nPos=548,678\nSize=768,283\nCollapsed=0\n\n[Window][Output##1]\nPos=0,26\nSize=2304,712\nCollapsed=0\n\n[Window][Symbol Library]\nPos=0,26\nSize=185,1151\nCollapsed=0\nDockId=0x00000007,0\n\n[Window][Render Video]\nPos=1466,583\nSize=454,594\nCollapsed=0\nDockId=0x00000006,1\n\n[Docking][Data]\nDockSpace         ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,26 Size=1920,1151 Split=X Selected=0x1F46795C\n  DockNode        ID=0x00000007 Parent=0x8B93E3BD SizeRef=185,1391 Selected=0xCA18E6EB\n  DockNode        ID=0x00000008 Parent=0x8B93E3BD SizeRef=1733,1391 Split=X\n    DockNode      ID=0x00000001 Parent=0x00000008 SizeRef=832,1391 CentralNode=1 Selected=0x1F46795C\n    DockNode      ID=0x00000002 Parent=0x00000008 SizeRef=899,1391 Split=Y Selected=0x9CE63BF6\n      DockNode    ID=0x00000003 Parent=0x00000002 SizeRef=768,497 Selected=0x75327DBA\n      DockNode    ID=0x00000004 Parent=0x00000002 SizeRef=768,532 Split=X Selected=0x9CE63BF6\n        DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=443,596 Selected=0x9CE63BF6\n        DockNode  ID=0x00000006 Parent=0x00000004 SizeRef=454,596 Selected=0x3BC11B9B\n\n"
 }

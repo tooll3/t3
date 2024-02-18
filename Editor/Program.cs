@@ -30,7 +30,7 @@ namespace T3.Editor
         public static Device Device { get; private set; }
 
         public static readonly bool IsStandAlone = File.Exists("StartT3.exe");
-        public const string Version = "3.8.2";
+        public const string Version = "3.9.1";
 
         /// <summary>
         /// Generate a release string with 
@@ -174,6 +174,7 @@ namespace T3.Editor
             T3Style.Apply();
 
             ProgramWindows.Main.RunRenderLoop(UiContentUpdate.RenderCallback);
+            IsShuttingDown = true;
 
             try
             {
@@ -203,5 +204,6 @@ namespace T3.Editor
         public static readonly ConsoleLogWindow ConsoleLogWindow = new();
         public static T3Ui T3Ui;
         public static string RequestImGuiLayoutUpdate;
+        public static bool IsShuttingDown;
     }
 }

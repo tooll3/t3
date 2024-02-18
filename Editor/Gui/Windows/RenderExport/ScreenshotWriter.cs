@@ -26,7 +26,11 @@ public static class ScreenshotWriter
     private static void OnReadComplete(TextureReadAccess.ReadRequestItem request)
     {
         var immediateContext = ResourceManager.Device.ImmediateContext;
-        
+        if (request.CpuAccessTexture.IsDisposed)
+        {
+            Log.Debug("ScreenshotWriter: Texture was disposed before readback was complete");
+            return;
+        }
         var dataBox = immediateContext.MapSubresource(request.CpuAccessTexture,
                                                       0,
                                                       0,

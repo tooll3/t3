@@ -41,7 +41,7 @@
         "X": 114.808914,
         "Y": 1201.7096
       },
-      "GroupTitle": "Render Background...",
+      "GroupTitle": "Render Background",
       "Description": "If turned on the environment will be visible to the camera by being mapped on a sphere-mesh around the scene."
     },
     {

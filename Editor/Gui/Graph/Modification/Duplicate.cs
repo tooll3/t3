@@ -138,7 +138,7 @@ internal static class Duplicate
         var sourceSelectables = sourceSymbolUi.GetSelectables().ToArray();
         var newSelectables = newSymbolUi.GetSelectables().ToArray();
         Debug.Assert(sourceSelectables.Length == newSelectables.Length);
-        for (int i = 0; i < sourceSelectables.Length; i++)
+        for (int i = 0; i < sourceSelectables.Length && i<newSelectables.Length; i++)
         {
             newSelectables[i].PosOnCanvas = sourceSelectables[i].PosOnCanvas; // todo: check if this is enough or if id check needed
         }

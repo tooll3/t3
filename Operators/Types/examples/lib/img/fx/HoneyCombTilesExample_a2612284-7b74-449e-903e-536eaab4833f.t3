@@ -192,12 +192,7 @@
           }
         },
         {
-          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
-          "Type": "System.Single",
-          "Value": -53.15775
-        },
-        {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
           "Value": 1.05
         },
@@ -212,9 +207,9 @@
           "Value": true
         },
         {
-          "Id": "fbe7e415-5740-4f44-ad4e-32e01c6eb1ad"/*Bias*/,
+          "Id": "8169be8f-cb35-4900-b462-f2139b412d59"/*Rotation*/,
           "Type": "System.Single",
-          "Value": -58.107468
+          "Value": -53.15775
         }
       ],
       "Outputs": []

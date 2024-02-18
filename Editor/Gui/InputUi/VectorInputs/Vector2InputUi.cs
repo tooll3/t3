@@ -161,7 +161,9 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         public override void DrawSettings()
         {
             base.DrawSettings();
+            
             {
+                FormInputs.AddVerticalSpace();
                 var tmpForRef = UseVec2Control;
                 if (FormInputs.AddEnumDropdown(ref tmpForRef, "Vec2 Control"))
                     UseVec2Control = tmpForRef;
