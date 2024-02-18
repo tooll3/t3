@@ -50,17 +50,16 @@ namespace T3.Core.Logging
             }
         }
 
-        private readonly StreamWriter _streamWriter;
-        private static FileWriter? Instance { get; set; }
 
         public static ILogWriter CreateDefault(string rootDirectory)
         {
-            var logDirectory = Path.Combine(rootDirectory, LogSubDirectory);
-            Directory.CreateDirectory(logDirectory);
             if (Instance != null)
                 return Instance;
             
-            var path = Path.Combine(logDirectory, $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss_fff}.log");
+            LogDirectory = Path.Combine(rootDirectory, LogSubDirectory);
+            Directory.CreateDirectory(LogDirectory);
+            
+            var path = Path.Combine(LogDirectory, $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss_fff}.log");
             Instance = new FileWriter(path)
                            {
                                Filter = ILogEntry.EntryLevel.All
@@ -68,6 +67,9 @@ namespace T3.Core.Logging
             return Instance;
         }
         
-        public const string LogSubDirectory = "log";
+        private readonly StreamWriter _streamWriter;
+        public static string LogDirectory { get; private set; }
+        private static FileWriter? Instance { get; set; }
+        private const string LogSubDirectory = "log";
     }
 }

@@ -37,7 +37,7 @@ internal static class CrashReporting
                            o.AutoSessionTracking = false;
                            o.SendDefaultPii = false;
                            o.Release = Program.GetReleaseVersion(indicateDebugBuild: false);
-                           o.SetBeforeSend((Func<SentryEvent, Hint, SentryEvent>)CrashHandler);
+                           o.SetBeforeSend((Func<SentryEvent, SentryHint, SentryEvent>)CrashHandler);
                        });
 
         //SentrySdk.ConfigureScope(scope => { scope.SetTag("IsStandAlone", Program.IsStandAlone ? "Yes" : "No"); });
@@ -50,26 +50,11 @@ internal static class CrashReporting
         SentrySdk.ConfigureScope(scope => { scope.SetTag("Configuration", configuration); });
     }
 
-    private static SentryEvent CrashHandler(SentryEvent sentryEvent, Hint hint)
+    private static SentryEvent CrashHandler(SentryEvent sentryEvent, SentryHint hint)
     {
         var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
         var timeSpan = THelpers.GetReadableRelativeTime(timeOfLastBackup);
-
-        CoreUi.Instance.SetUnhandledExceptionMode(true);
-        var result = CoreUi.Instance.ShowMessageBox(string.Join("\n",
-                                                 "Oh noooo, how embarrassing! T3 just crashed.",
-                                                 $"Last backup was saved {timeSpan} to .t3/backups/",
-                                                 "We copied the current operator to your clipboard.",
-                                                 "Please read the Wiki on what to do next.",
-                                                 "",
-                                                 "Click Yes to send a crash report to tooll.sentry.io.",
-                                                 "This will hopefully help us to fix this issue."
-                                                ),
-                                     @"☠🙈 Damn!",
-                                     PopUpButtons.YesNo);
-
-        var sendingEnabled = result == PopUpResult.Yes;
-
+        
         sentryEvent.SetTag("Nickname", "anonymous");
         sentryEvent.Contexts["tooll3"]= new
                                             {
@@ -99,9 +84,29 @@ internal static class CrashReporting
             sentryEvent.SetExtra("CurrentOpExportFailed", e.Message);
         }
 
-        WriteReportToLog(sentryEvent, sendingEnabled);
         WriteCrashReportFile(sentryEvent);
+
+        // We only show crash report dialog in release mode 
+        #if RELEASE
+        var result = CoreUi.Instance.ShowMessageBox(string.Join("\n",
+                                                                "Oh noooo, how embarrassing! T3 just crashed.",
+                                                                $"Last backup was saved {timeSpan} to .t3/backups/",
+                                                                "We copied the current operator to your clipboard.",
+                                                                "Please read the Wiki on what to do next.",
+                                                                "",
+                                                                "Click Yes to send a crash report to tooll.sentry.io.",
+                                                                "This will hopefully help us to fix this issue."
+                                                               ),
+                                                    @"☠🙈 Damn!",
+                                                    PopUpButtons.YesNo);
+
+        var sendingEnabled = result == PopUpResult.Yes;        
         return sendingEnabled ? sentryEvent : null;
+        #else
+        WriteReportToLog(sentryEvent, false);
+        CoreUi.Instance.SetUnhandledExceptionMode(true);
+        return null;
+        #endif
     }
     
     private static void WriteReportToLog(SentryEvent sentryEvent, bool sendingEnabled)
@@ -133,8 +138,7 @@ internal static class CrashReporting
             return;
         
         var exceptionTitle = sentryEvent.Exception.GetType().Name;
-        Directory.CreateDirectory(FileWriter.LogSubDirectory);
-        var filepath= ($@"{FileWriter.LogSubDirectory}/crash {exceptionTitle} - {DateTime.Now:yyyy-MM-dd  HH-mm-ss}.txt");
+        var filepath= Path.Combine(FileWriter.LogDirectory,$@"crash {DateTime.Now:yyyy-MM-dd  HH-mm-ss} - {exceptionTitle}.txt");
         
         using var streamFileWriter = new StreamWriter(filepath);
         streamFileWriter.WriteLine($"{sentryEvent.Exception.Message}\n{sentryEvent.Exception}");

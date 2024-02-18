@@ -69,7 +69,7 @@ namespace T3.Editor
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
 
-            //CrashReporting.InitializeCrashReporting();
+            CrashReporting.InitializeCrashReporting();
 
             Console.WriteLine("Creating SplashScreen");
             ISplashScreen splashScreen = new SplashScreen.SplashScreen();
@@ -84,7 +84,7 @@ namespace T3.Editor
             Log.AddWriter(StatusErrorLine);
             Log.AddWriter(ConsoleLogWindow);
             Log.Debug($"Starting {Version}");
-
+            
             //if (IsStandAlone)
             {
                 //StartupValidation.ValidateCurrentStandAloneExecutable();

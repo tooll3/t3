@@ -12,10 +12,12 @@
         <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
         <Configurations>Debug;Release;IDE</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <!-- <ApplicationManifest>app.manifest</ApplicationManifest> -->
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DefineConstants>TRACE</DefineConstants>
+        <DebugType>full</DebugType>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'IDE' ">
@@ -23,29 +25,30 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ImGui.NET" Version="1.89.9.4"/>
-        <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.0-2.final"/>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.0-2.final"/>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.0-2.final"/>
-        <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.9.0-2.final"/>
+        <PackageReference Include="ImGui.NET" Version="1.89.9.4" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.0-2.final" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.0-2.final" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.0-2.final" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.9.0-2.final" />
         <PackageReference Include="Rug.Osc" Version="1.2.5">
             <NoWarn>NU1701</NoWarn>
         </PackageReference>
-        <PackageReference Include="Sentry" Version="3.41.2"/>
+        <PackageReference Include="Sentry" Version="4.1.1" />
         <PackageReference Include="SharpDX.Desktop" Version="4.2.0">
             <NoWarn>NU1701</NoWarn>
         </PackageReference>
-        <PackageReference Include="System.Management" Version="6.0.0"/>
+        <PackageReference Include="System.Management" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Core\Core.csproj"/>
-        <ProjectReference Include="..\Logging\Logging.csproj"/>
-        <ProjectReference Include="..\MsForms\MsForms.csproj"/>
+        <ProjectReference Include="..\Core\Core.csproj" />
+        <ProjectReference Include="..\Logging\Logging.csproj" />
+        <ProjectReference Include="..\MsForms\MsForms.csproj" />
     </ItemGroup>
 
 
-    <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
+    <!--This
+    copies all files in the `dependencies` folder *directly* into the output directory-->
     <ItemGroup>
         <Content Include="../Dependencies/**/*" Visible="false">
             <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
@@ -54,40 +57,41 @@
     </ItemGroup>
 
 
-    <!--This copies all files in the `.Defaults` folder into the output/.t3 folder-->
+    <!--This
+    copies all files in the `.Defaults` folder into the output/.t3 folder-->
     <ItemGroup>
-        <DefaultUserConfigs Include="../.Defaults/**/*"/>
+        <DefaultUserConfigs Include="../.Defaults/**/*" />
     </ItemGroup>
 
     <Target Name="CopyDefaults" AfterTargets="AfterBuild">
         <Copy SourceFiles="@(DefaultUserConfigs)"
-              SkipUnchangedFiles="true"
-              UseHardlinksIfPossible="true"
-              DestinationFiles="@(DefaultUserConfigs->'$(OutputPath)/.t3/%(RecursiveDir)%(Filename)%(Extension)')"/>
+            SkipUnchangedFiles="true"
+            UseHardlinksIfPossible="true"
+            DestinationFiles="@(DefaultUserConfigs->'$(OutputPath)/.t3/%(RecursiveDir)%(Filename)%(Extension)')" />
     </Target>
 
     <!-- This copies ../t3/Resources into the output directory -->
     <ItemGroup>
-        <Resources Include="../Resources/**/*" Visible="false"/>
+        <Resources Include="../Resources/**/*" Visible="false" />
     </ItemGroup>
 
     <Target Name="CopyResources" AfterTargets="AfterBuild">
         <Copy SourceFiles="@(Resources)"
-              SkipUnchangedFiles="true"
-              UseHardlinksIfPossible="true"
-              DestinationFiles="@(Resources->'$(OutputPath)/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
+            SkipUnchangedFiles="true"
+            UseHardlinksIfPossible="true"
+            DestinationFiles="@(Resources->'$(OutputPath)/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
     </Target>
-    
+
     <!-- This copies ../Player project into the output directory -->
     <ItemGroup>
-        <Player Include="../Player/**/*" Visible="false"/>
+        <Player Include="../Player/**/*" Visible="false" />
     </ItemGroup>
-    
+
     <Target Name="CopyPlayer" AfterTargets="AfterBuild">
         <Copy SourceFiles="@(Player)"
-              SkipUnchangedFiles="true"
-              UseHardlinksIfPossible="true"
-              DestinationFiles="@(Player->'$(OutputPath)/Player/%(RecursiveDir)%(Filename)%(Extension)')"/>
+            SkipUnchangedFiles="true"
+            UseHardlinksIfPossible="true"
+            DestinationFiles="@(Player->'$(OutputPath)/Player/%(RecursiveDir)%(Filename)%(Extension)')" />
     </Target>
 
     <!-- Build lib, libEditor, and examples AfterBuild and copy them to the output directory-->
@@ -106,52 +110,60 @@
 
     <Target Name="CopyLibs" AfterTargets="AfterBuild" Condition=" '$(Configuration)' != 'IDE' ">
         <ItemGroup Condition=" '$(Configuration)' != 'IDE' ">
-            <Lib Include="$(lib)/$(BuildFolder)/**/*.dll;$(lib)/**/*.t3;$(lib)/**/*.t3ui;$(lib)/$(BuildFolder)/**/*deps.json" Visible="false"/>
-            <LibEditor Include="$(libEditor)/$(BuildFolder)/**/*.dll;$(libEditor)/**/*.t3;$(libEditor)/**/*.t3ui;$(libEditor)/$(BuildFolder)/**/*deps.json" Visible="false"/>
-            <Examples Include="$(examples)/$(BuildFolder)/**/*.dll;$(examples)/**/*.t3;$(examples)/**/*.t3ui;$(examples)/$(BuildFolder)/**/*deps.json" Visible="false"/>
-            <LibDataTypes Include="$(libDataTypes)/$(BuildFolder)/**/*.dll;$(libDataTypes)/**/*.t3;$(libDataTypes)/**/*.t3ui;$(libDataTypes)/$(BuildFolder)/**/*deps.json" Visible="false"/>
+            <Lib
+                Include="$(lib)/$(BuildFolder)/**/*.dll;$(lib)/**/*.t3;$(lib)/**/*.t3ui;$(lib)/$(BuildFolder)/**/*deps.json"
+                Visible="false" />
+            <LibEditor
+                Include="$(libEditor)/$(BuildFolder)/**/*.dll;$(libEditor)/**/*.t3;$(libEditor)/**/*.t3ui;$(libEditor)/$(BuildFolder)/**/*deps.json"
+                Visible="false" />
+            <Examples
+                Include="$(examples)/$(BuildFolder)/**/*.dll;$(examples)/**/*.t3;$(examples)/**/*.t3ui;$(examples)/$(BuildFolder)/**/*deps.json"
+                Visible="false" />
+            <LibDataTypes
+                Include="$(libDataTypes)/$(BuildFolder)/**/*.dll;$(libDataTypes)/**/*.t3;$(libDataTypes)/**/*.t3ui;$(libDataTypes)/$(BuildFolder)/**/*deps.json"
+                Visible="false" />
 
-            <LibResources Include="$(lib)/$(ResourceDir)/**/*" Visible="false"/>
-            <LibEditorResources Include="$(libEditor)/$(ResourceDir)/**/*" Visible="false"/>
-            <ExamplesResources Include="$(examples)/$(ResourceDir)/**/*" Visible="false"/>
-            <LibDataTypesResources Include="$(libDataTypes)/$(ResourceDir)/**/*" Visible="false"/>
+            <LibResources Include="$(lib)/$(ResourceDir)/**/*" Visible="false" />
+            <LibEditorResources Include="$(libEditor)/$(ResourceDir)/**/*" Visible="false" />
+            <ExamplesResources Include="$(examples)/$(ResourceDir)/**/*" Visible="false" />
+            <LibDataTypesResources Include="$(libDataTypes)/$(ResourceDir)/**/*" Visible="false" />
         </ItemGroup>
 
         <!-- Copy Dlls and symbols -->
         <Copy SourceFiles="@(Lib)"
-              SkipUnchangedFiles="true"
-              UseHardlinksIfPossible="true"
-              DestinationFiles="@(Lib->'$(OutputPath)/Operators/lib/%(RecursiveDir)%(Filename)%(Extension)')"/>
+            SkipUnchangedFiles="true"
+            UseHardlinksIfPossible="true"
+            DestinationFiles="@(Lib->'$(OutputPath)/Operators/lib/%(RecursiveDir)%(Filename)%(Extension)')" />
         <Copy SourceFiles="@(LibEditor)"
-              SkipUnchangedFiles="true"
-              UseHardlinksIfPossible="true"
-              DestinationFiles="@(LibEditor->'$(OutputPath)/Operators/libEditor/%(RecursiveDir)%(Filename)%(Extension)')"/>
+            SkipUnchangedFiles="true"
+            UseHardlinksIfPossible="true"
+            DestinationFiles="@(LibEditor->'$(OutputPath)/Operators/libEditor/%(RecursiveDir)%(Filename)%(Extension)')" />
         <Copy SourceFiles="@(Examples)"
-              SkipUnchangedFiles="true"
-              UseHardlinksIfPossible="true"
-              DestinationFiles="@(Examples->'$(OutputPath)/Operators/examples/%(RecursiveDir)%(Filename)%(Extension)')"/>
+            SkipUnchangedFiles="true"
+            UseHardlinksIfPossible="true"
+            DestinationFiles="@(Examples->'$(OutputPath)/Operators/examples/%(RecursiveDir)%(Filename)%(Extension)')" />
         <Copy SourceFiles="@(LibDataTypes)"
-              SkipUnchangedFiles="true"
-              UseHardlinksIfPossible="true"
-              DestinationFiles="@(LibDataTypes->'$(OutputPath)/Operators/libDataTypes/%(RecursiveDir)%(Filename)%(Extension)')"/>
+            SkipUnchangedFiles="true"
+            UseHardlinksIfPossible="true"
+            DestinationFiles="@(LibDataTypes->'$(OutputPath)/Operators/libDataTypes/%(RecursiveDir)%(Filename)%(Extension)')" />
 
         <!-- Copy Resources -->
         <Copy SourceFiles="@(LibResources)"
-              SkipUnchangedFiles="true"
-              UseHardlinksIfPossible="true"
-              DestinationFiles="@(LibResources->'$(OutputPath)/Operators/lib/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
+            SkipUnchangedFiles="true"
+            UseHardlinksIfPossible="true"
+            DestinationFiles="@(LibResources->'$(OutputPath)/Operators/lib/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
         <Copy SourceFiles="@(LibEditorResources)"
-              SkipUnchangedFiles="true"
-              UseHardlinksIfPossible="true"
-              DestinationFiles="@(LibEditorResources->'$(OutputPath)/Operators/libEditor/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
+            SkipUnchangedFiles="true"
+            UseHardlinksIfPossible="true"
+            DestinationFiles="@(LibEditorResources->'$(OutputPath)/Operators/libEditor/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
         <Copy SourceFiles="@(ExamplesResources)"
-              SkipUnchangedFiles="true"
-              UseHardlinksIfPossible="true"
-              DestinationFiles="@(ExamplesResources->'$(OutputPath)/Operators/examples/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
+            SkipUnchangedFiles="true"
+            UseHardlinksIfPossible="true"
+            DestinationFiles="@(ExamplesResources->'$(OutputPath)/Operators/examples/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
         <Copy SourceFiles="@(LibDataTypesResources)"
-              SkipUnchangedFiles="true"
-              UseHardlinksIfPossible="true"
-              DestinationFiles="@(LibDataTypesResources->'$(OutputPath)/Operators/libDataTypes/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
+            SkipUnchangedFiles="true"
+            UseHardlinksIfPossible="true"
+            DestinationFiles="@(LibDataTypesResources->'$(OutputPath)/Operators/libDataTypes/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
 
     </Target>
 
