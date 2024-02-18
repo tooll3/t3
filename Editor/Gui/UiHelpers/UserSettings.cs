@@ -111,10 +111,10 @@ namespace T3.Editor.Gui.UiHelpers
             
             public bool ExpandSpectrumVisualizerVertically = true;
             
-            private string _defaultNewProjectDirectory = DefaultProjectFolder;
-            public string DefaultNewProjectDirectory => _defaultNewProjectDirectory ??= DefaultProjectFolder;
+            private string _defaultNewProjectDirectory = _defaultProjectFolder;
+            public string DefaultNewProjectDirectory => _defaultNewProjectDirectory ??= _defaultProjectFolder;
 
-            private static readonly string DefaultProjectFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "T3Projects");
+            private static readonly string _defaultProjectFolder = Path.Combine("/temp", "T3Projects");
         }
 
         public enum ValueEditMethods
