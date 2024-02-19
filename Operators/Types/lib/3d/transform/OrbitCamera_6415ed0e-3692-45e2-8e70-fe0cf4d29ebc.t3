@@ -108,6 +108,10 @@
         "Y": 1.0,
         "Z": 0.0
       }
+    },
+    {
+      "Id": "46aa9ce1-ec54-43c5-ad5e-2ca679a254fd"/*OverrideTime*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [],
