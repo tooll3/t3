@@ -1,0 +1,184 @@
+{
+  "Id": "4bf73e3c-1d8c-4007-b155-b0edf00c2e2e"/*TextureMapForceExample2*/,
+  "Description": "Shows how to combine image blending with TextureMapForce",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "1113d3f2-83cb-4960-a06f-7443dd766f97"/*LoadImage*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "cef3f62b-a3ff-4ea2-b448-c15eb3e43734"/*Blur*/,
+      "Position": {
+        "X": 600.0,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "e9442996-51e2-442a-bd4f-f03f7ca6252e"/*NormalMap*/,
+      "Position": {
+        "X": 750.0,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "a7b19d6f-ad2a-435d-b508-6ba04cdd8455"/*TextureMapForce*/,
+      "Position": {
+        "X": 900.0,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "da160cdd-a65a-40a6-a27a-0177304689b1"/*ParticleSystem*/,
+      "Position": {
+        "X": 1050.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "b8351f32-de01-487b-9e71-57ed48a3d20d"/*RadialPoints*/,
+      "Position": {
+        "X": 900.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "348f6359-5c7a-4f4e-ada3-0129d70f1dcc"/*DrawPoints*/,
+      "Position": {
+        "X": 1200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "aa031748-b530-4bb8-ac9c-2b6bcbc09c5f"/*OrbitCamera*/,
+      "Position": {
+        "X": 1350.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "79af2397-724a-4d3d-a1f6-2563ba74b5d2"/*RenderTarget*/,
+      "Position": {
+        "X": 1500.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "e1e6c5f0-79a2-4da5-9a10-451621b7ef11"/*DepthOfField*/,
+      "Position": {
+        "X": 1800.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "7af10215-574e-4efe-8b6c-1dc37fb56c1c"/*TurbulenceForce*/,
+      "Position": {
+        "X": 900.0,
+        "Y": 63.0
+      }
+    },
+    {
+      "ChildId": "1f044375-2692-40e4-bdb8-74b772936fc8"/*BlendWithMask*/,
+      "Position": {
+        "X": 450.0,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "17ac3520-984c-4721-9377-15717b6a34b5"/*Layer2d*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "b956c445-5604-4a38-bc5e-9101028fbbc6"/*RenderTarget*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "5460fb3d-0a95-4a4f-b33d-e9a5fbb47ead"/*RenderTarget*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 299.0
+      }
+    },
+    {
+      "ChildId": "f98bb125-dd43-4c2d-9f19-569392e03777"/*Text*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 299.0
+      }
+    },
+    {
+      "ChildId": "2b9e4aed-6ac0-40cc-85b2-a2b7b2f8a840"/*LinearGradient*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 472.0
+      }
+    },
+    {
+      "ChildId": "b78fe07d-9e23-4ae9-962f-776ce2c2fe44"/*Time*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 472.0
+      }
+    },
+    {
+      "ChildId": "4c1adc7b-d54b-41ed-a406-04fd4c612cee"/*SSAO*/,
+      "Position": {
+        "X": 1650.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "fea6159c-e667-4ef2-b368-952eb043c711"/*Time*/,
+      "Position": {
+        "X": 750.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "29cab0d3-0066-4a5a-bbb0-a0249c02140e"/*AnimValue*/,
+      "Position": {
+        "X": 900.0,
+        "Y": 655.0
+      }
+    },
+    {
+      "ChildId": "2b784445-7836-4065-b06d-754d91d846b8"/*Damp*/,
+      "Position": {
+        "X": 1200.0,
+        "Y": 655.0
+      }
+    },
+    {
+      "ChildId": "2814c464-1a82-458f-8acd-aa8bf9888d96"/*Add*/,
+      "Position": {
+        "X": 1050.0,
+        "Y": 655.0
+      }
+    },
+    {
+      "ChildId": "0c5addf3-a984-412c-852d-eda28880801e"/*Time*/,
+      "Position": {
+        "X": 900.0,
+        "Y": 698.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "97420db1-fd37-4f4b-81b2-03146cb542a9"/*TextureOut*/,
+      "Position": {
+        "X": 2210.0,
+        "Y": 360.5
+      }
+    }
+  ]
+}
