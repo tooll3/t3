@@ -288,7 +288,7 @@ public abstract class BaseRenderWindow : Window
         if (texture == null || texture.IsDisposed)
         {
             warning = "You have selected an operator that does not render. " +
-                      "Hint: Use a [RenderTarget] with format B8G8R8A8_UNorm for fast exports.";
+                      "Ready to export to video.";
             return true;
         }
 
@@ -296,7 +296,7 @@ public abstract class BaseRenderWindow : Window
         return false;
     }
 
-    protected const string PreferredInputFormatHint = "Hint: Use a [ConvertFormat] with format B8G8R8A8_UNorm for fast exports.";
+    protected const string PreferredInputFormatHint = "Ready to export to video.";
 
     protected static double Progress => (FrameCount <= 1) ? 0 :
         (FrameIndex / (double)(FrameCount - 1)).Clamp(0, 1);
