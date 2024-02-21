@@ -1,7 +1,7 @@
 {
   "Name": "DeltaSinceLastFrame",
   "Id": "919beb6b-4798-45fc-83bd-8203a9b26e8e",
-  "Namespace": "lib.math.floats",
+  "Namespace": "lib.math.float",
   "Inputs": [
     {
       "Id": "0e8896e1-b98f-4ff3-9136-e55002c887d8"/*Value*/,
