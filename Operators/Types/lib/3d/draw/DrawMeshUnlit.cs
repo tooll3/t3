@@ -40,6 +40,9 @@ namespace T3.Operators.Types.Id_4499dcb1_c936_49ed_861b_2ad8ae58cb28
         [Input(Guid = "44b31261-df87-4289-bc64-db349476e418")]
         public readonly InputSlot<float> BlurLevel = new();
 
+        [Input(Guid = "48da47d3-8d30-4e85-8ecc-8c07894c54b4")]
+        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> TextureWrap = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
+
     }
 }
 

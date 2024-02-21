@@ -3,16 +3,16 @@
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
 
-cbuffer Params : register(b0)
-{
-    float4 Color;    
-    //float TestParamA;
-    //float AlphaCutOff;
-    //float UseCubeMap;
-};
+// cbuffer Params : register(b0)
+// {
+//     //float4 Color;    
+//     //float TestParamA;
+//     //float AlphaCutOff;
+//     //float UseCubeMap;
+// };
 
 
-cbuffer Transforms : register(b1)
+cbuffer Transforms : register(b0)
 {
     float4x4 CameraToClipSpace;
     float4x4 ClipSpaceToCamera;
@@ -26,7 +26,7 @@ cbuffer Transforms : register(b1)
     float4x4 ObjectToClipSpace;
 };
 
-cbuffer CamTransforms : register(b2)
+cbuffer CamTransforms : register(b1)
 {
     float4x4 RefCameraToClipSpace;
     float4x4 ClipSpaceToRefCamera;
@@ -42,7 +42,7 @@ cbuffer CamTransforms : register(b2)
 
 struct psInput
 {
-    float2 texCoord : TEXCOORD;
+    //float2 texCoord : TEXCOORD;
     float4 pixelPosition : SV_POSITION;
     float4 vertexPosInObject : VERTEXPOS;
 };
@@ -63,19 +63,11 @@ psInput vsMain(uint id: SV_VertexID)
 
     PbrVertex vertex = PbrVertices[FaceIndices[faceIndex][faceVertexIndex]];
 
-    float4 vertexPosInObject = float4( vertex.Position,1);
-    output.vertexPosInObject = vertexPosInObject;
+    output.vertexPosInObject = float4( vertex.Position,1);
 
-    float4 vertexInClipSpace = mul(vertexPosInObject, ObjectToRefClipSpace);
-    vertexInClipSpace.xyz /= vertexInClipSpace.w;    
-
-    output.texCoord = (vertexInClipSpace.xy * 0.5 -0.5);
-    output.texCoord.y = 1- output.texCoord.y;
-
-    //float4 aspect = float4(RefCameraToClipSpace[1][1] / RefCameraToClipSpace[0][0],1,1,1);
-    float4 posInObject = float4(vertex.TexCoord * 2- 1, 0, 1);
+    float4 posInObject = float4(vertex.TexCoord * 2 - 1, 0, 1);
     float4 posInClipSpace = mul(posInObject, ObjectToClipSpace);
-    output.pixelPosition = posInClipSpace;
+    output.pixelPosition =  posInClipSpace;
     return output;
 }
 
@@ -87,5 +79,5 @@ float4 psMain(psInput pin) : SV_TARGET
 
     float2 uv = vertexInClipSpace.xy * float2(0.5, -0.5) + 0.5;
     float4 albedo = BaseColorMap2.Sample(texSampler, uv);
-    return albedo * Color;
+    return albedo;
 }
