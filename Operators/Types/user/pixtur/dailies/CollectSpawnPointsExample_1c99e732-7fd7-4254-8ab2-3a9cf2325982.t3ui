@@ -178,6 +178,14 @@
         "X": 2138.756,
         "Y": 300.4564
       }
+    },
+    {
+      "ChildId": "fc6236ad-87cd-4285-a75b-9c6e5459511b"/*CustomPointShader*/,
+      "Comment": "Fix points' color attribute",
+      "Position": {
+        "X": 832.9492,
+        "Y": 147.03052
+      }
     }
   ],
   "OutputUis": [
