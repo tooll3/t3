@@ -674,6 +674,13 @@
         "X": -2033.7949,
         "Y": 2172.8772
       }
+    },
+    {
+      "ChildId": "674b6885-3433-41e4-a45f-7d09969ba278"/*SamplePointColorAttributesExample*/,
+      "Position": {
+        "X": -1237.3947,
+        "Y": 2409.9072
+      }
     }
   ],
   "OutputUis": [
