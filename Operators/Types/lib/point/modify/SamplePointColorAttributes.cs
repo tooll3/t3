@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -28,6 +29,12 @@ namespace T3.Operators.Types.Id_056ea55a_91a2_4b55_bcce_e44cc8602623
         [Input(Guid = "32e576f6-bcee-4762-babf-86aa95930e52")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
+        [Input(Guid = "6d244ad5-04d3-47dd-8986-b5bf90ee5b0a")]
+        public readonly InputSlot<System.Numerics.Vector4> BaseColor = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "adcb9860-0c16-4859-9af6-6eb3a2197b39", MappedType = typeof(SharedEnums.RgbBlendModes))]
+        public readonly InputSlot<int> BlendMode = new InputSlot<int>();
+
         [Input(Guid = "8416b39e-12fc-4052-9eab-95e8c035ceaa")]
         public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
 
@@ -46,42 +53,6 @@ namespace T3.Operators.Types.Id_056ea55a_91a2_4b55_bcce_e44cc8602623
         [Input(Guid = "e5162ad6-3a6a-4e2f-ae1c-ae365739f51f")]
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
 
-        [Input(Guid = "adcb9860-0c16-4859-9af6-6eb3a2197b39", MappedType = typeof(Modes))]
-        public readonly InputSlot<int> Mode = new InputSlot<int>();
-
-        [Input(Guid = "6d244ad5-04d3-47dd-8986-b5bf90ee5b0a")]
-        public readonly InputSlot<System.Numerics.Vector4> BaseColor = new InputSlot<System.Numerics.Vector4>();
-
-        [Input(Guid = "e87650fc-ebc0-414d-8d04-ae8953b08ae5")]
-        public readonly InputSlot<float> Mix = new InputSlot<float>();
-
-
-        private enum Attributes
-        {
-            NotUsed = 0,
-            For_X = 1,
-            For_Y = 2,
-            For_Z = 3,
-            For_W = 4,
-            Rotate_X = 5,
-            Rotate_Y = 6,
-            Rotate_Z = 7,
-            Stretch_X = 8,
-            Stretch_Y = 9,
-            Stretch_Z = 10,
-        }
-
-        private enum Modes
-        {
-            Add,
-            Multiply,
-        }
-        
-        private enum Spaces
-        {
-            Object,
-            Point,
-        }
     }
 }
 
