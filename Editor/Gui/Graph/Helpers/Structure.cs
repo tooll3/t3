@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -203,28 +204,19 @@ internal static class Structure
             return;
         }
 
-        if (all.Contains(slot))
+        if (!all.Add(slot))
             return;
 
-        all.Add(slot);
-
-        if (slot is IInputSlot)
+        if (slot.TryGetFirstConnection(out var firstConnection))
         {
-            if (!slot.IsConnected)
-                return;
-
-            CollectSlotDependencies(slot.FirstConnection, all);
-        }
-        else if (slot.IsConnected)
-        {
-            CollectSlotDependencies(slot.FirstConnection, all);
+            CollectSlotDependencies(firstConnection, all);
         }
         else
         {
             var parentInstance = slot.Parent;
             foreach (var input in parentInstance.Inputs)
             {
-                if (input.IsConnected)
+                if (slot.TryGetFirstConnection(out var inputFirstConnection))
                 {
                     if (input.TryGetAsMultiInput(out var multiInput))
                     {
@@ -235,8 +227,7 @@ internal static class Structure
                     }
                     else
                     {
-                        var target = input.FirstConnection;
-                        CollectSlotDependencies(target, all);
+                        CollectSlotDependencies(inputFirstConnection, all);
                     }
                 }
                 else if ((input.DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)

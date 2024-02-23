@@ -5,18 +5,33 @@ using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Stats;
+using T3.Core.Utils;
+// ReSharper disable FieldCanBeMadeReadOnly.Local
+
 // ReSharper disable ConvertToAutoPropertyWhenPossible
+// ReSharper disable ForCanBeConvertedToForeach
+// ReSharper disable InlineTemporaryVariable
 
 namespace T3.Core.Operator.Slots
 {
     public class Slot<T> : ISlot
     {
         public Guid Id;
-        public readonly Type ValueType;
-        Type ISlot.ValueType => ValueType;
-        public Instance Parent { get => _parent; set => _parent = value; }
+        private readonly Type _valueType;
+        Type ISlot.ValueType => _valueType;
+        public Instance Parent
+        {
+            get => _parent;
+            set
+            {
+                _parent = value;
+                _parentIsICompoundWithUpdate = _parent is ICompoundWithUpdate;
+            }
+        }
 
-        public readonly DirtyFlag DirtyFlag = new();
+        public DirtyFlag DirtyFlag => _dirtyFlag;
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private protected DirtyFlag _dirtyFlag = new();
         
         public T Value;
 
@@ -36,9 +51,9 @@ namespace T3.Core.Operator.Slots
                 }
                 
                 _keepOriginalUpdateAction = UpdateAction;
-                _keepDirtyFlagTrigger = DirtyFlag.Trigger;
+                _keepDirtyFlagTrigger = _dirtyFlag.Trigger;
                 UpdateAction = EmptyAction;
-                DirtyFlag.Invalidate();
+                _dirtyFlag.Invalidate();
             }
             else
             {
@@ -50,8 +65,8 @@ namespace T3.Core.Operator.Slots
         
         public bool TryGetAsMultiInputTyped(out MultiInputSlot<T> multiInput)
         {
-            multiInput = ThisAsMultiInputSlot;
-            return IsMultiInput;
+            multiInput = _thisAsMultiInputSlot;
+            return _isMultiInput;
         }
 
         public virtual bool TrySetBypassToInput(Slot<T> targetSlot)
@@ -63,9 +78,9 @@ namespace T3.Core.Operator.Slots
             }
             
             _keepOriginalUpdateAction = UpdateAction;
-            _keepDirtyFlagTrigger = DirtyFlag.Trigger;
+            _keepDirtyFlagTrigger = _dirtyFlag.Trigger;
             UpdateAction = ByPassUpdate;
-            DirtyFlag.Invalidate();
+            _dirtyFlag.Invalidate();
             _targetInputForBypass = targetSlot;
             return true;
         }
@@ -76,16 +91,16 @@ namespace T3.Core.Operator.Slots
             if (_keepOriginalUpdateAction == null)
             {
                 _keepOriginalUpdateAction = UpdateAction;
-                _keepDirtyFlagTrigger = DirtyFlag.Trigger;
+                _keepDirtyFlagTrigger = _dirtyFlag.Trigger;
             }
 
             UpdateAction = newAction;
-            DirtyFlag.Invalidate();
+            _dirtyFlag.Invalidate();
         }
         
         public virtual void RestoreUpdateAction()
         {
-            // This will happen when operators are recompiled and output slots are disconnected
+            // This will happen when operators are recompiled and output slots are InputConnections[0]
             if (_keepOriginalUpdateAction == null)
             {
                 UpdateAction = null;
@@ -94,8 +109,8 @@ namespace T3.Core.Operator.Slots
             
             UpdateAction = _keepOriginalUpdateAction;
             _keepOriginalUpdateAction = null;
-            DirtyFlag.Trigger = _keepDirtyFlagTrigger;
-            DirtyFlag.Invalidate();
+            _dirtyFlag.Trigger = _keepDirtyFlagTrigger;
+            _dirtyFlag.Invalidate();
         }
 
         public bool IsDisabled 
@@ -110,8 +125,8 @@ namespace T3.Core.Operator.Slots
         public Slot()
         {
             // UpdateAction = Update;
-            ValueType = typeof(T);
-            _valueIsCommand = ValueType == typeof(Command);
+            _valueType = typeof(T);
+            _valueIsCommand = _valueType == typeof(Command);
             
             if (this is IInputSlot)
             {
@@ -131,20 +146,19 @@ namespace T3.Core.Operator.Slots
             _isInputSlot = true;
             if (this is MultiInputSlot<T> multiInputSlot)
             {
-                IsMultiInput = true;
-                ThisAsMultiInputSlot = multiInputSlot;
+                _isMultiInput = true;
+                _thisAsMultiInputSlot = multiInputSlot;
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Update(EvaluationContext context)
         {
-            if (DirtyFlag.IsDirty || _valueIsCommand)
+            if (_dirtyFlag.IsDirty || _valueIsCommand)
             {
                 OpUpdateCounter.CountUp();
                 UpdateAction?.Invoke(context);
-                DirtyFlag.Clear();
-                DirtyFlag.SetUpdated();
+                _dirtyFlag.SetUpdated();
             }
         }
 
@@ -172,27 +186,29 @@ namespace T3.Core.Operator.Slots
                 if (UpdateAction != null)
                 {
                     _actionBeforeAddingConnecting = UpdateAction;
-                    if (Parent.Children.Count > 0 && Parent is ICompoundWithUpdate compoundWithUpdate && this is not IInputSlot)
+                    if (_parentIsICompoundWithUpdate && !_isInputSlot && _parent.Children.Count > 0)
                     {
                         //Log.Debug($"Skipping connection for compound op with update method for {Parent.Symbol} {this}", compoundWithUpdate);
                         //compoundWithUpdate.RegisterOutputUpdateAction(this, ConnectedUpdate);
-                        InputConnections.Insert(index, (Slot<T>)sourceSlot);
-                        DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
-                        DirtyFlag.Reference = DirtyFlag.Target - 1;
+                        ArrayUtils.Insert(ref InputConnections, (Slot<T>)sourceSlot, index);
+
+                        _dirtyFlag.Target = sourceSlot.DirtyFlag.Target;
+                        _dirtyFlag.Reference = _dirtyFlag.Target - 1;
                         return;
                     }
                 }
                 UpdateAction = ConnectedUpdate;
-                DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
-                DirtyFlag.Reference = DirtyFlag.Target - 1;
+                _dirtyFlag.Target = sourceSlot.DirtyFlag.Target;
+                _dirtyFlag.Reference = _dirtyFlag.Target - 1;
             }
             
-            if (sourceSlot.ValueType != ValueType)
+            if (sourceSlot.ValueType != _valueType)
             {
                 Log.Warning("Type mismatch during connection");
                 return;
             }
-            InputConnections.Insert(index, (Slot<T>)sourceSlot);
+
+            ArrayUtils.Insert(ref InputConnections, (Slot<T>)sourceSlot, index);
         }
 
         private Action<EvaluationContext> _actionBeforeAddingConnecting;
@@ -201,13 +217,13 @@ namespace T3.Core.Operator.Slots
         {
             if (IsConnected)
             {
-                if (index < InputConnections.Count)
+                if (index < InputConnections.Length)
                 {
-                    InputConnections.RemoveAt(index);
+                    ArrayUtils.RemoveAt(ref InputConnections, index);
                 }
                 else
                 {
-                    Log.Error($"Trying to delete connection at index {index}, but input slot only has {InputConnections.Count} connections");
+                    Log.Error($"Trying to delete connection at index {index}, but input slot only has {InputConnections.Length} connections");
                 }
             }
 
@@ -222,91 +238,90 @@ namespace T3.Core.Operator.Slots
                     // if no connection is set anymore restore the default update action
                     RestoreUpdateAction();
                 }
-                DirtyFlag.Invalidate();
+                _dirtyFlag.Invalidate();
             }
         }
 
-        public bool IsConnected => InputConnections.Count > 0;
+        public bool IsConnected => InputConnections.Length > 0;
 
         public ISlot FirstConnection => InputConnections[0];
 
-        protected readonly List<Slot<T>> InputConnections = [];
-
-        public virtual int Invalidate()
+        public bool TryGetFirstConnection(out ISlot connectedSlot)
         {
-            // ReSharper disable once InlineTemporaryVariable
-            var dirtyFlag = DirtyFlag;
+            if(InputConnections.Length > 0)
+            {
+                connectedSlot = InputConnections[0];
+                return true;
+            }
             
-            if (dirtyFlag.IsAlreadyInvalidated || dirtyFlag.HasBeenVisited)
-                return dirtyFlag.Target;
-
-            // reduce the number of method (property) calls
-
-            if (IsConnected)
-            {
-                dirtyFlag.Target = FirstConnection.Invalidate();
-            }
-            else if (_isInputSlot)
-            {
-                if(dirtyFlag.Trigger != DirtyFlagTrigger.None)
-                    dirtyFlag.Invalidate();
-            }
-            else
-            {
-                var parentInputs = _parent.Inputs;
-                
-                bool outputDirty = dirtyFlag.IsDirty;
-                foreach (var input in parentInputs)
-                {
-                    var inputFlag = input.DirtyFlag;
-                    if (input.IsConnected)
-                    {
-                        int target;
-                        if (input.TryGetAsMultiInput(out var multiInput))
-                        {
-                            // NOTE: In situations with extremely large graphs (1000 of instances)
-                            // invalidation can become bottle neck. In these cases it might be justified
-                            // to limit the invalidation to "active" parts of the subgraph. The [Switch]
-                            // operator defines this list.
-                            var multiInputLimitList = multiInput.LimitMultiInputInvalidationToIndices;
-                            var hasLimitList = multiInputLimitList.Count > 0;
-
-                            var collectedInputs = multiInput.GetCollectedInputs();
-                            var collectedCount = collectedInputs.Count;
-                            target = 0;
-                            for (var i = 0; i < collectedCount; i++)
-                            {
-                                if (hasLimitList && !multiInputLimitList.Contains(i))
-                                    continue;
-
-                                target += collectedInputs[i].Invalidate();
-                            }
-                        }
-                        else
-                        {
-                            target = input.FirstConnection.Invalidate();
-                        }
-                        
-                        inputFlag.Target = target;
-                    }
-                    else if ((inputFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
-                    {
-                        inputFlag.Invalidate();
-                    }
-
-                    inputFlag.SetVisited();
-                    outputDirty |= inputFlag.IsDirty;
-                }
-
-                if (outputDirty || (dirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
-                {
-                    dirtyFlag.Invalidate();
-                }
-            }
-
-            dirtyFlag.SetVisited();
-            return dirtyFlag.Target;
+            connectedSlot = null;
+            return false;
         }
+
+        protected Slot<T>[] InputConnections = [];
+
+        public int Invalidate()
+        {
+            var refFrame = DirtyFlag.InvalidationRefFrame;
+            if (refFrame == _dirtyFlag.InvalidatedWithRefFrame)
+            {
+                // do nothing
+                return _dirtyFlag.Target;
+            }
+
+            // MultiInputSlot, TimeClipSlot, TransformCallbackSlot, etc
+            if (HasInvalidationOverride) 
+            {
+                var target = InvalidationOverride();
+                _dirtyFlag.Target = target;
+                _dirtyFlag.InvalidatedWithRefFrame = refFrame;
+                return target;
+            }
+
+            // connected
+            if (InputConnections.Length > 0)
+            {
+                var target = InputConnections[0].Invalidate();
+                _dirtyFlag.Target = target;
+                _dirtyFlag.InvalidatedWithRefFrame = refFrame;
+                return target;
+            }
+ 
+            // unconnected input slots
+            if (_isInputSlot)
+            {
+                if(_dirtyFlag.TriggerIsEnabled)
+                {
+                    return _dirtyFlag.Invalidate();
+                }
+                _dirtyFlag.InvalidatedWithRefFrame = refFrame;
+                return _dirtyFlag.Target;
+            }
+
+            // unconnected output slots
+            var parentInputs = _parent.Inputs;
+            var parentInputCount = parentInputs.Count;
+                
+            bool outputDirty = _dirtyFlag.IsDirty;
+            for (var i = 0; i < parentInputCount; i++)
+            {
+                var input = parentInputs[i];
+                input.Invalidate();
+                outputDirty |= input.IsDirty;
+            }
+
+            if (outputDirty)
+            {
+                return _dirtyFlag.Invalidate();
+            }
+
+            _dirtyFlag.InvalidatedWithRefFrame = refFrame;
+            return _dirtyFlag.Target;
+        }
+        
+        protected void SetVisited() => _dirtyFlag.InvalidatedWithRefFrame = DirtyFlag.InvalidationRefFrame;
+        
+        protected virtual int InvalidationOverride() => 0;
 
         Guid ISlot.Id { get => Id; set => Id = value; }
         DirtyFlag ISlot.DirtyFlag => DirtyFlag;
@@ -317,10 +332,14 @@ namespace T3.Core.Operator.Slots
         private DirtyFlagTrigger _keepDirtyFlagTrigger;
         protected Slot<T> _targetInputForBypass;
         
-        private readonly bool _isInputSlot;
-        public readonly bool IsMultiInput;
-        protected readonly MultiInputSlot<T> ThisAsMultiInputSlot;
+        private bool _isInputSlot;
+        private bool _isMultiInput;
+        public bool IsMultiInput => _isMultiInput;
+        private MultiInputSlot<T> _thisAsMultiInputSlot;
+        protected MultiInputSlot<T> ThisAsMultiInputSlot => _thisAsMultiInputSlot;
         private Instance _parent;
-        private readonly bool _valueIsCommand;
+        private bool _valueIsCommand;
+        private protected bool HasInvalidationOverride;
+        private bool _parentIsICompoundWithUpdate;
     }
 }

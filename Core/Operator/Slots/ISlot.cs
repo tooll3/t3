@@ -14,6 +14,6 @@ namespace T3.Core.Operator.Slots
         void AddConnection(ISlot source, int index = 0);
         void RemoveConnection(int index = 0);
         bool IsConnected { get; }
-        ISlot FirstConnection { get; }
+        public bool TryGetFirstConnection(out ISlot connectedSlot);
     }
 }

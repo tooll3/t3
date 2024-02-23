@@ -119,7 +119,7 @@ namespace T3.Editor.Gui.Commands.Graph
                     var instance = parentInstance.Children.Single(child => child.SymbolChildId == symbolChild.Id);
                     var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
                     inputUi.ApplyValueToAnimation(inputSlot, valueToSet, animator, _animationTime);
-                    inputSlot.DirtyFlag.Invalidate(true);
+                    inputSlot.DirtyFlag.ForceInvalidate();
                 }
             }
             else
@@ -136,7 +136,7 @@ namespace T3.Editor.Gui.Commands.Graph
             {
                 var instance = parentInstance.Children.Single(child => child.SymbolChildId == symbolChild.Id);
                 var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
-                inputSlot.DirtyFlag.Invalidate(true);
+                inputSlot.DirtyFlag.ForceInvalidate();
             }
         }
 

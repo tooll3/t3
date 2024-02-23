@@ -617,15 +617,16 @@ namespace T3.Editor.Gui.Graph
                     if (_isVisible)
                     {
                         // Draw update indicator
-                        if (output.DirtyFlag.Trigger != DirtyFlagTrigger.None && usableArea.GetHeight() > 6)
+                        var trigger = output.DirtyFlag.Trigger;
+                        if (trigger != DirtyFlagTrigger.None && usableArea.GetHeight() > 6)
                         {
                             var r = usableArea.GetWidth() / 4;
                             var center = new Vector2(usableArea.Max.X + 2*r, usableArea.GetCenter().Y - 3*r);
-                            if (output.DirtyFlag.Trigger == DirtyFlagTrigger.Always)
+                            if (trigger == DirtyFlagTrigger.Always)
                             {
                                 _drawList.AddCircle(center, r, colorForType,3);
                             }
-                            else if (output.DirtyFlag.Trigger == DirtyFlagTrigger.Animated)
+                            else if (trigger == DirtyFlagTrigger.Animated)
                             {
                                 _drawList.AddCircleFilled(center, r, colorForType, 3);
                             }

@@ -71,7 +71,7 @@ namespace T3.Editor.Gui.Windows.Exploration
         {
             foreach (var param in ValuesForParameters.Keys)
             {
-                param.InputSlot.DirtyFlag.Invalidate(true);
+                param.InputSlot.DirtyFlag.ForceInvalidate();
             }
         }
 
