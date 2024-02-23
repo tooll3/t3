@@ -241,21 +241,22 @@ namespace T3.Editor.Gui.Graph
 
         private static void RecursivelyCollectExportData(ISlot slot, ExportInfo exportInfo)
         {
+            var gotConnection = slot.TryGetFirstConnection(out var firstConnection);
             if (slot is IInputSlot)
             {
-                if (slot.IsConnected)
+                if (gotConnection)
                 {
-                    RecursivelyCollectExportData(slot.FirstConnection, exportInfo);
+                    RecursivelyCollectExportData(firstConnection, exportInfo);
                 }
 
                 CheckInputForResourcePath(slot, exportInfo);
                 return;
             }
 
-            if (slot.IsConnected)
+            if (gotConnection)
             {
                 // slot is an output of an composition op
-                RecursivelyCollectExportData(slot.FirstConnection, exportInfo);
+                RecursivelyCollectExportData(firstConnection, exportInfo);
                 exportInfo.TryAddInstance(slot.Parent);
                 return;
             }
@@ -279,9 +280,9 @@ namespace T3.Editor.Gui.Graph
                         RecursivelyCollectExportData(entry, exportInfo);
                     }
                 }
-                else
+                else if (input.TryGetFirstConnection(out var inputsFirstConnection))
                 {
-                    RecursivelyCollectExportData(input.FirstConnection, exportInfo);
+                    RecursivelyCollectExportData(inputsFirstConnection, exportInfo);
                 }
             }
         }

@@ -5,6 +5,5 @@ namespace T3.Core.Operator.Slots
     public interface IMultiInputSlot : IInputSlot
     {
         IReadOnlyList<ISlot> GetCollectedInputs();
-        List<int> LimitMultiInputInvalidationToIndices { get; }
     }
 }

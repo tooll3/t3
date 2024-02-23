@@ -31,10 +31,11 @@ namespace lib.exec
 
         private int Invalidate(ISlot slot)
         {
-            if (slot.IsConnected)
+            var slotFlag = slot.DirtyFlag;
+            if (slot.TryGetFirstConnection(out var firstConnection))
             {
                 // slot is an output of an composition op
-                slot.DirtyFlag.Target = Invalidate(slot.FirstConnection);
+                slotFlag.Target = Invalidate(firstConnection);
             }
             else
             {
@@ -42,7 +43,8 @@ namespace lib.exec
 
                 foreach (var input in parent.Inputs)
                 {
-                    if (input.IsConnected)
+                    var inputFlag = input.DirtyFlag;
+                    if (input.TryGetFirstConnection(out var inputConnection))
                     {
                         if (input.IsMultiInput)
                         {
@@ -53,23 +55,23 @@ namespace lib.exec
                                 dirtySum += Invalidate(entry);
                             }
 
-                            input.DirtyFlag.Target = dirtySum;
+                            inputFlag.Target = dirtySum;
                         }
                         else
                         {
-                            input.DirtyFlag.Target = Invalidate(input.FirstConnection);
+                            inputFlag.Target = Invalidate(inputConnection);
                         }
                     }
                     else
                     {
-                        input.DirtyFlag.Invalidate();
+                        inputFlag.Invalidate();
                     }
                 }
 
-                slot.DirtyFlag.Invalidate();
+                slotFlag.Invalidate();
             }
 
-            return slot.DirtyFlag.Target;
+            return slotFlag.Target;
         }
 
         [Input(Guid = "7CC4E43B-18A2-4564-A511-05EB0D8EC7D2")]

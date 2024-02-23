@@ -2,6 +2,7 @@ using System;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
+// ReSharper disable ForCanBeConvertedToForeach
 
 namespace T3.Core.Operator.Slots
 {
@@ -23,6 +24,11 @@ namespace T3.Core.Operator.Slots
     public sealed class TimeClipSlot<T> : Slot<T>, ITimeClipProvider, IOutputDataUser<TimeClip>
     {
         public TimeClip TimeClip { get; private set; }
+
+        public TimeClipSlot()
+        {
+            HasInvalidationOverride = true;
+        }
 
         public void SetOutputData(IOutputData data)
         {
@@ -97,53 +103,40 @@ namespace T3.Core.Operator.Slots
             _isDisabled = isDisabled;
         }
 
-        public override int Invalidate()
+        protected override int InvalidationOverride()
         {
-            // ReSharper disable once InlineTemporaryVariable
-            var dirtyFlag = DirtyFlag;
-            if (dirtyFlag.IsAlreadyInvalidated || dirtyFlag.HasBeenVisited)
-                return dirtyFlag.Target;
-
             // Slot is an output of an composition op
             if (IsConnected)
             {
-                dirtyFlag.Target = FirstConnection.Invalidate();
+                return InputConnections[0].Invalidate();
             }
-            else
+
+            if (LastUpdateStatus == UpdateStates.Suspended)
             {
-                if (LastUpdateStatus == UpdateStates.Suspended)
-                {
-                    dirtyFlag.Invalidate();
-                }
-                else
-                {
-                    var parentInstance = Parent;
-                    var isOutputDirty = dirtyFlag.IsDirty;
-                    foreach (var inputSlot in parentInstance.Inputs)
-                    {
-                        var inputDirtyFlag = inputSlot.DirtyFlag;
-                        if (inputSlot.IsConnected)
-                        {
-                            inputDirtyFlag.Target = inputSlot.FirstConnection.Invalidate();
-                        }
-                        else if ((inputDirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
-                        {
-                            inputDirtyFlag.Invalidate();
-                        }
-
-                        inputDirtyFlag.SetVisited();
-                        isOutputDirty |= inputDirtyFlag.IsDirty;
-                    }
-
-                    if (isOutputDirty || (dirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
-                    {
-                        dirtyFlag.Invalidate();
-                    }
-                }
+                return _dirtyFlag.Invalidate();
             }
 
-            dirtyFlag.SetVisited();
-            return dirtyFlag.Target;
+            var isOutputDirty = _dirtyFlag.IsDirty;
+            var parentInputs = Parent.Inputs;
+            var parentInputCount = parentInputs.Count;
+            for (var index = 0; index < parentInputCount; index++)
+            {
+                var inputSlot = parentInputs[index];
+                var inputDirtyFlag = inputSlot.DirtyFlag;
+                if (inputSlot.TryGetFirstConnection(out var inputSlotConnection))
+                {
+                    inputDirtyFlag.Target = inputSlotConnection.Invalidate();
+                }
+                else if (inputDirtyFlag.TriggerIsAnimated)
+                {
+                    inputDirtyFlag.Invalidate();
+                }
+
+                inputSlot.SetVisited();
+                isOutputDirty |= inputDirtyFlag.IsDirty;
+            }
+
+            return isOutputDirty ? _dirtyFlag.Invalidate() : _dirtyFlag.Target;
         }
     }
 }

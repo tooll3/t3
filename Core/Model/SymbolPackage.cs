@@ -94,9 +94,10 @@ public abstract partial class SymbolPackage
             foreach (var readSymbolResult in symbolsRead)
             {
                 var symbol = readSymbolResult.Result.Symbol;
+                var id = symbol.Id;
 
-                var added = Symbols.TryAdd(symbol.Id, symbol)
-                            && SymbolRegistry.EntriesEditable.TryAdd(symbol.Id, symbol);
+                var added = Symbols.TryAdd(id, symbol)
+                            && SymbolRegistry.EntriesEditable.TryAdd(id, symbol);
 
                 if (!added)
                 {
@@ -124,8 +125,9 @@ public abstract partial class SymbolPackage
 
             var symbol = CreateSymbol(newType, guid, newType.Name, @namespace);
 
-            var added = Symbols.TryAdd(symbol.Id, symbol)
-                        && SymbolRegistry.EntriesEditable.TryAdd(symbol.Id, symbol);
+            var id = symbol.Id;
+            var added = Symbols.TryAdd(id, symbol)
+                        && SymbolRegistry.EntriesEditable.TryAdd(id, symbol);
             if (!added)
             {
                 Log.Error($"{AssemblyInformation.Name}: Ignoring redefinition symbol {symbol.Name}.");

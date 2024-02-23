@@ -36,7 +36,8 @@ namespace lib._3d.transform
 
         private void Update(EvaluationContext context)
         {
-            var commands = Commands.GetCollectedTypedInputs();
+            var commandSlot = Commands;
+            var commands = commandSlot.GetCollectedTypedInputs();
             var index = Index.GetValue(context);
 
             if (commands.Count == 0 || index == -1)
@@ -74,11 +75,22 @@ namespace lib._3d.transform
                 commands[index].Value?.RestoreAction?.Invoke(context);
             }
 
-            var switchList = Commands.LimitMultiInputInvalidationToIndices;
-            switchList.Clear();
-            
-            if(OptimizeInvalidation.GetValue(context))
-                switchList.AddRange(_activeIndices);
+            if (OptimizeInvalidation.GetValue(context))
+            {
+                var count = _activeIndices.Count;
+                if (commandSlot.LimitMultiInputInvalidationToIndices.Length == count)
+                {
+                    var switchList = commandSlot.LimitMultiInputInvalidationToIndices;
+                    for (int i = 0; i < count; i++)
+                    {
+                        switchList[i] = _activeIndices[i];
+                    }
+                }
+                else
+                {
+                    commandSlot.LimitMultiInputInvalidationToIndices = _activeIndices.ToArray();
+                }
+            }
             
             Count.Value = commands.Count;
         }

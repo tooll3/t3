@@ -1,5 +1,9 @@
 using System.Collections.Generic;
-// ReSharper disable ConvertToAutoProperty
+using System.Runtime.CompilerServices;
+// ReSharper disable ConvertToAutoPropertyWhenPossible
+// ReSharper disable ForCanBeConvertedToForeach
+// ReSharper disable InlineTemporaryVariable
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace T3.Core.Operator.Slots
 {
@@ -7,16 +11,28 @@ namespace T3.Core.Operator.Slots
     {
         public List<Slot<T>> CollectedInputs => _collectedInputs;
         private readonly List<Slot<T>> _collectedInputs = new(10);
+        public int[] LimitMultiInputInvalidationToIndices = [];
 
-        public List<Slot<T>> GetCollectedTypedInputs()
+        public MultiInputSlot()
         {
-            _collectedInputs.Clear();
+            HasInvalidationOverride = true;
+        }
 
-            foreach (var slot in InputConnections)
+        public List<Slot<T>> GetCollectedTypedInputs(bool forceRefresh = false)
+        {
+            if (!forceRefresh && !DirtyFlag.IsDirty)
+                return _collectedInputs;
+                
+            var inputConnectionCount = InputConnections.Length;
+            _collectedInputs.Clear();
+            
+            for (var i = 0; i < inputConnectionCount; i++)
             {
-                if (slot.TryGetAsMultiInputTyped(out var multiInput) && slot.IsConnected)
+                var slot = InputConnections[i];
+                if (slot.TryGetAsMultiInputTyped(out var multiInput))
                 {
-                    _collectedInputs.AddRange(multiInput.GetCollectedTypedInputs());
+                    var typedInputs = multiInput.GetCollectedTypedInputs();
+                    _collectedInputs.AddRange(typedInputs);
                 }
                 else
                 {
@@ -27,13 +43,45 @@ namespace T3.Core.Operator.Slots
             return _collectedInputs;
         }
 
+        protected override int InvalidationOverride()
+        {
+            // NOTE: In situations with extremely large graphs (1000 of instances)
+            // invalidation can become bottle neck. In these cases it might be justified
+            // to limit the invalidation to "active" parts of the subgraph. The [Switch]
+            // operator defines this list.
+
+            var collectedInputs = GetCollectedTypedInputs(true);
+            var collectedCount = collectedInputs.Count;
+            
+            int target = 0;
+            var multiInputLimitCount = LimitMultiInputInvalidationToIndices.Length;
+
+            if (multiInputLimitCount > 0)
+            {
+                for (int i = 0; i < multiInputLimitCount; i++)
+                {
+                    var index = LimitMultiInputInvalidationToIndices[i];
+                    if (index >= collectedCount)
+                        continue;
+
+                    target += collectedInputs[index].Invalidate();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < collectedCount; i++)
+                {
+                    target += collectedInputs[i].Invalidate();
+                }
+            }
+
+            return target;
+        }
+
         public IReadOnlyList<ISlot> GetCollectedInputs()
         {
             return GetCollectedTypedInputs();
         }
-
-        List<int> IMultiInputSlot.LimitMultiInputInvalidationToIndices => LimitMultiInputInvalidationToIndices;
-        public readonly List<int> LimitMultiInputInvalidationToIndices = [];
 
         public void GetValues(ref T[] resources, EvaluationContext context, bool clearDirty= true)
         {

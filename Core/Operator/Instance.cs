@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
@@ -16,9 +15,9 @@ namespace T3.Core.Operator
         public Instance Parent { get; internal set; }
         public abstract Symbol Symbol { get; }
 
-        public List<ISlot> Outputs { get; set; } = new();
-        public List<Instance> Children { get; set; } = new();
-        public List<IInputSlot> Inputs { get; set; } = new();
+        public readonly List<ISlot> Outputs = new();
+        public readonly List<Instance> Children = new();
+        public readonly List<IInputSlot> Inputs = new();
 
         protected internal ResourceFileWatcher ResourceFileWatcher => Symbol.SymbolPackage.ResourceFileWatcher;
 

@@ -72,5 +72,7 @@ namespace T3.Core.Operator.Slots
         public InputValue<T> TypedDefaultValue;
         
         bool IInputSlot.IsMultiInput => IsMultiInput;
+        public bool IsDirty => DirtyFlag.IsDirty;
+        void IInputSlot.SetVisited() => SetVisited();
     }
 }

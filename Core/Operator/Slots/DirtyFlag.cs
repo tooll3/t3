@@ -11,31 +11,35 @@ namespace T3.Core.Operator.Slots
             _globalTickCount += GlobalTickDiffPerFrame;
         }
 
-        public bool IsDirty => Reference != Target || Trigger == DirtyFlagTrigger.Always;
+        public bool IsDirty => TriggerIsEnabled || Reference != Target;
 
         public static int InvalidationRefFrame = 0;
-        public bool IsAlreadyInvalidated => InvalidationRefFrame == _invalidatedWithRefFrame;
 
-        public void SetVisited() 
+        public int Invalidate()
         {
-            _visitedAtFrame = InvalidationRefFrame;
-        }
+            // Returns the Target - should be no performance hit according to:
+            // https://stackoverflow.com/questions/12200662/are-void-methods-at-their-most-basic-faster-less-of-an-overhead-than-methods-tha
+            
+            // Debug.Assert(InvalidationRefFrame != InvalidatedWithRefFrame); // this should never happen and prevented on the calling side
 
-        public bool HasBeenVisited => _visitedAtFrame == InvalidationRefFrame;
-
-        public void Invalidate(bool forceInvalidation = false)
-        {
-            // Debug.Assert(!IsAlreadyInvalidated); // this should never happen and prevented on the calling side
-            if (!IsAlreadyInvalidated || forceInvalidation)
+            if (InvalidationRefFrame != InvalidatedWithRefFrame)
             {
                 // the ref frame prevent double invalidation when outputs are connected several times
-                _invalidatedWithRefFrame = InvalidationRefFrame;
+                InvalidatedWithRefFrame = InvalidationRefFrame;
                 Target++;
             }
-            else
-            {
-                //Log.Error("Double invalidation of a slot. Please notify cynic about current setup.");
-            }
+            //else
+            //{
+            //    Log.Error("Double invalidation of a slot. Please notify cynic about current setup.");
+            //}
+
+            return Target;
+        }
+
+        public void ForceInvalidate()
+        {
+            InvalidatedWithRefFrame = InvalidationRefFrame;
+            Target++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,9 +48,9 @@ namespace T3.Core.Operator.Slots
             Reference = Target;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetUpdated()
+        internal void SetUpdated()
         {
+            Clear();
             if (_lastUpdateTick >= _globalTickCount && _lastUpdateTick < _globalTickCount + GlobalTickDiffPerFrame - 1)
             {
                 _lastUpdateTick++;
@@ -60,7 +64,20 @@ namespace T3.Core.Operator.Slots
         public int Reference;
         public int Target = 1; // initially dirty
         public int FramesSinceLastUpdate => (_globalTickCount - 1 - _lastUpdateTick) / GlobalTickDiffPerFrame;
-        public DirtyFlagTrigger Trigger;
+
+        public DirtyFlagTrigger Trigger
+        {
+            get => _trigger;
+            set
+            {
+                _trigger = value;
+                TriggerIsEnabled = value != DirtyFlagTrigger.None;
+                TriggerIsAnimated = value == DirtyFlagTrigger.Animated;
+            }
+        }
+        private DirtyFlagTrigger _trigger;
+        internal bool TriggerIsEnabled;
+        internal bool TriggerIsAnimated;
 
         public int NumUpdatesWithinFrame
         {
@@ -73,8 +90,7 @@ namespace T3.Core.Operator.Slots
         }
 
         
-        private int _invalidatedWithRefFrame = -1;
-        private int _visitedAtFrame = -1;
+        internal int InvalidatedWithRefFrame = -1;
         private const int GlobalTickDiffPerFrame = 100; // each frame differs with 100 ticks to last one
         private static int _globalTickCount;
         private int _lastUpdateTick;
