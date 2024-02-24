@@ -1,0 +1,118 @@
+{
+  "Id": "53ff1a68-e888-444f-9ccc-23239c94d6db"/*LightRaysFx*/,
+  "Description": "Based on \"Simpler God Rays\" by akufishi\nPimped by Newemka",
+  "InputUis": [
+    {
+      "InputId": "9d4f4e29-b2fe-415b-90f1-18390b520346"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -764.6415,
+        "Y": 5.323948
+      }
+    },
+    {
+      "InputId": "e110c111-34d5-4251-87eb-6cb56d2a026e"/*TextureFX*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -761.0598,
+        "Y": 140.2838
+      },
+      "Description": "Allows to bring more variations to the light rays\nThis texture is using Multiply blending mode"
+    },
+    {
+      "InputId": "7d60c1e1-4924-48e8-991f-df83370c9a30"/*Direction*/,
+      "Position": {
+        "X": -761.0598,
+        "Y": 259.85358
+      }
+    },
+    {
+      "InputId": "c661ae7d-1cac-482f-b200-2d47946c22db"/*Samples*/,
+      "Position": {
+        "X": -759.89465,
+        "Y": 357.2854
+      }
+    },
+    {
+      "InputId": "a1c47663-95a2-4a26-9b9a-f7e109868a21"/*Density*/,
+      "Position": {
+        "X": -759.89465,
+        "Y": 402.2854
+      }
+    },
+    {
+      "InputId": "3f41e61f-52bb-41b4-b33c-3c0a00b2ff6e"/*Weight*/,
+      "Position": {
+        "X": -759.89465,
+        "Y": 447.2854
+      }
+    },
+    {
+      "InputId": "06a0cd42-55b7-481e-91f5-ccdf914b3956"/*Amount*/,
+      "Position": {
+        "X": -759.89465,
+        "Y": 492.2854
+      }
+    },
+    {
+      "InputId": "b26c20c8-ec60-4215-a53a-3e21cd98ea03"/*Decay*/,
+      "Position": {
+        "X": -759.89465,
+        "Y": 537.2854
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "95860265-858c-4760-abf7-82a88d566a1e"/*_multiImageFxSetup*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 128.4052,
+        "Y": 541.74316
+      },
+      "Position": {
+        "X": 88.591545,
+        "Y": -137.46729
+      }
+    },
+    {
+      "ChildId": "baa5f747-dbf2-4836-8110-e1dd7092445d"/*FirstValidTexture*/,
+      "Position": {
+        "X": -485.4989,
+        "Y": 117.287506
+      }
+    },
+    {
+      "ChildId": "1d446ccd-fd7c-4875-abbb-e412d88badd8"/*Vector2Components*/,
+      "Position": {
+        "X": -514.31177,
+        "Y": 250.762
+      }
+    },
+    {
+      "ChildId": "482b2d75-db6e-4aaa-af59-3bac8b7b71a0"/*IntToFloat*/,
+      "Position": {
+        "X": -557.42236,
+        "Y": 338.14838
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "bdc413f2-9a15-4333-baba-aa57f73dda1a"/*Output*/,
+      "Position": {
+        "X": 414.51212,
+        "Y": 252.2998
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "b9afb47d-1f7c-4db9-a9a9-e17766ba0eeb",
+      "Title": "Simpler God Rays",
+      "Description": "by akufishi",
+      "LinkUrl": "https://www.shadertoy.com/view/ss3fW7",
+      "LinkType": "Reference"
+    }
+  ]
+}
