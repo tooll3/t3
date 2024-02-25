@@ -11,7 +11,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
-public class RenderSequenceWindow : RenderHelperWindow
+public class RenderSequenceWindow : BaseRenderWindow
 {
     public RenderSequenceWindow()
     {
@@ -31,15 +31,13 @@ public class RenderSequenceWindow : RenderHelperWindow
 
         var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
 
-        if (!IsExporting)
+        if (!IsExportingImages && !IsToollRenderingSomething)
         {
             if (ImGui.Button("Start Export"))
             {
                 if (ValidateOrCreateTargetFolder(_targetFolder))
                 {
-                    _previousPlaybackSpeed = Playback.Current.PlaybackSpeed;
-                    Playback.Current.PlaybackSpeed = 0;
-                    _isExporting = true;
+                    IsExportingImages = true;
                     _exportStartedTime = Playback.RunTimeInSecs;
                     FrameIndex = 0;
                     SetPlaybackTimeForThisFrame();
@@ -47,15 +45,10 @@ public class RenderSequenceWindow : RenderHelperWindow
                 }
             }
         }
-        else
+        else if(IsExportingImages)
         {
-            // This is a very unfortunate hack. Sadly, activating playback can interfer
-            // with precise frame positioning will be required for exporting audio-reactivity...
-            if(FrameIndex>0)
-                Playback.Current.PlaybackSpeed = 1;
-                
-            // handle audio although we do not save it
-            var audioFrame = AudioEngine.LastMixDownBuffer(Playback.LastFrameDuration);
+            // Handle audio although we do not save it
+            AudioEngine.LastMixDownBuffer(Playback.LastFrameDuration);
             var success = SaveCurrentFrameAndAdvance(mainTexture);
             ImGui.ProgressBar((float) Progress, new Vector2(-1, 4));
 
@@ -65,34 +58,27 @@ public class RenderSequenceWindow : RenderHelperWindow
             {
                 var successful = success ? "successfully" : "unsuccessfully";
                 _lastHelpString = $"Sequence export finished {successful} in {durationSoFar:0.00}s";
-                _isExporting = false;
+                IsExportingImages = false;
             }
             else if (ImGui.Button("Cancel"))
             {
                 _lastHelpString = $"Sequence export cancelled after {durationSoFar:0.00}s";
-                _isExporting = false;
+                IsExportingImages = false;
             }
             else
             {
                 var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
                 _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {FrameIndex+1}/{FrameCount}  ";
-                _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0}s left";
-                
-                if (!_isExporting)
-                {
-                    Playback.Current.PlaybackSpeed = _previousPlaybackSpeed;
-                }
+                _lastHelpString += $"{Progress * 100.0:0}%%  {estimatedTimeLeft:0}s left";
+            }
+            
+            if (!IsExportingImages)
+            {
+                ReleasePlaybackTime();
             }
         }
 
         CustomComponents.HelpText(_lastHelpString);
-    }
-
-    private static int GetRealFrame()
-    {
-        // since we are double-buffering and discarding the first few frames,
-        // we have to subtract these frames to get the currently really shown framenumber...
-        return FrameIndex - ScreenshotWriter.SkipImages;
     }
 
     private static string GetFilePath()
@@ -112,17 +98,35 @@ public class RenderSequenceWindow : RenderHelperWindow
         catch (Exception e)
         {
             _lastHelpString = e.ToString();
-            _isExporting = false;
+            IsExportingImages = false;
             return false;
         }
     }
+    
+    private static bool IsExportingImages
+    {
+        get => _isExporting2;
+        set
+        {
+            if (value)
+            {
+                SetRenderingStarted();
+            }
+            else
+            {
+                RenderingFinished();
+            }
+
+            _isExporting2 = value;
+        }
+    }
+    private static bool _isExporting2;
 
     private static string Extension => _fileFormat.ToString().ToLower(); 
 
     private static double _exportStartedTime;
-    private static string _targetFolder = "./Render";
+    private static string _targetFolder = UserSettings.Config.RenderSequenceFilePath;
 
     private static ScreenshotWriter.FileFormats _fileFormat;
     private static string _lastHelpString = string.Empty;
-    private double _previousPlaybackSpeed;
 }

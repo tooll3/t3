@@ -240,9 +240,9 @@ namespace T3.Editor.Gui.Windows.Output
             _evaluationContext.BackgroundColor = _backgroundColor;
 
             const string overrideSampleVariableName = "OverrideMotionBlurSamples";
-            if (RenderHelperWindow.IsExporting)
+            if (BaseRenderWindow.IsToollRenderingSomething)
             {
-                var samples = RenderHelperWindow.OverrideMotionBlurSamples;
+                var samples = BaseRenderWindow.OverrideMotionBlurSamples;
                 if (samples >= 0)
                 {
                     _evaluationContext.IntVariables[overrideSampleVariableName] = samples;

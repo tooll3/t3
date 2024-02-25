@@ -55,13 +55,6 @@
       }
     },
     {
-      "ChildId": "1516ab3d-ff6e-464c-a413-87a425d4a510"/*Sub*/,
-      "Position": {
-        "X": -567.5594,
-        "Y": 454.28943
-      }
-    },
-    {
       "ChildId": "2743cd73-1a12-40a0-a1a5-634a52f6be1b"/*PickTexture*/,
       "Position": {
         "X": -417.5594,

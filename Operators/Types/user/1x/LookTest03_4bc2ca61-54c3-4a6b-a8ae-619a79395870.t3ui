@@ -1,0 +1,93 @@
+{
+  "Id": "4bc2ca61-54c3-4a6b-a8ae-619a79395870"/*LookTest03*/,
+  "Description": "A little series of recreating and copying the look of certain stills / wallpapers found online to learn how to create certain looks in Tooll3.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "6c8ba904-bad8-4f94-b78c-4716c6655c9c"/*GridPoints*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 123.78125
+      }
+    },
+    {
+      "ChildId": "4718cc04-0887-4a61-8dc8-5842a36e4c3e"/*DrawPoints*/,
+      "Position": {
+        "X": 450.0,
+        "Y": 168.60547
+      }
+    },
+    {
+      "ChildId": "1215b8fd-061e-48be-9f20-80ebfe2cb3fb"/*AddNoise*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 123.78125
+      }
+    },
+    {
+      "ChildId": "e0576380-4ec9-4f79-9c79-4dcc56a416da"/*Time*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 166.78125
+      }
+    },
+    {
+      "ChildId": "66aac097-57fd-4192-aee8-1ace9b435ccc"/*RandomizePoints*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 123.78125
+      }
+    },
+    {
+      "ChildId": "546333f9-b2f5-407e-9edb-2ad60176c07f"/*Camera*/,
+      "Position": {
+        "X": 600.0,
+        "Y": 123.78125
+      }
+    },
+    {
+      "ChildId": "8ab46d05-da21-4ace-9e42-de9a415f6838"/*RenderTarget*/,
+      "Position": {
+        "X": 750.0,
+        "Y": 123.78125
+      }
+    },
+    {
+      "ChildId": "e0af0373-802f-4745-aebd-e8dd12ed57ca"/*DepthOfField*/,
+      "Position": {
+        "X": 927.8325,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "53670e8d-e802-4ee2-a5f8-5c6315ede657"/*Glow*/,
+      "Position": {
+        "X": 1182.1744,
+        "Y": 55.085938
+      }
+    },
+    {
+      "ChildId": "9700ab66-778d-472c-9767-cdfb74f43d4f"/*Grain*/,
+      "Position": {
+        "X": 1396.2405,
+        "Y": 47.240234
+      }
+    },
+    {
+      "ChildId": "ef39ef7d-e0eb-44e1-abd7-b32321e25783"/*Layer2d*/,
+      "Position": {
+        "X": 1546.2405,
+        "Y": 47.240234
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "141bf161-492a-405d-9373-9401447e5cb7"/*Output*/,
+      "Position": {
+        "X": 1956.2405,
+        "Y": 102.302734
+      }
+    }
+  ]
+}

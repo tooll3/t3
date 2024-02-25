@@ -114,8 +114,8 @@
         "Y": 1163.3694
       },
       "Description": "Applies force to push particles towards distanced from the camera that is defined by CenterDepth.",
-      "Min": -1.0,
-      "Max": 1.0
+      "Min": 0.0,
+      "Max": 0.1
     },
     {
       "InputId": "d5038c16-3920-48fc-8cd8-9346b63dad7a"/*CenterDepth*/,

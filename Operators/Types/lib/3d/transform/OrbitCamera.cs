@@ -14,14 +14,14 @@ using T3.Core.Utils.Geometry;
 namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 {
     public class OrbitCamera : Instance<OrbitCamera>
-,ICameraPropertiesProvider,ICamera
+                             , ICameraPropertiesProvider, ICamera
     {
         [Output(Guid = "14a63b62-5fbb-4f82-8cf3-d0faf279eff8", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Command> Output = new();
 
         [Output(Guid = "451245E2-AC0B-435A-841E-7C9EDC804606", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Object> Reference = new();        
-        
+        public readonly Slot<Object> Reference = new();
+
         public OrbitCamera()
         {
             Output.UpdateAction = UpdateOutputWithSubtree;
@@ -31,24 +31,24 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 
         private void UpdateOutputWithSubtree(EvaluationContext context)
         {
-            if(!Reference.IsConnected || Reference.DirtyFlag.IsDirty)
-                UpdateCameraDefinition(context);            
-            
+            if (!Reference.IsConnected || Reference.DirtyFlag.IsDirty)
+                UpdateCameraDefinition(context);
+
             if (context.BypassCameras)
             {
                 Command.GetValue(context);
                 return;
             }
-            
+
             // Set properties and evaluate sub tree
             var prevCameraToClipSpace = context.CameraToClipSpace;
             var prevWorldToCamera = context.WorldToCamera;
-            
+
             context.CameraToClipSpace = CameraToClipSpace;
             context.WorldToCamera = WorldToCamera;
-            
+
             Command.GetValue(context);
-            
+
             context.CameraToClipSpace = prevCameraToClipSpace;
             context.WorldToCamera = prevWorldToCamera;
         }
@@ -56,7 +56,10 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         private void UpdateCameraDefinition(EvaluationContext context)
         {
             LastObjectToWorld = context.ObjectToWorld;
-            var damping = Damping.GetValue(context).Clamp(0,1);
+            var damping = Damping.GetValue(context).Clamp(0, 1);
+
+            var isOverriding = OverrideTime.IsConnected;
+            var time = isOverriding ? OverrideTime.GetValue(context) : context.LocalFxTime;
 
             var fov = MathUtils.ToRad * (FOV.GetValue(context));
             var aspectRatio = AspectRatio.GetValue(context);
@@ -64,8 +67,9 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             {
                 aspectRatio = (float)context.RequestedResolution.Width / context.RequestedResolution.Height;
             }
+
             Vector2 clip = NearFarClip.GetValue(context);
-            
+
             CameraToClipSpace = GraphicsMath.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
 
             var radiusValue = DistanceToTarget.GetValue(context) == 0.0f ? .0001f : DistanceToTarget.GetValue(context); // avoid 0 radius that causes issues
@@ -73,35 +77,36 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 
             var seed = Seed.GetValue(context);
             var wobbleSpeed = WobbleSpeed.GetValue(context);
-            var wobbleComplexity = (int)WobbleComplexity.GetValue(context).Clamp(1,8);
+            var wobbleComplexity = (int)WobbleComplexity.GetValue(context).Clamp(1, 8);
 
-            var rotOffset =  RotationOffset.GetValue(context);
+            var rotOffset = RotationOffset.GetValue(context);
 
             // Orbit rotation
             Vector3 t = CameraTargetPosition.GetValue(context);
             Vector3 center = new Vector3(t.X, t.Y, t.Z);
 
-            var orbitYaw = ComputeAngle(SpinAngleAndWobble,1) 
-                                   + MathUtils.ToRad * ((float)((SpinRate.GetValue(context) * context.LocalFxTime) * 360+ SpinOffset.GetValue(context)  
-                                                                       + MathUtils.PerlinNoise(0, 1, 6, seed) * 360 ) );
+            var spinOffset = SpinOffset.GetValue(context);
+            var orbitYaw = ComputeAngle(SpinAngleAndWobble, 1)
+                           + MathUtils.ToRad * ((float)((SpinRate.GetValue(context) * time) * 360
+                                                        + spinOffset
+                                                        + MathUtils.PerlinNoise(0, 1, 6, seed) * 360));
             var orbitPitch = -ComputeAngle(OrbitAngleAndWobble, 2);
             var rot = Matrix4x4.CreateFromYawPitchRoll(
-                                                  orbitYaw, 
-                                                  orbitPitch, 
-                                                  0);
+                                                       orbitYaw,
+                                                       orbitPitch,
+                                                       0);
             var p2 = Vector3.Transform(p, rot);
             var eye = new Vector3(p2.X, p2.Y, p2.Z);
 
             // View rotation
             var viewDirection = center - eye;
 
-            var viewYaw = ComputeAngle(AimYawAngleAndWobble,3) + rotOffset.X * MathUtils.ToRad;
-            var viewPitch = ComputeAngle(AimPitchAngleAndWobble,4) + rotOffset.Y * MathUtils.ToRad;
+            var viewYaw = ComputeAngle(AimYawAngleAndWobble, 3) + rotOffset.X * MathUtils.ToRad;
+            var viewPitch = ComputeAngle(AimPitchAngleAndWobble, 4) + rotOffset.Y * MathUtils.ToRad;
             var rotateAim = Matrix4x4.CreateFromYawPitchRoll(
-                                                        viewYaw,
-                                                        viewPitch,
-                                                        0);
-
+                                                             viewYaw,
+                                                             viewPitch,
+                                                             0);
 
             var adjustedViewDirection = Vector3.TransformNormal(viewDirection, rotateAim);
             adjustedViewDirection = Vector3.Normalize(adjustedViewDirection);
@@ -123,27 +128,25 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             _cameraDefinition.Roll = roll;
             _cameraDefinition.Up = up;
             _cameraDefinition.AspectRatio = aspectRatio;
-            
+
             WorldToCamera = GraphicsMath.LookAtRH(_dampedEye, _dampedTarget, up);
-            
+
             CameraPosition = eye;
             CameraTarget = eye + adjustedViewDirection;
-            
+
             float ComputeAngle(Slot<Vector2> angleAndWobbleInput, int seedIndex)
             {
                 var angleAndWobble = angleAndWobbleInput.GetValue(context);
-                var wobble=  Math.Abs(angleAndWobble.Y) < 0.001f 
-                                 ? 0 
-                                 : (MathUtils.PerlinNoise((float)context.LocalFxTime * wobbleSpeed, 
-                                                         1, 
-                                                         wobbleComplexity, 
-                                                         seed+ 123* seedIndex) 
-                                    -0.5f) *2 * angleAndWobble.Y ;
+                var wobble = Math.Abs(angleAndWobble.Y) < 0.001f
+                                 ? 0
+                                 : (MathUtils.PerlinNoise((float)time * wobbleSpeed,
+                                                          1,
+                                                          wobbleComplexity,
+                                                          seed + 123 * seedIndex)
+                                    - 0.5f) * 2 * angleAndWobble.Y;
                 return MathUtils.ToRad * (angleAndWobble.X + wobble);
             }
         }
-
-        
 
         public Matrix4x4 CameraToClipSpace { get; set; }
         public Vector3 CameraPosition { get; set; }
@@ -213,7 +216,9 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 
         [Input(Guid = "f51b38d7-2380-457f-897d-2429b2ad6ac3")]
         public readonly InputSlot<System.Numerics.Vector3> Up = new InputSlot<System.Numerics.Vector3>();
-
         
+        [Input(Guid = "46AA9CE1-EC54-43C5-AD5E-2CA679A254FD")]
+        public readonly InputSlot<float> OverrideTime = new();
+
     }
 }

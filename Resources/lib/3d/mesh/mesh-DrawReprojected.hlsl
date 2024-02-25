@@ -82,16 +82,10 @@ psInput vsMain(uint id: SV_VertexID)
 
 float4 psMain(psInput pin) : SV_TARGET
 {
-    //return BaseColorMap2.Sample(texSampler, pin.texCoord) * Color;
-
     float4 vertexInClipSpace = mul(pin.vertexPosInObject, ObjectToRefClipSpace);
     vertexInClipSpace.xyz /= vertexInClipSpace.w;    
 
-    float2 uv = (vertexInClipSpace.xy * 0.5 -0.5);
-    uv.y = 1- uv.y;
-    uv.x += 1;
-    uv.y -= 1;
+    float2 uv = vertexInClipSpace.xy * float2(0.5, -0.5) + 0.5;
     float4 albedo = BaseColorMap2.Sample(texSampler, uv);
-
     return albedo * Color;
 }

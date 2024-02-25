@@ -1,0 +1,191 @@
+{
+  "Id": "701f78b9-5b1a-4332-ab5e-89bcb1f520ce"/*LookTest02*/,
+  "Description": "A little series of recreating and copying the look of certain stills / wallpapers found online to learn how to create certain looks in Tooll3.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "2ff1156b-1138-4e5e-b21d-f86e21926680"/*GridPoints*/,
+      "Position": {
+        "X": 112.74048,
+        "Y": 16.27832
+      }
+    },
+    {
+      "ChildId": "6dc5a706-24dd-4d9a-aae7-9c4eef9f9d9f"/*DrawMeshAtPoints*/,
+      "Position": {
+        "X": 412.74048,
+        "Y": 16.27832
+      }
+    },
+    {
+      "ChildId": "597254fa-c68c-4fb3-a527-d6803b73271f"/*SetMaterial*/,
+      "Position": {
+        "X": 883.55396,
+        "Y": 3.9394531
+      }
+    },
+    {
+      "ChildId": "b673f817-b6b7-4131-a061-f1e594844230"/*RandomizePoints*/,
+      "Position": {
+        "X": 262.74048,
+        "Y": 16.27832
+      }
+    },
+    {
+      "ChildId": "43c6ccec-506e-46f1-8db9-6512bd5d334d"/*LoadObj*/,
+      "Position": {
+        "X": -37.25952,
+        "Y": 119.27832
+      }
+    },
+    {
+      "ChildId": "7f6613fb-9f8f-4bf7-98a1-345276ffb684"/*SetEnvironment*/,
+      "Position": {
+        "X": 1033.554,
+        "Y": 3.9394531
+      }
+    },
+    {
+      "ChildId": "0813b90c-965c-4a49-8d17-3a8ff6713c27"/*LoadImage*/,
+      "Position": {
+        "X": 733.55396,
+        "Y": 587.93945
+      }
+    },
+    {
+      "ChildId": "9a2e5270-2e5e-4860-9b30-99ce0da3610d"/*TextureToCubeMap*/,
+      "Position": {
+        "X": 883.55396,
+        "Y": 587.93945
+      }
+    },
+    {
+      "ChildId": "4dd0d81b-efeb-4f4c-9be6-369b046d749a"/*TransformMesh*/,
+      "Position": {
+        "X": 112.74048,
+        "Y": 119.27832
+      }
+    },
+    {
+      "ChildId": "1c998d33-9b02-407c-9afd-7dd9ec661204"/*RenderTarget*/,
+      "Position": {
+        "X": 1496.3301,
+        "Y": 5.0253906
+      }
+    },
+    {
+      "ChildId": "57876c46-789c-449e-8b5d-062a3a8faaac"/*OrbitCamera*/,
+      "Position": {
+        "X": 1183.554,
+        "Y": 3.9394531
+      }
+    },
+    {
+      "ChildId": "c53991e7-de3f-4dfd-b197-a786ecf91a1c"/*SSAO*/,
+      "Position": {
+        "X": 1658.3013,
+        "Y": 204.91699
+      }
+    },
+    {
+      "ChildId": "ac9e3c87-9e56-4f68-bde4-f27e6d498ac7"/*DepthOfField*/,
+      "Position": {
+        "X": 2228.8574,
+        "Y": 55.335938
+      }
+    },
+    {
+      "ChildId": "beff64c0-6da4-413a-8680-73ed87b05e53"/*Blend*/,
+      "Position": {
+        "X": 2029.1587,
+        "Y": 141.87988
+      }
+    },
+    {
+      "ChildId": "e388aa91-2e7f-4eb2-83d8-13738a056fbc"/*Blur*/,
+      "Position": {
+        "X": 1808.3013,
+        "Y": 204.91699
+      }
+    },
+    {
+      "ChildId": "317e0d71-5e41-45f9-a9a5-c95941393f83"/*FractalNoise*/,
+      "Position": {
+        "X": 583.55396,
+        "Y": 375.93945
+      }
+    },
+    {
+      "ChildId": "96383c70-5e7a-41f6-92f5-e1664778a992"/*TransformMeshUVs*/,
+      "Position": {
+        "X": 262.74048,
+        "Y": 119.27832
+      }
+    },
+    {
+      "ChildId": "86f8296d-047f-44f2-8a97-7f1d406415fe"/*CombineMaterialChannels*/,
+      "Position": {
+        "X": 733.55396,
+        "Y": 375.93945
+      }
+    },
+    {
+      "ChildId": "5128055e-9cff-4f8b-88bd-05d320e75bbe"/*PointLight*/,
+      "Position": {
+        "X": 1322.7744,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "50870471-c9bf-48bb-adf1-854d22a843ab"/*Glow*/,
+      "Position": {
+        "X": 2430.9517,
+        "Y": 91.82477
+      }
+    },
+    {
+      "ChildId": "5ed2ca45-654a-4571-95cb-6719f4cacb34"/*Transform*/,
+      "Position": {
+        "X": 562.7405,
+        "Y": 16.27832
+      }
+    },
+    {
+      "ChildId": "9deb2903-0039-4f37-90ea-100f1c6eeeff"/*ColorGrade*/,
+      "Position": {
+        "X": 2618.9844,
+        "Y": 98.290436
+      }
+    },
+    {
+      "ChildId": "6f2b9fcf-696d-4d5c-8065-b58684360edd"/*Layer2d*/,
+      "Position": {
+        "X": 2918.9844,
+        "Y": 86.67279
+      }
+    },
+    {
+      "ChildId": "7b13b6e5-97b0-4da3-85d3-2f1fad8629f7"/*ChromaticAbberation*/,
+      "Position": {
+        "X": 2768.9844,
+        "Y": 98.290436
+      }
+    },
+    {
+      "ChildId": "b883a97e-84ba-4e9b-97bb-437c16b1080b"/*Group*/,
+      "Position": {
+        "X": 712.7405,
+        "Y": 16.27832
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "854b773b-d6d2-40c8-9a8c-96a441e259cf"/*Output*/,
+      "Position": {
+        "X": 3231.4126,
+        "Y": 311.96973
+      }
+    }
+  ]
+}

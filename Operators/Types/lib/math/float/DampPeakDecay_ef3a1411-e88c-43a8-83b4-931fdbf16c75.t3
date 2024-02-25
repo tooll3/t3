@@ -1,7 +1,7 @@
 {
   "Name": "DampPeakDecay",
   "Id": "ef3a1411-e88c-43a8-83b4-931fdbf16c75",
-  "Namespace": "lib.math.floats",
+  "Namespace": "lib.math.float",
   "Inputs": [
     {
       "Id": "d548e650-ca2b-4a24-bca0-16c846fa9224"/*Value*/,

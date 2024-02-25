@@ -15,26 +15,38 @@ using T3.SystemUi;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
-public abstract class RenderHelperWindow : Window
+public abstract class BaseRenderWindow : Window
 {
 
-    protected static int soundtrackChannels()
+    protected static int SoundtrackChannels()
     {
         var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
         var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
-        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var compWithSettings, out var settings);
+        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);
         return AudioEngine.clipChannels(soundtrack);
     }
 
-    protected static int soundtrackSampleRate()
+    protected static int SoundtrackSampleRate()
     {
         var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
         var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
-        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var compWithSettings, out var settings);
+        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);
         return AudioEngine.clipSampleRate(soundtrack);
     }
+
+    protected static void SetRenderingStarted()
+    {
+        IsToollRenderingSomething = true;
+    }
+    
+    protected static void RenderingFinished()
+    {
+        IsToollRenderingSomething = false;
+    }
+
+    public static bool IsToollRenderingSomething { get; private set; }
 
     protected static void DrawTimeSetup()
     {
@@ -45,8 +57,8 @@ public abstract class RenderHelperWindow : Window
 
         if (FormInputs.AddEnumDropdown(ref _timeReference, "Time Format"))
         {
-            _startTime = (float)ConvertReferenceTime(_startTime, oldTimeReference, _timeReference);
-            _endTime = (float)ConvertReferenceTime(_endTime, oldTimeReference, _timeReference);
+            _startTimeInBars = (float)ConvertReferenceTime(_startTimeInBars, oldTimeReference, _timeReference);
+            _endTimeInBars = (float)ConvertReferenceTime(_endTimeInBars, oldTimeReference, _timeReference);
         }
 
         // Change FPS if required
@@ -54,20 +66,20 @@ public abstract class RenderHelperWindow : Window
         if (Fps < 0) Fps = -Fps;
         if (Fps != 0)
         {
-            _startTime = (float)ConvertFps(_startTime, _lastValidFps, Fps);
-            _endTime = (float)ConvertFps(_endTime, _lastValidFps, Fps);
+            _startTimeInBars = (float)ConvertFps(_startTimeInBars, _lastValidFps, Fps);
+            _endTimeInBars = (float)ConvertFps(_endTimeInBars, _lastValidFps, Fps);
             _lastValidFps = Fps;
         }
 
         FormInputs.AddEnumDropdown(ref _timeRange, "Use Range");
         ApplyTimeRange();
         
-        FormInputs.AddFloat($"Start in {_timeReference}", ref _startTime);
-        FormInputs.AddFloat($"End in {_timeReference}", ref _endTime);
+        FormInputs.AddFloat($"Start in {_timeReference}", ref _startTimeInBars);
+        FormInputs.AddFloat($"End in {_timeReference}", ref _endTimeInBars);
 
 
-        var startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
-        var endTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
+        var startTimeInSeconds = ReferenceTimeToSeconds(_startTimeInBars, _timeReference);
+        var endTimeInSeconds = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
         FrameCount = (int)Math.Round((endTimeInSeconds - startTimeInSeconds) * Fps);
 
         if (FormInputs.AddInt($"Motion Blur Samples", ref _overrideMotionBlurSamples, -1, 50, 1,
@@ -115,8 +127,8 @@ public abstract class RenderHelperWindow : Window
                 var playback = Playback.Current; // TODO, this should be non-static eventually
                 var startInSeconds = playback.SecondsFromBars(playback.LoopRange.Start);
                 var endInSeconds = playback.SecondsFromBars(playback.LoopRange.End);
-                _startTime = (float)SecondsToReferenceTime(startInSeconds, _timeReference);
-                _endTime = (float)SecondsToReferenceTime(endInSeconds, _timeReference);
+                _startTimeInBars = (float)SecondsToReferenceTime(startInSeconds, _timeReference);
+                _endTimeInBars = (float)SecondsToReferenceTime(endInSeconds, _timeReference);
                 break;
             }
             case TimeRanges.Soundtrack:
@@ -124,14 +136,14 @@ public abstract class RenderHelperWindow : Window
                 if (PlaybackUtils.TryFindingSoundtrack(out var soundtrack))
                 {
                     var playback = Playback.Current; // TODO, this should be non-static eventually
-                    _startTime = (float)SecondsToReferenceTime(playback.SecondsFromBars(soundtrack.StartTime), _timeReference);
+                    _startTimeInBars = (float)SecondsToReferenceTime(playback.SecondsFromBars(soundtrack.StartTime), _timeReference);
                     if (soundtrack.EndTime > 0)
                     {
-                        _endTime = (float)SecondsToReferenceTime(playback.SecondsFromBars(soundtrack.EndTime), _timeReference);
+                        _endTimeInBars = (float)SecondsToReferenceTime(playback.SecondsFromBars(soundtrack.EndTime), _timeReference);
                     }
                     else
                     {
-                        _endTime = (float)SecondsToReferenceTime(soundtrack.LengthInSeconds, _timeReference);
+                        _endTimeInBars = (float)SecondsToReferenceTime(soundtrack.LengthInSeconds, _timeReference);
                     }
                 }
                 break;
@@ -205,7 +217,7 @@ public abstract class RenderHelperWindow : Window
         // get playback settings
         var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
         var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
-        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var compWithSettings, out var settings);
+        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
 
         // change settings for all playback before calculating times
         Playback.Current.Bpm = settings.Bpm;
@@ -213,7 +225,7 @@ public abstract class RenderHelperWindow : Window
         Playback.Current.Settings = settings;
 
         // set user time in secs for video playback
-        double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
+        double startTimeInSeconds = ReferenceTimeToSeconds(_startTimeInBars, _timeReference);
         double endTimeInSeconds = startTimeInSeconds + (FrameCount - 1) / Fps;
         var oldTimeInSecs = Playback.Current.TimeInSecs;
         Playback.Current.TimeInSecs = MathUtils.Lerp(startTimeInSeconds, endTimeInSeconds, Progress);
@@ -234,7 +246,7 @@ public abstract class RenderHelperWindow : Window
 
             AudioEngine.prepareRecording(Playback.Current, Fps);
 
-            double requestedEndTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
+            double requestedEndTimeInSeconds = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
             double actualEndTimeInSeconds = startTimeInSeconds + FrameCount / Fps;
 
             Log.Debug($"Requested recording from {startTimeInSeconds:0.0000} to {requestedEndTimeInSeconds:0.0000} seconds");
@@ -245,23 +257,23 @@ public abstract class RenderHelperWindow : Window
         }
 
         // update audio parameters, respecting looping etc.
-        Playback.Current.Update(false);
+        Playback.Current.Update();
 
-        var bufferLengthInMS = (int)Math.Floor(1000.0 * adaptedDeltaTime);
-        _timingOverhang = adaptedDeltaTime - (double)bufferLengthInMS / 1000.0;
+        var bufferLengthInMs = (int)Math.Floor(1000.0 * adaptedDeltaTime);
+        _timingOverhang = adaptedDeltaTime - bufferLengthInMs / 1000.0;
         _timingOverhang = Math.Max(_timingOverhang, 0.0);
 
-        AudioEngine.CompleteFrame(Playback.Current, (double)bufferLengthInMS / 1000.0);
+        AudioEngine.CompleteFrame(Playback.Current, bufferLengthInMs / 1000.0);
     }
 
     protected static void ReleasePlaybackTime()
     {
         AudioEngine.endRecording(Playback.Current, Fps);
 
-        Playback.Current.TimeInSecs = ReferenceTimeToSeconds(_endTime, _timeReference);
+        Playback.Current.TimeInSecs = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
         Playback.Current.IsLive = true;
         Playback.Current.PlaybackSpeed = 0.0;
-        Playback.Current.Update(false);
+        Playback.Current.Update();
 
         _recording = false;
     }
@@ -276,39 +288,32 @@ public abstract class RenderHelperWindow : Window
         if (texture == null || texture.IsDisposed)
         {
             warning = "You have selected an operator that does not render. " +
-                      "Hint: Use a [RenderTarget] with format B8G8R8A8_UNorm for fast exports.";
+                      "Ready to export to video.";
             return true;
         }
-
-        // if (!supportedInputFormats.Contains(texture.Description.Format))
-        // {
-        //     warning = $"Texture format {texture.Description.Format} is not supported. Please use [ConvertFormat] with "
-        //               + string.Join(", ", supportedInputFormats);
-        //     return true;
-        // }
 
         warning = string.Empty;
         return false;
     }
 
-    protected const string PreferredInputFormatHint = "Hint: Use a [ConvertFormat] with format B8G8R8A8_UNorm for fast exports.";
+    protected const string PreferredInputFormatHint = "Ready to export to video.";
 
     protected static double Progress => (FrameCount <= 1) ? 0 :
-        ((double)FrameIndex / (double)(FrameCount - 1)).Clamp(0, 1);
+        (FrameIndex / (double)(FrameCount - 1)).Clamp(0, 1);
 
     private static TimeRanges _timeRange = TimeRanges.Custom;
     private static TimeReference _timeReference;
-    private static float _startTime;
-    private static float _endTime = 4.0f; // four Bars
+    private static float _startTimeInBars;
+    private static float _endTimeInBars = 4.0f; 
     protected static float Fps = 60.0f;
     private static float _lastValidFps = Fps;
 
-    private static double _timingOverhang = 0.0; // time that could not be updated due to MS resolution (in seconds)
-    private static bool _recording = false; // are we recording?
-    public static bool IsExporting => _isExporting;
+    private static double _timingOverhang; // Time that could not be updated due to MS resolution (in seconds)
+    private static bool _recording; 
+    //public static bool IsExporting => _isExporting;
 
     // ReSharper disable once InconsistentNaming
-    protected static bool _isExporting;
+    //protected static bool _isExporting;
     public static int OverrideMotionBlurSamples => _overrideMotionBlurSamples;
     private static int _overrideMotionBlurSamples = -1;
 

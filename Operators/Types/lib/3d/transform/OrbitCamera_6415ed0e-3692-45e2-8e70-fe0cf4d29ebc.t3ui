@@ -185,6 +185,13 @@
         "Y": 275.53278
       },
       "Description": "Defines the Up-Vector of the camera"
+    },
+    {
+      "InputId": "46aa9ce1-ec54-43c5-ad5e-2ca679a254fd"/*OverrideTime*/,
+      "Position": {
+        "X": -224.62245,
+        "Y": 320.53278
+      }
     }
   ],
   "SymbolChildUis": [],
