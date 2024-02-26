@@ -1,3 +1,4 @@
+using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -85,12 +86,12 @@ namespace T3.Operators.Types.Id_bdb41a6d_e225_4a8a_8348_820d45153e3f
                                           };
 
             // Generate points with text from font
-            var points = new List<PointT3>();
+            //var points = new List<PointT3>();
+            _tempPoints.Clear();
             var glyphs = TextBuilder.GenerateGlyphs(inputText, textOptions);
 
             foreach (var glyph in glyphs)
             {
-
                 var simplePaths = glyph.Flatten();
                 foreach (var simplePath in simplePaths)
                 {
@@ -100,28 +101,76 @@ namespace T3.Operators.Types.Id_bdb41a6d_e225_4a8a_8348_820d45153e3f
                     for (var pointIndex = 0; pointIndex < count + offsetForClosedPolygons; ++pointIndex)
                     {
                         var pointF = simplePath.Points.Span[pointIndex % count];
-                        points.Add(new PointT3
-                                       {
-                                           Position = new Vector3(pointF.X * appliedSize, -pointF.Y * appliedSize, 0f),
-                                           W = 1f,
-                                           Orientation = new Quaternion(0f, 0f, 0f, 1f),
-                                           Color = new Vector4(1f, 1f, 1f, 1f)
-                                       });
+                        _tempPoints.Add(new PointT3
+                                            {
+                                                Position = new Vector3(pointF.X * appliedSize, -pointF.Y * appliedSize, 0f),
+                                                W = 1f,
+                                                Orientation = new Quaternion(0f, 0f, 0f, 1f),
+                                                Color = new Vector4(1f, 1f, 1f, 1f)
+                                            });
                     }
 
                     // Add line separator
-                    points.Add(PointT3.Separator());
+                    _tempPoints.Add(PointT3.Separator());
                 }
             }
 
-            if (points.Count == 0)
+            if (_tempPoints.Count == 0)
                 return;
 
+            // Calc point orientation
+            var points = _tempPoints.ToArray();
+
+            var p0 = Vector3.Zero;
+            var p1 = Vector3.Zero;
+            var p1Valid = false;
+            var p2 = Vector3.Zero;
+            var p2Valid = false;
+            for (var pointIndex = 0; pointIndex <= points.Length + 2; pointIndex++)
+            {
+                var p0Valid = pointIndex >= 0 && pointIndex < points.Length && !float.IsNaN(points[pointIndex].W);
+                if (p0Valid)
+                    p0 = points[pointIndex].Position;
+
+                if (p1Valid)
+                {
+                    if (p0Valid && p2Valid)
+                    {
+                        var v1 = Vector3.Normalize(p0 - p1) - Vector3.Normalize(p2 - p1);
+                        var v2 = Vector3.Normalize(p0 - p2);
+                        var v = Vector3.Lerp(v1, v2, 0.1f);
+
+                        var angle = -MathF.Atan2(v.X, v.Y);
+                        points[pointIndex - 1].Orientation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, angle * 1);
+                    }
+                    else if (p2Valid)
+                    {
+                        var v = p1 - p2;
+                        var p = points[pointIndex - 1];
+                        var angle = -MathF.Atan2(v.X, v.Y);
+                        points[pointIndex - 1].Orientation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, angle * 1);
+                    }
+                    else if (p0Valid)
+                    {
+                        var v = p0 - p1;
+                        var p = points[pointIndex - 1];
+                        var angle = -MathF.Atan2(v.X, v.Y);
+                        points[pointIndex - 1].Orientation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, angle * 1);
+                    }
+                }
+
+                p2Valid = p1Valid;
+                p2 = p1;
+                p1Valid = p0Valid;
+                p1 = p0;
+            }
+
             // Output list
-            var list = new StructuredList<PointT3>(points.Count);
-            for (var index = 0; index < points.Count; index++) list.TypedElements[index] = points[index];
+            var list = new StructuredList<PointT3>(points);
             OutputList.Value = list;
         }
+
+        private readonly List<PointT3> _tempPoints = new();
 
         private enum TextAligns
         {
