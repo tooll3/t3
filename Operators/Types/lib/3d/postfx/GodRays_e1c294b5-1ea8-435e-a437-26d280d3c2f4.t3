@@ -12,7 +12,11 @@
       "DefaultValue": null
     },
     {
-      "Id": "58c08101-ac16-4aed-aa84-259853734116"/*Position*/,
+      "Id": "b64c4ece-8b59-4b32-a5fe-b99006286987"/*CameraReference*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "58c08101-ac16-4aed-aa84-259853734116"/*LightPosition*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
@@ -54,6 +58,10 @@
       "DefaultValue": 50
     },
     {
+      "Id": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
+      "DefaultValue": 1.0
+    },
+    {
       "Id": "6d985988-3107-4480-8852-f17fe1c6d002"/*ShiftDepth*/,
       "DefaultValue": 0.0
     },
@@ -72,14 +80,6 @@
     {
       "Id": "5129404e-54c5-4c5a-9736-69361bb3077d"/*BlurOffset*/,
       "DefaultValue": 0.0
-    },
-    {
-      "Id": "b64c4ece-8b59-4b32-a5fe-b99006286987"/*CameraReference*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
-      "DefaultValue": 1.0
     }
   ],
   "Children": [

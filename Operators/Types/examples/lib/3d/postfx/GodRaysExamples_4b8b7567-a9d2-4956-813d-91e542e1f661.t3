@@ -9,7 +9,7 @@
       "SymbolId": "e1c294b5-1ea8-435e-a437-26d280d3c2f4",
       "InputValues": [
         {
-          "Id": "58c08101-ac16-4aed-aa84-259853734116"/*Position*/,
+          "Id": "58c08101-ac16-4aed-aa84-259853734116"/*LightPosition*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": -0.060000002,

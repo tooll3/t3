@@ -19,11 +19,19 @@
       }
     },
     {
-      "InputId": "58c08101-ac16-4aed-aa84-259853734116"/*Position*/,
+      "InputId": "b64c4ece-8b59-4b32-a5fe-b99006286987"/*CameraReference*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -1090.583,
-        "Y": 14.5132675
+        "X": -1117.0369,
+        "Y": -18.27729
+      }
+    },
+    {
+      "InputId": "58c08101-ac16-4aed-aa84-259853734116"/*LightPosition*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -1117.0369,
+        "Y": 26.72271
       }
     },
     {
@@ -32,6 +40,7 @@
         "X": -1100.6145,
         "Y": 173.15916
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -51,7 +60,8 @@
       "Position": {
         "X": -1130.8816,
         "Y": 286.45346
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "b9ca7291-1f78-47e2-8ba9-35ccb282833c"/*Size*/,
@@ -75,17 +85,24 @@
       }
     },
     {
+      "InputId": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
+      "Position": {
+        "X": -1130.8816,
+        "Y": 466.45346
+      }
+    },
+    {
       "InputId": "6d985988-3107-4480-8852-f17fe1c6d002"/*ShiftDepth*/,
       "Position": {
-        "X": -1132.7573,
-        "Y": 514.28625
+        "X": -1131.0616,
+        "Y": 549.8971
       }
     },
     {
       "InputId": "71acc14a-e26a-4412-9556-d88e0ec70e63"/*Offset*/,
       "Position": {
-        "X": -1131.8196,
-        "Y": 562.99976
+        "X": -1130.1239,
+        "Y": 598.6106
       }
     },
     {
@@ -93,7 +110,8 @@
       "Position": {
         "X": -1133.0017,
         "Y": 692.4446
-      }
+      },
+      "GroupTitle": "Blur"
     },
     {
       "InputId": "9529d9b2-40ca-4f30-9142-1338dc4e07ff"/*BlurSize*/,
@@ -107,21 +125,6 @@
       "Position": {
         "X": -1120.325,
         "Y": 826.4696
-      }
-    },
-    {
-      "InputId": "b64c4ece-8b59-4b32-a5fe-b99006286987"/*CameraReference*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -1113.1089,
-        "Y": 990.6443
-      }
-    },
-    {
-      "InputId": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
-      "Position": {
-        "X": -1113.1089,
-        "Y": 1035.6443
       }
     }
   ],
