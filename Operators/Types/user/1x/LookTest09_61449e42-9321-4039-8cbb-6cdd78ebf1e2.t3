@@ -770,14 +770,14 @@
           }
         },
         {
-          "Id": "500549e0-aa60-4555-b82a-a829568959ff"/*Intensity*/,
-          "Type": "System.Single",
-          "Value": 0.66
-        },
-        {
           "Id": "59568136-2903-4fd5-a504-8a6308a2a2dc"/*Samples*/,
           "Type": "System.Int32",
           "Value": 32
+        },
+        {
+          "Id": "500549e0-aa60-4555-b82a-a829568959ff"/*CenterIntensity*/,
+          "Type": "System.Single",
+          "Value": 0.66
         }
       ],
       "Outputs": []

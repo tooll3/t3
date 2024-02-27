@@ -1443,7 +1443,7 @@
           }
         },
         {
-          "Id": "500549e0-aa60-4555-b82a-a829568959ff"/*Intensity*/,
+          "Id": "500549e0-aa60-4555-b82a-a829568959ff"/*CenterIntensity*/,
           "Type": "System.Single",
           "Value": 0.29
         },

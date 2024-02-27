@@ -28,23 +28,23 @@ namespace T3.Operators.Types.Id_e1c294b5_1ea8_435e_a437_26d280d3c2f4
         [Input(Guid = "2f365f2a-8a2e-472c-af15-9352b54e2009")]
         public readonly InputSlot<System.Numerics.Vector4> OriginalColor = new InputSlot<System.Numerics.Vector4>();
 
-        [Input(Guid = "500549e0-aa60-4555-b82a-a829568959ff")]
-        public readonly InputSlot<float> Intensity = new InputSlot<float>();
-
-        [Input(Guid = "b9ca7291-1f78-47e2-8ba9-35ccb282833c")]
-        public readonly InputSlot<float> Size = new InputSlot<float>();
-
-        [Input(Guid = "c59b6588-9e39-49ed-99b7-632e5f2b3bf4")]
-        public readonly InputSlot<float> Rays = new InputSlot<float>();
-
         [Input(Guid = "59568136-2903-4fd5-a504-8a6308a2a2dc")]
         public readonly InputSlot<int> Samples = new InputSlot<int>();
+
+        [Input(Guid = "500549e0-aa60-4555-b82a-a829568959ff")]
+        public readonly InputSlot<float> CenterIntensity = new InputSlot<float>();
+
+        [Input(Guid = "c59b6588-9e39-49ed-99b7-632e5f2b3bf4")]
+        public readonly InputSlot<float> RayIntensity = new InputSlot<float>();
 
         [Input(Guid = "ea737eeb-e936-48c0-aaa7-8247fea95228")]
         public readonly InputSlot<float> Decay = new InputSlot<float>();
 
         [Input(Guid = "6d985988-3107-4480-8852-f17fe1c6d002")]
         public readonly InputSlot<float> ShiftDepth = new InputSlot<float>();
+
+        [Input(Guid = "b9ca7291-1f78-47e2-8ba9-35ccb282833c")]
+        public readonly InputSlot<float> Size = new InputSlot<float>();
 
         [Input(Guid = "71acc14a-e26a-4412-9556-d88e0ec70e63")]
         public readonly InputSlot<float> Offset = new InputSlot<float>();
