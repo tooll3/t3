@@ -118,56 +118,94 @@ namespace T3.Operators.Types.Id_bdb41a6d_e225_4a8a_8348_820d45153e3f
             if (_tempPoints.Count == 0)
                 return;
 
-            // Calc point orientation
+            // Calculate point orientation
             var points = _tempPoints.ToArray();
-
-            var p0 = Vector3.Zero;
-            var p1 = Vector3.Zero;
-            var p1Valid = false;
-            var p2 = Vector3.Zero;
-            var p2Valid = false;
-            for (var pointIndex = 0; pointIndex <= points.Length + 2; pointIndex++)
+            var loopStartIndex = 0;
+            var loopStartNeighbor = Vector3.Zero;
+            var loopLength = 0;
+            
+            for (var pointIndex = 0; pointIndex <= points.Length -1; pointIndex++)
             {
-                var p0Valid = pointIndex >= 0 && pointIndex < points.Length && !float.IsNaN(points[pointIndex].W);
-                if (p0Valid)
-                    p0 = points[pointIndex].Position;
-
-                if (p1Valid)
+                var valid = TryGetValidPoint(pointIndex, points, out var p);
+                var leftValid = TryGetValidPoint(pointIndex-1, points, out var pLeft);
+                var rightValid = TryGetValidPoint(pointIndex+1, points, out var pRight);
+                
+                
+                var isLoopStart = !leftValid && valid && rightValid;
+                if (isLoopStart)
                 {
-                    if (p0Valid && p2Valid)
+                    loopStartIndex = pointIndex;
+                    loopStartNeighbor = pRight;
+                    loopLength = 1;
+                }
+                else if(rightValid)
+                {
+                    loopLength++;
+                }
+                
+                if (!valid)
+                {
+                    loopLength = 0;
+                    continue;
+                }
+                
+                if (leftValid && rightValid)
+                {
+                    var fromAxisAngle = ComputePointNormalOrientation(pRight, p, pLeft);
+                    points[pointIndex].Orientation = fromAxisAngle;
+                }
+                // End of line... check for loop...
+                else if (leftValid)
+                {
+                    if(loopLength > 2)
                     {
-                        var v1 = Vector3.Normalize(p0 - p1) - Vector3.Normalize(p2 - p1);
-                        var v2 = Vector3.Normalize(p0 - p2);
-                        var v = Vector3.Lerp(v1, v2, 0.1f);
-
-                        var angle = -MathF.Atan2(v.X, v.Y);
-                        points[pointIndex - 1].Orientation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, angle * 1);
+                        //var pTest = Try
+                        var fromAxisAngle = ComputePointNormalOrientation(loopStartNeighbor, p, pLeft);
+                        points[pointIndex].Orientation = fromAxisAngle;
+                        points[loopStartIndex].Orientation = fromAxisAngle;
                     }
-                    else if (p2Valid)
+                    else
                     {
-                        var v = p1 - p2;
-                        var p = points[pointIndex - 1];
+                        var v = p - pLeft;
                         var angle = -MathF.Atan2(v.X, v.Y);
-                        points[pointIndex - 1].Orientation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, angle * 1);
-                    }
-                    else if (p0Valid)
-                    {
-                        var v = p0 - p1;
-                        var p = points[pointIndex - 1];
-                        var angle = -MathF.Atan2(v.X, v.Y);
-                        points[pointIndex - 1].Orientation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, angle * 1);
+                        points[pointIndex].Orientation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, angle * 1);
                     }
                 }
-
-                p2Valid = p1Valid;
-                p2 = p1;
-                p1Valid = p0Valid;
-                p1 = p0;
+                else if (rightValid)
+                {
+                    var v = pRight - p;
+                    var angle = -MathF.Atan2(v.X, v.Y);
+                    points[pointIndex].Orientation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, angle * 1);
+                }
             }
-
+            
             // Output list
             var list = new StructuredList<PointT3>(points);
             OutputList.Value = list;
+        }
+
+        private static Quaternion ComputePointNormalOrientation(Vector3 p0, Vector3 p1, Vector3 p2)
+        {
+            var v1 = Vector3.Normalize(p0 - p1) - Vector3.Normalize(p2 - p1);
+            var v2 = Vector3.Normalize(p0 - p2);
+            var v = Vector3.Lerp(v1, v2, 0.01f);
+
+            var angle = -MathF.Atan2(v.X, v.Y);
+            var fromAxisAngle = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, angle * 1);
+            return fromAxisAngle;
+        }
+
+        // ReSharper disable once SuggestBaseTypeForParameter
+        private bool TryGetValidPoint(int index, PointT3[] points, out Vector3 point)
+        {
+            if (index < 0 || index >= points.Length)
+            {
+                point = Vector3.Zero;
+                return false;
+            }
+
+            point = points[index].Position;
+            return !float.IsNaN(points[index].W);
         }
 
         private readonly List<PointT3> _tempPoints = new();
