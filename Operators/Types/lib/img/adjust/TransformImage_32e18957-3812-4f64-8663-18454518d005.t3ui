@@ -14,7 +14,8 @@
       "Position": {
         "X": -214.98917,
         "Y": 172.78781
-      }
+      },
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "53538db0-2b65-4c92-80b1-ea6aecbc49ae"/*Stretch*/,
