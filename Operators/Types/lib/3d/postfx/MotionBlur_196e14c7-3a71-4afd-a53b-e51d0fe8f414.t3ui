@@ -1,6 +1,6 @@
 {
   "Id": "196e14c7-3a71-4afd-a53b-e51d0fe8f414"/*MotionBlur*/,
-  "Description": "Applies a post processing motion blur to a RenderTarget texture and its DepthBuffer.",
+  "Description": "Applies a post processing motion blur to a RenderTarget texture and its DepthBuffer.\n\nSee also [RenderWithMotionBlur] for an operator using multi-pass rendering to achieve high quality at the cost of more resources. \nDesigned primarily for video rendering, it can also be used for real-time applications with just a few passes, in simple scenes or on fast hardware.\n\nAlso see [DepthOfField]",
   "InputUis": [
     {
       "InputId": "619c2684-8495-4c19-a5b2-673728feaa00"/*Image*/,
@@ -31,21 +31,30 @@
       "Position": {
         "X": -553.8882,
         "Y": 514.13184
-      }
+      },
+      "Description": "Controls the fidelity of the effect.\nHigher numbers create smoother results at the cost of rendering speed.",
+      "AddPadding": "True",
+      "Min": -1,
+      "Max": 256,
+      "Scale": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "db0d11c8-f4c0-4762-8821-4dd75c71fb9e"/*Strength*/,
       "Position": {
         "X": -553.8882,
         "Y": 559.13184
-      }
+      },
+      "Description": "Controls the strength of the blur.\n\nProTip: For precise adjustment, it can be helpful to reduce the passes to very low settings making the strength clearly visible."
     },
     {
       "InputId": "77ed2341-48f2-4e0f-913d-b2f368449088"/*ClampEffect*/,
       "Position": {
         "X": -553.8882,
         "Y": 604.13184
-      }
+      },
+      "Description": "Controls how much the intensity of the motion blur of very fast image elements differs from slower ones. ",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
