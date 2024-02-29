@@ -21,7 +21,8 @@
       "Position": {
         "X": -308.4377,
         "Y": 148.1156
-      }
+      },
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "0b6c67e6-338e-4bb3-bcee-5cc9e2045824"/*Offset*/,
