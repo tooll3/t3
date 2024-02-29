@@ -5235,14 +5235,14 @@
           }
         },
         {
-          "Id": "b9ca7291-1f78-47e2-8ba9-35ccb282833c"/*Size*/,
-          "Type": "System.Single",
-          "Value": 1.16
-        },
-        {
           "Id": "6d985988-3107-4480-8852-f17fe1c6d002"/*ShiftDepth*/,
           "Type": "System.Single",
           "Value": 0.12
+        },
+        {
+          "Id": "b9ca7291-1f78-47e2-8ba9-35ccb282833c"/*Size*/,
+          "Type": "System.Single",
+          "Value": 1.16
         }
       ],
       "Outputs": []

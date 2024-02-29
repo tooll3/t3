@@ -1307,6 +1307,11 @@
           }
         },
         {
+          "Id": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
+          "Type": "System.Single",
+          "Value": 0.658
+        },
+        {
           "Id": "71acc14a-e26a-4412-9556-d88e0ec70e63"/*Offset*/,
           "Type": "System.Single",
           "Value": -0.04000002
@@ -1320,11 +1325,6 @@
           "Id": "9529d9b2-40ca-4f30-9142-1338dc4e07ff"/*BlurSize*/,
           "Type": "System.Single",
           "Value": 0.077999994
-        },
-        {
-          "Id": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
-          "Type": "System.Single",
-          "Value": 0.658
         }
       ],
       "Outputs": []

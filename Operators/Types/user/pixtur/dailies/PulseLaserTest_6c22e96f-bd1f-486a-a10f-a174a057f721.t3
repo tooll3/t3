@@ -485,7 +485,7 @@
           "Value": 0.01
         },
         {
-          "Id": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Reset*/,
+          "Id": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Refresh*/,
           "Type": "System.Boolean",
           "Value": false
         }

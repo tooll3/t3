@@ -180,11 +180,6 @@
           "Id": "bfa7d45a-0f98-4016-ae34-d5f653e821d6"/*ResultForTrue*/,
           "Type": "System.Int32",
           "Value": 1
-        },
-        {
-          "Id": "158e2790-1244-4509-8911-b850ffcee29f"/*ResultForFalse*/,
-          "Type": "System.Int32",
-          "Value": 0
         }
       ],
       "Outputs": []
