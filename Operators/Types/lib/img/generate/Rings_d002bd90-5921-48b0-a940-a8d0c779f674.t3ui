@@ -48,7 +48,8 @@
         "Y": -225.11075
       },
       "Min": -1.0,
-      "Max": 1.0
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "f74b3fd6-eee4-4218-9771-3f04c38e4ff1"/*Count*/,

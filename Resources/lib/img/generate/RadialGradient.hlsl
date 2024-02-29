@@ -45,20 +45,20 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 p = uv;
     p -= 0.5;
     p.x *= aspectRation;
-
+    
     float c = 0;
 
     if (PolarOrientation < 0.5)
     {
-        c = distance(p, Center) * 2 - Offset * Width;
+        c = distance(p, Center * float2(1,-1)) * 2 - Offset * Width;
     }
     else
     {
-        p += Center;
+        p += Center * float2(-1,1);
         float Radius = 1;
         float l = 2 * length(p) / Radius;
 
-        float2 polar = float2(atan2(p.x, p.y) / 3.141578 / 2 + 0.5, l) + Center - Center.x;
+        float2 polar = float2(atan2(p.x, p.y) / 3.141578 / 2 + 0.5, l) + Center  - Center.x;
         c = polar.x + Offset * Width;
     }
 
