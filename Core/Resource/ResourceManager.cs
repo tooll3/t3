@@ -96,10 +96,16 @@ namespace T3.Core.Resource
                 return pathWithoutUser[slashIndex..].ToString();
             }
 
+            const string commonSubfolder = "common";
+            if (relativePath.StartsWith(commonSubfolder, StringComparison.OrdinalIgnoreCase))
+            {
+                return relativePath[(commonSubfolder.Length + 1)..];
+            }
+
             const string libSubfolder = "lib";
             if (relativePath.StartsWith(libSubfolder, StringComparison.OrdinalIgnoreCase))
             {
-                relativePath = relativePath[(libSubfolder.Length + 1)..];
+                return relativePath[(libSubfolder.Length + 1)..];
             }
 
             return relativePath;

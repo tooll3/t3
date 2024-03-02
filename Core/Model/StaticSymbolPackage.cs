@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IO;
 using T3.Core.Compilation;
 using T3.Core.Operator;
 
@@ -19,6 +21,7 @@ public class StaticSymbolPackage : SymbolPackage
 
     public override string Folder => AssemblyInformation.Directory; // todo: symbols will likely be organized in subfolders
     public override bool IsModifiable => false;
+    protected override IEnumerable<string> SymbolSearchFiles => Directory.EnumerateFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
 
     public override AssemblyInformation AssemblyInformation { get; }
     protected override string ResourcesSubfolder => "Resources";

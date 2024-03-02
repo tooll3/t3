@@ -80,8 +80,7 @@ public abstract partial class SymbolPackage
 
         if (newTypes.Count > 0)
         {
-            var symbolFiles = Directory.EnumerateFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
-            var symbolsRead = symbolFiles
+            var symbolsRead = SymbolSearchFiles
                               //.AsParallel()
                              .Select(JsonFileResult<Symbol>.ReadAndCreate)
                              .Where(result => newTypes.ContainsKey(result.Guid))
@@ -214,6 +213,8 @@ public abstract partial class SymbolPackage
     protected readonly Dictionary<Guid, Symbol> Symbols = new();
 
     public const string SymbolExtension = ".t3";
+    
+    protected abstract IEnumerable<string> SymbolSearchFiles{ get; }
 
     public bool ContainsSymbolName(string newSymbolName) => Symbols.Values.Any(symbol => symbol.Name == newSymbolName);
 }

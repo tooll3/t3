@@ -98,35 +98,32 @@
 
 
     <!-- This copies built-in operator projects into the output directory -->
-    <PropertyGroup Condition=" '$(Configuration)' != 'IDE' ">
-        <OperatorsFolder>../Operators</OperatorsFolder>
-        <lib>$(OperatorsFolder)/lib</lib>
-        <libDataTypes>$(OperatorsFolder)/libDataTypes</libDataTypes>
-        <libEditor>$(OperatorsFolder)/libEditor</libEditor>
-        <examples>$(OperatorsFolder)/examples</examples>
-        <BuildFolder>bin/$(Configuration)/$(TargetFramework)</BuildFolder>
-        <ResourceDir>Resources</ResourceDir>
-    </PropertyGroup>
 
     <Target Name="CopyLibs" AfterTargets="AfterBuild" Condition=" '$(Configuration)' != 'IDE' ">
+        
+        <PropertyGroup>
+            <OperatorsFolder>../Operators</OperatorsFolder>
+            <lib>$(OperatorsFolder)/lib</lib>
+            <libDataTypes>$(OperatorsFolder)/libDataTypes</libDataTypes>
+            <libEditor>$(OperatorsFolder)/libEditor</libEditor>
+            <examples>$(OperatorsFolder)/examples</examples>
+            <BuildFolder>bin/$(Configuration)/$(TargetFramework)</BuildFolder>
+            <ResourceDir>Resources</ResourceDir>
+        </PropertyGroup>
+        
         <ItemGroup Condition=" '$(Configuration)' != 'IDE' ">
             <Lib
-                Include="$(lib)/$(BuildFolder)/**/*.dll;$(lib)/**/*.t3;$(lib)/**/*.t3ui;$(lib)/$(BuildFolder)/**/*deps.json"
+                Include="$(lib)/$(BuildFolder)/**/*.*"
                 Visible="false" />
             <LibEditor
-                Include="$(libEditor)/$(BuildFolder)/**/*.dll;$(libEditor)/**/*.t3;$(libEditor)/**/*.t3ui;$(libEditor)/$(BuildFolder)/**/*deps.json"
+                Include="$(libEditor)/$(BuildFolder)/**/*.*"
                 Visible="false" />
             <Examples
-                Include="$(examples)/$(BuildFolder)/**/*.dll;$(examples)/**/*.t3;$(examples)/**/*.t3ui;$(examples)/$(BuildFolder)/**/*deps.json"
+                Include="$(examples)/$(BuildFolder)/**/*.*"
                 Visible="false" />
             <LibDataTypes
-                Include="$(libDataTypes)/$(BuildFolder)/**/*.dll;$(libDataTypes)/**/*.t3;$(libDataTypes)/**/*.t3ui;$(libDataTypes)/$(BuildFolder)/**/*deps.json"
+                Include="$(libDataTypes)/$(BuildFolder)/**/*.*"
                 Visible="false" />
-
-            <LibResources Include="$(lib)/$(ResourceDir)/**/*" Visible="false" />
-            <LibEditorResources Include="$(libEditor)/$(ResourceDir)/**/*" Visible="false" />
-            <ExamplesResources Include="$(examples)/$(ResourceDir)/**/*" Visible="false" />
-            <LibDataTypesResources Include="$(libDataTypes)/$(ResourceDir)/**/*" Visible="false" />
         </ItemGroup>
 
         <!-- Copy Dlls and symbols -->
@@ -146,25 +143,6 @@
             SkipUnchangedFiles="true"
             UseHardlinksIfPossible="true"
             DestinationFiles="@(LibDataTypes->'$(OutputPath)/Operators/libDataTypes/%(RecursiveDir)%(Filename)%(Extension)')" />
-
-        <!-- Copy Resources -->
-        <Copy SourceFiles="@(LibResources)"
-            SkipUnchangedFiles="true"
-            UseHardlinksIfPossible="true"
-            DestinationFiles="@(LibResources->'$(OutputPath)/Operators/lib/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
-        <Copy SourceFiles="@(LibEditorResources)"
-            SkipUnchangedFiles="true"
-            UseHardlinksIfPossible="true"
-            DestinationFiles="@(LibEditorResources->'$(OutputPath)/Operators/libEditor/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
-        <Copy SourceFiles="@(ExamplesResources)"
-            SkipUnchangedFiles="true"
-            UseHardlinksIfPossible="true"
-            DestinationFiles="@(ExamplesResources->'$(OutputPath)/Operators/examples/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
-        <Copy SourceFiles="@(LibDataTypesResources)"
-            SkipUnchangedFiles="true"
-            UseHardlinksIfPossible="true"
-            DestinationFiles="@(LibDataTypesResources->'$(OutputPath)/Operators/libDataTypes/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
-
     </Target>
 
 </Project>

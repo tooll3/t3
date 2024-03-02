@@ -6,12 +6,29 @@
         <Nullable>disable</Nullable>
         <UserSecretsId>4ddcedc9-2c55-476d-9aeb-8e052ecd278a</UserSecretsId>
         <RootNamespace>examples</RootNamespace>
-        <Configurations>Debug;Release</Configurations>
+        <Configurations>Debug;Release;IDE</Configurations>
         <Platforms>AnyCPU</Platforms>
+
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\Core\Core.csproj" />
     </ItemGroup>
 
+
+    <!-- Include Resources/** into output/Resources -->
+    <ItemGroup Condition="'$(Configuration)' != 'IDE'">
+        <Content Include="Resources/**/*" Exclude="bin/**">
+            <Link>Resources/%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="**/*.t3" Exclude="bin/**">
+            <Link>Symbols/%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="**/*.t3ui" Exclude="bin/**">
+            <Link>SymbolUis/%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 </Project>

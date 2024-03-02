@@ -374,9 +374,6 @@ internal class CsProjectFile
     private const string ProjectReferenceStart = "<ProjectReference Include=\"";
     private const string PackageReferenceStart = "<PackageReference Include=\"";
 
-    #if RELEASE
-    internal const Compiler.BuildMode BuildMode = Compiler.BuildMode.Release;
-    #else
     internal const Compiler.BuildMode BuildMode = Compiler.BuildMode.Debug;
-    #endif
+    internal const Compiler.BuildMode PlayerBuildMode = Compiler.BuildMode.Release;
 }

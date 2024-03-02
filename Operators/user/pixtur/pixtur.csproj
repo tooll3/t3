@@ -20,4 +20,22 @@
       <PackageReference Include="AssetRipper.SharpGLTF.Runtime" Version="1.0.2" />
     </ItemGroup>
 
+
+    <!-- Include Resources/** into output/Resources -->
+    <ItemGroup Condition="'$(Configuration)' != 'Debug'">
+        <Content Include="Resources/**/*" Exclude="bin/**">
+            <Link>Resources/%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="**/*.t3" Exclude="bin/**">
+            <Link>Symbols/%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="**/*.t3ui" Exclude="bin/**">
+            <Link>SymbolUis/%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+
 </Project>
