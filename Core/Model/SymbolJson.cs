@@ -23,7 +23,7 @@ namespace T3.Core.Model
 
             writer.WriteObject(JsonKeys.Name, symbol.Name);
             writer.WriteValue(JsonKeys.Id, symbol.Id);
-            writer.WriteObject(JsonKeys.Namespace, symbol.Namespace);
+            writer.WriteObject(JsonKeys.Namespace, symbol.Namespace ?? "");
 
             WriteSymbolInputs(symbol.InputDefinitions, writer);
             WriteSymbolChildren(symbol.Children, writer);
