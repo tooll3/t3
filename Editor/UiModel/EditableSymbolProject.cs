@@ -178,7 +178,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
                 Log.Error($"Source namespace {sourceNamespace} is not a valid namespace. This is a bug.");
                 return;
             }
-            
+
             if (!TryConvertToValidCodeNamespace(newNamespace, out var newCodeNamespace))
             {
                 Log.Error($"{sourceNamespace} is not a valid namespace.");
@@ -259,6 +259,30 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     }
 
     public override string Folder => CsProjectFile.Directory;
+
+    private string ExcludeFolder => Path.Combine(Folder, "bin");
+
+    protected override IEnumerable<string> SymbolUiSearchFiles
+    {
+        get
+        {
+            return Directory.EnumerateDirectories(Folder)
+                            .Where(x => !x.StartsWith(ExcludeFolder))
+                            .SelectMany(subDir => Directory.EnumerateFiles(subDir, $"*{SymbolUiExtension}", SearchOption.AllDirectories))
+                            .Concat(Directory.EnumerateFiles(Folder, $"*{SymbolUiExtension}"));
+        }
+    }
+
+    protected override IEnumerable<string> SymbolSearchFiles
+    {
+        get
+        {
+            return Directory.EnumerateDirectories(Folder)
+                            .Where(x => !x.StartsWith(ExcludeFolder))
+                            .SelectMany(x => Directory.EnumerateFiles(x, $"*{SymbolExtension}", SearchOption.AllDirectories))
+                            .Concat(Directory.EnumerateFiles(Folder, $"*{SymbolExtension}"));
+        }
+    }
 
     public readonly CsProjectFile CsProjectFile;
 

@@ -99,7 +99,13 @@ internal static class ProjectSetup
             stopwatch.Restart();
 
             var operatorFolder = Path.Combine(GetT3ParentDirectory(), "Operators");
+            operatorFolder = Path.GetFullPath(operatorFolder);
             projectSearchDirectories = Directory.EnumerateDirectories(operatorFolder)
+                                                .Where(path =>
+                                                       {
+                                                           var subdirName = Path.GetFileName(path);
+                                                           return !subdirName.StartsWith('.');
+                                                       })
                                                 .Where(path => !path.EndsWith("user"))
                                                 .Concat(projectSearchDirectories)
                                                 .ToArray();

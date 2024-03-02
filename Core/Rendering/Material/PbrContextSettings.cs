@@ -1,6 +1,10 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
+using System.Resources;
 using SharpDX.Direct3D11;
+using T3.Core.Logging;
 using T3.Core.Operator;
+using ResourceManager = T3.Core.Resource.ResourceManager;
 
 namespace T3.Core.Rendering.Material;
 
@@ -21,8 +25,18 @@ public static class PbrContextSettings
         WhitePixelTexture = TextureUtils.CreateColorTexture(new Vector4(1, 1, 1, 1));
         BlackPixelTexture = TextureUtils.CreateColorTexture(new Vector4(0, 0, 0, 0));
 
-        PbrLookUpTextureSrv = TextureUtils.LoadTextureAsSrv(@"Resources\common\images\BRDF-LookUp.dds");
-        _prefilteredBrdfTexture = TextureUtils.LoadTexture(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
+        if (!ResourceManager.TryResolvePath("Resources/common/images/BRDF-LookUp.dds", out var bdrfPath, Array.Empty<string>()))
+        {
+            Log.Error("Could not find BRDF texture");
+        }
+
+        if (!ResourceManager.TryResolvePath("Resources/common/HDRI/studio_small_08-prefiltered.dds", out var prefilteredPath, Array.Empty<string>()))
+        {
+            Log.Error("Could not find prefiltered BRDF texture");
+        }
+        
+        PbrLookUpTextureSrv = TextureUtils.LoadTextureAsSrv(bdrfPath);
+        _prefilteredBrdfTexture = TextureUtils.LoadTexture(prefilteredPath);
 
         _defaultMaterial = PbrMaterial.CreateDefault();
         _wasInitialized = true;

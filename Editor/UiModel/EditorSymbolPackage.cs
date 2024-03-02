@@ -30,7 +30,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
         var newSymbolsWithoutUis = new ConcurrentDictionary<Guid, Symbol>(newSymbols);
         preExistingSymbolUis = SymbolUis.Values.ToArray();
         Log.Debug($"{AssemblyInformation.Name}: Loading Symbol UIs from \"{Folder}\"");
-        var newlyReadSymbolUiList = Directory.EnumerateFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories)
+        var newlyReadSymbolUiList = SymbolUiSearchFiles
                                              //.AsParallel()
                                              .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
                                              .Where(result => newSymbols.ContainsKey(result.Guid))
@@ -162,6 +162,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
     protected override string ResourcesSubfolder => "Resources";
 
+    protected virtual IEnumerable<string> SymbolUiSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, "SymbolUis"), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
     public override bool IsModifiable => false;
     protected const string SymbolUiExtension = ".t3ui";
 }

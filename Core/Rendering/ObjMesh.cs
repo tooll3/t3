@@ -24,7 +24,7 @@ namespace T3.Core.Rendering
 
         public static ObjMesh LoadFromFile(string filePathRelative, Instance instance)
         {
-            if (!ResourceManager.TryResolvePath(filePathRelative, out var objFilePath, instance.ResourceFolders))
+            if (!ResourceManager.TryResolvePath(filePathRelative, instance, out var objFilePath))
             {
                 Log.Warning($"Failed to load object path '{filePathRelative}' (Resolved to '{objFilePath}')");
                 return null;

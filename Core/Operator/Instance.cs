@@ -181,7 +181,7 @@ namespace T3.Core.Operator
             #if DEBUG
             if (!gotTargetInstance)
             {
-                Debug.Assert(connection.TargetParentOrChildId == Guid.Empty);
+                System.Diagnostics.Debug.Assert(connection.TargetParentOrChildId == Guid.Empty);
             }
             #endif
 
