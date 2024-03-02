@@ -121,7 +121,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         _meshBuffersForPrimitives.Clear();
         sceneSetup = new SceneSetup();
 
-        if (!ResourceManager.TryResolvePath(path, this, out var fullPath))
+        if (!TryGetFilePath(path, out var fullPath))
         {
             ShowError($"Gltf File not found: {path}");
             return true;

@@ -203,6 +203,11 @@ namespace T3.Core.Operator
         }
 
         public IList<Guid> InstancePath => OperatorUtils.BuildIdPathForInstance(this).ToArray();
+
+        protected bool TryGetFilePath(string relativePath, out string absolutePath)
+        {
+            return ResourceManager.TryResolvePath(relativePath, this, out absolutePath);
+        }
     }
 
     public class Instance<T> : Instance where T : Instance

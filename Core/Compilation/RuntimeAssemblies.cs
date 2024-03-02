@@ -11,7 +11,6 @@ public class RuntimeAssemblies
 {
     public static readonly string CorePath;
     public static readonly string CoreDirectory;
-    public static IReadOnlyList<AssemblyInformation> AllAssemblies { get; private set; } = Array.Empty<AssemblyInformation>();
     public const string EnvironmentVariableName = "T3_ASSEMBLY_PATH";
 
     static RuntimeAssemblies()

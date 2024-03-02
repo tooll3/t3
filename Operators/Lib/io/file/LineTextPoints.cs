@@ -48,7 +48,7 @@ namespace lib.io.file
             var cornerBalance = CornerWeightBalance.GetValue(context);
             
             var filepath = FilePath.GetValue(context);
-            if (!ResourceManager.TryResolvePath(filepath, this, out var fullPath))
+            if (!TryGetFilePath(filepath, out var fullPath))
             {
                 Log.Debug($"File {filepath} doesn't exist", this);
                 return;

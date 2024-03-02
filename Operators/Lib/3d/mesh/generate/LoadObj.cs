@@ -60,10 +60,17 @@ namespace lib._3d.mesh.generate
                     }
                 }
 
-                var mesh = ObjMesh.LoadFromFile(path, this);
+                if (!TryGetFilePath(path, out var absolutePath))
+                {
+                    Log.Error($"File not found: {path}", this);
+                    _warningMessage = $"File not found: {path}";
+                    return;
+                }
+
+                var mesh = ObjMesh.LoadFromFile(absolutePath);
                 if (mesh == null || mesh.DistinctDistinctVertices.Count == 0)
                 {
-                    var warningMessage = $"Can't read file {path}";
+                    var warningMessage = $"Can't read file {absolutePath}";
                     Log.Warning(warningMessage, this);
                     _warningMessage = warningMessage;
                     return;

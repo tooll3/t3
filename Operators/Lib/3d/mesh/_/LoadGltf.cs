@@ -41,7 +41,7 @@ public class LoadGltf : Instance<LoadGltf>, IDescriptiveFilename, IStatusProvide
         if (pathChanged || childIndexChanged)
         {
             var path = Path.GetValue(context);
-            if (!ResourceManager.TryResolvePath(path, this, out var fullPath))
+            if (!TryGetFilePath(path, out var fullPath))
             {
                 ShowError($"Gltf File not found: {path}");
                 return;
