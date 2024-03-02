@@ -40,24 +40,24 @@ namespace lib.io.file
         private void Update(EvaluationContext context)
         {
             var filepath = FilePath.GetValue(context);
-            if (!File.Exists(filepath))
+            if (!ResourceManager.TryResolvePath(filepath, this, out var fullPath))
             {
                 Log.Debug($"File {filepath} doesn't exist", this);
                 return;
             }
             
-            ResourceFileWatcher.AddFileHook(filepath, () => {FilePath.DirtyFlag.Invalidate();});
+            ResourceFileWatcher.AddFileHook(fullPath, () => {FilePath.DirtyFlag.Invalidate();});
 
             var centerToBounds = CenterToBounds.GetValue(context);
             var scaleToBounds = ScaleToBounds.GetValue(context);
             SvgDocument svgDoc;
             try
             {
-                svgDoc = SvgDocument.Open<SvgDocument>(filepath, null);
+                svgDoc = SvgDocument.Open<SvgDocument>(fullPath, null);
             }
             catch (Exception e)
             {
-                Log.Warning($"Failed to load svg document {filepath}:" + e.Message);
+                Log.Warning($"Failed to load svg document {fullPath}:" + e.Message);
                 return;
             }
 

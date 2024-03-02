@@ -41,13 +41,12 @@ public class LoadGltf : Instance<LoadGltf>, IDescriptiveFilename, IStatusProvide
         if (pathChanged || childIndexChanged)
         {
             var path = Path.GetValue(context);
-            if (!File.Exists(path))
+            if (!ResourceManager.TryResolvePath(path, this, out var fullPath))
             {
                 ShowError($"Gltf File not found: {path}");
                 return;
             }
 
-            var fullPath = System.IO.Path.GetFullPath(path);
             var model = ModelRoot.Load(fullPath);
             
             if(childIndexChanged)

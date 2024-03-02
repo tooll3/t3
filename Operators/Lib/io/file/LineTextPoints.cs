@@ -48,18 +48,18 @@ namespace lib.io.file
             var cornerBalance = CornerWeightBalance.GetValue(context);
             
             var filepath = FilePath.GetValue(context);
-            if (!File.Exists(filepath))
+            if (!ResourceManager.TryResolvePath(filepath, this, out var fullPath))
             {
                 Log.Debug($"File {filepath} doesn't exist", this);
                 return;
             }
 
-            ResourceFileWatcher.AddFileHook(filepath, () => { FilePath.DirtyFlag.Invalidate(); });
+            ResourceFileWatcher.AddFileHook(fullPath, () => { FilePath.DirtyFlag.Invalidate(); });
 
-            _lineFont = LineFont.CreateFromFilepath(filepath, reduceThreshold, cornerBalance, fontNeedsUpdate);
+            _lineFont = LineFont.CreateFromFilepath(fullPath, reduceThreshold, cornerBalance, fontNeedsUpdate);
             if (_lineFont == null)
             {
-                Log.Debug($"Failed to load svg font {filepath}", this);
+                Log.Debug($"Failed to load svg font {fullPath}", this);
                 ResultList.Value = null;
                 return;
             }
