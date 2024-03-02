@@ -22,14 +22,8 @@ namespace T3.Core.Rendering
         public readonly List<Face> Faces = new();
         public readonly List<Line> Lines = new();
 
-        public static ObjMesh LoadFromFile(string filePathRelative, Instance instance)
+        public static ObjMesh LoadFromFile(string objFilePath)
         {
-            if (!ResourceManager.TryResolvePath(filePathRelative, instance, out var objFilePath))
-            {
-                Log.Warning($"Failed to load object path '{filePathRelative}' (Resolved to '{objFilePath}')");
-                return null;
-            }
-            
             try
             {
                 if (string.IsNullOrEmpty(objFilePath) || !(new FileInfo(objFilePath).Exists))

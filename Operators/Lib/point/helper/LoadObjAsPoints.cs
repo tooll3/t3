@@ -44,7 +44,13 @@ namespace lib.point.helper
         private void Update(EvaluationContext context)
         {
             var path = Path.GetValue(context);
-            var mesh = ObjMesh.LoadFromFile(path, this);
+            if (!TryGetFilePath(path, out var absolutePath))
+            {
+                Log.Error($"File not found: {path}", this);
+                return;
+            }
+            
+            var mesh = ObjMesh.LoadFromFile(absolutePath);
 
             if (mesh == null)
             {

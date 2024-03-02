@@ -27,7 +27,13 @@ namespace lib._3d.mesh._
             var path = Path.GetValue(context);
             if (path != _lastFilePath)
             {
-                var mesh = ObjMesh.LoadFromFile(path, this);
+                if (!TryGetFilePath(path, out var fullPath))
+                {
+                    Log.Error($"File not found: {path}", this);
+                    return;
+                }
+                
+                var mesh = ObjMesh.LoadFromFile(fullPath);
                 if (mesh == null)
                 {
                     Log.Error($"Failed to extract edge line points from obj {path}", this);
