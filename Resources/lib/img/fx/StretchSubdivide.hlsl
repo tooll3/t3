@@ -1,24 +1,43 @@
 #include "lib/shared/hash-functions.hlsl"
-
+#include "lib/shared/bias-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {
-    float2 Center;
-    float2 Stretch2;
+    float4 GapColor;
+    float SplitPosition;
+    float SplitVariation;
 
-    float Size;
+    float MaxSubdivisions;
     float SubdivisionThreshold;
+
+    float RandomPhase;
+
     float Padding;
     float Feather;
 
-    float4 GapColor;
-    float MixOriginal;
-    float MaxSubdivisions;
+    float UseApectForSplit;
 
-    float Randomize;
+    float2 ScrollOffset;
+    float2 ScrollBiasAndGain;
+
+    float RandomSeed;
+    float ColorMode;
+    float DirectionBias;
+
+    float UseRGSSMultiSampling;
+
+    float IsTextureValid;
 }
 
-cbuffer Resolution : register(b1)
+#define COLORMODE_DIVISIONS 0
+#define COLORMODE_RANDOM 1
+
+cbuffer Time : register(b1)
+{
+
+}
+
+cbuffer Resolution : register(b2)
 {
     float TargetWidth;
     float TargetHeight;
@@ -31,8 +50,9 @@ struct vsOutput
 };
 
 Texture2D<float4> Image : register(t0);
-Texture2D<float4> FxImage : register(t1);
+Texture2D<float4> ImageB : register(t1);
 sampler texSampler : register(s0);
+sampler clampedSampler : register(s1);
 
 
 #define fmod(x, y) ((x) - (y) * floor((x) / (y)))
@@ -43,7 +63,7 @@ float PhaseHash(uint i)
 {
     uint pointU = i * _PRIME0;
     float particlePhaseOffset = hash11u(pointU);
-    float phase = abs(particlePhaseOffset + Randomize);
+    float phase = abs(particlePhaseOffset + RandomPhase);
 
     int phaseIndex = (int)phase + pointU; 
 
@@ -56,67 +76,114 @@ float PhaseHash(uint i)
 
 }
 
-float4 psMain(vsOutput input) : SV_TARGET
-{
-    float width, height;
-    Image.GetDimensions(width, height);
 
-    float2 uv = input.texCoord;
-    float currentSize = Size;    
-    int steps = (int)clamp(MaxSubdivisions,1,12);
+float4 ComputeSubdivision(float2 uv) {
+    int steps = (int)clamp(MaxSubdivisions,1,30);
 
-    int mainSeed = 1;
+    int mainSeed = RandomSeed;
     int step;
+
+    float aspectRatio = TargetWidth/TargetHeight;
 
     float2 size = 1;
     float2 uvInCell = uv;
-    float hash2 = 0.5;
-    int seed2 = 1;
+    //float hash2 = 0.5;
+    float phaseHashForCell =  (PhaseHash(mainSeed) -0.5) * SplitVariation + SplitPosition;
+    int seedInCell = RandomSeed;
+    uint lastDirection =0;
 
+    [loop]
     for( step = 0; step<steps; ++step) 
     {
+        float aspect = UseApectForSplit ? size.x/size.y : 1;
 
-        if(hash11u(seed2) * 2 < size.x/size.y ) 
+        if(hash11u(seedInCell) * 2 + DirectionBias < aspect ) 
         {
-            if(uvInCell.x < hash2 ) 
+            if(uvInCell.x < phaseHashForCell ) 
             {
-                uvInCell.x /= hash2;
-                size.x *= hash2;
-                mainSeed += (int)(hash2+ 2123);
-                seed2 *=2;
+                uvInCell.x /= phaseHashForCell;
+                size.x *= phaseHashForCell;
+                mainSeed += (int)(phaseHashForCell+ 2123u);
+                seedInCell *=2;
             }
             else {
-                uvInCell.x = (uvInCell.x -hash2) / (1- hash2);
-                size.x *= (1-hash2);
-                mainSeed = (int)(mainSeed+ 213) % 1251;
-                seed2 *=3;
-
+                uvInCell.x = (uvInCell.x -phaseHashForCell) / (1- phaseHashForCell);
+                size.x *= (1-phaseHashForCell);
+                mainSeed = (int)(mainSeed+ 213u) % 1251u;
+                seedInCell *=3;
             }
+
+        
+            lastDirection = 0;
         }
         else {
-            if(uvInCell.y < hash2 ) {
-                uvInCell.y /= hash2;                
-                size.y *= hash2;
-                mainSeed = (int)(mainSeed+ 113) % 1251;
-                seed2 *=5;
-
-
+            if(uvInCell.y < phaseHashForCell ) {
+                uvInCell.y /= phaseHashForCell;                
+                size.y *= phaseHashForCell;
+                mainSeed = (int)(mainSeed+ _PRIME2) % _PRIME1;
+                seedInCell *=5;
             }
             else {
-                uvInCell.y = (uvInCell.y -hash2) / (1- hash2);
-                size.y *= (1-hash2);
-                mainSeed = (int)(mainSeed+ 111113) % 1251;
-                seed2 *=7;
+                uvInCell.y = (uvInCell.y -phaseHashForCell) / (1- phaseHashForCell);
+                size.y *= (1-phaseHashForCell);
+                mainSeed = (int)(mainSeed + _PRIME1) % _PRIME2;
+                seedInCell *=7;
             } 
+            lastDirection = 1;
         }
-        hash2 = PhaseHash(mainSeed) * 0.2 +0.4;
-        if(hash11u(seed2) < 0.1)
-            break;
-        
 
+
+        float hash = hash11u(seedInCell);
+        uvInCell= fmod(uvInCell + ScrollOffset * float2(-1,1) * ApplyBiasAndGain( hash, ScrollBiasAndGain.x, ScrollBiasAndGain.y) ,1);
+
+        phaseHashForCell =  (PhaseHash(mainSeed) -0.5) * SplitVariation + SplitPosition;
+
+        float4 extra =  Image.Sample(texSampler, uv - uvInCell*size + size/2);
+        if(hash < SubdivisionThreshold )
+            break; 
+        
     }
 
-    float4 imageColor = Image.Sample(texSampler, uvInCell);
-    imageColor.rgb *= hash41u(mainSeed).rgb;
-    return imageColor;
+    float splitF = ColorMode > 0.5 ? hash11u(mainSeed) : step/(float)steps;
+    float4 imageGradient = ImageB.SampleLevel(clampedSampler, float2(splitF,0.5),0);
+
+    float2 dd = (uvInCell-0.5) * size;
+    float2 d4 = (size -abs (dd*2)) * float2(aspectRatio,1);
+    
+    float d5 = min(d4.x,d4.y);
+    float sGap= smoothstep(Padding- Feather, Padding + Feather, d5);
+
+    float2 imageUv = uv - uvInCell*size + size/2;
+    float4 imageColor = Image.Sample(texSampler, imageUv);
+    return lerp(  GapColor, imageColor * imageGradient,sGap);
+
+}
+
+float4 psMain(vsOutput input) : SV_TARGET
+{
+    // float width, height;
+    // Image.GetDimensions(width, height);
+    // float imageAspect = width/height;
+
+    float2 uv = input.texCoord;
+
+    if(UseRGSSMultiSampling > 0.5 ) 
+    {
+        // 4x rotated grid
+        float4 offsets[2];
+        offsets[0] = float4(-0.375, 0.125, 0.125, 0.375);
+        offsets[1] = float4(0.375, -0.125, -0.125, -0.375);
+        
+        float2 sxy = float2(TargetWidth, TargetHeight);
+        
+        return (ComputeSubdivision(uv + offsets[0].xy / sxy)+
+                ComputeSubdivision(uv + offsets[0].zw / sxy)+
+                ComputeSubdivision(uv + offsets[1].xy / sxy)+
+                ComputeSubdivision(uv + offsets[1].zw / sxy)) /4 ;
+
+    }
+    else 
+    {
+        return ComputeSubdivision(uv);
+    }
 }

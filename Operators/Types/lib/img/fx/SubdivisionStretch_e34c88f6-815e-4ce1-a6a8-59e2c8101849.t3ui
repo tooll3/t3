@@ -1,6 +1,6 @@
 {
   "Id": "e34c88f6-815e-4ce1-a6a8-59e2c8101849"/*SubdivisionStretch*/,
-  "Description": "An experimental effect that subdivides and stretch an image recursively.",
+  "Description": "A powerful image generation effect that splits an image into smaller and smaller fragments. The splits occur horizontal or vertical within the giving split range.\n\nThis effect is especially nice, because it can be animated either with the RandomPhase parameter or with the ScrollOffset. Combining it with an incoming image is also great, because it can produce great glitch effects.\n\nIt's similar to [RyojiPattern] and [RyojiPattern2] but produces more random results. Check out the presets and parameter documentation.",
   "InputUis": [
     {
       "InputId": "40bc83fb-a3a4-4bfd-b131-8ecf2908b1a3"/*Image*/,
@@ -8,134 +8,254 @@
       "Position": {
         "X": 132.69783,
         "Y": -84.86365
-      }
-    },
-    {
-      "InputId": "8a571283-e4a6-4707-a8b9-a09b4781160a"/*FxTextures*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": -39.863647
-      }
-    },
-    {
-      "InputId": "639c698e-328b-4acd-ae48-bbd1ba32f31b"/*Center*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": 29.375793
       },
-      "Scale": 0.01
+      "Description": "A source image from which each cell samples its color."
     },
     {
-      "InputId": "c91a5c04-34c8-4d89-8381-0c93066cc81d"/*Stretch*/,
+      "InputId": "32d082f5-d6e1-4068-bcd9-a01977ed72df"/*MaxSubdivisions*/,
       "Position": {
-        "X": 132.69783,
-        "Y": 74.37579
-      }
-    },
-    {
-      "InputId": "2c310da5-3e00-48cb-a073-9b79324eca17"/*Size*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": 119.37579
+        "X": 122.82417,
+        "Y": 154.68631
       },
-      "Min": 0.0,
-      "Max": 2.0,
-      "Scale": 0.001
+      "GroupTitle": "Divisions",
+      "Description": "The maximum number of splits applied to the image. "
     },
     {
       "InputId": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*SubdivisionThreshold*/,
       "Position": {
-        "X": 132.69783,
-        "Y": 164.3758
-      }
-    },
-    {
-      "InputId": "82a8fbb3-c1be-494e-8a8d-e7ccf5440556"/*Padding*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": 209.3758
-      }
-    },
-    {
-      "InputId": "3e164af6-1cb3-45b3-a319-e562789d73f7"/*Feather*/,
-      "Position": {
-        "X": 132.69783,
-        "Y": 254.3758
-      }
-    },
-    {
-      "InputId": "5cae4d6e-d441-42f7-8e17-3aeb58719f08"/*GapColor*/,
-      "Position": {
-        "X": 128.79921,
-        "Y": 341.92877
+        "X": 122.82417,
+        "Y": 199.68631
       },
+      "Description": "The chance that the cell is no longer sub-divided. If 0, every cell will be subdivided until MaxSubdivisions is reached.",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
     },
     {
-      "InputId": "8597dfcf-5697-437d-91e2-664540766806"/*MixOriginal*/,
+      "InputId": "6bdb499c-1300-4fe1-8634-7d3edc4d4050"/*UseAspectForSplit*/,
       "Position": {
-        "X": 128.79921,
-        "Y": 386.92877
-      }
+        "X": 137.93623,
+        "Y": 343.84253
+      },
+      "Description": "If enabled, split direction will select the longer side. This will preven cells for becoming to stretched.",
+      "AddPadding": "True"
     },
     {
-      "InputId": "32d082f5-d6e1-4068-bcd9-a01977ed72df"/*MaxSubdivisions*/,
+      "InputId": "d30b5542-d564-46e1-9f9e-987351eb425b"/*SplitCenter*/,
       "Position": {
-        "X": 128.79921,
-        "Y": 431.92877
-      }
+        "X": 137.93623,
+        "Y": 388.84256
+      },
+      "Description": "The position where a cell is split (0.5 is center).\n",
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
-      "InputId": "7a8684c9-ee81-49c1-ad13-d91d62799efb"/*Randomize*/,
+      "InputId": "c8550e83-bd37-4db3-a859-4a6bcd64a63c"/*SplitCenterVariation*/,
       "Position": {
-        "X": 128.79921,
-        "Y": 476.92877
-      }
+        "X": 137.93623,
+        "Y": 433.84256
+      },
+      "Description": "A random amount added to the split position. This will be animated with the RandomPhase parameter.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Format": "{0:0.000}"
+    },
+    {
+      "InputId": "6d3c2c76-df35-411a-8e25-450dc9cd6f4e"/*DirectionBias*/,
+      "Position": {
+        "X": 137.93623,
+        "Y": 478.84256
+      },
+      "Description": "Skews the chance of the split direction to vertical (negative) or horizontal (positive) splits.",
+      "Min": -1.0,
+      "Max": 1.0,
+      "Format": "{0:0.000}"
+    },
+    {
+      "InputId": "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02"/*ScrollOffset*/,
+      "Position": {
+        "X": 128.874,
+        "Y": 589.01996
+      },
+      "GroupTitle": "Scrolling",
+      "Description": "Add a scroll offset to every cell. This can be nicely combined with [AudioReaction] in AccumulativeSum mode.",
+      "Min": -2.0,
+      "Max": 2.0,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "22afde68-08c5-438f-9425-fe255b2e079f"/*ScrollBiasAndGain*/,
+      "Position": {
+        "X": 135.46915,
+        "Y": 656.903
+      },
+      "Description": "Controls the distribution of scroll speeds of each cell.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
+    },
+    {
+      "InputId": "7a8684c9-ee81-49c1-ad13-d91d62799efb"/*RandomPhase*/,
+      "Position": {
+        "X": 141.87672,
+        "Y": 723.931
+      },
+      "GroupTitle": "Random",
+      "Description": "Nicely animates the split position within the given SplitCenterVariation range."
+    },
+    {
+      "InputId": "819898d2-230b-4176-a1b7-a008aed9631d"/*RandomSeed*/,
+      "Position": {
+        "X": 141.87672,
+        "Y": 768.931
+      },
+      "Description": "An additiona random seed."
+    },
+    {
+      "InputId": "82a8fbb3-c1be-494e-8a8d-e7ccf5440556"/*GapWidth*/,
+      "Position": {
+        "X": 129.52394,
+        "Y": 827.58185
+      },
+      "GroupTitle": "Gaps",
+      "Description": "Inserts a gap between cells.",
+      "Min": -0.1,
+      "Max": 0.1
+    },
+    {
+      "InputId": "3e164af6-1cb3-45b3-a319-e562789d73f7"/*Feather*/,
+      "Position": {
+        "X": 129.52394,
+        "Y": 872.58185
+      },
+      "Description": "Controls the sharpness of the gap. Negative numbers will invert the gap direction.",
+      "Min": -0.01,
+      "Max": 0.01
+    },
+    {
+      "InputId": "5cae4d6e-d441-42f7-8e17-3aeb58719f08"/*GapColor*/,
+      "Position": {
+        "X": 125.62532,
+        "Y": 960.1348
+      },
+      "GroupTitle": "Colors",
+      "Description": "Color of the gap.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "be07242e-39fc-4631-ab6e-3023c9444406"/*Gradient*/,
+      "Position": {
+        "X": 105.86447,
+        "Y": 1100.8657
+      },
+      "Description": "Provides an additional color palette. This colors are then multiplied onto the image color.\n\nTry using this with RandomColor mode and hold interpolation of the gradient to create Piet Mondrian like designs."
+    },
+    {
+      "InputId": "ee2bc31a-a67f-4bec-bce7-0a70db88082c"/*ColorMode*/,
+      "Position": {
+        "X": 109.6633,
+        "Y": 1246.5812
+      },
+      "Description": "Controls how the colors are picked from the gradient: \n\nSteps: use the cells subdivision count\nRandom: Pick a random color for each cell."
+    },
+    {
+      "InputId": "d90350a0-9fa8-4747-805b-ba7ab8125595"/*Use4xMSAA*/,
+      "Position": {
+        "X": 107.974884,
+        "Y": 1336.7921
+      },
+      "GroupTitle": "Additional Options",
+      "Description": "Apply a rotated grid super sampling (RGSS) to avoid flickering of edges. This requires the effect to be rendered 4 times and has a significant performance overhead. Only enable if flickering is a problem."
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "6f157f43-25fb-4873-b1b9-fe82734fc535"/*Vector2Components*/,
-      "Position": {
-        "X": 321.91418,
-        "Y": 37.956757
-      }
-    },
-    {
-      "ChildId": "cc0e3e4c-213d-4e38-b8ad-b8643f4f30ab"/*Vector2Components*/,
-      "Position": {
-        "X": 321.91418,
-        "Y": 93.95676
-      }
-    },
-    {
       "ChildId": "ffc5ada5-8129-48ad-8196-1e5d3eff2a74"/*Vector4Components*/,
       "Position": {
-        "X": 321.74207,
-        "Y": 328.45667
+        "X": 331.7135,
+        "Y": 909.64825
       }
     },
     {
       "ChildId": "06b70633-676e-4f08-b501-be1982f0c3be"/*IntToFloat*/,
       "Position": {
-        "X": 320.84106,
-        "Y": 428.41513
+        "X": 257.47586,
+        "Y": 149.97528
       }
     },
     {
       "ChildId": "8229aec5-9664-485b-ac36-4ace21a8e29a"/*_multiImageFxSetup*/,
       "Position": {
-        "X": 688.4922,
-        "Y": 192.03278
+        "X": 683.3281,
+        "Y": 27.355812
       }
     },
     {
       "ChildId": "0f0073ed-6ec7-46ae-8af5-43d6cf0c2e45"/*FirstValidTexture*/,
       "Position": {
-        "X": 336.12442,
-        "Y": -173.25787
+        "X": 445.59695,
+        "Y": -100.06676
+      }
+    },
+    {
+      "ChildId": "c13fd46b-ae1c-44d3-9570-5b448df02196"/*BoolToFloat*/,
+      "Position": {
+        "X": 299.3652,
+        "Y": 356.63977
+      }
+    },
+    {
+      "ChildId": "0349d0d5-ff4b-41c4-813d-32e7dbf71202"/*GradientsToTexture*/,
+      "Position": {
+        "X": 519.92615,
+        "Y": 138.49385
+      }
+    },
+    {
+      "ChildId": "f5c8743c-b144-4427-9514-98fc5e19f6a8"/*IntToFloat*/,
+      "Position": {
+        "X": 295.70197,
+        "Y": 756.4457
+      }
+    },
+    {
+      "ChildId": "49ca111d-0abe-4099-a2da-d072acfed728"/*IntToFloat*/,
+      "Position": {
+        "X": 325.40088,
+        "Y": 1238.2512
+      }
+    },
+    {
+      "ChildId": "30e43a69-4f5b-49e3-8c08-51582186e865"/*LoadImage*/,
+      "Position": {
+        "X": 275.93024,
+        "Y": 77.458015
+      }
+    },
+    {
+      "ChildId": "4381b874-12b5-4802-8521-74908787ef2a"/*Vector2Components*/,
+      "Position": {
+        "X": 314.72565,
+        "Y": 584.158
+      }
+    },
+    {
+      "ChildId": "da5c8406-a897-46d3-ad8e-dc4641bd6c51"/*Vector2Components*/,
+      "Position": {
+        "X": 285.46912,
+        "Y": 656.903
+      }
+    },
+    {
+      "ChildId": "7c234fd3-eb12-4058-b8ae-71e1c760d5e8"/*BoolToFloat*/,
+      "Position": {
+        "X": 332.30554,
+        "Y": 1324.4791
       }
     }
   ],
