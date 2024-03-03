@@ -64,7 +64,7 @@
     },
     {
       "Id": "80edea41-7f4e-492e-bf73-270df9b225be"/*RandomRotate*/,
-      "DefaultValue": 180.0
+      "DefaultValue": 0.0
     },
     {
       "Id": "640e0f51-e636-406b-ba64-8746096fee36"/*RandomScale*/,
