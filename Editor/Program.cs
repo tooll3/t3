@@ -101,7 +101,7 @@ namespace T3.Editor
             var userSettings = new UserSettings(saveOnQuit: true);
             var projectSettings = new ProjectSettings(saveOnQuit: true);
             
-            #if IDE
+            #if DEBUG
             ProjectSetup.CreateSymlinks();
             #endif
 

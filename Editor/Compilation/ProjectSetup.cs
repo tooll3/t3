@@ -95,7 +95,8 @@ internal static class ProjectSetup
 
             Log.Debug($"Core directories initialized in {stopwatch.ElapsedMilliseconds}ms");
 
-            #if IDE
+            #if DEBUG
+
             stopwatch.Restart();
 
             var operatorFolder = Path.Combine(GetT3ParentDirectory(), "Operators");
@@ -258,7 +259,8 @@ internal static class ProjectSetup
         }
     }
 
-    #if IDE
+    #if DEBUG
+
     internal static void CreateSymlinks()
     {
         var t3ParentDirectory = GetT3ParentDirectory();
