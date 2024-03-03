@@ -28,8 +28,15 @@ namespace lib.img.fx._
         private void Update(EvaluationContext context)
         {
             var filePath = Filepath.GetValue(context);
+
+            if (!TryGetFilePath(filePath, out var absolutePath))
+            {
+                Log.Error($"Could not find file: {filePath}", this);
+                return;
+            }
+
             var filterCharacters = FilterCharacters.GetValue(context); 
-            var brightnessTable = SortAsciiLetters(filePath, filterCharacters);
+            var brightnessTable = SortAsciiLetters(absolutePath, filterCharacters);
             if (brightnessTable == null)
             {
                 return;
