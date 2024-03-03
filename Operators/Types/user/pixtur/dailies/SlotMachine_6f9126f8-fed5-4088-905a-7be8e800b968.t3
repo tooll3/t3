@@ -120,6 +120,16 @@
       "SymbolId": "d14233a2-8240-47d3-bb92-0854f6d3b218",
       "InputValues": [
         {
+          "Id": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Refresh*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "c42d8124-d656-4b52-864f-9c9d888e0c54"/*WrapSize*/,
+          "Type": "System.Single",
+          "Value": 9.0
+        },
+        {
           "Id": "e92432c8-6ceb-494b-9cf4-b21191567b29"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -130,19 +140,9 @@
           }
         },
         {
-          "Id": "c42d8124-d656-4b52-864f-9c9d888e0c54"/*WrapSize*/,
-          "Type": "System.Single",
-          "Value": 9.0
-        },
-        {
           "Id": "0744e03b-9df3-4a5e-9cfa-f522d9d946ea"/*NoiseAmount*/,
           "Type": "System.Single",
           "Value": 0.1
-        },
-        {
-          "Id": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Refresh*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []

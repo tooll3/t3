@@ -18,7 +18,8 @@
       },
       "Min": -1.0,
       "Max": 1.0,
-      "Scale": 0.001
+      "Scale": 0.001,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "48e80f45-9685-4ded-aa1c-d05e16658c5a"/*Width*/,

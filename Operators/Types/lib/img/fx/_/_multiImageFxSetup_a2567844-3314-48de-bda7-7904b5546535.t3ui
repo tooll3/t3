@@ -198,6 +198,13 @@
         "X": 93.91699,
         "Y": 119.381134
       }
+    },
+    {
+      "ChildId": "c8ecb85b-5060-4c0b-8c0a-7918d2aa1eab"/*SetPixelAndVertexShaderStage*/,
+      "Position": {
+        "X": 722.6665,
+        "Y": 24.293396
+      }
     }
   ],
   "OutputUis": [
