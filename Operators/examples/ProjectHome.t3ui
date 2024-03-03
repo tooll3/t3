@@ -7,38 +7,38 @@
       "ChildId": "d31691f2-3f93-474e-9327-b28281c057f3"/*FluidFeedback*/,
       "Comment": "A simple feedback effect. \n\nNote that generating live preset thumbnails with feedbacks is not supported.",
       "Position": {
-        "X": -1604.5897,
-        "Y": -4993.318
+        "X": -280.53003,
+        "Y": 390.34015
       }
     },
     {
       "ChildId": "64fe5405-7f98-4303-b2a5-f53db065740c"/*TorusMesh*/,
       "Position": {
-        "X": -2054.5908,
-        "Y": -4930.318
+        "X": -730.5311,
+        "Y": 453.34015
       }
     },
     {
       "ChildId": "dda89242-8a90-4442-b3df-ed2d855e32a4"/*DrawMesh*/,
       "Comment": "We use the color sampled from the gradient to draw a torus mesh.",
       "Position": {
-        "X": -1904.5897,
-        "Y": -4993.318
+        "X": -580.53,
+        "Y": 390.34015
       }
     },
     {
       "ChildId": "2fe00e23-ee4a-4234-a0dc-213b9a6ca9fe"/*OrbitCamera*/,
       "Position": {
-        "X": -1754.5897,
-        "Y": -4993.318
+        "X": -430.53003,
+        "Y": 390.34015
       }
     },
     {
       "ChildId": "018e0408-fac8-42f0-a17c-b9c0bb5ab5b7"/*SampleGradient*/,
       "Comment": "Here we sample a gradient with that value.\n\nYou can use the upper area for dragging the operator and the lower area for adjust the gradients.\nAlso try to right-click the lower area to open the context menu with presets and further options.\n\nTip: You can remove a step from the gradient by dragging it down until the remove icon appears.",
       "Position": {
-        "X": -2054.5903,
-        "Y": -4993.318
+        "X": -730.53064,
+        "Y": 390.34015
       }
     },
     {
@@ -50,58 +50,58 @@
       },
       "Comment": "Double click this operator to open an quick interactive tutorials.",
       "Position": {
-        "X": -1824.6055,
-        "Y": -5229.15
+        "X": -500.54578,
+        "Y": 154.50812
       }
     },
     {
       "ChildId": "665d7961-58a9-4181-94f1-eb40af17cdc7"/*HowToAnimate*/,
       "Position": {
-        "X": -2249.7317,
-        "Y": -4711.058
+        "X": -925.672,
+        "Y": 672.6001
       }
     },
     {
       "ChildId": "73956a9d-0756-4d9c-a11b-ca59b3ee16fb"/*HowToDrawThings*/,
       "Position": {
-        "X": -1949.7317,
-        "Y": -4711.058
+        "X": -625.672,
+        "Y": 672.6001
       }
     },
     {
       "ChildId": "acbc034c-3c0d-4f7e-ac09-39cfd702f601"/*HowToUseImageEffects*/,
       "Position": {
-        "X": -2099.7317,
-        "Y": -4711.058
+        "X": -775.672,
+        "Y": 672.6001
       }
     },
     {
       "ChildId": "91dc79a2-ed7a-41dc-8245-2d3011f4aebe"/*HowToUseOperators*/,
       "Position": {
-        "X": -1799.7317,
-        "Y": -4711.058
+        "X": -475.672,
+        "Y": 672.6001
       }
     },
     {
       "ChildId": "91042db3-81d6-4a17-8cef-423811aabb17"/*HowToUsePoints*/,
       "Position": {
-        "X": -1649.7317,
-        "Y": -4711.058
+        "X": -325.672,
+        "Y": 672.6001
       }
     },
     {
       "ChildId": "a777a09a-c830-46af-a2b1-3dcd3c48b169"/*AnimValue*/,
       "Comment": "This will generate an LFO-like value animation.\n\nTry to hold down CTRL and drag the curve or the speed multiplier...",
       "Position": {
-        "X": -2204.5908,
-        "Y": -4993.318
+        "X": -880.5311,
+        "Y": 390.34015
       }
     },
     {
       "ChildId": "9a40eb4f-cda2-4772-8a02-8f85ff4f13c2"/*HowToUseParticles*/,
       "Position": {
-        "X": -1499.7317,
-        "Y": -4711.058
+        "X": -175.672,
+        "Y": 672.6001
       }
     }
   ],
@@ -117,8 +117,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -2277.1924,
-        "Y": -5383.488
+        "X": -953.1327,
+        "Y": 0.17022705
       },
       "Size": {
         "X": 935.97754,
@@ -135,8 +135,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -2268.859,
-        "Y": -5326.587
+        "X": -944.7992,
+        "Y": 57.071106
       },
       "Size": {
         "X": 421.03372,
@@ -153,8 +153,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -2269.227,
-        "Y": -5141.452
+        "X": -945.16736,
+        "Y": 242.20587
       },
       "Size": {
         "X": 914.22864,
@@ -171,8 +171,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -2267.7087,
-        "Y": -4878.7495
+        "X": -943.64905,
+        "Y": 504.9085
       },
       "Size": {
         "X": 909.0123,
