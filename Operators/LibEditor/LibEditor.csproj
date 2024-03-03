@@ -6,14 +6,16 @@
         <Nullable>disable</Nullable>
         <Configurations>Debug;Release;IDE</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
 
     </PropertyGroup>
-
     <ItemGroup>
-      <ProjectReference Include="..\..\Editor\Editor.csproj" />
-      <ProjectReference Include="..\lib\lib.csproj" >
-          <ExcludeAssets>All</ExcludeAssets>
-      </ProjectReference>
+        <ProjectReference Include="..\..\Core\Core.csproj" Private="false"/>
+        <ProjectReference Include="..\lib\Lib.csproj" Private="false"/>
+        <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false"/>
+        <ProjectReference Include="..\..\Serialization\Serialization.csproj" Private="false"/>
+        <ProjectReference Include="..\..\SystemUI\SystemUI.csproj" Private="false"/>
+        <ProjectReference Include="..\..\Editor\Editor.csproj" Private="false"/>
     </ItemGroup>
 
 

@@ -1,4 +1,6 @@
-﻿namespace T3.SystemUi.Logging;
+﻿using T3.SystemUi.Logging;
+
+namespace T3.Core.Logging;
 
 public interface ILogWriter : IDisposable
 {

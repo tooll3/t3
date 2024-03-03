@@ -7,11 +7,14 @@
         <RootNamespace>lib.types</RootNamespace>
         <Configurations>Debug;Release;IDE</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
 
     </PropertyGroup>
-
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Core.csproj"/>
+        <ProjectReference Include="..\..\Core\Core.csproj" Private="false"/>
+        <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false"/>
+        <ProjectReference Include="..\..\Serialization\Serialization.csproj" Private="false"/>
+        <ProjectReference Include="..\..\SystemUI\SystemUI.csproj" Private="false"/>
     </ItemGroup>
 
     <!-- Include Resources/** into output/Resources -->

@@ -14,7 +14,7 @@
         <PackageReference Include="System.Windows.Forms" Version="4.0.0"/>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\SystemUi\SystemUi.csproj" />
+      <ProjectReference Include="..\SystemUi\SystemUi.csproj" Private="false"/>
     </ItemGroup>
 
 </Project>

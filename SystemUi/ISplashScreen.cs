@@ -1,4 +1,4 @@
-using T3.SystemUi.Logging;
+using T3.Core.Logging;
 
 namespace T3.SystemUi;
 
