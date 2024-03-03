@@ -1,5 +1,6 @@
 ﻿namespace T3.Core.Logging
 {
+    // todo: maybe move together with OpUpdateCounter. On the other hand, it's only required in Editor...
     public static class RenderStatsCollector
     {
         public static void RegisterProvider(IRenderStatsProvider newProvider)

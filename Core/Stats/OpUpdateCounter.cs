@@ -4,6 +4,9 @@ using T3.Core.Logging;
 
 namespace T3.Core.Stats
 {
+    /// <summary>
+    /// Performance profiling helper that counts slot updates per frame
+    /// </summary>
     public class OpUpdateCounter : IRenderStatsProvider
     {
         public OpUpdateCounter()

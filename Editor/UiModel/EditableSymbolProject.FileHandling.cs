@@ -195,6 +195,9 @@ internal sealed partial class EditableSymbolProject
         _needsCompilation = true;
     }
 
+    /// <summary>
+    /// Looks for source codes in the project folder and subfolders and tries to find the symbol id in the source code
+    /// </summary>
     public void LocateSourceCodeFiles()
     {
         _sourceCodeFiles.Clear();
@@ -209,6 +212,7 @@ internal sealed partial class EditableSymbolProject
                                  if (line == null)
                                      break;
 
+                                 //todo: this is a bit hacky. Would it be better to look for "[Guid(" ?
                                  var firstQuoteIndex = line.IndexOf('"');
                                  if (firstQuoteIndex == -1)
                                      continue;

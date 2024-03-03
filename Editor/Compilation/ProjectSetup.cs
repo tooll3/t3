@@ -14,12 +14,15 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation;
 
+/// <summary>
+/// handles the creation and management of symbol projects
+/// </summary>
 internal static class ProjectSetup
 {
     private static readonly List<EditableSymbolProject> EditableSymbolProjectsRw = new();
     public static readonly IReadOnlyList<EditableSymbolProject> EditableSymbolPackages = EditableSymbolProjectsRw;
 
-    internal static void CreateOrMigrateProject(string newName, string newNamespace)
+    internal static void CreateProject(string newName, string newNamespace)
     {
         if (TryCreateProject(newName, newNamespace, out var project))
         {

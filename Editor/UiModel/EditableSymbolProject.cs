@@ -13,6 +13,7 @@ using T3.Editor.Gui.Graph.Helpers;
 
 namespace T3.Editor.UiModel;
 
+
 internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 {
     public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;

@@ -37,7 +37,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                                                       isEnabled: GraphUtils.IsIdentifierValid(_newName) && GraphUtils.IsNamespaceValid(_namespaceBuilder.ToString()),
                                                       enableTriggerWithReturn: false))
                 {
-                    ProjectSetup.CreateOrMigrateProject(_newName, _newNamespace);
+                    ProjectSetup.CreateProject(_newName, _newNamespace);
                     T3Ui.Save(false);
                     ImGui.CloseCurrentPopup();
                 }
