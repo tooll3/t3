@@ -6,12 +6,13 @@
         <Nullable>disable</Nullable>
         <RootNamespace>user._1x</RootNamespace>
         <PackageId>t3.user._1x</PackageId>
+        <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll" Private="false"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll" Private="false"/>
+        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll" Private="false"/>
     </ItemGroup>
 
 

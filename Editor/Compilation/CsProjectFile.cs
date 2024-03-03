@@ -362,7 +362,7 @@ internal class CsProjectFile
     private const string ExpandedAssemblyDirectory = $"$({RuntimeAssemblies.EnvironmentVariableName})";
     private const string Indentation = "\t\t";
     private const string BeginReference = $"<Reference Include=\"{ExpandedAssemblyDirectory}/";
-    private const string Ending = "\"/>\n";
+    private const string Ending = "\" Private=\"false\"/>\n";
 
     private const string CoreReferences = BeginReference + "Core.dll" + Ending +
                                           Indentation + BeginReference + "Logging.dll" + Ending +

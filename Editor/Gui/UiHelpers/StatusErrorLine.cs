@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;

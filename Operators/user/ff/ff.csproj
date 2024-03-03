@@ -5,18 +5,13 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <RootNamespace>user.ff</RootNamespace>
+        <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll" >
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll" >
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll" >
-        <Private>False</Private>
-      </Reference>
+      <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll" Private="False"/>
+      <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll" Private="False"/>
+      <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll" Private="False"/>
     </ItemGroup>
 
 

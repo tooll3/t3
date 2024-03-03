@@ -14,30 +14,23 @@
 
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1"/>
+        <PackageReference Include="SharpDX.Desktop" Version="4.2.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Serialization.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Desktop.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.DXGI.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Mathematics.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SystemUi.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/ManagedBass.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/bass.dll"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/MsForms.dll"/>
         <Reference Include="System.Drawing.Common">
-          <HintPath>$(ProgramFiles)\dotnet\shared\Microsoft.WindowsDesktop.App\8.0.1\System.Drawing.Common.dll</HintPath>
+          
         </Reference>
         <Reference Include="System.Windows.Forms">
-          <HintPath>$(ProgramFiles)\dotnet\shared\Microsoft.WindowsDesktop.App\8.0.1\System.Windows.Forms.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.VisualBasic.Forms">
-            <HintPath>$(ProgramFiles)\dotnet\shared\Microsoft.WindowsDesktop.App\8.0.1\Microsoft.VisualBasic.Forms.dll</HintPath>
         </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Core\Core.csproj" />
+      <ProjectReference Include="..\MsForms\MsForms.csproj" />
+      <ProjectReference Include="..\SystemUi\SystemUi.csproj" />
     </ItemGroup>
 
 </Project>

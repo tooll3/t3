@@ -9,4 +9,8 @@
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\Logging\Logging.csproj" Private="false"/>
+    </ItemGroup>
+
 </Project>
