@@ -32,7 +32,8 @@ namespace T3.Editor.Gui.Commands.Variations
                 return;
             }
 
-            #if IDE
+            #if DEBUG
+
                 pool.AddDefaultVariation(_newVariation);
             #else
                 pool.AddUserVariation(_newVariation);
@@ -52,7 +53,8 @@ namespace T3.Editor.Gui.Commands.Variations
             }
 
 
-            #if IDE
+            #if DEBUG
+
                 pool.RemoveDefaultVariation(_newVariation);
             #else
                 pool.RemoveUserVariation(_newVariation);

@@ -102,7 +102,8 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         {
             SaveVariationsToFile(UserData.UserDataLocation.User);
 
-            #if IDE
+            #if DEBUG
+
             SaveVariationsToFile(UserData.UserDataLocation.Defaults);
             #endif
         }

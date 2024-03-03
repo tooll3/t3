@@ -18,7 +18,8 @@ namespace T3.Editor.Gui.Commands.Variations
         
         public void Undo()
         {
-            #if IDE
+            #if DEBUG
+
                 _variationPool.AddDefaultVariation(_originalVariation);
             #else
                 _variationPool.AddUserVariation(_originalVariation);
@@ -27,7 +28,8 @@ namespace T3.Editor.Gui.Commands.Variations
 
         public void Do()
         {
-            #if IDE
+            #if DEBUG
+
                 _variationPool.RemoveDefaultVariation(_originalVariation);
             #else
                 _variationPool.RemoveUserVariation(_originalVariation);
