@@ -105,10 +105,16 @@ namespace lib.io.midi
             var filename = Filename.GetValue(context);
             if (string.IsNullOrEmpty(filename))
                 return;
+
+            if (!TryGetFilePath(filename, out var filePath))
+            {
+                Log.Error($"Could not find file: {filename}", this);
+                return;
+            }
             
             // Initialize MIDI file reading, then read all parameters from file
             const bool noStrictMode = false;
-            _midiFile = new MidiFile(filename, noStrictMode);
+            _midiFile = new MidiFile(filePath, noStrictMode);
             _deltaTicksPerQuarterNote = _midiFile.DeltaTicksPerQuarterNote;
             _midiEventCollection = _midiFile.Events;
             ClearTracks();

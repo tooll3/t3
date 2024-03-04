@@ -57,7 +57,12 @@ namespace lib.point._experimental
 
             if (isFilePathDirty)
             {
-                _paging.LoadPages(filepath);
+                if(!TryGetFilePath(filepath, out var absolutePath))
+                {
+                    Log.Error($"Could not find file: {filepath}", this);
+                    return;
+                }
+                _paging.LoadPages(absolutePath);
             }
 
             var pageIndexNeedsUpdate = Math.Abs(_lastUpdateContextTime - context.LocalTime) > 0.001;

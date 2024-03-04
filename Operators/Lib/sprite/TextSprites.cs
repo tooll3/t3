@@ -39,10 +39,17 @@ namespace lib.sprite
             if (Filepath.DirtyFlag.IsDirty || _bmFont == null)
             {
                 var filepath = Filepath.GetValue(context);
-                _bmFont = BmFontDescription.InitializeFromFile(filepath);
+                
+                if(!TryGetFilePath(filepath, out var absolutePath))
+                {
+                    Log.Error($"Could not find file: {filepath}", this);
+                    return;
+                }
+                
+                _bmFont = BmFontDescription.InitializeFromFile(absolutePath);
                 if (_bmFont != null)
                 {
-                    var imageFilePath = filepath.Replace(".fnt", ".png");
+                    var imageFilePath = absolutePath.Replace(".fnt", ".png");
                     UpdateTexture(imageFilePath);
                 }
             }

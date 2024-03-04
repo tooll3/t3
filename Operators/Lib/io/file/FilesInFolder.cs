@@ -2,9 +2,11 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace lib.io.file
@@ -28,14 +30,22 @@ namespace lib.io.file
         private void Update(EvaluationContext context)
         {
             var wasTriggered = MathUtils.WasTriggered(TriggerUpdate.GetValue(context), ref _trigger);
-            if (wasTriggered || Folder.DirtyFlag.IsDirty || Filter.DirtyFlag.IsDirty)
+            var folderIsDirty = Folder.DirtyFlag.IsDirty;
+            if (wasTriggered || folderIsDirty || Filter.DirtyFlag.IsDirty)
             {
                 TriggerUpdate.SetTypedInputValue(false);
                 
-                var folderPath = Folder.GetValue(context);
+                if (folderIsDirty)
+                {
+                    var folderPath = Folder.GetValue(context);
+                    _resolvedFolder = ResourceManager.TryResolveDirectory(folderPath, this, out var resolvedFolder) 
+                                          ? resolvedFolder 
+                                          : folderPath;
+                }
+                
                 var filter = Filter.GetValue(context);
-                var filePaths = Directory.Exists(folderPath) 
-                                  ? Directory.GetFiles(folderPath).ToList() 
+                var filePaths = Directory.Exists(_resolvedFolder) 
+                                  ? Directory.GetFiles(_resolvedFolder).ToList() 
                                   : new List<string>();
                 
                 Files.Value = string.IsNullOrEmpty(Filter.Value) 
@@ -47,6 +57,7 @@ namespace lib.io.file
         }
 
         private bool _trigger;
+        private string _resolvedFolder;
 
         [Input(Guid = "ca9778e7-072c-4304-9043-eeb2dc4ca5d7")]
         public readonly InputSlot<string> Folder = new(".");

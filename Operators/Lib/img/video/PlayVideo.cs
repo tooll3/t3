@@ -266,11 +266,31 @@ namespace lib.img.video
                 return;
 
             _url = url;
+            
+            string resolvedUri;
+            
+            // check if file path or url
+            var isUrl = url.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
+                        || url.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+                        || url.StartsWith("ftp://", StringComparison.OrdinalIgnoreCase)
+                        || url.StartsWith("ftps://", StringComparison.OrdinalIgnoreCase)
+                        || url.StartsWith("file://", StringComparison.OrdinalIgnoreCase);
+            
+            if (isUrl)
+            {
+                resolvedUri = url;
+            }
+            else if (!TryGetFilePath(url, out resolvedUri))
+            {
+                Log.Error($"Video file not found: {url}", this);
+                return;
+            }
+            
             try
             {
                 _hasUpdatedTexture = false;
                 _engine.Pause();
-                _engine.Source = url;
+                _engine.Source = resolvedUri;
             }
             catch (SharpDXException e)
             {

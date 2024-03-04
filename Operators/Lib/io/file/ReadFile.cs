@@ -25,17 +25,24 @@ namespace lib.io.file
             var triggerUpdate = TriggerUpdate.GetValue(context);
             
             var filepath = FilePath.GetValue(context);
-            ResourceFileWatcher.AddFileHook(filepath, () => {FilePath.DirtyFlag.Invalidate();});
+
+            if (!TryGetFilePath(filepath, out var absolutePath))
+            {
+                Log.Error($"Could not find file: {filepath}", this);
+                return;
+            }
+            
+            ResourceFileWatcher.AddFileHook(absolutePath, () => {FilePath.DirtyFlag.Invalidate();});
             
             //ResourceManager.Instance().
 
             try
             {
-                Result.Value = File.ReadAllText(filepath);
+                Result.Value = File.ReadAllText(absolutePath);
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to read file {filepath}:" + e.Message);
+                Log.Error($"Failed to read file {absolutePath}:" + e.Message);
             }
         }
         
