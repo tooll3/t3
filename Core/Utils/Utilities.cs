@@ -7,8 +7,10 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Core.Utils
 {
+    // Todo: this probably deserves a better name
     public static class Utilities
     {
+        // This has been implemented by the C# compiler and is unnecessary. i.e. (a,b) = (b,a), (a, b) = kvp
         public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> tuple, out T1 key, out T2 value)
         {
             key = tuple.Key;

@@ -19,6 +19,9 @@ using Device = SharpDX.Direct3D11.Device;
 
 namespace T3.Core.Resource;
 
+/// <summary>
+/// Loads or creates resources that can be loaded into a shader, such as textures, buffers, SRVs, UAVs, etc
+/// </summary>
 public sealed partial class ResourceManager
 {
     public static Device Device => _instance._device;

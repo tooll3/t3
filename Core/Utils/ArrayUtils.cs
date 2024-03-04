@@ -2,6 +2,11 @@ namespace T3.Core.Utils;
 
 public class ArrayUtils
 {
+    /// <summary>
+    /// Inserts a value in an array by replacing the array with a new array (length + 1) and copying the values
+    /// Will create a lot of garbage if used frequently
+    /// Created for Slots so they can have array-based inputs for performance reasons
+    /// </summary>
     public static void Insert<T>(ref T[] array, T value, int index)
     {
         var newArray = new T[array.Length + 1];
@@ -19,6 +24,11 @@ public class ArrayUtils
         array = newArray;
     }
     
+    /// <summary>
+    /// Removes an element in an array by replacing the array with a new array (length - 1) and copying the values
+    /// Will create a lot of garbage if used frequently
+    /// Created for Slots so they can have array-based inputs for performance reasons
+    /// </summary>
     public static void RemoveAt<T>(ref T[] array, int index)
     {
         var newArray = new T[array.Length - 1];
