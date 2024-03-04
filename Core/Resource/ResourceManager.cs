@@ -10,6 +10,11 @@ using T3.Core.Operator;
 
 namespace T3.Core.Resource
 {
+    /// <summary>
+    /// File handler and GPU resource generator. Should probably be split into multiple classes, but for now it is a
+    /// multi-file partial class.
+    /// Todo: reduce/remove dependency on ResourceFileWatcher to resolve paths - this should happen the other way around
+    /// </summary>
     public sealed partial class ResourceManager
     {
         public static readonly ConcurrentDictionary<uint, AbstractResource> ResourcesById = new();

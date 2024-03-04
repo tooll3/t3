@@ -7,6 +7,10 @@ using T3.Core.Operator;
 
 namespace T3.Core.Resource;
 
+/// <summary>
+/// Creates or loads shaders as "resources" and handles their filehooks, compilation, etc
+/// Could do with some simplification - perhaps their arguments should be condensed into a struct?
+/// </summary>
 public sealed partial class ResourceManager
 {
     public bool TryCreateShaderResourceFromSource<TShader>(out ShaderResource<TShader> resource, string shaderSource, Instance instance,

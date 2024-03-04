@@ -7,6 +7,11 @@ using T3.Core.Resource;
 
 namespace T3.Core.Operator;
 
+/// <summary>
+/// An interface for shader operators (PixelShader, VertexShader, etc.)
+/// Shader updating can be complex, so this interface is used to provide the common functionality for all of them
+/// </summary>
+/// <typeparam name="T">The type of shader (i.e. SharpDX.D3D11.PixelShader)</typeparam>
 public interface IShaderOperator<T> where T : class, IDisposable
 {
     public Slot<T> Shader { get; }

@@ -8,6 +8,9 @@ using T3.Core.Logging;
 
 namespace T3.Core.Resource;
 
+/// <summary>
+/// An implementation of the <see cref="ShaderCompiler"/> class that uses the DirectX 11 shader compiler from SharpDX
+/// </summary>
 public class DX11ShaderCompiler : ShaderCompiler
 {
     public Device Device { get; set; }

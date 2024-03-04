@@ -1,4 +1,5 @@
-﻿namespace T3.Core.Utils
+﻿// ReSharper disable UnusedMember.Global
+namespace T3.Core.Utils
 {
     public class SharedEnums
     {

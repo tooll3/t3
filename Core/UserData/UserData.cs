@@ -8,6 +8,12 @@ using T3.Serialization;
 
 namespace T3.Core.UserData;
 
+/// <summary>
+/// A currently meek attempt at centralizing user data in a folder outside of the application or project folders.
+/// Settings, logs, backups, variations, etc should be stored in this folder.
+/// Also refers to "SettingsFolderInApplicationDirectory", which is used for defaults
+/// Todo: should variations be included in project folders? Probably not, but we should think about how to best preserve and update them.
+/// </summary>
 public static class UserData
 {
     static UserData()

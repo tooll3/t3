@@ -6,6 +6,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Core.Utils
 {
+    // Todo: can this be removed?
     public class StructuredListUtils
     {
         public static T GetValueOfFieldWithType<T>(EvaluationContext context, InputSlot<StructuredList> dataListInput, InputSlot<int> itemIndex, InputSlot<int> FieldIndex,

@@ -9,6 +9,11 @@ using T3.Core.Operator;
 
 namespace T3.Core.Resource;
 
+// Todo: This file has too many classes in it, and probably can occupy a folder by itself
+
+/// <summary>
+/// Base class for shader resources
+/// </summary>
 public abstract class ShaderResource : AbstractResource
 {
     public static string ExtractMeaningfulShaderErrorMessage(string message)
@@ -33,6 +38,11 @@ public abstract class ShaderResource : AbstractResource
     private static readonly Regex ShaderErrorPattern = new(@"(.*?)\((.*)\):(.*)");
 }
 
+/// <summary>
+/// Shader resource - currently tightly coupled with SharpDX, but ShaderBytecode could be abstracted out/made generic
+/// 
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class ShaderResource<T> : ShaderResource where T : class, IDisposable
 {
     private T _shader;
