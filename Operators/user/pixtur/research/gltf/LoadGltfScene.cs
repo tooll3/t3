@@ -138,7 +138,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         }
         catch (Exception e)
         {
-            ShowError($"Failed to load gltf file: {path} \n{e.Message}");
+            ShowError($"Failed to load gltf file: {fullPath} \n{e.Message}");
             return false;
         }
 

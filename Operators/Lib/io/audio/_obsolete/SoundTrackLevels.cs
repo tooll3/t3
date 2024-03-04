@@ -41,26 +41,25 @@ namespace lib.io.audio._obsolete
 
             var filePath = FilePath.GetValue(context);
 
-            if (filePath != _filepath)
+            if (!TryGetFilePath(filePath, out var absolutePath))
             {
-                _filepath = filePath;
+                Log.Error($"Could not find file: {filePath}", this);
+                return;
+            }
 
-                if (File.Exists(_filepath))
+            if (absolutePath != _filepath)
+            {
+                _filepath = absolutePath;
+
+                using (var reader = new StreamReader(absolutePath))
                 {
-                    using (var reader = new StreamReader(filePath))
+                    var jsonString = reader.ReadToEnd();
+                    _upLevels = JsonConvert.DeserializeObject<float[]>(jsonString);
+                    if (_upLevels == null || _upLevels.Length == 0)
                     {
-                        var jsonString = reader.ReadToEnd();
-                        _upLevels = JsonConvert.DeserializeObject<float[]>(jsonString);
-                        if (_upLevels == null || _upLevels.Length == 0)
-                        {
-                            Log.Warning("Loading sound levels failed", this);
-                            return;
-                        }
+                        Log.Warning("Loading sound levels failed", this);
+                        return;
                     }
-                }
-                else
-                {
-                    Log.Warning("File doesn't exist:  " + _filepath);
                 }
 
                 needsRecalcAverage = true;

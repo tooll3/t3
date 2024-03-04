@@ -76,9 +76,17 @@ namespace lib.img.video
             var reloadedPath = false;
             if (Path.DirtyFlag.IsDirty)
             {
-                reloadedPath = true;
-                MediaUrl = Path.GetValue(context);
-                _engine.Pause();
+                var filePath = Path.GetValue(context);
+                if (!TryGetFilePath(filePath, out var absolutePath))
+                {
+                    Log.Error($"Could not find file: {filePath}", this);
+                }
+                else
+                {
+                    reloadedPath = true;
+                    MediaUrl = absolutePath;
+                    _engine.Pause();
+                }
             }
 
             // get scaled time range of video

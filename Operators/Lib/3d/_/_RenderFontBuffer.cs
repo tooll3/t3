@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Operators.Utils;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -32,9 +33,15 @@ namespace lib._3d._
             {
                 var filepath = Filepath.GetValue(context);
                 
-                ResourceFileWatcher.AddFileHook(filepath, () => {Filepath.DirtyFlag.Invalidate();});
+                if(!TryGetFilePath(filepath, out var absolutePath))
+                {
+                    Log.Error($"Could not find file: {filepath}", this);
+                    return;
+                }
                 
-                _font = BmFontDescription.InitializeFromFile(filepath);
+                ResourceFileWatcher.AddFileHook(absolutePath, () => {Filepath.DirtyFlag.Invalidate();});
+                
+                _font = BmFontDescription.InitializeFromFile(absolutePath);
             }
             
             UpdateMesh(context);
