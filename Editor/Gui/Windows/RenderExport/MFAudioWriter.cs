@@ -242,3 +242,13 @@ class FlacAudioWriter : MediaFoundationAudioWriter
     public override Guid AudioFormat => MF.AudioFormatGuids.Flac;
 }
 
+class AacAudioWriter : MediaFoundationAudioWriter
+{
+    public AacAudioWriter(MF.SinkWriter sinkWriter, ref WaveFormatExtension waveFormat, int desiredBitRate = 192000)
+        : base(sinkWriter, ref waveFormat, desiredBitRate)
+    {
+    }
+
+    public override Guid AudioFormat => MF.AudioFormatGuids.Aac;
+}
+
