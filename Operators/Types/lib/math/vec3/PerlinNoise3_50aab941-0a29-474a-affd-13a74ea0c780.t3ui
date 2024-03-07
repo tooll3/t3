@@ -45,7 +45,8 @@
       "Position": {
         "X": -2.7436478,
         "Y": 35.444794
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "5401e715-7a82-43ab-ba16-d0e55a1d83d4"/*RangeMax*/,
@@ -60,6 +61,7 @@
         "X": -2.7436478,
         "Y": 125.44479
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "UseVec2Control": "BiasAndGain"
