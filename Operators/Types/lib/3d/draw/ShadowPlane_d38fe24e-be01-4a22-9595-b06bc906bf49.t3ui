@@ -78,6 +78,13 @@
       },
       "GroupTitle": "Position",
       "Description": "Defines the Position of the ShadowPlane.\nThe default is slightly above the ground.\n"
+    },
+    {
+      "InputId": "48974f83-203f-4c35-896f-c1e0820214cf"/*Rotation*/,
+      "Position": {
+        "X": -446.21228,
+        "Y": 408.63855
+      }
     }
   ],
   "SymbolChildUis": [
@@ -126,8 +133,8 @@
     {
       "ChildId": "81eeb5cf-b7a3-4711-8cc3-109fbd36650a"/*TransformMesh*/,
       "Position": {
-        "X": 635.5085,
-        "Y": 356.1574
+        "X": 692.2872,
+        "Y": 367.72345
       }
     },
     {
