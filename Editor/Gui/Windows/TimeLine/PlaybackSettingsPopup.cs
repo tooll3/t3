@@ -197,7 +197,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                     if (filepathModified)
                     {
+                        AudioEngine.ReloadClip(soundtrack);
                         UpdateBpmFromSoundtrackConfig(soundtrack);
+                        UpdatePlaybackAndTimeline(settings);
                     }
                 }
             }
