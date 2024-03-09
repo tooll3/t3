@@ -26,7 +26,7 @@ namespace lib.color
             Output.UpdateAction = Update;
         }
 
-        private void Update(EvaluationContext context)
+        private unsafe void Update(EvaluationContext context)
         {
             var alwaysUpdate = AlwaysUpdate.GetValue(context);
             var inputImage = InputImage.GetValue(context);
@@ -40,27 +40,29 @@ namespace lib.color
 
             var d3DDevice = ResourceManager.Device;
             var immediateContext = d3DDevice.ImmediateContext;
+            
+            var inputDescription = inputImage.Description;
 
-            var column = ((int)(position.X * inputImage.Description.Width)).Clamp(0, inputImage.Description.Width - 1);
-            var row = ((int)(position.Y * inputImage.Description.Height)).Clamp(0, inputImage.Description.Height - 1);
+            var column = ((int)(position.X * inputDescription.Width)).Clamp(0, inputDescription.Width - 1);
+            var row = ((int)(position.Y * inputDescription.Height)).Clamp(0, inputDescription.Height - 1);
             //column = column.Clamp(0, inputImage.Description.Width - 1);
 
             if (alwaysUpdate
                 || _imageWithCpuAccess == null
-                || _imageWithCpuAccess.Description.Format != inputImage.Description.Format
-                || _imageWithCpuAccess.Description.Width != inputImage.Description.Width
-                || _imageWithCpuAccess.Description.Height != inputImage.Description.Height
-                || _imageWithCpuAccess.Description.MipLevels != inputImage.Description.MipLevels
+                || _imageWithCpuAccess.Description.Format != inputDescription.Format
+                || _imageWithCpuAccess.Description.Width != inputDescription.Width
+                || _imageWithCpuAccess.Description.Height != inputDescription.Height
+                || _imageWithCpuAccess.Description.MipLevels != inputDescription.MipLevels
                 )
             {
                 // keep a copy of the texture which can be accessed by CPU
                 var desc = new Texture2DDescription()
                                {
                                    BindFlags = BindFlags.None,
-                                   Format = inputImage.Description.Format,
-                                   Width = inputImage.Description.Width,
-                                   Height = inputImage.Description.Height,
-                                   MipLevels = inputImage.Description.MipLevels,
+                                   Format = inputDescription.Format,
+                                   Width = inputDescription.Width,
+                                   Height = inputDescription.Height,
+                                   MipLevels = inputDescription.MipLevels,
                                    SampleDescription = new SampleDescription(1, 0),
                                    Usage = ResourceUsage.Staging,
                                    OptionFlags = ResourceOptionFlags.None,
@@ -72,8 +74,8 @@ namespace lib.color
                 immediateContext.CopyResource(inputImage, _imageWithCpuAccess);
             }
 
-            var width = inputImage.Description.Width;
-            var height = inputImage.Description.Height;
+            var width = inputDescription.Width;
+            var height = inputDescription.Height;
 
             column %= width;
             row %= height;
@@ -87,13 +89,12 @@ namespace lib.color
 
                 Vector4 color;
 
-                switch (inputImage.Description.Format)
+                switch (inputDescription.Format)
                 {
                     case Format.R8G8B8A8_UNorm:
                     {
                         // Position to the wanted pixel. 4 of bytes per pixel
-                        sourceStream.Seek(row * sourceDataBox.RowPitch + 4 * column, SeekOrigin.Begin);
-
+                        sourceStream.Position = GetStartIndex(row, sourceDataBox.RowPitch, column, 4);
                         var colorBytes = new Byte4(sourceStream.Read<Int32>());
                         color = new Color(colorBytes);
                     }
@@ -101,33 +102,38 @@ namespace lib.color
 
                     case Format.R16G16B16A16_Float:
                     {
-                        sourceStream.Seek(row * sourceDataBox.RowPitch + 8 * column, SeekOrigin.Begin);
+                        const int count = 8; // 2 bytes per float
+                        var buffPtr = stackalloc byte[count];
 
-                        var r = Read2BytesToHalf(sourceStream);
-                        var g = Read2BytesToHalf(sourceStream);
-                        var b = Read2BytesToHalf(sourceStream);
-                        var a = Read2BytesToHalf(sourceStream);
+                        sourceStream.Position = GetStartIndex(row, sourceDataBox.RowPitch, column, count);
+                        sourceStream.Read((IntPtr)buffPtr, 0, count);
+
+                        var fullSpan = new ReadOnlySpan<byte>(buffPtr, count);
+                        var r = (float)BitConverter.ToHalf(fullSpan[..2]);
+                        var g = (float)BitConverter.ToHalf(fullSpan[2..4]);
+                        var b = (float)BitConverter.ToHalf(fullSpan[4..6]);
+                        var a = (float)BitConverter.ToHalf(fullSpan[6..8]);
+                        
                         color = new Vector4(r, g, b, a);
                     }
                         break;
 
                     case Format.R16G16B16A16_UNorm:
                     {
-                        sourceStream.Seek(row * sourceDataBox.RowPitch + 8 * column, SeekOrigin.Begin);
-                        sourceStream.ReadByte();
-                        var r = (byte)sourceStream.ReadByte();
-                        sourceStream.ReadByte();
-                        var g = (byte)sourceStream.ReadByte();
-                        sourceStream.ReadByte();
-                        var b = (byte)sourceStream.ReadByte();
-                        sourceStream.ReadByte();
-                        var a = (byte)sourceStream.ReadByte();
+                        sourceStream.Position = GetStartIndex(row, sourceDataBox.RowPitch, column, 8) + 1;
+                        var r = sourceStream.ReadByte();
+                        ++sourceStream.Position;
+                        var g = sourceStream.ReadByte();
+                        ++sourceStream.Position;
+                        var b = sourceStream.ReadByte();
+                        ++sourceStream.Position;
+                        var a = sourceStream.ReadByte();
                         color = new Vector4(r, g, b, a);
                     }
                         break;
 
                     default:
-                        Log.Warning($"Can't access unknown texture format {inputImage.Description.Format}", this);
+                        Log.Warning($"Can't access unknown texture format {inputDescription.Format}", this);
                         color = Color.White;
                         break;
                 }
@@ -136,43 +142,11 @@ namespace lib.color
             }
 
             immediateContext.UnmapSubresource(_imageWithCpuAccess, 0);
+            return;
+
+            static int GetStartIndex(int row, int rowPitch, int column, int dataSize) => row * rowPitch + column * dataSize;
         }
 
-        private static float Read2BytesToHalf(SharpDX.DataStream imageStream)
-        {
-            var low = (byte)imageStream.ReadByte();
-            var high = (byte)imageStream.ReadByte();
-            return ToTwoByteFloat(low, high);
-        }
-
-        private static float ToTwoByteFloat(byte ho, byte lo)
-        {
-            var intVal = BitConverter.ToInt32(new byte[] { ho, lo, 0, 0 }, 0);
-
-            var mant = intVal & 0x03ff;
-            var exp = intVal & 0x7c00;
-            if (exp == 0x7c00) exp = 0x3fc00;
-            else if (exp != 0)
-            {
-                exp += 0x1c000;
-                if (mant == 0 && exp > 0x1c400)
-                    return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | exp << 13 | 0x3ff), 0);
-            }
-            else if (mant != 0)
-            {
-                exp = 0x1c400;
-                do
-                {
-                    mant <<= 1;
-                    exp -= 0x400;
-                }
-                while ((mant & 0x400) == 0);
-
-                mant &= 0x3ff;
-            }
-
-            return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | (exp | mant) << 13), 0);
-        }
 
         Texture2D _imageWithCpuAccess;
 
