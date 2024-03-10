@@ -100,10 +100,6 @@ namespace T3.Editor
             
             var userSettings = new UserSettings(saveOnQuit: true);
             var projectSettings = new ProjectSettings(saveOnQuit: true);
-            
-            #if DEBUG
-            ProjectSetup.CreateSymlinks();
-            #endif
 
             Log.Debug($"About to initialize ProgramWindows");
             ProgramWindows.InitializeMainWindow(GetReleaseVersion(), out var device);

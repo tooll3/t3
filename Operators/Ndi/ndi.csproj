@@ -4,15 +4,22 @@
         <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <RootNamespace>user.fuzzy</RootNamespace>
+        <UserSecretsId>4ddcedc9-2c55-476d-9aeb-8e052ecd278a</UserSecretsId>
+        <RootNamespace>t3.ndi</RootNamespace>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
         <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll" Private="false"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll" Private="false"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll" Private="false"/>
+        <ProjectReference Include="../../Core/Core.csproj" Private="false"/>
+        <ProjectReference Include="../../Logging/Logging.csproj" Private="false"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="NDILibDotNet6" Version="1.0.11" />
+    </ItemGroup>
+
 
 
     <!-- Include Resources/** into output/Resources -->
@@ -30,6 +37,7 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
 
 
 </Project>

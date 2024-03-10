@@ -41,12 +41,13 @@ public interface IShaderOperator<T> where T : class, IDisposable
         var source = sourceSlot.GetValue(context);
         var entryPoint = entryPointSlot.GetValue(context);
         var debugName = debugNameSlot.GetValue(context);
+        var instance = Instance;
 
         var type = GetType();
 
         if (!TryGetDebugName(out message, ref debugName))
         {
-            Log.Error($"Failed to update shader \"{debugName}\":\n{message}");
+            LogUpdateFailure(instance, debugName, message);
             return false;
         }
 
@@ -63,7 +64,6 @@ public interface IShaderOperator<T> where T : class, IDisposable
 
         bool updated;
 
-        var instance = Instance;
         if (needsNewResource)
         {
             updated = TryCreateResource(source, entryPoint, debugName, isSourceCode, Shader, instance, out message, out shaderResource);
@@ -85,7 +85,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
         }
         else
         {
-            Log.Error($"Failed to update shader \"{debugName}\": {message}");
+            LogUpdateFailure(instance, debugName, message);
         }
 
         cachedSource = source;
@@ -154,6 +154,11 @@ public interface IShaderOperator<T> where T : class, IDisposable
             }
 
             return updated;
+        }
+
+        static void LogUpdateFailure(Instance instance, string debugName, string message)
+        {
+            Log.Error($"Failed to update shader \"{debugName}\" in package {instance.Symbol.SymbolPackage.AssemblyInformation.Name}:\n{message}");
         }
     }
 }

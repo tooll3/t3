@@ -69,7 +69,7 @@ internal static class ProjectSetup
 
     private static void RemoveSymbolPackage(EditableSymbolProject newUiSymbolData)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException("Project removal not implemented yet");
     }
 
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
@@ -87,40 +87,10 @@ internal static class ProjectSetup
             ConcurrentBag<EditorSymbolPackage> readOnlyPackages = new(); // "static" packages, remember to filter by operator vs non-operator assemblies
             ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = new();
 
-            stopwatch.Start();
-            var coreAssemblyDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators"); // theoretically where the core libs assemblies will be
-            var exportPath = Path.Combine("T3Projects", "Exports");
-            var topDirectories = new[] { coreAssemblyDirectory, UserSettings.Config.DefaultNewProjectDirectory };
-            var projectSearchDirectories = topDirectories
-                                          .Where(Directory.Exists)
-                                          .SelectMany(Directory.EnumerateDirectories)
-                                          .Where(dirName => !dirName.Contains(exportPath)).ToArray();
-
-            Log.Debug($"Core directories initialized in {stopwatch.ElapsedMilliseconds}ms");
-
-            #if DEBUG
-
-            stopwatch.Restart();
-
-            var operatorFolder = Path.Combine(GetT3ParentDirectory(), "Operators");
-            operatorFolder = Path.GetFullPath(operatorFolder);
-            projectSearchDirectories = Directory.EnumerateDirectories(operatorFolder)
-                                                .Where(path =>
-                                                       {
-                                                           var subdirName = Path.GetFileName(path);
-                                                           return !subdirName.StartsWith('.');
-                                                       })
-                                                .Where(path => !path.EndsWith("user"))
-                                                .Concat(projectSearchDirectories)
-                                                .ToArray();
-
-            stopwatch.Stop();
-            Log.Debug($"Found {projectSearchDirectories.Length} root directories in {stopwatch.ElapsedMilliseconds}ms");
-            #else
-            stopwatch.Restart();
-            var directory = Directory.CreateDirectory(coreAssemblyDirectory);
+            #if !DEBUG // Load pre-built built-in packages as read-only
+            var directory = Directory.CreateDirectory(CoreOperatorDirectory);
             directory
-               .EnumerateDirectories("*", SearchOption.TopDirectoryOnly)
+               .EnumerateDirectories("*", SearchOption.TopDirectoryOnly) // ignore "player" project directory
                .ToList()
                .ForEach(package =>
                         {
@@ -141,15 +111,35 @@ internal static class ProjectSetup
                         });
             Log.Debug($"Found built-in operator assemblies in {stopwatch.ElapsedMilliseconds}ms");
             #endif
+            
+            // Find project directories
+            var exportPath = Path.Combine("T3Projects", "Exports");
+            var topDirectories = new[] { CoreOperatorDirectory, UserSettings.Config.DefaultNewProjectDirectory };
+            var projectSearchDirectories = topDirectories
+                                          .Where(Directory.Exists)
+                                          .SelectMany(Directory.EnumerateDirectories)
+                                          .Where(dirName => !dirName.Contains(exportPath));
 
-            stopwatch.Restart();
+            #if DEBUG // Add Built-in packages as projects
+            projectSearchDirectories = projectSearchDirectories.Concat(Directory.EnumerateDirectories(Path.Combine(T3ParentDirectory, "Operators"))
+                                                                                .Where(path =>
+                                                                                       {
+                                                                                           var subDir = Path.GetFileName(path);
+                                                                                           return !subDir.StartsWith('.');
+                                                                                       }));
+            #endif
+                                          
+
+            // Find csproj files
             var csProjFiles = projectSearchDirectories
                              .SelectMany(dir => Directory.EnumerateFiles(dir, "*.csproj", SearchOption.AllDirectories))
                              .Where(filePath => !filePath.Contains(CsProjectFile.ProjectNamePlaceholder))
                              .Select(x => new FileInfo(x))
                              .ToArray();
 
+            #if DEBUG
             Log.Debug($"Found {csProjFiles.Length} csproj files in {stopwatch.ElapsedMilliseconds}ms");
+            #endif
 
             stopwatch.Restart();
             
@@ -194,12 +184,8 @@ internal static class ProjectSetup
             Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {totalStopwatch.ElapsedMilliseconds}ms");
             #endif
 
-            var projectList = projects.ToArray();
-            var allSymbolPackages = projectList
-                                   .Concat(readOnlyPackages)
-                                   .ToArray();
+            EditableSymbolProjectsRw.AddRange(projects);
 
-            EditableSymbolProjectsRw.AddRange(projectList);
 
             // Load operators
             stopwatch.Restart();
@@ -208,6 +194,9 @@ internal static class ProjectSetup
             Log.Debug($"Initialized custom uis in {stopwatch.ElapsedMilliseconds}ms");
 
             stopwatch.Restart();
+            var allSymbolPackages = projects
+                                   .Concat(readOnlyPackages)
+                                   .ToArray();
             UpdateSymbolPackages(allSymbolPackages);
             Log.Debug($"Updated symbol packages in {stopwatch.ElapsedMilliseconds}ms");
 
@@ -225,11 +214,13 @@ internal static class ProjectSetup
                 exception = new Exception("Can't find examples library");
                 return false;
             }
+            
             EditorSymbolPackage.InitializeRoot(exampleLib);
 
             Log.Debug($"Created root symbol in {stopwatch.ElapsedMilliseconds}ms");
 
-            foreach (var project in projectList)
+            // create project "Home" entries on the homepage
+            foreach (var project in projects)
             {
                 _ = project.TryCreateHome();
             }
@@ -262,43 +253,9 @@ internal static class ProjectSetup
         }
     }
 
+    private static readonly string CoreOperatorDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators");
     #if DEBUG
-
-    internal static void CreateSymlinks()
-    {
-        var t3ParentDirectory = GetT3ParentDirectory();
-        Log.Debug($"Creating symlinks for t3 project in {t3ParentDirectory}");
-        var projectParentDirectory = Path.Combine(t3ParentDirectory, "Operators", "user");
-        var directoryInfo = new DirectoryInfo(projectParentDirectory);
-        if (!directoryInfo.Exists)
-            throw new Exception($"Could not find project parent directory {projectParentDirectory}");
-
-        Log.Debug($"Continuing creating symlinks for t3 project in {projectParentDirectory}");
-        var targetDirectory = UserSettings.Config.DefaultNewProjectDirectory;
-        Directory.CreateDirectory(targetDirectory);
-
-        Log.Debug($"Beginning enumerating subdirectories of {directoryInfo}");
-        foreach (var subDirectory in directoryInfo.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
-        {
-            // ignore dotfiles, like .idea, .git, .vs, etc
-            if (subDirectory.Name.StartsWith('.'))
-                continue;
-
-            //symlink to user project directory
-            var linkName = Path.Combine(targetDirectory, subDirectory.Name);
-            Log.Debug($"Target: {linkName} <- {subDirectory.FullName}");
-            if (Directory.Exists(linkName))
-                continue;
-
-            Log.Debug($"Creating symlink: {linkName} <- {subDirectory.FullName}");
-            Directory.CreateSymbolicLink(linkName, subDirectory.FullName);
-        }
-    }
-
-    private static string GetT3ParentDirectory()
-    {
-        return Path.Combine(RuntimeAssemblies.CoreDirectory, "..", "..", "..", "..");
-    }
+    private static readonly string T3ParentDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "..", "..", "..", "..");
     #endif
 
     private static void InitializeCustomUis(IReadOnlyCollection<AssemblyInformation> nonOperatorAssemblies)

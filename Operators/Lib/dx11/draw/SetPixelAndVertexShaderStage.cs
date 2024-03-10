@@ -82,7 +82,7 @@ namespace lib.dx11.draw
 
         private SharpDX.Direct3D11.PixelShader _prevPixelShader;
         private SharpDX.Direct3D11.VertexShader _prevVertexShader;
-        private SamplerState[] _prevSamplerStates = new SamplerState[0];
+        private SamplerState[] _prevSamplerStates = Array.Empty<SamplerState>();
         private Buffer[] _prevConstantBuffers;
         private ShaderResourceView[] _prevShaderResourceViews;
 
