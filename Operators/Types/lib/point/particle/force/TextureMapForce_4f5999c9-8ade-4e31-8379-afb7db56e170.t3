@@ -51,7 +51,7 @@
     },
     {
       "Id": "87264af4-0939-4aad-9a15-b79d067b9fcb"/*DepthConcentration*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.005
     },
     {
       "Id": "d5038c16-3920-48fc-8cd8-9346b63dad7a"/*CenterDepth*/,
