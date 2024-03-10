@@ -1,0 +1,60 @@
+{
+  "Id": "da93f7d1-ef91-4b4a-9708-2d9b1baa4c14",
+  "Variations": [
+    {
+      "Id": "b95e2d9d-baaa-4404-87c6-92ec345f26cc",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Wrapped Cycle",
+      "PosOnCanvas": {
+        "X": 106.77026,
+        "Y": -51.842346
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "e3363c0e-819a-45e2-8202-439bcce64d69": 0,
+          "b1763a8b-aa98-4e00-a47c-a5d0d750ae6e": 1.43
+        }
+      }
+    },
+    {
+      "Id": "84e5cf4c-1e58-4c8b-9e8a-88a4cc174c51",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Slack in the middle",
+      "PosOnCanvas": {
+        "X": 269.77026,
+        "Y": -51.842346
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "e3363c0e-819a-45e2-8202-439bcce64d69": 0,
+          "97771732-56fb-4e0c-915d-c79321ba27b5": {
+            "X": 0.065,
+            "Y": 0.63
+          }
+        }
+      }
+    },
+    {
+      "Id": "c2f49669-4c72-496f-bd6c-c2b5546ff5e9",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Alpha Mask for the poor",
+      "PosOnCanvas": {
+        "X": 106.77026,
+        "Y": 41.157654
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "e3363c0e-819a-45e2-8202-439bcce64d69": 0,
+          "97771732-56fb-4e0c-915d-c79321ba27b5": {
+            "X": 0.0,
+            "Y": 0.54
+          },
+          "7777f86d-dbf7-44d4-9da4-99a819038095": true
+        }
+      }
+    }
+  ]
+}

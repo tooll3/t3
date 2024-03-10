@@ -37,7 +37,7 @@
         "X": -200.0,
         "Y": 135.0
       },
-      "Description": "Defines the color of the fog.",
+      "Description": "Defines the color of the fog. \nTip you can use the alpha channel to fade out fog color impact.",
       "AddPadding": "True"
     }
   ],
