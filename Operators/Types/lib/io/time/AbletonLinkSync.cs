@@ -54,6 +54,7 @@ namespace T3.Operators.Types.Id_31ab98ec_5e79_4667_9a85_2fb168f41fa1
             if (_startMeasure == 0)
             {
                 _startMeasure = Math.Floor(beat / quantum) * quantum;
+                _startMeasure = 0;
             }
 
             var pauseIfDisconnected = PauseIfDisconnected.GetValue(context);
