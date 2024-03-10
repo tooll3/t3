@@ -23,14 +23,16 @@
         "Y": -17.179054
       },
       "Min": -0.5,
-      "Max": 0.5
+      "Max": 0.5,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "4109631f-850a-4d65-a3b9-47e168884c41"/*Offset*/,
       "Position": {
         "X": -165.24818,
         "Y": 27.820946
-      }
+      },
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "3949fce5-e285-4787-9db6-0ef2e533b15e"/*Stretch*/,
@@ -81,7 +83,12 @@
       "Position": {
         "X": -163.45872,
         "Y": 414.3106
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "d2e58300-b054-4df5-b3e8-5d7fb36d1ebc"/*Resolution*/,

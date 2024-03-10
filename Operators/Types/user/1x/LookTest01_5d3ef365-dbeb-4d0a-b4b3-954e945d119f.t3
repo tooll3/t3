@@ -56,7 +56,7 @@
           "Value": 0.45
         },
         {
-          "Id": "4dffb439-da81-477c-8100-34a9ba59b0ee"/*RandomSeed*/,
+          "Id": "4dffb439-da81-477c-8100-34a9ba59b0ee"/*RandomPhase*/,
           "Type": "System.Single",
           "Value": 6.6
         }

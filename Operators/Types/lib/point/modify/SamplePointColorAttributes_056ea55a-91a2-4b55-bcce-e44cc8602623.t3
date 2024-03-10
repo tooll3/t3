@@ -41,7 +41,7 @@
     },
     {
       "Id": "7139213f-fb73-42b6-8b2a-ffb05c2aeaf9"/*Scale*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 2.0
     },
     {
       "Id": "66b5e5eb-7743-48c9-979d-48d8cc492456"/*TextureRotate*/,
