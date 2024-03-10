@@ -435,7 +435,7 @@ internal static class InputsAndOutputs
             return false;
         }
 
-        var newSource = Regex.Replace(sourceCode, @$"\b{inputDef.Name}\b", newName);
+        var newSource = Regex.Replace(sourceCode, @$"\b{inputDef.Name}\b(?!\()", newName);
 
         if (dryRun)
         {
