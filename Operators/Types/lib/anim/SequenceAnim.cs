@@ -129,7 +129,7 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
                 time = overrideTime;
             }
                  
-            NormalizedBarTime = (float)(time % 1).Clamp(0, 0.999999f);
+            NormalizedBarTime = (float)MathUtils.Fmod(time, 1).Clamp(0, 0.999999);
 
             var updateMode = (UpdateModes)UpdateMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(UpdateModes)).Length - 1);
             switch (updateMode)
