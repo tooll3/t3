@@ -25,12 +25,12 @@ public static class PbrContextSettings
         WhitePixelTexture = TextureUtils.CreateColorTexture(new Vector4(1, 1, 1, 1));
         BlackPixelTexture = TextureUtils.CreateColorTexture(new Vector4(0, 0, 0, 0));
 
-        if (!ResourceManager.TryResolvePath("Resources/common/images/BRDF-LookUp.dds", out var bdrfPath, Array.Empty<string>()))
+        if (!ResourceManager.TryResolvePath("Resources/common/images/BRDF-LookUp.dds", Array.Empty<string>(), out var bdrfPath))
         {
             Log.Error("Could not find BRDF texture");
         }
 
-        if (!ResourceManager.TryResolvePath("Resources/common/HDRI/studio_small_08-prefiltered.dds", out var prefilteredPath, Array.Empty<string>()))
+        if (!ResourceManager.TryResolvePath("Resources/common/HDRI/studio_small_08-prefiltered.dds", Array.Empty<string>(), out var prefilteredPath))
         {
             Log.Error("Could not find prefiltered BRDF texture");
         }

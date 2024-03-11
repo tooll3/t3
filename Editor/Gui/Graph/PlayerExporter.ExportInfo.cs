@@ -30,10 +30,10 @@ public static partial class PlayerExporter
             }
         }
 
-        public bool TryAddSharedResource(string relativePath, IEnumerable<string>? otherDirs = null)
+        public bool TryAddSharedResource(string relativePath, IReadOnlyCollection<string>? otherDirs = null)
         {
             otherDirs ??= Array.Empty<string>();
-            if (!ResourceManager.TryResolvePath(relativePath, out var absolutePath, otherDirs))
+            if (!ResourceManager.TryResolvePath(relativePath, otherDirs, out var absolutePath))
             {
                 Log.Error($"Can't find file: {relativePath}");
                 return false;

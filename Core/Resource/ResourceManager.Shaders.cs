@@ -26,7 +26,7 @@ public sealed partial class ResourceManager
 
         var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromSource<TShader>(shaderSource: shaderSource,
                                                                                           name: name,
-                                                                                          directory: instance.ResourceFolders,
+                                                                                          directory: instance.AvailableResourceFolders,
                                                                                           entryPoint: entryPoint,
                                                                                           resourceId: resourceId,
                                                                                           resource: out var newResource,
@@ -57,7 +57,7 @@ public sealed partial class ResourceManager
             return false;
         }
 
-        if (!TryGetResourcePath(instance, relativePath, out var path, out var relevantFileWatcher))
+        if (!TryResolvePath(relativePath, instance, out var path, out var relevantFileWatcher))
         {
             resource = null;
             errorMessage = $"Path not found: '{relativePath}' (Resolved to '{path}').";
@@ -95,7 +95,7 @@ public sealed partial class ResourceManager
         List<string> compilationReferences = new();
 
         if (instance != null)
-            compilationReferences.AddRange(instance.ResourceFolders);
+            compilationReferences.AddRange(instance.AvailableResourceFolders);
         else if (relevantFileWatcher != null)
             compilationReferences.Add(relevantFileWatcher.WatchedFolder);
 

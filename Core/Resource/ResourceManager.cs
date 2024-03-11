@@ -27,60 +27,85 @@ namespace T3.Core.Resource
         {
         }
 
-        private static bool TryGetResourcePath(Instance? instance, string relativePath, out string path,
-                                               out ResourceFileWatcher? relevantFileWatcher)
+        public static bool TryResolvePath(string relativePath, IReadOnlyCollection<string> directories, out string absolutePath,
+                                          bool checkSharedResources = true, string? backCompat = null)
         {
-            // keep backwards compatibility
-            if (Path.IsPathRooted(relativePath))
+            if (string.IsNullOrWhiteSpace(relativePath))
             {
-                Log.Warning($"Absolute paths for resources are deprecated, live updating will not occur. " +
-                            $"Please use paths relative to your project or a shared resource folder instead: {relativePath}");
-                path = relativePath;
-                relevantFileWatcher = null;
-                return File.Exists(relativePath);
+                absolutePath = string.Empty;
+                return false;
+            }
+            
+            bool changedForCompatibility;
+            bool isAbsolute;
+            
+            if (backCompat == null)
+            {
+                backCompat = RelativePathBackwardsCompatibility(relativePath, out isAbsolute, out changedForCompatibility);
+            }
+            else
+            {
+                isAbsolute = Path.IsPathRooted(relativePath);
+                changedForCompatibility = !string.IsNullOrWhiteSpace(backCompat) && backCompat != relativePath;
             }
 
-            // then just resolve correctly
-            if (TryResolvePath(relativePath, instance, out var absolutePath, out var watcher))
+            if (isAbsolute)
             {
-                if (File.Exists(absolutePath))
+                absolutePath = relativePath;
+                return Exists(absolutePath);
+            }
+
+            foreach (var directory in directories)
+            {
+                absolutePath = Path.Combine(directory, relativePath);
+                if (Exists(absolutePath))
+                    return true;
+                
+                absolutePath = Path.Combine(directory, backCompat);
+                if (Exists(absolutePath))
+                    return true;
+            }
+
+            if (checkSharedResources)
+            {
+                if (CheckSharedResources(relativePath, out absolutePath, out _))
                 {
-                    path = absolutePath;
-                    relevantFileWatcher = watcher;
+                    return true;
+                }
+
+                if (changedForCompatibility && CheckSharedResources(backCompat, out absolutePath, out _))
+                {
                     return true;
                 }
             }
-
-            // prioritize project-local resources
-            var relativePathBackwardsCompatibility = RelativePathBackwardsCompatibility(relativePath, false);
-            if (TryResolvePath(relativePathBackwardsCompatibility, instance, out var absolutePathCompat, out var watcherCompat))
-            {
-                if (File.Exists(absolutePathCompat))
-                {
-                    path = absolutePathCompat;
-                    relevantFileWatcher = watcherCompat;
-                    return true;
-                }
-            }
-
-            path = relativePath;
-            relevantFileWatcher = null;
+            
+            absolutePath = string.Empty;
             return false;
         }
+        
+        private static bool Exists(string absolutePath) => File.Exists(absolutePath) || Directory.Exists(absolutePath);
 
-        private static string RelativePathBackwardsCompatibility(string relativePath, bool checkRoot = true)
+        public static string CleanRelativePath(string relativePath) => RelativePathBackwardsCompatibility(relativePath, out _, out _);
+        
+
+        private static string RelativePathBackwardsCompatibility(string relativePath, out bool isAbsolute, out bool changedForCompatibility)
         {
-            if (checkRoot && Path.IsPathRooted(relativePath))
+            changedForCompatibility = false;
+            
+            if (Path.IsPathRooted(relativePath))
             {
                 Log.Warning($"Path '{relativePath}' is not relative. This is deprecated and should be relative to the project Resources folder as " +
                             $"live updates will not occur. Please update your project settings.");
+                isAbsolute = true;
                 return relativePath;
             }
 
             const string resourcesSubfolder = "resources";
+            isAbsolute = false;
             if (relativePath.StartsWith(resourcesSubfolder, StringComparison.OrdinalIgnoreCase))
             {
                 relativePath = relativePath[(resourcesSubfolder.Length + 1)..];
+                changedForCompatibility = true;
             }
 
             const string userSubfolder = "user";
@@ -106,139 +131,101 @@ namespace T3.Core.Resource
                 else
                     slashIndex += 1;
 
+                changedForCompatibility = true;
                 return pathWithoutUser[slashIndex..].ToString();
             }
 
             const string commonSubfolder = "common";
             if (relativePath.StartsWith(commonSubfolder, StringComparison.OrdinalIgnoreCase))
             {
+                changedForCompatibility = true;
                 return relativePath[(commonSubfolder.Length + 1)..];
             }
 
             const string libSubfolder = "lib";
             if (relativePath.StartsWith(libSubfolder, StringComparison.OrdinalIgnoreCase))
             {
+                changedForCompatibility = true;
                 return relativePath[(libSubfolder.Length + 1)..];
             }
 
             return relativePath;
         }
 
-        private static bool TryResolvePath(string relativeFileName, Instance? instance, out string absolutePath, out ResourceFileWatcher? relevantFileWatcher)
+        internal static bool TryResolvePath(string relativePath, Instance? instance, out string absolutePath, out ResourceFileWatcher? relevantFileWatcher)
         {
-            var parent = instance;
-            while (parent != null)
+            if (string.IsNullOrWhiteSpace(relativePath))
             {
-                if (TryResolvePath(relativeFileName, parent, out absolutePath, false))
-                {
-                    relevantFileWatcher = parent.ResourceFileWatcher;
-                    return true;
-                }
-
-                parent = parent.Parent;
+                absolutePath = string.Empty;
+                relevantFileWatcher = null;
+                return false;
             }
             
-            return CheckSharedResources(relativeFileName, out absolutePath, out relevantFileWatcher);
-        }
+            var backCompat = RelativePathBackwardsCompatibility(relativePath, out var isAbsolute, out var changedForCompatibility);
+            if (isAbsolute)
+            {
+                absolutePath = relativePath;
+                relevantFileWatcher = null;
+                return Exists(absolutePath);
+            }
 
-        public static bool TryResolvePath(string relativeFileName, Instance instance, out string absolutePath, bool checkSharedResources = true)
-        {
-            relativeFileName = RelativePathBackwardsCompatibility(relativeFileName);
 
-            if (TryResolvePath(relativeFileName, out absolutePath, instance.ResourceFolders, checkSharedResources))
+            if (instance != null)
+            {
+                foreach (var package in instance.AvailableResourcePackages)
+                {
+                    var resourcesFolder = package.ResourcesFolder;
+                    var path = Path.Combine(resourcesFolder, relativePath);
+
+                    bool found = Exists(path);
+
+                    if (!found && changedForCompatibility)
+                    {
+                        path = Path.Combine(resourcesFolder, backCompat);
+                        found = Exists(path);
+                    }
+
+                    if (found)
+                    {
+                        absolutePath = path;
+                        relevantFileWatcher = package.ResourceFileWatcher;
+                        return true;
+                    }
+                }
+            }
+
+            if (CheckSharedResources(relativePath, out absolutePath, out relevantFileWatcher))
             {
                 return true;
             }
-
-
-            if(checkSharedResources)
-                return CheckSharedResources(relativeFileName, out absolutePath, out _);
             
-            absolutePath = relativeFileName;
+            if (changedForCompatibility && CheckSharedResources(backCompat, out absolutePath, out relevantFileWatcher))
+            {
+                return true;
+            }
+            
+            absolutePath = string.Empty;
+            relevantFileWatcher = null;
             return false;
         }
 
-        public static bool TryResolvePath(string relativeFileName, out string absolutePath, IEnumerable<string> directories, bool checkSharedResources = true)
-        {
-            relativeFileName = RelativePathBackwardsCompatibility(relativeFileName);
-
-            foreach (var directory in directories)
-            {
-                absolutePath = Path.Combine(directory, relativeFileName);
-                if (File.Exists(absolutePath))
-                    return true;
-            }
-            
-            if(checkSharedResources)
-                return CheckSharedResources(relativeFileName, out absolutePath, out _);
-            
-            absolutePath = relativeFileName;
-            return false;
-        }
-
-        public static bool TryResolvePath(string relativeFileName, out string absolutePath, string? directory)
-        {
-            relativeFileName = RelativePathBackwardsCompatibility(relativeFileName);
-
-            if (directory != null)
-            {
-                absolutePath = Path.Combine(directory, relativeFileName);
-                if (File.Exists(absolutePath))
-                    return true;
-            }
-
-            return CheckSharedResources(relativeFileName, out absolutePath, out _);
-        }
-
-        private static bool CheckSharedResources(string relativeFileName, out string path, out ResourceFileWatcher? relevantFileWatcher)
+        private static bool CheckSharedResources(string relativePath, out string absolutePath, out ResourceFileWatcher? relevantFileWatcher)
         {
             foreach (var fileWatcher in SharedResourceFileWatchers)
             {
-                path = Path.Combine(fileWatcher.WatchedFolder, relativeFileName);
-                if (File.Exists(path))
+                absolutePath = Path.Combine(fileWatcher.WatchedFolder, relativePath);
+                if (Exists(absolutePath))
                 {
                     relevantFileWatcher = fileWatcher;
                     return true;
                 }
             }
             
-            path = string.Empty;
+            absolutePath = string.Empty;
             relevantFileWatcher = null;
             return false;
         }
 
-        public static bool TryResolveDirectory(string relativeDirectory, Instance parent, out string absoluteDirectory)
-        {
-            relativeDirectory = RelativePathBackwardsCompatibility(relativeDirectory);
-            
-            foreach(var parentResourceFolder in parent.ResourceFolders)
-            {
-                var directory = Path.Combine(parentResourceFolder, relativeDirectory);
-                if(Directory.Exists(directory))
-                {
-                    absoluteDirectory = directory;
-                    return true;
-                }
-            }
-            
-            absoluteDirectory = string.Empty;
-            
-            foreach(var fileWatcher in SharedResourceFileWatchers)
-            {
-                var sharedResourceFolder = fileWatcher.WatchedFolder;
-                var directory = Path.Combine(sharedResourceFolder, relativeDirectory);
-                if(Directory.Exists(directory))
-                {
-                    absoluteDirectory = directory;
-                    return true;
-                }
-            }
-            
-            return false;
-        }
-
-        public static string CleanRelativePath(string relativePath) => RelativePathBackwardsCompatibility(relativePath, true);
-        
 
         private uint GetNextResourceId() => Interlocked.Increment(ref _resourceIdCounter);
 

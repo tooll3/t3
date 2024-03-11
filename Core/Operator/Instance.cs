@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
@@ -12,26 +13,40 @@ namespace T3.Core.Operator
     {
         public abstract Type Type { get; }
         public Guid SymbolChildId { get; set; }
-        public Instance Parent { get; internal set; }
+        
+        private Instance _parent;
+
+        public Instance Parent
+        {
+            get => _parent;
+            internal set
+            {
+                _parent = value;
+                _resourceFoldersDirty = true;
+            }
+        }
+
         public abstract Symbol Symbol { get; }
 
         public readonly List<ISlot> Outputs = new();
         public readonly List<Instance> Children = new();
         public readonly List<IInputSlot> Inputs = new();
 
-        protected internal ResourceFileWatcher ResourceFileWatcher => Symbol.SymbolPackage.ResourceFileWatcher;
-
-        private List<string> _resourceFolders = null;
-
-        public IReadOnlyList<string> ResourceFolders
+        public IReadOnlyList<SymbolPackage> AvailableResourcePackages
         {
             get
             {
-                if (_resourceFolders != null)
-                    return _resourceFolders;
+                GatherResourcePackages(this, ref _availableResourcePackages, ref _availableResourceFolders);
+                return _availableResourcePackages;
+            }
+        }
 
-                GatherResourceFolders(this, out _resourceFolders);
-                return _resourceFolders;
+        public IReadOnlyList<string> AvailableResourceFolders
+        {
+            get
+            {
+                GatherResourcePackages(this, ref _availableResourcePackages, ref _availableResourceFolders);
+                return _availableResourceFolders;
             }
         }
 
@@ -188,26 +203,46 @@ namespace T3.Core.Operator
             return gotTargetSlot;
         }
 
-        private static void GatherResourceFolders(Instance instance, out List<string> resourceFolders)
+        private static void GatherResourcePackages(Instance instance, ref List<SymbolPackage> resourceFolders, ref List<string> availableResourceFolders)
         {
-            resourceFolders = [instance.ResourceFileWatcher.WatchedFolder];
-
-            while (instance.Parent != null)
+            if (!instance._resourceFoldersDirty)
+                return;
+            
+            instance._resourceFoldersDirty = false;
+            if(resourceFolders != null)
+                resourceFolders.Clear();
+            else
+                resourceFolders = [];
+            
+            if(availableResourceFolders != null)
+                availableResourceFolders.Clear();
+            else
+                availableResourceFolders = [];
+            
+            while (instance != null)
             {
-                instance = instance.Parent;
-                var resourceFolder = instance.ResourceFileWatcher.WatchedFolder;
+                var package = instance.Symbol.SymbolPackage;
+                if (!resourceFolders.Contains(package))
+                {
+                    resourceFolders.Add(package);
+                    availableResourceFolders.Add(package.ResourcesFolder);
+                }
 
-                if (!resourceFolders.Contains(resourceFolder))
-                    resourceFolders.Add(resourceFolder);
+                instance = instance._parent;
             }
         }
 
-        public IList<Guid> InstancePath => OperatorUtils.BuildIdPathForInstance(this).ToArray();
-
         protected bool TryGetFilePath(string relativePath, out string absolutePath)
         {
-            return ResourceManager.TryResolvePath(relativePath, this, out absolutePath);
+            return ResourceManager.TryResolvePath(relativePath, this, out absolutePath, out _);
         }
+
+        public IList<Guid> InstancePath => OperatorUtils.BuildIdPathForInstance(this).ToArray();
+        
+
+        private List<SymbolPackage> _availableResourcePackages;
+        private List<string> _availableResourceFolders;
+        private bool _resourceFoldersDirty = true;
     }
 
     public class Instance<T> : Instance where T : Instance
