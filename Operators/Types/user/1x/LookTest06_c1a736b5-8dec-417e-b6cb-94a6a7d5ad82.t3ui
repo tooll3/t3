@@ -214,13 +214,6 @@
       }
     },
     {
-      "ChildId": "e37c1942-adf6-4fef-b7e4-610f215b02ac"/*Layer2d*/,
-      "Position": {
-        "X": 2499.878,
-        "Y": 6.3414307
-      }
-    },
-    {
       "ChildId": "9ae9f051-a82d-452f-bbbf-7a7999f5f42a"/*Transform*/,
       "Position": {
         "X": 1004.1272,
@@ -251,10 +244,10 @@
   ],
   "OutputUis": [
     {
-      "OutputId": "8b87b351-d56d-45cb-a0bd-008b88dc86b1"/*Output*/,
+      "OutputId": "d6775a29-1ba2-4404-87f2-ae2600f4b8cb"/*TextureOutput*/,
       "Position": {
-        "X": 2810.0,
-        "Y": 549.5
+        "X": 2545.7676,
+        "Y": 1.871582
       }
     }
   ]
