@@ -99,6 +99,12 @@
       "SymbolId": "e21c202f-9b93-456d-aeba-7232d9600572",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "928389b9-ef4a-44cd-a3a5-2d0023339b08"/*ChangesScannerFx*/,
+      "SymbolId": "dbd8e542-730a-4417-badf-acc721a3eca8",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": []
