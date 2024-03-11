@@ -5,17 +5,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <RootNamespace>user.pixtur</RootNamespace>
-        <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
 
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Core.dll" Private="false"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/Logging.dll" Private="false"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.dll" Private="false"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct3D11.dll" Private="false"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.DXGI.dll" Private="false"/>
-        <Reference Include="$(T3_ASSEMBLY_PATH)/SharpDX.Direct2D1.dll" Private="false"/>
+        <ProjectReference Include="$../../../../../Core/Core.csproj" Private="false"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -38,6 +32,4 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-
-
 </Project>
