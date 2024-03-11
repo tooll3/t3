@@ -191,21 +191,14 @@
         "X": 3121.142,
         "Y": 0.0
       }
-    },
-    {
-      "ChildId": "18a8df9e-776f-4f9a-84dc-0115a2ca7b98"/*Layer2d*/,
-      "Position": {
-        "X": 3271.142,
-        "Y": 0.0
-      }
     }
   ],
   "OutputUis": [
     {
-      "OutputId": "77823a3e-c8d9-416b-8df5-6d6823cb9227"/*Output*/,
+      "OutputId": "84f86eb1-9d2c-4630-b9e6-4aa8a0a8f44f"/*TextureOutput*/,
       "Position": {
-        "X": 3681.142,
-        "Y": 324.5752
+        "X": 3271.142,
+        "Y": 0.0
       }
     }
   ]

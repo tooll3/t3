@@ -158,13 +158,6 @@
       }
     },
     {
-      "ChildId": "6f2b9fcf-696d-4d5c-8065-b58684360edd"/*Layer2d*/,
-      "Position": {
-        "X": 2918.9844,
-        "Y": 86.67279
-      }
-    },
-    {
       "ChildId": "7b13b6e5-97b0-4da3-85d3-2f1fad8629f7"/*ChromaticAbberation*/,
       "Position": {
         "X": 2768.9844,
@@ -181,10 +174,10 @@
   ],
   "OutputUis": [
     {
-      "OutputId": "854b773b-d6d2-40c8-9a8c-96a441e259cf"/*Output*/,
+      "OutputId": "1f530af1-4348-4000-b748-1ec1cbfcfb53"/*output2D*/,
       "Position": {
-        "X": 3231.4126,
-        "Y": 311.96973
+        "X": 3001.3215,
+        "Y": 118.05798
       }
     }
   ]

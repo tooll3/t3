@@ -170,21 +170,14 @@
         "X": 1350.0,
         "Y": 0.0
       }
-    },
-    {
-      "ChildId": "bd8f44b9-7417-48a5-a6b5-355051b5e337"/*Layer2d*/,
-      "Position": {
-        "X": 2550.0,
-        "Y": 0.0
-      }
     }
   ],
   "OutputUis": [
     {
-      "OutputId": "c7c92fb5-98d7-4d87-8847-e35b2c80bc98"/*Output*/,
+      "OutputId": "750b2e4f-3ee7-433c-83e4-2c92010d73d8"/*output2D*/,
       "Position": {
-        "X": 2960.0,
-        "Y": 287.0
+        "X": 2550.0,
+        "Y": 0.0
       }
     }
   ]

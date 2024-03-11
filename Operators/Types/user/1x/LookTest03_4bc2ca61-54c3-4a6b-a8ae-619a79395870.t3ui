@@ -72,21 +72,14 @@
         "X": 1396.2405,
         "Y": 47.240234
       }
-    },
-    {
-      "ChildId": "ef39ef7d-e0eb-44e1-abd7-b32321e25783"/*Layer2d*/,
-      "Position": {
-        "X": 1546.2405,
-        "Y": 47.240234
-      }
     }
   ],
   "OutputUis": [
     {
-      "OutputId": "141bf161-492a-405d-9373-9401447e5cb7"/*Output*/,
+      "OutputId": "afb72dc5-df44-4ae5-84cc-b14d94be5d88"/*output2D*/,
       "Position": {
         "X": 1956.2405,
-        "Y": 102.302734
+        "Y": 202.30273
       }
     }
   ]
