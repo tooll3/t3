@@ -1,5 +1,6 @@
 {
   "Id": "946da16c-f536-4887-b764-af9468f22c0f"/*Blur*/,
+  "Description": "Blurs the incoming image",
   "InputUis": [
     {
       "InputId": "c115fd60-86c5-425f-975b-0b5e92c0f42b"/*Image*/,
@@ -15,6 +16,8 @@
         "X": -308.4377,
         "Y": 103.11561
       },
+      "Description": "Defines the strength / radius of the blur",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 20.0
     },
@@ -24,6 +27,7 @@
         "X": -308.4377,
         "Y": 148.1156
       },
+      "Description": "Defines the number of iterations with which the image is blurred. \n\nHigher values produce higher quality at the cost of computing speed.",
       "Min": 0.0,
       "Max": 100.0,
       "Clamp": true
@@ -33,28 +37,35 @@
       "Position": {
         "X": -308.4377,
         "Y": 193.1156
-      }
+      },
+      "GroupTitle": "Advanced Settings",
+      "Description": "Offsets the brightness of the image"
     },
     {
       "InputId": "d1421b9f-ddde-426a-9d68-32d3a41bf881"/*Opacity*/,
       "Position": {
         "X": -308.4377,
         "Y": 238.1156
-      }
+      },
+      "Description": "Changes the opacity / gamma of the image"
     },
     {
       "InputId": "e4e5e654-d570-4dea-ad16-f4eb1018ff2f"/*Resolution*/,
       "Position": {
         "X": -308.4377,
         "Y": 283.1156
-      }
+      },
+      "Description": "Overwrites / redefines the resolution of the incoming image",
+      "AddPadding": "True"
     },
     {
       "InputId": "9c944546-1363-4e3b-b706-31a4b750db2c"/*Wrap*/,
       "Position": {
         "X": -308.4377,
         "Y": 328.1156
-      }
+      },
+      "Description": "Defines what is displayed at the edge of the image or how it is repeated should it be cut off / offset over its borders.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
