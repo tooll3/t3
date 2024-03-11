@@ -95,7 +95,7 @@ public class DX11ShaderCompiler : ShaderCompiler
 
         public Stream Open(IncludeType type, string fileName, Stream parentStream)
         {
-            if (ResourceManager.TryResolvePath(fileName, out var path, _directories))
+            if (ResourceManager.TryResolvePath(fileName, _directories, out var path))
             {
                 _streamReader = new StreamReader(path);
                 return _streamReader.BaseStream;

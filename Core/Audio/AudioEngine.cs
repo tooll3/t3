@@ -515,7 +515,7 @@ namespace T3.Core.Audio
 
             if (path != null)
             {
-                _ = ResourceManager.TryResolvePath(path, out path, projectResourceDir);
+                _ = ResourceManager.TryResolvePath(path, [projectResourceDir], out path);
             }
             else
             {

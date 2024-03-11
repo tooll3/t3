@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Slots;
@@ -73,8 +74,8 @@ public interface IShaderOperator<T> where T : class, IDisposable
         else
         {
             updated = isSourceCode
-                          ? shaderResource.TryUpdateFromSource(source, entryPoint, instance.ResourceFolders, out message)
-                          : shaderResource.TryUpdateFromFile(source, entryPoint, instance.ResourceFolders, out message);
+                          ? shaderResource.TryUpdateFromSource(source, entryPoint, instance.AvailableResourceFolders, out message)
+                          : shaderResource.TryUpdateFromFile(source, entryPoint, instance.AvailableResourceFolders, out message);
         }
 
         if (updated && shaderResource != null)
@@ -158,7 +159,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
 
         static void LogUpdateFailure(Instance instance, string debugName, string message)
         {
-            Log.Error($"Failed to update shader \"{debugName}\" in package {instance.Symbol.SymbolPackage.AssemblyInformation.Name}:\n{message}");
+            Log.Error($"Failed to update shader \"{debugName}\" in package \"{instance.Symbol.SymbolPackage.AssemblyInformation.Name}\":\n{message}");
         }
     }
 }

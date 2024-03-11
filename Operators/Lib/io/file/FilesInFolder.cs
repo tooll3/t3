@@ -38,8 +38,9 @@ namespace lib.io.file
                 if (folderIsDirty)
                 {
                     var folderPath = Folder.GetValue(context);
-                    _resolvedFolder = ResourceManager.TryResolveDirectory(folderPath, this, out var resolvedFolder) 
-                                          ? resolvedFolder 
+                    bool success = ResourceManager.TryResolvePath(folderPath, AvailableResourceFolders, out var resolvedFolder);
+                    _resolvedFolder = success && File.GetAttributes(resolvedFolder).HasFlag(FileAttributes.Directory)
+                                          ? resolvedFolder
                                           : folderPath;
                 }
                 
