@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 
 namespace T3.Core.Resource
@@ -28,26 +29,15 @@ namespace T3.Core.Resource
         }
 
         public static bool TryResolvePath(string relativePath, IReadOnlyCollection<string> directories, out string absolutePath,
-                                          bool checkSharedResources = true, string? backCompat = null)
+                                          bool checkSharedResources = true)
         {
             if (string.IsNullOrWhiteSpace(relativePath))
             {
                 absolutePath = string.Empty;
                 return false;
             }
-            
-            bool changedForCompatibility;
-            bool isAbsolute;
-            
-            if (backCompat == null)
-            {
-                backCompat = RelativePathBackwardsCompatibility(relativePath, out isAbsolute, out changedForCompatibility);
-            }
-            else
-            {
-                isAbsolute = Path.IsPathRooted(relativePath);
-                changedForCompatibility = !string.IsNullOrWhiteSpace(backCompat) && backCompat != relativePath;
-            }
+
+            RelativePathBackwardsCompatibility(relativePath, out var isAbsolute, out var backCompatRanges);
 
             if (isAbsolute)
             {
@@ -60,10 +50,17 @@ namespace T3.Core.Resource
                 absolutePath = Path.Combine(directory, relativePath);
                 if (Exists(absolutePath))
                     return true;
-                
-                absolutePath = Path.Combine(directory, backCompat);
-                if (Exists(absolutePath))
-                    return true;
+            }
+
+            var backCompatPaths = PopulateBackCompatPaths(relativePath, backCompatRanges);
+            foreach (var backCompatPath in backCompatPaths)
+            {
+                foreach (var directory in directories)
+                {
+                    absolutePath = Path.Combine(directory, backCompatPath);
+                    if (Exists(absolutePath))
+                        return true;
+                }
             }
 
             if (checkSharedResources)
@@ -73,83 +70,19 @@ namespace T3.Core.Resource
                     return true;
                 }
 
-                if (changedForCompatibility && CheckSharedResources(backCompat, out absolutePath, out _))
+                foreach (var backCompatPath in backCompatPaths)
                 {
-                    return true;
+                    if (CheckSharedResources(backCompatPath, out absolutePath, out _))
+                        return true;
                 }
             }
-            
+
+            #if DEBUG
+            LogFailedResourceLocation(relativePath, null, directories.Concat(SharedResourceFolders));
+            #endif
+
             absolutePath = string.Empty;
             return false;
-        }
-        
-        private static bool Exists(string absolutePath) => File.Exists(absolutePath) || Directory.Exists(absolutePath);
-
-        public static string CleanRelativePath(string relativePath) => RelativePathBackwardsCompatibility(relativePath, out _, out _);
-        
-
-        private static string RelativePathBackwardsCompatibility(string relativePath, out bool isAbsolute, out bool changedForCompatibility)
-        {
-            changedForCompatibility = false;
-            
-            if (Path.IsPathRooted(relativePath))
-            {
-                Log.Warning($"Path '{relativePath}' is not relative. This is deprecated and should be relative to the project Resources folder as " +
-                            $"live updates will not occur. Please update your project settings.");
-                isAbsolute = true;
-                return relativePath;
-            }
-
-            const string resourcesSubfolder = "resources";
-            isAbsolute = false;
-            if (relativePath.StartsWith(resourcesSubfolder, StringComparison.OrdinalIgnoreCase))
-            {
-                relativePath = relativePath[(resourcesSubfolder.Length + 1)..];
-                changedForCompatibility = true;
-            }
-
-            const string userSubfolder = "user";
-            if (relativePath.StartsWith(userSubfolder, StringComparison.OrdinalIgnoreCase))
-            {
-                // remove the user subfolder
-                var pathWithoutUser = relativePath.AsSpan()[(userSubfolder.Length + 1)..];
-
-                // try to remove the user's name
-                var backslashIndex = pathWithoutUser.IndexOf('/');
-                var forwardSlashIndex = pathWithoutUser.IndexOf('\\');
-
-                if (backslashIndex == -1)
-                    backslashIndex = int.MaxValue;
-
-                if (forwardSlashIndex == -1)
-                    forwardSlashIndex = int.MaxValue;
-
-                var slashIndex = Math.Min(backslashIndex, forwardSlashIndex);
-
-                if (slashIndex == int.MaxValue)
-                    slashIndex = 0;
-                else
-                    slashIndex += 1;
-
-                changedForCompatibility = true;
-                return pathWithoutUser[slashIndex..].ToString();
-            }
-
-            const string commonSubfolder = "common";
-            if (relativePath.StartsWith(commonSubfolder, StringComparison.OrdinalIgnoreCase))
-            {
-                changedForCompatibility = true;
-                return relativePath[(commonSubfolder.Length + 1)..];
-            }
-
-            const string libSubfolder = "lib";
-            if (relativePath.StartsWith(libSubfolder, StringComparison.OrdinalIgnoreCase))
-            {
-                changedForCompatibility = true;
-                return relativePath[(libSubfolder.Length + 1)..];
-            }
-
-            return relativePath;
         }
 
         internal static bool TryResolvePath(string relativePath, Instance? instance, out string absolutePath, out ResourceFileWatcher? relevantFileWatcher)
@@ -160,8 +93,8 @@ namespace T3.Core.Resource
                 relevantFileWatcher = null;
                 return false;
             }
-            
-            var backCompat = RelativePathBackwardsCompatibility(relativePath, out var isAbsolute, out var changedForCompatibility);
+
+            RelativePathBackwardsCompatibility(relativePath, out var isAbsolute, out var backCompatRanges);
             if (isAbsolute)
             {
                 absolutePath = relativePath;
@@ -169,28 +102,19 @@ namespace T3.Core.Resource
                 return Exists(absolutePath);
             }
 
+            IReadOnlyList<string>? backCompatPaths = null;
 
             if (instance != null)
             {
-                foreach (var package in instance.AvailableResourcePackages)
+                if (TestPath(relativePath, instance, out absolutePath, out relevantFileWatcher))
+                    return true;
+
+                backCompatPaths ??= PopulateBackCompatPaths(relativePath, backCompatRanges);
+
+                foreach (var backCompatPath in backCompatPaths)
                 {
-                    var resourcesFolder = package.ResourcesFolder;
-                    var path = Path.Combine(resourcesFolder, relativePath);
-
-                    bool found = Exists(path);
-
-                    if (!found && changedForCompatibility)
-                    {
-                        path = Path.Combine(resourcesFolder, backCompat);
-                        found = Exists(path);
-                    }
-
-                    if (found)
-                    {
-                        absolutePath = path;
-                        relevantFileWatcher = package.ResourceFileWatcher;
+                    if (TestPath(backCompatPath, instance, out absolutePath, out relevantFileWatcher))
                         return true;
-                    }
                 }
             }
 
@@ -198,16 +122,47 @@ namespace T3.Core.Resource
             {
                 return true;
             }
-            
-            if (changedForCompatibility && CheckSharedResources(backCompat, out absolutePath, out relevantFileWatcher))
+
+            backCompatPaths ??= PopulateBackCompatPaths(relativePath, backCompatRanges);
+
+            foreach (var backCompatPath in backCompatPaths)
             {
-                return true;
+                if (CheckSharedResources(backCompatPath, out absolutePath, out relevantFileWatcher))
+                    return true;
             }
-            
+
+            #if DEBUG
+            LogFailedResourceLocation(relativePath, instance, SharedResourceFolders);
+            #endif
+
             absolutePath = string.Empty;
             relevantFileWatcher = null;
             return false;
+
+            static bool TestPath(string relative, Instance instance, out string absolutePath, out ResourceFileWatcher? resourceFileWatcher)
+            {
+                IReadOnlyList<SymbolPackage> resourcePackages = instance.AvailableResourcePackages;
+                foreach (var package in resourcePackages)
+                {
+                    var resourcesFolder = package.ResourcesFolder;
+                    var path = Path.Combine(resourcesFolder, relative);
+
+                    if (Exists(path))
+                    {
+                        absolutePath = path;
+                        resourceFileWatcher = package.ResourceFileWatcher;
+                        return true;
+                    }
+                }
+
+                absolutePath = string.Empty;
+                resourceFileWatcher = null;
+                return false;
+            }
         }
+
+        private static bool Exists(string absolutePath) => File.Exists(absolutePath) || Directory.Exists(absolutePath);
+
 
         private static bool CheckSharedResources(string relativePath, out string absolutePath, out ResourceFileWatcher? relevantFileWatcher)
         {
@@ -220,12 +175,11 @@ namespace T3.Core.Resource
                     return true;
                 }
             }
-            
+
             absolutePath = string.Empty;
             relevantFileWatcher = null;
             return false;
         }
-
 
         private uint GetNextResourceId() => Interlocked.Increment(ref _resourceIdCounter);
 

@@ -186,7 +186,7 @@ namespace T3.Editor.Gui.Graph
 
         private readonly struct ResourcePath(string relativePath, string absolutePath)
         {
-            public readonly string RelativePath = ResourceManager.CleanRelativePath(relativePath);
+            public readonly string RelativePath = relativePath;
             public readonly string AbsolutePath = absolutePath;
         }
 

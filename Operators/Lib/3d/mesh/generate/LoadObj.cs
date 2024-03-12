@@ -46,25 +46,25 @@ namespace lib._3d.mesh.generate
                                    || Math.Abs(scaleFactor - _scaleFactor) > 0.001f
                                    || vertexSorting != _lastSorting)
             {
-                ResourceFileWatcher.AddFileHook(path, FileChangedHandler);
+                if (!TryGetFilePath(path, out var absolutePath))
+                {
+                    Log.Error($"File not found: {path}", this);
+                    _warningMessage = $"File not found: {path}";
+                    return;
+                }
+                
+                ResourceFileWatcher.AddFileHook(absolutePath, FileChangedHandler);
                 _sourceFileChanged = false;
                 _lastSorting = vertexSorting;
                 _scaleFactor = scaleFactor;
                 
                 if (useGpuCaching)
                 {
-                    if (_meshBufferCache.TryGetValue(path, out var cachedBuffer))
+                    if (_meshBufferCache.TryGetValue(absolutePath, out var cachedBuffer))
                     {
                         Data.Value = cachedBuffer.DataBuffers;
                         return;
                     }
-                }
-
-                if (!TryGetFilePath(path, out var absolutePath))
-                {
-                    Log.Error($"File not found: {path}", this);
-                    _warningMessage = $"File not found: {path}";
-                    return;
                 }
 
                 var mesh = ObjMesh.LoadFromFile(absolutePath);
@@ -140,7 +140,7 @@ namespace lib._3d.mesh.generate
 
                 if (useGpuCaching)
                 {
-                    _meshBufferCache[path] = newData;
+                    _meshBufferCache[absolutePath] = newData;
                 }
 
                 _meshData = newData;
