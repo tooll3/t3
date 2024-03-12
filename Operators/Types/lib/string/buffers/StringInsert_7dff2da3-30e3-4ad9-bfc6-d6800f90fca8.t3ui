@@ -1,5 +1,6 @@
 {
   "Id": "7dff2da3-30e3-4ad9-bfc6-d6800f90fca8"/*StringInsert*/,
+  "Description": "Can replace and move characters to any position within a string",
   "InputUis": [
     {
       "InputId": "11d0a66a-e2e9-4267-9458-f9844a482235"/*Original*/,
@@ -7,6 +8,7 @@
         "X": 0.0,
         "Y": 45.0
       },
+      "Description": "Input for the string into which something is to be inserted",
       "Usage": "Default"
     },
     {
@@ -15,6 +17,7 @@
         "X": 0.0,
         "Y": 90.0
       },
+      "Description": "String to be inserted into the 'original' string",
       "Usage": "Default"
     },
     {
@@ -22,14 +25,16 @@
       "Position": {
         "X": 0.0,
         "Y": 135.0
-      }
+      },
+      "Description": "Defines the position at which the 'Insertion' string is inserted into the 'original' string\n\nThis value can be animated"
     },
     {
       "InputId": "c103c06d-bf68-4c5c-967e-ddd939221292"/*UseModuloPosition*/,
       "Position": {
         "X": 0.0,
         "Y": 180.0
-      }
+      },
+      "Description": "If modulo is activated, the string position is looped if the value is too high or too low"
     }
   ],
   "SymbolChildUis": [],
