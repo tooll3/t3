@@ -164,7 +164,7 @@
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [
         {
-          "Id": "656697b8-b271-463b-9e38-fdb5758d3736"/*Value*/,
+          "Id": "656697b8-b271-463b-9e38-fdb5758d3736"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.8995633,

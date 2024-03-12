@@ -195,7 +195,7 @@
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [
         {
-          "Id": "656697b8-b271-463b-9e38-fdb5758d3736"/*Value*/,
+          "Id": "656697b8-b271-463b-9e38-fdb5758d3736"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 1.0,
@@ -241,6 +241,11 @@
           "Value": 0.5
         },
         {
+          "Id": "a407fbe3-1f1b-4466-b4c2-511733046d00"/*InnerRadius*/,
+          "Type": "System.Single",
+          "Value": 0.64
+        },
+        {
           "Id": "188c2244-e55a-4c55-be93-cccbd6fd4e41"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -249,11 +254,6 @@
             "Z": 0.249,
             "W": 0.15
           }
-        },
-        {
-          "Id": "a407fbe3-1f1b-4466-b4c2-511733046d00"/*InnerRadius*/,
-          "Type": "System.Single",
-          "Value": 0.64
         }
       ],
       "Outputs": []
