@@ -1,5 +1,6 @@
 {
   "Id": "fd31d208-12fe-46bf-bfa3-101211f8f497"/*Text*/,
+  "Description": "Creates flat 2D Text as an Object in 3D Space from bitmap fonts.\nFor each Character a quad mesh is generated. [TextSprites] can be used to manipulate these generated Objects.\n\nAny String Operator like [AString], [RandomString] etc. can be used as string input.\n\nThe Fonts used consist of a BmFont font definition file and the matching MSDF (multichannel distance field) texture",
   "InputUis": [
     {
       "InputId": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
