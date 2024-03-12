@@ -3,6 +3,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Audio;
+using T3.Core.Model;
 using T3.Serialization;
 
 namespace T3.Core.Operator
@@ -22,6 +23,10 @@ namespace T3.Core.Operator
         public string AudioInputDeviceName = string.Empty;
         public float AudioGainFactor = 1;
         public float AudioDecayFactor = 0.9f;
+        
+        public SymbolPackage SymbolPackage { get; init; }
+
+        public PlaybackSettings(){}
 
         public bool GetMainSoundtrack(out AudioClip soundtrack)
         {
@@ -88,9 +93,9 @@ namespace T3.Core.Operator
             writer.WriteEndObject();
         }
 
-        public static PlaybackSettings ReadFromJson(JToken o, string resourceDirectory)
+        public static PlaybackSettings ReadFromJson(JToken o, SymbolPackage symbolPackage)
         {
-            var clips = GetClips(o, resourceDirectory).ToList(); // Support legacy json format
+            var clips = GetClips(o, symbolPackage).ToList(); // Support legacy json format
 
             var settingsToken = (JObject)o[nameof(Symbol.PlaybackSettings)];
             if (settingsToken == null && clips.Count == 0)
@@ -98,7 +103,8 @@ namespace T3.Core.Operator
 
             var newSettings = new PlaybackSettings
                                   {
-                                      AudioClips = clips
+                                      AudioClips = clips,
+                                      SymbolPackage = symbolPackage
                                   };
             
             if (settingsToken != null)
@@ -111,7 +117,7 @@ namespace T3.Core.Operator
                 newSettings.AudioGainFactor = JsonUtils.ReadToken(settingsToken, nameof(AudioGainFactor), 1f);
                 newSettings.AudioInputDeviceName = JsonUtils.ReadToken<string>(settingsToken, nameof(AudioInputDeviceName), null);
                 
-                newSettings.AudioClips.AddRange(GetClips(settingsToken, resourceDirectory)); // Support correct format
+                newSettings.AudioClips.AddRange(GetClips(settingsToken, symbolPackage)); // Support correct format
             }
             
             if (newSettings.Bpm == 0 && newSettings.GetMainSoundtrack(out var soundtrack))
@@ -123,14 +129,14 @@ namespace T3.Core.Operator
             return newSettings;
         }
 
-        private static IEnumerable<AudioClip> GetClips(JToken o, string resourceDirectory)
+        private static IEnumerable<AudioClip> GetClips(JToken o, SymbolPackage symbolPackage)
         {
             var jAudioClipArray = (JArray)o[nameof(Symbol.PlaybackSettings.AudioClips)];
             if (jAudioClipArray != null)
             {
                 foreach (var c in jAudioClipArray)
                 {
-                    yield return AudioClip.FromJson(c, resourceDirectory);
+                    yield return AudioClip.FromJson(c, symbolPackage);
                 }
             }
         }

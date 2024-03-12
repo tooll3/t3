@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using ManagedBass;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpDX.Win32;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
@@ -336,6 +334,8 @@ namespace T3.Core.Audio
         public float DefaultPlaybackFrequency { get; private set; }
         public double TargetTime { get; set; }
 
+        private readonly Instance _instance;
+
         public void UpdatePlaybackSpeed(double newSpeed)
         {
             if (newSpeed == 0.0)
@@ -362,22 +362,23 @@ namespace T3.Core.Audio
 
         public static AudioClipStream LoadClip(AudioClip clip)
         {
-            if (string.IsNullOrWhiteSpace(clip.FilePath))
-                return null;
+            var relativePath = clip.FilePath;
 
-            Log.Debug($"Loading audioClip {clip.FilePath} ...");
-            if (!File.Exists(clip.FilePath))
+            Log.Debug($"Loading audioClip {relativePath} ...");
+            
+            if(!clip.TryGetAbsoluteFilePath(out var absolutePath))
             {
-                Log.Error($"AudioClip file '{clip.FilePath}' does not exist.");
+                Log.Error($"AudioClip file '{relativePath}' not found.");
                 return null;
             }
-            var streamHandle = Bass.CreateStream(clip.FilePath, 0, 0, BassFlags.Prescan | BassFlags.Float);
+            
+            var streamHandle = Bass.CreateStream(absolutePath, 0, 0, BassFlags.Prescan | BassFlags.Float);
             Bass.ChannelGetAttribute(streamHandle, ChannelAttribute.Frequency, out var defaultPlaybackFrequency);
             Bass.ChannelSetAttribute(streamHandle, ChannelAttribute.Volume, AudioEngine.IsMuted ? 0 : 1);
             var bytes = Bass.ChannelGetLength(streamHandle);
             if (bytes < 0)
             {
-                Log.Error($"Failed to initialize audio playback for {clip.FilePath}.");
+                Log.Error($"Failed to initialize audio playback for \"{absolutePath}\".");
             }
 
             var duration = (float)Bass.ChannelBytes2Seconds(streamHandle, bytes);
@@ -501,9 +502,21 @@ namespace T3.Core.Audio
         /// Is initialized after loading...
         /// </summary>
         public double LengthInSeconds;
+        
+        private readonly SymbolPackage _symbolPackage;
+        
+        public AudioClip(SymbolPackage symbolPackage)
+        {
+            _symbolPackage = symbolPackage;
+        }
+
+        public bool TryGetAbsoluteFilePath(out string absolutePath)
+        {
+            return ResourceManager.TryResolvePath(FilePath, [_symbolPackage.ResourcesFolder], out absolutePath);
+        }
 
         #region serialization
-        public static AudioClip FromJson(JToken jToken, string projectResourceDir)
+        public static AudioClip FromJson(JToken jToken, SymbolPackage symbolPackage)
         {
             var idToken = jToken[nameof(Id)];
 
@@ -513,16 +526,7 @@ namespace T3.Core.Audio
 
             var path = jToken[nameof(FilePath)]?.Value<string>();
 
-            if (path != null)
-            {
-                _ = ResourceManager.TryResolvePath(path, [projectResourceDir], out path);
-            }
-            else
-            {
-                path = string.Empty;
-            }
-
-            var newAudioClip = new AudioClip
+            var newAudioClip = new AudioClip(symbolPackage)
                                    {
                                        Id = Guid.Parse(idString),
                                        FilePath = path,

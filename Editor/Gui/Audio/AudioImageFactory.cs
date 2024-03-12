@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using T3.Core.Audio;
 using T3.Core.Logging;
@@ -8,22 +8,27 @@ namespace T3.Editor.Gui.Audio
 {
     public static class AudioImageFactory
     {
+        private static readonly ConcurrentDictionary<AudioClip, bool> LoadingClips = new();
         public static string GetOrCreateImagePathForClip(AudioClip audioClip)
         {
-            if (audioClip == null || !File.Exists(audioClip.FilePath))
+            if (audioClip == null || LoadingClips.ContainsKey(audioClip) || !audioClip.TryGetAbsoluteFilePath(out var absolutePath))
             {
                 return null;
             }
             
-            if (ImageForAudioFiles.TryGetValue(audioClip.FilePath, out var imagePath))
+            if (ImageForAudioFiles.TryGetValue(absolutePath, out var imagePath))
             {
                 return imagePath;
             }
             
-            ImageForAudioFiles[audioClip.FilePath] = null; // Prevent double creation
-
-            var task = new AsyncImageGeneratorTask(audioClip);
-            task.Run();
+            LoadingClips.TryAdd(audioClip, true);
+            
+            Task.Run(() =>
+                     {
+                         var generator = new AsyncImageGeneratorTask(audioClip);
+                         generator.Generate();
+                         LoadingClips.TryRemove(audioClip, out _);
+                     });
             return null;
         }
 
@@ -32,29 +37,23 @@ namespace T3.Editor.Gui.Audio
             public AsyncImageGeneratorTask(AudioClip audioClip)
             {
                 _audioClip = audioClip;
-                _generator = new AudioImageGenerator(audioClip.FilePath);
+                _generator = new AudioImageGenerator(audioClip);
             }
 
-            public void Run()
-            {
-                Task.Run(GenerateAsync);
-            }
-
-            private void GenerateAsync()
+            public void Generate()
             {
                 Log.Debug($"Creating sound image for {_audioClip.FilePath}");
-                var imageFilePath = _generator.GenerateSoundSpectrumAndVolume();
-                if (imageFilePath == null)
+                if (!_generator.TryGenerateSoundSpectrumAndVolume())
                 {
                     Log.Debug("could not create filepath");
                 }
                 else
                 {
-                    ImageForAudioFiles[_audioClip.FilePath] = imageFilePath;
+                    ImageForAudioFiles[_generator.SoundFilePathAbsolute] = _generator.ImageFilePathAbsolute;
                 }
             }
 
-            private AudioClip _audioClip;
+            private readonly AudioClip _audioClip;
             private readonly AudioImageGenerator _generator;
         }
 

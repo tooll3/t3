@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using ManagedBass;
 using Newtonsoft.Json;
+using T3.Core.Audio;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
@@ -11,34 +12,42 @@ namespace T3.Editor.Gui.Audio
 {
     public class AudioImageGenerator
     {
-        public AudioImageGenerator(string soundFilePath)
+        public AudioImageGenerator(AudioClip audioClip)
         {
-            _soundFilePath = soundFilePath;
+            SoundFilePath = audioClip.FilePath;
+            
+            const string imageExtension = ".waveform.png";
+            ImageFilePath = SoundFilePath + imageExtension;
+            if(!audioClip.TryGetAbsoluteFilePath(out SoundFilePathAbsolute))
+                throw new Exception($"Could not get absolute path for audio clip: {SoundFilePath}");
+            
+            ImageFilePathAbsolute = SoundFilePathAbsolute + imageExtension;
         }
 
-        public string GenerateSoundSpectrumAndVolume()
+        public bool TryGenerateSoundSpectrumAndVolume()
         {
+            
             try
             {
-                if (string.IsNullOrEmpty(_soundFilePath) || !File.Exists(_soundFilePath))
-                    return null;
+                if (string.IsNullOrEmpty(SoundFilePathAbsolute) || !File.Exists(SoundFilePathAbsolute))
+                    return false;
 
-                if (File.Exists(ImageFilePath))
+                if (File.Exists(ImageFilePathAbsolute))
                 {
                     Log.Debug($"Reusing sound image file: {ImageFilePath}");
-                    return ImageFilePath;
+                    return true;
                 }
             }
             catch(Exception e)
             {
-                Log.Warning($"Failed to generated image for soundtrack {_soundFilePath}: " + e.Message);
-                return null;
+                Log.Warning($"Failed to generated image for soundtrack {SoundFilePath}: " + e.Message);
+                return false;
             }
 
             Log.Debug($"Generating {ImageFilePath}...");
 
             Bass.Init(-1, 44100, 0, IntPtr.Zero);
-            var stream = Bass.CreateStream(_soundFilePath, 0, 0, BassFlags.Decode | BassFlags.Prescan);
+            var stream = Bass.CreateStream(SoundFilePathAbsolute, 0, 0, BassFlags.Decode | BassFlags.Prescan);
 
             var streamLength = Bass.ChannelGetLength(stream);
 
@@ -52,7 +61,7 @@ namespace T3.Editor.Gui.Audio
             {
                 sampleLength = (long)(sampleLength * numSamples / (double)maxSamples) + 100;
                 numSamples = streamLength / sampleLength;
-                Log.Debug($"Limitting texture size to {numSamples} samples");
+                Log.Debug($"Limiting texture size to {numSamples} samples");
             }
 
             Bass.ChannelPlay(stream);
@@ -138,11 +147,22 @@ namespace T3.Editor.Gui.Audio
             //     region.SaveToFile(_soundFilePath);
             // }
 
-            spectrumImage.Save(ImageFilePath);
+            bool success;
+            try
+            {
+                spectrumImage.Save(ImageFilePathAbsolute);
+                success = true;
+            }
+            catch(Exception e)
+            {
+                success = false;
+                Log.Error(e.Message);
+            }
+
             Bass.ChannelStop(stream);
             Bass.StreamFree(stream);
 
-            return ImageFilePath;
+            return success;
         }
 
         private class FftRegion
@@ -176,8 +196,10 @@ namespace T3.Editor.Gui.Audio
             }
         }
 
-        private readonly string _soundFilePath;
-        private string ImageFilePath => _soundFilePath + ".waveform.png";
+        public readonly string SoundFilePath;
+        public readonly string SoundFilePathAbsolute;
+        public readonly string ImageFilePath;
+        public readonly string ImageFilePathAbsolute;
 
         private readonly FftRegion[] _regions =
             {
@@ -194,5 +216,10 @@ namespace T3.Editor.Gui.Audio
         private const int PaletteSize = 3 * ColorSteps;
 
         private float[] _fftBuffer = new float[SpectrumLength];
+
+        public AudioImageGenerator(string soundFilePath)
+        {
+            SoundFilePath = soundFilePath;
+        }
     }
 }

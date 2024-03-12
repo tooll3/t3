@@ -58,10 +58,15 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 if (isEnabledForCurrent)
                 {
-                    composition.Symbol.PlaybackSettings ??= new PlaybackSettings();
-                    composition.Symbol.PlaybackSettings.Enabled = true;
-                    Playback.Current.Settings = composition.Symbol.PlaybackSettings;
                     settings = composition.Symbol.PlaybackSettings;
+                    if (settings == null)
+                    {
+                        settings = new PlaybackSettings();
+                        composition.Symbol.PlaybackSettings = settings;
+                    }
+                    
+                    settings.Enabled = true;
+                    Playback.Current.Settings = settings;
                 }
                 else
                 {
@@ -121,7 +126,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     if (ImGui.Button("Add soundtrack to composition"))
                     {
-                        settings.AudioClips.Add(new AudioClip
+                        settings.AudioClips.Add(new AudioClip(settings.SymbolPackage)
                                                     {
                                                         IsSoundtrack = true,
                                                     });

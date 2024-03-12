@@ -443,7 +443,7 @@
         "Bpm": 120.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "C:\\Users\\Dom\\Documents\\T3Projects\\wake\\Resources\\proj-synchotron\\soundtrack\\synthjam.mp3"
+        "FilePath": "user\\wake\\proj-synchotron\\soundtrack\\synthjam.mp3"
       }
     ]
   }

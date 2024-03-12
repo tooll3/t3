@@ -1519,7 +1519,7 @@
         "Bpm": 120.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "C:\\Users\\Dom\\Documents\\T3Projects\\still\\Resources\\proj-worksforeverybody\\soundtrack\\works-for-everybody.mp3"
+        "FilePath": "user\\still\\proj-worksforeverybody\\soundtrack\\works-for-everybody.mp3"
       }
     ]
   },

@@ -3,6 +3,7 @@ using System.IO;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Audio;
+using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Gui.Audio;
 
@@ -42,7 +43,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private static void UpdateSoundTexture(AudioClip soundtrack)
         {
             var imagePath = AudioImageFactory.GetOrCreateImagePathForClip(soundtrack);
-            if (imagePath == null  || !File.Exists(imagePath))
+            if (imagePath == null)
             {
                 _loadedImagePath = null;
                 return;
@@ -52,8 +53,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 return;
             
             var resourceManager = ResourceManager.Instance();
-            if (resourceManager == null)
-                return;
 
             (_, _srvResId) = resourceManager.CreateTextureFromFile(imagePath, null, () => { });
             _loadedImagePath = imagePath;

@@ -292,11 +292,16 @@ namespace T3.Editor.Gui.Graph
             var soundtrack = symbolPlaybackSettings?.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
             if (soundtrack == null)
             {
-                if (PlaybackUtils.TryFindingSoundtrack(out var otherSoundtrack))
+                if (PlaybackUtils.TryFindingSoundtrack(out var otherSoundtrack, out var composition))
                 {
                     Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {otherSoundtrack.FilePath} set in parent...");
                     errorCount++;
-                    return otherSoundtrack.FilePath;
+
+                    if(!otherSoundtrack.TryGetAbsoluteFilePath(out var absolutePath))
+                    {
+                        Log.Error($"Failed to find absolute path for {otherSoundtrack.FilePath} in [{composition.Symbol.Name}]");
+                    }
+                    return absolutePath;
                 }
 
                 Log.Debug("No soundtrack defined within operator.");
