@@ -2,6 +2,7 @@
 using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
@@ -16,7 +17,7 @@ namespace T3.Editor.Gui.Interaction.Timing
         
         public static void UpdatePlaybackAndSyncing()
         {
-            var settings = FindPlaybackSettings();
+            var settings = FindPlaybackSettings(out var audioComposition);
 
             WasapiAudioInput.StartFrame(settings);
             
@@ -75,12 +76,12 @@ namespace T3.Editor.Gui.Interaction.Timing
             Playback.Current.Settings = settings;
         }
 
-        private static PlaybackSettings FindPlaybackSettings()
+        private static PlaybackSettings FindPlaybackSettings(out Instance instance)
         {
             var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
             var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
 
-            if (FindPlaybackSettingsForInstance(composition, out _, out var settings))
+            if (FindPlaybackSettingsForInstance(composition, out instance, out var settings))
                 return settings;
             
             var outputWindow = OutputWindow.GetPrimaryOutputWindow();
@@ -88,15 +89,15 @@ namespace T3.Editor.Gui.Interaction.Timing
             if(FindPlaybackSettingsForInstance(pinnedOutput, out _, out var settingsFromPinned))
                 return settingsFromPinned;
                 
-            return _defaultPlaybackSettings;
+            return GetDefaultPlaybackSettings(composition?.Symbol.SymbolPackage);
         }
 
         /// <summary>
         /// Scans the current composition path and its parents for a soundtrack 
         /// </summary>
-        public static bool TryFindingSoundtrack(out AudioClip soundtrack)
+        public static bool TryFindingSoundtrack(out AudioClip soundtrack, out Instance composition)
         {
-            var settings = FindPlaybackSettings();
+            var settings = FindPlaybackSettings(out composition);
             if (settings != null)
                 return settings.GetMainSoundtrack(out soundtrack);
             
@@ -115,7 +116,7 @@ namespace T3.Editor.Gui.Interaction.Timing
             {
                 if (instanceWithSettings == null)
                 {
-                    settings = _defaultPlaybackSettings;
+                    settings = GetDefaultPlaybackSettings(startInstance?.Symbol.SymbolPackage);
                     instanceWithSettings = null;
                     return false;
                 }
@@ -130,7 +131,7 @@ namespace T3.Editor.Gui.Interaction.Timing
             }
         }
 
-        private static readonly PlaybackSettings _defaultPlaybackSettings = new()
+        private static PlaybackSettings GetDefaultPlaybackSettings(SymbolPackage package) => new()
                                                                                 {
                                                                                           Enabled = false,
                                                                                           Bpm = 120,
@@ -138,7 +139,8 @@ namespace T3.Editor.Gui.Interaction.Timing
                                                                                           Syncing = PlaybackSettings.SyncModes.Timeline,
                                                                                           AudioInputDeviceName = null,
                                                                                           AudioGainFactor = 1,
-                                                                                          AudioDecayFactor = 1
+                                                                                          AudioDecayFactor = 1,
+                                                                                          SymbolPackage = package
                                                                                       };
     }
 }

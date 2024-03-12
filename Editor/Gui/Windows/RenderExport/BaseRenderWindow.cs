@@ -133,7 +133,7 @@ public abstract class BaseRenderWindow : Window
             }
             case TimeRanges.Soundtrack:
             {
-                if (PlaybackUtils.TryFindingSoundtrack(out var soundtrack))
+                if (PlaybackUtils.TryFindingSoundtrack(out var soundtrack, out var composition))
                 {
                     var playback = Playback.Current; // TODO, this should be non-static eventually
                     _startTimeInBars = (float)SecondsToReferenceTime(playback.SecondsFromBars(soundtrack.StartTime), _timeReference);

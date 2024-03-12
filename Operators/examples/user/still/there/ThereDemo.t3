@@ -2612,7 +2612,7 @@
         "Bpm": 120.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "C:\\Users\\Dom\\Documents\\T3Projects\\still\\Resources\\proj-there\\soundtrack\\partial.mp3"
+        "FilePath": "Resources\\user\\still\\proj-there\\soundtrack\\partial.mp3"
       }
     ]
   },

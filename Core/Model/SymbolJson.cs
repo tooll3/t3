@@ -359,7 +359,7 @@ namespace T3.Core.Model
                 }
             }
 
-            symbol.PlaybackSettings = PlaybackSettings.ReadFromJson(jToken, symbol.SymbolPackage.ResourcesFolder);
+            symbol.PlaybackSettings = PlaybackSettings.ReadFromJson(jToken, package);
 
             var animatorData = (JArray)jToken[JsonKeys.Animator];
             return new SymbolReadResult(symbol, childrenJsons, animatorData);

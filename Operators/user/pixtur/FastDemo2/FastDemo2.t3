@@ -779,7 +779,7 @@
         "Bpm": 120.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "C:\\Users\\Dom\\Documents\\T3Projects\\pixtur\\Resources\\FastDemo2\\soundrack\\quickProd-EliteHaus22_dreamColorfulGradient_2.4-MSTR.mp3"
+        "FilePath": "FastDemo2\\soundrack\\quickProd-EliteHaus22_dreamColorfulGradient_2.4-MSTR.mp3"
       }
     ]
   },

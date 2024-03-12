@@ -2214,7 +2214,7 @@
         "Bpm": 130.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "C:\\Users\\Dom\\Documents\\T3Projects\\wake\\Resources\\proj-lpm2024-teaser\\soundtrack\\LPM-Djinnzing.mp3"
+        "FilePath": "user\\wake\\proj-lpm2024-teaser\\soundtrack\\LPM-Djinnzing.mp3"
       }
     ]
   },

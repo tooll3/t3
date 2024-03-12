@@ -216,21 +216,18 @@ namespace T3.Player
                 // Init wasapi input if required
                 if (playbackSettings is { AudioSource: PlaybackSettings.AudioSources.ProjectSoundTrack } && playbackSettings.GetMainSoundtrack(out _soundtrack))
                 {
-                    if (File.Exists(_soundtrack.FilePath))
+                    if (_soundtrack.TryGetAbsoluteFilePath(out var _))
                     {
-                        if (File.Exists(_soundtrack.FilePath))
-                        {
-                            _playback.Bpm = _soundtrack.Bpm;
-                            // Trigger loading clip
-                            AudioEngine.UseAudioClip(_soundtrack, 0);
-                            AudioEngine.CompleteFrame(_playback, Playback.LastFrameDuration); // Initialize
-                            prerenderRequired = true;
-                        }
-                        else
-                        {
-                            Log.Warning($"Can't find soundtrack {_soundtrack.FilePath}");
-                            _soundtrack = null;
-                        }
+                        _playback.Bpm = _soundtrack.Bpm;
+                        // Trigger loading clip
+                        AudioEngine.UseAudioClip(_soundtrack, 0);
+                        AudioEngine.CompleteFrame(_playback, Playback.LastFrameDuration); // Initialize
+                        prerenderRequired = true;
+                    }
+                    else
+                    {
+                        Log.Warning($"Can't find soundtrack {_soundtrack.FilePath}");
+                        _soundtrack = null;
                     }
                 }
 
