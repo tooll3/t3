@@ -264,7 +264,7 @@ namespace T3.Core.Audio
 
         private static void UpdateFftBuffer(int soundStreamHandle, Playback playback)
         {
-            int get256FftValues = (int)DataFlags.FFT512;
+            int get256FftValues = (int)DataFlags.FFT2048;
 
             // do not advance plaback if we are not in live mode
             if (!playback.IsLive)
