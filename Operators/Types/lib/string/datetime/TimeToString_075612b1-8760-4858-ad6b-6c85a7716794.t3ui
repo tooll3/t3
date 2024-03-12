@@ -1,13 +1,14 @@
 {
   "Id": "075612b1-8760-4858-ad6b-6c85a7716794"/*TimeToString*/,
-  "Description": "",
+  "Description": "Converts [Time] float output and similar to a string",
   "InputUis": [
     {
       "InputId": "ecc27b89-e89a-4c01-93ad-b4750d09f2f7"/*Input*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Input for [Time] operator"
     }
   ],
   "SymbolChildUis": [
