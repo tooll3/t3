@@ -54,7 +54,7 @@ namespace lib.point.helper
 
             if (mesh == null)
             {
-                Log.Warning($"Can't read file {path}", this);
+                Log.Warning($"Can't read file \"{absolutePath}\"", this);
                 return;
             }
 
