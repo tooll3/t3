@@ -1,12 +1,14 @@
 {
   "Id": "06621b4b-43be-4ef9-80d0-f1b36fa4dbd1"/*MirrorRepeat*/,
+  "Description": "Shifts, slices or mirrors the incoming image to create endless textures or kaleidoscopic patterns when combined with itself",
   "InputUis": [
     {
       "InputId": "25bdfb83-a61c-448c-a909-527f1bb73740"/*Image*/,
       "Position": {
         "X": -77.13457,
         "Y": 30.053413
-      }
+      },
+      "Description": "Image input"
     },
     {
       "InputId": "149a9d1c-b76e-4256-8f5d-a261923a9ae5"/*RotateMirror*/,
@@ -14,6 +16,8 @@
         "X": -78.372604,
         "Y": 246.8786
       },
+      "GroupTitle": "Rotation",
+      "Description": "Rotates the result",
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.0}°"
@@ -24,6 +28,7 @@
         "X": -78.372604,
         "Y": 291.8786
       },
+      "Description": "Rotates the incoming image before its mirrored",
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.000}°"
@@ -33,21 +38,25 @@
       "Position": {
         "X": -83.52879,
         "Y": 345.58344
-      }
+      },
+      "GroupTitle": "Position",
+      "Description": "Defines the distance between the mirrors. A smaller distance many mirrored stripes."
     },
     {
       "InputId": "bb6c1508-1849-4c40-b609-06ddfe62a6ea"/*Offset*/,
       "Position": {
         "X": -83.52879,
         "Y": 390.58344
-      }
+      },
+      "Description": "Offsets the result along the mirror axis"
     },
     {
       "InputId": "5a5fc5e7-4fec-4146-9183-161fff71ee97"/*Offsetimage*/,
       "Position": {
         "X": -87.94841,
         "Y": 473.15018
-      }
+      },
+      "Description": "Offsets the image before it is mirrored"
     },
     {
       "InputId": "341ee76d-f431-40e8-ba14-aa4e0a1f10c4"/*ShadeAmount*/,
@@ -55,6 +64,8 @@
         "X": -88.193954,
         "Y": 547.31323
       },
+      "GroupTitle": "Settings",
+      "Description": "Darkens one side of the mirrored image\n\nHint: If combined with a small width it creates a 'Fanfold' effect",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -63,14 +74,17 @@
       "Position": {
         "X": -89.176094,
         "Y": 612.018
-      }
+      },
+      "Description": "Defines the color that is used for shading"
     },
     {
       "InputId": "6809a355-47fc-4e27-98a2-956dcc7f41ef"/*Resolution*/,
       "Position": {
         "X": -101.94387,
         "Y": 731.96674
-      }
+      },
+      "Description": "Defines the resolution of the result in pixels",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
