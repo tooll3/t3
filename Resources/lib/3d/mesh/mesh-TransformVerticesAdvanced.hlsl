@@ -78,12 +78,14 @@ void main(uint3 i : SV_DispatchThreadID)
     float s = UseVertexSelection > 0.5 ? SourceVerts[i.x].Selected : 1;
 
     float3 pos = SourceVerts[i.x].Position;
-
+    
+    float3 twisted = SourceVerts[i.x].Position;// for twist
 
     // Normalize the position to be on a sphere with a desired radius (e.g., 1.0)
     float3 Spos = normalizeToSphere(pos, Radius);
-    pos = lerp(pos, Spos, Spherize);
-
+   // pos = lerp(pos, Spos, Spherize);
+    pos = lerp(pos, lerp(pos, Spos, Spherize) , s);  
+    
     // Apply taper transformation 
    switch ((int)taperAxis)
     {
@@ -97,17 +99,19 @@ void main(uint3 i : SV_DispatchThreadID)
         pos.xy *= taperFunction(pos.z, TaperAmount);
         break;
     }
-
+    //pos = lerp(pos, tapered, s);
     // Apply twist transformation based on Y-coordinate
     /* float twistAngle = twistFunction(pos.y, TwistAmount);
     float cosTheta = cos(twistAngle);
     float sinTheta = sin(twistAngle);
     pos.xz = float2(pos.x * cosTheta - pos.z * sinTheta, pos.x * sinTheta + pos.z * cosTheta); */
-    pos = twistFunction(pos, TwistAmount);
+    twisted = twistFunction(pos, TwistAmount);
+
+    ResultVerts[i.x].Position = lerp(pos, twisted,s); 
 
  
 
-    ResultVerts[i.x].Position = lerp(pos, mul(float4(pos,1), TransformMatrix).xyz, s);
+    //ResultVerts[i.x].Position = lerp(pos, dpos,s) + lerp(pos, mul(float4(pos,1), TransformMatrix).xyz, s);
 
      // Transform normal without normalization
     float3 normal = SourceVerts[i.x].Normal;
