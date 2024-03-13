@@ -2619,6 +2619,11 @@
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {
+          "Id": "bcfe965f-27bd-4568-b25b-6987a26b5d6e"/*Amount*/,
+          "Type": "System.Single",
+          "Value": 1.15
+        },
+        {
           "Id": "56b551e9-47aa-4d19-954b-367c4d96e5d8"/*Direction*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -2626,11 +2631,6 @@
             "Y": -1.0,
             "Z": 0.0
           }
-        },
-        {
-          "Id": "bcfe965f-27bd-4568-b25b-6987a26b5d6e"/*Amount*/,
-          "Type": "System.Single",
-          "Value": 1.15
         }
       ],
       "Outputs": []
