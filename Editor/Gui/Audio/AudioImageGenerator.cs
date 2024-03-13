@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using ManagedBass;
-using Newtonsoft.Json;
 using T3.Core.Audio;
 using T3.Core.Logging;
 using T3.Core.Utils;
@@ -14,34 +14,25 @@ namespace T3.Editor.Gui.Audio
     {
         public AudioImageGenerator(AudioClip audioClip)
         {
-            SoundFilePath = audioClip.FilePath;
-            
-            const string imageExtension = ".waveform.png";
-            ImageFilePath = SoundFilePath + imageExtension;
+            var relativePath = audioClip.FilePath;
             if(!audioClip.TryGetAbsoluteFilePath(out SoundFilePathAbsolute))
-                throw new Exception($"Could not get absolute path for audio clip: {SoundFilePath}");
+                throw new Exception($"Could not get absolute path for audio clip: {relativePath}");
             
+            SoundFilePath = relativePath;
+            string imageExtension = UserSettings.Config.ExpandSpectrumVisualizerVertically ? ".10.waveform.png" : ".waveform.png";
+            ImageFilePath = SoundFilePath + imageExtension;
             ImageFilePathAbsolute = SoundFilePathAbsolute + imageExtension;
         }
 
         public bool TryGenerateSoundSpectrumAndVolume()
         {
-            
-            try
-            {
-                if (string.IsNullOrEmpty(SoundFilePathAbsolute) || !File.Exists(SoundFilePathAbsolute))
-                    return false;
-
-                if (File.Exists(ImageFilePathAbsolute))
-                {
-                    Log.Debug($"Reusing sound image file: {ImageFilePath}");
-                    return true;
-                }
-            }
-            catch(Exception e)
-            {
-                Log.Warning($"Failed to generated image for soundtrack {SoundFilePath}: " + e.Message);
+            if (string.IsNullOrWhiteSpace(SoundFilePathAbsolute) || !File.Exists(SoundFilePathAbsolute))
                 return false;
+
+            if (File.Exists(ImageFilePathAbsolute))
+            {
+                Log.Debug($"Reusing sound image file: {ImageFilePath}");
+                return true;
             }
 
             Log.Debug($"Generating {ImageFilePath}...");
@@ -56,7 +47,7 @@ namespace T3.Editor.Gui.Audio
             var sampleLength = Bass.ChannelSeconds2Bytes(stream, samplingResolution);
             var numSamples = streamLength / sampleLength;
 
-            const int maxSamples = 16384;
+            const int maxSamples = 16384; // 4k texture size limit
             if (numSamples > maxSamples)
             {
                 sampleLength = (long)(sampleLength * numSamples / (double)maxSamples) + 100;
@@ -68,84 +59,64 @@ namespace T3.Editor.Gui.Audio
 
             var spectrumImage = new Bitmap((int)numSamples, ImageHeight);
 
-            int a, b, r, g;
-            var palette = new System.Drawing.Color[PaletteSize];
-            
-            const float upperThreshold = PaletteSize * 2 / 3f;
-            const float lowerThreshold = PaletteSize / 3f;
+            var intensityPalette = IntensityPalette;
 
-            for (var palettePos = 0; palettePos < PaletteSize; ++palettePos)
-            {
-                a = 255;
-                if (palettePos < upperThreshold)
-                    a = (int)(palettePos * 255 / upperThreshold);
-
-                b = 0;
-                if (palettePos < lowerThreshold)
-                    b = palettePos;
-                else if (palettePos < upperThreshold)
-                    b = -palettePos + 510;
-
-                r = 0;
-                if (palettePos > upperThreshold)
-                    r = 255;
-                else if (palettePos > lowerThreshold)
-                    r = palettePos - 255;
-
-                g = 0;
-                if (palettePos > upperThreshold)
-                    g = palettePos - 510;
-
-                palette[palettePos] = System.Drawing.Color.FromArgb(a, r, g, b);
-            }
-
-            foreach (var region in _regions)
-            {
-                region.Levels = new float[numSamples];
-            }
-
-            var f = (float)(SpectrumLength / Math.Log(ImageHeight + 1));
+            var logarithms = PrecomputedLogs;
+            var f = (float)(FftBufferSize / logarithms[ImageHeight + 1]);
             var f2 = (float)((PaletteSize - 1) / Math.Log(MaxIntensity + 1));
             //var f3 = (float)((ImageHeight - 1) / Math.Log(32768.0f + 1));
 
             var logarithmicExponent = UserSettings.Config.ExpandSpectrumVisualizerVertically ? 10d : Math.E;
+            var precalculatedLogMultiplier = 1d / Math.Log(logarithmicExponent) * f;
 
+            const int channelLength = (int)DataFlags.FFT2048;
+            var fftBuffer = new float[FftBufferSize];
+            
+            int logCounter = 0;
+            
             for (var sampleIndex = 0; sampleIndex < numSamples; ++sampleIndex)
             {
                 Bass.ChannelSetPosition(stream, sampleIndex * sampleLength);
-                Bass.ChannelGetData(stream, _fftBuffer, (int)DataFlags.FFT2048);
+                Bass.ChannelGetData(stream, fftBuffer, channelLength);
 
                 for (var rowIndex = 0; rowIndex < ImageHeight; ++rowIndex)
                 {
-                    var j = (int)(f * Math.Log(rowIndex + 1));
-                    var pj = (int)(rowIndex > 0 ? f * Math.Log(rowIndex - 1 + 1, logarithmicExponent) : j);
-                    var nj = (int)(rowIndex < ImageHeight - 1 ? f * Math.Log(rowIndex + 1 + 1, logarithmicExponent) : j);
-                    var intensity = 125.0f * _fftBuffer[SpectrumLength - pj - 1] +
-                                    750.0f * _fftBuffer[SpectrumLength - j - 1] +
-                                    125.0f * _fftBuffer[SpectrumLength - nj - 1];
-                    intensity = Math.Min(MaxIntensity, intensity);
-                    intensity = Math.Max(0.0f, intensity);
+                    const int spectrumLengthMinusOne = FftBufferSize - 1;
+                    const int imageHeightMinusOne = ImageHeight - 1;
+                    
+                    var j = (int)(f * logarithms[rowIndex + 1]);
+                    
+                    bool rowIndexInBounds = rowIndex is > 0 and < imageHeightMinusOne;
+                    int pj, nj;
 
-                    var palettePos = (int)(f2 * Math.Log(intensity + 1));
-                    spectrumImage.SetPixel(sampleIndex, rowIndex, palette[palettePos]);
+                    if (rowIndexInBounds)
+                    {
+                        // precalculatedLogMultiplier is equivalent to f * Math.Log(rowIndex, logarithmicExponent)
+                        pj = (int)(logarithms[rowIndex] * precalculatedLogMultiplier);
+                        nj = (int)(logarithms[rowIndex + 2] * precalculatedLogMultiplier);
+                    }
+                    else
+                    {
+                        pj = nj = j;
+                    }
+                    
+                    var intensity = 125.0f * fftBuffer[spectrumLengthMinusOne - pj] + 
+                                    750.0f * fftBuffer[spectrumLengthMinusOne - j] + 
+                                    125.0f * fftBuffer[spectrumLengthMinusOne - nj];
+                    
+                    intensity = Math.Clamp(intensity, 0f, MaxIntensity) + 1;
+
+                    var palettePos = (int)(f2 * Math.Log(intensity));
+                    spectrumImage.SetPixel(sampleIndex, rowIndex, intensityPalette[palettePos]);
                 }
 
-                if (sampleIndex % 1000 == 0)
+                if (++logCounter > 1000)
                 {
-                    var percentage = (int)(100.0 * sampleIndex / (float)numSamples);
-                    Log.Debug($"   computing sound image {percentage}%% complete");
+                    logCounter = 0;
+                    var percentage = sampleIndex / (float)numSamples;
+                    Log.Debug($"   computing sound image {percentage:P1}% complete");
                 }
-
-                // foreach (var region in _regions)
-                // {
-                //     region.ComputeUpLevelForCurrentFft(sampleIndex, ref _fftBuffer);
-                // }
             }
-
-            // foreach (var region in _regions)
-            // {
-            //     region.SaveToFile(_soundFilePath);
-            // }
 
             bool success;
             try
@@ -165,61 +136,78 @@ namespace T3.Editor.Gui.Audio
             return success;
         }
 
-        private class FftRegion
+        private static Color[] GeneratePalette()
         {
-            public string Title;
-            public float[] Levels;
-            public float LowerLimit;
-            public float UpperLimit;
+            var palette = new Color[PaletteSize];
+            
+            const float upperThreshold = 2 / 3f;
+            const float lowerThreshold = 1 / 3f;
+            const float lowerThresholdInv = 1 / lowerThreshold;
+            
+            const int maxColorValue = 255;
 
-            public void ComputeUpLevelForCurrentFft(int index, ref float[] fftBuffer)
+            for (var pos = 0; pos < PaletteSize; ++pos)
             {
-                var level = 0f;
+                var pos01 = MathUtils.Remap(pos, 0, PaletteSize, 0f, 1f);
+                var posThreshold01Clamped = Math.Clamp(
+                                                       value: MathUtils.Remap(pos01, lowerThreshold, upperThreshold, 0f, 1f), 
+                                                       min: 0f, 
+                                                       max: 1f);
 
-                var startIndex = (int)MathUtils.Lerp(0, SpectrumLength, MathUtils.Clamp(this.LowerLimit, 0, 1));
-                var endIndex = (int)MathUtils.Lerp(0, SpectrumLength, MathUtils.Lerp(this.UpperLimit, 0, 1));
+                palette[pos] = Color.FromArgb(
+                                              // fraction of the upper threshold
+                                              alpha: RoundToInt(Math.Min(1f, pos01 / upperThreshold) * maxColorValue),
 
-                for (int i = startIndex; i < endIndex; i++)
-                {
-                    level += fftBuffer[i];
-                }
+                                              // normalized between lower and upper thresholds
+                                              red: RoundToInt(posThreshold01Clamped * maxColorValue),
 
-                Levels[index] = level;
+                                              // distance above upperThreshold
+                                              green: RoundToInt(Math.Max(0f, pos01 - 1f) * maxColorValue),
+
+                                              // distance from threshold it is below
+                                              blue: RoundToInt(Math.Min(pos01 * lowerThresholdInv, 1f - posThreshold01Clamped) * maxColorValue)
+                                             );
             }
+            
+            return palette;
+            
+            int RoundToInt(float value) => (int)Math.Round(value);
+        }
 
-            public void SaveToFile(string basePath)
+        sealed class PreComputedLogs
+        {
+            // ReSharper disable once FieldCanBeMadeReadOnly.Local
+            private double[] _logEvaluations = new double[ImageHeight + 2];
+            
+            // index accessor
+            public double this[int index] => _logEvaluations[index];
+            
+            public PreComputedLogs()
             {
-                using (var sw = new StreamWriter(basePath + "." + Title + ".json"))
+                for (var i = 0; i < _logEvaluations.Length; ++i)
                 {
-                    sw.Write(JsonConvert.SerializeObject(Levels, Formatting.Indented));
+                    _logEvaluations[i] = Math.Log(i + 1);
                 }
+            }
+            
+            public double Log(int rowIndex)
+            {
+                return _logEvaluations[rowIndex];
             }
         }
 
+        private static readonly PreComputedLogs PrecomputedLogs = new();
         public readonly string SoundFilePath;
         public readonly string SoundFilePathAbsolute;
         public readonly string ImageFilePath;
         public readonly string ImageFilePathAbsolute;
+        private static readonly Color[] IntensityPalette = GeneratePalette();
 
-        private readonly FftRegion[] _regions =
-            {
-                new() { Title = "levels", LowerLimit = 0f, UpperLimit = 1f },
-                new() { Title = "highlevels", LowerLimit = 0.3f, UpperLimit = 1f },
-                new() { Title = "midlevels", LowerLimit = 0.06f, UpperLimit = 0.3f },
-                new() { Title = "lowlevels", LowerLimit = 0.0f, UpperLimit = 0.02f },
-            };
 
-        private const int SpectrumLength = 1024;
+        private const int FftBufferSize = 1024;
         private const int ImageHeight = 256;
         private const float MaxIntensity = 500;
         private const int ColorSteps = 255;
         private const int PaletteSize = 3 * ColorSteps;
-
-        private float[] _fftBuffer = new float[SpectrumLength];
-
-        public AudioImageGenerator(string soundFilePath)
-        {
-            SoundFilePath = soundFilePath;
-        }
     }
 }
