@@ -13,42 +13,60 @@
       "Position": {
         "X": -198.16037,
         "Y": -12.877563
-      }
+      },
+      "Description": "Custom input for a background image"
     },
     {
       "InputId": "ea8656ce-a75d-4cfd-9deb-cd3a36294399"/*Fill*/,
       "Position": {
         "X": -198.16037,
         "Y": 32.122437
-      }
+      },
+      "GroupTitle": "Color",
+      "Description": "Defines the color of the line"
     },
     {
       "InputId": "924c36ab-7d36-4a3c-8dd2-72648fda1711"/*Background*/,
       "Position": {
         "X": -198.16037,
         "Y": 77.12242
-      }
+      },
+      "Description": "Defines the background color"
+    },
+    {
+      "InputId": "c6fbd3b2-45da-40bc-958a-8ab13b8cdf2b"/*LineWidth*/,
+      "Position": {
+        "X": -247.17827,
+        "Y": 210.70657
+      },
+      "GroupTitle": "Appearance",
+      "Description": "Defines the thickness of the lines"
+    },
+    {
+      "InputId": "aa818499-5322-47f4-b08d-d21bbd0b72c8"/*Fade*/,
+      "Position": {
+        "X": -247.17827,
+        "Y": 255.70657
+      },
+      "Description": "Defines the smoothness of the lines edges",
+      "Scale": 0.1
     },
     {
       "InputId": "78259bce-6e58-424c-9d06-5eea1f37606a"/*Size*/,
       "Position": {
-        "X": -241.44936,
-        "Y": 193.64334
-      }
+        "X": -255.77164,
+        "Y": 305.35715
+      },
+      "Description": "Scales the lines on the x and y axis",
+      "AddPadding": "True"
     },
     {
       "InputId": "23101a83-14d3-489e-a613-39439fb9a20e"/*Offset*/,
       "Position": {
-        "X": -241.44936,
-        "Y": 238.64346
-      }
-    },
-    {
-      "InputId": "40121009-b4b4-4613-9655-af09dcfea402"/*OffsetCopies*/,
-      "Position": {
-        "X": -241.44936,
-        "Y": 283.64346
-      }
+        "X": -255.77164,
+        "Y": 350.35727
+      },
+      "Description": "Transforms the position of the line"
     },
     {
       "InputId": "199467aa-ac7a-4851-94b8-9e0f5f64d6c0"/*Rotate*/,
@@ -56,30 +74,26 @@
         "X": -256.46817,
         "Y": 438.18356
       },
+      "Description": "Rotates the line",
       "Scale": 0.5
-    },
-    {
-      "InputId": "c6fbd3b2-45da-40bc-958a-8ab13b8cdf2b"/*LineWidth*/,
-      "Position": {
-        "X": -256.46817,
-        "Y": 483.18356
-      }
-    },
-    {
-      "InputId": "aa818499-5322-47f4-b08d-d21bbd0b72c8"/*Fade*/,
-      "Position": {
-        "X": -256.46817,
-        "Y": 528.1836
-      },
-      "Scale": 0.1
     },
     {
       "InputId": "33f88b64-3d8f-4b07-afdc-18d3b3eb63c8"/*Copies*/,
       "Position": {
-        "X": -256.46817,
-        "Y": 573.1836
+        "X": -257.42297,
+        "Y": 520.6686
       },
+      "GroupTitle": "Copies",
+      "Description": "Defines the amount of duplicated lines",
       "Scale": 0.2
+    },
+    {
+      "InputId": "40121009-b4b4-4613-9655-af09dcfea402"/*OffsetCopies*/,
+      "Position": {
+        "X": -257.42297,
+        "Y": 565.6686
+      },
+      "Description": "Offsets the duplicated lines"
     }
   ],
   "SymbolChildUis": [
