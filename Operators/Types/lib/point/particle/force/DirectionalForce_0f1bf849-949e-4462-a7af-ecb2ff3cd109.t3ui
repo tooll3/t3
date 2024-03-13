@@ -3,22 +3,22 @@
   "Description": "Generates a force acting on particles in a defined direction in space.\n\nUseful for simulating gravity, wind or attractive forces.",
   "InputUis": [
     {
+      "InputId": "bcfe965f-27bd-4568-b25b-6987a26b5d6e"/*Amount*/,
+      "Position": {
+        "X": -80.76926,
+        "Y": 524.66284
+      },
+      "Description": "Strength of the the force",
+      "AddPadding": "True",
+      "Scale": 0.001
+    },
+    {
       "InputId": "56b551e9-47aa-4d19-954b-367c4d96e5d8"/*Direction*/,
       "Position": {
         "X": -80.76926,
         "Y": 569.66284
       },
       "Description": "Defines the direction in which the force acts\n\nProTip: The 'ShowGizmo' feature creates a set of arrows that makes adjusting the direction easier",
-      "Scale": 0.001
-    },
-    {
-      "InputId": "bcfe965f-27bd-4568-b25b-6987a26b5d6e"/*Amount*/,
-      "Position": {
-        "X": -80.76926,
-        "Y": 614.66284
-      },
-      "Description": "Strength of the the force",
-      "AddPadding": "True",
       "Scale": 0.001
     },
     {
