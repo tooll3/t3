@@ -48,8 +48,9 @@ namespace lib._3d.mesh.generate
             {
                 if (!TryGetFilePath(path, out var absolutePath))
                 {
-                    Log.Error($"File not found: {path}", this);
-                    _warningMessage = $"File not found: {path}";
+                    string warningMessage = $"File not found: {path}";
+                    Log.Error(warningMessage, this);
+                    _warningMessage = warningMessage;
                     return;
                 }
                 
