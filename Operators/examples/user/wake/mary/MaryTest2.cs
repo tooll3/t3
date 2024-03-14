@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.wake.mary
+namespace examples.user.wake.mary
 {
 	[Guid("ba2a8670-e0c3-4e7b-9382-d1c0938ba2b3")]
     public class MaryTest2 : Instance<MaryTest2>

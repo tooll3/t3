@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.exec
+namespace examples.lib.exec
 {
 	[Guid("cce36a29-8f66-492d-bf8f-b924fa1ae384")]
     public class SetContextVariableExample : Instance<SetContextVariableExample>

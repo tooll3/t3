@@ -177,6 +177,12 @@
       "SymbolId": "812561d8-cbb5-40c3-a53e-3c3f0ad2352e",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "39c5ce1c-e6af-45ba-8f34-f9d4089ad7b3"/*DulcimerMain*/,
+      "SymbolId": "4c6d2682-e92a-46c1-9f16-19d61fb1fce5",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

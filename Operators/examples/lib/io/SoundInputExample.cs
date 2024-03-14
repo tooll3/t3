@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.io
+namespace examples.lib.io
 {
 	[Guid("012119bf-aeec-4134-b7aa-6bc7f9816800")]
     public class SoundInputExample : Instance<SoundInputExample>

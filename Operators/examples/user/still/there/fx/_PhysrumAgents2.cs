@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.there.fx
+namespace examples.user.still.there.fx
 {
 	[Guid("c0feef61-8cec-4418-8889-4001cbe1a957")]
     public class _PhysrumAgents2 : Instance<_PhysrumAgents2>

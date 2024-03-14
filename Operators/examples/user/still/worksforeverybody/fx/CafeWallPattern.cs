@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.worksforeverybody.fx
+namespace examples.user.still.worksforeverybody.fx
 {
 	[Guid("6854e04f-8b60-41b2-a369-ca0b715c4df3")]
     public class CafeWallPattern : Instance<CafeWallPattern>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.img.fx
+namespace examples.lib.img.fx
 {
 	[Guid("26aa6110-def1-4140-9d1e-de3621aeae10")]
     public class SortPixelGlitchExample : Instance<SortPixelGlitchExample>

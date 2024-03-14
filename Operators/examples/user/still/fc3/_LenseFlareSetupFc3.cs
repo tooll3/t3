@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.fc3
+namespace examples.user.still.fc3
 {
 	[Guid("6d594c55-a180-4742-8182-20b38929bab5")]
     public class _LenseFlareSetupFc3 : Instance<_LenseFlareSetupFc3>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.there.research
+namespace examples.user.still.there.research
 {
 	[Guid("0998c5a8-8771-4161-801d-e14507c2e89c")]
     public class PartialPhysarum2 : Instance<PartialPhysarum2>

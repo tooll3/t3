@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.worksforeverybody.elements
+namespace examples.user.still.worksforeverybody.elements
 {
 	[Guid("9df0e38e-ccf1-405a-ab18-6586e652cdf1")]
     public class _ParamBlendingOverlay : Instance<_ParamBlendingOverlay>

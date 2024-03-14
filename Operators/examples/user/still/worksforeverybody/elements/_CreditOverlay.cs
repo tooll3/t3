@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.worksforeverybody.elements
+namespace examples.user.still.worksforeverybody.elements
 {
 	[Guid("cea732a4-c4c2-40df-a0ff-f209125e7c99")]
     public class _CreditOverlay : Instance<_CreditOverlay>

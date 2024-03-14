@@ -402,30 +402,6 @@
       "SymbolId": "00485ce8-d342-4c97-aac3-1af8a7f03897",
       "InputValues": [],
       "Outputs": []
-    },
-    {
-      "Id": "9c77a977-d11a-49da-8496-e15a4bc153ed"/*PageTitle*/,
-      "SymbolId": "ffe6b076-f561-4230-a0c3-282fb4d58383",
-      "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "3ef7072f-bf0c-4e87-9525-69e19c4ddfdd"/*PageTitle*/,
-          "OutputData": {
-            "Type": "T3.Core.Animation.TimeClip",
-            "TimeClip": {
-              "TimeRange": {
-                "Start": 1.14675,
-                "End": 5.14675
-              },
-              "SourceRange": {
-                "Start": 1.14675,
-                "End": 5.14675
-              },
-              "LayerIndex": 0
-            }
-          }
-        }
-      ]
     }
   ],
   "Connections": [

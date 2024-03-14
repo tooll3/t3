@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.img.generate
+namespace examples.lib.img.generate
 {
 	[Guid("3ce7996f-dd8a-4deb-9cd5-d0aed584026f")]
     public class FragmentNoiseExample : Instance<FragmentNoiseExample>

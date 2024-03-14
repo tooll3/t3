@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.wake.summer2022.elements
+namespace examples.user.wake.summer2022.elements
 {
 	[Guid("814acb53-9a96-476f-b580-6eef174a318b")]
     public class WakeArps : Instance<WakeArps>

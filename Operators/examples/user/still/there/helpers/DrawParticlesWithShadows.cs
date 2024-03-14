@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.there.helpers
+namespace examples.user.still.there.helpers
 {
 	[Guid("b1ffe4dd-d734-4392-a644-7c587979066e")]
     public class DrawParticlesWithShadows : Instance<DrawParticlesWithShadows>

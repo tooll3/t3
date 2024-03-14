@@ -1,11 +1,11 @@
-using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace user.cynic.research.data
+namespace examples.user.cynic.research.data
 {
 	[Guid("f83bd8ce-ca66-4d31-9f2f-65066f15a3b2")]
     public class GetIteratedFloat : Instance<GetIteratedFloat>

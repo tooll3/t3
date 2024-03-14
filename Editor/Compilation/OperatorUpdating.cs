@@ -52,14 +52,16 @@ namespace T3.Editor.Compilation
         {
             if (!TryGetEditableProjectOfNamespace(sourceNamespace, out sourcePackage))
             {
-                EditorUi.Instance.ShowMessageBox("Could not rename namespace", "The source namespace belongs to a readonly project.");
+                EditorUi.Instance.ShowMessageBox($"$The namespace {sourceNamespace} was not found. This is probably a bug. " +
+                                                 $"Please try to reproduce this and file a bug report with reproduction steps.",
+                                                 "Could not rename namespace");
                 targetPackage = null;
                 return false;
             }
 
             if (!TryGetEditableProjectOfNamespace(targetNamespace, out targetPackage))
             {
-                EditorUi.Instance.ShowMessageBox("Could not rename namespace", "The target namespace belongs to a readonly project.");
+                EditorUi.Instance.ShowMessageBox($"$The namespace {targetNamespace} belongs to a readonly project or the project does not exist.","Could not rename namespace");
                 return false;
             }
 

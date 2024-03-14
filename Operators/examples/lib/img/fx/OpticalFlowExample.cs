@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.img.fx
+namespace examples.lib.img.fx
 {
 	[Guid("db89bacd-db5a-4d52-a073-ed141f413f8d")]
     public class OpticalFlowExample : Instance<OpticalFlowExample>

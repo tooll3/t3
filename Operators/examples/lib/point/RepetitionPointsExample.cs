@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.point
+namespace examples.lib.point
 {
 	[Guid("79a791ce-2490-4daa-a2a7-b4c024ecd735")]
     public class RepetitionPointsExample : Instance<RepetitionPointsExample>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.worksforeverybody.scenes
+namespace examples.user.still.worksforeverybody.scenes
 {
 	[Guid("1cdedb32-f23b-4649-b4d3-9e158ef9be40")]
     public class TVIntroSceneSetup : Instance<TVIntroSceneSetup>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples._3d.postfx
+namespace examples.lib._3d.postfx
 {
 	[Guid("6098f973-5f11-41b0-a066-fdef58d9e7b8")]
     public class MotionBlurExample : Instance<MotionBlurExample>

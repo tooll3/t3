@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.drd5
+namespace examples.user.still.drd5
 {
 	[Guid("3ddae933-ed91-4773-af39-a35c89dcec11")]
     public class Nevoke : Instance<Nevoke>

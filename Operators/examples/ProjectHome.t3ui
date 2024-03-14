@@ -103,6 +103,13 @@
         "X": -175.672,
         "Y": 672.6001
       }
+    },
+    {
+      "ChildId": "39c5ce1c-e6af-45ba-8f34-f9d4089ad7b3"/*DulcimerMain*/,
+      "Position": {
+        "X": -530.6958,
+        "Y": 775.2037
+      }
     }
   ],
   "OutputUis": [],

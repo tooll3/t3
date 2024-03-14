@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.wake.summer2022.elements
+namespace examples.user.wake.summer2022.elements
 {
 	[Guid("74ddc8f9-831e-4a82-945d-a9f5c53c040c")]
     public class WS4_Physarum : Instance<WS4_Physarum>

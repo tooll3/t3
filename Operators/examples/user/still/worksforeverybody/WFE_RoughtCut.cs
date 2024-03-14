@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.worksforeverybody
+namespace examples.user.still.worksforeverybody
 {
 	[Guid("edc5e1e6-b850-485a-99e1-7eaa070cc301")]
     public class WFE_RoughtCut : Instance<WFE_RoughtCut>

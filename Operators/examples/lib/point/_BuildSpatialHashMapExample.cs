@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.point
+namespace examples.lib.point
 {
 	[Guid("69776b58-e05d-47c8-b19f-2f44f7b9c915")]
     public class _BuildSpatialHashMapExample : Instance<_BuildSpatialHashMapExample>

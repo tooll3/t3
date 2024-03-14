@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.there.scenes
+namespace examples.user.still.there.scenes
 {
 	[Guid("ec9d9b04-9f86-49f9-9463-f5ba04e4ee00")]
     public class PartialCredits : Instance<PartialCredits>

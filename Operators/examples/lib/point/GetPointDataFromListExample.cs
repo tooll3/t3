@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.point
+namespace examples.lib.point
 {
 	[Guid("25d26231-730e-4376-b256-e34eca6290ce")]
     public class GetPointDataFromListExample : Instance<GetPointDataFromListExample>
