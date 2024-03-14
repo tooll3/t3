@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples._3d.draw
+namespace examples.lib._3d.draw
 {
 	[Guid("4f113e4a-eb27-4e40-8843-d15d54610f33")]
     public class DrawMeshAtPointsExample : Instance<DrawMeshAtPointsExample>

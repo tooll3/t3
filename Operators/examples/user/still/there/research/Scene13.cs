@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.there.research
+namespace examples.user.still.there.research
 {
 	[Guid("0c3a8cc9-85bf-4ded-b35b-7b447c7e13dd")]
     public class Scene13 : Instance<Scene13>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.point
+namespace examples.lib.point
 {
 	[Guid("a1384530-671b-4a6a-b17c-89480bc2f23a")]
     public class SoftTransformPointsExample2 : Instance<SoftTransformPointsExample2>

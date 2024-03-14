@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.wake.revision2021
+namespace examples.user.wake.revision2021
 {
 	[Guid("eb13f8e8-0fe1-47f0-8e86-45f85cf2f0f6")]
     public class RevisionPanic : Instance<RevisionPanic>

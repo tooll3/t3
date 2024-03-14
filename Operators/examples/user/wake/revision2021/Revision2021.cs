@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.wake.revision2021
+namespace examples.user.wake.revision2021
 {
 	[Guid("93184ac2-d545-4611-a941-d5e8769c999b")]
     public class Revision2021 : Instance<Revision2021>

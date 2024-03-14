@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.insomnia
+namespace examples.user.still.insomnia
 {
 	[Guid("41dbfc2d-06e7-40b2-a2f3-720fb1d28ed8")]
     public class InsomniaLenseFlares : Instance<InsomniaLenseFlares>

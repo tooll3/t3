@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.point
+namespace examples.lib.point
 {
 	[Guid("3828afee-3ba2-43f4-abc0-6e8f3e257cc5")]
     public class TraceContourLinesExample : Instance<TraceContourLinesExample>

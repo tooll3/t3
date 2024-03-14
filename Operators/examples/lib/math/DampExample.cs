@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.math
+namespace examples.lib.math
 {
 	[Guid("366b6a6f-9995-48a1-bc0e-5c516ec5170e")]
     public class DampExample : Instance<DampExample>

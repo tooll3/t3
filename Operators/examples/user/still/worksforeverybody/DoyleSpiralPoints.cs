@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.worksforeverybody
+namespace examples.user.still.worksforeverybody
 {
 	[Guid("4895a804-84df-4642-a2d3-db34a268d887")]
     public class DoyleSpiralPoints : Instance<DoyleSpiralPoints>

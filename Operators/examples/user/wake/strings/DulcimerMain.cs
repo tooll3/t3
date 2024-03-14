@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.wake.strings
+namespace examples.user.wake.strings
 {
 	[Guid("4c6d2682-e92a-46c1-9f16-19d61fb1fce5")]
     public class DulcimerMain : Instance<DulcimerMain>

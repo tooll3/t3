@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples._3d.rendering
+namespace examples.lib._3d.rendering
 {
 	[Guid("81337795-7e15-4335-a067-6d2c54a7b4b8")]
     public class SliceViewPortExample : Instance<SliceViewPortExample>

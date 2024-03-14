@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.point
+namespace examples.lib.point
 {
 	[Guid("c49ebc17-b730-4e86-9ea7-2c404e4be3ad")]
     public class LineTextPointsExamples : Instance<LineTextPointsExamples>

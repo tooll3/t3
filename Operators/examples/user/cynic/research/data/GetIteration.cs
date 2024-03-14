@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.cynic.research.data
+namespace examples.user.cynic.research.data
 {
 	[Guid("4c088b67-be47-4599-bd64-5f277abb0113")]
     public class GetIteration : Instance<GetIteration>

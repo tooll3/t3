@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.fuzzy.fx
+namespace examples.fx
 {
 	[Guid("0309e746-c356-4c7b-af05-93136a2607de")]
     public class OpticalFlow : Instance<OpticalFlow>

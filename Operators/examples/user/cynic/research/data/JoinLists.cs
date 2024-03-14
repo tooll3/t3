@@ -1,11 +1,10 @@
 using System.Runtime.InteropServices;
-using System.Linq;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.cynic.research.data
+namespace examples.user.cynic.research.data
 {
 	[Guid("0b99ab8b-5d61-49da-9851-9ad723cad3ae")]
     public class JoinLists : Instance<JoinLists>

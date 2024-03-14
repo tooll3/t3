@@ -1,12 +1,12 @@
-using System.Runtime.InteropServices;
 using System.Numerics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace user.cynic.research.data
+namespace examples.user.cynic.research.data
 {
 	[Guid("d86e9585-d233-455a-9059-fa93debfed01")]
     public class GetIteratedVec3 : Instance<GetIteratedVec3>

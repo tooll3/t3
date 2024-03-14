@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.cynic.research
+namespace examples.user.cynic.research
 {
 	[Guid("5b234754-2b45-46db-becb-86f0bb547608")]
     public class NearFarCoc : Instance<NearFarCoc>

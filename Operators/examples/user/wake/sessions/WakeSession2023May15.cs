@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.wake.sessions
+namespace examples.user.wake.sessions
 {
 	[Guid("30d1c825-c134-4d1c-a424-bb44abef6b6a")]
     public class WakeSession2023May15 : Instance<WakeSession2023May15>

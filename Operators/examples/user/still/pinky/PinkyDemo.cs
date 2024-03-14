@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.pinky
+namespace examples.user.still.pinky
 {
 	[Guid("ace28a0c-b71a-41eb-bd50-b57da38a23ce")]
     public class PinkyDemo : Instance<PinkyDemo>

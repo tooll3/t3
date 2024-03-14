@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.io.file
+namespace examples.lib.io.file
 {
 	[Guid("1d56e2c6-9199-41e7-9404-24f4f6b75044")]
     public class PlayVideoExample : Instance<PlayVideoExample>

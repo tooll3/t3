@@ -1,6 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
-using System.IO;
 using Newtonsoft.Json;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
@@ -9,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using Point = T3.Core.DataTypes.Point;
 
-namespace user.cynic.research.data
+namespace examples.user.cynic.research.data
 {
 	[Guid("d5607e3b-15e8-402c-8d54-b29e40415ab0")]
     public class ExportPointList : Instance<ExportPointList>

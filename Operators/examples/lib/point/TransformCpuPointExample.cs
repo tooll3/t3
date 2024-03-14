@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.point
+namespace examples.lib.point
 {
 	[Guid("69020cd2-de9a-4150-bac5-b547301e7bc8")]
     public class TransformCpuPointExample : Instance<TransformCpuPointExample>

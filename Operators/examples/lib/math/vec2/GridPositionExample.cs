@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.math.vec2
+namespace examples.lib.math.vec2
 {
 	[Guid("3dd015ed-5d7a-4b0e-a6da-958c58f716bb")]
     public class GridPositionExample : Instance<GridPositionExample>

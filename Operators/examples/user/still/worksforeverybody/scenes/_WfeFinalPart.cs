@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.worksforeverybody.scenes
+namespace examples.user.still.worksforeverybody.scenes
 {
 	[Guid("1026538b-f021-43f0-b6bd-dda89c57de94")]
     public class _WfeFinalPart : Instance<_WfeFinalPart>

@@ -1,11 +1,10 @@
 using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
-using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.worksforeverybody.fx
+namespace examples.user.still.worksforeverybody.fx
 {
 	[Guid("a5ec9aa9-73fc-44f9-8530-e62afc0b112d")]
     public class _ColorCycleMotion : Instance<_ColorCycleMotion>

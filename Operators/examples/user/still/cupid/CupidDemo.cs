@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.still.cupid
+namespace examples.user.still.cupid
 {
 	[Guid("442d40e3-7c00-4161-a606-79c2fe6c36c1")]
     public class CupidDemo : Instance<CupidDemo>

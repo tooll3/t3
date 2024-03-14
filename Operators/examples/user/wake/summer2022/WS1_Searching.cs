@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.wake.summer2022
+namespace examples.user.wake.summer2022
 {
 	[Guid("90b20942-810b-480c-a19e-a41296cac9e6")]
     public class WS1_Searching : Instance<WS1_Searching>

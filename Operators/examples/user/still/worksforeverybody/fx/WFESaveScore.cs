@@ -1,21 +1,16 @@
-using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.Logging;
+using T3.Core.Operator;
+using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace user.still.worksforeverybody.fx
+namespace examples.user.still.worksforeverybody.fx
 {
 	[Guid("40676c51-ecca-4bc3-bd4a-eeb80fc0b937")]
     public class WFESaveScore : Instance<WFESaveScore>

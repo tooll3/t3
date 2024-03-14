@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.wake.strings
+namespace examples.user.wake.strings
 {
 	[Guid("d1432885-5d16-49ec-afb9-845d0f3efcb8")]
     public class HammerDulcimer : Instance<HammerDulcimer>

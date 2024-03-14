@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace user.wake.summer2022.elements
+namespace examples.user.wake.summer2022.elements
 {
 	[Guid("32feb968-6196-43ea-be23-958c21e884bc")]
     public class PartTitle : Instance<PartTitle>
