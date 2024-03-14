@@ -1,6 +1,6 @@
 {
   "Id": "43f15919-f6c3-4a10-9092-00973fc8e821"/*GlitchDisplace*/,
-  "Description": "",
+  "Description": "Takes the incoming image and applies an image effect that glitches and displaces parts of the image to mimic lossy signals, broken videofiles, codec glitches etc.",
   "InputUis": [
     {
       "InputId": "7914bb8b-8444-4438-a156-b00d099ce659"/*Image*/,
@@ -15,70 +15,102 @@
       "Position": {
         "X": 836.0191,
         "Y": 5465.4746
-      }
+      },
+      "Description": "Defines how many glitch bars are generated vertically"
     },
     {
       "InputId": "8a966901-645f-4873-a4c5-8d53a75b3c60"/*Columns*/,
       "Position": {
         "X": 836.0191,
         "Y": 5510.4746
-      }
-    },
-    {
-      "InputId": "990ac61f-09b7-42ad-a2ed-4fa27b7e491b"/*Scatter*/,
-      "Position": {
-        "X": 1924.1256,
-        "Y": 6039.989
-      }
-    },
-    {
-      "InputId": "5e591643-7c92-4fbb-8e14-4954f9493236"/*Stretch*/,
-      "Position": {
-        "X": 1924.1256,
-        "Y": 6095.989
-      }
-    },
-    {
-      "InputId": "2e5c0cd5-8c34-49b1-b67e-1a6bc006b2b2"/*ScatterStretch*/,
-      "Position": {
-        "X": 1924.1256,
-        "Y": 6151.989
-      }
+      },
+      "Description": "Defines how many glitch bars are generated horizontally"
     },
     {
       "InputId": "502e7ba7-4824-4928-9e15-cbb060e73b05"/*Size*/,
       "Position": {
-        "X": 1923.8713,
-        "Y": 6207.2524
-      }
+        "X": 836.0191,
+        "Y": 5555.4746
+      },
+      "GroupTitle": "Bars",
+      "Description": "Scales the size of the glitch elements\nHigh value can make this effect take a lot of ressources",
+      "Min": 0.0,
+      "Max": 5.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "20f149ee-123f-4347-ba8e-f403a3eae7d3"/*Amount*/,
+      "Position": {
+        "X": 836.0191,
+        "Y": 5600.4746
+      },
+      "Description": "Defines the overall intensity of the effect"
+    },
+    {
+      "InputId": "c0b5e7e3-278d-4abd-aa2d-964a47fb2fcf"/*Threshold*/,
+      "Position": {
+        "X": 836.0191,
+        "Y": 5645.4746
+      },
+      "Description": "Defines based on the method which part of the image the effect is applied to"
+    },
+    {
+      "InputId": "5e591643-7c92-4fbb-8e14-4954f9493236"/*Stretch*/,
+      "Position": {
+        "X": 867.8816,
+        "Y": 5732.5356
+      },
+      "Description": "Scales the glitching bars\nX = width\nY = height",
+      "AddPadding": "True"
     },
     {
       "InputId": "531556ad-5d4d-4110-b8ea-be1fd6d443fd"/*Offset*/,
       "Position": {
-        "X": 1923.8713,
-        "Y": 6252.2524
-      }
+        "X": 867.8816,
+        "Y": 5777.5356
+      },
+      "Description": "Randomly offsets the bars\nX = horizontally\nY = vertically"
+    },
+    {
+      "InputId": "990ac61f-09b7-42ad-a2ed-4fa27b7e491b"/*Scatter*/,
+      "Position": {
+        "X": 867.8816,
+        "Y": 5822.5356
+      },
+      "Description": "Randomly scatters the position of the glitch elements",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "2e5c0cd5-8c34-49b1-b67e-1a6bc006b2b2"/*ScatterStretch*/,
+      "Position": {
+        "X": 867.8816,
+        "Y": 5867.5356
+      },
+      "Description": "Defines the maximum distance of the scattering"
     },
     {
       "InputId": "2866ef59-644d-4af5-bb95-0d028b01bb47"/*ScatterOffset*/,
       "Position": {
-        "X": 1923.8713,
-        "Y": 6308.2524
+        "X": 867.8816,
+        "Y": 5912.5356
       }
     },
     {
       "InputId": "1bd2e0bd-6902-44e3-93ce-da352973ca8d"/*Colorize*/,
       "Position": {
-        "X": 1923.8713,
-        "Y": 6364.2524
-      }
+        "X": 867.8816,
+        "Y": 5957.5356
+      },
+      "GroupTitle": "Color",
+      "Description": "Defines a color that is added to the elements"
     },
     {
       "InputId": "6a1efc82-7ca4-4c79-a3f9-f16b568c3131"/*ColorRatio*/,
       "Position": {
-        "X": 1923.8713,
-        "Y": 6409.2524
+        "X": 867.8816,
+        "Y": 6002.5356
       },
+      "Description": "Defines the color intensity",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -86,36 +118,25 @@
     {
       "InputId": "58f7ea26-2091-4b8f-8458-1d7e4a5b7699"/*Seed*/,
       "Position": {
-        "X": 1923.8713,
-        "Y": 6454.2524
-      }
+        "X": 867.8816,
+        "Y": 6047.5356
+      },
+      "GroupTitle": "Advanced",
+      "Description": "Random seed for the glitch effect"
     },
     {
       "InputId": "26c70c16-ba58-4dfe-93e6-e39bd6442485"/*OverridePoints*/,
       "Position": {
         "X": 1233.5548,
         "Y": 6250.265
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "3fdfce77-8622-4fcf-a7cf-e4bfbabc280c"/*Mode*/,
       "Position": {
         "X": 1233.5548,
         "Y": 6295.265
-      }
-    },
-    {
-      "InputId": "c0b5e7e3-278d-4abd-aa2d-964a47fb2fcf"/*Threshold*/,
-      "Position": {
-        "X": 1233.5548,
-        "Y": 6340.265
-      }
-    },
-    {
-      "InputId": "20f149ee-123f-4347-ba8e-f403a3eae7d3"/*Amount*/,
-      "Position": {
-        "X": 1233.5548,
-        "Y": 6385.265
       }
     }
   ],
@@ -356,7 +377,7 @@
       "ChildId": "d7b23a78-a043-406f-8648-3c3017a95f24"/*IntToFloat*/,
       "Position": {
         "X": 2073.8713,
-        "Y": 6454.2524
+        "Y": 6465.2524
       }
     },
     {
