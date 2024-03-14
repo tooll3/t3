@@ -48,12 +48,6 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
                     // {
                     //     symbolUi.Description = DescriptionMissing;
                     // }
-
-                    if (symbol.Namespace.EndsWith("."))
-                    {
-                        Log.Warning($"{symbol.Name} has invalid namespace  '{symbol.Namespace}'");
-                        symbol.Namespace = symbol.Namespace.TrimEnd('.');
-                    }
                     
                     toc.Add(symbolUi);
 

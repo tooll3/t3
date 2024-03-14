@@ -25,7 +25,7 @@ namespace T3.Core.Operator
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Namespace { get; set; }
+        public string Namespace { get; private set; }
         public string PendingSource { get; set; }
         public string SymbolFilePath { get; set; }
         public SymbolPackage SymbolPackage { get; set; }
@@ -164,6 +164,7 @@ namespace T3.Core.Operator
             InstanceType = instanceType;
             SymbolPackage = symbolPackage;
             Name = instanceType.Name;
+            Namespace = instanceType.Namespace ?? symbolPackage.AssemblyInformation.Name;
 
             isObject = instanceType == typeof(object);
             if (isObject || symbolPackage == null)
