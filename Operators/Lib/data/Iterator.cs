@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.user.cynic.research.data
+namespace lib.data
 {
 	[Guid("dd201330-6eab-43b9-b601-2e491ab18feb")]
     public class Iterator : Instance<Iterator>
