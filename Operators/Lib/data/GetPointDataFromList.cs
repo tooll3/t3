@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace examples.user.cynic.research.data
+namespace lib.data
 {
 	[Guid("1de7b1be-cab6-4beb-a837-4c817562efb2")]
     public class GetPointDataFromList : Instance<GetPointDataFromList>

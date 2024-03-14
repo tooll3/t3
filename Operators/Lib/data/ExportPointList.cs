@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using Point = T3.Core.DataTypes.Point;
 
-namespace examples.user.cynic.research.data
+namespace lib.data
 {
 	[Guid("d5607e3b-15e8-402c-8d54-b29e40415ab0")]
     public class ExportPointList : Instance<ExportPointList>

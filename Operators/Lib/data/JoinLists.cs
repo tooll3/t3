@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.user.cynic.research.data
+namespace lib.data
 {
 	[Guid("0b99ab8b-5d61-49da-9851-9ad723cad3ae")]
     public class JoinLists : Instance<JoinLists>
