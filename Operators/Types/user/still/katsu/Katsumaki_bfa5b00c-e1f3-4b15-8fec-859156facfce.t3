@@ -2135,21 +2135,6 @@
           "Value": 87
         },
         {
-          "Id": "502e7ba7-4824-4928-9e15-cbb060e73b05"/*Size*/,
-          "Type": "System.Single",
-          "Value": 6.2
-        },
-        {
-          "Id": "20f149ee-123f-4347-ba8e-f403a3eae7d3"/*Amount*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
-          "Id": "c0b5e7e3-278d-4abd-aa2d-964a47fb2fcf"/*Threshold*/,
-          "Type": "System.Single",
-          "Value": 0.21
-        },
-        {
           "Id": "5e591643-7c92-4fbb-8e14-4954f9493236"/*Stretch*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
@@ -2158,19 +2143,24 @@
           }
         },
         {
-          "Id": "531556ad-5d4d-4110-b8ea-be1fd6d443fd"/*Offset*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0
-          }
-        },
-        {
           "Id": "2e5c0cd5-8c34-49b1-b67e-1a6bc006b2b2"/*ScatterStretch*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.0,
             "Y": 3.8
+          }
+        },
+        {
+          "Id": "502e7ba7-4824-4928-9e15-cbb060e73b05"/*Size*/,
+          "Type": "System.Single",
+          "Value": 6.2
+        },
+        {
+          "Id": "531556ad-5d4d-4110-b8ea-be1fd6d443fd"/*Offset*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0
           }
         },
         {
@@ -2195,6 +2185,16 @@
           "Id": "3fdfce77-8622-4fcf-a7cf-e4bfbabc280c"/*Mode*/,
           "Type": "System.Int32",
           "Value": 4
+        },
+        {
+          "Id": "c0b5e7e3-278d-4abd-aa2d-964a47fb2fcf"/*Threshold*/,
+          "Type": "System.Single",
+          "Value": 0.21
+        },
+        {
+          "Id": "20f149ee-123f-4347-ba8e-f403a3eae7d3"/*Amount*/,
+          "Type": "System.Single",
+          "Value": 0.0
         }
       ],
       "Outputs": []
@@ -2619,11 +2619,6 @@
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {
-          "Id": "bcfe965f-27bd-4568-b25b-6987a26b5d6e"/*Amount*/,
-          "Type": "System.Single",
-          "Value": 1.15
-        },
-        {
           "Id": "56b551e9-47aa-4d19-954b-367c4d96e5d8"/*Direction*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -2631,6 +2626,11 @@
             "Y": -1.0,
             "Z": 0.0
           }
+        },
+        {
+          "Id": "bcfe965f-27bd-4568-b25b-6987a26b5d6e"/*Amount*/,
+          "Type": "System.Single",
+          "Value": 1.15
         }
       ],
       "Outputs": []
