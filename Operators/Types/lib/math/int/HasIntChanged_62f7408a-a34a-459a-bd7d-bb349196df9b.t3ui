@@ -1,6 +1,6 @@
 {
   "Id": "62f7408a-a34a-459a-bd7d-bb349196df9b"/*HasIntChanged*/,
-  "Description": "",
+  "Description": "Checks if the change of the incoming integer exceeded the given threshold.",
   "InputUis": [
     {
       "InputId": "a1462674-13d2-4380-8a93-11d0a23da5ac"/*Value*/,
