@@ -16,16 +16,11 @@
       "DefaultValue": 25
     },
     {
-      "Id": "502e7ba7-4824-4928-9e15-cbb060e73b05"/*Size*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "20f149ee-123f-4347-ba8e-f403a3eae7d3"/*Amount*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "c0b5e7e3-278d-4abd-aa2d-964a47fb2fcf"/*Threshold*/,
-      "DefaultValue": 0.0
+      "Id": "990ac61f-09b7-42ad-a2ed-4fa27b7e491b"/*Scatter*/,
+      "DefaultValue": {
+        "X": 0.1,
+        "Y": 0.1
+      }
     },
     {
       "Id": "5e591643-7c92-4fbb-8e14-4954f9493236"/*Stretch*/,
@@ -35,23 +30,20 @@
       }
     },
     {
-      "Id": "531556ad-5d4d-4110-b8ea-be1fd6d443fd"/*Offset*/,
+      "Id": "2e5c0cd5-8c34-49b1-b67e-1a6bc006b2b2"/*ScatterStretch*/,
       "DefaultValue": {
-        "X": 0.5,
+        "X": 0.0,
         "Y": 0.0
       }
     },
     {
-      "Id": "990ac61f-09b7-42ad-a2ed-4fa27b7e491b"/*Scatter*/,
-      "DefaultValue": {
-        "X": 0.1,
-        "Y": 0.1
-      }
+      "Id": "502e7ba7-4824-4928-9e15-cbb060e73b05"/*Size*/,
+      "DefaultValue": 1.0
     },
     {
-      "Id": "2e5c0cd5-8c34-49b1-b67e-1a6bc006b2b2"/*ScatterStretch*/,
+      "Id": "531556ad-5d4d-4110-b8ea-be1fd6d443fd"/*Offset*/,
       "DefaultValue": {
-        "X": 0.0,
+        "X": 0.5,
         "Y": 0.0
       }
     },
@@ -86,6 +78,14 @@
     {
       "Id": "3fdfce77-8622-4fcf-a7cf-e4bfbabc280c"/*Mode*/,
       "DefaultValue": 3
+    },
+    {
+      "Id": "c0b5e7e3-278d-4abd-aa2d-964a47fb2fcf"/*Threshold*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "20f149ee-123f-4347-ba8e-f403a3eae7d3"/*Amount*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [
