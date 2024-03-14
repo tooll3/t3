@@ -23,7 +23,6 @@ namespace T3.Core.Model
 
             writer.WriteObject(JsonKeys.Name, symbol.Name);
             writer.WriteValue(JsonKeys.Id, symbol.Id);
-            writer.WriteObject(JsonKeys.Namespace, symbol.Namespace ?? "");
 
             WriteSymbolInputs(symbol.InputDefinitions, writer);
             WriteSymbolChildren(symbol.Children, writer);
@@ -325,7 +324,6 @@ namespace T3.Core.Model
                 inputDefaultValues[idAndValue.Item1] = idAndValue.Item2;
             }
 
-            var @namespace = jToken[JsonKeys.Namespace]?.Value<string>() ?? string.Empty;
             Type instanceType;
             if (!allowNonOperatorInstanceType)
             {
@@ -345,7 +343,7 @@ namespace T3.Core.Model
                 }
             }
 
-            var symbol = package.CreateSymbol(instanceType, id, name, @namespace, orderedInputIds);
+            var symbol = package.CreateSymbol(instanceType, id, name, orderedInputIds);
 
             if (hasConnections)
                 symbol.Connections.AddRange(connections);
@@ -402,7 +400,6 @@ namespace T3.Core.Model
             public const string Id = "Id";
             public const string SymbolId = "SymbolId";
             public const string Name = "Name";
-            public const string Namespace = "Namespace";
             public const string InputValues = "InputValues";
             public const string OutputData = "OutputData";
             public const string Type = "Type";

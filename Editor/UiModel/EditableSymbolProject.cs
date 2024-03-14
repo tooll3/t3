@@ -195,9 +195,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
             Log.Error($"Could not find source code for {symbol.Name} in {CsProjectFile.Name} ({id})");
         }
 
-        Log.Debug($"Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNamespace}");
-        symbol.Namespace = newNamespace;
-
         var symbolUi = SymbolUis[id];
         symbolUi.FlagAsModified();
 

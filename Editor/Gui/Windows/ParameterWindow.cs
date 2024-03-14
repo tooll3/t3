@@ -7,6 +7,7 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
@@ -181,11 +182,20 @@ internal class ParameterWindow : Window
             var namespaceForEdit = op.Symbol.Namespace ?? "";
 
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 29); // the question mark is now aligned to the right
-            if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
-                                              SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
+
+            var symbol = op.Symbol;
+            var package = symbol.SymbolPackage;
+            if (package is EditableSymbolProject project)
             {
-                op.Symbol.Namespace = namespaceForEdit;
-                modified = true;
+                if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
+                                                  SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
+                {
+                    OperatorUpdating.UpdateNamespace(symbol.Id, namespaceForEdit);
+                }
+            }
+            else
+            {
+                ImGui.TextUnformatted(op.Symbol.Namespace);
             }
 
             ImGui.PopStyleColor();

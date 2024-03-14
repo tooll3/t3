@@ -121,15 +121,7 @@ public abstract partial class SymbolPackage
         // these do not have a file
         foreach (var (guid, newType) in newTypes)
         {
-            var @namespace = newType.Namespace;
-
-            if (string.IsNullOrWhiteSpace(@namespace))
-            {
-                // set namespace to assembly name
-                @namespace = AssemblyInformation.Name;
-            }
-
-            var symbol = CreateSymbol(newType, guid, newType.Name, @namespace);
+            var symbol = CreateSymbol(newType, guid, newType.Name);
 
             var id = symbol.Id;
             var added = Symbols.TryAdd(id, symbol)
@@ -170,12 +162,11 @@ public abstract partial class SymbolPackage
         return false;
     }
 
-    internal Symbol CreateSymbol(Type instanceType, Guid id, string name, string @namespace, Guid[] orderedInputIds = null)
+    internal Symbol CreateSymbol(Type instanceType, Guid id, string name, Guid[] orderedInputIds = null)
     {
         var symbol = new Symbol(instanceType, id, this, orderedInputIds)
                          {
-                             Name = name,
-                             Namespace = @namespace,
+                             Name = name
                          };
 
         symbol.SymbolPackage = this;

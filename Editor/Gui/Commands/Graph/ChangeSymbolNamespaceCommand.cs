@@ -1,5 +1,6 @@
 ﻿using System;
 using T3.Core.Operator;
+using T3.Editor.Compilation;
 
 namespace T3.Editor.Gui.Commands.Graph
 {
@@ -27,8 +28,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private void AssignValue(string newNamespace)
         {
-            var symbol = SymbolRegistry.Entries[_symbolId];
-            symbol.Namespace = newNamespace;
+            OperatorUpdating.UpdateNamespace(_symbolId, newNamespace);
         }
 
         public string NewNamespace { get; set; }
