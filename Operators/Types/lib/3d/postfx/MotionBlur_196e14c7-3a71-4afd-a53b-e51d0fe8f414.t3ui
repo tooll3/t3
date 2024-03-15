@@ -55,6 +55,16 @@
       },
       "Description": "Controls how much the intensity of the motion blur of very fast image elements differs from slower ones. ",
       "AddPadding": "True"
+    },
+    {
+      "InputId": "2ac4c1a2-c53e-4b78-90fc-15c0b69c8b28"/*VelocityOffset*/,
+      "Position": {
+        "X": -553.8882,
+        "Y": 649.13184
+      },
+      "Description": "An additional offset that can be used to fake motion blur for static cameras.",
+      "Min": -0.01,
+      "Max": -0.01
     }
   ],
   "SymbolChildUis": [
@@ -124,29 +134,15 @@
     {
       "ChildId": "0ac3a5df-0849-4370-82a7-aeb2521eb407"/*Rasterizer*/,
       "Position": {
-        "X": 164.11235,
-        "Y": 454.49353
-      }
-    },
-    {
-      "ChildId": "2c183503-0440-4f75-aed0-155cddbf54a0"/*PixelShaderStage*/,
-      "Position": {
-        "X": 164.11235,
-        "Y": 509.4933
-      }
-    },
-    {
-      "ChildId": "6705716f-7503-48cc-baa8-a694f6ccaba0"/*VertexShaderStage*/,
-      "Position": {
-        "X": 164.11235,
-        "Y": 372.49353
+        "X": 167.53365,
+        "Y": 425.4082
       }
     },
     {
       "ChildId": "afd91956-b872-482c-a84e-e27ffba32118"/*InputAssemblerStage*/,
       "Position": {
-        "X": 164.11235,
-        "Y": 333.4936
+        "X": 167.53365,
+        "Y": 382.4082
       }
     },
     {
@@ -159,15 +155,15 @@
     {
       "ChildId": "e31c88bd-7863-426b-b7fd-b0186cab562c"/*Execute*/,
       "Position": {
-        "X": 365.35483,
-        "Y": 358.62543
+        "X": 317.53357,
+        "Y": 382.4082
       }
     },
     {
       "ChildId": "27e18eea-55ad-4c3d-b537-9c099d22b6b9"/*RenderTarget*/,
       "Position": {
-        "X": 526.7592,
-        "Y": 246.20277
+        "X": 799.8771,
+        "Y": 208.6107
       }
     },
     {
@@ -218,14 +214,42 @@
         "X": -88.85836,
         "Y": 625.6719
       }
+    },
+    {
+      "ChildId": "20de1fab-5cc6-401d-b7f4-7b9d944648bb"/*SetPixelAndVertexShaderStage*/,
+      "Position": {
+        "X": 167.53365,
+        "Y": 481.4082
+      }
+    },
+    {
+      "ChildId": "a137f4f0-0f02-4be0-a989-0e766c86321f"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 186.57718,
+        "Y": 1059.7219
+      }
+    },
+    {
+      "ChildId": "19c35c6b-0320-4d71-bd42-8ec46f456a8e"/*Vector3*/,
+      "Position": {
+        "X": -113.42282,
+        "Y": 1059.7219
+      }
+    },
+    {
+      "ChildId": "56705a1f-00e2-4530-ac53-07d06d9bd775"/*Vector3Components*/,
+      "Position": {
+        "X": 36.57718,
+        "Y": 1059.7219
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "1b237829-8cfd-4039-a6c5-8ca3dbb225f7"/*Output*/,
       "Position": {
-        "X": 676.7592,
-        "Y": 246.20277
+        "X": 949.8771,
+        "Y": 208.6107
       }
     }
   ]

@@ -1,15 +1,20 @@
-//#include "lib/shared/hash-functions.hlsl"
+// #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
 #include "lib/shared/quat-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
+{
+    // TBD Transform const buffer
+}
+
+cbuffer ParamConstants : register(b1)
 {
     float SampleCount;
     float Strength;
     float Clamp_;
 }
 
-cbuffer TimeConstants : register(b1)
+cbuffer TimeConstants : register(b2)
 {
     float globalTime;
     float time;
@@ -17,13 +22,13 @@ cbuffer TimeConstants : register(b1)
     float beatTime;
 }
 
-cbuffer Resolution : register(b2)
+cbuffer Resolution : register(b3)
 {
     float TargetWidth;
     float TargetHeight;
 }
 
-cbuffer Transforms : register(b3)
+cbuffer TransformsCam1 : register(b4)
 {
     float4x4 CameraToClipSpace;
     float4x4 ClipSpaceToCamera;
@@ -37,8 +42,7 @@ cbuffer Transforms : register(b3)
     float4x4 ObjectToClipSpace;
 };
 
-
-cbuffer Transforms : register(b4)
+cbuffer TransformsCamPrevious : register(b5)
 {
     float4x4 PrevCameraToClipSpace;
     float4x4 PrevClipSpaceToCamera;
@@ -52,6 +56,11 @@ cbuffer Transforms : register(b4)
     float4x4 PrevObjectToClipSpace;
 };
 
+cbuffer AdditionalTransformParams : register(b6)
+{
+    float3 AdditionalMotionOffset;
+    // float4x4 AdditionalMotionOffset;
+}
 
 struct vsOutput
 {
@@ -63,35 +72,38 @@ Texture2D<float4> Image : register(t0);
 Texture2D<float4> DepthMap : register(t1);
 sampler texSampler : register(s0);
 
-
-float IsBetween( float value, float low, float high) {
-    return (value >= low && value <= high) ? 1:0;
+float IsBetween(float value, float low, float high)
+{
+    return (value >= low && value <= high) ? 1 : 0;
 }
 
-
 float4 psMain(vsOutput psInput) : SV_TARGET
-{   
+{
     float maxVelocity = Clamp_ / 100;
 
-    int samples = (int)clamp(SampleCount+0.5,1,32);
-    //float displaceMapWidth, displaceMapHeight; 
+    int samples = (int)clamp(SampleCount + 0.5, 1, 32);
+    // float displaceMapWidth, displaceMapHeight;
 
     float2 uv = psInput.texCoord;
-    float4 c= DepthMap.Sample(texSampler, uv);    
+    float4 c = DepthMap.Sample(texSampler, uv);
 
     float depth = DepthMap.Sample(texSampler, uv).r;
-    depth = min( depth, 0.999);
+    depth = min(depth, 0.999);
 
-    float4 viewTFragPos = float4(-uv.x*2.0 + 1.0, uv.y*2.0 - 1.0, depth, 1.0);
-    float4 worldTFragPos = mul(viewTFragPos, ClipSpaceToWorld);  // viewToWorld?
-    worldTFragPos /= worldTFragPos.w;
+    float4 viewTFragPos = float4(-uv.x * 2.0 + 1.0, uv.y * 2.0 - 1.0, depth, 1.0);
+    float4 worldTFragPos = mul(viewTFragPos, ClipSpaceToWorld); // viewToWorld?
+    worldTFragPos /= worldTFragPos.x;
 
-    float4 viewTPreviousFragPos = mul(worldTFragPos, PrevWorldToClipSpace); //  previousWorldToView
+    // float4x4 test = mul(AdditionalMotionOffset, PrevWorldToClipSpace);
+    float4x4 test = PrevWorldToClipSpace;
+    test._m00 += AdditionalMotionOffset.x;
+    test._m33 += AdditionalMotionOffset.z;
+
+    float4 viewTPreviousFragPos = mul(worldTFragPos, test); //  previousWorldToView
     viewTPreviousFragPos /= viewTPreviousFragPos.w;
-  
 
-    float2 velocity = (viewTFragPos.xy - viewTPreviousFragPos.xy)*Strength / 100;
-    
+    float2 velocity = (viewTFragPos.xy - viewTPreviousFragPos.xy) * Strength / 100;
+
     velocity.x = -velocity.x;
     if (abs(velocity.x) < 0.0001)
         velocity.x = 0.0;
@@ -100,23 +112,22 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float l = length(velocity);
     if (l > 0 && l > maxVelocity)
-        velocity *= maxVelocity/l;
+        velocity *= maxVelocity / l;
 
-    float2 dir = velocity*10.0/samples;
+    float2 dir = velocity * 10.0 / samples;
     float2 pos = dir;
     float totalWeight = 1;
-    c =0;
+    c = 0;
 
-    float weight=1;
+    float weight = 1;
     for (int i = 0; i < samples; ++i)
     {
-        c += Image.SampleLevel(texSampler, uv + pos, 0)*weight;
-        c += Image.SampleLevel(texSampler, uv - pos, 0)*weight;
+        c += Image.SampleLevel(texSampler, uv + pos, 0) * weight;
+        c += Image.SampleLevel(texSampler, uv - pos, 0) * weight;
         pos += dir;
-        totalWeight += 2*weight;
+        totalWeight += 2 * weight;
     }
     c.rgb /= totalWeight;
     c.a = 1.0;
-
     return c;
 }
