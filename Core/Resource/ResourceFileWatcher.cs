@@ -10,9 +10,8 @@ namespace T3.Core.Resource
 {
     public class ResourceFileWatcher
     {
-        public readonly string WatchedFolder;
         
-        internal ResourceFileWatcher(string watchedFolder, bool shared)
+        public ResourceFileWatcher(string watchedFolder)
         {
             Directory.CreateDirectory(watchedFolder);
             
@@ -28,12 +27,6 @@ namespace T3.Core.Resource
             AddWatcher(watchedFolder, "*.jpg", _fileWatchers, handler);
             AddWatcher(watchedFolder, "*.dds", _fileWatchers, handler);
             AddWatcher(watchedFolder, "*.tiff", _fileWatchers, handler);
-            WatchedFolder = watchedFolder;
-
-            if (shared)
-            {
-                ResourceManager.SharedResourceFileWatchers.Add(this);
-            }
         }
 
         // todo - optimize this by making pairing it with the correct watcher that already exists
@@ -118,6 +111,11 @@ namespace T3.Core.Resource
             fileHook.LastWriteReferenceTime = lastWriteTime;
 
             // else discard the (duplicated) OnChanged event
+        }
+
+        public void Dispose()
+        {
+            
         }
 
         internal readonly ConcurrentDictionary<string, ResourceFileHook> HooksForResourceFilePaths = new();

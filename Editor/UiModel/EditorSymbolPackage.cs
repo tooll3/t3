@@ -8,21 +8,14 @@ using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Resource;
 using T3.Editor.Gui.ChildUi;
 
 namespace T3.Editor.UiModel;
 
 // todo - make abstract, create NugetSymbolPackage
-internal abstract class EditorSymbolPackage : StaticSymbolPackage
+internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage(assembly)
 {
-    internal EditorSymbolPackage(AssemblyInformation assembly, bool initializeFileWatcher) : base(assembly, false)
-    {
-        if (initializeFileWatcher)
-        {
-            InitializeFileWatcher();
-        }
-    }
-
     public void LoadUiFiles(IEnumerable<Symbol> newlyReadSymbols, out IReadOnlyCollection<SymbolUi> newlyReadSymbolUis,
                             out IReadOnlyCollection<SymbolUi> preExistingSymbolUis)
     {
@@ -74,8 +67,11 @@ internal abstract class EditorSymbolPackage : StaticSymbolPackage
 
         newlyReadSymbolUis = newlyReadSymbolUiList;
     }
-    
-    protected abstract void OnSymbolUiLoaded(string? path, SymbolUi symbolUi);
+
+    protected virtual void OnSymbolUiLoaded(string? path, SymbolUi symbolUi)
+    {
+        // do nothing
+    }
 
     private static void RegisterCustomChildUi(Symbol symbol)
     {
@@ -84,13 +80,6 @@ internal abstract class EditorSymbolPackage : StaticSymbolPackage
         {
             CustomChildUiRegistry.Entries.TryAdd(valueInstanceType, DescriptiveUi.DrawChildUi);
         }
-    }
-
-    protected override void OnSymbolRemoved(Symbol symbol)
-    {
-        var id = symbol.Id;
-        SymbolUis.Remove(id, out _);
-        SymbolUiRegistry.EntriesEditable.Remove(id, out _);
     }
 
     public void RegisterUiSymbols(bool enableLog, IEnumerable<SymbolUi> newSymbolUis, IEnumerable<SymbolUi> preExistingSymbolUis)
@@ -121,13 +110,6 @@ internal abstract class EditorSymbolPackage : StaticSymbolPackage
         }
     }
 
-    protected override bool RemoveSymbol(Guid guid)
-    {
-        return base.RemoveSymbol(guid)
-               && SymbolUis.Remove(guid, out _)
-               && SymbolUiRegistry.EntriesEditable.Remove(guid, out _);
-    }
-
     public static void InitializeRoot(SymbolPackage package)
     {
         var rootInstanceId = new Guid("fa3db58b-068d-427d-96e7-8144f4721db3");
@@ -156,12 +138,24 @@ internal abstract class EditorSymbolPackage : StaticSymbolPackage
             RootSymbolUi.ForceUnmodified();
         }
     }
+    
+    public override void Dispose()
+    {
+        base.Dispose();
+        
+        var symbolUis = SymbolUis.Values.ToArray();
+
+        foreach (var symbolUi in symbolUis)
+        {
+            SymbolUiRegistry.EntriesEditable.TryRemove(symbolUi.Symbol.Id, out _);
+            SymbolUis.TryRemove(symbolUi.Symbol.Id, out _);
+        }
+    }
 
     public static Instance RootInstance { get; private set; }
     private protected static SymbolUi RootSymbolUi;
 
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
-    protected override string ResourcesSubfolder => "Resources";
 
     protected virtual IEnumerable<string> SymbolUiSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, "SymbolUis"), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
     public override bool IsModifiable => false;

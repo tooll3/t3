@@ -11,14 +11,12 @@ namespace T3.Editor.App
     /// </summary>
     public static class SharedResources
     {
-        private static ResourceFileWatcher _commonResourceWatcher;
         
         static SharedResources()
         {
-            var commonResourcesFolder = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources");
-            _commonResourceWatcher = new ResourceFileWatcher(commonResourcesFolder, true);
+            ResourceManager.SharedResourcePackages.Add(new SharedResourceObject());
         }
-        
+
         public static void Initialize()
         {
             const string errorHeader = $"{nameof(SharedResources)} error: ";
@@ -91,5 +89,11 @@ namespace T3.Editor.App
         public static ShaderResource<VertexShader> FullScreenVertexShaderResource => _fullScreenVertexShaderResource;
 
         public static ShaderResource<PixelShader> FullScreenPixelShaderResource => _fullScreenPixelShaderResource;
+
+        private sealed class SharedResourceObject : IResourceContainer
+        {
+            public string ResourcesFolder { get; } = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources");
+            public ResourceFileWatcher FileWatcher => null;
+        }
     }
 }

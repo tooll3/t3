@@ -121,7 +121,10 @@ public sealed partial class ResourceManager
             return (nullResource, nullResource);
         }
 
-        if (relevantFileWatcher != null && relevantFileWatcher.HooksForResourceFilePaths.TryGetValue(relativePath, out var existingHook))
+        var fileWatcher = relevantFileWatcher?.FileWatcher;
+        var hasFileWatcher = fileWatcher != null;
+
+        if (hasFileWatcher && fileWatcher!.HooksForResourceFilePaths.TryGetValue(relativePath, out var existingHook))
         {
             uint textureId = existingHook.ResourceIds.First();
             existingHook.FileChangeAction += fileChangeAction;
@@ -161,11 +164,11 @@ public sealed partial class ResourceManager
             srvResourceId = textureViewResourceEntry.Id;
         }
 
-        if (relevantFileWatcher != null)
+        if (hasFileWatcher)
         {
             var hook = new ResourceFileHook(relativePath, new[] { textureResourceEntry.Id, srvResourceId });
             hook.FileChangeAction += fileChangeAction;
-            relevantFileWatcher.HooksForResourceFilePaths.TryAdd(relativePath, hook);
+            fileWatcher!.HooksForResourceFilePaths.TryAdd(relativePath, hook);
         }
 
         return (textureResourceEntry.Id, srvResourceId);
