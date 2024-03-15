@@ -15,14 +15,11 @@ internal static class GraphUtils
 {
     public static SyntaxTree GetSyntaxTree(Symbol symbol)
     {
-        if (symbol.SymbolPackage is not EditableSymbolProject project)
-            return null;
-
-        
-        // there's intermediate source, so use this
-        if (!project.TryGetPendingSourceCode(symbol.Id, out var sourceCode))
+        var package = (EditorSymbolPackage)symbol.SymbolPackage;
+        if (package is not EditableSymbolProject project || !project.TryGetPendingSourceCode(symbol.Id, out var sourceCode))
         {
-            if (!project.TryGetSourceCodePath(symbol, out var sourceCodePath))
+            // there's intermediate source, so use this
+            if (!package.TryGetSourceCodePath(symbol, out var sourceCodePath))
             {
                 Log.Error($"Could not find source file for symbol '{symbol.Name}'");
                 return null;
@@ -30,7 +27,7 @@ internal static class GraphUtils
 
             try
             {
-                sourceCode = File.ReadAllText(sourceCodePath);
+                sourceCode = File.ReadAllText(sourceCodePath!);
             }
             catch (Exception e)
             {
@@ -40,7 +37,7 @@ internal static class GraphUtils
             }
         }
 
-        if (string.IsNullOrEmpty(sourceCode))
+        if (string.IsNullOrWhiteSpace(sourceCode))
         {
             Log.Info("Source was empty, skip compilation.");
             return null;

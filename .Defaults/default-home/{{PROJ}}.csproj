@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <!-- Include Resources/** into output/Resources -->
-    <ItemGroup Condition="'$(Configuration)' != 'Debug'">
+    <ItemGroup Condition="'$(Configuration)' == 'Release'">
         <Content Include="Resources/**/*" Exclude="bin/**">
             <Link>Resources/%(RecursiveDir)%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -31,6 +31,10 @@
         </Content>
         <Content Include="**/*.t3ui" Exclude="bin/**">
             <Link>SymbolUis/%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="**/*.cs" Exclude="bin/**">
+            <Link>SourceCode/%(RecursiveDir)%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>

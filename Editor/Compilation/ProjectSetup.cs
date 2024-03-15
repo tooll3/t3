@@ -337,10 +337,7 @@ internal static class ProjectSetup
            .AsParallel()
            .ForAll(pair =>
                    {
-                       if (pair.Key is EditableSymbolProject project)
-                       {
-                           project.LocateSourceCodeFiles();
-                       }
+                       pair.Key.LocateSourceCodeFiles();
                    });
 
         foreach (var (symbolPackage, symbolUis) in loadedSymbolUis)
