@@ -164,7 +164,7 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
     public virtual void LocateSourceCodeFiles()
     {
         _sourceCodePaths ??= new ConcurrentDictionary<Guid, string>();
-        Directory.EnumerateFiles(Folder, $"*{SourceCodeExtension}", SearchOption.AllDirectories)
+        Directory.EnumerateFiles(SourceCodeSearchFolder, $"*{SourceCodeExtension}", SearchOption.AllDirectories)
                  .AsParallel()
                  .ForAll(ParseCodeFile);
 
@@ -232,4 +232,6 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
     public override bool IsModifiable => false;
     internal const string SymbolUiExtension = ".t3ui";
     private ConcurrentDictionary<Guid, string>? _sourceCodePaths;
+
+    protected virtual string SourceCodeSearchFolder => Path.Combine(Folder, "SourceCode");
 }

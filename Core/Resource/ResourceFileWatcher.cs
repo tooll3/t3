@@ -115,7 +115,18 @@ namespace T3.Core.Resource
 
         public void Dispose()
         {
-            
+            foreach(var watcher in _fileWatchers.Values)
+            {
+                watcher.EnableRaisingEvents = false;
+                watcher.Dispose();
+            }
+
+            foreach (var hook in HooksForResourceFilePaths)
+            {
+                // not sure if this is necessary, but it doesn't hurt
+                // something something garbage collector dangling references with events something something
+                hook.Value.FileChangeAction = null;
+            }
         }
 
         internal readonly ConcurrentDictionary<string, ResourceFileHook> HooksForResourceFilePaths = new();
