@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.IO;
+using T3.Editor.Compilation;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Styling
 {
@@ -172,6 +176,17 @@ namespace T3.Editor.Gui.Styling
             }
 
             return modified;
+        }
+
+        // Todo: this needs to be resized horizontally so the label shows correctly
+        internal static bool AddSymbolProjectDropdown(ref string rootNamespace, out EditableSymbolProject selectedValue)
+        {
+            var added = AddDropdown(ref rootNamespace, ProjectSetup.EditableSymbolProjects.Select(x => x.CsProjectFile.RootNamespace),
+                        "Project", "Select project");
+
+            var rootNamespaceCopy = rootNamespace;
+            selectedValue = ProjectSetup.EditableSymbolProjects.FirstOrDefault(x => x.CsProjectFile.RootNamespace == rootNamespaceCopy);
+            return added;
         }
         
 

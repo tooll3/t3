@@ -469,12 +469,13 @@ namespace T3.Editor.Gui.Graph
                 
 
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
-                                            ref _symbolDescriptionForDialog);
+                                            ref _symbolDescriptionForDialog, ref _rootNamespaceForDialogEdits);
                 _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(),
                                             NodeSelection.GetSelectedNodes<Annotation>().ToList(),
                                             ref _nameSpaceForDialogEdits,
                                             ref _symbolNameForDialogEdits,
-                                            ref _symbolDescriptionForDialog);
+                                            ref _symbolDescriptionForDialog,
+                                            ref _rootNamespaceForDialogEdits);
                 _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
                 EditCommentDialog.Draw();
                 _addInputDialog.Draw(CompositionOp.Symbol);
@@ -1257,6 +1258,7 @@ namespace T3.Editor.Gui.Graph
         private string _symbolNameForDialogEdits = "";
         private string _symbolDescriptionForDialog = "";
         private string _nameSpaceForDialogEdits = "";
+        private string _rootNamespaceForDialogEdits = "";
         private readonly GraphWindow _window;
         private static Vector2 _dampedScrollVelocity = Vector2.Zero;
         private readonly List<Guid> _initialCompositionPath;

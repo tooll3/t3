@@ -28,7 +28,7 @@ public abstract partial class SymbolPackage
 
     protected internal ResourceFileWatcher ResourceFileWatcher { get; private set; }
 
-    internal string ResourcesFolder => ResourceFileWatcher.WatchedFolder;
+    public string ResourcesFolder => ResourceFileWatcher.WatchedFolder;
     protected abstract string ResourcesSubfolder { get; }
 
     static SymbolPackage()

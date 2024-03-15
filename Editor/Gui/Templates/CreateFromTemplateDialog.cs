@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.IO;
+using System.Numerics;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.Model;
@@ -104,42 +105,51 @@ namespace T3.Editor.Gui.Templates
                     ImGui.PopStyleColor();
                     ImGui.Dummy(new Vector2(10,10));
 
-                    var compositionSymbol = GraphWindow.GetMainComposition().Symbol;
-                    var isNewSymbolNameValid = GraphUtils.IsNewSymbolNameValid(_newSymbolName, compositionSymbol);
-                    FormInputs.AddStringInput("Name",
-                                                         ref _newSymbolName,
-                                                         null,
-                                                         isNewSymbolNameValid ? null : "Symbols must by unique and not contain spaces or special characters.");
+                    FormInputs.AddSymbolProjectDropdown(ref _rootNamespace, out var project);
 
-                    var isNamespaceValid = GraphUtils.IsIdentifierValid(NameSpace);
-                    FormInputs.AddStringInput("NameSpace",
-                                                         ref _newNameSpace,
-                                                         NameSpace,
-                                                         isNamespaceValid ? null : "Is required and may only include characters, numbers and dots."
-                                                        );
-
-                    
-                    var isResourceFolderValid = _validResourceFolderPattern.IsMatch(ResourceDirectory);
-                    FormInputs.AddStringInput("Resource Directory",
-                                                         ref _resourceFolder,
-                                                         ResourceDirectory,
-                                                         isResourceFolderValid ? null : "Your project files must be in Resources\\ directory for exporting."
-                                                        );
-                    
-                    FormInputs.AddStringInput("Description", ref _newDescription);
-                    
-                    ImGui.Dummy(new Vector2(10,10));
-
-                   
-                    if (CustomComponents.DisablableButton("Create", 
-                                                          isNewSymbolNameValid && isNamespaceValid, 
-                                                          enableTriggerWithReturn: false))
+                    if (project != null)
                     {
-                        TemplateUse.TryToApplyTemplate(_selectedTemplate, _newSymbolName, NameSpace, _newDescription, ResourceDirectory);
-                        ImGui.CloseCurrentPopup();
+                        var compositionSymbol = GraphWindow.GetMainComposition().Symbol;
+                        var isNewSymbolNameValid = GraphUtils.IsNewSymbolNameValid(_newSymbolName, compositionSymbol);
+                        FormInputs.AddStringInput("Name",
+                                                  ref _newSymbolName,
+                                                  null,
+                                                  isNewSymbolNameValid ? null : "Symbols must by unique and not contain spaces or special characters.");
+
+                        var namespaceCorrected = FormInputs.EnforceStringStart(project.CsProjectFile.RootNamespace + '.', ref _newNameSpace, true);
+                        var isNamespaceValid = !namespaceCorrected && GraphUtils.IsIdentifierValid(_newNameSpace);
+                        FormInputs.AddStringInput("NameSpace",
+                                                  ref _newNameSpace,
+                                                  "Enter namespace",
+                                                  isNamespaceValid ? null : "Is required and may only include characters, numbers and dots.\n" +
+                                                                            "Must begin with the root namespace of the selected project."
+                                                 );
+
+                        var resourceFolderCorrected =
+                            FormInputs.EnforceStringStart(project.ResourcesFolder + Path.DirectorySeparatorChar, ref _resourceFolder, true);
+                        var isResourceFolderValid = !resourceFolderCorrected && _validResourceFolderPattern.IsMatch(_resourceFolder);
+                        FormInputs.AddStringInput("Resource Directory",
+                                                  ref _resourceFolder,
+                                                  "Enter resource folder",
+                                                  isResourceFolderValid ? null : "Your project files must be in project's Resources\\ directory for exporting."
+                                                 );
+
+                        FormInputs.AddStringInput("Description", ref _newDescription);
+
+                        ImGui.Dummy(new Vector2(10, 10));
+
+
+                        if (CustomComponents.DisablableButton("Create",
+                                                              isNewSymbolNameValid && isNamespaceValid,
+                                                              enableTriggerWithReturn: false))
+                        {
+                            TemplateUse.TryToApplyTemplate(_selectedTemplate, _newSymbolName, _newNameSpace, _newDescription, project);
+                            ImGui.CloseCurrentPopup();
+                        }
+
+                        ImGui.SameLine();
                     }
 
-                    ImGui.SameLine();
                     if (ImGui.Button("Cancel"))
                     {
                         ImGui.CloseCurrentPopup();
@@ -163,15 +173,11 @@ namespace T3.Editor.Gui.Templates
         private TemplateDefinition _selectedTemplate = TemplateDefinition.TemplateDefinitions[0];
         private static readonly Regex _validResourceFolderPattern = new(@"^Resources\\([A-Za-z_][A-Za-z_\-\d]*)(\\([A-Za-z_][A-Za-z\-_\d]*))*\\?$");
         
-        private string NameSpace => string.IsNullOrEmpty(_newNameSpace) ? $"{UserSettings.Config.UserName}.{CurrentProjectName}.{_newSymbolName}" : _newNameSpace;
-        private string ResourceDirectory => string.IsNullOrEmpty(_resourceFolder) ? $"Resources\\user\\{CurrentProjectName}\\{_newSymbolName}\\" : _resourceFolder;
-        private string CurrentProjectName => CurrentPackage.AssemblyInformation.Name;
-        private SymbolPackage CurrentPackage => GraphWindow.GetMainComposition().Symbol.SymbolPackage;
-
         private string _newSymbolName = "MyNewOp";
         private string _newNameSpace = null;
         private string _newDescription = null;
         private string _resourceFolder = null;
+        private string _rootNamespace = null;
 
         private int _selectedTemplateIndex = -1;
     }

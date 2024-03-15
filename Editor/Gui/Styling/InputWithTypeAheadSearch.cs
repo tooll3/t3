@@ -23,7 +23,7 @@ namespace T3.Editor.Gui.Styling
     public static class InputWithTypeAheadSearch
     {
         
-        public static bool Draw(string label, ref string filter, IEnumerable<string> items)
+        public static bool Draw(string label, ref string filter, IEnumerable<string> items, bool warning = false)
         {
             var inputId = ImGui.GetID(label);
             var isSearchResultWindowOpen = inputId == _activeInputId;
@@ -48,8 +48,9 @@ namespace T3.Editor.Gui.Styling
                     }
                 }
             }
-            
-            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+
+            var color = warning ? UiColors.StatusWarning.Rgba : UiColors.Text.Rgba;
+            ImGui.PushStyleColor(ImGuiCol.Text, color);
             var wasChanged = ImGui.InputText(label, ref filter, 256);
             ImGui.PopStyleColor();
 
