@@ -116,7 +116,7 @@ internal sealed partial class EditableSymbolProject
         filePathHandler.UiFilePath = path;
     }
 
-    private void OnSourceCodeLocated(string path, Guid guid)
+    protected override void OnSourceCodeLocated(string path, Guid guid)
     {
         if (_filePathHandlers.TryGetValue(guid, out var filePathHandler))
         {
@@ -224,61 +224,9 @@ internal sealed partial class EditableSymbolProject
         _needsCompilation = true;
     }
 
-    /// <summary>
-    /// Looks for source codes in the project folder and subfolders and tries to find the symbol id in the source code
-    /// </summary>
-    public void LocateSourceCodeFiles()
-    {
-        MarkAsSaving();
-        Directory.EnumerateFiles(Folder, $"*{SourceCodeExtension}", SearchOption.AllDirectories)
-                 .AsParallel()
-                 .ForAll(ParseCodeFile);
+    
 
-        UnmarkAsSaving();
-
-        return;
-
-        void ParseCodeFile(string file)
-        {
-            var streamReader = new StreamReader(file);
-
-            var guid = Guid.Empty;
-            while (!streamReader.EndOfStream)
-            {
-                var line = streamReader.ReadLine();
-                if (line == null)
-                    break;
-
-                //todo: this is a bit hacky. Would it be better to look for "[Guid(" ?
-                // todo - search for "[Guid("" while somehow ignoring whitespace
-                var firstQuoteIndex = line.IndexOf('"');
-                if (firstQuoteIndex == -1)
-                    continue;
-
-                var secondQuoteIndex = line.IndexOf('"', firstQuoteIndex + 1);
-
-                if (secondQuoteIndex == -1)
-                    continue;
-
-                var stringSpan = line.AsSpan(firstQuoteIndex + 1, secondQuoteIndex - firstQuoteIndex - 1);
-
-                if (!Guid.TryParse(stringSpan, out guid))
-                    continue;
-
-                break;
-            }
-
-            streamReader.Close();
-            streamReader.Dispose();
-
-            if (guid == Guid.Empty)
-                return;
-
-            OnSourceCodeLocated(file, guid);
-        }
-    }
-
-    public bool TryGetSourceCodePath(Symbol symbol, out string? path)
+    public override bool TryGetSourceCodePath(Symbol symbol, out string? path)
     {
         if (_filePathHandlers.TryGetValue(symbol.Id, out var filePathInfo))
         {
@@ -290,11 +238,17 @@ internal sealed partial class EditableSymbolProject
         return false;
     }
 
+    public override void LocateSourceCodeFiles()
+    {
+        MarkAsSaving();
+        base.LocateSourceCodeFiles();
+        UnmarkAsSaving();
+    }
+
     public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0 || CheckCompilation(out _);
     private static long _savingCount;
     static readonly FileStreamOptions SaveOptions = new() { Mode = FileMode.Create, Access = FileAccess.ReadWrite };
 
-    internal const string SourceCodeExtension = ".cs";
     private readonly ConcurrentDictionary<Guid, SymbolPathHandler> _filePathHandlers = new();
 
     private sealed class CodeFileWatcher : FileSystemWatcher

@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
-using T3.Core.Resource;
 using T3.Editor.Gui.ChildUi;
 
 namespace T3.Editor.UiModel;
@@ -49,6 +49,7 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
                                                          return symbolUi;
                                                      })
                                              .Where(symbolUi => symbolUi != null)
+                                             .Select(symbolUi => symbolUi!)
                                              .ToList();
 
         foreach (var (guid, symbol) in newSymbolsWithoutUis)
@@ -129,6 +130,11 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
 
     internal static void EnableDisableRootSaving(bool enabled)
     {
+        if (RootSymbolUi == null)
+        {
+            throw new Exception("RootSymbolUi is null");
+        }
+        
         if (enabled)
         {
             RootSymbolUi.DisableForceUnmodified();
@@ -152,12 +158,78 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
         }
     }
 
-    public static Instance RootInstance { get; private set; }
-    private protected static SymbolUi RootSymbolUi;
+    /// <summary>
+    /// Looks for source codes in the project folder and subfolders and tries to find the symbol id in the source code
+    /// </summary>
+    public virtual void LocateSourceCodeFiles()
+    {
+        _sourceCodePaths ??= new ConcurrentDictionary<Guid, string>();
+        Directory.EnumerateFiles(Folder, $"*{SourceCodeExtension}", SearchOption.AllDirectories)
+                 .AsParallel()
+                 .ForAll(ParseCodeFile);
+
+        return;
+
+        void ParseCodeFile(string file)
+        {
+            var streamReader = new StreamReader(file);
+
+            var guid = Guid.Empty;
+            while (!streamReader.EndOfStream)
+            {
+                var line = streamReader.ReadLine();
+                if (line == null)
+                    break;
+
+                //todo: this is a bit hacky. Would it be better to look for "[Guid(" ?
+                // todo - search for "[Guid("" while somehow ignoring whitespace
+                var firstQuoteIndex = line.IndexOf('"');
+                if (firstQuoteIndex == -1)
+                    continue;
+
+                var secondQuoteIndex = line.IndexOf('"', firstQuoteIndex + 1);
+
+                if (secondQuoteIndex == -1)
+                    continue;
+
+                var stringSpan = line.AsSpan(firstQuoteIndex + 1, secondQuoteIndex - firstQuoteIndex - 1);
+
+                if (!Guid.TryParse(stringSpan, out guid))
+                    continue;
+
+                break;
+            }
+
+            streamReader.Close();
+            streamReader.Dispose();
+
+            if (guid == Guid.Empty)
+                return;
+
+            OnSourceCodeLocated(file, guid);
+        }
+    }
+
+    public virtual bool TryGetSourceCodePath(Symbol symbol, out string? sourceCodePath)
+    {
+        return _sourceCodePaths!.TryGetValue(symbol.Id, out sourceCodePath);
+    }
+
+    protected virtual void OnSourceCodeLocated(string path, Guid guid)
+    {
+        _sourceCodePaths![guid] = path;
+    }
+
+    public static Instance? RootInstance { get; private set; }
+    private protected static SymbolUi? RootSymbolUi;
 
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
+    internal const string SourceCodeExtension = ".cs";
 
-    protected virtual IEnumerable<string> SymbolUiSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, "SymbolUis"), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
+    protected virtual IEnumerable<string> SymbolUiSearchFiles =>
+        Directory.EnumerateFiles(Path.Combine(Folder, "SymbolUis"), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
+    
     public override bool IsModifiable => false;
     internal const string SymbolUiExtension = ".t3ui";
+    private ConcurrentDictionary<Guid, string>? _sourceCodePaths;
 }
