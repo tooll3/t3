@@ -57,9 +57,7 @@ internal static class UiContentUpdate
         ImGui.GetIO().DisplaySize = ProgramWindows.Main.Size;
 
         ProgramWindows.HandleFullscreenToggle();
-        EditableSymbolProject.RecompileChangedProjects();
-        
-        
+        EditableSymbolProject.RecompileChangedProjects(async: true);
 
         DirtyFlag.IncrementGlobalTicks();
         T3Metrics.UiRenderingStarted();

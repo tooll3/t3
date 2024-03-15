@@ -133,7 +133,8 @@ internal sealed partial class EditableSymbolProject
         foreach (var symbolUi in symbolUis)
         {
             var symbol = symbolUi.Symbol;
-            var pathHandler = _filePathHandlers[symbol.Id];
+            var id = symbol.Id;
+            var pathHandler = _filePathHandlers[id];
 
             if (!pathHandler.TryCreateDirectory())
             {
@@ -148,12 +149,12 @@ internal sealed partial class EditableSymbolProject
                 
                 var sourceCodePath = pathHandler.SourceCodePath;
                 if (sourceCodePath != null)
-                    WriteSymbolSourceToFile(symbolUi.Symbol, sourceCodePath);
+                    WriteSymbolSourceToFile(id, sourceCodePath);
                 else
-                    throw new Exception($"{CsProjectFile.Name}: No source code path found for symbol {symbolUi.Symbol.Id}");
+                    throw new Exception($"{CsProjectFile.Name}: No source code path found for symbol {id}");
 
                 var symbolPath = pathHandler.SymbolFilePath ?? SymbolPathHandler.GetCorrectPath(symbol, this);
-                SaveSymbolDefinition(symbolUi.Symbol, symbolPath);
+                SaveSymbolDefinition(symbol, symbolPath);
                 pathHandler.SymbolFilePath = symbolPath;
                 
                 var uiFilePath = pathHandler.UiFilePath ?? SymbolPathHandler.GetCorrectPath(symbolUi, this);
@@ -167,7 +168,7 @@ internal sealed partial class EditableSymbolProject
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to save symbol {symbolUi.Symbol.Id}\n{e}");
+                Log.Error($"Failed to save symbol {id}\n{e}");
             }
         }
     }
@@ -191,15 +192,13 @@ internal sealed partial class EditableSymbolProject
         SymbolJson.WriteSymbol(symbol, writer);
     }
 
-    private void WriteSymbolSourceToFile(Symbol symbol, string sourcePath)
+    private void WriteSymbolSourceToFile(Guid id, string sourcePath)
     {
-        if (string.IsNullOrWhiteSpace(symbol.PendingSource))
+        if(!_pendingSource.Remove(id, out var sourceCode))
             return;
 
         using var sw = new StreamWriter(sourcePath, SaveOptions);
-        sw.Write(symbol.PendingSource);
-
-        symbol.PendingSource = null;
+        sw.Write(sourceCode);
     }
 
     private void MarkAsSaving()
@@ -222,7 +221,7 @@ internal sealed partial class EditableSymbolProject
     private void OnFileRenamed(object sender, RenamedEventArgs args)
     {
         EditorUi.Instance.ShowMessageBox($"File {args.OldFullPath} renamed to {args.FullPath}. Please do not do this while the editor is running.");
-        NeedsCompilation = true;
+        _needsCompilation = true;
     }
 
     /// <summary>
@@ -233,46 +232,50 @@ internal sealed partial class EditableSymbolProject
         MarkAsSaving();
         Directory.EnumerateFiles(Folder, $"*{SourceCodeExtension}", SearchOption.AllDirectories)
                  .AsParallel()
-                 .ForAll(file =>
-                         {
-                             var streamReader = new StreamReader(file);
+                 .ForAll(ParseCodeFile);
 
-                             var guid = Guid.Empty;
-                             while (!streamReader.EndOfStream)
-                             {
-                                 var line = streamReader.ReadLine();
-                                 if (line == null)
-                                     break;
-
-                                 //todo: this is a bit hacky. Would it be better to look for "[Guid(" ?
-                                 // todo - search for "[Guid("" while somehow ignoring whitespace
-                                 var firstQuoteIndex = line.IndexOf('"');
-                                 if (firstQuoteIndex == -1)
-                                     continue;
-
-                                 var secondQuoteIndex = line.IndexOf('"', firstQuoteIndex + 1);
-
-                                 if (secondQuoteIndex == -1)
-                                     continue;
-
-                                 var stringSpan = line.AsSpan(firstQuoteIndex + 1, secondQuoteIndex - firstQuoteIndex - 1);
-
-                                 if (!Guid.TryParse(stringSpan, out guid))
-                                     continue;
-
-                                 break;
-                             }
-                             
-                             streamReader.Close();
-                             streamReader.Dispose();
-
-                             if (guid == Guid.Empty)
-                                 return;
-                             
-                             OnSourceCodeLocated(file, guid);
-                         });
-        
         UnmarkAsSaving();
+
+        return;
+
+        void ParseCodeFile(string file)
+        {
+            var streamReader = new StreamReader(file);
+
+            var guid = Guid.Empty;
+            while (!streamReader.EndOfStream)
+            {
+                var line = streamReader.ReadLine();
+                if (line == null)
+                    break;
+
+                //todo: this is a bit hacky. Would it be better to look for "[Guid(" ?
+                // todo - search for "[Guid("" while somehow ignoring whitespace
+                var firstQuoteIndex = line.IndexOf('"');
+                if (firstQuoteIndex == -1)
+                    continue;
+
+                var secondQuoteIndex = line.IndexOf('"', firstQuoteIndex + 1);
+
+                if (secondQuoteIndex == -1)
+                    continue;
+
+                var stringSpan = line.AsSpan(firstQuoteIndex + 1, secondQuoteIndex - firstQuoteIndex - 1);
+
+                if (!Guid.TryParse(stringSpan, out guid))
+                    continue;
+
+                break;
+            }
+
+            streamReader.Close();
+            streamReader.Dispose();
+
+            if (guid == Guid.Empty)
+                return;
+
+            OnSourceCodeLocated(file, guid);
+        }
     }
 
     public bool TryGetSourceCodePath(Symbol symbol, out string? path)
@@ -287,7 +290,7 @@ internal sealed partial class EditableSymbolProject
         return false;
     }
 
-    public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0 || EditableSymbolProject.CheckCompilation();
+    public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0 || CheckCompilation(out _);
     private static long _savingCount;
     static readonly FileStreamOptions SaveOptions = new() { Mode = FileMode.Create, Access = FileAccess.ReadWrite };
 

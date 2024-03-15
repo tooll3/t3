@@ -1,13 +1,11 @@
 ﻿using System;
 using System.CodeDom.Compiler;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.UiModel;
 
@@ -20,8 +18,9 @@ internal static class GraphUtils
         if (symbol.SymbolPackage is not EditableSymbolProject project)
             return null;
 
-        var sourceCode = symbol.PendingSource; // there's intermediate source, so use this
-        if (string.IsNullOrWhiteSpace(sourceCode))
+        
+        // there's intermediate source, so use this
+        if (!project.TryGetPendingSourceCode(symbol.Id, out var sourceCode))
         {
             if (!project.TryGetSourceCodePath(symbol, out var sourceCodePath))
             {
