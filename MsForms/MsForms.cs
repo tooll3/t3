@@ -15,14 +15,14 @@ public class MsForms : ICoreSystemUiService
                                                                         : UnhandledExceptionMode.CatchException);
     }
 
-    void ICoreSystemUiService.ShowMessageBox(string text, string caption)
+    void ICoreSystemUiService.ShowMessageBox(string text, string title)
     {
-        MessageBox.Show(text, caption);
+        MessageBox.Show(text, title);
     }
 
-    PopUpResult ICoreSystemUiService.ShowMessageBox(string text, string caption, PopUpButtons buttons)
+    PopUpResult ICoreSystemUiService.ShowMessageBox(string text, string title, PopUpButtons buttons)
     {
-        DialogResult result = MessageBox.Show(text, caption, ButtonEnumConversion[buttons]);
+        DialogResult result = MessageBox.Show(text, title, ButtonEnumConversion[buttons]);
         return ResultEnumConversion[result];
     }
 

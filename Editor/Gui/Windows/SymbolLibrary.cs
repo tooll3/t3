@@ -7,11 +7,11 @@ using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows
@@ -26,7 +26,7 @@ namespace T3.Editor.Gui.Windows
             _filter.SearchString = "";
             Config.Title = "Symbol Library";
             _treeNode.PopulateCompleteTree();
-
+            EditableSymbolProject.CompilationComplete += _treeNode.PopulateCompleteTree;
         }
 
         protected override void DrawContent()
@@ -285,8 +285,8 @@ namespace T3.Editor.Gui.Windows
 
         private void MoveSymbolToNamespace(Guid symbolId, string nameSpace)
         {
-            EditableSymbolProject.ChangeSymbolNamespace(symbolId, nameSpace);
-            _treeNode.PopulateCompleteTree();
+            if(!EditableSymbolProject.ChangeSymbolNamespace(symbolId, nameSpace, out var reason))
+                EditorUi.Instance.ShowMessageBox(reason, "Could not move symbol's namespace");
         }
 
         public override List<Window> GetInstances()

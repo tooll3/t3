@@ -10,6 +10,7 @@ using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Modification;
@@ -29,9 +30,11 @@ internal static class InputsAndOutputs
         var newSource = newRoot.GetText().ToString();
         Log.Debug(newSource);
 
-        EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
-
-        FlagDependentOpsAsModified(symbol);
+        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
+        if (success)
+            FlagDependentOpsAsModified(symbol);
+        else
+            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
     }
 
     private static SyntaxNode RemoveNodesByIdFromTree(Guid[] inputIdsToRemove, SyntaxNode root)
@@ -55,7 +58,10 @@ internal static class InputsAndOutputs
         var newSource = newRoot.GetText().ToString();
         Log.Debug(newSource);
 
-        EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
+        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
+        if (!success)
+            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
+
     }
 
     private static void FlagDependentOpsAsModified(Symbol symbol)
@@ -240,7 +246,9 @@ internal static class InputsAndOutputs
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
+        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
+        if (!success)
+            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
     }
 
     public static void AddOutputToSymbol(string outputName, bool isTimeClipOutput, Type outputType, Symbol symbol)
@@ -300,7 +308,9 @@ internal static class InputsAndOutputs
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
+        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
+        if (!success)
+            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
     }
 
     public static void AdjustInputOrderOfSymbol(Symbol symbol)
@@ -374,7 +384,9 @@ internal static class InputsAndOutputs
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
+        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
+        if (!success)
+            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
     }
     
     
@@ -417,7 +429,9 @@ internal static class InputsAndOutputs
         if (dryRun)
             return true;
         
-        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
+        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
+        if (!success)
+            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
 
         if (success)
         {

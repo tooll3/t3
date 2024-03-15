@@ -1,5 +1,6 @@
 ﻿using System;
 using T3.Core.Operator;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Commands.Graph
 {
@@ -8,7 +9,7 @@ namespace T3.Editor.Gui.Commands.Graph
         public string Name => "Change Symbol Namespace";
         public bool IsUndoable => true;
 
-        public ChangeSymbolNamespaceCommand(Symbol symbol, string newNamespace, Action<Guid, string> changeNamespaceAction)
+        public ChangeSymbolNamespaceCommand(Symbol symbol, string newNamespace, Func<Guid, string, string> changeNamespaceAction)
         {
             _newNamespace = newNamespace;
             _symbolId = symbol.Id;
@@ -28,12 +29,15 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private void AssignValue(string newNamespace)
         {
-            _changeNamespaceAction(_symbolId, newNamespace);
+            var reason = _changeNamespaceAction(_symbolId, newNamespace);
+
+            if (!string.IsNullOrWhiteSpace(reason))
+                EditorUi.Instance.ShowMessageBox(reason, "Could not rename namespace");
         }
 
         private readonly Guid _symbolId;
         private readonly string _newNamespace;
         private readonly string _originalNamespace;
-        private readonly Action<Guid, string> _changeNamespaceAction;
+        private readonly Func<Guid, string, string> _changeNamespaceAction;
     }
 }

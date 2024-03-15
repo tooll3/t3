@@ -27,7 +27,6 @@ namespace T3.Core.Operator
         public Guid Id { get; }
         public string Name { get; private set; }
         public string Namespace { get; private set; }
-        public string PendingSource { get; set; }
         public SymbolPackage SymbolPackage { get; set; }
 
         public readonly List<Instance> InstancesOfSymbol = new();

@@ -14,6 +14,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Layouts;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.SystemUi;
 
@@ -190,7 +191,10 @@ internal class ParameterWindow : Window
                                                              SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i));
                 if (namespaceModified && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 {
-                    EditableSymbolProject.ChangeSymbolNamespace(symbol.Id, namespaceForEdit);
+                    if (!EditableSymbolProject.ChangeSymbolNamespace(symbol.Id, namespaceForEdit, out var reason))
+                    {
+                        EditorUi.Instance.ShowMessageBox(reason, "Could not rename namespace");
+                    }
                 }
             }
             else

@@ -45,92 +45,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         return true;
     }
 
-    public bool TryCompile(string sourceCode, string newSymbolName, Guid newSymbolId, string nameSpace, out Symbol? newSymbol)
-    {
-        var path = SymbolPathHandler.GetCorrectPath(newSymbolName, nameSpace, Folder, CsProjectFile.RootNamespace, SourceCodeExtension);
-        
-        try
-        {
-            File.WriteAllText(path, sourceCode);
-        }
-        catch
-        {
-            Log.Error($"Could not write source code to {path}");
-            newSymbol = null;
-            return false;
-        }
-        
-        if (TryRecompile())
-        {
-            UpdateSymbols();
-            return Symbols.TryGetValue(newSymbolId, out newSymbol);
-        }
-
-        newSymbol = null;
-        return false;
-    }
-
-    // todo : determine name from source code
-    public bool TryRecompileWithNewSource(Symbol symbol, string newSource)
-    {
-        var gotCurrentSource = _filePathHandlers.TryGetValue(symbol.Id, out var currentSourcePath);
-        if (!gotCurrentSource || currentSourcePath!.SourceCodePath == null)
-        {
-            Log.Error($"Could not find original source code for symbol \"{symbol.Name}\"");
-            return false;
-        }
-
-        string currentSourceCode;
-
-        try
-        {
-            currentSourceCode = File.ReadAllText(currentSourcePath.SourceCodePath);
-        }
-        catch
-        {
-            Log.Error($"Could not read original source code at \"{currentSourcePath}\"");
-            return false;
-        }
-
-        symbol.PendingSource = newSource;
-
-        var symbolUi = SymbolUis[symbol.Id];
-        symbolUi.FlagAsModified();
-
-        if (TryRecompile())
-        {
-            UpdateSymbols();
-            return true;
-        }
-
-        symbol.PendingSource = currentSourceCode;
-        symbolUi.FlagAsModified();
-        SaveModifiedSymbols();
-
-        return false;
-    }
-
-    internal bool TryRecompile()
-    {
-        NeedsCompilation = false;
-        
-        SaveModifiedSymbols();
-        
-        MarkAsSaving();
-        var updated = CsProjectFile.TryRecompile();
-        UnmarkAsSaving();
-
-        if (!updated)
-            return false;
-
-        return true;
-    }
-
-    public void UpdateSymbols()
-    {
-        ProjectSetup.UpdateSymbolPackage(this);
-    }
-
     public void ReplaceSymbolUi(SymbolUi symbolUi)
     {
         var symbol = symbolUi.Symbol;
@@ -138,84 +52,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         SymbolUis[symbol.Id] = symbolUi;
 
         Log.Debug($"Replaced symbol ui for {symbol.Name}");
-    }
-
-    public void RenameNamespace(string sourceNamespace, string newNamespace, EditableSymbolProject newDestinationProject)
-    {
-        // copy since we are modifying the collection while iterating
-        var mySymbols = Symbols.Values.ToArray();
-        foreach (var symbol in mySymbols)
-        {
-            if (!symbol.Namespace.StartsWith(sourceNamespace))
-                continue;
-
-            var substitutedNamespace = Regex.Replace(symbol.Namespace, sourceNamespace, newNamespace);
-
-            ChangeNamespaceOf(symbol.Id, substitutedNamespace, newDestinationProject, sourceNamespace);
-        }
-    }
-
-    public void ChangeNamespaceOf(Guid id, string newNamespace, EditableSymbolProject newDestinationProject, string? sourceNamespace = null)
-    {
-        var symbol = Symbols[id];
-        sourceNamespace ??= symbol.Namespace;
-        if (_filePathHandlers.TryGetValue(id, out var filePathHandler) && filePathHandler.SourceCodePath != null)
-        {
-            if (!TryConvertToValidCodeNamespace(sourceNamespace, out var sourceCodeNamespace))
-            {
-                Log.Error($"Source namespace {sourceNamespace} is not a valid namespace. This is a bug.");
-                return;
-            }
-
-            if (!TryConvertToValidCodeNamespace(newNamespace, out var newCodeNamespace))
-            {
-                Log.Error($"{newNamespace} is not a valid namespace.");
-                return;
-            }
-
-            var sourceCode = File.ReadAllText(filePathHandler.SourceCodePath);
-            var newSourceCode = Regex.Replace(sourceCode, sourceCodeNamespace, newCodeNamespace);
-            symbol.PendingSource = newSourceCode;
-        }
-        else
-        {
-            throw new Exception($"Could not find source code for {symbol.Name} in {CsProjectFile.Name} ({id})");
-        }
-
-        var symbolUi = SymbolUis[id];
-        symbolUi.FlagAsModified();
-
-        if (newDestinationProject != this)
-        {
-            GiveSymbolToPackage(id, newDestinationProject);
-            newDestinationProject.MarkAsNeedingRecompilation();
-        }
-
-        MarkAsNeedingRecompilation();
-    }
-
-    private static bool TryConvertToValidCodeNamespace(string sourceNamespace, out string result)
-    {
-        // prepend any reserved words with a '@'
-        var parts = sourceNamespace.Split('.');
-        for (var i = 0; i < parts.Length; i++)
-        {
-            var part = parts[i];
-            if (!GraphUtils.IsIdentifierValid(part))
-            {
-                var newPart = "@" + part;
-                if (!GraphUtils.IsIdentifierValid(newPart))
-                {
-                    result = string.Empty;
-                    return false;
-                }
-
-                parts[i] = newPart;
-            }
-        }
-
-        result = string.Join('.', parts);
-        return true;
     }
 
     private void GiveSymbolToPackage(Guid id, EditableSymbolProject newDestinationProject)
@@ -238,13 +74,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         symbolUi.FlagAsModified();
         newDestinationProject.MarkAsNeedingRecompilation();
         MarkAsNeedingRecompilation();
-    }
-
-    private void MarkAsNeedingRecompilation()
-    {
-        if (IsSaving)
-            return;
-        NeedsCompilation = true;
     }
 
     public override string Folder => CsProjectFile.Directory;
@@ -287,10 +116,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public static readonly IReadOnlyList<EditableSymbolProject> AllProjects = AllProjectsRw;
 
     public override bool IsModifiable => true;
-
-    private readonly CodeFileWatcher _csFileWatcher;
-
-    public bool NeedsCompilation { get; private set; }
 
     private static int _newProjectPosition = 0;
 }
