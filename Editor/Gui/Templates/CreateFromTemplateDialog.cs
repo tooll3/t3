@@ -7,6 +7,7 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Templates
 {
@@ -105,9 +106,9 @@ namespace T3.Editor.Gui.Templates
                     ImGui.PopStyleColor();
                     ImGui.Dummy(new Vector2(10,10));
 
-                    FormInputs.AddSymbolProjectDropdown(ref _rootNamespace, out var project);
+                    CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
 
-                    if (project != null)
+                    if (_projectToCopyTo != null)
                     {
                         var compositionSymbol = GraphWindow.GetMainComposition().Symbol;
                         var isNewSymbolNameValid = GraphUtils.IsNewSymbolNameValid(_newSymbolName, compositionSymbol);
@@ -116,22 +117,14 @@ namespace T3.Editor.Gui.Templates
                                                   null,
                                                   isNewSymbolNameValid ? null : "Symbols must by unique and not contain spaces or special characters.");
 
-                        var namespaceCorrected = FormInputs.EnforceStringStart(project.CsProjectFile.RootNamespace + '.', ref _newNameSpace, true);
-                        var isNamespaceValid = !namespaceCorrected && GraphUtils.IsIdentifierValid(_newNameSpace);
+                        var rootNamespace = _projectToCopyTo.CsProjectFile.RootNamespace;
+                        var namespaceNeedsCorrecting = !_newNameSpace.StartsWith(rootNamespace);
+                        var isNamespaceValid = !namespaceNeedsCorrecting && GraphUtils.IsIdentifierValid(_newNameSpace);
                         FormInputs.AddStringInput("NameSpace",
                                                   ref _newNameSpace,
-                                                  "Enter namespace",
+                                                  rootNamespace,
                                                   isNamespaceValid ? null : "Is required and may only include characters, numbers and dots.\n" +
                                                                             "Must begin with the root namespace of the selected project."
-                                                 );
-
-                        var resourceFolderCorrected =
-                            FormInputs.EnforceStringStart(project.ResourcesFolder + Path.DirectorySeparatorChar, ref _resourceFolder, true);
-                        var isResourceFolderValid = !resourceFolderCorrected && _validResourceFolderPattern.IsMatch(_resourceFolder);
-                        FormInputs.AddStringInput("Resource Directory",
-                                                  ref _resourceFolder,
-                                                  "Enter resource folder",
-                                                  isResourceFolderValid ? null : "Your project files must be in project's Resources\\ directory for exporting."
                                                  );
 
                         FormInputs.AddStringInput("Description", ref _newDescription);
@@ -143,7 +136,7 @@ namespace T3.Editor.Gui.Templates
                                                               isNewSymbolNameValid && isNamespaceValid,
                                                               enableTriggerWithReturn: false))
                         {
-                            TemplateUse.TryToApplyTemplate(_selectedTemplate, _newSymbolName, _newNameSpace, _newDescription, project);
+                            TemplateUse.TryToApplyTemplate(_selectedTemplate, _newSymbolName, _newNameSpace, _newDescription, _projectToCopyTo);
                             ImGui.CloseCurrentPopup();
                         }
 
@@ -171,14 +164,12 @@ namespace T3.Editor.Gui.Templates
         }
         
         private TemplateDefinition _selectedTemplate = TemplateDefinition.TemplateDefinitions[0];
-        private static readonly Regex _validResourceFolderPattern = new(@"^Resources\\([A-Za-z_][A-Za-z_\-\d]*)(\\([A-Za-z_][A-Za-z\-_\d]*))*\\?$");
         
         private string _newSymbolName = "MyNewOp";
         private string _newNameSpace = null;
         private string _newDescription = null;
-        private string _resourceFolder = null;
-        private string _rootNamespace = null;
 
         private int _selectedTemplateIndex = -1;
+        private EditableSymbolProject _projectToCopyTo;
     }
 }

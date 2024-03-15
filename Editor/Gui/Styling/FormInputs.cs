@@ -178,24 +178,13 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
-        // Todo: this needs to be resized horizontally so the label shows correctly
-        internal static bool AddSymbolProjectDropdown(ref string rootNamespace, out EditableSymbolProject selectedValue)
-        {
-            var added = AddDropdown(ref rootNamespace, ProjectSetup.EditableSymbolProjects.Select(x => x.CsProjectFile.RootNamespace),
-                        "Project", "Select project");
-
-            var rootNamespaceCopy = rootNamespace;
-            selectedValue = ProjectSetup.EditableSymbolProjects.FirstOrDefault(x => x.CsProjectFile.RootNamespace == rootNamespaceCopy);
-            return added;
-        }
-        
 
         public static bool AddDropdown(ref string selectedValue, IEnumerable<string> values, string label, string tooltip = null)
         {
             DrawInputLabel(label);
 
-            var inputSize = GetAvailableInputSize(tooltip, false, true);
-            ImGui.SetNextItemWidth(inputSize.X);
+            //var inputSize = GetAvailableInputSize(tooltip, false, true);
+            //ImGui.SetNextItemWidth(inputSize.X);
 
             var modified = false;
             if (ImGui.BeginCombo("##SelectTheme", UserSettings.Config.ColorThemeName, ImGuiComboFlags.HeightLarge))
@@ -561,32 +550,6 @@ namespace T3.Editor.Gui.Styling
 
             ImGui.PopFont();
             ImGui.PopStyleVar(2);
-        }
-
-        /// <summary>
-        /// Ensures the string being modified starts with the given string
-        /// </summary>
-        /// <param name="start">The desired start of the string</param>
-        /// <param name="valueEnforced">the string being modified</param>
-        /// <param name="replaceStart">If true, the start of the string will be replaced. If false, the start will be prepended</param>
-        /// <returns>True if the string was modified by this method</returns>
-        public static bool EnforceStringStart(string start, ref string valueEnforced, bool replaceStart)
-        {
-            if (valueEnforced.StartsWith(start))
-                return false;
-
-            if (replaceStart)
-            {
-                valueEnforced = valueEnforced.Length <= start.Length
-                                    ? start
-                                    : start + valueEnforced[start.Length..];
-            }
-            else
-            {
-                valueEnforced = start + valueEnforced;
-            }
-
-            return true;
         }
         #endregion
 
