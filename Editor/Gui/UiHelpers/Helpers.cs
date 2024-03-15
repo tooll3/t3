@@ -102,6 +102,32 @@ namespace T3.Editor.Gui.UiHelpers
             var days = timeSinceLastBack.Value.TotalDays;
             return $"{days:0.0} days ago";
         }
+
+        /// <summary>
+        /// Ensures the string being modified starts with the given string
+        /// </summary>
+        /// <param name="start">The desired start of the string</param>
+        /// <param name="valueEnforced">the string being modified</param>
+        /// <param name="replaceStart">If true, the start of the string will be replaced. If false, the start will be prepended</param>
+        /// <returns>True if the string was modified by this method</returns>
+        public static bool EnforceStringStart(string start, ref string valueEnforced, bool replaceStart)
+        {
+            if (valueEnforced.StartsWith(start))
+                return false;
+
+            if (replaceStart)
+            {
+                valueEnforced = valueEnforced.Length <= start.Length
+                                    ? start
+                                    : start + valueEnforced[start.Length..];
+            }
+            else
+            {
+                valueEnforced = start + valueEnforced;
+            }
+
+            return true;
+        }
     }
 
     /// <summary>

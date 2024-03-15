@@ -9,6 +9,7 @@ using T3.Core.IO;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.SystemUi;
 
 namespace T3.Editor.Gui.Styling
@@ -620,6 +621,74 @@ namespace T3.Editor.Gui.Styling
         public static string HumanReadablePascalCase(string f)
         {
             return Regex.Replace(f, "(\\B[A-Z])", " $1");
+        }
+
+        public static bool DrawDropdown<T>(ref T selectedValue, IEnumerable<T> values, string label,  Func<T, string> getDisplayTextFunc, bool labelOnSameLine = false,
+                                            string defaultDisplayText = null, string tooltip = null) where T : class
+        {
+            if (labelOnSameLine)
+            {
+                ImGui.PushFont(Fonts.FontNormal);
+                ImGui.TextUnformatted(label);
+                ImGui.SameLine();
+            }
+            else
+            {
+                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.TextUnformatted(label);
+            }
+            ImGui.PopFont();
+
+            const string imguiLabelFmt = "##Select{0}";
+            var imguiLabel = string.Format(imguiLabelFmt, label);
+            
+            const string defaultDisplayTextFmt = "Select {0}";
+            defaultDisplayText ??= string.Format(defaultDisplayTextFmt, label);
+
+            var modified = false;
+            
+            var previewValue = selectedValue == null ? defaultDisplayText : getDisplayTextFunc(selectedValue);
+            if (ImGui.BeginCombo(imguiLabel, previewValue, ImGuiComboFlags.HeightLarge))
+            {
+                foreach (var project in values)
+                {
+                    var isSelected = project == selectedValue;
+                    if (!ImGui.Selectable(getDisplayTextFunc(project) ?? "Error", isSelected, ImGuiSelectableFlags.DontClosePopups))
+                        continue;
+
+                    ImGui.CloseCurrentPopup();
+                    selectedValue = project;
+                    modified = true;
+                }
+                
+                ImGui.EndCombo();
+            }
+
+            if (tooltip != null && ImGui.IsItemHovered())
+            {
+                ImGui.BeginTooltip();
+                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.TextUnformatted(tooltip);
+                ImGui.PopFont();
+                ImGui.EndTooltip();
+            }
+
+            return modified;
+        }
+
+        // Todo: this needs to be resized horizontally so the label shows correctly
+        internal static bool DrawProjectDropdown(ref EditableSymbolProject selectedValue)
+        {
+            return DrawDropdown(ref selectedValue, EditableSymbolProject.AllProjects, "Project", GetDisplayText,
+                                defaultDisplayText: "Select a project",
+                                tooltip: "Select a project to edit symbols in.",
+                                labelOnSameLine: false);
+
+            static string GetDisplayText(EditableSymbolProject project)
+            {
+                var projectFile = project.CsProjectFile;
+                return $"{projectFile.Name} - ({projectFile.RootNamespace})";
+            }
         }
     }
 }

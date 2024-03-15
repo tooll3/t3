@@ -14,15 +14,15 @@ namespace T3.Editor.Gui.Graph.Dialogs
     public class CombineToSymbolDialog : ModalDialog
     {
         public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, List<Annotation> selectedAnnotations, ref string nameSpace,
-                         ref string combineName, ref string description, ref string rootNamespace)
+                         ref string combineName, ref string description)
         {
             DialogSize = new Vector2(500, 350);
 
             if (BeginDialog("Combine into symbol"))
             {
-                FormInputs.AddSymbolProjectDropdown(ref rootNamespace, out var project);
+                CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
 
-                if (project != null)
+                if (_projectToCopyTo != null)
                 {
                     // namespace and title
                     ImGui.PushFont(Fonts.FontSmall);
@@ -33,12 +33,17 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.TextUnformatted("Name");
                     ImGui.PopFont();
                     
-                    var changed = FormInputs.EnforceStringStart(rootNamespace + '.', ref nameSpace, false);
+                    var rootNamespace = _projectToCopyTo.CsProjectFile.RootNamespace;
+                    var incorrect = !nameSpace.StartsWith(rootNamespace);
 
                     ImGui.SetNextItemWidth(250);
                     InputWithTypeAheadSearch.Draw("##namespace2", ref nameSpace,
-                                                  SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i),
-                                                  warning: changed);
+                                                  SymbolRegistry.Entries.Values
+                                                                .Select(i => i.Namespace)
+                                                                .Distinct()
+                                                                .Where(x => x.StartsWith(rootNamespace))
+                                                                .OrderBy(i => i),
+                                                  warning: incorrect);
 
                     ImGui.SetNextItemWidth(150);
                     ImGui.SameLine();
@@ -60,11 +65,11 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
                     ImGui.Checkbox("Combine as time clip", ref _shouldBeTimeClip);
 
-                    if (CustomComponents.DisablableButton("Combine", GraphUtils.IsNewSymbolNameValid(combineName, compositionOp.Symbol),
+                    if (CustomComponents.DisablableButton("Combine", !incorrect && GraphUtils.IsNewSymbolNameValid(combineName, compositionOp.Symbol),
                                                           enableTriggerWithReturn: false))
                     {
                         var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
-                        Combine.CombineAsNewType(compositionSymbolUi, project, selectedChildUis, selectedAnnotations, combineName, nameSpace, description,
+                        Combine.CombineAsNewType(compositionSymbolUi, _projectToCopyTo, selectedChildUis, selectedAnnotations, combineName, nameSpace, description,
                                                  _shouldBeTimeClip);
                         _shouldBeTimeClip = false; // Making timeclips this is normally a one off operation
                         ImGui.CloseCurrentPopup();
@@ -85,5 +90,6 @@ namespace T3.Editor.Gui.Graph.Dialogs
         }
 
         private static bool _shouldBeTimeClip;
+        private EditableSymbolProject _projectToCopyTo;
     }
 }
