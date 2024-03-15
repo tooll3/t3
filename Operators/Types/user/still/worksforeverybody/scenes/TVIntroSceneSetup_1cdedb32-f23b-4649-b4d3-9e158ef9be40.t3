@@ -1623,8 +1623,8 @@
           "Id": "8a991e5f-361c-4ab9-9660-bdf759c87594"/*Translate*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 0.6021,
-            "Y": 0.8715,
+            "X": -0.05,
+            "Y": 0.29,
             "Z": 0.0
           }
         },
@@ -1632,10 +1632,15 @@
           "Id": "432c3388-907b-4b7f-8c6e-73a5100bc43a"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 1.27,
-            "Y": -2.258,
+            "X": -1.69,
+            "Y": 1.0,
             "Z": 1.0
           }
+        },
+        {
+          "Id": "2ce29895-0bfd-4b73-ad57-50aca7fd1a96"/*Scale*/,
+          "Type": "System.Single",
+          "Value": 0.45
         }
       ],
       "Outputs": []
@@ -1755,8 +1760,8 @@
           "Id": "590e24cc-00cc-4c9a-8f96-850857686c4a"/*Pivot*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 0.5,
-            "Y": 1.5,
+            "X": -0.49,
+            "Y": -0.55,
             "Z": 0.0
           }
         }
@@ -2302,6 +2307,53 @@
       "Id": "b5f67cea-897c-48f7-bfd3-bb5325800b21"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "a8534350-e8e1-4cd4-80db-6bf7a3324b8f"/*MeshProjectUV*/,
+      "SymbolId": "97ffb173-f4cc-4143-a479-80cf3465cc7e",
+      "InputValues": [
+        {
+          "Id": "8a991e5f-361c-4ab9-9660-bdf759c87594"/*Translate*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 0.6021,
+            "Y": 0.8715,
+            "Z": 0.0
+          }
+        },
+        {
+          "Id": "432c3388-907b-4b7f-8c6e-73a5100bc43a"/*Stretch*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 1.27,
+            "Y": -2.258,
+            "Z": 1.0
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "d8c278d7-b733-4620-aded-45150ba608fb"/*AnimValue*/,
+      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
+      "InputValues": [
+        {
+          "Id": "4cf5d20b-7335-4584-b246-c260ac5cdf4f"/*Shape*/,
+          "Type": "System.Int32",
+          "Value": 6
+        },
+        {
+          "Id": "79917ef7-64ca-4825-9c6a-c9b2a7f6ff86"/*Amplitude*/,
+          "Type": "System.Single",
+          "Value": 3.3
+        },
+        {
+          "Id": "ddd93b06-118e-43e0-85f6-c150faf91d04"/*Offset*/,
+          "Type": "System.Single",
+          "Value": 0.68
+        }
+      ],
       "Outputs": []
     }
   ],
