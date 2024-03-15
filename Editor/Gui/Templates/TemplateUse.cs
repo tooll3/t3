@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.Templates
     /// </summary>
     public static class TemplateUse
     {
-        public static void TryToApplyTemplate(TemplateDefinition template, string symbolName, string nameSpace, string description, string resourceFolder)
+        internal static void TryToApplyTemplate(TemplateDefinition template, string symbolName, string nameSpace, string description, EditableSymbolProject project)
         {
             var defaultCanvasWindow = GraphWindow.GetPrimaryGraphWindow();
             if (defaultCanvasWindow == null)
@@ -34,7 +34,7 @@ namespace T3.Editor.Gui.Templates
             var centerOnScreen = graphCanvas.WindowPos + graphCanvas.WindowSize / 2;
             var positionOnCanvas2 = graphCanvas.InverseTransformPositionFloat(centerOnScreen);
             var freePosition = FindFreePositionOnCanvas(graphCanvas, positionOnCanvas2);
-            var newSymbol = Duplicate.DuplicateAsNewType(compositionSymbolUi, template.TemplateSymbolId, symbolName, nameSpace, description, freePosition);
+            var newSymbol = Duplicate.DuplicateAsNewType(compositionSymbolUi, project, template.TemplateSymbolId, symbolName, nameSpace, description, freePosition);
             
             // Select instance of new symbol
             var newChildUi = compositionSymbolUi.ChildUis.SingleOrDefault(c => c.SymbolChild.Symbol.Id == newSymbol.Id);
@@ -49,7 +49,7 @@ namespace T3.Editor.Gui.Templates
                                               symbolName,
                                               nameSpace, 
                                               description, 
-                                              resourceFolder);
+                                              project.ResourcesFolder);
             T3Ui.Save(false);
         }
 

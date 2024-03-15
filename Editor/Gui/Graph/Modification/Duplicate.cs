@@ -13,25 +13,18 @@ using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Modification;
 
 internal static class Duplicate
 {
-    public static Symbol DuplicateAsNewType(SymbolUi compositionUi, Guid symbolId, string newTypeName, string nameSpace,
+    public static Symbol DuplicateAsNewType(SymbolUi compositionUi,EditableSymbolProject project, Guid symbolId, string newTypeName, string nameSpace,
                                             string description, Vector2 posOnCanvas)
     {
         if (!SymbolRegistry.Entries.TryGetValue(symbolId, out var sourceSymbol))
         {
             Log.Warning("Can't find symbol to duplicate");
-            return null;
-        }
-
-        if (compositionUi.Symbol.SymbolPackage is not EditableSymbolProject project)
-        {
-            EditorUi.Instance.ShowMessageBox("Can only create new types in editable projects.");
             return null;
         }
         

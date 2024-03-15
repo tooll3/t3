@@ -25,11 +25,12 @@ namespace T3.Editor.Gui.Graph.Dialogs
             {
                 // Name and namespace
                 _namespaceBuilder.Clear();
-                _namespaceBuilder.Append(UserSettings.Config.UserName).Append('.');
+                var username = UserSettings.Config.UserName;
+                _namespaceBuilder.Append(username).Append('.');
 
-                FormInputs.AddStringInput("Namespace", ref _newNamespace);
+                var incorrect = FormInputs.EnforceStringStart(_namespaceBuilder.ToString(), ref _newNamespace, true);
+                FormInputs.AddStringInput("Namespace", ref _newNamespace, warning: incorrect ? $"Namespace must be within the {username} namespace" : null);
                 FormInputs.AddStringInput("Name", ref _newName);
-                FormInputs.EnforceStringStart(_namespaceBuilder.ToString(), ref _newNamespace, false);
                 
                 _namespaceBuilder.Append(_newNamespace);
                 
