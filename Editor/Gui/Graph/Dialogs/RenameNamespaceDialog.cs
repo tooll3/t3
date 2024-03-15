@@ -4,6 +4,7 @@ using T3.Editor.Compilation;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
@@ -40,7 +41,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                                                       && Regex.IsMatch(_nameSpace, @"^[\d\w_\.]+$")
                                                       ))
                 {
-                    OperatorUpdating.RenameNameSpaces(_node, _nameSpace);
+                    EditableSymbolProject.RenameNameSpaces(_node, _nameSpace);
                     Close();
                 }
 

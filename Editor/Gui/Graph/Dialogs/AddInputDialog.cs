@@ -22,7 +22,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
             if (BeginDialog("Add parameter input"))
             {
                 var warning = string.Empty;
-                var isValid = GraphUtils.IsNewSymbolNameValid(symbol.SymbolPackage, _parameterName) && _selectedType != null;
+                var isValid = _selectedType != null && GraphUtils.IsIdentifierValid(_parameterName);
 
                 if (!isValid)
                 {

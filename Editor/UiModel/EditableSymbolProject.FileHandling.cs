@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Editor.Compilation;
 using T3.Editor.SystemUi;
 using SearchOption = System.IO.SearchOption;
 
@@ -17,6 +19,12 @@ internal sealed partial class EditableSymbolProject
 {
     public void SaveAll()
     {
+        if (IsSaving)
+        {
+            Log.Error($"{CsProjectFile.Name}: Saving is already in progress.");
+            return;
+        }
+        
         Log.Debug($"{CsProjectFile.Name}: Saving...");
 
         MarkAsSaving();
@@ -29,6 +37,12 @@ internal sealed partial class EditableSymbolProject
     /// </summary>
     internal void SaveModifiedSymbols()
     {
+        if (IsSaving)
+        {
+            Log.Error($"{CsProjectFile.Name}: Saving is already in progress.");
+            return;
+        }
+        
         MarkAsSaving();
 
         var modifiedSymbolUis = SymbolUis
@@ -46,20 +60,92 @@ internal sealed partial class EditableSymbolProject
         UnmarkAsSaving();
     }
 
+    protected override void OnSymbolLoaded(string? path, Symbol symbol)
+    {
+        path ??= SymbolPathHandler.GetCorrectPath(symbol.Name, symbol.Namespace, Folder, CsProjectFile.RootNamespace, SymbolExtension);
+        
+        var id = symbol.Id;
+        if (_filePathHandlers.TryGetValue(id, out var handler))
+            return;
+        handler = new SymbolPathHandler(symbol, path);
+        handler.AllFilesReady += CorrectFileLocations;
+        _filePathHandlers[id] = handler;
+    }
+
+    private static Action<SymbolPathHandler> CorrectFileLocations => handler =>
+                                                                     {
+                                                                         handler.AllFilesReady -= CorrectFileLocations;
+                                                                         handler.UpdateFromSymbol();
+                                                                     };
+
+    protected override void OnSymbolUiLoaded(string? path, SymbolUi symbolUi)
+    {
+        var symbol = symbolUi.Symbol;
+        path ??= SymbolPathHandler.GetCorrectPath(symbol.Name, symbol.Namespace, Folder, CsProjectFile.RootNamespace, SymbolUiExtension);
+        var filePathHandler = _filePathHandlers[symbol.Id];
+        filePathHandler.UiFilePath = path;
+    }
+
+    private void OnSourceCodeLocated(string path, Guid guid)
+    {
+        if (_filePathHandlers.TryGetValue(guid, out var filePathHandler))
+        {
+            filePathHandler.SourceCodePath = path;
+        }
+        else
+        {
+            Log.Error($"No file path handler found for {guid}");
+        }
+    }
+
+    protected override void OnSymbolUpdated(Symbol symbol)
+    {
+        var filePathHandler = _filePathHandlers[symbol.Id];
+
+        if (symbol != filePathHandler.Symbol)
+        {
+            throw new Exception("Symbol mismatch when updating symbol files");
+        }
+        
+        filePathHandler.UpdateFromSymbol();
+    }
+
     private void WriteAllSymbolFilesOf(IEnumerable<SymbolUi> symbolUis)
     {
         foreach (var symbolUi in symbolUis)
         {
-            var filePathFmt = BuildFilepathFmt(symbolUi.Symbol);
-            var destinationFolder = Path.GetDirectoryName(filePathFmt);
+            var symbol = symbolUi.Symbol;
+            var pathHandler = _filePathHandlers[symbol.Id];
+
+            if (!pathHandler.TryCreateDirectory())
+            {
+                Log.Error($"Could not create directory for symbol {symbol.Id}");
+                continue;
+            }
+
+            pathHandler.UpdateFromSymbol();
 
             try
             {
-                Directory.CreateDirectory(destinationFolder!);
+                
+                var sourceCodePath = pathHandler.SourceCodePath;
+                if (sourceCodePath != null)
+                    WriteSymbolSourceToFile(symbolUi.Symbol, sourceCodePath);
+                else
+                    throw new Exception($"{CsProjectFile.Name}: No source code path found for symbol {symbolUi.Symbol.Id}");
 
-                SaveSymbolDefinition(symbolUi.Symbol, filePathFmt);
-                WriteSymbolSourceToFile(symbolUi.Symbol, filePathFmt);
-                WriteSymbolUi(symbolUi, filePathFmt);
+                var symbolPath = pathHandler.SymbolFilePath ?? SymbolPathHandler.GetCorrectPath(symbol, this);
+                SaveSymbolDefinition(symbolUi.Symbol, symbolPath);
+                pathHandler.SymbolFilePath = symbolPath;
+                
+                var uiFilePath = pathHandler.UiFilePath ?? SymbolPathHandler.GetCorrectPath(symbolUi, this);
+                WriteSymbolUi(symbolUi, uiFilePath);
+                pathHandler.UiFilePath = uiFilePath;
+                
+                #if DEBUG
+                string debug = $"{CsProjectFile.Name}: Saved [{symbol.Name}] to:\nSymbol: \"{symbolPath}\"\nUi: \"{uiFilePath}\"\nSource: \"{sourceCodePath}\"\n";
+                Log.Debug(debug);
+                #endif
             }
             catch (Exception e)
             {
@@ -68,13 +154,8 @@ internal sealed partial class EditableSymbolProject
         }
     }
 
-    private static void WriteSymbolUi(SymbolUi symbolUi, string filePathFmt)
+    private static void WriteSymbolUi(SymbolUi symbolUi, string uiFilePath)
     {
-        var uiFilePath = string.Format(filePathFmt, SymbolUiExtension);
-
-        MoveIfNecessary(symbolUi.UiFilePath, uiFilePath);
-        symbolUi.UiFilePath = uiFilePath;
-
         using var sw = new StreamWriter(uiFilePath, SaveOptions);
         using var writer = new JsonTextWriter(sw);
 
@@ -84,29 +165,16 @@ internal sealed partial class EditableSymbolProject
         symbolUi.ClearModifiedFlag();
     }
 
-    private void SaveSymbolDefinition(Symbol symbol, string filePathFmt)
+    private void SaveSymbolDefinition(Symbol symbol, string filePath)
     {
-        var filePath = string.Format(filePathFmt, SymbolExtension);
-
-        MoveIfNecessary(symbol.SymbolFilePath, filePath);
-        symbol.SymbolFilePath = filePath;
-
         using var sw = new StreamWriter(filePath, SaveOptions);
         using var writer = new JsonTextWriter(sw);
         writer.Formatting = Formatting.Indented;
         SymbolJson.WriteSymbol(symbol, writer);
     }
 
-    private void WriteSymbolSourceToFile(Symbol symbol, string filePathFmt)
+    private void WriteSymbolSourceToFile(Symbol symbol, string sourcePath)
     {
-        var sourcePath = string.Format(filePathFmt, SourceCodeExtension);
-        if (_sourceCodeFiles.TryGetValue(symbol.Id, out var previousSourcePath))
-        {
-            MoveIfNecessary(previousSourcePath, sourcePath);
-        }
-
-        _sourceCodeFiles[symbol.Id] = sourcePath;
-
         if (string.IsNullOrWhiteSpace(symbol.PendingSource))
             return;
 
@@ -115,62 +183,6 @@ internal sealed partial class EditableSymbolProject
 
         symbol.PendingSource = null;
     }
-
-    /// <summary>
-    /// Moves the source file if the path has changed
-    /// </summary>
-    /// <param name="previousPath">Previous source path, moved from here if necessary</param>
-    /// <param name="path">Latest source path, destination</param>
-    /// <returns></returns>
-    private static bool MoveIfNecessary(string previousPath, string path)
-    {
-        if (previousPath == path || string.IsNullOrWhiteSpace(previousPath))
-            return false;
-
-        Log.Debug($" Moving {previousPath} -> {path} ...");
-
-        try
-        {
-            File.Move(previousPath, path, true);
-            return true;
-        }
-        catch (Exception e)
-        {
-            Log.Error($"Failed to move '{previousPath}' -> '{path}': {e}");
-        }
-
-        return false;
-    }
-
-    #region File path handling
-    private string BuildFilepathFmt(Symbol symbol) => BuildFilepathFmt(symbol.Name, symbol.Namespace);
-    
-
-    private string BuildFilepathFmt(string name, string @namespace)
-    {
-        var dir = BuildAndCreateFolderFromNamespace(@namespace);
-        return Path.Combine(dir, name + "{0}");
-
-        string BuildAndCreateFolderFromNamespace(string symbolNamespace)
-        {
-            var rootNamespace = CsProjectFile.RootNamespace;
-            symbolNamespace = symbolNamespace.StartsWith(rootNamespace) 
-                                  ? symbolNamespace.Replace(rootNamespace, "")
-                                  : symbolNamespace;
-            
-            if (string.IsNullOrWhiteSpace(symbolNamespace) || symbolNamespace == CsProjectFile.RootNamespace)
-            {
-                return Folder;
-            }
-
-            var namespaceParts = symbolNamespace.Split('.').Where(x => x.Length > 0);
-            var subfolders = new [] { Folder }.Concat(namespaceParts).ToArray();
-            var directory = Path.Combine(subfolders); 
-            Directory.CreateDirectory(directory);
-            return directory;
-        }
-    }
-    #endregion
 
     private void MarkAsSaving()
     {
@@ -192,7 +204,7 @@ internal sealed partial class EditableSymbolProject
     private void OnFileRenamed(object sender, RenamedEventArgs args)
     {
         EditorUi.Instance.ShowMessageBox($"File {args.OldFullPath} renamed to {args.FullPath}. Please do not do this while the editor is running.");
-        _needsCompilation = true;
+        NeedsCompilation = true;
     }
 
     /// <summary>
@@ -200,12 +212,14 @@ internal sealed partial class EditableSymbolProject
     /// </summary>
     public void LocateSourceCodeFiles()
     {
-        _sourceCodeFiles.Clear();
+        MarkAsSaving();
         Directory.EnumerateFiles(Folder, $"*{SourceCodeExtension}", SearchOption.AllDirectories)
                  .AsParallel()
                  .ForAll(file =>
                          {
-                             using var streamReader = new StreamReader(file);
+                             var streamReader = new StreamReader(file);
+
+                             var guid = Guid.Empty;
                              while (!streamReader.EndOfStream)
                              {
                                  var line = streamReader.ReadLine();
@@ -213,6 +227,7 @@ internal sealed partial class EditableSymbolProject
                                      break;
 
                                  //todo: this is a bit hacky. Would it be better to look for "[Guid(" ?
+                                 // todo - search for "[Guid("" while somehow ignoring whitespace
                                  var firstQuoteIndex = line.IndexOf('"');
                                  if (firstQuoteIndex == -1)
                                      continue;
@@ -224,25 +239,44 @@ internal sealed partial class EditableSymbolProject
 
                                  var stringSpan = line.AsSpan(firstQuoteIndex + 1, secondQuoteIndex - firstQuoteIndex - 1);
 
-                                 if (!Guid.TryParse(stringSpan, out var guid))
+                                 if (!Guid.TryParse(stringSpan, out guid))
                                      continue;
 
-                                 _sourceCodeFiles.TryAdd(guid, file);
                                  break;
                              }
+                             
+                             streamReader.Close();
+                             streamReader.Dispose();
+
+                             if (guid == Guid.Empty)
+                                 return;
+                             
+                             OnSourceCodeLocated(file, guid);
                          });
+        
+        UnmarkAsSaving();
     }
 
-    public bool TryGetSourceCodePath(Symbol symbol, out string path) => _sourceCodeFiles.TryGetValue(symbol.Id, out path);
+    public bool TryGetSourceCodePath(Symbol symbol, out string? path)
+    {
+        if (_filePathHandlers.TryGetValue(symbol.Id, out var filePathInfo))
+        {
+            path = filePathInfo.SourceCodePath;
+            return path != null;
+        }
 
-    public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0;
+        path = null;
+        return false;
+    }
+
+    public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0 || EditableSymbolProject.CheckCompilation();
     private static long _savingCount;
     static readonly FileStreamOptions SaveOptions = new() { Mode = FileMode.Create, Access = FileAccess.ReadWrite };
-    private readonly ConcurrentDictionary<Guid, string> _sourceCodeFiles = new();
 
-    private const string SourceCodeExtension = ".cs";
+    internal const string SourceCodeExtension = ".cs";
+    private readonly ConcurrentDictionary<Guid, SymbolPathHandler> _filePathHandlers = new();
 
-    private class EditablePackageFsWatcher : FileSystemWatcher
+    private sealed class EditablePackageFsWatcher : FileSystemWatcher
     {
         public EditablePackageFsWatcher(EditableSymbolProject project, FileSystemEventHandler onChange, RenamedEventHandler onRename) :
             base(project.Folder, "*.cs")

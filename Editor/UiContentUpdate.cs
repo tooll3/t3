@@ -16,6 +16,7 @@ using T3.Editor.Gui;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
+using T3.Editor.UiModel;
 
 namespace T3.Editor;
 
@@ -56,7 +57,9 @@ internal static class UiContentUpdate
         ImGui.GetIO().DisplaySize = ProgramWindows.Main.Size;
 
         ProgramWindows.HandleFullscreenToggle();
-        OperatorUpdating.UpdateChangedOperators();
+        EditableSymbolProject.RecompileChangedProjects();
+        
+        
 
         DirtyFlag.IncrementGlobalTicks();
         T3Metrics.UiRenderingStarted();

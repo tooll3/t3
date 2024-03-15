@@ -50,17 +50,11 @@ internal static class GraphUtils
         return CSharpSyntaxTree.ParseText(sourceCode);
     }
 
-    public static bool IsNewSymbolNameValid(SymbolPackage symbolPackage, string newSymbolName)
+    public static bool IsNewSymbolNameValid(string newSymbolName, Symbol symbol)
     {
         return IsIdentifierValid(newSymbolName)
-        		&& !ReservedWords.Contains(newSymbolName)
-               	&& !symbolPackage.ContainsSymbolName(newSymbolName);
-    }
-
-    public static bool IsNewSymbolNameValid(IEnumerable<SymbolPackage> symbolPackages, string newSymbolName)
-    {
-        return IsIdentifierValid(newSymbolName)
-               && !symbolPackages.Any(p => p.ContainsSymbolName(newSymbolName));
+               && !ReservedWords.Contains(newSymbolName)
+               && !symbol.SymbolPackage.ContainsSymbolName(newSymbolName, symbol.Namespace);
     }
 
     public static bool IsIdentifierValid(string className) => !string.IsNullOrWhiteSpace(className)

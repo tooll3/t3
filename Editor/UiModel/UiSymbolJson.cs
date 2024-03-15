@@ -26,7 +26,7 @@ namespace T3.Editor.UiModel
         {
             writer.WriteStartObject();
 
-            writer.WriteObject(JsonKeys.Id, symbolUi.Symbol.Id);
+            writer.WriteValue(JsonKeys.Id, symbolUi.Symbol.Id);
             writer.WriteComment(symbolUi.Symbol.Name);
 
             writer.WriteObject(JsonKeys.Description, symbolUi.Description);

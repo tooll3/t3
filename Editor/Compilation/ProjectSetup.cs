@@ -20,7 +20,7 @@ namespace T3.Editor.Compilation;
 internal static class ProjectSetup
 {
     private static readonly List<EditableSymbolProject> EditableSymbolProjectsRw = new();
-    public static readonly IReadOnlyList<EditableSymbolProject> EditableSymbolPackages = EditableSymbolProjectsRw;
+    public static readonly IReadOnlyList<EditableSymbolProject> EditableSymbolProjects = EditableSymbolProjectsRw;
 
     internal static void CreateProject(string newName, string newNamespace)
     {
@@ -331,7 +331,9 @@ internal static class ProjectSetup
            .ForAll(pair =>
                    {
                        if (pair.Key is EditableSymbolProject project)
+                       {
                            project.LocateSourceCodeFiles();
+                       }
                    });
 
         foreach (var (symbolPackage, symbolUis) in loadedSymbolUis)

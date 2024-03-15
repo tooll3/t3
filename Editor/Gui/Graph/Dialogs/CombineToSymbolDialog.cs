@@ -60,7 +60,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
                 ImGui.Checkbox("Combine as time clip", ref _shouldBeTimeClip);
 
-                if (CustomComponents.DisablableButton("Combine", GraphUtils.IsNewSymbolNameValid(compositionOp.Symbol.SymbolPackage, combineName),
+                if (CustomComponents.DisablableButton("Combine", GraphUtils.IsNewSymbolNameValid(combineName, compositionOp.Symbol),
                                                       enableTriggerWithReturn: false))
                 {
                     var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];

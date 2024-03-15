@@ -8,7 +8,6 @@ using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharpDX.Direct3D11;
-using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -1216,7 +1215,7 @@ namespace T3.Editor.Gui.Graph
             if (hasSymbol)
                 return true;
 
-            var jsonResult = SymbolJson.ReadSymbolRoot(guid, jToken, allowNonOperatorInstanceType: true, project);
+            var jsonResult = SymbolJson.ReadSymbolRoot(guid, jToken, typeof(object), project);
 
             if (jsonResult.Symbol is null)
                 return false;

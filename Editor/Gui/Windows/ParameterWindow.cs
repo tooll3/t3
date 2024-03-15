@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -7,7 +6,6 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
@@ -17,6 +15,7 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.UiModel;
+using T3.SystemUi;
 
 namespace T3.Editor.Gui.Windows;
 
@@ -185,12 +184,13 @@ internal class ParameterWindow : Window
 
             var symbol = op.Symbol;
             var package = symbol.SymbolPackage;
-            if (package is EditableSymbolProject project)
+            if (package is EditableSymbolProject)
             {
-                if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
-                                                  SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
+                bool namespaceModified = InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
+                                                             SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i));
+                if (namespaceModified && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 {
-                    OperatorUpdating.UpdateNamespace(symbol.Id, namespaceForEdit);
+                    EditableSymbolProject.ChangeSymbolNamespace(symbol.Id, namespaceForEdit);
                 }
             }
             else

@@ -7,15 +7,11 @@ namespace T3.Core.Stats
     /// <summary>
     /// Performance profiling helper that counts slot updates per frame
     /// </summary>
-    public class OpUpdateCounter : IRenderStatsProvider
+    public sealed class OpUpdateCounter : IRenderStatsProvider
     {
         public OpUpdateCounter()
         {
-            if (!_registered)
-            {
-                RenderStatsCollector.RegisterProvider(this);
-                _registered = true;
-            }
+            RenderStatsCollector.RegisterProvider(this);
         }
         
         public IEnumerable<(string, int)> GetStats()
@@ -36,6 +32,5 @@ namespace T3.Core.Stats
         }
 
         private static int _updateCount;
-        private static bool _registered;
     }
 }
