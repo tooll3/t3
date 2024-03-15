@@ -20,7 +20,11 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
             if (BeginDialog("Combine into symbol"))
             {
-                CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
+                var projectChanged = CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
+                if(projectChanged && _projectToCopyTo != null)
+                {
+                    nameSpace = _projectToCopyTo.CsProjectFile.RootNamespace + '.' + compositionOp.Symbol.Namespace.Split('.').Last();
+                }
 
                 if (_projectToCopyTo != null)
                 {
@@ -34,7 +38,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.PopFont();
                     
                     var rootNamespace = _projectToCopyTo.CsProjectFile.RootNamespace;
-                    var incorrect = !nameSpace.StartsWith(rootNamespace);
+                    var correct = nameSpace.StartsWith(rootNamespace) && GraphUtils.IsNamespaceValid(nameSpace);
 
                     ImGui.SetNextItemWidth(250);
                     InputWithTypeAheadSearch.Draw("##namespace2", ref nameSpace,
@@ -43,7 +47,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                                                                 .Distinct()
                                                                 .Where(x => x.StartsWith(rootNamespace))
                                                                 .OrderBy(i => i),
-                                                  warning: incorrect);
+                                                  warning: !correct);
 
                     ImGui.SetNextItemWidth(150);
                     ImGui.SameLine();
@@ -65,7 +69,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
                     ImGui.Checkbox("Combine as time clip", ref _shouldBeTimeClip);
 
-                    if (CustomComponents.DisablableButton("Combine", !incorrect && GraphUtils.IsNewSymbolNameValid(combineName, compositionOp.Symbol),
+                    if (CustomComponents.DisablableButton("Combine", correct && GraphUtils.IsNewSymbolNameValid(combineName, compositionOp.Symbol),
                                                           enableTriggerWithReturn: false))
                     {
                         var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];

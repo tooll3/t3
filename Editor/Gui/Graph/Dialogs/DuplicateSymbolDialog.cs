@@ -19,8 +19,11 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
             if (BeginDialog("Duplicate as new symbol"))
             {
-
-                CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
+                var projectChanged = CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
+                if(projectChanged && _projectToCopyTo != null)
+                {
+                    nameSpace = _projectToCopyTo.CsProjectFile.RootNamespace + '.' + compositionOp.Symbol.Namespace.Split('.').Last();
+                }
 
                 if (_projectToCopyTo != null)
                 {
@@ -34,7 +37,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.PopFont();
                     
                     var rootNamespace = _projectToCopyTo.CsProjectFile.RootNamespace;
-                    var incorrect = !nameSpace.StartsWith(rootNamespace);
+                    var correct = nameSpace.StartsWith(rootNamespace) && GraphUtils.IsNamespaceValid(nameSpace);
 
                     ImGui.SetNextItemWidth(250);
                     //ImGui.InputText("##namespace", ref nameSpace, 255);
@@ -44,7 +47,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                                                                 .Distinct()
                                                                 .Where(x => x.StartsWith(rootNamespace))
                                                                 .OrderBy(i => i),
-                                                  warning: incorrect);
+                                                  warning: !correct);
 
                     ImGui.SetNextItemWidth(150);
                     ImGui.SameLine();
@@ -65,7 +68,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.SetNextItemWidth(460);
                     ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));
 
-                    if (CustomComponents.DisablableButton("Duplicate", !incorrect && GraphUtils.IsNewSymbolNameValid(newTypeName, compositionOp.Symbol),
+                    if (CustomComponents.DisablableButton("Duplicate", correct && GraphUtils.IsNewSymbolNameValid(newTypeName, compositionOp.Symbol),
                                                           enableTriggerWithReturn: false))
                     {
                         var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];

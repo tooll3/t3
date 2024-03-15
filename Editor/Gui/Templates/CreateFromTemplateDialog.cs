@@ -106,7 +106,12 @@ namespace T3.Editor.Gui.Templates
                     ImGui.PopStyleColor();
                     ImGui.Dummy(new Vector2(10,10));
 
-                    CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
+                    var projectChanged = CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
+                    if (projectChanged && _projectToCopyTo != null)
+                    {
+                        _newNameSpace = _projectToCopyTo.CsProjectFile.RootNamespace + '.';
+                    }
+
 
                     if (_projectToCopyTo != null)
                     {
@@ -119,7 +124,7 @@ namespace T3.Editor.Gui.Templates
 
                         var rootNamespace = _projectToCopyTo.CsProjectFile.RootNamespace;
                         var namespaceNeedsCorrecting = !_newNameSpace.StartsWith(rootNamespace);
-                        var isNamespaceValid = !namespaceNeedsCorrecting && GraphUtils.IsIdentifierValid(_newNameSpace);
+                        var isNamespaceValid = !namespaceNeedsCorrecting && GraphUtils.IsNamespaceValid(_newNameSpace);
                         FormInputs.AddStringInput("NameSpace",
                                                   ref _newNameSpace,
                                                   rootNamespace,
