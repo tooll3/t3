@@ -19,7 +19,7 @@ namespace T3.Core.Resource
     public sealed partial class ResourceManager
     {
         public static readonly ConcurrentDictionary<uint, AbstractResource> ResourcesById = new();
-        public static IEnumerable<string> SharedResourceFolders => SharedResourceFileWatchers.Select(x => x.WatchedFolder);
+        public static IEnumerable<string> SharedResourceFolders => SharedResourcePackages.Select(x => x.ResourcesFolder);
 
         public static ResourceManager Instance() => _instance;
         private static readonly ResourceManager _instance = new();
@@ -85,12 +85,12 @@ namespace T3.Core.Resource
             return false;
         }
 
-        internal static bool TryResolvePath(string relativePath, Instance? instance, out string absolutePath, out ResourceFileWatcher? relevantFileWatcher)
+        internal static bool TryResolvePath(string relativePath, Instance? instance, out string absolutePath, out IResourceContainer? resourceContainer)
         {
             if (string.IsNullOrWhiteSpace(relativePath))
             {
                 absolutePath = string.Empty;
-                relevantFileWatcher = null;
+                resourceContainer = null;
                 return false;
             }
 
@@ -98,7 +98,7 @@ namespace T3.Core.Resource
             if (isAbsolute)
             {
                 absolutePath = relativePath;
-                relevantFileWatcher = null;
+                resourceContainer = null;
                 return Exists(absolutePath);
             }
 
@@ -106,19 +106,19 @@ namespace T3.Core.Resource
 
             if (instance != null)
             {
-                if (TestPath(relativePath, instance, out absolutePath, out relevantFileWatcher))
+                if (TestPath(relativePath, instance, out absolutePath, out resourceContainer))
                     return true;
 
                 backCompatPaths ??= PopulateBackCompatPaths(relativePath, backCompatRanges);
 
                 foreach (var backCompatPath in backCompatPaths)
                 {
-                    if (TestPath(backCompatPath, instance, out absolutePath, out relevantFileWatcher))
+                    if (TestPath(backCompatPath, instance, out absolutePath, out resourceContainer))
                         return true;
                 }
             }
 
-            if (CheckSharedResources(relativePath, out absolutePath, out relevantFileWatcher))
+            if (CheckSharedResources(relativePath, out absolutePath, out resourceContainer))
             {
                 return true;
             }
@@ -127,7 +127,7 @@ namespace T3.Core.Resource
 
             foreach (var backCompatPath in backCompatPaths)
             {
-                if (CheckSharedResources(backCompatPath, out absolutePath, out relevantFileWatcher))
+                if (CheckSharedResources(backCompatPath, out absolutePath, out resourceContainer))
                     return true;
             }
 
@@ -136,10 +136,10 @@ namespace T3.Core.Resource
             #endif
 
             absolutePath = string.Empty;
-            relevantFileWatcher = null;
+            resourceContainer = null;
             return false;
 
-            static bool TestPath(string relative, Instance instance, out string absolutePath, out ResourceFileWatcher? resourceFileWatcher)
+            static bool TestPath(string relative, Instance instance, out string absolutePath, out IResourceContainer? resourceContainer)
             {
                 IReadOnlyList<SymbolPackage> resourcePackages = instance.AvailableResourcePackages;
                 foreach (var package in resourcePackages)
@@ -150,13 +150,13 @@ namespace T3.Core.Resource
                     if (Exists(path))
                     {
                         absolutePath = path;
-                        resourceFileWatcher = package.ResourceFileWatcher;
+                        resourceContainer = package;
                         return true;
                     }
                 }
 
                 absolutePath = string.Empty;
-                resourceFileWatcher = null;
+                resourceContainer = null;
                 return false;
             }
         }
@@ -164,14 +164,14 @@ namespace T3.Core.Resource
         private static bool Exists(string absolutePath) => File.Exists(absolutePath) || Directory.Exists(absolutePath);
 
 
-        private static bool CheckSharedResources(string relativePath, out string absolutePath, out ResourceFileWatcher? relevantFileWatcher)
+        private static bool CheckSharedResources(string relativePath, out string absolutePath, out IResourceContainer? relevantFileWatcher)
         {
-            foreach (var fileWatcher in SharedResourceFileWatchers)
+            foreach (var package in SharedResourcePackages)
             {
-                absolutePath = Path.Combine(fileWatcher.WatchedFolder, relativePath);
+                absolutePath = Path.Combine(package.ResourcesFolder, relativePath);
                 if (Exists(absolutePath))
                 {
-                    relevantFileWatcher = fileWatcher;
+                    relevantFileWatcher = package;
                     return true;
                 }
             }
@@ -184,6 +184,6 @@ namespace T3.Core.Resource
         private uint GetNextResourceId() => Interlocked.Increment(ref _resourceIdCounter);
 
         private uint _resourceIdCounter = 1;
-        internal static readonly List<ResourceFileWatcher> SharedResourceFileWatchers = new(4);
+        public static readonly List<IResourceContainer> SharedResourcePackages = new(4);
     }
 }

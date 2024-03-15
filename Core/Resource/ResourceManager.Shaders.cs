@@ -57,7 +57,7 @@ public sealed partial class ResourceManager
             return false;
         }
 
-        if (!TryResolvePath(relativePath, instance, out var path, out var relevantFileWatcher))
+        if (!TryResolvePath(relativePath, instance, out var path, out var resourceContainer))
         {
             resource = null;
             errorMessage = $"Path not found: '{relativePath}' (Resolved to '{path}').";
@@ -69,7 +69,10 @@ public sealed partial class ResourceManager
             name = fileInfo.Name;
 
         ResourceFileHook? fileHook = null;
-        var hookExists = relevantFileWatcher != null && relevantFileWatcher.HooksForResourceFilePaths.TryGetValue(relativePath, out fileHook);
+        var fileWatcher = resourceContainer?.FileWatcher;
+        var hasFileWatcher = fileWatcher != null;
+        var resourceFolder = resourceContainer?.ResourcesFolder;
+        var hookExists = hasFileWatcher && fileWatcher!.HooksForResourceFilePaths.TryGetValue(relativePath, out fileHook);
         if (hookExists)
         {
             foreach (var id in fileHook!.ResourceIds)
@@ -96,8 +99,8 @@ public sealed partial class ResourceManager
 
         if (instance != null)
             compilationReferences.AddRange(instance.AvailableResourceFolders);
-        else if (relevantFileWatcher != null)
-            compilationReferences.Add(relevantFileWatcher.WatchedFolder);
+        else if (resourceFolder != null)
+            compilationReferences.Add(resourceFolder);
 
         var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromFile(srcFile: path,
                                                                                entryPoint: entryPoint,
@@ -114,20 +117,30 @@ public sealed partial class ResourceManager
         }
 
         ResourcesById.TryAdd(resource!.Id, resource);
-        if (relevantFileWatcher == null)
+        if (resourceContainer == null)
             return true;
 
-        if (fileHook == null)
+        if (hasFileWatcher)
         {
-            fileHook = new ResourceFileHook(path, new[] { resourceId });
-            relevantFileWatcher.HooksForResourceFilePaths.TryAdd(relativePath, fileHook);
-        }
+            if (fileHook == null)
+            {
+                fileHook = new ResourceFileHook(path, new[] { resourceId });
+                fileWatcher!.HooksForResourceFilePaths.TryAdd(relativePath, fileHook);
+            }
 
-        if (fileChangedAction != null)
-        {
-            fileHook.FileChangeAction -= fileChangedAction;
-            fileHook.FileChangeAction += fileChangedAction;
+            if (fileChangedAction != null)
+            {
+                fileHook.FileChangeAction -= fileChangedAction;
+                fileHook.FileChangeAction += fileChangedAction;
+            }
         }
+        #if DEBUG
+        else if (fileChangedAction != null)
+        {
+            const string logFmt = "File watcher not enabled for resource '{0}'. It likely comes from a read-only resource container.";
+            Log.Debug(string.Format(logFmt, relativePath));
+        }
+        #endif
 
         return true;
     }

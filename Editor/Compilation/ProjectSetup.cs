@@ -55,6 +55,7 @@ internal static class ProjectSetup
         }
 
         newProject = new EditableSymbolProject(newCsProj);
+        newProject.InitializeResources();
 
         UpdateSymbolPackages(newProject);
         if (!newProject.TryCreateHome())
@@ -104,7 +105,7 @@ internal static class ProjectSetup
                                 }
 
                                 if (assembly.IsOperatorAssembly)
-                                    readOnlyPackages.Add(new EditorSymbolPackage(assembly, true));
+                                    readOnlyPackages.Add(new EditorSymbolPackage(assembly));
                                 else
                                     nonOperatorAssemblies.Add(assembly);
                             }
@@ -197,6 +198,12 @@ internal static class ProjectSetup
             var allSymbolPackages = projects
                                    .Concat(readOnlyPackages)
                                    .ToArray();
+
+            foreach (var package in allSymbolPackages)
+            {
+                package.InitializeResources();
+            }
+            
             UpdateSymbolPackages(allSymbolPackages);
             Log.Debug($"Updated symbol packages in {stopwatch.ElapsedMilliseconds}ms");
 

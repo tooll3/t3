@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -9,7 +10,6 @@ using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Editor.Compilation;
 using T3.Editor.SystemUi;
 using SearchOption = System.IO.SearchOption;
 
@@ -60,7 +60,7 @@ internal sealed partial class EditableSymbolProject
         UnmarkAsSaving();
     }
 
-    protected override void OnSymbolLoaded(string? path, Symbol symbol)
+    private void OnSymbolAdded(string? path, Symbol symbol)
     {
         path ??= SymbolPathHandler.GetCorrectPath(symbol.Name, symbol.Namespace, Folder, CsProjectFile.RootNamespace, SymbolExtension);
         
@@ -70,6 +70,36 @@ internal sealed partial class EditableSymbolProject
         handler = new SymbolPathHandler(symbol, path);
         handler.AllFilesReady += CorrectFileLocations;
         _filePathHandlers[id] = handler;
+    }
+
+    private void OnSymbolUpdated(Symbol symbol)
+    {
+        var filePathHandler = _filePathHandlers[symbol.Id];
+
+        if (symbol != filePathHandler.Symbol)
+        {
+            throw new Exception("Symbol mismatch when updating symbol files");
+        }
+        
+        filePathHandler.UpdateFromSymbol();
+    }
+
+    /// <summary>
+    /// Removal is a feature unique to editable projects - all others are assumed to be read-only and unchanging
+    /// </summary>
+    /// <param name="id">Id of the symbol to be removed</param>
+    private void OnSymbolRemoved(Guid id)
+    {
+        Symbols.Remove(id, out var symbol);
+        SymbolRegistry.EntriesEditable.Remove(id, out var publicSymbol);
+        
+        Debug.Assert(symbol != null);
+        Debug.Assert(symbol == publicSymbol);
+        
+        SymbolUis.Remove(id, out _);
+        SymbolUiRegistry.EntriesEditable.Remove(id, out _);
+
+        Log.Info($"Removed symbol {symbol.Name}");
     }
 
     private static Action<SymbolPathHandler> CorrectFileLocations => handler =>
@@ -96,18 +126,6 @@ internal sealed partial class EditableSymbolProject
         {
             Log.Error($"No file path handler found for {guid}");
         }
-    }
-
-    protected override void OnSymbolUpdated(Symbol symbol)
-    {
-        var filePathHandler = _filePathHandlers[symbol.Id];
-
-        if (symbol != filePathHandler.Symbol)
-        {
-            throw new Exception("Symbol mismatch when updating symbol files");
-        }
-        
-        filePathHandler.UpdateFromSymbol();
     }
 
     private void WriteAllSymbolFilesOf(IEnumerable<SymbolUi> symbolUis)
@@ -276,9 +294,9 @@ internal sealed partial class EditableSymbolProject
     internal const string SourceCodeExtension = ".cs";
     private readonly ConcurrentDictionary<Guid, SymbolPathHandler> _filePathHandlers = new();
 
-    private sealed class EditablePackageFsWatcher : FileSystemWatcher
+    private sealed class CodeFileWatcher : FileSystemWatcher
     {
-        public EditablePackageFsWatcher(EditableSymbolProject project, FileSystemEventHandler onChange, RenamedEventHandler onRename) :
+        public CodeFileWatcher(EditableSymbolProject project, FileSystemEventHandler onChange, RenamedEventHandler onRename) :
             base(project.Folder, "*.cs")
         {
             NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName | NotifyFilters.DirectoryName;

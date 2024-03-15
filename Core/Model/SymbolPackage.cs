@@ -21,15 +21,20 @@ namespace T3.Core.Model;
 /// Regarding naming, we consider all t3 operator packages as packages for the sake of consistency with future nuget terminology etc.
 /// -- only the user's editable "packages" are referred to as projects
 ///</remarks>
-public abstract partial class SymbolPackage
+public abstract partial class SymbolPackage(AssemblyInformation assembly) : IResourceContainer
 {
-    public abstract AssemblyInformation AssemblyInformation { get; }
-    public abstract string Folder { get; }
+    public virtual AssemblyInformation AssemblyInformation { get; } = assembly;
+    public virtual string Folder => AssemblyInformation.Directory;
+    public virtual bool IsModifiable => false;
+    protected virtual IEnumerable<string> SymbolSearchFiles => Directory.EnumerateFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+    
+    protected event Action<string?, Symbol>? SymbolAdded;
+    protected event Action<Symbol>? SymbolUpdated;
+    protected event Action<Guid>? SymbolRemoved;
 
-    protected internal ResourceFileWatcher ResourceFileWatcher { get; private set; }
+    private const string ResourcesSubfolder = "Resources";
 
-    public string ResourcesFolder => ResourceFileWatcher.WatchedFolder;
-    protected abstract string ResourcesSubfolder { get; }
+    public string ResourcesFolder { get; private set; } = null!;
 
     static SymbolPackage()
     {
@@ -37,13 +42,26 @@ public abstract partial class SymbolPackage
         RegisterTypes();
     }
 
-    protected void InitializeFileWatcher()
+    public virtual void InitializeResources()
     {
-        if (ResourceFileWatcher != null)
-            return;
+        ResourcesFolder = Path.Combine(Folder, ResourcesSubfolder);
+        Directory.CreateDirectory(ResourcesFolder);
+        if(AssemblyInformation.ShouldShareResources)
+            ResourceManager.SharedResourcePackages.Add(this);
+    }
 
-        var fullResourcesFolder = Path.Combine(Folder, ResourcesSubfolder);
-        ResourceFileWatcher = new ResourceFileWatcher(fullResourcesFolder, AssemblyInformation.ShouldShareResources);
+    public virtual void Dispose()
+    {
+        ResourceManager.SharedResourcePackages.Remove(this);
+        var symbols = Symbols.Values.ToArray();
+        foreach (var symbol in symbols)
+        {
+            var id = symbol.Id;
+            Symbols.Remove(id);
+            SymbolRegistry.EntriesEditable.Remove(id, out _);
+        }
+        
+        // Todo - symbol instance destruction...?
     }
 
     public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> newlyRead, out IReadOnlyCollection<Symbol> allNewSymbols)
@@ -74,13 +92,16 @@ public abstract partial class SymbolPackage
         {
             symbol.UpdateInstanceType();
             symbol.CreateAnimationUpdateActionsForSymbolInstances();
-            OnSymbolUpdated(symbol);
+            SymbolUpdated?.Invoke(symbol);
         }
 
-        // remaining symbols have been removed from the assembly
-        foreach (var symbolId in removedSymbolIds)
+        if (SymbolRemoved != null)
         {
-            RemoveSymbol(symbolId);
+            // remaining symbols have been removed from the assembly
+            foreach (var symbolId in removedSymbolIds)
+            {
+                SymbolRemoved.Invoke(symbolId);
+            }
         }
 
         newlyRead = [];
@@ -122,7 +143,7 @@ public abstract partial class SymbolPackage
                 newTypes.Remove(id);
                 allNewSymbolsList.Add(symbol);
                 
-                OnSymbolLoaded(readSymbolResult.Path, symbol);
+                SymbolAdded?.Invoke(readSymbolResult.Path, symbol);
             }
         }
 
@@ -145,7 +166,7 @@ public abstract partial class SymbolPackage
 
             allNewSymbolsList.Add(symbol);
             
-            OnSymbolLoaded(null, symbol);
+            SymbolAdded?.Invoke(null, symbol);
         }
 
         allNewSymbols = allNewSymbolsList;
@@ -159,11 +180,8 @@ public abstract partial class SymbolPackage
             return new SymbolJsonResult(result, jsonInfo.FilePath);
         }
     }
-    
-    protected abstract void OnSymbolLoaded(string? path, Symbol symbol);
-    protected abstract void OnSymbolUpdated(Symbol symbol);
 
-    public bool TryCreateInstance(Guid id, Guid instanceId, Instance parent, out Instance? instance)
+    public bool TryCreateInstance(Guid id, Guid instanceId, Instance? parent, out Instance? instance)
     {
         if (Symbols.TryGetValue(id, out var symbol))
         {
@@ -183,19 +201,6 @@ public abstract partial class SymbolPackage
         return symbol;
     }
 
-    protected virtual bool RemoveSymbol(Guid guid)
-    {
-        var removed = Symbols.Remove(guid, out var symbol) && SymbolRegistry.EntriesEditable.Remove(guid, out _);
-        if (removed)
-        {
-            OnSymbolRemoved(symbol!);
-        }
-
-        return removed;
-    }
-
-    protected abstract void OnSymbolRemoved(Symbol symbol);
-
     public void ApplySymbolChildren(List<SymbolJson.SymbolReadResult> symbolsRead)
     {
         Log.Debug($"{AssemblyInformation.Name}: Applying symbol children...");
@@ -214,13 +219,11 @@ public abstract partial class SymbolPackage
 
     public readonly record struct SymbolJsonResult(in SymbolJson.SymbolReadResult Result, string Path);
 
-    public abstract bool IsModifiable { get; }
 
     protected readonly Dictionary<Guid, Symbol> Symbols = new();
 
     public const string SymbolExtension = ".t3";
     
-    protected abstract IEnumerable<string> SymbolSearchFiles{ get; }
 
     public bool ContainsSymbolName(string newSymbolName, string symbolNamespace)
     {
@@ -232,4 +235,6 @@ public abstract partial class SymbolPackage
 
          return false;
     }
+
+    public virtual ResourceFileWatcher? FileWatcher => null;
 }

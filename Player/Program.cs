@@ -318,6 +318,7 @@ namespace T3.Player
                                  .Select(assemblyInfo =>
                                          {
                                              var symbolPackage = new PlayerSymbolPackage(assemblyInfo);
+                                             symbolPackage.InitializeResources();
                                              symbolPackage.LoadSymbols(false, out var newSymbolsWithFiles, out var allNewSymbols);
                                              return new PackageLoadInfo(symbolPackage, newSymbolsWithFiles, allNewSymbols);
                                          })

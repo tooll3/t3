@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Resource;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
 
@@ -19,12 +20,14 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 {
     public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;
 
-    public EditableSymbolProject(CsProjectFile csProjectFile) : base(csProjectFile.Assembly, false)
+    public EditableSymbolProject(CsProjectFile csProjectFile) : base(null)
     {
         CsProjectFile = csProjectFile;
         AllProjectsRw.Add(this);
-        InitializeFileWatcher();
-        _csFileWatcher = new EditablePackageFsWatcher(this, OnFileChanged, OnFileRenamed);
+        _csFileWatcher = new CodeFileWatcher(this, OnFileChanged, OnFileRenamed);
+        SymbolAdded += OnSymbolAdded;
+        SymbolUpdated += OnSymbolUpdated;
+        SymbolRemoved += OnSymbolRemoved;
     }
 
     public bool TryCreateHome()
@@ -270,14 +273,22 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         }
     }
 
+    public override void InitializeResources()
+    {
+        base.InitializeResources();
+        _resourceFileWatcher = new ResourceFileWatcher(ResourcesFolder);
+    }
+
     public readonly CsProjectFile CsProjectFile;
+    private ResourceFileWatcher _resourceFileWatcher;
+    public override ResourceFileWatcher FileWatcher => _resourceFileWatcher;
 
     private static readonly List<EditableSymbolProject> AllProjectsRw = new();
     public static readonly IReadOnlyList<EditableSymbolProject> AllProjects = AllProjectsRw;
 
     public override bool IsModifiable => true;
 
-    private readonly EditablePackageFsWatcher _csFileWatcher;
+    private readonly CodeFileWatcher _csFileWatcher;
 
     public bool NeedsCompilation { get; private set; }
 
