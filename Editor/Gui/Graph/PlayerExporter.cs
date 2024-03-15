@@ -156,7 +156,7 @@ namespace T3.Editor.Gui.Graph
             const string t3IconPath = @"t3-editor\images\t3.ico";
             const string hashMapSettingsShader = @"points\spatial-hash-map\hash-map-settings.hlsl";
             const string fullscreenTextureShader = @"dx11\fullscreen-texture.hlsl";
-            const string resolveMultisampledDepthBufferShader = @"img\internal\resolve-multisampled-depth-buffer-cs.hlsl";
+            const string resolveMultisampledDepthBufferShader = @"dx11\resolve-multisampled-depth-buffer-cs.hlsl";
             const string brdfLookUp = @"common\images\BRDF-LookUp.png";
             const string studioSmall08Prefiltered = @"common\HDRI\studio_small_08-prefiltered.dds";
 
