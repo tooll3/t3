@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Attributes;
@@ -23,11 +24,10 @@ namespace T3.Core.Operator
     /// </remarks>
     public sealed class Symbol : IDisposable
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
+        public Guid Id { get; }
+        public string Name { get; private set; }
         public string Namespace { get; private set; }
         public string PendingSource { get; set; }
-        public string SymbolFilePath { get; set; }
         public SymbolPackage SymbolPackage { get; set; }
 
         public readonly List<Instance> InstancesOfSymbol = new();
@@ -40,8 +40,18 @@ namespace T3.Core.Operator
         public readonly List<InputDefinition> InputDefinitions = new();
 
         public readonly List<OutputDefinition> OutputDefinitions = new();
-
-        public Type InstanceType { get; private set; }
+        
+        private Type _instanceType;
+        public Type InstanceType
+        {
+            get => _instanceType;
+            private set
+            {
+                _instanceType = value;
+                Name = value.Name;
+                Namespace = value.Namespace ?? SymbolPackage.AssemblyInformation.Name;
+            }
+        }
 
         public Animator Animator { get; } = new();
 
@@ -63,10 +73,11 @@ namespace T3.Core.Operator
 
         public void ForEachSymbolChildInstanceWithId(Guid id, Action<Instance> handler)
         {
-            var matchingInstances = from symbolInstance in InstancesOfSymbol
-                                    from childInstance in symbolInstance.Children
-                                    where childInstance.SymbolChildId == id
-                                    select childInstance;
+            var matchingInstances = InstancesOfSymbol
+                                   .SelectMany(symbolInstance => symbolInstance.Children,
+                                               (symbolInstance, childInstance) => new { symbolInstance, childInstance })
+                                   .Where(@t => t.childInstance.SymbolChildId == id)
+                                   .Select(@t => t.childInstance);
 
             foreach (var childInstance in matchingInstances)
             {
@@ -76,7 +87,6 @@ namespace T3.Core.Operator
 
         public Symbol(Type instanceType, Guid symbolId, SymbolPackage symbolPackage, Guid[] orderedInputIds = null)
         {
-            Name = instanceType.Name;
             Id = symbolId;
 
             UpdateType(instanceType, symbolPackage, out var isObject);
@@ -161,10 +171,8 @@ namespace T3.Core.Operator
 
         public void UpdateType(Type instanceType, SymbolPackage symbolPackage, out bool isObject)
         {
-            InstanceType = instanceType;
             SymbolPackage = symbolPackage;
-            Name = instanceType.Name;
-            Namespace = instanceType.Namespace ?? symbolPackage.AssemblyInformation.Name;
+            InstanceType = instanceType;
 
             isObject = instanceType == typeof(object);
             if (isObject || symbolPackage == null)
@@ -481,24 +489,36 @@ namespace T3.Core.Operator
 
         public Instance CreateInstance(Guid id, Instance parent)
         {
-        	if(!SymbolPackage.AssemblyInformation.Constructors.TryGetValue(InstanceType, out var constructor))
-        	{
-        		Log.Error($"No constructor found for {InstanceType}");
-                return null;
-        	}
-            
-            Instance newInstance = null;
+            Instance newInstance;
+            if (SymbolPackage.AssemblyInformation.Constructors.TryGetValue(InstanceType, out var constructor))
+            {
+                try
+                {
+                    newInstance = (Instance)constructor.Invoke();
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to create instance of type {InstanceType} with id {id}: {e.Message}");
+                    return null;
+                }
+            }
+            else
+            {
+                Log.Error($"No constructor found for {InstanceType}. This is likely an old operator version - it is recommended you add it");
 
-            try
-            {
-                newInstance = (Instance)constructor.Invoke();
+                try
+                {
+                    // create instance through reflection
+                    newInstance = (Instance)Activator.CreateInstance(InstanceType, AssemblyInformation.ConstructorBindingFlags, 
+                                                                     binder: null, args: Array.Empty<object>(), culture: null);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"(Instance creation fallback failure) Failed to create instance of type {InstanceType} with id {id}: {e.Message}");
+                    return null;
+                }
             }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to create instance of type {InstanceType} with id {id}: {e.Message}");
-                return null;
-            }
-        	
+
             Debug.Assert(newInstance != null);
             newInstance.SymbolChildId = id;
             newInstance.Parent = parent;

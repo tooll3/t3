@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Editor.Gui;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.UiModel;
 
@@ -58,7 +57,7 @@ internal static class SymbolNaming
 
         var project = (EditableSymbolProject)symbol.SymbolPackage;
 
-        var updated = project.TryRecompileWithNewSource(symbol, newSource, newName);
+        var updated = project.TryRecompileWithNewSource(symbol, newSource);
         if (!updated)
         {
             Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");

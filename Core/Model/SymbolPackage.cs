@@ -1,9 +1,8 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using T3.Core.Compilation;
 using T3.Core.Logging;
@@ -34,7 +33,7 @@ public abstract partial class SymbolPackage
 
     static SymbolPackage()
     {
-        _updateCounter = new OpUpdateCounter();
+        RenderStatsCollector.RegisterProvider(new OpUpdateCounter());
         RegisterTypes();
     }
 
@@ -60,6 +59,7 @@ public abstract partial class SymbolPackage
             if (Symbols.Count > 0 && Symbols.TryGetValue(guid, out var symbol))
             {
                 removedSymbolIds.Remove(guid);
+                
                 symbol.UpdateType(type, this, out _);
                 updatedSymbols.Add(symbol);
             }
@@ -74,6 +74,7 @@ public abstract partial class SymbolPackage
         {
             symbol.UpdateInstanceType();
             symbol.CreateAnimationUpdateActionsForSymbolInstances();
+            OnSymbolUpdated(symbol);
         }
 
         // remaining symbols have been removed from the assembly
@@ -90,8 +91,13 @@ public abstract partial class SymbolPackage
             var symbolsRead = SymbolSearchFiles
                               //.AsParallel()
                              .Select(JsonFileResult<Symbol>.ReadAndCreate)
-                             .Where(result => newTypes.ContainsKey(result.Guid))
-                             .Select(ReadSymbolFromJsonFileResult)
+                             .Select(result =>
+                                    {
+                                        if (!newTypes.TryGetValue(result.Guid, out var type))
+                                            return default;
+
+                                        return ReadSymbolFromJsonFileResult(result, type);
+                                    })
                              .Where(symbolReadResult => symbolReadResult.Result.Symbol is not null)
                              .ToArray(); // Execute and bring back to main thread
 
@@ -111,17 +117,19 @@ public abstract partial class SymbolPackage
                     continue;
                 }
 
+                
                 newlyRead.Add(readSymbolResult.Result);
-                newTypes.Remove(symbol.Id);
+                newTypes.Remove(id);
                 allNewSymbolsList.Add(symbol);
-                symbol.SymbolFilePath = readSymbolResult.Path;
+                
+                OnSymbolLoaded(readSymbolResult.Path, symbol);
             }
         }
 
         // these do not have a file
         foreach (var (guid, newType) in newTypes)
         {
-            var symbol = CreateSymbol(newType, guid, newType.Name);
+            var symbol = CreateSymbol(newType, guid);
 
             var id = symbol.Id;
             var added = Symbols.TryAdd(id, symbol)
@@ -136,21 +144,26 @@ public abstract partial class SymbolPackage
                 Log.Debug($"{AssemblyInformation.Name}: new added symbol: {newType}");
 
             allNewSymbolsList.Add(symbol);
+            
+            OnSymbolLoaded(null, symbol);
         }
 
         allNewSymbols = allNewSymbolsList;
         return;
 
-        SymbolJsonResult ReadSymbolFromJsonFileResult(JsonFileResult<Symbol> jsonInfo)
+        SymbolJsonResult ReadSymbolFromJsonFileResult(JsonFileResult<Symbol> jsonInfo, Type type)
         {
-            var result = SymbolJson.ReadSymbolRoot(jsonInfo.Guid, jsonInfo.JToken, allowNonOperatorInstanceType: false, this);
+            var result = SymbolJson.ReadSymbolRoot(jsonInfo.Guid, jsonInfo.JToken, type, this);
 
             jsonInfo.Object = result.Symbol;
             return new SymbolJsonResult(result, jsonInfo.FilePath);
         }
     }
+    
+    protected abstract void OnSymbolLoaded(string? path, Symbol symbol);
+    protected abstract void OnSymbolUpdated(Symbol symbol);
 
-    public bool TryCreateInstance(Guid id, Guid instanceId, Instance parent, out Instance instance)
+    public bool TryCreateInstance(Guid id, Guid instanceId, Instance parent, out Instance? instance)
     {
         if (Symbols.TryGetValue(id, out var symbol))
         {
@@ -162,12 +175,9 @@ public abstract partial class SymbolPackage
         return false;
     }
 
-    internal Symbol CreateSymbol(Type instanceType, Guid id, string name, Guid[] orderedInputIds = null)
+    internal Symbol CreateSymbol(Type instanceType, Guid id, Guid[]? orderedInputIds = null)
     {
-        var symbol = new Symbol(instanceType, id, this, orderedInputIds)
-                         {
-                             Name = name
-                         };
+        var symbol = new Symbol(instanceType, id, this, orderedInputIds);
 
         symbol.SymbolPackage = this;
         return symbol;
@@ -178,7 +188,7 @@ public abstract partial class SymbolPackage
         var removed = Symbols.Remove(guid, out var symbol) && SymbolRegistry.EntriesEditable.Remove(guid, out _);
         if (removed)
         {
-            OnSymbolRemoved(symbol);
+            OnSymbolRemoved(symbol!);
         }
 
         return removed;
@@ -204,8 +214,6 @@ public abstract partial class SymbolPackage
 
     public readonly record struct SymbolJsonResult(in SymbolJson.SymbolReadResult Result, string Path);
 
-    private static readonly OpUpdateCounter _updateCounter;
-
     public abstract bool IsModifiable { get; }
 
     protected readonly Dictionary<Guid, Symbol> Symbols = new();
@@ -214,5 +222,14 @@ public abstract partial class SymbolPackage
     
     protected abstract IEnumerable<string> SymbolSearchFiles{ get; }
 
-    public bool ContainsSymbolName(string newSymbolName) => Symbols.Values.Any(symbol => symbol.Name == newSymbolName);
+    public bool ContainsSymbolName(string newSymbolName, string symbolNamespace)
+    {
+         foreach (var existing in Symbols.Values)
+         {
+             if (existing.Name == newSymbolName && existing.Namespace == symbolNamespace)
+                 return true;
+         }
+
+         return false;
+    }
 }

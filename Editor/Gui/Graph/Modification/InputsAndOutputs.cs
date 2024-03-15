@@ -9,7 +9,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.UiModel;
 
@@ -30,10 +29,7 @@ internal static class InputsAndOutputs
         var newSource = newRoot.GetText().ToString();
         Log.Debug(newSource);
 
-        if (!OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource))
-        {
-            Log.Error("Compilation after removing inputs failed, aborting the remove.");
-        }
+        EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
 
         FlagDependentOpsAsModified(symbol);
     }
@@ -59,10 +55,7 @@ internal static class InputsAndOutputs
         var newSource = newRoot.GetText().ToString();
         Log.Debug(newSource);
 
-        if (!OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource))
-        {
-            Log.Error("Compilation after removing outputs failed, aborting the remove.");
-        }
+        EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
     }
 
     private static void FlagDependentOpsAsModified(Symbol symbol)
@@ -247,11 +240,7 @@ internal static class InputsAndOutputs
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        var success = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
-        if (!success)
-        {
-            Log.Error("Compilation after adding input failed, aborting the add.");
-        }
+        EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
     }
 
     public static void AddOutputToSymbol(string outputName, bool isTimeClipOutput, Type outputType, Symbol symbol)
@@ -311,11 +300,7 @@ internal static class InputsAndOutputs
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        var success = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
-        if (!success)
-        {
-            Log.Error("Compilation after adding output failed, aborting the add.");
-        }
+        EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
     }
 
     public static void AdjustInputOrderOfSymbol(Symbol symbol)
@@ -389,11 +374,7 @@ internal static class InputsAndOutputs
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        var success = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
-        if (!success)
-        {
-            Log.Error("Compilation after reordering inputs failed, aborting the add.");
-        }
+        EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
     }
     
     
@@ -401,7 +382,7 @@ internal static class InputsAndOutputs
     {
         warning = null;
 
-        var isValid = GraphUtils.IsNewSymbolNameValid(symbol.SymbolPackage, newName);
+        var isValid = GraphUtils.IsNewSymbolNameValid(newName, symbol);
         if (!isValid)
         {
             warning= $"{newName} is not a valid input name.";
@@ -436,7 +417,7 @@ internal static class InputsAndOutputs
         if (dryRun)
             return true;
         
-        var success = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
+        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource);
 
         if (success)
         {

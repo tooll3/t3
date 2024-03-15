@@ -18,7 +18,6 @@ namespace T3.Editor.UiModel
     public sealed class SymbolUi : ISelectionContainer
     {
         public Symbol Symbol { get; }
-        public string UiFilePath { get; internal set; }
 
         internal SymbolUi(Symbol symbol, bool updateConsistency = true)
         {

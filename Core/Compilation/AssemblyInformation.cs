@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.DependencyModel.Resolution;
+using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -47,6 +48,8 @@ public class AssemblyInformation
     public readonly string Directory;
     private readonly AssemblyName _assemblyName;
     private readonly Assembly _assembly;
+    
+    public const BindingFlags ConstructorBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance;
 
     public bool TryGetType(Guid typeId, out Type type) => _operatorTypes.TryGetValue(typeId, out type);
 
@@ -160,7 +163,12 @@ public class AssemblyInformation
 
                                          try
                                          {
-                                             var obj = Activator.CreateInstanceFrom(Path, type.FullName!);
+                                             var obj = Activator.CreateInstanceFrom(
+                                                                                    assemblyFile: Path, 
+                                                                                    typeName: type.FullName!, 
+                                                                                    ignoreCase: false, 
+                                                                                    bindingAttr: ConstructorBindingFlags, 
+                                                                                    binder: null, args: null, culture: null, activationAttributes: null);
                                              var unwrapped = obj?.Unwrap();
                                              if (unwrapped is IShareResources shareable)
                                              {

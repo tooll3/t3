@@ -13,7 +13,7 @@ using T3.Editor.Gui.ChildUi;
 namespace T3.Editor.UiModel;
 
 // todo - make abstract, create NugetSymbolPackage
-internal class EditorSymbolPackage : StaticSymbolPackage
+internal abstract class EditorSymbolPackage : StaticSymbolPackage
 {
     internal EditorSymbolPackage(AssemblyInformation assembly, bool initializeFileWatcher) : base(assembly, false)
     {
@@ -42,22 +42,20 @@ internal class EditorSymbolPackage : StaticSymbolPackage
                                                              return null;
                                                          }
 
-                                                         symbolUi.UiFilePath = uiJson.FilePath;
-                                                         uiJson.Object = symbolUi;
-                                                         return uiJson;
+                                                         newSymbolsWithoutUis.Remove(symbolUi.Symbol.Id, out _);
+                                                         var id = symbolUi.Symbol.Id;
+
+                                                         var added = SymbolUis.TryAdd(id, symbolUi);
+                                                         if (!added)
+                                                         {
+                                                             Log.Error($"{AssemblyInformation.Name}: Duplicate symbol UI for {symbolUi.Symbol.Name}?");
+                                                             return null;
+                                                         }
+
+                                                         OnSymbolUiLoaded(uiJson.FilePath, symbolUi);
+                                                         return symbolUi;
                                                      })
-                                             .Where(result =>
-                                                    {
-                                                        if (result?.Object == null)
-                                                            return false;
-
-                                                        var symbolUi = result.Object;
-                                                        newSymbolsWithoutUis.Remove(symbolUi.Symbol.Id, out _);
-                                                        var id = symbolUi.Symbol.Id;
-
-                                                        return SymbolUis.TryAdd(id, symbolUi);
-                                                    })
-                                             .Select(result => result!.Object)
+                                             .Where(symbolUi => symbolUi != null)
                                              .ToList();
 
         foreach (var (guid, symbol) in newSymbolsWithoutUis)
@@ -71,10 +69,13 @@ internal class EditorSymbolPackage : StaticSymbolPackage
             }
 
             newlyReadSymbolUiList.Add(symbolUi);
+            OnSymbolUiLoaded(null, symbolUi);
         }
 
         newlyReadSymbolUis = newlyReadSymbolUiList;
     }
+    
+    protected abstract void OnSymbolUiLoaded(string? path, SymbolUi symbolUi);
 
     private static void RegisterCustomChildUi(Symbol symbol)
     {
@@ -164,5 +165,5 @@ internal class EditorSymbolPackage : StaticSymbolPackage
 
     protected virtual IEnumerable<string> SymbolUiSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, "SymbolUis"), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
     public override bool IsModifiable => false;
-    protected const string SymbolUiExtension = ".t3ui";
+    internal const string SymbolUiExtension = ".t3ui";
 }

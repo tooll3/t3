@@ -21,8 +21,8 @@ namespace T3.Core.Model
         {
             writer.WriteStartObject();
 
-            writer.WriteObject(JsonKeys.Name, symbol.Name);
             writer.WriteValue(JsonKeys.Id, symbol.Id);
+            writer.WriteComment(symbol.Name);
 
             WriteSymbolInputs(symbol.InputDefinitions, writer);
             WriteSymbolChildren(symbol.Children, writer);
@@ -85,7 +85,7 @@ namespace T3.Core.Model
                 writer.WriteValue(JsonKeys.SymbolId, child.Symbol.Id);
                 if (!string.IsNullOrEmpty(child.Name))
                 {
-                    writer.WriteObject(JsonKeys.Name, child.Name);
+                    writer.WriteObject(JsonKeys.SymbolChildName, child.Name);
                 }
 
                 writer.WritePropertyName(JsonKeys.InputValues);
@@ -195,7 +195,7 @@ namespace T3.Core.Model
             child = new SymbolChild(symbol, childJsonResult.ChildId, null);
 
             var symbolChildJson = childJsonResult.Json;
-            var nameToken = symbolChildJson[JsonKeys.Name]?.Value<string>();
+            var nameToken = symbolChildJson[JsonKeys.SymbolChildName]?.Value<string>();
             if (nameToken != null)
             {
                 child.Name = nameToken;
@@ -291,10 +291,9 @@ namespace T3.Core.Model
             output.OutputData.ReadFromJson(json);
         }
 
-        public static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, bool allowNonOperatorInstanceType, SymbolPackage package)
+        public static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, Type instanceType, SymbolPackage package)
         {
             // Read symbol with Id - dictionary of Guid-JToken?
-            var name = jToken[JsonKeys.Name].Value<string>();
 
             var childrenJsonArray = (JArray)jToken[JsonKeys.Children];
             JsonChildResult[] childrenJsons = new JsonChildResult[childrenJsonArray.Count];
@@ -324,26 +323,7 @@ namespace T3.Core.Model
                 inputDefaultValues[idAndValue.Item1] = idAndValue.Item2;
             }
 
-            Type instanceType;
-            if (!allowNonOperatorInstanceType)
-            {
-                if (!package.AssemblyInformation.TryGetType(id, out instanceType))
-                    LogMissingTypeAndExit(package, name);
-            }
-            else
-            {
-                try
-                {
-                    instanceType = Type.GetType(name) ?? typeof(object);
-                }
-                catch (Exception e)
-                {
-                    instanceType = typeof(object);
-                    Log.Warning($"Failed to load type {name}: {e}");
-                }
-            }
-
-            var symbol = package.CreateSymbol(instanceType, id, name, orderedInputIds);
+            var symbol = package.CreateSymbol(instanceType, id, orderedInputIds);
 
             if (hasConnections)
                 symbol.Connections.AddRange(connections);
@@ -361,22 +341,6 @@ namespace T3.Core.Model
 
             var animatorData = (JArray)jToken[JsonKeys.Animator];
             return new SymbolReadResult(symbol, childrenJsons, animatorData);
-        }
-
-
-
-        // Method for when allowNonOpInstanceType = true
-        static Type LogMissingTypeAndExit(SymbolPackage package, string typeName)
-        {
-            var assemblyInformation = package.AssemblyInformation;
-            var existingTypes = string.Join(",\n", assemblyInformation.Types.Select(x => x.FullName));
-
-            CoreUi.Instance.ShowMessageBox($"Definition '{typeName}' is missing.\nPlease try to rebuild your solution.\n\n" +
-                                           $"Existing types in project {assemblyInformation.Name}:\n{existingTypes}\n\n");
-            CoreUi.Instance.ExitApplication();
-            CoreUi.Instance.ExitThread();
-
-            return null;
         }
 
         private static void ObtainConnections(JArray connectionsJson, List<Symbol.Connection> connections)
@@ -398,8 +362,8 @@ namespace T3.Core.Model
             public const string TargetSlotId = "TargetSlotId";
             public const string Children = "Children";
             public const string Id = "Id";
+            public const string SymbolChildName = "Name";
             public const string SymbolId = "SymbolId";
-            public const string Name = "Name";
             public const string InputValues = "InputValues";
             public const string OutputData = "OutputData";
             public const string Type = "Type";

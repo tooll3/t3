@@ -12,6 +12,7 @@ using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -284,7 +285,7 @@ namespace T3.Editor.Gui.Windows
 
         private void MoveSymbolToNamespace(Guid symbolId, string nameSpace)
         {
-            OperatorUpdating.UpdateNamespace(symbolId, nameSpace);
+            EditableSymbolProject.ChangeSymbolNamespace(symbolId, nameSpace);
             _treeNode.PopulateCompleteTree();
         }
 

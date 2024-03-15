@@ -28,7 +28,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 
                 FormInputs.AddCheckBox("Is time clip", ref _isTimeClip);
                 
-                var isValid = GraphUtils.IsNewSymbolNameValid(symbol.SymbolPackage, _parameterName) && _selectedType != null;
+                var isValid = _selectedType != null && GraphUtils.IsIdentifierValid(_parameterName);
                 FormInputs.ApplyIndent();
                 if (CustomComponents.DisablableButton("Add", isValid))
                 {

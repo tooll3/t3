@@ -13,7 +13,17 @@ public class StaticSymbolPackage : SymbolPackage
         if (initializeFileWatcher)
             InitializeFileWatcher();
     }
-    
+
+    protected override void OnSymbolLoaded(string path, Symbol symbol)
+    {
+        // do nothing
+    }
+
+    protected override void OnSymbolUpdated(Symbol symbol)
+    {
+        // do nothing
+    }
+
     protected override void OnSymbolRemoved (Symbol symbol)
     {
         // do nothing

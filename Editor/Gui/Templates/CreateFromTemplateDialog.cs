@@ -104,8 +104,8 @@ namespace T3.Editor.Gui.Templates
                     ImGui.PopStyleColor();
                     ImGui.Dummy(new Vector2(10,10));
 
-                    var project = GraphWindow.GetMainComposition().Symbol.SymbolPackage;
-                    var isNewSymbolNameValid = GraphUtils.IsNewSymbolNameValid(project, _newSymbolName);
+                    var compositionSymbol = GraphWindow.GetMainComposition().Symbol;
+                    var isNewSymbolNameValid = GraphUtils.IsNewSymbolNameValid(_newSymbolName, compositionSymbol);
                     FormInputs.AddStringInput("Name",
                                                          ref _newSymbolName,
                                                          null,
