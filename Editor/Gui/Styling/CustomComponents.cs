@@ -639,8 +639,8 @@ namespace T3.Editor.Gui.Styling
             }
             ImGui.PopFont();
 
-            const string imguiLabelFmt = "##Select{0}";
-            var imguiLabel = string.Format(imguiLabelFmt, label);
+            const string imguiLabelFmt = "##Select{0}{1}";
+            var imguiLabel = string.Format(imguiLabelFmt, label, nameof(T));
             
             const string defaultDisplayTextFmt = "Select {0}";
             defaultDisplayText ??= string.Format(defaultDisplayTextFmt, label);
