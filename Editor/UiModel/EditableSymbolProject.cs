@@ -108,6 +108,12 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         _resourceFileWatcher = new ResourceFileWatcher(ResourcesFolder);
     }
 
+    public override void Dispose()
+    {
+        base.Dispose();
+        FileWatcher.Dispose();
+    }
+
     public readonly CsProjectFile CsProjectFile;
     private ResourceFileWatcher _resourceFileWatcher;
     public override ResourceFileWatcher FileWatcher => _resourceFileWatcher;
@@ -118,4 +124,5 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public override bool IsModifiable => true;
 
     private static int _newProjectPosition = 0;
+    protected override string SourceCodeSearchFolder => Folder;
 }
