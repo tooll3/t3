@@ -219,7 +219,7 @@ namespace lib.img.generate
             if (_resolveComputeShaderResource != null)
                 return;
             
-            const string sourcePath = @"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl";
+            const string sourcePath = @"dx11\resolve-multisampled-depth-buffer-cs.hlsl";
             const string entryPoint = "main";
             const string debugName = "resolve-multisampled-depth-buffer";
             var resourceManager = ResourceManager.Instance();

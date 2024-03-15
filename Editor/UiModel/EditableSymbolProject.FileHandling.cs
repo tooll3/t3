@@ -11,7 +11,6 @@ using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.SystemUi;
-using SearchOption = System.IO.SearchOption;
 
 namespace T3.Editor.UiModel;
 
@@ -68,8 +67,10 @@ internal sealed partial class EditableSymbolProject
         if (_filePathHandlers.TryGetValue(id, out var handler))
             return;
         handler = new SymbolPathHandler(symbol, path);
-        handler.AllFilesReady += CorrectFileLocations;
         _filePathHandlers[id] = handler;
+        
+        if(AutoOrganizeOnStartup)
+            handler.AllFilesReady += CorrectFileLocations;
     }
 
     private void OnSymbolUpdated(Symbol symbol)
@@ -250,6 +251,7 @@ internal sealed partial class EditableSymbolProject
     static readonly FileStreamOptions SaveOptions = new() { Mode = FileMode.Create, Access = FileAccess.ReadWrite };
 
     private readonly ConcurrentDictionary<Guid, SymbolPathHandler> _filePathHandlers = new();
+    private const bool AutoOrganizeOnStartup = false;
 
     private sealed class CodeFileWatcher : FileSystemWatcher
     {
