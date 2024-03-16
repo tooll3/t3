@@ -134,4 +134,34 @@ public static class StringUtils
 
         return str;
     }
+
+    public static ReadOnlySpan<char> TrimStringToLineCount(ReadOnlySpan<char> message, int maxLines)
+    {
+        var messageLength = message.Length;
+
+        if (messageLength == 0)
+            return message;
+
+        int lineCount = 0;
+        int length = 0;
+        int nextStartIndex = 0;
+
+        while (lineCount < maxLines)
+        {
+            lineCount++;
+
+            var newlineIndex = message[nextStartIndex..].IndexOf('\n');
+            nextStartIndex += newlineIndex + 1;
+
+            if (newlineIndex == -1 || nextStartIndex == messageLength)
+            {
+                length = messageLength;
+                break;
+            }
+
+            length = nextStartIndex;
+        }
+
+        return message[..length];
+    }
 }

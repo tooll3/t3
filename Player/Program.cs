@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using CommandLine;
@@ -32,6 +33,7 @@ using Device = SharpDX.Direct3D11.Device;
 using Resource = SharpDX.Direct3D11.Resource;
 using Vector2 = System.Numerics.Vector2;
 using SharpDX.Windows;
+using T3.Core.Utils;
 using T3.Serialization;
 using T3.SystemUi;
 using DeviceContext = SharpDX.Direct3D11.DeviceContext;
@@ -172,7 +174,7 @@ namespace T3.Player
 
                 if(!SymbolRegistry.Entries.TryGetValue(exportSettings.OperatorId, out var demoSymbol))
                 {
-                    CloseApplication(true, $"Failed to find operator with id {exportSettings.OperatorId}");
+                    CloseApplication(true, $"Failed to find [{exportSettings.ApplicationTitle}] with id {exportSettings.OperatorId}");
                     return;
                 }
 
@@ -276,12 +278,24 @@ namespace T3.Player
             
             return;
 
-            void CloseApplication(bool error, string errorMessage)
+            void CloseApplication(bool error, string message)
             {
-                if (!string.IsNullOrWhiteSpace(errorMessage))
+                CoreUi.Instance.Cursor.SetVisible(true);
+                bool openLogs = false;
+                if (!string.IsNullOrWhiteSpace(message))
                 {
-                    Log.Error(errorMessage);
-                    CoreUi.Instance.ShowMessageBox(errorMessage);
+                    Log.Error(message);
+
+                    const int maxLines = 10;
+                    message = StringUtils.TrimStringToLineCount(message, maxLines).ToString();
+
+                    if (error)
+                    {
+                        message += "\n\nDo you want to open the log file?";
+
+                        var result = CoreUi.Instance.ShowMessageBox(message, $"{exportSettings.ApplicationTitle} crashed /:", PopUpButtons.YesNo);
+                        openLogs = result == PopUpResult.Yes;
+                    }
                 }
                     
                 fileWriter.Dispose(); // flush and close
@@ -294,7 +308,7 @@ namespace T3.Player
                 _device?.Dispose();
                 _deviceContext?.Dispose();
                 
-                if (error)
+                if (openLogs)
                 {
                     CoreUi.Instance.OpenWithDefaultApplication(logPath);
                 }
@@ -302,85 +316,6 @@ namespace T3.Player
                 CoreUi.Instance.ExitApplication();
             }
         }
-
-        private static void PreloadShadersAndResources(double durationSecs, 
-                                                       Int2 resolution, 
-                                                       Playback playback, 
-                                                       DeviceContext deviceContext, 
-                                                       EvaluationContext context, 
-                                                       Slot<Texture2D> textureOutput, 
-                                                       SwapChain swapChain, 
-                                                       RenderTargetView renderView)
-        {
-            var previousSpeed = playback.PlaybackSpeed;
-            var originalTime = playback.TimeInSecs;
-            
-            playback.PlaybackSpeed = 0.1f;
-            var rasterizer = deviceContext.Rasterizer;
-            var merger = deviceContext.OutputMerger;
-            var hasTextureOutput = textureOutput != null;
-            
-            for (double timeInSecs = 0; timeInSecs < durationSecs; timeInSecs += 2.0)
-            {
-                playback.TimeInSecs = timeInSecs;
-                Log.Info($"Pre-evaluate at: {timeInSecs:0.00}s / {playback.TimeInBars:0.00} bars");
-
-                DirtyFlag.IncrementGlobalTicks();
-                DirtyFlag.InvalidationRefFrame++;
-
-                rasterizer.SetViewport(new Viewport(0, 0, resolution.Width, resolution.Height, 0.0f, 1.0f));
-                merger.SetTargets(renderView);
-
-                context.Reset();
-                context.RequestedResolution = resolution;
-
-                if (hasTextureOutput)
-                {
-                    textureOutput.Invalidate();
-                    textureOutput.GetValue(context); // why is this done twice?
-
-                    if (textureOutput.GetValue(context) == null)
-                    {
-                        Log.Error("Failed to initialize texture");
-                    }
-                }
-
-                Thread.Sleep(20);
-                swapChain.Present(1, PresentFlags.None);
-            }
-            
-            playback.PlaybackSpeed = previousSpeed;
-            playback.TimeInSecs = originalTime;
-        }
-
-        private static void LoadOperators()
-        {
-            var assemblies = Directory.GetFiles(RuntimeAssemblies.CoreDirectory, "*.dll")
-                                      .Where(path => Path.GetFileName(path) != "System.Windows.Forms.dll")
-                                      .Select(file =>
-                                              {
-                                                  RuntimeAssemblies.TryLoadAssemblyInformation(file, out var info);
-                                                  return info;
-                                              })
-                                      .Where(info => info != null)
-                                      .Where(info => info.IsOperatorAssembly);
-
-            var packageLoadInfo = assemblies
-                                 .AsParallel()
-                                 .Select(assemblyInfo =>
-                                         {
-                                             var symbolPackage = new PlayerSymbolPackage(assemblyInfo);
-                                             symbolPackage.InitializeResources();
-                                             symbolPackage.LoadSymbols(false, out var newSymbolsWithFiles, out _);
-                                             return new PackageLoadInfo(symbolPackage, newSymbolsWithFiles);
-                                         })
-                                 .ToArray();
-
-            packageLoadInfo
-               .AsParallel()
-               .ForAll(packageInfo => packageInfo.Package.ApplySymbolChildren(packageInfo.NewlyLoadedSymbols));
-        }
-
 
         private static void RebuildBackBuffer(RenderForm form, Device device, ref RenderTargetView rtv, ref Texture2D buffer, SwapChain swapChain)
         {
