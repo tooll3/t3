@@ -80,26 +80,18 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     private string ExcludeFolder => Path.Combine(Folder, "bin");
 
-    protected override IEnumerable<string> SymbolUiSearchFiles
-    {
-        get
-        {
-            return Directory.EnumerateDirectories(Folder)
-                            .Where(x => !x.StartsWith(ExcludeFolder))
-                            .SelectMany(subDir => Directory.EnumerateFiles(subDir, $"*{SymbolUiExtension}", SearchOption.AllDirectories))
-                            .Concat(Directory.EnumerateFiles(Folder, $"*{SymbolUiExtension}"));
-        }
-    }
+    protected override IEnumerable<string> SymbolUiSearchFiles => FindFilesOfType(SymbolUiExtension);
 
-    protected override IEnumerable<string> SymbolSearchFiles
+    protected override IEnumerable<string> SymbolSearchFiles => FindFilesOfType(SymbolExtension);
+    
+    protected override IEnumerable<string> SourceCodeSearchFiles => FindFilesOfType(SourceCodeExtension);
+
+    private IEnumerable<string> FindFilesOfType(string fileExtension)
     {
-        get
-        {
-            return Directory.EnumerateDirectories(Folder)
-                            .Where(x => !x.StartsWith(ExcludeFolder))
-                            .SelectMany(x => Directory.EnumerateFiles(x, $"*{SymbolExtension}", SearchOption.AllDirectories))
-                            .Concat(Directory.EnumerateFiles(Folder, $"*{SymbolExtension}"));
-        }
+        return Directory.EnumerateDirectories(Folder)
+                        .Where(x => !x.StartsWith(ExcludeFolder))
+                        .SelectMany(x => Directory.EnumerateFiles(x, $"*{fileExtension}", SearchOption.AllDirectories))
+                        .Concat(Directory.EnumerateFiles(Folder, $"*{fileExtension}"));
     }
 
     public override void InitializeResources()
@@ -124,5 +116,4 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public override bool IsModifiable => true;
 
     private static int _newProjectPosition = 0;
-    protected override string SourceCodeSearchFolder => Folder;
 }
