@@ -4,11 +4,13 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi;
 
 namespace T3.Editor.UiModel;
@@ -164,14 +166,35 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
     public virtual void LocateSourceCodeFiles()
     {
         _sourceCodePaths ??= new ConcurrentDictionary<Guid, string>();
-        Directory.EnumerateFiles(SourceCodeSearchFolder, $"*{SourceCodeExtension}", SearchOption.AllDirectories)
+
+        #if DEBUG
+        int sourceCodeCount = 0;
+        int sourceCodeAttempts = 0;
+        #endif
+        
+        SourceCodeSearchFiles
                  .AsParallel()
                  .ForAll(ParseCodeFile);
 
+        #if DEBUG
+        if (sourceCodeCount == 0 && sourceCodeAttempts != 0)
+        {
+            Log.Error($"{AssemblyInformation.Name}: No source code files found in project folder.");
+        }
+        else
+        {
+            Log.Debug($"{AssemblyInformation.Name}: Found {sourceCodeCount} operator source code files out of {sourceCodeAttempts} files.");
+        }
+        #endif
+        
         return;
 
         void ParseCodeFile(string file)
         {
+            #if DEBUG
+            Interlocked.Increment(ref sourceCodeAttempts);
+            #endif
+
             var streamReader = new StreamReader(file);
 
             var guid = Guid.Empty;
@@ -181,21 +204,17 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
                 if (line == null)
                     break;
 
-                //todo: this is a bit hacky. Would it be better to look for "[Guid(" ?
-                // todo - search for "[Guid("" while somehow ignoring whitespace
-                var firstQuoteIndex = line.IndexOf('"');
-                if (firstQuoteIndex == -1)
+                if (!StringUtils.TryFindIgnoringAllWhitespace(line, "[Guid(\"", StringUtils.SearchResultIndex.AfterTerm, out var guidStartIndex))
                     continue;
+                
+                var indexOfQuote = line.IndexOf('"', guidStartIndex);
+                var guidSpan = line.AsSpan(guidStartIndex, indexOfQuote - guidStartIndex);
 
-                var secondQuoteIndex = line.IndexOf('"', firstQuoteIndex + 1);
-
-                if (secondQuoteIndex == -1)
+                if (!Guid.TryParse(guidSpan, out guid))
+                {
+                    Log.Error($"{AssemblyInformation.Name}: Failed to parse guid from {guidSpan.ToString()} in \"{file}\"");
                     continue;
-
-                var stringSpan = line.AsSpan(firstQuoteIndex + 1, secondQuoteIndex - firstQuoteIndex - 1);
-
-                if (!Guid.TryParse(stringSpan, out guid))
-                    continue;
+                }
 
                 break;
             }
@@ -206,6 +225,10 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
             if (guid == Guid.Empty)
                 return;
 
+            #if DEBUG
+            Interlocked.Increment(ref sourceCodeCount);
+            #endif
+            
             OnSourceCodeLocated(file, guid);
         }
     }
@@ -233,5 +256,5 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
     internal const string SymbolUiExtension = ".t3ui";
     private ConcurrentDictionary<Guid, string>? _sourceCodePaths;
 
-    protected virtual string SourceCodeSearchFolder => Path.Combine(Folder, "SourceCode");
+    protected virtual IEnumerable<string> SourceCodeSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, "SourceCode"), $"*{SourceCodeExtension}", SearchOption.AllDirectories);
 }

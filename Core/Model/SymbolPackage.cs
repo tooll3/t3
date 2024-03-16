@@ -26,7 +26,7 @@ public abstract partial class SymbolPackage(AssemblyInformation assembly) : IRes
     public virtual AssemblyInformation AssemblyInformation { get; } = assembly;
     public virtual string Folder => AssemblyInformation.Directory;
     public virtual bool IsModifiable => false;
-    protected virtual IEnumerable<string> SymbolSearchFiles => Directory.EnumerateFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+    protected virtual IEnumerable<string> SymbolSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, "Symbols"), $"*{SymbolExtension}", SearchOption.AllDirectories);
     
     protected event Action<string?, Symbol>? SymbolAdded;
     protected event Action<Symbol>? SymbolUpdated;

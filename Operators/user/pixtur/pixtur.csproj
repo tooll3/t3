@@ -30,7 +30,7 @@
             <Link>SymbolUis/%(RecursiveDir)%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="**/*.cs" Exclude="bin/**">
+        <Content Include="**/*.cs" Exclude="bin/**;obj/**">
             <Link>SourceCode/%(RecursiveDir)%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
