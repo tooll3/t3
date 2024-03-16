@@ -10,14 +10,14 @@ namespace T3.Editor.Compilation;
 internal static class Compiler
 {
     
-    public static bool TryCompile(CsProjectFile projectFile, string? targetDirectory = null, Verbosity verbosity = Verbosity.Quiet)
+    public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, string? targetDirectory = null, Verbosity verbosity = Verbosity.Quiet)
     {
         Stopwatch stopwatch = new();
         stopwatch.Start();
         var workingDirectory = projectFile.Directory;
         
         const string configurationArgFmt = "--configuration {0}";
-        string buildModeName = CsProjectFile.BuildMode == BuildMode.Debug ? "Debug" : "Release";
+        string buildModeName = buildMode == BuildMode.Debug ? "Debug" : "Release";
         var buildModeArg = string.Format(configurationArgFmt, buildModeName);
         targetDirectory ??= projectFile.GetBuildTargetDirectory();
 

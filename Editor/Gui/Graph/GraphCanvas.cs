@@ -918,7 +918,17 @@ namespace T3.Editor.Gui.Graph
 
             if (ImGui.MenuItem("Export as Executable", oneOpSelected))
             {
-                PlayerExporter.ExportInstance(this, selectedChildUis.Single());
+                switch (PlayerExporter.TryExportInstance(this, selectedChildUis.Single(), out var reason))
+                {
+                    case false:
+                        Log.Error(reason);
+                        EditorUi.Instance.ShowMessageBox(reason, $"Failed to export {label}");
+                        break;
+                    default:
+                        Log.Info(reason);
+                        EditorUi.Instance.ShowMessageBox(reason, $"Exported {label} successfully!");
+                        break;
+                }
             }
         }
 

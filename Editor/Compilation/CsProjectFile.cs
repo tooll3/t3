@@ -59,7 +59,7 @@ internal class CsProjectFile
         return Path.Combine(GetRootDirectory(), _buildId.ToString(CultureInfo.InvariantCulture), TargetFramework);
     }
 
-    private string GetRootDirectory() => BuildMode == Compiler.BuildMode.Debug ? _debugRootDirectory : _releaseRootDirectory;
+    private string GetRootDirectory() => EditorBuildMode == Compiler.BuildMode.Debug ? _debugRootDirectory : _releaseRootDirectory;
 
     private string GetTargetFramework(string contents)
     {
@@ -205,7 +205,7 @@ internal class CsProjectFile
         var previousBuildId = _buildId;
         var previousAssembly = Assembly;
         _buildId = GetNewBuildId();
-        var success = Compiler.TryCompile(this);
+        var success = Compiler.TryCompile(this, EditorBuildMode);
 
         if (!success)
         {
@@ -222,9 +222,9 @@ internal class CsProjectFile
         return loaded;
     }
 
-    public bool TryCompileExternal(string externalDirectory)
+    public bool TryCompileRelease(string externalDirectory)
     {
-        return Compiler.TryCompile(this, externalDirectory);
+        return Compiler.TryCompile(this, PlayerBuildMode, externalDirectory);
     }
 
     // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation
@@ -374,6 +374,6 @@ internal class CsProjectFile
     private const string ProjectReferenceStart = "<ProjectReference Include=\"";
     private const string PackageReferenceStart = "<PackageReference Include=\"";
 
-    internal const Compiler.BuildMode BuildMode = Compiler.BuildMode.Debug;
+    internal const Compiler.BuildMode EditorBuildMode = Compiler.BuildMode.Debug;
     internal const Compiler.BuildMode PlayerBuildMode = Compiler.BuildMode.Release;
 }

@@ -3,22 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
-using Newtonsoft.Json;
 using SharpDX.Direct3D11;
-using T3.Core.Compilation;
 using T3.Core.IO;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Editor.Compilation;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 // ReSharper disable StringLiteralTypo
@@ -27,7 +21,7 @@ namespace T3.Editor.Gui.Graph
 {
     public static partial class PlayerExporter
     {
-        public static void ExportInstance(GraphCanvas graphCanvas, SymbolChildUi childUi)
+        public static bool TryExportInstance(GraphCanvas graphCanvas, SymbolChildUi childUi, out string reason)
         {
             T3Ui.Save(false);
 
@@ -39,8 +33,8 @@ namespace T3.Editor.Gui.Graph
             var output = instance.Outputs.First();
             if (output == null || output.ValueType != typeof(Texture2D))
             {
-                Log.Warning("Can only export ops with 'Texture2D' output");
-                return;
+                reason = "Can only export ops with 'Texture2D' output";
+                return false;
             }
 
             // Update project settings
@@ -51,12 +45,6 @@ namespace T3.Editor.Gui.Graph
             // traverse starting at output and collect everything
             var exportInfo = new ExportInfo();
             CollectChildSymbols(instance.Symbol, exportInfo);
-
-            var playerCsProjPath = Path.Combine(RuntimeAssemblies.CoreDirectory, "Player", "Player.csproj");
-            var playerProject = new CsProjectFile(new FileInfo(playerCsProjPath));
-
-            if (!File.Exists(playerCsProjPath))
-                throw new FileNotFoundException("Player project not found", playerCsProjPath);
 
             var exportDir = Path.Combine(UserSettings.Config.DefaultNewProjectDirectory, "Exports", childUi.SymbolChild.ReadableName);
 
@@ -75,47 +63,51 @@ namespace T3.Editor.Gui.Graph
 
             Directory.CreateDirectory(exportDir);
 
-            if (!playerProject.TryCompileExternal(exportDir))
-            {
-                EditorUi.Instance.ShowMessageBox("Failed to compile player project");
-                Log.Error("Failed to compile player project");
-                return;
-            }
-
             // copy assemblies into export dir
-            var successInt = Convert.ToInt32(true);
-            exportInfo.UniqueSymbols
-                      .Select(symbol => symbol.SymbolPackage.AssemblyInformation)
-                      .Distinct()
-                      .AsParallel()
-                      .ForAll(assemblyInfo =>
-                              {
-                                  bool success = true;
-                                  foreach (var assemblyPath in assemblyInfo.AssemblyPaths)
-                                  {
-                                      var fileName = Path.GetFileName(assemblyPath);
-                                      
-                                      var outputPath = Path.Combine(exportDir, fileName);
-                                      
-                                      try
-                                      {
-                                          File.Copy(assemblyPath, outputPath, true);
-                                      }
-                                      catch (Exception e)
-                                      {
-                                          Log.Error($"Failed to copy assembly: {fileName} to {outputPath}. Exception: {e}");
-                                          success = false;
-                                          break;
-                                      }
-                                  }
+            var symbolPackages = exportInfo.UniqueSymbols
+                                           .Select(symbol => symbol.SymbolPackage)
+                                           .Distinct();
 
-                                  Interlocked.And(ref successInt, Convert.ToInt32(success));
-                              });
-
-            if (!Convert.ToBoolean(successInt))
+            var operatorDir = Path.Combine(exportDir, "Operators");
+            Directory.CreateDirectory(operatorDir);
+            // todo - trim output rather than copying everything
+            // todo - can we handle resource references here too?
+            foreach (var package in symbolPackages)
             {
-                Log.Error("Failed to copy assemblies");
-                return;
+                var name = package.AssemblyInformation.Name;
+                var targetDirectory = Path.Combine(operatorDir, name);
+                _ = Directory.CreateDirectory(targetDirectory);
+                if (package is EditableSymbolProject project)
+                {
+                    project.SaveModifiedSymbols();
+                    var compiled = project.CsProjectFile.TryCompileRelease(targetDirectory);
+                    if (!compiled)
+                    {
+                        reason = $"Failed to compile project \"{name}\"";
+                        return false;
+                    }
+                }
+                else
+                {
+                    // copy full directory into target directory recursively, maintaining folder layout
+                    var directoryToCopy = package.AssemblyInformation.Directory;
+                    try
+                    {
+                        var files = Directory.EnumerateFiles(directoryToCopy, "*", SearchOption.AllDirectories);
+                        foreach (var file in files)
+                        {
+                            var relativePath = file.Replace(directoryToCopy, string.Empty);
+                            var targetPath = Path.Combine(targetDirectory, relativePath);
+                            Directory.CreateDirectory(Path.GetDirectoryName(targetPath)!);
+                            File.Copy(file, targetPath, true);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        reason = $"Failed to copy directory {directoryToCopy} to {targetDirectory}. Exception:\n{e}";
+                        return false;
+                    }
+                }
             }
 
             var symbolExportDir = Path.Combine(exportDir, "Operators");
@@ -125,20 +117,6 @@ namespace T3.Editor.Gui.Graph
             }
 
             Directory.CreateDirectory(symbolExportDir);
-
-            exportInfo.UniqueSymbols
-                      .AsParallel()
-                      .ForAll(symbol =>
-                              {
-                                  var directory = Path.Combine(symbolExportDir, symbol.SymbolPackage.AssemblyInformation.Name);
-                                  var path = Path.Combine(directory, symbol.Name + "_" + symbol.Id + SymbolPackage.SymbolExtension);
-                                  Directory.CreateDirectory(directory);
-                                  using var sw = new StreamWriter(path);
-                                  using var writer = new JsonTextWriter(sw);
-
-                                  writer.Formatting = Formatting.Indented;
-                                  SymbolJson.WriteSymbol(symbol, writer);
-                              });
 
             // Copy referenced resources
             RecursivelyCollectExportData(output, exportInfo);
@@ -169,19 +147,20 @@ namespace T3.Editor.Gui.Graph
 
             if (!success)
             {
-                Log.Error("Failed to add shared resources");
-                return;
+                reason = "Failed to add shared resources";
+                return false;
             }
 
             var copied = TryCopyFiles(exportInfo.UniqueResourcePaths, resourceDir);
 
             if (errorCount > 0 || !copied)
             {
-                Log.Error("Error exporting. See log for details.");
-                return;
+                reason = "Error exporting. See log for details.";
             }
 
-            Log.Debug($"Exported successfully to {exportDir}");
+            reason = "Exported successfully to " + exportDir;
+            Log.Info(reason);
+            return true;
         }
 
         private readonly struct ResourcePath(string relativePath, string absolutePath)
