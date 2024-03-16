@@ -10,6 +10,7 @@ using T3.Core.UserData;
 
 namespace T3.Editor.Compilation;
 
+// todo - convert to a proper XML parser
 internal class CsProjectFile
 {
     public string FullPath { get; }

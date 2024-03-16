@@ -509,4 +509,14 @@ public partial class SymbolPackage
         TypeNameRegistry.Entries.Add(type, typeName);
         InputValueCreators.Entries.Add(type, defaultValueCreator);
     }
+
+    /// <summary>
+    /// Dependencies to other packages based on resources
+    /// </summary>
+    public IEnumerable<SymbolPackage> ResourceDependencies => Array.Empty<SymbolPackage>();
+    
+    /// <summary>
+    /// Dependencies to other packages based on symbols
+    /// </summary>
+    public IEnumerable<SymbolPackage> SymbolDependencies => Array.Empty<SymbolPackage>();
 }

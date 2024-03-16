@@ -250,11 +250,14 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
     internal const string SourceCodeExtension = ".cs";
 
     protected virtual IEnumerable<string> SymbolUiSearchFiles =>
-        Directory.EnumerateFiles(Path.Combine(Folder, "SymbolUis"), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
+        Directory.EnumerateFiles(Path.Combine(Folder, SymbolUiSubFolder), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
     
     public override bool IsModifiable => false;
     internal const string SymbolUiExtension = ".t3ui";
     private ConcurrentDictionary<Guid, string>? _sourceCodePaths;
 
-    protected virtual IEnumerable<string> SourceCodeSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, "SourceCode"), $"*{SourceCodeExtension}", SearchOption.AllDirectories);
+    protected virtual IEnumerable<string> SourceCodeSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, SourceCodeSubFolder), $"*{SourceCodeExtension}", SearchOption.AllDirectories);
+    
+    public const string SymbolUiSubFolder = "SymbolUis";
+    public const string SourceCodeSubFolder = "SourceCode";
 }
