@@ -32,7 +32,7 @@ namespace T3.Editor.Gui.Graph
             var symbol = instance.Symbol;
             Log.Info($"Exporting {symbol.Name}...");
 
-            var output = instance.Outputs.First();
+            var output = instance.Outputs.FirstOrDefault();
             if (output == null || output.ValueType != typeof(Texture2D))
             {
                 reason = "Can only export ops with 'Texture2D' output";

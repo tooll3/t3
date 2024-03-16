@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
+using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
@@ -234,7 +235,7 @@ public class OperatorHelp
                 CustomComponents.TooltipForLastItem(!string.IsNullOrEmpty(l.Description) ? l.Description : "Open link in browser", l.Url);
 
                 if (clicked)
-                    StartupValidation.OpenUrl(l.Url);
+                    CoreUi.Instance.OpenWithDefaultApplication(l.Url);
 
                 ImGui.PopID();
                 ImGui.SameLine();

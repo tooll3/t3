@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using SharpDX.Direct3D11;
 using T3.Core.Compilation;
 using T3.Core.Logging;
@@ -23,26 +24,32 @@ namespace T3.Editor.App
             const string errorHeader = $"{nameof(SharedResources)} error: ";
 
             var resourceManager = ResourceManager.Instance();
-            var gotFullscreenVertexShader = resourceManager.TryCreateShaderResource<VertexShader>(
+            var gotFullscreenVertexShader = resourceManager.TryCreateShaderResource(
                  relativePath: @"dx11\fullscreen-texture.hlsl",
                  instance: null,
                  entryPoint: "vsMain",
                  name: "vs-fullscreen-texture",
-                 fileChangedAction: () => { },
+                 fileChangedAction: null,
                  resource: out _fullScreenVertexShaderResource,
                  errorMessage: out var errorMessage);
+            
 
             if (!string.IsNullOrWhiteSpace(errorMessage))
             {
                 Log.Error(errorHeader + errorMessage);
             }
+
+            if (!gotFullscreenVertexShader)
+            {
+                throw new Exception("Failed to load fullscreen vertex shader");
+            }
             
-            var gotFullscreenPixelShader = resourceManager.TryCreateShaderResource<PixelShader>(
+            var gotFullscreenPixelShader = resourceManager.TryCreateShaderResource(
                 relativePath: @"dx11\fullscreen-texture.hlsl",
                 instance: null,
                 entryPoint: "psMain",
                 name: "ps-fullscreen-texture",
-                fileChangedAction: () => { },
+                fileChangedAction: null,
                 resource: out _fullScreenPixelShaderResource,
                 errorMessage: out errorMessage);
             
@@ -50,6 +57,11 @@ namespace T3.Editor.App
             if (!string.IsNullOrWhiteSpace(errorMessage))
             {
                 Log.Error(errorHeader + errorMessage);
+            }
+            
+            if (!gotFullscreenPixelShader)
+            {
+                throw new Exception("Failed to load fullscreen pixel shader");
             }
             
             ViewWindowRasterizerState = new RasterizerState(ResourceManager.Device, new RasterizerStateDescription
