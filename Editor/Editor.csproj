@@ -15,7 +15,7 @@
         <!-- <ApplicationManifest>app.manifest</ApplicationManifest> -->
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
         <DefineConstants>TRACE</DefineConstants>
         <DebugType>full</DebugType>
     </PropertyGroup>
@@ -43,8 +43,7 @@
     </ItemGroup>
 
 
-    <!--This
-    copies all files in the `dependencies` folder *directly* into the output directory-->
+    <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
     <ItemGroup>
         <Content Include="../Dependencies/**/*" Visible="false">
             <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
@@ -53,8 +52,7 @@
     </ItemGroup>
 
 
-    <!--This
-    copies all files in the `.Defaults` folder into the output/.t3 folder-->
+    <!--This copies all files in the `.Defaults` folder into the output/.t3 folder-->
     <ItemGroup>
         <DefaultUserConfigs Include="../.Defaults/**/*"/>
     </ItemGroup>
@@ -66,7 +64,7 @@
               DestinationFiles="@(DefaultUserConfigs->'$(OutputPath)/.t3/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
 
-    <!-- This copies ../t3/Resources into the output directory -->
+    <!-- This copies t3/Resources into the output directory -->
     <ItemGroup>
         <Resources Include="../Resources/**/*" Visible="false"/>
     </ItemGroup>
@@ -77,10 +75,14 @@
               UseHardlinksIfPossible="true"
               DestinationFiles="@(Resources->'$(OutputPath)/Resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
+    
+    <PropertyGroup>
+        <RelativeBuildFolder>bin/$(Configuration)/$(TargetFramework)</RelativeBuildFolder>
+    </PropertyGroup>
 
-    <!-- This copies ../Player project into the output directory -->
+    <!-- This copies ../Player build into the output directory -->
     <ItemGroup>
-        <Player Include="../Player/**/*" Visible="false"/>
+        <Player Include="../Player/$(RelativeBuildFolder)/**/*" Visible="false"/>
     </ItemGroup>
 
     <Target Name="CopyPlayer" AfterTargets="AfterBuild">
@@ -90,48 +92,32 @@
               DestinationFiles="@(Player->'$(OutputPath)/Player/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
 
-    <!-- Build lib, libEditor, and examples AfterBuild and copy them to the output directory-->
-
-
     <!-- This copies built-in operator projects into the output directory -->
-    <!-- There must be a better (and less manual) way to do this, but this is the best we have right now. -->
+    <!-- There might be a better (and less manual) way to do this, but this is the best we have right now. -->
     <Target Name="CopyLibs" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
 
-    <PropertyGroup>
-        <Ops>../Operators</Ops>
-        <OpBuildFolder>bin/$(Configuration)/$(TargetFramework)</OpBuildFolder>
-        <ExportFolder>$(OutputPath)/Operators</ExportFolder>
-    </PropertyGroup>
-    
-    <ItemGroup>
-        <Lib Include="$(Ops)/lib/$(OpBuildFolder)/**">
-            <SubFolder>lib</SubFolder>
-        </Lib>
-        <LibDataTypes Include="$(Ops)/libDataTypes/$(OpBuildFolder)/**">
-            <SubFolder>libDataTypes</SubFolder>
-        </LibDataTypes>
-        <LibEditor Include="$(Ops)/LibEditor/$(OpBuildFolder)/**">
-            <SubFolder>LibEditor</SubFolder>
-        </LibEditor>
-        <Examples Include="$(Ops)/examples/$(OpBuildFolder)/**">
-            <SubFolder>examples</SubFolder>
-        </Examples>
-        <Unsplash Include="$(Ops)/unsplash/$(OpBuildFolder)/**">
-            <SubFolder>unsplash</SubFolder>
-        </Unsplash>
-        <Ndi Include="$(Ops)/Ndi/$(OpBuildFolder)/**">
-            <SubFolder>Ndi</SubFolder>
-        </Ndi>
-        <pixtur Include="$(Ops)/user/pixtur/$(OpBuildFolder)/**">
-            <SubFolder>pixtur</SubFolder>
-        </pixtur>
-    </ItemGroup>
+        <PropertyGroup>
+            <Ops>../Operators</Ops>
+            <UserOps>../Operators/user</UserOps>
+            <ExportFolder>$(OutputPath)/Operators</ExportFolder>
+        </PropertyGroup>
 
-    <!-- Copy Dlls and symbols -->
-    <Copy SourceFiles="@(Lib);@(LibDataTypes);@(LibEditor);@(Examples);@(Unsplash);@(Ndi);@(pixtur)" 
-          DestinationFolder="$(ExportFolder)/%(SubFolder)/%(RecursiveDir)" 
-          SkipUnchangedFiles="true" 
-          UseHardlinksIfPossible="true" />
-</Target>
+        <ItemGroup>
+            <!-- This is a list of all the built-in operator projects. 'Include' refers to project directory, 'SubFolder' to export subfolder -->
+            <Lib Include="$(Ops)/lib/$(RelativeBuildFolder)/**" SubFolder="lib"/>
+            <LibDataTypes Include="$(Ops)/libDataTypes/$(RelativeBuildFolder)/**" SubFolder="libDataTypes"/>
+            <LibEditor Include="$(Ops)/LibEditor/$(RelativeBuildFolder)/**" SubFolder="LibEditor"/>
+            <Examples Include="$(Ops)/examples/$(RelativeBuildFolder)/**" SubFolder="examples"/>
+            <Unsplash Include="$(Ops)/unsplash/$(RelativeBuildFolder)/**" SubFolder="unsplash"/>
+            <Ndi Include="$(Ops)/Ndi/$(RelativeBuildFolder)/**" SubFolder="Ndi"/>
+            <pixtur Include="$(UserOps)/pixtur/$(RelativeBuildFolder)/**" SubFolder="pixtur"/>
+        </ItemGroup>
+
+        <!-- Copy Dlls and symbols using the items and subfolders defined above -->
+        <Copy SourceFiles="@(Lib);@(LibDataTypes);@(LibEditor);@(Examples);@(Unsplash);@(Ndi);@(pixtur)"
+              DestinationFolder="$(ExportFolder)/%(SubFolder)/%(RecursiveDir)"
+              SkipUnchangedFiles="true"
+              UseHardlinksIfPossible="true"/>
+    </Target>
 
 </Project>
