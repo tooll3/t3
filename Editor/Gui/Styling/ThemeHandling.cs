@@ -47,7 +47,7 @@ public static class ThemeHandling
 
         StoreAllColors(theme);
 
-        JsonUtils.SaveJson(theme, filepath);
+        JsonUtils.TrySaveJson(theme, filepath);
         LoadThemes();
     }
 

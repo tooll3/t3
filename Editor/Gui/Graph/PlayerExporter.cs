@@ -5,75 +5,134 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using SharpDX.Direct3D11;
+using T3.Core.Compilation;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Editor.App;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-
-// ReSharper disable StringLiteralTypo
+using T3.Serialization;
 
 namespace T3.Editor.Gui.Graph
 {
     public static partial class PlayerExporter
     {
-        public static bool TryExportInstance(GraphCanvas graphCanvas, SymbolChildUi childUi, out string reason)
+        public static bool TryExportInstance(GraphCanvas graphCanvas, SymbolChildUi childUi, out string reason, out string exportDir)
         {
             T3Ui.Save(false);
 
             // Collect all ops and types
             var instance = graphCanvas.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
-            Log.Info($"Exporting {instance.Symbol.Name}...");
-            var errorCount = 0;
+            var symbol = instance.Symbol;
+            Log.Info($"Exporting {symbol.Name}...");
 
             var output = instance.Outputs.First();
             if (output == null || output.ValueType != typeof(Texture2D))
             {
                 reason = "Can only export ops with 'Texture2D' output";
+                exportDir = string.Empty;
                 return false;
             }
 
-            // Update project settings
-            ProjectSettings.Config.MainOperatorGuid = instance.Symbol.Id;
-            ProjectSettings.Config.MainOperatorName = instance.Symbol.Name;
-            ProjectSettings.Save();
-
+            
             // traverse starting at output and collect everything
             var exportInfo = new ExportInfo();
             CollectChildSymbols(instance.Symbol, exportInfo);
 
-            var exportDir = Path.Combine(UserSettings.Config.DefaultNewProjectDirectory, "Exports", childUi.SymbolChild.ReadableName);
+            exportDir = Path.Combine(UserSettings.Config.DefaultNewProjectDirectory, "Exports", childUi.SymbolChild.ReadableName);
 
             try
             {
                 if(Directory.Exists(exportDir))
                 {
-                    Directory.Delete(exportDir, true);
+                    Directory.Move(exportDir, exportDir + '_' + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
                 }
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to delete export dir: {exportDir}. Exception: {e}");
-                exportDir = exportDir + '_' + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                reason = $"Failed to move export dir: {exportDir}. Exception: {e}";
+                return false;
             }
 
             Directory.CreateDirectory(exportDir);
 
             // copy assemblies into export dir
-            var symbolPackages = exportInfo.UniqueSymbols
-                                           .Select(symbol => symbol.SymbolPackage)
-                                           .Distinct();
+            // get symbol packages directly used by the exported symbols
+            var primarySymbolPackages = exportInfo.UniqueSymbols
+                                                  .Select(symbol => symbol.SymbolPackage)
+                                                  .Distinct()
+                                                  .ToArray();
+            
+            // get symbol packages indirectly referenced by the primary symbol packages
+            var dependencyReferences = primarySymbolPackages
+                                      .SelectMany(package => package.ResourceDependencies)
+                                      .Distinct();
+
+            // combine primary and dependency symbol packages
+            var symbolPackages = primarySymbolPackages
+                                .Concat(dependencyReferences)
+                                .Distinct();
 
             var operatorDir = Path.Combine(exportDir, "Operators");
             Directory.CreateDirectory(operatorDir);
-            // todo - trim output rather than copying everything
-            // todo - can we handle resource references here too?
+            
+            if (!TryExportPackages(out reason, symbolPackages, operatorDir))
+                return false;
+
+            // Copy referenced resources
+            RecursivelyCollectExportData(output, exportInfo);
+            exportInfo.PrintInfo();
+
+            var resourceDir = Path.Combine(exportDir, "Resources");
+            
+            //var symbolPlaybackSettings = childUi.SymbolChild.Symbol.PlaybackSettings;
+            //var audioClipLocation = FindAudioClip(symbolPlaybackSettings, ref errorCount);
+            //if (audioClipLocation != null)
+            //{
+            //    var audioClipPath = Path.Combine(resourceDir, Path.GetFileName(audioClipLocation));
+            //    TryCopyFile(audioClipLocation, audioClipPath);
+            //}
+
+            if(!TryCopyDirectory(SharedResources.Directory, resourceDir, out reason))
+                return false;
+            
+            var playerDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Player");
+            if(!TryCopyDirectory(playerDirectory, exportDir, out reason))
+                return false;
+
+            //var copied = TryCopyFiles(exportInfo.UniqueResourcePaths, resourceDir);
+
+            // Update project settings
+            var exportSettings = new ExportSettings(OperatorId: symbol.Id, 
+                                                    ApplicationTitle: symbol.Name, 
+                                                    WindowMode: WindowMode.Fullscreen, 
+                                                    ConfigData: ProjectSettings.Config,
+                                                    Author: symbol.SymbolPackage.AssemblyInformation.Name); // todo - actual author name
+            
+            const string exportSettingsFile = "exportSettings.json";
+            if(!JsonUtils.TrySaveJson(exportSettings, Path.Combine(exportDir, exportSettingsFile)))
+            {
+                reason = $"Failed to save export settings to {exportSettingsFile}";
+                return false;
+            }
+
+            reason = "Exported successfully to " + exportDir;
+            return true;
+        }
+
+        // todo - can we handle resource references here too?
+        private static bool TryExportPackages(out string reason, IEnumerable<SymbolPackage> symbolPackages, string operatorDir)
+        {
+            string[] excludeSubdirectories = [EditorSymbolPackage.SymbolUiSubFolder, EditorSymbolPackage.SourceCodeSubFolder, ".git"];
             foreach (var package in symbolPackages)
             {
+                Log.Debug($"Exporting package {package.AssemblyInformation.Name}");
                 var name = package.AssemblyInformation.Name;
                 var targetDirectory = Path.Combine(operatorDir, name);
                 _ = Directory.CreateDirectory(targetDirectory);
@@ -86,80 +145,104 @@ namespace T3.Editor.Gui.Graph
                         reason = $"Failed to compile project \"{name}\"";
                         return false;
                     }
+
+                    // delete extraneous folders
+                    var symbolUiDir = Path.Combine(targetDirectory, EditorSymbolPackage.SymbolUiSubFolder);
+                    var sourceCodeDir = Path.Combine(targetDirectory, EditorSymbolPackage.SourceCodeSubFolder);
+                    var gitDir = Path.Combine(targetDirectory, ".git");
+                    
+                    try
+                    {
+                        Directory.Delete(symbolUiDir, true);
+                        Directory.Delete(sourceCodeDir, true);
+                        Directory.Delete(gitDir, true);
+                    }
+                    catch (Exception e)
+                    {
+                        reason = $"Failed to delete extraneous folders in {targetDirectory}. Exception:\n{e}";
+                        return false;
+                    }
                 }
                 else
                 {
                     // copy full directory into target directory recursively, maintaining folder layout
                     var directoryToCopy = package.AssemblyInformation.Directory;
-                    try
-                    {
-                        var files = Directory.EnumerateFiles(directoryToCopy, "*", SearchOption.AllDirectories);
-                        foreach (var file in files)
-                        {
-                            var relativePath = file.Replace(directoryToCopy, string.Empty);
-                            var targetPath = Path.Combine(targetDirectory, relativePath);
-                            Directory.CreateDirectory(Path.GetDirectoryName(targetPath)!);
-                            File.Copy(file, targetPath, true);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        reason = $"Failed to copy directory {directoryToCopy} to {targetDirectory}. Exception:\n{e}";
+                    if (!TryCopyDirectory(directoryToCopy, targetDirectory, out reason, excludeSubdirectories))
                         return false;
-                    }
                 }
             }
+            
+            reason = string.Empty;
+            return true;
+        }
 
-            var symbolExportDir = Path.Combine(exportDir, "Operators");
-            if (Directory.Exists(symbolExportDir))
+        private static bool TryCopyDirectory(string directoryToCopy, string targetDirectory, out string reason, string[]? excludeSubFolders = null, string[]? excludeFiles = null, string[]? excludeFileExtensions = null)
+        {
+            try
             {
-                Directory.Delete(symbolExportDir, true);
+                var rootFiles = Directory.EnumerateFiles(directoryToCopy, "*", SearchOption.TopDirectoryOnly);
+                var subfolderFiles = Directory.EnumerateDirectories(directoryToCopy, "*", SearchOption.TopDirectoryOnly)
+                                              .Where(subDir =>
+                                                     {
+                                                         if(excludeSubFolders == null)
+                                                             return true;
+                                                         
+                                                         var dirName = Path.GetRelativePath(directoryToCopy, subDir);
+                                                         foreach (var excludeSubFolder in excludeSubFolders)
+                                                         {
+                                                             if (string.Equals(dirName, excludeSubFolder, StringComparison.OrdinalIgnoreCase))
+                                                             {
+                                                                 return false;
+                                                             }
+                                                         }
+
+                                                         return true;
+                                                     })
+                                              .SelectMany(subDir => Directory.EnumerateFiles(subDir, "*", SearchOption.AllDirectories));
+                
+                var files = rootFiles.Concat(subfolderFiles);
+                var shouldExcludeFiles = excludeFiles != null;
+                var shouldExcludeFileExtensions = excludeFileExtensions != null;
+                foreach (var file in files)
+                {
+                    if (shouldExcludeFiles && excludeFiles!.Contains(Path.GetFileName(file)))
+                        continue;
+
+                    bool shouldSkipBasedOnExtension = false;
+                    if (shouldExcludeFileExtensions)
+                    {
+                        foreach(var extension in excludeFileExtensions!)
+                        {
+                            if (file.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
+                            {
+                                shouldSkipBasedOnExtension = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (shouldSkipBasedOnExtension)
+                        continue;
+                    
+                    var relativePath = Path.GetRelativePath(directoryToCopy, file);
+                    var targetPath = Path.Combine(targetDirectory, relativePath);
+                    var targetDir = Path.GetDirectoryName(targetPath);
+                    if (targetDir == null)
+                    {
+                        reason = $"Failed to get directory for \"{targetPath}\" - is it missing a file extension?";
+                        return false;
+                    }
+                    Directory.CreateDirectory(targetDir!);
+                    File.Copy(file, targetPath, true);
+                }
             }
-
-            Directory.CreateDirectory(symbolExportDir);
-
-            // Copy referenced resources
-            RecursivelyCollectExportData(output, exportInfo);
-            exportInfo.PrintInfo();
-
-            var resourceDir = Path.Combine(exportDir, "Resources");
-            var symbolPlaybackSettings = childUi.SymbolChild.Symbol.PlaybackSettings;
-            var audioClipLocation = FindAudioClip(symbolPlaybackSettings, ref errorCount);
-            if (audioClipLocation != null)
+            catch (Exception e)
             {
-                var audioClipPath = Path.Combine(resourceDir, Path.GetFileName(audioClipLocation));
-                TryCopyFile(audioClipLocation, audioClipPath);
-            }
-
-            const string t3IconPath = @"t3-editor\images\t3.ico";
-            const string hashMapSettingsShader = @"points\spatial-hash-map\hash-map-settings.hlsl";
-            const string fullscreenTextureShader = @"dx11\fullscreen-texture.hlsl";
-            const string resolveMultisampledDepthBufferShader = @"dx11\resolve-multisampled-depth-buffer-cs.hlsl";
-            const string brdfLookUp = @"common\images\BRDF-LookUp.png";
-            const string studioSmall08Prefiltered = @"common\HDRI\studio_small_08-prefiltered.dds";
-
-            var success = exportInfo.TryAddSharedResource(t3IconPath)
-                          && exportInfo.TryAddSharedResource(hashMapSettingsShader)
-                          && exportInfo.TryAddSharedResource(fullscreenTextureShader)
-                          && exportInfo.TryAddSharedResource(resolveMultisampledDepthBufferShader)
-                          && exportInfo.TryAddSharedResource(brdfLookUp)
-                          && exportInfo.TryAddSharedResource(studioSmall08Prefiltered);
-
-            if (!success)
-            {
-                reason = "Failed to add shared resources";
+                reason = $"Failed to copy directory {directoryToCopy} to {targetDirectory}. Exception:\n{e}";
                 return false;
             }
 
-            var copied = TryCopyFiles(exportInfo.UniqueResourcePaths, resourceDir);
-
-            if (errorCount > 0 || !copied)
-            {
-                reason = "Error exporting. See log for details.";
-            }
-
-            reason = "Exported successfully to " + exportDir;
-            Log.Info(reason);
+            reason = string.Empty;
             return true;
         }
 

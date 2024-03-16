@@ -14,14 +14,17 @@ namespace T3.Core.IO
         public class ConfigData
         {
             public bool TimeClipSuspending = true;
-            public Guid MainOperatorGuid = Guid.Empty;
             public float AudioResyncThreshold = 0.04f;
             public bool EnablePlaybackControlWithKeyboard = true;
-            public bool WindowedMode = false;
             
             public string LimitMidiDeviceCapture = null; 
             public bool EnableMidiSnapshotIndication = false;
-            public string MainOperatorName { get; set; }
+            public WindowMode DefaultWindowMode = WindowMode.Fullscreen;
         }
     }
+
+    [Serializable]
+    public record ExportSettings(Guid OperatorId, string ApplicationTitle, WindowMode WindowMode, ProjectSettings.ConfigData ConfigData, string Author);
+    
+    public enum WindowMode { Windowed, Fullscreen }
 }

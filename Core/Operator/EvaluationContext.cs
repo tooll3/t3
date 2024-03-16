@@ -29,6 +29,9 @@ namespace T3.Core.Operator
             Reset();
         }
         
+        /// <summary>
+        /// note: generally requires setting <see cref="RequestedResolution"/> afterwards
+        /// </summary>
         public void Reset()
         {
             // TODO: this should be replaced with a solution that supports multiple playback sources 

@@ -30,7 +30,7 @@ public static class GradientPresets
 
     public static void Save()
     {
-        JsonUtils.SaveJson(_presets, FilePath);    
+        JsonUtils.TrySaveJson(_presets, FilePath);    
     }
     
     private static List<Gradient> _presets;

@@ -138,7 +138,7 @@ namespace lib.point._experimental
             if (_needsSave && Playback.RunTimeInSecs - _lastModificationTime > 2)
             {
                 var filepath1 = FilePath.GetValue(context);
-                JsonUtils.SaveJson(_paging.Pages, filepath1);
+                JsonUtils.TrySaveJson(_paging.Pages, filepath1);
                 _needsSave = false;
             }
         }

@@ -20,12 +20,23 @@ public static class JsonUtils
         return jSettingsToken == null ? defaultValue : jSettingsToken.Value<T>();
     }
 
-    public static T? TryLoadingJson<T>(string filepath) where T : class, new()
+    public static T? TryLoadingJson<T>(string filepath) where T : class
+    {
+        if(!TryLoadingJson(filepath, out T? result))
+        {
+            return default;
+        }
+        
+        return result;
+    }
+
+    public static bool TryLoadingJson<T>(string filepath, out T? result) where T : class // Is this generic constraint necessary?
     {
         if (!File.Exists(filepath))
         {
             Log.Warning($"{filepath} doesn't exist yet");
-            return null;
+            result = default;
+            return false;
         }
 
         var jsonBlob = File.ReadAllText(filepath);
@@ -34,24 +45,29 @@ public static class JsonUtils
         try
         {
             if (serializer.Deserialize(fileTextReader, typeof(T)) is T configurations)
-                return configurations;
+            {
+                result = configurations;
+                return true;
+            }
+
+            Log.Error($"Can't load {filepath}");
+            result = default;
+            return false;
         }
         catch (Exception e)
         {
             Log.Error($"Can't load {filepath}:" + e.Message);
-            return null;
+            result = default;
+            return false;
         }
-
-        Log.Error($"Can't load {filepath}");
-        return null;
     }
 
-    public static void SaveJson<T>(T dataObject, string filepath) where T : class, new()
+    public static bool TrySaveJson<T>(T dataObject, string filepath) where T : class // Is this generic constraint necessary?
     {
         if (string.IsNullOrEmpty(filepath))
         {
             Log.Warning($"Can't save {typeof(T)} to empty filename...");
-            return;
+            return false;
         }
 
         var serializer = JsonSerializer.Create();
@@ -60,10 +76,12 @@ public static class JsonUtils
         {
             using var streamWriter = File.CreateText(filepath);
             serializer.Serialize(streamWriter, dataObject);
+            return true;
         }
         catch (Exception e)
         {
             Log.Warning($"Can't create file {filepath} to save {typeof(T)} " + e.Message);
+            return false;
         }
     }
 
