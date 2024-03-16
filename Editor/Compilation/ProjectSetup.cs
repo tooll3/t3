@@ -110,6 +110,7 @@ internal static class ProjectSetup
                                     nonOperatorAssemblies.Add(assembly);
                             }
                         });
+            
             Log.Debug($"Found built-in operator assemblies in {stopwatch.ElapsedMilliseconds}ms");
             #endif
             

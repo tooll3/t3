@@ -11,6 +11,7 @@ namespace T3.Editor.App
     /// </summary>
     public static class SharedResources
     {
+        public static readonly string Directory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources");
         
         static SharedResources()
         {
@@ -92,7 +93,8 @@ namespace T3.Editor.App
 
         private sealed class SharedResourceObject : IResourceContainer
         {
-            public string ResourcesFolder { get; } = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources");
+            // ReSharper disable once ReplaceAutoPropertyWithComputedProperty
+            public string ResourcesFolder { get; } = Directory;
             public ResourceFileWatcher FileWatcher => null;
         }
     }
