@@ -67,6 +67,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
             return false;
         }
         
+        OpenProjectInCodeEditor();
         CoreUi.Instance.OpenWithDefaultApplication(sourceCodePath);
         return true;
     }
