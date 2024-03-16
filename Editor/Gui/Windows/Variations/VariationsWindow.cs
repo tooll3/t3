@@ -130,7 +130,7 @@ namespace T3.Editor.Gui.Windows.Variations
                                                + additionalHint, "Learn More"))
                         {
                             const string url = "https://github.com/tooll3/t3/wiki/PresetsAndSnapshots";
-                            CoreUi.Instance.OpenUri(url);
+                            CoreUi.Instance.OpenWithDefaultApplication(url);
                         }
                     }
                     else

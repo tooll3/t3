@@ -290,7 +290,7 @@ namespace T3.Player
                 
                 if (error)
                 {
-                    CoreUi.Instance.OpenUri(logPath);
+                    CoreUi.Instance.OpenWithDefaultApplication(logPath);
                 }
                 
                 CoreUi.Instance.ExitApplication();

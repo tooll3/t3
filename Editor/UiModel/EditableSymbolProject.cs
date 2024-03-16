@@ -10,6 +10,7 @@ using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
+using T3.Core.SystemUi;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
 
@@ -42,6 +43,31 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         RootSymbolUi.AddChild(homeSymbol, Guid.NewGuid(), new Vector2(0, _newProjectPosition), SymbolChildUi.DefaultOpSize, "");
         _newProjectPosition += (int)SymbolChildUi.DefaultOpSize.Y + 20;
 
+        return true;
+    }
+
+    public void OpenProjectInCodeEditor()
+    {
+        CoreUi.Instance.OpenWithDefaultApplication(CsProjectFile.FullPath);
+    }
+    
+    public bool TryOpenCSharpInEditor(Symbol symbol)
+    {
+        var guid = symbol.Id;
+        if (!_filePathHandlers.TryGetValue(guid, out var filePathHandler))
+        {
+            Log.Error($"No file path handler found for symbol {guid}");
+            return false;
+        }
+
+        var sourceCodePath = filePathHandler.SourceCodePath;
+        if (string.IsNullOrWhiteSpace(sourceCodePath))
+        {
+            Log.Error($"No source code path found for symbol {guid}");
+            return false;
+        }
+        
+        CoreUi.Instance.OpenWithDefaultApplication(sourceCodePath);
         return true;
     }
 

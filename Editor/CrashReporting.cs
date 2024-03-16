@@ -104,7 +104,7 @@ internal static class CrashReporting
 
         if (!string.IsNullOrWhiteSpace(LogPath))
         {
-            CoreUi.Instance.OpenUri(LogPath);
+            CoreUi.Instance.OpenWithDefaultApplication(LogPath);
         }
         
         return sendingEnabled ? sentryEvent : null;
