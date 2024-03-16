@@ -84,8 +84,10 @@ namespace T3.Editor.Gui.UiHelpers
 
                 ImGui.PopStyleColor(4);
                 HandleDragAndDropForSymbolItem(symbol);
-                
-                CustomComponents.ContextMenuForItem(() => CustomComponents.DrawSymbolCodeContextMenuItem(symbol));
+
+                CustomComponents.ContextMenuForItem(drawMenuItems: () => CustomComponents.DrawSymbolCodeContextMenuItem(symbol), 
+                                                    title: symbol.Name,
+                                                    id: "##symbolTreeSymbolContextMenu");
 
                 if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
                 {
