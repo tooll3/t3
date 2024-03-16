@@ -68,6 +68,13 @@
       "Min": 0,
       "Max": 2,
       "Clamp": true
+    },
+    {
+      "InputId": "6323532f-f548-4faa-9c21-826ee4d44090"/*TwistPivot*/,
+      "Position": {
+        "X": -557.6606,
+        "Y": 1407.4706
+      }
     }
   ],
   "SymbolChildUis": [
@@ -205,8 +212,8 @@
     {
       "ChildId": "16047c0e-a4c6-44f2-81a2-47a4fe9e1f90"/*__padding*/,
       "Position": {
-        "X": 127.337524,
-        "Y": 941.1708
+        "X": 99.39505,
+        "Y": 935.47876
       }
     },
     {
@@ -235,6 +242,13 @@
       "Position": {
         "X": 619.56744,
         "Y": 1184.7712
+      }
+    },
+    {
+      "ChildId": "887c00e4-f481-4390-847e-343e54bbd3fa"/*Vector3Components*/,
+      "Position": {
+        "X": -52.40454,
+        "Y": 1502.3657
       }
     }
   ],

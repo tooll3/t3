@@ -52,6 +52,9 @@ namespace T3.Operators.Types.Id_a8fd7522_7874_4411_ad8d_b2e7a20bc4ac
 
         [Input(Guid = "ebf1167b-1519-4ca9-bfa6-87472889966b")]
         public readonly InputSlot<int> TwistAxis = new InputSlot<int>();
+
+        [Input(Guid = "6323532f-f548-4faa-9c21-826ee4d44090")]
+        public readonly InputSlot<System.Numerics.Vector3> TwistPivot = new InputSlot<System.Numerics.Vector3>();
         
         
         
