@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using T3.SystemUi;
 
 namespace T3.MsForms;
@@ -13,6 +14,17 @@ public class MsForms : ICoreSystemUiService
         System.Windows.Forms.Application.SetUnhandledExceptionMode(throwException
                                                                         ? UnhandledExceptionMode.ThrowException
                                                                         : UnhandledExceptionMode.CatchException);
+    }
+    
+    void ICoreSystemUiService.OpenUri(string uri)
+    {
+        var startInfo = new ProcessStartInfo
+                        {
+                            FileName = "cmd",
+                            Arguments = $"/c start {uri}",
+                        };
+        
+        Process.Start(startInfo);
     }
 
     void ICoreSystemUiService.ShowMessageBox(string text, string title)

@@ -56,7 +56,7 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
                                     });
                 }
 
-                JsonUtils.SaveJson(results, DocumentationJsonFilename);
+                JsonUtils.TrySaveJson(results, DocumentationJsonFilename);
             }
         }
         

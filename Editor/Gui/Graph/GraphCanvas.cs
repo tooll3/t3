@@ -11,6 +11,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
@@ -918,7 +919,7 @@ namespace T3.Editor.Gui.Graph
 
             if (ImGui.MenuItem("Export as Executable", oneOpSelected))
             {
-                switch (PlayerExporter.TryExportInstance(this, selectedChildUis.Single(), out var reason))
+                switch (PlayerExporter.TryExportInstance(this, selectedChildUis.Single(), out var reason, out var exportDir))
                 {
                     case false:
                         Log.Error(reason);
@@ -927,6 +928,8 @@ namespace T3.Editor.Gui.Graph
                     default:
                         Log.Info(reason);
                         EditorUi.Instance.ShowMessageBox(reason, $"Exported {label} successfully!");
+                        // open export directory in native file explorer
+                        CoreUi.Instance.OpenUri(exportDir);
                         break;
                 }
             }

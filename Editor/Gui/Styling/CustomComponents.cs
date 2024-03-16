@@ -623,8 +623,9 @@ namespace T3.Editor.Gui.Styling
             return Regex.Replace(f, "(\\B[A-Z])", " $1");
         }
 
-        public static bool DrawDropdown<T>(ref T selectedValue, IEnumerable<T> values, string label,  Func<T, string> getDisplayTextFunc, bool labelOnSameLine = false,
-                                            string defaultDisplayText = null, string tooltip = null) where T : class
+        public static bool DrawDropdown<T>(ref T selectedValue, IEnumerable<T> values, string label, Func<T, string> getDisplayTextFunc,
+                                           bool labelOnSameLine = false,
+                                           string defaultDisplayText = null, string tooltip = null)
         {
             if (labelOnSameLine)
             {
@@ -637,22 +638,24 @@ namespace T3.Editor.Gui.Styling
                 ImGui.PushFont(Fonts.FontSmall);
                 ImGui.TextUnformatted(label);
             }
+
             ImGui.PopFont();
 
             const string imguiLabelFmt = "##Select{0}{1}";
             var imguiLabel = string.Format(imguiLabelFmt, label, nameof(T));
-            
+
             const string defaultDisplayTextFmt = "Select {0}";
             defaultDisplayText ??= string.Format(defaultDisplayTextFmt, label);
 
             var modified = false;
-            
+
             var previewValue = selectedValue == null ? defaultDisplayText : getDisplayTextFunc(selectedValue);
             if (ImGui.BeginCombo(imguiLabel, previewValue, ImGuiComboFlags.HeightLarge))
             {
                 foreach (var project in values)
                 {
-                    var isSelected = project == selectedValue;
+                    var equalityComparer = EqualityComparer<T>.Default;
+                    var isSelected = equalityComparer.Equals(project, selectedValue);
                     if (!ImGui.Selectable(getDisplayTextFunc(project) ?? "Error", isSelected, ImGuiSelectableFlags.DontClosePopups))
                         continue;
 
@@ -660,7 +663,7 @@ namespace T3.Editor.Gui.Styling
                     selectedValue = project;
                     modified = true;
                 }
-                
+
                 ImGui.EndCombo();
             }
 

@@ -80,11 +80,12 @@ namespace T3.Editor
             Console.WriteLine("Initializing logging");
             Log.AddWriter(splashScreen);
             Log.AddWriter(new ConsoleWriter());
-            Log.AddWriter(FileWriter.CreateDefault(UserData.SettingsFolder));
+            Log.AddWriter(FileWriter.CreateDefault(UserData.SettingsFolder, out var logPath));
             Log.AddWriter(StatusErrorLine);
             Log.AddWriter(ConsoleLogWindow);
             Log.Debug($"Starting {Version}");
             
+            CrashReporting.LogPath = logPath;
             //if (IsStandAlone)
             {
                 //StartupValidation.ValidateCurrentStandAloneExecutable();

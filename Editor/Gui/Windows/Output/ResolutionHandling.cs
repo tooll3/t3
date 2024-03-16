@@ -56,7 +56,7 @@ namespace T3.Editor.Gui.Windows.Output
         
         public static void Save()
         {
-            JsonUtils.SaveJson(_resolutions, FilePath);    
+            JsonUtils.TrySaveJson(_resolutions, FilePath);    
         }
         
         public static List<Resolution> Resolutions => _resolutions

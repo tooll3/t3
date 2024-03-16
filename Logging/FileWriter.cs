@@ -9,9 +9,13 @@ namespace T3.Core.Logging
     {
         public ILogEntry.EntryLevel Filter { get; set; }
 
-        public FileWriter(string filename)
+        public FileWriter(string directory, string filename)
         {
-            _streamWriter = new StreamWriter(filename);
+            LogDirectory = Path.Combine(directory, LogSubDirectory);
+            _logPath = Path.Combine(LogDirectory, filename);
+            
+            Directory.CreateDirectory(LogDirectory);
+            _streamWriter = new StreamWriter(_logPath);
             //#if DEBUG
             _streamWriter.AutoFlush = true;
             //#endif
@@ -51,25 +55,29 @@ namespace T3.Core.Logging
         }
 
 
-        public static ILogWriter CreateDefault(string rootDirectory)
+        public static ILogWriter CreateDefault(string rootDirectory, out string path)
         {
             if (Instance != null)
+            {
+                path = Instance._logPath;
                 return Instance;
+            }
+
             
-            LogDirectory = Path.Combine(rootDirectory, LogSubDirectory);
-            Directory.CreateDirectory(LogDirectory);
-            
-            var path = Path.Combine(LogDirectory, $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss_fff}.log");
-            Instance = new FileWriter(path)
+            var fileName = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss_fff}.log";
+            Instance = new FileWriter(rootDirectory, fileName)
                            {
                                Filter = ILogEntry.EntryLevel.All
                            };
+            
+            path = Instance._logPath;
             return Instance;
         }
         
         private readonly StreamWriter _streamWriter;
-        public static string LogDirectory { get; private set; }
-        private static FileWriter? Instance { get; set; }
+        private readonly string _logPath;
+        public readonly string LogDirectory;
+        public static FileWriter? Instance { get; private set; }
         private const string LogSubDirectory = "log";
     }
 }

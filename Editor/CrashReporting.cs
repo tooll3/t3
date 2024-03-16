@@ -55,7 +55,7 @@ internal static class CrashReporting
         var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
         var timeSpan = THelpers.GetReadableRelativeTime(timeOfLastBackup);
         
-        sentryEvent.SetTag("Nickname", "anonymous");
+        sentryEvent.SetTag("Nickname", UserSettings.Config.UserName);
         sentryEvent.Contexts["tooll3"]= new
                                             {
                                                 UndoStack = UndoRedoStack.GetUndoStackAsString(),
@@ -100,7 +100,13 @@ internal static class CrashReporting
                                                     @"☠🙈 Damn!",
                                                     PopUpButtons.YesNo);
 
-        var sendingEnabled = result == PopUpResult.Yes;        
+        var sendingEnabled = result == PopUpResult.Yes;
+
+        if (!string.IsNullOrWhiteSpace(LogPath))
+        {
+            CoreUi.Instance.OpenUri(LogPath);
+        }
+        
         return sendingEnabled ? sentryEvent : null;
         #else
         WriteReportToLog(sentryEvent, false);
@@ -138,7 +144,7 @@ internal static class CrashReporting
             return;
         
         var exceptionTitle = sentryEvent.Exception.GetType().Name;
-        var filepath= Path.Combine(FileWriter.LogDirectory,$@"crash {DateTime.Now:yyyy-MM-dd  HH-mm-ss} - {exceptionTitle}.txt");
+        var filepath= Path.Combine(FileWriter.Instance.LogDirectory,$@"crash {DateTime.Now:yyyy-MM-dd  HH-mm-ss} - {exceptionTitle}.txt");
         
         using var streamFileWriter = new StreamWriter(filepath);
         streamFileWriter.WriteLine($"{sentryEvent.Exception.Message}\n{sentryEvent.Exception}");
@@ -152,4 +158,6 @@ internal static class CrashReporting
         streamFileWriter.WriteLine(Encoding.UTF8.GetString(memoryStream.ToArray()));
         streamFileWriter.Flush();
     }
+
+    public static string LogPath { get; set; }
 }

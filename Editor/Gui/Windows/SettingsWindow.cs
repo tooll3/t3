@@ -179,10 +179,13 @@ namespace T3.Editor.Gui.Windows
                                                                          ref ProjectSettings.Config.EnablePlaybackControlWithKeyboard,
                                                                          "Users can use cursor left/right to skip through time\nand space key to pause playback\nof exported executable.",
                                                                          ProjectSettings.Defaults.EnablePlaybackControlWithKeyboard);
-                        projectSettingsChanged |= FormInputs.AddCheckBox("Windowed player",
-                                                                         ref ProjectSettings.Config.WindowedMode,
-                                                                         "Run the executable in windowed mode by default.",
-                                                                         ProjectSettings.Defaults.WindowedMode);
+                        
+                        projectSettingsChanged |= CustomComponents.DrawDropdown(selectedValue: ref ProjectSettings.Config.DefaultWindowMode,
+                                                                                label: "Default Export Window Mode",
+                                                                                tooltip: "The default window mode when exporting an executable.",
+                                                                                getDisplayTextFunc: value => value.ToString(),
+                                                                                values: Enum.GetValues<WindowMode>(),
+                                                                                labelOnSameLine: true);
                         if (projectSettingsChanged)
                             ProjectSettings.Save();
 

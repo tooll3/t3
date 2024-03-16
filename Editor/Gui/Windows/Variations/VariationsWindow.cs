@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
@@ -128,8 +129,8 @@ namespace T3.Editor.Gui.Windows.Variations
                            .EmptyWindowMessage("No Snapshots yet.\n\nWith shapshots you can switch or blend\nbetween parameter sets in your composition.\n\n"
                                                + additionalHint, "Learn More"))
                         {
-                            var url = "https://github.com/tooll3/t3/wiki/PresetsAndSnapshots";
-                            Process.Start("explorer", url);
+                            const string url = "https://github.com/tooll3/t3/wiki/PresetsAndSnapshots";
+                            CoreUi.Instance.OpenUri(url);
                         }
                     }
                     else

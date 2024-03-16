@@ -30,7 +30,7 @@ namespace T3.Core.IO
 
         public static void Save()
         {
-            JsonUtils.SaveJson(Config, _instance._filePath);
+            JsonUtils.TrySaveJson(Config, _instance._filePath);
         }
 
         private static Settings<T> _instance;

@@ -11,6 +11,7 @@ using CommandLine;
 using CommandLine.Text;
 using ManagedBass;
 using SharpDX;
+using SharpDX.Direct2D1;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -31,12 +32,16 @@ using Device = SharpDX.Direct3D11.Device;
 using Resource = SharpDX.Direct3D11.Resource;
 using Vector2 = System.Numerics.Vector2;
 using SharpDX.Windows;
+using T3.Serialization;
 using T3.SystemUi;
+using DeviceContext = SharpDX.Direct3D11.DeviceContext;
+using Factory = SharpDX.DXGI.Factory;
+using FillMode = SharpDX.Direct3D11.FillMode;
 using ResourceManager = T3.Core.Resource.ResourceManager;
 
 namespace T3.Player
 {
-    internal static class Program
+    internal static partial class Program
     {
         private class Options
         {
@@ -48,8 +53,6 @@ namespace T3.Player
 
             [Option(Default = 1080, Required = false, HelpText = "Defines the height")]
             public int Height { get; set; }
-
-            public Size Size => new(Width, Height);
 
             [Option(Default = false, Required = false, HelpText = "Run in windowed mode")]
             public bool Windowed { get; set; }
@@ -64,29 +67,34 @@ namespace T3.Player
         [STAThread]
         private static void Main(string[] args)
         {
-            var logDirectory = Path.Combine(Core.UserData.UserData.SettingsFolder, "log");
-            var fileWriter = FileWriter.CreateDefault(logDirectory);
             CoreUi.Instance = new MsForms.MsForms();
+            
+            var settingsPath = Path.Combine(RuntimeAssemblies.CoreDirectory, "exportSettings.json");
+            if (!JsonUtils.TryLoadingJson(settingsPath, out ExportSettings exportSettings))
+            {
+                var message = $"Failed to load export settings from \"{settingsPath}\". Exiting!";
+                Log.Error(message);
+                CoreUi.Instance.ShowMessageBox(message);
+                return;
+            }
+            
+            var logDirectory = Path.Combine(Core.UserData.UserData.SettingsFolder, exportSettings!.Author, exportSettings.ApplicationTitle);
+            var fileWriter = FileWriter.CreateDefault(logDirectory, out var logPath);
             try
             {
                 Log.AddWriter(new ConsoleWriter());
                 Log.AddWriter(fileWriter);
 
-                var _ = new ProjectSettings(saveOnQuit: false);
-
-                _commandLineOptions = ParseCommandLine(args);
-                if (_commandLineOptions == null)
+                if (!TryResolveOptions(args, exportSettings!, out _resolvedOptions))
                     return;
-                
 
-                _vsync = !_commandLineOptions.NoVsync;
-                Log.Debug($"using vsync: {_vsync}, windowed: {_commandLineOptions.Windowed}, size: {_commandLineOptions.Size}, loop: {_commandLineOptions.Loop}, logging: {_commandLineOptions.Logging}");
-                
-                var resolution = _commandLineOptions.Size;             
-                
+                var resolution = new Int2(_resolvedOptions.Width, _resolvedOptions.Height);
+                _vsyncInterval = Convert.ToInt16(!_resolvedOptions.NoVsync);
+                Log.Debug($": {_vsyncInterval}, windowed: {_resolvedOptions.Windowed}, size: {resolution}, loop: {_resolvedOptions.Loop}, logging: {_resolvedOptions.Logging}");
+
                 var iconPath = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources", "t3-editor", "images", "t3.ico");
                 var gotIcon = File.Exists(iconPath);
-                
+
                 Icon icon;
                 if (!gotIcon)
                 {
@@ -98,13 +106,13 @@ namespace T3.Player
                     icon = new Icon(iconPath);
                 }
 
-                _renderForm = new RenderForm(ProjectSettings.Config.MainOperatorName)
+                _renderForm = new RenderForm(exportSettings!.ApplicationTitle)
                                   {
-                                      ClientSize = resolution,
+                                      ClientSize = new Size(resolution.X, resolution.Y),
                                       AllowUserResizing = false,
                                       Icon = icon,
                                   };
-                
+
                 var handle = _renderForm.Handle;
 
                 // SwapChain description
@@ -113,7 +121,7 @@ namespace T3.Player
                                    BufferCount = 3,
                                    ModeDescription = new ModeDescription(resolution.Width, resolution.Height,
                                                                          new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                                   IsWindowed = _commandLineOptions.Windowed,
+                                   IsWindowed = _resolvedOptions.Windowed,
                                    OutputHandle = handle,
                                    SampleDescription = new SampleDescription(1, 0),
                                    SwapEffect = SwapEffect.FlipDiscard,
@@ -143,44 +151,8 @@ namespace T3.Player
                 var factory = _swapChain.GetParent<Factory>();
                 factory.MakeWindowAssociation(_renderForm.Handle, WindowAssociationFlags.IgnoreAll);
 
-                var startedWindowed = _commandLineOptions.Windowed;
-
-                MsForms.MsForms.TrackKeysOf(_renderForm);
-
-                _renderForm.KeyUp += (sender, keyArgs) =>
-                                     {
-                                         if (startedWindowed && keyArgs.Alt && keyArgs.KeyCode == Keys.Enter)
-                                         {
-                                             _swapChain.IsFullScreen = !_swapChain.IsFullScreen;
-                                             RebuildBackBuffer(_renderForm, _device, ref _renderView, ref _backBuffer, ref _swapChain);
-                                             cursor.SetVisible(!_swapChain.IsFullScreen);
-                                         }
-
-                                         var currentPlayback = Playback.Current;
-                                         if (ProjectSettings.Config.EnablePlaybackControlWithKeyboard)
-                                         {
-                                             switch (keyArgs.KeyCode)
-                                             {
-                                                 case Keys.Left:
-                                                     currentPlayback.TimeInBars -= 4;
-                                                     break;
-                                                 case Keys.Right:
-                                                     currentPlayback.TimeInBars += 4;
-                                                     break;
-                                                 case Keys.Space:
-                                                     currentPlayback.PlaybackSpeed = Math.Abs(currentPlayback.PlaybackSpeed) > 0.01f ? 0 : 1;
-                                                     break;
-                                             }
-                                         }
-
-                                         if (keyArgs.KeyCode == Keys.Escape)
-                                         {
-                                             CoreUi.Instance.ExitApplication();
-                                         }
-                                     };
-
-                _renderForm.MouseMove += MouseMoveHandler;
-                _renderForm.MouseClick += MouseMoveHandler;
+                // initialize input
+                InitializeInput(_renderForm);
 
                 // New RenderTargetView from the backbuffer
                 _backBuffer = Resource.FromSwapChain<Texture2D>(_swapChain, 0);
@@ -196,7 +168,7 @@ namespace T3.Player
 
                 LoadOperators();
 
-                var demoSymbol = SymbolRegistry.Entries[ProjectSettings.Config.MainOperatorGuid];
+                var demoSymbol = SymbolRegistry.Entries[exportSettings.OperatorId];
 
                 var playbackSettings = demoSymbol.PlaybackSettings;
                 _playback = new Playback
@@ -212,6 +184,8 @@ namespace T3.Player
 
                 Bass.Free();
                 Bass.Init();
+
+                _resolution = new Int2(_resolvedOptions.Width, _resolvedOptions.Height);
 
                 // Init wasapi input if required
                 if (playbackSettings is { AudioSource: PlaybackSettings.AudioSources.ProjectSoundTrack } && playbackSettings.GetMainSoundtrack(out _soundtrack))
@@ -231,7 +205,7 @@ namespace T3.Player
                     }
                 }
 
-                var rasterizerDesc = new RasterizerStateDescription()
+                var rasterizerDesc = new RasterizerStateDescription
                                          {
                                              FillMode = FillMode.Solid,
                                              CullMode = CullMode.None,
@@ -240,39 +214,28 @@ namespace T3.Player
                                          };
                 _rasterizerState = new RasterizerState(_device, rasterizerDesc);
 
+                foreach (var output in _project.Outputs)
+                {
+                    if (output is Slot<Texture2D> textureSlot)
+                    {
+                        if (_textureOutput == null)
+                            _textureOutput = textureSlot;
+                        else
+                        {
+                            var message = "Multiple texture outputs found. Only the first one will be used.";
+                            Log.Warning(message);
+                            break;
+                        }
+                    }
+                }
+
+                // TODO - implement proper shader pre-compilation as an option to instance instantiation
+                // move this to core?
                 // Sample some frames to preload all shaders and resources
                 if (prerenderRequired)
                 {
-                    _playback.PlaybackSpeed = 0.1f;
-                    for (double timeInSecs = 0; timeInSecs < _soundtrack.LengthInSeconds; timeInSecs += 2.0)
-                    {
-                        Playback.Current.TimeInSecs = timeInSecs;
-                        Log.Info($"Pre-evaluate at: {timeInSecs:0.00}s / {Playback.Current.TimeInBars:0.00} bars");
-
-                        DirtyFlag.IncrementGlobalTicks();
-                        DirtyFlag.InvalidationRefFrame++;
-
-                        _deviceContext.Rasterizer.SetViewport(new Viewport(0, 0, _renderForm.ClientSize.Width, _renderForm.ClientSize.Height, 0.0f, 1.0f));
-                        _deviceContext.OutputMerger.SetTargets(_renderView);
-
-                        _evalContext.Reset();
-                        _evalContext.RequestedResolution = new Int2(_commandLineOptions.Width, _commandLineOptions.Height);
-
-                        if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
-                        {
-                            textureOutput.Invalidate();
-                            textureOutput.GetValue(_evalContext);
-
-                            var tex = textureOutput.GetValue(_evalContext);
-                            if (tex == null)
-                            {
-                                Log.Error("Failed to initialize texture");
-                            }
-                        }
-
-                        Thread.Sleep(20);
-                        _swapChain.Present(1, PresentFlags.None);
-                    }
+                    PreloadShadersAndResources(_soundtrack.LengthInSeconds, _resolution, _playback, _deviceContext, _evalContext, _textureOutput, _swapChain,
+                                               _renderView);
                 }
 
                 // Start playback           
@@ -280,25 +243,108 @@ namespace T3.Player
                 _playback.TimeInBars = 0;
                 _playback.PlaybackSpeed = 1.0;
 
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
+                try
+                {
+                    // Main loop
+                    RenderLoop.Run(_renderForm, RenderCallback);
+                }
+                catch (TimelineEndedException)
+                {
+                    Log.Info($"Program ended at the end of the timeline: {_playback.TimeInSecs:0.00}s / {_playback.TimeInBars:0.00} bars");
+                    CloseApplication(false, null);
+                }
+                catch (Exception e)
+                {
+                    var errorMessage = "Exception in main loop:\n" + e;
+                    CloseApplication(true, errorMessage);
+                    Log.Error(errorMessage);
+                    fileWriter.Dispose(); // flush and close
+                    CoreUi.Instance.ShowMessageBox(errorMessage);
+                }
 
-                // Main loop
-                RenderLoop.Run(_renderForm, RenderCallback);
-
-                // Release all resources
-                _renderView.Dispose();
-                _backBuffer.Dispose();
-                _deviceContext.ClearState();
-                _deviceContext.Flush();
-                _device.Dispose();
-                _deviceContext.Dispose();
             }
             catch (Exception e)
             {
-                Log.Error("Exception in main loop: " + e);
-                fileWriter.Dispose(); // flush and close
+                CloseApplication(true, "Exception in initialization:\n" + e);
             }
+            
+            return;
+
+            void CloseApplication(bool error, string errorMessage)
+            {
+                if (!string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    Log.Error(errorMessage);
+                    CoreUi.Instance.ShowMessageBox(errorMessage);
+                }
+                    
+                fileWriter.Dispose(); // flush and close
+
+                // Release all resources
+                _renderView?.Dispose();
+                _backBuffer?.Dispose();
+                _deviceContext?.ClearState();
+                _deviceContext?.Flush();
+                _device?.Dispose();
+                _deviceContext?.Dispose();
+                
+                if (error)
+                {
+                    CoreUi.Instance.OpenUri(logPath);
+                }
+                
+                CoreUi.Instance.ExitApplication();
+            }
+        }
+
+        private static void PreloadShadersAndResources(double durationSecs, 
+                                                       Int2 resolution, 
+                                                       Playback playback, 
+                                                       DeviceContext deviceContext, 
+                                                       EvaluationContext context, 
+                                                       Slot<Texture2D> textureOutput, 
+                                                       SwapChain swapChain, 
+                                                       RenderTargetView renderView)
+        {
+            var previousSpeed = playback.PlaybackSpeed;
+            var originalTime = playback.TimeInSecs;
+            
+            playback.PlaybackSpeed = 0.1f;
+            var rasterizer = deviceContext.Rasterizer;
+            var merger = deviceContext.OutputMerger;
+            var hasTextureOutput = textureOutput != null;
+            
+            for (double timeInSecs = 0; timeInSecs < durationSecs; timeInSecs += 2.0)
+            {
+                playback.TimeInSecs = timeInSecs;
+                Log.Info($"Pre-evaluate at: {timeInSecs:0.00}s / {playback.TimeInBars:0.00} bars");
+
+                DirtyFlag.IncrementGlobalTicks();
+                DirtyFlag.InvalidationRefFrame++;
+
+                rasterizer.SetViewport(new Viewport(0, 0, resolution.Width, resolution.Height, 0.0f, 1.0f));
+                merger.SetTargets(renderView);
+
+                context.Reset();
+                context.RequestedResolution = resolution;
+
+                if (hasTextureOutput)
+                {
+                    textureOutput.Invalidate();
+                    textureOutput.GetValue(context); // why is this done twice?
+
+                    if (textureOutput.GetValue(context) == null)
+                    {
+                        Log.Error("Failed to initialize texture");
+                    }
+                }
+
+                Thread.Sleep(20);
+                swapChain.Present(1, PresentFlags.None);
+            }
+            
+            playback.PlaybackSpeed = previousSpeed;
+            playback.TimeInSecs = originalTime;
         }
 
         private static void LoadOperators()
@@ -319,8 +365,8 @@ namespace T3.Player
                                          {
                                              var symbolPackage = new PlayerSymbolPackage(assemblyInfo);
                                              symbolPackage.InitializeResources();
-                                             symbolPackage.LoadSymbols(false, out var newSymbolsWithFiles, out var allNewSymbols);
-                                             return new PackageLoadInfo(symbolPackage, newSymbolsWithFiles, allNewSymbols);
+                                             symbolPackage.LoadSymbols(false, out var newSymbolsWithFiles, out _);
+                                             return new PackageLoadInfo(symbolPackage, newSymbolsWithFiles);
                                          })
                                  .ToArray();
 
@@ -329,85 +375,8 @@ namespace T3.Player
                .ForAll(packageInfo => packageInfo.Package.ApplySymbolChildren(packageInfo.NewlyLoadedSymbols));
         }
 
-        private static void RenderCallback()
-        {
-            WasapiAudioInput.StartFrame(_playback.Settings);
-            _playback.Update();
 
-            //Log.Debug($" render at playback time {_playback.TimeInSecs:0.00}s");
-            if (_soundtrack != null)
-            {
-                AudioEngine.UseAudioClip(_soundtrack, _playback.TimeInSecs);
-                if (_playback.TimeInSecs >= _soundtrack.LengthInSeconds + _soundtrack.StartTime)
-                {
-                    if (_commandLineOptions.Loop)
-                    {
-                        _playback.TimeInSecs = 0.0;
-                    }
-                    else
-                    {
-                        CoreUi.Instance.ExitApplication();
-                    }
-                }
-            }
-
-            // Update
-            AudioEngine.CompleteFrame(_playback, Playback.LastFrameDuration);
-
-            DirtyFlag.IncrementGlobalTicks();
-            DirtyFlag.InvalidationRefFrame++;
-
-            _deviceContext.Rasterizer.SetViewport(new Viewport(0, 0, _renderForm.ClientSize.Width, _renderForm.ClientSize.Height, 0.0f, 1.0f));
-            _deviceContext.OutputMerger.SetTargets(_renderView);
-
-            _evalContext.Reset();
-            _evalContext.RequestedResolution = new Int2(_commandLineOptions.Width, _commandLineOptions.Height);
-
-            if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
-            {
-                textureOutput.Invalidate();
-                var outputTexture = textureOutput.GetValue(_evalContext);
-                var textureChanged = outputTexture != _outputTexture;
-
-                if (_outputTexture != null || textureChanged)
-                {
-                    _outputTexture = outputTexture;
-                    _deviceContext.Rasterizer.State = _rasterizerState;
-                    if (_fullScreenVertexShaderResource?.Shader != null)
-                        _deviceContext.VertexShader.Set(_fullScreenVertexShaderResource.Shader);
-                    if (_fullScreenPixelShaderResource?.Shader != null)
-                        _deviceContext.PixelShader.Set(_fullScreenPixelShaderResource.Shader);
-
-                    if (_outputTextureSrv == null || textureChanged)
-                    {
-                        Log.Debug("Creating new srv...");
-                        _outputTextureSrv = new ShaderResourceView(_device, _outputTexture);
-                    }
-
-                    _deviceContext.PixelShader.SetShaderResource(0, _outputTextureSrv);
-
-                    _deviceContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-                    _deviceContext.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
-                    _deviceContext.Draw(3, 0);
-                    _deviceContext.PixelShader.SetShaderResource(0, null);
-                }
-            }
-
-            _swapChain.Present(_vsync ? 1 : 0, PresentFlags.None);
-        }
-
-        private static void MouseMoveHandler(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (sender is not Form form)
-                return;
-
-            var relativePosition = new Vector2((float)e.X / form.Size.Width,
-                                               (float)e.Y / form.Size.Height);
-
-            MouseInput.Set(relativePosition, (e.Button & MouseButtons.Left) != 0);
-        }
-
-        private static void RebuildBackBuffer(RenderForm form, Device device, ref RenderTargetView rtv, ref Texture2D buffer, ref SwapChain swapChain)
+        private static void RebuildBackBuffer(RenderForm form, Device device, ref RenderTargetView rtv, ref Texture2D buffer, SwapChain swapChain)
         {
             rtv.Dispose();
             buffer.Dispose();
@@ -416,9 +385,8 @@ namespace T3.Player
             rtv = new RenderTargetView(device, buffer);
         }
 
-        private static Options ParseCommandLine(string[] args)
+        private static bool TryResolveOptions(string[] args, ExportSettings exportSettings, out Options resolvedOptions)
         {
-            Options parsedOptions = null;
             var parser = new Parser(config =>
                                     {
                                         config.HelpWriter = null;
@@ -431,38 +399,41 @@ namespace T3.Player
                                                   h.AdditionalNewLineAfterOption = false;
 
                                                   // Todo: This should use information from the main operator
-                                                  h.Heading = $"{ProjectSettings.Config.MainOperatorName}";
+                                                  h.Heading = exportSettings.ApplicationTitle;
 
-                                                  // Todo: This should use information from the main operator
-                                                  h.Copyright = "Author";
+                                                  h.Copyright = exportSettings.Author;
                                                   h.AutoVersion = false;
                                                   return h;
                                               },
                                               e => e);
 
+            Options parsedOptions = null;
             parserResult.WithParsed(o => { parsedOptions = o; })
-                        .WithNotParsed(o => { Log.Debug(helpText); });
+                        .WithNotParsed(_ => { Log.Debug(helpText); });
+
+            resolvedOptions = parsedOptions;
+            if (resolvedOptions == null)
+                return false;
+            
             // use windowed status _only_ when explicitly set, the Options struct doesn't know about this
             if (!args.Any(s => "--windowed".Contains(s)))
             {
-                parsedOptions.Windowed = ProjectSettings.Config.WindowedMode;
+                parsedOptions.Windowed = exportSettings.WindowMode == WindowMode.Windowed;
             }
 
-            return parsedOptions;
+            return true;
         }
 
         private readonly struct PackageLoadInfo(
             PlayerSymbolPackage package,
-            List<SymbolJson.SymbolReadResult> newlyLoadedSymbols,
-            IReadOnlyCollection<Symbol> allNewSymbols)
+            List<SymbolJson.SymbolReadResult> newlyLoadedSymbols)
         {
             public readonly PlayerSymbolPackage Package = package;
             public readonly List<SymbolJson.SymbolReadResult> NewlyLoadedSymbols = newlyLoadedSymbols;
-            public readonly IReadOnlyCollection<Symbol> AllNewSymbols = allNewSymbols;
         }
 
         // Private static bool _inResize;
-        private static bool _vsync;
+        private static int _vsyncInterval;
         private static SwapChain _swapChain;
         private static RenderTargetView _renderView;
         private static Texture2D _backBuffer;
@@ -471,7 +442,7 @@ namespace T3.Player
         private static Playback _playback;
         private static AudioClip _soundtrack;
         private static DeviceContext _deviceContext;
-        private static Options _commandLineOptions;
+        private static Options _resolvedOptions;
         private static RenderForm _renderForm;
         private static Texture2D _outputTexture;
         private static ShaderResourceView _outputTextureSrv;
@@ -479,5 +450,7 @@ namespace T3.Player
         private static ShaderResource<VertexShader> _fullScreenVertexShaderResource;
         private static ShaderResource<PixelShader> _fullScreenPixelShaderResource;
         private static Device _device;
+        private static Int2 _resolution;
+        private static Slot<Texture2D> _textureOutput;
     }
 }
