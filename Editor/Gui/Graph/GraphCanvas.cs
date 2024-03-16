@@ -933,6 +933,12 @@ namespace T3.Editor.Gui.Graph
                         break;
                 }
             }
+
+            if (oneOpSelected)
+            {
+                var symbol = selectedChildUis.Single().SymbolChild.Symbol;
+                CustomComponents.DrawSymbolCodeContextMenuItem(symbol);
+            }
         }
 
         private void FlagCurrentCompositionAsModified()

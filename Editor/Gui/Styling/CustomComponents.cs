@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
+using T3.Core.Operator;
+using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
@@ -691,6 +693,20 @@ namespace T3.Editor.Gui.Styling
             {
                 var projectFile = project.CsProjectFile;
                 return $"{projectFile.Name} - ({projectFile.RootNamespace})";
+            }
+        }
+
+        public static void DrawSymbolCodeContextMenuItem(Symbol symbol)
+        {
+            var symbolPackage = symbol.SymbolPackage;
+            var project = symbolPackage as EditableSymbolProject;
+            var enabled = project != null;
+            if(ImGui.MenuItem("Open C# code", enabled))
+            {
+                if (!project!.TryOpenCSharpInEditor(symbol))
+                {
+                    CoreUi.Instance.ShowMessageBox($"Failed to open C# code for {symbol.Name}\nCheck the logs for details.", "Error");
+                }
             }
         }
     }

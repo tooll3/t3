@@ -84,6 +84,8 @@ namespace T3.Editor.Gui.UiHelpers
 
                 ImGui.PopStyleColor(4);
                 HandleDragAndDropForSymbolItem(symbol);
+                
+                CustomComponents.ContextMenuForItem(() => CustomComponents.DrawSymbolCodeContextMenuItem(symbol));
 
                 if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
                 {
@@ -129,6 +131,7 @@ namespace T3.Editor.Gui.UiHelpers
                     ImGui.PopStyleVar();
                     ImGui.PopFont();
                 }
+                
             }
             ImGui.PopID();
         }
