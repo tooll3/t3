@@ -18,6 +18,11 @@ public class MsForms : ICoreSystemUiService
     
     void ICoreSystemUiService.OpenWithDefaultApplication(string uri)
     {
+        if (string.IsNullOrWhiteSpace(uri))
+        {
+            throw new Exception("Uri is empty");
+        }
+        
         var startInfo = new ProcessStartInfo
                         {
                             FileName = "cmd",

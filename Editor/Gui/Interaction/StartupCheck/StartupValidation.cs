@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using T3.Core.Logging;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.SystemUi;
 using T3.SystemUi;
@@ -59,42 +60,6 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                              };
             var _ = checks.Any(check => !check.Do());
         }
-
-        public static void OpenUrl(string url)
-        {
-            try
-            {
-                Process.Start(url);
-            }
-            catch
-            {
-                // hack because of this: https://github.com/dotnet/corefx/issues/10361
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    url = url.Replace("&", "^&");
-                    try
-                    {
-                        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Warning($"Failed to open URL {url} " + e.Message);
-                    }
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    Process.Start("xdg-open", url);
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    Process.Start("open", url);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
         
         private struct Check
         {
@@ -143,7 +108,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 var result = EditorUi.Instance.ShowMessageBox(sb.ToString(), caption, PopUpButtons.YesNo);
                 if (result == PopUpResult.Yes)
                 {
-                    OpenUrl(URL);
+                    CoreUi.Instance.OpenWithDefaultApplication(URL);
                 }
                 
                 EditorUi.Instance.ExitApplication();

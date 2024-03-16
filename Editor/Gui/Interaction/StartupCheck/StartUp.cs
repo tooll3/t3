@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using T3.Core.Logging;
+using T3.Core.SystemUi;
 using T3.Core.UserData;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
@@ -85,7 +86,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                     break;
                 }
                 case PopUpResult.No:
-                    StartupValidation.OpenUrl(HelpUrl);
+                    CoreUi.Instance.OpenWithDefaultApplication(HelpUrl);
                     Environment.Exit(0);
                     break;
                 
