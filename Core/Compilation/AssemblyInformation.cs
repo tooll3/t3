@@ -69,7 +69,7 @@ public class AssemblyInformation
     public bool IsOperatorAssembly => _operatorTypes.Count > 0;
 
     private readonly List<string> _assemblyPaths = new();
-    public IReadOnlyCollection<string> AssemblyPaths;
+    public readonly IReadOnlyCollection<string> AssemblyPaths;
         
 
     public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
