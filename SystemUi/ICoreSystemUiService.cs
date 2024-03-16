@@ -5,7 +5,7 @@ namespace T3.SystemUi;
 
 public interface ICoreSystemUiService
 {
-    public void OpenUri(string uri);
+    public void OpenWithDefaultApplication(string uri);
     public void ShowMessageBox(string text, string title);
     public PopUpResult ShowMessageBox(string text, string title, PopUpButtons buttons);
     public void ShowMessageBox(string message);

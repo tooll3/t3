@@ -16,7 +16,7 @@ public class MsForms : ICoreSystemUiService
                                                                         : UnhandledExceptionMode.CatchException);
     }
     
-    void ICoreSystemUiService.OpenUri(string uri)
+    void ICoreSystemUiService.OpenWithDefaultApplication(string uri)
     {
         var startInfo = new ProcessStartInfo
                         {

@@ -929,7 +929,7 @@ namespace T3.Editor.Gui.Graph
                         Log.Info(reason);
                         EditorUi.Instance.ShowMessageBox(reason, $"Exported {label} successfully!");
                         // open export directory in native file explorer
-                        CoreUi.Instance.OpenUri(exportDir);
+                        CoreUi.Instance.OpenWithDefaultApplication(exportDir);
                         break;
                 }
             }
