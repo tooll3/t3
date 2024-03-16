@@ -136,9 +136,8 @@ namespace T3.Player
                 var deviceCreationFlags = DeviceCreationFlags.None;
                 #endif
                 Device.CreateWithSwapChain(DriverType.Hardware, deviceCreationFlags, desc, out _device, out _swapChain);
-                _deviceContext = _device.ImmediateContext;
                 ResourceManager.Instance().Init(_device);
-                SharedResources.Initialize();
+                _deviceContext = _device.ImmediateContext;
 
                 var cursor = CoreUi.Instance.Cursor;
 
@@ -163,12 +162,19 @@ namespace T3.Player
                                              Device = _device
                                          };
                 ShaderCompiler.Instance = shaderCompiler;
+                
+                SharedResources.Initialize();
+                
                 _fullScreenPixelShaderResource = SharedResources.FullScreenPixelShaderResource;
                 _fullScreenVertexShaderResource = SharedResources.FullScreenVertexShaderResource;
 
                 LoadOperators();
 
-                var demoSymbol = SymbolRegistry.Entries[exportSettings.OperatorId];
+                if(!SymbolRegistry.Entries.TryGetValue(exportSettings.OperatorId, out var demoSymbol))
+                {
+                    CloseApplication(true, $"Failed to find operator with id {exportSettings.OperatorId}");
+                    return;
+                }
 
                 var playbackSettings = demoSymbol.PlaybackSettings;
                 _playback = new Playback
@@ -190,7 +196,7 @@ namespace T3.Player
                 // Init wasapi input if required
                 if (playbackSettings is { AudioSource: PlaybackSettings.AudioSources.ProjectSoundTrack } && playbackSettings.GetMainSoundtrack(out _soundtrack))
                 {
-                    if (_soundtrack.TryGetAbsoluteFilePath(out var _))
+                    if (_soundtrack.TryGetAbsoluteFilePath(out _))
                     {
                         _playback.Bpm = _soundtrack.Bpm;
                         // Trigger loading clip
