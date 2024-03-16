@@ -13,57 +13,68 @@
     {
       "InputId": "3af8bfb8-a2d8-4919-98f5-5431798d927a"/*UseVertexSelection*/,
       "Position": {
-        "X": -557.6606,
-        "Y": 1047.4706
+        "X": -565.2654,
+        "Y": 986.07227
       }
     },
     {
-      "InputId": "cf8e1065-164d-4ba9-8c60-9ab545aaaee2"/*Pivot*/,
+      "InputId": "aa003a1b-929d-4776-b816-608771242177"/*ShowPivots*/,
       "Position": {
-        "X": -557.6606,
-        "Y": 1092.4706
+        "X": -565.2654,
+        "Y": 1031.0723
       }
     },
     {
       "InputId": "f6efc4a6-5267-40aa-82d3-e1b67d852fa8"/*Spherize*/,
       "Position": {
-        "X": -557.6606,
-        "Y": 1137.4706
-      }
+        "X": -565.2654,
+        "Y": 1076.0723
+      },
+      "GroupTitle": "Spherize"
     },
     {
       "InputId": "161f293c-1d7f-4543-befe-0b4bd676483a"/*Radius*/,
       "Position": {
-        "X": -557.6606,
-        "Y": 1182.4706
+        "X": -565.2654,
+        "Y": 1121.0723
       }
+    },
+    {
+      "InputId": "cf8e1065-164d-4ba9-8c60-9ab545aaaee2"/*Pivot*/,
+      "Position": {
+        "X": -565.2654,
+        "Y": 1166.0723
+      },
+      "Description": "Pink cross, center of Spherize"
     },
     {
       "InputId": "10d0502e-1a9d-4d8f-a516-2b2b465849bf"/*Taper*/,
       "Position": {
-        "X": -557.6606,
-        "Y": 1227.4706
+        "X": -565.2654,
+        "Y": 1211.0723
+      },
+      "GroupTitle": "Taper "
+    },
+    {
+      "InputId": "a53aad5d-7bc5-4cbb-8a59-90cf8c346992"/*TaperAxis*/,
+      "Position": {
+        "X": -565.2654,
+        "Y": 1256.0723
       }
     },
     {
       "InputId": "c67fa5cb-97b2-4146-a6c1-0ea84a03f703"/*Twist*/,
       "Position": {
-        "X": -557.6606,
-        "Y": 1272.4706
-      }
-    },
-    {
-      "InputId": "a53aad5d-7bc5-4cbb-8a59-90cf8c346992"/*TaperAxis*/,
-      "Position": {
-        "X": -557.6606,
-        "Y": 1317.4706
-      }
+        "X": -565.2654,
+        "Y": 1301.0723
+      },
+      "GroupTitle": "Twist"
     },
     {
       "InputId": "ebf1167b-1519-4ca9-bfa6-87472889966b"/*TwistAxis*/,
       "Position": {
-        "X": -557.6606,
-        "Y": 1362.4706
+        "X": -565.2654,
+        "Y": 1346.0723
       },
       "Min": 0,
       "Max": 2,
@@ -72,9 +83,10 @@
     {
       "InputId": "6323532f-f548-4faa-9c21-826ee4d44090"/*TwistPivot*/,
       "Position": {
-        "X": -557.6606,
-        "Y": 1407.4706
-      }
+        "X": -565.2654,
+        "Y": 1391.0723
+      },
+      "Description": "Blue cross, origin of twist deformation"
     }
   ],
   "SymbolChildUis": [
@@ -249,6 +261,27 @@
       "Position": {
         "X": -52.40454,
         "Y": 1502.3657
+      }
+    },
+    {
+      "ChildId": "673252b7-3d52-4939-b289-b942645497aa"/*DrawLines*/,
+      "Position": {
+        "X": 522.6749,
+        "Y": 1324.2261
+      }
+    },
+    {
+      "ChildId": "21f51a4f-b6d1-4a60-a9e1-f2ca28f00646"/*Transform*/,
+      "Position": {
+        "X": 672.6749,
+        "Y": 1324.2261
+      }
+    },
+    {
+      "ChildId": "bf096c3c-bf6a-41ea-a9fe-0f2186e92d15"/*Execute*/,
+      "Position": {
+        "X": 826.70514,
+        "Y": 1215.1003
       }
     }
   ],
