@@ -17,6 +17,14 @@
         <PackageReference Include="SharpDX.Desktop" Version="4.2.0" />
     </ItemGroup>
 
+    <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
+    <ItemGroup>
+        <Content Include="../Dependencies/**/*" Visible="false">
+            <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
     <ItemGroup>
         <Reference Include="System.Drawing.Common">
           
