@@ -393,7 +393,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         if (!forceUpdate && _combineChannelsComputeShaderResource != null)
             return;
 
-        const string sourcePath = @"Resources\lib\cs\CombineGltfChannels-cs.hlsl";
+        const string sourcePath = @"cs\CombineGltfChannels-cs.hlsl";
         const string entryPoint = "main";
         const string debugName = "combine-channel-textures";
         var resourceManager = ResourceManager.Instance();
