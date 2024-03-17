@@ -79,7 +79,7 @@ internal sealed class SymbolPathHandler
         var changed = false;
         if (_initialized && TryCreateDirectory(newFolder))
         {
-            changed |= MoveFileIfNecessary(_sourceCodePath!, EditableSymbolProject.SourceCodeExtension, fmt, out var sourceCodePath);
+            changed |= MoveFileIfNecessary(_sourceCodePath!, EditorSymbolPackage.SourceCodeExtension, fmt, out var sourceCodePath);
             _sourceCodePath = sourceCodePath;
 
             changed |= MoveFileIfNecessary(_symbolFilePath!, SymbolPackage.SymbolExtension, fmt, out var symbolPath);

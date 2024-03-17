@@ -112,6 +112,7 @@ internal sealed partial class EditableSymbolProject
     protected override void OnSymbolUiLoaded(string? path, SymbolUi symbolUi)
     {
         var symbol = symbolUi.Symbol;
+        symbolUi.ForceUnmodified = false;
         path ??= SymbolPathHandler.GetCorrectPath(symbol.Name, symbol.Namespace, Folder, CsProjectFile.RootNamespace, SymbolUiExtension);
         var filePathHandler = _filePathHandlers[symbol.Id];
         filePathHandler.UiFilePath = path;

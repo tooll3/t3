@@ -426,7 +426,7 @@ public static class T3Ui
         SaveStopwatch.Restart();
 
         // Todo - parallelize? 
-        foreach (var package in ProjectSetup.EditableSymbolProjects)
+        foreach (var package in EditableSymbolProject.AllProjects)
         {
             if (saveAll)
                 package.SaveAll();

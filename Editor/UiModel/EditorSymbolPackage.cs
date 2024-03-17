@@ -4,7 +4,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -125,26 +124,7 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
         
         SymbolUiRegistry.Entries.TryGetValue(rootSymbolId, out RootSymbolUi);
         
-        EnableDisableRootSaving(false);
-
         RootInstance = rootInstance;
-    }
-
-    internal static void EnableDisableRootSaving(bool enabled)
-    {
-        if (RootSymbolUi == null)
-        {
-            throw new Exception("RootSymbolUi is null");
-        }
-        
-        if (enabled)
-        {
-            RootSymbolUi.DisableForceUnmodified();
-        }
-        else
-        {
-            RootSymbolUi.ForceUnmodified();
-        }
     }
     
     public override void Dispose()
@@ -247,17 +227,17 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
     private protected static SymbolUi? RootSymbolUi;
 
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
-    internal const string SourceCodeExtension = ".cs";
 
     protected virtual IEnumerable<string> SymbolUiSearchFiles =>
         Directory.EnumerateFiles(Path.Combine(Folder, SymbolUiSubFolder), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
     
     public override bool IsModifiable => false;
-    internal const string SymbolUiExtension = ".t3ui";
     private ConcurrentDictionary<Guid, string>? _sourceCodePaths;
 
     protected virtual IEnumerable<string> SourceCodeSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, SourceCodeSubFolder), $"*{SourceCodeExtension}", SearchOption.AllDirectories);
     
+    internal const string SourceCodeExtension = ".cs";
+    public const string SymbolUiExtension = ".t3ui";
     public const string SymbolUiSubFolder = "SymbolUis";
     public const string SourceCodeSubFolder = "SourceCode";
 }
