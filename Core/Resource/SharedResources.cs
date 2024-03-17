@@ -16,7 +16,7 @@ namespace T3.Editor.App
         
         static SharedResources()
         {
-            ResourceManager.SharedResourcePackages.Add(new SharedResourceObject());
+            ResourceManager.AddSharedResourceFolder(new SharedResourceObject(), true);
         }
 
         public static void Initialize()

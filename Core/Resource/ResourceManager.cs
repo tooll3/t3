@@ -62,7 +62,7 @@ namespace T3.Core.Resource
                 }
             }
             
-            var sharedResourcePackages = SharedResourcePackages;
+            var sharedResourcePackages = relativePath.EndsWith(".hlsl") ? ShaderPackages : SharedResourcePackages;
 
             if (TestPath(relativePath, sharedResourcePackages, out absolutePath, out resourceContainer))
             {
@@ -112,6 +112,22 @@ namespace T3.Core.Resource
         private uint GetNextResourceId() => Interlocked.Increment(ref _resourceIdCounter);
 
         private uint _resourceIdCounter = 1;
-        public static readonly List<IResourceContainer> SharedResourcePackages = new(4);
+
+        internal static void AddSharedResourceFolder(IResourceContainer resourceContainer, bool allowSharedNonCodeFiles)
+        {
+            if(allowSharedNonCodeFiles)
+                SharedResourcePackages.Add(resourceContainer);
+            
+            ShaderPackages.Add(resourceContainer);
+        }
+        
+        internal static void RemoveSharedResourceFolder(IResourceContainer resourceContainer)
+        {
+            ShaderPackages.Remove(resourceContainer);
+            SharedResourcePackages.Remove(resourceContainer);
+        }
+        
+        private static readonly List<IResourceContainer> SharedResourcePackages = new(4);
+        private static readonly List<IResourceContainer> ShaderPackages = new(4);
     }
 }

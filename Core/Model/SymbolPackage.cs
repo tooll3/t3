@@ -45,13 +45,12 @@ public abstract partial class SymbolPackage(AssemblyInformation assembly) : IRes
     {
         ResourcesFolder = Path.Combine(Folder, ResourceManager.ResourcesSubfolder);
         Directory.CreateDirectory(ResourcesFolder);
-        if(AssemblyInformation.ShouldShareResources)
-            ResourceManager.SharedResourcePackages.Add(this);
+        ResourceManager.AddSharedResourceFolder(this, AssemblyInformation.ShouldShareResources);
     }
 
     public virtual void Dispose()
     {
-        ResourceManager.SharedResourcePackages.Remove(this);
+        ResourceManager.RemoveSharedResourceFolder(this);
         var symbols = Symbols.Values.ToArray();
         foreach (var symbol in symbols)
         {
