@@ -1,21 +1,27 @@
-//#include "lib/shared/bias-functions.hlsl"
+// #include "lib/shared/bias-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {
     float2 Center;
     float NumSamples;
-    float Density;
-    float Weight;
-    float Amount;
+    float Length;
+
+    float4 RayColor;
+
     float Decay;
+    float ApplyFxToBackground;
+    float Amount;
+    float RefineFactor;
+    float RefineSamples;
 
+    float AspectRatio;
 }
 
-cbuffer Resolution : register(b1)
-{
-    float TargetWidth;
-    float TargetHeight;
-}
+// cbuffer Resolution : register(b1)
+// {
+//     float TargetWidth;
+//     float TargetHeight;
+// }
 
 struct vsOutput
 {
@@ -25,51 +31,53 @@ struct vsOutput
 
 Texture2D<float4> Image : register(t0);
 Texture2D<float4> FxImage : register(t1);
+Texture2D<float4> RayImage : register(t2);
+
 sampler texSampler : register(s0);
 
 float4 psMain(vsOutput input) : SV_TARGET
 {
-    
-    float2 centerproof = Center * float2 (1, -1) +float2(0.5,0.5);
-    //float width, height;
-    //Image.GetDimensions(width, height);
-    //float aspectRatio = width / height;
-       
+    float2 centerproof = Center * float2(1, -1) + float2(0.5, 0.5);
+
     float2 uv = input.texCoord;
 
-    //delta between current pixel and light position
-    float2 delta = uv - centerproof;
-    
-    //define sampling step
-    delta *= 1.0f / float(NumSamples) * Density;
-    
-    //initial color
-    float4 color = Image.Sample(texSampler, uv);
-    float4 fx = FxImage.Sample(texSampler, uv);
-    
-    //float illuminationDecay = 0.9f;
-    float illuminationDecay = Decay;
-    float weight = Weight*0.01; // Scaling down the value in order to make it easier to tweak in the UI
-    
-    for(int i = 0; i < NumSamples; i++)
+    float4 orgColor = Image.Sample(texSampler, uv) * lerp(1, FxImage.Sample(texSampler, uv), ApplyFxToBackground);
+
+    float2 delta = (uv - centerproof) * Length / NumSamples;
+    float4 colorSum = 0;
+
+    for (int i = 1; i < NumSamples; i++)
     {
-        //peform sampling step
         uv -= delta;
-        
-        //decay the ray
-        float4 color_sample = Image.Sample(texSampler, uv) * FxImage.Sample(texSampler, uv);
-        
-        color_sample *= illuminationDecay * weight;
-                
-        //original color + ray sample
-        color += color_sample * Amount;
-        //color = 1 - (1 - color) * (1 - color_sample * Amount ); //screen blending mode
-       
+        colorSum += Image.Sample(texSampler, uv) * FxImage.Sample(texSampler, uv) * pow(1 - (float)i / NumSamples, Decay);
     }
 
-    // Output to screen
-       
-    float4 c = color;
-    
-    return (c);
+    return clamp(orgColor + colorSum / NumSamples * RayColor * Amount, 0, float4(1000, 1000, 1000, 1));
+}
+
+// An ill-fated attempt of a refinement pass.
+// Sadly it has too many artifacts to be usable.
+float4 Pass2Refine(vsOutput input) : SV_TARGET
+{
+
+    float2 centerproof = Center * float2(1, -1) + float2(0.5, 0.5);
+
+    float2 uv = input.texCoord;
+
+    float4 orgColor = Image.Sample(texSampler, uv) * lerp(1, FxImage.Sample(texSampler, uv), ApplyFxToBackground);
+
+    int refineSampleCount = 20;
+
+    float extra = length((uv - centerproof) * float2(1, 1));
+    float2 delta = (uv - centerproof) * Length / refineSampleCount * RefineFactor * extra;
+    float4 colorSum = 0;
+
+    uv += delta * RefineSamples / 2;
+    for (int i = 1; i < RefineSamples; i++)
+    {
+        uv -= delta;
+        colorSum += RayImage.Sample(texSampler, uv); // * FxImage.Sample(texSampler, uv) * pow(1 - (float)i / NumSamples, Decay);
+    }
+
+    return clamp(orgColor + colorSum / NumSamples * RayColor * Amount, 0, float4(1000, 1000, 1000, 1));
 }
