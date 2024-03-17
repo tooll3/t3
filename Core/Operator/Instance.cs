@@ -13,7 +13,7 @@ namespace T3.Core.Operator
     public abstract class Instance : IDisposable, IGuidPathContainer
     {
         public abstract Type Type { get; }
-        public Guid SymbolChildId { get; set; }
+        public Guid SymbolChildId;
         
         private Instance _parent;
 
@@ -114,9 +114,11 @@ namespace T3.Core.Operator
             Instance sourceInstance = null;
             var gotSourceInstance = false;
             
+            var sourceParentOrChildId = connection.SourceParentOrChildId;
+            
             foreach(var child in compositionInstance.Children)
             {
-                if (child.SymbolChildId != connection.SourceParentOrChildId)
+                if (child.SymbolChildId != sourceParentOrChildId)
                     continue;
                 
                 sourceInstance = child;
@@ -125,10 +127,10 @@ namespace T3.Core.Operator
             }
 
             // Evaluate correctness of slot source Instance
-            var connectionBelongsToThis = connection.SourceParentOrChildId == Guid.Empty;
+            var connectionBelongsToThis = sourceParentOrChildId == Guid.Empty;
             if (!gotSourceInstance && !connectionBelongsToThis)
             {
-                Log.Error($"Connection in {this} has incorrect source slot: {connection.SourceParentOrChildId}");
+                Log.Error($"Connection in {this} has incorrect source slot: {sourceParentOrChildId}");
                 sourceSlot = null;
                 return false;
             }
@@ -160,9 +162,11 @@ namespace T3.Core.Operator
             Instance targetInstance = null;
             bool gotTargetInstance = false;
             
+            var targetParentOrChildId = connection.TargetParentOrChildId;
+            
             foreach(var child in compositionInstance.Children)
             {
-                if (child.SymbolChildId != connection.TargetParentOrChildId)
+                if (child.SymbolChildId != targetParentOrChildId)
                     continue;
                 
                 targetInstance = child;
@@ -233,8 +237,8 @@ namespace T3.Core.Operator
 
     public class Instance<T> : Instance where T : Instance
     {
-        public override Type Type { get; } = typeof(T);
-        public override Symbol Symbol => _typeSymbol;
+        public sealed override Type Type { get; } = typeof(T);
+        public sealed override Symbol Symbol => _typeSymbol;
 
         // ReSharper disable once StaticMemberInGenericType
         #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
