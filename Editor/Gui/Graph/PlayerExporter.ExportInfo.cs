@@ -1,6 +1,8 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
@@ -32,21 +34,43 @@ public static partial class PlayerExporter
 
         public bool TryAddSharedResource(string relativePath, IReadOnlyCollection<string>? otherDirs = null)
         {
-            otherDirs ??= Array.Empty<string>();
-            if (!ResourceManager.TryResolvePath(relativePath, otherDirs, out var absolutePath))
+            var searchDirs = otherDirs ?? Array.Empty<string>();
+            if (!ResourceManager.TryResolvePath(relativePath, searchDirs, out var absolutePath))
             {
                 Log.Error($"Can't find file: {relativePath}");
                 return false;
             }
+            
+            relativePath = relativePath.Replace("\\", "/");
+            absolutePath = absolutePath.Replace("\\", "/");
 
             TryAddResourcePath(new ResourcePath(relativePath, absolutePath));
 
             // Copy related font textures
-            if (relativePath.EndsWith(".fnt"))
+            if (relativePath.EndsWith(".fnt", StringComparison.OrdinalIgnoreCase))
             {
                 var relativePathPng = relativePath.Replace(".fnt", ".png");
                 var absolutePathPng = absolutePath.Replace(".fnt", ".png");
                 TryAddResourcePath(new ResourcePath(relativePathPng, absolutePathPng));
+            }
+
+            // search for shader includes
+            if (absolutePath.EndsWith(".hlsl", StringComparison.OrdinalIgnoreCase))
+            {
+                 var shaderFolder = Path.GetDirectoryName(absolutePath)!;
+                 var shaderDirs = searchDirs.Append(shaderFolder).Distinct().ToArray();
+                 var shaderText = File.ReadAllText(absolutePath);
+                 var includeLines = shaderText.Split('\n').Where(l => l.StartsWith("#include")).ToArray();
+                 foreach (var line in includeLines)
+                 {
+                     // get include path without quotes
+                     var split = line.Split('"');
+                     if (split.Length < 2)
+                         continue;
+                     
+                     var includePath = line.Split('"')[1];
+                     TryAddSharedResource(includePath, shaderDirs);
+                 }
             }
 
             return true;
