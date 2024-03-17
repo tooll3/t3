@@ -79,8 +79,10 @@ namespace T3.Player
                 CoreUi.Instance.ShowMessageBox(message);
                 return;
             }
+
+            ProjectSettings.Config = exportSettings!.ConfigData;
             
-            var logDirectory = Path.Combine(Core.UserData.UserData.SettingsFolder, exportSettings!.Author, exportSettings.ApplicationTitle);
+            var logDirectory = Path.Combine(Core.UserData.UserData.SettingsFolder, exportSettings.Author, exportSettings.ApplicationTitle);
             var fileWriter = FileWriter.CreateDefault(logDirectory, out var logPath);
             try
             {
