@@ -37,17 +37,8 @@ namespace T3.Core.Operator
         {
             get
             {
-                GatherResourcePackages(this, ref _availableResourcePackages, ref _availableResourceFolders);
+                GatherResourcePackages(this, ref _availableResourcePackages);
                 return _availableResourcePackages;
-            }
-        }
-
-        public IReadOnlyList<string> AvailableResourceFolders
-        {
-            get
-            {
-                GatherResourcePackages(this, ref _availableResourcePackages, ref _availableResourceFolders);
-                return _availableResourceFolders;
             }
         }
 
@@ -204,7 +195,7 @@ namespace T3.Core.Operator
             return gotTargetSlot;
         }
 
-        private static void GatherResourcePackages(Instance instance, ref List<SymbolPackage> resourceFolders, ref List<string> availableResourceFolders)
+        private static void GatherResourcePackages(Instance instance, ref List<SymbolPackage> resourceFolders)
         {
             if (!instance._resourceFoldersDirty)
                 return;
@@ -215,18 +206,12 @@ namespace T3.Core.Operator
             else
                 resourceFolders = [];
             
-            if(availableResourceFolders != null)
-                availableResourceFolders.Clear();
-            else
-                availableResourceFolders = [];
-            
             while (instance != null)
             {
                 var package = instance.Symbol.SymbolPackage;
                 if (!resourceFolders.Contains(package))
                 {
                     resourceFolders.Add(package);
-                    availableResourceFolders.Add(package.ResourcesFolder);
                 }
 
                 instance = instance._parent;
@@ -243,7 +228,6 @@ namespace T3.Core.Operator
         
 
         private List<SymbolPackage> _availableResourcePackages;
-        private List<string> _availableResourceFolders;
         private bool _resourceFoldersDirty = true;
     }
 
