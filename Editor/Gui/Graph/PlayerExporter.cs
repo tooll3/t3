@@ -23,6 +23,7 @@ namespace T3.Editor.Gui.Graph
 {
     public static partial class PlayerExporter
     {
+        public const string ExportFolderName = "T3Exports";
         public static bool TryExportInstance(GraphCanvas graphCanvas, SymbolChildUi childUi, out string reason, out string exportDir)
         {
             T3Ui.Save(false);
@@ -45,7 +46,7 @@ namespace T3.Editor.Gui.Graph
             var exportInfo = new ExportInfo();
             CollectChildSymbols(instance.Symbol, exportInfo);
 
-            exportDir = Path.Combine(UserSettings.Config.DefaultNewProjectDirectory, "Exports", childUi.SymbolChild.ReadableName);
+            exportDir = Path.Combine(UserSettings.Config.DefaultNewProjectDirectory, ExportFolderName, childUi.SymbolChild.ReadableName);
 
             try
             {

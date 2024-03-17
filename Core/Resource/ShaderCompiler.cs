@@ -25,7 +25,7 @@ public abstract class ShaderCompiler
         }
     }
 
-    protected abstract bool CompileShaderFromSource<TShader>(string shaderSource, IReadOnlyList<IResourceContainer> directories, string entryPoint, string name, out ShaderBytecode blob,
+    protected abstract bool CompileShaderFromSource<TShader>(string shaderSource, IReadOnlyList<IResourcePackage> directories, string entryPoint, string name, out ShaderBytecode blob,
                                                              out string errorMessage)
         where TShader : class, IDisposable;
 
@@ -33,7 +33,7 @@ public abstract class ShaderCompiler
         where TShader : class, IDisposable;
 
     public bool TryCompileShaderFromSource<TShader>(string shaderSource, string entryPoint, string name, ref TShader shader, ref ShaderBytecode? blob,
-                                                    out string errorMessage, IReadOnlyList<IResourceContainer> directories)
+                                                    out string errorMessage, IReadOnlyList<IResourcePackage> directories)
         where TShader : class, IDisposable
     {
         if (string.IsNullOrWhiteSpace(entryPoint))
@@ -91,7 +91,7 @@ public abstract class ShaderCompiler
         return true;
     }
 
-    public bool TryCompileShaderFromFile<TShader>(string srcFile, string entryPoint, string name, IEnumerable<IResourceContainer>? resourceDirs, ref TShader shader,
+    public bool TryCompileShaderFromFile<TShader>(string srcFile, string entryPoint, string name, IEnumerable<IResourcePackage>? resourceDirs, ref TShader shader,
                                                   ref ShaderBytecode blob, out string errorMessage)
         where TShader : class, IDisposable
     {
@@ -103,8 +103,8 @@ public abstract class ShaderCompiler
             return false;
         }
 
-        List<IResourceContainer> directories = new();
-        directories.Add(new ShaderResourceContainer(file.DirectoryName!));
+        List<IResourcePackage> directories = new();
+        directories.Add(new ShaderResourcePackage(file.DirectoryName!));
 
         if (resourceDirs != null)
             directories.AddRange(resourceDirs);
@@ -131,7 +131,7 @@ public abstract class ShaderCompiler
                                           directories: directories);
     }
 
-    public bool TryCreateShaderResourceFromSource<TShader>(string shaderSource, string name, IReadOnlyList<IResourceContainer> directories, string entryPoint, uint resourceId,
+    public bool TryCreateShaderResourceFromSource<TShader>(string shaderSource, string name, IReadOnlyList<IResourcePackage> directories, string entryPoint, uint resourceId,
                                                            out ShaderResource<TShader> resource, out string errorMessage)
         where TShader : class, IDisposable
     {
@@ -157,7 +157,7 @@ public abstract class ShaderCompiler
         return true;
     }
 
-    public bool TryCreateShaderResourceFromFile<TShader>(string srcFile, string name, string entryPoint, uint resourceId, IReadOnlyList<IResourceContainer>? resourceDirs,
+    public bool TryCreateShaderResourceFromFile<TShader>(string srcFile, string name, string entryPoint, uint resourceId, IReadOnlyList<IResourcePackage>? resourceDirs,
                                                          out ShaderResource<TShader>? resource, out string errorMessage)
         where TShader : class, IDisposable
     {
@@ -181,7 +181,7 @@ public abstract class ShaderCompiler
         return true;
     }
     
-    public sealed class ShaderResourceContainer(string resourcesFolder) : IResourceContainer
+    public sealed class ShaderResourcePackage(string resourcesFolder) : IResourcePackage
     {
         public string ResourcesFolder { get; } = resourcesFolder;
         public ResourceFileWatcher? FileWatcher => null;

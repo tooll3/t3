@@ -71,7 +71,7 @@ public sealed partial class ResourceManager
         if(string.IsNullOrWhiteSpace(entryPoint))
             entryPoint = "main";
         
-        List<IResourceContainer> compilationReferences = new();
+        List<IResourcePackage> compilationReferences = new();
         ResourceFileWatcher? fileWatcher = null;
         ResourceFileHook? fileHook = null;
 

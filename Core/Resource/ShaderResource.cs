@@ -56,7 +56,7 @@ public sealed class ShaderResource<T> : ShaderResource where T : class, IDisposa
 
     public void UpdateDebugName(string newDebugName) => UpdateName(newDebugName);
 
-    public bool TryUpdateFromFile(string path, string entryPoint, IReadOnlyList<IResourceContainer> resourceDirectories, out string errorMessage)
+    public bool TryUpdateFromFile(string path, string entryPoint, IReadOnlyList<IResourcePackage> resourceDirectories, out string errorMessage)
     {
         var success = ShaderCompiler.Instance.TryCompileShaderFromFile(path, entryPoint, Name, resourceDirectories, ref _shader, ref _blob, out errorMessage);
         if (success)
@@ -64,7 +64,7 @@ public sealed class ShaderResource<T> : ShaderResource where T : class, IDisposa
         return success;
     }
 
-    public bool TryUpdateFromSource(string source, string entryPoint, IReadOnlyList<IResourceContainer> directories, out string errorMessage)
+    public bool TryUpdateFromSource(string source, string entryPoint, IReadOnlyList<IResourcePackage> directories, out string errorMessage)
     {
         var success = ShaderCompiler.Instance.TryCompileShaderFromSource(source, entryPoint, Name, ref _shader, ref _blob, out errorMessage, directories);
         if (success)

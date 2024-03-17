@@ -15,7 +15,7 @@ public class DX11ShaderCompiler : ShaderCompiler
 {
     public Device Device { get; set; }
 
-    protected override bool CompileShaderFromSource<TShader>(string shaderSource, IReadOnlyList<IResourceContainer> directories, string entryPoint, string name, out ShaderBytecode blob,
+    protected override bool CompileShaderFromSource<TShader>(string shaderSource, IReadOnlyList<IResourcePackage> directories, string entryPoint, string name, out ShaderBytecode blob,
                                                              out string errorMessage)
     {
         CompilationResult compilationResult = null;
@@ -86,9 +86,9 @@ public class DX11ShaderCompiler : ShaderCompiler
     private class IncludeHandler : SharpDX.D3DCompiler.Include
     {
         private StreamReader _streamReader;
-        private readonly IReadOnlyList<IResourceContainer> _directories;
+        private readonly IReadOnlyList<IResourcePackage> _directories;
         
-        public IncludeHandler(IReadOnlyList<IResourceContainer> directories)
+        public IncludeHandler(IReadOnlyList<IResourcePackage> directories)
         {
             _directories = directories;
         }

@@ -29,7 +29,7 @@ namespace T3.Core.Resource
         {
         }
 
-        public static bool TryResolvePath(string relativePath, IReadOnlyList<IResourceContainer>? resourceContainers, out string absolutePath, out IResourceContainer? resourceContainer)
+        public static bool TryResolvePath(string relativePath, IReadOnlyList<IResourcePackage>? resourceContainers, out string absolutePath, out IResourcePackage? resourceContainer)
         {
             if (string.IsNullOrWhiteSpace(relativePath))
             {
@@ -88,8 +88,8 @@ namespace T3.Core.Resource
 
         private static bool Exists(string absolutePath) => File.Exists(absolutePath) || Directory.Exists(absolutePath);
 
-        static bool TestPath(string relative, IReadOnlyList<IResourceContainer> resourceContainers, out string absolutePath,
-                             out IResourceContainer? resourceContainer)
+        static bool TestPath(string relative, IReadOnlyList<IResourcePackage> resourceContainers, out string absolutePath,
+                             out IResourcePackage? resourceContainer)
         {
             foreach (var package in resourceContainers)
             {
@@ -113,21 +113,22 @@ namespace T3.Core.Resource
 
         private uint _resourceIdCounter = 1;
 
-        internal static void AddSharedResourceFolder(IResourceContainer resourceContainer, bool allowSharedNonCodeFiles)
+        internal static void AddSharedResourceFolder(IResourcePackage resourcePackage, bool allowSharedNonCodeFiles)
         {
             if(allowSharedNonCodeFiles)
-                SharedResourcePackages.Add(resourceContainer);
+                SharedResourcePackages.Add(resourcePackage);
             
-            ShaderPackages.Add(resourceContainer);
+            ShaderPackages.Add(resourcePackage);
         }
         
-        internal static void RemoveSharedResourceFolder(IResourceContainer resourceContainer)
+        internal static void RemoveSharedResourceFolder(IResourcePackage resourcePackage)
         {
-            ShaderPackages.Remove(resourceContainer);
-            SharedResourcePackages.Remove(resourceContainer);
+            ShaderPackages.Remove(resourcePackage);
+            SharedResourcePackages.Remove(resourcePackage);
         }
         
-        private static readonly List<IResourceContainer> SharedResourcePackages = new(4);
-        private static readonly List<IResourceContainer> ShaderPackages = new(4);
+        private static readonly List<IResourcePackage> SharedResourcePackages = new(4);
+        public static IReadOnlyList<IResourcePackage> SharedShaderPackages => ShaderPackages;
+        private static readonly List<IResourcePackage> ShaderPackages = new(4);
     }
 }
