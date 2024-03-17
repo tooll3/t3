@@ -13,7 +13,7 @@ public static partial class PlayerExporter
     {
         private HashSet<Instance> CollectedInstances { get; } = new();
         public HashSet<Symbol> UniqueSymbols { get; } = new();
-        public List<ResourcePath> UniqueResourcePaths { get; } = new();
+        public HashSet<ResourcePath> UniqueResourcePaths { get; } = new();
 
         public bool TryAddInstance(Instance instance) => CollectedInstances.Add(instance);
 

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using T3.Core.Compilation;
 using T3.Core.Logging;
+using T3.Core.Resource;
 using T3.Core.UserData;
 
 namespace T3.Editor.Compilation;
@@ -240,7 +241,7 @@ internal class CsProjectFile
         var dependenciesDirectory = Path.Combine(destinationDirectory, "dependencies");
         System.IO.Directory.CreateDirectory(dependenciesDirectory);
 
-        var resourcesDirectory = Path.Combine(destinationDirectory, "Resources");
+        var resourcesDirectory = Path.Combine(destinationDirectory, ResourceManager.ResourcesSubfolder);
         System.IO.Directory.CreateDirectory(resourcesDirectory);
 
         string placeholderDependencyPath = Path.Combine(dependenciesDirectory, "PlaceNativeDllDependenciesHere.txt");

@@ -32,7 +32,6 @@ public abstract partial class SymbolPackage(AssemblyInformation assembly) : IRes
     protected event Action<Symbol>? SymbolUpdated;
     protected event Action<Guid>? SymbolRemoved;
 
-    private const string ResourcesSubfolder = "Resources";
 
     public string ResourcesFolder { get; private set; } = null!;
 
@@ -44,7 +43,7 @@ public abstract partial class SymbolPackage(AssemblyInformation assembly) : IRes
 
     public virtual void InitializeResources()
     {
-        ResourcesFolder = Path.Combine(Folder, ResourcesSubfolder);
+        ResourcesFolder = Path.Combine(Folder, ResourceManager.ResourcesSubfolder);
         Directory.CreateDirectory(ResourcesFolder);
         if(AssemblyInformation.ShouldShareResources)
             ResourceManager.SharedResourcePackages.Add(this);

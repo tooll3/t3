@@ -90,14 +90,29 @@ namespace T3.Editor.Gui.Graph
             exportInfo.PrintInfo();
 
             var resourceDir = Path.Combine(exportDir, "Resources");
+            Directory.CreateDirectory(resourceDir);
             
-            //var symbolPlaybackSettings = childUi.SymbolChild.Symbol.PlaybackSettings;
-            //var audioClipLocation = FindAudioClip(symbolPlaybackSettings, ref errorCount);
-            //if (audioClipLocation != null)
-            //{
-            //    var audioClipPath = Path.Combine(resourceDir, Path.GetFileName(audioClipLocation));
-            //    TryCopyFile(audioClipLocation, audioClipPath);
-            //}
+            if (!TryFindSoundtrack(symbol, out var absolutePath, out var relativePath))
+            {
+                reason = $"Failed to find soundTrack for [{symbol.Name}] with relative path \"{relativePath}\"";
+                return false;
+            }
+            
+            if (absolutePath != null)
+            {
+                if (Path.IsPathRooted(relativePath))
+                {
+                    reason = $"Soundtrack path is not relative: \"{relativePath}\"";
+                    return false;
+                }
+                
+                var newPath = Path.Combine(resourceDir, relativePath!);
+                if(!TryCopyFile(absolutePath, newPath))
+                {
+                    reason = $"Failed to copy soundtrack from \"{absolutePath}\" to \"{newPath}\"";
+                    return false;
+                }
+            }
 
             if(!TryCopyDirectory(SharedResources.Directory, resourceDir, out reason))
                 return false;
@@ -106,7 +121,11 @@ namespace T3.Editor.Gui.Graph
             if(!TryCopyDirectory(playerDirectory, exportDir, out reason))
                 return false;
 
-            //var copied = TryCopyFiles(exportInfo.UniqueResourcePaths, resourceDir);
+            if (!TryCopyFiles(exportInfo.UniqueResourcePaths, resourceDir))
+            {
+                reason = "Failed to copy resource files - see log for details";
+                return false;
+            }
 
             // Update project settings
             var exportSettings = new ExportSettings(OperatorId: symbol.Id, 
@@ -129,7 +148,7 @@ namespace T3.Editor.Gui.Graph
         // todo - can we handle resource references here too?
         private static bool TryExportPackages(out string reason, IEnumerable<SymbolPackage> symbolPackages, string operatorDir)
         {
-            string[] excludeSubdirectories = [EditorSymbolPackage.SymbolUiSubFolder, EditorSymbolPackage.SourceCodeSubFolder, ".git"];
+            string[] excludeSubdirectories = [EditorSymbolPackage.SymbolUiSubFolder, EditorSymbolPackage.SourceCodeSubFolder, ".git", ResourceManager.ResourcesSubfolder];
             foreach (var package in symbolPackages)
             {
                 Log.Debug($"Exporting package {package.AssemblyInformation.Name}");
@@ -250,6 +269,14 @@ namespace T3.Editor.Gui.Graph
         {
             public readonly string RelativePath = relativePath;
             public readonly string AbsolutePath = absolutePath;
+            
+            // equality operators
+            public static bool operator ==(ResourcePath left, ResourcePath right) => left.AbsolutePath == right.AbsolutePath;
+            public static bool operator !=(ResourcePath left, ResourcePath right) => left.AbsolutePath != right.AbsolutePath;
+            public override int GetHashCode() => AbsolutePath.GetHashCode();
+            public override bool Equals(object? obj) => obj is ResourcePath other && other == this;
+            
+            public override string ToString() => $"\"{RelativePath}\" (\"{AbsolutePath}\")";
         }
 
         private static bool TryCopyFiles(IEnumerable<ResourcePath> resourcePaths, string targetDir)
@@ -349,28 +376,28 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private static string? FindAudioClip(PlaybackSettings symbolPlaybackSettings, ref int errorCount)
+        private static bool TryFindSoundtrack(Symbol symbol, out string? absolutePath, out string? relativePath)
         {
-            var soundtrack = symbolPlaybackSettings?.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
+            var playbackSettings = symbol.PlaybackSettings;
+            var soundtrack = playbackSettings?.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
             if (soundtrack == null)
             {
-                if (PlaybackUtils.TryFindingSoundtrack(out var otherSoundtrack, out var composition))
+                if (PlaybackUtils.TryFindingSoundtrack(out soundtrack, out _))
                 {
-                    Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {otherSoundtrack.FilePath} set in parent...");
-                    errorCount++;
-
-                    if(!otherSoundtrack.TryGetAbsoluteFilePath(out var absolutePath))
-                    {
-                        Log.Error($"Failed to find absolute path for {otherSoundtrack.FilePath} in [{composition.Symbol.Name}]");
-                    }
-                    return absolutePath;
+                    Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {soundtrack.FilePath} set in parent...");
+                }
+                else
+                {
+                    relativePath = null;
+                    absolutePath = null;
+                    return true;
                 }
 
                 Log.Debug("No soundtrack defined within operator.");
-                return null;
             }
 
-            return soundtrack.FilePath;
+            relativePath = soundtrack.FilePath;
+            return soundtrack.TryGetAbsoluteFilePath(out absolutePath);
         }
 
         private static void CheckInputForResourcePath(ISlot inputSlot, ExportInfo exportInfo)

@@ -149,7 +149,7 @@ namespace T3.Editor.App
 
         private void CreateRenderForm(string windowTitle, bool disableClose)
         {
-            var fileName = Path.Combine(RuntimeAssemblies.CoreDirectory, @"Resources\t3-editor\images\t3.ico");
+            var fileName = Path.Combine(SharedResources.Directory, @"t3-editor\images\t3.ico");
             Form = disableClose
                        ? new NoCloseRenderForm(windowTitle)
                              {

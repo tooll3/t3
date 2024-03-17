@@ -103,8 +103,9 @@ public partial class ResourceManager
             var range = subfolderRanges[index];
             var subfolder = pathSpan[range];
             var nextStartIndex = range.End.Value + 1;
+            var testStringSpan = testString.AsSpan();
         
-            if (testString == "*" || StringUtils.Equals(subfolder, testString, true))
+            if (testStringSpan.Length == 0 && testStringSpan[0] == '*' || StringUtils.Equals(subfolder, testStringSpan, true))
             {
                 if (TryCreateRange(nextStartIndex, pathSpan.Length, pathSpan, out var newRange))
                 {
@@ -118,7 +119,7 @@ public partial class ResourceManager
         }
     }
 
-    static IReadOnlyList<string> PopulateBackCompatPaths(string original, List<Range>? backCompatRanges)
+    private static IReadOnlyList<string> PopulateBackCompatPaths(string original, List<Range>? backCompatRanges)
     {
         if (backCompatRanges is null or { Count: 0 })
             return Array.Empty<string>();
@@ -132,6 +133,7 @@ public partial class ResourceManager
         return list;
     }
 
+    #if DEBUG
     private static void LogFailedResourceLocation(string searchPath, Instance? instance, IEnumerable<string> usedResourceFolders)
     {
         string instanceFolders;
@@ -158,6 +160,7 @@ public partial class ResourceManager
 
         Log.Debug($"Failed to locate resource {searchPathDebug} in available resource folders:\n" + instanceFolders);
     }
+    #endif
 
     // ReSharper disable once FieldCanBeMadeReadOnly.Local
     private static Utils.ObjectPooling.ArrayPool<Range> _rangeArrayPool = new(true, 30);

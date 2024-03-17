@@ -12,7 +12,7 @@ namespace T3.Editor.App
     /// </summary>
     public static class SharedResources
     {
-        public static readonly string Directory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Resources");
+        public static readonly string Directory = Path.Combine(RuntimeAssemblies.CoreDirectory, ResourceManager.ResourcesSubfolder);
         
         static SharedResources()
         {
@@ -21,6 +21,11 @@ namespace T3.Editor.App
 
         public static void Initialize()
         {
+            if (ShaderCompiler.Instance == null)
+            {
+                throw new Exception($"{nameof(ShaderCompiler)}.{nameof(ShaderCompiler.Instance)} not initialized");
+            }
+            
             const string errorHeader = $"{nameof(SharedResources)} error: ";
 
             var resourceManager = ResourceManager.Instance();
