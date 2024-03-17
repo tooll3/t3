@@ -5,14 +5,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Text.RegularExpressions;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
 using T3.Editor.Compilation;
-using T3.Editor.Gui.Graph.Helpers;
 
 namespace T3.Editor.UiModel;
 
@@ -21,7 +19,43 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 {
     public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;
 
-    public EditableSymbolProject(CsProjectFile csProjectFile) : base(null)
+    static EditableSymbolProject()
+    {
+        ProjectAdded += (project, homeSymbol) =>
+                        {
+                            if (RootSymbolUi == null)
+                            {
+                                const string message = "Root symbol is null! It must be created before adding projects!";
+                                throw new Exception(message);
+                            }
+                            
+                            var opSize = SymbolChildUi.DefaultOpSize;
+                            RootSymbolUi.AddChild(homeSymbol, 
+                                                  addedChildId: Guid.NewGuid(), 
+                                                  posInCanvas: new Vector2(0, _newProjectPosition), 
+                                                  size: opSize, 
+                                                  name: "");
+                            
+                            _newProjectPosition += (int)opSize.Y + 20;
+                        };
+    }
+
+    internal static void EnableRootSaving(bool enabled)
+    {
+        if (RootSymbolUi == null)
+        {
+            throw new Exception("RootSymbolUi is null");
+        }
+        
+        RootSymbolUi.ForceUnmodified = enabled;
+    }
+
+    /// <summary>
+    /// Create a new <see cref="EditableSymbolProject"/> using the given <see cref="CsProjectFile"/>.
+    /// This calls the base constructor with a null assembly as we override the assembly property
+    /// </summary>
+    /// <param name="csProjectFile"></param>
+    public EditableSymbolProject(CsProjectFile csProjectFile) : base(assembly: null!)
     {
         CsProjectFile = csProjectFile;
         AllProjectsRw.Add(this);
@@ -40,8 +74,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         var homeGuid = CsProjectFile.Assembly.HomeGuid;
         var homeSymbol = Symbols[homeGuid];
 
-        RootSymbolUi.AddChild(homeSymbol, Guid.NewGuid(), new Vector2(0, _newProjectPosition), SymbolChildUi.DefaultOpSize, "");
-        _newProjectPosition += (int)SymbolChildUi.DefaultOpSize.Y + 20;
+        ProjectAdded?.Invoke(this, homeSymbol);
 
         return true;
     }
@@ -131,14 +164,21 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     {
         base.Dispose();
         FileWatcher.Dispose();
+        AllProjectsRw.Remove(this);
     }
 
     public readonly CsProjectFile CsProjectFile;
     private ResourceFileWatcher _resourceFileWatcher;
     public override ResourceFileWatcher FileWatcher => _resourceFileWatcher;
 
-    private static readonly List<EditableSymbolProject> AllProjectsRw = new();
+    private static readonly List<EditableSymbolProject> AllProjectsRw = [];
     public static readonly IReadOnlyList<EditableSymbolProject> AllProjects = AllProjectsRw;
+    
+    /// <summary>
+    /// Event that is raised when a new project is added
+    /// Symbol is the new project's <see href="T3.Core.Operator.Attributes.HomeAttribute"/> symbol
+    /// </summary>
+    public static event Action<EditableSymbolProject, Symbol>? ProjectAdded;
 
     public override bool IsModifiable => true;
 

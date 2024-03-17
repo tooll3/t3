@@ -161,7 +161,7 @@ namespace T3.Editor.UiModel
             }
 
             bool needsRecompilation = false;
-            foreach (var package in ProjectSetup.EditableSymbolProjects)
+            foreach (var package in AllProjects)
             {
                 needsRecompilation |= package._needsCompilation;
             }
@@ -171,20 +171,22 @@ namespace T3.Editor.UiModel
 
             _recompiling = true;
 
+            var projects = AllProjects.Where(x => x._needsCompilation).ToArray();
             if (async)
-                Task.Run(Recompile);
+                Task.Run(() => Recompile(projects));
             else
-                Recompile();
+                Recompile(projects);
 
             return;
 
-            void Recompile()
+            // ReSharper disable once ParameterTypeCanBeEnumerable.Local
+            void Recompile(EditableSymbolProject[] dirtyProjects)
             {
-                foreach (var package in ProjectSetup.EditableSymbolProjects)
+                foreach (var project in dirtyProjects)
                 {
-                    if (package._needsCompilation && package.TryRecompile())
+                    if (project.TryRecompile())
                     {
-                        RecompiledProjects.Enqueue(package);
+                        RecompiledProjects.Enqueue(project);
                     }
                 }
 
@@ -229,8 +231,8 @@ namespace T3.Editor.UiModel
 
             static bool TryGetEditableProjectOfNamespace(string targetNamespace, out EditableSymbolProject targetProject)
             {
-                var namespaceInfos = ProjectSetup.EditableSymbolProjects
-                                                 .Select(package => new PackageNamespaceInfo(package, package.CsProjectFile.RootNamespace));
+                var namespaceInfos = AllProjects
+                   .Select(package => new PackageNamespaceInfo(package, package.CsProjectFile.RootNamespace));
 
                 foreach (var namespaceInfo in namespaceInfos)
                 {

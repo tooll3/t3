@@ -19,18 +19,8 @@ namespace T3.Editor.Compilation;
 /// </summary>
 internal static class ProjectSetup
 {
-    private static readonly List<EditableSymbolProject> EditableSymbolProjectsRw = new();
-    public static readonly IReadOnlyList<EditableSymbolProject> EditableSymbolProjects = EditableSymbolProjectsRw;
 
-    internal static void CreateProject(string newName, string newNamespace)
-    {
-        if (TryCreateProject(newName, newNamespace, out var project))
-        {
-            EditableSymbolProjectsRw.Add(project);
-        }
-    }
-
-    private static bool TryCreateProject(string name, string nameSpace, out EditableSymbolProject newProject)
+    public static bool TryCreateProject(string name, string nameSpace, out EditableSymbolProject newProject)
     {
         var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, UserSettings.Config.DefaultNewProjectDirectory);
         if (newCsProj == null)
@@ -68,9 +58,9 @@ internal static class ProjectSetup
         return true;
     }
 
-    private static void RemoveSymbolPackage(EditableSymbolProject newUiSymbolData)
+    private static void RemoveSymbolPackage(EditableSymbolProject project)
     {
-        throw new NotImplementedException("Project removal not implemented yet");
+        project.Dispose();
     }
 
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
@@ -185,9 +175,6 @@ internal static class ProjectSetup
             #if DEBUG
             Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {totalStopwatch.ElapsedMilliseconds}ms");
             #endif
-
-            EditableSymbolProjectsRw.AddRange(projects);
-
 
             // Load operators
             stopwatch.Restart();

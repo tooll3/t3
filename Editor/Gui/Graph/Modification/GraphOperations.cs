@@ -37,7 +37,7 @@ namespace T3.Editor.Gui.Graph.Modification
         {
             var resultJsonString = string.Empty;
             var containerOp = new Symbol(typeof(object), Guid.NewGuid(), null);
-            var newContainerUi = new SymbolUi(containerOp);
+            var newContainerUi = new SymbolUi(containerOp, true);
             
             if(!SymbolUiRegistry.EntriesEditable.TryAdd(newContainerUi.Symbol.Id, newContainerUi))
                 throw new Exception("Could not add new container to SymbolUiRegistry. Guid collision!");

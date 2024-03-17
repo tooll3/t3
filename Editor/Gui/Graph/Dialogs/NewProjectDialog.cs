@@ -1,10 +1,11 @@
 ﻿using System.Numerics;
-using System.Text;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
@@ -43,9 +44,20 @@ namespace T3.Editor.Gui.Graph.Dialogs
                                                       isEnabled: namespaceCorrect && nameCorrect,
                                                       enableTriggerWithReturn: false))
                 {
-                    ProjectSetup.CreateProject(_newName, _newNamespace);
-                    T3Ui.Save(false);
-                    ImGui.CloseCurrentPopup();
+                    if (ProjectSetup.TryCreateProject(_newName, _newNamespace, out var project))
+                    {
+                        T3Ui.Save(false); // todo : this is probably not needed
+                        ImGui.CloseCurrentPopup();
+                    }
+                    else
+                    {
+                        var message = $"Failed to create project \"{_newName}\" in \"{_newNamespace}\".\n\n" +
+                                      "This should never happen - please file a bug report.\n" +
+                                      "Currently this error is unhandled, so you will want to manually delete the project from disk.";
+                        
+                        Log.Error(message);
+                        EditorUi.Instance.ShowMessageBox(message, "Failed to create new project");
+                    }
                 }
 
                 ImGui.SameLine();

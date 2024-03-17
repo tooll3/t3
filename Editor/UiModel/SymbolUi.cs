@@ -19,11 +19,13 @@ namespace T3.Editor.UiModel
     {
         public Symbol Symbol { get; }
 
-        internal SymbolUi(Symbol symbol, bool updateConsistency = true)
+        internal SymbolUi(Symbol symbol, bool updateConsistency)
         {
             Symbol = symbol;
             if (updateConsistency)
                 UpdateConsistencyWithSymbol();
+
+            ForceUnmodified = true;
         }
 
         internal SymbolUi(Symbol symbol,
@@ -307,23 +309,13 @@ namespace T3.Editor.UiModel
         public string Description { get; set; } = string.Empty;
         public OrderedDictionary<Guid, ExternalLink> Links { get; } = new();
 
-        private bool _forceUnmodified = false;
-        private bool _hasBeenModified = false;
-        public bool HasBeenModified => _hasBeenModified && !_forceUnmodified;
-        public readonly List<SymbolChildUi> ChildUis = new(); // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
-        public OrderedDictionary<Guid, IInputUi> InputUis { get; } = new();
-        public OrderedDictionary<Guid, IOutputUi> OutputUis { get; } = new();
-        public OrderedDictionary<Guid, Annotation> Annotations { get; } = new();
-
-        public void ForceUnmodified()
-        {
-            _forceUnmodified = true;
-        }
-        
-        public void DisableForceUnmodified()
-        {
-            _forceUnmodified = false;
-        }
+        internal bool ForceUnmodified;
+        private bool _hasBeenModified;
+        public bool HasBeenModified => _hasBeenModified && !ForceUnmodified;
+        public readonly List<SymbolChildUi> ChildUis = []; // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
+        public readonly OrderedDictionary<Guid, IInputUi> InputUis = new();
+        public readonly OrderedDictionary<Guid, IOutputUi> OutputUis = new();
+        public readonly OrderedDictionary<Guid, Annotation> Annotations = new();
     }
 
     public static class SymbolUiRegistry
