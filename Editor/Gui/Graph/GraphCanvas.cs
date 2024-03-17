@@ -11,6 +11,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Core.Resource;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
@@ -938,6 +939,64 @@ namespace T3.Editor.Gui.Graph
             {
                 var symbol = selectedChildUis.Single().SymbolChild.Symbol;
                 CustomComponents.DrawSymbolCodeContextMenuItem(symbol);
+                SymbolChildUi childUi = selectedChildUis.Single();
+                
+                // get instance that is currently selected
+                var instance = CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+
+
+                if (TryGetShaderPath(instance, out var filePath, out var owner))
+                {
+                    var enabled = owner is EditableSymbolProject;
+                    if(ImGui.MenuItem("Open in Shader Editor", enabled))
+                    {
+                        EditorUi.Instance.OpenWithDefaultApplication(filePath);
+                    }
+                }
+            }
+        }
+
+        // Todo: There must be a better way...
+        private static bool TryGetShaderPath(Instance instance, out string filePath, out IResourcePackage owner)
+        {
+            bool found = false;
+            var type = instance.Type;
+            if (type.IsAssignableTo(typeof(IShaderOperator<PixelShader>)))
+            {
+                found = TryGetSourceFile((IShaderOperator<PixelShader>)instance, out filePath, out owner);
+            }
+            else if(type.IsAssignableTo(typeof(IShaderOperator<ComputeShader>)))
+            {
+                found = TryGetSourceFile((IShaderOperator<ComputeShader>)instance, out filePath, out owner);
+            }
+            else if(type.IsAssignableTo(typeof(IShaderOperator<GeometryShader>)))
+            {
+                found = TryGetSourceFile((IShaderOperator<GeometryShader>)instance, out filePath, out owner);
+            }
+            else if(type.IsAssignableTo(typeof(IShaderOperator<VertexShader>)))
+            {
+                found = TryGetSourceFile((IShaderOperator<VertexShader>)instance, out filePath, out owner);
+            }
+            else
+            {
+                filePath = null;
+                owner = null;
+            }
+
+            return found;
+
+            static bool TryGetSourceFile<T>(IShaderOperator<T> op, out string filePath, out IResourcePackage package) where T : class, IDisposable
+            {
+                if (op.SourceIsSourceCode)
+                {
+                    package = null;
+                    filePath = null;
+                    return false;
+                }
+
+                var relative = op.Source.GetCurrentValue();
+                var instance = op.Instance;
+                return ResourceManager.TryResolvePath(relative, instance.AvailableResourcePackages, out filePath, out package);
             }
         }
 
