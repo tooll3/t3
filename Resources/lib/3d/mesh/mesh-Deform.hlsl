@@ -18,6 +18,8 @@ cbuffer Params : register(b0)
     float __padding1;
     float3 TwistPivot;
     float AbsTaper;
+    float __padding2;
+    float3 TaperControl;
 }
 
 StructuredBuffer<PbrVertex> SourceVerts : t0;
@@ -95,10 +97,28 @@ inline float3 TwistFunction(float3 position, float twistAmount)
         tapered.yz *= TaperFunction(pos.x, TaperAmount);
         break;
     case 1:
-        tapered.xz *= TaperFunction(pos.y, TaperAmount);
+        tapered.y *= TaperFunction(pos.x, TaperAmount);
         break;
     case 2:
+        tapered.z *= TaperFunction(pos.x, TaperAmount);
+        break;
+    case 3:
+        tapered.xz *= TaperFunction(pos.y, TaperAmount);
+        break;
+    case 4:
+        tapered.x *= TaperFunction(pos.y, TaperAmount);
+        break;
+    case 5:
+        tapered.z *= TaperFunction(pos.y, TaperAmount);
+        break;
+    case 6:
         tapered.xy *= TaperFunction(pos.z, TaperAmount);
+        break;
+    case 7:
+        tapered.x *= TaperFunction(pos.z, TaperAmount);
+        break;
+    case 8:
+        tapered.y *= TaperFunction(pos.z, TaperAmount);
         break;
     }
     pos = lerp(pos, tapered, s);
