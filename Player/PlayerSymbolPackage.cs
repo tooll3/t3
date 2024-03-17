@@ -6,5 +6,4 @@ namespace T3.Player;
 
 public sealed class PlayerSymbolPackage(AssemblyInformation assembly) : SymbolPackage(assembly)
 {
-    public override string Folder => Path.Combine(AssemblyInformation.Directory, "Operators", AssemblyInformation.Name);
 }
