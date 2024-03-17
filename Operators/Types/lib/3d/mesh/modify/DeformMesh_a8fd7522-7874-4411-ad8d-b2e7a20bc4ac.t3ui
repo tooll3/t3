@@ -63,18 +63,25 @@
       }
     },
     {
-      "InputId": "c67fa5cb-97b2-4146-a6c1-0ea84a03f703"/*Twist*/,
+      "InputId": "408f6526-8fef-41b9-8de6-a20ae81a2037"/*AmountPerAxis*/,
       "Position": {
         "X": -565.2654,
         "Y": 1301.0723
+      }
+    },
+    {
+      "InputId": "c67fa5cb-97b2-4146-a6c1-0ea84a03f703"/*Twist*/,
+      "Position": {
+        "X": -567.0597,
+        "Y": 1348.6211
       },
       "GroupTitle": "Twist"
     },
     {
       "InputId": "ebf1167b-1519-4ca9-bfa6-87472889966b"/*TwistAxis*/,
       "Position": {
-        "X": -565.2654,
-        "Y": 1346.0723
+        "X": -567.0597,
+        "Y": 1393.6211
       },
       "Min": 0,
       "Max": 2,
@@ -83,8 +90,8 @@
     {
       "InputId": "6323532f-f548-4faa-9c21-826ee4d44090"/*TwistPivot*/,
       "Position": {
-        "X": -565.2654,
-        "Y": 1391.0723
+        "X": -567.0597,
+        "Y": 1438.6211
       },
       "Description": "Blue cross, origin of twist deformation"
     }
@@ -282,6 +289,13 @@
       "Position": {
         "X": 826.70514,
         "Y": 1215.1003
+      }
+    },
+    {
+      "ChildId": "fcf04aae-29fe-4106-9834-47488476c5a4"/*Vector2Components*/,
+      "Position": {
+        "X": -373.7249,
+        "Y": 1537.574
       }
     }
   ],

@@ -17,9 +17,8 @@ cbuffer Params : register(b0)
     float3 Pivot;
     float __padding1;
     float3 TwistPivot;
-    float AbsTaper;
     float __padding2;
-    float3 TaperControl;
+    float2 Taper2;
 }
 
 StructuredBuffer<PbrVertex> SourceVerts : t0;
@@ -33,9 +32,9 @@ inline float3 NormalizeToSphere(float3 position, float targetRadius)
 }
 
 // Tapering function based on selected axis
-inline float TaperFunction(float y, float taperAmount)
+inline float2 TaperFunction(float y, float2 taperAmount)
 {
-    return 1.0 - taperAmount * y;
+    return float2(1.0 - taperAmount.x * y , 1.0 - taperAmount.y * y);
 }
 
 
@@ -94,37 +93,22 @@ inline float3 TwistFunction(float3 position, float twistAmount)
     switch ((int)TaperAxis)
     {
     case 0:
-        tapered.yz *= TaperFunction(pos.x, TaperAmount);
+        tapered.yz *= TaperFunction(pos.x, Taper2 * TaperAmount) ; //Tapering on X axis
         break;
+   
     case 1:
-        tapered.y *= TaperFunction(pos.x, TaperAmount);
+        tapered.xz *= TaperFunction(pos.y, Taper2 * TaperAmount); //Tapering on Y axis
         break;
+ 
     case 2:
-        tapered.z *= TaperFunction(pos.x, TaperAmount);
+        tapered.xy *= TaperFunction(pos.z, Taper2 * TaperAmount); //Tapering on Z axis
         break;
-    case 3:
-        tapered.xz *= TaperFunction(pos.y, TaperAmount);
-        break;
-    case 4:
-        tapered.x *= TaperFunction(pos.y, TaperAmount);
-        break;
-    case 5:
-        tapered.z *= TaperFunction(pos.y, TaperAmount);
-        break;
-    case 6:
-        tapered.xy *= TaperFunction(pos.z, TaperAmount);
-        break;
-    case 7:
-        tapered.x *= TaperFunction(pos.z, TaperAmount);
-        break;
-    case 8:
-        tapered.y *= TaperFunction(pos.z, TaperAmount);
-        break;
+   
     }
     pos = lerp(pos, tapered, s);
 
     //  Apply twist transformation 
-    twisted = TwistFunction(pos, TwistAmount) ;
+    twisted = TwistFunction(pos, radians(TwistAmount)) ;
 
     // Results
     ResultVerts[i.x].Position = lerp(pos, twisted, s);
