@@ -512,7 +512,7 @@ namespace T3.Core.Audio
 
         public bool TryGetAbsoluteFilePath(out string absolutePath)
         {
-            return ResourceManager.TryResolvePath(FilePath, [_symbolPackage.ResourcesFolder], out absolutePath);
+            return ResourceManager.TryResolvePath(FilePath, [_symbolPackage], out absolutePath, out _);
         }
 
         #region serialization

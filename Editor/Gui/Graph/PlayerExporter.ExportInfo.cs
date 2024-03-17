@@ -32,10 +32,10 @@ public static partial class PlayerExporter
             }
         }
 
-        public bool TryAddSharedResource(string relativePath, IReadOnlyCollection<string>? otherDirs = null)
+        public bool TryAddSharedResource(string relativePath, IReadOnlyList<IResourceContainer>? otherDirs = null)
         {
-            var searchDirs = otherDirs ?? Array.Empty<string>();
-            if (!ResourceManager.TryResolvePath(relativePath, searchDirs, out var absolutePath))
+            var searchDirs = otherDirs ?? Array.Empty<IResourceContainer>();
+            if (!ResourceManager.TryResolvePath(relativePath, searchDirs, out var absolutePath, out _))
             {
                 Log.Error($"Can't find file: {relativePath}");
                 return false;
@@ -58,7 +58,8 @@ public static partial class PlayerExporter
             if (absolutePath.EndsWith(".hlsl", StringComparison.OrdinalIgnoreCase))
             {
                  var shaderFolder = Path.GetDirectoryName(absolutePath)!;
-                 var shaderDirs = searchDirs.Append(shaderFolder).Distinct().ToArray();
+                 ShaderCompiler.ShaderResourceContainer shaderResourceContainer = new(shaderFolder);
+                 var shaderDirs = searchDirs.Append(shaderResourceContainer).Distinct().ToArray();
                  var shaderText = File.ReadAllText(absolutePath);
                  var includeLines = shaderText.Split('\n').Where(l => l.StartsWith("#include")).ToArray();
                  foreach (var line in includeLines)

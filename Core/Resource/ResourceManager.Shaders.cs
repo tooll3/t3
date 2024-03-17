@@ -26,7 +26,7 @@ public sealed partial class ResourceManager
 
         var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromSource<TShader>(shaderSource: shaderSource,
                                                                                           name: name,
-                                                                                          directory: instance.AvailableResourceFolders,
+                                                                                          directories: instance.AvailableResourcePackages,
                                                                                           entryPoint: entryPoint,
                                                                                           resourceId: resourceId,
                                                                                           resource: out var newResource,
@@ -57,7 +57,7 @@ public sealed partial class ResourceManager
             return false;
         }
 
-        if (!TryResolvePath(relativePath, instance, out var path, out var resourceContainer))
+        if (!TryResolvePath(relativePath, instance?.AvailableResourcePackages, out var path, out var resourceContainer))
         {
             resource = null;
             errorMessage = $"Path not found: '{relativePath}' (Resolved to '{path}').";
@@ -71,16 +71,16 @@ public sealed partial class ResourceManager
         if(string.IsNullOrWhiteSpace(entryPoint))
             entryPoint = "main";
         
-        List<string> compilationReferences = new();
+        List<IResourceContainer> compilationReferences = new();
         ResourceFileWatcher? fileWatcher = null;
         ResourceFileHook? fileHook = null;
 
         if (instance != null)
-            compilationReferences.AddRange(instance.AvailableResourceFolders);
+            compilationReferences.AddRange(instance.AvailableResourcePackages);
 
         if (resourceContainer != null)
         {
-            compilationReferences.Add(resourceContainer.ResourcesFolder);
+            compilationReferences.Add(resourceContainer);
             fileWatcher = resourceContainer.FileWatcher;
             if (TryFindExistingResource(fileWatcher, relativePath, fileChangedAction, entryPoint, out fileHook, out var potentialResource))
             {

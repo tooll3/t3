@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Slots;
@@ -232,9 +233,10 @@ namespace T3.Core.Operator
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected bool TryGetFilePath(string relativePath, out string absolutePath)
         {
-            return ResourceManager.TryResolvePath(relativePath, this, out absolutePath, out _);
+            return ResourceManager.TryResolvePath(relativePath, AvailableResourcePackages, out absolutePath, out _);
         }
 
         public IList<Guid> InstancePath => OperatorUtils.BuildIdPathForInstance(this).ToArray();
