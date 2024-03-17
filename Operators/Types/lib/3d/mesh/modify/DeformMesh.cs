@@ -44,8 +44,11 @@ namespace T3.Operators.Types.Id_a8fd7522_7874_4411_ad8d_b2e7a20bc4ac
         [Input(Guid = "10d0502e-1a9d-4d8f-a516-2b2b465849bf")]
         public readonly InputSlot<float> Taper = new InputSlot<float>();
 
-        [Input(Guid = "a53aad5d-7bc5-4cbb-8a59-90cf8c346992", MappedType = typeof(SetAxisAndLock))]
+        [Input(Guid = "a53aad5d-7bc5-4cbb-8a59-90cf8c346992", MappedType = typeof(SetAxis))]
         public readonly InputSlot<int> TaperAxis = new InputSlot<int>();
+
+        [Input(Guid = "408f6526-8fef-41b9-8de6-a20ae81a2037")]
+        public readonly InputSlot<System.Numerics.Vector2> AmountPerAxis = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "c67fa5cb-97b2-4146-a6c1-0ea84a03f703")]
         public readonly InputSlot<float> Twist = new InputSlot<float>();
@@ -57,18 +60,6 @@ namespace T3.Operators.Types.Id_a8fd7522_7874_4411_ad8d_b2e7a20bc4ac
         public readonly InputSlot<System.Numerics.Vector3> TwistPivot = new InputSlot<System.Numerics.Vector3>();
 
 
-        private enum SetAxisAndLock
-        {
-            X,
-            X_Lock_Z,
-            X_Lock_Y,
-            Y,
-            Y_Lock_Z,
-            Y_Lock_X,
-            Z,
-            Z_Lock_Y,
-            Z_Lock_X,
-        }
         private enum SetAxis
         {
             X,
