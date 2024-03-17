@@ -258,9 +258,7 @@ internal static class ProjectSetup
         var uiInitializerTypes = nonOperatorAssemblies
                                 .ToArray()
                                 .AsParallel()
-                                .SelectMany(assemblyInfo => assemblyInfo.Types
-                                                                        .Where(type =>
-                                                                                   type.IsAssignableTo(typeof(IOperatorUIInitializer)))
+                                .SelectMany(assemblyInfo => assemblyInfo.TypesInheritingFrom(typeof(IOperatorUIInitializer))
                                                                         .Select(type => new AssemblyConstructorInfo(assemblyInfo, type)))
                                 .ToList();
 
