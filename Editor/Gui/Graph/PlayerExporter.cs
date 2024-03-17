@@ -62,25 +62,23 @@ namespace T3.Editor.Gui.Graph
 
             Directory.CreateDirectory(exportDir);
 
-            // copy assemblies into export dir
-            // get symbol packages directly used by the exported symbols
-            var primarySymbolPackages = exportInfo.UniqueSymbols
-                                                  .Select(symbol => symbol.SymbolPackage)
-                                                  .Distinct()
-                                                  .ToArray();
-            
-            // get symbol packages indirectly referenced by the primary symbol packages
-            var dependencyReferences = primarySymbolPackages
-                                      .SelectMany(package => package.ResourceDependencies)
-                                      .Distinct();
-
-            // combine primary and dependency symbol packages
-            var symbolPackages = primarySymbolPackages
-                                .Concat(dependencyReferences)
-                                .Distinct();
-
             var operatorDir = Path.Combine(exportDir, "Operators");
             Directory.CreateDirectory(operatorDir);
+
+            // copy assemblies into export dir
+            // get symbol packages directly used by the exported symbols
+            Dictionary<SymbolPackage, List<Symbol>> symbolPackageToSymbols = new();
+            foreach(var uniqueSymbol in exportInfo.UniqueSymbols)
+            {
+                var symbolPackage = uniqueSymbol.SymbolPackage;
+                if (!symbolPackageToSymbols.TryGetValue(symbolPackage, out var symbols))
+                {
+                    symbols = new List<Symbol>();
+                }
+                symbols.Add(uniqueSymbol);
+            }
+            
+            var symbolPackages = symbolPackageToSymbols.Keys;
             
             if (!TryExportPackages(out reason, symbolPackages, operatorDir))
                 return false;
@@ -89,7 +87,7 @@ namespace T3.Editor.Gui.Graph
             RecursivelyCollectExportData(output, exportInfo);
             exportInfo.PrintInfo();
 
-            var resourceDir = Path.Combine(exportDir, "Resources");
+            var resourceDir = Path.Combine(exportDir, ResourceManager.ResourcesSubfolder);
             Directory.CreateDirectory(resourceDir);
             
             if (!TryFindSoundtrack(symbol, out var absolutePath, out var relativePath))
