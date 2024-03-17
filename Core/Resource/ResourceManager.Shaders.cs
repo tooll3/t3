@@ -67,41 +67,32 @@ public sealed partial class ResourceManager
         var fileInfo = new FileInfo(path);
         if (string.IsNullOrWhiteSpace(name))
             name = fileInfo.Name;
-
+        
+        if(string.IsNullOrWhiteSpace(entryPoint))
+            entryPoint = "main";
+        
+        List<string> compilationReferences = new();
+        ResourceFileWatcher? fileWatcher = null;
         ResourceFileHook? fileHook = null;
-        var fileWatcher = resourceContainer?.FileWatcher;
-        var hasFileWatcher = fileWatcher != null;
-        var resourceFolder = resourceContainer?.ResourcesFolder;
-        var hookExists = hasFileWatcher && fileWatcher!.HooksForResourceFilePaths.TryGetValue(relativePath, out fileHook);
-        if (hookExists)
+
+        if (instance != null)
+            compilationReferences.AddRange(instance.AvailableResourceFolders);
+
+        if (resourceContainer != null)
         {
-            foreach (var id in fileHook!.ResourceIds)
+            compilationReferences.Add(resourceContainer.ResourcesFolder);
+            fileWatcher = resourceContainer.FileWatcher;
+            if (TryFindExistingResource(fileWatcher, relativePath, fileChangedAction, entryPoint, out fileHook, out var potentialResource))
             {
-                var resourceById = ResourcesById[id];
-                if (resourceById is not ShaderResource<TShader> shaderResource || shaderResource.EntryPoint != entryPoint)
-                    continue;
-
-                if (fileChangedAction != null)
-                {
-                    fileHook.FileChangeAction -= fileChangedAction;
-                    fileHook.FileChangeAction += fileChangedAction;
-                }
-
-                resource = shaderResource;
+                resource = potentialResource;
                 errorMessage = string.Empty;
                 return true;
             }
         }
 
+
         // need to create
         var resourceId = GetNextResourceId();
-        List<string> compilationReferences = new();
-
-        if (instance != null)
-            compilationReferences.AddRange(instance.AvailableResourceFolders);
-        else if (resourceFolder != null)
-            compilationReferences.Add(resourceFolder);
-
         var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromFile(srcFile: path,
                                                                                entryPoint: entryPoint,
                                                                                name: name,
@@ -117,31 +108,59 @@ public sealed partial class ResourceManager
         }
 
         ResourcesById.TryAdd(resource!.Id, resource);
-        if (resourceContainer == null)
+        if (resourceContainer == null || fileWatcher == null)
             return true;
 
-        if (hasFileWatcher)
+        if (fileHook == null)
         {
-            if (fileHook == null)
-            {
-                fileHook = new ResourceFileHook(path, new[] { resourceId });
-                fileWatcher!.HooksForResourceFilePaths.TryAdd(relativePath, fileHook);
-            }
+            fileHook = new ResourceFileHook(path, new[] { resourceId });
+            fileWatcher.HooksForResourceFilePaths.TryAdd(relativePath, fileHook);
+        }
 
-            if (fileChangedAction != null)
-            {
-                fileHook.FileChangeAction -= fileChangedAction;
-                fileHook.FileChangeAction += fileChangedAction;
-            }
-        }
-        #if DEBUG
-        else if (fileChangedAction != null)
+        if (fileChangedAction != null)
         {
-            const string logFmt = "File watcher not enabled for resource '{0}'. It likely comes from a read-only resource container.";
-            Log.Debug(string.Format(logFmt, relativePath));
+            fileHook.FileChangeAction -= fileChangedAction;
+            fileHook.FileChangeAction += fileChangedAction;
         }
-        #endif
 
         return true;
+
+        static bool TryFindExistingResource(ResourceFileWatcher? fileWatcher, string relativePath, Action? fileChangedAction, string entryPoint, out ResourceFileHook? fileHook, out ShaderResource<TShader>? resource)
+        {
+            if (fileWatcher == null)
+            {
+                fileHook = null;
+                resource = null;
+                return false;
+            }
+            
+            if(!fileWatcher.HooksForResourceFilePaths.TryGetValue(relativePath, out fileHook))
+            {
+                resource = null;
+                return false;
+            }
+
+            var resourceIds = fileHook.ResourceIds;
+            var count = resourceIds.Count;
+            for (var index = 0; index < count; index++)
+            {
+                var id = resourceIds[index];
+                var resourceById = ResourcesById[id];
+                if (resourceById is not ShaderResource<TShader> shaderResource || shaderResource.EntryPoint != entryPoint)
+                    continue;
+
+                if (fileChangedAction != null)
+                {
+                    fileHook.FileChangeAction -= fileChangedAction;
+                    fileHook.FileChangeAction += fileChangedAction;
+                }
+
+                resource = shaderResource;
+                return true;
+            }
+
+            resource = null;
+            return false;
+        }
     }
 }
