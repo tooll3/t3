@@ -21,9 +21,9 @@ namespace T3.Core.Model;
 /// Regarding naming, we consider all t3 operator packages as packages for the sake of consistency with future nuget terminology etc.
 /// -- only the user's editable "packages" are referred to as projects
 ///</remarks>
-public abstract partial class SymbolPackage(AssemblyInformation assembly) : IResourceContainer
+public abstract partial class SymbolPackage : IResourceContainer
 {
-    public virtual AssemblyInformation AssemblyInformation { get; } = assembly;
+    public virtual AssemblyInformation AssemblyInformation { get; }
     public virtual string Folder => AssemblyInformation.Directory;
     public virtual bool IsModifiable => false;
     protected virtual IEnumerable<string> SymbolSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, "Symbols"), $"*{SymbolExtension}", SearchOption.AllDirectories);
@@ -39,6 +39,12 @@ public abstract partial class SymbolPackage(AssemblyInformation assembly) : IRes
     {
         RenderStatsCollector.RegisterProvider(new OpUpdateCounter());
         RegisterTypes();
+    }
+
+    protected SymbolPackage(AssemblyInformation assembly)
+    {
+        AssemblyInformation = assembly;
+        AllPackagesRw.Add(this);
     }
 
     public virtual void InitializeResources()
@@ -59,6 +65,8 @@ public abstract partial class SymbolPackage(AssemblyInformation assembly) : IRes
             SymbolRegistry.EntriesEditable.Remove(id, out _);
         }
         
+        AssemblyInformation.Unload();
+        AllPackagesRw.Remove(this);
         // Todo - symbol instance destruction...?
     }
 
@@ -235,4 +243,7 @@ public abstract partial class SymbolPackage(AssemblyInformation assembly) : IRes
     }
 
     public virtual ResourceFileWatcher? FileWatcher => null;
+    
+    private static readonly List<SymbolPackage> AllPackagesRw = [];
+    public static IReadOnlyList<SymbolPackage> AllPackages => AllPackagesRw;
 }

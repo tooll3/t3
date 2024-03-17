@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.DependencyModel.Resolution;
-using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -17,7 +17,7 @@ using T3.Core.Resource;
 
 namespace T3.Core.Compilation;
 
-public readonly struct InputSlotInfo(InputAttribute attribute, FieldInfo field)
+internal readonly struct InputSlotInfo(InputAttribute attribute, FieldInfo field)
 {
     public readonly InputAttribute Attribute = attribute;
     public readonly FieldInfo Field = field;
@@ -29,7 +29,7 @@ public readonly struct InputSlotInfo(InputAttribute attribute, FieldInfo field)
     }
 }
 
-public struct OutputSlotInfo(OutputAttribute attribute, FieldInfo field)
+internal readonly struct OutputSlotInfo(OutputAttribute attribute, FieldInfo field)
 {
     public readonly OutputAttribute Attribute = attribute;
     public readonly FieldInfo Field = field;
@@ -41,51 +41,53 @@ public struct OutputSlotInfo(OutputAttribute attribute, FieldInfo field)
     }
 }
 
-public class AssemblyInformation
+public sealed class AssemblyInformation
 {
     public readonly string Name;
     public readonly string Path;
     public readonly string Directory;
-    private readonly AssemblyName _assemblyName;
-    private readonly Assembly _assembly;
-    
-    public const BindingFlags ConstructorBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance;
-
-    public bool TryGetType(Guid typeId, out Type type) => _operatorTypes.TryGetValue(typeId, out type);
-
-    public IReadOnlyDictionary<Guid, Type> OperatorTypes => _operatorTypes;
-    private Dictionary<Guid, Type> _operatorTypes;
-    private Dictionary<string, Type> _types;
-    public IReadOnlyCollection<Type> Types => _types.Values;
+    public readonly IReadOnlyCollection<string> AssemblyPaths;
 
     public Guid HomeGuid { get; private set; } = Guid.Empty;
     public bool HasHome => HomeGuid != Guid.Empty;
-
-    public IEnumerable<Assembly> AllAssemblies => _loadContext.Assemblies;
-    public IReadOnlyDictionary<Type, Func<object>> Constructors => _constructors;
-    public IReadOnlyDictionary<Type,Type> GenericTypes => _genericTypes;
-    public IReadOnlyDictionary<Type, IReadOnlyList<InputSlotInfo>> InputFields => _inputFields;
-    public IReadOnlyDictionary<Type, IReadOnlyList<OutputSlotInfo>> OutputFields => _outputFields;
     public bool IsOperatorAssembly => _operatorTypes.Count > 0;
+    
+    private readonly AssemblyName _assemblyName;
+    private readonly Assembly _assembly;
 
-    private readonly List<string> _assemblyPaths = new();
-    public readonly IReadOnlyCollection<string> AssemblyPaths;
-        
+    internal const BindingFlags ConstructorBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance;
 
-    public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
+    internal bool TryGetType(Guid typeId, out Type? type) => _operatorTypes.TryGetValue(typeId, out type);
+
+    internal IReadOnlyDictionary<Guid, Type> OperatorTypes => _operatorTypes;
+    private Dictionary<Guid, Type> _operatorTypes;
+    private Dictionary<string, Type> _types;
+
+    internal readonly bool ShouldShareResources;
+    internal IReadOnlyDictionary<Type, Func<object>> Constructors => _constructors;
+    internal IReadOnlyDictionary<Type,Type> GenericTypes => _genericTypes;
+    internal IReadOnlyDictionary<Type, IReadOnlyList<InputSlotInfo>> InputFields => _inputFields;
+    internal IReadOnlyDictionary<Type, IReadOnlyList<OutputSlotInfo>> OutputFields => _outputFields;
+
+    private IEnumerable<Assembly> AllAssemblies => _loadContext?.Assemblies ?? Enumerable.Empty<Assembly>();
+    private readonly List<string> _assemblyPaths = [];
+
+    internal AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
     {
         AssemblyPaths = _assemblyPaths;
-        Name = assemblyName.Name;
+        Name = assemblyName.Name ?? "Unknown Assembly Name";
         Path = path;
         _assemblyPaths.Add(path);
         _assemblyName = assemblyName;
         _assembly = assembly;
-        Directory = System.IO.Path.GetDirectoryName(path);
+        Directory = System.IO.Path.GetDirectoryName(path)!;
 
         _loadContext = loadContext;
 
         LoadTypes(path, assembly, out ShouldShareResources);
     }
+    
+    public IEnumerable<Type> TypesInheritingFrom(Type type) => _types.Values.Where(t => t.IsAssignableTo(type));
 
     private void LoadTypes(string path, Assembly assembly, out bool shouldShareResources)
     {
@@ -93,7 +95,7 @@ public class AssemblyInformation
         Type[] types;
         try
         {
-            types = assembly.GetExportedTypes();
+            types = assembly.GetTypes();
         }
         catch (Exception e)
         {
@@ -107,7 +109,7 @@ public class AssemblyInformation
         var typeDict = new Dictionary<string, Type>();
         foreach (var type in types)
         {
-            if (!typeDict.TryAdd(type.FullName, type))
+            if (!typeDict.TryAdd(type.FullName!, type))
             {
                 Log.Warning($"Duplicate type {type.FullName} in assembly {assembly.FullName}");
             }
@@ -146,7 +148,7 @@ public class AssemblyInformation
             if (!_operatorTypes.TryAdd(op.Guid, op.Type))
             {
                 var existingType = _operatorTypes[op.Guid];
-                Log.Error($"Duplicate operator type {op.Type.FullName} with guid {op.Guid}. Existing type: {existingType.FullName}");
+                throw new Exception($"Duplicate operator type {op.Type.FullName} with guid {op.Guid}. Existing type: {existingType.FullName}");
             }
         }
         
@@ -236,7 +238,8 @@ public class AssemblyInformation
     /// <param name="path">path to dll</param>
     private void TryResolveReferences(string path)
     {
-        if (DependencyContext == null)
+        _dependencyContext = DependencyContext.Load(_assembly); 
+        if (_dependencyContext == null)
         {
             Log.Error($"Failed to load dependency context for assembly {_assemblyName.FullName}");
             return;
@@ -257,21 +260,17 @@ public class AssemblyInformation
         }
 
         _loadContext.Resolving += OnResolving;
-        return;
     }
 
-    private Assembly OnResolving(AssemblyLoadContext context, AssemblyName name)
+    private Assembly? OnResolving(AssemblyLoadContext context, AssemblyName name)
     {
-        var library = DependencyContext.RuntimeLibraries
-                                       .FirstOrDefault(lib => NamesMatch(lib, name));
-
-        if (library == null)
+        if (!TryFindLibrary(name, _dependencyContext!, out var library))
         {
             return null;
         }
 
         var wrapper = new CompilationLibrary(
-                                             library.Type,
+                                             library!.Type,
                                              library.Name,
                                              library.Version,
                                              library.Hash,
@@ -298,72 +297,87 @@ public class AssemblyInformation
             }
         }
 
-        static bool NamesMatch(RuntimeLibrary runtime, AssemblyName nameToSearchFor)
+        static bool TryFindLibrary(AssemblyName name, DependencyContext dependencyContext, out RuntimeLibrary? library)
         {
-            var name = nameToSearchFor.Name;
-            return string.Equals(runtime.Name, name, StringComparison.OrdinalIgnoreCase)
-                || runtime.RuntimeAssemblyGroups
-                          .Any(x => x.RuntimeFiles
-                                     .Any(runtimeFile => System.IO.Path.GetFileNameWithoutExtension(runtimeFile.Path) == name));
+            var nameToSearchFor = name.Name;
+            foreach (var runtime in dependencyContext.RuntimeLibraries)
+            {
+                if (string.Equals(runtime.Name, nameToSearchFor, StringComparison.OrdinalIgnoreCase))
+                {
+                    library = runtime;
+                    return true;
+                }
+
+                var assemblyGroups = runtime.RuntimeAssemblyGroups;
+                foreach (var assemblyGroup in assemblyGroups)
+                {
+                    var runtimeFiles = assemblyGroup.RuntimeFiles;
+                    foreach (var runtimeFile in runtimeFiles)
+                    {
+                        var fileName = System.IO.Path.GetFileNameWithoutExtension(runtimeFile.Path);
+                        if (string.Equals(fileName, nameToSearchFor, StringComparison.Ordinal))
+                        {
+                            library = runtime;
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            library = default;
+            return false;
         }
-    }
-    
-    private static string RemovePackageSuffixes(string name)
-    {
-        string removed = name.Replace(".api", string.Empty);
-        return removed;
     }
 
     private static bool TryGetGuidOfType(Type newType, out Guid guid)
     {
         var guidAttributes = newType.GetCustomAttributes(typeof(GuidAttribute), false);
-        if (guidAttributes.Length == 0)
+        switch (guidAttributes.Length)
         {
-            Log.Error($"Type {newType.Name} has no GuidAttribute");
-            guid = Guid.Empty;
-            return false;
+            case 0:
+                Log.Error($"Type {newType.Name} has no GuidAttribute");
+                guid = Guid.Empty;
+                return false;
+            
+            case 1: // This is what we want - types with a single GuidAttribute
+                var guidAttribute = (GuidAttribute)guidAttributes[0];
+                var guidString = guidAttribute.Value;
+
+                if (!Guid.TryParse(guidString, out guid))
+                {
+                    Log.Error($"Type {newType.Name} has invalid GuidAttribute");
+                    return false;
+                }
+
+                return true;
+            default:
+                Log.Error($"Type {newType.Name} has multiple GuidAttributes");
+                guid = Guid.Empty;
+                return false;
         }
-
-        if (guidAttributes.Length > 1)
-        {
-            Log.Error($"Type {newType.Name} has multiple GuidAttributes");
-            guid = Guid.Empty;
-            return false;
-        }
-
-        var guidAttribute = (GuidAttribute)guidAttributes[0];
-        var guidString = guidAttribute.Value;
-
-        if (!Guid.TryParse(guidString, out guid))
-        {
-            Log.Error($"Type {newType.Name} has invalid GuidAttribute");
-            return false;
-        }
-
-        return true;
     }
 
-    private readonly struct GuidInfo(bool hasGuid, Guid guid, Type type)
-    {
-        public readonly bool HasGuid = hasGuid;
-        public readonly Guid Guid = guid;
-        public readonly Type Type = type;
-    }
+    private readonly record struct GuidInfo(bool HasGuid, Guid Guid, Type Type);
 
     public void Unload()
     {
         _operatorTypes.Clear();
         _types.Clear();
-        _loadContext.Resolving -= OnResolving;
+
+        if (_loadContext == null)
+            return;
+        
+        // because we only subscribe to the Resolving event once we've found the dependency context
+        if(_dependencyContext != null)
+            _loadContext.Resolving -= OnResolving;
+        
         _loadContext.Unload();
         _loadContext = null;
     }
 
-    private DependencyContext DependencyContext => _dependencyContext ??= DependencyContext.Load(_assembly);
-    public readonly bool ShouldShareResources;
-    private DependencyContext _dependencyContext;
+    private DependencyContext? _dependencyContext;
     private readonly ConcurrentDictionary<Type, Func<object>> _constructors = new();
-    private AssemblyLoadContext _loadContext;
+    private AssemblyLoadContext? _loadContext;
     private CompositeCompilationAssemblyResolver _assemblyResolver;
     private readonly ConcurrentDictionary<Type, Type> _genericTypes = new();
     private readonly ConcurrentDictionary<Type, IReadOnlyList<InputSlotInfo>> _inputFields = new();
