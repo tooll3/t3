@@ -4,12 +4,15 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Resources;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Editor.External;
 using T3.Editor.Gui.ChildUi;
 
 namespace T3.Editor.UiModel;
@@ -138,6 +141,8 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
             SymbolUiRegistry.EntriesEditable.TryRemove(symbolUi.Symbol.Id, out _);
             SymbolUis.TryRemove(symbolUi.Symbol.Id, out _);
         }
+        
+        ShaderLinter.RemovePackage(this);
     }
 
     /// <summary>
@@ -240,4 +245,9 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
     public const string SymbolUiExtension = ".t3ui";
     public const string SymbolUiSubFolder = "SymbolUis";
     public const string SourceCodeSubFolder = "SourceCode";
+
+    public void InitializeShaderLinting(IReadOnlyList<IResourcePackage> sharedShaderPackages)
+    {
+        ShaderLinter.AddPackage(this, sharedShaderPackages);
+    }
 }

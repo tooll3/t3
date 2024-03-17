@@ -9,6 +9,10 @@ using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Core.Resource;
+using T3.Editor.App;
+using T3.Editor.External;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
@@ -82,6 +86,7 @@ internal static class ProjectSetup
             var directory = Directory.CreateDirectory(CoreOperatorDirectory);
             directory
                .EnumerateDirectories("*", SearchOption.TopDirectoryOnly) // ignore "player" project directory
+               .Where(folder => !string.Equals(folder.Name, PlayerExporter.ExportFolderName, StringComparison.OrdinalIgnoreCase))
                .ToList()
                .ForEach(package =>
                         {
@@ -105,12 +110,11 @@ internal static class ProjectSetup
             #endif
             
             // Find project directories
-            var exportPath = Path.Combine("T3Projects", "Exports");
             var topDirectories = new[] { CoreOperatorDirectory, UserSettings.Config.DefaultNewProjectDirectory };
             var projectSearchDirectories = topDirectories
                                           .Where(Directory.Exists)
                                           .SelectMany(Directory.EnumerateDirectories)
-                                          .Where(dirName => !dirName.Contains(exportPath));
+                                          .Where(dirName => !dirName.Contains(PlayerExporter.ExportFolderName, StringComparison.OrdinalIgnoreCase));
 
             #if DEBUG // Add Built-in packages as projects
             projectSearchDirectories = projectSearchDirectories.Concat(Directory.EnumerateDirectories(Path.Combine(T3ParentDirectory, "Operators"))
@@ -191,6 +195,14 @@ internal static class ProjectSetup
             {
                 package.InitializeResources();
             }
+
+            var sharedShaderPackages = ResourceManager.SharedShaderPackages;
+            foreach (var package in allSymbolPackages)
+            {
+                package.InitializeShaderLinting(sharedShaderPackages);
+            }
+            
+            ShaderLinter.AddPackage(SharedResources.ResourcePackage, sharedShaderPackages);
             
             UpdateSymbolPackages(allSymbolPackages);
             Log.Debug($"Updated symbol packages in {stopwatch.ElapsedMilliseconds}ms");
@@ -289,6 +301,14 @@ internal static class ProjectSetup
                 Log.Error($"Failed to create UI initializer for {constructorInfo.AssemblyInformation.Name}: \"{typeName}\" - does it have a parameterless constructor?\n{e}");
             }
         }
+    }
+
+    public static void DisposePackages()
+    {
+        ShaderLinter.DeleteFiles();
+        
+        foreach(var package in SymbolPackage.AllPackages)
+            package.Dispose();
     }
 
     internal static void UpdateSymbolPackage(EditableSymbolProject project) => UpdateSymbolPackages(project);

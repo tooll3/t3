@@ -177,6 +177,7 @@ namespace T3.Editor
 
             try
             {
+                ProjectSetup.DisposePackages();
                 UiContentContentDrawer.Dispose();
             }
             catch (Exception e)

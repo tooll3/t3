@@ -21,7 +21,7 @@ namespace T3.Core.Model;
 /// Regarding naming, we consider all t3 operator packages as packages for the sake of consistency with future nuget terminology etc.
 /// -- only the user's editable "packages" are referred to as projects
 ///</remarks>
-public abstract partial class SymbolPackage : IResourceContainer
+public abstract partial class SymbolPackage : IResourcePackage
 {
     public virtual AssemblyInformation AssemblyInformation { get; }
     public virtual string Folder => AssemblyInformation.Directory;
@@ -31,7 +31,6 @@ public abstract partial class SymbolPackage : IResourceContainer
     protected event Action<string?, Symbol>? SymbolAdded;
     protected event Action<Symbol>? SymbolUpdated;
     protected event Action<Guid>? SymbolRemoved;
-
 
     public string ResourcesFolder { get; private set; } = null!;
 

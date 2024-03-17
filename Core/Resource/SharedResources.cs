@@ -13,10 +13,11 @@ namespace T3.Editor.App
     public static class SharedResources
     {
         public static readonly string Directory = Path.Combine(RuntimeAssemblies.CoreDirectory, ResourceManager.ResourcesSubfolder);
+        public static readonly IResourcePackage ResourcePackage = new SharedResourceObject();
         
         static SharedResources()
         {
-            ResourceManager.AddSharedResourceFolder(new SharedResourceObject(), true);
+            ResourceManager.AddSharedResourceFolder(ResourcePackage, true);
         }
 
         public static void Initialize()
@@ -108,7 +109,7 @@ namespace T3.Editor.App
 
         public static ShaderResource<PixelShader> FullScreenPixelShaderResource => _fullScreenPixelShaderResource;
 
-        private sealed class SharedResourceObject : IResourceContainer
+        private sealed class SharedResourceObject : IResourcePackage
         {
             // ReSharper disable once ReplaceAutoPropertyWithComputedProperty
             public string ResourcesFolder { get; } = Directory;
