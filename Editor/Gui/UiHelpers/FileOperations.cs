@@ -5,6 +5,7 @@ using System.IO;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
+using T3.Core.Resource;
 using T3.Editor.SystemUi;
 using T3.SystemUi;
 
@@ -12,8 +13,6 @@ namespace T3.Editor.Gui.UiHelpers
 {
     public static class FileOperations
     {
-        private const string ResourcesFolder = "Resources";
-
         public static string PickResourceFilePath(string initialPath = "", string filter = null)
         {
             using (var openFileDialog = EditorUi.Instance.CreateFilePicker())
@@ -123,13 +122,13 @@ namespace T3.Editor.Gui.UiHelpers
 
         private static string GetAbsoluteResourcePath()
         {
-            return Path.Combine(Path.GetFullPath("."), ResourcesFolder);
+            return Path.Combine(Path.GetFullPath("."), ResourceManager.ResourcesSubfolder);
         }
 
         private static string GetAbsoluteDirectory(string relativeFilepath)
         {
             var absolutePath = GetAbsoluteResourcePath();
-            return Path.GetDirectoryName(Path.Combine(absolutePath, relativeFilepath.Replace(ResourcesFolder + "\\", "")));
+            return Path.GetDirectoryName(Path.Combine(absolutePath, relativeFilepath.Replace(ResourceManager.ResourcesSubfolder + "\\", "")));
         }
     }
 }

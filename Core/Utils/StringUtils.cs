@@ -4,26 +4,35 @@ namespace T3.Core.Utils;
 
 public static class StringUtils
 {
-    public static bool Equals(ReadOnlySpan<char> a, ReadOnlySpan<char> b, bool ignoreCase)
+    public static unsafe bool Equals(ReadOnlySpan<char> a, ReadOnlySpan<char> b, bool ignoreCase)
     {
         var aLength = a.Length;
         if (aLength != b.Length)
             return false;
 
+        // this is made unsafe to avoid the overhead of the span bounds check - it's safe because we checked the length already
         if (ignoreCase)
         {
-            for (var i = 0; i < aLength; i++)
+            fixed(char* aPtr = a)
+            fixed(char* bPtr = b)
             {
-                if (char.ToLowerInvariant(a[i]) != char.ToLowerInvariant(b[i]))
-                    return false;
+                for (var i = 0; i < aLength; i++)
+                {
+                    if (char.ToLowerInvariant(aPtr[i]) != char.ToLowerInvariant(bPtr[i]))
+                        return false;
+                }
             }
         }
         else
         {
-            for (int i = 0; i < aLength; i++)
+            fixed(char* aPtr = a)
+            fixed(char* bPtr = b)
             {
-                if (a[i] != b[i])
-                    return false;
+                for (var i = 0; i < aLength; i++)
+                {
+                    if (aPtr[i] != bPtr[i])
+                        return false;
+                }
             }
         }
 
