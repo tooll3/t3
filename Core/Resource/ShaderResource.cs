@@ -43,7 +43,7 @@ public abstract class ShaderResource : AbstractResource
 /// 
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class ShaderResource<T> : ShaderResource where T : class, IDisposable
+public sealed class ShaderResource<T> : ShaderResource where T : class, IDisposable
 {
     private T _shader;
     public T Shader { get => _shader; init => _shader = value; }
@@ -56,7 +56,7 @@ public class ShaderResource<T> : ShaderResource where T : class, IDisposable
 
     public void UpdateDebugName(string newDebugName) => UpdateName(newDebugName);
 
-    public bool TryUpdateFromFile(string path, string entryPoint, IReadOnlyList<string> resourceDirectories, out string errorMessage)
+    public bool TryUpdateFromFile(string path, string entryPoint, IReadOnlyList<IResourceContainer> resourceDirectories, out string errorMessage)
     {
         var success = ShaderCompiler.Instance.TryCompileShaderFromFile(path, entryPoint, Name, resourceDirectories, ref _shader, ref _blob, out errorMessage);
         if (success)
@@ -64,7 +64,7 @@ public class ShaderResource<T> : ShaderResource where T : class, IDisposable
         return success;
     }
 
-    public bool TryUpdateFromSource(string source, string entryPoint, IReadOnlyList<string> directories, out string errorMessage)
+    public bool TryUpdateFromSource(string source, string entryPoint, IReadOnlyList<IResourceContainer> directories, out string errorMessage)
     {
         var success = ShaderCompiler.Instance.TryCompileShaderFromSource(source, entryPoint, Name, ref _shader, ref _blob, out errorMessage, directories);
         if (success)
@@ -121,7 +121,7 @@ public class Texture3dResource : AbstractResource
     public Texture3D Texture;
 }
 
-public class ShaderResourceViewResource : AbstractResource
+public sealed class ShaderResourceViewResource : AbstractResource
 {
     public ShaderResourceViewResource(uint id, string name, ShaderResourceView srv, uint textureId)
         : base(id, name)

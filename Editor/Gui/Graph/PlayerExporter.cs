@@ -419,14 +419,14 @@ namespace T3.Editor.Gui.Graph
                 case StringInputUi.UsageType.FilePath:
                 {
                     var relativePath = stringValue.Value;
-                    exportInfo.TryAddSharedResource(relativePath, parent.AvailableResourceFolders);
+                    exportInfo.TryAddSharedResource(relativePath, parent.AvailableResourcePackages);
                     break;
                 }
                 case StringInputUi.UsageType.DirectoryPath:
                 {
                     var relativeDirectory = stringValue.Value;
 
-                    if (!ResourceManager.TryResolvePath(relativeDirectory, parent.AvailableResourceFolders, out var absoluteDirectory))
+                    if (!ResourceManager.TryResolvePath(relativeDirectory, parent.AvailableResourcePackages, out var absoluteDirectory, out _))
                     {
                         Log.Warning($"Directory '{relativeDirectory}' was not found in any resource folder");
                     }

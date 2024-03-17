@@ -15,7 +15,7 @@ public class DX11ShaderCompiler : ShaderCompiler
 {
     public Device Device { get; set; }
 
-    protected override bool CompileShaderFromSource<TShader>(string shaderSource, IReadOnlyList<string> directories, string entryPoint, string name, out ShaderBytecode blob,
+    protected override bool CompileShaderFromSource<TShader>(string shaderSource, IReadOnlyList<IResourceContainer> directories, string entryPoint, string name, out ShaderBytecode blob,
                                                              out string errorMessage)
     {
         CompilationResult compilationResult = null;
@@ -55,19 +55,26 @@ public class DX11ShaderCompiler : ShaderCompiler
 
         return success;
     }
-
+    
     protected override void CreateShaderInstance<TShader>(string name, in ShaderBytecode blob, out TShader shader)
     {
         // As shader type is generic we've to use Activator and PropertyInfo to create/set the shader object
         var shaderType = typeof(TShader);
 
-        // todo - optimize and cache constructors similar to AssemblyInformation.cs and Symbol.OutputDefinition
-        shader = (TShader)Activator.CreateInstance(shaderType, Device, blob.Data, null);
+        shader = (TShader)ShaderConstructors[shaderType].Invoke(Device, blob.Data);
 
         var debugNameInfo = shaderType.GetProperty("DebugName");
         debugNameInfo?.SetValue(shader, name);
     }
 
+    private static readonly IReadOnlyDictionary<Type, Func<Device, byte[], object> > ShaderConstructors = new Dictionary<Type, Func<Device, byte[], object>>()
+                                                                                   {
+                                                                                       { typeof(VertexShader), (device, data) => new VertexShader(device, data, null) },
+                                                                                       { typeof(PixelShader), (device, data) => new PixelShader(device, data, null) },
+                                                                                       { typeof(ComputeShader), (device, data) => new ComputeShader(device, data, null) },
+                                                                                       { typeof(GeometryShader), (device, data) => new GeometryShader(device, data, null) },
+                                                                                   };
+    
     private static readonly IReadOnlyDictionary<Type, string> ShaderProfiles = new Dictionary<Type, string>()
                                                                                    {
                                                                                        { typeof(VertexShader), "vs_5_0" },
@@ -79,9 +86,9 @@ public class DX11ShaderCompiler : ShaderCompiler
     private class IncludeHandler : SharpDX.D3DCompiler.Include
     {
         private StreamReader _streamReader;
-        private readonly IReadOnlyList<string> _directories;
+        private readonly IReadOnlyList<IResourceContainer> _directories;
         
-        public IncludeHandler(IReadOnlyList<string> directories)
+        public IncludeHandler(IReadOnlyList<IResourceContainer> directories)
         {
             _directories = directories;
         }
@@ -95,7 +102,7 @@ public class DX11ShaderCompiler : ShaderCompiler
 
         public Stream Open(IncludeType type, string fileName, Stream parentStream)
         {
-            if (ResourceManager.TryResolvePath(fileName, _directories, out var path))
+            if (ResourceManager.TryResolvePath(fileName, _directories, out var path, out _))
             {
                 _streamReader = new StreamReader(path);
                 return _streamReader.BaseStream;

@@ -114,7 +114,7 @@ public sealed partial class ResourceManager
     {
         const uint nullResource = 0;
         
-        if (!TryResolvePath(relativePath, instance, out var path, out var relevantFileWatcher))
+        if (!TryResolvePath(relativePath, instance?.AvailableResourcePackages, out var path, out var relevantFileWatcher))
         {
             // todo - search other packages? common?
             Log.Warning($"Couldn't find texture '{relativePath} (Resolved to '{path}'.");
