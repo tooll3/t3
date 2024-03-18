@@ -133,35 +133,6 @@ public partial class ResourceManager
         return list;
     }
 
-    #if DEBUG
-    private static void LogFailedResourceLocation(string searchPath, Instance? instance, IEnumerable<string> usedResourceFolders)
-    {
-        string instanceFolders;
-        if (instance != null)
-        {
-            instanceFolders = $"{instance.Symbol.Name}: Instance ID {instance.SymbolChildId}, Symbol ID {instance.Symbol.Id}\n" +
-                              string.Join("\n", instance.AvailableResourceFolders.Concat(usedResourceFolders).Distinct());
-        }
-        else
-        {
-            instanceFolders = string.Join("\n", usedResourceFolders);
-        }
-
-        var searchPathDebug = $"\"{searchPath}\"";
-        if (RelativePathBackwardsCompatibility(searchPath, out _, out var ranges))
-        {
-            var paths = PopulateBackCompatPaths(searchPath, ranges);
-            if (paths.Count > 0)
-            {
-                var backCompatPathList = string.Join('\n', paths);
-                searchPathDebug += $" (backcompat: {backCompatPathList})\n";
-            }
-        }
-
-        Log.Debug($"Failed to locate resource {searchPathDebug} in available resource folders:\n" + instanceFolders);
-    }
-    #endif
-
     // ReSharper disable once FieldCanBeMadeReadOnly.Local
     private static Utils.ObjectPooling.ArrayPool<Range> _rangeArrayPool = new(true, 30);
 }
