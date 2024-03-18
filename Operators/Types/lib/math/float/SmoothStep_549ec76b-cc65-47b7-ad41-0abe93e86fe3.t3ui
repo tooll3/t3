@@ -1,20 +1,22 @@
 {
   "Id": "549ec76b-cc65-47b7-ad41-0abe93e86fe3"/*SmoothStep*/,
-  "Description": "",
+  "Description": "Smoothes an incoming animated value\n\nFor an alternative with more options see [Damp]",
   "InputUis": [
     {
       "InputId": "2fc8855f-3aef-42f1-9269-9390079fd348"/*Min*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Defines the degree to which falling / lower values are drawn smoothly"
     },
     {
       "InputId": "338e3b0b-4012-4c7d-899b-12b7384f5a80"/*Max*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Defines the degree to which rising / high values are drawn smoothly"
     },
     {
       "InputId": "fe01e41c-bd3b-441c-82f6-6c972097e155"/*Value*/,
@@ -22,6 +24,7 @@
         "X": 36.0,
         "Y": 334.0
       },
+      "GroupTitle": "Input",
       "Min": -100.0,
       "Max": 100.0
     }
