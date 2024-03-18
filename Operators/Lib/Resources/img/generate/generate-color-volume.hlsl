@@ -1,4 +1,4 @@
-#include "lib/shared/noise-functions.hlsl"
+#include "shared/noise-functions.hlsl"
 
 RWTexture3D<float4> outputTexture : register(u0);
 

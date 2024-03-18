@@ -1,8 +1,8 @@
 /* An update version of the boid system using a spatial hash map */
 
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/shared/point.hlsl"
-#include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
+#include "shared/hash-functions.hlsl"
+#include "shared/point.hlsl"
+#include "points/spatial-hash-map/hash-map-settings.hlsl" 
 
 cbuffer ParamConstants : register(b0)
 {

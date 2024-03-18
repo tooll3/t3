@@ -1,4 +1,4 @@
-#include "lib/shared/bias-functions.hlsl"
+#include "shared/bias-functions.hlsl"
 
 // This shader is heavily based on a ShaderToy Project by CandyCat https://www.shadertoy.com/view/4sc3z2
 

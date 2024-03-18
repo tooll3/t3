@@ -1,5 +1,5 @@
-#include "lib/shared/particle.hlsl"
-#include "lib/shared/hash-functions.hlsl"
+#include "shared/particle.hlsl"
+#include "shared/hash-functions.hlsl"
 cbuffer TimeConstants : register(b0)
 {
     float GlobalTime;

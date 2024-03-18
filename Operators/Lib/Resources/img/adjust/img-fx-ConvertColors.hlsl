@@ -1,4 +1,4 @@
-#include "lib/shared/color-functions.hlsl"
+#include "shared/color-functions.hlsl"
 
 Texture2D<float4> InputTexture : register(t0);
 sampler texSampler : register(s0);

@@ -1,4 +1,4 @@
-#include "lib/shared/bias-functions.hlsl"
+#include "shared/bias-functions.hlsl"
 
 // This shader is based on a ShaderToy Project by jamelouis https://www.shadertoy.com/view/3dXyRl 
 // Ported to Tooll3 by Newemka (so you know who to blame)

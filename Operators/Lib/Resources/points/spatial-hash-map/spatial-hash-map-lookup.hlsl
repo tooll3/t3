@@ -4,8 +4,8 @@ StructuredBuffer<uint> HashGridCells :register(t2);     // HashGridBuffer -> Has
 StructuredBuffer<uint> CellPointCounts :register(t3);    // CountBuffer -> CellPointCounts
 StructuredBuffer<uint> CellRangeIndices :register(t4);    // RangeIndexBuffer -> CellRangeIndices
 
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
+#include "shared/hash-functions.hlsl"
+#include "points/spatial-hash-map/hash-map-settings.hlsl" 
 
 bool ParticleGridFind(in float3 position, out uint2 entry)
 {

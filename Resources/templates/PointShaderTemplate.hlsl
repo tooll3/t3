@@ -1,6 +1,6 @@
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/shared/noise-functions.hlsl"
-#include "lib/shared/point.hlsl"
+#include "shared/hash-functions.hlsl"
+#include "shared/noise-functions.hlsl"
+#include "shared/point.hlsl"
 
 cbuffer Params : register(b0)
 {

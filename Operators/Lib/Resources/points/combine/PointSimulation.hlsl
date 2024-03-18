@@ -1,6 +1,6 @@
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
+#include "shared/hash-functions.hlsl"
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
 
 StructuredBuffer<Point> SourcePoints : t0;         // input
 RWStructuredBuffer<Point> ResultPoints : u0; 

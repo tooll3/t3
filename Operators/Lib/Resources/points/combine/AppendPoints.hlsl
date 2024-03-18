@@ -1,5 +1,5 @@
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
 cbuffer Params : register(b0)
 {
     float CountA;

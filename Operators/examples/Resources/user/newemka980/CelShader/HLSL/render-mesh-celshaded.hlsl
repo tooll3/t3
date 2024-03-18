@@ -1,9 +1,9 @@
 //This shader is a hack of Tooll3's DrawMeshHatched, it can certainly be improved.
 
-#include "lib/shared/point.hlsl"
-#include "lib/shared/point-light.hlsl"
-#include "lib/shared/pbr.hlsl"
-#include "lib/shared/hash-functions.hlsl"
+#include "shared/point.hlsl"
+#include "shared/point-light.hlsl"
+#include "shared/pbr.hlsl"
+#include "shared/hash-functions.hlsl"
 
 cbuffer Transforms : register(b0)
 {

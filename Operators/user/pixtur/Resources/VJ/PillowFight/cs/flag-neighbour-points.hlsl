@@ -1,4 +1,4 @@
-#include "lib/shared/point.hlsl"
+#include "shared/point.hlsl"
 
 RWStructuredBuffer<Point> points :register(u0); 
 
@@ -8,7 +8,7 @@ cbuffer Params : register(b0)
     float CellSize;
 }
 
-#include "lib/points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
+#include "points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
 
 
 [numthreads(1, 1, 1 )]

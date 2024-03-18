@@ -1,4 +1,4 @@
-#include "lib/shared/bias-functions.hlsl"
+#include "shared/bias-functions.hlsl"
 
 Texture2D<float4> inputTexture : register(t0);
 sampler texSampler : register(s0);

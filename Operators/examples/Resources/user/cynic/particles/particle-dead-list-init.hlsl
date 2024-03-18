@@ -1,4 +1,4 @@
-#include "lib/shared/particle.hlsl"
+#include "shared/particle.hlsl"
 
 AppendStructuredBuffer<ParticleIndex> DeadParticles : u0;
 

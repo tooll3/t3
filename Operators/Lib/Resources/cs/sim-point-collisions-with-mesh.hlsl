@@ -1,5 +1,5 @@
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
  
 RWStructuredBuffer<Particle> particles :register(u0);
 
@@ -12,7 +12,7 @@ cbuffer Params : register(b0)
     float Time;
 }
 
-#include "lib/points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
+#include "points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
 
 static const float3 CellOffsets[] = 
 {
