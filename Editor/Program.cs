@@ -25,7 +25,7 @@ using T3.SystemUi;
 
 namespace T3.Editor
 {
-    public static class Program
+    internal static class Program
     {
         public static IUiContentDrawer<SharpDX.Direct3D11.Device, ImDrawDataPtr> UiContentContentDrawer;
         public static Device Device { get; private set; }

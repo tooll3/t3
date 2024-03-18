@@ -1,16 +1,10 @@
 ﻿namespace ProjectUpdater;
 
-internal class Program
+public class ProjectUpdater
 {
-    private static void Main(string[] args)
+    private static void Convert(string currentProjectRootDir, string newProjectRootDir)
     {
-        Console.WriteLine("Hello, World!");
-
-        Console.WriteLine("Commencing spline reticulation...");
-
-        string currentLibRoot = Path.Combine("C:", "Repos", "FOSS", "t3", "Operators", "Types");
-        string newLibRoot = Path.Combine("C:", "Repos", "FOSS", "t3", "Operators");
-
-        Conversion.StartConversion(currentLibRoot, newLibRoot);
+        var converter = new Conversion();
+        converter.StartConversion(currentProjectRootDir, newProjectRootDir);
     }
 }
