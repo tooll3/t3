@@ -1,7 +1,6 @@
 {
   "Name": "{{PROJ}}",
   "Id": "{{GUID}}",
-  "Namespace": "{{NAMESPACE}}",
   "Inputs": [],
   "Children": [
     {

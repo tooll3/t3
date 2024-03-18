@@ -18,7 +18,7 @@ internal class CsProjectFile
     public string Directory { get; }
     public string FileName { get; }
     public string Name { get; }
-    public string Contents { get; }
+    private string Contents { get; }
     public string RootNamespace { get; }
     public string TargetFramework { get; }
     public AssemblyInformation Assembly { get; private set; }

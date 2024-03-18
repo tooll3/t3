@@ -134,44 +134,49 @@ internal sealed partial class EditableSymbolProject
     {
         foreach (var symbolUi in symbolUis)
         {
-            var symbol = symbolUi.Symbol;
-            var id = symbol.Id;
-            var pathHandler = _filePathHandlers[id];
+            SaveSymbolFile(symbolUi);
+        }
+    }
 
-            if (!pathHandler.TryCreateDirectory())
-            {
-                Log.Error($"Could not create directory for symbol {symbol.Id}");
-                continue;
-            }
+    private void SaveSymbolFile(SymbolUi symbolUi)
+    {
+        var symbol = symbolUi.Symbol;
+        var id = symbol.Id;
+        var pathHandler = _filePathHandlers[id];
 
-            pathHandler.UpdateFromSymbol();
+        if (!pathHandler.TryCreateDirectory())
+        {
+            Log.Error($"Could not create directory for symbol {symbol.Id}");
+            return;
+        }
 
-            try
-            {
+        pathHandler.UpdateFromSymbol();
+
+        try
+        {
                 
-                var sourceCodePath = pathHandler.SourceCodePath;
-                if (sourceCodePath != null)
-                    WriteSymbolSourceToFile(id, sourceCodePath);
-                else
-                    throw new Exception($"{CsProjectFile.Name}: No source code path found for symbol {id}");
+            var sourceCodePath = pathHandler.SourceCodePath;
+            if (sourceCodePath != null)
+                WriteSymbolSourceToFile(id, sourceCodePath);
+            else
+                throw new Exception($"{CsProjectFile.Name}: No source code path found for symbol {id}");
 
-                var symbolPath = pathHandler.SymbolFilePath ?? SymbolPathHandler.GetCorrectPath(symbol, this);
-                SaveSymbolDefinition(symbol, symbolPath);
-                pathHandler.SymbolFilePath = symbolPath;
+            var symbolPath = pathHandler.SymbolFilePath ??= SymbolPathHandler.GetCorrectPath(symbol, this);
+            SaveSymbolDefinition(symbol, symbolPath);
+            pathHandler.SymbolFilePath = symbolPath;
                 
-                var uiFilePath = pathHandler.UiFilePath ?? SymbolPathHandler.GetCorrectPath(symbolUi, this);
-                WriteSymbolUi(symbolUi, uiFilePath);
-                pathHandler.UiFilePath = uiFilePath;
+            var uiFilePath = pathHandler.UiFilePath ??= SymbolPathHandler.GetCorrectPath(symbolUi, this);
+            WriteSymbolUi(symbolUi, uiFilePath);
+            pathHandler.UiFilePath = uiFilePath;
                 
-                #if DEBUG
+            #if DEBUG
                 string debug = $"{CsProjectFile.Name}: Saved [{symbol.Name}] to:\nSymbol: \"{symbolPath}\"\nUi: \"{uiFilePath}\"\nSource: \"{sourceCodePath}\"\n";
                 Log.Debug(debug);
-                #endif
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to save symbol {id}\n{e}");
-            }
+            #endif
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to save symbol {id}\n{e}");
         }
     }
 

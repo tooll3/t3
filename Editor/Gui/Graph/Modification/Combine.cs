@@ -17,6 +17,7 @@ namespace T3.Editor.Gui.Graph.Modification;
 
 internal static class Combine
 {
+    // todo - convert to proper c# style code generation
     public static void CombineAsNewType(SymbolUi parentCompositionSymbolUi,
                                         EditableSymbolProject project,
                                         List<SymbolChildUi> selectedChildUis,
@@ -129,7 +130,7 @@ internal static class Combine
         classStringBuilder.Append("namespace ").Append(nameSpace);
         classStringBuilder.AppendLine("{");
         classStringBuilder.AppendLine("    [Guid(\"" + newSymbolId + "\")]");
-        classStringBuilder.AppendFormat("    public class {0} : Instance<{0}>\n", newSymbolName);
+        classStringBuilder.AppendFormat("    internal sealed class {0} : Instance<{0}>\n", newSymbolName);
         classStringBuilder.AppendLine("    {");
         classStringBuilder.Append(outputStringBuilder);
         classStringBuilder.AppendLine("");
@@ -142,14 +143,13 @@ internal static class Combine
 
         // compile new instance type
 
-        var success = project.TryCompile(newSource, newSymbolName, newSymbolId, nameSpace, out var newSymbol);
+        var success = project.TryCompile(newSource, newSymbolName, newSymbolId, nameSpace, out var newSymbol, out var newSymbolUi);
         if (!success)
         {
             Log.Error($"Could not compile new symbol '{newSymbolName}'");
             return;
         }
 
-        var newSymbolUi = SymbolUiRegistry.Entries[newSymbolId];
         newSymbolUi.Description = description;
         newSymbolUi.FlagAsModified();
 
@@ -248,7 +248,7 @@ internal static class Combine
         // Sadly saving in background does not save the source files.
         // This needs to be fixed.
         //T3Ui.SaveInBackground(false);
-        T3Ui.Save(false);
+        project.SaveModifiedSymbols();
     }
 
     private static ImRect GetAreaFromChildren(List<SymbolChildUi> childUis)

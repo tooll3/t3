@@ -8,6 +8,6 @@ using T3.Core.Operator.Slots;
 namespace {{NAMESPACE}};
 
 [Guid("{{GUID}}"), Home]
-public class {{PROJ}} : Instance<{{PROJ}}>
+internal sealed class {{PROJ}} : Instance<{{PROJ}}>
 {
 }
