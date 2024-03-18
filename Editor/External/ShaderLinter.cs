@@ -21,7 +21,7 @@ internal static class ShaderLinter
 
     private const string FileName = "shadertoolsconfig.json";
 
-    public static void AddPackage(IResourcePackage package, IEnumerable<IResourcePackage>? additionalPackages)
+    public static void AddPackage(IResourcePackage package, IEnumerable<IResourcePackage>? additionalPackages, bool replaceExisting = false)
     {
         var filePath = Path.Combine(package.ResourcesFolder, FileName);
         var jsonObject = new HlslToolsJson(filePath);
@@ -40,7 +40,18 @@ internal static class ShaderLinter
             return;
         }
 
-        HlslToolsJsons.Add(package, jsonObject);
+        if (!replaceExisting)
+        {
+            HlslToolsJsons.Add(package, jsonObject);
+        }
+        else
+        {
+            var existing = HlslToolsJsons.SingleOrDefault(x => x.Key.ResourcesFolder == package.ResourcesFolder);
+            if (existing.Key != null)
+            {
+                HlslToolsJsons.Remove(existing.Key);
+            }
+        }
     }
 
     public static void DeleteFiles()

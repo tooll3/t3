@@ -13,6 +13,8 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
+using T3.Core.UserData;
+using T3.Editor.External;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
@@ -964,22 +966,53 @@ namespace T3.Editor.Gui.Graph
 
                 if (TryGetShaderPath(instance, out var filePath, out var owner))
                 {
-                    var enabled = !owner.IsReadOnly;
+                    var shaderIsReadOnly = !owner.IsReadOnly;
                     
-                    if(ImGui.MenuItem("Open in Shader Editor", enabled))
+                    if(ImGui.MenuItem("Open in Shader Editor", true))
                     {
-                        if (!canModify)
+                        if (shaderIsReadOnly)
                         {
-                            // todo - copy into project + edit
-                            EditorUi.Instance.ShowMessageBox("Read, but don't modify this! You are directly modifying a shared, read-only file.\n" +
-                                                             "You may break several ops next time you launch T3 by changing this shader.\n" +
-                                                             "This option is left here for the curious to learn.\n\nWith great power...", "WARNING!");
+                            CopyToTempShaderPath(filePath, out filePath);
+                            EditorUi.Instance.ShowMessageBox("Warning - viewing a read-only shader. Modifications will not be saved.\n" +
+                                                             "Following #include directives outside of the temp folder may lead you to read-only files, " +
+                                                             "and editing those can break operators.\n\nWith great power...", "Warning");
                         }
 
                         EditorUi.Instance.OpenWithDefaultApplication(filePath);
                     }
                 }
             }
+        }
+
+        private static void CopyToTempShaderPath(string filePath, out string newFilePath)
+        {
+            var directory = Path.GetDirectoryName(filePath)!;
+            var destinationDirectory = Path.Combine(UserData.TempFolder, "ReadOnlyShaders");
+
+            if (Directory.Exists(destinationDirectory))
+            {
+                try
+                {
+                    Directory.Delete(destinationDirectory, true);
+                }
+                catch(Exception e)
+                {
+                    Log.Warning($"Failed to delete temp directory: {e}");
+                }
+            }
+
+            Directory.CreateDirectory(destinationDirectory);
+            
+            // copy all files in directory to temp directory for intellisense to work
+            var allFilesInDirectory = Directory.EnumerateFiles(directory);
+            foreach (var file in allFilesInDirectory)
+            {
+                var destinationPath = Path.Combine(destinationDirectory, Path.GetFileName(file));
+                File.Copy(file, destinationPath);
+            }
+            
+            ShaderLinter.AddPackage(new ShaderCompiler.ShaderResourcePackage(destinationDirectory), ResourceManager.SharedShaderPackages, replaceExisting: true);
+            newFilePath = Path.Combine(destinationDirectory, Path.GetFileName(filePath));
         }
 
         // Todo: There must be a better way...
