@@ -164,6 +164,8 @@ namespace T3.Editor.Gui.Graph
                 Log.Warning("can't jump to parent with invalid instance");
                 return;
             }
+            
+            // todo - undo changes made by the user if they were made in a read-only package
 
             var previousCompositionOp = CompositionOp;
             var shortenedPath = new List<Guid>();
@@ -465,10 +467,12 @@ namespace T3.Editor.Gui.Graph
                         }
                     }
                 }
+                
+                var symbol = CompositionOp.Symbol;
+                var canModify = !symbol.SymbolPackage.IsReadOnly;
 
                 DrawList.PopClipRect();
-                DrawContextMenu();
-                
+                DrawContextMenu(canModify);
 
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
@@ -477,10 +481,16 @@ namespace T3.Editor.Gui.Graph
                                             ref _nameSpaceForDialogEdits,
                                             ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
-                _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
-                EditCommentDialog.Draw();
-                _addInputDialog.Draw(CompositionOp.Symbol);
-                _addOutputDialog.Draw(CompositionOp.Symbol);
+
+                if (canModify)
+                {
+                    _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
+                    EditCommentDialog.Draw();
+                    
+                    _addInputDialog.Draw(symbol);
+                    _addOutputDialog.Draw(symbol);
+                }
+
                 LibWarningDialog.Draw();
                 EditNodeOutputDialog.Draw();
             }
@@ -665,15 +675,15 @@ namespace T3.Editor.Gui.Graph
             return bounds;
         }
 
-        private void DrawContextMenu()
+        private void DrawContextMenu(bool canModify)
         {
             if (FrameStats.Current.OpenedPopUpName == string.Empty)
             {
-                CustomComponents.DrawContextMenuForScrollCanvas(DrawContextMenuContent, ref _contextMenuIsOpen);
+                CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(canModify), ref _contextMenuIsOpen);
             }
         }
 
-        private void DrawContextMenuContent()
+        private void DrawContextMenuContent(bool canModify)
         {
             var clickPosition =ImGui.GetMousePosOnOpeningCurrentPopup();
 
@@ -743,19 +753,23 @@ namespace T3.Editor.Gui.Graph
             {
                 NodeGraphLayouting.ArrangeOps();
             }
-            
-            if (ImGui.MenuItem("Enable for snapshots",
-                               KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleSnapshotControl, false),
-                               selected: snapShotsEnabledFromSomeOps,
-                               enabled: someOpsSelected))
+
+            if (canModify)
             {
-                // Disable if already enabled for all
-                var enabledForAll = selectedChildUis.TrueForAll(c2 => c2.SnapshotGroupIndex > 0);
-                foreach (var c in selectedChildUis)
+                if (ImGui.MenuItem("Enable for snapshots",
+                                   KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleSnapshotControl, false),
+                                   selected: snapShotsEnabledFromSomeOps,
+                                   enabled: someOpsSelected))
                 {
-                    c.SnapshotGroupIndex = enabledForAll ? 0 : 1;
+                    // Disable if already enabled for all
+                    var enabledForAll = selectedChildUis.TrueForAll(c2 => c2.SnapshotGroupIndex > 0);
+                    foreach (var c in selectedChildUis)
+                    {
+                        c.SnapshotGroupIndex = enabledForAll ? 0 : 1;
+                    }
+
+                    FlagCurrentCompositionAsModified();
                 }
-                FlagCurrentCompositionAsModified();
             }
 
             if (ImGui.BeginMenu("Display as..."))
@@ -895,14 +909,17 @@ namespace T3.Editor.Gui.Graph
                     SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
                 }
 
-                if (ImGui.MenuItem("Add input parameter..."))
+                if (canModify)
                 {
-                    _addInputDialog.ShowNextFrame();
-                }
+                    if (ImGui.MenuItem("Add input parameter..."))
+                    {
+                        _addInputDialog.ShowNextFrame();
+                    }
 
-                if (ImGui.MenuItem("Add output..."))
-                {
-                    _addOutputDialog.ShowNextFrame();
+                    if (ImGui.MenuItem("Add output..."))
+                    {
+                        _addOutputDialog.ShowNextFrame();
+                    }
                 }
 
                 if (ImGui.MenuItem("Add Annotation",
@@ -948,8 +965,17 @@ namespace T3.Editor.Gui.Graph
                 if (TryGetShaderPath(instance, out var filePath, out var owner))
                 {
                     var enabled = !owner.IsReadOnly;
+                    
                     if(ImGui.MenuItem("Open in Shader Editor", enabled))
                     {
+                        if (!canModify)
+                        {
+                            // todo - copy into project + edit
+                            EditorUi.Instance.ShowMessageBox("Read, but don't modify this! You are directly modifying a shared, read-only file.\n" +
+                                                             "You may break several ops next time you launch T3 by changing this shader.\n" +
+                                                             "This option is left here for the curious to learn.\n\nWith great power...", "WARNING!");
+                        }
+
                         EditorUi.Instance.OpenWithDefaultApplication(filePath);
                     }
                 }
@@ -1167,12 +1193,6 @@ namespace T3.Editor.Gui.Graph
 
         private void PasteClipboard(Instance compositionOp)
         {
-            if (compositionOp.Symbol.SymbolPackage is not EditableSymbolProject project)
-            {
-                Log.Error($"Can't paste symbols into non-editable project");
-                return;
-            }
-            
             try
             {
                 var text = EditorUi.Instance.GetClipboardText();
@@ -1183,7 +1203,7 @@ namespace T3.Editor.Gui.Graph
 
                 var symbolJson = jArray[0];
                     
-                var gotSymbolJson = GetPastedSymbol(symbolJson, project, out var containerSymbol);
+                var gotSymbolJson = GetPastedSymbol(symbolJson, compositionOp.Symbol.SymbolPackage, out var containerSymbol);
                 if (!gotSymbolJson)
                 {
                     Log.Error($"Failed to paste symbol due to invalid symbol json");
@@ -1274,7 +1294,7 @@ namespace T3.Editor.Gui.Graph
         
         
         // todo - better encapsulate this in SymbolJson
-        private static bool GetPastedSymbol(JToken jToken, EditableSymbolProject project, out Symbol symbol)
+        private static bool GetPastedSymbol(JToken jToken, SymbolPackage package, out Symbol symbol)
         {
             var guidString = jToken[SymbolJson.JsonKeys.Id].Value<string>();
             var hasId = Guid.TryParse(guidString, out var guid);
@@ -1293,7 +1313,7 @@ namespace T3.Editor.Gui.Graph
             if (hasSymbol)
                 return true;
 
-            var jsonResult = SymbolJson.ReadSymbolRoot(guid, jToken, typeof(object), project);
+            var jsonResult = SymbolJson.ReadSymbolRoot(guid, jToken, typeof(object), package);
 
             if (jsonResult.Symbol is null)
                 return false;

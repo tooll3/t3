@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -34,8 +35,9 @@ internal static class SymbolNaming
 
     public static void RenameSymbol(Symbol symbol, string newName)
     {
-        if (!symbol.SymbolPackage.IsModifiable)
-            return;
+        if (symbol.SymbolPackage.IsReadOnly)
+            throw new ArgumentException("Symbol is read-only and cannot be renamed");
+        
         
         var syntaxTree = GraphUtils.GetSyntaxTree(symbol);
         if (syntaxTree == null)
@@ -54,9 +56,7 @@ internal static class SymbolNaming
 
         var newSource = root.GetText().ToString();
 
-
         var project = (EditableSymbolProject)symbol.SymbolPackage;
-
         var updated = project.TryRecompileWithNewSource(symbol, newSource);
         if (!updated)
         {

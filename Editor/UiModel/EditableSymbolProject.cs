@@ -184,7 +184,5 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     /// </summary>
     public static event Action<EditableSymbolProject, Symbol>? ProjectAdded;
 
-    public override bool IsModifiable => true;
-
     private static int _newProjectPosition = 0;
 }

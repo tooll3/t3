@@ -24,7 +24,7 @@ namespace T3.Editor.Gui.Graph
     /// <summary>
     /// A window that renders a node graph 
     /// </summary>
-    public class GraphWindow : Window
+    public sealed class GraphWindow : Window
     {
         public GraphWindow(Instance instance)
         {
@@ -265,7 +265,7 @@ namespace T3.Editor.Gui.Graph
                         if (GraphImageBackground.IsActive)
                             flags |= GraphCanvas.GraphDrawingFlags.HideGrid;
 
-                        if (GraphImageBackground.HasInteractionFocus || MustPreventModification)
+                        if (GraphImageBackground.HasInteractionFocus)
                             flags |= GraphCanvas.GraphDrawingFlags.PreventInteractions;
 
                         GraphCanvas.Draw(drawList, flags, graphFade);
@@ -471,11 +471,11 @@ namespace T3.Editor.Gui.Graph
 
         protected override void AddAnotherInstance()
         {
-            if (EditableSymbolProject.RootInstance == null)
+            if (EditorSymbolPackage.RootInstance == null)
                 return;
             
             // ReSharper disable once ObjectCreationAsStatement
-            new GraphWindow(EditableSymbolProject.RootInstance); // Must call constructor
+            new GraphWindow(EditorSymbolPackage.RootInstance); // Must call constructor
         }
 
         private static class TitleAndBreadCrumbs
@@ -559,18 +559,6 @@ namespace T3.Editor.Gui.Graph
         }
 
         internal readonly GraphImageBackground GraphImageBackground = new();
-        
-        bool MustPreventModification
-        {
-            get
-            {
-                var op = GraphCanvas.Current?.CompositionOp;
-                if (op == null || op == EditorSymbolPackage.RootInstance)
-                    return false;
-                
-                return !op.Symbol.SymbolPackage.IsModifiable;
-            }
-        }
 
         public readonly GraphCanvas GraphCanvas;
         private const int UseComputedHeight = -1;
