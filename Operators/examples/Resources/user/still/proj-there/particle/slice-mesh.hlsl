@@ -1,5 +1,5 @@
 
-#include "lib/shared/hash-functions.hlsl"
+#include "shared/hash-functions.hlsl"
 
 cbuffer EmitParameter : register(b0)
 {

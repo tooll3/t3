@@ -1,4 +1,4 @@
-#include "lib/shared/particle.hlsl"
+#include "shared/particle.hlsl"
 
 static const float3 Quad[] = 
 {

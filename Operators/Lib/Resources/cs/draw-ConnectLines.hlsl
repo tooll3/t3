@@ -1,7 +1,7 @@
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
-// #include "lib/shared/hash-functions.hlsl"
-// #include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
+ #include "shared/hash-functions.hlsl"
+// #include "points/spatial-hash-map/hash-map-settings.hlsl" 
 
 cbuffer Params : register(b0)
 {
@@ -19,7 +19,7 @@ cbuffer Params : register(b1)
     int CurrentStep;           // 0
 }
 
-#include "lib/points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
+#include "points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
 StructuredBuffer<Point> points :register(t5);
 
 RWStructuredBuffer<uint2> pointIndexPairs :register(u0);

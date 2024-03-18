@@ -1,8 +1,8 @@
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
-#include "lib/shared/SpriteDef.hlsl"
-#include "lib/shared/point-light.hlsl"
-#include "lib/shared/pbr.hlsl"
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
+#include "shared/SpriteDef.hlsl"
+#include "shared/point-light.hlsl"
+#include "shared/pbr.hlsl"
 
 static const float3 Corners[] =
 {

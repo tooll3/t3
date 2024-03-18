@@ -1,4 +1,4 @@
-#include "lib/shared/particle.hlsl"
+#include "shared/particle.hlsl"
 
 cbuffer SortParameterConstBuffer : register(b0)
 {

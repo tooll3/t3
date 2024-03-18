@@ -1,9 +1,9 @@
 // This shader is directly ported
 // from lomateron's excellent "Simple detailed fluid":  https://www.shadertoy.com/view/sl3Szs
 
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
+#include "shared/hash-functions.hlsl"
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {

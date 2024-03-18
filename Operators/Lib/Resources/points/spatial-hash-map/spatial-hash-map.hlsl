@@ -1,10 +1,10 @@
 // For more details on how this works see https://www.figma.com/file/wBNGUlaACjaCDOTdeBvBvR/ComputeShader-Ideas?node-id=8%3A0
 // This code is derived after Guillaume Boissé 
 
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
+#include "shared/hash-functions.hlsl"
+#include "points/spatial-hash-map/hash-map-settings.hlsl" 
 
 StructuredBuffer<Point> _points :register(t0); 
 

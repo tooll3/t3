@@ -1,5 +1,5 @@
 
-#include "lib/shared/particle.hlsl"
+#include "shared/particle.hlsl"
 
 cbuffer TimeConstants : register(b0)
 {

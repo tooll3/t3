@@ -1,5 +1,5 @@
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/shared/blend-functions.hlsl"
+#include "shared/hash-functions.hlsl"
+#include "shared/blend-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {

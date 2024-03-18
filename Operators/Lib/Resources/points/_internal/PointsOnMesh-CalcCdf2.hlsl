@@ -1,4 +1,4 @@
-#include "lib/shared/pbr.hlsl"
+#include "shared/pbr.hlsl"
 
 struct FaceProperties {
     float normalizedFaceArea;

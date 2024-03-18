@@ -1,7 +1,7 @@
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/shared/noise-functions.hlsl"
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
+#include "shared/hash-functions.hlsl"
+#include "shared/noise-functions.hlsl"
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
 
 
 cbuffer Params : register(b0)

@@ -1,6 +1,6 @@
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
-#include "lib/shared/pbr.hlsl"
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
+#include "shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
 {

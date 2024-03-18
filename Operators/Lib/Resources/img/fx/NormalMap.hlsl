@@ -1,4 +1,4 @@
-//#include "lib/shared/hash-functions.hlsl"
+//#include "shared/hash-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {

@@ -1,5 +1,5 @@
-#include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
+#include "shared/point.hlsl"
+#include "shared/quat-functions.hlsl"
 // struct Point
 // {
 //     float3 position;

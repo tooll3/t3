@@ -1,4 +1,4 @@
-#include "lib/shared/bias-functions.hlsl"
+#include "shared/bias-functions.hlsl"
 
 // This shader is based on Shard Noise by @ENDESGA https://www.shadertoy.com/view/dlKyWw
 // Ported with love to Tooll3 by Newemka
