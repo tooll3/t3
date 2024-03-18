@@ -11,7 +11,7 @@ namespace T3.Editor.Compilation;
 
 internal static class SymbolNaming
 {
-    private class ConstructorRewriter : CSharpSyntaxRewriter
+    private sealed class ConstructorRewriter : CSharpSyntaxRewriter
     {
         private readonly string _newSymbolName;
 

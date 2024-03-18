@@ -26,18 +26,7 @@ namespace T3.Editor.Gui.ChildUi
             WidgetElements.DrawSmallTitle(drawList, area, !string.IsNullOrEmpty(symbolChild.Name) ? symbolChild.Name : symbolChild.Symbol.Name);
 
             var slot = descriptiveGraphNode.GetSourcePathSlot();
-            var filePath = slot?.TypedInputValue?.Value;
-            if (!string.IsNullOrEmpty(filePath))
-            {
-                try
-                {
-                    filePath = Path.GetFileName(filePath);
-                }
-                catch (Exception e)
-                {
-                    Log.Debug("Can't get filepath for output " + e.Message);
-                }
-            }
+            var filePath = Path.GetFileName(slot?.TypedInputValue?.Value);
             
             WidgetElements.DrawPrimaryValue(drawList, area, filePath);
             
