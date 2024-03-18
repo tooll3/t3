@@ -2,23 +2,23 @@ using System.Text;
 
 namespace ProjectUpdater;
 
-public static partial class Conversion
+internal sealed partial class Conversion
 {
-    private static FileChangeInfo ConvertAndMoveCSharp(string file, string text, string originalRootDirectory, string newRootDirectory)
+    private FileChangeInfo ConvertAndMoveCSharp(string file, string text, string originalRootDirectory, string newRootDirectory)
     {
         StringBuilder stringBuilder = new(32);
 
-        var folderComponents = GetSubfolderArray(file, originalRootDirectory, stringBuilder);
+        var folderComponents = Utils.GetSubfolderArray(file, originalRootDirectory, stringBuilder);
         stringBuilder.Clear();
 
-        ConvertLineEndingsOf(ref text, false);
+        Utils.ConvertLineEndingsOf(ref text, false);
         var gotGuid = TryConvertToModernOperator(ref text, out var guid);
         var namespaceChanged = ChangeNamespaceTo(ref text, folderComponents, stringBuilder, out var oldNamespace, out var newNamespace);
 
         if (namespaceChanged)
         {
-            lock (ChangedNamespaces)
-                ChangedNamespaces.Add(new NamespaceChanged(oldNamespace, newNamespace));
+            lock (_changedNamespaces)
+                _changedNamespaces.Add(new NamespaceChanged(oldNamespace, newNamespace));
         }
         
         stringBuilder.Clear();
@@ -29,7 +29,7 @@ public static partial class Conversion
         newFileDirectory = Path.Combine(newRootDirectory, newFileDirectory);
 
         if(gotGuid)
-            DestinationDirectories[guid] = newFileDirectory;
+            _destinationDirectories[guid] = newFileDirectory;
 
         var newFilePath = Path.Combine(newFileDirectory, Path.GetFileName(file));
 
@@ -161,7 +161,7 @@ public static partial class Conversion
     /// <summary>
     /// Returns true if the text namespace was changed
     /// </summary>
-    private static bool ChangeNamespaceTo(ref string text, string[] namespaceComponents, StringBuilder sb, out string oldNamespace, out string newNamespace)
+    private bool ChangeNamespaceTo(ref string text, string[] namespaceComponents, StringBuilder sb, out string oldNamespace, out string newNamespace)
     {
         var namespaceStartIndex = text.IndexOf(NamespacePrefix, StringComparison.Ordinal);
 
@@ -280,5 +280,4 @@ public static partial class Conversion
     }
 
     public record struct NamespaceChanged(string OldNamespace, string NewNamespace);
-        
 }

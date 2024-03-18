@@ -36,7 +36,7 @@ internal static class ShaderLinter
 
         if (!JsonUtils.TrySaveJson(jsonObject, filePath))
         {
-            Log.Error($"{nameof(ShaderLinter)}: failed to save .hlsltools.json to \"{filePath}\"");
+            Log.Error($"{nameof(ShaderLinter)}: failed to save {FileName} to \"{filePath}\"");
             return;
         }
 
