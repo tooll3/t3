@@ -26,12 +26,20 @@
       }
     },
     {
-      "Id": "2bd55eb6-8bca-4f34-bc0e-d1223f47b410"/*Inverted*/,
-      "DefaultValue": false
-    },
-    {
       "Id": "b0e1cd04-9377-4ab0-9c4e-8780f4efa271"/*Scale*/,
       "DefaultValue": 7.71
+    },
+    {
+      "Id": "7328bfec-fad5-4262-9c10-fad57bd39e2e"/*EdgeWidth*/,
+      "DefaultValue": 0.68
+    },
+    {
+      "Id": "55c3fe18-be3c-479b-b9cf-4473c4696f2e"/*Radius*/,
+      "DefaultValue": 0.65
+    },
+    {
+      "Id": "2bd55eb6-8bca-4f34-bc0e-d1223f47b410"/*Animated*/,
+      "DefaultValue": false
     },
     {
       "Id": "485ea866-3764-402b-8bb5-ade85efde0c1"/*Resolution*/,
@@ -39,14 +47,6 @@
         "X": 0,
         "Y": 0
       }
-    },
-    {
-      "Id": "55c3fe18-be3c-479b-b9cf-4473c4696f2e"/*Radius*/,
-      "DefaultValue": 0.65
-    },
-    {
-      "Id": "7328bfec-fad5-4262-9c10-fad57bd39e2e"/*LineWidth*/,
-      "DefaultValue": 0.68
     }
   ],
   "Children": [

@@ -4,7 +4,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_c68fbb84_2f56_4aed_97ab_3c2df0ec700b
 {
-    public class MosiacTiling : Instance<MosiacTiling>
+    public class MosaicTiling : Instance<MosaicTiling>
     {
         [Output(Guid = "0ce69c7f-29c9-461b-b593-402c4f9131e8")]
         public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();

@@ -1,5 +1,5 @@
 {
-  "Id": "c68fbb84-2f56-4aed-97ab-3c2df0ec700b"/*MosiacTiling*/,
+  "Id": "c68fbb84-2f56-4aed-97ab-3c2df0ec700b"/*MosaicTiling*/,
   "Description": "This subdivides the incoming image into recursive tiles.\n\nCheck out the presets for an overview.",
   "InputUis": [
     {
