@@ -52,7 +52,7 @@ internal static class Duplicate
         newSource = ReplaceGuidAttributeWith(newSymbolId, newSource);
         Log.Debug(newSource);
 
-        var success = project.TryCompile(newSource, newTypeName, newSymbolId, nameSpace, out var newSymbol);
+        var success = project.TryCompile(newSource, newTypeName, newSymbolId, nameSpace, out var newSymbol, out _);
         if (!success)
         {
             Log.Error($"Could not compile new symbol '{newTypeName}'");
@@ -128,6 +128,9 @@ internal static class Duplicate
         }
         
         Log.Debug($"Created new symbol '{newTypeName}'");
+        
+        newSymbolUi.FlagAsModified();
+        project.SaveModifiedSymbols();
 
         return newSymbol;
     }

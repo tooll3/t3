@@ -21,7 +21,7 @@ namespace T3.Editor.UiModel
     {
         public static event Action? CompilationComplete;
 
-        public bool TryCompile(string sourceCode, string newSymbolName, Guid newSymbolId, string nameSpace, out Symbol newSymbol)
+        public bool TryCompile(string sourceCode, string newSymbolName, Guid newSymbolId, string nameSpace, out Symbol newSymbol, out SymbolUi newSymbolUi)
         {
             var path = SymbolPathHandler.GetCorrectPath(newSymbolName, nameSpace, Folder, CsProjectFile.RootNamespace, SourceCodeExtension);
 
@@ -33,16 +33,26 @@ namespace T3.Editor.UiModel
             {
                 Log.Error($"Could not write source code to {path}");
                 newSymbol = null;
+                newSymbolUi = null;
                 return false;
             }
 
             if (TryRecompile())
             {
                 UpdateSymbols();
-                return Symbols.TryGetValue(newSymbolId, out newSymbol);
+
+                newSymbolUi = null;
+                var gotSymbol = Symbols.TryGetValue(newSymbolId, out newSymbol) && SymbolUis.TryGetValue(newSymbolId, out newSymbolUi);
+                if(gotSymbol)
+                {
+                    newSymbolUi.FlagAsModified();
+                }
+
+                return gotSymbol;
             }
 
             newSymbol = null;
+            newSymbolUi = null;
             return false;
         }
 
