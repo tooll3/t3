@@ -18,7 +18,7 @@ public static class UserData
 {
     static UserData()
     {
-        Directory.CreateDirectory(SettingsFolderInApplicationDirectory);
+        Directory.CreateDirectory(ReadOnlySettingsFolder);
         Directory.CreateDirectory(SettingsFolder);
     }
 
@@ -72,7 +72,7 @@ public static class UserData
     {
         var filePath = Path.Combine(location == UserDataLocation.User 
                                         ? SettingsFolder 
-                                        : SettingsFolderInApplicationDirectory, relativeFilePath);
+                                        : ReadOnlySettingsFolder, relativeFilePath);
         return filePath;
     }
 
@@ -129,7 +129,7 @@ public static class UserData
             return true;
         }
 
-        var defaultsFilePath = Path.Combine(SettingsFolderInApplicationDirectory, relativeFileName);
+        var defaultsFilePath = Path.Combine(ReadOnlySettingsFolder, relativeFileName);
         return File.Exists(defaultsFilePath);
     }
 
@@ -139,8 +139,9 @@ public static class UserData
         User
     }
 
-    public static string SettingsFolderInApplicationDirectory => Path.Combine(RuntimeAssemblies.CoreDirectory!, ".t3");
-    
+    public static string ReadOnlySettingsFolder => Path.Combine(RuntimeAssemblies.CoreDirectory!, ".t3");
+    public static string TempFolder => Path.Combine(SettingsFolder, "temp");
+
     public static readonly string SettingsFolder =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "T3", Process.GetCurrentProcess().ProcessName);
 }

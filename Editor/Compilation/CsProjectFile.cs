@@ -232,7 +232,7 @@ internal class CsProjectFile
     // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation
     public static CsProjectFile CreateNewProject(string projectName, string nameSpace, string parentDirectory)
     {
-        var defaultHomeDir = Path.Combine(UserData.SettingsFolderInApplicationDirectory, "default-home");
+        var defaultHomeDir = Path.Combine(UserData.ReadOnlySettingsFolder, "default-home");
         var files = System.IO.Directory.EnumerateFiles(defaultHomeDir, "*");
         string destinationDirectory = Path.Combine(parentDirectory, projectName);
         destinationDirectory = Path.GetFullPath(destinationDirectory);

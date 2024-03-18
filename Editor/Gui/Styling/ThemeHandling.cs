@@ -214,7 +214,7 @@ public static class ThemeHandling
 
     public static readonly List<ColorTheme> Themes = new();
     public static string ThemeFolder => Path.Combine(UserData.SettingsFolder, "themes");
-    private static string DefaultThemeFolder => Path.Combine(UserData.SettingsFolderInApplicationDirectory, "themes");
+    private static string DefaultThemeFolder => Path.Combine(UserData.ReadOnlySettingsFolder, "themes");
     public static ColorTheme FactoryTheme;
     
     
