@@ -114,6 +114,7 @@ namespace T3.Editor.App
             // ReSharper disable once ReplaceAutoPropertyWithComputedProperty
             public string ResourcesFolder { get; } = Directory;
             public ResourceFileWatcher FileWatcher => null;
+            public bool IsReadOnly => true;
         }
     }
 }

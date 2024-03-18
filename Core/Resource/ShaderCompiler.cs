@@ -185,6 +185,7 @@ public abstract class ShaderCompiler
     {
         public string ResourcesFolder { get; } = resourcesFolder;
         public ResourceFileWatcher? FileWatcher => null;
+        public bool IsReadOnly => true;
     }
 
     private readonly Dictionary<ShaderBytecode, int> _shaderBytecodeHashes = new();

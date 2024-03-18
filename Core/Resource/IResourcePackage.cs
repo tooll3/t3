@@ -5,4 +5,5 @@ public interface IResourcePackage
 {
     public string ResourcesFolder { get; }
     public ResourceFileWatcher? FileWatcher { get; }
+    public bool IsReadOnly { get; }
 }
