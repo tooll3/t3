@@ -9,7 +9,7 @@ public readonly struct DependencyInfo
     public readonly string Version;
     public readonly DependencyType DependencyType;
 
-    public DependencyInfo(string name, DependencyType dependencyType)
+    internal DependencyInfo(string name, DependencyType dependencyType)
     {
         Name = name;
         Version = string.Empty;
@@ -18,18 +18,13 @@ public readonly struct DependencyInfo
         DependencyType = dependencyType;
     }
 
-    public DependencyInfo(string name, string version, DependencyType dependencyType)
+    internal DependencyInfo(string name, string version, DependencyType dependencyType)
     {
         Name = name;
         Version = version;
 
         Debug.Assert(dependencyType == DependencyType.PackageReference);
         DependencyType = dependencyType;
-    }
-
-    public DependencyInfo AdjustPath(string oldCsprojPath, string newCsprojPath)
-    {
-        throw new NotImplementedException();
     }
 }
 
