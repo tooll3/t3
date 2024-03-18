@@ -268,9 +268,9 @@ public static class T3Ui
                 {
                     Task.Run(() =>
                              {
-                                 EditorSymbolPackage.EnableDisableRootSaving(true);
+                                 EditorSymbolPackage.RootSymbolUi!.ForceUnmodified = false;
                                  Save(true);
-                                 EditorSymbolPackage.EnableDisableRootSaving(false);
+                                 EditorSymbolPackage.RootSymbolUi.ForceUnmodified = true;
                              });
                 }
                 #endif

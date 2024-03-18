@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Resources;
+using System.Threading;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -229,7 +230,7 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
     }
 
     public static Instance? RootInstance { get; private set; }
-    private protected static SymbolUi? RootSymbolUi;
+    internal static SymbolUi? RootSymbolUi;
 
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
 

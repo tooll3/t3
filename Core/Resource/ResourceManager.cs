@@ -77,10 +77,6 @@ namespace T3.Core.Resource
                     return true;
             }
 
-            #if DEBUG
-            LogFailedResourceLocation(relativePath, instance, SharedResourceFolders);
-            #endif
-
             absolutePath = string.Empty;
             resourceContainer = null;
             return false;
