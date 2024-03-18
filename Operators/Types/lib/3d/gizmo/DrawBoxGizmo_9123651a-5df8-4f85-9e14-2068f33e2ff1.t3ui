@@ -1,5 +1,6 @@
 {
   "Id": "9123651a-5df8-4f85-9e14-2068f33e2ff1"/*DrawBoxGizmo*/,
+  "Description": "Creates a 3D wireframe cube that can be used as a bounding box",
   "InputUis": [
     {
       "InputId": "656697b8-b271-463b-9e38-fdb5758d3736"/*Color*/,
