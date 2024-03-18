@@ -170,6 +170,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public readonly CsProjectFile CsProjectFile;
     private ResourceFileWatcher _resourceFileWatcher;
     public override ResourceFileWatcher FileWatcher => _resourceFileWatcher;
+    public override bool IsReadOnly => false;
 
     private static readonly List<EditableSymbolProject> AllProjectsRw = [];
     public static readonly IReadOnlyList<EditableSymbolProject> AllProjects = AllProjectsRw;

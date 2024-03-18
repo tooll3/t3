@@ -947,7 +947,7 @@ namespace T3.Editor.Gui.Graph
 
                 if (TryGetShaderPath(instance, out var filePath, out var owner))
                 {
-                    var enabled = owner is EditableSymbolProject;
+                    var enabled = !owner.IsReadOnly;
                     if(ImGui.MenuItem("Open in Shader Editor", enabled))
                     {
                         EditorUi.Instance.OpenWithDefaultApplication(filePath);

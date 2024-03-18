@@ -242,6 +242,7 @@ public abstract partial class SymbolPackage : IResourcePackage
     }
 
     public virtual ResourceFileWatcher? FileWatcher => null;
+    public virtual bool IsReadOnly => true;
     
     private static readonly List<SymbolPackage> AllPackagesRw = [];
     public static IReadOnlyList<SymbolPackage> AllPackages => AllPackagesRw;
