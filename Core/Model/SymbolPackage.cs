@@ -25,7 +25,6 @@ public abstract partial class SymbolPackage : IResourcePackage
 {
     public virtual AssemblyInformation AssemblyInformation { get; }
     public virtual string Folder => AssemblyInformation.Directory;
-    public virtual bool IsModifiable => false;
     protected virtual IEnumerable<string> SymbolSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, "Symbols"), $"*{SymbolExtension}", SearchOption.AllDirectories);
     
     protected event Action<string?, Symbol>? SymbolAdded;

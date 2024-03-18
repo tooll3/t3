@@ -16,6 +16,7 @@ namespace T3.Editor.Gui.UiHelpers
     /// <summary>
     /// Saves view layout, currently open node and other user settings 
     /// </summary>
+    ///  todo - make internal, make extendable by external packaages
     public class UserSettings : Settings<UserSettings.ConfigData>
     {
         public UserSettings(bool saveOnQuit) : base("userSettings.json", saveOnQuit:saveOnQuit)
@@ -125,19 +126,19 @@ namespace T3.Editor.Gui.UiHelpers
             ValueLadder,
         }
         
-        public static bool IsUserNameDefined()
+        internal static bool IsUserNameDefined()
         {
             return !string.IsNullOrEmpty(Config.UserName) && Config.UserName != UndefinedUserName;
         }
 
         private const string UndefinedUserName = "unknown";
 
-        public static Guid GetLastOpenOpForWindow(string windowTitle)
+        internal static Guid GetLastOpenOpForWindow(string windowTitle)
         {
             return Config.LastOpsForWindows.TryGetValue(windowTitle, out var id) ? id : Guid.Empty;
         }
 
-        public static void SaveLastViewedOpForWindow(GraphWindow window, Guid opInstanceId)
+        internal static void SaveLastViewedOpForWindow(GraphWindow window, Guid opInstanceId)
         {
             Config.LastOpsForWindows[window.Config.Title] = opInstanceId;
         }

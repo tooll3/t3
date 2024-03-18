@@ -38,8 +38,6 @@ namespace T3.Editor.UiModel
         
         public SymbolChild SymbolChild;
 
-        public bool IsModifiable => SymbolChild.Symbol.SymbolPackage.IsModifiable;
-
         public Guid Id => SymbolChild.Id;
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = DefaultOpSize;

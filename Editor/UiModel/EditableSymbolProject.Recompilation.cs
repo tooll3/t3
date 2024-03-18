@@ -104,7 +104,7 @@ namespace T3.Editor.UiModel
             if (CheckCompilation(out reason))
                 return false;
 
-            if (!symbol.SymbolPackage.IsModifiable)
+            if (symbol.SymbolPackage.IsReadOnly)
             {
                 reason = $"Could not update symbol '{symbol.Name}' because it is not modifiable.";
                 Log.Error(reason);

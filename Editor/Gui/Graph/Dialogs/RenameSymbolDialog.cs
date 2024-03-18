@@ -13,7 +13,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
     {
         public void Draw(List<SymbolChildUi> selectedChildUis, ref string name)
         {
-            var canRename = selectedChildUis.All(x => x.IsModifiable);
+            var canRename = selectedChildUis.All(x => !x.SymbolChild.Symbol.SymbolPackage.IsReadOnly);
             
             if (!canRename)
                 return;

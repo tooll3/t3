@@ -237,7 +237,6 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
     protected virtual IEnumerable<string> SymbolUiSearchFiles =>
         Directory.EnumerateFiles(Path.Combine(Folder, SymbolUiSubFolder), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
     
-    public override bool IsModifiable => false;
     private ConcurrentDictionary<Guid, string>? _sourceCodePaths;
 
     protected virtual IEnumerable<string> SourceCodeSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, SourceCodeSubFolder), $"*{SourceCodeExtension}", SearchOption.AllDirectories);
