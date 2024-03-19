@@ -1,6 +1,6 @@
 {
   "Id": "6820b166-1782-43b9-bc5c-6b4f63b16f86"/*FakeLight*/,
-  "Description": "Applies fake shading to the image.",
+  "Description": "Applies fake shading to the image.\n\nFor similar effects see: [Steps] [DetectEdges] [DistortAndShade] [Displace]",
   "InputUis": [
     {
       "InputId": "00c53b57-7347-4ebc-97d7-1ab48483f09b"/*HeightMap*/,

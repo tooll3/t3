@@ -1,6 +1,6 @@
 {
   "Id": "f2a0a8d9-e2dc-476b-ac97-de13101a6fdb"/*ZollnerPattern*/,
-  "Description": "Creates an image for a optical illusion.\n\nOriginally programmed for [WorksForEverybody]",
+  "Description": "Creates an image for a optical illusion.\n\nOriginally programmed for [WorksForEverybody]\n\nOther interesting patterns can be generated with [SinForm] [ZollnerPattern] [FraserGrid] [Raster] [CheckerBoard] [RyojiPattern2] [RyojiPattern1]",
   "InputUis": [
     {
       "InputId": "b68794e6-4067-4500-b8ba-7cb6f5e9ea28"/*Image*/,

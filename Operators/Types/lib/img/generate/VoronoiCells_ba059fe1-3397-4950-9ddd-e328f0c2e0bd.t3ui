@@ -1,6 +1,6 @@
 {
   "Id": "ba059fe1-3397-4950-9ddd-e328f0c2e0bd"/*VoronoiCells*/,
-  "Description": "Creates a Voronoi cell pattern based on an incoming image.\n\nFor similar effects see [MosaicTiling] [HoneyCombTiles] [AsciiRender] [Dither]",
+  "Description": "Creates a Voronoi cell pattern based on an incoming image.\n\nFor similar effects or interesting combinations see: [MosaicTiling] [VoronoiCells] [SubdivisionStretch] [HoneyCombTiles] [TriangleGridTransition] [Dither] [AsciiRender]",
   "InputUis": [
     {
       "InputId": "f5bad014-1895-4490-8c00-4c775db54716"/*Image*/,

@@ -1,6 +1,6 @@
 {
   "Id": "43f15919-f6c3-4a10-9092-00973fc8e821"/*GlitchDisplace*/,
-  "Description": "Takes the incoming image and applies an image effect that glitches and displaces parts of the image to mimic lossy signals, broken videofiles, codec glitches etc.",
+  "Description": "Takes the incoming image and applies an image effect that glitches and displaces parts of the image to mimic lossy signals, broken videofiles, codec glitches etc.\n\nVaguely similar Op: [SortPixelGlitch]\n\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
   "InputUis": [
     {
       "InputId": "7914bb8b-8444-4438-a156-b00d099ce659"/*Image*/,

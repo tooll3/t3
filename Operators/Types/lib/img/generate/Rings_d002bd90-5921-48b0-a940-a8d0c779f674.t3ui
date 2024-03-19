@@ -1,6 +1,6 @@
 {
   "Id": "d002bd90-5921-48b0-a940-a8d0c779f674"/*Rings*/,
-  "Description": "Generates a procedural rings texture that can produce a wide variety of radial patterns. Please try the presets.",
+  "Description": "Generates a procedural rings texture that can produce a wide variety of radial patterns. Please try the presets.\n\n\nSimilar Ops: [NGon] [RoundedRect] [Rings] [RadialGradient] [LinearGradient] [Blob]",
   "InputUis": [
     {
       "InputId": "a22945ec-c576-491a-83d0-ffea9dd0cdc4"/*Image*/,

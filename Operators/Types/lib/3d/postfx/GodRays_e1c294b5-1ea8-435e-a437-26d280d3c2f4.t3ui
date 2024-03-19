@@ -1,6 +1,6 @@
 {
   "Id": "e1c294b5-1ea8-435e-a437-26d280d3c2f4"/*GodRays*/,
-  "Description": "Uses the z-buffer to draw god rays.",
+  "Description": "Uses the z-buffer to draw god rays.\n\nA different approach [LightRaysFx]\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
   "InputUis": [
     {
       "InputId": "c94e4bb6-d6fc-4184-bd71-3563f4416413"/*Image*/,

@@ -1,6 +1,6 @@
 {
   "Id": "f7366bdc-86b2-4951-8788-3826126ed8c2"/*KochKaleidoskope*/,
-  "Description": "This effect is based on Koch snowflake fractal curve.\nAngle starts working with Steps set to 2 and above.",
+  "Description": "This effect is based on Koch snowflake fractal curve.\nAngle starts working with Steps set to 2 and above.\n\nFor a much simpler version see: [MirrorRepeat] or [TransformImage]\n\nSimilar effects or interesting combinations: [MosaicTiling] [VoronoiCells] [SubdivisionStretch]",
   "InputUis": [
     {
       "InputId": "362bcc93-74a0-40fb-a19f-bff8b7246c34"/*Image*/,

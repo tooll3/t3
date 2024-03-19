@@ -1,5 +1,6 @@
 {
   "Id": "0626aba2-ed0c-40c4-9b50-2e729d0d8d86"/*SinForm*/,
+  "Description": "Generates a sine curve with various parameters\n\nThe presets show various application possibilities for different patterns\n\n\nOther interesting patterns can be generated with [SinForm] [ZollnerPattern] [FraserGrid] [Raster] [CheckerBoard] [RyojiPattern2] [RyojiPattern1]",
   "InputUis": [
     {
       "InputId": "7eca4ec2-40f1-4699-8c1f-9e196917df67"/*Resolution*/,

@@ -1,6 +1,6 @@
 {
   "Id": "1b149f1f-529c-4418-ac9d-3871f24a9e38"/*Displace*/,
-  "Description": "Uses two images to distort (create a bevel / emboss effect) that can look like textured glass\n\nAlso see [DistortAndShade]",
+  "Description": "Uses two images to distort (create a bevel / emboss effect) that can look like textured glass\n\nAlso see [DistortAndShade]\n\nFor similar effects see: [Steps] [DetectEdges] [FakeLight]",
   "InputUis": [
     {
       "InputId": "d0508dfa-89cf-4713-8f5e-893dd5bfc3f4"/*Image*/,

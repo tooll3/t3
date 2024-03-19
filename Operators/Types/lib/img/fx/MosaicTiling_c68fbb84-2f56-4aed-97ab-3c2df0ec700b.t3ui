@@ -1,6 +1,6 @@
 {
   "Id": "c68fbb84-2f56-4aed-97ab-3c2df0ec700b"/*MosaicTiling*/,
-  "Description": "Subdivides the incoming image into recursive tiles.\n\nCheck out the presets for an overview.",
+  "Description": "Subdivides the incoming image into recursive tiles.\n\nCheck out the presets for an overview.\n\n\nFor similar effects or interesting combinations see: [MosaicTiling] [VoronoiCells] [SubdivisionStretch] [HoneyCombTiles] [TriangleGridTransition] [Dither] [AsciiRender]",
   "InputUis": [
     {
       "InputId": "5a5ebec0-88ac-4e8e-873b-88e5d68fb920"/*Image*/,

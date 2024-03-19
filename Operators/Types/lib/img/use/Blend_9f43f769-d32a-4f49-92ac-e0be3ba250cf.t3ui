@@ -1,6 +1,6 @@
 {
   "Id": "9f43f769-d32a-4f49-92ac-e0be3ba250cf"/*Blend*/,
-  "Description": "Blends two images.\n\nIf you want do cross fade (mix) images, consider using [BlendImages]",
+  "Description": "Blends two images.\n\nIf you want do cross fade (mix) images, consider using [BlendImages]\n\nAll blend ops and similar: [BlendImages] [Blend] [BlendWithMask] [Combine3Images]",
   "InputUis": [
     {
       "InputId": "abaa52e9-7d3d-4ae5-89d2-5251f61e5392"/*ImageA*/,
