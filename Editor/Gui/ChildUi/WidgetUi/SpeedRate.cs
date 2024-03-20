@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace T3.Editor.Gui.ChildUi.WidgetUi
+﻿namespace T3.Editor.Gui.ChildUi.WidgetUi
 {
     public struct SpeedRate
     {

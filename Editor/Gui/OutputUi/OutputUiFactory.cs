@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace T3.Editor.Gui.OutputUi
+﻿namespace T3.Editor.Gui.OutputUi
 {
     public static class OutputUiFactory
     {

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;

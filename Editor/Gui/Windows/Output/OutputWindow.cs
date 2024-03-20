@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
@@ -10,18 +7,19 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Output
 {
-    public class OutputWindow : Window
+    internal class OutputWindow : Window
     {
         #region Window implementation
         public OutputWindow()
         {
-            Config.Title = "Output##" + _instanceCounter;
+            Config.Title = LayoutHandling.OutputPrefix + _instanceCounter;
             Config.Visible = true;
 
             AllowMultipleInstances = true;
@@ -30,19 +28,20 @@ namespace T3.Editor.Gui.Windows.Output
 
             _instanceCounter++;
             OutputWindowInstances.Add(this);
+            _camSelectionHandling = new();
         }
 
         public static IEnumerable<OutputWindow> GetVisibleInstances()
         {
             foreach (var i in OutputWindowInstances)
             {
-                if (!(i is OutputWindow graphWindow))
+                if (!(i is OutputWindow outputWindow))
                     continue;
 
                 if (!i.Config.Visible)
                     continue;
 
-                yield return graphWindow;
+                yield return outputWindow;
             }
         }
 
@@ -54,15 +53,6 @@ namespace T3.Editor.Gui.Windows.Output
         public Texture2D GetCurrentTexture()
         {
             return _imageCanvas?.LastTexture;
-        }
-
-        protected override void DrawAllInstances()
-        {
-            // Convert to array to enable removable of members during iteration
-            foreach (var w in OutputWindowInstances.ToArray())
-            {
-                w.DrawOneInstance();
-            }
         }
 
         protected override void Close()
@@ -96,17 +86,25 @@ namespace T3.Editor.Gui.Windows.Output
 
                 // Move down to avoid overlapping with toolbar
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
-                var drawnInstance = Pinning.GetPinnedOrSelectedInstance();
 
-                var drawnType = UpdateAndDrawOutput(drawnInstance, Pinning.GetPinnedEvaluationInstance());
-                _imageCanvas.Deactivate();
+                Pinning.TryGetPinnedOrSelectedInstance(out var drawnInstance,  out var canvas);
 
-                _camSelectionHandling.Update(drawnInstance, drawnType);
-                _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction;
-                _imageCanvas.Update();
+                if (canvas != null)
+                {
+                    Pinning.TryGetPinnedEvaluationInstance(canvas?.Structure, out var evaluationInstance);
 
-                T3Ui.UiScaleFactor = keepScale;
-                DrawToolbar(drawnType);
+                    var drawnType = UpdateAndDrawOutput(drawnInstance, evaluationInstance);
+                    _imageCanvas.Deactivate();
+                    _camSelectionHandling.Update(drawnInstance, drawnType);
+                    var editingFlags = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction
+                                           ? T3Ui.EditingFlags.PreventMouseInteractions
+                                           : T3Ui.EditingFlags.None;
+
+                    _imageCanvas.Update(editingFlags);
+
+                    T3Ui.UiScaleFactor = keepScale;
+                    DrawToolbar(drawnType);
+                }
                 CustomComponents.DrawWindowFocusFrame();
             }
             ImGui.EndChild();
@@ -213,8 +211,8 @@ namespace T3.Editor.Gui.Windows.Output
             if (instanceForEvaluation == null || instanceForEvaluation.Outputs.Count <= 0)
                 return null;
 
-            var evaluatedSymbolUi = SymbolUiRegistry.Entries[instanceForEvaluation.Symbol.Id];
-
+            var evaluatedSymbolUi = instanceForEvaluation.GetSymbolUi();
+            
             // Todo: support different outputs...
             var evalOutput = instanceForEvaluation.Outputs[0];
             if (!evaluatedSymbolUi.OutputUis.TryGetValue(evalOutput.Id, out IOutputUi evaluatedOutputUi))
@@ -266,7 +264,7 @@ namespace T3.Editor.Gui.Windows.Output
                     return null;
 
                 var viewOutput = instanceForOutput.Outputs[0];
-                var viewSymbolUi = SymbolUiRegistry.Entries[instanceForOutput.Symbol.Id];
+                var viewSymbolUi = instanceForOutput.GetSymbolUi();
                 if (!viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
                     return null;
 
@@ -282,14 +280,22 @@ namespace T3.Editor.Gui.Windows.Output
             }
         }
 
-        public Instance ShownInstance => Pinning.GetPinnedOrSelectedInstance();
+        public Instance ShownInstance
+        {
+            get
+            {
+                Pinning.TryGetPinnedOrSelectedInstance(out var instance, out _);
+                return instance;
+            }
+        }
+
         public static readonly List<Window> OutputWindowInstances = new();
         public ViewSelectionPinning Pinning { get; } = new();
 
         private System.Numerics.Vector4 _backgroundColor = new(0.1f, 0.1f, 0.1f, 1.0f);
         private readonly EvaluationContext _evaluationContext = new();
         private readonly ImageOutputCanvas _imageCanvas = new();
-        private readonly CameraSelectionHandling _camSelectionHandling = new();
+        private readonly CameraSelectionHandling _camSelectionHandling;
         private static int _instanceCounter;
         private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
         private readonly EditResolutionDialog _resolutionDialog = new();

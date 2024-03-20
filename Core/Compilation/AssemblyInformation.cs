@@ -12,32 +12,33 @@ using Microsoft.Extensions.DependencyModel.Resolution;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-
 namespace T3.Core.Compilation;
 
-internal readonly struct InputSlotInfo(InputAttribute attribute, FieldInfo field)
-{
-    public readonly InputAttribute Attribute = attribute;
-    public readonly FieldInfo Field = field;
+public readonly record struct InputSlotInfo(string Name, InputAttribute Attribute, Type Type, Type[] GenericArguments, FieldInfo Field, bool IsMultiInput);
 
-    public void Deconstruct(out FieldInfo info, out InputAttribute attribute)
-    {
-        info = Field;
-        attribute = Attribute;
-    }
-}
+public readonly record struct OperatorTypeInfo(Guid Id, List<InputSlotInfo> Inputs, List<OutputSlotInfo> Outputs, Func<object> Constructor, Type Type, FieldInfo StaticSymbolField, bool IsDescriptiveFileNameType);
 
-internal readonly struct OutputSlotInfo(OutputAttribute attribute, FieldInfo field)
+public readonly record struct OutputSlotInfo(string Name, OutputAttribute Attribute, Type Type, Type[] GenericArguments, FieldInfo Field)
 {
-    public readonly OutputAttribute Attribute = attribute;
-    public readonly FieldInfo Field = field;
-    
-    public void Deconstruct(out FieldInfo info, out OutputAttribute attribute)
+    public readonly Type? OutputDataType = GetOutputDataType(Type);
+
+    private static Type? GetOutputDataType(Type fieldType)
     {
-        info = Field;
-        attribute = Attribute;
+        var interfaces = fieldType.GetInterfaces();
+        Type foundInterface = null;
+        foreach (var i in interfaces)
+        {
+            if (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IOutputDataUser<>))
+            {
+                foundInterface = i;
+                break;
+            }
+        }
+
+        return foundInterface?.GetGenericArguments().Single();
     }
 }
 
@@ -50,25 +51,19 @@ public sealed class AssemblyInformation
 
     public Guid HomeGuid { get; private set; } = Guid.Empty;
     public bool HasHome => HomeGuid != Guid.Empty;
-    public bool IsOperatorAssembly => _operatorTypes.Count > 0;
+    public bool IsOperatorAssembly => _operatorTypeInfo.Count > 0;
     
     private readonly AssemblyName _assemblyName;
     private readonly Assembly _assembly;
 
     internal const BindingFlags ConstructorBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance;
 
-    internal bool TryGetType(Guid typeId, out Type? type) => _operatorTypes.TryGetValue(typeId, out type);
-
-    internal IReadOnlyDictionary<Guid, Type> OperatorTypes => _operatorTypes;
-    private Dictionary<Guid, Type> _operatorTypes;
+    public IReadOnlyDictionary<Guid, OperatorTypeInfo> OperatorTypeInfo => _operatorTypeInfo;
+    private readonly ConcurrentDictionary<Guid, OperatorTypeInfo> _operatorTypeInfo = new();
     private Dictionary<string, Type> _types;
 
     internal readonly bool ShouldShareResources;
-    internal IReadOnlyDictionary<Type, Func<object>> Constructors => _constructors;
-    internal IReadOnlyDictionary<Type,Type> GenericTypes => _genericTypes;
-    internal IReadOnlyDictionary<Type, IReadOnlyList<InputSlotInfo>> InputFields => _inputFields;
-    internal IReadOnlyDictionary<Type, IReadOnlyList<OutputSlotInfo>> OutputFields => _outputFields;
-
+    
     private IEnumerable<Assembly> AllAssemblies => _loadContext?.Assemblies ?? Enumerable.Empty<Assembly>();
     private readonly List<string> _assemblyPaths = [];
 
@@ -86,7 +81,7 @@ public sealed class AssemblyInformation
 
         LoadTypes(path, assembly, out ShouldShareResources);
     }
-    
+
     public IEnumerable<Type> TypesInheritingFrom(Type type) => _types.Values.Where(t => t.IsAssignableTo(type));
 
     private void LoadTypes(string path, Assembly assembly, out bool shouldShareResources)
@@ -101,7 +96,6 @@ public sealed class AssemblyInformation
         {
             Log.Warning($"Failed to load types from assembly {assembly.FullName}\n{e.Message}\n{e.StackTrace}");
             _types = new Dictionary<string, Type>();
-            _operatorTypes = new Dictionary<Guid, Type>();
             shouldShareResources = false;
             return;
         }
@@ -118,41 +112,16 @@ public sealed class AssemblyInformation
         _types = typeDict;
 
         ConcurrentBag<Type> nonOperatorTypes = new();
-        var opGuidInfoEnumerable = _types.Values
-                               .Where(type =>
-                                      {
-                                          var isOperator = type.IsAssignableTo(typeof(Instance));
-                                          if (!isOperator)
-                                              nonOperatorTypes.Add(type);
-                                          else
-                                              SetUpOperatorType(type);
-
-                                          return isOperator;
-                                      })
-                               .Select(type =>
-                                       {
-                                           var gotGuid = TryGetGuidOfType(type, out var id);
-                                           var isHome = type.GetCustomAttribute<HomeAttribute>() is not null;
-                                           if (isHome && gotGuid)
-                                           {
-                                               HomeGuid = id;
-                                           }
-
-                                           return new GuidInfo(gotGuid, id, type);
-                                       })
-                               .Where(x => x.HasGuid);
-
-        _operatorTypes = new Dictionary<Guid, Type>(_types.Count);
-        foreach (var op in opGuidInfoEnumerable)
-        {
-            if (!_operatorTypes.TryAdd(op.Guid, op.Type))
-            {
-                var existingType = _operatorTypes[op.Guid];
-                throw new Exception($"Duplicate operator type {op.Type.FullName} with guid {op.Guid}. Existing type: {existingType.FullName}");
-            }
-        }
         
-        _operatorTypes.TrimExcess();
+        _types.Values.AsParallel().ForAll(type =>
+                                          {
+                                              var isOperator = type.IsAssignableTo(typeof(Instance));
+                                              if (!isOperator)
+                                                  nonOperatorTypes.Add(type);
+                                              else
+                                                  SetUpOperatorType(type);
+                                              
+                                          });
 
         shouldShareResources = nonOperatorTypes
                               .Where(type =>
@@ -190,9 +159,29 @@ public sealed class AssemblyInformation
 
     private void SetUpOperatorType(Type type)
     {
-        _genericTypes[type] = typeof(Instance<>).MakeGenericType(type);
-        _constructors[type] = Expression.Lambda<Func<object>>(Expression.New(type)).Compile();
+        var gotGuid = TryGetGuidOfType(type, out var id);
+        var isHome = type.GetCustomAttribute<HomeAttribute>() is not null;
+
+        if (!gotGuid)
+        {
+            Log.Error($"Failed to get guid for {type.FullName}");
+            return;
+        }
         
+        if (isHome)
+        {
+            HomeGuid = id;
+        }
+        
+        var constructor = Expression.Lambda<Func<object>>(Expression.New(type)).Compile();
+        
+        // get static field to set the symbol to the instance type
+        var genericType = typeof(Instance<>).MakeGenericType(type);
+        var staticFieldInfos = genericType.GetFields(BindingFlags.Static | BindingFlags.NonPublic);
+        var staticSymbolField = staticFieldInfos.Single(x => x.Name == "_typeSymbol");
+        
+        
+        var isDescriptive = type.IsAssignableTo(typeof(IDescriptiveFilename));
 
         var bindFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
         var slots = type.GetFields(bindFlags)
@@ -202,12 +191,16 @@ public sealed class AssemblyInformation
         List<OutputSlotInfo> outputFields = new();
         foreach (var field in slots)
         {
-            if (field.FieldType.IsAssignableTo(typeof(IInputSlot)))
+            var fieldType = field.FieldType;
+            var genericArguments = fieldType.GetGenericArguments();
+            var name = field.Name;
+            if (fieldType.IsAssignableTo(typeof(IInputSlot)))
             {
                 var inputAttribute = field.GetCustomAttribute<InputAttribute>();
                 if(inputAttribute is not null)
                 {
-                    inputFields.Add(new InputSlotInfo(inputAttribute, field));
+                    var isMultiInput = fieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
+                    inputFields.Add(new InputSlotInfo(name, inputAttribute, fieldType, genericArguments, field, isMultiInput));
                 }
                 else
                 {
@@ -219,7 +212,7 @@ public sealed class AssemblyInformation
                 var outputAttribute = field.GetCustomAttribute<OutputAttribute>();
                 if(outputAttribute is not null)
                 {
-                    outputFields.Add(new OutputSlotInfo(outputAttribute, field));
+                    outputFields.Add(new OutputSlotInfo(name, outputAttribute, fieldType, genericArguments, field));
                 }
                 else
                 {
@@ -227,9 +220,20 @@ public sealed class AssemblyInformation
                 }
             }
         }
-        
-        _inputFields[type] = inputFields;
-        _outputFields[type] = outputFields;
+
+        var added = _operatorTypeInfo.TryAdd(id, new OperatorTypeInfo(
+                                                       Id: id,
+                                                       Type: type,
+                                                       Constructor: constructor,
+                                                       Inputs: inputFields,
+                                                       Outputs: outputFields,
+                                                       StaticSymbolField: staticSymbolField,
+                                                       IsDescriptiveFileNameType: isDescriptive));
+
+        if (!added)
+        {
+            Log.Error($"Failed to add operator type {type.FullName} with guid {id} because the id was already in use by {_operatorTypeInfo[id].Type.FullName}");
+        }
     }
 
     /// <summary>
@@ -357,11 +361,9 @@ public sealed class AssemblyInformation
         }
     }
 
-    private readonly record struct GuidInfo(bool HasGuid, Guid Guid, Type Type);
-
     public void Unload()
     {
-        _operatorTypes.Clear();
+        _operatorTypeInfo.Clear();
         _types.Clear();
 
         if (_loadContext == null)
@@ -379,7 +381,4 @@ public sealed class AssemblyInformation
     private readonly ConcurrentDictionary<Type, Func<object>> _constructors = new();
     private AssemblyLoadContext? _loadContext;
     private CompositeCompilationAssemblyResolver _assemblyResolver;
-    private readonly ConcurrentDictionary<Type, Type> _genericTypes = new();
-    private readonly ConcurrentDictionary<Type, IReadOnlyList<InputSlotInfo>> _inputFields = new();
-    private readonly ConcurrentDictionary<Type, IReadOnlyList<OutputSlotInfo>> _outputFields = new();
 }

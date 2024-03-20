@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using ImGuiNET;
 using SharpDX.Direct3D11;

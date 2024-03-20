@@ -24,10 +24,7 @@ namespace lib.dx11.draw
             var updated = ShaderOperatorImpl.TryUpdateShader(context, ref _cachedSource, out _warningMessage);
         }
 
-        public InputSlot<string> GetSourcePathSlot()
-        {
-            return Source;
-        }
+        public InputSlot<string> SourcePathSlot => Source;
 
         public IStatusProvider.StatusLevel GetStatusLevel()
         {

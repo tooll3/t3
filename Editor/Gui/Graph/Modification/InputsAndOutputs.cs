@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
@@ -17,24 +14,20 @@ namespace T3.Editor.Gui.Graph.Modification;
 
 internal static class InputsAndOutputs
 {
-    public static void RemoveInputsFromSymbol(Guid[] inputIdsToRemove, Symbol symbol)
+    public static bool RemoveInputsFromSymbol(Guid[] inputIdsToRemove, Symbol symbol)
     {
         var syntaxTree = GraphUtils.GetSyntaxTree(symbol);
         if (syntaxTree == null)
         {
             Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
-            return;
+            return false;
         }
 
         var newRoot = RemoveNodesByIdFromTree(inputIdsToRemove, syntaxTree.GetRoot());
         var newSource = newRoot.GetText().ToString();
         Log.Debug(newSource);
 
-        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
-        if (success)
-            FlagDependentOpsAsModified(symbol);
-        else
-            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
+        return EditableSymbolProject.RecompileSymbol(symbol, newSource, true, out _);
     }
 
     private static SyntaxNode RemoveNodesByIdFromTree(Guid[] inputIdsToRemove, SyntaxNode root)
@@ -45,32 +38,20 @@ internal static class InputsAndOutputs
         return SyntaxNodeExtensions.RemoveNodes<SyntaxNode>(newRoot, nodeFinder.NodesToRemove, SyntaxRemoveOptions.KeepNoTrivia);
     }
 
-    public static void RemoveOutputsFromSymbol(Guid[] outputIdsToRemove, Symbol symbol)
+    public static bool RemoveOutputsFromSymbol(Guid[] outputIdsToRemove, Symbol symbol)
     {
         var syntaxTree = GraphUtils.GetSyntaxTree(symbol);
         if (syntaxTree == null)
         {
             Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
-            return;
+            return false;
         }
 
         var newRoot = RemoveNodesByIdFromTree(outputIdsToRemove, syntaxTree.GetRoot());
         var newSource = newRoot.GetText().ToString();
         Log.Debug(newSource);
-
-        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
-        if (!success)
-            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
-
-    }
-
-    private static void FlagDependentOpsAsModified(Symbol symbol)
-    {
-        foreach (var dependent in Structure.CollectDependingSymbols(symbol))
-        {
-            var symbolUi = SymbolUiRegistry.Entries[dependent.Id];
-            symbolUi.FlagAsModified();
-        }
+        
+        return EditableSymbolProject.RecompileSymbol(symbol, newSource, false, out _);
     }
 
     internal class NodeByAttributeIdFinder : CSharpSyntaxRewriter
@@ -188,13 +169,13 @@ internal static class InputsAndOutputs
         public SyntaxNode[] ReplacementNodes;
     }
 
-    public static void AddInputToSymbol(string inputName, bool multiInput, Type inputType, Symbol symbol)
+    public static bool AddInputToSymbol(string inputName, bool multiInput, Type inputType, Symbol symbol)
     {
         var syntaxTree = GraphUtils.GetSyntaxTree(symbol);
         if (syntaxTree == null)
         {
             Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
-            return;
+            return false;
         }
 
         var root = syntaxTree.GetRoot();
@@ -208,7 +189,7 @@ internal static class InputsAndOutputs
             if (blockFinder.ClassDeclarationNode == null)
             {
                 Log.Error("Can't find class declaration.");
-                return;
+                return false;
             }
         }
         
@@ -240,24 +221,22 @@ internal static class InputsAndOutputs
             var theClass = root.DescendantNodes().OfType<ClassDeclarationSyntax>().First();
             var classDeclarationSyntax = theClass.AddMembers(inputDeclaration);
             Log.Info($"{classDeclarationSyntax}");
-            return;
+            return false;
         }
 
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
-        if (!success)
-            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
+        return EditableSymbolProject.RecompileSymbol(symbol, newSource, false, out _);
     }
 
-    public static void AddOutputToSymbol(string outputName, bool isTimeClipOutput, Type outputType, Symbol symbol)
+    public static bool AddOutputToSymbol(string outputName, bool isTimeClipOutput, Type outputType, Symbol symbol)
     {
         var syntaxTree = GraphUtils.GetSyntaxTree(symbol);
         if (syntaxTree == null)
         {
             Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
-            return;
+            return false;
         }
 
         var root = syntaxTree.GetRoot();
@@ -272,7 +251,7 @@ internal static class InputsAndOutputs
             if (blockFinder.ClassDeclarationNode == null)
             {
                 Log.Error("Could not add an output as no previous one was found, this case is missing and must be added.");
-                return;
+                return false;
             }
         }
 
@@ -302,24 +281,22 @@ internal static class InputsAndOutputs
             var theClass = root.DescendantNodes().OfType<ClassDeclarationSyntax>().First();
             var classDeclarationSyntax = theClass.AddMembers(outputDeclaration);
             Log.Info($"{classDeclarationSyntax}");
-            return;
+            return false;
         }
 
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
-        if (!success)
-            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
+        return EditableSymbolProject.RecompileSymbol(symbol, newSource, false, out _);
     }
 
-    public static void AdjustInputOrderOfSymbol(Symbol symbol)
+    public static bool AdjustInputOrderOfSymbol(Symbol symbol)
     {
         var syntaxTree = GraphUtils.GetSyntaxTree(symbol);
         if (syntaxTree == null)
         {
             Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
-            return;
+            return false;
         }
 
         var root = syntaxTree.GetRoot();
@@ -340,7 +317,7 @@ internal static class InputsAndOutputs
         }
 
         if (orderIsOk)
-            return; // nothing to do
+            return true; // nothing to do
 
         var inputDeclarations = new List<SyntaxNode>(symbol.InputDefinitions.Count);
         foreach (var inputDef in symbol.InputDefinitions)
@@ -384,9 +361,7 @@ internal static class InputsAndOutputs
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
-        if (!success)
-            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
+        return EditableSymbolProject.RecompileSymbol(symbol, newSource, true, out _);
     }
     
     
@@ -429,17 +404,6 @@ internal static class InputsAndOutputs
         if (dryRun)
             return true;
         
-        var success = EditableSymbolProject.UpdateSymbolWithNewSource(symbol, newSource, out var reason);
-        if (!success)
-            EditorUi.Instance.ShowMessageBox(reason, $"Could not update symbol '{symbol.Name}'");
-
-        if (success)
-        {
-            FlagDependentOpsAsModified(symbol);
-            return true;
-        }
-            
-        warning = "Compilation after reordering inputs failed, aborting the add.";
-        return false;
+        return EditableSymbolProject.RecompileSymbol(symbol, newSource, true, out warning);
     }
 }

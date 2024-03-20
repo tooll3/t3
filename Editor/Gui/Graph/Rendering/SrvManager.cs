@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using SharpDX.Direct3D11;
-using T3.Core.Logging;
+﻿using SharpDX.Direct3D11;
 using T3.Core.Resource;
 
 namespace T3.Editor.Gui.Graph.Rendering

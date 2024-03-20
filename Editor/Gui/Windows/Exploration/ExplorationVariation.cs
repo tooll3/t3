@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using T3.Core.Logging;
-using T3.Core.Operator;
+﻿using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
@@ -15,7 +11,7 @@ using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Editor.Gui.Windows.Exploration
 {
-    public class ExplorationVariation
+    internal class ExplorationVariation
     {
         public GridCell GridCell;
         public bool ThumbnailNeedsUpdate;
@@ -28,29 +24,16 @@ namespace T3.Editor.Gui.Windows.Exploration
             ThumbnailNeedsUpdate = true;
         }
 
-        public ExplorationVariation Clone()
+        public ExplorationVariation Clone(Structure structure)
         {
             var newVariation = new ExplorationVariation(new Dictionary<VariationParameter, InputValue>(ValuesForParameters));
-            newVariation.UpdateUndoCommand();
+            newVariation.UpdateUndoCommand(structure);
             return newVariation;
         }
-        
 
-        public List<Instance> GetInvolvedInstances()
+        public void KeepCurrentAndApplyNewValues(Structure structure)
         {
-            var instances = new HashSet<Instance>();
-
-            foreach (var p in ValuesForParameters.Keys)
-            {
-                instances.Add(Structure.GetInstanceFromIdPath(p.InstanceIdPath));
-            }
-
-            return instances.ToList();
-        }
-
-        public void KeepCurrentAndApplyNewValues()
-        {
-            _changeCommand = CreateChangeCommand();
+            _changeCommand = CreateChangeCommand(structure);
             _changeCommand.Do();
         }
 
@@ -75,9 +58,9 @@ namespace T3.Editor.Gui.Windows.Exploration
             }
         }
 
-        public void UpdateUndoCommand()
+        public void UpdateUndoCommand(Structure structure)
         {
-            _changeCommand = CreateChangeCommand();
+            _changeCommand = CreateChangeCommand(structure);
         }
 
         public static ExplorationVariation Mix(IEnumerable<VariationParameter> variationParameters,
@@ -207,7 +190,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                        };
         }
 
-        private MacroCommand CreateChangeCommand()
+        private MacroCommand CreateChangeCommand(Structure structure)
         {
             var commands = new List<ICommand>();
 
@@ -215,7 +198,8 @@ namespace T3.Editor.Gui.Windows.Exploration
             {
                 try
                 {
-                    var newCommand = new ChangeInputValueCommand(param.Instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input, value);
+                    var instance = structure.GetInstanceFromIdPath(param.InstanceIdPath);
+                    var newCommand = new ChangeInputValueCommand(instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input, value);
                     commands.Add(newCommand);
                 }
                 catch (Exception)
@@ -230,7 +214,6 @@ namespace T3.Editor.Gui.Windows.Exploration
         public class VariationParameter
         {
             public List<Guid> InstanceIdPath = new();
-            public Instance Instance => Structure.GetInstanceFromIdPath(InstanceIdPath);
             public SymbolChildUi SymbolChildUi;
             public IInputSlot InputSlot { get; set; }
             public SymbolChild.Input Input;

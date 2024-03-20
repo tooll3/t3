@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.External.Truncon.Collections;
 using T3.Editor.Gui.Graph.Interaction.Connections;
-using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 // ReSharper disable LoopCanBeConvertedToQuery
@@ -41,20 +35,23 @@ namespace T3.Editor.Gui.Graph
     /// 5. Draw outputs 
     /// 6. Draw connection lines
     ///</remarks>
-    public static class Graph
+    internal partial class Graph
     {
-        public static void DrawGraph(ImDrawListPtr drawList, bool preventInteraction, float graphOpacity = 1)
+        private readonly GraphWindow _window;
+        public Graph(GraphWindow window, GraphCanvas canvas)
         {
+            _window = window;
+            _connectionSorter = new ConnectionSorter(this, window, canvas);
+        }
+        
+        public void DrawGraph(ImDrawListPtr drawList, bool preventInteraction, Instance composition, float graphOpacity)
+        {
+            var canvas = _window.GraphCanvas;
             var needsReinit = false;
             GraphOpacity = graphOpacity; //MathF.Sin((float)ImGui.GetTime() * 2) * 0.5f + 0.5f;
-            DrawList = drawList;
-            var graphSymbol = GraphCanvas.Current.CompositionOp.Symbol;
-            var children = GraphCanvas.Current.CompositionOp.Children;
-
-            _symbolUi = SymbolUiRegistry.Entries[graphSymbol.Id];
-            _childUis = _symbolUi.ChildUis;
-            _inputUisById = _symbolUi.InputUis;
-            _outputUisById = _symbolUi.OutputUis;
+            var compositionUi = composition.GetSymbolUi();
+            var graphSymbol = compositionUi.Symbol;
+            var children = composition.Children;
 
             if (ConnectionMaker.TempConnections.Count > 0 || AllConnections.Count != ConnectionMaker.TempConnections.Count + graphSymbol.Connections.Count)
             {
@@ -93,43 +90,52 @@ namespace T3.Editor.Gui.Graph
                 AllConnections.AddRange(ConnectionMaker.TempConnections);
 
                 // 1. Initializes lists of ConnectionLineUis
-                Connections.Init();
+                _connectionSorter.Init();
 
                 // 2. Collect which nodes are connected to which lines
                 foreach (var c in AllConnections)
                 {
-                    Connections.CreateAndSortLineUi(c);
+                    _connectionSorter.CreateAndSortLineUi(c, compositionUi);
                 }
             }
             else
             {
-                foreach (var c in Connections.Lines)
+                foreach (var c in _connectionSorter.Lines)
                 {
                     c.IsSelected = false;
                 }
             }
 
             drawList.ChannelsSplit(2);
-            DrawList.ChannelsSetCurrent((int)Channels.Operators);
+            drawList.ChannelsSetCurrent((int)Channels.Operators);
 
             // 3. Draw Nodes and their sockets and set positions for connection lines
-            if (graphSymbol == GraphCanvas.Current.CompositionOp.Symbol) // todo: is this check necessary?
+            foreach (var instance in children)
             {
-                foreach (var instance in children)
-                {
-                    foreach (var childUi in _childUis) // Don't use linq to avoid allocations
-                    {
-                        if (childUi.Id != instance.SymbolChildId)
-                            continue;
+                if (instance == null)
+                    continue;
 
-                        GraphNode.Draw(childUi, instance, preventInteraction);
-                        break;
+                foreach (var childUi in compositionUi.ChildUis) // Don't use linq to avoid allocations
+                {
+                    if (childUi.Id != instance.SymbolChildId)
+                        continue;
+
+                    var isSelected = canvas.NodeSelection.IsNodeSelected(childUi);
+
+                    // todo - remove nodes that are not in the graph anymore?
+                    if (!_graphNodes.TryGetValue(childUi, out var node))
+                    {
+                        node = new GraphNode(_window, _connectionSorter);
+                        _graphNodes[childUi] = node;
                     }
+
+                    node.Draw(drawList, GraphOpacity, isSelected, childUi, instance, preventInteraction);
+                    break;
                 }
             }
 
             // 4. Draw Inputs Nodes
-            foreach (var (nodeId, node) in _inputUisById)
+            foreach (var (nodeId, node) in compositionUi.InputUis)
             {
                 var index = graphSymbol.InputDefinitions.FindIndex(def => def.Id == nodeId);
                 if (index < 0)
@@ -138,13 +144,13 @@ namespace T3.Editor.Gui.Graph
                     continue;
                 }
                 var inputDef = graphSymbol.InputDefinitions[index];
-                var isSelectedOrHovered = InputNode.Draw(inputDef, node, index);
+                var isSelectedOrHovered = InputNode.Draw(_window, drawList, inputDef, node, index);
 
                 var sourcePos = new Vector2(
                                             InputNode._lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
                                             InputNode._lastScreenRect.GetCenter().Y
                                            );
-                foreach (var line in Connections.GetLinesFromInputNodes(node, nodeId))
+                foreach (var line in _connectionSorter.GetLinesFromInputNodes(node, nodeId))
                 {
                     line.SourcePosition = sourcePos;
                     line.IsSelected |= isSelectedOrHovered;
@@ -152,220 +158,54 @@ namespace T3.Editor.Gui.Graph
             }
 
             // 5. Draw Output Nodes
-            foreach (var (outputId, outputNode) in _outputUisById)
+            foreach (var (outputId, outputNode) in compositionUi.OutputUis)
             {
                 var outputDef = graphSymbol.OutputDefinitions.Find(od => od.Id == outputId);
-                OutputNode.Draw(outputDef, outputNode);
+                OutputNode.Draw(_window, drawList, outputDef, outputNode);
 
                 var targetPos = new Vector2(OutputNode.LastScreenRect.Min.X + GraphNode.InputSlotThickness,
                                             OutputNode.LastScreenRect.GetCenter().Y);
 
-                foreach (var line in Connections.GetLinesToOutputNodes(outputNode, outputId))
+                foreach (var line in _connectionSorter.GetLinesToOutputNodes(outputNode, outputId))
                 {
                     line.TargetPosition = targetPos;
                 }
             }
 
             // 6. Draw ConnectionLines
-            foreach (var line in Connections.Lines)
+            foreach (var line in _connectionSorter.Lines)
             {
-                line.Draw();
+                line.Draw(canvas.Scale, drawList);
             }
 
             // 7. Draw Annotations
             drawList.ChannelsSetCurrent((int)Channels.Annotations);
-            foreach (var annotation in _symbolUi.Annotations.Values)
+            foreach (var annotation in compositionUi.Annotations.Values)
             {
                 //var posOnScreen = GraphCanvas.Current.TransformPosition(annotation.Position);
                 //drawList.AddRectFilled(  posOnScreen, posOnScreen + new Vector2(300,300), Color.Green);
-                AnnotationElement.Draw(annotation);
+                // todo - remove annotations that are not in the graph anymore?
+                if(!_annotationElements.TryGetValue(annotation, out var annotationElement))
+                {
+                    annotationElement = new AnnotationElement(_window, annotation);
+                    _annotationElements[annotation] = annotationElement;
+                }
+                
+                annotationElement.Draw(drawList);
             }
 
             drawList.ChannelsMerge();
         }
 
-        internal class ConnectionSorter
+        internal void RenameAnnotation(Annotation annotation)
         {
-            public readonly List<ConnectionLineUi> Lines = new();
-
-            public void Init()
+            if (!_annotationElements.TryGetValue(annotation, out var annotationElement))
             {
-                Lines.Clear();
-                _linesFromNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
-                _linesIntoNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
-                _linesToOutputNodes = new Dictionary<IOutputUi, List<ConnectionLineUi>>();
-                _linesFromInputNodes = new Dictionary<IInputUi, List<ConnectionLineUi>>();
+                annotationElement = new AnnotationElement(_window, annotation);
+                _annotationElements[annotation] = annotationElement;
             }
-
-            public void CreateAndSortLineUi(Symbol.Connection c)
-            {
-                var newLine = new ConnectionLineUi(c);
-                Lines.Add(newLine);
-
-                if (c.IsConnectedToSymbolOutput)
-                {
-                    if (!_outputUisById.TryGetValue(c.TargetSlotId, out var outputNode))
-                        return;
-
-                    if (!_linesToOutputNodes.ContainsKey(outputNode))
-                        _linesToOutputNodes.Add(outputNode, new List<ConnectionLineUi>());
-
-                    _linesToOutputNodes[outputNode].Add(newLine);
-                }
-                else if (c.TargetParentOrChildId != ConnectionMaker.NotConnectedId
-                         && c.TargetParentOrChildId != ConnectionMaker.UseDraftChildId)
-                {
-                    var targetNode = _childUis.SingleOrDefault(childUi => childUi.Id == c.TargetParentOrChildId);
-                    if (targetNode == null)
-                        return;
-
-                    if (!_linesIntoNodes.ContainsKey(targetNode))
-                        _linesIntoNodes.Add(targetNode, new List<ConnectionLineUi>());
-
-                    _linesIntoNodes[targetNode].Add(newLine);
-                }
-
-                if (c.IsConnectedToSymbolInput)
-                {
-                    if (!_inputUisById.TryGetValue(c.SourceSlotId, out var inputNode))
-                        return;
-
-                    if (!_linesFromInputNodes.ContainsKey(inputNode))
-                        _linesFromInputNodes.Add(inputNode, new List<ConnectionLineUi>());
-
-                    _linesFromInputNodes[inputNode].Add(newLine);
-
-                    var color = UiColors.Gray;
-                    if (TypeUiRegistry.Entries.TryGetValue(inputNode.Type, out var typeUiProperties))
-                        color = typeUiProperties.Color;
-
-                    newLine.ColorForType = color;
-                }
-                else if (c.SourceParentOrChildId != ConnectionMaker.NotConnectedId
-                         && c.SourceParentOrChildId != ConnectionMaker.UseDraftChildId)
-                {
-                    var sourceNode = _childUis.SingleOrDefault(childUi => childUi.Id == c.SourceParentOrChildId);
-                    if (sourceNode == null)
-                        return;
-
-                    if (!_linesFromNodes.ContainsKey(sourceNode))
-                        _linesFromNodes.Add(sourceNode, new List<ConnectionLineUi>());
-
-                    _linesFromNodes[sourceNode].Add(newLine);
-                }
-
-                InitTempConnection(newLine);
-            }
-
-            private static void InitTempConnection(ConnectionLineUi newLine)
-            {
-                if (!(newLine.Connection is ConnectionMaker.TempConnection c))
-                    return;
-
-                newLine.ColorForType = TypeUiRegistry.Entries[c.ConnectionType].Color;
-
-                // if (!ConnectionMaker.TempConnections.Contains(c))
-                //     return;
-
-                // if (!Equals(newLine.Connection, ConnectionMaker.TempConnections))
-                //     return;
-
-                if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
-                {
-                    if (ConnectionSnapEndHelper.BestMatchLastFrame != null)
-                    {
-                        newLine.TargetPosition = new Vector2(ConnectionSnapEndHelper.BestMatchLastFrame.Area.Min.X,
-                                                             ConnectionSnapEndHelper.BestMatchLastFrame.Area.GetCenter().Y);
-                    }
-                    else
-                    {
-                        newLine.TargetPosition = ImGui.GetMousePos();
-                    }
-
-                    newLine.ColorForType = Color.White;
-                }
-                else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
-                {
-                    newLine.TargetPosition = GraphCanvas.Current.TransformPosition(GraphCanvas.Current.SymbolBrowser.PosOnCanvas);
-                    //newLine.ColorForType = Color.White;
-                }
-                else if (c.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
-                {
-                    newLine.SourcePosition = ImGui.GetMousePos();
-                    //newLine.ColorForType = Color.White;
-                }
-                else if (c.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
-                {
-                    newLine.SourcePosition = GraphCanvas.Current.SymbolBrowser.OutputPositionOnScreen;
-                }
-                else
-                {
-                    Log.Warning("invalid temporary connection?");
-                }
-            }
-
-            private static readonly List<ConnectionLineUi> _resultConnection = new(20);
-
-            public List<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
-            {
-                _resultConnection.Clear();
-
-                if (!_linesFromNodes.TryGetValue(childUi, out var lines))
-                    return NoLines;
-
-                foreach (var l in lines)
-                {
-                    if (l.Connection.SourceSlotId != outputId)
-                        continue;
-
-                    _resultConnection.Add(l);
-                }
-
-                return _resultConnection;
-            }
-
-            public List<ConnectionLineUi> GetLinesToNodeInputSlot(SymbolChildUi childUi, Guid inputId)
-            {
-                _resultConnection.Clear();
-                if (!_linesIntoNodes.TryGetValue(childUi, out var lines))
-                    return NoLines;
-
-                foreach (var l in lines)
-                {
-                    if (l.Connection.TargetSlotId != inputId)
-                        continue;
-                    _resultConnection.Add(l);
-                }
-
-                return _resultConnection;
-            }
-
-            public List<ConnectionLineUi> GetLinesIntoNode(SymbolChildUi childUi)
-            {
-                return _linesIntoNodes.ContainsKey(childUi) ? _linesIntoNodes[childUi] : NoLines;
-            }
-
-            public List<ConnectionLineUi> GetLinesToOutputNodes(IOutputUi outputNode, Guid outputId)
-            {
-                return _linesToOutputNodes.ContainsKey(outputNode)
-                           ? _linesToOutputNodes[outputNode].FindAll(l => l.Connection.TargetSlotId == outputId)
-                           : NoLines;
-            }
-
-            public List<ConnectionLineUi> GetLinesFromInputNodes(IInputUi inputNode, Guid inputNodeId)
-            {
-                return _linesFromInputNodes.ContainsKey(inputNode)
-                           ? _linesFromInputNodes[inputNode].FindAll(l => l.Connection.SourceSlotId == inputNodeId)
-                           : NoLines;
-            }
-
-            private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesFromNodes = new(50);
-            private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesIntoNodes = new(50);
-            private Dictionary<IOutputUi, List<ConnectionLineUi>> _linesToOutputNodes = new(50);
-            private Dictionary<IInputUi, List<ConnectionLineUi>> _linesFromInputNodes = new(50);
-
-            // Reuse empty list instead of null check
-            private static readonly List<ConnectionLineUi> NoLines = new();
+            
+            annotationElement.StartRenaming();
         }
 
         internal class ConnectionLineUi
@@ -381,13 +221,15 @@ namespace T3.Editor.Gui.Graph
             public ImRect SourceNodeArea;
             public ImRect TargetNodeArea;
             public bool IsAboutToBeReplaced;
+            private Graph _graph;
 
-            internal ConnectionLineUi(Symbol.Connection connection)
+            internal ConnectionLineUi(Symbol.Connection connection, Graph graph)
             {
                 Connection = connection;
+                _graph = graph;
             }
 
-            internal void Draw()
+            internal void Draw(Vector2 canvasScale, ImDrawListPtr drawList)
             {
                 var color = IsSelected
                                 ? ColorVariations.Highlight.Apply(ColorForType)
@@ -405,7 +247,7 @@ namespace T3.Editor.Gui.Graph
                 if (UserSettings.Config.UseArcConnections)
                 {
                     var hoverPositionOnLine = Vector2.Zero;
-                    var isHovering = ArcConnection.Draw(new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
+                    var isHovering = ArcConnection.Draw(canvasScale, new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
                                                         SourcePosition,
                                                         TargetNodeArea,
                                                         TargetPosition,
@@ -426,7 +268,7 @@ namespace T3.Editor.Gui.Graph
                                                                 30, 300,
                                                                 5, 200);
 
-                    DrawList.AddBezierCubic(
+                    drawList.AddBezierCubic(
                                             SourcePosition,
                                             SourcePosition + new Vector2(tangentLength, 0),
                                             TargetPosition + new Vector2(-tangentLength, 0),
@@ -444,17 +286,14 @@ namespace T3.Editor.Gui.Graph
             Operators = 1,
         }
 
-        public static float GraphOpacity = 0.2f;
+        public float GraphOpacity = 0.2f;
 
-        private static int _lastCheckSum;
-        internal static readonly ConnectionSorter Connections = new();
-        public static ImDrawListPtr DrawList;
-        private static List<SymbolChildUi> _childUis;
-        private static SymbolUi _symbolUi;
-        private static OrderedDictionary<Guid, IOutputUi> _outputUisById;
-        private static OrderedDictionary<Guid, IInputUi> _inputUisById;
+        private int _lastCheckSum;
+        private readonly ConnectionSorter _connectionSorter;
 
         // Try to avoid allocations
-        private static readonly List<Symbol.Connection> AllConnections = new(100);
+        private readonly List<Symbol.Connection> AllConnections = new(100);
+        private readonly Dictionary<SymbolChildUi, GraphNode> _graphNodes = new();
+        private readonly Dictionary<Annotation, AnnotationElement> _annotationElements = new();
     }
 }

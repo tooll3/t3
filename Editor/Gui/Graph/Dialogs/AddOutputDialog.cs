@@ -1,5 +1,4 @@
-﻿using System;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Modification;

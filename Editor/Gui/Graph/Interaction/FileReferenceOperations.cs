@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using T3.Core.Logging;
+﻿using System.IO;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
@@ -28,13 +24,9 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
 
                 
-            foreach (var symbol in SymbolRegistry.Entries.Values)
+            foreach (var symbol in EditorSymbolPackage.AllSymbols)
             {
-                var symbolUpdated = FindMissingPathsInSymbol(symbol);
-                if (symbolUpdated)
-                {
-                    
-                }
+                FindMissingPathsInSymbol(symbol);
             }
         }
 
@@ -79,9 +71,14 @@ namespace T3.Editor.Gui.Graph.Interaction
             var symbolUpdated = false;
             foreach (var symbolChild in symbol.Children)
             {
-                foreach (var input in symbolChild.Symbol.InputDefinitions)
+                var childSymbol = symbolChild.Symbol;
+                var package = (EditorSymbolPackage)childSymbol.SymbolPackage;
+                
+                if(!package.TryGetSymbolUi(childSymbol.Id, out var symbolChildUi))
+                    throw new Exception($"Can't find symbol ui for symbol {childSymbol.Id}");
+                
+                foreach (var input in childSymbol.InputDefinitions)
                 {
-                    var symbolChildUi = SymbolUiRegistry.Entries[symbolChild.Symbol.Id];    
                     var inputUi = symbolChildUi.InputUis[input.Id];
                     if (inputUi is not StringInputUi stringInputUi)
                         continue;

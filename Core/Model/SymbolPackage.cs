@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,8 +26,12 @@ public abstract partial class SymbolPackage : IResourcePackage
 {
     public virtual AssemblyInformation AssemblyInformation { get; }
     public virtual string Folder => AssemblyInformation.Directory;
-    protected virtual IEnumerable<string> SymbolSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, "Symbols"), $"*{SymbolExtension}", SearchOption.AllDirectories);
     
+    public virtual string DisplayName => AssemblyInformation.Name;
+
+    protected virtual IEnumerable<string> SymbolSearchFiles =>
+        Directory.EnumerateFiles(Path.Combine(Folder, "Symbols"), $"*{SymbolExtension}", SearchOption.AllDirectories);
+
     protected event Action<string?, Symbol>? SymbolAdded;
     protected event Action<Symbol>? SymbolUpdated;
     protected event Action<Guid>? SymbolRemoved;
@@ -42,7 +47,6 @@ public abstract partial class SymbolPackage : IResourcePackage
     protected SymbolPackage(AssemblyInformation assembly)
     {
         AssemblyInformation = assembly;
-        AllPackagesRw.Add(this);
     }
 
     public virtual void InitializeResources()
@@ -55,47 +59,73 @@ public abstract partial class SymbolPackage : IResourcePackage
     public virtual void Dispose()
     {
         ResourceManager.RemoveSharedResourceFolder(this);
+        ClearSymbols();
+
+        AssemblyInformation.Unload();
+        // Todo - symbol instance destruction...?
+    }
+
+    protected void ClearSymbols()
+    {
+        if (Symbols.Count == 0)
+            return;
+
         var symbols = Symbols.Values.ToArray();
         foreach (var symbol in symbols)
         {
             var id = symbol.Id;
-            Symbols.Remove(id);
+            Symbols.Remove(id, out _);
             SymbolRegistry.EntriesEditable.Remove(id, out _);
         }
-        
-        AssemblyInformation.Unload();
-        AllPackagesRw.Remove(this);
-        // Todo - symbol instance destruction...?
     }
 
-    public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> newlyRead, out IReadOnlyCollection<Symbol> allNewSymbols)
+    public void LoadSymbols(bool parallel, out List<SymbolJson.SymbolReadResult> newlyRead, out List<Symbol> allNewSymbols, bool readOnlyReload)
     {
         Log.Debug($"{AssemblyInformation.Name}: Loading symbols...");
 
-        Dictionary<Guid, Type> newTypes = new();
+        ConcurrentDictionary<Guid, Type> newTypes = new();
 
         var removedSymbolIds = new HashSet<Guid>(Symbols.Keys);
         List<Symbol> updatedSymbols = new();
-        foreach (var (guid, type) in AssemblyInformation.OperatorTypes)
+
+        if (readOnlyReload)
+            ClearSymbols();
+
+        Action<Guid, Type, ConcurrentDictionary<Guid, Type>> reloadFunc = readOnlyReload
+                                            ? (guid, type, newTypesDict) => newTypesDict.TryAdd(guid, type)
+                                            : (guid, type, newTypesDict) =>
+                                              {
+                                                  if (Symbols.TryGetValue(guid, out var symbol))
+                                                  {
+                                                      removedSymbolIds.Remove(guid);
+
+                                                      symbol.UpdateType(type, this, out _);
+                                                      updatedSymbols.Add(symbol);
+                                                  }
+                                                  else
+                                                  {
+                                                      // it's a new type!!
+                                                      newTypesDict.TryAdd(guid, type);
+                                                  }
+                                              };
+
+        if (parallel)
         {
-            if (Symbols.Count > 0 && Symbols.TryGetValue(guid, out var symbol))
+            AssemblyInformation.OperatorTypeInfo
+                               .AsParallel()
+                               .ForAll(kvp => reloadFunc(kvp.Key, kvp.Value.Type, newTypes));
+        }
+        else
+        {
+            foreach (var (guid, type) in AssemblyInformation.OperatorTypeInfo)
             {
-                removedSymbolIds.Remove(guid);
-                
-                symbol.UpdateType(type, this, out _);
-                updatedSymbols.Add(symbol);
-            }
-            else
-            {
-                // it's a new type!!
-                newTypes.Add(guid, type);
+                reloadFunc(guid, type.Type, newTypes);
             }
         }
 
         foreach (var symbol in updatedSymbols)
         {
-            symbol.UpdateInstanceType();
-            symbol.CreateAnimationUpdateActionsForSymbolInstances();
+            UpdateSymbolInstances(symbol);
             SymbolUpdated?.Invoke(symbol);
         }
 
@@ -108,23 +138,33 @@ public abstract partial class SymbolPackage : IResourcePackage
             }
         }
 
-        newlyRead = [];
-        List<Symbol> allNewSymbolsList = [];
+        Func<Guid, Symbol, ConcurrentDictionary<Guid, Symbol>, bool> addSymbolFunc = readOnlyReload
+                                                                               ? (id, symbol, localRegistry) => localRegistry.TryAdd(id, symbol)
+                                                                                     && SymbolRegistry.EntriesEditable.TryAdd(id, symbol)
+                                                                               : (id, symbol, localRegistry) =>
+                                                                                 {
+                                                                                     localRegistry[id] = symbol;
+                                                                                     SymbolRegistry.EntriesEditable[id] = symbol;
+                                                                                     return true;
+                                                                                 };
 
+        newlyRead = [];
+        allNewSymbols = [];
+        
         if (newTypes.Count > 0)
         {
-            var symbolsRead = SymbolSearchFiles
-                              //.AsParallel()
+            var searchFileEnumerator = parallel ? SymbolSearchFiles.AsParallel() : SymbolSearchFiles;
+            var symbolsRead = searchFileEnumerator
                              .Select(JsonFileResult<Symbol>.ReadAndCreate)
                              .Select(result =>
-                                    {
-                                        if (!newTypes.TryGetValue(result.Guid, out var type))
-                                            return default;
+                                     {
+                                         if (!newTypes.TryGetValue(result.Guid, out var type))
+                                             return default;
 
-                                        return ReadSymbolFromJsonFileResult(result, type);
-                                    })
+                                         return ReadSymbolFromJsonFileResult(result, type);
+                                     })
                              .Where(symbolReadResult => symbolReadResult.Result.Symbol is not null)
-                             .ToArray(); // Execute and bring back to main thread
+                             .ToArray();
 
             Log.Debug($"{AssemblyInformation.Name}: Registering loaded symbols...");
 
@@ -133,20 +173,16 @@ public abstract partial class SymbolPackage : IResourcePackage
                 var symbol = readSymbolResult.Result.Symbol;
                 var id = symbol.Id;
 
-                var added = Symbols.TryAdd(id, symbol)
-                            && SymbolRegistry.EntriesEditable.TryAdd(id, symbol);
-
-                if (!added)
+                if (!addSymbolFunc(id, symbol, Symbols))
                 {
                     Log.Error($"Can't load symbol for [{symbol.Name}]. Registry already contains id {symbol.Id}: [{SymbolRegistry.EntriesEditable[symbol.Id].Name}]");
                     continue;
                 }
 
-                
                 newlyRead.Add(readSymbolResult.Result);
-                newTypes.Remove(id);
-                allNewSymbolsList.Add(symbol);
-                
+                newTypes.Remove(id, out _);
+                allNewSymbols.Add(symbol);
+
                 SymbolAdded?.Invoke(readSymbolResult.Path, symbol);
             }
         }
@@ -157,23 +193,19 @@ public abstract partial class SymbolPackage : IResourcePackage
             var symbol = CreateSymbol(newType, guid);
 
             var id = symbol.Id;
-            var added = Symbols.TryAdd(id, symbol)
-                        && SymbolRegistry.EntriesEditable.TryAdd(id, symbol);
-            if (!added)
+            if (!addSymbolFunc(id, symbol, Symbols))
             {
                 Log.Error($"{AssemblyInformation.Name}: Ignoring redefinition symbol {symbol.Name}.");
                 continue;
             }
 
-            if (enableLog)
-                Log.Debug($"{AssemblyInformation.Name}: new added symbol: {newType}");
+            //Log.Debug($"{AssemblyInformation.Name}: new added symbol: {newType}");
 
-            allNewSymbolsList.Add(symbol);
-            
+            allNewSymbols.Add(symbol);
+
             SymbolAdded?.Invoke(null, symbol);
         }
 
-        allNewSymbols = allNewSymbolsList;
         return;
 
         SymbolJsonResult ReadSymbolFromJsonFileResult(JsonFileResult<Symbol> jsonInfo, Type type)
@@ -185,64 +217,55 @@ public abstract partial class SymbolPackage : IResourcePackage
         }
     }
 
-    public bool TryCreateInstance(Guid id, Guid instanceId, Instance? parent, out Instance? instance)
+    protected static void UpdateSymbolInstances(Symbol symbol)
     {
-        if (Symbols.TryGetValue(id, out var symbol))
-        {
-            instance = symbol.CreateInstance(instanceId, parent);
-            return true;
-        }
-
-        instance = null;
-        return false;
+        symbol.UpdateInstanceType();
+        symbol.CreateAnimationUpdateActionsForSymbolInstances();
     }
 
     internal Symbol CreateSymbol(Type instanceType, Guid id, Guid[]? orderedInputIds = null)
     {
         var symbol = new Symbol(instanceType, id, this, orderedInputIds);
 
-        symbol.SymbolPackage = this;
         return symbol;
     }
+
 
     public void ApplySymbolChildren(List<SymbolJson.SymbolReadResult> symbolsRead)
     {
         Log.Debug($"{AssemblyInformation.Name}: Applying symbol children...");
-        Parallel.ForEach(symbolsRead, ReadAndApplyChildren);
+        Parallel.ForEach(symbolsRead, result => TryReadAndApplyChildren(result));
         Log.Debug($"{AssemblyInformation.Name}: Done applying symbol children.");
-        return;
+    }
 
-        void ReadAndApplyChildren(SymbolJson.SymbolReadResult result)
+    protected static bool TryReadAndApplyChildren(SymbolJson.SymbolReadResult result)
+    {
+        if (!SymbolJson.TryReadAndApplySymbolChildren(result))
         {
-            if (!SymbolJson.TryReadAndApplySymbolChildren(result))
-            {
-                Log.Error($"Problem obtaining children of {result.Symbol.Name} ({result.Symbol.Id})");
-            }
+            Log.Error($"Problem obtaining children of {result.Symbol.Name} ({result.Symbol.Id})");
+            return false;
         }
+
+        return true;
     }
 
     public readonly record struct SymbolJsonResult(in SymbolJson.SymbolReadResult Result, string Path);
 
-
-    protected readonly Dictionary<Guid, Symbol> Symbols = new();
+    protected readonly ConcurrentDictionary<Guid, Symbol> Symbols = new();
 
     public const string SymbolExtension = ".t3";
-    
 
     public bool ContainsSymbolName(string newSymbolName, string symbolNamespace)
     {
-         foreach (var existing in Symbols.Values)
-         {
-             if (existing.Name == newSymbolName && existing.Namespace == symbolNamespace)
-                 return true;
-         }
+        foreach (var existing in Symbols.Values)
+        {
+            if (existing.Name == newSymbolName && existing.Namespace == symbolNamespace)
+                return true;
+        }
 
-         return false;
+        return false;
     }
 
     public virtual ResourceFileWatcher? FileWatcher => null;
     public virtual bool IsReadOnly => true;
-    
-    private static readonly List<SymbolPackage> AllPackagesRw = [];
-    public static IReadOnlyList<SymbolPackage> AllPackages => AllPackagesRw;
 }

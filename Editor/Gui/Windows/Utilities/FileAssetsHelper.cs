@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
+﻿using System.IO;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
@@ -142,10 +137,9 @@ public static class FileAssetsHelper
     private static void ScanResources()
     {
         _resources.Clear();
-        foreach (var symbol in SymbolRegistry.Entries.Values)
+        foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
         {
-            if (!SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
-                continue;
+            var symbol = symbolUi.Symbol;
 
             // Default values
             foreach (var inputDef in symbol.InputDefinitions)
@@ -176,12 +170,7 @@ public static class FileAssetsHelper
             // Collect children
             foreach (var symbolChild in symbol.Children)
             {
-                var childUi = symbolUi.ChildUis.FirstOrDefault(sui => sui.Id == symbolChild.Id);
-                if (childUi == null)
-                    continue;
-
-                if (!SymbolUiRegistry.Entries.TryGetValue(childUi.SymbolChild.Symbol.Id, out var childUiSymbolUi))
-                    continue;
+                var childUiSymbolUi = symbolChild.Symbol.GetSymbolUi();
 
                 foreach (var (inputId, input) in symbolChild.Inputs)
                 {

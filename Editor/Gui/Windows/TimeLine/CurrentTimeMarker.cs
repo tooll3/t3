@@ -1,21 +1,17 @@
-using System.Numerics;
 using ImGuiNET;
-using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.TimeLine
 {
-    public class CurrentTimeMarker: IValueSnapAttractor
+    internal class CurrentTimeMarker: IValueSnapAttractor
     {
-        public void Draw(Playback playback)
+        public void Draw(double timeInBars, TimeLineCanvas timelineCanvas)
         {
-            if (playback == null)
-                return;
-            _playback = playback;
+            _currentTimeInBars = timeInBars;
 
-            var p = new Vector2(TimeLineCanvas.Current.TransformX((float)playback.TimeInBars), 0);
+            var p = new Vector2(timelineCanvas.TransformX((float)timeInBars), 0);
             var drawList = ImGui.GetWindowDrawList();
             var y = ImGui.GetWindowPos().Y;
             var windowHeight = ImGui.GetWindowHeight() +1;
@@ -27,10 +23,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
         
         public SnapResult CheckForSnap(double time, float canvasScale)
         {
-            return ValueSnapHandler.FindSnapResult(time, _playback.TimeInBars, canvasScale);
+            return ValueSnapHandler.FindSnapResult(time, _currentTimeInBars, canvasScale);
         }
         
-        private Playback _playback;
+        private double _currentTimeInBars;
         private const double SnapThreshold = 8;
     }
 }

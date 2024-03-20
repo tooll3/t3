@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;

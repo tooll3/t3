@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using T3.Core.Logging;
+﻿using System.IO;
 using T3.Core.SystemUi;
 using T3.Core.UserData;
 using T3.Editor.Gui.UiHelpers;

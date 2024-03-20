@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -16,7 +14,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Exploration
 {
-    public class ExploreVariationCanvas : ScalableCanvas
+    internal class ExploreVariationCanvas : ScalableCanvas
     {
         public ExploreVariationCanvas(ExplorationWindow explorationWindow)
         {
@@ -24,7 +22,7 @@ namespace T3.Editor.Gui.Windows.Exploration
             _explorationWindow = explorationWindow;
         }
 
-        public void Draw()
+        public void Draw(Structure structure)
         {
             _thumbnailCanvasRendering.InitializeCanvasTexture(_thumbnailSize);
 
@@ -32,6 +30,12 @@ namespace T3.Editor.Gui.Windows.Exploration
             if (outputWindow == null)
             {
                 ImGui.TextUnformatted("No output window found");
+                return;
+            }
+
+            if (structure == null)
+            {
+                ImGui.TextUnformatted("No graph window open");
                 return;
             }
 
@@ -52,7 +56,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
             // Set correct output ui
             {
-                var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+                var symbolUi = instance.GetSymbolUi();
                 if (!symbolUi.OutputUis.ContainsKey(_firstOutputSlot.Id))
                     return;
 
@@ -62,8 +66,8 @@ namespace T3.Editor.Gui.Windows.Exploration
             if (textureSlot.Value == null)
                 return;
 
-            FillInNextVariation();
-            UpdateCanvas();
+            FillInNextVariation(structure);
+            UpdateCanvas(out _);
             Invalidate();
 
             var drawList = ImGui.GetWindowDrawList();
@@ -98,13 +102,13 @@ namespace T3.Editor.Gui.Windows.Exploration
                 {
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                     {
-                        var savedVariation = _hoveringVariation.Clone();
+                        var savedVariation = _hoveringVariation.Clone(structure);
 
                         _explorationWindow.SaveVariation(savedVariation);
                         savedVariation.ApplyPermanently();
                     }
 
-                    _hoveringVariation.KeepCurrentAndApplyNewValues();
+                    _hoveringVariation.KeepCurrentAndApplyNewValues(structure);
                 }
             }
             else
@@ -214,7 +218,7 @@ namespace T3.Editor.Gui.Windows.Exploration
             _gridFocusIndex.Y = (int)(centerInCanvas.Y / _thumbnailSize.Y);
         }
 
-        private void FillInNextVariation()
+        private void FillInNextVariation(Structure structure)
         {
             if (_updateCompleted)
             {
@@ -242,13 +246,13 @@ namespace T3.Editor.Gui.Windows.Exploration
                     if (!variation.ThumbnailNeedsUpdate)
                         continue;
 
-                    RenderThumbnail(variation);
+                    RenderThumbnail(variation, structure);
                     return;
                 }
                 else
                 {
                     variation = CreateVariationForCell(cell);
-                    RenderThumbnail(variation);
+                    RenderThumbnail(variation, structure);
                     _variationByGridIndex[cell.GridIndex] = variation;
                     return;
                 }
@@ -344,7 +348,7 @@ namespace T3.Editor.Gui.Windows.Exploration
             _variationByGridIndex[newVariation.GridCell.GridIndex] = newVariation;
         }
 
-        private void RenderThumbnail(ExplorationVariation variation)
+        private void RenderThumbnail(ExplorationVariation variation, Structure structure)
         {
             variation.ThumbnailNeedsUpdate = false;
 
@@ -352,7 +356,7 @@ namespace T3.Editor.Gui.Windows.Exploration
             var posInCanvasTexture = screenRect.Min - WindowPos;
 
             // Set variation values
-            variation.KeepCurrentAndApplyNewValues();
+            variation.KeepCurrentAndApplyNewValues(structure);
 
             // Render variation
             _thumbnailCanvasRendering.EvaluationContext.Reset();

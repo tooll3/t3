@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using NAudio.Midi;
 using T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations.Model;

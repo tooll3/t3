@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Editor.Gui.Graph.Rendering;
 

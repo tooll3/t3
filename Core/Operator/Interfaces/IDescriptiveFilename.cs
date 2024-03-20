@@ -7,6 +7,6 @@ namespace T3.Core.Operator.Interfaces
     /// </summary>
     public interface IDescriptiveFilename
     {
-        InputSlot<string> GetSourcePathSlot();
+        InputSlot<string> SourcePathSlot { get; }
     }
 }

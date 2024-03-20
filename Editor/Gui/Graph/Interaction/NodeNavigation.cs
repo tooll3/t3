@@ -1,7 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
+﻿using System.Diagnostics;
+using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Windows;
@@ -9,39 +7,44 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
-public abstract class NodeNavigation
+internal class NodeNavigation
 {
-    public static void SelectAbove()
+    public NodeNavigation(Func<Instance> getComposition, GraphCanvas canvas, Structure structure, NavigationHistory navigationHistory)
+    {
+        _canvas = canvas;
+        _structure = structure;
+        _navigationHistory = navigationHistory;
+        _getComposition = getComposition;
+    }
+    
+    public void SelectAbove()
     {
         TryMoveSelectionTowards(Directions.Up);
     }
     
-    public static void SelectBelow()
+    public void SelectBelow()
     {
         TryMoveSelectionTowards(Directions.Down);
     }
     
-    public static void SelectLeft()
+    public void SelectLeft()
     {
         TryMoveSelectionTowards(Directions.Left);
     }
 
-    public static void SelectRight()
+    public void SelectRight()
     {
         TryMoveSelectionTowards(Directions.Right);
     }
     
     
-    private static void TryMoveSelectionTowards(Directions direction)
+    private void TryMoveSelectionTowards(Directions direction)
     {
-        var currentInstance = NavigationHistory.GetLastSelectedInstance();
+        var composition = _getComposition();
+        var currentInstance = _navigationHistory.GetLastSelectedInstance();
 
-        var composition = currentInstance?.Parent;
-        if (composition == null)
-            return;
-
-        var symbolUi = SymbolUiRegistry.Entries[composition.Symbol.Id];
-        var currentSymbolChildUi = symbolUi.ChildUis.Single(c => c.Id == currentInstance.SymbolChildId);
+        var symbolUi = composition.Symbol.GetSymbolUi();
+        var currentSymbolChildUi = composition.GetSymbolChildUiWithId(currentInstance.SymbolChildId);
         
         // Search all children
         SymbolChildUi bestMatch = null;
@@ -80,10 +83,10 @@ public abstract class NodeNavigation
         //Log.Debug($"Found with relevancy {bestRelevancy}: " + Structure.GetReadableInstancePath( OperatorUtils.BuildIdPathForInstance( bestInstance)), bestInstance);
         
         var path = OperatorUtils.BuildIdPathForInstance(bestInstance);
-        if (Structure.GetInstanceFromIdPath(path) == null)
+        if (_structure.GetInstanceFromIdPath(path) == null)
             return;
             
-        GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
+        _canvas.OpenAndFocusInstance(path);
 
         if (!ParameterWindow.IsAnyInstanceVisible())
         {
@@ -111,7 +114,9 @@ public abstract class NodeNavigation
         Down,
         Left,
     }
-    
-    
-    
+
+    private readonly Func<Instance> _getComposition;
+    private readonly GraphCanvas _canvas;
+    private readonly Structure _structure;
+    private readonly NavigationHistory _navigationHistory;
 }

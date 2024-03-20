@@ -1,6 +1,4 @@
-﻿using System;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Styling;
@@ -11,7 +9,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
     /// <summary>
     /// Interaction logic for CurvePointControl.xaml
     /// </summary>
-    public static class CurvePoint
+    internal static class CurvePoint
     {
         public static void Draw(VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, CurveEditing curveEditing)
         {

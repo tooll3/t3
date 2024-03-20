@@ -2,12 +2,13 @@
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
-    public class LibWarningDialog : ModalDialog
+    internal class LibWarningDialog : ModalDialog
     {
-        public void Draw()
+        public void Draw(GraphCanvas canvas)
         {
             if (BeginDialog("Careful now"))
             {
@@ -27,7 +28,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 ImGui.SameLine();
                 if (ImGui.Button("I know what I'm doing"))
                 {
-                    GraphCanvas.Current.SetCompositionToChildInstance(HandledInstance);
+                    canvas.SetCompositionToChildInstance(HandledInstance);
                     ImGui.CloseCurrentPopup();
 
                 }

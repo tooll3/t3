@@ -1,9 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.IO;
-using T3.Core.Logging;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.UiModel;
@@ -14,7 +10,7 @@ namespace T3.Editor.Gui.Graph
     /// <summary>
     /// If active renders a small input field above a symbolChildUi. Handles its state 
     /// </summary>
-    public static class RenameInstanceOverlay
+    internal static class RenameInstanceOverlay
     {
         public static void OpenForSymbolChildUi(SymbolChildUi symbolChildUi)
         {
@@ -23,7 +19,7 @@ namespace T3.Editor.Gui.Graph
 
         private static Guid _nextFocusedInstanceId = Guid.Empty;
 
-        public static void Draw()
+        public static void Draw(GraphWindow window)
         {
             var justOpened = false;
 
@@ -37,7 +33,7 @@ namespace T3.Editor.Gui.Graph
                     && (renameTriggered || ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                     && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName))
                 {
-                    var selectedInstances = NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
+                    var selectedInstances = window.GraphCanvas.NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
                     if (_nextFocusedInstanceId != Guid.Empty)
                     {
                         _focusedInstanceId = _nextFocusedInstanceId;
@@ -59,17 +55,18 @@ namespace T3.Editor.Gui.Graph
             if (_focusedInstanceId == Guid.Empty)
                 return;
 
-            var symbolChild = GraphCanvas.Current.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == _focusedInstanceId);
+            var symbolChild = window.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == _focusedInstanceId);
             if (symbolChild == null)
             {
                 Log.Error("canceling rename overlay of no longer valid selection");
                 _focusedInstanceId = Guid.Empty;
                 return;
             }
-            var parentSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+
+            var parentSymbolUi = window.CompositionOp.GetSymbolUi();
             var symbolChildUi = parentSymbolUi.ChildUis.Single(child => child.Id == _focusedInstanceId);
 
-            var positionInScreen = GraphCanvas.Current.TransformPosition(symbolChildUi.PosOnCanvas);
+            var positionInScreen = window.GraphCanvas.TransformPosition(symbolChildUi.PosOnCanvas);
 
             ImGui.SetCursorScreenPos(positionInScreen + Vector2.One);
             

@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
+using System.IO.Packaging;
 using System.Threading.Tasks;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
@@ -11,13 +8,14 @@ using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.IO;
-using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
@@ -76,7 +74,7 @@ public static class T3Ui
         // Prepare the current frame 
         RenderStatsCollector.StartNewFrame();
             
-        if (Playback.Current.IsLive)
+        if (Playback.Current.IsLive && GraphWindow.Focused != null)
         {
             PlaybackUtils.UpdatePlaybackAndSyncing();
             //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
@@ -95,27 +93,15 @@ public static class T3Ui
         KeyboardBinding.InitFrame();
         ConnectionSnapEndHelper.PrepareNewFrame();
 
+        var nodeSelection = GraphWindow.Focused?.GraphCanvas.NodeSelection;
+
         // Set selected id so operator can check if they are selected or not  
-        var selectedInstance = NodeSelection.GetSelectedInstance();
+        var selectedInstance = nodeSelection?.GetSelectedInstanceWithoutComposition();
         MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
 
-        // Keep invalidating selected op to enforce rendering of Transform gizmo  
-        foreach (var si in NodeSelection.GetSelectedInstances().ToList())
+        if (nodeSelection != null)
         {
-            if (si is not ITransformable transformable)
-                continue;
-
-            foreach (var i in si.Inputs)
-            {
-                // Skip string inputs to prevent potential interference with resource file paths hooks
-                // I.e. Invalidating these every frame breaks shader recompiling if Shader-op is selected
-                if (i.ValueType == typeof(string))
-                {
-                    continue;
-                }
-
-                i.DirtyFlag.Invalidate();
-            }
+            InvalidateSelectedOpsForTransormGizmo(nodeSelection);
         }
 
         // Draw everything!
@@ -155,6 +141,28 @@ public static class T3Ui
 
         Playback.OpNotReady = false;
         AutoBackup.AutoBackup.CheckForSave();
+    }
+
+    private static void InvalidateSelectedOpsForTransormGizmo(NodeSelection nodeSelection)
+    {
+        // Keep invalidating selected op to enforce rendering of Transform gizmo  
+        foreach (var si in nodeSelection.GetSelectedInstances().ToList())
+        {
+            if (si is not ITransformable)
+                continue;
+
+            foreach (var i in si.Inputs)
+            {
+                // Skip string inputs to prevent potential interference with resource file paths hooks
+                // I.e. Invalidating these every frame breaks shader recompiling if Shader-op is selected
+                if (i.ValueType == typeof(string))
+                {
+                    continue;
+                }
+
+                i.DirtyFlag.Invalidate();
+            }
+        }
     }
 
     /// <summary>
@@ -197,11 +205,12 @@ public static class T3Ui
         var shouldBeFocusMode = !UserSettings.Config.FocusMode;
 
         var outputWindow = OutputWindow.GetPrimaryOutputWindow();
-        var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+        var primaryGraphWindow = GraphWindow.Focused;
 
         if (shouldBeFocusMode && outputWindow != null && primaryGraphWindow != null)
         {
-            primaryGraphWindow.GraphImageBackground.OutputInstance = outputWindow.Pinning.GetPinnedOrSelectedInstance();
+            outputWindow.Pinning.TryGetPinnedOrSelectedInstance(out var instance, out _);
+            primaryGraphWindow.GraphImageBackground.OutputInstance = instance;
         }
 
         UserSettings.Config.FocusMode = shouldBeFocusMode;
@@ -212,7 +221,7 @@ public static class T3Ui
         outputWindow = OutputWindow.GetPrimaryOutputWindow();
         if (!shouldBeFocusMode && outputWindow != null && primaryGraphWindow != null)
         {
-            outputWindow.Pinning.PinInstance(primaryGraphWindow.GraphImageBackground.OutputInstance);
+            outputWindow.Pinning.PinInstance(primaryGraphWindow.GraphImageBackground.OutputInstance, primaryGraphWindow.GraphCanvas);
             primaryGraphWindow.GraphImageBackground.ClearBackground();
         }
     }
@@ -263,17 +272,46 @@ public static class T3Ui
                     SaveInBackground(saveAll: false);
                 }
                 
+                
+                
                 #if DEBUG
                 if (ImGui.MenuItem("Save All", !IsCurrentlySaving))
                 {
                     Task.Run(() =>
                              {
-                                 EditorSymbolPackage.RootSymbolUi!.ForceUnmodified = false;
                                  Save(true);
-                                 EditorSymbolPackage.RootSymbolUi.ForceUnmodified = true;
                              });
                 }
                 #endif
+                
+                if(ImGui.BeginMenu("Load Project", !IsCurrentlySaving))
+                {
+                    foreach (var package in EditorSymbolPackage.AllPackages)
+                    {
+                        if (!package.HasHome)
+                            continue;
+
+                        var name = package.DisplayName;
+                        
+                        if (ImGui.MenuItem(name))
+                        {
+                            bool replaceFocusedWindow = false;
+
+                            if (GraphWindow.GraphWindowInstances.Count > 0)
+                            {
+                                var choice = EditorUi.Instance.ShowMessageBox("Would you like to create a new window?", "Opening " + name, PopUpButtons.YesNo);
+                                replaceFocusedWindow = choice == PopUpResult.No;
+                            }
+                            
+                            if (!GraphWindow.TryOpenPackage(package, replaceFocusedWindow))
+                            {
+                                Log.Error("Failed to open package " + name);
+                            };
+                        }
+                    }
+                    
+                    ImGui.EndMenu();
+                }
 
                 if (ImGui.MenuItem("Quit", !IsCurrentlySaving))
                 {
@@ -440,19 +478,19 @@ public static class T3Ui
 
     public static void SelectAndCenterChildIdInView(Guid symbolChildId)
     {
-        var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+        var primaryGraphWindow = GraphWindow.Focused;
         if (primaryGraphWindow == null)
             return;
 
-        var compositionOp = primaryGraphWindow.GraphCanvas.CompositionOp;
+        var compositionOp = primaryGraphWindow.CompositionOp;
 
-        var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
+        var symbolUi = compositionOp.GetSymbolUi();
         var sourceSymbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == symbolChildId);
         var selectionTargetInstance = compositionOp.Children.SingleOrDefault(instance => instance.SymbolChildId == symbolChildId);
         if (selectionTargetInstance == null)
             return;
         
-        NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
+        primaryGraphWindow.GraphCanvas.NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
         FitViewToSelectionHandling.FitViewToSelection();
     }
 
@@ -471,7 +509,7 @@ public static class T3Ui
     private static void CountSymbolUsage()
     {
         var counts = new Dictionary<Symbol, int>();
-        foreach (var s in SymbolRegistry.Entries.Values)
+        foreach (var s in EditorSymbolPackage.AllSymbols)
         {
             foreach (var child in s.Children)
             {

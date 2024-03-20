@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using System.Text;
 using ImGuiNET;
 using T3.Core.Animation;
@@ -23,7 +19,7 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows.TimeLine
 {
-    public class TimelineCurveEditArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
+    internal class TimelineCurveEditArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
     {
         public TimelineCurveEditArea(TimeLineCanvas timeLineCanvas, ValueSnapHandler snapHandlerForU, ValueSnapHandler snapHandlerV)
         {
@@ -39,7 +35,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
         public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters, bool fitCurvesVertically = false)
         {
             _visibleKeyframes.Clear();
-            _compositionOp = compositionOp;
             AnimationParameters = animationParameters;
 
             if (fitCurvesVertically)
@@ -184,7 +179,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     _pinnedParameterComponents.Clear();
                 }
 
-                DrawContextMenu();
+                DrawContextMenu(compositionOp);
             }
             ImGui.EndGroup();
 
@@ -341,9 +336,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
             UpdateDragCommand(u - vDef.U, v - vDef.Value);
         }
 
-        void ITimeObjectManipulation.DeleteSelectedElements()
+        void ITimeObjectManipulation.DeleteSelectedElements(Instance compositionOp)
         {
-            AnimationOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters, _compositionOp);
+            AnimationOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters, compositionOp);
             RebuildCurveTables();
         }
 
@@ -383,7 +378,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         public ICommand StartDragCommand()
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, SelectedKeyframes, GetAllCurves());
+            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
             return _changeKeyframesCommand;
         }
 
@@ -490,7 +485,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         private static ChangeKeyframesCommand _changeKeyframesCommand;
         private static Vector2[] _curveLinePoints = new Vector2[0];
-        private Instance _compositionOp;
         private readonly ValueSnapHandler _snapHandlerU;
         private readonly ValueSnapHandler _snapHandlerV;
         private readonly Dictionary<int, int> _pinnedParameterComponents = new();

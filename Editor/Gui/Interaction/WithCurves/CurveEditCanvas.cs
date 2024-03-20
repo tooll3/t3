@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
+using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction.Snapping;
@@ -15,7 +12,7 @@ using T3.Editor.Gui.Windows.TimeLine;
 
 namespace T3.Editor.Gui.Interaction.WithCurves
 {
-    public abstract class CurveEditCanvas : ScalableCanvas, ITimeObjectManipulation
+    internal abstract class CurveEditCanvas : ScalableCanvas, ITimeObjectManipulation
     {
         protected CurveEditCanvas()
         {
@@ -26,7 +23,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         public string ImGuiTitle = "timeline";
 
         
-        protected void DrawCurveCanvas(Action drawAdditionalCanvasContent, float height = 0, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
+        protected void DrawCurveCanvas(ScalableCanvas canvas, Action<InteractionState> drawAdditionalCanvasContent, float height = 0, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
         {
 
             ImGui.BeginChild(ImGuiTitle, new Vector2(0, height), true,
@@ -35,11 +32,11 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                              ImGuiWindowFlags.NoScrollWithMouse);
             {
                 Drawlist = ImGui.GetWindowDrawList();
-                UpdateCanvas(flags);
-                SetScaleToParentCanvas(GraphCanvas.Current);
+                UpdateCanvas(out var interactionState, flags);
+                SetScaleToParentCanvas(canvas);
                 Drawlist = ImGui.GetWindowDrawList();
 
-                drawAdditionalCanvasContent();
+                drawAdditionalCanvasContent(interactionState);
                 HandleFenceUpdate();
                 SnapHandlerForU.DrawSnapIndicator(this, ValueSnapHandler.Mode.VerticalLinesForU);
                 SnapHandlerForV.DrawSnapIndicator(this, ValueSnapHandler.Mode.HorizontalLinesForV);
@@ -201,11 +198,11 @@ namespace T3.Editor.Gui.Interaction.WithCurves
             UndoRedoStack.AddAndExecute(_macro);
         }
 
-        public void DeleteSelectedElements()
+        public void DeleteSelectedElements(Instance composition)
         {
             foreach (var s in TimeObjectManipulators)
             {
-                s.DeleteSelectedElements();
+                s.DeleteSelectedElements(composition);
             }
         }
 

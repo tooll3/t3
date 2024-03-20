@@ -15,12 +15,12 @@ namespace libEditor.CustomUi
 {
     public static class SampleCurveUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
         {
             if (!(instance is SampleCurve sampleCurve))
                 return SymbolChildUi.CustomUiResult.None;
             
-            var dragWidth = WidgetElements.DrawDragIndicator(selectableScreenRect, drawList);
+            var dragWidth = WidgetElements.DrawDragIndicator(selectableScreenRect, drawList, canvasScale);
             var innerRect = selectableScreenRect;
             innerRect.Min.X += dragWidth;
             innerRect.Min.Y += 1;
@@ -59,12 +59,12 @@ namespace libEditor.CustomUi
                 var modified2 = CurveInputEditing.DrawCanvasForCurve(ref curve, 
                                                                      sampleCurve.Curve.Input,
                                                      cloneIfModified,
-                                                     T3Ui.EditingFlags.ExpandVertically
-                                                     | preventEditingUnlessCtrlPressed
-                                                     | T3Ui.EditingFlags.PreventZoomWithMouseWheel);
+                                                     instance.Parent, T3Ui.EditingFlags.ExpandVertically
+                                                                      | preventEditingUnlessCtrlPressed
+                                                                      | T3Ui.EditingFlags.PreventZoomWithMouseWheel);
 
                 var showPopupIcon = innerRect.GetHeight()> ImGui.GetFrameHeight()* T3Ui.UiScaleFactor * 2;
-                if (showPopupIcon && CurveEditPopup.DrawPopupIndicator(sampleCurve.Curve.Input, ref curve, keepPositionForIcon, cloneIfModified, out var popupResult))
+                if (showPopupIcon && CurveEditPopup.DrawPopupIndicator(instance.Parent, sampleCurve.Curve.Input, ref curve, keepPositionForIcon, cloneIfModified, out var popupResult))
                 {
                     modified2 = popupResult;
                 }
@@ -92,7 +92,7 @@ namespace libEditor.CustomUi
 
             void DrawSamplePointIndicator()
             {
-                var canvas = CurveInputEditing.GetCanvasForCurve(curve);
+                ICanvas canvas = null;//CurveInputEditing.GetCanvasForCurve(curve);
                 if (canvas == null)
                     return;
                 

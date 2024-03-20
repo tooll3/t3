@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ImGuiNET;
+﻿using ImGuiNET;
 
 namespace T3.Editor.Gui.UiHelpers;
 

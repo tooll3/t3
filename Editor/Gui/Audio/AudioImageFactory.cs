@@ -1,8 +1,6 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using T3.Core.Audio;
-using T3.Core.Logging;
 
 namespace T3.Editor.Gui.Audio
 {

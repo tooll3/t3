@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.ChildUi;
@@ -41,7 +36,6 @@ namespace T3.Editor.UiModel
         public Guid Id => SymbolChild.Id;
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = DefaultOpSize;
-        public bool IsSelected => NodeSelection.IsNodeSelected(this);
         public int SnapshotGroupIndex;
         public Styles Style;
         public string Comment;
@@ -96,14 +90,6 @@ namespace T3.Editor.UiModel
                     }
                 }
             }
-        }
-
-        
-        public static CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
-        {
-            return CustomChildUiRegistry.Entries.TryGetValue(instance.Type, out var drawFunction) 
-                       ? drawFunction(instance, drawList, selectableScreenRect) 
-                       : CustomUiResult.None;
         }
 
         /// <summary>

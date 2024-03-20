@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
-using T3.Core.Logging;
+﻿using ImGuiNET;
 using T3.Editor.Gui.Styling;
 
 // ReSharper disable StringLiteralTypo

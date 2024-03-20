@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
@@ -92,8 +89,8 @@ namespace T3.Editor.Gui.UiHelpers
                 if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
                 {
                     ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                    ListSymbolSetWithTooltip("  (needs {0}/", "  (", info.RequiredSymbolIds);
-                    if (ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ", info.DependingSymbolIds))
+                    ListSymbolSetWithTooltip("  (needs {0}/", "  (", info.RequiredSymbols);
+                    if (ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ", info.DependingSymbols))
                     {
                         SymbolLibrary._symbolUsageReference = symbol;
                     }
@@ -101,7 +98,7 @@ namespace T3.Editor.Gui.UiHelpers
                     ImGui.PopStyleColor();
                 }
 
-                if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
+                var symbolUi = symbol.GetSymbolUi();
                 {
                     if (!string.IsNullOrEmpty(symbolUi.Description))
                     {
@@ -118,16 +115,16 @@ namespace T3.Editor.Gui.UiHelpers
                     }
                 }
 
-                if (ExampleSymbolLinking.ExampleSymbols.TryGetValue(symbol.Id, out var examples))
+                if (ExampleSymbolLinking.ExampleSymbolUis.TryGetValue(symbol.Id, out var examples))
                 {
                     ImGui.PushFont(Fonts.FontSmall);
                     ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
                     for (var index = 0; index < examples.Count; index++)
                     {
-                        var exampleId = examples[index];
+                        var exampleSymbolUi = examples[index];
                         ImGui.SameLine();
                         ImGui.Button($"EXAMPLE");
-                        HandleDragAndDropForSymbolItem(SymbolRegistry.Entries[exampleId]);
+                        HandleDragAndDropForSymbolItem(exampleSymbolUi.Symbol);
                     }
 
                     ImGui.PopStyleVar();
@@ -138,23 +135,23 @@ namespace T3.Editor.Gui.UiHelpers
             ImGui.PopID();
         }
 
-        private static bool ListSymbolSetWithTooltip(string setTitleFormat, string emptySetTitle, HashSet<Guid> symbolIdSet)
+        private static bool ListSymbolSetWithTooltip(string setTitleFormat, string emptySetTitle, HashSet<Symbol> symbolSet)
         {
             var activated = false;
             ImGui.PushID(setTitleFormat);
             ImGui.SameLine();
 
-            if (symbolIdSet.Count == 0)
+            if (symbolSet.Count == 0)
             {
                 ImGui.TextUnformatted(emptySetTitle);
             }
             else
             {
-                ImGui.TextUnformatted(string.Format(setTitleFormat, symbolIdSet.Count));
+                ImGui.TextUnformatted(string.Format(setTitleFormat, symbolSet.Count));
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.BeginTooltip();
-                    ListSymbols(symbolIdSet);
+                    ListSymbols(symbolSet);
                     ImGui.EndTooltip();
                 }
 
@@ -168,14 +165,11 @@ namespace T3.Editor.Gui.UiHelpers
             return activated;
         }
 
-        private static void ListSymbols(HashSet<Guid> valueRequiredSymbolIds)
+        private static void ListSymbols(HashSet<Symbol> valueRequiredSymbols)
         {
-            foreach (var required in valueRequiredSymbolIds
-                                    .Select(rId =>
-                                            {
-                                                var rSymbol = SymbolRegistry.Entries[rId];
-                                                return rSymbol.Namespace + ". " + rSymbol.Name;
-                                            }).OrderBy(c => c))
+            foreach (var required in valueRequiredSymbols
+                                    .Select(rSymbol => rSymbol.Namespace + ". " + rSymbol.Name)
+                                    .OrderBy(c => c))
             {
                 ImGui.TextUnformatted(required);
             }
@@ -183,13 +177,14 @@ namespace T3.Editor.Gui.UiHelpers
 
         private static bool IsSymbolCurrentCompositionOrAParent(Symbol symbol)
         {
-            var comp = GraphWindow.GetPrimaryGraphWindow()?.GraphCanvas?.CompositionOp;
-            if (comp == null)
-            {
-                return true;
-            }
+            var graphWindow = GraphWindow.Focused;
 
-            if (comp.Symbol == symbol)
+            if (graphWindow == null)
+                return true;
+
+            var comp = graphWindow.CompositionOp;
+
+            if (comp.Symbol.Id == symbol.Id)
             {
                 return true;
             }
@@ -197,7 +192,7 @@ namespace T3.Editor.Gui.UiHelpers
             var instance = comp;
             while (instance != null)
             {
-                if (instance.Symbol == symbol)
+                if (instance.Symbol.Id == symbol.Id)
                     return true;
 
                 instance = instance.Parent;
@@ -234,9 +229,14 @@ namespace T3.Editor.Gui.UiHelpers
             {
                 if (ImGui.GetMouseDragDelta().Length() < 4)
                 {
-                    if (NodeSelection.GetSelectedChildUis().Count() == 1)
+                    var window = GraphWindow.Focused;
+                    if (window == null)
                     {
-                        ConnectionMaker.InsertSymbolInstance(symbol);
+                        Log.Error($"No focused graph window found");
+                    }
+                    else if (window.GraphCanvas.NodeSelection.GetSelectedChildUis().Count() == 1)
+                    {
+                        ConnectionMaker.InsertSymbolInstance(window, symbol);
                     }
                 }
 

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.Snapping
 {
-    public class ValueSnapHandler
+    internal class ValueSnapHandler
     {
         private const float SnapIndicatorDuration = 1;
 

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Reflection;
 using ImGuiNET;
 using T3.Core.DataTypes;

@@ -1,7 +1,5 @@
 {
-  "Name": "DataRecording",
-  "Id": "4023bcbf-74a6-4e50-a12e-4c22be5dbbdf",
-  "Namespace": "lib.io.input",
+  "Id": "4023bcbf-74a6-4e50-a12e-4c22be5dbbdf"/*DataRecording*/,
   "Inputs": [
     {
       "Id": "48e9dd6c-87d2-4701-96ab-3971f3150ff1"/*ResetTrigger*/,

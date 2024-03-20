@@ -1,149 +1,199 @@
 #nullable enable
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Resources;
 using System.Threading;
 using T3.Core.Compilation;
-using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.External;
 using T3.Editor.Gui.ChildUi;
+using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.UiModel;
 
 // todo - make abstract, create NugetSymbolPackage
-internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage(assembly)
+internal class EditorSymbolPackage : SymbolPackage
 {
-    public void LoadUiFiles(IEnumerable<Symbol> newlyReadSymbols, out IReadOnlyCollection<SymbolUi> newlyReadSymbolUis,
-                            out IReadOnlyCollection<SymbolUi> preExistingSymbolUis)
+    public EditorSymbolPackage(AssemblyInformation assembly) : base(assembly)
+    {
+        AllPackagesRw.Add(this);
+        SymbolAdded += OnSymbolAdded;
+    }
+
+
+    protected virtual void OnSymbolAdded(string? path, Symbol symbol)
+    {
+        var id = symbol.Id;
+        if (_filePathHandlers.TryGetValue(id, out var handler))
+            return;
+        handler = new SymbolPathHandler(symbol, path);
+        _filePathHandlers[id] = handler;
+    }
+
+    protected virtual void OnSymbolUiLoaded(string? path, SymbolUi symbolUi)
+    {
+        var id = symbolUi.Symbol.Id;
+        _filePathHandlers[id].UiFilePath = path;
+    }
+
+    private void OnSourceCodeLocated(string path, Guid guid)
+    {
+        if (_filePathHandlers.TryGetValue(guid, out var handler))
+        {
+            handler.SourceCodePath = path;
+        }
+        else
+        {
+            Log.Error($"No file path handler found for {guid}");
+        }
+    }
+
+    public void LoadUiFiles(bool parallel, List<Symbol> newlyReadSymbols, out SymbolUi[] newlyReadSymbolUis,
+                            out SymbolUi[] preExistingSymbolUis, bool readOnlyReload)
     {
         var newSymbols = newlyReadSymbols.ToDictionary(result => result.Id, symbol => symbol);
         var newSymbolsWithoutUis = new ConcurrentDictionary<Guid, Symbol>(newSymbols);
-        preExistingSymbolUis = SymbolUis.Values.ToArray();
+        preExistingSymbolUis = SymbolUiDict.Values.ToArray();
         Log.Debug($"{AssemblyInformation.Name}: Loading Symbol UIs from \"{Folder}\"");
-        var newlyReadSymbolUiList = SymbolUiSearchFiles
-                                             //.AsParallel()
-                                             .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
-                                             .Where(result => newSymbols.ContainsKey(result.Guid))
-                                             .Select(uiJson =>
-                                                     {
-                                                         if (!SymbolUiJson.TryReadSymbolUi(uiJson.JToken, uiJson.Guid, out var symbolUi))
-                                                         {
-                                                             Log.Error($"Error reading symbol Ui for {uiJson.Guid} from file \"{uiJson.FilePath}\"");
-                                                             return null;
-                                                         }
+        
+        Func<Guid, ConcurrentDictionary<Guid, SymbolUi>, SymbolUi, bool> addFunc = readOnlyReload
+                                                                                       ? (guid, dict, symbolUi) =>
+                                                                                         {
+                                                                                             dict[guid] = symbolUi;
+                                                                                             return true;
+                                                                                         }
+                                                                                       : (guid, dict, symbolUi) => dict.TryAdd(guid, symbolUi);
+            
+        var enumerator = parallel ? SymbolUiSearchFiles.AsParallel() : SymbolUiSearchFiles;
+        newlyReadSymbolUis = enumerator
+                                   .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
+                                   .Where(result => newSymbols.ContainsKey(result.Guid))
+                                   .Select(uiJson =>
+                                           {
+                                               if (!SymbolUiJson.TryReadSymbolUi(uiJson.JToken, newSymbols[uiJson.Guid], out var symbolUi))
+                                               {
+                                                   Log.Error($"Error reading symbol Ui for {uiJson.Guid} from file \"{uiJson.FilePath}\"");
+                                                   return null;
+                                               }
 
-                                                         newSymbolsWithoutUis.Remove(symbolUi.Symbol.Id, out _);
-                                                         var id = symbolUi.Symbol.Id;
+                                               newSymbolsWithoutUis.Remove(symbolUi.Symbol.Id, out _);
+                                               var id = symbolUi.Symbol.Id;
 
-                                                         var added = SymbolUis.TryAdd(id, symbolUi);
-                                                         if (!added)
-                                                         {
-                                                             Log.Error($"{AssemblyInformation.Name}: Duplicate symbol UI for {symbolUi.Symbol.Name}?");
-                                                             return null;
-                                                         }
+                                               if (!addFunc(id, SymbolUiDict, symbolUi))
+                                               {
+                                                   Log.Error($"{AssemblyInformation.Name}: Duplicate symbol UI for {symbolUi.Symbol.Name}?");
+                                                   return null;
+                                               }
 
-                                                         OnSymbolUiLoaded(uiJson.FilePath, symbolUi);
-                                                         return symbolUi;
-                                                     })
-                                             .Where(symbolUi => symbolUi != null)
-                                             .Select(symbolUi => symbolUi!)
-                                             .ToList();
+                                               OnSymbolUiLoaded(uiJson.FilePath, symbolUi);
+                                               return symbolUi;
+                                           })
+                                   .Where(symbolUi => symbolUi != null)
+                                   .Select(symbolUi => symbolUi!)
+                                   .ToArray();
 
+        if(newSymbolsWithoutUis.Count == 0)
+            return;
+        
+        var originalLength = newlyReadSymbolUis.Length;
+        var newArray = new SymbolUi[originalLength + newSymbolsWithoutUis.Count];
+        Array.Copy(newlyReadSymbolUis, newArray, newlyReadSymbolUis.Length);
+        
+        var currentIndex = originalLength;
         foreach (var (guid, symbol) in newSymbolsWithoutUis)
         {
             var symbolUi = new SymbolUi(symbol, false);
 
-            if (!SymbolUis.TryAdd(guid, symbolUi))
+            if (!addFunc(guid, SymbolUiDict, symbolUi))
             {
                 Log.Error($"{AssemblyInformation.Name}: Duplicate symbol UI for {symbol.Name}?");
                 continue;
             }
 
-            newlyReadSymbolUiList.Add(symbolUi);
+            newArray[currentIndex++] = symbolUi;
             OnSymbolUiLoaded(null, symbolUi);
         }
 
-        newlyReadSymbolUis = newlyReadSymbolUiList;
+        newlyReadSymbolUis = newArray;
     }
 
-    protected virtual void OnSymbolUiLoaded(string? path, SymbolUi symbolUi)
+    private static void UnregisterCustomChildUi(Symbol symbol)
     {
-        // do nothing
+        CustomChildUiRegistry.EntriesRw.Remove(symbol.InstanceType, out _);
     }
 
-    private static void RegisterCustomChildUi(Symbol symbol)
+    public void RegisterUiSymbols(bool parallel, SymbolUi[] newSymbolUis, SymbolUi[] preExistingSymbolUis, bool readOnlyReload)
     {
-        var valueInstanceType = symbol.InstanceType;
-        if (typeof(IDescriptiveFilename).IsAssignableFrom(valueInstanceType))
-        {
-            CustomChildUiRegistry.Entries.TryAdd(valueInstanceType, DescriptiveUi.DrawChildUi);
-        }
-    }
+        Log.Debug($@"{DisplayName}: Registering UI entries...");
 
-    public void RegisterUiSymbols(bool enableLog, IEnumerable<SymbolUi> newSymbolUis, IEnumerable<SymbolUi> preExistingSymbolUis)
-    {
-        Log.Debug($@"{AssemblyInformation.Name}: Registering UI entries...");
-
+        
         foreach (var symbolUi in preExistingSymbolUis)
         {
             symbolUi.UpdateConsistencyWithSymbol();
         }
 
-        foreach (var symbolUi in newSymbolUis)
+        Func<Guid, ConcurrentDictionary<Guid, SymbolUi>, SymbolUi, bool> addFunc = readOnlyReload
+                                                                                       ? (guid, dict, symbolUi) =>
+                                                                                         {
+                                                                                             dict[guid] = symbolUi;
+                                                                                             return true;
+                                                                                         }
+                                                                                       : (guid, dict, symbolUi) => dict.TryAdd(guid, symbolUi);
+
+        var descriptiveDrawFunc = DescriptiveUi.DrawChildUiDelegate;
+
+        if (parallel)
+        {
+            newSymbolUis
+               .AsParallel()
+               .ForAll(RegisterSymbolUi);
+        }
+        else
+        {
+            foreach (var symbolUi in newSymbolUis)
+            {
+                RegisterSymbolUi(symbolUi);
+            }
+        }
+
+        return;
+
+        void RegisterSymbolUi(SymbolUi symbolUi)
         {
             var symbol = symbolUi.Symbol;
-
-            RegisterCustomChildUi(symbol);
-
-            if (!SymbolUiRegistry.EntriesEditable.TryAdd(symbol.Id, symbolUi))
+            var customUiEntries = CustomChildUiRegistry.EntriesRw;
+            var operatorInfo = AssemblyInformation.OperatorTypeInfo[symbol.Id];
+            
+            if (operatorInfo.IsDescriptiveFileNameType)
             {
-                SymbolUis.Remove(symbol.Id, out _);
-                Log.Error($"Can't load UI for [{symbolUi.Symbol.Name}] Registry already contains id {symbolUi.Symbol.Id}.");
-                continue;
+                customUiEntries.TryAdd(symbol.InstanceType, descriptiveDrawFunc);
             }
-
+            
             symbolUi.UpdateConsistencyWithSymbol();
-            if (enableLog)
-                Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
+            //Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
         }
-    }
-
-    public static void InitializeRoot(SymbolPackage package)
-    {
-        var rootInstanceId = new Guid("fa3db58b-068d-427d-96e7-8144f4721db3");
-        var rootSymbolId = new Guid("341992ea-6343-4485-9fef-3a84bb36199d");
-        
-        if (!package.TryCreateInstance(rootSymbolId, rootInstanceId, null, out var rootInstance))
-        {
-            throw new Exception("Could not create root symbol instance.");
-        }
-        
-        SymbolUiRegistry.Entries.TryGetValue(rootSymbolId, out RootSymbolUi);
-        
-        RootInstance = rootInstance;
     }
     
     public override void Dispose()
     {
         base.Dispose();
-        
-        var symbolUis = SymbolUis.Values.ToArray();
+        ClearSymbolUis();
+        ShaderLinter.RemovePackage(this);
+        AllPackagesRw.Remove(this);
+    }
+
+    private void ClearSymbolUis()
+    {
+        var symbolUis = SymbolUiDict.Values.ToArray();
 
         foreach (var symbolUi in symbolUis)
         {
-            SymbolUiRegistry.EntriesEditable.TryRemove(symbolUi.Symbol.Id, out _);
-            SymbolUis.TryRemove(symbolUi.Symbol.Id, out _);
+            var symbol = symbolUi.Symbol;
+            SymbolUiDict.TryRemove(symbolUi.Symbol.Id, out _);
+            UnregisterCustomChildUi(symbolUi.Symbol);
         }
-        
-        ShaderLinter.RemovePackage(this);
     }
 
     /// <summary>
@@ -151,8 +201,6 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
     /// </summary>
     public virtual void LocateSourceCodeFiles()
     {
-        _sourceCodePaths ??= new ConcurrentDictionary<Guid, string>();
-
         #if DEBUG
         int sourceCodeCount = 0;
         int sourceCodeAttempts = 0;
@@ -198,7 +246,7 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
 
                 if (!Guid.TryParse(guidSpan, out guid))
                 {
-                    Log.Error($"{AssemblyInformation.Name}: Failed to parse guid from {guidSpan.ToString()} in \"{file}\"");
+                    Log.Error($"{DisplayName}: Failed to parse guid from {guidSpan.ToString()} in \"{file}\"");
                     continue;
                 }
 
@@ -219,35 +267,149 @@ internal class EditorSymbolPackage(AssemblyInformation assembly) : SymbolPackage
         }
     }
 
-    public virtual bool TryGetSourceCodePath(Symbol symbol, out string? sourceCodePath)
+
+    public bool TryGetSourceCodePath(Symbol symbol, out string? path)
     {
-        return _sourceCodePaths!.TryGetValue(symbol.Id, out sourceCodePath);
+        if (_filePathHandlers.TryGetValue(symbol.Id, out var filePathInfo))
+        {
+            path = filePathInfo.SourceCodePath;
+            return path != null;
+        }
+
+        path = null;
+        return false;
     }
 
-    protected virtual void OnSourceCodeLocated(string path, Guid guid)
+
+    public void InitializeShaderLinting(IReadOnlyList<IResourcePackage> sharedShaderPackages)
     {
-        _sourceCodePaths![guid] = path;
+        ShaderLinter.AddPackage(this, sharedShaderPackages);
     }
 
-    public static Instance? RootInstance { get; private set; }
-    internal static SymbolUi? RootSymbolUi;
+    private Instance? _rootInstance;
 
-    protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
+    public bool TryGetRootInstance(out Instance? rootInstance)
+    {
+        if (!HasHome)
+        {
+            rootInstance = null;
+            return false;
+        }
+
+        if (_rootInstance != null)
+        {
+            rootInstance = _rootInstance;
+            return true;
+        }
+
+        var rootSymboLUi = SymbolUiDict[AssemblyInformation.HomeGuid];
+        Log.Debug($"{DisplayName}: Found home symbol");
+
+        var symbol = rootSymboLUi.Symbol;
+        var homeGuid = CreateHomeGuid(symbol.Id);
+        rootInstance = symbol.CreateInstance(homeGuid, null);
+        _rootInstance = rootInstance;
+
+        if (rootInstance == null)
+        {
+            Log.Error($"Failed to create home instance for symbol {symbol.Name} with id {symbol.Id}");
+            return false;
+        }
+
+        return true;
+    }
+
+    private static Guid CreateHomeGuid(Guid symbolId)
+    {
+        //deterministically create a new guid from the symbol id
+        var bytes = symbolId.ToByteArray();
+        var hash = System.Security.Cryptography.SHA1.Create().ComputeHash(bytes);
+        return new Guid(hash.AsSpan(..16));
+    }
+
+    internal bool HasHome => AssemblyInformation.HasHome;
+
+    private static readonly List<EditorSymbolPackage> AllPackagesRw = new();
+    public static readonly IReadOnlyList<EditorSymbolPackage> AllPackages = AllPackagesRw;
+    
+    
+    protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUiDict = new();
+    public IEnumerable<SymbolUi> SymbolUis => SymbolUiDict.Values;
 
     protected virtual IEnumerable<string> SymbolUiSearchFiles =>
         Directory.EnumerateFiles(Path.Combine(Folder, SymbolUiSubFolder), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
     
-    private ConcurrentDictionary<Guid, string>? _sourceCodePaths;
-
     protected virtual IEnumerable<string> SourceCodeSearchFiles => Directory.EnumerateFiles(Path.Combine(Folder, SourceCodeSubFolder), $"*{SourceCodeExtension}", SearchOption.AllDirectories);
+    private readonly ConcurrentDictionary<Guid, SymbolPathHandler> _filePathHandlers = new();
+    protected IDictionary<Guid, SymbolPathHandler> FilePathHandlers => _filePathHandlers;
     
     internal const string SourceCodeExtension = ".cs";
     public const string SymbolUiExtension = ".t3ui";
     public const string SymbolUiSubFolder = "SymbolUis";
     public const string SourceCodeSubFolder = "SourceCode";
 
-    public void InitializeShaderLinting(IReadOnlyList<IResourcePackage> sharedShaderPackages)
+    public static IEnumerable<Symbol> AllSymbols => AllPackages
+                                                    .Select(x => x.SymbolUiDict)
+                                                    .SelectMany(x => x.Values)
+                                                    .Select(x => x.Symbol);
+    
+    public static IEnumerable<SymbolUi> AllSymbolUis => AllPackages
+                                                        .Select(x => x.SymbolUiDict)
+                                                        .SelectMany(x => x.Values);
+
+    public void Reload(SymbolUi symbolUi)
     {
-        ShaderLinter.AddPackage(this, sharedShaderPackages);
+        var symbol = symbolUi.Symbol;
+        var id = symbol.Id;
+        
+        if (!_filePathHandlers.TryGetValue(id, out var pathHandler))
+        {
+            throw new Exception($"No path handler found for symbol {id}");
+        }
+
+        var symbolPath = pathHandler.SymbolFilePath;
+        if (symbolPath == null)
+        {
+            throw new Exception($"No symbol path found for symbol {id}");
+        }
+        
+        var symbolUiPath = pathHandler.UiFilePath;
+        if (symbolUiPath == null)
+        {
+            throw new Exception($"No symbol ui path found for symbol {id}");
+        }
+        
+        // reload single ui
+        var symbolJson = JsonFileResult<Symbol>.ReadAndCreate(symbolPath);
+        var result = SymbolJson.ReadSymbolRoot(symbol.Id, symbolJson.JToken, symbol.InstanceType, this);
+        var newSymbol = result.Symbol;
+
+        if (!TryReadAndApplyChildren(result))
+        {
+            throw new Exception($"Failed to reload symbol for symbol {id}");
+        }
+
+        // transfer instances over to the new symbol
+        newSymbol.InstancesOfSymbol.AddRange(symbol.InstancesOfSymbol);
+        UpdateSymbolInstances(newSymbol);
+        
+        var symbolUiJson = JsonFileResult<SymbolUi>.ReadAndCreate(symbolUiPath);
+        
+        if(!SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, newSymbol, out var newSymbolUi))
+            throw new Exception($"Failed to reload symbol ui for symbol {id}");
+        
+        
+        newSymbolUi.UpdateConsistencyWithSymbol();
+        
+        
+        // override registry values
+        Symbols[id] = newSymbol;
+        SymbolUiDict[id] = newSymbolUi;
+        SymbolRegistry.EntriesEditable[id] = newSymbol;
+    }
+
+    public bool TryGetSymbolUi(Guid rSymbolId, out SymbolUi? symbolUi)
+    {
+        return SymbolUiDict.TryGetValue(rSymbolId, out symbolUi);
     }
 }

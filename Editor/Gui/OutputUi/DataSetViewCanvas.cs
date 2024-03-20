@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.DataTypes.Vector;
@@ -36,7 +32,7 @@ public class DataSetViewCanvas
         }
             
         _standardRaster.Draw(_canvas);
-        _canvas.UpdateCanvas();
+        _canvas.UpdateCanvas(out _);
 
         if (Scroll)
         {

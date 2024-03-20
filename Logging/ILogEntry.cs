@@ -15,7 +15,7 @@ public interface ILogEntry
     DateTime TimeStamp { get; }
     EntryLevel Level { get; }
     string Message { get; }
-    IList<Guid> SourceIdPath { get; }
+    IReadOnlyList<Guid> SourceIdPath { get; }
     double SecondsSinceStart { get; }
     double SecondsAgo { get; }
     Guid SourceId { get; }

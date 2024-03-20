@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.DataTypes;
@@ -17,7 +14,7 @@ using T3.Serialization;
 
 namespace T3.Editor.Gui.InputUi.VectorInputs
 {
-    public class Vector2InputUi : FloatVectorInputValueUi<Vector2>
+    internal class Vector2InputUi : FloatVectorInputValueUi<Vector2>
     {
         public Vector2InputUi() : base(2)
         {

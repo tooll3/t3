@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using System.Numerics;
-using T3.Core.DataTypes;
+﻿using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Interaction;
 
 namespace T3.Editor.Gui.InputUi.VectorInputs
 {
-    public class Vector3InputUi : FloatVectorInputValueUi<Vector3>
+    internal class Vector3InputUi : FloatVectorInputValueUi<Vector3>
     {
         public Vector3InputUi() : base(3) { }
 

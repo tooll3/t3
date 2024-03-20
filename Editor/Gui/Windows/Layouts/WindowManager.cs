@@ -1,39 +1,22 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Exploration;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.Gui.Windows.Variations;
-using T3.Editor.SystemUi;
-using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows.Layouts
 {
-    public static class WindowManager
+    public static partial class WindowManager
     {
-        private static bool _startedWithoutHomeCanvas;
-        
         public static void Draw()
         {
             TryToInitialize(); // We have to keep initializing until window sizes are initialized
             if (!_hasBeenInitialized)
                 return;
-
-            // create the home canvas if it hasn't been created yet
-            // we also need to re-apply the layout since the graph window was not created
-            if (_startedWithoutHomeCanvas && EditableSymbolProject.RootInstance != null)
-            {
-                _windows.Add(new GraphWindow(EditableSymbolProject.RootInstance));
-                LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
-                _startedWithoutHomeCanvas = false;
-            }
-
+            
             LayoutHandling.ProcessKeyboardShortcuts();
 
             if (KeyboardBinding.Triggered(UserActions.ToggleVariationsWindow))
@@ -48,6 +31,14 @@ namespace T3.Editor.Gui.Windows.Layouts
                 windowType.Draw();
             }
 
+            // use a separate list to avoid enumerator modified exceptions
+            _currentGraphWindows.AddRange(GraphWindow.GraphWindowInstances);
+            foreach (var graphWindow in _currentGraphWindows)
+            {
+                graphWindow.Draw();
+            }
+            _currentGraphWindows.Clear();
+
             if (_demoWindowVisible)
                 ImGui.ShowDemoWindow(ref _demoWindowVisible);
 
@@ -55,7 +46,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                 ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
         }
 
-        public static void TryToInitialize()
+        private static void TryToInitialize()
         {
             // Wait first frame for ImGUI to initialize
             if (ImGui.GetTime() > 0.2f || _hasBeenInitialized)
@@ -76,90 +67,20 @@ namespace T3.Editor.Gui.Windows.Layouts
                                new SettingsWindow(),
                            };
 
-            if (EditableSymbolProject.RootInstance != null)
-            {
-                _windows.Add(new GraphWindow(EditableSymbolProject.RootInstance));
-            }
-            else
-            {
-                _startedWithoutHomeCanvas = true;
-            }
 
-            LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
-
+            ReApplyLayout();
             _appWindowSize = ImGui.GetIO().DisplaySize;
             _hasBeenInitialized = true;
         }
 
-        public static void DrawWindowMenuContent()
+        public static void ReApplyLayout()
         {
-            if (_windows == null)
-            {
-                Log.Warning("Can't draw window list before initialization");
-                return;
-            }
-            
-            foreach (var window in _windows)
-            {
-                window.DrawMenuItemToggle();
-            }
-
-            ImGui.Separator();
-            
-            if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
-                ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
-            
-            var screens = EditorUi.Instance.AllScreens;
-            if(ImGui.BeginMenu("2nd Render Window Fullscreen On"))
-            {
-                for (var index = 0; index < screens.Count; index++)
-                {
-                    var screen = screens.ElementAt(index);
-                    var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
-                                $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
-                    if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexViewer)) 
-                    {
-                        UserSettings.Config.FullScreenIndexViewer = index;
-                    }
-                }
-                ImGui.EndMenu();
-            }
-            
-            if (ImGui.BeginMenu("Editor Window Fullscreen On"))
-            {
-                for (var index = 0; index < screens.Count; index++)
-                {
-                    var screen = screens.ElementAt(index);
-                    var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
-                                $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
-                    if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexMain)) 
-                    {
-                        UserSettings.Config.FullScreenIndexMain = index;
-                    }
-                }
-                ImGui.EndMenu();
-            }
-            ImGui.Separator();
-            
-            if (ImGui.BeginMenu("Debug"))
-            {
-                if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
-                    _demoWindowVisible = !_demoWindowVisible;
-
-                if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
-                    _metricsWindowVisible = !_metricsWindowVisible;
-                
-                ImGui.EndMenu();
-            }
-            ImGui.Separator();
-
-            LayoutHandling.DrawMainMenuItems();
+            LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
         }
-        
 
         public static void SetGraphWindowToNormal()
         {
-            var graphWindow1 = GraphWindow.GetPrimaryGraphWindow();
+            var graphWindow1 = GraphWindow.Focused;
             if (graphWindow1 == null)
                 return;
             graphWindow1.WindowFlags &= ~(ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove |
@@ -182,6 +103,9 @@ namespace T3.Editor.Gui.Windows.Layouts
                     yield return window;
                 }
             }
+
+            foreach (var window in GraphWindow.GraphWindowInstances)
+                yield return window;
         }
 
         public static bool IsAnyInstanceVisible<T>() where T : Window
@@ -202,27 +126,6 @@ namespace T3.Editor.Gui.Windows.Layouts
                 }
 
                 w.Config.Visible = newVisibility;
-            }
-        }
-        
-
-        private static void HideAllWindowBesidesMainGraph()
-        {
-            var graphWindowIsMain = true;
-
-            foreach (var windowType in _windows)
-            {
-                foreach (var w in windowType.GetInstances())
-                {
-                    if (w is GraphWindow && graphWindowIsMain)
-                    {
-                        graphWindowIsMain = false;
-                    }
-                    else
-                    {
-                        w.Config.Visible = false;
-                    }
-                }
             }
         }
 
@@ -252,5 +155,6 @@ namespace T3.Editor.Gui.Windows.Layouts
         private static bool _metricsWindowVisible;
         public static bool ShowSecondaryRenderWindow { get; private set; }
         private static bool _hasBeenInitialized;
+        private static List<GraphWindow> _currentGraphWindows = new();
     }
 }

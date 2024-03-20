@@ -26,7 +26,6 @@ https://github.com/RolandKoenig/SeeingSharp/blob/master/SeeingSharp.Multimedia_S
 */
 #endregion
 
-using System;
 using System.Text;
 
 namespace T3.Editor.Gui.Windows.RenderExport;

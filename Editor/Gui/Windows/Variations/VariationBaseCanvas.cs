@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ImGuiNET;
+﻿using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -18,7 +16,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Variations
 {
-    public abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContainer
+    internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContainer
     {
         public abstract Variation CreateVariation();
         public abstract void DrawToolbarFunctions();
@@ -30,7 +28,7 @@ namespace T3.Editor.Gui.Windows.Variations
 
         public void Draw(ImDrawListPtr drawList, bool hideHeader = false)
         {
-            UpdateCanvas();
+            UpdateCanvas(out _);
 
             // Complete deferred actions
             if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
@@ -111,7 +109,7 @@ namespace T3.Editor.Gui.Windows.Variations
                 _previousRenderInstance = renderInstance;
             }
 
-            var symbolUi = SymbolUiRegistry.Entries[renderInstance.Symbol.Id];
+            var symbolUi = renderInstance.GetSymbolUi();
             if (!symbolUi.OutputUis.ContainsKey(textureSlot.Id))
                 return;
 

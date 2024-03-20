@@ -99,7 +99,14 @@ namespace T3.Editor.Gui.Commands.Graph
         private void AssignValue(InputValue valueToSet)
         {
             //Log.Debug($"assigning value {valueToSet}");
-            var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
+            if (!SymbolUiRegistry.TryGetValue(_inputParentSymbolId, out var inputParentSymbolUi))
+            {
+                Log.Warning($"Can't find symbol {_inputParentSymbolId} - was it removed?");
+                return;
+            }
+            
+            var inputParentSymbol = inputParentSymbolUi!.Symbol;
+            
             var symbolChild = inputParentSymbol.Children.SingleOrDefault(child => child.Id == _childId);
             if (symbolChild == null)
             {
@@ -110,7 +117,12 @@ namespace T3.Editor.Gui.Commands.Graph
             
             if (_isAnimated)
             {
-                var symbolUi = SymbolUiRegistry.Entries[symbolChild.Symbol.Id];
+                if(!SymbolUiRegistry.TryGetValue(symbolChild.Symbol.Id, out var symbolUi))
+                {
+                    Log.Warning($"Can't find symbol {symbolChild.Symbol.Id} - was it removed?");
+                    return;
+                }
+                
                 var inputUi = symbolUi.InputUis[_inputId];
                 var animator = inputParentSymbol.Animator;
 

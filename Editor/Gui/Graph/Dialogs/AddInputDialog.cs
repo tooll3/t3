@@ -1,5 +1,4 @@
-﻿using System;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Modification;
@@ -31,11 +30,6 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 else if(symbol.InputDefinitions.Exists(i => i.Name == _parameterName))
                 {
                     warning = "Parameter name already exists.";
-                    isValid = false;
-                }
-                else if (symbol.InstanceType == EditableSymbolProject.RootInstance.GetType())
-                {
-                    warning = "You can't add parameters to the home canvas.";
                     isValid = false;
                 }
                 

@@ -1,3 +1,4 @@
+using System.Numerics;
 using ImGuiNET;
 using lib.data;
 using T3.Core.Operator;
@@ -9,7 +10,7 @@ namespace libEditor.CustomUi
 {
     public static class DataListUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
         {
             if (!(instance is DataList dataList)
                 || !ImGui.IsRectVisible(selectableScreenRect.Min, selectableScreenRect.Max))

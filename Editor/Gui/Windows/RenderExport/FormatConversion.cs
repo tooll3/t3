@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;

@@ -12,7 +12,7 @@ namespace libEditor.CustomUi
 {
     public static class GpuMeasureUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
         {
             if (!(instance is GpuMeasure measureInstance))
                 return SymbolChildUi.CustomUiResult.None;

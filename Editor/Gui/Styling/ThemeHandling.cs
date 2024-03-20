@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
+﻿using System.IO;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.UserData;
 using T3.Editor.Gui.UiHelpers;
 using T3.Serialization;

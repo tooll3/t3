@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using T3.Editor.Gui.OutputUi;
+﻿using T3.Editor.Gui.OutputUi;
 
 // ReSharper disable PossibleMultipleEnumeration
 

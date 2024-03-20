@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.UiModel;
@@ -33,7 +30,7 @@ internal static class SymbolNaming
         }
     }
 
-    public static void RenameSymbol(Symbol symbol, string newName)
+    public static bool RenameSymbol(Symbol symbol, string newName)
     {
         if (symbol.SymbolPackage.IsReadOnly)
             throw new ArgumentException("Symbol is read-only and cannot be renamed");
@@ -43,7 +40,7 @@ internal static class SymbolNaming
         if (syntaxTree == null)
         {
             Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
-            return;
+            return false;
         }
 
         // Create new source on basis of original type
@@ -56,12 +53,7 @@ internal static class SymbolNaming
 
         var newSource = root.GetText().ToString();
 
-        var project = (EditableSymbolProject)symbol.SymbolPackage;
-        var updated = project.TryRecompileWithNewSource(symbol, newSource);
-        if (!updated)
-        {
-            Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
-        }
+        return EditableSymbolProject.RecompileSymbol(symbol, newSource, false, out _);
     }
 }
 

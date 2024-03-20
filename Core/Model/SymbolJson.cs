@@ -273,7 +273,7 @@ namespace T3.Core.Model
             }
             catch
             {
-                Log.Error($"Failed to read input value ({input.InputDefinition.DefaultValue.ValueType}) for {symbolChild.Symbol.Id}: " + jsonValue);
+                Log.Error($"Failed to read input value ({input.DefaultValue.ValueType}) for {symbolChild.Symbol.Id}: " + jsonValue);
             }
         }
 
@@ -377,12 +377,7 @@ namespace T3.Core.Model
             public const string Animator = "Animator";
         }
 
-        public readonly struct SymbolReadResult(Symbol symbol, JsonChildResult[] childrenJsonArray, JArray animatorJsonData)
-        {
-            public readonly Symbol Symbol = symbol;
-            public readonly JsonChildResult[] ChildrenJsonArray = childrenJsonArray;
-            public readonly JArray AnimatorJsonData = animatorJsonData;
-        }
+        public readonly record struct SymbolReadResult(Symbol Symbol, JsonChildResult[] ChildrenJsonArray, JArray AnimatorJsonData);
 
         public readonly struct JsonChildResult
         {

@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.External.Truncon.Collections;
@@ -41,12 +35,45 @@ namespace T3.Editor.UiModel
             OutputUis = outputs;
             Annotations = annotations;
             Links = links;
+            ForceUnmodified = true;
             
-            if(updateConsistency)
+            if (updateConsistency)
                 UpdateConsistencyWithSymbol();
         }
 
-        internal SymbolUi CloneForNewSymbol(Symbol newSymbol, Dictionary<Guid, Guid> oldToNewIds)
+        internal SymbolUi CloneForReadOnly(Symbol newSymbol)
+        {
+            var childUis = ChildUis.ToList();
+            var inputUis = new OrderedDictionary<Guid, IInputUi>(InputUis.Count);
+            var outputUis = new OrderedDictionary<Guid, IOutputUi>(OutputUis.Count);
+            var annotations = new OrderedDictionary<Guid, Annotation>(Annotations.Count);
+            var links = new OrderedDictionary<Guid, ExternalLink>(Links.Count);
+
+            foreach (var (id, inputUi) in InputUis)
+            {
+                var clonedInputUi = inputUi.Clone();
+                inputUis.Add(id, clonedInputUi);
+            }
+            
+            foreach (var outputUi in OutputUis)
+            {
+                outputUis.Add(outputUi.Key, outputUi.Value);
+            }
+            
+            foreach (var annotation in Annotations)
+            {
+                annotations.Add(annotation.Key, annotation.Value);
+            }
+            
+            foreach (var link in Links)
+            {
+                links.Add(link.Key, link.Value);
+            }
+            
+            return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations, links, false);
+        }
+        
+        internal SymbolUi CloneForNewSymbol(Symbol newSymbol, Dictionary<Guid, Guid> oldToNewIds = null)
         {
             FlagAsModified();
             
@@ -59,12 +86,16 @@ namespace T3.Editor.UiModel
             //     childUis.Add(clonedChildUi);
             // }
 
+            var hasIdMap = oldToNewIds != null;
+            
+            Func<Guid, Guid> idMapper = hasIdMap ? id => oldToNewIds[id] : id => id;
+
             var inputUis = new OrderedDictionary<Guid, IInputUi>(InputUis.Count);
             foreach (var (_, inputUi) in InputUis)
             {
                 var clonedInputUi = inputUi.Clone();
                 clonedInputUi.Parent = this;
-                Guid newInputId = oldToNewIds[clonedInputUi.Id];
+                Guid newInputId = idMapper(clonedInputUi.Id);
                 clonedInputUi.InputDefinition = newSymbol.InputDefinitions.Single(inputDef => inputDef.Id == newInputId);
                 inputUis.Add(clonedInputUi.Id, clonedInputUi);
             }
@@ -73,7 +104,7 @@ namespace T3.Editor.UiModel
             foreach (var (_, outputUi) in OutputUis)
             {
                 var clonedOutputUi = outputUi.Clone();
-                Guid newOutputId = oldToNewIds[clonedOutputUi.Id];
+                Guid newOutputId = idMapper(clonedOutputUi.Id);
                 clonedOutputUi.OutputDefinition = newSymbol.OutputDefinitions.Single(outputDef => outputDef.Id == newOutputId);
                 outputUis.Add(clonedOutputUi.Id, clonedOutputUi);
             }
@@ -92,7 +123,7 @@ namespace T3.Editor.UiModel
                 links.Add(clonedLink.Id, clonedLink);
             }
 
-            return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations, links, true);
+            return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations, links, hasIdMap);
         }
 
         IEnumerable<ISelectableCanvasObject> ISelectionContainer.GetSelectables() => GetSelectables();
@@ -316,14 +347,5 @@ namespace T3.Editor.UiModel
         public readonly OrderedDictionary<Guid, IInputUi> InputUis = new();
         public readonly OrderedDictionary<Guid, IOutputUi> OutputUis = new();
         public readonly OrderedDictionary<Guid, Annotation> Annotations = new();
-    }
-
-    public static class SymbolUiRegistry
-    {
-        // todo - symbol Ui can be lazily created?
-        public static IReadOnlyDictionary<Guid, SymbolUi> Entries => EntriesEditable;
-
-        // split up to track changes more easily
-        internal static ConcurrentDictionary<Guid, SymbolUi> EntriesEditable { get; } = new(-1, 1000);
     }
 }

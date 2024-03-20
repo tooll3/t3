@@ -1,7 +1,7 @@
-﻿using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs
@@ -22,6 +22,10 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
         
         protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Curve curve, bool readOnly)
         {
+            var comp = GraphWindow.Focused?.CompositionOp;
+            if (comp == null)
+                return InputEditStateFlags.Nothing;
+            
             if (curve == null)
             {
                 // value was null!
@@ -34,9 +38,9 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             var keepPositionForIcon = ImGui.GetCursorPos();
             
             var cloneIfModified = input.IsDefault;
-            var modified= CurveInputEditing.DrawCanvasForCurve(ref curve, input, cloneIfModified, T3Ui.EditingFlags.PreventZoomWithMouseWheel);
+            var modified= CurveInputEditing.DrawCanvasForCurve(ref curve, input, cloneIfModified, comp, T3Ui.EditingFlags.PreventZoomWithMouseWheel);
 
-            if (CurveEditPopup.DrawPopupIndicator(input, ref curve, keepPositionForIcon, cloneIfModified, out var popupResult))
+            if (CurveEditPopup.DrawPopupIndicator(comp, input, ref curve, keepPositionForIcon, cloneIfModified, out var popupResult))
             {
                 modified = popupResult;
             }

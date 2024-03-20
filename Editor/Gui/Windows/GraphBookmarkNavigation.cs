@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -16,9 +10,9 @@ namespace T3.Editor.Gui.Windows
     /// <summary>
     /// Allows users to create and use bookmarks to quickly navigate between areas of graphs
     /// </summary>
-    public static class GraphBookmarkNavigation
+    internal static class GraphBookmarkNavigation
     {
-        public static void HandleForCanvas(GraphCanvas canvas)
+        public static void HandleForCanvas(GraphWindow graphWindow)
         {
             // var isNotFocused = !ImGui.IsWindowFocused();
             // if (isNotFocused)
@@ -36,38 +30,28 @@ namespace T3.Editor.Gui.Windows
             {
                 if (KeyboardBinding.Triggered(_saveBookmarkActions[i]))
                 {
-                    SaveBookmark(canvas, i);
+                    SaveBookmark(graphWindow, i);
                     _lastInteractionFrame = ImGui.GetFrameCount();
                     break;
                 }
 
                 else if (KeyboardBinding.Triggered(_loadBookmarkActions[i]))
                 {
-                    LoadBookmark(canvas, i);
+                    LoadBookmark(graphWindow, i);
                     _lastInteractionFrame = ImGui.GetFrameCount();
                     break;
                 }
             }
         }
 
-        private static GraphWindow GetCurrentGraphWindow()
-        {
-            GraphWindow current = null;
-            foreach (var instance in GraphWindow.GraphWindowInstances)
-            {
-                if (instance is GraphWindow graphWindow && instance.Config.Visible)
-                {
-                    current = graphWindow;
-                    break;
-                }
-            }
-
-            return current;
-        }
-
         public static void DrawBookmarksMenu()
         {
-            var currentWindow = GetCurrentGraphWindow();
+            var currentWindow = GraphWindow.Focused;
+            if (currentWindow == null)
+            {
+                Log.Warning($"Cannot draw bookmark menu. No focused graph window.");
+                return;
+            }
 
             if (ImGui.BeginMenu("Load graph bookmark"))
             {
@@ -78,7 +62,7 @@ namespace T3.Editor.Gui.Windows
                     var isAvailable = DoesBookmarkExist(index);
                     if (ImGui.MenuItem(action.ToString(), shortcuts, false, enabled: isAvailable))
                     {
-                        LoadBookmark(currentWindow.GraphCanvas, index);
+                        LoadBookmark(currentWindow, index);
                     }
                 }
 
@@ -95,7 +79,7 @@ namespace T3.Editor.Gui.Windows
                     
                     if (ImGui.MenuItem(action.ToString(), shortcuts))
                     {
-                        SaveBookmark(currentWindow.GraphCanvas, index);
+                        SaveBookmark(currentWindow, index);
                     }
                 }
 
@@ -103,7 +87,7 @@ namespace T3.Editor.Gui.Windows
             }
         }
 
-        private static void LoadBookmark(GraphCanvas canvas, int index)
+        private static void LoadBookmark(GraphWindow window, int index)
         {
             var bookmark = GetBookmarkAt(index);
             if (bookmark == null)
@@ -112,19 +96,19 @@ namespace T3.Editor.Gui.Windows
                 return;
             }
 
-            var op = Structure.GetInstanceFromIdPath(bookmark.IdPath);
+            var op = window.Structure.GetInstanceFromIdPath(bookmark.IdPath);
             if (op == null)
             {
                 Log.Error("Invalid node path");
                 return;
             }
 
-            canvas.SetComposition(bookmark.IdPath, ICanvas.Transition.Undefined);
-            canvas.SetVisibleRange(bookmark.ViewScope.Scale, bookmark.ViewScope.Scroll);
+            window.TrySetCompositionOp(bookmark.IdPath);
+            window.GraphCanvas.SetVisibleRange(bookmark.ViewScope.Scale, bookmark.ViewScope.Scroll);
             //SelectionManager.SetSelection(bookmark.SelectedChildIds);
         }
 
-        private static void SaveBookmark(GraphCanvas canvas, int index)
+        private static void SaveBookmark(GraphWindow window, int index)
         {
             Log.Debug("Saving bookmark " + index);
             var bookmarks = UserSettings.Config.Bookmarks;
@@ -134,12 +118,14 @@ namespace T3.Editor.Gui.Windows
             {
                 bookmarks.AddRange(new Bookmark[index + 1 - bookmarks.Count]);
             }
+            
+            var canvas = window.GraphCanvas;
 
             bookmarks[index] = new Bookmark()
                                    {
-                                       IdPath = OperatorUtils.BuildIdPathForInstance(canvas.CompositionOp),
+                                       IdPath = OperatorUtils.BuildIdPathForInstance(window.CompositionOp),
                                        ViewScope = canvas.GetTargetScope(),
-                                       SelectedChildIds = NodeSelection.GetSelectedNodes<SymbolChildUi>().Select(s => s.Id).ToList()
+                                       SelectedChildIds = canvas.NodeSelection.GetSelectedNodes<SymbolChildUi>().Select(s => s.Id).ToList()
                                    };
             ;
         }
@@ -189,15 +175,6 @@ namespace T3.Editor.Gui.Windows
             return null;
         }
 
-        public class Bookmark
-        {
-            // Fixme: Deserialization doesn't work and results into new (incorrect) random Ids
-            //[JsonConverter(typeof(List<Guid>))]
-            public List<Guid> IdPath = new();
-            public ScalableCanvas.Scope ViewScope;
-            public List<Guid> SelectedChildIds = new();
-        }
-
 
         private static bool HasInteractedInCurrentFrame()
         {
@@ -206,5 +183,16 @@ namespace T3.Editor.Gui.Windows
         }
         
         private static int _lastInteractionFrame;
+    }
+
+    public class Bookmark
+    {
+        // Fixme: Deserialization doesn't work and results into new (incorrect) random Ids
+        //[JsonConverter(typeof(List<Guid>))]
+        public List<Guid> IdPath = new();
+        public CanvasScope ViewScope;
+
+        public List<Guid> SelectedChildIds = new();
+        // todo - include Project in this
     }
 }

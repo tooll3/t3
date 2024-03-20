@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
+using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
@@ -21,7 +17,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         protected readonly HashSet<VDefinition> SelectedKeyframes = new();
         protected abstract IEnumerable<Curve> GetAllCurves();
         protected abstract void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false);
-        protected abstract void DeleteSelectedKeyframes();
+        protected abstract void DeleteSelectedKeyframes(Instance composition);
         protected internal abstract void HandleCurvePointDragging(VDefinition vDef, bool isSelected);
 
         /// <summary>
@@ -47,7 +43,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
             return result;
         }
 
-        public void DrawContextMenu()
+        public void DrawContextMenu(Instance composition)
         {
             CustomComponents.DrawContextMenuForScrollCanvas
                 (
@@ -113,7 +109,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                          ViewAllOrSelectedKeys();
 
                      if (ImGui.MenuItem("Delete keyframes"))
-                         DeleteSelectedKeyframes();
+                         DeleteSelectedKeyframes(composition);
 
                      if (ImGui.MenuItem("Recount values"))
                      {

@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using T3.Core.Compilation;
-using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
@@ -51,10 +47,10 @@ internal static class ProjectSetup
         newProject = new EditableSymbolProject(newCsProj);
         newProject.InitializeResources();
 
-        UpdateSymbolPackages(newProject);
-        if (!newProject.TryCreateHome())
+        UpdateSymbolPackages(false, newProject);
+        if (!newProject.AssemblyInformation.HasHome)
         {
-            Log.Error("Failed to create project home");
+            Log.Error("Failed to find project home");
             RemoveSymbolPackage(newProject);
             return false;
         }
@@ -204,8 +200,7 @@ internal static class ProjectSetup
             
             ShaderLinter.AddPackage(SharedResources.ResourcePackage, sharedShaderPackages);
             
-            UpdateSymbolPackages(allSymbolPackages);
-            Log.Debug($"Updated symbol packages in {stopwatch.ElapsedMilliseconds}ms");
+            UpdateSymbolPackages(false,  allSymbolPackages);
 
             #if DEBUG
             totalStopwatch.Stop();
@@ -213,24 +208,6 @@ internal static class ProjectSetup
             #endif
 
             stopwatch.Restart();
-
-            var exampleLib = allSymbolPackages.SingleOrDefault(x => x.AssemblyInformation.Name == "examples");
-            if (exampleLib == null)
-            {
-                Log.Error("ProjectSetup failed: Can't find examples library");
-                exception = new Exception("Can't find examples library");
-                return false;
-            }
-            
-            EditorSymbolPackage.InitializeRoot(exampleLib);
-
-            Log.Debug($"Created root symbol in {stopwatch.ElapsedMilliseconds}ms");
-
-            // create project "Home" entries on the homepage
-            foreach (var project in projects)
-            {
-                _ = project.TryCreateHome();
-            }
 
             stopwatch.Stop();
 
@@ -305,23 +282,44 @@ internal static class ProjectSetup
 
     public static void DisposePackages()
     {
-        ShaderLinter.DeleteFiles();
-        
-        foreach(var package in SymbolPackage.AllPackages)
+        var allPackages = EditorSymbolPackage.AllPackages.ToArray();
+        foreach(var package in allPackages)
             package.Dispose();
     }
 
-    internal static void UpdateSymbolPackage(EditableSymbolProject project) => UpdateSymbolPackages(project);
+    internal static void UpdateSymbolPackage(EditableSymbolProject project) => UpdateSymbolPackages(false, project);
 
-    private static void UpdateSymbolPackages(params EditorSymbolPackage[] symbolPackages)
+    internal static void ReloadReadOnlyPackage(EditorSymbolPackage package)
     {
+        Debug.Assert(package.IsReadOnly && package is not EditableSymbolProject);
+        UpdateSymbolPackages(true, package);
+    }
+
+    private static void UpdateSymbolPackages(bool readOnlyReload, params EditorSymbolPackage[] symbolPackages)
+    {
+        switch (symbolPackages.Length)
+        {
+            case 0:
+                throw new ArgumentException("No symbol packages to update");
+            case 1:
+            {
+                var package = symbolPackages[0];
+                package.LoadSymbols(true, out var newlyRead, out var allNewSymbols, readOnlyReload);
+                package.ApplySymbolChildren(newlyRead);
+                package.LoadUiFiles(true, allNewSymbols, out var newlyLoadedUis, out var preExistingUis, readOnlyReload);
+                package.LocateSourceCodeFiles();
+                package.RegisterUiSymbols(true, newlyLoadedUis, preExistingUis, readOnlyReload);
+                return;
+            }
+        }
+
         ConcurrentDictionary<EditorSymbolPackage, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
-        ConcurrentDictionary<EditorSymbolPackage, IReadOnlyCollection<Symbol>> loadedOrCreatedSymbols = new();
+        ConcurrentDictionary<EditorSymbolPackage, List<Symbol>> loadedOrCreatedSymbols = new();
         symbolPackages
            .AsParallel()
            .ForAll(package => //pull out for non-editable ones too
                    {
-                       package.LoadSymbols(false, out var newlyRead, out var allNewSymbols);
+                       package.LoadSymbols(false, out var newlyRead, out var allNewSymbols, readOnlyReload);
                        loadedSymbols.TryAdd(package, newlyRead);
                        loadedOrCreatedSymbols.TryAdd(package, allNewSymbols);
                    });
@@ -335,7 +333,7 @@ internal static class ProjectSetup
            .AsParallel()
            .ForAll(package =>
                    {
-                       package.LoadUiFiles(loadedOrCreatedSymbols[package], out var newlyRead, out var preExisting);
+                       package.LoadUiFiles(false, loadedOrCreatedSymbols[package], out var newlyRead, out var preExisting, readOnlyReload);
                        loadedSymbolUis.TryAdd(package, new SymbolUiLoadInfo(newlyRead, preExisting));
                    });
 
@@ -348,19 +346,10 @@ internal static class ProjectSetup
 
         foreach (var (symbolPackage, symbolUis) in loadedSymbolUis)
         {
-            symbolPackage.RegisterUiSymbols(enableLog: false, symbolUis.NewlyLoaded, symbolUis.PreExisting);
+            symbolPackage.RegisterUiSymbols(false, symbolUis.NewlyLoaded, symbolUis.PreExisting, readOnlyReload);
         }
     }
 
-    private readonly struct SymbolUiLoadInfo(IReadOnlyCollection<SymbolUi> newlyLoaded, IReadOnlyCollection<SymbolUi> preExisting)
-    {
-        public readonly IReadOnlyCollection<SymbolUi> NewlyLoaded = newlyLoaded;
-        public readonly IReadOnlyCollection<SymbolUi> PreExisting = preExisting;
-    }
-
-    private readonly struct AssemblyConstructorInfo(AssemblyInformation assemblyInformation, Type instanceType)
-    {
-        public readonly AssemblyInformation AssemblyInformation = assemblyInformation;
-        public readonly Type InstanceType = instanceType;
-    }
+    private readonly record struct SymbolUiLoadInfo(SymbolUi[] NewlyLoaded, SymbolUi[] PreExisting);
+    private readonly record struct AssemblyConstructorInfo(AssemblyInformation AssemblyInformation, Type InstanceType);
 }

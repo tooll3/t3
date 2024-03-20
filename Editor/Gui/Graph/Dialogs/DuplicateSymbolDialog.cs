@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
-    public class DuplicateSymbolDialog : ModalDialog
+    internal class DuplicateSymbolDialog : ModalDialog
     {
         public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description)
         {
@@ -42,10 +40,9 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.SetNextItemWidth(250);
                     //ImGui.InputText("##namespace", ref nameSpace, 255);
                     InputWithTypeAheadSearch.Draw("##namespace", ref nameSpace,
-                                                  SymbolRegistry.Entries.Values
+                                                  _projectToCopyTo.SymbolUis.Select(x => x.Symbol)
                                                                 .Select(i => i.Namespace)
                                                                 .Distinct()
-                                                                .Where(x => x.StartsWith(rootNamespace))
                                                                 .OrderBy(i => i),
                                                   warning: !correct);
 
@@ -71,7 +68,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     if (CustomComponents.DisablableButton("Duplicate", correct && GraphUtils.IsNewSymbolNameValid(newTypeName, compositionOp.Symbol),
                                                           enableTriggerWithReturn: false))
                     {
-                        var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
+                        var compositionSymbolUi = compositionOp.GetSymbolUi();
                         var position = selectedChildUis.First().PosOnCanvas + new Vector2(0, 100);
 
                         Duplicate.DuplicateAsNewType(compositionSymbolUi, _projectToCopyTo, selectedChildUis.First().SymbolChild.Symbol.Id, newTypeName, nameSpace, description,

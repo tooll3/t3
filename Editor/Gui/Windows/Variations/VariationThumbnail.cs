@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
@@ -16,7 +12,7 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows.Variations
 {
-    public static class VariationThumbnail
+    internal static class VariationThumbnail
     {
         public static bool Draw(VariationBaseCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
@@ -193,7 +189,7 @@ namespace T3.Editor.Gui.Windows.Variations
                         _draggedNodes.Add(variation);
                     }
 
-                    _moveCommand = new ModifyCanvasElementsCommand(_canvas, _draggedNodes);
+                    _moveCommand = new ModifyCanvasElementsCommand(_canvas, _draggedNodes, Selection);
                 }
 
                 HandleNodeDragging(variation);

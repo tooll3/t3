@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using ImGuiNET;
@@ -12,7 +8,6 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
-using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
 using T3.Editor.SystemUi;
 using T3.SystemUi;

@@ -1,5 +1,4 @@
-﻿using System;
-using T3.Core.DataTypes.Vector;
+﻿using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 
 // ReSharper disable MemberCanBePrivate.Global

@@ -16,12 +16,12 @@ namespace libEditor.CustomUi
 {
     public static class ValueUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect area)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect area, Vector2 canvasScale)
         {
             if (!(instance is Value valueInstance))
                 return SymbolChildUi.CustomUiResult.None;
 
-            var dragWidth = WidgetElements.DrawDragIndicator(area, drawList);
+            var dragWidth = WidgetElements.DrawDragIndicator(area, drawList, canvasScale);
             var usableArea = area;
             area.Min.X += dragWidth;
 
@@ -94,12 +94,12 @@ namespace libEditor.CustomUi
             // Label if instance has title
             if (!string.IsNullOrEmpty(symbolChild.Name))
             {
-                WidgetElements.DrawPrimaryTitle(drawList, area, symbolChild.Name);
-                WidgetElements.DrawSmallValue(drawList, area, $"{value:0.000}");
+                WidgetElements.DrawPrimaryTitle(drawList, area, symbolChild.Name, canvasScale);
+                WidgetElements.DrawSmallValue(drawList, area, $"{value:0.000}", canvasScale);
             }
             else
             {
-                WidgetElements.DrawPrimaryValue(drawList, area, $"{value:0.000}");
+                WidgetElements.DrawPrimaryValue(drawList, area, $"{value:0.000}", canvasScale);
             }
             
             drawList.PopClipRect();

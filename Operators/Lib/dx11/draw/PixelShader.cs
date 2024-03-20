@@ -34,10 +34,7 @@ namespace lib.dx11.draw
             }
         }
 
-        public InputSlot<string> GetSourcePathSlot()
-        {
-            return Source;
-        }
+        public InputSlot<string> SourcePathSlot => Source;
 
         public IStatusProvider.StatusLevel GetStatusLevel()
         {

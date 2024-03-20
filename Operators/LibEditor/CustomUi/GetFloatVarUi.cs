@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using ImGuiNET;
 using lib.exec.context;
 using T3.Core.Operator;
@@ -10,7 +11,7 @@ namespace libEditor.CustomUi
 {
     public static class GetFloatVarUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance1, ImDrawListPtr drawList, ImRect area)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance1, ImDrawListPtr drawList, ImRect area, Vector2 canvasScale)
         {
             if (!(instance1 is GetFloatVar instance))
                 return SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
@@ -22,14 +23,14 @@ namespace libEditor.CustomUi
 
             if (!string.IsNullOrEmpty(symbolChild.Name))
             {
-                WidgetElements.DrawPrimaryTitle(drawList, area, symbolChild.Name);
+                WidgetElements.DrawPrimaryTitle(drawList, area, symbolChild.Name, canvasScale);
             }
             else
             {
-                WidgetElements.DrawPrimaryTitle(drawList, area, "Get " + instance.Variable.TypedInputValue.Value);
+                WidgetElements.DrawPrimaryTitle(drawList, area, "Get " + instance.Variable.TypedInputValue.Value, canvasScale);
             }
 
-            WidgetElements.DrawSmallValue(drawList, area, $"{value:0.000}");
+            WidgetElements.DrawSmallValue(drawList, area, $"{value:0.000}", canvasScale);
 
             drawList.PopClipRect();
             return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph;

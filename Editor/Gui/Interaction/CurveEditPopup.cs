@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Numerics;
 using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
@@ -12,7 +11,7 @@ namespace T3.Editor.Gui.Interaction;
 
 public static class CurveEditPopup
 {
-    public static bool DrawPopupIndicator(SymbolChild.Input input, ref Curve curve, Vector2 keepPositionForIcon, bool cloneIfModified, out InputEditStateFlags result)
+    public static bool DrawPopupIndicator(Instance compositionOp, SymbolChild.Input input, ref Curve curve, Vector2 keepPositionForIcon, bool cloneIfModified, out InputEditStateFlags result)
     {
         var openPop = false;
         var keepPositionForContentBelow = ImGui.GetCursorPos();
@@ -35,12 +34,12 @@ public static class CurveEditPopup
 
         var isOpen = ImGui.IsPopupOpen(CurvePopupId);
         
-        result= DrawPopup(ref curve, input, cloneIfModified);
+        result= DrawPopup(ref curve, input, cloneIfModified, compositionOp);
         return isOpen;
     }
     
     private static InputEditStateFlags DrawPopup(ref Curve curve, SymbolChild.Input input,
-                                                 bool cloneIfModified)
+                                                 bool cloneIfModified, Instance comp)
     {
         
         var edited = InputEditStateFlags.Nothing;
@@ -53,7 +52,7 @@ public static class CurveEditPopup
             //     _activatedComponentId = componentId;
             // }
             
-            edited= CurveInputEditing.DrawCanvasForCurve(ref curve, input, cloneIfModified, T3Ui.EditingFlags.ExpandVertically);
+            edited= CurveInputEditing.DrawCanvasForCurve(ref curve, input, cloneIfModified, comp, T3Ui.EditingFlags.ExpandVertically);
             ImGui.EndPopup();
         }
         else

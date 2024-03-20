@@ -1,12 +1,9 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Numerics;
 using System.Threading;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Compilation;
-using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.SystemUi;

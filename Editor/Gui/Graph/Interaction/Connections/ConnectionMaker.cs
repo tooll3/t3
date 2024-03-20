@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using T3.Core.Logging;
-using T3.Core.Operator;
+﻿using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
@@ -18,7 +15,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
     /// It provides accessors for highlighting matching input slots and methods that need to be
     /// called when connections are completed or aborted.
     /// </summary>
-    public static class ConnectionMaker
+    internal static class ConnectionMaker
     {
         public static readonly List<TempConnection> TempConnections = new();
 
@@ -67,11 +64,11 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                    && TempConnections[0].TargetSlotId == outputDef.Id;
         }
 
-        public static void StartFromOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, Symbol.OutputDefinition outputDef)
+        public static void StartFromOutputSlot(NodeSelection selection, SymbolChildUi sourceUi, Symbol.OutputDefinition outputDef)
         {
             StartOperation($"Connect from {sourceUi.SymbolChild.ReadableName}.{outputDef.Name}");
 
-            var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis().OrderBy(c => c.PosOnCanvas.Y * 100 + c.PosOnCanvas.X).ToList();
+            var selectedSymbolChildUis = selection.GetSelectedChildUis().OrderBy(c => c.PosOnCanvas.Y * 100 + c.PosOnCanvas.X).ToList();
             selectedSymbolChildUis.Reverse();
 
             if (selectedSymbolChildUis.Count > 1 && (selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id)))
@@ -221,14 +218,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
         public static void AbortOperation()
         {
-            if (_inProgressCommand == null)
-            {
-                Log.Warning("Can't abort undefined connection operation");
-            }
-            else
-            {
-                _inProgressCommand.Undo();
-            }
+            _inProgressCommand?.Undo();
             Reset();
         }
 
@@ -241,7 +231,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             ConnectionSnapEndHelper.ResetSnapping();
         }
 
-        private static void AdjustGraphLayoutForNewNode(Symbol parent, Symbol.Connection connection)
+        private static void AdjustGraphLayoutForNewNode(Symbol parent, Symbol.Connection connection, NodeSelection selection)
         {
             if (connection.IsConnectedToSymbolOutput || connection.IsConnectedToSymbolInput)
             {
@@ -252,7 +242,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             var sourceNode = parent.Children.Single(child => child.Id == connection.SourceParentOrChildId);
             var targetNode = parent.Children.Single(child => child.Id == connection.TargetParentOrChildId);
 
-            var parentSymbolUi = SymbolUiRegistry.Entries[parent.Id];
+            var parentSymbolUi = parent.GetSymbolUi();
             var sourceNodeUi = parentSymbolUi.ChildUis.Single(node => node.Id == sourceNode.Id);
             var targetNodeUi = parentSymbolUi.ChildUis.Single(node => node.Id == targetNode.Id);
             var center = (sourceNodeUi.PosOnCanvas + targetNodeUi.PosOnCanvas) / 2;
@@ -286,7 +276,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 changedChildUis.Add(childUi);
             }
 
-            var command = new ModifyCanvasElementsCommand(parentSymbolUi.Symbol.Id, changedChildren);
+            var command = new ModifyCanvasElementsCommand(parentSymbolUi.Symbol.Id, changedChildren, selection);
             foreach (var childUi in changedChildUis)
             {
                 var pos = childUi.PosOnCanvas;
@@ -330,28 +320,27 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             }
         }
 
-        public static void CompleteAtInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input, int multiInputIndex = 0,
+        public static void CompleteAtInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition input, Instance sourceInstance, int multiInputIndex = 0,
                                                bool insertMultiInput = false)
         {
+            var parentUi = sourceInstance.Parent.GetSymbolUi();
+            var parentSymbol = parentUi.Symbol;
+            
             // Check for cycles
-            var sourceInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == TempConnections[0].SourceParentOrChildId);
-            if (sourceInstance != null)
+            var outputSlot = sourceInstance.Outputs[0];
+            var deps = new HashSet<ISlot>();
+            Structure.CollectSlotDependencies(outputSlot, deps);
+
+            foreach (var d in deps)
             {
-                var outputSlot = sourceInstance.Outputs[0];
-                var deps = new HashSet<ISlot>();
-                Structure.CollectSlotDependencies(outputSlot, deps);
+                if (d.Parent.SymbolChildId != targetUi.SymbolChild.Id)
+                    continue;
 
-                foreach (var d in deps)
-                {
-                    if (d.Parent.SymbolChildId != targetUi.SymbolChild.Id)
-                        continue;
-
-                    Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
-                    //TempConnections.Clear();
-                    //ConnectionSnapEndHelper.ResetSnapping();
-                    AbortOperation();
-                    return;
-                }
+                Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
+                //TempConnections.Clear();
+                //ConnectionSnapEndHelper.ResetSnapping();
+                AbortOperation();
+                return;
             }
 
             var newConnections = new List<Symbol.Connection>();
@@ -382,7 +371,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             var addCommands = new List<ICommand>();
             foreach (var newConnection in newConnections)
             {
-                addCommands.Add(new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex));
+                addCommands.Add(new AddConnectionCommand(parentUi.Symbol, newConnection, multiInputIndex));
             }
 
             if (replacesConnection)
@@ -406,28 +395,24 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             CompleteOperation();
         }
 
-        public static void CompleteAtOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, Symbol.OutputDefinition output)
+        public static void CompleteAtOutputSlot(Instance sourceInstance, SymbolChildUi sourceUi, Symbol.OutputDefinition output)
         {
             // Check for cycles
-            var sourceInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == sourceUi.SymbolChild.Id);
-            if (sourceInstance != null)
+            var deps = new HashSet<ISlot>();
+            foreach (var inputSlot in sourceInstance.Inputs)
             {
-                var deps = new HashSet<ISlot>();
-                foreach (var inputSlot in sourceInstance.Inputs)
-                {
-                    Structure.CollectSlotDependencies(inputSlot, deps);
-                }
+                Structure.CollectSlotDependencies(inputSlot, deps);
+            }
 
-                foreach (var d in deps)
-                {
-                    if (d.Parent.SymbolChildId != TempConnections[0].TargetParentOrChildId)
-                        continue;
+            foreach (var d in deps)
+            {
+                if (d.Parent.SymbolChildId != TempConnections[0].TargetParentOrChildId)
+                    continue;
 
-                    Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
-                    TempConnections.Clear();
-                    ConnectionSnapEndHelper.ResetSnapping();
-                    return;
-                }
+                Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
+                TempConnections.Clear();
+                ConnectionSnapEndHelper.ResetSnapping();
+                return;
             }
 
             var newConnection = new Symbol.Connection(sourceParentOrChildId: sourceUi.SymbolChild.Id,
@@ -435,26 +420,16 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                       targetParentOrChildId: TempConnections[0].TargetParentOrChildId,
                                                       targetSlotId: TempConnections[0].TargetSlotId);
             
-            _inProgressCommand.AddAndExecCommand(new AddConnectionCommand(parentSymbol, newConnection, 0));
+            _inProgressCommand.AddAndExecCommand(new AddConnectionCommand(sourceInstance.Parent.Symbol, newConnection, 0));
             CompleteOperation();
         }
 
         #region related to SymbolBrowser
-
-        public static void InitSymbolBrowserOnPrimaryGraphWindow(Vector2 canvasPosition)
-        {
-            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-            if (primaryGraphWindow == null)
-                return;
-
-            InitSymbolBrowserAtPosition(primaryGraphWindow.GraphCanvas.SymbolBrowser, canvasPosition);
-        }
-        
         
         /// <remarks>
         /// Assumes that a temp connection has be created earlier and is now dropped on the background
         /// </remarks>
-        public static void InitSymbolBrowserAtPosition(SymbolBrowser symbolBrowser, Vector2 canvasPosition)
+        public static void InitSymbolBrowserAtPosition(GraphWindow window, Vector2 canvasPosition)
         {
             if (TempConnections.Count == 0)
                 return;
@@ -464,6 +439,8 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 CompleteOperation();
                 return;
             }
+            
+            var symbolBrowser = window.SymbolBrowser;
 
             var firstConnectionType = TempConnections[0].ConnectionType;
             if (TempConnections.Count == 1)
@@ -516,7 +493,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
         }
         
 
-        public static void OpenSymbolBrowserAtOutput(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance,
+        public static void OpenSymbolBrowserAtOutput(GraphWindow window, SymbolChildUi childUi, Instance instance,
                                                      Guid outputId)
         {
             var primaryOutput = instance.Outputs.SingleOrDefault(o => o.Id == outputId);
@@ -524,19 +501,20 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 return;
             
             StartOperation("Insert Operator");
-            InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
+            InsertSymbolBrowser(window, childUi, instance, primaryOutput);
         }
 
-        public static void InsertSymbolInstance(Symbol symbol)
+        public static void InsertSymbolInstance(GraphWindow window, Symbol symbol)
         {
-            var instance = NodeSelection.GetSelectedInstance();
+            var selection = window.GraphCanvas.NodeSelection;
+            var instance = selection.GetSelectedInstanceWithoutComposition();
             if (instance == null)
             {
                 return;
             }
 
 
-            var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
+            var parentUi = instance.Parent.GetSymbolUi();
             var symbolChildUi = parentUi.ChildUis.FirstOrDefault(c => c.Id == instance.SymbolChildId);
 
             if (symbolChildUi == null)
@@ -563,7 +541,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
             if (connections.Count > 0)
             {
-                AdjustGraphLayoutForNewNode(instance.Parent.Symbol, connections[0]);
+                AdjustGraphLayoutForNewNode(instance.Parent.Symbol, connections[0], window.GraphCanvas.NodeSelection);
                 foreach (var oldConnection in connections)
                 {
                     var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
@@ -582,16 +560,17 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             }
             
             var commandsForUndo = new List<ICommand>();
-            var parentSymbol = instance.Parent.Symbol;
+            var parent = instance.Parent;
+            var parentSymbol = parent.Symbol;
 
-            var addSymbolChildCommand = new AddSymbolChildCommand(parentSymbol, symbol.Id) { PosOnCanvas = posOnCanvas };
+            var addSymbolChildCommand = new AddSymbolChildCommand(instance.Parent.Symbol, symbol.Id) { PosOnCanvas = posOnCanvas };
             commandsForUndo.Add(addSymbolChildCommand);
             addSymbolChildCommand.Do();
             var newSymbolChild = parentSymbol.Children.Single(entry => entry.Id == addSymbolChildCommand.AddedChildId);
 
             // Select new node
-            var symbolUi = SymbolUiRegistry.Entries[parentSymbol.Id];
-            var newChildUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+            var parentSymbolUi = parentSymbol.GetSymbolUi();
+            var newChildUi = parentSymbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
             if (newChildUi == null)
             {
                 Log.Warning("Unable to create new operator");
@@ -600,7 +579,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             
             var newInstance = instance.Parent.Children.Single(child => child.SymbolChildId == newChildUi.Id);
 
-            NodeSelection.SetSelectionToChildUi(newChildUi, newInstance);
+            selection.SetSelectionToChildUi(newChildUi, newInstance);
             
             foreach (var c in ConnectionMaker.TempConnections)
             {
@@ -619,7 +598,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                                           sourceSlotId: outputDef.Id,
                                                                           targetParentOrChildId: c.TargetParentOrChildId,
                                                                           targetSlotId: c.TargetSlotId);
-                        var addConnectionCommand = new AddConnectionCommand(parentSymbol, newConnectionToSource, c.MultiInputIndex);
+                        var addConnectionCommand = new AddConnectionCommand(parentSymbolUi.Symbol, newConnectionToSource, c.MultiInputIndex);
                         addConnectionCommand.Do();
                         commandsForUndo.Add(addConnectionCommand);
                         break;
@@ -636,7 +615,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                                          sourceSlotId: c.SourceSlotId,
                                                                          targetParentOrChildId: newSymbolChild.Id,
                                                                          targetSlotId: inputDef.Id);
-                        var connectionCommand = new AddConnectionCommand(parentSymbol, newConnectionToInput, c.MultiInputIndex);
+                        var connectionCommand = new AddConnectionCommand(parentSymbolUi.Symbol, newConnectionToInput, c.MultiInputIndex);
                         connectionCommand.Do();
                         commandsForUndo.Add(connectionCommand);
                         break;
@@ -647,7 +626,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
         }
         
-        public static void OpenBrowserWithSingleSelection(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance)
+        public static void OpenBrowserWithSingleSelection(GraphWindow window, SymbolChildUi childUi, Instance instance)
         {
             if (instance.Outputs.Count < 1)
                 return;
@@ -655,10 +634,10 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             //StartOperation("Insert Operator");
             var primaryOutput = instance.Outputs[0];
             
-            InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
+            InsertSymbolBrowser(window, childUi, instance, primaryOutput);
         }
 
-        private static void InsertSymbolBrowser(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance, ISlot primaryOutput)
+        private static void InsertSymbolBrowser(GraphWindow window, SymbolChildUi childUi, Instance instance, ISlot primaryOutput)
         {
             StartOperation("Insert Operator");
             
@@ -678,12 +657,11 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 var mainConnection = connections[0];
                 if (mainConnection.IsConnectedToSymbolOutput)
                 {
-                    var compId = instance.Parent.Symbol.Id;
-                    var compUi = SymbolUiRegistry.Entries[compId];
+                    var compUi = instance.Parent.GetSymbolUi();
                     
                     if(compUi.OutputUis.TryGetValue(mainConnection.TargetSlotId, out var outputUi))
                     {
-                        var moveCommand = new ModifyCanvasElementsCommand(compId, new List<ISelectableCanvasObject>() {outputUi});
+                        var moveCommand = new ModifyCanvasElementsCommand(compUi, new List<ISelectableCanvasObject>() {outputUi}, window.GraphCanvas.NodeSelection);
                         outputUi.PosOnCanvas += new Vector2(SymbolChildUi.DefaultOpSize.X, 0);
                         moveCommand.StoreCurrentValues();
                         _inProgressCommand.AddAndExecCommand(moveCommand);
@@ -691,7 +669,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 }
                 else
                 {
-                    AdjustGraphLayoutForNewNode(instance.Parent.Symbol, mainConnection);
+                    AdjustGraphLayoutForNewNode(instance.Parent.Symbol, mainConnection, window.GraphCanvas.NodeSelection);
                     foreach (var oldConnection in connections)
                     {
                         var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
@@ -707,12 +685,12 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 }
             }
 
-            symbolBrowser.OpenAt(childUi.PosOnCanvas + new Vector2(childUi.Size.X, 0)
+            window.SymbolBrowser.OpenAt(childUi.PosOnCanvas + new Vector2(childUi.Size.X, 0)
                                                      + new Vector2(SelectableNodeMovement.SnapPadding.X, 0),
                                  primaryOutput.ValueType, filterOutputType, false);
         }
 
-        public static void SplitConnectionWithSymbolBrowser(Symbol parentSymbol, SymbolBrowser symbolBrowser, Symbol.Connection connection,
+        public static void SplitConnectionWithSymbolBrowser(GraphWindow window, Symbol parentSymbol, Symbol.Connection connection,
                                                             Vector2 positionInCanvas)
         {
             if (connection.IsConnectedToSymbolOutput)
@@ -736,7 +714,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             var multiInputIndex = parentSymbol.GetMultiInputIndexFor(connection);
             //_tempDeletionCommands.Add(  new DeleteConnectionCommand(parentSymbol, connection, multiInputIndex));;
 
-            AdjustGraphLayoutForNewNode(parentSymbol, connection);
+            AdjustGraphLayoutForNewNode(parentSymbol, connection, window.GraphCanvas.NodeSelection);
             _inProgressCommand.AddAndExecCommand(new DeleteConnectionCommand(parentSymbol, connection, multiInputIndex));
             
             TempConnections.Clear();
@@ -754,12 +732,12 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                    connectionType,
                                                    multiInputIndex));
 
-            symbolBrowser.OpenAt(positionInCanvas, connectionType, connectionType, false);
+            window.SymbolBrowser.OpenAt(positionInCanvas, connectionType, connectionType, false);
         }
         #endregion
 
         public static void SplitConnectionWithDraggedNode(SymbolChildUi childUi, Symbol.Connection oldConnection, Instance instance,
-                                                          ModifyCanvasElementsCommand moveCommand)
+                                                          ModifyCanvasElementsCommand moveCommand, NodeSelection selection)
         { 
             StartOperation($"Split connection with {childUi.SymbolChild.ReadableName}");
             
@@ -805,29 +783,30 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
             //var connectionCommands = new List<ICommand>();
             var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
-            AdjustGraphLayoutForNewNode(parent.Symbol, oldConnection);
+            AdjustGraphLayoutForNewNode(parent.Symbol, oldConnection, selection);
 
-            var parentUi = SymbolUiRegistry.Entries[parent.Symbol.Id];
+            var parentUi = parent.Symbol.GetSymbolUi();
             var sourceUi = parentUi.ChildUis.Single(child => child.Id == sourceInstance.SymbolChildId);
             var targetUi = parentUi.ChildUis.Single(child => child.Id == targetInstance.SymbolChildId);
             var isSnappedHorizontally = (Math.Abs(sourceUi.PosOnCanvas.Y - targetUi.PosOnCanvas.Y) < 0.01f)
                                         && Math.Abs(sourceUi.PosOnCanvas.X + sourceUi.Size.X + SelectableNodeMovement.SnapPadding.X) - targetUi.PosOnCanvas.X <
                                         0.1f;
 
+            var parentSymbolUi = parent.GetSymbolUi();
             if (isSnappedHorizontally)
             {
                 childUi.PosOnCanvas = sourceUi.PosOnCanvas + new Vector2(sourceUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0);
-                _inProgressCommand.AddAndExecCommand(new ModifyCanvasElementsCommand(parent.Symbol.Id, new List<ISelectableCanvasObject>() { childUi }));
+                _inProgressCommand.AddAndExecCommand(new ModifyCanvasElementsCommand(parentSymbolUi, [childUi], selection));
             }
 
             _inProgressCommand.AddAndExecCommand(new DeleteConnectionCommand(parent.Symbol, oldConnection, multiInputIndex));
-            _inProgressCommand.AddAndExecCommand(new AddConnectionCommand(parent.Symbol, new Symbol.Connection(oldConnection.SourceParentOrChildId,
+            _inProgressCommand.AddAndExecCommand(new AddConnectionCommand(parentSymbolUi.Symbol, new Symbol.Connection(oldConnection.SourceParentOrChildId,
                                                                                                  oldConnection.SourceSlotId,
                                                                                                  childUi.SymbolChild.Id,
                                                                                                  firstMatchingInput.Id
                                                                                                 ), 0));
 
-            _inProgressCommand.AddAndExecCommand(new AddConnectionCommand(parent.Symbol, new Symbol.Connection(childUi.SymbolChild.Id,
+            _inProgressCommand.AddAndExecCommand(new AddConnectionCommand(parentSymbolUi.Symbol, new Symbol.Connection(childUi.SymbolChild.Id,
                                                                                                  primaryOutput.Id,
                                                                                                  oldConnection.TargetParentOrChildId,
                                                                                                  oldConnection.TargetSlotId
@@ -837,7 +816,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             CompleteOperation();
         }
 
-        public static void CompleteAtSymbolInputNode(Symbol parentSymbol, Symbol.InputDefinition inputDef)
+        public static void CompleteAtSymbolInputNode(SymbolUi parentSymbolUi, Symbol.InputDefinition inputDef)
         {
             //StartOperation("Insert Node");
             //var macroCommand = new MacroCommand("Insert node");
@@ -847,7 +826,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                           sourceSlotId: inputDef.Id,
                                                           targetParentOrChildId: c.TargetParentOrChildId,
                                                           targetSlotId: c.TargetSlotId);
-                _inProgressCommand.AddAndExecCommand(new AddConnectionCommand(parentSymbol, newConnection, 0));
+                _inProgressCommand.AddAndExecCommand(new AddConnectionCommand(parentSymbolUi.Symbol, newConnection, 0));
             }
 
             //UndoRedoStack.AddAndExecute(macroCommand);

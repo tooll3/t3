@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NAudio.Midi;
+﻿using NAudio.Midi;
 using Operators.Utils;
 using T3.Core.IO;
-using T3.Core.Logging;
 using T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations.Model;
 

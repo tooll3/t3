@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi
+﻿namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi
 {
     public class Triangle
     {

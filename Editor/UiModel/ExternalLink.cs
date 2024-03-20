@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using T3.Editor.Gui.Styling;
+﻿using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.UiModel
 {

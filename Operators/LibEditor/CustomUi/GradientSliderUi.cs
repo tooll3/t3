@@ -18,13 +18,13 @@ namespace libEditor.CustomUi
         private static ChangeInputValueCommand _inputValueCommandInFlight;
         private static object _inputSlotForActiveCommand;
 
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
         {
             if (instance is not SampleGradient gradientInstance
                 || !ImGui.IsRectVisible(selectableScreenRect.Min, selectableScreenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
-            var dragWidth = WidgetElements.DrawDragIndicator(selectableScreenRect, drawList);
+            var dragWidth = WidgetElements.DrawDragIndicator(selectableScreenRect, drawList, canvasScale);
             var innerRect = selectableScreenRect;
             innerRect.Min.X += dragWidth;
             

@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using T3.Core.Compilation;
-using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.UserData;
 
@@ -250,6 +246,9 @@ internal class CsProjectFile
         const string guidPlaceholder = "{{GUID}}";
         const string defaultReferencesPlaceholder = "{{DEFAULT_REFS}}";
         const string nameSpacePlaceholder = "{{NAMESPACE}}";
+        const string usernamePlaceholder = "{{USER}}";
+
+        string username = nameSpace.Split('.').First();
 
         var homeGuid = Guid.NewGuid().ToString();
         string csprojPath = null;
@@ -259,7 +258,8 @@ internal class CsProjectFile
                            .Replace(ProjectNamePlaceholder, projectName)
                            .Replace(guidPlaceholder, homeGuid)
                            .Replace(defaultReferencesPlaceholder, CoreReferences)
-                           .Replace(nameSpacePlaceholder, nameSpace);
+                           .Replace(nameSpacePlaceholder, nameSpace)
+                           .Replace(usernamePlaceholder, username);
 
             var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file))
                                           .Replace(ProjectNamePlaceholder, projectName)

@@ -1,3 +1,4 @@
+using System.Numerics;
 using ImGuiNET;
 using lib.anim._obsolete;
 using T3.Core.Operator;
@@ -9,14 +10,14 @@ namespace libEditor.CustomUi
 {
     public static class Jitter2dUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is _Jitter2d jitter2d)
                 ||!ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
             
                 return SymbolChildUi.CustomUiResult.None;
             
-            if (WidgetElements.DrawRateLabelWithTitle(jitter2d.Rate, screenRect, drawList, nameof(jitter2d)))
+            if (WidgetElements.DrawRateLabelWithTitle(jitter2d.Rate, screenRect, drawList, nameof(jitter2d), canvasScale))
             {
                 jitter2d.Rate.Input.IsDefault = false;
                 jitter2d.Rate.DirtyFlag.Invalidate();

@@ -57,7 +57,7 @@ namespace lib._3d.draw
         #region custom material dropdown
         string ICustomDropdownHolder.GetValueForInput(Guid inputId)
         {
-            return inputId != UseMaterialId.Input.InputDefinition.Id 
+            return inputId != UseMaterialId.Input.Id 
                        ? "Undefined input" 
                        : UseMaterialId.TypedInputValue.Value;
         }
@@ -77,7 +77,7 @@ namespace lib._3d.draw
 
         void ICustomDropdownHolder.HandleResultForInput(Guid inputId, string result)
         {
-            if (inputId != UseMaterialId.Input.InputDefinition.Id)
+            if (inputId != UseMaterialId.Input.Id)
                 return;
             
             UseMaterialId.SetTypedInputValue(result);

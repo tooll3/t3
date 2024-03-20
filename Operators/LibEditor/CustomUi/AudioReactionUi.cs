@@ -14,7 +14,7 @@ namespace libEditor.CustomUi
 {
     public static class AudioReactionUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is AudioReaction audioReaction2)
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))

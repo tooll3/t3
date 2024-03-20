@@ -1,15 +1,11 @@
 #nullable enable
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
 
 namespace T3.Editor.Gui.Graph;
 
-public static partial class PlayerExporter
+internal static partial class PlayerExporter
 {
     private class ExportInfo
     {

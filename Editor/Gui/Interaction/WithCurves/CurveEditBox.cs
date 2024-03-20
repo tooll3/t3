@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
@@ -18,7 +14,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
     /// Note: This component is currently not used because most interactions can be completed by dragging keyframes with
     /// snapping or using the TimeRangeSelection's scale functionality. 
     /// </summary>
-    public class CurveEditBox : IValueSnapAttractor
+    internal class CurveEditBox : IValueSnapAttractor
     {
         public CurveEditBox(ICanvas canvas, ValueSnapHandler snapHandler)
         {
@@ -235,7 +231,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         {
             // FIXME: getting current curves is complicated here.
             var mockNotWorking = new List<Curve>();
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, _selectedKeyframes, mockNotWorking);
+            _changeKeyframesCommand = new ChangeKeyframesCommand(_selectedKeyframes, mockNotWorking);
         }
         
         

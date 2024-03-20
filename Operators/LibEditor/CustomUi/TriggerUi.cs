@@ -6,7 +6,6 @@ using lib.math.@bool;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
@@ -14,7 +13,7 @@ namespace libEditor.CustomUi
 {
     public static class TriggerUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (instance is not Trigger trigger
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
@@ -22,7 +21,7 @@ namespace libEditor.CustomUi
                 return SymbolChildUi.CustomUiResult.None;
             }
 
-            var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList);
+            var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList, canvasScale);
             var colorAsVec4 = trigger.ColorInGraph.TypedInputValue.Value;
             var color = new Color(colorAsVec4);
 
@@ -41,15 +40,15 @@ namespace libEditor.CustomUi
                             : symbolChild.ReadableName;
 
             drawList.AddRectFilled(activeRect.Min, activeRect.Max, color.Fade(refValue ? 0.5f : 0.1f));
-            var canvasScale = GraphCanvas.Current.Scale.Y;
+            var canvasScaleY = canvasScale.Y;
 
-            var font = WidgetElements.GetPrimaryLabelFont(canvasScale);
-            var labelColor = WidgetElements.GetPrimaryLabelColor(canvasScale);
+            var font = WidgetElements.GetPrimaryLabelFont(canvasScaleY);
+            var labelColor = WidgetElements.GetPrimaryLabelColor(canvasScaleY);
 
             ImGui.PushFont(font);
             var labelSize = ImGui.CalcTextSize(label);
 
-            var labelPos = activeRect.GetCenter() - labelSize/2 - new Vector2(3 * canvasScale,0);
+            var labelPos = activeRect.GetCenter() - labelSize/2 - new Vector2(3 * canvasScaleY,0);
             drawList.AddText(font, font.FontSize, labelPos, labelColor, label);
             ImGui.PopFont();
             

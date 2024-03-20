@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Interaction;
@@ -43,7 +39,6 @@ internal static class ParameterPopUp
     public static void Open(Instance instance)
     {
         _selectedInstance = instance;
-        _graphCanvas = GraphCanvas.Current;
 
         NodeIdRequestedForParameterWindowActivation = Guid.Empty;
 
@@ -54,11 +49,11 @@ internal static class ParameterPopUp
 
     public static void DrawParameterPopUp(GraphWindow graphWindow)
     {
-        if (!_isOpen || _selectedInstance == null || _graphCanvas == null)
+        if (!_isOpen || _selectedInstance == null)
             return;
 
-        var symbolUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
-        var compositionSymbolUi = SymbolUiRegistry.Entries[_graphCanvas.CompositionOp.Symbol.Id];
+        var symbolUi = _selectedInstance.GetSymbolUi();
+        var compositionSymbolUi = graphWindow.CompositionOp.GetSymbolUi();
         var symbolChildUi = compositionSymbolUi.ChildUis.SingleOrDefault(symbolChildUi2 => symbolChildUi2.Id == _selectedInstance.SymbolChildId);
         if (symbolChildUi == null)
         {
@@ -66,13 +61,13 @@ internal static class ParameterPopUp
             return;
         }
 
-        if (!NodeSelection.IsAnythingSelected())
+        if (!graphWindow.GraphCanvas.NodeSelection.IsAnythingSelected())
         {
             Close();
             return;
         }
 
-        var nodeScreenRect = _graphCanvas.TransformRect(ImRect.RectWithSize(symbolChildUi.PosOnCanvas, symbolChildUi.Size));
+        var nodeScreenRect = graphWindow.GraphCanvas.TransformRect(ImRect.RectWithSize(symbolChildUi.PosOnCanvas, symbolChildUi.Size));
         var screenPos = new Vector2(nodeScreenRect.Min.X + 5, nodeScreenRect.Max.Y + 5);
         var height = _lastRequiredHeight.Clamp(MinHeight, MaxHeight);
         ImGui.SetNextWindowPos(screenPos);
@@ -128,7 +123,7 @@ internal static class ParameterPopUp
                 case ViewModes.Parameters:
                     FrameStats.Current.OpenedPopUpName = ParameterPopUpName;
                     ImGui.PushFont(Fonts.FontSmall);
-                    ParameterWindow.DrawParameters(_selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi, hideNonEssentials: true);
+                    ParameterWindow.DrawParameters(graphWindow, _selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi, hideNonEssentials: true);
                     ImGui.PopFont();
                     break;
                 case ViewModes.Presets:
@@ -190,7 +185,6 @@ internal static class ParameterPopUp
     private static bool _isOpen;
     private static int _focusDelayCount;
 
-    private static GraphCanvas _graphCanvas;
     private static ViewModes _viewMode = ViewModes.Parameters;
     private static Instance _selectedInstance;
     private const string ParameterPopUpName = "parameterContextPopup";

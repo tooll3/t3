@@ -1,6 +1,4 @@
-﻿using System;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.IO;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.UiHelpers;

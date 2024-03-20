@@ -1,6 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;

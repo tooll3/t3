@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
+using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
@@ -12,6 +10,7 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.SystemUi;
@@ -25,7 +24,7 @@ internal class ParameterWindow : Window
     public ParameterWindow()
     {
         _instanceCounter++;
-        Config.Title = "Parameters##" + _instanceCounter;
+        Config.Title = LayoutHandling.ParametersPrefix + _instanceCounter;
         AllowMultipleInstances = true;
         Config.Visible = true;
         MenuTitle = "Open New Parameter";
@@ -38,26 +37,18 @@ internal class ParameterWindow : Window
         return _parameterWindowInstances;
     }
 
-    protected override void DrawAllInstances()
-    {
-        // Convert to array to allow closing of windows
-        foreach (var w in _parameterWindowInstances.ToArray())
-        {
-            w.DrawOneInstance();
-        }
-    }
-
     protected override void Close()
     {
         _parameterWindowInstances.Remove(this);
     }
+
 
     protected override void AddAnotherInstance()
     {
         // ReSharper disable once ObjectCreationAsStatement
         new ParameterWindow(); // Required to call constructor
     }
-
+    
     protected override void DrawContent()
     {
         // Insert invisible spill over input to catch accidental imgui focus attempts
@@ -67,23 +58,26 @@ internal class ParameterWindow : Window
             ImGui.InputText("##imgui workaround", ref tmpBuffer, 1);
             ImGui.SameLine();
         }
+        
+        var graphWindow = GraphWindow.Focused;
+        if(graphWindow == null)
+            return;
 
-        var instance = NodeSelection.GetFirstSelectedInstance();
+        var graphCanvas = graphWindow.GraphCanvas;
+        var nodeSelection = graphCanvas.NodeSelection;
+
+        var instance = nodeSelection.GetSelectedInstanceWithoutComposition();
+        
         if (instance != null)
         {
-            if (!SymbolUiRegistry.Entries.TryGetValue(instance.Symbol.Id, out var symbolUi))
-            {
-                Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
-                return;
-            }
-
-            OperatorHelp.EditDescriptionDialog.Draw(instance.Symbol);
+            var symbolUi = instance.GetSymbolUi();
+            OperatorHelp.EditDescriptionDialog.Draw(symbolUi.Symbol);
             RenameInputDialog.Draw();
 
             SymbolChildUi symbolChildUi = null;
             if (instance.Parent != null)
             {
-                var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
+                var parentUi = instance.Parent.GetSymbolUi();
                 symbolChildUi = parentUi.ChildUis.SingleOrDefault(childUi => childUi.Id == instance.SymbolChildId);
                 if (symbolChildUi == null)
                 {
@@ -92,18 +86,18 @@ internal class ParameterWindow : Window
                 }
             }
 
-            if (DrawSelectedSymbolHeader(instance, symbolChildUi, symbolUi))
+            if (DrawSelectedSymbolHeader(instance))
             {
                 symbolUi.FlagAsModified();
             }
 
             if (instance.Parent != null && !_help.IsActive)
             {
-                var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
-                var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
+                var selectedChildSymbolUi = instance.GetSymbolUi();
+                var compositionSymbolUi = instance.Parent.GetSymbolUi();
 
                 // Draw parameters
-                DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false);
+                DrawParameters(graphWindow, instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false);
                 FormInputs.AddVerticalSpace(15);
 
                 _help.DrawHelpSummary(symbolUi);
@@ -121,11 +115,11 @@ internal class ParameterWindow : Window
             return;
         }
 
-        if (!NodeSelection.IsAnythingSelected())
+        if (!nodeSelection.IsAnythingSelected())
             return;
 
         // Draw parameter Settings
-        foreach (var inputUi in NodeSelection.GetSelectedNodes<IInputUi>())
+        foreach (var inputUi in nodeSelection.GetSelectedNodes<IInputUi>())
         {
             ImGui.PushID(inputUi.Id.GetHashCode());
             ImGui.PushFont(Fonts.FontLarge);
@@ -140,7 +134,7 @@ internal class ParameterWindow : Window
         }
 
         // Draw Annotation settings
-        foreach (var annotation in NodeSelection.GetSelectedNodes<Annotation>())
+        foreach (var annotation in nodeSelection.GetSelectedNodes<Annotation>())
         {
             ImGui.PushID(annotation.Id.GetHashCode());
             ImGui.PushFont(Fonts.FontLarge);
@@ -159,7 +153,7 @@ internal class ParameterWindow : Window
         InsideOpened,
     }
 
-    private bool DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi, SymbolUi symbolUi)
+    private bool DrawSelectedSymbolHeader(Instance op)
     {
         var modified = false;
 
@@ -185,13 +179,15 @@ internal class ParameterWindow : Window
 
             var symbol = op.Symbol;
             var package = symbol.SymbolPackage;
-            if (package is EditableSymbolProject)
+            if (!package.IsReadOnly)
             {
-                bool namespaceModified = InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
-                                                             SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i));
+                bool namespaceModified = InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit, EditorSymbolPackage.AllSymbols
+                                                                          .Select(i => i.Namespace)
+                                                                          .Distinct()
+                                                                          .OrderBy(i => i));
                 if (namespaceModified && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 {
-                    if (!EditableSymbolProject.ChangeSymbolNamespace(symbol.Id, namespaceForEdit, out var reason))
+                    if (!EditableSymbolProject.ChangeSymbolNamespace(symbol, namespaceForEdit, out var reason))
                     {
                         EditorUi.Instance.ShowMessageBox(reason, "Could not rename namespace");
                     }
@@ -199,14 +195,17 @@ internal class ParameterWindow : Window
             }
             else
             {
-                ImGui.TextUnformatted(op.Symbol.Namespace);
+                ImGui.Text(op.Symbol.Namespace);
             }
 
             ImGui.PopStyleColor();
         }
 
+        var symbolUi = op.GetSymbolUi();
         _help.DrawHelpIcon(symbolUi);
 
+        var symbolChildUi = op.GetSymbolChildUi();
+        
         // SymbolChild Name
         if (symbolChildUi != null)
         {
@@ -307,7 +306,7 @@ internal class ParameterWindow : Window
     /// Draw all parameters of the selected instance.
     /// The actual implementation is done in <see cref="InputValueUi{T}.DrawParameterEdit"/>  
     /// </summary>
-    public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
+    public static void DrawParameters(GraphWindow window, Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
                                       SymbolUi compositionSymbolUi, bool hideNonEssentials)
     {
         var groupState = GroupState.None;
@@ -383,7 +382,7 @@ internal class ParameterWindow : Window
 
             if (editState == InputEditStateFlags.ShowOptions)
             {
-                NodeSelection.SetSelection(inputUi);
+                window.GraphCanvas.NodeSelection.SetSelection(inputUi);
             }
 
             ImGui.PopID();

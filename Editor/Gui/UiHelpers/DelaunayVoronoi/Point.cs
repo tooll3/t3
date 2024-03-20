@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Numerics;
-
-namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi
+﻿namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi
 {
     public class Point
     {

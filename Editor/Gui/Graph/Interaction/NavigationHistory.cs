@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using T3.Core.Logging;
-using T3.Core.Operator;
+﻿using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
@@ -11,8 +9,13 @@ namespace T3.Editor.Gui.Graph.Interaction;
 /// Manage the navigation between previously selected instances.
 /// This can also be used sort items by relevance in search dialog.
 /// </summary>
-internal static class NavigationHistory
+internal class NavigationHistory
 {
+
+    public NavigationHistory(Structure structure)
+    {
+        _structure = structure;
+    }
         
     /// <summary>
     /// abC   select D -> append...
@@ -21,7 +24,7 @@ internal static class NavigationHistory
     /// bcdA
     /// 
     /// </summary>
-    public static void UpdateSelectedInstance(Instance instance)
+    public void UpdateSelectedInstance(Instance instance)
     {
         var path = OperatorUtils.BuildIdPathForInstance(instance);
         var hash = GetHashForIdPath(path);
@@ -62,19 +65,19 @@ internal static class NavigationHistory
         _currentIndex = 0;
     }
 
-    public static Instance GetLastSelectedInstance()
+    public Instance GetLastSelectedInstance()
     {
         if (_previousSelections.Count == 0)
             return null;
         
-        return _previousSelections.Count < _currentIndex ? null : Structure.GetInstanceFromIdPath(_previousSelections[ _currentIndex]);
+        return _previousSelections.Count < _currentIndex ? null : _structure.GetInstanceFromIdPath(_previousSelections[_currentIndex]);
     }
 
-    public static IEnumerable<Instance> GetPreviouslySelectedInstances()
+    public IEnumerable<Instance> GetPreviouslySelectedInstances()
     {
         foreach (var path in _previousSelections)
         {
-            var instance = Structure.GetInstanceFromIdPath(path);
+            var instance = _structure.GetInstanceFromIdPath(path);
             if (instance == null)
                 continue;
 
@@ -82,36 +85,37 @@ internal static class NavigationHistory
         }
     }
 
-    internal static void NavigateBackwards()
+    internal List<Guid>? NavigateBackwards()
     {
         while (_currentIndex < _previousSelections.Count - 1)
         {
             _currentIndex++;
             var path = _previousSelections[_currentIndex];
-            if (Structure.GetInstanceFromIdPath(path) == null)
+            if (_structure.GetInstanceFromIdPath(path) == null)
                 continue;
-            
-            GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
-            break;
+
+            return path;
         }
+
+        return null;
     }
 
-    internal static void NavigateForward()
+    internal List<Guid>? NavigateForward()
     {
         while (_currentIndex > 0)
         {
             _currentIndex--;
             var path = _previousSelections[_currentIndex];
-            if (Structure.GetInstanceFromIdPath(path) == null)
+            if (_structure.GetInstanceFromIdPath(path) == null)
                 continue;
-            
-            GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
-            break;
-            
+
+            return path;
         }
+
+        return null;
     }
 
-    private static long GetHashForIdPath(List<Guid> path)
+    private long GetHashForIdPath(List<Guid> path)
     {
         long hash = 31.GetHashCode();
         foreach (var id in path)
@@ -122,10 +126,9 @@ internal static class NavigationHistory
         return hash;
     }
 
-    private static int _currentIndex;
+    private int _currentIndex;
+    private Structure _structure;
     
-    private static readonly List<List<Guid>> _previousSelections = new();
-    private static readonly Dictionary<long, List<Guid>> _idPathsByHash = new();
-
-
+    private readonly List<List<Guid>> _previousSelections = new();
+    private readonly Dictionary<long, List<Guid>> _idPathsByHash = new();
 }

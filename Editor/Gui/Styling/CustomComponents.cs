@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
@@ -404,7 +400,7 @@ namespace T3.Editor.Gui.Styling
         {
             drawList.PushClipRect(areaOnScreen.Min, areaOnScreen.Max, true);
             var lineColor = new Color(0f, 0f, 0f, 0.2f);
-            var stripeOffset = GraphCanvas.Current == null ? patternWidth : (patternWidth / 2 * GraphCanvas.Current.Scale.X);
+            var stripeOffset = GraphWindow.Focused == null ? patternWidth : (patternWidth / 2 * GraphWindow.Focused.GraphCanvas.Scale.X);
             var lineWidth = stripeOffset / 2.7f;
 
             var h = areaOnScreen.GetHeight();
@@ -610,14 +606,16 @@ namespace T3.Editor.Gui.Styling
         /// <summary>
         /// Draws a frame that indicates if the current window is focused.
         /// This is useful for windows that have window specific keyboard short cuts.
+        /// Returns true if the window is focused
         /// </summary>
-        public static void DrawWindowFocusFrame()
+        public static bool DrawWindowFocusFrame()
         {
             if (!ImGui.IsWindowFocused())
-                return;
+                return false;
             
             var min = ImGui.GetWindowPos() + new Vector2(1,1);
             ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(-2,-1) , UiColors.ForegroundFull.Fade(0.1f));
+            return true;
         }
 
         public static string HumanReadablePascalCase(string f)

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using T3.Core.Logging;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.SystemUi;

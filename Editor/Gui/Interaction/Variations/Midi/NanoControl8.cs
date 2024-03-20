@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing;
+﻿using T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing;
 
 namespace T3.Editor.Gui.Interaction.Variations.Midi
 {

@@ -1,9 +1,6 @@
 #nullable enable
-using System;
 using System.Collections.Frozen;
-using System.Collections.Generic;
 using System.Diagnostics;
-using T3.Core.Logging;
 
 namespace T3.Editor.Compilation;
 

@@ -47,7 +47,7 @@ internal static partial class Program
                                      {
                                          var symbolPackage = new PlayerSymbolPackage(assemblyInfo);
                                          symbolPackage.InitializeResources();
-                                         symbolPackage.LoadSymbols(false, out var newSymbolsWithFiles, out _);
+                                         symbolPackage.LoadSymbols(false, out var newSymbolsWithFiles, out _, false);
                                          return new PackageLoadInfo(symbolPackage, newSymbolsWithFiles);
                                      })
                              .ToArray();

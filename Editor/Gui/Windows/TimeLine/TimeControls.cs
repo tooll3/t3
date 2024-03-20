@@ -1,9 +1,7 @@
-using System;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
@@ -49,12 +47,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 var frameDuration = UserSettings.Config.FrameStepAmount switch
                                         {
-                                            TimeLineCanvas.FrameStepAmount.FrameAt60Fps => 1 / 60f,
-                                            TimeLineCanvas.FrameStepAmount.FrameAt30Fps => 1 / 30f,
-                                            TimeLineCanvas.FrameStepAmount.FrameAt15Fps => 1 / 15f,
-                                            TimeLineCanvas.FrameStepAmount.Bar          => (float)playback.SecondsFromBars(1),
-                                            TimeLineCanvas.FrameStepAmount.Beat         => (float)playback.SecondsFromBars(1 / 4f),
-                                            TimeLineCanvas.FrameStepAmount.Tick         => (float)playback.SecondsFromBars(1 / 16f),
+                                            FrameStepAmount.FrameAt60Fps => 1 / 60f,
+                                            FrameStepAmount.FrameAt30Fps => 1 / 30f,
+                                            FrameStepAmount.FrameAt15Fps => 1 / 15f,
+                                            FrameStepAmount.Bar          => (float)playback.SecondsFromBars(1),
+                                            FrameStepAmount.Beat         => (float)playback.SecondsFromBars(1 / 4f),
+                                            FrameStepAmount.Tick         => (float)playback.SecondsFromBars(1 / 16f),
                                             _                                           => 1
                                         };
 
@@ -146,13 +144,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
         }
 
-        internal static void DrawTimeControls(TimeLineCanvas timeLineCanvas)
+        internal static void DrawTimeControls(TimeLineCanvas timeLineCanvas, Instance composition)
         {
             var playback = Playback.Current; // TODO, this should be non-static eventually
-
-            var composition = GraphCanvas.Current?.CompositionOp;
-            if (composition == null)
-                return;
 
             // Settings
             PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var compositionWithSettings, out var settings);
@@ -166,7 +160,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.OpenPopup(PlaybackSettingsPopup.PlaybackSettingsPopupId);
             }
 
-            PlaybackSettingsPopup.DrawPlaybackSettings();
+            PlaybackSettingsPopup.DrawPlaybackSettings(compositionWithSettings);
 
             CustomComponents.TooltipForLastItem("Timeline Settings",
                                                 "Switch between soundtrack and VJ modes. Control BPM and other inputs.");
@@ -523,12 +517,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 CustomComponents.ButtonStates state = CustomComponents.ButtonStates.Normal;
                 switch (UserSettings.Config.HoverMode)
                 {
-                    case GraphCanvas.HoverModes.Disabled:
+                    case GraphHoverModes.Disabled:
                         state = CustomComponents.ButtonStates.Dimmed;
                         icon = Icon.HoverPreviewDisabled;
                         hoverModeTooltip = "No preview images on hover";
                         break;
-                    case GraphCanvas.HoverModes.Live:
+                    case GraphHoverModes.Live:
                         icon = Icon.HoverPreviewPlay;
                         hoverModeTooltip = "Live Hover Preview - Render explicit thumbnail image.";
                         hoverModeAdditionalTooltip = "This can interfere with the rendering of the current output.";
@@ -543,7 +537,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 if (CustomComponents.IconButton(icon, ControlSize, state))
                 {
                     UserSettings.Config.HoverMode =
-                        (GraphCanvas.HoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
+                        (GraphHoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphHoverModes)).Length);
                 }
 
                 CustomComponents.TooltipForLastItem(hoverModeTooltip, hoverModeAdditionalTooltip);

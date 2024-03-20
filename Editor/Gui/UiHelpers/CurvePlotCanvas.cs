@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.TimeLine.Raster;
@@ -53,7 +52,7 @@ namespace T3.Editor.Gui.UiHelpers
                 _lastValue = value;
             }
             
-            _canvas.UpdateCanvas();
+            _canvas.UpdateCanvas(out _);
             dl.PushClipRect(_canvas.WindowPos, _canvas.WindowPos + _canvas.WindowSize, true);
             
             _raster.Draw(_canvas);

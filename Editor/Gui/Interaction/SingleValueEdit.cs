@@ -1,9 +1,7 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Globalization;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;

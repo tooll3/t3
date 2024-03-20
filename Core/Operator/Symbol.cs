@@ -31,7 +31,7 @@ namespace T3.Core.Operator
 
         public readonly List<Instance> InstancesOfSymbol = new();
         public readonly List<SymbolChild> Children = new();
-        public readonly List<Connection> Connections = new();
+        public List<Connection> Connections { get; init; } = new();
 
         /// <summary>
         /// Inputs of this symbol. input values are the default values (exist only once per symbol)
@@ -96,75 +96,6 @@ namespace T3.Core.Operator
             if (symbolPackage != null)
             {
                 UpdateInstanceType();
-                return;
-            }
-
-            // input identified by base interface
-
-            var fieldInfos = instanceType.GetFields(BindingFlags.Instance | BindingFlags.Public);
-            var inputInfos = fieldInfos.Where(field => field.FieldType.IsAssignableTo(typeof(IInputSlot)));
-            var inputDefs = new List<InputDefinition>();
-            foreach (var inputInfo in inputInfos)
-            {
-                var customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false);
-                Debug.Assert(customAttributes.Length == 1);
-                var attribute = (InputAttribute)customAttributes[0];
-                var isMultiInput = inputInfo.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
-                var valueType = inputInfo.FieldType.GetGenericArguments()[0];
-
-                if (!TypeNameRegistry.Entries.ContainsKey(valueType))
-                {
-                    Log.Error($"Skipping input {Name}.{inputInfo.Name} with undefined type {valueType}...");
-                    continue;
-                }
-
-                var inputDef = CreateInputDefinition(attribute.Id, inputInfo.Name, isMultiInput, valueType);
-                inputDefs.Add(inputDef);
-            }
-
-            // add in order for input ids that are given
-            if (orderedInputIds != null)
-            {
-                foreach (Guid id in orderedInputIds)
-                {
-                    var inputDefinition = inputDefs.Find(inputDef => inputDef != null && inputDef.Id == id);
-
-                    if (inputDefinition != null)
-                    {
-                        InputDefinitions.Add(inputDefinition);
-                        inputDefs.Remove(inputDefinition);
-                    }
-                }
-            }
-
-            // add the ones where no id was available to the end
-            InputDefinitions.AddRange(inputDefs);
-
-            // outputs identified by attribute
-            var outputs = (from field in fieldInfos
-                           let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
-                           from attr in attributes
-                           select (field, attributes)).ToArray();
-            foreach (var (output, attributes) in outputs)
-            {
-                var valueType = output.FieldType.GenericTypeArguments[0];
-                var attribute = (OutputAttribute)attributes.First();
-                var outputDataType = GetOutputDataType(output);
-
-                if (!TypeNameRegistry.Entries.ContainsKey(valueType))
-                {
-                    Log.Error($"Skipping output {Name}.{output.Name} with undefined type {valueType}...");
-                    continue;
-                }
-
-                OutputDefinitions.Add(new OutputDefinition
-                                          {
-                                              Id = attribute.Id,
-                                              Name = output.Name,
-                                              ValueType = valueType,
-                                              OutputDataType = outputDataType,
-                                              DirtyFlagTrigger = attribute.DirtyFlagTrigger
-                                          });
             }
         }
 
@@ -178,18 +109,9 @@ namespace T3.Core.Operator
                 return;
 
             // set the static TypeSymbol field so that instances can access their resources in their constructor
-            var genericType = symbolPackage.AssemblyInformation.GenericTypes[instanceType];
-            var staticFieldInfos = genericType.GetFields(BindingFlags.Static | BindingFlags.NonPublic);
-            var staticSymbolField = staticFieldInfos.Single(x => x.Name == "_typeSymbol");
+            var typeInfo = symbolPackage.AssemblyInformation.OperatorTypeInfo[Id];
+            var staticSymbolField = typeInfo.StaticSymbolField;
             staticSymbolField.SetValue(null, this);
-        }
-
-        private static Type GetOutputDataType(FieldInfo output)
-        {
-            Type outputDataInterfaceType = (from interfaceType in output.FieldType.GetInterfaces()
-                                            where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IOutputDataUser<>)
-                                            select interfaceType).SingleOrDefault();
-            return outputDataInterfaceType?.GetGenericArguments().Single();
         }
 
         public void Dispose()
@@ -212,41 +134,43 @@ namespace T3.Core.Operator
 
         public void UpdateInstanceType()
         {
-            var instanceType = InstanceType;
-
             var newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<ConnectionEntry>)>();
 
+            var operatorInfo = SymbolPackage.AssemblyInformation.OperatorTypeInfo[Id];
+
             // check if inputs have changed
-            var inputs = SymbolPackage.AssemblyInformation.InputFields[instanceType];
+            var inputs = operatorInfo.Inputs;
 
             // todo: it's probably better to first check if there's a change and only then allocate
             var oldInputDefinitions = new List<InputDefinition>(InputDefinitions);
             InputDefinitions.Clear();
-            foreach (var (info, attribute) in inputs)
+            foreach (var info in inputs)
             {
-                var alreadyExistingInput = oldInputDefinitions.FirstOrDefault(i => i.Id == attribute.Id);
+                var id = info.Attribute.Id;
+                var alreadyExistingInput = oldInputDefinitions.FirstOrDefault(i => i.Id == id);
                 if (alreadyExistingInput != null)
                 {
                     alreadyExistingInput.Name = info.Name;
-                    alreadyExistingInput.IsMultiInput = info.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
+                    alreadyExistingInput.IsMultiInput = info.IsMultiInput;
                     InputDefinitions.Add(alreadyExistingInput);
                     oldInputDefinitions.Remove(alreadyExistingInput);
                 }
                 else
                 {
-                    var isMultiInput = info.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
-                    var valueType = info.FieldType.GetGenericArguments()[0];
-                    var inputDef = CreateInputDefinition(attribute.Id, info.Name, isMultiInput, valueType);
+                    var isMultiInput = info.IsMultiInput;
+                    var valueType = info.GenericArguments[0];
+                    var inputDef = CreateInputDefinition(id, info.Name, isMultiInput, valueType);
                     InputDefinitions.Add(inputDef);
                 }
             }
 
             // check if outputs have changed
-            var outputs = SymbolPackage.AssemblyInformation.OutputFields[instanceType];
+            var outputs = operatorInfo.Outputs;
             var oldOutputDefinitions = new List<OutputDefinition>(OutputDefinitions);
             OutputDefinitions.Clear();
-            foreach (var (output, attribute) in outputs)
+            foreach (var info in outputs)
             {
+                var attribute = info.Attribute;
                 var alreadyExistingOutput = oldOutputDefinitions.FirstOrDefault(o => o.Id == attribute.Id);
                 if (alreadyExistingOutput != null)
                 {
@@ -255,14 +179,12 @@ namespace T3.Core.Operator
                 }
                 else
                 {
-                    var valueType = output.FieldType.GenericTypeArguments[0];
-                    var outputDataType = GetOutputDataType(output);
                     OutputDefinitions.Add(new OutputDefinition
                                               {
                                                   Id = attribute.Id,
-                                                  Name = output.Name,
-                                                  ValueType = valueType,
-                                                  OutputDataType = outputDataType,
+                                                  Name = info.Name,
+                                                  ValueType = info.GenericArguments[0],
+                                                  OutputDataType = info.OutputDataType,
                                                   DirtyFlagTrigger = attribute.DirtyFlagTrigger
                                               });
                 }
@@ -445,25 +367,20 @@ namespace T3.Core.Operator
         private static InputDefinition CreateInputDefinition(Guid id, string name, bool isMultiInput, Type valueType)
         {
             // create new input definition
-            try
-            {
-                InputValue defaultValue = InputValueCreators.Entries[valueType]();
-                return new InputDefinition { Id = id, Name = name, DefaultValue = defaultValue, IsMultiInput = isMultiInput };
-            }
-            catch
+            if (!InputValueCreators.Entries.TryGetValue(valueType, out var creationFunc))
             {
                 Log.Error("Can't create default value for " + valueType);
                 return null;
             }
-        }
 
-        public void SwapInputs(int indexA, int indexB)
-        {
-            InputDefinitions.Swap(indexA, indexB);
-
-            foreach (var instance in InstancesOfSymbol)
+            try
             {
-                instance.Inputs.Swap(indexA, indexB);
+                return new InputDefinition { Id = id, Name = name, DefaultValue = creationFunc(), IsMultiInput = isMultiInput };
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to create default value for {valueType}: {e}");
+                return null;
             }
         }
 
@@ -505,8 +422,9 @@ namespace T3.Core.Operator
         public Instance CreateInstance(Guid id, Instance parent)
         {
             Instance newInstance;
-            if (SymbolPackage.AssemblyInformation.Constructors.TryGetValue(InstanceType, out var constructor))
+            if (SymbolPackage.AssemblyInformation.OperatorTypeInfo.TryGetValue(Id, out var typeInfo))
             {
+                var constructor = typeInfo.Constructor;
                 try
                 {
                     newInstance = (Instance)constructor.Invoke();
@@ -667,7 +585,7 @@ namespace T3.Core.Operator
                                     where child.Id == connection.TargetParentOrChildId
                                     where child.Inputs.ContainsKey(connection.TargetSlotId)
                                     select child.Inputs[connection.TargetSlotId]).SingleOrDefault();
-            bool isMultiInput = childInputTarget?.InputDefinition.IsMultiInput ?? false;
+            bool isMultiInput = childInputTarget?.IsMultiInput ?? false;
 
             return isMultiInput;
         }
@@ -873,10 +791,10 @@ namespace T3.Core.Operator
         /// </summary>
         public sealed class InputDefinition
         {
-            public Guid Id { get; init; }
-            public string Name { get; set; }
+            public Guid Id { get; internal init; }
+            public string Name { get; internal set; }
             public InputValue DefaultValue { get; set; }
-            public bool IsMultiInput { get; set; }
+            public bool IsMultiInput { get; internal set; }
         }
 
         public sealed class OutputDefinition

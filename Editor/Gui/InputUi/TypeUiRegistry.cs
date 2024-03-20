@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace T3.Editor.Gui.InputUi
+﻿namespace T3.Editor.Gui.InputUi
 {
     public static class TypeUiRegistry
     {

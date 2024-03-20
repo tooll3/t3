@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using ImGuiNET;
-using T3.Core.Logging;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Modification;
@@ -31,12 +28,7 @@ public class RenameInputDialog : ModalDialog
         // ImGui.PopFont();
 
         FormInputs.SetIndentToLeft();
-        if (!SymbolRegistry.Entries.TryGetValue(_symbolId, out var symbol))
-        {
-            ImGui.TextUnformatted("invalid symbol");
-
-            return;
-        }
+        var symbol = _symbol;
         FormInputs.AddHint($"Careful! This operation will modify the definition of {symbol.Name}.");
             if(symbol.Namespace.StartsWith("lib"))
             {
@@ -112,11 +104,11 @@ public class RenameInputDialog : ModalDialog
     public void ShowNextFrame(Symbol symbol, Guid inputId)
     {
         ShowNextFrame();
-        _symbolId = symbol.Id;
+        _symbol = symbol;
         _inputId = inputId;
     }
 
-    private static Guid _symbolId; // avoid references
+    private static Symbol _symbol;
     private static Guid _inputId;
     private static string _newInputName = string.Empty;
     private static string _lastWarning = string.Empty;

@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -15,7 +14,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
             if (BeginDialog("Edit description"))
             {
-                var symbolUi = SymbolUiRegistry.Entries[operatorSymbol.Id];
+                var symbolUi = operatorSymbol.GetSymbolUi();
                 var desc = symbolUi.Description ?? string.Empty;
 
                 ImGui.PushFont(Fonts.FontLarge);

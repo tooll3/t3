@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction;
@@ -77,7 +76,7 @@ namespace T3.Editor.Gui.UiHelpers
                 _lastValues = newValueComponents;
             }
 
-            _canvas.UpdateCanvas();
+            _canvas.UpdateCanvas(out _);
             _raster.Draw(_canvas);
             if (!_paused)
             {
