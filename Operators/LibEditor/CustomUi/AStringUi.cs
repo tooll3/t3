@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
@@ -23,7 +24,7 @@ namespace libEditor.CustomUi
         ///
         /// Using an invisibleButton interfered with the drag interaction of the node.
         /// </remarks>
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is String stringInstance))
                 return SymbolChildUi.CustomUiResult.None;
@@ -31,15 +32,15 @@ namespace libEditor.CustomUi
             if (stringInstance.InputString.IsConnected)
                 return SymbolChildUi.CustomUiResult.None;
 
-            var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList);
+            var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList, canvasScale);
             var usableArea = screenRect;
             usableArea.Min.X += dragWidth;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
 
-            ImGui.PushFont(GraphCanvas.Current.Scale.X < 2
+            ImGui.PushFont(canvasScale.X < 2
                                ? Fonts.FontSmall
-                               : GraphCanvas.Current.Scale.X < 4 
+                               : canvasScale.X < 4 
                                    ? Fonts.FontNormal
                                    : Fonts.FontLarge);
 
@@ -67,7 +68,7 @@ namespace libEditor.CustomUi
             else
             {
                 //Log.Debug("hovered " + ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows | ImGuiHoveredFlags.AllowWhenBlockedByPopup | ImGuiHoveredFlags.AllowWhenDisabled ) + " focus" + ImGui.IsWindowFocused(), stringInstance);
-                usableArea.Expand(GraphCanvas.Current.Scale.X < 0.75f ? 0 : -4);
+                usableArea.Expand(canvasScale.X < 0.75f ? 0 : -4);
                 if (usableArea.Contains(ImGui.GetMousePos())
                     && (ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) || ImGui.IsWindowFocused())
                     && ImGui.IsMouseReleased(ImGuiMouseButton.Left)

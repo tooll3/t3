@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi
+﻿namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi
 {
     public class Voronoi
     {

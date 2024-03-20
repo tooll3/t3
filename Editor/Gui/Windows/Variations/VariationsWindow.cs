@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
+﻿using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.SystemUi;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
@@ -40,13 +38,19 @@ namespace T3.Editor.Gui.Windows.Variations
                 _variationsToBeDeletedNextFrame.Clear();
             }
 
+            var graphWindow = GraphWindow.Focused;
+            if (graphWindow == null)
+                return;
+            
+            var nodeSelection = graphWindow.GraphCanvas.NodeSelection;
+
             var compositionHasVariations = VariationHandling.ActivePoolForSnapshots != null && VariationHandling.ActivePoolForSnapshots.AllVariations.Count > 0;
-            var oneChildSelected = NodeSelection.Selection.Count == 1;
-            var selectionChanged = NodeSelection.Selection.Count != _selectedNodeCount;
+            var oneChildSelected = nodeSelection.Selection.Count == 1;
+            var selectionChanged = nodeSelection.Selection.Count != _selectedNodeCount;
 
             if (selectionChanged)
             {
-                _selectedNodeCount = NodeSelection.Selection.Count;
+                _selectedNodeCount = nodeSelection.Selection.Count;
 
                 if (oneChildSelected)
                 {
@@ -121,7 +125,7 @@ namespace T3.Editor.Gui.Windows.Variations
                         || VariationHandling.ActiveInstanceForSnapshots == null
                         || VariationHandling.ActivePoolForSnapshots.AllVariations.Count == 0)
                     {
-                        var childUi = SymbolUiRegistry.Entries[VariationHandling.ActiveInstanceForSnapshots.Symbol.Id];
+                        var childUi = VariationHandling.ActiveInstanceForPresets.GetSymbolUi();
                         var shapshotsEnabledForNone = !childUi.ChildUis.Any(s => s.SnapshotGroupIndex > 0);
                         var additionalHint = shapshotsEnabledForNone ? "Use the graph window context menu\nto activate snapshots for operators." : "";
 

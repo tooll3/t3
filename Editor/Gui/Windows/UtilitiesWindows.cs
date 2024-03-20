@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Utilities;
@@ -78,10 +76,12 @@ public class UtilitiesWindow : Window
                         ImGui.TreePop();
                     }
 
-                    if (ImGui.TreeNode("Navigation history"))
+                    var graphCanvas = GraphWindow.Focused?.GraphCanvas;
+                    
+                    if (graphCanvas != null && ImGui.TreeNode("Navigation history"))
                     {
                         int index = 0;
-                        foreach (var c in NavigationHistory.GetPreviouslySelectedInstances())
+                        foreach (var c in graphCanvas.NavigationHistory.GetPreviouslySelectedInstances())
                         {
                             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f / (index + 1) + 0.5f));
                             ImGui.PushFont(index == 0 ? Fonts.FontBold : Fonts.FontNormal);

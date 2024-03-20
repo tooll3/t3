@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.UiModel;
@@ -23,7 +19,7 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
 
             var toc = new List<SymbolUi>();
 
-            foreach (var symbolUi in SymbolUiRegistry.Entries.Values)
+            foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
             {
                 try
                 {

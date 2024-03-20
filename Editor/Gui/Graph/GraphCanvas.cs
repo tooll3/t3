@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Numerics;
 using System.Runtime.InteropServices;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharpDX.Direct3D11;
-using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
@@ -29,9 +24,7 @@ using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Output;
-using T3.Editor.Gui.Windows.TimeLine;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.SystemUi;
@@ -41,75 +34,21 @@ namespace T3.Editor.Gui.Graph
     /// <summary>
     /// A <see cref="ICanvas"/> that displays the graph of an Operator.
     /// </summary>
-    public class GraphCanvas : ScalableCanvas, INodeCanvas
+    internal class GraphCanvas : ScalableCanvas, INodeCanvas
     {
-        public GraphCanvas(GraphWindow window, List<Guid> idPath)
+        internal GraphCanvas(GraphWindow window, NodeSelection nodeSelection, NavigationHistory navigationHistory)
         {
             _window = window;
-            _initialCompositionPath = idPath;
-        }
+            Structure = window.Structure;
+            NavigationHistory = navigationHistory;
+            NodeSelection = nodeSelection;
+            _nodeGraphLayouting = new NodeGraphLayouting(NodeSelection, Structure);
+            NodeNavigation = new NodeNavigation(() => window.CompositionOp, this, Structure, NavigationHistory);
+            SelectableNodeMovement = new SelectableNodeMovement(window, this, NodeSelection);
+            _graph = new Graph(window, this);
+            
 
-
-        public void SetComposition(List<Guid> childIdPath, ICanvas.Transition transition)
-        {
-            SelectableNodeMovement.Reset();
-            // Zoom timeline out if necessary
-            if (transition == ICanvas.Transition.JumpOut)
-            {
-                var primaryGraphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
-                primaryGraphWindow?.CurrentTimeLine?.UpdateScaleAndTranslation(primaryGraphWindow.GraphCanvas.CompositionOp,
-                                                                               transition);
-            }
-
-            var previousFocusOnScreen = WindowPos + WindowSize / 2;
-
-            var previousInstanceWasSet = _compositionPath != null && _compositionPath.Count > 0;
-            if (previousInstanceWasSet)
-            {
-                //NodeOperations.GetInstanceFromIdPath(_compositionPath)
-                var previousInstance = Structure.GetInstanceFromIdPath(_compositionPath);
-                UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId] = GetTargetScope();
-
-                var newUiContainer = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                var matchingChildUi = newUiContainer.ChildUis.FirstOrDefault(childUi => childUi.SymbolChild.Id == previousInstance.SymbolChildId);
-                if (matchingChildUi != null)
-                {
-                    var centerOnCanvas = matchingChildUi.PosOnCanvas + matchingChildUi.Size / 2;
-                    previousFocusOnScreen = TransformPosition(centerOnCanvas);
-                }
-            }
-
-            _compositionPath = childIdPath;
-            var comp = Structure.GetInstanceFromIdPath(childIdPath);
-            if (comp == null)
-            {
-                Log.Error("Can't resolve instance for id-path " + childIdPath);
-                return;
-            }
-
-            CompositionOp = comp;
-
-            NodeSelection.Clear();
-            TimeLineCanvas.Current?.ClearSelection();
-
-            var newProps = GuessViewProperties();
-            if (CompositionOp != null)
-            {
-                UserSettings.SaveLastViewedOpForWindow(_window, CompositionOp.SymbolChildId);
-                if (UserSettings.Config.OperatorViewSettings.TryGetValue(CompositionOp.SymbolChildId, out var viewSetting))
-                {
-                    newProps = viewSetting;
-                }
-            }
-
-            SetScopeWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);
-
-            if (transition == ICanvas.Transition.JumpIn)
-            {
-                var primaryGraphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
-                primaryGraphWindow?.CurrentTimeLine?.UpdateScaleAndTranslation(primaryGraphWindow.GraphCanvas.CompositionOp,
-                                                                               transition);
-            }
+            window.WindowDestroyed += (_, _) => Destroyed = true;
         }
 
         /// <summary>
@@ -118,230 +57,137 @@ namespace T3.Editor.Gui.Graph
         /// </summary>
         public void OpenAndFocusInstance(List<Guid> childIdPath)
         {
-            var instance = Structure.GetInstanceFromIdPath(childIdPath);
-            if (instance == null)
-            {
-                return;
-            }
-
-            if (childIdPath.Count < 2)
-            {
-                return;
-            }
-
             var pathToParent = childIdPath.GetRange(0, childIdPath.Count - 1);
-            SetComposition(pathToParent, ICanvas.Transition.Undefined);
+            var success = _window.TrySetCompositionOp(pathToParent);
 
-            var parentComposition = instance.Parent;
-            var parentUi = SymbolUiRegistry.Entries[parentComposition.Symbol.Id];
-            var childInstanceUi = parentUi.ChildUis.SingleOrDefault(c => c.Id == instance.SymbolChildId);
-            NodeSelection.SetSelectionToChildUi(childInstanceUi, instance);
-            // NodeSelection.Clear();
-            // NodeSelection.AddSymbolChildToSelection(childInstanceUi, instance);
-            FitViewToSelectionHandling.FitViewToSelection();
-        }
+            if (!success)
+                return;
 
-        public void SetCompositionToChildInstance(Instance instance)
-        {
-            // Validation that instance is valid
-            // TODO: only do in debug mode
-            var op = Structure.GetInstanceFromIdPath(_compositionPath);
-            var matchingChild = op.Children.SingleOrDefault(child => child == instance);
-            if (matchingChild == null)
+            var composition = _window.CompositionOp;
+            var instanceId = childIdPath[^1];
+
+            if (!composition.TryGetChildInstance(instanceId, false, out var childInstance, out _))
             {
-                throw new ArgumentException("Can't OpenChildNode because Instance is not a child of current composition");
-            }
-
-            var newPath = _compositionPath;
-            newPath.Add(instance.SymbolChildId);
-            NodeSelection.Clear();
-            TimeLineCanvas.Current?.ClearSelection();
-            SetComposition(newPath, ICanvas.Transition.JumpIn);
-        }
-
-        public void SetCompositionToParentInstance(Instance instance)
-        {
-            if (instance == null)
-            {
-                Log.Warning("can't jump to parent with invalid instance");
+                Log.Error($"Failed to find child instance with id {instanceId}");
                 return;
             }
             
-            // todo - undo changes made by the user if they were made in a read-only package
-
-            var previousCompositionOp = CompositionOp;
-            var shortenedPath = new List<Guid>();
-            foreach (var pathItemId in _compositionPath)
-            {
-                if (pathItemId == instance.SymbolChildId)
-                    break;
-
-                shortenedPath.Add(pathItemId);
-            }
-
-            shortenedPath.Add(instance.SymbolChildId);
-
-            if (shortenedPath.Count() == _compositionPath.Count())
-                throw new ArgumentException("Can't SetCompositionToParentInstance because Instance is not a parent of current composition");
-
-            SetComposition(shortenedPath, ICanvas.Transition.JumpOut);
-            NodeSelection.Clear();
-            TimeLineCanvas.Current?.ClearSelection();
-            var previousCompChildUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis
-                                                      .SingleOrDefault(childUi => childUi.Id == previousCompositionOp.SymbolChildId);
-            if (previousCompChildUi != null)
-                NodeSelection.AddSymbolChildToSelection(previousCompChildUi, previousCompositionOp);
+            NodeSelection.SetSelectionToChildUi(childInstance!.GetSymbolChildUi(), composition);
+            FitViewToSelectionHandling.FitViewToSelection();
         }
 
-        private Scope GuessViewProperties()
-        {
-            ChildUis = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis;
-            FocusViewToSelection();
-            return GetTargetScope();
-        }
-
-        public void MakeCurrent()
-        {
-            Current = this;
-        }
+        public void SetCompositionToChildInstance(Instance instance) => _window.TrySetCompositionOpToChild(instance.SymbolChildId);
 
         [Flags]
         public enum GraphDrawingFlags
         {
             None = 0,
-            PreventInteractions = 1<<1,
-            HideGrid= 1 << 2,
+            PreventInteractions = 1 << 1,
+            HideGrid = 1 << 2,
         }
 
         #region drawing UI ====================================================================
-        public void Draw(ImDrawListPtr dl, GraphDrawingFlags drawingFlags, float graphOpacity=1)
+        /// <summary>
+        /// Scales the canvas and handles basic canvas interactions
+        /// </summary>
+        public void Draw(bool preventInteractions)
         {
-            var preventInteractions = drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions);
-
             var editingFlags = T3Ui.EditingFlags.None;
 
-            if (SymbolBrowser.IsOpen)
+            if (_window.SymbolBrowser.IsOpen)
                 editingFlags |= T3Ui.EditingFlags.PreventZoomWithMouseWheel;
 
             if (preventInteractions)
                 editingFlags |= T3Ui.EditingFlags.PreventMouseInteractions;
-            
-            UpdateCanvas(editingFlags);
 
-            /*
-             * This is a work around to delay setting the composition until ImGui has
-             * finally updated its window size and applied its layout so we can use
-             * Graph window size to properly fit the content into view.
-             *
-             * The side effect of this hack is that CompositionOp stays undefined for
-             * multiple frames with requires many checks in GraphWindow's Draw().
-             */
-            var imGuiLayoutReady = ImGui.GetFrameCount() > 1;
-            if (!imGuiLayoutReady)
-            {
-                return;
-            }
+            UpdateCanvas(out _, editingFlags);
 
-            if (!_initializedCompositionAfterLayoutReady)
-            {
-                SetComposition(_initialCompositionPath, ICanvas.Transition.JumpIn);
-                FocusViewToSelection();
-                _initializedCompositionAfterLayoutReady = true;
-            }
+        }
 
-            // TODO: Refresh reference on every frame. Since this uses lists instead of dictionary
-            // it can be really slow
-            CompositionOp = Structure.GetInstanceFromIdPath(_compositionPath);
-            if (CompositionOp == null)
-            {
-                Log.Error("unable to get composition op");
-                return;
-            }
-
-            if (CompositionOp == null)
-            {
-                Log.Error("Can't show graph for undefined CompositionOp");
-                return;
-            }
-
-            
-            GraphBookmarkNavigation.HandleForCanvas(this);
-
-            MakeCurrent();
-            var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-            symbolUi.FlagAsModified();
-            ChildUis = symbolUi.ChildUis;
-            DrawList = dl;
+        public void DrawGraph(ImDrawListPtr drawList, GraphDrawingFlags drawingFlags, bool preventInteractions, float graphOpacity)
+        {
             ImGui.BeginGroup();
             {
                 ImGui.SetScrollY(0);
-                CustomComponents.DrawWindowFocusFrame();
+                var focused = CustomComponents.DrawWindowFocusFrame();
+                if (focused)
+                    _window.TakeFocus();
                 
-                DrawDropHandler();
-                ImGui.SetCursorScreenPos(Vector2.One * 100); 
-                
+                DrawDropHandler(_window.CompositionOp, _window.CompositionOp.GetSymbolUi());
+                ImGui.SetCursorScreenPos(Vector2.One * 100);
+
                 if (!preventInteractions)
                 {
+                    var compositionOp = _window.CompositionOp;
+                    var compositionUi = compositionOp.GetSymbolUi();
+                    compositionUi.FlagAsModified();
+                    
                     if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                         FocusViewToSelection();
 
                     if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.Duplicate))
                     {
-                        CopySelectedNodesToClipboard();
-                        PasteClipboard(CompositionOp);
+                        CopySelectedNodesToClipboard(compositionOp);
+                        PasteClipboard(compositionOp);
                     }
 
                     if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                     {
-                        DeleteSelectedElements();
+                        var canModify = !compositionUi.Symbol.SymbolPackage.IsReadOnly;
+                        DeleteSelectedElements(compositionUi, canModify);
                     }
 
                     if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
                     {
                         ToggleDisabledForSelectedElements();
                     }
-                    
+
                     if (KeyboardBinding.Triggered(UserActions.ToggleBypassed))
                     {
                         ToggleBypassedForSelectedElements();
                     }
-                    
+
                     if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
                     {
-                        PinSelectedToOutputWindow();
+                        PinSelectedToOutputWindow(compositionOp);
                     }
 
                     if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
                     {
-                        CopySelectedNodesToClipboard();
+                        CopySelectedNodesToClipboard(compositionOp);
                     }
 
                     if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
                     {
-                        PasteClipboard(CompositionOp);
+                        PasteClipboard(compositionOp);
                     }
 
                     if (KeyboardBinding.Triggered(UserActions.LayoutSelection))
                     {
-                        NodeGraphLayouting.ArrangeOps();
+                        _nodeGraphLayouting.ArrangeOps(compositionOp);
                     }
 
                     if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
                     {
-                        AddAnnotation();
+                        AddAnnotation(compositionOp);
                     }
+
+                    List<Guid>? navigationPath = null;
 
                     // Navigation
                     if (KeyboardBinding.Triggered(UserActions.NavigateBackwards))
                     {
-                        NavigationHistory.NavigateBackwards();
+                        navigationPath = NavigationHistory.NavigateBackwards();
                     }
-                    
+
                     if (KeyboardBinding.Triggered(UserActions.NavigateForward))
                     {
-                        NavigationHistory.NavigateForward();
+                        navigationPath = NavigationHistory.NavigateForward();
                     }
-                    
+
+                    if (navigationPath != null)
+                        OpenAndFocusInstance(navigationPath);
+
                     if (KeyboardBinding.Triggered(UserActions.SelectToAbove))
                     {
                         NodeNavigation.SelectAbove();
@@ -351,37 +197,37 @@ namespace T3.Editor.Gui.Graph
                     {
                         NodeNavigation.SelectRight();
                     }
-                    
+
                     if (KeyboardBinding.Triggered(UserActions.SelectToBelow))
                     {
                         NodeNavigation.SelectBelow();
                     }
-                    
+
                     if (KeyboardBinding.Triggered(UserActions.AddComment))
                     {
                         EditCommentDialog.ShowNextFrame();
                     }
-                    
+
                     if (KeyboardBinding.Triggered(UserActions.SelectToLeft))
                     {
                         NodeNavigation.SelectLeft();
                     }
-                    
+
                     if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
                     {
                         var selectedImage = NodeSelection.GetFirstSelectedInstance();
                         if (selectedImage != null)
                         {
-                            GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
+                            _window.GraphImageBackground.OutputInstance = selectedImage;
                         }
                     }
                 }
 
-                if (ImGui.IsWindowFocused()  && !preventInteractions)
+                if (ImGui.IsWindowFocused() && !preventInteractions)
                 {
                     var io = ImGui.GetIO();
                     var editingSomething = ImGui.IsAnyItemActive();
-                    
+
                     if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt && !editingSomething)
                     {
                         if (ImGui.IsKeyDown((ImGuiKey)Key.W))
@@ -403,16 +249,17 @@ namespace T3.Editor.Gui.Graph
                         {
                             _dampedScrollVelocity.X += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
                         }
-                        
+
                         if (ImGui.IsKeyDown((ImGuiKey)Key.Q))
                         {
                             var center = WindowPos + WindowSize / 2;
-                            ApplyZoomDelta( center, 1.05f);
+                            ApplyZoomDelta(center, 1.05f, out _);
                         }
+
                         if (ImGui.IsKeyDown((ImGuiKey)Key.E))
                         {
                             var center = WindowPos + WindowSize / 2;
-                            ApplyZoomDelta( center, 1/1.05f);
+                            ApplyZoomDelta(center, 1 / 1.05f, out _);
                         }
                     }
                 }
@@ -420,33 +267,32 @@ namespace T3.Editor.Gui.Graph
                 ScrollTarget += _dampedScrollVelocity;
                 _dampedScrollVelocity *= 0.90f;
 
-                DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
+                drawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                 if (!drawingFlags.HasFlag(GraphDrawingFlags.HideGrid))
-                    DrawGrid();
+                    DrawGrid(drawList);
 
                 if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
                 {
-                    ConnectionSplitHelper.PrepareNewFrame(this);
+                    ConnectionSplitHelper.PrepareNewFrame(_window);
                 }
 
-                SymbolBrowser.Draw();
+                _window.SymbolBrowser.Draw();
 
                 graphOpacity *= preventInteractions ? 0.3f : 1;
-                Graph.DrawGraph(DrawList,drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), graphOpacity);
-                
-                RenameInstanceOverlay.Draw();
-                
-                if(ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
-                   && !preventInteractions
-                   && ConnectionMaker.TempConnections.Count == 0)
-                    HandleFenceSelection();
+                _graph.DrawGraph(drawList, drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _window.CompositionOp, graphOpacity);
+
+                RenameInstanceOverlay.Draw(_window);
+
+                if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
+                    && !preventInteractions
+                    && ConnectionMaker.TempConnections.Count == 0)
+                    HandleFenceSelection(_window.CompositionOp);
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
                 if (isOnBackground && ImGui.IsMouseDoubleClicked(0))
                 {
-                    if (CompositionOp.Parent != null)
-                        SetCompositionToParentInstance(CompositionOp.Parent);
+                    _window.TrySetCompositionOpToParent();
                 }
 
                 if (ConnectionMaker.TempConnections.Count > 0 && ImGui.IsMouseReleased(0))
@@ -456,12 +302,13 @@ namespace T3.Editor.Gui.Graph
                         ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isAnyItemHovered;
                     if (droppedOnBackground)
                     {
-                        ConnectionMaker.InitSymbolBrowserAtPosition(SymbolBrowser,
+                        ConnectionMaker.InitSymbolBrowserAtPosition(_window,
                                                                     InverseTransformPositionFloat(ImGui.GetIO().MousePos));
                     }
                     else
                     {
-                        var connectionDroppedOnBackground = ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
+                        var connectionDroppedOnBackground =
+                            ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
                         if (connectionDroppedOnBackground)
                         {
                             //Log.Warning("Skipping complete operation on background drop?");
@@ -469,38 +316,43 @@ namespace T3.Editor.Gui.Graph
                         }
                     }
                 }
+
+                drawList.PopClipRect();
                 
-                var symbol = CompositionOp.Symbol;
-                var canModify = !symbol.SymbolPackage.IsReadOnly;
+                var compositionUpdated = _window.CompositionOp;
+                var canModifyUpdated = !compositionUpdated.Symbol.SymbolPackage.IsReadOnly;
+                
+                if (FrameStats.Current.OpenedPopUpName != string.Empty)
+                    CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(canModifyUpdated, compositionUpdated), ref _contextMenuIsOpen);
 
-                DrawList.PopClipRect();
-                DrawContextMenu(canModify);
-
-                _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
+                _duplicateSymbolDialog.Draw(compositionUpdated, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
-                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(),
+                _combineToSymbolDialog.Draw(compositionUpdated, GetSelectedChildUis(),
                                             NodeSelection.GetSelectedNodes<Annotation>().ToList(),
                                             ref _nameSpaceForDialogEdits,
                                             ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
 
-                if (canModify)
+                if (canModifyUpdated)
                 {
                     _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
-                    EditCommentDialog.Draw();
-                    
-                    _addInputDialog.Draw(symbol);
-                    _addOutputDialog.Draw(symbol);
+                    EditCommentDialog.Draw(NodeSelection);
+
+                    if (compositionUpdated != _window.RootInstance.Instance)
+                    {
+                        var symbol = compositionUpdated.Symbol;
+                        _addInputDialog.Draw(symbol);
+                        _addOutputDialog.Draw(symbol);
+                    }
                 }
 
-                LibWarningDialog.Draw();
+                LibWarningDialog.Draw(this);
                 EditNodeOutputDialog.Draw();
             }
             ImGui.EndGroup();
-            Current = null;
         }
 
-        private void HandleFenceSelection()
+        private void HandleFenceSelection(Instance compositionOp)
         {
             _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
             switch (_fenceState)
@@ -511,29 +363,30 @@ namespace T3.Editor.Gui.Graph
                     break;
 
                 case SelectionFence.States.Updated:
-                    HandleSelectionFenceUpdate(SelectionFence.BoundsInScreen);
+                    HandleSelectionFenceUpdate(SelectionFence.BoundsInScreen, compositionOp);
                     break;
 
                 case SelectionFence.States.CompletedAsClick:
                     // A hack to prevent clearing selection when opening parameter popup
                     if (ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
                         break;
-                    
+
                     NodeSelection.Clear();
-                    NodeSelection.SetSelectionToParent(CompositionOp);
+                    NodeSelection.SetSelectionToComposition(compositionOp);
                     break;
             }
         }
 
         private SelectionFence.States _fenceState = SelectionFence.States.Inactive;
 
-        private void HandleSelectionFenceUpdate(ImRect boundsInScreen)
+        private void HandleSelectionFenceUpdate(ImRect boundsInScreen, Instance compositionOp)
         {
             var boundsInCanvas = InverseTransformRect(boundsInScreen);
-            var nodesToSelect = (from child in SelectableChildren
-                                 let rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size)
-                                 where rect.Overlaps(boundsInCanvas)
-                                 select child).ToList();
+            var nodesToSelect = SelectableChildren
+                               .Select(child => (child, rect: new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size) ))
+                               .Where(t => t.rect.Overlaps(boundsInCanvas))
+                               .Select(t => t.child)
+                               .ToList();
 
             if (SelectionFence.SelectMode == SelectionFence.SelectModes.Replace)
             {
@@ -544,10 +397,12 @@ namespace T3.Editor.Gui.Graph
             {
                 if (node is SymbolChildUi symbolChildUi)
                 {
-                    var instance = CompositionOp.Children.FirstOrDefault(child => child.SymbolChildId == symbolChildUi.Id);
-                    if (instance == null)
+                    if (!compositionOp.TryGetChildInstance(symbolChildUi.Id, false, out var instance, out _))
                     {
                         Log.Warning("Can't find instance");
+                    }
+                    else
+                    {
                     }
 
                     if (SelectionFence.SelectMode == SelectionFence.SelectModes.Remove)
@@ -600,19 +455,19 @@ namespace T3.Editor.Gui.Graph
         /// </remarks>
         public void OpenSymbolBrowserForOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef)
         {
-            ConnectionMaker.InitSymbolBrowserAtPosition(SymbolBrowser,
+            ConnectionMaker.InitSymbolBrowserAtPosition(_window,
                                                         childUi.PosOnCanvas + new Vector2(childUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0));
         }
 
         // private Symbol GetSelectedSymbol()
         // {
         //     var selectedChildUi = GetSelectedChildUis().FirstOrDefault();
-        //     return selectedChildUi != null ? selectedChildUi.SymbolChild.Symbol : CompositionOp.Symbol;
+        //     return selectedChildUi != null ? selectedChildUi.SymbolChild.Symbol : compositionOp.Symbol;
         // }
 
-        private void DrawDropHandler()
+        private void DrawDropHandler(Instance compositionOp, SymbolUi compositionOpSymbolUi)
         {
-            if (!T3Ui.DraggingIsInProgress || CompositionOp == null)
+            if (!T3Ui.DraggingIsInProgress)
                 return;
 
             ImGui.SetCursorPos(Vector2.Zero);
@@ -630,12 +485,11 @@ namespace T3.Editor.Gui.Graph
                         var guid = Guid.Parse(guidString);
                         Log.Debug("dropped symbol here" + payload + " " + myString + "  " + guid);
 
-                        var symbol = SymbolRegistry.Entries[guid];
-                        var parent = CompositionOp.Symbol;
+                        var symbol = EditorSymbolPackage.AllSymbols.First(x => x.Id == guid);
                         var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
-                        var childUi = GraphOperations.AddSymbolChild(symbol, parent, posOnCanvas);
+                        var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
 
-                        var instance = CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+                        var instance = compositionOp.GetChildInstanceWithId(childUi.Id);
                         NodeSelection.SetSelectionToChildUi(childUi, instance);
 
                         T3Ui.DraggingIsInProgress = false;
@@ -646,12 +500,7 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        public IEnumerable<Symbol> GetParentSymbols()
-        {
-            return Structure.CollectParentInstances(CompositionOp, includeChildInstance: true).Select(p => p.Symbol);
-        }
-
-        private void FocusViewToSelection()
+        internal void FocusViewToSelection()
         {
             FitAreaOnCanvas(GetSelectionBounds());
         }
@@ -677,17 +526,10 @@ namespace T3.Editor.Gui.Graph
             return bounds;
         }
 
-        private void DrawContextMenu(bool canModify)
+        private void DrawContextMenuContent(bool canModify, Instance compositionOp)
         {
-            if (FrameStats.Current.OpenedPopUpName == string.Empty)
-            {
-                CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(canModify), ref _contextMenuIsOpen);
-            }
-        }
-
-        private void DrawContextMenuContent(bool canModify)
-        {
-            var clickPosition =ImGui.GetMousePosOnOpeningCurrentPopup();
+            var clickPosition = ImGui.GetMousePosOnOpeningCurrentPopup();
+            var compositionSymbolUi = compositionOp.GetSymbolUi();
 
             var selectedChildUis = GetSelectedChildUis();
             var nextUndoTitle = UndoRedoStack.CanUndo ? $" ({UndoRedoStack.GetNextUndoTitle()})" : string.Empty;
@@ -718,12 +560,11 @@ namespace T3.Editor.Gui.Graph
 
             var allSelectedDisabled = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
             if (ImGui.MenuItem("Disable",
-                                                       KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleDisabled, false),
-                                                       selected: allSelectedDisabled,
-                                                       enabled: selectedChildUis.Count > 0))
+                               KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleDisabled, false),
+                               selected: allSelectedDisabled,
+                               enabled: selectedChildUis.Count > 0))
             {
                 ToggleDisabledForSelectedElements();
-
             }
 
             var allSelectedBypassed = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SymbolChild.IsBypassed);
@@ -739,7 +580,7 @@ namespace T3.Editor.Gui.Graph
             {
                 RenameInstanceOverlay.OpenForSymbolChildUi(selectedChildUis[0]);
             }
-            
+
             if (ImGui.MenuItem("Add Comment",
                                KeyboardBinding.ListKeyboardShortcuts(UserActions.AddComment, false),
                                selected: false,
@@ -753,7 +594,7 @@ namespace T3.Editor.Gui.Graph
                                selected: false,
                                enabled: someOpsSelected))
             {
-                NodeGraphLayouting.ArrangeOps();
+                _nodeGraphLayouting.ArrangeOps(compositionOp);
             }
 
             if (canModify)
@@ -770,7 +611,7 @@ namespace T3.Editor.Gui.Graph
                         c.SnapshotGroupIndex = enabledForAll ? 0 : 1;
                     }
 
-                    FlagCurrentCompositionAsModified();
+                    compositionSymbolUi.FlagAsModified();
                 }
             }
 
@@ -816,13 +657,13 @@ namespace T3.Editor.Gui.Graph
                                    selected: false,
                                    enabled: isImage))
                 {
-                    var instance = CompositionOp.Children.Single(child => child.SymbolChildId == selectedChildUis[0].Id);
-                    GraphWindow.SetBackgroundInstanceForCurrentGraph(instance);
+                    var instance = compositionOp.Children.Single(child => child.SymbolChildId == selectedChildUis[0].Id);
+                    _window.GraphImageBackground.OutputInstance = instance;
                 }
 
                 if (ImGui.MenuItem("Pin to output", oneOpSelected))
                 {
-                    PinSelectedToOutputWindow();
+                    PinSelectedToOutputWindow(compositionOp);
                 }
 
                 ImGui.EndMenu();
@@ -835,12 +676,12 @@ namespace T3.Editor.Gui.Graph
                                selected: false,
                                enabled: someOpsSelected))
             {
-                CopySelectedNodesToClipboard();
+                CopySelectedNodesToClipboard(compositionOp);
             }
 
             if (ImGui.MenuItem("Paste", KeyboardBinding.ListKeyboardShortcuts(UserActions.PasteFromClipboard, false)))
             {
-                PasteClipboard(CompositionOp);
+                PasteClipboard(compositionOp);
             }
 
             var selectedInputUis = GetSelectedInputUis().ToList();
@@ -851,7 +692,7 @@ namespace T3.Editor.Gui.Graph
                                selected: false,
                                enabled: someOpsSelected || selectedInputUis.Count > 0 || selectedOutputUis.Count > 0))
             {
-                DeleteSelectedElements(selectedChildUis, selectedInputUis, selectedOutputUis);
+                DeleteSelectedElements(compositionSymbolUi, canModify, selectedChildUis, selectedInputUis, selectedOutputUis);
             }
 
             if (ImGui.MenuItem("Duplicate",
@@ -859,8 +700,8 @@ namespace T3.Editor.Gui.Graph
                                selected: false,
                                enabled: selectedChildUis.Count > 0))
             {
-                CopySelectedNodesToClipboard();
-                PasteClipboard(CompositionOp);
+                CopySelectedNodesToClipboard(compositionOp);
+                PasteClipboard(compositionOp);
             }
 
             ImGui.Separator();
@@ -869,10 +710,8 @@ namespace T3.Editor.Gui.Graph
             {
                 var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
                 var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
-                SymbolBrowser.OpenAt(position, null, null, false, startingSearchString, symbol =>
-                    {
-                        ChangeSymbol.ChangeOperatorSymbol(CompositionOp, selectedChildUis, symbol);
-                    });
+                _window.SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
+                                             symbol => { ChangeSymbol.ChangeOperatorSymbol(this, compositionOp, selectedChildUis, symbol); });
             }
 
             if (ImGui.BeginMenu("Symbol definition..."))
@@ -894,7 +733,7 @@ namespace T3.Editor.Gui.Graph
 
                 if (ImGui.MenuItem("Combine into new type...", someOpsSelected))
                 {
-                    _nameSpaceForDialogEdits = CompositionOp.Symbol.Namespace ?? string.Empty;
+                    _nameSpaceForDialogEdits = compositionOp.Symbol.Namespace ?? string.Empty;
                     _symbolDescriptionForDialog = "";
                     _combineToSymbolDialog.ShowNextFrame();
                 }
@@ -907,8 +746,7 @@ namespace T3.Editor.Gui.Graph
             {
                 if (ImGui.MenuItem("Add Node...", "TAB", false, true))
                 {
-
-                    SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
+                    _window.SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
                 }
 
                 if (canModify)
@@ -929,7 +767,7 @@ namespace T3.Editor.Gui.Graph
                                    selected: false,
                                    enabled: true))
                 {
-                    AddAnnotation();
+                    AddAnnotation(compositionOp);
                 }
 
                 ImGui.EndMenu();
@@ -939,7 +777,7 @@ namespace T3.Editor.Gui.Graph
 
             if (ImGui.MenuItem("Export as Executable", oneOpSelected))
             {
-                switch (PlayerExporter.TryExportInstance(this, selectedChildUis.Single(), out var reason, out var exportDir))
+                switch (PlayerExporter.TryExportInstance(compositionOp, selectedChildUis.Single(), out var reason, out var exportDir))
                 {
                     case false:
                         Log.Error(reason);
@@ -958,17 +796,16 @@ namespace T3.Editor.Gui.Graph
             {
                 var symbol = selectedChildUis.Single().SymbolChild.Symbol;
                 CustomComponents.DrawSymbolCodeContextMenuItem(symbol);
-                SymbolChildUi childUi = selectedChildUis.Single();
-                
-                // get instance that is currently selected
-                var instance = CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+                var childUi = selectedChildUis.Single();
 
+                // get instance that is currently selected
+                var instance = compositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
 
                 if (TryGetShaderPath(instance, out var filePath, out var owner))
                 {
                     var shaderIsReadOnly = !owner.IsReadOnly;
-                    
-                    if(ImGui.MenuItem("Open in Shader Editor", true))
+
+                    if (ImGui.MenuItem("Open in Shader Editor", true))
                     {
                         if (shaderIsReadOnly)
                         {
@@ -995,14 +832,14 @@ namespace T3.Editor.Gui.Graph
                 {
                     Directory.Delete(destinationDirectory, true);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Log.Warning($"Failed to delete temp directory: {e}");
                 }
             }
 
             Directory.CreateDirectory(destinationDirectory);
-            
+
             // copy all files in directory to temp directory for intellisense to work
             var allFilesInDirectory = Directory.EnumerateFiles(directory);
             foreach (var file in allFilesInDirectory)
@@ -1010,8 +847,9 @@ namespace T3.Editor.Gui.Graph
                 var destinationPath = Path.Combine(destinationDirectory, Path.GetFileName(file));
                 File.Copy(file, destinationPath);
             }
-            
-            ShaderLinter.AddPackage(new ShaderCompiler.ShaderResourcePackage(destinationDirectory), ResourceManager.SharedShaderPackages, replaceExisting: true);
+
+            ShaderLinter.AddPackage(new ShaderCompiler.ShaderResourcePackage(destinationDirectory), ResourceManager.SharedShaderPackages,
+                                    replaceExisting: true);
             newFilePath = Path.Combine(destinationDirectory, Path.GetFileName(filePath));
         }
 
@@ -1019,22 +857,21 @@ namespace T3.Editor.Gui.Graph
         private static bool TryGetShaderPath(Instance instance, out string filePath, out IResourcePackage owner)
         {
             bool found = false;
-            var type = instance.Type;
-            if (type.IsAssignableTo(typeof(IShaderOperator<PixelShader>)))
+            if (instance is IShaderOperator<PixelShader> pixelShader)
             {
-                found = TryGetSourceFile((IShaderOperator<PixelShader>)instance, out filePath, out owner);
+                found = TryGetSourceFile(pixelShader, out filePath, out owner);
             }
-            else if(type.IsAssignableTo(typeof(IShaderOperator<ComputeShader>)))
+            else if (instance is IShaderOperator<ComputeShader> computeShader)
             {
-                found = TryGetSourceFile((IShaderOperator<ComputeShader>)instance, out filePath, out owner);
+                found = TryGetSourceFile(computeShader, out filePath, out owner);
             }
-            else if(type.IsAssignableTo(typeof(IShaderOperator<GeometryShader>)))
+            else if (instance is IShaderOperator<GeometryShader> geometryShader)
             {
-                found = TryGetSourceFile((IShaderOperator<GeometryShader>)instance, out filePath, out owner);
+                found = TryGetSourceFile(geometryShader, out filePath, out owner);
             }
-            else if(type.IsAssignableTo(typeof(IShaderOperator<VertexShader>)))
+            else if (instance is IShaderOperator<VertexShader> vertexShader)
             {
-                found = TryGetSourceFile((IShaderOperator<VertexShader>)instance, out filePath, out owner);
+                found = TryGetSourceFile(vertexShader, out filePath, out owner);
             }
             else
             {
@@ -1059,12 +896,7 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private void FlagCurrentCompositionAsModified()
-        {
-            SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].FlagAsModified();
-        }
-
-        private void AddAnnotation()
+        private void AddAnnotation(Instance compositionOp)
         {
             var size = new Vector2(100, 140);
             var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
@@ -1091,7 +923,6 @@ namespace T3.Editor.Gui.Graph
                 area.Expand(60);
             }
 
-            var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
             var annotation = new Annotation()
                                  {
                                      Id = Guid.NewGuid(),
@@ -1100,12 +931,14 @@ namespace T3.Editor.Gui.Graph
                                      PosOnCanvas = area.Min,
                                      Size = area.GetSize()
                                  };
-            var command = new AddAnnotationCommand(symbolUi, annotation);
+            
+            var command = new AddAnnotationCommand(compositionOp.GetSymbolUi(), annotation);
             UndoRedoStack.AddAndExecute(command);
-            AnnotationElement.StartRenaming(annotation);
+
+            _graph.RenameAnnotation(annotation);
         }
 
-        private void PinSelectedToOutputWindow()
+        private void PinSelectedToOutputWindow(Instance compositionOp)
         {
             var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(ow => ow.Config.Visible) as OutputWindow;
             if (outputWindow == null)
@@ -1121,20 +954,17 @@ namespace T3.Editor.Gui.Graph
                 return;
             }
 
-            var instance = CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == selection[0].Id);
-            if (instance != null)
+            if (compositionOp.TryGetChildInstance(selection[0].Id, false, out var child, out _))
             {
-                outputWindow.Pinning.PinInstance(instance);
+                outputWindow.Pinning.PinInstance(child, this);
             }
         }
 
         private bool _contextMenuIsOpen;
 
-        private void DeleteSelectedElements(List<SymbolChildUi> selectedChildUis = null, List<IInputUi> selectedInputUis = null,
+        private void DeleteSelectedElements(SymbolUi compositionSymbolUi, bool canModify, List<SymbolChildUi> selectedChildUis = null, List<IInputUi> selectedInputUis = null,
                                             List<IOutputUi> selectedOutputUis = null)
         {
-            var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-
             var commands = new List<ICommand>();
             selectedChildUis ??= GetSelectedChildUis();
             if (selectedChildUis.Any())
@@ -1149,16 +979,19 @@ namespace T3.Editor.Gui.Graph
                 commands.Add(cmd);
             }
 
-            selectedInputUis ??= NodeSelection.GetSelectedNodes<IInputUi>().ToList();
-            if (selectedInputUis.Count > 0)
+            if (canModify)
             {
-                InputsAndOutputs.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
-            }
+                selectedInputUis ??= NodeSelection.GetSelectedNodes<IInputUi>().ToList();
+                if (selectedInputUis.Count > 0)
+                {
+                    InputsAndOutputs.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), compositionSymbolUi.Symbol);
+                }
 
-            selectedOutputUis ??= NodeSelection.GetSelectedNodes<IOutputUi>().ToList();
-            if (selectedOutputUis.Count > 0)
-            {
-                InputsAndOutputs.RemoveOutputsFromSymbol(selectedOutputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
+                selectedOutputUis ??= NodeSelection.GetSelectedNodes<IOutputUi>().ToList();
+                if (selectedOutputUis.Count > 0)
+                {
+                    InputsAndOutputs.RemoveOutputsFromSymbol(selectedOutputUis.Select(entry => entry.Id).ToArray(), compositionSymbolUi.Symbol);
+                }
             }
 
             var deleteCommand = new MacroCommand("Delete elements", commands);
@@ -1169,7 +1002,7 @@ namespace T3.Editor.Gui.Graph
         private void ToggleDisabledForSelectedElements()
         {
             var selectedChildren = GetSelectedChildUis();
-            
+
             var allSelectedDisabled = selectedChildren.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
             var shouldDisable = !allSelectedDisabled;
 
@@ -1181,11 +1014,11 @@ namespace T3.Editor.Gui.Graph
 
             UndoRedoStack.AddAndExecute(new MacroCommand("Disable/Enable", commands));
         }
-        
+
         private void ToggleBypassedForSelectedElements()
         {
             var selectedChildUis = GetSelectedChildUis();
-            
+
             var allSelectedAreBypassed = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SymbolChild.IsBypassed);
             var shouldBypass = !allSelectedAreBypassed;
 
@@ -1197,9 +1030,8 @@ namespace T3.Editor.Gui.Graph
 
             UndoRedoStack.AddAndExecute(new MacroCommand("Changed Bypassed", commands));
         }
-        
 
-        private static List<SymbolChildUi> GetSelectedChildUis()
+        private List<SymbolChildUi> GetSelectedChildUis()
         {
             return NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
         }
@@ -1214,12 +1046,14 @@ namespace T3.Editor.Gui.Graph
             return NodeSelection.GetSelectedNodes<IOutputUi>();
         }
 
-        private void CopySelectedNodesToClipboard()
+        private void CopySelectedNodesToClipboard(Instance composition)
         {
-            var symbolId = CompositionOp.Symbol.Id;
-            var selectedChildren = NodeSelection.GetSelectedNodes<SymbolChildUi>();
+            var selectedChildren = NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
             var selectedAnnotations = NodeSelection.GetSelectedNodes<Annotation>().ToList();
-            var resultJsonString = GraphOperations.CopyNodesAsJson(symbolId, selectedChildren, selectedAnnotations);
+            if (selectedChildren.Count + selectedAnnotations.Count == 0)
+                return;
+            
+            var resultJsonString = GraphOperations.CopyNodesAsJson(composition, selectedChildren, selectedAnnotations);
 
             EditorUi.Instance.SetClipboardText(resultJsonString);
         }
@@ -1235,15 +1069,15 @@ namespace T3.Editor.Gui.Graph
                     return;
 
                 var symbolJson = jArray[0];
-                    
+
                 var gotSymbolJson = GetPastedSymbol(symbolJson, compositionOp.Symbol.SymbolPackage, out var containerSymbol);
                 if (!gotSymbolJson)
                 {
                     Log.Error($"Failed to paste symbol due to invalid symbol json");
                     return;
                 }
-                    
-                if(!SymbolRegistry.EntriesEditable.TryAdd(containerSymbol.Id, containerSymbol))
+
+                if (!SymbolRegistry.EntriesEditable.TryAdd(containerSymbol.Id, containerSymbol))
                     throw new Exception($"Failed to add symbol for {containerSymbol.Name}");
 
                 var symbolUiJson = jArray[1];
@@ -1253,18 +1087,14 @@ namespace T3.Editor.Gui.Graph
                     Log.Error($"Failed to paste symbol due to invalid symbol ui json");
                     return;
                 }
-                    
-                var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                if(!SymbolUiRegistry.EntriesEditable.TryAdd(containerSymbolUi.Symbol.Id, containerSymbolUi))
-                    throw new Exception($"Failed to add symbol ui for {containerSymbolUi.Symbol.Name}");
-                
+
+                var compositionSymbolUi = compositionOp.GetSymbolUi();
                 var cmd = new CopySymbolChildrenCommand(containerSymbolUi,
                                                         null,
                                                         containerSymbolUi.Annotations.Values.ToList(),
                                                         compositionSymbolUi,
                                                         InverseTransformPositionFloat(ImGui.GetMousePos()));
                 cmd.Do(); // FIXME: Shouldn't this be UndoRedoQueue.AddAndExecute() ? 
-                SymbolUiRegistry.EntriesEditable.Remove(containerSymbolUi.Symbol.Id, out _);
                 SymbolRegistry.EntriesEditable.Remove(containerSymbol.Id, out _);
 
                 // Select new operators
@@ -1273,7 +1103,7 @@ namespace T3.Editor.Gui.Graph
                 foreach (var id in cmd.NewSymbolChildIds)
                 {
                     var newChildUi = compositionSymbolUi.ChildUis.Single(c => c.Id == id);
-                    var instance = CompositionOp.Children.Single(c2 => c2.SymbolChildId == id);
+                    var instance = compositionOp.Children.Single(c2 => c2.SymbolChildId == id);
                     NodeSelection.AddSymbolChildToSelection(newChildUi, instance);
                 }
 
@@ -1290,18 +1120,18 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private void DrawGrid()
+        private void DrawGrid(ImDrawListPtr drawList)
         {
             var gridSize = Math.Abs(64.0f * Scale.X);
             for (var x = (-Scroll.X * Scale.X) % gridSize; x < WindowSize.X; x += gridSize)
             {
-                DrawList.AddLine(new Vector2(x, 0.0f) + WindowPos,
+                drawList.AddLine(new Vector2(x, 0.0f) + WindowPos,
                                  new Vector2(x, WindowSize.Y) + WindowPos, UiColors.CanvasGrid);
             }
 
             for (var y = (-Scroll.Y * Scale.Y) % gridSize; y < WindowSize.Y; y += gridSize)
             {
-                DrawList.AddLine(
+                drawList.AddLine(
                                  new Vector2(0.0f, y) + WindowPos,
                                  new Vector2(WindowSize.X, y) + WindowPos, UiColors.CanvasGrid);
             }
@@ -1312,8 +1142,15 @@ namespace T3.Editor.Gui.Graph
             get
             {
                 _selectableItems.Clear();
-                _selectableItems.AddRange(ChildUis);
-                var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                var compositionOp = _window.CompositionOp;
+                var symbolUi = compositionOp.GetSymbolUi();
+                _selectableItems.AddRange(compositionOp.Children.Select(x =>
+                                                                        {
+                                                                            var child = x.GetSymbolChildUi();
+                                                                            if(child == null)
+                                                                                throw new Exception($"Failed to get symbol child ui for {x.SymbolChildId}");
+                                                                            return child;
+                                                                        }));
                 _selectableItems.AddRange(symbolUi.InputUis.Values);
                 _selectableItems.AddRange(symbolUi.OutputUis.Values);
                 _selectableItems.AddRange(symbolUi.Annotations.Values);
@@ -1324,8 +1161,7 @@ namespace T3.Editor.Gui.Graph
 
         private readonly List<ISelectableCanvasObject> _selectableItems = new();
         #endregion
-        
-        
+
         // todo - better encapsulate this in SymbolJson
         private static bool GetPastedSymbol(JToken jToken, SymbolPackage package, out Symbol symbol)
         {
@@ -1339,11 +1175,11 @@ namespace T3.Editor.Gui.Graph
                 return false;
             }
 
-            var hasSymbol = SymbolRegistry.Entries.TryGetValue(guid, out symbol);
+            symbol = EditorSymbolPackage.AllSymbols.FirstOrDefault(x => x.Id == guid);
 
             // is this really necessary? just bringing things into parity with what was previously there, but I feel like
             // everything below can be skipped, unless "allowNonOperatorInstanceType" actually matters
-            if (hasSymbol)
+            if (symbol != null)
                 return true;
 
             var jsonResult = SymbolJson.ReadSymbolRoot(guid, jToken, typeof(object), package);
@@ -1362,17 +1198,8 @@ namespace T3.Editor.Gui.Graph
         }
 
         #region public API
-        /// <summary>
-        /// The canvas that is currently being drawn from the UI.
-        /// Note that <see cref="GraphCanvas"/> is NOT a singleton so you can't rely on this to be valid outside of the Drawing() context.
-        /// </summary>
-        public static GraphCanvas Current { get; private set; }
-
-        public ImDrawListPtr DrawList { get; private set; }
-        public Instance CompositionOp { get; private set; }
+        public bool Destroyed { get; private set; }
         #endregion
-
-        private List<Guid> _compositionPath = new();
 
         private readonly AddInputDialog _addInputDialog = new();
         private readonly AddOutputDialog _addOutputDialog = new();
@@ -1380,24 +1207,28 @@ namespace T3.Editor.Gui.Graph
         private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new();
         private readonly RenameSymbolDialog _renameSymbolDialog = new();
         public readonly EditNodeOutputDialog EditNodeOutputDialog = new();
-        public static  readonly EditCommentDialog EditCommentDialog = new();
+        public static readonly EditCommentDialog EditCommentDialog = new();
         public static readonly LibWarningDialog LibWarningDialog = new();
 
-        private List<SymbolChildUi> ChildUis { get; set; }
-        public readonly SymbolBrowser SymbolBrowser = new();
         private string _symbolNameForDialogEdits = "";
         private string _symbolDescriptionForDialog = "";
         private string _nameSpaceForDialogEdits = "";
         private readonly GraphWindow _window;
+        public GraphWindow Window => _window;
         private static Vector2 _dampedScrollVelocity = Vector2.Zero;
-        private readonly List<Guid> _initialCompositionPath;
-        private bool _initializedCompositionAfterLayoutReady;
+        internal readonly NavigationHistory NavigationHistory;
+        internal readonly Structure Structure;
+        internal readonly NodeNavigation NodeNavigation;
+        internal readonly NodeSelection NodeSelection;
+        private readonly NodeGraphLayouting _nodeGraphLayouting;
+        private readonly Graph _graph;
+        internal readonly SelectableNodeMovement SelectableNodeMovement;
+    }
 
-        public enum HoverModes
-        {
-            Disabled,
-            Live,
-            LastValue,
-        }
+    public enum GraphHoverModes
+    {
+        Disabled,
+        Live,
+        LastValue,
     }
 }

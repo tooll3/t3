@@ -1,6 +1,5 @@
-using System;
-using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Text;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
@@ -9,6 +8,7 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.TimeLine;
 
 namespace T3.Editor.Gui.Interaction
@@ -17,7 +17,7 @@ namespace T3.Editor.Gui.Interaction
     /// Implements transformations and interactions for a canvas that can
     /// be zoomed and panned.
     /// </summary>
-    public class ScalableCanvas : ICanvas
+    internal class ScalableCanvas : ICanvas
     {
         public ScalableCanvas(bool isCurveCanvas = false)
         {
@@ -32,10 +32,10 @@ namespace T3.Editor.Gui.Interaction
         /// <summary>
         /// This needs to be called by the inherited class before drawing its interface. 
         /// </summary>
-        public void UpdateCanvas(T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
+        public void UpdateCanvas(out InteractionState interactionState, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
         {
-            Io = ImGui.GetIO();
-            _mouse = ImGui.GetMousePos();
+            var io = ImGui.GetIO();
+            var mouse = new MouseState(io.MousePos, io.MouseDelta, io.MouseWheel);
 
             if (FillMode == FillModes.FillWindow)
             {
@@ -50,10 +50,11 @@ namespace T3.Editor.Gui.Interaction
                 WindowPos = ImGui.GetCursorScreenPos();
             }
 
-            if (!UsingParentCanvas)
-                DampScaling();
+            //if (!UsingParentCanvas)
+                DampScaling(io.DeltaTime);
 
-            HandleInteraction(flags);
+            HandleInteraction(flags, mouse, out var zoomed, out var panned);
+            interactionState = new InteractionState(panned, zoomed, mouse);
         }
 
         #region implement ICanvas =================================================================
@@ -186,16 +187,16 @@ namespace T3.Editor.Gui.Interaction
         protected Vector2 ScrollTarget = new(0.0f, 0.0f);
         #endregion
 
-        public Scope GetTargetScope()
+        public CanvasScope GetTargetScope()
         {
-            return new Scope()
+            return new CanvasScope()
                        {
                            Scale = ScaleTarget,
                            Scroll = ScrollTarget
                        };
         }
 
-        public void SetTargetScope(Scope scope)
+        public void SetTargetScope(CanvasScope scope)
         {
             ScaleTarget = scope.Scale;
             ScrollTarget = scope.Scroll;
@@ -327,7 +328,7 @@ namespace T3.Editor.Gui.Interaction
             }
         }
 
-        protected void SetScopeWithTransition(Vector2 scale, Vector2 scroll, Vector2 previousFocusOnScreen, ICanvas.Transition transition)
+        internal void SetScopeWithTransition(Vector2 scale, Vector2 scroll, ICanvas.Transition transition)
         {
             if (float.IsInfinity(scale.X) || float.IsNaN(scale.X)
                                           || float.IsInfinity(scale.Y) || float.IsNaN(scale.Y)
@@ -363,7 +364,7 @@ namespace T3.Editor.Gui.Interaction
             }
         }
 
-        protected void DampScaling()
+        private void DampScaling(float deltaTime)
         {
             // Damp scaling
             var minInCanvas = Scroll;
@@ -371,7 +372,7 @@ namespace T3.Editor.Gui.Interaction
             var minTargetInCanvas = ScrollTarget;
             var maxTargetInCanvas = ScrollTarget + WindowSize / ScaleTarget;
 
-            var f = Math.Min(Io.DeltaTime / UserSettings.Config.ScrollSmoothing.Clamp(0.01f, 0.99f), 1);
+            var f = Math.Min(deltaTime / UserSettings.Config.ScrollSmoothing.Clamp(0.01f, 0.99f), 1);
 
             var min = Vector2.Lerp(minInCanvas, minTargetInCanvas, f);
             var max = Vector2.Lerp(maxInCanvas, maxTargetInCanvas, f);
@@ -408,8 +409,10 @@ namespace T3.Editor.Gui.Interaction
                 Scroll = ScrollTarget;
         }
 
-        protected void HandleInteraction(T3Ui.EditingFlags flags)
+        private void HandleInteraction(T3Ui.EditingFlags flags, in MouseState mouseState, out bool zoomed, out bool panned)
         {
+            zoomed = false;
+            panned = false;
             
             var isDraggingConnection = (ConnectionMaker.TempConnections.Count > 0) && ImGui.IsWindowFocused();
             
@@ -418,45 +421,47 @@ namespace T3.Editor.Gui.Interaction
                                       ? ImGuiHoveredFlags.ChildWindows
                                       : ImGuiHoveredFlags.None;
             
-            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | allowChildHover) && !isDraggingConnection)
+            var isHovered = ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | allowChildHover);
+            if (!isHovered && !isDraggingConnection)
+            {
+                //Log.Debug($"Not hovered {GetType().Name}");
                 return;
+            }
 
             //DrawCanvasDebugInfos();
-            
+
             if ((flags & T3Ui.EditingFlags.PreventMouseInteractions) != T3Ui.EditingFlags.None)
+            {
+                //Log.Debug($"Preventing {GetType().Name}");
                 return;
-
-            // if (FrameStats.Last.OpenedPopUpName != string.Empty)
-            //     return;
-
-            if (PreventMouseInteraction)
-                return;
+            }
 
             var isVerticalColorSliderActive = FrameStats.Last.OpenedPopUpName == "ColorBrightnessSlider";
             
+            var preventPanning = flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse);
+            var mouseIsDragging = ImGui.IsMouseDragging(ImGuiMouseButton.Right)
+                                  || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt
+                                  || ImGui.IsMouseDragging(ImGuiMouseButton.Middle);
+            
             if (!isVerticalColorSliderActive 
-                && !flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse)
-                && (
-                        
-                       ImGui.IsMouseDragging(ImGuiMouseButton.Right)
-                        || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
-                        || ImGui.IsMouseDragging(ImGuiMouseButton.Middle)
+                && !preventPanning
+                && mouseIsDragging
                )
             {
-                ScrollTarget -= Io.MouseDelta / (ParentScale * ScaleTarget);
-                UserScrolledCanvas = true;
+                ScrollTarget -= mouseState.Delta / (ParentScale * ScaleTarget);
+                panned = true;
             }
-            else
-            {
-                UserScrolledCanvas = false;
-            }
+            
+            var preventZoom = flags.HasFlag(T3Ui.EditingFlags.PreventZoomWithMouseWheel);
 
-            if (!flags.HasFlag(T3Ui.EditingFlags.PreventZoomWithMouseWheel))
+            if (!preventZoom)
                 //&& !ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
             {
-                ZoomWithMouseWheel(_mouse);
+                ZoomWithMouseWheel(mouseState, out zoomed);
                 ScaleTarget = ClampScaleToValidRange(ScaleTarget);
             }
+            
+            //Log.Debug($"({GetType().Name}) {nameof(preventPanning)}: {preventPanning}, {nameof(mouseIsDragging)}: {mouseIsDragging}, {nameof(preventZoom)}: {preventZoom}");
         }
 
         protected Vector2 ClampScaleToValidRange(Vector2 scale)
@@ -469,20 +474,16 @@ namespace T3.Editor.Gui.Interaction
                        : new Vector2(scale.X.Clamp(0.1f, 40), scale.Y.Clamp(0.1f, 40));
         }
 
-        public virtual void ZoomWithMouseWheel(Vector2 focusCenterOnScreen)
-        {
-            UserZoomedCanvas = false;
-            
-            
-
-            var zoomDelta = ComputeZoomDeltaFromMouseWheel();
-            
-            ApplyZoomDelta(focusCenterOnScreen, zoomDelta);
+        void ZoomWithMouseWheel(MouseState mouseState, out bool zoomed)
+        { 
+            var zoomDelta = ComputeZoomDeltaFromMouseWheel(mouseState);
+            ApplyZoomDelta(mouseState.Position, zoomDelta, out zoomed);
         }
 
-        protected void ApplyZoomDelta(Vector2 focusCenterOnScreen, float zoomDelta)
+        protected void ApplyZoomDelta(Vector2 position, float zoomDelta, out bool zoomed)
         {
             var clamped = ClampScaleToValidRange(ScaleTarget * zoomDelta);
+            zoomed = false;
             if (clamped == ScaleTarget)
                 return;
 
@@ -505,15 +506,15 @@ namespace T3.Editor.Gui.Interaction
             ScaleTarget *= zoom;
 
             if (Math.Abs(zoomDelta) > 0.1f)
-                UserZoomedCanvas = true;
+                zoomed = true;
 
-            var focusCenterOnCanvas = InverseTransformPositionFloat(focusCenterOnScreen);
+            var focusCenterOnCanvas = InverseTransformPositionFloat(position);
             ScrollTarget += (focusCenterOnCanvas - ScrollTarget) * (zoom - Vector2.One) / zoom;
         }
 
-        private void DrawCanvasDebugInfos()
+        private void DrawCanvasDebugInfos(Vector2 mousePos)
         {
-            var focusCenterOnCanvas = InverseTransformPositionFloat(_mouse);
+            var focusCenterOnCanvas = InverseTransformPositionFloat(mousePos);
             var dl = ImGui.GetForegroundDrawList();
 
             var focusOnScreen = TransformPosition(focusCenterOnCanvas);
@@ -536,9 +537,9 @@ namespace T3.Editor.Gui.Interaction
 
         protected bool IsCurveCanvas => Scale.Y < 0;
 
-        protected float ComputeZoomDeltaFromMouseWheel()
+        protected float ComputeZoomDeltaFromMouseWheel(in MouseState mouseState)
         {
-            var ioMouseWheel = Io.MouseWheel;
+            var ioMouseWheel = mouseState.ScrollWheel;
             if (ioMouseWheel == 0)
                 return 1;
             
@@ -593,15 +594,20 @@ namespace T3.Editor.Gui.Interaction
         //     }
         // }
 
-        public bool UsingParentCanvas => GraphCanvas.Current != this && GraphCanvas.Current != null;
-        public Vector2 ParentScale => UsingParentCanvas ? GraphCanvas.Current.ScaleTarget : Vector2.One;
-        public Vector2 ParentScroll => UsingParentCanvas ? GraphCanvas.Current.ScrollTarget : Vector2.Zero;
-
-        public struct Scope
+        private bool UsingParentCanvas
         {
-            public Vector2 Scale;
-            public Vector2 Scroll;
+            get
+            {
+                var focused = GraphWindow.Focused;
+                if (focused == null)
+                    return false;
+
+                var canvas = focused.GraphCanvas;
+                return canvas != this;
+            }
         }
+
+        public Vector2 ParentScale => UsingParentCanvas ? GraphWindow.Focused!.GraphCanvas.ScaleTarget : Vector2.One;
 
         public enum FillModes
         {
@@ -611,10 +617,28 @@ namespace T3.Editor.Gui.Interaction
 
         public FillModes FillMode = FillModes.FillWindow;
 
-        protected bool UserZoomedCanvas;
-        protected bool UserScrolledCanvas;
-        public bool PreventMouseInteraction;
-        private Vector2 _mouse;
-        protected ImGuiIOPtr Io;
+        public readonly record struct InteractionState(bool UserPannedCanvas, bool UserZoomedCanvas, MouseState MouseState);
+
+        public static string PrintInteractionState(in InteractionState state)
+        {
+            var sb = new StringBuilder();
+            sb.Append("Panned: ");
+            sb.Append(state.UserPannedCanvas ? "Yes" : "No");
+            sb.Append("  Zoomed: ");
+            sb.Append(state.UserZoomedCanvas ? "Yes" : "No");
+            sb.Append("  Mouse: ");
+            sb.Append(state.MouseState.Position);
+            var str = sb.ToString();
+            Log.Debug(str);
+            return str;
+        }
     }
+
+    public struct CanvasScope
+    {
+        public Vector2 Scale;
+        public Vector2 Scroll;
+    }
+
+    public readonly record struct MouseState(Vector2 Position, Vector2 Delta, float ScrollWheel);
 }

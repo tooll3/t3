@@ -1,11 +1,11 @@
-﻿using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph
 {
@@ -15,13 +15,13 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     static class InputNode
     {
-        internal static bool Draw(Symbol.InputDefinition inputDef, IInputUi inputUi, int index)
+        internal static bool Draw(GraphWindow window, ImDrawListPtr drawList, Symbol.InputDefinition inputDef, IInputUi inputUi, int index)
         { 
             var isSelectedOrHovered = false;
             ImGui.PushID(inputDef.Id.GetHashCode());
             {
-                
-                _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(inputUi.PosOnCanvas, inputUi.PosOnCanvas + inputUi.Size));
+                var canvas = window.GraphCanvas;
+                _lastScreenRect = canvas.TransformRect(new ImRect(inputUi.PosOnCanvas, inputUi.PosOnCanvas + inputUi.Size));
                 _lastScreenRect.Floor();
 
                 // Interaction
@@ -36,18 +36,17 @@ namespace T3.Editor.Gui.Graph
                     isSelectedOrHovered = true;
                 }
 
-                SelectableNodeMovement.Handle(inputUi);
+                canvas.SelectableNodeMovement.Handle(inputUi);
 
                 // Rendering
                 var typeColor = TypeUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
 
-                var drawList = GraphCanvas.Current.DrawList;
                 drawList.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
                                        hovered
                                            ? ColorVariations.OperatorBackgroundHover.Apply(typeColor)
                                            : ColorVariations.ConnectionLines.Apply(typeColor));
 
-                var inputUiIsSelected = inputUi.IsSelected;
+                var inputUiIsSelected = canvas.NodeSelection.IsNodeSelected(inputUi);
                 isSelectedOrHovered |= inputUiIsSelected;
                 
                 if (inputUiIsSelected)
@@ -61,7 +60,7 @@ namespace T3.Editor.Gui.Graph
                 // Label
                 {
                     
-                    var isScaledDown = GraphCanvas.Current.Scale.X < 1;
+                    var isScaledDown = canvas.Scale.X < 1;
                     ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontBold);
                     
                     // Index
@@ -112,7 +111,7 @@ namespace T3.Editor.Gui.Graph
 
                             if (ImGui.IsMouseReleased(0))
                             {
-                                ConnectionMaker.CompleteAtSymbolInputNode(GraphCanvas.Current.CompositionOp.Symbol, inputDef);
+                                ConnectionMaker.CompleteAtSymbolInputNode(window.CompositionOp.GetSymbolUi(), inputDef);
                             }
                         }
                         else

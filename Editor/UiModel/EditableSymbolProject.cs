@@ -1,12 +1,7 @@
 #nullable enable
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Numerics;
 using T3.Core.Compilation;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
@@ -18,37 +13,7 @@ namespace T3.Editor.UiModel;
 internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 {
     public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;
-
-    static EditableSymbolProject()
-    {
-        ProjectAdded += (project, homeSymbol) =>
-                        {
-                            if (RootSymbolUi == null)
-                            {
-                                const string message = "Root symbol is null! It must be created before adding projects!";
-                                throw new Exception(message);
-                            }
-                            
-                            var opSize = SymbolChildUi.DefaultOpSize;
-                            RootSymbolUi.AddChild(homeSymbol, 
-                                                  addedChildId: Guid.NewGuid(), 
-                                                  posInCanvas: new Vector2(0, _newProjectPosition), 
-                                                  size: opSize, 
-                                                  name: "");
-                            
-                            _newProjectPosition += (int)opSize.Y + 20;
-                        };
-    }
-
-    internal static void EnableRootSaving(bool enabled)
-    {
-        if (RootSymbolUi == null)
-        {
-            throw new Exception("RootSymbolUi is null");
-        }
-        
-        RootSymbolUi.ForceUnmodified = enabled;
-    }
+    public override string DisplayName { get; }
 
     /// <summary>
     /// Create a new <see cref="EditableSymbolProject"/> using the given <see cref="CsProjectFile"/>.
@@ -60,23 +25,9 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         CsProjectFile = csProjectFile;
         AllProjectsRw.Add(this);
         _csFileWatcher = new CodeFileWatcher(this, OnFileChanged, OnFileRenamed);
-        SymbolAdded += OnSymbolAdded;
+        DisplayName = $"{AssemblyInformation.Name} ({CsProjectFile.RootNamespace})";
         SymbolUpdated += OnSymbolUpdated;
         SymbolRemoved += OnSymbolRemoved;
-    }
-
-    public bool TryCreateHome()
-    {
-        if (!CsProjectFile.Assembly.HasHome)
-            return false;
-
-        Log.Debug($"Creating home for {CsProjectFile.Name}...");
-        var homeGuid = CsProjectFile.Assembly.HomeGuid;
-        var homeSymbol = Symbols[homeGuid];
-
-        ProjectAdded?.Invoke(this, homeSymbol);
-
-        return true;
     }
 
     public void OpenProjectInCodeEditor()
@@ -87,7 +38,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public bool TryOpenCSharpInEditor(Symbol symbol)
     {
         var guid = symbol.Id;
-        if (!_filePathHandlers.TryGetValue(guid, out var filePathHandler))
+        if (!FilePathHandlers.TryGetValue(guid, out var filePathHandler))
         {
             Log.Error($"No file path handler found for symbol {guid}");
             return false;
@@ -108,8 +59,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public void ReplaceSymbolUi(SymbolUi symbolUi)
     {
         var symbol = symbolUi.Symbol;
-        SymbolUiRegistry.EntriesEditable[symbol.Id] = symbolUi;
-        SymbolUis[symbol.Id] = symbolUi;
+        SymbolUiDict[symbol.Id] = symbolUi;
         symbolUi.FlagAsModified();
         symbolUi.ForceUnmodified = false;
         SaveSymbolFile(symbolUi);
@@ -120,8 +70,8 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     private void GiveSymbolToPackage(Guid id, EditableSymbolProject newDestinationProject)
     {
         Symbols.Remove(id, out var symbol);
-        SymbolUis.Remove(id, out var symbolUi);
-        _filePathHandlers.Remove(id, out var symbolPathHandler);
+        SymbolUiDict.Remove(id, out var symbolUi);
+        FilePathHandlers.Remove(id, out var symbolPathHandler);
         
         Debug.Assert(symbol != null);
         Debug.Assert(symbolUi != null);
@@ -129,15 +79,16 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
         symbol.SymbolPackage = newDestinationProject;
 
-        newDestinationProject.Symbols.Add(id, symbol);
-        newDestinationProject.SymbolUis.TryAdd(id, symbolUi);
+        newDestinationProject.Symbols.TryAdd(id, symbol);
+        newDestinationProject.SymbolUiDict.TryAdd(id, symbolUi);
 
-        newDestinationProject._filePathHandlers.TryAdd(id, symbolPathHandler);
+        newDestinationProject.FilePathHandlers.TryAdd(id, symbolPathHandler);
 
         symbolUi.FlagAsModified();
         newDestinationProject.MarkAsNeedingRecompilation();
         MarkAsNeedingRecompilation();
     }
+
 
     public override string Folder => CsProjectFile.Directory;
 
@@ -177,12 +128,4 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     private static readonly List<EditableSymbolProject> AllProjectsRw = [];
     public static readonly IReadOnlyList<EditableSymbolProject> AllProjects = AllProjectsRw;
-    
-    /// <summary>
-    /// Event that is raised when a new project is added
-    /// Symbol is the new project's <see href="T3.Core.Operator.Attributes.HomeAttribute"/> symbol
-    /// </summary>
-    public static event Action<EditableSymbolProject, Symbol>? ProjectAdded;
-
-    private static int _newProjectPosition = 0;
 }

@@ -1,10 +1,6 @@
 #nullable enable
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
-using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Serialization;
 
@@ -54,16 +50,6 @@ internal static class ShaderLinter
         }
     }
 
-    public static void DeleteFiles()
-    {
-        foreach (var json in HlslToolsJsons.Values)
-        {
-            TryDelete(json.FilePath);
-        }
-        
-        HlslToolsJsons.Clear();
-    }
-
     private static void TryDelete(string filePath)
     {
         try
@@ -97,11 +83,19 @@ internal static class ShaderLinter
 
     public static void RemovePackage(IResourcePackage resourcePackage)
     {
-        var json = HlslToolsJsons[resourcePackage];
+        if (!HlslToolsJsons.TryGetValue(resourcePackage, out var json))
+        {
+            Log.Error($"{nameof(ShaderLinter)}: failed to remove {resourcePackage.ResourcesFolder}");
+            return;
+        }
+        
         var filePath = json.FilePath;
         
         TryDelete(filePath);
         HlslToolsJsons.Remove(resourcePackage);
+
+        if (Program.IsShuttingDown)
+            return;
         
         var resourceFolder = resourcePackage.ResourcesFolder;
         foreach(var dependent in HlslToolsJsons.Values)

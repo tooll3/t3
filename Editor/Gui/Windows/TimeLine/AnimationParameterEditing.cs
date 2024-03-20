@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using T3.Core.Animation;
+﻿using T3.Core.Animation;
 using T3.Core.DataTypes;
+using T3.Core.Operator;
 using T3.Editor.Gui.Interaction.WithCurves;
 
 namespace T3.Editor.Gui.Windows.TimeLine
@@ -8,7 +8,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
     /// <summary>
     /// Links to AnimationParameters to editors like DopeSheets or <see cref="TimelineCurveEditArea"/>>
     /// </summary>
-    public abstract class AnimationParameterEditing : CurveEditing
+    internal abstract class AnimationParameterEditing : CurveEditing
     {
         protected override IEnumerable<Curve> GetAllCurves()
         {
@@ -27,9 +27,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
         }
 
-        protected override void DeleteSelectedKeyframes()
+        protected override void DeleteSelectedKeyframes(Instance composition)
         {
-            TimeLineCanvas.DeleteSelectedElements();
+            TimeLineCanvas.DeleteSelectedElements(composition);
         }
 
         public TimeRange GetSelectionTimeRange()

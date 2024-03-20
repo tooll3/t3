@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
+﻿using System.Text;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
@@ -169,19 +164,38 @@ namespace T3.Editor.Gui.Windows
 
             ImGui.TextColored(color, firstLine);
 
-            var hasInstancePath = entry.SourceIdPath?.Count > 1;
+            var hasInstancePath = entry.SourceIdPath.Count > 0;
             if (IsLineHovered() && (hasInstancePath || hasMessageWithLineBreaks))
             {
                 FrameStats.AddHoveredId(entry.SourceId);
+
+                GraphCanvas owner = null;
+                bool foundOwner = false;
+                var childIdPath = entry.SourceIdPath?.ToList();
+
+                if (hasInstancePath)
+                {
+                    foreach (var graphWindow in GraphWindow.GraphWindowInstances)
+                    {
+                        var canvas = graphWindow.GraphCanvas;
+                        var hoveredSourceInstance = canvas.Structure.GetInstanceFromIdPath(childIdPath);
+                        if (hoveredSourceInstance == null)
+                        {
+                            continue;
+                        }
+
+                        owner = canvas;
+                        foundOwner = true;
+                        break;
+                    }
+                }
 
                 ImGui.BeginTooltip();
                 {
                     // Show instance details
                     if (hasInstancePath)
                     {
-                        var childIdPath = entry.SourceIdPath?.ToList();
-                        var hoveredSourceInstance = Structure.GetInstanceFromIdPath(childIdPath);
-                        if (hoveredSourceInstance == null)
+                        if (!foundOwner)
                         {
                             ImGui.Text("Source Instance of message not longer valid");
                         }
@@ -189,7 +203,7 @@ namespace T3.Editor.Gui.Windows
                         {
                             ImGui.TextColored(UiColors.TextMuted, "from ");
 
-                            foreach (var p in Structure.GetReadableInstancePath(childIdPath))
+                            foreach (var p in owner.Structure.GetReadableInstancePath(childIdPath))
                             {
                                 ImGui.SameLine();
                                 ImGui.TextColored(UiColors.TextMuted, " / ");
@@ -206,9 +220,13 @@ namespace T3.Editor.Gui.Windows
                     }
                 }
                 ImGui.EndTooltip();
-                if (hasInstancePath && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+
+                if (!foundOwner)
+                    return;
+                
+                if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                 {
-                    GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(entry.SourceIdPath?.ToList());
+                    owner.OpenAndFocusInstance(entry.SourceIdPath?.ToList());
                 }
             }
         }

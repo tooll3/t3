@@ -64,8 +64,13 @@ namespace T3.Editor.Gui.Commands.Variations
 
         private void FlagSymbolAsModified()
         {
-            var symbolUi = SymbolUiRegistry.Entries[_symbol.Id];
-            symbolUi.FlagAsModified();
+            if (!SymbolUiRegistry.TryGetValue(_symbol.Id, out var symbolUi))
+            {
+                Log.Warning($"Could not find symbol with id {_symbol.Id} - was it removed?");
+                return;
+            }
+            
+            symbolUi!.FlagAsModified();
         }
     }
 }

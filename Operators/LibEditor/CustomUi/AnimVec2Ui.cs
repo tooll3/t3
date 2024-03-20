@@ -13,14 +13,14 @@ namespace libEditor.CustomUi
 {
     public static class AnimVec2Ui
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is AnimVec2 animVec2)
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
-            if (WidgetElements.DrawRateLabelWithTitle(animVec2.RateFactor, screenRect, drawList,  "Anim2 " + (AnimMath.Shapes)animVec2.Shape.TypedInputValue.Value))
+            if (WidgetElements.DrawRateLabelWithTitle(animVec2.RateFactor, screenRect, drawList,  "Anim2 " + (AnimMath.Shapes)animVec2.Shape.TypedInputValue.Value, canvasScale))
             {
                 animVec2.RateFactor.Input.IsDefault = false;
                 animVec2.RateFactor.DirtyFlag.Invalidate();

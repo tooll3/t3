@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using T3.Core.DataTypes;
-using T3.Core.Logging;
+﻿using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction;
@@ -18,14 +15,32 @@ internal static class ParameterExtraction
         return _symbolIdsForTypes.ContainsKey(inputSlot.ValueType);
     }
     
-    public static void ExtractAsConnectedOperator(IInputSlot inputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
+    public static void ExtractAsConnectedOperator(NodeSelection nodeSelection, IInputSlot inputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
     {
-        var composition = NodeSelection.GetSelectedComposition() ?? inputSlot.Parent.Parent;
+        SymbolUi? compositionUi = null;
+        Instance composition;
+        var potentialComposition = nodeSelection.GetSelectedComposition();
+        if (potentialComposition != null)
+        {
+            compositionUi = potentialComposition.GetSymbolUi();
+            composition = potentialComposition;
+        }
+        else
+        {
+            composition = inputSlot.Parent.Parent;
+        }
+        
         if (composition == null)
         {
             Log.Warning("Can't publish input to undefined composition");
             return;
         }
+
+        if (compositionUi == null)
+        {
+            compositionUi = composition.GetSymbolUi();
+        }
+            
 
         var compositionSymbol = composition.Symbol;
         var commands = new List<ICommand>();
@@ -37,11 +52,9 @@ internal static class ParameterExtraction
             return;
         }
 
-        var symbol = SymbolRegistry.Entries[symbolId];
-
         // Add Child
-        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionSymbol, symbolChildUi, input.InputDefinition);
-        var addSymbolChildCommand = new AddSymbolChildCommand(compositionSymbol, symbol.Id)
+        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionSymbol, symbolChildUi);
+        var addSymbolChildCommand = new AddSymbolChildCommand(composition.Symbol, symbolId)
                                         {
                                             PosOnCanvas = freePosition,
                                             ChildName = input.Name
@@ -56,8 +69,7 @@ internal static class ParameterExtraction
 
         var newSymbolChild = compositionSymbol.Children.Single(entry => entry.Id == addSymbolChildCommand.AddedChildId);
 
-        var symbolUi = SymbolUiRegistry.Entries[compositionSymbol.Id];
-        var newChildUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+        var newChildUi = compositionUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
 
         // Sadly, we have have apply size manually.
         if (_sizesForTypes.TryGetValue(input.DefaultValue.ValueType, out _))
@@ -74,7 +86,7 @@ internal static class ParameterExtraction
         // Set type
         var newInstance = composition.Children.Single(child => child.SymbolChildId == newChildUi.Id);
 
-        if(newInstance is not IExtractable extractable)
+        if(newInstance is not IExtractable extractable) // FIXME: implement extractable
         {
             Log.Warning("Can't extract this parameter type");
             return;
@@ -113,14 +125,14 @@ internal static class ParameterExtraction
         var newConnection = new Symbol.Connection(sourceParentOrChildId: newSymbolChild.Id,
                                                   sourceSlotId: firstMatchingOutput.Id,
                                                   targetParentOrChildId: symbolChildUi.SymbolChild.Id,
-                                                  targetSlotId: input.InputDefinition.Id);
-        var addConnectionCommand = new AddConnectionCommand(compositionSymbol, newConnection, 0);
+                                                  targetSlotId: input.Id);
+        var addConnectionCommand = new AddConnectionCommand(compositionUi.Symbol, newConnection, 0);
         addConnectionCommand.Do();
         commands.Add(addConnectionCommand);
         UndoRedoStack.Add(new MacroCommand("Extract as operator", commands));
     }
 
-    // Todo: this should be defined where the types are defined
+    // Todo: this should be defined where the types are defined and be direct symbol references
     private static readonly Dictionary<Type, Guid> _symbolIdsForTypes = new()
                                                                             {
                                                                                 { typeof(float), Guid.Parse("5d7d61ae-0a41-4ffa-a51d-93bab665e7fe") },

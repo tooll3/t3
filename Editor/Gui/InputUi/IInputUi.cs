@@ -1,8 +1,9 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.UiModel;
 

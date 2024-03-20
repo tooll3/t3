@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -15,12 +14,13 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Graph.Interaction.Connections
 {
-    public class ConnectionSplitHelper
+    internal class ConnectionSplitHelper
     {
-        public static void PrepareNewFrame(GraphCanvas graphCanvas)
+        public static void PrepareNewFrame(GraphWindow window)
         {
             _mousePosition = ImGui.GetMousePos();
             BestMatchLastFrame = _bestMatchYetForCurrentFrame;
+            var graphCanvas = window.GraphCanvas;
             if (BestMatchLastFrame != null && ConnectionMaker.TempConnections.Count == 0)
             {
                 var time = ImGui.GetTime();
@@ -42,8 +42,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                       - new Vector2(SymbolChildUi.DefaultOpSize.X * 0.25f,
                                                     SymbolChildUi.DefaultOpSize.Y * 0.5f);
 
-                    ConnectionMaker.SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol,
-                                                                     graphCanvas.SymbolBrowser,
+                    ConnectionMaker.SplitConnectionWithSymbolBrowser(window, window.CompositionOp!.Symbol,
                                                                      _bestMatchYetForCurrentFrame.Connection,
                                                                      posOnScreen);
                 }
@@ -56,9 +55,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                     SymbolChild.Output output = null;
                     Symbol.OutputDefinition outputDefinition = null;
 
-                    var sourceOpInstance =
-                        graphCanvas.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
-                    var sourceOp = graphCanvas.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
+                    var op = window.CompositionOp!;
+                    var sourceOpInstance = op.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
+                    var sourceOp = op.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
                     if (sourceOpInstance != null)
                     {
                         outputDefinition = sourceOpInstance.Symbol.OutputDefinitions.SingleOrDefault(outDef => outDef.Id == connection.SourceSlotId);
@@ -70,7 +69,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                     }
 
                     SymbolChild.Input input = null;
-                    var targetOp = graphCanvas.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.TargetParentOrChildId);
+                    var targetOp = op.Symbol.Children.SingleOrDefault(child => child.Id == connection.TargetParentOrChildId);
                     if (targetOp != null)
                     {
                         input = targetOp.Inputs[connection.TargetSlotId];
@@ -90,11 +89,11 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                             ImageCanvasForTooltips.SetAsCurrent();
 
                             //var sourceOpUi = SymbolUiRegistry.Entries[graphCanvas.CompositionOp.Symbol.Id].ChildUis.Single(childUi => childUi.Id == sourceOp.Id);
-                            var sourceOpUi = SymbolUiRegistry.Entries[sourceOpInstance.Symbol.Id];
+                            var sourceOpUi = sourceOpInstance.GetSymbolUi();
                             IOutputUi outputUi = sourceOpUi.OutputUis[output.OutputDefinition.Id];
                             EvaluationContext.Reset();
                             EvaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
-                            outputUi.DrawValue(outputSlot, EvaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
+                            outputUi.DrawValue(outputSlot, EvaluationContext, recompute: UserSettings.Config.HoverMode == GraphHoverModes.Live);
 
                             // if (!string.IsNullOrEmpty(sourceOpUi.Description))
                             // {
@@ -117,7 +116,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                             
                             ImGui.TextUnformatted(type.Name);
                             ImGui.SameLine();
-                            var connectionTarget = "--> " + targetOp.ReadableName + "." + input.InputDefinition.Name;
+                            var connectionTarget = "--> " + targetOp.ReadableName + "." + input.Name;
                             ImGui.TextColored(UiColors.TextMuted, connectionTarget);
                             ImGui.PopFont();
 

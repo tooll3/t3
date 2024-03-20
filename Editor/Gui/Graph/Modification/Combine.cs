@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using T3.Core.Logging;
+﻿using System.Text;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;

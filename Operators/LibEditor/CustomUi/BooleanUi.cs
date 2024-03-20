@@ -15,7 +15,7 @@ namespace libEditor.CustomUi
 {
     public static class BooleanUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (instance is not Boolean boolean)
                 return SymbolChildUi.CustomUiResult.None;
@@ -23,7 +23,7 @@ namespace libEditor.CustomUi
             if (!ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
-            var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList);
+            var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList, canvasScale);
             var colorAsVec4 = boolean.ColorInGraph.TypedInputValue.Value;
             var color = new Color(colorAsVec4);
 
@@ -42,23 +42,23 @@ namespace libEditor.CustomUi
                             : symbolChild.ReadableName;
 
             drawList.AddRectFilled(activeRect.Min, activeRect.Max, color.Fade(refValue ? 0.5f : 0.1f));
-            var canvasScale = GraphCanvas.Current.Scale.Y;
 
-            var font = WidgetElements.GetPrimaryLabelFont(canvasScale);
-            var labelColor = WidgetElements.GetPrimaryLabelColor(canvasScale);
+            var canvasScaleY = canvasScale.Y;
+            var font = WidgetElements.GetPrimaryLabelFont(canvasScaleY);
+            var labelColor = WidgetElements.GetPrimaryLabelColor(canvasScaleY);
 
             ImGui.PushFont(font);
             var labelSize = ImGui.CalcTextSize(label);
 
-            var labelPos = new Vector2(activeRect.Min.X + 18 * canvasScale,
+            var labelPos = new Vector2(activeRect.Min.X + 18 * canvasScaleY,
                                        (activeRect.Min.Y + activeRect.Max.Y) / 2 - labelSize.Y / 2);
             drawList.AddText(font, font.FontSize, labelPos, labelColor, label);
             ImGui.PopFont();
 
-            var checkCenter = new Vector2(labelPos.X - 10f * canvasScale,
-                                          (activeRect.Min.Y + activeRect.Max.Y) / 2 + 1.5f * canvasScale
+            var checkCenter = new Vector2(labelPos.X - 10f * canvasScaleY,
+                                          (activeRect.Min.Y + activeRect.Max.Y) / 2 + 1.5f * canvasScaleY
                                          );
-            var checkSize = MathF.Min(100, 2.5f * canvasScale);
+            var checkSize = MathF.Min(100, 2.5f * canvasScaleY);
             var points = new[]
                              {
                                  checkCenter + new Vector2(-2, -1) * checkSize,
@@ -68,7 +68,7 @@ namespace libEditor.CustomUi
             drawList.AddPolyline(ref points[0], 3,
                                  refValue ? UiColors.WidgetTitle : UiColors.BackgroundFull.Fade(0.2f),
                                  ImDrawFlags.None,
-                                 MathF.Max(1.4f, 0.5f * canvasScale));
+                                 MathF.Max(1.4f, 0.5f * canvasScaleY));
 
             if (!boolean.BoolValue.IsConnected)
             {
@@ -101,14 +101,15 @@ namespace libEditor.CustomUi
         /// <summary>
         /// toggle button for boolean math op 
         /// </summary>
-        private static bool ToggleButtonB(string label, ref bool isSelected, Vector2 size, Vector4 color, bool trigger = false)
+        private static bool ToggleButtonB(string label, ref bool isSelected, Vector2 size, Vector4 color, Vector2 canvasScale, bool trigger = false)
         {
             var clicked = false;
             var colorInactive = color - new Vector4(.0f, .0f, .0f, .3f);
 
-            ImGui.PushFont(GraphCanvas.Current.Scale.X < 2
+            var xScale = canvasScale.X;
+            ImGui.PushFont(xScale < 2
                                ? Fonts.FontSmall
-                               : GraphCanvas.Current.Scale.X < 4
+                               : xScale < 4
                                    ? Fonts.FontNormal
                                    : Fonts.FontLarge);
 

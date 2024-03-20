@@ -1,9 +1,7 @@
-using System;
 using System.Drawing;
 using System.IO;
 using ManagedBass;
 using T3.Core.Audio;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
 

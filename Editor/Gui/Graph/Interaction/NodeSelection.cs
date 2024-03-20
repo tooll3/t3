@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using T3.Core.Logging;
+﻿#nullable enable
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction
@@ -20,9 +19,17 @@ namespace T3.Editor.Gui.Graph.Interaction
     /// - Frequently we want to select the parent operator when clicking on the background of a composition (e.g. to
     ///   to show it's parameters.  
     /// </summary>
-    public static class NodeSelection
+    internal class NodeSelection : ISelection
     {
-        public static void Clear()
+        public static NodeSelection FocusedSelection { get; } = null;
+
+        public NodeSelection(NavigationHistory history, Structure structure)
+        {
+            _history = history;
+            _structure = structure;
+        }
+        
+        public void Clear()
         {
             TransformGizmoHandling.ClearSelectedTransformables();
             Selection.Clear();
@@ -31,15 +38,15 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// <summary>
         /// This called when clicking on background
         /// </summary>
-        public static void SetSelectionToParent(Instance instance)
+        public void SetSelectionToComposition(Instance instance)
         {
-            NavigationHistory.UpdateSelectedInstance(instance);
+            _history.UpdateSelectedInstance(instance);
             Clear();
             _childUiInstanceIdPaths.Clear();
             _selectedComposition = instance;
         }
 
-        public static void SetSelection(ISelectableCanvasObject node)
+        public void SetSelection(ISelectableCanvasObject node)
         {
             if (node is SymbolChildUi)
             {
@@ -50,18 +57,16 @@ namespace T3.Editor.Gui.Graph.Interaction
             AddSelection(node);
         }
 
-        public static void AddSelection(ISelectableCanvasObject node)
+        public void AddSelection(ISelectableCanvasObject node)
         {
-            _selectedComposition = null;
             if (Selection.Contains(node))
                 return;
 
             Selection.Add(node);
         }
         
-        public static void DeselectNode(ISelectableCanvasObject node)
+        public void DeselectNode(ISelectableCanvasObject node)
         {
-            _selectedComposition = null;
             var index = Selection.IndexOf(node);
             if(index != -1)
                 Selection.RemoveAt(index);
@@ -70,16 +75,16 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// <summary>
         /// Replaces current selection with symbol child
         /// </summary>
-        public static void SetSelectionToChildUi(SymbolChildUi node, Instance instance)
+        public void SetSelectionToChildUi(SymbolChildUi node, Instance instance)
         {
             Clear();
             AddSymbolChildToSelection(node, instance);
-            NavigationHistory.UpdateSelectedInstance(instance);
+            _history.UpdateSelectedInstance(instance);
         }
 
-        public static void SelectCompositionChild(Instance compositionOp, Guid id, bool replaceSelection = true)
+        public void SelectCompositionChild(Instance compositionOp, Guid id, bool replaceSelection = true)
         {
-            if (!Structure.TryGetUiAndInstanceInComposition(id, compositionOp, out var childUi, out var instance))
+            if (!_structure.TryGetUiAndInstanceInComposition(id, compositionOp, out var childUi, out var instance))
                 return;
             
             if (replaceSelection)
@@ -90,9 +95,8 @@ namespace T3.Editor.Gui.Graph.Interaction
             AddSymbolChildToSelection(childUi, instance);
         }
 
-        public static void AddSymbolChildToSelection(SymbolChildUi childUi, Instance instance)
+        public void AddSymbolChildToSelection(SymbolChildUi childUi, Instance instance)
         {
-            _selectedComposition = null;
             if (Selection.Contains(childUi))
                 return;
 
@@ -107,7 +111,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
-        public static IEnumerable<T> GetSelectedNodes<T>() where T : ISelectableCanvasObject
+        public IEnumerable<T> GetSelectedNodes<T>() where T : ISelectableCanvasObject
         {
             foreach (var item in Selection)
             {
@@ -116,20 +120,14 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
         
-        public static bool IsNodeSelected(ISelectableCanvasObject node)
-        {
-            return Selection.Contains(node);
-        }
+        public bool IsNodeSelected(ISelectableCanvasObject node) => Selection.Contains(node);
 
-        public static bool IsAnythingSelected()
-        {
-            return Selection.Count > 0;
-        }
+        public bool IsAnythingSelected() => Selection.Count > 0;
 
         /// <summary>
         /// Returns null if more than onl
         /// </summary>
-        public static Instance GetSelectedInstance()
+        public Instance GetSelectedInstanceWithoutComposition()
         {
             if (Selection.Count != 1)
                 return null;
@@ -137,7 +135,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             return GetFirstSelectedInstance();
         }
         
-        public static Instance GetFirstSelectedInstance()
+        public Instance? GetFirstSelectedInstance()
         {
             if (Selection.Count == 0)
                 return _selectedComposition;
@@ -152,78 +150,54 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
 
                 var idPath = _childUiInstanceIdPaths[firstNode];
-                return Structure.GetInstanceFromIdPath(idPath);
+                return _structure.GetInstanceFromIdPath(idPath);
             }
 
             return null;
         }
 
-        public static IEnumerable<Instance> GetSelectedInstances()
+        public IEnumerable<SymbolChildUi> GetSelectedChildUis() => GetSelectedNodes<SymbolChildUi>();
+        public IEnumerable<Instance> GetSelectedInstances()
         {
-            foreach (var s in Selection)
-            {
-                if (s is not SymbolChildUi symbolChildUi)
-                    continue;
-                
-                if (!_childUiInstanceIdPaths.ContainsKey(symbolChildUi))
-                {
-                    Log.Error("Failed to access id-path of selected childUi " + symbolChildUi.SymbolChild.Name);
-                    Clear();
-                    break;
-                }
-
-                var idPath = _childUiInstanceIdPaths[symbolChildUi];
-                yield return Structure.GetInstanceFromIdPath(idPath);
-
-            }
+            return GetSelectedNodes<SymbolChildUi>()
+                  .Where(x => _childUiInstanceIdPaths.ContainsKey(x))
+                  .Select(symbolChildUi =>
+                          {
+                              var idPath = _childUiInstanceIdPaths[symbolChildUi];
+                              return _structure.GetInstanceFromIdPath(idPath)!;
+                          });
         }
 
         
-        public static Instance GetSelectedComposition()
-        {
-            return _selectedComposition;
-        }
+        /// <summary>
+        /// Returns null if there are other selections
+        /// </summary>
+        public Instance? GetSelectedComposition() => Selection.Count > 0 ? null : _selectedComposition;
 
-        public static Instance GetCompositionForSelection()
+        public Guid? GetSelectionSymbolChildId()
         {
             if (Selection.Count == 0)
-                return _selectedComposition;
+                return _selectedComposition.SymbolChildId;
 
-            if (!(Selection[0] is SymbolChildUi firstNode))
+            if (Selection[0] is not SymbolChildUi firstNode)
                 return null;
 
-            var idPath = _childUiInstanceIdPaths[firstNode];
-            var instanceFromIdPath = Structure.GetInstanceFromIdPath(idPath);
-            return instanceFromIdPath?.Parent;
+            return firstNode.SymbolChild.Id;
         }
 
-        public static IEnumerable<SymbolChildUi> GetSelectedChildUis()
+        public void DeselectCompositionChild(Instance compositionOp, Guid symbolChildId)
         {
-            var result = new List<SymbolChildUi>();
-            foreach (var s in Selection)
-            {
-                if (!(s is SymbolChildUi symbolChildUi))
-                    continue;
-
-                result.Add(symbolChildUi);
-            }
-
-            return result;
-        }
-
-        public static void DeselectCompositionChild(Instance compositionOp, Guid symbolChildId)
-        {
-            if (!Structure.TryGetUiAndInstanceInComposition(symbolChildId, compositionOp, out var childUi, out var instance))
+            if (!_structure.TryGetUiAndInstanceInComposition(symbolChildId, compositionOp, out var childUi, out var instance))
                 return;
 
-            Selection.Remove(childUi);
+            Selection.Remove(childUi!);
             if (instance is ITransformable transformable)
             {
                 TransformGizmoHandling.ClearDeselectedTransformableNode(transformable);
             }
         }
 
-        public static void DeselectNode(ISelectableCanvasObject node, Instance instance)
+        public void DeselectNode(ISelectableCanvasObject node, Instance instance)
         {
             Selection.Remove(node);
             if (instance is ITransformable transformable)
@@ -232,14 +206,17 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
-        public static Instance GetInstanceForSymbolChildUi(SymbolChildUi symbolChildUi)
+        public Instance? GetInstanceForSymbolChildUi(SymbolChildUi symbolChildUi)
         {
             var idPath = _childUiInstanceIdPaths[symbolChildUi];
-            return Structure.GetInstanceFromIdPath(idPath);
+            return _structure.GetInstanceFromIdPath(idPath);
         }
 
-        public static readonly List<ISelectableCanvasObject> Selection = new();
-        private static Instance _selectedComposition;
-        private static readonly Dictionary<SymbolChildUi, List<Guid>> _childUiInstanceIdPaths = new();
+        private readonly NavigationHistory _history;
+        private readonly Structure _structure;
+
+        public readonly List<ISelectableCanvasObject> Selection = new();
+        private Instance _selectedComposition;
+        private readonly Dictionary<SymbolChildUi, List<Guid>> _childUiInstanceIdPaths = new();
     }
 }

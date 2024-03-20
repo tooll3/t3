@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator;
@@ -21,42 +17,50 @@ namespace T3.Editor.Gui.Graph
     /// <summary>
     /// Draws an AnnotationElement and handles its interaction
     /// </summary>
-    static class AnnotationElement
+    class AnnotationElement
     {
-        public static void StartRenaming(Annotation annotation)
+        private readonly Annotation _annotation;
+        public AnnotationElement(GraphWindow window, Annotation annotation)
         {
-            _requestedRenameId = annotation.Id;
+            _window = window;
+            _annotation = annotation;
+        }
+        
+        public void StartRenaming()
+        {
+            _requestedRenameId = _annotation.Id;
         }
 
-        private static Guid _requestedRenameId = Guid.Empty;
+        private Guid _requestedRenameId = Guid.Empty;
 
-        internal static void Draw(Annotation annotation)
+        internal void Draw(ImDrawListPtr drawList)
         {
-            _screenArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size));
+            var annotation = _annotation;
+            var canvas = _window.GraphCanvas;
+            var screenArea = canvas.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size));
             var titleSize = annotation.Size;
             titleSize.Y = MathF.Min(titleSize.Y, 14 * T3Ui.UiScaleFactor);
 
             // Keep height of title area at a minimum height when zooming out
-            var clickableArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + titleSize));
-            var height = MathF.Min(16 * T3Ui.UiScaleFactor, _screenArea.GetHeight());
+            var clickableArea = canvas.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + titleSize));
+            var height = MathF.Min(16 * T3Ui.UiScaleFactor, screenArea.GetHeight());
             clickableArea.Max.Y = clickableArea.Min.Y + height;
 
-            _isVisible = ImGui.IsRectVisible(_screenArea.Min, _screenArea.Max);
+            var isVisible = ImGui.IsRectVisible(screenArea.Min, screenArea.Max);
 
-            if (!_isVisible)
+            if (!isVisible)
                 return;
 
             ImGui.PushID(annotation.Id.GetHashCode());
-            var drawList = GraphCanvas.Current.DrawList;
 
             // Resize indicator
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
-                ImGui.SetCursorScreenPos(_screenArea.Max - new Vector2(10, 10) * T3Ui.UiScaleFactor);
+                ImGui.SetCursorScreenPos(screenArea.Max - new Vector2(10, 10) * T3Ui.UiScaleFactor);
                 ImGui.Button("##resize", new Vector2(10, 10) * T3Ui.UiScaleFactor);
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
-                    var delta = GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+                    var delta = canvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
                     annotation.Size += delta;
                 }
 
@@ -67,7 +71,7 @@ namespace T3.Editor.Gui.Graph
             const float backgroundAlpha = 0.2f;
             const float headerHoverAlpha = 0.3f;
 
-            drawList.AddRectFilled(_screenArea.Min, _screenArea.Max, UiColors.BackgroundFull.Fade(backgroundAlpha));
+            drawList.AddRectFilled(screenArea.Min, screenArea.Max, UiColors.BackgroundFull.Fade(backgroundAlpha));
 
             // Interaction
             ImGui.SetCursorScreenPos(clickableArea.Min);
@@ -84,21 +88,21 @@ namespace T3.Editor.Gui.Graph
             drawList.AddRectFilled(clickableArea.Min, clickableArea.Max,
                                    annotation.Color.Fade(isHeaderHovered ? headerHoverAlpha : 0));
 
-            HandleDragging(annotation);
+            HandleDragging();
             var shouldRename = (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left)) || _requestedRenameId == annotation.Id;
-            Renaming.Draw(annotation, shouldRename);
+            Renaming.Draw(annotation, screenArea, shouldRename);
             if (shouldRename)
             {
                 _requestedRenameId = Guid.Empty;
             }
 
-            var borderColor = annotation.IsSelected
+            var borderColor = canvas.NodeSelection.IsNodeSelected(annotation)
                                   ? UiColors.Selection
                                   : UiColors.BackgroundFull.Fade(isHeaderHovered ? headerHoverAlpha : backgroundAlpha);
 
             const float thickness = 1;
-            drawList.AddRect(_screenArea.Min - Vector2.One * thickness,
-                             _screenArea.Max + Vector2.One * thickness,
+            drawList.AddRect(screenArea.Min - Vector2.One * thickness,
+                             screenArea.Max + Vector2.One * thickness,
                              borderColor,
                              0f,
                              0,
@@ -106,11 +110,11 @@ namespace T3.Editor.Gui.Graph
 
             // Label
             if(!string.IsNullOrEmpty(annotation.Title)) {
-                var canvasScale = GraphCanvas.Current.Scale.X;
+                var canvasScale = canvas.Scale.X;
                 var font = annotation.Title.StartsWith("# ") ? Fonts.FontLarge: Fonts.FontNormal;
                 var fade = MathUtils.SmootherStep(0.25f, 0.6f, canvasScale);
-                drawList.PushClipRect(_screenArea.Min, _screenArea.Max, true);
-                var labelPos = _screenArea.Min + new Vector2(8, 6) * T3Ui.DisplayScaleFactor;
+                drawList.PushClipRect(screenArea.Min, screenArea.Max, true);
+                var labelPos = screenArea.Min + new Vector2(8, 6) * T3Ui.DisplayScaleFactor;
 
                 var fontSize = canvasScale > 1 
                                    ? font.FontSize
@@ -128,38 +132,35 @@ namespace T3.Editor.Gui.Graph
             ImGui.PopID();
         }
 
-        private static void HandleDragging(Annotation annotation, Instance instance = null)
+        private void HandleDragging()
         {
+            var nodeSelection = _window.GraphCanvas.NodeSelection;
             if (ImGui.IsItemActive())
             {
                 if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                 {
-                    var compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
-                    _draggedNodeId = annotation.Id;
-                    if (annotation.IsSelected)
+                    var parentUi = _window.CompositionOp.GetSymbolUi();
+                    _draggedNodeId = _annotation.Id;
+                    if (nodeSelection.IsNodeSelected(_annotation))
                     {
-                        _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
+                        _draggedNodes = nodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
                     }
                     else
                     {
-                        var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
 
                         if (!ImGui.GetIO().KeyCtrl)
-                            _draggedNodes = FindAnnotatedOps(parentUi, annotation).ToList();
-                        _draggedNodes.Add(annotation);
+                            _draggedNodes = FindAnnotatedOps(parentUi, _annotation).ToList();
+                        _draggedNodes.Add(_annotation);
                     }
 
-                    _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
-                }
-                else if (_moveCommand != null)
-                {
+                    _moveCommand = new ModifyCanvasElementsCommand(parentUi, _draggedNodes, nodeSelection);
                 }
 
-                HandleNodeDragging(annotation);
+                HandleNodeDragging(_annotation);
             }
             else if (ImGui.IsMouseReleased(0) && _moveCommand != null)
             {
-                if (_draggedNodeId != annotation.Id)
+                if (_draggedNodeId != _annotation.Id)
                     return;
 
                 // var singleDraggedNode = (_draggedNodes.Count == 1) ? _draggedNodes[0] : null;
@@ -174,20 +175,20 @@ namespace T3.Editor.Gui.Graph
                 }
                 else
                 {
-                    if (!NodeSelection.IsNodeSelected(annotation))
+                    if (!nodeSelection.IsNodeSelected(_annotation))
                     {
                         if (!ImGui.GetIO().KeyShift)
                         {
-                            NodeSelection.Clear();
+                            nodeSelection.Clear();
                         }
 
-                        NodeSelection.AddSelection(annotation);
+                        nodeSelection.AddSelection(_annotation);
                     }
                     else
                     {
                         if (ImGui.GetIO().KeyShift)
                         {
-                            NodeSelection.DeselectNode(annotation, instance);
+                            nodeSelection.DeselectNode(_annotation, null);
                         }
                     }
                 }
@@ -199,9 +200,9 @@ namespace T3.Editor.Gui.Graph
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
                 && !wasDraggingRight
                 && ImGui.IsItemHovered()
-                && !NodeSelection.IsNodeSelected(annotation))
+                && !nodeSelection.IsNodeSelected(_annotation))
             {
-                NodeSelection.SetSelection(annotation);
+                nodeSelection.SetSelection(_annotation);
             }
         }
 
@@ -230,22 +231,24 @@ namespace T3.Editor.Gui.Graph
             return matches;
         }
 
-        private static void HandleNodeDragging(ISelectableCanvasObject draggedNode)
+        private void HandleNodeDragging(ISelectableCanvasObject draggedNode)
         {
             if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
                 _isDragging = false;
                 return;
             }
+            
+            var canvas = _window.GraphCanvas;
 
             if (!_isDragging)
             {
-                _dragStartDelta = ImGui.GetMousePos() - GraphCanvas.Current.TransformPosition(draggedNode.PosOnCanvas);
+                _dragStartDelta = ImGui.GetMousePos() - canvas.TransformPosition(draggedNode.PosOnCanvas);
                 _isDragging = true;
             }
 
             var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
-            var newDragPosInCanvas = GraphCanvas.Current.InverseTransformPositionFloat(newDragPos);
+            var newDragPosInCanvas = canvas.InverseTransformPositionFloat(newDragPos);
             var moveDeltaOnCanvas = newDragPosInCanvas - draggedNode.PosOnCanvas;
 
             // Drag selection
@@ -257,7 +260,7 @@ namespace T3.Editor.Gui.Graph
 
         private static class Renaming
         {
-            public static void Draw(Annotation annotation, bool shouldBeOpened)
+            public static void Draw(Annotation annotation, ImRect screenArea, bool shouldBeOpened)
             {
                 var justOpened = false;
                 if (_focusedAnnotationId == Guid.Empty)
@@ -277,13 +280,13 @@ namespace T3.Editor.Gui.Graph
                 if (_focusedAnnotationId != annotation.Id)
                     return;
 
-                var positionInScreen = _screenArea.Min;
+                var positionInScreen = screenArea.Min;
                 ImGui.SetCursorScreenPos(positionInScreen);
 
                 var text = annotation.Title;
 
                 ImGui.SetNextItemWidth(150);
-                ImGui.InputTextMultiline("##renameAnnotation", ref text, 256, _screenArea.GetSize(), ImGuiInputTextFlags.AutoSelectAll);
+                ImGui.InputTextMultiline("##renameAnnotation", ref text, 256, screenArea.GetSize(), ImGuiInputTextFlags.AutoSelectAll);
                 if (!ImGui.IsItemDeactivated())
                     annotation.Title = text;
 
@@ -299,14 +302,13 @@ namespace T3.Editor.Gui.Graph
             private static ChangeAnnotationTextCommand _changeAnnotationTextCommand;
         }
 
-        private static bool _isDragging;
-        private static Vector2 _dragStartDelta;
-        private static ModifyCanvasElementsCommand _moveCommand;
+        bool _isDragging;
+        Vector2 _dragStartDelta;
+        ModifyCanvasElementsCommand _moveCommand;
 
-        private static Guid _draggedNodeId = Guid.Empty;
-        private static List<ISelectableCanvasObject> _draggedNodes = new();
+        Guid _draggedNodeId = Guid.Empty;
+        List<ISelectableCanvasObject> _draggedNodes = new();
 
-        private static bool _isVisible;
-        private static ImRect _screenArea;
+        readonly GraphWindow _window;
     }
 }

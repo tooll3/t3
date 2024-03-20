@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Numerics;
+﻿using System.Drawing;
 using ImGuiNET;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
@@ -16,13 +11,14 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using Color = T3.Core.DataTypes.Vector.Color;
 using Point = System.Drawing.Point;
 
 namespace T3.Editor.Gui.Interaction
 {
-    public static class ColorEditPopup
+    internal static class ColorEditPopup
     {
         public static InputEditStateFlags DrawPopup(ref Vector4 color, Vector4 previousColor)
         {
@@ -33,12 +29,13 @@ namespace T3.Editor.Gui.Interaction
             var dontCloseIfColorPicking = ImGui.GetIO().KeyAlt ? ImGuiWindowFlags.Modal : ImGuiWindowFlags.None;
 
             var id = ImGui.GetID("colorPicker");
+            var composition = GraphWindow.Focused?.CompositionOp;
             if (ImGui.BeginPopup(PopupId, dontCloseIfColorPicking))
             {
                 if (_openedId != id)
                 {
                     _openedId = id;
-                    ColorUsage.CollectUsedColors();
+                    ColorUsage.CollectUsedColors(composition);
                 }
 
                 var drawList = ImGui.GetForegroundDrawList();
@@ -52,7 +49,7 @@ namespace T3.Editor.Gui.Interaction
                 edited |= DrawUsedColors(ref cColor);
 
                 if (edited == InputEditStateFlags.ModifiedAndFinished)
-                    ColorUsage.CollectUsedColors();
+                    ColorUsage.CollectUsedColors(composition);
 
                 ImGui.EndPopup();
             }
@@ -690,20 +687,21 @@ namespace T3.Editor.Gui.Interaction
         {
             var selectedIds = new HashSet<Guid>();
 
-            NodeSelection.Clear();
+            var nodeSelection = GraphWindow.Focused?.GraphCanvas.NodeSelection;
+            nodeSelection?.Clear();
             foreach (var use in uses)
             {
                 if (use.Instance == null || selectedIds.Contains(use.Instance.SymbolChildId))
                     continue;
 
-                if (!SymbolUiRegistry.Entries.TryGetValue(use.Instance.Parent.Symbol.Id, out var parentSymbolUi))
-                    continue;
+                var instance = use.Instance;
 
-                var childUi = parentSymbolUi.ChildUis.SingleOrDefault(cc => cc.Id == use.Instance.SymbolChildId);
+                var childUi = instance.GetSymbolChildUi();
+
                 if (childUi == null)
                     continue;
 
-                NodeSelection.AddSymbolChildToSelection(childUi, use.Instance);
+                nodeSelection?.AddSymbolChildToSelection(childUi, instance);
                 selectedIds.Add(childUi.Id);
             }
 
@@ -742,12 +740,12 @@ namespace T3.Editor.Gui.Interaction
         public  const string PopupId =  "##colorEdit";
     }
 
-    public static class ColorUsage
+    internal static class ColorUsage
     {
         public static readonly Dictionary<Vector4, List<ColorUse>> ColorUses = new();
         public static List<Vector4> ColorsOrderedByFrequency = new();
 
-        public static void CollectUsedColors()
+        public static void CollectUsedColors(Instance op)
         {
             ColorUses.Clear();
 
@@ -757,7 +755,6 @@ namespace T3.Editor.Gui.Interaction
                 SaveUse(dc, new LibraryColorUse());
             }
 
-            var op = GraphWindow.GetMainComposition();
             if (op == null)
                 return;
 

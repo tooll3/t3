@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
@@ -12,6 +8,7 @@ using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
@@ -20,12 +17,12 @@ namespace T3.Editor.Gui.Graph.Interaction
     /// <summary>
     /// Handles selection and dragging (with snapping) of node canvas elements
     /// </summary>
-    public static class SelectableNodeMovement
+    internal class SelectableNodeMovement(GraphWindow window, INodeCanvas canvas, NodeSelection selection)
     {
         /// <summary>
         /// Reset to avoid accidental dragging of previous elements 
         /// </summary>
-        public static void Reset()
+        public void Reset()
         {
             _moveCommand = null;
             _draggedNodes.Clear();
@@ -37,44 +34,53 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// </summary>
         public static void CompleteFrame()
         {
+            foreach (var graphWindow in GraphWindow.GraphWindowInstances)
+            {
+                graphWindow.GraphCanvas.SelectableNodeMovement.OnCompleteFrame();
+               
+            }
+        }
+
+        private void OnCompleteFrame()
+        {
             if (ImGui.IsMouseReleased(0) && _moveCommand != null)
             {
-                Reset();    
+                Reset();
             }
         }
 
         /// <summary>
         /// NOTE: This has to be called for ALL movable elements (ops, inputs, outputs) and directly after ImGui.Item
         /// </summary>
-        public static void Handle(ISelectableCanvasObject node, Instance instance = null)
+        public void Handle(ISelectableCanvasObject node, Instance instance = null)
         {
 
+            var composition = window.CompositionOp;
             var justClicked = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
             
             var isActiveNode = node.Id == _draggedNodeId;
             if (justClicked)
             {
-                var compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
                 _draggedNodeId = node.Id;
-                if (node.IsSelected)
+                var parentUi = composition.GetSymbolUi();
+                if (selection.IsNodeSelected(node))
                 {
-                    _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
+                    _draggedNodes = selection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
                 }
                 else
                 {
-                    var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                     if(UserSettings.Config.SmartGroupDragging)
-                        _draggedNodes = FindSnappedNeighbours(parentUi, node).ToList();
+                        _draggedNodes = FindSnappedNeighbours(node).ToList();
                     
                     _draggedNodes.Add(node);
                 }
 
-                _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
-                ShakeDetector.ResetShaking();
+                _moveCommand = new ModifyCanvasElementsCommand(parentUi, _draggedNodes, selection);
+                _shakeDetector.ResetShaking();
             }
             else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _moveCommand != null)
             {
-                if (!T3Ui.IsCurrentlySaving && ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
+                if (!T3Ui.IsCurrentlySaving && _shakeDetector.TestDragForShake(ImGui.GetMousePos()))
                 {
                     _moveCommand.StoreCurrentValues();
                     UndoRedoStack.Add(_moveCommand);
@@ -98,11 +104,11 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                     if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
                     {
-                        var instanceForSymbolChildUi = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
+                        var instanceForSymbolChildUi = composition.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
                         ConnectionMaker.SplitConnectionWithDraggedNode(childUi, 
                                                                        ConnectionSplitHelper.BestMatchLastFrame.Connection, 
                                                                        instanceForSymbolChildUi,
-                                                                       _moveCommand);
+                                                                       _moveCommand, selection);
                         _moveCommand = null;
                     }
                     else
@@ -111,11 +117,10 @@ namespace T3.Editor.Gui.Graph.Interaction
                     }
 
                     // Reorder inputs nodes if dragged
-                    var selectedInputs = NodeSelection.GetSelectedNodes<IInputUi>().ToList();
+                    var selectedInputs = selection.GetSelectedNodes<IInputUi>().ToList();
                     if (selectedInputs.Count > 0)
                     {
-                        var composition = GraphCanvas.Current.CompositionOp;
-                        var compositionUi = SymbolUiRegistry.Entries[composition.Symbol.Id];
+                        var compositionUi = composition.GetSymbolUi();
                         composition.Symbol.InputDefinitions.Sort((a, b) =>
                                                                  {
                                                                      var childA = compositionUi.InputUis[a.Id];
@@ -129,29 +134,29 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
                 else
                 {
-                    if (!NodeSelection.IsNodeSelected(node))
+                    if (!selection.IsNodeSelected(node))
                     {
                         var replaceSelection = !ImGui.GetIO().KeyShift;
                         if (replaceSelection)
                         {
                             if (node is SymbolChildUi childUi3)
                             {
-                                NodeSelection.SetSelectionToChildUi(childUi3, instance);
+                                selection.SetSelectionToChildUi(childUi3, instance);
                             }
                             else
                             {
-                                NodeSelection.SetSelection(node);
+                                selection.SetSelection(node);
                             }
                         }
                         else
                         {
                             if (node is SymbolChildUi childUi2)
                             {
-                                NodeSelection.AddSymbolChildToSelection(childUi2, instance);
+                                selection.AddSymbolChildToSelection(childUi2, instance);
                             }
                             else
                             {
-                                NodeSelection.AddSelection(node);
+                                selection.AddSelection(node);
                             }
                         }
                     }
@@ -159,7 +164,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     {
                         if (ImGui.GetIO().KeyShift)
                         {
-                            NodeSelection.DeselectNode(node, instance);
+                            selection.DeselectNode(node, instance);
                         }
                     }
                 }
@@ -177,20 +182,20 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
                 && !wasDraggingRight
                 && ImGui.IsItemHovered()
-                && !NodeSelection.IsNodeSelected(node))
+                && !selection.IsNodeSelected(node))
             {
                 if (node is SymbolChildUi childUi2)
                 {
-                    NodeSelection.SetSelectionToChildUi(childUi2, instance);
+                    selection.SetSelectionToChildUi(childUi2, instance);
                 }
                 else
                 {
-                    NodeSelection.SetSelection(node);
+                    selection.SetSelection(node);
                 }
             }
         }
 
-        private static void DisconnectDraggedNodes()
+        private void DisconnectDraggedNodes()
         {
             var removeCommands = new List<ICommand>();
             var inputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>();
@@ -200,7 +205,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 if (node is not SymbolChildUi childUi)
                     continue;
 
-                var instance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
+                var instance = window.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
                 if (instance == null)
                 {
                     Log.Error("Can't disconnect missing instance");
@@ -245,7 +250,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             inputConnections.Sort((x, y) => y.multiInputIndex.CompareTo(x.multiInputIndex));
             foreach (var inputConnection in inputConnections)
             {
-                removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, inputConnection.connection, inputConnection.multiInputIndex));
+                removeCommands.Add(new DeleteConnectionCommand(window.CompositionOp.Symbol, inputConnection.connection, inputConnection.multiInputIndex));
             }
 
             // Remove the output connections in index descending order to
@@ -253,7 +258,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             outputConnections.Sort((x, y) => y.multiInputIndex.CompareTo(x.multiInputIndex));
             foreach(var outputConnection in outputConnections)
             {
-                removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, outputConnection.connection, outputConnection.multiInputIndex));
+                removeCommands.Add(new DeleteConnectionCommand(window.CompositionOp.Symbol, outputConnection.connection, outputConnection.multiInputIndex));
             }
 
             // Reconnect inputs of 1th nodes and outputs of last nodes if are of the same type
@@ -272,7 +277,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                                                                   targetParentOrChildId: itemOutputConnectionRemaining.connection.TargetParentOrChildId,
                                                                   targetSlotId: itemOutputConnectionRemaining.connection.TargetSlotId);
 
-                        removeCommands.Add(new AddConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, newConnection, itemOutputConnectionRemaining.multiInputIndex));
+                        removeCommands.Add(new AddConnectionCommand(window.CompositionOp.Symbol, newConnection, itemOutputConnectionRemaining.multiInputIndex));
                         outputConnectionsRemaining.Remove(itemOutputConnectionRemaining);
 
                         break;
@@ -292,7 +297,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         }
 
         
-        private static void HandleNodeDragging(ISelectableCanvasObject draggedNode)
+        private void HandleNodeDragging(ISelectableCanvasObject draggedNode)
         {
             
             if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
@@ -303,12 +308,12 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             if (!_isDragging)
             {
-                _dragStartPosInOpOnCanvas =  GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetMousePos()) - draggedNode.PosOnCanvas;
+                _dragStartPosInOpOnCanvas =  canvas.InverseTransformPositionFloat(ImGui.GetMousePos()) - draggedNode.PosOnCanvas;
                 _isDragging = true;
             }
 
 
-            var mousePosOnCanvas = GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetMousePos());
+            var mousePosOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
             var newDragPosInCanvas = mousePosOnCanvas - _dragStartPosInOpOnCanvas;
 
             var bestDistanceInCanvas = float.PositiveInfinity;
@@ -329,7 +334,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     }
                 }
 
-                foreach (var neighbor in GraphCanvas.Current.SelectableChildren)
+                foreach (var neighbor in canvas.SelectableChildren)
                 {
                     if (neighbor == draggedNode || _draggedNodes.Contains(neighbor))
                         continue;
@@ -346,7 +351,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
             }
 
-            var snapDistanceInCanvas = GraphCanvas.Current.InverseTransformDirection(new Vector2(20, 0)).X;
+            var snapDistanceInCanvas = canvas.InverseTransformDirection(new Vector2(20, 0)).X;
             var isSnapping = bestDistanceInCanvas < snapDistanceInCanvas;
 
             var moveDeltaOnCanvas = isSnapping
@@ -360,32 +365,32 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
-        public static void HighlightSnappedNeighbours(SymbolChildUi childUi)
+        public void HighlightSnappedNeighbours(SymbolChildUi childUi)
         {
-            if (childUi.IsSelected)
+            if (selection.IsNodeSelected(childUi))
                 return;
 
             var drawList = ImGui.GetWindowDrawList();
-            var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-            var snappedNeighbours = FindSnappedNeighbours(parentUi, childUi);
+            var parentUi = window.CompositionOp.GetSymbolUi();
+            var snappedNeighbours = FindSnappedNeighbours(childUi);
 
             var color = new Color(1f, 1f, 1f, 0.08f);
             snappedNeighbours.Add(childUi);
-            var expandOnScreen = GraphCanvas.Current.TransformDirection(SelectableNodeMovement.SnapPadding).X / 2;
+            var expandOnScreen = canvas.TransformDirection(SelectableNodeMovement.SnapPadding).X / 2;
 
             foreach (var snappedNeighbour in snappedNeighbours)
             {
                 var areaOnCanvas = new ImRect(snappedNeighbour.PosOnCanvas, snappedNeighbour.PosOnCanvas + snappedNeighbour.Size);
-                var areaOnScreen = GraphCanvas.Current.TransformRect(areaOnCanvas);
+                var areaOnScreen = canvas.TransformRect(areaOnCanvas);
                 areaOnScreen.Expand(expandOnScreen);
                 drawList.AddRect(areaOnScreen.Min, areaOnScreen.Max, color, rounding: 10, ImDrawFlags.RoundCornersAll, thickness: 4);
             }
         }
 
-        public static List<ISelectableCanvasObject> FindSnappedNeighbours(SymbolUi parentUi, ISelectableCanvasObject childUi)
+        public List<ISelectableCanvasObject> FindSnappedNeighbours(ISelectableCanvasObject childUi)
         {
             //var pool = new HashSet<ISelectableNode>(parentUi.ChildUis);
-            var pool = new HashSet<ISelectableCanvasObject>(GraphCanvas.Current.SelectableChildren);
+            var pool = new HashSet<ISelectableCanvasObject>(canvas.SelectableChildren);
             pool.Remove(childUi);
             return RecursivelyFindSnappedInPool(childUi, pool).Distinct().ToList();
         }
@@ -467,17 +472,18 @@ namespace T3.Editor.Gui.Graph.Interaction
                 new(0, -SnapPadding.Y)
             };
 
-        private static bool _isDragging;
-        private static Vector2 _dragStartPosInOpOnCanvas;
+        private bool _isDragging;
+        private Vector2 _dragStartPosInOpOnCanvas;
 
-        private static ModifyCanvasElementsCommand _moveCommand;
+        private ModifyCanvasElementsCommand _moveCommand;
+        private readonly ShakeDetector _shakeDetector = new();
 
-        private static Guid _draggedNodeId = Guid.Empty;
-        private static List<ISelectableCanvasObject> _draggedNodes = new();
+        private Guid _draggedNodeId = Guid.Empty;
+        private List<ISelectableCanvasObject> _draggedNodes = new();
 
-        private static class ShakeDetector
+        private class ShakeDetector
         {
-            public static bool TestDragForShake(Vector2 mousePosition)
+            public bool TestDragForShake(Vector2 mousePosition)
             {
                 var delta = mousePosition - _lastPosition;
                 _lastPosition = mousePosition;
@@ -525,15 +531,15 @@ namespace T3.Editor.Gui.Graph.Interaction
                 return wasShaking;
             }
 
-            public static void ResetShaking()
+            public void ResetShaking()
             {
                 _directions.Clear();
             }
 
-            private static Vector2 _lastPosition = Vector2.Zero;
+            private Vector2 _lastPosition = Vector2.Zero;
             private const int QueueLength = 35;
             private const int ChangeDirectionThreshold = 5;
-            private static readonly List<int> _directions = new(QueueLength);
+            private readonly List<int> _directions = new(QueueLength);
         }
 
     }

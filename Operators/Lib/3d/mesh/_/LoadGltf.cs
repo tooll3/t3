@@ -212,10 +212,7 @@ public class LoadGltf : Instance<LoadGltf>, IDescriptiveFilename, IStatusProvide
     
     
 
-    public InputSlot<string> GetSourcePathSlot()
-    {
-        return Path;
-    }
+    public InputSlot<string> SourcePathSlot => Path;
 
     [Input(Guid = "6e0fa62a-a8e1-4d0b-a5b1-80876ff636c0")]
     public readonly InputSlot<string> Path = new();

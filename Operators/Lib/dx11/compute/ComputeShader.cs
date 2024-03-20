@@ -24,10 +24,7 @@ namespace lib.dx11.compute
             ThreadCount.UpdateAction = Update;
         }
 
-        public InputSlot<string> GetSourcePathSlot()
-        {
-            return Source;
-        }
+        public InputSlot<string> SourcePathSlot => Source;
 
         private void Update(EvaluationContext context)
         {

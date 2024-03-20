@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using T3.Core.Logging;
-using T3.Editor.UiModel;
+﻿using T3.Editor.UiModel;
 using T3.Serialization;
 // ReSharper disable NotAccessedField.Local
 
@@ -18,7 +14,7 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
         {
             var results = new List<DocumentationEntry>();
 
-            foreach (var symbolUi in SymbolUiRegistry.Entries.Values)
+            foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
             {
                 if (!string.IsNullOrWhiteSpace(symbolUi.Description))
                 {
@@ -72,7 +68,7 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
 
             foreach (var r in results)
             {
-                if (SymbolUiRegistry.Entries.TryGetValue(r.SymbolId, out var symbolUi))
+                if (SymbolUiRegistry.TryGetValue(r.SymbolId, out var symbolUi))
                 {
                     switch (r.Type)
                     {

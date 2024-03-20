@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using ImGuiNET;
+﻿using ImGuiNET;
 
 namespace T3.Editor.Gui.InputUi.SingleControl
 {
-    public class StringListInputUi : SingleControlInputUi<List<string>>
+    internal class StringListInputUi : SingleControlInputUi<List<string>>
     {
         public override IInputUi Clone()
         {

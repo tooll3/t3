@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using Operators.Utils;
 using T3.Core.Animation;
 using T3.Core.IO;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Variations.Midi;
 using T3.Editor.Gui.Interaction.Variations.Model;
+using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Variations;
 using T3.Editor.UiModel;
 
@@ -60,13 +57,15 @@ namespace T3.Editor.Gui.Interaction.Variations
         public static void Update()
         {
             // Sync with composition selected in UI
-            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+            var primaryGraphWindow = GraphWindow.Focused;
             if (primaryGraphWindow == null)
                 return;
+            
+            var nodeSelection = primaryGraphWindow.GraphCanvas.NodeSelection;
 
 
-            var singleSelectedInstance = NodeSelection.GetSelectedInstance();
-            if (singleSelectedInstance != null)
+            var singleSelectedInstance = nodeSelection.GetSelectedInstanceWithoutComposition();
+            if (singleSelectedInstance != null && singleSelectedInstance.Parent != null)
             {
                 var selectedSymbolId = singleSelectedInstance.Symbol.Id;
                 ActivePoolForPresets = GetOrLoadVariations(selectedSymbolId);
@@ -78,9 +77,7 @@ namespace T3.Editor.Gui.Interaction.Variations
             {
                 ActivePoolForPresets = null;
                 
-                var activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
-                if (activeCompositionInstance == null)
-                    return;
+                var activeCompositionInstance = primaryGraphWindow.CompositionOp;
                 
                 ActiveInstanceForSnapshots = activeCompositionInstance;
                 
@@ -95,7 +92,7 @@ namespace T3.Editor.Gui.Interaction.Variations
                     ActivePoolForSnapshots = GetOrLoadVariations(activeCompositionInstance.Symbol.Id);
                 }
 
-                if (!NodeSelection.IsAnythingSelected())
+                if (!nodeSelection.IsAnythingSelected())
                 {
                     ActiveInstanceForPresets = ActiveInstanceForSnapshots;
                 }
@@ -350,7 +347,7 @@ namespace T3.Editor.Gui.Interaction.Variations
 
         private static void AddSnapshotEnabledChildrenToList(Instance instance, List<Instance> list)
         {
-            var compositionUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+            var compositionUi = instance.GetSymbolUi();
             foreach (var childInstance in instance.Children)
             {
                 var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
@@ -360,21 +357,6 @@ namespace T3.Editor.Gui.Interaction.Variations
                     continue;
 
                 list.Add(childInstance);
-            }
-        }
-
-        private static IEnumerable<Instance> GetSnapshotEnabledChildren(Instance instance)
-        {
-            var compositionUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
-            foreach (var childInstance in instance.Children)
-            {
-                var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
-                Debug.Assert(symbolChildUi != null);
-                
-                if (symbolChildUi.SnapshotGroupIndex == 0)
-                    continue;
-
-                yield return childInstance;
             }
         }
         

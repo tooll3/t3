@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using Operators.Utils;
 using T3.Core.IO;
 using T3.Editor.Gui.Interaction;

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using Rug.Osc;
-using T3.Core.Logging;
 
 namespace T3.Editor.Gui.Interaction.Timing
 {

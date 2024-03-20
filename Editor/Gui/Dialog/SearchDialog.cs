@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
-using T3.Core.IO;
-using T3.Core.Logging;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.UiModel;
+using T3.Editor.Gui.Windows;
 using T3.SystemUi;
 
 namespace T3.Editor.Gui.Dialog
@@ -70,7 +63,7 @@ namespace T3.Editor.Gui.Dialog
                 {
                     ImGui.CloseCurrentPopup();
                 }
-
+                
                 DrawResultsList();
                 ImGui.PopStyleVar();
                 EndDialogContent();
@@ -91,22 +84,24 @@ namespace T3.Editor.Gui.Dialog
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
 
+            var matchingInstances = _matchingInstances;
+
             if (ImGui.BeginChildFrame(999, size))
             {
                 if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorDown))
                 {
-                    UiListHelpers.AdvanceSelectedItem(_matchingInstances, ref _selectedInstance, 1);
+                    UiListHelpers.AdvanceSelectedItem(matchingInstances, ref _selectedInstance, 1);
                     _selectedItemChanged = true;
-                    var index = _matchingInstances.IndexOf(_selectedInstance);
+                    var index = matchingInstances.IndexOf(_selectedInstance);
                     if(index == 0)
                         ImGui.SetScrollY(0);
                 }
                 else if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorUp))
                 {
-                    UiListHelpers.AdvanceSelectedItem(_matchingInstances, ref _selectedInstance, -1);
+                    UiListHelpers.AdvanceSelectedItem(matchingInstances, ref _selectedInstance, -1);
                     _selectedItemChanged = true;
                     
-                    var index = _matchingInstances.IndexOf(_selectedInstance);
+                    var index = matchingInstances.IndexOf(_selectedInstance);
 
                     if (index * ImGui.GetTextLineHeight() > ImGui.GetScrollY() + ImGui.GetContentRegionAvail().Y)
                     {
@@ -120,15 +115,15 @@ namespace T3.Editor.Gui.Dialog
                     var clipperData = new ImGuiListClipper();
                     var listClipperPtr = new ImGuiListClipperPtr(&clipperData);
 
-                    listClipperPtr.Begin(_matchingInstances.Count, ImGui.GetTextLineHeight());
+                    listClipperPtr.Begin(matchingInstances.Count, ImGui.GetTextLineHeight());
                     while (listClipperPtr.Step())
                     {
                         for (var i = listClipperPtr.DisplayStart; i < listClipperPtr.DisplayEnd; ++i)
                         {
-                            if (i < 0 || i >= _matchingInstances.Count)
+                            if (i < 0 || i >= matchingInstances.Count)
                                 continue;
 
-                            DrawItem(_matchingInstances[i]);
+                            DrawItem(matchingInstances[i]);
                         }
                     }
                     
@@ -141,8 +136,10 @@ namespace T3.Editor.Gui.Dialog
             ImGui.PopStyleVar(2);
         }
 
-        private void DrawItem(Instance instance)
+        private void DrawItem(FoundInstance foundInstance)
         {
+            var instance = foundInstance.Instance;
+            var canvas = foundInstance.GraphCanvas;
             var symbolHash = instance.Symbol.Id.GetHashCode();
             ImGui.PushID(symbolHash);
             {
@@ -168,23 +165,23 @@ namespace T3.Editor.Gui.Dialog
                 ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(2, 4));
 
-                var isSelected = instance == _selectedInstance;
+                var isSelected = foundInstance == _selectedInstance;
                 var hasBeenClicked = ImGui.Selectable($"##Selectable{symbolHash.ToString()}", isSelected);
                 _selectedItemChanged |= hasBeenClicked; 
 
                 var path = OperatorUtils.BuildIdPathForInstance(instance);
-                var readablePath = string.Join(" / ", Structure.GetReadableInstancePath(path, false));
+                var readablePath = string.Join(" / ", canvas.Structure.GetReadableInstancePath(path, false));
                 
                 if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                 {
-                    GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
-                    _selectedInstance = instance;
+                    canvas.OpenAndFocusInstance(path);
+                    _selectedInstance = foundInstance;
                     _selectedItemChanged = false;
                 }
-                else if (_selectedItemChanged && _selectedInstance == instance)
+                else if (_selectedItemChanged && _selectedInstance == foundInstance)
                 {
                     UiListHelpers.ScrollToMakeItemVisible();
-                    GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
+                    canvas.OpenAndFocusInstance(path);
                     _selectedItemChanged = false;
                 }
 
@@ -218,45 +215,68 @@ namespace T3.Editor.Gui.Dialog
         private void UpdateResults()
         {
             _matchingInstances.Clear();
-            
-            if(string.IsNullOrEmpty(_searchString))
-            {
-                _matchingInstances.AddRange(NavigationHistory.GetPreviouslySelectedInstances());
-                _selectedInstance = _matchingInstances.Count > 0 ? _matchingInstances[0] : null;
-                
+
+            if (GraphWindow.GraphWindowInstances.Count == 0)
                 return;
-            }
             
-            var composition = _searchMode switch
+            
+            foreach (var graphWindow in GraphWindow.GraphWindowInstances)
+            {
+                var canvas = graphWindow.GraphCanvas;
+                var package = graphWindow.Package;
+
+                if (string.IsNullOrEmpty(_searchString))
+                {
+                    var previousInstances = canvas.NavigationHistory.GetPreviouslySelectedInstances()
+                                                  .Select(instance => new FoundInstance(instance, graphWindow.GraphCanvas));
+                    _matchingInstances.AddRange(previousInstances);
+
+                    if (_matchingInstances.Count > 0)
+                        _selectedInstance = _matchingInstances[0];
+
+                    continue;
+                }
+
+                var compositionOp = graphWindow.CompositionOp;
+
+                var composition = _searchMode switch
                                       {
-                                          SearchModes.Global             => EditableSymbolProject.RootInstance,
-                                          SearchModes.Local              => GraphWindow.GetMainComposition(),
-                                          SearchModes.LocalAndInChildren => GraphWindow.GetMainComposition(),
+                                          SearchModes.Global             => graphWindow.RootInstance.Instance,
+                                          SearchModes.Local              => compositionOp,
+                                          SearchModes.LocalAndInChildren => compositionOp,
                                           _                              => throw new ArgumentOutOfRangeException()
                                       };
 
-            if (composition == null)
-                return;
+                if (composition == null)
+                    continue;
 
-            FindAllChildren(composition,
-                            instance =>
-                            {
-                                if (string.IsNullOrEmpty(_searchString)
-                                    || instance.Symbol.Name.Contains(_searchString, StringComparison.InvariantCultureIgnoreCase))
+                FindAllChildren(composition,
+                                instance =>
                                 {
-                                    _matchingInstances.Add(instance);
-                                }
-                            });
+                                    if (string.IsNullOrEmpty(_searchString)
+                                        || instance.Symbol.Name.Contains(_searchString, StringComparison.InvariantCultureIgnoreCase))
+                                    {
+                                        _matchingInstances.Add(new FoundInstance(instance, canvas));
+                                    }
+                                });
 
-            _matchingInstances = _matchingInstances.OrderBy(r => r.Symbol.Name).ToList();
+                _matchingInstances.Sort((foundA, foundB) =>
+                                        {
+                                            var a = foundA.Instance;
+                                            var b = foundB.Instance;
+                                            return string.Compare(a.Symbol.Name, b.Symbol.Name, StringComparison.Ordinal);
+                                        });
+            }
         }
 
-        private List<Instance> _matchingInstances = new();
+        private readonly List<FoundInstance> _matchingInstances = new();
         private bool _justOpened;
         private static string _searchString;
-        private Instance _selectedInstance;
+        private FoundInstance _selectedInstance;
         private bool _selectedItemChanged;
         private SearchModes _searchMode = SearchModes.Local;
+
+        private readonly record struct FoundInstance(Instance Instance, GraphCanvas GraphCanvas);
 
         private enum SearchModes
         {

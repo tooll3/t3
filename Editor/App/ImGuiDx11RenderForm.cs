@@ -1,9 +1,7 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using ImGuiNET;
 using SharpDX.Windows;
 using T3.Core.IO;
-using T3.Core.Logging;
 using T3.SystemUi;
 
 // ReSharper disable InconsistentNaming

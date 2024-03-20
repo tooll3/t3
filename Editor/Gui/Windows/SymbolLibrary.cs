@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
@@ -50,9 +45,8 @@ namespace T3.Editor.Gui.Windows
                     {
                         if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(_symbolUsageReference.Id, out var info))
                         {
-                            foreach (var s in info.DependingSymbolIds)
+                            foreach (var symbol in info.DependingSymbols)
                             {
-                                var symbol = SymbolRegistry.Entries[s];
                                 SymbolTreeMenu.DrawSymbolItem(symbol);
                             }
                         }
@@ -112,7 +106,7 @@ namespace T3.Editor.Gui.Windows
 
         private void DrawList()
         {
-            _filter.UpdateIfNecessary();
+            _filter.UpdateIfNecessary(null);
             foreach (var symbolUi in _filter.MatchingSymbolUis)
             {
                 SymbolTreeMenu.DrawSymbolItem(symbolUi.Symbol);
@@ -147,7 +141,7 @@ namespace T3.Editor.Gui.Windows
                 if (_allLibSymbols == null)
                 {
                     _allLibSymbols = new List<Symbol>();
-                    foreach (var s in SymbolRegistry.Entries.Values)
+                    foreach (var s in EditorSymbolPackage.AllSymbols)
                     {
                         if(s.Namespace.StartsWith("lib.") && !s.Name.StartsWith("_"))
                             _allLibSymbols.Add(s);
@@ -158,7 +152,7 @@ namespace T3.Editor.Gui.Windows
                 var limit = (int)(_allLibSymbols.Count * _promptComplexity).Clamp(1, _allLibSymbols.Count-1);
                 var keep = _filter.SearchString;
                 _filter.SearchString = "lib.";
-                _filter.UpdateIfNecessary(true, limit);
+                _filter.UpdateIfNecessary(null, true, limit);
                 _filter.SearchString = keep;
             }
             
@@ -275,18 +269,38 @@ namespace T3.Editor.Gui.Windows
                         var guidString = myString.Split('|')[0];
                         var guid = Guid.Parse(guidString);
                         Log.Debug("dropped symbol here" + payload + " " + myString + "  " + guid);
-                        MoveSymbolToNamespace(guid, subtree.GetAsString());
+                        if(!MoveSymbolToNamespace(guid, subtree.GetAsString(), out var reason))
+                            EditorUi.Instance.ShowMessageBox(reason, "Could not move symbol's namespace");
                     }
                 }
 
                 ImGui.EndDragDropTarget();
             }
-        }
 
-        private void MoveSymbolToNamespace(Guid symbolId, string nameSpace)
-        {
-            if(!EditableSymbolProject.ChangeSymbolNamespace(symbolId, nameSpace, out var reason))
-                EditorUi.Instance.ShowMessageBox(reason, "Could not move symbol's namespace");
+            return;
+
+            static bool MoveSymbolToNamespace(Guid symbolId, string nameSpace, out string reason)
+            {
+                if (!SymbolUiRegistry.TryGetValue(symbolId, out var symbolUi))
+                {
+                    reason = $"Could not find symbol with id '{symbolId}'";
+                    return false;
+                }
+                
+                if (symbolUi!.Symbol.Namespace == nameSpace)
+                {
+                    reason = string.Empty;
+                    return true;
+                }
+                
+                if (symbolUi.Symbol.SymbolPackage.IsReadOnly)
+                {
+                    reason = $"Could not move symbol [{symbolUi.Symbol.Name}] because its package is not modifiable";
+                    return false;
+                }
+                
+                return EditableSymbolProject.ChangeSymbolNamespace(symbolUi.Symbol, nameSpace, out reason);
+            }
         }
 
         public override List<Window> GetInstances()

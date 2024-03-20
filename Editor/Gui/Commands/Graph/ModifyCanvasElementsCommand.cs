@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Graph
 {
-    public class ModifyCanvasElementsCommand : ICommand
+    internal class ModifyCanvasElementsCommand : ICommand
     {
         public string Name => "Move canvas elements";
         public bool IsUndoable => true;
@@ -28,10 +29,12 @@ namespace T3.Editor.Gui.Commands.Graph
         private readonly ISelectionContainer _selectionContainer;
         private Entry[] _entries;
         private readonly Guid _compositionSymbolId;
+        private readonly ISelection _nodeSelection;
 
-        public ModifyCanvasElementsCommand(Guid compositionSymbolId, List<ISelectableCanvasObject> selectables)
+        public ModifyCanvasElementsCommand(Guid compositionSymbolId, List<ISelectableCanvasObject> selectables, ISelection nodeSelection)
         {
             _compositionSymbolId = compositionSymbolId;
+            _nodeSelection = nodeSelection;
             StoreSelectable(selectables);
         }
 
@@ -49,15 +52,16 @@ namespace T3.Editor.Gui.Commands.Graph
                                     OriginalSize = selectable.Size,
                                     PosOnCanvas = selectable.PosOnCanvas,
                                     Size = selectable.Size,
-                                    IsSelected = selectable.IsSelected
+                                    IsSelected = _nodeSelection.IsNodeSelected(selectable)
                                 };
                 _entries[i] = entry;
             }
         }
 
-        public ModifyCanvasElementsCommand(ISelectionContainer selectionContainer, List<ISelectableCanvasObject> selectables)
+        public ModifyCanvasElementsCommand(ISelectionContainer selectionContainer, List<ISelectableCanvasObject> selectables, ISelection nodeSelection)
         {
             _selectionContainer = selectionContainer;
+            _nodeSelection = nodeSelection;
             StoreSelectable(selectables);
         }
 
@@ -65,13 +69,13 @@ namespace T3.Editor.Gui.Commands.Graph
         {
             foreach (var entry in _entries)
             {
-                var selectable = GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
+                var selectable = GetSelectables()?.SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
                 
                 entry.PosOnCanvas = selectable.PosOnCanvas;
                 entry.Size = selectable.Size;
-                entry.IsSelected = selectable.IsSelected;
+                entry.IsSelected = _nodeSelection.IsNodeSelected(selectable);
             }
         }
 
@@ -85,7 +89,7 @@ namespace T3.Editor.Gui.Commands.Graph
             
             foreach (var entry in _entries)
             {
-                var selectable = GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
+                var selectable = GetSelectables()?.SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
                 
@@ -98,7 +102,7 @@ namespace T3.Editor.Gui.Commands.Graph
         {
             foreach (var entry in _entries)
             {
-                var selectable = GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
+                var selectable = GetSelectables()?.SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
                 
@@ -107,10 +111,20 @@ namespace T3.Editor.Gui.Commands.Graph
             }
         }
 
-        private IEnumerable<ISelectableCanvasObject> GetSelectables()
+        private IEnumerable<ISelectableCanvasObject>? GetSelectables()
         {
-            var container = _compositionSymbolId == Guid.Empty ? _selectionContainer : SymbolUiRegistry.Entries[_compositionSymbolId];
-            return container.GetSelectables();
+            ISelectionContainer container;
+            if(_compositionSymbolId == Guid.Empty)
+            {
+                container = _selectionContainer;
+            }
+            else
+            {
+                SymbolUiRegistry.TryGetValue(_compositionSymbolId, out var symbolUi);
+                container = symbolUi;
+            }
+            
+            return container?.GetSelectables();
         }
     }
 }

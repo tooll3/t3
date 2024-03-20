@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using T3.Core.Animation;
+﻿using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.DataTypes.DataSet;
-using T3.Core.Logging;
 
 //using T3.Core.Utils;
 

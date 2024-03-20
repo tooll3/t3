@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.External.Truncon.Collections;
@@ -202,7 +197,8 @@ namespace T3.Editor.UiModel
                 return false;
             }
 
-            var success = TryReadSymbolUi(mainObject, symbolId, out symbolUi);
+            var symbol = SymbolRegistry.Entries[symbolId];
+            var success = TryReadSymbolUi(mainObject, symbol, out symbolUi);
             if(success)
                 symbolUi.UpdateConsistencyWithSymbol();
 
@@ -210,10 +206,8 @@ namespace T3.Editor.UiModel
         }
 
 
-        internal static bool TryReadSymbolUi(JToken mainObject, Guid symbolId, out SymbolUi symbolUi)
+        internal static bool TryReadSymbolUi(JToken mainObject, Symbol symbol, out SymbolUi symbolUi)
         {
-            var symbol = SymbolRegistry.Entries[symbolId];
-
             var inputDict = new OrderedDictionary<Guid, IInputUi>();
             foreach (JToken uiInputEntry in (JArray)mainObject[JsonKeys.InputUis])
             {
@@ -253,6 +247,7 @@ namespace T3.Editor.UiModel
             }
 
             var symbolChildUis = new List<SymbolChildUi>();
+            var symbolId = symbol.Id;
             foreach (var childEntry in (JArray)mainObject[JsonKeys.SymbolChildUis])
             {
                 var childUi = new SymbolChildUi();

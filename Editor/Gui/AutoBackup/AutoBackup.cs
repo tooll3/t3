@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using T3.Core.Logging;
 using T3.Core.UserData;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Layouts;

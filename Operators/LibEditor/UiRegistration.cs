@@ -34,36 +34,36 @@ public class UiRegistration : IOperatorUIInitializer
 
     public void Initialize()
     {
-        CustomChildUiRegistry.Entries.Add(typeof(Counter), CounterUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(SampleGradient), GradientSliderUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(SampleCurve), SampleCurveUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(_Jitter), _JitterUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(_Jitter2d), Jitter2dUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(AString), AStringUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(Value), ValueUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(IntValue), IntValueUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(Remap), RemapUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(AnimValue), AnimValueUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(AnimVec2), AnimVec2Ui.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(AnimVec3), AnimVec3Ui.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(SequenceAnim), SequenceAnimUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(TriggerAnim), TriggerAnimUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(MidiInput), MidiInputUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(Boolean), BooleanUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(Trigger), TriggerUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(Counter), CounterUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(SampleGradient), GradientSliderUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(SampleCurve), SampleCurveUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(_Jitter), _JitterUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(_Jitter2d), Jitter2dUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(AString), AStringUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(Value), ValueUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(IntValue), IntValueUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(Remap), RemapUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(AnimValue), AnimValueUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(AnimVec2), AnimVec2Ui.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(AnimVec3), AnimVec3Ui.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(SequenceAnim), SequenceAnimUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(TriggerAnim), TriggerAnimUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(MidiInput), MidiInputUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(Boolean), BooleanUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(Trigger), TriggerUi.DrawChildUi);
 
-        CustomChildUiRegistry.Entries.Add(typeof(LoadObj), DescriptiveUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(ComputeShader), DescriptiveUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(VertexShader), DescriptiveUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(PixelShader), DescriptiveUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(LoadObj), DescriptiveUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(ComputeShader), DescriptiveUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(VertexShader), DescriptiveUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(PixelShader), DescriptiveUi.DrawChildUi);
 
-        CustomChildUiRegistry.Entries.Add(typeof(GetIntVar), GetIntVarUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(GetFloatVar), GetFloatVarUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(SetFloatVar), SetFloatVarUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(GetIntVar), GetIntVarUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(GetFloatVar), GetFloatVarUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(SetFloatVar), SetFloatVarUi.DrawChildUi);
 
-        CustomChildUiRegistry.Entries.Add(typeof(AudioReaction), AudioReactionUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(GpuMeasure), GpuMeasureUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(DataList), DataListUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(AudioReaction), AudioReactionUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(GpuMeasure), GpuMeasureUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(DataList), DataListUi.DrawChildUi);
 
         PlaybackUtils.BpmProvider = BpmProvider.Instance;
         PlaybackUtils.TapProvider = TapProvider.Instance;
@@ -73,6 +73,6 @@ public class UiRegistration : IOperatorUIInitializer
             TemplateDefinition.AddTemplateDefinition(templateDefinition);
         }
         
-        Log.Debug("Registered UI entries. Total: {0}", CustomChildUiRegistry.Entries.Count);
+        Log.Debug("Registered UI EntriesRw. Total: {0}", CustomChildUiRegistry.Entries.Count);
     }
 }

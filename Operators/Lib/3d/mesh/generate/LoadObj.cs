@@ -159,10 +159,7 @@ namespace lib._3d.mesh.generate
             _sourceFileChanged = true;
         }
 
-        public InputSlot<string> GetSourcePathSlot()
-        {
-            return Path;
-        }
+        public InputSlot<string> SourcePathSlot => Path;
 
         private bool _sourceFileChanged;
         private string _lastFilePath;

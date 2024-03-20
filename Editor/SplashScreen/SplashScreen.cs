@@ -1,6 +1,4 @@
-using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using T3.SystemUi;
 using T3.SystemUi.Logging;

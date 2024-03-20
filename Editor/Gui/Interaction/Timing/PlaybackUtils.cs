@@ -1,11 +1,11 @@
 ﻿using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.IO;
-using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Output;
 
 namespace T3.Editor.Gui.Interaction.Timing
@@ -18,6 +18,9 @@ namespace T3.Editor.Gui.Interaction.Timing
         public static void UpdatePlaybackAndSyncing()
         {
             var settings = FindPlaybackSettings(out var audioComposition);
+
+            if (settings == null)
+                return;
 
             WasapiAudioInput.StartFrame(settings);
             
@@ -76,20 +79,28 @@ namespace T3.Editor.Gui.Interaction.Timing
             Playback.Current.Settings = settings;
         }
 
-        private static PlaybackSettings FindPlaybackSettings(out Instance instance)
+        private static PlaybackSettings? FindPlaybackSettings(out Instance instance)
         {
-            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-            var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
+            var primaryGraphWindow = GraphWindow.Focused;
+            var composition = primaryGraphWindow?.CompositionOp;
 
             if (FindPlaybackSettingsForInstance(composition, out instance, out var settings))
                 return settings;
             
             var outputWindow = OutputWindow.GetPrimaryOutputWindow();
-            var pinnedOutput = outputWindow?.Pinning.GetPinnedOrSelectedInstance();
-            if(FindPlaybackSettingsForInstance(pinnedOutput, out _, out var settingsFromPinned))
-                return settingsFromPinned;
-                
-            return GetDefaultPlaybackSettings(composition?.Symbol.SymbolPackage);
+
+            if (outputWindow == null)
+                return null;
+
+            if (outputWindow.Pinning.TryGetPinnedOrSelectedInstance(out var pinnedOutput, out _))
+            {
+                if (FindPlaybackSettingsForInstance(pinnedOutput, out _, out var settingsFromPinned))
+                    return settingsFromPinned;
+
+                return GetDefaultPlaybackSettings(composition?.Symbol.SymbolPackage);
+            }
+
+            return null;
         }
 
         /// <summary>

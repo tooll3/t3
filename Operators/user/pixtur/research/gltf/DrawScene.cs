@@ -64,7 +64,7 @@ namespace user.pixtur.research.gltf
         #region custom material dropdown
         string ICustomDropdownHolder.GetValueForInput(Guid inputId)
         {
-            if (inputId != UseMaterialId.Input.InputDefinition.Id)
+            if (inputId != UseMaterialId.Input.Id)
                 return "Undefined input";
 
             return "Default";
@@ -85,7 +85,7 @@ namespace user.pixtur.research.gltf
 
         void ICustomDropdownHolder.HandleResultForInput(Guid inputId, string result)
         {
-            if (inputId != UseMaterialId.Input.InputDefinition.Id)
+            if (inputId != UseMaterialId.Input.Id)
                 return;
             
             UseMaterialId.SetTypedInputValue(result);

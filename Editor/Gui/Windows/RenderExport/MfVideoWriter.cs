@@ -5,8 +5,6 @@ https://github.com/jtpgames/Kinect-Recorder/blob/master/KinectRecorder/Multimedi
 Copyright(c) 2016 Juri Tomak
 */
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SharpDX;
@@ -14,7 +12,6 @@ using SharpDX.Direct3D11;
 using SharpDX.MediaFoundation;
 using SharpDX.WIC;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Resource;
 using MF = SharpDX.MediaFoundation;
 

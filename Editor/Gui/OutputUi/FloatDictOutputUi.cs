@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
 using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;

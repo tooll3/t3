@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Management;
 using System.Text;
 using System.Text.Json;
@@ -8,7 +6,6 @@ using System.Windows.Forms;
 using ImGuiNET;
 using Sentry;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.AutoBackup;
 using T3.Editor.Gui.Commands;
@@ -54,12 +51,14 @@ internal static class CrashReporting
     {
         var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
         var timeSpan = THelpers.GetReadableRelativeTime(timeOfLastBackup);
+
+        var canvas = GraphWindow.Focused?.GraphCanvas;
         
         sentryEvent.SetTag("Nickname", UserSettings.Config.UserName);
         sentryEvent.Contexts["tooll3"]= new
                                             {
                                                 UndoStack = UndoRedoStack.GetUndoStackAsString(),
-                                                Selection = string.Join("\n", NodeSelection.Selection),
+                                                Selection = canvas == null ? string.Empty : string.Join("\n", canvas.NodeSelection),
                                                 Nickname = "",
                                                 RuntimeSeconds = Playback.RunTimeInSecs,
                                                 RuntimeFrames = ImGui.GetFrameCount(),
@@ -68,12 +67,12 @@ internal static class CrashReporting
         
         try
         {
-            var primaryComposition = GraphWindow.GetMainComposition();
+            var primaryComposition = GraphWindow.Focused?.CompositionOp;
             if (primaryComposition != null)
             {
-                var compositionUi = SymbolUiRegistry.Entries[primaryComposition.Symbol.Id];
+                var compositionUi = primaryComposition.Symbol.GetSymbolUi();
                 var json = GraphOperations.CopyNodesAsJson(
-                                                           primaryComposition.Symbol.Id,
+                                                           primaryComposition,
                                                            compositionUi.ChildUis,
                                                            compositionUi.Annotations.Values.ToList());
                 EditorUi.Instance.SetClipboardText(json);

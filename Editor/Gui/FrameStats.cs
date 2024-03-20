@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace T3.Editor.Gui
+﻿namespace T3.Editor.Gui
 {
     /// <summary>
     /// A helper class that collects information duration the processing of a frame,

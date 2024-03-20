@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
+﻿using System.IO;
 using System.Text.RegularExpressions;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;

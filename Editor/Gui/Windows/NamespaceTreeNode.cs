@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using T3.Core.Operator;
+﻿using T3.Core.Operator;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -44,9 +42,9 @@ namespace T3.Editor.Gui.Windows
             Name = RootNodeId;
             Clear();
 
-            foreach (var symbol in SymbolRegistry.Entries.OrderBy(pair => pair.Value.Namespace + pair.Value.Name))
+            foreach (var symbol in EditorSymbolPackage.AllSymbols.OrderBy(symbol => symbol.Namespace + symbol.Name))
             {
-                SortInOperator(symbol.Value);
+                SortInOperator(symbol);
             }
         }
         

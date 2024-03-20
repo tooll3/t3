@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using T3.Core.Logging;
-using T3.Editor.UiModel;
+﻿using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Selection
 {
-    public class CanvasElementSelection
+    public class CanvasElementSelection : ISelection
     {
         public void Clear()
         {

@@ -1,9 +1,7 @@
-using System;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.IO;
 using SharpDX.WIC;
-using T3.Core.Logging;
 using T3.Core.Resource;
 
 namespace T3.Editor.Gui.Windows.RenderExport;

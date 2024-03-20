@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using T3.Core.DataTypes;
+﻿using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -7,7 +6,7 @@ using T3.Editor.Gui.Interaction;
 
 namespace T3.Editor.Gui.InputUi.VectorInputs
 {
-    public class Int3InputUi : IntVectorInputValueUi<Int3>
+    internal class Int3InputUi : IntVectorInputValueUi<Int3>
     {
         public override bool IsAnimatable => true;
 

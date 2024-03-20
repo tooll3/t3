@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.Animation;
 using T3.Core.Audio;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction.Timing;
@@ -20,8 +17,10 @@ public abstract class BaseRenderWindow : Window
 
     protected static int SoundtrackChannels()
     {
-        var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-        var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
+        var composition = GraphWindow.Focused?.CompositionOp;
+        if (composition == null)
+            return AudioEngine.clipChannels(null);
+        
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);
         return AudioEngine.clipChannels(soundtrack);
@@ -29,8 +28,11 @@ public abstract class BaseRenderWindow : Window
 
     protected static int SoundtrackSampleRate()
     {
-        var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-        var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
+        var composition = GraphWindow.Focused?.CompositionOp;
+
+        if (composition == null)
+            return AudioEngine.clipSampleRate(null);
+        
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);
         return AudioEngine.clipSampleRate(soundtrack);
@@ -215,8 +217,7 @@ public abstract class BaseRenderWindow : Window
     protected static void SetPlaybackTimeForThisFrame()
     {
         // get playback settings
-        var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-        var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
+        var composition = GraphWindow.Focused?.CompositionOp;
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
 
         // change settings for all playback before calculating times

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.UiHelpers;

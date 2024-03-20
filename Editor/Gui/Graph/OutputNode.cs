@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
@@ -16,11 +15,12 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     static class OutputNode
     {
-        public static void Draw(Symbol.OutputDefinition outputDef, IOutputUi outputUi)
+        public static void Draw(GraphWindow window, ImDrawListPtr drawList, Symbol.OutputDefinition outputDef, IOutputUi outputUi)
         {
+            var canvas = window.GraphCanvas;
             ImGui.PushID(outputDef.Id.GetHashCode());
             {
-                LastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(outputUi.PosOnCanvas, outputUi.PosOnCanvas + outputUi.Size));
+                LastScreenRect = canvas.TransformRect(new ImRect(outputUi.PosOnCanvas, outputUi.PosOnCanvas + outputUi.Size));
                 LastScreenRect.Floor();
 
                 // Interaction
@@ -34,12 +34,11 @@ namespace T3.Editor.Gui.Graph
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                 }
 
-                SelectableNodeMovement.Handle(outputUi);
+                canvas.SelectableNodeMovement.Handle(outputUi);
 
                 // Rendering
                 var typeColor = TypeUiRegistry.Entries[outputDef.ValueType].Color;
 
-                var drawList = GraphCanvas.Current.DrawList;
                 drawList.AddRectFilled(LastScreenRect.Min, LastScreenRect.Max,
                                  hovered
                                      ? ColorVariations.OperatorBackgroundHover.Apply(typeColor)
@@ -52,7 +51,7 @@ namespace T3.Editor.Gui.Graph
 
                 // Label
                 if(!string.IsNullOrEmpty(outputDef.Name)){
-                    var isScaledDown = GraphCanvas.Current.Scale.X < 1;
+                    var isScaledDown = canvas.Scale.X < 1;
                     drawList.PushClipRect(LastScreenRect.Min, LastScreenRect.Max, true);
                     ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontBold);
 
@@ -63,7 +62,7 @@ namespace T3.Editor.Gui.Graph
                     drawList.PopClipRect();
                 }
 
-                if (outputUi.IsSelected)
+                if (canvas.NodeSelection.IsNodeSelected(outputUi))
                 {
                     drawList.AddRect(LastScreenRect.Min - Vector2.One, LastScreenRect.Max + Vector2.One, UiColors.Selection, 1);
                 }
@@ -101,7 +100,7 @@ namespace T3.Editor.Gui.Graph
 
                             if (ImGui.IsMouseReleased(0))
                             {
-                                ConnectionMaker.CompleteAtSymbolOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
+                                ConnectionMaker.CompleteAtSymbolOutputNode(window.CompositionOp.Symbol, outputDef);
                             }
                         }
                         else
@@ -109,7 +108,7 @@ namespace T3.Editor.Gui.Graph
                             drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, UiColors.Selection);
                             if (ImGui.IsItemClicked(0))
                             {
-                                ConnectionMaker.StartFromOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
+                                ConnectionMaker.StartFromOutputNode(window.CompositionOp.Symbol, outputDef);
                             }
                         }
                     }

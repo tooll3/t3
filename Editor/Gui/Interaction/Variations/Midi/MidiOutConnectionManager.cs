@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using NAudio.Midi;
-using T3.Core.Logging;
+﻿using NAudio.Midi;
 
 namespace T3.Editor.Gui.Interaction.Variations.Midi
 {

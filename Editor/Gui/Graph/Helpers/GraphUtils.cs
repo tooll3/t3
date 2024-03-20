@@ -1,11 +1,9 @@
-﻿using System;
+﻿#nullable enable
 using System.CodeDom.Compiler;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.UiModel;
 
@@ -13,7 +11,7 @@ namespace T3.Editor.Gui.Graph.Helpers;
 
 internal static partial class GraphUtils
 {
-    public static SyntaxTree GetSyntaxTree(Symbol symbol)
+    public static SyntaxTree? GetSyntaxTree(Symbol symbol)
     {
         var package = (EditorSymbolPackage)symbol.SymbolPackage;
         if (package is not EditableSymbolProject project || !project.TryGetPendingSourceCode(symbol.Id, out var sourceCode))

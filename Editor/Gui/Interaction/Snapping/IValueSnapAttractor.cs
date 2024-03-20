@@ -1,4 +1,6 @@
-﻿namespace T3.Editor.Gui.Interaction.Snapping
+﻿using T3.Core.Operator;
+
+namespace T3.Editor.Gui.Interaction.Snapping
 {
     /// <summary>
     /// Helper struct to pass return values

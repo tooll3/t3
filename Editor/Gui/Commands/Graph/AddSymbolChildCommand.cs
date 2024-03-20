@@ -23,15 +23,30 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Undo()
         {
-            var parentSymbolUi = SymbolUiRegistry.Entries[_parentSymbolId];
-            parentSymbolUi.RemoveChild(_addedChildId);
+            if(!SymbolUiRegistry.TryGetValue(_parentSymbolId, out var parentSymbolUi))
+            {
+                Log.Warning($"Could not find symbol with id {_parentSymbolId} - was it removed?");
+                return;
+            }
+            
+            parentSymbolUi!.RemoveChild(_addedChildId);
         }
 
         public void Do()
         {
-            var parentSymbolUi = SymbolUiRegistry.Entries[_parentSymbolId];
-            var symbolToAdd = SymbolRegistry.Entries[_addedSymbolId];
-            parentSymbolUi.AddChild(symbolToAdd, _addedChildId, PosOnCanvas, Size, ChildName);
+            if(!SymbolUiRegistry.TryGetValue(_parentSymbolId, out var parentSymbolUi))
+            {
+                Log.Warning($"Could not find symbol with id {_parentSymbolId} - was it removed?");
+                return;
+            }
+            
+            if(!SymbolUiRegistry.TryGetValue(_addedSymbolId, out var symbolToAdd))
+            {
+                Log.Warning($"Could not find symbol with id {_addedSymbolId} - was it removed?");
+                return;
+            }
+            
+            parentSymbolUi!.AddChild(symbolToAdd!.Symbol, _addedChildId, PosOnCanvas, Size, ChildName);
         }
 
         // core data

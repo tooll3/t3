@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
-using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
@@ -18,32 +15,36 @@ namespace T3.Editor.Gui.Graph.Modification
 {
     internal static class GraphOperations
     {
-        public static SymbolChildUi AddSymbolChild(Symbol symbol, Symbol parent, Vector2 positionOnCanvas)
+        public static SymbolChildUi AddSymbolChild(Symbol symbol, SymbolUi parentUi, Vector2 positionOnCanvas)
         {
-            var addCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = positionOnCanvas };
+            var addCommand = new AddSymbolChildCommand(parentUi.Symbol, symbol.Id) { PosOnCanvas = positionOnCanvas };
             UndoRedoStack.AddAndExecute(addCommand);
-            var newSymbolChild = parent.Children.Single(entry => entry.Id == addCommand.AddedChildId);
+            
+            var parentSymbol = parentUi.Symbol;
+            var newSymbolChild = parentSymbol.Children.Single(entry => entry.Id == addCommand.AddedChildId);
 
             // Select new node
-            var symbolUi = SymbolUiRegistry.Entries[parent.Id];
-            var childUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+            var childUi = parentUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
 
             return childUi;
         }
 
-        public static string CopyNodesAsJson(Guid symbolId, 
+        public static string CopyNodesAsJson(Instance composition, 
                                              IEnumerable<SymbolChildUi> selectedChildren, 
                                              List<Annotation> selectedAnnotations)
         {
             var resultJsonString = string.Empty;
+
+            Guid newGuid = new Guid();
+            var allSymbolUis = EditorSymbolPackage.AllSymbols.Select(x => x.Id).ToHashSet();
+
+            while (allSymbolUis.Contains(newGuid))
+                newGuid = new Guid();
+            
             var containerOp = new Symbol(typeof(object), Guid.NewGuid(), null);
             var newContainerUi = new SymbolUi(containerOp, true);
             
-            if(!SymbolUiRegistry.EntriesEditable.TryAdd(newContainerUi.Symbol.Id, newContainerUi))
-                throw new Exception("Could not add new container to SymbolUiRegistry. Guid collision!");
-
-            var compositionSymbolUi = SymbolUiRegistry.Entries[symbolId];
-            var cmd = new CopySymbolChildrenCommand(compositionSymbolUi,
+            var cmd = new CopySymbolChildrenCommand(composition.GetSymbolUi(),
                                                     selectedChildren,
                                                     selectedAnnotations,
                                                     newContainerUi,
@@ -68,7 +69,6 @@ namespace T3.Editor.Gui.Graph.Modification
                 }
             }
 
-            SymbolUiRegistry.EntriesEditable.Remove(newContainerUi.Symbol.Id, out _);
             return resultJsonString;
         }
     }

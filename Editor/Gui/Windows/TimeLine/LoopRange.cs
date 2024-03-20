@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Interaction.Snapping;
 
 namespace T3.Editor.Gui.Windows.TimeLine
 {
-    public class LoopRange : IValueSnapAttractor
+    internal class LoopRange : IValueSnapAttractor
     {
         public void Draw(TimeLineCanvas canvas, Playback playback, ImDrawListPtr drawlist, ValueSnapHandler snapHandler)
         {

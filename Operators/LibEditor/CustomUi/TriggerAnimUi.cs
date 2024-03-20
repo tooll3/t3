@@ -13,7 +13,7 @@ namespace libEditor.CustomUi
 {
     public static class TriggerAnimUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is TriggerAnim anim)
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))

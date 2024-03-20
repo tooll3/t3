@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
@@ -26,14 +23,14 @@ namespace T3.Editor.Gui.Windows.TimeLine
     /// Combines multiple <see cref="ITimeObjectManipulation"/>s into a single consistent
     /// timeline that allows dragging selected time elements of various types.
     /// </summary>
-    public class TimeLineCanvas : CurveEditCanvas
+    internal sealed class TimeLineCanvas : CurveEditCanvas
     {
-        public TimeLineCanvas()
+        public TimeLineCanvas(GraphCanvas canvas)
         {
             DopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
             _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandlerForU, SnapHandlerForV);
             _timeSelectionRange = new TimeSelectionRange(this, SnapHandlerForU);
-            LayersArea = new LayersArea(SnapHandlerForU);
+            LayersArea = new LayersArea(SnapHandlerForU, canvas);
 
             SnapHandlerForV.AddSnapAttractor(_horizontalRaster);
             SnapHandlerForU.AddSnapAttractor(_clipRange);
@@ -41,8 +38,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
             SnapHandlerForU.AddSnapAttractor(_timeRasterSwitcher);
             SnapHandlerForU.AddSnapAttractor(_currentTimeMarker);
             SnapHandlerForU.AddSnapAttractor(LayersArea);
+            _structure = canvas.Structure;
+            _nodeSelection = canvas.NodeSelection;
+            _graphCanvas = canvas;
         }
 
+        public NodeSelection NodeSelection => _nodeSelection;
 
         public void Draw(Instance compositionOp, Playback playback)
         {
@@ -56,9 +57,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ScrollToTimeAfterStopped();
 
             var modeChanged = UpdateMode();
-            DrawCurveCanvas(drawAdditionalCanvasContent: DrawCanvasContent, 0, T3Ui.EditingFlags.AllowHoveredChildWindows);
+            DrawCurveCanvas(_graphCanvas, drawAdditionalCanvasContent: DrawCanvasContent, 0, T3Ui.EditingFlags.AllowHoveredChildWindows);
 
-            void DrawCanvasContent()
+            void DrawCanvasContent(InteractionState interactionState)
             {
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY()-6);
                 if (PlaybackUtils.TryFindingSoundtrack(out var soundtrack, out var composition))
@@ -77,7 +78,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 {
                     if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
-                        DeleteSelectedElements();
+                        DeleteSelectedElements(compositionOp);
                     
                     switch (Mode)
                     {
@@ -91,7 +92,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                             break;
                     }
 
-                    var compositionTimeClip = Structure.GetCompositionTimeClip(compositionOp);
+                    var compositionTimeClip = _structure.GetCompositionTimeClip(compositionOp);
 
                     if (Playback.IsLooping)
                     {
@@ -105,9 +106,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 
                 ImGui.EndChild();
                 
-                _currentTimeMarker.Draw(Playback);
-                _timeSelectionRange.Draw(Drawlist);
-                DrawDragTimeArea();
+                _currentTimeMarker.Draw(Playback.TimeInBars, this);
+                _timeSelectionRange.Draw(compositionOp, Drawlist);
+                DrawDragTimeArea(interactionState.MouseState.Position.X);
 
                 if (FenceState == SelectionFence.States.CompletedAsClick)
                 {
@@ -140,7 +141,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var oldScale = Scale;
             var oldScroll = Scroll;
 
-            var clip = Structure.GetCompositionTimeClip(compositionOp);
+            var clip = _structure.GetCompositionTimeClip(compositionOp);
             if (clip == null) return;
 
             // determine scaling factor
@@ -228,7 +229,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
         }
 
-        private void DrawDragTimeArea()
+        private void DrawDragTimeArea(float mouseX)
         {
             if (Playback == null)
                 return;
@@ -250,7 +251,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left) || ImGui.IsItemClicked())
             {
-                var draggedTime = InverseTransformX(Io.MousePos.X);
+                var draggedTime = InverseTransformX(mouseX);
                 if (ImGui.GetIO().KeyShift)
                 {
                     SnapHandlerForU.CheckForSnapping(ref draggedTime, Scale.X, new List<IValueSnapAttractor> { _currentTimeMarker });
@@ -349,8 +350,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
         // TODO: this is horrible and should be refactored
         private List<AnimationParameter> GetAnimationParametersForSelectedNodes(Instance compositionOp)
         {
-            var selection = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>();
-            var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
+            var selection = _nodeSelection.GetSelectedNodes<ISelectableCanvasObject>();
+            var symbolUi = compositionOp.GetSymbolUi();
             var animator = symbolUi.Symbol.Animator;
             
             // No Linq to avoid allocations
@@ -405,6 +406,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private double _lastPlaybackSpeed;
         private readonly List<AnimationParameter> _pinnedParams = new(20);
         private readonly List<AnimationParameter> _curvesForSelection = new(64);
+        private readonly Structure _structure;
+        private readonly NodeSelection _nodeSelection;
+        private readonly GraphCanvas _graphCanvas;
 
         // Styling
         public const float TimeLineDragHeight = 30;
@@ -416,15 +420,15 @@ namespace T3.Editor.Gui.Windows.TimeLine
             public Instance Instance;
             public SymbolChildUi ChildUi;
         }
-        
-        public enum FrameStepAmount
-        {
-            FrameAt60Fps,
-            FrameAt30Fps,
-            FrameAt15Fps,
-            Bar,
-            Beat,
-            Tick,
-        }
+    }
+
+    public enum FrameStepAmount
+    {
+        FrameAt60Fps,
+        FrameAt30Fps,
+        FrameAt15Fps,
+        Bar,
+        Beat,
+        Tick,
     }
 }

@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.UiModel;
 
@@ -19,7 +17,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             var usages = Structure.CollectSymbolUsageCounts();
             ConnectionHashCounts = new Dictionary<int, int>();
             
-            foreach (var symbolUi in SymbolUiRegistry.Entries.Values)
+            foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
             {
                 var symbolId = symbolUi.Symbol.Id;
                 if (!InformationForSymbolIds.TryGetValue(symbolId, out var info))
@@ -49,20 +47,22 @@ namespace T3.Editor.Gui.Graph.Interaction
             var usages = Structure.CollectSymbolUsageCounts();
             
             InformationForSymbolIds.Clear();
-            foreach (var symbolUi in SymbolUiRegistry.Entries.Values)
+
+            var allSymbolUis = EditorSymbolPackage.AllSymbolUis.ToArray();
+            foreach (var symbolUi in allSymbolUis)
             {
                 usages.TryGetValue(symbolUi.Symbol.Id, out var usageCount);
 
                 InformationForSymbolIds[symbolUi.Symbol.Id]
                     = new SymbolInformation()
                           {
-                              RequiredSymbolIds = Structure.CollectRequiredSymbolIds(symbolUi.Symbol),
-                              DependingSymbolIds = Structure.CollectDependingSymbols(symbolUi.Symbol).Select(s => s.Id).ToHashSet(),
-                              ExampleSymbols = SymbolUiRegistry.Entries.Values
-                                                               .Where(c => c.Symbol.Name == symbolUi.Symbol.Name + "Example"
-                                                                           || c.Symbol.Name == symbolUi.Symbol.Name + "Examples")
-                                                               .Select(c => c.Symbol.Id)
-                                                               .ToList() ,
+                              RequiredSymbols = Structure.CollectRequiredSymbols(symbolUi.Symbol),
+                              DependingSymbols = Structure.CollectDependingSymbols(symbolUi.Symbol).ToHashSet(),
+                              ExampleSymbols = allSymbolUis
+                                              .Where(c => c.Symbol.Name == symbolUi.Symbol.Name + "Example"
+                                                          || c.Symbol.Name == symbolUi.Symbol.Name + "Examples")
+                                              .Select(c => c.Symbol.Id)
+                                              .ToList(),
                               UsageCount = usageCount,
                           };
                 
@@ -86,8 +86,8 @@ namespace T3.Editor.Gui.Graph.Interaction
         public class SymbolInformation
         {
             public List<string> Warnings = new();
-            public HashSet<Guid> RequiredSymbolIds = new();
-            public HashSet<Guid> DependingSymbolIds = new();
+            public HashSet<Symbol> RequiredSymbols = new();
+            public HashSet<Symbol> DependingSymbols = new();
             public List<Guid> ExampleSymbols = new();
             public int UsageCount { get; set; }
         }

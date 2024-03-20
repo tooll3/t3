@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
-    public class CombineToSymbolDialog : ModalDialog
+    internal class CombineToSymbolDialog : ModalDialog
     {
         public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, List<Annotation> selectedAnnotations, ref string nameSpace,
                          ref string combineName, ref string description)
@@ -42,10 +40,9 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
                     ImGui.SetNextItemWidth(250);
                     InputWithTypeAheadSearch.Draw("##namespace2", ref nameSpace,
-                                                  SymbolRegistry.Entries.Values
+                                                  _projectToCopyTo.SymbolUis.Select(x => x.Symbol)
                                                                 .Select(i => i.Namespace)
                                                                 .Distinct()
-                                                                .Where(x => x.StartsWith(rootNamespace))
                                                                 .OrderBy(i => i),
                                                   warning: !correct);
 
@@ -72,7 +69,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     if (CustomComponents.DisablableButton("Combine", correct && GraphUtils.IsNewSymbolNameValid(combineName, compositionOp.Symbol),
                                                           enableTriggerWithReturn: false))
                     {
-                        var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
+                        var compositionSymbolUi = compositionOp.GetSymbolUi();
                         Combine.CombineAsNewType(compositionSymbolUi, _projectToCopyTo, selectedChildUis, selectedAnnotations, combineName, nameSpace, description,
                                                  _shouldBeTimeClip);
                         _shouldBeTimeClip = false; // Making timeclips this is normally a one off operation

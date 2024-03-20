@@ -1,33 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using SharpDX.Direct3D11;
+﻿using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
-public static class NodeGraphLayouting
+internal class NodeGraphLayouting
 {
-    public static void ArrangeOps()
+    private readonly NodeSelection _nodeSelection;
+    private readonly Structure _structure;
+    public NodeGraphLayouting(NodeSelection nodeSelection, Structure structure)
+    {
+        _nodeSelection = nodeSelection;
+        _structure = structure;
+    }
+    
+    public void ArrangeOps(Instance composition)
     {
         var commands = new List<ICommand>();
-        var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+        var compositionSymbolUi = composition.GetSymbolUi();
 
-        foreach (var n in NodeSelection.GetSelectedChildUis())
+        foreach (var n in _nodeSelection.GetSelectedChildUis())
         {
             //var xxx = NodeOperations.CollectSlotDependencies(n)
-            var connectedChildren = Structure.CollectConnectedChildren(n.SymbolChild);
+            var connectedChildren = _structure.CollectConnectedChildren(n.SymbolChild, composition);
 
             // First pass is rough layout
             var nodesForSecondPass = new Dictionary<ISelectableCanvasObject, int>();
-            RecursivelyAlignChildren(n, connectedChildren, ref commands, ref nodesForSecondPass);
+            RecursivelyAlignChildren(n, connectedChildren, ref commands, ref nodesForSecondPass, composition);
 
             var minX = float.MaxValue;
             foreach (var (secondPassOp, depthForOp) in nodesForSecondPass)
@@ -39,15 +44,14 @@ public static class NodeGraphLayouting
                 var morePasses = new Dictionary<ISelectableCanvasObject, int>();
 
                 var pos = Vector2.Zero;
-                var compositionOpSymbol = GraphCanvas.Current.CompositionOp.Symbol;
+                var compositionOpSymbol = composition.Symbol;
                 var connectedTargetsIds = compositionOpSymbol.Connections
                                                              .Where(ccc => ccc.SourceParentOrChildId == secondPassOp.Id
                                                                            && ccc.TargetParentOrChildId != childUi.Id)
                                                              .Select(ccc => ccc.TargetParentOrChildId).ToList();
-
                 foreach (var id in connectedTargetsIds)
                 {
-                    var connectedOp = parentUi.ChildUis.SingleOrDefault(s => s.Id == id);
+                    var connectedOp = compositionSymbolUi.ChildUis.SingleOrDefault(s => s.Id == id);
                     if (connectedOp != null)
                     {
                         minX = MathF.Min(minX, connectedOp.PosOnCanvas.X);
@@ -58,7 +62,7 @@ public static class NodeGraphLayouting
                     childUi.PosOnCanvas = p;
                 }
 
-                RecursivelyAlignChildren(childUi, connectedChildren, ref commands, ref morePasses);
+                RecursivelyAlignChildren(childUi, connectedChildren, ref commands, ref morePasses, composition);
             }
         }
 
@@ -66,19 +70,20 @@ public static class NodeGraphLayouting
         UndoRedoStack.Add(command);
     }
 
-    private static float RecursivelyAlignChildren(SymbolChildUi childUi,
+    private float RecursivelyAlignChildren(SymbolChildUi childUi,
                                                   HashSet<Guid> connectedChildIds,
                                                   ref List<ICommand> moveCommands,
                                                   ref Dictionary<ISelectableCanvasObject, int> nodesForSecondPass,
+                                                  Instance composition,
                                                   int depth = 0,
                                                   List<ISelectableCanvasObject> sortedIn = null)
     {
         sortedIn ??= new List<ISelectableCanvasObject>();
         nodesForSecondPass ??= new Dictionary<ISelectableCanvasObject, int>();
 
-        var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-        var compositionSymbol = GraphCanvas.Current.CompositionOp.Symbol;
-        var connectedChildUis = (from con in compositionSymbol.Connections
+        var parentUi = composition.GetSymbolUi();
+        var parentSymbol = composition.Symbol;
+        var connectedChildUis = (from con in parentSymbol.Connections
                                  where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
                                  from sourceChildUi in parentUi.ChildUis
                                  where con.SourceParentOrChildId == sourceChildUi.Id
@@ -86,7 +91,7 @@ public static class NodeGraphLayouting
                                  select sourceChildUi).Distinct().ToArray();
 
         // Order connections by input definition order
-        var connections = (from con in compositionSymbol.Connections
+        var connections = (from con in parentSymbol.Connections
                            where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
                            from sourceChildUi in parentUi.ChildUis
                            where con.SourceParentOrChildId == sourceChildUi.Id
@@ -108,7 +113,7 @@ public static class NodeGraphLayouting
                 //                                              .Where(c5 => c5.SourceParentOrChildId == op.Id
                 //                                                                       && c5.TargetParentOrChildId != childUi.Id);
 
-                var count = compositionSymbol.Connections
+                var count = parentSymbol.Connections
                                              .Where(ccc => ccc.SourceParentOrChildId == op.Id
                                                            && ccc.TargetParentOrChildId != childUi.Id)
                                              .Count(ccc => connectedChildIds.Contains(ccc.TargetParentOrChildId));
@@ -139,22 +144,22 @@ public static class NodeGraphLayouting
             if (snappedCount > 0)
                 verticalOffset += thumbnailPadding;
 
-            var moveCommand = new ModifyCanvasElementsCommand(compositionSymbol.Id, new List<ISelectableCanvasObject>() { connectedChildUi });
+            var moveCommand = new ModifyCanvasElementsCommand(parentUi, [connectedChildUi], _nodeSelection);
             connectedChildUi.PosOnCanvas = childUi.PosOnCanvas + new Vector2(-(childUi.Size.X + SelectableNodeMovement.SnapPadding.X), verticalOffset);
             moveCommand.StoreCurrentValues();
             moveCommands.Add(moveCommand);
 
             sortedIn.Add(connectedChildUi);
-            verticalOffset += RecursivelyAlignChildren(connectedChildUi, connectedChildIds, ref moveCommands, ref nodesForSecondPass, depth + 1,
+            verticalOffset += RecursivelyAlignChildren(connectedChildUi, connectedChildIds, ref moveCommands, ref nodesForSecondPass, composition, depth + 1,
                                                        sortedIn: sortedIn);
 
             sortedIn.Add(connectedChildUi);
             //NodeSelection.AddSelection(connectedChildUi);
 
-            var instance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == connectedChildUi.Id);
+            var instance = composition.Children.SingleOrDefault(c => c.SymbolChildId == connectedChildUi.Id);
             if (instance != null)
             {
-                NodeSelection.AddSymbolChildToSelection(connectedChildUi, instance);
+                _nodeSelection.AddSymbolChildToSelection(connectedChildUi, instance);
             }
 
             snappedCount++;
@@ -169,12 +174,12 @@ public static class NodeGraphLayouting
         return childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0 && childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
     }
 
-    public static Vector2 FindPositionForNodeConnectedToInput(Symbol compositionSymbol, SymbolChildUi connectionTargetUi, Symbol.InputDefinition inputDefinition)
+    public static Vector2 FindPositionForNodeConnectedToInput(Symbol compositionSymbol, SymbolChildUi connectionTargetUi)
     {
         var idealPos = connectionTargetUi.PosOnCanvas 
                        + new Vector2(-SelectableNodeMovement.PaddedDefaultOpSize.X, 0);
 
-        var symbolUi = SymbolUiRegistry.Entries[compositionSymbol.Id];
+        var symbolUi = compositionSymbol.GetSymbolUi();
         var interferingOps = symbolUi.ChildUis
                                      .Where(op =>
                                                 op.PosOnCanvas.Y >= idealPos.Y

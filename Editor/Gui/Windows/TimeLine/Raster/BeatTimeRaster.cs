@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Text;
 using T3.Core.Animation;
 using T3.Editor.Gui.UiHelpers;

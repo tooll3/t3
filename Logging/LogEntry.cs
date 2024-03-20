@@ -7,9 +7,9 @@ namespace T3.Core.Logging
         public DateTime TimeStamp { get; }
         public ILogEntry.EntryLevel Level { get; }
         public string Message { get; }
-        public IList<Guid> SourceIdPath  { get; }
+        public IReadOnlyList<Guid> SourceIdPath  { get; }
 
-        public LogEntry(ILogEntry.EntryLevel level, string message, IList<Guid> sourceIdPath)
+        public LogEntry(ILogEntry.EntryLevel level, string message, IReadOnlyList<Guid> sourceIdPath)
         {
             TimeStamp = DateTime.Now;
             Level = level;

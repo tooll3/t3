@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using T3.Core.DataTypes;
 using T3.Core.UserData;
 using T3.Serialization;

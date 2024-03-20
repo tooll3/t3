@@ -1,4 +1,3 @@
-using System.Numerics;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils.Geometry;
 using T3.Editor.Gui.UiHelpers;

@@ -1,10 +1,7 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Numerics;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Editor.SystemUi;
 using T3.SystemUi;

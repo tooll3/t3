@@ -1,4 +1,3 @@
-using System;
 using T3.SystemUi;
 
 namespace T3.Editor.SystemUi;

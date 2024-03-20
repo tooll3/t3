@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
-using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 
 namespace T3.Editor.Gui.OutputUi

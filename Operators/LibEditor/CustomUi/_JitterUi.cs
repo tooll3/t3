@@ -1,3 +1,4 @@
+using System.Numerics;
 using ImGuiNET;
 using lib.anim._obsolete;
 using T3.Core.Operator;
@@ -9,12 +10,12 @@ namespace libEditor.CustomUi
 {
     public static class _JitterUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is _Jitter jitter))
                 return SymbolChildUi.CustomUiResult.None;
             
-            if (WidgetElements.DrawRateLabelWithTitle(jitter.Rate, screenRect, drawList, nameof(jitter)))
+            if (WidgetElements.DrawRateLabelWithTitle(jitter.Rate, screenRect, drawList, nameof(jitter), canvasScale))
             {
                 jitter.Rate.Input.IsDefault = false;
                 jitter.Rate.DirtyFlag.Invalidate();

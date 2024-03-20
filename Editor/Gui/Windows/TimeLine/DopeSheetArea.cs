@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
@@ -9,7 +5,6 @@ using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.Interaction;
@@ -22,7 +17,7 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows.TimeLine
 {
-    public class DopeSheetArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
+    internal class DopeSheetArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
     {
         public DopeSheetArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas)
         {
@@ -40,9 +35,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 CurvesTablesNeedsRefresh = false;
             }
                 
-            _drawList = ImGui.GetWindowDrawList();
+            var drawList = ImGui.GetWindowDrawList();
+            
             AnimationParameters = animationParameters;
-            _compositionOp = compositionOp;
 
             ImGui.BeginGroup();
             {
@@ -72,26 +67,28 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(0, 3)); // keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
 
+                var compositionSymbolChildId = compositionOp.SymbolChildId;
+
                 for (var index = 0; index < animationParameters.Count; index++)
                 {
                     var parameter = animationParameters[index];
                     _currentAnimationParameter = parameter;
                     ImGui.PushID(index);
-                    DrawProperty(parameter);
+                    DrawProperty(parameter, compositionSymbolChildId, drawList);
                     ImGui.PopID();
                 }
 
-                DrawContextMenu();
+                DrawContextMenu(compositionOp);
             }
             ImGui.EndGroup();
         }
 
-        private void DrawProperty(TimeLineCanvas.AnimationParameter parameter)
+        private void DrawProperty(TimeLineCanvas.AnimationParameter parameter, Guid compositionSymbolChildId, ImDrawListPtr drawList)
         {
 
             var min = ImGui.GetCursorScreenPos();
             var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight );
-            _drawList.AddRectFilled(new Vector2(min.X, max.Y),
+            drawList.AddRectFilled(new Vector2(min.X, max.Y),
                                     new Vector2(max.X, max.Y + 1), UiColors.BackgroundFull);
             
             var mousePos = ImGui.GetMousePos();
@@ -99,10 +96,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var layerArea = new ImRect(min, max);
             var layerHovered = ImGui.IsWindowHovered() && layerArea.Contains(mousePos);
 
-            var isCurrentSelected = NodeSelection.GetSelectedInstance()?.SymbolChildId == parameter.Input.Parent.SymbolChildId;
+            var isCurrentSelected = TimeLineCanvas.NodeSelection.GetSelectedInstanceWithoutComposition()?.SymbolChildId == parameter.Input.Parent.SymbolChildId;
             if(FrameStats.Last.HoveredIds.Contains(parameter.Input.Parent.SymbolChildId) || isCurrentSelected || layerHovered )
             {
-                _drawList.AddRectFilled(new Vector2(min.X, min.Y),
+                drawList.AddRectFilled(new Vector2(min.X, min.Y),
                                         new Vector2(max.X, max.Y), UiColors.ForegroundFull.Fade(0.04f));
             }
 
@@ -156,24 +153,24 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 var iconColor = isPinned? UiColors.StatusAnimated : UiColors.Gray;
                 iconColor = iconColor.Fade(ImGui.IsItemHovered() ? 1 : 0.8f);
                 
-                Icons.DrawIconAtScreenPosition(Icon.Pin, lastPos, _drawList, iconColor);
+                Icons.DrawIconAtScreenPosition(Icon.Pin, lastPos, drawList, iconColor);
                 var labelColor = layerHovered
                                      ? UiColors.ForegroundFull
                                      : isPinned
                                          ? UiColors.StatusAnimated
                                          : UiColors.TextMuted;
-                _drawList.AddText( lastPos+ new Vector2(20,0), labelColor, label);
+                drawList.AddText( lastPos+ new Vector2(20,0), labelColor, label);
                 ImGui.PopID();
             }
             
             // Draw curves and gradients...
             if (parameter.Curves.Count() == 4)
             {
-                DrawCurveGradient(parameter, layerArea);
+                DrawCurveGradient(parameter, layerArea, drawList);
             }
             else
             {
-                DrawCurveLines(parameter, layerArea);
+                DrawCurveLines(parameter, layerArea, drawList);
             }
 
             HandleCreateNewKeyframes(parameter, layerArea);
@@ -185,7 +182,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     var vDef = list[index].Value;
                     var nextVDef = (index < list.Count - 1) ? list[index + 1].Value : null;
-                    DrawKeyframe(vDef, layerArea, parameter, nextVDef);
+                    DrawKeyframe(vDef, layerArea, parameter, nextVDef, drawList, compositionSymbolChildId);
                 }
             }
 
@@ -262,7 +259,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         private static readonly List<Vector2> Positions = new(100);  // Reuse list to avoid allocations
         
-        private void DrawCurveLines(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea)
+        private void DrawCurveLines(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea, ImDrawListPtr drawList)
         {
             const float padding = 2;
             // Lines
@@ -328,7 +325,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     lastUOnScreen = uOnScreen;
                 }
 
-                _drawList.AddPolyline(
+                drawList.AddPolyline(
                                       ref Positions.ToArray()[0],
                                       Positions.Count,
                                       parameter.Curves.Count() > 1 ? CurveColors[curveIndex % 4] : GrayCurveColor,
@@ -344,7 +341,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
         }
 
-        private void DrawCurveGradient(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea)
+        private void DrawCurveGradient(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea, ImDrawListPtr drawList)
         {
             if (parameter.Curves.Count() != 4)
                 return;
@@ -373,7 +370,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             for (var index2 = 0; index2 < times.Length - 1; index2++)
             {
-                _drawList.AddRectFilledMultiColor(new Vector2(times[index2], layerArea.Min.Y + padding),
+                drawList.AddRectFilledMultiColor(new Vector2(times[index2], layerArea.Min.Y + padding),
                                                   new Vector2(times[index2 + 1], layerArea.Max.Y - padding),
                                                   colors[index2],
                                                   colors[index2 + 1],
@@ -383,7 +380,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         }
 
         private void DrawKeyframe(VDefinition vDef, ImRect layerArea, TimeLineCanvas.AnimationParameter parameter,
-                                  VDefinition nextVDef)
+                                  VDefinition nextVDef, ImDrawListPtr drawList, Guid compositionSymbolChildId)
         {
             var vDefU = (float)vDef.U;
             if (vDefU < Playback.Current.TimeInBars)
@@ -412,7 +409,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                     var color = UiColors.StatusAnimated.Fade(MathUtils.RemapAndClamp(availableSpace, 30, 50, 0, 1).Clamp(0, 1));
                     ImGui.PushFont(Fonts.FontSmall);
-                    _drawList.AddText(labelPos, color, $"{vDef.Value:G3}");
+                    drawList.AddText(labelPos, color, $"{vDef.Value:G3}");
                     ImGui.PopFont();
                 }
             }
@@ -472,7 +469,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 var valueInputVisible = isSelected && keyHash == _clickedKeyframeHash;
                 if (valueInputVisible)
                 {
-                    var symbolUi = SymbolUiRegistry.Entries[parameter.ChildUi.SymbolChild.Symbol.Id];
+                    var symbolUi = parameter.ChildUi.SymbolChild.Symbol.GetSymbolUi();
                     var inputUi = symbolUi.InputUis[parameter.Input.Id];
                     if (inputUi is FloatInputUi floatInputUi)
                     {
@@ -485,7 +482,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         var result = floatInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
-                            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.SymbolChildId, SelectedKeyframes, _currentAnimationParameter.Curves);
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, _currentAnimationParameter.Curves);
                         }
 
                         if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -517,7 +514,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         var result = intInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
-                            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.SymbolChildId, SelectedKeyframes, _currentAnimationParameter.Curves);
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, _currentAnimationParameter.Curves);
                         }
 
                         if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -673,7 +670,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         ICommand ITimeObjectManipulation.StartDragCommand()
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, SelectedKeyframes, GetAllCurves());
+            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
             return _changeKeyframesCommand;
         }
 
@@ -706,9 +703,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
             _changeKeyframesCommand = null;
         }
 
-        void ITimeObjectManipulation.DeleteSelectedElements()
+        void ITimeObjectManipulation.DeleteSelectedElements(Instance compositionOp)
         {
-            AnimationOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters, _compositionOp);
+            AnimationOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters, compositionOp);
             RebuildCurveTables();
         }
         #endregion
@@ -738,8 +735,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private Vector2 _minScreenPos;
         private static ChangeKeyframesCommand _changeKeyframesCommand;
         public const int LayerHeight = 25;
-        private Instance _compositionOp;
-        private ImDrawListPtr _drawList;
         private readonly ValueSnapHandler _snapHandler;
     }
 }

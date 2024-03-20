@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
@@ -28,7 +24,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
     public static class CurveInputEditing
     {
 
-        public static InputEditStateFlags DrawCanvasForCurve(ref Curve curveRef, SymbolChild.Input input, bool cloneIfModified,
+        public static InputEditStateFlags DrawCanvasForCurve(ref Curve curveRef, SymbolChild.Input input, bool cloneIfModified, Instance compositionOp,
                                                              T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
         {
             var imGuiId = ImGui.GetID("");
@@ -61,7 +57,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             }
             
             curveInteraction.EditState = InputEditStateFlags.Nothing;
-            curveInteraction.Draw();
+            curveInteraction.Draw(compositionOp);
 
             var modified = curveInteraction.EditState != InputEditStateFlags.Nothing;
 
@@ -76,12 +72,6 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             return curveInteraction.EditState;
         }
 
-        public static ScalableCanvas GetCanvasForCurve(Curve curve)
-        {
-            return null;
-
-        }
-
         /// <summary>
         /// Implement interaction of manipulating the individual keyframes
         /// </summary>
@@ -94,9 +84,9 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
             public InputEditStateFlags EditState { get; set; } = InputEditStateFlags.Nothing;
 
-            public void Draw()
+            public void Draw(Instance compositionOp)
             {
-                _singleCurveCanvas.Draw(Curves[0], this);
+                _singleCurveCanvas.Draw(Curves[0], this, compositionOp);
             }
 
 
@@ -111,7 +101,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                 _singleCurveCanvas.NeedToAdjustScopeAfterFirstRendering = true;
             }
 
-            protected override void DeleteSelectedKeyframes()
+            protected override void DeleteSelectedKeyframes(Instance compositionOp)
             {
                 foreach (var curve in GetAllCurves())
                 {
@@ -201,7 +191,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
             private ICommand StartDragCommand()
             {
-                _changeKeyframesCommand = new ChangeKeyframesCommand(Guid.Empty, SelectedKeyframes, GetAllCurves());
+                _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
                 return _changeKeyframesCommand;
             }
 
@@ -269,7 +259,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                     SnapHandlerForV.AddSnapAttractor(_horizontalRaster);
                 }
 
-                public void Draw(Curve curve, CurveInteraction interaction)
+                public void Draw(Curve curve, CurveInteraction interaction, Instance compositionOp)
                 {
                     var height = _interactionFlags.HasFlag(T3Ui.EditingFlags.ExpandVertically)
                                      ? ImGui.GetContentRegionAvail().Y
@@ -289,9 +279,10 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                         }
                     }
 
-                    DrawCurveCanvas(DrawCanvasContent, height, _interactionFlags);
+                    var graphCanvas = GraphWindow.Focused?.GraphCanvas;
+                    DrawCurveCanvas(graphCanvas, DrawCanvasContent, height, _interactionFlags);
 
-                    void DrawCanvasContent()
+                    void DrawCanvasContent(InteractionState interactionState)
                     {
                         _standardRaster.Draw(this);
                         _horizontalRaster.Draw(this);
@@ -303,7 +294,8 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                             CurvePoint.Draw(keyframe, this, interaction.SelectedKeyframes.Contains(keyframe), interaction);
                         }
 
-                        //var min = ImGui.GetWindowPos() ;
+                        //v
+                        //ar min = ImGui.GetWindowPos() ;
                         //ImGui.GetWindowDrawList().AddText(min, Color.Green, " Curve #" + _objectIdGenerator.GetId(curve, out _));
 
                         interaction.HandleFenceSelection();
@@ -316,15 +308,15 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
                         if (ImGui.IsWindowHovered() && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                         {
-                            interaction.DeleteSelectedKeyframes();
+                            interaction.DeleteSelectedKeyframes(compositionOp);
                         }
 
-                        interaction.DrawContextMenu();
+                        interaction.DrawContextMenu(compositionOp);
                         HandleCreateNewKeyframes(curve);
                         if (NeedToAdjustScopeAfterFirstRendering)
                         {
                             var bounds = GetBoundsOnCanvas(interaction.GetAllKeyframes());
-                            SetScopeToCanvasArea(bounds, flipY: true, GraphCanvas.Current, 30, 15);
+                            SetScopeToCanvasArea(bounds, flipY: true, GraphWindow.Focused?.GraphCanvas, 30, 15);
                             NeedToAdjustScopeAfterFirstRendering = false;
                         }
                     }

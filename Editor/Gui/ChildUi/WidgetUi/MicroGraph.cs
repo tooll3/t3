@@ -1,7 +1,4 @@
-﻿using System;
-using System.Numerics;
-using ImGuiNET;
-using T3.Core.Logging;
+﻿using ImGuiNET;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;

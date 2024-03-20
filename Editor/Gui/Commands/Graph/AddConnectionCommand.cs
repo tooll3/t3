@@ -18,20 +18,26 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Do()
         {
-            var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
-            compositionSymbol.AddConnection(_addedConnection, _multiInputIndex);
-
-            var symbolUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-            symbolUi.FlagAsModified();
+            if (!SymbolUiRegistry.TryGetValue(_compositionSymbolId, out var compositionSymbolUi))
+            {
+                Log.Warning($"Could not find symbol with id {_compositionSymbolId} - was it removed?");
+                return;
+            }
+            
+            compositionSymbolUi!.Symbol.AddConnection(_addedConnection, _multiInputIndex);
+            compositionSymbolUi.FlagAsModified();
         }
 
         public void Undo()
         {
-            var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
-            compositionSymbol.RemoveConnection(_addedConnection, _multiInputIndex);
+            if (!SymbolUiRegistry.TryGetValue(_compositionSymbolId, out var compositionSymbolUi))
+            {
+                Log.Warning($"Could not find symbol with id {_compositionSymbolId} - was it removed?");
+                return;
+            }
             
-            var symbolUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-            symbolUi.FlagAsModified();
+            compositionSymbolUi!.Symbol.RemoveConnection(_addedConnection, _multiInputIndex);
+            compositionSymbolUi.FlagAsModified();
         }
 
         private readonly Guid _compositionSymbolId;

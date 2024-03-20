@@ -1,32 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿#nullable enable
+using System.Diagnostics;
 using T3.Core.Animation;
-using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Core.Utils;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Helpers;
 
-internal static class Structure
+// todo - make this non-static to be able to edit multiple projects at once
+// each GraphWindow class should have its own Structure object, and some of this logic should be moved out where applicable
+// (i.e. dealing with packages, selecting root instasnce, etc
+internal class Structure
 {
-    public static Instance GetInstanceFromIdPath(List<Guid> compositionPath)
+    private readonly Func<Instance> _getRootInstance;
+
+    public Structure(Func<Instance> getRootInstance)
     {
-        return OperatorUtils.GetInstanceFromIdPath(EditorSymbolPackage.RootInstance, compositionPath);
+        _getRootInstance = getRootInstance;
+    }
+    
+    public Instance? GetInstanceFromIdPath(List<Guid> compositionPath)
+    {
+        return TryGetInstanceFromIdPath(_getRootInstance(), compositionPath, out var instance) ? instance : null;
     }
 
-    public static List<string> GetReadableInstancePath(List<Guid> path, bool includeLeave= true)
+    public List<string> GetReadableInstancePath(List<Guid>? path, bool includeLeave= true)
     {
         if (path == null || (includeLeave && path.Count == 0) || (!includeLeave && path.Count == 1)) 
-            return new List<string> { "Path empty" };
+            return ["Path empty"];
 
         var instance = GetInstanceFromIdPath(path);
         
         if (instance == null)
-            return new List<string> { "Path invalid" };
+            return ["Path invalid"];
 
         var newList = new List<string>();
 
@@ -49,7 +57,7 @@ internal static class Structure
 
             isFirst = false;
 
-            var parentSymbolUi = SymbolUiRegistry.Entries[parent.Symbol.Id];
+            var parentSymbolUi = parent.GetSymbolUi();
             var childUisWithThatType = parentSymbolUi.ChildUis.FindAll(c => c.SymbolChild.Symbol == instance.Symbol);
             var indexLabel = "";
 
@@ -73,7 +81,7 @@ internal static class Structure
         return newList;
     }
 
-    public static ITimeClip GetCompositionTimeClip(Instance compositionOp)
+    public ITimeClip GetCompositionTimeClip(Instance compositionOp)
     {
         if (compositionOp == null)
         {
@@ -98,12 +106,12 @@ internal static class Structure
         {
             foreach (var clipProvider in child.Outputs.OfType<ITimeClipProvider>())
             {
-                yield return clipProvider.TimeClip;
+                yield return clipProvider.TimeClip;//CHANGE
             }
         }
     }
 
-    public static bool TryGetUiAndInstanceInComposition(Guid id, Instance compositionOp, out SymbolChildUi childUi, out Instance instance)
+    public bool TryGetUiAndInstanceInComposition(Guid id, Instance compositionOp, out SymbolChildUi? childUi, out Instance? instance)
     {
         instance = compositionOp.Children.SingleOrDefault(child => child.SymbolChildId == id);
         if (instance == null)
@@ -113,7 +121,7 @@ internal static class Structure
             return false;
         }
 
-        childUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id].ChildUis.SingleOrDefault(ui => ui.Id == id);
+        childUi = compositionOp.GetSymbolChildUiWithId(id);
         if (childUi == null)
         {
             Log.Assert($"Can't select child with id {id} in composition {compositionOp}");
@@ -125,11 +133,12 @@ internal static class Structure
 
     public static IEnumerable<Symbol> CollectDependingSymbols(Symbol symbol)
     {
-        foreach (var s in SymbolRegistry.Entries.Values)
+        var symbolId = symbol.Id;
+        foreach (var s in EditorSymbolPackage.AllSymbols)
         {
-            foreach (var ss in s.Children)
+            foreach (var child in s.Children)
             {
-                if (ss.Symbol.Id != symbol.Id)
+                if (child.Symbol.Id != symbolId)
                     continue;
 
                 yield return s;
@@ -142,7 +151,7 @@ internal static class Structure
     {
         var results = new Dictionary<Guid, int>();
 
-        foreach (var s in SymbolRegistry.Entries.Values)
+        foreach (var s in EditorSymbolPackage.AllSymbols)
         {
             foreach (var child in s.Children)
             {
@@ -154,28 +163,27 @@ internal static class Structure
         return results;
     }
 
-    public static HashSet<Guid> CollectRequiredSymbolIds(Symbol symbol, HashSet<Guid> all = null)
+    public static HashSet<Symbol> CollectRequiredSymbols(Symbol symbol, HashSet<Symbol> all = null)
     {
-        all ??= new HashSet<Guid>();
+        all ??= new HashSet<Symbol>();
 
         foreach (var symbolChild in symbol.Children)
         {
-            if (all.Contains(symbolChild.Symbol.Id))
+            if (!all.Add(symbolChild.Symbol))
                 continue;
 
-            all.Add(symbolChild.Symbol.Id);
-            CollectRequiredSymbolIds(symbolChild.Symbol, all);
+            CollectRequiredSymbols(symbolChild.Symbol, all);
         }
 
         return all;
     }
 
-    public static HashSet<Guid> CollectConnectedChildren(SymbolChild child, HashSet<Guid> set = null)
+    public HashSet<Guid> CollectConnectedChildren(SymbolChild child, Instance composition, HashSet<Guid> set = null)
     {
         set ??= new HashSet<Guid>();
 
         set.Add(child.Id);
-        var compositionSymbol = GraphCanvas.Current.CompositionOp.Symbol;
+        var compositionSymbol = composition.Symbol;
         var connectedChildren = (from con in compositionSymbol.Connections
                                  where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
                                  from sourceChild in compositionSymbol.Children
@@ -186,7 +194,7 @@ internal static class Structure
         foreach (var connectedChild in connectedChildren)
         {
             set.Add(connectedChild.Id);
-            CollectConnectedChildren(connectedChild, set);
+            CollectConnectedChildren(connectedChild, composition, set);
         }
 
         return set;
@@ -238,12 +246,10 @@ internal static class Structure
         }
     }
 
-    public static IEnumerable<Instance> CollectParentInstances(Instance compositionOp, bool includeChildInstance = false)
+    public static IEnumerable<Instance> CollectParentInstances(Instance compositionOp)
     {
         var parents = new List<Instance>();
         var op = compositionOp;
-        if (includeChildInstance)
-            parents.Add(op);
 
         while (op.Parent != null)
         {
@@ -252,5 +258,58 @@ internal static class Structure
         }
 
         return parents;
+    }
+
+    public static bool TryGetInstanceFromIdPath(Instance rootInstance, IReadOnlyCollection<Guid>? childPath, out Instance? instance)
+    {
+        if (childPath == null || childPath.Count == 0)
+        {
+            instance = null;
+            return false;
+        }
+        
+        var rootId = rootInstance.SymbolChildId;
+        
+        if(childPath.Count == 1 && childPath.First() == rootId)
+        {
+            instance = rootInstance;
+            return true;
+        }
+
+        // if the path ends in the root, we have been given an incorrect path
+        // this is because a composition cannot have a child of itself
+        if (childPath.Last() == rootId)
+        {
+            instance = null;
+            return false;
+        }
+        
+        instance = rootInstance;
+        var foundRootId = false;
+        foreach (var childId in childPath)
+        {
+            // Ignore root - skip parts of the path 
+            // we give this as a courtesy to the caller to not have to have all paths provided start with the root
+            if (!foundRootId)
+            {
+                foundRootId |= childId == rootId;
+                continue;
+            }
+
+            if (!instance!.TryGetChildInstance(childId, false, out instance, out _))
+            {
+                instance = null;
+                return false;
+            }
+        }
+        
+        if(!foundRootId)
+        {
+            instance = null;
+            Log.Error("Did not find root in path provided - check your path begins with the root provided");
+            return false;
+        }
+
+        return true;
     }
 }

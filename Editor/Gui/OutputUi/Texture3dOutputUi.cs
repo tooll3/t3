@@ -8,6 +8,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Editor.App;
 using T3.Editor.Gui.Windows;
+using Buffer = SharpDX.Direct3D11.Buffer;
 using ComputeShader = SharpDX.Direct3D11.ComputeShader;
 
 namespace T3.Editor.Gui.OutputUi

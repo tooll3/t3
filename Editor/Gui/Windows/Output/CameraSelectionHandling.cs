@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.Interaction.TransformGizmos;
@@ -14,7 +11,7 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.Output
 {
-    public class CameraSelectionHandling
+    internal class CameraSelectionHandling
     {
         public ICamera CameraForRendering { get; private set; }
         public bool BypassCamera { get; private set; }
@@ -52,6 +49,8 @@ namespace T3.Editor.Gui.Windows.Output
             /// </summary>
             PickedACamera,
         }
+        
+        private static NodeSelection? NodeSelection => GraphWindow.Focused?.GraphCanvas.NodeSelection;
         
         public void Update(Instance drawnInstance, Type drawnType, bool preventInteractions = false)
         {
@@ -114,7 +113,7 @@ namespace T3.Editor.Gui.Windows.Output
                     if (_firstCamInGraph != null)
                     {
                         PreventImageCanvasInteraction = true;
-                        var isCamOpSelected = NodeSelection.GetFirstSelectedInstance() == _firstCamInGraph;
+                        var isCamOpSelected = IsCamOpSelected();
                         if (isCamOpSelected)
                         {
                             cameraForManipulation = _firstCamInGraph;
@@ -141,7 +140,7 @@ namespace T3.Editor.Gui.Windows.Output
                 {
                     if (_firstCamInGraph != null)
                     {
-                        var isCamOpSelected = NodeSelection.GetFirstSelectedInstance() == _firstCamInGraph;
+                        var isCamOpSelected = IsCamOpSelected();
                         if (!isCamOpSelected)
                         {
                             cameraForManipulation = _outputWindowViewCamera;
@@ -185,6 +184,12 @@ namespace T3.Editor.Gui.Windows.Output
             {
                 _cameraInteraction.Update(cameraForManipulation, !PreventCameraInteraction);
             }
+
+            bool IsCamOpSelected()
+            {
+                var firstSelectedInstance = NodeSelection?.GetSelectedInstanceWithoutComposition();
+                return firstSelectedInstance is ICamera camera && camera == _firstCamInGraph;
+            }
         }
 
         private void UpdateRecentCameras(Instance drawnInstance)
@@ -211,7 +216,7 @@ namespace T3.Editor.Gui.Windows.Output
                 }
             }
 
-            var selectedInstance = NodeSelection.GetSelectedInstance();
+            var selectedInstance = NodeSelection?.GetSelectedInstanceWithoutComposition();
             if (selectedInstance is ICamera selectedCamera
                 && !_recentlyUsedCameras.Contains(selectedCamera))
             {
@@ -322,7 +327,7 @@ namespace T3.Editor.Gui.Windows.Output
                     ImGui.PushID(cameraInstance.SymbolChildId.GetHashCode());
                     {
                         // This is expensive, but happens only if dropdown is open...
-                        var symbolChild = SymbolRegistry.Entries[_drawnInstance.Parent.Symbol.Id].Children
+                        var symbolChild = _drawnInstance.Parent.Symbol.Children
                                                         .SingleOrDefault(child => child.Id == cameraInstance.SymbolChildId);
 
                         if (symbolChild == null)

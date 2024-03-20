@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using ImGuiNET;
+﻿using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Animation;
@@ -12,7 +10,7 @@ using T3.Serialization;
 
 namespace T3.Editor.Gui.InputUi.VectorInputs
 {
-    public abstract class FloatVectorInputValueUi<T> : InputValueUi<T>
+    internal abstract class FloatVectorInputValueUi<T> : InputValueUi<T>
     {
         protected FloatVectorInputValueUi(int componentCount)
         {

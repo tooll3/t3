@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using ImGuiNET;
@@ -6,7 +5,6 @@ using SharpDX.Direct3D11;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;

@@ -1,20 +1,16 @@
-
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Modification;
 
 internal static class ChangeSymbol
 {
-    public static void ChangeOperatorSymbol(Instance CompositionOp, List<SymbolChildUi> selectedChildUis, Symbol symbol)
+    public static void ChangeOperatorSymbol(GraphCanvas canvas, Instance compositionOp, List<SymbolChildUi> selectedChildUis, Symbol symbol)
     {
         var nextSelection = new List<SymbolChild>();
 
@@ -22,7 +18,7 @@ internal static class ChangeSymbol
 
         foreach (var sel in selectedChildUis)
         {
-            var result = ChangeSymbol.ChangeOperatorSymbol(sel, symbol, executedCommands);
+            var result = ChangeOperatorSymbol(sel, symbol, executedCommands, canvas.NodeSelection);
             if (result != null)
                 nextSelection.Add(result);
         }
@@ -30,36 +26,42 @@ internal static class ChangeSymbol
         if(nextSelection.Count > 0)
             UndoRedoStack.Add(new MacroCommand(nextSelection.Count == 1 ? "Change Symbol" : "Change Symbols ("+ nextSelection.Count + ")", executedCommands));
 
-        NodeSelection.Clear();
-        nextSelection.ForEach(symbolChild => {
-            var childUi = SymbolUiRegistry.Entries[symbolChild.Parent.Id].ChildUis.SingleOrDefault(ui => ui.SymbolChild == symbolChild); // need better map?
-            var instance = CompositionOp.Children.Single(c2 => c2.SymbolChildId == symbolChild.Id);
-            if (childUi != null && instance != null)
-                NodeSelection.AddSymbolChildToSelection(childUi, instance);
-        });
+        canvas.NodeSelection.Clear();
+        nextSelection.ForEach(symbolChild =>
+                              {
+                                  var childUi = symbolChild.GetSymbolChildUi();
+                                  if (childUi == null)
+                                      return;
+                                  var instance = compositionOp.GetChildInstanceWith(symbolChild);
+                                  canvas.NodeSelection.AddSymbolChildToSelection(childUi, instance);
+                              });
     }
 
 
-    public static SymbolChild ChangeOperatorSymbol(SymbolChildUi symbolChildUi, Symbol newSymbol, List<ICommand> executedCommands)
+    public static SymbolChild ChangeOperatorSymbol(SymbolChildUi symbolChildUi, Symbol newSymbol, List<ICommand> executedCommands, NodeSelection selection)
     {
         var symbolChild = symbolChildUi.SymbolChild;
         if(symbolChild.Symbol == newSymbol)
             return null;
 
         var orgPos = symbolChildUi.PosOnCanvas;
-        var parentSymbolUi = SymbolUiRegistry.Entries[symbolChild.Parent.Id];
-
+        var parentSymbol = symbolChild.Parent;
+        var parentSymbolPackage = (EditorSymbolPackage) parentSymbol.SymbolPackage;
+        
+        if(!parentSymbolPackage.TryGetSymbolUi(parentSymbol.Id, out var parentSymbolUi))
+            throw new Exception($"Can't find symbol ui for symbol {parentSymbol.Id}");
+        
         var conversionWasLossy = false;
 
         // move old SymbolChild to new position
-        var moveCmd = new ModifyCanvasElementsCommand(parentSymbolUi, new List<ISelectableCanvasObject>() { symbolChildUi });
+        var moveCmd = new ModifyCanvasElementsCommand(parentSymbolUi, new List<ISelectableCanvasObject>() { symbolChildUi }, selection);
         symbolChildUi.PosOnCanvas = orgPos + new Vector2(0, 100);
         moveCmd.StoreCurrentValues();
         moveCmd.Do();
         executedCommands.Add(moveCmd);
 
         // create new SymbolChild at original position
-        var addSymbolChildCommand = new AddSymbolChildCommand(symbolChild.Parent, newSymbol.Id) { PosOnCanvas = orgPos, ChildName = symbolChild.Name };
+        var addSymbolChildCommand = new AddSymbolChildCommand(parentSymbolUi.Symbol, newSymbol.Id) { PosOnCanvas = orgPos, ChildName = symbolChild.Name };
         addSymbolChildCommand.Do();
         executedCommands.Add(addSymbolChildCommand);
 
@@ -115,7 +117,7 @@ internal static class ChangeSymbol
                                                     sourceSlotId: connections[0].SourceSlotId,
                                                     targetParentOrChildId: newSymbolChild.Id,
                                                     targetSlotId: destInput.Key);
-                            var addCommand = new AddConnectionCommand(symbolChild.Parent, newConnectionToInput, 0);
+                            var addCommand = new AddConnectionCommand(parentSymbolUi.Symbol, newConnectionToInput, 0);
                             addCommand.Do();
                             executedCommands.Add(addCommand);
                         }
@@ -169,7 +171,7 @@ internal static class ChangeSymbol
                                              sourceSlotId: destOutput.Key,
                                              targetParentOrChildId: connection.TargetParentOrChildId,
                                              targetSlotId: connection.TargetSlotId);
-                        var addCommand = new AddConnectionCommand(symbolChild.Parent, newConnectionToInput, multiInputIndex);
+                        var addCommand = new AddConnectionCommand(parentSymbolUi.Symbol, newConnectionToInput, multiInputIndex);
                         addCommand.Do();
                         executedCommands.Add(addCommand);
                     }

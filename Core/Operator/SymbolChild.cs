@@ -17,9 +17,9 @@ namespace T3.Core.Operator
     public sealed class SymbolChild
     {
         /// <summary>A reference to the <see cref="Symbol"/> this is an instance from.</summary>
-        public Symbol Symbol { get; }
+        public Symbol Symbol { get; init; }
 
-        public Guid Id { get; }
+        public Guid Id { get; init; }
         
         public Symbol Parent { get; set; }
 
@@ -32,8 +32,8 @@ namespace T3.Core.Operator
             set => SetBypassed(value);
         }
         
-        public Dictionary<Guid, Input> Inputs { get; } = new();
-        public Dictionary<Guid, Output> Outputs { get; } = new();
+        public Dictionary<Guid, Input> Inputs { get; private init; } = new();
+        public Dictionary<Guid, Output> Outputs { get; private init; } = new();
 
         public SymbolChild(Symbol symbol, Guid childId, Symbol parent)
         {
@@ -62,7 +62,7 @@ namespace T3.Core.Operator
 
         #region sub classes =============================================================
 
-        public class Output
+        public sealed class Output
         {
             public Symbol.OutputDefinition OutputDefinition { get; }
             public IOutputData OutputData { get; }
@@ -82,11 +82,18 @@ namespace T3.Core.Operator
                 OutputDefinition = outputDefinition;
                 OutputData = outputData;
             }
+            
+            public Output DeepCopy()
+            {
+                return new Output(OutputDefinition, OutputData);
+            }
         }
 
-        public class Input
+        public sealed class Input
         {
             public Symbol.InputDefinition InputDefinition { get; }
+            public Guid Id => InputDefinition.Id;
+            public bool IsMultiInput => InputDefinition.IsMultiInput;
             public InputValue DefaultValue => InputDefinition.DefaultValue;
 
             public string Name => InputDefinition.Name;
@@ -101,6 +108,11 @@ namespace T3.Core.Operator
                 InputDefinition = inputDefinition;
                 Value = DefaultValue.Clone();
                 IsDefault = true;
+            }
+            
+            public Input DeepCopy()
+            {
+                return new Input(InputDefinition);
             }
 
             public void SetCurrentValueAsDefault()
@@ -342,5 +354,18 @@ namespace T3.Core.Operator
         {
             return Parent.Name + ">" + ReadableName;
         }
+
+        public SymbolChild DeepCopy()
+        {
+  
+                
+            var newChild = new SymbolChild(Symbol, Id, Parent)
+                               {
+                                   Name = Name,
+                                   IsBypassed = IsBypassed,
+                               };
+            return newChild;
+        }
+
     }
 }

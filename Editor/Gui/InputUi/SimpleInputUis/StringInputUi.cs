@@ -1,16 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Numerics;
+﻿using System.IO;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Serialization;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis
@@ -131,15 +129,15 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
 
         private static InputEditStateFlags DrawCustomDropdown(SymbolChild.Input input, ref string value)
         {
-            var instance = NodeSelection.GetSelectedInstance();
-            if (instance is ICustomDropdownHolder customValueHoder)
+            var instance = GraphWindow.Focused?.GraphCanvas.NodeSelection.GetSelectedInstanceWithoutComposition();
+            if (instance != null && instance is ICustomDropdownHolder customValueHolder)
             {
                 var changed = false;
 
-                var currentValue = customValueHoder.GetValueForInput(input.InputDefinition.Id);
+                var currentValue = customValueHolder.GetValueForInput(input.Id);
                 if (ImGui.BeginCombo("##customDropdown", currentValue, ImGuiComboFlags.HeightLarge))
                 {
-                    foreach (var value2 in customValueHoder.GetOptionsForInput(input.InputDefinition.Id))
+                    foreach (var value2 in customValueHolder.GetOptionsForInput(input.Id))
                     {
                         if (value2 == null)
                             continue;
@@ -149,7 +147,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                             continue;
 
                         ImGui.CloseCurrentPopup();
-                        customValueHoder.HandleResultForInput(input.InputDefinition.Id, value2);
+                        customValueHolder.HandleResultForInput(input.Id, value2);
                         changed = true;
                     }
 

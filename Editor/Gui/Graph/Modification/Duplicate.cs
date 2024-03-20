@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
@@ -22,7 +17,8 @@ internal static class Duplicate
     public static Symbol DuplicateAsNewType(SymbolUi compositionUi,EditableSymbolProject project, Guid symbolId, string newTypeName, string nameSpace,
                                             string description, Vector2 posOnCanvas)
     {
-        if (!SymbolRegistry.Entries.TryGetValue(symbolId, out var sourceSymbol))
+        var sourceSymbol = EditorSymbolPackage.AllSymbols.FirstOrDefault(x => x.Id == symbolId);
+        if (sourceSymbol == null)
         {
             Log.Warning("Can't find symbol to duplicate");
             return null;
@@ -59,7 +55,7 @@ internal static class Duplicate
             return null;
         }
 
-        var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];
+        var sourceSymbolUi = sourceSymbol.GetSymbolUi();
         var newSymbolUi = sourceSymbolUi.CloneForNewSymbol(newSymbol, oldToNewIdMap);
         newSymbolUi.Description = description;
         

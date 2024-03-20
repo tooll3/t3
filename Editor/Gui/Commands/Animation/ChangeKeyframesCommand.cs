@@ -15,7 +15,7 @@ namespace T3.Editor.Gui.Commands.Animation
         private readonly Dictionary<VDefinition, VDefinition> _newDefForReferences = new();
         private readonly IEnumerable<Curve> _curves;
 
-        public ChangeKeyframesCommand(Guid compositionSymbolId, IEnumerable<VDefinition> vDefinitions, IEnumerable<Curve> curves)
+        public ChangeKeyframesCommand(IEnumerable<VDefinition> vDefinitions, IEnumerable<Curve> curves)
         {
             _curves = curves;
             foreach (var def in vDefinitions)

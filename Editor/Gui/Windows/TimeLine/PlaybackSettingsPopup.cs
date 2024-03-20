@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using ImGuiNET;
@@ -8,7 +7,6 @@ using ManagedBass.Wasapi;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.IO;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction.Timing;
@@ -19,7 +17,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 {
     public static class PlaybackSettingsPopup
     {
-        public static void DrawPlaybackSettings()
+        public static void DrawPlaybackSettings(Instance? composition)
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(2, 2));
             ImGui.SetNextWindowSize(new Vector2(600, 500) * T3Ui.UiScaleFactor);
@@ -36,7 +34,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ImGui.TextUnformatted("Playback settings");
             ImGui.PopFont();
 
-            var composition = GraphWindow.GetMainComposition();
             if (composition == null)
             {
                 CustomComponents.EmptyWindowMessage("no composition active");

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using T3.Core.Logging;
+﻿using System.Text.RegularExpressions;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction.Connections;
@@ -14,7 +10,7 @@ namespace T3.Editor.Gui.Graph.Interaction
     /// <summary>
     /// Provides a regular expression to filter and sort matching <see cref="Symbol"/>s
     /// </summary>
-    internal class SymbolFilter
+    internal sealed class SymbolFilter
     {
         public string SearchString;  // not a property to allow ref passing
         public Type FilterInputType {
@@ -38,8 +34,8 @@ namespace T3.Editor.Gui.Graph.Interaction
         public List<SymbolUi> MatchingSymbolUis { get; private set; } = new();
         //public List<Variation> MatchingPresets { get; } = new();
         public SymbolVariationPool PresetPool { get; private set; }
-        
-        public void UpdateIfNecessary(bool forceUpdate = false, int limit=30)
+
+        public void UpdateIfNecessary(NodeSelection? selection, bool forceUpdate = false, int limit=30)
         {
             _needsUpdate |= forceUpdate;
             _needsUpdate |= UpdateFilters(SearchString, 
@@ -51,7 +47,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (_needsUpdate)
             {
                 //UpdateConnectSlotHashes();
-                UpdateMatchingSymbols(limit);
+                UpdateMatchingSymbols(selection, limit);
 
             }
 
@@ -119,15 +115,15 @@ namespace T3.Editor.Gui.Graph.Interaction
         }
 
         
-        private void UpdateMatchingSymbols(int limit)
+        private void UpdateMatchingSymbols(NodeSelection? selection, int limit)
         {
-            var composition = NodeSelection.GetSelectedComposition();
-            var parentSymbolIds = composition != null
-                                      ? new HashSet<Guid>(Structure.CollectParentInstances(composition, includeChildInstance: true).Select(p => p.Symbol.Id))
-                                      : new HashSet<Guid>();
+            var compositionInstance = selection?.GetSelectedComposition();
+            ICollection<Guid> parentSymbolIds = compositionInstance != null
+                                      ? new HashSet<Guid>(Structure.CollectParentInstances(compositionInstance).Append(compositionInstance).Select(p => p.Symbol.Id))
+                                      : Array.Empty<Guid>();
 
             MatchingSymbolUis.Clear();
-            foreach (var symbolUi in SymbolUiRegistry.Entries.Values)
+            foreach (var symbolUi in EditorSymbolPackage.AllSymbolUis)
             {
                 var symbolUiSymbol = symbolUi.Symbol;
                 

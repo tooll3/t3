@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
+﻿using System.IO;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
@@ -247,7 +244,7 @@ public class OperatorHelp
 
         var groupLabel = "Also see:";
         var groupLabelShown = false;
-        if (ExampleSymbolLinking.ExampleSymbols.TryGetValue(symbolUi.Symbol.Id, out var examplesOpIds))
+        if (ExampleSymbolLinking.ExampleSymbolUis.TryGetValue(symbolUi.Symbol.Id, out var examplesOpIds))
         {
             DrawGroupLabel(groupLabel);
             groupLabelShown = true;
@@ -280,10 +277,13 @@ public class OperatorHelp
                         continue;
 
                     // This is slow and could be optimized by dictionary
-                    var referencedSymbolUi = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == referencedName);
-                    if (referencedSymbolUi != null)
+                    var referencedSymbol = EditorSymbolPackage.AllSymbols.SingleOrDefault(s => s.Name == referencedName);
+                    if (referencedSymbol != null)
                     {
-                        SymbolBrowser.DrawExampleOperator(referencedSymbolUi.Id, referencedName);
+                        var package = (EditorSymbolPackage)referencedSymbol.SymbolPackage;
+                        if(!package.TryGetSymbolUi(referencedSymbol.Id, out var exampleSymbolUi))
+                            throw new Exception($"Can't find symbol ui for symbol {referencedSymbol.Id}");
+                        SymbolBrowser.DrawExampleOperator(exampleSymbolUi, referencedName);
                     }
 
                     alreadyListedSymbolNames.Add(referencedName);

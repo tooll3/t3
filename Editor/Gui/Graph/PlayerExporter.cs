@@ -1,13 +1,9 @@
 #nullable enable
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using SharpDX.Direct3D11;
 using T3.Core.Compilation;
 using T3.Core.IO;
-using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -16,20 +12,21 @@ using T3.Editor.App;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using T3.Serialization;
 
 namespace T3.Editor.Gui.Graph
 {
-    public static partial class PlayerExporter
+    internal static partial class PlayerExporter
     {
         public const string ExportFolderName = "T3Exports";
-        public static bool TryExportInstance(GraphCanvas graphCanvas, SymbolChildUi childUi, out string reason, out string exportDir)
+        public static bool TryExportInstance(Instance composition, SymbolChildUi childUi, out string reason, out string exportDir)
         {
             T3Ui.Save(false);
 
             // Collect all ops and types
-            var instance = graphCanvas.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+            var instance = composition.GetChildInstanceWith(childUi.SymbolChild);
             var symbol = instance.Symbol;
             Log.Info($"Exporting {symbol.Name}...");
 
@@ -75,6 +72,7 @@ namespace T3.Editor.Gui.Graph
                 if (!symbolPackageToSymbols.TryGetValue(symbolPackage, out var symbols))
                 {
                     symbols = new List<Symbol>();
+                    symbolPackageToSymbols[symbolPackage] = symbols;
                 }
                 symbols.Add(uniqueSymbol);
             }
@@ -402,7 +400,7 @@ namespace T3.Editor.Gui.Graph
         private static void CheckInputForResourcePath(ISlot inputSlot, ExportInfo exportInfo)
         {
             var parent = inputSlot.Parent;
-            var inputUi = SymbolUiRegistry.Entries[parent.Symbol.Id].InputUis[inputSlot.Id];
+            var inputUi = parent.GetSymbolUi().InputUis[inputSlot.Id];
             if (inputUi is not StringInputUi stringInputUi)
                 return;
 

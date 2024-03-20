@@ -1,12 +1,10 @@
 using ImGuiNET;
 using SharpDX.Direct3D11;
-using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using T3.Core.Compilation;
 using T3.Core.IO;
-using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
 using T3.Core.UserData;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using T3.Core.Animation;
@@ -26,11 +24,11 @@ namespace T3.Editor.Gui.UiHelpers
         
         public class ConfigData
         {
-            public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new();
+            public readonly Dictionary<Guid, CanvasScope> OperatorViewSettings = new();
             public readonly Dictionary<string, Guid> LastOpsForWindows = new();
 
             [JsonConverter(typeof(StringEnumConverter))]
-            public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.LastValue;
+            public GraphHoverModes HoverMode = GraphHoverModes.LastValue;
 
             public bool AudioMuted;
             
@@ -65,7 +63,7 @@ namespace T3.Editor.Gui.UiHelpers
             public bool AdjustCameraSpeedWithMouseWheel = false;
             public float CameraSpeed = 1;
 
-            public TimeLineCanvas.FrameStepAmount FrameStepAmount = TimeLineCanvas.FrameStepAmount.FrameAt30Fps;
+            public FrameStepAmount FrameStepAmount = FrameStepAmount.FrameAt30Fps;
             
             public bool MouseWheelEditsNeedCtrlKey = true;
             public bool AutoPinAllAnimations = false;
@@ -105,7 +103,7 @@ namespace T3.Editor.Gui.UiHelpers
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
-            public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new();
+            public List<Bookmark> Bookmarks = new();
             public List<Gradient> GradientPresets = new();
 
             public string ColorThemeName;

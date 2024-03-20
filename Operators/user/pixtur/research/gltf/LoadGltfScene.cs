@@ -752,10 +752,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     private bool _updateTriggered;
 
     #region implement graph node interfaces
-    InputSlot<string> IDescriptiveFilename.GetSourcePathSlot()
-    {
-        return Path;
-    }
+    InputSlot<string> IDescriptiveFilename.SourcePathSlot => Path;
 
     private string _lastFilePath;
 

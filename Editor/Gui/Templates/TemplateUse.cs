@@ -1,10 +1,7 @@
-﻿using System.Linq;
-using System.Numerics;
-using T3.Core.Logging;
-using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Interaction;
+﻿using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Templates
@@ -16,24 +13,19 @@ namespace T3.Editor.Gui.Templates
     {
         internal static void TryToApplyTemplate(TemplateDefinition template, string symbolName, string nameSpace, string description, EditableSymbolProject project)
         {
-            var defaultCanvasWindow = GraphWindow.GetPrimaryGraphWindow();
+            var defaultCanvasWindow = GraphWindow.Focused;
             if (defaultCanvasWindow == null)
             {
-                Log.Warning("Can't create from template without open graph window");
+                EditorUi.Instance.ShowMessageBox("Can't create from template without open graph window");
                 return;
             }
 
-            var defaultComposition = GraphWindow.GetMainComposition();
-            if (defaultComposition == null || !SymbolUiRegistry.Entries.TryGetValue(defaultComposition.Symbol.Id, out var compositionSymbolUi))
-            {
-                Log.Warning("Can't find default op");
-                return;
-            }
+            var compositionSymbolUi = defaultCanvasWindow.CompositionOp.GetSymbolUi();
 
             var graphCanvas = defaultCanvasWindow.GraphCanvas;
             var centerOnScreen = graphCanvas.WindowPos + graphCanvas.WindowSize / 2;
             var positionOnCanvas2 = graphCanvas.InverseTransformPositionFloat(centerOnScreen);
-            var freePosition = FindFreePositionOnCanvas(graphCanvas, positionOnCanvas2);
+            var freePosition = FindFreePositionOnCanvas(compositionSymbolUi, positionOnCanvas2);
             var newSymbol = Duplicate.DuplicateAsNewType(compositionSymbolUi, project, template.TemplateSymbolId, symbolName, nameSpace, description, freePosition);
             
             // Select instance of new symbol
@@ -44,7 +36,7 @@ namespace T3.Editor.Gui.Templates
                 return;
             }
             T3Ui.SelectAndCenterChildIdInView(newChildUi.SymbolChild.Id);
-            var newInstance = NodeSelection.GetSelectedInstance(); 
+            var newInstance = defaultCanvasWindow.GraphCanvas.NodeSelection.GetSelectedInstanceWithoutComposition(); 
             template.AfterSetupAction?.Invoke(newInstance,
                                               symbolName,
                                               nameSpace, 
@@ -53,18 +45,12 @@ namespace T3.Editor.Gui.Templates
             T3Ui.Save(false);
         }
 
-        private static Vector2 FindFreePositionOnCanvas(GraphCanvas canvas, Vector2 pos)
+        private static Vector2 FindFreePositionOnCanvas(SymbolUi compositionSymbolUi, Vector2 pos)
         {
-            if (!SymbolUiRegistry.Entries.TryGetValue(canvas.CompositionOp.Symbol.Id, out var symbolUi))
-            {
-                Log.Error("Can't find symbol child on composition op?");
-                return Vector2.Zero;
-            }
-
             while (true)
             {
                 var isPositionFree = true;
-                foreach (var childUi in symbolUi.ChildUis)
+                foreach (var childUi in compositionSymbolUi.ChildUis)
                 {
                     var rect = ImRect.RectWithSize(childUi.PosOnCanvas, childUi.Size);
                     rect.Expand(20);

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Numerics;
-using T3.Core.DataTypes.Vector;
+﻿using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -14,7 +12,6 @@ namespace T3.Editor.Gui.Graph
         public Guid Id { get; init; }
         public Vector2 PosOnCanvas { get; set; }
         public Vector2 Size { get; set; }
-        public bool IsSelected => NodeSelection.IsNodeSelected(this);
 
         public Annotation Clone()
         {

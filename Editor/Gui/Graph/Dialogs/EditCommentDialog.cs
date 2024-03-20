@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -8,15 +6,15 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
-    public class EditCommentDialog : ModalDialog
+    internal class EditCommentDialog : ModalDialog
     {
-        public void Draw()
+        public void Draw(NodeSelection selection)
         {
             DialogSize = new Vector2(500, 450);
             
             if (BeginDialog("Edit comment"))
             {
-                var instance = NodeSelection.GetSelectedInstance();
+                var instance = selection.GetSelectedInstanceWithoutComposition();
 
                 if (instance?.Parent == null)
                 {
@@ -24,9 +22,8 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 }
                 else
                 {
-                    var parentSymbolId = instance.Parent.Symbol.Id;
-                    var symbolUi = SymbolUiRegistry.Entries[parentSymbolId];
-                    var symbolChildUi = symbolUi.ChildUis.FirstOrDefault(c => c.Id == instance.SymbolChildId);
+                    var symbolUi = instance.Parent.Symbol.GetSymbolUi();
+                    var symbolChildUi = symbolUi.GetSymbolChildUiWithId(instance.SymbolChildId);
                     if (symbolChildUi == null)
                     {
                         CustomComponents.EmptyWindowMessage("Sorry, can't find UI definition for operator.");

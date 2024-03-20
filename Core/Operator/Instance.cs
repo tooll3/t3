@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Slots;
@@ -32,6 +33,7 @@ namespace T3.Core.Operator
         public readonly List<ISlot> Outputs = new();
         public readonly List<Instance> Children = new();
         public readonly List<IInputSlot> Inputs = new();
+        public bool IsCopy = false;
 
         public IReadOnlyList<SymbolPackage> AvailableResourcePackages
         {
@@ -66,17 +68,19 @@ namespace T3.Core.Operator
         protected void SetupInputAndOutputsFromType()
         {
             var assemblyInfo = Symbol.SymbolPackage.AssemblyInformation;
-            foreach (var input in assemblyInfo.InputFields[Type])
+            var operatorTypeInfo = assemblyInfo.OperatorTypeInfo[Symbol.Id];
+            foreach (var input in operatorTypeInfo.Inputs)
             {
+                var attribute = input.Attribute;
                 var inputSlot = (IInputSlot)input.Field.GetValue(this);
                 inputSlot!.Parent = this;
-                inputSlot.Id = input.Attribute.Id;
-                inputSlot.MappedType = input.Attribute.MappedType;
+                inputSlot.Id = attribute.Id;
+                inputSlot.MappedType = attribute.MappedType;
                 Inputs.Add(inputSlot);
             }
 
             // outputs identified by attribute
-            foreach (var output in assemblyInfo.OutputFields[Type])
+            foreach (var output in operatorTypeInfo.Outputs)
             {
                 var slot = (ISlot)output.Field.GetValue(this);
                 slot!.Parent = this;
@@ -228,8 +232,19 @@ namespace T3.Core.Operator
             return ResourceManager.TryResolvePath(relativePath, AvailableResourcePackages, out absolutePath, out _);
         }
 
-        public IList<Guid> InstancePath => OperatorUtils.BuildIdPathForInstance(this).ToArray();
-        
+        public IReadOnlyList<Guid> InstancePath => BuildIdPathForInstance(this);
+
+        static List<Guid> BuildIdPathForInstance(Instance instance)
+        {
+            var result = new List<Guid>(6);
+            while (instance != null)
+            {
+                result.Insert(0, instance.SymbolChildId);
+                instance = instance.Parent;
+            }
+
+            return result;
+        }
 
         private List<SymbolPackage> _availableResourcePackages;
         private bool _resourceFoldersDirty = true;

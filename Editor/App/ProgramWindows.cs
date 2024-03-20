@@ -1,13 +1,10 @@
-using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.IO;
-using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Interaction.StartupCheck;

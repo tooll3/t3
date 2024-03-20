@@ -1,0 +1,209 @@
+using ImGuiNET;
+using T3.Core.DataTypes.Vector;
+using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Interaction.Connections;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.OutputUi;
+using T3.Editor.Gui.Styling;
+using T3.Editor.UiModel;
+
+namespace T3.Editor.Gui.Graph;
+
+internal partial class Graph
+{
+    internal sealed class ConnectionSorter
+    {
+        public readonly List<ConnectionLineUi> Lines = new();
+        private readonly GraphCanvas _canvas;
+        private readonly Graph _graph;
+        private readonly GraphWindow _window;
+
+        public ConnectionSorter(Graph graph, GraphWindow window, GraphCanvas canvas)
+        {
+            _graph = graph;
+            _canvas = canvas;
+            _window = window;
+        }
+            
+        public void Init()
+        {
+            Lines.Clear();
+            _linesFromNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
+            _linesIntoNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
+            _linesToOutputNodes = new Dictionary<IOutputUi, List<ConnectionLineUi>>();
+            _linesFromInputNodes = new Dictionary<IInputUi, List<ConnectionLineUi>>();
+        }
+
+        public void CreateAndSortLineUi(Symbol.Connection c, SymbolUi symbolUi)
+        {
+            var newLine = new ConnectionLineUi(c, _graph);
+            Lines.Add(newLine);
+
+            var childUis = symbolUi.ChildUis;
+
+            if (c.IsConnectedToSymbolOutput)
+            {
+                if (!symbolUi.OutputUis.TryGetValue(c.TargetSlotId, out var outputNode))
+                    return;
+
+                if (!_linesToOutputNodes.ContainsKey(outputNode))
+                    _linesToOutputNodes.Add(outputNode, new List<ConnectionLineUi>());
+
+                _linesToOutputNodes[outputNode].Add(newLine);
+            }
+            else if (c.TargetParentOrChildId != ConnectionMaker.NotConnectedId
+                     && c.TargetParentOrChildId != ConnectionMaker.UseDraftChildId)
+            {
+                var targetNode = childUis.SingleOrDefault(childUi => childUi.Id == c.TargetParentOrChildId);
+                if (targetNode == null)
+                    return;
+
+                if (!_linesIntoNodes.ContainsKey(targetNode))
+                    _linesIntoNodes.Add(targetNode, new List<ConnectionLineUi>());
+
+                _linesIntoNodes[targetNode].Add(newLine);
+            }
+
+            if (c.IsConnectedToSymbolInput)
+            {
+                if (!symbolUi.InputUis.TryGetValue(c.SourceSlotId, out var inputNode))
+                    return;
+
+                if (!_linesFromInputNodes.ContainsKey(inputNode))
+                    _linesFromInputNodes.Add(inputNode, new List<ConnectionLineUi>());
+
+                _linesFromInputNodes[inputNode].Add(newLine);
+
+                var color = UiColors.Gray;
+                if (TypeUiRegistry.Entries.TryGetValue(inputNode.Type, out var typeUiProperties))
+                    color = typeUiProperties.Color;
+
+                newLine.ColorForType = color;
+            }
+            else if (c.SourceParentOrChildId != ConnectionMaker.NotConnectedId
+                     && c.SourceParentOrChildId != ConnectionMaker.UseDraftChildId)
+            {
+                var sourceNode = childUis.SingleOrDefault(childUi => childUi.Id == c.SourceParentOrChildId);
+                if (sourceNode == null)
+                    return;
+
+                if (!_linesFromNodes.ContainsKey(sourceNode))
+                    _linesFromNodes.Add(sourceNode, new List<ConnectionLineUi>());
+
+                _linesFromNodes[sourceNode].Add(newLine);
+            }
+
+            InitTempConnection(newLine);
+        }
+
+        private void InitTempConnection(ConnectionLineUi newLine)
+        {
+            if (!(newLine.Connection is ConnectionMaker.TempConnection c))
+                return;
+
+            newLine.ColorForType = TypeUiRegistry.Entries[c.ConnectionType].Color;
+
+            // if (!ConnectionMaker.TempConnections.Contains(c))
+            //     return;
+
+            // if (!Equals(newLine.Connection, ConnectionMaker.TempConnections))
+            //     return;
+
+            if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
+            {
+                if (ConnectionSnapEndHelper.BestMatchLastFrame != null)
+                {
+                    newLine.TargetPosition = new Vector2(ConnectionSnapEndHelper.BestMatchLastFrame.Area.Min.X,
+                                                         ConnectionSnapEndHelper.BestMatchLastFrame.Area.GetCenter().Y);
+                }
+                else
+                {
+                    newLine.TargetPosition = ImGui.GetMousePos();
+                }
+
+                newLine.ColorForType = Color.White;
+            }
+            else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
+            {
+                newLine.TargetPosition = _canvas.TransformPosition(_window.SymbolBrowser.PosOnCanvas);
+                //newLine.ColorForType = Color.White;
+            }
+            else if (c.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
+            {
+                newLine.SourcePosition = ImGui.GetMousePos();
+                //newLine.ColorForType = Color.White;
+            }
+            else if (c.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
+            {
+                newLine.SourcePosition = _window.SymbolBrowser.OutputPositionOnScreen;
+            }
+            else
+            {
+                Log.Warning("invalid temporary connection?");
+            }
+        }
+
+        private static readonly List<ConnectionLineUi> _resultConnection = new(20);
+
+        public List<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
+        {
+            _resultConnection.Clear();
+
+            if (!_linesFromNodes.TryGetValue(childUi, out var lines))
+                return NoLines;
+
+            foreach (var l in lines)
+            {
+                if (l.Connection.SourceSlotId != outputId)
+                    continue;
+
+                _resultConnection.Add(l);
+            }
+
+            return _resultConnection;
+        }
+
+        public List<ConnectionLineUi> GetLinesToNodeInputSlot(SymbolChildUi childUi, Guid inputId)
+        {
+            _resultConnection.Clear();
+            if (!_linesIntoNodes.TryGetValue(childUi, out var lines))
+                return NoLines;
+
+            foreach (var l in lines)
+            {
+                if (l.Connection.TargetSlotId != inputId)
+                    continue;
+                _resultConnection.Add(l);
+            }
+
+            return _resultConnection;
+        }
+
+        public List<ConnectionLineUi> GetLinesIntoNode(SymbolChildUi childUi)
+        {
+            return _linesIntoNodes.ContainsKey(childUi) ? _linesIntoNodes[childUi] : NoLines;
+        }
+
+        public List<ConnectionLineUi> GetLinesToOutputNodes(IOutputUi outputNode, Guid outputId)
+        {
+            return _linesToOutputNodes.ContainsKey(outputNode)
+                       ? _linesToOutputNodes[outputNode].FindAll(l => l.Connection.TargetSlotId == outputId)
+                       : NoLines;
+        }
+
+        public List<ConnectionLineUi> GetLinesFromInputNodes(IInputUi inputNode, Guid inputNodeId)
+        {
+            return _linesFromInputNodes.ContainsKey(inputNode)
+                       ? _linesFromInputNodes[inputNode].FindAll(l => l.Connection.SourceSlotId == inputNodeId)
+                       : NoLines;
+        }
+
+        private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesFromNodes = new(50);
+        private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesIntoNodes = new(50);
+        private Dictionary<IOutputUi, List<ConnectionLineUi>> _linesToOutputNodes = new(50);
+        private Dictionary<IInputUi, List<ConnectionLineUi>> _linesFromInputNodes = new(50);
+
+        // Reuse empty list instead of null check
+        private static readonly List<ConnectionLineUi> NoLines = new();
+    }
+}

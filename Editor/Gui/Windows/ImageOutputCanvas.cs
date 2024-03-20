@@ -1,5 +1,3 @@
-using System;
-using System.Numerics;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -12,14 +10,12 @@ using T3.SystemUi;
 
 namespace T3.Editor.Gui.Windows
 {
-    public class ImageOutputCanvas : ScalableCanvas
+    internal class ImageOutputCanvas : ScalableCanvas
     {
-        public void Update()
+        public void Update(T3Ui.EditingFlags editingFlags = T3Ui.EditingFlags.None)
         {
-            
-            UpdateCanvas();
-            UpdateViewMode();
-            
+            UpdateCanvas(out var interactionState, editingFlags);
+            UpdateViewMode(interactionState);
         }
 
         public void SetAsCurrent()
@@ -138,17 +134,17 @@ namespace T3.Editor.Gui.Windows
         /// <summary>
         /// Updated the view mode if user interacted 
         /// </summary>
-        private void UpdateViewMode()
+        private void UpdateViewMode(InteractionState interactionState)
         {
             switch (_viewMode)
             {
                 case Modes.Fitted:
-                    if (UserScrolledCanvas || UserZoomedCanvas)
+                    if (interactionState.UserPannedCanvas || interactionState.UserZoomedCanvas)
                         _viewMode = Modes.Custom;
                     break;
 
                 case Modes.Pixel:
-                    if (UserZoomedCanvas)
+                    if (interactionState.UserZoomedCanvas)
                         _viewMode = Modes.Custom;
                     break;
             }

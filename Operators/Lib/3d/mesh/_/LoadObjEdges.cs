@@ -105,10 +105,7 @@ namespace lib._3d.mesh._
             Data.Value = _pointList;
         }
 
-        public InputSlot<string> GetSourcePathSlot()
-        {
-            return Path;
-        }
+        public InputSlot<string> SourcePathSlot => Path;
 
         private readonly StructuredList<Point> _pointList = new(10);
 

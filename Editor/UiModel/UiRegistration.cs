@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Text;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;

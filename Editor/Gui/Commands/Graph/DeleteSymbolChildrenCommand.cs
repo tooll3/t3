@@ -59,8 +59,13 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Do()
         {
-            var compositionSymbolUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-            var compositionSymbol = compositionSymbolUi.Symbol;
+            if(!SymbolUiRegistry.TryGetValue(_compositionSymbolId, out var compositionSymbolUi))
+            {
+                Log.Warning($"Could not find symbol with id {_compositionSymbolId} - was it removed?");
+                return;
+            }
+            
+            var compositionSymbol = compositionSymbolUi!.Symbol;
             _removedConnections.Clear();
 
             foreach (var childUndoData in _removedChildren)
@@ -89,14 +94,19 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Undo()
         {
-            var compositionSymbolUi = SymbolUiRegistry.Entries[_compositionSymbolId];
+            if(!SymbolUiRegistry.TryGetValue(_compositionSymbolId, out var compositionSymbolUi))
+            {
+                Log.Warning($"Could not find symbol with id {_compositionSymbolId} - was it removed?");
+                return;
+            }
+            
             foreach (var childUndoData in _removedChildren)
             {
                 var symbol = SymbolRegistry.Entries[childUndoData.SymbolId];
-                var id = compositionSymbolUi.AddChild(symbol, childUndoData.ChildId, childUndoData.PosInCanvas, childUndoData.Size);
+                var id = compositionSymbolUi!.AddChild(symbol, childUndoData.ChildId, childUndoData.PosInCanvas, childUndoData.Size);
                 var symbolChild = compositionSymbolUi.Symbol.Children.FirstOrDefault(c => c.Id == childUndoData.ChildId);
                 
-                foreach (var (inputId, input) in symbolChild.Inputs)
+                foreach (var (inputId, input) in symbolChild!.Inputs)
                 {
                     if(childUndoData.OriginalValuesForInputs.TryGetValue(inputId, out var originalValue))
                     {
@@ -119,7 +129,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
             foreach (var entry in _removedConnections)
             {
-                compositionSymbolUi.Symbol.AddConnection(entry.Connection, entry.MultiInputIndex);
+                compositionSymbolUi!.Symbol.AddConnection(entry.Connection, entry.MultiInputIndex);
             }
         }
         

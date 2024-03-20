@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
@@ -20,14 +16,16 @@ namespace T3.Editor.Gui.Windows
     /// A helper that decides which graph element to show.
     /// This is used by <see cref="OutputWindow"/> and eventually in <see cref="ParameterWindow"/>.
     /// </summary>
-    public class ViewSelectionPinning
+    internal class ViewSelectionPinning
     {
         public void DrawPinning()
         {
-            var pinnedOrSelectedInstance = GetPinnedOrSelectedInstance();
-            if (pinnedOrSelectedInstance == null)
+            if (!TryGetPinnedOrSelectedInstance(out var pinnedOrSelectedInstance, out var canvas))
                 return;
+            
+            var selection = canvas.NodeSelection;
 
+            bool shouldPin = false;
             FrameStats.AddPinnedId(pinnedOrSelectedInstance.SymbolChildId);    
             
             if (CustomComponents.IconButton(Icon.Pin, 
@@ -40,20 +38,25 @@ namespace T3.Editor.Gui.Windows
                 if (_isPinned)
                 {
                     // Keep pinned if pinned operator changed
-                    var oneSelected = NodeSelection.Selection.Count == 1;
-                    var selectedOp= NodeSelection.GetFirstSelectedInstance();
+                    var oneSelected = selection.Selection.Count == 1;
+                    var selectedOp= selection.GetFirstSelectedInstance();
                     var opChanged = pinnedOrSelectedInstance != selectedOp;
                     if (!opChanged || !oneSelected)
                     {
-                        _isPinned = false;
+                        Unpin();
+                    }
+                    else
+                    {
+                        shouldPin = true;
                     }
                 }
                 else
                 {
-                    _isPinned = true;
+                    shouldPin = true;
                 }
-                if (_isPinned)
-                    PinSelectionToView();
+                
+                if (shouldPin)
+                    PinSelectionToView(canvas);
             }
             CustomComponents.TooltipForLastItem("Pin output to active operator.");
             
@@ -62,8 +65,7 @@ namespace T3.Editor.Gui.Windows
             ImGui.SetNextItemWidth(200);
             var suffix = _isPinned ? " (pinned)" : " (selected)";
 
-            var pinnedEvaluationInstance = GetPinnedEvaluationInstance();
-            if (pinnedEvaluationInstance != null)
+            if (TryGetPinnedEvaluationInstance(canvas.Structure, out var pinnedEvaluationInstance))
             {
                 suffix += " -> " + pinnedEvaluationInstance.Symbol.Name + " (Final)";
             }
@@ -77,16 +79,15 @@ namespace T3.Editor.Gui.Windows
                 {
                     if (ImGui.MenuItem("Unpin view"))
                     {
-                        _isPinned = false;
+                        Unpin();
                     }
 
-                    var instanceSelectedInGraph = NodeSelection.GetFirstSelectedInstance();
+                    var instanceSelectedInGraph = _pinnedInstanceCanvas!.NodeSelection.GetFirstSelectedInstance();
                     if (instanceSelectedInGraph != pinnedOrSelectedInstance)
                     {
                         if (ImGui.MenuItem("Pin Selection to View"))
                         {
-                            _isPinned = true;
-                            PinSelectionToView();
+                            PinSelectionToView(canvas);
                         }
                     }
                 }
@@ -94,8 +95,7 @@ namespace T3.Editor.Gui.Windows
                 {
                     if (ImGui.MenuItem("Pin Selection to View"))
                     {
-                        _isPinned = true;
-                        PinSelectionToView();
+                        PinSelectionToView(canvas);
                     }
                 }
 
@@ -110,18 +110,18 @@ namespace T3.Editor.Gui.Windows
                 {
                     if (ImGui.MenuItem("Pin as start operator"))
                     {
-                        PinSelectionAsEvaluationStart(NodeSelection.GetFirstSelectedInstance());
+                        PinSelectionAsEvaluationStart(selection?.GetFirstSelectedInstance());
                     }
                 }
 
-                if (GraphCanvas.Current?.CompositionOp != null)
+                if (GraphWindow.Focused != null)
                 {
                     if (ImGui.MenuItem("Show in Graph"))
                     {
                         var parentInstance = pinnedOrSelectedInstance.Parent;
-                        var parentSymbolUi = SymbolUiRegistry.Entries[parentInstance.Symbol.Id];
+                        var parentSymbolUi = parentInstance.GetSymbolUi();
                         var instanceChildUi = parentSymbolUi.ChildUis.Single(childUi => childUi.Id == pinnedOrSelectedInstance.SymbolChildId);
-                        NodeSelection.SetSelectionToChildUi(instanceChildUi, pinnedOrSelectedInstance);
+                        selection.SetSelectionToChildUi(instanceChildUi, pinnedOrSelectedInstance);
                         FitViewToSelectionHandling.FitViewToSelection();
                     }
                 }
@@ -149,17 +149,11 @@ namespace T3.Editor.Gui.Windows
             ImGui.SameLine();
         }
 
-        private void PinSelectionToView()
+        private void PinSelectionToView(GraphCanvas canvas)
         {
-            var firstSelectedInstance = NodeSelection.GetFirstSelectedInstance();
-            PinInstance(firstSelectedInstance);
+            var firstSelectedInstance = canvas.NodeSelection.GetFirstSelectedInstance();
+            PinInstance(firstSelectedInstance, canvas);
             //_pinnedEvaluationInstancePath = null;
-        }
-
-        public void PinInstance(Instance instance)
-        {
-            _pinnedInstancePath = OperatorUtils.BuildIdPathForInstance(instance);
-            _isPinned = true;
         }
 
         private void PinSelectionAsEvaluationStart(Instance instance)
@@ -167,25 +161,61 @@ namespace T3.Editor.Gui.Windows
             _pinnedEvaluationInstancePath = OperatorUtils.BuildIdPathForInstance(instance);
         }
 
-        public Instance GetPinnedOrSelectedInstance()
+        public bool TryGetPinnedOrSelectedInstance(out Instance instance, out GraphCanvas canvas)
         {
-            if (!_isPinned)
-                return NodeSelection.GetFirstSelectedInstance();
+            var window = GraphWindow.Focused;
+            canvas = window?.GraphCanvas;
+            instance = null;
 
-            var instance = Structure.GetInstanceFromIdPath(_pinnedInstancePath);
-            if (instance != null)
-                return instance;
-            
-            _isPinned = false;
-            return NodeSelection.GetFirstSelectedInstance();
+            if (!_isPinned)
+            {
+                if (window == null)
+                {
+                    return false;
+                }
+
+                instance = canvas.NodeSelection.GetFirstSelectedInstance();
+            }
+            else if (!_pinnedInstanceCanvas!.Destroyed)
+            {
+                instance = _pinnedInstanceCanvas.Structure.GetInstanceFromIdPath(_pinnedInstancePath);
+                canvas = _pinnedInstanceCanvas;
+            }
+            else
+            {
+                Unpin();
+                if (window != null)
+                {
+                    instance = canvas.NodeSelection.GetFirstSelectedInstance();
+                }
+            }
+
+            return instance != null;
         }
 
-        public Instance GetPinnedEvaluationInstance()
+
+        public void PinInstance(Instance instance, GraphCanvas canvas)
         {
-            return Structure.GetInstanceFromIdPath(_pinnedEvaluationInstancePath);
+            _pinnedInstancePath = OperatorUtils.BuildIdPathForInstance(instance);
+            _pinnedInstanceCanvas = canvas;
+            _isPinned = true;
+        }
+        
+        private void Unpin()
+        {
+            _isPinned = false;
+            _pinnedInstanceCanvas = null;
+            _pinnedInstancePath = null;
+        }
+
+        public bool TryGetPinnedEvaluationInstance(Structure structure, out Instance? instance)
+        {
+            instance = structure.GetInstanceFromIdPath(_pinnedEvaluationInstancePath);
+            return instance != null;
         }
 
         private bool _isPinned;
+        private GraphCanvas? _pinnedInstanceCanvas;
         private List<Guid> _pinnedInstancePath = new();
         private List<Guid> _pinnedEvaluationInstancePath = new();
     }

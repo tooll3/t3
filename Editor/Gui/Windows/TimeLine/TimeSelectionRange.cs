@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Operator;
 using T3.Editor.Gui.Interaction.Snapping;
 
 namespace T3.Editor.Gui.Windows.TimeLine
@@ -10,7 +9,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
     /// <summary>
     /// A graphic representation that allows to move and scale multiple selected timeline elements
     /// </summary>
-    public class TimeSelectionRange : IValueSnapAttractor
+    internal class TimeSelectionRange : IValueSnapAttractor
     {
         public TimeSelectionRange(TimeLineCanvas timeLineCanvas, ValueSnapHandler snapHandler)
         {
@@ -18,7 +17,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             _snapHandler = snapHandler;
         }
 
-        public void Draw(ImDrawListPtr drawlist)
+        public void Draw(Instance composition, ImDrawListPtr drawlist)
         {
             if (!_isDragging && !ImGui.GetIO().KeyAlt)
                 return;
@@ -54,7 +53,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                                        (contentRegionMax-contentRegionMin).Y - TimeRangeHandleSize.Y));
                 ImGui.Button("##SelectionStartPos", TimeRangeHandleSize);
 
-                HandleDrag(_selectionTimeRange.Start, _selectionTimeRange.End);
+                HandleDrag(composition, _selectionTimeRange.Start, _selectionTimeRange.End);
             }
 
             // Range end
@@ -83,13 +82,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                          + new Vector2(0, (contentRegionMax-contentRegionMin).Y - TimeRangeHandleSize.Y));
                 
                 ImGui.Button("##SelectionEndPos", TimeRangeHandleSize);
-                HandleDrag(_selectionTimeRange.End, _selectionTimeRange.Start);
+                HandleDrag(composition, _selectionTimeRange.End, _selectionTimeRange.Start);
             }
 
             ImGui.PopStyleColor();
         }
 
-        private void HandleDrag(double originalU, double origin)
+        private void HandleDrag(Instance composition, double originalU, double origin)
         {
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {

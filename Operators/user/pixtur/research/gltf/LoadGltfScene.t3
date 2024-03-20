@@ -1,7 +1,5 @@
 {
-  "Name": "LoadGltfScene",
-  "Id": "00618c91-f39a-44ea-b9d8-175c996460dc",
-  "Namespace": "user.pixtur.research.gltf",
+  "Id": "00618c91-f39a-44ea-b9d8-175c996460dc"/*LoadGltfScene*/,
   "Inputs": [
     {
       "Id": "292e80cf-ba31-4a50-9bf4-83712430f811"/*Path*/,

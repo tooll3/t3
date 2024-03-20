@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
+﻿using System.IO;
 using ImGuiNET;
 using Newtonsoft.Json;
-using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.UserData;
 using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -22,7 +20,7 @@ namespace T3.Editor.Gui.Windows.Layouts
     /// - toggling visibility from main menu
     /// - Graph over content mode
     /// </summary>    
-    public static class LayoutHandling
+    internal static class LayoutHandling
     {
         
         public static void ProcessKeyboardShortcuts()
@@ -84,29 +82,53 @@ namespace T3.Editor.Gui.Windows.Layouts
                                                .ToList()
                             });
         }
+        
+        public static string GraphPrefix => "Graph##";
+        public static string OutputPrefix => "Output##";
+        public static string ParametersPrefix => "Parameters##";
 
         private static void ApplyLayout(Layout layout)
         {
+            var editableProjects = EditableSymbolProject.AllProjects;
+            
             // First update windows settings
             foreach (var config in layout.WindowConfigs)
             {
-                var matchingWindow = WindowManager.GetAllWindows().FirstOrDefault(window => window.Config.Title == config.Title);
+                var matchingWindow = WindowManager.GetAllWindows()
+                                                  .FirstOrDefault(window => window.Config.Title == config.Title);
                 if (matchingWindow == null)
                 {
-                    if (config.Title.StartsWith("Graph#"))
+                    if (config.Title.StartsWith(GraphPrefix))
                     {
-                        if (GraphWindow.CanOpenAnotherWindow() && EditableSymbolProject.RootInstance != null)
+                        if (!GraphWindow.CanOpenAnotherWindow)
+                            continue;
+                        
+                        var title = config.Title.Substring(GraphPrefix.Length);
+                        if (!int.TryParse(title, out var number))
                         {
-                            matchingWindow = new GraphWindow(EditableSymbolProject.RootInstance);
-                            matchingWindow.Config = config;
+                            Log.Warning($"Can't parse number from \"{config.Title}\"");
+                            continue;
                         }
+
+                        if (number >= editableProjects.Count)
+                            continue;
+
+                        var project = editableProjects[number];
+                        if (!project.TryGetRootInstance(out var rootInstance))
+                        {
+                            Log.Warning($"Can't find root instance in project \"{project.DisplayName}\"");
+                            continue;
+                        }
+
+                        matchingWindow = new GraphWindow(project, rootInstance!, number);
+                        matchingWindow.Config = config;
                     }
-                    else if (config.Title.StartsWith("Output#"))
+                    else if (config.Title.StartsWith(OutputPrefix))
                     {
                         matchingWindow = new OutputWindow();
                         matchingWindow.Config = config;
                     }
-                    else if (config.Title.StartsWith("Parameters#"))
+                    else if (config.Title.StartsWith(ParametersPrefix))
                     {
                         matchingWindow = new ParameterWindow();
                         matchingWindow.Config = config;

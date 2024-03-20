@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Windows;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.UiModel
 {
@@ -39,10 +37,9 @@ namespace T3.Editor.UiModel
 
             if (TryRecompile())
             {
-                UpdateSymbols();
-
+                ProjectSetup.UpdateSymbolPackage(this);
                 newSymbolUi = null;
-                var gotSymbol = Symbols.TryGetValue(newSymbolId, out newSymbol) && SymbolUis.TryGetValue(newSymbolId, out newSymbolUi);
+                var gotSymbol = Symbols.TryGetValue(newSymbolId, out newSymbol) && SymbolUiDict.TryGetValue(newSymbolId, out newSymbolUi);
                 if(gotSymbol)
                 {
                     newSymbolUi.FlagAsModified();
@@ -59,7 +56,7 @@ namespace T3.Editor.UiModel
         public bool TryRecompileWithNewSource(Symbol symbol, string newSource)
         {
             var id = symbol.Id;
-            var gotCurrentSource = _filePathHandlers.TryGetValue(id, out var currentSourcePath);
+            var gotCurrentSource = FilePathHandlers.TryGetValue(id, out var currentSourcePath);
             if (!gotCurrentSource || currentSourcePath!.SourceCodePath == null)
             {
                 Log.Error($"Could not find original source code for symbol \"{symbol.Name}\"");
@@ -80,12 +77,12 @@ namespace T3.Editor.UiModel
 
             _pendingSource[id] = newSource;
 
-            var symbolUi = SymbolUis[id];
+            var symbolUi = SymbolUiDict[id];
             symbolUi.FlagAsModified();
 
             if (TryRecompile())
             {
-                UpdateSymbols();
+                ProjectSetup.UpdateSymbolPackage(this);
                 return true;
             }
 
@@ -134,19 +131,26 @@ namespace T3.Editor.UiModel
             return true;
         }
 
-        public static bool ChangeSymbolNamespace(Guid symbolId, string newNamespace, out string reason)
+        public static bool ChangeSymbolNamespace(Symbol symbol, string newNamespace, out string reason)
         {
             if (CheckCompilation(out reason))
                 return false;
 
-            var symbol = SymbolRegistry.Entries[symbolId];
+            if (symbol.SymbolPackage is not EditableSymbolProject)
+                return false;
+            
             var command = new ChangeSymbolNamespaceCommand(symbol, newNamespace, ChangeNamespace);
             UndoRedoStack.AddAndExecute(command);
             return true;
 
             static string ChangeNamespace(Guid symbolId, string nameSpace)
             {
-                var symbol = SymbolRegistry.Entries[symbolId];
+                if (!SymbolUiRegistry.TryGetValue(symbolId, out var symbolUi))
+                {
+                    return $"Could not find symbol with id {symbolId} in registry";
+                }
+                
+                var symbol = symbolUi!.Symbol;
                 var currentNamespace = symbol.Namespace;
                 var reason = string.Empty;
                 if (currentNamespace == nameSpace)
@@ -155,7 +159,7 @@ namespace T3.Editor.UiModel
                 if (!TryGetSourceAndTargetProjects(currentNamespace, nameSpace, out var sourceProject, out var targetProject, out reason))
                     return reason;
 
-                sourceProject.ChangeNamespaceOf(symbolId, nameSpace, targetProject);
+                sourceProject.ChangeNamespaceOf(symbol, nameSpace, targetProject);
                 return reason;
             }
         }
@@ -167,7 +171,7 @@ namespace T3.Editor.UiModel
 
             while (RecompiledProjects.TryDequeue(out var project))
             {
-                project.UpdateSymbols();
+                ProjectSetup.UpdateSymbolPackage(project);
             }
 
             bool needsRecompilation = false;
@@ -287,15 +291,15 @@ namespace T3.Editor.UiModel
 
                 var substitutedNamespace = Regex.Replace(symbol.Namespace, sourceNamespace, newNamespace);
 
-                ChangeNamespaceOf(symbol.Id, substitutedNamespace, newDestinationProject, sourceNamespace);
+                ChangeNamespaceOf(symbol, substitutedNamespace, newDestinationProject, sourceNamespace);
             }
         }
 
-        private void ChangeNamespaceOf(Guid id, string newNamespace, EditableSymbolProject newDestinationProject, string sourceNamespace = null)
+        private void ChangeNamespaceOf(Symbol symbol, string newNamespace, EditableSymbolProject newDestinationProject, string sourceNamespace = null)
         {
-            var symbol = Symbols[id];
+            var id = symbol.Id;
             sourceNamespace ??= symbol.Namespace;
-            if (_filePathHandlers.TryGetValue(id, out var filePathHandler) && filePathHandler.SourceCodePath != null)
+            if (FilePathHandlers.TryGetValue(id, out var filePathHandler) && filePathHandler.SourceCodePath != null)
             {
                 if (!TryConvertToValidCodeNamespace(sourceNamespace, out var sourceCodeNamespace))
                 {
@@ -318,7 +322,7 @@ namespace T3.Editor.UiModel
                 throw new Exception($"Could not find source code for {symbol.Name} in {CsProjectFile.Name} ({id})");
             }
 
-            var symbolUi = SymbolUis[id];
+            var symbolUi = SymbolUiDict[id];
             symbolUi.FlagAsModified();
 
             if (newDestinationProject != this)
@@ -333,11 +337,6 @@ namespace T3.Editor.UiModel
         public bool TryGetPendingSourceCode(Guid symbolId, out string? sourceCode)
         {
             return _pendingSource.TryGetValue(symbolId, out sourceCode);
-        }
-
-        private void UpdateSymbols()
-        {
-            ProjectSetup.UpdateSymbolPackage(this);
         }
 
         private static bool TryConvertToValidCodeNamespace(string sourceNamespace, out string result)
@@ -378,5 +377,57 @@ namespace T3.Editor.UiModel
         private static volatile bool _recompiling;
         private static readonly ConcurrentQueue<EditableSymbolProject> RecompiledProjects = new();
         private readonly ConcurrentDictionary<Guid, string> _pendingSource = new();
+
+        public static bool RecompileSymbol(Symbol symbol, string newSource, bool flagDependentOpsAsModified, out string reason)
+        {
+            if (!UpdateSymbolWithNewSource(symbol, newSource, out reason))
+            {
+                var title = $"Could not update symbol '{symbol.Name}'";
+                EditorUi.Instance.ShowMessageBox(reason, title);
+                reason = title + ": " + reason;
+                return false;
+            }
+
+            if (flagDependentOpsAsModified)
+                FlagDependentOpsAsModified(symbol);
+            return true;
+
+            static void FlagDependentOpsAsModified(Symbol symbol)
+            {
+                List<SymbolUi> readOnlyDependents = null;
+                foreach (var dependent in Structure.CollectDependingSymbols(symbol))
+                {
+                    var package = (EditorSymbolPackage)dependent.SymbolPackage;
+                    if (!package.TryGetSymbolUi(dependent.Id, out var symbolUi))
+                    {
+                        Log.Error($"Could not find symbol UI for [{dependent.Name}] ({dependent.Id})");
+                    }
+                    
+                    if (!package.IsReadOnly)
+                    {
+                        symbolUi.FlagAsModified();
+                    }
+                    else
+                    {
+                        readOnlyDependents ??= [];
+                        readOnlyDependents.Add(symbolUi);
+                    }
+                }
+
+                if (readOnlyDependents != null)
+                {
+                    var packages = readOnlyDependents.Select(x => x.Symbol.SymbolPackage).Distinct();
+                    foreach (var package in packages)
+                    {
+                        Log.Warning($"Read-only symbol package {package.DisplayName} had a dependency modified. [{symbol.Id}]: {symbol.Name}");
+                    }
+
+                    foreach (var symbolUi in readOnlyDependents)
+                    {
+                        symbolUi.UpdateConsistencyWithSymbol();
+                    }
+                }
+            }
+        }
     }
 }

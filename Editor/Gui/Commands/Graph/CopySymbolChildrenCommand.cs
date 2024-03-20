@@ -71,7 +71,12 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Undo()
         {
-            var parentSymbolUi = SymbolUiRegistry.Entries[_targetSymbolId];
+            if(!SymbolUiRegistry.TryGetValue(_targetSymbolId, out var parentSymbolUi))
+            {
+                Log.Warning($"Failed to find target symbol with id: {_targetSymbolId} - was it removed?");
+                return;
+            }
+            
             foreach (var child in _childrenToCopy)
             {
                 parentSymbolUi.RemoveChild(child.AddedId);
@@ -87,14 +92,24 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Do()
         {
-            var targetCompositionSymbolUi = SymbolUiRegistry.Entries[_targetSymbolId];
-            var targetSymbol = targetCompositionSymbolUi.Symbol;
-            var sourceCompositionSymbolUi = SymbolUiRegistry.Entries[_sourceSymbolId];
+            if(!SymbolUiRegistry.TryGetValue(_targetSymbolId, out var targetCompositionSymbolUi))
+            {
+                Log.Warning($"Failed to find target symbol with id: {_targetSymbolId} - was it removed?");
+                return;
+            }
+            
+            if(!SymbolUiRegistry.TryGetValue(_sourceSymbolId, out var sourceCompositionSymbolUi))
+            {
+                Log.Warning($"Failed to find source symbol with id: {_sourceSymbolId} - was it removed?");
+                return;
+            }
+            
+            var targetSymbol = targetCompositionSymbolUi!.Symbol;
 
             // copy animations first, so when creating the new child instances can automatically create animations actions for the existing curves
             var childIdsToCopyAnimations = _childrenToCopy.Select(entry => entry.ChildId).ToList();
             var oldToNewIdDict = _childrenToCopy.ToDictionary(entry => entry.ChildId, entry => entry.AddedId);
-            sourceCompositionSymbolUi.Symbol.Animator.CopyAnimationsTo(targetSymbol.Animator, childIdsToCopyAnimations, oldToNewIdDict);
+            sourceCompositionSymbolUi!.Symbol.Animator.CopyAnimationsTo(targetSymbol.Animator, childIdsToCopyAnimations, oldToNewIdDict);
 
             foreach (var childEntryToCopy in _childrenToCopy)
             {

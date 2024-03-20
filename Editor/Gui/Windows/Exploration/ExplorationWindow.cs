@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi.VectorInputs;
@@ -20,7 +17,7 @@ namespace T3.Editor.Gui.Windows.Exploration
     /// <summary>
     /// Renders the <see cref="ExplorationWindow"/>
     /// </summary>
-    public class ExplorationWindow : Window
+    internal class ExplorationWindow : Window
     {
         public ExplorationWindow()
         {
@@ -31,12 +28,12 @@ namespace T3.Editor.Gui.Windows.Exploration
 
         private Guid _compositionSymbolId;
 
-        private bool CheckFavoriteMatchesNodeSelection(ExplorationVariation variation)
+        private bool CheckFavoriteMatchesNodeSelection(ExplorationVariation variation, NodeSelection nodeSelection)
         {
             var match = true;
             foreach (var param in variation.ValuesForParameters.Keys)
             {
-                if (!NodeSelection.GetSelectedChildUis().Contains(param.SymbolChildUi))
+                if (!nodeSelection.GetSelectedChildUis().Contains(param.SymbolChildUi))
                 {
                     match = false;
                 }
@@ -50,7 +47,14 @@ namespace T3.Editor.Gui.Windows.Exploration
             ImGui.BeginChild("params", new Vector2(200, -1));
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(4,4));
-                DrawSidePanelContent();
+
+                var currentGraphCanvas = GraphWindow.Focused?.GraphCanvas;
+
+                if (currentGraphCanvas != null)
+                {
+                    DrawSidePanelContent(currentGraphCanvas.NodeSelection, currentGraphCanvas.Structure);
+                }
+
                 ImGui.EndChild();
             }
             ImGui.PopStyleVar();
@@ -58,20 +62,20 @@ namespace T3.Editor.Gui.Windows.Exploration
             ImGui.SameLine();
             ImGui.BeginChild("canvas", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
             {
-                _variationCanvas.Draw();
+                _variationCanvas.Draw(GraphWindow.Focused?.GraphCanvas.Structure);
             }
             ImGui.EndChild();
         }
 
         private static float _strengthBeforeDrag = 0;
         
-        private void DrawSidePanelContent()
+        private void DrawSidePanelContent(NodeSelection nodeSelection, Structure structure)
         {
             // List selected operators and parameters
             ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.1f, 0, 100);
-            _compositionSymbolId = NodeSelection.GetCompositionForSelection()?.SymbolChildId ?? Guid.Empty;
+            _compositionSymbolId = nodeSelection.GetSelectionSymbolChildId() ?? Guid.Empty;
 
-            var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis();
+            var selectedSymbolChildUis = nodeSelection.GetSelectedChildUis();
 
             // Remove no longer selected parameters
             var symbolChildUis = selectedSymbolChildUis as SymbolChildUi[] ?? selectedSymbolChildUis.ToArray();
@@ -95,7 +99,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                 var keepX = ImGui.GetCursorPosX();
                 foreach (var input in symbolChildUi.SymbolChild.Inputs.Values)
                 {
-                    ImGui.PushID(input.InputDefinition.Id.GetHashCode());
+                    ImGui.PushID(input.Id.GetHashCode());
                     var p = input.DefaultValue;
 
                     // TODO: check if input is connected
@@ -148,17 +152,17 @@ namespace T3.Editor.Gui.Windows.Exploration
                             }
                             else
                             {
-                                var instance = NodeSelection.GetInstanceForSymbolChildUi(symbolChildUi);
-                                var inputSlot = instance.Inputs.Single(input2 => input2.Id == input.InputDefinition.Id);
+                                var instance = nodeSelection.GetInstanceForSymbolChildUi(symbolChildUi);
+                                var inputSlot = instance.Inputs.Single(input2 => input2.Id == input.Id);
                                 
                                 //var xxx = symbolChildUi.SymbolChild.Symbol
                                 var scale = 1f;
                                 var min = float.NegativeInfinity;
                                 var max = float.PositiveInfinity;
                                 var clamp = false;
-                                
-                                var symbolUi = SymbolUiRegistry.Entries[symbolChildUi.SymbolChild.Symbol.Id];
-                                var inputUi = symbolUi.InputUis[input.InputDefinition.Id];
+
+                                var symbolUi = symbolChildUi.SymbolChild.Symbol.GetSymbolUi();
+                                var inputUi = symbolUi.InputUis[input.Id];
                                 switch (inputUi)
                                 {
                                     case FloatInputUi floatInputUi:
@@ -232,7 +236,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                 ExplorationVariation deleteAfterIteration = null;
                 foreach (var variation in savedForComposition)
                 {
-                    var isMatching = CheckFavoriteMatchesNodeSelection(variation);
+                    var isMatching = CheckFavoriteMatchesNodeSelection(variation, nodeSelection);
                     ImGui.PushStyleColor(ImGuiCol.Text, isMatching ? UiColors.Gray.Rgba : NonMatchingVarationsColor);
                     ImGui.PushID(variation.GetHashCode());
                     {
@@ -255,20 +259,20 @@ namespace T3.Editor.Gui.Windows.Exploration
 
                         if (ImGui.Selectable(variation.Title, false, 0, new Vector2(ImGui.GetWindowWidth() - 32, 0)))
                         {
-                            SelectVariation(variation);
+                            SelectVariation(variation, nodeSelection, structure);
                         }
 
                         if (ImGui.IsItemHovered())
                         {
                             if (_lastHoveredVariation == null)
                             {
-                                variation.KeepCurrentAndApplyNewValues();
+                                variation.KeepCurrentAndApplyNewValues(structure);
                                 _lastHoveredVariation = variation;
                             }
                             else if (_lastHoveredVariation != variation)
                             {
                                 _lastHoveredVariation.RestoreValues();
-                                variation.KeepCurrentAndApplyNewValues();
+                                variation.KeepCurrentAndApplyNewValues(structure);
                                 _lastHoveredVariation = variation;
                             }
 
@@ -363,13 +367,13 @@ namespace T3.Editor.Gui.Windows.Exploration
             }
         }
 
-        private void SelectVariation(ExplorationVariation variation)
+        private void SelectVariation(ExplorationVariation variation, NodeSelection nodeSelection, Structure structure)
         {
             variation.ApplyPermanently();
-            variation.UpdateUndoCommand();
+            variation.UpdateUndoCommand(structure);
 
             // Select variation
-            NodeSelection.Clear();
+            nodeSelection.Clear();
             VariationParameters.Clear();
 
             var alreadyAdded = new HashSet<SymbolChildUi>();
@@ -378,7 +382,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                 VariationParameters.Add(param);
                 if (!alreadyAdded.Contains(param.SymbolChildUi))
                 {
-                    NodeSelection.AddSymbolChildToSelection(param.SymbolChildUi, Structure.GetInstanceFromIdPath(param.InstanceIdPath));
+                    nodeSelection.AddSymbolChildToSelection(param.SymbolChildUi, structure.GetInstanceFromIdPath(param.InstanceIdPath));
                     alreadyAdded.Add(param.SymbolChildUi);
                 }
             }
