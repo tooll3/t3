@@ -25,14 +25,14 @@ namespace T3.Operators.Types.Id_ba059fe1_3397_4950_9ddd_e328f0c2e0bd
         [Input(Guid = "7328bfec-fad5-4262-9c10-fad57bd39e2e")]
         public readonly InputSlot<float> EdgeWidth = new InputSlot<float>();
 
-        [Input(Guid = "55c3fe18-be3c-479b-b9cf-4473c4696f2e")]
-        public readonly InputSlot<float> Radius = new InputSlot<float>();
-
         [Input(Guid = "2bd55eb6-8bca-4f34-bc0e-d1223f47b410")]
         public readonly InputSlot<bool> Animated = new InputSlot<bool>();
 
         [Input(Guid = "485ea866-3764-402b-8bb5-ade85efde0c1")]
         public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+
+        [Input(Guid = "29791375-afb4-4612-9e44-a60eed50ea9b")]
+        public readonly InputSlot<float> Phase = new InputSlot<float>();
     }
 }
 

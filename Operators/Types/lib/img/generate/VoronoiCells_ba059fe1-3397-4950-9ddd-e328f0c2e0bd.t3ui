@@ -43,18 +43,10 @@
       "Description": "Defines the thickness of the edges"
     },
     {
-      "InputId": "55c3fe18-be3c-479b-b9cf-4473c4696f2e"/*Radius*/,
+      "InputId": "2bd55eb6-8bca-4f34-bc0e-d1223f47b410"/*Animated*/,
       "Position": {
         "X": -198.16037,
         "Y": 257.12244
-      },
-      "Description": "Defines the Radius (is currently not evaluated)"
-    },
-    {
-      "InputId": "2bd55eb6-8bca-4f34-bc0e-d1223f47b410"/*Animated*/,
-      "Position": {
-        "X": -193.60469,
-        "Y": 335.42743
       },
       "Description": "Activates a wafting animation of the cells",
       "AddPadding": "True"
@@ -66,6 +58,13 @@
         "Y": 380.42743
       },
       "Description": "Defines the resolution of the output image"
+    },
+    {
+      "InputId": "29791375-afb4-4612-9e44-a60eed50ea9b"/*Phase*/,
+      "Position": {
+        "X": -193.60469,
+        "Y": 425.42743
+      }
     }
   ],
   "SymbolChildUis": [
