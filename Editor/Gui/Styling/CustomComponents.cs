@@ -384,6 +384,18 @@ namespace T3.Editor.Gui.Styling
             ImGui.Dummy(new Vector2(0,4 * T3Ui.DisplayScaleFactor));
         }
 
+        public static void SmallGroupHeader(string text)
+        {
+            FormInputs.AddVerticalSpace(5);
+            ImGui.PushFont(Fonts.FontSmall);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            ImGui.SetCursorPosX(4);
+            ImGui.TextUnformatted(text.ToUpperInvariant());
+            ImGui.PopStyleColor();
+            ImGui.PopFont();
+            FormInputs.AddVerticalSpace(2);
+        }
+
         /// <summary>
         /// A small label that can be used to structure context menus
         /// </summary>
