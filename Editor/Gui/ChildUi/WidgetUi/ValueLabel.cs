@@ -17,7 +17,11 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
                 return false;
             
             var modified = false;
-            var value = (double)inputSlot.TypedInputValue.Value;
+            //var value = (double)inputSlot.TypedInputValue.Value;
+            var value = (inputSlot.IsConnected) 
+                            ? (double)inputSlot.Value 
+                            :(double)inputSlot.TypedInputValue.Value;
+            
             var valueText = $"{value:G5}";
             var hashCode = inputSlot.GetHashCode();
             ImGui.PushID(hashCode);
