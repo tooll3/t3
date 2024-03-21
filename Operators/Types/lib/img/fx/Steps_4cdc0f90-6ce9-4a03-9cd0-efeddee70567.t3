@@ -50,22 +50,22 @@
           "Interpolation": "Linear",
           "Steps": [
             {
-              "Id": "d1e6379c-855f-4188-ac79-1d73abf60eb0",
+              "Id": "940ecad4-01c9-4c8b-9e81-515649a7864d",
               "NormalizedPosition": 0.0,
-              "Color": {
-                "R": 1.0,
-                "G": 0.99999,
-                "B": 1.0,
-                "A": 1.0
-              }
-            },
-            {
-              "Id": "e2166499-868f-472f-89a3-5b7cdbce25ab",
-              "NormalizedPosition": 1.0,
               "Color": {
                 "R": 9.9999E-07,
                 "G": 9.9999E-07,
                 "B": 1E-06,
+                "A": 1.0
+              }
+            },
+            {
+              "Id": "388e8fca-fc13-4b79-bba5-d8c7fdebbc86",
+              "NormalizedPosition": 1.0,
+              "Color": {
+                "R": 1.0,
+                "G": 0.99999,
+                "B": 1.0,
                 "A": 1.0
               }
             }
