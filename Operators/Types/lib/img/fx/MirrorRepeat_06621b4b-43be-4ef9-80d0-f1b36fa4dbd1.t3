@@ -24,6 +24,10 @@
       "DefaultValue": 0.0
     },
     {
+      "Id": "bb67b53b-2d0b-42f5-b2be-26c28f869b71"/*OffsetEdge*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "5a5fc5e7-4fec-4146-9183-161fff71ee97"/*Offsetimage*/,
       "DefaultValue": {
         "X": 0.0,
@@ -207,6 +211,12 @@
     {
       "SourceParentOrChildId": "944097d1-2a7d-4654-a595-3e149eb8b725",
       "SourceSlotId": "e1dede5f-6963-4bcc-aa12-abeb819bb5da",
+      "TargetParentOrChildId": "4aac8849-638f-4086-bf52-201d5716e80c",
+      "TargetSlotId": "4ef6f204-1894-4b0a-bb2d-8b5ecbad4040"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "bb67b53b-2d0b-42f5-b2be-26c28f869b71",
       "TargetParentOrChildId": "4aac8849-638f-4086-bf52-201d5716e80c",
       "TargetSlotId": "4ef6f204-1894-4b0a-bb2d-8b5ecbad4040"
     },

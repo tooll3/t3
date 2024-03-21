@@ -10,6 +10,7 @@ cbuffer ParamConstants : register(b0)
     float ShadeAmount;
 
     float4 ShadeColor;
+    float OffsetEdge;
 }
 
 // cbuffer TimeConstants : register(b1)
@@ -76,12 +77,14 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float dist = dot(p, angle);
     float offset = Offset % 2;
     dist += offset;
+
     float shade = 0;
 
     float d = 0;
     float mDist = dist % (2 * Width);
     if (dist > Width)
     {
+
         if (mDist > Width)
         {
             shade = 1;
@@ -102,6 +105,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     }
     d -= dist - mDist;
     d += offset;
+    d += OffsetEdge;
     p += d * angle;
     p.x /= aspectRatio;
 

@@ -51,12 +51,22 @@
       "Description": "Offsets the result along the mirror axis"
     },
     {
+      "InputId": "bb67b53b-2d0b-42f5-b2be-26c28f869b71"/*OffsetEdge*/,
+      "Position": {
+        "X": -87.94841,
+        "Y": 428.15018
+      },
+      "Min": -0.5,
+      "Max": 0.5
+    },
+    {
       "InputId": "5a5fc5e7-4fec-4146-9183-161fff71ee97"/*Offsetimage*/,
       "Position": {
         "X": -87.94841,
         "Y": 473.15018
       },
-      "Description": "Offsets the image before it is mirrored"
+      "Description": "Offsets the image before it is mirrored",
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "341ee76d-f431-40e8-ba14-aa4e0a1f10c4"/*ShadeAmount*/,
