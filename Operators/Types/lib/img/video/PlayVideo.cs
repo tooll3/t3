@@ -334,34 +334,35 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 Log.Debug($"Seeking took {(Playback.RunTimeInSecs - _seekOperationStartTime)*1000:0}ms", this);
                 _isSeeking = false;
             }
-
-                
-            if (_invalidated || _texture == null)
-            {
-                _invalidated = false;
-
-                _engine.GetNativeVideoSize(out var width, out var height);
-                SetupTexture(new Int2(width, height));
-
-                // _SRGB doesn't work :/ Getting invalid argument exception in TransferVideoFrame
-                //_renderTarget = Texture.New2D(graphicsDevice, width, height, PixelFormat.B8G8R8A8_UNorm, TextureFlags.RenderTarget | TextureFlags.ShaderResource);
-            }
             
-            if (_texture == null)
-            {
-                _errorMessageForStatus = "Failed to setup texture";
-                _hasUpdatedTexture = true;
-                return;
-            }
-
-            if (presentationTimeTicks == _lastStreamTick)
-            {
-                _hasUpdatedTexture = false;
-                return;
-            }
-
             try
             {
+                
+                if (_invalidated || _texture == null)
+                {
+                    _invalidated = false;
+
+                    _engine.GetNativeVideoSize(out var width, out var height);
+                    SetupTexture(new Int2(width, height));
+
+                    // _SRGB doesn't work :/ Getting invalid argument exception in TransferVideoFrame
+                    //_renderTarget = Texture.New2D(graphicsDevice, width, height, PixelFormat.B8G8R8A8_UNorm, TextureFlags.RenderTarget | TextureFlags.ShaderResource);
+                }
+                
+                if (_texture == null)
+                {
+                    _errorMessageForStatus = "Failed to setup texture";
+                    _hasUpdatedTexture = true;
+                    return;
+                }
+
+                if (presentationTimeTicks == _lastStreamTick)
+                {
+                    _hasUpdatedTexture = false;
+                    return;
+                }
+
+
 
                 _engine.TransferVideoFrame(
                                            _texture,
