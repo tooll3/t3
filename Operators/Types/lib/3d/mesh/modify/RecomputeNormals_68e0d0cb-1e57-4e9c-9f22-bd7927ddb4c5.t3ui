@@ -1,6 +1,6 @@
 {
   "Id": "68e0d0cb-1e57-4e9c-9f22-bd7927ddb4c5"/*RecomputeNormals*/,
-  "Description": "",
+  "Description": "Recalculates the normals (smoothing groups) of the surfaces of a mesh. For example, if these are changed by [DeformMesh] and similar operators",
   "InputUis": [
     {
       "InputId": "b55aeb9b-5286-476a-b8f0-86cb96e41310"/*InputMesh*/,
@@ -8,14 +8,16 @@
       "Position": {
         "X": -142.75635,
         "Y": 1687.4246
-      }
+      },
+      "Description": "Mesh Input"
     },
     {
       "InputId": "fd3f8225-3d33-40d3-af15-ae768e2c67ad"/*RecomputeIndices*/,
       "Position": {
         "X": -170.62433,
         "Y": 1893.0575
-      }
+      },
+      "Description": "Defines whether the indices should also be recalculated"
     }
   ],
   "SymbolChildUis": [
