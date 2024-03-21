@@ -7,18 +7,7 @@
     {
       "Id": "e23139eb-0f0f-4063-8188-c8229b62cdf0"/*LightRaysFx*/,
       "SymbolId": "53ff1a68-e888-444f-9ccc-23239c94d6db",
-      "InputValues": [
-        {
-          "Id": "3f41e61f-52bb-41b4-b33c-3c0a00b2ff6e"/*Weight*/,
-          "Type": "System.Single",
-          "Value": 3.09
-        },
-        {
-          "Id": "06a0cd42-55b7-481e-91f5-ccdf914b3956"/*Amount*/,
-          "Type": "System.Single",
-          "Value": 0.83
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -329,14 +318,9 @@
           "Value": 150
         },
         {
-          "Id": "a1c47663-95a2-4a26-9b9a-f7e109868a21"/*Density*/,
+          "Id": "a1c47663-95a2-4a26-9b9a-f7e109868a21"/*Length*/,
           "Type": "System.Single",
           "Value": 0.94
-        },
-        {
-          "Id": "3f41e61f-52bb-41b4-b33c-3c0a00b2ff6e"/*Weight*/,
-          "Type": "System.Single",
-          "Value": 5.2
         }
       ],
       "Outputs": []

@@ -214,6 +214,72 @@
           "82a8fbb3-c1be-494e-8a8d-e7ccf5440556": 0.015
         }
       }
+    },
+    {
+      "Id": "aaa91208-bd42-43fe-9801-b8bda3370bca",
+      "IsPreset": true,
+      "ActivationIndex": 9,
+      "Title": "Orange!",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 279.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02": {
+            "X": 0.22,
+            "Y": 0.065
+          },
+          "be07242e-39fc-4631-ab6e-3023c9444406": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "bc39e29a-3359-4346-a2cb-22f324794399",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 6.7507567,
+                    "G": 6.7507567,
+                    "B": 6.7507567,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "d0ea9111-fbe3-4f8d-82bc-d5ee13594cce",
+                  "NormalizedPosition": 0.097165994,
+                  "Color": {
+                    "R": 0.89729434,
+                    "G": 0.4930691,
+                    "B": 0.3641723,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "21368f5e-5100-4237-876b-c0a4567cf14e",
+                  "NormalizedPosition": 0.46558705,
+                  "Color": {
+                    "R": 0.09968401,
+                    "G": 0.115548015,
+                    "B": 0.17703348,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "82dd92bb-a958-416f-ac6b-d6e9b1ff285d",
+                  "NormalizedPosition": 0.94606256,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 0.0,
+                    "B": 0.0,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "ee2bc31a-a67f-4bec-bce7-0a70db88082c": 1
+        }
+      }
     }
   ]
 }

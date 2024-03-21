@@ -69,43 +69,71 @@
     {
       "ChildId": "e9d0e6f2-05ff-402f-acb1-d2c249641799"/*ForwardBeatTaps*/,
       "Position": {
-        "X": 8.340027,
-        "Y": 80.473755
+        "X": -9.677856,
+        "Y": 320.94476
       }
     },
     {
       "ChildId": "4e7ff83d-fea7-4c55-ba7c-d5f992c0ba38"/*Beat Tapping*/,
       "Position": {
-        "X": -291.65997,
-        "Y": 80.473755
+        "X": -309.67786,
+        "Y": 320.94476
       }
     },
     {
       "ChildId": "9ea76be6-91d8-4b55-9909-f1266acea5d8"/*HasValueIncreased*/,
       "Position": {
-        "X": -141.65997,
-        "Y": 80.473755
+        "X": -159.67786,
+        "Y": 320.94476
       }
     },
     {
       "ChildId": "196fdbc3-2a93-4c33-9c7c-04af058146ad"/*Sync Beat*/,
       "Position": {
-        "X": -291.65997,
-        "Y": 143.47375
+        "X": -309.67786,
+        "Y": 383.94476
       }
     },
     {
       "ChildId": "e209cd98-a57f-4b43-8508-039139cdb3d3"/*HasValueIncreased*/,
       "Position": {
-        "X": -141.65997,
-        "Y": 143.47375
+        "X": -159.67786,
+        "Y": 383.94476
       }
     },
     {
       "ChildId": "5de123d1-764d-4f5f-806f-aa027fc9f699"/*ExecuteTextureUpdate*/,
       "Position": {
-        "X": 1821.2683,
-        "Y": -189.55042
+        "X": 467.40155,
+        "Y": -241.77673
+      }
+    },
+    {
+      "ChildId": "dd6fc729-c3ec-4bf4-9bd1-c4731925dd36"/*SetIntVariable*/,
+      "Position": {
+        "X": -2.927002,
+        "Y": 156.55658
+      }
+    },
+    {
+      "ChildId": "cfee8ca0-f7bd-4770-9c47-ff7a97b2e420"/*AudioReaction*/,
+      "Position": {
+        "X": -293.72437,
+        "Y": 239.0097
+      }
+    },
+    {
+      "ChildId": "babca9cc-44e6-4661-92f9-61022f242094"/*BoolToInt*/,
+      "Position": {
+        "X": -152.927,
+        "Y": 225.55658
+      }
+    },
+    {
+      "ChildId": "604a2d61-cced-48cd-958d-9bdc09e52234"/*Midi SignalA*/,
+      "Position": {
+        "X": -518.7612,
+        "Y": 61.535248
       }
     }
   ],
@@ -113,8 +141,8 @@
     {
       "OutputId": "a8127182-4b8d-4be2-8c50-9ce475d2699d"/*Output2*/,
       "Position": {
-        "X": 2025.7756,
-        "Y": -188.3042
+        "X": 671.9088,
+        "Y": -240.53052
       }
     }
   ],
@@ -133,8 +161,8 @@
         "Y": -131.52625
       },
       "Size": {
-        "X": 646.353,
-        "Y": 371.0
+        "X": 677.3512,
+        "Y": 637.3932
       }
     }
   ]
