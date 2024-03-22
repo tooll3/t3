@@ -1,0 +1,17 @@
+{
+  "Name": "PDF",
+  "Id": "cf473b55-5fa1-4dfd-854d-caa763d33cdd",
+  "Namespace": "user.fuzzy.pdf",
+  "Inputs": [
+    {
+      "Id": "5ca4eab7-4254-4113-9836-037d68444bb2"/*Filename*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "1a3a8db9-3db7-4c59-bd9f-50e6b7d5ab04"/*DPI*/,
+      "DefaultValue": 100
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

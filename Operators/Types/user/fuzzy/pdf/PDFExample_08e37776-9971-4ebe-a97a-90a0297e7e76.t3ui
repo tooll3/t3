@@ -1,0 +1,72 @@
+{
+  "Id": "08e37776-9971-4ebe-a97a-90a0297e7e76"/*PDFExample*/,
+  "Description": "Demoing the PDF operator",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "6d2ea16b-9d13-4960-9aea-e27fa647c038"/*AString*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "c7b8fbaf-2993-4e8a-a718-c8f0921fb0b7"/*Layer2d*/,
+      "Position": {
+        "X": 600.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "d24c12e2-1c2b-4188-b896-316bec64bd75"/*ColorGrade*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "7ad6de68-e386-4bb5-8ed9-2bb2cc0e1e92"/*PDF*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "21afd5b8-9d27-491c-ad58-f276822bdcfb"/*AdjustColors*/,
+      "Position": {
+        "X": 450.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "17ea6ce8-7bd8-4ea1-afc8-03db98365be2"/*Camera*/,
+      "Position": {
+        "X": 750.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "d88dd2ea-94d6-4a7b-bfb2-615eea8af1f7"/*PerlinNoise3*/,
+      "Position": {
+        "X": 600.0,
+        "Y": 129.0
+      }
+    },
+    {
+      "ChildId": "d79a76a5-d4c4-490c-9f32-cd0648ac34cd"/*RenderTarget*/,
+      "Position": {
+        "X": 900.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "b95e5264-1308-4764-8adf-d6d0d3780da8"/*Out*/,
+      "Position": {
+        "X": 1038.8358,
+        "Y": 63.830383
+      }
+    }
+  ]
+}
