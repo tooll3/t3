@@ -24,7 +24,7 @@ public abstract class BaseRenderWindow : Window
         var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);
-        return AudioEngine.ClipChannels(soundtrack);
+        return AudioEngine.GetClipChannelCount(soundtrack);
     }
 
     protected static int SoundtrackSampleRate()
@@ -33,7 +33,7 @@ public abstract class BaseRenderWindow : Window
         var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);
-        return AudioEngine.ClipSampleRate(soundtrack);
+        return AudioEngine.GetClipSampleRate(soundtrack);
     }
 
     protected static void SetRenderingStarted()
@@ -244,7 +244,7 @@ public abstract class BaseRenderWindow : Window
             Playback.Current.IsRenderingToFile = true;
             Playback.Current.PlaybackSpeed = 1.0;
 
-            AudioEngine.PrepareRecording(Playback.Current, Fps);
+            AudioRendering.PrepareRecording(Playback.Current, Fps);
 
             double requestedEndTimeInSeconds = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
             double actualEndTimeInSeconds = startTimeInSeconds + FrameCount / Fps;
@@ -268,7 +268,7 @@ public abstract class BaseRenderWindow : Window
 
     protected static void ReleasePlaybackTime()
     {
-        AudioEngine.EndRecording(Playback.Current, Fps);
+        AudioRendering.EndRecording(Playback.Current, Fps);
 
         Playback.Current.TimeInSecs = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
         Playback.Current.IsRenderingToFile = false;

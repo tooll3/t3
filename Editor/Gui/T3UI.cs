@@ -61,7 +61,7 @@ public class T3Ui
     }
 
     public static readonly Playback DefaultTimelinePlayback = new();
-    public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new();
+    public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new() { PlaybackSpeed = 1};
         
     private void InitializeAfterAppWindowReady()
     {
