@@ -36,6 +36,6 @@
     <PackageReference Include="unsplasharp.api" Version="0.7.0" />
     <PackageReference Include="SixLabors.Fonts" Version="2.0.2"/>
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.1"/>
+    <PackageReference Include="WpfMath" Version="2.1.0" />
   </ItemGroup>
-
 </Project>

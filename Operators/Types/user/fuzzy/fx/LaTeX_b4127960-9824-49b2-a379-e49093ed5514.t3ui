@@ -1,0 +1,52 @@
+{
+  "Id": "b4127960-9824-49b2-a379-e49093ed5514"/*LaTeX*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "7d022c0a-85a5-4ad6-b946-8582ca73f573"/*Formula*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 653.1398,
+        "Y": 191.10593
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "459d0fb8-4778-46fb-bb4c-c16c74576b5a"/*DPI*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 653.1398,
+        "Y": 236.10593
+      },
+      "Min": 3.0,
+      "Max": 6000.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "b4cbf757-ce16-435b-a5f8-cf98985f0e5c"/*Offset*/,
+      "Position": {
+        "X": 653.1398,
+        "Y": 281.10593
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "42db801a-1d93-4883-b7e1-b1bdef791900"/*Out*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "6e2b005a-8909-4e19-82aa-6727bc6d8556",
+      "Title": "T3-Introduction",
+      "Description": "A short video tutorial that will guide you through the user interface.",
+      "LinkUrl": "https://tooll.io",
+      "LinkType": "TutorialVideo"
+    }
+  ]
+}
