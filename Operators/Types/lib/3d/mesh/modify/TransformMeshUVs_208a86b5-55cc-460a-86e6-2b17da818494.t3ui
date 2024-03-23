@@ -1,6 +1,6 @@
 {
   "Id": "208a86b5-55cc-460a-86e6-2b17da818494"/*TransformMeshUVs*/,
-  "Description": "",
+  "Description": "Manipulates the existing UV coordinates of a mesh to change the mapping of textures.\n\nBecomes visible with [DrawMesh].\n\nTo overwrite existing UV Coordinates with planar mapping see [MeshProjectUV] \n\n\nAlso see [ReprojectToUV].",
   "InputUis": [
     {
       "InputId": "b9e7efdf-98d6-4d5a-94e8-16f38cfe4e55"/*InputMesh*/,
@@ -15,21 +15,24 @@
       "Position": {
         "X": 298.87473,
         "Y": 2908.3635
-      }
+      },
+      "Description": "Moves the UV coordinates linearly"
     },
     {
       "InputId": "4b8a067d-8630-485e-b390-1fca7cc06323"/*Stretch*/,
       "Position": {
         "X": 298.87473,
         "Y": 2953.3635
-      }
+      },
+      "Description": "Scales the UV coordinates linearly per axis"
     },
     {
       "InputId": "d2d278d9-7933-49ea-83c2-3566f5a13d1f"/*Scale*/,
       "Position": {
         "X": 298.87473,
         "Y": 2998.3635
-      }
+      },
+      "Description": "Scales the UV coordinates linearly"
     },
     {
       "InputId": "da73250e-fcf2-4fe9-9a84-a1d139a0390c"/*Rotate*/,
@@ -37,6 +40,7 @@
         "X": 298.87473,
         "Y": 3043.3635
       },
+      "Description": "Rotates the UV coordinates",
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.0}°"
@@ -46,14 +50,18 @@
       "Position": {
         "X": 298.87473,
         "Y": 3088.3635
-      }
+      },
+      "Description": "Defines whether only selected vertices should be affected by the manipulation",
+      "AddPadding": "True"
     },
     {
       "InputId": "590e24cc-00cc-4c9a-8f96-850857686c4a"/*Pivot*/,
       "Position": {
         "X": 298.87473,
         "Y": 3133.3635
-      }
+      },
+      "Description": "Moves the center point of the UV manipulations for rotations or scaling",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [

@@ -50,6 +50,14 @@ namespace T3.Core.Animation
         public TimeRange LoopRange;
 
         public double Bpm { get;  set; } = 120.0;
+        
+        /// <summary>
+        /// Controls if the playback is controlled by rendering output.
+        /// </summary>
+        /// <remarks>
+        /// During rendering of videos or image sequence this setting is set to false
+        /// to prevent time updates that interfere with rendered controlled audio output. 
+        /// </remarks>
         public bool IsLive
         {
             get => _isLive;

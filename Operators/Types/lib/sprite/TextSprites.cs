@@ -46,9 +46,9 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
 
             UpdateMesh(context);
             
-            Texture.DirtyFlag.Clear();
-            SpriteBuffer.DirtyFlag.Clear();
-            PointBuffer.DirtyFlag.Clear();
+            // Texture.DirtyFlag.Clear();
+            // SpriteBuffer.DirtyFlag.Clear();
+            // PointBuffer.DirtyFlag.Clear();
         }
 
         private void UpdateTexture(string imageFilePath)

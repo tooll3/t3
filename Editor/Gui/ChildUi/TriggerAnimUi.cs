@@ -46,8 +46,8 @@ namespace T3.Editor.Gui.ChildUi
 
             if (h > 14)
             {
-                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), anim.EndValue);
-                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), anim.StartValue);
+                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), anim.Amplitude);
+                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), anim.Base);
             }
             
             // Graph dragging to edit Bias and Ratio
@@ -117,13 +117,19 @@ namespace T3.Editor.Gui.ChildUi
                 //  0-----1 - - - - - -   lh
                 //        |
                 //        |
+                
+                
+                var shapeValue = anim.Shape.IsConnected 
+                                ? anim.Shape.Value 
+                                :anim.Shape.TypedInputValue.Value;
+                var shapeIndex = shapeValue.Clamp(0, Enum.GetNames<TriggerAnim.Shapes>().Length -1 );
 
                 for (var i = 0; i < GraphListSteps; i++)
                 {
                     var f = (float)i / GraphListSteps;
                     var fragment = f * (1 + previousCycleFragment) - previousCycleFragment;
                     GraphLinePoints[i] = new Vector2((f * duration +  delay) * graphWidth,
-                                                     (0.5f - anim.CalcNormalizedValueForFraction(fragment) / 2) * h
+                                                     (0.5f - anim.CalcNormalizedValueForFraction(fragment, shapeIndex) / 2) * h
                                                     ) + graphRect.Min;
                 }
 

@@ -7,8 +7,9 @@ namespace T3.Operators.Types.Id_24bd37aa_e348_40c6_9df4_95c870b2890d
 {
     public class LookTest07 : Instance<LookTest07>
     {
-        [Output(Guid = "77823a3e-c8d9-416b-8df5-6d6823cb9227")]
-        public readonly Slot<Command> Output = new Slot<Command>();
+
+        [Output(Guid = "84f86eb1-9d2c-4630-b9e6-4aa8a0a8f44f")]
+        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new Slot<SharpDX.Direct3D11.Texture2D>();
 
 
     }

@@ -30,8 +30,4 @@
     <ProjectReference Include="..\MsForms\MsForms.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Gui\UiHelpers\ConvertSvgFonts" />
-  </ItemGroup>
-
 </Project>

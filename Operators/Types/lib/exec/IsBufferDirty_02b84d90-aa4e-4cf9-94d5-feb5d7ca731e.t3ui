@@ -1,0 +1,24 @@
+{
+  "Id": "02b84d90-aa4e-4cf9-94d5-feb5d7ca731e"/*IsBufferDirty*/,
+  "Description": "A helper that can be used to optimize update behaviour of compute shaders. ",
+  "InputUis": [
+    {
+      "InputId": "ccb0be73-78ca-4094-aaf3-2e487631a947"/*InputBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "b3f19e80-8c09-4e38-9b6d-fc864facd34a"/*HasChanged*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

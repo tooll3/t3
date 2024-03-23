@@ -1,6 +1,6 @@
 {
   "Id": "4cdc0f90-6ce9-4a03-9cd0-efeddee70567"/*Steps*/,
-  "Description": "A versatile effect that uses the value of the input image to draw 'steps'. These can be shaded and animated.",
+  "Description": "A versatile effect that uses the value of the input image to draw 'steps'. These can be shaded and animated.\n\nFor similar effects see: [DetectEdges] [DistortAndShade] [Displace] [Fakelight]",
   "InputUis": [
     {
       "InputId": "c5c7888a-294d-4a51-a68d-446cc7f1444c"/*Image*/,

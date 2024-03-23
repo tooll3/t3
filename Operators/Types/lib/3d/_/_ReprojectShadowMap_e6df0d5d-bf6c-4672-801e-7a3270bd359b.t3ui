@@ -3,19 +3,19 @@
   "Description": "An internal helper that transforms the shadow map of [ShadowPlane].",
   "InputUis": [
     {
-      "InputId": "0a8d40f1-c032-4c60-ac46-f7c6fd501f61"/*Mesh*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": 545.7166,
-        "Y": 4260.0938
-      }
-    },
-    {
       "InputId": "b95865f0-ae7a-4290-aebb-43bc6f277474"/*Texture*/,
       "Relevancy": "Relevant",
       "Position": {
         "X": 545.7166,
         "Y": 4204.0938
+      }
+    },
+    {
+      "InputId": "0a8d40f1-c032-4c60-ac46-f7c6fd501f61"/*Mesh*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 545.7166,
+        "Y": 4260.0938
       }
     },
     {

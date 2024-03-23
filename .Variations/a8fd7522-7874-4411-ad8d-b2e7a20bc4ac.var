@@ -1,0 +1,59 @@
+{
+  "Id": "a8fd7522-7874-4411-ad8d-b2e7a20bc4ac",
+  "Variations": [
+    {
+      "Id": "20c47273-0964-48d9-b8a3-bde0530e6b2e",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Pyramid",
+      "PosOnCanvas": {
+        "X": -76.00884,
+        "Y": -380.52448
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "10d0502e-1a9d-4d8f-a516-2b2b465849bf": 1.0,
+          "a53aad5d-7bc5-4cbb-8a59-90cf8c346992": 1,
+          "ebf1167b-1519-4ca9-bfa6-87472889966b": 1
+        }
+      }
+    },
+    {
+      "Id": "aec43613-7d58-49d1-a5ce-727a8e5b53fd",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Sphere",
+      "PosOnCanvas": {
+        "X": -76.00884,
+        "Y": -287.52448
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "f6efc4a6-5267-40aa-82d3-e1b67d852fa8": 1.0,
+          "10d0502e-1a9d-4d8f-a516-2b2b465849bf": 0.0,
+          "a53aad5d-7bc5-4cbb-8a59-90cf8c346992": 1,
+          "ebf1167b-1519-4ca9-bfa6-87472889966b": 1
+        }
+      }
+    },
+    {
+      "Id": "71a70e35-887c-4fe2-a93e-393c0e520f7d",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Screw",
+      "PosOnCanvas": {
+        "X": -76.00884,
+        "Y": -194.52448
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "f6efc4a6-5267-40aa-82d3-e1b67d852fa8": 0.0,
+          "10d0502e-1a9d-4d8f-a516-2b2b465849bf": -1.0,
+          "a53aad5d-7bc5-4cbb-8a59-90cf8c346992": 1,
+          "c67fa5cb-97b2-4146-a6c1-0ea84a03f703": 360.0,
+          "ebf1167b-1519-4ca9-bfa6-87472889966b": 1
+        }
+      }
+    }
+  ]
+}

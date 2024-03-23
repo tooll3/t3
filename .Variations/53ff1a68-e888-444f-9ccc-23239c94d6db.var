@@ -1,0 +1,74 @@
+{
+  "Id": "53ff1a68-e888-444f-9ccc-23239c94d6db",
+  "Variations": [
+    {
+      "Id": "7461a8f6-ca74-4c2a-8fef-f203362c1778",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Parallax",
+      "PosOnCanvas": {
+        "X": 229.51265,
+        "Y": -251.23994
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c661ae7d-1cac-482f-b200-2d47946c22db": 8,
+          "06a0cd42-55b7-481e-91f5-ccdf914b3956": 10.0
+        }
+      }
+    },
+    {
+      "Id": "b5f1e498-dd93-40d5-8c3f-1d05ecc589e3",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Short",
+      "PosOnCanvas": {
+        "X": 55.492897,
+        "Y": -140.19919
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "a1c47663-95a2-4a26-9b9a-f7e109868a21": 0.35,
+          "3f41e61f-52bb-41b4-b33c-3c0a00b2ff6e": 0.25,
+          "06a0cd42-55b7-481e-91f5-ccdf914b3956": 10.0
+        }
+      }
+    },
+    {
+      "Id": "4c0c255c-4f30-4e05-94d8-0b3ff4e141d2",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "MajorLazer",
+      "PosOnCanvas": {
+        "X": 233.1581,
+        "Y": -138.9654
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c661ae7d-1cac-482f-b200-2d47946c22db": 150,
+          "a1c47663-95a2-4a26-9b9a-f7e109868a21": 0.94,
+          "3f41e61f-52bb-41b4-b33c-3c0a00b2ff6e": 5.2
+        }
+      }
+    },
+    {
+      "Id": "cf847e0f-8550-4ae0-9be1-5c1a3c05b7ad",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Default",
+      "PosOnCanvas": {
+        "X": 54.78839,
+        "Y": -251.97333
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c661ae7d-1cac-482f-b200-2d47946c22db": 100,
+          "a1c47663-95a2-4a26-9b9a-f7e109868a21": 0.85,
+          "3f41e61f-52bb-41b4-b33c-3c0a00b2ff6e": 1.0,
+          "06a0cd42-55b7-481e-91f5-ccdf914b3956": 1.0,
+          "b26c20c8-ec60-4215-a53a-3e21cd98ea03": 0.9
+        }
+      }
+    }
+  ]
+}

@@ -17,11 +17,11 @@
     },
     {
       "Id": "afd8fd12-8b3b-462b-a117-90981ddfccc6"/*Variation*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.2
     },
     {
       "Id": "098f4485-7aa7-4ae8-a2b5-e59fa2c2309c"/*KeepPlanar*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.5
     },
     {
       "Id": "8dabcbb3-2aa6-4213-82c9-e92c774c13f7"/*Twist*/,

@@ -1,6 +1,4 @@
 using T3.Core.DataTypes;
-using System.Numerics;
-using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -36,6 +34,9 @@ namespace T3.Operators.Types.Id_d38fe24e_be01_4a22_9595_b06bc906bf49
 
         [Input(Guid = "bcfc6e35-6427-46fd-9902-189e88651ebe")]
         public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
+
+        [Input(Guid = "48974f83-203f-4c35-896f-c1e0820214cf")]
+        public readonly InputSlot<System.Numerics.Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
 
         private enum Resolutions
         {

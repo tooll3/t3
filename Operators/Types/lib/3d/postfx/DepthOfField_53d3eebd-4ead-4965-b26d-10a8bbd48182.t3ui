@@ -1,6 +1,6 @@
 {
   "Id": "53d3eebd-4ead-4965-b26d-10a8bbd48182"/*DepthOfField*/,
-  "Description": "Adds a depth of field effect.\n\nHint: Use a [Locator] and its DistanceToCamera output to use automatic focus distance.",
+  "Description": "Adds a depth of field effect.\n\nHint: Use a [Locator] and its DistanceToCamera output to use automatic focus distance.\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
   "InputUis": [
     {
       "InputId": "bc1685a8-0a92-460f-85ca-7f096db965f0"/*TextureBuffer*/,

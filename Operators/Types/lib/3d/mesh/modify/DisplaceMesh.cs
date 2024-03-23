@@ -33,9 +33,6 @@ namespace T3.Operators.Types.Id_79c01289_f3a9_4bea_8e95_a6b5f89b752d
 
         [Input(Guid = "7c6fa9b0-1c70-4865-8f01-d22c41ff9b6b")]
         public readonly InputSlot<bool> UseVertexSelection = new InputSlot<bool>();
-
-        [Input(Guid = "ec50aedf-5c2d-4f32-ad7e-205dd435e1fd")]
-        public readonly InputSlot<bool> RecomputeNormals_ = new InputSlot<bool>();
         
         private enum Modes
         {

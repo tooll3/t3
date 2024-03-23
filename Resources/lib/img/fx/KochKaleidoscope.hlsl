@@ -125,7 +125,7 @@ float4 psMain(vsOutput input) : SV_TARGET
     float2 uv = input.texCoord;
     rotation = rotate2d(Rotate);
 
-    uv-= float2(CenterX, CenterY);    
+    uv-= float2(CenterX, -1*CenterY);    
     uv.x *= aspect;
 
     //uv.x *= aspect;

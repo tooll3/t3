@@ -1,34 +1,40 @@
 {
   "Id": "d38fe24e-be01-4a22-9595-b06bc906bf49"/*ShadowPlane*/,
-  "Description": "Renders a plane with shadow for a point light at the given position.",
+  "Description": "Creates a Plane that is transparent except for a realtime rendered Shadowmap.\n\nSee [ShadowPlaneExample] on how to use it.",
   "InputUis": [
     {
       "InputId": "7a51aab1-7de2-4bc2-bfb6-bd32aca0381c"/*Command*/,
       "Position": {
         "X": -446.21228,
         "Y": 3.6385498
-      }
+      },
+      "Description": "Everything connected here will cast a shadow onto the ShadowPlane"
     },
     {
       "InputId": "5a2f2521-c521-48a9-99c9-3916413c7938"/*PlaneSize*/,
       "Position": {
         "X": -446.21228,
         "Y": 93.63855
-      }
+      },
+      "Description": "Can be used to scale the ShadowPlane if shadows are cut off too early",
+      "AddPadding": "True"
     },
     {
       "InputId": "16527748-fe55-4ced-b08d-6c94377c5563"/*FOV*/,
       "Position": {
         "X": -446.21228,
         "Y": 138.63855
-      }
+      },
+      "GroupTitle": "ShadowMap",
+      "Description": "This defines the angle at which the light casts a shadow. \nSince this operator treats any PointLight as a directional light this can be helpful if lightsources are very close to the ShadowPlane and have to cast shadows in a wide 'Field of View'."
     },
     {
       "InputId": "2f90c70b-7979-4426-aad2-7e715e7c1691"/*Resolution*/,
       "Position": {
         "X": -446.21228,
         "Y": 183.63855
-      }
+      },
+      "Description": "Sets the resolution of the 'ShadowMap'"
     },
     {
       "InputId": "f192118e-ea03-4233-a7b5-93f0fa380e93"/*Color*/,
@@ -36,6 +42,7 @@
         "X": -446.21228,
         "Y": 228.63855
       },
+      "Description": "Defines the Color and Opacity of the shadow.",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -46,6 +53,8 @@
         "X": -446.21228,
         "Y": 273.63855
       },
+      "GroupTitle": "Blur",
+      "Description": "Defines how strongly the shadows are blurred",
       "Min": 0.0,
       "Max": 10.0
     },
@@ -55,6 +64,7 @@
         "X": -446.21228,
         "Y": 318.63855
       },
+      "Description": "Defines how strongly the shadows in the center (X) and at the edge (Y) of the ShadowPlane are blurred.",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true,
@@ -65,6 +75,15 @@
       "Position": {
         "X": -446.21228,
         "Y": 363.63855
+      },
+      "GroupTitle": "Position",
+      "Description": "Defines the Position of the ShadowPlane.\nThe default is slightly above the ground.\n"
+    },
+    {
+      "InputId": "48974f83-203f-4c35-896f-c1e0820214cf"/*Rotation*/,
+      "Position": {
+        "X": -446.21228,
+        "Y": 408.63855
       }
     }
   ],
@@ -114,8 +133,8 @@
     {
       "ChildId": "81eeb5cf-b7a3-4711-8cc3-109fbd36650a"/*TransformMesh*/,
       "Position": {
-        "X": 635.5085,
-        "Y": 356.1574
+        "X": 692.2872,
+        "Y": 367.72345
       }
     },
     {

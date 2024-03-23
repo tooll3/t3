@@ -305,13 +305,6 @@
       }
     },
     {
-      "ChildId": "60d5f756-6f2b-4c55-9df5-3b7755cbc432"/*Layer2d*/,
-      "Position": {
-        "X": 3159.5144,
-        "Y": 888.2422
-      }
-    },
-    {
       "ChildId": "66833d5e-19db-4bb8-ad59-91f4533e0e0f"/*Position*/,
       "Position": {
         "X": 486.65533,
@@ -391,10 +384,10 @@
   ],
   "OutputUis": [
     {
-      "OutputId": "ff4de346-43b8-4f39-ad46-e061d8bd5b82"/*Output*/,
+      "OutputId": "b06d32a3-5d59-4c9d-b0e9-7207b32dacb9"/*TextureOutput*/,
       "Position": {
-        "X": 3569.5144,
-        "Y": 741.6626
+        "X": 3237.0225,
+        "Y": 893.1756
       }
     }
   ]

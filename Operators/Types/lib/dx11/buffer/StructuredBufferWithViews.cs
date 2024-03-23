@@ -27,7 +27,10 @@ namespace T3.Operators.Types.Id_b6c5be1d_b133_45e9_a269_8047ea0d6ad7
             var uavBufferFlags = BufferFlags.GetValue(context);
 
             if (sizeInBytes <= 0)
+            {
+                BufferWithViews.Value = null;
                 return;
+            }
 
             BufferWithViews.Value ??= new BufferWithViews();
 

@@ -205,21 +205,14 @@
         "X": 2295.81,
         "Y": 492.625
       }
-    },
-    {
-      "ChildId": "910df256-16e4-4454-b5bb-8ba12dfa53e3"/*Layer2d*/,
-      "Position": {
-        "X": 3003.4167,
-        "Y": 493.01697
-      }
     }
   ],
   "OutputUis": [
     {
-      "OutputId": "811bebee-087a-4144-8397-bfbae8eb693b"/*Output*/,
+      "OutputId": "5dbef9ad-a109-460c-bfee-2afd59ecd0d6"/*Output*/,
       "Position": {
-        "X": 3221.0835,
-        "Y": 456.15527
+        "X": 2904.201,
+        "Y": 474.47144
       }
     }
   ]

@@ -612,12 +612,12 @@
             "Type": "T3.Core.Animation.TimeClip",
             "TimeClip": {
               "TimeRange": {
-                "Start": 148.68582,
-                "End": 309.75854
+                "Start": 149.34306,
+                "End": 310.41577
               },
               "SourceRange": {
-                "Start": 148.68582,
-                "End": 309.75854
+                "Start": 149.34306,
+                "End": 310.41577
               },
               "LayerIndex": 1
             }

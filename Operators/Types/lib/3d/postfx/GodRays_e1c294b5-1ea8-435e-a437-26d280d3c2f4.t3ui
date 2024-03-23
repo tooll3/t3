@@ -1,6 +1,6 @@
 {
   "Id": "e1c294b5-1ea8-435e-a437-26d280d3c2f4"/*GodRays*/,
-  "Description": "Uses the z-buffer to draw god rays.",
+  "Description": "Uses the z-buffer to draw god rays.\n\nA different approach [LightRaysFx]\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
   "InputUis": [
     {
       "InputId": "c94e4bb6-d6fc-4184-bd71-3563f4416413"/*Image*/,
@@ -8,7 +8,8 @@
       "Position": {
         "X": -1074.981,
         "Y": -162.3269
-      }
+      },
+      "Description": "Image Input \nusually [Camera] -> [RenderTarget]"
     },
     {
       "InputId": "bba257ae-e45d-43b6-9905-52e526583978"/*DepthBuffer*/,
@@ -16,15 +17,26 @@
       "Position": {
         "X": -1074.1685,
         "Y": -79.134636
-      }
+      },
+      "Description": "DepthBuffer Input\ne.g. from [RenderTarget]"
     },
     {
-      "InputId": "58c08101-ac16-4aed-aa84-259853734116"/*Position*/,
+      "InputId": "b64c4ece-8b59-4b32-a5fe-b99006286987"/*CameraReference*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -1090.583,
-        "Y": 14.5132675
-      }
+        "X": -1117.0369,
+        "Y": -18.27729
+      },
+      "Description": "[Reference] from [Camera] Output"
+    },
+    {
+      "InputId": "58c08101-ac16-4aed-aa84-259853734116"/*LightPosition*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -1117.0369,
+        "Y": 26.72271
+      },
+      "Description": "Center / Position of the Lightsource\nProTip: Use the position of a [Locator] for a [Pointlight] and as an Input"
     },
     {
       "InputId": "6063bb2b-2255-4a0b-a222-7b8dd8397918"/*RayColor*/,
@@ -32,6 +44,8 @@
         "X": -1100.6145,
         "Y": 173.15916
       },
+      "Description": "Selects a color that is multiplied with the rays",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -42,87 +56,124 @@
         "X": -1100.6145,
         "Y": 218.15916
       },
+      "Description": "Tints / Multiplies a color with the original image input",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
     },
     {
-      "InputId": "500549e0-aa60-4555-b82a-a829568959ff"/*Intensity*/,
-      "Position": {
-        "X": -1130.8816,
-        "Y": 286.45346
-      }
-    },
-    {
-      "InputId": "b9ca7291-1f78-47e2-8ba9-35ccb282833c"/*Size*/,
-      "Position": {
-        "X": -1130.8816,
-        "Y": 331.45346
-      }
-    },
-    {
-      "InputId": "c59b6588-9e39-49ed-99b7-632e5f2b3bf4"/*Rays*/,
-      "Position": {
-        "X": -1130.8816,
-        "Y": 376.45346
-      }
-    },
-    {
       "InputId": "59568136-2903-4fd5-a504-8a6308a2a2dc"/*Samples*/,
       "Position": {
         "X": -1130.8816,
-        "Y": 421.45346
-      }
+        "Y": 287.4734
+      },
+      "Description": "Controls the amount of samples.\nHigher values create smoother and brighter results at the price of performance",
+      "AddPadding": "True",
+      "Min": 0,
+      "Max": 128,
+      "Scale": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "500549e0-aa60-4555-b82a-a829568959ff"/*CenterIntensity*/,
+      "Position": {
+        "X": -1130.8816,
+        "Y": 332.4734
+      },
+      "Description": "Defines the intensity of the effect",
+      "Min": 0.0,
+      "Max": 20.0,
+      "Scale": 0.1,
+      "Clamp": true
+    },
+    {
+      "InputId": "c59b6588-9e39-49ed-99b7-632e5f2b3bf4"/*RayIntensity*/,
+      "Position": {
+        "X": -1130.8816,
+        "Y": 376.45346
+      },
+      "Description": "Defines the brightness of the beams",
+      "Min": 0.0,
+      "Max": 100.0,
+      "Scale": 0.1,
+      "Clamp": true
+    },
+    {
+      "InputId": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
+      "Position": {
+        "X": -1130.4225,
+        "Y": 448.01138
+      },
+      "Description": "Defines the degree to which the effect decreases with greater distance from the light source.",
+      "Min": -3.0,
+      "Max": 3.0,
+      "Scale": 0.01
     },
     {
       "InputId": "6d985988-3107-4480-8852-f17fe1c6d002"/*ShiftDepth*/,
       "Position": {
-        "X": -1132.7573,
-        "Y": 514.28625
-      }
+        "X": -1130.4225,
+        "Y": 493.01138
+      },
+      "Description": "Defines the image depth up to which the effect should be applied",
+      "Min": -2.0,
+      "Max": 2.0,
+      "Scale": 0.001
+    },
+    {
+      "InputId": "b9ca7291-1f78-47e2-8ba9-35ccb282833c"/*Size*/,
+      "Position": {
+        "X": -1130.1239,
+        "Y": 553.6106
+      },
+      "Description": "Scales the samples to the depth of the image",
+      "Min": -10.0,
+      "Max": 10.0,
+      "Scale": 0.1,
+      "Clamp": true
     },
     {
       "InputId": "71acc14a-e26a-4412-9556-d88e0ec70e63"/*Offset*/,
       "Position": {
-        "X": -1131.8196,
-        "Y": 562.99976
-      }
+        "X": -1130.1239,
+        "Y": 598.6106
+      },
+      "Description": "Scales the image effect separately from the original image",
+      "Min": -30.0,
+      "Max": 30.0,
+      "Scale": 0.01
     },
     {
       "InputId": "2e487d56-cc02-42d6-978e-aeb776516118"/*BlurSamples*/,
       "Position": {
         "X": -1133.0017,
         "Y": 692.4446
-      }
+      },
+      "GroupTitle": "Blur",
+      "Description": "Amount of Blur samples",
+      "Min": 1,
+      "Max": 128,
+      "Scale": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "9529d9b2-40ca-4f30-9142-1338dc4e07ff"/*BlurSize*/,
       "Position": {
         "X": -1134.7358,
         "Y": 761.6322
-      }
+      },
+      "Description": "Size of the blur effect",
+      "Min": -3.0,
+      "Max": 3.0,
+      "Scale": 0.001
     },
     {
       "InputId": "5129404e-54c5-4c5a-9736-69361bb3077d"/*BlurOffset*/,
       "Position": {
         "X": -1120.325,
         "Y": 826.4696
-      }
-    },
-    {
-      "InputId": "b64c4ece-8b59-4b32-a5fe-b99006286987"/*CameraReference*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -1113.1089,
-        "Y": 990.6443
-      }
-    },
-    {
-      "InputId": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
-      "Position": {
-        "X": -1113.1089,
-        "Y": 1035.6443
-      }
+      },
+      "Description": "Blur effect offset"
     }
   ],
   "SymbolChildUis": [

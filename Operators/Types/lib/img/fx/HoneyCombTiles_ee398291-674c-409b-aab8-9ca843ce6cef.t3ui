@@ -1,5 +1,6 @@
 {
   "Id": "ee398291-674c-409b-aab8-9ca843ce6cef"/*HoneyCombTiles*/,
+  "Description": "For similar effects or interesting combinations see: [MosaicTiling] [VoronoiCells] [SubdivisionStretch] [HoneyCombTiles] [TriangleGridTransition] [Dither] [AsciiRender]",
   "InputUis": [
     {
       "InputId": "452fb0e1-34c1-4042-9a7c-30bf8dd4cb3c"/*Image*/,

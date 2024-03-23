@@ -195,9 +195,19 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         UserSettings.Save();
                     }
 
+                    FormInputs.AddFloat("AudioDecay", ref settings.AudioDecayFactor,
+                                        0.001f,
+                                        1f,
+                                        0.01f,
+                                        true,
+                                        "The decay factors controls the impact of [AudioReaction] when AttackMode. Good values strongly depend on style, loudness and variation of input signal.",
+                                        0.9f);
+                    
                     if (filepathModified)
                     {
+                        AudioEngine.ReloadClip(soundtrack);
                         UpdateBpmFromSoundtrackConfig(soundtrack);
+                        UpdatePlaybackAndTimeline(settings);
                     }
                 }
             }

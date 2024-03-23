@@ -61,7 +61,6 @@ namespace T3.Operators.Types.Id_73d99108_f49a_48fb_aa5d_707c00abb1c2
                                                       translation: translation);
             
                 //context.ObjectToWorld = transform * prevTransform;
-                
                 //var rot = Quaternion.CreateFromAxisAngle(new Vector3(0,1,0), (float)Math.Atan2(startPosition.X - to.X, startPosition.Y - to.Y) );
                 Vector4 v = new Vector4(0, 0, 0, 1);
                 var pos = Vector4.Transform(v, transform);
@@ -69,6 +68,9 @@ namespace T3.Operators.Types.Id_73d99108_f49a_48fb_aa5d_707c00abb1c2
                 _pointList.TypedElements[i].Position = new Vector3(pos.X, pos.Y, pos.Z);
                 _pointList.TypedElements[i].W = scale.Length() / Vector3.One.Length() + startW;
                 _pointList.TypedElements[i].Orientation =  new Quaternion(rotation.X, rotation.Y, rotation.Z, rotation.W);
+                _pointList.TypedElements[i].Color = new Vector4(1, 1, 1, 1);
+                _pointList.TypedElements[i].Selected = 1;
+                _pointList.TypedElements[i].Stretch = Vector3.One;
             }
             
             if (addSeparator)

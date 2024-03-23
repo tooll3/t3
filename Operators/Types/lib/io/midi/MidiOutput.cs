@@ -75,8 +75,18 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
                             break;
                         
                         case SendModes.Notes_FixedDuration:
-                            if(triggerActive)
-                                midiEvent = new NoteOnEvent(0, channel, noteOrControllerIndex, velocity, durationInMs);
+                            if (triggerActive)
+                            {
+                                var noteOnEvent= new NoteOnEvent(0, channel, noteOrControllerIndex, velocity, durationInMs);
+                                midiEvent = noteOnEvent;
+                                _lastNoteOnTime = Playback.RunTimeInSecs;
+                                _offEvent = noteOnEvent.OffEvent;
+                            }
+                            else if (Playback.RunTimeInSecs - _lastNoteOnTime > durationInMs / 1000.0)
+                            {
+                                midiEvent = _offEvent;
+                                _offEvent = null;
+                            }
                             break;
                         
                         case SendModes.ControllerChange:
@@ -116,6 +126,8 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
             }
             _lastErrorMessage = !foundDevice ? $"Can't find MidiDevice {deviceName}" : null;
         }
+        
+        private double _lastNoteOnTime;
 
         private static int GetMicrosecondsPerQuarterNoteFromBpm(double bpm)
         {
@@ -200,5 +212,6 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
         [Input(Guid = "ABE9393E-282E-4DE0-8F86-541FA955658F")]
         public readonly InputSlot<float> DurationInSecs = new ();
 
+        private NoteEvent _offEvent;
     }
 }

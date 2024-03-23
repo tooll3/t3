@@ -11,7 +11,7 @@
         {
           "Id": "895dab2c-e3be-4e73-9c96-0f6101cea113"/*Path*/,
           "Type": "System.String",
-          "Value": "D:\\Framefield Dropbox\\ff-projects\\raumHoch\\2023-03 SpurLab\\_work\\2023-05-03 gsg-tracking-research\\_export\\test-lines-v07.obj"
+          "Value": "C:\\Users\\pixtur\\Downloads\\test-lines-v07.obj"
         },
         {
           "Id": "dcacd412-1885-4a10-b073-54192f074ae8"/*Mode*/,
@@ -639,7 +639,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "D:\\Framefield Dropbox\\ff-projects\\raumHoch\\2023-03 SpurLab\\_work\\2023-05-03 gsg-tracking-research\\_export\\gsg-office-building.obj"
+          "Value": "C:\\Users\\pixtur\\Downloads\\gsg-office-building.obj"
         }
       ],
       "Outputs": []

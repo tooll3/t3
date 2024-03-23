@@ -11,6 +11,7 @@
     },
     {
       "InputId": "72cfe742-88fb-41cd-b6cf-d96730b24b23"/*BufferWithViews*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 90.0

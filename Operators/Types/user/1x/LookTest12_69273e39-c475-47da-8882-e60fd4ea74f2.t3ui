@@ -305,13 +305,6 @@
       }
     },
     {
-      "ChildId": "242b8747-985f-4587-ae35-27a803f5bc4d"/*Layer2d*/,
-      "Position": {
-        "X": 6632.1235,
-        "Y": 1978.7031
-      }
-    },
-    {
       "ChildId": "149c8ecc-2038-4704-8884-3231fb9e8ef4"/*CubeMesh*/,
       "Position": {
         "X": 994.9287,
@@ -566,10 +559,10 @@
   ],
   "OutputUis": [
     {
-      "OutputId": "1b707a07-61a0-4368-8db6-76accb2055c1"/*Output*/,
+      "OutputId": "f3473eb5-39cf-404e-b4d8-bdd7950c0a80"/*Output*/,
       "Position": {
-        "X": 7042.1235,
-        "Y": 1374.874
+        "X": 6501.405,
+        "Y": 1858.5542
       }
     }
   ]

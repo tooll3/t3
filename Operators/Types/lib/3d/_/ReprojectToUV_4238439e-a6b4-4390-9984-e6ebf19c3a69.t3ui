@@ -1,13 +1,14 @@
 {
   "Id": "4238439e-a6b4-4390-9984-e6ebf19c3a69"/*ReprojectToUV*/,
-  "Description": "Uses a camera projection and the UV layout of the incoming mesh to reproject an image onto a geometry.\n\nThis can useful for uses like projection mapping or immersive media installations.\n\nNote:\n\nFor the setup to work correctly make sure that...\n- the FOV of the viewer camera is wide enough.\n- the aspect ratio of the viewer camera matches the texture resolution\n\nSee [ReprojectToUvExample].",
+  "Description": "Uses a camera projection and the UV layout of the incoming mesh to reproject an image onto a geometry.\n\nThis can useful for uses like projection mapping or immersive media installations.\n\nNote:\n\nFor the setup to work correctly make sure that...\n- the FOV of the viewer camera is wide enough.\n- the aspect ratio of the viewer camera matches the texture resolution\n\nSee [ReprojectToUvExample].\n\n\nFor simple methods to change the UVs of meshes, see [MeshProjectUV] or [TransformMeshUVs].",
   "InputUis": [
     {
       "InputId": "eb4da1b0-f9c6-480d-a1a3-ac875cbf1037"/*Color*/,
       "Position": {
         "X": 548.2994,
         "Y": 4083.9585
-      }
+      },
+      "Description": "Color that is multiplied with the generated image"
     },
     {
       "InputId": "04e2fd86-3dbc-4718-9f3b-361dff3e49c8"/*Texture*/,
@@ -15,7 +16,9 @@
       "Position": {
         "X": 545.7166,
         "Y": 4204.0938
-      }
+      },
+      "Description": "Render / Texture input",
+      "AddPadding": "True"
     },
     {
       "InputId": "5ba52f22-0fe6-4316-a512-7577fcdff091"/*Mesh*/,
@@ -23,7 +26,8 @@
       "Position": {
         "X": 545.7166,
         "Y": 4260.0938
-      }
+      },
+      "Description": "Mesh input"
     },
     {
       "InputId": "cb1254ab-4d68-41db-a326-c5e34bb5d2f4"/*CameraReference*/,
@@ -31,14 +35,17 @@
       "Position": {
         "X": 545.7166,
         "Y": 4305.0938
-      }
+      },
+      "Description": "Input for the camera reference output"
     },
     {
       "InputId": "6ff4c0bd-f47c-48f2-a2bc-ba13f7cff3ce"/*Resolution*/,
       "Position": {
         "X": 554.13184,
         "Y": 4514.247
-      }
+      },
+      "Description": "Defines the resolution of the output.\nPowers of 2 are recommended (128, 256, 512, 1024, 2048, ...)",
+      "AddPadding": "True"
     },
     {
       "InputId": "c4fff7ca-02d3-4337-b4e8-9c3074f98eb5"/*ClearColor*/,
@@ -46,6 +53,7 @@
         "X": 554.13184,
         "Y": 4559.247
       },
+      "Description": "defines the clear color",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -55,7 +63,9 @@
       "Position": {
         "X": 554.13184,
         "Y": 4604.247
-      }
+      },
+      "Description": "defines the DirectX format of rendering (colordepths, channels etc.)",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [

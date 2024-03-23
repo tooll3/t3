@@ -1,6 +1,6 @@
 {
   "Id": "841e4072-4138-4dda-b156-b01ec3a8f9ae"/*HasVec3Changed*/,
-  "Description": "",
+  "Description": "Checks if the change of the incoming vector exceeded the given threshold.",
   "InputUis": [
     {
       "InputId": "1d19da45-54e4-4ee9-a1a8-a04d9ffc5cac"/*Value*/,

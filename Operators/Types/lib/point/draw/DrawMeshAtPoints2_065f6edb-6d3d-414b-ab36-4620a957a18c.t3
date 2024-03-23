@@ -86,7 +86,7 @@
     },
     {
       "Id": "1a87a03d-9f8f-479f-8681-f2a047b08f3b"/*ColorVariationMode*/,
-      "DefaultValue": 0
+      "DefaultValue": 3
     },
     {
       "Id": "01288f85-aa38-4b63-b862-d40beacaeea2"/*ColorVariations*/,
