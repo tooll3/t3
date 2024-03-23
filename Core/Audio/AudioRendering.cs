@@ -20,7 +20,7 @@ public static class AudioRendering
         Bass.Configure(Configuration.UpdatePeriod, 0);
         Bass.Configure(Configuration.GlobalStreamVolume, 0);
         
-        foreach (var (_, clipStream) in AudioEngine.ClipPlaybacks)
+        foreach (var (_, clipStream) in AudioEngine.ClipStreams)
         {
             _settingsBeforeExport.BufferLengthInSeconds = Bass.ChannelGetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer);
 
@@ -115,7 +115,7 @@ public static class AudioRendering
         // TODO: Find this in Managed Bass library. It doesn't seem to be present.
         const int tailAttribute = 16;
 
-        foreach (var (_, clipStream) in AudioEngine.ClipPlaybacks)
+        foreach (var (_, clipStream) in AudioEngine.ClipStreams)
         {
             // Bass.ChannelPause(clipStream.StreamHandle);
             clipStream.UpdateTimeWhileRecording(playback, fps, false);
@@ -133,7 +133,7 @@ public static class AudioRendering
     
     public static byte[] GetLastMixDownBuffer(double frameDurationInSeconds)
     {
-        if (AudioEngine.ClipPlaybacks.Count == 0)
+        if (AudioEngine.ClipStreams.Count == 0)
         {
             // Get default sample rate
             var channels = AudioEngine.GetClipChannelCount(null);
@@ -144,7 +144,7 @@ public static class AudioRendering
             return new byte[bytes];
         }
 
-        foreach (var (_, clipStream) in AudioEngine.ClipPlaybacks)
+        foreach (var (_, clipStream) in AudioEngine.ClipStreams)
         {
             if (!_fifoBuffersForClips.TryGetValue(clipStream.AudioClip, out var buffer))
                 continue;

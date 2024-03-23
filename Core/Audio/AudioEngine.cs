@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using ManagedBass;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using T3.Core.Animation;
 using T3.Core.Operator;
-using T3.Core.Resource;
 
 namespace T3.Core.Audio
 {
@@ -21,10 +18,10 @@ namespace T3.Core.Audio
 
         public static void ReloadClip(AudioClip clip)
         {
-            if (ClipPlaybacks.TryGetValue(clip.Id, out var stream))
+            if (ClipStreams.TryGetValue(clip.Id, out var stream))
             {
                 Bass.StreamFree(stream.StreamHandle);
-                ClipPlaybacks.Remove(clip.Id);
+                ClipStreams.Remove(clip.Id);
             }
 
             UseAudioClip(clip, 0);
@@ -45,7 +42,7 @@ namespace T3.Core.Audio
             // Create new streams
             foreach (var (audioClip, time) in _updatedClipTimes)
             {
-                if (ClipPlaybacks.TryGetValue(audioClip.Id, out var clip))
+                if (ClipStreams.TryGetValue(audioClip.Id, out var clip))
                 {
                     clip.TargetTime = time;
                 }
@@ -53,7 +50,7 @@ namespace T3.Core.Audio
                 {
                     var audioClipStream = AudioClipStream.LoadClip(audioClip);
                     if (audioClipStream != null)
-                        ClipPlaybacks[audioClip.Id] = audioClipStream;
+                        ClipStreams[audioClip.Id] = audioClipStream;
                 }
             }
 
@@ -62,7 +59,7 @@ namespace T3.Core.Audio
             _lastPlaybackSpeed = playback.PlaybackSpeed;
 
             var handledMainSoundtrack = false;
-            foreach (var (audioClipId, clipStream) in ClipPlaybacks)
+            foreach (var (audioClipId, clipStream) in ClipStreams)
             {
                 clipStream.IsInUse = _updatedClipTimes.ContainsKey(clipStream.AudioClip);
                 if (!clipStream.IsInUse && clipStream.AudioClip.DiscardAfterUse)
@@ -93,8 +90,8 @@ namespace T3.Core.Audio
 
             foreach (var id in obsoleteIds)
             {
-                ClipPlaybacks[id].Disable();
-                ClipPlaybacks.Remove(id);
+                ClipStreams[id].Disable();
+                ClipStreams.Remove(id);
             }
 
             _updatedClipTimes.Clear();
@@ -110,7 +107,7 @@ namespace T3.Core.Audio
 
         private static void UpdateMuting()
         {
-            foreach (var stream in ClipPlaybacks.Values)
+            foreach (var stream in ClipStreams.Values)
             {
                 var volume = IsMuted ? 0 : 1;
                 Bass.ChannelSetAttribute(stream.StreamHandle, ChannelAttribute.Volume, volume);
@@ -135,7 +132,7 @@ namespace T3.Core.Audio
         public static int GetClipChannelCount(AudioClip clip)
         {
             // By default use stereo
-            if (clip == null || !ClipPlaybacks.TryGetValue(clip.Id, out var clipStream))
+            if (clip == null || !ClipStreams.TryGetValue(clip.Id, out var clipStream))
                 return 2;
 
             Bass.ChannelGetInfo(clipStream.StreamHandle, out var info);
@@ -144,7 +141,7 @@ namespace T3.Core.Audio
 
         public static int GetClipSampleRate(AudioClip clip)
         {
-            if (clip == null || !ClipPlaybacks.TryGetValue(clip.Id, out var stream))
+            if (clip == null || !ClipStreams.TryGetValue(clip.Id, out var stream))
                 return 48000;
 
             Bass.ChannelGetInfo(stream.StreamHandle, out var info);
@@ -153,68 +150,7 @@ namespace T3.Core.Audio
 
         private static double _lastPlaybackSpeed = 1;
         private static bool _bassInitialized;
-        public static readonly Dictionary<Guid, AudioClipStream> ClipPlaybacks = new();
+        public static readonly Dictionary<Guid, AudioClipStream> ClipStreams = new();
         private static readonly Dictionary<AudioClip, double> _updatedClipTimes = new();
-    }
-
-    /// <summary>
-    /// Defines a single audio clip within a timeline.
-    /// </summary>
-    public class AudioClip
-    {
-        #region serialized attributes
-        public Guid Id;
-        public string FilePath;
-        public double StartTime;
-        public double EndTime;
-        public float Bpm = 120;
-        public bool DiscardAfterUse = true;
-        public bool IsSoundtrack;
-        #endregion
-
-        /// <summary>
-        /// Is initialized after loading...
-        /// </summary>
-        public double LengthInSeconds;
-
-        #region serialization
-        public static AudioClip FromJson(JToken jToken)
-        {
-            var idToken = jToken[nameof(Id)];
-
-            var idString = idToken?.Value<string>();
-            if (idString == null)
-                return null;
-
-            var newAudioClip = new AudioClip
-                                   {
-                                       Id = Guid.Parse(idString),
-                                       FilePath = jToken[nameof(FilePath)]?.Value<string>() ?? String.Empty,
-                                       StartTime = jToken[nameof(StartTime)]?.Value<double>() ?? 0,
-                                       EndTime = jToken[nameof(EndTime)]?.Value<double>() ?? 0,
-                                       Bpm = jToken[nameof(Bpm)]?.Value<float>() ?? 0,
-                                       DiscardAfterUse = jToken[nameof(DiscardAfterUse)]?.Value<bool>() ?? true,
-                                       IsSoundtrack = jToken[nameof(IsSoundtrack)]?.Value<bool>() ?? true,
-                                   };
-
-            return newAudioClip;
-        }
-
-        public void ToJson(JsonTextWriter writer)
-        {
-            //writer.WritePropertyName(Id.ToString());
-            writer.WriteStartObject();
-            {
-                writer.WriteValue(nameof(Id), Id);
-                writer.WriteValue(nameof(StartTime), StartTime);
-                writer.WriteValue(nameof(EndTime), EndTime);
-                writer.WriteValue(nameof(Bpm), Bpm);
-                writer.WriteValue(nameof(DiscardAfterUse), DiscardAfterUse);
-                writer.WriteValue(nameof(IsSoundtrack), IsSoundtrack);
-                writer.WriteObject(nameof(FilePath), FilePath);
-            }
-            writer.WriteEndObject();
-        }
-        #endregion
     }
 }

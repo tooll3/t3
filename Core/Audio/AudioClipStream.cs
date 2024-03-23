@@ -103,10 +103,6 @@ public class AudioClipStream
         var isOutOfBounds = localTargetTimeInSecs < 0 || localTargetTimeInSecs >= AudioClip.LengthInSeconds;
         var channelIsActive = Bass.ChannelIsActive(StreamHandle);
         var isPlaying = channelIsActive == PlaybackState.Playing; // || channelIsActive == PlaybackState.Stalled;
-
-        // if (channelIsActive == PlaybackState.Stalled)
-        //     Log.Debug(" Stalling?");
-        
         
         if (isOutOfBounds)
         {
@@ -126,6 +122,8 @@ public class AudioClipStream
         var currentStreamBufferPos = Bass.ChannelGetPosition(StreamHandle);
         var currentPosInSec = Bass.ChannelBytes2Seconds(StreamHandle, currentStreamBufferPos) - AudioSyncingOffset;
         var soundDelta = (currentPosInSec - localTargetTimeInSecs) * playback.PlaybackSpeed;
+        
+        Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.Volume, AudioClip.Volume);
             
         // We may not fall behind or skip ahead in playback
         var maxSoundDelta = ProjectSettings.Config.AudioResyncThreshold * Math.Abs(playback.PlaybackSpeed);

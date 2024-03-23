@@ -354,12 +354,19 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     Playback.Current = T3Ui.DefaultBeatTimingPlayback;
                     UserSettings.Config.ShowTimeline = false;
                     UserSettings.Config.EnableIdleMotion = true;
-                
+                    Bass.Configure(Configuration.UpdateThreads, true);
+                    
+                    Bass.Free();
+                    Bass.Init();
+                    Bass.Start();
+                    Playback.Current.PlaybackSpeed = 1;
                 }
                 else
                 {
                     Playback.Current = T3Ui.DefaultTimelinePlayback;
                     UserSettings.Config.ShowTimeline = true;
+                    Playback.Current.PlaybackSpeed = 0;
+
                 }
             }
         }
