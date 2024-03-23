@@ -24,7 +24,7 @@ public abstract class BaseRenderWindow : Window
         var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);
-        return AudioEngine.clipChannels(soundtrack);
+        return AudioEngine.ClipChannels(soundtrack);
     }
 
     protected static int SoundtrackSampleRate()
@@ -33,7 +33,7 @@ public abstract class BaseRenderWindow : Window
         var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);
-        return AudioEngine.clipSampleRate(soundtrack);
+        return AudioEngine.ClipSampleRate(soundtrack);
     }
 
     protected static void SetRenderingStarted()

@@ -100,7 +100,7 @@ public class RenderVideoWindow : BaseRenderWindow
         }
         else if(IsExportingVideo)
         {
-            var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / Fps);
+            var audioFrame = AudioEngine.GetLastMixDownBuffer(1.0 / Fps);
             var success = SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
                                                      SoundtrackChannels(), SoundtrackSampleRate());
             ImGui.ProgressBar((float)Progress, new Vector2(-1, 4));

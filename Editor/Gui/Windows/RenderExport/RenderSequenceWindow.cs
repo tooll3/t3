@@ -51,7 +51,7 @@ public class RenderSequenceWindow : BaseRenderWindow
         else if(IsExportingImages)
         {
             // Handle audio although we do not save it
-            AudioEngine.LastMixDownBuffer(Playback.LastFrameDuration);
+            AudioEngine.GetLastMixDownBuffer(Playback.LastFrameDuration);
             var success = SaveCurrentFrameAndAdvance(mainTexture);
             ImGui.ProgressBar((float) Progress, new Vector2(-1, 4));
 
