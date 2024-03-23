@@ -58,7 +58,7 @@ namespace T3.Core.Audio
             UseAudioClip(clip,0);
         }
 
-        public static void prepareRecording(Playback playback, double fps)
+        public static void PrepareRecording(Playback playback, double fps)
         {
             _bassUpdateThreads = Bass.GetConfig(Configuration.UpdateThreads);
             _bassUpdatePeriod = Bass.GetConfig(Configuration.UpdatePeriod);
@@ -89,7 +89,7 @@ namespace T3.Core.Audio
             _fifoBuffers.Clear();
         }
 
-        public static void endRecording(Playback playback, double fps)
+        public static void EndRecording(Playback playback, double fps)
         {
             // TODO: Find this in Managed Bass library. It doesn't seem to be present.
             int tailAttribute = (int)16;
@@ -150,12 +150,12 @@ namespace T3.Core.Audio
                 }
                 else
                 {
-                    if (playback.IsLive && playbackSpeedChanged)
+                    if (!playback.IsRenderingToFile && playbackSpeedChanged)
                         clipStream.UpdatePlaybackSpeed(playback.PlaybackSpeed);
 
                     if (!handledMainSoundtrack && clipStream.AudioClip.IsSoundtrack)
                     {
-                        if (!playback.IsLive)
+                        if (playback.IsRenderingToFile)
                         {
                             // create buffer if necessary
                             byte[] buffer = null;
@@ -267,7 +267,7 @@ namespace T3.Core.Audio
             int get256FftValues = (int)DataFlags.FFT2048;
 
             // do not advance plaback if we are not in live mode
-            if (!playback.IsLive)
+            if (playback.IsRenderingToFile)
                 get256FftValues |= (int)268435456; // TODO: find BASS_DATA_NOREMOVE in ManagedBass
 
             if (playback.Settings != null && playback.Settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)

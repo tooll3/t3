@@ -86,10 +86,9 @@ public class T3Ui
         // Prepare the current frame 
         RenderStatsCollector.StartNewFrame();
             
-        if (Playback.Current.IsLive)
+        if (!Playback.Current.IsRenderingToFile)
         {
             PlaybackUtils.UpdatePlaybackAndSyncing();
-            //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
             AudioEngine.CompleteFrame(Playback.Current, Playback.LastFrameDuration);    // Update
         }
         TextureReadAccess.Update();

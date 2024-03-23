@@ -27,13 +27,16 @@ public class RenderSequenceWindow : BaseRenderWindow
         FormInputs.AddStringInput("Folder", ref _targetFolder);
         ImGui.SameLine();
         FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.Folder, ref _targetFolder);
+
+        FormInputs.AddVerticalSpace(5);
         ImGui.Separator();
+        FormInputs.AddVerticalSpace(5);
 
         var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
 
         if (!IsExportingImages && !IsToollRenderingSomething)
         {
-            if (ImGui.Button("Start Export"))
+            if (ImGui.Button("Start Render"))
             {
                 if (ValidateOrCreateTargetFolder(_targetFolder))
                 {

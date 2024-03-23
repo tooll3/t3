@@ -236,15 +236,15 @@ public abstract class BaseRenderWindow : Window
         if (soundtrack != null)
             AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
 
-        if (!_recording)
+        if (!_audioRecording)
         {
             _timingOverhang = 0.0;
             adaptedDeltaTime = 1.0 / Fps;
 
-            Playback.Current.IsLive = false;
+            Playback.Current.IsRenderingToFile = true;
             Playback.Current.PlaybackSpeed = 1.0;
 
-            AudioEngine.prepareRecording(Playback.Current, Fps);
+            AudioEngine.PrepareRecording(Playback.Current, Fps);
 
             double requestedEndTimeInSeconds = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
             double actualEndTimeInSeconds = startTimeInSeconds + FrameCount / Fps;
@@ -253,7 +253,7 @@ public abstract class BaseRenderWindow : Window
             Log.Debug($"Actually recording from {startTimeInSeconds:0.0000} to {actualEndTimeInSeconds:0.0000} seconds due to frame raster");
             Log.Debug($"Using {Playback.Current.Bpm} bpm");
 
-            _recording = true;
+            _audioRecording = true;
         }
 
         // update audio parameters, respecting looping etc.
@@ -268,14 +268,14 @@ public abstract class BaseRenderWindow : Window
 
     protected static void ReleasePlaybackTime()
     {
-        AudioEngine.endRecording(Playback.Current, Fps);
+        AudioEngine.EndRecording(Playback.Current, Fps);
 
         Playback.Current.TimeInSecs = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
-        Playback.Current.IsLive = true;
+        Playback.Current.IsRenderingToFile = false;
         Playback.Current.PlaybackSpeed = 0.0;
         Playback.Current.Update();
 
-        _recording = false;
+        _audioRecording = false;
     }
 
     public override List<Window> GetInstances()
@@ -309,7 +309,7 @@ public abstract class BaseRenderWindow : Window
     private static float _lastValidFps = Fps;
 
     private static double _timingOverhang; // Time that could not be updated due to MS resolution (in seconds)
-    private static bool _recording; 
+    private static bool _audioRecording; 
     //public static bool IsExporting => _isExporting;
 
     // ReSharper disable once InconsistentNaming

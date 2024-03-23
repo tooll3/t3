@@ -24,7 +24,7 @@ namespace T3.Core.Animation
     {
         public Playback()
         {
-            _isLive = true;
+            _isRenderingToFile = false;
             Current = this;
         }
 
@@ -58,11 +58,11 @@ namespace T3.Core.Animation
         /// During rendering of videos or image sequence this setting is set to false
         /// to prevent time updates that interfere with rendered controlled audio output. 
         /// </remarks>
-        public bool IsLive
+        public bool IsRenderingToFile
         {
-            get => _isLive;
+            get => _isRenderingToFile;
             set {
-                _isLive = value;
+                _isRenderingToFile = value;
                 if (value)
                 {
                     PlaybackSpeed = 0;
@@ -85,9 +85,9 @@ namespace T3.Core.Animation
         
         public virtual void Update(bool idleMotionEnabled = false)
         {
-            // if we are not live, TimeInBars is provided externally
+            // If we are not live, TimeInBars is provided externally
             Current = this;
-            var currentRuntime = (IsLive) ? RunTimeInSecs : TimeInSecs;
+            var currentRuntime = IsRenderingToFile ?   TimeInSecs : RunTimeInSecs;
 
             LastFrameDuration = currentRuntime - _lastFrameStart;
             _lastFrameStart = currentRuntime;
@@ -95,7 +95,7 @@ namespace T3.Core.Animation
             var timeSinceLastFrameInSecs = LastFrameDuration;
             var isPlaying = Math.Abs(PlaybackSpeed) > 0.001;
 
-            if (!IsLive)
+            if (IsRenderingToFile)
             {
                 FxTimeInBars = TimeInBars;
             }
@@ -118,7 +118,7 @@ namespace T3.Core.Animation
             }
 
             // don't support looping if recording (looping sound is not implemented yet)
-            if (IsLive && IsLooping && TimeInBars > LoopRange.End)
+            if (!IsRenderingToFile && IsLooping && TimeInBars > LoopRange.End)
             {
                 double loopDuration = LoopRange.End - LoopRange.Start;
 
@@ -145,6 +145,6 @@ namespace T3.Core.Animation
         private static double _lastFrameStart;
         private double _previousTime;
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
-        private bool _isLive;
+        private bool _isRenderingToFile;
     }
 }

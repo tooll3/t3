@@ -57,7 +57,7 @@ public class RenderVideoWindow : BaseRenderWindow
             CustomComponents.TooltipForLastItem(q.Description);
         }
 
-        FormInputs.AddStringInput("File", ref UserSettings.Config.RenderVideoFilePath);
+        FormInputs.AddStringInput("Filename", ref UserSettings.Config.RenderVideoFilePath);
         ImGui.SameLine();
         FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref UserSettings.Config.RenderVideoFilePath);
 
@@ -70,11 +70,13 @@ public class RenderVideoWindow : BaseRenderWindow
 
         FormInputs.AddCheckBox("Export Audio (experimental)", ref _exportAudio);
 
+        FormInputs.AddVerticalSpace(5);
         ImGui.Separator();
+        FormInputs.AddVerticalSpace(5);
 
         if (!IsExportingVideo && !IsToollRenderingSomething)
         {
-            if (ImGui.Button("Start Export"))
+            if (ImGui.Button("Start Render"))
             {
                 if (ValidateOrCreateTargetFolder(UserSettings.Config.RenderVideoFilePath))
                 {
