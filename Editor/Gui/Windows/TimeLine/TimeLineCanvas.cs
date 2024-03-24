@@ -57,7 +57,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ScrollToTimeAfterStopped();
 
             var modeChanged = UpdateMode();
-            DrawCurveCanvas(_graphCanvas, drawAdditionalCanvasContent: DrawCanvasContent, 0, T3Ui.EditingFlags.AllowHoveredChildWindows);
+            DrawCurveCanvas(_graphCanvas, drawAdditionalCanvasContent: DrawCanvasContent, _selectionFence, 0, T3Ui.EditingFlags.AllowHoveredChildWindows);
 
             void DrawCanvasContent(InteractionState interactionState)
             {
@@ -110,7 +110,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 _timeSelectionRange.Draw(compositionOp, Drawlist);
                 DrawDragTimeArea(interactionState.MouseState.Position.X);
 
-                if (FenceState == SelectionFence.States.CompletedAsClick)
+                if (_selectionFence.State == SelectionFence.States.CompletedAsClick)
                 {
                     var newTime = InverseTransformPositionFloat(ImGui.GetMousePos()).X;
                     if (Playback.IsLooping)
@@ -409,6 +409,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private readonly Structure _structure;
         private readonly NodeSelection _nodeSelection;
         private readonly GraphCanvas _graphCanvas;
+        private readonly SelectionFence _selectionFence = new();
 
         // Styling
         public const float TimeLineDragHeight = 30;
