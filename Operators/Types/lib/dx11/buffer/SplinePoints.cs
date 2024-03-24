@@ -177,7 +177,7 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
                 lastPos = pos;
 
                 result[index].W = 1;
-                result[index].Orientation = LookAt(-Vector3.Normalize(d), -upVector);
+                result[index].Orientation = LookAt(Vector3.Normalize(d), -upVector);
                 result[index].Color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
                 result[index].Stretch = new Vector3(1.0f, 1.0f, 1.0f);
             }
