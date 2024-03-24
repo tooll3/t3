@@ -12,7 +12,7 @@
       "AddPadding": "True",
       "Min": 0.0,
       "Max": 100.0,
-      "Clamp": true
+      "Scale": 0.001
     },
     {
       "InputId": "18b19778-3ff2-4e38-8fb6-fa748babb967"/*RandomSeed*/,
