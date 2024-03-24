@@ -1,5 +1,6 @@
 {
   "Id": "dd586355-64b3-4e96-af6d-b4927595dee7"/*AddNoise*/,
+  "Description": "Creates a new buffer by resampling the connected points. This can be useful for increasing resolution or smoothing out hard edges.",
   "InputUis": [
     {
       "InputId": "3f5abde2-66e1-4b04-9bff-5a19a58aab86"/*Points*/,
