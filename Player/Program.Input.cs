@@ -6,6 +6,7 @@ using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.SystemUi;
 using T3.SystemUi;
+using MouseButtons = System.Windows.Forms.MouseButtons;
 
 namespace T3.Player;
 
