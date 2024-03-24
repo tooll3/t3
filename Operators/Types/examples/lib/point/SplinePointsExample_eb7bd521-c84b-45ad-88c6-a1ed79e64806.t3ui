@@ -1,0 +1,92 @@
+{
+  "Id": "eb7bd521-c84b-45ad-88c6-a1ed79e64806"/*SplinePointsExample*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "af6cccca-5bf8-4a12-b393-2f0971c5dd06"/*SplinePoints*/,
+      "Position": {
+        "X": 236.5589,
+        "Y": 4.456482
+      }
+    },
+    {
+      "ChildId": "92e12dd6-29c3-4032-9858-61e68924f750"/*APoint*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "b304dd5c-99ea-4709-8fa1-bd0562d3d325"/*APoint*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "27bfb911-cf9f-4a4f-8f48-c4d6dd67f9d3"/*APoint*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 86.0
+      }
+    },
+    {
+      "ChildId": "ea603947-962b-4bcf-add1-47ae3a975c6e"/*APoint*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 129.0
+      }
+    },
+    {
+      "ChildId": "12230496-6dd8-47fd-a93c-dcdce50fd643"/*DrawLines*/,
+      "Position": {
+        "X": 395.7058,
+        "Y": 37.698242
+      }
+    },
+    {
+      "ChildId": "cfd33241-3c1b-494b-9a60-ac29cb2ad1a7"/*Camera*/,
+      "Position": {
+        "X": 545.7058,
+        "Y": 37.698242
+      }
+    },
+    {
+      "ChildId": "4b39ab9a-6404-41c6-83fa-49f1883be097"/*RenderTarget*/,
+      "Position": {
+        "X": 719.82654,
+        "Y": 23.445312
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "e1e8ec79-d528-496e-a769-0d2c526b9cf0"/*ColorBuffer*/,
+      "Position": {
+        "X": 915.19556,
+        "Y": 2.220642
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "db58bd57-c851-4843-91bd-150dda27da7a",
+      "Title": "Select all the points and\nactivate gizmos\n(in the output window)",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -61.920654,
+        "Y": -82.81738
+      },
+      "Size": {
+        "X": 231.09624,
+        "Y": 253.5783
+      }
+    }
+  ]
+}
