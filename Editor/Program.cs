@@ -53,7 +53,6 @@ namespace T3.Editor
             Console.WriteLine("Starting T3 Editor");
             Console.WriteLine("Creating EditorUi");
             EditorUi.Instance = new MsFormsEditor();
-            CoreUi.Instance = EditorUi.Instance;
 
             Console.WriteLine("Creating DX11ShaderCompiler");
             ShaderCompiler.Instance = new DX11ShaderCompiler();

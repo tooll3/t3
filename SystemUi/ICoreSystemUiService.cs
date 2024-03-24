@@ -15,10 +15,3 @@ public interface ICoreSystemUiService
     public ICursor Cursor { get; }
     void SetUnhandledExceptionMode(bool throwException);
 }
-
-public interface ICursor
-{
-    public Vector2 PositionVec => new(Position.X, Position.Y);
-    public Point Position { get; }
-    public void SetVisible(bool visible);
-}

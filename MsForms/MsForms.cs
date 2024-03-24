@@ -1,5 +1,8 @@
 using System.Diagnostics;
+using Microsoft.VisualBasic.Logging;
 using T3.SystemUi;
+
+// ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 
 namespace T3.MsForms;
 
@@ -8,27 +11,27 @@ public class MsForms : ICoreSystemUiService
     public MsForms()
     {
     }
-    
+
     public void SetUnhandledExceptionMode(bool throwException)
     {
         System.Windows.Forms.Application.SetUnhandledExceptionMode(throwException
-                                                                        ? UnhandledExceptionMode.ThrowException
-                                                                        : UnhandledExceptionMode.CatchException);
+                                                                       ? UnhandledExceptionMode.ThrowException
+                                                                       : UnhandledExceptionMode.CatchException);
     }
-    
+
     void ICoreSystemUiService.OpenWithDefaultApplication(string uri)
     {
         if (string.IsNullOrWhiteSpace(uri))
         {
             throw new Exception("Uri is empty");
         }
-        
+
         var startInfo = new ProcessStartInfo
-                        {
-                            FileName = "cmd",
-                            Arguments = $"/c start {uri}",
-                        };
-        
+                            {
+                                FileName = "cmd",
+                                Arguments = $"/c start {uri}",
+                            };
+
         Process.Start(startInfo);
     }
 
@@ -66,8 +69,8 @@ public class MsForms : ICoreSystemUiService
     {
         Application.ExitThread();
     }
-    
-    public ICursor Cursor { get; } = new CursorWrapper();
+
+    public ICursor Cursor => FirstCursor!;
 
     private static readonly Dictionary<PopUpButtons, MessageBoxButtons> ButtonEnumConversion =
         new()
@@ -102,6 +105,15 @@ public class MsForms : ICoreSystemUiService
         form.KeyUp += HandleKeyUp;
     }
 
+    public static void TrackMouseOf(Form form)
+    {
+        var cursorWrapper = new CursorWrapper();
+        cursorWrapper.TrackMouseOf(form);
+        
+        TrackedCursors.Add(form, cursorWrapper);
+        FirstCursor ??= cursorWrapper;
+    }
+
     private static void HandleKeyDown(object? sender, KeyEventArgs e)
     {
         var keyIndex = (int)e.KeyCode;
@@ -113,16 +125,7 @@ public class MsForms : ICoreSystemUiService
         var keyIndex = (int)e.KeyCode;
         KeyHandler.SetKeyUp(keyIndex);
     }
-}
 
-public class CursorWrapper : ICursor
-{
-    public Point Position => Cursor.Position;
-    public void SetVisible(bool visible)
-    {
-        if(visible)
-            Cursor.Show();
-        else
-            Cursor.Hide();
-    }
+    internal static ICursor? FirstCursor;
+    private static readonly Dictionary<Form, CursorWrapper> TrackedCursors = new();
 }

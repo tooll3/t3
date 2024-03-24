@@ -121,6 +121,8 @@ namespace T3.Editor.App
             {
                 MsForms.MsForms.TrackKeysOf(Form);
             }
+            
+            MsForms.MsForms.TrackMouseOf(Form);
 
             if (handleClose != null)
                 Form.Closing += handleClose;
