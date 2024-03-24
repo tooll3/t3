@@ -1,5 +1,6 @@
 {
   "Id": "0db15e2d-b457-44d7-bb58-ace0a0708073"/*WriteToFile*/,
+  "Description": "Writes the incoming string into a predefined file on the local disk\n\nInfo: This Operator is unable to create files. The file has to exist in order to write something into it. \nAnd depending on the user and operating system admin privileges might be needed.\n\n\n\nAlso see: [ReadFile] [RequestUrl] [FilesInFolder]",
   "InputUis": [
     {
       "InputId": "a12d0e5c-a0f9-4d3c-8ab6-827fb618c021"/*Content*/,
@@ -7,6 +8,7 @@
         "X": 0.0,
         "Y": 45.0
       },
+      "Description": "Input / definition of the string that is being written into the file saved at the filepath",
       "Usage": "Multiline"
     },
     {
@@ -15,6 +17,7 @@
         "X": 0.0,
         "Y": 90.0
       },
+      "Description": "Path to the file that should be written into\n\nExample: \n\nResources\\user\\YourUserName\\FileName.txt\n\nwill open the FileName.txt and write the incoming string into the file",
       "Usage": "FilePath"
     }
   ],
