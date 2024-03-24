@@ -14,6 +14,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
 {
@@ -177,6 +178,8 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
 
                 result[index].W = 1;
                 result[index].Orientation = LookAt(-Vector3.Normalize(d), -upVector);
+                result[index].Color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+                result[index].Stretch = new Vector3(1.0f, 1.0f, 1.0f);
             }
 
             return result;
