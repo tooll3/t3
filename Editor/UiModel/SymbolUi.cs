@@ -40,38 +40,6 @@ namespace T3.Editor.UiModel
             if (updateConsistency)
                 UpdateConsistencyWithSymbol();
         }
-
-        internal SymbolUi CloneForReadOnly(Symbol newSymbol)
-        {
-            var childUis = ChildUis.ToList();
-            var inputUis = new OrderedDictionary<Guid, IInputUi>(InputUis.Count);
-            var outputUis = new OrderedDictionary<Guid, IOutputUi>(OutputUis.Count);
-            var annotations = new OrderedDictionary<Guid, Annotation>(Annotations.Count);
-            var links = new OrderedDictionary<Guid, ExternalLink>(Links.Count);
-
-            foreach (var (id, inputUi) in InputUis)
-            {
-                var clonedInputUi = inputUi.Clone();
-                inputUis.Add(id, clonedInputUi);
-            }
-            
-            foreach (var outputUi in OutputUis)
-            {
-                outputUis.Add(outputUi.Key, outputUi.Value);
-            }
-            
-            foreach (var annotation in Annotations)
-            {
-                annotations.Add(annotation.Key, annotation.Value);
-            }
-            
-            foreach (var link in Links)
-            {
-                links.Add(link.Key, link.Value);
-            }
-            
-            return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations, links, false);
-        }
         
         internal SymbolUi CloneForNewSymbol(Symbol newSymbol, Dictionary<Guid, Guid> oldToNewIds = null)
         {

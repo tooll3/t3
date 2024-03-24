@@ -51,21 +51,13 @@ internal class EditorSymbolPackage : SymbolPackage
     }
 
     public void LoadUiFiles(bool parallel, List<Symbol> newlyReadSymbols, out SymbolUi[] newlyReadSymbolUis,
-                            out SymbolUi[] preExistingSymbolUis, bool readOnlyReload)
+                            out SymbolUi[] preExistingSymbolUis)
     {
         var newSymbols = newlyReadSymbols.ToDictionary(result => result.Id, symbol => symbol);
         var newSymbolsWithoutUis = new ConcurrentDictionary<Guid, Symbol>(newSymbols);
         preExistingSymbolUis = SymbolUiDict.Values.ToArray();
         Log.Debug($"{AssemblyInformation.Name}: Loading Symbol UIs from \"{Folder}\"");
         
-        Func<Guid, ConcurrentDictionary<Guid, SymbolUi>, SymbolUi, bool> addFunc = readOnlyReload
-                                                                                       ? (guid, dict, symbolUi) =>
-                                                                                         {
-                                                                                             dict[guid] = symbolUi;
-                                                                                             return true;
-                                                                                         }
-                                                                                       : (guid, dict, symbolUi) => dict.TryAdd(guid, symbolUi);
-            
         var enumerator = parallel ? SymbolUiSearchFiles.AsParallel() : SymbolUiSearchFiles;
         newlyReadSymbolUis = enumerator
                                    .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
@@ -81,7 +73,7 @@ internal class EditorSymbolPackage : SymbolPackage
                                                newSymbolsWithoutUis.Remove(symbolUi.Symbol.Id, out _);
                                                var id = symbolUi.Symbol.Id;
 
-                                               if (!addFunc(id, SymbolUiDict, symbolUi))
+                                               if (!SymbolUiDict.TryAdd(id, symbolUi))
                                                {
                                                    Log.Error($"{AssemblyInformation.Name}: Duplicate symbol UI for {symbolUi.Symbol.Name}?");
                                                    return null;
@@ -106,7 +98,7 @@ internal class EditorSymbolPackage : SymbolPackage
         {
             var symbolUi = new SymbolUi(symbol, false);
 
-            if (!addFunc(guid, SymbolUiDict, symbolUi))
+            if (!SymbolUiDict.TryAdd(guid, symbolUi))
             {
                 Log.Error($"{AssemblyInformation.Name}: Duplicate symbol UI for {symbol.Name}?");
                 continue;
@@ -124,7 +116,7 @@ internal class EditorSymbolPackage : SymbolPackage
         CustomChildUiRegistry.EntriesRw.Remove(symbol.InstanceType, out _);
     }
 
-    public void RegisterUiSymbols(bool parallel, SymbolUi[] newSymbolUis, SymbolUi[] preExistingSymbolUis, bool readOnlyReload)
+    public void RegisterUiSymbols(bool parallel, SymbolUi[] newSymbolUis, SymbolUi[] preExistingSymbolUis)
     {
         Log.Debug($@"{DisplayName}: Registering UI entries...");
 
@@ -133,14 +125,6 @@ internal class EditorSymbolPackage : SymbolPackage
         {
             symbolUi.UpdateConsistencyWithSymbol();
         }
-
-        Func<Guid, ConcurrentDictionary<Guid, SymbolUi>, SymbolUi, bool> addFunc = readOnlyReload
-                                                                                       ? (guid, dict, symbolUi) =>
-                                                                                         {
-                                                                                             dict[guid] = symbolUi;
-                                                                                             return true;
-                                                                                         }
-                                                                                       : (guid, dict, symbolUi) => dict.TryAdd(guid, symbolUi);
 
         var descriptiveDrawFunc = DescriptiveUi.DrawChildUiDelegate;
 
