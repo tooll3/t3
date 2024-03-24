@@ -45,7 +45,7 @@ namespace T3.Editor.Gui.Windows.Variations
             }
 
             //UpdateCanvas();
-            HandleFenceSelection();
+            HandleFenceSelection(_selectionFence);
 
             // Blending...
             HandleBlendingInteraction();
@@ -413,18 +413,17 @@ namespace T3.Editor.Gui.Windows.Variations
             }
         }
 
-        private void HandleFenceSelection()
+        private void HandleFenceSelection(SelectionFence selectionFence)
         {
-            _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
-            switch (_fenceState)
+            switch (selectionFence.UpdateAndDraw(out var selectMode))
             {
                 case SelectionFence.States.PressedButNotMoved:
-                    if (SelectionFence.SelectMode == SelectionFence.SelectModes.Replace)
+                    if (selectMode == SelectionFence.SelectModes.Replace)
                         Selection.Clear();
                     break;
 
                 case SelectionFence.States.Updated:
-                    HandleSelectionFenceUpdate(SelectionFence.BoundsInScreen);
+                    HandleSelectionFenceUpdate(selectionFence.BoundsInScreen);
                     break;
 
                 case SelectionFence.States.CompletedAsClick:
@@ -669,8 +668,8 @@ namespace T3.Editor.Gui.Windows.Variations
         private bool _allThumbnailsRendered;
         private readonly ImageOutputCanvas _imageCanvas = new();
         private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
-        private SelectionFence.States _fenceState;
         internal readonly CanvasElementSelection Selection = new();
         private Instance _previousRenderInstance;
+        private readonly SelectionFence _selectionFence = new();
     }
 }

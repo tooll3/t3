@@ -284,10 +284,10 @@ namespace T3.Editor.Gui.Graph
 
                 RenameInstanceOverlay.Draw(_window);
 
-                if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
+                if ((ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
                     && !preventInteractions
                     && ConnectionMaker.TempConnections.Count == 0)
-                    HandleFenceSelection(_window.CompositionOp);
+                    HandleFenceSelection(_window.CompositionOp, _selectionFence);
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
                 if (isOnBackground && ImGui.IsMouseDoubleClicked(0))
@@ -352,18 +352,19 @@ namespace T3.Editor.Gui.Graph
             ImGui.EndGroup();
         }
 
-        private void HandleFenceSelection(Instance compositionOp)
+        private void HandleFenceSelection(Instance compositionOp, SelectionFence selectionFence)
         {
-            _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
-            switch (_fenceState)
+            const bool allowRectOutOfBounds = true;
+            switch (selectionFence.UpdateAndDraw(out var selectMode, allowRectOutOfBounds))
             {
                 case SelectionFence.States.PressedButNotMoved:
-                    if (SelectionFence.SelectMode == SelectionFence.SelectModes.Replace)
+                    if (selectMode == SelectionFence.SelectModes.Replace)
                         NodeSelection.Clear();
                     break;
 
                 case SelectionFence.States.Updated:
-                    HandleSelectionFenceUpdate(SelectionFence.BoundsInScreen, compositionOp);
+                    var bounds = allowRectOutOfBounds ? selectionFence.BoundsUnclamped : selectionFence.BoundsInScreen;
+                    HandleSelectionFenceUpdate(bounds, compositionOp);
                     break;
 
                 case SelectionFence.States.CompletedAsClick:
@@ -377,18 +378,16 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private SelectionFence.States _fenceState = SelectionFence.States.Inactive;
-
-        private void HandleSelectionFenceUpdate(ImRect boundsInScreen, Instance compositionOp)
+        private void HandleSelectionFenceUpdate(ImRect bounds, Instance compositionOp)
         {
-            var boundsInCanvas = InverseTransformRect(boundsInScreen);
+            var boundsInCanvas = InverseTransformRect(bounds);
             var nodesToSelect = SelectableChildren
                                .Select(child => (child, rect: new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size) ))
                                .Where(t => t.rect.Overlaps(boundsInCanvas))
                                .Select(t => t.child)
                                .ToList();
 
-            if (SelectionFence.SelectMode == SelectionFence.SelectModes.Replace)
+            if (_selectionFence.SelectMode == SelectionFence.SelectModes.Replace)
             {
                 NodeSelection.Clear();
             }
@@ -405,7 +404,7 @@ namespace T3.Editor.Gui.Graph
                     {
                     }
 
-                    if (SelectionFence.SelectMode == SelectionFence.SelectModes.Remove)
+                    if (_selectionFence.SelectMode == SelectionFence.SelectModes.Remove)
                     {
                         NodeSelection.DeselectNode(symbolChildUi, instance);
                     }
@@ -419,7 +418,7 @@ namespace T3.Editor.Gui.Graph
                     var annotationRect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
                     if (boundsInCanvas.Contains(annotationRect))
                     {
-                        if (SelectionFence.SelectMode == SelectionFence.SelectModes.Remove)
+                        if (_selectionFence.SelectMode == SelectionFence.SelectModes.Remove)
                         {
                             NodeSelection.DeselectNode(annotation);
                         }
@@ -431,7 +430,7 @@ namespace T3.Editor.Gui.Graph
                 }
                 else
                 {
-                    if (SelectionFence.SelectMode == SelectionFence.SelectModes.Remove)
+                    if (_selectionFence.SelectMode == SelectionFence.SelectModes.Remove)
                     {
                         NodeSelection.DeselectNode(node);
                     }
@@ -1201,6 +1200,7 @@ namespace T3.Editor.Gui.Graph
         public bool Destroyed { get; private set; }
         #endregion
 
+        private readonly SelectionFence _selectionFence = new();
         private readonly AddInputDialog _addInputDialog = new();
         private readonly AddOutputDialog _addOutputDialog = new();
         private readonly CombineToSymbolDialog _combineToSymbolDialog = new();

@@ -57,7 +57,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             }
             
             curveInteraction.EditState = InputEditStateFlags.Nothing;
-            curveInteraction.Draw(compositionOp);
+            curveInteraction.Draw(compositionOp, SelectionFence);
 
             var modified = curveInteraction.EditState != InputEditStateFlags.Nothing;
 
@@ -84,9 +84,9 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
             public InputEditStateFlags EditState { get; set; } = InputEditStateFlags.Nothing;
 
-            public void Draw(Instance compositionOp)
+            public void Draw(Instance compositionOp, SelectionFence selectionFence)
             {
-                _singleCurveCanvas.Draw(Curves[0], this, compositionOp);
+                _singleCurveCanvas.Draw(Curves[0], this, compositionOp, selectionFence);
             }
 
 
@@ -223,13 +223,12 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             #endregion
 
             #region handle selection ----------------------------------------------------------------
-            private void HandleFenceSelection()
+            private void HandleFenceSelection(SelectionFence selectionFence)
             {
-                _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
-                switch (_fenceState)
+                switch (selectionFence.UpdateAndDraw(out _))
                 {
                     case SelectionFence.States.Updated:
-                        var boundsInCanvas = _singleCurveCanvas.InverseTransformRect(SelectionFence.BoundsInScreen).MakePositive();
+                        var boundsInCanvas = _singleCurveCanvas.InverseTransformRect(selectionFence.BoundsInScreen).MakePositive();
                         SelectedKeyframes.Clear();
                         foreach (var point in GetAllKeyframes())
                         {
@@ -245,7 +244,6 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                 }
             }
 
-            private SelectionFence.States _fenceState = SelectionFence.States.Inactive;
             #endregion
 
             /// <summary>
@@ -259,7 +257,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                     SnapHandlerForV.AddSnapAttractor(_horizontalRaster);
                 }
 
-                public void Draw(Curve curve, CurveInteraction interaction, Instance compositionOp)
+                public void Draw(Curve curve, CurveInteraction interaction, Instance compositionOp, SelectionFence selectionFence)
                 {
                     var height = _interactionFlags.HasFlag(T3Ui.EditingFlags.ExpandVertically)
                                      ? ImGui.GetContentRegionAvail().Y
@@ -280,7 +278,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                     }
 
                     var graphCanvas = GraphWindow.Focused?.GraphCanvas;
-                    DrawCurveCanvas(graphCanvas, DrawCanvasContent, height, _interactionFlags);
+                    DrawCurveCanvas(graphCanvas, DrawCanvasContent, selectionFence, height, _interactionFlags);
 
                     void DrawCanvasContent(InteractionState interactionState)
                     {
@@ -298,7 +296,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                         //ar min = ImGui.GetWindowPos() ;
                         //ImGui.GetWindowDrawList().AddText(min, Color.Green, " Curve #" + _objectIdGenerator.GetId(curve, out _));
 
-                        interaction.HandleFenceSelection();
+                        interaction.HandleFenceSelection(selectionFence);
 
                         // Handle keyboard interaction 
                         if (ImGui.IsWindowHovered() && KeyboardBinding.Triggered(UserActions.FocusSelection))
@@ -331,6 +329,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
         private static readonly Dictionary<uint, CurveInteraction> _interactionForCurve = new(); 
         private static readonly Dictionary<InputValue, Curve> _clonedDefaultCurves = new();
+        private static readonly SelectionFence SelectionFence = new();
 
         private static T3Ui.EditingFlags _interactionFlags;
 

@@ -23,7 +23,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         public string ImGuiTitle = "timeline";
 
         
-        protected void DrawCurveCanvas(ScalableCanvas canvas, Action<InteractionState> drawAdditionalCanvasContent, float height = 0, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
+        protected void DrawCurveCanvas(ScalableCanvas canvas, Action<InteractionState> drawAdditionalCanvasContent, SelectionFence selectionFence, float height = 0, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
         {
 
             ImGui.BeginChild(ImGuiTitle, new Vector2(0, height), true,
@@ -37,21 +37,20 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                 Drawlist = ImGui.GetWindowDrawList();
 
                 drawAdditionalCanvasContent(interactionState);
-                HandleFenceUpdate();
+                HandleFenceUpdate(selectionFence, out _);
                 SnapHandlerForU.DrawSnapIndicator(this, ValueSnapHandler.Mode.VerticalLinesForU);
                 SnapHandlerForV.DrawSnapIndicator(this, ValueSnapHandler.Mode.HorizontalLinesForV);
             }
             ImGui.EndChild();
         }
 
-        private void HandleFenceUpdate()
+        private void HandleFenceUpdate(SelectionFence selectionFence, out SelectionFence.SelectModes selectMode)
         {
-            FenceState = SelectionFence.UpdateAndDraw(FenceState);
-            switch (FenceState)
+            switch (selectionFence.UpdateAndDraw(out selectMode))
             {
                 case SelectionFence.States.Updated:
                 case SelectionFence.States.CompletedAsClick:
-                    UpdateSelectionForArea(SelectionFence.BoundsInScreen, SelectionFence.SelectMode);
+                    UpdateSelectionForArea(selectionFence.BoundsInScreen, selectMode);
                     break;
             }
         }
@@ -208,8 +207,6 @@ namespace T3.Editor.Gui.Interaction.WithCurves
 
         protected readonly List<ITimeObjectManipulation> TimeObjectManipulators = new();
         #endregion
-        
-        protected SelectionFence.States FenceState;
         
         public readonly ValueSnapHandler SnapHandlerForU = new();
         public readonly ValueSnapHandler SnapHandlerForV = new();
