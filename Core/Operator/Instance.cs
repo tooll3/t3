@@ -14,8 +14,16 @@ namespace T3.Core.Operator
     public abstract class Instance : IDisposable, IGuidPathContainer
     {
         public abstract Type Type { get; }
-        public Guid SymbolChildId;
-        
+        private SymbolChild _symbolChild;
+
+        public Guid SymbolChildId => SymbolChild.Id;
+
+        public SymbolChild SymbolChild
+        {
+            get => _symbolChild ?? throw new Exception("SymbolChild is null");
+            set => _symbolChild = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
         private Instance _parent;
 
         public Instance Parent
@@ -28,7 +36,7 @@ namespace T3.Core.Operator
             }
         }
 
-        public abstract Symbol Symbol { get; }
+        public Symbol Symbol => _symbolChild == null ? SymbolRegistry.SymbolsByType[Type] : _symbolChild.Symbol;
 
         public readonly List<ISlot> Outputs = new();
         public readonly List<Instance> Children = new();
@@ -67,8 +75,9 @@ namespace T3.Core.Operator
 
         protected void SetupInputAndOutputsFromType()
         {
-            var assemblyInfo = Symbol.SymbolPackage.AssemblyInformation;
-            var operatorTypeInfo = assemblyInfo.OperatorTypeInfo[Symbol.Id];
+            var symbol = SymbolRegistry.SymbolsByType[Type];
+            var assemblyInfo = symbol.SymbolPackage.AssemblyInformation;
+            var operatorTypeInfo = assemblyInfo.OperatorTypeInfo[symbol.Id];
             foreach (var input in operatorTypeInfo.Inputs)
             {
                 var attribute = input.Attribute;
@@ -104,9 +113,11 @@ namespace T3.Core.Operator
 
         public void RemoveConnection(Symbol.Connection connection, int index)
         {
-            var success = TryGetTargetSlot(connection, out var targetSlot);
-            if (!success)
+            if (!TryGetTargetSlot(connection, out var targetSlot))
+            {
                 return;
+            }
+
             targetSlot.RemoveConnection(index);
         }
 
@@ -253,12 +264,6 @@ namespace T3.Core.Operator
     public class Instance<T> : Instance where T : Instance
     {
         public sealed override Type Type { get; } = typeof(T);
-        public sealed override Symbol Symbol => _typeSymbol;
-
-        // ReSharper disable once StaticMemberInGenericType
-        #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
-        private static Symbol _typeSymbol; // this is set with reflection in Symbol.UpdateType()
-        #pragma warning restore CS0649 // Field is never assigned to, and will always have its default value
 
         protected Instance()
         {

@@ -45,7 +45,8 @@ namespace T3.Editor.UiModel
             set => SetDisabled(value);
         }
 
-        
+        public SymbolUi Parent { get; internal set; }
+
         private void SetDisabled(bool shouldBeDisabled)
         {
             var outputDefinitions = SymbolChild.Symbol.OutputDefinitions;
@@ -106,7 +107,7 @@ namespace T3.Editor.UiModel
             PreventInputLabels = 1<<6,
         }
         
-        public virtual SymbolChildUi Clone()
+        public virtual SymbolChildUi Clone(SymbolUi parent)
         {
             return new SymbolChildUi()
                    {
@@ -114,6 +115,7 @@ namespace T3.Editor.UiModel
                        Size = Size,
                        Style = Style,
                        SymbolChild = SymbolChild,
+                       Parent = parent,
                    };
         }
         

@@ -47,7 +47,7 @@ internal static class ProjectSetup
         newProject = new EditableSymbolProject(newCsProj);
         newProject.InitializeResources();
 
-        UpdateSymbolPackages(false, newProject);
+        UpdateSymbolPackages(newProject);
         if (!newProject.AssemblyInformation.HasHome)
         {
             Log.Error("Failed to find project home");
@@ -200,7 +200,7 @@ internal static class ProjectSetup
             
             ShaderLinter.AddPackage(SharedResources.ResourcePackage, sharedShaderPackages);
             
-            UpdateSymbolPackages(false,  allSymbolPackages);
+            UpdateSymbolPackages( allSymbolPackages);
 
             #if DEBUG
             totalStopwatch.Stop();
@@ -287,15 +287,10 @@ internal static class ProjectSetup
             package.Dispose();
     }
 
-    internal static void UpdateSymbolPackage(EditableSymbolProject project) => UpdateSymbolPackages(false, project);
+    internal static void UpdateSymbolPackage(EditableSymbolProject project) => UpdateSymbolPackages(project);
 
-    internal static void ReloadReadOnlyPackage(EditorSymbolPackage package)
-    {
-        Debug.Assert(package.IsReadOnly && package is not EditableSymbolProject);
-        UpdateSymbolPackages(true, package);
-    }
 
-    private static void UpdateSymbolPackages(bool readOnlyReload, params EditorSymbolPackage[] symbolPackages)
+    private static void UpdateSymbolPackages(params EditorSymbolPackage[] symbolPackages)
     {
         switch (symbolPackages.Length)
         {
@@ -304,11 +299,11 @@ internal static class ProjectSetup
             case 1:
             {
                 var package = symbolPackages[0];
-                package.LoadSymbols(true, out var newlyRead, out var allNewSymbols, readOnlyReload);
+                package.LoadSymbols(true, out var newlyRead, out var allNewSymbols);
                 package.ApplySymbolChildren(newlyRead);
-                package.LoadUiFiles(true, allNewSymbols, out var newlyLoadedUis, out var preExistingUis, readOnlyReload);
+                package.LoadUiFiles(true, allNewSymbols, out var newlyLoadedUis, out var preExistingUis);
                 package.LocateSourceCodeFiles();
-                package.RegisterUiSymbols(true, newlyLoadedUis, preExistingUis, readOnlyReload);
+                package.RegisterUiSymbols(true, newlyLoadedUis, preExistingUis);
                 return;
             }
         }
@@ -319,7 +314,7 @@ internal static class ProjectSetup
            .AsParallel()
            .ForAll(package => //pull out for non-editable ones too
                    {
-                       package.LoadSymbols(false, out var newlyRead, out var allNewSymbols, readOnlyReload);
+                       package.LoadSymbols(false, out var newlyRead, out var allNewSymbols);
                        loadedSymbols.TryAdd(package, newlyRead);
                        loadedOrCreatedSymbols.TryAdd(package, allNewSymbols);
                    });
@@ -333,7 +328,7 @@ internal static class ProjectSetup
            .AsParallel()
            .ForAll(package =>
                    {
-                       package.LoadUiFiles(false, loadedOrCreatedSymbols[package], out var newlyRead, out var preExisting, readOnlyReload);
+                       package.LoadUiFiles(false, loadedOrCreatedSymbols[package], out var newlyRead, out var preExisting);
                        loadedSymbolUis.TryAdd(package, new SymbolUiLoadInfo(newlyRead, preExisting));
                    });
 
@@ -346,7 +341,7 @@ internal static class ProjectSetup
 
         foreach (var (symbolPackage, symbolUis) in loadedSymbolUis)
         {
-            symbolPackage.RegisterUiSymbols(false, symbolUis.NewlyLoaded, symbolUis.PreExisting, readOnlyReload);
+            symbolPackage.RegisterUiSymbols(false, symbolUis.NewlyLoaded, symbolUis.PreExisting);
         }
     }
 

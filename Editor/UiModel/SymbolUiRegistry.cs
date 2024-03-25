@@ -36,23 +36,28 @@ internal static class SymbolUiRegistry
         
         return GetSymbolChildUiWithId(parent.GetSymbolUi(), instance.SymbolChildId); 
     }
-    
-    public static SymbolChildUi? GetSymbolChildUiWithId(this Instance instance, Guid id)
+
+    public static SymbolChildUi? GetSymbolChildUiWithId(this Instance instance, Guid id, bool allowNull = false)
     {
         var symbolUi = instance.GetSymbolUi();
         return symbolUi.GetSymbolChildUiWithId(id);
     }
     
     // todo - simplify lookups with a dictionary or something
-    public static SymbolChildUi? GetSymbolChildUiWithId(this SymbolUi symbolUi, Guid id)
+    public static SymbolChildUi? GetSymbolChildUiWithId(this SymbolUi symbolUi, Guid id, bool allowNull = true)
     {
-        return symbolUi.ChildUis.SingleOrDefault(child => child.Id == id);
+        return allowNull ? symbolUi.ChildUis.SingleOrDefault(child => child.Id == id) 
+                   : symbolUi.ChildUis.Single(child => child.Id == id);
     }
     
     public static Instance GetChildInstanceWith(this Instance instance, SymbolChild child) => GetChildInstanceWithId(instance, child.Id);
 
-    public static Instance GetChildInstanceWithId(this Instance instance, Guid id) => instance.Children.Single(child => child.SymbolChildId == id);
-    
+    public static Instance? GetChildInstanceWithId(this Instance instance, Guid id, bool allowNull = false)
+    {
+        return allowNull ? instance.Children.SingleOrDefault(child => child.SymbolChildId == id) 
+                   : instance.Children.Single(child => child.SymbolChildId == id);
+    }
+
     public static bool TryGetChildInstance(this Instance instance, Guid id, bool recursive, out Instance? child, out List<Guid>? pathFromRoot)
     {
         child = instance.Children.SingleOrDefault(child => child.SymbolChildId == id);

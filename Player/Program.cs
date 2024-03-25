@@ -187,7 +187,8 @@ namespace T3.Player
                                 };
 
                 // Create instance of project op, all children are create automatically
-                _project = demoSymbol.CreateInstance(Guid.NewGuid(), null);
+                var demoSymbolChild = new SymbolChild(demoSymbol, Guid.NewGuid(), null);
+                _project = demoSymbol.CreateInstance(null, demoSymbolChild);
                 _evalContext = new EvaluationContext();
 
                 var prerenderRequired = false;

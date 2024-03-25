@@ -58,10 +58,12 @@ internal class Structure
             isFirst = false;
 
             var parentSymbolUi = parent.GetSymbolUi();
-            var childUisWithThatType = parentSymbolUi.ChildUis.FindAll(c => c.SymbolChild.Symbol == instance.Symbol);
+            var childUisWithThatType = parentSymbolUi.ChildUis
+                                                     .Where(c => c.SymbolChild.Symbol == instance.Symbol)
+                                                     .ToList();
             var indexLabel = "";
 
-            var symbolUiChild = childUisWithThatType.SingleOrDefault(c => c.Id == instance.SymbolChildId);
+            var symbolUiChild = childUisWithThatType.Single(c => c.Id == instance.SymbolChildId);
 
             if (childUisWithThatType.Count > 1)
             {
