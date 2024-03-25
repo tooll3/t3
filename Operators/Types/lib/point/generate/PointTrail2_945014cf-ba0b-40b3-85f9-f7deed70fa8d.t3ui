@@ -1,6 +1,6 @@
 {
   "Id": "945014cf-ba0b-40b3-85f9-f7deed70fa8d"/*PointTrail2*/,
-  "Description": "",
+  "Description": "Same as [PointTrail] with added internal features for [DrawBillboards]\nKeeps previous copies of points in a cycling buffer that can be used to draw trails and other effects.\n\nCan be used with [DrawPoints] [DrawLines] [DrawBillboards] and similar",
   "InputUis": [
     {
       "InputId": "f22a4834-6333-4ed5-b07d-237692c61dc6"/*GPoints*/,
@@ -8,35 +8,42 @@
       "Position": {
         "X": -1193.0658,
         "Y": -225.60172
-      }
+      },
+      "Description": "Point input"
     },
     {
       "InputId": "9a3998f9-f68a-4f8f-84dc-643e89f8c4f2"/*TrailLength*/,
       "Position": {
         "X": -1188.3076,
         "Y": -137.40767
-      }
+      },
+      "Description": "Defines the length of the trail by the amount of points added"
     },
     {
       "InputId": "274f1a1f-4dfa-4426-b53e-77c0c96cf7d8"/*IsEnabled*/,
       "Position": {
         "X": -1162.7197,
         "Y": 533.0679
-      }
+      },
+      "Description": "Enables / disables the trail",
+      "AddPadding": "True"
     },
     {
       "InputId": "98366176-fdf3-42e1-afbc-a87fc0f9d82d"/*Reset*/,
       "Position": {
         "X": -1162.7197,
         "Y": 578.0679
-      }
+      },
+      "Description": "Resets the trail when clicked"
     },
     {
       "InputId": "a5448c00-a6d4-476e-bf41-826fdff531cc"/*AddSeperatorThreshold*/,
       "Position": {
         "X": -1162.7197,
         "Y": 623.0679
-      }
+      },
+      "GroupTitle": "Options",
+      "Description": "Defines the threshold for the seperator"
     }
   ],
   "SymbolChildUis": [
