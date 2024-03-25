@@ -56,10 +56,11 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                     Symbol.OutputDefinition outputDefinition = null;
 
                     var op = window.CompositionOp!;
-                    var sourceOpInstance = op.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
-                    var sourceOp = op.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
-                    if (sourceOpInstance != null)
+
+                    SymbolChild? sourceOp = null;
+                    if (op.Children.TryGetValue(connection.SourceParentOrChildId, out var sourceOpInstance))
                     {
+                        sourceOp = sourceOpInstance.SymbolChild;
                         outputDefinition = sourceOpInstance.Symbol.OutputDefinitions.SingleOrDefault(outDef => outDef.Id == connection.SourceSlotId);
                         if (outputDefinition != null && sourceOp != null)
                         {
@@ -69,8 +70,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                     }
 
                     SymbolChild.Input input = null;
-                    var targetOp = op.Symbol.Children.SingleOrDefault(child => child.Id == connection.TargetParentOrChildId);
-                    if (targetOp != null)
+                    if (op.Symbol.Children.TryGetValue(connection.TargetParentOrChildId, out var targetOp))
                     {
                         input = targetOp.Inputs[connection.TargetSlotId];
                     }

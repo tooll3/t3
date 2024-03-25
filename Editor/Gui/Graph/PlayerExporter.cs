@@ -319,7 +319,7 @@ namespace T3.Editor.Gui.Graph
             if (!exportInfo.TryAddSymbol(symbol))
                 return; // already visited
 
-            foreach (var symbolChild in symbol.Children)
+            foreach (var symbolChild in symbol.Children.Values)
             {
                 CollectChildSymbols(symbolChild.Symbol, exportInfo);
             }
@@ -408,7 +408,7 @@ namespace T3.Editor.Gui.Graph
                 return;
 
             var compositionSymbol = parent.Parent.Symbol;
-            var parentSymbolChild = compositionSymbol.Children.Single(child => child.Id == parent.SymbolChildId);
+            var parentSymbolChild = compositionSymbol.Children[parent.SymbolChildId];
             var value = parentSymbolChild.Inputs[inputSlot.Id].Value;
             if (value is not InputValue<string> stringValue)
                 return;

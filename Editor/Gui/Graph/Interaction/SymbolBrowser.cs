@@ -596,16 +596,17 @@ namespace T3.Editor.Gui.Graph.Interaction
             var addSymbolChildCommand = new AddSymbolChildCommand(parentSymbol, symbol.Id) { PosOnCanvas = PosOnCanvas };
             commandsForUndo.Add(addSymbolChildCommand);
             addSymbolChildCommand.Do();
-            var newSymbolChild = parentSymbol.Children.Single(entry => entry.Id == addSymbolChildCommand.AddedChildId);
 
             // Select new node
-            var newChildUi = parentSymbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+            var newChildUi = parentSymbolUi.GetSymbolChildUiWithId(addSymbolChildCommand.AddedChildId, true);
             if (newChildUi == null)
             {
                 Log.Warning("Unable to create new operator");
                 return;
             }
-            var newInstance = _window.CompositionOp.Children.Single(child => child.SymbolChildId == newChildUi.Id);
+            
+            var newSymbolChild = newChildUi.SymbolChild;
+            var newInstance = _window.CompositionOp.Children[newChildUi.Id];
 
             var presetPool = VariationHandling.GetOrLoadVariations(_selectedSymbolUi.Symbol.Id);
             if (presetPool != null && _selectedPreset != null)

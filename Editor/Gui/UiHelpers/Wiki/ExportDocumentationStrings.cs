@@ -38,7 +38,7 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
                                     });
                 }
 
-                foreach (var childUi in symbolUi.ChildUis)
+                foreach (var childUi in symbolUi.ChildUis.Values)
                 {
                     if (string.IsNullOrWhiteSpace(childUi.Comment))
                         continue;
@@ -73,20 +73,19 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
                     switch (r.Type)
                     {
                         case DocumentationEntry.Types.Description:
-                            symbolUi.Description = r.Text;
+                            symbolUi!.Description = r.Text;
 
                             break;
                         
                         case DocumentationEntry.Types.Annotation:
-                            if (symbolUi.Annotations.TryGetValue(r.Id, out var a))
+                            if (symbolUi!.Annotations.TryGetValue(r.Id, out var a))
                             {
                                 a.Title = r.Text;
                             }
                             break;
                         
                         case DocumentationEntry.Types.Comment:
-                            var childUi= symbolUi.ChildUis.FirstOrDefault(c => c.Id == r.Id);
-                            if (childUi != null)
+                            if (symbolUi!.ChildUis.TryGetValue(r.Id, out var childUi))
                             {
                                 childUi.Comment = r.Text;
                             }

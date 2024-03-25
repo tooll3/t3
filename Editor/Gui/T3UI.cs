@@ -485,9 +485,11 @@ public static class T3Ui
         var compositionOp = primaryGraphWindow.CompositionOp;
 
         var symbolUi = compositionOp.GetSymbolUi();
-        var sourceSymbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == symbolChildId);
-        var selectionTargetInstance = compositionOp.Children.SingleOrDefault(instance => instance.SymbolChildId == symbolChildId);
-        if (selectionTargetInstance == null)
+        
+        if(!symbolUi.ChildUis.TryGetValue(symbolChildId, out var sourceSymbolChildUi))
+            return;
+        
+        if(!compositionOp.Children.TryGetValue(symbolChildId, out var selectionTargetInstance))
             return;
         
         primaryGraphWindow.GraphCanvas.NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
@@ -511,11 +513,9 @@ public static class T3Ui
         var counts = new Dictionary<Symbol, int>();
         foreach (var s in EditorSymbolPackage.AllSymbols)
         {
-            foreach (var child in s.Children)
+            foreach (var child in s.Children.Values)
             {
-                if (!counts.ContainsKey(child.Symbol))
-                    counts[child.Symbol] = 0;
-
+                counts.TryAdd(child.Symbol, 0);
                 counts[child.Symbol]++;
             }
         }

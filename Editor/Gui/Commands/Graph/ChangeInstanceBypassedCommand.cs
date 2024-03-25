@@ -33,8 +33,7 @@ namespace T3.Editor.Gui.Commands.Graph
             if (!SymbolRegistry.Entries.TryGetValue(_inputParentSymbolId, out var symbol))
                 return;
             
-            var child = symbol.Children.SingleOrDefault(c => c.Id == _childId);
-            if (child == null)
+            if (!symbol.Children.TryGetValue(_childId, out var child))
             {
                 Log.Assert("Failed to find child");
                 return;

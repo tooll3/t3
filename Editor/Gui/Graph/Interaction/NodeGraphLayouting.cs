@@ -51,8 +51,7 @@ internal class NodeGraphLayouting
                                                              .Select(ccc => ccc.TargetParentOrChildId).ToList();
                 foreach (var id in connectedTargetsIds)
                 {
-                    var connectedOp = compositionSymbolUi.ChildUis.SingleOrDefault(s => s.Id == id);
-                    if (connectedOp != null)
+                    if (compositionSymbolUi.ChildUis.TryGetValue(id, out var connectedOp))
                     {
                         minX = MathF.Min(minX, connectedOp.PosOnCanvas.X);
                     }
@@ -85,7 +84,7 @@ internal class NodeGraphLayouting
         var parentSymbol = composition.Symbol;
         var connectedChildUis = (from con in parentSymbol.Connections
                                  where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
-                                 from sourceChildUi in parentUi.ChildUis
+                                 from sourceChildUi in parentUi.ChildUis.Values
                                  where con.SourceParentOrChildId == sourceChildUi.Id
                                        && con.TargetParentOrChildId == childUi.Id
                                  select sourceChildUi).Distinct().ToArray();
@@ -93,7 +92,7 @@ internal class NodeGraphLayouting
         // Order connections by input definition order
         var connections = (from con in parentSymbol.Connections
                            where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
-                           from sourceChildUi in parentUi.ChildUis
+                           from sourceChildUi in parentUi.ChildUis.Values
                            where con.SourceParentOrChildId == sourceChildUi.Id
                                  && con.TargetParentOrChildId == childUi.Id
                            select con).Distinct().ToArray();
@@ -156,8 +155,7 @@ internal class NodeGraphLayouting
             sortedIn.Add(connectedChildUi);
             //NodeSelection.AddSelection(connectedChildUi);
 
-            var instance = composition.Children.SingleOrDefault(c => c.SymbolChildId == connectedChildUi.Id);
-            if (instance != null)
+            if (composition.Children.TryGetValue(connectedChildUi.Id, out var instance))
             {
                 _nodeSelection.AddSymbolChildToSelection(connectedChildUi, instance);
             }
@@ -180,7 +178,7 @@ internal class NodeGraphLayouting
                        + new Vector2(-SelectableNodeMovement.PaddedDefaultOpSize.X, 0);
 
         var symbolUi = compositionSymbol.GetSymbolUi();
-        var interferingOps = symbolUi.ChildUis
+        var interferingOps = symbolUi.ChildUis.Values
                                      .Where(op =>
                                                 op.PosOnCanvas.Y >= idealPos.Y
                                                 && op.PosOnCanvas.X + op.Size.X >= idealPos.X

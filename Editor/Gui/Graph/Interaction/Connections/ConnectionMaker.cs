@@ -239,12 +239,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 return;
             }
 
-            var sourceNode = parent.Children.Single(child => child.Id == connection.SourceParentOrChildId);
-            var targetNode = parent.Children.Single(child => child.Id == connection.TargetParentOrChildId);
-
             var parentSymbolUi = parent.GetSymbolUi();
-            var sourceNodeUi = parentSymbolUi.ChildUis.Single(node => node.Id == sourceNode.Id);
-            var targetNodeUi = parentSymbolUi.ChildUis.Single(node => node.Id == targetNode.Id);
+            var sourceNodeUi = parentSymbolUi.ChildUis[connection.SourceParentOrChildId];
+            var targetNodeUi = parentSymbolUi.ChildUis[connection.TargetParentOrChildId];
             var center = (sourceNodeUi.PosOnCanvas + targetNodeUi.PosOnCanvas) / 2;
             var commands = new List<ICommand>();
 
@@ -267,9 +264,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
             foreach (var child in connectedOps)
             {
-                var childUi = parentSymbolUi.ChildUis.FirstOrDefault(c => c.Id == child.Id);
-
-                if (childUi == null || childUi.PosOnCanvas.X > center.X)
+                if (!parentSymbolUi.ChildUis.TryGetValue(child.Id, out var childUi) || childUi.PosOnCanvas.X > center.X)
                     continue;
 
                 changedChildren.Add(childUi);
@@ -304,27 +299,25 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                     if (c.SourceParentOrChildId == UseSymbolContainerId) // TODO move symbol inputs?
                         continue;
 
-                    var sourceOp = parent.Children.FirstOrDefault(child => child.Id == c.SourceParentOrChildId);
-                    if (sourceOp == null)
+                    if (!parent.Children.TryGetValue(c.SourceParentOrChildId, out var sourceOp))
                     {
                         Log.Error($"Can't find child for connection source {c.SourceParentOrChildId}");
                         continue;
                     }
 
-                    if (set.Contains(sourceOp))
+                    if (!set.Add(sourceOp))
                         continue;
 
-                    set.Add(sourceOp);
                     RecursivelyAddChildren(ref set, parent, sourceOp);
                 }
             }
         }
 
-        public static void CompleteAtInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition input, Instance sourceInstance, int multiInputIndex = 0,
+        public static void CompleteAtInputSlot(Instance childInstance, SymbolChildUi targetUi, Symbol.InputDefinition input, int multiInputIndex = 0,
                                                bool insertMultiInput = false)
         {
-            var parentUi = sourceInstance.Parent.GetSymbolUi();
-            var parentSymbol = parentUi.Symbol;
+            var symbolInstance = childInstance.Parent;
+            var sourceInstance = symbolInstance.Children[TempConnections[0].SourceParentOrChildId];
             
             // Check for cycles
             var outputSlot = sourceInstance.Outputs[0];
@@ -333,15 +326,18 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
             foreach (var d in deps)
             {
-                if (d.Parent.SymbolChildId != targetUi.SymbolChild.Id)
+                if (d.Parent.SymbolChildId != targetUi.Id)
                     continue;
 
                 Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
+                Log.Debug($"Dependency: [{d.Parent.Symbol.Name}], target: [{targetUi.SymbolChild.Symbol.Name}]");
                 //TempConnections.Clear();
                 //ConnectionSnapEndHelper.ResetSnapping();
                 AbortOperation();
                 return;
             }
+
+            var symbol = symbolInstance.Symbol;
 
             var newConnections = new List<Symbol.Connection>();
 
@@ -355,7 +351,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             }
 
             // get the previous connection
-            var allConnectionsToSlot = parentSymbol.Connections.FindAll(c => c.TargetParentOrChildId == targetUi.SymbolChild.Id &&
+            var allConnectionsToSlot = symbol.Connections.FindAll(c => c.TargetParentOrChildId == targetUi.SymbolChild.Id &&
                                                                              c.TargetSlotId == input.Id);
             var replacesConnection = false;
             if (insertMultiInput)
@@ -371,13 +367,13 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             var addCommands = new List<ICommand>();
             foreach (var newConnection in newConnections)
             {
-                addCommands.Add(new AddConnectionCommand(parentUi.Symbol, newConnection, multiInputIndex));
+                addCommands.Add(new AddConnectionCommand(symbol, newConnection, multiInputIndex));
             }
 
             if (replacesConnection)
             {
                 var connectionToRemove = allConnectionsToSlot[multiInputIndex];
-                var deleteCommand = new DeleteConnectionCommand(parentSymbol, connectionToRemove, multiInputIndex);
+                var deleteCommand = new DeleteConnectionCommand(symbol, connectionToRemove, multiInputIndex);
                 _inProgressCommand.AddAndExecCommand(deleteCommand);
                 foreach (var addCommand in addCommands)
                 {
@@ -515,9 +511,8 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
 
             var parentUi = instance.Parent.GetSymbolUi();
-            var symbolChildUi = parentUi.ChildUis.FirstOrDefault(c => c.Id == instance.SymbolChildId);
 
-            if (symbolChildUi == null)
+            if (!parentUi.ChildUis.TryGetValue(instance.SymbolChildId, out var symbolChildUi))
             {
                 return;
             }
@@ -566,18 +561,17 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             var addSymbolChildCommand = new AddSymbolChildCommand(instance.Parent.Symbol, symbol.Id) { PosOnCanvas = posOnCanvas };
             commandsForUndo.Add(addSymbolChildCommand);
             addSymbolChildCommand.Do();
-            var newSymbolChild = parentSymbol.Children.Single(entry => entry.Id == addSymbolChildCommand.AddedChildId);
+            var newSymbolChild = parentSymbol.Children[addSymbolChildCommand.AddedChildId];
 
             // Select new node
             var parentSymbolUi = parentSymbol.GetSymbolUi();
-            var newChildUi = parentSymbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
-            if (newChildUi == null)
+            if (!parentUi.ChildUis.TryGetValue(newSymbolChild.Id, out var newChildUi))
             {
                 Log.Warning("Unable to create new operator");
                 return;
             }
             
-            var newInstance = instance.Parent.Children.Single(child => child.SymbolChildId == newChildUi.Id);
+            var newInstance = instance.Parent.Children[newChildUi.Id];
 
             selection.SetSelectionToChildUi(newChildUi, newInstance);
             
@@ -707,7 +701,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             StartOperation("Split connection with new Operator");
 
             // Todo: Fix me for output nodes
-            var child = parentSymbol.Children.Single(child2 => child2.Id == connection.TargetParentOrChildId);
+            var child = parentSymbol.Children[connection.TargetParentOrChildId];
             var inputDef = child.Symbol.InputDefinitions.Single(i => i.Id == connection.TargetSlotId);
 
             //var commands = new List<ICommand>();
@@ -744,9 +738,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             _inProgressCommand.AddExecutedCommandForUndo(moveCommand); // FIXME: this will break consistency check 
             
             var parent = instance.Parent;
-            var sourceInstance = instance.Parent.Children.SingleOrDefault(child => child.SymbolChildId == oldConnection.SourceParentOrChildId);
-            var targetInstance = instance.Parent.Children.SingleOrDefault(child => child.SymbolChildId == oldConnection.TargetParentOrChildId);
-            if (sourceInstance == null || targetInstance == null)
+            var siblingDict = parent.Children;
+            if (!siblingDict.TryGetValue(oldConnection.SourceParentOrChildId, out var sourceInstance) 
+                || !siblingDict.TryGetValue(oldConnection.TargetParentOrChildId, out var targetInstance))
             {
                 Log.Warning("Can't split this connection");
                 return;
@@ -786,8 +780,8 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             AdjustGraphLayoutForNewNode(parent.Symbol, oldConnection, selection);
 
             var parentUi = parent.Symbol.GetSymbolUi();
-            var sourceUi = parentUi.ChildUis.Single(child => child.Id == sourceInstance.SymbolChildId);
-            var targetUi = parentUi.ChildUis.Single(child => child.Id == targetInstance.SymbolChildId);
+            var sourceUi = parentUi.ChildUis[sourceInstance.SymbolChildId];
+            var targetUi = parentUi.ChildUis[targetInstance.SymbolChildId];
             var isSnappedHorizontally = (Math.Abs(sourceUi.PosOnCanvas.Y - targetUi.PosOnCanvas.Y) < 0.01f)
                                         && Math.Abs(sourceUi.PosOnCanvas.X + sourceUi.Size.X + SelectableNodeMovement.SnapPadding.X) - targetUi.PosOnCanvas.X <
                                         0.1f;

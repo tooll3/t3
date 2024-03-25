@@ -214,7 +214,7 @@ namespace T3.Core.Operator
             
             foreach (var parentInstance in parentInstancesOfSymbol)
             {
-                var instance = parentInstance.Children.First(child => child.SymbolChildId == Id);
+                var instance = parentInstance.Children[Id];
 
                 var mainInputSlot = instance.Inputs[0];
                 var mainOutputSlot = instance.Outputs[0];

@@ -21,7 +21,7 @@ namespace T3.Editor.Gui.Graph.Modification
             UndoRedoStack.AddAndExecute(addCommand);
             
             var parentSymbol = parentUi.Symbol;
-            var newSymbolChild = parentSymbol.Children.Single(entry => entry.Id == addCommand.AddedChildId);
+            var newSymbolChild = parentSymbol.Children[addCommand.AddedChildId];
 
             // Select new node
             var childUi = parentUi.GetSymbolChildUiWithId(newSymbolChild.Id);

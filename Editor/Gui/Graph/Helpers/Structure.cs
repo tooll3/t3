@@ -58,7 +58,7 @@ internal class Structure
             isFirst = false;
 
             var parentSymbolUi = parent.GetSymbolUi();
-            var childUisWithThatType = parentSymbolUi.ChildUis
+            var childUisWithThatType = parentSymbolUi.ChildUis.Values
                                                      .Where(c => c.SymbolChild.Symbol == instance.Symbol)
                                                      .ToList();
             var indexLabel = "";
@@ -104,7 +104,7 @@ internal class Structure
     /// </summary>
     public static IEnumerable<ITimeClip> GetAllTimeClips(Instance compositionOp)
     {
-        foreach (var child in compositionOp.Children)
+        foreach (var child in compositionOp.Children.Values)
         {
             foreach (var clipProvider in child.Outputs.OfType<ITimeClipProvider>())
             {
@@ -115,8 +115,7 @@ internal class Structure
 
     public bool TryGetUiAndInstanceInComposition(Guid id, Instance compositionOp, out SymbolChildUi? childUi, out Instance? instance)
     {
-        instance = compositionOp.Children.SingleOrDefault(child => child.SymbolChildId == id);
-        if (instance == null)
+        if (!compositionOp.Children.TryGetValue(id, out instance))
         {
             Log.Assert($"Can't select child with id {id} in composition {compositionOp}");
             childUi = null;
@@ -138,7 +137,7 @@ internal class Structure
         var symbolId = symbol.Id;
         foreach (var s in EditorSymbolPackage.AllSymbols)
         {
-            foreach (var child in s.Children)
+            foreach (var child in s.Children.Values)
             {
                 if (child.Symbol.Id != symbolId)
                     continue;
@@ -155,7 +154,7 @@ internal class Structure
 
         foreach (var s in EditorSymbolPackage.AllSymbols)
         {
-            foreach (var child in s.Children)
+            foreach (var child in s.Children.Values)
             {
                 results.TryGetValue(child.Symbol.Id, out var currentCount);
                 results[child.Symbol.Id] = currentCount + 1;
@@ -165,11 +164,11 @@ internal class Structure
         return results;
     }
 
-    public static HashSet<Symbol> CollectRequiredSymbols(Symbol symbol, HashSet<Symbol> all = null)
+    public static HashSet<Symbol> CollectRequiredSymbols(Symbol symbol, HashSet<Symbol>? all = null)
     {
         all ??= new HashSet<Symbol>();
 
-        foreach (var symbolChild in symbol.Children)
+        foreach (var symbolChild in symbol.Children.Values)
         {
             if (!all.Add(symbolChild.Symbol))
                 continue;
@@ -188,7 +187,7 @@ internal class Structure
         var compositionSymbol = composition.Symbol;
         var connectedChildren = (from con in compositionSymbol.Connections
                                  where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
-                                 from sourceChild in compositionSymbol.Children
+                                 from sourceChild in compositionSymbol.Children.Values
                                  where con.SourceParentOrChildId == sourceChild.Id
                                        && con.TargetParentOrChildId == child.Id
                                  select sourceChild).Distinct().ToArray();

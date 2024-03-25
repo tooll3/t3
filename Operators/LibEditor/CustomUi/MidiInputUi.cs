@@ -60,7 +60,7 @@ namespace libEditor.CustomUi
 
             ImGui.TextUnformatted(deviceAndChannel);
 
-            var renamedTitle = midiInput.Parent.Symbol.Children.Single(c => c.Id == midiInput.SymbolChildId).Name;
+            var renamedTitle = instance.SymbolChild.Name;
             if (!string.IsNullOrEmpty(renamedTitle))
             {
                 ImGui.TextUnformatted($"\"{renamedTitle}\"");

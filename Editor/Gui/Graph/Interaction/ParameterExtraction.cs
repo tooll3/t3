@@ -67,9 +67,9 @@ internal static class ParameterExtraction
         commands.Add(addSymbolChildCommand);
         addSymbolChildCommand.Do();
 
-        var newSymbolChild = compositionSymbol.Children.Single(entry => entry.Id == addSymbolChildCommand.AddedChildId);
 
-        var newChildUi = compositionUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+        var newChildUi = compositionUi.ChildUis[addSymbolChildCommand.AddedChildId];
+        var newSymbolChild = newChildUi.SymbolChild;
 
         // Sadly, we have have apply size manually.
         if (_sizesForTypes.TryGetValue(input.DefaultValue.ValueType, out _))
@@ -77,16 +77,10 @@ internal static class ParameterExtraction
             newChildUi.Style = SymbolChildUi.Styles.Resizable;
         }
 
-        if (newChildUi == null)
-        {
-            Log.Warning("Unable to create new operator");
-            return;
-        }
-
         // Set type
-        var newInstance = composition.Children.Single(child => child.SymbolChildId == newChildUi.Id);
+        var newInstance = composition.Children[newChildUi.Id];
 
-        if(newInstance is not IExtractable extractable) // FIXME: implement extractable
+        if(newInstance is not IExtractable extractable) // FIXME: implement extractable - got lost in source control
         {
             Log.Warning("Can't extract this parameter type");
             return;
@@ -114,7 +108,7 @@ internal static class ParameterExtraction
 
         foreach (var (typedInput, inputValue) in inputsAndValues)
         {
-            var setValueCommand = new ChangeInputValueCommand(compositionSymbol, newSymbolChild.Id, typedInput, inputValue);
+            var setValueCommand = new ChangeInputValueCommand(newSymbolChild.Symbol, newSymbolChild.Id, typedInput, inputValue);
             setValueCommand.Do();
             commands.Add(setValueCommand);
         }

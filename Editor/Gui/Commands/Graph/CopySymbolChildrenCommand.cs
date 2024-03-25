@@ -27,11 +27,7 @@ namespace T3.Editor.Gui.Commands.Graph
             _targetSymbolId = targetCompositionUi.Symbol.Id;
             _targetPosition = targetPosition;
 
-            if (symbolChildrenToCopy == null)
-            {
-                // if no specific children are selected copy all of the source composition op
-                symbolChildrenToCopy = sourceCompositionUi.ChildUis;
-            }
+            symbolChildrenToCopy ??= sourceCompositionUi.ChildUis.Values.ToArray();
 
             Vector2 upperLeftCorner = new Vector2(Single.MaxValue, Single.MaxValue);
             foreach (var childToCopy in symbolChildrenToCopy)
@@ -73,7 +69,7 @@ namespace T3.Editor.Gui.Commands.Graph
         {
             if(!SymbolUiRegistry.TryGetValue(_targetSymbolId, out var parentSymbolUi))
             {
-                Log.Warning($"Failed to find target symbol with id: {_targetSymbolId} - was it removed?");
+                this.LogError(true, $"Failed to find target symbol with id: {_targetSymbolId} - was it removed?");
                 return;
             }
             
@@ -94,13 +90,13 @@ namespace T3.Editor.Gui.Commands.Graph
         {
             if(!SymbolUiRegistry.TryGetValue(_targetSymbolId, out var targetCompositionSymbolUi))
             {
-                Log.Warning($"Failed to find target symbol with id: {_targetSymbolId} - was it removed?");
+                this.LogError(false, $"Failed to find target symbol with id: {_targetSymbolId} - was it removed?");
                 return;
             }
             
             if(!SymbolUiRegistry.TryGetValue(_sourceSymbolId, out var sourceCompositionSymbolUi))
             {
-                Log.Warning($"Failed to find source symbol with id: {_sourceSymbolId} - was it removed?");
+                this.LogError(false, $"Failed to find source symbol with id: {_sourceSymbolId} - was it removed?");
                 return;
             }
             
@@ -113,8 +109,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
             foreach (var childEntryToCopy in _childrenToCopy)
             {
-                SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == childEntryToCopy.ChildId);
-                if (symbolChildToCopy == null)
+                if (!sourceCompositionSymbolUi.Symbol.Children.TryGetValue(childEntryToCopy.ChildId, out var symbolChildToCopy))
                 {
                     Log.Warning("Skipping attempt to copy undefined operator. This can be related to undo/redo operations. Please try to reproduce and tell pixtur");
                     continue;
@@ -185,6 +180,11 @@ namespace T3.Editor.Gui.Commands.Graph
             public readonly Guid AddedId;
             public readonly Vector2 RelativePosition;
             public readonly Vector2 Size;
+        }
+
+        private static void LogError(bool isUndo,string log)
+        {
+            Log.Warning($"{nameof(CopySymbolChildrenCommand)} {(isUndo ? "Undo" : "Redo")}: {log}");
         }
 
         private readonly Vector2 _targetPosition;

@@ -29,10 +29,9 @@ namespace T3.Editor.Gui.Templates
             var newSymbol = Duplicate.DuplicateAsNewType(compositionSymbolUi, project, template.TemplateSymbolId, symbolName, nameSpace, description, freePosition);
             
             // Select instance of new symbol
-            var newChildUi = compositionSymbolUi.ChildUis.SingleOrDefault(c => c.SymbolChild.Symbol.Id == newSymbol.Id);
-            if (newChildUi == null)
+            if (!compositionSymbolUi.ChildUis.TryGetValue(newSymbol.Id, out var newChildUi))
             {
-                Log.Debug("Creating symbol for template failed.");
+                Log.Debug("Creating symbol for template failed. Couldn't find child ui");
                 return;
             }
             T3Ui.SelectAndCenterChildIdInView(newChildUi.SymbolChild.Id);
@@ -50,7 +49,7 @@ namespace T3.Editor.Gui.Templates
             while (true)
             {
                 var isPositionFree = true;
-                foreach (var childUi in compositionSymbolUi.ChildUis)
+                foreach (var childUi in compositionSymbolUi.ChildUis.Values)
                 {
                     var rect = ImRect.RectWithSize(childUi.PosOnCanvas, childUi.Size);
                     rect.Expand(20);

@@ -17,7 +17,7 @@ namespace libEditor.CustomUi
             if (!(instance is GpuMeasure measureInstance))
                 return SymbolChildUi.CustomUiResult.None;
 
-            var symbolChild = measureInstance.Parent.Symbol.Children.Single(c => c.Id == measureInstance.SymbolChildId);
+            var symbolChild = instance.SymbolChild;
             ImGui.PushClipRect(selectableScreenRect.Min, selectableScreenRect.Max, true);
             
             float h = selectableScreenRect.GetHeight();
@@ -32,7 +32,7 @@ namespace libEditor.CustomUi
             ImGui.PushFont(font);
             ImGui.SetCursorScreenPos(selectableScreenRect.Min + new Vector2(10,0));
             ImGui.BeginGroup();
-            if (!string.IsNullOrEmpty(symbolChild.Name))
+            if (!string.IsNullOrWhiteSpace(symbolChild.Name))
             {
                 ImGui.TextUnformatted(symbolChild.Name);
             }

@@ -304,7 +304,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     var hasChildren = false;
                     ImRect bounds = new ImRect();
-                    foreach (var child in symbolUi.ChildUis)
+                    foreach (var child in symbolUi.ChildUis.Values)
                     {
                         var rect = ImRect.RectWithSize(child.PosOnCanvas, child.Size);
 
@@ -352,7 +352,7 @@ namespace T3.Editor.Gui.Graph
                             dl.AddRectFilled(min, max, annotation.Color.Fade(0.1f * opacity));
                         }
 
-                        foreach (var child in symbolUi.ChildUis)
+                        foreach (var child in symbolUi.ChildUis.Values)
                         {
                             var rect = ImRect.RectWithSize(child.PosOnCanvas, child.Size);
                             var min = (rect.Min - boundsMin) / boundsSize * mapSize + mapMin;
@@ -597,7 +597,7 @@ namespace T3.Editor.Gui.Graph
             if (nextSelectedUi != null)
             {
                 var instance = _composition.Instance.GetChildInstanceWithId(nextSelectedUi.Value);
-                var symbolChildUi = instance.GetSymbolChildUiWithId(nextSelectedUi.Value);
+                var symbolChildUi = instance.GetSymbolChildUi();
                 
                 if(symbolChildUi != null)
                     GraphCanvas.NodeSelection.SetSelectionToChildUi(symbolChildUi, instance);

@@ -73,7 +73,7 @@ internal static class CrashReporting
                 var compositionUi = primaryComposition.Symbol.GetSymbolUi();
                 var json = GraphOperations.CopyNodesAsJson(
                                                            primaryComposition,
-                                                           compositionUi.ChildUis,
+                                                           compositionUi.ChildUis.Values,
                                                            compositionUi.Annotations.Values.ToList());
                 EditorUi.Instance.SetClipboardText(json);
             }

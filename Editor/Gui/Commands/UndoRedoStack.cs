@@ -11,6 +11,20 @@ namespace T3.Editor.Gui.Commands
         void Do();
     }
 
+    internal static class CommandExtensions
+    {
+        public static void LogError(this ICommand command, bool isUndo, string message, bool logStackTrace = true)
+        {
+            Log.Warning($"{command.GetType().Name} {(isUndo ? "Undo" : "Do")}: {message}");
+            if (logStackTrace)
+            {
+                var stackTrace = Environment.StackTrace;
+                //if(!stackTrace.Contains("SentryClient", StringComparison.OrdinalIgnoreCase))
+                    Log.Debug(Environment.StackTrace);
+            }
+        }
+    }
+
 
 
     public static class UndoRedoStack

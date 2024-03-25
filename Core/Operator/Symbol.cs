@@ -30,7 +30,8 @@ namespace T3.Core.Operator
         public SymbolPackage SymbolPackage { get; set; }
 
         public readonly List<Instance> InstancesOfSymbol = new();
-        public readonly List<SymbolChild> Children = new();
+        public IReadOnlyDictionary<Guid, SymbolChild> Children => _children;
+        private readonly Dictionary<Guid, SymbolChild> _children = new();
         public List<Connection> Connections { get; init; } = new();
 
         /// <summary>
@@ -59,28 +60,21 @@ namespace T3.Core.Operator
         #region public API =======================================================================
         internal void SetChildren(IReadOnlyCollection<SymbolChild> children, bool setChildrensParent)
         {
-            Children.AddRange(children);
-
-            if (!setChildrensParent)
-                return;
-
-            foreach (var child in Children)
+            foreach (var child in children)
             {
-                child.Parent = this;
+                _children.Add(child.Id, child);
+                
+                if(setChildrensParent)
+                    child.Parent = this;
             }
         }
 
         public void ForEachSymbolChildInstanceWithId(Guid id, Action<Instance> handler)
         {
-            var matchingInstances = InstancesOfSymbol
-                                   .SelectMany(symbolInstance => symbolInstance.Children,
-                                               (symbolInstance, childInstance) => new { symbolInstance, childInstance })
-                                   .Where(@t => t.childInstance.SymbolChildId == id)
-                                   .Select(@t => t.childInstance);
-
-            foreach (var childInstance in matchingInstances)
+            foreach (var symbolInstance in InstancesOfSymbol)
             {
-                handler(childInstance);
+                if(symbolInstance.Children.TryGetValue(id, out var childInstance))
+                    handler(childInstance);
             }
         }
 
@@ -234,7 +228,7 @@ namespace T3.Core.Operator
                     continue;
                 }
 
-                if (!parent.Children.Contains(instance))
+                if (!parent.Children.ContainsKey(instance.SymbolChildId))
                 {
                     // This happens when recompiling ops...
                     Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
@@ -292,12 +286,8 @@ namespace T3.Core.Operator
 
                 connectionEntriesToReplace.Reverse(); // restore original order
 
-                var symbolChild = parentSymbol.Children.SingleOrDefault(child => child.Id == instance.SymbolChildId);
-                if (symbolChild == null)
-                {
-                    Log.Error($"Can't find SymnbolChild with id {instance.SymbolChildId} in {parentSymbol}");
-                    continue;
-                }
+                var symbolChild = instance.SymbolChild;
+
                 // update inputs of symbol child
                 var childInputDict = symbolChild.Inputs;
                 var oldChildInputs = new Dictionary<Guid, SymbolChild.Input>(childInputDict);
@@ -337,7 +327,7 @@ namespace T3.Core.Operator
             for (var index = maxInstanceIndex; index >= 0; index--)
             {
                 var instance = instanceList[index];
-                instance.Parent?.Children.Remove(instance);
+                instance.Parent?.Children.Remove(instance.SymbolChildId);
                 instance.Dispose();
                 instanceList.RemoveAt(index);
             }
@@ -456,7 +446,7 @@ namespace T3.Core.Operator
             InstancesOfSymbol.Add(newInstance);
 
             // adds children to the new instance
-            foreach (var child in Children)
+            foreach (var child in _children.Values)
             {
                 CreateAndAddNewChildInstance(child, newInstance);
             }
@@ -489,7 +479,7 @@ namespace T3.Core.Operator
             }
 
             // connect animations if available
-            Animator.CreateUpdateActionsForExistingCurves(newInstance.Children);
+            Animator.CreateUpdateActionsForExistingCurves(newInstance.Children.Values);
 
             return newInstance;
         }
@@ -558,7 +548,7 @@ namespace T3.Core.Operator
                 outputSlot.IsDisabled = symbolChildOutput.IsDisabled;
             }
 
-            parentInstance.Children.Add(childInstance);
+            parentInstance.Children.Add(childInstance.SymbolChildId, childInstance);
 
             if (symbolChild.IsBypassed)
             {
@@ -568,23 +558,11 @@ namespace T3.Core.Operator
             return childInstance;
         }
 
-        private static bool RemoveChildInstance(SymbolChild childToRemove, Instance parentInstance)
-        {
-            var children = parentInstance.Children;
-            var removeId = childToRemove.Id;
-            var childInstanceToRemove = children.Single(child => child.SymbolChildId == removeId);
-            return children.Remove(childInstanceToRemove);
-        }
-
         public bool IsTargetMultiInput(Connection connection)
         {
-            var childInputTarget = (from child in Children
-                                    where child.Id == connection.TargetParentOrChildId
-                                    where child.Inputs.ContainsKey(connection.TargetSlotId)
-                                    select child.Inputs[connection.TargetSlotId]).SingleOrDefault();
-            bool isMultiInput = childInputTarget?.IsMultiInput ?? false;
-
-            return isMultiInput;
+            return Children.TryGetValue(connection.TargetParentOrChildId, out var child) 
+                   && child.Inputs.TryGetValue(connection.TargetSlotId, out var targetSlot) 
+                   && targetSlot.IsMultiInput;
         }
 
         /// <summary>
@@ -714,7 +692,8 @@ namespace T3.Core.Operator
                                {
                                    Name = name
                                };
-            Children.Add(newChild);
+            
+            _children.Add(newChild.Id, newChild);
 
             var childInstances = new List<Instance>(InstancesOfSymbol.Count);
             foreach (var instance in InstancesOfSymbol)
@@ -731,7 +710,7 @@ namespace T3.Core.Operator
         {
             foreach (var symbolInstance in InstancesOfSymbol)
             {
-                Animator.CreateUpdateActionsForExistingCurves(symbolInstance.Children);
+                Animator.CreateUpdateActionsForExistingCurves(symbolInstance.Children.Values);
             }
         }
 
@@ -755,13 +734,12 @@ namespace T3.Core.Operator
             Connections.RemoveAll(c => c.SourceParentOrChildId == childId || c.TargetParentOrChildId == childId);
 
             removedFromAll = true;
-            var childToRemove = Children.Single(child => child.Id == childId);
             foreach (var instance in InstancesOfSymbol)
             {
-                removedFromAll &= RemoveChildInstance(childToRemove, instance);
+                removedFromAll &= instance.Children.Remove(childId);
             }
 
-            var removedFromSymbol = Children.Remove(childToRemove);
+            var removedFromSymbol = _children.Remove(childId);
             removedFromAll &= removedFromSymbol;
             return removedFromSymbol;
         }
@@ -915,7 +893,7 @@ namespace T3.Core.Operator
         {
             foreach (var symbolInstance in InstancesOfSymbol)
             {
-                var childInstance = symbolInstance.Children.Single(c => c.SymbolChildId == childId);
+                var childInstance = symbolInstance.Children[childId];
                 var slot = childInstance.Inputs.Single(i => i.Id == inputId);
                 slot.DirtyFlag.Invalidate();
             }

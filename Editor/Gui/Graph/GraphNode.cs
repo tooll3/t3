@@ -1025,7 +1025,7 @@ namespace T3.Editor.Gui.Graph
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        ConnectionMaker.CompleteAtInputSlot(targetUi, inputDef, instance);
+                        ConnectionMaker.CompleteAtInputSlot(instance, targetUi, inputDef);
                     }
                 }
                 else
@@ -1048,8 +1048,7 @@ namespace T3.Editor.Gui.Graph
                                                                                                               && c.TargetSlotId == inputDef.Id);
                         if (connection != null)
                         {
-                            sourceOp = parentSymbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
-                            if (sourceOp != null)
+                            if (parentSymbol.Children.TryGetValue(connection.SourceParentOrChildId, out sourceOp))
                             {
                                 if (!sourceOp.Outputs.TryGetValue(connection.SourceSlotId, out output))
                                 {
@@ -1204,10 +1203,9 @@ namespace T3.Editor.Gui.Graph
                 }
 
                 var connectionSourceId = connection.SourceParentOrChildId;
-                var connectionSourceUi = compositionUi.ChildUis.SingleOrDefault(c => c.Id == connectionSourceId);
 
-                var instance = compositionOp.Children.SingleOrDefault(child => child.SymbolChildId == connectionSourceId);
-                if (connectionSourceUi != null && instance != null)
+                if (compositionUi.ChildUis.TryGetValue(connectionSourceId, out var connectionSourceUi) && 
+                    compositionOp.Children.TryGetValue(connectionSourceId, out var instance))
                 {
                     var outputDef = connectionSourceUi.SymbolChild.Symbol.OutputDefinitions.SingleOrDefault(outp => outp.Id == connection.SourceSlotId);
                     var output = instance.Outputs.SingleOrDefault(outp => outp.Id == connection.SourceSlotId);
@@ -1307,7 +1305,7 @@ namespace T3.Editor.Gui.Graph
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        ConnectionMaker.CompleteAtInputSlot(targetUi, inputDef, instance, multiInputIndex, true);
+                        ConnectionMaker.CompleteAtInputSlot(instance, targetUi, inputDef, multiInputIndex, true);
                     }
                 }
                 else

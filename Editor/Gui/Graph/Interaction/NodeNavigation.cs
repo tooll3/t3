@@ -49,7 +49,7 @@ internal class NodeNavigation
         // Search all children
         SymbolChildUi bestMatch = null;
         var bestRelevancy = float.PositiveInfinity;
-        foreach (var otherChildUi in symbolUi.ChildUis)
+        foreach (var otherChildUi in symbolUi.ChildUis.Values)
         {
             var alignedDelta = GetAlignedDelta(direction, otherChildUi.PosOnCanvas - currentSymbolChildUi.PosOnCanvas);
 
@@ -74,11 +74,7 @@ internal class NodeNavigation
             return;
         }
 
-        var bestInstance = currentInstance.Parent.Children.Single(c => c.SymbolChildId == bestMatch.Id);
-        if (bestInstance == null)
-        {
-            Debug.Assert(false);
-        }
+        var bestInstance = currentInstance.Parent.Children[bestMatch.Id];
 
         //Log.Debug($"Found with relevancy {bestRelevancy}: " + Structure.GetReadableInstancePath( OperatorUtils.BuildIdPathForInstance( bestInstance)), bestInstance);
         

@@ -117,10 +117,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         
                         // Apply new time range to newly added instance
                         Guid newChildId = cmd.OldToNewIdDict[clip.Id];
-                        var newInstance = compositionOp.Children.Single(child => child.SymbolChildId == newChildId);
+                        var newInstance = compositionOp.Children[newChildId];
                         var newTimeClip = newInstance.Outputs.OfType<ITimeClipProvider>().Single().TimeClip;
                         
-                        var newSymbolChildUi = compositionSymbolUi.ChildUis.Single(child => child.Id == newChildId);
+                        var newSymbolChildUi = compositionSymbolUi.ChildUis[newChildId];
                         var renameCommand = new ChangeSymbolChildNameCommand(newSymbolChildUi, compositionSymbolUi.Symbol);
                         renameCommand.NewName = originalName;
                         renameCommand.Do();
@@ -700,7 +700,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 _compositionTimeClips.Clear();
 
                 // Avoiding Linq for GC reasons 
-                foreach (var child in compositionOp.Children)
+                foreach (var child in compositionOp.Children.Values)
                 {
                     foreach (var output in child.Outputs)
                     {

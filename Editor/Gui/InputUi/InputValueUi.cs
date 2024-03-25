@@ -237,7 +237,7 @@ namespace T3.Editor.Gui.InputUi
                         {
                             var selectedInstance = nodeSelection.GetFirstSelectedInstance();
                             var parent = selectedInstance.Parent;
-                            var selectionTargetInstance = parent.Children.Single(instance => instance.SymbolChildId == sourceUi.Id);
+                            var selectionTargetInstance = parent.Children[sourceUi.Id];
                             nodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
                             FitViewToSelectionHandling.FitViewToSelection();
                         }

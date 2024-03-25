@@ -29,7 +29,7 @@ namespace T3.Editor.Gui.Commands.Graph
         private void AssignValue(string newName)
         {
             var symbolParent = SymbolRegistry.Entries[_parentSymbolId];
-            var symbol = symbolParent.Children.Find(c => c.Id == _symbolChildId);
+            var symbol = symbolParent.Children[_symbolChildId];
             symbol.Name = newName;
         }
 

@@ -43,7 +43,7 @@ namespace lib._3d.rendering._
             try
             {
                 _cameraInstances.Clear();
-                foreach (var child in Parent.Parent.Children)
+                foreach (var child in Parent.Parent.Children.Values)
                 {
                     if (child is not ICameraPropertiesProvider camera)
                         continue;

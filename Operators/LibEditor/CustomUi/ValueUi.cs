@@ -26,8 +26,8 @@ namespace libEditor.CustomUi
             area.Min.X += dragWidth;
 
             drawList.AddRectFilled(area.Min, area.Max, UiColors.BackgroundFull.Fade(0.1f));
-            
-            var symbolChild = valueInstance.Parent.Symbol.Children.Single(c => c.Id == valueInstance.SymbolChildId);
+
+            var symbolChild = instance.SymbolChild;
             drawList.PushClipRect(area.Min, area.Max, true);
             
             var isAnimated = instance.Parent?.Symbol.Animator.IsInputSlotAnimated(valueInstance.Float)??false;

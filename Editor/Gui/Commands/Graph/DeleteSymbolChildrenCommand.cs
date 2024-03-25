@@ -103,8 +103,8 @@ namespace T3.Editor.Gui.Commands.Graph
             foreach (var childUndoData in _removedChildren)
             {
                 var symbol = SymbolRegistry.Entries[childUndoData.SymbolId];
-                var id = compositionSymbolUi!.AddChild(symbol, childUndoData.ChildId, childUndoData.PosInCanvas, childUndoData.Size);
-                var symbolChild = compositionSymbolUi.Symbol.Children.FirstOrDefault(c => c.Id == childUndoData.ChildId);
+                var symbolChildUi = compositionSymbolUi!.AddChild(symbol, childUndoData.ChildId, childUndoData.PosInCanvas, childUndoData.Size);
+                var symbolChild = symbolChildUi.SymbolChild;
                 
                 foreach (var (inputId, input) in symbolChild!.Inputs)
                 {
@@ -122,9 +122,9 @@ namespace T3.Editor.Gui.Commands.Graph
                         output.OutputData.Assign(timeClip);
                     }
                 }
-                    
-                
-                compositionSymbolUi.Symbol.Children.Find(c => c.Id == childUndoData.ChildId).Name = childUndoData.ChildName; // todo: ugly
+
+
+                symbolChild.Name = childUndoData.ChildName;
             }
 
             foreach (var entry in _removedConnections)

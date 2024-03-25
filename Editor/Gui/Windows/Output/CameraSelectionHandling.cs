@@ -200,7 +200,7 @@ namespace T3.Editor.Gui.Windows.Output
             var parentInstance = drawnInstance.Parent;
             if (parentInstance != null)
             {
-                var children = parentInstance.Children;
+                var children = parentInstance.Children.Values;
                 foreach (var child in children)
                 {
                     if (child is not ICamera cam2)
@@ -327,11 +327,7 @@ namespace T3.Editor.Gui.Windows.Output
                     ImGui.PushID(cameraInstance.SymbolChildId.GetHashCode());
                     {
                         // This is expensive, but happens only if dropdown is open...
-                        var symbolChild = _drawnInstance.Parent.Symbol.Children
-                                                        .SingleOrDefault(child => child.Id == cameraInstance.SymbolChildId);
-
-                        if (symbolChild == null)
-                            continue;
+                        var symbolChild = _drawnInstance.SymbolChild;
                         
                         if(ImGui.MenuItem(symbolChild.ReadableName, "",cameraInstance.SymbolChildId == _pickedCameraId, true))
                         {

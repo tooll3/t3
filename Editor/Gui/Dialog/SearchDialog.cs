@@ -203,7 +203,7 @@ namespace T3.Editor.Gui.Dialog
 
         private void FindAllChildren(Instance instance, Action<Instance> callback)
         {
-            foreach (var child in instance.Children)
+            foreach (var child in instance.Children.Values)
             {
                 callback(child);
                 if (_searchMode == SearchModes.Local)

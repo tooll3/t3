@@ -656,7 +656,7 @@ namespace T3.Editor.Gui.Graph
                                    selected: false,
                                    enabled: isImage))
                 {
-                    var instance = compositionOp.Children.Single(child => child.SymbolChildId == selectedChildUis[0].Id);
+                    var instance = compositionOp.Children[selectedChildUis[0].Id];
                     _window.GraphImageBackground.OutputInstance = instance;
                 }
 
@@ -798,7 +798,7 @@ namespace T3.Editor.Gui.Graph
                 var childUi = selectedChildUis.Single();
 
                 // get instance that is currently selected
-                var instance = compositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+                var instance = compositionOp.Children[childUi.Id];
 
                 if (TryGetShaderPath(instance, out var filePath, out var owner))
                 {
@@ -1101,8 +1101,8 @@ namespace T3.Editor.Gui.Graph
 
                 foreach (var id in cmd.NewSymbolChildIds)
                 {
-                    var newChildUi = compositionSymbolUi.ChildUis.Single(c => c.Id == id);
-                    var instance = compositionOp.Children.Single(c2 => c2.SymbolChildId == id);
+                    var newChildUi = compositionSymbolUi.ChildUis[id];
+                    var instance = compositionOp.Children[id];
                     NodeSelection.AddSymbolChildToSelection(newChildUi, instance);
                 }
 
@@ -1143,7 +1143,7 @@ namespace T3.Editor.Gui.Graph
                 _selectableItems.Clear();
                 var compositionOp = _window.CompositionOp;
                 var symbolUi = compositionOp.GetSymbolUi();
-                _selectableItems.AddRange(compositionOp.Children.Select(x =>
+                _selectableItems.AddRange(compositionOp.Children.Values.Select(x =>
                                                                         {
                                                                             var child = x.GetSymbolChildUi();
                                                                             if(child == null)

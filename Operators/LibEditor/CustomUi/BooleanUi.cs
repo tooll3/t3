@@ -33,7 +33,7 @@ namespace libEditor.CustomUi
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
             screenRect.Expand(-4);
             ImGui.SetCursorScreenPos(screenRect.Min);
-            var symbolChild = instance.Parent.Symbol.Children.Single(c => c.Id == instance.SymbolChildId);
+            var symbolChild = instance.SymbolChild;
             ImGui.PushClipRect(screenRect.Min, screenRect.Max, true);
 
             var refValue = boolean.BoolValue.Value;
