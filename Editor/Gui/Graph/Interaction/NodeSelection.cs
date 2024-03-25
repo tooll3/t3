@@ -135,7 +135,8 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (Selection.Count != 1)
                 return null;
 
-            return GetFirstSelectedInstance();
+            var selection = GetFirstSelectedInstance();
+            return selection == _selectedComposition ? null : selection;
         }
         
         public Instance? GetFirstSelectedInstance()
