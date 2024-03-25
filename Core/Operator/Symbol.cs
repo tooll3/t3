@@ -29,7 +29,7 @@ namespace T3.Core.Operator
         public string Namespace { get; private set; }
         public SymbolPackage SymbolPackage { get; set; }
 
-        public readonly List<Instance> InstancesOfSymbol = new();
+        public readonly List<Instance> InstancesOfSymbol = new(); // todo - instances are added twice for some reason?
         public IReadOnlyDictionary<Guid, SymbolChild> Children => _children;
         private readonly Dictionary<Guid, SymbolChild> _children = new();
         public List<Connection> Connections { get; init; } = new();
