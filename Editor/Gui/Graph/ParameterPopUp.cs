@@ -54,8 +54,7 @@ internal static class ParameterPopUp
 
         var symbolUi = _selectedInstance.GetSymbolUi();
         var compositionSymbolUi = graphWindow.CompositionOp.GetSymbolUi();
-        var symbolChildUi = compositionSymbolUi.ChildUis.SingleOrDefault(symbolChildUi2 => symbolChildUi2.Id == _selectedInstance.SymbolChildId);
-        if (symbolChildUi == null)
+        if (!compositionSymbolUi.ChildUis.TryGetValue(_selectedInstance.SymbolChildId, out var symbolChildUi))
         {
             Close();
             return;

@@ -6,6 +6,7 @@ namespace T3.Core.Operator
 {
     public static class SymbolRegistry //: IDisposable
     {
+        // todo - it would be nice to get rid of this global dictionary
         public static IReadOnlyDictionary<Guid, Symbol> Entries => EntriesEditable;
         public static readonly ConcurrentDictionary<Guid, Symbol> EntriesEditable = new(-1, 1000);
 

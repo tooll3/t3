@@ -760,7 +760,7 @@ namespace T3.Editor.Gui.Interaction
 
             var animator = op.Symbol.Animator;
 
-            foreach (var child in op.Children)
+            foreach (var child in op.Children.Values)
             {
                 if (_ignoredSymbols.Contains(child.Symbol.Name))
                     continue;

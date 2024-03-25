@@ -46,24 +46,31 @@ internal static class SymbolUiRegistry
     // todo - simplify lookups with a dictionary or something
     public static SymbolChildUi? GetSymbolChildUiWithId(this SymbolUi symbolUi, Guid id, bool allowNull = true)
     {
-        return allowNull ? symbolUi.ChildUis.SingleOrDefault(child => child.Id == id) 
-                   : symbolUi.ChildUis.Single(child => child.Id == id);
+        if (symbolUi.ChildUis.TryGetValue(id, out var childUi))
+            return childUi;
+        
+        if (!allowNull)
+            throw new Exception($"Can't find child ui for id {id}");
+        
+        return null;
     }
     
     public static Instance GetChildInstanceWith(this Instance instance, SymbolChild child) => GetChildInstanceWithId(instance, child.Id);
 
     public static Instance? GetChildInstanceWithId(this Instance instance, Guid id, bool allowNull = false)
     {
-        return allowNull ? instance.Children.SingleOrDefault(child => child.SymbolChildId == id) 
-                   : instance.Children.Single(child => child.SymbolChildId == id);
+        if(instance.Children.TryGetValue(id, out var child))
+            return child;
+        
+        if(!allowNull)
+            throw new Exception($"Can't find child instance for id {id}");
+        
+        return null;
     }
 
     public static bool TryGetChildInstance(this Instance instance, Guid id, bool recursive, out Instance? child, out List<Guid>? pathFromRoot)
     {
-        child = instance.Children.SingleOrDefault(child => child.SymbolChildId == id);
-        var success = child != null;
-
-        if (success)
+        if (instance.Children.TryGetValue(id, out child))
         {
             pathFromRoot = OperatorUtils.BuildIdPathForInstance(child);
             return true;
@@ -71,7 +78,7 @@ internal static class SymbolUiRegistry
 
         if (recursive)
         {
-            foreach (var childInstance in instance.Children)
+            foreach (var childInstance in instance.Children.Values)
             {
                 if (TryGetChildInstance(childInstance, id, true, out child, out pathFromRoot))
                     return true;

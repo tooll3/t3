@@ -74,21 +74,14 @@ namespace T3.Editor.UiModel
             // Set disabled status on outputs of each instanced copy of this child within all parents that contain it
             foreach (var parentInstance in SymbolChild.Parent.InstancesOfSymbol)
             {
-                var matchingChildInstances = parentInstance.Children.Where(child => child.SymbolChildId == Id).ToArray();
-
                 // This parent doesn't have an instance of our SymbolChild. Ignoring and continuing.
-                if (matchingChildInstances.Length == 0)
+                if (!parentInstance.Children.TryGetValue(Id, out var matchingChildInstance))
                     continue;
 
                 // Set disabled status on all outputs of each instance
-                foreach (var instance in matchingChildInstances)
+                foreach (var slot in matchingChildInstance.Outputs)
                 {
-                    List<ISlot> outputs = instance.Outputs;
-
-                    foreach (var t in outputs)
-                    {
-                        t.IsDisabled = shouldBeDisabled;
-                    }
+                    slot.IsDisabled = shouldBeDisabled;
                 }
             }
         }

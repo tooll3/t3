@@ -65,7 +65,7 @@ internal static class ChangeSymbol
         addSymbolChildCommand.Do();
         executedCommands.Add(addSymbolChildCommand);
 
-        var newSymbolChild = symbolChild.Parent.Children.Single(entry => entry.Id == addSymbolChildCommand.AddedChildId);
+        var newSymbolChild = symbolChild.Parent.Children[addSymbolChildCommand.AddedChildId];
 
         // loop though inputs
         foreach (var input in symbolChild.Inputs)

@@ -69,7 +69,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         private static bool FindMissingPathsInSymbol(Symbol symbol)
         {
             var symbolUpdated = false;
-            foreach (var symbolChild in symbol.Children)
+            foreach (var symbolChild in symbol.Children.Values)
             {
                 var childSymbol = symbolChild.Symbol;
                 var package = (EditorSymbolPackage)childSymbol.SymbolPackage;

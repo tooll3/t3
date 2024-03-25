@@ -77,6 +77,9 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// </summary>
         public void SetSelectionToChildUi(SymbolChildUi node, Instance instance)
         {
+            if(instance == null)
+                throw new ArgumentNullException(nameof(instance));
+            
             Clear();
             AddSymbolChildToSelection(node, instance);
             _history.UpdateSelectedInstance(instance);
@@ -127,7 +130,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// <summary>
         /// Returns null if more than onl
         /// </summary>
-        public Instance GetSelectedInstanceWithoutComposition()
+        public Instance? GetSelectedInstanceWithoutComposition()
         {
             if (Selection.Count != 1)
                 return null;

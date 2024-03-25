@@ -11,11 +11,7 @@ internal sealed partial class GraphWindow
         public SymbolUi SymbolUi => _instance.GetSymbolUi();
         public Symbol Symbol => SymbolUi.Symbol;
         public Guid SymbolChildId => _instance.SymbolChildId;
-        public List<ISlot> Outputs => _instance.Outputs;
-        public List<IInputSlot> Inputs => _instance.Inputs;
         public Type Type => _instance.Type;
-        public SymbolChildUi? SymbolChildUi => _instance.GetSymbolChildUi();
-        public IEnumerable<Instance> Children => _instance.Children;
         public Instance Instance => _instance;
         public bool IsDisposed => _disposed;
         public readonly EditorSymbolPackage SymbolPackage;
@@ -49,11 +45,26 @@ internal sealed partial class GraphWindow
         {
             if (_needsReload)
             {
-                var symbol = _instance.Symbol;
+                var symbol = Symbol;
+                var symbolUi = SymbolUi;
                 Log.Info($"Reloading symbol [{symbol.Name}] ({symbol.Id}).");
                 SymbolPackage.Reload(SymbolUi);
-                var newSymbol = _instance.Symbol;
-                Log.Info($"Reloaded symbol [{newSymbol.Name}] ({newSymbol.Id}). Same object? {newSymbol == symbol}");
+                var newSymbol = Symbol;
+                var newSymbolUi = SymbolUi;
+                
+                var sameSymbol = newSymbol == symbol;
+                var sameSymbolUi = newSymbolUi == symbolUi;
+                
+                string msg = $"Reloaded symbol [{newSymbol.Name}] ({newSymbol.Id}). Same symbol? {sameSymbol} | Same symbol ui? {sameSymbolUi}";
+
+                if (!sameSymbol && !sameSymbolUi)
+                {
+                    Log.Info(msg);
+                }
+                else
+                {
+                    throw new Exception(msg);
+                }
             }
         }
 

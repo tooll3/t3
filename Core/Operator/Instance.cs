@@ -39,7 +39,7 @@ namespace T3.Core.Operator
         public Symbol Symbol => _symbolChild == null ? SymbolRegistry.SymbolsByType[Type] : _symbolChild.Symbol;
 
         public readonly List<ISlot> Outputs = new();
-        public readonly List<Instance> Children = new();
+        public readonly Dictionary<Guid, Instance> Children = new();
         public readonly List<IInputSlot> Inputs = new();
         public bool IsCopy = false;
 
@@ -131,7 +131,7 @@ namespace T3.Core.Operator
             
             var sourceParentOrChildId = connection.SourceParentOrChildId;
             
-            foreach(var child in compositionInstance.Children)
+            foreach(var child in compositionInstance.Children.Values)
             {
                 if (child.SymbolChildId != sourceParentOrChildId)
                     continue;
@@ -173,24 +173,13 @@ namespace T3.Core.Operator
             var compositionInstance = this;
 
             // Get target Instance
-
-            Instance targetInstance = null;
-            bool gotTargetInstance = false;
             
             var targetParentOrChildId = connection.TargetParentOrChildId;
-            
-            foreach(var child in compositionInstance.Children)
-            {
-                if (child.SymbolChildId != targetParentOrChildId)
-                    continue;
-                
-                targetInstance = child;
-                gotTargetInstance = true;
-                break;
-            }
 
             // Get target Slot
-            var targetSlotList = gotTargetInstance ? targetInstance.Inputs.Cast<ISlot>() : compositionInstance.Outputs;
+            var targetSlotList = compositionInstance.Children.TryGetValue(targetParentOrChildId, out var targetInstance) 
+                                     ? targetInstance.Inputs.Cast<ISlot>() 
+                                     : compositionInstance.Outputs;
 
             targetSlot = null;
             var gotTargetSlot = false;

@@ -126,7 +126,7 @@ namespace T3.Editor.Gui.Windows.Variations
                         || VariationHandling.ActivePoolForSnapshots.AllVariations.Count == 0)
                     {
                         var childUi = VariationHandling.ActiveInstanceForPresets.GetSymbolUi();
-                        var shapshotsEnabledForNone = !childUi.ChildUis.Any(s => s.SnapshotGroupIndex > 0);
+                        var shapshotsEnabledForNone = !childUi.ChildUis.Values.Any(s => s.SnapshotGroupIndex > 0);
                         var additionalHint = shapshotsEnabledForNone ? "Use the graph window context menu\nto activate snapshots for operators." : "";
 
                         if (CustomComponents

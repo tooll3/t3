@@ -57,13 +57,12 @@ namespace T3.Editor.Gui.Windows.Variations
 
                     var parentSymbolUi = InstanceForBlendOperations.Symbol.GetSymbolUi();
 
-                    foreach (var symbolChildUi in parentSymbolUi.ChildUis)
+                    foreach (var symbolChildUi in parentSymbolUi.ChildUis.Values)
                     {
                         if (!selectedVariation.ParameterSetsForChildIds.ContainsKey(symbolChildUi.Id))
                             continue;
 
-                        var instance = InstanceForBlendOperations.Children.FirstOrDefault(c => c.SymbolChildId == symbolChildUi.Id);
-                        if (instance != null)
+                        if (InstanceForBlendOperations.Children.TryGetValue(symbolChildUi.Id, out var instance))
                             nodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
                     }
                 }

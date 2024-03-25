@@ -54,8 +54,7 @@ internal partial class Graph
             else if (c.TargetParentOrChildId != ConnectionMaker.NotConnectedId
                      && c.TargetParentOrChildId != ConnectionMaker.UseDraftChildId)
             {
-                var targetNode = childUis.SingleOrDefault(childUi => childUi.Id == c.TargetParentOrChildId);
-                if (targetNode == null)
+                if (!childUis.TryGetValue(c.TargetParentOrChildId, out var targetNode))
                     return;
 
                 if (!_linesIntoNodes.ContainsKey(targetNode))
@@ -83,8 +82,7 @@ internal partial class Graph
             else if (c.SourceParentOrChildId != ConnectionMaker.NotConnectedId
                      && c.SourceParentOrChildId != ConnectionMaker.UseDraftChildId)
             {
-                var sourceNode = childUis.SingleOrDefault(childUi => childUi.Id == c.SourceParentOrChildId);
-                if (sourceNode == null)
+                if (!childUis.TryGetValue(c.SourceParentOrChildId, out var sourceNode))
                     return;
 
                 if (!_linesFromNodes.ContainsKey(sourceNode))

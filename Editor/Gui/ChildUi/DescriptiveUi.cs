@@ -20,7 +20,7 @@ namespace T3.Editor.Gui.ChildUi
             drawList.PushClipRect(area.Min, area.Max, true);
             
             // Label if instance has title
-            var symbolChild = instance.Parent.Symbol.Children.Single(c => c.Id == instance.SymbolChildId);
+            var symbolChild = instance.SymbolChild;
             
             WidgetElements.DrawSmallTitle(drawList, area, !string.IsNullOrEmpty(symbolChild.Name) ? symbolChild.Name : symbolChild.Symbol.Name, canvasScale);
 

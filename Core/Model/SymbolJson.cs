@@ -25,7 +25,7 @@ namespace T3.Core.Model
             writer.WriteComment(symbol.Name);
 
             WriteSymbolInputs(symbol.InputDefinitions, writer);
-            WriteSymbolChildren(symbol.Children, writer);
+            WriteSymbolChildren(symbol.Children.Values, writer);
             WriteConnections(symbol.Connections, writer);
             symbol.PlaybackSettings?.WriteToJson(writer);
             symbol.Animator.Write(writer);
@@ -68,7 +68,7 @@ namespace T3.Core.Model
             writer.WriteEndArray();
         }
 
-        private static void WriteSymbolChildren(List<SymbolChild> children, JsonTextWriter writer)
+        private static void WriteSymbolChildren(IEnumerable<SymbolChild> children, JsonTextWriter writer)
         {
             writer.WritePropertyName(JsonKeys.Children);
             writer.WriteStartArray();

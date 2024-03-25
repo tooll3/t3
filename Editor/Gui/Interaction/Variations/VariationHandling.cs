@@ -348,10 +348,9 @@ namespace T3.Editor.Gui.Interaction.Variations
         private static void AddSnapshotEnabledChildrenToList(Instance instance, List<Instance> list)
         {
             var compositionUi = instance.GetSymbolUi();
-            foreach (var childInstance in instance.Children)
+            foreach (var childInstance in instance.Children.Values)
             {
-                var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
-                Debug.Assert(symbolChildUi != null);
+                var symbolChildUi = compositionUi.ChildUis[childInstance.SymbolChildId];
                 
                 if (symbolChildUi.SnapshotGroupIndex == 0)
                     continue;

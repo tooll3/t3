@@ -34,7 +34,7 @@ internal static class Combine
                                 where potentialTargetIds.All(potId => potId != con.SourceParentOrChildId)
                                 select con).ToArray();
         var inputsToGenerate = (from con in inputConnections
-                                from child in parentCompositionSymbol.Children
+                                from child in parentCompositionSymbol.Children.Values
                                 where child.Id == con.TargetParentOrChildId
                                 from input in child.Symbol.InputDefinitions
                                 where input.Id == con.TargetSlotId
@@ -78,7 +78,7 @@ internal static class Combine
                                  where potentialTargetIds.All(potId => potId != con.TargetParentOrChildId)
                                  select con).ToArray();
         var outputsToGenerate = (from con in outputConnections
-                                 from child in parentCompositionSymbol.Children
+                                 from child in parentCompositionSymbol.Children.Values
                                  where child.Id == con.SourceParentOrChildId
                                  from output in child.Symbol.OutputDefinitions
                                  where output.Id == con.SourceSlotId
@@ -153,7 +153,7 @@ internal static class Combine
         copyCmd.Do();
         executedCommands.Add(copyCmd);
 
-        var newChildrenArea = GetAreaFromChildren(newSymbolUi.ChildUis);
+        var newChildrenArea = GetAreaFromChildren(newSymbolUi.ChildUis.Values);
 
         // Initialize output positions
         if (newSymbolUi.OutputUis.Count > 0)
@@ -246,21 +246,23 @@ internal static class Combine
         project.SaveModifiedSymbols();
     }
 
-    private static ImRect GetAreaFromChildren(List<SymbolChildUi> childUis)
+    private static ImRect GetAreaFromChildren(IEnumerable<SymbolChildUi> childUis)
     {
-        if (childUis.Count == 0)
-        {
-            return new ImRect(new Vector2(-100, -100),
-                              new Vector2(100, 100));
-        }
+        var min = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
+        var max = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
 
-        Vector2 min = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
-        Vector2 max = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
-
+        var hasAtLeastOne = false;
         foreach (var childUi in childUis)
         {
             min = Vector2.Min(min, childUi.PosOnCanvas);
             max = Vector2.Max(max, childUi.PosOnCanvas + childUi.Size);
+            hasAtLeastOne = true;
+        }
+
+        if (!hasAtLeastOne)
+        {
+            return new ImRect(new Vector2(-100, -100),
+                                          new Vector2(100, 100));
         }
 
         return new ImRect(min, max);

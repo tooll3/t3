@@ -78,8 +78,7 @@ internal class ParameterWindow : Window
             if (instance.Parent != null)
             {
                 var parentUi = instance.Parent.GetSymbolUi();
-                symbolChildUi = parentUi.ChildUis.SingleOrDefault(childUi => childUi.Id == instance.SymbolChildId);
-                if (symbolChildUi == null)
+                if (!parentUi.ChildUis.TryGetValue(instance.SymbolChildId, out symbolChildUi))
                 {
                     Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
                     return;

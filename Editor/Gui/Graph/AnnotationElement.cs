@@ -211,7 +211,7 @@ namespace T3.Editor.Gui.Graph
             var matches = new List<ISelectableCanvasObject>();
             var aRect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
 
-            foreach (var n in parentUi.ChildUis)
+            foreach (var n in parentUi.ChildUis.Values)
             {
                 var nRect = new ImRect(n.PosOnCanvas, n.PosOnCanvas + n.Size);
                 if (aRect.Contains(nRect))

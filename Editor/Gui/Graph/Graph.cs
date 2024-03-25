@@ -110,28 +110,23 @@ namespace T3.Editor.Gui.Graph
             drawList.ChannelsSetCurrent((int)Channels.Operators);
 
             // 3. Draw Nodes and their sockets and set positions for connection lines
-            foreach (var instance in children)
+            foreach (var instance in children.Values)
             {
                 if (instance == null)
                     continue;
 
-                foreach (var childUi in compositionUi.ChildUis) // Don't use linq to avoid allocations
+                var childUi = compositionUi.ChildUis[instance.SymbolChildId];
+
+                var isSelected = canvas.NodeSelection.IsNodeSelected(childUi);
+
+                // todo - remove nodes that are not in the graph anymore?
+                if (!_graphNodes.TryGetValue(childUi, out var node))
                 {
-                    if (childUi.Id != instance.SymbolChildId)
-                        continue;
-
-                    var isSelected = canvas.NodeSelection.IsNodeSelected(childUi);
-
-                    // todo - remove nodes that are not in the graph anymore?
-                    if (!_graphNodes.TryGetValue(childUi, out var node))
-                    {
-                        node = new GraphNode(_window, _connectionSorter);
-                        _graphNodes[childUi] = node;
-                    }
-
-                    node.Draw(drawList, GraphOpacity, isSelected, childUi, instance, preventInteraction);
-                    break;
+                    node = new GraphNode(_window, _connectionSorter);
+                    _graphNodes[childUi] = node;
                 }
+
+                node.Draw(drawList, GraphOpacity, isSelected, childUi, instance, preventInteraction);
             }
 
             // 4. Draw Inputs Nodes

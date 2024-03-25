@@ -356,27 +356,28 @@ namespace T3.Editor.Gui.Windows.TimeLine
             
             // No Linq to avoid allocations
             _pinnedParams.Clear();
-            foreach (Instance child in compositionOp.Children)
+            var children = compositionOp.Children.Values;
+            foreach (Instance child in children)
             foreach (var input in child.Inputs)
             {
                 if (animator.IsInputSlotAnimated(input))
                     foreach (var pinnedInputSlot in DopeSheetArea.PinnedParameters)
                     {
                         if (pinnedInputSlot == input.GetHashCode())
-                            _pinnedParams.Add(new AnimationParameter() { Instance = child, Input = input, Curves = animator.GetCurvesForInput(input), ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == child.SymbolChildId) });
+                            _pinnedParams.Add(new AnimationParameter() { Instance = child, Input = input, Curves = animator.GetCurvesForInput(input), ChildUi = symbolUi.ChildUis[child.SymbolChildId] });
                     }
             }
 
             _curvesForSelection.Clear();
             
-            foreach (Instance child in compositionOp.Children)
+            foreach (Instance child in children)
             foreach (var selectedElement in selection)
             {
                 if (child.SymbolChildId == selectedElement.Id)
                     foreach (var input in child.Inputs)
                     {
                         if (animator.IsInputSlotAnimated(input))
-                            _curvesForSelection.Add(new AnimationParameter() { Instance = child, Input = input, Curves = animator.GetCurvesForInput(input), ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == selectedElement.Id) });
+                            _curvesForSelection.Add(new AnimationParameter() { Instance = child, Input = input, Curves = animator.GetCurvesForInput(input), ChildUi = symbolUi.ChildUis[selectedElement.Id] });
                     }
             }
 

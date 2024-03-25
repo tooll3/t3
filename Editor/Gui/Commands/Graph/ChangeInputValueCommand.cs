@@ -14,23 +14,21 @@ namespace T3.Editor.Gui.Commands.Graph
         public string Name => "Change Input Value";
         public bool IsUndoable => true;
 
-        public ChangeInputValueCommand(Symbol inputParentSymbol, Guid symbolChildId, SymbolChild.Input input, InputValue newValue)
+        public ChangeInputValueCommand(Symbol symbol, Guid symbolChildId, SymbolChild.Input input, InputValue newValue)
         {
-            _inputParentSymbolId = inputParentSymbol.Id;
+            _inputParentSymbol = symbol;
+            _inputParentSymbolId = symbol.Id;
             _childId = symbolChildId;
             _inputId = input.InputDefinition.Id;
-            _isAnimated = inputParentSymbol.Animator.IsAnimated(_childId, _inputId);
+            _isAnimated = symbol.Animator.IsAnimated(_childId, _inputId);
             _wasDefault = input.IsDefault;
             _animationTime = Playback.Current.TimeInBars;
-
             OriginalValue = input.Value.Clone();
             _newValue = newValue == null ? input.Value.Clone() : newValue.Clone();
-
-            //Log.Debug($"New command {OriginalValue} -> {newValue}");
+            
             if (_isAnimated)
             {
-                var animator = inputParentSymbol.Animator;
-                _originalKeyframes = animator.GetTimeKeys(symbolChildId, _inputId, _animationTime).ToList();
+                _originalKeyframes = symbol.Animator.GetTimeKeys(_childId, _inputId, _animationTime).ToList();
             }
         }
 
@@ -50,28 +48,25 @@ namespace T3.Editor.Gui.Commands.Graph
                 }
 
                 var animator = inputParentSymbol.Animator;
-                if (wasNewKeyframe)
+                if (wasNewKeyframe) // todo: these are identical?
                 {
                     //Log.Debug("  was new keyframe...");
                     animator.SetTimeKeys(_childId, _inputId,_animationTime, _originalKeyframes); // Remove keyframes
-                    var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
-                    InvalidateInstances(inputParentSymbol, symbolChild);
                 }
                 else
                 {
                     //Log.Debug("  restore original keyframes...");
                     animator.SetTimeKeys(_childId, _inputId,_animationTime, _originalKeyframes);
-                    
-                    var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
-                    InvalidateInstances(inputParentSymbol, symbolChild);
                 }
+
+                var symbolChild = inputParentSymbol.Children[_childId];
+                InvalidateInstances(inputParentSymbol, symbolChild);
             }
             else
             {
                 if (_wasDefault)
                 {
-                    var symbolChild = inputParentSymbol.Children.SingleOrDefault(child => child.Id == _childId);
-                    if (symbolChild == null)
+                    if (!inputParentSymbol.Children.TryGetValue(_childId, out var symbolChild))
                         return;
                     
                     var input = symbolChild.Inputs[_inputId];
@@ -98,17 +93,9 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private void AssignValue(InputValue valueToSet)
         {
-            //Log.Debug($"assigning value {valueToSet}");
-            if (!SymbolUiRegistry.TryGetValue(_inputParentSymbolId, out var inputParentSymbolUi))
-            {
-                Log.Warning($"Can't find symbol {_inputParentSymbolId} - was it removed?");
-                return;
-            }
+            var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
             
-            var inputParentSymbol = inputParentSymbolUi!.Symbol;
-            
-            var symbolChild = inputParentSymbol.Children.SingleOrDefault(child => child.Id == _childId);
-            if (symbolChild == null)
+            if (!inputParentSymbol.Children.TryGetValue(_childId, out var symbolChild))
             {
                 Log.Error($"Can't assign value to missing symbolChild {_childId}");
                 return;
@@ -119,16 +106,17 @@ namespace T3.Editor.Gui.Commands.Graph
             {
                 if(!SymbolUiRegistry.TryGetValue(symbolChild.Symbol.Id, out var symbolUi))
                 {
-                    Log.Warning($"Can't find symbol {symbolChild.Symbol.Id} - was it removed?");
+                    Log.Warning($"Can't find symbol child's SymbolUI  {symbolChild.Symbol.Id} - was it removed? [{symbolChild.Symbol.Name}]");
                     return;
                 }
                 
                 var inputUi = symbolUi.InputUis[_inputId];
                 var animator = inputParentSymbol.Animator;
+                var symbolChildId = symbolChild.Id;
 
                 foreach (var parentInstance in inputParentSymbol.InstancesOfSymbol)
                 {
-                    var instance = parentInstance.Children.Single(child => child.SymbolChildId == symbolChild.Id);
+                    var instance = parentInstance.Children[symbolChildId];
                     var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
                     inputUi.ApplyValueToAnimation(inputSlot, valueToSet, animator, _animationTime);
                     inputSlot.DirtyFlag.ForceInvalidate();
@@ -144,9 +132,10 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private void InvalidateInstances(Symbol inputParentSymbol, SymbolChild symbolChild)
         {
+            var symbolChildId = symbolChild.Id;
             foreach (var parentInstance in inputParentSymbol.InstancesOfSymbol)
             {
-                var instance = parentInstance.Children.Single(child => child.SymbolChildId == symbolChild.Id);
+                var instance = parentInstance.Children[symbolChildId];
                 var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
                 inputSlot.DirtyFlag.ForceInvalidate();
             }
@@ -155,6 +144,7 @@ namespace T3.Editor.Gui.Commands.Graph
         private InputValue OriginalValue { get; set; }
         private readonly InputValue _newValue;
         private readonly Guid _inputParentSymbolId;
+        private readonly Symbol _inputParentSymbol;
         private readonly Guid _childId;
         private readonly Guid _inputId;
         private readonly bool _wasDefault;

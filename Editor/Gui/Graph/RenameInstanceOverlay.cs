@@ -55,16 +55,15 @@ namespace T3.Editor.Gui.Graph
             if (_focusedInstanceId == Guid.Empty)
                 return;
 
-            var symbolChild = window.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == _focusedInstanceId);
-            if (symbolChild == null)
+            var parentSymbolUi = window.CompositionOp.GetSymbolUi();
+            if (!parentSymbolUi.ChildUis.TryGetValue(_focusedInstanceId, out var symbolChildUi))
             {
                 Log.Error("canceling rename overlay of no longer valid selection");
                 _focusedInstanceId = Guid.Empty;
                 return;
             }
 
-            var parentSymbolUi = window.CompositionOp.GetSymbolUi();
-            var symbolChildUi = parentSymbolUi.ChildUis.Single(child => child.Id == _focusedInstanceId);
+            var symbolChild = symbolChildUi.SymbolChild;
 
             var positionInScreen = window.GraphCanvas.TransformPosition(symbolChildUi.PosOnCanvas);
 

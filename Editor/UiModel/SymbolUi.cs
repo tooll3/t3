@@ -30,7 +30,7 @@ namespace T3.Editor.UiModel
                         OrderedDictionary<Guid, ExternalLink> links,
                         bool updateConsistency) : this(symbol, false)
         {
-            _childUis = childUis;
+            _childUis = childUis.ToDictionary(x => x.Id, x => x);
             
             foreach(var childUi in childUis)
                 childUi.Parent = this;
@@ -102,7 +102,7 @@ namespace T3.Editor.UiModel
 
         internal IEnumerable<ISelectableCanvasObject> GetSelectables()
         {
-            foreach (var childUi in ChildUis)
+            foreach (var childUi in ChildUis.Values)
                 yield return childUi;
 
             foreach (var inputUi in InputUis)
@@ -118,9 +118,9 @@ namespace T3.Editor.UiModel
         internal void UpdateConsistencyWithSymbol()
         {
             // Check if child entries are missing
-            foreach (var child in Symbol.Children)
+            foreach (var child in Symbol.Children.Values)
             {
-                if (ChildUis.FirstOrDefault(c => c.Id == child.Id) == null)
+                if (!ChildUis.TryGetValue(child.Id, out _))
                 {
                     Log.Debug($"Found no symbol child ui entry for symbol child '{child.ReadableName}' - creating a new one");
                     var childUi = new SymbolChildUi()
@@ -129,12 +129,23 @@ namespace T3.Editor.UiModel
                                           PosOnCanvas = new Vector2(100, 100),
                                           Parent = this,
                                       };
-                    _childUis.Add(childUi);
+                    _childUis.Add(child.Id, childUi);
                 }
             }
 
             // check if there are child entries where no symbol child exists anymore
-            _childUis.RemoveAll(childUi => !Symbol.Children.Exists(child => child.Id == childUi.Id));
+            List<Guid> childIdsToRemove = new(4);
+
+            foreach (var childUi in _childUis.Values)
+            {
+                if(!Symbol.Children.ContainsKey(childUi.Id))
+                    childIdsToRemove.Add(childUi.Id);
+            }
+            
+            foreach (var id in childIdsToRemove)
+            {
+                _childUis.Remove(id);
+            }
 
             // check if input UIs are missing
             var inputUiFactory = InputUiFactory.Entries;
@@ -185,7 +196,7 @@ namespace T3.Editor.UiModel
 
                     var newOutputUi = outputUiCreator();
                     newOutputUi.OutputDefinition = output;
-                    newOutputUi.PosOnCanvas = ComputeNewOutputUiPositionOnCanvas(ChildUis, OutputUis);
+                    newOutputUi.PosOnCanvas = ComputeNewOutputUiPositionOnCanvas(_childUis.Values, OutputUis);
                     OutputUis.Add(output.Id, newOutputUi);
                     FlagAsModified();
                 }
@@ -199,7 +210,7 @@ namespace T3.Editor.UiModel
             }
         }
 
-        private static Vector2 ComputeNewOutputUiPositionOnCanvas(IReadOnlyList<SymbolChildUi> childUis, OrderedDictionary<Guid, IOutputUi> outputUis)
+        private static Vector2 ComputeNewOutputUiPositionOnCanvas(IReadOnlyCollection<SymbolChildUi> childUis, OrderedDictionary<Guid, IOutputUi> outputUis)
         {
             if (outputUis.Count > 0)
             {
@@ -256,7 +267,7 @@ namespace T3.Editor.UiModel
             return lastInputUi.PosOnCanvas + new Vector2(0, lastInputUi.Size.Y + SelectableNodeMovement.SnapPadding.Y);
         }
 
-        internal Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size, string name = null)
+        internal SymbolChildUi AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size, string name = null)
         {
             FlagAsModified();
             var symbolChild = Symbol.AddChild(symbolToAdd, addedChildId, name);
@@ -267,9 +278,9 @@ namespace T3.Editor.UiModel
                                   Parent = this,
                                   Size = size,
                               };
-            _childUis.Add(childUi);
+            _childUis.Add(childUi.Id, childUi);
 
-            return addedChildId;
+            return childUi;
         }
 
         internal SymbolChild AddChildAsCopyFromSource(Symbol symbolToAdd, SymbolChild sourceChild, SymbolUi sourceCompositionSymbolUi, Vector2 posInCanvas,
@@ -286,7 +297,7 @@ namespace T3.Editor.UiModel
             newChildUi.PosOnCanvas = posInCanvas;
             newChildUi.Comment = sourceChildUi.Comment;
 
-            _childUis.Add(newChildUi);
+            _childUis.Add(newChildUi.Id, newChildUi);
             return newChild;
         }
 
@@ -297,8 +308,7 @@ namespace T3.Editor.UiModel
             var removed = Symbol.RemoveChild(id, out _); // remove from symbol
 
             // now remove ui entry
-            var childToRemove = ChildUis.Single(child => child.Id == id); 
-            var removedUi =_childUis.Remove(childToRemove);
+            var removedUi =_childUis.Remove(id, out _);
             
             if(removed != removedUi)
             {
@@ -322,8 +332,8 @@ namespace T3.Editor.UiModel
         internal bool ForceUnmodified;
         private bool _hasBeenModified;
         public bool HasBeenModified => _hasBeenModified && !ForceUnmodified;
-        private List<SymbolChildUi> _childUis = new();
-        public IReadOnlyList<SymbolChildUi> ChildUis => _childUis; // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
+        private Dictionary<Guid, SymbolChildUi> _childUis = new();
+        public IReadOnlyDictionary<Guid, SymbolChildUi> ChildUis => _childUis; // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
         public readonly OrderedDictionary<Guid, IInputUi> InputUis = new();
         public readonly OrderedDictionary<Guid, IOutputUi> OutputUis = new();
         public readonly OrderedDictionary<Guid, Annotation> Annotations = new();

@@ -32,7 +32,7 @@ static class TemplateDefinitions
                                                  try
                                                  {
                                                      var newShaderFilename = $@"{resourceFolder}shader\{name}.hlsl";
-                                                     var shaderInstance = newInstance.Children.SingleOrDefault(c => c.Symbol.Id ==
+                                                     var shaderInstance = newInstance.Children.Values.SingleOrDefault(c => c.Symbol.Id ==
                                                                       Guid.Parse("a256d70f-adb3-481d-a926-caf35bd3e64c"));
 
                                                      File.Copy(@"examples\templates\PointShaderTemplate.hlsl",
@@ -48,6 +48,7 @@ static class TemplateDefinitions
                                                      {
                                                          Log.Warning("Can't find compute shader for source file");
                                                      }
+                                                     
 
                                                      // Open editor
                                                      Process.Start(new ProcessStartInfo(newShaderFilename) { UseShellExecute = true });
@@ -75,7 +76,7 @@ static class TemplateDefinitions
                                                  try
                                                  {
                                                      var newShaderFilename = $@"{resourceFolder}shader\{name}.hlsl";
-                                                     var shaderSetupInstance = newInstance.Children.SingleOrDefault(c => c.Symbol.Id ==
+                                                     var shaderSetupInstance = newInstance.Children.Values.SingleOrDefault(c => c.Symbol.Id ==
                                                                       Guid.Parse("bd0b9c5b-c611-42d0-8200-31af9661f189"));
 
                                                      File.Copy(@"examples\templates\ImgFxShaderTemplate.hlsl",

@@ -10,6 +10,7 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Commands.Variations;
 using T3.Editor.Gui.Windows;
+using T3.Editor.UiModel;
 using T3.Serialization;
 
 namespace T3.Editor.Gui.Interaction.Variations.Model
@@ -382,18 +383,17 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
             foreach (var (childId, parameterSets) in variation.ParameterSetsForChildIds)
             {
-                var symbolChild = compositionSymbol.Children.SingleOrDefault(s => s.Id == childId);
-                if (symbolChild == null)
-                {
-                    //Log.Warning($"Ignoring childId {childId} in variation...");
-                    continue;
-                }
-
                 if (childId == Guid.Empty)
                 {
                     Log.Warning("Didn't expect parent-reference id in variation");
                     continue;
                 }
+                
+                var instance = compositionInstance.GetChildInstanceWithId(childId, true);
+                if (instance == null)
+                    continue;
+                
+                var symbolChild = instance.SymbolChild;
 
                 foreach (var input in symbolChild.Inputs.Values)
                 {
@@ -435,7 +435,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
             foreach (var childId2 in affectedInstances)
             {
-                var instance = compositionInstance.Children.SingleOrDefault(s => s.SymbolChildId == childId2);
+                var instance = compositionInstance.GetChildInstanceWithId(childId2, true);
                 if (instance == null)
                     continue;
 
@@ -493,7 +493,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             if (!variation.IsSnapshot)
                 return null;
 
-            foreach (var child in compositionInstance.Children)
+            foreach (var child in compositionInstance.Children.Values)
             {
                 if (!variation.ParameterSetsForChildIds.TryGetValue(child.SymbolChildId, out var parametersForInputs))
                     continue;
@@ -528,10 +528,8 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         private static MacroCommand CreateApplyPresetCommand(Instance instance, Variation variation)
         {
             var commands = new List<ICommand>();
-            var parentSymbol = instance.Parent.Symbol;
 
-            var symbolChild = parentSymbol.Children.SingleOrDefault(s => s.Id == instance.SymbolChildId);
-            if (symbolChild != null)
+            if (instance.Parent.Symbol.Children.ContainsKey(instance.SymbolChildId))
             {
                 foreach (var (childId, parametersForInputs) in variation.ParameterSetsForChildIds)
                 {
@@ -551,13 +549,13 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                             if (param == null)
                                 continue;
 
-                            var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, inputSlot.Input, param);
+                            var newCommand = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, param);
                             commands.Add(newCommand);
                         }
                         else
                         {
                             // ResetOtherNonDefaults
-                            commands.Add(new ResetInputToDefault(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input));
+                            commands.Add(new ResetInputToDefault(instance.Symbol, instance.SymbolChildId, inputSlot.Input));
                         }
                     }
                 }
@@ -572,8 +570,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             var commands = new List<ICommand>();
             var parentSymbol = instance.Parent.Symbol;
 
-            var symbolChild = parentSymbol.Children.SingleOrDefault(s => s.Id == instance.SymbolChildId);
-            if (symbolChild != null)
+            if (parentSymbol.Children.ContainsKey(instance.SymbolChildId))
             {
                 foreach (var (childId, parametersForInputs) in variation.ParameterSetsForChildIds)
                 {
@@ -617,8 +614,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             var parentSymbol = instance.Parent.Symbol;
             var weightsArray = weights.ToArray();
 
-            var symbolChild = parentSymbol.Children.SingleOrDefault(s => s.Id == instance.SymbolChildId);
-            if (symbolChild != null)
+            if (parentSymbol.Children.ContainsKey(instance.SymbolChildId))
             {
                 // collect variation parameters
                 var variationParameterSets = new List<Dictionary<Guid, InputValue>>();

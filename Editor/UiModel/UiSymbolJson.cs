@@ -65,7 +65,7 @@ namespace T3.Editor.UiModel
             writer.WritePropertyName(JsonKeys.SymbolChildUis);
             writer.WriteStartArray();
 
-            foreach (var childUi in symbolUi.ChildUis)
+            foreach (var childUi in symbolUi.ChildUis.Values)
             {
                 writer.WriteStartObject(); // child entry
                 writer.WriteObject(JsonKeys.ChildId, childUi.Id);
@@ -260,12 +260,13 @@ namespace T3.Editor.UiModel
                     continue;
                 }
                 
-                childUi.SymbolChild = symbol.Children.SingleOrDefault(child => child.Id == childId);
-                if (childUi.SymbolChild == null)
+                if (!symbol.Children.TryGetValue(childId, out var symbolChild))
                 {
                     Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for undefined child {childId}");
                     continue;
                 }
+                
+                childUi.SymbolChild = symbolChild;
                 
                 if (childEntry[JsonKeys.Comment] != null)
                 {

@@ -168,7 +168,7 @@ public static class FileAssetsHelper
             }
             
             // Collect children
-            foreach (var symbolChild in symbol.Children)
+            foreach (var symbolChild in symbol.Children.Values)
             {
                 var childUiSymbolUi = symbolChild.Symbol.GetSymbolUi();
 

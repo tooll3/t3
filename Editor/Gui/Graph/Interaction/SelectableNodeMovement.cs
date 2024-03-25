@@ -104,7 +104,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                     if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
                     {
-                        var instanceForSymbolChildUi = composition.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
+                        var instanceForSymbolChildUi = composition.Children[childUi.Id];
                         ConnectionMaker.SplitConnectionWithDraggedNode(childUi, 
                                                                        ConnectionSplitHelper.BestMatchLastFrame.Connection, 
                                                                        instanceForSymbolChildUi,
@@ -205,8 +205,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 if (node is not SymbolChildUi childUi)
                     continue;
 
-                var instance = window.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
-                if (instance == null)
+                if (!window.CompositionOp.Children.TryGetValue(childUi.Id, out var instance))
                 {
                     Log.Error("Can't disconnect missing instance");
                     continue;

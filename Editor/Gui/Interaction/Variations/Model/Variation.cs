@@ -76,11 +76,17 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
                 var symbolChildId = Guid.Parse(symbolChildIdString);
 
-                var symbolForChanges = symbolChildId == Guid.Empty
-                                           ? compositionSymbol
-                                           : compositionSymbol.Children.SingleOrDefault(c => c.Id == symbolChildId)?.Symbol;
+                Symbol symbolForChanges;
 
-                if (symbolForChanges == null)
+                if (symbolChildId == Guid.Empty)
+                {
+                    symbolForChanges = compositionSymbol;
+                }
+                else if(compositionSymbol.Children.TryGetValue(symbolChildId, out var symbolChild))
+                {
+                    symbolForChanges = symbolChild.Symbol;
+                }
+                else
                 {
                     //Log.Warning($"Can't find symbol {symbolChildIdString} for preset changes");
                     continue;

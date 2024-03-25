@@ -16,14 +16,14 @@ namespace libEditor.CustomUi
             if (!(instance1 is GetFloatVar instance))
                 return SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
 
-            var symbolChild = instance.Parent.Symbol.Children.Single(c => c.Id == instance.SymbolChildId);
             drawList.PushClipRect(area.Min, area.Max, true);
 
             var value = instance.Result.Value;
 
-            if (!string.IsNullOrEmpty(symbolChild.Name))
+            var name = instance1.SymbolChild.Name;
+            if (!string.IsNullOrWhiteSpace(instance1.SymbolChild.Name))
             {
-                WidgetElements.DrawPrimaryTitle(drawList, area, symbolChild.Name, canvasScale);
+                WidgetElements.DrawPrimaryTitle(drawList, area, name, canvasScale);
             }
             else
             {

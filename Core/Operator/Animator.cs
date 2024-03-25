@@ -409,7 +409,7 @@ namespace T3.Core.Operator
                 var index = indexToken?.Value<int>() ?? 0;
                 var curve = new Curve();
 
-                if (symbol.Children.All(c => c.Id != symbolChildId))
+                if (!symbol.Children.ContainsKey(symbolChildId))
                     continue;
                 
                 curve.Read(entry);

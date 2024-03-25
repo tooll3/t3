@@ -33,8 +33,7 @@ namespace lib.dx11.buffer
 
             if (UnorderedAccessView.Value != null)
             {
-                var symbolChild = Parent.Symbol.Children.Single(c => c.Id == SymbolChildId);
-                UnorderedAccessView.Value.DebugName = symbolChild.ReadableName;
+                UnorderedAccessView.Value.DebugName = SymbolChild.ReadableName;
                 // Log.Info($"{symbolChild.ReadableName} updated with ref {UnorderedAccessView.DirtyFlag.Reference}", this);
             }
         }
