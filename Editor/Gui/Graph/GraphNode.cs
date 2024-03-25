@@ -1073,7 +1073,7 @@ namespace T3.Editor.Gui.Graph
                             if (sourceOp != null)
                             {
                                 Log.Debug("Cloning connection from source op...");
-                                var sourceOpUi = parentSymbol.GetSymbolUi().GetSymbolChildUiWithId(sourceOp.Id)!;
+                                var sourceOpUi = parentSymbol.GetSymbolUi().ChildUis[sourceOp.Id]!;
                                 ConnectionMaker.StartFromOutputSlot(_canvas.NodeSelection, sourceOpUi, output.OutputDefinition);
                             }
                             else if (connection.IsConnectedToSymbolInput)

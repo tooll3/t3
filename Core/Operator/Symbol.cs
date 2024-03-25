@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -29,7 +30,7 @@ namespace T3.Core.Operator
         public string Namespace { get; private set; }
         public SymbolPackage SymbolPackage { get; set; }
 
-        public readonly List<Instance> InstancesOfSymbol = new(); // todo - instances are added twice for some reason?
+        public readonly List<Instance> InstancesOfSymbol = new(); // todo - instances are added twice for some reason? make a dictionary..?
         public IReadOnlyDictionary<Guid, SymbolChild> Children => _children;
         private readonly Dictionary<Guid, SymbolChild> _children = new();
         public List<Connection> Connections { get; init; } = new();
@@ -106,6 +107,7 @@ namespace T3.Core.Operator
         public void Dispose()
         {
             InstancesOfSymbol.ForEach(instance => instance.Dispose());
+            InstancesOfSymbol.Clear();
         }
 
         private class ConnectionEntry
@@ -373,17 +375,18 @@ namespace T3.Core.Operator
         {
             foreach (var instance in InstancesOfSymbol)
             {
-                SortInputSlotsByDefinitionOrder(instance.Inputs);
+                SortInputSlotsByDefinitionOrder(instance);
             }
         }
 
-        private void SortInputSlotsByDefinitionOrder(List<IInputSlot> inputs)
+        private static void SortInputSlotsByDefinitionOrder(Instance instance)
         {
             // order the inputs by the given input definitions. original order is coming from code, but input def order is the relevant one
+            var inputs = instance.Inputs;
+            var inputDefinitions = instance.Symbol.InputDefinitions;
             int numInputs = inputs.Count;
             var lastIndex = numInputs - 1;
 
-            var inputDefinitions = InputDefinitions;
             for (int i = 0; i < lastIndex; i++)
             {
                 Guid inputId = inputDefinitions[i].Id;
@@ -403,56 +406,44 @@ namespace T3.Core.Operator
             }
             #endif
         }
+        
+        public override string ToString() => $"{Namespace}.[{Name}]";
 
-        public Instance CreateInstance(Instance parent, SymbolChild symbolChild)
+        public static bool TryCreateInstance(Instance? parent, SymbolChild symbolChild, [NotNullIfNotNull(nameof(parent))] out Instance? newInstance, out string reason)
         {
-            Instance newInstance;
-            if (SymbolPackage.AssemblyInformation.OperatorTypeInfo.TryGetValue(Id, out var typeInfo))
+            var symbol = symbolChild.Symbol;
+            var instancesOfSymbol = symbol.InstancesOfSymbol;
+            var symbolChildId = symbolChild.Id;
+            
+            if(parent != null && parent.Children.ContainsKey(symbolChildId))
             {
-                var constructor = typeInfo.Constructor;
-                try
-                {
-                    newInstance = (Instance)constructor.Invoke();
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"Failed to create instance of type {InstanceType} with id {symbolChild.Id}: {e}");
-                    return null;
-                }
+                reason = $"Instance {symbolChild} with id ({symbolChild.Id}) already exists in {parent.Symbol}";
+                newInstance = null;
+                return false;
             }
-            else
+            
+            if (!TryInstantiate(out newInstance, symbol, symbolChildId, out reason))
             {
-                Log.Error($"No constructor found for {InstanceType}. This is likely an old operator version - it is recommended you add it");
-
-                try
-                {
-                    // create instance through reflection
-                    newInstance = (Instance)Activator.CreateInstance(InstanceType, AssemblyInformation.ConstructorBindingFlags, 
-                                                                     binder: null, args: Array.Empty<object>(), culture: null);
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"(Instance creation fallback failure) Failed to create instance of type {InstanceType} with id {symbolChild.Id}: {e}");
-                    return null;
-                }
+                Log.Error(reason);
+                return false;
             }
 
             Debug.Assert(newInstance != null);
-            newInstance!.SymbolChild = symbolChild;
-            
+            newInstance!.SymbolChildId = symbolChildId;
             newInstance.Parent = parent;
 
-            SortInputSlotsByDefinitionOrder(newInstance.Inputs);
-            InstancesOfSymbol.Add(newInstance);
+            SortInputSlotsByDefinitionOrder(newInstance);
+            
+            instancesOfSymbol.Add(newInstance);
 
             // adds children to the new instance
-            foreach (var child in _children.Values)
+            foreach (var child in symbol.Children.Values)
             {
                 CreateAndAddNewChildInstance(child, newInstance);
             }
 
-            // create connections between instances
-            var connections = Connections;
+            // create connections between child instances populated with CreateAndAddNewChildInstance
+            var connections = symbol.Connections;
             if (connections.Count != 0)
             {
                 var conHashToCount = new Dictionary<ulong, int>(connections.Count);
@@ -465,10 +456,9 @@ namespace T3.Core.Operator
                     if (!conHashToCount.TryGetValue(hash, out int count))
                         conHashToCount.Add(hash, 0);
 
-                    var valid = newInstance.TryAddConnection(connection, count);
-                    if (!valid)
+                    if (!newInstance.TryAddConnection(connection, count))
                     {
-                        Log.Warning($"Removing obsolete connecting in {this}...");
+                        Log.Warning($"Removing obsolete connecting in {symbol}...");
                         connections.RemoveAt(index);
                         index--;
                         continue;
@@ -479,17 +469,60 @@ namespace T3.Core.Operator
             }
 
             // connect animations if available
-            Animator.CreateUpdateActionsForExistingCurves(newInstance.Children.Values);
+            symbol.Animator.CreateUpdateActionsForExistingCurves(newInstance.Children.Values);
 
-            return newInstance;
+            return true;
+
+            static bool TryInstantiate(out Instance instance, Symbol symbol, in Guid id, out string reason)
+            {
+                var symbolPackage = symbol.SymbolPackage;
+                if (symbolPackage.AssemblyInformation.OperatorTypeInfo.TryGetValue(symbol.Id, out var typeInfo))
+                {
+                    var constructor = typeInfo.Constructor;
+                    try
+                    {
+                        instance = (Instance)constructor.Invoke();
+                    }
+                    catch (Exception e)
+                    {
+                        reason = "Failed to create instance of type {symbol.InstanceType} with id {id}: {e}";
+                        instance = null;
+                        return false;
+                    }
+                }
+                else
+                {
+                    Log.Error($"No constructor found for {symbol.InstanceType}. This should never happen!! Please report this");
+
+                    try
+                    {
+                        // create instance through reflection
+                        instance = (Instance)Activator.CreateInstance(symbol.InstanceType, AssemblyInformation.ConstructorBindingFlags, 
+                                                                      binder: null, args: Array.Empty<object>(), culture: null);
+                    }
+                    catch (Exception e)
+                    {
+                        reason = $"(Instance creation fallback failure) Failed to create instance of type {symbol.InstanceType} with id {id}: {e}";
+                        instance = null;
+                        return false;
+                    }
+                }
+
+                reason = string.Empty;
+                return true;
+            }
         }
 
         private static Instance CreateAndAddNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
         {
+            if (!TryCreateInstance(parentInstance, symbolChild, out var childInstance, out var reason))
+            {
+                Log.Error(reason);
+                return null;
+            }
+
             // cache property accesses for performance
             var childSymbol = symbolChild.Symbol;
-            var childInstance = childSymbol.CreateInstance(parentInstance, symbolChild);
-
             var childInputDefinitions = childSymbol.InputDefinitions;
             var childInputDefinitionCount = childInputDefinitions.Count;
             

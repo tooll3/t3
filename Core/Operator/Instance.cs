@@ -14,15 +14,21 @@ namespace T3.Core.Operator
     public abstract class Instance : IDisposable, IGuidPathContainer
     {
         public abstract Type Type { get; }
-        private SymbolChild _symbolChild;
 
-        public Guid SymbolChildId => SymbolChild.Id;
-
-        public SymbolChild SymbolChild
+        private Guid _symbolChildId = Guid.Empty;
+        public Guid SymbolChildId
         {
-            get => _symbolChild ?? throw new Exception("SymbolChild is null");
-            set => _symbolChild = value ?? throw new ArgumentNullException(nameof(value));
+            get => _symbolChildId;
+            internal set
+            {
+                if(_symbolChildId != Guid.Empty)
+                    throw new InvalidOperationException("Can't change SymbolChildId after it has been set");
+                
+                _symbolChildId = value;
+            }
         }
+
+        public SymbolChild? SymbolChild => Parent?.Symbol.Children[SymbolChildId];
 
         private Instance _parent;
 
@@ -36,7 +42,7 @@ namespace T3.Core.Operator
             }
         }
 
-        public Symbol Symbol => _symbolChild == null ? SymbolRegistry.SymbolsByType[Type] : _symbolChild.Symbol;
+        public Symbol Symbol => SymbolRegistry.SymbolsByType[Type];
 
         public readonly List<ISlot> Outputs = new();
         public readonly Dictionary<Guid, Instance> Children = new();

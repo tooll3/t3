@@ -19,12 +19,20 @@ namespace T3.Editor.Gui.OutputUi
 
         public CommandOutputUi()
         {
-            // create op for drawing grid
-            Guid gridPlaneGizmoId = Guid.Parse("e5588101-5686-4b02-ab7d-e58199ba552e");
+            // ensure op exists for drawing grid
+            var gridPlaneGizmoId = Guid.Parse("e5588101-5686-4b02-ab7d-e58199ba552e");
             var gridPlaneGizmoSymbol = SymbolRegistry.Entries[gridPlaneGizmoId];
-            
-            var gridSymbolChild = new SymbolChild(gridPlaneGizmoSymbol, Guid.NewGuid(), null);
-            _gridInstance = gridPlaneGizmoSymbol.CreateInstance(null, gridSymbolChild);
+
+            var childId = Guid.NewGuid();
+            var gridSymbolChild = new SymbolChild(gridPlaneGizmoSymbol, childId, null);
+
+            if (!Symbol.TryCreateInstance(null, gridSymbolChild, out var gridInstance, out var reason))
+            {
+                Log.Error(nameof(CommandOutputUi) + ": " + reason);
+                gridInstance = gridPlaneGizmoSymbol.InstancesOfSymbol.Single(x => x.SymbolChildId == childId);
+            }
+
+            _gridOutputs = gridInstance.Outputs;
         }
 
         protected override void Recompute(ISlot slot, EvaluationContext context)
@@ -65,8 +73,9 @@ namespace T3.Editor.Gui.OutputUi
                 context.WorldToCamera = originalCamMatrix;
                 context.CameraToClipSpace = originalViewMatrix;
 
-                _gridInstance.Outputs[0].Invalidate();
-                _gridInstance.Outputs[0].Update(context);
+                var outputSlot = _gridOutputs[0];
+                outputSlot.Invalidate();
+                outputSlot.Update(context);
             }
 
             // restore prev setup
@@ -182,6 +191,6 @@ namespace T3.Editor.Gui.OutputUi
         private Texture2D _depthBuffer;
         
         private DepthStencilView _depthBufferDsv;
-        private Instance _gridInstance;
+        private IReadOnlyList<ISlot> _gridOutputs;
     }
 }

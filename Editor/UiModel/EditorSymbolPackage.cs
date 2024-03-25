@@ -290,26 +290,15 @@ internal class EditorSymbolPackage : SymbolPackage
         Log.Debug($"{DisplayName}: Found home symbol");
 
         var symbol = rootSymboLUi.Symbol;
-        var homeGuid = CreateHomeGuid(symbol.Id);
-        var newSymbolChild = new SymbolChild(symbol, homeGuid, null);
-        rootInstance = symbol.CreateInstance(null, newSymbolChild);
-        _rootInstance = rootInstance;
-
-        if (rootInstance == null)
+        var newSymbolChild = SymbolChild.CreateWithDeterministicId(symbol, null);
+        if (!Symbol.TryCreateInstance(null, newSymbolChild, out rootInstance, out var reason))
         {
-            Log.Error($"Failed to create home instance for symbol {symbol.Name} with id {symbol.Id}");
+            Log.Error($"Failed to create home instance for {AssemblyInformation.Name}'s symbol {symbol.Name} with id {symbol.Id}\n{reason}");
             return false;
         }
-
+        
+        _rootInstance = rootInstance;
         return true;
-    }
-
-    private static Guid CreateHomeGuid(Guid symbolId)
-    {
-        //deterministically create a new guid from the symbol id
-        var bytes = symbolId.ToByteArray();
-        var hash = System.Security.Cryptography.SHA1.Create().ComputeHash(bytes);
-        return new Guid(hash.AsSpan(..16));
     }
 
     internal bool HasHome => AssemblyInformation.HasHome;

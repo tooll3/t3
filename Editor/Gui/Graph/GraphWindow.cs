@@ -596,7 +596,7 @@ namespace T3.Editor.Gui.Graph
             
             if (nextSelectedUi != null)
             {
-                var instance = _composition.Instance.GetChildInstanceWithId(nextSelectedUi.Value);
+                var instance = _composition.Instance.Children[nextSelectedUi.Value];
                 var symbolChildUi = instance.GetSymbolChildUi();
                 
                 if(symbolChildUi != null)

@@ -290,7 +290,7 @@ namespace T3.Editor.UiModel
             var newChild = Symbol.AddChild(symbolToAdd, newChildId);
             newChild.Name = sourceChild.Name;
 
-            var sourceChildUi = sourceCompositionSymbolUi.GetSymbolChildUiWithId(sourceChild.Id);
+            var sourceChildUi = sourceCompositionSymbolUi.ChildUis[sourceChild.Id];
             var newChildUi = sourceChildUi!.Clone(this);
 
             newChildUi.SymbolChild = newChild;

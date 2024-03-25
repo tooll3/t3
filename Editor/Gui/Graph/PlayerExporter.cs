@@ -26,7 +26,7 @@ namespace T3.Editor.Gui.Graph
             T3Ui.Save(false);
 
             // Collect all ops and types
-            var instance = composition.GetChildInstanceWith(childUi.SymbolChild);
+            var instance = composition.Children[childUi.SymbolChild.Id];
             var symbol = instance.Symbol;
             Log.Info($"Exporting {symbol.Name}...");
 
