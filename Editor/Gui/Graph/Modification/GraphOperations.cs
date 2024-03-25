@@ -24,7 +24,7 @@ namespace T3.Editor.Gui.Graph.Modification
             var newSymbolChild = parentSymbol.Children.Single(entry => entry.Id == addCommand.AddedChildId);
 
             // Select new node
-            var childUi = parentUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+            var childUi = parentUi.GetSymbolChildUiWithId(newSymbolChild.Id);
 
             return childUi;
         }

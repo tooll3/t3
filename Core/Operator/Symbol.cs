@@ -103,15 +103,10 @@ namespace T3.Core.Operator
         {
             SymbolPackage = symbolPackage;
             InstanceType = instanceType;
+            
+            SymbolRegistry.SymbolsByType[instanceType] = this;
 
             isObject = instanceType == typeof(object);
-            if (isObject || symbolPackage == null)
-                return;
-
-            // set the static TypeSymbol field so that instances can access their resources in their constructor
-            var typeInfo = symbolPackage.AssemblyInformation.OperatorTypeInfo[Id];
-            var staticSymbolField = typeInfo.StaticSymbolField;
-            staticSymbolField.SetValue(null, this);
         }
 
         public void Dispose()
@@ -419,7 +414,7 @@ namespace T3.Core.Operator
             #endif
         }
 
-        public Instance CreateInstance(Guid id, Instance parent)
+        public Instance CreateInstance(Instance parent, SymbolChild symbolChild)
         {
             Instance newInstance;
             if (SymbolPackage.AssemblyInformation.OperatorTypeInfo.TryGetValue(Id, out var typeInfo))
@@ -431,7 +426,7 @@ namespace T3.Core.Operator
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"Failed to create instance of type {InstanceType} with id {id}: {e.Message}");
+                    Log.Error($"Failed to create instance of type {InstanceType} with id {symbolChild.Id}: {e}");
                     return null;
                 }
             }
@@ -447,18 +442,20 @@ namespace T3.Core.Operator
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"(Instance creation fallback failure) Failed to create instance of type {InstanceType} with id {id}: {e.Message}");
+                    Log.Error($"(Instance creation fallback failure) Failed to create instance of type {InstanceType} with id {symbolChild.Id}: {e}");
                     return null;
                 }
             }
 
             Debug.Assert(newInstance != null);
-            newInstance!.SymbolChildId = id;
+            newInstance!.SymbolChild = symbolChild;
+            
             newInstance.Parent = parent;
 
             SortInputSlotsByDefinitionOrder(newInstance.Inputs);
             InstancesOfSymbol.Add(newInstance);
 
+            // adds children to the new instance
             foreach (var child in Children)
             {
                 CreateAndAddNewChildInstance(child, newInstance);
@@ -501,7 +498,7 @@ namespace T3.Core.Operator
         {
             // cache property accesses for performance
             var childSymbol = symbolChild.Symbol;
-            var childInstance = childSymbol.CreateInstance(symbolChild.Id, parentInstance);
+            var childInstance = childSymbol.CreateInstance(parentInstance, symbolChild);
 
             var childInputDefinitions = childSymbol.InputDefinitions;
             var childInputDefinitionCount = childInputDefinitions.Count;
@@ -571,12 +568,12 @@ namespace T3.Core.Operator
             return childInstance;
         }
 
-        private static void RemoveChildInstance(SymbolChild childToRemove, Instance parentInstance)
+        private static bool RemoveChildInstance(SymbolChild childToRemove, Instance parentInstance)
         {
             var children = parentInstance.Children;
             var removeId = childToRemove.Id;
             var childInstanceToRemove = children.Single(child => child.SymbolChildId == removeId);
-            children.Remove(childInstanceToRemove);
+            return children.Remove(childInstanceToRemove);
         }
 
         public bool IsTargetMultiInput(Connection connection)
@@ -705,6 +702,10 @@ namespace T3.Core.Operator
                     instance.RemoveConnection(connection, multiInputIndex);
                 }
             }
+            else
+            {
+                Log.Warning($"Failed to remove connection.");
+            }
         }
 
         public SymbolChild AddChild(Symbol symbol, Guid addedChildId, string name = null)
@@ -748,18 +749,21 @@ namespace T3.Core.Operator
             }
         }
 
-        public void RemoveChild(Guid childId)
+        public bool RemoveChild(Guid childId, out bool removedFromAll)
         {
             // first remove all connections to or from the child
             Connections.RemoveAll(c => c.SourceParentOrChildId == childId || c.TargetParentOrChildId == childId);
 
+            removedFromAll = true;
             var childToRemove = Children.Single(child => child.Id == childId);
             foreach (var instance in InstancesOfSymbol)
             {
-                RemoveChildInstance(childToRemove, instance);
+                removedFromAll &= RemoveChildInstance(childToRemove, instance);
             }
 
-            Children.Remove(childToRemove);
+            var removedFromSymbol = Children.Remove(childToRemove);
+            removedFromAll &= removedFromSymbol;
+            return removedFromSymbol;
         }
 
         public InputDefinition GetInputMatchingType(Type type)

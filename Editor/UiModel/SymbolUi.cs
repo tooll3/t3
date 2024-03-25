@@ -30,7 +30,11 @@ namespace T3.Editor.UiModel
                         OrderedDictionary<Guid, ExternalLink> links,
                         bool updateConsistency) : this(symbol, false)
         {
-            ChildUis = childUis;
+            _childUis = childUis;
+            
+            foreach(var childUi in childUis)
+                childUi.Parent = this;
+            
             InputUis = inputs;
             OutputUis = outputs;
             Annotations = annotations;
@@ -116,20 +120,21 @@ namespace T3.Editor.UiModel
             // Check if child entries are missing
             foreach (var child in Symbol.Children)
             {
-                if (!ChildUis.Exists(c => c.Id == child.Id))
+                if (ChildUis.FirstOrDefault(c => c.Id == child.Id) == null)
                 {
                     Log.Debug($"Found no symbol child ui entry for symbol child '{child.ReadableName}' - creating a new one");
                     var childUi = new SymbolChildUi()
                                       {
                                           SymbolChild = child,
-                                          PosOnCanvas = new Vector2(100, 100)
+                                          PosOnCanvas = new Vector2(100, 100),
+                                          Parent = this,
                                       };
-                    ChildUis.Add(childUi);
+                    _childUis.Add(childUi);
                 }
             }
 
             // check if there are child entries where no symbol child exists anymore
-            ChildUis.RemoveAll(childUi => !Symbol.Children.Exists(child => child.Id == childUi.Id));
+            _childUis.RemoveAll(childUi => !Symbol.Children.Exists(child => child.Id == childUi.Id));
 
             // check if input UIs are missing
             var inputUiFactory = InputUiFactory.Entries;
@@ -194,7 +199,7 @@ namespace T3.Editor.UiModel
             }
         }
 
-        private static Vector2 ComputeNewOutputUiPositionOnCanvas(List<SymbolChildUi> childUis, OrderedDictionary<Guid, IOutputUi> outputUis)
+        private static Vector2 ComputeNewOutputUiPositionOnCanvas(IReadOnlyList<SymbolChildUi> childUis, OrderedDictionary<Guid, IOutputUi> outputUis)
         {
             if (outputUis.Count > 0)
             {
@@ -254,14 +259,15 @@ namespace T3.Editor.UiModel
         internal Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size, string name = null)
         {
             FlagAsModified();
-            Symbol.AddChild(symbolToAdd, addedChildId, name);
+            var symbolChild = Symbol.AddChild(symbolToAdd, addedChildId, name);
             var childUi = new SymbolChildUi
                               {
-                                  SymbolChild = Symbol.Children.Find(entry => entry.Id == addedChildId),
+                                  SymbolChild = symbolChild,
                                   PosOnCanvas = posInCanvas,
+                                  Parent = this,
                                   Size = size,
                               };
-            ChildUis.Add(childUi);
+            _childUis.Add(childUi);
 
             return addedChildId;
         }
@@ -273,14 +279,14 @@ namespace T3.Editor.UiModel
             var newChild = Symbol.AddChild(symbolToAdd, newChildId);
             newChild.Name = sourceChild.Name;
 
-            var sourceChildUi = sourceCompositionSymbolUi.ChildUis.Single(child => child.Id == sourceChild.Id);
-            var newChildUi = sourceChildUi.Clone();
+            var sourceChildUi = sourceCompositionSymbolUi.GetSymbolChildUiWithId(sourceChild.Id);
+            var newChildUi = sourceChildUi!.Clone(this);
 
             newChildUi.SymbolChild = newChild;
             newChildUi.PosOnCanvas = posInCanvas;
             newChildUi.Comment = sourceChildUi.Comment;
 
-            ChildUis.Add(newChildUi);
+            _childUis.Add(newChildUi);
             return newChild;
         }
 
@@ -288,11 +294,16 @@ namespace T3.Editor.UiModel
         {
             FlagAsModified();
 
-            Symbol.RemoveChild(id); // remove from symbol
+            var removed = Symbol.RemoveChild(id, out _); // remove from symbol
 
             // now remove ui entry
-            var childToRemove = ChildUis.Single(child => child.Id == id);
-            ChildUis.Remove(childToRemove);
+            var childToRemove = ChildUis.Single(child => child.Id == id); 
+            var removedUi =_childUis.Remove(childToRemove);
+            
+            if(removed != removedUi)
+            {
+                Log.Error($"Removed {removed} but removedUi {removedUi}!!");
+            }
         }
 
         internal void FlagAsModified()
@@ -311,7 +322,8 @@ namespace T3.Editor.UiModel
         internal bool ForceUnmodified;
         private bool _hasBeenModified;
         public bool HasBeenModified => _hasBeenModified && !ForceUnmodified;
-        public readonly List<SymbolChildUi> ChildUis = []; // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
+        private List<SymbolChildUi> _childUis = new();
+        public IReadOnlyList<SymbolChildUi> ChildUis => _childUis; // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
         public readonly OrderedDictionary<Guid, IInputUi> InputUis = new();
         public readonly OrderedDictionary<Guid, IOutputUi> OutputUis = new();
         public readonly OrderedDictionary<Guid, Annotation> Annotations = new();

@@ -19,7 +19,7 @@ namespace T3.Core.Compilation;
 
 public readonly record struct InputSlotInfo(string Name, InputAttribute Attribute, Type Type, Type[] GenericArguments, FieldInfo Field, bool IsMultiInput);
 
-public readonly record struct OperatorTypeInfo(Guid Id, List<InputSlotInfo> Inputs, List<OutputSlotInfo> Outputs, Func<object> Constructor, Type Type, FieldInfo StaticSymbolField, bool IsDescriptiveFileNameType);
+public readonly record struct OperatorTypeInfo(Guid Id, List<InputSlotInfo> Inputs, List<OutputSlotInfo> Outputs, Func<object> Constructor, Type Type, bool IsDescriptiveFileNameType);
 
 public readonly record struct OutputSlotInfo(string Name, OutputAttribute Attribute, Type Type, Type[] GenericArguments, FieldInfo Field)
 {
@@ -175,12 +175,6 @@ public sealed class AssemblyInformation
         
         var constructor = Expression.Lambda<Func<object>>(Expression.New(type)).Compile();
         
-        // get static field to set the symbol to the instance type
-        var genericType = typeof(Instance<>).MakeGenericType(type);
-        var staticFieldInfos = genericType.GetFields(BindingFlags.Static | BindingFlags.NonPublic);
-        var staticSymbolField = staticFieldInfos.Single(x => x.Name == "_typeSymbol");
-        
-        
         var isDescriptive = type.IsAssignableTo(typeof(IDescriptiveFilename));
 
         var bindFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
@@ -227,7 +221,6 @@ public sealed class AssemblyInformation
                                                        Constructor: constructor,
                                                        Inputs: inputFields,
                                                        Outputs: outputFields,
-                                                       StaticSymbolField: staticSymbolField,
                                                        IsDescriptiveFileNameType: isDescriptive));
 
         if (!added)

@@ -291,7 +291,8 @@ internal class EditorSymbolPackage : SymbolPackage
 
         var symbol = rootSymboLUi.Symbol;
         var homeGuid = CreateHomeGuid(symbol.Id);
-        rootInstance = symbol.CreateInstance(homeGuid, null);
+        var newSymbolChild = new SymbolChild(symbol, homeGuid, null);
+        rootInstance = symbol.CreateInstance(null, newSymbolChild);
         _rootInstance = rootInstance;
 
         if (rootInstance == null)
