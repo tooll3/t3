@@ -1131,8 +1131,8 @@
     {
       "ChildId": "85c70305-6bcb-4751-8081-528a4ba14fdf"/*PlayAudioClip*/,
       "Position": {
-        "X": 3509.7273,
-        "Y": 5216.0244
+        "X": 3427.4258,
+        "Y": 5632.9
       }
     },
     {
@@ -1669,6 +1669,181 @@
         "X": 2835.4368,
         "Y": 1403.5865
       }
+    },
+    {
+      "ChildId": "4434b58b-ac89-402d-ab63-65979c0cee71"/*FadingSlideShow*/,
+      "Position": {
+        "X": 1782.5564,
+        "Y": 6384.2266
+      }
+    },
+    {
+      "ChildId": "8f0f6d41-c163-4465-aade-9c15a5018ac3"/*Counter*/,
+      "Position": {
+        "X": 1632.5564,
+        "Y": 6384.2266
+      }
+    },
+    {
+      "ChildId": "e6c65d3e-57b6-4963-831c-fa14831570f1"/*GetFloatVar*/,
+      "Position": {
+        "X": 1332.5564,
+        "Y": 6384.2266
+      }
+    },
+    {
+      "ChildId": "44fbd986-1104-4ab6-933a-6338f9812555"/*HasValueIncreased*/,
+      "Position": {
+        "X": 1482.5564,
+        "Y": 6384.2266
+      }
+    },
+    {
+      "ChildId": "8d2edebd-2965-4978-9f9c-949ef0e504ed"/*ChannelMixer*/,
+      "Position": {
+        "X": 1932.5564,
+        "Y": 6384.2266
+      }
+    },
+    {
+      "ChildId": "2ab0e789-bef4-440c-b86a-5e9ade6134bb"/*Layer2d*/,
+      "Position": {
+        "X": 2082.5564,
+        "Y": 6108.2266
+      }
+    },
+    {
+      "ChildId": "e9f288ef-da5a-471f-9397-ba0d8455432f"/*AdvancedFeedback2*/,
+      "Position": {
+        "X": 2232.5564,
+        "Y": 6108.2266
+      }
+    },
+    {
+      "ChildId": "204cd79e-1ad9-4b52-8fcf-dd63a55be2f5"/*Layer2d*/,
+      "Position": {
+        "X": 2532.5564,
+        "Y": 6108.2266
+      }
+    },
+    {
+      "ChildId": "c4bc3de1-3b8f-48c3-b38f-13d6bcbb13e5"/*TriggerAnim*/,
+      "Position": {
+        "X": 1632.5564,
+        "Y": 6151.2266
+      }
+    },
+    {
+      "ChildId": "d758192d-c047-4dd5-8e69-4b3866f6ea73"/*RgbaToColor*/,
+      "Position": {
+        "X": 1782.5564,
+        "Y": 6151.2266
+      }
+    },
+    {
+      "ChildId": "5cef8cd7-dd0a-4e21-ae91-a1293a555004"/*ColorGrade*/,
+      "Position": {
+        "X": 2382.5564,
+        "Y": 6108.2266
+      }
+    },
+    {
+      "ChildId": "f8f61f86-83cf-454b-9acc-df548a7a128a"/*Zoom*/,
+      "Position": {
+        "X": 2082.5564,
+        "Y": 6716.2266
+      }
+    },
+    {
+      "ChildId": "a607865c-2a91-4411-9d84-4155613070d6"/*DisplaceOffset*/,
+      "Position": {
+        "X": 2082.5564,
+        "Y": 6590.2266
+      }
+    },
+    {
+      "ChildId": "257a9bd9-ecad-419d-990d-c8a2c17b0de3"/*Displace*/,
+      "Position": {
+        "X": 2082.5564,
+        "Y": 6527.2266
+      }
+    },
+    {
+      "ChildId": "0a4ce7fa-d2a8-493c-861f-4e079504122a"/*Twist*/,
+      "Position": {
+        "X": 2082.5564,
+        "Y": 6653.2266
+      }
+    },
+    {
+      "ChildId": "342c7cf1-9103-4ffa-8f87-a336ef3a23b9"/*Colorize*/,
+      "Position": {
+        "X": 1482.5564,
+        "Y": 6151.2266
+      }
+    },
+    {
+      "ChildId": "1e70de2b-9ade-4396-b49c-5ce2f2de9b41"/*BlendColors*/,
+      "Position": {
+        "X": 1932.5564,
+        "Y": 6151.2266
+      }
+    },
+    {
+      "ChildId": "f7c8f697-491e-45db-9cfa-83b209c4d527"/*Reset*/,
+      "Position": {
+        "X": 1932.5564,
+        "Y": 6716.2266
+      }
+    },
+    {
+      "ChildId": "73b77658-824d-4790-b426-ce1de5c1f895"/*Reset*/,
+      "Position": {
+        "X": 1932.5564,
+        "Y": 6590.2266
+      }
+    },
+    {
+      "ChildId": "87b8a296-cec8-464e-bd72-701d169151c4"/*Reset*/,
+      "Position": {
+        "X": 1932.5564,
+        "Y": 6527.2266
+      }
+    },
+    {
+      "ChildId": "ba1be2cf-3644-4de6-a10a-030d0245a02f"/*Reset*/,
+      "Position": {
+        "X": 1932.5564,
+        "Y": 6653.2266
+      }
+    },
+    {
+      "ChildId": "ce7a8914-4572-4c89-8e78-9c26b4b79c91"/*Reset*/,
+      "Position": {
+        "X": 1332.5564,
+        "Y": 6151.2266
+      }
+    },
+    {
+      "ChildId": "5d20e393-ef06-437c-b813-ab81bf856c7d"/*Rotate*/,
+      "Position": {
+        "X": 2082.5564,
+        "Y": 6779.2266
+      }
+    },
+    {
+      "ChildId": "2241a05c-cf29-4e06-aa2e-d201e586a4cc"/*Reset*/,
+      "Position": {
+        "X": 1932.5564,
+        "Y": 6779.2266
+      }
+    },
+    {
+      "ChildId": "0de0d2e2-b24c-4f74-bfb6-d608ee48c37b"/*AnimValue*/,
+      "Position": {
+        "X": 1932.5564,
+        "Y": 6108.2266
+      }
     }
   ],
   "OutputUis": [
@@ -1787,6 +1962,24 @@
       "Size": {
         "X": 2572.3242,
         "Y": 373.22314
+      }
+    },
+    {
+      "Id": "d974ca01-a56a-4749-8700-2fa00bb59ef3",
+      "Title": "Acid Cats",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1272.5564,
+        "Y": 6048.2266
+      },
+      "Size": {
+        "X": 1430.0,
+        "Y": 827.0
       }
     }
   ]
