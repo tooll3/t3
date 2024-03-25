@@ -229,7 +229,7 @@ namespace lib.img.generate
                                                                   instance: this,
                                                                   entryPoint: entryPoint, 
                                                                   name: debugName,
-                                                                  errorMessage: out var errorMessage);
+                                                                  reason: out var errorMessage);
 
             if(!success || !string.IsNullOrWhiteSpace(errorMessage))
                 Log.Error($"Failed to initialize {nameof(RenderTarget)}: {errorMessage}");

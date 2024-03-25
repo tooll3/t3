@@ -11,6 +11,7 @@ using T3.Core.IO;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Resource;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
@@ -284,6 +285,8 @@ public static class T3Ui
                 }
                 #endif
                 
+                ImGui.Separator();
+                
                 if(ImGui.BeginMenu("Load Project", !IsCurrentlySaving))
                 {
                     foreach (var package in EditorSymbolPackage.AllPackages)
@@ -312,6 +315,15 @@ public static class T3Ui
                     
                     ImGui.EndMenu();
                 }
+                
+                ImGui.Separator();
+                
+                if(ImGui.MenuItem("Clear shader cache"))
+                {
+                    ShaderCompiler.DeleteShaderCache();
+                }
+                
+                ImGui.Separator();
 
                 if (ImGui.MenuItem("Quit", !IsCurrentlySaving))
                 {

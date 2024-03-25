@@ -13,8 +13,7 @@ namespace T3.Core.Resource;
 /// </summary>
 public sealed partial class ResourceManager
 {
-    public bool TryCreateShaderResourceFromSource<TShader>(out ShaderResource<TShader> resource, string shaderSource, Instance instance,
-                                                           out string errorMessage,
+    public bool TryCreateShaderResourceFromSource<TShader>(out ShaderResource<TShader> resource, string shaderSource, Instance instance, out string reason,
                                                            string name = "", string entryPoint = "main")
         where TShader : class, IDisposable
     {
@@ -24,13 +23,13 @@ public sealed partial class ResourceManager
             name = $"{typeof(TShader).Name}_{resourceId}";
         }
 
-        var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromSource<TShader>(shaderSource: shaderSource,
-                                                                                          name: name,
-                                                                                          directories: instance.AvailableResourcePackages,
-                                                                                          entryPoint: entryPoint,
-                                                                                          resourceId: resourceId,
-                                                                                          resource: out var newResource,
-                                                                                          errorMessage: out errorMessage);
+        var compiled = ShaderCompiler.TryCreateShaderResourceFromCode<TShader>(shaderCode: shaderSource,
+                                                                               name: name,
+                                                                               directories: instance.AvailableResourcePackages,
+                                                                               entryPoint: entryPoint,
+                                                                               resourceId: resourceId,
+                                                                               resource: out var newResource,
+                                                                               reason: out reason);
 
         if (compiled)
         {
@@ -46,21 +45,23 @@ public sealed partial class ResourceManager
     }
 
     public bool TryCreateShaderResource<TShader>(out ShaderResource<TShader>? resource, Instance? instance, string relativePath,
-                                                 out string errorMessage,
+                                                 out string reason,
                                                  string name = "", string entryPoint = "main", Action? fileChangedAction = null)
         where TShader : class, IDisposable
     {
         if (string.IsNullOrWhiteSpace(relativePath))
         {
             resource = null;
-            errorMessage = "Empty file name";
+            reason = "Empty file name";
+            Log.Warning(reason);
             return false;
         }
 
         if (!TryResolvePath(relativePath, instance?.AvailableResourcePackages, out var path, out var resourceContainer))
         {
             resource = null;
-            errorMessage = $"Path not found: '{relativePath}' (Resolved to '{path}').";
+            reason = $"Path not found: '{relativePath}' (Resolved to '{path}').";
+            Log.Warning(reason);
             return false;
         }
 
@@ -85,7 +86,7 @@ public sealed partial class ResourceManager
             if (TryFindExistingResource(fileWatcher, relativePath, fileChangedAction, entryPoint, out fileHook, out var potentialResource))
             {
                 resource = potentialResource;
-                errorMessage = string.Empty;
+                reason = string.Empty;
                 return true;
             }
         }
@@ -93,13 +94,14 @@ public sealed partial class ResourceManager
 
         // need to create
         var resourceId = GetNextResourceId();
-        var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromFile(srcFile: path,
-                                                                               entryPoint: entryPoint,
-                                                                               name: name,
-                                                                               resourceId: resourceId,
-                                                                               resource: out resource,
-                                                                               errorMessage: out errorMessage,
-                                                                               resourceDirs: compilationReferences);
+        var compiled = ShaderCompiler.TryCreateShaderResourceFromFile(srcFile: path,
+                                                                      entryPoint: entryPoint,
+                                                                      name: name,
+                                                                      resourceId: resourceId,
+                                                                      resource: out resource,
+                                                                      reason: out reason,
+                                                                      resourceDirs: compilationReferences,
+                                                                      forceRecompile: false);
 
         if (!compiled)
         {

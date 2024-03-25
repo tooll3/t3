@@ -177,7 +177,7 @@ internal static class TextureReadAccess
                                                               entryPoint: entryPoint,
                                                               name: debugName,
                                                               instance: null,
-                                                              errorMessage: out var errorMessage);
+                                                              reason: out var errorMessage);
 
         if (!success || !string.IsNullOrWhiteSpace(errorMessage))
             Log.Error($"Failed to initialize video conversion shader: {errorMessage}");

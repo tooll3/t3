@@ -40,6 +40,14 @@ public interface IShaderOperator<T> where T : class, IDisposable
         }
 
         var source = sourceSlot.GetValue(context);
+        
+        // prevent rapid recompilation attempts when a user is typing a value
+        if (isSourceCode && !source.AsSpan().EndsWith(".hlsl"))
+        {
+            message = "Source code must be HLSL and file must end with \".hlsl\" file extension.";
+            return false;
+        }
+        
         var entryPoint = entryPointSlot.GetValue(context);
         var debugName = debugNameSlot.GetValue(context);
         var instance = Instance;
@@ -136,7 +144,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
                                                                             instance: instance,
                                                                             entryPoint: entryPoint,
                                                                             name: debugName,
-                                                                            errorMessage: out errorMessage);
+                                                                            reason: out errorMessage);
             }
             else
             {
@@ -151,7 +159,18 @@ public interface IShaderOperator<T> where T : class, IDisposable
                                                                                          shaderSlot.DirtyFlag.Invalidate();
                                                                                          //Log.Debug($"Invalidated {sourceSlot}   isDirty: {sourceSlot.DirtyFlag.IsDirty}", sourceSlot.Parent);
                                                                                      },
-                                                                  errorMessage: out errorMessage);
+                                                                  reason: out errorMessage);
+            }
+
+            string instanceName = instance.SymbolChild?.ReadableName ?? instance.Symbol.Name;
+            if (!updated)
+            {
+                Log.Error($"[{instanceName}] Failed to create shader resource for shader \"{debugName}\" in package \"{instance.Symbol.SymbolPackage.AssemblyInformation.Name}\":" +
+                          $"\n{errorMessage}");
+            }
+            else
+            {
+                Log.Debug($"[{instanceName}] Created shader resource for shader \"{debugName}\".");
             }
 
             return updated;
