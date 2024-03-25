@@ -16,6 +16,12 @@ namespace T3.Editor.UiModel
         internal SymbolUi(Symbol symbol, bool updateConsistency)
         {
             Symbol = symbol;
+            
+            InputUis = new Dictionary<Guid, IInputUi>();
+            OutputUis = new Dictionary<Guid, IOutputUi>();
+            Annotations = new OrderedDictionary<Guid, Annotation>();
+            Links = new OrderedDictionary<Guid, ExternalLink>();
+            
             if (updateConsistency)
                 UpdateConsistencyWithSymbol();
 
@@ -24,9 +30,9 @@ namespace T3.Editor.UiModel
 
         internal SymbolUi(Symbol symbol,
                         List<SymbolChildUi> childUis,
-                        OrderedDictionary<Guid, IInputUi> inputs,
-                        OrderedDictionary<Guid, IOutputUi> outputs,
-                        OrderedDictionary<Guid, Annotation> annotations,
+                        IDictionary<Guid, IInputUi> inputs,
+                        IDictionary<Guid, IOutputUi> outputs,
+                        IDictionary<Guid, Annotation> annotations,
                         OrderedDictionary<Guid, ExternalLink> links,
                         bool updateConsistency) : this(symbol, false)
         {
@@ -196,7 +202,7 @@ namespace T3.Editor.UiModel
 
                     var newOutputUi = outputUiCreator();
                     newOutputUi.OutputDefinition = output;
-                    newOutputUi.PosOnCanvas = ComputeNewOutputUiPositionOnCanvas(_childUis.Values, OutputUis);
+                    newOutputUi.PosOnCanvas = ComputeNewOutputUiPositionOnCanvas(_childUis.Values, OutputUis.Values);
                     OutputUis.Add(output.Id, newOutputUi);
                     FlagAsModified();
                 }
@@ -210,37 +216,37 @@ namespace T3.Editor.UiModel
             }
         }
 
-        private static Vector2 ComputeNewOutputUiPositionOnCanvas(IReadOnlyCollection<SymbolChildUi> childUis, OrderedDictionary<Guid, IOutputUi> outputUis)
+        private static Vector2 ComputeNewOutputUiPositionOnCanvas(IEnumerable<SymbolChildUi> childUis, IEnumerable<IOutputUi> outputUis)
         {
-            if (outputUis.Count > 0)
+            bool setByOutputs = false;
+            var maxPos = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
+            foreach (var output in outputUis)
             {
-                var maxPos = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
-                foreach (var output in outputUis.Values)
-                {
-                    maxPos = Vector2.Max(maxPos, output.PosOnCanvas);
-                }
-
-                return maxPos + new Vector2(0, 100);
+                maxPos = Vector2.Max(maxPos, output.PosOnCanvas);
+                setByOutputs = true;
             }
+
+            if (setByOutputs)
+                return maxPos + new Vector2(0, 100);
 
             // FIXME: childUis are always undefined at this point?
-            if (childUis.Count > 0)
+            var setByChildren = false;
+            var minY = float.PositiveInfinity;
+            var maxY = float.NegativeInfinity;
+
+            var maxX = float.NegativeInfinity;
+
+            foreach (var childUi in childUis)
             {
-                var minY = float.PositiveInfinity;
-                var maxY = float.NegativeInfinity;
+                minY = MathUtils.Min(childUi.PosOnCanvas.Y, minY);
+                maxY = MathUtils.Max(childUi.PosOnCanvas.Y, maxY);
 
-                var maxX = float.NegativeInfinity;
-
-                foreach (var childUi in childUis)
-                {
-                    minY = MathUtils.Min(childUi.PosOnCanvas.Y, minY);
-                    maxY = MathUtils.Max(childUi.PosOnCanvas.Y, maxY);
-
-                    maxX = MathUtils.Max(childUi.PosOnCanvas.X, maxX);
-                }
-
-                return new Vector2(maxX + 100, (maxY + minY) / 2);
+                maxX = MathUtils.Max(childUi.PosOnCanvas.X, maxX);
+                setByChildren = true;
             }
+
+            if (setByChildren)
+                return new Vector2(maxX + 100, (maxY + minY) / 2);
 
             //Log.Warning("Assuming default output position");
             return new Vector2(300, 200);
@@ -327,15 +333,15 @@ namespace T3.Editor.UiModel
         }
 
         public string Description { get; set; } = string.Empty;
-        public OrderedDictionary<Guid, ExternalLink> Links { get; } = new();
 
         internal bool ForceUnmodified;
         private bool _hasBeenModified;
         public bool HasBeenModified => _hasBeenModified && !ForceUnmodified;
-        private Dictionary<Guid, SymbolChildUi> _childUis = new();
+        private readonly Dictionary<Guid, SymbolChildUi> _childUis = new();
         public IReadOnlyDictionary<Guid, SymbolChildUi> ChildUis => _childUis; // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
-        public readonly OrderedDictionary<Guid, IInputUi> InputUis = new();
-        public readonly OrderedDictionary<Guid, IOutputUi> OutputUis = new();
-        public readonly OrderedDictionary<Guid, Annotation> Annotations = new();
+        public readonly IDictionary<Guid, ExternalLink> Links;
+        public readonly IDictionary<Guid, IInputUi> InputUis;
+        public readonly IDictionary<Guid, IOutputUi> OutputUis;
+        public readonly IDictionary<Guid, Annotation> Annotations;
     }
 }

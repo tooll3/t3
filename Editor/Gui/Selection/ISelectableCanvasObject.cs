@@ -5,6 +5,7 @@
         Guid Id { get; }
         Vector2 PosOnCanvas { get; set; }
         Vector2 Size { get; set; }
+        public Vector2 TopRightPosOnCanvas => PosOnCanvas + Size;
     }
 
     public interface ISelectionContainer

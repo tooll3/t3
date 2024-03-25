@@ -36,6 +36,7 @@ namespace T3.Editor.UiModel
         public Guid Id => SymbolChild.Id;
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = DefaultOpSize;
+        
         public int SnapshotGroupIndex;
         public Styles Style;
         public string Comment;
