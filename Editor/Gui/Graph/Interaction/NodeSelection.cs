@@ -87,7 +87,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         public void SelectCompositionChild(Instance compositionOp, Guid id, bool replaceSelection = true)
         {
-            if (!_structure.TryGetUiAndInstanceInComposition(id, compositionOp, out var childUi, out var instance))
+            if (!Structure.TryGetUiAndInstanceInComposition(id, compositionOp, out var childUi, out var instance))
                 return;
             
             if (replaceSelection)
@@ -191,7 +191,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         public void DeselectCompositionChild(Instance compositionOp, Guid symbolChildId)
         {
-            if (!_structure.TryGetUiAndInstanceInComposition(symbolChildId, compositionOp, out var childUi, out var instance))
+            if (!Structure.TryGetUiAndInstanceInComposition(symbolChildId, compositionOp, out var childUi, out var instance))
                 return;
 
             Selection.Remove(childUi!);

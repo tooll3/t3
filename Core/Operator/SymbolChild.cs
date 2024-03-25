@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
@@ -367,5 +369,19 @@ namespace T3.Core.Operator
             return newChild;
         }
 
+        public static SymbolChild CreateWithDeterministicId(Symbol symbol, Symbol? parent)
+        {
+            //deterministically create a new guid from the symbol id
+            var bytes = symbol.Id.ToByteArray();
+            var parentBytes = parent?.Id.ToByteArray() ?? Array.Empty<byte>();
+            
+            using var hashComputer = IncrementalHash.CreateHash(HashAlgorithmName.SHA1);
+            hashComputer.AppendData(bytes);
+            hashComputer.AppendData(parentBytes);
+            
+            // SHA1 is 20 bytes long, but we only need 16 bytes for a guid
+            var newGuidBytes = new ReadOnlySpan<byte>(hashComputer.GetCurrentHash(), 0, 16);
+            return new SymbolChild(symbol, new Guid(newGuidBytes), parent);
+        }
     }
 }

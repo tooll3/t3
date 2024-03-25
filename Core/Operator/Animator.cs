@@ -151,107 +151,150 @@ namespace T3.Core.Operator
             return curves;
         }
 
-        public void CreateUpdateActionsForExistingCurves(IEnumerable<Instance> childInstances)
+        private readonly record struct InstanceCurve(CurveId Id, Curve Value, Instance CorrespondingInstance);
+
+        private readonly struct InstanceCurveInput(in InstanceCurve instanceCurve, IInputSlot inputSlot)
+        {
+            public readonly CurveId Id = instanceCurve.Id;
+            public readonly Curve Curve = instanceCurve.Value;
+            public readonly Instance CorrespondingInstance = instanceCurve.CorrespondingInstance;
+            public readonly IInputSlot InputSlot = inputSlot;
+        }
+        private readonly record struct InputSlotCurve(IInputSlot InputSlot, Curve Curve);
+        private readonly record struct OrderedAnimationCurve(in CurveId Id, Curve Curve);
+
+        // ReSharper disable NotAccessedPositionalProperty.Local
+        private readonly record struct InputGroupKey(in Guid SymbolChildId, in Guid InputId, Instance ChildInstance);
+        // ReSharper restore NotAccessedPositionalProperty.Local
+        
+        public void CreateUpdateActionsForExistingCurves(IReadOnlyCollection<Instance> childInstances)
         {
             // gather all inputs that correspond to stored ids
-            var relevantInputs = (from curveEntry in OrderedAnimationCurves
-                                 from childInstance in childInstances
-                                 where curveEntry.Key.SymbolChildId == childInstance.SymbolChildId
-                                 from inputSlot in childInstance.Inputs
-                                 where curveEntry.Key.InputId == inputSlot.Id
-                                 group (inputSlot, curveEntry.Value) by (Id: childInstance.SymbolChildId, inputSlot.Id, childInstance)
-                                 into inputGroup
-                                 select inputGroup).ToArray();
-            
+            var relevantInputs = _animatedInputCurves
+                                 // first sort them 
+                                .OrderBy(valuePair => valuePair.Key.SymbolChildId)
+                                .ThenBy(valuePair => valuePair.Key.InputId)
+                                .ThenBy(valuePair => valuePair.Key.Index)
+                                .Select(kvp => new OrderedAnimationCurve(kvp.Key, kvp.Value))
+                                 
+                                 // then match instances to the curves
+                                .SelectMany(_ => childInstances, (curve, childInstance) => new InstanceCurve(curve.Id, curve.Curve, childInstance))
+                                .Where(instanceCurve => instanceCurve.Id.SymbolChildId == instanceCurve.CorrespondingInstance.SymbolChildId)
+                                 
+                                 // match each matching instance's input with its corresponding curve
+                                .SelectMany(instanceCurve => instanceCurve.CorrespondingInstance.Inputs,
+                                            (instanceCurve, inputSlot) => new InstanceCurveInput(instanceCurve, inputSlot))
+                                .Where(instanceCurveInput => instanceCurveInput.Id.InputId == instanceCurveInput.InputSlot.Id)
+                                 
+                                 // finally group them by input of specific child instances
+                                .GroupBy(
+                                         instanceCurveInput => new InputGroupKey(instanceCurveInput.CorrespondingInstance.SymbolChildId,
+                                                                                 instanceCurveInput.InputSlot.Id,
+                                                                                 instanceCurveInput.CorrespondingInstance),
+                                         instanceCurveInput => new InputSlotCurve(instanceCurveInput.InputSlot, instanceCurveInput.Curve)
+                                        )
+                                .ToArray();
+
             foreach (var groupEntry in relevantInputs)
             {
-                var count = groupEntry.Count();
-                if (count == 1)
+                switch (groupEntry.Count())
                 {
-                    var (inputSlot, curve) = groupEntry.First();
-                    if (inputSlot is Slot<float> typedInputSlot)
+                    case 1:
                     {
-                        typedInputSlot.OverrideWithAnimationAction(context => { typedInputSlot.Value = (float)curve.GetSampledValue(context.LocalTime); });
-                        typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                        var (inputSlot, curve) = groupEntry.First();
+                        switch (inputSlot)
+                        {
+                            case Slot<float> typedInputSlot:
+                                typedInputSlot.OverrideWithAnimationAction(context => { typedInputSlot.Value = (float)curve.GetSampledValue(context.LocalTime); });
+                                typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                                break;
+                            case Slot<int> intSlot:
+                                intSlot.OverrideWithAnimationAction(context => { intSlot.Value = (int)curve.GetSampledValue(context.LocalTime); });
+                                intSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                                break;
+                            case Slot<bool> boolSlot:
+                                boolSlot.OverrideWithAnimationAction(context => { boolSlot.Value = curve.GetSampledValue(context.LocalTime) > 0.5f; });
+                                boolSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                                break;
+                        }
+
+                        break;
                     }
-                    else if (inputSlot is Slot<int> intSlot)
+                    case 2:
                     {
-                        intSlot.OverrideWithAnimationAction(context => { intSlot.Value = (int)curve.GetSampledValue(context.LocalTime); });
-                        intSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                        var entries = groupEntry.ToArray();
+                        var inputSlot = entries[0].InputSlot;
+                        switch (inputSlot)
+                        {
+                            case Slot<System.Numerics.Vector2> vector2InputSlot:
+                                vector2InputSlot.OverrideWithAnimationAction(context =>
+                                                                             {
+                                                                                 vector2InputSlot.Value.X = (float)entries[0].Curve.GetSampledValue(context.LocalTime);
+                                                                                 vector2InputSlot.Value.Y = (float)entries[1].Curve.GetSampledValue(context.LocalTime);
+                                                                             });
+                                vector2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                                break;
+                            case Slot<Int2> size2InputSlot:
+                                size2InputSlot.OverrideWithAnimationAction(context =>
+                                                                           {
+                                                                               size2InputSlot.Value.Width = (int)entries[0].Curve.GetSampledValue(context.LocalTime);
+                                                                               size2InputSlot.Value.Height = (int)entries[1].Curve.GetSampledValue(context.LocalTime);
+                                                                           });
+                                size2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                                break;
+                        }
+
+                        break;
                     }
-                    else if (inputSlot is Slot<bool> boolSlot)
+                    case 3:
                     {
-                        boolSlot.OverrideWithAnimationAction(context => { boolSlot.Value = curve.GetSampledValue(context.LocalTime) > 0.5f; });
-                        boolSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                        var entries = groupEntry.ToArray();
+                        var inputSlot = entries[0].InputSlot;
+                        switch (inputSlot)
+                        {
+                            case Slot<System.Numerics.Vector3> vector3InputSlot:
+                                vector3InputSlot.OverrideWithAnimationAction(context =>
+                                                                             {
+                                                                                 vector3InputSlot.Value.X = (float)entries[0].Curve.GetSampledValue(context.LocalTime);
+                                                                                 vector3InputSlot.Value.Y = (float)entries[1].Curve.GetSampledValue(context.LocalTime);
+                                                                                 vector3InputSlot.Value.Z = (float)entries[2].Curve.GetSampledValue(context.LocalTime);
+                                                                             });
+                                vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                                break;
+                            case Slot<Int3> int3InputSlot:
+                                int3InputSlot.OverrideWithAnimationAction(context =>
+                                                                          {
+                                                                              int3InputSlot.Value.X = (int)entries[0].Curve.GetSampledValue(context.LocalTime);
+                                                                              int3InputSlot.Value.Y = (int)entries[1].Curve.GetSampledValue(context.LocalTime);
+                                                                              int3InputSlot.Value.Z = (int)entries[2].Curve.GetSampledValue(context.LocalTime);
+                                                                          });
+                                int3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                                break;
+                        }
+
+                        break;
                     }
-                }
-                else if (count == 2)
-                {
-                    var entries = groupEntry.ToArray();
-                    var inputSlot = entries[0].inputSlot;
-                    if (inputSlot is Slot<System.Numerics.Vector2> vector2InputSlot)
+                    case 4:
                     {
-                        vector2InputSlot.OverrideWithAnimationAction(context =>
-                                                        {
-                                                            vector2InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.LocalTime);
-                                                            vector2InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.LocalTime);
-                                                        });
-                        vector2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                        var entries = groupEntry.ToArray();
+                        var inputSlot = entries[0].InputSlot;
+                        if (inputSlot is Slot<System.Numerics.Vector4> vector4InputSlot)
+                        {
+                            vector4InputSlot.OverrideWithAnimationAction(context =>
+                                                                         {
+                                                                             vector4InputSlot.Value.X = (float)entries[0].Curve.GetSampledValue(context.LocalTime);
+                                                                             vector4InputSlot.Value.Y = (float)entries[1].Curve.GetSampledValue(context.LocalTime);
+                                                                             vector4InputSlot.Value.Z = (float)entries[2].Curve.GetSampledValue(context.LocalTime);
+                                                                             vector4InputSlot.Value.W = (float)entries[3].Curve.GetSampledValue(context.LocalTime);
+                                                                         });
+                            vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                        }
+
+                        break;
                     }
-                    else if (inputSlot is Slot<Int2> size2InputSlot)
-                    {
-                        size2InputSlot.OverrideWithAnimationAction(context =>
-                                                        {
-                                                            size2InputSlot.Value.Width = (int)entries[0].Value.GetSampledValue(context.LocalTime);
-                                                            size2InputSlot.Value.Height = (int)entries[1].Value.GetSampledValue(context.LocalTime);
-                                                        });
-                        size2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
-                    }
-                }
-                else if (count == 3)
-                {
-                    var entries = groupEntry.ToArray();
-                    var inputSlot = entries[0].inputSlot;
-                    if (inputSlot is Slot<System.Numerics.Vector3> vector3InputSlot)
-                    {
-                        vector3InputSlot.OverrideWithAnimationAction(context =>
-                                                        {
-                                                            vector3InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.LocalTime);
-                                                            vector3InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.LocalTime);
-                                                            vector3InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.LocalTime);
-                                                        });
-                        vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
-                    }
-                    else if (inputSlot is Slot<Int3> int3InputSlot)
-                    {
-                        int3InputSlot.OverrideWithAnimationAction(context =>
-                                                        {
-                                                            int3InputSlot.Value.X = (int)entries[0].Value.GetSampledValue(context.LocalTime);
-                                                            int3InputSlot.Value.Y = (int)entries[1].Value.GetSampledValue(context.LocalTime);
-                                                            int3InputSlot.Value.Z = (int)entries[2].Value.GetSampledValue(context.LocalTime);
-                                                        });
-                        int3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
-                    }
-                }
-                else if (count == 4)
-                {
-                    var entries = groupEntry.ToArray();
-                    var inputSlot = entries[0].inputSlot;
-                    if (inputSlot is Slot<System.Numerics.Vector4> vector4InputSlot)
-                    {
-                        vector4InputSlot.OverrideWithAnimationAction(context =>
-                                                        {
-                                                            vector4InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.LocalTime);
-                                                            vector4InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.LocalTime);
-                                                            vector4InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.LocalTime);
-                                                            vector4InputSlot.Value.W = (float)entries[3].Value.GetSampledValue(context.LocalTime);
-                                                        });
-                        vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
-                    }
-                }
-                else
-                {
-                    Debug.Assert(false);
+                    default:
+                        Debug.Assert(false);
+                        break;
                 }
             }
         }

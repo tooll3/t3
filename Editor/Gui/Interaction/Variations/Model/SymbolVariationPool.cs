@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.DataTypes;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -389,13 +391,15 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                     continue;
                 }
                 
-                var instance = compositionInstance.GetChildInstanceWithId(childId, true);
-                if (instance == null)
+                if (!compositionInstance.Children.TryGetValue(childId, out var instance))
                     continue;
                 
                 var symbolChild = instance.SymbolChild;
+                
+                // symbolChild would only be null if the instance has no parent - this would only ever happen if the composition
+                // erroneously has a non-child instance in its children list
 
-                foreach (var input in symbolChild.Inputs.Values)
+                foreach (var input in symbolChild!.Inputs.Values)
                 {
                     if (!ValueUtils.BlendMethods.TryGetValue(input.Value.ValueType, out var blendFunction))
                         continue;
@@ -435,8 +439,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
             foreach (var childId2 in affectedInstances)
             {
-                var instance = compositionInstance.GetChildInstanceWithId(childId2, true);
-                if (instance == null)
+                if (!compositionInstance.Children.TryGetValue(childId2, out var instance))
                     continue;
 
                 // Collect variation parameters
@@ -527,41 +530,44 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         private static MacroCommand CreateApplyPresetCommand(Instance instance, Variation variation)
         {
+            const string commandName = "Apply Preset Values";
+            if (!instance.Parent.Symbol.Children.ContainsKey(instance.SymbolChildId))
+            {
+                return new MacroCommand(commandName, Array.Empty<ICommand>());
+            }
+            
             var commands = new List<ICommand>();
 
-            if (instance.Parent.Symbol.Children.ContainsKey(instance.SymbolChildId))
+            foreach (var (childId, parametersForInputs) in variation.ParameterSetsForChildIds)
             {
-                foreach (var (childId, parametersForInputs) in variation.ParameterSetsForChildIds)
+                if (childId != Guid.Empty)
                 {
-                    if (childId != Guid.Empty)
-                    {
-                        Log.Warning("Didn't expect childId in preset");
-                        continue;
-                    }
+                    Log.Warning("Didn't expect childId in preset");
+                    continue;
+                }
 
-                    foreach (var inputSlot in instance.Inputs)
+                foreach (var inputSlot in instance.Inputs)
+                {
+                    if (!ValueUtils.BlendMethods.ContainsKey(inputSlot.ValueType))
+                        continue;
+
+                    if (parametersForInputs.TryGetValue(inputSlot.Id, out var param))
                     {
-                        if (!ValueUtils.BlendMethods.TryGetValue(inputSlot.ValueType, out var blendFunction))
+                        if (param == null)
                             continue;
 
-                        if (parametersForInputs.TryGetValue(inputSlot.Id, out var param))
-                        {
-                            if (param == null)
-                                continue;
-
-                            var newCommand = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, param);
-                            commands.Add(newCommand);
-                        }
-                        else
-                        {
-                            // ResetOtherNonDefaults
-                            commands.Add(new ResetInputToDefault(instance.Symbol, instance.SymbolChildId, inputSlot.Input));
-                        }
+                        var newCommand = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, param);
+                        commands.Add(newCommand);
+                    }
+                    else
+                    {
+                        // ResetOtherNonDefaults
+                        commands.Add(new ResetInputToDefault(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input));
                     }
                 }
             }
 
-            var command = new MacroCommand("Apply Preset Values", commands);
+            var command = new MacroCommand(commandName, commands);
             return command;
         }
 

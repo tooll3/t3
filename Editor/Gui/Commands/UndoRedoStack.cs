@@ -15,12 +15,11 @@ namespace T3.Editor.Gui.Commands
     {
         public static void LogError(this ICommand command, bool isUndo, string message, bool logStackTrace = true)
         {
-            Log.Warning($"{command.GetType().Name} {(isUndo ? "Undo" : "Do")}: {message}");
+            Log.Warning($"{command.GetType().Name} {(isUndo ? "Undo" : "Execute")}: {message}");
             if (logStackTrace)
             {
-                var stackTrace = Environment.StackTrace;
-                //if(!stackTrace.Contains("SentryClient", StringComparison.OrdinalIgnoreCase))
-                    Log.Debug(Environment.StackTrace);
+                Log.Debug(Environment.StackTrace);
+                Log.Debug("\n");
             }
         }
     }

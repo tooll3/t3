@@ -2,6 +2,7 @@
 using System.Linq;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Graph
 {
@@ -12,9 +13,9 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private readonly string _creationStack;
 
-        public ResetInputToDefault(Symbol symbol, Guid symbolChildId, SymbolChild.Input input)
+        public ResetInputToDefault(Symbol parent, Guid symbolChildId, SymbolChild.Input input)
         {
-            _inputParentSymbolId = symbol.Id;
+            _inputParentSymbolId = parent.Id;
             _childId = symbolChildId;
             _inputId = input.InputDefinition.Id;
 
@@ -31,7 +32,7 @@ namespace T3.Editor.Gui.Commands.Graph
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to undo ResetInputToDefault command: {e.Message}\nCommand created at: {_creationStack}");
+                this.LogError(true, $"Failed! Command created at:\n{_creationStack}\n\n{e}\n\n", false);
             }
         }
 
@@ -43,20 +44,19 @@ namespace T3.Editor.Gui.Commands.Graph
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to execute ResetInputToDefault command: {e.Message}\nCommand created at: {_creationStack}\n");
+                this.LogError(false, $"Failed! Command created at:\n{_creationStack}\n\n{e}\n\n", false);
             }
         }
 
         private void AssignValue(bool shouldBeDefault)
         {
-            var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
-            var instances = inputParentSymbol.InstancesOfSymbol;
-            var thisInstance = instances.SingleOrDefault(child => child.SymbolChildId == _childId);
+            if (!SymbolUiRegistry.TryGetValue(_inputParentSymbolId, out var parentSymbolUi))
+            {
+                throw new InvalidOperationException("Symbol not found");
+            }
             
-            if(thisInstance == null)
-                throw new InvalidOperationException($"Instance not found: sequence contains {instances.Count(c => c.SymbolChildId == _childId)} elements with id {_childId}");
-            
-            var symbolChild = thisInstance.SymbolChild;
+            var parentSymbol = parentSymbolUi!.Symbol;
+            var symbolChild = parentSymbol.Children[_childId];
             var input = symbolChild.Inputs[_inputId];
 
             if (shouldBeDefault)
@@ -71,7 +71,7 @@ namespace T3.Editor.Gui.Commands.Graph
             }
 
             //inputParentSymbol.InvalidateInputInAllChildInstances(input);
-            foreach (var instance in inputParentSymbol.InstancesOfSymbol)
+            foreach (var instance in symbolChild.Symbol.InstancesOfSymbol)
             {
                 var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
                 inputSlot.DirtyFlag.ForceInvalidate();

@@ -95,7 +95,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                     foreach (var clip in matchingClips)
                     {
-                        var symbolChildUi = compositionSymbolUi.GetSymbolChildUiWithId(clip.Id);
+                        var symbolChildUi = compositionSymbolUi.ChildUis[clip.Id];
 
                         var originalName = symbolChildUi.SymbolChild.ReadableName;
                         Vector2 newPos = symbolChildUi.PosOnCanvas;
@@ -205,7 +205,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var bodySize = new Vector2(bodyWidth, LayerHeight-2);
             var clipSize = new Vector2(clipWidth, LayerHeight - 2);
 
-            var symbolChildUi = compositionSymbolUi.GetSymbolChildUiWithId(timeClip.Id);
+            var symbolChildUi = compositionSymbolUi.ChildUis[timeClip.Id];
 
             ImGui.PushID(symbolChildUi.Id.GetHashCode());
 
@@ -300,7 +300,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 
                 //FitViewToSelectionHandling.FitViewToSelection();
                 //ClipSelection.Select(timeClip);
-                if (_graphCanvas.Structure.TryGetUiAndInstanceInComposition(timeClip.Id, compositionOp, out var childUi, out var instance))
+                if (Structure.TryGetUiAndInstanceInComposition(timeClip.Id, compositionOp, out var childUi, out var instance))
                 {
                     _graphCanvas.SetCompositionToChildInstance(instance);
                 }

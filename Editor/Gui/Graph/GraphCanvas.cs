@@ -488,7 +488,7 @@ namespace T3.Editor.Gui.Graph
                         var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
                         var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
 
-                        var instance = compositionOp.GetChildInstanceWithId(childUi.Id);
+                        var instance = compositionOp.Children[childUi.Id];
                         NodeSelection.SetSelectionToChildUi(childUi, instance);
 
                         T3Ui.DraggingIsInProgress = false;

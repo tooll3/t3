@@ -30,9 +30,7 @@ internal static class ChangeSymbol
         nextSelection.ForEach(symbolChild =>
                               {
                                   var childUi = symbolChild.GetSymbolChildUi();
-                                  if (childUi == null)
-                                      return;
-                                  var instance = compositionOp.GetChildInstanceWith(symbolChild);
+                                  var instance = compositionOp.Children[symbolChild.Id];
                                   canvas.NodeSelection.AddSymbolChildToSelection(childUi, instance);
                               });
     }

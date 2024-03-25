@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using T3.Core.Animation;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -113,7 +114,10 @@ internal class Structure
         }
     }
 
-    public bool TryGetUiAndInstanceInComposition(Guid id, Instance compositionOp, out SymbolChildUi? childUi, out Instance? instance)
+    public static bool TryGetUiAndInstanceInComposition(Guid id, 
+                                                 Instance compositionOp, 
+                                                 [NotNullWhen(true)] out SymbolChildUi? childUi, 
+                                                 [NotNullWhen(true)] out Instance? instance)
     {
         if (!compositionOp.Children.TryGetValue(id, out instance))
         {
@@ -122,7 +126,7 @@ internal class Structure
             return false;
         }
 
-        childUi = compositionOp.GetSymbolChildUiWithId(id);
+        childUi = compositionOp.GetSymbolChildUi();
         if (childUi == null)
         {
             Log.Assert($"Can't select child with id {id} in composition {compositionOp}");

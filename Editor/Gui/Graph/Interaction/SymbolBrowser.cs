@@ -598,10 +598,10 @@ namespace T3.Editor.Gui.Graph.Interaction
             addSymbolChildCommand.Do();
 
             // Select new node
-            var newChildUi = parentSymbolUi.GetSymbolChildUiWithId(addSymbolChildCommand.AddedChildId, true);
-            if (newChildUi == null)
+            if (!parentSymbolUi.ChildUis.TryGetValue(addSymbolChildCommand.AddedChildId, out var newChildUi))
             {
-                Log.Warning("Unable to create new operator");
+                Log.Warning($"Unable to create new operator - failed to retrieve new child ui \"{addSymbolChildCommand.AddedChildId}\" " +
+                            $"from parent symbol ui {parentSymbolUi.Symbol}");
                 return;
             }
             

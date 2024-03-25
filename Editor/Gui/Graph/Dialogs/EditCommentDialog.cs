@@ -23,7 +23,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 else
                 {
                     var symbolUi = instance.Parent.Symbol.GetSymbolUi();
-                    var symbolChildUi = symbolUi.GetSymbolChildUiWithId(instance.SymbolChildId);
+                    var symbolChildUi = symbolUi.ChildUis[instance.SymbolChildId];
                     if (symbolChildUi == null)
                     {
                         CustomComponents.EmptyWindowMessage("Sorry, can't find UI definition for operator.");

@@ -2,6 +2,7 @@ using System;
 
 namespace T3.Core.Operator.Slots
 {
+    [Flags]
     public enum DirtyFlagTrigger : byte
     {
         None = 0,

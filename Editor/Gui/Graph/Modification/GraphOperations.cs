@@ -4,7 +4,6 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
@@ -24,9 +23,7 @@ namespace T3.Editor.Gui.Graph.Modification
             var newSymbolChild = parentSymbol.Children[addCommand.AddedChildId];
 
             // Select new node
-            var childUi = parentUi.GetSymbolChildUiWithId(newSymbolChild.Id);
-
-            return childUi;
+            return newSymbolChild.GetSymbolChildUi();
         }
 
         public static string CopyNodesAsJson(Instance composition, 
