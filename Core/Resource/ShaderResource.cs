@@ -46,7 +46,7 @@ public abstract class ShaderResource : AbstractResource
 public sealed class ShaderResource<T> : ShaderResource where T : class, IDisposable
 {
     private T _shader;
-    public T Shader { get => _shader; init => _shader = value; }
+    public T Shader { get => _shader; internal init => _shader = value; }
 
     private ShaderBytecode _blob;
     public ShaderBytecode Blob { get => _blob; init => _blob = value; }
@@ -56,20 +56,31 @@ public sealed class ShaderResource<T> : ShaderResource where T : class, IDisposa
 
     public void UpdateDebugName(string newDebugName) => UpdateName(newDebugName);
 
-    public bool TryUpdateFromFile(string path, string entryPoint, IReadOnlyList<IResourcePackage> resourceDirectories, out string errorMessage)
+    public bool TryUpdateFromFile(string path, string entryPoint, IReadOnlyList<IResourcePackage> resourceDirectories, out string reason)
     {
-        var success = ShaderCompiler.Instance.TryCompileShaderFromFile(path, entryPoint, Name, resourceDirectories, ref _shader, ref _blob, out errorMessage);
-        if (success)
-            _entryPoint = entryPoint;
-        return success;
+        if(!ShaderCompiler.TryPrepareSourceFile(path, entryPoint, resourceDirectories, out reason, out var args))
+            return false;
+        
+        if(!ShaderCompiler.TryCompileShaderFromSource(args, Name, ref _shader, ref _blob, true, true, out reason))
+            return false;
+        
+        _entryPoint = entryPoint;
+        return true;
     }
 
-    public bool TryUpdateFromSource(string source, string entryPoint, IReadOnlyList<IResourcePackage> directories, out string errorMessage)
+    public bool TryUpdateFromSource(string source, string entryPoint, IReadOnlyList<IResourcePackage> directories, out string reason)
     {
-        var success = ShaderCompiler.Instance.TryCompileShaderFromSource(source, entryPoint, Name, ref _shader, ref _blob, out errorMessage, directories);
-        if (success)
-            _entryPoint = entryPoint;
-        return success;
+        var args = new ShaderCompiler.ShaderCompilationArgs(source, entryPoint, directories);
+
+        if (!ShaderCompiler.TryCompileShaderFromSource(args, Name, ref _shader, ref _blob, false, true, out reason))
+        {
+            reason = $"Failed to compile shader '{Name}'.";
+            return false;
+        }
+
+        _entryPoint = entryPoint;
+        reason = string.Empty;
+        return true;
     }
 }
 

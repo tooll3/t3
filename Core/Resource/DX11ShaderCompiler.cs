@@ -15,8 +15,7 @@ public class DX11ShaderCompiler : ShaderCompiler
 {
     public Device Device { get; set; }
 
-    protected override bool CompileShaderFromSource<TShader>(string shaderSource, IReadOnlyList<IResourcePackage> directories, string entryPoint, string name, out ShaderBytecode blob,
-                                                             out string errorMessage)
+    protected override bool CompileShaderFromSource<TShader>(ShaderCompilationArgs args, out ShaderBytecode blob, out string errorMessage)
     {
         CompilationResult compilationResult = null;
         string resultMessage;
@@ -29,7 +28,7 @@ public class DX11ShaderCompiler : ShaderCompiler
             flags |= ShaderFlags.Debug;
             #endif
 
-            compilationResult = ShaderBytecode.Compile(shaderSource, entryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler(directories));
+            compilationResult = ShaderBytecode.Compile(args.SourceCode, args.EntryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler(args.IncludeDirectories));
 
             success = compilationResult.ResultCode == Result.Ok;
             resultMessage = compilationResult.Message;
@@ -48,7 +47,6 @@ public class DX11ShaderCompiler : ShaderCompiler
         else
         {
             resultMessage = ShaderResource.ExtractMeaningfulShaderErrorMessage(resultMessage);
-            resultMessage = $"Failed to compile shader '{name}'.\n{resultMessage}";
             errorMessage = resultMessage;
             blob = null;
         }
@@ -62,7 +60,7 @@ public class DX11ShaderCompiler : ShaderCompiler
         var shaderType = typeof(TShader);
 
         shader = (TShader)ShaderConstructors[shaderType].Invoke(Device, blob.Data);
-
+        
         var debugNameInfo = shaderType.GetProperty("DebugName");
         debugNameInfo?.SetValue(shader, name);
     }

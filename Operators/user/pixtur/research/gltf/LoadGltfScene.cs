@@ -403,7 +403,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                                               entryPoint: entryPoint,
                                                               instance: instance,
                                                               name: debugName,
-                                                              errorMessage: out var errorMessage);
+                                                              reason: out var errorMessage);
 
         if (!success || !string.IsNullOrWhiteSpace(errorMessage))
             Log.Error($"Failed to initialize video conversion shader: {errorMessage}");

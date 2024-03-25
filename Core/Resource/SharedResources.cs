@@ -37,7 +37,7 @@ namespace T3.Editor.App
                  name: "vs-fullscreen-texture",
                  fileChangedAction: null,
                  resource: out _fullScreenVertexShaderResource,
-                 errorMessage: out var errorMessage);
+                 reason: out var errorMessage);
             
 
             if (!string.IsNullOrWhiteSpace(errorMessage))
@@ -57,7 +57,7 @@ namespace T3.Editor.App
                 name: "ps-fullscreen-texture",
                 fileChangedAction: null,
                 resource: out _fullScreenPixelShaderResource,
-                errorMessage: out errorMessage);
+                reason: out errorMessage);
             
 
             if (!string.IsNullOrWhiteSpace(errorMessage))
