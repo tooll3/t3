@@ -75,6 +75,13 @@
         "X": -200.0,
         "Y": 360.0
       }
+    },
+    {
+      "InputId": "ac35e75a-bec5-497c-9c68-6b809b12cd8b"/*ResetToDefaultTrigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
     }
   ],
   "SymbolChildUis": [],
