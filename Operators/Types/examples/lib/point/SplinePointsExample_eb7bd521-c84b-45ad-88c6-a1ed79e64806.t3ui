@@ -6,57 +6,183 @@
     {
       "ChildId": "af6cccca-5bf8-4a12-b393-2f0971c5dd06"/*SplinePoints*/,
       "Position": {
-        "X": 236.5589,
-        "Y": 4.456482
+        "X": -3.1467896,
+        "Y": -35.78247
       }
     },
     {
       "ChildId": "92e12dd6-29c3-4032-9858-61e68924f750"/*APoint*/,
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": -256.07617,
+        "Y": -11.976288
       }
     },
     {
       "ChildId": "b304dd5c-99ea-4709-8fa1-bd0562d3d325"/*APoint*/,
       "Position": {
-        "X": 0.0,
-        "Y": 43.0
+        "X": -256.07617,
+        "Y": 31.023712
       }
     },
     {
       "ChildId": "27bfb911-cf9f-4a4f-8f48-c4d6dd67f9d3"/*APoint*/,
       "Position": {
-        "X": 0.0,
-        "Y": 86.0
+        "X": -256.07617,
+        "Y": 74.02371
       }
     },
     {
       "ChildId": "ea603947-962b-4bcf-add1-47ae3a975c6e"/*APoint*/,
       "Position": {
-        "X": 0.0,
-        "Y": 129.0
-      }
-    },
-    {
-      "ChildId": "12230496-6dd8-47fd-a93c-dcdce50fd643"/*DrawLines*/,
-      "Position": {
-        "X": 395.7058,
-        "Y": 37.698242
+        "X": -256.07617,
+        "Y": 160.02371
       }
     },
     {
       "ChildId": "cfd33241-3c1b-494b-9a60-ac29cb2ad1a7"/*Camera*/,
       "Position": {
-        "X": 545.7058,
-        "Y": 37.698242
+        "X": 1002.72064,
+        "Y": 47.204254
       }
     },
     {
       "ChildId": "4b39ab9a-6404-41c6-83fa-49f1883be097"/*RenderTarget*/,
       "Position": {
-        "X": 719.82654,
-        "Y": 23.445312
+        "X": 1152.7212,
+        "Y": 47.204254
+      }
+    },
+    {
+      "ChildId": "084d2e00-b857-41ae-a69e-befec4172892"/*APoint*/,
+      "Position": {
+        "X": -256.07617,
+        "Y": 203.02371
+      }
+    },
+    {
+      "ChildId": "b1ae58f7-43d0-41e0-9dad-275ef3277244"/*VisualizePoints*/,
+      "Position": {
+        "X": 149.25815,
+        "Y": -157.74004
+      }
+    },
+    {
+      "ChildId": "3fd3b635-3a96-4721-a31c-059fed3b7dd5"/*ExtrudeCurves*/,
+      "Position": {
+        "X": 393.61133,
+        "Y": 36.70166
+      }
+    },
+    {
+      "ChildId": "ca39694c-f4bb-4b8c-9f01-c24f4ef86e7c"/*DrawMesh*/,
+      "Position": {
+        "X": 552.72095,
+        "Y": 47.204254
+      }
+    },
+    {
+      "ChildId": "b3c852e5-dbc0-4888-8d36-34eae61860d4"/*RadialPoints*/,
+      "Position": {
+        "X": 243.61133,
+        "Y": 88.01123
+      }
+    },
+    {
+      "ChildId": "cb47fe4c-c1f7-45f8-b3a5-1a3b70208fa5"/*Execute*/,
+      "Position": {
+        "X": 852.72064,
+        "Y": 47.204254
+      }
+    },
+    {
+      "ChildId": "828b3273-75bf-4102-a030-a639e44a66a6"/*SetMaterial*/,
+      "Position": {
+        "X": 702.72095,
+        "Y": 47.204254
+      }
+    },
+    {
+      "ChildId": "6aaeec86-3a77-4d2b-8b6e-18ba38321008"/*APoint*/,
+      "Position": {
+        "X": -256.07617,
+        "Y": 117.02371
+      }
+    },
+    {
+      "ChildId": "015d1b62-f2e9-40ca-9a29-cb566cb2ca31"/*RadialPoints*/,
+      "Position": {
+        "X": 243.61133,
+        "Y": 131.01123
+      }
+    },
+    {
+      "ChildId": "8441fd39-9516-46b5-9149-4521aaf241ab"/*ExtrudeCurves*/,
+      "Position": {
+        "X": 393.61133,
+        "Y": 105.70166
+      }
+    },
+    {
+      "ChildId": "9d8fc564-7e50-4f4c-a7b3-9eecd3f2eaaa"/*DrawMesh*/,
+      "Position": {
+        "X": 552.72095,
+        "Y": 103.204254
+      }
+    },
+    {
+      "ChildId": "90b71d46-4c2e-468f-9a0d-6608a740f5f0"/*FilterPoints*/,
+      "Position": {
+        "X": 243.61133,
+        "Y": 174.70166
+      }
+    },
+    {
+      "ChildId": "e6d3de7f-7fe2-454e-85fd-1292fdd5b534"/*TorusMesh*/,
+      "Position": {
+        "X": 93.61133,
+        "Y": 243.70166
+      }
+    },
+    {
+      "ChildId": "83b309a2-6036-463a-ab01-b58dde2d7555"/*RepeatMeshAtPoints*/,
+      "Position": {
+        "X": 393.61133,
+        "Y": 174.70166
+      }
+    },
+    {
+      "ChildId": "d1ff3853-0100-4213-9230-11ea7026ae2a"/*DrawMesh*/,
+      "Position": {
+        "X": 543.6113,
+        "Y": 174.70166
+      }
+    },
+    {
+      "ChildId": "437594ed-7d73-47d2-ae2a-727e7e8c7db0"/*TransformMesh*/,
+      "Position": {
+        "X": 243.61133,
+        "Y": 243.70166
+      }
+    },
+    {
+      "ChildId": "7a90fa32-ab15-499b-b829-90aa4d58a396"/*SetMaterial*/,
+      "Position": {
+        "X": 702.72095,
+        "Y": 114.204254
+      }
+    },
+    {
+      "ChildId": "558ea272-f5ce-4d2f-9a51-bb503a7067e1"/*SetMaterial*/,
+      "Position": {
+        "X": 702.72095,
+        "Y": 183.20425
+      }
+    },
+    {
+      "ChildId": "5f65c1af-8c28-4658-8e9d-b933daeb087e"/*AColor*/,
+      "Position": {
+        "X": 552.72095,
+        "Y": -8.795746
       }
     }
   ],
@@ -64,15 +190,15 @@
     {
       "OutputId": "e1e8ec79-d528-496e-a769-0d2c526b9cf0"/*ColorBuffer*/,
       "Position": {
-        "X": 915.19556,
-        "Y": 2.220642
+        "X": 1302.7212,
+        "Y": 47.204254
       }
     }
   ],
   "Annotations": [
     {
       "Id": "db58bd57-c851-4843-91bd-150dda27da7a",
-      "Title": "Select all the points and\nactivate gizmos\n(in the output window)",
+      "Title": "Select one or more points and\nactivate gizmos so you can modify\nthe spline directly in the output window)",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -80,13 +206,22 @@
         "W": 1.0
       },
       "Position": {
-        "X": -61.920654,
-        "Y": -82.81738
+        "X": -292.56137,
+        "Y": -95.70233
       },
       "Size": {
-        "X": 231.09624,
-        "Y": 253.5783
+        "X": 287.05106,
+        "Y": 345.94357
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "8795228a-14fd-4b23-8b8f-3b8efca4b5a3",
+      "Title": "Tooll3 - Let's build a logo animation from scratch",
+      "Description": "",
+      "LinkUrl": "https://youtu.be/7S4aedYxqQE?si=3Aafmh3wneREkTES&t=300",
+      "LinkType": "TutorialVideo"
     }
   ]
 }
