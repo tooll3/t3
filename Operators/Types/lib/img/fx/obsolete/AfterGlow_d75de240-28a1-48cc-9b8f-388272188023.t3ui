@@ -1,5 +1,6 @@
 {
   "Id": "d75de240-28a1-48cc-9b8f-388272188023"/*AfterGlow*/,
+  "Description": "Creates an afterglow effect for moving images just like the newer version [AfterGlow2]\n\nOther Useful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]\n\nAll Feedback Ops: [FluidFeedback] [AdvancedFeedback] [AdvancedFeedback2]",
   "InputUis": [
     {
       "InputId": "4a83673a-c0ec-4dba-9ce0-b71cb2ee0849"/*Image*/,
@@ -34,21 +35,24 @@
       "Position": {
         "X": -638.0425,
         "Y": 225.1691
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "9af9f8af-f7f6-465d-a35b-7b0d952a7db6"/*Resolution*/,
       "Position": {
         "X": -653.34314,
         "Y": 381.4316
-      }
+      },
+      "GroupTitle": "Parameters"
     },
     {
       "InputId": "949dc09e-9782-4876-b4d3-d2ffa3a87a0a"/*Color*/,
       "Position": {
         "X": -653.34314,
         "Y": 426.43155
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
