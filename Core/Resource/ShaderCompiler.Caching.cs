@@ -13,15 +13,22 @@ namespace T3.Core.Resource;
 
 public abstract partial class ShaderCompiler
 {
-    public static void DeleteShaderCache()
+    public static void DeleteShaderCache(bool all)
     {
         int failures = 0;
         int total = 0;
         long totalFileSize = 0;
 
+        var directory = all ? ShaderCacheRootPath : _shaderCacheDirectory;
+        if(!Directory.Exists(directory))
+        {
+            CoreUi.Instance.ShowMessageBox($"No shader cache found at \"{directory}\".", "No shader cache found");
+            return;
+        }
+        
         lock (ShaderCacheLock)
         {
-            Directory.EnumerateFiles(ShaderCacheRootPath)
+            Directory.EnumerateFiles(directory, $"*{FileExtension}", SearchOption.AllDirectories)
                      .AsParallel()
                      .ForAll(file =>
                              {
@@ -74,12 +81,23 @@ public abstract partial class ShaderCompiler
 
     private static void SaveBytecodeToDisk(ulong hash, ShaderBytecode bytecode)
     {
+        if (!_diskCachingEnabled)
+        {
+            return;
+        }
+        
         var path = GetPathForShaderCache(hash);
         File.WriteAllBytes(path, bytecode.Data);
     }
 
     private static bool TryLoadBytecodeFromDisk(ulong hash, [NotNullWhen(true)] out ShaderBytecode bytecode)
     {
+        if (!_diskCachingEnabled)
+        {
+            bytecode = null;
+            return false;
+        }
+        
         var path = GetPathForShaderCache(hash);
         var file = new FileInfo(path);
         if (!file.Exists)
@@ -110,17 +128,12 @@ public abstract partial class ShaderCompiler
     private static string GetPathForShaderCache(ulong hashCode)
     {
         // ReSharper disable once StringLiteralTypo
-        return Path.Combine(ShaderCacheRootPath, $"{hashCode}.shadercache");
+        return Path.Combine(_shaderCacheDirectory, hashCode + FileExtension);
     }
 
     private static readonly Dictionary<ShaderBytecode, ulong> ShaderBytecodeHashes = new();
     private static readonly Dictionary<ulong, ShaderBytecode> ShaderBytecodeCache = new();
     
-    static ShaderCompiler()
-    {
-        Directory.CreateDirectory(ShaderCacheRootPath);
-    }
-
     [StructLayout(LayoutKind.Explicit)]
     private readonly struct ULongFromTwoInts(int a, int b)
     {
@@ -135,5 +148,33 @@ public abstract partial class ShaderCompiler
     }
     
     private static readonly object ShaderCacheLock = new();
-    private static readonly string ShaderCacheRootPath = Path.Combine(UserData.UserData.TempFolder, "ShaderCache");
+    private static readonly string ShaderCacheRootPath = Path.Combine(UserData.UserData.TempFolder, "cache");
+    private static string _shaderCacheDirectory;
+
+    public static string ShaderCacheSubdirectory
+    {
+        set
+        {
+            if(_shaderCacheDirectory != null)
+                throw new InvalidOperationException("Shader cache subdirectory can only be set once.");
+            
+            _shaderCacheDirectory = Path.Combine(ShaderCacheRootPath, value);
+            
+            var potentialCacheFilePath = Path.Combine(_shaderCacheDirectory, ulong.MaxValue + FileExtension);
+
+            if (potentialCacheFilePath.Length > 259)
+            {
+                string message = $"File path for shader cache is too long: \"{_shaderCacheDirectory}\". Disk caching will be disabled.";
+                CoreUi.Instance.ShowMessageBox(message);
+                Log.Error(message);
+                _diskCachingEnabled = false;
+                return;
+            }
+
+            Directory.CreateDirectory(_shaderCacheDirectory);
+        }
+    }
+
+    private static bool _diskCachingEnabled = true;
+    private const string FileExtension = ".shadercache";
 }

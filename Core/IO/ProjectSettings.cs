@@ -24,7 +24,7 @@ namespace T3.Core.IO
     }
 
     [Serializable]
-    public record ExportSettings(Guid OperatorId, string ApplicationTitle, WindowMode WindowMode, ProjectSettings.ConfigData ConfigData, string Author);
+    public record ExportSettings(Guid OperatorId, string ApplicationTitle, WindowMode WindowMode, ProjectSettings.ConfigData ConfigData, string Author, Guid BuildId, string EditorVersion);
     
     public enum WindowMode { Windowed, Fullscreen }
 }

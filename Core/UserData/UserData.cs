@@ -140,7 +140,7 @@ public static class UserData
     }
 
     public static string ReadOnlySettingsFolder => Path.Combine(RuntimeAssemblies.CoreDirectory!, ".t3");
-    public static string TempFolder => Path.Combine(SettingsFolder, "temp");
+    public static string TempFolder => Path.Combine(SettingsFolder, "tmp");
 
     public static readonly string SettingsFolder =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "T3", Process.GetCurrentProcess().ProcessName);

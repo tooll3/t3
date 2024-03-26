@@ -91,6 +91,16 @@ namespace T3.Player
 
                 if (!TryResolveOptions(args, exportSettings!, out _resolvedOptions))
                     return;
+                
+                Log.Info($"Starting {exportSettings.ApplicationTitle} with id {exportSettings.OperatorId} by {exportSettings.Author}.");
+                Log.Info($"Build: {exportSettings.BuildId}, Editor: {exportSettings.EditorVersion}");
+                
+                ShaderCompiler.ShaderCacheSubdirectory = Path.Combine("Player", 
+                                                                      exportSettings.EditorVersion, 
+                                                                      exportSettings.Author,
+                                                                      exportSettings.ApplicationTitle, 
+                                                                      exportSettings.OperatorId.ToString(), 
+                                                                      exportSettings.BuildId.ToString());
 
                 var resolution = new Int2(_resolvedOptions.Width, _resolvedOptions.Height);
                 _vsyncInterval = Convert.ToInt16(!_resolvedOptions.NoVsync);
