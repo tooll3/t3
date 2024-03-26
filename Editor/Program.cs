@@ -80,7 +80,9 @@ namespace T3.Editor
             Log.AddWriter(FileWriter.CreateDefault(UserData.SettingsFolder, out var logPath));
             Log.AddWriter(StatusErrorLine);
             Log.AddWriter(ConsoleLogWindow);
-            Log.Debug($"Starting {Version}");
+            
+            var version = GetReleaseVersion(true);
+            Log.Debug($"Starting {version}");
             
             CrashReporting.LogPath = logPath;
             //if (IsStandAlone)
@@ -95,12 +97,13 @@ namespace T3.Editor
             StartUp.FlagBeginStartupSequence();
 
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
+            ShaderCompiler.ShaderCacheSubdirectory = $"Editor_{version}";
             
             var userSettings = new UserSettings(saveOnQuit: true);
             var projectSettings = new ProjectSettings(saveOnQuit: true);
 
             Log.Debug($"About to initialize ProgramWindows");
-            ProgramWindows.InitializeMainWindow(GetReleaseVersion(), out var device);
+            ProgramWindows.InitializeMainWindow(version, out var device);
 
             Device = device;
 

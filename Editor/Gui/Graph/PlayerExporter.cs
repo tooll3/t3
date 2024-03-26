@@ -129,7 +129,9 @@ namespace T3.Editor.Gui.Graph
                                                     ApplicationTitle: symbol.Name, 
                                                     WindowMode: WindowMode.Fullscreen, 
                                                     ConfigData: ProjectSettings.Config,
-                                                    Author: symbol.SymbolPackage.AssemblyInformation.Name); // todo - actual author name
+                                                    Author: symbol.SymbolPackage.AssemblyInformation.Name, // todo - actual author name
+                                                    BuildId: Guid.NewGuid(),
+                                                    EditorVersion: Program.GetReleaseVersion());
             
             const string exportSettingsFile = "exportSettings.json";
             if(!JsonUtils.TrySaveJson(exportSettings, Path.Combine(exportDir, exportSettingsFile)))

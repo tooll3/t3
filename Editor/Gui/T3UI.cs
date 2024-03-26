@@ -318,9 +318,19 @@ public static class T3Ui
                 
                 ImGui.Separator();
                 
-                if(ImGui.MenuItem("Clear shader cache"))
+                if(ImGui.BeginMenu("Clear shader cache"))
                 {
-                    ShaderCompiler.DeleteShaderCache();
+                    if (ImGui.MenuItem("Editor only"))
+                    {
+                        ShaderCompiler.DeleteShaderCache(all: false);
+                    }
+
+                    if (ImGui.MenuItem("All editor and player versions"))
+                    {
+                        ShaderCompiler.DeleteShaderCache(all: true);
+                    }
+                    
+                    ImGui.EndMenu();
                 }
                 
                 ImGui.Separator();
