@@ -8,6 +8,7 @@
         "X": 51.512096,
         "Y": 46.995968
       },
+      "Description": "Path to the videofile",
       "Usage": "FilePath",
       "FileFilter": "All Files|*.*|Video files (mp4,webm,mpeg,m4v,mkv)|*.mp4;*.webm;*.mpeg;*.m4v;*.mkv"
     },
@@ -16,28 +17,34 @@
       "Position": {
         "X": 51.512096,
         "Y": 91.99597
-      }
+      },
+      "Description": "Defines the volume of the sound output",
+      "AddPadding": "True"
     },
     {
       "InputId": "e9c15b3f-8c4a-411d-b9b3-795d64d6bd20"/*ResyncThreshold*/,
       "Position": {
         "X": 51.512096,
         "Y": 136.99597
-      }
+      },
+      "Description": "Threshold for timing resyncing"
     },
     {
       "InputId": "48e62a3c-a903-4a9b-a44a-148c6c07ac1e"/*OverrideTimeInSecs*/,
       "Position": {
         "X": 51.512096,
         "Y": 181.99597
-      }
+      },
+      "Description": "Defines whether the video is shifted forwards or backwards in time"
     },
     {
       "InputId": "21b5671b-862f-4cea-a355-fa019996c936"/*Loop*/,
       "Position": {
         "X": 51.512096,
         "Y": 226.99597
-      }
+      },
+      "Description": "When activated, the video is repeated endlessly",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],
