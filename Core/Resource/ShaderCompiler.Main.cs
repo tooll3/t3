@@ -15,7 +15,7 @@ public abstract partial class ShaderCompiler
         if (string.IsNullOrWhiteSpace(args.EntryPoint))
             args.EntryPoint = "main";
 
-        var hashCombination = new LongFromTwoInts(args.SourceCode.GetHashCode(), args.EntryPoint.GetHashCode());
+        var hashCombination = new ULongFromTwoInts(args.SourceCode.GetHashCode(), args.EntryPoint.GetHashCode());
         var hash = hashCombination.Value;
         bool success = false;
         ShaderBytecode compiledBlob;
@@ -61,7 +61,7 @@ public abstract partial class ShaderCompiler
         reason = $"Failed to compile shader '{name}'.\n{reason}";
         return false;
 
-        static bool TryLoadCached(long hash, out ShaderBytecode compiledBlob, out string reason)
+        static bool TryLoadCached(ulong hash, out ShaderBytecode compiledBlob, out string reason)
         {
             if (ShaderBytecodeCache.TryGetValue(hash, out compiledBlob))
             {
