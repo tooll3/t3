@@ -17,14 +17,27 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public Dictionary<Guid, Guid> OldToNewIdDict { get; } = new();
 
+        private CopyMode _copyMode;
+        
+        public enum CopyMode {Normal, ClipboardSource, ClipboardTarget}
+
         public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi,
                                          IEnumerable<SymbolChildUi> symbolChildrenToCopy,
                                          List<Annotation> selectedAnnotations,
                                          SymbolUi targetCompositionUi,
-                                         Vector2 targetPosition)
+                                         Vector2 targetPosition, CopyMode copyMode = CopyMode.Normal)
         {
+            _copyMode = copyMode;
             _sourceSymbolId = sourceCompositionUi.Symbol.Id;
+            
+            if(copyMode == CopyMode.ClipboardSource)
+                _clipboardSymbolUi = sourceCompositionUi;
+            
             _targetSymbolId = targetCompositionUi.Symbol.Id;
+            
+            if(copyMode == CopyMode.ClipboardTarget)
+                _clipboardSymbolUi = targetCompositionUi;
+            
             _targetPosition = targetPosition;
 
             symbolChildrenToCopy ??= sourceCompositionUi.ChildUis.Values.ToArray();
@@ -88,18 +101,30 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Do()
         {
-            if(!SymbolUiRegistry.TryGetValue(_targetSymbolId, out var targetCompositionSymbolUi))
+            SymbolUi targetCompositionSymbolUi;
+            SymbolUi sourceCompositionSymbolUi;
+            
+            if (_copyMode == CopyMode.ClipboardTarget)
+            {
+                targetCompositionSymbolUi = _clipboardSymbolUi;
+            }
+            else if (!SymbolUiRegistry.TryGetValue(_targetSymbolId, out targetCompositionSymbolUi))
             {
                 this.LogError(false, $"Failed to find target symbol with id: {_targetSymbolId} - was it removed?");
                 return;
             }
-            
-            if(!SymbolUiRegistry.TryGetValue(_sourceSymbolId, out var sourceCompositionSymbolUi))
+
+
+            if (_copyMode == CopyMode.ClipboardSource)
+            {
+                sourceCompositionSymbolUi = _clipboardSymbolUi;
+            }
+            else if (!SymbolUiRegistry.TryGetValue(_sourceSymbolId, out sourceCompositionSymbolUi))
             {
                 this.LogError(false, $"Failed to find source symbol with id: {_sourceSymbolId} - was it removed?");
                 return;
             }
-            
+
             var targetSymbol = targetCompositionSymbolUi!.Symbol;
 
             // copy animations first, so when creating the new child instances can automatically create animations actions for the existing curves
@@ -189,6 +214,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private readonly Vector2 _targetPosition;
         private readonly Guid _sourceSymbolId;
+        private readonly SymbolUi _clipboardSymbolUi;
         private readonly Guid _targetSymbolId;
         private readonly List<Entry> _childrenToCopy = new();
         private readonly List<Annotation> _annotationsToCopy = new();

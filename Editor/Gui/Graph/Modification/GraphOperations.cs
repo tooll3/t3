@@ -32,12 +32,6 @@ namespace T3.Editor.Gui.Graph.Modification
         {
             var resultJsonString = string.Empty;
 
-            Guid newGuid = new Guid();
-            var allSymbolUis = EditorSymbolPackage.AllSymbols.Select(x => x.Id).ToHashSet();
-
-            while (allSymbolUis.Contains(newGuid))
-                newGuid = new Guid();
-            
             var containerOp = new Symbol(typeof(object), Guid.NewGuid(), null);
             var newContainerUi = new SymbolUi(containerOp, true);
             
@@ -45,7 +39,8 @@ namespace T3.Editor.Gui.Graph.Modification
                                                     selectedChildren,
                                                     selectedAnnotations,
                                                     newContainerUi,
-                                                    Vector2.Zero);
+                                                    Vector2.Zero,
+                                                    copyMode: CopySymbolChildrenCommand.CopyMode.ClipboardTarget);
             cmd.Do();
 
             using (var writer = new StringWriter())

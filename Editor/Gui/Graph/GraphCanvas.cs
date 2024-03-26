@@ -484,13 +484,20 @@ namespace T3.Editor.Gui.Graph
                         var guid = Guid.Parse(guidString);
                         Log.Debug("dropped symbol here" + payload + " " + myString + "  " + guid);
 
-                        var symbol = EditorSymbolPackage.AllSymbols.First(x => x.Id == guid);
-                        var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
-                        var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
+                        if (SymbolUiRegistry.TryGetValue(guid, out var symbolUi))
+                        {
+                            var symbol = symbolUi.Symbol;
+                            var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
+                            var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
 
-                        var instance = compositionOp.Children[childUi.Id];
-                        NodeSelection.SetSelectionToChildUi(childUi, instance);
-
+                            var instance = compositionOp.Children[childUi.Id];
+                            NodeSelection.SetSelectionToChildUi(childUi, instance);
+                        }
+                        else
+                        {
+                            Log.Warning($"Symbol {guid} not found in registry");
+                        }
+                        
                         T3Ui.DraggingIsInProgress = false;
                     }
                 }
@@ -1045,6 +1052,7 @@ namespace T3.Editor.Gui.Graph
             return NodeSelection.GetSelectedNodes<IOutputUi>();
         }
 
+        #region Copy and paste
         private void CopySelectedNodesToClipboard(Instance composition)
         {
             var selectedChildren = NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
@@ -1053,7 +1061,6 @@ namespace T3.Editor.Gui.Graph
                 return;
             
             var resultJsonString = GraphOperations.CopyNodesAsJson(composition, selectedChildren, selectedAnnotations);
-
             EditorUi.Instance.SetClipboardText(resultJsonString);
         }
 
@@ -1069,18 +1076,14 @@ namespace T3.Editor.Gui.Graph
 
                 var symbolJson = jArray[0];
 
-                var gotSymbolJson = GetPastedSymbol(symbolJson, compositionOp.Symbol.SymbolPackage, out var containerSymbol);
-                if (!gotSymbolJson)
+                if (!TryGetPastedSymbol(symbolJson, compositionOp.Symbol.SymbolPackage, out var containerSymbol))
                 {
                     Log.Error($"Failed to paste symbol due to invalid symbol json");
                     return;
                 }
 
-                if (!SymbolRegistry.EntriesEditable.TryAdd(containerSymbol.Id, containerSymbol))
-                    throw new Exception($"Failed to add symbol for {containerSymbol.Name}");
-
                 var symbolUiJson = jArray[1];
-                var hasContainerSymbolUi = SymbolUiJson.TryReadSymbolUiExternal(symbolUiJson, out var containerSymbolUi);
+                var hasContainerSymbolUi = SymbolUiJson.TryReadSymbolUiExternal(symbolUiJson, containerSymbol, out var containerSymbolUi);
                 if (!hasContainerSymbolUi)
                 {
                     Log.Error($"Failed to paste symbol due to invalid symbol ui json");
@@ -1092,9 +1095,10 @@ namespace T3.Editor.Gui.Graph
                                                         null,
                                                         containerSymbolUi.Annotations.Values.ToList(),
                                                         compositionSymbolUi,
-                                                        InverseTransformPositionFloat(ImGui.GetMousePos()));
+                                                        InverseTransformPositionFloat(ImGui.GetMousePos()),
+                                                        copyMode: CopySymbolChildrenCommand.CopyMode.ClipboardSource);
+                
                 cmd.Do(); // FIXME: Shouldn't this be UndoRedoQueue.AddAndExecute() ? 
-                SymbolRegistry.EntriesEditable.Remove(containerSymbol.Id, out _);
 
                 // Select new operators
                 NodeSelection.Clear();
@@ -1118,6 +1122,39 @@ namespace T3.Editor.Gui.Graph
                 Log.Debug("Paste exception: " + e);
             }
         }
+
+        // todo - better encapsulate this in SymbolJson
+        private static bool TryGetPastedSymbol(JToken jToken, SymbolPackage package, out Symbol symbol)
+        {
+            var guidString = jToken[SymbolJson.JsonKeys.Id].Value<string>();
+            var hasId = Guid.TryParse(guidString, out var guid);
+
+            if (!hasId)
+            {
+                Log.Error($"Failed to parse guid in symbol json: `{guidString}`");
+                symbol = null;
+                return false;
+            }
+
+            var jsonResult = SymbolJson.ReadSymbolRoot(guid, jToken, typeof(object), package);
+
+            if (jsonResult.Symbol is null)
+            {
+                symbol = null;
+                return false;
+            }
+
+            if (SymbolJson.TryReadAndApplySymbolChildren(jsonResult))
+            {
+                symbol = jsonResult.Symbol;
+                return true;
+            }
+
+            Log.Error($"Failed to get children of pasted token:\n{jToken}");
+            symbol = null;
+            return false;
+        }
+        #endregion Copy and paste
 
         private void DrawGrid(ImDrawListPtr drawList)
         {
@@ -1161,40 +1198,6 @@ namespace T3.Editor.Gui.Graph
         private readonly List<ISelectableCanvasObject> _selectableItems = new();
         #endregion
 
-        // todo - better encapsulate this in SymbolJson
-        private static bool GetPastedSymbol(JToken jToken, SymbolPackage package, out Symbol symbol)
-        {
-            var guidString = jToken[SymbolJson.JsonKeys.Id].Value<string>();
-            var hasId = Guid.TryParse(guidString, out var guid);
-
-            if (!hasId)
-            {
-                Log.Error($"Failed to parse guid in symbol json: `{guidString}`");
-                symbol = null;
-                return false;
-            }
-
-            symbol = EditorSymbolPackage.AllSymbols.FirstOrDefault(x => x.Id == guid);
-
-            // is this really necessary? just bringing things into parity with what was previously there, but I feel like
-            // everything below can be skipped, unless "allowNonOperatorInstanceType" actually matters
-            if (symbol != null)
-                return true;
-
-            var jsonResult = SymbolJson.ReadSymbolRoot(guid, jToken, typeof(object), package);
-
-            if (jsonResult.Symbol is null)
-                return false;
-
-            if (SymbolJson.TryReadAndApplySymbolChildren(jsonResult))
-            {
-                symbol = jsonResult.Symbol;
-                return true;
-            }
-
-            Log.Error($"Failed to get children of pasted token:\n{jToken}");
-            return false;
-        }
 
         #region public API
         public bool Destroyed { get; private set; }
