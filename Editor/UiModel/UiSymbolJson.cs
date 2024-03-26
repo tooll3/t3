@@ -185,7 +185,7 @@ namespace T3.Editor.UiModel
         }
         
         
-        internal static bool TryReadSymbolUiExternal(JToken mainObject, out SymbolUi symbolUi)
+        internal static bool TryReadSymbolUiExternal(JToken mainObject, Symbol symbol, out SymbolUi symbolUi)
         {
             symbolUi = null;
             var guidString = mainObject[JsonKeys.Id].Value<string>();
@@ -197,7 +197,6 @@ namespace T3.Editor.UiModel
                 return false;
             }
 
-            var symbol = SymbolRegistry.Entries[symbolId];
             var success = TryReadSymbolUi(mainObject, symbol, out symbolUi);
             if(success)
                 symbolUi.UpdateConsistencyWithSymbol();
