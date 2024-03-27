@@ -1,0 +1,24 @@
+{
+  "Name": "LaTeX",
+  "Id": "b4127960-9824-49b2-a379-e49093ed5514",
+  "Namespace": "user.fuzzy.fx",
+  "Inputs": [
+    {
+      "Id": "7d022c0a-85a5-4ad6-b946-8582ca73f573"/*Formula*/,
+      "DefaultValue": "E=mc^2"
+    },
+    {
+      "Id": "459d0fb8-4778-46fb-bb4c-c16c74576b5a"/*DPI*/,
+      "DefaultValue": 96.0
+    },
+    {
+      "Id": "b4cbf757-ce16-435b-a5f8-cf98985f0e5c"/*Offset*/,
+      "DefaultValue": {
+        "X": 5.0,
+        "Y": 5.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
