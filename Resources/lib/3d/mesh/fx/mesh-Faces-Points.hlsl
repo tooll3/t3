@@ -151,7 +151,7 @@ void CalculateTangentBitangent(
     ResultPoints[index].Position = pCenter;
     ResultPoints[index].Rotation = normalize(orientation);
     ResultPoints[index].Color = Color;
-    ResultPoints[index].Selected = v.Selected;
+    ResultPoints[index].Selected = 1;
     ResultPoints[index].Stretch.xy = 1;
     ResultPoints[index].Stretch.z = CalculateTriangleArea(a, b, c) * StretchZ;
 }
