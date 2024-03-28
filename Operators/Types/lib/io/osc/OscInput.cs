@@ -173,8 +173,5 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
 
         [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
         public readonly InputSlot<bool> PrintLogMessages = new();
-
-        [Input(Guid = "dbd5e806-faa7-4cc0-b997-f00041fe1fd1")]
-        public readonly InputSlot<bool> TextMode = new InputSlot<bool>();
     }
 }
