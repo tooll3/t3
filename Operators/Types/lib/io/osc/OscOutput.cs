@@ -1,15 +1,15 @@
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Logging;
 using System.Net;
 using Rug.Osc;
 using System;
 using T3.Core.Utils;
+using T3.Core.Operator.Interfaces;
 
 namespace T3.Operators.Types.Id_4e99da86_482f_4037_8664_b2371526d632
 {
-    public class OscOutput : Instance<OscOutput>
+    public class OscOutput : Instance<OscOutput>, IStatusProvider
     {
         [Input(Guid = "98f38caa-4f79-425c-ab46-22d7dbe62978")]
         public readonly InputSlot<string> IpAddress = new InputSlot<string>();
@@ -27,9 +27,11 @@ namespace T3.Operators.Types.Id_4e99da86_482f_4037_8664_b2371526d632
         public readonly InputSlot<float> Number = new InputSlot<float>();
 
         [Input(Guid = "4931217b-e30d-42a6-9cda-bc49a8fd8d67", MappedType = typeof(OscTypes))]
-        public readonly InputSlot<int> OscValueType = new ();
+        public readonly InputSlot<int> OscValueType = new();
 
         [Output(Guid = "a6679d6c-fc34-4588-ab20-5079ad8f8a03")]
+        public readonly Slot<T3.Core.DataTypes.Command> Result = new Slot<T3.Core.DataTypes.Command>();
+
         public OscOutput()
         {
             Result.UpdateAction = Update;
@@ -47,96 +49,127 @@ namespace T3.Operators.Types.Id_4e99da86_482f_4037_8664_b2371526d632
             var num = Number.GetValue(context);
             var str = String.GetValue(context);
             var oscType = OscValueType.GetEnumValue<OscTypes>(context);
-
-            CheckAddr(context);
-            if (OscAddress.IsValidAddressPattern(location) == false)
+            if (TryGetValidAddress(IpAddress.GetValue(context), out var error, out var address))
             {
-                Log.Error("OSC location is invalid");
+                int port = Port.GetValue(context);
+                if (port <= 0 || port > 65535)
+                {
+                    _lastErrorMessage = "Port must be found in 1-65535 range";
+                    return;
+                }
+
+                if (!_connected) _connected = TryConnectOSC(address, port);
+                else
+                {
+                    // Connection changed, let's close and reset it.
+                    if (address != _ipAddress || port != _port)
+                    {
+                        _sender.Close();
+                        _connected = TryConnectOSC(address, port);
+                    }
+                }
+            }
+            else
+            {
+                _lastErrorMessage = error;
                 return;
             }
+
+
+            // Address means location in Rug.Osc, and is confusing, not related to our IpAddress
+            if (OscAddress.IsValidAddressPattern(location) == false)
+            {
+                _lastErrorMessage = $"The OSC location '{location}' is invalid";
+                return;
+            }
+
+            var _invalidMessage = $"Failed to build the OSC message({oscType})";
             switch (oscType)
             {
                 case OscTypes.Number:
-                    if (num != _num_value)
+                    if (num != _numericValue)
                     {
-                        // Log.Info("Sending:" + num);
                         OscMessage message = new OscMessage(location, num);
                         if (message.Error == OscPacketError.None)
                         {
                             _sender.Send(message);
-                            _num_value = num;
+                            _numericValue = num;
+                            _lastErrorMessage = null;
                         }
-                        else Log.Error("Failed to build the OSC message (float): " + message.ErrorMessage);
+                        else _lastErrorMessage = $"{_invalidMessage}: {message.ErrorMessage}";
                     }
                     break;
 
                 case OscTypes.String:
-                    if (str != _str_value)
+                    if (str != _stringValue)
                     {
-                        // Log.Info("Sending:" + str);
                         OscMessage message = new OscMessage(location, str);
                         if (message.Error == OscPacketError.None)
                         {
                             _sender.Send(message);
-                            _str_value = str;
+                            _stringValue = str;
+                            _lastErrorMessage = null;
                         }
-                        else Log.Error("Failed to build the OSC message (string): " + message.ErrorMessage);
+                        else _lastErrorMessage = $"{_invalidMessage}: {message.ErrorMessage}";
                     }
                     break;
             }
         }
 
-        private void CheckAddr(EvaluationContext context)
+        protected override void Dispose(bool isDisposing)
         {
-            IPAddress address;
+            if (isDisposing && _connected) _sender.Dispose();
+        }
+
+        private bool TryGetValidAddress(string address, out string error, out IPAddress ipAddress)
+        {
             try
             {
-                address = IPAddress.Parse(IpAddress.GetValue(context));
+                _ipAddress = IPAddress.Parse(address);
             }
-            catch (System.FormatException e)
+            catch (System.FormatException)
             {
-                Log.Error("Failed to parse ip: " + e);
-                return;
+                error = $"Failed to parse ip: {address}";
+                ipAddress = null;
+                return false;
             }
-            int port = Port.GetValue(context);
-            if (_connected) CheckChanges(address, port);
-            else ConnectOSC(address, port);
+            error = null;
+            ipAddress = _ipAddress;
+            return true;
         }
 
-        // Connection changed, let's close and reset it.
-        private void CheckChanges(IPAddress address, int port)
+        private bool TryConnectOSC(IPAddress ipAddress, int port)
         {
-            if (address != _address || port != _port)
+            try
             {
-                _sender.Close();
-                ConnectOSC(address, port);
-            }
-        }
-
-        private void ConnectOSC(IPAddress address, int port)
-        {
-            try {
-                _sender = new OscSender(address, port);
+                _sender = new OscSender(ipAddress, port);
                 _sender.Connect();
-                if (_sender.State == OscSocketState.Connected) {
-                    _address = address;
+                if (_sender.State == OscSocketState.Connected)
+                {
+                    _ipAddress = ipAddress;
                     _port = port;
-                    _connected = true;
-                    return;
+                    return true;
                 }
             }
-            catch (Exception e) {
-                Log.Error("Connection failure: " + e);
+            catch (Exception)
+            {
+                _lastErrorMessage = $"Failed to connect to {ipAddress}:{port}";
             }
-            _connected = false;
+            return false;
         }
 
-        public readonly Slot<T3.Core.DataTypes.Command> Result = new Slot<T3.Core.DataTypes.Command>();
         private bool _connected;
-        private IPAddress _address;
+        private IPAddress _ipAddress;
         private int _port;
-        private float _num_value;
-        private string _str_value;
+        private float _numericValue;
+        private string _stringValue;
         private OscSender _sender;
+        private string _lastErrorMessage = null;
+        public IStatusProvider.StatusLevel GetStatusLevel()
+        {
+            return string.IsNullOrEmpty(_lastErrorMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
+        }
+
+        public string GetStatusMessage() { return _lastErrorMessage; }
     }
 }
