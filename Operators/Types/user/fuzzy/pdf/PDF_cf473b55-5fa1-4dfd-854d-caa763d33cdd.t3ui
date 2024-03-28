@@ -1,0 +1,37 @@
+{
+  "Id": "cf473b55-5fa1-4dfd-854d-caa763d33cdd"/*PDF*/,
+  "Description": "An operator to read PDF files in Tooll.\n\nThe background is transparent in PDF format (it's aimed at paper, which usually isn't)\n\nWithout a background, the whole render glitches out a bit, use an \"AdjustColor\" operator to set it right. And fix the whole thing\n\nSet relevant DPI to control the output resolution.",
+  "InputUis": [
+    {
+      "InputId": "5ca4eab7-4254-4113-9836-037d68444bb2"/*Filename*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "1a3a8db9-3db7-4c59-bd9f-50e6b7d5ab04"/*DPI*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Min": 1,
+      "Max": 5000,
+      "Scale": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "0c2bb090-8698-43f5-bd69-a74a42c12519"/*Texture*/,
+      "Position": {
+        "X": 917.91473,
+        "Y": 291.50122
+      }
+    }
+  ]
+}
