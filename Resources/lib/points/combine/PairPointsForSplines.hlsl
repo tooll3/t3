@@ -87,4 +87,6 @@ inline float3 Interpolate(float t, float3 pA, float3 tA, float3 tB, float3 pB)
     // Handle NaN values correctly
     float w = isnan(paW) || isnan(pbW) ? NAN : lerp(PointsA[indexA].W, PointsB[indexB].W, f);
     ResultPoints[i.x].W = InitWTo01 > 0.5 ? f : w;
+
+    ResultPoints[i.x].Selected = 1;
 }
