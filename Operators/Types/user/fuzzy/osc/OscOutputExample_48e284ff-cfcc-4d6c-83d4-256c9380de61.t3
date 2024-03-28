@@ -9,7 +9,7 @@
       "SymbolId": "4e99da86-482f-4037-8664-b2371526d632",
       "InputValues": [
         {
-          "Id": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*Address*/,
+          "Id": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*IpAddress*/,
           "Type": "System.String",
           "Value": "192.168.1.19"
         },
@@ -49,7 +49,7 @@
         {
           "Id": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
           "Type": "System.Single",
-          "Value": 2.0
+          "Value": 1.0
         }
       ],
       "Outputs": []
@@ -59,7 +59,7 @@
       "SymbolId": "4e99da86-482f-4037-8664-b2371526d632",
       "InputValues": [
         {
-          "Id": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*Address*/,
+          "Id": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*IpAddress*/,
           "Type": "System.String",
           "Value": "192.168.1.19"
         },
