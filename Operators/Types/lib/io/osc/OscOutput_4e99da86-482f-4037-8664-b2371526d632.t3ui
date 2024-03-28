@@ -3,7 +3,7 @@
   "Description": "Send out OSC signals to a server",
   "InputUis": [
     {
-      "InputId": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*Address*/,
+      "InputId": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*IpAddress*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
