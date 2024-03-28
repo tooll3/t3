@@ -4,7 +4,7 @@
   "Namespace": "lib.io.osc",
   "Inputs": [
     {
-      "Id": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*Address*/,
+      "Id": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*IpAddress*/,
       "DefaultValue": "127.0.0.1"
     },
     {
