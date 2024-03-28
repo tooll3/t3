@@ -24,17 +24,21 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
         [Output(Guid = "8F426B4A-AD49-4AB9-80EE-3DF9F5A5AFF6", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> LastMessageTime = new ();
 
+        [Output(Guid = "004c2d30-a709-4f21-af5d-0377f93dcd16")]
+        public readonly Slot<string> TextResult = new();
 
         public OscInput()
         {
             FirstResult.UpdateAction = Update;
             Results.UpdateAction = Update;
             LastMessageTime.UpdateAction = Update;
+            TextResult.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
         {
             _address = Address.GetValue(context);
+            _textMode = TextMode.GetValue(context);
             
             var newPort = Port.GetValue(context);
             if (newPort != _registeredPort)
@@ -106,6 +110,7 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
                     
                     _lastMessageTime = Playback.RunTimeInSecs;
                     _isDefaultValue = false;
+                    _textOut = (string)message[0];
                 }
 
                 _lastMatchingSignals.Clear();
@@ -119,6 +124,8 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
 
         private double _lastMessageTime;
         private List<float> _allResults = new();
+        private bool _textMode;
+        private string _textOut;
 
         // Called in other thread!
         public void ProcessMessage(OscMessage msg)
@@ -132,11 +139,13 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
 
                 var matchesAddress = msg.Address == _address;
 
-                    if (matchesAddress || _teachingActive)
-                    {
-                        _lastMatchingSignals.Add(msg);
-                        _isDefaultValue = false;
+                if (matchesAddress || _teachingActive)
+                {
+                    _lastMatchingSignals.Add(msg);
+                    _isDefaultValue = false;
                 }
+
+                if (_textMode) TextResult.Value = (string)msg[0];
             }
         }
 
@@ -174,9 +183,8 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
 
         [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
         public readonly InputSlot<bool> PrintLogMessages = new();
-        
-        
-        
 
+        [Input(Guid = "dbd5e806-faa7-4cc0-b997-f00041fe1fd1")]
+        public readonly InputSlot<bool> TextMode = new InputSlot<bool>();
     }
 }
