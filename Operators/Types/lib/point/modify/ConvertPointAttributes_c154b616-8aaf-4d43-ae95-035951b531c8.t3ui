@@ -1,6 +1,6 @@
 {
   "Id": "c154b616-8aaf-4d43-ae95-035951b531c8"/*ConvertPointAttributes*/,
-  "Description": "",
+  "Description": "Takes one point attribute and converts it into another.",
   "InputUis": [
     {
       "InputId": "cace5c6d-5411-4835-97c0-b2690b4e1b26"/*Points*/,
@@ -8,6 +8,13 @@
       "Position": {
         "X": -501.39294,
         "Y": 452.90167
+      }
+    },
+    {
+      "InputId": "c1631db3-ba6f-4bd5-badf-30309b001d60"/*Mode*/,
+      "Position": {
+        "X": -485.94177,
+        "Y": 849.4209
       }
     },
     {
@@ -27,15 +34,15 @@
     {
       "InputId": "ab049e91-c918-43f2-97b5-457c4eaffa89"/*Amount*/,
       "Position": {
-        "X": -483.93066,
-        "Y": 763.4206
+        "X": -484.9242,
+        "Y": 915.43134
       }
     },
     {
       "InputId": "2d55ff51-5f1b-421a-95ab-9c18d34b0efe"/*Offset*/,
       "Position": {
-        "X": -483.93066,
-        "Y": 808.42084
+        "X": -484.9242,
+        "Y": 960.4316
       }
     }
   ],
@@ -108,6 +115,13 @@
       "Position": {
         "X": -333.93066,
         "Y": 729.4205
+      }
+    },
+    {
+      "ChildId": "41933e73-6c89-4215-92a8-48cdfc6b743a"/*IntToFloat*/,
+      "Position": {
+        "X": -335.94177,
+        "Y": 849.4209
       }
     }
   ],

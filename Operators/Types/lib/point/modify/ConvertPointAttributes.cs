@@ -14,6 +14,9 @@ namespace T3.Operators.Types.Id_c154b616_8aaf_4d43_ae95_035951b531c8
         [Input(Guid = "cace5c6d-5411-4835-97c0-b2690b4e1b26")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
+        [Input(Guid = "c1631db3-ba6f-4bd5-badf-30309b001d60", MappedType =typeof(Modes))]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
+
         [Input(Guid = "ec70d9cc-d0ed-4490-8f50-542e442f38cd", MappedType = typeof(ConvertOptions))]
         public readonly InputSlot<int> ConvertFrom = new InputSlot<int>();
 
@@ -25,6 +28,7 @@ namespace T3.Operators.Types.Id_c154b616_8aaf_4d43_ae95_035951b531c8
 
         [Input(Guid = "2d55ff51-5f1b-421a-95ab-9c18d34b0efe")]
         public readonly InputSlot<float> Offset = new InputSlot<float>();
+
 
 
         private enum ConvertOptions

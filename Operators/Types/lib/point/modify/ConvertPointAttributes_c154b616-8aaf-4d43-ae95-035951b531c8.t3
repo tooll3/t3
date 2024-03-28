@@ -8,12 +8,16 @@
       "DefaultValue": null
     },
     {
-      "Id": "ec70d9cc-d0ed-4490-8f50-542e442f38cd"/*ConvertFrom*/,
+      "Id": "c1631db3-ba6f-4bd5-badf-30309b001d60"/*Mode*/,
       "DefaultValue": 0
     },
     {
+      "Id": "ec70d9cc-d0ed-4490-8f50-542e442f38cd"/*ConvertFrom*/,
+      "DefaultValue": 13
+    },
+    {
       "Id": "035af505-295a-4ecd-9230-8e1e22f38c4a"/*ConvertTo*/,
-      "DefaultValue": 0
+      "DefaultValue": 12
     },
     {
       "Id": "ab049e91-c918-43f2-97b5-457c4eaffa89"/*Amount*/,
@@ -106,6 +110,12 @@
       "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "41933e73-6c89-4215-92a8-48cdfc6b743a"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -126,6 +136,12 @@
       "SourceSlotId": "cace5c6d-5411-4835-97c0-b2690b4e1b26",
       "TargetParentOrChildId": "226ce4bf-0dd2-4b94-b437-2625941fec09",
       "TargetSlotId": "7a13b834-21e5-4cef-ad5b-23c3770ea763"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "c1631db3-ba6f-4bd5-badf-30309b001d60",
+      "TargetParentOrChildId": "41933e73-6c89-4215-92a8-48cdfc6b743a",
+      "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
     },
     {
       "SourceParentOrChildId": "0ef2108d-1bdf-4c0b-b1f5-035b2f467814",
@@ -160,6 +176,12 @@
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "2d55ff51-5f1b-421a-95ab-9c18d34b0efe",
+      "TargetParentOrChildId": "c3dd7c91-1785-4a81-8c05-5a6164c20c69",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
+      "SourceParentOrChildId": "41933e73-6c89-4215-92a8-48cdfc6b743a",
+      "SourceSlotId": "db1073a1-b9d8-4d52-bc5c-7ae8c0ee1ac3",
       "TargetParentOrChildId": "c3dd7c91-1785-4a81-8c05-5a6164c20c69",
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },
