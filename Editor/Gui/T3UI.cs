@@ -290,7 +290,7 @@ public class T3Ui
                     UndoRedoStack.Undo();
                 }
 
-                if (ImGui.MenuItem("Redo", "CTRL+Y", false, UndoRedoStack.CanRedo))
+                if (ImGui.MenuItem("Redo", "CTRL+SHIFT+Z", false, UndoRedoStack.CanRedo))
                 {
                     UndoRedoStack.Redo();
                 }
