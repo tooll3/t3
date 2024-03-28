@@ -6853,12 +6853,12 @@
           }
         },
         {
-          "Id": "bfc2279a-7bf8-436a-a04d-813ecee1776a"/*P*/,
+          "Id": "bfc2279a-7bf8-436a-a04d-813ecee1776a"/*PointsPerStep*/,
           "Type": "System.Int32",
           "Value": 16
         },
         {
-          "Id": "77f01a41-38ff-4186-8336-84a030be124f"/*Q*/,
+          "Id": "77f01a41-38ff-4186-8336-84a030be124f"/*SpiralSteepness*/,
           "Type": "System.Int32",
           "Value": 16
         },
@@ -6868,7 +6868,7 @@
           "Value": 93.96
         },
         {
-          "Id": "5af0a50e-0da1-4800-9fef-c1217eb2368a"/*Bias2*/,
+          "Id": "5af0a50e-0da1-4800-9fef-c1217eb2368a"/*ScaleBias*/,
           "Type": "System.Single",
           "Value": 0.83
         }
