@@ -610,12 +610,16 @@ namespace T3.Editor.Gui.Interaction
                         _isHoveringColor = true;
                         _hoveredColor = c;
 
-                        foreach (var use in uses)
+                        if (GraphWindow.Focused != null)
                         {
-                            if (use.Instance == null)
-                                continue;
-                            
-                            FrameStats.AddHoveredId(use.Instance.SymbolChildId);
+                            var nodeSelection = GraphWindow.Focused.GraphCanvas.NodeSelection;
+                            foreach (var use in uses)
+                            {
+                                if (use.Instance == null)
+                                    continue;
+
+                                nodeSelection.HoveredIds.Add(use.Instance.SymbolChildId);
+                            }
                         }
 
                         if (ImGui.IsItemDeactivated())

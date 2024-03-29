@@ -120,8 +120,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                             continue;
                         }
 
-                        matchingWindow = new GraphWindow(project, rootInstance!, number);
-                        matchingWindow.Config = config;
+                        GraphWindow.TryOpenPackage(project, false, rootInstance!, config, number);
                     }
                     else if (config.Title.StartsWith(OutputPrefix))
                     {

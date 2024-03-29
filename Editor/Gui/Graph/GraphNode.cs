@@ -89,7 +89,7 @@ namespace T3.Editor.Gui.Graph
                         if (ImGui.InvisibleButton("#comment", new Vector2(15, 15)))
                         {
                             _canvas.NodeSelection.SetSelectionToChildUi(childUi, instance);
-                            GraphCanvas.EditCommentDialog.ShowNextFrame();
+                            _canvas.EditCommentDialog.ShowNextFrame();
                         }
                         Icons.DrawIconOnLastItem(Icon.Comment, UiColors.ForegroundFull);
                         CustomComponents.TooltipForLastItem( UiColors.Text, childUi.Comment, null, false);
@@ -119,7 +119,7 @@ namespace T3.Editor.Gui.Graph
                     var backgroundColor = typeColor;
 
                     // Background
-                    var isHighlighted = FrameStats.Last.HoveredIds.Contains(instance.SymbolChildId);
+                    var isHighlighted = _canvas.NodeSelection.HoveredIds.Contains(instance.SymbolChildId);
                     if (framesSinceLastUpdate > 2)
                     {
                         var fadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 1.0f);
@@ -219,7 +219,7 @@ namespace T3.Editor.Gui.Graph
                             _canvas.SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
 
                         //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                        FrameStats.AddHoveredId(childUi.SymbolChild.Id);
+                        _canvas.NodeSelection.HoveredIds.Add(childUi.SymbolChild.Id);
 
                         if (UserSettings.Config.HoverMode != GraphHoverModes.Disabled
                             && !ImGui.IsMouseDragging(ImGuiMouseButton.Left)
@@ -260,7 +260,7 @@ namespace T3.Editor.Gui.Graph
                     }
 
                     var hovered =  (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
-                                      FrameStats.Last.HoveredIds.Contains(instance.SymbolChildId));
+                                      _canvas.NodeSelection.HoveredIds.Contains(instance.SymbolChildId));
 
                     // A horrible work around to prevent exception because CompositionOp changed during drawing.
                     // A better solution would defer setting the compositionOp to the beginning of next frame.
@@ -279,7 +279,7 @@ namespace T3.Editor.Gui.Graph
                                     var count = Structure.CollectDependingSymbols(instance.Symbol).Count();
                                     LibWarningDialog.DependencyCount = count;
                                     LibWarningDialog.HandledInstance = instance;
-                                    GraphCanvas.LibWarningDialog.ShowNextFrame();
+                                    _canvas.LibWarningDialog.ShowNextFrame();
                                     blocked = true;
                                 }
                             }
@@ -324,7 +324,7 @@ namespace T3.Editor.Gui.Graph
                     }
 
                     // Pinned indicator
-                    if (FrameStats.Last.RenderedIds.Contains(instance.SymbolChildId))
+                    if (_canvas.NodeSelection.PinnedIds.Contains(instance.SymbolChildId))
                     {
                         DrawIndicator(drawList, UiColors.Selection, opacity, ref indicatorCount);
                     }

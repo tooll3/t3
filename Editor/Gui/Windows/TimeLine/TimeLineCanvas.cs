@@ -44,6 +44,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         }
 
         public NodeSelection NodeSelection => _nodeSelection;
+        public HashSet<Guid> HoveredIds => _nodeSelection.HoveredIds;
 
         public void Draw(Instance compositionOp, Playback playback)
         {

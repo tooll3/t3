@@ -155,8 +155,15 @@ namespace T3.Editor.Gui.Windows
             _lastLimeTime = time;
             ImGui.SameLine(90);
 
-            var color = GetColorForLogLevel(entryLevel)
-               .Fade(FrameStats.Last.HoveredIds.Contains(entry.SourceId) ? 1 : 0.8f);
+            float opacity = 1f;
+            var nodeSelection = GraphWindow.Focused?.GraphCanvas.NodeSelection;
+            if (nodeSelection != null)
+            {
+                if(nodeSelection.HoveredIds.Contains(entry.SourceId))
+                    opacity = 0.8f;
+            }
+
+            var color = GetColorForLogLevel(entryLevel).Fade(opacity);
             
             var lineBreak = entry.Message.IndexOf('\n');
             var hasMessageWithLineBreaks = lineBreak != -1;
@@ -167,7 +174,8 @@ namespace T3.Editor.Gui.Windows
             var hasInstancePath = entry.SourceIdPath.Count > 0;
             if (IsLineHovered() && (hasInstancePath || hasMessageWithLineBreaks))
             {
-                FrameStats.AddHoveredId(entry.SourceId);
+                if(nodeSelection != null)
+                    nodeSelection.HoveredIds.Add(entry.SourceId);
 
                 GraphCanvas owner = null;
                 bool foundOwner = false;

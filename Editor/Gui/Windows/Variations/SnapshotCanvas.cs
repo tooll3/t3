@@ -33,8 +33,8 @@ namespace T3.Editor.Gui.Windows.Variations
 
         protected override void DrawAdditionalContextMenuContent(Instance InstanceForBlendOperations)
         {
-            var oneSelected = Selection.SelectedElements.Count == 1;
-            var oneOrMoreSelected = Selection.SelectedElements.Count > 0;
+            var oneSelected = CanvasElementSelection.SelectedElements.Count == 1;
+            var oneOrMoreSelected = CanvasElementSelection.SelectedElements.Count > 0;
 
             var graphWindow = GraphWindow.Focused;
             if (graphWindow == null)
@@ -49,7 +49,7 @@ namespace T3.Editor.Gui.Windows.Variations
             {
                 nodeSelection.Clear();
 
-                foreach (var element in Selection.SelectedElements)
+                foreach (var element in CanvasElementSelection.SelectedElements)
                 {
                     if (element is not Variation selectedVariation)
                         continue;
@@ -76,7 +76,7 @@ namespace T3.Editor.Gui.Windows.Variations
             {
                 var selectedInstances = nodeSelection.GetSelectedInstances().ToList();
                 var selectedThumbnails = new List<Variation>();
-                foreach (var thumbnail in Selection.SelectedElements)
+                foreach (var thumbnail in CanvasElementSelection.SelectedElements)
                 {
                     if (thumbnail is Variation v)
                     {
@@ -95,7 +95,7 @@ namespace T3.Editor.Gui.Windows.Variations
                 return new Variation();
 
             PoolForBlendOperations.SaveVariationsToFile();
-            Selection.SetSelection(newVariation);
+            CanvasElementSelection.SetSelection(newVariation);
             ResetView();
             TriggerThumbnailUpdate();
             VariationThumbnail.VariationForRenaming = newVariation;

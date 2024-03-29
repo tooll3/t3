@@ -176,8 +176,8 @@ internal class EditorSymbolPackage : SymbolPackage
         foreach (var symbolUi in symbolUis)
         {
             var symbol = symbolUi.Symbol;
-            SymbolUiDict.TryRemove(symbolUi.Symbol.Id, out _);
-            UnregisterCustomChildUi(symbolUi.Symbol);
+            SymbolUiDict.TryRemove(symbol.Id, out _);
+            UnregisterCustomChildUi(symbol);
         }
     }
 

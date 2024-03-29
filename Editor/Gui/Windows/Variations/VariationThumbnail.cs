@@ -5,6 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Selection;
@@ -59,7 +60,7 @@ namespace T3.Editor.Gui.Windows.Variations
 
             drawList.AddRect(pMin, pMax, UiColors.Gray.Fade(0.2f * focusOpacity));
 
-            variation.IsSelected = Selection.IsNodeSelected(variation);
+            variation.IsSelected = CanvasElementSelection.IsNodeSelected(variation);
             if (variation.IsSelected)
             {
                 drawList.AddRect(pMin - Vector2.One, pMax + Vector2.One, UiColors.Selection);
@@ -110,11 +111,12 @@ namespace T3.Editor.Gui.Windows.Variations
                 if (ImGui.IsItemVisible() && ImGui.IsItemHovered())
                 {
 
-                    if (variation.IsSnapshot)
+                    if (variation.IsSnapshot && GraphWindow.Focused != null)
                     {
+                        var nodeSelection = GraphWindow.Focused.GraphCanvas.NodeSelection;
                         foreach (var childId in variation.ParameterSetsForChildIds.Keys)
                         {
-                            FrameStats.AddHoveredId(childId);
+                            nodeSelection.HoveredIds.Add(childId);
                         }
                     }
 
@@ -183,14 +185,14 @@ namespace T3.Editor.Gui.Windows.Variations
                     _draggedNodeId = variation.Id;
                     if (variation.IsSelected)
                     {
-                        _draggedNodes = Selection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
+                        _draggedNodes = CanvasElementSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
                     }
                     else
                     {
                         _draggedNodes.Add(variation);
                     }
 
-                    _moveCommand = new ModifyCanvasElementsCommand(_canvas, _draggedNodes, Selection);
+                    _moveCommand = new ModifyCanvasElementsCommand(_canvas, _draggedNodes, CanvasElementSelection);
                 }
 
                 HandleNodeDragging(variation);
@@ -211,22 +213,22 @@ namespace T3.Editor.Gui.Windows.Variations
                     return true;
                 }
 
-                if (!Selection.IsNodeSelected(variation))
+                if (!CanvasElementSelection.IsNodeSelected(variation))
                 {
                     if (!ImGui.GetIO().KeyShift)
                     {
-                        Selection.Clear();
+                        CanvasElementSelection.Clear();
                         _hoveredVariation = null;
                         _canvas.Apply(variation, instanceForBlending);
                     }
 
-                    Selection.AddSelection(variation);
+                    CanvasElementSelection.AddSelection(variation);
                 }
                 else
                 {
                     if (ImGui.GetIO().KeyShift)
                     {
-                        Selection.DeselectNode(variation);
+                        CanvasElementSelection.DeselectNode(variation);
                     }
                     else
                     {
@@ -298,7 +300,7 @@ namespace T3.Editor.Gui.Windows.Variations
         private static bool _isDragging;
 
         private static VariationBaseCanvas _canvas;
-        private static CanvasElementSelection Selection => _canvas.Selection;
+        private static CanvasElementSelection CanvasElementSelection => _canvas.CanvasElementSelection;
         private static Guid _draggedNodeId;
         private static List<ISelectableCanvasObject> _draggedNodes = new();
         public static readonly Vector2 ThumbnailSize = new(160, (int)(160 / 16f * 9));
