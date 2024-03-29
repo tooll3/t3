@@ -120,7 +120,10 @@ namespace T3.Editor.Gui.Windows.Layouts
                             continue;
                         }
 
-                        GraphWindow.TryOpenPackage(project, false, rootInstance!, config, number);
+                        if (GraphWindow.TryOpenPackage(project, false, rootInstance!, config, number))
+                        {
+                            Log.Debug($"Initialized graph window layout for project \"{project.DisplayName}\"");
+                        }
                     }
                     else if (config.Title.StartsWith(OutputPrefix))
                     {
@@ -198,9 +201,11 @@ namespace T3.Editor.Gui.Windows.Layouts
                 return;
             }
 
-            WindowManager.SetGraphWindowToNormal();
-
             ApplyLayout(layout);
+            foreach (var graphWindow in GraphWindow.GraphWindowInstances)
+            {
+                graphWindow.SetWindowToNormal();
+            }
             if (!isFocusMode)
             {
                 UserSettings.Config.WindowLayoutIndex = index;

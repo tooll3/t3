@@ -78,16 +78,7 @@ namespace T3.Editor.Gui.Windows.Layouts
             LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
         }
 
-        public static void SetGraphWindowToNormal()
-        {
-            var graphWindow1 = GraphWindow.Focused;
-            if (graphWindow1 == null)
-                return;
-            graphWindow1.WindowFlags &= ~(ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove |
-                                          ImGuiWindowFlags.NoResize);
-        }
-
-        public static IEnumerable<Window> GetAllWindows()
+        internal static IEnumerable<Window> GetAllWindows()
         {
             foreach (var window in _windows)
             {
