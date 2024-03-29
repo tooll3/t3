@@ -9,7 +9,8 @@ using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Interaction.Variations.Midi;
+using T3.Editor.Gui.Interaction.Midi;
+using T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Windows.Variations;
 using T3.Editor.UiModel;
@@ -44,14 +45,14 @@ namespace T3.Editor.Gui.Interaction.Variations
             // Scan for output devices (e.g. to update LEDs etc.)
             MidiOutConnectionManager.Init();
 
-            _inputDevices = new List<IControllerInputDevice>()
+            _compatibleMidiDevices = new List<IControllerInputDevice>()
                                 {
                                     new Apc40Mk2(),
                                     new NanoControl8(),
                                     new ApcMini(),
                                 };
         }
-        private static List<IControllerInputDevice> _inputDevices;
+        private static List<IControllerInputDevice> _compatibleMidiDevices;
         
         /// <summary>
         /// Update variation handling
@@ -100,24 +101,24 @@ namespace T3.Editor.Gui.Interaction.Variations
                 }
             }
             
-            UpdateMidiDevices();
+            UpdateCompatibleMidiDevices();
             SmoothVariationBlending.UpdateBlend();
         }
 
-        private static void UpdateMidiDevices()
+        private static void UpdateCompatibleMidiDevices()
         {
-            // Update Midi Devices 
-            foreach (var connectedDevice in _inputDevices)
+            if (ActivePoolForSnapshots == null)
+                return;
+            
+            foreach (var compatibleDevice in _compatibleMidiDevices)
             {
                 // TODO: support generic input controllers with arbitrary DeviceId 
-                var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(connectedDevice.GetProductNameHash());
-                if (midiIn == null)
+                var device = MidiInConnectionManager.GetMidiInForProductNameHash(compatibleDevice.GetProductNameHash());
+                var isConnected = device != null;
+                if (!isConnected)
                     continue;
 
-                if (ActivePoolForSnapshots != null)
-                {
-                    connectedDevice.Update(midiIn, ActivePoolForSnapshots.ActiveVariation);
-                }
+                compatibleDevice.UpdateVariationHandling(device, ActivePoolForSnapshots.ActiveVariation);
             }
         }
         

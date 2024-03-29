@@ -4,22 +4,29 @@ using System.Linq;
 using NAudio.Midi;
 using Operators.Utils;
 using T3.Core.Logging;
-using T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing;
+using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations.Model;
 
-namespace T3.Editor.Gui.Interaction.Variations.Midi
+namespace T3.Editor.Gui.Interaction.Midi
 {
     public interface IControllerInputDevice
     {
-        void Update(MidiIn midiIn, Variation activeVariation);
+        void UpdateVariationHandling(MidiIn midiIn, Variation activeVariation);
         int GetProductNameHash();
     }
 
+    /// <summary>
+    /// Combines midi signals related to Variations into triggers and invokes matching <see cref="CommandTriggerCombination"/>s.
+    /// Allow allows to update the status of midi devices, e.g. for controlling LEDs to indicate available or active variations.
+    /// </summary>
+    /// <remarks>
+    /// This is NOT related to the MidiInput operator: Both are registered as independent <see cref="MidiInConnectionManager.IMidiConsumer"/>
+    /// and handle their events individually.
+    /// </remarks>
     public abstract class AbstractMidiDevice : IControllerInputDevice, MidiInConnectionManager.IMidiConsumer
     {
         protected AbstractMidiDevice()
         {
-            //if(MidiInConnectionManager.GetMidiInForProductNameHash(GetProductNameHash()) != null)
             MidiInConnectionManager.RegisterConsumer(this);
         }
 
@@ -35,7 +42,13 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
 
         public InputModes ActiveMode = InputModes.Default;
 
-        public virtual void Update(MidiIn midiIn, Variation activeVariation)
+        /// <summary>
+        /// Updates the variation handling. 
+        /// </summary>
+        /// <remarks>
+        /// Note this is not related to MidiInput.
+        /// </remarks>
+        public virtual void UpdateVariationHandling(MidiIn midiIn, Variation activeVariation)
         {
             CombineButtonSignals();
 
@@ -105,6 +118,10 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
 
         // ------------------------------------------------------------------------------------
         #region Process button Signals
+        /// <summary>
+        /// Combines press/hold/release signals into states like JustPressed and Hold than are
+        /// later used to check for actions triggered by button combinations. 
+        /// </summary>
         private void CombineButtonSignals()
         {
             lock (_buttonSignalsSinceLastUpdate)

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using NAudio.Midi;
 using T3.Core.Logging;
 
-namespace T3.Editor.Gui.Interaction.Variations.Midi
+namespace T3.Editor.Gui.Interaction.Midi
 {
     /// <summary>
     /// Keeps track of connected midi out devices sorted by product names 
     /// </summary>
     /// <remarks>
     /// This list is being used to the send midi commands like highlighting LEDs on some controllers.
-    /// This should be eventually be move to core and aligned with MidiOut.</remarks>
+    /// This should be eventually be moved to core and aligned with MidiOut.</remarks>
     public static class MidiOutConnectionManager
     {
         public static void Init()

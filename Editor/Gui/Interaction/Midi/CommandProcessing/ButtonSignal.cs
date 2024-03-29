@@ -1,4 +1,4 @@
-﻿namespace T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing
+﻿namespace T3.Editor.Gui.Interaction.Midi.CommandProcessing
 {
     /// <summary>
     /// Used to save captured note and control events from MidiInputs

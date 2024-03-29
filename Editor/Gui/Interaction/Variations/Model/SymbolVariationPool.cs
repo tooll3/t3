@@ -27,12 +27,12 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public static SymbolVariationPool InitVariationPoolForSymbol(Guid compositionId)
         {
-            var newPool = new SymbolVariationPool()
+            var newPool = new SymbolVariationPool
                               {
-                                  SymbolId = compositionId
+                                  SymbolId = compositionId,
+                                  Variations = LoadVariations(compositionId)
                               };
 
-            newPool.Variations = LoadVariations(compositionId);
             return newPool;
         }
 
