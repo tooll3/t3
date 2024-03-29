@@ -26,7 +26,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
                        };
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref int value, bool readOnly)
+        protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref int value, bool readOnly)
         {
             InputEditStateFlags result;
             

@@ -29,9 +29,9 @@ namespace T3.Core.Operator.Slots
             Value = Input.IsDefault ? TypedDefaultValue.Value : TypedInputValue.Value;
         }
 
-        private SymbolChild.Input _input;
+        private Symbol.Child.Input _input;
 
-        public SymbolChild.Input Input
+        public Symbol.Child.Input Input
         {
             get => _input;
             set

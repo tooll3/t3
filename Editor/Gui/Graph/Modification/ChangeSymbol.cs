@@ -11,7 +11,7 @@ internal static class ChangeSymbol
 {
     public static void ChangeOperatorSymbol(NodeSelection nodeSelection, Instance compositionOp, List<SymbolChildUi> selectedChildUis, Symbol symbol)
     {
-        var nextSelection = new List<SymbolChild>();
+        var nextSelection = new List<Symbol.Child>();
 
         var executedCommands = new List<ICommand>();
 
@@ -34,7 +34,7 @@ internal static class ChangeSymbol
                               });
     }
 
-    private static SymbolChild ChangeOperatorSymbol(SymbolChildUi symbolChildUi, Symbol newSymbol, List<ICommand> executedCommands, NodeSelection selection)
+    private static Symbol.Child ChangeOperatorSymbol(SymbolChildUi symbolChildUi, Symbol newSymbol, List<ICommand> executedCommands, NodeSelection selection)
     {
         var symbolChild = symbolChildUi.SymbolChild;
         if(symbolChild.Symbol == newSymbol)

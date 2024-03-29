@@ -52,12 +52,12 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                     var connection = _bestMatchYetForCurrentFrame.Connection;
 
                     ISlot outputSlot = null;
-                    SymbolChild.Output output = null;
+                    Symbol.Child.Output output = null;
                     Symbol.OutputDefinition outputDefinition = null;
 
                     var op = window.CompositionOp!;
 
-                    SymbolChild? sourceOp = null;
+                    Symbol.Child? sourceOp = null;
                     if (op.Children.TryGetValue(connection.SourceParentOrChildId, out var sourceOpInstance))
                     {
                         sourceOp = sourceOpInstance.SymbolChild;
@@ -69,7 +69,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                         }
                     }
 
-                    SymbolChild.Input input = null;
+                    Symbol.Child.Input input = null;
                     if (op.Symbol.Children.TryGetValue(connection.TargetParentOrChildId, out var targetOp))
                     {
                         input = targetOp.Inputs[connection.TargetSlotId];

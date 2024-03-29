@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Interaction;
 
 public static class CurveEditPopup
 {
-    public static bool DrawPopupIndicator(Instance compositionOp, SymbolChild.Input input, ref Curve curve, Vector2 keepPositionForIcon, bool cloneIfModified, out InputEditStateFlags result)
+    public static bool DrawPopupIndicator(Instance compositionOp, Symbol.Child.Input input, ref Curve curve, Vector2 keepPositionForIcon, bool cloneIfModified, out InputEditStateFlags result)
     {
         var openPop = false;
         var keepPositionForContentBelow = ImGui.GetCursorPos();
@@ -38,7 +38,7 @@ public static class CurveEditPopup
         return isOpen;
     }
     
-    private static InputEditStateFlags DrawPopup(ref Curve curve, SymbolChild.Input input,
+    private static InputEditStateFlags DrawPopup(ref Curve curve, Symbol.Child.Input input,
                                                  bool cloneIfModified, Instance comp)
     {
         

@@ -11,7 +11,7 @@ namespace T3.Editor.UiModel
     /// <summary>
     /// Properties needed for visual representation of an instance. Should later be moved to gui component.
     /// </summary>
-    public class SymbolChildUi : ISelectableCanvasObject
+    public sealed class SymbolChildUi : ISelectableCanvasObject
     {
         public enum Styles
         {
@@ -31,7 +31,7 @@ namespace T3.Editor.UiModel
         
         public Dictionary<Guid, ConnectionStyles> ConnectionStyleOverrides { get; } = new();
         
-        public SymbolChild SymbolChild;
+        public Symbol.Child SymbolChild;
 
         public Guid Id => SymbolChild.Id;
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
@@ -44,6 +44,11 @@ namespace T3.Editor.UiModel
         public bool IsDisabled {
             get => SymbolChild.Outputs.FirstOrDefault().Value?.IsDisabled ?? false;
             set => SetDisabled(value);
+        }
+
+        internal SymbolChildUi()
+        {
+            
         }
 
         public SymbolUi Parent { get; internal set; }
@@ -64,7 +69,7 @@ namespace T3.Editor.UiModel
                 var hasOutput = SymbolChild.Outputs.TryGetValue(outputDef.Id, out var childOutput);
                 if (!hasOutput)
                 {
-                    Log.Warning($"{typeof(SymbolChild)} {SymbolChild.ReadableName} does not have the following child output as defined: " +
+                    Log.Warning($"{typeof(Symbol.Child)} {SymbolChild.ReadableName} does not have the following child output as defined: " +
                                 $"{childOutput.OutputDefinition.Name}({nameof(Guid)}{childOutput.OutputDefinition.Id})");
                     continue;
                 }
@@ -100,8 +105,8 @@ namespace T3.Editor.UiModel
             PreventOpenParameterPopUp = 1<<5,
             PreventInputLabels = 1<<6,
         }
-        
-        public virtual SymbolChildUi Clone(SymbolUi parent)
+
+        internal SymbolChildUi Clone(SymbolUi parent)
         {
             return new SymbolChildUi()
                    {

@@ -19,12 +19,12 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
     /// Handles editing of Curve-Inputs in parameter windows and Graph CustomUi.
     /// </summary>
     /// <remarks>
-    /// The view settings (selection, zoom, scale, etc) for each canvas are stored in a dictionary of <see cref="CurveInteraction"/> instances.  
+    /// The view settings (selection, zoom, scale, etc) for each canvas are stored in a dictionary of <see cref="T3.Editor.Gui.InputUi.CombinedInputs.CurveInputEditing.CurveInteraction"/> instances.  
     /// </remarks>
     public static class CurveInputEditing
     {
 
-        public static InputEditStateFlags DrawCanvasForCurve(ref Curve curveRef, SymbolChild.Input input, bool cloneIfModified, Instance compositionOp,
+        public static InputEditStateFlags DrawCanvasForCurve(ref Curve curveRef, Symbol.Child.Input input, bool cloneIfModified, Instance compositionOp,
                                                              T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
         {
             var imGuiId = ImGui.GetID("");

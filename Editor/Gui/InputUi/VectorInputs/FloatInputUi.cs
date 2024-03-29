@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             return CloneWithType<FloatInputUi>();
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref float value, bool readOnly)
+        protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref float value, bool readOnly)
         {
             FloatComponents[0] = value;
             var inputEditState = VectorValueEdit.Draw(FloatComponents, Min, Max, Scale, Clamp, 0, Format);

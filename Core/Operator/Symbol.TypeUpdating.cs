@@ -245,21 +245,21 @@ public sealed partial class Symbol
 
             // update inputs of symbol child
             var childInputDict = symbolChild.Inputs;
-            var oldChildInputs = new Dictionary<Guid, SymbolChild.Input>(childInputDict);
+            var oldChildInputs = new Dictionary<Guid, Child.Input>(childInputDict);
             childInputDict.Clear();
             foreach (var inputDefinition in slotChangeInfo.NewInputDefinitions)
             {
                 var inputId = inputDefinition.Id;
                 var inputToAdd = oldChildInputs.TryGetValue(inputId, out var oldInput)
                                      ? oldInput
-                                     : new SymbolChild.Input(inputDefinition);
+                                     : new Child.Input(inputDefinition);
 
                 childInputDict.Add(inputId, inputToAdd);
             }
 
             // update output of symbol child
             var childOutputDict = symbolChild.Outputs;
-            var oldChildOutputs = new Dictionary<Guid, SymbolChild.Output>(childOutputDict);
+            var oldChildOutputs = new Dictionary<Guid, Child.Output>(childOutputDict);
             childOutputDict.Clear();
             foreach (var outputDefinition in slotChangeInfo.NewOutputDefinitions)
             {
@@ -267,7 +267,7 @@ public sealed partial class Symbol
                 if (!oldChildOutputs.TryGetValue(id, out var output))
                 {
                     OutputDefinition.TryGetNewValueType(outputDefinition, out var outputData);
-                    output = new SymbolChild.Output(outputDefinition, outputData);
+                    output = new Child.Output(outputDefinition, outputData);
                 }
 
                 childOutputDict.Add(id, output);
@@ -284,7 +284,7 @@ public sealed partial class Symbol
         public int MultiInputIndex { get; set; }
     }
 
-    private readonly record struct InstanceTypeRefreshInfo(SymbolChild SymbolChild, Instance Parent, List<ConnectionEntry> ConnectionsToReplace);
+    private readonly record struct InstanceTypeRefreshInfo(Child SymbolChild, Instance Parent, List<ConnectionEntry> ConnectionsToReplace);
 
     private readonly record struct SlotChangeInfo(
         IReadOnlyList<InputDefinition> OldInputDefinitions,

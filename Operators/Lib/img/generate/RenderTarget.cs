@@ -231,7 +231,7 @@ namespace lib.img.generate
                                                                   name: debugName,
                                                                   reason: out var errorMessage);
 
-            if(!success || !string.IsNullOrWhiteSpace(errorMessage))
+            if(!success)
                 Log.Error($"Failed to initialize {nameof(RenderTarget)}: {errorMessage}");
         }
         

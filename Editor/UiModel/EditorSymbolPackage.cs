@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Threading;
 using T3.Core.Compilation;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -10,7 +9,6 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.External;
 using T3.Editor.Gui.ChildUi;
-using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.UiModel;
 
@@ -291,7 +289,7 @@ internal class EditorSymbolPackage : SymbolPackage
         Log.Debug($"{DisplayName}: Found home symbol");
 
         var symbol = rootSymboLUi.Symbol;
-        var newSymbolChildId = SymbolChild.CreateChildIdDeterministically(symbol, null);
+        var newSymbolChildId = Symbol.Child.CreateChildIdDeterministically(symbol, null);
         if (!symbol.TryCreateParentlessInstance(newSymbolChildId, out rootInstance))
         {
             Log.Error($"Failed to create home instance for {AssemblyInformation.Name}'s symbol {symbol.Name} with id {symbol.Id}");

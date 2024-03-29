@@ -7,8 +7,8 @@ public interface IExtractable
     public bool TryExtractInputsFor(IInputSlot inputSlot, out IEnumerable<ExtractedInput> inputParameters);
 }
 
-public readonly struct ExtractedInput(SymbolChild.Input instanceInput, InputValue inputValue)
+public readonly struct ExtractedInput(Symbol.Child.Input instanceInput, InputValue inputValue)
 {
-    public readonly SymbolChild.Input InstanceInput = instanceInput;
+    public readonly Symbol.Child.Input InstanceInput = instanceInput;
     public readonly InputValue InputValue = inputValue;
 }

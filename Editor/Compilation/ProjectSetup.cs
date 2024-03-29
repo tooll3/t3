@@ -200,12 +200,17 @@ internal static class ProjectSetup
             
             ShaderLinter.AddPackage(SharedResources.ResourcePackage, sharedShaderPackages);
             
-            UpdateSymbolPackages( allSymbolPackages);
+            UpdateSymbolPackages(allSymbolPackages);
 
             #if DEBUG
             totalStopwatch.Stop();
             Log.Debug($"Total load time pre-home: {totalStopwatch.ElapsedMilliseconds}ms");
             #endif
+
+            foreach (var package in EditorSymbolPackage.AllPackages)
+            {
+                Log.Debug($"Loaded {package.DisplayName}");
+            }
 
             stopwatch.Restart();
 

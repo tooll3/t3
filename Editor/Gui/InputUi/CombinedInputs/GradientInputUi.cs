@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                    };
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Gradient gradient, bool readOnly)
+        protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref Gradient gradient, bool readOnly)
         {
             if (gradient == null)
             {

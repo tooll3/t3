@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Commands.Graph
         public string Name => "Bypass";
         public bool IsUndoable => true;
 
-        public ChangeInstanceBypassedCommand(SymbolChild symbolChild, bool setBypassedTo)
+        public ChangeInstanceBypassedCommand(Symbol.Child symbolChild, bool setBypassedTo)
         {
             _inputParentSymbolId = symbolChild.Parent.Id;
             _childId = symbolChild.Id;

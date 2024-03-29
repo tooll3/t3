@@ -216,7 +216,7 @@ namespace T3.Editor.Gui.Windows.Exploration
             public IReadOnlyList<Guid> InstanceIdPath = Array.Empty<Guid>();
             public SymbolChildUi SymbolChildUi;
             public IInputSlot InputSlot { get; set; }
-            public SymbolChild.Input Input;
+            public Symbol.Child.Input Input;
             public Type Type;
             public float ScatterStrength = 1;
             public float ParameterScale = 1;

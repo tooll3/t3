@@ -24,7 +24,7 @@ public sealed partial class SymbolUi
         return childUi;
     }
 
-    internal SymbolChild AddChildAsCopyFromSource(Symbol symbolToAdd, SymbolChild sourceChild, SymbolUi sourceCompositionSymbolUi, Vector2 posInCanvas,
+    internal Symbol.Child AddChildAsCopyFromSource(Symbol symbolToAdd, Symbol.Child sourceChild, SymbolUi sourceCompositionSymbolUi, Vector2 posInCanvas,
                                                   Guid newChildId)
     {
         FlagAsModified();

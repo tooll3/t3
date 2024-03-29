@@ -15,10 +15,10 @@ namespace T3.Core.Operator
     {
         public abstract Type Type { get; }
 
-        private SymbolChild _symbolChildOf;
+        private Symbol.Child _symbolChildOf;
         public Guid SymbolChildId => _symbolChildOf.Id;
 
-        internal void SetSymbolChild(SymbolChild symbolChild)
+        internal void SetSymbolChild(Symbol.Child symbolChild)
         {
             if (_symbolChildOf != null)
                 throw new InvalidOperationException("Instance already has a symbol child");
@@ -26,7 +26,7 @@ namespace T3.Core.Operator
             _symbolChildOf = symbolChild;
         }
 
-        public SymbolChild? SymbolChild => _symbolChildOf;
+        public Symbol.Child? SymbolChild => _symbolChildOf;
 
         private Instance _parent;
 
