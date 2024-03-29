@@ -80,7 +80,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Undo()
         {
-            if(!SymbolUiRegistry.TryGetValue(_targetSymbolId, out var parentSymbolUi))
+            if(!SymbolUiRegistry.TryGetSymbolUi(_targetSymbolId, out var parentSymbolUi))
             {
                 this.LogError(true, $"Failed to find target symbol with id: {_targetSymbolId} - was it removed?");
                 return;
@@ -108,7 +108,7 @@ namespace T3.Editor.Gui.Commands.Graph
             {
                 targetCompositionSymbolUi = _clipboardSymbolUi;
             }
-            else if (!SymbolUiRegistry.TryGetValue(_targetSymbolId, out targetCompositionSymbolUi))
+            else if (!SymbolUiRegistry.TryGetSymbolUi(_targetSymbolId, out targetCompositionSymbolUi))
             {
                 this.LogError(false, $"Failed to find target symbol with id: {_targetSymbolId} - was it removed?");
                 return;
@@ -119,7 +119,7 @@ namespace T3.Editor.Gui.Commands.Graph
             {
                 sourceCompositionSymbolUi = _clipboardSymbolUi;
             }
-            else if (!SymbolUiRegistry.TryGetValue(_sourceSymbolId, out sourceCompositionSymbolUi))
+            else if (!SymbolUiRegistry.TryGetSymbolUi(_sourceSymbolId, out sourceCompositionSymbolUi))
             {
                 this.LogError(false, $"Failed to find source symbol with id: {_sourceSymbolId} - was it removed?");
                 return;
@@ -139,8 +139,8 @@ namespace T3.Editor.Gui.Commands.Graph
                     Log.Warning("Skipping attempt to copy undefined operator. This can be related to undo/redo operations. Please try to reproduce and tell pixtur");
                     continue;
                 }
-                
-                var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
+
+                var symbolToAdd = symbolChildToCopy.Symbol;
                 var newSymbolChild = targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, 
                                                                                         symbolChildToCopy, 
                                                                                         sourceCompositionSymbolUi,

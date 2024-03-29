@@ -51,7 +51,6 @@ namespace T3.Editor.Gui.Graph
             GraphOpacity = graphOpacity; //MathF.Sin((float)ImGui.GetTime() * 2) * 0.5f + 0.5f;
             var compositionUi = composition.GetSymbolUi();
             var graphSymbol = compositionUi.Symbol;
-            var children = composition.Children;
 
             if (ConnectionMaker.TempConnections.Count > 0 || AllConnections.Count != ConnectionMaker.TempConnections.Count + graphSymbol.Connections.Count)
             {
@@ -110,7 +109,7 @@ namespace T3.Editor.Gui.Graph
             drawList.ChannelsSetCurrent((int)Channels.Operators);
 
             // 3. Draw Nodes and their sockets and set positions for connection lines
-            foreach (var instance in children.Values)
+            foreach (var instance in composition.Children.Values)
             {
                 if (instance == null)
                     continue;

@@ -37,7 +37,10 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     var trigger = (DirtyFlagTrigger)Enum.Parse(enumType, valueNames[index]);
                     outputEntry.DirtyFlagTrigger = trigger;
 
-                    _compositionSymbol.ForEachSymbolChildInstanceWithId(symbolChild.Id, ApplyTriggerToInstanceOutputs);
+                    foreach (var instance in _compositionSymbol.InstancesOfSelf)
+                    {
+                        ApplyTriggerToInstanceOutputs(instance);
+                    }
 
                     void ApplyTriggerToInstanceOutputs(Instance instance)
                     {

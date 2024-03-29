@@ -169,7 +169,7 @@ namespace T3.Editor.Gui.Dialog
                 var hasBeenClicked = ImGui.Selectable($"##Selectable{symbolHash.ToString()}", isSelected);
                 _selectedItemChanged |= hasBeenClicked; 
 
-                var path = OperatorUtils.BuildIdPathForInstance(instance);
+                var path = instance.InstancePath;
                 var readablePath = string.Join(" / ", canvas.Structure.GetReadableInstancePath(path, false));
                 
                 if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))

@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private void AssignValue(bool shouldBeDisabled)
         {
-            if (!SymbolUiRegistry.TryGetValue(_inputParentSymbolId, out var symbolUi))
+            if (!SymbolUiRegistry.TryGetSymbolUi(_inputParentSymbolId, out var symbolUi))
                 return;
             
             if (!symbolUi!.ChildUis.TryGetValue(_childId, out var childUi))

@@ -26,7 +26,7 @@ internal class NavigationHistory
     /// </summary>
     public void UpdateSelectedInstance(Instance instance)
     {
-        var path = OperatorUtils.BuildIdPathForInstance(instance);
+        var path = instance.InstancePath;
         var hash = GetHashForIdPath(path);
 
         if (!_idPathsByHash.TryGetValue(hash, out var previousPath))
@@ -85,7 +85,7 @@ internal class NavigationHistory
         }
     }
 
-    internal List<Guid>? NavigateBackwards()
+    internal IReadOnlyList<Guid>? NavigateBackwards()
     {
         while (_currentIndex < _previousSelections.Count - 1)
         {
@@ -100,7 +100,7 @@ internal class NavigationHistory
         return null;
     }
 
-    internal List<Guid>? NavigateForward()
+    internal IReadOnlyList<Guid>? NavigateForward()
     {
         while (_currentIndex > 0)
         {
@@ -115,7 +115,7 @@ internal class NavigationHistory
         return null;
     }
 
-    private long GetHashForIdPath(List<Guid> path)
+    private long GetHashForIdPath(IReadOnlyList<Guid> path)
     {
         long hash = 31.GetHashCode();
         foreach (var id in path)
@@ -129,6 +129,6 @@ internal class NavigationHistory
     private int _currentIndex;
     private Structure _structure;
     
-    private readonly List<List<Guid>> _previousSelections = new();
-    private readonly Dictionary<long, List<Guid>> _idPathsByHash = new();
+    private readonly List<IReadOnlyList<Guid>> _previousSelections = new();
+    private readonly Dictionary<long, IReadOnlyList<Guid>> _idPathsByHash = new();
 }

@@ -22,12 +22,12 @@ internal class Structure
         _getRootInstance = getRootInstance;
     }
     
-    public Instance? GetInstanceFromIdPath(List<Guid> compositionPath)
+    public Instance? GetInstanceFromIdPath(IReadOnlyList<Guid> compositionPath)
     {
         return TryGetInstanceFromIdPath(_getRootInstance(), compositionPath, out var instance) ? instance : null;
     }
 
-    public List<string> GetReadableInstancePath(List<Guid>? path, bool includeLeave= true)
+    public List<string> GetReadableInstancePath(IReadOnlyList<Guid>? path, bool includeLeave= true)
     {
         if (path == null || (includeLeave && path.Count == 0) || (!includeLeave && path.Count == 1)) 
             return ["Path empty"];
@@ -265,7 +265,7 @@ internal class Structure
         return parents;
     }
 
-    public static bool TryGetInstanceFromIdPath(Instance rootInstance, IReadOnlyCollection<Guid>? childPath, out Instance? instance)
+    public static bool TryGetInstanceFromIdPath(Instance rootInstance, IReadOnlyList<Guid>? childPath, out Instance? instance)
     {
         if (childPath == null || childPath.Count == 0)
         {
@@ -275,44 +275,26 @@ internal class Structure
         
         var rootId = rootInstance.SymbolChildId;
         
-        if(childPath.Count == 1 && childPath.First() == rootId)
+        if(childPath.First() != rootId)
+            throw new ArgumentException("Path does not start with the root instance");
+        
+        var pathCount = childPath.Count;
+        
+        if(pathCount == 1)
         {
             instance = rootInstance;
             return true;
         }
-
-        // if the path ends in the root, we have been given an incorrect path
-        // this is because a composition cannot have a child of itself
-        if (childPath.Last() == rootId)
-        {
-            instance = null;
-            return false;
-        }
         
         instance = rootInstance;
-        var foundRootId = false;
-        foreach (var childId in childPath)
+        for(int i = 1; i < pathCount; i++)
         {
-            // Ignore root - skip parts of the path 
-            // we give this as a courtesy to the caller to not have to have all paths provided start with the root
-            if (!foundRootId)
+            if (!instance!.TryGetChildInstance(childPath[i], false, out instance, out _))
             {
-                foundRootId |= childId == rootId;
-                continue;
-            }
-
-            if (!instance!.TryGetChildInstance(childId, false, out instance, out _))
-            {
+                Log.Error("Did not find instance in path provided");
                 instance = null;
                 return false;
             }
-        }
-        
-        if(!foundRootId)
-        {
-            instance = null;
-            Log.Error("Did not find root in path provided - check your path begins with the root provided");
-            return false;
         }
 
         return true;

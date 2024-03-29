@@ -120,7 +120,7 @@ namespace T3.Editor.Gui.Commands.Graph
             }
             else
             {
-                SymbolUiRegistry.TryGetValue(_compositionSymbolId, out var symbolUi);
+                SymbolUiRegistry.TryGetSymbolUi(_compositionSymbolId, out var symbolUi);
                 container = symbolUi;
             }
             

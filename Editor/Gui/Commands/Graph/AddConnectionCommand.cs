@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Do()
         {
-            if (!SymbolUiRegistry.TryGetValue(_compositionSymbolId, out var compositionSymbolUi))
+            if (!SymbolUiRegistry.TryGetSymbolUi(_compositionSymbolId, out var compositionSymbolUi))
             {
                 Log.Warning($"Could not find symbol with id {_compositionSymbolId} - was it removed?");
                 return;
@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Undo()
         {
-            if (!SymbolUiRegistry.TryGetValue(_compositionSymbolId, out var compositionSymbolUi))
+            if (!SymbolUiRegistry.TryGetSymbolUi(_compositionSymbolId, out var compositionSymbolUi))
             {
                 Log.Warning($"Could not find symbol with id {_compositionSymbolId} - was it removed?");
                 return;

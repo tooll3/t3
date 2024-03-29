@@ -77,9 +77,8 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// </summary>
         public void SetSelectionToChildUi(SymbolChildUi node, Instance instance)
         {
-            if(instance == null)
-                throw new ArgumentNullException(nameof(instance));
-            
+            ArgumentNullException.ThrowIfNull(instance);
+
             Clear();
             AddSymbolChildToSelection(node, instance);
             _history.UpdateSelectedInstance(instance);
@@ -103,14 +102,13 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (Selection.Contains(childUi))
                 return;
 
+            ArgumentNullException.ThrowIfNull(instance);
+
             Selection.Add(childUi);
-            if (instance != null)
+            _childUiInstanceIdPaths[childUi] = instance.InstancePath;
+            if (instance is ITransformable transformable)
             {
-                _childUiInstanceIdPaths[childUi] = OperatorUtils.BuildIdPathForInstance(instance);
-                if (instance is ITransformable transformable)
-                {
-                    TransformGizmoHandling.RegisterSelectedTransformable(childUi, transformable);
-                }
+                TransformGizmoHandling.RegisterSelectedTransformable(childUi, transformable);
             }
         }
 
@@ -221,6 +219,6 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         public readonly List<ISelectableCanvasObject> Selection = new();
         private Instance _selectedComposition;
-        private readonly Dictionary<SymbolChildUi, List<Guid>> _childUiInstanceIdPaths = new();
+        private readonly Dictionary<SymbolChildUi, IReadOnlyList<Guid>> _childUiInstanceIdPaths = new();
     }
 }

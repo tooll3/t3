@@ -3,14 +3,13 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Modification;
 
 internal static class ChangeSymbol
 {
-    public static void ChangeOperatorSymbol(GraphCanvas canvas, Instance compositionOp, List<SymbolChildUi> selectedChildUis, Symbol symbol)
+    public static void ChangeOperatorSymbol(NodeSelection nodeSelection, Instance compositionOp, List<SymbolChildUi> selectedChildUis, Symbol symbol)
     {
         var nextSelection = new List<SymbolChild>();
 
@@ -18,7 +17,7 @@ internal static class ChangeSymbol
 
         foreach (var sel in selectedChildUis)
         {
-            var result = ChangeOperatorSymbol(sel, symbol, executedCommands, canvas.NodeSelection);
+            var result = ChangeOperatorSymbol(sel, symbol, executedCommands, nodeSelection);
             if (result != null)
                 nextSelection.Add(result);
         }
@@ -26,17 +25,16 @@ internal static class ChangeSymbol
         if(nextSelection.Count > 0)
             UndoRedoStack.Add(new MacroCommand(nextSelection.Count == 1 ? "Change Symbol" : "Change Symbols ("+ nextSelection.Count + ")", executedCommands));
 
-        canvas.NodeSelection.Clear();
+        nodeSelection.Clear();
         nextSelection.ForEach(symbolChild =>
                               {
                                   var childUi = symbolChild.GetSymbolChildUi();
                                   var instance = compositionOp.Children[symbolChild.Id];
-                                  canvas.NodeSelection.AddSymbolChildToSelection(childUi, instance);
+                                  nodeSelection.AddSymbolChildToSelection(childUi, instance);
                               });
     }
 
-
-    public static SymbolChild ChangeOperatorSymbol(SymbolChildUi symbolChildUi, Symbol newSymbol, List<ICommand> executedCommands, NodeSelection selection)
+    private static SymbolChild ChangeOperatorSymbol(SymbolChildUi symbolChildUi, Symbol newSymbol, List<ICommand> executedCommands, NodeSelection selection)
     {
         var symbolChild = symbolChildUi.SymbolChild;
         if(symbolChild.Symbol == newSymbol)

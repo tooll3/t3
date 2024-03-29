@@ -281,7 +281,7 @@ namespace T3.Editor.Gui.Windows
 
             static bool MoveSymbolToNamespace(Guid symbolId, string nameSpace, out string reason)
             {
-                if (!SymbolUiRegistry.TryGetValue(symbolId, out var symbolUi))
+                if (!SymbolUiRegistry.TryGetSymbolUi(symbolId, out var symbolUi))
                 {
                     reason = $"Could not find symbol with id '{symbolId}'";
                     return false;

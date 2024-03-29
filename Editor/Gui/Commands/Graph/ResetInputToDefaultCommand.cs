@@ -50,7 +50,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private void AssignValue(bool shouldBeDefault)
         {
-            if (!SymbolUiRegistry.TryGetValue(_inputParentSymbolId, out var parentSymbolUi))
+            if (!SymbolUiRegistry.TryGetSymbolUi(_inputParentSymbolId, out var parentSymbolUi))
             {
                 throw new InvalidOperationException("Symbol not found");
             }
@@ -71,7 +71,7 @@ namespace T3.Editor.Gui.Commands.Graph
             }
 
             //inputParentSymbol.InvalidateInputInAllChildInstances(input);
-            foreach (var instance in symbolChild.Symbol.InstancesOfSymbol)
+            foreach (var instance in symbolChild.Symbol.InstancesOfSelf)
             {
                 var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
                 inputSlot.DirtyFlag.ForceInvalidate();

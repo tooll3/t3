@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Slots;
@@ -11,24 +11,22 @@ using T3.Core.Utils;
 
 namespace T3.Core.Operator
 {
-    public abstract class Instance : IDisposable, IGuidPathContainer
+    public abstract class Instance :  IGuidPathContainer
     {
         public abstract Type Type { get; }
 
-        private Guid _symbolChildId = Guid.Empty;
-        public Guid SymbolChildId
+        private SymbolChild _symbolChildOf;
+        public Guid SymbolChildId => _symbolChildOf.Id;
+
+        internal void SetSymbolChild(SymbolChild symbolChild)
         {
-            get => _symbolChildId;
-            internal set
-            {
-                if(_symbolChildId != Guid.Empty)
-                    throw new InvalidOperationException("Can't change SymbolChildId after it has been set");
-                
-                _symbolChildId = value;
-            }
+            if (_symbolChildOf != null)
+                throw new InvalidOperationException("Instance already has a symbol child");
+            
+            _symbolChildOf = symbolChild;
         }
 
-        public SymbolChild? SymbolChild => Parent?.Symbol.Children[SymbolChildId];
+        public SymbolChild? SymbolChild => _symbolChildOf;
 
         private Instance _parent;
 
@@ -44,10 +42,13 @@ namespace T3.Core.Operator
 
         public Symbol Symbol => SymbolRegistry.SymbolsByType[Type];
 
-        public readonly List<ISlot> Outputs = new();
-        public readonly Dictionary<Guid, Instance> Children = new();
-        public readonly List<IInputSlot> Inputs = new();
-        public bool IsCopy = false;
+        private readonly List<ISlot> _outputs = new();
+        public readonly IReadOnlyList<ISlot> Outputs;
+
+        private readonly Dictionary<Guid, Instance> _childInstances = new();
+        public readonly IReadOnlyDictionary<Guid, Instance> Children;
+        private readonly List<IInputSlot> _inputs = new();
+        public readonly IReadOnlyList<IInputSlot> Inputs;
 
         public IReadOnlyList<SymbolPackage> AvailableResourcePackages
         {
@@ -73,7 +74,17 @@ namespace T3.Core.Operator
             return null;
         }
 
-        public void Dispose() => Dispose(true);
+        protected Instance()
+        {
+            Outputs = _outputs;
+            Inputs = _inputs;
+            Children = _childInstances;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
         protected virtual void Dispose(bool disposing)
         {
@@ -91,7 +102,7 @@ namespace T3.Core.Operator
                 inputSlot!.Parent = this;
                 inputSlot.Id = attribute.Id;
                 inputSlot.MappedType = attribute.MappedType;
-                Inputs.Add(inputSlot);
+                _inputs.Add(inputSlot);
             }
 
             // outputs identified by attribute
@@ -100,11 +111,11 @@ namespace T3.Core.Operator
                 var slot = (ISlot)output.Field.GetValue(this);
                 slot!.Parent = this;
                 slot.Id = output.Attribute.Id;
-                Outputs.Add(slot);
+                _outputs.Add(slot);
             }
         }
 
-        public bool TryAddConnection(Symbol.Connection connection, int multiInputIndex)
+        internal bool TryAddConnection(Symbol.Connection connection, int multiInputIndex)
         {
             var gotSource = TryGetSourceSlot(connection, out var sourceSlot);
             var gotTarget = TryGetTargetSlot(connection, out var targetSlot);
@@ -237,23 +248,72 @@ namespace T3.Core.Operator
         {
             return ResourceManager.TryResolvePath(relativePath, AvailableResourcePackages, out absolutePath, out _);
         }
-
-        public IReadOnlyList<Guid> InstancePath => BuildIdPathForInstance(this);
-
-        static List<Guid> BuildIdPathForInstance(Instance instance)
+        
+        
+        internal static void SortInputSlotsByDefinitionOrder(Instance instance)
         {
-            var result = new List<Guid>(6);
-            while (instance != null)
+            // order the inputs by the given input definitions. original order is coming from code, but input def order is the relevant one
+            var inputs = instance._inputs;
+            var inputDefinitions = instance.Symbol.InputDefinitions;
+            int numInputs = inputs.Count;
+            var lastIndex = numInputs - 1;
+
+            for (int i = 0; i < lastIndex; i++)
             {
-                result.Insert(0, instance.SymbolChildId);
-                instance = instance.Parent;
+                Guid inputId = inputDefinitions[i].Id;
+                if (inputs[i].Id != inputId)
+                {
+                    int index = inputs.FindIndex(i + 1, input => input.Id == inputId);
+                    Debug.Assert(index >= 0);
+                    inputs.Swap(i, index);
+                    Debug.Assert(inputId == inputs[i].Id);
+                }
             }
 
-            return result;
+            #if DEBUG
+            if (numInputs > 0)
+            {
+                Debug.Assert(inputs.Count == InputDefinitions.Count);
+            }
+            #endif
         }
+
+        public IReadOnlyList<Guid> InstancePath => OperatorUtils.BuildIdPathForInstance(this);
 
         private List<SymbolPackage> _availableResourcePackages;
         private bool _resourceFoldersDirty = true;
+
+        public static void Destroy(Instance instance)
+        {
+            var allChildren = instance._childInstances.Values.ToArray();
+            foreach (var child in allChildren)
+            {
+                DestroyChildInstance(instance, child.SymbolChildId, out _);
+            }
+            
+            var parent = instance._parent;
+            if (parent != null)
+            {
+                DestroyChildInstance(parent, instance.SymbolChildId, out _);
+            }
+            else
+            {
+                instance.Dispose();
+            }
+
+            static void DestroyChildInstance(Instance parent, Guid childId, out Instance childInstance)
+            {
+                var instance = parent._childInstances[childId];
+                parent._childInstances.Remove(childId, out childInstance);
+                instance.Dispose();
+            }
+        }
+
+
+        internal static void AddChildTo(Instance parentInstance, Instance childInstance)
+        {
+            parentInstance._childInstances.Add(childInstance.SymbolChildId, childInstance);
+        }
     }
 
     public class Instance<T> : Instance where T : Instance

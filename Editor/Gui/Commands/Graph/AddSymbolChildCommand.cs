@@ -23,7 +23,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Undo()
         {
-            if(!SymbolUiRegistry.TryGetValue(_parentSymbolId, out var parentSymbolUi))
+            if(!SymbolUiRegistry.TryGetSymbolUi(_parentSymbolId, out var parentSymbolUi))
             {
                 Log.Warning($"Could not find symbol with id {_parentSymbolId} - was it removed?");
                 return;
@@ -34,13 +34,13 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Do()
         {
-            if(!SymbolUiRegistry.TryGetValue(_parentSymbolId, out var parentSymbolUi))
+            if(!SymbolUiRegistry.TryGetSymbolUi(_parentSymbolId, out var parentSymbolUi))
             {
                 Log.Warning($"Could not find symbol with id {_parentSymbolId} - was it removed?");
                 return;
             }
             
-            if(!SymbolUiRegistry.TryGetValue(_addedSymbolId, out var symbolToAdd))
+            if(!SymbolUiRegistry.TryGetSymbolUi(_addedSymbolId, out var symbolToAdd))
             {
                 Log.Warning($"Could not find symbol with id {_addedSymbolId} - was it removed?");
                 return;

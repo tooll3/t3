@@ -2,6 +2,7 @@
 using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Graph
 {
@@ -30,9 +31,10 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private void AssignValue(bool shouldBeBypassed)
         {
-            if (!SymbolRegistry.Entries.TryGetValue(_inputParentSymbolId, out var symbol))
+            if (!SymbolUiRegistry.TryGetSymbolUi(_inputParentSymbolId, out var symbolUi))
                 return;
             
+            var symbol = symbolUi.Symbol;
             if (!symbol.Children.TryGetValue(_childId, out var child))
             {
                 Log.Assert("Failed to find child");

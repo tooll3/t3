@@ -63,7 +63,7 @@ namespace T3.Editor.Gui.Windows.Output
             {
                 PreventCameraInteraction = true;
                 CameraForRendering = _outputWindowViewCamera;
-                _recentlyUsedCameras = new List<ICamera>();
+                _recentlyUsedCameras.Clear();
                 return;
             }
 
@@ -373,7 +373,7 @@ namespace T3.Editor.Gui.Windows.Output
         private Guid _pickedCameraId = Guid.Empty;
         
         private Instance _drawnInstance;
-        private List<ICamera> _recentlyUsedCameras = new();
+        private readonly List<ICamera> _recentlyUsedCameras = [];
 
         private ControlModes _lastControlMode;
 

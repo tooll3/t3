@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
@@ -11,8 +9,6 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator
 {
-    
-
     /// <summary>
     /// Represents an instance of a <see cref="Symbol"/> within a combined symbol group.
     /// </summary>
@@ -37,7 +33,7 @@ namespace T3.Core.Operator
         public Dictionary<Guid, Input> Inputs { get; private init; } = new();
         public Dictionary<Guid, Output> Outputs { get; private init; } = new();
 
-        public SymbolChild(Symbol symbol, Guid childId, Symbol parent)
+        internal SymbolChild(Symbol symbol, Guid childId, Symbol parent)
         {
             Symbol = symbol;
             Id = childId;
@@ -112,11 +108,6 @@ namespace T3.Core.Operator
                 IsDefault = true;
             }
             
-            public Input DeepCopy()
-            {
-                return new Input(InputDefinition);
-            }
-
             public void SetCurrentValueAsDefault()
             {
                 if (DefaultValue.IsEditableInputReferenceType)
@@ -207,20 +198,16 @@ namespace T3.Core.Operator
             }
             
             
-            var parentInstancesOfSymbol = Parent.InstancesOfSymbol;
-            if (parentInstancesOfSymbol.Count == 0)
+            if (Parent.InstancesOfSelf.Count == 0)
             {
                 _isBypassed = shouldBypass;  // while duplicating / cloning as new symbol there are no instances yet.
                 return;
             }
             
-            foreach (var parentInstance in parentInstancesOfSymbol)
+            foreach (var instance in Parent.InstancesOfChildren[Id])
             {
-                var instance = parentInstance.Children[Id];
-
                 var mainInputSlot = instance.Inputs[0];
                 var mainOutputSlot = instance.Outputs[0];
-
                 
                 var wasByPassed = false;
                 
@@ -357,31 +344,20 @@ namespace T3.Core.Operator
             return Parent.Name + ">" + ReadableName;
         }
 
-        public SymbolChild DeepCopy()
-        {
-  
-                
-            var newChild = new SymbolChild(Symbol, Id, Parent)
-                               {
-                                   Name = Name,
-                                   IsBypassed = IsBypassed,
-                               };
-            return newChild;
-        }
-
-        public static SymbolChild CreateWithDeterministicId(Symbol symbol, Symbol? parent)
+        public static Guid CreateChildIdDeterministically(Symbol symbol, Symbol? parent)
         {
             //deterministically create a new guid from the symbol id
-            var bytes = symbol.Id.ToByteArray();
-            var parentBytes = parent?.Id.ToByteArray() ?? Array.Empty<byte>();
-            
             using var hashComputer = IncrementalHash.CreateHash(HashAlgorithmName.SHA1);
-            hashComputer.AppendData(bytes);
-            hashComputer.AppendData(parentBytes);
-            
+            hashComputer.AppendData(symbol.Id.ToByteArray(), 0, 16);
+
+            if (parent != null)
+            {
+                hashComputer.AppendData(parent.Id.ToByteArray(), 0, 16);
+            }
+
             // SHA1 is 20 bytes long, but we only need 16 bytes for a guid
-            var newGuidBytes = new ReadOnlySpan<byte>(hashComputer.GetCurrentHash(), 0, 16);
-            return new SymbolChild(symbol, new Guid(newGuidBytes), parent);
+            var newGuidBytes = new ReadOnlySpan<byte>(hashComputer.GetHashAndReset(), 0, 16);
+            return new Guid(newGuidBytes);
         }
     }
 }

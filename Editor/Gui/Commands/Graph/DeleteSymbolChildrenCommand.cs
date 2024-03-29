@@ -13,11 +13,22 @@ namespace T3.Editor.Gui.Commands.Graph
     {
         public string Name => "Delete Operator";
         public bool IsUndoable => true;
+
+        private readonly string _creationStack;
         
         public DeleteSymbolChildrenCommand(SymbolUi compositionSymbolUi, List<SymbolChildUi> uiChildrenToRemove)
         {
+            if(compositionSymbolUi == null)
+                throw new ArgumentNullException(nameof(compositionSymbolUi));
+            
+            _creationStack = Environment.StackTrace;
             var compositionSymbol = compositionSymbolUi.Symbol;
+            
+            if(compositionSymbol == null)
+                throw new ArgumentNullException(nameof(compositionSymbol));
+            
             _removedChildren = new ChildEntry[uiChildrenToRemove.Count];
+            _compositionSymbolId = compositionSymbol.Id;
 
             for (int i = 0; i < uiChildrenToRemove.Count; i++)
             {
@@ -53,15 +64,13 @@ namespace T3.Editor.Gui.Commands.Graph
                                               TimeClipSettingsForOutputs = timeClipSettingsForOutputs,
                                           };
             }
-
-            _compositionSymbolId = compositionSymbol.Id;
         }
 
         public void Do()
         {
-            if(!SymbolUiRegistry.TryGetValue(_compositionSymbolId, out var compositionSymbolUi))
+            if(!SymbolUiRegistry.TryGetSymbolUi(_compositionSymbolId, out var compositionSymbolUi))
             {
-                Log.Warning($"Could not find symbol with id {_compositionSymbolId} - was it removed?");
+                this.LogError(false, $"Could not find symbol with id {_compositionSymbolId} - was it removed?\nCreated at stack:\n{_creationStack}", false);
                 return;
             }
             
@@ -94,16 +103,22 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Undo()
         {
-            if(!SymbolUiRegistry.TryGetValue(_compositionSymbolId, out var compositionSymbolUi))
+            if(!SymbolUiRegistry.TryGetSymbolUi(_compositionSymbolId, out var compositionSymbolUi))
             {
-                Log.Warning($"Could not find symbol with id {_compositionSymbolId} - was it removed?");
+                this.LogError(true, $"Could not find symbol with id {_compositionSymbolId} - was it removed?\nCreated at stack:\n{_creationStack}", false);
                 return;
             }
             
             foreach (var childUndoData in _removedChildren)
             {
-                var symbol = SymbolRegistry.Entries[childUndoData.SymbolId];
-                var symbolChildUi = compositionSymbolUi!.AddChild(symbol, childUndoData.ChildId, childUndoData.PosInCanvas, childUndoData.Size);
+                if(!SymbolUiRegistry.TryGetSymbolUi(childUndoData.SymbolId, out var childSymbolUi))
+                {
+                    this.LogError(true, $"Could not find symbol {childUndoData.SymbolId} - was it removed?\nCreated at stack:\n{_creationStack}", false);
+                    continue;
+                }
+                
+                var symbol = childSymbolUi.Symbol;
+                var symbolChildUi = compositionSymbolUi.AddChild(symbol, childUndoData.ChildId, childUndoData.PosInCanvas, childUndoData.Size);
                 var symbolChild = symbolChildUi.SymbolChild;
                 
                 foreach (var (inputId, input) in symbolChild!.Inputs)

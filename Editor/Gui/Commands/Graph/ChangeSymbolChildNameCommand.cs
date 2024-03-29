@@ -28,7 +28,9 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private void AssignValue(string newName)
         {
-            var symbolParent = SymbolRegistry.Entries[_parentSymbolId];
+            if (!SymbolUiRegistry.TryGetSymbolUi(_parentSymbolId, out var symbolUi))
+                throw new Exception("Symbol not found: " + _parentSymbolId);
+            var symbolParent = symbolUi.Symbol;
             var symbol = symbolParent.Children[_symbolChildId];
             symbol.Name = newName;
         }

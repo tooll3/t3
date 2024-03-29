@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -14,53 +15,49 @@ namespace T3.Editor.Gui.Graph.Modification;
 
 internal static class InputsAndOutputs
 {
-    public static bool RemoveInputsFromSymbol(Guid[] inputIdsToRemove, Symbol symbol)
+    public static bool RemoveInputsAndOutputsFromSymbol(Guid[] inputIdsToRemove, Guid[] outputIdsToRemove, Symbol symbol)
     {
+        if (inputIdsToRemove.Length == 0 && outputIdsToRemove.Length == 0)
+            return true;
+        
         var syntaxTree = GraphUtils.GetSyntaxTree(symbol);
         if (syntaxTree == null)
         {
             Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
             return false;
         }
+        
+        var root = syntaxTree.GetRoot();
 
-        var newRoot = RemoveNodesByIdFromTree(inputIdsToRemove, syntaxTree.GetRoot());
-        var newSource = newRoot.GetText().ToString();
+        if (inputIdsToRemove.Length > 0)
+        {
+            if (!TryRemoveNodesByIdFromTree(inputIdsToRemove, root, out root))
+                return false;
+        }
+
+        if (outputIdsToRemove.Length > 0)
+        {
+            if (!TryRemoveNodesByIdFromTree(outputIdsToRemove, root, out root))
+                return false;
+        }
+
+        var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
         return EditableSymbolProject.RecompileSymbol(symbol, newSource, true, out _);
-    }
 
-    private static SyntaxNode RemoveNodesByIdFromTree(Guid[] inputIdsToRemove, SyntaxNode root)
-    {
-        var nodeFinder = new InputsAndOutputs.NodeByAttributeIdFinder(inputIdsToRemove);
-        var newRoot = nodeFinder.Visit(root);
-
-        return SyntaxNodeExtensions.RemoveNodes<SyntaxNode>(newRoot, nodeFinder.NodesToRemove, SyntaxRemoveOptions.KeepNoTrivia);
-    }
-
-    public static bool RemoveOutputsFromSymbol(Guid[] outputIdsToRemove, Symbol symbol)
-    {
-        var syntaxTree = GraphUtils.GetSyntaxTree(symbol);
-        if (syntaxTree == null)
+        static bool TryRemoveNodesByIdFromTree(Guid[] inputIdsToRemove, SyntaxNode root, [NotNullWhen(true)] out SyntaxNode? rootWithoutRemoved)
         {
-            Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
-            return false;
-        }
+            var nodeFinder = new NodeByAttributeIdFinder(inputIdsToRemove);
+            var newRoot = nodeFinder.Visit(root);
 
-        var newRoot = RemoveNodesByIdFromTree(outputIdsToRemove, syntaxTree.GetRoot());
-        var newSource = newRoot.GetText().ToString();
-        Log.Debug(newSource);
-        
-        return EditableSymbolProject.RecompileSymbol(symbol, newSource, false, out _);
+            rootWithoutRemoved = newRoot.RemoveNodes(nodeFinder.NodesToRemove, SyntaxRemoveOptions.KeepNoTrivia);
+            return rootWithoutRemoved != null;
+        }
     }
 
-    internal class NodeByAttributeIdFinder : CSharpSyntaxRewriter
+    private sealed class NodeByAttributeIdFinder(Guid[] inputIds) : CSharpSyntaxRewriter
     {
-        public NodeByAttributeIdFinder(Guid[] inputIds)
-        {
-            _ids = inputIds ?? Array.Empty<Guid>();
-        }
-
         public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
         {
             if (node.AttributeLists.Count > 0) {
@@ -78,11 +75,11 @@ internal static class InputsAndOutputs
             return node;
         }
 
-        private readonly Guid[] _ids;
+        private readonly Guid[] _ids = inputIds ?? Array.Empty<Guid>();
         public List<SyntaxNode> NodesToRemove { get; } = new();
     }
 
-    private class InputNodeByTypeFinder : CSharpSyntaxRewriter
+    private sealed class InputNodeByTypeFinder : CSharpSyntaxRewriter
     {
         public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
         {
@@ -101,7 +98,7 @@ internal static class InputsAndOutputs
         public SyntaxNode LastInputNodeFound { get; private set; }
     }
 
-    private class OutputNodeByTypeFinder : CSharpSyntaxRewriter
+    private sealed class OutputNodeByTypeFinder : CSharpSyntaxRewriter
     {
         public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
         {
@@ -118,7 +115,7 @@ internal static class InputsAndOutputs
         public SyntaxNode LastOutputNodeFound { get; private set; }
     }
 
-    private class ClassDeclarationFinder : CSharpSyntaxWalker
+    private sealed class ClassDeclarationFinder : CSharpSyntaxWalker
     {
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
@@ -128,7 +125,7 @@ internal static class InputsAndOutputs
         public ClassDeclarationSyntax ClassDeclarationNode;
     }
 
-    private class AllInputNodesFinder : CSharpSyntaxRewriter
+    private sealed class AllInputNodesFinder : CSharpSyntaxRewriter
     {
         public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
         {
@@ -149,7 +146,7 @@ internal static class InputsAndOutputs
         public List<(string, SyntaxNode)> InputNodesFound { get; } = new();
     }
 
-    private class AllInputNodesReplacer : CSharpSyntaxRewriter
+    private sealed class AllInputNodesReplacer : CSharpSyntaxRewriter
     {
         public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
         {
@@ -230,6 +227,7 @@ internal static class InputsAndOutputs
         return EditableSymbolProject.RecompileSymbol(symbol, newSource, false, out _);
     }
 
+    // todo - factor out common code between AddInputToSymbol and AddOutputToSymbol
     public static bool AddOutputToSymbol(string outputName, bool isTimeClipOutput, Type outputType, Symbol symbol)
     {
         var syntaxTree = GraphUtils.GetSyntaxTree(symbol);

@@ -1,0 +1,127 @@
+using T3.Core.Operator;
+using T3.Editor.External.Truncon.Collections;
+using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.OutputUi;
+
+namespace T3.Editor.UiModel;
+
+public sealed partial class SymbolUi
+{
+    internal SymbolChildUi AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size, string name = null)
+    {
+        FlagAsModified();
+        var symbolChild = Symbol.AddChild(symbolToAdd, addedChildId, name);
+        var childUi = new SymbolChildUi
+                          {
+                              SymbolChild = symbolChild,
+                              PosOnCanvas = posInCanvas,
+                              Parent = this,
+                              Size = size,
+                          };
+        _childUis.Add(childUi.Id, childUi);
+
+        return childUi;
+    }
+
+    internal SymbolChild AddChildAsCopyFromSource(Symbol symbolToAdd, SymbolChild sourceChild, SymbolUi sourceCompositionSymbolUi, Vector2 posInCanvas,
+                                                  Guid newChildId)
+    {
+        FlagAsModified();
+        var newChild = Symbol.AddChild(symbolToAdd, newChildId);
+        newChild.Name = sourceChild.Name;
+
+        var sourceChildUi = sourceCompositionSymbolUi.ChildUis[sourceChild.Id];
+        var newChildUi = sourceChildUi!.Clone(this);
+
+        newChildUi.SymbolChild = newChild;
+        newChildUi.PosOnCanvas = posInCanvas;
+        newChildUi.Comment = sourceChildUi.Comment;
+
+        _childUis.Add(newChildUi.Id, newChildUi);
+        return newChild;
+    }
+
+    internal void RemoveChild(Guid id)
+    {
+        FlagAsModified();
+
+        var removed = Symbol.RemoveChild(id); // remove from symbol
+
+        // now remove ui entry
+        var removedUi = _childUis.Remove(id, out _);
+
+        if (removed != removedUi)
+        {
+            Log.Error($"Removed {removed} but removedUi {removedUi}!!");
+        }
+
+        if (removed == false)
+        {
+            Log.Error($"Could not remove child with id {id}");
+        }
+
+        if (removedUi == false)
+        {
+            Log.Error($"Could not remove child ui with id {id}");
+        }
+    }
+
+    internal void FlagAsModified()
+    {
+        _hasBeenModified = true;
+    }
+
+    internal SymbolUi CloneForNewSymbol(Symbol newSymbol, Dictionary<Guid, Guid> oldToNewIds = null)
+    {
+        FlagAsModified();
+            
+        var childUis = new List<SymbolChildUi>(ChildUis.Count);
+        // foreach (var sourceChildUi in ChildUis)
+        // {
+        //     var clonedChildUi = sourceChildUi.Clone();
+        //     Guid newChildId = oldToNewIds[clonedChildUi.Id];
+        //     clonedChildUi.SymbolChild = newSymbol.Children.Single(child => child.Id == newChildId);
+        //     childUis.Add(clonedChildUi);
+        // }
+
+        var hasIdMap = oldToNewIds != null;
+            
+        Func<Guid, Guid> idMapper = hasIdMap ? id => oldToNewIds[id] : id => id;
+
+        var inputUis = new OrderedDictionary<Guid, IInputUi>(InputUis.Count);
+        foreach (var (_, inputUi) in InputUis)
+        {
+            var clonedInputUi = inputUi.Clone();
+            clonedInputUi.Parent = this;
+            Guid newInputId = idMapper(clonedInputUi.Id);
+            clonedInputUi.InputDefinition = newSymbol.InputDefinitions.Single(inputDef => inputDef.Id == newInputId);
+            inputUis.Add(clonedInputUi.Id, clonedInputUi);
+        }
+
+        var outputUis = new OrderedDictionary<Guid, IOutputUi>(OutputUis.Count);
+        foreach (var (_, outputUi) in OutputUis)
+        {
+            var clonedOutputUi = outputUi.Clone();
+            Guid newOutputId = idMapper(clonedOutputUi.Id);
+            clonedOutputUi.OutputDefinition = newSymbol.OutputDefinitions.Single(outputDef => outputDef.Id == newOutputId);
+            outputUis.Add(clonedOutputUi.Id, clonedOutputUi);
+        }
+
+        var annotations = new OrderedDictionary<Guid, Annotation>(Annotations.Count);
+        foreach (var (_, annotation) in Annotations)
+        {
+            var clonedAnnotation = annotation.Clone();
+            annotations.Add(clonedAnnotation.Id, clonedAnnotation);
+        }
+
+        var links = new OrderedDictionary<Guid, ExternalLink>(Links.Count);
+        foreach (var (_, link) in Links)
+        {
+            var clonedLink = link.Clone();
+            links.Add(clonedLink.Id, clonedLink);
+        }
+
+        return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations, links, hasIdMap);
+    }
+}

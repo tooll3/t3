@@ -223,7 +223,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     {
                         inConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(connectionToInput);
                     }
-                    Type connectionType = instance.Inputs.Find(c => c.Id == connectionToInput.TargetSlotId).ValueType;
+                    Type connectionType = instance.Inputs.Single(c => c.Id == connectionToInput.TargetSlotId).ValueType;
                     inputConnections.Add((connectionToInput, connectionType, isMultiInput, isMultiInput ? inConnectionInputIndex : 0));
                 }
 
@@ -239,7 +239,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     {
                         outConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(connectionToOutput);
                     }
-                    Type connectionType = instance.Outputs.Find(c => c.Id == connectionToOutput.SourceSlotId).ValueType;
+                    Type connectionType = instance.Outputs.Single(c => c.Id == connectionToOutput.SourceSlotId).ValueType;
                     outputConnections.Add((connectionToOutput, connectionType, isMultiInput, isMultiInput ? outConnectionInputIndex : 0));
                 }
             }

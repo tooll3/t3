@@ -102,9 +102,10 @@ public abstract partial class SymbolPackage : IResourcePackage
             }
         }
 
+        var emptyInstanceCollection = Array.Empty<Instance>();
         foreach (var symbol in updatedSymbols)
         {
-            UpdateSymbolInstances(symbol);
+            UpdateSymbolInstances(symbol, emptyInstanceCollection);
             SymbolUpdated?.Invoke(symbol);
         }
 
@@ -188,7 +189,7 @@ public abstract partial class SymbolPackage : IResourcePackage
             {
                 removedSymbolIds.Remove(guid);
 
-                symbol.UpdateType(type, this, out _);
+                symbol.UpdateTypeWithoutUpdatingDefinitionsOrInstances(type, this);
                 updatedSymbols.Add(symbol);
             }
             else
@@ -207,15 +208,15 @@ public abstract partial class SymbolPackage : IResourcePackage
         }
     }
 
-    protected static void UpdateSymbolInstances(Symbol symbol)
+    protected static void UpdateSymbolInstances(Symbol symbol, Instance[] transferredInstances)
     {
-        symbol.UpdateInstanceType();
+        symbol.UpdateInstanceType(transferredInstances);
         symbol.CreateAnimationUpdateActionsForSymbolInstances();
     }
 
-    internal Symbol CreateSymbol(Type instanceType, Guid id, Guid[]? orderedInputIds = null)
+    internal Symbol CreateSymbol(Type instanceType, Guid id)
     {
-        var symbol = new Symbol(instanceType, id, this, orderedInputIds);
+        var symbol = new Symbol(instanceType, id, this);
 
         return symbol;
     }

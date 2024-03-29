@@ -1,7 +1,6 @@
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
 using T3.Core.Operator;
-using T3.Core.Utils;
 
 namespace T3.Editor.UiModel;
 
@@ -19,11 +18,11 @@ internal static class SymbolUiRegistry
         throw new Exception($"Can't find symbol ui for symbol {id}");
     }
 
-    public static bool TryGetChildInstance(this Instance instance, Guid id, bool recursive, [NotNullWhen(true)] out Instance? child, [NotNullWhen(true)] out List<Guid>? pathFromRoot)
+    public static bool TryGetChildInstance(this Instance instance, Guid id, bool recursive, [NotNullWhen(true)] out Instance? child, [NotNullWhen(true)] out IReadOnlyList<Guid>? pathFromRoot)
     {
         if (instance.Children.TryGetValue(id, out child))
         {
-            pathFromRoot = OperatorUtils.BuildIdPathForInstance(child);
+            pathFromRoot = child.InstancePath;
             return true;
         }
 
@@ -39,12 +38,23 @@ internal static class SymbolUiRegistry
         pathFromRoot = null;
         return false;
     }
-
-    public static bool TryGetValue(Guid rSymbolId, [NotNullWhen(true)] out SymbolUi? symbolUi)
+    
+    public static bool TryGetSymbol(Guid symbolId, [NotNullWhen(true)] out Symbol? symbol)
     {
         foreach(var package in EditorSymbolPackage.AllPackages)
         {
-            if (package.TryGetSymbolUi(rSymbolId, out symbolUi))
+            if (package.TryGetSymbol(symbolId, out symbol))
+                return true;
+        }
+        symbol = null;
+        return false;
+    }
+
+    public static bool TryGetSymbolUi(Guid symbolId, [NotNullWhen(true)] out SymbolUi? symbolUi)
+    {
+        foreach(var package in EditorSymbolPackage.AllPackages)
+        {
+            if (package.TryGetSymbolUi(symbolId, out symbolUi))
                 return true;
         }
         symbolUi = null;

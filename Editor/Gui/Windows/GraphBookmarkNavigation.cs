@@ -123,7 +123,7 @@ namespace T3.Editor.Gui.Windows
 
             bookmarks[index] = new Bookmark()
                                    {
-                                       IdPath = OperatorUtils.BuildIdPathForInstance(window.CompositionOp),
+                                       IdPath = window.CompositionOp.InstancePath.ToList(),
                                        ViewScope = canvas.GetTargetScope(),
                                        SelectedChildIds = canvas.NodeSelection.GetSelectedNodes<SymbolChildUi>().Select(s => s.Id).ToList()
                                    };

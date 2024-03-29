@@ -5,6 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Windows.Variations;
+using T3.Editor.UiModel;
 using T3.Serialization;
 
 namespace T3.Editor.Gui.Interaction.Variations.Model
@@ -34,10 +35,12 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         /// </summary>
         public Dictionary<Guid, Dictionary<Guid, InputValue>> ParameterSetsForChildIds;
 
-        public static Variation FromJson(Guid symbolId, JToken jToken)
+        public static Variation? FromJson(Guid symbolId, JToken jToken)
         {
-            if (!SymbolRegistry.Entries.TryGetValue(symbolId, out var compositionSymbol))
+            if (!SymbolUiRegistry.TryGetSymbolUi(symbolId, out var compositionSymbolUi))
                 return null;
+            
+            var compositionSymbol = compositionSymbolUi.Symbol;
 
             var idToken = jToken[nameof(Id)];
 

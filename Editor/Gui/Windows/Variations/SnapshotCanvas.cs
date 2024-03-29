@@ -1,7 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Selection;
@@ -12,7 +11,7 @@ namespace T3.Editor.Gui.Windows.Variations
 {
     internal class SnapshotCanvas : VariationBaseCanvas
     {
-        protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
+        private protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
         private protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
 
         public override void DrawToolbarFunctions()
@@ -32,7 +31,7 @@ namespace T3.Editor.Gui.Windows.Variations
                        : string.Empty;
         }
 
-        protected override void DrawAdditionalContextMenuContent()
+        protected override void DrawAdditionalContextMenuContent(Instance InstanceForBlendOperations)
         {
             var oneSelected = Selection.SelectedElements.Count == 1;
             var oneOrMoreSelected = Selection.SelectedElements.Count > 0;

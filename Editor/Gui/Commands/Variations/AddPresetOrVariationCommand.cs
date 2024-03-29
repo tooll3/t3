@@ -64,7 +64,7 @@ namespace T3.Editor.Gui.Commands.Variations
 
         private void FlagSymbolAsModified()
         {
-            if (!SymbolUiRegistry.TryGetValue(_symbol.Id, out var symbolUi))
+            if (!SymbolUiRegistry.TryGetSymbolUi(_symbol.Id, out var symbolUi))
             {
                 Log.Warning($"Could not find symbol with id {_symbol.Id} - was it removed?");
                 return;

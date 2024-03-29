@@ -145,7 +145,7 @@ namespace T3.Editor.UiModel
 
             static string ChangeNamespace(Guid symbolId, string nameSpace)
             {
-                if (!SymbolUiRegistry.TryGetValue(symbolId, out var symbolUi))
+                if (!SymbolUiRegistry.TryGetSymbolUi(symbolId, out var symbolUi))
                 {
                     return $"Could not find symbol with id {symbolId} in registry";
                 }
@@ -401,6 +401,7 @@ namespace T3.Editor.UiModel
                     if (!package.TryGetSymbolUi(dependent.Id, out var symbolUi))
                     {
                         Log.Error($"Could not find symbol UI for [{dependent.Name}] ({dependent.Id})");
+                        continue;
                     }
                     
                     if (!package.IsReadOnly)

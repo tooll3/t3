@@ -213,7 +213,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
         public class VariationParameter
         {
-            public List<Guid> InstanceIdPath = new();
+            public IReadOnlyList<Guid> InstanceIdPath = Array.Empty<Guid>();
             public SymbolChildUi SymbolChildUi;
             public IInputSlot InputSlot { get; set; }
             public SymbolChild.Input Input;

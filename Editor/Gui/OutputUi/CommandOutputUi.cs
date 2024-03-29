@@ -8,6 +8,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Editor.Gui.Windows;
+using T3.Editor.UiModel;
 using Device = SharpDX.Direct3D11.Device;
 using Utilities = T3.Core.Utils.Utilities;
 
@@ -20,16 +21,19 @@ namespace T3.Editor.Gui.OutputUi
         public CommandOutputUi()
         {
             // ensure op exists for drawing grid
-            var gridPlaneGizmoId = Guid.Parse("e5588101-5686-4b02-ab7d-e58199ba552e");
-            var gridPlaneGizmoSymbol = SymbolRegistry.Entries[gridPlaneGizmoId];
-
-            var childId = Guid.NewGuid();
-            var gridSymbolChild = new SymbolChild(gridPlaneGizmoSymbol, childId, null);
-
-            if (!Symbol.TryCreateInstance(null, gridSymbolChild, out var gridInstance, out var reason))
+            var outputWindowGridSymbolId = Guid.Parse("e5588101-5686-4b02-ab7d-e58199ba552e");
+            
+            if(!SymbolUiRegistry.TryGetSymbol(outputWindowGridSymbolId, out var outputWindowGridSymbol))
             {
-                Log.Error(nameof(CommandOutputUi) + ": " + reason);
-                gridInstance = gridPlaneGizmoSymbol.InstancesOfSymbol.Single(x => x.SymbolChildId == childId);
+                Log.Warning("CommandOutputUi: Could not find grid Gizmo symbol UI");
+                return;
+            }
+
+            if (!outputWindowGridSymbol.TryCreateParentlessInstance(Guid.NewGuid(), out var gridInstance))
+            {
+                var message = $"{nameof(CommandOutputUi)} Could not create grid instance";
+                Log.Error(message);
+                throw new Exception(message);
             }
 
             _gridOutputs = gridInstance.Outputs;

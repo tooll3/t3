@@ -1,5 +1,6 @@
 #nullable enable
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using T3.Core.Compilation;
@@ -290,10 +291,10 @@ internal class EditorSymbolPackage : SymbolPackage
         Log.Debug($"{DisplayName}: Found home symbol");
 
         var symbol = rootSymboLUi.Symbol;
-        var newSymbolChild = SymbolChild.CreateWithDeterministicId(symbol, null);
-        if (!Symbol.TryCreateInstance(null, newSymbolChild, out rootInstance, out var reason))
+        var newSymbolChildId = SymbolChild.CreateChildIdDeterministically(symbol, null);
+        if (!symbol.TryCreateParentlessInstance(newSymbolChildId, out rootInstance))
         {
-            Log.Error($"Failed to create home instance for {AssemblyInformation.Name}'s symbol {symbol.Name} with id {symbol.Id}\n{reason}");
+            Log.Error($"Failed to create home instance for {AssemblyInformation.Name}'s symbol {symbol.Name} with id {symbol.Id}");
             return false;
         }
         
@@ -357,33 +358,41 @@ internal class EditorSymbolPackage : SymbolPackage
         var symbolJson = JsonFileResult<Symbol>.ReadAndCreate(symbolPath);
         var result = SymbolJson.ReadSymbolRoot(symbol.Id, symbolJson.JToken, symbol.InstanceType, this);
         var newSymbol = result.Symbol;
+        SymbolRegistry.EntriesEditable[id] = newSymbol;
 
         if (!TryReadAndApplyChildren(result))
         {
-            throw new Exception($"Failed to reload symbol for symbol {id}");
+            Log.Error($"Failed to reload symbol for symbol {id}");
+            SymbolRegistry.EntriesEditable[id] = symbol;
+            return;
         }
 
-        // transfer instances over to the new symbol
-        newSymbol.InstancesOfSymbol.AddRange(symbol.InstancesOfSymbol);
-        UpdateSymbolInstances(newSymbol);
+        // transfer instances over to the new symbol and update them
+        UpdateSymbolInstances(newSymbol, symbol.InstancesOfSelf.ToArray());
         
         var symbolUiJson = JsonFileResult<SymbolUi>.ReadAndCreate(symbolUiPath);
-        
-        if(!SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, newSymbol, out var newSymbolUi))
+
+        if (!SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, newSymbol, out var newSymbolUi))
+        {
             throw new Exception($"Failed to reload symbol ui for symbol {id}");
-        
-        
+        }
+
+
         newSymbolUi.UpdateConsistencyWithSymbol();
         
         
         // override registry values
         Symbols[id] = newSymbol;
         SymbolUiDict[id] = newSymbolUi;
-        SymbolRegistry.EntriesEditable[id] = newSymbol;
     }
 
-    public bool TryGetSymbolUi(Guid rSymbolId, out SymbolUi? symbolUi)
+    public bool TryGetSymbolUi(Guid rSymbolId, [NotNullWhen(true)] out SymbolUi? symbolUi)
     {
         return SymbolUiDict.TryGetValue(rSymbolId, out symbolUi);
+    }
+
+    public bool TryGetSymbol(Guid symbolId, [NotNullWhen(true)] out Symbol? symbol)
+    {
+        return Symbols.TryGetValue(symbolId, out symbol);
     }
 }
