@@ -210,10 +210,12 @@ namespace T3.Editor.Gui.Graph
                                     && ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup);
                     
                     // Tooltip
-                    if (isNodeHovered
-                        && UserSettings.Config.EditorHoverPreview
-                        && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
-                        )
+                    if (!isNodeHovered)
+                    {
+                        _canvas.NodeSelection.HoveredIds.Remove(childUi.SymbolChild.Id);
+                    }
+                    else if (UserSettings.Config.EditorHoverPreview
+                        && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip)
                     {
                         if (UserSettings.Config.SmartGroupDragging)
                             _canvas.SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
