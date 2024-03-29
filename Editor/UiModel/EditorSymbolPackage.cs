@@ -58,7 +58,7 @@ internal class EditorSymbolPackage : SymbolPackage
         Log.Debug($"{AssemblyInformation.Name}: Loading Symbol UIs from \"{Folder}\"");
         
         var enumerator = parallel ? SymbolUiSearchFiles.AsParallel() : SymbolUiSearchFiles;
-        newlyReadSymbolUis = enumerator
+        var newlyReadSymbolUiList = enumerator
                                    .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
                                    .Where(result => newSymbols.ContainsKey(result.Guid))
                                    .Select(uiJson =>
@@ -83,16 +83,14 @@ internal class EditorSymbolPackage : SymbolPackage
                                            })
                                    .Where(symbolUi => symbolUi != null)
                                    .Select(symbolUi => symbolUi!)
-                                   .ToArray();
+                                   .ToList();
 
-        if(newSymbolsWithoutUis.Count == 0)
+        if (newSymbolsWithoutUis.Count == 0)
+        {
+            newlyReadSymbolUis = newlyReadSymbolUiList.ToArray();
             return;
-        
-        var originalLength = newlyReadSymbolUis.Length;
-        var newArray = new SymbolUi[originalLength + newSymbolsWithoutUis.Count];
-        Array.Copy(newlyReadSymbolUis, newArray, newlyReadSymbolUis.Length);
-        
-        var currentIndex = originalLength;
+        }
+
         foreach (var (guid, symbol) in newSymbolsWithoutUis)
         {
             var symbolUi = new SymbolUi(symbol, false);
@@ -103,11 +101,11 @@ internal class EditorSymbolPackage : SymbolPackage
                 continue;
             }
 
-            newArray[currentIndex++] = symbolUi;
+            newlyReadSymbolUiList.Add(symbolUi);
             OnSymbolUiLoaded(null, symbolUi);
         }
 
-        newlyReadSymbolUis = newArray;
+        newlyReadSymbolUis = newlyReadSymbolUiList.ToArray();
     }
 
     private static void UnregisterCustomChildUi(Symbol symbol)
