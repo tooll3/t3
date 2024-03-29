@@ -10,7 +10,7 @@ using Type = System.Type;
 namespace T3.Editor.Gui.Interaction.Midi;
 
 /// <summary>
-/// Handles the initialization and update of compatible midi devices.
+/// Handles the initialization and update of <see cref="CompatibleMidiDevice"/>s.
 /// </summary>
 public static class CompatibleMidiDeviceHandling
 {

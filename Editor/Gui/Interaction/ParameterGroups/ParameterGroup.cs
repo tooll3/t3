@@ -29,16 +29,10 @@ namespace T3.Editor.Gui.Interaction.ParameterGroups;
 ///     - Add parameter control button
 ///     - draw Parameter List
 /// - Connect to midi connection manager
-///   - Some thoughts: The current control flow is
-///         T3Ui.ProcessFrame()
-///         -> VariationHandling.Update()
-///         -> ...
-///         -> AbstractMidiDevice.UpdateVariationHandling()
-///
-/// - This behaviour should be refactored because so that AbstractMidiDevice handles the update of connected and devices
-///   and the update includes everything related to interacting with that device including Variations AND ParameterGroups.
-///
-///  
+///     - somehow switch between snapshot and parameter control modes
+///     - add commands to CompatibleMidiDevice
+///     - indicate parameters as controlled on midi device (e.g. by activating LEDs)
+/// 
 /// </remarks>
 ///
 /// 
