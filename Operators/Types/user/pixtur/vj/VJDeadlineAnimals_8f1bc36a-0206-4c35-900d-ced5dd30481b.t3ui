@@ -1844,6 +1844,20 @@
         "X": 1932.5564,
         "Y": 6108.2266
       }
+    },
+    {
+      "ChildId": "ae30e7d2-6cbb-40e4-a2a5-a4dc7bfbaa0b"/*Group*/,
+      "Position": {
+        "X": 2760.3813,
+        "Y": 7622.582
+      }
+    },
+    {
+      "ChildId": "a4950032-442b-4900-aca1-2914ee4d3797"/*CutOffShapes*/,
+      "Position": {
+        "X": 2392.0073,
+        "Y": 7628.629
+      }
     }
   ],
   "OutputUis": [

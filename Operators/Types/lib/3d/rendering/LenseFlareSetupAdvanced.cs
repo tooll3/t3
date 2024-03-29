@@ -10,9 +10,6 @@ namespace T3.Operators.Types.Id_8f4ca295_7268_44a2_94b0_4e974fac22a4
         [Output(Guid = "fe0eca40-4f2d-475b-8372-0351d9f67c59")]
         public readonly Slot<Command> Output = new();
 
-        [Output(Guid = "e2e8f9a0-48eb-4014-8356-8aa4d1a81a6d")]
-        public readonly Slot<float> Centerglow = new Slot<float>();
-
         [Input(Guid = "f2c310f0-a019-40e5-9b17-3c35d254bb82")]
         public readonly InputSlot<float> Brightness = new();
 

@@ -20,8 +20,7 @@
       "AddPadding": "True",
       "Min": 0.0,
       "Max": 5.0,
-      "Scale": 0.01,
-      "Clamp": true
+      "Scale": 0.01
     },
     {
       "InputId": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*Intensity*/,

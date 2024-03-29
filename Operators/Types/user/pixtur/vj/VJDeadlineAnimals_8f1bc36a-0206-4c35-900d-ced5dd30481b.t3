@@ -3170,7 +3170,12 @@
         {
           "Id": "e0c927f9-5528-49c5-b457-5aea51f51628"/*Path*/,
           "Type": "System.String",
-          "Value": "C:\\Users\\pixtur\\Downloads\\Lug00ber - Solskogen 2013 Promomix.mp3"
+          "Value": "C:\\Users\\pixtur\\Music\\Max Cooper - All Night Long [Phonox, London].mp3"
+        },
+        {
+          "Id": "7abb80b8-5ea3-48f3-9f28-19daca9b8648"/*TimeInSecs*/,
+          "Type": "System.Single",
+          "Value": 303.2
         },
         {
           "Id": "989c84c4-f085-4839-89fd-bcf0f33a04e8"/*IsLooping*/,
@@ -3314,15 +3319,15 @@
         {
           "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
           "Type": "System.Boolean",
-          "Value": false
+          "Value": true
         },
         {
           "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0,
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
             "W": 1.0
           }
         },
@@ -4634,7 +4639,12 @@
           }
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f"/*Layer2d*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "c4bc3de1-3b8f-48c3-b38f-13d6bcbb13e5"/*TriggerAnim*/,
@@ -5254,6 +5264,18 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "ae30e7d2-6cbb-40e4-a2a5-a4dc7bfbaa0b"/*Group*/,
+      "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "a4950032-442b-4900-aca1-2914ee4d3797"/*CutOffShapes*/,
+      "SymbolId": "49bbae57-da13-4fe6-b28b-8878d63c1fee",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -5752,6 +5774,12 @@
     {
       "SourceParentOrChildId": "204cd79e-1ad9-4b52-8fcf-dd63a55be2f5",
       "SourceSlotId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f",
+      "TargetParentOrChildId": "50440039-60d6-4e47-8128-d4dffb07a96b",
+      "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
+    },
+    {
+      "SourceParentOrChildId": "ae30e7d2-6cbb-40e4-a2a5-a4dc7bfbaa0b",
+      "SourceSlotId": "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b",
       "TargetParentOrChildId": "50440039-60d6-4e47-8128-d4dffb07a96b",
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
@@ -6350,6 +6378,12 @@
       "TargetSlotId": "d4d0f046-297b-440a-aef8-c2f0426ef4f5"
     },
     {
+      "SourceParentOrChildId": "a4950032-442b-4900-aca1-2914ee4d3797",
+      "SourceSlotId": "f22f02f7-1703-4e1e-8237-1d609b8f09d7",
+      "TargetParentOrChildId": "ae30e7d2-6cbb-40e4-a2a5-a4dc7bfbaa0b",
+      "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
+    },
+    {
       "SourceParentOrChildId": "dc8323aa-e755-42cf-9e34-41b2010a1b11",
       "SourceSlotId": "fa56b47f-1b16-45d5-80cd-32c5a872acf4",
       "TargetParentOrChildId": "b16c52d7-c3b5-4bbf-af59-0199bf19a8d0",
@@ -6892,8 +6926,8 @@
   ],
   "PlaybackSettings": {
     "Enabled": true,
-    "Bpm": 60.0,
-    "AudioSource": 0,
+    "Bpm": 98.0,
+    "AudioSource": 1,
     "Syncing": 1,
     "AudioDecayFactor": 0.92,
     "AudioGainFactor": 1.0,
