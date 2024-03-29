@@ -73,7 +73,7 @@ namespace T3.Editor.Gui.Graph
             GraphCanvas = new GraphCanvas(this, nodeSelection, navigationHistory);
             SymbolBrowser = new SymbolBrowser(this, GraphCanvas);
             TimeLineCanvas = new TimeLineCanvas(GraphCanvas);
-            
+            SetWindowToNormal();
         }
 
         public static bool CanOpenAnotherWindow => true;
@@ -527,23 +527,28 @@ namespace T3.Editor.Gui.Graph
                 LogFailure();
                 return false;
             }
-            
-            if(replaceFocused)
-                Focused?.Close();
-            
+
+            var shouldBeVisible = true;
+            if (replaceFocused && Focused != null)
+            {
+                shouldBeVisible = Focused.Config.Visible;
+                Focused.Close();
+            }
+
             instanceNumber = instanceNumber == NoInstanceNumber ? ++_instanceCounter : instanceNumber;
             var newWindow = new GraphWindow(package, instanceNumber);
 
-            if (config != null)
+            if (config == null)
             {
-                newWindow.Config = config;
+                config = newWindow.Config;
+                config.Title = LayoutHandling.GraphPrefix + instanceNumber;
+                config.Visible = shouldBeVisible;
             }
             else
             {
-                newWindow.Config.Title = LayoutHandling.GraphPrefix + instanceNumber;
-                newWindow.Config.Visible = true;
+                config.Visible = true;
+                newWindow.Config = config;
             }
-
 
             IReadOnlyList<Guid> rootPath = [root!.SymbolChildId];
             var startPath = rootPath;
@@ -573,6 +578,12 @@ namespace T3.Editor.Gui.Graph
             return true;
             
             void LogFailure() => Log.Error($"Failed to open operator graph for {package.DisplayName}");
+        }
+
+        public void SetWindowToNormal()
+        {
+            WindowFlags &= ~(ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove |
+                             ImGuiWindowFlags.NoResize);
         }
 
         public void TakeFocus()

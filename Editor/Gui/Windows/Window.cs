@@ -120,7 +120,7 @@ namespace T3.Editor.Gui.Windows
             public bool Visible;
         }
 
-        public WindowConfig Config = new();
+        internal WindowConfig Config = new();
 
         protected string MenuTitle;
     }
