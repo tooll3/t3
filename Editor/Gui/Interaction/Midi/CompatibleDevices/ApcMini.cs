@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using NAudio.Midi;
 using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
@@ -8,6 +8,7 @@ using T3.Editor.Gui.Interaction.Variations.Model;
 namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 
 [SuppressMessage("ReSharper", "UnusedMember.Local")]
+[MidiDeviceProduct("APC MINI")]
 public class ApcMini : CompatibleMidiDevice
 {
     public ApcMini()
@@ -38,12 +39,9 @@ public class ApcMini : CompatibleMidiDevice
                           };
     }
 
-    public override void UpdateVariationHandling(MidiIn midiIn, Variation activeVariation)
+    protected override void UpdateVisualization(Variation? activeVariation)
     {
         _updateCount++;
-        base.UpdateVariationHandling(midiIn, activeVariation);
-        // if (activeVariation == null)
-        //     return;
 
         var midiOut = MidiOutConnectionManager.GetConnectedController(ProductNameHash);
         if (midiOut == null)
@@ -56,7 +54,6 @@ public class ApcMini : CompatibleMidiDevice
                             if (!SymbolVariationPool.TryGetSnapshot(mappedIndex, out var variation))
                             {
                                 return (int)color;
-                                    
                             }
 
                             if (variation == activeVariation)
@@ -137,11 +134,6 @@ public class ApcMini : CompatibleMidiDevice
         //                 });
     }
 
-    public override int GetProductNameHash()
-    {
-        return ProductNameHash;
-    }
-
     private int AddModeHighlight(int index, int orgColor)
     {
         var indicatedStatus = (_updateCount + index / 8) % 30 < 4;
@@ -162,9 +154,9 @@ public class ApcMini : CompatibleMidiDevice
         return orgColor;
     }
 
-    private int _updateCount = 0;
+    private int _updateCount;
 
-    public static readonly int ProductNameHash = "APC MINI".GetHashCode();
+    // public static readonly int ProductNameHash = "APC MINI".GetHashCode();
 
     private enum ApcButtonColor
     {

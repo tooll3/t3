@@ -492,7 +492,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         private static MacroCommand CreateBlendTowardsVariationCommand(Instance compositionInstance, Variation variation, float blend)
         {
             var commands = new List<ICommand>();
-            //var parentSymbol = compositionInstance.Parent.Symbol;
             if (!variation.IsSnapshot)
                 return null;
             

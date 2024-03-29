@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using NAudio.Midi;
 using T3.Core.Logging;
 using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations;
@@ -18,6 +17,7 @@ namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 /// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "UnusedMember.Local")]
+[MidiDeviceProduct("APC40 mkII")]
 public class Apc40Mk2 : CompatibleMidiDevice
 {
     public Apc40Mk2()
@@ -31,9 +31,8 @@ public class Apc40Mk2 : CompatibleMidiDevice
     }
 
 
-    public override void UpdateVariationHandling(MidiIn midiIn, Variation activeVariation)
+    protected override void UpdateVisualization(Variation activeVariation)
     {
-        base.UpdateVariationHandling(midiIn, activeVariation);
         if (activeVariation == null)
             return;
 
@@ -117,14 +116,7 @@ public class Apc40Mk2 : CompatibleMidiDevice
         //                     return (int)color2;
         //                 });
     }
-
-    public override int GetProductNameHash()
-    {
-        return ProductNameHash;
-    }
-
-    public static readonly int ProductNameHash = "APC40 mkII".GetHashCode();
-
+    
     // Buttons
     private static readonly ButtonRange SceneTrigger1To40 = new(0, 0 + 40);
     private static readonly ButtonRange SceneLaunch1To5 = new(82, 82 + 5);

@@ -6,6 +6,7 @@ using NAudio.Midi;
 using Operators.Utils;
 using T3.Core.Logging;
 using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
+using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.Gui.Interaction.Midi;
@@ -20,11 +21,21 @@ namespace T3.Editor.Gui.Interaction.Midi;
 /// </remarks>
 public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsumer, IDisposable
 {
-    protected CompatibleMidiDevice()
-    {
-        MidiInConnectionManager.RegisterConsumer(this);
-    }
+    // protected CompatibleMidiDevice()
+    // {
+    // }
 
+    public void Initialize(string productName, MidiIn midiIn)
+    {
+        ProductName = productName;
+        _midiInputDevice = midiIn;
+        MidiInConnectionManager.RegisterConsumer(this);
+    }    
+    
+    /// <summary>
+    /// Depending on various hotkeys a device can be in different input modes.
+    /// This allows actions with the button combinations.
+    /// </summary>
     [Flags]
     public enum InputModes
     {
@@ -35,16 +46,19 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
         None = 0,
     }
 
-    public InputModes ActiveMode = InputModes.Default;
-
+    protected InputModes ActiveMode = InputModes.Default;
+    
+    protected abstract void UpdateVisualization(Variation activeVariation);
+    
     /// <summary>
     /// Updates the variation handling. 
     /// </summary>
     /// <remarks>
     /// Note this is not related to MidiInput.
     /// </remarks>
-    public virtual void UpdateVariationHandling(MidiIn midiIn, Variation activeVariation)
+    public void Update()
     {
+        UpdateVisualization(VariationHandling.ActivePoolForSnapshots?.ActiveVariation);
         CombineButtonSignals();
 
         ControlChangeSignal[] controlChangeSignals = null;
@@ -105,13 +119,13 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
             _combinedButtonSignals.Clear();
         }
     }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 
     public void Dispose() 
     {
         MidiInConnectionManager.UnregisterConsumer(this);        
     }
-    
-    public abstract int GetProductNameHash();
     
     protected List<CommandTriggerCombination> CommandTriggerCombinations;
     protected List<ModeButton> ModeButtons;
@@ -157,16 +171,21 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
     {
         lock (this)
         {
-            if (!(sender is MidiIn midiIn) || msg.MidiEvent == null)
+            if (sender is not MidiIn midiIn || msg.MidiEvent == null)
                 return;
 
-            var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
-
-            if (device.ProductName.GetHashCode() != GetProductNameHash())
+            if (midiIn != _midiInputDevice)
             {
-                //Log.Debug($"Ingore device {device.ProductName} in AbstractMidiController");
+                //Log.Debug($"Ignore device {device.ProductName} in AbstractMidiController");
                 return;
             }
+            
+            // var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
+            // if (device.ProductName.GetHashCode() != GetProductNameHash())
+            // {
+            //     //Log.Debug($"Ingore device {device.ProductName} in AbstractMidiController");
+            //     return;
+            // }
 
             if (msg.MidiEvent == null)
                 return;
@@ -253,7 +272,19 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
     private readonly Dictionary<int, ButtonSignal> _combinedButtonSignals = new();
     private readonly List<ButtonSignal> _buttonSignalsSinceLastUpdate = new();
     private readonly List<ControlChangeSignal> _controlSignalsSinceLastUpdate = new();
-    
+    private MidiIn _midiInputDevice;
+    public int ProductNameHash => ProductName.GetHashCode();
+    public string ProductName { get; set; }
 
+
+}
+
+public class MidiDeviceProductAttribute : Attribute
+{
+    public MidiDeviceProductAttribute(string productName)
+    {
+        ProductName = productName;
+    }
     
+    public string ProductName { get; set; }
 }

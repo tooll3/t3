@@ -244,13 +244,15 @@ namespace Operators.Utils
             _midiOutsWithDevices.Clear();
             _midiOutsByDeviceIdHash.Clear();
         }
+
+        public static IReadOnlyDictionary<MidiIn, MidiInCapabilities> MidiIns => _midiInsWithDevices;
         
         private static readonly List<IMidiConsumer> _midiConsumers = new();
         private static readonly Dictionary<MidiIn, MidiInCapabilities> _midiInsWithDevices = new();
         private static readonly Dictionary<int, MidiIn> _midiInsByDeviceIdHash = new();
         
         public static readonly Dictionary<MidiOut, MidiOutCapabilities> _midiOutsWithDevices = new();
-        public static readonly Dictionary<int, MidiOut> _midiOutsByDeviceIdHash = new();
+        private static readonly Dictionary<int, MidiOut> _midiOutsByDeviceIdHash = new();
         private static bool _initialized;
     }
 }

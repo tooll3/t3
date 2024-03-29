@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations;
+using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 
+//Fixme: this needs the correct product name
+[MidiDeviceProduct("Korg NanoControl")]
 public class NanoControl8 : CompatibleMidiDevice
 {
     public NanoControl8()
@@ -16,6 +19,9 @@ public class NanoControl8 : CompatibleMidiDevice
                                          };
     }
 
+    protected override void UpdateVisualization(Variation activeVariation) { }
+
+    
     private static readonly ButtonRange ButtonRewind = new(43);
     private static readonly ButtonRange ButtonFastForward = new(44);
     private static readonly ButtonRange ButtonStop = new(42);
@@ -33,11 +39,4 @@ public class NanoControl8 : CompatibleMidiDevice
     private static readonly ButtonRange NanoButtonSolo1To8 = new(32, 32 + 7);
     private static readonly ButtonRange NanoButtonMute1To8 = new(48, 48 + 7);
     private static readonly ButtonRange NanoButtonR1To8 = new(64, 64 + 7);
-
-    public override int GetProductNameHash()
-    {
-        return ProductNameHash;
-    }
-
-    public static readonly int ProductNameHash = "Korg NanoControl".GetHashCode(); //Fixme: this needs the correct product name
 }

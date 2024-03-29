@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using NAudio.Midi;
+using System.Reflection;
 using Operators.Utils;
 using T3.Core.Logging;
 using T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
-using T3.Editor.Gui.Interaction.Variations;
 using Type = System.Type;
 
 namespace T3.Editor.Gui.Interaction.Midi;
@@ -23,63 +22,59 @@ public static class CompatibleMidiDeviceHandling
         }
 
         // Dispose devices
-        foreach (var (midiIn, device) in _connectedMidiDevices)
+        foreach (var device in _connectedMidiDevices)
         {
             device.Dispose();
         }
+
         _connectedMidiDevices.Clear();
         
-        
-        foreach (var c in _compatibleControllerTypes)
-        {
-            RegisterControllerType(c);
-        }
+        CreateConnectedCompatibleDevices();
     }
 
     public static void UpdateConnectedDevices()
     {
-        if (VariationHandling.ActivePoolForSnapshots == null)
-            return;
-
-        foreach (var (midiIn, abstractMidiDevice) in _connectedMidiDevices)
+        foreach (var compatibleMidiDevice in _connectedMidiDevices)
         {
-            abstractMidiDevice.UpdateVariationHandling(midiIn, VariationHandling.ActivePoolForSnapshots.ActiveVariation);
+            compatibleMidiDevice.Update();
         }
     }
-    
+
     /// <summary>
     /// Creates instances for connected known controller types.
     /// </summary>
-    /// <remarks>
-    /// This implementation should be adjusted to support multiple connected controllers
-    /// of the same type: Ideally we should iterate over the connected midiIns and then look for
-    /// and instantiate matching controller.
-    /// </remarks>
-    private static void RegisterControllerType(Type controller)
+    private static void CreateConnectedCompatibleDevices()
     {
-        // Creating an instance just to access the static product name hash feels ugly...
-        if (Activator.CreateInstance(controller) is not CompatibleMidiDevice compatibleDevice)
+        foreach (var controllerType in _compatibleControllerTypes)
         {
-            Log.Warning("Can't create midi-device");
-            return;
-        }
+            var attr = controllerType.GetCustomAttribute<MidiDeviceProductAttribute>(false);
+            if (attr == null)
+            {
+                Log.Warning($"{controllerType} should implement MidiDeviceProductAttribute");
+                continue;
+            }
 
-        var productNameHash = compatibleDevice.GetProductNameHash();
-        var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(productNameHash);
-        if (midiIn == null)
-        {
-            compatibleDevice.Dispose();
-            return;
-        }
+            var productName = attr.ProductName;
 
-        Log.Debug($"Connected midi device {compatibleDevice}");
-        _connectedMidiDevices.Add(new Tuple<MidiIn, CompatibleMidiDevice>(midiIn, compatibleDevice));
+            foreach (var (midiIn, midiInCapabilities) in MidiInConnectionManager.MidiIns)
+            {
+                if (midiInCapabilities.ProductName != productName)
+                    continue;
+
+                if (Activator.CreateInstance(controllerType) is not CompatibleMidiDevice compatibleDevice)
+                {
+                    Log.Warning("Can't create midi-device");
+                    return;
+                }
+
+                compatibleDevice.Initialize(productName, midiIn);
+                _connectedMidiDevices.Add(compatibleDevice);
+                Log.Debug($"Connected midi device {compatibleDevice}");
+            }
+        }
     }
 
-
-
-    private static readonly List<Tuple<MidiIn, CompatibleMidiDevice>> _connectedMidiDevices = new();
-
+    // TODO: This list could be inferred by reflection checking for MidiDeviceProductAttribute 
     private static readonly List<Type> _compatibleControllerTypes
         = new()
               {
@@ -87,4 +82,6 @@ public static class CompatibleMidiDeviceHandling
                   typeof(ApcMini),
                   typeof(NanoControl8)
               };
+
+    private static readonly List<CompatibleMidiDevice> _connectedMidiDevices = new();
 }
