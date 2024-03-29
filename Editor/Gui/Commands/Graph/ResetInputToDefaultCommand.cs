@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using T3.Core.Operator;
+﻿using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.UiModel;
 
@@ -16,6 +14,12 @@ namespace T3.Editor.Gui.Commands.Graph
         public ResetInputToDefault(Symbol parent, Guid symbolChildId, Symbol.Child.Input input)
         {
             _inputParentSymbolId = parent.Id;
+
+            if (!SymbolUiRegistry.TryGetSymbolUi(_inputParentSymbolId, out _))
+            {
+                throw new InvalidOperationException("Symbol not found");
+            }
+            
             _childId = symbolChildId;
             _inputId = input.InputDefinition.Id;
 
