@@ -4,7 +4,7 @@ using T3.Editor.Gui.Interaction.Variations;
 
 namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 
-public class NanoControl8 : AbstractMidiDevice
+public class NanoControl8 : CompatibleMidiDevice
 {
     public NanoControl8()
     {
@@ -36,8 +36,8 @@ public class NanoControl8 : AbstractMidiDevice
 
     public override int GetProductNameHash()
     {
-        return _productNameHash;
+        return ProductNameHash;
     }
 
-    private readonly int _productNameHash = "Korg NanoControl".GetHashCode(); //Todo: this needs the correct product name
+    public static readonly int ProductNameHash = "Korg NanoControl".GetHashCode(); //Fixme: this needs the correct product name
 }

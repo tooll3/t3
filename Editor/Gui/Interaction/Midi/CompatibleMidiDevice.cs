@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NAudio;
 using NAudio.Midi;
 using Operators.Utils;
 using T3.Core.Logging;
 using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
+using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.Gui.Interaction.Midi
@@ -23,9 +25,9 @@ namespace T3.Editor.Gui.Interaction.Midi
     /// This is NOT related to the MidiInput operator: Both are registered as independent <see cref="MidiInConnectionManager.IMidiConsumer"/>
     /// and handle their events individually.
     /// </remarks>
-    public abstract class AbstractMidiDevice : IControllerInputDevice, MidiInConnectionManager.IMidiConsumer
+    public abstract class CompatibleMidiDevice : IControllerInputDevice, MidiInConnectionManager.IMidiConsumer
     {
-        protected AbstractMidiDevice()
+        protected CompatibleMidiDevice()
         {
             MidiInConnectionManager.RegisterConsumer(this);
         }
@@ -112,7 +114,7 @@ namespace T3.Editor.Gui.Interaction.Midi
         }
 
         public abstract int GetProductNameHash();
-
+        
         protected List<CommandTriggerCombination> CommandTriggerCombinations;
         protected List<ModeButton> ModeButtons;
 
@@ -239,7 +241,7 @@ namespace T3.Editor.Gui.Interaction.Midi
             {
                 midiOut.Send(noteOnEvent.GetAsShortMessage());
             }
-            catch(NAudio.MmException e) 
+            catch(MmException e) 
             {
                 Log.Warning("Failed setting midi color message:" + e.Message);        
             } 

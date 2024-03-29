@@ -17,7 +17,7 @@ namespace T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 /// </remarks>
 public class CommandTriggerCombination
 {
-    public CommandTriggerCombination(Action<int> indexAction, AbstractMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges,
+    public CommandTriggerCombination(Action<int> indexAction, CompatibleMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges,
                                      ExecutesAt executesAt)
     {
         _keyRanges = keyRanges;
@@ -26,7 +26,7 @@ public class CommandTriggerCombination
         _indexAction = indexAction;
     }
 
-    public CommandTriggerCombination(Action<int[]> action, AbstractMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges, ExecutesAt executesAt)
+    public CommandTriggerCombination(Action<int[]> action, CompatibleMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges, ExecutesAt executesAt)
     {
         _keyRanges = keyRanges;
         _requiredInputMode = requiredInputMode;
@@ -34,7 +34,7 @@ public class CommandTriggerCombination
         _indicesAction = action;
     }
 
-    public CommandTriggerCombination(Action<int, float> action, AbstractMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges,
+    public CommandTriggerCombination(Action<int, float> action, CompatibleMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges,
                                      ExecutesAt executesAt)
     {
         _keyRanges = keyRanges;
@@ -43,7 +43,7 @@ public class CommandTriggerCombination
         _controllerValueUpdateAction = action;
     }
 
-    public CommandTriggerCombination(Action action, AbstractMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges, ExecutesAt executesAt)
+    public CommandTriggerCombination(Action action, CompatibleMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges, ExecutesAt executesAt)
     {
         _keyRanges = keyRanges;
         _requiredInputMode = requiredInputMode;
@@ -51,8 +51,8 @@ public class CommandTriggerCombination
         _actionWithoutParameters = action;
     }
         
-    public void InvokeMatchingButtonCommands(List<ButtonSignal> buttonSignals, AbstractMidiDevice.InputModes activeMode,
-                                             AbstractMidiDevice.InputModes releasedMode)
+    public void InvokeMatchingButtonCommands(List<ButtonSignal> buttonSignals, CompatibleMidiDevice.InputModes activeMode,
+                                             CompatibleMidiDevice.InputModes releasedMode)
     {
         UpdateMatchingRangeIndices(buttonSignals);
 
@@ -69,7 +69,7 @@ public class CommandTriggerCombination
             return;
         }
 
-        if (_requiredInputMode != AbstractMidiDevice.InputModes.None && activeMode != _requiredInputMode)
+        if (_requiredInputMode != CompatibleMidiDevice.InputModes.None && activeMode != _requiredInputMode)
             return;
 
         switch (_executesAt)
@@ -109,9 +109,9 @@ public class CommandTriggerCombination
         }
     }
 
-    public void InvokeMatchingControlCommands(IEnumerable<ControlChangeSignal> controlSignals, AbstractMidiDevice.InputModes activeMode)
+    public void InvokeMatchingControlCommands(IEnumerable<ControlChangeSignal> controlSignals, CompatibleMidiDevice.InputModes activeMode)
     {
-        if (_requiredInputMode != AbstractMidiDevice.InputModes.None && activeMode != _requiredInputMode)
+        if (_requiredInputMode != CompatibleMidiDevice.InputModes.None && activeMode != _requiredInputMode)
             return;
 
         if (_executesAt != ExecutesAt.ControllerChange)
@@ -193,7 +193,7 @@ public class CommandTriggerCombination
     private static readonly List<int> _holdIndices = new(10);
 
     private readonly ButtonRange[] _keyRanges;
-    private readonly AbstractMidiDevice.InputModes _requiredInputMode;
+    private readonly CompatibleMidiDevice.InputModes _requiredInputMode;
     private readonly ExecutesAt _executesAt;
     private readonly Action _actionWithoutParameters;
     private readonly Action<int> _indexAction;

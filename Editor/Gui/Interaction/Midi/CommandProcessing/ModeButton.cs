@@ -5,7 +5,7 @@ public class ModeButton
     /// <summary>
     /// While holding switches the device into an input mode 
     /// </summary>
-    public ModeButton(ButtonRange buttonRange, AbstractMidiDevice.InputModes mode, Interactions interaction= Interactions.ActiveWhileHolding)
+    public ModeButton(ButtonRange buttonRange, CompatibleMidiDevice.InputModes mode, Interactions interaction= Interactions.ActiveWhileHolding)
     {
         ButtonRange = buttonRange;
         Mode = mode;
@@ -20,5 +20,5 @@ public class ModeButton
 
     public Interactions Interaction;
     public ButtonRange ButtonRange;
-    public AbstractMidiDevice.InputModes Mode;
+    public CompatibleMidiDevice.InputModes Mode;
 }

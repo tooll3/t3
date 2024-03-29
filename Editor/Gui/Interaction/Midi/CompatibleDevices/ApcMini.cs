@@ -8,7 +8,7 @@ using T3.Editor.Gui.Interaction.Variations.Model;
 namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 
 [SuppressMessage("ReSharper", "UnusedMember.Local")]
-public class ApcMini : AbstractMidiDevice
+public class ApcMini : CompatibleMidiDevice
 {
     public ApcMini()
     {
@@ -45,7 +45,7 @@ public class ApcMini : AbstractMidiDevice
         // if (activeVariation == null)
         //     return;
 
-        var midiOut = MidiOutConnectionManager.GetConnectedController(_productNameHash);
+        var midiOut = MidiOutConnectionManager.GetConnectedController(ProductNameHash);
         if (midiOut == null)
             return;
 
@@ -139,7 +139,7 @@ public class ApcMini : AbstractMidiDevice
 
     public override int GetProductNameHash()
     {
-        return _productNameHash;
+        return ProductNameHash;
     }
 
     private int AddModeHighlight(int index, int orgColor)
@@ -164,7 +164,7 @@ public class ApcMini : AbstractMidiDevice
 
     private int _updateCount = 0;
 
-    private readonly int _productNameHash = "APC MINI".GetHashCode();
+    public static readonly int ProductNameHash = "APC MINI".GetHashCode();
 
     private enum ApcButtonColor
     {

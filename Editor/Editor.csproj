@@ -30,4 +30,8 @@
     <ProjectReference Include="..\MsForms\MsForms.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Gui\Interaction\Variations\Midi\" />
+  </ItemGroup>
+
 </Project>

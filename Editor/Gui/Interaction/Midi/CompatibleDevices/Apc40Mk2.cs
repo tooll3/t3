@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 /// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "UnusedMember.Local")]
-public class Apc40Mk2 : AbstractMidiDevice
+public class Apc40Mk2 : CompatibleMidiDevice
 {
     public Apc40Mk2()
     {
@@ -37,7 +37,7 @@ public class Apc40Mk2 : AbstractMidiDevice
         if (activeVariation == null)
             return;
 
-        var midiOut = MidiOutConnectionManager.GetConnectedController(_productNameHash);
+        var midiOut = MidiOutConnectionManager.GetConnectedController(ProductNameHash);
         if (midiOut == null)
             return;
 
@@ -120,10 +120,10 @@ public class Apc40Mk2 : AbstractMidiDevice
 
     public override int GetProductNameHash()
     {
-        return _productNameHash;
+        return ProductNameHash;
     }
 
-    private readonly int _productNameHash = "APC40 mkII".GetHashCode();
+    public static readonly int ProductNameHash = "APC40 mkII".GetHashCode();
 
     // Buttons
     private static readonly ButtonRange SceneTrigger1To40 = new(0, 0 + 40);
@@ -171,7 +171,7 @@ public class Apc40Mk2 : AbstractMidiDevice
     /// This is sub set of the original colors defined in reference
     /// </summary>
     /// <remarks>
-    /// Alsp see
+    /// Also see
     /// - https://www.akaipro.de/sites/default/files/2018-01/APC40Mk2_Communications_Protocol_v1.2.pdf_7db83a06354c396174676105098e3a7d.pdf
     /// - https://docs.google.com/spreadsheets/d/1pCAOFYCUAilqwpT1rA5_pxA1u19Yipcy_RI4egxKy5k/edit?usp=sharing
     /// </remarks>

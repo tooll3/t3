@@ -15,8 +15,6 @@ using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Windows.Variations;
 using T3.Editor.UiModel;
 
-//using T3.Gui.Windows.Variations;
-
 namespace T3.Editor.Gui.Interaction.Variations;
 
 /// <summary>
@@ -45,14 +43,8 @@ public static class VariationHandling
         // Scan for output devices (e.g. to update LEDs etc.)
         MidiOutConnectionManager.Init();
 
-        _compatibleMidiDevices = new List<IControllerInputDevice>()
-                                     {
-                                         new Apc40Mk2(),
-                                         new NanoControl8(),
-                                         new ApcMini(),
-                                     };
+
     }
-    private static List<IControllerInputDevice> _compatibleMidiDevices;
         
     /// <summary>
     /// Update variation handling
@@ -100,28 +92,11 @@ public static class VariationHandling
                 ActiveInstanceForPresets = ActiveInstanceForSnapshots;
             }
         }
-            
-        UpdateCompatibleMidiDevices();
+
+        CompatibleMidiDeviceHandling.UpdateConnectedDevices();
         SmoothVariationBlending.UpdateBlend();
     }
 
-    private static void UpdateCompatibleMidiDevices()
-    {
-        if (ActivePoolForSnapshots == null)
-            return;
-            
-        foreach (var compatibleDevice in _compatibleMidiDevices)
-        {
-            // TODO: support generic input controllers with arbitrary DeviceId 
-            var device = MidiInConnectionManager.GetMidiInForProductNameHash(compatibleDevice.GetProductNameHash());
-            var isConnected = device != null;
-            if (!isConnected)
-                continue;
-
-            compatibleDevice.UpdateVariationHandling(device, ActivePoolForSnapshots.ActiveVariation);
-        }
-    }
-        
     public static SymbolVariationPool GetOrLoadVariations(Guid symbolId)
     {
         if (_variationPoolForOperators.TryGetValue(symbolId, out var variationForComposition))

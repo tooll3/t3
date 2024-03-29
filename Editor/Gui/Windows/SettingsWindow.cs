@@ -6,7 +6,6 @@ using Operators.Utils;
 using T3.Core.IO;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Midi;
-using T3.Editor.Gui.Interaction.Variations.Midi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 

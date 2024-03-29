@@ -33,6 +33,8 @@ namespace Operators.Utils
             }
         }
 
+        public static bool Initialized => _initialized;
+
         public static void UnregisterConsumer(IMidiConsumer consumer)
         {
             if (!_midiConsumers.Contains(consumer))
@@ -53,7 +55,6 @@ namespace Operators.Utils
 
         public static void Rescan()
         { 
-            
             CloseMidiDevices();
             ScanAndRegisterToMidiDevices(logInformation: true);
             
