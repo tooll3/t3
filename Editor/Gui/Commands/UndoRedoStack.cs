@@ -19,7 +19,6 @@ namespace T3.Editor.Gui.Commands
             if (logStackTrace)
             {
                 Log.Debug(Environment.StackTrace);
-                Log.Debug("\n");
             }
         }
     }

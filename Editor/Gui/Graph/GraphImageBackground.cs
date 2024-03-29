@@ -34,7 +34,7 @@ namespace T3.Editor.Gui.Graph
 
         public Instance OutputInstance
         {
-            set => _backgroundNodePath = OperatorUtils.BuildIdPathForInstance(value);
+            set => _backgroundNodePath = value.InstancePath;
             get => _structure.GetInstanceFromIdPath(_backgroundNodePath);
         }
         
@@ -152,7 +152,7 @@ namespace T3.Editor.Gui.Graph
         private readonly EvaluationContext _evaluationContext = new();
         private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
         private readonly CameraInteraction _cameraInteraction = new();
-        private List<Guid> _backgroundNodePath;
+        private IReadOnlyList<Guid> _backgroundNodePath;
         private readonly GraphWindow _window;
         private readonly Structure _structure;
         private readonly NodeSelection _nodeSelection;

@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
     {
         public void Draw(List<SymbolChildUi> selectedChildUis, ref string name)
         {
-            var canRename = selectedChildUis.All(x => !x.SymbolChild.Symbol.SymbolPackage.IsReadOnly);
+            var canRename = selectedChildUis.Count == 1 && !selectedChildUis[0].SymbolChild.Symbol.SymbolPackage.IsReadOnly;
             
             if (!canRename)
                 return;

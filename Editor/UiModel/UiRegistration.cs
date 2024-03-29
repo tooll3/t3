@@ -20,17 +20,8 @@ using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Editor.UiModel;
 
-static class UiRegistration
+internal static class UiRegistration
 {
-    public static class TypeByNameRegistry
-    {
-        public static Dictionary<string, Type> Entries { get; } = new();
-    }
-
-    private static void RegisterCustomChildUis()
-    {
-    }
-
     public static void RegisterUiTypes()
     {
         // build-in types
@@ -184,15 +175,13 @@ static class UiRegistration
                        () => new ValueOutputUi<System.Numerics.Vector4[]>());
         RegisterUiType(typeof(Dict<float>), new ValueUiProperties(),
                        () => new FloatDictInputUi(), () => new FloatDictOutputUi());
-    }
+        return;
 
-    private static void RegisterUiType(Type type, ITypeUiProperties uiProperties, Func<IInputUi> inputUi, Func<IOutputUi> outputUi)
-    {
-        TypeUiRegistry.Entries.Add(type, uiProperties);
-        InputUiFactory.Entries.Add(type, inputUi);
-        OutputUiFactory.Entries.Add(type, outputUi);
-
-        var typeFullName = type.ToString();
-        TypeByNameRegistry.Entries[typeFullName] = type;
+        static void RegisterUiType(Type type, ITypeUiProperties uiProperties, Func<IInputUi> inputUi, Func<IOutputUi> outputUi)
+        {
+            TypeUiRegistry.Entries.Add(type, uiProperties);
+            InputUiFactory.Entries.Add(type, inputUi);
+            OutputUiFactory.Entries.Add(type, outputUi);
+        }
     }
 }

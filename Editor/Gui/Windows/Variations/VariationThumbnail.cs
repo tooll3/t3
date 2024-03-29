@@ -1,6 +1,7 @@
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
@@ -14,7 +15,7 @@ namespace T3.Editor.Gui.Windows.Variations
 {
     internal static class VariationThumbnail
     {
-        public static bool Draw(VariationBaseCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
+        public static bool Draw(VariationBaseCanvas canvas, Variation variation, Instance instanceForBlending, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
             if (VariationForRenaming == variation)
             {
@@ -122,7 +123,7 @@ namespace T3.Editor.Gui.Windows.Variations
                         if (_hoveredVariation == null)
                         {
                             _hoveredVariation = variation;
-                            _canvas.StartHover(variation);
+                            _canvas.StartHover(variation, instanceForBlending);
                         }
                     
                     
@@ -130,7 +131,7 @@ namespace T3.Editor.Gui.Windows.Variations
                         {
                             var mouseX = ImGui.GetMousePos().X;
                             var blend = (mouseX - pMin.X) / sizeOnScreen.X;
-                            _canvas.StartBlendTo(variation, blend);
+                            _canvas.StartBlendTo(variation, blend, instanceForBlending);
                             DrawBlendIndicator(drawList, areaOnScreen, blend);
                         }
                     }
@@ -148,7 +149,7 @@ namespace T3.Editor.Gui.Windows.Variations
             var modified = false;
             if (!_canvas.IsBlendingActive)
             {
-                modified |= HandleMovement(variation);
+                modified |= HandleMovement(variation, instanceForBlending);
             }
 
             ImGui.PopID();
@@ -173,7 +174,7 @@ namespace T3.Editor.Gui.Windows.Variations
             ImGui.PopFont();
         }
 
-        private static bool HandleMovement(Variation variation)
+        private static bool HandleMovement(Variation variation, Instance instanceForBlending)
         {
             if (ImGui.IsItemActive())
             {
@@ -216,7 +217,7 @@ namespace T3.Editor.Gui.Windows.Variations
                     {
                         Selection.Clear();
                         _hoveredVariation = null;
-                        _canvas.Apply(variation);
+                        _canvas.Apply(variation, instanceForBlending);
                     }
 
                     Selection.AddSelection(variation);
@@ -230,7 +231,7 @@ namespace T3.Editor.Gui.Windows.Variations
                     else
                     {
                         _hoveredVariation = null;
-                        _canvas.Apply(variation);
+                        _canvas.Apply(variation, instanceForBlending);
                     }
                 }
 

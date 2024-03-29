@@ -170,10 +170,9 @@ namespace T3.Core.Model
                     continue;
 
                 children.Add(symbolChild);
-                symbolChild.Parent = parent;
             }
 
-            parent.SetChildren(children, setChildrensParent: false);
+            parent.SetChildrenWithoutInstantiating(children);
 
             if (symbolReadResult.AnimatorJsonData != null)
                 parent.Animator.Read(symbolReadResult.AnimatorJsonData, parent);
@@ -314,16 +313,13 @@ namespace T3.Core.Model
             var inputDefaults = inputJsonArray
                                .Select(ReadSymbolInputDefaults).ToArray();
 
-            var orderedInputIds = inputDefaults
-                                 .Select(idAndValue => idAndValue.Item1).ToArray();
-
             var inputDefaultValues = new Dictionary<Guid, JToken>();
             foreach (var idAndValue in inputDefaults)
             {
                 inputDefaultValues[idAndValue.Item1] = idAndValue.Item2;
             }
 
-            var symbol = package.CreateSymbol(instanceType, id, orderedInputIds);
+            var symbol = package.CreateSymbol(instanceType, id);
 
             if (hasConnections)
                 symbol.Connections.AddRange(connections);

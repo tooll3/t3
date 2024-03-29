@@ -158,7 +158,7 @@ namespace T3.Editor.Gui.Windows
 
         private void PinSelectionAsEvaluationStart(Instance instance)
         {
-            _pinnedEvaluationInstancePath = OperatorUtils.BuildIdPathForInstance(instance);
+            _pinnedEvaluationInstancePath = instance.InstancePath;
         }
 
         public bool TryGetPinnedOrSelectedInstance(out Instance instance, out GraphCanvas canvas)
@@ -196,7 +196,7 @@ namespace T3.Editor.Gui.Windows
 
         public void PinInstance(Instance instance, GraphCanvas canvas)
         {
-            _pinnedInstancePath = OperatorUtils.BuildIdPathForInstance(instance);
+            _pinnedInstancePath = instance.InstancePath;
             _pinnedInstanceCanvas = canvas;
             _isPinned = true;
         }
@@ -216,7 +216,7 @@ namespace T3.Editor.Gui.Windows
 
         private bool _isPinned;
         private GraphCanvas? _pinnedInstanceCanvas;
-        private List<Guid> _pinnedInstancePath = new();
-        private List<Guid> _pinnedEvaluationInstancePath = new();
+        private IReadOnlyList<Guid> _pinnedInstancePath = Array.Empty<Guid>();
+        private IReadOnlyList<Guid> _pinnedEvaluationInstancePath = Array.Empty<Guid>();
     }
 }

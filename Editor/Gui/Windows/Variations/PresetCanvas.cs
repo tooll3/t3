@@ -28,10 +28,10 @@ namespace T3.Editor.Gui.Windows.Variations
             return $"...for {VariationHandling.ActiveInstanceForPresets?.Symbol.Name}";
         }
 
-        protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForPresets;
+        private protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForPresets;
         private protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForPresets;
 
-        protected override void DrawAdditionalContextMenuContent()
+        protected override void DrawAdditionalContextMenuContent(Instance instance)
         {
         }
 

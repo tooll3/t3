@@ -624,7 +624,7 @@ namespace T3.Editor.Gui.InputUi
             if (!InputsAndOutputs.AddInputToSymbol(input.Name, input.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol))
                 return;
 
-            var updatedComposition = structure.GetInstanceFromIdPath(OperatorUtils.BuildIdPathForInstance(composition));
+            var updatedComposition = selection.GetSelectedComposition()!;
 
             var newInputDefinition = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
             if (newInputDefinition == null)

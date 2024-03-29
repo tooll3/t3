@@ -76,7 +76,7 @@ namespace T3.Editor.Gui.Graph
             SymbolBrowser = new SymbolBrowser(this, GraphCanvas);
             TimeLineCanvas = new TimeLineCanvas(GraphCanvas);
 
-            List<Guid> startPath = [RootInstance.SymbolChildId];
+            IReadOnlyList<Guid> startPath = [RootInstance.SymbolChildId];
             if (actualRoot == startingComposition)
             {
                 // Legacy work-around
@@ -559,7 +559,7 @@ namespace T3.Editor.Gui.Graph
             Focused = this;
         }
 
-        internal bool TrySetCompositionOp(List<Guid> path, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? nextSelectedUi = null)
+        internal bool TrySetCompositionOp(IReadOnlyList<Guid> path, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? nextSelectedUi = null)
         {
             if (!Package.IsReadOnly)
             {
@@ -585,8 +585,15 @@ namespace T3.Editor.Gui.Graph
 
             // composition is only null once in the very first call to TrySetCompositionOp
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (previousComposition != null && previousComposition.SymbolChildId == newCompositionInstance.SymbolChildId)
-                return true;
+            if (previousComposition != null)
+            {
+                if (path[0] != RootInstance.Instance.SymbolChildId)
+                {
+                    throw new Exception("Root instance is not the first element in the path");
+                }
+                if (previousComposition.SymbolChildId == newCompositionInstance.SymbolChildId)
+                    return true;
+            }
 
             _composition = Composition.GetFor(newCompositionInstance, true)!;
             _compositionPath.Clear();
@@ -615,7 +622,7 @@ namespace T3.Editor.Gui.Graph
             UserSettings.SaveLastViewedOpForWindow(this, _composition.SymbolChildId);
             return true;
 
-            static void DisposeOfCompositions(List<Guid> currentPath, Composition? previous, List<Composition> compositionsWaitingForDisposal)
+            static void DisposeOfCompositions(IReadOnlyList<Guid> currentPath, Composition? previous, List<Composition> compositionsWaitingForDisposal)
             {
                 // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                 if (previous != null)

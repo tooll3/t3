@@ -68,7 +68,7 @@ namespace T3.Editor.Gui.UiHelpers.Wiki
 
             foreach (var r in results)
             {
-                if (SymbolUiRegistry.TryGetValue(r.SymbolId, out var symbolUi))
+                if (SymbolUiRegistry.TryGetSymbolUi(r.SymbolId, out var symbolUi))
                 {
                     switch (r.Type)
                     {

@@ -166,8 +166,8 @@ namespace T3.Core.Operator
         // ReSharper disable NotAccessedPositionalProperty.Local
         private readonly record struct InputGroupKey(in Guid SymbolChildId, in Guid InputId, Instance ChildInstance);
         // ReSharper restore NotAccessedPositionalProperty.Local
-        
-        public void CreateUpdateActionsForExistingCurves(IReadOnlyCollection<Instance> childInstances)
+
+        internal void CreateUpdateActionsForExistingCurves(IEnumerable<Instance> childInstances)
         {
             // gather all inputs that correspond to stored ids
             var relevantInputs = _animatedInputCurves

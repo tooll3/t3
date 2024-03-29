@@ -28,7 +28,6 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private void AssignValue(string newName)
         {
-            var symbol = SymbolRegistry.Entries[_symbolId];
             throw new NotImplementedException("Not implemented yet");
         }
 

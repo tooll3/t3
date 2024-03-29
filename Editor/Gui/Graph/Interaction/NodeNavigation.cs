@@ -78,7 +78,7 @@ internal class NodeNavigation
 
         //Log.Debug($"Found with relevancy {bestRelevancy}: " + Structure.GetReadableInstancePath( OperatorUtils.BuildIdPathForInstance( bestInstance)), bestInstance);
         
-        var path = OperatorUtils.BuildIdPathForInstance(bestInstance);
+        var path = bestInstance.InstancePath;
         if (_structure.GetInstanceFromIdPath(path) == null)
             return;
             

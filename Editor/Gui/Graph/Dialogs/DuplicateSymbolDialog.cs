@@ -13,6 +13,9 @@ namespace T3.Editor.Gui.Graph.Dialogs
     {
         public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description)
         {
+            if(selectedChildUis.Count != 1)
+                return;
+            
             DialogSize = new Vector2(700, 300);
 
             if (BeginDialog("Duplicate as new symbol"))

@@ -18,6 +18,12 @@ namespace T3.Editor.Gui.Commands.Graph
         {
             _inputParentSymbol = symbol;
             _inputParentSymbolId = symbol.Id;
+
+            if (!SymbolUiRegistry.TryGetSymbolUi(_inputParentSymbolId, out var inputParentSymbolUi))
+            {
+                throw new Exception("Symbol not found: " + _inputParentSymbolId);
+            }
+            
             _childId = symbolChildId;
             _inputId = input.InputDefinition.Id;
             _isAnimated = symbol.Animator.IsAnimated(_childId, _inputId);
@@ -34,7 +40,10 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void Undo()
         {
-            var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
+            if(!SymbolUiRegistry.TryGetSymbolUi(_inputParentSymbolId, out var inputParentSymbolUi))
+                throw new Exception("Symbol not found: " + _inputParentSymbolId);
+            
+            var inputParentSymbol = inputParentSymbolUi.Symbol;
             if (_isAnimated)
             {
                 var wasNewKeyframe = false;
@@ -93,7 +102,10 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private void AssignValue(InputValue valueToSet)
         {
-            var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
+            if(!SymbolUiRegistry.TryGetSymbolUi(_inputParentSymbolId, out var inputParentSymbolUi))
+                throw new Exception("Symbol not found: " + _inputParentSymbolId);
+            
+            var inputParentSymbol = inputParentSymbolUi.Symbol;
             
             if (!inputParentSymbol.Children.TryGetValue(_childId, out var symbolChild))
             {
@@ -104,7 +116,7 @@ namespace T3.Editor.Gui.Commands.Graph
             
             if (_isAnimated)
             {
-                if(!SymbolUiRegistry.TryGetValue(symbolChild.Symbol.Id, out var symbolUi))
+                if(!SymbolUiRegistry.TryGetSymbolUi(symbolChild.Symbol.Id, out var symbolUi))
                 {
                     Log.Warning($"Can't find symbol child's SymbolUI  {symbolChild.Symbol.Id} - was it removed? [{symbolChild.Symbol.Name}]");
                     return;
@@ -114,7 +126,7 @@ namespace T3.Editor.Gui.Commands.Graph
                 var animator = inputParentSymbol.Animator;
                 var symbolChildId = symbolChild.Id;
 
-                foreach (var parentInstance in inputParentSymbol.InstancesOfSymbol)
+                foreach (var parentInstance in inputParentSymbol.InstancesOfSelf)
                 {
                     var instance = parentInstance.Children[symbolChildId];
                     var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
@@ -133,7 +145,7 @@ namespace T3.Editor.Gui.Commands.Graph
         private void InvalidateInstances(Symbol inputParentSymbol, SymbolChild symbolChild)
         {
             var symbolChildId = symbolChild.Id;
-            foreach (var parentInstance in inputParentSymbol.InstancesOfSymbol)
+            foreach (var parentInstance in inputParentSymbol.InstancesOfSelf)
             {
                 var instance = parentInstance.Children[symbolChildId];
                 var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);

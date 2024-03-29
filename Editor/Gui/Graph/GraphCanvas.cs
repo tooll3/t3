@@ -51,31 +51,6 @@ namespace T3.Editor.Gui.Graph
             window.WindowDestroyed += (_, _) => Destroyed = true;
         }
 
-        /// <summary>
-        /// Uses an ID-path to open an instance's parent composition and centers the instance.
-        /// This can be useful to jump to elements (e.g. through bookmarks)
-        /// </summary>
-        public void OpenAndFocusInstance(List<Guid> childIdPath)
-        {
-            var pathToParent = childIdPath.GetRange(0, childIdPath.Count - 1);
-            var success = _window.TrySetCompositionOp(pathToParent);
-
-            if (!success)
-                return;
-
-            var composition = _window.CompositionOp;
-            var instanceId = childIdPath[^1];
-
-            if (!composition.TryGetChildInstance(instanceId, false, out var childInstance, out _))
-            {
-                Log.Error($"Failed to find child instance with id {instanceId}");
-                return;
-            }
-            
-            NodeSelection.SetSelectionToChildUi(childInstance!.GetSymbolChildUi(), composition);
-            FitViewToSelectionHandling.FitViewToSelection();
-        }
-
         public void SetCompositionToChildInstance(Instance instance) => _window.TrySetCompositionOpToChild(instance.SymbolChildId);
 
         [Flags]
@@ -133,8 +108,7 @@ namespace T3.Editor.Gui.Graph
 
                     if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                     {
-                        var canModify = !compositionUi.Symbol.SymbolPackage.IsReadOnly;
-                        DeleteSelectedElements(compositionUi, canModify);
+                        DeleteSelectedElements(compositionUi);
                     }
 
                     if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
@@ -172,7 +146,7 @@ namespace T3.Editor.Gui.Graph
                         AddAnnotation(compositionOp);
                     }
 
-                    List<Guid>? navigationPath = null;
+                    IReadOnlyList<Guid>? navigationPath = null;
 
                     // Navigation
                     if (KeyboardBinding.Triggered(UserActions.NavigateBackwards))
@@ -186,7 +160,7 @@ namespace T3.Editor.Gui.Graph
                     }
 
                     if (navigationPath != null)
-                        OpenAndFocusInstance(navigationPath);
+                        _window.TrySetCompositionOp(navigationPath);
 
                     if (KeyboardBinding.Triggered(UserActions.SelectToAbove))
                     {
@@ -320,10 +294,9 @@ namespace T3.Editor.Gui.Graph
                 drawList.PopClipRect();
                 
                 var compositionUpdated = _window.CompositionOp;
-                var canModifyUpdated = !compositionUpdated.Symbol.SymbolPackage.IsReadOnly;
                 
                 if (FrameStats.Current.OpenedPopUpName != string.Empty)
-                    CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(canModifyUpdated, compositionUpdated), ref _contextMenuIsOpen);
+                    CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(compositionUpdated), ref _contextMenuIsOpen);
 
                 _duplicateSymbolDialog.Draw(compositionUpdated, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
@@ -333,17 +306,15 @@ namespace T3.Editor.Gui.Graph
                                             ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
 
-                if (canModifyUpdated)
-                {
-                    _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
-                    EditCommentDialog.Draw(NodeSelection);
+                _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
+                
+                EditCommentDialog.Draw(NodeSelection);
 
-                    if (compositionUpdated != _window.RootInstance.Instance)
-                    {
-                        var symbol = compositionUpdated.Symbol;
-                        _addInputDialog.Draw(symbol);
-                        _addOutputDialog.Draw(symbol);
-                    }
+                if (compositionUpdated != _window.RootInstance.Instance && !compositionUpdated.Symbol.SymbolPackage.IsReadOnly)
+                {
+                    var symbol = compositionUpdated.Symbol;
+                    _addInputDialog.Draw(symbol);
+                    _addOutputDialog.Draw(symbol);
                 }
 
                 LibWarningDialog.Draw(this);
@@ -484,7 +455,7 @@ namespace T3.Editor.Gui.Graph
                         var guid = Guid.Parse(guidString);
                         Log.Debug("dropped symbol here" + payload + " " + myString + "  " + guid);
 
-                        if (SymbolUiRegistry.TryGetValue(guid, out var symbolUi))
+                        if (SymbolUiRegistry.TryGetSymbolUi(guid, out var symbolUi))
                         {
                             var symbol = symbolUi.Symbol;
                             var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
@@ -532,7 +503,7 @@ namespace T3.Editor.Gui.Graph
             return bounds;
         }
 
-        private void DrawContextMenuContent(bool canModify, Instance compositionOp)
+        private void DrawContextMenuContent(Instance compositionOp)
         {
             var clickPosition = ImGui.GetMousePosOnOpeningCurrentPopup();
             var compositionSymbolUi = compositionOp.GetSymbolUi();
@@ -603,6 +574,7 @@ namespace T3.Editor.Gui.Graph
                 _nodeGraphLayouting.ArrangeOps(compositionOp);
             }
 
+            var canModify = !compositionSymbolUi.Symbol.SymbolPackage.IsReadOnly;
             if (canModify)
             {
                 if (ImGui.MenuItem("Enable for snapshots",
@@ -693,18 +665,20 @@ namespace T3.Editor.Gui.Graph
             var selectedInputUis = GetSelectedInputUis().ToList();
             var selectedOutputUis = GetSelectedOutputUis().ToList();
 
+            var isSaving = T3Ui.IsCurrentlySaving;
+
             if (ImGui.MenuItem("Delete",
                                shortcut: "Del", // dynamic assigned shortcut is too long
                                selected: false,
-                               enabled: someOpsSelected || selectedInputUis.Count > 0 || selectedOutputUis.Count > 0))
+                               enabled: (someOpsSelected || selectedInputUis.Count > 0 || selectedOutputUis.Count > 0) && !isSaving))
             {
-                DeleteSelectedElements(compositionSymbolUi, canModify, selectedChildUis, selectedInputUis, selectedOutputUis);
+                DeleteSelectedElements(compositionSymbolUi, selectedChildUis, selectedInputUis, selectedOutputUis);
             }
 
             if (ImGui.MenuItem("Duplicate",
                                KeyboardBinding.ListKeyboardShortcuts(UserActions.Duplicate, false),
                                selected: false,
-                               enabled: selectedChildUis.Count > 0))
+                               enabled: selectedChildUis.Count > 0 && !isSaving))
             {
                 CopySelectedNodesToClipboard(compositionOp);
                 PasteClipboard(compositionOp);
@@ -712,15 +686,15 @@ namespace T3.Editor.Gui.Graph
 
             ImGui.Separator();
 
-            if (ImGui.MenuItem("Change Symbol", someOpsSelected))
+            if (ImGui.MenuItem("Change Symbol", someOpsSelected && !isSaving))
             {
                 var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
                 var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
                 _window.SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
-                                             symbol => { ChangeSymbol.ChangeOperatorSymbol(this, compositionOp, selectedChildUis, symbol); });
+                                             symbol => { ChangeSymbol.ChangeOperatorSymbol(NodeSelection, compositionOp, selectedChildUis, symbol); });
             }
 
-            if (ImGui.BeginMenu("Symbol definition..."))
+            if (ImGui.BeginMenu("Symbol definition...", !isSaving))
             {
                 if (ImGui.MenuItem("Rename Symbol", oneOpSelected))
                 {
@@ -968,12 +942,12 @@ namespace T3.Editor.Gui.Graph
 
         private bool _contextMenuIsOpen;
 
-        private void DeleteSelectedElements(SymbolUi compositionSymbolUi, bool canModify, List<SymbolChildUi> selectedChildUis = null, List<IInputUi> selectedInputUis = null,
+        private void DeleteSelectedElements(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildUis = null, List<IInputUi> selectedInputUis = null,
                                             List<IOutputUi> selectedOutputUis = null)
         {
             var commands = new List<ICommand>();
             selectedChildUis ??= GetSelectedChildUis();
-            if (selectedChildUis.Any())
+            if (selectedChildUis.Count != 0)
             {
                 var cmd = new DeleteSymbolChildrenCommand(compositionSymbolUi, selectedChildUis);
                 commands.Add(cmd);
@@ -985,18 +959,15 @@ namespace T3.Editor.Gui.Graph
                 commands.Add(cmd);
             }
 
-            if (canModify)
+            if (!compositionSymbolUi.Symbol.SymbolPackage.IsReadOnly)
             {
                 selectedInputUis ??= NodeSelection.GetSelectedNodes<IInputUi>().ToList();
+                selectedOutputUis ??= NodeSelection.GetSelectedNodes<IOutputUi>().ToList();
                 if (selectedInputUis.Count > 0)
                 {
-                    InputsAndOutputs.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), compositionSymbolUi.Symbol);
-                }
-
-                selectedOutputUis ??= NodeSelection.GetSelectedNodes<IOutputUi>().ToList();
-                if (selectedOutputUis.Count > 0)
-                {
-                    InputsAndOutputs.RemoveOutputsFromSymbol(selectedOutputUis.Select(entry => entry.Id).ToArray(), compositionSymbolUi.Symbol);
+                    InputsAndOutputs.RemoveInputsAndOutputsFromSymbol(inputIdsToRemove: selectedInputUis.Select(entry => entry.Id).ToArray(), 
+                                                                      outputIdsToRemove: selectedOutputUis.Select(entry => entry.Id).ToArray(),
+                                                                      symbol: compositionSymbolUi.Symbol);
                 }
             }
 
@@ -1180,13 +1151,8 @@ namespace T3.Editor.Gui.Graph
                 _selectableItems.Clear();
                 var compositionOp = _window.CompositionOp;
                 var symbolUi = compositionOp.GetSymbolUi();
-                _selectableItems.AddRange(compositionOp.Children.Values.Select(x =>
-                                                                        {
-                                                                            var child = x.GetSymbolChildUi();
-                                                                            if(child == null)
-                                                                                throw new Exception($"Failed to get symbol child ui for {x.SymbolChildId}");
-                                                                            return child;
-                                                                        }));
+                _selectableItems.AddRange(compositionOp.Children.Values.Select(x => x.GetSymbolChildUi()));
+                                                            
                 _selectableItems.AddRange(symbolUi.InputUis.Values);
                 _selectableItems.AddRange(symbolUi.OutputUis.Values);
                 _selectableItems.AddRange(symbolUi.Annotations.Values);
@@ -1201,6 +1167,18 @@ namespace T3.Editor.Gui.Graph
 
         #region public API
         public bool Destroyed { get; private set; }
+
+        public void OpenAndFocusInstance(IReadOnlyList<Guid> path)
+        {
+            if (path.Count == 1)
+            {
+                _window.TrySetCompositionOp(path, ICanvas.Transition.JumpOut, path[0]);
+                return;
+            }
+            
+            var compositionPath = path.Take(path.Count - 1).ToList();
+            _window.TrySetCompositionOp(compositionPath, ICanvas.Transition.JumpIn, path[^1]);
+        }
         #endregion
 
         private readonly SelectionFence _selectionFence = new();

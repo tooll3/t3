@@ -22,9 +22,9 @@ namespace T3.Editor.Gui.Windows.Variations
         public abstract void DrawToolbarFunctions();
         public abstract string GetTitle();
 
-        protected abstract Instance InstanceForBlendOperations { get; }
+        private protected abstract Instance InstanceForBlendOperations { get; }
         private protected abstract SymbolVariationPool PoolForBlendOperations { get; }
-        protected abstract void DrawAdditionalContextMenuContent();
+        protected abstract void DrawAdditionalContextMenuContent(Instance InstanceForBlendOperations);
 
         public void Draw(ImDrawListPtr drawList, bool hideHeader = false)
         {
@@ -33,14 +33,30 @@ namespace T3.Editor.Gui.Windows.Variations
             // Complete deferred actions
             if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                 DeleteSelectedElements();
+            
+            bool pinnedOutputChanged = false;
 
-            UpdateThumbnailRendering(out var pinnedOutputChanged);
+            // Render variations to pinned output
+            if (OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) is OutputWindow outputWindow)
+            {
+                var renderInstance = outputWindow.ShownInstance;
+
+                if (renderInstance is { Outputs.Count: > 0 } && renderInstance.Outputs[0] is Slot<Texture2D> textureSlot)
+                {
+                    UpdateThumbnailRendering(renderInstance, textureSlot);
+                }
+
+                if (renderInstance != _currentRenderInstance)
+                {
+                    pinnedOutputChanged = true;
+                    _currentRenderInstance = renderInstance;
+                }
+            }
+
 
             // Get instance for variations
-            var instanceForBlending = InstanceForBlendOperations;
-            if (instanceForBlending != _instanceForBlending || pinnedOutputChanged)
+            if (pinnedOutputChanged)
             {
-                _instanceForBlending = instanceForBlending;
                 RefreshView();
             }
 
@@ -68,17 +84,18 @@ namespace T3.Editor.Gui.Windows.Variations
             {
                 modified |= VariationThumbnail.Draw(this,
                                                     PoolForBlendOperations.AllVariations[index],
+                                                    InstanceForBlendOperations,
                                                     drawList,
                                                     _thumbnailCanvasRendering.CanvasTextureSrv,
                                                     GetUvRectForIndex(index));
             }
 
-            DrawBlendingOverlay(drawList);
+            DrawBlendingOverlay(drawList, InstanceForBlendOperations);
 
             if (modified)
                 PoolForBlendOperations.SaveVariationsToFile();
 
-            DrawContextMenu();
+            DrawContextMenu(InstanceForBlendOperations);
         }
 
         private bool _rerenderManuallyRequested = false;
@@ -86,45 +103,29 @@ namespace T3.Editor.Gui.Windows.Variations
         /// <summary>
         /// Updates keeps rendering thumbnails until all are processed.
         /// </summary>
-        private void UpdateThumbnailRendering(out bool pinnedOutputChanged)
+        private void UpdateThumbnailRendering(Instance renderInstance, Slot<Texture2D> textureOutputSlot)
         {
-            pinnedOutputChanged = false;
-
             if (!UserSettings.Config.VariationLiveThumbnails && !_rerenderManuallyRequested)
-                return;
-
-            // Render variations to pinned output
-            if (OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) is not OutputWindow outputWindow)
-                return;
-
-            var renderInstance = outputWindow.ShownInstance;
-            if (renderInstance is not { Outputs: { Count: > 0 } } || renderInstance.Outputs[0] is not Slot<Texture2D> textureSlot)
                 return;
 
             _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
 
-            if (renderInstance != _previousRenderInstance)
-            {
-                pinnedOutputChanged = true;
-                _previousRenderInstance = renderInstance;
-            }
-
             var symbolUi = renderInstance.GetSymbolUi();
-            if (!symbolUi.OutputUis.ContainsKey(textureSlot.Id))
+            
+            if (!symbolUi.OutputUis.TryGetValue(textureOutputSlot.Id, out var outputUi))
                 return;
 
-            var outputUi = symbolUi.OutputUis[textureSlot.Id];
-            UpdateNextVariationThumbnail(outputUi, textureSlot);
+            UpdateNextVariationThumbnail(outputUi, textureOutputSlot, renderInstance);
         }
 
-        private void DrawBlendingOverlay(ImDrawListPtr drawList)
+        private void DrawBlendingOverlay(ImDrawListPtr drawList, Instance instanceForBlending)
         {
             if (IsBlendingActive)
             {
                 var mousePos = ImGui.GetMousePos();
                 if (_blendPoints.Count == 1)
                 {
-                    PoolForBlendOperations.BeginWeightedBlend(_instanceForBlending, _blendVariations, _blendWeights);
+                    PoolForBlendOperations.BeginWeightedBlend(instanceForBlending, _blendVariations, _blendWeights);
 
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
@@ -144,7 +145,7 @@ namespace T3.Editor.Gui.Windows.Variations
 
                     drawList.AddCircleFilled(blendPosition, 5, UiColors.ForegroundFull);
 
-                    PoolForBlendOperations.BeginWeightedBlend(_instanceForBlending, _blendVariations, _blendWeights);
+                    PoolForBlendOperations.BeginWeightedBlend(instanceForBlending, _blendVariations, _blendWeights);
 
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
@@ -162,7 +163,7 @@ namespace T3.Editor.Gui.Windows.Variations
                     }
 
                     drawList.AddCircleFilled(mousePos, 5, UiColors.ForegroundFull);
-                    PoolForBlendOperations.BeginWeightedBlend(_instanceForBlending, _blendVariations, _blendWeights);
+                    PoolForBlendOperations.BeginWeightedBlend(instanceForBlending, _blendVariations, _blendWeights);
 
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
@@ -325,7 +326,7 @@ namespace T3.Editor.Gui.Windows.Variations
             return (min + max) * 0.5f;
         }
 
-        private void DrawContextMenu()
+        private void DrawContextMenu(Instance instance)
         {
             if (FrameStats.Current.OpenedPopUpName == string.Empty)
             {
@@ -362,29 +363,29 @@ namespace T3.Editor.Gui.Windows.Variations
                                                                                    true);
                                                                     ImGui.MenuItem("Preview on Hover", "", ref UserSettings.Config.VariationHoverPreview, true);
 
-                                                                    DrawAdditionalContextMenuContent();
+                                                                    DrawAdditionalContextMenuContent(instance);
                                                                 }, ref _contextMenuIsOpen);
             }
         }
 
         private bool _contextMenuIsOpen;
 
-        public void StartHover(Variation variation)
+        public void StartHover(Variation variation, Instance instanceForBlending)
         {
-            PoolForBlendOperations.BeginHover(_instanceForBlending, variation);
+            PoolForBlendOperations.BeginHover(instanceForBlending, variation);
         }
 
-        public void Apply(Variation variation)
+        public void Apply(Variation variation, Instance instanceForBlending)
         {
             PoolForBlendOperations.StopHover();
-            PoolForBlendOperations.Apply(_instanceForBlending, variation);
+            PoolForBlendOperations.Apply(instanceForBlending, variation);
         }
 
-        public void StartBlendTo(Variation variation, float blend)
+        public void StartBlendTo(Variation variation, float blend, Instance instanceForBlending)
         {
             if (variation.IsPreset)
             {
-                PoolForBlendOperations.BeginBlendToPresent(_instanceForBlending, variation, blend);
+                PoolForBlendOperations.BeginBlendToPresent(instanceForBlending, variation, blend);
             }
         }
 
@@ -466,7 +467,7 @@ namespace T3.Editor.Gui.Windows.Variations
         }
 
         #region thumbnail rendering
-        private void UpdateNextVariationThumbnail(IOutputUi outputUi, Slot<Texture2D> textureSlot)
+        private void UpdateNextVariationThumbnail(IOutputUi outputUi, Slot<Texture2D> textureSlot, Instance instanceForBlending)
         {
             if (_allThumbnailsRendered)
                 return;
@@ -488,14 +489,14 @@ namespace T3.Editor.Gui.Windows.Variations
             }
 
             var variation = PoolForBlendOperations.AllVariations[_renderThumbnailIndex];
-            RenderThumbnail(variation, _renderThumbnailIndex, outputUi, textureSlot);
+            RenderThumbnail(variation, _renderThumbnailIndex, instanceForBlending, outputUi, textureSlot);
             _renderThumbnailIndex++;
         }
 
-        private void RenderThumbnail(Variation variation, int atlasIndex, IOutputUi outputUi, Slot<Texture2D> textureSlot)
+        private void RenderThumbnail(Variation variation, int atlasIndex, Instance instanceForBlending, IOutputUi outputUi, Slot<Texture2D> textureSlot)
         {
             // Set variation values
-            PoolForBlendOperations.BeginHover(InstanceForBlendOperations, variation);
+            PoolForBlendOperations.BeginHover(instanceForBlending, variation);
 
             // Render variation
             _thumbnailCanvasRendering.EvaluationContext.Reset();
@@ -662,14 +663,14 @@ namespace T3.Editor.Gui.Windows.Variations
         private readonly List<Vector2> _blendPoints = new(3);
         private readonly List<Variation> _blendVariations = new(3);
 
-        private Instance _instanceForBlending;
+        private Instance _previousInstanceForBlending;
 
         private int _renderThumbnailIndex;
         private bool _allThumbnailsRendered;
         private readonly ImageOutputCanvas _imageCanvas = new();
         private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
         internal readonly CanvasElementSelection Selection = new();
-        private Instance _previousRenderInstance;
+        private Instance _currentRenderInstance;
         private readonly SelectionFence _selectionFence = new();
     }
 }

@@ -73,7 +73,7 @@ namespace T3.Editor.UiModel
             }
 
             // Set disabled status on outputs of each instanced copy of this child within all parents that contain it
-            foreach (var parentInstance in SymbolChild.Parent.InstancesOfSymbol)
+            foreach (var parentInstance in SymbolChild.Parent.InstancesOfSelf)
             {
                 // This parent doesn't have an instance of our SymbolChild. Ignoring and continuing.
                 if (!parentInstance.Children.TryGetValue(Id, out var matchingChildInstance))

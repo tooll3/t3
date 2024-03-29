@@ -197,11 +197,10 @@ namespace T3.Player
                                 };
 
                 // Create instance of project op, all children are create automatically
-                var demoSymbolChild = new SymbolChild(demoSymbol, Guid.NewGuid(), null);
 
-                if (!Symbol.TryCreateInstance(null, demoSymbolChild, out _project, out var reason))
+                if (!demoSymbol.TryCreateParentlessInstance(Guid.NewGuid(), out _project))
                 {
-                    CloseApplication(true, $"Failed to create instance of project op {demoSymbol} ({demoSymbolChild})\n\n{reason}");
+                    CloseApplication(true, $"Failed to create instance of project op {demoSymbol}");
                 }
                 
                 _evalContext = new EvaluationContext();
