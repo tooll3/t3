@@ -9,7 +9,11 @@ namespace T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 /// <remarks>
 /// The requirements turned out to be quite complicated. This sketch might give an overview:
 /// - https://www.figma.com/file/lLlkKILVbLuv1mxuTq6jMb/Interaction?node-id=823%3A57
-///  
+///
+/// The general idea of the <see cref="CommandProcessing"/> namespace is to abstract as
+/// much functionally as possible so new midi-devices can be quickly added without implementing
+/// too much logic. Ideally 
+/// 
 /// </remarks>
 public class CommandTriggerCombination
 {

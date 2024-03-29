@@ -6,10 +6,16 @@ using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 
-//using T3.Gui.Interaction.VariationHandling.InputCommands;
-
 namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 
+/// <summary>
+/// Incomplete adaptation of the Apc40 controller for Tooll.
+/// 
+/// Attempt of implementing advanced logic for Apc40MK2 controller. Sadly advanced
+/// features like receiving button combinations or setting the LED-lights requires the
+/// device to be in "Ableton with full ctrl mode". So far, all attempts of activating
+/// this mode by send midi-system messages have been unsuccessful.
+/// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "UnusedMember.Local")]
 public class Apc40Mk2 : AbstractMidiDevice

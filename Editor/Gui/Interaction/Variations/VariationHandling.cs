@@ -17,367 +17,366 @@ using T3.Editor.UiModel;
 
 //using T3.Gui.Windows.Variations;
 
-namespace T3.Editor.Gui.Interaction.Variations
+namespace T3.Editor.Gui.Interaction.Variations;
+
+/// <summary>
+/// Handles the live integration of variation model to the user interface.
+/// </summary>
+/// <remarks>
+/// Variations are a sets of symbolChild.input-parameters combinations defined for an Symbol.
+/// These input slots can also include the symbols out inputs which thus can be used for defining
+/// and applying "presets" to instances of that symbol.
+///
+/// Most variations will modify(!) the parent symbol. This is great while working within a single symbol
+/// and tweaking an blending parameters. However it's potentially unintended (or dangerous) if the
+/// modified symbol has many instances. That's why applying symbol-variations is not allowed for Symbols
+/// in the lib-namespace.  
+/// </remarks>
+public static class VariationHandling
 {
-    /// <summary>
-    /// Handles the live integration of variation model to the user interface.
-    /// </summary>
-    /// <remarks>
-    /// Variations are a sets of symbolChild.input-parameters combinations defined for an Symbol.
-    /// These input slots can also include the symbols out inputs which thus can be used for defining
-    /// and applying "presets" to instances of that symbol.
-    ///
-    /// Most variations will modify(!) the parent symbol. This is great while working within a single symbol
-    /// and tweaking an blending parameters. However it's potentially unintended (or dangerous) if the
-    /// modified symbol has many instances. That's why applying symbol-variations is not allowed for Symbols
-    /// in the lib-namespace.  
-    /// </remarks>
-    public static class VariationHandling
+    public static SymbolVariationPool ActivePoolForSnapshots { get; private set; }
+    public static Instance ActiveInstanceForSnapshots  { get; private set; }
+        
+    public static SymbolVariationPool ActivePoolForPresets { get; private set; }
+    public static Instance ActiveInstanceForPresets  { get; private set; }
+
+    public static void Init()
     {
-        public static SymbolVariationPool ActivePoolForSnapshots { get; private set; }
-        public static Instance ActiveInstanceForSnapshots  { get; private set; }
+        // Scan for output devices (e.g. to update LEDs etc.)
+        MidiOutConnectionManager.Init();
+
+        _compatibleMidiDevices = new List<IControllerInputDevice>()
+                                     {
+                                         new Apc40Mk2(),
+                                         new NanoControl8(),
+                                         new ApcMini(),
+                                     };
+    }
+    private static List<IControllerInputDevice> _compatibleMidiDevices;
         
-        public static SymbolVariationPool ActivePoolForPresets { get; private set; }
-        public static Instance ActiveInstanceForPresets  { get; private set; }
+    /// <summary>
+    /// Update variation handling
+    /// </summary>
+    public static void Update()
+    {
+        // Sync with composition selected in UI
+        var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+        if (primaryGraphWindow == null)
+            return;
 
-        public static void Init()
+
+        var singleSelectedInstance = NodeSelection.GetSelectedInstance();
+        if (singleSelectedInstance != null)
         {
-            // Scan for output devices (e.g. to update LEDs etc.)
-            MidiOutConnectionManager.Init();
-
-            _compatibleMidiDevices = new List<IControllerInputDevice>()
-                                {
-                                    new Apc40Mk2(),
-                                    new NanoControl8(),
-                                    new ApcMini(),
-                                };
+            var selectedSymbolId = singleSelectedInstance.Symbol.Id;
+            ActivePoolForPresets = GetOrLoadVariations(selectedSymbolId);
+            ActivePoolForSnapshots = GetOrLoadVariations(singleSelectedInstance.Parent.Symbol.Id);
+            ActiveInstanceForPresets = singleSelectedInstance;
+            ActiveInstanceForSnapshots = singleSelectedInstance.Parent;
         }
-        private static List<IControllerInputDevice> _compatibleMidiDevices;
-        
-        /// <summary>
-        /// Update variation handling
-        /// </summary>
-        public static void Update()
+        else
         {
-            // Sync with composition selected in UI
-            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-            if (primaryGraphWindow == null)
+            ActivePoolForPresets = null;
+                
+            var activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
+            if (activeCompositionInstance == null)
                 return;
-
-
-            var singleSelectedInstance = NodeSelection.GetSelectedInstance();
-            if (singleSelectedInstance != null)
+                
+            ActiveInstanceForSnapshots = activeCompositionInstance;
+                
+                
+            // Prevent variations for library operators
+            if (activeCompositionInstance.Symbol.Namespace.StartsWith("lib."))
             {
-                var selectedSymbolId = singleSelectedInstance.Symbol.Id;
-                ActivePoolForPresets = GetOrLoadVariations(selectedSymbolId);
-                ActivePoolForSnapshots = GetOrLoadVariations(singleSelectedInstance.Parent.Symbol.Id);
-                ActiveInstanceForPresets = singleSelectedInstance;
-                ActiveInstanceForSnapshots = singleSelectedInstance.Parent;
+                ActivePoolForSnapshots = null;
             }
             else
             {
-                ActivePoolForPresets = null;
-                
-                var activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
-                if (activeCompositionInstance == null)
-                    return;
-                
-                ActiveInstanceForSnapshots = activeCompositionInstance;
-                
-                
-                // Prevent variations for library operators
-                if (activeCompositionInstance.Symbol.Namespace.StartsWith("lib."))
-                {
-                    ActivePoolForSnapshots = null;
-                }
-                else
-                {
-                    ActivePoolForSnapshots = GetOrLoadVariations(activeCompositionInstance.Symbol.Id);
-                }
-
-                if (!NodeSelection.IsAnythingSelected())
-                {
-                    ActiveInstanceForPresets = ActiveInstanceForSnapshots;
-                }
+                ActivePoolForSnapshots = GetOrLoadVariations(activeCompositionInstance.Symbol.Id);
             }
-            
-            UpdateCompatibleMidiDevices();
-            SmoothVariationBlending.UpdateBlend();
-        }
 
-        private static void UpdateCompatibleMidiDevices()
-        {
-            if (ActivePoolForSnapshots == null)
-                return;
-            
-            foreach (var compatibleDevice in _compatibleMidiDevices)
+            if (!NodeSelection.IsAnythingSelected())
             {
-                // TODO: support generic input controllers with arbitrary DeviceId 
-                var device = MidiInConnectionManager.GetMidiInForProductNameHash(compatibleDevice.GetProductNameHash());
-                var isConnected = device != null;
-                if (!isConnected)
-                    continue;
-
-                compatibleDevice.UpdateVariationHandling(device, ActivePoolForSnapshots.ActiveVariation);
+                ActiveInstanceForPresets = ActiveInstanceForSnapshots;
             }
         }
+            
+        UpdateCompatibleMidiDevices();
+        SmoothVariationBlending.UpdateBlend();
+    }
+
+    private static void UpdateCompatibleMidiDevices()
+    {
+        if (ActivePoolForSnapshots == null)
+            return;
+            
+        foreach (var compatibleDevice in _compatibleMidiDevices)
+        {
+            // TODO: support generic input controllers with arbitrary DeviceId 
+            var device = MidiInConnectionManager.GetMidiInForProductNameHash(compatibleDevice.GetProductNameHash());
+            var isConnected = device != null;
+            if (!isConnected)
+                continue;
+
+            compatibleDevice.UpdateVariationHandling(device, ActivePoolForSnapshots.ActiveVariation);
+        }
+    }
         
-        public static SymbolVariationPool GetOrLoadVariations(Guid symbolId)
+    public static SymbolVariationPool GetOrLoadVariations(Guid symbolId)
+    {
+        if (_variationPoolForOperators.TryGetValue(symbolId, out var variationForComposition))
         {
-            if (_variationPoolForOperators.TryGetValue(symbolId, out var variationForComposition))
-            {
-                return variationForComposition;
-            }
-
-            var newOpVariation = SymbolVariationPool.InitVariationPoolForSymbol(symbolId);
-            _variationPoolForOperators[newOpVariation.SymbolId] = newOpVariation;
-            return newOpVariation;
+            return variationForComposition;
         }
 
+        var newOpVariation = SymbolVariationPool.InitVariationPoolForSymbol(symbolId);
+        _variationPoolForOperators[newOpVariation.SymbolId] = newOpVariation;
+        return newOpVariation;
+    }
 
-        private static readonly Dictionary<Guid, SymbolVariationPool> _variationPoolForOperators = new();
 
-        public static void ActivateOrCreateSnapshotAtIndex(int activationIndex)
+    private static readonly Dictionary<Guid, SymbolVariationPool> _variationPoolForOperators = new();
+
+    public static void ActivateOrCreateSnapshotAtIndex(int activationIndex)
+    {
+        if (ActivePoolForSnapshots == null)
         {
-            if (ActivePoolForSnapshots == null)
-            {
-                Log.Warning($"Can't save variation #{activationIndex}. No variation pool active.");
-                return;
-            }
-            
-            if(SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
-            {
-                ActivePoolForSnapshots.Apply(ActiveInstanceForSnapshots, existingVariation);
-                return;
-            } 
-            
-            CreateOrUpdateSnapshotVariation(activationIndex);
-            ActivePoolForSnapshots.UpdateActiveStateForVariation(activationIndex);
+            Log.Warning($"Can't save variation #{activationIndex}. No variation pool active.");
+            return;
         }
-
-        public static void SaveSnapshotAtIndex(int activationIndex)
-        {
-            if (ActivePoolForSnapshots == null)
-            {
-                Log.Warning($"Can't save variation #{activationIndex}. No variation pool active.");
-                return;
-            }
-
-            CreateOrUpdateSnapshotVariation(activationIndex);
-            ActivePoolForSnapshots.UpdateActiveStateForVariation(activationIndex);
-        }
-
-        public static void RemoveSnapshotAtIndex(int activationIndex)
-        {
-            if (ActivePoolForSnapshots == null)
-                return;
             
-            //ActivePoolForSnapshots.DeleteVariation
-            if (SymbolVariationPool.TryGetSnapshot(activationIndex, out var snapshot))
-            {
-                ActivePoolForSnapshots.DeleteVariation(snapshot);
-            }
-            else
-            {
-                Log.Warning($"No preset to delete at index {activationIndex}");
-            }
-        }
-
-        public static void StartBlendingSnapshots(int[] indices)
+        if(SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
         {
-            Log.Warning($"StartBlendingSnapshots {indices.Length} not implemented");
-        }
-
-        public static void StartBlendingTowardsSnapshot(int index)
-        {
-            if (ActiveInstanceForSnapshots == null || ActivePoolForSnapshots == null)
-            {
-                Log.Warning("Can't blend without active composition or variation pool");
-                return;
-            }
-
-            if (SymbolVariationPool.TryGetSnapshot(index, out var variation))
-            {
-                _blendTowardsIndex = index;
-                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, 0);
-            }
-        }
-
-        private static int _blendTowardsIndex = -1;
-
-        public static void UpdateBlendingTowardsProgress(int index, float midiValue)
-        {
-            if (ActiveInstanceForSnapshots == null || ActivePoolForSnapshots == null)
-            {
-                Log.Warning("Can't blend without active composition or variation pool");
-                return;
-            }
-
-            if (_blendTowardsIndex == -1)
-            {
-                return;
-            }
-            
-            if (SymbolVariationPool.TryGetSnapshot(_blendTowardsIndex, out var variation))
-            {
-                //_blendTargetVariation = variation;
-                var normalizedValue = midiValue/127.0f;
-                SmoothVariationBlending.StartBlendTo(variation, normalizedValue);
-            }
-            else
-            {
-                SmoothVariationBlending.Stop();
-            }
-        }
-
-
-        /// <summary>
-        /// Smooths blending between variations to avoid glitches by low 127 midi resolution steps 
-        /// </summary>
-        private static class SmoothVariationBlending
-        {
-            public static void StartBlendTo(Variation variation, float normalizedBlendWeight)
-            {
-                if (variation != _targetVariation)
-                {
-                    _dampedWeight = normalizedBlendWeight;
-                    _targetVariation = variation;
-                }
-                _targetWeight = normalizedBlendWeight;
-                UpdateBlend();
-            } 
-            
-            public static void UpdateBlend()
-            {
-                if (_targetVariation == null)
-                    return;
-
-                _dampedWeight = MathUtils.SpringDamp(_targetWeight,
-                                                                    _dampedWeight,
-                                                                    ref _dampingVelocity,
-                                                                    200f, (float)Playback.LastFrameDuration);
-
-                if (!(MathF.Abs(_dampingVelocity) > 0.0005f))
-                    return;
-                
-                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, _targetVariation, _dampedWeight);
-            }
-
-            public static void Stop()
-            {
-                _targetVariation = null;
-                
-            }
-            
-            private static float _targetWeight;
-            private static float _dampedWeight;
-            private static float _dampingVelocity;
-            private static Variation _targetVariation;
-            
+            ActivePoolForSnapshots.Apply(ActiveInstanceForSnapshots, existingVariation);
+            return;
         } 
-        
-        
-        public static void StopBlendingTowards()
+            
+        CreateOrUpdateSnapshotVariation(activationIndex);
+        ActivePoolForSnapshots.UpdateActiveStateForVariation(activationIndex);
+    }
+
+    public static void SaveSnapshotAtIndex(int activationIndex)
+    {
+        if (ActivePoolForSnapshots == null)
         {
-            _blendTowardsIndex = -1;
-            ActivePoolForSnapshots.ApplyCurrentBlend();
+            Log.Warning($"Can't save variation #{activationIndex}. No variation pool active.");
+            return;
+        }
+
+        CreateOrUpdateSnapshotVariation(activationIndex);
+        ActivePoolForSnapshots.UpdateActiveStateForVariation(activationIndex);
+    }
+
+    public static void RemoveSnapshotAtIndex(int activationIndex)
+    {
+        if (ActivePoolForSnapshots == null)
+            return;
+            
+        //ActivePoolForSnapshots.DeleteVariation
+        if (SymbolVariationPool.TryGetSnapshot(activationIndex, out var snapshot))
+        {
+            ActivePoolForSnapshots.DeleteVariation(snapshot);
+        }
+        else
+        {
+            Log.Warning($"No preset to delete at index {activationIndex}");
+        }
+    }
+
+    public static void StartBlendingSnapshots(int[] indices)
+    {
+        Log.Warning($"StartBlendingSnapshots {indices.Length} not implemented");
+    }
+
+    public static void StartBlendingTowardsSnapshot(int index)
+    {
+        if (ActiveInstanceForSnapshots == null || ActivePoolForSnapshots == null)
+        {
+            Log.Warning("Can't blend without active composition or variation pool");
+            return;
+        }
+
+        if (SymbolVariationPool.TryGetSnapshot(index, out var variation))
+        {
+            _blendTowardsIndex = index;
+            ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, 0);
+        }
+    }
+
+    private static int _blendTowardsIndex = -1;
+
+    public static void UpdateBlendingTowardsProgress(int index, float midiValue)
+    {
+        if (ActiveInstanceForSnapshots == null || ActivePoolForSnapshots == null)
+        {
+            Log.Warning("Can't blend without active composition or variation pool");
+            return;
+        }
+
+        if (_blendTowardsIndex == -1)
+        {
+            return;
+        }
+            
+        if (SymbolVariationPool.TryGetSnapshot(_blendTowardsIndex, out var variation))
+        {
+            //_blendTargetVariation = variation;
+            var normalizedValue = midiValue/127.0f;
+            SmoothVariationBlending.StartBlendTo(variation, normalizedValue);
+        }
+        else
+        {
             SmoothVariationBlending.Stop();
         }
-        
-        public static void UpdateBlendValues(int obj, float value)
-        {
-            //Log.Warning($"BlendValuesUpdate {obj} not implemented");
-        }
-
-        public static void SaveSnapshotAtNextFreeSlot(int obj)
-        {
-            //Log.Warning($"SaveSnapshotAtNextFreeSlot {obj} not implemented");
-        }
-
-        private const int AutoIndex=-1;
-        public static Variation CreateOrUpdateSnapshotVariation(int activationIndex = AutoIndex )
-        {
-            // Only allow for snapshots.
-            if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
-            {
-                return null;
-            }
-            
-            // Delete previous snapshot for that index.
-            if (activationIndex != AutoIndex && SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
-            {
-                ActivePoolForSnapshots.DeleteVariation(existingVariation);
-            }
-            
-            _affectedInstances.Clear();
-            
-            AddSnapshotEnabledChildrenToList(ActiveInstanceForSnapshots, _affectedInstances);
-            
-            var newVariation = ActivePoolForSnapshots.CreateVariationForCompositionInstances(_affectedInstances);
-            if (newVariation == null)
-                return null;
-            
-            newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForSnapshots.Variations);
-            if (activationIndex != AutoIndex)
-                newVariation.ActivationIndex = activationIndex;
-
-            newVariation.State = Variation.States.Active;
-            ActivePoolForSnapshots.SaveVariationsToFile();
-            return newVariation;
-        }
-        
-        // TODO: Implement undo/redo!
-        public static void RemoveInstancesFromVariations(List<Instance> instances, List<Variation> variations)
-        {
-            
-            if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
-            {
-                return;
-            }
-
-            foreach (var variation in variations)
-            {
-                foreach (var instance in instances)
-                {
-                    if (!variation.ParameterSetsForChildIds.ContainsKey(instance.SymbolChildId))
-                        continue;
-
-                    variation.ParameterSetsForChildIds.Remove(instance.SymbolChildId);
-                }
-            }
-            ActivePoolForSnapshots.SaveVariationsToFile();
-        }
-
-        private static void AddSnapshotEnabledChildrenToList(Instance instance, List<Instance> list)
-        {
-            var compositionUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
-            foreach (var childInstance in instance.Children)
-            {
-                var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
-                Debug.Assert(symbolChildUi != null);
-                
-                if (symbolChildUi.SnapshotGroupIndex == 0)
-                    continue;
-
-                list.Add(childInstance);
-            }
-        }
-
-        private static IEnumerable<Instance> GetSnapshotEnabledChildren(Instance instance)
-        {
-            var compositionUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
-            foreach (var childInstance in instance.Children)
-            {
-                var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
-                Debug.Assert(symbolChildUi != null);
-                
-                if (symbolChildUi.SnapshotGroupIndex == 0)
-                    continue;
-
-                yield return childInstance;
-            }
-        }
-        
-        private static readonly List<Instance> _affectedInstances = new(100);
     }
+
+
+    /// <summary>
+    /// Smooths blending between variations to avoid glitches by low 127 midi resolution steps 
+    /// </summary>
+    private static class SmoothVariationBlending
+    {
+        public static void StartBlendTo(Variation variation, float normalizedBlendWeight)
+        {
+            if (variation != _targetVariation)
+            {
+                _dampedWeight = normalizedBlendWeight;
+                _targetVariation = variation;
+            }
+            _targetWeight = normalizedBlendWeight;
+            UpdateBlend();
+        } 
+            
+        public static void UpdateBlend()
+        {
+            if (_targetVariation == null)
+                return;
+
+            _dampedWeight = MathUtils.SpringDamp(_targetWeight,
+                                                 _dampedWeight,
+                                                 ref _dampingVelocity,
+                                                 200f, (float)Playback.LastFrameDuration);
+
+            if (!(MathF.Abs(_dampingVelocity) > 0.0005f))
+                return;
+                
+            ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, _targetVariation, _dampedWeight);
+        }
+
+        public static void Stop()
+        {
+            _targetVariation = null;
+                
+        }
+            
+        private static float _targetWeight;
+        private static float _dampedWeight;
+        private static float _dampingVelocity;
+        private static Variation _targetVariation;
+            
+    } 
+        
+        
+    public static void StopBlendingTowards()
+    {
+        _blendTowardsIndex = -1;
+        ActivePoolForSnapshots.ApplyCurrentBlend();
+        SmoothVariationBlending.Stop();
+    }
+        
+    public static void UpdateBlendValues(int obj, float value)
+    {
+        //Log.Warning($"BlendValuesUpdate {obj} not implemented");
+    }
+
+    public static void SaveSnapshotAtNextFreeSlot(int obj)
+    {
+        //Log.Warning($"SaveSnapshotAtNextFreeSlot {obj} not implemented");
+    }
+
+    private const int AutoIndex=-1;
+    public static Variation CreateOrUpdateSnapshotVariation(int activationIndex = AutoIndex )
+    {
+        // Only allow for snapshots.
+        if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
+        {
+            return null;
+        }
+            
+        // Delete previous snapshot for that index.
+        if (activationIndex != AutoIndex && SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
+        {
+            ActivePoolForSnapshots.DeleteVariation(existingVariation);
+        }
+            
+        _affectedInstances.Clear();
+            
+        AddSnapshotEnabledChildrenToList(ActiveInstanceForSnapshots, _affectedInstances);
+            
+        var newVariation = ActivePoolForSnapshots.CreateVariationForCompositionInstances(_affectedInstances);
+        if (newVariation == null)
+            return null;
+            
+        newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForSnapshots.Variations);
+        if (activationIndex != AutoIndex)
+            newVariation.ActivationIndex = activationIndex;
+
+        newVariation.State = Variation.States.Active;
+        ActivePoolForSnapshots.SaveVariationsToFile();
+        return newVariation;
+    }
+        
+    // TODO: Implement undo/redo!
+    public static void RemoveInstancesFromVariations(List<Instance> instances, List<Variation> variations)
+    {
+            
+        if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
+        {
+            return;
+        }
+
+        foreach (var variation in variations)
+        {
+            foreach (var instance in instances)
+            {
+                if (!variation.ParameterSetsForChildIds.ContainsKey(instance.SymbolChildId))
+                    continue;
+
+                variation.ParameterSetsForChildIds.Remove(instance.SymbolChildId);
+            }
+        }
+        ActivePoolForSnapshots.SaveVariationsToFile();
+    }
+
+    private static void AddSnapshotEnabledChildrenToList(Instance instance, List<Instance> list)
+    {
+        var compositionUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+        foreach (var childInstance in instance.Children)
+        {
+            var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
+            Debug.Assert(symbolChildUi != null);
+                
+            if (symbolChildUi.SnapshotGroupIndex == 0)
+                continue;
+
+            list.Add(childInstance);
+        }
+    }
+
+    private static IEnumerable<Instance> GetSnapshotEnabledChildren(Instance instance)
+    {
+        var compositionUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+        foreach (var childInstance in instance.Children)
+        {
+            var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
+            Debug.Assert(symbolChildUi != null);
+                
+            if (symbolChildUi.SnapshotGroupIndex == 0)
+                continue;
+
+            yield return childInstance;
+        }
+    }
+        
+    private static readonly List<Instance> _affectedInstances = new(100);
 }
