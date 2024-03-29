@@ -170,56 +170,56 @@
       "ChildId": "bf7e00f9-6380-4b8b-8f03-180ca8f2de3b"/*SplinePoints*/,
       "Position": {
         "X": -158.33508,
-        "Y": 582.62305
+        "Y": 618.8345
       }
     },
     {
       "ChildId": "0e01a334-3931-49c4-bed3-e600538dcab0"/*APoint*/,
       "Position": {
         "X": -406.62585,
-        "Y": 549.22003
+        "Y": 585.43146
       }
     },
     {
       "ChildId": "740cf523-feba-44fb-a436-c1f736bbbda7"/*APoint*/,
       "Position": {
         "X": -406.62585,
-        "Y": 592.22003
+        "Y": 628.43146
       }
     },
     {
       "ChildId": "68c63c73-8fff-4e03-bae0-2ad7b6131f12"/*APoint*/,
       "Position": {
         "X": -406.62585,
-        "Y": 635.22003
+        "Y": 671.43146
       }
     },
     {
       "ChildId": "86c8da07-2368-48d0-bdf3-a7e7c828aa40"/*APoint*/,
       "Position": {
         "X": -406.62585,
-        "Y": 721.22003
+        "Y": 757.43146
       }
     },
     {
       "ChildId": "b40937f0-8968-4dec-ba20-8a05e9375c48"/*APoint*/,
       "Position": {
         "X": -406.62585,
-        "Y": 764.22003
+        "Y": 800.43146
       }
     },
     {
       "ChildId": "77010ddc-d90d-4965-ab7c-a813ac8c5530"/*APoint*/,
       "Position": {
         "X": -406.62585,
-        "Y": 678.22003
+        "Y": 714.43146
       }
     },
     {
       "ChildId": "405904df-066a-4f8d-b293-1f85eb2ff669"/*DrawRibbons*/,
       "Position": {
-        "X": 418.15204,
-        "Y": 588.24695
+        "X": 419.2494,
+        "Y": 535.57574
       }
     },
     {
@@ -268,57 +268,57 @@
       "ChildId": "980c87ea-fcbb-4add-abd8-99c51bd63bd2"/*TransformPoints*/,
       "Position": {
         "X": -8.335083,
-        "Y": 582.62305
+        "Y": 618.8345
       }
     },
     {
       "ChildId": "6da934b8-aeae-4a3f-b6fc-3a6fa2a3e24c"/*VisualizePoints*/,
       "Comment": "it helps to check the points orientation",
       "Position": {
-        "X": 418.15204,
-        "Y": 644.24695
+        "X": 569.2494,
+        "Y": 591.57574
       }
     },
     {
       "ChildId": "af0e1524-d46f-4dae-8770-9f93b9373162"/*Group*/,
       "Position": {
-        "X": 718.15204,
-        "Y": 588.24695
+        "X": 719.2494,
+        "Y": 535.57574
       }
     },
     {
       "ChildId": "7b0c7c6e-cb43-4f77-b4aa-f3e6e5aa0560"/*AddNoise*/,
       "Position": {
-        "X": 234.38522,
-        "Y": 596.9411
+        "X": 258.6267,
+        "Y": 564.75116
       }
     },
     {
       "ChildId": "1145ac53-e53f-41eb-a1a4-4fdf58ecc4fb"/*Time*/,
       "Position": {
-        "X": 98.52292,
-        "Y": 699.305
+        "X": 140.22095,
+        "Y": 702.5969
       }
     },
     {
       "ChildId": "773fe88e-9872-46f4-87e6-6f1aa4010ad9"/*SetMaterial*/,
       "Position": {
-        "X": 568.15204,
-        "Y": 588.24695
+        "X": 569.2494,
+        "Y": 535.57574
       }
     },
     {
       "ChildId": "a4f31b6a-6a8f-48dc-b67a-a1cf8d60f1b7"/*Camera*/,
       "Position": {
-        "X": 868.15204,
-        "Y": 588.24695
+        "X": 869.2494,
+        "Y": 535.57574
       }
     },
     {
       "ChildId": "5c339123-abf7-4b15-bdd7-68df53bfc0dc"/*RenderTarget*/,
       "Position": {
-        "X": 1018.15204,
-        "Y": 588.24695
+        "X": 1019.2494,
+        "Y": 535.57574
       }
     }
   ],
@@ -352,7 +352,7 @@
     },
     {
       "Id": "6e062bf9-4764-4ec6-87c1-024e36d1e40d",
-      "Title": "For DrawRibbons I had to fix the point orientation with TransformPoints",
+      "Title": "For DrawRibbons I had to fix the point orientation with TransformPoints,\nso the spline works well with DrawRibbons\nBonus: you can change the color of the control points\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -364,8 +364,8 @@
         "Y": 506.7657
       },
       "Size": {
-        "X": 562.6466,
-        "Y": 299.8105
+        "X": 565.93854,
+        "Y": 363.4549
       }
     }
   ],

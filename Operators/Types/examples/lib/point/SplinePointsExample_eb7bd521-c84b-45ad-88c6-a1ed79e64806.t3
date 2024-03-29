@@ -450,6 +450,25 @@
             "Y": -0.030087575,
             "Z": 1.061466
           }
+        },
+        {
+          "Id": "55a3370f-1768-414f-b38d-4accc5e93914"/*RotationAxis*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 0.0,
+            "Y": 1.0,
+            "Z": 0.0
+          }
+        },
+        {
+          "Id": "34ad759e-9a81-4d7e-9024-5abacc279895"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.6411483,
+            "Y": 0.0,
+            "Z": 0.1987318,
+            "W": 1.0
+          }
         }
       ],
       "Outputs": []
@@ -465,6 +484,16 @@
             "X": 0.2794057,
             "Y": 0.19731379,
             "Z": 0.5298946
+          }
+        },
+        {
+          "Id": "34ad759e-9a81-4d7e-9024-5abacc279895"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 0.13025486,
+            "Z": 0.0,
+            "W": 1.0
           }
         }
       ],
@@ -482,6 +511,16 @@
             "Y": 0.63977015,
             "Z": 0.17223361
           }
+        },
+        {
+          "Id": "34ad759e-9a81-4d7e-9024-5abacc279895"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 0.6590747,
+            "Z": 0.0,
+            "W": 1.0
+          }
         }
       ],
       "Outputs": []
@@ -497,6 +536,16 @@
             "X": 1.1231654,
             "Y": 0.6773761,
             "Z": -0.5773123
+          }
+        },
+        {
+          "Id": "34ad759e-9a81-4d7e-9024-5abacc279895"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 1.0,
+            "Z": 0.89289975,
+            "W": 1.0
           }
         }
       ],
@@ -514,6 +563,16 @@
             "Y": 0.118139446,
             "Z": 1.65
           }
+        },
+        {
+          "Id": "34ad759e-9a81-4d7e-9024-5abacc279895"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.91531086,
+            "W": 1.0
+          }
         }
       ],
       "Outputs": []
@@ -529,6 +588,16 @@
             "X": -0.03404087,
             "Y": 0.64,
             "Z": -0.81
+          }
+        },
+        {
+          "Id": "34ad759e-9a81-4d7e-9024-5abacc279895"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.2749133,
+            "Y": 1.0,
+            "Z": 0.0,
+            "W": 1.0
           }
         }
       ],
@@ -642,17 +711,7 @@
     {
       "Id": "af0e1524-d46f-4dae-8770-9f93b9373162"/*Group*/,
       "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
-      "InputValues": [
-        {
-          "Id": "4e15eb7a-3872-4f26-93e3-1dd38bce01a5"/*Rotation*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 80.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -682,24 +741,9 @@
       "SymbolId": "0ed2bee3-641f-4b08-8685-df1506e9af3c",
       "InputValues": [
         {
-          "Id": "9ff5ade2-cfa7-4616-ad89-356f3248e04f"/*BaseColor*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.60466444,
-            "Y": 0.88065434,
-            "Z": 1.0,
-            "W": 1.0
-          }
-        },
-        {
           "Id": "e14dcc43-7c18-4ed7-ad39-dfeab10e3d33"/*Roughness*/,
           "Type": "System.Single",
           "Value": 0.24
-        },
-        {
-          "Id": "108ff533-f205-4989-b894-acf48e3cc1db"/*Metal*/,
-          "Type": "System.Single",
-          "Value": 0.42
         }
       ],
       "Outputs": []
@@ -712,18 +756,18 @@
           "Id": "313596cc-3854-436b-89da-5fd40164ce76"/*Position*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": -0.4621997,
-            "Y": -0.88692904,
-            "Z": 4.389511
+            "X": 2.12646,
+            "Y": 3.832418,
+            "Z": 1.7483289
           }
         },
         {
           "Id": "a7acb25c-d60c-43a6-b1df-2cd5c6e183f3"/*Target*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0
+            "X": 0.0956313,
+            "Y": 0.18564443,
+            "Z": 0.11414328
           }
         }
       ],
