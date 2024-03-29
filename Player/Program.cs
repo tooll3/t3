@@ -198,7 +198,7 @@ namespace T3.Player
 
                 // Create instance of project op, all children are create automatically
 
-                if (!demoSymbol.TryCreateParentlessInstance(Guid.NewGuid(), out _project))
+                if (!demoSymbol.TryCreateParentlessInstance(out _project))
                 {
                     CloseApplication(true, $"Failed to create instance of project op {demoSymbol}");
                 }

@@ -354,7 +354,7 @@ namespace T3.Core.Operator
                 return Parent.Name + ">" + ReadableName;
             }
 
-            public static Guid CreateChildIdDeterministically(Symbol symbol, Symbol? parent)
+            internal static Guid CreateIdDeterministically(Symbol symbol, Symbol? parent)
             {
                 //deterministically create a new guid from the symbol id
                 using var hashComputer = IncrementalHash.CreateHash(HashAlgorithmName.SHA1);
