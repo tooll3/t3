@@ -10,7 +10,7 @@ namespace T3.Core.Operator
 {
     /// <summary>
     /// Represents the definition of an operator. It can include:
-    /// - <see cref="SymbolChild"/>s that references other Symbols
+    /// - <see cref="Child"/>s that references other Symbols
     /// - <see cref="Connection"/>s that connect these children
     /// </summary>
     /// <remarks>
@@ -20,7 +20,7 @@ namespace T3.Core.Operator
     {
         #region Saved Properties
         public Guid Id { get; }
-        public IReadOnlyDictionary<Guid, SymbolChild> Children => _children;
+        public IReadOnlyDictionary<Guid, Child> Children => _children;
         public IReadOnlyDictionary<Guid, List<Instance>> InstancesOfChildren => _instancesOfChildren;
         public IReadOnlyList<Instance> InstancesOfSelf => _instancesOfSelf;
         public readonly List<Connection> Connections = [];
@@ -65,15 +65,6 @@ namespace T3.Core.Operator
             if (symbolPackage != null)
             {
                 UpdateInstanceType(Array.Empty<Instance>());
-            }
-        }
-
-        internal void SetChildrenWithoutInstantiating(IEnumerable<SymbolChild> children)
-        {
-            foreach (var child in children)
-            {
-                _children.TryAdd(child.Id, child);
-                child.Parent = this;
             }
         }
 
@@ -334,7 +325,7 @@ namespace T3.Core.Operator
         }
         
         private readonly List<Instance> _instancesOfSelf = new();
-        private readonly ConcurrentDictionary<Guid, SymbolChild> _children = new();
+        private readonly ConcurrentDictionary<Guid, Child> _children = new();
         private readonly ConcurrentDictionary<Guid, List<Instance> > _instancesOfChildren = new();
     }
 }

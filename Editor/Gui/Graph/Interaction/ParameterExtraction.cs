@@ -15,7 +15,7 @@ internal static class ParameterExtraction
         return _symbolIdsForTypes.ContainsKey(inputSlot.ValueType);
     }
     
-    public static void ExtractAsConnectedOperator(NodeSelection nodeSelection, IInputSlot inputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
+    public static void ExtractAsConnectedOperator(NodeSelection nodeSelection, IInputSlot inputSlot, SymbolChildUi symbolChildUi, Symbol.Child.Input input)
     {
         SymbolUi? compositionUi = null;
         Instance composition;
@@ -86,7 +86,7 @@ internal static class ParameterExtraction
             return;
         }
         
-        var inputsAndValues = new Dictionary<SymbolChild.Input, InputValue>();
+        var inputsAndValues = new Dictionary<Symbol.Child.Input, InputValue>();
         
         var success = extractable.TryExtractInputsFor(inputSlot, out var extractedInputs);
         

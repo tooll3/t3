@@ -13,7 +13,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private readonly string _creationStack;
 
-        public ResetInputToDefault(Symbol parent, Guid symbolChildId, SymbolChild.Input input)
+        public ResetInputToDefault(Symbol parent, Guid symbolChildId, Symbol.Child.Input input)
         {
             _inputParentSymbolId = parent.Id;
             _childId = symbolChildId;

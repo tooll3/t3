@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             return CloneWithType<Int2InputUi>();
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Int2 int3Value, bool readOnly)
+        protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref Int2 int3Value, bool readOnly)
         {
             IntComponents[0] = int3Value.Width;
             IntComponents[1] = int3Value.Height;

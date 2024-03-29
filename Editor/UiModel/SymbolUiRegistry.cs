@@ -62,5 +62,5 @@ internal static class SymbolUiRegistry
     }
     
     public static SymbolChildUi? GetSymbolChildUi(this Instance instance) => instance.SymbolChild?.GetSymbolChildUi();
-    public static SymbolChildUi GetSymbolChildUi(this SymbolChild symbolChild) => symbolChild.Parent!.GetSymbolUi().ChildUis[symbolChild.Id];
+    public static SymbolChildUi GetSymbolChildUi(this Symbol.Child symbolChild) => symbolChild.Parent!.GetSymbolUi().ChildUis[symbolChild.Id];
 }

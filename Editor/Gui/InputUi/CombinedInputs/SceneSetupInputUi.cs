@@ -27,7 +27,7 @@ public class SceneSetupInputUi : InputValueUi<SceneSetup>
         return new SceneSetupInputUi();
     }
 
-    protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref SceneSetup value, bool readOnly)
+    protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref SceneSetup value, bool readOnly)
     {
         if (ImGui.Button("Edit Scene Setup"))
         {

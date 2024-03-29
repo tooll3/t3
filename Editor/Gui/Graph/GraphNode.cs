@@ -1039,8 +1039,8 @@ namespace T3.Editor.Gui.Graph
                                            );
 
                     Symbol.Connection connection;
-                    SymbolChild sourceOp = null;
-                    SymbolChild.Output output = null;
+                    Symbol.Child sourceOp = null;
+                    Symbol.Child.Output output = null;
                     ImGui.BeginTooltip();
                     {
                         DrawInputSources(targetUi, inputDef, instance);

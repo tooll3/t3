@@ -147,7 +147,7 @@ namespace T3.Editor.Gui.Commands.Graph
                                                                                         _targetPosition + childEntryToCopy.RelativePosition,
                                                                                         childEntryToCopy.AddedId);
 
-                //SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
+                //Symbol.Child newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
                 NewSymbolChildIds.Add(newSymbolChild.Id);
                 var newSymbolInputs = newSymbolChild.Inputs;
                 foreach (var (id, input) in symbolChildToCopy.Inputs)

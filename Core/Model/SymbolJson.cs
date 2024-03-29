@@ -68,7 +68,7 @@ namespace T3.Core.Model
             writer.WriteEndArray();
         }
 
-        private static void WriteSymbolChildren(IEnumerable<SymbolChild> children, JsonTextWriter writer)
+        private static void WriteSymbolChildren(IEnumerable<Symbol.Child> children, JsonTextWriter writer)
         {
             writer.WritePropertyName(JsonKeys.Children);
             writer.WriteStartArray();
@@ -160,19 +160,10 @@ namespace T3.Core.Model
             var parent = symbolReadResult.Symbol;
             var success = true;
 
-            List<SymbolChild> children = new(childrenJson.Length); // todo: ordered dictionary
             foreach (var childJson in childrenJson)
             {
-                var gotChild = TryReadSymbolChild(in childJson, out var symbolChild);
-                success &= gotChild;
-
-                if (!gotChild)
-                    continue;
-
-                children.Add(symbolChild);
+                success &= TryReadSymbolChild(in childJson, symbolReadResult.Symbol);
             }
-
-            parent.SetChildrenWithoutInstantiating(children);
 
             if (symbolReadResult.AnimatorJsonData != null)
                 parent.Animator.Read(symbolReadResult.AnimatorJsonData, parent);
@@ -180,60 +171,65 @@ namespace T3.Core.Model
             return success;
         }
 
-        private static bool TryReadSymbolChild(in JsonChildResult childJsonResult, out SymbolChild child)
+        private static bool TryReadSymbolChild(in JsonChildResult childJsonResult, Symbol parent)
         {
             // If the used symbol hasn't been loaded so far ensure it's loaded now
             var haveChildSymbolDefinition = SymbolRegistry.Entries.TryGetValue(childJsonResult.SymbolId, out var symbol);
             if (!haveChildSymbolDefinition)
             {
                 Log.Warning($"Error loading symbol child {childJsonResult.SymbolId}");
-                child = null;
                 return false;
             }
 
-            child = new SymbolChild(symbol, childJsonResult.ChildId, null);
-
             var symbolChildJson = childJsonResult.Json;
             var nameToken = symbolChildJson[JsonKeys.SymbolChildName]?.Value<string>();
+            string? name = null;
+            bool isBypassed = false;
             if (nameToken != null)
             {
-                child.Name = nameToken;
+                name = nameToken;
             }
 
             var isBypassedJson = symbolChildJson[JsonKeys.IsBypassed];
             if (isBypassedJson != null)
             {
-                child.IsBypassed = isBypassedJson.Value<bool>();
+                isBypassed = isBypassedJson.Value<bool>();
             }
 
-            foreach (var inputValue in (JArray)symbolChildJson[JsonKeys.InputValues])
-            {
-                ReadChildInputValue(child, inputValue);
-            }
+            var modifyAction = new Action<Symbol.Child>(child =>
+                                                       {
+                                                           foreach (var inputValue in (JArray)symbolChildJson[JsonKeys.InputValues])
+                                                           {
+                                                               ReadChildInputValue(child, inputValue);
+                                                           }
 
-            foreach (var outputJson in (JArray)symbolChildJson[JsonKeys.Outputs])
-            {
-                var outputId = Guid.Parse(outputJson[JsonKeys.Id].Value<string>());
-                var outputDataJson = outputJson[JsonKeys.OutputData];
-                if (outputDataJson != null)
-                {
-                    ReadChildOutputData(child, outputId, outputDataJson);
-                }
+                                                           foreach (var outputJson in (JArray)symbolChildJson[JsonKeys.Outputs])
+                                                           {
+                                                               var outputId = Guid.Parse(outputJson[JsonKeys.Id].Value<string>());
+                                                               var outputDataJson = outputJson[JsonKeys.OutputData];
+                                                               if (outputDataJson != null)
+                                                               {
+                                                                   ReadChildOutputData(child, outputId, outputDataJson);
+                                                               }
 
-                var dirtyFlagJson = outputJson[JsonKeys.DirtyFlagTrigger];
-                if (dirtyFlagJson != null)
-                {
-                    child.Outputs[outputId].DirtyFlagTrigger = (DirtyFlagTrigger)Enum.Parse(typeof(DirtyFlagTrigger), dirtyFlagJson.Value<string>());
-                }
+                                                               var dirtyFlagJson = outputJson[JsonKeys.DirtyFlagTrigger];
+                                                               if (dirtyFlagJson != null)
+                                                               {
+                                                                   child.Outputs[outputId].DirtyFlagTrigger =
+                                                                       (DirtyFlagTrigger)Enum.Parse(typeof(DirtyFlagTrigger), dirtyFlagJson.Value<string>());
+                                                               }
 
-                var isDisabledJson = outputJson[JsonKeys.IsDisabled];
-                if (isDisabledJson != null)
-                {
-                    if (child.Outputs.TryGetValue(outputId, out var output))
-                        output.IsDisabled = isDisabledJson.Value<bool>();
-                }
-            }
+                                                               var isDisabledJson = outputJson[JsonKeys.IsDisabled];
+                                                               if (isDisabledJson != null)
+                                                               {
+                                                                   if (child.Outputs.TryGetValue(outputId, out var output))
+                                                                       output.IsDisabled = isDisabledJson.Value<bool>();
+                                                               }
+                                                           }
+                                                       });
 
+
+            parent.AddChild(symbol, childJsonResult.ChildId, name, isBypassed, modifyAction);
             return true;
         }
 
@@ -254,7 +250,7 @@ namespace T3.Core.Model
             return new Symbol.Connection(sourceInstanceId, sourceSlotId, targetInstanceId, targetSlotId);
         }
 
-        private static void ReadChildInputValue(SymbolChild symbolChild, JToken inputJson)
+        private static void ReadChildInputValue(Symbol.Child symbolChild, JToken inputJson)
         {
             var id = Guid.Parse(inputJson[JsonKeys.Id].Value<string>());
             var jsonValue = inputJson[JsonKeys.Value];
@@ -276,7 +272,7 @@ namespace T3.Core.Model
             }
         }
 
-        private static void ReadChildOutputData(SymbolChild symbolChild, Guid outputId, JToken json)
+        private static void ReadChildOutputData(Symbol.Child symbolChild, Guid outputId, JToken json)
         {
             if (json[JsonKeys.Type] == null)
                 return;

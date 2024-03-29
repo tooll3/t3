@@ -14,15 +14,10 @@ namespace T3.Editor.Gui.Commands.Graph
         public string Name => "Change Input Value";
         public bool IsUndoable => true;
 
-        public ChangeInputValueCommand(Symbol symbol, Guid symbolChildId, SymbolChild.Input input, InputValue newValue)
+        public ChangeInputValueCommand(Symbol symbol, Guid symbolChildId, Symbol.Child.Input input, InputValue newValue)
         {
             _inputParentSymbol = symbol;
             _inputParentSymbolId = symbol.Id;
-
-            if (!SymbolUiRegistry.TryGetSymbolUi(_inputParentSymbolId, out var inputParentSymbolUi))
-            {
-                throw new Exception("Symbol not found: " + _inputParentSymbolId);
-            }
             
             _childId = symbolChildId;
             _inputId = input.InputDefinition.Id;
@@ -142,7 +137,7 @@ namespace T3.Editor.Gui.Commands.Graph
             }
         }
 
-        private void InvalidateInstances(Symbol inputParentSymbol, SymbolChild symbolChild)
+        private void InvalidateInstances(Symbol inputParentSymbol, Symbol.Child symbolChild)
         {
             var symbolChildId = symbolChild.Id;
             foreach (var parentInstance in inputParentSymbol.InstancesOfSelf)

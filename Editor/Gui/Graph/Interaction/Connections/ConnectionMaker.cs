@@ -259,7 +259,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             var offset = Math.Min(requiredGap - currentGap, requiredGap);
 
             // Collect all connected ops further down the tree
-            var connectedOps = new HashSet<SymbolChild>();
+            var connectedOps = new HashSet<Symbol.Child>();
             RecursivelyAddChildren(ref connectedOps, parent, targetNodeUi.SymbolChild);
 
             foreach (var child in connectedOps)
@@ -287,7 +287,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             //return new MacroCommand("adjust layout", commands);
         }
 
-        private static void RecursivelyAddChildren(ref HashSet<SymbolChild> set, Symbol parent, SymbolChild targetNode)
+        private static void RecursivelyAddChildren(ref HashSet<Symbol.Child> set, Symbol parent, Symbol.Child targetNode)
         {
             foreach (var inputDef in targetNode.Symbol.InputDefinitions)
             {

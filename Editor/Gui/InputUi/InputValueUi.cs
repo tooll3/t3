@@ -73,7 +73,7 @@ namespace T3.Editor.Gui.InputUi
         /// <summary>
         /// Wraps the implementation of an parameter control to handle <see cref="InputEditStateFlags"/>
         /// </summary>
-        protected abstract InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref T value, bool readOnly);
+        protected abstract InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref T value, bool readOnly);
 
         protected abstract void DrawReadOnlyControl(string name, ref T value);
 
@@ -611,7 +611,7 @@ namespace T3.Editor.Gui.InputUi
             Extract,
         }
 
-        private static void PublishAsInput(NodeSelection selection, Structure structure, IInputSlot originalInputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
+        private static void PublishAsInput(NodeSelection selection, Structure structure, IInputSlot originalInputSlot, SymbolChildUi symbolChildUi, Symbol.Child.Input input)
         {
             var composition = selection.GetSelectedComposition() ?? originalInputSlot.Parent.Parent;
 

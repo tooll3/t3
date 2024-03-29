@@ -11,18 +11,16 @@ namespace T3.Core.Operator;
 
 public sealed partial class Symbol
 {
-    public SymbolChild AddChild(Symbol symbol, Guid addedChildId, string name = null)
+    public Child AddChild(Symbol symbol, Guid addedChildId, string? name = null, bool isBypassed = false, Action<Child>? modifyAction = null)
     {
-        var newChild = new SymbolChild(symbol, addedChildId, this)
-                           {
-                               Name = name
-                           };
+        var newChild = new Child(symbol, addedChildId, this, name, isBypassed);
+        modifyAction?.Invoke(newChild);
 
         if (!_children.TryAdd(addedChildId, newChild))
         {
             throw new InvalidOperationException("The ID for symbol child must be unique.");
         }
-        
+
         var newChildInstances = new List<Instance>(_instancesOfSelf.Count);
         _instancesOfChildren[addedChildId] = newChildInstances;
 
@@ -38,11 +36,11 @@ public sealed partial class Symbol
 
     public bool TryCreateParentlessInstance(Guid childId, out Instance? newInstance)
     {
-        var newSymbolChild = new SymbolChild(this, childId, null);
+        var newSymbolChild = new Child(this, childId, null, null, false);
         return TryCreateNewInstance(newSymbolChild, null, out newInstance);
     }
 
-    private static bool TryCreateNewInstance(SymbolChild symbolChild, Instance? parentInstance, [NotNullWhen(true)] out Instance? newInstance)
+    private static bool TryCreateNewInstance(Child symbolChild, Instance? parentInstance, [NotNullWhen(true)] out Instance? newInstance)
     {
         if (!TryCreateInstance(parentInstance, symbolChild, out newInstance, out var reason))
         {
@@ -57,14 +55,8 @@ public sealed partial class Symbol
         {
             Instance.AddChildTo(parentInstance, newInstance);
             var parentSymbol = parentInstance.Symbol;
-
-            if (!parentSymbol._instancesOfChildren.TryGetValue(symbolChild.Id, out var childInstances))
-            {
-                childInstances = new List<Instance>();
-                parentSymbol._instancesOfChildren[symbolChild.Id] = childInstances;
-            }
-            
-            childInstances.Add(newInstance);
+            var instanceList = parentSymbol.InstancesOfChildren[symbolChild.Id];
+            instanceList.Add(newInstance);
         }
 
         // cache property accesses for performance
@@ -134,7 +126,7 @@ public sealed partial class Symbol
 
         return true;
 
-        static bool TryCreateInstance(Instance? parent, SymbolChild symbolChild, [NotNullWhen(true)] out Instance? newInstance, out string reason)
+        static bool TryCreateInstance(Instance? parent, Child symbolChild, [NotNullWhen(true)] out Instance? newInstance, out string reason)
         {
             var symbolChildId = symbolChild.Id;
 

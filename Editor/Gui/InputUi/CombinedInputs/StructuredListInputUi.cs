@@ -24,7 +24,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             return new StructuredListInputUi();
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref StructuredList slist, bool readOnly)
+        protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref StructuredList slist, bool readOnly)
         {
             if (slist == null)
             {

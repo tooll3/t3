@@ -26,7 +26,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         }
 
 
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Vector2 float2Value, bool readOnly)
+        protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref Vector2 float2Value, bool readOnly)
         {
             float2Value.CopyTo(FloatComponents);
 

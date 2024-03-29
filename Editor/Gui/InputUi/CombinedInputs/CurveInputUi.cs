@@ -20,7 +20,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                    };
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Curve curve, bool readOnly)
+        protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref Curve curve, bool readOnly)
         {
             var comp = GraphWindow.Focused?.CompositionOp;
             if (comp == null)

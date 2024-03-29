@@ -43,7 +43,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                        };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref string value, bool readOnly)
+        protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref string value, bool readOnly)
         {
             if (value == null)
             {
@@ -127,7 +127,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
 
-        private static InputEditStateFlags DrawCustomDropdown(SymbolChild.Input input, ref string value)
+        private static InputEditStateFlags DrawCustomDropdown(Symbol.Child.Input input, ref string value)
         {
             var instance = GraphWindow.Focused?.GraphCanvas.NodeSelection.GetSelectedInstanceWithoutComposition();
             if (instance != null && instance is ICustomDropdownHolder customValueHolder)

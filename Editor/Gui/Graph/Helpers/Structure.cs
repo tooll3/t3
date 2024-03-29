@@ -183,7 +183,7 @@ internal class Structure
         return all;
     }
 
-    public HashSet<Guid> CollectConnectedChildren(SymbolChild child, Instance composition, HashSet<Guid> set = null)
+    public HashSet<Guid> CollectConnectedChildren(Symbol.Child child, Instance composition, HashSet<Guid> set = null)
     {
         set ??= new HashSet<Guid>();
 
