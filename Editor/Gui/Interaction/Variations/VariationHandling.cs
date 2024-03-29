@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Operators.Utils;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -10,7 +9,6 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Midi;
-using T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Windows.Variations;
 using T3.Editor.UiModel;
@@ -33,19 +31,17 @@ namespace T3.Editor.Gui.Interaction.Variations;
 public static class VariationHandling
 {
     public static SymbolVariationPool ActivePoolForSnapshots { get; private set; }
-    public static Instance ActiveInstanceForSnapshots  { get; private set; }
-        
+    public static Instance ActiveInstanceForSnapshots { get; private set; }
+
     public static SymbolVariationPool ActivePoolForPresets { get; private set; }
-    public static Instance ActiveInstanceForPresets  { get; private set; }
+    public static Instance ActiveInstanceForPresets { get; private set; }
 
     public static void Init()
     {
         // Scan for output devices (e.g. to update LEDs etc.)
         MidiOutConnectionManager.Init();
-
-
     }
-        
+
     /// <summary>
     /// Update variation handling
     /// </summary>
@@ -55,7 +51,6 @@ public static class VariationHandling
         var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
         if (primaryGraphWindow == null)
             return;
-
 
         var singleSelectedInstance = NodeSelection.GetSelectedInstance();
         if (singleSelectedInstance != null)
@@ -69,14 +64,13 @@ public static class VariationHandling
         else
         {
             ActivePoolForPresets = null;
-                
+
             var activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
             if (activeCompositionInstance == null)
                 return;
-                
+
             ActiveInstanceForSnapshots = activeCompositionInstance;
-                
-                
+
             // Prevent variations for library operators
             if (activeCompositionInstance.Symbol.Namespace.StartsWith("lib."))
             {
@@ -109,7 +103,6 @@ public static class VariationHandling
         return newOpVariation;
     }
 
-
     private static readonly Dictionary<Guid, SymbolVariationPool> _variationPoolForOperators = new();
 
     public static void ActivateOrCreateSnapshotAtIndex(int activationIndex)
@@ -119,13 +112,13 @@ public static class VariationHandling
             Log.Warning($"Can't save variation #{activationIndex}. No variation pool active.");
             return;
         }
-            
-        if(SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
+
+        if (SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
         {
             ActivePoolForSnapshots.Apply(ActiveInstanceForSnapshots, existingVariation);
             return;
-        } 
-            
+        }
+
         CreateOrUpdateSnapshotVariation(activationIndex);
         ActivePoolForSnapshots.UpdateActiveStateForVariation(activationIndex);
     }
@@ -146,7 +139,7 @@ public static class VariationHandling
     {
         if (ActivePoolForSnapshots == null)
             return;
-            
+
         //ActivePoolForSnapshots.DeleteVariation
         if (SymbolVariationPool.TryGetSnapshot(activationIndex, out var snapshot))
         {
@@ -192,11 +185,12 @@ public static class VariationHandling
         {
             return;
         }
-            
+
         if (SymbolVariationPool.TryGetSnapshot(_blendTowardsIndex, out var variation))
         {
             //_blendTargetVariation = variation;
-            var normalizedValue = midiValue/127.0f;
+            var normalizedValue = midiValue / 127.0f;
+            Log.Debug($"NormlizedBlendingValue: {normalizedValue}");
             SmoothVariationBlending.StartBlendTo(variation, normalizedValue);
         }
         else
@@ -204,7 +198,6 @@ public static class VariationHandling
             SmoothVariationBlending.Stop();
         }
     }
-
 
     /// <summary>
     /// Smooths blending between variations to avoid glitches by low 127 midi resolution steps 
@@ -218,10 +211,11 @@ public static class VariationHandling
                 _dampedWeight = normalizedBlendWeight;
                 _targetVariation = variation;
             }
+
             _targetWeight = normalizedBlendWeight;
             UpdateBlend();
-        } 
-            
+        }
+
         public static void UpdateBlend()
         {
             if (_targetVariation == null)
@@ -234,31 +228,28 @@ public static class VariationHandling
 
             if (!(MathF.Abs(_dampingVelocity) > 0.0005f))
                 return;
-                
+
             ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, _targetVariation, _dampedWeight);
         }
 
         public static void Stop()
         {
             _targetVariation = null;
-                
         }
-            
+
         private static float _targetWeight;
         private static float _dampedWeight;
         private static float _dampingVelocity;
         private static Variation _targetVariation;
-            
-    } 
-        
-        
+    }
+
     public static void StopBlendingTowards()
     {
         _blendTowardsIndex = -1;
         ActivePoolForSnapshots.ApplyCurrentBlend();
         SmoothVariationBlending.Stop();
     }
-        
+
     public static void UpdateBlendValues(int obj, float value)
     {
         //Log.Warning($"BlendValuesUpdate {obj} not implemented");
@@ -269,29 +260,30 @@ public static class VariationHandling
         //Log.Warning($"SaveSnapshotAtNextFreeSlot {obj} not implemented");
     }
 
-    private const int AutoIndex=-1;
-    public static Variation CreateOrUpdateSnapshotVariation(int activationIndex = AutoIndex )
+    private const int AutoIndex = -1;
+
+    public static Variation CreateOrUpdateSnapshotVariation(int activationIndex = AutoIndex)
     {
         // Only allow for snapshots.
         if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
         {
             return null;
         }
-            
+
         // Delete previous snapshot for that index.
         if (activationIndex != AutoIndex && SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
         {
             ActivePoolForSnapshots.DeleteVariation(existingVariation);
         }
-            
+
         _affectedInstances.Clear();
-            
+
         AddSnapshotEnabledChildrenToList(ActiveInstanceForSnapshots, _affectedInstances);
-            
+
         var newVariation = ActivePoolForSnapshots.CreateVariationForCompositionInstances(_affectedInstances);
         if (newVariation == null)
             return null;
-            
+
         newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForSnapshots.Variations);
         if (activationIndex != AutoIndex)
             newVariation.ActivationIndex = activationIndex;
@@ -300,11 +292,10 @@ public static class VariationHandling
         ActivePoolForSnapshots.SaveVariationsToFile();
         return newVariation;
     }
-        
+
     // TODO: Implement undo/redo!
     public static void RemoveInstancesFromVariations(List<Instance> instances, List<Variation> variations)
     {
-            
         if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
         {
             return;
@@ -320,6 +311,7 @@ public static class VariationHandling
                 variation.ParameterSetsForChildIds.Remove(instance.SymbolChildId);
             }
         }
+
         ActivePoolForSnapshots.SaveVariationsToFile();
     }
 
@@ -330,7 +322,7 @@ public static class VariationHandling
         {
             var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
             Debug.Assert(symbolChildUi != null);
-                
+
             if (symbolChildUi.SnapshotGroupIndex == 0)
                 continue;
 
@@ -345,13 +337,13 @@ public static class VariationHandling
         {
             var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
             Debug.Assert(symbolChildUi != null);
-                
+
             if (symbolChildUi.SnapshotGroupIndex == 0)
                 continue;
 
             yield return childInstance;
         }
     }
-        
+
     private static readonly List<Instance> _affectedInstances = new(100);
 }

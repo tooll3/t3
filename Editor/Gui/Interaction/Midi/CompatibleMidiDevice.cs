@@ -21,17 +21,13 @@ namespace T3.Editor.Gui.Interaction.Midi;
 /// </remarks>
 public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsumer, IDisposable
 {
-    // protected CompatibleMidiDevice()
-    // {
-    // }
-
     public void Initialize(string productName, MidiIn midiIn)
     {
-        ProductName = productName;
+        _productName = productName;
         _midiInputDevice = midiIn;
         MidiInConnectionManager.RegisterConsumer(this);
-    }    
-    
+    }
+
     /// <summary>
     /// Depending on various hotkeys a device can be in different input modes.
     /// This allows actions with the button combinations.
@@ -47,22 +43,24 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
     }
 
     protected InputModes ActiveMode = InputModes.Default;
-    
-    protected abstract void UpdateVisualization(Variation activeVariation);
-    
-    /// <summary>
-    /// Updates the variation handling. 
-    /// </summary>
-    /// <remarks>
-    /// Note this is not related to MidiInput.
-    /// </remarks>
+
+    protected abstract void UpdateVariationVisualization();
+
     public void Update()
     {
-        UpdateVisualization(VariationHandling.ActivePoolForSnapshots?.ActiveVariation);
+        UpdateVariationVisualization();
+        
         CombineButtonSignals();
+        ProcessLastSignals();
+        _hasNewMessages = false;
+    }
 
-        ControlChangeSignal[] controlChangeSignals = null;
+    private void ProcessLastSignals()
+    {
+        if (!_hasNewMessages)
+            return;
 
+        ControlChangeSignal[] controlChangeSignals;
         lock (_controlSignalsSinceLastUpdate)
         {
             controlChangeSignals = _controlSignalsSinceLastUpdate.ToArray();
@@ -119,18 +117,16 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
             _combinedButtonSignals.Clear();
         }
     }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 
-    public void Dispose() 
+    public void Dispose()
     {
-        MidiInConnectionManager.UnregisterConsumer(this);        
+        MidiInConnectionManager.UnregisterConsumer(this);
     }
-    
+
     protected List<CommandTriggerCombination> CommandTriggerCombinations;
     protected List<ModeButton> ModeButtons;
+    private bool _hasNewMessages;
 
-    
     // ------------------------------------------------------------------------------------
     #region Process button Signals
     /// <summary>
@@ -139,6 +135,9 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
     /// </summary>
     private void CombineButtonSignals()
     {
+        if (!_hasNewMessages)
+            return;
+        
         lock (_buttonSignalsSinceLastUpdate)
         {
             foreach (var earlierSignal in _combinedButtonSignals.Values)
@@ -169,69 +168,58 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
 
     void MidiInConnectionManager.IMidiConsumer.MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
-        lock (this)
+        if (sender is not MidiIn midiIn || msg.MidiEvent == null)
+            return;
+
+        if (midiIn != _midiInputDevice)
+            return;
+
+        if (msg.MidiEvent == null)
+            return;
+
+        switch (msg.MidiEvent.CommandCode)
         {
-            if (sender is not MidiIn midiIn || msg.MidiEvent == null)
-                return;
-
-            if (midiIn != _midiInputDevice)
-            {
-                //Log.Debug($"Ignore device {device.ProductName} in AbstractMidiController");
-                return;
-            }
-            
-            // var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
-            // if (device.ProductName.GetHashCode() != GetProductNameHash())
-            // {
-            //     //Log.Debug($"Ingore device {device.ProductName} in AbstractMidiController");
-            //     return;
-            // }
-
-            if (msg.MidiEvent == null)
-                return;
-
-            switch (msg.MidiEvent.CommandCode)
-            {
-                case MidiCommandCode.NoteOff:
-                case MidiCommandCode.NoteOn:
-                    if (!(msg.MidiEvent is NoteEvent noteEvent))
-                        return;
-
-                    //Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {noteEvent.NoteNumber}  Value: {noteEvent.Velocity}");
-                    _buttonSignalsSinceLastUpdate.Add(new ButtonSignal()
-                                                          {
-                                                              Channel = noteEvent.Channel,
-                                                              ButtonId = noteEvent.NoteNumber,
-                                                              ControllerValue = noteEvent.Velocity,
-                                                              State = msg.MidiEvent.CommandCode == MidiCommandCode.NoteOn
-                                                                          ? ButtonSignal.States.JustPressed
-                                                                          : ButtonSignal.States.Released,
-                                                          });
-                    return;
-
-                case MidiCommandCode.ControlChange:
-                    if (!(msg.MidiEvent is ControlChangeEvent controlChangeEvent))
-                        return;
-
-                    lock (_controlSignalsSinceLastUpdate)
+            case MidiCommandCode.NoteOff:
+            case MidiCommandCode.NoteOn:
+                if (msg.MidiEvent is NoteEvent noteEvent)
+                {
+                    lock (_buttonSignalsSinceLastUpdate)
                     {
-                        //Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {controlChangeEvent.Controller}  Value: {controlChangeEvent.ControllerValue}");
-                        _controlSignalsSinceLastUpdate.Add(new ControlChangeSignal()
-                                                               {
-                                                                   Channel = controlChangeEvent.Channel,
-                                                                   ControllerId = (int)controlChangeEvent.Controller,
-                                                                   ControllerValue = controlChangeEvent.ControllerValue,
-                                                               });
+                        _buttonSignalsSinceLastUpdate.Add(new ButtonSignal()
+                                                              {
+                                                                  Channel = noteEvent.Channel,
+                                                                  ButtonId = noteEvent.NoteNumber,
+                                                                  ControllerValue = noteEvent.Velocity,
+                                                                  State = msg.MidiEvent.CommandCode == MidiCommandCode.NoteOn
+                                                                              ? ButtonSignal.States.JustPressed
+                                                                              : ButtonSignal.States.Released,
+                                                              });
                     }
+                    _hasNewMessages = true;
+                }
+                return;
+            //Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {noteEvent.NoteNumber}  Value: {noteEvent.Velocity}");
 
+            case MidiCommandCode.ControlChange:
+                if (msg.MidiEvent is not ControlChangeEvent controlChangeEvent)
                     return;
-            }
+
+                lock (_controlSignalsSinceLastUpdate)
+                {
+                    _controlSignalsSinceLastUpdate.Add(new ControlChangeSignal()
+                                                           {
+                                                               Channel = controlChangeEvent.Channel,
+                                                               ControllerId = (int)controlChangeEvent.Controller,
+                                                               ControllerValue = controlChangeEvent.ControllerValue,
+                                                           });
+                }
+                _hasNewMessages = true;
+                return;
         }
     }
 
     void MidiInConnectionManager.IMidiConsumer.ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
-        //throw new NotImplementedException();
     }
     #endregion
 
@@ -252,17 +240,18 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
     {
         if (CacheControllerColors[apcControlIndex] == colorCode)
             return;
-            
+
         const int defaultChannel = 1;
         var noteOnEvent = new NoteOnEvent(0, defaultChannel, apcControlIndex, colorCode, 50);
         try
         {
             midiOut.Send(noteOnEvent.GetAsShortMessage());
         }
-        catch(MmException e) 
+        catch (MmException e)
         {
-            Log.Warning("Failed setting midi color message:" + e.Message);        
-        } 
+            Log.Warning("Failed setting midi color message:" + e.Message);
+        }
+
         CacheControllerColors[apcControlIndex] = colorCode;
     }
 
@@ -273,10 +262,8 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
     private readonly List<ButtonSignal> _buttonSignalsSinceLastUpdate = new();
     private readonly List<ControlChangeSignal> _controlSignalsSinceLastUpdate = new();
     private MidiIn _midiInputDevice;
-    public int ProductNameHash => ProductName.GetHashCode();
-    public string ProductName { get; set; }
-
-
+    protected int ProductNameHash => _productName.GetHashCode();
+    private string _productName;
 }
 
 public class MidiDeviceProductAttribute : Attribute
@@ -285,6 +272,6 @@ public class MidiDeviceProductAttribute : Attribute
     {
         ProductName = productName;
     }
-    
+
     public string ProductName { get; set; }
 }

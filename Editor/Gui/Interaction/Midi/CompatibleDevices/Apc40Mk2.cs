@@ -31,11 +31,8 @@ public class Apc40Mk2 : CompatibleMidiDevice
     }
 
 
-    protected override void UpdateVisualization(Variation activeVariation)
+    protected override void UpdateVariationVisualization()
     {
-        if (activeVariation == null)
-            return;
-
         var midiOut = MidiOutConnectionManager.GetConnectedController(ProductNameHash);
         if (midiOut == null)
             return;

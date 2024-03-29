@@ -19,8 +19,7 @@ public class NanoControl8 : CompatibleMidiDevice
                                          };
     }
 
-    protected override void UpdateVisualization(Variation activeVariation) { }
-
+    protected override void UpdateVariationVisualization() { }
     
     private static readonly ButtonRange ButtonRewind = new(43);
     private static readonly ButtonRange ButtonFastForward = new(44);

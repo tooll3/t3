@@ -39,7 +39,7 @@ public class ApcMini : CompatibleMidiDevice
                           };
     }
 
-    protected override void UpdateVisualization(Variation? activeVariation)
+    protected override void UpdateVariationVisualization()
     {
         _updateCount++;
 
@@ -55,9 +55,10 @@ public class ApcMini : CompatibleMidiDevice
                             {
                                 return (int)color;
                             }
-
-                            if (variation == activeVariation)
+                            if(variation.State == Variation.States.Active)
                             {
+                            // if (variation == activeVariation)
+                            // {
                                 return (int)ApcButtonColor.Red;
                             }
                                 
