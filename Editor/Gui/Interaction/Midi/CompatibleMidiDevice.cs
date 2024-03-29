@@ -10,12 +10,6 @@ using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.Gui.Interaction.Midi;
 
-public interface IControllerInputDevice
-{
-    void UpdateVariationHandling(MidiIn midiIn, Variation activeVariation);
-    int GetProductNameHash();
-}
-
 /// <summary>
 /// Combines midi signals related to Variations into triggers and invokes matching <see cref="CommandTriggerCombination"/>s.
 /// Allow allows to update the status of midi devices, e.g. for controlling LEDs to indicate available or active variations.
@@ -24,7 +18,7 @@ public interface IControllerInputDevice
 /// This is NOT related to the MidiInput operator: Both are registered as independent <see cref="MidiInConnectionManager.IMidiConsumer"/>
 /// and handle their events individually.
 /// </remarks>
-public abstract class CompatibleMidiDevice : IControllerInputDevice, MidiInConnectionManager.IMidiConsumer
+public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsumer, IDisposable
 {
     protected CompatibleMidiDevice()
     {
@@ -112,11 +106,17 @@ public abstract class CompatibleMidiDevice : IControllerInputDevice, MidiInConne
         }
     }
 
+    public void Dispose() 
+    {
+        MidiInConnectionManager.UnregisterConsumer(this);        
+    }
+    
     public abstract int GetProductNameHash();
-        
+    
     protected List<CommandTriggerCombination> CommandTriggerCombinations;
     protected List<ModeButton> ModeButtons;
 
+    
     // ------------------------------------------------------------------------------------
     #region Process button Signals
     /// <summary>
@@ -253,4 +253,7 @@ public abstract class CompatibleMidiDevice : IControllerInputDevice, MidiInConne
     private readonly Dictionary<int, ButtonSignal> _combinedButtonSignals = new();
     private readonly List<ButtonSignal> _buttonSignalsSinceLastUpdate = new();
     private readonly List<ControlChangeSignal> _controlSignalsSinceLastUpdate = new();
+    
+
+    
 }

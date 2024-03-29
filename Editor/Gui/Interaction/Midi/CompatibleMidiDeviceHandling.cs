@@ -21,8 +21,15 @@ public static class CompatibleMidiDeviceHandling
             //Log.Warning("MidiInConnectionManager should be initialized before InitializeConnectedDevices().");
             MidiInConnectionManager.Rescan();
         }
-            
+
+        // Dispose devices
+        foreach (var (midiIn, device) in _connectedMidiDevices)
+        {
+            device.Dispose();
+        }
         _connectedMidiDevices.Clear();
+        
+        
         foreach (var c in _compatibleControllerTypes)
         {
             RegisterControllerType(c);
@@ -60,7 +67,10 @@ public static class CompatibleMidiDeviceHandling
         var productNameHash = compatibleDevice.GetProductNameHash();
         var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(productNameHash);
         if (midiIn == null)
+        {
+            compatibleDevice.Dispose();
             return;
+        }
 
         Log.Debug($"Connected midi device {compatibleDevice}");
         _connectedMidiDevices.Add(new Tuple<MidiIn, CompatibleMidiDevice>(midiIn, compatibleDevice));
