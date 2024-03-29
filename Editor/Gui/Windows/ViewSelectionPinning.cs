@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System.Diagnostics.CodeAnalysis;
+using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
@@ -26,7 +27,7 @@ namespace T3.Editor.Gui.Windows
             var selection = canvas.NodeSelection;
 
             bool shouldPin = false;
-            FrameStats.AddPinnedId(pinnedOrSelectedInstance.SymbolChildId);    
+            canvas.NodeSelection.PinnedIds.Add(pinnedOrSelectedInstance.SymbolChildId);
             
             if (CustomComponents.IconButton(Icon.Pin, 
                                                    
@@ -161,36 +162,42 @@ namespace T3.Editor.Gui.Windows
             _pinnedEvaluationInstancePath = instance.InstancePath;
         }
 
-        public bool TryGetPinnedOrSelectedInstance(out Instance instance, out GraphCanvas canvas)
+        public bool TryGetPinnedOrSelectedInstance([NotNullWhen(true)] out Instance? instance, [NotNullWhen(true)] out GraphCanvas? canvas)
         {
             var window = GraphWindow.Focused;
-            canvas = window?.GraphCanvas;
-            instance = null;
 
             if (!_isPinned)
             {
                 if (window == null)
                 {
+                    canvas = null;
+                    instance = null;
                     return false;
                 }
 
+                canvas = window.GraphCanvas;
                 instance = canvas.NodeSelection.GetFirstSelectedInstance();
+                return instance != null;
             }
-            else if (!_pinnedInstanceCanvas!.Destroyed)
+
+            if (!_pinnedInstanceCanvas!.Destroyed)
             {
                 instance = _pinnedInstanceCanvas.Structure.GetInstanceFromIdPath(_pinnedInstancePath);
                 canvas = _pinnedInstanceCanvas;
-            }
-            else
-            {
-                Unpin();
-                if (window != null)
-                {
-                    instance = canvas.NodeSelection.GetFirstSelectedInstance();
-                }
+                return instance != null;
             }
 
-            return instance != null;
+            Unpin();
+            if (window != null)
+            {
+                canvas = window.GraphCanvas;
+                instance = canvas.NodeSelection.GetFirstSelectedInstance();
+                return instance != null;
+            }
+
+            canvas = null;
+            instance = null;
+            return false;
         }
 
 

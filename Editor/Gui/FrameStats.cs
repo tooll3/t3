@@ -6,16 +6,6 @@
     /// </summary>
     public static class FrameStats
     {
-        public static void AddHoveredId(Guid id)
-        {
-            Current.HoveredIds.Add(id);
-        }
-
-        public static void AddPinnedId(Guid id)
-        {
-            Current.RenderedIds.Add(id);
-        }
-
         public static void CompleteFrame()
         {
             (Current, Last) = (Last, Current);
@@ -24,8 +14,6 @@
             
         public class Stats
         {
-            public readonly HashSet<Guid> HoveredIds = new();
-            public readonly HashSet<Guid> RenderedIds = new();
             public bool HasKeyframesBeforeCurrentTime;
             public bool HasKeyframesAfterCurrentTime;
             public bool HasAnimatedParameters => HasKeyframesBeforeCurrentTime || HasKeyframesAfterCurrentTime;
@@ -41,8 +29,6 @@
             
             public void Clear()
             {
-                HoveredIds.Clear();
-                RenderedIds.Clear();
                 HasKeyframesBeforeCurrentTime = false;
                 HasKeyframesAfterCurrentTime = false;
                 IsItemContextMenuOpen = false;

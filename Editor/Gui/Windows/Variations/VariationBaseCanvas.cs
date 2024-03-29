@@ -184,13 +184,13 @@ namespace T3.Editor.Gui.Windows.Variations
 
             if (IsBlendingActive)
             {
-                foreach (var s in Selection.SelectedElements)
+                foreach (var s in CanvasElementSelection.SelectedElements)
                 {
                     _blendPoints.Add(GetNodeCenterOnScreen(s));
                     _blendVariations.Add(s as Variation);
                 }
 
-                if (Selection.SelectedElements.Count == 1)
+                if (CanvasElementSelection.SelectedElements.Count == 1)
                 {
                     var posOnScreen = TransformPosition(_blendVariations[0].PosOnCanvas);
                     var sizeOnScreen = TransformDirection(_blendVariations[0].Size);
@@ -198,7 +198,7 @@ namespace T3.Editor.Gui.Windows.Variations
 
                     _blendWeights.Add(a);
                 }
-                else if (Selection.SelectedElements.Count == 2)
+                else if (CanvasElementSelection.SelectedElements.Count == 2)
                 {
                     if (_blendPoints[0] == _blendPoints[1])
                     {
@@ -216,7 +216,7 @@ namespace T3.Editor.Gui.Windows.Variations
                         _blendWeights.Add(a);
                     }
                 }
-                else if (Selection.SelectedElements.Count == 3)
+                else if (CanvasElementSelection.SelectedElements.Count == 3)
                 {
                     Barycentric(mousePos, _blendPoints[0], _blendPoints[1], _blendPoints[2], out var u, out var v, out var w);
                     _blendWeights.Add(u);
@@ -332,8 +332,8 @@ namespace T3.Editor.Gui.Windows.Variations
             {
                 CustomComponents.DrawContextMenuForScrollCanvas(() =>
                                                                 {
-                                                                    var oneOrMoreSelected = Selection.SelectedElements.Count > 0;
-                                                                    var oneSelected = Selection.SelectedElements.Count == 1;
+                                                                    var oneOrMoreSelected = CanvasElementSelection.SelectedElements.Count > 0;
+                                                                    var oneSelected = CanvasElementSelection.SelectedElements.Count == 1;
 
                                                                     if (ImGui.MenuItem("Delete selected",
                                                                                        "Del", // We should use the correct assigned short cut, but "Del or Backspace" is too long for layout
@@ -348,7 +348,7 @@ namespace T3.Editor.Gui.Windows.Variations
                                                                                        false,
                                                                                        oneSelected))
                                                                     {
-                                                                        VariationThumbnail.VariationForRenaming = Selection.SelectedElements[0] as Variation;
+                                                                        VariationThumbnail.VariationForRenaming = CanvasElementSelection.SelectedElements[0] as Variation;
                                                                     }
 
                                                                     if (ImGui.MenuItem("Update thumbnails",
@@ -420,7 +420,7 @@ namespace T3.Editor.Gui.Windows.Variations
             {
                 case SelectionFence.States.PressedButNotMoved:
                     if (selectMode == SelectionFence.SelectModes.Replace)
-                        Selection.Clear();
+                        CanvasElementSelection.Clear();
                     break;
 
                 case SelectionFence.States.Updated:
@@ -428,7 +428,7 @@ namespace T3.Editor.Gui.Windows.Variations
                     break;
 
                 case SelectionFence.States.CompletedAsClick:
-                    Selection.Clear();
+                    CanvasElementSelection.Clear();
                     break;
             }
         }
@@ -441,20 +441,20 @@ namespace T3.Editor.Gui.Windows.Variations
                                     where rect.Overlaps(boundsInCanvas)
                                     select child).ToList();
 
-            Selection.Clear();
+            CanvasElementSelection.Clear();
             foreach (var element in elementsToSelect)
             {
-                Selection.AddSelection(element);
+                CanvasElementSelection.AddSelection(element);
             }
         }
 
         private void DeleteSelectedElements()
         {
-            if (Selection.SelectedElements.Count <= 0)
+            if (CanvasElementSelection.SelectedElements.Count <= 0)
                 return;
 
             var list = new List<Variation>();
-            foreach (var e in Selection.SelectedElements)
+            foreach (var e in CanvasElementSelection.SelectedElements)
             {
                 if (e is Variation v)
                 {
@@ -547,7 +547,7 @@ namespace T3.Editor.Gui.Windows.Variations
         public void RefreshView()
         {
             TriggerThumbnailUpdate();
-            Selection.Clear();
+            CanvasElementSelection.Clear();
             ResetView();
         }
 
@@ -669,7 +669,7 @@ namespace T3.Editor.Gui.Windows.Variations
         private bool _allThumbnailsRendered;
         private readonly ImageOutputCanvas _imageCanvas = new();
         private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
-        internal readonly CanvasElementSelection Selection = new();
+        internal readonly CanvasElementSelection CanvasElementSelection = new();
         private Instance _currentRenderInstance;
         private readonly SelectionFence _selectionFence = new();
     }

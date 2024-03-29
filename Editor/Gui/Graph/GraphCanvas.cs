@@ -49,6 +49,11 @@ namespace T3.Editor.Gui.Graph
             
 
             window.WindowDestroyed += (_, _) => Destroyed = true;
+            window.FocusLost += (_, _) =>
+                                {
+                                    NodeSelection.Clear();
+                                    NodeSelection.HoveredIds.Clear();
+                                };
         }
 
         public void SetCompositionToChildInstance(Instance instance) => _window.TrySetCompositionOpToChild(instance.SymbolChildId);
@@ -1188,15 +1193,14 @@ namespace T3.Editor.Gui.Graph
         private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new();
         private readonly RenameSymbolDialog _renameSymbolDialog = new();
         public readonly EditNodeOutputDialog EditNodeOutputDialog = new();
-        public static readonly EditCommentDialog EditCommentDialog = new();
-        public static readonly LibWarningDialog LibWarningDialog = new();
+        public readonly EditCommentDialog EditCommentDialog = new();
+        public readonly LibWarningDialog LibWarningDialog = new();
 
         private string _symbolNameForDialogEdits = "";
         private string _symbolDescriptionForDialog = "";
         private string _nameSpaceForDialogEdits = "";
         private readonly GraphWindow _window;
-        public GraphWindow Window => _window;
-        private static Vector2 _dampedScrollVelocity = Vector2.Zero;
+        private Vector2 _dampedScrollVelocity = Vector2.Zero;
         internal readonly NavigationHistory NavigationHistory;
         internal readonly Structure Structure;
         internal readonly NodeNavigation NodeNavigation;

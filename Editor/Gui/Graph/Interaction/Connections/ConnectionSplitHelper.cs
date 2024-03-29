@@ -120,8 +120,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                             ImGui.TextColored(UiColors.TextMuted, connectionTarget);
                             ImGui.PopFont();
 
-                        FrameStats.AddHoveredId(targetOp.Id);
-                        FrameStats.AddHoveredId(sourceOp.Id);
+                        var nodeSelection = window.GraphCanvas.NodeSelection;
+                        nodeSelection.HoveredIds.Add(targetOp.Id);
+                        nodeSelection.HoveredIds.Add(sourceOp.Id);
                     }
                 }
                 ImGui.EndTooltip();

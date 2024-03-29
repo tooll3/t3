@@ -286,8 +286,8 @@ namespace T3.Editor.Gui.Windows.Output
                     _pickedCameraId = Guid.Empty;
                 }
                 CustomComponents.TooltipForLastItem("Shows the first scene camera. For manipulation select the camera operator in graph or in the list below.");
-                if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance)
-                    FrameStats.AddHoveredId(camInstance.SymbolChildId);
+                if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance && NodeSelection != null)
+                    NodeSelection.HoveredIds.Add(camInstance.SymbolChildId);
 
                 if (ImGui.MenuItem("Viewer",
                                    "", 
@@ -308,8 +308,8 @@ namespace T3.Editor.Gui.Windows.Output
                     _controlMode = ControlModes.SceneViewerFollowing;
                     _pickedCameraId = Guid.Empty;
                 }
-                if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance2)
-                    FrameStats.AddHoveredId(camInstance2.SymbolChildId);
+                if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance2 && NodeSelection != null)
+                    NodeSelection.HoveredIds.Add(camInstance2.SymbolChildId);
                 
                 CustomComponents.TooltipForLastItem("During playback the scene viewer is following the scene camera. Otherwise it can be independently manipulated without affecting the scene camera.");
 
@@ -337,9 +337,9 @@ namespace T3.Editor.Gui.Windows.Output
                             T3Ui.SelectAndCenterChildIdInView(symbolChild.Id);
                         }
 
-                        if (ImGui.IsItemHovered())
+                        if (ImGui.IsItemHovered() && NodeSelection != null)
                         {
-                            FrameStats.AddHoveredId(cameraInstance.SymbolChildId);
+                            NodeSelection.HoveredIds.Add(cameraInstance.SymbolChildId);
                         }
                     }
                     ImGui.PopID();

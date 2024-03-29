@@ -21,14 +21,15 @@ namespace T3.Editor.Gui.Graph.Interaction
     /// </summary>
     internal class NodeSelection : ISelection
     {
-        public static NodeSelection FocusedSelection { get; } = null;
-
         public NodeSelection(NavigationHistory history, Structure structure)
         {
             _history = history;
             _structure = structure;
         }
-        
+
+        public readonly HashSet<Guid> HoveredIds = new();
+        public readonly HashSet<Guid> PinnedIds = new();
+
         public void Clear()
         {
             TransformGizmoHandling.ClearSelectedTransformables();

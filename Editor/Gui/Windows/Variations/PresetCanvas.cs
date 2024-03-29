@@ -45,7 +45,7 @@ namespace T3.Editor.Gui.Windows.Variations
                 VariationHandling.ActivePoolForPresets.SaveVariationsToFile();
             }
 
-            Selection.SetSelection(newVariation);
+            CanvasElementSelection.SetSelection(newVariation);
             ResetView();
             TriggerThumbnailUpdate();
             return newVariation;

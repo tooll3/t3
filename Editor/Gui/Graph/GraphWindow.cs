@@ -33,13 +33,15 @@ namespace T3.Editor.Gui.Graph
             {
                 if (_focused == value)
                     return;
-                
-                _focused?.GraphCanvas.NodeSelection.Clear();
+
+                _focused?.FocusLost?.Invoke(_focused, _focused);
                 _focused = value;
                 if(value != null)
                     Log.Debug($"Focused! {value.Config.Title} + {value.InstanceNumber}");
             }
         }
+        
+        internal event EventHandler<GraphWindow>? FocusLost;
 
         private Composition _composition;
         internal Instance CompositionOp => _composition.Instance;
@@ -48,11 +50,11 @@ namespace T3.Editor.Gui.Graph
         public readonly EditorSymbolPackage Package;
         public readonly int InstanceNumber;
         private static int _instanceCounter;
+        private const int NoInstanceNumber = -1;
         
-        public GraphWindow(EditorSymbolPackage package, Instance startingComposition, int instanceNumber = -1)
+        private GraphWindow(EditorSymbolPackage package, int instanceNumber)
         {
-            InstanceNumber = instanceNumber == -1 ? ++_instanceCounter : instanceNumber;
-
+            InstanceNumber = instanceNumber;
             WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
             Package = package;
             
@@ -60,11 +62,7 @@ namespace T3.Editor.Gui.Graph
                 throw new Exception("Could not get root instance from package");
             
             _rootInstance = actualRoot!;
-            
-            Config.Title = LayoutHandling.GraphPrefix + InstanceNumber;
-            Config.Visible = true;
             AllowMultipleInstances = true;
-            GraphWindowInstances.Add(this);
             
             Structure = new Structure(() => RootInstance.Instance);
             
@@ -75,30 +73,12 @@ namespace T3.Editor.Gui.Graph
             GraphCanvas = new GraphCanvas(this, nodeSelection, navigationHistory);
             SymbolBrowser = new SymbolBrowser(this, GraphCanvas);
             TimeLineCanvas = new TimeLineCanvas(GraphCanvas);
-
-            IReadOnlyList<Guid> startPath = [RootInstance.SymbolChildId];
-            if (actualRoot == startingComposition)
-            {
-                // Legacy work-around
-                var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
-                if (opId != Guid.Empty && opId != RootInstance.SymbolChildId)
-                {
-                    if (RootInstance.Instance.TryGetChildInstance(opId, true, out _, out var path))
-                    {
-                        startPath = path!;
-                    }
-                }
-            }
             
-            if (!TrySetCompositionOp(startPath, ICanvas.Transition.JumpIn))
-            {
-                throw new Exception("Failed to open operator");
-            }
         }
 
         public static bool CanOpenAnotherWindow => true;
 
-        public static readonly List<GraphWindow> GraphWindowInstances = new();
+        internal static readonly List<GraphWindow> GraphWindowInstances = new();
 
         public override IReadOnlyList<Window> GetInstances() => GraphWindowInstances;
 
@@ -540,18 +520,59 @@ namespace T3.Editor.Gui.Graph
         private static readonly EditSymbolDescriptionDialog EditDescriptionDialog = new();
         private static GraphWindow? _focused;
 
-        public static bool TryOpenPackage(EditorSymbolPackage package, bool replaceFocused, Instance? startingComposition = null)
+        public static bool TryOpenPackage(EditorSymbolPackage package, bool replaceFocused, Instance? startingComposition = null, WindowConfig? config = null, int instanceNumber = NoInstanceNumber)
         {
             if (!package.TryGetRootInstance(out var root))
             {
+                LogFailure();
                 return false;
             }
             
             if(replaceFocused)
                 Focused?.Close();
+            
+            instanceNumber = instanceNumber == NoInstanceNumber ? ++_instanceCounter : instanceNumber;
+            var newWindow = new GraphWindow(package, instanceNumber);
 
-            Focused = new GraphWindow(package, startingComposition ?? root!);
+            if (config != null)
+            {
+                newWindow.Config = config;
+            }
+            else
+            {
+                newWindow.Config.Title = LayoutHandling.GraphPrefix + instanceNumber;
+                newWindow.Config.Visible = true;
+            }
+
+
+            IReadOnlyList<Guid> rootPath = [root!.SymbolChildId];
+            var startPath = rootPath;
+            if (root == startingComposition)
+            {
+                // Legacy work-around
+                var opId = UserSettings.GetLastOpenOpForWindow(config.Title);
+                if (opId != Guid.Empty && opId != root.SymbolChildId)
+                {
+                    if (root.TryGetChildInstance(opId, true, out _, out var path))
+                    {
+                        startPath = path;
+                    }
+                }
+            }
+
+            const ICanvas.Transition transition = ICanvas.Transition.JumpIn;
+            if (!newWindow.TrySetCompositionOp(startPath, transition) && !newWindow.TrySetCompositionOp(rootPath, transition))
+            {
+                LogFailure();
+                newWindow.Close();
+                return false;
+            }
+            
+            GraphWindowInstances.Add(newWindow);
+            newWindow.TakeFocus();
             return true;
+            
+            void LogFailure() => Log.Error($"Failed to open operator graph for {package.DisplayName}");
         }
 
         public void TakeFocus()

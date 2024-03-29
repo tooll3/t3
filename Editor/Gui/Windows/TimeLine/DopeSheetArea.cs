@@ -97,7 +97,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var layerHovered = ImGui.IsWindowHovered() && layerArea.Contains(mousePos);
 
             var isCurrentSelected = TimeLineCanvas.NodeSelection.GetSelectedInstanceWithoutComposition()?.SymbolChildId == parameter.Input.Parent.SymbolChildId;
-            if(FrameStats.Last.HoveredIds.Contains(parameter.Input.Parent.SymbolChildId) || isCurrentSelected || layerHovered )
+            if(TimeLineCanvas.HoveredIds.Contains(parameter.Input.Parent.SymbolChildId) || isCurrentSelected || layerHovered )
             {
                 drawList.AddRectFilled(new Vector2(min.X, min.Y),
                                         new Vector2(max.X, max.Y), UiColors.ForegroundFull.Fade(0.04f));
@@ -109,7 +109,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 ImGui.PushFont(Fonts.FontSmall);
                 ImGui.TextUnformatted(parameter.Input.Input.Name);
-                FrameStats.Current.HoveredIds.Add(parameter.Input.Parent.SymbolChildId);
+                TimeLineCanvas.HoveredIds.Add(parameter.Input.Parent.SymbolChildId);
 
                 foreach (var curve in parameter.Curves)
                 {

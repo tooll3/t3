@@ -308,7 +308,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             if (ImGui.IsItemHovered())
             {
-                FrameStats.AddHoveredId(symbolChildUi.Id);
+                _graphCanvas.NodeSelection.HoveredIds.Add(symbolChildUi.Id);
             }
 
             var notClickingOrDragging = !ImGui.IsItemActive() && !ImGui.IsMouseDragging(ImGuiMouseButton.Left);
