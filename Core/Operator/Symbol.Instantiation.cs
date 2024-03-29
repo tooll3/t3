@@ -34,9 +34,10 @@ public sealed partial class Symbol
         return newChild;
     }
 
-    public bool TryCreateParentlessInstance(Guid childId, out Instance? newInstance)
+    public bool TryCreateParentlessInstance(out Instance? newInstance)
     {
-        var newSymbolChild = new Child(this, childId, null, null, false);
+        var newSymbolChildId = Child.CreateIdDeterministically(this, null);
+        var newSymbolChild = new Child(this, newSymbolChildId, null, null, false);
         return TryCreateNewInstance(newSymbolChild, null, out newInstance);
     }
 

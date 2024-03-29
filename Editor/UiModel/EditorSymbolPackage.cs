@@ -289,8 +289,7 @@ internal class EditorSymbolPackage : SymbolPackage
         Log.Debug($"{DisplayName}: Found home symbol");
 
         var symbol = rootSymboLUi.Symbol;
-        var newSymbolChildId = Symbol.Child.CreateChildIdDeterministically(symbol, null);
-        if (!symbol.TryCreateParentlessInstance(newSymbolChildId, out rootInstance))
+        if (!symbol.TryCreateParentlessInstance(out rootInstance))
         {
             Log.Error($"Failed to create home instance for {AssemblyInformation.Name}'s symbol {symbol.Name} with id {symbol.Id}");
             return false;
