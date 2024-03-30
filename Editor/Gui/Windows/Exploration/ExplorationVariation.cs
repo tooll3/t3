@@ -211,7 +211,7 @@ namespace T3.Editor.Gui.Windows.Exploration
             return new MacroCommand("Set Preset Values", commands);
         }
 
-        public class VariationParameter
+        public sealed class VariationParameter
         {
             public IReadOnlyList<Guid> InstanceIdPath = Array.Empty<Guid>();
             public SymbolUi.Child TargetChild;

@@ -19,9 +19,8 @@ namespace T3.Core.Operator
     public sealed partial class Symbol : IDisposable
     {
         #region Saved Properties
-        public Guid Id { get; }
+        public readonly Guid Id;
         public IReadOnlyDictionary<Guid, Child> Children => _children;
-        public IReadOnlyDictionary<Guid, List<Instance>> InstancesOfChildren => _instancesOfChildren;
         public IReadOnlyList<Instance> InstancesOfSelf => _instancesOfSelf;
         public readonly List<Connection> Connections = [];
 

@@ -289,7 +289,7 @@ public static class T3Ui
                 
                 if(ImGui.BeginMenu("Load Project", !IsCurrentlySaving))
                 {
-                    foreach (var package in EditorSymbolPackage.AllPackages)
+                    foreach (var package in SymbolPackage.AllPackages.Cast<EditorSymbolPackage>())
                     {
                         if (!package.HasHome)
                             continue;

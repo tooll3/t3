@@ -41,7 +41,7 @@ internal sealed partial class EditableSymbolProject
 
         var modifiedSymbolUis = SymbolUiDict
                                .Select(x => x.Value)
-                               .Where(symbolUi => symbolUi.HasBeenModified)
+                               .Where(symbolUi => symbolUi.NeedsSaving)
                                .ToArray();
 
         if (modifiedSymbolUis.Length != 0)
@@ -90,10 +90,8 @@ internal sealed partial class EditableSymbolProject
     private void OnSymbolRemoved(Guid id)
     {
         Symbols.Remove(id, out var symbol);
-        SymbolRegistry.EntriesEditable.Remove(id, out var publicSymbol);
         
         Debug.Assert(symbol != null);
-        Debug.Assert(symbol == publicSymbol);
         
         SymbolUiDict.Remove(id, out _);
 

@@ -17,7 +17,7 @@ internal class EditorSymbolPackage : SymbolPackage
 {
     public EditorSymbolPackage(AssemblyInformation assembly) : base(assembly)
     {
-        AllPackagesRw.Add(this);
+        Log.Debug($"Added package {assembly.Name}");
         SymbolAdded += OnSymbolAdded;
     }
 
@@ -162,7 +162,6 @@ internal class EditorSymbolPackage : SymbolPackage
         base.Dispose();
         ClearSymbolUis();
         ShaderLinter.RemovePackage(this);
-        AllPackagesRw.Remove(this);
     }
 
     private void ClearSymbolUis()
@@ -298,9 +297,6 @@ internal class EditorSymbolPackage : SymbolPackage
     }
 
     internal bool HasHome => AssemblyInformation.HasHome;
-
-    private static readonly List<EditorSymbolPackage> AllPackagesRw = new();
-    public static readonly IReadOnlyList<EditorSymbolPackage> AllPackages = AllPackagesRw;
     
     
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUiDict = new();
@@ -319,13 +315,14 @@ internal class EditorSymbolPackage : SymbolPackage
     public const string SourceCodeSubFolder = "SourceCode";
 
     public static IEnumerable<Symbol> AllSymbols => AllPackages
-                                                    .Select(x => x.SymbolUiDict)
-                                                    .SelectMany(x => x.Values)
-                                                    .Select(x => x.Symbol);
-    
+                                                   .Cast<EditorSymbolPackage>()
+                                                   .Select(x => x.Symbols)
+                                                   .SelectMany(x => x.Values);
+
     public static IEnumerable<SymbolUi> AllSymbolUis => AllPackages
-                                                        .Select(x => x.SymbolUiDict)
-                                                        .SelectMany(x => x.Values);
+                                                       .Cast<EditorSymbolPackage>()
+                                                       .Select(x => x.SymbolUiDict)
+                                                       .SelectMany(x => x.Values);
 
     public void Reload(SymbolUi symbolUi)
     {
@@ -353,12 +350,12 @@ internal class EditorSymbolPackage : SymbolPackage
         var symbolJson = JsonFileResult<Symbol>.ReadAndCreate(symbolPath);
         var result = SymbolJson.ReadSymbolRoot(symbol.Id, symbolJson.JToken, symbol.InstanceType, this);
         var newSymbol = result.Symbol;
-        SymbolRegistry.EntriesEditable[id] = newSymbol;
+        Symbols[id] = newSymbol;
 
         if (!TryReadAndApplyChildren(result))
         {
             Log.Error($"Failed to reload symbol for symbol {id}");
-            SymbolRegistry.EntriesEditable[id] = symbol;
+            Symbols[id] = symbol;
             return;
         }
 
@@ -369,25 +366,19 @@ internal class EditorSymbolPackage : SymbolPackage
 
         if (!SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, newSymbol, out var newSymbolUi))
         {
+            Symbols[id] = symbol;
             throw new Exception($"Failed to reload symbol ui for symbol {id}");
         }
-
 
         newSymbolUi.UpdateConsistencyWithSymbol();
         
         
         // override registry values
-        Symbols[id] = newSymbol;
         SymbolUiDict[id] = newSymbolUi;
     }
 
     public bool TryGetSymbolUi(Guid rSymbolId, [NotNullWhen(true)] out SymbolUi? symbolUi)
     {
         return SymbolUiDict.TryGetValue(rSymbolId, out symbolUi);
-    }
-
-    public bool TryGetSymbol(Guid symbolId, [NotNullWhen(true)] out Symbol? symbol)
-    {
-        return Symbols.TryGetValue(symbolId, out symbol);
     }
 }

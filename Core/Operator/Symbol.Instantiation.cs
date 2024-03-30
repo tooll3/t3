@@ -56,7 +56,7 @@ public sealed partial class Symbol
         {
             Instance.AddChildTo(parentInstance, newInstance);
             var parentSymbol = parentInstance.Symbol;
-            var instanceList = parentSymbol.InstancesOfChildren[symbolChild.Id];
+            var instanceList = parentSymbol._instancesOfChildren[symbolChild.Id];
             instanceList.Add(newInstance);
         }
 

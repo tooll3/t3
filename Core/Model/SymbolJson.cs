@@ -174,8 +174,7 @@ namespace T3.Core.Model
         private static bool TryReadSymbolChild(in JsonChildResult childJsonResult, Symbol parent)
         {
             // If the used symbol hasn't been loaded so far ensure it's loaded now
-            var haveChildSymbolDefinition = SymbolRegistry.Entries.TryGetValue(childJsonResult.SymbolId, out var symbol);
-            if (!haveChildSymbolDefinition)
+            if (!SymbolRegistry.TryGetSymbol(childJsonResult.SymbolId, out var symbol))
             {
                 Log.Warning($"Error loading symbol child {childJsonResult.SymbolId}");
                 return false;
