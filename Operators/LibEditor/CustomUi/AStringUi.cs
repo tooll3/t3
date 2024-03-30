@@ -24,13 +24,13 @@ namespace libEditor.CustomUi
         ///
         /// Using an invisibleButton interfered with the drag interaction of the node.
         /// </remarks>
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is String stringInstance))
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
 
             if (stringInstance.InputString.IsConnected)
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
 
             var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList, canvasScale);
             var usableArea = screenRect;
@@ -89,7 +89,7 @@ namespace libEditor.CustomUi
 
             ImGui.PopFont();
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventOpenSubGraph | SymbolChildUi.CustomUiResult.PreventTooltip | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
+            return SymbolUi.Child.CustomUiResult.Rendered | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph | SymbolUi.Child.CustomUiResult.PreventTooltip | SymbolUi.Child.CustomUiResult.PreventOpenParameterPopUp;
         }
 
         private static Guid _focusedInstanceId;

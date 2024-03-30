@@ -116,7 +116,7 @@ internal class Structure
 
     public static bool TryGetUiAndInstanceInComposition(Guid id, 
                                                  Instance compositionOp, 
-                                                 [NotNullWhen(true)] out SymbolChildUi? childUi, 
+                                                 [NotNullWhen(true)] out SymbolUi.Child? childUi, 
                                                  [NotNullWhen(true)] out Instance? instance)
     {
         if (!compositionOp.Children.TryGetValue(id, out instance))
@@ -126,7 +126,7 @@ internal class Structure
             return false;
         }
 
-        childUi = compositionOp.GetSymbolChildUi();
+        childUi = compositionOp.GetChildUi();
         if (childUi == null)
         {
             Log.Assert($"Can't select child with id {id} in composition {compositionOp}");

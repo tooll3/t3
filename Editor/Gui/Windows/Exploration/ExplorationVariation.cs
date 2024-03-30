@@ -199,7 +199,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                 try
                 {
                     var instance = structure.GetInstanceFromIdPath(param.InstanceIdPath);
-                    var newCommand = new ChangeInputValueCommand(instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input, value);
+                    var newCommand = new ChangeInputValueCommand(instance.Parent.Symbol, param.TargetChild.Id, param.Input, value);
                     commands.Add(newCommand);
                 }
                 catch (Exception)
@@ -214,7 +214,7 @@ namespace T3.Editor.Gui.Windows.Exploration
         public class VariationParameter
         {
             public IReadOnlyList<Guid> InstanceIdPath = Array.Empty<Guid>();
-            public SymbolChildUi SymbolChildUi;
+            public SymbolUi.Child TargetChild;
             public IInputSlot InputSlot { get; set; }
             public Symbol.Child.Input Input;
             public Type Type;

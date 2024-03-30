@@ -13,11 +13,11 @@ namespace libEditor.CustomUi
 {
     public static class AnimVec2Ui
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is AnimVec2 animVec2)
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
             if (WidgetElements.DrawRateLabelWithTitle(animVec2.RateFactor, screenRect, drawList,  "Anim2 " + (AnimMath.Shapes)animVec2.Shape.TypedInputValue.Value, canvasScale))
@@ -87,10 +87,10 @@ namespace libEditor.CustomUi
             DrawCurve(drawList, graphRect, animVec2, highlightEditable);
             
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered 
-                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
-                   | SymbolChildUi.CustomUiResult.PreventInputLabels
-                   | SymbolChildUi.CustomUiResult.PreventTooltip;
+            return SymbolUi.Child.CustomUiResult.Rendered 
+                   | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolUi.Child.CustomUiResult.PreventInputLabels
+                   | SymbolUi.Child.CustomUiResult.PreventTooltip;
         }
 
         private static void DrawCurve(ImDrawListPtr drawList, ImRect graphRect, AnimVec2 animValue, bool highlightEditable)

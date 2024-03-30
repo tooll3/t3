@@ -10,7 +10,7 @@ namespace libEditor.CustomUi
 {
     public static class DataListUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
         {
             if (!(instance is DataList dataList)
                 || !ImGui.IsRectVisible(selectableScreenRect.Min, selectableScreenRect.Max))
@@ -42,10 +42,10 @@ namespace libEditor.CustomUi
             return DefaultResult;
         }
         
-        private const SymbolChildUi.CustomUiResult  DefaultResult =             SymbolChildUi.CustomUiResult.Rendered
-                                                                        | SymbolChildUi.CustomUiResult.PreventTooltip
-                                                                        | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
-                                                                        | SymbolChildUi.CustomUiResult.PreventInputLabels
-                                                                        | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
+        private const SymbolUi.Child.CustomUiResult  DefaultResult =             SymbolUi.Child.CustomUiResult.Rendered
+                                                                        | SymbolUi.Child.CustomUiResult.PreventTooltip
+                                                                        | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph
+                                                                        | SymbolUi.Child.CustomUiResult.PreventInputLabels
+                                                                        | SymbolUi.Child.CustomUiResult.PreventOpenParameterPopUp;
     }
 }

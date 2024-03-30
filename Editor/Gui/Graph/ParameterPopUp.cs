@@ -13,7 +13,7 @@ namespace T3.Editor.Gui.Graph;
 
 internal static class ParameterPopUp
 {
-    public static void HandleOpenParameterPopUp(SymbolChildUi childUi, Instance instance, SymbolChildUi.CustomUiResult customUiResult, ImRect nodeScreenRect)
+    public static void HandleOpenParameterPopUp(SymbolUi.Child childUi, Instance instance, SymbolUi.Child.CustomUiResult customUiResult, ImRect nodeScreenRect)
     {
         var activatedWithLeftMouse = ImGui.IsItemHovered()
                                      && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
@@ -29,7 +29,7 @@ internal static class ParameterPopUp
                                   && !ParameterWindow.IsAnyInstanceVisible();
 
         if ((activatedWithLeftMouse || activatedWithMiddleMouse || activationRequested)
-            && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0
+            && (customUiResult & SymbolUi.Child.CustomUiResult.PreventOpenParameterPopUp) == 0
            )
         {
             Open(instance);

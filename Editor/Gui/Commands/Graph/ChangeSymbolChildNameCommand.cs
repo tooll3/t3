@@ -9,7 +9,7 @@ namespace T3.Editor.Gui.Commands.Graph
         public string Name => "Change Symbol Name";
         public bool IsUndoable => true;
 
-        public ChangeSymbolChildNameCommand(SymbolChildUi symbolChildUi, Symbol parentSymbol)
+        public ChangeSymbolChildNameCommand(SymbolUi.Child symbolChildUi, Symbol parentSymbol)
         {
             _symbolChildId = symbolChildUi.SymbolChild.Id;
             _parentSymbolId = parentSymbol.Id;

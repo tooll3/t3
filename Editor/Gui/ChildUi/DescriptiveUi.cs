@@ -12,10 +12,10 @@ namespace T3.Editor.Gui.ChildUi
     public static class DescriptiveUi
     {
         internal static readonly DrawChildUiDelegate DrawChildUiDelegate = DrawChildUi;
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect area, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect area, Vector2 canvasScale)
         {
             if(instance is not IDescriptiveFilename descriptiveGraphNode)
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
             
             drawList.PushClipRect(area.Min, area.Max, true);
             
@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.ChildUi
             WidgetElements.DrawPrimaryValue(drawList, area, filePath, canvasScale);
             
             drawList.PopClipRect();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolUi.Child.CustomUiResult.Rendered | SymbolUi.Child.CustomUiResult.PreventInputLabels;
         }
     }
 }

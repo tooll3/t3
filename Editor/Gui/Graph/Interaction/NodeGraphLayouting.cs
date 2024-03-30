@@ -37,7 +37,7 @@ internal class NodeGraphLayouting
             var minX = float.MaxValue;
             foreach (var (secondPassOp, depthForOp) in nodesForSecondPass)
             {
-                if (secondPassOp is not SymbolChildUi childUi)
+                if (secondPassOp is not SymbolUi.Child childUi)
                     continue;
 
                 childUi.PosOnCanvas += new Vector2(0, +40);
@@ -69,7 +69,7 @@ internal class NodeGraphLayouting
         UndoRedoStack.Add(command);
     }
 
-    private float RecursivelyAlignChildren(SymbolChildUi childUi,
+    private float RecursivelyAlignChildren(SymbolUi.Child childUi,
                                                   HashSet<Guid> connectedChildIds,
                                                   ref List<ICommand> moveCommands,
                                                   ref Dictionary<ISelectableCanvasObject, int> nodesForSecondPass,
@@ -100,7 +100,7 @@ internal class NodeGraphLayouting
         // Sort the incoming operators into the correct input order and
         // ignore operators that can't be auto-layouted because their outputs
         // have connection to multiple operators
-        var sortedInputOps = new List<SymbolChildUi>();
+        var sortedInputOps = new List<SymbolUi.Child>();
         foreach (var inputDef in childUi.SymbolChild.Symbol.InputDefinitions)
         {
             var matchingConnections = connections.Where(c => c.TargetSlotId == inputDef.Id).ToArray();
@@ -167,12 +167,12 @@ internal class NodeGraphLayouting
         return requiredHeight + SelectableNodeMovement.SnapPadding.Y;
     }
 
-    private static bool HasThumbnail(SymbolChildUi childUi)
+    private static bool HasThumbnail(SymbolUi.Child childUi)
     {
         return childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0 && childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
     }
 
-    public static Vector2 FindPositionForNodeConnectedToInput(Symbol compositionSymbol, SymbolChildUi connectionTargetUi)
+    public static Vector2 FindPositionForNodeConnectedToInput(Symbol compositionSymbol, SymbolUi.Child connectionTargetUi)
     {
         var idealPos = connectionTargetUi.PosOnCanvas 
                        + new Vector2(-SelectableNodeMovement.PaddedDefaultOpSize.X, 0);

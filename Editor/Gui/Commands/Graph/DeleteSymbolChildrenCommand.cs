@@ -16,7 +16,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private readonly string _creationStack;
         
-        public DeleteSymbolChildrenCommand(SymbolUi compositionSymbolUi, List<SymbolChildUi> uiChildrenToRemove)
+        public DeleteSymbolChildrenCommand(SymbolUi compositionSymbolUi, List<SymbolUi.Child> uiChildrenToRemove)
         {
             if(compositionSymbolUi == null)
                 throw new ArgumentNullException(nameof(compositionSymbolUi));

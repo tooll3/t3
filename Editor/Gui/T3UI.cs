@@ -508,13 +508,13 @@ public static class T3Ui
 
         var symbolUi = compositionOp.GetSymbolUi();
         
-        if(!symbolUi.ChildUis.TryGetValue(symbolChildId, out var sourceSymbolChildUi))
+        if(!symbolUi.ChildUis.TryGetValue(symbolChildId, out var sourceChildUi))
             return;
         
         if(!compositionOp.Children.TryGetValue(symbolChildId, out var selectionTargetInstance))
             return;
         
-        primaryGraphWindow.GraphCanvas.NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
+        primaryGraphWindow.GraphCanvas.NodeSelection.SetSelectionToChildUi(sourceChildUi, selectionTargetInstance);
         FitViewToSelectionHandling.FitViewToSelection();
     }
 

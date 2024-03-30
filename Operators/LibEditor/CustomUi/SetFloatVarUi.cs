@@ -11,10 +11,10 @@ namespace libEditor.CustomUi
 {
     public static class SetFloatVarUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance1, ImDrawListPtr drawList, ImRect area, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance1, ImDrawListPtr drawList, ImRect area, Vector2 canvasScale)
         {
             if (!(instance1 is SetFloatVar instance))
-                return SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
+                return SymbolUi.Child.CustomUiResult.PreventOpenSubGraph;
 
             var symbolChild = instance1.SymbolChild;
             drawList.PushClipRect(area.Min, area.Max, true);
@@ -33,7 +33,7 @@ namespace libEditor.CustomUi
             WidgetElements.DrawSmallValue(drawList, area, $"{value:0.000}", canvasScale);
             
             drawList.PopClipRect();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
+            return SymbolUi.Child.CustomUiResult.Rendered | SymbolUi.Child.CustomUiResult.PreventInputLabels | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph;
         }
 
     }

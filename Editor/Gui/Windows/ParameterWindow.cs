@@ -74,7 +74,7 @@ internal class ParameterWindow : Window
             OperatorHelp.EditDescriptionDialog.Draw(symbolUi.Symbol);
             RenameInputDialog.Draw();
 
-            SymbolChildUi symbolChildUi = null;
+            SymbolUi.Child symbolChildUi = null;
             if (instance.Parent != null)
             {
                 var parentUi = instance.Parent.GetSymbolUi();
@@ -203,7 +203,7 @@ internal class ParameterWindow : Window
         var symbolUi = op.GetSymbolUi();
         _help.DrawHelpIcon(symbolUi);
 
-        var symbolChildUi = op.GetSymbolChildUi();
+        var symbolChildUi = op.GetChildUi();
         
         // SymbolChild Name
         if (symbolChildUi != null)
@@ -305,7 +305,7 @@ internal class ParameterWindow : Window
     /// Draw all parameters of the selected instance.
     /// The actual implementation is done in <see cref="InputValueUi{T}.DrawParameterEdit"/>  
     /// </summary>
-    public static void DrawParameters(GraphWindow window, Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
+    public static void DrawParameters(GraphWindow window, Instance instance, SymbolUi symbolUi, SymbolUi.Child symbolChildUi,
                                       SymbolUi compositionSymbolUi, bool hideNonEssentials)
     {
         var groupState = GroupState.None;

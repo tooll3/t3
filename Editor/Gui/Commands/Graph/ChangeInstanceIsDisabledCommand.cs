@@ -10,7 +10,7 @@ namespace T3.Editor.Gui.Commands.Graph
         public string Name => "Disable/Enable";
         public bool IsUndoable => true;
 
-        public ChangeInstanceIsDisabledCommand(SymbolChildUi symbolChildUi, bool setDisabledTo)
+        public ChangeInstanceIsDisabledCommand(SymbolUi.Child symbolChildUi, bool setDisabledTo)
         {
             _inputParentSymbolId = symbolChildUi.SymbolChild.Parent.Id;
             _childId = symbolChildUi.Id;

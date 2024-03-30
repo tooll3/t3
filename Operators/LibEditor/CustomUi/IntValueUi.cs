@@ -11,10 +11,10 @@ namespace libEditor.CustomUi
 {
     public static class IntValueUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
         {
             if (!(instance is IntValue intValueInstance))
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
 
             var symbolChild = instance.SymbolChild;
             ImGui.PushClipRect(selectableScreenRect.Min, selectableScreenRect.Max, true);
@@ -45,10 +45,10 @@ namespace libEditor.CustomUi
             ImGui.PopFont();
             
             ImGui.PopClipRect();
-            return SymbolChildUi.CustomUiResult.Rendered 
-                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
-                   | SymbolChildUi.CustomUiResult.PreventInputLabels
-                   | SymbolChildUi.CustomUiResult.PreventTooltip;
+            return SymbolUi.Child.CustomUiResult.Rendered 
+                   | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolUi.Child.CustomUiResult.PreventInputLabels
+                   | SymbolUi.Child.CustomUiResult.PreventTooltip;
         }
     }
 }

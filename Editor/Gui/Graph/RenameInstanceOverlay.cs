@@ -12,7 +12,7 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     internal static class RenameInstanceOverlay
     {
-        public static void OpenForSymbolChildUi(SymbolChildUi symbolChildUi)
+        public static void OpenForChildUi(SymbolUi.Child symbolChildUi)
         {
             _nextFocusedInstanceId = symbolChildUi.SymbolChild.Id;
         }
@@ -33,7 +33,7 @@ namespace T3.Editor.Gui.Graph
                     && (renameTriggered || ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                     && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName))
                 {
-                    var selectedInstances = window.GraphCanvas.NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
+                    var selectedInstances = window.GraphCanvas.NodeSelection.GetSelectedNodes<SymbolUi.Child>().ToList();
                     if (_nextFocusedInstanceId != Guid.Empty)
                     {
                         _focusedInstanceId = _nextFocusedInstanceId;

@@ -21,7 +21,7 @@ namespace T3.Editor.Gui.Graph
     internal static partial class PlayerExporter
     {
         public const string ExportFolderName = "T3Exports";
-        public static bool TryExportInstance(Instance composition, SymbolChildUi childUi, out string reason, out string exportDir)
+        public static bool TryExportInstance(Instance composition, SymbolUi.Child childUi, out string reason, out string exportDir)
         {
             T3Ui.Save(false);
 

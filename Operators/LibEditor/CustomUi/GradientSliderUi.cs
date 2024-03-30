@@ -18,11 +18,11 @@ namespace libEditor.CustomUi
         private static ChangeInputValueCommand _inputValueCommandInFlight;
         private static object _inputSlotForActiveCommand;
 
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
         {
             if (instance is not SampleGradient gradientInstance
                 || !ImGui.IsRectVisible(selectableScreenRect.Min, selectableScreenRect.Max))
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
 
             var dragWidth = WidgetElements.DrawDragIndicator(selectableScreenRect, drawList, canvasScale);
             var innerRect = selectableScreenRect;
@@ -84,11 +84,11 @@ namespace libEditor.CustomUi
             }
 
 
-            return SymbolChildUi.CustomUiResult.Rendered 
-                   | SymbolChildUi.CustomUiResult.PreventInputLabels 
-                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
-                   | SymbolChildUi.CustomUiResult.PreventTooltip 
-                   | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
+            return SymbolUi.Child.CustomUiResult.Rendered 
+                   | SymbolUi.Child.CustomUiResult.PreventInputLabels 
+                   | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolUi.Child.CustomUiResult.PreventTooltip 
+                   | SymbolUi.Child.CustomUiResult.PreventOpenParameterPopUp;
         }
     }
 }

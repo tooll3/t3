@@ -421,7 +421,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             public IEnumerable<Curve> Curves;
             public IInputSlot Input;
             public Instance Instance;
-            public SymbolChildUi ChildUi;
+            public SymbolUi.Child ChildUi;
         }
     }
 

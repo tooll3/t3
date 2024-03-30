@@ -120,13 +120,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         var newInstance = compositionOp.Children[newChildId];
                         var newTimeClip = newInstance.Outputs.OfType<ITimeClipProvider>().Single().TimeClip;
                         
-                        var newSymbolChildUi = compositionSymbolUi.ChildUis[newChildId];
-                        var renameCommand = new ChangeSymbolChildNameCommand(newSymbolChildUi, compositionSymbolUi.Symbol);
+                        var newSymbolUiChild = compositionSymbolUi.ChildUis[newChildId];
+                        var renameCommand = new ChangeSymbolChildNameCommand(newSymbolUiChild, compositionSymbolUi.Symbol);
                         renameCommand.NewName = originalName;
                         renameCommand.Do();
                         commands.Add(renameCommand);
                         
-                        newSymbolChildUi.SymbolChild.Name = originalName;
+                        newSymbolUiChild.SymbolChild.Name = originalName;
                             
                         newTimeClip.TimeRange = new TimeRange((float)_playback.TimeInBars, orgTimeRangeEnd);
                         newTimeClip.SourceRange.Start = newTimeClip.SourceRange.Start + originalSourceDuration * normalizedCutPosition;

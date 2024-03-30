@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.Graph.Modification
 {
     internal static class GraphOperations
     {
-        public static SymbolChildUi AddSymbolChild(Symbol symbol, SymbolUi parentUi, Vector2 positionOnCanvas)
+        public static SymbolUi.Child AddSymbolChild(Symbol symbol, SymbolUi parentUi, Vector2 positionOnCanvas)
         {
             var addCommand = new AddSymbolChildCommand(parentUi.Symbol, symbol.Id) { PosOnCanvas = positionOnCanvas };
             UndoRedoStack.AddAndExecute(addCommand);
@@ -23,11 +23,11 @@ namespace T3.Editor.Gui.Graph.Modification
             var newSymbolChild = parentSymbol.Children[addCommand.AddedChildId];
 
             // Select new node
-            return newSymbolChild.GetSymbolChildUi();
+            return newSymbolChild.GetChildUi();
         }
 
         public static string CopyNodesAsJson(Instance composition, 
-                                             IEnumerable<SymbolChildUi> selectedChildren, 
+                                             IEnumerable<SymbolUi.Child> selectedChildren, 
                                              List<Annotation> selectedAnnotations)
         {
             var resultJsonString = string.Empty;

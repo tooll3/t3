@@ -10,12 +10,12 @@ namespace libEditor.CustomUi
 {
     public static class Jitter2dUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is _Jitter2d jitter2d)
                 ||!ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
             
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
             
             if (WidgetElements.DrawRateLabelWithTitle(jitter2d.Rate, screenRect, drawList, nameof(jitter2d), canvasScale))
             {
@@ -34,7 +34,7 @@ namespace libEditor.CustomUi
                 jitter2d.JumpDistance.Input.IsDefault = false;
                 jitter2d.JumpDistance.DirtyFlag.Invalidate();
             }
-            return SymbolChildUi.CustomUiResult.Rendered  | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolUi.Child.CustomUiResult.Rendered  | SymbolUi.Child.CustomUiResult.PreventInputLabels;
         }
     }
 }

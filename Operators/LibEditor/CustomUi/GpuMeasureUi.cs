@@ -12,10 +12,10 @@ namespace libEditor.CustomUi
 {
     public static class GpuMeasureUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
         {
             if (!(instance is GpuMeasure measureInstance))
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
 
             var symbolChild = instance.SymbolChild;
             ImGui.PushClipRect(selectableScreenRect.Min, selectableScreenRect.Max, true);
@@ -42,7 +42,7 @@ namespace libEditor.CustomUi
             ImGui.PopFont();
             
             ImGui.PopClipRect();
-            return SymbolChildUi.CustomUiResult.Rendered;
+            return SymbolUi.Child.CustomUiResult.Rendered;
         }
 
         private static Color _color = new(0.8f, 0.6f, 0.2f, 0.2f);

@@ -636,7 +636,7 @@ namespace T3.Editor.Gui.Graph
             if (nextSelectedUi != null)
             {
                 var instance = _composition.Instance.Children[nextSelectedUi.Value];
-                var symbolChildUi = instance.GetSymbolChildUi();
+                var symbolChildUi = instance.GetChildUi();
                 
                 if(symbolChildUi != null)
                     GraphCanvas.NodeSelection.SetSelectionToChildUi(symbolChildUi, instance);

@@ -22,7 +22,7 @@ namespace T3.Editor.Gui.Commands.Graph
         public enum CopyMode {Normal, ClipboardSource, ClipboardTarget}
 
         public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi,
-                                         IEnumerable<SymbolChildUi> symbolChildrenToCopy,
+                                         IEnumerable<SymbolUi.Child> symbolChildrenToCopy,
                                          List<Annotation> selectedAnnotations,
                                          SymbolUi targetCompositionUi,
                                          Vector2 targetPosition, CopyMode copyMode = CopyMode.Normal)

@@ -13,12 +13,12 @@ namespace libEditor.CustomUi
 {
     public static class TriggerUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (instance is not Trigger trigger
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
             {
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
             }
 
             var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList, canvasScale);
@@ -73,11 +73,11 @@ namespace libEditor.CustomUi
 
             ImGui.PopClipRect();
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered
-                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
-                   | SymbolChildUi.CustomUiResult.PreventTooltip
-                   | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp
-                   | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolUi.Child.CustomUiResult.Rendered
+                   | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph
+                   | SymbolUi.Child.CustomUiResult.PreventTooltip
+                   | SymbolUi.Child.CustomUiResult.PreventOpenParameterPopUp
+                   | SymbolUi.Child.CustomUiResult.PreventInputLabels;
         }
         
         private static Guid activeInputId;

@@ -49,9 +49,9 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         public void SetSelection(ISelectableCanvasObject node)
         {
-            if (node is SymbolChildUi)
+            if (node is SymbolUi.Child)
             {
-                Log.Warning("Setting selection to a SymbolChildUi without providing instance will lead to problems.");
+                Log.Warning("Setting selection to a SymbolUi.Child without providing instance will lead to problems.");
             }
 
             Clear();
@@ -76,7 +76,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// <summary>
         /// Replaces current selection with symbol child
         /// </summary>
-        public void SetSelectionToChildUi(SymbolChildUi node, Instance instance)
+        public void SetSelectionToChildUi(SymbolUi.Child node, Instance instance)
         {
             ArgumentNullException.ThrowIfNull(instance);
 
@@ -98,7 +98,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             AddSymbolChildToSelection(childUi, instance);
         }
 
-        public void AddSymbolChildToSelection(SymbolChildUi childUi, Instance instance)
+        public void AddSymbolChildToSelection(SymbolUi.Child childUi, Instance instance)
         {
             if (Selection.Contains(childUi))
                 return;
@@ -143,7 +143,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (Selection.Count == 0)
                 return _selectedComposition;
 
-            if (Selection[0] is SymbolChildUi firstNode)
+            if (Selection[0] is SymbolUi.Child firstNode)
             {
                 if (!_childUiInstanceIdPaths.ContainsKey(firstNode))
                 {
@@ -159,10 +159,10 @@ namespace T3.Editor.Gui.Graph.Interaction
             return null;
         }
 
-        public IEnumerable<SymbolChildUi> GetSelectedChildUis() => GetSelectedNodes<SymbolChildUi>();
+        public IEnumerable<SymbolUi.Child> GetSelectedChildUis() => GetSelectedNodes<SymbolUi.Child>();
         public IEnumerable<Instance> GetSelectedInstances()
         {
-            return GetSelectedNodes<SymbolChildUi>()
+            return GetSelectedNodes<SymbolUi.Child>()
                   .Where(x => _childUiInstanceIdPaths.ContainsKey(x))
                   .Select(symbolChildUi =>
                           {
@@ -182,7 +182,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (Selection.Count == 0)
                 return _selectedComposition.SymbolChildId;
 
-            if (Selection[0] is not SymbolChildUi firstNode)
+            if (Selection[0] is not SymbolUi.Child firstNode)
                 return null;
 
             return firstNode.SymbolChild.Id;
@@ -209,7 +209,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
-        public Instance? GetInstanceForSymbolChildUi(SymbolChildUi symbolChildUi)
+        public Instance? GetInstanceForChildUi(SymbolUi.Child symbolChildUi)
         {
             var idPath = _childUiInstanceIdPaths[symbolChildUi];
             return _structure.GetInstanceFromIdPath(idPath);
@@ -220,6 +220,6 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         public readonly List<ISelectableCanvasObject> Selection = new();
         private Instance _selectedComposition;
-        private readonly Dictionary<SymbolChildUi, IReadOnlyList<Guid>> _childUiInstanceIdPaths = new();
+        private readonly Dictionary<SymbolUi.Child, IReadOnlyList<Guid>> _childUiInstanceIdPaths = new();
     }
 }

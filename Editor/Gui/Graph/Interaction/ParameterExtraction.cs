@@ -15,7 +15,7 @@ internal static class ParameterExtraction
         return _symbolIdsForTypes.ContainsKey(inputSlot.ValueType);
     }
     
-    public static void ExtractAsConnectedOperator(NodeSelection nodeSelection, IInputSlot inputSlot, SymbolChildUi symbolChildUi, Symbol.Child.Input input)
+    public static void ExtractAsConnectedOperator(NodeSelection nodeSelection, IInputSlot inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
     {
         SymbolUi? compositionUi = null;
         Instance composition;
@@ -74,7 +74,7 @@ internal static class ParameterExtraction
         // Sadly, we have have apply size manually.
         if (_sizesForTypes.TryGetValue(input.DefaultValue.ValueType, out _))
         {
-            newChildUi.Style = SymbolChildUi.Styles.Resizable;
+            newChildUi.Style = SymbolUi.Child.Styles.Resizable;
         }
 
         // Set type
