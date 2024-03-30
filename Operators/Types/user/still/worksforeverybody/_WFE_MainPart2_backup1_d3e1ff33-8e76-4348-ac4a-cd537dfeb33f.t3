@@ -6839,18 +6839,9 @@
           "Value": 2159
         },
         {
-          "Id": "c576de4b-d0da-4fb7-8290-e9fc383f7c13"/*Scale*/,
+          "Id": "ffbfa2dd-75ed-439e-8bab-eb0104ab9c0d"/*Offset*/,
           "Type": "System.Single",
-          "Value": 0.4338
-        },
-        {
-          "Id": "1e099abf-0378-43a4-899c-ade1828e42a6"/*Center*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.009000001,
-            "Z": 0.0
-          }
+          "Value": 93.96
         },
         {
           "Id": "bfc2279a-7bf8-436a-a04d-813ecee1776a"/*PointsPerStep*/,
@@ -6863,14 +6854,23 @@
           "Value": 16
         },
         {
-          "Id": "ffbfa2dd-75ed-439e-8bab-eb0104ab9c0d"/*Offset*/,
+          "Id": "c576de4b-d0da-4fb7-8290-e9fc383f7c13"/*Scale*/,
           "Type": "System.Single",
-          "Value": 93.96
+          "Value": 0.4338
         },
         {
           "Id": "5af0a50e-0da1-4800-9fef-c1217eb2368a"/*ScaleBias*/,
           "Type": "System.Single",
           "Value": 0.83
+        },
+        {
+          "Id": "1e099abf-0378-43a4-899c-ade1828e42a6"/*Center*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.009000001,
+            "Z": 0.0
+          }
         }
       ],
       "Outputs": []
