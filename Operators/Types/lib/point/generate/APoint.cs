@@ -30,6 +30,7 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
         
         public APoint()
         {
+            UpdateBuffer(); // Force update when application starts (needed for executable export)
             Buffer.UpdateAction = UpdateWithBuffer;
             ResultList.UpdateAction = Update;
             OutPosition.UpdateAction = Update;
