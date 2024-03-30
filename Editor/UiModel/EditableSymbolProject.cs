@@ -1,4 +1,5 @@
 #nullable enable
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using T3.Core.Compilation;
@@ -17,13 +18,14 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     /// <summary>
     /// Create a new <see cref="EditableSymbolProject"/> using the given <see cref="CsProjectFile"/>.
-    /// This calls the base constructor with a null assembly as we override the assembly property
     /// </summary>
     /// <param name="csProjectFile"></param>
-    public EditableSymbolProject(CsProjectFile csProjectFile) : base(assembly: null!)
+    public EditableSymbolProject(CsProjectFile csProjectFile) : base(assembly: csProjectFile.Assembly)
     {
         CsProjectFile = csProjectFile;
-        AllProjectsRw.Add(this);
+        lock(_allProjects)
+            _allProjects.Add(this);
+        Log.Debug($"Added project {csProjectFile.Name}");
         _csFileWatcher = new CodeFileWatcher(this, OnFileChanged, OnFileRenamed);
         DisplayName = $"{AssemblyInformation.Name} ({CsProjectFile.RootNamespace})";
         SymbolUpdated += OnSymbolUpdated;
@@ -118,7 +120,13 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     {
         base.Dispose();
         FileWatcher.Dispose();
-        AllProjectsRw.Remove(this);
+
+        lock (_allProjects)
+        {
+            var currentProjects = _allProjects.ToList();
+            currentProjects.Remove(this);
+            _allProjects = new ConcurrentBag<EditableSymbolProject>(currentProjects);
+        }
     }
 
     public readonly CsProjectFile CsProjectFile;
@@ -126,6 +134,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public override ResourceFileWatcher FileWatcher => _resourceFileWatcher;
     public override bool IsReadOnly => false;
 
-    private static readonly List<EditableSymbolProject> AllProjectsRw = [];
-    public static readonly IReadOnlyList<EditableSymbolProject> AllProjects = AllProjectsRw;
+    private static ConcurrentBag<EditableSymbolProject> _allProjects = [];
+    public static readonly IEnumerable<EditableSymbolProject> AllProjects = _allProjects;
 }

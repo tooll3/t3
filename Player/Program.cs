@@ -184,7 +184,7 @@ namespace T3.Player
 
                 LoadOperators();
 
-                if(!SymbolRegistry.Entries.TryGetValue(exportSettings.OperatorId, out var demoSymbol))
+                if(!SymbolRegistry.TryGetSymbol(exportSettings.OperatorId, out var demoSymbol))
                 {
                     CloseApplication(true, $"Failed to find [{exportSettings.ApplicationTitle}] with id {exportSettings.OperatorId}");
                     return;

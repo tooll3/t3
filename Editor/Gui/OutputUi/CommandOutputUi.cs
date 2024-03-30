@@ -8,7 +8,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Editor.Gui.Windows;
-using T3.Editor.UiModel;
 using Device = SharpDX.Direct3D11.Device;
 using Utilities = T3.Core.Utils.Utilities;
 
@@ -23,7 +22,7 @@ namespace T3.Editor.Gui.OutputUi
             // ensure op exists for drawing grid
             var outputWindowGridSymbolId = Guid.Parse("e5588101-5686-4b02-ab7d-e58199ba552e");
             
-            if(!SymbolUiRegistry.TryGetSymbol(outputWindowGridSymbolId, out var outputWindowGridSymbol))
+            if(!SymbolRegistry.TryGetSymbol(outputWindowGridSymbolId, out var outputWindowGridSymbol))
             {
                 Log.Warning("CommandOutputUi: Could not find grid Gizmo symbol UI");
                 return;

@@ -220,16 +220,16 @@ namespace T3.Editor.UiModel
             _hasBeenModified = false;
         }
 
-        public string Description { get; set; } = string.Empty;
+        internal string Description { get; set; } = string.Empty;
 
         internal bool ForceUnmodified;
         private bool _hasBeenModified;
-        public bool HasBeenModified => _hasBeenModified && !ForceUnmodified;
+        internal bool NeedsSaving => _hasBeenModified && !ForceUnmodified;
         private readonly Dictionary<Guid, Child> _childUis = new();
-        public IReadOnlyDictionary<Guid, Child> ChildUis => _childUis; // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
-        public readonly IDictionary<Guid, ExternalLink> Links;
-        public readonly IDictionary<Guid, IInputUi> InputUis;
-        public readonly IDictionary<Guid, IOutputUi> OutputUis;
-        public readonly IDictionary<Guid, Annotation> Annotations;
+        internal IReadOnlyDictionary<Guid, Child> ChildUis => _childUis; // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
+        internal readonly IDictionary<Guid, ExternalLink> Links;
+        internal readonly IDictionary<Guid, IInputUi> InputUis;
+        internal readonly IDictionary<Guid, IOutputUi> OutputUis;
+        internal readonly IDictionary<Guid, Annotation> Annotations;
     }
 }

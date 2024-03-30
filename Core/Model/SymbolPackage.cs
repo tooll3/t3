@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,6 +37,9 @@ public abstract partial class SymbolPackage : IResourcePackage
     protected event Action<Symbol>? SymbolUpdated;
     protected event Action<Guid>? SymbolRemoved;
 
+    private static ConcurrentBag<SymbolPackage> _allPackages = new();
+    public static IEnumerable<SymbolPackage> AllPackages => _allPackages;
+
     public string ResourcesFolder { get; private set; } = null!;
 
     static SymbolPackage()
@@ -47,6 +51,8 @@ public abstract partial class SymbolPackage : IResourcePackage
     protected SymbolPackage(AssemblyInformation assembly)
     {
         AssemblyInformation = assembly;
+        lock(_allPackages)
+            _allPackages.Add(this);
     }
 
     public virtual void InitializeResources()
@@ -60,12 +66,18 @@ public abstract partial class SymbolPackage : IResourcePackage
     {
         ResourceManager.RemoveSharedResourceFolder(this);
         ClearSymbols();
-
+        
+        
+        var currentPackages = _allPackages.ToList();
+        currentPackages.Remove(this);
+        lock (_allPackages)
+            _allPackages = new ConcurrentBag<SymbolPackage>(currentPackages);
+        
         AssemblyInformation.Unload();
         // Todo - symbol instance destruction...?
     }
 
-    protected void ClearSymbols()
+    private void ClearSymbols()
     {
         if (Symbols.Count == 0)
             return;
@@ -75,7 +87,6 @@ public abstract partial class SymbolPackage : IResourcePackage
         {
             var id = symbol.Id;
             Symbols.Remove(id, out _);
-            SymbolRegistry.EntriesEditable.Remove(id, out _);
         }
     }
 
@@ -143,9 +154,9 @@ public abstract partial class SymbolPackage : IResourcePackage
                 var symbol = readSymbolResult.Result.Symbol;
                 var id = symbol.Id;
 
-                if (!RegisterSymbol(id, symbol, Symbols))
+                if (!Symbols.TryAdd(id, symbol))
                 {
-                    Log.Error($"Can't load symbol for [{symbol.Name}]. Registry already contains id {symbol.Id}: [{SymbolRegistry.EntriesEditable[symbol.Id].Name}]");
+                    Log.Error($"Can't load symbol for [{symbol.Name}]. Registry already contains id {symbol.Id}: [{Symbols[symbol.Id].Name}]");
                     continue;
                 }
 
@@ -163,7 +174,7 @@ public abstract partial class SymbolPackage : IResourcePackage
             var symbol = CreateSymbol(newType, guid);
 
             var id = symbol.Id;
-            if (!RegisterSymbol(id, symbol, Symbols))
+            if (!Symbols.TryAdd(id, symbol))
             {
                 Log.Error($"{AssemblyInformation.Name}: Ignoring redefinition symbol {symbol.Name}.");
                 continue;
@@ -177,11 +188,6 @@ public abstract partial class SymbolPackage : IResourcePackage
         }
 
         return;
-
-        bool RegisterSymbol(Guid id, Symbol symbol, ConcurrentDictionary<Guid, Symbol> localRegistry)
-        {
-            return localRegistry.TryAdd(id, symbol) && SymbolRegistry.EntriesEditable.TryAdd(id, symbol);
-        }
 
         void LoadTypes(Guid guid, Type type, ConcurrentDictionary<Guid, Type> newTypesDict)
         {
@@ -259,4 +265,6 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     public virtual ResourceFileWatcher? FileWatcher => null;
     public virtual bool IsReadOnly => true;
+
+    public bool TryGetSymbol(Guid symbolId, [NotNullWhen(true)] out Symbol? symbol) => Symbols.TryGetValue(symbolId, out symbol);
 }

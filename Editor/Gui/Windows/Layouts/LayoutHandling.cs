@@ -89,7 +89,8 @@ namespace T3.Editor.Gui.Windows.Layouts
 
         private static void ApplyLayout(Layout layout)
         {
-            var editableProjects = EditableSymbolProject.AllProjects;
+            // todo - layout should refer to actual project rather than this random bs
+            var editableProjects = EditableSymbolProject.AllProjects.OrderBy(x => x.DisplayName).ToArray();
             
             // First update windows settings
             foreach (var config in layout.WindowConfigs)
@@ -110,7 +111,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                             continue;
                         }
 
-                        if (number >= editableProjects.Count)
+                        if (number >= editableProjects.Length)
                             continue;
 
                         var project = editableProjects[number];

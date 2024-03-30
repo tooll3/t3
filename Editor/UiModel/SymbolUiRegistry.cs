@@ -1,5 +1,6 @@
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
+using T3.Core.Model;
 using T3.Core.Operator;
 
 namespace T3.Editor.UiModel;
@@ -38,21 +39,10 @@ internal static class SymbolUiRegistry
         pathFromRoot = null;
         return false;
     }
-    
-    public static bool TryGetSymbol(Guid symbolId, [NotNullWhen(true)] out Symbol? symbol)
-    {
-        foreach(var package in EditorSymbolPackage.AllPackages)
-        {
-            if (package.TryGetSymbol(symbolId, out symbol))
-                return true;
-        }
-        symbol = null;
-        return false;
-    }
 
     public static bool TryGetSymbolUi(Guid symbolId, [NotNullWhen(true)] out SymbolUi? symbolUi)
     {
-        foreach(var package in EditorSymbolPackage.AllPackages)
+        foreach(var package in SymbolPackage.AllPackages.Cast<EditorSymbolPackage>())
         {
             if (package.TryGetSymbolUi(symbolId, out symbolUi))
                 return true;

@@ -206,7 +206,7 @@ namespace T3.Core.Operator
                     return;
                 }
 
-                foreach (var instance in Parent.InstancesOfChildren[Id])
+                foreach (var instance in Parent._instancesOfChildren[Id])
                 {
                     var mainInputSlot = instance.Inputs[0];
                     var mainOutputSlot = instance.Outputs[0];
