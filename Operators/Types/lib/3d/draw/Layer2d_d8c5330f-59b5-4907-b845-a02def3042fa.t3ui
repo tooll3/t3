@@ -1,6 +1,6 @@
 {
   "Id": "d8c5330f-59b5-4907-b845-a02def3042fa"/*Layer2d*/,
-  "Description": "Creates a 2D plane in 3D space onto which the incoming image is rendered.\nThis op automatically adjusts to the correct aspect ratio and is usually always the last op in every render pipeline.\n\nIn addition to this essential function, it can also be used for other purposes due to its versatile options.\n\nA possible alternative [QuadMesh] -> [DrawMesh] -> [SetMaterial] in combination with [RenderTarget].",
+  "Description": "Creates a 2D plane in 3D space onto which the incoming image is rendered.\nThis op automatically adjusts to the correct aspect ratio.\n\nA possible alternative [QuadMesh] -> [DrawMesh] -> [SetMaterial] in combination with [RenderTarget].",
   "InputUis": [
     {
       "InputId": "a384be77-c5fc-47b3-9ec3-960db9f9bae9"/*Position*/,
