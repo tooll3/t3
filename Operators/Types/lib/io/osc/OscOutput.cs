@@ -142,7 +142,10 @@ namespace T3.Operators.Types.Id_4e99da86_482f_4037_8664_b2371526d632
         {
             try
             {
-                _sender = new OscSender(ipAddress, port);
+                // the '0' picks a random available outbound (send) port
+                // it defaults to "port" otherwise, which break server if it's
+                // running on the same IP.
+                _sender = new OscSender(ipAddress, 0, port);
                 _sender.Connect();
                 if (_sender.State == OscSocketState.Connected)
                 {
