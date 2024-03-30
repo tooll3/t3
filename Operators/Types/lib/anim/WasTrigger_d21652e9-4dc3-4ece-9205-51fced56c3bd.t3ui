@@ -1,0 +1,31 @@
+{
+  "Id": "d21652e9-4dc3-4ece-9205-51fced56c3bd"/*WasTrigger*/,
+  "Description": "Returns true if one of the trigger variables have been set.",
+  "InputUis": [
+    {
+      "InputId": "2d78e40b-11f8-4e49-b3a2-5f24f1015b2e"/*Trigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "902d731f-e1b9-40ce-9afa-5ffb8fed53a4"/*CustomVariableName*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "bbbfa448-3499-4d88-8fe4-0caea4c270fd"/*HasChanged*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

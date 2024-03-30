@@ -12,6 +12,10 @@
       "DefaultValue": null
     },
     {
+      "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
+      "DefaultValue": 1.0
+    },
+    {
       "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
       "DefaultValue": 2.0
     },
@@ -29,10 +33,6 @@
         "X": 0.003,
         "Y": 0.015999999
       }
-    },
-    {
-      "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
-      "DefaultValue": 1.0
     },
     {
       "Id": "9d5e3055-c17e-4013-963d-e17c76b707c1"/*HighlightColor*/,

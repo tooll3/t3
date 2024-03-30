@@ -22,26 +22,35 @@ public class Apc40Mk2 : CompatibleMidiDevice
 {
     public Apc40Mk2()
     {
-        CommandTriggerCombinations = new List<CommandTriggerCombination>()
-                                         {
-                                             new(VariationHandling.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                             new(VariationHandling.SaveSnapshotAtIndex, InputModes.Save, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                             new(VariationHandling.RemoveSnapshotAtIndex, InputModes.Delete, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                             //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { ClipStopButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                         };
-        
+        CommandTriggerCombinations
+            = new List<CommandTriggerCombination>()
+                  {
+                      new(VariationHandling.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { SceneTrigger1To40 },
+                          CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                      new(VariationHandling.SaveSnapshotAtIndex, InputModes.Save, new[] { SceneTrigger1To40 },
+                          CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                      new(VariationHandling.RemoveSnapshotAtIndex, InputModes.Delete, new[] { SceneTrigger1To40 },
+                          CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                      //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { ClipStopButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                      new(VariationHandling.StopBlendingTowards, InputModes.Default, new[] { SceneLaunch2 },
+                          CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
+                      new(VariationHandling.StartBlendingTowardsSnapshot, requiredInputMode: InputModes.BlendTo, new[] { SceneTrigger1To40 },
+                          CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                      new(VariationHandling.UpdateBlendingTowardsProgress, InputModes.Default, new[] { AbFader },
+                          CommandTriggerCombination.ExecutesAt.ControllerChange),
+                  };
+
         ModeButtons = new List<ModeButton>
                           {
-                              new(Shift, InputModes.BlendTo),
+                              new(SceneLaunch2, InputModes.BlendTo),
                               new(SceneLaunch1, InputModes.Delete),
                           };
     }
 
-
     protected override void UpdateVariationVisualization()
     {
         _updateCount++;
-        
+
         var midiOut = MidiOutConnectionManager.GetConnectedController(ProductNameHash);
         if (midiOut == null)
             return;
@@ -91,12 +100,11 @@ public class Apc40Mk2 : CompatibleMidiDevice
                                         break;
                                 }
                             }
+
                             return AddModeHighlight(mappedIndex, (int)color);
                             //return (int)color;
                         });
 
-        
-        
         // Update groups
         // UpdateRangeLeds(midiOut, ClipStopButtons1To8,
         //                 mappedIndex =>
@@ -124,7 +132,7 @@ public class Apc40Mk2 : CompatibleMidiDevice
         //                     return (int)color2;
         //                 });
     }
-    
+
     private int AddModeHighlight(int index, int orgColor)
     {
         var indicatedStatus = (_updateCount + index / 8) % 30 < 4;
@@ -133,7 +141,7 @@ public class Apc40Mk2 : CompatibleMidiDevice
             return orgColor;
         }
 
-        if (ActiveMode == InputModes.Save)
+        if (ActiveMode == InputModes.BlendTo)
         {
             return (int)Apc40Colors.Yellow;
         }
@@ -146,10 +154,12 @@ public class Apc40Mk2 : CompatibleMidiDevice
     }
 
     private int _updateCount;
+
     // Buttons
     private static readonly ButtonRange SceneTrigger1To40 = new(0, 0 + 40);
     private static readonly ButtonRange SceneLaunch1To5 = new(82, 82 + 5);
     private static readonly ButtonRange SceneLaunch1 = new(82);
+    private static readonly ButtonRange SceneLaunch2 = new(82 + 1);
     private static readonly ButtonRange ClipStopButtons1To8 = new(52, 52 + 8);
     private static readonly ButtonRange ClipABButtons1To8 = new(66, 66 + 8);
     private static readonly ButtonRange ClipNumberButtons1To8 = new(50, 50 + 8);
@@ -246,6 +256,6 @@ public class Apc40Mk2 : CompatibleMidiDevice
         White = 3,
         Yellow = 12,
     };
-        
+
     private bool _initialized;
 }

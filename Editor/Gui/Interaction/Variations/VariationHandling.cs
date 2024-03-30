@@ -166,6 +166,7 @@ public static class VariationHandling
 
         if (SymbolVariationPool.TryGetSnapshot(index, out var variation))
         {
+            // Log.Debug($"Start blending towards: {index}");
             _blendTowardsIndex = index;
             ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, 0);
         }
@@ -190,7 +191,7 @@ public static class VariationHandling
         {
             //_blendTargetVariation = variation;
             var normalizedValue = midiValue / 127.0f;
-            //Log.Debug($"NormlizedBlendingValue: {normalizedValue}");
+            // Log.Debug($"NormlizedBlendingValue: {normalizedValue}");
             SmoothVariationBlending.StartBlendTo(variation, normalizedValue);
         }
         else
@@ -221,15 +222,26 @@ public static class VariationHandling
             if (_targetVariation == null)
                 return;
 
+            if (float.IsNaN(_dampedWeight) || float.IsInfinity(_dampedWeight))
+            {
+                _dampedWeight = _targetWeight;
+            }
+
+            if (float.IsNaN(_dampingVelocity) || float.IsInfinity(_dampingVelocity))
+            {
+                _dampingVelocity = 0.5f;
+            }
+
+            var frameDuration = 1 / 60f;    // Fixme: (float)Playback.LastFrameDuration
             _dampedWeight = MathUtils.SpringDamp(_targetWeight,
-                                                 _dampedWeight,
-                                                 ref _dampingVelocity,
-                                                 200f, (float)Playback.LastFrameDuration);
+                                              _dampedWeight,
+                                              ref _dampingVelocity,
+                                              200f, frameDuration);
 
             if (!(MathF.Abs(_dampingVelocity) > 0.0005f))
                 return;
 
-            ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, _targetVariation, _dampedWeight);
+            ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, _targetVariation, _targetWeight);
         }
 
         public static void Stop()
