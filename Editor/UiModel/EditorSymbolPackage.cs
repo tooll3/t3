@@ -351,11 +351,13 @@ internal class EditorSymbolPackage : SymbolPackage
         var result = SymbolJson.ReadSymbolRoot(symbol.Id, symbolJson.JToken, symbol.InstanceType, this);
         var newSymbol = result.Symbol;
         Symbols[id] = newSymbol;
+        _filePathHandlers[id].Symbol = newSymbol;
 
         if (!TryReadAndApplyChildren(result))
         {
             Log.Error($"Failed to reload symbol for symbol {id}");
             Symbols[id] = symbol;
+            _filePathHandlers[id].Symbol = symbol;
             return;
         }
 
@@ -367,14 +369,13 @@ internal class EditorSymbolPackage : SymbolPackage
         if (!SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, newSymbol, out var newSymbolUi))
         {
             Symbols[id] = symbol;
+            _filePathHandlers[id].Symbol = symbol;
             throw new Exception($"Failed to reload symbol ui for symbol {id}");
         }
 
-        newSymbolUi.UpdateConsistencyWithSymbol();
-        
-        
         // override registry values
         SymbolUiDict[id] = newSymbolUi;
+        newSymbolUi.UpdateConsistencyWithSymbol();
     }
 
     public bool TryGetSymbolUi(Guid rSymbolId, [NotNullWhen(true)] out SymbolUi? symbolUi)

@@ -37,7 +37,7 @@ public abstract partial class SymbolPackage : IResourcePackage
     protected event Action<Symbol>? SymbolUpdated;
     protected event Action<Guid>? SymbolRemoved;
 
-    private static ConcurrentBag<SymbolPackage> _allPackages = new();
+    private static ConcurrentBag<SymbolPackage> _allPackages = [];
     public static IEnumerable<SymbolPackage> AllPackages => _allPackages;
 
     public string ResourcesFolder { get; private set; } = null!;
@@ -222,9 +222,7 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     internal Symbol CreateSymbol(Type instanceType, Guid id)
     {
-        var symbol = new Symbol(instanceType, id, this);
-
-        return symbol;
+        return new Symbol(instanceType, id, this);
     }
 
 

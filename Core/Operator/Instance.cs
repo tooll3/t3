@@ -288,24 +288,25 @@ namespace T3.Core.Operator
             var allChildren = instance._childInstances.Values.ToArray();
             foreach (var child in allChildren)
             {
-                DestroyChildInstance(instance, child.SymbolChildId, out _);
+                DestroyChildInstance(instance, child.SymbolChildId);
             }
             
             var parent = instance._parent;
             if (parent != null)
             {
-                DestroyChildInstance(parent, instance.SymbolChildId, out _);
+                DestroyChildInstance(parent, instance.SymbolChildId);
             }
             else
             {
                 instance.Dispose();
             }
 
-            static void DestroyChildInstance(Instance parent, Guid childId, out Instance childInstance)
+            return;
+
+            static void DestroyChildInstance(Instance parent, Guid childId)
             {
-                var instance = parent._childInstances[childId];
-                parent._childInstances.Remove(childId, out childInstance);
-                instance.Dispose();
+                parent._childInstances.Remove(childId, out var childInstance);
+                childInstance!.Dispose();
             }
         }
 
