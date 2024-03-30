@@ -949,57 +949,57 @@
     {
       "ChildId": "4caeb45f-55cf-4eb5-af9c-570ab3c7f675"/*SubdivisionStretch*/,
       "Position": {
-        "X": 4538.752,
-        "Y": 5480.1523
+        "X": 4933.0312,
+        "Y": 6025.186
       }
     },
     {
       "ChildId": "acf1463b-75e7-4512-90ed-2ca274e1c002"/*Glow*/,
       "Position": {
-        "X": 4688.752,
-        "Y": 5480.1523
+        "X": 5083.0312,
+        "Y": 6025.186
       }
     },
     {
       "ChildId": "6703a192-afdc-4f9a-9f5e-a47a03aa96a6"/*Counter*/,
       "Position": {
-        "X": 4224.9053,
-        "Y": 5611.9937
+        "X": 4619.1846,
+        "Y": 6157.0273
       }
     },
     {
       "ChildId": "80eb7cb4-9c5c-441e-9d0a-6aa16fedd145"/*FloatToInt*/,
       "Position": {
-        "X": 4374.9053,
-        "Y": 5611.9937
+        "X": 4769.1846,
+        "Y": 6157.0273
       }
     },
     {
       "ChildId": "95edd9cd-2bc3-4440-913c-abb7d71a482b"/*ScrollOffset*/,
       "Position": {
-        "X": 4374.9053,
-        "Y": 5492.9937
+        "X": 4769.1846,
+        "Y": 6038.0273
       }
     },
     {
       "ChildId": "5147a4ed-7f14-481b-ae89-fa4de24a1bbe"/*TriggerAnim*/,
       "Position": {
-        "X": 4224.9053,
-        "Y": 5492.9937
+        "X": 4619.1846,
+        "Y": 6038.0273
       }
     },
     {
       "ChildId": "ac1d7081-b951-4c3a-a892-c14849ecc45d"/*Time*/,
       "Position": {
-        "X": 4374.9053,
-        "Y": 5568.9937
+        "X": 4769.1846,
+        "Y": 6114.0273
       }
     },
     {
       "ChildId": "e7da36cb-6cc4-4c7c-9aa1-f5c1f23c2756"/*HasValueIncreased*/,
       "Position": {
-        "X": 4028.4854,
-        "Y": 5667.95
+        "X": 4594.057,
+        "Y": 6571.2627
       }
     },
     {
@@ -1029,6 +1029,13 @@
       "Position": {
         "X": 3811.307,
         "Y": 5225.9404
+      }
+    },
+    {
+      "ChildId": "8b3f36b5-11c7-4cc4-95b1-467aaa84feef"/*VJSkullScene*/,
+      "Position": {
+        "X": 3809.5173,
+        "Y": 5303.4155
       }
     }
   ],

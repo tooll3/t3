@@ -2693,7 +2693,7 @@
         {
           "Id": "00fd2794-567a-4f9b-a900-c2ebf9760764"/*Index*/,
           "Type": "System.Int32",
-          "Value": 5
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -2713,6 +2713,12 @@
     {
       "Id": "7d265ed5-d72e-4706-98fd-192fe624c551"/*Layer2d*/,
       "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "8b3f36b5-11c7-4cc4-95b1-467aaa84feef"/*VJSkullScene*/,
+      "SymbolId": "78024fb9-4c07-400d-a919-8e1488dc37c5",
       "InputValues": [],
       "Outputs": []
     }
@@ -3021,6 +3027,12 @@
     {
       "SourceParentOrChildId": "7d265ed5-d72e-4706-98fd-192fe624c551",
       "SourceSlotId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f",
+      "TargetParentOrChildId": "64129846-7e9a-4afd-a46c-be50ba148aa2",
+      "TargetSlotId": "988dd1b5-636d-4a78-9592-2c6601401cc1"
+    },
+    {
+      "SourceParentOrChildId": "8b3f36b5-11c7-4cc4-95b1-467aaa84feef",
+      "SourceSlotId": "465eaee7-391e-4996-b25e-e73cff6245af",
       "TargetParentOrChildId": "64129846-7e9a-4afd-a46c-be50ba148aa2",
       "TargetSlotId": "988dd1b5-636d-4a78-9592-2c6601401cc1"
     },
@@ -3627,7 +3639,7 @@
   ],
   "PlaybackSettings": {
     "Enabled": true,
-    "Bpm": 60.0,
+    "Bpm": 121.62703,
     "AudioSource": 1,
     "Syncing": 1,
     "AudioDecayFactor": 0.92,
