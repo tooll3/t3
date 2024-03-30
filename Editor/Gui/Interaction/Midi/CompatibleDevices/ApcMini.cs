@@ -57,8 +57,6 @@ public class ApcMini : CompatibleMidiDevice
                             }
                             if(variation.State == Variation.States.Active)
                             {
-                            // if (variation == activeVariation)
-                            // {
                                 return (int)ApcButtonColor.Red;
                             }
                                 

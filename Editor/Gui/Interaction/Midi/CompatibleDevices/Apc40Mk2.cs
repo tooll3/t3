@@ -26,13 +26,22 @@ public class Apc40Mk2 : CompatibleMidiDevice
                                          {
                                              new(VariationHandling.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                              new(VariationHandling.SaveSnapshotAtIndex, InputModes.Save, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                             new(VariationHandling.RemoveSnapshotAtIndex, InputModes.Delete, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                              //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { ClipStopButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                          };
+        
+        ModeButtons = new List<ModeButton>
+                          {
+                              new(Shift, InputModes.BlendTo),
+                              new(SceneLaunch1, InputModes.Delete),
+                          };
     }
 
 
     protected override void UpdateVariationVisualization()
     {
+        _updateCount++;
+        
         var midiOut = MidiOutConnectionManager.GetConnectedController(ProductNameHash);
         if (midiOut == null)
             return;
@@ -82,10 +91,12 @@ public class Apc40Mk2 : CompatibleMidiDevice
                                         break;
                                 }
                             }
-
-                            return (int)color;
+                            return AddModeHighlight(mappedIndex, (int)color);
+                            //return (int)color;
                         });
 
+        
+        
         // Update groups
         // UpdateRangeLeds(midiOut, ClipStopButtons1To8,
         //                 mappedIndex =>
@@ -114,9 +125,31 @@ public class Apc40Mk2 : CompatibleMidiDevice
         //                 });
     }
     
+    private int AddModeHighlight(int index, int orgColor)
+    {
+        var indicatedStatus = (_updateCount + index / 8) % 30 < 4;
+        if (!indicatedStatus)
+        {
+            return orgColor;
+        }
+
+        if (ActiveMode == InputModes.Save)
+        {
+            return (int)Apc40Colors.Yellow;
+        }
+        else if (ActiveMode == InputModes.Delete)
+        {
+            return (int)Apc40Colors.Red;
+        }
+
+        return orgColor;
+    }
+
+    private int _updateCount;
     // Buttons
     private static readonly ButtonRange SceneTrigger1To40 = new(0, 0 + 40);
     private static readonly ButtonRange SceneLaunch1To5 = new(82, 82 + 5);
+    private static readonly ButtonRange SceneLaunch1 = new(82);
     private static readonly ButtonRange ClipStopButtons1To8 = new(52, 52 + 8);
     private static readonly ButtonRange ClipABButtons1To8 = new(66, 66 + 8);
     private static readonly ButtonRange ClipNumberButtons1To8 = new(50, 50 + 8);
