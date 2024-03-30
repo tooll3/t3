@@ -102,12 +102,12 @@ namespace T3.Editor.Gui.Graph.Interaction
                 {
                     _moveCommand.StoreCurrentValues();
 
-                    if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
+                    if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolUi.Child childUi)
                     {
-                        var instanceForSymbolChildUi = composition.Children[childUi.Id];
+                        var instanceForUiChild = composition.Children[childUi.Id];
                         ConnectionMaker.SplitConnectionWithDraggedNode(childUi, 
                                                                        ConnectionSplitHelper.BestMatchLastFrame.Connection, 
-                                                                       instanceForSymbolChildUi,
+                                                                       instanceForUiChild,
                                                                        _moveCommand, selection);
                         _moveCommand = null;
                     }
@@ -139,7 +139,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                         var replaceSelection = !ImGui.GetIO().KeyShift;
                         if (replaceSelection)
                         {
-                            if (node is SymbolChildUi childUi3)
+                            if (node is SymbolUi.Child childUi3)
                             {
                                 selection.SetSelectionToChildUi(childUi3, instance);
                             }
@@ -150,7 +150,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                         }
                         else
                         {
-                            if (node is SymbolChildUi childUi2)
+                            if (node is SymbolUi.Child childUi2)
                             {
                                 selection.AddSymbolChildToSelection(childUi2, instance);
                             }
@@ -184,7 +184,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 && ImGui.IsItemHovered()
                 && !selection.IsNodeSelected(node))
             {
-                if (node is SymbolChildUi childUi2)
+                if (node is SymbolUi.Child childUi2)
                 {
                     selection.SetSelectionToChildUi(childUi2, instance);
                 }
@@ -202,7 +202,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             var outputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>();
             foreach (var node in _draggedNodes)
             {
-                if (node is not SymbolChildUi childUi)
+                if (node is not SymbolUi.Child childUi)
                     continue;
 
                 if (!window.CompositionOp.Children.TryGetValue(childUi.Id, out var instance))
@@ -364,7 +364,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
-        public void HighlightSnappedNeighbours(SymbolChildUi childUi)
+        public void HighlightSnappedNeighbours(SymbolUi.Child childUi)
         {
             if (selection.IsNodeSelected(childUi))
                 return;
@@ -461,12 +461,12 @@ namespace T3.Editor.Gui.Graph.Interaction
         }
 
         public static readonly Vector2 SnapPadding = new(40, 20);
-        public static readonly Vector2 PaddedDefaultOpSize = SymbolChildUi.DefaultOpSize + SnapPadding;
+        public static readonly Vector2 PaddedDefaultOpSize = SymbolUi.Child.DefaultOpSize + SnapPadding;
 
         private static readonly Vector2[] _snapOffsetsInCanvas =
             {
-                new(SymbolChildUi.DefaultOpSize.X + SnapPadding.X, 0),
-                new(-SymbolChildUi.DefaultOpSize.X - +SnapPadding.X, 0),
+                new(SymbolUi.Child.DefaultOpSize.X + SnapPadding.X, 0),
+                new(-SymbolUi.Child.DefaultOpSize.X - +SnapPadding.X, 0),
                 new(0, SnapPadding.Y),
                 new(0, -SnapPadding.Y)
             };

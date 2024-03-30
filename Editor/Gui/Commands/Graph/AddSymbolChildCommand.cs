@@ -56,7 +56,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         // ui data
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
-        public Vector2 Size { get; set; } = SymbolChildUi.DefaultOpSize;
+        public Vector2 Size { get; set; } = SymbolUi.Child.DefaultOpSize;
         public string ChildName { get; set; } = string.Empty;
     }
 }

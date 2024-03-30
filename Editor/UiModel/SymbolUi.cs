@@ -29,17 +29,14 @@ namespace T3.Editor.UiModel
         }
 
         internal SymbolUi(Symbol symbol,
-                        List<SymbolChildUi> childUis,
+                        Func<SymbolUi, List<Child>> childUis,
                         IDictionary<Guid, IInputUi> inputs,
                         IDictionary<Guid, IOutputUi> outputs,
                         IDictionary<Guid, Annotation> annotations,
                         OrderedDictionary<Guid, ExternalLink> links,
                         bool updateConsistency) : this(symbol, false)
         {
-            _childUis = childUis.ToDictionary(x => x.Id, x => x);
-            
-            foreach(var childUi in childUis)
-                childUi.Parent = this;
+            _childUis = childUis(this).ToDictionary(x => x.Id, x => x);
             
             InputUis = inputs;
             OutputUis = outputs;
@@ -76,11 +73,9 @@ namespace T3.Editor.UiModel
                 if (!ChildUis.TryGetValue(child.Id, out _))
                 {
                     Log.Debug($"Found no symbol child ui entry for symbol child '{child.ReadableName}' - creating a new one");
-                    var childUi = new SymbolChildUi()
+                    var childUi = new Child(child, this)
                                       {
-                                          SymbolChild = child,
                                           PosOnCanvas = new Vector2(100, 100),
-                                          Parent = this,
                                       };
                     _childUis.Add(child.Id, childUi);
                 }
@@ -163,7 +158,7 @@ namespace T3.Editor.UiModel
             }
         }
 
-        private static Vector2 ComputeNewOutputUiPositionOnCanvas(IEnumerable<SymbolChildUi> childUis, IEnumerable<IOutputUi> outputUis)
+        private static Vector2 ComputeNewOutputUiPositionOnCanvas(IEnumerable<Child> childUis, IEnumerable<IOutputUi> outputUis)
         {
             bool setByOutputs = false;
             var maxPos = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
@@ -230,8 +225,8 @@ namespace T3.Editor.UiModel
         internal bool ForceUnmodified;
         private bool _hasBeenModified;
         public bool HasBeenModified => _hasBeenModified && !ForceUnmodified;
-        private readonly Dictionary<Guid, SymbolChildUi> _childUis = new();
-        public IReadOnlyDictionary<Guid, SymbolChildUi> ChildUis => _childUis; // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
+        private readonly Dictionary<Guid, Child> _childUis = new();
+        public IReadOnlyDictionary<Guid, Child> ChildUis => _childUis; // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
         public readonly IDictionary<Guid, ExternalLink> Links;
         public readonly IDictionary<Guid, IInputUi> InputUis;
         public readonly IDictionary<Guid, IOutputUi> OutputUis;

@@ -9,7 +9,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
 {
     public class RenameSymbolDialog : ModalDialog
     {
-        public void Draw(List<SymbolChildUi> selectedChildUis, ref string name)
+        public void Draw(List<SymbolUi.Child> selectedChildUis, ref string name)
         {
             var canRename = selectedChildUis.Count == 1 && !selectedChildUis[0].SymbolChild.Symbol.SymbolPackage.IsReadOnly;
             

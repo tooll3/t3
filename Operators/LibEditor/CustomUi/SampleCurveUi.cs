@@ -15,10 +15,10 @@ namespace libEditor.CustomUi
 {
     public static class SampleCurveUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
         {
             if (!(instance is SampleCurve sampleCurve))
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
             
             var dragWidth = WidgetElements.DrawDragIndicator(selectableScreenRect, drawList, canvasScale);
             var innerRect = selectableScreenRect;
@@ -26,10 +26,10 @@ namespace libEditor.CustomUi
             innerRect.Min.Y += 1;
             
             if (innerRect.GetHeight() < 0)
-                return SymbolChildUi.CustomUiResult.PreventTooltip
-                       | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
-                       | SymbolChildUi.CustomUiResult.PreventInputLabels
-                       | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
+                return SymbolUi.Child.CustomUiResult.PreventTooltip
+                       | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph
+                       | SymbolUi.Child.CustomUiResult.PreventInputLabels
+                       | SymbolUi.Child.CustomUiResult.PreventOpenParameterPopUp;
             
             var curve = (sampleCurve.Curve.IsConnected) 
                             ? sampleCurve.Curve.Value 
@@ -39,10 +39,10 @@ namespace libEditor.CustomUi
             if (curve == null)
             {
                 //Log.Warning("Can't draw undefined gradient");
-                return SymbolChildUi.CustomUiResult.PreventTooltip
-                       | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
-                       | SymbolChildUi.CustomUiResult.PreventInputLabels
-                       | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
+                return SymbolUi.Child.CustomUiResult.PreventTooltip
+                       | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph
+                       | SymbolUi.Child.CustomUiResult.PreventInputLabels
+                       | SymbolUi.Child.CustomUiResult.PreventOpenParameterPopUp;
             }
 
             ImGui.PushClipRect(innerRect.Min, innerRect.Max, true);
@@ -84,11 +84,11 @@ namespace libEditor.CustomUi
             ImGui.EndChild();
             ImGui.PopClipRect();
 
-            return SymbolChildUi.CustomUiResult.Rendered
-                   | SymbolChildUi.CustomUiResult.PreventTooltip
-                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
-                   | SymbolChildUi.CustomUiResult.PreventInputLabels
-                   | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
+            return SymbolUi.Child.CustomUiResult.Rendered
+                   | SymbolUi.Child.CustomUiResult.PreventTooltip
+                   | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph
+                   | SymbolUi.Child.CustomUiResult.PreventInputLabels
+                   | SymbolUi.Child.CustomUiResult.PreventOpenParameterPopUp;
 
             void DrawSamplePointIndicator()
             {

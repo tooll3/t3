@@ -8,15 +8,13 @@ namespace T3.Editor.UiModel;
 
 public sealed partial class SymbolUi
 {
-    internal SymbolChildUi AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size, string name = null)
+    internal Child AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size, string name = null)
     {
         FlagAsModified();
         var symbolChild = Symbol.AddChild(symbolToAdd, addedChildId, name);
-        var childUi = new SymbolChildUi
+        var childUi = new Child(symbolChild, this)
                           {
-                              SymbolChild = symbolChild,
                               PosOnCanvas = posInCanvas,
-                              Parent = this,
                               Size = size,
                           };
         _childUis.Add(childUi.Id, childUi);
@@ -32,11 +30,9 @@ public sealed partial class SymbolUi
         newChild.Name = sourceChild.Name;
 
         var sourceChildUi = sourceCompositionSymbolUi.ChildUis[sourceChild.Id];
-        var newChildUi = sourceChildUi!.Clone(this);
+        var newChildUi = sourceChildUi!.Clone(this, newChild);
 
-        newChildUi.SymbolChild = newChild;
         newChildUi.PosOnCanvas = posInCanvas;
-        newChildUi.Comment = sourceChildUi.Comment;
 
         _childUis.Add(newChildUi.Id, newChildUi);
         return newChild;
@@ -76,7 +72,7 @@ public sealed partial class SymbolUi
     {
         FlagAsModified();
             
-        var childUis = new List<SymbolChildUi>(ChildUis.Count);
+        //var childUis = new List<SymbolUi.Child>(ChildUis.Count);
         // foreach (var sourceChildUi in ChildUis)
         // {
         //     var clonedChildUi = sourceChildUi.Clone();
@@ -122,6 +118,6 @@ public sealed partial class SymbolUi
             links.Add(clonedLink.Id, clonedLink);
         }
 
-        return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations, links, hasIdMap);
+        return new SymbolUi(newSymbol, _ => [], inputUis, outputUis, annotations, links, hasIdMap);
     }
 }

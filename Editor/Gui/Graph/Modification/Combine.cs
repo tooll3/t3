@@ -15,7 +15,7 @@ internal static class Combine
     // todo - convert to proper c# style code generation
     public static void CombineAsNewType(SymbolUi parentCompositionSymbolUi,
                                         EditableSymbolProject project,
-                                        List<SymbolChildUi> selectedChildUis,
+                                        List<SymbolUi.Child> selectedChildUis,
                                         List<Annotation> selectedAnnotations,
                                         string newSymbolName,
                                         string nameSpace, string description, bool shouldBeTimeClip)
@@ -246,7 +246,7 @@ internal static class Combine
         project.SaveModifiedSymbols();
     }
 
-    private static ImRect GetAreaFromChildren(IEnumerable<SymbolChildUi> childUis)
+    private static ImRect GetAreaFromChildren(IEnumerable<SymbolUi.Child> childUis)
     {
         var min = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
         var max = new Vector2(float.NegativeInfinity, float.NegativeInfinity);

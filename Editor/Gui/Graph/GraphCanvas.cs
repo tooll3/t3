@@ -370,7 +370,7 @@ namespace T3.Editor.Gui.Graph
 
             foreach (var node in nodesToSelect)
             {
-                if (node is SymbolChildUi symbolChildUi)
+                if (node is SymbolUi.Child symbolChildUi)
                 {
                     if (!compositionOp.TryGetChildInstance(symbolChildUi.Id, false, out var instance, out _))
                     {
@@ -428,7 +428,7 @@ namespace T3.Editor.Gui.Graph
         /// - If the user completes the symbol browser, it must complete the previous connections from the temp connections.
         /// - If the user cancels the operation, the previous state has to be restored. This might be tricky
         /// </remarks>
-        public void OpenSymbolBrowserForOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef)
+        public void OpenSymbolBrowserForOutput(SymbolUi.Child childUi, Symbol.OutputDefinition outputDef)
         {
             ConnectionMaker.InitSymbolBrowserAtPosition(_window,
                                                         childUi.PosOnCanvas + new Vector2(childUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0));
@@ -560,7 +560,7 @@ namespace T3.Editor.Gui.Graph
 
             if (ImGui.MenuItem("Rename", oneOpSelected))
             {
-                RenameInstanceOverlay.OpenForSymbolChildUi(selectedChildUis[0]);
+                RenameInstanceOverlay.OpenForChildUi(selectedChildUis[0]);
             }
 
             if (ImGui.MenuItem("Add Comment",
@@ -601,32 +601,32 @@ namespace T3.Editor.Gui.Graph
             if (ImGui.BeginMenu("Display as..."))
             {
                 if (ImGui.MenuItem("Small", "",
-                                   selected: selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Default),
+                                   selected: selectedChildUis.Any(child => child.Style == SymbolUi.Child.Styles.Default),
                                    enabled: someOpsSelected))
                 {
                     foreach (var childUi in selectedChildUis)
                     {
-                        childUi.Style = SymbolChildUi.Styles.Default;
+                        childUi.Style = SymbolUi.Child.Styles.Default;
                     }
                 }
 
                 if (ImGui.MenuItem("Resizable", "",
-                                   selected: selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable),
+                                   selected: selectedChildUis.Any(child => child.Style == SymbolUi.Child.Styles.Resizable),
                                    enabled: someOpsSelected))
                 {
                     foreach (var childUi in selectedChildUis)
                     {
-                        childUi.Style = SymbolChildUi.Styles.Resizable;
+                        childUi.Style = SymbolUi.Child.Styles.Resizable;
                     }
                 }
 
                 if (ImGui.MenuItem("Expanded", "",
-                                   selected: selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable),
+                                   selected: selectedChildUis.Any(child => child.Style == SymbolUi.Child.Styles.Resizable),
                                    enabled: someOpsSelected))
                 {
                     foreach (var childUi in selectedChildUis)
                     {
-                        childUi.Style = SymbolChildUi.Styles.Expanded;
+                        childUi.Style = SymbolUi.Child.Styles.Expanded;
                     }
                 }
 
@@ -947,7 +947,7 @@ namespace T3.Editor.Gui.Graph
 
         private bool _contextMenuIsOpen;
 
-        private void DeleteSelectedElements(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildUis = null, List<IInputUi> selectedInputUis = null,
+        private void DeleteSelectedElements(SymbolUi compositionSymbolUi, List<SymbolUi.Child> selectedChildUis = null, List<IInputUi> selectedInputUis = null,
                                             List<IOutputUi> selectedOutputUis = null)
         {
             var commands = new List<ICommand>();
@@ -1013,9 +1013,9 @@ namespace T3.Editor.Gui.Graph
             UndoRedoStack.AddAndExecute(new MacroCommand("Changed Bypassed", commands));
         }
 
-        private List<SymbolChildUi> GetSelectedChildUis()
+        private List<SymbolUi.Child> GetSelectedChildUis()
         {
-            return NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
+            return NodeSelection.GetSelectedNodes<SymbolUi.Child>().ToList();
         }
 
         private IEnumerable<IInputUi> GetSelectedInputUis()
@@ -1031,7 +1031,7 @@ namespace T3.Editor.Gui.Graph
         #region Copy and paste
         private void CopySelectedNodesToClipboard(Instance composition)
         {
-            var selectedChildren = NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
+            var selectedChildren = NodeSelection.GetSelectedNodes<SymbolUi.Child>().ToList();
             var selectedAnnotations = NodeSelection.GetSelectedNodes<Annotation>().ToList();
             if (selectedChildren.Count + selectedAnnotations.Count == 0)
                 return;
@@ -1156,7 +1156,7 @@ namespace T3.Editor.Gui.Graph
                 _selectableItems.Clear();
                 var compositionOp = _window.CompositionOp;
                 var symbolUi = compositionOp.GetSymbolUi();
-                _selectableItems.AddRange(compositionOp.Children.Values.Select(x => x.GetSymbolChildUi()));
+                _selectableItems.AddRange(compositionOp.Children.Values.Select(x => x.GetChildUi()));
                                                             
                 _selectableItems.AddRange(symbolUi.InputUis.Values);
                 _selectableItems.AddRange(symbolUi.OutputUis.Values);

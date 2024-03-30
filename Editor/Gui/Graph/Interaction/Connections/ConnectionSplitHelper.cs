@@ -39,8 +39,8 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 if (ImGui.InvisibleButton("splitMe", Vector2.One * radius))
                 {
                     var posOnScreen = graphCanvas.InverseTransformPositionFloat(_bestMatchYetForCurrentFrame.PositionOnScreen)
-                                      - new Vector2(SymbolChildUi.DefaultOpSize.X * 0.25f,
-                                                    SymbolChildUi.DefaultOpSize.Y * 0.5f);
+                                      - new Vector2(SymbolUi.Child.DefaultOpSize.X * 0.25f,
+                                                    SymbolUi.Child.DefaultOpSize.Y * 0.5f);
 
                     ConnectionMaker.SplitConnectionWithSymbolBrowser(window, window.CompositionOp!.Symbol,
                                                                      _bestMatchYetForCurrentFrame.Connection,
@@ -161,7 +161,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new() { DisableDamping = true };
         private static readonly EvaluationContext EvaluationContext = new();
 
-        public static PotentialConnectionSplit BestMatchLastFrame;
+        public static ConnectionSplitHelper.PotentialConnectionSplit BestMatchLastFrame;
         private static PotentialConnectionSplit _bestMatchYetForCurrentFrame;
         private static float _bestMatchDistance = float.PositiveInfinity;
         private const int SnapDistance = 50;

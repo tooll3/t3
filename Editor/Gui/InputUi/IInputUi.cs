@@ -44,7 +44,7 @@ namespace T3.Editor.Gui.InputUi
         
         void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time);
         
-        InputEditStateFlags DrawParameterEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi, bool hideNonEssentials, bool skipIfDefault);
+        InputEditStateFlags DrawParameterEdit(IInputSlot input, SymbolUi compositionUi, SymbolUi.Child symbolChildUi, bool hideNonEssentials, bool skipIfDefault);
         string GetSlotValue(IInputSlot inputSlot);
         void DrawSettings();
         void DrawDescriptionEdit();

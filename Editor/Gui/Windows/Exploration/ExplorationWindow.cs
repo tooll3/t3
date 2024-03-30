@@ -33,7 +33,7 @@ namespace T3.Editor.Gui.Windows.Exploration
             var match = true;
             foreach (var param in variation.ValuesForParameters.Keys)
             {
-                if (!nodeSelection.GetSelectedChildUis().Contains(param.SymbolChildUi))
+                if (!nodeSelection.GetSelectedChildUis().Contains(param.TargetChild))
                 {
                     match = false;
                 }
@@ -75,13 +75,13 @@ namespace T3.Editor.Gui.Windows.Exploration
             ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.1f, 0, 100);
             _compositionSymbolId = nodeSelection.GetSelectionSymbolChildId() ?? Guid.Empty;
 
-            var selectedSymbolChildUis = nodeSelection.GetSelectedChildUis();
+            var selectedSymbolUiChilds = nodeSelection.GetSelectedChildUis();
 
             // Remove no longer selected parameters
-            var symbolChildUis = selectedSymbolChildUis as SymbolChildUi[] ?? selectedSymbolChildUis.ToArray();
+            var symbolChildUis = selectedSymbolUiChilds as SymbolUi.Child[] ?? selectedSymbolUiChilds.ToArray();
             for (var index = VariationParameters.Count - 1; index >= 0; index--)
             {
-                if (!symbolChildUis.Contains(VariationParameters[index].SymbolChildUi))
+                if (!symbolChildUis.Contains(VariationParameters[index].TargetChild))
                 {
                     VariationParameters.RemoveAt(index);
                 }
@@ -111,7 +111,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                     {
                         var matchingParam =
                             VariationParameters.FirstOrDefault(variationParam =>
-                                                                   input == variationParam.Input && symbolChildUi.Id == variationParam.SymbolChildUi.Id);
+                                                                   input == variationParam.Input && symbolChildUi.Id == variationParam.TargetChild.Id);
                         var selected = matchingParam != null;
 
                         if (matchingParam != null)
@@ -152,7 +152,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                             }
                             else
                             {
-                                var instance = nodeSelection.GetInstanceForSymbolChildUi(symbolChildUi);
+                                var instance = nodeSelection.GetInstanceForChildUi(symbolChildUi);
                                 var inputSlot = instance.Inputs.Single(input2 => input2.Id == input.Id);
                                 
                                 //var xxx = symbolChildUi.SymbolChild.Symbol
@@ -190,7 +190,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
                                 VariationParameters.Add(new ExplorationVariation.VariationParameter()
                                                             {
-                                                                SymbolChildUi = symbolChildUi,
+                                                                TargetChild = symbolChildUi,
                                                                 Input = input,
                                                                 InstanceIdPath = instance.InstancePath,
                                                                 Type = p.ValueType,
@@ -279,7 +279,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                             // Hover relevant operators
                             foreach (var param in _lastHoveredVariation.ValuesForParameters.Keys)
                             {
-                                nodeSelection.HoveredIds.Add(param.SymbolChildUi.Id);
+                                nodeSelection.HoveredIds.Add(param.TargetChild.Id);
                             }
                         }
                         else
@@ -376,14 +376,14 @@ namespace T3.Editor.Gui.Windows.Exploration
             nodeSelection.Clear();
             VariationParameters.Clear();
 
-            var alreadyAdded = new HashSet<SymbolChildUi>();
+            var alreadyAdded = new HashSet<SymbolUi.Child>();
             foreach (var param in variation.ValuesForParameters.Keys.Distinct())
             {
                 VariationParameters.Add(param);
-                if (!alreadyAdded.Contains(param.SymbolChildUi))
+                if (!alreadyAdded.Contains(param.TargetChild))
                 {
-                    nodeSelection.AddSymbolChildToSelection(param.SymbolChildUi, structure.GetInstanceFromIdPath(param.InstanceIdPath));
-                    alreadyAdded.Add(param.SymbolChildUi);
+                    nodeSelection.AddSymbolChildToSelection(param.TargetChild, structure.GetInstanceFromIdPath(param.InstanceIdPath));
+                    alreadyAdded.Add(param.TargetChild);
                 }
             }
 

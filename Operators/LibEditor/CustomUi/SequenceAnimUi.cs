@@ -12,11 +12,11 @@ namespace libEditor.CustomUi
 {
     public static class SequenceAnimUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is SequenceAnim sequenceAnim)
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
             
@@ -42,7 +42,7 @@ namespace libEditor.CustomUi
             var w = screenRect.GetWidth();
             if (h < 10 || sequenceAnim.CurrentSequence == null || sequenceAnim.CurrentSequence.Count == 0)
             {
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
             }
             
             
@@ -116,10 +116,10 @@ namespace libEditor.CustomUi
             
             drawList.PopClipRect();
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered 
-                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
-                   | SymbolChildUi.CustomUiResult.PreventInputLabels
-                   | SymbolChildUi.CustomUiResult.PreventTooltip;
+            return SymbolUi.Child.CustomUiResult.Rendered 
+                   | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolUi.Child.CustomUiResult.PreventInputLabels
+                   | SymbolUi.Child.CustomUiResult.PreventTooltip;
         }
 
         // private static float _dragStartBias;

@@ -72,10 +72,10 @@ namespace T3.Editor.UiModel
                 {
                     writer.WriteComment(childUi.SymbolChild.ReadableName);
 
-                    if (childUi.Style != SymbolChildUi.Styles.Default)
+                    if (childUi.Style != SymbolUi.Child.Styles.Default)
                     {
                         writer.WriteObject(JsonKeys.Style, childUi.Style);
-                        if (childUi.Size != SymbolChildUi.DefaultOpSize)
+                        if (childUi.Size != SymbolUi.Child.DefaultOpSize)
                         {
                             writer.WritePropertyName(JsonKeys.Size);
                             _vector2ToJson(writer, childUi.Size);
@@ -91,7 +91,7 @@ namespace T3.Editor.UiModel
                     _vector2ToJson(writer, childUi.PosOnCanvas);
 
                     if(childUi.SnapshotGroupIndex > 0)
-                        writer.WriteObject(nameof(SymbolChildUi.SnapshotGroupIndex), childUi.SnapshotGroupIndex);
+                        writer.WriteObject(nameof(SymbolUi.Child.SnapshotGroupIndex), childUi.SnapshotGroupIndex);
 
                     if (childUi.ConnectionStyleOverrides.Count > 0)
                     {
@@ -245,71 +245,6 @@ namespace T3.Editor.UiModel
                 }
             }
 
-            var symbolChildUis = new List<SymbolChildUi>();
-            var symbolId = symbol.Id;
-            foreach (var childEntry in (JArray)mainObject[JsonKeys.SymbolChildUis])
-            {
-                var childUi = new SymbolChildUi();
-                var childIdString = childEntry[JsonKeys.ChildId].Value<string>();
-                var hasChildId = Guid.TryParse(childIdString, out var childId);
-
-                if (!hasChildId)
-                {
-                    Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for invalid child id `{childIdString}`");
-                    continue;
-                }
-                
-                if (!symbol.Children.TryGetValue(childId, out var symbolChild))
-                {
-                    Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for undefined child {childId}");
-                    continue;
-                }
-                
-                childUi.SymbolChild = symbolChild;
-                
-                if (childEntry[JsonKeys.Comment] != null)
-                {
-                    childUi.Comment = childEntry[JsonKeys.Comment].Value<string>();
-                }
-
-                var positionToken = childEntry[JsonKeys.Position];
-                childUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
-
-                if (childEntry[JsonKeys.Size] != null)
-                {
-                    var sizeToken = childEntry[JsonKeys.Size];
-                    childUi.Size = (Vector2)_jsonToVector2(sizeToken);
-                }
-                
-                if (childEntry[nameof(SymbolChildUi.SnapshotGroupIndex)] != null)
-                {
-                    childUi.SnapshotGroupIndex = childEntry[nameof(SymbolChildUi.SnapshotGroupIndex)].Value<int>();
-                }
-
-                var childStyleEntry = childEntry[JsonKeys.Style];
-                if (childStyleEntry != null)
-                {
-                    childUi.Style = (SymbolChildUi.Styles)Enum.Parse(typeof(SymbolChildUi.Styles), childStyleEntry.Value<string>());
-                }
-                else
-                {
-                    childUi.Style = SymbolChildUi.Styles.Default;
-                }
-
-                var conStyleEntry = childEntry[JsonKeys.ConnectionStyleOverrides];
-                if (conStyleEntry != null)
-                {
-                    var dict = childUi.ConnectionStyleOverrides;
-                    foreach (var styleEntry in (JArray)conStyleEntry)
-                    {
-                        var id = Guid.Parse(styleEntry[JsonKeys.Id].Value<string>());
-                        var style = (SymbolChildUi.ConnectionStyles)Enum.Parse(typeof(SymbolChildUi.ConnectionStyles), styleEntry[JsonKeys.Style].Value<string>());
-                        dict.Add(id, style);
-                    }
-                }
-
-                symbolChildUis.Add(childUi);
-            }
 
             var outputDict = new OrderedDictionary<Guid, IOutputUi>();
             foreach (var uiOutputEntry in (JArray)mainObject[JsonKeys.OutputUis])
@@ -319,7 +254,7 @@ namespace T3.Editor.UiModel
 
                 if (!hasOutputId)
                 {
-                    Log.Warning($"Skipping UI output in {symbol.Name} {symbolId} for invalid output id `{outputIdString}`");
+                    Log.Warning($"Skipping UI output in {symbol.Name} {symbol.Id} for invalid output id `{outputIdString}`");
                     continue;
                 }
                 
@@ -337,7 +272,7 @@ namespace T3.Editor.UiModel
                     var outputUi = outputCreator();
                     outputUi.OutputDefinition = symbol.OutputDefinitions.First(def => def.Id == outputId);
 
-                    JToken positionToken = uiOutputEntry[JsonKeys.Position];
+                    var positionToken = uiOutputEntry[JsonKeys.Position];
                     outputUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
 
                     outputDict.Add(outputId, outputUi);
@@ -352,13 +287,91 @@ namespace T3.Editor.UiModel
             var linksDict = ReadLinks(mainObject);
 
 
-            symbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict, linksDict, false);
+            var symbolChildUiJson = (JArray)mainObject[JsonKeys.SymbolChildUis];
+            symbolUi = new SymbolUi(symbol: symbol, 
+                                    childUis: parent => CreateSymbolUiChildren(parent, symbolChildUiJson), 
+                                    inputs: inputDict, 
+                                    outputs: outputDict, 
+                                    annotations: annotationDict, 
+                                    links: linksDict, 
+                                    updateConsistency: false);
             
             var descriptionEntry = mainObject[JsonKeys.Description];
             if(descriptionEntry?.Value<string>() != null)
                 symbolUi.Description = descriptionEntry.Value<string>();
 
             return true;
+        }
+
+        private static List<SymbolUi.Child> CreateSymbolUiChildren(SymbolUi parent, IEnumerable<JToken> childJsons)
+        {
+            var symbolChildUis = new List<SymbolUi.Child>();
+            var symbol = parent.Symbol;
+            var symbolId = symbol.Id;
+            foreach (var childEntry in childJsons)
+            {
+                var childIdString = childEntry[JsonKeys.ChildId].Value<string>();
+                var hasChildId = Guid.TryParse(childIdString, out var childId);
+
+                if (!hasChildId)
+                {
+                    Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for invalid child id `{childIdString}`");
+                    continue;
+                }
+                
+                if (!symbol.Children.TryGetValue(childId, out var symbolChild))
+                {
+                    Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for undefined child {childId}");
+                    continue;
+                }
+                
+                var childUi = new SymbolUi.Child(symbolChild, parent);
+                
+                if (childEntry[JsonKeys.Comment] != null)
+                {
+                    childUi.Comment = childEntry[JsonKeys.Comment].Value<string>();
+                }
+
+                var positionToken = childEntry[JsonKeys.Position];
+                childUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
+
+                if (childEntry[JsonKeys.Size] != null)
+                {
+                    var sizeToken = childEntry[JsonKeys.Size];
+                    childUi.Size = (Vector2)_jsonToVector2(sizeToken);
+                }
+                
+                if (childEntry[nameof(SymbolUi.Child.SnapshotGroupIndex)] != null)
+                {
+                    childUi.SnapshotGroupIndex = childEntry[nameof(SymbolUi.Child.SnapshotGroupIndex)].Value<int>();
+                }
+
+                var childStyleEntry = childEntry[JsonKeys.Style];
+                if (childStyleEntry != null)
+                {
+                    childUi.Style = (SymbolUi.Child.Styles)Enum.Parse(typeof(SymbolUi.Child.Styles), childStyleEntry.Value<string>());
+                }
+                else
+                {
+                    childUi.Style = SymbolUi.Child.Styles.Default;
+                }
+
+                var conStyleEntry = childEntry[JsonKeys.ConnectionStyleOverrides];
+                if (conStyleEntry != null)
+                {
+                    var dict = childUi.ConnectionStyleOverrides;
+                    foreach (var styleEntry in (JArray)conStyleEntry)
+                    {
+                        var id = Guid.Parse(styleEntry[JsonKeys.Id].Value<string>());
+                        var style = (SymbolUi.Child.ConnectionStyles)Enum.Parse(typeof(SymbolUi.Child.ConnectionStyles), styleEntry[JsonKeys.Style].Value<string>());
+                        dict.Add(id, style);
+                    }
+                }
+
+                symbolChildUis.Add(childUi);
+            }
+
+            return symbolChildUis;
         }
 
         private static OrderedDictionary<Guid, Annotation> ReadAnnotations(JToken token)

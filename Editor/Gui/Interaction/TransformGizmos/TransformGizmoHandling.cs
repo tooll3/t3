@@ -31,7 +31,7 @@ namespace T3.Editor.Gui.Interaction.TransformGizmos
     {
         public static bool IsDragging => _draggedGizmoPart != GizmoParts.None;
 
-        public static void RegisterSelectedTransformable(SymbolChildUi node, ITransformable transformable)
+        public static void RegisterSelectedTransformable(SymbolUi.Child node, ITransformable transformable)
         {
             if (_selectedTransformables.Contains(transformable))
                 return;

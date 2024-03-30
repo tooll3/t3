@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
 {
     internal class CombineToSymbolDialog : ModalDialog
     {
-        public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, List<Annotation> selectedAnnotations, ref string nameSpace,
+        public void Draw(Instance compositionOp, List<SymbolUi.Child> selectedChildUis, List<Annotation> selectedAnnotations, ref string nameSpace,
                          ref string combineName, ref string description)
         {
             DialogSize = new Vector2(500, 350);

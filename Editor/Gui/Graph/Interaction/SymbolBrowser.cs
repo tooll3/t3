@@ -38,7 +38,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             // Scroll canvas to avoid symbol-browser close too edge
 
             var screenPos = _canvas.TransformPosition(positionOnCanvas);
-            var screenRect = ImRect.RectWithSize(screenPos, SymbolChildUi.DefaultOpSize);
+            var screenRect = ImRect.RectWithSize(screenPos, SymbolUi.Child.DefaultOpSize);
             screenRect.Expand(200 * _canvas.Scale.X);
             var windowRect = ImRect.RectWithSize(ImGui.GetWindowPos(), ImGui.GetWindowSize());
             var tooCloseToEdge = !windowRect.Contains(screenRect);
@@ -46,7 +46,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             var canvasPosition = _canvas.InverseTransformPositionFloat(screenPos);
             if (tooCloseToEdge)
             {
-                var canvasRect = ImRect.RectWithSize(canvasPosition, SymbolChildUi.DefaultOpSize);
+                var canvasRect = ImRect.RectWithSize(canvasPosition, SymbolUi.Child.DefaultOpSize);
                 canvasRect.Expand(400);
                 _canvas.FitAreaOnCanvas(canvasRect);
             }
@@ -97,7 +97,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                 var childUi = nodeSelection.GetSelectedChildUis().ToList()[0];
                 {
-                    var instance = nodeSelection.GetInstanceForSymbolChildUi(childUi);
+                    var instance = nodeSelection.GetInstanceForChildUi(childUi);
                     if (instance == null)
                     {
                         nodeSelection.Clear();
@@ -106,7 +106,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     
                     
                     var screenPos = canvas.TransformPosition(childUi.PosOnCanvas);
-                    var screenRect = ImRect.RectWithSize(screenPos, SymbolChildUi.DefaultOpSize);
+                    var screenRect = ImRect.RectWithSize(screenPos, SymbolUi.Child.DefaultOpSize);
                     screenRect.Expand(200 * canvas.Scale.X);
                     var windowRect = ImRect.RectWithSize(ImGui.GetWindowPos(), ImGui.GetWindowSize());
                     var tooCloseToEdge = !windowRect.Contains(screenRect);
@@ -114,7 +114,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     var canvasPosition = canvas.InverseTransformPositionFloat(screenPos);
                     if (tooCloseToEdge)
                     {
-                        var canvasRect = ImRect.RectWithSize(canvasPosition, SymbolChildUi.DefaultOpSize);
+                        var canvasRect = ImRect.RectWithSize(canvasPosition, SymbolUi.Child.DefaultOpSize);
                         canvasRect.Expand(400);
                         canvas.FitAreaOnCanvas(canvasRect);
                     }
@@ -675,7 +675,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         public Vector2 OutputPositionOnScreen => _posInScreen + _size;
         public bool IsOpen;
 
-        private readonly Vector2 _size = SymbolChildUi.DefaultOpSize;
+        private readonly Vector2 _size = SymbolUi.Child.DefaultOpSize;
         private static Vector2 BrowserPositionOffset => new(0, 40);
 
         private bool _focusInputNextTime;

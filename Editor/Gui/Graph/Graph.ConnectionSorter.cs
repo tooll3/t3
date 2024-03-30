@@ -28,8 +28,8 @@ internal partial class Graph
         public void Init()
         {
             Lines.Clear();
-            _linesFromNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
-            _linesIntoNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
+            _linesFromNodes = new Dictionary<SymbolUi.Child, List<ConnectionLineUi>>();
+            _linesIntoNodes = new Dictionary<SymbolUi.Child, List<ConnectionLineUi>>();
             _linesToOutputNodes = new Dictionary<IOutputUi, List<ConnectionLineUi>>();
             _linesFromInputNodes = new Dictionary<IInputUi, List<ConnectionLineUi>>();
         }
@@ -143,7 +143,7 @@ internal partial class Graph
 
         private static readonly List<ConnectionLineUi> _resultConnection = new(20);
 
-        public List<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
+        public List<ConnectionLineUi> GetLinesFromNodeOutput(SymbolUi.Child childUi, Guid outputId)
         {
             _resultConnection.Clear();
 
@@ -161,7 +161,7 @@ internal partial class Graph
             return _resultConnection;
         }
 
-        public List<ConnectionLineUi> GetLinesToNodeInputSlot(SymbolChildUi childUi, Guid inputId)
+        public List<ConnectionLineUi> GetLinesToNodeInputSlot(SymbolUi.Child childUi, Guid inputId)
         {
             _resultConnection.Clear();
             if (!_linesIntoNodes.TryGetValue(childUi, out var lines))
@@ -177,7 +177,7 @@ internal partial class Graph
             return _resultConnection;
         }
 
-        public List<ConnectionLineUi> GetLinesIntoNode(SymbolChildUi childUi)
+        public List<ConnectionLineUi> GetLinesIntoNode(SymbolUi.Child childUi)
         {
             return _linesIntoNodes.ContainsKey(childUi) ? _linesIntoNodes[childUi] : NoLines;
         }
@@ -196,8 +196,8 @@ internal partial class Graph
                        : NoLines;
         }
 
-        private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesFromNodes = new(50);
-        private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesIntoNodes = new(50);
+        private Dictionary<SymbolUi.Child, List<ConnectionLineUi>> _linesFromNodes = new(50);
+        private Dictionary<SymbolUi.Child, List<ConnectionLineUi>> _linesIntoNodes = new(50);
         private Dictionary<IOutputUi, List<ConnectionLineUi>> _linesToOutputNodes = new(50);
         private Dictionary<IInputUi, List<ConnectionLineUi>> _linesFromInputNodes = new(50);
 

@@ -9,7 +9,7 @@ namespace T3.Editor.Gui.Graph.Modification;
 
 internal static class ChangeSymbol
 {
-    public static void ChangeOperatorSymbol(NodeSelection nodeSelection, Instance compositionOp, List<SymbolChildUi> selectedChildUis, Symbol symbol)
+    public static void ChangeOperatorSymbol(NodeSelection nodeSelection, Instance compositionOp, List<SymbolUi.Child> selectedChildUis, Symbol symbol)
     {
         var nextSelection = new List<Symbol.Child>();
 
@@ -28,13 +28,13 @@ internal static class ChangeSymbol
         nodeSelection.Clear();
         nextSelection.ForEach(symbolChild =>
                               {
-                                  var childUi = symbolChild.GetSymbolChildUi();
+                                  var childUi = symbolChild.GetChildUi();
                                   var instance = compositionOp.Children[symbolChild.Id];
                                   nodeSelection.AddSymbolChildToSelection(childUi, instance);
                               });
     }
 
-    private static Symbol.Child ChangeOperatorSymbol(SymbolChildUi symbolChildUi, Symbol newSymbol, List<ICommand> executedCommands, NodeSelection selection)
+    private static Symbol.Child ChangeOperatorSymbol(SymbolUi.Child symbolChildUi, Symbol newSymbol, List<ICommand> executedCommands, NodeSelection selection)
     {
         var symbolChild = symbolChildUi.SymbolChild;
         if(symbolChild.Symbol == newSymbol)
@@ -187,7 +187,7 @@ internal static class ChangeSymbol
 
         if(!conversionWasLossy)
         {
-            var delCommand = new DeleteSymbolChildrenCommand(parentSymbolUi, new List<SymbolChildUi>() { symbolChildUi });
+            var delCommand = new DeleteSymbolChildrenCommand(parentSymbolUi, new List<SymbolUi.Child>() { symbolChildUi });
             delCommand.Do();
             executedCommands.Add(delCommand);
         }

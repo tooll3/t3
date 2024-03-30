@@ -700,7 +700,7 @@ namespace T3.Editor.Gui.Interaction
 
                 var instance = use.Instance;
 
-                var childUi = instance.GetSymbolChildUi();
+                var childUi = instance.GetChildUi();
 
                 if (childUi == null)
                     continue;

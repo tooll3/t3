@@ -44,16 +44,16 @@ internal class NodeNavigation
         var currentInstance = _navigationHistory.GetLastSelectedInstance();
 
         var symbolUi = composition.Symbol.GetSymbolUi();
-        var currentSymbolChildUi = symbolUi.ChildUis[currentInstance.SymbolChildId];
+        var currentSymbolUiChild = symbolUi.ChildUis[currentInstance.SymbolChildId];
         
         // Search all children
-        SymbolChildUi bestMatch = null;
+        SymbolUi.Child bestMatch = null;
         var bestRelevancy = float.PositiveInfinity;
         foreach (var otherChildUi in symbolUi.ChildUis.Values)
         {
-            var alignedDelta = GetAlignedDelta(direction, otherChildUi.PosOnCanvas - currentSymbolChildUi.PosOnCanvas);
+            var alignedDelta = GetAlignedDelta(direction, otherChildUi.PosOnCanvas - currentSymbolUiChild.PosOnCanvas);
 
-            if (otherChildUi == currentSymbolChildUi)
+            if (otherChildUi == currentSymbolUiChild)
             {
                 continue;
             }

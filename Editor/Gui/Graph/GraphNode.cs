@@ -41,7 +41,7 @@ namespace T3.Editor.Gui.Graph
             _sorter = sorter;
         }
         
-        public void Draw(ImDrawListPtr drawList, float opacity, bool isSelected, SymbolChildUi childUi, Instance instance, bool preventInteraction)
+        public void Draw(ImDrawListPtr drawList, float opacity, bool isSelected, SymbolUi.Child childUi, Instance instance, bool preventInteraction)
         {
             var symbolUi = instance.GetSymbolUi();
             var nodeHasHiddenMatchingInputs = false;
@@ -53,7 +53,7 @@ namespace T3.Editor.Gui.Graph
                 framesSinceLastUpdate = Math.Min(framesSinceLastUpdate, output.DirtyFlag.FramesSinceLastUpdate);
             }
 
-            SymbolChildUi.CustomUiResult customUiResult  = SymbolChildUi.CustomUiResult.None;
+            SymbolUi.Child.CustomUiResult customUiResult  = SymbolUi.Child.CustomUiResult.None;
 
             var newNodeSize = ComputeNodeSize(childUi, visibleInputUis, _sorter);
             AdjustGroupLayoutAfterResize(childUi, newNodeSize, instance.Parent.GetSymbolUi());
@@ -96,7 +96,7 @@ namespace T3.Editor.Gui.Graph
                     }
                     
                     // Resize indicator
-                    if (childUi.Style == SymbolChildUi.Styles.Resizable)
+                    if (childUi.Style == SymbolUi.Child.Styles.Resizable)
                     {
                         ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
                         ImGui.SetCursorScreenPos(_usableScreenRect.Max - new Vector2(10, 10) * T3Ui.UiScaleFactor);
@@ -138,7 +138,7 @@ namespace T3.Editor.Gui.Graph
                     customUiResult = DrawCustomUi(instance, drawList, _selectableScreenRect, _canvas.Scale);
 
                     // Size toggle
-                    if (customUiResult == SymbolChildUi.CustomUiResult.None && _canvas.Scale.X > 0.7f)
+                    if (customUiResult == SymbolUi.Child.CustomUiResult.None && _canvas.Scale.X > 0.7f)
                     {
                         var pos = new Vector2(_usableScreenRect.Max.X - 15, _usableScreenRect.Min.Y + 2);
 
@@ -150,18 +150,18 @@ namespace T3.Editor.Gui.Graph
                         ImGui.PushStyleColor(ImGuiCol.Text, transparentWhite);
                         ImGui.PushFont(Icons.IconFont);
 
-                        if (childUi.Style == SymbolChildUi.Styles.Default)
+                        if (childUi.Style == SymbolUi.Child.Styles.Default)
                         {
                             if (ImGui.Button(_unfoldLabel, new Vector2(16, 16)))
                             {
-                                childUi.Style = SymbolChildUi.Styles.Expanded;
+                                childUi.Style = SymbolUi.Child.Styles.Expanded;
                             }
                         }
-                        else if (childUi.Style != SymbolChildUi.Styles.Default)
+                        else if (childUi.Style != SymbolUi.Child.Styles.Default)
                         {
                             if (ImGui.Button(_foldLabel, new Vector2(16, 16)))
                             {
-                                childUi.Style = SymbolChildUi.Styles.Default;
+                                childUi.Style = SymbolUi.Child.Styles.Default;
                             }
                         }
 
@@ -215,7 +215,7 @@ namespace T3.Editor.Gui.Graph
                         _canvas.NodeSelection.HoveredIds.Remove(childUi.SymbolChild.Id);
                     }
                     else if (UserSettings.Config.EditorHoverPreview
-                        && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip)
+                        && (customUiResult & SymbolUi.Child.CustomUiResult.PreventTooltip) != SymbolUi.Child.CustomUiResult.PreventTooltip)
                     {
                         if (UserSettings.Config.SmartGroupDragging)
                             _canvas.SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
@@ -269,7 +269,7 @@ namespace T3.Editor.Gui.Graph
                     var justOpenedChild = false;
                     if (hovered && ImGui.IsMouseDoubleClicked(0)
                                 && !RenameInstanceOverlay.IsOpen
-                                && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenSubGraph) == 0)
+                                && (customUiResult & SymbolUi.Child.CustomUiResult.PreventOpenSubGraph) == 0)
                     {
                         if (ImGui.IsWindowFocused() || ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                         {
@@ -352,7 +352,7 @@ namespace T3.Editor.Gui.Graph
                     }
 
                     // Label
-                    if (customUiResult == SymbolChildUi.CustomUiResult.None
+                    if (customUiResult == SymbolUi.Child.CustomUiResult.None
                         && _selectableScreenRect.GetHeight() > 8)
                     {
                         drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
@@ -409,7 +409,7 @@ namespace T3.Editor.Gui.Graph
                 var connectedLines = _sorter.GetLinesToNodeInputSlot(childUi, inputDefinition.Id);
                 
                 // Render input Label
-                if ((customUiResult & SymbolChildUi.CustomUiResult.PreventInputLabels) == 0)
+                if ((customUiResult & SymbolUi.Child.CustomUiResult.PreventInputLabels) == 0)
                 {
                     var inputLabelOpacity = MathUtils.RemapAndClamp(_canvas.Scale.X,
                                                                     0.75f, 1.5f,
@@ -657,11 +657,11 @@ namespace T3.Editor.Gui.Graph
 
         
         // todo - move outta here
-        internal static SymbolChildUi.CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
+        internal static SymbolUi.Child.CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
         {
             return CustomChildUiRegistry.Entries.TryGetValue(instance.Type, out var drawFunction) 
                        ? drawFunction(instance, drawList, selectableScreenRect, canvasScale) 
-                       : SymbolChildUi.CustomUiResult.None;
+                       : SymbolUi.Child.CustomUiResult.None;
         }
 
         private void DrawOverlayLine(ImDrawListPtr drawList, float opacity, Vector2 p1, Vector2 p2)
@@ -735,11 +735,11 @@ namespace T3.Editor.Gui.Graph
 
         // Find visible input slots.
         // TODO: this is a major performance hot spot and needs optimization
-        private List<IInputUi> FindVisibleInputUis(SymbolUi symbolUi, SymbolChildUi childUi, ref bool nodeHasHiddenMatchingInputs)
+        private List<IInputUi> FindVisibleInputUis(SymbolUi symbolUi, SymbolUi.Child childUi, ref bool nodeHasHiddenMatchingInputs)
         {
             var connectionsToNode = _sorter.GetLinesIntoNode(childUi);
 
-            if (childUi.Style == SymbolChildUi.Styles.Expanded)
+            if (childUi.Style == SymbolUi.Child.Styles.Expanded)
             {
                 return symbolUi.InputUis.Values.ToList();
             }
@@ -863,9 +863,9 @@ namespace T3.Editor.Gui.Graph
                                                                 Color.White.Fade(opacity));
         }
 
-        private Vector2 ComputeNodeSize(SymbolChildUi childUi, List<IInputUi> visibleInputUis, Graph.ConnectionSorter connectionSorter)
+        private Vector2 ComputeNodeSize(SymbolUi.Child childUi, List<IInputUi> visibleInputUis, Graph.ConnectionSorter connectionSorter)
         {
-            if (childUi.Style == SymbolChildUi.Styles.Resizable)
+            if (childUi.Style == SymbolUi.Child.Styles.Resizable)
             {
                 return childUi.Size;
             }
@@ -881,11 +881,11 @@ namespace T3.Editor.Gui.Graph
                 additionalMultiInputSlots += connectedLines.Count;
             }
 
-            return new Vector2(SymbolChildUi.DefaultOpSize.X,
+            return new Vector2(SymbolUi.Child.DefaultOpSize.X,
                                23 + (visibleInputUis.Count + additionalMultiInputSlots) * 13);
         }
 
-        private void DrawOutput(ImDrawListPtr drawList, SymbolChildUi childUi, Symbol.OutputDefinition outputDef, ImRect usableArea, Color colorForType,
+        private void DrawOutput(ImDrawListPtr drawList, SymbolUi.Child childUi, Symbol.OutputDefinition outputDef, ImRect usableArea, Color colorForType,
                                 bool hovered, Instance instance)
         {
             if (ConnectionMaker.IsOutputSlotCurrentConnectionSource(childUi, outputDef))
@@ -984,7 +984,7 @@ namespace T3.Editor.Gui.Graph
         private static Guid _draggedInputOpId;
         private static Guid _draggedInputDefId;
 
-        private ImRect GetUsableOutputSlotArea(Vector2 canvasScale, SymbolChildUi targetUi, int outputIndex)
+        private ImRect GetUsableOutputSlotArea(Vector2 canvasScale, SymbolUi.Child targetUi, int outputIndex)
         {
             var thickness = (int)MathUtils.RemapAndClamp(canvasScale.X, 0.5f, 1.2f, (int)(UsableSlotThickness * 0.5f), UsableSlotThickness ) * T3Ui.UiScaleFactor ;
 
@@ -1010,7 +1010,7 @@ namespace T3.Editor.Gui.Graph
         /// <summary>
         /// Draws slot for non multi-input
         /// </summary>
-        private void DrawInputSlot(ImDrawListPtr drawList, SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered,
+        private void DrawInputSlot(ImDrawListPtr drawList, SymbolUi.Child targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered,
                                           bool isMissing, Instance instance)
         {
             var parentSymbol = instance.Parent.Symbol;
@@ -1150,7 +1150,7 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private void DrawInputSources(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, Instance instance, int inputIndex = 0)
+        private void DrawInputSources(SymbolUi.Child targetUi, Symbol.InputDefinition inputDef, Instance instance, int inputIndex = 0)
         {
             var sources = CollectSourcesForInput(instance.Parent, targetUi, inputDef, inputIndex);
             if (sources.Count <= 0)
@@ -1168,7 +1168,7 @@ namespace T3.Editor.Gui.Graph
         /// <summary>
         /// Crawl down the graph and collect a list of inputs that contributed to the given input   
         /// </summary>
-        private List<string> CollectSourcesForInput(Instance compositionOp, SymbolChildUi targetUi,
+        private List<string> CollectSourcesForInput(Instance compositionOp, SymbolUi.Child targetUi,
                                                            Symbol.InputDefinition inputDef, int inputIndex)
         {
             var sources = new List<string>();
@@ -1291,7 +1291,7 @@ namespace T3.Editor.Gui.Graph
             return input[..Math.Min(input.Length, maxLength)] + "...";
         }
 
-        private void DrawMultiInputSocket(ImDrawListPtr drawList, SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea,
+        private void DrawMultiInputSocket(ImDrawListPtr drawList, SymbolUi.Child targetUi, Symbol.InputDefinition inputDef, ImRect usableArea,
                                                  bool isInputHovered, int multiInputIndex, bool isGap, Color colorForType,
                                                  Color reactiveSlotColor, Instance instance)
         {

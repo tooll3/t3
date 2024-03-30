@@ -34,7 +34,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             BestMatchLastFrame = null;
         }
 
-        public static void RegisterAsPotentialTarget(SymbolChildUi childUi, IInputUi inputUi, int slotIndex, ImRect areaOnScreen)
+        public static void RegisterAsPotentialTarget(SymbolUi.Child childUi, IInputUi inputUi, int slotIndex, ImRect areaOnScreen)
         {
             if (ConnectionMaker.TempConnections == null || ConnectionMaker.TempConnections.Count == 0)
                 return;
@@ -90,7 +90,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             _bestMatchDistance = distance;
         }
 
-        public static bool IsNextBestTarget(SymbolChildUi childUi, Guid inputDefinitionId, int socketIndex)
+        public static bool IsNextBestTarget(SymbolUi.Child childUi, Guid inputDefinitionId, int socketIndex)
         {
             return BestMatchLastFrame != null && BestMatchLastFrame.TargetParentOrChildId == childUi.SymbolChild.Id
                                               && BestMatchLastFrame.TargetInputId == inputDefinitionId
@@ -104,7 +104,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                               && BestMatchLastFrame.SlotIndex == 0;
         }
 
-        public static PotentialConnectionTarget BestMatchLastFrame;
+        public static ConnectionSnapEndHelper.PotentialConnectionTarget BestMatchLastFrame;
         private static PotentialConnectionTarget _bestMatchYetForCurrentFrame;
         private static float _bestMatchDistance = float.PositiveInfinity;
         private const int SnapDistance = 50;

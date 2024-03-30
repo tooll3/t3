@@ -12,9 +12,9 @@ namespace T3.Editor.Gui.Selection
 
         public  void SetSelection(ISelectableCanvasObject node)
         {
-            if (node is SymbolChildUi)
+            if (node is SymbolUi.Child)
             {
-                Log.Warning("Setting selection to a SymbolChildUi without providing instance will lead to problems.");
+                Log.Warning("Setting selection to a SymbolUi.Child without providing instance will lead to problems.");
             }
 
             Clear();

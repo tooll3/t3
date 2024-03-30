@@ -125,7 +125,7 @@ namespace T3.Editor.Gui.Windows
                                    {
                                        IdPath = window.CompositionOp.InstancePath.ToList(),
                                        ViewScope = canvas.GetTargetScope(),
-                                       SelectedChildIds = canvas.NodeSelection.GetSelectedNodes<SymbolChildUi>().Select(s => s.Id).ToList()
+                                       SelectedChildIds = canvas.NodeSelection.GetSelectedNodes<SymbolUi.Child>().Select(s => s.Id).ToList()
                                    };
             ;
         }

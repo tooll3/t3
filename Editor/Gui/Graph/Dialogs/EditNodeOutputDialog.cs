@@ -62,7 +62,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     }
                     else
                     {
-                        _symbolChildUi.ConnectionStyleOverrides.Add(_outputDefinition.Id, SymbolChildUi.ConnectionStyles.FadedOut);
+                        _symbolChildUi.ConnectionStyleOverrides.Add(_outputDefinition.Id, SymbolUi.Child.ConnectionStyles.FadedOut);
                     }
                 }
                 
@@ -77,7 +77,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
             EndDialog();
         }
 
-        public void OpenForOutput(Symbol compositionSymbol, SymbolChildUi symbolChildUi, Symbol.OutputDefinition outputDefinition)
+        public void OpenForOutput(Symbol compositionSymbol, SymbolUi.Child symbolChildUi, Symbol.OutputDefinition outputDefinition)
         {
             _compositionSymbol = compositionSymbol;
             _symbolChildUi = symbolChildUi;
@@ -85,7 +85,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
             ShowNextFrame();
         }
 
-        private SymbolChildUi _symbolChildUi;
+        private SymbolUi.Child _symbolChildUi;
         private Symbol.OutputDefinition _outputDefinition;
         private Symbol _compositionSymbol;
     }

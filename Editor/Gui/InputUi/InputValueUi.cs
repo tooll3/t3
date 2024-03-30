@@ -38,7 +38,7 @@ namespace T3.Editor.Gui.InputUi
         /** Defines position of inputNode within graph */
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
 
-        public Vector2 Size { get; set; } = SymbolChildUi.DefaultOpSize;
+        public Vector2 Size { get; set; } = SymbolUi.Child.DefaultOpSize;
 
         /** Defines when input slots are visible in graph */
         public Relevancy Relevancy { get; set; } = Relevancy.Optional;
@@ -110,7 +110,7 @@ namespace T3.Editor.Gui.InputUi
                                                                Icon.KeyframeToggleOnBoth,
                                                            };
 
-        public InputEditStateFlags DrawParameterEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi, bool hideNonEssentials,
+        public InputEditStateFlags DrawParameterEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolUi.Child symbolChildUi, bool hideNonEssentials,
                                                      bool skipIfDefault)
         {
             var editState = InputEditStateFlags.Nothing;
@@ -233,12 +233,12 @@ namespace T3.Editor.Gui.InputUi
                         var sourceUi = compositionUi.GetSelectables()
                                                     .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
                         // Try to find instance
-                        if (sourceUi is SymbolChildUi sourceSymbolChildUi)
+                        if (sourceUi is SymbolUi.Child sourceChildUi)
                         {
                             var selectedInstance = nodeSelection.GetFirstSelectedInstance();
                             var parent = selectedInstance.Parent;
                             var selectionTargetInstance = parent.Children[sourceUi.Id];
-                            nodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
+                            nodeSelection.SetSelectionToChildUi(sourceChildUi, selectionTargetInstance);
                             FitViewToSelectionHandling.FitViewToSelection();
                         }
                     }
@@ -611,7 +611,7 @@ namespace T3.Editor.Gui.InputUi
             Extract,
         }
 
-        private static void PublishAsInput(NodeSelection selection, Structure structure, IInputSlot originalInputSlot, SymbolChildUi symbolChildUi, Symbol.Child.Input input)
+        private static void PublishAsInput(NodeSelection selection, Structure structure, IInputSlot originalInputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
         {
             var composition = selection.GetSelectedComposition() ?? originalInputSlot.Parent.Parent;
 

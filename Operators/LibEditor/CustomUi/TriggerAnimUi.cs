@@ -13,11 +13,11 @@ namespace libEditor.CustomUi
 {
     public static class TriggerAnimUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is TriggerAnim anim)
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
             // if (RateEditLabel.Draw(ref triggerAnimation.Rate.TypedInputValue.Value,
@@ -32,7 +32,7 @@ namespace libEditor.CustomUi
 
             if (h < 10)
             {
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
             }
             
 
@@ -132,10 +132,10 @@ namespace libEditor.CustomUi
             }
             drawList.PopClipRect();
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered 
-                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
-                   | SymbolChildUi.CustomUiResult.PreventInputLabels
-                   | SymbolChildUi.CustomUiResult.PreventTooltip;
+            return SymbolUi.Child.CustomUiResult.Rendered 
+                   | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolUi.Child.CustomUiResult.PreventInputLabels
+                   | SymbolUi.Child.CustomUiResult.PreventTooltip;
         }
 
         private static float _dragStartBias;

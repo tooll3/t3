@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
 {
     internal class DuplicateSymbolDialog : ModalDialog
     {
-        public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description)
+        public void Draw(Instance compositionOp, List<SymbolUi.Child> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description)
         {
             if(selectedChildUis.Count != 1)
                 return;

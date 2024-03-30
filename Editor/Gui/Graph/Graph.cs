@@ -287,7 +287,7 @@ namespace T3.Editor.Gui.Graph
 
         // Try to avoid allocations
         private readonly List<Symbol.Connection> AllConnections = new(100);
-        private readonly Dictionary<SymbolChildUi, GraphNode> _graphNodes = new();
+        private readonly Dictionary<SymbolUi.Child, GraphNode> _graphNodes = new();
         private readonly Dictionary<Annotation, AnnotationElement> _annotationElements = new();
     }
 }
