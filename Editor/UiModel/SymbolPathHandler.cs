@@ -43,7 +43,7 @@ internal sealed class SymbolPathHandler
         }
     }
 
-    public readonly Symbol Symbol;
+    public Symbol Symbol;
     private bool _initialized;
     private string _projectFolder;
     
