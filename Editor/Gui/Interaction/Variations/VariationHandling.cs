@@ -190,7 +190,7 @@ public static class VariationHandling
         {
             //_blendTargetVariation = variation;
             var normalizedValue = midiValue / 127.0f;
-            Log.Debug($"NormlizedBlendingValue: {normalizedValue}");
+            //Log.Debug($"NormlizedBlendingValue: {normalizedValue}");
             SmoothVariationBlending.StartBlendTo(variation, normalizedValue);
         }
         else

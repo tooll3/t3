@@ -194,6 +194,7 @@ namespace T3.Editor.Gui.Windows
                         {
                             MidiInConnectionManager.Rescan();
                             MidiOutConnectionManager.Init();
+                            CompatibleMidiDeviceHandling.InitializeConnectedDevices();
                         }
 
                         {
