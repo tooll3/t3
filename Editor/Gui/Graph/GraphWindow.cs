@@ -73,12 +73,14 @@ namespace T3.Editor.Gui.Graph
             GraphCanvas = new GraphCanvas(this, nodeSelection, navigationHistory);
             SymbolBrowser = new SymbolBrowser(this, GraphCanvas);
             TimeLineCanvas = new TimeLineCanvas(GraphCanvas);
+            WindowDisplayTitle = package.DisplayName + "##" + InstanceNumber;
             SetWindowToNormal();
         }
 
         public static bool CanOpenAnotherWindow => true;
 
         internal static readonly List<GraphWindow> GraphWindowInstances = new();
+        protected override string WindowDisplayTitle { get; }
 
         public override IReadOnlyList<Window> GetInstances() => GraphWindowInstances;
 
