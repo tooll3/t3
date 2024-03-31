@@ -4,7 +4,6 @@ using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs
@@ -43,10 +42,11 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.SetNextItemWidth(250);
                     //ImGui.InputText("##namespace", ref nameSpace, 255);
                     InputWithTypeAheadSearch.Draw("##namespace", ref nameSpace,
-                                                  _projectToCopyTo.SymbolUis.Select(x => x.Symbol)
-                                                                .Select(i => i.Namespace)
-                                                                .Distinct()
-                                                                .OrderBy(i => i),
+                                                  _projectToCopyTo.SymbolUis.Values
+                                                                  .Select(x => x.Symbol)
+                                                                  .Select(i => i.Namespace)
+                                                                  .Distinct()
+                                                                  .OrderBy(i => i),
                                                   warning: !correct);
 
                     ImGui.SetNextItemWidth(150);

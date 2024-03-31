@@ -44,7 +44,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             _history.UpdateSelectedInstance(instance);
             Clear();
             _childUiInstanceIdPaths.Clear();
-            _selectedComposition = instance;
+            _selectedComposition = instance.InstancePath;
         }
 
         public void SetSelection(ISelectableCanvasObject node)
@@ -135,13 +135,13 @@ namespace T3.Editor.Gui.Graph.Interaction
                 return null;
 
             var selection = GetFirstSelectedInstance();
-            return selection == _selectedComposition ? null : selection;
+            return selection == _structure.GetInstanceFromIdPath(_selectedComposition) ? null : selection;
         }
         
         public Instance? GetFirstSelectedInstance()
         {
             if (Selection.Count == 0)
-                return _selectedComposition;
+                return _structure.GetInstanceFromIdPath(_selectedComposition);
 
             if (Selection[0] is SymbolUi.Child firstNode)
             {
@@ -175,12 +175,12 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// <summary>
         /// Returns null if there are other selections
         /// </summary>
-        public Instance? GetSelectedComposition() => Selection.Count > 0 ? null : _selectedComposition;
+        public Instance? GetSelectedComposition() => Selection.Count > 0 ? null : _structure.GetInstanceFromIdPath(_selectedComposition);
 
         public Guid? GetSelectionSymbolChildId()
         {
             if (Selection.Count == 0)
-                return _selectedComposition.SymbolChildId;
+                return _selectedComposition[^1];
 
             if (Selection[0] is not SymbolUi.Child firstNode)
                 return null;
@@ -219,7 +219,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         private readonly Structure _structure;
 
         public readonly List<ISelectableCanvasObject> Selection = new();
-        private Instance _selectedComposition;
+        private IReadOnlyList<Guid> _selectedComposition;
         private readonly Dictionary<SymbolUi.Child, IReadOnlyList<Guid>> _childUiInstanceIdPaths = new();
     }
 }

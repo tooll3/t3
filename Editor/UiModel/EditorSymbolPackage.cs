@@ -300,7 +300,7 @@ internal class EditorSymbolPackage : SymbolPackage
     
     
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUiDict = new();
-    public IEnumerable<SymbolUi> SymbolUis => SymbolUiDict.Values;
+    public IReadOnlyDictionary<Guid, SymbolUi> SymbolUis => SymbolUiDict;
 
     protected virtual IEnumerable<string> SymbolUiSearchFiles =>
         Directory.EnumerateFiles(Path.Combine(Folder, SymbolUiSubFolder), $"*{SymbolUiExtension}", SearchOption.AllDirectories);
@@ -316,7 +316,7 @@ internal class EditorSymbolPackage : SymbolPackage
 
     public static IEnumerable<Symbol> AllSymbols => AllPackages
                                                    .Cast<EditorSymbolPackage>()
-                                                   .Select(x => x.Symbols)
+                                                   .Select(x => x.SymbolDict)
                                                    .SelectMany(x => x.Values);
 
     public static IEnumerable<SymbolUi> AllSymbolUis => AllPackages

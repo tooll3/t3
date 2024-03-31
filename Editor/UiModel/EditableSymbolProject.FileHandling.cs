@@ -89,7 +89,7 @@ internal sealed partial class EditableSymbolProject
     /// <param name="id">Id of the symbol to be removed</param>
     private void OnSymbolRemoved(Guid id)
     {
-        Symbols.Remove(id, out var symbol);
+        SymbolDict.Remove(id, out var symbol);
         
         Debug.Assert(symbol != null);
         

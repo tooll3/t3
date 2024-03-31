@@ -40,10 +40,11 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
                     ImGui.SetNextItemWidth(250);
                     InputWithTypeAheadSearch.Draw("##namespace2", ref nameSpace,
-                                                  _projectToCopyTo.SymbolUis.Select(x => x.Symbol)
-                                                                .Select(i => i.Namespace)
-                                                                .Distinct()
-                                                                .OrderBy(i => i),
+                                                  _projectToCopyTo.SymbolUis.Values
+                                                                  .Select(x => x.Symbol)
+                                                                  .Select(i => i.Namespace)
+                                                                  .Distinct()
+                                                                  .OrderBy(i => i),
                                                   warning: !correct);
 
                     ImGui.SetNextItemWidth(150);

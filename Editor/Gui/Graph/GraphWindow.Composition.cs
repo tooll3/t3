@@ -1,5 +1,5 @@
+#nullable enable
 using T3.Core.Operator;
-using T3.Core.Operator.Slots;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph;
@@ -8,19 +8,26 @@ internal sealed partial class GraphWindow
 {
     internal sealed class Composition : IDisposable
     {
-        public SymbolUi SymbolUi => _instance.GetSymbolUi();
-        public Symbol Symbol => SymbolUi.Symbol;
-        public Guid SymbolChildId => _instance.SymbolChildId;
-        public Type Type => _instance.Type;
-        public Instance Instance => _instance;
-        public bool IsDisposed => _disposed;
-        public readonly EditorSymbolPackage SymbolPackage;
+        public SymbolUi SymbolUi => _symbolPackage.SymbolUis[_symbolId];
+        public Symbol Symbol => _symbolPackage.Symbols[_symbolId];
+        public Instance Instance => _hasParent ? _parent!.Children[SymbolChildId] : _instance;
+        
+        public readonly Guid SymbolChildId;
+        private readonly Guid _symbolId;
+        
+        private readonly Instance? _parent;
         private readonly Instance _instance;
+        private readonly bool _hasParent;
+        private readonly EditorSymbolPackage _symbolPackage;
 
-        private Composition(Instance instance, EditorSymbolPackage package)
+        private Composition(Instance instance)
         {
-            SymbolPackage = package;
+            _symbolPackage = (EditorSymbolPackage)instance.Symbol.SymbolPackage;
+            _parent = instance.Parent;
+            _hasParent = _parent != null;
             _instance = instance;
+            SymbolChildId = instance.SymbolChildId;
+            _symbolId = instance.Symbol.Id;
         }
 
         internal static Composition GetFor(Instance instance, bool allowReload)
@@ -32,12 +39,12 @@ internal sealed partial class GraphWindow
             {
                 if (!Compositions.TryGetValue(instance, out composition))
                 {
-                    composition = new Composition(instance, symbolPackage);
+                    composition = new Composition(instance);
                     Compositions[instance] = composition;
                 }
             }
 
-            composition!._needsReload |= needsReload;
+            composition._needsReload |= needsReload;
             return composition;
         }
 
@@ -45,7 +52,7 @@ internal sealed partial class GraphWindow
         {
             if (_needsReload)
             {
-                SymbolPackage.Reload(SymbolUi);
+                _symbolPackage.Reload(SymbolUi);
             }
         }
 

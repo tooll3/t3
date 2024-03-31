@@ -79,14 +79,14 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     private void ClearSymbols()
     {
-        if (Symbols.Count == 0)
+        if (SymbolDict.Count == 0)
             return;
 
-        var symbols = Symbols.Values.ToArray();
+        var symbols = SymbolDict.Values.ToArray();
         foreach (var symbol in symbols)
         {
             var id = symbol.Id;
-            Symbols.Remove(id, out _);
+            SymbolDict.Remove(id, out _);
         }
     }
 
@@ -96,7 +96,7 @@ public abstract partial class SymbolPackage : IResourcePackage
 
         ConcurrentDictionary<Guid, Type> newTypes = new();
 
-        var removedSymbolIds = new HashSet<Guid>(Symbols.Keys);
+        var removedSymbolIds = new HashSet<Guid>(SymbolDict.Keys);
         List<Symbol> updatedSymbols = new();
 
         if (parallel)
@@ -153,9 +153,9 @@ public abstract partial class SymbolPackage : IResourcePackage
                 var symbol = readSymbolResult.Result.Symbol;
                 var id = symbol.Id;
 
-                if (!Symbols.TryAdd(id, symbol))
+                if (!SymbolDict.TryAdd(id, symbol))
                 {
-                    Log.Error($"Can't load symbol for [{symbol.Name}]. Registry already contains id {symbol.Id}: [{Symbols[symbol.Id].Name}]");
+                    Log.Error($"Can't load symbol for [{symbol.Name}]. Registry already contains id {symbol.Id}: [{SymbolDict[symbol.Id].Name}]");
                     continue;
                 }
 
@@ -173,7 +173,7 @@ public abstract partial class SymbolPackage : IResourcePackage
             var symbol = CreateSymbol(newType, guid);
 
             var id = symbol.Id;
-            if (!Symbols.TryAdd(id, symbol))
+            if (!SymbolDict.TryAdd(id, symbol))
             {
                 Log.Error($"{AssemblyInformation.Name}: Ignoring redefinition symbol {symbol.Name}.");
                 continue;
@@ -190,7 +190,7 @@ public abstract partial class SymbolPackage : IResourcePackage
 
         void LoadTypes(Guid guid, Type type, ConcurrentDictionary<Guid, Type> newTypesDict)
         {
-            if (Symbols.TryGetValue(guid, out var symbol))
+            if (SymbolDict.TryGetValue(guid, out var symbol))
             {
                 removedSymbolIds.Remove(guid);
 
@@ -245,14 +245,14 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     public readonly record struct SymbolJsonResult(in SymbolJson.SymbolReadResult Result, string Path);
 
-    public IReadOnlyDictionary<Guid, Symbol> SymbolDict => Symbols;
-    protected readonly ConcurrentDictionary<Guid, Symbol> Symbols = new();
+    public IReadOnlyDictionary<Guid, Symbol> Symbols => SymbolDict;
+    protected readonly ConcurrentDictionary<Guid, Symbol> SymbolDict = new();
 
     public const string SymbolExtension = ".t3";
 
     public bool ContainsSymbolName(string newSymbolName, string symbolNamespace)
     {
-        foreach (var existing in Symbols.Values)
+        foreach (var existing in SymbolDict.Values)
         {
             if (existing.Name == newSymbolName && existing.Namespace == symbolNamespace)
                 return true;
@@ -264,5 +264,5 @@ public abstract partial class SymbolPackage : IResourcePackage
     public virtual ResourceFileWatcher? FileWatcher => null;
     public virtual bool IsReadOnly => true;
 
-    public bool TryGetSymbol(Guid symbolId, [NotNullWhen(true)] out Symbol? symbol) => Symbols.TryGetValue(symbolId, out symbol);
+    public bool TryGetSymbol(Guid symbolId, [NotNullWhen(true)] out Symbol? symbol) => SymbolDict.TryGetValue(symbolId, out symbol);
 }

@@ -71,7 +71,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     private void GiveSymbolToPackage(Guid id, EditableSymbolProject newDestinationProject)
     {
-        Symbols.Remove(id, out var symbol);
+        SymbolDict.Remove(id, out var symbol);
         SymbolUiDict.Remove(id, out var symbolUi);
         FilePathHandlers.Remove(id, out var symbolPathHandler);
         
@@ -81,7 +81,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
         symbol.SymbolPackage = newDestinationProject;
 
-        newDestinationProject.Symbols.TryAdd(id, symbol);
+        newDestinationProject.SymbolDict.TryAdd(id, symbol);
         newDestinationProject.SymbolUiDict.TryAdd(id, symbolUi);
 
         newDestinationProject.FilePathHandlers.TryAdd(id, symbolPathHandler);
