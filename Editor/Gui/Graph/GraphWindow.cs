@@ -657,7 +657,7 @@ namespace T3.Editor.Gui.Graph
             static void DisposeOfCompositions(IReadOnlyList<Guid> currentPath, Composition? previous, List<Composition> compositionsWaitingForDisposal)
             {
                 // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-                if (previous != null)
+                if (previous != null && !compositionsWaitingForDisposal.Contains(previous))
                 {
                     compositionsWaitingForDisposal.Add(previous);
                 }
