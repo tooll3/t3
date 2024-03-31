@@ -325,7 +325,8 @@ namespace T3.Editor.UiModel
                     continue;
                 }
                 
-                var childUi = new SymbolUi.Child(symbolChild, parent);
+                var parentSymbol = parent.Symbol;
+                var childUi = new SymbolUi.Child(symbolChild.Id, parentSymbol.Id, (EditorSymbolPackage)parentSymbol.SymbolPackage);
                 
                 if (childEntry[JsonKeys.Comment] != null)
                 {

@@ -15,18 +15,17 @@ namespace T3.Core.Operator
     {
         public abstract Type Type { get; }
 
-        private Symbol.Child _symbolChildOf;
-        public Guid SymbolChildId => _symbolChildOf.Id;
+        public Guid SymbolChildId { get; private set; } = Guid.Empty;
 
-        internal void SetSymbolChild(Symbol.Child symbolChild)
+        internal void SetChildId(Guid symbolChildId)
         {
-            if (_symbolChildOf != null)
+            if(SymbolChildId != Guid.Empty)
                 throw new InvalidOperationException("Instance already has a symbol child");
             
-            _symbolChildOf = symbolChild;
+            SymbolChildId = symbolChildId;
         }
 
-        public Symbol.Child? SymbolChild => _symbolChildOf;
+        public Symbol.Child? SymbolChild => _parent?.Symbol.Children[SymbolChildId];
 
         private Instance _parent;
 
@@ -306,7 +305,7 @@ namespace T3.Core.Operator
             static void DestroyChildInstance(Instance parent, Guid childId)
             {
                 parent._childInstances.Remove(childId, out var childInstance);
-                childInstance!.Dispose();
+                childInstance?.Dispose();
             }
         }
 

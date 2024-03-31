@@ -8,13 +8,8 @@ namespace T3.Core.Operator;
 
 public sealed partial class Symbol
 {
-    internal void UpdateInstanceType(Instance[] transferredInstances)
+    internal void UpdateInstanceType()
     {
-        foreach (var instance in transferredInstances)
-        {
-            _instancesOfSelf.Add(instance);
-        }
-
         UpdateSlotsAndConnectionsForType(out var oldInputDefinitions, out var oldOutputDefinitions);
 
         var existingInstancesRefreshInfo = new List<InstanceTypeRefreshInfo>();
@@ -291,4 +286,12 @@ public sealed partial class Symbol
         IReadOnlyList<OutputDefinition> OldOutputDefinitions,
         IReadOnlyList<InputDefinition> NewInputDefinitions,
         IReadOnlyList<OutputDefinition> NewOutputDefinitions);
+
+    public void ReplaceWith(Symbol newSymbol)
+    {
+        Connections.Clear();
+        Connections.AddRange(newSymbol.Connections);
+        _children = newSymbol._children;
+        SymbolRegistry.SymbolsByType[InstanceType] = this; // ugly - the other one replaced this value with itself when it was created
+    }
 }

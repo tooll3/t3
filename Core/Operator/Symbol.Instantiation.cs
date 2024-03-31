@@ -22,7 +22,6 @@ public sealed partial class Symbol
         }
 
         var newChildInstances = new List<Instance>(_instancesOfSelf.Count);
-        _instancesOfChildren[addedChildId] = newChildInstances;
 
         foreach (var instance in _instancesOfSelf)
         {
@@ -56,8 +55,6 @@ public sealed partial class Symbol
         {
             Instance.AddChildTo(parentInstance, newInstance);
             var parentSymbol = parentInstance.Symbol;
-            var instanceList = parentSymbol._instancesOfChildren[symbolChild.Id];
-            instanceList.Add(newInstance);
         }
 
         // cache property accesses for performance
@@ -146,7 +143,7 @@ public sealed partial class Symbol
             }
 
             Debug.Assert(newInstance != null);
-            newInstance!.SetSymbolChild(symbolChild); // this will also set symbolChildId;
+            newInstance!.SetChildId(symbolChild.Id);
             
             newInstance.Parent = parent;
 

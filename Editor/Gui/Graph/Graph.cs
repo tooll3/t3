@@ -2,11 +2,9 @@
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.External.Truncon.Collections;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 // ReSharper disable LoopCanBeConvertedToQuery
@@ -48,9 +46,7 @@ namespace T3.Editor.Gui.Graph
         {
             var canvas = _window.GraphCanvas;
             var needsReinit = false;
-            GraphOpacity = graphOpacity; //MathF.Sin((float)ImGui.GetTime() * 2) * 0.5f + 0.5f;
-            var compositionUi = composition.GetSymbolUi();
-            var graphSymbol = compositionUi.Symbol;
+            var graphSymbol = composition.Symbol;
 
             if (ConnectionMaker.TempConnections.Count > 0 || AllConnections.Count != ConnectionMaker.TempConnections.Count + graphSymbol.Connections.Count)
             {
@@ -82,6 +78,7 @@ namespace T3.Editor.Gui.Graph
             }
 
             //needsReinit = true;
+            var compositionUi = composition.GetSymbolUi();
             if (needsReinit)
             {
                 AllConnections.Clear();
@@ -108,8 +105,9 @@ namespace T3.Editor.Gui.Graph
             drawList.ChannelsSplit(2);
             drawList.ChannelsSetCurrent((int)Channels.Operators);
 
+            compositionUi = composition.GetSymbolUi();
             // 3. Draw Nodes and their sockets and set positions for connection lines
-            foreach (var instance in composition.Children.Values)
+            foreach (var instance in _window.CompositionOp.Children.Values)
             {
                 if (instance == null)
                     continue;
@@ -125,7 +123,7 @@ namespace T3.Editor.Gui.Graph
                     _graphNodes[childUi] = node;
                 }
 
-                node.Draw(drawList, GraphOpacity, isSelected, childUi, instance, preventInteraction);
+                node.Draw(drawList, graphOpacity, isSelected, childUi, instance, preventInteraction);
             }
 
             // 4. Draw Inputs Nodes
@@ -279,8 +277,6 @@ namespace T3.Editor.Gui.Graph
             Annotations = 0,
             Operators = 1,
         }
-
-        public float GraphOpacity = 0.2f;
 
         private int _lastCheckSum;
         private readonly ConnectionSorter _connectionSorter;
