@@ -145,14 +145,13 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             if (Selection[0] is SymbolUi.Child firstNode)
             {
-                if (!_childUiInstanceIdPaths.ContainsKey(firstNode))
+                if (!_childUiInstanceIdPaths.TryGetValue(firstNode, out var idPath))
                 {
                     Log.Error("Failed to access id-path of selected childUi " + firstNode.SymbolChild.Name);
                     Clear();
                     return null;
                 }
 
-                var idPath = _childUiInstanceIdPaths[firstNode];
                 return _structure.GetInstanceFromIdPath(idPath);
             }
 
