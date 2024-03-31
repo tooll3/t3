@@ -64,7 +64,8 @@
       "Position": {
         "X": 4128.573,
         "Y": 316.00854
-      }
+      },
+      "SnapshotGroupIndex": "1"
     },
     {
       "ChildId": "828c1cd6-8788-4f55-a6e2-6c974b816b24"/*LinePoints*/,
@@ -218,14 +219,16 @@
       "Position": {
         "X": 4428.573,
         "Y": 316.00854
-      }
+      },
+      "SnapshotGroupIndex": "1"
     },
     {
       "ChildId": "7641b2a6-7459-443f-8750-da857f07ec5c"/*ColorGrade*/,
       "Position": {
         "X": 4278.573,
         "Y": 316.00854
-      }
+      },
+      "SnapshotGroupIndex": "1"
     },
     {
       "ChildId": "88275f2a-ef2b-4ea0-8d5b-28beebf23272"/*mainKick*/,

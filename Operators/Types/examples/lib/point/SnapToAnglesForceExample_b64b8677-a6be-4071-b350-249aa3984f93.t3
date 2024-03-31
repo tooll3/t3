@@ -1404,7 +1404,7 @@
           "Id": "aad1e576-f144-423f-83b5-5694b1119c23"/*OutputRange*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.0,
+            "X": 3.27,
             "Y": -10.0
           }
         },

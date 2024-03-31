@@ -946,7 +946,7 @@
         {
           "Id": "792e9b7e-9094-4bf9-8aed-d8b3fcdee358"/*Spread*/,
           "Type": "System.Single",
-          "Value": 2.65
+          "Value": 12.2
         },
         {
           "Id": "f21dbefd-ea54-4901-a806-b1a2c5ee140f"/*OffsetTowardsCenter*/,

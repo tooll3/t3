@@ -30,7 +30,7 @@ namespace T3.Operators.Types.Id_31ab98ec_5e79_4667_9a85_2fb168f41fa1
 
         private void Update(EvaluationContext context)
         {
-            var isConnected = _nativeLinkInstance == IntPtr.Zero;
+            var isConnected = _nativeLinkInstance != IntPtr.Zero;
             IsConnected.Value = isConnected;
             
             if (!isConnected)
