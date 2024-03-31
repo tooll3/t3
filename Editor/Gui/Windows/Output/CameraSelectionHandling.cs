@@ -49,13 +49,32 @@ namespace T3.Editor.Gui.Windows.Output
             /// </summary>
             PickedACamera,
         }
+
+        public CameraSelectionHandling()
+        {
+            _getPlayback = () => Playback.Current;
+        }
+
+        public CameraSelectionHandling(NodeSelection nodeSelection, Func<Playback> getPlayback)
+        {
+            _nodeSelection = nodeSelection;
+            _getPlayback = getPlayback;
+        }
+
+        private readonly NodeSelection? _nodeSelection;
         
-        private static NodeSelection? NodeSelection => GraphWindow.Focused?.GraphCanvas.NodeSelection;
+        // preparation for each window to have its own playback
+        private readonly Func<Playback> _getPlayback;
+        
+        private NodeSelection? NodeSelection => _nodeSelection ?? GraphWindow.Focused?.GraphCanvas.NodeSelection;
+        
         
         public void Update(Instance drawnInstance, Type drawnType, bool preventInteractions = false)
         {
-            _hasAnimationTimeChanged = Math.Abs(_lastUpdateTime - Playback.Current.TimeInBars) > 0.001f;
-            _lastUpdateTime = Playback.Current.TimeInBars;
+            var currentPlayback = _getPlayback();
+            var timeInBars = currentPlayback.TimeInBars;
+            _hasAnimationTimeChanged = Math.Abs(_lastUpdateTime - timeInBars) > 0.001f;
+            _lastUpdateTime = timeInBars;
             PreventImageCanvasInteraction = false;
             
             _drawnInstance = drawnInstance;
@@ -164,7 +183,6 @@ namespace T3.Editor.Gui.Windows.Output
 
             if (_controlMode != ControlModes.PickedACamera)
             {
-                
                 CameraForRendering = cameraForManipulation;
             }
             else
@@ -172,10 +190,7 @@ namespace T3.Editor.Gui.Windows.Output
                 PreventImageCanvasInteraction = true;
             }
 
-            if (CameraForRendering == null)
-            {
-                CameraForRendering = _outputWindowViewCamera;
-            }
+            CameraForRendering ??= _outputWindowViewCamera;
 
             if (TransformGizmoHandling.IsDragging)
                 PreventCameraInteraction = true;
