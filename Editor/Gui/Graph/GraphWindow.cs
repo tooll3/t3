@@ -27,65 +27,13 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     internal sealed partial class GraphWindow : Window
     {
-        public static GraphWindow? Focused
-        {
-            get => _focused;
-            private set
-            {
-                if (_focused == value)
-                    return;
-
-                _focused?.FocusLost?.Invoke(_focused, _focused);
-                _focused = value;
-                if(value != null)
-                    Log.Debug($"Focused! {value.Config.Title} + {value.InstanceNumber}");
-            }
-        }
-        
-        internal event EventHandler<GraphWindow>? FocusLost;
-
         private Composition _composition;
         internal Instance CompositionOp => _composition.Instance;
 
         public readonly SymbolBrowser SymbolBrowser;
         public readonly EditorSymbolPackage Package;
-        public readonly int InstanceNumber;
-        private static int _instanceCounter;
-        private const int NoInstanceNumber = -1;
-        
-        private GraphWindow(EditorSymbolPackage package, int instanceNumber)
-        {
-            InstanceNumber = instanceNumber;
-            WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
-            Package = package;
-            
-            if(!package.TryGetRootInstance(out var actualRoot))
-                throw new Exception("Could not get root instance from package");
-            
-            _rootInstance = actualRoot!;
-            AllowMultipleInstances = true;
-            
-            ConnectionMaker.AddWindow(this);
-            Structure = new Structure(() => RootInstance.Instance);
-            
-            var navigationHistory = new NavigationHistory(Structure);
-            var nodeSelection = new NodeSelection(navigationHistory, Structure);
 
-            GraphImageBackground = new GraphImageBackground(this, nodeSelection, Structure);
-            GraphCanvas = new GraphCanvas(this, nodeSelection, navigationHistory);
-            SymbolBrowser = new SymbolBrowser(this, GraphCanvas);
-            TimeLineCanvas = new TimeLineCanvas(GraphCanvas);
-            WindowDisplayTitle = package.DisplayName + "##" + InstanceNumber;
-            SetWindowToNormal();
-        }
-
-        public static bool CanOpenAnotherWindow => true;
-
-        internal static readonly List<GraphWindow> GraphWindowInstances = new();
         protected override string WindowDisplayTitle { get; }
-
-        public override IReadOnlyList<Window> GetInstances() => GraphWindowInstances;
-
         private bool _focusOnNextFrame;
 
         public void FocusFromSymbolBrowser()
@@ -253,7 +201,7 @@ namespace T3.Editor.Gui.Graph
                                      | ImGuiWindowFlags.NoBackground
                                     );
                     {
-                        TimeLineCanvas.Draw(CompositionOp, Playback.Current);
+                        _timeLineCanvas.Draw(CompositionOp, Playback.Current);
                     }
                     ImGui.EndChild();
                     ImGui.PopStyleVar(1);
@@ -400,7 +348,7 @@ namespace T3.Editor.Gui.Graph
                 ImGui.SameLine();
 
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
-                TimeControls.DrawTimeControls(TimeLineCanvas, composition.Instance);
+                TimeControls.DrawTimeControls(_timeLineCanvas, composition.Instance);
                 ImGui.PopStyleVar();
                 ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 10);
 
@@ -420,8 +368,6 @@ namespace T3.Editor.Gui.Graph
             
             WindowDestroyed?.Invoke(this, Package);
         }
-
-        public event EventHandler<EditorSymbolPackage> WindowDestroyed;
 
         protected override void AddAnotherInstance()
         {
@@ -509,242 +455,17 @@ namespace T3.Editor.Gui.Graph
         }
 
         internal readonly GraphImageBackground GraphImageBackground;
-
         public readonly GraphCanvas GraphCanvas;
         private const int UseComputedHeight = -1;
         private int _customTimeLineHeight = UseComputedHeight;
         private bool UsingCustomTimelineHeight => _customTimeLineHeight > UseComputedHeight;
 
-        private float ComputedTimelineHeight => (TimeLineCanvas.SelectedAnimationParameters.Count * DopeSheetArea.LayerHeight)
-                                                + TimeLineCanvas.LayersArea.LastHeight
+        private float ComputedTimelineHeight => (_timeLineCanvas.SelectedAnimationParameters.Count * DopeSheetArea.LayerHeight)
+                                                + _timeLineCanvas.LayersArea.LastHeight
                                                 + TimeLineCanvas.TimeLineDragHeight
                                                 + 1;
 
-        internal readonly TimeLineCanvas TimeLineCanvas;
-
+        private readonly TimeLineCanvas _timeLineCanvas;
         private static readonly EditSymbolDescriptionDialog EditDescriptionDialog = new();
-        private static GraphWindow? _focused;
-
-        public static bool TryOpenPackage(EditorSymbolPackage package, bool replaceFocused, Instance? startingComposition = null, WindowConfig? config = null, int instanceNumber = NoInstanceNumber)
-        {
-            if (!package.TryGetRootInstance(out var root))
-            {
-                LogFailure();
-                return false;
-            }
-
-            var shouldBeVisible = true;
-            if (replaceFocused && Focused != null)
-            {
-                shouldBeVisible = Focused.Config.Visible;
-                Focused.Close();
-            }
-
-            instanceNumber = instanceNumber == NoInstanceNumber ? ++_instanceCounter : instanceNumber;
-            var newWindow = new GraphWindow(package, instanceNumber);
-
-            if (config == null)
-            {
-                config = newWindow.Config;
-                config.Title = LayoutHandling.GraphPrefix + instanceNumber;
-                config.Visible = shouldBeVisible;
-            }
-            else
-            {
-                config.Visible = true;
-                newWindow.Config = config;
-            }
-
-            IReadOnlyList<Guid> rootPath = [root!.SymbolChildId];
-            var startPath = rootPath;
-            if (root == startingComposition)
-            {
-                // Legacy work-around
-                var opId = UserSettings.GetLastOpenOpForWindow(config.Title);
-                if (opId != Guid.Empty && opId != root.SymbolChildId)
-                {
-                    if (root.TryGetChildInstance(opId, true, out _, out var path))
-                    {
-                        startPath = path;
-                    }
-                }
-            }
-
-            const ICanvas.Transition transition = ICanvas.Transition.JumpIn;
-            if (!newWindow.TrySetCompositionOp(startPath, transition) && !newWindow.TrySetCompositionOp(rootPath, transition))
-            {
-                LogFailure();
-                newWindow.Close();
-                return false;
-            }
-            
-            GraphWindowInstances.Add(newWindow);
-            newWindow.TakeFocus();
-            return true;
-            
-            void LogFailure() => Log.Error($"Failed to open operator graph for {package.DisplayName}");
-        }
-
-        public void SetWindowToNormal()
-        {
-            WindowFlags &= ~(ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove |
-                             ImGuiWindowFlags.NoResize);
-        }
-
-        public void TakeFocus()
-        {
-            Focused = this;
-        }
-
-        internal bool TrySetCompositionOp(IReadOnlyList<Guid> path, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? nextSelectedUi = null)
-        {
-            if (!Package.IsReadOnly)
-            {
-                // refresh root in case the project root changed in code?
-                if (!Package.TryGetRootInstance(out var rootInstance))
-                {
-                    return false;
-                }
-
-                _rootInstance = rootInstance!;
-            }
-
-            var newCompositionInstance = Structure.GetInstanceFromIdPath(path);
-
-            if (newCompositionInstance == null)
-            {
-                var pathString = string.Join('/', Structure.GetReadableInstancePath(path));
-                Log.Error("Failed to find instance with path " + pathString);
-                return false;
-            }
-            
-            var previousComposition = _composition;
-
-            // composition is only null once in the very first call to TrySetCompositionOp
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (previousComposition != null)
-            {
-                if (path[0] != RootInstance.Instance.SymbolChildId)
-                {
-                    throw new Exception("Root instance is not the first element in the path");
-                }
-                if (previousComposition.SymbolChildId == newCompositionInstance.SymbolChildId)
-                    return true;
-            }
-
-            _composition = Composition.GetFor(newCompositionInstance, true)!;
-            _compositionPath.Clear();
-            _compositionPath.AddRange(path);
-            TimeLineCanvas.ClearSelection();
-
-            
-            if (nextSelectedUi != null)
-            {
-                var instance = _composition.Instance.Children[nextSelectedUi.Value];
-                var symbolChildUi = instance.GetChildUi();
-                
-                if(symbolChildUi != null)
-                    GraphCanvas.NodeSelection.SetSelectionToChildUi(symbolChildUi, instance);
-                else
-                    GraphCanvas.NodeSelection.Clear();
-            }
-            else
-            {
-                GraphCanvas.NodeSelection.Clear();
-            }
-            
-            ApplyComposition(transition, previousComposition);
-            DisposeOfCompositions(path, previousComposition, _compositionsWaitingForDisposal);
-
-            UserSettings.SaveLastViewedOpForWindow(this, _composition.SymbolChildId);
-            return true;
-
-            static void DisposeOfCompositions(IReadOnlyList<Guid> currentPath, Composition? previous, List<Composition> compositionsWaitingForDisposal)
-            {
-                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-                if (previous != null && !compositionsWaitingForDisposal.Contains(previous))
-                {
-                    compositionsWaitingForDisposal.Add(previous);
-                }
-
-                for (int i = compositionsWaitingForDisposal.Count - 1; i >= 0; i--)
-                {
-                    var composition = compositionsWaitingForDisposal[i];
-                    var symbolChildId = composition.SymbolChildId;
-                    if (!currentPath.Contains(symbolChildId))
-                    {
-                        composition.Dispose();
-                        compositionsWaitingForDisposal.RemoveAt(i);
-                    }
-                }
-            }
-        }
-        
-        private readonly List<Guid> _compositionPath = [];
-        
-        private Instance _rootInstance;
-        internal Composition RootInstance => Composition.GetFor(_rootInstance, true);
-        private bool _initializedAfterLayoutReady;
-        private readonly List<Composition> _compositionsWaitingForDisposal = new();
-
-        public readonly Structure Structure;
-
-        public bool TrySetCompositionOpToChild(Guid symbolChildId)
-        {
-            // new list as _compositionPath is mutable
-            var newPathList = new List<Guid>(_compositionPath.Count + 1);
-            newPathList.AddRange(_compositionPath);
-            newPathList.Add(symbolChildId);
-            return TrySetCompositionOp(newPathList, ICanvas.Transition.JumpIn);
-        }
-        
-        public bool TrySetCompositionOpToParent()
-        {
-            if (_compositionPath.Count == 1)
-                return false;
-
-            var previousComposition = _composition;
-            
-            // new list as _compositionPath is mutable
-            var path = _compositionPath.GetRange(0, _compositionPath.Count - 1);
-
-            // pass the child UI only in case the previous composition was a cloned instance
-            return TrySetCompositionOp(path, ICanvas.Transition.JumpOut, previousComposition.SymbolChildId);
-        }
-
-        private void ApplyComposition(ICanvas.Transition transition, Composition? previousComposition)
-        {
-            GraphCanvas.SelectableNodeMovement.Reset();
-
-            var compositionOp = CompositionOp;
-
-            if (previousComposition != null)
-            {
-                // zoom timeline out if necessary
-                if (transition == ICanvas.Transition.JumpOut)
-                {
-                    TimeLineCanvas.UpdateScaleAndTranslation(previousComposition.Instance, transition);
-                }
-
-                var targetScope = GraphCanvas.GetTargetScope();
-                UserSettings.Config.OperatorViewSettings[previousComposition.SymbolChildId] = targetScope;
-            }
-
-            TimeLineCanvas.ClearSelection();
-            GraphCanvas.FocusViewToSelection();
-
-            var newProps = GraphCanvas.GetTargetScope();
-            if (UserSettings.Config.OperatorViewSettings.TryGetValue(compositionOp.SymbolChildId, out var viewSetting))
-            {
-                newProps = viewSetting;
-            }
-
-            GraphCanvas.SetScopeWithTransition(newProps.Scale, newProps.Scroll, transition);
-
-            if (transition == ICanvas.Transition.JumpIn)
-            {
-                TimeLineCanvas.UpdateScaleAndTranslation(compositionOp, transition);
-            }
-        }
     }
 }
