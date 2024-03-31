@@ -9,7 +9,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
     /// <summary>
     /// A helper that collects potential collection targets during connection drag operations.
     /// </summary>
-    public static class ConnectionSnapEndHelper
+    internal static class ConnectionSnapEndHelper
     {
         public static void PrepareNewFrame()
         {
@@ -34,15 +34,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             BestMatchLastFrame = null;
         }
 
-        public static void RegisterAsPotentialTarget(SymbolUi.Child childUi, IInputUi inputUi, int slotIndex, ImRect areaOnScreen)
+        internal static void RegisterAsPotentialTarget(GraphWindow window, SymbolUi.Child childUi, IInputUi inputUi, int slotIndex, ImRect areaOnScreen)
         {
-            if (ConnectionMaker.TempConnections == null || ConnectionMaker.TempConnections.Count == 0)
-                return;
-
-            if (T3Ui.IsAnyPopupOpen)
-                return;
-            
-            if (ConnectionMaker.TempConnections.All(c => c.ConnectionType != inputUi.Type))
+            if (ConnectionMaker.IsTargetInvalid(window, inputUi.Type))
                 return;
 
             var distance = Vector2.Distance(areaOnScreen.Min, _mousePosition);
@@ -62,15 +56,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             _bestMatchDistance = distance;
         }
 
-        public static void RegisterAsPotentialTarget(IOutputUi outputUi, ImRect areaOnScreen)
+        public static void RegisterAsPotentialTarget(GraphWindow window, IOutputUi outputUi, ImRect areaOnScreen)
         {
-            if (ConnectionMaker.TempConnections == null || ConnectionMaker.TempConnections.Count == 0)
-                return;
-
-            if (!string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName))
-                return;
-            
-            if (ConnectionMaker.TempConnections.All(c => c.ConnectionType != outputUi.Type))
+            if (ConnectionMaker.IsTargetInvalid(window, outputUi.Type))
                 return;
 
             var distance = Vector2.Distance(areaOnScreen.Min, _mousePosition);
@@ -110,7 +98,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
         private const int SnapDistance = 50;
         private static Vector2 _mousePosition;
 
-        public class PotentialConnectionTarget
+        public sealed class PotentialConnectionTarget
         {
             public Guid TargetParentOrChildId;
             public Guid TargetInputId;

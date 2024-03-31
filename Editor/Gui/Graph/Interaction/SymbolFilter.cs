@@ -94,12 +94,14 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// Build hashes for symbol specific input slots. These are then used
         /// the compute relevancy. 
         /// </summary>
-        private void UpdateConnectSlotHashes()
+        private void UpdateConnectSlotHashes(GraphWindow window)
         {
             _sourceInputHash = 0;
             _targetInputHash = 0;
 
-            foreach (var c in ConnectionMaker.TempConnections)
+            var tempConnections = ConnectionMaker.GetTempConnectionsFor(window);
+
+            foreach (var c in tempConnections)
             {
                 switch (c.GetStatus())
                 {

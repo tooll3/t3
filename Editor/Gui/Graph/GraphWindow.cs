@@ -8,6 +8,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Selection;
@@ -64,6 +65,7 @@ namespace T3.Editor.Gui.Graph
             _rootInstance = actualRoot!;
             AllowMultipleInstances = true;
             
+            ConnectionMaker.AddWindow(this);
             Structure = new Structure(() => RootInstance.Instance);
             
             var navigationHistory = new NavigationHistory(Structure);
@@ -411,6 +413,7 @@ namespace T3.Editor.Gui.Graph
 
         protected override void Close()
         {
+            ConnectionMaker.RemoveWindow(this);
             GraphWindowInstances.Remove(this);
             if (Focused == this)
                 Focused = GraphWindowInstances.FirstOrDefault();

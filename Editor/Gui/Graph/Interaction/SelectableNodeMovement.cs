@@ -105,7 +105,8 @@ namespace T3.Editor.Gui.Graph.Interaction
                     if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolUi.Child childUi)
                     {
                         var instanceForUiChild = composition.Children[childUi.Id];
-                        ConnectionMaker.SplitConnectionWithDraggedNode(childUi, 
+                        ConnectionMaker.SplitConnectionWithDraggedNode(window, 
+                                                                       childUi, 
                                                                        ConnectionSplitHelper.BestMatchLastFrame.Connection, 
                                                                        instanceForUiChild,
                                                                        _moveCommand, selection);

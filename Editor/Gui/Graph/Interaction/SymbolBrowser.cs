@@ -85,7 +85,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                 if (canvas.NodeSelection.GetSelectedChildUis().Count() != 1)
                 {
-                    ConnectionMaker.StartOperation("Add operator");
+                    ConnectionMaker.StartOperation(_window, "Add operator");
                     
                     var screenPos = ImGui.GetIO().MousePos + new Vector2(-4, -20);
                     var canvasPosition = canvas.InverseTransformPositionFloat(screenPos);
@@ -241,7 +241,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         private void Cancel()
         {
-            ConnectionMaker.AbortOperation();
+            ConnectionMaker.AbortOperation(_window);
             // if (_prepareCommand != null)
             // {
             //     _prepareCommand.Undo();
@@ -620,9 +620,10 @@ namespace T3.Editor.Gui.Graph.Interaction
             // {
             //     additionalCommands.Add(_prepareCommand);
             // }
-            
 
-            foreach (var c in ConnectionMaker.TempConnections)
+            var tempConnections = ConnectionMaker.GetTempConnectionsFor(_window);
+
+            foreach (var c in tempConnections)
             {
                 switch (c.GetStatus())
                 {
@@ -664,7 +665,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             // var newCommand = new MacroCommand("Insert Op", commands);
             // UndoRedoStack.Add(newCommand);
-            ConnectionMaker.CompleteOperation(commandsForUndo, "Insert Op " + newChildUi.SymbolChild.ReadableName);
+            ConnectionMaker.CompleteOperation(_window, commandsForUndo, "Insert Op " + newChildUi.SymbolChild.ReadableName);
             ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
             Close();
         }
