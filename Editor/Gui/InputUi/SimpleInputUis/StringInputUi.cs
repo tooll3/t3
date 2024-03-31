@@ -98,6 +98,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
         {
             ImGui.SetNextItemWidth(-70);
 
+            // todo: hook into resource manager
             var warning = type switch
                               {
                                   FileOperations.FilePickerTypes.File when !File.Exists(value)        => "File doesn't exist:\n",
