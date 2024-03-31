@@ -11,3 +11,13 @@ namespace {{NAMESPACE}};
 internal sealed class {{PROJ}} : Instance<{{PROJ}}>
 {
 }
+
+// ReSharper disable once UnusedType.Global
+public sealed class ShareDefinition : IShareResources
+{
+    // ReSharper disable once EmptyConstructor
+    public ShareDefinition(){}
+    #pragma warning disable CA1822
+    public bool ShouldShareResources => {{SHARE_RESOURCES}};
+    #pragma warning restore CA1822
+}

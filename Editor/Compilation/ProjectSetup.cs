@@ -20,9 +20,9 @@ namespace T3.Editor.Compilation;
 internal static class ProjectSetup
 {
 
-    public static bool TryCreateProject(string name, string nameSpace, out EditableSymbolProject newProject)
+    public static bool TryCreateProject(string name, string nameSpace, bool shareResources, out EditableSymbolProject newProject)
     {
-        var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, UserSettings.Config.DefaultNewProjectDirectory);
+        var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, shareResources, UserSettings.Config.DefaultNewProjectDirectory);
         if (newCsProj == null)
         {
             Log.Error("Failed to create new project");

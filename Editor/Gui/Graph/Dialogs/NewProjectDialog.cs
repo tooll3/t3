@@ -38,11 +38,20 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 FormInputs.AddStringInput("Name", ref _newName,
                                           warning: !nameCorrect ? "Name must be a valid C# identifier" : null);
                 
+                FormInputs.AddCheckBox("Share Resources", ref _shareResources, "Enabling this allows anyone with this package to reference shaders, " +
+                                                                               "images, and other resources that belong to this package in other projects.\n" +
+                                                                               "It is recommended that you leave this option enabled.");
+
+                if (_shareResources == false)
+                {
+                    ImGui.TextColored(UiColors.StatusWarning, "Warning: there is no way to change this without editing the project code at this time.");
+                }
+                
                 if (CustomComponents.DisablableButton(label: "Create",
                                                       isEnabled: namespaceCorrect && nameCorrect,
                                                       enableTriggerWithReturn: false))
                 {
-                    if (ProjectSetup.TryCreateProject(_newName, _newNamespace, out var project))
+                    if (ProjectSetup.TryCreateProject(_newName, _newNamespace, _shareResources, out var project))
                     {
                         T3Ui.Save(false); // todo : this is probably not needed
                         ImGui.CloseCurrentPopup();
@@ -56,12 +65,15 @@ namespace T3.Editor.Gui.Graph.Dialogs
                         Log.Error(message);
                         EditorUi.Instance.ShowMessageBox(message, "Failed to create new project");
                     }
+                    
+                    ResetValuesToDefault();
                 }
 
                 ImGui.SameLine();
                 if (ImGui.Button("Cancel"))
                 {
                     ImGui.CloseCurrentPopup();
+                    ResetValuesToDefault();
                 }
 
                 EndDialogContent();
@@ -70,7 +82,15 @@ namespace T3.Editor.Gui.Graph.Dialogs
             EndDialog();
         }
 
+        private static void ResetValuesToDefault()
+        {
+            _shareResources = true;
+            _newName = string.Empty;
+            _newNamespace = string.Empty;
+        }
+
         private static string _newName = string.Empty;
         private static string _newNamespace = string.Empty;
+        private static bool _shareResources = true;
     }
 }
