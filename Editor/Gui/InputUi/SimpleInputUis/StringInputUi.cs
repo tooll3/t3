@@ -63,9 +63,11 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                     break;
                 case UsageType.FilePath:
                     inputEditStateFlags = DrawEditWithSelectors(FileOperations.FilePickerTypes.File, ref value, FileFilter);
+                    NormalizePathSeparators(inputEditStateFlags, ref value);
                     break;
                 case UsageType.DirectoryPath:
                     inputEditStateFlags = DrawEditWithSelectors(FileOperations.FilePickerTypes.Folder, ref value);
+                    NormalizePathSeparators(inputEditStateFlags, ref value);
                     break;
                 case UsageType.CustomDropdown:
                     inputEditStateFlags = DrawCustomDropdown(input, ref value);
@@ -76,6 +78,20 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             inputEditStateFlags |= ImGui.IsItemDeactivatedAfterEdit() ? InputEditStateFlags.Finished : InputEditStateFlags.Nothing;
 
             return inputEditStateFlags;
+
+            static void NormalizePathSeparators(InputEditStateFlags inputEditStateFlags, ref string value)
+            {
+                // normalize path separators when modified
+                // use only forward slashes as windows is the only OS that supports backslashes
+                if ((inputEditStateFlags & InputEditStateFlags.Modified) == InputEditStateFlags.Modified
+                    || (inputEditStateFlags & InputEditStateFlags.Finished) == InputEditStateFlags.Finished)
+                {
+                    value = value.Replace('\\', '/');
+                    
+                    if (value.EndsWith('/'))
+                        value = value[..^1];
+                }
+            }
         }
 
         private static InputEditStateFlags DrawEditWithSelectors(FileOperations.FilePickerTypes type, ref string value, string filter = null)
