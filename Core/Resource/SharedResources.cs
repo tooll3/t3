@@ -111,6 +111,7 @@ namespace T3.Editor.App
 
         private sealed class SharedResourceObject : IResourcePackage
         {
+            public string Alias => "t3";
             // ReSharper disable once ReplaceAutoPropertyWithComputedProperty
             public string ResourcesFolder { get; } = Directory;
             public ResourceFileWatcher FileWatcher => null;
