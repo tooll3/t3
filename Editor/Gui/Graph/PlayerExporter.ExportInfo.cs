@@ -57,15 +57,8 @@ internal static partial class PlayerExporter
                  ShaderCompiler.ShaderResourcePackage shaderResourcePackage = new(shaderFolder);
                  var shaderDirs = searchDirs.Append(shaderResourcePackage).Distinct().ToArray();
                  var shaderText = File.ReadAllText(absolutePath);
-                 var includeLines = shaderText.Split('\n').Where(l => l.StartsWith("#include")).ToArray();
-                 foreach (var line in includeLines)
+                 foreach (var includePath in ShaderCompiler.GetIncludesFrom(shaderText))
                  {
-                     // get include path without quotes
-                     var split = line.Split('"');
-                     if (split.Length < 2)
-                         continue;
-                     
-                     var includePath = line.Split('"')[1];
                      TryAddSharedResource(includePath, shaderDirs);
                  }
             }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SharpDX.D3DCompiler;
 using T3.Core.Logging;
 
@@ -12,6 +13,18 @@ public abstract partial class ShaderCompiler
                                                              bool forceRecompile, out string reason)
         where TShader : class, IDisposable
     {
+        var includes = GetIncludesFrom(args.SourceCode);
+        var includeDirectories = args.IncludeDirectories;
+
+        foreach (var include in includes)
+        {
+            if (!ResourceManager.TryResolvePath(include, includeDirectories, out _, out _))
+            {
+                reason = $"Can't find include file: {include}";
+                return false;
+            }
+        }
+        
         if (string.IsNullOrWhiteSpace(args.EntryPoint))
             args.EntryPoint = "main";
 
@@ -122,10 +135,21 @@ public abstract partial class ShaderCompiler
         }
     }
 
+    public static IEnumerable<string> GetIncludesFrom(string shaderText)
+    {
+        // todo - optimize with spans
+        return shaderText.Split('\n')
+                                 .Where(l => l.StartsWith("#include"))
+                                 .Select(x => x.Split('\"'))
+                                 .Where(x => x.Length > 1)
+                                 .Select(x => x[1]);
+    }
+
     public record struct ShaderCompilationArgs(string SourceCode, string EntryPoint, IReadOnlyList<IResourcePackage> IncludeDirectories);
 
     public sealed class ShaderResourcePackage(string resourcesFolder) : IResourcePackage
     {
+        public string? Alias => null;
         public string ResourcesFolder { get; } = resourcesFolder;
         public ResourceFileWatcher FileWatcher => null;
         public bool IsReadOnly => true;

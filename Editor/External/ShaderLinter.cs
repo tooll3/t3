@@ -21,13 +21,26 @@ internal static class ShaderLinter
     {
         var filePath = Path.Combine(package.ResourcesFolder, FileName);
         var jsonObject = new HlslToolsJson(filePath);
-        var resourceFolders = jsonObject.IncludeDirectories;
+        var resourceFolderList = jsonObject.IncludeDirectories;
+        var virtualIncludeDirectories = jsonObject.VirtualDirectoryMappings;
+        
 
-        resourceFolders.Add(package.ResourcesFolder);
+        resourceFolderList.Add(package.ResourcesFolder);
+        if(package.Alias != null)
+        {
+            virtualIncludeDirectories.Add('/' + package.Alias, package.ResourcesFolder);
+        }
 
         if (additionalPackages is not null)
         {
-            resourceFolders.AddRange(additionalPackages.Select(p => p.ResourcesFolder));
+            foreach (var p in additionalPackages)
+            {
+                resourceFolderList.Add(p.ResourcesFolder);
+                if (p.Alias != null)
+                {
+                    virtualIncludeDirectories.TryAdd('/' + p.Alias, p.ResourcesFolder);
+                }
+            }
         }
 
         if (!JsonUtils.TrySaveJson(jsonObject, filePath))
@@ -75,7 +88,7 @@ internal static class ShaderLinter
         public readonly List<string> IncludeDirectories = ["."];
 
         [JsonProperty("hlsl.virtualDirectoryMappings")]
-        public readonly string? VirtualDirectoryMappings;
+        public readonly Dictionary<string, string> VirtualDirectoryMappings = new();
 
         [JsonIgnore]
         public string FilePath = filePath;

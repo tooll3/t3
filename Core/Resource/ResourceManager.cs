@@ -8,6 +8,7 @@ using System.Threading;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Core.Utils;
 
 namespace T3.Core.Resource
 {
@@ -36,6 +37,11 @@ namespace T3.Core.Resource
                 absolutePath = string.Empty;
                 resourceContainer = null;
                 return false;
+            }
+            
+            if (relativePath.StartsWith('/'))
+            {
+                return HandleAlias(relativePath, resourceContainers, out absolutePath, out resourceContainer);
             }
 
             RelativePathBackwardsCompatibility(relativePath, out var isAbsolute, out var backCompatRanges);
@@ -84,7 +90,7 @@ namespace T3.Core.Resource
 
         private static bool Exists(string absolutePath) => File.Exists(absolutePath) || Directory.Exists(absolutePath);
 
-        static bool TestPath(string relative, IReadOnlyList<IResourcePackage> resourceContainers, out string absolutePath,
+        private static bool TestPath(string relative, IReadOnlyList<IResourcePackage> resourceContainers, out string absolutePath,
                              out IResourcePackage? resourceContainer)
         {
             foreach (var package in resourceContainers)
@@ -103,6 +109,73 @@ namespace T3.Core.Resource
             absolutePath = string.Empty;
             resourceContainer = null;
             return false;
+        }
+
+        private static bool HandleAlias(string relative, IReadOnlyList<IResourcePackage>? resourceContainers, out string absolutePath, out IResourcePackage? resourceContainer)
+        {
+            var relativePathAliased = relative.AsSpan(1);
+            var aliasEnd = relativePathAliased.IndexOf('/');
+            if (aliasEnd == -1)
+                aliasEnd = relativePathAliased.IndexOf('\\');
+
+            if (aliasEnd == -1)
+            {
+                absolutePath = string.Empty;
+                resourceContainer = null;
+                return false;
+            }
+
+            var alias = relativePathAliased[..aliasEnd];
+            var relativePathWithoutAlias = relativePathAliased[(aliasEnd + 1)..].ToString();
+
+            if (resourceContainers != null)
+            {
+                foreach (var container in resourceContainers)
+                {
+                    if (TestAlias(container, alias, relativePathWithoutAlias, out absolutePath))
+                    {
+                        resourceContainer = container;
+                        return true;
+                    }
+                }
+            }
+            
+            var sharedResourcePackages = relativePathAliased.EndsWith(".hlsl") ? ShaderPackages : SharedResourcePackages;
+            foreach (var container in sharedResourcePackages)
+            {
+                if(TestAlias(container, alias, relativePathWithoutAlias, out absolutePath))
+                {
+                    resourceContainer = container;
+                    return true;
+                }
+            }
+            
+            absolutePath = string.Empty;
+            resourceContainer = null;
+            return false;
+
+            static bool TestAlias(IResourcePackage container, ReadOnlySpan<char> alias, string relativePathWithoutAlias, out string absolutePath)
+            {
+                var containerAlias = container.Alias;
+                if (containerAlias == null)
+                {
+                    absolutePath = string.Empty;
+                    return false;
+                }
+
+                if (StringUtils.Equals(containerAlias, alias, true))
+                {
+                    var path = Path.Combine(container.ResourcesFolder, relativePathWithoutAlias);
+                    if (Exists(path))
+                    {
+                        absolutePath = path;
+                        return true;
+                    }
+                }
+
+                absolutePath = string.Empty;
+                return false;
+            }
         }
 
         private uint GetNextResourceId() => Interlocked.Increment(ref _resourceIdCounter);

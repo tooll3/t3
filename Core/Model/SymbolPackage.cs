@@ -262,7 +262,22 @@ public abstract partial class SymbolPackage : IResourcePackage
     }
 
     public virtual ResourceFileWatcher? FileWatcher => null;
+    public string Alias
+    {
+        get
+        {
+            if (!AssemblyInformation.HasHome)
+            {
+                return AssemblyInformation.Name;
+            }
+
+            // hacky way of getting the home namespace
+            var typeInfo = AssemblyInformation.OperatorTypeInfo[AssemblyInformation.HomeGuid].Type;
+            return typeInfo.Namespace! + "." + typeInfo.Name; // alias is fully-qualified project name
+        }
+    }
+
     public virtual bool IsReadOnly => true;
 
-    public bool TryGetSymbol(Guid symbolId, [NotNullWhen(true)] out Symbol? symbol) => SymbolDict.TryGetValue(symbolId, out symbol);
+    internal bool TryGetSymbol(Guid symbolId, [NotNullWhen(true)] out Symbol? symbol) => SymbolDict.TryGetValue(symbolId, out symbol);
 }
