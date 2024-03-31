@@ -15,6 +15,8 @@ namespace T3.Editor.Gui.Windows
 
         public abstract IReadOnlyList<Window> GetInstances();
 
+        protected virtual string WindowDisplayTitle => Config.Title;
+
         public void Draw()
         {
             UpdateBeforeDraw();
@@ -32,7 +34,7 @@ namespace T3.Editor.Gui.Windows
             if (hideFrameBorder)
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
 
-            if (ImGui.Begin(Config.Title, ref Config.Visible, WindowFlags))
+            if (ImGui.Begin(WindowDisplayTitle, ref Config.Visible, WindowFlags))
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding);
                 // Prevent window header from becoming invisible 
