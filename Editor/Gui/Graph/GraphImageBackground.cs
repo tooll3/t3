@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
@@ -27,7 +28,8 @@ namespace T3.Editor.Gui.Graph
         public GraphImageBackground(GraphWindow window, NodeSelection nodeSelection, Structure structure)
         {
             _window = window;
-            _camSelectionHandling = new CameraSelectionHandling();
+            
+            _camSelectionHandling = new CameraSelectionHandling(nodeSelection, () => Playback.Current);
             _structure = structure;
             _nodeSelection = nodeSelection;
         }

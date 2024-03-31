@@ -378,17 +378,17 @@ namespace T3.Editor.Gui.Interaction.Camera
             cam.CameraRoll = 0;
         }
 
-        private static ViewAxis _viewAxis = new();
+        private ViewAxis _viewAxis;
         private readonly CameraSetup _smoothedSetup = new();
         private readonly CameraSetup _intendedSetup = new();
 
-        private static float FrameDurationFactor => (ImGui.GetIO().DeltaTime);
+        private static float FrameDurationFactor => ImGui.GetIO().DeltaTime;
         private bool _manipulatedByMouseWheel;
         private bool _manipulatedByKeyboard;
 
         private Vector3 _moveVelocity;
         private Vector2 _orbitVelocity;
         private ICamera _lastCameraNode;
-        private static float _deltaTime;
+        private float _deltaTime;
     }
 }

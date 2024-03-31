@@ -10,7 +10,7 @@ namespace T3.Editor.Gui.Interaction.Camera
     /// </summary>
     /// <remarks>Setup is a slightly misleading name. PositionAndOrientation would
     /// clearer but is too long.</remarks>
-    public class CameraSetup
+    public sealed class CameraSetup
     {
         public Vector3 Position = new(0, 0, GraphicsMath.DefaultCameraDistance);
         public Vector3 Target;

@@ -27,8 +27,8 @@ namespace T3.Editor.Gui.Windows.Output
             WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
 
             _instanceCounter++;
+            _camSelectionHandling = new CameraSelectionHandling();
             OutputWindowInstances.Add(this);
-            _camSelectionHandling = new();
         }
 
         public static IEnumerable<OutputWindow> GetVisibleInstances()
