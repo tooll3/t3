@@ -75,7 +75,7 @@ namespace T3.Editor.Gui.Graph
                                                     new Vector2(LastScreenRect.Min.X,
                                                                 LastScreenRect.Max.Y)); 
                     
-                    ConnectionSnapEndHelper.RegisterAsPotentialTarget(outputUi, usableSlotArea);
+                    ConnectionSnapEndHelper.RegisterAsPotentialTarget(window, outputUi, usableSlotArea);
                     
                     
                     ImGui.SetCursorScreenPos(usableSlotArea.Min);
@@ -84,23 +84,23 @@ namespace T3.Editor.Gui.Graph
                     var color = TypeUiRegistry.Entries[outputDef.ValueType].Color;
 
                     //Note: isItemHovered will not work
-                    var slotHovered = ConnectionMaker.TempConnections.Count > 0
+                    var slotHovered = ConnectionMaker.GetTempConnectionsFor(window).Count > 0
                                           ? usableSlotArea.Contains(ImGui.GetMousePos())
                                           : ImGui.IsItemHovered();
 
-                    if (ConnectionMaker.IsOutputNodeCurrentConnectionTarget(outputDef))
+                    if (ConnectionMaker.IsOutputNodeCurrentConnectionTarget(window, outputDef))
                     {
                         drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
                     }
                     else if (ConnectionSnapEndHelper.IsNextBestTarget(outputUi) || slotHovered)
                     {
-                        if (ConnectionMaker.IsMatchingInputType(outputDef.ValueType))
+                        if (ConnectionMaker.IsMatchingInputType(window, outputDef.ValueType))
                         {
                             drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
 
                             if (ImGui.IsMouseReleased(0))
                             {
-                                ConnectionMaker.CompleteAtSymbolOutputNode(window.CompositionOp.Symbol, outputDef);
+                                ConnectionMaker.CompleteAtSymbolOutputNode(window, window.CompositionOp.Symbol, outputDef);
                             }
                         }
                         else
@@ -108,13 +108,13 @@ namespace T3.Editor.Gui.Graph
                             drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, UiColors.Selection);
                             if (ImGui.IsItemClicked(0))
                             {
-                                ConnectionMaker.StartFromOutputNode(window.CompositionOp.Symbol, outputDef);
+                                ConnectionMaker.StartFromOutputNode(window, window.CompositionOp.Symbol, outputDef);
                             }
                         }
                     }
                     else
                     {
-                        var colorWithMatching = ConnectionMaker.IsMatchingInputType(outputDef.ValueType) ? UiColors.Selection : color;
+                        var colorWithMatching = ConnectionMaker.IsMatchingInputType(window, outputDef.ValueType) ? UiColors.Selection : color;
                         drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - GraphNode.InputSlotMargin- GraphNode.InputSlotThickness,
                                                            usableSlotArea.Min.Y), 
                                                new Vector2(

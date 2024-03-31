@@ -99,19 +99,19 @@ namespace T3.Editor.Gui.Graph
                     var color = TypeUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
                     color = ColorVariations.ConnectionLines.Apply(color);
 
-                    if (ConnectionMaker.IsInputNodeCurrentConnectionSource(inputDef))
+                    if (ConnectionMaker.IsInputNodeCurrentConnectionSource(window, inputDef))
                     {
                         drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
                     }
                     else if (ImGui.IsItemHovered())
                     {
-                        if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                        if (ConnectionMaker.IsMatchingInputType(window, inputDef.DefaultValue.ValueType))
                         {
                             drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
 
                             if (ImGui.IsMouseReleased(0))
                             {
-                                ConnectionMaker.CompleteAtSymbolInputNode(window.CompositionOp.GetSymbolUi(), inputDef);
+                                ConnectionMaker.CompleteAtSymbolInputNode(window, window.CompositionOp.GetSymbolUi(), inputDef);
                             }
                         }
                         else
@@ -119,7 +119,7 @@ namespace T3.Editor.Gui.Graph
                             drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, UiColors.Selection);
                             if (ImGui.IsItemClicked(0))
                             {
-                                ConnectionMaker.StartFromInputNode(inputDef);
+                                ConnectionMaker.StartFromInputNode(window, inputDef);
                             }
                         }
                     }

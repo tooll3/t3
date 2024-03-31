@@ -413,8 +413,16 @@ namespace T3.Editor.Gui.Interaction
         {
             zoomed = false;
             panned = false;
-            
-            var isDraggingConnection = (ConnectionMaker.TempConnections.Count > 0) && ImGui.IsWindowFocused();
+
+            var currentGraphWindow = GraphWindow.Focused;
+            bool isCurrentGraphCanvas = currentGraphWindow?.GraphCanvas == this;
+            bool isDraggingConnection = false;
+
+            if (isCurrentGraphCanvas)
+            {
+                var tempConnections = ConnectionMaker.GetTempConnectionsFor(currentGraphWindow);
+                isDraggingConnection = tempConnections.Count > 0 && ImGui.IsWindowFocused();
+            }
             
             // This is a work around to allow the curve edit canvas to control zooming the timeline window
             var allowChildHover = flags.HasFlag(T3Ui.EditingFlags.AllowHoveredChildWindows)

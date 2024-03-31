@@ -31,14 +31,20 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     internal class GraphNode
     {
-        private GraphWindow _window;
-        private GraphCanvas _canvas;
-        private Graph.ConnectionSorter _sorter;
         public GraphNode(GraphWindow window, Graph.ConnectionSorter sorter)
         {
             _window = window;
             _canvas = window.GraphCanvas;
             _sorter = sorter;
+
+            lock (DraggedIds)
+            {
+                if (!DraggedIds.TryGetValue(window, out _dragInfo))
+                {
+                    _dragInfo = new DraggedIdInfo();
+                    DraggedIds[window] = _dragInfo;
+                }
+            }
         }
         
         public void Draw(ImDrawListPtr drawList, float opacity, bool isSelected, SymbolUi.Child childUi, Instance instance, bool preventInteraction)
@@ -46,6 +52,9 @@ namespace T3.Editor.Gui.Graph
             var symbolUi = instance.GetSymbolUi();
             var nodeHasHiddenMatchingInputs = false;
             var visibleInputUis = FindVisibleInputUis(symbolUi, childUi, ref nodeHasHiddenMatchingInputs);
+            var tempConnections = ConnectionMaker.GetTempConnectionsFor(_window);
+            bool hasConnections = tempConnections.Count > 0;
+            bool inActiveWindow = _window == GraphWindow.Focused;
 
             var framesSinceLastUpdate = 100;
             foreach (var output in instance.Outputs)
@@ -261,8 +270,8 @@ namespace T3.Editor.Gui.Graph
                         _hoveredNodeIdForConnectionTarget = childUi.Id;
                     }
 
-                    var hovered =  (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
-                                      _canvas.NodeSelection.HoveredIds.Contains(instance.SymbolChildId));
+                    var hovered = inActiveWindow && (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
+                                                     _canvas.NodeSelection.HoveredIds.Contains(instance.SymbolChildId));
 
                     // A horrible work around to prevent exception because CompositionOp changed during drawing.
                     // A better solution would defer setting the compositionOp to the beginning of next frame.
@@ -338,12 +347,13 @@ namespace T3.Editor.Gui.Graph
                             DrawIndicator(drawList, UiColors.StatusAutomated, opacity, ref indicatorCount);
                         }
                     }
+                    
 
                     // Hidden inputs indicator
                     if (nodeHasHiddenMatchingInputs)
                     {
                         var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.8f);
-                        var colorForType = TypeUiRegistry.Entries[ConnectionMaker.TempConnections[0].ConnectionType].Color;
+                        var colorForType = TypeUiRegistry.Entries[tempConnections[0].ConnectionType].Color;
                         colorForType.Rgba.W *= blink;
                         drawList.AddRectFilled(
                                                 new Vector2(_usableScreenRect.Min.X, _usableScreenRect.Max.Y + 3),
@@ -399,11 +409,13 @@ namespace T3.Editor.Gui.Graph
                 THelpers.DebugItemRect("input-slot");
                 
                 // Note: isItemHovered does not work when a connection is being dragged from another item
-                var hovered = ConnectionMaker.TempConnections.Count > 0
+                var hovered = hasConnections
                                   ? usableSlotArea.Contains(ImGui.GetMousePos())
                                   : ImGui.IsItemHovered();
                 
-                var isPotentialConnectionTarget = ConnectionMaker.IsMatchingInputType(inputDefinition.DefaultValue.ValueType);
+                hovered &= inActiveWindow;
+                
+                var isPotentialConnectionTarget = ConnectionMaker.IsMatchingInputType(_window, inputDefinition.DefaultValue.ValueType);
                 var colorForType = ColorForInputType(inputDefinition).Fade(opacity);
                 
                 var connectedLines = _sorter.GetLinesToNodeInputSlot(childUi, inputDefinition.Id);
@@ -489,7 +501,7 @@ namespace T3.Editor.Gui.Graph
                         var usableSocketArea = new ImRect(topLeft, topLeft + socketSize);
                 
                         var isSocketHovered = usableSocketArea.Contains(ImGui.GetMousePos());
-                        ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, socketIndex, usableSocketArea);
+                        ConnectionSnapEndHelper.RegisterAsPotentialTarget(_window, childUi, inputUi, socketIndex, usableSocketArea);
                 
                         bool isGap = false;
                         if (showGaps)
@@ -547,7 +559,7 @@ namespace T3.Editor.Gui.Graph
                 }
                 else
                 {
-                    ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, 0, usableSlotArea);
+                    ConnectionSnapEndHelper.RegisterAsPotentialTarget(_window, childUi, inputUi, 0, usableSlotArea);
                     //ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id,0)
                     var isAboutToBeReconnected = ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, 0);
                     var isChildSelected = _canvas.NodeSelection.IsNodeSelected(childUi);
@@ -593,7 +605,8 @@ namespace T3.Editor.Gui.Graph
                 var colorForType = TypeUiRegistry.Entries[valueType].Color.Fade(opacity);
             
                 //Note: isItemHovered does not work when dragging is active
-                var hovered = ConnectionMaker.TempConnections.Count > 0
+                var hovered = inActiveWindow &&
+                              hasConnections
                                   ? usableArea.Contains(ImGui.GetMousePos())
                                   : ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup);
             
@@ -744,11 +757,12 @@ namespace T3.Editor.Gui.Graph
                 return symbolUi.InputUis.Values.ToList();
             }
 
+            var tempConnections = ConnectionMaker.GetTempConnectionsFor(_window);
+
             var isNodeHoveredAsConnectionTarget = _hoveredNodeIdForConnectionTarget == childUi.Id
-                                                  && ConnectionMaker.TempConnections != null
-                                                  && ConnectionMaker.TempConnections.Count == 1
-                                                  && ConnectionMaker.TempConnections[0].TargetParentOrChildId == ConnectionMaker.NotConnectedId
-                                                  && ConnectionMaker.TempConnections[0].SourceParentOrChildId != childUi.Id;
+                                                  && tempConnections.Count == 1
+                                                  && tempConnections[0].TargetParentOrChildId == ConnectionMaker.NotConnectedId
+                                                  && tempConnections[0].SourceParentOrChildId != childUi.Id;
 
             _visibleInputs.Clear();
             foreach (var inputUi in symbolUi.InputUis.Values)
@@ -767,7 +781,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     _visibleInputs.Add(inputUi);
                 }
-                else if (ConnectionMaker.IsMatchingInputType(inputUi.Type))
+                else if (ConnectionMaker.IsMatchingInputType(_window, inputUi.Type))
                 {
                     if (isNodeHoveredAsConnectionTarget)
                     {
@@ -794,11 +808,11 @@ namespace T3.Editor.Gui.Graph
             var style = direction == SocketDirections.Input
                             ? ColorVariations.ConnectionLines
                             : ColorVariations.OperatorBackground;
-            if (ConnectionMaker.TempConnections.Count > 0)
+            if (ConnectionMaker.GetTempConnectionsFor(_window).Count > 0)
             {
                 if (direction == SocketDirections.Input
-                        ? ConnectionMaker.IsMatchingInputType(type)
-                        : ConnectionMaker.IsMatchingOutputType(type))
+                        ? ConnectionMaker.IsMatchingInputType(_window, type)
+                        : ConnectionMaker.IsMatchingOutputType(_window, type))
                 {
                     var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.8f);
                     colorForType.Rgba.W *= blink;
@@ -888,7 +902,7 @@ namespace T3.Editor.Gui.Graph
         private void DrawOutput(ImDrawListPtr drawList, SymbolUi.Child childUi, Symbol.OutputDefinition outputDef, ImRect usableArea, Color colorForType,
                                 bool hovered, Instance instance)
         {
-            if (ConnectionMaker.IsOutputSlotCurrentConnectionSource(childUi, outputDef))
+            if (ConnectionMaker.IsOutputSlotCurrentConnectionSource(_window, childUi, outputDef))
             {
                 drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                                         ColorVariations.Highlight.Apply(colorForType));
@@ -904,14 +918,14 @@ namespace T3.Editor.Gui.Graph
             }
             else if (hovered)
             {
-                if (ConnectionMaker.IsMatchingOutputType(outputDef.ValueType))
+                if (ConnectionMaker.IsMatchingOutputType(_window, outputDef.ValueType))
                 {
                     drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                                             ColorVariations.OperatorBackgroundHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        ConnectionMaker.CompleteAtOutputSlot(instance, childUi, outputDef);
+                        ConnectionMaker.CompleteAtOutputSlot(_window, instance, childUi, outputDef);
                     }
                 }
                 else
@@ -932,8 +946,8 @@ namespace T3.Editor.Gui.Graph
 
                         if(ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                         {
-                            _draggedOutputOpId = childUi.Id;
-                            _draggedOutputDefId = outputDef.Id;
+                            _dragInfo.DraggedOutputOpId = childUi.Id;
+                            _dragInfo.DraggedOutputDefId = outputDef.Id;
                         }
 
                         // Clicked
@@ -941,8 +955,8 @@ namespace T3.Editor.Gui.Graph
                         {
                             if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                             {
-                                _draggedOutputOpId = Guid.Empty;
-                                _draggedOutputDefId = Guid.Empty;
+                                _dragInfo.DraggedOutputOpId = Guid.Empty;
+                                _dragInfo.DraggedOutputDefId = Guid.Empty;
                                 if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickThreshold)
                                 {
                                     ConnectionMaker.OpenSymbolBrowserAtOutput(_window, childUi, instance, output.Id);
@@ -956,14 +970,14 @@ namespace T3.Editor.Gui.Graph
                     }
                 }
             }
-            else if (_draggedOutputOpId == childUi.Id && _draggedOutputDefId == outputDef.Id)
+            else if (_dragInfo.DraggedOutputOpId == childUi.Id && _dragInfo.DraggedOutputDefId == outputDef.Id)
             {
                 if (ImGui.IsMouseDragging(ImGuiMouseButton.Left)
                     && ImGui.GetMouseDragDelta().Length() > UserSettings.Config.ClickThreshold)
                 {
-                    _draggedOutputOpId = Guid.Empty;
-                    _draggedOutputDefId = Guid.Empty;
-                    ConnectionMaker.StartFromOutputSlot(_canvas.NodeSelection, childUi, outputDef);
+                    _dragInfo.DraggedOutputOpId = Guid.Empty;
+                    _dragInfo.DraggedOutputDefId = Guid.Empty;
+                    ConnectionMaker.StartFromOutputSlot(_window, _canvas.NodeSelection, childUi, outputDef);
                 }
             }
             else
@@ -977,12 +991,6 @@ namespace T3.Editor.Gui.Graph
                                        );
             }
         }
-
-        private static Guid _draggedOutputOpId;
-        private static Guid _draggedOutputDefId;
-
-        private static Guid _draggedInputOpId;
-        private static Guid _draggedInputDefId;
 
         private ImRect GetUsableOutputSlotArea(Vector2 canvasScale, SymbolUi.Child targetUi, int outputIndex)
         {
@@ -1015,19 +1023,19 @@ namespace T3.Editor.Gui.Graph
         {
             var parentSymbol = instance.Parent.Symbol;
             
-            if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
+            if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(_window, targetUi, inputDef))
             {
             }
             else if (ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, 0) || hovered)
             {
-                if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                if (ConnectionMaker.IsMatchingInputType(_window, inputDef.DefaultValue.ValueType))
                 {
                     drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                                             ColorVariations.OperatorBackgroundHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        ConnectionMaker.CompleteAtInputSlot(instance, targetUi, inputDef);
+                        ConnectionMaker.CompleteAtInputSlot(_window, instance, targetUi, inputDef);
                     }
                 }
                 else
@@ -1076,13 +1084,13 @@ namespace T3.Editor.Gui.Graph
                             {
                                 Log.Debug("Cloning connection from source op...");
                                 var sourceOpUi = parentSymbol.GetSymbolUi().ChildUis[sourceOp.Id]!;
-                                ConnectionMaker.StartFromOutputSlot(_canvas.NodeSelection, sourceOpUi, output.OutputDefinition);
+                                ConnectionMaker.StartFromOutputSlot(_window, _canvas.NodeSelection, sourceOpUi, output.OutputDefinition);
                             }
                             else if (connection.IsConnectedToSymbolInput)
                             {
                                 Log.Debug("Cloning connection from input node...");
                                 var inputDef2 = parentSymbol.InputDefinitions.Single(id => id.Id == connection.SourceSlotId);
-                                ConnectionMaker.StartFromInputNode(inputDef2);
+                                ConnectionMaker.StartFromInputNode(_window, inputDef2);
                             }
                             else
                             {
@@ -1091,38 +1099,38 @@ namespace T3.Editor.Gui.Graph
                         }
                         else
                         {
-                            _draggedInputOpId = targetUi.Id;
-                            _draggedInputDefId = inputDef.Id;
+                            _dragInfo.DraggedInputOpId = targetUi.Id;
+                            _dragInfo.DraggedInputDefId = inputDef.Id;
                         }
                     }
                     else
                     {
                         if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                         {
-                            _draggedInputOpId = Guid.Empty;
-                            _draggedInputDefId = Guid.Empty;
+                            _dragInfo.DraggedInputOpId = Guid.Empty;
+                            _dragInfo.DraggedInputDefId = Guid.Empty;
                             if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickThreshold)
                             {
-                                ConnectionMaker.StartFromInputSlot(targetUi.SymbolChild.Parent, targetUi, inputDef);
+                                ConnectionMaker.StartFromInputSlot(_window, targetUi.SymbolChild.Parent, targetUi, inputDef);
                                 var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(targetUi.SymbolChild.Parent, targetUi);
                                 ConnectionMaker.InitSymbolBrowserAtPosition(_window, freePosition);
                             }
                             else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) && ImGui.GetIO().KeyCtrl)
                             {
-                                ConnectionMaker.StartFromInputSlot(parentSymbol, targetUi, inputDef);
+                                ConnectionMaker.StartFromInputSlot(_window, parentSymbol, targetUi, inputDef);
                             }
                         }
                     }
                 }
             }
-            else if (_draggedInputOpId == targetUi.Id && _draggedInputDefId == inputDef.Id)
+            else if (_dragInfo.DraggedInputOpId == targetUi.Id && _dragInfo.DraggedInputDefId == inputDef.Id)
             {
                 if (ImGui.IsMouseDragging(ImGuiMouseButton.Left)
                     && ImGui.GetMouseDragDelta().Length() > UserSettings.Config.ClickThreshold)
                 {
-                    _draggedInputOpId = Guid.Empty;
-                    _draggedInputDefId = Guid.Empty;
-                    ConnectionMaker.StartFromInputSlot(parentSymbol, targetUi, inputDef);
+                    _dragInfo.DraggedInputOpId = Guid.Empty;
+                    _dragInfo.DraggedInputDefId = Guid.Empty;
+                    ConnectionMaker.StartFromInputSlot(_window, parentSymbol, targetUi, inputDef);
                 }
             }            
             else
@@ -1295,19 +1303,19 @@ namespace T3.Editor.Gui.Graph
                                                  bool isInputHovered, int multiInputIndex, bool isGap, Color colorForType,
                                                  Color reactiveSlotColor, Instance instance)
         {
-            if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef, multiInputIndex))
+            if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(_window, targetUi, inputDef, multiInputIndex))
             {
             }
             else if (ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, multiInputIndex) || isInputHovered)
             {
-                if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                if (ConnectionMaker.IsMatchingInputType(_window, inputDef.DefaultValue.ValueType))
                 {
                     drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                                             ColorVariations.OperatorBackgroundHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        ConnectionMaker.CompleteAtInputSlot(instance, targetUi, inputDef, multiInputIndex, true);
+                        ConnectionMaker.CompleteAtInputSlot(_window, instance, targetUi, inputDef, multiInputIndex, true);
                     }
                 }
                 else
@@ -1356,7 +1364,7 @@ namespace T3.Editor.Gui.Graph
                     //ImGui.SetTooltip($"-> .{inputDef.Name}[{multiInputIndex}] <{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                     if (ImGui.IsItemClicked(0))
                     {
-                        ConnectionMaker.StartFromInputSlot(instance.Symbol, targetUi, inputDef, multiInputIndex);
+                        ConnectionMaker.StartFromInputSlot(_window, instance.Symbol, targetUi, inputDef, multiInputIndex);
                         Log.Debug("started connection at MultiInputIndex:" + multiInputIndex);
                     }
                 }
@@ -1422,9 +1430,24 @@ namespace T3.Editor.Gui.Graph
         private static readonly ImageOutputCanvas _imageCanvasForTooltips = new() { DisableDamping = true };
         private static Guid _hoveredNodeIdForConnectionTarget;
 
+        private readonly GraphWindow _window;
+        private readonly GraphCanvas _canvas;
+        private readonly Graph.ConnectionSorter _sorter;
+        private readonly DraggedIdInfo _dragInfo;
+        private static readonly Dictionary<GraphWindow, DraggedIdInfo> DraggedIds = new();
+        
         private ImRect _usableScreenRect;
         private ImRect _selectableScreenRect;
         private bool _isVisible;
         private const float NodeTitleHeight = 22;
+
+        private sealed class DraggedIdInfo()
+        {
+            public Guid DraggedOutputOpId;
+            public Guid DraggedOutputDefId;
+            
+            public Guid DraggedInputOpId;
+            public Guid DraggedInputDefId;
+        }
     }
 }

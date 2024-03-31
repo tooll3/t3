@@ -262,10 +262,11 @@ namespace T3.Editor.Gui.Graph
                 _graph.DrawGraph(drawList, drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), _window.CompositionOp, graphOpacity);
 
                 RenameInstanceOverlay.Draw(_window);
+                var tempConnections = ConnectionMaker.GetTempConnectionsFor(_window);
 
                 if ((ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
                     && !preventInteractions
-                    && ConnectionMaker.TempConnections.Count == 0)
+                    && tempConnections.Count == 0)
                     HandleFenceSelection(_window.CompositionOp, _selectionFence);
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
@@ -274,7 +275,8 @@ namespace T3.Editor.Gui.Graph
                     _window.TrySetCompositionOpToParent();
                 }
 
-                if (ConnectionMaker.TempConnections.Count > 0 && ImGui.IsMouseReleased(0))
+
+                if (tempConnections.Count > 0 && ImGui.IsMouseReleased(0))
                 {
                     var isAnyItemHovered = ImGui.IsAnyItemHovered();
                     var droppedOnBackground =
@@ -287,7 +289,7 @@ namespace T3.Editor.Gui.Graph
                     else
                     {
                         var connectionDroppedOnBackground =
-                            ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
+                            tempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
                         if (connectionDroppedOnBackground)
                         {
                             //Log.Warning("Skipping complete operation on background drop?");

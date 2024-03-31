@@ -149,6 +149,7 @@ namespace T3.Editor.Gui.InputUi
             var graphCanvas = window.GraphCanvas;
             var nodeSelection = graphCanvas.NodeSelection;
             var structure = graphCanvas.Structure;
+            var tempConnections = ConnectionMaker.GetTempConnectionsFor(window);
 
             if (inputSlot.IsConnected)
             {
@@ -395,7 +396,7 @@ namespace T3.Editor.Gui.InputUi
 
                 var inputOperation = InputOperations.None;
 
-                if (ConnectionMaker.TempConnections.Count == 0)
+                if (tempConnections.Count == 0)
                 {
                     if (IsAnimatable && ImGui.GetIO().KeyAlt)
                     {
@@ -433,7 +434,7 @@ namespace T3.Editor.Gui.InputUi
                             break;
                         case InputOperations.ConnectWithSearch:
                         {
-                            ConnectionMaker.StartFromInputSlot(compositionSymbol, symbolChildUi, InputDefinition);
+                            ConnectionMaker.StartFromInputSlot(GraphWindow.Focused, compositionSymbol, symbolChildUi, InputDefinition);
                             var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionSymbol, symbolChildUi);
                             ConnectionMaker.InitSymbolBrowserAtPosition(window, freePosition);
                             break;
@@ -455,9 +456,9 @@ namespace T3.Editor.Gui.InputUi
                 // Draw out input
                 if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickThreshold)
                 {
-                    if (ConnectionMaker.TempConnections.Count == 0)
+                    if (tempConnections.Count == 0)
                     {
-                        ConnectionMaker.StartFromInputSlot(compositionSymbol, symbolChildUi, InputDefinition);
+                        ConnectionMaker.StartFromInputSlot(GraphWindow.Focused, compositionSymbol, symbolChildUi, InputDefinition);
                     }
                 }
 

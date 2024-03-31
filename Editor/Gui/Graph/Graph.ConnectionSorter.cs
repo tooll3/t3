@@ -141,14 +141,14 @@ internal partial class Graph
             }
         }
 
-        private static readonly List<ConnectionLineUi> _resultConnection = new(20);
+        private readonly List<ConnectionLineUi> _resultConnection = new(20);
 
-        public List<ConnectionLineUi> GetLinesFromNodeOutput(SymbolUi.Child childUi, Guid outputId)
+        public IReadOnlyList<ConnectionLineUi> GetLinesFromNodeOutput(SymbolUi.Child childUi, Guid outputId)
         {
             _resultConnection.Clear();
 
             if (!_linesFromNodes.TryGetValue(childUi, out var lines))
-                return NoLines;
+                return Array.Empty<ConnectionLineUi>();
 
             foreach (var l in lines)
             {
@@ -161,11 +161,11 @@ internal partial class Graph
             return _resultConnection;
         }
 
-        public List<ConnectionLineUi> GetLinesToNodeInputSlot(SymbolUi.Child childUi, Guid inputId)
+        public IReadOnlyList<ConnectionLineUi> GetLinesToNodeInputSlot(SymbolUi.Child childUi, Guid inputId)
         {
             _resultConnection.Clear();
             if (!_linesIntoNodes.TryGetValue(childUi, out var lines))
-                return NoLines;
+                return Array.Empty<ConnectionLineUi>();
 
             foreach (var l in lines)
             {
@@ -177,31 +177,28 @@ internal partial class Graph
             return _resultConnection;
         }
 
-        public List<ConnectionLineUi> GetLinesIntoNode(SymbolUi.Child childUi)
+        public IReadOnlyList<ConnectionLineUi> GetLinesIntoNode(SymbolUi.Child childUi)
         {
-            return _linesIntoNodes.ContainsKey(childUi) ? _linesIntoNodes[childUi] : NoLines;
+            return _linesIntoNodes.TryGetValue(childUi, out var node) ? node : Array.Empty<ConnectionLineUi>();
         }
 
-        public List<ConnectionLineUi> GetLinesToOutputNodes(IOutputUi outputNode, Guid outputId)
+        public IReadOnlyList<ConnectionLineUi> GetLinesToOutputNodes(IOutputUi outputNode, Guid outputId)
         {
-            return _linesToOutputNodes.ContainsKey(outputNode)
-                       ? _linesToOutputNodes[outputNode].FindAll(l => l.Connection.TargetSlotId == outputId)
-                       : NoLines;
+            return _linesToOutputNodes.TryGetValue(outputNode, out var node)
+                       ? node.FindAll(l => l.Connection.TargetSlotId == outputId)
+                       : Array.Empty<ConnectionLineUi>();
         }
 
-        public List<ConnectionLineUi> GetLinesFromInputNodes(IInputUi inputNode, Guid inputNodeId)
+        public IReadOnlyList<ConnectionLineUi> GetLinesFromInputNodes(IInputUi inputNode, Guid inputNodeId)
         {
-            return _linesFromInputNodes.ContainsKey(inputNode)
-                       ? _linesFromInputNodes[inputNode].FindAll(l => l.Connection.SourceSlotId == inputNodeId)
-                       : NoLines;
+            return _linesFromInputNodes.TryGetValue(inputNode, out var node)
+                       ? node.FindAll(l => l.Connection.SourceSlotId == inputNodeId)
+                       : Array.Empty<ConnectionLineUi>();
         }
 
         private Dictionary<SymbolUi.Child, List<ConnectionLineUi>> _linesFromNodes = new(50);
         private Dictionary<SymbolUi.Child, List<ConnectionLineUi>> _linesIntoNodes = new(50);
         private Dictionary<IOutputUi, List<ConnectionLineUi>> _linesToOutputNodes = new(50);
         private Dictionary<IInputUi, List<ConnectionLineUi>> _linesFromInputNodes = new(50);
-
-        // Reuse empty list instead of null check
-        private static readonly List<ConnectionLineUi> NoLines = new();
     }
 }

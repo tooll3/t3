@@ -47,8 +47,10 @@ namespace T3.Editor.Gui.Graph
             var canvas = _window.GraphCanvas;
             var needsReinit = false;
             var graphSymbol = composition.Symbol;
+            
+            var tempConnections = ConnectionMaker.GetTempConnectionsFor(_window);
 
-            if (ConnectionMaker.TempConnections.Count > 0 || AllConnections.Count != ConnectionMaker.TempConnections.Count + graphSymbol.Connections.Count)
+            if (tempConnections.Count > 0 || AllConnections.Count != tempConnections.Count + graphSymbol.Connections.Count)
             {
                 _lastCheckSum = 0;
                 needsReinit = true;
@@ -65,7 +67,7 @@ namespace T3.Editor.Gui.Graph
                     checkSum += c.GetHashCode() * (index + 1);
                 }
 
-                foreach (var c in ConnectionMaker.TempConnections)
+                foreach (var c in tempConnections)
                 {
                     checkSum += c.GetHashCode();
                 }
@@ -83,7 +85,7 @@ namespace T3.Editor.Gui.Graph
             {
                 AllConnections.Clear();
                 AllConnections.AddRange(graphSymbol.Connections);
-                AllConnections.AddRange(ConnectionMaker.TempConnections);
+                AllConnections.AddRange(tempConnections);
 
                 // 1. Initializes lists of ConnectionLineUis
                 _connectionSorter.Init();

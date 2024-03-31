@@ -21,7 +21,8 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             _mousePosition = ImGui.GetMousePos();
             BestMatchLastFrame = _bestMatchYetForCurrentFrame;
             var graphCanvas = window.GraphCanvas;
-            if (BestMatchLastFrame != null && ConnectionMaker.TempConnections.Count == 0)
+            
+            if (BestMatchLastFrame != null && !ConnectionMaker.HasTempConnectionsFor(window))
             {
                 var time = ImGui.GetTime();
                 if (_hoverStartTime < 0)
@@ -161,14 +162,14 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new() { DisableDamping = true };
         private static readonly EvaluationContext EvaluationContext = new();
 
-        public static ConnectionSplitHelper.PotentialConnectionSplit BestMatchLastFrame;
+        public static PotentialConnectionSplit BestMatchLastFrame;
         private static PotentialConnectionSplit _bestMatchYetForCurrentFrame;
         private static float _bestMatchDistance = float.PositiveInfinity;
         private const int SnapDistance = 50;
         private static Vector2 _mousePosition;
         private static double _hoverStartTime = -1;
 
-        public class PotentialConnectionSplit
+        public sealed class PotentialConnectionSplit
         {
             public Vector2 PositionOnScreen;
             public Symbol.Connection Connection;
