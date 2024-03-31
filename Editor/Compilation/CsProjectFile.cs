@@ -226,7 +226,7 @@ internal class CsProjectFile
     }
 
     // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation
-    public static CsProjectFile CreateNewProject(string projectName, string nameSpace, string parentDirectory)
+    public static CsProjectFile CreateNewProject(string projectName, string nameSpace, bool shareResources, string parentDirectory)
     {
         var defaultHomeDir = Path.Combine(UserData.ReadOnlySettingsFolder, "default-home");
         var files = System.IO.Directory.EnumerateFiles(defaultHomeDir, "*");
@@ -247,11 +247,14 @@ internal class CsProjectFile
         const string defaultReferencesPlaceholder = "{{DEFAULT_REFS}}";
         const string nameSpacePlaceholder = "{{NAMESPACE}}";
         const string usernamePlaceholder = "{{USER}}";
-
-        string username = nameSpace.Split('.').First();
-
+        const string shareResourcesPlaceholder = "{{SHARE_RESOURCES}}";
+        
+        var shouldShareResources = shareResources ? "true" : "false";
+        var username = nameSpace.Split('.').First();
         var homeGuid = Guid.NewGuid().ToString();
+        
         string csprojPath = null;
+        
         foreach (var file in files)
         {
             var text = File.ReadAllText(file)
@@ -259,7 +262,8 @@ internal class CsProjectFile
                            .Replace(guidPlaceholder, homeGuid)
                            .Replace(defaultReferencesPlaceholder, CoreReferences)
                            .Replace(nameSpacePlaceholder, nameSpace)
-                           .Replace(usernamePlaceholder, username);
+                           .Replace(usernamePlaceholder, username)
+                           .Replace(shareResourcesPlaceholder, shouldShareResources);
 
             var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file))
                                           .Replace(ProjectNamePlaceholder, projectName)
