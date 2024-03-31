@@ -113,10 +113,9 @@ public abstract partial class SymbolPackage : IResourcePackage
             }
         }
 
-        var emptyInstanceCollection = Array.Empty<Instance>();
         foreach (var symbol in updatedSymbols)
         {
-            UpdateSymbolInstances(symbol, emptyInstanceCollection);
+            UpdateSymbolInstances(symbol);
             SymbolUpdated?.Invoke(symbol);
         }
 
@@ -214,9 +213,9 @@ public abstract partial class SymbolPackage : IResourcePackage
         }
     }
 
-    protected static void UpdateSymbolInstances(Symbol symbol, Instance[] transferredInstances)
+    protected static void UpdateSymbolInstances(Symbol symbol)
     {
-        symbol.UpdateInstanceType(transferredInstances);
+        symbol.UpdateInstanceType();
         symbol.CreateAnimationUpdateActionsForSymbolInstances();
     }
 
@@ -246,6 +245,7 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     public readonly record struct SymbolJsonResult(in SymbolJson.SymbolReadResult Result, string Path);
 
+    public IReadOnlyDictionary<Guid, Symbol> SymbolDict => Symbols;
     protected readonly ConcurrentDictionary<Guid, Symbol> Symbols = new();
 
     public const string SymbolExtension = ".t3";

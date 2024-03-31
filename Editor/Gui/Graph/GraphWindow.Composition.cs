@@ -45,26 +45,7 @@ internal sealed partial class GraphWindow
         {
             if (_needsReload)
             {
-                var symbol = Symbol;
-                var symbolUi = SymbolUi;
-                Log.Info($"Reloading symbol [{symbol.Name}] ({symbol.Id}).");
                 SymbolPackage.Reload(SymbolUi);
-                var newSymbol = Symbol;
-                var newSymbolUi = SymbolUi;
-                
-                var sameSymbol = newSymbol == symbol;
-                var sameSymbolUi = newSymbolUi == symbolUi;
-                
-                string msg = $"Reloaded symbol [{newSymbol.Name}] ({newSymbol.Id}). Same symbol? {sameSymbol} | Same symbol ui? {sameSymbolUi}";
-
-                if (!sameSymbol && !sameSymbolUi)
-                {
-                    Log.Info(msg);
-                }
-                else
-                {
-                    throw new Exception(msg);
-                }
             }
         }
 

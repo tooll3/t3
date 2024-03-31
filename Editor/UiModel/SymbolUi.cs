@@ -1,3 +1,4 @@
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.External.Truncon.Collections;
@@ -11,11 +12,14 @@ namespace T3.Editor.UiModel
 {
     public sealed partial class SymbolUi : ISelectionContainer
     {
-        internal readonly Symbol Symbol;
+        internal Symbol Symbol => _package.SymbolDict[_id];
+        private readonly SymbolPackage _package;
+        private readonly Guid _id;
 
         internal SymbolUi(Symbol symbol, bool updateConsistency)
         {
-            Symbol = symbol;
+            _id = symbol.Id;
+            _package = symbol.SymbolPackage;
             
             InputUis = new Dictionary<Guid, IInputUi>();
             OutputUis = new Dictionary<Guid, IOutputUi>();
@@ -67,17 +71,19 @@ namespace T3.Editor.UiModel
 
         internal void UpdateConsistencyWithSymbol()
         {
+            var symbol = Symbol;
             // Check if child entries are missing
-            foreach (var child in Symbol.Children.Values)
+            foreach (var child in symbol.Children.Values)
             {
-                if (!ChildUis.TryGetValue(child.Id, out _))
+                var childId = child.Id;
+                if (!ChildUis.TryGetValue(childId, out _))
                 {
                     Log.Debug($"Found no symbol child ui entry for symbol child '{child.ReadableName}' - creating a new one");
-                    var childUi = new Child(child, this)
+                    var childUi = new Child(childId, _id, (EditorSymbolPackage)symbol.SymbolPackage)
                                       {
                                           PosOnCanvas = new Vector2(100, 100),
                                       };
-                    _childUis.Add(child.Id, childUi);
+                    _childUis.Add(childId, childUi);
                 }
             }
 
@@ -225,11 +231,21 @@ namespace T3.Editor.UiModel
         internal bool ForceUnmodified;
         private bool _hasBeenModified;
         internal bool NeedsSaving => _hasBeenModified && !ForceUnmodified;
-        private readonly Dictionary<Guid, Child> _childUis = new();
-        internal IReadOnlyDictionary<Guid, Child> ChildUis => _childUis; // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
-        internal readonly IDictionary<Guid, ExternalLink> Links;
-        internal readonly IDictionary<Guid, IInputUi> InputUis;
-        internal readonly IDictionary<Guid, IOutputUi> OutputUis;
-        internal readonly IDictionary<Guid, Annotation> Annotations;
+        private  Dictionary<Guid, Child> _childUis = new();
+        internal IReadOnlyDictionary<Guid, Child> ChildUis => _childUis;
+        internal IDictionary<Guid, ExternalLink> Links { get; private set; }
+        internal IDictionary<Guid, IInputUi> InputUis { get; private set; } 
+        internal IDictionary<Guid, IOutputUi> OutputUis{ get; private set; }
+        internal IDictionary<Guid, Annotation> Annotations { get; private set; }
+
+        internal void ReplaceWith(SymbolUi newSymbolUi)
+        {
+            _childUis = newSymbolUi._childUis;
+            InputUis = newSymbolUi.InputUis;
+            OutputUis = newSymbolUi.OutputUis;
+            Annotations = newSymbolUi.Annotations;
+            Links = newSymbolUi.Links;
+            Description = newSymbolUi.Description;
+        }
     }
 }

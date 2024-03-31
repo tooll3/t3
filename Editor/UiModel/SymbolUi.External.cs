@@ -12,7 +12,7 @@ public sealed partial class SymbolUi
     {
         FlagAsModified();
         var symbolChild = Symbol.AddChild(symbolToAdd, addedChildId, name);
-        var childUi = new Child(symbolChild, this)
+        var childUi = new Child(symbolChild.Id, _id, (EditorSymbolPackage)Symbol.SymbolPackage)
                           {
                               PosOnCanvas = posInCanvas,
                               Size = size,

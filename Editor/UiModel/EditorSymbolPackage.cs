@@ -350,32 +350,27 @@ internal class EditorSymbolPackage : SymbolPackage
         var symbolJson = JsonFileResult<Symbol>.ReadAndCreate(symbolPath);
         var result = SymbolJson.ReadSymbolRoot(symbol.Id, symbolJson.JToken, symbol.InstanceType, this);
         var newSymbol = result.Symbol;
-        Symbols[id] = newSymbol;
-        _filePathHandlers[id].Symbol = newSymbol;
 
         if (!TryReadAndApplyChildren(result))
         {
             Log.Error($"Failed to reload symbol for symbol {id}");
-            Symbols[id] = symbol;
-            _filePathHandlers[id].Symbol = symbol;
             return;
         }
-
+        
         // transfer instances over to the new symbol and update them
-        UpdateSymbolInstances(newSymbol, symbol.InstancesOfSelf.ToArray());
+        symbol.ReplaceWith(newSymbol);
+        UpdateSymbolInstances(symbol);
         
         var symbolUiJson = JsonFileResult<SymbolUi>.ReadAndCreate(symbolUiPath);
 
-        if (!SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, newSymbol, out var newSymbolUi))
+        if (!SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, symbol, out var newSymbolUi))
         {
-            Symbols[id] = symbol;
-            _filePathHandlers[id].Symbol = symbol;
             throw new Exception($"Failed to reload symbol ui for symbol {id}");
         }
 
         // override registry values
-        SymbolUiDict[id] = newSymbolUi;
         newSymbolUi.UpdateConsistencyWithSymbol();
+        symbolUi.ReplaceWith(newSymbolUi);
     }
 
     public bool TryGetSymbolUi(Guid rSymbolId, [NotNullWhen(true)] out SymbolUi? symbolUi)

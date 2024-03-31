@@ -28,10 +28,13 @@ namespace T3.Editor.UiModel
 
             internal Dictionary<Guid, ConnectionStyles> ConnectionStyleOverrides { get; } = new();
 
-            internal readonly Symbol.Child SymbolChild;
-            internal readonly SymbolUi Parent;
+            internal Symbol.Child SymbolChild => Parent.Children[Id];
+            private Symbol Parent => _parentSymbolPackage.SymbolDict[_symbolId];
 
-            public Guid Id => SymbolChild.Id;
+            private readonly Guid _symbolId;
+            private readonly EditorSymbolPackage _parentSymbolPackage;
+
+            public Guid Id { get; }
             public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
             public Vector2 Size { get; set; } = DefaultOpSize;
 
@@ -41,10 +44,11 @@ namespace T3.Editor.UiModel
 
             internal bool IsDisabled { get => SymbolChild.Outputs.FirstOrDefault().Value?.IsDisabled ?? false; set => SetDisabled(value); }
 
-            internal Child(Symbol.Child symbolChild, SymbolUi parent)
+            internal Child(Guid symbolChildId, Guid symbolId, EditorSymbolPackage parentSymbolPackage)
             {
-                SymbolChild = symbolChild;
-                Parent = parent;
+                Id = symbolChildId;
+                _symbolId = symbolId;
+                _parentSymbolPackage = parentSymbolPackage;
             }
 
 
@@ -103,7 +107,7 @@ namespace T3.Editor.UiModel
 
             internal Child Clone(SymbolUi parent, Symbol.Child symbolChild)
             {
-                return new Child(symbolChild, parent)
+                return new Child(symbolChild.Id, parent._id, (EditorSymbolPackage)parent.Symbol.SymbolPackage)
                            {
                                PosOnCanvas = PosOnCanvas,
                                Size = Size,

@@ -19,7 +19,7 @@ namespace T3.Core.Operator
             /// <summary>A reference to the <see cref="Symbol"/> this is an instance from.</summary>
             public Symbol Symbol { get; init; }
 
-            public Guid Id { get; init; }
+            public Guid Id { get; }
 
             public Symbol Parent { get; }
 
@@ -206,8 +206,10 @@ namespace T3.Core.Operator
                     return;
                 }
 
-                foreach (var instance in Parent._instancesOfChildren[Id])
+                var id = Id;
+                foreach (var parentInstance in Parent._instancesOfSelf)
                 {
+                    var instance = parentInstance.Children[id];
                     var mainInputSlot = instance.Inputs[0];
                     var mainOutputSlot = instance.Outputs[0];
 

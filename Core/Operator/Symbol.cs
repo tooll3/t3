@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis.Operations;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Slots;
@@ -63,7 +64,7 @@ namespace T3.Core.Operator
 
             if (symbolPackage != null)
             {
-                UpdateInstanceType(Array.Empty<Instance>());
+                UpdateInstanceType();
             }
         }
 
@@ -255,15 +256,12 @@ namespace T3.Core.Operator
             Connections.RemoveAll(c => c.SourceParentOrChildId == childId || c.TargetParentOrChildId == childId);
             
             var removedFromSymbol = _children.Remove(childId, out var symbolChild);
-            var symbolOfRemovedChild = symbolChild!.Symbol;
-            var idOfRemovedChild = symbolChild.Id;
-            _instancesOfChildren.Remove(idOfRemovedChild, out var instancesOfRemovedChild);
-            
-            // then destroy all instances of the child from instances of this symbol
-            foreach (var instance in instancesOfRemovedChild!)
+            var idOfRemovedChild = symbolChild!.Id;
+
+            foreach (var instance in _instancesOfSelf)
             {
-                symbolOfRemovedChild._instancesOfSelf.Remove(instance);
-                Instance.Destroy(instance);
+                var childInstance = instance.Children[idOfRemovedChild];
+                Instance.Destroy(childInstance);
             }
 
             return removedFromSymbol;
@@ -300,8 +298,9 @@ namespace T3.Core.Operator
 
         public void InvalidateInputInAllChildInstances(Guid inputId, Guid childId)
         {
-            foreach (var instance in _instancesOfChildren[childId])
+            foreach (var parent in _instancesOfSelf)
             {
+                var instance = parent.Children[childId];
                 var slot = instance.Inputs.Single(i => i.Id == inputId);
                 slot.DirtyFlag.Invalidate();
             }
@@ -324,7 +323,6 @@ namespace T3.Core.Operator
         }
         
         private readonly List<Instance> _instancesOfSelf = new();
-        private readonly ConcurrentDictionary<Guid, Child> _children = new();
-        private readonly ConcurrentDictionary<Guid, List<Instance> > _instancesOfChildren = new();
+        private ConcurrentDictionary<Guid, Child> _children = new();
     }
 }
