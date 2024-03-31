@@ -39,7 +39,7 @@ namespace T3.Editor.UiModel
             {
                 ProjectSetup.UpdateSymbolPackage(this);
                 newSymbolUi = null;
-                var gotSymbol = Symbols.TryGetValue(newSymbolId, out newSymbol) && SymbolUiDict.TryGetValue(newSymbolId, out newSymbolUi);
+                var gotSymbol = SymbolDict.TryGetValue(newSymbolId, out newSymbol) && SymbolUiDict.TryGetValue(newSymbolId, out newSymbolUi);
                 if(gotSymbol)
                 {
                     newSymbolUi.FlagAsModified();
@@ -283,7 +283,7 @@ namespace T3.Editor.UiModel
         private void RenameNamespace(string sourceNamespace, string newNamespace, EditableSymbolProject newDestinationProject)
         {
             // copy since we are modifying the collection while iterating
-            var mySymbols = Symbols.Values.ToArray();
+            var mySymbols = SymbolDict.Values.ToArray();
             foreach (var symbol in mySymbols)
             {
                 if (!symbol.Namespace.StartsWith(sourceNamespace))

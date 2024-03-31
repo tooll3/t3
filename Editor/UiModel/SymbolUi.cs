@@ -12,7 +12,7 @@ namespace T3.Editor.UiModel
 {
     public sealed partial class SymbolUi : ISelectionContainer
     {
-        internal Symbol Symbol => _package.SymbolDict[_id];
+        internal Symbol Symbol => _package.Symbols[_id];
         private readonly SymbolPackage _package;
         private readonly Guid _id;
 

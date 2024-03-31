@@ -29,7 +29,7 @@ namespace T3.Editor.UiModel
             internal Dictionary<Guid, ConnectionStyles> ConnectionStyleOverrides { get; } = new();
 
             internal Symbol.Child SymbolChild => Parent.Children[Id];
-            private Symbol Parent => _parentSymbolPackage.SymbolDict[_symbolId];
+            private Symbol Parent => _parentSymbolPackage.Symbols[_symbolId];
 
             private readonly Guid _symbolId;
             private readonly EditorSymbolPackage _parentSymbolPackage;
