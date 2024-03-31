@@ -24,7 +24,7 @@ internal class Structure
     
     public Instance? GetInstanceFromIdPath(IReadOnlyList<Guid> compositionPath)
     {
-        return TryGetInstanceFromIdPath(_getRootInstance(), compositionPath, out var instance) ? instance : null;
+        return TryGetInstanceFromIdPath(compositionPath, out var instance) ? instance : null;
     }
 
     public List<string> GetReadableInstancePath(IReadOnlyList<Guid>? path, bool includeLeave= true)
@@ -265,17 +265,18 @@ internal class Structure
         return parents;
     }
 
-    public static bool TryGetInstanceFromIdPath(Instance rootInstance, IReadOnlyList<Guid>? childPath, out Instance? instance)
+    private bool TryGetInstanceFromIdPath([NotNullWhen(true)] IReadOnlyList<Guid>? childPath, [NotNullWhen(true)] out Instance? instance)
     {
         if (childPath == null || childPath.Count == 0)
         {
             instance = null;
             return false;
         }
-        
+
+        var rootInstance = _getRootInstance();
         var rootId = rootInstance.SymbolChildId;
         
-        if(childPath.First() != rootId)
+        if(childPath[0] != rootId)
             throw new ArgumentException("Path does not start with the root instance");
         
         var pathCount = childPath.Count;
@@ -289,7 +290,7 @@ internal class Structure
         instance = rootInstance;
         for(int i = 1; i < pathCount; i++)
         {
-            if (!instance!.TryGetChildInstance(childPath[i], false, out instance, out _))
+            if (!instance.Children.TryGetValue(childPath[i], out instance))
             {
                 Log.Error("Did not find instance in path provided");
                 instance = null;
