@@ -70,7 +70,7 @@ public class MsForms : ICoreSystemUiService
         Application.ExitThread();
     }
 
-    public ICursor Cursor => FirstCursor!;
+    public ICursor Cursor => FirstCursor ??= new CursorWrapper();
 
     private static readonly Dictionary<PopUpButtons, MessageBoxButtons> ButtonEnumConversion =
         new()
@@ -109,9 +109,11 @@ public class MsForms : ICoreSystemUiService
     {
         var cursorWrapper = new CursorWrapper();
         cursorWrapper.TrackMouseOf(form);
+
+        if (TrackedCursors.Count == 0)
+            FirstCursor = cursorWrapper;
         
         TrackedCursors.Add(form, cursorWrapper);
-        FirstCursor ??= cursorWrapper;
     }
 
     private static void HandleKeyDown(object? sender, KeyEventArgs e)
