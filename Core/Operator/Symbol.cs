@@ -33,8 +33,8 @@ namespace T3.Core.Operator
         
         #endregion Saved Properties
 
-        public string Name { get; private set; }
-        public string Namespace { get; private set; }
+        public string Name => _instanceType.Name;
+        public string Namespace => _instanceType.Namespace ?? SymbolPackage.AssemblyInformation.Name;
         public Animator Animator { get; } = new();
         public PlaybackSettings PlaybackSettings { get; set; } = new();
         
@@ -47,8 +47,6 @@ namespace T3.Core.Operator
             private set
             {
                 _instanceType = value;
-                Name = value.Name;
-                Namespace = value.Namespace ?? SymbolPackage.AssemblyInformation.Name;
                 SymbolRegistry.SymbolsByType[value] = this;
             }
         }
