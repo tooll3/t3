@@ -6,7 +6,7 @@ using T3.Core.Operator.Slots;
 namespace lib.types
 {
 	[Guid("0c2dcf1f-48ff-45aa-a28b-c5900279ce6e")]
-    public class Int3 : Instance<Int3>
+    public class Int3 : Instance<Int3>, IExtractedInput<T3.Core.DataTypes.Vector.Int3>
     {
         [Output(Guid = "9D9CAFA3-FDA3-48D9-81D5-5374FC439688")]
         public readonly Slot<T3.Core.DataTypes.Vector.Int3> Result = new ();
@@ -29,5 +29,16 @@ namespace lib.types
         
         [Input(Guid = "0564CF1C-40A3-40FC-92DD-2E2632EEC37C")]
         public readonly InputSlot<int> Z = new();
+
+
+
+        public Slot<T3.Core.DataTypes.Vector.Int3> OutputSlot => Result;
+
+        public void SetInputValues(T3.Core.DataTypes.Vector.Int3 value)
+        {
+            X.Value = value.X;
+            Y.Value = value.Y;
+            Z.Value = value.Z;
+        }
     }
 }

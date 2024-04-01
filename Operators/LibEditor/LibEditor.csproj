@@ -11,6 +11,7 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Core\Core.csproj" Private="false"/>
+        <ProjectReference Include="..\libDataTypes\libDataTypes.csproj" />
         <ProjectReference Include="..\lib\Lib.csproj" Private="false"/>
         <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false"/>
         <ProjectReference Include="..\..\Serialization\Serialization.csproj" Private="false"/>
