@@ -25,18 +25,18 @@ public class Apc40Mk2 : CompatibleMidiDevice
         CommandTriggerCombinations
             = new List<CommandTriggerCombination>()
                   {
-                      new(VariationHandling.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { SceneTrigger1To40 },
+                      new(SnapshotActions.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { SceneTrigger1To40 },
                           CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                      new(VariationHandling.SaveSnapshotAtIndex, InputModes.Save, new[] { SceneTrigger1To40 },
+                      new(SnapshotActions.SaveSnapshotAtIndex, InputModes.Save, new[] { SceneTrigger1To40 },
                           CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                      new(VariationHandling.RemoveSnapshotAtIndex, InputModes.Delete, new[] { SceneTrigger1To40 },
+                      new(SnapshotActions.RemoveSnapshotAtIndex, InputModes.Delete, new[] { SceneTrigger1To40 },
                           CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                      //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { ClipStopButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                      new(VariationHandling.StopBlendingTowards, InputModes.Default, new[] { SceneLaunch2 },
+                      //new CommandTriggerCombination(SnapshotActions.ActivateGroupAtIndex, InputModes.Default, new[] { ClipStopButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                      new(BlendActions.StopBlendingTowards, InputModes.Default, new[] { SceneLaunch2 },
                           CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
-                      new(VariationHandling.StartBlendingTowardsSnapshot, requiredInputMode: InputModes.BlendTo, new[] { SceneTrigger1To40 },
+                      new(BlendActions.StartBlendingTowardsSnapshot, requiredInputMode: InputModes.BlendTo, new[] { SceneTrigger1To40 },
                           CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                      new(VariationHandling.UpdateBlendingTowardsProgress, InputModes.Default, new[] { AbFader },
+                      new(BlendActions.UpdateBlendingTowardsProgress, InputModes.Default, new[] { AbFader },
                           CommandTriggerCombination.ExecutesAt.ControllerChange),
                   };
 

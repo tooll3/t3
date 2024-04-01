@@ -61,6 +61,7 @@ public abstract class CompatibleMidiDevice : MidiConnectionManager.IMidiConsumer
         if (!_hasNewMessages)
             return;
 
+        // Handle sliders and knobs...
         ControlChangeSignal[] controlChangeSignals;
         lock (_controlSignalsSinceLastUpdate)
         {
@@ -68,10 +69,14 @@ public abstract class CompatibleMidiDevice : MidiConnectionManager.IMidiConsumer
             _controlSignalsSinceLastUpdate.Clear();
         }
 
-        foreach (var ctc in CommandTriggerCombinations)
+        if (controlChangeSignals.Length != 0)
         {
-            ctc.InvokeMatchingControlCommands(controlChangeSignals, ActiveMode);
+            foreach (var ctc in CommandTriggerCombinations)
+            {
+                ctc.InvokeMatchingControlCommands(controlChangeSignals, ActiveMode);
+            }
         }
+
 
         if (_combinedButtonSignals.Count == 0)
             return;

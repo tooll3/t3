@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Midi;
@@ -16,7 +13,7 @@ using T3.Editor.UiModel;
 namespace T3.Editor.Gui.Interaction.Variations;
 
 /// <summary>
-/// Handles the live integration of variations to the user interface.
+/// Applies actions on variations to the currently active pool.
 /// </summary>
 /// <remarks>
 /// Variations are a sets of symbolChild.input-parameters combinations defined for an Symbol.
@@ -28,7 +25,7 @@ namespace T3.Editor.Gui.Interaction.Variations;
 /// modified symbol has many instances. That's why applying symbol-variations is not allowed for Symbols
 /// in the lib-namespace.  
 /// </remarks>
-public static class VariationHandling
+internal static class VariationHandling
 {
     public static SymbolVariationPool ActivePoolForSnapshots { get; private set; }
     public static Instance ActiveInstanceForSnapshots { get; private set; }
@@ -82,7 +79,7 @@ public static class VariationHandling
         }
 
         CompatibleMidiDeviceHandling.UpdateConnectedDevices();
-        SmoothVariationBlending.UpdateBlend();
+        BlendActions.SmoothVariationBlending.UpdateBlend();
     }
 
     public static SymbolVariationPool GetOrLoadVariations(Guid symbolId)
@@ -95,173 +92,6 @@ public static class VariationHandling
         var newOpVariation = SymbolVariationPool.InitVariationPoolForSymbol(symbolId);
         _variationPoolForOperators[newOpVariation.SymbolId] = newOpVariation;
         return newOpVariation;
-    }
-
-    private static readonly Dictionary<Guid, SymbolVariationPool> _variationPoolForOperators = new();
-
-    public static void ActivateOrCreateSnapshotAtIndex(int activationIndex)
-    {
-        if (ActivePoolForSnapshots == null)
-        {
-            Log.Warning($"Can't save variation #{activationIndex}. No variation pool active.");
-            return;
-        }
-
-        if (SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
-        {
-            ActivePoolForSnapshots.Apply(ActiveInstanceForSnapshots, existingVariation);
-            return;
-        }
-
-        CreateOrUpdateSnapshotVariation(activationIndex);
-        ActivePoolForSnapshots.UpdateActiveStateForVariation(activationIndex);
-    }
-
-    public static void SaveSnapshotAtIndex(int activationIndex)
-    {
-        if (ActivePoolForSnapshots == null)
-        {
-            Log.Warning($"Can't save variation #{activationIndex}. No variation pool active.");
-            return;
-        }
-
-        CreateOrUpdateSnapshotVariation(activationIndex);
-        ActivePoolForSnapshots.UpdateActiveStateForVariation(activationIndex);
-    }
-
-    public static void RemoveSnapshotAtIndex(int activationIndex)
-    {
-        if (ActivePoolForSnapshots == null)
-            return;
-
-        //ActivePoolForSnapshots.DeleteVariation
-        if (SymbolVariationPool.TryGetSnapshot(activationIndex, out var snapshot))
-        {
-            ActivePoolForSnapshots.DeleteVariation(snapshot);
-        }
-        else
-        {
-            Log.Warning($"No preset to delete at index {activationIndex}");
-        }
-    }
-
-    public static void StartBlendingSnapshots(int[] indices)
-    {
-        Log.Warning($"StartBlendingSnapshots {indices.Length} not implemented");
-    }
-
-    public static void StartBlendingTowardsSnapshot(int index)
-    {
-        if (ActiveInstanceForSnapshots == null || ActivePoolForSnapshots == null)
-        {
-            Log.Warning("Can't blend without active composition or variation pool");
-            return;
-        }
-
-        if (SymbolVariationPool.TryGetSnapshot(index, out var variation))
-        {
-            // Log.Debug($"Start blending towards: {index}");
-            _blendTowardsIndex = index;
-            ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, 0);
-        }
-    }
-
-    private static int _blendTowardsIndex = -1;
-
-    public static void UpdateBlendingTowardsProgress(int index, float midiValue)
-    {
-        if (ActiveInstanceForSnapshots == null || ActivePoolForSnapshots == null)
-        {
-            Log.Warning("Can't blend without active composition or variation pool");
-            return;
-        }
-
-        if (_blendTowardsIndex == -1)
-        {
-            return;
-        }
-
-        if (SymbolVariationPool.TryGetSnapshot(_blendTowardsIndex, out var variation))
-        {
-            var normalizedValue = midiValue / 127.0f;
-            SmoothVariationBlending.StartBlendTo(variation, normalizedValue);
-        }
-        else
-        {
-            SmoothVariationBlending.Stop();
-        }
-    }
-
-    /// <summary>
-    /// Smooths blending between variations to avoid glitches by low 127 midi resolution steps 
-    /// </summary>
-    private static class SmoothVariationBlending
-    {
-        public static void StartBlendTo(Variation variation, float normalizedBlendWeight)
-        {
-            if (variation != _targetVariation)
-            {
-                _dampedWeight = normalizedBlendWeight;
-                _targetVariation = variation;
-            }
-
-            _targetWeight = normalizedBlendWeight;
-            UpdateBlend();
-        }
-
-        public static void UpdateBlend()
-        {
-            if (_targetVariation == null)
-                return;
-
-            if (float.IsNaN(_dampedWeight) || float.IsInfinity(_dampedWeight))
-            {
-                _dampedWeight = _targetWeight;
-            }
-
-            if (float.IsNaN(_dampingVelocity) || float.IsInfinity(_dampingVelocity))
-            {
-                _dampingVelocity = 0.5f;
-            }
-
-            var frameDuration = 1 / 60f;    // Fixme: (float)Playback.LastFrameDuration
-            _dampedWeight = MathUtils.SpringDamp(_targetWeight,
-                                              _dampedWeight,
-                                              ref _dampingVelocity,
-                                              200f, frameDuration);
-
-            if (!(MathF.Abs(_dampingVelocity) > 0.0005f))
-                return;
-
-            ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, _targetVariation, _targetWeight);
-        }
-
-        public static void Stop()
-        {
-            _targetVariation = null;
-        }
-
-        private static float _targetWeight;
-        private static float _dampedWeight;
-        private static float _dampingVelocity;
-        private static Variation _targetVariation;
-    }
-
-    public static void StopBlendingTowards()
-    {
-        _blendTowardsIndex = -1;
-        ActivePoolForSnapshots.ApplyCurrentBlend();
-        SmoothVariationBlending.Stop();
-    }
-
-    public static void UpdateBlendValues(int obj, float value)
-    {
-        //Log.Warning($"BlendValuesUpdate {obj} not implemented");
-    }
-
-    public static void SaveSnapshotAtNextFreeSlot(int obj)
-    {
-        //Log.Warning($"SaveSnapshotAtNextFreeSlot {obj} not implemented");
     }
 
     private const int AutoIndex = -1;
@@ -288,7 +118,7 @@ public static class VariationHandling
         if (newVariation == null)
             return null;
 
-        newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForSnapshots.Variations);
+        newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(ActivePoolForSnapshots.Variations);
         if (activationIndex != AutoIndex)
             newVariation.ActivationIndex = activationIndex;
 
@@ -348,6 +178,7 @@ public static class VariationHandling
             yield return childInstance;
         }
     }
-
+    
+    private static readonly Dictionary<Guid, SymbolVariationPool> _variationPoolForOperators = new();
     private static readonly List<Instance> _affectedInstances = new(100);
 }

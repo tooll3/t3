@@ -16,22 +16,30 @@ public class ApcMini : CompatibleMidiDevice
         CommandTriggerCombinations
             = new List<CommandTriggerCombination>
                   {
-                      new(VariationHandling.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                      new(VariationHandling.SaveSnapshotAtIndex, InputModes.Save, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                          
-                      new(VariationHandling.RemoveSnapshotAtIndex, InputModes.Delete, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                          
-                      new(VariationHandling.StartBlendingSnapshots, InputModes.Default, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.AllCombinedButtonsReleased),
-                          
-                      new(VariationHandling.StopBlendingTowards, InputModes.Default, new[] { Shift }, CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
-                      new(VariationHandling.StartBlendingTowardsSnapshot, requiredInputMode: InputModes.BlendTo, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                      new(VariationHandling.UpdateBlendingTowardsProgress, InputModes.Default, new[] { Slider9 }, CommandTriggerCombination.ExecutesAt.ControllerChange),
-                          
-                      new(VariationHandling.UpdateBlendValues, InputModes.Default, new[] { Sliders1To8 }, CommandTriggerCombination.ExecutesAt.ControllerChange),
-                      new(VariationHandling.SaveSnapshotAtNextFreeSlot, InputModes.Default, new[] { SceneLaunch8ClipStopAll }, CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),                          
+                      new(SnapshotActions.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { SceneTrigger1To64 },
+                          CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                      new(SnapshotActions.SaveSnapshotAtIndex, InputModes.Save, new[] { SceneTrigger1To64 },
+                          CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+
+                      new(SnapshotActions.RemoveSnapshotAtIndex, InputModes.Delete, new[] { SceneTrigger1To64 },
+                          CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+
+                      new(BlendActions.StartBlendingSnapshots, InputModes.Default, new[] { SceneTrigger1To64 },
+                          CommandTriggerCombination.ExecutesAt.AllCombinedButtonsReleased),
+
+                      new(BlendActions.StopBlendingTowards, InputModes.Default, new[] { Shift },
+                          CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
+                      new(BlendActions.StartBlendingTowardsSnapshot, requiredInputMode: InputModes.BlendTo, new[] { SceneTrigger1To64 },
+                          CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                      new(BlendActions.UpdateBlendingTowardsProgress, InputModes.Default, new[] { Slider9 },
+                          CommandTriggerCombination.ExecutesAt.ControllerChange),
+
+                      new(BlendActions.UpdateBlendValues, InputModes.Default, new[] { Sliders1To8 }, CommandTriggerCombination.ExecutesAt.ControllerChange),
+                      new(SnapshotActions.SaveSnapshotAtNextFreeSlot, InputModes.Default, new[] { SceneLaunch8ClipStopAll },
+                          CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
                       //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { ChannelButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
                   };
-
+        
         ModeButtons = new List<ModeButton>
                           {
                               new(Shift, InputModes.BlendTo),
@@ -42,7 +50,7 @@ public class ApcMini : CompatibleMidiDevice
     protected override void UpdateVariationVisualization()
     {
         _updateCount++;
-        
+
         UpdateRangeLeds(SceneTrigger1To64,
                         mappedIndex =>
                         {
@@ -51,11 +59,12 @@ public class ApcMini : CompatibleMidiDevice
                             {
                                 return (int)color;
                             }
-                            if(variation.State == Variation.States.Active)
+
+                            if (variation.State == Variation.States.Active)
                             {
                                 return (int)ApcButtonColor.Red;
                             }
-                                
+
                             switch (variation.State)
                             {
                                 case Variation.States.Undefined:
@@ -80,7 +89,7 @@ public class ApcMini : CompatibleMidiDevice
 
         // UpdateRangeLeds(midiOut, SceneLaunch8ClipStopAll, 
         //                 mappedIndex => (int)ApcButtonColor.Red);
-            
+
         // if (activeVariation.IsGroupExpanded)
         // {
         //     var activeIndex = activeVariation.ActiveGroupIndex; 
@@ -166,7 +175,7 @@ public class ApcMini : CompatibleMidiDevice
     private static readonly ButtonRange SceneTrigger1To64 = new(0, 63);
     private static readonly ButtonRange Sliders1To9 = new(48, 48 + 8);
     private static readonly ButtonRange Sliders1To8 = new(48, 48 + 7);
-    private static readonly ButtonRange Slider9 = new(48+8, 48 + 8);
+    private static readonly ButtonRange Slider9 = new(48 + 8, 48 + 8);
 
     private static readonly ButtonRange ChannelButtons1To8 = new(64, 71);
     private static readonly ButtonRange ButtonUp = new(64);

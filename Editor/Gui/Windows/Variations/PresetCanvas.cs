@@ -17,7 +17,7 @@ namespace T3.Editor.Gui.Windows.Variations
             
             if (CustomComponents.IconButton(Icon.Plus, new Vector2(s, s)))
             {
-                CreateVariation();
+                CreatePreset();
             }
         }
 
@@ -36,7 +36,7 @@ namespace T3.Editor.Gui.Windows.Variations
         {
         }
 
-        public virtual Variation CreateVariation()
+        private void CreatePreset()
         {
             var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
             if (newVariation != null)
@@ -49,7 +49,6 @@ namespace T3.Editor.Gui.Windows.Variations
             Selection.SetSelection(newVariation);
             ResetView();
             TriggerThumbnailUpdate();
-            return newVariation;
         }
     }
 }

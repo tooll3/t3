@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations;
-using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 
@@ -13,8 +12,8 @@ public class NanoControl8 : CompatibleMidiDevice
     {
         CommandTriggerCombinations = new List<CommandTriggerCombination>()
                                          {
-                                             new(VariationHandling.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                             new(VariationHandling.SaveSnapshotAtIndex, InputModes.Save, new[] { ManagerSet, NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                             new(SnapshotActions.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                             new(SnapshotActions.SaveSnapshotAtIndex, InputModes.Save, new[] { ManagerSet, NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                              //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                          };
     }

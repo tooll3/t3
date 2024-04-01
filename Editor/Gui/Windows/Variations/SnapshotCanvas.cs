@@ -23,7 +23,7 @@ public class SnapshotCanvas : VariationBaseCanvas
 
         if (CustomComponents.IconButton(Icon.Plus, new Vector2(s, s)))
         {
-            CreateVariation();
+            CreateSnapshot();
         }
     }
 
@@ -67,6 +67,7 @@ public class SnapshotCanvas : VariationBaseCanvas
             FitViewToSelectionHandling.FitViewToSelection();
         }
 
+        // Todo: This should be done automatically when disabling snapshots for a symbol child
         if (ImGui.MenuItem("Remove selected Ops from Variations",
                            "",
                            false,
@@ -86,7 +87,7 @@ public class SnapshotCanvas : VariationBaseCanvas
         }
     }
 
-    protected virtual void CreateVariation()
+    private void CreateSnapshot()
     {
         var newSnapshot = VariationHandling.CreateOrUpdateSnapshotVariation();
         if (newSnapshot == null)
