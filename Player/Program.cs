@@ -1,18 +1,12 @@
 #define FORCE_D3D_DEBUG
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
 using CommandLine;
 using CommandLine.Text;
 using ManagedBass;
-using SharpDX;
-using SharpDX.Direct2D1;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -28,10 +22,8 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
 using T3.Editor.App;
-using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
 using Resource = SharpDX.Direct3D11.Resource;
-using Vector2 = System.Numerics.Vector2;
 using SharpDX.Windows;
 using T3.Core.Utils;
 using T3.Serialization;
@@ -299,9 +291,13 @@ namespace T3.Player
             {
                 CoreUi.Instance.Cursor.SetVisible(true);
                 bool openLogs = false;
+                
                 if (!string.IsNullOrWhiteSpace(message))
                 {
-                    Log.Error(message);
+                    if (error)
+                        Log.Error(message);
+                    else
+                        Log.Info(message);
 
                     const int maxLines = 10;
                     message = StringUtils.TrimStringToLineCount(message, maxLines).ToString();
@@ -318,13 +314,20 @@ namespace T3.Player
                 fileWriter.Dispose(); // flush and close
 
                 // Release all resources
-                _renderView?.Dispose();
-                _backBuffer?.Dispose();
-                _deviceContext?.ClearState();
-                _deviceContext?.Flush();
-                _device?.Dispose();
-                _deviceContext?.Dispose();
-                
+                try
+                {
+                    _renderView?.Dispose();
+                    _backBuffer?.Dispose();
+                    _deviceContext?.ClearState();
+                    _deviceContext?.Flush();
+                    _device?.Dispose();
+                    _deviceContext?.Dispose();
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to dispose of resources: {e}");
+                }
+
                 if (openLogs)
                 {
                     CoreUi.Instance.OpenWithDefaultApplication(logPath);
