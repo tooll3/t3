@@ -302,7 +302,7 @@ namespace T3.Editor.Gui.Graph
                 
                 var compositionUpdated = _window.CompositionOp;
                 
-                if (FrameStats.Current.OpenedPopUpName != string.Empty)
+                if (FrameStats.Current.OpenedPopUpName == string.Empty)
                     CustomComponents.DrawContextMenuForScrollCanvas(() => DrawContextMenuContent(compositionUpdated), ref _contextMenuIsOpen);
 
                 _duplicateSymbolDialog.Draw(compositionUpdated, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
