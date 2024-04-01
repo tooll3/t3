@@ -1,9 +1,8 @@
-﻿using T3.Core.DataTypes;
+﻿using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction;
@@ -12,10 +11,10 @@ internal static class ParameterExtraction
 {
     public static bool IsInputSlotExtractable(IInputSlot inputSlot)
     {
-        return _symbolIdsForTypes.ContainsKey(inputSlot.ValueType);
+        return SymbolsExtractableFromInputs.ContainsKey(inputSlot.ValueType);
     }
     
-    public static void ExtractAsConnectedOperator(NodeSelection nodeSelection, IInputSlot inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
+    public static void ExtractAsConnectedOperator<T>(NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
     {
         SymbolUi? compositionUi = null;
         Instance composition;
@@ -40,13 +39,13 @@ internal static class ParameterExtraction
         {
             compositionUi = composition.GetSymbolUi();
         }
-            
 
         var compositionSymbol = composition.Symbol;
         var commands = new List<ICommand>();
 
+        // cast input slot to constructedInputSlotType
         // Find matching symbol
-        if (!_symbolIdsForTypes.TryGetValue(input.DefaultValue.ValueType, out var symbolId))
+        if (!SymbolsExtractableFromInputs.TryGetValue(input.DefaultValue.ValueType, out var symbolId))
         {
             Log.Warning("Can't extract this parameter type");
             return;
@@ -59,6 +58,7 @@ internal static class ParameterExtraction
                                             PosOnCanvas = freePosition,
                                             ChildName = input.Name
                                         };
+        
         if (_sizesForTypes.TryGetValue(input.DefaultValue.ValueType, out var sizeOverride))
         {
             addSymbolChildCommand.Size = sizeOverride;  // FIXME: doesn't seem to have an effect
@@ -78,67 +78,52 @@ internal static class ParameterExtraction
         }
 
         // Set type
+        // Todo - make this undoable - currently not implemented with the new extraction system
         var newInstance = composition.Children[newChildUi.Id];
-
-        if(newInstance is not IExtractable extractable) // FIXME: implement extractable - got lost in source control
-        {
-            Log.Warning("Can't extract this parameter type");
-            return;
-        }
-        
-        var inputsAndValues = new Dictionary<Symbol.Child.Input, InputValue>();
-        
-        var success = extractable.TryExtractInputsFor(inputSlot, out var extractedInputs);
-        
-        if (!success)
-        {
-            Log.Warning("Failed to find matching types");
-            return;
-        }
-        
-        foreach (var extractedInput in extractedInputs)
-        {
-            inputsAndValues[extractedInput.InstanceInput] = extractedInput.InputValue;
-        }
-
-        if (inputsAndValues.Count == 0)
-        {
-            return;
-        }
-
-        foreach (var (typedInput, inputValue) in inputsAndValues)
-        {
-            var setValueCommand = new ChangeInputValueCommand(newSymbolChild.Symbol, newSymbolChild.Id, typedInput, inputValue);
-            setValueCommand.Do();
-            commands.Add(setValueCommand);
-        }
+        ExtractInputValues(inputSlot, newInstance, out var outputSlot, out var previousValue);
 
         // Create connection
-        var firstMatchingOutput = newSymbolChild.Symbol.OutputDefinitions.First(o => o.ValueType == input.DefaultValue.ValueType);
-
         var newConnection = new Symbol.Connection(sourceParentOrChildId: newSymbolChild.Id,
-                                                  sourceSlotId: firstMatchingOutput.Id,
+                                                  sourceSlotId: outputSlot.Id,
                                                   targetParentOrChildId: symbolChildUi.SymbolChild.Id,
                                                   targetSlotId: input.Id);
         var addConnectionCommand = new AddConnectionCommand(compositionUi.Symbol, newConnection, 0);
         addConnectionCommand.Do();
         commands.Add(addConnectionCommand);
         UndoRedoStack.Add(new MacroCommand("Extract as operator", commands));
-    }
+        return;
 
-    // Todo: this should be defined where the types are defined and be direct symbol references
-    private static readonly Dictionary<Type, Guid> _symbolIdsForTypes = new()
-                                                                            {
-                                                                                { typeof(float), Guid.Parse("5d7d61ae-0a41-4ffa-a51d-93bab665e7fe") },
-                                                                                { typeof(System.Numerics.Vector2), Guid.Parse("926ab3fd-fbaf-4c4b-91bc-af277000dcb8") },
-                                                                                { typeof(System.Numerics.Vector3), Guid.Parse("94a5de3b-ee6a-43d3-8d21-7b8fe94b042b") },
-                                                                                { typeof(string), Guid.Parse("5880cbc3-a541-4484-a06a-0e6f77cdbe8e") },
-                                                                                { typeof(int), Guid.Parse("cc07b314-4582-4c2c-84b8-bb32f59fc09b") },
-                                                                                { typeof(Gradient), Guid.Parse("8211249d-7a26-4ad0-8d84-56da72a5c536") },
-                                                                            };
+        static void ExtractInputValues(InputSlot<T> slot, Instance newInstance, out Slot<T> outputSlot, out T previousValue)
+        {
+            var extractableInput = (IExtractedInput<T>)newInstance;
+            outputSlot = extractableInput.OutputSlot;
+            previousValue = outputSlot.Value;
+            extractableInput.SetInputValues(slot.TypedInputValue.Value);
+        }
+    }
 
     private static readonly Dictionary<Type, System.Numerics.Vector2> _sizesForTypes = new()
                                                                                            {
                                                                                                { typeof(string), new System.Numerics.Vector2(120, 80) },
                                                                                            };
+    
+    // todo: define this elsewhere so they can be properly hot reloaded
+    private static Dictionary<Type, Guid>? _symbolsExtractableFromInputs;
+    private static Dictionary<Type, Guid> SymbolsExtractableFromInputs => _symbolsExtractableFromInputs ??=
+                                                                              SymbolPackage.AllPackages
+                                                                                           .SelectMany(package =>
+                                                                                                       {
+                                                                                                           return package.Symbols.Values
+                                                                                                              .Select(x =>
+                                                                                                               {
+                                                                                                                   var typeInfo = package
+                                                                                                                      .AssemblyInformation
+                                                                                                                      .OperatorTypeInfo[x.Id];
+                                                                                                                   return (x, typeInfo);
+                                                                                                               });
+                                                                                                       })
+                                                                                           .Where(x => x.typeInfo.ExtractableTypeInfo.IsExtractable)
+                                                                                           .ToDictionary(x => x.typeInfo.ExtractableTypeInfo.ExtractableType,
+                                                                                                         x => x.x.Id);
+
 }

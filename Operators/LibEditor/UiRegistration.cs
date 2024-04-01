@@ -39,7 +39,7 @@ public class UiRegistration : IOperatorUIInitializer
         CustomChildUiRegistry.Register(typeof(SampleCurve), SampleCurveUi.DrawChildUi);
         CustomChildUiRegistry.Register(typeof(_Jitter), _JitterUi.DrawChildUi);
         CustomChildUiRegistry.Register(typeof(_Jitter2d), Jitter2dUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(AString), AStringUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(lib.types.String), StringUi.DrawChildUi);
         CustomChildUiRegistry.Register(typeof(Value), ValueUi.DrawChildUi);
         CustomChildUiRegistry.Register(typeof(IntValue), IntValueUi.DrawChildUi);
         CustomChildUiRegistry.Register(typeof(Remap), RemapUi.DrawChildUi);

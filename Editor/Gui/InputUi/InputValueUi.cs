@@ -402,7 +402,7 @@ namespace T3.Editor.Gui.InputUi
                     {
                         inputOperation = InputOperations.Animate;
                     }
-                    else if (ImGui.GetIO().KeyCtrl && ParameterExtraction.IsInputSlotExtractable(inputSlot))
+                    else if (ImGui.GetIO().KeyCtrl && inputSlot is InputSlot<T> && ParameterExtraction.IsInputSlotExtractable(inputSlot))
                     {
                         inputOperation = InputOperations.Extract;
                     }
@@ -430,7 +430,7 @@ namespace T3.Editor.Gui.InputUi
                             break;
                         }
                         case InputOperations.Extract:
-                            ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, inputSlot, symbolChildUi, input);
+                            ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, (InputSlot<T>)inputSlot, symbolChildUi, input);
                             break;
                         case InputOperations.ConnectWithSearch:
                         {
@@ -576,7 +576,7 @@ namespace T3.Editor.Gui.InputUi
 
                                                         if (ImGui.MenuItem("Extract as connection operator"))
                                                         {
-                                                            ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, inputSlot, symbolChildUi, input);
+                                                            ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, typedInputSlot, symbolChildUi, input);
                                                         }
 
                                                         if (!isReadOnly)

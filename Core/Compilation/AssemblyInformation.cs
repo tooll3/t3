@@ -15,11 +15,21 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+
 namespace T3.Core.Compilation;
 
 public readonly record struct InputSlotInfo(string Name, InputAttribute Attribute, Type Type, Type[] GenericArguments, FieldInfo Field, bool IsMultiInput);
 
-public readonly record struct OperatorTypeInfo(Guid Id, List<InputSlotInfo> Inputs, List<OutputSlotInfo> Outputs, Func<object> Constructor, Type Type, bool IsDescriptiveFileNameType);
+public readonly record struct OperatorTypeInfo(
+    Guid Id,
+    List<InputSlotInfo> Inputs,
+    List<OutputSlotInfo> Outputs,
+    Func<object> Constructor,
+    Type Type,
+    bool IsDescriptiveFileNameType,
+    ExtractableTypeInfo ExtractableTypeInfo);
+
+public readonly record struct ExtractableTypeInfo(bool IsExtractable, Type? ExtractableType);
 
 public readonly record struct OutputSlotInfo(string Name, OutputAttribute Attribute, Type Type, Type[] GenericArguments, FieldInfo Field)
 {
@@ -52,7 +62,7 @@ public sealed class AssemblyInformation
     public Guid HomeGuid { get; private set; } = Guid.Empty;
     public bool HasHome => HomeGuid != Guid.Empty;
     public bool IsOperatorAssembly => _operatorTypeInfo.Count > 0;
-    
+
     private readonly AssemblyName _assemblyName;
     private readonly Assembly _assembly;
 
@@ -63,7 +73,7 @@ public sealed class AssemblyInformation
     private Dictionary<string, Type> _types;
 
     internal readonly bool ShouldShareResources;
-    
+
     private IEnumerable<Assembly> AllAssemblies => _loadContext?.Assemblies ?? Enumerable.Empty<Assembly>();
     private readonly List<string> _assemblyPaths = [];
 
@@ -108,11 +118,11 @@ public sealed class AssemblyInformation
                 Log.Warning($"Duplicate type {type.FullName} in assembly {assembly.FullName}");
             }
         }
-        
+
         _types = typeDict;
 
         ConcurrentBag<Type> nonOperatorTypes = new();
-        
+
         _types.Values.AsParallel().ForAll(type =>
                                           {
                                               var isOperator = type.IsAssignableTo(typeof(Instance));
@@ -120,7 +130,6 @@ public sealed class AssemblyInformation
                                                   nonOperatorTypes.Add(type);
                                               else
                                                   SetUpOperatorType(type);
-                                              
                                           });
 
         shouldShareResources = nonOperatorTypes
@@ -135,10 +144,10 @@ public sealed class AssemblyInformation
                                          try
                                          {
                                              var obj = Activator.CreateInstanceFrom(
-                                                                                    assemblyFile: Path, 
-                                                                                    typeName: type.FullName!, 
-                                                                                    ignoreCase: false, 
-                                                                                    bindingAttr: ConstructorBindingFlags, 
+                                                                                    assemblyFile: Path,
+                                                                                    typeName: type.FullName!,
+                                                                                    ignoreCase: false,
+                                                                                    bindingAttr: ConstructorBindingFlags,
                                                                                     binder: null, args: null, culture: null, activationAttributes: null);
                                              var unwrapped = obj?.Unwrap();
                                              if (unwrapped is IShareResources shareable)
@@ -167,15 +176,13 @@ public sealed class AssemblyInformation
             Log.Error($"Failed to get guid for {type.FullName}");
             return;
         }
-        
+
         if (isHome)
         {
             HomeGuid = id;
         }
-        
+
         var constructor = Expression.Lambda<Func<object>>(Expression.New(type)).Compile();
-        
-        var isDescriptive = type.IsAssignableTo(typeof(IDescriptiveFilename));
 
         var bindFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
         var slots = type.GetFields(bindFlags)
@@ -191,7 +198,7 @@ public sealed class AssemblyInformation
             if (fieldType.IsAssignableTo(typeof(IInputSlot)))
             {
                 var inputAttribute = field.GetCustomAttribute<InputAttribute>();
-                if(inputAttribute is not null)
+                if (inputAttribute is not null)
                 {
                     var isMultiInput = fieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
                     inputFields.Add(new InputSlotInfo(name, inputAttribute, fieldType, genericArguments, field, isMultiInput));
@@ -204,7 +211,7 @@ public sealed class AssemblyInformation
             else
             {
                 var outputAttribute = field.GetCustomAttribute<OutputAttribute>();
-                if(outputAttribute is not null)
+                if (outputAttribute is not null)
                 {
                     outputFields.Add(new OutputSlotInfo(name, outputAttribute, fieldType, genericArguments, field));
                 }
@@ -215,13 +222,32 @@ public sealed class AssemblyInformation
             }
         }
 
+        ExtractableTypeInfo extractableTypeInfo = default;
+        var isDescriptive = false;
+
+        // collect information about implemented interfaces
+        var interfaces = type.GetInterfaces();
+        foreach (var interfaceType in interfaces)
+        {
+            if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IExtractedInput<>))
+            {
+                var extractableType = interfaceType.GetGenericArguments().Single();
+                extractableTypeInfo = new ExtractableTypeInfo(true, extractableType);
+            }
+            else if(interfaceType == typeof(IDescriptiveFilename))
+            {
+                isDescriptive = true;
+            }
+        }
+
         var added = _operatorTypeInfo.TryAdd(id, new OperatorTypeInfo(
-                                                       Id: id,
-                                                       Type: type,
-                                                       Constructor: constructor,
-                                                       Inputs: inputFields,
-                                                       Outputs: outputFields,
-                                                       IsDescriptiveFileNameType: isDescriptive));
+                                                                      Id: id,
+                                                                      Type: type,
+                                                                      Constructor: constructor,
+                                                                      Inputs: inputFields,
+                                                                      Outputs: outputFields,
+                                                                      IsDescriptiveFileNameType: isDescriptive,
+                                                                      ExtractableTypeInfo: extractableTypeInfo));
 
         if (!added)
         {
@@ -235,7 +261,7 @@ public sealed class AssemblyInformation
     /// <param name="path">path to dll</param>
     private void TryResolveReferences(string path)
     {
-        _dependencyContext = DependencyContext.Load(_assembly); 
+        _dependencyContext = DependencyContext.Load(_assembly);
         if (_dependencyContext == null)
         {
             Log.Error($"Failed to load dependency context for assembly {_assemblyName.FullName}");
@@ -335,7 +361,7 @@ public sealed class AssemblyInformation
                 Log.Error($"Type {newType.Name} has no GuidAttribute");
                 guid = Guid.Empty;
                 return false;
-            
+
             case 1: // This is what we want - types with a single GuidAttribute
                 var guidAttribute = (GuidAttribute)guidAttributes[0];
                 var guidString = guidAttribute.Value;
@@ -361,11 +387,11 @@ public sealed class AssemblyInformation
 
         if (_loadContext == null)
             return;
-        
+
         // because we only subscribe to the Resolving event once we've found the dependency context
-        if(_dependencyContext != null)
+        if (_dependencyContext != null)
             _loadContext.Resolving -= OnResolving;
-        
+
         _loadContext.Unload();
         _loadContext = null;
     }

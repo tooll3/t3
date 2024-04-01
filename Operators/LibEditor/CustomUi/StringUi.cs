@@ -8,11 +8,11 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using String = lib.@string.AString;
+using String = lib.types.String;
 
 namespace libEditor.CustomUi
 {
-    public static class AStringUi
+    public static class StringUi
     {
         /// <summary>
         /// Draws a custom ui that allows direct editing of strings within the graph 
