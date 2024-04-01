@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
@@ -27,7 +28,8 @@ namespace T3.Editor.Gui.Windows.Variations
             DrawWindowContent();
         }
 
-        private ViewModes _viewMode = 0;
+        private InteractionModes _interactionMode = InteractionModes.Presets;
+
         private int _selectedNodeCount = 0;
 
         public void DrawWindowContent(bool hideHeader = false)
@@ -49,16 +51,16 @@ namespace T3.Editor.Gui.Windows.Variations
 
                 if (oneChildSelected)
                 {
-                    _viewMode = ViewModes.Presets;
+                    _interactionMode = InteractionModes.Presets;
                 }
                 else if (compositionHasVariations && _selectedNodeCount == 0)
                 {
-                    _viewMode = ViewModes.Snapshots;
+                    _interactionMode = InteractionModes.Snapshots;
                 }
             }
 
             var drawList = ImGui.GetWindowDrawList();
-            var keepCursorPos = ImGui.GetCursorScreenPos();
+            var topLeftCorner = ImGui.GetCursorScreenPos();
 
             drawList.ChannelsSplit(2);
             drawList.ChannelsSetCurrent(1);
@@ -70,11 +72,13 @@ namespace T3.Editor.Gui.Windows.Variations
                                      false,
                                      ImGuiWindowFlags.NoScrollbar);
 
-                    var viewModeIndex = (int)_viewMode;
+                    // var viewModeIndex = (int)_interactionMode;
 
-                    if (CustomComponents.DrawSegmentedToggle(ref viewModeIndex, _options))
+                    //if(CustomComponents.DrawSegmentedToggle())
+
+                    if (FormInputs.SegmentedButton(ref _interactionMode))
                     {
-                        _viewMode = (ViewModes)viewModeIndex;
+                        // _interactionMode = (InteractionModes)viewModeIndex;
                         _presetCanvas.RefreshView();
                         _snapshotCanvas.RefreshView();
                     }
@@ -82,14 +86,17 @@ namespace T3.Editor.Gui.Windows.Variations
                     ImGui.SameLine();
                     ImGui.Dummy(new Vector2(10, 10));
                     ImGui.SameLine();
-                    switch (_viewMode)
+                    switch (_interactionMode)
                     {
-                        case ViewModes.Presets:
+                        case InteractionModes.Presets:
                             _presetCanvas.DrawToolbarFunctions();
                             break;
 
-                        case ViewModes.Snapshots:
+                        case InteractionModes.Snapshots:
                             _snapshotCanvas.DrawToolbarFunctions();
+                            break;
+                        case InteractionModes.ParameterGroups:
+                            _parameterGroupUi.DrawToolbarContent();
                             break;
                     }
 
@@ -99,53 +106,63 @@ namespace T3.Editor.Gui.Windows.Variations
 
             drawList.ChannelsSetCurrent(0);
             {
-                ImGui.SetCursorScreenPos(keepCursorPos);
 
-                if (_viewMode == ViewModes.Presets)
+                switch (_interactionMode)
                 {
-                    if (VariationHandling.ActivePoolForPresets == null
-                        || VariationHandling.ActiveInstanceForPresets == null
-                        || VariationHandling.ActivePoolForPresets.Variations.Count == 0)
-                    {
-                        CustomComponents.EmptyWindowMessage("No presets yet.");
-                    }
-                    else
-                    {
-                        _presetCanvas.Draw(drawList, hideHeader);
-                    }
-                }
-                else
-                {
-                    if (VariationHandling.ActivePoolForSnapshots == null
-                        || VariationHandling.ActiveInstanceForSnapshots == null
-                        || VariationHandling.ActivePoolForSnapshots.Variations.Count == 0)
-                    {
-                        var childUi = SymbolUiRegistry.Entries[VariationHandling.ActiveInstanceForSnapshots.Symbol.Id];
-                        var shapshotsEnabledForNone = !childUi.ChildUis.Any(s => s.SnapshotGroupIndex > 0);
-                        var additionalHint = shapshotsEnabledForNone ? "Use the graph window context menu\nto activate snapshots for operators." : "";
+                    case InteractionModes.Presets:
+                        ImGui.SetCursorScreenPos(topLeftCorner);
 
-                        if (CustomComponents
-                           .EmptyWindowMessage("No Snapshots yet.\n\nWith shapshots you can switch or blend\nbetween parameter sets in your composition.\n\n"
-                                               + additionalHint, "Learn More"))
+                        if (VariationHandling.ActivePoolForPresets == null
+                            || VariationHandling.ActiveInstanceForPresets == null
+                            || VariationHandling.ActivePoolForPresets.Variations.Count == 0)
                         {
-                            var url = "https://github.com/tooll3/t3/wiki/PresetsAndSnapshots";
-                            Process.Start("explorer", url);
+                            CustomComponents.EmptyWindowMessage("No presets yet.");
                         }
-                    }
-                    else
-                    {
-                        _snapshotCanvas.Draw(drawList);
-                    }
+                        else
+                        {
+                            _presetCanvas.DrawBaseCanvas(drawList, hideHeader);
+                        }
+
+                        break;
+                    case InteractionModes.Snapshots:
+                        ImGui.SetCursorScreenPos(topLeftCorner);
+
+                        if (VariationHandling.ActivePoolForSnapshots == null
+                            || VariationHandling.ActiveInstanceForSnapshots == null
+                            || VariationHandling.ActivePoolForSnapshots.Variations.Count == 0)
+                        {
+                            var childUi = SymbolUiRegistry.Entries[VariationHandling.ActiveInstanceForSnapshots.Symbol.Id];
+                            var snapshotsEnabledForNone = !childUi.ChildUis.Any(s => s.SnapshotGroupIndex > 0);
+                            var additionalHint = snapshotsEnabledForNone ? "Use the graph window context menu\nto activate snapshots for operators." : "";
+
+                            if (CustomComponents
+                               .EmptyWindowMessage("No Snapshots yet.\n\nWith snapshots you can switch or blend\nbetween parameter sets in your composition.\n\n"
+                                                   + additionalHint, "Learn More"))
+                            {
+                                var url = "https://github.com/tooll3/t3/wiki/PresetsAndSnapshots";
+                                Process.Start("explorer", url);
+                            }
+                        }
+                        else
+                        {
+                            _snapshotCanvas.DrawBaseCanvas(drawList);
+                        }
+                        break;
+                    
+                    case InteractionModes.ParameterGroups:
+                        _parameterGroupUi.DrawContent();
+                        break;
                 }
             }
 
             drawList.ChannelsMerge();
         }
 
-        private enum ViewModes
+        private enum InteractionModes
         {
             Presets,
             Snapshots,
+            ParameterGroups,
         }
 
         private static readonly List<string> _options = new() { "Presets", "Snapshots" };
@@ -167,5 +184,6 @@ namespace T3.Editor.Gui.Windows.Variations
         private static SymbolVariationPool _poolWithVariationToBeDeleted;
         private readonly PresetCanvas _presetCanvas;
         private readonly SnapshotCanvas _snapshotCanvas;
+        private readonly ParameterGroupUi _parameterGroupUi = new();
     }
 }

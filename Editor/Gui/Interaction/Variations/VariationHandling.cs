@@ -16,7 +16,7 @@ using T3.Editor.UiModel;
 namespace T3.Editor.Gui.Interaction.Variations;
 
 /// <summary>
-/// Handles the live integration of variation model to the user interface.
+/// Handles the live integration of variations to the user interface.
 /// </summary>
 /// <remarks>
 /// Variations are a sets of symbolChild.input-parameters combinations defined for an Symbol.
@@ -24,7 +24,7 @@ namespace T3.Editor.Gui.Interaction.Variations;
 /// and applying "presets" to instances of that symbol.
 ///
 /// Most variations will modify(!) the parent symbol. This is great while working within a single symbol
-/// and tweaking an blending parameters. However it's potentially unintended (or dangerous) if the
+/// and tweaking and blending parameters. However it's potentially unintended (or dangerous) if the
 /// modified symbol has many instances. That's why applying symbol-variations is not allowed for Symbols
 /// in the lib-namespace.  
 /// </remarks>
@@ -183,9 +183,7 @@ public static class VariationHandling
 
         if (SymbolVariationPool.TryGetSnapshot(_blendTowardsIndex, out var variation))
         {
-            //_blendTargetVariation = variation;
             var normalizedValue = midiValue / 127.0f;
-            // Log.Debug($"NormlizedBlendingValue: {normalizedValue}");
             SmoothVariationBlending.StartBlendTo(variation, normalizedValue);
         }
         else

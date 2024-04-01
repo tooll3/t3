@@ -37,7 +37,7 @@ namespace T3.Editor.Gui.Windows
             ImGui.BeginChild("categories", new Vector2(120 * T3Ui.UiScaleFactor, -1), true, ImGuiWindowFlags.NoScrollbar);
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
-                FormInputs.AddSegmentedButton(ref _activeCategory, "", 110 * T3Ui.UiScaleFactor);
+                FormInputs.AddSegmentedButtonWithLabel(ref _activeCategory, "", 110 * T3Ui.UiScaleFactor);
                 ImGui.PopStyleVar();
             }
             ImGui.EndChild();

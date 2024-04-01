@@ -104,7 +104,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             FormInputs.SetIndentToParameters();
 
 
-            if (FormInputs.AddSegmentedButton(ref settings.AudioSource, "Audio Source"))
+            if (FormInputs.AddSegmentedButtonWithLabel(ref settings.AudioSource, "Audio Source"))
             {
                 UpdatePlaybackAndTimeline(settings);
             }
@@ -215,7 +215,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 FormInputs.AddVerticalSpace();
 
-                if (FormInputs.AddSegmentedButton(ref settings.Syncing, "Sync Mode"))
+                if (FormInputs.AddSegmentedButtonWithLabel(ref settings.Syncing, "Sync Mode"))
                 {
                     UpdatePlaybackAndTimeline(settings);
                 }

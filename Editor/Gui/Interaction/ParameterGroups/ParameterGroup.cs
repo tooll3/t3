@@ -23,10 +23,15 @@ namespace T3.Editor.Gui.Interaction.ParameterGroups;
 /// Parameter manipulation by midi controllers or ops is likely to "break" undo/redo.
 ///
 /// Todo:
-/// - Create parameterGroups window
+/// - Create parameterGroups window or panel
 ///     - List Groups
 ///     - Create new Group Button
-///     - Add parameter control button
+///     - Assign parameter to index. Some Ideas:
+///         - Maybe drag and drop from control to parameter name (Pick whip?)
+///         - Draw and drop from parameter name to control button?
+///         - Context Menu of current parameter op?
+///         - Context menu at parameter window?
+///         - Special hotkey when clicking on parameter name
 ///     - draw Parameter List
 /// - Connect to midi connection manager
 ///     - somehow switch between snapshot and parameter control modes
@@ -36,7 +41,7 @@ namespace T3.Editor.Gui.Interaction.ParameterGroups;
 ///       - 
 ///     - add commands to CompatibleMidiDevice
 ///     - indicate parameters as controlled on midi device (e.g. by activating LEDs)
-///     - only register MidiOutConnections for compatible connected midi-devices
+///     ✔ only register MidiOutConnections for compatible connected midi-devices
 /// 
 /// Needs clarification:
 /// - Should ParameterGroups be its own window (or a tab in variations)?

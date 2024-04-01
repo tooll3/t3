@@ -16,7 +16,7 @@ using T3.Editor.Gui.Commands.Variations;
 namespace T3.Editor.Gui.Interaction.Variations.Model
 {
     /// <summary>
-    /// Collects all presets and variations for a symbol 
+    /// Collects all presets and variations for a symbol.
     /// </summary>
     public class SymbolVariationPool
     {
@@ -91,9 +91,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public void SaveVariationsToFile()
         {
-            // if (Variations.Count == 0)
-            //     return;
-
             CreateFolderIfNotExists(VariationsFolder);
             
             var filePath = GetFilePathForVariationId(SymbolId);
@@ -108,7 +105,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
                 writer.WriteValue("Id", SymbolId);
 
-                // Presets
                 {
                     writer.WritePropertyName("Variations");
                     writer.WriteStartArray();
