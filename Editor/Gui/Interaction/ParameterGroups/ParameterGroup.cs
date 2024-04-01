@@ -30,9 +30,22 @@ namespace T3.Editor.Gui.Interaction.ParameterGroups;
 ///     - draw Parameter List
 /// - Connect to midi connection manager
 ///     - somehow switch between snapshot and parameter control modes
+///       - Make ParameterGroups be part of VariationHandling
+///       - Add new VariationHandling.Mode property: Preset|Snapshot|ParamGroups
+///       - Update .Mode from PresetWindow
+///       - 
 ///     - add commands to CompatibleMidiDevice
 ///     - indicate parameters as controlled on midi device (e.g. by activating LEDs)
+///     - only register MidiOutConnections for compatible connected midi-devices
 /// 
+/// Needs clarification:
+/// - Should ParameterGroups be its own window (or a tab in variations)?
+///   Pro: Use-case might be different because it's mostly relevant for live performing
+///   - "Presets" is a good window title.
+///   Contra:
+///   - If there is a variation mode used by the midi-controller, it it would be awkward, if 1 out of 3 modes would be scattered
+///     across multiple windows. And then. How would you activate this mode?
+///   - Switching between modes should be possible on Midi-Controllers and should be consistently reflected on the UI.
 /// </remarks>
 ///
 /// 

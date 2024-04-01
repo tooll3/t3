@@ -16,16 +16,17 @@ namespace T3.Editor.Gui.Interaction.Midi;
 /// Allow allows to update the status of midi devices, e.g. for controlling LEDs to indicate available or active variations.
 /// </summary>
 /// <remarks>
-/// This is NOT related to the MidiInput operator: Both are registered as independent <see cref="MidiInConnectionManager.IMidiConsumer"/>
+/// This is NOT related to the MidiInput operator: Both are registered as independent <see cref="MidiConnectionManager.IMidiConsumer"/>
 /// and handle their events individually.
 /// </remarks>
-public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsumer, IDisposable
+public abstract class CompatibleMidiDevice : MidiConnectionManager.IMidiConsumer, IDisposable
 {
-    public void Initialize(string productName, MidiIn midiIn)
+    internal void Initialize(MidiIn midiIn, MidiOut midiOut)
     {
-        _productName = productName;
-        _midiInputDevice = midiIn;
-        MidiInConnectionManager.RegisterConsumer(this);
+        _midiInputConnection = midiIn;
+        MidiOutConnection = midiOut;
+        
+        MidiConnectionManager.RegisterConsumer(this);
     }
 
     /// <summary>
@@ -120,7 +121,7 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
 
     public void Dispose()
     {
-        MidiInConnectionManager.UnregisterConsumer(this);
+        MidiConnectionManager.UnregisterConsumer(this);
     }
 
     protected List<CommandTriggerCombination> CommandTriggerCombinations;
@@ -162,16 +163,16 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
         }
     }
 
-    void MidiInConnectionManager.IMidiConsumer.OnSettingsChanged()
+    void MidiConnectionManager.IMidiConsumer.OnSettingsChanged()
     {
     }
 
-    void MidiInConnectionManager.IMidiConsumer.MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
+    void MidiConnectionManager.IMidiConsumer.MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
         if (sender is not MidiIn midiIn || msg.MidiEvent == null)
             return;
 
-        if (midiIn != _midiInputDevice)
+        if (midiIn != _midiInputConnection)
             return;
 
         if (msg.MidiEvent == null)
@@ -198,7 +199,6 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
                     _hasNewMessages = true;
                 }
                 return;
-            //Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {noteEvent.NoteNumber}  Value: {noteEvent.Velocity}");
 
             case MidiCommandCode.ControlChange:
                 if (msg.MidiEvent is not ControlChangeEvent controlChangeEvent)
@@ -218,7 +218,7 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
         }
     }
 
-    void MidiInConnectionManager.IMidiConsumer.ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
+    void MidiConnectionManager.IMidiConsumer.ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
     }
     #endregion
@@ -227,12 +227,15 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
     #region SendColors
     protected delegate int ComputeColorForIndex(int index);
 
-    protected static void UpdateRangeLeds(MidiOut midiOut, ButtonRange range, ComputeColorForIndex computeColorForIndex)
+    protected void UpdateRangeLeds(ButtonRange range, ComputeColorForIndex computeColorForIndex)
     {
+        if (MidiOutConnection == null)
+            return;
+        
         foreach (var buttonIndex in range.Indices())
         {
             var mappedIndex = range.GetMappedIndex(buttonIndex);
-            SendColor(midiOut, buttonIndex, computeColorForIndex(mappedIndex));
+            SendColor(MidiOutConnection, buttonIndex, computeColorForIndex(mappedIndex));
         }
     }
 
@@ -261,9 +264,8 @@ public abstract class CompatibleMidiDevice : MidiInConnectionManager.IMidiConsum
     private readonly Dictionary<int, ButtonSignal> _combinedButtonSignals = new();
     private readonly List<ButtonSignal> _buttonSignalsSinceLastUpdate = new();
     private readonly List<ControlChangeSignal> _controlSignalsSinceLastUpdate = new();
-    private MidiIn _midiInputDevice;
-    protected int ProductNameHash => _productName.GetHashCode();
-    private string _productName;
+    private MidiIn _midiInputConnection;
+    protected MidiOut MidiOutConnection;
 }
 
 public class MidiDeviceProductAttribute : Attribute

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Operators.Utils;
 using T3.Core.Logging;
@@ -15,10 +16,10 @@ public static class CompatibleMidiDeviceHandling
 {
     public static void InitializeConnectedDevices()
     {
-        if (!MidiInConnectionManager.Initialized)
+        if (!MidiConnectionManager.Initialized)
         {
             //Log.Warning("MidiInConnectionManager should be initialized before InitializeConnectedDevices().");
-            MidiInConnectionManager.Rescan();
+            MidiConnectionManager.Rescan();
         }
 
         // Dispose devices
@@ -50,26 +51,32 @@ public static class CompatibleMidiDeviceHandling
             var attr = controllerType.GetCustomAttribute<MidiDeviceProductAttribute>(false);
             if (attr == null)
             {
-                Log.Warning($"{controllerType} should implement MidiDeviceProductAttribute");
+                Log.Error($"{controllerType} should implement MidiDeviceProductAttribute");
                 continue;
             }
 
             var productName = attr.ProductName;
 
-            foreach (var (midiIn, midiInCapabilities) in MidiInConnectionManager.MidiIns)
+            foreach (var (midiIn, midiInCapabilities) in MidiConnectionManager.MidiIns)
             {
                 if (midiInCapabilities.ProductName != productName)
                     continue;
+                
+                if (!MidiConnectionManager.TryGetMidiOut(attr.ProductName, out var midiOut))
+                {
+                    Log.Error($"Can't find midi out connection for {attr.ProductName}");
+                    continue;
+                }
 
                 if (Activator.CreateInstance(controllerType) is not CompatibleMidiDevice compatibleDevice)
                 {
-                    Log.Warning("Can't create midi-device");
-                    return;
+                    Log.Error("Can't create midi-device?");
+                    continue;
                 }
 
-                compatibleDevice.Initialize(productName, midiIn);
+                compatibleDevice.Initialize(midiIn, midiOut);
                 _connectedMidiDevices.Add(compatibleDevice);
-                Log.Debug($"Connected midi device {compatibleDevice}");
+                Log.Debug($"Connected compatible midi device {compatibleDevice}");
             }
         }
     }

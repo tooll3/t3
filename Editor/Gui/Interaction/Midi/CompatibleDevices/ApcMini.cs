@@ -42,12 +42,8 @@ public class ApcMini : CompatibleMidiDevice
     protected override void UpdateVariationVisualization()
     {
         _updateCount++;
-
-        var midiOut = MidiOutConnectionManager.GetConnectedController(ProductNameHash);
-        if (midiOut == null)
-            return;
-
-        UpdateRangeLeds(midiOut, SceneTrigger1To64,
+        
+        UpdateRangeLeds(SceneTrigger1To64,
                         mappedIndex =>
                         {
                             var color = ApcButtonColor.Off;
@@ -154,8 +150,6 @@ public class ApcMini : CompatibleMidiDevice
     }
 
     private int _updateCount;
-
-    // public static readonly int ProductNameHash = "APC MINI".GetHashCode();
 
     private enum ApcButtonColor
     {

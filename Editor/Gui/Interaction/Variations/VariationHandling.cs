@@ -36,12 +36,6 @@ public static class VariationHandling
     public static SymbolVariationPool ActivePoolForPresets { get; private set; }
     public static Instance ActiveInstanceForPresets { get; private set; }
 
-    public static void Init()
-    {
-        // Scan for output devices (e.g. to update LEDs etc.)
-        MidiOutConnectionManager.Init();
-    }
-
     /// <summary>
     /// Update variation handling
     /// </summary>

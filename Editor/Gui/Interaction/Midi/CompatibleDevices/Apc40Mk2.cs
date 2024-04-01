@@ -50,11 +50,6 @@ public class Apc40Mk2 : CompatibleMidiDevice
     protected override void UpdateVariationVisualization()
     {
         _updateCount++;
-
-        var midiOut = MidiOutConnectionManager.GetConnectedController(ProductNameHash);
-        if (midiOut == null)
-            return;
-
         if (!_initialized)
         {
             // NOTE: This invocation doesn't seem to have an effect
@@ -74,35 +69,27 @@ public class Apc40Mk2 : CompatibleMidiDevice
                                  0x01, // PC Bug Fix Lvl (?)
                                  0xF7, // MIDI excl end
                              };
-            midiOut.SendBuffer(buffer);
+            MidiOutConnection?.SendBuffer(buffer);
             _initialized = true;
         }
 
-        UpdateRangeLeds(midiOut, SceneTrigger1To40,
+        UpdateRangeLeds(SceneTrigger1To40,
                         mappedIndex =>
                         {
                             var color = Apc40Colors.Off;
                             if (SymbolVariationPool.TryGetSnapshot(mappedIndex, out var v))
                             {
-                                switch (v.State)
-                                {
-                                    case Variation.States.Undefined:
-                                        color = Apc40Colors.Off;
-                                        break;
-                                    case Variation.States.InActive:
-                                        color = Apc40Colors.PureGreen;
-                                        break;
-                                    case Variation.States.Active:
-                                        color = Apc40Colors.Red;
-                                        break;
-                                    case Variation.States.Modified:
-                                        color = Apc40Colors.Yellow;
-                                        break;
-                                }
+                                color = v.State switch
+                                            {
+                                                Variation.States.Undefined => Apc40Colors.Off,
+                                                Variation.States.InActive  => Apc40Colors.PureGreen,
+                                                Variation.States.Active    => Apc40Colors.Red,
+                                                Variation.States.Modified  => Apc40Colors.Yellow,
+                                                _                          => color
+                                            };
                             }
 
                             return AddModeHighlight(mappedIndex, (int)color);
-                            //return (int)color;
                         });
 
         // Update groups

@@ -55,7 +55,6 @@ public class T3Ui
 
         //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
-        VariationHandling.Init();
 
         Playback.Current = DefaultTimelinePlayback;
         ThemeHandling.Initialize();
