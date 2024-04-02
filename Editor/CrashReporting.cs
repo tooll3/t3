@@ -33,7 +33,7 @@ internal static class CrashReporting
                            o.SendClientReports = false;
                            o.AutoSessionTracking = false;
                            o.SendDefaultPii = false;
-                           o.Release = Program.GetReleaseVersion(indicateDebugBuild: false);
+                           o.Release = Program.Version.ToBasicVersionString();
                            o.SetBeforeSend((Func<SentryEvent, SentryHint, SentryEvent>)CrashHandler);
                        });
 

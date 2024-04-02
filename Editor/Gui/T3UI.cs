@@ -437,7 +437,7 @@ public static class T3Ui
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 1);
 
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Fade(0.2f).Rgba);
-                ImGui.TextUnformatted(Program.GetReleaseVersion());
+                ImGui.TextUnformatted(Program.VersionText);
                 ImGui.PopStyleColor();
             }
 
