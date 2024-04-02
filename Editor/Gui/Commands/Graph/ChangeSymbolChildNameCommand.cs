@@ -33,6 +33,7 @@ namespace T3.Editor.Gui.Commands.Graph
             var symbolParent = symbolUi.Symbol;
             var symbol = symbolParent.Children[_symbolChildId];
             symbol.Name = newName;
+            symbolUi.FlagAsModified();
         }
 
         public string NewName { get; set; }

@@ -40,6 +40,7 @@ namespace T3.Editor.Gui.Commands.Graph
             }
 
             childUi.IsDisabled = shouldBeDisabled;
+            symbolUi.FlagAsModified();
         }
 
         private readonly bool _newState;

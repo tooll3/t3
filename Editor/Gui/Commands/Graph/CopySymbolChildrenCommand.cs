@@ -97,6 +97,7 @@ namespace T3.Editor.Gui.Commands.Graph
             }
 
             NewSymbolChildIds.Clear();
+            parentSymbolUi.FlagAsModified();
         }
 
         public void Do()
@@ -186,6 +187,8 @@ namespace T3.Editor.Gui.Commands.Graph
                 targetCompositionSymbolUi.Annotations[annotation.Id].PosOnCanvas += PositionOffset;
                 NewSymbolAnnotationIds.Add(annotation.Id);
             }
+            
+            targetCompositionSymbolUi.FlagAsModified();
         }
 
         public readonly List<Guid> NewSymbolChildIds = new(); //This primarily used for selecting the new children

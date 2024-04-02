@@ -42,6 +42,7 @@ namespace T3.Editor.Gui.Commands.Graph
             }
 
             child.IsBypassed = shouldBeBypassed;
+            symbolUi.FlagAsModified();
         }
 
         private readonly bool _newState;

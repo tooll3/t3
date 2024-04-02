@@ -80,6 +80,9 @@ namespace T3.Editor.Gui.Commands.Graph
                 var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
                 inputSlot.DirtyFlag.ForceInvalidate();
             }
+            
+            if(shouldBeDefault != _wasDefault)
+                parentSymbolUi.FlagAsModified();
         }
 
         private InputValue OriginalValue { get; set; }

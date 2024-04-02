@@ -431,7 +431,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 var dragStartedAtTime = TimeLineCanvas.Current.InverseTransformX(mousePos.X);
                 _timeWithinDraggedClip = dragStartedAtTime - referenceRange.Start;
                 _posYInsideDraggedClip = mousePos.Y - position.Y;
-                TimeLineCanvas.Current.StartDragCommand();
+                TimeLineCanvas.Current.StartDragCommand(compositionOp.Symbol.Id);
             }
 
             switch (mode)
@@ -517,7 +517,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
         }
 
-        public ICommand StartDragCommand()
+        public ICommand StartDragCommand(in Guid compositionSymbolId)
         {
             var composition = GraphWindow.Focused?.CompositionOp;
             if (composition == null)

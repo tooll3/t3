@@ -108,15 +108,16 @@ namespace T3.Editor.Gui.Commands.Graph
                 return;
             }
             var input = symbolChild.Inputs[_inputId];
-            
+
+            if (!SymbolUiRegistry.TryGetSymbolUi(symbolChild.Symbol.Id, out var symbolUi))
+            {
+                Log.Warning($"Can't find symbol child's SymbolUI  {symbolChild.Symbol.Id} - was it removed? [{symbolChild.Symbol.Name}]");
+                return;
+            }
+
+            bool changed = false;
             if (_isAnimated)
             {
-                if(!SymbolUiRegistry.TryGetSymbolUi(symbolChild.Symbol.Id, out var symbolUi))
-                {
-                    Log.Warning($"Can't find symbol child's SymbolUI  {symbolChild.Symbol.Id} - was it removed? [{symbolChild.Symbol.Name}]");
-                    return;
-                }
-                
                 var inputUi = symbolUi.InputUis[_inputId];
                 var animator = inputParentSymbol.Animator;
                 var symbolChildId = symbolChild.Id;
@@ -132,9 +133,12 @@ namespace T3.Editor.Gui.Commands.Graph
             else
             {
                 input.IsDefault = false;
-                input.Value.Assign(valueToSet);
+                changed = input.Value.Assign(valueToSet);
                 InvalidateInstances(inputParentSymbol, symbolChild);
             }
+            
+            if(changed)
+                symbolUi.FlagAsModified();
         }
 
         private void InvalidateInstances(Symbol inputParentSymbol, Symbol.Child symbolChild)

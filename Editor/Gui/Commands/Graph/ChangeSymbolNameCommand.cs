@@ -1,6 +1,4 @@
-﻿using System;
-using T3.Core.Operator;
-using T3.Editor.UiModel;
+﻿using T3.Core.Operator;
 
 namespace T3.Editor.Gui.Commands.Graph
 {

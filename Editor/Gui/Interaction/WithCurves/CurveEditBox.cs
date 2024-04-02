@@ -25,7 +25,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
 
         private HashSet<VDefinition> _selectedKeyframes;
         
-        public void Draw(HashSet<VDefinition> selectedKeyframes, Instance compositionOp)
+        public void Draw(Guid compositionSymbolId, HashSet<VDefinition> selectedKeyframes, Instance compositionOp)
         {
             if (selectedKeyframes.Count <= 1)
                 return;
@@ -97,28 +97,28 @@ namespace T3.Editor.Gui.Interaction.WithCurves
             var combined = (MoveRingInnerRadius + MoveRingOuterRadius);
             var center = _canvas.TransformPosition(_bounds.GetCenter());
 
-            MoveHandle(
+            MoveHandle(compositionSymbolId,
                 "<##moveLeft", Direction.Horizontal,
                 screenPos: center + new Vector2(-MoveRingOuterRadius, -0.5f * combined),
                 size: new Vector2(MoveRingOuterRadius - MoveRingInnerRadius, combined));
 
 
-            MoveHandle(
+            MoveHandle(compositionSymbolId,
                 "^##moveUp", Direction.Vertical,
                 screenPos: center + new Vector2(-0.5f * combined, -MoveRingOuterRadius),
                 size: new Vector2(combined, MoveRingOuterRadius - MoveRingInnerRadius));
 
-            MoveHandle(
+            MoveHandle(compositionSymbolId,
                 ">##moveRight", Direction.Horizontal,
                 screenPos: center + new Vector2(MoveRingInnerRadius, -0.5f * combined),
                 size: new Vector2(MoveRingOuterRadius - MoveRingInnerRadius, combined));
 
-            MoveHandle(
+            MoveHandle(compositionSymbolId,
                 "v##moveDown", Direction.Vertical,
                 screenPos: center + new Vector2(-0.5f * combined, MoveRingInnerRadius),
                 size: new Vector2(combined, MoveRingOuterRadius - MoveRingInnerRadius));
 
-            MoveHandle(
+            MoveHandle(compositionSymbolId,
                 "+##both", Direction.Both,
                 screenPos: center - new Vector2(1, 1) * MoveRingInnerRadius,
                 size: Vector2.One * MoveRingInnerRadius * 2f);
@@ -174,7 +174,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         private double _boundUMinDragStarted;
         private double _lastU;
         
-        private void MoveHandle(string labelAndId, Direction direction, Vector2 screenPos, Vector2 size)
+        private void MoveHandle(in Guid compositionSymbolId, string labelAndId, Direction direction, Vector2 screenPos, Vector2 size)
         {
             ImGui.SetCursorScreenPos(screenPos);
 
@@ -188,7 +188,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                 var u = _canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
                 if (_changeKeyframesCommand == null)
                 {
-                    StartDragCommand();
+                    StartDragCommand(compositionSymbolId);
                     _uDragStarted = u;
                     _lastU = u;
                     _boundUMaxDragStarted = _bounds.Max.X;
@@ -227,11 +227,11 @@ namespace T3.Editor.Gui.Interaction.WithCurves
             }
         }
 
-        public void StartDragCommand()
+        public void StartDragCommand(Guid compositionSymbolId)
         {
             // FIXME: getting current curves is complicated here.
             var mockNotWorking = Array.Empty<Curve>();
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_selectedKeyframes, mockNotWorking);
+            _changeKeyframesCommand = new ChangeKeyframesCommand(compositionSymbolId, _selectedKeyframes, mockNotWorking);
         }
         
         

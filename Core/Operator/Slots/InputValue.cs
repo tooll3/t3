@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,7 +13,7 @@ namespace T3.Core.Operator.Slots
     {
         public Type ValueType;
         public abstract InputValue Clone();
-        public abstract void Assign(InputValue otherValue);
+        public abstract bool Assign(InputValue otherValue);
         public abstract void AssignClone(InputValue otherValue);
         public abstract bool IsEditableInputReferenceType { get; }
         public abstract void ToJson(JsonTextWriter writer);
@@ -42,15 +43,20 @@ namespace T3.Core.Operator.Slots
             return new InputValue<T>(Value);
         }
 
-        public override void Assign(InputValue otherValue)
+        public override bool Assign(InputValue otherValue)
         {
             if (otherValue is InputValue<T> otherTypedValue)
             {
+                // check if value changed using default equality comparer
+                var comparer = EqualityComparer<T>.Default;
+                var changed = !comparer.Equals(Value, otherTypedValue.Value);
                 Value = otherTypedValue.Value;
+                return changed;
             }
             else
             {
                 Debug.Assert(false); // trying to assign different types of input values
+                return false;
             }
         }
 

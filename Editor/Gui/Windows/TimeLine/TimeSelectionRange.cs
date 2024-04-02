@@ -26,6 +26,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             if (!_selectionTimeRange.IsValid || _selectionTimeRange.Duration <= 0)
                 return;
 
+            var compositionSymbolId = composition.Symbol.Id;
             var contentRegionMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos();
             var contentRegionMax = ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos();
             ImGui.PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
@@ -53,7 +54,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                                        (contentRegionMax-contentRegionMin).Y - TimeRangeHandleSize.Y));
                 ImGui.Button("##SelectionStartPos", TimeRangeHandleSize);
 
-                HandleDrag(composition, _selectionTimeRange.Start, _selectionTimeRange.End);
+                HandleDrag(compositionSymbolId, _selectionTimeRange.Start, _selectionTimeRange.End);
             }
 
             // Range end
@@ -82,13 +83,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                          + new Vector2(0, (contentRegionMax-contentRegionMin).Y - TimeRangeHandleSize.Y));
                 
                 ImGui.Button("##SelectionEndPos", TimeRangeHandleSize);
-                HandleDrag(composition, _selectionTimeRange.End, _selectionTimeRange.Start);
+                HandleDrag(compositionSymbolId, _selectionTimeRange.End, _selectionTimeRange.Start);
             }
 
             ImGui.PopStyleColor();
         }
 
-        private void HandleDrag(Instance composition, double originalU, double origin)
+        private void HandleDrag(in Guid compositionSymbolId, double originalU, double origin)
         {
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
@@ -96,7 +97,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 if (!_isDragging)
                 {
-                    _timeLineCanvas.StartDragCommand();
+                    _timeLineCanvas.StartDragCommand(compositionSymbolId);
                     _lastDragU = originalU;
                     _isDragging = true;
                 }

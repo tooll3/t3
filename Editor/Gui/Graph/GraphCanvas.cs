@@ -100,7 +100,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     var compositionOp = _window.CompositionOp;
                     var compositionUi = compositionOp.GetSymbolUi();
-                    compositionUi.FlagAsModified();
+                    //compositionUi.FlagAsModified();
                     
                     if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                         FocusViewToSelection();
