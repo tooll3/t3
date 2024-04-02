@@ -27,9 +27,10 @@ namespace lib.types
 
         public Slot<string> OutputSlot => Result;
 
-        public void SetInputValues(string value)
+        public void SetTypedInputValuesTo(string value)
         {
-            InputString.Value = value;
+            InputString.Input.IsDefault = false;
+            InputString.TypedInputValue.Value = value;
         }
     }
 }

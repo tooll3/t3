@@ -26,9 +26,10 @@ namespace lib.math.@int
 
         public Slot<int> OutputSlot => Result;
 
-        public void SetInputValues(int value)
+        public void SetTypedInputValuesTo(int value)
         {
-            Int.Value = value;
+            Int.Input.IsDefault = false;
+            Int.TypedInputValue.Value = value;
         }
     }
 }

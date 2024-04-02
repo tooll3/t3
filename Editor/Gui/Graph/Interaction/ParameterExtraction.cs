@@ -98,7 +98,7 @@ internal static class ParameterExtraction
             var extractableInput = (IExtractedInput<T>)newInstance;
             outputSlot = extractableInput.OutputSlot;
             previousValue = outputSlot.Value;
-            extractableInput.SetInputValues(slot.TypedInputValue.Value);
+            extractableInput.SetTypedInputValuesTo(slot.TypedInputValue.Value);
         }
     }
 

@@ -47,9 +47,10 @@ namespace lib.color
 
         public Slot<Gradient> OutputSlot => OutGradient;
 
-        public void SetInputValues(Gradient value)
+        public void SetTypedInputValuesTo(Gradient value)
         {
-            Gradient.Value = value;
+            Gradient.Input.IsDefault = false;
+            Gradient.TypedInputValue.Value = value;
         }
     }
 }
