@@ -1,4 +1,4 @@
-using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -7,18 +7,33 @@ namespace T3.Editor.Gui.Graph;
 
 internal sealed partial class GraphWindow
 {
+    private void RefreshRootInstance()
+    {
+        if (!Package.TryGetRootInstance(out var rootInstance))
+        {
+            throw new Exception("Could not get root instance from package");
+        }
+
+        var previousRoot = RootInstance.Instance;
+        
+        if (rootInstance == previousRoot)
+            return;
+
+        var rootIsComposition = _composition?.Instance == previousRoot;
+        RootInstance.Dispose();
+
+        if (rootIsComposition)
+        {
+            _composition.Dispose();
+            _composition = Composition.GetFor(rootInstance, true);
+        }
+        
+        RootInstance = Composition.GetFor(rootInstance, true);
+    }
     internal bool TrySetCompositionOp(IReadOnlyList<Guid> path, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? nextSelectedUi = null)
     {
-        if (!Package.IsReadOnly)
-        {
-            // refresh root in case the project root changed in code?
-            if (!Package.TryGetRootInstance(out var rootInstance))
-            {
-                return false;
-            }
-
-            _rootInstance = rootInstance!;
-        }
+        if (_compositionForDisposal != null)
+            throw new Exception($"New composition was requested before the previous one was disposed");
 
         var newCompositionInstance = Structure.GetInstanceFromIdPath(path);
 
@@ -65,28 +80,23 @@ internal sealed partial class GraphWindow
         }
 
         ApplyComposition(transition, previousComposition);
-        DisposeOfCompositions(path, previousComposition, _compositionsWaitingForDisposal);
+        _compositionForDisposal = previousComposition;
 
         UserSettings.SaveLastViewedOpForWindow(this, _composition.SymbolChildId);
         return true;
+    }
 
-        static void DisposeOfCompositions(IReadOnlyList<Guid> currentPath, Composition previous, List<Composition> compositionsWaitingForDisposal)
+    void DisposeOfCompositions()
+    {
+        for (int i = _compositionsWaitingForDisposal.Count - 1; i >= 0; i--)
         {
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (previous != null && !compositionsWaitingForDisposal.Contains(previous))
-            {
-                compositionsWaitingForDisposal.Add(previous);
-            }
+            var composition = _compositionsWaitingForDisposal[i];
 
-            for (int i = compositionsWaitingForDisposal.Count - 1; i >= 0; i--)
+            var symbolChildId = composition.SymbolChildId;
+            if (!_compositionPath.Contains(symbolChildId))
             {
-                var composition = compositionsWaitingForDisposal[i];
-                var symbolChildId = composition.SymbolChildId;
-                if (!currentPath.Contains(symbolChildId))
-                {
-                    composition.Dispose();
-                    compositionsWaitingForDisposal.RemoveAt(i);
-                }
+                composition.Dispose();
+                _compositionsWaitingForDisposal.RemoveAt(i);
             }
         }
     }
@@ -149,9 +159,25 @@ internal sealed partial class GraphWindow
         }
     }
 
+    private void OnDuplicationComplete()
+    {
+        if(_compositionForDisposal == null)
+            throw new InvalidOperationException("No duplication composition was set");
+        
+        _compositionForDisposal.MarkDuplicationComplete();
+        _compositionForDisposal.Dispose();
+        _compositionForDisposal = null;
+    }
+
+    private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new();
+    private string _dupeReadonlyNamespace = "";
+    private string _dupeReadonlyName = "";
+    private string _dupeReadonlyDescription = "";
+    private Composition? _compositionForDisposal;
     private readonly List<Guid> _compositionPath = [];
-    private Instance _rootInstance;
-    internal Composition RootInstance => Composition.GetFor(_rootInstance, true);
+
+    internal Composition RootInstance { get; private set; }
+
     private bool _initializedAfterLayoutReady;
     private readonly List<Composition> _compositionsWaitingForDisposal = new();
     public readonly Structure Structure;

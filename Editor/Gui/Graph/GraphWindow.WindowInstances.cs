@@ -32,16 +32,13 @@ internal sealed partial class GraphWindow
     internal event EventHandler<GraphWindow>? FocusLost;
     public readonly int InstanceNumber;
 
-    private GraphWindow(EditorSymbolPackage package, int instanceNumber)
+    private GraphWindow(EditorSymbolPackage package, int instanceNumber, Instance rootInstance)
     {
         InstanceNumber = instanceNumber;
         WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
         Package = package;
 
-        if (!package.TryGetRootInstance(out var actualRoot))
-            throw new Exception("Could not get root instance from package");
-
-        _rootInstance = actualRoot!;
+        RootInstance = Composition.GetFor(rootInstance!, true);
         AllowMultipleInstances = true;
 
         ConnectionMaker.AddWindow(this);
@@ -56,6 +53,7 @@ internal sealed partial class GraphWindow
         _timeLineCanvas = new TimeLineCanvas(GraphCanvas);
         WindowDisplayTitle = package.DisplayName + "##" + InstanceNumber;
         SetWindowToNormal();
+        _duplicateSymbolDialog.Closed += OnDuplicationComplete;
     }
 
     public static bool CanOpenAnotherWindow => true;
@@ -80,7 +78,7 @@ internal sealed partial class GraphWindow
         }
 
         instanceNumber = instanceNumber == NoInstanceNumber ? ++_instanceCounter : instanceNumber;
-        var newWindow = new GraphWindow(package, instanceNumber);
+        var newWindow = new GraphWindow(package, instanceNumber, root);
 
         if (config == null)
         {

@@ -63,7 +63,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         var symbol = symbolUi.Symbol;
         SymbolUiDict[symbol.Id] = symbolUi;
         symbolUi.FlagAsModified();
-        symbolUi.ForceUnmodified = false;
+        symbolUi.ReadOnly = false;
         SaveSymbolFile(symbolUi);
 
         Log.Debug($"Replaced symbol ui for {symbol.Name}");

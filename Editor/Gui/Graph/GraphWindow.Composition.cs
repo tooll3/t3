@@ -1,6 +1,8 @@
 #nullable enable
 using T3.Core.Operator;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
+using T3.SystemUi;
 
 namespace T3.Editor.Gui.Graph;
 
@@ -11,10 +13,10 @@ internal sealed partial class GraphWindow
         public SymbolUi SymbolUi => _symbolPackage.SymbolUis[_symbolId];
         public Symbol Symbol => _symbolPackage.Symbols[_symbolId];
         public Instance Instance => _hasParent ? _parent!.Children[SymbolChildId] : _instance;
-        
+
         public readonly Guid SymbolChildId;
         private readonly Guid _symbolId;
-        
+
         private readonly Instance? _parent;
         private readonly Instance _instance;
         private readonly bool _hasParent;
@@ -42,11 +44,15 @@ internal sealed partial class GraphWindow
                     composition = new Composition(instance);
                     Compositions[instance] = composition;
                 }
+                
+                composition.CheckoutCount++;
             }
 
             composition._needsReload |= needsReload;
             return composition;
         }
+
+        public int CheckoutCount;
 
         private void ReloadIfNecessary()
         {
@@ -56,11 +62,43 @@ internal sealed partial class GraphWindow
             }
         }
 
+        public bool CheckForDuplicateNeeded()
+        {
+            if(CheckoutCount > 1)
+                return false;
+            
+            if (_needsDuplicate != null)
+                return _needsDuplicate.Value;
+
+            var symbolUi = SymbolUi;
+            if (_needsReload && symbolUi.HasBeenModified)
+            {
+                var result = EditorUi.Instance.ShowMessageBox(text: "You've made changes to a read-only operator. " +
+                                                                    "Do you want to save your changes as a new operator?",
+                                                              title: $"[{symbolUi.Symbol.Name}] is read-only!",
+                                                              buttons: PopUpButtons.YesNo);
+                _needsDuplicate = result == PopUpResult.Yes;
+            }
+            else
+            {
+                _needsDuplicate = false;
+            }
+
+            return _needsDuplicate.Value;
+        }
+
         public void Dispose()
         {
+            CheckoutCount--;
+            if(CheckoutCount > 0)
+                return;
+            
             if (_disposed)
                 throw new Exception("Composition already disposed.");
 
+            if (_needsDuplicate == true)
+                throw new InvalidOperationException("Duplication not completed.");
+                                                    
             _disposed = true;
 
             lock (Compositions)
@@ -70,8 +108,17 @@ internal sealed partial class GraphWindow
             }
         }
 
+        public void MarkDuplicationComplete()
+        {
+            if(_needsDuplicate is null or false)
+                throw new InvalidOperationException("Duplication not needed.");
+            
+            _needsDuplicate = false;
+        }
+
         private bool _disposed;
         private bool _needsReload;
+        private bool? _needsDuplicate;
 
         private static readonly Dictionary<Instance, Composition> Compositions = new();
     }
