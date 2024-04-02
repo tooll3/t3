@@ -26,9 +26,10 @@ namespace lib.math.@float
 
         public Slot<float> OutputSlot => Result;
 
-        public void SetInputValues(float value)
+        public void SetTypedInputValuesTo(float value)
         {
-            Float.Value = value;
+            Float.Input.IsDefault = false;
+            Float.TypedInputValue.Value = value;
         }
     }
 }

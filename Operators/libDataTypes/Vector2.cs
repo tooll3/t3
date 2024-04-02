@@ -29,10 +29,13 @@ namespace lib.types
 
         public Slot<System.Numerics.Vector2> OutputSlot => Result;
 
-        public void SetInputValues(System.Numerics.Vector2 value)
+        public void SetTypedInputValuesTo(System.Numerics.Vector2 value)
         {
-            X.Value = value.X;
-            Y.Value = value.Y;
+            X.Input.IsDefault = false;
+            Y.Input.IsDefault = false;
+            
+            X.TypedInputValue.Value = value.X;
+            Y.TypedInputValue.Value = value.Y;
         }
     }
 }
