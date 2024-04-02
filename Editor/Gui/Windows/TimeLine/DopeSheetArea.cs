@@ -29,6 +29,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters)
         {
+            var symbolUi = compositionOp.GetSymbolUi();
             if (CurvesTablesNeedsRefresh)
             {
                 RebuildCurveTables();
@@ -42,21 +43,29 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ImGui.BeginGroup();
             {
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
+                {
                     ViewAllOrSelectedKeys(alsoChangeTimeRange: true);
+                }
 
                 if (KeyboardBinding.Triggered(UserActions.Duplicate))
+                {
+                    symbolUi.FlagAsModified();
                     DuplicateSelectedKeyframes(TimeLineCanvas.Playback.TimeInBars);
+                }
 
                 if (KeyboardBinding.Triggered(UserActions.InsertKeyframe))
                 {
+                    symbolUi.FlagAsModified();
                     foreach (var p in AnimationParameters)
                     {
                         InsertNewKeyframe(p, (float)TimeLineCanvas.Playback.TimeInBars);
                     }
+                    
                 }
 
                 if (KeyboardBinding.Triggered(UserActions.InsertKeyframeWithIncrement))
                 {
+                    symbolUi.FlagAsModified();
                     SelectedKeyframes.Clear();
                     foreach (var p in AnimationParameters)
                     {
@@ -173,7 +182,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 DrawCurveLines(parameter, layerArea, drawList);
             }
 
-            HandleCreateNewKeyframes(parameter, layerArea);
+            var changed = HandleCreateNewKeyframes(parameter, layerArea);
 
             foreach (var curve in parameter.Curves)
             {
@@ -182,7 +191,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     var vDef = list[index].Value;
                     var nextVDef = (index < list.Count - 1) ? list[index + 1].Value : null;
-                    DrawKeyframe(vDef, layerArea, parameter, nextVDef, drawList, compositionSymbolChildId);
+                    DrawKeyframe(compositionSymbolChildId, vDef, layerArea, parameter, nextVDef, drawList);
                 }
             }
 
@@ -191,18 +200,19 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         public readonly HashSet<int> PinnedParameters = new();
 
-        private void HandleCreateNewKeyframes(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea)
+        private bool HandleCreateNewKeyframes(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea)
         {
             var hoverNewKeyframe = !ImGui.IsAnyItemActive()
                                    && ImGui.IsWindowHovered()
                                    && ImGui.GetIO().KeyAlt
                                    && layerArea.Contains(ImGui.GetMousePos());
             if (!hoverNewKeyframe)
-                return;
+                return false;
 
             var hoverTime = TimeLineCanvas.Current.InverseTransformX(ImGui.GetIO().MousePos.X);
             _snapHandler.CheckForSnapping(ref hoverTime, TimeLineCanvas.Current.Scale.X);
 
+            bool changed = false;
             if (ImGui.IsMouseReleased(0))
             {
                 var dragDistance = ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length();
@@ -211,6 +221,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     TimeLineCanvas.Current.ClearSelection();
 
                     InsertNewKeyframe(parameter, hoverTime, setPlaybackTime: true);
+                    changed = true;
                 }
             }
             else
@@ -222,6 +233,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
 
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            return changed;
         }
 
         private void InsertNewKeyframe(TimeLineCanvas.AnimationParameter parameter, float time, bool setPlaybackTime = false, float increment = 0)
@@ -379,8 +391,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
         }
 
-        private void DrawKeyframe(VDefinition vDef, ImRect layerArea, TimeLineCanvas.AnimationParameter parameter,
-                                  VDefinition nextVDef, ImDrawListPtr drawList, Guid compositionSymbolChildId)
+        private void DrawKeyframe(in Guid compositionSymbolId, VDefinition vDef, ImRect layerArea, TimeLineCanvas.AnimationParameter parameter,
+                                  VDefinition nextVDef, ImDrawListPtr drawList)
         {
             var vDefU = (float)vDef.U;
             if (vDefU < Playback.Current.TimeInBars)
@@ -463,7 +475,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         TimeLineCanvas.Current.CompleteDragCommand();
                 }
 
-                HandleCurvePointDragging(vDef, isSelected);
+                HandleCurvePointDragging(compositionSymbolId, vDef, isSelected);
 
                 // Draw value input
                 var valueInputVisible = isSelected && keyHash == _clickedKeyframeHash;
@@ -482,7 +494,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         var result = floatInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
-                            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, _currentAnimationParameter.Curves);
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(compositionSymbolId, SelectedKeyframes, _currentAnimationParameter.Curves);
                         }
 
                         if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -514,7 +526,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         var result = intInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
-                            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, _currentAnimationParameter.Curves);
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(compositionSymbolId, SelectedKeyframes, _currentAnimationParameter.Curves);
                         }
 
                         if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -544,7 +556,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         private int _clickedKeyframeHash;
 
-        protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
+        protected internal override void HandleCurvePointDragging(in Guid compositionSymbolId, VDefinition vDef, bool isSelected)
         {
             if (ImGui.IsItemHovered())
             {
@@ -564,7 +576,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             if (_changeKeyframesCommand == null)
             {
-                TimeLineCanvas.Current.StartDragCommand();
+                TimeLineCanvas.Current.StartDragCommand(compositionSymbolId);
             }
 
             var newDragTime = TimeLineCanvas.Current.InverseTransformX(ImGui.GetIO().MousePos.X);
@@ -668,9 +680,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
         }
 
-        ICommand ITimeObjectManipulation.StartDragCommand()
+        ICommand ITimeObjectManipulation.StartDragCommand(in Guid compositionSymbolId)
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
+            _changeKeyframesCommand = new ChangeKeyframesCommand(compositionSymbolId, SelectedKeyframes, GetAllCurves());
             return _changeKeyframesCommand;
         }
 

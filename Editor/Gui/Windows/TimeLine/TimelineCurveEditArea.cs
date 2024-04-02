@@ -14,6 +14,7 @@ using T3.Editor.Gui.Interaction.WithCurves;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
@@ -57,6 +58,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 var visibleCurveCount = 0;
 
                 ImGui.PushFont(Fonts.FontSmall);
+                var compositionSymbolId = compositionOp.GetSymbolUi().Symbol.Id;
                 foreach (var param in animationParameters)
                 {
                     ImGui.PushID(param.Input.GetHashCode());
@@ -151,7 +153,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                             visibleCurveCount++;
                             foreach (var keyframe in curve.GetVDefinitions().ToList())
                             {
-                                CurvePoint.Draw(keyframe, TimeLineCanvas, SelectedKeyframes.Contains(keyframe), this);
+                                CurvePoint.Draw(compositionSymbolId, keyframe, TimeLineCanvas, SelectedKeyframes.Contains(keyframe), this);
                                 _visibleKeyframes.Add(keyframe);
                             }
 
@@ -246,7 +248,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             return result;
         }
 
-        protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
+        protected internal override void HandleCurvePointDragging(in Guid compositionSymbolId, VDefinition vDef, bool isSelected)
         {
             if (vDef.U < Playback.Current.TimeInBars)
             {
@@ -298,12 +300,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     if (Math.Abs(mouseDragDelta.X) > CurveInputEditing.MoveDirectionThreshold)
                     {
                         CurveInputEditing.MoveDirection = CurveInputEditing.MoveDirections.Horizontal;
-                        TimeLineCanvas.Current.StartDragCommand();
+                        TimeLineCanvas.Current.StartDragCommand(compositionSymbolId);
                     }
                     else if (Math.Abs(mouseDragDelta.Y) > CurveInputEditing.MoveDirectionThreshold)
                     {
                         CurveInputEditing.MoveDirection = CurveInputEditing.MoveDirections.Vertical;
-                        TimeLineCanvas.Current.StartDragCommand();
+                        TimeLineCanvas.Current.StartDragCommand(compositionSymbolId);
                     }
                 }
             }
@@ -376,9 +378,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
         }
 
-        public ICommand StartDragCommand()
+        public ICommand StartDragCommand(in Guid symbolId)
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
+            _changeKeyframesCommand = new ChangeKeyframesCommand(symbolId, SelectedKeyframes, GetAllCurves());
             return _changeKeyframesCommand;
         }
 

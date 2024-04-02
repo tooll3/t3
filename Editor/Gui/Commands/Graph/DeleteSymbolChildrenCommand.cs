@@ -98,6 +98,7 @@ namespace T3.Editor.Gui.Commands.Graph
                 compositionSymbolUi.RemoveChild(childUndoData.ChildId);
             }
 
+            compositionSymbolUi.FlagAsModified();
             _removedConnections.Reverse(); // reverse in order to restore in reversed order
         }
 
@@ -146,6 +147,8 @@ namespace T3.Editor.Gui.Commands.Graph
             {
                 compositionSymbolUi!.Symbol.AddConnection(entry.Connection, entry.MultiInputIndex);
             }
+            
+            compositionSymbolUi.FlagAsModified();
         }
         
         private class ChildEntry

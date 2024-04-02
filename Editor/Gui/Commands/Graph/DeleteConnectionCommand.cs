@@ -23,6 +23,7 @@ namespace T3.Editor.Gui.Commands.Graph
             
             var compositionSymbol = symbolUi.Symbol;
             compositionSymbol.RemoveConnection(_removedConnection, _multiInputIndex);
+            symbolUi.FlagAsModified();
         }
 
         public void Undo()
@@ -32,6 +33,7 @@ namespace T3.Editor.Gui.Commands.Graph
             
             var compositionSymbol = symbolUi.Symbol;
             compositionSymbol.AddConnection(_removedConnection, _multiInputIndex);
+            symbolUi.FlagAsModified();
         }
 
         private readonly Guid _compositionSymbolId;

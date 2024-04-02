@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
     /// </summary>
     internal static class CurvePoint
     {
-        public static void Draw(VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, CurveEditing curveEditing)
+        public static void Draw(in Guid compositionSymbolId, VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, CurveEditing curveEditing)
         {
             _drawList = ImGui.GetWindowDrawList();
             _curveEditCanvas = curveEditCanvas;
@@ -45,7 +45,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
             _drawList.AddText(pTopLeft + new Vector2(5,4) , color, isSelected ? _keyframeIconSelected : _keyframeIcon);
             ImGui.PopFont();
 
-            curveEditing?.HandleCurvePointDragging(_vDef, isSelected);
+            curveEditing?.HandleCurvePointDragging(compositionSymbolId, _vDef, isSelected);
         }
 
         private static void DrawLeftTangent(Vector2 pCenter)

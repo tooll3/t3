@@ -127,12 +127,12 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         private MacroCommand _macro;
         private readonly List<ICommand> _commands = new();
         
-        public ICommand StartDragCommand()
+        public ICommand StartDragCommand(in Guid compositionSymbolId)
         {
             _commands.Clear();
             foreach (var manipulators in TimeObjectManipulators)
             {
-                _commands.Add(manipulators.StartDragCommand());
+                _commands.Add(manipulators.StartDragCommand(compositionSymbolId));
             }
             _macro = new MacroCommand("Manipulate Keyframes", _commands);
             return null;

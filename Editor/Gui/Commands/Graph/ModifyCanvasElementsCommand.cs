@@ -67,9 +67,13 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public void StoreCurrentValues()
         {
+            var selectables = GetSelectables(out _)?.ToArray();
+            if (selectables == null)
+                return;
+            
             foreach (var entry in _entries)
             {
-                var selectable = GetSelectables()?.SingleOrDefault(s => s.Id == entry.SelectableId);
+                var selectable = selectables.SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
                 
@@ -87,33 +91,51 @@ namespace T3.Editor.Gui.Commands.Graph
                 return;    
             }
             
+            var selectables = GetSelectables(out var container)?.ToArray();
+            if (selectables == null)
+                return;
+
+            bool changed = false;
             foreach (var entry in _entries)
             {
-                var selectable = GetSelectables()?.SingleOrDefault(s => s.Id == entry.SelectableId);
+                var selectable = selectables.SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
                 
+                changed |= selectable.PosOnCanvas != entry.OriginalPosOnCanvas || selectable.Size != entry.OriginalSize;
                 selectable.PosOnCanvas = entry.OriginalPosOnCanvas;
                 selectable.Size = entry.OriginalSize;
             }
+            
+            if(changed && container is SymbolUi symbolUi)
+                symbolUi.FlagAsModified();
         }
 
         public void Do()
-        {
+        {  
+            var selectables = GetSelectables(out var container)?.ToArray();
+            if (selectables == null)
+                return;
+
+            bool changed = false;
+            
             foreach (var entry in _entries)
             {
-                var selectable = GetSelectables()?.SingleOrDefault(s => s.Id == entry.SelectableId);
+                var selectable = selectables.SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
                 
+                changed |= selectable.PosOnCanvas != entry.PosOnCanvas || selectable.Size != entry.Size;
                 selectable.PosOnCanvas = entry.PosOnCanvas;
                 selectable.Size = entry.Size;
             }
+            
+            if(changed && container is SymbolUi symbolUi)
+                symbolUi.FlagAsModified();
         }
 
-        private IEnumerable<ISelectableCanvasObject>? GetSelectables()
+        private IEnumerable<ISelectableCanvasObject>? GetSelectables(out ISelectionContainer? container)
         {
-            ISelectionContainer container;
             if(_compositionSymbolId == Guid.Empty)
             {
                 container = _selectionContainer;

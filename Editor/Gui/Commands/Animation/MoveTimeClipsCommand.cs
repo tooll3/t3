@@ -4,6 +4,7 @@ using System.Linq;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Animation
 {
@@ -59,6 +60,7 @@ namespace T3.Editor.Gui.Commands.Animation
 
         public void Undo()
         {
+            bool changed = false;
             foreach (var clip in Structure.GetAllTimeClips(_compositionOp))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
@@ -68,6 +70,12 @@ namespace T3.Editor.Gui.Commands.Animation
                 clip.TimeRange = selectedEntry.TimeRange.Clone();
                 clip.SourceRange = selectedEntry.SourceRange.Clone();
                 clip.LayerIndex = selectedEntry.LayerIndex;
+                changed = true;
+            }
+
+            if (changed)
+            {
+                _compositionOp.GetSymbolUi().FlagAsModified();
             }
         }
 
@@ -75,6 +83,7 @@ namespace T3.Editor.Gui.Commands.Animation
         {
             var allTimeClips = Structure.GetAllTimeClips(_compositionOp).ToList();
             
+            bool changed = false;
             foreach (var clip in allTimeClips)
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
@@ -89,6 +98,13 @@ namespace T3.Editor.Gui.Commands.Animation
                 {
                     clip.LayerIndex++;
                 }
+                
+                changed = true;
+            }
+
+            if (changed)
+            {
+                _compositionOp.GetSymbolUi().FlagAsModified();
             }
         }
     }

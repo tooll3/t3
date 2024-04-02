@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Editor.Gui.Windows.TimeLine;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Commands.Animation
 {
@@ -14,10 +15,12 @@ namespace T3.Editor.Gui.Commands.Animation
         private readonly Dictionary<VDefinition, VDefinition> _originalDefForReferences = new();
         private readonly Dictionary<VDefinition, VDefinition> _newDefForReferences = new();
         private readonly IEnumerable<Curve> _curves;
+        private readonly Guid _symbolId;
 
-        public ChangeKeyframesCommand(IEnumerable<VDefinition> vDefinitions, IEnumerable<Curve> curves)
+        public ChangeKeyframesCommand(in Guid symbolId, IEnumerable<VDefinition> vDefinitions, IEnumerable<Curve> curves)
         {
             _curves = curves;
+            _symbolId = symbolId;
             foreach (var def in vDefinitions)
             {
                 _originalDefForReferences[def] = def.Clone();
@@ -62,6 +65,8 @@ namespace T3.Editor.Gui.Commands.Animation
             }
 
             AnimationParameterEditing.CurvesTablesNeedsRefresh = true;
+            SymbolUiRegistry.TryGetSymbolUi(_symbolId, out var symbolUi);
+            symbolUi?.FlagAsModified();
         }
     }
 }

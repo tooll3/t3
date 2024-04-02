@@ -118,7 +118,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                 EditState = InputEditStateFlags.Modified;
             }
 
-            protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
+            protected internal override void HandleCurvePointDragging(in Guid compositionSymbolId, VDefinition vDef, bool isSelected)
             {
                 if ((_interactionFlags & T3Ui.EditingFlags.PreventMouseInteractions) != 0)
                     return;
@@ -170,7 +170,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
                 if (_changeKeyframesCommand == null)
                 {
-                    StartDragCommand();
+                    StartDragCommand(compositionSymbolId);
                 }
 
                 var newDragPosition = _singleCurveCanvas.InverseTransformPositionFloat(ImGui.GetIO().MousePos);
@@ -189,9 +189,9 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                 EditState = InputEditStateFlags.Modified;
             }
 
-            private ICommand StartDragCommand()
+            private ICommand StartDragCommand(Guid symbolId)
             {
-                _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
+                _changeKeyframesCommand = new ChangeKeyframesCommand(symbolId, SelectedKeyframes, GetAllCurves());
                 return _changeKeyframesCommand;
             }
 
@@ -282,6 +282,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
                     void DrawCanvasContent(InteractionState interactionState)
                     {
+                        var compositionSymbolId = compositionOp.Symbol.Id;
                         _standardRaster.Draw(this);
                         _horizontalRaster.Draw(this);
                         curve.UpdateTangents();
@@ -289,7 +290,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
                         foreach (var keyframe in interaction.GetAllKeyframes().ToArray())
                         {
-                            CurvePoint.Draw(keyframe, this, interaction.SelectedKeyframes.Contains(keyframe), interaction);
+                            CurvePoint.Draw(compositionSymbolId, keyframe, this, interaction.SelectedKeyframes.Contains(keyframe), interaction);
                         }
 
                         //v
