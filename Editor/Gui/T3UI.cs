@@ -273,9 +273,6 @@ public static class T3Ui
                     SaveInBackground(saveAll: false);
                 }
                 
-                
-                
-                #if DEBUG
                 if (ImGui.MenuItem("Save All", !IsCurrentlySaving))
                 {
                     Task.Run(() =>
@@ -283,7 +280,6 @@ public static class T3Ui
                                  Save(true);
                              });
                 }
-                #endif
                 
                 ImGui.Separator();
                 
