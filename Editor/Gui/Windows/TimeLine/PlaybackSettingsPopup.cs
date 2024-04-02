@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -223,7 +223,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 if (settings.Syncing == PlaybackSettings.SyncModes.Tapping)
                 {
                     FormInputs.SetIndentToParameters();
-                    FormInputs.AddHint("Tab the [Sync] button on every beat.\nThe right click on measure to resync and refine.");
+                    FormInputs.AddHint("Tap the [Sync] button on every beat.\nThe right click on measure to resync and refine.");
                 }
                 
 
