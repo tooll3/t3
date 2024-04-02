@@ -66,7 +66,7 @@ internal sealed partial class EditableSymbolProject
 
     protected override void OnSymbolUiLoaded(string? path, SymbolUi symbolUi)
     {
-        symbolUi.ForceUnmodified = false;
+        symbolUi.ReadOnly = false;
         path ??= SymbolPathHandler.GetCorrectPath(symbolUi.Symbol.Name, symbolUi.Symbol.Namespace, Folder, CsProjectFile.RootNamespace, SymbolUiExtension);
         base.OnSymbolUiLoaded(path, symbolUi);
     }
@@ -82,6 +82,7 @@ internal sealed partial class EditableSymbolProject
         }
         
         filePathHandler.UpdateFromSymbol();
+        RootInstance = null;
     }
 
     /// <summary>

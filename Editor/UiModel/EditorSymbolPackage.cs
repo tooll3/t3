@@ -153,6 +153,7 @@ internal class EditorSymbolPackage : SymbolPackage
             }
             
             symbolUi.UpdateConsistencyWithSymbol();
+            symbolUi.ClearModifiedFlag();
             //Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
         }
     }
@@ -266,9 +267,9 @@ internal class EditorSymbolPackage : SymbolPackage
         ShaderLinter.AddPackage(this, sharedShaderPackages);
     }
 
-    private Instance? _rootInstance;
+    protected Instance? RootInstance;
 
-    public bool TryGetRootInstance(out Instance? rootInstance)
+    public bool TryGetRootInstance([NotNullWhen(true)] out Instance? rootInstance)
     {
         if (!HasHome)
         {
@@ -276,9 +277,9 @@ internal class EditorSymbolPackage : SymbolPackage
             return false;
         }
 
-        if (_rootInstance != null)
+        if (RootInstance != null)
         {
-            rootInstance = _rootInstance;
+            rootInstance = RootInstance;
             return true;
         }
 
@@ -292,7 +293,7 @@ internal class EditorSymbolPackage : SymbolPackage
             return false;
         }
         
-        _rootInstance = rootInstance;
+        RootInstance = rootInstance;
         return true;
     }
 
@@ -371,6 +372,7 @@ internal class EditorSymbolPackage : SymbolPackage
         // override registry values
         newSymbolUi.UpdateConsistencyWithSymbol();
         symbolUi.ReplaceWith(newSymbolUi);
+        symbolUi.ClearModifiedFlag();
     }
 
     public bool TryGetSymbolUi(Guid rSymbolId, [NotNullWhen(true)] out SymbolUi? symbolUi)

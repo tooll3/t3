@@ -58,6 +58,7 @@ internal static class Duplicate
         var sourceSymbolUi = sourceSymbol.GetSymbolUi();
         var newSymbolUi = sourceSymbolUi.CloneForNewSymbol(newSymbol, oldToNewIdMap);
         newSymbolUi.Description = description;
+        newSymbolUi.ReadOnly = false;
         
         project.ReplaceSymbolUi(newSymbolUi);
 

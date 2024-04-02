@@ -51,6 +51,8 @@ namespace T3.Editor.Gui.Graph
         {
             if (FitViewToSelectionHandling.FitViewToSelectionRequested)
                 GraphCanvas.FocusViewToSelection();
+            
+            RefreshRootInstance();
 
             var fadeBackgroundImage = GraphImageBackground.IsActive 
                                           ? (ImGui.GetMousePos().X + 50).Clamp(0, 100) / 100 
@@ -137,6 +139,7 @@ namespace T3.Editor.Gui.Graph
                                                new Vector2(x+2, windowPos.Y + windowSize.Y),
                                                UiColors.ForegroundFull.Fade((1-graphFade)) * 0.5f);
                     }
+                    
 
                     if (showBackgroundOnly)
                     {
@@ -210,6 +213,30 @@ namespace T3.Editor.Gui.Graph
 
             if (UserSettings.Config.ShowMiniMap)
                 DrawMiniMap(_composition, GraphCanvas);
+
+            if (_compositionForDisposal != null)
+            {
+                if (_compositionForDisposal.CheckForDuplicateNeeded())
+                {
+                    _duplicateSymbolDialog.ShowNextFrame(); // actually shows this frame
+                    var instance = _compositionForDisposal.Instance;
+                    var parent = instance.Parent;
+                    var symbolChildUi = parent.GetSymbolUi().ChildUis[instance.SymbolChildId];
+                    _duplicateSymbolDialog.Draw(compositionOp: _compositionForDisposal.Instance.Parent,
+                                                selectedChildUis: [symbolChildUi],
+                                                nameSpace: ref _dupeReadonlyNamespace,
+                                                newTypeName: ref _dupeReadonlyName,
+                                                description: ref _dupeReadonlyDescription);
+                }
+                else
+                {
+                    _compositionsWaitingForDisposal.Add(_compositionForDisposal);
+                    _compositionForDisposal = null;
+                }
+
+            }
+            
+            DisposeOfCompositions();
         }
 
         private static void DrawMiniMap(Composition compositionOp, ScalableCanvas canvas)

@@ -29,7 +29,7 @@ namespace T3.Editor.UiModel
             if (updateConsistency)
                 UpdateConsistencyWithSymbol();
 
-            ForceUnmodified = true;
+            ReadOnly = true;
         }
 
         internal SymbolUi(Symbol symbol,
@@ -46,7 +46,7 @@ namespace T3.Editor.UiModel
             OutputUis = outputs;
             Annotations = annotations;
             Links = links;
-            ForceUnmodified = true;
+            ReadOnly = true;
             
             if (updateConsistency)
                 UpdateConsistencyWithSymbol();
@@ -228,9 +228,10 @@ namespace T3.Editor.UiModel
 
         internal string Description { get; set; } = string.Empty;
 
-        internal bool ForceUnmodified;
+        internal bool ReadOnly;
         private bool _hasBeenModified;
-        internal bool NeedsSaving => _hasBeenModified && !ForceUnmodified;
+        internal bool HasBeenModified => _hasBeenModified;
+        internal bool NeedsSaving => _hasBeenModified && !ReadOnly;
         private  Dictionary<Guid, Child> _childUis = new();
         internal IReadOnlyDictionary<Guid, Child> ChildUis => _childUis;
         internal IDictionary<Guid, ExternalLink> Links { get; private set; }

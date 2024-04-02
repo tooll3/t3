@@ -10,6 +10,8 @@ namespace T3.Editor.Gui.Graph.Dialogs
 {
     internal class DuplicateSymbolDialog : ModalDialog
     {
+        public event Action? Closed;
+        
         public void Draw(Instance compositionOp, List<SymbolUi.Child> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description)
         {
             if(selectedChildUis.Count != 1)
@@ -78,6 +80,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                                                      position);
                         T3Ui.Save(false);
                         ImGui.CloseCurrentPopup();
+                        Closed?.Invoke();
                     }
 
                     ImGui.SameLine();
@@ -86,6 +89,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 if (ImGui.Button("Cancel"))
                 {
                     ImGui.CloseCurrentPopup();
+                    Closed?.Invoke();
                 }
 
                 EndDialogContent();
@@ -96,4 +100,5 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
         private EditableSymbolProject _projectToCopyTo;
     }
+    
 }
