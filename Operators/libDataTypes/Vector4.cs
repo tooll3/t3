@@ -36,12 +36,9 @@ namespace lib.types
 
         public Slot<System.Numerics.Vector4> OutputSlot => Result;
 
-        public void SetTypedInputValuesTo(System.Numerics.Vector4 value)
+        public void SetTypedInputValuesTo(System.Numerics.Vector4 value, out IEnumerable<IInputSlot> inputs)
         {
-            X.Input.IsDefault = false;
-            Y.Input.IsDefault = false;
-            Z.Input.IsDefault = false;
-            W.Input.IsDefault = false;
+            inputs = new[] { X, Y, Z, W };
             
             X.TypedInputValue.Value = value.X;
             Y.TypedInputValue.Value = value.Y;

@@ -34,11 +34,9 @@ namespace lib.types
 
         public Slot<T3.Core.DataTypes.Vector.Int3> OutputSlot => Result;
 
-        public void SetTypedInputValuesTo(T3.Core.DataTypes.Vector.Int3 value)
+        public void SetTypedInputValuesTo(T3.Core.DataTypes.Vector.Int3 value, out IEnumerable<IInputSlot> changedInputs)
         {
-            X.Input.IsDefault = false;
-            Y.Input.IsDefault = false;
-            Z.Input.IsDefault = false;
+            changedInputs = [X, Y, Z];
             
             X.TypedInputValue.Value = value.X;
             Y.TypedInputValue.Value = value.Y;

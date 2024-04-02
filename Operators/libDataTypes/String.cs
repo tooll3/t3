@@ -27,9 +27,9 @@ namespace lib.types
 
         public Slot<string> OutputSlot => Result;
 
-        public void SetTypedInputValuesTo(string value)
+        public void SetTypedInputValuesTo(string value, out IEnumerable<IInputSlot> changedInputs)
         {
-            InputString.Input.IsDefault = false;
+            changedInputs = [InputString];
             InputString.TypedInputValue.Value = value;
         }
     }

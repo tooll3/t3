@@ -29,11 +29,9 @@ namespace lib.types
 
         public Slot<System.Numerics.Vector2> OutputSlot => Result;
 
-        public void SetTypedInputValuesTo(System.Numerics.Vector2 value)
+        public void SetTypedInputValuesTo(System.Numerics.Vector2 value, out IEnumerable<IInputSlot> changedInputs)
         {
-            X.Input.IsDefault = false;
-            Y.Input.IsDefault = false;
-            
+            changedInputs = new[] { X, Y };
             X.TypedInputValue.Value = value.X;
             Y.TypedInputValue.Value = value.Y;
         }

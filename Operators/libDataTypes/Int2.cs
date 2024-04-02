@@ -33,10 +33,9 @@ namespace lib.types
         public readonly InputSlot<int> Y = new();
 
         public Slot<T3.Core.DataTypes.Vector.Int2> OutputSlot => Result;
-        public void SetTypedInputValuesTo(T3.Core.DataTypes.Vector.Int2 value)
+        public void SetTypedInputValuesTo(T3.Core.DataTypes.Vector.Int2 value, out IEnumerable<IInputSlot> changedInputs)
         {
-            X.Input.IsDefault = false;
-            Y.Input.IsDefault = false;
+            changedInputs = new IInputSlot[] { X, Y };
             
             X.TypedInputValue.Value = value.X;
             Y.TypedInputValue.Value = value.Y;

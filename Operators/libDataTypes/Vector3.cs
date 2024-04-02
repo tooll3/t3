@@ -32,12 +32,9 @@ namespace lib.types
         
         public Slot<System.Numerics.Vector3> OutputSlot => Result;
 
-        public void SetTypedInputValuesTo(System.Numerics.Vector3 value)
+        public void SetTypedInputValuesTo(System.Numerics.Vector3 value, out IEnumerable<IInputSlot> changedInputs)
         {
-            X.Input.IsDefault = false;
-            Y.Input.IsDefault = false;
-            Z.Input.IsDefault = false;
-            
+            changedInputs = new[] { X, Y, Z };
             X.TypedInputValue.Value = value.X;
             Y.TypedInputValue.Value = value.Y;
             Z.TypedInputValue.Value = value.Z;
