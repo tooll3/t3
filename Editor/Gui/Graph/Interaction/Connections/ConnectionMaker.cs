@@ -912,6 +912,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
         public static void CompleteAtSymbolOutputNode(GraphWindow window, Symbol parentSymbol, Symbol.OutputDefinition outputDef)
         {
             var connectionList = InProgress[window].TempConnections;
+            bool added = false;
             foreach (var c in connectionList)
             {
                 var newConnection = new Symbol.Connection(sourceParentOrChildId: c.SourceParentOrChildId,
@@ -919,8 +920,12 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                           targetParentOrChildId: UseSymbolContainerId,
                                                           targetSlotId: outputDef.Id);
                 parentSymbol.AddConnection(newConnection);
+                added = true;
             }
 
+            if(added)
+                parentSymbol.GetSymbolUi().FlagAsModified();
+            
             connectionList.Clear();
             ConnectionSnapEndHelper.ResetSnapping();
         }
