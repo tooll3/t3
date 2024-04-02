@@ -56,7 +56,7 @@ internal class SplashScreen : ISplashScreen
                                               TextAlign = ContentAlignment.BottomLeft,
                                               BackColor = Color.Transparent,
                                               ForeColor = Color.Ivory,
-                                              Text = "" + Program.Version,
+                                              Text = "" + Program.VersionText,
                                               UseMnemonic = false,
                                               Font = new Font("Arial", 8),
                                               Anchor = AnchorStyles.Bottom | AnchorStyles.Left,

@@ -131,7 +131,7 @@ namespace T3.Editor.Gui.Graph
                                                     ConfigData: ProjectSettings.Config,
                                                     Author: symbol.SymbolPackage.AssemblyInformation.Name, // todo - actual author name
                                                     BuildId: Guid.NewGuid(),
-                                                    EditorVersion: Program.GetReleaseVersion());
+                                                    EditorVersion: Program.VersionText);
             
             const string exportSettingsFile = "exportSettings.json";
             if(!JsonUtils.TrySaveJson(exportSettings, Path.Combine(exportDir, exportSettingsFile)))

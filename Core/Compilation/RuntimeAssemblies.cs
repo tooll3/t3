@@ -12,11 +12,13 @@ public class RuntimeAssemblies
     public static readonly string CorePath;
     public static readonly string CoreDirectory;
     public const string EnvironmentVariableName = "T3_ASSEMBLY_PATH";
+    public static readonly Version Version;
 
     static RuntimeAssemblies()
     {
         var coreAssembly = typeof(RuntimeAssemblies).Assembly;
         CorePath = coreAssembly.Location;
+        Version = coreAssembly.GetName().Version;
 
         CoreDirectory = Path.GetDirectoryName(CorePath);
         SetEnvironmentVariable(EnvironmentVariableName, CoreDirectory);

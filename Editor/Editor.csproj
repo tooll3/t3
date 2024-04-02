@@ -12,6 +12,7 @@
         <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <VersionPrefix>3.9.1</VersionPrefix>
         <!-- <ApplicationManifest>app.manifest</ApplicationManifest> -->
     </PropertyGroup>
 

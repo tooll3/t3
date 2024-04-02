@@ -57,6 +57,7 @@ public sealed class AssemblyInformation
     public readonly string Name;
     public readonly string Path;
     public readonly string Directory;
+    public Version? Version => _assemblyName.Version;
     public readonly IReadOnlyCollection<string> AssemblyPaths;
 
     public Guid HomeGuid { get; private set; } = Guid.Empty;
@@ -81,6 +82,7 @@ public sealed class AssemblyInformation
     {
         AssemblyPaths = _assemblyPaths;
         Name = assemblyName.Name ?? "Unknown Assembly Name";
+        var version = assemblyName.Version;
         Path = path;
         _assemblyPaths.Add(path);
         _assemblyName = assemblyName;

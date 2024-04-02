@@ -9,6 +9,7 @@
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <VersionPrefix>3.9.1</VersionPrefix>
     </PropertyGroup>
 
     <ItemGroup>

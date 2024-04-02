@@ -28,22 +28,27 @@ namespace T3.Editor
         public static IUiContentDrawer<SharpDX.Direct3D11.Device, ImDrawDataPtr> UiContentContentDrawer;
         public static Device Device { get; private set; }
 
-        public const string Version = "3.9.1";
-
-        /// <summary>
-        /// Generate a release string with 
-        /// </summary>
-        public static string GetReleaseVersion(bool indicateDebugBuild = true)
+        public static Version Version => RuntimeAssemblies.Version;
+        private static string? _versionText;
+        public static string VersionText
         {
-            var isDebug = "";
-            #if DEBUG
-            if (indicateDebugBuild)
+            get
             {
-                isDebug = " Debug";
-            }
-            #endif
+                if (_versionText == null)
+                {
+                    _versionText = Version.ToBasicVersionString();
+                    #if DEBUG
+                    _versionText += " Debug";
+                    #endif
+                }
 
-            return $"v{Version}{isDebug}";
+                return _versionText;
+            }
+        }
+
+        public static string ToBasicVersionString(this Version version)
+        {
+            return $"{version.Major}.{version.Minor}.{version.Build}";
         }
 
         [STAThread]
@@ -81,8 +86,7 @@ namespace T3.Editor
             Log.AddWriter(StatusErrorLine);
             Log.AddWriter(ConsoleLogWindow);
             
-            var version = GetReleaseVersion(true);
-            Log.Debug($"Starting {version}");
+            Log.Debug($"Starting {VersionText}");
             
             CrashReporting.LogPath = logPath;
             //if (IsStandAlone)
@@ -97,13 +101,13 @@ namespace T3.Editor
             StartUp.FlagBeginStartupSequence();
 
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
-            ShaderCompiler.ShaderCacheSubdirectory = $"Editor_{version}";
+            ShaderCompiler.ShaderCacheSubdirectory = $"Editor_{VersionText}";
             
             var userSettings = new UserSettings(saveOnQuit: true);
             var projectSettings = new ProjectSettings(saveOnQuit: true);
 
             Log.Debug($"About to initialize ProgramWindows");
-            ProgramWindows.InitializeMainWindow(version, out var device);
+            ProgramWindows.InitializeMainWindow(VersionText, out var device);
 
             Device = device;
 
