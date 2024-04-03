@@ -1,6 +1,6 @@
 {
   "Id": "da8ebc61-87cf-44ff-888e-994c8628ddb7"/*TriangleGridTransition*/,
-  "Description": "Creates a transition between two images using a truncated border consisting of triangles.\n\nAlso see [FadingSlideShow] [HoneyCombTiles]",
+  "Description": "Creates a linear- or clock-wipe transition between two images using a truncated border consisting of triangles.\n\nAlso see [FadingSlideShow] [HoneyCombTiles]",
   "InputUis": [
     {
       "InputId": "5a5bed81-c48d-43dd-a6b0-fc7964f90f2d"/*Image*/,
@@ -24,7 +24,7 @@
         "X": -200.0,
         "Y": 45.0
       },
-      "Description": "Rotates and animates the effect",
+      "Description": "Rotates and animates the effect like a clock-wope transition",
       "AddPadding": "True",
       "Scale": 0.5
     },
@@ -34,7 +34,7 @@
         "X": -200.0,
         "Y": 90.0
       },
-      "Description": "Increases the width of the effect / shifts and animates the effect"
+      "Description": "Increases the width of the effect / shifts and animates the effect like a linear-wipe transition"
     },
     {
       "InputId": "846f8b1e-e6bb-4e6a-a42c-f83636fd4b6f"/*Fill*/,
