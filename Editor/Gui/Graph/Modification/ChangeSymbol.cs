@@ -30,7 +30,7 @@ internal static class ChangeSymbol
                               {
                                   var childUi = symbolChild.GetChildUi();
                                   var instance = compositionOp.Children[symbolChild.Id];
-                                  nodeSelection.AddSymbolChildToSelection(childUi, instance);
+                                  nodeSelection.AddSelection(childUi, instance);
                               });
     }
 

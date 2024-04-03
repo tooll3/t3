@@ -382,7 +382,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                 VariationParameters.Add(param);
                 if (!alreadyAdded.Contains(param.TargetChild))
                 {
-                    nodeSelection.AddSymbolChildToSelection(param.TargetChild, structure.GetInstanceFromIdPath(param.InstanceIdPath));
+                    nodeSelection.AddSelection(param.TargetChild, structure.GetInstanceFromIdPath(param.InstanceIdPath));
                     alreadyAdded.Add(param.TargetChild);
                 }
             }

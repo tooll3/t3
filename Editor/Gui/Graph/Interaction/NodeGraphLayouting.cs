@@ -157,7 +157,7 @@ internal class NodeGraphLayouting
 
             if (composition.Children.TryGetValue(connectedChildUi.Id, out var instance))
             {
-                _nodeSelection.AddSymbolChildToSelection(connectedChildUi, instance);
+                _nodeSelection.AddSelection(connectedChildUi, instance);
             }
 
             snappedCount++;

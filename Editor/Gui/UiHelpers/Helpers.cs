@@ -238,12 +238,12 @@ namespace T3.Editor.Gui.UiHelpers
             return p.X >= Min.X && p.Y >= Min.Y && p.X < Max.X && p.Y < Max.Y;
         }
 
-        public bool Contains(ImRect r)
+        public bool Contains(in ImRect r)
         {
             return r.Min.X >= Min.X && r.Min.Y >= Min.Y && r.Max.X <= Max.X && r.Max.Y <= Max.Y;
         }
 
-        public bool Overlaps(ImRect r)
+        public bool Overlaps(in ImRect r)
         {
             return r.Min.Y < Max.Y && r.Max.Y > Min.Y && r.Min.X < Max.X && r.Max.X > Min.X;
         }

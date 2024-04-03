@@ -742,7 +742,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     _nodeSelection.DeselectCompositionChild(_compositionOp, c.Id);
                 }
-                _nodeSelection.SelectCompositionChild(_compositionOp, timeClip.Id, replaceSelection:false);
+                _nodeSelection.SelectCompositionChild(_compositionOp, timeClip.Id);
                 _selectedClips.Add(timeClip);
             }
 
@@ -759,7 +759,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             public void AddSelection(ITimeClip matchingClip)
             {
-                _nodeSelection.SelectCompositionChild(_compositionOp, matchingClip.Id, replaceSelection:false);
+                _nodeSelection.SelectCompositionChild(_compositionOp, matchingClip.Id);
                 _selectedClips.Add(matchingClip);
             }
             
@@ -767,7 +767,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 foreach (var timeClip in matchingClips)
                 {
-                    _nodeSelection.SelectCompositionChild(_compositionOp, timeClip.Id, replaceSelection:false);
+                    _nodeSelection.SelectCompositionChild(_compositionOp, timeClip.Id);
                     _selectedClips.Add(timeClip);
                 }
             }
