@@ -263,18 +263,21 @@ namespace T3.Editor.Gui.Graph
 
                 RenameInstanceOverlay.Draw(_window);
                 var tempConnections = ConnectionMaker.GetTempConnectionsFor(_window);
-
-                if ((ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
-                    && !preventInteractions
-                    && tempConnections.Count == 0)
-                    HandleFenceSelection(_window.CompositionOp, _selectionFence);
+                
+                var doubleClicked = ImGui.IsMouseDoubleClicked(0);
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
-                if (isOnBackground && ImGui.IsMouseDoubleClicked(0))
+                if (isOnBackground && doubleClicked)
                 {
                     _window.TrySetCompositionOpToParent();
                 }
 
+                if ((ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
+                    && !preventInteractions
+                    && tempConnections.Count == 0)
+                {
+                    HandleFenceSelection(_window.CompositionOp, _selectionFence, doubleClicked);
+                }
 
                 if (tempConnections.Count > 0 && ImGui.IsMouseReleased(0))
                 {
@@ -330,10 +333,10 @@ namespace T3.Editor.Gui.Graph
             ImGui.EndGroup();
         }
 
-        private void HandleFenceSelection(Instance compositionOp, SelectionFence selectionFence)
+        private void HandleFenceSelection(Instance compositionOp, SelectionFence selectionFence, bool doubleClicked)
         {
             const bool allowRectOutOfBounds = true;
-            switch (selectionFence.UpdateAndDraw(out var selectMode, allowRectOutOfBounds))
+            switch (selectionFence.UpdateAndDraw(out var selectMode, allowRectOutOfBounds, doubleClicked))
             {
                 case SelectionFence.States.PressedButNotMoved:
                     if (selectMode == SelectionFence.SelectModes.Replace)
@@ -342,7 +345,7 @@ namespace T3.Editor.Gui.Graph
 
                 case SelectionFence.States.Updated:
                     var bounds = allowRectOutOfBounds ? selectionFence.BoundsUnclamped : selectionFence.BoundsInScreen;
-                    HandleSelectionFenceUpdate(bounds, compositionOp);
+                    HandleSelectionFenceUpdate(bounds, compositionOp, selectMode);
                     break;
 
                 case SelectionFence.States.CompletedAsClick:
@@ -356,19 +359,20 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private void HandleSelectionFenceUpdate(ImRect bounds, Instance compositionOp)
+        private void HandleSelectionFenceUpdate(ImRect bounds, Instance compositionOp, SelectionFence.SelectModes selectMode)
         {
             var boundsInCanvas = InverseTransformRect(bounds);
             var nodesToSelect = SelectableChildren
-                               .Select(child => (child, rect: new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size) ))
-                               .Where(t => t.rect.Overlaps(boundsInCanvas))
-                               .Select(t => t.child)
-                               .ToList();
+               .Where(child => child is Annotation
+                                   ? boundsInCanvas.Contains(child.Rect)
+                                   : child.Rect.Overlaps(boundsInCanvas));
 
-            if (_selectionFence.SelectMode == SelectionFence.SelectModes.Replace)
+            if (selectMode == SelectionFence.SelectModes.Replace)
             {
                 NodeSelection.Clear();
             }
+            
+            var isRemoval = selectMode == SelectionFence.SelectModes.Remove;
 
             foreach (var node in nodesToSelect)
             {
@@ -376,39 +380,21 @@ namespace T3.Editor.Gui.Graph
                 {
                     if (!compositionOp.TryGetChildInstance(symbolChildUi.Id, false, out var instance, out _))
                     {
-                        Log.Warning("Can't find instance");
-                    }
-                    else
-                    {
+                        Log.Error("Can't find instance");
                     }
 
-                    if (_selectionFence.SelectMode == SelectionFence.SelectModes.Remove)
+                    if (isRemoval)
                     {
                         NodeSelection.DeselectNode(symbolChildUi, instance);
                     }
                     else
                     {
-                        NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
-                    }
-                }
-                else if (node is Annotation annotation)
-                {
-                    var annotationRect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
-                    if (boundsInCanvas.Contains(annotationRect))
-                    {
-                        if (_selectionFence.SelectMode == SelectionFence.SelectModes.Remove)
-                        {
-                            NodeSelection.DeselectNode(annotation);
-                        }
-                        else
-                        {
-                            NodeSelection.AddSelection(annotation);
-                        }
+                        NodeSelection.AddSelection(symbolChildUi, instance);
                     }
                 }
                 else
                 {
-                    if (_selectionFence.SelectMode == SelectionFence.SelectModes.Remove)
+                    if (isRemoval)
                     {
                         NodeSelection.DeselectNode(node);
                     }
@@ -469,7 +455,7 @@ namespace T3.Editor.Gui.Graph
                             var childUi = GraphOperations.AddSymbolChild(symbol, compositionOpSymbolUi, posOnCanvas);
 
                             var instance = compositionOp.Children[childUi.Id];
-                            NodeSelection.SetSelectionToChildUi(childUi, instance);
+                            NodeSelection.SetSelection(childUi, instance);
                         }
                         else
                         {
@@ -1085,7 +1071,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     var newChildUi = compositionSymbolUi.ChildUis[id];
                     var instance = compositionOp.Children[id];
-                    NodeSelection.AddSymbolChildToSelection(newChildUi, instance);
+                    NodeSelection.AddSelection(newChildUi, instance);
                 }
 
                 foreach (var id in cmd.NewSymbolAnnotationIds)

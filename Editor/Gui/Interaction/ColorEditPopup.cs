@@ -705,7 +705,7 @@ namespace T3.Editor.Gui.Interaction
                 if (childUi == null)
                     continue;
 
-                nodeSelection?.AddSymbolChildToSelection(childUi, instance);
+                nodeSelection?.AddSelection(childUi, instance);
                 selectedIds.Add(childUi.Id);
             }
 

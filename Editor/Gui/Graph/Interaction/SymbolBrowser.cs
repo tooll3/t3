@@ -614,7 +614,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 presetPool.Apply(newInstance, _selectedPreset);
             }
 
-            _window.GraphCanvas.NodeSelection.SetSelectionToChildUi(newChildUi, newInstance);
+            _window.GraphCanvas.NodeSelection.SetSelection(newChildUi, newInstance);
 
             // if (_prepareCommand != null)
             // {

@@ -12,8 +12,15 @@ namespace T3.Editor.Gui.Selection
     /// </summary>
     public sealed class SelectionFence
     {
-        internal States UpdateAndDraw(out SelectModes selectMode, bool allowRectOutOfBounds = true)
+        internal States UpdateAndDraw(out SelectModes selectMode, bool allowRectOutOfBounds = true, bool forceClear = false)
         {
+            if (forceClear)
+            {
+                _state = States.CompletedAsClick;
+                selectMode = SelectModes.Replace;
+                return _state;
+            }
+
             if (_state is States.CompletedAsArea or States.CompletedAsClick)
                 _state = States.Inactive;
             
@@ -21,17 +28,22 @@ namespace T3.Editor.Gui.Selection
 
             var io = ImGui.GetIO();
             var imguiMousePos = io.MousePos;
-            _selectMode = GetSelectMode(io);
-            selectMode = _selectMode;
+            selectMode = GetSelectMode(io);
+            var isLeftButtonDown = globalMouse.IsButtonDown(MouseButtons.Left);
+            
+            const ImGuiHoveredFlags hoverRules = ImGuiHoveredFlags.AllowWhenBlockedByPopup | ImGuiHoveredFlags.ChildWindows;
             
             if (_state == States.Inactive)
             {
-                if (ImGui.IsAnyItemHovered() 
-                    || !ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | ImGuiHoveredFlags.ChildWindows) 
-                    || !ImGui.IsMouseClicked(ImGuiMouseButton.Left) || ImGui.GetIO().KeyAlt
+                if (ImGui.IsAnyItemHovered()
+                    || !ImGui.IsWindowHovered(hoverRules)
+                    || !isLeftButtonDown
+                    || ImGui.GetIO().KeyAlt
                     || FrameStats.Last.IsItemContextMenuOpen)
+                {
                     return States.Inactive;
-                
+                }
+
                 _startPositionInScreen = imguiMousePos;
                 _state = States.PressedButNotMoved;
                 return States.PressedButNotMoved;
@@ -49,7 +61,7 @@ namespace T3.Editor.Gui.Selection
             BoundsInScreen = ImRect.RectBetweenPoints(onScreenMin, onScreenMax);
             BoundsUnclamped = ImRect.RectBetweenPoints(_startPositionInScreen, globalMousePos);
 
-            if (!globalMouse.IsButtonDown(MouseButtons.Left)) // check for release - even if released off-window
+            if (!isLeftButtonDown) // check for release - even if released off-window
             {
                 _state = _state == States.PressedButNotMoved ? States.CompletedAsClick : States.CompletedAsArea;
                 return _state;
@@ -100,10 +112,8 @@ namespace T3.Editor.Gui.Selection
             CompletedAsClick,
         }
 
-        internal SelectModes SelectMode => _selectMode;
         internal States State => _state;
-        SelectModes _selectMode;
-        States _state;
+        private States _state;
 
         internal ImRect BoundsInScreen;
         internal ImRect BoundsUnclamped;

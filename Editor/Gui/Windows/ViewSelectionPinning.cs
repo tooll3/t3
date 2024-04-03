@@ -122,7 +122,7 @@ namespace T3.Editor.Gui.Windows
                         var parentInstance = pinnedOrSelectedInstance.Parent;
                         var parentSymbolUi = parentInstance.GetSymbolUi();
                         var instanceChildUi = parentSymbolUi.ChildUis[pinnedOrSelectedInstance.SymbolChildId];
-                        selection.SetSelectionToChildUi(instanceChildUi, pinnedOrSelectedInstance);
+                        selection.SetSelection(instanceChildUi, pinnedOrSelectedInstance);
                         FitViewToSelectionHandling.FitViewToSelection();
                     }
                 }

@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System.Diagnostics;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
@@ -47,70 +48,47 @@ namespace T3.Editor.Gui.Graph.Interaction
             _selectedComposition = instance.InstancePath;
         }
 
-        public void SetSelection(ISelectableCanvasObject node)
+        /// <summary>
+        /// Replaces the current selection with the given node
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="instance">required if the object is a <see cref="SymbolUi.Child"/></param>
+        public void SetSelection(ISelectableCanvasObject node, Instance? instance = null)
         {
-            if (node is SymbolUi.Child)
-            {
-                Log.Warning("Setting selection to a SymbolUi.Child without providing instance will lead to problems.");
-            }
-
             Clear();
-            AddSelection(node);
+            AddSelection(node, instance);
+            
+            if(node is SymbolUi.Child)
+            {
+                Debug.Assert(instance != null);
+                _history.UpdateSelectedInstance(instance);
+            }
         }
 
-        public void AddSelection(ISelectableCanvasObject node)
+        public void AddSelection(ISelectableCanvasObject node, Instance? instance = null)
         {
             if (Selection.Contains(node))
                 return;
 
+            if (node is SymbolUi.Child childUi)
+            {
+                ArgumentNullException.ThrowIfNull(instance);
+                _childUiInstanceIdPaths[childUi] = instance.InstancePath;
+                if (instance is ITransformable transformable)
+                {
+                    TransformGizmoHandling.RegisterSelectedTransformable(childUi, transformable);
+                }
+            }
+
             Selection.Add(node);
         }
-        
-        public void DeselectNode(ISelectableCanvasObject node)
-        {
-            var index = Selection.IndexOf(node);
-            if(index != -1)
-                Selection.RemoveAt(index);
-        }
 
-        /// <summary>
-        /// Replaces current selection with symbol child
-        /// </summary>
-        public void SetSelectionToChildUi(SymbolUi.Child node, Instance instance)
-        {
-            ArgumentNullException.ThrowIfNull(instance);
-
-            Clear();
-            AddSymbolChildToSelection(node, instance);
-            _history.UpdateSelectedInstance(instance);
-        }
-
-        public void SelectCompositionChild(Instance compositionOp, Guid id, bool replaceSelection = true)
+        public void SelectCompositionChild(Instance compositionOp, Guid id)
         {
             if (!Structure.TryGetUiAndInstanceInComposition(id, compositionOp, out var childUi, out var instance))
                 return;
-            
-            if (replaceSelection)
-            {
-                Clear();
-            }
 
-            AddSymbolChildToSelection(childUi, instance);
-        }
-
-        public void AddSymbolChildToSelection(SymbolUi.Child childUi, Instance instance)
-        {
-            if (Selection.Contains(childUi))
-                return;
-
-            ArgumentNullException.ThrowIfNull(instance);
-
-            Selection.Add(childUi);
-            _childUiInstanceIdPaths[childUi] = instance.InstancePath;
-            if (instance is ITransformable transformable)
-            {
-                TransformGizmoHandling.RegisterSelectedTransformable(childUi, transformable);
-            }
+            AddSelection(childUi, instance);
         }
 
         public IEnumerable<T> GetSelectedNodes<T>() where T : ISelectableCanvasObject
@@ -192,14 +170,10 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (!Structure.TryGetUiAndInstanceInComposition(symbolChildId, compositionOp, out var childUi, out var instance))
                 return;
 
-            Selection.Remove(childUi!);
-            if (instance is ITransformable transformable)
-            {
-                TransformGizmoHandling.ClearDeselectedTransformableNode(transformable);
-            }
+            DeselectNode(childUi, instance);
         }
 
-        public void DeselectNode(ISelectableCanvasObject node, Instance instance)
+        public void DeselectNode(ISelectableCanvasObject node, Instance? instance = null)
         {
             Selection.Remove(node);
             if (instance is ITransformable transformable)

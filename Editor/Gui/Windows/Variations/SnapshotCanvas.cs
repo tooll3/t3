@@ -62,7 +62,7 @@ namespace T3.Editor.Gui.Windows.Variations
                             continue;
 
                         if (InstanceForBlendOperations.Children.TryGetValue(symbolChildUi.Id, out var instance))
-                            nodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
+                            nodeSelection.AddSelection(symbolChildUi, instance);
                     }
                 }
 

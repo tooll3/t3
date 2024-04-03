@@ -97,7 +97,7 @@ namespace T3.Editor.Gui.Graph
                         ImGui.SetCursorScreenPos(new Vector2(_usableScreenRect.Max.X,  _usableScreenRect.Min.Y) -  new Vector2(3, 12) * T3Ui.UiScaleFactor * T3Ui.UiScaleFactor);
                         if (ImGui.InvisibleButton("#comment", new Vector2(15, 15)))
                         {
-                            _canvas.NodeSelection.SetSelectionToChildUi(childUi, instance);
+                            _canvas.NodeSelection.SetSelection(childUi, instance);
                             _canvas.EditCommentDialog.ShowNextFrame();
                         }
                         Icons.DrawIconOnLastItem(Icon.Comment, UiColors.ForegroundFull);

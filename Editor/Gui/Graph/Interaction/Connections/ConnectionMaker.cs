@@ -631,7 +631,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             
             var newInstance = instance.Parent.Children[newChildUi.Id];
 
-            selection.SetSelectionToChildUi(newChildUi, newInstance);
+            selection.SetSelection(newChildUi, newInstance);
             
             foreach (var c in connectionList)
             {

@@ -70,7 +70,7 @@ internal sealed partial class GraphWindow
             var symbolChildUi = instance.GetChildUi();
 
             if (symbolChildUi != null)
-                GraphCanvas.NodeSelection.SetSelectionToChildUi(symbolChildUi, instance);
+                GraphCanvas.NodeSelection.SetSelection(symbolChildUi, instance);
             else
                 GraphCanvas.NodeSelection.Clear();
         }

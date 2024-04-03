@@ -142,7 +142,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                         {
                             if (node is SymbolUi.Child childUi3)
                             {
-                                selection.SetSelectionToChildUi(childUi3, instance);
+                                selection.SetSelection(childUi3, instance);
                             }
                             else
                             {
@@ -153,7 +153,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                         {
                             if (node is SymbolUi.Child childUi2)
                             {
-                                selection.AddSymbolChildToSelection(childUi2, instance);
+                                selection.AddSelection(childUi2, instance);
                             }
                             else
                             {
@@ -187,7 +187,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             {
                 if (node is SymbolUi.Child childUi2)
                 {
-                    selection.SetSelectionToChildUi(childUi2, instance);
+                    selection.SetSelection(childUi2, instance);
                 }
                 else
                 {
