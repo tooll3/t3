@@ -8,6 +8,7 @@
         "X": 0.0,
         "Y": 90.0
       },
+      "Description": "Allows the selection of the file to be read",
       "Usage": "FilePath"
     },
     {
@@ -15,7 +16,9 @@
       "Position": {
         "X": 0.0,
         "Y": 135.0
-      }
+      },
+      "Description": "triggers a new scan of the selected file",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],
