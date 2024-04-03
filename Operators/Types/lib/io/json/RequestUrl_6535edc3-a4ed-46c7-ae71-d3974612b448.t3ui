@@ -8,6 +8,7 @@
         "X": 51.512096,
         "Y": 46.995968
       },
+      "Description": "Defines the URL which should be contacted\ne.g. https://cataas.com/cat",
       "Usage": "Default"
     },
     {
@@ -15,7 +16,9 @@
       "Position": {
         "X": 51.512096,
         "Y": 91.99597
-      }
+      },
+      "Description": "triggers a refresh of the defined URL to update the result",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],
