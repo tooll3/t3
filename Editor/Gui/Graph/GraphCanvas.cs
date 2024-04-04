@@ -1160,6 +1160,7 @@ namespace T3.Editor.Gui.Graph
 
         #region public API
         public bool Destroyed { get; private set; }
+        public GraphWindow Window => _window;
 
         public void OpenAndFocusInstance(IReadOnlyList<Guid> path)
         {
