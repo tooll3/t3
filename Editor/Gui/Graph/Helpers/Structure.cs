@@ -126,7 +126,7 @@ internal class Structure
             return false;
         }
 
-        childUi = compositionOp.GetChildUi();
+        childUi = instance.GetChildUi();
         if (childUi == null)
         {
             Log.Assert($"Can't select child with id {id} in composition {compositionOp}");
