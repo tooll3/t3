@@ -33,7 +33,6 @@ namespace T3.Editor.Gui.Interaction.WithCurves
             {
                 Drawlist = ImGui.GetWindowDrawList();
                 UpdateCanvas(out var interactionState, flags);
-                SetScaleToParentCanvas(canvas);
                 Drawlist = ImGui.GetWindowDrawList();
 
                 drawAdditionalCanvasContent(interactionState);

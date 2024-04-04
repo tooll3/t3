@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             DopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
             _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandlerForU, SnapHandlerForV);
             _timeSelectionRange = new TimeSelectionRange(this, SnapHandlerForU);
-            LayersArea = new LayersArea(SnapHandlerForU, canvas);
+            LayersArea = new LayersArea(SnapHandlerForU, canvas, this);
 
             SnapHandlerForV.AddSnapAttractor(_horizontalRaster);
             SnapHandlerForU.AddSnapAttractor(_clipRange);
@@ -59,6 +59,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             var modeChanged = UpdateMode();
             DrawCurveCanvas(_graphCanvas, drawAdditionalCanvasContent: DrawCanvasContent, _selectionFence, 0, T3Ui.EditingFlags.AllowHoveredChildWindows);
+            Current = null;
+            return;
 
             void DrawCanvasContent(InteractionState interactionState)
             {
@@ -128,7 +130,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     }
                 }
             }
-            Current = null;
         }
 
 

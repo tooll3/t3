@@ -220,20 +220,6 @@ namespace T3.Editor.Gui.Interaction
             ScaleTarget = Vector2.One;
         }
 
-        /// <summary>
-        /// This is a horrible hack: We sacrifice smooth interpolated scaling so we can use...
-        /// - ... ScaleTarget for the local view
-        /// - ... Scale for the view transformed to the parent canvas
-        /// </summary>
-        public void SetScaleToParentCanvas(ScalableCanvas parent)
-        {
-            if (parent == null)
-                return;
-
-            Scale = ScaleTarget * parent.Scale;
-            Scroll = ScrollTarget;
-        }
-
         public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null, float paddingX = 0, float paddingY = 0)
         {
             var areaSize = area.GetSize();

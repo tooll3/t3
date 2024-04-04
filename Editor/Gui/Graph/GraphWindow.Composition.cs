@@ -1,9 +1,6 @@
 #nullable enable
-using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
-using T3.SystemUi;
 
 namespace T3.Editor.Gui.Graph;
 
