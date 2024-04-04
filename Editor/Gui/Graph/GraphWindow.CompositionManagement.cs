@@ -25,10 +25,10 @@ internal sealed partial class GraphWindow
         if (rootIsComposition)
         {
             _composition.Dispose();
-            _composition = Composition.GetFor(rootInstance, true);
+            _composition = Composition.GetFor(rootInstance);
         }
         
-        RootInstance = Composition.GetFor(rootInstance, true);
+        RootInstance = Composition.GetFor(rootInstance);
     }
     internal bool TrySetCompositionOp(IReadOnlyList<Guid> path, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? nextSelectedUi = null)
     {
@@ -59,7 +59,7 @@ internal sealed partial class GraphWindow
                 return true;
         }
 
-        _composition = Composition.GetFor(newCompositionInstance, true)!;
+        _composition = Composition.GetFor(newCompositionInstance)!;
         _compositionPath.Clear();
         _compositionPath.AddRange(path);
         _timeLineCanvas.ClearSelection();
@@ -164,7 +164,6 @@ internal sealed partial class GraphWindow
         if(_compositionForDisposal == null)
             throw new InvalidOperationException("No duplication composition was set");
         
-        _compositionForDisposal.MarkDuplicationComplete();
         _compositionForDisposal.Dispose();
         _compositionForDisposal = null;
     }

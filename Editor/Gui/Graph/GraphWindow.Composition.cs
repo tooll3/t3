@@ -1,4 +1,5 @@
 #nullable enable
+using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
@@ -21,6 +22,7 @@ internal sealed partial class GraphWindow
         private readonly Instance _instance;
         private readonly bool _hasParent;
         private readonly EditorSymbolPackage _symbolPackage;
+        private int _checkoutCount;
 
         private Composition(Instance instance)
         {
@@ -30,13 +32,12 @@ internal sealed partial class GraphWindow
             _instance = instance;
             SymbolChildId = instance.SymbolChildId;
             _symbolId = instance.Symbol.Id;
+            _isReadOnly = _symbolPackage.IsReadOnly;
         }
 
-        internal static Composition GetFor(Instance instance, bool allowReload)
+        internal static Composition GetFor(Instance instance)
         {
             Composition? composition;
-            var symbolPackage = (EditorSymbolPackage)instance.Symbol.SymbolPackage;
-            var needsReload = allowReload && symbolPackage.IsReadOnly;
             lock (Compositions)
             {
                 if (!Compositions.TryGetValue(instance, out composition))
@@ -45,59 +46,32 @@ internal sealed partial class GraphWindow
                     Compositions[instance] = composition;
                 }
                 
-                composition.CheckoutCount++;
+                composition._checkoutCount++;
             }
 
-            composition._needsReload |= needsReload;
             return composition;
         }
 
-        public int CheckoutCount;
 
         private void ReloadIfNecessary()
         {
-            if (_needsReload)
+            if (_isReadOnly && SymbolUi.HasBeenModified)
             {
                 _symbolPackage.Reload(SymbolUi);
             }
         }
-
-        public bool CheckForDuplicateNeeded()
-        {
-            if(CheckoutCount > 1)
-                return false;
-            
-            if (_needsDuplicate != null)
-                return _needsDuplicate.Value;
-
-            var symbolUi = SymbolUi;
-            if (_needsReload && symbolUi.HasBeenModified)
-            {
-                var result = EditorUi.Instance.ShowMessageBox(text: "You've made changes to a read-only operator. " +
-                                                                    "Do you want to save your changes as a new operator?",
-                                                              title: $"[{symbolUi.Symbol.Name}] is read-only!",
-                                                              buttons: PopUpButtons.YesNo);
-                _needsDuplicate = result == PopUpResult.Yes;
-            }
-            else
-            {
-                _needsDuplicate = false;
-            }
-
-            return _needsDuplicate.Value;
-        }
+        
+        // it must be the last instance checked out, read only, and modified to qualify for reload
+        public bool NeedsReload => _checkoutCount == 1 && _isReadOnly && SymbolUi.HasBeenModified;
 
         public void Dispose()
         {
-            CheckoutCount--;
-            if(CheckoutCount > 0)
+            _checkoutCount--;
+            if(_checkoutCount > 0)
                 return;
             
             if (_disposed)
                 throw new Exception("Composition already disposed.");
-
-            if (_needsDuplicate == true)
-                throw new InvalidOperationException("Duplication not completed.");
                                                     
             _disposed = true;
 
@@ -108,17 +82,8 @@ internal sealed partial class GraphWindow
             }
         }
 
-        public void MarkDuplicationComplete()
-        {
-            if(_needsDuplicate is null or false)
-                throw new InvalidOperationException("Duplication not needed.");
-            
-            _needsDuplicate = false;
-        }
-
         private bool _disposed;
-        private bool _needsReload;
-        private bool? _needsDuplicate;
+        private bool _isReadOnly;
 
         private static readonly Dictionary<Instance, Composition> Compositions = new();
     }

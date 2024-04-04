@@ -266,17 +266,17 @@ namespace T3.Editor.Gui.Graph
                 
                 var doubleClicked = ImGui.IsMouseDoubleClicked(0);
 
-                var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
-                if (isOnBackground && doubleClicked)
-                {
-                    _window.TrySetCompositionOpToParent();
-                }
-
                 if ((ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
                     && !preventInteractions
                     && tempConnections.Count == 0)
                 {
-                    HandleFenceSelection(_window.CompositionOp, _selectionFence, doubleClicked);
+                    HandleFenceSelection(_window.CompositionOp, _selectionFence);
+                }
+
+                var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
+                if (isOnBackground && doubleClicked)
+                {
+                    _window.TrySetCompositionOpToParent();
                 }
 
                 if (tempConnections.Count > 0 && ImGui.IsMouseReleased(0))
@@ -333,10 +333,10 @@ namespace T3.Editor.Gui.Graph
             ImGui.EndGroup();
         }
 
-        private void HandleFenceSelection(Instance compositionOp, SelectionFence selectionFence, bool doubleClicked)
+        private void HandleFenceSelection(Instance compositionOp, SelectionFence selectionFence)
         {
             const bool allowRectOutOfBounds = true;
-            switch (selectionFence.UpdateAndDraw(out var selectMode, allowRectOutOfBounds, doubleClicked))
+            switch (selectionFence.UpdateAndDraw(out var selectMode, allowRectOutOfBounds))
             {
                 case SelectionFence.States.PressedButNotMoved:
                     if (selectMode == SelectionFence.SelectModes.Replace)
