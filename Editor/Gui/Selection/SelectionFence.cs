@@ -12,15 +12,8 @@ namespace T3.Editor.Gui.Selection
     /// </summary>
     public sealed class SelectionFence
     {
-        internal States UpdateAndDraw(out SelectModes selectMode, bool allowRectOutOfBounds = true, bool forceClear = false)
+        internal States UpdateAndDraw(out SelectModes selectMode, bool allowRectOutOfBounds = true)
         {
-            if (forceClear)
-            {
-                _state = States.CompletedAsClick;
-                selectMode = SelectModes.Replace;
-                return _state;
-            }
-
             if (_state is States.CompletedAsArea or States.CompletedAsClick)
                 _state = States.Inactive;
             

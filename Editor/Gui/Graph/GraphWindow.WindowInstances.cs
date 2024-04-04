@@ -38,7 +38,7 @@ internal sealed partial class GraphWindow
         WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
         Package = package;
 
-        RootInstance = Composition.GetFor(rootInstance!, true);
+        RootInstance = Composition.GetFor(rootInstance!);
         AllowMultipleInstances = true;
 
         ConnectionMaker.AddWindow(this);

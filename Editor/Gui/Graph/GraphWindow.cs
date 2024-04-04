@@ -1,5 +1,4 @@
 #nullable enable
-using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
@@ -15,7 +14,6 @@ using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
-using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.Gui.Windows.TimeLine;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
@@ -216,7 +214,7 @@ namespace T3.Editor.Gui.Graph
 
             if (_compositionForDisposal != null)
             {
-                if (_compositionForDisposal.CheckForDuplicateNeeded())
+                if (_compositionForDisposal.NeedsReload) 
                 {
                     _duplicateSymbolDialog.ShowNextFrame(); // actually shows this frame
                     var instance = _compositionForDisposal.Instance;
@@ -226,7 +224,8 @@ namespace T3.Editor.Gui.Graph
                                                 selectedChildUis: [symbolChildUi],
                                                 nameSpace: ref _dupeReadonlyNamespace,
                                                 newTypeName: ref _dupeReadonlyName,
-                                                description: ref _dupeReadonlyDescription);
+                                                description: ref _dupeReadonlyDescription,
+                                                isReload: true);
                 }
                 else
                 {

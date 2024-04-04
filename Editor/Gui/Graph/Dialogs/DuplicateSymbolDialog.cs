@@ -12,22 +12,50 @@ namespace T3.Editor.Gui.Graph.Dialogs
     {
         public event Action? Closed;
         
-        public void Draw(Instance compositionOp, List<SymbolUi.Child> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description)
+        public void Draw(Instance compositionOp, List<SymbolUi.Child> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description, bool isReload = false)
         {
             if(selectedChildUis.Count != 1)
                 return;
             
-            DialogSize = new Vector2(700, 300);
+            if(isReload && !_completedReloadPrompt)
+            {
+                DialogSize = new Vector2(400, 200);
+                if (BeginDialog("Changes made to readonly operator"))
+                {
+                    ImGui.TextWrapped("You've made changes to a read-only operator.\nDo you want to save your changes as a new operator?");
+                    
+                    if(ImGui.Button("Yes"))
+                    {
+                        _completedReloadPrompt = true;
+                    }
+                    
+                    ImGui.SameLine();
+                    
+                    if(ImGui.Button("No"))
+                    {
+                        ImGui.CloseCurrentPopup();
+                        Closed?.Invoke();
+                    }
+                    
+                    EndDialogContent();
+                }
+                
+                EndDialog();
+                return;
+            }
+
+            var hasProject = _projectToCopyTo != null;
+            DialogSize = new Vector2(600, 400);
 
             if (BeginDialog("Duplicate as new symbol"))
             {
                 var projectChanged = CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
-                if(projectChanged && _projectToCopyTo != null)
+                if(projectChanged && hasProject)
                 {
                     nameSpace = _projectToCopyTo.CsProjectFile.RootNamespace + '.' + compositionOp.Symbol.Namespace.Split('.').Last();
                 }
 
-                if (_projectToCopyTo != null)
+                if (hasProject)
                 {
                     // Name and namespace
                     ImGui.PushFont(Fonts.FontSmall);
@@ -80,6 +108,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                                                      position);
                         T3Ui.Save(false);
                         ImGui.CloseCurrentPopup();
+                        _completedReloadPrompt = false;
                         Closed?.Invoke();
                     }
 
@@ -89,16 +118,23 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 if (ImGui.Button("Cancel"))
                 {
                     ImGui.CloseCurrentPopup();
+                    _completedReloadPrompt = false;
                     Closed?.Invoke();
                 }
 
                 EndDialogContent();
+            }
+            else
+            {
+                _completedReloadPrompt = false;
+                Closed?.Invoke();
             }
 
             EndDialog();
         }
 
         private EditableSymbolProject _projectToCopyTo;
+        private bool _completedReloadPrompt = false;
     }
     
 }
