@@ -43,6 +43,9 @@ internal class NodeNavigation
         var composition = _getComposition();
         var currentInstance = _navigationHistory.GetLastSelectedInstance();
 
+        if (currentInstance == composition)
+            return;
+
         var symbolUi = composition.Symbol.GetSymbolUi();
         var currentSymbolUiChild = symbolUi.ChildUis[currentInstance.SymbolChildId];
         
