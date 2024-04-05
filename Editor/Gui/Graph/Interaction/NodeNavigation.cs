@@ -54,12 +54,12 @@ internal class NodeNavigation
         var bestRelevancy = float.PositiveInfinity;
         foreach (var otherChildUi in symbolUi.ChildUis.Values)
         {
-            var alignedDelta = GetAlignedDelta(direction, otherChildUi.PosOnCanvas - currentSymbolUiChild.PosOnCanvas);
-
             if (otherChildUi == currentSymbolUiChild)
             {
                 continue;
             }
+            
+            var alignedDelta = GetAlignedDelta(direction, otherChildUi.PosOnCanvas - currentSymbolUiChild.PosOnCanvas);
             
             if (alignedDelta.X <= 0)
                 continue;
