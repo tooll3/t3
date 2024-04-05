@@ -32,9 +32,6 @@ internal sealed partial class GraphWindow
     }
     internal bool TrySetCompositionOp(IReadOnlyList<Guid> path, ICanvas.Transition transition = ICanvas.Transition.Undefined, Guid? nextSelectedUi = null)
     {
-        if (_compositionForDisposal != null)
-            throw new Exception($"New composition was requested before the previous one was disposed");
-
         var newCompositionInstance = Structure.GetInstanceFromIdPath(path);
 
         if (newCompositionInstance == null)
@@ -80,25 +77,12 @@ internal sealed partial class GraphWindow
         }
 
         ApplyComposition(transition, previousComposition);
-        _compositionForDisposal = previousComposition;
+        
+        if(previousComposition != null)
+            _compositionsForDisposal.Push(previousComposition);
 
         UserSettings.SaveLastViewedOpForWindow(this, _composition.SymbolChildId);
         return true;
-    }
-
-    void DisposeOfCompositions()
-    {
-        for (int i = _compositionsWaitingForDisposal.Count - 1; i >= 0; i--)
-        {
-            var composition = _compositionsWaitingForDisposal[i];
-
-            var symbolChildId = composition.SymbolChildId;
-            if (!_compositionPath.Contains(symbolChildId))
-            {
-                composition.Dispose();
-                _compositionsWaitingForDisposal.RemoveAt(i);
-            }
-        }
     }
 
     public bool TrySetCompositionOpToChild(Guid symbolChildId)
@@ -159,25 +143,21 @@ internal sealed partial class GraphWindow
         }
     }
 
-    private void OnDuplicationComplete()
+    private void DisposeLatestComposition()
     {
-        if(_compositionForDisposal == null)
-            throw new InvalidOperationException("No duplication composition was set");
-        
-        _compositionForDisposal.Dispose();
-        _compositionForDisposal = null;
+        var composition = _compositionsForDisposal.Pop();
+        composition.Dispose();
     }
 
     private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new();
     private string _dupeReadonlyNamespace = "";
     private string _dupeReadonlyName = "";
     private string _dupeReadonlyDescription = "";
-    private Composition? _compositionForDisposal;
+    private Stack<Composition> _compositionsForDisposal = new();
     private readonly List<Guid> _compositionPath = [];
 
     internal Composition RootInstance { get; private set; }
 
     private bool _initializedAfterLayoutReady;
-    private readonly List<Composition> _compositionsWaitingForDisposal = new();
     public readonly Structure Structure;
 }

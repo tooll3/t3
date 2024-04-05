@@ -53,7 +53,7 @@ internal sealed partial class GraphWindow
         _timeLineCanvas = new TimeLineCanvas(GraphCanvas);
         WindowDisplayTitle = package.DisplayName + "##" + InstanceNumber;
         SetWindowToNormal();
-        _duplicateSymbolDialog.Closed += OnDuplicationComplete;
+        _duplicateSymbolDialog.Closed += DisposeLatestComposition;
     }
 
     public static bool CanOpenAnotherWindow => true;
