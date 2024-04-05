@@ -1,48 +1,64 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using Microsoft.Build.Construction;
 using T3.Core.Compilation;
 using T3.Core.Resource;
 using T3.Core.UserData;
+using Encoding = System.Text.Encoding;
+// ReSharper disable SuggestBaseTypeForParameterInConstructor
 
 namespace T3.Editor.Compilation;
 
 // todo - convert to a proper XML parser
-internal class CsProjectFile
+internal sealed partial class CsProjectFile
 {
-    public string FullPath { get; }
-    public string Directory { get; }
-    public string FileName { get; }
-    public string Name { get; }
-    private string Contents { get; }
-    public string RootNamespace { get; }
-    public string TargetFramework { get; }
+    public string FullPath => _projectRootElement.FullPath;
+    public string Directory => _projectRootElement.DirectoryPath;
+    public string FileName => Path.GetFileName(FullPath);
+    public string Name => Path.GetFileNameWithoutExtension(FullPath);
+    private string Text => _projectRootElement.RawXml;
+    public readonly string RootNamespace;
+    private string TargetFramework { get; }
     public AssemblyInformation Assembly { get; private set; }
-    public IReadOnlyList<DependencyInfo> Dependencies => _dependencies;
+
     public bool IsOperatorAssembly => Assembly.IsOperatorAssembly;
-    public const string ProjectNamePlaceholder = "{{PROJ}}";
-    private readonly List<DependencyInfo> _dependencies;
     public event Action<CsProjectFile> Recompiled;
 
     private uint _buildId = GetNewBuildId();
     private readonly string _releaseRootDirectory;
     private readonly string _debugRootDirectory;
     public readonly string DllName;
+    private readonly ProjectRootElement _projectRootElement;
 
-    public CsProjectFile(FileInfo file)
+    public static bool TryLoad(string filePath, [NotNullWhen(true)] out CsProjectFile? csProjFile, [NotNullWhen(false)] out string? error)
     {
-        FullPath = file.FullName;
-        Contents = File.ReadAllText(file.FullName);
-        Directory = Path.GetDirectoryName(FullPath)!;
-        FileName = Path.GetFileName(FullPath);
-        Name = Path.GetFileNameWithoutExtension(FullPath);
+        try
+        {
+            var root = ProjectRootElement.Open(filePath);
+            csProjFile = new CsProjectFile(root);
+            error = null;
+            return true;
+        }
+        catch (Exception e)
+        {
+            error = $"Failed to open project file: {e}";
+            csProjFile = null;
+            return false;
+        }
+    }
 
-        _dependencies = ParseDependencies(Contents);
-        RootNamespace = GetRootNamespace(Contents);
-        TargetFramework = GetTargetFramework(Contents);
+    private CsProjectFile(ProjectRootElement projectRootElement)
+    {
+        _projectRootElement = projectRootElement;
 
-        _releaseRootDirectory = Path.Combine(Directory, "bin", "Release");
-        _debugRootDirectory = Path.Combine(Directory, "bin", "Debug");
+        RootNamespace = GetProperty(PropertyType.RootNamespace, _projectRootElement, Name);
+        TargetFramework = GetProperty(PropertyType.TargetFramework, _projectRootElement);
+
+        var dir = Directory;
+        _releaseRootDirectory = Path.Combine(dir, "bin", "Release");
+        _debugRootDirectory = Path.Combine(dir, "bin", "Debug");
         DllName = Name + ".dll";
     }
 
@@ -54,148 +70,14 @@ internal class CsProjectFile
 
     public string GetBuildTargetDirectory()
     {
-        return Path.Combine(GetRootDirectory(), _buildId.ToString(CultureInfo.InvariantCulture), TargetFramework);
+        return Path.Combine(GetRootDirectory(EditorBuildMode), _buildId.ToString(CultureInfo.InvariantCulture), TargetFramework);
     }
 
-    private string GetRootDirectory() => EditorBuildMode == Compiler.BuildMode.Debug ? _debugRootDirectory : _releaseRootDirectory;
-
-    private string GetTargetFramework(string contents)
-    {
-        const string beginTargetFrameworkTag = "<TargetFramework>";
-        const string endTargetFrameworkTag = "</TargetFramework>";
-        var start = contents.IndexOf(beginTargetFrameworkTag, StringComparison.Ordinal) + beginTargetFrameworkTag.Length;
-        var end = contents.IndexOf(endTargetFrameworkTag, StringComparison.Ordinal);
-        if (start == -1 || end == -1 || start > end)
-        {
-            Log.Error($"Could not find {beginTargetFrameworkTag} in {FullPath}");
-            return string.Empty;
-        }
-
-        return contents[start..end];
-    }
+    private string GetRootDirectory(Compiler.BuildMode buildMode) => buildMode == Compiler.BuildMode.Debug ? _debugRootDirectory : _releaseRootDirectory;
 
     // int to keep directory name smaller
     private static uint GetNewBuildId() => unchecked((uint)DateTime.UtcNow.Ticks);
 
-    private string GetRootNamespace(string contents)
-    {
-        const string beginNamespaceTag = "<RootNamespace>";
-        const string endNamespaceTag = "</RootNamespace>";
-        var start = contents.IndexOf(beginNamespaceTag, StringComparison.Ordinal) + beginNamespaceTag.Length;
-        var end = contents.IndexOf(endNamespaceTag, StringComparison.Ordinal);
-        if (start == -1 || end == -1)
-        {
-            Log.Error($"Could not find {beginNamespaceTag} in {FullPath}");
-            return string.Empty;
-        }
-
-        return contents[start..end];
-    }
-
-    private static List<DependencyInfo> ParseDependencies(string csproj)
-    {
-        var dependencies = new List<DependencyInfo>();
-        var lines = csproj.Split('\n');
-
-        foreach (var line in lines)
-        {
-            var gotRefType = TryGetDependencyType(line, out var refType);
-            if (!gotRefType) continue;
-
-            var gotName = TryExtractDependencyName(line, refType, out var name);
-            if (!gotName) continue;
-
-            if (refType == DependencyType.PackageReference)
-            {
-                var gotVersion = TryExtractVersion(line, name, out var version);
-                if (!gotVersion)
-                {
-                    Log.Warning($"Could not extract version for package {name}");
-                    // should we throw here?
-                }
-
-                dependencies.Add(new DependencyInfo(name, version, refType));
-            }
-            else
-            {
-                dependencies.Add(new DependencyInfo(name, refType));
-
-                // todo: parse HintPath
-            }
-        }
-
-        return dependencies;
-    }
-
-    private static bool TryGetDependencyType(string line, out DependencyType type)
-    {
-        if (line.Contains(ProjectReferenceStart))
-        {
-            type = DependencyType.ProjectReference;
-            return true;
-        }
-
-        if (line.Contains(DllReferenceStart))
-        {
-            type = DependencyType.DllReference;
-            return true;
-        }
-
-        if (line.Contains(PackageReferenceStart))
-        {
-            type = DependencyType.PackageReference;
-            return true;
-        }
-
-        type = default;
-        return false;
-    }
-
-    private static bool TryExtractDependencyName(string line, DependencyType type, out string name)
-    {
-        var refStart = type switch
-                           {
-                               DependencyType.ProjectReference => ProjectReferenceStart,
-                               DependencyType.DllReference     => DllReferenceStart,
-                               DependencyType.PackageReference => PackageReferenceStart,
-                               _                               => string.Empty
-                           };
-
-        if (refStart == string.Empty)
-        {
-            name = string.Empty;
-            return false;
-        }
-
-        var startIndex = line.IndexOf(refStart, StringComparison.Ordinal) + refStart.Length;
-        var endIndex = line.IndexOf('"', startIndex);
-        name = line[startIndex..endIndex];
-        return true;
-    }
-
-    private static bool TryExtractVersion(string line, string dependencyName, out string version)
-    {
-        const string versionStart = "\" Version=\"";
-        var startIndex = line.IndexOf(dependencyName, StringComparison.Ordinal) + dependencyName.Length;
-        var versionIndex = line.IndexOf(versionStart, startIndex, StringComparison.Ordinal);
-        if (versionIndex == -1)
-        {
-            version = string.Empty;
-            return false;
-        }
-
-        versionIndex += versionStart.Length;
-        var endIndex = line.IndexOf('"', versionIndex);
-
-        if (endIndex == -1)
-        {
-            version = string.Empty;
-            return false;
-        }
-
-        version = line[versionIndex..endIndex];
-        return true;
-    }
 
     // todo - rate limit recompiles for when multiple files change
     public bool TryRecompile()
@@ -243,50 +125,45 @@ internal class CsProjectFile
         string placeholderDependencyPath = Path.Combine(dependenciesDirectory, "PlaceNativeDllDependenciesHere.txt");
         File.Create(placeholderDependencyPath).Dispose();
 
+        // todo - use source generation and direct type references instead of this copy and replace strategy
         const string guidPlaceholder = "{{GUID}}";
-        const string defaultReferencesPlaceholder = "{{DEFAULT_REFS}}";
         const string nameSpacePlaceholder = "{{NAMESPACE}}";
         const string usernamePlaceholder = "{{USER}}";
         const string shareResourcesPlaceholder = "{{SHARE_RESOURCES}}";
-        
+        const string projectNamePlaceholder = "{{PROJ}}";
+
         var shouldShareResources = shareResources ? "true" : "false";
         var username = nameSpace.Split('.').First();
-        var homeGuid = Guid.NewGuid().ToString();
         
-        string csprojPath = null;
-        
+        var homeGuid = Guid.NewGuid();
+        var homeGuidString = homeGuid.ToString();
+
+        var projRoot = CreateNewProjectRootElement(nameSpace, homeGuid);
+
         foreach (var file in files)
         {
             var text = File.ReadAllText(file)
-                           .Replace(ProjectNamePlaceholder, projectName)
-                           .Replace(guidPlaceholder, homeGuid)
-                           .Replace(defaultReferencesPlaceholder, CoreReferences)
+                           .Replace(projectNamePlaceholder, projectName)
+                           .Replace(guidPlaceholder, homeGuidString)
                            .Replace(nameSpacePlaceholder, nameSpace)
                            .Replace(usernamePlaceholder, username)
                            .Replace(shareResourcesPlaceholder, shouldShareResources);
 
             var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file))
-                                          .Replace(ProjectNamePlaceholder, projectName)
-                                          .Replace(guidPlaceholder, homeGuid);
+                                          .Replace(projectNamePlaceholder, projectName)
+                                          .Replace(guidPlaceholder, homeGuidString);
 
             File.WriteAllText(destinationFilePath, text);
-
-            if (destinationFilePath.EndsWith(".csproj"))
-                csprojPath = destinationFilePath;
         }
 
-        if (csprojPath == null)
-        {
-            Log.Error($"Could not find .csproj in {defaultHomeDir}");
-            return null;
-        }
-
-        return new CsProjectFile(new FileInfo(csprojPath));
+        projRoot.FullPath = Path.Combine(destinationDirectory, $"{projectName}.csproj");
+        projRoot.Save(Encoding.UTF8);
+        return new CsProjectFile(projRoot);
     }
 
-    public bool TryLoadLatestAssembly()
+    public bool TryLoadLatestAssembly(Compiler.BuildMode buildMode)
     {
-        if (!TryGetBuildDirectories(out var compatibleDirectories, out var latestDll))
+        if (!TryGetBuildDirectories(buildMode, out var compatibleDirectories, out var latestDll))
             return false;
 
         var loaded = TryLoadAssembly(latestDll);
@@ -300,9 +177,9 @@ internal class CsProjectFile
         return true;
     }
 
-    private bool TryGetBuildDirectories(out DirectoryInfo[] compatibleDirectories, out FileInfo latestDll)
+    private bool TryGetBuildDirectories(Compiler.BuildMode buildMode, out DirectoryInfo[] compatibleDirectories, out FileInfo latestDll)
     {
-        var rootDir = new DirectoryInfo(GetRootDirectory());
+        var rootDir = new DirectoryInfo(GetRootDirectory(buildMode));
         if (!rootDir.Exists)
         {
             compatibleDirectories = Array.Empty<DirectoryInfo>();
@@ -316,9 +193,9 @@ internal class CsProjectFile
         return latestDll != null;
     }
 
-    public void RemoveOldBuilds()
+    public void RemoveOldBuilds(Compiler.BuildMode buildMode)
     {
-        if (!TryGetBuildDirectories(out var compatibleDirectories, out var latestDll))
+        if (!TryGetBuildDirectories(buildMode, out var compatibleDirectories, out var latestDll))
             return;
 
         var latestDir = Assembly != null ? Assembly.Directory : latestDll.Directory!.FullName;
@@ -364,21 +241,6 @@ internal class CsProjectFile
 
         return true;
     }
-
-    private const string ExpandedAssemblyDirectory = $"$({RuntimeAssemblies.EnvironmentVariableName})";
-    private const string Indentation = "\t\t";
-    private const string BeginReference = $"<Reference Include=\"{ExpandedAssemblyDirectory}/";
-    private const string Ending = "\" Private=\"false\"/>\n";
-
-    private const string CoreReferences = BeginReference + "Core.dll" + Ending +
-                                          Indentation + BeginReference + "Logging.dll" + Ending +
-                                          Indentation + BeginReference + "SharpDX.dll" + Ending +
-                                          Indentation + BeginReference + "SharpDX.Direct3D11.dll" + Ending +
-                                          Indentation + BeginReference + "SharpDX.DXGI.dll" + Ending;
-
-    private const string DllReferenceStart = "<Reference Include=\"";
-    private const string ProjectReferenceStart = "<ProjectReference Include=\"";
-    private const string PackageReferenceStart = "<PackageReference Include=\"";
 
     internal const Compiler.BuildMode EditorBuildMode = Compiler.BuildMode.Debug;
     internal const Compiler.BuildMode PlayerBuildMode = Compiler.BuildMode.Release;
