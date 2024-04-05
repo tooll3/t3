@@ -23,6 +23,7 @@
 
     <ItemGroup>
         <PackageReference Include="ImGui.NET" Version="1.89.9.4"/>
+        <PackageReference Include="Microsoft.Build" Version="17.9.5" />
         <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.0-2.final"/>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.0-2.final"/>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.0-2.final"/>
@@ -34,7 +35,6 @@
         <PackageReference Include="SharpDX.Desktop" Version="4.2.0">
             <NoWarn>NU1701</NoWarn>
         </PackageReference>
-        <PackageReference Include="System.Management" Version="6.0.0"/>
     </ItemGroup>
 
     <ItemGroup>

@@ -125,7 +125,6 @@ internal static class ProjectSetup
             // Find csproj files
             var csProjFiles = projectSearchDirectories
                              .SelectMany(dir => Directory.EnumerateFiles(dir, "*.csproj", SearchOption.AllDirectories))
-                             .Where(filePath => !filePath.Contains(CsProjectFile.ProjectNamePlaceholder))
                              .Select(x => new FileInfo(x))
                              .ToArray();
 
@@ -143,8 +142,14 @@ internal static class ProjectSetup
                .ForAll(fileInfo =>
                        {
                            stopwatch.Restart();
-                           var csProjFile = new CsProjectFile(fileInfo);
-                           if (csProjFile.TryLoadLatestAssembly())
+
+                           if (!CsProjectFile.TryLoad(fileInfo.FullName, out var csProjFile, out var error))
+                           {
+                               Log.Error($"Failed to load project at \"{fileInfo.FullName}\":\n{error}");
+                               return;
+                           }
+                           
+                           if (csProjFile.TryLoadLatestAssembly(Compiler.BuildMode.Debug))
                            {
                                InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
                            }
@@ -157,7 +162,7 @@ internal static class ProjectSetup
             foreach (var csProjFile in projectsNeedingCompilation)
             {
                 // check again if assembly can be loaded as previous compilations could have compiled this project
-                if (csProjFile.TryLoadLatestAssembly() || csProjFile.TryRecompile())
+                if (csProjFile.TryLoadLatestAssembly(Compiler.BuildMode.Debug) || csProjFile.TryRecompile())
                 {
                     InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
                 }
@@ -169,7 +174,7 @@ internal static class ProjectSetup
 
             foreach (var project in projects)
             {
-                project.CsProjectFile.RemoveOldBuilds();
+                project.CsProjectFile.RemoveOldBuilds(Compiler.BuildMode.Debug);
             }
 
             #if DEBUG
