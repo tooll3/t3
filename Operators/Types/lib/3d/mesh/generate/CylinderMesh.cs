@@ -188,8 +188,8 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
 
                                 // Write vertex
                                 var capUvOffset = isLowerCap 
-                                                      ? new Vector2(-0.25f, -0.25f)
-                                                      : new Vector2(0.25f, -0.25f);
+                                                      ? new Vector2(0.25f, 0.75f)
+                                                      : new Vector2(0.75f, 0.75f);
                                 
                                 p = Vector3.TransformNormal(p, rotationMatrix);                                
                                 _vertexBufferData[vertexIndex] = new PbrVertex
