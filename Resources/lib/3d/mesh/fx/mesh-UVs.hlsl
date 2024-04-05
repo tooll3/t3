@@ -1,19 +1,15 @@
-#include "lib/shared/hash-functions.hlsl"
+//#include "lib/shared/hash-functions.hlsl"
 // #include "lib/shared/point.hlsl"
-#include "lib/shared/quat-functions.hlsl"
+//#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
 {
     float BlendFactor;
-    float BlendMode;
-    float PairingMode;
-    float Width;
-    float Scatter;
 }
 
 StructuredBuffer<PbrVertex> VerticesA : t0;        // input
-StructuredBuffer<PbrVertex> VerticesB : t1;        // input
+
 RWStructuredBuffer<PbrVertex> ResultVertices : u0; // output
 
 [numthreads(64, 1, 1)] void main(uint3 i
@@ -22,64 +18,23 @@ RWStructuredBuffer<PbrVertex> ResultVertices : u0; // output
     uint resultCount, countA, countB, stride;
     ResultVertices.GetDimensions(resultCount, stride);
     VerticesA.GetDimensions(countA, stride);
-    VerticesB.GetDimensions(countB, stride);
+
 
     if (i.x > resultCount)
         return;
 
     uint aIndex = i.x;
-    uint bIndex = i.x;
 
     float t = i.x / (float)resultCount;
 
-    if (PairingMode > 0.5 && countA != countB)
-    {
-        aIndex = (int)(countA * t);
-        bIndex = (int)(countB * t);
-    }
-
     PbrVertex A = VerticesA[aIndex];
-    PbrVertex B = VerticesB[bIndex];
 
-    float f = 0;
-
-    if (BlendMode < 0.5)
-    {
-        f = BlendFactor;
-    }
-    else if (BlendMode < 1.5)
-    {
-        f = A.Selected;
-    }
-    else if (BlendMode < 2.5)
-    {
-        f = (1 - B.Selected);
-    }
-
-    // Ranged
-    // see https://www.desmos.com/calculator/zxs1fy06uh
-    else if (BlendMode < 3.5)
-    {
-        f = 1 - saturate((t - BlendFactor) / Width - BlendFactor + 1);
-    }
-    else
-    {
-        float b = BlendFactor % 2;
-        if (b > 1)
-        {
-            b = 2 - b;
-            t = 1 - t;
-        }
-        f = 1 - smoothstep(0, 1, saturate((t - b) / Width - b + 1));
-    }
-
-    float fallOffFromCenter = smoothstep(0, 1, 1 - abs(f - 0.5) * 2);
-    f += (hash11(t) - 0.5) * Scatter * fallOffFromCenter;
+    float f = BlendFactor;
 
     ResultVertices[i.x].Position = lerp(A.Position, float3(A.TexCoord,0) , f);
     ResultVertices[i.x].Normal = lerp(A.Normal,float3(0,0,1), f); 
     ResultVertices[i.x].Tangent = lerp(A.Tangent, float3(1,0,0), f);
     ResultVertices[i.x].Bitangent = lerp(A.Bitangent, float3(0,1,0), f);
     ResultVertices[i.x].TexCoord = A.TexCoord;
-    ResultVertices[i.x].Selected = lerp(A.Selected, B.Selected, f);
+    ResultVertices[i.x].Selected = A.Selected;
 }
