@@ -1,52 +1,24 @@
 {
-  "Id": "68cf773d-30ac-4ae0-bc1e-b7a17ea322bb"/*UvsViewer*/,
-  "Description": "",
+  "Id": "68cf773d-30ac-4ae0-bc1e-b7a17ea322bb"/*UVsViewer*/,
+  "Description": "Morph a mesh to its UV map. It can be useful when you edit the texture of a mesh. \n\n[TransformMeshUVs] [MeshProjectUV]",
   "InputUis": [
     {
-      "InputId": "4ccfb3fe-5c64-45d6-8b3f-63249c69e146"/*MeshA*/,
+      "InputId": "4ccfb3fe-5c64-45d6-8b3f-63249c69e146"/*Mesh*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -458.9133,
-        "Y": 1142.6947
+        "X": -493.16177,
+        "Y": 823.9202
       }
     },
     {
       "InputId": "017cf5d0-5e39-480e-9a23-ce3d6e1c0d40"/*BlendValue*/,
       "Position": {
-        "X": -453.51883,
-        "Y": 769.64264
+        "X": -485.13284,
+        "Y": 992.25793
       },
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
-    },
-    {
-      "InputId": "09a187f9-1a96-4d1c-84be-522061af7e49"/*Scatter*/,
-      "Position": {
-        "X": -452.91107,
-        "Y": 998.6807
-      }
-    },
-    {
-      "InputId": "0d249c59-d48b-4329-9ad0-fb009e90a700"/*BlendMode*/,
-      "Position": {
-        "X": -453.51883,
-        "Y": 814.64264
-      }
-    },
-    {
-      "InputId": "3efbc6d9-8386-4160-8510-d4dcd4da37d6"/*RangeWidth*/,
-      "Position": {
-        "X": -452.91107,
-        "Y": 953.6807
-      }
-    },
-    {
-      "InputId": "3bb4a7d7-f101-478b-ad99-1bfe3418179e"/*Pairing*/,
-      "Position": {
-        "X": -453.51883,
-        "Y": 859.64264
-      }
     }
   ],
   "SymbolChildUis": [
@@ -73,14 +45,7 @@
       },
       "Position": {
         "X": 298.73434,
-        "Y": 979.3921
-      }
-    },
-    {
-      "ChildId": "215732b2-a09e-4815-909a-2f22d8263dc0"/*IntToFloat*/,
-      "Position": {
-        "X": -323.51883,
-        "Y": 814.64264
+        "Y": 966.3921
       }
     },
     {
@@ -112,24 +77,10 @@
       }
     },
     {
-      "ChildId": "e7e7ab7a-a176-4595-b894-e58cb4ed5530"/*IntToFloat*/,
-      "Position": {
-        "X": -323.51883,
-        "Y": 870.64264
-      }
-    },
-    {
       "ChildId": "d1b12e3f-af1f-4d86-a487-0f8fe3640c9c"/*_MeshBufferComponents*/,
       "Position": {
         "X": -308.9133,
         "Y": 1142.6947
-      }
-    },
-    {
-      "ChildId": "4a0298b3-a054-4e80-b768-b09de4408c8d"/*_MeshBufferComponents*/,
-      "Position": {
-        "X": -310.26855,
-        "Y": 1204.6438
       }
     },
     {
@@ -158,13 +109,6 @@
       "Position": {
         "X": -1.2656555,
         "Y": 1057.6326
-      }
-    },
-    {
-      "ChildId": "94605985-2f92-4ce7-ae70-1502c0f9674b"/*GetBufferComponents*/,
-      "Position": {
-        "X": -160.26855,
-        "Y": 1204.6438
       }
     }
   ],
