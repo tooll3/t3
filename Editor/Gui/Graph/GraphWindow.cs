@@ -212,30 +212,29 @@ namespace T3.Editor.Gui.Graph
             if (UserSettings.Config.ShowMiniMap)
                 DrawMiniMap(_composition, GraphCanvas);
 
-            if (_compositionForDisposal != null)
+            if (_compositionsForDisposal.TryPeek(out var latestComposition))
             {
-                if (_compositionForDisposal.NeedsReload) 
+                if (!_compositionPath.Contains(latestComposition.SymbolChildId))
                 {
-                    _duplicateSymbolDialog.ShowNextFrame(); // actually shows this frame
-                    var instance = _compositionForDisposal.Instance;
-                    var parent = instance.Parent;
-                    var symbolChildUi = parent.GetSymbolUi().ChildUis[instance.SymbolChildId];
-                    _duplicateSymbolDialog.Draw(compositionOp: _compositionForDisposal.Instance.Parent,
-                                                selectedChildUis: [symbolChildUi],
-                                                nameSpace: ref _dupeReadonlyNamespace,
-                                                newTypeName: ref _dupeReadonlyName,
-                                                description: ref _dupeReadonlyDescription,
-                                                isReload: true);
+                    if (latestComposition.NeedsReload)
+                    {
+                        _duplicateSymbolDialog.ShowNextFrame(); // actually shows this frame
+                        var instance = latestComposition.Instance;
+                        var parent = instance.Parent;
+                        var symbolChildUi = parent.GetSymbolUi().ChildUis[instance.SymbolChildId];
+                        _duplicateSymbolDialog.Draw(compositionOp: latestComposition.Instance.Parent,
+                                                    selectedChildUis: [symbolChildUi],
+                                                    nameSpace: ref _dupeReadonlyNamespace,
+                                                    newTypeName: ref _dupeReadonlyName,
+                                                    description: ref _dupeReadonlyDescription,
+                                                    isReload: true);
+                    }
+                    else
+                    {
+                        DisposeLatestComposition();
+                    }
                 }
-                else
-                {
-                    _compositionsWaitingForDisposal.Add(_compositionForDisposal);
-                    _compositionForDisposal = null;
-                }
-
             }
-            
-            DisposeOfCompositions();
         }
 
         private static void DrawMiniMap(Composition compositionOp, ScalableCanvas canvas)
