@@ -41,21 +41,27 @@ internal sealed partial class GraphWindow
             return false;
         }
 
-        var previousComposition = _composition;
-
         // composition is only null once in the very first call to TrySetCompositionOp
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-        if (previousComposition != null)
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+        if (_composition != null)
         {
             if (path[0] != RootInstance.Instance.SymbolChildId)
             {
                 throw new Exception("Root instance is not the first element in the path");
             }
 
-            if (previousComposition.SymbolChildId == newCompositionInstance.SymbolChildId)
+            if (_composition.SymbolChildId == newCompositionInstance.SymbolChildId)
+            {
+                if (nextSelectedUi != null)
+                {
+                    var instance = _composition.Instance.Children[nextSelectedUi.Value];
+                    GraphCanvas.NodeSelection.SetSelection(instance.GetChildUi()!, instance);
+                }
                 return true;
+            }
         }
 
+        var previousComposition = _composition;
         _composition = Composition.GetFor(newCompositionInstance)!;
         _compositionPath.Clear();
         _compositionPath.AddRange(path);
