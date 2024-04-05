@@ -22,26 +22,18 @@ internal sealed partial class CsProjectFile
         var propertyGroup = project.AddPropertyGroup();
         foreach (var defaultProperty in DefaultProperties)
         {
-            var propertyName = PropertyTypeNames[defaultProperty.PropertyType];
-
-            string value;
-            switch (defaultProperty.PropertyType)
+            if (defaultProperty.PropertyType is PropertyType.ProjectGuid or PropertyType.RootNamespace)
             {
-                case PropertyType.ProjectGuid:
-                    value = projectGuid.ToString();
-                    break;
-                case PropertyType.RootNamespace:
-                    Log.Warning("Cannot set default root namespace here - remove it from defaults\n" + Environment.StackTrace);
-                    continue;
-                default:
-                    value = defaultProperty.Value;
-                    break;
+                Log.Warning($"Cannot set {defaultProperty.PropertyType} here - remove it from defaults\n" + Environment.StackTrace);
+                continue;
             }
             
-            propertyGroup.AddProperty(propertyName, value);
+            var propertyName = PropertyTypeNames[defaultProperty.PropertyType];
+            propertyGroup.AddProperty(propertyName, defaultProperty.Value);
         }
         
         propertyGroup.AddProperty(PropertyTypeNames[PropertyType.RootNamespace], projectNamespace);
+        propertyGroup.AddProperty(PropertyTypeNames[PropertyType.ProjectGuid], projectGuid.ToString());
     }
 
     private static void AddDefaultReferenceGroup(ProjectRootElement project)
