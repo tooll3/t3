@@ -7,7 +7,7 @@ using T3.Core.Logging;
 
 namespace T3.Core.Compilation;
 
-public class RuntimeAssemblies
+public static class RuntimeAssemblies
 {
     public static readonly string CorePath;
     public static readonly string CoreDirectory;
@@ -75,6 +75,11 @@ public class RuntimeAssemblies
             info = null;
             return false;
         }
+    }
+
+    public static string ToBasicVersionString(this Version versionPrefix)
+    {
+        return $"{versionPrefix.Major}.{versionPrefix.Minor}.{versionPrefix.Build}";
     }
 
     private struct AssemblyNameAndPath

@@ -46,11 +46,6 @@ namespace T3.Editor
             }
         }
 
-        public static string ToBasicVersionString(this Version version)
-        {
-            return $"{version.Major}.{version.Minor}.{version.Build}";
-        }
-
         [STAThread]
         private static void Main()
         {

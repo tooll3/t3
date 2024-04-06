@@ -151,7 +151,7 @@ internal static class ProjectSetup
                                return;
                            }
                            
-                           if (csProjFile.TryLoadLatestAssembly(Compiler.BuildMode.Debug))
+                           if (csProjFile.TryLoadLatestAssembly())
                            {
                                InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
                            }
@@ -164,7 +164,7 @@ internal static class ProjectSetup
             foreach (var csProjFile in projectsNeedingCompilation)
             {
                 // check again if assembly can be loaded as previous compilations could have compiled this project
-                if (csProjFile.TryLoadLatestAssembly(Compiler.BuildMode.Debug) || csProjFile.TryRecompile())
+                if (csProjFile.TryLoadLatestAssembly() || csProjFile.TryRecompile())
                 {
                     InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
                 }

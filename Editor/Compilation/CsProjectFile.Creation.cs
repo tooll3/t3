@@ -24,18 +24,18 @@ internal sealed partial class CsProjectFile
         var propertyGroup = project.AddPropertyGroup();
         foreach (var defaultProperty in DefaultProperties)
         {
-            if (defaultProperty.PropertyType is PropertyType.HomeGuid or PropertyType.RootNamespace)
+            var propertyName = GetNameOf(defaultProperty.Key);
+            if (defaultProperty.Key is PropertyType.HomeGuid or PropertyType.RootNamespace)
             {
-                Log.Warning($"Cannot set {defaultProperty.PropertyType} here - remove it from defaults\n" + Environment.StackTrace);
+                Log.Warning($"Cannot set {propertyName} here - remove it from defaults\n" + Environment.StackTrace);
                 continue;
             }
             
-            var propertyName = PropertyTypeNames[defaultProperty.PropertyType];
             propertyGroup.AddProperty(propertyName, defaultProperty.Value);
         }
         
-        propertyGroup.AddProperty(PropertyTypeNames[PropertyType.RootNamespace], projectNamespace);
-        propertyGroup.AddProperty(PropertyTypeNames[PropertyType.HomeGuid], homeGuid.ToString());
+        propertyGroup.AddProperty(GetNameOf(PropertyType.RootNamespace), projectNamespace);
+        propertyGroup.AddProperty(GetNameOf(PropertyType.HomeGuid), homeGuid.ToString());
     }
 
     private static void AddDefaultReferenceGroup(ProjectRootElement project)
@@ -43,17 +43,17 @@ internal sealed partial class CsProjectFile
         var itemGroup = project.AddItemGroup();
         foreach (var reference in DefaultReferences)
         {
-            var item = itemGroup.AddItem(ItemTypeNames[reference.Type], reference.Include);
+            var item = itemGroup.AddItem(GetNameOf(reference.Type), reference.Include);
             foreach (var tag in reference.Tags)
             {
-                item.AddMetadata(MetadataTagTypeNames[tag.Tag], tag.Value, tag.AddAsAttribute);
+                item.AddMetadata(GetNameOf(tag.Tag), tag.Value, tag.AddAsAttribute);
             }
         }
     }
 
     private static void AddDefaultContent(ProjectRootElement project)
     {
-        var contentTagName = ItemTypeNames[ItemType.Content];
+        var contentTagName = GetNameOf(ItemType.Content);
         
         foreach (var group in DefaultContent)
         {
@@ -62,16 +62,14 @@ internal sealed partial class CsProjectFile
             foreach (var content in group.Content)
             {
                 var item = itemGroup.AddItem(contentTagName, content.Include);
-                if(content.Exclude != null)
-                    item.Exclude = content.Exclude;
+                if(content.TryGetExclude(out var exclude))
+                    item.Exclude = exclude;
                 
                 foreach (var tag in content.GetTags())
                 {
-                    var name = MetadataTagTypeNames[tag.Tag];
-                    item.AddMetadata(name, tag.Value, tag.AddAsAttribute);
+                    item.AddMetadata(GetNameOf(tag.Tag), tag.Value, tag.AddAsAttribute);
                 }
             }
-            
         }
     }
 
@@ -81,13 +79,15 @@ internal sealed partial class CsProjectFile
         target.AfterTargets = "AfterBuild";
         
         var propertyGroup = target.AddPropertyGroup();
-        var homeGuidPropertyName = PropertyTypeNames[PropertyType.HomeGuid];
-        var rootNamespacePropertyName = PropertyTypeNames[PropertyType.RootNamespace];
+        var homeGuidPropertyName = GetNameOf(PropertyType.HomeGuid);
+        var rootNamespacePropertyName = GetNameOf(PropertyType.RootNamespace);
+        var editorVersionPropertyName = GetNameOf(PropertyType.EditorVersion);
         
         propertyGroup.AddProperty("PackageInfoJsonContent", "{\n" +
                                                 $"\t\"HomeGuid\": \"{EvaluatedVariable(homeGuidPropertyName)}\", \n" +
                                                 $"\t\"RootNamespace\": \"{EvaluatedVariable(rootNamespacePropertyName)}\"\n" +
-                                                "}");
+                                                $"\t\"EditorVersion\": \"{EvaluatedVariable(editorVersionPropertyName)}\", \n" +
+                                                "}\n");
         
         //<WriteLinesToFile File="$(OutputPath)OperatorPackage.json" Lines="$(PackageInfoJsonContent)" Overwrite="True" Encoding="UTF-8"/>
         var task = target.AddTask("WriteLinesToFile");

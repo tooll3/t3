@@ -1,14 +1,16 @@
 #nullable enable
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Build.Construction;
 
 namespace T3.Editor.Compilation;
 
 internal partial class CsProjectFile
 {
+    [return: NotNullIfNotNull(nameof(defaultValue))]
     private static string? GetProperty(PropertyType propertyType, ProjectRootElement project, string? defaultValue = null)
     {
         var properties = project.Properties;
-        var propertyName = PropertyTypeNames[propertyType];
+        var propertyName = GetNameOf(propertyType);
         var property = properties.SingleOrDefault(x => x.Name == propertyName);
 
         if (property != null)
@@ -20,12 +22,10 @@ internal partial class CsProjectFile
 
         if (defaultValue == null)
         {
-            if (DefaultProperties.All(x => x.PropertyType != propertyType))
+            if (!DefaultProperties.TryGetValue(propertyType, out defaultValue))
             {
                 return null;
             }
-
-            defaultValue = DefaultProperties.First(x => x.PropertyType == propertyType).Value;
         }
 
         property = SetOrAddProperty(propertyType, defaultValue, project);
@@ -35,7 +35,7 @@ internal partial class CsProjectFile
     private static ProjectPropertyElement SetOrAddProperty(PropertyType propertyType, string value, ProjectRootElement project)
     {
         var properties = project.Properties;
-        var propertyName = PropertyTypeNames[propertyType];
+        var propertyName = GetNameOf(propertyType);
         var property = properties.SingleOrDefault(x => x.Name == propertyName);
 
         if (property == null)
