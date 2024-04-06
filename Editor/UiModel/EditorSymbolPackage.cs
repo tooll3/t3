@@ -283,7 +283,7 @@ internal class EditorSymbolPackage : SymbolPackage
             return true;
         }
 
-        var rootSymboLUi = SymbolUiDict[AssemblyInformation.HomeGuid];
+        var rootSymboLUi = SymbolUiDict[AssemblyInformation.ReleaseInfo!.HomeGuid];
         Log.Debug($"{DisplayName}: Found home symbol");
 
         var symbol = rootSymboLUi.Symbol;
@@ -297,8 +297,8 @@ internal class EditorSymbolPackage : SymbolPackage
         return true;
     }
 
-    internal bool HasHome => AssemblyInformation.HasHome;
-    
+    internal bool HasHome => AssemblyInformation.ReleaseInfo != null 
+                             && AssemblyInformation.ReleaseInfo.HomeGuid != Guid.Empty;
     
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUiDict = new();
     public IReadOnlyDictionary<Guid, SymbolUi> SymbolUis => SymbolUiDict;

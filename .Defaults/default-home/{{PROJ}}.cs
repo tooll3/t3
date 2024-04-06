@@ -8,7 +8,7 @@ using T3.Core.Resource;
 
 namespace {{NAMESPACE}};
 
-[Guid("{{GUID}}"), Home]
+[Guid("{{GUID}}")]
 internal sealed class {{PROJ}} : Instance<{{PROJ}}>
 {
 }

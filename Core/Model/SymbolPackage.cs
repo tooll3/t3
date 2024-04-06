@@ -267,13 +267,13 @@ public abstract partial class SymbolPackage : IResourcePackage
     {
         get
         {
-            if (!AssemblyInformation.HasHome)
+            if (AssemblyInformation.ReleaseInfo.HomeGuid == Guid.Empty)
             {
                 return AssemblyInformation.Name;
             }
 
             // hacky way of getting the home namespace
-            var typeInfo = AssemblyInformation.OperatorTypeInfo[AssemblyInformation.HomeGuid].Type;
+            var typeInfo = AssemblyInformation.OperatorTypeInfo[AssemblyInformation.ReleaseInfo.HomeGuid].Type;
             return typeInfo.Namespace! + "." + typeInfo.Name; // alias is fully-qualified project name
         }
     }

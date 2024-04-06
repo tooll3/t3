@@ -38,4 +38,18 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
+
+    <!-- Add guid and root namespace to packageinfo -->
+    <Target Name="CreatePackageInfo" AfterTargets="AfterBuild">
+        <PropertyGroup>
+            <PackageInfoJsonContent>
+                {
+                "HomeGuid": "$(HomeGuid)",
+                "RootNamespace": "$(RootNamespace)"
+                }
+            </PackageInfoJsonContent>
+        </PropertyGroup>
+        <WriteLinesToFile File="$(OutputPath)OperatorPackage.json" Lines="$(PackageInfoJsonContent)" Overwrite="True" Encoding="UTF-8"/>
+    </Target>
 </Project>
