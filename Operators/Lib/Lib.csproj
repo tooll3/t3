@@ -10,6 +10,7 @@
         <Platforms>AnyCPU</Platforms>
         <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
         <VersionPrefix>1.0.0</VersionPrefix>
+        <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Core\Core.csproj" Private="false"/>
@@ -44,4 +45,16 @@
         </Content>
     </ItemGroup>
 
+    <!-- Add guid and root namespace to packageinfo -->
+    <Target Name="CreatePackageInfo" AfterTargets="AfterBuild">
+        <PropertyGroup>
+            <PackageInfoJsonContent>
+{
+    "HomeGuid": "$(HomeGuid)",
+    "RootNamespace": "$(RootNamespace)"
+}
+            </PackageInfoJsonContent>
+        </PropertyGroup>
+        <WriteLinesToFile File="$(OutputPath)OperatorPackage.json" Lines="$(PackageInfoJsonContent)" Overwrite="True" Encoding="UTF-8"/>
+    </Target>
 </Project>

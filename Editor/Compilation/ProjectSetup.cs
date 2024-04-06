@@ -37,7 +37,8 @@ internal static class ProjectSetup
             return false;
         }
 
-        if (!newCsProj.Assembly.HasHome)
+        var releaseInfo = newCsProj.Assembly.ReleaseInfo;
+        if (releaseInfo.HomeGuid == Guid.Empty)
         {
             Log.Error("Failed to create project home");
             newProject = null;
@@ -48,7 +49,8 @@ internal static class ProjectSetup
         newProject.InitializeResources();
 
         UpdateSymbolPackages(newProject);
-        if (!newProject.AssemblyInformation.HasHome)
+        var newReleaseInfo = newProject.AssemblyInformation.ReleaseInfo;
+        if (newReleaseInfo.HomeGuid == Guid.Empty)
         {
             Log.Error("Failed to find project home");
             RemoveSymbolPackage(newProject);

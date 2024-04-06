@@ -1,3 +1,5 @@
+#nullable enable
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
@@ -30,7 +32,7 @@ public static class JsonUtils
         return result;
     }
 
-    public static bool TryLoadingJson<T>(string filepath, out T? result) where T : class // Is this generic constraint necessary?
+    public static bool TryLoadingJson<T>(string filepath, [NotNullWhen(true)] out T? result)
     {
         if (!File.Exists(filepath))
         {
@@ -62,7 +64,7 @@ public static class JsonUtils
         }
     }
 
-    public static bool TrySaveJson<T>(T dataObject, string filepath) where T : class // Is this generic constraint necessary?
+    public static bool TrySaveJson<T>(T dataObject, string filepath) 
     {
         if (string.IsNullOrEmpty(filepath))
         {

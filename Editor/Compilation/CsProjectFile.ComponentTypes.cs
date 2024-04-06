@@ -14,7 +14,7 @@ internal sealed partial class CsProjectFile
         DisableTransitiveProjectReferences,
         VersionPrefix,
         Nullable,
-        ProjectGuid,
+        HomeGuid,
         EditorVersion
     }
 
@@ -97,11 +97,11 @@ internal sealed partial class CsProjectFile
             {
                 (Name: "RootNamespace", Type: PropertyType.RootNamespace),
                 (Name: "TargetFramework", Type: PropertyType.TargetFramework),
-                (Name: "DisableTransitiveProjectReferences",
-                 Type: PropertyType.DisableTransitiveProjectReferences),
+                (Name: "DisableTransitiveProjectReferences", Type: PropertyType.DisableTransitiveProjectReferences),
                 (Name: "VersionPrefix", Type: PropertyType.VersionPrefix),
                 (Name: "Nullable", Type: PropertyType.Nullable),
-                (Name: "ProjectGuid", Type: PropertyType.ProjectGuid),
+                (Name: "HomeGuid", Type: PropertyType.HomeGuid),
+                (Name: "EditorVersion", Type: PropertyType.EditorVersion)
             }
        .ToFrozenDictionary(x => x.Type, x => x.Name);
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -9,12 +10,14 @@ using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.DependencyModel.Resolution;
+using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Serialization;
 
 namespace T3.Core.Compilation;
 
@@ -52,6 +55,10 @@ public readonly record struct OutputSlotInfo(string Name, OutputAttribute Attrib
     }
 }
 
+[Serializable]
+
+public readonly record struct ReleaseInfo(Guid HomeGuid, string RootNamespace);
+
 public sealed class AssemblyInformation
 {
     public readonly string Name;
@@ -60,9 +67,8 @@ public sealed class AssemblyInformation
     public Version? Version => _assemblyName.Version;
     public readonly IReadOnlyCollection<string> AssemblyPaths;
 
-    public Guid HomeGuid { get; private set; } = Guid.Empty;
-    public bool HasHome => HomeGuid != Guid.Empty;
     public bool IsOperatorAssembly => _operatorTypeInfo.Count > 0;
+    public const string PackageInfoFileName = "OperatorPackage.json";
 
     private readonly AssemblyName _assemblyName;
     private readonly Assembly _assembly;
@@ -78,6 +84,8 @@ public sealed class AssemblyInformation
     private IEnumerable<Assembly> AllAssemblies => _loadContext?.Assemblies ?? Enumerable.Empty<Assembly>();
     private readonly List<string> _assemblyPaths = [];
 
+    public readonly ReleaseInfo ReleaseInfo;
+
     internal AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
     {
         AssemblyPaths = _assemblyPaths;
@@ -88,6 +96,12 @@ public sealed class AssemblyInformation
         _assemblyName = assemblyName;
         _assembly = assembly;
         Directory = System.IO.Path.GetDirectoryName(path)!;
+        
+        var packageInfoPath = System.IO.Path.Combine(Directory, PackageInfoFileName);
+        if (!JsonUtils.TryLoadingJson(packageInfoPath, out ReleaseInfo))
+        {
+            Log.Warning($"Failed to load package info from path {packageInfoPath}");
+        }
 
         _loadContext = loadContext;
 
@@ -171,17 +185,11 @@ public sealed class AssemblyInformation
     private void SetUpOperatorType(Type type)
     {
         var gotGuid = TryGetGuidOfType(type, out var id);
-        var isHome = type.GetCustomAttribute<HomeAttribute>() is not null;
 
         if (!gotGuid)
         {
             Log.Error($"Failed to get guid for {type.FullName}");
             return;
-        }
-
-        if (isHome)
-        {
-            HomeGuid = id;
         }
 
         var constructor = Expression.Lambda<Func<object>>(Expression.New(type)).Compile();
