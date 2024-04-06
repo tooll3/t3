@@ -20,6 +20,7 @@ namespace T3.Core.Resource
     public sealed partial class ResourceManager
     {
         public const string ResourcesSubfolder = "Resources";
+        public const char PathSeparator = '/';
         public static readonly ConcurrentDictionary<uint, AbstractResource> ResourcesById = new();
         public static IEnumerable<string> SharedResourceFolders => SharedResourcePackages.Select(x => x.ResourcesFolder);
 

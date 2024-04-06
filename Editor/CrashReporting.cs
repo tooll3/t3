@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using ImGuiNET;
 using Sentry;
 using T3.Core.Animation;
+using T3.Core.Compilation;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.AutoBackup;
 using T3.Editor.Gui.Commands;
