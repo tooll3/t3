@@ -14,7 +14,8 @@ internal sealed partial class CsProjectFile
         DisableTransitiveProjectReferences,
         VersionPrefix,
         Nullable,
-        ProjectGuid
+        ProjectGuid,
+        EditorVersion
     }
 
     private enum ItemType

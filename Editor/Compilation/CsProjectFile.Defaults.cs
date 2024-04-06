@@ -11,7 +11,8 @@ internal sealed partial class CsProjectFile
             new Property(PropertyType.TargetFramework, "net8.0-windows"),
             new Property(PropertyType.DisableTransitiveProjectReferences, "true"),
             new Property(PropertyType.VersionPrefix, "1.0.0"),
-            new Property(PropertyType.Nullable, "enable")
+            new Property(PropertyType.Nullable, "enable"),
+            new Property(PropertyType.EditorVersion, Program.Version.ToBasicVersionString())
         ];
     
     private static readonly TagValue PrivateEnabledTag = new(MetadataTagType.Private, "true", true);
