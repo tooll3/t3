@@ -232,15 +232,24 @@ namespace T3.Core.Resource
 
                 foreach (var path in searchFunc(package.ResourcesFolder, "*", SearchOption.AllDirectories))
                 {
-                    if (filters.Any(filter => StringUtils.MatchesFilter(Path.GetFileName(path), filter, true)))
+                    var pathSpan = path.AsSpan();
+                    var lastSlashIndex = pathSpan.LastIndexOf(Path.DirectorySeparatorChar);
+
+                    var fileNameSpan = lastSlashIndex == -1 ? pathSpan : pathSpan[(lastSlashIndex + 1)..];
+                    var fileName = fileNameSpan.ToString();
+
+                    foreach (var filter in filters)
                     {
-                        yield return pathMode switch
-                                         {
-                                             PathMode.Absolute => path.Replace('\\', '/'),
-                                             PathMode.Relative => path[(package.ResourcesFolder.Length + 1)..].Replace('\\', '/'),
-                                             PathMode.Aliased  => $"/{package.Alias}/{path[(package.ResourcesFolder.Length + 1)..]}".Replace('\\', '/'),
-                                             _                 => throw new ArgumentOutOfRangeException(nameof(pathMode), pathMode, null)
-                                         };
+                        if (StringUtils.MatchesFilter(fileName, filter, true))
+                        {
+                            yield return pathMode switch
+                                             {
+                                                 PathMode.Absolute => path.Replace('\\', '/'),
+                                                 PathMode.Relative => path[(package.ResourcesFolder.Length + 1)..].Replace('\\', '/'),
+                                                 PathMode.Aliased  => $"/{package.Alias}/{path[(package.ResourcesFolder.Length + 1)..]}".Replace('\\', '/'),
+                                                 _                 => throw new ArgumentOutOfRangeException(nameof(pathMode), pathMode, null)
+                                             };
+                        }
                     }
                 }
             }
