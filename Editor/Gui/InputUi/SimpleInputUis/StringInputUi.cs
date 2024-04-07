@@ -133,12 +133,20 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             if (warning != string.Empty)
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAnimated.Rgba);
 
+            string[] uiFilter;
+            if(filter == null)
+                uiFilter = Array.Empty<string>();
+            else if (!filter.Contains('|'))
+                uiFilter = [filter];
+            else
+                uiFilter = filter.Split('|')[1].Split(';');
+
             var fileFiltersInCommon = selectedInstances
                                      .Where(x => x is IDescriptiveFilename)
                                      .Cast<IDescriptiveFilename>()
                                      .Select(x => x.FileFilter)
                                      .Aggregate((a, b) => a.Intersect(b))
-                                     .Append(filter != null && filter.Contains('|') ? filter.Split('|')[1] : filter)
+                                     .Concat(uiFilter)
                                      .Where(s => !string.IsNullOrWhiteSpace(s))
                                      .Distinct()
                                      .ToArray();
