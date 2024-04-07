@@ -9,7 +9,7 @@
         "Y": 46.995968
       },
       "Usage": "FilePath",
-      "FileFilter": "All Files|*.*|Image files (png,jpg,jpeg,tga,gif,dds)bmp|*.png;*.jpg;*.jpeg;*.tga;*.gif;*.dds;*.bmp"
+      "FileFilter": "Image files (png,jpg,jpeg,tga,gif,dds)bmp|*.png;*.jpg;*.jpeg;*.tga;*.gif;*.dds;*.bmp"
     }
   ],
   "SymbolChildUis": [],

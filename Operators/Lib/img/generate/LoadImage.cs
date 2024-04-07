@@ -84,7 +84,7 @@ namespace lib.img.generate
         public readonly InputSlot<string> Path = new();
 
         public IEnumerable<string> FileFilter => FileFilters;
-        private static readonly string[] FileFilters = { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.tga", "*.dds" };
+        private static readonly string[] FileFilters = ["*.png", "*.jpg", "*.jpeg", "*.bmp", "*.tga", "*.dds", "*.gif"];
         public InputSlot<string> SourcePathSlot => Path;
     }
 }
