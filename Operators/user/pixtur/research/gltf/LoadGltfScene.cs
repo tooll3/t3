@@ -232,6 +232,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             ParseChildren(child.VisualChildren, structureNode);
         }
     }
+    
+    public IEnumerable<string> FileFilter => FileFilters;
+    private static readonly string[] FileFilters = ["*.gltf"];
 
     #region Asset extraction
     /// <summary>

@@ -20,6 +20,8 @@ namespace T3.Editor.UiModel
         {
             _id = symbol.Id;
             _package = symbol.SymbolPackage;
+            if(_package == null)
+                throw new ArgumentException("Symbol must have a package");
             
             InputUis = new Dictionary<Guid, IInputUi>();
             OutputUis = new Dictionary<Guid, IOutputUi>();

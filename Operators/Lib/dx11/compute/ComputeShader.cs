@@ -61,6 +61,8 @@ namespace lib.dx11.compute
 
         private string _statusWarning;
         private string _sourcePath;
+        public IEnumerable<string> FileFilter => FileFilters;
+        private static readonly string[] FileFilters = ["*.hlsl"];
         #region IShaderOperator implementation
         private IShaderOperator<ComputeShaderD3D> ShaderOperatorImpl => this;
         InputSlot<string> IShaderOperator<ComputeShaderD3D>.Source => Source;

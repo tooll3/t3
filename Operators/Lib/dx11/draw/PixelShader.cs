@@ -58,6 +58,8 @@ namespace lib.dx11.draw
         [Input(Guid = "BE9B3DC1-7122-4B3D-B936-CCCF2581B69E")]
         public readonly InputSlot<string> DebugName = new();
 
+        public IEnumerable<string> FileFilter => FileFilters;
+        private static readonly string[] FileFilters = ["*.hlsl"];
 
         #region IShaderOperator implementation
         private IShaderOperator<PixelShaderD3D> ShaderOperatorImpl => this;

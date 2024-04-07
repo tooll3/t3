@@ -1,15 +1,12 @@
-﻿using System.IO;
-using ImGuiNET;
+﻿using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
 using T3.Serialization;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis
@@ -106,31 +103,16 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 var filter = request.Filter;
                 var value = request.Value;
                 
-                if(filter != null && filter.Contains('|')) // things like LoadObj have a filter like "OBJ-File|*.obj"
-                    filter = filter.Split('|')[1];
-                
                 var drawnItems = ResourceManager.EnumerateResources(filter, request.IsFolder, request.ResourcePackages, ResourceManager.PathMode.Aliased);
                 
                 var changed = InputWithTypeAheadSearch.Draw("##filePathSearch", ref value, drawnItems);
                 return new InputResult(changed, value);
             }
         }
-
-        private static InputEditStateFlags DrawEditWithSelectors(FileOperations.FilePickerTypes type, ref string value, string filter = null)
-        {
-            return DrawFileInput(type, ref value, filter, Draw);
-
-            static InputResult Draw(InputRequest request)
-            {
-                var value = request.Value;
-                var changed = DrawDefaultTextEdit(ref value);
-                return new InputResult(changed, value);
-            }
-        }
         
         private readonly record struct InputResult(bool Modified, string Value);
 
-        private readonly record struct InputRequest(string Value, string Filter, bool IsFolder, IEnumerable<IResourcePackage> ResourcePackages);
+        private readonly record struct InputRequest(string Value, string[] Filter, bool IsFolder, IEnumerable<IResourcePackage> ResourcePackages);
 
         private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string value, string filter, Func<InputRequest, InputResult> draw)
         {
@@ -151,7 +133,17 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             if (warning != string.Empty)
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAnimated.Rgba);
 
-            var result = draw(new InputRequest(value, filter, isFolder, packagesInCommon));
+            var fileFiltersInCommon = selectedInstances
+                                     .Where(x => x is IDescriptiveFilename)
+                                     .Cast<IDescriptiveFilename>()
+                                     .Select(x => x.FileFilter)
+                                     .Aggregate((a, b) => a.Intersect(b))
+                                     .Append(filter != null && filter.Contains('|') ? filter.Split('|')[1] : filter)
+                                     .Where(s => !string.IsNullOrWhiteSpace(s))
+                                     .Distinct()
+                                     .ToArray();
+
+            var result = draw(new InputRequest(value, fileFiltersInCommon, isFolder, packagesInCommon));
             value = result.Value;
             var inputEditStateFlags = result.Modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
 

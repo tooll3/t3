@@ -202,28 +202,36 @@ namespace T3.Core.Resource
         private static readonly List<IResourcePackage> ShaderPackages = new(4);
         public enum PathMode {Absolute, Relative, Aliased}
 
-        public static IEnumerable<string> EnumerateResources(string? filter, bool isFolder, IEnumerable<IResourcePackage> packages, PathMode pathMode = PathMode.Relative)
+        public static IEnumerable<string> EnumerateResources(string[] fileExtensionFilter, bool isFolder, IEnumerable<IResourcePackage> packages, PathMode pathMode = PathMode.Relative)
         {
-            filter ??= isFolder ? "*" : "*.*";
-            var filterAcceptsShaders = !isFolder && filter.EndsWith(".hlsl") || filter.EndsWith('*');
+            var filterAcceptsShaders = !isFolder;
+            
+            // if there's an "all" wildcard, all other filters are irrelevant
+            if(fileExtensionFilter.Length == 0 || fileExtensionFilter.Length > 0 && (fileExtensionFilter.Contains("*.*") || fileExtensionFilter.Contains("*")))
+            {
+                fileExtensionFilter = isFolder ? ["*"] : ["*.*"];
+            }
+
+            filterAcceptsShaders = filterAcceptsShaders && fileExtensionFilter.Any(x => x.EndsWith(".hlsl") || x.EndsWith('*'));
             
             var allFiles = packages
                           .Concat(SharedResourcePackages)
                           .Distinct()
-                          .SelectMany(x => AllEntriesOf(x, filter, isFolder, pathMode));
+                          .SelectMany(x => AllEntriesOf(x, isFolder, pathMode, fileExtensionFilter));
 
             // handle always-shared shaders
             return !isFolder && filterAcceptsShaders 
-                       ? allFiles.Concat(SharedShaderPackages.Except(SharedResourcePackages).SelectMany(x => AllEntriesOf(x, ".hlsl", false, pathMode))) 
+                       ? allFiles.Concat(SharedShaderPackages.Except(SharedResourcePackages).SelectMany(x => AllEntriesOf(x, false, pathMode, ".hlsl"))) 
                        : allFiles;
             
-            static IEnumerable<string> AllEntriesOf(IResourcePackage package, string filter, bool useFolder, PathMode pathMode)
+            static IEnumerable<string> AllEntriesOf(IResourcePackage package, bool useFolder, PathMode pathMode, params string[] filters)
             {
-                var items = useFolder
-                                ? Directory.EnumerateDirectories(package.ResourcesFolder, filter, SearchOption.AllDirectories)
-                                           .Select(x => x.Replace('\\', '/'))
-                                : Directory.EnumerateFiles(package.ResourcesFolder, filter, SearchOption.AllDirectories)
-                                           .Select(x => x.Replace('\\', '/'));
+                Func<string, string, SearchOption, IEnumerable<string>> searchFunc = useFolder
+                                                                                     ? Directory.EnumerateDirectories
+                                                                                     : Directory.EnumerateFiles;
+
+                var items = filters.SelectMany(searchPattern => searchFunc(package.ResourcesFolder, searchPattern, SearchOption.AllDirectories))
+                                   .Select(x => x.Replace('\\', '/'));
 
                 return pathMode switch
                            {

@@ -4,13 +4,14 @@ using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
 namespace lib.img.generate
 {
 	[Guid("0b3436db-e283-436e-ba85-2f3a1de76a9d")]
-    public class LoadImage : Instance<LoadImage>
+    public class LoadImage : Instance<LoadImage>, IDescriptiveFilename
     {
         [Output(Guid = "{E0C4FEDD-5C2F-46C8-B67D-5667435FB037}")]
         public readonly Slot<Texture2D> Texture = new();
@@ -80,6 +81,10 @@ namespace lib.img.generate
         }
 
         [Input(Guid = "{76CC3811-4AE0-48B2-A119-890DB5A4EEB2}")]
-        public readonly InputSlot<string> Path = new();        
+        public readonly InputSlot<string> Path = new();
+
+        public IEnumerable<string> FileFilter => FileFilters;
+        private static readonly string[] FileFilters = { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.tga", "*.dds" };
+        public InputSlot<string> SourcePathSlot => Path;
     }
 }

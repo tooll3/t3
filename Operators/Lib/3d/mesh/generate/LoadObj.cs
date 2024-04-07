@@ -211,5 +211,7 @@ namespace lib._3d.mesh.generate
         public readonly InputSlot<float> ScaleFactor = new();
 
 
+        public IEnumerable<string> FileFilter => FileFilters;
+        private static readonly string[] FileFilters = ["*.obj"];
     }
 }
