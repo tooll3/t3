@@ -26,9 +26,6 @@ internal sealed partial class EditableSymbolProject
         UnmarkAsSaving();
     }
 
-    /// <summary>
-    /// Note: This does NOT clean up 
-    /// </summary>
     internal void SaveModifiedSymbols()
     {
         if (IsSaving)
@@ -53,7 +50,6 @@ internal sealed partial class EditableSymbolProject
 
         UnmarkAsSaving();
     }
-
    
     protected override void OnSymbolAdded(string? path, Symbol symbol)
     {
@@ -146,15 +142,17 @@ internal sealed partial class EditableSymbolProject
             var uiFilePath = pathHandler.UiFilePath ??= SymbolPathHandler.GetCorrectPath(symbolUi, this);
             WriteSymbolUi(symbolUi, uiFilePath);
             pathHandler.UiFilePath = uiFilePath;
-                
+
             #if DEBUG
-                string debug = $"{CsProjectFile.Name}: Saved [{symbol.Name}] to:\nSymbol: \"{symbolPath}\"\nUi: \"{uiFilePath}\"\nSource: \"{sourceCodePath}\"\n";
-                Log.Debug(debug);
+                var debug = $"{CsProjectFile.Name}: Saved [{symbol.Name}] to:\nSymbol: \"{symbolPath}\"\nUi: \"{uiFilePath}\"\nSource: \"{sourceCodePath}\"\n";
+            #else
+                var debug = $"{DisplayName}: Saved [{symbol.Name}]";
             #endif
+            Log.Debug(debug);
         }
         catch (Exception e)
         {
-            Log.Error($"Failed to save symbol {id}\n{e}");
+            Log.Error($"{DisplayName}: Failed to save [{symbol.Name}] {id}\n{e}");
         }
     }
 
