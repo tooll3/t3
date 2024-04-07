@@ -40,7 +40,7 @@ namespace T3.Editor.Gui;
 
 public static class T3Ui
 {
-    public static void InitializeEnvironment()
+    internal static void InitializeEnvironment()
     {
         //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
@@ -50,8 +50,8 @@ public static class T3Ui
         ThemeHandling.Initialize();
     }
 
-    public static readonly Playback DefaultTimelinePlayback = new();
-    public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new();
+    internal static readonly Playback DefaultTimelinePlayback = new();
+    internal static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new();
 
     private static void InitializeAfterAppWindowReady()
     {
@@ -64,7 +64,7 @@ public static class T3Ui
 
     private static bool _initialed;
 
-    public static void ProcessFrame()
+    internal static void ProcessFrame()
     {
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
 
@@ -471,7 +471,7 @@ public static class T3Ui
         Task.Run(() => Save(saveAll));
     }
 
-    public static void Save(bool saveAll)
+    internal static void Save(bool saveAll)
     {
         if (SaveStopwatch.IsRunning)
         {
@@ -491,10 +491,9 @@ public static class T3Ui
         }
 
         SaveStopwatch.Stop();
-        Log.Debug($"Saving took {SaveStopwatch.ElapsedMilliseconds}ms.");
     }
 
-    public static void SelectAndCenterChildIdInView(Guid symbolChildId)
+    internal static void SelectAndCenterChildIdInView(Guid symbolChildId)
     {
         var primaryGraphWindow = GraphWindow.Focused;
         if (primaryGraphWindow == null)
@@ -544,22 +543,21 @@ public static class T3Ui
         }
     }
 
-    public static IntPtr NotDroppingPointer = new(0);
-    public static bool DraggingIsInProgress = false;
-    public static bool MouseWheelFieldHovered { private get; set; }
-    public static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }
-    public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
-    public const string FloatNumberFormat = "{0:F2}";
+    internal static bool DraggingIsInProgress = false;
+    internal static bool MouseWheelFieldHovered { private get; set; }
+    internal static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }
+    internal static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
+    internal const string FloatNumberFormat = "{0:F2}";
 
     private static readonly Stopwatch SaveStopwatch = new();
 
     // ReSharper disable once InconsistentlySynchronizedField
-    public static bool IsCurrentlySaving => SaveStopwatch is { IsRunning: true };
+    internal static bool IsCurrentlySaving => SaveStopwatch is { IsRunning: true };
 
-    public static float UiScaleFactor { get; set; } = 1;
-    public static float DisplayScaleFactor { get; set; } = 1;
-    public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
-    public static readonly MidiDataRecording MidiDataRecording = new();
+    public static float UiScaleFactor { get; internal set; } = 1;
+    internal static float DisplayScaleFactor { get; set; } = 1;
+    internal static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
+    internal static readonly MidiDataRecording MidiDataRecording = new();
 
     //private static readonly AutoBackup.AutoBackup _autoBackup = new();
 
@@ -581,6 +579,6 @@ public static class T3Ui
         AllowHoveredChildWindows = 1 << 5,
     }
 
-    public static bool UseVSync = true;
+    internal static bool UseVSync = true;
     public static bool ItemRegionsVisible;
 }
