@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Resource;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
@@ -53,20 +54,21 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             }
 
             var inputEditStateFlags = InputEditStateFlags.Nothing;
+
             switch (Usage)
             {
                 case UsageType.Default:
-                    inputEditStateFlags = DrawDefaultTextEdit(ref value);
+                    inputEditStateFlags = DrawDefaultTextEdit(ref value) ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
                     break;
                 case UsageType.Multiline:
                     inputEditStateFlags = DrawMultilineTextEdit(ref value);
                     break;
                 case UsageType.FilePath:
-                    inputEditStateFlags = DrawEditWithSelectors(FileOperations.FilePickerTypes.File, ref value, FileFilter);
+                    inputEditStateFlags = DrawTypeAheadSearch(FileOperations.FilePickerTypes.File, ref value);
                     NormalizePathSeparators(inputEditStateFlags, ref value);
                     break;
                 case UsageType.DirectoryPath:
-                    inputEditStateFlags = DrawEditWithSelectors(FileOperations.FilePickerTypes.Folder, ref value);
+                    inputEditStateFlags = DrawTypeAheadSearch(FileOperations.FilePickerTypes.Folder, ref value);
                     NormalizePathSeparators(inputEditStateFlags, ref value);
                     break;
                 case UsageType.CustomDropdown:
@@ -88,28 +90,70 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 {
                     value = value.Replace('\\', '/');
                     
-                    if (value.EndsWith('/'))
-                        value = value[..^1];
+                    // todo: handle trailing slashes
+                    //if (value.EndsWith('/'))
+                      //  value = value[..^1];
                 }
+            }
+        }
+
+        private InputEditStateFlags DrawTypeAheadSearch(FileOperations.FilePickerTypes type, ref string value)
+        {
+            return DrawFileInput(type, ref value, FileFilter, Draw);
+            
+            static InputResult Draw(InputRequest request)
+            {
+                var filter = request.Filter;
+                var value = request.Value;
+                
+                if(filter != null && filter.Contains('|')) // things like LoadObj have a filter like "OBJ-File|*.obj"
+                    filter = filter.Split('|')[1];
+                
+                var drawnItems = ResourceManager.EnumerateResources(filter, request.IsFolder, request.ResourcePackages, ResourceManager.PathMode.Aliased);
+                
+                var changed = InputWithTypeAheadSearch.Draw("##filePathSearch", ref value, drawnItems);
+                return new InputResult(changed, value);
             }
         }
 
         private static InputEditStateFlags DrawEditWithSelectors(FileOperations.FilePickerTypes type, ref string value, string filter = null)
         {
+            return DrawFileInput(type, ref value, filter, Draw);
+
+            static InputResult Draw(InputRequest request)
+            {
+                var value = request.Value;
+                var changed = DrawDefaultTextEdit(ref value);
+                return new InputResult(changed, value);
+            }
+        }
+        
+        private readonly record struct InputResult(bool Modified, string Value);
+
+        private readonly record struct InputRequest(string Value, string Filter, bool IsFolder, IEnumerable<IResourcePackage> ResourcePackages);
+
+        private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string value, string filter, Func<InputRequest, InputResult> draw)
+        {
             ImGui.SetNextItemWidth(-70);
 
-            // todo: hook into resource manager
+            var selectedInstances = GraphWindow.Focused!.GraphCanvas.NodeSelection.GetSelectedInstances().ToArray();
+            var packagesInCommon = selectedInstances.PackagesInCommon().ToArray();
+            var isFolder = type == FileOperations.FilePickerTypes.Folder;
+            var exists = ResourceManager.TryResolvePath(value, packagesInCommon, out _, out _, isFolder);
+            
             var warning = type switch
                               {
-                                  FileOperations.FilePickerTypes.File when !File.Exists(value)        => "File doesn't exist:\n",
-                                  FileOperations.FilePickerTypes.Folder when !Directory.Exists(value) => "Directory doesn't exist:\n",
+                                  FileOperations.FilePickerTypes.File when !exists        => "File doesn't exist:\n",
+                                  FileOperations.FilePickerTypes.Folder when !exists => "Directory doesn't exist:\n",
                                   _                                                                   => string.Empty
                               };
 
             if (warning != string.Empty)
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAnimated.Rgba);
 
-            var inputEditStateFlags = DrawDefaultTextEdit(ref value);
+            var result = draw(new InputRequest(value, filter, isFolder, packagesInCommon));
+            value = result.Value;
+            var inputEditStateFlags = result.Modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
 
             if (warning != string.Empty)
                 ImGui.PopStyleColor();
@@ -127,14 +171,12 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             {
                 inputEditStateFlags = InputEditStateFlags.Modified | InputEditStateFlags.Finished;
             }
-
             return inputEditStateFlags;
         }
 
-        private static InputEditStateFlags DrawDefaultTextEdit(ref string value)
+        private static bool DrawDefaultTextEdit(ref string value)
         {
-            bool changed = ImGui.InputText("##textEdit", ref value, MaxStringLength);
-            return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
+            return ImGui.InputText("##textEdit", ref value, MaxStringLength);
         }
 
         private static InputEditStateFlags DrawMultilineTextEdit(ref string value)
