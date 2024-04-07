@@ -180,10 +180,15 @@ internal class ParameterWindow : Window
             var package = symbol.SymbolPackage;
             if (!package.IsReadOnly)
             {
-                bool namespaceModified = InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit, EditorSymbolPackage.AllSymbols
-                                                                          .Select(i => i.Namespace)
-                                                                          .Distinct()
-                                                                          .OrderBy(i => i), false);
+                var args = new InputWithTypeAheadSearch.Args<string>(Label: "##namespace",
+                                                                     Items: EditorSymbolPackage.AllSymbols
+                                                                                               .Select(i => i.Namespace)
+                                                                                               .Distinct()
+                                                                                               .OrderBy(i => i),
+                                                                     GetTextInfo: i => new InputWithTypeAheadSearch.Texts(i, i, null),
+                                                                     Warning: false);
+                
+                bool namespaceModified = InputWithTypeAheadSearch.Draw(args, ref namespaceForEdit,out _);
                 if (namespaceModified && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 {
                     if (!EditableSymbolProject.ChangeSymbolNamespace(symbol, namespaceForEdit, out var reason))

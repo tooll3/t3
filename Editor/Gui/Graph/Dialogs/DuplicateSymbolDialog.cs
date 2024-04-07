@@ -71,13 +71,15 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
                     ImGui.SetNextItemWidth(250);
                     //ImGui.InputText("##namespace", ref nameSpace, 255);
-                    InputWithTypeAheadSearch.Draw("##namespace", ref nameSpace,
-                                                  _projectToCopyTo.SymbolUis.Values
-                                                                  .Select(x => x.Symbol)
-                                                                  .Select(i => i.Namespace)
-                                                                  .Distinct()
-                                                                  .OrderBy(i => i),
-                                                  warning: !correct);
+                    var args = new InputWithTypeAheadSearch.Args<string>(Label: "##namespace2",
+                                                                        Items: _projectToCopyTo.SymbolUis.Values
+                                                                                               .Select(x => x.Symbol)
+                                                                                               .Select(i => i.Namespace)
+                                                                                               .Distinct()
+                                                                                               .OrderBy(i => i),
+                                                                        GetTextInfo: i => new InputWithTypeAheadSearch.Texts(i, i, null),
+                                                                        Warning: !correct);
+                    InputWithTypeAheadSearch.Draw(args, ref nameSpace, out _);
 
                     ImGui.SetNextItemWidth(150);
                     ImGui.SameLine();

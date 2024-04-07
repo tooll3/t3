@@ -105,8 +105,14 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 
                 var drawnItems = ResourceManager.EnumerateResources(filter, request.IsFolder, request.ResourcePackages, ResourceManager.PathMode.Aliased);
                 
-                var changed = InputWithTypeAheadSearch.Draw("##filePathSearch", ref value, drawnItems, request.ShowWarning, true);
+                var args = new InputWithTypeAheadSearch.Args<string>("##filePathSearch", drawnItems, GetTextInfo, request.ShowWarning);
+                var changed = InputWithTypeAheadSearch.Draw(args, ref value, out _);
                 return new InputResult(changed, value);
+            }
+            
+            static InputWithTypeAheadSearch.Texts GetTextInfo(string resourcePath)
+            {
+                return new InputWithTypeAheadSearch.Texts(DisplayText: System.IO.Path.GetFileName(resourcePath), resourcePath, resourcePath);
             }
         }
         

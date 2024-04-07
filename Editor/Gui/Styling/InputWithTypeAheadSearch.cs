@@ -19,10 +19,12 @@ namespace T3.Editor.Gui.Styling
     /// </remarks>
     public static class InputWithTypeAheadSearch
     {
+        public readonly record struct Texts(string DisplayText, string SearchText, string? Tooltip);
+        public readonly record struct Args<T>(string Label, IEnumerable<T> Items, Func<T, Texts> GetTextInfo, bool Warning);
         
-        public static bool Draw(string label, ref string filter, IEnumerable<string> items, bool warning, bool showTooltip = false)
+        public static bool Draw<T>(Args<T> args, ref string filter, out T selected)
         {
-            var inputId = ImGui.GetID(label);
+            var inputId = ImGui.GetID(args.Label);
             var isSearchResultWindowOpen = inputId == _activeInputId;
             
             if (isSearchResultWindowOpen)
@@ -46,9 +48,9 @@ namespace T3.Editor.Gui.Styling
                 }
             }
 
-            var color = warning ? UiColors.StatusWarning.Rgba : UiColors.Text.Rgba;
+            var color = args.Warning ? UiColors.StatusWarning.Rgba : UiColors.Text.Rgba;
             ImGui.PushStyleColor(ImGuiCol.Text, color);
-            var wasChanged = ImGui.InputText(label, ref filter, 256);
+            var wasChanged = ImGui.InputText(args.Label, ref filter, 256);
             ImGui.PopStyleColor();
 
             if (ImGui.IsItemActivated())
@@ -62,6 +64,7 @@ namespace T3.Editor.Gui.Styling
             
             // We defer exit to get clicks on opened popup list
             var lostFocus = isItemDeactivated || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
+            selected = default;
             
             if ( ImGui.IsItemActive() || isSearchResultWindowOpen)
             {
@@ -74,36 +77,40 @@ namespace T3.Editor.Gui.Styling
                     wasChanged = true;
                     _activeInputId = 0;
                 }
+
+                const ImGuiWindowFlags flags = ImGuiWindowFlags.NoTitleBar
+                                               | ImGuiWindowFlags.NoMove
+                                               | ImGuiWindowFlags.Tooltip // ugly as f**k. Sadly .PopUp will lead to random crashes.
+                                               | ImGuiWindowFlags.NoFocusOnAppearing
+                                               | ImGuiWindowFlags.ChildWindow;
+
                 
-                if (ImGui.Begin("##typeAheadSearchPopup", ref isSearchResultWindowOpen,
-                                ImGuiWindowFlags.NoTitleBar 
-                                | ImGuiWindowFlags.NoMove 
-                                | ImGuiWindowFlags.Tooltip // ugly as f**k. Sadly .PopUp will lead to random crashes.
-                                | ImGuiWindowFlags.NoFocusOnAppearing 
-                                | ImGuiWindowFlags.ChildWindow
-                               ))
+                if (ImGui.Begin("##typeAheadSearchPopup", ref isSearchResultWindowOpen,flags))
                 {
                     _lastTypeAheadResults.Clear();
                     var index = 0;
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Gray.Rgba);
+                    
+                    var getInfo = args.GetTextInfo;
                         
-                    foreach (var word in items)
+                    foreach (var word in args.Items)
                     {
-                        if (word == null ||  !word.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
+                        var info = getInfo(word);
+                        if (word == null ||  !info.SearchText.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
                             continue;
                         
                         var isSelected = index == _selectedResultIndex;
                         
                         // We can't use IsItemHovered because we need to use Tooltip hack 
                         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-                        ImGui.Selectable(word, isSelected);
+                        ImGui.Selectable(info.DisplayText, isSelected);
 
                         var isItemHovered = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax()).Contains( ImGui.GetMousePos());
 
-                        if (isItemHovered && showTooltip)
+                        if (isItemHovered && !string.IsNullOrEmpty(info.Tooltip))
                         {
                             ImGui.BeginTooltip();
-                            ImGui.TextUnformatted(word);
+                            ImGui.TextUnformatted(info.Tooltip);
                             ImGui.EndTooltip();
                         }
                         
@@ -112,12 +119,13 @@ namespace T3.Editor.Gui.Styling
                         if ((ImGui.IsMouseClicked(ImGuiMouseButton.Left) && isItemHovered) 
                             || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
                         {
-                            filter = word;
+                            filter = info.SearchText;
                             wasChanged = true;
                             _activeInputId = 0;
+                            selected = word;
                         }
 
-                        _lastTypeAheadResults.Add(word);
+                        _lastTypeAheadResults.Add(info.SearchText);
                         if (++index > 100)
                             break;
                     }
