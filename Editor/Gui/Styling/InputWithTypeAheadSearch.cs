@@ -20,7 +20,7 @@ namespace T3.Editor.Gui.Styling
     public static class InputWithTypeAheadSearch
     {
         
-        public static bool Draw(string label, ref string filter, IEnumerable<string> items, bool warning = false)
+        public static bool Draw(string label, ref string filter, IEnumerable<string> items, bool warning, bool showTooltip = false)
         {
             var inputId = ImGui.GetID(label);
             var isSearchResultWindowOpen = inputId == _activeInputId;
@@ -97,9 +97,17 @@ namespace T3.Editor.Gui.Styling
                         // We can't use IsItemHovered because we need to use Tooltip hack 
                         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
                         ImGui.Selectable(word, isSelected);
-                        ImGui.PopStyleColor();
 
                         var isItemHovered = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax()).Contains( ImGui.GetMousePos());
+
+                        if (isItemHovered && showTooltip)
+                        {
+                            ImGui.BeginTooltip();
+                            ImGui.TextUnformatted(word);
+                            ImGui.EndTooltip();
+                        }
+                        
+                        ImGui.PopStyleColor();
                             
                         if ((ImGui.IsMouseClicked(ImGuiMouseButton.Left) && isItemHovered) 
                             || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))

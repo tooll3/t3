@@ -105,14 +105,14 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 
                 var drawnItems = ResourceManager.EnumerateResources(filter, request.IsFolder, request.ResourcePackages, ResourceManager.PathMode.Aliased);
                 
-                var changed = InputWithTypeAheadSearch.Draw("##filePathSearch", ref value, drawnItems);
+                var changed = InputWithTypeAheadSearch.Draw("##filePathSearch", ref value, drawnItems, request.ShowWarning, true);
                 return new InputResult(changed, value);
             }
         }
         
         private readonly record struct InputResult(bool Modified, string Value);
 
-        private readonly record struct InputRequest(string Value, string[] Filter, bool IsFolder, IEnumerable<IResourcePackage> ResourcePackages);
+        private readonly record struct InputRequest(string Value, string[] Filter, bool IsFolder, bool ShowWarning, IEnumerable<IResourcePackage> ResourcePackages);
 
         private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string value, string filter, Func<InputRequest, InputResult> draw)
         {
@@ -143,7 +143,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                                      .Distinct()
                                      .ToArray();
 
-            var result = draw(new InputRequest(value, fileFiltersInCommon, isFolder, packagesInCommon));
+            var result = draw(new InputRequest(value, fileFiltersInCommon, isFolder, ShowWarning: !exists, packagesInCommon));
             value = result.Value;
             var inputEditStateFlags = result.Modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
 
