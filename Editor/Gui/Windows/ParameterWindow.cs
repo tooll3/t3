@@ -183,7 +183,7 @@ internal class ParameterWindow : Window
                 bool namespaceModified = InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit, EditorSymbolPackage.AllSymbols
                                                                           .Select(i => i.Namespace)
                                                                           .Distinct()
-                                                                          .OrderBy(i => i));
+                                                                          .OrderBy(i => i), false);
                 if (namespaceModified && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 {
                     if (!EditableSymbolProject.ChangeSymbolNamespace(symbol, namespaceForEdit, out var reason))
