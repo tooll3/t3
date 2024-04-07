@@ -230,16 +230,19 @@ namespace T3.Core.Resource
                                                                                      ? Directory.EnumerateDirectories
                                                                                      : Directory.EnumerateFiles;
 
-                var items = filters.SelectMany(searchPattern => searchFunc(package.ResourcesFolder, searchPattern, SearchOption.AllDirectories))
-                                   .Select(x => x.Replace('\\', '/'));
-
-                return pathMode switch
-                           {
-                               PathMode.Absolute => items,
-                               PathMode.Relative => items.Select(x => x[(package.ResourcesFolder.Length + 1)..]),
-                               PathMode.Aliased  => items.Select(x => $"/{package.Alias}/{x[(package.ResourcesFolder.Length + 1)..]}"),
-                               _                 => throw new ArgumentOutOfRangeException(nameof(pathMode), pathMode, null)
-                           };
+                foreach (var path in searchFunc(package.ResourcesFolder, "*", SearchOption.AllDirectories))
+                {
+                    if (filters.Any(filter => StringUtils.MatchesFilter(Path.GetFileName(path), filter, true)))
+                    {
+                        yield return pathMode switch
+                                         {
+                                             PathMode.Absolute => path.Replace('\\', '/'),
+                                             PathMode.Relative => path[(package.ResourcesFolder.Length + 1)..].Replace('\\', '/'),
+                                             PathMode.Aliased  => $"/{package.Alias}/{path[(package.ResourcesFolder.Length + 1)..]}".Replace('\\', '/'),
+                                             _                 => throw new ArgumentOutOfRangeException(nameof(pathMode), pathMode, null)
+                                         };
+                    }
+                }
             }
         }
     }

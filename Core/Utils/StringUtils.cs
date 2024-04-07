@@ -13,8 +13,8 @@ public static class StringUtils
         // this is made unsafe to avoid the overhead of the span bounds check - it's safe because we checked the length already
         if (ignoreCase)
         {
-            fixed(char* aPtr = a)
-            fixed(char* bPtr = b)
+            fixed (char* aPtr = a)
+            fixed (char* bPtr = b)
             {
                 for (var i = 0; i < aLength; i++)
                 {
@@ -25,8 +25,8 @@ public static class StringUtils
         }
         else
         {
-            fixed(char* aPtr = a)
-            fixed(char* bPtr = b)
+            fixed (char* aPtr = a)
+            fixed (char* bPtr = b)
             {
                 for (var i = 0; i < aLength; i++)
                 {
@@ -72,15 +72,23 @@ public static class StringUtils
         return count;
     }
 
-    public enum SearchResultIndex {BeforeTerm, AfterTerm, FirstIndex, LastIndex}
-    public static bool TryFindIgnoringAllWhitespace(string text, string searchTerm, SearchResultIndex searchResultIndex, out int indexFollowingSearchTerm, int startIndex = 0)
+    public enum SearchResultIndex
+    {
+        BeforeTerm,
+        AfterTerm,
+        FirstIndex,
+        LastIndex
+    }
+
+    public static bool TryFindIgnoringAllWhitespace(string text, string searchTerm, SearchResultIndex searchResultIndex, out int indexFollowingSearchTerm,
+                                                    int startIndex = 0)
     {
         // search the given string for the search term, ignoring all whitespace in both strings. " \ta b" == "ab"
         var searchTextLength = text.Length;
-        
+
         // remove all whitespace from searchTerm
         searchTerm = RemoveWhitespaceFrom(searchTerm);
-        
+
         var searchTermLength = searchTerm.Length;
 
         int currentSearchIndex = 0;
@@ -90,7 +98,7 @@ public static class StringUtils
         for (int j = startIndex; j < searchTextLength; j++)
         {
             var textChar = text[j];
-            
+
             if (char.IsWhiteSpace(textChar))
                 continue;
 
@@ -101,20 +109,20 @@ public static class StringUtils
                 firstIndex = -1;
                 continue;
             }
-            
+
             if (firstIndex == -1)
                 firstIndex = j;
-            
+
             ++currentSearchIndex;
             if (currentSearchIndex == searchTermLength)
             {
                 indexFollowingSearchTerm = searchResultIndex switch
                                                {
                                                    SearchResultIndex.BeforeTerm => firstIndex - 1,
-                                                   SearchResultIndex.AfterTerm => j + 1,
+                                                   SearchResultIndex.AfterTerm  => j + 1,
                                                    SearchResultIndex.FirstIndex => firstIndex,
-                                                   SearchResultIndex.LastIndex => j,
-                                                   _ => throw new ArgumentOutOfRangeException(nameof(searchResultIndex))
+                                                   SearchResultIndex.LastIndex  => j,
+                                                   _                            => throw new ArgumentOutOfRangeException(nameof(searchResultIndex))
                                                };
                 indexFollowingSearchTerm = j + 1;
                 return true;
@@ -172,5 +180,102 @@ public static class StringUtils
         }
 
         return message[..length];
+    }
+
+    public static int IndexOfNot(this ReadOnlySpan<char> span, char c, bool ignoreCase, out char nextChar)
+    {
+        if (ignoreCase)
+        {
+            c = char.ToLowerInvariant(c);
+            for (var i = 0; i < span.Length; i++)
+            {
+                nextChar = char.ToLowerInvariant(span[i]);
+                if (nextChar != c)
+                    return i;
+            }
+
+            nextChar = default;
+            return -1;
+        }
+
+        for (var i = 0; i < span.Length; i++)
+        {
+            nextChar = span[i];
+            if (nextChar != c)
+                return i;
+        }
+
+        nextChar = default;
+        return -1;
+    }
+    
+    public static int IndexOf(this ReadOnlySpan<char> span, char c, bool ignoreCase)
+    {
+        if (ignoreCase)
+        {
+            c = char.ToLowerInvariant(c);
+            for (var i = 0; i < span.Length; i++)
+            {
+                if (char.ToLowerInvariant(span[i]) == c)
+                    return i;
+            }
+
+            return -1;
+        }
+
+        for (var i = 0; i < span.Length; i++)
+        {
+            if (span[i] == c)
+                return i;
+        }
+
+        return -1;
+    }
+
+    public static bool MatchesFilter(ReadOnlySpan<char> possibleMatch, ReadOnlySpan<char> filter, bool ignoreCase)
+    {
+        while (true)
+        {
+            if (filter.Length == 0)
+                return true;
+
+            if (filter[0] == '*')
+            {
+                var nextNonWildcardIndex = filter.IndexOfNot('*', ignoreCase, out var filterChar);
+                if (nextNonWildcardIndex == -1)
+                    return true;
+
+                var matchIndex = possibleMatch.IndexOf(filterChar, ignoreCase);
+                if (matchIndex == -1)
+                    return false;
+
+                filter = filter[(nextNonWildcardIndex + 1)..];
+                possibleMatch = possibleMatch[(matchIndex + 1)..];
+            }
+            
+            if(filter.Length == 0)
+                return true;
+            
+            if(possibleMatch.Length == 0)
+                return false;
+            
+            if (possibleMatch[0] == filter[0])
+            {
+                // filter is complete!
+                if (filter.Length == 1) 
+                    return true;
+
+                // match string is complete but filter is not
+                if(possibleMatch.Length == 1)
+                    return false;
+                
+                possibleMatch = possibleMatch[1..];
+                filter = filter[1..];
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
