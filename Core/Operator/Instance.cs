@@ -49,7 +49,7 @@ namespace T3.Core.Operator
         private readonly List<IInputSlot> _inputs = new();
         public readonly IReadOnlyList<IInputSlot> Inputs;
 
-        public IReadOnlyList<SymbolPackage> AvailableResourcePackages
+        public IReadOnlyList<IResourcePackage> AvailableResourcePackages
         {
             get
             {
@@ -243,9 +243,9 @@ namespace T3.Core.Operator
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected bool TryGetFilePath(string relativePath, out string absolutePath)
+        protected bool TryGetFilePath(string relativePath, out string absolutePath, bool isFolder = false)
         {
-            return ResourceManager.TryResolvePath(relativePath, AvailableResourcePackages, out absolutePath, out _);
+            return ResourceManager.TryResolvePath(relativePath, AvailableResourcePackages, out absolutePath, out _, isFolder);
         }
         
         

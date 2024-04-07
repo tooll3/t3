@@ -15,7 +15,6 @@ namespace T3.Core.Resource
     /// <summary>
     /// File handler and GPU resource generator. Should probably be split into multiple classes, but for now it is a
     /// multi-file partial class.
-    /// Todo: reduce/remove dependency on ResourceFileWatcher to resolve paths - this should happen the other way around
     /// </summary>
     public sealed partial class ResourceManager
     {
@@ -31,8 +30,9 @@ namespace T3.Core.Resource
         {
         }
 
-        public static bool TryResolvePath(string relativePath, IReadOnlyList<IResourcePackage>? resourceContainers, out string absolutePath, out IResourcePackage? resourceContainer)
+        public static bool TryResolvePath(string relativePath, IEnumerable<IResourcePackage>? resourceContainers, out string absolutePath, out IResourcePackage? resourceContainer, bool isFolder = false)
         {
+            var packages = resourceContainers?.ToArray();
             if (string.IsNullOrWhiteSpace(relativePath))
             {
                 absolutePath = string.Empty;
@@ -42,7 +42,7 @@ namespace T3.Core.Resource
             
             if (relativePath.StartsWith('/'))
             {
-                return HandleAlias(relativePath, resourceContainers, out absolutePath, out resourceContainer);
+                return HandleAlias(relativePath, packages, out absolutePath, out resourceContainer, isFolder);
             }
 
             RelativePathBackwardsCompatibility(relativePath, out var isAbsolute, out var backCompatRanges);
@@ -50,28 +50,28 @@ namespace T3.Core.Resource
             {
                 absolutePath = relativePath;
                 resourceContainer = null;
-                return Exists(absolutePath);
+                return Exists(absolutePath, isFolder);
             }
 
             IReadOnlyList<string>? backCompatPaths = null;
 
-            if (resourceContainers != null)
+            if (packages != null)
             {
-                if (TestPath(relativePath, resourceContainers, out absolutePath, out resourceContainer))
+                if (TestPath(relativePath, packages, out absolutePath, out resourceContainer, isFolder))
                     return true;
 
                 backCompatPaths ??= PopulateBackCompatPaths(relativePath, backCompatRanges);
 
                 foreach (var backCompatPath in backCompatPaths)
                 {
-                    if (TestPath(backCompatPath, resourceContainers, out absolutePath, out resourceContainer))
+                    if (TestPath(backCompatPath, packages, out absolutePath, out resourceContainer, isFolder))
                         return true;
                 }
             }
             
             var sharedResourcePackages = relativePath.EndsWith(".hlsl") ? ShaderPackages : SharedResourcePackages;
 
-            if (TestPath(relativePath, sharedResourcePackages, out absolutePath, out resourceContainer))
+            if (TestPath(relativePath, sharedResourcePackages, out absolutePath, out resourceContainer, isFolder))
             {
                 return true;
             }
@@ -80,7 +80,7 @@ namespace T3.Core.Resource
 
             foreach (var backCompatPath in backCompatPaths)
             {
-                if (TestPath(backCompatPath, sharedResourcePackages, out absolutePath, out resourceContainer))
+                if (TestPath(backCompatPath, sharedResourcePackages, out absolutePath, out resourceContainer, isFolder))
                     return true;
             }
 
@@ -89,17 +89,17 @@ namespace T3.Core.Resource
             return false;
         }
 
-        private static bool Exists(string absolutePath) => File.Exists(absolutePath) || Directory.Exists(absolutePath);
+        private static bool Exists(string absolutePath, bool isFolder) =>  isFolder ? Directory.Exists(absolutePath) : File.Exists(absolutePath);
 
-        private static bool TestPath(string relative, IReadOnlyList<IResourcePackage> resourceContainers, out string absolutePath,
-                             out IResourcePackage? resourceContainer)
+        private static bool TestPath(string relative, IEnumerable<IResourcePackage> resourceContainers, out string absolutePath,
+                             out IResourcePackage? resourceContainer, bool isFolder)
         {
             foreach (var package in resourceContainers)
             {
                 var resourcesFolder = package.ResourcesFolder;
                 var path = Path.Combine(resourcesFolder, relative);
 
-                if (Exists(path))
+                if (Exists(path, isFolder))
                 {
                     absolutePath = path;
                     resourceContainer = package;
@@ -112,7 +112,7 @@ namespace T3.Core.Resource
             return false;
         }
 
-        private static bool HandleAlias(string relative, IReadOnlyList<IResourcePackage>? resourceContainers, out string absolutePath, out IResourcePackage? resourceContainer)
+        private static bool HandleAlias(string relative, IEnumerable<IResourcePackage>? resourceContainers, out string absolutePath, out IResourcePackage? resourceContainer, bool isFolder)
         {
             var relativePathAliased = relative.AsSpan(1);
             var aliasEnd = relativePathAliased.IndexOf('/');
@@ -133,7 +133,7 @@ namespace T3.Core.Resource
             {
                 foreach (var container in resourceContainers)
                 {
-                    if (TestAlias(container, alias, relativePathWithoutAlias, out absolutePath))
+                    if (TestAlias(container, alias, relativePathWithoutAlias, out absolutePath, isFolder))
                     {
                         resourceContainer = container;
                         return true;
@@ -144,7 +144,7 @@ namespace T3.Core.Resource
             var sharedResourcePackages = relativePathAliased.EndsWith(".hlsl") ? ShaderPackages : SharedResourcePackages;
             foreach (var container in sharedResourcePackages)
             {
-                if(TestAlias(container, alias, relativePathWithoutAlias, out absolutePath))
+                if(TestAlias(container, alias, relativePathWithoutAlias, out absolutePath, isFolder))
                 {
                     resourceContainer = container;
                     return true;
@@ -155,7 +155,7 @@ namespace T3.Core.Resource
             resourceContainer = null;
             return false;
 
-            static bool TestAlias(IResourcePackage container, ReadOnlySpan<char> alias, string relativePathWithoutAlias, out string absolutePath)
+            static bool TestAlias(IResourcePackage container, ReadOnlySpan<char> alias, string relativePathWithoutAlias, out string absolutePath, bool isFolder)
             {
                 var containerAlias = container.Alias;
                 if (containerAlias == null)
@@ -167,7 +167,7 @@ namespace T3.Core.Resource
                 if (StringUtils.Equals(containerAlias, alias, true))
                 {
                     var path = Path.Combine(container.ResourcesFolder, relativePathWithoutAlias);
-                    if (Exists(path))
+                    if (Exists(path, isFolder))
                     {
                         absolutePath = path;
                         return true;
@@ -200,5 +200,48 @@ namespace T3.Core.Resource
         private static readonly List<IResourcePackage> SharedResourcePackages = new(4);
         public static IReadOnlyList<IResourcePackage> SharedShaderPackages => ShaderPackages;
         private static readonly List<IResourcePackage> ShaderPackages = new(4);
+        public enum PathMode {Absolute, Relative, Aliased}
+
+        public static IEnumerable<string> EnumerateResources(string? filter, bool isFolder, IEnumerable<IResourcePackage> packages, PathMode pathMode = PathMode.Relative)
+        {
+            filter ??= isFolder ? "*" : "*.*";
+            var filterAcceptsShaders = !isFolder && filter.EndsWith(".hlsl") || filter.EndsWith('*');
+            
+            var allFiles = packages
+                          .Concat(SharedResourcePackages)
+                          .Distinct()
+                          .SelectMany(x => AllEntriesOf(x, filter, isFolder, pathMode));
+
+            // handle always-shared shaders
+            return !isFolder && filterAcceptsShaders 
+                       ? allFiles.Concat(SharedShaderPackages.Except(SharedResourcePackages).SelectMany(x => AllEntriesOf(x, ".hlsl", false, pathMode))) 
+                       : allFiles;
+            
+            static IEnumerable<string> AllEntriesOf(IResourcePackage package, string filter, bool useFolder, PathMode pathMode)
+            {
+                var items = useFolder
+                                ? Directory.EnumerateDirectories(package.ResourcesFolder, filter, SearchOption.AllDirectories)
+                                           .Select(x => x.Replace('\\', '/'))
+                                : Directory.EnumerateFiles(package.ResourcesFolder, filter, SearchOption.AllDirectories)
+                                           .Select(x => x.Replace('\\', '/'));
+
+                return pathMode switch
+                           {
+                               PathMode.Absolute => items,
+                               PathMode.Relative => items.Select(x => x[(package.ResourcesFolder.Length + 1)..]),
+                               PathMode.Aliased  => items.Select(x => $"/{package.Alias}/{x[(package.ResourcesFolder.Length + 1)..]}"),
+                               _                 => throw new ArgumentOutOfRangeException(nameof(pathMode), pathMode, null)
+                           };
+            }
+        }
+    }
+
+    public static class ResourceExtensions
+    {
+        public static IEnumerable<IResourcePackage> PackagesInCommon(this IEnumerable<Instance> instances)
+        {
+            return instances.Select(x => x.AvailableResourcePackages)
+                            .Aggregate<IEnumerable<IResourcePackage>>((a, b) => a.Intersect(b));
+        }
     }
 }

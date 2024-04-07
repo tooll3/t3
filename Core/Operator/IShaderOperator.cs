@@ -91,6 +91,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
             shaderResource.UpdateDebugName(debugName);
             Shader.Value = shaderResource.Shader;
             Shader.DirtyFlag.Invalidate();
+            message = string.Empty;
         }
         else
         {

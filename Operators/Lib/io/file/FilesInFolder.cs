@@ -38,10 +38,8 @@ namespace lib.io.file
                 if (folderIsDirty)
                 {
                     var folderPath = Folder.GetValue(context);
-                    bool success = TryGetFilePath(folderPath, out var resolvedFolder);
-                    _resolvedFolder = success && File.GetAttributes(resolvedFolder).HasFlag(FileAttributes.Directory)
-                                          ? resolvedFolder
-                                          : folderPath;
+                    var success = TryGetFilePath(folderPath, out var resolvedFolder, true);
+                    _resolvedFolder = success ? resolvedFolder : folderPath;
                 }
                 
                 var filter = Filter.GetValue(context);
