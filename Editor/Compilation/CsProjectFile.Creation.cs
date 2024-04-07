@@ -85,8 +85,8 @@ internal sealed partial class CsProjectFile
         
         propertyGroup.AddProperty("PackageInfoJsonContent", "{\n" +
                                                 $"\t\"HomeGuid\": \"{EvaluatedVariable(homeGuidPropertyName)}\", \n" +
-                                                $"\t\"RootNamespace\": \"{EvaluatedVariable(rootNamespacePropertyName)}\"\n" +
-                                                $"\t\"EditorVersion\": \"{EvaluatedVariable(editorVersionPropertyName)}\", \n" +
+                                                $"\t\"RootNamespace\": \"{EvaluatedVariable(rootNamespacePropertyName)}\",\n" +
+                                                $"\t\"EditorVersion\": \"{EvaluatedVariable(editorVersionPropertyName)}\" \n" +
                                                 "}\n");
         
         //<WriteLinesToFile File="$(OutputPath)OperatorPackage.json" Lines="$(PackageInfoJsonContent)" Overwrite="True" Encoding="UTF-8"/>
