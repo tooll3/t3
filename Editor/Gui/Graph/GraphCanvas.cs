@@ -437,7 +437,7 @@ namespace T3.Editor.Gui.Graph
                     HandleFenceSelection();
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
-                if (isOnBackground && ImGui.IsMouseDoubleClicked(0))
+                if (isOnBackground && (ImGui.IsMouseDoubleClicked(0) || KeyboardBinding.Triggered(UserActions.CloseOperator)))
                 {
                     if (CompositionOp.Parent != null)
                         SetCompositionToParentInstance(CompositionOp.Parent);

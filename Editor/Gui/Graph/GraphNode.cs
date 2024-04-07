@@ -16,6 +16,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
@@ -264,7 +265,7 @@ namespace T3.Editor.Gui.Graph
                     // A horrible work around to prevent exception because CompositionOp changed during drawing.
                     // A better solution would defer setting the compositionOp to the beginning of next frame.
                     var justOpenedChild = false;
-                    if (hovered && ImGui.IsMouseDoubleClicked(0)
+                    if (hovered && (ImGui.IsMouseDoubleClicked(0) || KeyboardBinding.Triggered(UserActions.OpenOperator))
                                 && !RenameInstanceOverlay.IsOpen
                                 && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenSubGraph) == 0)
                     {
