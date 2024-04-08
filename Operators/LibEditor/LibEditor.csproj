@@ -9,6 +9,7 @@
         <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
         <VersionPrefix>1.0.0</VersionPrefix>
         <RootNamespace>lib.Editor</RootNamespace>
+        <AssemblyName>$(RootNamespace)</AssemblyName>
         <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     </PropertyGroup>
     <ItemGroup>
@@ -63,6 +64,7 @@
             <OperatorPackageInfoJson>{
                 "HomeGuid": "$(HomeGuid)",
                 "RootNamespace": "$(RootNamespace)",
+                "Version": "$(VersionPrefix)",
                 "EditorVersion": "$(EditorVersion)",
                 "OperatorPackages":
                 [$(OperatorReferenceArray)

@@ -77,11 +77,6 @@ public readonly record struct OutputSlotInfo
     }
 }
 
-[Serializable]
-
-// Warning: Do not change these structs, as they are used in the serialization of the operator package file and is linked to the csproj json output
-public record ReleaseInfo(Guid HomeGuid, string RootNamespace, string EditorVersion, OperatorPackageReference[] OperatorPackages);
-public readonly record struct OperatorPackageReference(string Identity, string Version, bool ResourcesOnly);
 
 public sealed class AssemblyInformation
 {

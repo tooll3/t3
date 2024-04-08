@@ -13,10 +13,10 @@ namespace lib.types
 
         public String()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction = UpdateString;
         }
 
-        private void Update(EvaluationContext context)
+        private void UpdateString(EvaluationContext context)
         {
             Result.Value = InputString.GetValue(context);
         }
@@ -24,7 +24,6 @@ namespace lib.types
         [Input(Guid = "ceeae47b-d792-471d-a825-49e22749b7b9")]
         public readonly InputSlot<string> InputString = new();
         
-
         public Slot<string> OutputSlot => Result;
 
         public void SetTypedInputValuesTo(string value, out IEnumerable<IInputSlot> changedInputs)

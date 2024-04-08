@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using T3.Core.Logging;
@@ -76,9 +77,14 @@ public static class RuntimeAssemblies
                                                    [NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
         var packageInfoPath = Path.Combine(Path.GetDirectoryName(name.Path)!, PackageInfoFileName);
-        if (!JsonUtils.TryLoadingJson(packageInfoPath, out releaseInfo))
+        if (!JsonUtils.TryLoadingJson(packageInfoPath, out ReleaseInfoSerialized? json))
         {
             Log.Warning($"Failed to load package info from path {packageInfoPath}");
+            releaseInfo = null;
+        }
+        else
+        {
+            releaseInfo = json.ToReleaseInfo();
         }
             
         try
@@ -111,4 +117,32 @@ public static class RuntimeAssemblies
     }
 
     public const string PackageInfoFileName = "OperatorPackage.json";
+
+
+    [Serializable]
+    private readonly record struct OperatorPackageReferenceSerialized(string Identity, string Version, bool ResourcesOnly);
+    [Serializable]
+    // Warning: Do not change these structs, as they are used in the serialization of the operator package file and is linked to the csproj json output
+    // todo - add package's own Version to release info
+    private record ReleaseInfoSerialized(
+        Guid HomeGuid,
+        string RootNamespace,
+        string EditorVersion,
+        string Version,
+        OperatorPackageReferenceSerialized[] OperatorPackages);
+    
+    private static ReleaseInfo ToReleaseInfo(this ReleaseInfoSerialized serialized)
+    {
+        return new ReleaseInfo(
+            serialized.HomeGuid,
+            serialized.RootNamespace,
+            new Version(serialized.EditorVersion),
+            new Version(serialized.Version),
+            serialized.OperatorPackages
+                      .Select(x => new OperatorPackageReference(x.Identity, new Version(x.Version), x.ResourcesOnly))
+                      .ToArray());
+    }
 }
+
+public sealed record OperatorPackageReference(string Identity, Version Version, bool ResourcesOnly);
+public sealed record ReleaseInfo(Guid HomeGuid, string RootNamespace, Version EditorVersion, Version Version, OperatorPackageReference[] OperatorPackages);
