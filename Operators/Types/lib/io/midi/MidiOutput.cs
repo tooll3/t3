@@ -13,7 +13,7 @@ using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9 
 {
-    public class MidiOutput : Instance<MidiOutput>, ICustomDropdownHolder,IStatusProvider
+    public class MidiOutput : Instance<MidiOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider
     {
         [Output(Guid = "670C784C-DE53-46F4-B93A-A1F07AA8F18E")]
         public readonly Slot<Command> Result = new();
@@ -23,6 +23,16 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
             Result.UpdateAction = Update;
         }
 
+        private bool _initialized;
+        protected override void Dispose(bool isDisposing)
+        {
+            if(!isDisposing) return;
+
+            if (_initialized)
+            {
+                MidiConnectionManager.UnregisterConsumer(this);
+            }
+        }
         private void Update(EvaluationContext context)
         {
             var deviceName = Device.GetValue(context);
@@ -36,6 +46,13 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
 
             var triggerJustActivated = false;
             var triggerJustDeactivated = false;
+
+            if(!_initialized)
+            {
+                MidiConnectionManager.RegisterConsumer(this);
+                _initialized = true;
+            }
+
             if (triggerActive != _triggered)
             {
                 if (triggerActive)
@@ -185,6 +202,13 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
         {
             return _lastErrorMessage;
         }
+
+        // We don't actually receive midi in this operator, those methods can remain empty, we just want the MIDI connection thread up
+        public void MessageReceivedHandler(object sender, MidiInMessageEventArgs msg) {}
+
+        public void ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg) {}
+
+        public void OnSettingsChanged() {}
 
         private string _lastErrorMessage;
         #endregion
