@@ -29,7 +29,7 @@ internal static partial class Program
                                                                           {
                                                                               var relativePath = Path.GetRelativePath(searchDirectory, file);
                                                                               Log.Debug($"Found dll: {relativePath}");
-                                                                              RuntimeAssemblies.TryLoadAssemblyInformation(file, out var info);
+                                                                              RuntimeAssemblies.TryLoadAssemblyInformation(file, out var info, out _);
                                                                               return info;
                                                                           })
                                                                   .Where(info =>

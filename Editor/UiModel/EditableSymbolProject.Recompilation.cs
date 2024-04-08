@@ -216,7 +216,7 @@ namespace T3.Editor.UiModel
             SaveModifiedSymbols();
 
             MarkAsSaving();
-            var updated = CsProjectFile.TryRecompile();
+            var updated = CsProjectFile.TryRecompile(out var releaseInfo);
             UnmarkAsSaving();
 
             return updated;

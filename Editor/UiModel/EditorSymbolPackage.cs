@@ -15,6 +15,8 @@ namespace T3.Editor.UiModel;
 // todo - make abstract, create NugetSymbolPackage
 internal class EditorSymbolPackage : SymbolPackage
 {
+    public ReleaseInfo ReleaseInfo => AssemblyInformation.ReleaseInfo;
+    
     public EditorSymbolPackage(AssemblyInformation assembly) : base(assembly)
     {
         Log.Debug($"Added package {assembly.Name}");

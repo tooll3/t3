@@ -19,25 +19,17 @@ namespace T3.Editor.Compilation;
 /// </summary>
 internal static class ProjectSetup
 {
-
     public static bool TryCreateProject(string name, string nameSpace, bool shareResources, out EditableSymbolProject newProject)
     {
         var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, shareResources, UserSettings.Config.DefaultNewProjectDirectory);
-        if (newCsProj == null)
-        {
-            Log.Error("Failed to create new project");
-            newProject = null;
-            return false;
-        }
 
-        if (!newCsProj.TryRecompile())
+        if (!newCsProj.TryRecompile(out var releaseInfo))
         {
             Log.Error("Failed to compile new project");
             newProject = null;
             return false;
         }
 
-        var releaseInfo = newCsProj.Assembly.ReleaseInfo;
         if (releaseInfo.HomeGuid == Guid.Empty)
         {
             Log.Error("Failed to create project home");
@@ -90,7 +82,7 @@ internal static class ProjectSetup
                         {
                             foreach (var file in package.EnumerateFiles($"{package.Name}.dll", SearchOption.TopDirectoryOnly))
                             {
-                                var loaded = RuntimeAssemblies.TryLoadAssemblyInformation(file.FullName, out var assembly);
+                                var loaded = RuntimeAssemblies.TryLoadAssemblyInformation(file.FullName, out var assembly, out var releaseInfo);
                                 if (!loaded)
                                 {
                                     Log.Error($"Could not load assembly at \"{file.FullName}\"");
@@ -151,7 +143,7 @@ internal static class ProjectSetup
                                return;
                            }
                            
-                           if (csProjFile.TryLoadLatestAssembly())
+                           if (csProjFile.TryLoadLatestAssembly(out var releaseInfo))
                            {
                                InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
                            }
@@ -164,7 +156,7 @@ internal static class ProjectSetup
             foreach (var csProjFile in projectsNeedingCompilation)
             {
                 // check again if assembly can be loaded as previous compilations could have compiled this project
-                if (csProjFile.TryLoadLatestAssembly() || csProjFile.TryRecompile())
+                if (csProjFile.TryLoadLatestAssembly(out var releaseInfo) || csProjFile.TryRecompile(out releaseInfo))
                 {
                     InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
                 }

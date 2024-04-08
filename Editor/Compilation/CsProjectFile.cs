@@ -86,7 +86,7 @@ internal sealed partial class CsProjectFile
 
 
     // todo - rate limit recompiles for when multiple files change
-    public bool TryRecompile()
+    public bool TryRecompile([NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
         var previousBuildId = _buildId;
         var previousAssembly = Assembly;
@@ -96,13 +96,14 @@ internal sealed partial class CsProjectFile
         if (!success)
         {
             _buildId = previousBuildId;
+            releaseInfo = null;
             return false;
         }
 
         previousAssembly?.Unload();
         Stopwatch stopwatch = new();
         stopwatch.Start();
-        var loaded = TryLoadAssembly(null);
+        var loaded = TryLoadAssembly(null, out releaseInfo);
         stopwatch.Stop();
         Log.Info($"{(loaded ? "Loading" : "Failing to load")} assembly took {stopwatch.ElapsedMilliseconds} ms");
 
@@ -200,14 +201,15 @@ internal sealed partial class CsProjectFile
         return new CsProjectFile(projRoot);
     }
 
-    public bool TryLoadLatestAssembly()
+    public bool TryLoadLatestAssembly([NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
         if (!TryGetBuildDirectories(EditorBuildMode, out _, out var latestDll))
+        {
+            releaseInfo = null;
             return false;
+        }
 
-        var loaded = TryLoadAssembly(latestDll);
-
-        if (!loaded)
+        if (!TryLoadAssembly(latestDll, out releaseInfo))
         {
             Log.Error($"Could not load latest assembly at \"{latestDll.FullName}\"");
             return false;
@@ -258,17 +260,17 @@ internal sealed partial class CsProjectFile
                    });
     }
 
-    private bool TryLoadAssembly(FileInfo assemblyFile)
+    private bool TryLoadAssembly(FileInfo? assemblyFile, [NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
         assemblyFile ??= GetBuildTargetPath();
         if (!assemblyFile.Exists)
         {
             Log.Error($"Could not find assembly at \"{assemblyFile.FullName}\"");
+            releaseInfo = null;
             return false;
         }
 
-        var gotAssembly = RuntimeAssemblies.TryLoadAssemblyInformation(assemblyFile.FullName, out var assembly);
-        if (!gotAssembly)
+        if (!RuntimeAssemblies.TryLoadAssemblyInformation(assemblyFile.FullName, out var assembly, out releaseInfo))
         {
             Log.Error($"Could not load assembly at \"{assemblyFile.FullName}\"");
             return false;

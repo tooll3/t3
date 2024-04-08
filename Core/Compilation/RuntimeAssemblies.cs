@@ -1,9 +1,12 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 using T3.Core.Logging;
+using T3.Serialization;
 
 namespace T3.Core.Compilation;
 
@@ -32,11 +35,11 @@ public static class RuntimeAssemblies
         var existing = Environment.GetEnvironmentVariable(envVar, EnvironmentVariableTarget.User);
         if (existing == envValue)
             return;
-        
+
         Environment.SetEnvironmentVariable(envVar, envValue, EnvironmentVariableTarget.User);
     }
 
-    public static bool TryLoadAssemblyInformation(string path, out AssemblyInformation info)
+    public static bool TryLoadAssemblyInformation(string path, [NotNullWhen(true)] out AssemblyInformation? info, out ReleaseInfo releaseInfo)
     {
         AssemblyName assemblyName;
         try
@@ -47,6 +50,7 @@ public static class RuntimeAssemblies
         {
             Log.Error($"Failed to get assembly name for {path}\n{e.Message}\n{e.StackTrace}");
             info = null;
+            releaseInfo = null;
             return false;
         }
 
@@ -56,23 +60,41 @@ public static class RuntimeAssemblies
                                           Path = path
                                       };
 
-        return TryLoadAssemblyInformation(assemblyNameAndPath, out info);
+        var success = TryLoadAssemblyInformation(assemblyNameAndPath, out info, out releaseInfo);
+
+        if (releaseInfo == null)
+        {
+            string error = $"Failed to load package info for {assemblyName.FullName} from \"{path}\". Try removing the offending package and restart the application.";
+            SystemUi.CoreUi.Instance.ShowMessageBox(error);
+            throw new Exception(error);
+        }
+
+        return success;
     }
 
-    private static bool TryLoadAssemblyInformation(AssemblyNameAndPath name, out AssemblyInformation info)
+    private static bool TryLoadAssemblyInformation(AssemblyNameAndPath name, [NotNullWhen(true)] out AssemblyInformation? info,
+                                                   [NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
+        var packageInfoPath = Path.Combine(Path.GetDirectoryName(name.Path)!, PackageInfoFileName);
+        if (!JsonUtils.TryLoadingJson(packageInfoPath, out releaseInfo))
+        {
+            Log.Warning($"Failed to load package info from path {packageInfoPath}");
+        }
+            
         try
         {
             var loadContext = new AssemblyLoadContext(name.AssemblyName.FullName, true);
             var assembly = loadContext.LoadFromAssemblyPath(name.Path);
             Log.Debug($"Loaded assembly {name.AssemblyName.FullName}");
-            info = new AssemblyInformation(name.Path, name.AssemblyName, assembly, loadContext);
+
+            info = new AssemblyInformation(releaseInfo, name.Path, name.AssemblyName, assembly, loadContext);
             return true;
         }
         catch (Exception e)
         {
             Log.Error($"Failed to load assembly {name.AssemblyName.FullName}\n{name.Path}\n{e.Message}\n{e.StackTrace}");
             info = null;
+            releaseInfo = null;
             return false;
         }
     }
@@ -87,4 +109,6 @@ public static class RuntimeAssemblies
         public AssemblyName AssemblyName;
         public string Path;
     }
+
+    public const string PackageInfoFileName = "OperatorPackage.json";
 }
