@@ -140,7 +140,7 @@ internal sealed partial class CsProjectFile
         const string outputPathVariable = "OutputPath"; // built-in variable to get the output path of the project
         
         var task = target.AddTask("WriteLinesToFile");
-        task.SetParameter("File", UnevaluatedVariable(outputPathVariable) + '/' + AssemblyInformation.PackageInfoFileName);
+        task.SetParameter("File", UnevaluatedVariable(outputPathVariable) + '/' + RuntimeAssemblies.PackageInfoFileName);
         task.SetParameter("Lines", UnevaluatedVariable(fullJsonTagName));
         task.SetParameter("Overwrite", "True");
         task.SetParameter("Encoding", "UTF-8");

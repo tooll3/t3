@@ -58,7 +58,7 @@ public readonly record struct OutputSlotInfo(string Name, OutputAttribute Attrib
 [Serializable]
 
 // Warning: Do not change these structs, as they are used in the serialization of the operator package file and is linked to the csproj json output
-public readonly record struct ReleaseInfo(Guid HomeGuid, string RootNamespace, string EditorVersion, OperatorPackageReference[] OperatorPackages);
+public record ReleaseInfo(Guid HomeGuid, string RootNamespace, string EditorVersion, OperatorPackageReference[] OperatorPackages);
 public readonly record struct OperatorPackageReference(string Identity, string Version, bool ResourcesOnly);
 
 public sealed class AssemblyInformation
@@ -70,7 +70,6 @@ public sealed class AssemblyInformation
     public readonly IReadOnlyCollection<string> AssemblyPaths;
 
     public bool IsOperatorAssembly => _operatorTypeInfo.Count > 0;
-    public const string PackageInfoFileName = "OperatorPackage.json";
 
     private readonly AssemblyName _assemblyName;
     private readonly Assembly _assembly;
@@ -88,8 +87,9 @@ public sealed class AssemblyInformation
 
     public readonly ReleaseInfo ReleaseInfo;
 
-    internal AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
+    internal AssemblyInformation(ReleaseInfo releaseInfo, string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
     {
+        ReleaseInfo = releaseInfo;
         AssemblyPaths = _assemblyPaths;
         Name = assemblyName.Name ?? "Unknown Assembly Name";
         var version = assemblyName.Version;
@@ -98,12 +98,6 @@ public sealed class AssemblyInformation
         _assemblyName = assemblyName;
         _assembly = assembly;
         Directory = System.IO.Path.GetDirectoryName(path)!;
-        
-        var packageInfoPath = System.IO.Path.Combine(Directory, PackageInfoFileName);
-        if (!JsonUtils.TryLoadingJson(packageInfoPath, out ReleaseInfo))
-        {
-            Log.Warning($"Failed to load package info from path {packageInfoPath}");
-        }
 
         _loadContext = loadContext;
 
