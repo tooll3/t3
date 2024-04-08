@@ -2619,7 +2619,7 @@
   ],
   "PlaybackSettings": {
     "Enabled": true,
-    "Bpm": 138.65788,
+    "Bpm": 60.0,
     "AudioSource": 1,
     "Syncing": 1,
     "AudioDecayFactor": 0.92,

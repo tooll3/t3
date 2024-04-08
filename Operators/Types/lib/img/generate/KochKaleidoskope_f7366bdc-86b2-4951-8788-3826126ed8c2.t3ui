@@ -29,7 +29,8 @@
       "Position": {
         "X": -308.4377,
         "Y": 204.1156
-      }
+      },
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "a1b3ae23-cb29-4e3e-93b6-fd4f1efadbf1"/*Angle*/,
@@ -61,7 +62,9 @@
         "X": -307.04523,
         "Y": 428.1638
       },
-      "Scale": 0.001
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "d2e12b96-7be3-4b31-bcdd-c882543a6ca6"/*ShadeFolds*/,
