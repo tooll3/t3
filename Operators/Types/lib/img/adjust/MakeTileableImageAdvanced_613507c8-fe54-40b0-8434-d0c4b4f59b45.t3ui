@@ -235,10 +235,49 @@
       }
     },
     {
-      "ChildId": "d58f3505-300c-4c78-8885-a45d3d50effb"/*MakeTileableImage*/,
+      "ChildId": "4d2020a8-7a4a-4451-bc81-38e1fec7b6db"/*BlendWithMask*/,
+      "Comment": "We're blending in the first texture with the mask to hide the seam.",
       "Position": {
-        "X": -483.65192,
-        "Y": 290.86743
+        "X": -1547.2101,
+        "Y": 796.629
+      }
+    },
+    {
+      "ChildId": "cf833802-5ff6-4ec2-8d59-552b49807df7"/*TransformImage*/,
+      "Comment": "Now you can spot the vertical seam.\nIt's because we're shifting the texture on the X axis. And the texture wrapping mode is set to Wrap. \n",
+      "Position": {
+        "X": -1764.8807,
+        "Y": 785.3914
+      }
+    },
+    {
+      "ChildId": "3ddd3479-4744-4562-922b-8c8abffbe09f"/*LinearGradient*/,
+      "Position": {
+        "X": -1683.0068,
+        "Y": 1035.1669
+      }
+    },
+    {
+      "ChildId": "04c944cb-f2b5-4ad1-814e-21c9681b164a"/*TransformImage*/,
+      "Comment": "It's time to take care of the horizontal seam",
+      "Position": {
+        "X": -1385.7101,
+        "Y": 922.9075
+      }
+    },
+    {
+      "ChildId": "1ae51171-b601-469d-bcee-d63bc183f335"/*BlendWithMask*/,
+      "Comment": "Now this texture can be repeated to the infinite",
+      "Position": {
+        "X": -1179.0946,
+        "Y": 945.06213
+      }
+    },
+    {
+      "ChildId": "de4a994a-f01a-4fd9-8505-4cdbd765fafd"/*LinearGradient*/,
+      "Position": {
+        "X": -1383.4199,
+        "Y": 1084.9379
       }
     }
   ],
