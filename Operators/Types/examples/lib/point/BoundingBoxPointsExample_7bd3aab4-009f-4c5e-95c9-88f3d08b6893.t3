@@ -38,9 +38,19 @@
       "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
       "InputValues": [
         {
+          "Id": "cc442161-e9ca-40ea-be3b-f87189d4e155"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 1.0,
+            "Z": 0.26611543,
+            "W": 1.0
+          }
+        },
+        {
           "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
           "Type": "System.Single",
-          "Value": 0.5
+          "Value": 0.265
         }
       ],
       "Outputs": []
@@ -125,7 +135,18 @@
     {
       "Id": "bd233ab1-bca8-403e-93e1-68ed94f1b3af"/*DrawLines*/,
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "75419a73-8a3e-4538-9a1d-e3b0ce7f8561"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.544512,
+            "Z": 0.6315789,
+            "W": 1.0
+          }
+        }
+      ],
       "Outputs": []
     },
     {
