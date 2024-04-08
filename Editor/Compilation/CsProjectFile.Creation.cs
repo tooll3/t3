@@ -133,6 +133,7 @@ internal sealed partial class CsProjectFile
         propertyGroup.AddProperty(fullJsonTagName, "{\n" +
                                                 $"\t\"HomeGuid\": \"{UnevaluatedVariable(homeGuidPropertyName)}\", \n" +
                                                 $"\t\"RootNamespace\": \"{UnevaluatedVariable(rootNamespacePropertyName)}\",\n" +
+                                                $"\t\"Version\": \"{UnevaluatedVariable(GetNameOf(PropertyType.VersionPrefix))}\",\n" +
                                                 $"\t\"EditorVersion\": \"{UnevaluatedVariable(editorVersionPropertyName)}\",\n" +
                                                 $"\t\"OperatorPackages\": [{UnevaluatedVariable(opReferencesArray)}\n\t]\n" +
                                                 "}\n");

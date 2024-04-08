@@ -6,6 +6,7 @@
         <Nullable>disable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RootNamespace>lib</RootNamespace>
+        <AssemblyName>$(RootNamespace)</AssemblyName>
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
         <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
@@ -65,6 +66,7 @@
             <OperatorPackageInfoJson>{
                 "HomeGuid": "$(HomeGuid)",
                 "RootNamespace": "$(RootNamespace)",
+                "Version": "$(VersionPrefix)",
                 "EditorVersion": "$(EditorVersion)",
                 "OperatorPackages":
                 [$(OperatorReferenceArray)
