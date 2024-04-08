@@ -1,0 +1,102 @@
+{
+  "Id": "69bd6cd3-85b2-4a6c-9184-ab25045a51aa"/*BoundingBoxPoints*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "c6082d55-5e47-404f-96f9-612959cd75ce"/*Points*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -570.3106,
+        "Y": 594.0847
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "1e55e4a8-a064-4ada-82c9-5c105033006b"/*ComputeShader*/,
+      "Position": {
+        "X": -35.912445,
+        "Y": 492.44617
+      }
+    },
+    {
+      "ChildId": "8cdf6a5d-9f5d-473a-8d99-dd94c902198c"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 471.04163,
+        "Y": 587.7994
+      }
+    },
+    {
+      "ChildId": "13cc016c-5b16-472a-b798-3e2b0577eb5e"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 232.65718,
+        "Y": 675.3694
+      }
+    },
+    {
+      "ChildId": "6839fe61-1816-4d6e-b93c-11e568b59232"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 641.2465,
+        "Y": 646.7957
+      }
+    },
+    {
+      "ChildId": "49276ef2-1044-418f-bf6b-3a17bce9d7f1"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 121.54491,
+        "Y": 562.4695
+      }
+    },
+    {
+      "ChildId": "bcd6b0ec-98dc-4bef-9796-511f20802d46"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 88.67059,
+        "Y": 1330.228
+      }
+    },
+    {
+      "ChildId": "886b599d-19fb-4804-8174-e677bcaf2ffd"/*GetBufferComponents*/,
+      "Position": {
+        "X": -419.65558,
+        "Y": 590.20135
+      }
+    },
+    {
+      "ChildId": "1705a63d-3d5a-485f-b920-e69f24200db5"/*GetBufferComponents*/,
+      "Position": {
+        "X": 230.9817,
+        "Y": 1250.8696
+      }
+    },
+    {
+      "ChildId": "73e411c4-790c-4b33-9502-39cf13e6dc24"/*IntsToBuffer*/,
+      "Position": {
+        "X": 272.03995,
+        "Y": 874.241
+      }
+    },
+    {
+      "ChildId": "909dffac-9bbe-44c2-a399-3de82927109b"/*IntValue*/,
+      "Position": {
+        "X": -158.20798,
+        "Y": 943.0149
+      }
+    },
+    {
+      "ChildId": "1f565330-c583-40f6-868c-89a02204b703"/*RepeatAtGPoints*/,
+      "Position": {
+        "X": 985.5725,
+        "Y": 1070.216
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "921d43ce-6167-409b-9748-d6f59daa1cde"/*Output*/,
+      "Position": {
+        "X": 771.2465,
+        "Y": 646.7957
+      }
+    }
+  ]
+}
