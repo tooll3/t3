@@ -6,7 +6,8 @@ namespace T3.Editor.Compilation;
 
 internal sealed partial class CsProjectFile
 {
-    private static string EvaluatedVariable(string variableName) => $"$({variableName})";
+    private static string UnevaluatedVariable(string variableName) => $"$({variableName})";
+    private static string UnevaluatedIterator(string variableName) => $"@({variableName})";
 
     private static ProjectRootElement CreateNewProjectRootElement(string projectNamespace, Guid homeGuid)
     {
@@ -15,6 +16,7 @@ internal sealed partial class CsProjectFile
         AddDefaultPropertyGroup(rootElement, projectNamespace, homeGuid);
         AddDefaultReferenceGroup(rootElement);
         AddDefaultContent(rootElement);
+        AddOpPackageItemGroup(rootElement);
         AddPackageInfoTarget(rootElement);
         return rootElement;
     }
@@ -73,27 +75,77 @@ internal sealed partial class CsProjectFile
         }
     }
 
+    private static void AddOpPackageItemGroup(ProjectRootElement project)
+    {
+        var group = project.AddItemGroup();
+        group.Label = OpPackIncludeTagName;
+    }
+
+    private static void AddOperatorPackageTo(ProjectRootElement project, string name, string @namespace, Version version, bool resourcesOnly)
+    {
+        // find item group
+        var group = project.ItemGroups.FirstOrDefault(x => x.Label == OpPackItemGroupLabel);
+        if (group == null)
+        {
+            group = project.AddItemGroup();
+            group.Label = OpPackItemGroupLabel;
+        }
+        
+        // add item
+        var item = group.AddItem(GetNameOf(ItemType.OperatorPackage), name + '.' + @namespace);
+        item.AddMetadata(nameof(OperatorPackageReference.Version), version.ToBasicVersionString(), true);
+        item.AddMetadata(nameof(OperatorPackageReference.ResourcesOnly), resourcesOnly.ToString(), true);
+    }
+
     private static void AddPackageInfoTarget(ProjectRootElement project)
     {
         var target = project.AddTarget("CreatePackageInfo");
         target.AfterTargets = "AfterBuild";
         
+        const string perPackageInfoTagName = "OpPackageInfoJson";
+
+        const string version = nameof(OperatorPackageReference.Version);
+        const string resourcesOnly = nameof(OperatorPackageReference.ResourcesOnly);
+        const string includeVar = nameof(OperatorPackageReference.Identity); // dont ask me, this is just how MSBuild works. I guess the "Include" tag is
+                                                                             // basically the identity of the item?
+        
+        const string jsonStructure = $"\n\t\t{{\n" +
+                                     $"\t\t\t\"{includeVar}\": \"%({includeVar})\",\n" +
+                                     $"\t\t\t\"{version}\": \"%({version})\", \n" +
+                                     $"\t\t\t\"{resourcesOnly}\": \"%({resourcesOnly})\"\n" +
+                                     $"\t\t}}";
+        
+        const string opReferencesArray = "OperatorReferenceArray";
+        const string jsonArrayIterator = $"@({OpPackIncludeTagName} -> '%({perPackageInfoTagName})', ',')";
+        
+        var itemGroup = target.AddItemGroup();
+        itemGroup.Label = "Define json structure of referenced operator packages";
+        var item = itemGroup.AddItem(OpPackIncludeTagName, UnevaluatedIterator(GetNameOf(ItemType.OperatorPackage)));
+        item.AddMetadata(perPackageInfoTagName, jsonStructure, false);
+        
         var propertyGroup = target.AddPropertyGroup();
+        propertyGroup.AddProperty(opReferencesArray, jsonArrayIterator);
+        
+        const string fullJsonTagName = "OperatorPackageInfoJson";
         var homeGuidPropertyName = GetNameOf(PropertyType.HomeGuid);
         var rootNamespacePropertyName = GetNameOf(PropertyType.RootNamespace);
         var editorVersionPropertyName = GetNameOf(PropertyType.EditorVersion);
-        
-        propertyGroup.AddProperty("PackageInfoJsonContent", "{\n" +
-                                                $"\t\"HomeGuid\": \"{EvaluatedVariable(homeGuidPropertyName)}\", \n" +
-                                                $"\t\"RootNamespace\": \"{EvaluatedVariable(rootNamespacePropertyName)}\",\n" +
-                                                $"\t\"EditorVersion\": \"{EvaluatedVariable(editorVersionPropertyName)}\" \n" +
+        propertyGroup.AddProperty(fullJsonTagName, "{\n" +
+                                                $"\t\"HomeGuid\": \"{UnevaluatedVariable(homeGuidPropertyName)}\", \n" +
+                                                $"\t\"RootNamespace\": \"{UnevaluatedVariable(rootNamespacePropertyName)}\",\n" +
+                                                $"\t\"EditorVersion\": \"{UnevaluatedVariable(editorVersionPropertyName)}\",\n" +
+                                                $"\t\"OperatorPackages\": [{UnevaluatedVariable(opReferencesArray)}\n\t]\n" +
                                                 "}\n");
         
-        //<WriteLinesToFile File="$(OutputPath)OperatorPackage.json" Lines="$(PackageInfoJsonContent)" Overwrite="True" Encoding="UTF-8"/>
+        const string outputPathVariable = "OutputPath"; // built-in variable to get the output path of the project
+        
         var task = target.AddTask("WriteLinesToFile");
-        task.SetParameter("File", "$(OutputPath)/" + AssemblyInformation.PackageInfoFileName);
-        task.SetParameter("Lines", "$(PackageInfoJsonContent)");
+        task.SetParameter("File", UnevaluatedVariable(outputPathVariable) + '/' + AssemblyInformation.PackageInfoFileName);
+        task.SetParameter("Lines", UnevaluatedVariable(fullJsonTagName));
         task.SetParameter("Overwrite", "True");
         task.SetParameter("Encoding", "UTF-8");
     }
+
+    private const string OpPackIncludeTagName = "OpPacks";
+    private const string OpPackItemGroupLabel = "OperatorPackages";
 }

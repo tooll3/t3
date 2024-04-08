@@ -30,6 +30,7 @@ internal sealed partial class CsProjectFile
         /// using <see cref="RuntimeAssemblies.EnvironmentVariableName"/>. See <see cref="CsProjectFile.ItemTypeNames"/> below.
         /// </summary>
         EditorReference,
+        OperatorPackage,
         Content
     }
 
@@ -39,7 +40,8 @@ internal sealed partial class CsProjectFile
         Exclude,
         Link,
         CopyToOutputDirectory,
-        Private
+        Private,
+        Label,
     }
     
     /// <summary>
@@ -52,6 +54,7 @@ internal sealed partial class CsProjectFile
                 (Name: nameof(ItemType.PackageReference), Type: ItemType.PackageReference),
                 (Name: "Reference", Type: ItemType.DllReference),
                 (Name: "Reference", Type: ItemType.EditorReference),
+                (Name: "Operators", Type: ItemType.OperatorPackage)
             }
        .ToFrozenDictionary(x => x.Type, x => x.Name);
     
@@ -71,7 +74,7 @@ internal sealed partial class CsProjectFile
         public readonly ItemType Type = type;
         
         public readonly string Include = type == ItemType.EditorReference
-                                             ? Path.Combine(EvaluatedVariable(RuntimeAssemblies.EnvironmentVariableName), include)
+                                             ? Path.Combine(UnevaluatedVariable(RuntimeAssemblies.EnvironmentVariableName), include)
                                              : include;
         
         public readonly TagValue[] Tags = tags ?? Array.Empty<TagValue>();
@@ -79,7 +82,7 @@ internal sealed partial class CsProjectFile
 
     private readonly record struct Condition(string ConditionVarName, string RequiredValue, bool IfEqual)
     {
-        public override string ToString() => $"'{EvaluatedVariable(ConditionVarName)}' {(IfEqual ? "==" : "!=")} '{RequiredValue}'";
+        public override string ToString() => $"'{UnevaluatedVariable(ConditionVarName)}' {(IfEqual ? "==" : "!=")} '{RequiredValue}'";
     }
 
     private readonly record struct ContentInclude
