@@ -2,7 +2,6 @@
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
