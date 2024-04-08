@@ -1,0 +1,100 @@
+{
+  "Id": "7bd3aab4-009f-4c5e-95c9-88f3d08b6893"/*BoundingBoxPointsExample*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "6ea7f88e-4616-472e-91a3-6b9bcd58e9f5"/*RadialPoints*/,
+      "Position": {
+        "X": 84.86218,
+        "Y": 0.9867554
+      }
+    },
+    {
+      "ChildId": "d84a3a3a-5970-4971-b4a6-e788668f6a73"/*DrawPoints*/,
+      "Position": {
+        "X": 633.3752,
+        "Y": -6.00708
+      }
+    },
+    {
+      "ChildId": "75620917-85b4-4847-8882-9c549ac8113d"/*Execute*/,
+      "Position": {
+        "X": 824.12524,
+        "Y": 18.907959
+      }
+    },
+    {
+      "ChildId": "1e1255d8-51dc-4e2c-bf3c-06a4feda6622"/*DrawPoints*/,
+      "Position": {
+        "X": 633.3752,
+        "Y": 49.99292
+      }
+    },
+    {
+      "ChildId": "b63477f8-d234-4366-93c6-4a08d44b5cfd"/*AddNoise*/,
+      "Position": {
+        "X": 234.86218,
+        "Y": 0.9867554
+      }
+    },
+    {
+      "ChildId": "6ad3c59f-366c-4741-a463-a156ee3f6bdf"/*Time*/,
+      "Position": {
+        "X": 84.86218,
+        "Y": 43.986755
+      }
+    },
+    {
+      "ChildId": "f89ad42c-bd0e-416d-a5ff-dd1586b2b201"/*Camera*/,
+      "Position": {
+        "X": 974.12524,
+        "Y": 18.907959
+      }
+    },
+    {
+      "ChildId": "de2c56f5-c00e-4b2b-8a66-96b0aa7c69c9"/*RenderTarget*/,
+      "Position": {
+        "X": 1124.1252,
+        "Y": 18.907959
+      }
+    },
+    {
+      "ChildId": "38c1a09b-222b-4486-9ce9-7cdc930d462f"/*PointsToCPU*/,
+      "Position": {
+        "X": 633.3752,
+        "Y": 161.99292
+      }
+    },
+    {
+      "ChildId": "b4521f62-447c-440b-8f7f-a91c15858afa"/*GetPointDataFromList*/,
+      "Position": {
+        "X": 824.12524,
+        "Y": 113.90796
+      }
+    },
+    {
+      "ChildId": "bd233ab1-bca8-403e-93e1-68ed94f1b3af"/*DrawLines*/,
+      "Position": {
+        "X": 633.3752,
+        "Y": 105.99292
+      }
+    },
+    {
+      "ChildId": "ec7cfe28-49f1-493a-9332-b20241b07f16"/*BoundingBoxPoints*/,
+      "Position": {
+        "X": 423.6731,
+        "Y": 120.63721
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "3edf7f96-e0ac-4370-a099-fcfe30fee2dc"/*ColorBuffer*/,
+      "Position": {
+        "X": 1534.1252,
+        "Y": 136.25183
+      }
+    }
+  ]
+}
