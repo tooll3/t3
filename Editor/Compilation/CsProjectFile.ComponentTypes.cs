@@ -17,7 +17,8 @@ internal sealed partial class CsProjectFile
         VersionPrefix,
         Nullable,
         HomeGuid,
-        EditorVersion
+        EditorVersion,
+        AssemblyName
     }
 
     private enum ItemType

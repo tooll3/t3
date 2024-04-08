@@ -210,7 +210,7 @@ namespace T3.Core.Operator
             }
 
             #if DEBUG
-            if (!gotTargetInstance)
+            if (targetInstance == null)
             {
                 System.Diagnostics.Debug.Assert(connection.TargetParentOrChildId == Guid.Empty);
             }
@@ -272,7 +272,7 @@ namespace T3.Core.Operator
             #if DEBUG
             if (numInputs > 0)
             {
-                Debug.Assert(inputs.Count == InputDefinitions.Count);
+                Debug.Assert(inputs.Count == inputDefinitions.Count);
             }
             #endif
         }

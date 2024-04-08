@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Threading;
 using T3.Core.Compilation;
 using T3.Core.Model;
 using T3.Core.Operator;
