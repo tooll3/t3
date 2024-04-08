@@ -78,7 +78,7 @@ internal sealed partial class CsProjectFile
     private static void AddOpPackageItemGroup(ProjectRootElement project)
     {
         var group = project.AddItemGroup();
-        group.Label = OpPackIncludeTagName;
+        group.Label = OpPackItemGroupLabel;
     }
 
     private static void AddOperatorPackageTo(ProjectRootElement project, string name, string @namespace, Version version, bool resourcesOnly)

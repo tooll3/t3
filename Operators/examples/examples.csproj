@@ -10,6 +10,7 @@
         <Platforms>AnyCPU</Platforms>
         <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
         <VersionPrefix>1.0.0</VersionPrefix>
+        <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Core\Core.csproj" Private="false"/>
@@ -40,16 +41,34 @@
     </ItemGroup>
 
 
-    <!-- Add guid and root namespace to packageinfo -->
+    <ItemGroup Label="OperatorPackages">
+        <Operators Include="lib" Version="1.0.0" ResourcesOnly="False" />
+        <Operators Include="lib.types" Version="1.0.0" ResourcesOnly="False" />
+    </ItemGroup>
     <Target Name="CreatePackageInfo" AfterTargets="AfterBuild">
+        <ItemGroup Label="Define json structure of referenced operator packages">
+            <OpPacks Include="@(Operators)">
+                <OpPackageInfoJson>
+                    {
+                    "Identity": "%(Identity)",
+                    "Version": "%(Version)",
+                    "ResourcesOnly": "%(ResourcesOnly)"
+                    }
+                </OpPackageInfoJson>
+            </OpPacks>
+        </ItemGroup>
         <PropertyGroup>
-            <PackageInfoJsonContent>
-                {
+            <OperatorReferenceArray>@(OpPacks -> '%(OpPackageInfoJson)', ',')</OperatorReferenceArray>
+            <OperatorPackageInfoJson>{
                 "HomeGuid": "$(HomeGuid)",
-                "RootNamespace": "$(RootNamespace)"
+                "RootNamespace": "$(RootNamespace)",
+                "EditorVersion": "$(EditorVersion)",
+                "OperatorPackages":
+                [$(OperatorReferenceArray)
+                ]
                 }
-            </PackageInfoJsonContent>
+            </OperatorPackageInfoJson>
         </PropertyGroup>
-        <WriteLinesToFile File="$(OutputPath)OperatorPackage.json" Lines="$(PackageInfoJsonContent)" Overwrite="True" Encoding="UTF-8"/>
+        <WriteLinesToFile File="$(OutputPath)/OperatorPackage.json" Lines="$(OperatorPackageInfoJson)" Overwrite="True" Encoding="UTF-8" />
     </Target>
 </Project>

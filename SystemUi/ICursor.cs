@@ -92,9 +92,11 @@ public static class MouseButtonConversion // for array-users
     private static readonly int ButtonCount = AllButtons.Length;
 }
 
-public sealed class MouseButtonEventArgs(MouseButtons Button) : EventArgs
+public sealed class MouseButtonEventArgs(MouseButtons button) : EventArgs
 {
     public bool Consumed { get; private set; }
+
+    public readonly MouseButtons Button = button;
 
     public void Consume()
     {

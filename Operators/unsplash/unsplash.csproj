@@ -22,7 +22,6 @@
       <PackageReference Include="unsplasharp.api" Version="0.7.0" />
     </ItemGroup>
 
-
     <!-- Include Resources/** into output/Resources -->
     <ItemGroup Condition="'$(Configuration)' == 'Release'">
         <Content Include="Resources/**/*" Exclude="bin/**">
@@ -43,17 +42,35 @@
         </Content>
     </ItemGroup>
 
-    <!-- Add guid and root namespace to packageinfo -->
+    <ItemGroup Label="OperatorPackages">
+        <Operators Include="lib" Version="1.0.0" ResourcesOnly="False" />
+        <Operators Include="lib.types" Version="1.0.0" ResourcesOnly="False" />
+    </ItemGroup>
     <Target Name="CreatePackageInfo" AfterTargets="AfterBuild">
+        <ItemGroup Label="Define json structure of referenced operator packages">
+            <OpPacks Include="@(Operators)">
+                <OpPackageInfoJson>
+                    {
+                    "Identity": "%(Identity)",
+                    "Version": "%(Version)",
+                    "ResourcesOnly": "%(ResourcesOnly)"
+                    }
+                </OpPackageInfoJson>
+            </OpPacks>
+        </ItemGroup>
         <PropertyGroup>
-            <PackageInfoJsonContent>
-                {
+            <OperatorReferenceArray>@(OpPacks -> '%(OpPackageInfoJson)', ',')</OperatorReferenceArray>
+            <OperatorPackageInfoJson>{
                 "HomeGuid": "$(HomeGuid)",
-                "RootNamespace": "$(RootNamespace)"
+                "RootNamespace": "$(RootNamespace)",
+                "EditorVersion": "$(EditorVersion)",
+                "OperatorPackages":
+                [$(OperatorReferenceArray)
+                ]
                 }
-            </PackageInfoJsonContent>
+            </OperatorPackageInfoJson>
         </PropertyGroup>
-        <WriteLinesToFile File="$(OutputPath)OperatorPackage.json" Lines="$(PackageInfoJsonContent)" Overwrite="True" Encoding="UTF-8"/>
+        <WriteLinesToFile File="$(OutputPath)/OperatorPackage.json" Lines="$(OperatorPackageInfoJson)" Overwrite="True" Encoding="UTF-8" />
     </Target>
 
 </Project>
