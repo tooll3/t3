@@ -8,7 +8,8 @@
         <Platforms>AnyCPU</Platforms>
         <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
         <VersionPrefix>1.0.0</VersionPrefix>
-
+        <RootNamespace>lib.Editor</RootNamespace>
+        <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Core\Core.csproj" Private="false"/>
@@ -41,5 +42,34 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-    
+    <ItemGroup Label="OperatorPackages">
+        <Operators Include="lib" Version="1.0.0" ResourcesOnly="False" />
+        <Operators Include="lib.types" Version="1.0.0" ResourcesOnly="False" />
+    </ItemGroup>
+    <Target Name="CreatePackageInfo" AfterTargets="AfterBuild">
+        <ItemGroup Label="Define json structure of referenced operator packages">
+            <OpPacks Include="@(Operators)">
+                <OpPackageInfoJson>
+                    {
+                    "Identity": "%(Identity)",
+                    "Version": "%(Version)",
+                    "ResourcesOnly": "%(ResourcesOnly)"
+                    }
+                </OpPackageInfoJson>
+            </OpPacks>
+        </ItemGroup>
+        <PropertyGroup>
+            <OperatorReferenceArray>@(OpPacks -> '%(OpPackageInfoJson)', ',')</OperatorReferenceArray>
+            <OperatorPackageInfoJson>{
+                "HomeGuid": "$(HomeGuid)",
+                "RootNamespace": "$(RootNamespace)",
+                "EditorVersion": "$(EditorVersion)",
+                "OperatorPackages":
+                [$(OperatorReferenceArray)
+                ]
+                }
+            </OperatorPackageInfoJson>
+        </PropertyGroup>
+        <WriteLinesToFile File="$(OutputPath)/OperatorPackage.json" Lines="$(OperatorPackageInfoJson)" Overwrite="True" Encoding="UTF-8" />
+    </Target> 
 </Project>

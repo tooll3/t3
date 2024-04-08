@@ -12,7 +12,6 @@ using Encoding = System.Text.Encoding;
 
 namespace T3.Editor.Compilation;
 
-// todo - convert to a proper XML parser
 internal sealed partial class CsProjectFile
 {
     public string FullPath => _projectRootElement.FullPath;

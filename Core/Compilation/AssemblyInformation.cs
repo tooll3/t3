@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -21,10 +22,9 @@ using T3.Serialization;
 
 namespace T3.Core.Compilation;
 
-public readonly record struct InputSlotInfo(string Name, InputAttribute Attribute, Type Type, Type[] GenericArguments, FieldInfo Field, bool IsMultiInput);
+public readonly record struct InputSlotInfo(string Name, InputAttribute Attribute, Type[] GenericArguments, FieldInfo Field, bool IsMultiInput);
 
 public readonly record struct OperatorTypeInfo(
-    Guid Id,
     List<InputSlotInfo> Inputs,
     List<OutputSlotInfo> Outputs,
     Func<object> Constructor,
@@ -34,14 +34,28 @@ public readonly record struct OperatorTypeInfo(
 
 public readonly record struct ExtractableTypeInfo(bool IsExtractable, Type? ExtractableType);
 
-public readonly record struct OutputSlotInfo(string Name, OutputAttribute Attribute, Type Type, Type[] GenericArguments, FieldInfo Field)
+public readonly record struct OutputSlotInfo
 {
-    public readonly Type? OutputDataType = GetOutputDataType(Type);
+    internal readonly Type? OutputDataType;
+
+    internal OutputSlotInfo(string Name, OutputAttribute Attribute, Type type, Type[] GenericArguments, FieldInfo Field)
+    {
+        this.Name = Name;
+        this.Attribute = Attribute;
+        this.GenericArguments = GenericArguments;
+        this.Field = Field;
+        OutputDataType = GetOutputDataType(type);
+    }
+
+    public string Name { get; }
+    public OutputAttribute Attribute { get; }
+    public Type[] GenericArguments { get; }
+    public FieldInfo Field { get; }
 
     private static Type? GetOutputDataType(Type fieldType)
     {
         var interfaces = fieldType.GetInterfaces();
-        Type foundInterface = null;
+        Type? foundInterface = null;
         foreach (var i in interfaces)
         {
             if (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IOutputDataUser<>))
@@ -52,6 +66,14 @@ public readonly record struct OutputSlotInfo(string Name, OutputAttribute Attrib
         }
 
         return foundInterface?.GetGenericArguments().Single();
+    }
+
+    public void Deconstruct(out string Name, out OutputAttribute Attribute, out Type[] GenericArguments, out FieldInfo Field)
+    {
+        Name = this.Name;
+        Attribute = this.Attribute;
+        GenericArguments = this.GenericArguments;
+        Field = this.Field;
     }
 }
 
@@ -67,7 +89,6 @@ public sealed class AssemblyInformation
     public readonly string Path;
     public readonly string Directory;
     public Version? Version => _assemblyName.Version;
-    public readonly IReadOnlyCollection<string> AssemblyPaths;
 
     public bool IsOperatorAssembly => _operatorTypeInfo.Count > 0;
 
@@ -83,32 +104,26 @@ public sealed class AssemblyInformation
     internal readonly bool ShouldShareResources;
 
     private IEnumerable<Assembly> AllAssemblies => _loadContext?.Assemblies ?? Enumerable.Empty<Assembly>();
-    private readonly List<string> _assemblyPaths = [];
 
     public readonly ReleaseInfo ReleaseInfo;
 
     internal AssemblyInformation(ReleaseInfo releaseInfo, string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
     {
         ReleaseInfo = releaseInfo;
-        AssemblyPaths = _assemblyPaths;
         Name = assemblyName.Name ?? "Unknown Assembly Name";
         var version = assemblyName.Version;
         Path = path;
-        _assemblyPaths.Add(path);
         _assemblyName = assemblyName;
         _assembly = assembly;
         Directory = System.IO.Path.GetDirectoryName(path)!;
 
         _loadContext = loadContext;
 
-        LoadTypes(path, assembly, out ShouldShareResources);
-    }
-
-    public IEnumerable<Type> TypesInheritingFrom(Type type) => _types.Values.Where(t => t.IsAssignableTo(type));
-
-    private void LoadTypes(string path, Assembly assembly, out bool shouldShareResources)
-    {
-        TryResolveReferences(path);
+        if (!TryResolveReferences(path, out _assemblyResolver!))
+        {
+            throw new Exception($"Failed to load assembly {path}");
+        }
+        
         Type[] types;
         try
         {
@@ -118,11 +133,18 @@ public sealed class AssemblyInformation
         {
             Log.Warning($"Failed to load types from assembly {assembly.FullName}\n{e.Message}\n{e.StackTrace}");
             _types = new Dictionary<string, Type>();
-            shouldShareResources = false;
+            ShouldShareResources = false;
             return;
         }
+        
+        LoadTypes(types, assembly, out ShouldShareResources, out _types);
+    }
 
-        var typeDict = new Dictionary<string, Type>();
+    public IEnumerable<Type> TypesInheritingFrom(Type type) => _types.Values.Where(t => t.IsAssignableTo(type));
+
+    private void LoadTypes(Type[] types, Assembly assembly, out bool shouldShareResources, out Dictionary<string, Type> typeDict)
+    {
+        typeDict = new Dictionary<string, Type>();
         foreach (var type in types)
         {
             if (!typeDict.TryAdd(type.FullName!, type))
@@ -199,15 +221,15 @@ public sealed class AssemblyInformation
         foreach (var field in slots)
         {
             var fieldType = field.FieldType;
-            var genericArguments = fieldType.GetGenericArguments();
             var name = field.Name;
+            var genericArguments = fieldType.GetGenericArguments();
             if (fieldType.IsAssignableTo(typeof(IInputSlot)))
             {
                 var inputAttribute = field.GetCustomAttribute<InputAttribute>();
                 if (inputAttribute is not null)
                 {
                     var isMultiInput = fieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
-                    inputFields.Add(new InputSlotInfo(name, inputAttribute, fieldType, genericArguments, field, isMultiInput));
+                    inputFields.Add(new InputSlotInfo(name, inputAttribute, genericArguments, field, isMultiInput));
                 }
                 else
                 {
@@ -218,7 +240,7 @@ public sealed class AssemblyInformation
             {
                 var outputAttribute = field.GetCustomAttribute<OutputAttribute>();
                 if (outputAttribute is not null)
-                {
+                { 
                     outputFields.Add(new OutputSlotInfo(name, outputAttribute, fieldType, genericArguments, field));
                 }
                 else
@@ -247,7 +269,6 @@ public sealed class AssemblyInformation
         }
 
         var added = _operatorTypeInfo.TryAdd(id, new OperatorTypeInfo(
-                                                                      Id: id,
                                                                       Type: type,
                                                                       Constructor: constructor,
                                                                       Inputs: inputFields,
@@ -265,13 +286,16 @@ public sealed class AssemblyInformation
     /// Adapted from https://www.codeproject.com/Articles/1194332/Resolving-Assemblies-in-NET-Core
     /// </summary>
     /// <param name="path">path to dll</param>
-    private void TryResolveReferences(string path)
+    /// <param name="assemblyResolver"></param>
+    /// <param name="loadContext"></param>
+    private bool TryResolveReferences(string path, [NotNullWhen(true)] out CompositeCompilationAssemblyResolver? assemblyResolver)
     {
         _dependencyContext = DependencyContext.Load(_assembly);
         if (_dependencyContext == null)
         {
             Log.Error($"Failed to load dependency context for assembly {_assemblyName.FullName}");
-            return;
+            assemblyResolver = null;
+            return false;
         }
 
         var resolvers = new ICompilationAssemblyResolver[]
@@ -280,15 +304,16 @@ public sealed class AssemblyInformation
                                 new ReferenceAssemblyPathResolver(),
                                 new PackageCompilationAssemblyResolver()
                             };
-        _assemblyResolver = new CompositeCompilationAssemblyResolver(resolvers);
+        assemblyResolver = new CompositeCompilationAssemblyResolver(resolvers);
 
         if (_loadContext == null)
         {
             Log.Error($"Failed to get load context for assembly {_assemblyName.FullName}");
-            return;
+            return false;
         }
 
         _loadContext.Resolving += OnResolving;
+        return true;
     }
 
     private Assembly? OnResolving(AssemblyLoadContext context, AssemblyName name)
@@ -315,7 +340,6 @@ public sealed class AssemblyInformation
                 return null;
             case 1:
                 var path = assemblies[0];
-                _assemblyPaths.Add(path);
                 return context.LoadFromAssemblyPath(path);
             default:
             {
