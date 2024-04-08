@@ -27,7 +27,6 @@ internal sealed partial class CsProjectFile
     private readonly string _targetFramework;
     private readonly string _releaseRootDirectory;
     private readonly string _debugRootDirectory;
-    private readonly string _dllName;
     private readonly ProjectRootElement _projectRootElement;
 
     public static bool TryLoad(string filePath, [NotNullWhen(true)] out CsProjectFile? csProjFile, [NotNullWhen(false)] out string? error)
@@ -64,13 +63,25 @@ internal sealed partial class CsProjectFile
         var dir = Directory;
         _releaseRootDirectory = Path.Combine(dir, "bin", "Release");
         _debugRootDirectory = Path.Combine(dir, "bin", "Debug");
-        _dllName = Name + ".dll";
     }
 
     private FileInfo GetBuildTargetPath()
     {
         var directory = GetBuildTargetDirectory();
-        return new FileInfo(Path.Combine(directory, _dllName));
+        return new FileInfo(Path.Combine(directory, DllName));
+    }
+
+    private string DllName
+    {
+        get
+        {
+            var defaultAssemblyName = UnevaluatedVariable(GetNameOf(PropertyType.RootNamespace));
+            var property = GetProperty(PropertyType.AssemblyName, _projectRootElement, defaultAssemblyName);
+            if(property != defaultAssemblyName)
+                return property + ".dll";
+            
+            return RootNamespace + ".dll";
+        }
     }
 
     public string GetBuildTargetDirectory()
@@ -217,7 +228,7 @@ internal sealed partial class CsProjectFile
         return true;
     }
 
-    private bool TryGetBuildDirectories(Compiler.BuildMode buildMode, out DirectoryInfo[] compatibleDirectories, out FileInfo latestDll)
+    private bool TryGetBuildDirectories(Compiler.BuildMode buildMode, out DirectoryInfo[] compatibleDirectories, [NotNullWhen(true)]out FileInfo? latestDll)
     {
         var rootDir = new DirectoryInfo(GetRootDirectory(buildMode));
         if (!rootDir.Exists)
@@ -229,7 +240,11 @@ internal sealed partial class CsProjectFile
 
         compatibleDirectories = rootDir.EnumerateDirectories($"*{_targetFramework}", SearchOption.AllDirectories).ToArray();
 
-        latestDll = compatibleDirectories.SelectMany(x => x.EnumerateFiles(_dllName)).MaxBy(x => x.LastWriteTime);
+        var dllName = DllName;
+        latestDll = compatibleDirectories
+                   .Select(x => new FileInfo(Path.Combine(x.FullName, dllName)))
+                   .Where(file => file.Exists)
+                   .MaxBy(x => x.LastWriteTime);
         return latestDll != null;
     }
 
