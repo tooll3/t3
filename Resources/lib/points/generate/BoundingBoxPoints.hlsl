@@ -1,5 +1,3 @@
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
 #include "lib/shared/quat-functions.hlsl"
 
@@ -12,9 +10,6 @@ cbuffer Params : register(b1)
 {
     int SourceCount;
     int ResultCount;
-   
-
-
 }
 
 StructuredBuffer<Point> SourcePoints : t0;   // input
@@ -103,12 +98,13 @@ RWStructuredBuffer<Point> ResultPoints : u0; // output
         }
     }
 
-    ResultPoints[1,5].Color = float4(1,0,0,1); //minBounds
+    // color helpers for development
+    /* ResultPoints[1,5].Color = float4(1,0,0,1); //minBounds
     ResultPoints[7].Color = float4(1,0,1,1);
     ResultPoints[8,14].Color = float4(0,1,0,1);//maxBounds
+    ResultPoints[0].Color = float4(0,0,1,1);//middlePoint */
 
-  
-    ResultPoints[0].Color = float4(0,0,1,1);//middlePoint
+    ResultPoints[0].W = NAN;
     ResultPoints[13].W = NAN;
     ResultPoints[16].W = NAN;
     ResultPoints[19].W = NAN;
