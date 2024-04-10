@@ -12,6 +12,7 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
+using T3.Core.SystemUi;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
@@ -426,6 +427,19 @@ public static class T3Ui
                 WindowManager.DrawWindowMenuContent();
                 ImGui.EndMenu();
             }
+            
+            #if DEBUG
+            
+            if (ImGui.BeginMenu("Debug"))
+            {
+                if (ImGui.MenuItem("Show Popup"))
+                {
+                    EditorUi.Instance.ShowMessageBox("Hello World!", "Debug Popup", PopUpButtons.Ok);
+                }
+                ImGui.EndMenu();
+            }
+            
+            #endif
 
             if (UserSettings.Config.FullScreen)
             {
