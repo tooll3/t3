@@ -438,7 +438,8 @@ public static class T3Ui
                                             "Donec auctor, nisl vel ultricies tincidunt, nisl nisl aliquam nisl, nec pulvinar nisl nisl vitae nisl. " +
                                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis quis ligula sit amet ornare. ";
                         
-                    BlockingWindow.Instance.Show(bodyText, "Debug Popup", "Ok", "Maybe", "Idk", "Possibly", "Affirmative", "Negatory", "NO!");
+                    var result = BlockingWindow.Instance.Show(bodyText, "Debug Popup", "Ok", "Maybe", "Idk", "Possibly", "Affirmative", "Negatory", "NO!");
+                    Log.Debug($"Result: \"{result}\"");
                 }
                 ImGui.EndMenu();
                 
