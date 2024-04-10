@@ -16,6 +16,14 @@
       }
     },
     {
+      "Id": "da73250e-fcf2-4fe9-9a84-a1d139a0390c"/*Rotate*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
       "Id": "4b8a067d-8630-485e-b390-1fca7cc06323"/*Stretch*/,
       "DefaultValue": {
         "X": 1.0,
@@ -24,16 +32,8 @@
       }
     },
     {
-      "Id": "d2d278d9-7933-49ea-83c2-3566f5a13d1f"/*Scale*/,
+      "Id": "d2d278d9-7933-49ea-83c2-3566f5a13d1f"/*Uniformscale*/,
       "DefaultValue": 1.0
-    },
-    {
-      "Id": "da73250e-fcf2-4fe9-9a84-a1d139a0390c"/*Rotate*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
     },
     {
       "Id": "888017f2-3ac2-464b-ae6f-9f8caf53ba6d"/*UseVertexSelection*/,
