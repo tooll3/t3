@@ -5,6 +5,7 @@ using System.Threading;
 using Newtonsoft.Json;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Core.SystemUi;
 using T3.Editor.SystemUi;
 
 namespace T3.Editor.UiModel;
@@ -203,7 +204,7 @@ internal sealed partial class EditableSymbolProject
 
     private void OnFileRenamed(object sender, RenamedEventArgs args)
     {
-        EditorUi.Instance.ShowMessageBox($"File {args.OldFullPath} renamed to {args.FullPath}. Please do not do this while the editor is running.");
+        BlockingWindow.Instance.Show($"File {args.OldFullPath} renamed to {args.FullPath}. Please do not do this while the editor is running.");
         _needsCompilation = true;
     }
 

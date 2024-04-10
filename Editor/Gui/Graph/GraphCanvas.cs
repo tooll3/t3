@@ -754,11 +754,11 @@ namespace T3.Editor.Gui.Graph
                 {
                     case false:
                         Log.Error(reason);
-                        EditorUi.Instance.ShowMessageBox(reason, $"Failed to export {label}");
+                        BlockingWindow.Instance.Show(reason, $"Failed to export {label}");
                         break;
                     default:
                         Log.Info(reason);
-                        EditorUi.Instance.ShowMessageBox(reason, $"Exported {label} successfully!");
+                        BlockingWindow.Instance.Show(reason, $"Exported {label} successfully!");
                         // open export directory in native file explorer
                         CoreUi.Instance.OpenWithDefaultApplication(exportDir);
                         break;
@@ -783,7 +783,7 @@ namespace T3.Editor.Gui.Graph
                         if (shaderIsReadOnly)
                         {
                             CopyToTempShaderPath(filePath, out filePath);
-                            EditorUi.Instance.ShowMessageBox("Warning - viewing a read-only shader. Modifications will not be saved.\n" +
+                            BlockingWindow.Instance.Show("Warning - viewing a read-only shader. Modifications will not be saved.\n" +
                                                              "Following #include directives outside of the temp folder may lead you to read-only files, " +
                                                              "and editing those can break operators.\n\nWith great power...", "Warning");
                         }

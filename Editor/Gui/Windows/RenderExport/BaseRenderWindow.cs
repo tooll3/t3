@@ -3,6 +3,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction.Timing;
@@ -97,8 +98,8 @@ public abstract class BaseRenderWindow : Window
         if (targetFile != directory && File.Exists(targetFile))
         {
             // FIXME: get a nicer popup window here...
-            var result = EditorUi.Instance.ShowMessageBox("File exists. Overwrite?", "Render Video", PopUpButtons.YesNo);
-            return (result == PopUpResult.Yes);
+            var result = BlockingWindow.Instance.Show("File exists. Overwrite?", "Render Video", "Yes", "No");
+            return (result == "Yes");
         }
 
         if (directory == null || Directory.Exists(directory))

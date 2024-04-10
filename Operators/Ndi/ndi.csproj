@@ -12,6 +12,7 @@
         <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
         <VersionPrefix>1.0.0</VersionPrefix>
         <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
+        <EditorVersion>3.9.1</EditorVersion>
     </PropertyGroup>
 
     <ItemGroup>

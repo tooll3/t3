@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using T3.Core.Operator;
+using T3.Core.SystemUi;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
@@ -383,7 +384,7 @@ namespace T3.Editor.UiModel
             if (!UpdateSymbolWithNewSource(symbol, newSource, out reason))
             {
                 var title = $"Could not update symbol '{symbol.Name}'";
-                EditorUi.Instance.ShowMessageBox(reason, title);
+                BlockingWindow.Instance.Show(reason, title);
                 reason = title + ": " + reason;
                 return false;
             }

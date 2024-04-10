@@ -1,7 +1,6 @@
 using System;
 using System.Numerics;
 using System.Windows.Forms;
-using SharpDX.Windows;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.SystemUi;

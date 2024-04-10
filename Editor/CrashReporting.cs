@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using System.Text.Json;
-using System.Windows.Forms;
 using ImGuiNET;
 using Sentry;
 using T3.Core.Animation;
@@ -65,17 +64,17 @@ internal static class CrashReporting
                                                 UndoActions = UndoRedoStack.UndoStack.Count,
                                             };
         
+        string? json = null;
         try
         {
             var primaryComposition = GraphWindow.Focused?.CompositionOp;
             if (primaryComposition != null)
             {
                 var compositionUi = primaryComposition.Symbol.GetSymbolUi();
-                var json = GraphOperations.CopyNodesAsJson(
+                json = GraphOperations.CopyNodesAsJson(
                                                            primaryComposition,
                                                            compositionUi.ChildUis.Values,
                                                            compositionUi.Annotations.Values.ToList());
-                EditorUi.Instance.SetClipboardText(json);
             }
         }
         catch (Exception e)
@@ -87,19 +86,25 @@ internal static class CrashReporting
 
         // We only show crash report dialog in release mode 
         #if RELEASE
-        var result = CoreUi.Instance.ShowMessageBox(string.Join("\n",
-                                                                "Oh noooo, how embarrassing! T3 just crashed.",
-                                                                $"Last backup was saved {timeSpan} to .t3/backups/",
-                                                                "We copied the current operator to your clipboard.",
-                                                                "Please read the Wiki on what to do next.",
-                                                                "",
-                                                                "Click Yes to send a crash report to tooll.sentry.io.",
-                                                                "This will hopefully help us to fix this issue."
-                                                               ),
-                                                    @"☠🙈 Damn!",
-                                                    PopUpButtons.YesNo);
-
-        var sendingEnabled = result == PopUpResult.Yes;
+        string message = "On noooo, how embarrassing! T3 just crashed\n" +
+                         $"Last backup was saved {timeSpan} to .t3/backups/\n" +
+                         "Please consult the Wiki on what to do next.";
+        
+        if (json != null)
+        {
+            message += "\n\n" + "When this window closes, the current operator will be copied to your clipboard. " +
+                       "You can use it to troubleshoot/reproduce the issue.";
+        }
+        
+        const string confirmation = "Send crash report (it really helps!)";
+        var result = BlockingWindow.Instance.Show(message, @"☠🙈 Damn!", confirmation, "No thanks, I hate it when things are fixed");
+        
+        if (json != null)
+        {
+            EditorUi.Instance.SetClipboardText(json);
+        }
+        
+        var sendingEnabled = result == confirmation;
 
         if (!string.IsNullOrWhiteSpace(LogPath))
         {

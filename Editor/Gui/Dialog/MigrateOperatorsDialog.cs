@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.Model;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
@@ -23,7 +24,7 @@ namespace T3.Editor.Gui.Dialog
             FormInputs.SetIndentToParameters();
             if (BeginDialog("Import Operators from another Tooll installation"))
             {
-                EditorUi.Instance.ShowMessageBox("This function has been deprecated due to the new project structure.");
+                BlockingWindow.Instance.Show("This function has been deprecated due to the new project structure.");
                 EndDialog();
                 return;
                 
@@ -69,9 +70,9 @@ namespace T3.Editor.Gui.Dialog
                     FormInputs.ApplyIndent();
                     if (CustomComponents.DisablableButton("Import and Restart", isValid))
                     {
-                        EditorUi.Instance.ShowMessageBox($"This function has been deprecated as a result of the new project structure.");
+                        BlockingWindow.Instance.Show($"This function has been deprecated as a result of the new project structure.");
                         return;
-                        EditorUi.Instance.ShowMessageBox("Tooll now has to restart to complete the import.");
+                        BlockingWindow.Instance.Show("Tooll now has to restart to complete the import.");
                         EditorUi.Instance.ExitApplication();
                         //Application.Restart();
                         //Environment.Exit(0);

@@ -1,12 +1,12 @@
 ﻿using System.Runtime.InteropServices;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows
@@ -270,7 +270,7 @@ namespace T3.Editor.Gui.Windows
                         var guid = Guid.Parse(guidString);
                         Log.Debug("dropped symbol here" + payload + " " + myString + "  " + guid);
                         if(!MoveSymbolToNamespace(guid, subtree.GetAsString(), out var reason))
-                            EditorUi.Instance.ShowMessageBox(reason, "Could not move symbol's namespace");
+                            BlockingWindow.Instance.Show(reason, "Could not move symbol's namespace");
                     }
                 }
 

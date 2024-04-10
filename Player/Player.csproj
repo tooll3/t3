@@ -38,6 +38,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Core\Core.csproj" />
       <ProjectReference Include="..\MsForms\MsForms.csproj" />
+      <ProjectReference Include="..\SilkWindows\SilkWindows.csproj" />
       <ProjectReference Include="..\SystemUi\SystemUi.csproj" />
     </ItemGroup>
 

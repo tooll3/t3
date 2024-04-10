@@ -8,9 +8,6 @@ namespace T3.MsForms;
 
 public class MsForms : ICoreSystemUiService
 {
-    public MsForms()
-    {
-    }
 
     public void SetUnhandledExceptionMode(bool throwException)
     {
@@ -35,22 +32,6 @@ public class MsForms : ICoreSystemUiService
         Process.Start(startInfo);
     }
 
-    void ICoreSystemUiService.ShowMessageBox(string text, string title)
-    {
-        MessageBox.Show(text, title);
-    }
-
-    PopUpResult ICoreSystemUiService.ShowMessageBox(string text, string title, PopUpButtons buttons)
-    {
-        DialogResult result = MessageBox.Show(text, title, ButtonEnumConversion[buttons]);
-        return ResultEnumConversion[result];
-    }
-
-    void ICoreSystemUiService.ShowMessageBox(string message)
-    {
-        MessageBox.Show(message);
-    }
-
     void ICoreSystemUiService.ExitApplication()
     {
         if (System.Windows.Forms.Application.MessageLoop)
@@ -71,33 +52,6 @@ public class MsForms : ICoreSystemUiService
     }
 
     public ICursor Cursor => FirstCursor ??= new CursorWrapper();
-
-    private static readonly Dictionary<PopUpButtons, MessageBoxButtons> ButtonEnumConversion =
-        new()
-            {
-                { PopUpButtons.Ok, MessageBoxButtons.OK },
-                { PopUpButtons.OkCancel, MessageBoxButtons.OKCancel },
-                { PopUpButtons.AbortRetryIgnore, MessageBoxButtons.AbortRetryIgnore },
-                { PopUpButtons.YesNoCancel, MessageBoxButtons.YesNoCancel },
-                { PopUpButtons.YesNo, MessageBoxButtons.YesNo },
-                { PopUpButtons.RetryCancel, MessageBoxButtons.RetryCancel },
-                { PopUpButtons.CancelTryContinue, MessageBoxButtons.CancelTryContinue },
-            };
-
-    protected static readonly Dictionary<DialogResult, PopUpResult> ResultEnumConversion =
-        new()
-            {
-                { DialogResult.None, PopUpResult.None },
-                { DialogResult.OK, PopUpResult.Ok },
-                { DialogResult.Cancel, PopUpResult.Cancel },
-                { DialogResult.Abort, PopUpResult.Abort },
-                { DialogResult.Retry, PopUpResult.Retry },
-                { DialogResult.Ignore, PopUpResult.Ignore },
-                { DialogResult.Yes, PopUpResult.Yes },
-                { DialogResult.No, PopUpResult.No },
-                { DialogResult.TryAgain, PopUpResult.TryAgain },
-                { DialogResult.Continue, PopUpResult.Continue }
-            };
 
     public static void TrackKeysOf(Form form)
     {

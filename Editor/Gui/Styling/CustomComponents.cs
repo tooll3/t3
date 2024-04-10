@@ -703,7 +703,7 @@ namespace T3.Editor.Gui.Styling
             {
                 if (!project!.TryOpenCSharpInEditor(symbol))
                 {
-                    CoreUi.Instance.ShowMessageBox($"Failed to open C# code for {symbol.Name}\nCheck the logs for details.", "Error");
+                    BlockingWindow.Instance.Show($"Failed to open C# code for {symbol.Name}\nCheck the logs for details.", "Error");
                 }
             }
         }

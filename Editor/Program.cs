@@ -3,6 +3,7 @@ using SharpDX.Direct3D11;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using SilkWindows;
 using T3.Core.Compilation;
 using T3.Core.IO;
 using T3.Core.Resource;
@@ -53,6 +54,7 @@ namespace T3.Editor
             Console.WriteLine("Starting T3 Editor");
             Console.WriteLine("Creating EditorUi");
             EditorUi.Instance = new MsFormsEditor();
+            BlockingWindow.Instance = new SilkBlockingDialog();
 
             Console.WriteLine("Creating DX11ShaderCompiler");
             ShaderCompiler.Instance = new DX11ShaderCompiler();
@@ -131,11 +133,10 @@ namespace T3.Editor
             {
                 Log.Error(uiException.Message + "\n\n" + uiException.StackTrace);
                 var innerException = uiException.InnerException?.Message.Replace("\\r", "\r") ?? string.Empty;
-                EditorUi.Instance
-                        .ShowMessageBox($"Loading Operators failed:\n\n{uiException.Message}\n{innerException}\n\n" +
-                                        $"This is liked caused by a corrupted operator file." +
-                                        $"\nPlease try restarting and restore backup.",
-                                        @"Error", PopUpButtons.Ok);
+                BlockingWindow.Instance.Show($"Loading Operators failed:\n\n{uiException.Message}\n{innerException}\n\n" +
+                                            $"This is liked caused by a corrupted operator file." +
+                                            $"\nPlease try restarting and restore backup.",
+                                            @"Error", "Ok");
                 EditorUi.Instance.ExitApplication();
             }
 

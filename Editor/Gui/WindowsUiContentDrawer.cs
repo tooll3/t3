@@ -8,6 +8,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.SystemUi;
 using T3.SystemUi;
@@ -27,7 +28,7 @@ public class WindowsUiContentDrawer : IUiContentDrawer<Device, ImDrawDataPtr>
         if (device == null)
         {
             Log.Error("Can't initialize window without device.");
-            EditorUi.Instance.ShowMessageBox("Can't initialize rendering device.","Graphics error");
+            BlockingWindow.Instance.Show("Can't initialize rendering device.","Graphics error");
             EditorUi.Instance.ExitApplication();
             return;
         }

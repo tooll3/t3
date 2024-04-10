@@ -7,7 +7,6 @@ namespace T3.SystemUi
         public void EnableDpiAwareScaling();
         public void SetClipboardText(string text);
         public string GetClipboardText();
-        public string StartupPath { get; }
         public IFilePicker CreateFilePicker();
         public IReadOnlyList<IScreen> AllScreens { get; }
     }
@@ -34,10 +33,14 @@ namespace T3.SystemUi
         public bool ShowReadOnly { get; set; }
         public string Title { get; set; }
         public bool ValidateNames { get; set; }
-        public PopUpResult ShowDialog();
+        
+        /// <summary>
+        /// Returns true if the user confirmed a choice
+        /// </summary>
+        /// <returns></returns>
+        public bool ChooseFile();
         public bool CheckFileExists { get; set; }
         public bool CheckPathExists { get; set; }
         public int FilterIndex { get; set; }
-    
     }
 }

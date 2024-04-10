@@ -27,7 +27,7 @@ namespace T3.Editor.Gui.UiHelpers
 
                 try
                 {
-                    if (openFileDialog.ShowDialog() != PopUpResult.Ok)
+                    if (!openFileDialog.ChooseFile())
                         return null;
                 }
                 catch (Exception e)
@@ -50,7 +50,7 @@ namespace T3.Editor.Gui.UiHelpers
                 folderBrowser.CheckFileExists = false;
                 folderBrowser.CheckPathExists = true;
                 folderBrowser.FileName = "Folder Selection.";
-                if (folderBrowser.ShowDialog() != PopUpResult.Ok)
+                if (!folderBrowser.ChooseFile())
                     return null;
 
                 var absoluteFolderPath = System.IO.Path.GetDirectoryName(folderBrowser.FileName);
