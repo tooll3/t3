@@ -1,7 +1,7 @@
 ﻿using T3.SystemUi;
 using Silk.NET.Windowing;
 using Silk.NET.Maths;
-using Window = Silk.NET.SDL.Window;
+using SilkWindows.Implementations;
 
 namespace SilkWindows;
 
@@ -13,8 +13,6 @@ public class SilkBlockingDialog : IPopUpWindows
         Show(text, title, str => str,"Ok");
     }
 
-    public float UiScale { get; set; }
-
     public void SetFonts(FontPack fontPack)
     {
         _fontPack = fontPack;
@@ -22,18 +20,25 @@ public class SilkBlockingDialog : IPopUpWindows
 
     public T Show<T>(string text, string title, Func<T, string>? toString, params T[]? buttons)
     {
-        var options = BlockingPopupOptions;
-        if (buttons == null || buttons.Length == 0)
+        return Show<MessageBox<T>, T>(title, new MessageBox<T>(text, buttons, toString));
+    }
+    
+    public TData Show<TDrawer, TData>(string title, TDrawer drawer, in SimpleWindowOptions? options = null) where TDrawer : IImguiDrawer<TData>
+    {
+        var fullOptions = DefaultOptions;
+        if (options.HasValue)
         {
-            buttons = [];
+            var val = options.Value;
+            fullOptions.Size = val.Size.ToVector2DInt();
+            fullOptions.FramesPerSecond = val.Fps;
+            fullOptions.VSync = val.Vsync;
+            fullOptions.WindowBorder = val.IsResizable ? WindowBorder.Resizable : WindowBorder.Fixed;
+            fullOptions.TopMost = val.AlwaysOnTop;
         }
-
-        toString ??= item => item!.ToString()!;
         
-        var messageBox = new MessageBox<T>(text, buttons, toString);
-        var windowHandler = new WindowHandler(BlockingPopupOptions, messageBox, title, _fontPack);
-        windowHandler.RunBlocking();
-        return messageBox.Result;
+        var windowHandler = new WindowHandler(fullOptions, drawer, title, _fontPack);
+        windowHandler.RunUntilClosed();
+        return drawer.Result;
     }
 
     public void Show(string message)
@@ -42,22 +47,22 @@ public class SilkBlockingDialog : IPopUpWindows
     }
     
     private FontPack? _fontPack;
-
-    private static readonly WindowOptions BlockingPopupOptions = new()
-                                                                   {
-                                                                       IsEventDriven = true,
-                                                                       ShouldSwapAutomatically = true,
-                                                                       IsVisible = true,
-                                                                       Position = new Vector2D<int>(600, 600),
-                                                                       Size = new Vector2D<int>(400, 320),
-                                                                       FramesPerSecond = 60,
-                                                                       UpdatesPerSecond = 60,
-                                                                       PreferredDepthBufferBits = 0,
-                                                                       PreferredStencilBufferBits = 0,
-                                                                       PreferredBitDepth = new Vector4D<int>(8, 8, 8, 8),
-                                                                       Samples = 0,
-                                                                       VSync = true,
-                                                                       TopMost = true,
-                                                                       WindowBorder = WindowBorder.Resizable
-                                                                   };
+    
+    private static readonly WindowOptions DefaultOptions = new()
+                                                               {
+                                                                   IsEventDriven = true,
+                                                                   ShouldSwapAutomatically = true,
+                                                                   IsVisible = true,
+                                                                   Position = new Vector2D<int>(600, 600),
+                                                                   Size = new Vector2D<int>(400, 320),
+                                                                   FramesPerSecond = 60,
+                                                                   UpdatesPerSecond = 60,
+                                                                   PreferredDepthBufferBits = 0,
+                                                                   PreferredStencilBufferBits = 0,
+                                                                   PreferredBitDepth = new Vector4D<int>(8, 8, 8, 8),
+                                                                   Samples = 0,
+                                                                   VSync = true,
+                                                                   TopMost = true,
+                                                                   WindowBorder = WindowBorder.Resizable
+                                                               };
 }
