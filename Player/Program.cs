@@ -25,7 +25,9 @@ using T3.Editor.App;
 using Device = SharpDX.Direct3D11.Device;
 using Resource = SharpDX.Direct3D11.Resource;
 using SharpDX.Windows;
+using SilkWindows;
 using T3.Core.Utils;
+using T3.MsForms;
 using T3.Serialization;
 using T3.SystemUi;
 using DeviceContext = SharpDX.Direct3D11.DeviceContext;
@@ -62,13 +64,14 @@ namespace T3.Player
         private static void Main(string[] args)
         {
             CoreUi.Instance = new MsForms.MsForms();
+            BlockingWindow.Instance = new SilkBlockingDialog();
             
             var settingsPath = Path.Combine(RuntimeAssemblies.CoreDirectory, "exportSettings.json");
             if (!JsonUtils.TryLoadingJson(settingsPath, out ExportSettings exportSettings))
             {
                 var message = $"Failed to load export settings from \"{settingsPath}\". Exiting!";
                 Log.Error(message);
-                CoreUi.Instance.ShowMessageBox(message);
+                BlockingWindow.Instance.Show(message);
                 return;
             }
 
@@ -276,7 +279,7 @@ namespace T3.Player
                     CloseApplication(true, errorMessage);
                     Log.Error(errorMessage);
                     fileWriter.Dispose(); // flush and close
-                    CoreUi.Instance.ShowMessageBox(errorMessage);
+                    BlockingWindow.Instance.Show(errorMessage);
                 }
 
             }
@@ -306,8 +309,8 @@ namespace T3.Player
                     {
                         message += "\n\nDo you want to open the log file?";
 
-                        var result = CoreUi.Instance.ShowMessageBox(message, $"{exportSettings.ApplicationTitle} crashed /:", PopUpButtons.YesNo);
-                        openLogs = result == PopUpResult.Yes;
+                        var result = BlockingWindow.Instance.Show(message, $"{exportSettings.ApplicationTitle} crashed /:", "Yes", "No");
+                        openLogs = result == "Yes";
                     }
                 }
                     

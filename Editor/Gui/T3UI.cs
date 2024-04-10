@@ -299,8 +299,8 @@ public static class T3Ui
 
                             if (GraphWindow.GraphWindowInstances.Count > 0)
                             {
-                                var choice = EditorUi.Instance.ShowMessageBox("Would you like to create a new window?", "Opening " + name, PopUpButtons.YesNo);
-                                replaceFocusedWindow = choice == PopUpResult.No;
+                                var choice = BlockingWindow.Instance.Show("Would you like to create a new window?", "Opening " + name, "Yes", "No");
+                                replaceFocusedWindow = choice == "Yes";
                             }
                             
                             if (!GraphWindow.TryOpenPackage(package, replaceFocusedWindow))
@@ -434,13 +434,18 @@ public static class T3Ui
             {
                 if (ImGui.MenuItem("Show Popup"))
                 {
-                    EditorUi.Instance.ShowMessageBox("Hello World!", "Debug Popup", PopUpButtons.Ok);
+                    const string bodyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis quis ligula sit amet ornare. " +
+                                            "Donec auctor, nisl vel ultricies tincidunt, nisl nisl aliquam nisl, nec pulvinar nisl nisl vitae nisl. " +
+                                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis quis ligula sit amet ornare. ";
+                        
+                    BlockingWindow.Instance.Show(bodyText, "Debug Popup", "Ok", "Maybe", "Idk", "Possibly", "Affirmative", "Negatory", "NO!");
                 }
                 ImGui.EndMenu();
+                
             }
             
             #endif
-
+            
             if (UserSettings.Config.FullScreen)
             {
                 ImGui.Dummy(new Vector2(10, 10));

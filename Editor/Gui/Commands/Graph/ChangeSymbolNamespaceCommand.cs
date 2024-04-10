@@ -1,5 +1,6 @@
 ﻿using System;
 using T3.Core.Operator;
+using T3.Core.SystemUi;
 using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Commands.Graph
@@ -32,7 +33,7 @@ namespace T3.Editor.Gui.Commands.Graph
             var reason = _changeNamespaceAction(_symbolId, newNamespace);
 
             if (!string.IsNullOrWhiteSpace(reason))
-                EditorUi.Instance.ShowMessageBox(reason, "Could not rename namespace");
+                BlockingWindow.Instance.Show(reason, "Could not rename namespace");
         }
 
         private readonly Guid _symbolId;

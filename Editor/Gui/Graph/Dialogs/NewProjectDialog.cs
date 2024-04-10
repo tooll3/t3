@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Core.SystemUi;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
@@ -63,7 +64,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                                       "Currently this error is unhandled, so you will want to manually delete the project from disk.";
                         
                         Log.Error(message);
-                        EditorUi.Instance.ShowMessageBox(message, "Failed to create new project");
+                        BlockingWindow.Instance.Show(message, "Failed to create new project");
                     }
                     
                     ResetValuesToDefault();

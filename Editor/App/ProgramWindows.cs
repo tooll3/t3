@@ -93,10 +93,9 @@ internal static class ProgramWindows
             if (e.Message.Contains("DXGI_ERROR_SDK_COMPONENT_MISSING"))
             {
                 var result =
-                    EditorUi.Instance
-                            .ShowMessageBox("You need to install Windows Graphics diagnostics tools.\n\nClick Ok to download this Windows component directly from Microsoft.",
-                                            "Windows component missing", PopUpButtons.OkCancel);
-                if (result == PopUpResult.Ok)
+                    BlockingWindow.Instance.Show("You need to install Windows Graphics diagnostics tools.\n\nClick Ok to download this Windows component directly from Microsoft.",
+                                                          "Windows component missing", "Ok", "Cancel");
+                if (result == "Ok")
                 {
                     CoreUi.Instance
                           .OpenWithDefaultApplication("https://learn.microsoft.com/en-us/windows/uwp/gaming/use-the-directx-runtime-and-visual-studio-graphics-diagnostic-features");
@@ -104,8 +103,8 @@ internal static class ProgramWindows
             }
             else
             {
-                EditorUi.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll3\n\n" + e.Message, "Oh noooo",
-                                                 PopUpButtons.Ok);
+                BlockingWindow.Instance.Show("We are sorry but your graphics hardware might not be capable of running Tooll3\n\n" + e.Message, "Oh noooo",
+                                                 "Ok... /:");
             }
 
             Environment.Exit(0);

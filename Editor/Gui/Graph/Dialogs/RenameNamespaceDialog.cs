@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using ImGuiNET;
+using T3.Core.SystemUi;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -48,7 +49,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     }
                     else
                     {
-                        EditorUi.Instance.ShowMessageBox(reason, "Could not rename namespace");
+                        BlockingWindow.Instance.Show(reason, "Could not rename namespace");
                     }
 
                     Close();

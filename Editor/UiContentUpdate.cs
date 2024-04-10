@@ -14,6 +14,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
+using T3.SystemUi;
 
 namespace T3.Editor;
 
@@ -132,15 +133,17 @@ internal static class UiContentUpdate
         const string fileExtension = ".ttf";
         var format = $"{root}{{0}}{fileExtension}";
         
-        var normalPath = string.Format(format, "Regular");
-        var boldPath = string.Format(format, "Medium");
-        var lightPath = string.Format(format, "Light");
+        var normalFont  = new TtfFont(string.Format(format, "Regular"), 18f * dpiAwareScale);
+        var boldFont    = new TtfFont(string.Format(format, "Medium"), 18f * dpiAwareScale);
+        var smallFont   = new TtfFont(string.Format(format, "Regular"), 14f * dpiAwareScale);
+        var largeFont   = new TtfFont(string.Format(format, "Light"), 30f * dpiAwareScale);
         
-        Fonts.FontNormal = fontAtlasPtr.AddFontFromFileTTF(normalPath, 18f * dpiAwareScale);
-        Fonts.FontBold = fontAtlasPtr.AddFontFromFileTTF(boldPath, 18f * dpiAwareScale);
-        Fonts.FontSmall = fontAtlasPtr.AddFontFromFileTTF(normalPath, 14f * dpiAwareScale);
-        Fonts.FontLarge = fontAtlasPtr.AddFontFromFileTTF(lightPath, 30f * dpiAwareScale);
-
+        Fonts.FontNormal = fontAtlasPtr.AddFontFromFileTTF(normalFont.Path, normalFont.PixelSize);
+        Fonts.FontBold = fontAtlasPtr.AddFontFromFileTTF(boldFont.Path, boldFont.PixelSize);
+        Fonts.FontSmall = fontAtlasPtr.AddFontFromFileTTF(smallFont.Path, smallFont.PixelSize);
+        Fonts.FontLarge = fontAtlasPtr.AddFontFromFileTTF(largeFont.Path, largeFont.PixelSize);
+        
+        BlockingWindow.Instance.SetFonts(new FontPack(normalFont, boldFont, smallFont, largeFont));
         Program.UiContentContentDrawer.CreateDeviceObjects();
     }
     

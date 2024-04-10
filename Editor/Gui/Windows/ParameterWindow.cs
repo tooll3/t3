@@ -1,9 +1,9 @@
-using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
@@ -13,7 +13,6 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Layouts;
-using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.SystemUi;
 
@@ -193,7 +192,7 @@ internal class ParameterWindow : Window
                 {
                     if (!EditableSymbolProject.ChangeSymbolNamespace(symbol, namespaceForEdit, out var reason))
                     {
-                        EditorUi.Instance.ShowMessageBox(reason, "Could not rename namespace");
+                        BlockingWindow.Instance.Show(reason, "Could not rename namespace");
                     }
                 }
             }

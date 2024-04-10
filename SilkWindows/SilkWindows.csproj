@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Logging\Logging.csproj" />
+      <ProjectReference Include="..\Serialization\Serialization.csproj" />
+      <ProjectReference Include="..\SystemUi\SystemUi.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Silk.NET.Input" Version="2.20.0" />
+      <PackageReference Include="Silk.NET.OpenGL" Version="2.20.0" />
+      <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.20.0" />
+      <PackageReference Include="Silk.NET.Windowing" Version="2.20.0" />
+      <PackageReference Include="Silk.NET.XInput" Version="2.20.0" />
+    </ItemGroup>
+
+</Project>

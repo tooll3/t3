@@ -23,3 +23,19 @@ public static class CoreUi
         }
     }
 }
+
+public static class BlockingWindow
+{
+    private static IPopUpWindows _instance;
+    public static IPopUpWindows Instance
+    {
+        get => _instance;
+        set
+        {
+            if (_instance != null)
+                throw new CantStartSingleInstanceException($"{typeof(BlockingWindow)}'s {nameof(Instance)} already set to {_instance.GetType()}");
+            
+            _instance = value;
+        }
+    }
+}

@@ -1,12 +1,9 @@
-﻿using System.IO;
-using System.Text.RegularExpressions;
-using ImGuiNET;
-using T3.Core.Model;
+﻿using ImGuiNET;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Templates
@@ -33,7 +30,7 @@ namespace T3.Editor.Gui.Templates
 
                 if (graphWindow == null)
                 {
-                    EditorUi.Instance.ShowMessageBox("Can't create from template without open graph window");
+                    BlockingWindow.Instance.Show("Can't create from template without open graph window");
                     EndDialog();
                     return;
                 }
