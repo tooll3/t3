@@ -133,11 +133,23 @@ public static class RuntimeAssemblies
     
     private static ReleaseInfo ToReleaseInfo(this ReleaseInfoSerialized serialized)
     {
+        if (!Version.TryParse(serialized.EditorVersion, out var editorVersion))
+        {
+            editorVersion = new Version(1, 0, 0);
+            Log.Warning($"{serialized.RootNamespace}: Failed to parse editor version \"{serialized.EditorVersion}\" from package info. Setting to {editorVersion}");
+        }
+        
+        if (!Version.TryParse(serialized.Version, out var version))
+        {
+            version = new Version(1, 0, 0);
+            Log.Warning($"{serialized.RootNamespace}: Failed to parse package version \"{serialized.Version}\" from package info. Setting to {version}");
+        }
+        
         return new ReleaseInfo(
             serialized.HomeGuid,
             serialized.RootNamespace,
-            new Version(serialized.EditorVersion),
-            new Version(serialized.Version),
+            editorVersion,
+            version,
             serialized.OperatorPackages
                       .Select(x => new OperatorPackageReference(x.Identity, new Version(x.Version), x.ResourcesOnly))
                       .ToArray());
