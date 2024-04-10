@@ -15,7 +15,9 @@
       "Position": {
         "X": -557.6606,
         "Y": 867.47046
-      }
+      },
+      "GroupTitle": "Transform Mesh",
+      "Description": "Moves the incoming mesh\n\nX (-left / +right), \nY (-down / + up), \nZ (-forward/+backwards)\n"
     },
     {
       "InputId": "1168094f-1eee-4ed7-95e2-9459e6171e08"/*Rotation*/,
@@ -23,6 +25,7 @@
         "X": -557.6606,
         "Y": 912.47046
       },
+      "Description": "Rotates the incoming mesh around the following axes:\n\nX: Horizontal axis\nY: Vertical axis\nZ: Forward axis\n",
       "Scale": 0.1
     },
     {
@@ -30,28 +33,35 @@
       "Position": {
         "X": -557.6606,
         "Y": 957.47064
-      }
+      },
+      "Description": "Scales the incoming subgraph in the following directions:\n\nX: Width\nY: Height\nZ: Depth\n"
     },
     {
       "InputId": "86791d0a-97c3-413a-89d9-aa2ddd40ce4a"/*UniformScale*/,
       "Position": {
         "X": -557.6606,
         "Y": 1002.4706
-      }
+      },
+      "Description": "Uniformly scales the incoming mesh",
+      "AddPadding": "True"
     },
     {
       "InputId": "71531810-78ab-449e-bb13-bfe5fe3d2a69"/*UseVertexSelection*/,
       "Position": {
         "X": -557.6606,
         "Y": 1047.4706
-      }
+      },
+      "Description": "Defines whether only selected vertices should be affected by the manipulation",
+      "AddPadding": "True"
     },
     {
       "InputId": "ccd89dd2-1baa-4a0c-8ec3-5a0e77551379"/*Pivot*/,
       "Position": {
         "X": -557.6606,
         "Y": 1092.4706
-      }
+      },
+      "GroupTitle": "Transform Pivot",
+      "Description": "Moves the Pivot (center point) of the incoming subgraph:\n\nX (-left / +right) \nY (-down / + up) \nZ (-forward/+backwards)\n\nThe Pivot Point determines the location of the incoming subgraph Gizmo. Transforming its location can make it easier to perform transformations around the position you want.\n"
     }
   ],
   "SymbolChildUis": [
