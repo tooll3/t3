@@ -39,7 +39,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
             var isThereABackup = !string.IsNullOrEmpty(AutoBackup.AutoBackup.GetLatestArchiveFilePath());
             if (!isThereABackup)
             {
-                var result2 = BlockingWindow.Instance.Show("It looks like the last startup failed.\nSadly there is no backup yet.", "Startup Failed", "Retry", "Cancel");
+                var result2 = BlockingWindow.Instance.ShowMessageBox("It looks like the last startup failed.\nSadly there is no backup yet.", "Startup Failed", "Retry", "Cancel");
                 if (result2 != "Retry")
                 {
                     Log.Info("User cancelled startup.");
@@ -64,7 +64,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
             const string restore = "Restore backup";
             const string openDoc = "Open documentation";
             const string startup = "I don't care do it anyway!!!!";
-            var result = BlockingWindow.Instance.Show(message, caption, restore, openDoc, startup);
+            var result = BlockingWindow.Instance.ShowMessageBox(message, caption, restore, openDoc, startup);
             switch (result)
             {
                 case restore:
@@ -73,13 +73,13 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                     if (wasSuccessful)
                     {
                         FlagStartupSequenceComplete();
-                        BlockingWindow.Instance.Show("Backup restored. Click OK to restart.\nFingers crossed.", "Complete", "Ok");
+                        BlockingWindow.Instance.ShowMessageBox("Backup restored. Click OK to restart.\nFingers crossed.", "Complete", "Ok");
                         //Application.Exit();
                         Environment.Exit(0);
                     }
                     else
                     {
-                        BlockingWindow.Instance.Show("Restoring backup failed.\nYou might want to try an earlier archive in .t3\\backup\\...", "Failed",
+                        BlockingWindow.Instance.ShowMessageBox("Restoring backup failed.\nYou might want to try an earlier archive in .t3\\backup\\...", "Failed",
                             "Ok");
                         Environment.Exit(0);
                     }

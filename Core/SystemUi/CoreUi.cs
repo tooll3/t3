@@ -1,4 +1,4 @@
-using Microsoft.VisualBasic.ApplicationServices;
+using System;
 using T3.SystemUi;
 
 namespace T3.Core.SystemUi;
@@ -17,23 +17,7 @@ public static class CoreUi
         set
         {
             if (_instance != null)
-                throw new CantStartSingleInstanceException($"{typeof(CoreUi)}'s {nameof(Instance)} already set to {_instance.GetType()}");
-            
-            _instance = value;
-        }
-    }
-}
-
-public static class BlockingWindow
-{
-    private static IPopUpWindows _instance;
-    public static IPopUpWindows Instance
-    {
-        get => _instance;
-        set
-        {
-            if (_instance != null)
-                throw new CantStartSingleInstanceException($"{typeof(BlockingWindow)}'s {nameof(Instance)} already set to {_instance.GetType()}");
+                throw new Exception($"{typeof(CoreUi)}'s {nameof(Instance)} already set to {_instance.GetType()}");
             
             _instance = value;
         }

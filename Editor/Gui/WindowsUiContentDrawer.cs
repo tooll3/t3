@@ -28,7 +28,7 @@ public class WindowsUiContentDrawer : IUiContentDrawer<Device, ImDrawDataPtr>
         if (device == null)
         {
             Log.Error("Can't initialize window without device.");
-            BlockingWindow.Instance.Show("Can't initialize rendering device.","Graphics error");
+            BlockingWindow.Instance.ShowMessageBox("Can't initialize rendering device.","Graphics error");
             EditorUi.Instance.ExitApplication();
             return;
         }

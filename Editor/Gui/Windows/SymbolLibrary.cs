@@ -270,7 +270,7 @@ namespace T3.Editor.Gui.Windows
                         var guid = Guid.Parse(guidString);
                         Log.Debug("dropped symbol here" + payload + " " + myString + "  " + guid);
                         if(!MoveSymbolToNamespace(guid, subtree.GetAsString(), out var reason))
-                            BlockingWindow.Instance.Show(reason, "Could not move symbol's namespace");
+                            BlockingWindow.Instance.ShowMessageBox(reason, "Could not move symbol's namespace");
                     }
                 }
 

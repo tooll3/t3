@@ -66,7 +66,7 @@ public static class RuntimeAssemblies
         if (releaseInfo == null)
         {
             string error = $"Failed to load package info for {assemblyName.FullName} from \"{path}\". Try removing the offending package and restart the application.";
-            SystemUi.BlockingWindow.Instance.Show(error);
+            SystemUi.BlockingWindow.Instance.ShowMessageBox(error);
             throw new Exception(error);
         }
 

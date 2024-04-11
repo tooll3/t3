@@ -24,7 +24,7 @@ namespace T3.Editor.Gui.Dialog
             FormInputs.SetIndentToParameters();
             if (BeginDialog("Import Operators from another Tooll installation"))
             {
-                BlockingWindow.Instance.Show("This function has been deprecated due to the new project structure.");
+                BlockingWindow.Instance.ShowMessageBox("This function has been deprecated due to the new project structure.");
                 EndDialog();
                 return;
                 
@@ -70,9 +70,9 @@ namespace T3.Editor.Gui.Dialog
                     FormInputs.ApplyIndent();
                     if (CustomComponents.DisablableButton("Import and Restart", isValid))
                     {
-                        BlockingWindow.Instance.Show($"This function has been deprecated as a result of the new project structure.");
+                        BlockingWindow.Instance.ShowMessageBox($"This function has been deprecated as a result of the new project structure.");
                         return;
-                        BlockingWindow.Instance.Show("Tooll now has to restart to complete the import.");
+                        BlockingWindow.Instance.ShowMessageBox("Tooll now has to restart to complete the import.");
                         EditorUi.Instance.ExitApplication();
                         //Application.Restart();
                         //Environment.Exit(0);

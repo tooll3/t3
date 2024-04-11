@@ -15,10 +15,10 @@ public interface ICoreSystemUiService
 public interface IPopUpWindows
 {
     public void SetFonts(FontPack fontPack);
-    public T Show<T>(string text, string title, Func<T, string> toString, params T[] buttons);
-    public string Show(string text, string title, params string[] buttons) => Show(text, title, str => str, buttons);
-    public void Show(string text, string title);
-    public void Show(string message);
+    public T? ShowMessageBox<T>(string text, string title, Func<T, string> toString, params T[] buttons);
+    public string? ShowMessageBox(string text, string title, params string[] buttons) => ShowMessageBox(text, title, str => str, buttons);
+    public void ShowMessageBox(string text, string title);
+    public void ShowMessageBox(string message);
 }
 
 public readonly record struct FontPack(TtfFont Regular, TtfFont Bold, TtfFont Small, TtfFont Large);

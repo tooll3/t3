@@ -22,7 +22,7 @@ public abstract partial class ShaderCompiler
         var directory = all ? ShaderCacheRootPath : _shaderCacheDirectory;
         if(!Directory.Exists(directory))
         {
-            BlockingWindow.Instance.Show($"No shader cache found at \"{directory}\".", "No shader cache found");
+            BlockingWindow.Instance.ShowMessageBox($"No shader cache found at \"{directory}\".", "No shader cache found");
             return;
         }
         
@@ -70,7 +70,7 @@ public abstract partial class ShaderCompiler
 
         var finalMessage = $"Deleted {deletionsString} of shader cache from \"{ShaderCacheRootPath}\".\n{message}\n" +
                            $"Restart the application to refresh the removed cache, as all shaders still reside in memory.";
-        BlockingWindow.Instance.Show(finalMessage, title);
+        BlockingWindow.Instance.ShowMessageBox(finalMessage, title);
     }
 
     private static void CacheSuccessfulCompilation(ShaderBytecode oldBytecode, ulong hash, ShaderBytecode newBytecode)
@@ -165,7 +165,7 @@ public abstract partial class ShaderCompiler
             if (potentialCacheFilePath.Length > 259)
             {
                 string message = $"File path for shader cache is too long: \"{_shaderCacheDirectory}\". Disk caching will be disabled.";
-                BlockingWindow.Instance.Show(message);
+                BlockingWindow.Instance.ShowMessageBox(message);
                 Log.Error(message);
                 _diskCachingEnabled = false;
                 return;

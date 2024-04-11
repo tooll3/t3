@@ -192,7 +192,7 @@ internal class ParameterWindow : Window
                 {
                     if (!EditableSymbolProject.ChangeSymbolNamespace(symbol, namespaceForEdit, out var reason))
                     {
-                        BlockingWindow.Instance.Show(reason, "Could not rename namespace");
+                        BlockingWindow.Instance.ShowMessageBox(reason, "Could not rename namespace");
                     }
                 }
             }

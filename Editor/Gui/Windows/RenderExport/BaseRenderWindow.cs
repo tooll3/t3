@@ -98,7 +98,7 @@ public abstract class BaseRenderWindow : Window
         if (targetFile != directory && File.Exists(targetFile))
         {
             // FIXME: get a nicer popup window here...
-            var result = BlockingWindow.Instance.Show("File exists. Overwrite?", "Render Video", "Yes", "No");
+            var result = BlockingWindow.Instance.ShowMessageBox("File exists. Overwrite?", "Render Video", "Yes", "No");
             return (result == "Yes");
         }
 

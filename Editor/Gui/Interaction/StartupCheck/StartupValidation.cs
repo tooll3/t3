@@ -106,7 +106,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 }
 
 
-                var result = BlockingWindow.Instance.Show(sb.ToString(), caption, buttons);
+                var result = BlockingWindow.Instance.ShowMessageBox(sb.ToString(), caption, buttons);
                 if (result == helpButton)
                 {
                     CoreUi.Instance.OpenWithDefaultApplication(URL);
@@ -135,7 +135,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 if (currentDir.IndexOf(folderPath, StringComparison.OrdinalIgnoreCase) < 0)
                     continue;
 
-                BlockingWindow.Instance.Show($"Tooll can't be started from {folderPath}", @"Error", "Ok");
+                BlockingWindow.Instance.ShowMessageBox($"Tooll can't be started from {folderPath}", @"Error", "Ok");
                 EditorUi.Instance.ExitApplication();
             }
             
@@ -144,7 +144,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
             if (!directoryInfo.Attributes.HasFlag(FileAttributes.ReadOnly))
                 return;
             
-            BlockingWindow.Instance.Show($"Can't write to current working directory: {currentDir}.", @"Error", "Ok");
+            BlockingWindow.Instance.ShowMessageBox($"Can't write to current working directory: {currentDir}.", @"Error", "Ok");
             EditorUi.Instance.ExitApplication();
         }
 
@@ -158,7 +158,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
             if (File.Exists(operatorFilePath) && (DateTime.Now - File.GetLastWriteTime(operatorFilePath)) <= fiveMinutes)
                 return;
             
-            BlockingWindow.Instance.Show($"Operators.dll is outdated.\nPlease use StartT3.exe to run Tooll.",
+            BlockingWindow.Instance.ShowMessageBox($"Operators.dll is outdated.\nPlease use StartT3.exe to run Tooll.",
                                              @"Error", "Ok");
             EditorUi.Instance.ExitApplication();
         }
