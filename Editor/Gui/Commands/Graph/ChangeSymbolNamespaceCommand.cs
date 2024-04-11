@@ -33,7 +33,7 @@ namespace T3.Editor.Gui.Commands.Graph
             var reason = _changeNamespaceAction(_symbolId, newNamespace);
 
             if (!string.IsNullOrWhiteSpace(reason))
-                BlockingWindow.Instance.Show(reason, "Could not rename namespace");
+                BlockingWindow.Instance.ShowMessageBox(reason, "Could not rename namespace");
         }
 
         private readonly Guid _symbolId;

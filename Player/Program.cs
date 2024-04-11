@@ -71,7 +71,7 @@ namespace T3.Player
             {
                 var message = $"Failed to load export settings from \"{settingsPath}\". Exiting!";
                 Log.Error(message);
-                BlockingWindow.Instance.Show(message);
+                BlockingWindow.Instance.ShowMessageBox(message);
                 return;
             }
 
@@ -279,7 +279,7 @@ namespace T3.Player
                     CloseApplication(true, errorMessage);
                     Log.Error(errorMessage);
                     fileWriter.Dispose(); // flush and close
-                    BlockingWindow.Instance.Show(errorMessage);
+                    BlockingWindow.Instance.ShowMessageBox(errorMessage);
                 }
 
             }
@@ -309,7 +309,7 @@ namespace T3.Player
                     {
                         message += "\n\nDo you want to open the log file?";
 
-                        var result = BlockingWindow.Instance.Show(message, $"{exportSettings.ApplicationTitle} crashed /:", "Yes", "No");
+                        var result = BlockingWindow.Instance.ShowMessageBox(message, $"{exportSettings.ApplicationTitle} crashed /:", "Yes", "No");
                         openLogs = result == "Yes";
                     }
                 }

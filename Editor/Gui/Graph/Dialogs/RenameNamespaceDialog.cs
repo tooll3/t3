@@ -49,7 +49,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     }
                     else
                     {
-                        BlockingWindow.Instance.Show(reason, "Could not rename namespace");
+                        BlockingWindow.Instance.ShowMessageBox(reason, "Could not rename namespace");
                     }
 
                     Close();

@@ -64,7 +64,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                                       "Currently this error is unhandled, so you will want to manually delete the project from disk.";
                         
                         Log.Error(message);
-                        BlockingWindow.Instance.Show(message, "Failed to create new project");
+                        BlockingWindow.Instance.ShowMessageBox(message, "Failed to create new project");
                     }
                     
                     ResetValuesToDefault();

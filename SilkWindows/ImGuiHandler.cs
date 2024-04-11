@@ -61,6 +61,7 @@ internal sealed class ImGuiHandler
         }
         
         _fontObj = new ImFonts(fonts);
+        _drawer.Init();
     }
     
     private ImFonts? _fontObj;
@@ -98,7 +99,7 @@ internal sealed class ImGuiHandler
         ImGui.Begin(_mainWindowId, windowFlags);
         
         ImGui.BeginChild(_childWindowId, Vector2.Zero, false);
-        _drawer.OnRender(_windowTitle, deltaTime, _fontObj);
+        _drawer.OnRender(_windowTitle, deltaTime, _fontObj!);
         ImGui.EndChild();
         
         ImGui.End();

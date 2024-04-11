@@ -384,7 +384,7 @@ namespace T3.Editor.UiModel
             if (!UpdateSymbolWithNewSource(symbol, newSource, out reason))
             {
                 var title = $"Could not update symbol '{symbol.Name}'";
-                BlockingWindow.Instance.Show(reason, title);
+                BlockingWindow.Instance.ShowMessageBox(reason, title);
                 reason = title + ": " + reason;
                 return false;
             }

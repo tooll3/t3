@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.Templates
 
                 if (graphWindow == null)
                 {
-                    BlockingWindow.Instance.Show("Can't create from template without open graph window");
+                    BlockingWindow.Instance.ShowMessageBox("Can't create from template without open graph window");
                     EndDialog();
                     return;
                 }

@@ -1,4 +1,5 @@
-﻿using T3.SystemUi;
+﻿using System.Numerics;
+using T3.SystemUi;
 using Silk.NET.Windowing;
 using Silk.NET.Maths;
 using SilkWindows.Implementations;
@@ -6,11 +7,11 @@ using SilkWindows.Implementations;
 namespace SilkWindows;
 
 //https://github.com/dotnet/Silk.NET/blob/main/examples/CSharp/OpenGL%20Tutorials/Tutorial%201.1%20-%20Hello%20Window/Program.cs
-public class SilkBlockingDialog : IPopUpWindows
+public sealed class SilkBlockingDialog : IPopUpWindows
 {
-    public void Show(string text, string title)
+    public void ShowMessageBox(string text, string title)
     {
-        Show(text, title, str => str,"Ok");
+        ShowMessageBox(text, title, str => str,"Ok");
     }
 
     public void SetFonts(FontPack fontPack)
@@ -18,12 +19,12 @@ public class SilkBlockingDialog : IPopUpWindows
         _fontPack = fontPack;
     }
 
-    public T Show<T>(string text, string title, Func<T, string>? toString, params T[]? buttons)
+    public T? ShowMessageBox<T>(string text, string title, Func<T, string>? toString, params T[]? buttons)
     {
-        return Show<MessageBox<T>, T>(title, new MessageBox<T>(text, buttons, toString));
+        return Show(title, new MessageBox<T>(text, buttons, toString), DefaultSimpleOptions);
     }
     
-    public TData Show<TDrawer, TData>(string title, TDrawer drawer, in SimpleWindowOptions? options = null) where TDrawer : IImguiDrawer<TData>
+    public TData? Show<TData>(string title, IImguiDrawer<TData> drawer, in SimpleWindowOptions? options)
     {
         var fullOptions = DefaultOptions;
         if (options.HasValue)
@@ -41,12 +42,14 @@ public class SilkBlockingDialog : IPopUpWindows
         return drawer.Result;
     }
 
-    public void Show(string message)
+    public void ShowMessageBox(string message)
     {
-        Show(message, "Notice");
+        ShowMessageBox(message, "Notice");
     }
     
     private FontPack? _fontPack;
+    
+    private static readonly SimpleWindowOptions DefaultSimpleOptions = new( new Vector2(400, 320), 60, true, true, true);
     
     private static readonly WindowOptions DefaultOptions = new()
                                                                {

@@ -18,12 +18,15 @@ internal sealed class MessageBox<T> : IImguiDrawer<T>
         _toString = toString;
     }
     
-    public void OnRender(string windowName, double deltaSeconds, ImFonts? fonts)
+    public void Init()
+    {
+    }
+    
+    public void OnRender(string windowName, double deltaSeconds, ImFonts fonts)
     {
         var contentRegion = ImGui.GetContentRegionAvail();
         var padding = contentRegion.X * 0.1f;
         var widthAvailable = contentRegion.X - padding;
-        var hasFonts = fonts != null;
         
         ImGui.NewLine();
         ImGui.PushTextWrapPos(widthAvailable);
@@ -31,10 +34,9 @@ internal sealed class MessageBox<T> : IImguiDrawer<T>
         ImGui.TextWrapped(_message);
         ImGui.PopTextWrapPos();
         
-        DrawSpacing(fonts, hasFonts);
+        DrawSpacing(fonts);
         
-        if (hasFonts)
-            ImGui.PushFont(fonts.Small);
+        ImGui.PushFont(fonts.Small);
         
         ImGui.SetCursorPosX(padding);
         if (ImGui.Button("Copy to clipboard"))
@@ -53,17 +55,13 @@ internal sealed class MessageBox<T> : IImguiDrawer<T>
         
         style.HoverFlagsForTooltipMouse = originalHoverFlags;
         
-        if (hasFonts)
-            ImGui.PopFont();
+        ImGui.PopFont();
         
-        DrawSpacing(fonts, hasFonts);
+        DrawSpacing(fonts);
         ImGui.Separator();
-        DrawSpacing(fonts, hasFonts);
+        DrawSpacing(fonts);
         
-        if (hasFonts)
-        {
-            ImGui.PushFont(fonts.Regular);
-        }
+        ImGui.PushFont(fonts.Regular);
         
         var width = ImGui.GetContentRegionAvail().X;
         var size = new Vector2(width, 0);
@@ -79,16 +77,15 @@ internal sealed class MessageBox<T> : IImguiDrawer<T>
             ImGui.Spacing();
         }
         
-        if (hasFonts)
-            ImGui.PopFont();
+        ImGui.PopFont();
         
-        DrawSpacing(fonts, hasFonts);
+        DrawSpacing(fonts);
         
         return;
         
-        static void DrawSpacing(ImFonts? fonts, bool hasFonts)
+        static void DrawSpacing(ImFonts fonts)
         {
-            if (hasFonts)
+            if (fonts.HasFonts)
             {
                 ImGui.PushFont(fonts.Small);
                 ImGui.NewLine();

@@ -299,7 +299,7 @@ public static class T3Ui
 
                             if (GraphWindow.GraphWindowInstances.Count > 0)
                             {
-                                var choice = BlockingWindow.Instance.Show("Would you like to create a new window?", "Opening " + name, "Yes", "No");
+                                var choice = BlockingWindow.Instance.ShowMessageBox("Would you like to create a new window?", "Opening " + name, "Yes", "No");
                                 replaceFocusedWindow = choice == "Yes";
                             }
                             
@@ -438,7 +438,7 @@ public static class T3Ui
                                             "Donec auctor, nisl vel ultricies tincidunt, nisl nisl aliquam nisl, nec pulvinar nisl nisl vitae nisl. " +
                                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis quis ligula sit amet ornare. ";
                         
-                    var result = BlockingWindow.Instance.Show(bodyText, "Debug Popup", "Ok", "Maybe", "Idk", "Possibly", "Affirmative", "Negatory", "NO!");
+                    var result = BlockingWindow.Instance.ShowMessageBox(bodyText, "Debug Popup", "Ok", "Maybe", "Idk", "Possibly", "Affirmative", "Negatory", "NO!");
                     Log.Debug($"Result: \"{result}\"");
                 }
                 ImGui.EndMenu();

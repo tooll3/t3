@@ -93,7 +93,7 @@ internal static class ProgramWindows
             if (e.Message.Contains("DXGI_ERROR_SDK_COMPONENT_MISSING"))
             {
                 var result =
-                    BlockingWindow.Instance.Show("You need to install Windows Graphics diagnostics tools.\n\nClick Ok to download this Windows component directly from Microsoft.",
+                    BlockingWindow.Instance.ShowMessageBox("You need to install Windows Graphics diagnostics tools.\n\nClick Ok to download this Windows component directly from Microsoft.",
                                                           "Windows component missing", "Ok", "Cancel");
                 if (result == "Ok")
                 {
@@ -103,7 +103,7 @@ internal static class ProgramWindows
             }
             else
             {
-                BlockingWindow.Instance.Show("We are sorry but your graphics hardware might not be capable of running Tooll3\n\n" + e.Message, "Oh noooo",
+                BlockingWindow.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll3\n\n" + e.Message, "Oh noooo",
                                                  "Ok... /:");
             }
 
