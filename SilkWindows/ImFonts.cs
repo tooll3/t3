@@ -1,4 +1,5 @@
 using ImGuiNET;
+using T3.SystemUi;
 
 namespace SilkWindows;
 
@@ -9,4 +10,9 @@ public sealed class ImFonts(ImFontPtr[] fonts)
     public ImFontPtr Regular => HasFonts ? fonts[1] : ImGui.GetIO().Fonts.Fonts[0];
     public ImFontPtr Bold => HasFonts ? fonts[2] : ImGui.GetIO().Fonts.Fonts[0];
     public ImFontPtr Large => HasFonts ? fonts[3] : ImGui.GetIO().Fonts.Fonts[0];
+}
+
+public interface IImguiWindowProvider : IPopUpWindowProvider
+{
+    public TData? Show<TData>(string title, IImguiDrawer<TData> drawer, in SimpleWindowOptions? options = null);
 }

@@ -7,7 +7,7 @@ public sealed partial class FileManager
 {
     public void OnFileDrop(string[] filePaths)
     {
-        _droppedPaths = filePaths.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+        _droppedPaths = FileOperations.PathsToFileSystemInfo(filePaths).ToArray();
     }
     
     public bool IsDraggingPaths => _isDraggingMouse && _draggedPaths.Length > 0;
@@ -31,20 +31,38 @@ public sealed partial class FileManager
                        _                               => throw new ArgumentOutOfRangeException(nameof(drawer), drawer, null)
                    };
         
-        static bool CanReceiveDraggedFiles(DirectoryDrawer directoryDrawer, string[] draggedPaths)
+        static bool CanReceiveDraggedFiles(DirectoryDrawer directoryDrawer, FileSystemInfo[] draggedPaths)
         {
             var targetDirectory = directoryDrawer.DirectoryInfo.FullName;
-            foreach (var path in draggedPaths)
+            foreach (var fileSystemInfo in draggedPaths)
             {
+                var path = fileSystemInfo.FullName;
                 if (path == targetDirectory)
                     return false;
                 
-                var incompatibleFilePath = Path.Combine(targetDirectory, Path.GetFileName(path));
-                if (path == incompatibleFilePath)
+                DirectoryInfo? parent = null;
+                switch (fileSystemInfo)
                 {
-                    Console.WriteLine($"Can't receive dropped files from its own directory.\nSource: \"{path}\nTarget: \"{targetDirectory}\"");
-                    return false;
+                    case FileInfo fileInfo:
+                        parent = fileInfo.Directory;
+                        break;
+                    case DirectoryInfo directoryInfo:
+                        
+                        // can't drag a parent directory into its child
+                        if (targetDirectory.StartsWith(directoryInfo.FullName))
+                            return false;
+                        
+                        parent = directoryInfo.Parent;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(fileSystemInfo), fileSystemInfo, null);
                 }
+                
+                if (parent?.FullName != targetDirectory) 
+                    continue;
+                
+                Console.WriteLine($"Can't receive dropped files from its own directory.\nSource: \"{path}\nTarget: \"{targetDirectory}\"");
+                return false;
             }
             
             return true;
@@ -64,7 +82,7 @@ public sealed partial class FileManager
                                   };
         
         var droppedPaths = _droppedPaths;
-        NewEmptyArray(ref _droppedPaths);
+        ConsumeArray(ref _droppedPaths);
         
         if (directoryDrawer.IsReadOnly)
         {
@@ -77,41 +95,27 @@ public sealed partial class FileManager
         }
     }
     
-    private bool TryDropPathsInto(DirectoryInfo rootDirectory, DirectoryInfo targetDirectory, string[] paths)
+    private bool TryDropPathsInto(DirectoryInfo rootDirectory, DirectoryInfo targetDirectory, IEnumerable<FileSystemInfo> paths)
     {
-        if (paths.Length == 0)
-            return false;
         var targetRootDirectoryPath = rootDirectory.FullName;
         var droppedDirectories = new List<DirectoryInfo>();
         var droppedFiles = new List<FileInfo>();
         
-        foreach (var path in paths)
+        foreach (var fileSystemInfo in paths)
         {
-            var attributes = File.GetAttributes(path);
-            
-            if (attributes.HasFlag(FileAttributes.Directory))
+            if (!fileSystemInfo.Exists)
             {
-                var directory = new DirectoryInfo(path);
-                
-                if (!directory.Exists)
-                {
-                    Console.WriteLine("Directory not found: " + path);
-                    continue;
-                }
-                
-                droppedDirectories.Add(directory);
+                Console.WriteLine($"Path does not exist: {fileSystemInfo.FullName}");
+                continue;
+            }
+            
+            if (fileSystemInfo is FileInfo fileInfo)
+            {
+                droppedFiles.Add(fileInfo);
             }
             else
             {
-                var file = new FileInfo(path);
-                
-                if (!file.Exists)
-                {
-                    Console.WriteLine("File not found: " + path);
-                    continue;
-                }
-                
-                droppedFiles.Add(file);
+                droppedDirectories.Add((DirectoryInfo) fileSystemInfo);
             }
         }
         
@@ -172,12 +176,12 @@ public sealed partial class FileManager
             {
                 case true: // start dragging
                     _isDraggingMouse = true;
-                    _draggedPaths = _selections.Select(x => x.Path).ToArray();
+                    _draggedPaths = FileOperations.PathsToFileSystemInfo(_selections.Select(x => x.Path)).ToArray();
                     break;
                 case false: // stop dragging
                     _isDraggingMouse = false;
                     _droppedPaths = _draggedPaths;
-                    NewEmptyArray(ref _draggedPaths);
+                    ConsumeArray(ref _draggedPaths);
                     break;
             }
         }
@@ -185,9 +189,10 @@ public sealed partial class FileManager
         {
             // clear dropped files if we are not dragging files after a frame of no dragging
             // todo - this likely breaks external drag and drop
-            NewEmptyArray(ref _droppedPaths);
+            ConsumeArray(ref _droppedPaths);
         }
     }
+    
     
     private void DragFileDragIndicators()
     {
@@ -210,7 +215,7 @@ public sealed partial class FileManager
         ImGui.EndTooltip();
     }
     
-    private string[] _droppedPaths = [];
-    private string[] _draggedPaths = [];
+    private FileSystemInfo[] _droppedPaths = [];
+    private FileSystemInfo[] _draggedPaths = [];
     public bool HasDroppedFiles => _droppedPaths.Length > 0;
 }

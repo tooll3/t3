@@ -64,7 +64,7 @@ namespace T3.Player
         private static void Main(string[] args)
         {
             CoreUi.Instance = new MsForms.MsForms();
-            BlockingWindow.Instance = new SilkBlockingDialog();
+            BlockingWindow.Instance = new SilkWindowProvider();
             
             var settingsPath = Path.Combine(RuntimeAssemblies.CoreDirectory, "exportSettings.json");
             if (!JsonUtils.TryLoadingJson(settingsPath, out ExportSettings exportSettings))
