@@ -19,7 +19,7 @@ internal class FileDrawer : FileSystemDrawer
     {
         _name = file.Name;
         _file = file;
-        _displayText = $"[{file.Extension}] {_name}";
+        _displayText = file.Extension == "" ? _name : $"[{file.Extension}] {_name}";
         
         if(ParentDirectoryDrawer == null)
             throw new InvalidOperationException("File drawer must have a parent directory drawer");
@@ -81,6 +81,10 @@ internal class FileDrawer : FileSystemDrawer
         ImGui.Text("size: ");
         ImGui.SameLine();
         ImGui.Text(showInMb ? $"{sizeInBytes * toMb: 0.0} MB" : $"{sizeInBytes * toKb: 0.0} KB");
+        
+        ImGui.PushFont(fonts.Small);
+        ImGui.Text("Last modified: " + FileSystemInfo.LastWriteTime.ToShortDateString());
+        ImGui.PopFont();
     }
     
     protected sealed override FileSystemInfo FileSystemInfo => _file;
