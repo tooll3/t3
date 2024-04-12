@@ -1,6 +1,8 @@
+using System.Diagnostics;
+using System.Numerics;
 using ImGuiNET;
 
-namespace SilkWindows.Implementations.FileManager;
+namespace SilkWindows.Implementations.FileManager.ItemDrawers;
 
 // todo: child class (directory) being referenced in the base class is UGLY
 public abstract class FileSystemDrawer
@@ -29,8 +31,11 @@ public abstract class FileSystemDrawer
     
     protected bool IsHovered() => ImGui.IsItemHovered(HoverFlags);
     
-    protected bool HoveredByFileDrag(ImGuiHoveredFlags flags = ImGuiHoveredFlags.AllowWhenOverlappedByItem) =>
-        FileManager.IsDraggingFiles && ImGui.IsItemHovered(flags);
+    const ImGuiHoveredFlags FileDragHoverFlags = ImGuiHoveredFlags.AllowWhenOverlappedByItem | ImGuiHoveredFlags.DelayNone |
+                                                 ImGuiHoveredFlags.AllowWhenOverlappedByItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup;
+    
+    protected bool HoveredByFileDrag(ImGuiHoveredFlags flags = FileDragHoverFlags) =>
+        FileManager.IsDraggingPaths && ImGui.IsItemHovered(flags);
     
     protected abstract void DrawSelectable(ImFonts fonts, bool isSelected);
     protected abstract void CompleteDraw(ImFonts fonts, bool hovered, bool isSelected);
@@ -38,6 +43,14 @@ public abstract class FileSystemDrawer
     public void Draw(ImFonts fonts)
     {
         bool isSelected = FileManager.IsSelected(this);
+        var fileInfo = FileSystemInfo;
+        fileInfo.Refresh();
+        var missing = !fileInfo.Exists;
+        if (missing)
+        {
+            ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1f, 0.2f, 0.2f, 1f));
+        }
+        
         DrawSelectable(fonts, isSelected);
         var hovered = IsHovered();
         var hoveredByFileDrag = HoveredByFileDrag();
@@ -66,7 +79,7 @@ public abstract class FileSystemDrawer
             }
         }
         
-        var isDropTarget = hoveredByFileDrag && FileManager.IsValidFileDropTarget(this);
+        var isDropTarget = hoveredByFileDrag && FileManager.IsDropTarget(this);
         
         if (isDropTarget)
         {
@@ -79,9 +92,11 @@ public abstract class FileSystemDrawer
             if (ImGui.BeginPopupContextItem())
             {
                 DrawContextMenu(fonts);
+                
+                ImGui.EndPopup();
             }
             
-            if (!FileManager.IsDraggingFiles && hovered)
+            if (!FileManager.IsDraggingPaths && hovered)
             {
                 ImGui.BeginTooltip();
                 DrawTooltip(fonts);
@@ -89,7 +104,15 @@ public abstract class FileSystemDrawer
             }
         }
         
-        CompleteDraw(fonts, hovered, isSelected);
+        if (missing)
+        {
+            ImGui.PopStyleColor();
+            ParentDirectoryDrawer?.MarkNeedsRescan();
+        }
+        else
+        {
+            CompleteDraw(fonts, hovered, isSelected);
+        }
     }
     
     protected abstract void DrawContextMenu(ImFonts fonts);

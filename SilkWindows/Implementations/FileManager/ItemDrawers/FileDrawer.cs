@@ -1,6 +1,6 @@
 using ImGuiNET;
 
-namespace SilkWindows.Implementations.FileManager;
+namespace SilkWindows.Implementations.FileManager.ItemDrawers;
 
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 internal class FileDrawer : FileSystemDrawer

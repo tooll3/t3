@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Numerics;
 using ImGuiNET;
+using SilkWindows.Implementations.FileManager.ItemDrawers;
 using T3.Core.SystemUi;
 
 namespace SilkWindows.Implementations.FileManager;
@@ -14,7 +15,7 @@ public enum FileManagerMode
     Manage
 }
 
-public sealed class FileManager : IImguiDrawer<string>, IFileManager
+public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
 {
     private SilkBlockingDialog? _blockingDialog;
     
@@ -57,57 +58,68 @@ public sealed class FileManager : IImguiDrawer<string>, IFileManager
                 throw new ArgumentOutOfRangeException();
         }
         
-        _isDraggingMouse = ImGui.IsMouseDragging(ImGuiMouseButton.Left);
+        ImGui.SameLine();
+        ImGui.Text("\tDragged files: " + _draggedPaths.Length);
+        HandleFileDragEvents();
+        DragFileDragIndicators();
+        
         ImGui.SameLine();
         ImGui.Text("\tMouse dragging: " + _isDraggingMouse);
         ImGui.SameLine();
         ImGui.Text("\tSelection count: " + _selections.Count);
-        ImGui.BeginTable(_uniqueIdSuffix, _directoryDrawers.Length);
-        ImGui.TableNextRow();
-        int column = 0;
-        foreach (var directoryDrawer in _directoryDrawers)
-        {
-            ImGui.TableSetColumnIndex(column++);
-            ImGui.BeginChild(directoryDrawer.Path + _uniqueIdSuffix);
-            
-            // for being able to drag and drop across columns
-            if(_isDraggingMouse && ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
-                ImGui.SetWindowFocus();
-            
-            directoryDrawer.Draw(fonts);
-            
-            ImGui.EndChild();
-        }
         
-        ImGui.EndTable();
-        
-        if (IsDraggingFiles)
+        const ImGuiTableFlags tableFlags = ImGuiTableFlags.Reorderable;
+        if (ImGui.BeginTable(_uniqueIdSuffix, _directoryDrawers.Length, tableFlags))
         {
-            var style = ImGui.GetStyle();
-            ImGui.PushStyleColor(ImGuiCol.PopupBg, style.Colors[(int)ImGuiCol.Text]);
-            ImGui.PushStyleColor(ImGuiCol.Text, style.Colors[(int)ImGuiCol.WindowBg]);
-            ImGui.BeginTooltip();
-            
-            foreach (var item in _selections)
+            ImGui.TableNextRow();
+            for (var index = 0; index < _directoryDrawers.Length; index++)
             {
-                ImGui.Text(item.Name);
-                if (item.IsDirectory)
-                {
-                    ImGui.SameLine();
-                    ImGui.Text("/");
-                }
+                var directoryDrawer = _directoryDrawers[index];
+                var columnId = "##col_" + directoryDrawer.Path;
+                ImGui.TableSetupColumn(columnId, ImGuiTableColumnFlags.WidthStretch);
+                ImGui.TableSetColumnIndex(index);
+                
+                // draw header
+                var tableHeaderTitle = $"{(directoryDrawer.IsReadOnly ? "[Read Only]" : string.Empty)} ";
+                ImGui.TableHeader(tableHeaderTitle);
+                
+                // draw separator - hack?
+                var style = ImGui.GetStyle();
+                var thickness = style.CellPadding.X;
+                var headerMin = ImGui.GetItemRectMin();
+                var headerMax = ImGui.GetItemRectMax();
+                var minPosition = headerMin with { X = headerMin.X - thickness };
+                var maxPosition = headerMax with { X = minPosition.X + thickness };
+                var drawList = ImGui.GetWindowDrawList();
+                var windowColor = ImGui.GetColorU32(ImGuiCol.WindowBg);
+                drawList.AddRectFilled(minPosition, maxPosition, windowColor);
             }
             
-            ImGui.EndTooltip();
-            ImGui.PopStyleColor(2);
+            ImGui.TableNextRow();
+            for (var index = 0; index < _directoryDrawers.Length; index++)
+            {
+                var directoryDrawer = _directoryDrawers[index];
+                ImGui.TableSetColumnIndex(index);
+                
+                // we do this so we can have the same directory potentially in multiple columns commander-style
+                //var childId = index +  + _uniqueIdSuffix + "##" + index;
+                ImGui.BeginChild(directoryDrawer.Path);
+                
+                // for being able to drag and drop across columns
+                //if (_isDraggingMouse && ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
+                //ImGui.SetWindowFocus();
+                
+                directoryDrawer.Draw(fonts);
+                
+                ImGui.EndChild();
+            }
+            
+            ImGui.EndTable();
         }
         
-        if (IsDraggingFiles && !ImGui.IsMouseDown(ImGuiMouseButton.Left))
-        {
-            _isDraggingMouse = false;
-            _droppedFiles = _selections.Select(x => x.Path).ToArray();
-            _selections.Clear();
-        }
+        
+        
+        return;
         
         ImGui.SetNextWindowScroll(new Vector2(0f, float.MaxValue));
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
@@ -128,13 +140,7 @@ public sealed class FileManager : IImguiDrawer<string>, IFileManager
     private void DrawPickButtonAndSetResult<T>(string buttonName) where T : FileSystemDrawer
     {
         var first = _selections.FirstOrDefault() as T;
-        var isEnabled = _selections.Count == 1 && first != null;
-        isEnabled = isEnabled && _selections.First() is T;
-        
-        if (isEnabled)
-        {
-            Result = first!.Path;
-        }
+        var isEnabled = first is not null;
         
         if (!isEnabled)
         {
@@ -143,6 +149,7 @@ public sealed class FileManager : IImguiDrawer<string>, IFileManager
         
         if (ImGui.Button(buttonName))
         {
+            Result = first!.Path;
             _shouldClose = true;
         }
         
@@ -160,124 +167,6 @@ public sealed class FileManager : IImguiDrawer<string>, IFileManager
     public void OnClose()
     {
     }
-    
-    #region Feature: Drag and Drop
-    public void OnFileDrop(string[] filePaths)
-    {
-        _droppedFiles = filePaths.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-    }
-    
-    public bool IsDraggingFiles => _isDraggingMouse && _selections.Count > 0;
-    
-    private bool _isDraggingMouse;
-    
-    void IFileManager.ConsumeDroppedFiles(FileSystemDrawer drawer)
-    {
-        var directoryDrawer = drawer is FileDrawer fileDrawer ? fileDrawer.ParentDirectoryDrawer : (DirectoryDrawer)drawer;
-        var droppedFiles = _droppedFiles;
-        _droppedFiles = null;
-        if (directoryDrawer.IsReadOnly)
-        {
-            BlockingWindow.Instance.ShowMessageBox("Cannot drop files in a read-only directory.");
-            return;
-        }
-        
-        if (droppedFiles == null)
-        {
-            throw new InvalidOperationException($"Tried to consume dropped files, but none were available. Was it already consumed?");
-        }
-        
-        if (!TryDropPathsInto(directoryDrawer.RootDirectory, directoryDrawer.DirectoryInfo, droppedFiles))
-        {
-            return;
-        }
-        
-        directoryDrawer.MarkNeedsRescan();
-    }
-    
-    private bool TryDropPathsInto(DirectoryInfo rootDirectory, DirectoryInfo targetDirectory, IEnumerable<string> paths)
-    {
-        var targetRootDirectoryPath = rootDirectory.FullName;
-        var droppedDirectories = new List<DirectoryInfo>();
-        var droppedFiles = new List<FileInfo>();
-        
-        foreach (var path in paths)
-        {
-            var attributes = File.GetAttributes(path);
-            
-            if (attributes.HasFlag(FileAttributes.Directory))
-            {
-                var directory = new DirectoryInfo(path);
-                
-                if (!directory.Exists)
-                {
-                    Console.WriteLine("Directory not found: " + path);
-                    continue;
-                }
-                
-                droppedDirectories.Add(directory);
-            }
-            else
-            {
-                var file = new FileInfo(path);
-                
-                if (!file.Exists)
-                {
-                    Console.WriteLine("File not found: " + path);
-                    continue;
-                }
-                
-                droppedFiles.Add(file);
-            }
-        }
-        
-        // remove any duplicate directories
-        for (var i = droppedDirectories.Count - 1; i >= 0; i--)
-        {
-            var directory = droppedDirectories[i];
-            bool shouldRemove = false;
-            
-            foreach (var otherDirectory in droppedDirectories)
-            {
-                if (otherDirectory == directory)
-                    continue;
-                
-                if (otherDirectory.FullName.StartsWith(directory.FullName))
-                {
-                    shouldRemove = true;
-                    break;
-                }
-            }
-            
-            if (shouldRemove)
-            {
-                droppedDirectories.RemoveAt(i);
-            }
-        }
-        
-        // remove any duplicate or unwanted files
-        var files = droppedFiles
-                   .Where(file => _fileFilter(file.FullName))
-                   .Where(x => !droppedDirectories
-                               .Select(dir => dir.FullName)
-                               .Any(x.FullName.StartsWith))
-                   .ToArray();
-        
-        foreach (var file in files)
-        {
-            var moveType = file.FullName.StartsWith(targetRootDirectoryPath) ? FileOperations.MoveType.Move : FileOperations.MoveType.Copy;
-            FileOperations.TryMoveFile(moveType, file, targetDirectory, _fileConflictResolver);
-        }
-        
-        foreach (var directory in droppedDirectories)
-        {
-            var moveType = directory.FullName.StartsWith(targetRootDirectoryPath) ? FileOperations.MoveType.Move : FileOperations.MoveType.Copy;
-            FileOperations.TryMoveDirectory(moveType, directory, targetDirectory, _fileConflictResolver);
-        }
-        
-        return true;
-    }
-    #endregion
     
     private readonly Func<FileInfo, FileConflictOption> _fileConflictResolver;
     
@@ -300,13 +189,13 @@ public sealed class FileManager : IImguiDrawer<string>, IFileManager
     {
         var wasSelected = IsSelected(drawer);
         
+        var ctrl = ImGui.GetIO().KeyCtrl;
         // todo - shift / ctrl to select/deselect multiple
-        _selections.Clear();
         
-        if (wasSelected)
-        {
+        if (!ctrl)
+            _selections.Clear();
+        else if (wasSelected)
             return;
-        }
         
         _selections.Add(drawer);
     }
@@ -319,16 +208,6 @@ public sealed class FileManager : IImguiDrawer<string>, IFileManager
     public bool IsSelected(FileSystemDrawer drawer)
     {
         return _selections.Contains(drawer);
-    }
-    
-    public bool IsSelectedOrParentSelected(FileSystemDrawer drawer)
-    {
-        return IsSelected(drawer) || drawer.ParentDirectoryDrawer != null && IsSelectedOrParentSelected(drawer.ParentDirectoryDrawer);
-    }
-    
-    public void ClearSelection()
-    {
-        _selections.Clear();
     }
     #endregion
     
@@ -416,48 +295,33 @@ public sealed class FileManager : IImguiDrawer<string>, IFileManager
         
         if (result is not { Exists: true })
         {
-            if(consumeDroppedFiles)
-                _droppedFiles = null;
+            if (consumeDroppedFiles)
+                NewEmptyArray(ref _droppedPaths);
             
             return;
         }
         
         if (consumeDroppedFiles)
         {
-            if (_droppedFiles == null)
+            if (_droppedPaths.Length == 0)
             {
                 Log("No dropped files to consume??");
                 return;
             }
             
-            if (TryDropPathsInto(directoryDrawer.RootDirectory, result, _droppedFiles!))
+            if (TryDropPathsInto(directoryDrawer.RootDirectory, result, _droppedPaths))
             {
-                _droppedFiles = null;
             }
+            
+            NewEmptyArray(ref _droppedPaths);
         }
         
         directoryDrawer.MarkNeedsRescan();
     }
     
-    bool IFileManager.IsValidFileDropTarget(FileSystemDrawer drawer)
-    {
-        if (drawer.IsReadOnly)
-            return false;
-        
-        var directoryDrawer = drawer is FileDrawer fileDrawer ? fileDrawer.ParentDirectoryDrawer! : (DirectoryDrawer)drawer;
-        return CanReceiveDroppedFiles(directoryDrawer);
-    }
-    
-    internal bool CanReceiveDroppedFiles(DirectoryDrawer directoryDrawer)
-    {
-        if(directoryDrawer.IsReadOnly)
-            return false;
-        
-        if(_droppedFiles == null || _droppedFiles.Length == 0)
-            return false;
-        
-        return true;
-    }
+    // ReSharper disable once RedundantAssignment
+    // a silly little helper method to keep the way I'm handling the dragged/dropped files consistent and easy to find
+    private static void NewEmptyArray<T>(ref T[] paths) => paths = [];
     
     private void Log(string log) => _logs.Enqueue(log);
     
@@ -470,10 +334,8 @@ public sealed class FileManager : IImguiDrawer<string>, IFileManager
     private readonly ConcurrentQueue<string> _logs = new();
     private const int MaxLogCount = 100;
     private readonly Func<string, bool> _fileFilter;
-    private string[]? _droppedFiles;
     private bool _shouldClose = false;
     private readonly DirectoryDrawer[] _directoryDrawers;
-    public bool HasDroppedFiles => _droppedFiles != null;
     public string? Result { get; private set; }
     private bool _multiSelectEnabled;
 }
