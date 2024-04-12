@@ -4,8 +4,8 @@ namespace T3.Core.SystemUi;
 
 public static class BlockingWindow
 {
-    private static IPopUpWindows _instance;
-    public static IPopUpWindows Instance
+    private static IPopUpWindowProvider _instance;
+    public static IPopUpWindowProvider Instance
     {
         get => _instance;
         set

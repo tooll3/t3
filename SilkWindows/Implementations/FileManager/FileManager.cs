@@ -17,8 +17,6 @@ public enum FileManagerMode
 
 public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
 {
-    private SilkBlockingDialog? _blockingDialog;
-    
     public FileManager(FileManagerMode mode, IEnumerable<ManagedDirectory> rootDirectories, Func<string, bool>? fileFilter = null)
     {
         _mode = mode;
@@ -290,13 +288,12 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     void IFileManager.CreateNewSubfolder(DirectoryDrawer directoryDrawer, bool consumeDroppedFiles)
     {
         var nameFolderDialog = new NewSubfolderWindow(directoryDrawer.DirectoryInfo);
-        _blockingDialog ??= new SilkBlockingDialog();
-        var result = _blockingDialog.Show("Create new subfolder", nameFolderDialog);
+        var result = ImguiWindowService.Instance.Show("Create new subfolder", nameFolderDialog);
         
         if (result is not { Exists: true })
         {
             if (consumeDroppedFiles)
-                NewEmptyArray(ref _droppedPaths);
+                ConsumeArray(ref _droppedPaths);
             
             return;
         }
@@ -309,11 +306,9 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
                 return;
             }
             
-            if (TryDropPathsInto(directoryDrawer.RootDirectory, result, _droppedPaths))
-            {
-            }
+            _ = TryDropPathsInto(directoryDrawer.RootDirectory, result, _droppedPaths);
             
-            NewEmptyArray(ref _droppedPaths);
+            ConsumeArray(ref _droppedPaths);
         }
         
         directoryDrawer.MarkNeedsRescan();
@@ -321,7 +316,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     
     // ReSharper disable once RedundantAssignment
     // a silly little helper method to keep the way I'm handling the dragged/dropped files consistent and easy to find
-    private static void NewEmptyArray<T>(ref T[] paths) => paths = [];
+    private static void ConsumeArray<T>(ref T[] paths) => paths = [];
     
     private void Log(string log) => _logs.Enqueue(log);
     

@@ -12,7 +12,7 @@ public interface ICoreSystemUiService
     void SetUnhandledExceptionMode(bool throwException);
 }
 
-public interface IPopUpWindows
+public interface IPopUpWindowProvider
 {
     public void SetFonts(FontPack fontPack);
     public T? ShowMessageBox<T>(string text, string title, Func<T, string> toString, params T[] buttons);

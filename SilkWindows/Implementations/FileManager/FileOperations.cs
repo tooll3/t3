@@ -11,24 +11,38 @@ internal static class FileOperations
     /// <summary>
     /// Returns true if a file operation was performed successfully, false if skipped or failed
     /// </summary>
-    public static bool TryMoveDirectory(MoveType moveType, DirectoryInfo source, DirectoryInfo destination, Func<FileInfo, FileConflictOption> fileConflictHandler)
+    public static bool TryMoveDirectory(MoveType moveType, DirectoryInfo source, DirectoryInfo destination,
+                                        Func<FileInfo, FileConflictOption> fileConflictHandler)
     {
-        if(source.FullName == destination.FullName)
+        if (source.FullName == destination.FullName)
             return false;
         
         // dont move if the destination is a subdirectory of the source
         if (destination.FullName.StartsWith(source.FullName))
             return false;
         
+        // create subfolder
+        DirectoryInfo newDirectory;
+        
+        try
+        {
+            newDirectory = destination.CreateSubdirectory(source.Name);
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
+        
         var operationPerformed = false;
         foreach (var file in source.EnumerateFiles())
         {
-            operationPerformed |= TryMoveFile(moveType, file, destination, fileConflictHandler);
+            operationPerformed |= TryMoveFile(moveType, file, newDirectory, fileConflictHandler);
         }
         
         foreach (var subDir in source.EnumerateDirectories())
         {
-            operationPerformed |= TryMoveDirectory(moveType, subDir, destination.CreateSubdirectory(subDir.Name), fileConflictHandler);
+            operationPerformed |= TryMoveDirectory(moveType, subDir, newDirectory, fileConflictHandler);
         }
         
         try
@@ -56,7 +70,7 @@ internal static class FileOperations
     {
         var newFileInfo = new FileInfo(Path.Combine(targetDirectory.FullName, file.Name));
         
-        if(newFileInfo.FullName == file.FullName)
+        if (newFileInfo.FullName == file.FullName)
             return false;
         
         if (newFileInfo.Exists)
@@ -99,6 +113,24 @@ internal static class FileOperations
         }
         
         return true;
+    }
+    
+    public static IEnumerable<FileSystemInfo> PathsToFileSystemInfo(IEnumerable<string> paths)
+    {
+        return paths
+              .Where(Path.Exists)
+              .Select(path =>
+                      {
+                          if (Path.Exists(path))
+                          {
+                          }
+                          
+                          var attributes = File.GetAttributes(path);
+                          if (attributes.HasFlag(FileAttributes.Directory))
+                              return new DirectoryInfo(path);
+                          
+                          return (FileSystemInfo)new FileInfo(path);
+                      });
     }
 }
 

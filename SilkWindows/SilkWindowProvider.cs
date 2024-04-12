@@ -7,7 +7,7 @@ using SilkWindows.Implementations;
 namespace SilkWindows;
 
 //https://github.com/dotnet/Silk.NET/blob/main/examples/CSharp/OpenGL%20Tutorials/Tutorial%201.1%20-%20Hello%20Window/Program.cs
-public sealed class SilkBlockingDialog : IPopUpWindows
+public sealed class SilkWindowProvider : IImguiWindowProvider, IPopUpWindowProvider
 {
     public void ShowMessageBox(string text, string title)
     {
