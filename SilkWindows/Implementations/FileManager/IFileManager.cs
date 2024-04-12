@@ -3,17 +3,18 @@ namespace SilkWindows.Implementations.FileManager;
 internal interface IFileManager
 {
     public bool HasDroppedFiles { get; }
-    public void ConsumeDroppedFiles(DirectoryDrawer directoryDrawer);
+    bool IsDraggingFiles { get; }
+    public void ConsumeDroppedFiles(FileSystemDrawer directoryDrawer);
     
-    public void ItemClicked(IFileSystemDrawer fileSystemInfo);
-    public void RemoveFromSelection(IFileSystemDrawer fileSystemInfo);
+    public void ItemClicked(FileSystemDrawer fileSystemInfo);
+    public void RemoveFromSelection(FileSystemDrawer fileSystemInfo);
     
-    public bool IsSelected(IFileSystemDrawer fileSystemInfo);
-    public bool IsSelectedOrParentSelected(IFileSystemDrawer fileSystemInfo);
-    public void ClearSelection();
+    public bool IsSelected(FileSystemDrawer fileSystemInfo);
     public IEnumerable<FileSystemInfo> GetDirectoryContents(DirectoryInfo directory);
     public void DoubleClicked(FileDrawer file, bool inExternalEditor);
     
-    public void ShowInSystemFileManager(IFileSystemDrawer drawer);
-    public void Log(IFileSystemDrawer drawer, string log);
+    public void ShowInSystemFileManager(FileSystemDrawer drawer);
+    public void Log(FileSystemDrawer drawer, string log);
+    void CreateNewSubfolder(DirectoryDrawer directoryDrawer, bool consumeDroppedFiles = false);
+    public bool IsValidFileDropTarget(FileSystemDrawer directoryDrawer);
 }

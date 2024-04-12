@@ -2,41 +2,55 @@ using ImGuiNET;
 
 namespace SilkWindows.Implementations.FileManager;
 
-internal sealed class DirectoryDrawer : IFileSystemDrawer
+internal sealed class DirectoryDrawer : FileSystemDrawer
 {
-    public string Name => _directory.Name;
-    public string Path => _directory.FullName;
-    public bool IsDirectory => true;
-    public FileSystemInfo FileSystemInfo => _directory;
-    public DirectoryInfo RootDirectory => _parent == null ? _directory : _parent.RootDirectory;
-    public IFileSystemDrawer? ParentDirectoryDrawer => _parent;
+    internal override string Name => _directory.Name;
+    internal override string Path => _directory.FullName;
+    internal override bool IsDirectory => true;
+    public DirectoryInfo DirectoryInfo => _directory;
     
     private readonly List<DirectoryDrawer> _directories = new();
     
-    private readonly DirectoryDrawer? _parent;
     private readonly List<FileDrawer> _files = new();
     
-    public bool Expanded { get; set; }
+    protected bool Expanded { get; private set; }
     
     private bool _needsRescan;
-    private readonly IFileManager _fileManager;
     private readonly DirectoryInfo _directory;
-    public readonly bool IsReadOnly;
+    public override bool IsReadOnly { get; }
     private readonly string _displayName;
     private readonly string _expandedButtonLabel;
     private readonly string _collapsedButtonLabel;
+    private readonly string _newSubfolderLabel;
+    private readonly string _relativeDirectory;
     
-    public DirectoryDrawer(IFileManager fileManager, DirectoryInfo directory, bool isReadOnly, DirectoryDrawer? parent, string? alias = null)
+    public DirectoryDrawer(IFileManager fileManager, DirectoryInfo directory, bool isReadOnly, DirectoryDrawer? parent, string? alias = null) :
+        base(fileManager, parent)
     {
         _directory = directory;
         _needsRescan = true;
-        _fileManager = fileManager;
-        _parent = parent;
         IsReadOnly = isReadOnly;
         _displayName = string.IsNullOrEmpty(alias) ? _directory.Name : '/' + alias;
         var buttonIdSuffix = "##" + _displayName;
         _expandedButtonLabel = "[-]" + buttonIdSuffix;
         _collapsedButtonLabel = "[+]" + buttonIdSuffix;
+        _newSubfolderLabel = "*New subfolder" + buttonIdSuffix;
+        
+        var topParent = parent;
+        while (topParent?.ParentDirectoryDrawer != null)
+        {
+            topParent = topParent.ParentDirectoryDrawer;
+        }
+        
+        if (topParent != null)
+        {
+            var relativePath = System.IO.Path.GetRelativePath(topParent.RootDirectory.FullName, _directory.FullName);
+            _relativeDirectory = System.IO.Path.Combine(topParent._displayName, relativePath);
+        }
+        else
+        {
+            _relativeDirectory = _displayName;
+        }
     }
     
     public void MarkNeedsRescan() => _needsRescan = true;
@@ -45,16 +59,16 @@ internal sealed class DirectoryDrawer : IFileSystemDrawer
     {
         ClearChildren();
         
-        var contents = _fileManager.GetDirectoryContents(_directory);
+        var contents = FileManager.GetDirectoryContents(_directory);
         foreach (var dir in contents)
         {
             switch (dir)
             {
                 case DirectoryInfo di:
-                    _directories.Add(new DirectoryDrawer(_fileManager, di, IsReadOnly, this));
+                    _directories.Add(new DirectoryDrawer(FileManager, di, IsReadOnly, this));
                     break;
                 case FileInfo fi:
-                    _files.Add(new FileDrawer(_fileManager, fi, this));
+                    _files.Add(new FileDrawer(FileManager, fi, this));
                     break;
             }
         }
@@ -65,24 +79,19 @@ internal sealed class DirectoryDrawer : IFileSystemDrawer
         {
             for (int i = _directories.Count - 1; i >= 0; i--)
             {
-                _fileManager.RemoveFromSelection(_directories[i]);
+                FileManager.RemoveFromSelection(_directories[i]);
                 _directories.RemoveAt(i);
             }
             
             for (int i = _files.Count - 1; i >= 0; i--)
             {
-                _fileManager.RemoveFromSelection(_files[i]);
+                FileManager.RemoveFromSelection(_files[i]);
                 _files.RemoveAt(i);
             }
         }
     }
     
-    public void DropInFiles()
-    {
-        _fileManager.ConsumeDroppedFiles(this);
-    }
-    
-    public void Draw()
+    protected override void DrawSelectable(ImFonts fonts, bool isSelected)
     {
         var expandCollapseLabel = Expanded ? _expandedButtonLabel : _collapsedButtonLabel;
         if (ImGui.Button(expandCollapseLabel))
@@ -92,44 +101,25 @@ internal sealed class DirectoryDrawer : IFileSystemDrawer
         
         ImGui.SameLine();
         
-        if (ImGui.Selectable(_displayName, _fileManager.IsSelected(this)))
+        ImGui.Selectable(_displayName, isSelected);
+    }
+    
+    protected override void DrawTooltip(ImFonts fonts)
+    {
+        if (!IsReadOnly)
+            ImGui.Text(_directory.FullName);
+        else
+            ImGui.Text(_relativeDirectory);
+    }
+    
+    protected override FileSystemInfo FileSystemInfo => _directory;
+    
+    protected override void CompleteDraw(ImFonts fonts, bool hovered, bool isSelected)
+    {
+        if (!Expanded)
         {
-            _fileManager.ItemClicked(this);
+            return;
         }
-        
-        if (ImGui.IsItemHovered())
-        {
-            if (_fileManager.HasDroppedFiles)
-            {
-                DropInFiles();
-            }
-            
-            if (ImGui.IsMouseDoubleClicked(0))
-            {
-                Expanded = !Expanded;
-            }
-            
-            if (!IsReadOnly)
-            {
-                if (ImGui.BeginTooltip())
-                {
-                    ImGui.Text(_directory.FullName);
-                    ImGui.EndTooltip();
-                }
-            }
-        }
-        
-        if (ImGui.BeginPopupContextWindow())
-        {
-            if (ImGui.MenuItem("Refresh"))
-            {
-                MarkNeedsRescan();
-            }
-            
-            ImGui.EndPopup();
-        }
-        
-        if (!Expanded) return;
         
         if (_needsRescan)
         {
@@ -139,22 +129,45 @@ internal sealed class DirectoryDrawer : IFileSystemDrawer
         
         ImGui.Indent();
         ImGui.BeginGroup();
+        
         foreach (var dir in _directories)
         {
-            dir.Draw();
+            dir.Draw(fonts);
         }
         
         foreach (var file in _files)
         {
-            file.Draw();
+            file.Draw(fonts);
         }
         
-        if (ImGui.Selectable("*New Subfolder*"))
+        if (!IsReadOnly)
         {
-            Console.WriteLine($"Requested new folder at {_directory.FullName}");
+            ImGui.PushFont(fonts.Small);
+            if (ImGui.SmallButton(_newSubfolderLabel))
+            {
+                FileManager.Log(this, $"Requested new folder at {_directory.FullName}");
+                FileManager.CreateNewSubfolder(this);
+            }
+            
+            ImGui.PopFont();
+            
+            if (ImGui.IsItemHovered() && FileManager.HasDroppedFiles)
+            {
+                FileManager.CreateNewSubfolder(this, true);
+            }
         }
         
         ImGui.EndGroup();
         ImGui.Unindent();
     }
+    
+    protected override void DrawContextMenu(ImFonts fonts)
+    {
+        if (ImGui.MenuItem("Refresh"))
+        {
+            MarkNeedsRescan();
+        }
+    }
+    
+    protected override void OnDoubleClicked() => Expanded = !Expanded;
 }

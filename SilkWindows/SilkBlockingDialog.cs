@@ -24,7 +24,7 @@ public sealed class SilkBlockingDialog : IPopUpWindows
         return Show(title, new MessageBox<T>(text, buttons, toString), DefaultSimpleOptions);
     }
     
-    public TData? Show<TData>(string title, IImguiDrawer<TData> drawer, in SimpleWindowOptions? options)
+    public TData? Show<TData>(string title, IImguiDrawer<TData> drawer, in SimpleWindowOptions? options = null)
     {
         var fullOptions = DefaultOptions;
         if (options.HasValue)

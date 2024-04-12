@@ -10,6 +10,9 @@ internal static class FileOperations
     
     public static bool TryMoveDirectory(MoveType moveType, DirectoryInfo source, DirectoryInfo destination, Func<FileInfo, FileConflictOption> fileConflictHandler)
     {
+        if(source.FullName == destination.FullName)
+            return true;
+        
         var success = false;
         foreach (var file in source.EnumerateFiles())
         {
@@ -37,6 +40,9 @@ internal static class FileOperations
     public static bool TryMoveFile(MoveType moveType, FileInfo file, DirectoryInfo targetDirectory, Func<FileInfo, FileConflictOption> shouldOverwrite)
     {
         var newFileInfo = new FileInfo(Path.Combine(targetDirectory.FullName, file.Name));
+        
+        if(newFileInfo.FullName == file.FullName)
+            return true;
         
         if (newFileInfo.Exists)
         {
