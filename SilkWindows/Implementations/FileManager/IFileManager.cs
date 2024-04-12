@@ -19,4 +19,6 @@ internal interface IFileManager
     public void Log(FileSystemDrawer drawer, string log);
     void CreateNewSubfolder(DirectoryDrawer directoryDrawer, bool consumeDroppedFiles = false);
     public bool IsDropTarget(FileSystemDrawer directoryDrawer);
+    
+    public string FormatPathForDisplay(string path);
 }

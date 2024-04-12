@@ -23,6 +23,9 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     private readonly string _collapsedButtonLabel;
     private readonly string _newSubfolderLabel;
     private readonly string _relativeDirectory;
+    private readonly bool _isRoot;
+    private readonly Action _beginChildren;
+    private readonly Action _endChildren;
     
     public DirectoryDrawer(IFileManager fileManager, DirectoryInfo directory, bool isReadOnly, DirectoryDrawer? parent, string? alias = null) :
         base(fileManager, parent)
@@ -35,9 +38,16 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         _expandedButtonLabel = "[-]" + buttonIdSuffix;
         _collapsedButtonLabel = "[+]" + buttonIdSuffix;
         _newSubfolderLabel = "*New subfolder" + buttonIdSuffix;
+        _isRoot = parent == null;
+        
+        _beginChildren = _isRoot ? ImGui.Separator : ImGui.Indent;
+        _endChildren = _isRoot ? () => { } : ImGui.Unindent;
+        
+        Expanded = _isRoot;
         
         var topParent = parent;
-        while (topParent?.ParentDirectoryDrawer != null)
+        
+        while (topParent is { _isRoot: false })
         {
             topParent = topParent.ParentDirectoryDrawer;
         }
@@ -45,7 +55,8 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         if (topParent != null)
         {
             var relativePath = System.IO.Path.GetRelativePath(topParent.RootDirectory.FullName, _directory.FullName);
-            _relativeDirectory = System.IO.Path.Combine(topParent._displayName, relativePath);
+            var relativeDirectory = System.IO.Path.Combine(topParent._displayName, relativePath);
+            _relativeDirectory = fileManager.FormatPathForDisplay(relativeDirectory);
         }
         else
         {
@@ -106,10 +117,11 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     
     protected override void DrawTooltip(ImFonts fonts)
     {
-        if (!IsReadOnly)
-            ImGui.Text(_directory.FullName);
-        else
-            ImGui.Text(_relativeDirectory);
+        ImGui.Text(_relativeDirectory);
+        
+        ImGui.PushFont(fonts.Small);
+        ImGui.Text("Last modified: " + FileSystemInfo.LastWriteTime.ToShortDateString());
+        ImGui.PopFont();
     }
     
     protected override FileSystemInfo FileSystemInfo => _directory;
@@ -127,17 +139,26 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
             _needsRescan = false;
         }
         
-        ImGui.Indent();
+        _beginChildren();
+        
         ImGui.BeginGroup();
         
-        foreach (var dir in _directories)
+        if (_directories.Count + _files.Count > 0)
         {
-            dir.Draw(fonts);
+            foreach (var dir in _directories)
+            {
+                dir.Draw(fonts);
+            }
+            
+            foreach (var file in _files)
+            {
+                file.Draw(fonts);
+            }
         }
-        
-        foreach (var file in _files)
+        else
         {
-            file.Draw(fonts);
+            // draw empty directory
+            ImGui.TextDisabled("Empty directory");
         }
         
         if (!IsReadOnly)
@@ -158,7 +179,8 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         }
         
         ImGui.EndGroup();
-        ImGui.Unindent();
+        
+        _endChildren();
     }
     
     protected override void DrawContextMenu(ImFonts fonts)

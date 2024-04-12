@@ -314,6 +314,11 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         directoryDrawer.MarkNeedsRescan();
     }
     
+    public string FormatPathForDisplay(string path)
+    {
+        return path.Replace('\\', '/');
+    }
+    
     // ReSharper disable once RedundantAssignment
     // a silly little helper method to keep the way I'm handling the dragged/dropped files consistent and easy to find
     private static void ConsumeArray<T>(ref T[] paths) => paths = [];
