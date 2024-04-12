@@ -1,6 +1,6 @@
 using ImGuiNET;
 
-namespace SilkWindows.Implementations.FileManager;
+namespace SilkWindows.Implementations.FileManager.ItemDrawers;
 
 internal sealed class DirectoryDrawer : FileSystemDrawer
 {

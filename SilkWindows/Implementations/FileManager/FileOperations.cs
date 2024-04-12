@@ -8,41 +8,56 @@ internal static class FileOperations
         Copy
     }
     
+    /// <summary>
+    /// Returns true if a file operation was performed successfully, false if skipped or failed
+    /// </summary>
     public static bool TryMoveDirectory(MoveType moveType, DirectoryInfo source, DirectoryInfo destination, Func<FileInfo, FileConflictOption> fileConflictHandler)
     {
         if(source.FullName == destination.FullName)
-            return true;
+            return false;
         
-        var success = false;
+        // dont move if the destination is a subdirectory of the source
+        if (destination.FullName.StartsWith(source.FullName))
+            return false;
+        
+        var operationPerformed = false;
         foreach (var file in source.EnumerateFiles())
         {
-            success |= TryMoveFile(moveType, file, destination, fileConflictHandler);
+            operationPerformed |= TryMoveFile(moveType, file, destination, fileConflictHandler);
         }
         
         foreach (var subDir in source.EnumerateDirectories())
         {
-            success |= TryMoveDirectory(moveType, subDir, destination.CreateSubdirectory(subDir.Name), fileConflictHandler);
+            operationPerformed |= TryMoveDirectory(moveType, subDir, destination.CreateSubdirectory(subDir.Name), fileConflictHandler);
         }
         
         try
         {
-            if (source.GetFileSystemInfos().Length == 0)
+            if (source.GetFileSystemInfos().Length == 0 && moveType == MoveType.Move)
+            {
                 source.Delete();
+                operationPerformed = true;
+            }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
         }
         
-        return success;
+        return operationPerformed;
     }
     
+    /// <summary>
+    /// Returns true if a file operation was performed successfully - false if a failure occurs or the file was skipped
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public static bool TryMoveFile(MoveType moveType, FileInfo file, DirectoryInfo targetDirectory, Func<FileInfo, FileConflictOption> shouldOverwrite)
     {
         var newFileInfo = new FileInfo(Path.Combine(targetDirectory.FullName, file.Name));
         
         if(newFileInfo.FullName == file.FullName)
-            return true;
+            return false;
         
         if (newFileInfo.Exists)
         {

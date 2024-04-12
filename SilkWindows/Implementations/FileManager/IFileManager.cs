@@ -1,9 +1,11 @@
+using SilkWindows.Implementations.FileManager.ItemDrawers;
+
 namespace SilkWindows.Implementations.FileManager;
 
 internal interface IFileManager
 {
     public bool HasDroppedFiles { get; }
-    bool IsDraggingFiles { get; }
+    bool IsDraggingPaths { get; }
     public void ConsumeDroppedFiles(FileSystemDrawer directoryDrawer);
     
     public void ItemClicked(FileSystemDrawer fileSystemInfo);
@@ -16,5 +18,5 @@ internal interface IFileManager
     public void ShowInSystemFileManager(FileSystemDrawer drawer);
     public void Log(FileSystemDrawer drawer, string log);
     void CreateNewSubfolder(DirectoryDrawer directoryDrawer, bool consumeDroppedFiles = false);
-    public bool IsValidFileDropTarget(FileSystemDrawer directoryDrawer);
+    public bool IsDropTarget(FileSystemDrawer directoryDrawer);
 }
