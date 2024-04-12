@@ -3,89 +3,73 @@ using ImGuiNET;
 namespace SilkWindows.Implementations.FileManager;
 
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-internal class FileDrawer : IFileSystemDrawer
+internal class FileDrawer : FileSystemDrawer
 {
-    public string Name => _name;
-    public string Path => _file.FullName;
-    public bool Expanded { get; set; }
-    public IFileSystemDrawer? ParentDirectoryDrawer => _parent;
-    public bool IsDirectory => false;
-    public FileSystemInfo FileSystemInfo => _file;
+    internal sealed override string Name => _name;
+    internal sealed override string Path => _file.FullName;
+    protected bool Expanded;
+    internal sealed override bool IsDirectory => false;
+    public sealed override bool IsReadOnly => ParentDirectoryDrawer!.IsReadOnly;
     
-    private string _name;
-    private string _extension;
-    private string _displayText;
+    private readonly string _name;
+    private readonly string _displayText;
     private readonly FileInfo _file;
-    private readonly DirectoryDrawer _parent;
-    private readonly IFileManager _fileManager;
-    private readonly Func<bool, bool> _drawBasic;
-    private readonly Func<bool, bool> _drawExpanded;
     
-    public FileDrawer(IFileManager fileManager, FileInfo file, DirectoryDrawer parent)
+    public FileDrawer(IFileManager fileManager, FileInfo file, DirectoryDrawer parent) : base(fileManager, parent)
     {
         _name = file.Name;
-        _extension = file.Extension;
         _file = file;
-        _parent = parent;
-        _fileManager = fileManager;
-        _displayText = $"[{_extension}] {_name}";
-        _drawBasic = DrawBasic;
-        _drawExpanded = DrawExpanded;
+        _displayText = $"[{file.Extension}] {_name}";
+        
+        if(ParentDirectoryDrawer == null)
+            throw new InvalidOperationException("File drawer must have a parent directory drawer");
     }
     
-    public void Draw()
+    protected override void DrawSelectable(ImFonts fonts, bool isSelected)
     {
-        if (DrawBasic(_fileManager.IsSelected(this)))
-        {
-            _fileManager.ItemClicked(this);
-        }
-        
-        var isSelected = _fileManager.IsSelected(this);
-        var clicked = Expanded ? DrawExpanded(isSelected) : DrawBasic(isSelected);
-        if (clicked)
-        {
-            _fileManager.ItemClicked(this);
-        }
-        
-        if (ImGui.IsItemHovered())
-        {
-            if (_fileManager.HasDroppedFiles)
-            {
-                _parent.DropInFiles();
-            }
-            else if (ImGui.IsMouseDoubleClicked(0))
-            {
-                _fileManager.DoubleClicked(this, false);
-            }
-            else if (ImGui.BeginTooltip())
-            {
-                DrawTooltip();
-                ImGui.EndTooltip();
-            }
-        }
+        if (Expanded)
+            DrawExpanded(isSelected, fonts);
+        else
+            DrawBasic(isSelected, fonts);
+    }
+    
+    protected override void CompleteDraw(ImFonts fonts, bool hovered, bool isSelected)
+    {
+    }
+    
+    protected sealed override void OnDoubleClicked() => FileManager.DoubleClicked(this, false);
+    
+    /// <summary>
+    /// Top item in the stack must be the selectable/hoverable item
+    /// </summary>
+    protected virtual void DrawBasic(bool isCurrentlySelected, ImFonts fonts)
+    {
+        ImGui.Selectable(_displayText, isCurrentlySelected);
     }
     
     /// <summary>
-    /// Must return true if the item is clicked
+    /// Top item in the stack must be the selectable/hoverable item
     /// </summary>
-    /// <param name="isCurrentlySelected"></param>
-    /// <returns></returns>
-    protected virtual bool DrawBasic(bool isCurrentlySelected)
-    {
-        return ImGui.Selectable(_displayText, isCurrentlySelected);
-    }
-    
-    /// <summary>
-    /// Must return true if the item is clicked
-    /// </summary>
-    /// <param name="isCurrentlySelected"></param>
-    protected virtual bool DrawExpanded(bool isCurrentlySelected)
+    protected virtual void DrawExpanded(bool isCurrentlySelected, ImFonts fonts)
     {
         // does nothing extra right now - can be overridden
-        return DrawBasic(isCurrentlySelected);
+        DrawBasic(isCurrentlySelected, fonts);
     }
     
-    protected virtual void DrawTooltip()
+    protected override void DrawContextMenu(ImFonts fonts)
+    {
+        if (ImGui.MenuItem("Open in system file manager"))
+        {
+            FileManager.ShowInSystemFileManager(this);
+        }
+        
+        if (ImGui.MenuItem("Open in external editor"))
+        {
+            FileManager.DoubleClicked(this, true);
+        }
+    }
+    
+    protected override void DrawTooltip(ImFonts fonts)
     {
         const double kb = 1024;
         const double mb = kb * 1024;
@@ -98,4 +82,6 @@ internal class FileDrawer : IFileSystemDrawer
         ImGui.SameLine();
         ImGui.Text(showInMb ? $"{sizeInBytes * toMb: 0.0} MB" : $"{sizeInBytes * toKb: 0.0} KB");
     }
+    
+    protected sealed override FileSystemInfo FileSystemInfo => _file;
 }
