@@ -4,6 +4,8 @@ namespace SilkWindows.Implementations.FileManager;
 
 internal interface IFileManager
 {
+    public const string ExpandedButtonLabel = "[-]";
+    public const string CollapsedButtonLabel = "[+]";
     public bool HasDroppedFiles { get; }
     bool IsDraggingPaths { get; }
     public void ConsumeDroppedFiles(FileSystemDrawer directoryDrawer);
