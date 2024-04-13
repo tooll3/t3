@@ -110,7 +110,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
             var max = mousePos + halfSize;
             var mid = (max + min) * 0.5f;
             
-            var drawList = ImGui.GetForegroundDrawList();
+            var drawList = ImGui.GetWindowDrawList();
             drawList.AddRectFilled(min, max, ImGui.GetColorU32(ImGuiCol.TableHeaderBg));
             
             var textStartPos = min + GetButtonInnerPadding();

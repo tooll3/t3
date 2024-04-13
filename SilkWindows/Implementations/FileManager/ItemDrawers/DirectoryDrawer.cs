@@ -1,3 +1,4 @@
+using System.Numerics;
 using ImGuiNET;
 
 namespace SilkWindows.Implementations.FileManager.ItemDrawers;
@@ -42,9 +43,6 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         _collapsedButtonLabel = IFileManager.CollapsedButtonLabel + buttonIdSuffix;
         _newSubfolderLabel = "*New subfolder" + buttonIdSuffix;
         _fileTableLabel = "File table" + buttonIdSuffix;
-        
-        _beginChildren = IsRoot ? ImGui.Separator : ImGui.Indent;
-        _endChildren = IsRoot ? () => { } : ImGui.Unindent;
         
         Expanded = IsRoot;
         
@@ -178,7 +176,19 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
             _needsRescan = false;
         }
         
-        _beginChildren();
+        // draw guide line for children
+        var lineStart = Vector2.Zero;
+        
+        if (IsRoot)
+        {
+            ImGui.Separator();
+        }
+        else
+        {
+            lineStart = ImGui.GetCursorScreenPos();
+            ImGui.Indent();
+            lineStart = (lineStart + ImGui.GetCursorScreenPos()) * 0.5f;
+        }
         
         ImGui.BeginGroup();
         
@@ -237,7 +247,16 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         
         ImGui.EndGroup();
         
-        _endChildren();
+        if (!IsRoot)
+        {
+            ImGui.Unindent();
+            var style = ImGui.GetStyle();
+            var lineShortenAmount = style.ItemSpacing.Y;
+            var lineEnd = lineStart with { Y = ImGui.GetCursorScreenPos().Y - lineShortenAmount };
+            
+            // draw guide-line
+            ImGui.GetWindowDrawList().AddLine(lineStart, lineEnd, ImGui.GetColorU32(ImGuiCol.ScrollbarGrab));
+        }
     }
     
     protected override void DrawContextMenuContents(ImFonts fonts)
@@ -257,6 +276,4 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     private readonly string _relativeDirectory;
     private readonly string _fileTableLabel;
     public readonly bool IsRoot;
-    private readonly Action _beginChildren;
-    private readonly Action _endChildren;
 }
