@@ -130,7 +130,8 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     private void DrawTable(ImFonts fonts, List<DirectoryDrawer> expanded)
     {
         const ImGuiTableFlags tableFlags = ImGuiTableFlags.Reorderable | ImGuiTableFlags.Resizable;
-        const ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags.NoHeaderWidth | ImGuiTableColumnFlags.WidthStretch;
+        const ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags.NoHeaderWidth | ImGuiTableColumnFlags.WidthStretch | ImGuiTableColumnFlags.NoHide |
+                                                  ImGuiTableColumnFlags.NoSort;
         
         if (ImGui.BeginTable(_uniqueIdSuffix, expanded.Count, tableFlags))
         {
