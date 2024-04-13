@@ -65,7 +65,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         CheckForFileDrop();
         DragFileDragIndicators(fonts);
         
-        const ImGuiTableFlags tableFlags = ImGuiTableFlags.Reorderable | ImGuiTableFlags.Resizable | ImGuiTableFlags.SizingStretchProp;
+        const ImGuiTableFlags tableFlags = ImGuiTableFlags.Reorderable | ImGuiTableFlags.Resizable | ImGuiTableFlags.SizingStretchProp | ImGuiTableFlags.NoSavedSettings;
         if (ImGui.BeginTable(_uniqueIdSuffix, _directoryDrawers.Length, tableFlags))
         {
             ImGui.TableNextRow();
@@ -98,13 +98,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
                 var directoryDrawer = _directoryDrawers[index];
                 ImGui.TableSetColumnIndex(index);
                 
-                // we do this so we can have the same directory potentially in multiple columns commander-style
-                //var childId = index +  + _uniqueIdSuffix + "##" + index;
                 ImGui.BeginChild(directoryDrawer.Path);
-                
-                // for being able to drag and drop across columns
-                //if (_isDraggingMouse && ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
-                //ImGui.SetWindowFocus();
                 
                 directoryDrawer.Draw(fonts);
                 
