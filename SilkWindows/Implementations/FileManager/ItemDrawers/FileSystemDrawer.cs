@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Numerics;
 using ImGuiNET;
 
@@ -28,6 +27,7 @@ public abstract class FileSystemDrawer
     protected abstract FileSystemInfo FileSystemInfo { get; }
     
     protected virtual ImGuiHoveredFlags HoverFlags => ImGuiHoveredFlags.None;
+    public bool Expanded { get; set; }
     
     protected bool IsHovered() => ImGui.IsItemHovered(HoverFlags);
     
@@ -40,7 +40,7 @@ public abstract class FileSystemDrawer
     protected abstract void DrawSelectable(ImFonts fonts, bool isSelected);
     protected abstract void CompleteDraw(ImFonts fonts, bool hovered, bool isSelected);
     
-    public void Draw(ImFonts fonts)
+    public void Draw(ImFonts fonts, bool forceDeselected = false)
     {
         bool isSelected = FileManager.IsSelected(this);
         var fileInfo = FileSystemInfo;
@@ -59,7 +59,7 @@ public abstract class FileSystemDrawer
         var tempInternalSpacing = originalInternalSpacing with { Y = originalInternalSpacing.Y + originalItemSpacing.Y };
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, tempItemSpacing);
         ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, tempInternalSpacing);
-        DrawSelectable(fonts, isSelected);
+        DrawSelectable(fonts, isSelected && !forceDeselected);
         ImGui.PopStyleVar();
         ImGui.PopStyleVar();
         
@@ -71,6 +71,11 @@ public abstract class FileSystemDrawer
             if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
                 FileManager.ItemClicked(this);
+            }
+            
+            if (ImGui.IsMouseDragging(ImGuiMouseButton.Left, lock_threshold: 2f)) // lock threshold is required distance of dragging (in pixels maybe??)
+            {
+                FileManager.BeginDragOn(this);
             }
             
             if (FileManager.HasDroppedFiles)

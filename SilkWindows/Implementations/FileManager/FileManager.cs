@@ -6,7 +6,7 @@ using T3.Core.SystemUi;
 
 namespace SilkWindows.Implementations.FileManager;
 
-public readonly record struct ManagedDirectory(string Path, bool IsReadOnly, string? Alias = null);
+public readonly record struct ManagedDirectory(string Path, bool IsReadOnly, bool startExpanded = true, string? Alias = null);
 
 public enum FileManagerMode
 {
@@ -58,15 +58,14 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         
         ImGui.SameLine();
         ImGui.Text("\tDragged files: " + _draggedPaths.Length);
-        HandleFileDragEvents();
-        DragFileDragIndicators();
         
-        ImGui.SameLine();
-        ImGui.Text("\tMouse dragging: " + _isDraggingMouse);
         ImGui.SameLine();
         ImGui.Text("\tSelection count: " + _selections.Count);
         
-        const ImGuiTableFlags tableFlags = ImGuiTableFlags.Reorderable;
+        CheckForFileDrop();
+        DragFileDragIndicators(fonts);
+        
+        const ImGuiTableFlags tableFlags = ImGuiTableFlags.Reorderable | ImGuiTableFlags.Resizable | ImGuiTableFlags.SizingStretchProp;
         if (ImGui.BeginTable(_uniqueIdSuffix, _directoryDrawers.Length, tableFlags))
         {
             ImGui.TableNextRow();
@@ -74,7 +73,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
             {
                 var directoryDrawer = _directoryDrawers[index];
                 var columnId = "##col_" + directoryDrawer.Path;
-                ImGui.TableSetupColumn(columnId, ImGuiTableColumnFlags.WidthStretch);
+                ImGui.TableSetupColumn(columnId);
                 ImGui.TableSetColumnIndex(index);
                 
                 // draw header
@@ -193,7 +192,10 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         if (!ctrl)
             _selections.Clear();
         else if (wasSelected)
+        {
+            RemoveFromSelection(drawer);
             return;
+        }
         
         _selections.Add(drawer);
     }

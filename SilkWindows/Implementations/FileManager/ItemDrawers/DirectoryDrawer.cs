@@ -13,8 +13,6 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     
     private readonly List<FileDrawer> _files = new();
     
-    protected bool Expanded { get; private set; }
-    
     private bool _needsRescan;
     private readonly DirectoryInfo _directory;
     public override bool IsReadOnly { get; }
