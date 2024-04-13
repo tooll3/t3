@@ -23,16 +23,17 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         _fileConflictResolver = FileConflictWindow;
         
         _fileFilter = fileFilter ?? (_ => true);
-        _directoryDrawers = rootDirectories.Select(dir =>
-                                                   {
-                                                       var directoryInfo = new DirectoryInfo(dir.Path);
-                                                       if (!directoryInfo.Exists)
-                                                           throw new DirectoryNotFoundException(directoryInfo.FullName);
-                                                       
-                                                       var drawer = new DirectoryDrawer(this, directoryInfo, dir.IsReadOnly, null, dir.Alias);
-                                                       _columnsExpanded[drawer] = dir.startExpanded;
-                                                       return drawer;
-                                                   }).ToArray();
+        _folderTabs = rootDirectories
+                     .Select(dir =>
+                             {
+                                 var directoryInfo = new DirectoryInfo(dir.Path);
+                                 if (!directoryInfo.Exists)
+                                     throw new DirectoryNotFoundException(directoryInfo.FullName);
+                                 
+                                 var drawer = new DirectoryDrawer(this, directoryInfo, dir.IsReadOnly, null, dir.Alias);
+                                 
+                                 return new Column(drawer, dir.startExpanded);
+                             }).ToArray();
     }
     
     public FileManager(FileManagerMode mode, ManagedDirectory rootDirectory, Func<string, bool>? fileFilter = null) : this(mode, [rootDirectory], fileFilter)
@@ -43,7 +44,15 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     {
     }
     
-    private readonly Dictionary<DirectoryDrawer, bool> _columnsExpanded = new();
+    private class Column(DirectoryDrawer drawer, bool drawn)
+    {
+        public readonly DirectoryDrawer Drawer = drawer;
+        public bool Drawn = drawn;
+    }
+    
+    private readonly Column[] _folderTabs;
+    private readonly List<Column> _columnsToDraw = [];
+    private readonly List<Column> _columnsMinimized = [];
     
     public void OnRender(string windowName, double deltaSeconds, ImFonts fonts)
     {
@@ -61,32 +70,69 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
                 throw new ArgumentOutOfRangeException();
         }
         
-        List<DirectoryDrawer> collapsed = new();
-        List<DirectoryDrawer> expanded = new();
+        if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
+            _selectedRoot = null;
         
-        foreach (var (drawer, isExpanded) in _columnsExpanded)
+        _columnsToDraw.Clear();
+        _columnsMinimized.Clear();
+        
+        foreach (var column in _folderTabs)
         {
-            if (isExpanded)
-                expanded.Add(drawer);
+            if (column.Drawn)
+            {
+                _columnsToDraw.Add(column);
+            }
             else
-                collapsed.Add(drawer);
+            {
+                if (_selectedRoot == column.Drawer)
+                    _selectedRoot = null;
+                
+                _columnsMinimized.Add(column);
+            }
         }
-
+        
+        if (_selectedRoot != null)
+            Console.WriteLine("Selected root: " + _selectedRoot.DisplayName);
+        
+        if (_selectedRoot != null && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+        {
+            // draw dragged indicator 
+            Console.WriteLine("Dragging root");
+            var displayName = _selectedRoot.DisplayName;
+            ImGui.PushFont(fonts.Large);
+            var size = GetButtonSize(displayName);
+            ImGui.PopFont();
+            
+            var mousePos = ImGui.GetMousePos();
+            
+            var halfSize = size * 0.5f;
+            var min = mousePos - halfSize;
+            var max = mousePos + halfSize;
+            var mid = (max + min) * 0.5f;
+            
+            var drawList = ImGui.GetForegroundDrawList();
+            drawList.AddRectFilled(min, max, ImGui.GetColorU32(ImGuiCol.TableHeaderBg));
+            
+            var textStartPos = min + GetButtonInnerPadding();
+            drawList.AddText(fonts.Large, fonts.Large.FontSize, textStartPos, ImGui.GetColorU32(ImGuiCol.Text), displayName);
+        }
+        
         CheckForFileDrop();
         DragFileDragIndicators(fonts);
         
-        if (collapsed.Count > 0)
+        if (_columnsMinimized.Count > 0)
         {
-            DrawCollapsedButtons(collapsed);
+            DrawCollapsedButtons(_columnsMinimized);
         }
         
-        if (expanded.Count > 0)
+        if (_columnsToDraw.Count > 0)
         {
-            DrawTable(fonts, expanded);
+            DrawTable(fonts, _columnsToDraw);
         }
         
         return;
         
+        // todo - log toasts
         ImGui.SetNextWindowScroll(new Vector2(0f, float.MaxValue));
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
         ImGui.BeginChild("Logs" + _uniqueIdSuffix);
@@ -103,34 +149,48 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         ImGui.EndChild();
     }
     
-    private void DrawCollapsedButtons(List<DirectoryDrawer> collapsed)
+    private void DrawCollapsedButtons(List<Column> collapsed)
     {
         ImGui.SameLine();
+        
+        // draw right-aligned buttons
         var startPosition = ImGui.GetContentRegionAvail().X + ImGui.GetCursorPosX();
         var style = ImGui.GetStyle();
         var innerSpacing = style.ItemInnerSpacing.X + (style.FramePadding.X * 2);
-        foreach (var drawer in collapsed)
+        foreach (var column in collapsed)
         {
-            startPosition -= ImGui.CalcTextSize(drawer.DisplayName).X + innerSpacing;
+            startPosition -= GetButtonSize(column.Drawer.DisplayName).X;
+            //startPosition -= ImGui.CalcTextSize(column.Drawer.DisplayName).X + innerSpacing;
         }
         
         ImGui.SetCursorPosX(startPosition);
         
-        foreach (var drawer in collapsed)
+        foreach (var column in collapsed)
         {
+            var drawer = column.Drawer;
             if (ImGui.Button(drawer.DisplayName + "##expand_" + drawer.Path))
             {
-                _columnsExpanded[drawer] = true;
+                column.Drawn = true;
             }
+            
             ImGui.SameLine();
         }
+        
         ImGui.NewLine();
     }
     
-    private void DrawTable(ImFonts fonts, List<DirectoryDrawer> expanded)
+    private static Vector2 GetButtonSize(string text, bool useSpacing = true)
     {
-        const ImGuiTableFlags tableFlags = ImGuiTableFlags.Reorderable | ImGuiTableFlags.Resizable;
-        const ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags.NoHeaderWidth | ImGuiTableColumnFlags.WidthStretch | ImGuiTableColumnFlags.NoHide |
+        var style = ImGui.GetStyle();
+        return ImGui.CalcTextSize(text) + style.ItemInnerSpacing * (useSpacing ? 1 : 0) + GetButtonInnerPadding();
+    }
+    
+    private static Vector2 GetButtonInnerPadding() => ImGui.GetStyle().FramePadding * 2;
+    
+    private void DrawTable(ImFonts fonts, List<Column> expanded)
+    {
+        const ImGuiTableFlags tableFlags = ImGuiTableFlags.None;
+        const ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags.WidthStretch | ImGuiTableColumnFlags.NoHide |
                                                   ImGuiTableColumnFlags.NoSort;
         
         if (ImGui.BeginTable(_uniqueIdSuffix, expanded.Count, tableFlags))
@@ -138,9 +198,9 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
             ImGui.TableNextRow();
             for (var index = 0; index < expanded.Count; index++)
             {
-                var directoryDrawer = expanded[index];
+                var column = expanded[index];
+                var directoryDrawer = column.Drawer;
                 var columnId = "##col_" + directoryDrawer.Path;
-                
                 
                 ImGui.TableSetupColumn(columnId, columnFlags);
                 ImGui.TableSetColumnIndex(index);
@@ -148,7 +208,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
                 // draw header
                 if (ImGui.Button("_##minimize_" + directoryDrawer.Path))
                 {
-                    _columnsExpanded[directoryDrawer] = false;
+                    column.Drawn = false;
                 }
                 
                 ImGui.SameLine();
@@ -171,7 +231,8 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
             ImGui.TableNextRow();
             for (var index = 0; index < expanded.Count; index++)
             {
-                var directoryDrawer = expanded[index];
+                var column = expanded[index];
+                var directoryDrawer = column.Drawer;
                 ImGui.TableSetColumnIndex(index);
                 
                 ImGui.BeginChild(directoryDrawer.Path);
@@ -212,11 +273,16 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         shouldClose = _shouldClose;
     }
     
+    public void OnWindowFocusChanged(bool changedTo)
+    {
+        ConsumeArray(ref _draggedPaths);
+        ConsumeArray(ref _droppedPaths);
+    }
+    
     public void OnClose()
     {
     }
     
-    private readonly Func<FileInfo, FileConflictOption> _fileConflictResolver;
     
     private FileConflictOption FileConflictWindow(FileInfo file)
     {
@@ -232,13 +298,22 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         return FileConflictOption.Skip;
     }
     
+    #region IFileManager Implementation
     #region Feature: Selection
     public void ItemClicked(FileSystemDrawer drawer)
     {
+        if (drawer is DirectoryDrawer { IsRoot: true } directoryDrawer)
+        {
+            _selectedRoot = directoryDrawer;
+            _selections.Clear();
+            return;
+        }
+        
+        _selectedRoot = null;
         var wasSelected = IsSelected(drawer);
         
         var ctrl = ImGui.GetIO().KeyCtrl;
-        // todo - shift / ctrl to select/deselect multiple
+        // todo - shift to select/deselect multiple
         
         if (!ctrl)
             _selections.Clear();
@@ -262,10 +337,6 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     }
     #endregion
     
-    public void OnWindowFocusChanged(bool changedTo)
-    {
-    }
-    
     IEnumerable<FileSystemInfo> IFileManager.GetDirectoryContents(DirectoryInfo directory)
     {
         return directory.EnumerateFileSystemInfos()
@@ -274,8 +345,8 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     
     void IFileManager.DoubleClicked(FileDrawer drawer, bool inExternalEditor)
     {
-        if (_multiSelectEnabled)
-            return;
+        //if (_multiSelectEnabled)
+          //  return;
         
         if (_selections.Count != 1)
         {
@@ -371,6 +442,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     {
         return path.Replace('\\', '/');
     }
+    #endregion
     
     // ReSharper disable once RedundantAssignment
     // a silly little helper method to keep the way I'm handling the dragged/dropped files consistent and easy to find
@@ -380,6 +452,8 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     
     private static readonly HashSet<FileSystemDrawer> _selections = [];
     
+    private static DirectoryDrawer? _selectedRoot;
+    
     private static int _fileManagerCount = 0;
     private readonly string _uniqueIdSuffix = "##" + Interlocked.Increment(ref _fileManagerCount);
     
@@ -387,8 +461,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     private readonly ConcurrentQueue<string> _logs = new();
     private const int MaxLogCount = 100;
     private readonly Func<string, bool> _fileFilter;
-    private bool _shouldClose = false;
-    private readonly DirectoryDrawer[] _directoryDrawers;
+    private bool _shouldClose;
     public string? Result { get; private set; }
-    private bool _multiSelectEnabled;
+    private readonly Func<FileInfo, FileConflictOption> _fileConflictResolver;
 }
