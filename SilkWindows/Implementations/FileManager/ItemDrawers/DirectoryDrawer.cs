@@ -26,6 +26,14 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     private readonly Action _beginChildren;
     private readonly Action _endChildren;
     
+    private static readonly Action<FileDrawer, ImFonts>[] _fileTableColumns =
+        [
+            (file, fonts) => { file.Draw(fonts); },
+            (file, fonts) => file.DrawFileExtension(fonts),
+            (file, fonts) => file.DrawSize(fonts),
+            (file, fonts) => file.DrawLastModified(fonts)
+        ];
+    
     public DirectoryDrawer(IFileManager fileManager, DirectoryInfo directory, bool isReadOnly, DirectoryDrawer? parent, string? alias = null) :
         base(fileManager, parent)
     {
@@ -53,7 +61,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         
         if (topParent != null)
         {
-            var relativePath = System.IO.Path.GetRelativePath(topParent.RootDirectory.FullName, _directory.FullName);
+            var relativePath = System.IO.Path.GetRelativePath(topParent.RootDirectory.FullName, directory.FullName);
             var relativeDirectory = System.IO.Path.Combine(topParent._displayDisplayName, relativePath);
             _relativeDirectory = fileManager.FormatPathForDisplay(relativeDirectory);
         }
@@ -171,9 +179,19 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
                 dir.Draw(fonts);
             }
             
-            foreach (var file in _files)
+            const ImGuiTableFlags flags = ImGuiTableFlags.RowBg | ImGuiTableFlags.SizingStretchProp;
+            if (ImGui.BeginTable("FileTable", _fileTableColumns.Length, flags))
             {
-                file.Draw(fonts);
+                foreach (var file in _files)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        ImGui.TableNextColumn();
+                        _fileTableColumns[i](file, fonts);
+                    }
+                }
+                
+                ImGui.EndTable();
             }
         }
         else
