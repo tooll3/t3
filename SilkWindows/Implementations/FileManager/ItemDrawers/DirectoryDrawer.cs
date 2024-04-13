@@ -1,3 +1,4 @@
+using System.Numerics;
 using ImGuiNET;
 
 namespace SilkWindows.Implementations.FileManager.ItemDrawers;
@@ -103,14 +104,24 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     protected override void DrawSelectable(ImFonts fonts, bool isSelected)
     {
         var expandCollapseLabel = Expanded ? _expandedButtonLabel : _collapsedButtonLabel;
+        
+        ImGui.PushFont(fonts.Small);
         if (ImGui.Button(expandCollapseLabel))
         {
             Expanded = !Expanded;
         }
+        ImGui.PopFont();
         
         ImGui.SameLine();
         
+        // we need extra padding between the rows so theres no blank space between them
+        // the intuitive thing would be to allow files to be dropped in between directories like many other file managers do, but this is much easier
+        // for the time being.
+        var style = ImGui.GetStyle();
+        var currentPadding = style.TouchExtraPadding;
+        style.TouchExtraPadding = currentPadding with {Y = style.ItemSpacing.Y + style.FramePadding.Y};
         ImGui.Selectable(_displayName, isSelected);
+        style.TouchExtraPadding = currentPadding;
     }
     
     protected override void DrawTooltip(ImFonts fonts)

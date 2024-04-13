@@ -51,17 +51,7 @@ public abstract class FileSystemDrawer
             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1f, 0.2f, 0.2f, 1f));
         }
         
-        // contiguous hover surface
-        var style = ImGui.GetStyle();
-        var originalItemSpacing = style.ItemSpacing;
-        var tempItemSpacing = originalItemSpacing with { Y = 0 };
-        var originalInternalSpacing = style.ItemInnerSpacing;
-        var tempInternalSpacing = originalInternalSpacing with { Y = originalInternalSpacing.Y + originalItemSpacing.Y };
-        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, tempItemSpacing);
-        ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, tempInternalSpacing);
         DrawSelectable(fonts, isSelected && !forceDeselected);
-        ImGui.PopStyleVar();
-        ImGui.PopStyleVar();
         
         var hovered = IsHovered();
         var hoveredByFileDrag = HoveredByFileDrag();
