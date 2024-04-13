@@ -10,8 +10,7 @@ public sealed partial class FileManager
         _droppedPaths = FileOperations.PathsToFileSystemInfo(filePaths).ToArray();
     }
     
-    public bool IsDraggingPaths => _isDraggingMouse && _draggedPaths.Length > 0;
-    private bool _isDraggingMouse;
+    public bool IsDraggingPaths => _draggedPaths.Length > 0;
     
     bool IFileManager.IsDropTarget(FileSystemDrawer drawer)
     {
@@ -58,7 +57,7 @@ public sealed partial class FileManager
                         throw new ArgumentOutOfRangeException(nameof(fileSystemInfo), fileSystemInfo, null);
                 }
                 
-                if (parent?.FullName != targetDirectory) 
+                if (parent?.FullName != targetDirectory)
                     continue;
                 
                 Console.WriteLine($"Can't receive dropped files from its own directory.\nSource: \"{path}\nTarget: \"{targetDirectory}\"");
@@ -71,7 +70,7 @@ public sealed partial class FileManager
     
     void IFileManager.ConsumeDroppedFiles(FileSystemDrawer drawer)
     {
-        if(_droppedPaths.Length == 0)
+        if (_droppedPaths.Length == 0)
             throw new InvalidOperationException("Files were already consumed");
         
         var directoryDrawer = drawer switch
@@ -115,7 +114,7 @@ public sealed partial class FileManager
             }
             else
             {
-                droppedDirectories.Add((DirectoryInfo) fileSystemInfo);
+                droppedDirectories.Add((DirectoryInfo)fileSystemInfo);
             }
         }
         
@@ -167,52 +166,53 @@ public sealed partial class FileManager
         return movedOne;
     }
     
-    private void HandleFileDragEvents()
+    public void BeginDragOn(FileSystemDrawer drawer)
     {
-        var isDragging = ImGui.IsMouseDragging(ImGuiMouseButton.Left);
-        if (isDragging != _isDraggingMouse)
-        {
-            switch (isDragging)
-            {
-                case true: // start dragging
-                    _isDraggingMouse = true;
-                    _draggedPaths = FileOperations.PathsToFileSystemInfo(_selections.Select(x => x.Path)).ToArray();
-                    break;
-                case false: // stop dragging
-                    _isDraggingMouse = false;
-                    _droppedPaths = _draggedPaths;
-                    ConsumeArray(ref _draggedPaths);
-                    break;
-            }
-        }
-        else if (!isDragging)
-        {
-            // clear dropped files if we are not dragging files after a frame of no dragging
-            // todo - this likely breaks external drag and drop
-            ConsumeArray(ref _droppedPaths);
-        }
+        if (IsDraggingPaths)
+            return;
+        
+        _selections.Add(drawer);
+        _draggedPaths = FileOperations.PathsToFileSystemInfo(_selections.Select(x => x.Path)).ToArray();
     }
     
+    private void CheckForFileDrop()
+    {
+        if (!IsDraggingPaths)
+            return;
+        
+        if (ImGui.IsMouseDown(ImGuiMouseButton.Left))
+            return;
+        
+        _droppedPaths = _draggedPaths;
+        ConsumeArray(ref _draggedPaths);
+    }
     
-    private void DragFileDragIndicators()
+    private void DragFileDragIndicators(ImFonts fonts)
     {
         var isDragging = IsDraggingPaths;
         ImGui.SetMouseCursor(isDragging ? ImGuiMouseCursor.Hand : ImGuiMouseCursor.Arrow);
-        if (!IsDraggingPaths) return;
+        if (!isDragging)
+        {
+            return;
+        }
         
+        
+        ImGui.BeginDisabled();
         ImGui.BeginTooltip();
         
         foreach (var item in _selections)
         {
-            ImGui.Text(item.Name);
-            if (item.IsDirectory)
-            {
-                ImGui.SameLine();
-                ImGui.Text("/");
-            }
+            ImGui.NewLine();
+            var expanded = item.Expanded;
+            item.Expanded = false;
+            item.Draw(fonts, true);
+            item.Expanded = expanded;
         }
         
+        ImGui.NewLine();
+        
         ImGui.EndTooltip();
+        ImGui.EndDisabled();
     }
     
     private FileSystemInfo[] _droppedPaths = [];

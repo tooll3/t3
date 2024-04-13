@@ -7,7 +7,6 @@ internal class FileDrawer : FileSystemDrawer
 {
     internal sealed override string Name => _name;
     internal sealed override string Path => _file.FullName;
-    protected bool Expanded;
     internal sealed override bool IsDirectory => false;
     public sealed override bool IsReadOnly => ParentDirectoryDrawer!.IsReadOnly;
     

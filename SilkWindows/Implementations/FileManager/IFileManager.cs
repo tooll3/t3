@@ -21,4 +21,5 @@ internal interface IFileManager
     public bool IsDropTarget(FileSystemDrawer directoryDrawer);
     
     public string FormatPathForDisplay(string path);
+    public void BeginDragOn(FileSystemDrawer drawer);
 }
