@@ -5,20 +5,20 @@ namespace SilkWindows.Implementations.FileManager.ItemDrawers;
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 internal class FileDrawer : FileSystemDrawer
 {
-    internal sealed override string Name => _name;
+    internal sealed override string DisplayName => _displayName;
     internal sealed override string Path => _file.FullName;
     internal sealed override bool IsDirectory => false;
     public sealed override bool IsReadOnly => ParentDirectoryDrawer!.IsReadOnly;
     
-    private readonly string _name;
+    private readonly string _displayName;
     private readonly string _displayText;
     private readonly FileInfo _file;
     
     public FileDrawer(IFileManager fileManager, FileInfo file, DirectoryDrawer parent) : base(fileManager, parent)
     {
-        _name = file.Name;
+        _displayName = file.Name;
         _file = file;
-        _displayText = file.Extension == "" ? _name : $"[{file.Extension}] {_name}";
+        _displayText = file.Extension == "" ? _displayName : $"[{file.Extension}] {_displayName}";
         
         if(ParentDirectoryDrawer == null)
             throw new InvalidOperationException("File drawer must have a parent directory drawer");

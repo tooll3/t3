@@ -5,7 +5,7 @@ namespace SilkWindows.Implementations.FileManager.ItemDrawers;
 
 internal sealed class DirectoryDrawer : FileSystemDrawer
 {
-    internal override string Name => _directory.Name;
+    internal override string DisplayName => _displayDisplayName;
     internal override string Path => _directory.FullName;
     internal override bool IsDirectory => true;
     public DirectoryInfo DirectoryInfo => _directory;
@@ -17,7 +17,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     private bool _needsRescan;
     private readonly DirectoryInfo _directory;
     public override bool IsReadOnly { get; }
-    private readonly string _displayName;
+    private readonly string _displayDisplayName;
     private readonly string _expandedButtonLabel;
     private readonly string _collapsedButtonLabel;
     private readonly string _newSubfolderLabel;
@@ -32,10 +32,10 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         _directory = directory;
         _needsRescan = true;
         IsReadOnly = isReadOnly;
-        _displayName = string.IsNullOrEmpty(alias) ? _directory.Name : '/' + alias;
-        var buttonIdSuffix = "##" + _displayName;
-        _expandedButtonLabel = "[-]" + buttonIdSuffix;
-        _collapsedButtonLabel = "[+]" + buttonIdSuffix;
+        _displayDisplayName = string.IsNullOrEmpty(alias) ? _directory.Name : '/' + alias;
+        var buttonIdSuffix = "##" + _displayDisplayName;
+        _expandedButtonLabel = IFileManager.ExpandedButtonLabel + buttonIdSuffix;
+        _collapsedButtonLabel = IFileManager.CollapsedButtonLabel + buttonIdSuffix;
         _newSubfolderLabel = "*New subfolder" + buttonIdSuffix;
         _isRoot = parent == null;
         
@@ -54,12 +54,12 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         if (topParent != null)
         {
             var relativePath = System.IO.Path.GetRelativePath(topParent.RootDirectory.FullName, _directory.FullName);
-            var relativeDirectory = System.IO.Path.Combine(topParent._displayName, relativePath);
+            var relativeDirectory = System.IO.Path.Combine(topParent._displayDisplayName, relativePath);
             _relativeDirectory = fileManager.FormatPathForDisplay(relativeDirectory);
         }
         else
         {
-            _relativeDirectory = _displayName;
+            _relativeDirectory = _displayDisplayName;
         }
     }
     
@@ -103,16 +103,23 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     
     protected override void DrawSelectable(ImFonts fonts, bool isSelected)
     {
-        var expandCollapseLabel = Expanded ? _expandedButtonLabel : _collapsedButtonLabel;
-        
-        ImGui.PushFont(fonts.Small);
-        if (ImGui.Button(expandCollapseLabel))
+        if (!_isRoot)
         {
-            Expanded = !Expanded;
+            var expandCollapseLabel = Expanded ? _expandedButtonLabel : _collapsedButtonLabel;
+            
+            ImGui.PushFont(fonts.Small);
+            if (ImGui.Button(expandCollapseLabel))
+            {
+                Expanded = !Expanded;
+            }
+            
+            ImGui.PopFont();
+            ImGui.SameLine();
         }
-        ImGui.PopFont();
-        
-        ImGui.SameLine();
+        else
+        {
+            ImGui.PushFont(fonts.Large);
+        }
         
         // we need extra padding between the rows so theres no blank space between them
         // the intuitive thing would be to allow files to be dropped in between directories like many other file managers do, but this is much easier
@@ -120,8 +127,13 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         var style = ImGui.GetStyle();
         var currentPadding = style.TouchExtraPadding;
         style.TouchExtraPadding = currentPadding with {Y = style.ItemSpacing.Y + style.FramePadding.Y};
-        ImGui.Selectable(_displayName, isSelected);
+        ImGui.Selectable(_displayDisplayName, isSelected);
         style.TouchExtraPadding = currentPadding;
+        
+        if (_isRoot)
+        {
+            ImGui.PopFont();
+        }
     }
     
     protected override void DrawTooltip(ImFonts fonts)

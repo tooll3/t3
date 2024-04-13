@@ -28,7 +28,10 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
                                                        var directoryInfo = new DirectoryInfo(dir.Path);
                                                        if (!directoryInfo.Exists)
                                                            throw new DirectoryNotFoundException(directoryInfo.FullName);
-                                                       return new DirectoryDrawer(this, directoryInfo, dir.IsReadOnly, null, dir.Alias);
+                                                       
+                                                       var drawer = new DirectoryDrawer(this, directoryInfo, dir.IsReadOnly, null, dir.Alias);
+                                                       _columnsExpanded[drawer] = dir.startExpanded;
+                                                       return drawer;
                                                    }).ToArray();
     }
     
@@ -39,6 +42,8 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     public void Init()
     {
     }
+    
+    private readonly Dictionary<DirectoryDrawer, bool> _columnsExpanded = new();
     
     public void OnRender(string windowName, double deltaSeconds, ImFonts fonts)
     {
@@ -56,59 +61,29 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
                 throw new ArgumentOutOfRangeException();
         }
         
-        ImGui.SameLine();
-        ImGui.Text("\tDragged files: " + _draggedPaths.Length);
+        List<DirectoryDrawer> collapsed = new();
+        List<DirectoryDrawer> expanded = new();
         
-        ImGui.SameLine();
-        ImGui.Text("\tSelection count: " + _selections.Count);
-        
+        foreach (var (drawer, isExpanded) in _columnsExpanded)
+        {
+            if (isExpanded)
+                expanded.Add(drawer);
+            else
+                collapsed.Add(drawer);
+        }
+
         CheckForFileDrop();
         DragFileDragIndicators(fonts);
         
-        const ImGuiTableFlags tableFlags = ImGuiTableFlags.Reorderable | ImGuiTableFlags.Resizable | ImGuiTableFlags.SizingStretchProp | ImGuiTableFlags.NoSavedSettings;
-        if (ImGui.BeginTable(_uniqueIdSuffix, _directoryDrawers.Length, tableFlags))
+        if (collapsed.Count > 0)
         {
-            ImGui.TableNextRow();
-            for (var index = 0; index < _directoryDrawers.Length; index++)
-            {
-                var directoryDrawer = _directoryDrawers[index];
-                var columnId = "##col_" + directoryDrawer.Path;
-                ImGui.TableSetupColumn(columnId);
-                ImGui.TableSetColumnIndex(index);
-                
-                // draw header
-                var tableHeaderTitle = $"{(directoryDrawer.IsReadOnly ? "[Read Only]" : string.Empty)} ";
-                ImGui.TableHeader(tableHeaderTitle);
-                
-                // draw separator - hack?
-                var style = ImGui.GetStyle();
-                var thickness = style.CellPadding.X;
-                var headerMin = ImGui.GetItemRectMin();
-                var headerMax = ImGui.GetItemRectMax();
-                var minPosition = headerMin with { X = headerMin.X - thickness };
-                var maxPosition = headerMax with { X = minPosition.X + thickness };
-                var drawList = ImGui.GetWindowDrawList();
-                var windowColor = ImGui.GetColorU32(ImGuiCol.WindowBg);
-                drawList.AddRectFilled(minPosition, maxPosition, windowColor);
-            }
-            
-            ImGui.TableNextRow();
-            for (var index = 0; index < _directoryDrawers.Length; index++)
-            {
-                var directoryDrawer = _directoryDrawers[index];
-                ImGui.TableSetColumnIndex(index);
-                
-                ImGui.BeginChild(directoryDrawer.Path);
-                
-                directoryDrawer.Draw(fonts);
-                
-                ImGui.EndChild();
-            }
-            
-            ImGui.EndTable();
+            DrawCollapsedButtons(collapsed);
         }
         
-        
+        if (expanded.Count > 0)
+        {
+            DrawTable(fonts, expanded);
+        }
         
         return;
         
@@ -126,6 +101,87 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         }
         
         ImGui.EndChild();
+    }
+    
+    private void DrawCollapsedButtons(List<DirectoryDrawer> collapsed)
+    {
+        ImGui.SameLine();
+        var startPosition = ImGui.GetContentRegionAvail().X + ImGui.GetCursorPosX();
+        var style = ImGui.GetStyle();
+        var innerSpacing = style.ItemInnerSpacing.X + (style.FramePadding.X * 2);
+        foreach (var drawer in collapsed)
+        {
+            startPosition -= ImGui.CalcTextSize(drawer.DisplayName).X + innerSpacing;
+        }
+        
+        ImGui.SetCursorPosX(startPosition);
+        
+        foreach (var drawer in collapsed)
+        {
+            if (ImGui.Button(drawer.DisplayName + "##expand_" + drawer.Path))
+            {
+                _columnsExpanded[drawer] = true;
+            }
+            ImGui.SameLine();
+        }
+        ImGui.NewLine();
+    }
+    
+    private void DrawTable(ImFonts fonts, List<DirectoryDrawer> expanded)
+    {
+        const ImGuiTableFlags tableFlags = ImGuiTableFlags.Reorderable | ImGuiTableFlags.Resizable;
+        const ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags.NoHeaderWidth | ImGuiTableColumnFlags.WidthStretch;
+        
+        if (ImGui.BeginTable(_uniqueIdSuffix, expanded.Count, tableFlags))
+        {
+            ImGui.TableNextRow();
+            for (var index = 0; index < expanded.Count; index++)
+            {
+                var directoryDrawer = expanded[index];
+                var columnId = "##col_" + directoryDrawer.Path;
+                
+                
+                ImGui.TableSetupColumn(columnId, columnFlags);
+                ImGui.TableSetColumnIndex(index);
+                
+                // draw header
+                if (ImGui.Button("_##minimize_" + directoryDrawer.Path))
+                {
+                    _columnsExpanded[directoryDrawer] = false;
+                }
+                
+                ImGui.SameLine();
+                
+                var tableHeaderTitle = $"{(directoryDrawer.IsReadOnly ? "[Read Only]" : string.Empty)} ";
+                ImGui.TableHeader(tableHeaderTitle);
+                
+                // draw separator - hack?
+                var headerMin = ImGui.GetItemRectMin();
+                var headerMax = ImGui.GetItemRectMax();
+                var style = ImGui.GetStyle();
+                var thickness = style.CellPadding.X;
+                var minPosition = headerMin with { X = headerMin.X - thickness };
+                var maxPosition = headerMax with { X = minPosition.X + thickness };
+                var drawList = ImGui.GetWindowDrawList();
+                var windowColor = ImGui.GetColorU32(ImGuiCol.WindowBg);
+                drawList.AddRectFilled(minPosition, maxPosition, windowColor);
+            }
+            
+            ImGui.TableNextRow();
+            for (var index = 0; index < expanded.Count; index++)
+            {
+                var directoryDrawer = expanded[index];
+                ImGui.TableSetColumnIndex(index);
+                
+                ImGui.BeginChild(directoryDrawer.Path);
+                
+                directoryDrawer.Draw(fonts);
+                
+                ImGui.EndChild();
+            }
+            
+            ImGui.EndTable();
+        }
     }
     
     private void DrawPickButtonAndSetResult<T>(string buttonName) where T : FileSystemDrawer
@@ -275,8 +331,8 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         var parent = drawer.ParentDirectoryDrawer;
         var fileOrDirectory = drawer.IsDirectory ? "Directory " : "File ";
         var msg = parent != null
-                      ? fileOrDirectory + $"[..{parent.Name}/{drawer.Name}]: {log}"
-                      : $"[{drawer.Name}]: {log}";
+                      ? fileOrDirectory + $"[..{parent.DisplayName}/{drawer.DisplayName}]: {log}"
+                      : $"[{drawer.DisplayName}]: {log}";
         
         Log(msg);
     }
