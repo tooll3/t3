@@ -1,60 +1,56 @@
-using System.Numerics;
 using ImGuiNET;
 
 namespace SilkWindows.Implementations.FileManager.ItemDrawers;
 
 internal sealed class DirectoryDrawer : FileSystemDrawer
 {
-    internal override string DisplayName => _displayDisplayName;
-    internal override string Path => _directory.FullName;
+    internal override string DisplayName { get; }
+    internal override string Path => DirectoryInfo.FullName;
     internal override bool IsDirectory => true;
-    public DirectoryInfo DirectoryInfo => _directory;
+    public DirectoryInfo DirectoryInfo { get; }
     
-    private readonly List<DirectoryDrawer> _directories = new();
+    private readonly List<DirectoryDrawer> _directories = [];
+    private readonly List<FileDrawer> _files = [];
     
-    private readonly List<FileDrawer> _files = new();
-    
-    private bool _needsRescan;
-    private readonly DirectoryInfo _directory;
     public override bool IsReadOnly { get; }
-    private readonly string _displayDisplayName;
-    private readonly string _expandedButtonLabel;
-    private readonly string _collapsedButtonLabel;
-    private readonly string _newSubfolderLabel;
-    private readonly string _relativeDirectory;
-    private readonly bool _isRoot;
-    private readonly Action _beginChildren;
-    private readonly Action _endChildren;
     
-    private static readonly Action<FileDrawer, ImFonts>[] _fileTableColumns =
+    private readonly record struct FileTableColumn(string Name, ImGuiTableColumnFlags Flags, Action<FileDrawer, ImFonts> DrawAction);
+    
+    private const ImGuiTableFlags FileTableFlags = ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerV | ImGuiTableFlags.SizingFixedFit;
+    private const ImGuiTableColumnFlags FileColumnFlags = ImGuiTableColumnFlags.None;
+    private const ImGuiTableColumnFlags ColumnFlags = ImGuiTableColumnFlags.None;
+    
+    private static readonly FileTableColumn[] _fileTableColumns =
         [
-            (file, fonts) => { file.Draw(fonts); },
-            (file, fonts) => file.DrawFileExtension(fonts),
-            (file, fonts) => file.DrawSize(fonts),
-            (file, fonts) => file.DrawLastModified(fonts)
+            new FileTableColumn("File", FileColumnFlags,(file, fonts) => { file.Draw(fonts); }),
+            new FileTableColumn("Extension", ColumnFlags, (file, fonts) => file.DrawFileFormat(fonts)),
+            new FileTableColumn("Size", ColumnFlags, (file, fonts) => file.DrawSize(fonts)),
+            new FileTableColumn("Modified Date", ColumnFlags, (file, fonts) => file.DrawLastModified(fonts))
         ];
     
     public DirectoryDrawer(IFileManager fileManager, DirectoryInfo directory, bool isReadOnly, DirectoryDrawer? parent, string? alias = null) :
         base(fileManager, parent)
     {
-        _directory = directory;
+        DirectoryInfo = directory;
         _needsRescan = true;
         IsReadOnly = isReadOnly;
-        _displayDisplayName = string.IsNullOrEmpty(alias) ? _directory.Name : '/' + alias;
-        var buttonIdSuffix = "##" + _displayDisplayName;
+        IsRoot = parent == null;
+        DisplayName = string.IsNullOrEmpty(alias) ? DirectoryInfo.Name : '/' + alias;
+        
+        var buttonIdSuffix = "##" + DisplayName;
         _expandedButtonLabel = IFileManager.ExpandedButtonLabel + buttonIdSuffix;
         _collapsedButtonLabel = IFileManager.CollapsedButtonLabel + buttonIdSuffix;
         _newSubfolderLabel = "*New subfolder" + buttonIdSuffix;
-        _isRoot = parent == null;
+        _fileTableLabel = "File table" + buttonIdSuffix;
         
-        _beginChildren = _isRoot ? ImGui.Separator : ImGui.Indent;
-        _endChildren = _isRoot ? () => { } : ImGui.Unindent;
+        _beginChildren = IsRoot ? ImGui.Separator : ImGui.Indent;
+        _endChildren = IsRoot ? () => { } : ImGui.Unindent;
         
-        Expanded = _isRoot;
+        Expanded = IsRoot;
         
         var topParent = parent;
         
-        while (topParent is { _isRoot: false })
+        while (topParent is { IsRoot: false })
         {
             topParent = topParent.ParentDirectoryDrawer;
         }
@@ -62,12 +58,12 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         if (topParent != null)
         {
             var relativePath = System.IO.Path.GetRelativePath(topParent.RootDirectory.FullName, directory.FullName);
-            var relativeDirectory = System.IO.Path.Combine(topParent._displayDisplayName, relativePath);
+            var relativeDirectory = System.IO.Path.Combine(topParent.DisplayName, relativePath);
             _relativeDirectory = fileManager.FormatPathForDisplay(relativeDirectory);
         }
         else
         {
-            _relativeDirectory = _displayDisplayName;
+            _relativeDirectory = DisplayName;
         }
     }
     
@@ -77,7 +73,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     {
         ClearChildren();
         
-        var contents = FileManager.GetDirectoryContents(_directory);
+        var contents = FileManager.GetDirectoryContents(DirectoryInfo);
         foreach (var dir in contents)
         {
             switch (dir)
@@ -86,7 +82,21 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
                     _directories.Add(new DirectoryDrawer(FileManager, di, IsReadOnly, this));
                     break;
                 case FileInfo fi:
-                    _files.Add(new FileDrawer(FileManager, fi, this));
+                    
+                    // determine relative path of file for display
+                    var topParent = this;
+                    while (topParent.ParentDirectoryDrawer != null)
+                        topParent = topParent.ParentDirectoryDrawer;
+                    
+                    var topParentDisplayName = topParent.DisplayName;
+                    var topParentPath = topParent.Path;
+                    var relativePath = System.IO.Path.GetRelativePath(topParentPath, fi.FullName);
+                    
+                    // only add the root folder name if it has an alias - should probably have a better way of determining this
+                    relativePath = topParentDisplayName[0] == '/' ? System.IO.Path.Combine(topParentDisplayName, relativePath) : relativePath;
+                    
+                    // add new file drawer
+                    _files.Add(new FileDrawer(FileManager, fi, this, relativePath));
                     break;
             }
         }
@@ -111,7 +121,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     
     protected override void DrawSelectable(ImFonts fonts, bool isSelected)
     {
-        if (!_isRoot)
+        if (!IsRoot)
         {
             var expandCollapseLabel = Expanded ? _expandedButtonLabel : _collapsedButtonLabel;
             
@@ -129,22 +139,22 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
             ImGui.PushFont(fonts.Large);
         }
         
-        // we need extra padding between the rows so theres no blank space between them
+        // we need extra padding between the rows so there's no blank space between them
         // the intuitive thing would be to allow files to be dropped in between directories like many other file managers do, but this is much easier
         // for the time being.
         var style = ImGui.GetStyle();
         var currentPadding = style.TouchExtraPadding;
-        style.TouchExtraPadding = currentPadding with {Y = style.ItemSpacing.Y + style.FramePadding.Y};
-        ImGui.Selectable(_displayDisplayName, isSelected);
+        style.TouchExtraPadding = currentPadding with { Y = style.ItemSpacing.Y + style.FramePadding.Y };
+        ImGui.Selectable(DisplayName, isSelected);
         style.TouchExtraPadding = currentPadding;
         
-        if (_isRoot)
+        if (IsRoot)
         {
             ImGui.PopFont();
         }
     }
     
-    protected override void DrawTooltip(ImFonts fonts)
+    protected override void DrawTooltipContents(ImFonts fonts)
     {
         ImGui.Text(_relativeDirectory);
         
@@ -153,11 +163,11 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         ImGui.PopFont();
     }
     
-    protected override FileSystemInfo FileSystemInfo => _directory;
+    protected override FileSystemInfo FileSystemInfo => DirectoryInfo;
     
     protected override void CompleteDraw(ImFonts fonts, bool hovered, bool isSelected)
     {
-        if (!Expanded)
+        if (!Expanded && !IsRoot)
         {
             return;
         }
@@ -179,15 +189,23 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
                 dir.Draw(fonts);
             }
             
-            const ImGuiTableFlags flags = ImGuiTableFlags.RowBg | ImGuiTableFlags.SizingStretchProp;
-            if (ImGui.BeginTable("FileTable", _fileTableColumns.Length, flags))
+            var columnCount = _fileTableColumns.Length;
+            if (_files.Count > 0 && ImGui.BeginTable(_fileTableLabel, columnCount, FileTableFlags))
             {
+                ImGui.TableNextRow();
+                for (var index = 0; index < columnCount; index++)
+                {
+                    var column = _fileTableColumns[index];
+                    ImGui.TableSetupColumn(column.Name, column.Flags);
+                }
+                
                 foreach (var file in _files)
                 {
-                    for (int i = 0; i < 4; i++)
+                    ImGui.TableNextRow();
+                    for (int i = 0; i < columnCount; i++)
                     {
-                        ImGui.TableNextColumn();
-                        _fileTableColumns[i](file, fonts);
+                        if(ImGui.TableNextColumn())
+                            _fileTableColumns[i].DrawAction(file, fonts);
                     }
                 }
                 
@@ -205,7 +223,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
             ImGui.PushFont(fonts.Small);
             if (ImGui.SmallButton(_newSubfolderLabel))
             {
-                FileManager.Log(this, $"Requested new folder at {_directory.FullName}");
+                FileManager.Log(this, $"Requested new folder at {DirectoryInfo.FullName}");
                 FileManager.CreateNewSubfolder(this);
             }
             
@@ -222,7 +240,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         _endChildren();
     }
     
-    protected override void DrawContextMenu(ImFonts fonts)
+    protected override void DrawContextMenuContents(ImFonts fonts)
     {
         if (ImGui.MenuItem("Refresh"))
         {
@@ -231,4 +249,14 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     }
     
     protected override void OnDoubleClicked() => Expanded = !Expanded;
+    
+    private bool _needsRescan;
+    private readonly string _expandedButtonLabel;
+    private readonly string _collapsedButtonLabel;
+    private readonly string _newSubfolderLabel;
+    private readonly string _relativeDirectory;
+    private readonly string _fileTableLabel;
+    public readonly bool IsRoot;
+    private readonly Action _beginChildren;
+    private readonly Action _endChildren;
 }

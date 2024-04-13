@@ -3,7 +3,7 @@ using ImGuiNET;
 
 namespace SilkWindows.Implementations.FileManager.ItemDrawers;
 
-// todo: child class (directory) being referenced in the base class is UGLY
+// todo: child class (DirectoryDrawer) being referenced in the base class is UGLY
 public abstract class FileSystemDrawer
 {
     private protected readonly IFileManager FileManager;
@@ -14,7 +14,7 @@ public abstract class FileSystemDrawer
         ParentDirectoryDrawer = parent;
     }
     
-    internal DirectoryInfo RootDirectory => ParentDirectoryDrawer == null ? new(FileSystemInfo.FullName) : ParentDirectoryDrawer.RootDirectory;
+    internal DirectoryInfo RootDirectory => ParentDirectoryDrawer == null ? new DirectoryInfo(FileSystemInfo.FullName) : ParentDirectoryDrawer.RootDirectory;
     public abstract bool IsReadOnly { get; }
     internal abstract bool IsDirectory { get; }
     internal abstract string DisplayName { get; }
@@ -22,12 +22,12 @@ public abstract class FileSystemDrawer
     
     internal DirectoryDrawer? ParentDirectoryDrawer { get; }
     
-    protected abstract void DrawTooltip(ImFonts fonts);
+    protected abstract void DrawTooltipContents(ImFonts fonts);
     
     protected abstract FileSystemInfo FileSystemInfo { get; }
     
     protected virtual ImGuiHoveredFlags HoverFlags => ImGuiHoveredFlags.None;
-    public bool Expanded { get; set; }
+    protected internal bool Expanded { get; set; }
     
     protected bool IsHovered() => ImGui.IsItemHovered(HoverFlags);
     
@@ -91,16 +91,20 @@ public abstract class FileSystemDrawer
         {
             if (ImGui.BeginPopupContextItem())
             {
-                DrawContextMenu(fonts);
+                DrawContextMenuContents(fonts);
                 
                 ImGui.EndPopup();
             }
             
-            if (!FileManager.IsDraggingPaths && hovered)
+            // check for root directory drawer since we treat it specially. it should probably be its own class but here we are for now
+            // the root directory has its own tooltip that this would mess up 
+            if (!FileManager.IsDraggingPaths && hovered && this is not DirectoryDrawer { IsRoot: true })
             {
-                ImGui.BeginTooltip();
-                DrawTooltip(fonts);
-                ImGui.EndTooltip();
+                if (ImGui.BeginTooltip())
+                {
+                    DrawTooltipContents(fonts);
+                    ImGui.EndTooltip();
+                }
             }
         }
         
@@ -115,7 +119,7 @@ public abstract class FileSystemDrawer
         }
     }
     
-    protected abstract void DrawContextMenu(ImFonts fonts);
+    protected abstract void DrawContextMenuContents(ImFonts fonts);
     
     protected abstract void OnDoubleClicked();
 }

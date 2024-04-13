@@ -1,5 +1,6 @@
 using ImGuiNET;
 using SilkWindows.Implementations.FileManager.ItemDrawers;
+// ReSharper disable InvertIf
 
 namespace SilkWindows.Implementations.FileManager;
 
@@ -171,6 +172,9 @@ public sealed partial class FileManager
         if (IsDraggingPaths)
             return;
         
+        if(drawer is DirectoryDrawer { IsRoot: true })
+            return;
+        
         _selections.Add(drawer);
         _draggedPaths = FileOperations.PathsToFileSystemInfo(_selections.Select(x => x.Path)).ToArray();
     }
@@ -196,23 +200,24 @@ public sealed partial class FileManager
             return;
         }
         
-        
-        ImGui.BeginDisabled();
-        ImGui.BeginTooltip();
-        
-        foreach (var item in _selections)
+        if (ImGui.BeginTooltip())
         {
+            ImGui.BeginDisabled();
+            foreach (var item in _selections)
+            {
+                ImGui.NewLine();
+                var expanded = item.Expanded;
+                item.Expanded = false;
+                item.Draw(fonts, true);
+                item.Expanded = expanded;
+            }
+            
             ImGui.NewLine();
-            var expanded = item.Expanded;
-            item.Expanded = false;
-            item.Draw(fonts, true);
-            item.Expanded = expanded;
+            
+            ImGui.EndDisabled();
+            ImGui.EndTooltip();
         }
         
-        ImGui.NewLine();
-        
-        ImGui.EndTooltip();
-        ImGui.EndDisabled();
     }
     
     private FileSystemInfo[] _droppedPaths = [];
