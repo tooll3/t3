@@ -1,5 +1,6 @@
 using ImGuiNET;
 using SilkWindows.Implementations.FileManager.ItemDrawers;
+
 // ReSharper disable InvertIf
 
 namespace SilkWindows.Implementations.FileManager;
@@ -172,7 +173,7 @@ public sealed partial class FileManager
         if (IsDraggingPaths)
             return;
         
-        if(drawer is DirectoryDrawer { IsRoot: true })
+        if (drawer is DirectoryDrawer { IsRoot: true })
             return;
         
         _selections.Add(drawer);
@@ -195,29 +196,30 @@ public sealed partial class FileManager
     {
         var isDragging = IsDraggingPaths;
         ImGui.SetMouseCursor(isDragging ? ImGuiMouseCursor.Hand : ImGuiMouseCursor.Arrow);
+        IEnumerable<FileSystemDrawer> selections = _selections;
         if (!isDragging)
         {
-            return;
+            if (_selectedRoot == null)
+                return;
+            
+            selections = new[] { _selectedRoot };
         }
         
-        if (ImGui.BeginTooltip())
+        var originalCursorPos = ImGui.GetCursorScreenPos();
+        var mousePos = ImGui.GetMousePos();
+        
+        ImGui.SetCursorScreenPos(mousePos);
+        ImGui.BeginGroup();
+        foreach (var item in selections)
         {
-            ImGui.BeginDisabled();
-            foreach (var item in _selections)
-            {
-                ImGui.NewLine();
-                var expanded = item.Expanded;
-                item.Expanded = false;
-                item.Draw(fonts, true);
-                item.Expanded = expanded;
-            }
-            
-            ImGui.NewLine();
-            
-            ImGui.EndDisabled();
-            ImGui.EndTooltip();
+            var expanded = item.Expanded;
+            item.Expanded = false;
+            item.Draw(fonts,  true);
+            item.Expanded = expanded;
         }
         
+        ImGui.EndGroup();
+        ImGui.SetCursorScreenPos(originalCursorPos);
     }
     
     private FileSystemInfo[] _droppedPaths = [];

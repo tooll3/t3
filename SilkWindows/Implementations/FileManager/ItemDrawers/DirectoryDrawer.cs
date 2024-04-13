@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using ImGuiNET;
 
 namespace SilkWindows.Implementations.FileManager.ItemDrawers;
@@ -8,6 +9,8 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     internal override string DisplayName { get; }
     internal override string Path => DirectoryInfo.FullName;
     internal override bool IsDirectory => true;
+    
+    internal Action? ToggleButtonPressed;
     public DirectoryInfo DirectoryInfo { get; }
     
     private readonly List<DirectoryDrawer> _directories = [];
@@ -23,7 +26,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     
     private static readonly FileTableColumn[] _fileTableColumns =
         [
-            new FileTableColumn("File", FileColumnFlags,(file, fonts) => { file.Draw(fonts); }),
+            new FileTableColumn("File", FileColumnFlags, (file, fonts) => { file.Draw(fonts); }),
             new FileTableColumn("Extension", ColumnFlags, (file, fonts) => file.DrawFileFormat(fonts)),
             new FileTableColumn("Size", ColumnFlags, (file, fonts) => file.DrawSize(fonts)),
             new FileTableColumn("Modified Date", ColumnFlags, (file, fonts) => file.DrawLastModified(fonts))
@@ -39,7 +42,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         DisplayName = string.IsNullOrEmpty(alias) ? DirectoryInfo.Name : '/' + alias;
         
         var buttonIdSuffix = "##" + DisplayName;
-        _expandedButtonLabel = IFileManager.ExpandedButtonLabel + buttonIdSuffix;
+        _expandedButtonLabel = (IsRoot ? "_" : IFileManager.ExpandedButtonLabel) + buttonIdSuffix;
         _collapsedButtonLabel = IFileManager.CollapsedButtonLabel + buttonIdSuffix;
         _newSubfolderLabel = "*New subfolder" + buttonIdSuffix;
         _fileTableLabel = "File table" + buttonIdSuffix;
@@ -119,37 +122,111 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     
     protected override void DrawSelectable(ImFonts fonts, bool isSelected)
     {
-        if (!IsRoot)
+        if (IsRoot)
         {
-            var expandCollapseLabel = Expanded ? _expandedButtonLabel : _collapsedButtonLabel;
-            
-            ImGui.PushFont(fonts.Small);
-            if (ImGui.Button(expandCollapseLabel))
-            {
-                Expanded = !Expanded;
-            }
-            
-            ImGui.PopFont();
-            ImGui.SameLine();
+            DrawRootSelectable(fonts, isSelected);
         }
         else
         {
-            ImGui.PushFont(fonts.Large);
+            DrawStandardSelectable(fonts.Regular, fonts.Regular, isSelected);
+        }
+    }
+    
+    /// <summary>
+    /// Returns true is button was pressed
+    /// </summary>
+    private bool DrawStandardSelectable(ImFontPtr buttonFont, ImFontPtr textFont, bool isSelected)
+    {
+        var clicked = false;
+        
+        // expand / collapse button
+        var expandCollapseLabel = Expanded ? _expandedButtonLabel : _collapsedButtonLabel;
+        ImGui.PushFont(buttonFont);
+        if (ImGui.Button(expandCollapseLabel))
+        {
+            Expanded = !Expanded;
+            clicked = true;
         }
         
+        ImGui.PopFont();
+        
+        // text
+        ImGui.PushFont(textFont);
+        ImGui.SameLine();
+        DrawTouchPaddedSelectable(DisplayName, isSelected);
+        ImGui.PopFont();
+        
+        return clicked;
+    }
+    
+    void DrawRootSelectable(ImFonts fonts, bool isSelected)
+    {
+        const float tabCornerRadius = 8.0f;
+        
+        // prevent selectable highlighting we don't want
+        isSelected = false;
+        var transparent = ImGui.GetColorU32(Vector4.Zero);
+        var bgColor = ImGui.GetColorU32(isSelected ? ImGuiCol.PopupBg : ImGuiCol.TableHeaderBg);
+        ImGui.PushStyleColor(ImGuiCol.HeaderHovered, transparent);
+        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ImGui.GetColorU32(ImGuiCol.TextDisabled));
+        ImGui.PushStyleColor(ImGuiCol.Button, bgColor);
+        ImGui.PushStyleColor(ImGuiCol.HeaderActive, bgColor);
+        ImGui.PushStyleColor(ImGuiCol.TextDisabled, ImGui.GetColorU32(ImGuiCol.Text));
+        
+        var originalCursorPosition = ImGui.GetCursorScreenPos();
+        
+        // ensure button and label don't intersect with curved tab corners
+        ImGui.SetCursorPosX(tabCornerRadius);
+        
+        // -------- Split channel drawing --------
+        
+        // split channels, select top channel
+        var drawList = ImGui.GetWindowDrawList();
+        drawList.ChannelsSplit(2);
+        drawList.ChannelsSetCurrent(1);
+        
+        // draw the standard selectable
+        var clicked = DrawStandardSelectable(fonts.Large, fonts.Large, false);
+        
+        // capture where the selectable ends
+        var endPosition = ImGui.GetCursorScreenPos();
+        endPosition.Y -= ImGui.GetStyle().ItemSpacing.Y;
+        
+        // change to bottom channel
+        drawList.ChannelsSetCurrent(0);
+        
+        
+        // draw a tab-like outline
+        drawList.AddRectFilled(originalCursorPosition, endPosition with { X = originalCursorPosition.X + ImGui.GetContentRegionAvail().X }, bgColor,
+                               tabCornerRadius,
+                               ImDrawFlags.RoundCornersTop);
+        
+        // merge channels
+        drawList.ChannelsMerge();
+        
+        // -------- End split channel drawing --------
+        
+        
+        ImGui.PopStyleColor();
+        ImGui.PopStyleColor();
+        ImGui.PopStyleColor();
+        ImGui.PopStyleColor();
+        ImGui.PopStyleColor();
+    }
+    
+    private static void DrawTouchPaddedSelectable(string label, bool isSelected, ImGuiSelectableFlags flags = ImGuiSelectableFlags.None)
+    {
         // we need extra padding between the rows so there's no blank space between them
         // the intuitive thing would be to allow files to be dropped in between directories like many other file managers do, but this is much easier
         // for the time being.
+        
         var style = ImGui.GetStyle();
         var currentPadding = style.TouchExtraPadding;
         style.TouchExtraPadding = currentPadding with { Y = style.ItemSpacing.Y + style.FramePadding.Y };
-        ImGui.Selectable(DisplayName, isSelected);
-        style.TouchExtraPadding = currentPadding;
         
-        if (IsRoot)
-        {
-            ImGui.PopFont();
-        }
+        ImGui.Selectable(label, isSelected, flags);
+        
+        style.TouchExtraPadding = currentPadding; // reset touch padding
     }
     
     protected override void DrawTooltipContents(ImFonts fonts)
@@ -165,7 +242,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     
     protected override void CompleteDraw(ImFonts fonts, bool hovered, bool isSelected)
     {
-        if (!Expanded && !IsRoot)
+        if (!Expanded)
         {
             return;
         }
@@ -214,7 +291,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
                     ImGui.TableNextRow();
                     for (int i = 0; i < columnCount; i++)
                     {
-                        if(ImGui.TableNextColumn())
+                        if (ImGui.TableNextColumn())
                             _fileTableColumns[i].DrawAction(file, fonts);
                     }
                 }

@@ -71,7 +71,14 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         }
         
         if (!ImGui.IsMouseDown(ImGuiMouseButton.Left))
+        {
+            if (_selectedRoot != null)
+            {
+                // check for tab position swap
+                
+            }
             _selectedRoot = null;
+        }
         
         _columnsToDraw.Clear();
         _columnsMinimized.Clear();
@@ -93,29 +100,6 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         
         if (_selectedRoot != null)
             Console.WriteLine("Selected root: " + _selectedRoot.DisplayName);
-        
-        if (_selectedRoot != null && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-        {
-            // draw dragged indicator 
-            Console.WriteLine("Dragging root");
-            var displayName = _selectedRoot.DisplayName;
-            ImGui.PushFont(fonts.Large);
-            var size = GetButtonSize(displayName);
-            ImGui.PopFont();
-            
-            var mousePos = ImGui.GetMousePos();
-            
-            var halfSize = size * 0.5f;
-            var min = mousePos - halfSize;
-            var max = mousePos + halfSize;
-            var mid = (max + min) * 0.5f;
-            
-            var drawList = ImGui.GetWindowDrawList();
-            drawList.AddRectFilled(min, max, ImGui.GetColorU32(ImGuiCol.TableHeaderBg));
-            
-            var textStartPos = min + GetButtonInnerPadding();
-            drawList.AddText(fonts.Large, fonts.Large.FontSize, textStartPos, ImGui.GetColorU32(ImGuiCol.Text), displayName);
-        }
         
         CheckForFileDrop();
         DragFileDragIndicators(fonts);
@@ -189,7 +173,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     
     private void DrawTable(ImFonts fonts, List<Column> expanded)
     {
-        const ImGuiTableFlags tableFlags = ImGuiTableFlags.None;
+        const ImGuiTableFlags tableFlags = ImGuiTableFlags.Resizable;
         const ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags.WidthStretch | ImGuiTableColumnFlags.NoHide |
                                                   ImGuiTableColumnFlags.NoSort;
         
@@ -203,36 +187,6 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
                 var columnId = "##col_" + directoryDrawer.Path;
                 
                 ImGui.TableSetupColumn(columnId, columnFlags);
-                ImGui.TableSetColumnIndex(index);
-                
-                // draw header
-                if (ImGui.Button("_##minimize_" + directoryDrawer.Path))
-                {
-                    column.Drawn = false;
-                }
-                
-                ImGui.SameLine();
-                
-                var tableHeaderTitle = $"{(directoryDrawer.IsReadOnly ? "[Read Only]" : string.Empty)} ";
-                ImGui.TableHeader(tableHeaderTitle);
-                
-                // draw separator - hack?
-                var headerMin = ImGui.GetItemRectMin();
-                var headerMax = ImGui.GetItemRectMax();
-                var style = ImGui.GetStyle();
-                var thickness = style.CellPadding.X;
-                var minPosition = headerMin with { X = headerMin.X - thickness };
-                var maxPosition = headerMax with { X = minPosition.X + thickness };
-                var drawList = ImGui.GetWindowDrawList();
-                var windowColor = ImGui.GetColorU32(ImGuiCol.WindowBg);
-                drawList.AddRectFilled(minPosition, maxPosition, windowColor);
-            }
-            
-            ImGui.TableNextRow();
-            for (var index = 0; index < expanded.Count; index++)
-            {
-                var column = expanded[index];
-                var directoryDrawer = column.Drawer;
                 ImGui.TableSetColumnIndex(index);
                 
                 ImGui.BeginChild(directoryDrawer.Path);
@@ -453,6 +407,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     private static readonly HashSet<FileSystemDrawer> _selections = [];
     
     private static DirectoryDrawer? _selectedRoot;
+    private static Vector2 _tabDragPosition;
     
     private static int _fileManagerCount = 0;
     private readonly string _uniqueIdSuffix = "##" + Interlocked.Increment(ref _fileManagerCount);
