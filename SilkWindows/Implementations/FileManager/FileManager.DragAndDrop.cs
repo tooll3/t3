@@ -14,10 +14,14 @@ public sealed partial class FileManager
     
     public bool IsDraggingPaths => _draggedPaths.Length > 0;
     
-    bool IFileManager.IsDropTarget(FileSystemDrawer drawer)
+    bool IFileManager.IsDropTarget(FileSystemDrawer drawer, out DirectoryDrawer targetDir)
     {
+        targetDir = GetDropLocationFromHoveredDrawer(drawer);
+        
         if (drawer.IsReadOnly)
+        {
             return false;
+        }
         
         if (_draggedPaths.Length == 0)
         {
@@ -75,12 +79,7 @@ public sealed partial class FileManager
         if (_droppedPaths.Length == 0)
             throw new InvalidOperationException("Files were already consumed");
         
-        var directoryDrawer = drawer switch
-                                  {
-                                      DirectoryDrawer dir   => dir,
-                                      FileDrawer fileDrawer => fileDrawer.ParentDirectoryDrawer!,
-                                      _                     => throw new ArgumentOutOfRangeException(nameof(drawer), drawer, null)
-                                  };
+        var directoryDrawer = GetDropLocationFromHoveredDrawer(drawer);
         
         var droppedPaths = _droppedPaths;
         ConsumeArray(ref _droppedPaths);
@@ -94,6 +93,19 @@ public sealed partial class FileManager
         {
             directoryDrawer.MarkNeedsRescan();
         }
+    }
+    
+    private DirectoryDrawer GetDropLocationFromHoveredDrawer(FileSystemDrawer drawer)
+    {
+        var dropInParent = ShouldDropInParent;
+        var directoryDrawer = drawer switch
+                                  {
+                                      DirectoryDrawer dir when dropInParent  => dir.ParentDirectoryDrawer ?? dir,
+                                      DirectoryDrawer dir when !dropInParent => dir,
+                                      FileDrawer fileDrawer                  => fileDrawer.ParentDirectoryDrawer!,
+                                      _                                      => throw new ArgumentOutOfRangeException(nameof(drawer), drawer, null)
+                                  };
+        return directoryDrawer;
     }
     
     private bool TryDropPathsInto(DirectoryInfo rootDirectory, DirectoryInfo targetDirectory, IEnumerable<FileSystemInfo> paths)
@@ -222,6 +234,7 @@ public sealed partial class FileManager
         ImGui.SetCursorScreenPos(originalCursorPos);
     }
     
+    private bool ShouldDropInParent => ImGui.GetIO().KeyShift;
     private FileSystemInfo[] _droppedPaths = [];
     private FileSystemInfo[] _draggedPaths = [];
     public bool HasDroppedFiles => _droppedPaths.Length > 0;

@@ -149,7 +149,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         var startPosition = ImGui.GetContentRegionAvail().X + ImGui.GetCursorPosX();
         foreach (var column in collapsed)
         {
-            startPosition -= column.Drawer.LastDrawnSize.X;
+            startPosition -= column.Drawer.LastDrawnSize.X + ImGui.GetStyle().ItemSpacing.X;
             //startPosition -= ImGui.CalcTextSize(column.Drawer.DisplayName).X + innerSpacing;
         }
         

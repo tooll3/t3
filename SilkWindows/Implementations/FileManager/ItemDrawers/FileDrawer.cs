@@ -21,7 +21,8 @@ internal class FileDrawer : FileSystemDrawer
     {
         _file = file;
         var extension = _file.Extension;
-        if (extension.Length == file.Name.Length) // for example .gitignore
+        if (extension.Length == file.Name.Length // e.g. .gitignore
+            || extension.Length == 0) // e.g. LICENSE
         {
             _fileFormatDisplay = string.Empty;
         }
