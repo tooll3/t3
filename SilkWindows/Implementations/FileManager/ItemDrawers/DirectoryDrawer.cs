@@ -1,5 +1,4 @@
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using ImGuiNET;
 
 namespace SilkWindows.Implementations.FileManager.ItemDrawers;
@@ -124,23 +123,24 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     {
         if (IsRoot)
         {
-            DrawRootSelectable(fonts, isSelected);
+            DrawRootSelectable(fonts);
         }
         else
         {
-            DrawStandardSelectable(fonts.Regular, fonts.Regular, isSelected);
+            DrawStandardSelectable(fonts.Regular, fonts.Regular, isSelected, false);
         }
     }
     
     /// <summary>
     /// Returns true is button was pressed
     /// </summary>
-    private bool DrawStandardSelectable(ImFontPtr buttonFont, ImFontPtr textFont, bool isSelected)
+    private bool DrawStandardSelectable(ImFontPtr buttonFont, ImFontPtr textFont, bool isSelected, bool expanded,
+                                        ImGuiSelectableFlags flags = ImGuiSelectableFlags.None)
     {
         var clicked = false;
         
         // expand / collapse button
-        var expandCollapseLabel = Expanded ? _expandedButtonLabel : _collapsedButtonLabel;
+        var expandCollapseLabel = expanded ? _expandedButtonLabel : _collapsedButtonLabel;
         ImGui.PushFont(buttonFont);
         if (ImGui.Button(expandCollapseLabel))
         {
@@ -153,30 +153,27 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         // text
         ImGui.PushFont(textFont);
         ImGui.SameLine();
-        DrawTouchPaddedSelectable(DisplayName, isSelected);
+        DrawTouchPaddedSelectable(DisplayName, isSelected, expanded, flags);
         ImGui.PopFont();
         
         return clicked;
     }
     
-    void DrawRootSelectable(ImFonts fonts, bool isSelected)
+    void DrawRootSelectable(ImFonts fonts)
     {
-        const float tabCornerRadius = 8.0f;
-        
-        // prevent selectable highlighting we don't want
-        isSelected = false;
+        // prevent selectable highlighting we don't want, blend foreground with background
         var transparent = ImGui.GetColorU32(Vector4.Zero);
-        var bgColor = ImGui.GetColorU32(isSelected ? ImGuiCol.PopupBg : ImGuiCol.TableHeaderBg);
+        var bgColor = ImGui.GetColorU32(ImGuiCol.TableHeaderBg);
         ImGui.PushStyleColor(ImGuiCol.HeaderHovered, transparent);
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ImGui.GetColorU32(ImGuiCol.TextDisabled));
         ImGui.PushStyleColor(ImGuiCol.Button, bgColor);
-        ImGui.PushStyleColor(ImGuiCol.HeaderActive, bgColor);
+        ImGui.PushStyleColor(ImGuiCol.HeaderActive, transparent);
         ImGui.PushStyleColor(ImGuiCol.TextDisabled, ImGui.GetColorU32(ImGuiCol.Text));
         
         var originalCursorPosition = ImGui.GetCursorScreenPos();
         
         // ensure button and label don't intersect with curved tab corners
-        ImGui.SetCursorPosX(tabCornerRadius);
+        float tabCornerRadius = 8f; //ImGui.GetStyle().TabRounding;
         
         // -------- Split channel drawing --------
         
@@ -185,36 +182,54 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         drawList.ChannelsSplit(2);
         drawList.ChannelsSetCurrent(1);
         
+        ImGui.SetCursorScreenPos(originalCursorPosition with { X = originalCursorPosition.X + tabCornerRadius });
         // draw the standard selectable
-        var clicked = DrawStandardSelectable(fonts.Large, fonts.Large, false);
+        
+        var expanded = Expanded;
+        var flags = expanded ? ImGuiSelectableFlags.None : ImGuiSelectableFlags.Disabled;
+        
+        bool clicked;
+        if (expanded)
+        {
+            clicked = DrawStandardSelectable(fonts.Large, fonts.Large, false, true, flags);
+        }
+        else
+        {
+            DrawStandardSelectable(fonts.Large, fonts.Large, false, false, flags);
+            ImGui.SameLine();
+            clicked = false;
+        }
         
         // capture where the selectable ends
-        var endPosition = ImGui.GetCursorScreenPos();
-        endPosition.Y -= ImGui.GetStyle().ItemSpacing.Y;
+        var max = ImGui.GetItemRectMax();
         
         // change to bottom channel
         drawList.ChannelsSetCurrent(0);
         
-        
         // draw a tab-like outline
-        drawList.AddRectFilled(originalCursorPosition, endPosition with { X = originalCursorPosition.X + ImGui.GetContentRegionAvail().X }, bgColor,
-                               tabCornerRadius,
-                               ImDrawFlags.RoundCornersTop);
+        var style = ImGui.GetStyle();
+        Vector2 tweakScaleToMatchStyle = new(x: -style.WindowPadding.X + style.CellPadding.X, // we are in a window inside a table cell
+                                             y: style.FramePadding.Y + style.SeparatorTextPadding.Y); // buttons have a frame padding and we draw a separator beneath us
+    
+        drawList.AddRectFilled(originalCursorPosition, max + tweakScaleToMatchStyle, bgColor, tabCornerRadius, ImDrawFlags.RoundCornersTop);
         
         // merge channels
         drawList.ChannelsMerge();
         
         // -------- End split channel drawing --------
         
+        ImGui.PopStyleColor();
+        ImGui.PopStyleColor();
+        ImGui.PopStyleColor();
+        ImGui.PopStyleColor();
+        ImGui.PopStyleColor();
         
-        ImGui.PopStyleColor();
-        ImGui.PopStyleColor();
-        ImGui.PopStyleColor();
-        ImGui.PopStyleColor();
-        ImGui.PopStyleColor();
+        if (clicked)
+            ToggleButtonPressed?.Invoke();
     }
     
-    private static void DrawTouchPaddedSelectable(string label, bool isSelected, ImGuiSelectableFlags flags = ImGuiSelectableFlags.None)
+    private static void DrawTouchPaddedSelectable(string label, bool isSelected, bool expandHorizontally,
+                                                  ImGuiSelectableFlags flags = ImGuiSelectableFlags.None)
     {
         // we need extra padding between the rows so there's no blank space between them
         // the intuitive thing would be to allow files to be dropped in between directories like many other file managers do, but this is much easier
@@ -222,7 +237,15 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         
         var style = ImGui.GetStyle();
         var currentPadding = style.TouchExtraPadding;
+        
         style.TouchExtraPadding = currentPadding with { Y = style.ItemSpacing.Y + style.FramePadding.Y };
+        
+        
+        if (expandHorizontally)
+        {
+            style.TouchExtraPadding.X = 0f;
+            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
+        }
         
         ImGui.Selectable(label, isSelected, flags);
         

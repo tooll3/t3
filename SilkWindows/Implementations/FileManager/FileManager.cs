@@ -98,11 +98,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
             }
         }
         
-        if (_selectedRoot != null)
-            Console.WriteLine("Selected root: " + _selectedRoot.DisplayName);
-        
         CheckForFileDrop();
-        DragFileDragIndicators(fonts);
         
         if (_columnsMinimized.Count > 0)
         {
@@ -113,6 +109,8 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         {
             DrawTable(fonts, _columnsToDraw);
         }
+        
+        DragFileDragIndicators(fonts);
         
         return;
         
@@ -143,7 +141,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         var innerSpacing = style.ItemInnerSpacing.X + (style.FramePadding.X * 2);
         foreach (var column in collapsed)
         {
-            startPosition -= GetButtonSize(column.Drawer.DisplayName).X;
+            startPosition -= ImguiUtils.GetButtonSize(column.Drawer.DisplayName).X;
             //startPosition -= ImGui.CalcTextSize(column.Drawer.DisplayName).X + innerSpacing;
         }
         
@@ -163,13 +161,6 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         ImGui.NewLine();
     }
     
-    private static Vector2 GetButtonSize(string text, bool useSpacing = true)
-    {
-        var style = ImGui.GetStyle();
-        return ImGui.CalcTextSize(text) + style.ItemInnerSpacing * (useSpacing ? 1 : 0) + GetButtonInnerPadding();
-    }
-    
-    private static Vector2 GetButtonInnerPadding() => ImGui.GetStyle().FramePadding * 2;
     
     private void DrawTable(ImFonts fonts, List<Column> expanded)
     {
