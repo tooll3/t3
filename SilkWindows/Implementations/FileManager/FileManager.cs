@@ -32,7 +32,8 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
                                  
                                  var drawer = new DirectoryDrawer(this, directoryInfo, dir.IsReadOnly, null, dir.Alias);
                                  
-                                 return new Column(drawer, dir.startExpanded);
+                                 var id = "##col_" + directoryInfo.FullName;
+                                 return new Column(drawer, dir.startExpanded, id);
                              }).ToArray();
     }
     
@@ -44,8 +45,9 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     {
     }
     
-    private class Column(DirectoryDrawer drawer, bool drawn)
+    private class Column(DirectoryDrawer drawer, bool drawn, string id)
     {
+        public readonly string Id = id;
         public readonly DirectoryDrawer Drawer = drawer;
         public bool Drawn = drawn;
     }
@@ -117,7 +119,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         // todo - log toasts
         ImGui.SetNextWindowScroll(new Vector2(0f, float.MaxValue));
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        ImGui.BeginChild("Logs" + _uniqueIdSuffix);
+        ImGui.BeginChild("Logs" + _tableId);
         while (_logs.Count > MaxLogCount)
         {
             _logs.TryDequeue(out _);
@@ -161,23 +163,21 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         ImGui.NewLine();
     }
     
-    
     private void DrawTable(ImFonts fonts, List<Column> expanded)
     {
         const ImGuiTableFlags tableFlags = ImGuiTableFlags.Resizable;
         const ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags.WidthStretch | ImGuiTableColumnFlags.NoHide |
                                                   ImGuiTableColumnFlags.NoSort;
         
-        if (ImGui.BeginTable(_uniqueIdSuffix, expanded.Count, tableFlags))
+        if (ImGui.BeginTable(_tableId, expanded.Count, tableFlags))
         {
             ImGui.TableNextRow();
             for (var index = 0; index < expanded.Count; index++)
             {
                 var column = expanded[index];
                 var directoryDrawer = column.Drawer;
-                var columnId = "##col_" + directoryDrawer.Path;
                 
-                ImGui.TableSetupColumn(columnId, columnFlags);
+                ImGui.TableSetupColumn(column.Id, columnFlags);
                 ImGui.TableSetColumnIndex(index);
                 
                 ImGui.BeginChild(directoryDrawer.Path);
@@ -227,7 +227,6 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     public void OnClose()
     {
     }
-    
     
     private FileConflictOption FileConflictWindow(FileInfo file)
     {
@@ -291,7 +290,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     void IFileManager.DoubleClicked(FileDrawer drawer, bool inExternalEditor)
     {
         //if (_multiSelectEnabled)
-          //  return;
+        //  return;
         
         if (_selections.Count != 1)
         {
@@ -401,7 +400,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     private static Vector2 _tabDragPosition;
     
     private static int _fileManagerCount = 0;
-    private readonly string _uniqueIdSuffix = "##" + Interlocked.Increment(ref _fileManagerCount);
+    private readonly string _tableId = "##" + Interlocked.Increment(ref _fileManagerCount);
     
     private readonly FileManagerMode _mode;
     private readonly ConcurrentQueue<string> _logs = new();
