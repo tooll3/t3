@@ -191,20 +191,16 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         var expanded = Expanded;
         var flags = expanded ? ImGuiSelectableFlags.None : ImGuiSelectableFlags.Disabled;
         
-        bool clicked;
-        if (expanded)
-        {
-            clicked = DrawStandardSelectable(fonts.Large, fonts.Large, false, true, flags);
-        }
-        else
-        {
-            DrawStandardSelectable(fonts.Large, fonts.Large, false, false, flags);
-            ImGui.SameLine();
-            clicked = false;
-        }
+        var clicked = DrawStandardSelectable(fonts.Large, fonts.Large, false, expanded, flags);
         
         // capture where the selectable ends
         var max = ImGui.GetItemRectMax();
+        if (!expanded)
+        {
+            // HACK - scale when dragged fills the full width and i cant figure out why - the only reason i can assume is because the function
+            // is being called outside of the table ID stack in the file manager. I don't care to fix that right now because damn this is hard
+            max.X = newCursorPos.X + ImguiUtils.GetButtonSize(DisplayName).X + ImguiUtils.GetButtonSize("_").X;
+        }
         
         // change to bottom channel
         drawList.ChannelsSetCurrent(0);
@@ -213,7 +209,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         var style = ImGui.GetStyle();
         Vector2 tweakScaleToMatchStyle = new(x: -style.WindowPadding.X + style.CellPadding.X, // we are in a window inside a table cell
                                              y: style.FramePadding.Y + style.SeparatorTextPadding.Y); // buttons have a frame padding and we draw a separator beneath us
-    
+        
         drawList.AddRectFilled(originalCursorPosition, max + tweakScaleToMatchStyle, bgColor, tabCornerRadius, ImDrawFlags.RoundCornersTop);
         
         // merge channels
