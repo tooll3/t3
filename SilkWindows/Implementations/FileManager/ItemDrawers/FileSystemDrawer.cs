@@ -24,15 +24,16 @@ public abstract class FileSystemDrawer
     
     protected abstract void DrawTooltipContents(ImFonts fonts);
     
-    protected abstract FileSystemInfo FileSystemInfo { get; }
+    protected internal abstract FileSystemInfo FileSystemInfo { get; }
     
     protected virtual ImGuiHoveredFlags HoverFlags => ImGuiHoveredFlags.None;
     protected internal bool Expanded { get; set; }
     
     protected bool IsHovered() => ImGui.IsItemHovered(HoverFlags);
     
-    const ImGuiHoveredFlags FileDragHoverFlags = ImGuiHoveredFlags.AllowWhenOverlappedByItem | ImGuiHoveredFlags.DelayNone |
-                                                 ImGuiHoveredFlags.AllowWhenOverlappedByItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup;
+    const ImGuiHoveredFlags FileDragHoverFlags = ImGuiHoveredFlags.AllowWhenOverlappedByItem 
+                                                 | ImGuiHoveredFlags.DelayNone 
+                                                 | ImGuiHoveredFlags.AllowWhenBlockedByPopup;
     
     protected bool HoveredByFileDrag(ImGuiHoveredFlags flags = FileDragHoverFlags) =>
         FileManager.IsDraggingPaths && ImGui.IsItemHovered(flags);
@@ -87,7 +88,7 @@ public abstract class FileSystemDrawer
             ImGui.SeparatorText("Drop files here");
             ImGui.Unindent();
         }
-        else
+        else if (!missing)
         {
             if (ImGui.BeginPopupContextItem())
             {

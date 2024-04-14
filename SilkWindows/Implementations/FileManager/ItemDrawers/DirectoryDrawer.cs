@@ -8,6 +8,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     internal override string DisplayName { get; }
     internal override string Path => DirectoryInfo.FullName;
     internal override bool IsDirectory => true;
+    protected internal override FileSystemInfo FileSystemInfo => DirectoryInfo;
     
     internal Action? ToggleButtonPressed;
     public DirectoryInfo DirectoryInfo { get; }
@@ -16,6 +17,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     private readonly List<FileDrawer> _files = [];
     
     public override bool IsReadOnly { get; }
+    internal Vector2 LastDrawnSize { get; private set; }
     
     private readonly record struct FileTableColumn(string Name, ImGuiTableColumnFlags Flags, Action<FileDrawer, ImFonts> DrawAction);
     
@@ -149,12 +151,18 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         }
         
         ImGui.PopFont();
+        var min = ImGui.GetItemRectMin();
+        var max = ImGui.GetItemRectMax();
         
         // text
         ImGui.PushFont(textFont);
         ImGui.SameLine();
         DrawTouchPaddedSelectable(DisplayName, isSelected, expanded, flags);
         ImGui.PopFont();
+        
+        min = Vector2.Min(ImGui.GetItemRectMin(), min);
+        max = Vector2.Max(ImGui.GetItemRectMax(), max);
+        LastDrawnSize = max - min;
         
         return clicked;
     }
@@ -211,7 +219,10 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         Vector2 tweakScaleToMatchStyle = new(x: -style.WindowPadding.X + style.CellPadding.X, // we are in a window inside a table cell
                                              y: style.FramePadding.Y + style.SeparatorTextPadding.Y); // buttons have a frame padding and we draw a separator beneath us
         
-        drawList.AddRectFilled(originalCursorPosition, max + tweakScaleToMatchStyle, bgColor, tabCornerRadius, ImDrawFlags.RoundCornersTop);
+        var newMax = max + tweakScaleToMatchStyle;
+        drawList.AddRectFilled(originalCursorPosition, newMax, bgColor, tabCornerRadius, ImDrawFlags.RoundCornersTop);
+        
+        LastDrawnSize = newMax - originalCursorPosition;
         
         // merge channels
         drawList.ChannelsMerge();
@@ -261,7 +272,6 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         ImGui.PopFont();
     }
     
-    protected override FileSystemInfo FileSystemInfo => DirectoryInfo;
     
     protected override void CompleteDraw(ImFonts fonts, bool hovered, bool isSelected)
     {
@@ -311,11 +321,19 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
                 
                 foreach (var file in _files)
                 {
+                    if (!file.FileSystemInfo.Exists)
+                    {
+                        _needsRescan = true; // redundant but just in case
+                        continue;
+                    }
+                    
                     ImGui.TableNextRow();
                     for (int i = 0; i < columnCount; i++)
                     {
                         if (ImGui.TableNextColumn())
+                        {
                             _fileTableColumns[i].DrawAction(file, fonts);
+                        }
                     }
                 }
                 

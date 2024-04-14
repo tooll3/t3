@@ -45,11 +45,19 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
     {
     }
     
-    private class Column(DirectoryDrawer drawer, bool drawn, string id)
+    private sealed class Column
     {
-        public readonly string Id = id;
-        public readonly DirectoryDrawer Drawer = drawer;
-        public bool Drawn = drawn;
+        public readonly string Id;
+        public readonly DirectoryDrawer Drawer;
+        public bool Drawn;
+        
+        public Column(DirectoryDrawer drawer, bool drawn, string id)
+        {
+            Id = id;
+            Drawer = drawer;
+            Drawn = drawn;
+            drawer.ToggleButtonPressed = () => Drawn = !Drawn;
+        }
     }
     
     private readonly Column[] _folderTabs;
@@ -104,7 +112,7 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         
         if (_columnsMinimized.Count > 0)
         {
-            DrawCollapsedButtons(_columnsMinimized);
+            DrawCollapsedButtons(fonts, _columnsMinimized);
         }
         
         if (_columnsToDraw.Count > 0)
@@ -133,17 +141,15 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         ImGui.EndChild();
     }
     
-    private void DrawCollapsedButtons(List<Column> collapsed)
+    private void DrawCollapsedButtons(ImFonts fonts, List<Column> collapsed)
     {
         ImGui.SameLine();
         
         // draw right-aligned buttons
         var startPosition = ImGui.GetContentRegionAvail().X + ImGui.GetCursorPosX();
-        var style = ImGui.GetStyle();
-        var innerSpacing = style.ItemInnerSpacing.X + (style.FramePadding.X * 2);
         foreach (var column in collapsed)
         {
-            startPosition -= ImguiUtils.GetButtonSize(column.Drawer.DisplayName).X;
+            startPosition -= column.Drawer.LastDrawnSize.X;
             //startPosition -= ImGui.CalcTextSize(column.Drawer.DisplayName).X + innerSpacing;
         }
         
@@ -152,6 +158,9 @@ public sealed partial class FileManager : IImguiDrawer<string>, IFileManager
         foreach (var column in collapsed)
         {
             var drawer = column.Drawer;
+            drawer.Draw(fonts, true);
+            ImGui.SameLine();
+            continue;
             if (ImGui.Button(drawer.DisplayName + "##expand_" + drawer.Path))
             {
                 column.Drawn = true;

@@ -88,7 +88,7 @@ internal class FileDrawer : FileSystemDrawer
         ImGui.Text(_relativePathDisplay);
     }
     
-    protected sealed override FileSystemInfo FileSystemInfo => _file;
+    protected internal sealed override FileSystemInfo FileSystemInfo => _file;
     
     public void DrawFileFormat(ImFonts fonts)
     {
