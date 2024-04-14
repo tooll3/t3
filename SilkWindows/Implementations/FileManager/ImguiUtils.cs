@@ -3,7 +3,7 @@ using ImGuiNET;
 
 namespace SilkWindows.Implementations.FileManager;
 
-public class ImguiUtils
+internal static class ImguiUtils
 {
     public static Vector2 GetButtonSize(string text, bool useSpacing = true)
     {
