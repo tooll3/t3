@@ -182,7 +182,10 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         drawList.ChannelsSplit(2);
         drawList.ChannelsSetCurrent(1);
         
-        ImGui.SetCursorScreenPos(originalCursorPosition with { X = originalCursorPosition.X + tabCornerRadius });
+        var newCursorPos = new Vector2(x: originalCursorPosition.X + tabCornerRadius, // make sure curves of tab dont intersect with text 
+                                       y: originalCursorPosition.Y + ImGui.GetStyle().FramePadding.Y); // vertically center (see offsets applied below)
+        
+        ImGui.SetCursorScreenPos(newCursorPos);
         // draw the standard selectable
         
         var expanded = Expanded;
