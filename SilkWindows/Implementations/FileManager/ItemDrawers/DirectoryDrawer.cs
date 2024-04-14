@@ -199,7 +199,8 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         {
             // HACK - scale when dragged fills the full width and i cant figure out why - the only reason i can assume is because the function
             // is being called outside of the table ID stack in the file manager. I don't care to fix that right now because damn this is hard
-            max.X = newCursorPos.X + ImguiUtils.GetButtonSize(DisplayName).X + ImguiUtils.GetButtonSize("_").X;
+            max.X = newCursorPos.X + ImguiUtils.GetButtonSize(DisplayName).X + ImguiUtils.GetButtonSize("_").X + 
+                    (newCursorPos.X - originalCursorPosition.X) + tabCornerRadius;
         }
         
         // change to bottom channel
