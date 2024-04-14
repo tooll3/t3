@@ -20,7 +20,7 @@ internal interface IFileManager
     public void ShowInSystemFileManager(FileSystemDrawer drawer);
     public void Log(FileSystemDrawer drawer, string log);
     void CreateNewSubfolder(DirectoryDrawer directoryDrawer, bool consumeDroppedFiles = false);
-    public bool IsDropTarget(FileSystemDrawer directoryDrawer);
+    public bool IsDropTarget(FileSystemDrawer directoryDrawer, out DirectoryDrawer targetDir);
     
     public string FormatPathForDisplay(string path);
     public void BeginDragOn(FileSystemDrawer drawer);

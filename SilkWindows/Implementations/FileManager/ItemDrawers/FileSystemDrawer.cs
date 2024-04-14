@@ -31,9 +31,8 @@ public abstract class FileSystemDrawer
     
     protected bool IsHovered() => ImGui.IsItemHovered(HoverFlags);
     
-    const ImGuiHoveredFlags FileDragHoverFlags = ImGuiHoveredFlags.AllowWhenOverlappedByItem 
-                                                 | ImGuiHoveredFlags.DelayNone 
-                                                 | ImGuiHoveredFlags.AllowWhenBlockedByPopup;
+    const ImGuiHoveredFlags FileDragHoverFlags =  ImGuiHoveredFlags.DelayNone 
+                                                 | ImGuiHoveredFlags.AllowWhenBlockedByActiveItem;
     
     protected bool HoveredByFileDrag(ImGuiHoveredFlags flags = FileDragHoverFlags) =>
         FileManager.IsDraggingPaths && ImGui.IsItemHovered(flags);
@@ -80,13 +79,15 @@ public abstract class FileSystemDrawer
             }
         }
         
-        var isDropTarget = hoveredByFileDrag && FileManager.IsDropTarget(this);
         
-        if (isDropTarget)
+        if (hoveredByFileDrag && FileManager.IsDropTarget(this, out var targetDirDrawer))
         {
-            ImGui.Indent();
-            ImGui.SeparatorText("Drop files here");
-            ImGui.Unindent();
+            var imTheTarget = targetDirDrawer == this;
+            if(imTheTarget)
+                ImGui.Indent();
+            ImGui.SeparatorText($"Drop in \"{targetDirDrawer.DisplayName}\"");
+            if(imTheTarget)
+                ImGui.Unindent();
         }
         else if (!missing)
         {

@@ -17,6 +17,8 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     private readonly List<FileDrawer> _files = [];
     
     public override bool IsReadOnly { get; }
+    
+    // todo : this is very ugly, only the roots do this and there is definitely a better way
     internal Vector2 LastDrawnSize { get; private set; }
     
     private readonly record struct FileTableColumn(string Name, ImGuiTableColumnFlags Flags, Action<FileDrawer, ImFonts> DrawAction);
@@ -44,7 +46,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         
         var buttonIdSuffix = "##" + DisplayName;
         _expandedButtonLabel = (IsRoot ? "_" : IFileManager.ExpandedButtonLabel) + buttonIdSuffix;
-        _collapsedButtonLabel = IFileManager.CollapsedButtonLabel + buttonIdSuffix;
+        _collapsedButtonLabel = (IsRoot ? DisplayName : IFileManager.CollapsedButtonLabel) + buttonIdSuffix;
         _newSubfolderLabel = "*New subfolder" + buttonIdSuffix;
         _fileTableLabel = "File table" + buttonIdSuffix;
         
@@ -129,20 +131,30 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         }
         else
         {
-            DrawStandardSelectable(fonts.Regular, fonts.Regular, isSelected, false);
+            _ = DrawMinimizeMaximizeButton(fonts.Regular);
+            DrawStandardSelectable(fonts.Regular, isSelected, false);
         }
     }
     
     /// <summary>
     /// Returns true is button was pressed
     /// </summary>
-    private bool DrawStandardSelectable(ImFontPtr buttonFont, ImFontPtr textFont, bool isSelected, bool expanded,
+    private void DrawStandardSelectable(ImFontPtr textFont, bool isSelected, bool forceExpandHorizontally,
                                         ImGuiSelectableFlags flags = ImGuiSelectableFlags.None)
+    {
+        // text
+        ImGui.PushFont(textFont);
+        ImGui.SameLine();
+        DrawTouchPaddedSelectable(DisplayName, isSelected, forceExpandHorizontally, flags);
+        ImGui.PopFont();
+    }
+    
+    private bool DrawMinimizeMaximizeButton(ImFontPtr buttonFont)
     {
         var clicked = false;
         
         // expand / collapse button
-        var expandCollapseLabel = expanded ? _expandedButtonLabel : _collapsedButtonLabel;
+        var expandCollapseLabel = Expanded ? _expandedButtonLabel : _collapsedButtonLabel;
         ImGui.PushFont(buttonFont);
         if (ImGui.Button(expandCollapseLabel))
         {
@@ -151,19 +163,6 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         }
         
         ImGui.PopFont();
-        var min = ImGui.GetItemRectMin();
-        var max = ImGui.GetItemRectMax();
-        
-        // text
-        ImGui.PushFont(textFont);
-        ImGui.SameLine();
-        DrawTouchPaddedSelectable(DisplayName, isSelected, expanded, flags);
-        ImGui.PopFont();
-        
-        min = Vector2.Min(ImGui.GetItemRectMin(), min);
-        max = Vector2.Max(ImGui.GetItemRectMax(), max);
-        LastDrawnSize = max - min;
-        
         return clicked;
     }
     
@@ -181,7 +180,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         var originalCursorPosition = ImGui.GetCursorScreenPos();
         
         // ensure button and label don't intersect with curved tab corners
-        float tabCornerRadius = 8f; //ImGui.GetStyle().TabRounding;
+        float tabCornerRadius = ImGui.GetStyle().TabRounding;
         
         // -------- Split channel drawing --------
         
@@ -190,39 +189,50 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         drawList.ChannelsSplit(2);
         drawList.ChannelsSetCurrent(1);
         
-        var newCursorPos = new Vector2(x: originalCursorPosition.X + tabCornerRadius, // make sure curves of tab dont intersect with text 
-                                       y: originalCursorPosition.Y + ImGui.GetStyle().FramePadding.Y); // vertically center (see offsets applied below)
+        var expanded = Expanded; 
+        
+        // make sure curves of tab dont intersect with text 
+        var newCursorPos = originalCursorPosition with {X = originalCursorPosition.X + tabCornerRadius};
+        
+        if (expanded) // vertically center (see offsets applied below)
+            newCursorPos.Y += ImGui.GetStyle().FramePadding.Y;
         
         ImGui.SetCursorScreenPos(newCursorPos);
         // draw the standard selectable
         
-        var expanded = Expanded;
         var flags = expanded ? ImGuiSelectableFlags.None : ImGuiSelectableFlags.Disabled;
         
-        var clicked = DrawStandardSelectable(fonts.Large, fonts.Large, false, expanded, flags);
-        
-        // capture where the selectable ends
+        var clicked = DrawMinimizeMaximizeButton(fonts.Large);
         var max = ImGui.GetItemRectMax();
-        if (!expanded)
+        ImDrawFlags cornerFlags;
+        if (expanded)
         {
-            // HACK - scale when dragged fills the full width and i cant figure out why - the only reason i can assume is because the function
-            // is being called outside of the table ID stack in the file manager. I don't care to fix that right now because damn this is hard
-            max.X = newCursorPos.X + ImguiUtils.GetButtonSize(DisplayName).X + ImguiUtils.GetButtonSize("_").X + 
-                    (newCursorPos.X - originalCursorPosition.X) + tabCornerRadius;
+            DrawStandardSelectable(fonts.Large, false, expanded, flags);
+            max = Vector2.Max(max, ImGui.GetItemRectMax());
+            
+            // modify drawing scale for tab-like display
+            var style = ImGui.GetStyle();
+            Vector2 tweakScaleToMatchStyle = new(x: -style.WindowPadding.X + style.CellPadding.X, // we are in a window inside a table cell
+                                                 y: style.FramePadding.Y +
+                                                    style.SeparatorTextPadding.Y); // buttons have a frame padding and we draw a separator beneath us
+            
+            max = max + tweakScaleToMatchStyle;
+            
+            cornerFlags = ImDrawFlags.RoundCornersTop;
+        }
+        else
+        {
+            max.X += tabCornerRadius;
+            cornerFlags = ImDrawFlags.RoundCornersAll;
         }
         
         // change to bottom channel
         drawList.ChannelsSetCurrent(0);
         
         // draw a tab-like outline
-        var style = ImGui.GetStyle();
-        Vector2 tweakScaleToMatchStyle = new(x: -style.WindowPadding.X + style.CellPadding.X, // we are in a window inside a table cell
-                                             y: style.FramePadding.Y + style.SeparatorTextPadding.Y); // buttons have a frame padding and we draw a separator beneath us
+        drawList.AddRectFilled(originalCursorPosition, max, bgColor, tabCornerRadius, cornerFlags);
         
-        var newMax = max + tweakScaleToMatchStyle;
-        drawList.AddRectFilled(originalCursorPosition, newMax, bgColor, tabCornerRadius, ImDrawFlags.RoundCornersTop);
-        
-        LastDrawnSize = newMax - originalCursorPosition;
+        LastDrawnSize = max - originalCursorPosition;
         
         // merge channels
         drawList.ChannelsMerge();
@@ -249,8 +259,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         var style = ImGui.GetStyle();
         var currentPadding = style.TouchExtraPadding;
         
-        style.TouchExtraPadding = currentPadding with { Y = style.ItemSpacing.Y + style.FramePadding.Y };
-        
+        style.TouchExtraPadding = currentPadding with { Y = style.FramePadding.Y };
         
         if (expandHorizontally)
         {
@@ -271,7 +280,6 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         ImGui.Text("Last modified: " + FileSystemInfo.LastWriteTime.ToShortDateString());
         ImGui.PopFont();
     }
-    
     
     protected override void CompleteDraw(ImFonts fonts, bool hovered, bool isSelected)
     {
