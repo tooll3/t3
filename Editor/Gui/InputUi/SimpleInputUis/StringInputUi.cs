@@ -142,6 +142,13 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             if (warning != string.Empty)
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAnimated.Rgba);
 
+            var fileManagerOpen = _fileManagerOpen;
+            
+            if (fileManagerOpen)
+            {
+                ImGui.BeginDisabled();
+            }
+            
             string[] uiFilter;
             if(filter == null)
                 uiFilter = Array.Empty<string>();
@@ -176,32 +183,42 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             
             ImGui.SameLine();
             //var modifiedByPicker = FileOperations.DrawFileSelector(type, ref value, filter);
+            
             if (ImGui.Button("...##fileSelector"))
             {
-                var managedDirectories = packagesInCommon
-                                                         .OrderBy(x => !x.IsReadOnly)
-                                                         .Select(x => new ManagedDirectory(x.ResourcesFolder, x.IsReadOnly, !x.IsReadOnly, x.Alias));
-                
-                var fileManagerMode = type == FileOperations.FilePickerTypes.File ? FileManagerMode.PickFile : FileManagerMode.PickDirectory;
-                
-                Func<string, bool> filterFunc = fileFiltersInCommon.Length == 0
-                                                    ? str => true
-                                                    : str => fileFiltersInCommon.Any(x => StringUtils.MatchesFilter(str, x, true));
-                
-                var fileManager = new FileManager(fileManagerMode, managedDirectories, filterFunc);
-                var options = new SimpleWindowOptions(new Vector2(960, 600), 60, true, true);
-                var fileManagerResult = ImGuiWindowService.Instance.Show("Select a path", fileManager, options);
-                
-                if (fileManagerResult != null)
-                {
-                    value = fileManagerResult.RelativePathWithAlias ?? fileManagerResult.RelativePath;
-                }
-                
-                inputEditStateFlags = InputEditStateFlags.Modified | InputEditStateFlags.Finished;
+                OpenFileManager(type, ref value, packagesInCommon, fileFiltersInCommon, true);
             }
+            
+            if (fileManagerOpen)
+            {
+                ImGui.EndDisabled();
+            }
+            
+            // refresh value because 
+            
+            string? fileManValue;
+            lock (_fileManagerResultLock)
+                fileManValue = _latestFileManagerResult;
+            
+            var valueIsUpdated = !string.IsNullOrEmpty(fileManValue) && fileManValue != value;
+            
+            if (valueIsUpdated)
+            {
+                value = fileManValue;
+                inputEditStateFlags |= InputEditStateFlags.Modified;
+            }
+            
+            if (_hasClosedFileManager)
+            {
+                _hasClosedFileManager = false;
+                inputEditStateFlags |= InputEditStateFlags.Finished;
+            }
+            
             return inputEditStateFlags;
         }
-
+        
+     
+        
         private static bool DrawDefaultTextEdit(ref string value)
         {
             return ImGui.InputText("##textEdit", ref value, MaxStringLength);
@@ -314,5 +331,72 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
 
             FileFilter = inputToken[nameof(FileFilter)]?.Value<string>();
         }
+        
+        private static void OpenFileManager(FileOperations.FilePickerTypes type, ref string value,
+                                                           IResourcePackage[] packagesInCommon, string[] fileFiltersInCommon, bool async)
+        {
+            InputEditStateFlags inputEditStateFlags;
+            var managedDirectories = packagesInCommon
+                                    .OrderBy(x => !x.IsReadOnly)
+                                    .Select(x => new ManagedDirectory(x.ResourcesFolder, x.IsReadOnly, !x.IsReadOnly, x.Alias));
+            
+            var fileManagerMode = type == FileOperations.FilePickerTypes.File ? FileManagerMode.PickFile : FileManagerMode.PickDirectory;
+            
+            Func<string, bool> filterFunc = fileFiltersInCommon.Length == 0
+                                                ? str => true
+                                                : str => fileFiltersInCommon.Any(x => StringUtils.MatchesFilter(str, x, true));
+            
+            var options = new SimpleWindowOptions(new Vector2(960, 600), 60, true, true);
+            if (!async)
+            {
+                StartFileManagerBlocking();
+            }
+            else
+            {
+                StartFileManagerAsync();
+            }
+            
+            return;
+            
+            void StartFileManagerAsync()
+            {
+                var fileManager = new FileManager(fileManagerMode, managedDirectories, filterFunc)
+                                      {
+                                          CloseOnResult = false,
+                                          ClosingCallback = () =>
+                                                            {
+                                                                _hasClosedFileManager = true;
+                                                                _fileManagerOpen = false;
+                                                            }
+                                      };
+                _fileManagerOpen = true;
+                _ = ImGuiWindowService.Instance.ShowAsync("Select a path", fileManager, (result) =>
+                                                                                        {
+                                                                                            lock(_fileManagerResultLock)
+                                                                                                _latestFileManagerResult = result.RelativePathWithAlias ?? result.RelativePath;
+                                                                                            
+                                                                                        }, options);
+            }
+            
+            void StartFileManagerBlocking()
+            {
+                var fileManager = new FileManager(fileManagerMode, managedDirectories, filterFunc);
+                _fileManagerOpen = true;
+                var fileManagerResult = ImGuiWindowService.Instance.Show("Select a path", fileManager, options);
+                _fileManagerOpen = false;
+                
+                if (fileManagerResult != null)
+                {
+                    _latestFileManagerResult = fileManagerResult.RelativePathWithAlias ?? fileManagerResult.RelativePath;
+                }
+                
+                _hasClosedFileManager = true;
+            }
+        }
+        
+        private static string? _latestFileManagerResult;
+        private static bool _fileManagerOpen;
+        private static readonly object _fileManagerResultLock = new();
+        private static bool _hasClosedFileManager;
     }
 }
