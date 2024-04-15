@@ -7,7 +7,7 @@ namespace SilkWindows.Implementations.FileManager;
 
 public sealed partial class FileManager
 {
-    public void OnFileDrop(string[] filePaths)
+    public override void OnFileDrop(string[] filePaths)
     {
         _droppedPaths = FileOperations.PathsToFileSystemInfo(filePaths).ToArray();
     }
@@ -89,7 +89,7 @@ public sealed partial class FileManager
             return;
         }
         
-        if (TryDropPathsInto(directoryDrawer.RootDirectory, directoryDrawer.DirectoryInfo, droppedPaths))
+        if (TryDropPathsInto(directoryDrawer.RootDirectory.DirectoryInfo, directoryDrawer.DirectoryInfo, droppedPaths))
         {
             directoryDrawer.MarkNeedsRescan();
         }

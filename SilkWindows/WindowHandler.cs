@@ -8,7 +8,7 @@ namespace SilkWindows;
 
 internal sealed class WindowHandler
 {
-    public WindowHandler(WindowOptions options, IImguiDrawer drawer, string title, FontPack? fontPack)
+    public WindowHandler(WindowOptions options, IImguiDrawer drawer, string title, FontPack? fontPack, object imguiContextLockObj)
     {
         var windowOptions = options;
         windowOptions.API = GraphicsAPI.Default;
@@ -17,6 +17,7 @@ internal sealed class WindowHandler
         _drawer = drawer;
         _windowTitle = title;
         _fontPack = fontPack;
+        _imguiContextLock = imguiContextLockObj;
     }
     
     public void RunUntilClosed()
@@ -28,7 +29,10 @@ internal sealed class WindowHandler
         _window.Run();
         UnsubscribeFromWindow();
         Dispose();
-        _imguiHandler?.RestoreContext();
+        
+        Console.WriteLine($"Disposed of window {_windowTitle} ({_drawer.GetType()})");
+        
+        return;
         
         void Dispose()
         {
@@ -86,29 +90,43 @@ internal sealed class WindowHandler
         Console.WriteLine("Starting render");
         #endif
         
-        _graphicsContext!.ClearColor(_imguiHandler!.ClearColor);
-        _graphicsContext.Clear(ClearBufferMask.ColorBufferBit);
-        _imguiHandler!.Draw(_window.Size.ToVector2(), deltaTime);
+        lock (_imguiContextLock)
+        {
+            _graphicsContext!.ClearColor(_imguiHandler!.ClearColor);
+            _graphicsContext.Clear(ClearBufferMask.ColorBufferBit);
+            _imguiHandler!.Draw(_window.Size.ToVector2(), deltaTime);
+        }
     }
     
     private void OnLoad()
     {
         _inputContext = _window.CreateInput();
         _graphicsContext = _window.CreateOpenGL();
-        _imguiHandler = new ImGuiHandler(_inputContext, _window, _graphicsContext, _drawer, _windowTitle, _fontPack);
+        lock (_imguiContextLock)
+        {
+            _imguiHandler = new ImGuiHandler(_inputContext, _window, _graphicsContext, _drawer, _windowTitle, _fontPack, _imguiContextLock);
+        }
+        Console.WriteLine("Created imgui context");
     }
     
     private void OnClose()
     {
-        _drawer.OnClose();
-        _imguiHandler?.DisposeOfImguiContext();
+        lock (_imguiContextLock)
+        {
+            _drawer.OnClose();
+            _imguiHandler?.DisposeOfImguiContext();
+        }
+        
+        Console.WriteLine("Closed and disposed of imgui context");
     }
     
     private void OnWindowUpdate(double deltaSeconds)
     {
         _drawer.OnWindowUpdate(deltaSeconds, out var shouldClose);
         if (shouldClose)
+        {
             _window.Close();
+        }
     }
     
     private void OnWindowResize(Vector2D<int> size)
@@ -116,6 +134,7 @@ internal sealed class WindowHandler
         _graphicsContext!.Viewport(size);
     }
     
+    private readonly object _imguiContextLock;
     private readonly IImguiDrawer _drawer;
     private IWindow _window;
     private IInputContext? _inputContext;

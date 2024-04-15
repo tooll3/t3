@@ -14,7 +14,7 @@ public abstract class FileSystemDrawer
         ParentDirectoryDrawer = parent;
     }
     
-    internal DirectoryInfo RootDirectory => ParentDirectoryDrawer == null ? new DirectoryInfo(FileSystemInfo.FullName) : ParentDirectoryDrawer.RootDirectory;
+    internal abstract DirectoryDrawer RootDirectory { get; }
     public abstract bool IsReadOnly { get; }
     internal abstract bool IsDirectory { get; }
     internal abstract string DisplayName { get; }

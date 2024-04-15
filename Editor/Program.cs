@@ -26,7 +26,7 @@ namespace T3.Editor
 {
     internal static class Program
     {
-        public static IUiContentDrawer<SharpDX.Direct3D11.Device, ImDrawDataPtr> UiContentContentDrawer;
+        public static IUiContentDrawer UiContentContentDrawer;
         public static Device Device { get; private set; }
 
         public static Version Version => RuntimeAssemblies.Version;
@@ -54,7 +54,11 @@ namespace T3.Editor
             Console.WriteLine("Starting T3 Editor");
             Console.WriteLine("Creating EditorUi");
             EditorUi.Instance = new MsFormsEditor();
-            BlockingWindow.Instance = new SilkWindowProvider();
+            
+            var windowProvider = new SilkWindowProvider();
+            var imguiContextLock = windowProvider.ContextLock;
+            ImGuiWindowService.Instance = windowProvider;
+            BlockingWindow.Instance = windowProvider;
 
             Console.WriteLine("Creating DX11ShaderCompiler");
             ShaderCompiler.Instance = new DX11ShaderCompiler();
@@ -114,8 +118,9 @@ namespace T3.Editor
             shaderCompiler.Device = device;
 
             Log.Debug($"About to initialize UiContentContentDrawer");
-            UiContentContentDrawer = new WindowsUiContentDrawer();
-            UiContentContentDrawer.Initialize(device, ProgramWindows.Main.Width, ProgramWindows.Main.Height);
+            var contentDrawer = new WindowsUiContentDrawer();
+            UiContentContentDrawer = contentDrawer;
+            contentDrawer.Initialize(device, ProgramWindows.Main.Width, ProgramWindows.Main.Height, imguiContextLock, out var context);
 
             Log.Debug($"About to initialize Camera Interaction");
             var spaceMouse = new SpaceMouse(ProgramWindows.Main.HwndHandle);
@@ -141,21 +146,13 @@ namespace T3.Editor
             }
 
             SymbolAnalysis.UpdateUsagesOnly();
-
-            ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DpiEnableScaleFonts;
-            ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DpiEnableScaleViewports;
-
-            UiContentUpdate.GenerateFontsWithScaleFactor(UserSettings.Config.UiScaleFactor);
-
+            
+            UiContentContentDrawer.InitializeScaling();
+            UiContentUpdate.CheckScaling();
+            
             // Setup file watching the operator source
             T3Ui.InitializeEnvironment();
-
-            unsafe
-            {
-                // Disable ImGui ini file settings
-                ImGui.GetIO().NativePtr->IniFilename = null;
-            }
-
+            
             Log.RemoveWriter(splashScreen);
             splashScreen.Close();
             splashScreen.Dispose();
@@ -171,8 +168,9 @@ namespace T3.Editor
             UiContentUpdate.StartMeasureFrame();
 
             T3Style.Apply();
-
-            ProgramWindows.Main.RunRenderLoop(UiContentUpdate.RenderCallback);
+            
+            // ReSharper disable once AccessToDisposedClosure
+            ProgramWindows.Main.RunRenderLoop(UiContentContentDrawer.RenderCallback);
             IsShuttingDown = true;
 
             try
