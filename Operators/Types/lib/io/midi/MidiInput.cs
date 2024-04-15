@@ -130,11 +130,8 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                         _valuesForControlRange[index] = signal.ControllerValue;
                     }
 
-                    if (hasValueChanged && signal.ControllerValue > 0 && !Control.IsConnected)
-                    {
-                        Control.Value = _currentControllerId;
+                    if (hasValueChanged && signal.ControllerValue > 0)
                         wasHit = true;
-                    }
                     
                     LastMessageTime = Playback.RunTimeInSecs;
                     _isDefaultValue = false;
@@ -226,7 +223,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                 if (msg.MidiEvent is ControlChangeEvent controlEvent)
                 {
                     if (_printLogMessages)
-                        Log.Debug($"{device}/{controlEvent}  ControlValue :{controlEvent.ControllerValue}", this);
+                        Log.Debug($"{device}/{controlEvent}", this);
 
                     if (!UseControlRange)
                     {
