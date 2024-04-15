@@ -29,8 +29,7 @@ internal sealed class NewSubfolderWindow(DirectoryInfo directoryInfo) : IImguiDr
         {
             try
             {
-                directoryInfo.CreateSubdirectory(_newSubfolderInput);
-                var newSubdirectory = new DirectoryInfo(_newSubfolderInput);
+                var newSubdirectory = directoryInfo.CreateSubdirectory(_newSubfolderInput);
                 if (newSubdirectory.Exists)
                 {
                     Result = newSubdirectory;
