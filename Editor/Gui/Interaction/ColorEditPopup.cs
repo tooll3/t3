@@ -3,6 +3,7 @@ using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.App;
 using T3.Editor.Gui.Graph;
@@ -717,7 +718,7 @@ namespace T3.Editor.Gui.Interaction
 
         private static Color GetColorAtMousePosition()
         {
-            var pos = UiContentUpdate.CursorPosOnScreen;
+            var pos = CoreUi.Instance.Cursor.PositionVec;
             var x = (int)pos.X;
             var y = (int)pos.Y;
 

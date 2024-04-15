@@ -16,22 +16,40 @@ internal sealed class NewSubfolderWindow(DirectoryInfo directoryInfo) : IImguiDr
         ImGui.Text("Enter name for new subfolder:");
         ImGui.PopFont();
         
-        ImGui.InputText("##newSubfolderInput", ref _newSubfolderInput, 32);
+        if (ImGui.InputText("##newSubfolderInput", ref _newSubfolderInput, 32))
+        {
+            _inputValid = _newSubfolderInput.Length > 0
+                          && _newSubfolderInput.IndexOfAny(Path.GetInvalidFileNameChars()) < 0;
+        }
+        
+        if(!_inputValid)
+            ImGui.BeginDisabled();
         
         if (ImGui.Button("Create"))
         {
             try
             {
                 directoryInfo.CreateSubdirectory(_newSubfolderInput);
-                Result = new DirectoryInfo(_newSubfolderInput);
-                _shouldClose = true;
-                _errorText = "";
+                var newSubdirectory = new DirectoryInfo(_newSubfolderInput);
+                if (newSubdirectory.Exists)
+                {
+                    Result = newSubdirectory;
+                    _shouldClose = true;
+                    _errorText = "";
+                }
+                else
+                {
+                    _errorText = "Failed to create subfolder";
+                }
             }
             catch (Exception e)
             {
                 _errorText = e.Message;
             }
         }
+        
+        if(!_inputValid)
+            ImGui.EndDisabled();
         
         if (!string.IsNullOrWhiteSpace(_errorText))
         {
@@ -70,5 +88,6 @@ internal sealed class NewSubfolderWindow(DirectoryInfo directoryInfo) : IImguiDr
     
     private string _errorText = "";
     private bool _shouldClose;
+    private bool _inputValid;
     private string _newSubfolderInput = "";
 }

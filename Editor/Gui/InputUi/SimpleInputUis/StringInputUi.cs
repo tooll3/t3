@@ -1,9 +1,12 @@
 ﻿using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SilkWindows;
+using SilkWindows.Implementations.FileManager;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -151,7 +154,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                                      .Where(x => x is IDescriptiveFilename)
                                      .Cast<IDescriptiveFilename>()
                                      .Select(x => x.FileFilter)
-                                     .Aggregate((a, b) => a.Intersect(b))
+                                     .Aggregate(Enumerable.Empty<string>(), (a, b) => a.Intersect(b))
                                      .Concat(uiFilter)
                                      .Where(s => !string.IsNullOrWhiteSpace(s))
                                      .Distinct()
@@ -164,17 +167,36 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             if (warning != string.Empty)
                 ImGui.PopStyleColor();
 
-            if (ImGui.IsItemHovered() && ImGui.CalcTextSize(value).X > ImGui.GetItemRectSize().X)
+            if (ImGui.IsItemHovered() && value.Length > 0 && ImGui.CalcTextSize(value).X > ImGui.GetItemRectSize().X)
             {
                 ImGui.BeginTooltip();
                 ImGui.TextUnformatted(warning + value);
                 ImGui.EndTooltip();
             }
-
+            
             ImGui.SameLine();
-            var modifiedByPicker = FileOperations.DrawFileSelector(type, ref value, filter);
-            if (modifiedByPicker)
+            //var modifiedByPicker = FileOperations.DrawFileSelector(type, ref value, filter);
+            if (ImGui.Button("...##fileSelector"))
             {
+                var managedDirectories = packagesInCommon
+                                                         .OrderBy(x => !x.IsReadOnly)
+                                                         .Select(x => new ManagedDirectory(x.ResourcesFolder, x.IsReadOnly, !x.IsReadOnly, x.Alias));
+                
+                var fileManagerMode = type == FileOperations.FilePickerTypes.File ? FileManagerMode.PickFile : FileManagerMode.PickDirectory;
+                
+                Func<string, bool> filterFunc = fileFiltersInCommon.Length == 0
+                                                    ? str => true
+                                                    : str => fileFiltersInCommon.Any(x => StringUtils.MatchesFilter(str, x, true));
+                
+                var fileManager = new FileManager(fileManagerMode, managedDirectories, filterFunc);
+                var options = new SimpleWindowOptions(new Vector2(960, 600), 60, true, true);
+                var fileManagerResult = ImGuiWindowService.Instance.Show("Select a path", fileManager, options);
+                
+                if (fileManagerResult != null)
+                {
+                    value = fileManagerResult.RelativePathWithAlias ?? fileManagerResult.RelativePath;
+                }
+                
                 inputEditStateFlags = InputEditStateFlags.Modified | InputEditStateFlags.Finished;
             }
             return inputEditStateFlags;

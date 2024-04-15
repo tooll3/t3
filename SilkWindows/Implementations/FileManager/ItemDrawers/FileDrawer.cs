@@ -9,6 +9,7 @@ internal class FileDrawer : FileSystemDrawer
     internal sealed override string DisplayName => _file.Name;
     internal sealed override string Path => _file.FullName;
     internal sealed override bool IsDirectory => false;
+    internal override DirectoryDrawer RootDirectory => ParentDirectoryDrawer!.RootDirectory;
     public sealed override bool IsReadOnly => ParentDirectoryDrawer!.IsReadOnly;
     
     static FileDrawer()

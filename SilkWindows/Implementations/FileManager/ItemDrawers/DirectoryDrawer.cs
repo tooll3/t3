@@ -16,6 +16,8 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     private readonly List<DirectoryDrawer> _directories = [];
     private readonly List<FileDrawer> _files = [];
     
+    internal override DirectoryDrawer RootDirectory => ParentDirectoryDrawer == null ? this : ParentDirectoryDrawer.RootDirectory;
+    public readonly string? Alias;
     public override bool IsReadOnly { get; }
     
     // todo : this is very ugly, only the roots do this and there is definitely a better way
@@ -43,6 +45,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         IsReadOnly = isReadOnly;
         IsRoot = parent == null;
         DisplayName = string.IsNullOrEmpty(alias) ? DirectoryInfo.Name : '/' + alias;
+        Alias = alias;
         
         var buttonIdSuffix = "##" + DisplayName;
         _expandedButtonLabel = (IsRoot ? "_" : IFileManager.ExpandedButtonLabel) + buttonIdSuffix;
@@ -61,7 +64,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         
         if (topParent != null)
         {
-            var relativePath = System.IO.Path.GetRelativePath(topParent.RootDirectory.FullName, directory.FullName);
+            var relativePath = System.IO.Path.GetRelativePath(topParent.RootDirectory.Path, directory.FullName);
             var relativeDirectory = System.IO.Path.Combine(topParent.DisplayName, relativePath);
             _relativeDirectory = fileManager.FormatPathForDisplay(relativeDirectory);
         }
@@ -166,7 +169,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         return clicked;
     }
     
-    void DrawRootSelectable(ImFonts fonts)
+    private void DrawRootSelectable(ImFonts fonts)
     {
         // prevent selectable highlighting we don't want, blend foreground with background
         var transparent = ImGui.GetColorU32(Vector4.Zero);
@@ -189,10 +192,10 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         drawList.ChannelsSplit(2);
         drawList.ChannelsSetCurrent(1);
         
-        var expanded = Expanded; 
+        var expanded = Expanded;
         
         // make sure curves of tab dont intersect with text 
-        var newCursorPos = originalCursorPosition with {X = originalCursorPosition.X + tabCornerRadius};
+        var newCursorPos = originalCursorPosition with { X = originalCursorPosition.X + tabCornerRadius };
         
         if (expanded) // vertically center (see offsets applied below)
             newCursorPos.Y += ImGui.GetStyle().FramePadding.Y;
@@ -329,17 +332,17 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
                 
                 foreach (var file in _files)
                 {
-                    if (!file.FileSystemInfo.Exists)
-                    {
-                        _needsRescan = true; // redundant but just in case
-                        continue;
-                    }
-                    
                     ImGui.TableNextRow();
                     for (int i = 0; i < columnCount; i++)
                     {
                         if (ImGui.TableNextColumn())
                         {
+                            if (!file.FileSystemInfo.Exists)
+                            {
+                                _needsRescan = true; // redundant but just in case
+                                continue;
+                            }
+                            
                             _fileTableColumns[i].DrawAction(file, fonts);
                         }
                     }

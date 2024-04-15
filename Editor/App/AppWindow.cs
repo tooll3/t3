@@ -107,7 +107,7 @@ namespace T3.Editor.App
             _deviceContext.ClearRenderTargetView(RenderTargetView, sharpDxColor);
         }
 
-        internal void RunRenderLoop(RenderLoop.RenderCallback callback) => RenderLoop.Run(Form, callback);
+        internal void RunRenderLoop(Action callback) => RenderLoop.Run(Form, () => callback());
 
         internal void SetSize(int width, int height) => Form.ClientSize = new Size(width, height);
 

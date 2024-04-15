@@ -12,7 +12,9 @@ public sealed class ImFonts(ImFontPtr[] fonts)
     public ImFontPtr Large => HasFonts ? fonts[3] : ImGui.GetIO().Fonts.Fonts[0];
 }
 
-public interface IImguiWindowProvider : IPopUpWindowProvider
+public interface IImguiWindowProvider
 {
+    public object ContextLock { get; }
+    public void SetFonts(FontPack fontPack);
     public TData? Show<TData>(string title, IImguiDrawer<TData> drawer, in SimpleWindowOptions? options = null);
 }

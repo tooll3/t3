@@ -38,6 +38,7 @@ internal sealed partial class CsProjectFile
         
         propertyGroup.AddProperty(GetNameOf(PropertyType.RootNamespace), projectNamespace);
         propertyGroup.AddProperty(GetNameOf(PropertyType.HomeGuid), homeGuid.ToString());
+        propertyGroup.AddProperty(GetNameOf(PropertyType.AssemblyName), UnevaluatedVariable(GetNameOf(PropertyType.RootNamespace)));
     }
 
     private static void AddDefaultReferenceGroup(ProjectRootElement project)
