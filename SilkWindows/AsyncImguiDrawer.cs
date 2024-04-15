@@ -64,6 +64,8 @@ public abstract class AsyncImguiDrawer<T> : IImguiDrawer<T>
         
         _cts.Dispose();
         _resultEvent.Reset();
+        
+        ClosingCallback?.Invoke();
     }
     
     public abstract void OnFileDrop(string[] filePaths);
@@ -74,6 +76,8 @@ public abstract class AsyncImguiDrawer<T> : IImguiDrawer<T>
     protected abstract void OnWindowUpdateImpl(double deltaSeconds);
     
     public bool CloseOnResult { get; init; } = true;
+    
+    public Action? ClosingCallback { get; init; }
     
     public void ForceClose() => _cts.Cancel();
 }

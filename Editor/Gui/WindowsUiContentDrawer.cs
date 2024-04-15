@@ -47,7 +47,7 @@ public sealed class WindowsUiContentDrawer : IUiContentDrawer<Device>
         _deviceContext = device.ImmediateContext;
         _windowWidth = width;
         _windowHeight = height;
-        _contextLock = new();
+        _contextLock = contextLock;
         
         lock (_contextLock)
         {

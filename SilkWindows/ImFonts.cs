@@ -17,4 +17,6 @@ public interface IImguiWindowProvider
     public object ContextLock { get; }
     public void SetFonts(FontPack fontPack);
     public TData? Show<TData>(string title, IImguiDrawer<TData> drawer, in SimpleWindowOptions? options = null);
+    public Task ShowAsync(string title, IImguiDrawer drawer, SimpleWindowOptions? options = null);
+    public Task ShowAsync<TData>(string title, AsyncImguiDrawer<TData> drawer, Action<TData> assign, SimpleWindowOptions? options = null);
 }
