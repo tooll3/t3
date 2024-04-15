@@ -25,6 +25,11 @@ namespace lib.io.file
             var triggerUpdate = TriggerUpdate.GetValue(context);
             
             var filepath = FilePath.GetValue(context);
+            
+            if (string.IsNullOrEmpty(filepath))
+            {
+                return;
+            }
 
             if (!TryGetFilePath(filepath, out var absolutePath))
             {
