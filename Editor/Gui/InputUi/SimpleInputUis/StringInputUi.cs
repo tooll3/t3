@@ -335,10 +335,16 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
         private static void OpenFileManager(FileOperations.FilePickerTypes type, ref string value,
                                                            IResourcePackage[] packagesInCommon, string[] fileFiltersInCommon, bool async)
         {
-            InputEditStateFlags inputEditStateFlags;
-            var managedDirectories = packagesInCommon
+            var packages = packagesInCommon.Concat(ResourceManager.SharedResourcePacks);
+            if(fileFiltersInCommon.Contains("*.hlsl")) // todo - clean this up 
+            {
+                packages = packages.Concat(ResourceManager.SharedShaderPackages);
+            }
+            packages = packages.Distinct();
+            
+            var managedDirectories = packages
                                     .OrderBy(x => !x.IsReadOnly)
-                                    .Select(x => new ManagedDirectory(x.ResourcesFolder, x.IsReadOnly, !x.IsReadOnly, x.Alias));
+                                    .Select(x => new ManagedDirectory(x.ResourcesFolder, x.IsReadOnly, true, x.Alias));
             
             var fileManagerMode = type == FileOperations.FilePickerTypes.File ? FileManagerMode.PickFile : FileManagerMode.PickDirectory;
             
@@ -346,7 +352,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                                                 ? str => true
                                                 : str => fileFiltersInCommon.Any(x => StringUtils.MatchesFilter(str, x, true));
             
-            var options = new SimpleWindowOptions(new Vector2(960, 600), 60, true, true);
+            var options = new SimpleWindowOptions(new Vector2(960, 600), 60, true, true, false);
             if (!async)
             {
                 StartFileManagerBlocking();

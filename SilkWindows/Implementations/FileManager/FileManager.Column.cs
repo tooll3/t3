@@ -1,3 +1,4 @@
+using System.Numerics;
 using ImGuiNET;
 using SilkWindows.Implementations.FileManager.ItemDrawers;
 
@@ -7,9 +8,17 @@ public sealed partial class FileManager
 {
     private void DrawTable(ImFonts fonts, List<Column> expanded)
     {
-        const ImGuiTableFlags tableFlags = ImGuiTableFlags.Resizable;
-        const ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags.WidthStretch | ImGuiTableColumnFlags.NoHide |
-                                                  ImGuiTableColumnFlags.NoSort;
+        const ImGuiTableFlags tableFlags = ImGuiTableFlags.Resizable | ImGuiTableFlags.NoClip;
+        const ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags.NoHide |
+                                                  ImGuiTableColumnFlags.NoSort | ImGuiTableColumnFlags.NoHeaderWidth | ImGuiTableColumnFlags.WidthStretch;
+        const ImGuiWindowFlags windowFlags = ImGuiWindowFlags.ChildWindow | ImGuiWindowFlags.HorizontalScrollbar;
+        
+        var mouseDown = ImGui.IsMouseDown(ImGuiMouseButton.Middle);
+        
+        if (!mouseDown)
+        {
+            _dragScrollingColumn = null;
+        }
         
         if (ImGui.BeginTable(_tableId, expanded.Count, tableFlags))
         {
@@ -22,16 +31,33 @@ public sealed partial class FileManager
                 ImGui.TableSetupColumn(column.Id, columnFlags);
                 ImGui.TableSetColumnIndex(index);
                 
-                ImGui.BeginChild(directoryDrawer.Path);
+                ImGui.BeginChild(directoryDrawer.Path, new Vector2(0, 0), true, windowFlags);
+                
+                if (_dragScrollingColumn == column)
+                {
+                    var mousePos = ImGui.GetMousePos();
+                    var scroll = _dragStart - mousePos;
+                    ImGui.SetScrollX(scroll.X);
+                    ImGui.SetScrollY(scroll.Y);
+                }
                 
                 directoryDrawer.Draw(fonts);
                 
                 ImGui.EndChild();
+                
+                if(mouseDown && _dragScrollingColumn == null && ImGui.IsItemHovered(ImGuiHoveredFlags.ChildWindows))
+                {
+                    _dragScrollingColumn = column;
+                    _dragStart = ImGui.GetMousePos();
+                }
             }
             
             ImGui.EndTable();
         }
     }
+    
+    private Column? _dragScrollingColumn;
+    private Vector2 _dragStart;
     
     private sealed class Column
     {
