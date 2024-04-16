@@ -25,9 +25,10 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
     
     private readonly record struct FileTableColumn(string Name, ImGuiTableColumnFlags Flags, Action<FileDrawer, ImFonts> DrawAction);
     
-    private const ImGuiTableFlags FileTableFlags = ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerV | ImGuiTableFlags.SizingFixedFit;
-    private const ImGuiTableColumnFlags FileColumnFlags = ImGuiTableColumnFlags.None;
-    private const ImGuiTableColumnFlags ColumnFlags = ImGuiTableColumnFlags.None;
+    private const ImGuiTableFlags FileTableFlags =
+        ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerV | ImGuiTableFlags.SizingFixedFit;
+    private const ImGuiTableColumnFlags FileColumnFlags = ImGuiTableColumnFlags.NoResize;
+    private const ImGuiTableColumnFlags ColumnFlags = ImGuiTableColumnFlags.NoResize;
     
     private static readonly FileTableColumn[] _fileTableColumns =
         [
@@ -321,6 +322,8 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
             }
             
             var columnCount = _fileTableColumns.Length;
+            
+            // these tables get unfortunately squished https://github.com/ocornut/imgui/issues/6586
             if (_files.Count > 0 && ImGui.BeginTable(_fileTableLabel, columnCount, FileTableFlags))
             {
                 ImGui.TableNextRow();
@@ -335,16 +338,14 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
                     ImGui.TableNextRow();
                     for (int i = 0; i < columnCount; i++)
                     {
-                        if (ImGui.TableNextColumn())
+                        ImGui.TableNextColumn();
+                        if (!file.FileSystemInfo.Exists)
                         {
-                            if (!file.FileSystemInfo.Exists)
-                            {
-                                _needsRescan = true; // redundant but just in case
-                                continue;
-                            }
-                            
-                            _fileTableColumns[i].DrawAction(file, fonts);
+                            _needsRescan = true; // redundant but just in case
+                            continue;
                         }
+                        
+                        _fileTableColumns[i].DrawAction(file, fonts);
                     }
                 }
                 

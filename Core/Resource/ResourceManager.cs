@@ -197,6 +197,7 @@ namespace T3.Core.Resource
             SharedResourcePackages.Remove(resourcePackage);
         }
         
+        public static IReadOnlyList<IResourcePackage> SharedResourcePacks => SharedResourcePackages;
         private static readonly List<IResourcePackage> SharedResourcePackages = new(4);
         public static IReadOnlyList<IResourcePackage> SharedShaderPackages => ShaderPackages;
         private static readonly List<IResourcePackage> ShaderPackages = new(4);
