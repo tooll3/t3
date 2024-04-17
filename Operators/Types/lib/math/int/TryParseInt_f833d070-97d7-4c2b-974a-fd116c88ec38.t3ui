@@ -1,0 +1,31 @@
+{
+  "Id": "f833d070-97d7-4c2b-974a-fd116c88ec38"/*TryParseInt*/,
+  "Description": "Tries to parse a string to an integer, if failing, the default value is used instead.",
+  "InputUis": [
+    {
+      "InputId": "f8ce4dca-088f-48de-8613-5b83caeb8c2f"/*String*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "45002dd0-6035-4126-847f-d588b31389c5"/*Default*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "b494af0a-0010-4729-8b7e-cb9e8922545a"/*Result*/,
+      "Position": {
+        "X": 11.510208,
+        "Y": -18.285713
+      }
+    }
+  ]
+}
