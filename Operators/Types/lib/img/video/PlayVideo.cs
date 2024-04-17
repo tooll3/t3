@@ -356,11 +356,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                     return;
                 }
 
-                if (presentationTimeTicks == _lastStreamTick)
-                {
-                    _hasUpdatedTexture = false;
-                    return;
-                }
+                if (presentationTimeTicks == _lastStreamTick) return;
 
 
 
