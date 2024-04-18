@@ -13,7 +13,8 @@ namespace T3.Editor.Gui.Graph.Interaction
         {
             AssetFiles.Clear();
 
-            foreach (var directory in ResourceManager.SharedResourceFolders)
+            // we use the shared shader packages as that includes all packages with no exclusions
+            foreach (var directory in ResourceManager.SharedShaderPackages.Select(x => x.ResourcesFolder))
             {
                 ScanAssetDirectory(directory);
             }

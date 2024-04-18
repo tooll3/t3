@@ -186,7 +186,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             
             if (ImGui.Button("...##fileSelector"))
             {
-                OpenFileManager(type, ref value, packagesInCommon, fileFiltersInCommon, true);
+                OpenFileManager(type, packagesInCommon, fileFiltersInCommon, isFolder, async: true);
             }
             
             if (fileManagerOpen)
@@ -332,25 +332,22 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             FileFilter = inputToken[nameof(FileFilter)]?.Value<string>();
         }
         
-        private static void OpenFileManager(FileOperations.FilePickerTypes type, ref string value,
-                                                           IResourcePackage[] packagesInCommon, string[] fileFiltersInCommon, bool async)
+        private static void OpenFileManager(FileOperations.FilePickerTypes type, IEnumerable<IResourcePackage> packagesInCommon, string[] fileFiltersInCommon, bool isFolder, bool async)
         {
-            var packages = packagesInCommon.Concat(ResourceManager.SharedResourcePacks);
-            if(fileFiltersInCommon.Contains("*.hlsl")) // todo - clean this up 
-            {
-                packages = packages.Concat(ResourceManager.SharedShaderPackages);
-            }
-            packages = packages.Distinct();
-            
-            var managedDirectories = packages
-                                    .OrderBy(x => !x.IsReadOnly)
-                                    .Select(x => new ManagedDirectory(x.ResourcesFolder, x.IsReadOnly, true, x.Alias));
+            var managedDirectories = packagesInCommon
+                          .Concat(ResourceManager.GetSharedPackagesForFilters(fileFiltersInCommon, isFolder, out var culledFilters))
+                          .Distinct()
+                          .OrderBy(package => !package.IsReadOnly)
+                          .Select(package => new ManagedDirectory(package.ResourcesFolder, package.IsReadOnly, !package.IsReadOnly, package.Alias));
             
             var fileManagerMode = type == FileOperations.FilePickerTypes.File ? FileManagerMode.PickFile : FileManagerMode.PickDirectory;
             
-            Func<string, bool> filterFunc = fileFiltersInCommon.Length == 0
-                                                ? str => true
-                                                : str => fileFiltersInCommon.Any(x => StringUtils.MatchesFilter(str, x, true));
+            Func<string, bool> filterFunc = culledFilters.Length == 0
+                                                ? _ => true
+                                                : str =>
+                                                  {
+                                                      return culledFilters.Any(filter => StringUtils.MatchesSearchFilter(str, filter, ignoreCase: true));
+                                                  };
             
             var options = new SimpleWindowOptions(new Vector2(960, 600), 60, true, true, false);
             if (!async)

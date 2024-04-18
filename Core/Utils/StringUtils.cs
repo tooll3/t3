@@ -189,9 +189,11 @@ public static class StringUtils
             c = char.ToLowerInvariant(c);
             for (var i = 0; i < span.Length; i++)
             {
-                nextChar = char.ToLowerInvariant(span[i]);
-                if (nextChar != c)
+                nextChar = span[i];
+                if (char.ToLowerInvariant(nextChar) != c)
+                {
                     return i;
+                }
             }
 
             nextChar = default;
@@ -231,51 +233,112 @@ public static class StringUtils
 
         return -1;
     }
-
-    public static bool MatchesFilter(ReadOnlySpan<char> possibleMatch, ReadOnlySpan<char> filter, bool ignoreCase)
+    
+    public static int LastIndexOf(this ReadOnlySpan<char> span, char c, bool ignoreCase)
     {
-        while (true)
+        if (ignoreCase)
         {
-            if (filter.Length == 0)
-                return true;
-
-            if (filter[0] == '*')
+            c = char.ToLowerInvariant(c);
+            for (var i = span.Length - 1; i >= 0; i--)
             {
-                var nextNonWildcardIndex = filter.IndexOfNot('*', ignoreCase, out var filterChar);
-                if (nextNonWildcardIndex == -1)
-                    return true;
+                if (char.ToLowerInvariant(span[i]) == c)
+                    return i;
+            }
 
-                var matchIndex = possibleMatch.IndexOf(filterChar, ignoreCase);
-                if (matchIndex == -1)
-                    return false;
+            return -1;
+        }
 
-                filter = filter[(nextNonWildcardIndex + 1)..];
-                possibleMatch = possibleMatch[(matchIndex + 1)..];
+        for (var i = span.Length - 1; i >= 0; i--)
+        {
+            if (span[i] == c)
+                return i;
+        }
+
+        return -1;
+    }
+    
+    public static int LastIndexOfNot(this ReadOnlySpan<char> span, char c, bool ignoreCase, out char precedingChar)
+    {
+        if (ignoreCase)
+        {
+            c = char.ToLowerInvariant(c);
+            for (var i = span.Length - 1; i >= 0; i--)
+            {
+                precedingChar = span[i];;
+                if (char.ToLowerInvariant(precedingChar) != c)
+                    return i;
             }
             
-            if(filter.Length == 0)
-                return true;
-            
+            precedingChar = default;
+            return -1;
+        }
+        
+        for (var i = span.Length - 1; i >= 0; i--)
+        {
+            precedingChar = span[i];
+            if (precedingChar != c)
+                return i;
+        }
+        
+        precedingChar = default;
+        return -1;
+    }
+    
+    /// <summary>
+    /// A naive implementation of a filtering algorithm that supports wildcards ('*').
+    /// 
+    /// It is designed to be highly optimized, but it may not behave how you expect.
+    /// This will accept an infinite amount of wildcards and treat them all the same -
+    /// so "a*b**c" will match "a/b/anything/c" (expected) and "a/anything/b/c" (possibly unexpected) -
+    /// there is no special directory treatment as is standard in most file search implementations.
+    /// 
+    /// Technically, the search begins from the end of the filter and the end of the possible match, and works backwards. This is because
+    /// 
+    /// This is mostly intended for use in file path searches, where the end of the path is the most likely to be the most specific, and the end of the search term
+    /// is most likely to change with consecutive calls.
+    /// </summary>
+    /// <param name="possibleMatch">string you want to check for a match</param>
+    /// <param name="filter">The filter to match against</param>
+    /// <param name="ignoreCase"></param>
+    /// <returns>True if the provided string matches the provided filter</returns>
+    public static bool MatchesSearchFilter(ReadOnlySpan<char> possibleMatch, ReadOnlySpan<char> filter, bool ignoreCase)
+    {
+        while (filter.Length > 0)
+        {
+            // the possible match has been exhausted but the filter has not
             if(possibleMatch.Length == 0)
                 return false;
             
-            if (possibleMatch[0] == filter[0])
+            var nextFilterChar = filter[^1];
+
+            if (nextFilterChar == '*')
             {
-                // filter is complete!
-                if (filter.Length == 1) 
+                var nextNonWildcardIndex = filter.LastIndexOfNot('*', ignoreCase, out nextFilterChar);
+                if (nextNonWildcardIndex == -1)
                     return true;
 
-                // match string is complete but filter is not
-                if(possibleMatch.Length == 1)
+                var matchIndex = possibleMatch.LastIndexOf(nextFilterChar, ignoreCase);
+                if (matchIndex == -1)
                     return false;
-                
-                possibleMatch = possibleMatch[1..];
-                filter = filter[1..];
+
+                // remove the last character from both strings to continue the search
+                filter = filter[..nextNonWildcardIndex];
+                possibleMatch = possibleMatch[..matchIndex];
+            }
+            else if (possibleMatch[^1] == nextFilterChar)
+            {
+                // remove the last character from both strings to continue the search
+                possibleMatch = possibleMatch[..^1];
+                filter = filter[..^1];
             }
             else
             {
+                // no match /:
                 return false;
             }
         }
+        
+        // we finished the filter - it's a match!
+        return true;
     }
 }
