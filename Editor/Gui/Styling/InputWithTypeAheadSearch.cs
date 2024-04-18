@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.IO;
+using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
 using T3.SystemUi;
 
@@ -83,7 +84,8 @@ namespace T3.Editor.Gui.Styling
                                                | ImGuiWindowFlags.Tooltip // ugly as f**k. Sadly .PopUp will lead to random crashes.
                                                | ImGuiWindowFlags.NoFocusOnAppearing
                                                | ImGuiWindowFlags.ChildWindow;
-
+                
+                var searchFilter = $"*{filter}*";
                 
                 if (ImGui.Begin("##typeAheadSearchPopup", ref isSearchResultWindowOpen,flags))
                 {
@@ -93,10 +95,14 @@ namespace T3.Editor.Gui.Styling
                     
                     var getInfo = args.GetTextInfo;
                         
-                    foreach (var word in args.Items)
+                    foreach (var item in args.Items)
                     {
-                        var info = getInfo(word);
-                        if (word == null ||  !info.SearchText.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
+                        // this check shouldn't be necessary
+                        if(item == null)
+                            continue;
+                        
+                        var info = getInfo(item);
+                        if (!StringUtils.MatchesSearchFilter(info.SearchText, searchFilter, true))
                             continue;
                         
                         var isSelected = index == _selectedResultIndex;
@@ -122,14 +128,14 @@ namespace T3.Editor.Gui.Styling
                             filter = info.SearchText;
                             wasChanged = true;
                             _activeInputId = 0;
-                            selected = word;
+                            selected = item;
                         }
 
                         _lastTypeAheadResults.Add(info.SearchText);
                         if (++index > 100)
                             break;
                     }
-
+                    
                     var isPopupHovered = new ImRect(ImGui.GetWindowContentRegionMin(), ImGui.GetWindowContentRegionMax()).Contains(ImGui.GetMousePos());
                     
                     if (!isPopupHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))

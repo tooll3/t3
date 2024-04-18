@@ -21,7 +21,6 @@ namespace T3.Core.Resource
         public const string ResourcesSubfolder = "Resources";
         public const char PathSeparator = '/';
         public static readonly ConcurrentDictionary<uint, AbstractResource> ResourcesById = new();
-        public static IEnumerable<string> SharedResourceFolders => SharedResourcePackages.Select(x => x.ResourcesFolder);
 
         public static ResourceManager Instance() => _instance;
         private static readonly ResourceManager _instance = new();
@@ -197,72 +196,9 @@ namespace T3.Core.Resource
             SharedResourcePackages.Remove(resourcePackage);
         }
         
-        public static IReadOnlyList<IResourcePackage> SharedResourcePacks => SharedResourcePackages;
         private static readonly List<IResourcePackage> SharedResourcePackages = new(4);
         public static IReadOnlyList<IResourcePackage> SharedShaderPackages => ShaderPackages;
         private static readonly List<IResourcePackage> ShaderPackages = new(4);
-        public enum PathMode {Absolute, Relative, Aliased}
-
-        public static IEnumerable<string> EnumerateResources(string[] fileExtensionFilter, bool isFolder, IEnumerable<IResourcePackage> packages, PathMode pathMode = PathMode.Relative)
-        {
-            var filterAcceptsShaders = !isFolder;
-            
-            // if there's an "all" wildcard, all other filters are irrelevant
-            if(fileExtensionFilter.Length == 0 || fileExtensionFilter.Length > 0 && (fileExtensionFilter.Contains("*.*") || fileExtensionFilter.Contains("*")))
-            {
-                fileExtensionFilter = isFolder ? ["*"] : ["*.*"];
-            }
-
-            filterAcceptsShaders = filterAcceptsShaders && fileExtensionFilter.Any(x => x.EndsWith(".hlsl") || x.EndsWith('*'));
-            
-            var allFiles = packages
-                          .Concat(SharedResourcePackages)
-                          .Distinct()
-                          .SelectMany(x => AllEntriesOf(x, isFolder, pathMode, fileExtensionFilter));
-
-            // handle always-shared shaders
-            return !isFolder && filterAcceptsShaders 
-                       ? allFiles.Concat(SharedShaderPackages.Except(SharedResourcePackages).SelectMany(x => AllEntriesOf(x, false, pathMode, ".hlsl"))) 
-                       : allFiles;
-            
-            static IEnumerable<string> AllEntriesOf(IResourcePackage package, bool useFolder, PathMode pathMode, params string[] filters)
-            {
-                Func<string, string, SearchOption, IEnumerable<string>> searchFunc = useFolder
-                                                                                     ? Directory.EnumerateDirectories
-                                                                                     : Directory.EnumerateFiles;
-
-                foreach (var path in searchFunc(package.ResourcesFolder, "*", SearchOption.AllDirectories))
-                {
-                    var pathSpan = path.AsSpan();
-                    var lastSlashIndex = pathSpan.LastIndexOf(Path.DirectorySeparatorChar);
-
-                    var fileNameSpan = lastSlashIndex == -1 ? pathSpan : pathSpan[(lastSlashIndex + 1)..];
-                    var fileName = fileNameSpan.ToString();
-
-                    foreach (var filter in filters)
-                    {
-                        if (StringUtils.MatchesFilter(fileName, filter, true))
-                        {
-                            yield return pathMode switch
-                                             {
-                                                 PathMode.Absolute => path.Replace('\\', '/'),
-                                                 PathMode.Relative => path[(package.ResourcesFolder.Length + 1)..].Replace('\\', '/'),
-                                                 PathMode.Aliased  => $"/{package.Alias}/{path[(package.ResourcesFolder.Length + 1)..]}".Replace('\\', '/'),
-                                                 _                 => throw new ArgumentOutOfRangeException(nameof(pathMode), pathMode, null)
-                                             };
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public static class ResourceExtensions
-    {
-        public static IEnumerable<IResourcePackage> PackagesInCommon(this IEnumerable<Instance> instances)
-        {
-            return instances.Select(x => x.AvailableResourcePackages)
-                            .Aggregate<IEnumerable<IResourcePackage>>((a, b) => a.Intersect(b));
-        }
+        public enum PathMode {Absolute, Relative, Aliased, Raw}
     }
 }
