@@ -3,15 +3,6 @@ using SilkWindows;
 using SilkWindows.Implementations.FileManager;
 using T3.Core.SystemUi;
 
-int? x = Get<int>();
-
-Console.WriteLine("is null? " + (!x.HasValue));
-
-static T? Get<T>()
-{
-    return default;
-}
-return;
 var windowProvider = new SilkWindowProvider();
 ImGuiWindowService.Instance = windowProvider;
 BlockingWindow.Instance = windowProvider;

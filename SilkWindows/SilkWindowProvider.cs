@@ -26,8 +26,7 @@ public sealed class SilkWindowProvider : IImguiWindowProvider, IMessageBoxProvid
     public TData? Show<TData>(string title, IImguiDrawer<TData> drawer, in SimpleWindowOptions? options = null)
     {
         var fullOptions = ConstructWindowOptions(options);
-        var windowHandler = new WindowHandler(fullOptions, drawer, title, _fontPack, ContextLock);
-        windowHandler.RunUntilClosed();
+        WindowHelper.RunWindow(ImGuiHandlerGL.CreateDefault(), drawer, _fontPack, ContextLock);
         return drawer.Result;
     }
     
@@ -55,15 +54,13 @@ public sealed class SilkWindowProvider : IImguiWindowProvider, IMessageBoxProvid
     {
         var fullOptions = ConstructWindowOptions(options);
         
-        var windowHandler = new WindowHandler(fullOptions, drawer, title, fontPack, ContextLock);
-        
         Console.WriteLine("Starting window run");
         
         var context = SynchronizationContext.Current;
         
         await Task.Run(() =>
                        {
-                           windowHandler.RunUntilClosed();
+                           WindowHelper.RunWindow(ImGuiHandlerGL.CreateDefault(), drawer, fontPack, ContextLock);
                            Console.WriteLine("Window run SHOULD be completed");
                        }).ConfigureAwait(false);
         
