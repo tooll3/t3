@@ -2,20 +2,45 @@ using System.Drawing;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
-using Silk.NET.Input;
-using Silk.NET.OpenGL;
-using Silk.NET.OpenGL.Extensions.ImGui;
-using Silk.NET.Windowing;
 
 namespace SilkWindows;
 
-internal sealed class ImGuiHandler
+internal class ImGuiHandler
 {
+    private readonly IImguiDrawer _drawer;
+    private readonly string _windowTitle;
+    private readonly IntPtr? _originalContext;
+    private readonly object _contextLock;
+    private readonly FontPack? _fontPack;
+    private readonly string _mainWindowId;
+    private readonly string _childWindowId;
+    private ImFonts? _fontObj;
+    private readonly IntPtr _context;
+    
+    public ImGuiHandler(IImguiImplementation impl, IImguiDrawer drawer, FontPack? fontPack, object? lockObj)
+    {
+        _windowTitle = impl.WindowOptions.Title;
+        _mainWindowId = impl.MainWindowId;
+        _childWindowId = impl.ChildWindowId;
+        _drawer = drawer;
+        _fontPack = fontPack;
+        _contextLock = lockObj ?? new object();
+        _imguiController = impl;
+        
+        lock (_contextLock)
+        {
+            var previousContext = ImGui.GetCurrentContext();
+            _originalContext = previousContext == IntPtr.Zero ? null : previousContext;
+            _context = impl.InitializeControllerContext();
+            InitializeStyle();
+        }
+    }
+    
     private unsafe void InitializeStyle()
     {
         if (_originalContext.HasValue)
         {
-            var myContext = ImGui.GetCurrentContext();
+            var myContext = _context;
             
             // first we switch to the previous imgui context
             ImGui.SetCurrentContext(_originalContext.Value);
@@ -63,46 +88,19 @@ internal sealed class ImGuiHandler
         _drawer.Init();
     }
     
-    private ImFonts? _fontObj;
-    private readonly FontPack? _fontPack;
-    private readonly string _mainWindowId;
-    private readonly string _childWindowId;
-    private static int _windowCounter = 999;
-    private readonly ImGuiController _imguiController;
-    private readonly IImguiDrawer _drawer;
-    private readonly string _windowTitle;
-    private readonly IntPtr? _originalContext;
-    private readonly object _contextLock;
-    
-    public ImGuiHandler(IInputContext inputContext, IView window, GL graphicsContext, IImguiDrawer drawer, string title, FontPack? fontPack, object? lockObj)
-    {
-        _windowTitle = title;
-        _mainWindowId = $"{title}##{Interlocked.Increment(ref _windowCounter)}";
-        _childWindowId = $"{title}Child##{Interlocked.Increment(ref _windowCounter)}";
-        _drawer = drawer;
-        _fontPack = fontPack;
-        _contextLock = lockObj ?? new object();
-        
-        lock (_contextLock)
-        {
-            var previousContext = ImGui.GetCurrentContext();
-            _originalContext = previousContext == IntPtr.Zero ? null : previousContext;
-            _imguiController = new ImGuiController(gl: graphicsContext, window, inputContext, null, InitializeStyle);
-        }
-    }
-    
     public void Draw(Vector2 windowSize, double deltaTime)
     {
         lock (_contextLock)
         {
+            _imguiController.ClearFrame(ClearColor);
             var contextToRestore = ImGui.GetCurrentContext();
-            if (contextToRestore == IntPtr.Zero || contextToRestore == _imguiController.Context)
+            if (contextToRestore == IntPtr.Zero || contextToRestore == _context)
             {
-                contextToRestore = _originalContext ?? _imguiController.Context;
+                contextToRestore = _originalContext ?? _context;
             }
             
-            ImGui.SetCurrentContext(_imguiController.Context);
-            _imguiController.Update((float)deltaTime);
+            ImGui.SetCurrentContext(_context);
+            _imguiController.StartUpdate((float)deltaTime);
             
             ImGui.SetNextWindowSize(windowSize);
             ImGui.SetNextWindowPos(new Vector2(0, 0));
@@ -119,6 +117,7 @@ internal sealed class ImGuiHandler
             ImGui.End();
             
             _imguiController.Render();
+            _imguiController.Render();
             
             // restore
             ImGui.SetCurrentContext(contextToRestore);
@@ -133,5 +132,6 @@ internal sealed class ImGuiHandler
         }
     }
     
-    public Color ClearColor { get; private set; } = Color.Black;
+    private readonly IImguiImplementation _imguiController;
+    public Color ClearColor { get; protected set; } = Color.Black;
 }

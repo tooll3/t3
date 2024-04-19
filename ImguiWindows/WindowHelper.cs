@@ -1,21 +1,25 @@
+using System.Numerics;
+using Silk.NET.Core.Native;
 using Silk.NET.Input;
 using Silk.NET.Maths;
-using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
-using T3.SystemUi;
 
 namespace SilkWindows;
 
-internal sealed class WindowHandler
+public sealed class WindowHelper
 {
-    public WindowHandler(WindowOptions options, IImguiDrawer drawer, string title, FontPack? fontPack, object imguiContextLockObj)
+    public static void RunWindow(IImguiImplementation imguiImpl, IImguiDrawer drawer, FontPack? fontPack, object imguiContextLockObj)
     {
-        var windowOptions = options;
-        windowOptions.API = GraphicsAPI.Default;
-        _windowOptions = windowOptions;
+        var windowHelper = new WindowHelper(imguiImpl.WindowOptions, imguiImpl, drawer, fontPack, imguiContextLockObj);
+        windowHelper.RunUntilClosed();
+    }
+    
+    private WindowHelper(WindowOptions options, IImguiImplementation imguiImpl, IImguiDrawer drawer, FontPack? fontPack, object imguiContextLockObj)
+    {
+        _windowOptions = options;
         
         _drawer = drawer;
-        _windowTitle = title;
+        _imguiImpl = imguiImpl;
         _fontPack = fontPack;
         _imguiContextLock = imguiContextLockObj;
     }
@@ -23,14 +27,13 @@ internal sealed class WindowHandler
     public void RunUntilClosed()
     {
         var window = Window.Create(_windowOptions);
-        window.Title = _windowTitle;
         _window = window;
         SubscribeToWindow();
         _window.Run();
         UnsubscribeFromWindow();
         Dispose();
         
-        Console.WriteLine($"Disposed of window {_windowTitle} ({_drawer.GetType()})");
+        Console.WriteLine($"Disposed of window {_windowOptions.Title} ({_drawer.GetType()})");
         
         return;
         
@@ -47,7 +50,6 @@ internal sealed class WindowHandler
         
         void SubscribeToWindow()
         {
-            //window.FileDrop
             _window.Load += OnLoad;
             _window.Render += RenderWindowContents;
             _window.FramebufferResize += OnWindowResize;
@@ -78,7 +80,7 @@ internal sealed class WindowHandler
     {
         if (!isFocused && AlwaysOnTop)
         {
-            // todo: force re-focus once silk.NET supports that ?
+            // todo: force re-focus once silk.NET supports that ? wayland may not allow it anyway..
         }
         
         _drawer.OnWindowFocusChanged(isFocused);
@@ -92,19 +94,18 @@ internal sealed class WindowHandler
         
         lock (_imguiContextLock)
         {
-            _graphicsContext!.ClearColor(_imguiHandler!.ClearColor);
-            _graphicsContext.Clear(ClearBufferMask.ColorBufferBit);
-            _imguiHandler!.Draw(_window.Size.ToVector2(), deltaTime);
+            var windowSize = _window.Size;
+            _imguiHandler!.Draw(new Vector2(windowSize.X, windowSize.Y), deltaTime);
         }
     }
     
     private void OnLoad()
     {
         _inputContext = _window.CreateInput();
-        _graphicsContext = _window.CreateOpenGL();
+        _graphicsContext = _imguiImpl.InitializeGraphicsAndInputContexts(_window);
         lock (_imguiContextLock)
         {
-            _imguiHandler = new ImGuiHandler(_inputContext, _window, _graphicsContext, _drawer, _windowTitle, _fontPack, _imguiContextLock);
+            _imguiHandler = new ImGuiHandler(_imguiImpl, _drawer , _fontPack, _imguiContextLock);
         }
         Console.WriteLine("Created imgui context");
     }
@@ -131,18 +132,17 @@ internal sealed class WindowHandler
     
     private void OnWindowResize(Vector2D<int> size)
     {
-        _graphicsContext!.Viewport(size);
+        _imguiImpl.ResizeGraphicsContext(size);
     }
     
     private readonly object _imguiContextLock;
     private readonly IImguiDrawer _drawer;
+    private readonly IImguiImplementation _imguiImpl;
     private IWindow _window;
     private IInputContext? _inputContext;
     private bool AlwaysOnTop => _windowOptions.TopMost;
     private readonly WindowOptions _windowOptions;
-    private GL? _graphicsContext;
+    private NativeAPI? _graphicsContext;
     private ImGuiHandler? _imguiHandler;
     private readonly FontPack? _fontPack;
-    
-    private readonly string _windowTitle;
 }

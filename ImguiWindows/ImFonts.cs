@@ -1,8 +1,8 @@
 using ImGuiNET;
-using T3.SystemUi;
 
 namespace SilkWindows;
 
+// ReSharper disable once SuggestBaseTypeForParameterInConstructor
 public sealed class ImFonts(ImFontPtr[] fonts)
 {
     public readonly bool HasFonts = fonts.Length > 3;
