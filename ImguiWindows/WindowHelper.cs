@@ -1,4 +1,6 @@
+using System.Drawing;
 using System.Numerics;
+using ImguiWindows;
 using Silk.NET.Core.Native;
 using Silk.NET.Input;
 using Silk.NET.Maths;
@@ -8,37 +10,35 @@ namespace SilkWindows;
 
 public sealed class WindowHelper
 {
-    public static void RunWindow(IImguiImplementation imguiImpl, IImguiDrawer drawer, FontPack? fontPack, object imguiContextLockObj)
+    public static void RunWindow(IWindowImplementation window, IImguiDrawer drawer, FontPack? fontPack,
+                                 object imguiContextLockObj)
     {
-        var windowHelper = new WindowHelper(imguiImpl.WindowOptions, imguiImpl, drawer, fontPack, imguiContextLockObj);
+        var windowHelper = new WindowHelper(window, drawer, fontPack, imguiContextLockObj);
         windowHelper.RunUntilClosed();
     }
     
-    private WindowHelper(WindowOptions options, IImguiImplementation imguiImpl, IImguiDrawer drawer, FontPack? fontPack, object imguiContextLockObj)
+    private WindowHelper(IWindowImplementation window, IImguiDrawer drawer, FontPack? fontPack, object? graphicsContextLockObj)
     {
-        _windowOptions = options;
-        
+        _windowImpl = window;
         _drawer = drawer;
-        _imguiImpl = imguiImpl;
         _fontPack = fontPack;
-        _imguiContextLock = imguiContextLockObj;
+        _graphicsContextLock = graphicsContextLockObj ?? new object();
     }
     
     public void RunUntilClosed()
     {
-        var window = Window.Create(_windowOptions);
+        var window = Window.Create(_windowImpl.WindowOptions);
         _window = window;
         SubscribeToWindow();
         _window.Run();
         UnsubscribeFromWindow();
         Dispose();
         
-        Console.WriteLine($"Disposed of window {_windowOptions.Title} ({_drawer.GetType()})");
-        
         return;
         
         void Dispose()
         {
+            _windowImpl.Dispose();
             _window.Dispose();
             
             _graphicsContext?.Dispose();
@@ -73,17 +73,17 @@ public sealed class WindowHelper
     
     private void OnFileDrop(string[] filePaths)
     {
-        _drawer.OnFileDrop(filePaths);
+        _imguiHandler?.OnFileDrop(filePaths);
     }
     
     private void OnFocusChanged(bool isFocused)
     {
-        if (!isFocused && AlwaysOnTop)
+        if (!isFocused && _windowImpl.WindowOptions.TopMost)
         {
             // todo: force re-focus once silk.NET supports that ? wayland may not allow it anyway..
         }
         
-        _drawer.OnWindowFocusChanged(isFocused);
+        _imguiHandler?.OnWindowFocusChanged(isFocused);
     }
     
     private void RenderWindowContents(double deltaTime)
@@ -92,39 +92,40 @@ public sealed class WindowHelper
         Console.WriteLine("Starting render");
         #endif
         
-        lock (_imguiContextLock)
+        lock (_graphicsContextLock)
         {
             var windowSize = _window.Size;
-            _imguiHandler!.Draw(new Vector2(windowSize.X, windowSize.Y), deltaTime);
+            var clearColor = _imguiHandler?.ClearColor ?? _windowImpl.DefaultClearColor;
+            clearColor = Color.White;
+            if (_windowImpl.Render(clearColor, deltaTime))
+            {
+                _imguiHandler?.Draw(new Vector2(windowSize.X, windowSize.Y), deltaTime);
+                _windowImpl.EndRender();
+            }
         }
     }
     
     private void OnLoad()
     {
-        _inputContext = _window.CreateInput();
-        _graphicsContext = _imguiImpl.InitializeGraphicsAndInputContexts(_window);
-        lock (_imguiContextLock)
-        {
-            _imguiHandler = new ImGuiHandler(_imguiImpl, _drawer , _fontPack, _imguiContextLock);
-        }
-        Console.WriteLine("Created imgui context");
+        _graphicsContext = _windowImpl.InitializeGraphicsAndInputContexts(_window, out _inputContext);
+        
+        if (_drawer == null)
+            return;
+        
+        _imguiHandler = new ImGuiHandler(_windowImpl.GetImguiImplementation(), _drawer, _fontPack, _graphicsContextLock);
     }
     
     private void OnClose()
     {
-        lock (_imguiContextLock)
-        {
-            _drawer.OnClose();
-            _imguiHandler?.DisposeOfImguiContext();
-        }
-        
-        Console.WriteLine("Closed and disposed of imgui context");
+        _imguiHandler?.DisposeOfImguiContext();
     }
     
     private void OnWindowUpdate(double deltaSeconds)
     {
-        _drawer.OnWindowUpdate(deltaSeconds, out var shouldClose);
-        if (shouldClose)
+        if (_imguiHandler == null) return;
+        
+        _imguiHandler.OnWindowUpdate(deltaSeconds, out var shouldCloseWindow);
+        if (shouldCloseWindow)
         {
             _window.Close();
         }
@@ -132,17 +133,16 @@ public sealed class WindowHelper
     
     private void OnWindowResize(Vector2D<int> size)
     {
-        _imguiImpl.ResizeGraphicsContext(size);
+        _windowImpl.OnWindowResize(size);
     }
     
-    private readonly object _imguiContextLock;
-    private readonly IImguiDrawer _drawer;
-    private readonly IImguiImplementation _imguiImpl;
+    private readonly object _graphicsContextLock;
+    private readonly IWindowImplementation _windowImpl;
     private IWindow _window;
     private IInputContext? _inputContext;
-    private bool AlwaysOnTop => _windowOptions.TopMost;
-    private readonly WindowOptions _windowOptions;
     private NativeAPI? _graphicsContext;
-    private ImGuiHandler? _imguiHandler;
     private readonly FontPack? _fontPack;
+    
+    private readonly IImguiDrawer? _drawer;
+    private ImGuiHandler? _imguiHandler;
 }

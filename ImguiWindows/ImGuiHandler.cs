@@ -2,10 +2,11 @@ using System.Drawing;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
+using SilkWindows;
 
-namespace SilkWindows;
+namespace ImguiWindows;
 
-internal class ImGuiHandler
+internal sealed class ImGuiHandler
 {
     private readonly IImguiDrawer _drawer;
     private readonly string _windowTitle;
@@ -19,7 +20,7 @@ internal class ImGuiHandler
     
     public ImGuiHandler(IImguiImplementation impl, IImguiDrawer drawer, FontPack? fontPack, object? lockObj)
     {
-        _windowTitle = impl.WindowOptions.Title;
+        _windowTitle = impl.Title;
         _mainWindowId = impl.MainWindowId;
         _childWindowId = impl.ChildWindowId;
         _drawer = drawer;
@@ -31,8 +32,8 @@ internal class ImGuiHandler
         {
             var previousContext = ImGui.GetCurrentContext();
             _originalContext = previousContext == IntPtr.Zero ? null : previousContext;
-            _context = impl.InitializeControllerContext();
-            InitializeStyle();
+            _context = impl.InitializeControllerContext(InitializeStyle);
+            _drawer.Init();
         }
     }
     
@@ -40,7 +41,7 @@ internal class ImGuiHandler
     {
         if (_originalContext.HasValue)
         {
-            var myContext = _context;
+            var myContext = ImGui.GetCurrentContext();
             
             // first we switch to the previous imgui context
             ImGui.SetCurrentContext(_originalContext.Value);
@@ -85,22 +86,19 @@ internal class ImGuiHandler
         }
         
         _fontObj = new ImFonts(fonts);
-        _drawer.Init();
     }
     
     public void Draw(Vector2 windowSize, double deltaTime)
     {
         lock (_contextLock)
         {
-            _imguiController.ClearFrame(ClearColor);
             var contextToRestore = ImGui.GetCurrentContext();
             if (contextToRestore == IntPtr.Zero || contextToRestore == _context)
             {
                 contextToRestore = _originalContext ?? _context;
             }
-            
             ImGui.SetCurrentContext(_context);
-            _imguiController.StartUpdate((float)deltaTime);
+            _imguiController.StartImguiFrame((float)deltaTime);
             
             ImGui.SetNextWindowSize(windowSize);
             ImGui.SetNextWindowPos(new Vector2(0, 0));
@@ -116,8 +114,7 @@ internal class ImGuiHandler
             
             ImGui.End();
             
-            _imguiController.Render();
-            _imguiController.Render();
+            _imguiController.EndImguiFrame();
             
             // restore
             ImGui.SetCurrentContext(contextToRestore);
@@ -128,10 +125,27 @@ internal class ImGuiHandler
     {
         lock (_contextLock)
         {
+            _drawer.OnClose();
             _imguiController.Dispose();
         }
     }
     
     private readonly IImguiImplementation _imguiController;
-    public Color ClearColor { get; protected set; } = Color.Black;
+    public Color? ClearColor { get; private set; }
+    
+    // forwards window events
+    public void OnWindowUpdate(double deltaSeconds, out bool shouldCloseWindow)
+    {
+        _drawer.OnWindowUpdate(deltaSeconds, out shouldCloseWindow);
+    }
+    
+    public void OnWindowFocusChanged(bool isFocused)
+    {
+        _drawer.OnWindowFocusChanged(isFocused);
+    }
+    
+    public void OnFileDrop(string[] filePaths)
+    {
+        _drawer.OnFileDrop(filePaths);
+    }
 }

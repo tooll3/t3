@@ -1,4 +1,5 @@
-﻿using T3.SystemUi;
+﻿using ImGuiVulkan;
+using T3.SystemUi;
 using Silk.NET.Windowing;
 using Silk.NET.Maths;
 using SilkWindows.Implementations;
@@ -25,8 +26,11 @@ public sealed class SilkWindowProvider : IImguiWindowProvider, IMessageBoxProvid
     
     public TData? Show<TData>(string title, IImguiDrawer<TData> drawer, in SimpleWindowOptions? options = null)
     {
-        var fullOptions = ConstructWindowOptions(options);
-        WindowHelper.RunWindow(ImGuiHandlerGL.CreateDefault(), drawer, _fontPack, ContextLock);
+        var fullOptions = ConstructWindowOptions(options, title);
+       // var window = new ImGuiVulkanWindowImpl(fullOptions);
+       var window = new GLWindow(fullOptions);
+        
+        WindowHelper.RunWindow(window, drawer, _fontPack, ContextLock);
         return drawer.Result;
     }
     
@@ -52,23 +56,21 @@ public sealed class SilkWindowProvider : IImguiWindowProvider, IMessageBoxProvid
     
     private async Task StartAsyncWindow(string title, IImguiDrawer drawer, SimpleWindowOptions? options, FontPack? fontPack)
     {
-        var fullOptions = ConstructWindowOptions(options);
-        
-        Console.WriteLine("Starting window run");
+        var fullOptions = ConstructWindowOptions(options, title);
         
         var context = SynchronizationContext.Current;
         
         await Task.Run(() =>
                        {
-                           WindowHelper.RunWindow(ImGuiHandlerGL.CreateDefault(), drawer, fontPack, ContextLock);
-                           Console.WriteLine("Window run SHOULD be completed");
+        var window = new ImGuiVulkanWindowImpl(fullOptions);
+                           WindowHelper.RunWindow(window, drawer, fontPack, ContextLock);
                        }).ConfigureAwait(false);
         
         SynchronizationContext.SetSynchronizationContext(context);
         Console.WriteLine("Completed window run");
     }
     
-    private static WindowOptions ConstructWindowOptions(in SimpleWindowOptions? options)
+    private static WindowOptions ConstructWindowOptions(in SimpleWindowOptions? options, string title)
     {
         var fullOptions = DefaultOptions;
         if (options.HasValue)
@@ -81,6 +83,8 @@ public sealed class SilkWindowProvider : IImguiWindowProvider, IMessageBoxProvid
             fullOptions.TopMost = val.AlwaysOnTop;
         }
         
+        fullOptions.Title = title;
+        
         return fullOptions;
     }
     
@@ -88,6 +92,7 @@ public sealed class SilkWindowProvider : IImguiWindowProvider, IMessageBoxProvid
     
     private static readonly WindowOptions DefaultOptions = new()
                                                                {
+                                                                   API = GraphicsAPI.Default,
                                                                    IsEventDriven = true,
                                                                    ShouldSwapAutomatically = true,
                                                                    IsVisible = true,
