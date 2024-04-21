@@ -1004,7 +1004,7 @@ namespace SilkWindows.Vulkan
             _vk.DestroyDescriptorPool(_vk.CurrentDevice.Value, _descriptorPool, default);
             _vk.DestroyRenderPass(_vk.CurrentDevice.Value, _renderPass, default);
 
-            ImGuiNET.ImGui.DestroyContext();
+            ImGuiNET.ImGui.DestroyContext(this.Context);
         }
 
         struct FrameRenderBuffer
