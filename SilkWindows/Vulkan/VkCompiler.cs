@@ -1,12 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using Silk.NET.Core.Native;
 using Silk.NET.Shaderc;
 
 namespace ImGuiVulkan;
 
-public unsafe class Compiler
+public static unsafe class VkCompiler
 {
+    public static SourceLanguage DefaultSourceLanguage { get; } = SourceLanguage.Glsl;
+    
     private static readonly IncludeResolveFn IncludeResolveFn = IncludeResolve;
     
     private static IncludeResult* IncludeResolve(void* arg0, byte* arg1, int arg2, byte* arg3, UIntPtr arg4)
@@ -18,38 +19,50 @@ public unsafe class Compiler
     
     private static void IncludeResultRelease(void* arg0, IncludeResult* arg1)
     {
-        
     }
     
-    public static bool TryCompileShaderFile(string path, string? entryPoint, [NotNullWhen(true)] out ShaderKind? shaderKind, [NotNullWhen(true)] out byte[]? compiledShader)
+    public static bool TryCompileShaderFile(string path, string? entryPoint, [NotNullWhen(true)] out ShaderKind? shaderKind,
+                                            [NotNullWhen(true)] out byte[]? compiledShader, EnvVersion environment = EnvVersion.Vulkan13)
     {
         var src = File.ReadAllText(path);
         var fileExtension = Path.GetExtension(path);
-        var sourceLanguage = fileExtension switch
-                                 {
-                                     ".glsl" => SourceLanguage.Glsl,
-                                     ".hlsl" => SourceLanguage.Hlsl,
-                                     _       => throw new Exception("Unknown shader language used - file extension must be .glsl or .hlsl")
-                                 };
-        
-        var shaderKindExtension = Path.GetExtension(path.AsSpan(0, path.Length - fileExtension.Length));
-        shaderKind = shaderKindExtension switch
+        SourceLanguage sourceLanguage;
+        bool hasShaderExtension = true;
+        switch (fileExtension)
         {
-            ".vert" => ShaderKind.VertexShader,
-            ".frag" => ShaderKind.FragmentShader,
-            ".comp" => ShaderKind.ComputeShader,
-            ".geom"  => ShaderKind.GeometryShader,
-            _       => throw new Exception("Unknown shader kind - file extension must be .vert, .frag, or .comp")
-        };
+            case ".glsl":
+                sourceLanguage = SourceLanguage.Glsl;
+                break;
+            case ".hlsl":
+                sourceLanguage = SourceLanguage.Hlsl;
+                break;
+            default:
+                sourceLanguage = DefaultSourceLanguage;
+                hasShaderExtension = false;
+                break;
+        }
+        
+        var shaderKindExtension = hasShaderExtension
+                                      ? Path.GetExtension(path.AsSpan(0, path.Length - fileExtension.Length))
+                                      : fileExtension;
+        
+        shaderKind = shaderKindExtension switch
+                         {
+                             ".vert" => ShaderKind.VertexShader,
+                             ".frag" => ShaderKind.FragmentShader,
+                             ".comp" => ShaderKind.ComputeShader,
+                             ".geom" => ShaderKind.GeometryShader,
+                             _       => throw new Exception("Unknown shader kind - file extension must be .vert, .frag, .comp, or .geom")
+                         };
         
         var shaderName = Path.GetFileName(path);
         
-        return TryCompileShaderSourceCode(src, entryPoint, shaderName, shaderKind.Value, sourceLanguage, out compiledShader);
+        return TryCompileShaderSourceCode(src, entryPoint, shaderName, shaderKind.Value, sourceLanguage, out compiledShader, environment);
     }
     
     private static bool TryCompileShaderSourceCode(string src, string? entryPoint, string shaderName, ShaderKind shaderKind,
-                                             SourceLanguage sourceLanguage,
-                                             [NotNullWhen(true)] out byte[]? compiledShader)
+                                                   SourceLanguage sourceLanguage,
+                                                   [NotNullWhen(true)] out byte[]? compiledShader, EnvVersion environment = EnvVersion.Vulkan13)
     {
         // hacky way of skipping garbage at the beginning of the file - like BOMs, etc, that the compiler hates
         var srcStartIndex = src.IndexOf("#version", StringComparison.Ordinal);
@@ -62,7 +75,6 @@ public unsafe class Compiler
         
         if (srcStartIndex != 0)
         {
-            Console.Write($"Unexpected garbage at the beginning of file \"{shaderName}\". Skipping garbage...");
             src = src[srcStartIndex..];
         }
         
@@ -77,7 +89,7 @@ public unsafe class Compiler
         
         //api.CompileOptionsSetIncludeCallbacks(opts, IncludeResolveFn, IncludeResultReleaseFn)
         
-        api.CompileOptionsSetTargetEnv(opts, TargetEnv.Vulkan, (uint)EnvVersion.Vulkan13);
+        api.CompileOptionsSetTargetEnv(opts, TargetEnv.Vulkan, (uint)environment);
         
         api.CompileOptionsSetSourceLanguage(opts, sourceLanguage);
         
@@ -85,7 +97,7 @@ public unsafe class Compiler
         
         // preprocess shader text - i.e. expand macros and get includes
         var preprocessedResultPtr = api.CompileIntoPreprocessedText(compiler: compiler,
-                                                                    source_text: (byte*) srcPtr,
+                                                                    source_text: (byte*)srcPtr,
                                                                     source_text_size: (uint)src.Length,
                                                                     shader_kind: shaderKind,
                                                                     input_file_name: (byte*)errorTag,
@@ -145,7 +157,6 @@ public unsafe class Compiler
         Release(api, resultPtr);
         return true;
         
-        
         void LogErrorsAndRelease(Shaderc apiToRelease, CompilationResult* resultToRelease)
         {
             var message = apiToRelease.ResultGetErrorMessage(resultToRelease);
@@ -153,6 +164,7 @@ public unsafe class Compiler
             Console.WriteLine(messageString);
             Release(apiToRelease, resultToRelease);
         }
+        
         void Release(Shaderc apiToRelease, CompilationResult* resultToRelease)
         {
             SilkMarshal.Free(entryPointNamePtr);

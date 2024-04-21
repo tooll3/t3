@@ -1,8 +1,6 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using ImguiWindows;
 using Silk.NET.Core.Native;
@@ -54,7 +52,7 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
     {
         // Wait for any fences
         var fence = _inFlightFences[_currentFrame];
-        _vk.WaitForFences(_device, 1, in fence, Vk.True, ulong.MaxValue);
+        _vk.WaitForFences(_device, 1, in fence, Silk.NET.Vulkan.Vk.True, ulong.MaxValue);
         
         // Manage swapchain
         uint imageIndex;
@@ -77,7 +75,7 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
         
         if (_imagesInFlight[imageIndex].Handle != 0)
         {
-            _vk.WaitForFences(_device, 1, in _imagesInFlight[imageIndex], Vk.True, ulong.MaxValue);
+            _vk.WaitForFences(_device, 1, in _imagesInFlight[imageIndex], Silk.NET.Vulkan.Vk.True, ulong.MaxValue);
         }
         
         _imagesInFlight[imageIndex] = _inFlightFences[_currentFrame];
@@ -287,7 +285,7 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
     
     private bool _framebufferResized = false;
     
-    private Vk _vk;
+    private Silk.NET.Vulkan.Vk _vk;
     private KhrSurface _vkSurface;
     private KhrSwapchain _vkSwapchain;
     private ExtDebugUtils _debugUtils;
@@ -317,7 +315,7 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
     
     internal void WaitForIdle()
     {
-        _vk.WaitForFences(_device, 1, in _inFlightFences[_currentFrame], Vk.True, ulong.MaxValue);
+        _vk.WaitForFences(_device, 1, in _inFlightFences[_currentFrame], Silk.NET.Vulkan.Vk.True, ulong.MaxValue);
         _vk.QueueWaitIdle(_graphicsQueue);
         _vk.QueueWaitIdle(_presentQueue);
         _vk.DeviceWaitIdle(_device);
