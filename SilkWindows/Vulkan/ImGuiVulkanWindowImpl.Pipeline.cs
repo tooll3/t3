@@ -1,8 +1,11 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using Silk.NET.Core;
 using Silk.NET.Core.Native;
 using Silk.NET.Maths;
@@ -595,21 +598,31 @@ public partial class ImGuiVulkanWindowImpl
         }
     }
     
+   
     private unsafe void CreateGraphicsPipeline()
     {
-        var compiler = Shaderc.GetApi().CompilerInitialize();
-        var api = Shaderc.GetApi();
-        var opts = api.CompileOptionsInitialize();
+        var watch = Stopwatch.StartNew();
+        if (!Compiler.TryCompileShaderFile("./Vulkan/shader.vert.glsl", "main", out var vertKind, out var vertCompiled))
+        {
+            throw new Exception("Failed to compile vertex shader");
+        }
         
-        var fragSrc = File.ReadAllBytes("./Vulkan/shader.frag");
-        var vertSrc = File.ReadAllBytes("./Vulkan/shader.vert");
+        watch.Stop();
+        Console.WriteLine($"Compiled shaders in {watch.ElapsedMilliseconds}ms");
+        watch.Restart();
         
-       // api.CompileIntoSpv(
+        if (!Compiler.TryCompileShaderFile("./Vulkan/shader.frag.glsl", "main", out var fragKind, out var fragCompiled))
+        {
+            throw new Exception("Failed to compile fragment shader");
+            
+        }
         
-       // api.CompilerRelease(compiler);
-       var vertShaderCode = fragSrc;//Program.LoadEmbeddedResourceBytes($"{nameof(ImGuiVulkan)}.shader.vert.spv");
-       var fragShaderCode = vertSrc;//Program.LoadEmbeddedResourceBytes($"{nameof(ImGuiVulkan)}.shader.frag.spv");
+        watch.Stop();
+        Console.WriteLine($"Compiled shaders in {watch.ElapsedMilliseconds}ms");
+        watch.Restart();
         
+        var vertShaderCode = vertCompiled; //Program.LoadEmbeddedResourceBytes($"{nameof(ImGuiVulkan)}.shader.vert.spv");
+        var fragShaderCode = fragCompiled;//vertSrc; //Program.LoadEmbeddedResourceBytes($"{nameof(ImGuiVulkan)}.shader.frag.spv");
         var vertShaderModule = CreateShaderModule(vertShaderCode);
         var fragShaderModule = CreateShaderModule(fragShaderCode);
         
