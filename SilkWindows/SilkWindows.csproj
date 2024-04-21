@@ -8,7 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Silk.NET\src\Lab\Experiments\ImGuiVulkan\ImGuiVulkan.csproj" />
       <ProjectReference Include="..\ImguiWindows\ImguiWindows.csproj" />
       <ProjectReference Include="..\Logging\Logging.csproj" />
       <ProjectReference Include="..\Serialization\Serialization.csproj" />
@@ -20,15 +19,24 @@
       <PackageReference Include="Silk.NET.OpenGL" Version="2.20.0" />
       <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.20.0" />
       <PackageReference Include="Silk.NET.Shaderc" Version="2.20.0" />
+      <PackageReference Include="Silk.NET.Vulkan" Version="2.20.0" />
+      <PackageReference Include="Silk.NET.Vulkan.Extensions.EXT" Version="2.20.0" />
+      <PackageReference Include="Silk.NET.Vulkan.Extensions.KHR" Version="2.20.0" />
       <PackageReference Include="Silk.NET.Windowing" Version="2.20.0" />
       <PackageReference Include="Silk.NET.XInput" Version="2.20.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Vulkan\shader.frag.glsl">
+      <None Update="Vulkan\Silk.NET Lab\Shaders\imgui-background.frag.glsl">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Vulkan\shader.vert.glsl">
+      <None Update="Vulkan\Silk.NET Lab\Shaders\imgui-background.vert.glsl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Vulkan\Silk.NET Lab\Shaders\triangle.frag.glsl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Vulkan\Silk.NET Lab\Shaders\triangle.vert.glsl">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

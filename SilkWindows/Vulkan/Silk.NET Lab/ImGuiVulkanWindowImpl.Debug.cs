@@ -1,9 +1,6 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using Silk.NET.Vulkan;
 
@@ -55,7 +52,7 @@ public partial class ImGuiVulkanWindowImpl
                 ($"{messageSeverity} {messageTypes}" + Marshal.PtrToStringAnsi((nint) pCallbackData->PMessage));
         }
         
-        return Vk.False;
+        return Silk.NET.Vulkan.Vk.False;
     }
     
     private unsafe void CheckValidationLayerSupport()

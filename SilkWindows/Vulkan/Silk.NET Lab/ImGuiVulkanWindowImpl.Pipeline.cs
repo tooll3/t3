@@ -1,15 +1,11 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using Silk.NET.Core;
 using Silk.NET.Core.Native;
 using Silk.NET.Maths;
-using Silk.NET.Shaderc;
 using Silk.NET.Vulkan;
 using Result = Silk.NET.Vulkan.Result;
 using Semaphore = Silk.NET.Vulkan.Semaphore;
@@ -44,7 +40,7 @@ public partial class ImGuiVulkanWindowImpl
     
     private unsafe void CreateInstance()
     {
-        _vk = Vk.GetApi();
+        _vk = Silk.NET.Vulkan.Vk.GetApi();
         
         var isMacOs = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
         
@@ -63,7 +59,7 @@ public partial class ImGuiVulkanWindowImpl
             ApplicationVersion = new Version32(1, 0, 0),
             PEngineName = (byte*) Marshal.StringToHGlobalAnsi("No Engine"),
             EngineVersion = new Version32(1, 0, 0),
-            ApiVersion = Vk.Version11
+            ApiVersion = Silk.NET.Vulkan.Vk.Version13
         };
         
         var createInfo = new InstanceCreateInfo
@@ -245,7 +241,7 @@ public partial class ImGuiVulkanWindowImpl
             
             _vkSurface.GetPhysicalDeviceSurfaceSupport(device, i, _surface, out var presentSupport);
             
-            if (presentSupport == Vk.True)
+            if (presentSupport == Silk.NET.Vulkan.Vk.True)
             {
                 indices.PresentFamily = i;
             }
@@ -400,7 +396,7 @@ public partial class ImGuiVulkanWindowImpl
             createInfo.PreTransform = swapChainSupport.Capabilities.CurrentTransform;
             createInfo.CompositeAlpha = CompositeAlphaFlagsKHR.OpaqueBitKhr;
             createInfo.PresentMode = presentMode;
-            createInfo.Clipped = Vk.True;
+            createInfo.Clipped = Silk.NET.Vulkan.Vk.True;
             
             createInfo.OldSwapchain = default;
             
@@ -570,7 +566,7 @@ public partial class ImGuiVulkanWindowImpl
         
         var dependency = new SubpassDependency
         {
-            SrcSubpass = Vk.SubpassExternal,
+            SrcSubpass = Silk.NET.Vulkan.Vk.SubpassExternal,
             DstSubpass = 0,
             SrcStageMask = PipelineStageFlags.ColorAttachmentOutputBit,
             SrcAccessMask = 0,
@@ -601,25 +597,16 @@ public partial class ImGuiVulkanWindowImpl
    
     private unsafe void CreateGraphicsPipeline()
     {
-        var watch = Stopwatch.StartNew();
-        if (!Compiler.TryCompileShaderFile("./Vulkan/shader.vert.glsl", "main", out var vertKind, out var vertCompiled))
+        if (!VkCompiler.TryCompileShaderFile("./Vulkan/Silk.NET Lab/Shaders/triangle.vert.glsl", "main", out _, out var vertCompiled))
         {
             throw new Exception("Failed to compile vertex shader");
         }
         
-        watch.Stop();
-        Console.WriteLine($"Compiled shaders in {watch.ElapsedMilliseconds}ms");
-        watch.Restart();
-        
-        if (!Compiler.TryCompileShaderFile("./Vulkan/shader.frag.glsl", "main", out var fragKind, out var fragCompiled))
+        if (!VkCompiler.TryCompileShaderFile("./Vulkan/Silk.NET Lab/Shaders/triangle.frag.glsl", "main", out _, out var fragCompiled))
         {
             throw new Exception("Failed to compile fragment shader");
             
         }
-        
-        watch.Stop();
-        Console.WriteLine($"Compiled shaders in {watch.ElapsedMilliseconds}ms");
-        watch.Restart();
         
         var vertShaderCode = vertCompiled; //Program.LoadEmbeddedResourceBytes($"{nameof(ImGuiVulkan)}.shader.vert.spv");
         var fragShaderCode = fragCompiled;//vertSrc; //Program.LoadEmbeddedResourceBytes($"{nameof(ImGuiVulkan)}.shader.frag.spv");
@@ -657,7 +644,7 @@ public partial class ImGuiVulkanWindowImpl
         {
             SType = StructureType.PipelineInputAssemblyStateCreateInfo,
             Topology = PrimitiveTopology.TriangleList,
-            PrimitiveRestartEnable = Vk.False
+            PrimitiveRestartEnable = Silk.NET.Vulkan.Vk.False
         };
         
         var viewport = new Viewport
@@ -684,19 +671,19 @@ public partial class ImGuiVulkanWindowImpl
         var rasterizer = new PipelineRasterizationStateCreateInfo
         {
             SType = StructureType.PipelineRasterizationStateCreateInfo,
-            DepthClampEnable = Vk.False,
-            RasterizerDiscardEnable = Vk.False,
+            DepthClampEnable = Silk.NET.Vulkan.Vk.False,
+            RasterizerDiscardEnable = Silk.NET.Vulkan.Vk.False,
             PolygonMode = PolygonMode.Fill,
             LineWidth = 1.0f,
             CullMode = CullModeFlags.BackBit,
             FrontFace = FrontFace.Clockwise,
-            DepthBiasEnable = Vk.False
+            DepthBiasEnable = Silk.NET.Vulkan.Vk.False
         };
         
         var multisampling = new PipelineMultisampleStateCreateInfo
         {
             SType = StructureType.PipelineMultisampleStateCreateInfo,
-            SampleShadingEnable = Vk.False,
+            SampleShadingEnable = Silk.NET.Vulkan.Vk.False,
             RasterizationSamples = SampleCountFlags.Count1Bit
         };
         
@@ -706,13 +693,13 @@ public partial class ImGuiVulkanWindowImpl
                              ColorComponentFlags.GBit |
                              ColorComponentFlags.BBit |
                              ColorComponentFlags.ABit,
-            BlendEnable = Vk.False
+            BlendEnable = Silk.NET.Vulkan.Vk.False
         };
         
         var colorBlending = new PipelineColorBlendStateCreateInfo
         {
             SType = StructureType.PipelineColorBlendStateCreateInfo,
-            LogicOpEnable = Vk.False,
+            LogicOpEnable = Silk.NET.Vulkan.Vk.False,
             LogicOp = LogicOp.Copy,
             AttachmentCount = 1,
             PAttachments = &colorBlendAttachment
