@@ -608,10 +608,8 @@ public partial class ImGuiVulkanWindowImpl
             
         }
         
-        var vertShaderCode = vertCompiled; //Program.LoadEmbeddedResourceBytes($"{nameof(ImGuiVulkan)}.shader.vert.spv");
-        var fragShaderCode = fragCompiled;//vertSrc; //Program.LoadEmbeddedResourceBytes($"{nameof(ImGuiVulkan)}.shader.frag.spv");
-        var vertShaderModule = CreateShaderModule(vertShaderCode);
-        var fragShaderModule = CreateShaderModule(fragShaderCode);
+        var vertShaderModule = CreateShaderModule(vertCompiled);
+        var fragShaderModule = CreateShaderModule(fragCompiled);
         
         var vertShaderStageInfo = new PipelineShaderStageCreateInfo
         {
