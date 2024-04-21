@@ -26,10 +26,10 @@ public class VulkanImGuiImpl(ImGuiVulkanWindowImpl vulkanWindow, Silk.NET.Vulkan
             vulkanWindow.GraphicsFamilyIndex,
             vulkanWindow.SwapChainLength,
             vulkanWindow.SwapChainImageFormat,
-            null
+            null,
+            onConfigure: onConfigureIO
         );
        
-        onConfigureIO?.Invoke();
         return _imGuiControllerVk.Context;
     }
     

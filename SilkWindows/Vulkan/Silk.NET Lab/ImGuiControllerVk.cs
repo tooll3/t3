@@ -59,7 +59,7 @@ namespace SilkWindows.Vulkan
         /// <param name="swapChainImageCt">The number of images used in the swap chain</param>
         /// <param name="swapChainFormat">The image format used by the swap chain</param>
         /// <param name="depthBufferFormat">The image formate used by the depth buffer, or null if no depth buffer is used</param>
-        public ImGuiControllerVk(Vk vk, IView view, IInputContext input, PhysicalDevice physicalDevice, uint graphicsFamilyIndex, int swapChainImageCt, Format swapChainFormat, Format? depthBufferFormat)
+        public ImGuiControllerVk(Vk vk, IView view, IInputContext input, PhysicalDevice physicalDevice, uint graphicsFamilyIndex, int swapChainImageCt, Format swapChainFormat, Format? depthBufferFormat, Action? onConfigure)
         {
             var context = ImGuiNET.ImGui.CreateContext();
             Context = context;
@@ -70,7 +70,7 @@ namespace SilkWindows.Vulkan
             io.Fonts.AddFontDefault();
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
 
-            Init(vk, view, input, physicalDevice, graphicsFamilyIndex, swapChainImageCt, swapChainFormat, depthBufferFormat);
+            Init(vk, view, input, physicalDevice, graphicsFamilyIndex, swapChainImageCt, swapChainFormat, depthBufferFormat, onConfigure);
 
             SetKeyMappings();
 
@@ -79,7 +79,7 @@ namespace SilkWindows.Vulkan
             BeginFrame();
         }
 
-        private unsafe void Init(Vk vk, IView view, IInputContext input, PhysicalDevice physicalDevice, uint graphicsFamilyIndex, int swapChainImageCt, Format swapChainFormat, Format? depthBufferFormat)
+        private unsafe void Init(Vk vk, IView view, IInputContext input, PhysicalDevice physicalDevice, uint graphicsFamilyIndex, int swapChainImageCt, Format swapChainFormat, Format? depthBufferFormat, Action? onConfigure)
         {
             _vk = vk;
             _view = view;
@@ -202,7 +202,7 @@ namespace SilkWindows.Vulkan
             binding.DescriptorType = DescriptorType.CombinedImageSampler;
             binding.DescriptorCount = 1;
             binding.StageFlags = ShaderStageFlags.FragmentBit;
-            binding.PImmutableSamplers = (Sampler*)Unsafe.AsPointer(ref sampler);
+            binding.PImmutableSamplers = (Sampler*)Unsafe.AsPointer(ref _fontSampler);
 
             var descriptorInfo = new DescriptorSetLayoutCreateInfo();
             descriptorInfo.SType = StructureType.DescriptorSetLayoutCreateInfo;
@@ -350,6 +350,7 @@ namespace SilkWindows.Vulkan
             SilkMarshal.Free((nint)stage[1].PName);
 
             // Initialise ImGui Vulkan adapter
+            onConfigure?.Invoke();
             var io = ImGuiNET.ImGui.GetIO();
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out int width, out int height);
