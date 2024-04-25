@@ -65,7 +65,20 @@ public static unsafe class VkCompiler
                                                    [NotNullWhen(true)] out byte[]? compiledShader, EnvVersion environment = EnvVersion.Vulkan13)
     {
         // hacky way of skipping garbage at the beginning of the file - like BOMs, etc, that the compiler hates
-        var srcStartIndex = src.IndexOf("#version", StringComparison.Ordinal);
+        int srcStartIndex;
+        
+        switch (sourceLanguage)
+        {
+            case SourceLanguage.Glsl:
+                srcStartIndex = src.IndexOf("#version", StringComparison.Ordinal);
+                break;
+            case SourceLanguage.Hlsl:
+                srcStartIndex = 0;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(sourceLanguage), sourceLanguage, null);
+        }
+        
         if (srcStartIndex == -1)
         {
             Console.WriteLine($"Could not find the start of the source code file. It must define \"#version\".");
