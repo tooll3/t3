@@ -192,6 +192,8 @@ public partial class ImGuiVulkanWindowImpl
         }
         
         var presentModeCount = 0u;
+        
+        // todo - is the following more redundant/complex than it needs to be?
         _vkSurface.GetPhysicalDeviceSurfacePresentModes(device, _surface, &presentModeCount, null);
         
         if (presentModeCount != 0)
@@ -276,9 +278,9 @@ public partial class ImGuiVulkanWindowImpl
     private unsafe void CreateLogicalDevice()
     {
         var indices = FindQueueFamilies(_physicalDevice);
-        var uniqueQueueFamilies = indices.GraphicsFamily.Value == indices.PresentFamily.Value
-            ? new[] { indices.GraphicsFamily.Value }
-            : new[] { indices.GraphicsFamily.Value, indices.PresentFamily.Value };
+        uint[] uniqueQueueFamilies = indices.GraphicsFamily.Value != indices.PresentFamily.Value
+            ? [indices.GraphicsFamily.Value, indices.PresentFamily.Value]
+            : [indices.GraphicsFamily.Value];
         
         _graphicsFamilyIndex = indices.GraphicsFamily.Value;
         
@@ -300,12 +302,14 @@ public partial class ImGuiVulkanWindowImpl
         
         var deviceFeatures = new PhysicalDeviceFeatures();
         
-        var createInfo = new DeviceCreateInfo();
-        createInfo.SType = StructureType.DeviceCreateInfo;
-        createInfo.QueueCreateInfoCount = (uint) uniqueQueueFamilies.Length;
-        createInfo.PQueueCreateInfos = queueCreateInfos;
-        createInfo.PEnabledFeatures = &deviceFeatures;
-        createInfo.EnabledExtensionCount = (uint) _deviceExtensions.Count;
+        var createInfo = new DeviceCreateInfo
+                             {
+                                 SType = StructureType.DeviceCreateInfo,
+                                 QueueCreateInfoCount = (uint) uniqueQueueFamilies.Length,
+                                 PQueueCreateInfos = queueCreateInfos,
+                                 PEnabledFeatures = &deviceFeatures,
+                                 EnabledExtensionCount = (uint) _deviceExtensions.Count
+                             };
         
         var enabledExtensionNames = SilkMarshal.StringArrayToPtr(_deviceExtensions);
         createInfo.PpEnabledExtensionNames = (byte**) enabledExtensionNames;
@@ -323,6 +327,7 @@ public partial class ImGuiVulkanWindowImpl
         fixed (Device* device = &_device)
         {
             // todo - verify _physicalDeviceFeatures has what we need for best-practice implementation before creating device
+            // maybe when initially choosing physical device
             
             if (_vk.CreateDevice(_physicalDevice, &createInfo, null, device) != Result.Success)
             {
@@ -347,7 +352,7 @@ public partial class ImGuiVulkanWindowImpl
             throw new NotSupportedException("KHR_swapchain extension not found.");
         }
         
-        Console.WriteLine($"{_vk.CurrentInstance?.Handle} {_vk.CurrentDevice?.Handle}");
+        Console.WriteLine($"Vulkan Instance: \"{_vk.CurrentInstance?.Handle}\", Device: \"{_vk.CurrentDevice?.Handle}\"");
     }
     
     private unsafe void CreateSwapChain()
@@ -356,8 +361,9 @@ public partial class ImGuiVulkanWindowImpl
         
         var surfaceFormat = ChooseSwapSurfaceFormat(swapChainSupport.Formats);
         var presentMode = ChooseSwapPresentMode(swapChainSupport.PresentModes);
-        var extent = ChooseSwapExtent(swapChainSupport.Capabilities);
+        var extent = ChooseSwapExtent(swapChainSupport.Capabilities); // extents of the rendered image on the presentation surface - width and height
         
+        // todo: this logic is a little loopy
         var imageCount = swapChainSupport.Capabilities.MinImageCount + 1;
         if (swapChainSupport.Capabilities.MaxImageCount > 0 &&
             imageCount > swapChainSupport.Capabilities.MaxImageCount)
@@ -382,6 +388,7 @@ public partial class ImGuiVulkanWindowImpl
         
         fixed (uint* qfiPtr = queueFamilyIndices)
         {
+            // if we have separate graphics and present queues, we allow concurrent usage of the queues
             if (indices.GraphicsFamily != indices.PresentFamily)
             {
                 createInfo.ImageSharingMode = SharingMode.Concurrent;
@@ -393,12 +400,12 @@ public partial class ImGuiVulkanWindowImpl
                 createInfo.ImageSharingMode = SharingMode.Exclusive;
             }
             
-            createInfo.PreTransform = swapChainSupport.Capabilities.CurrentTransform;
-            createInfo.CompositeAlpha = CompositeAlphaFlagsKHR.OpaqueBitKhr;
+            createInfo.PreTransform = swapChainSupport.Capabilities.CurrentTransform; // disable transformations - just render straight to the screen
+            createInfo.CompositeAlpha = CompositeAlphaFlagsKHR.OpaqueBitKhr; // opaque window transparency
             createInfo.PresentMode = presentMode;
             createInfo.Clipped = Silk.NET.Vulkan.Vk.True;
             
-            createInfo.OldSwapchain = default;
+            createInfo.OldSwapchain = default; // todo: this might be for window resizing and such - specify previous swapchain if it exists?
             
             if (!_vk.TryGetDeviceExtension(_instance, _vk.CurrentDevice.Value, out _vkSwapchain))
             {
@@ -414,6 +421,7 @@ public partial class ImGuiVulkanWindowImpl
             }
         }
         
+        // todo: pSwapChainImages argument - probably also for window resizing/swapchain recreation
         _vkSwapchain.GetSwapchainImages(_device, _swapchain, &imageCount, null);
         _swapchainImages = new Image[imageCount];
         fixed (Image* swapchainImage = _swapchainImages)
@@ -476,15 +484,16 @@ public partial class ImGuiVulkanWindowImpl
     {
         foreach (var availablePresentMode in presentModes)
         {
-            if (availablePresentMode == PresentModeKHR.MailboxKhr)
+            if (availablePresentMode == PresentModeKHR.MailboxKhr) // vertical sync, overwrites latest presentation requests (less latency?)
             {
                 return availablePresentMode;
             }
         }
         
-        return PresentModeKHR.FifoKhr;
+        return PresentModeKHR.FifoKhr; // vertical sync, appends new presentation requests to the queue (more latency?)
     }
     
+    // todo - are higher bit depths and their compatibilities worth implementing here? would this break shaders?
     private SurfaceFormatKHR ChooseSwapSurfaceFormat(SurfaceFormatKHR[] formats)
     {
         foreach (var format in formats)
@@ -500,6 +509,7 @@ public partial class ImGuiVulkanWindowImpl
     
     private unsafe void CreateImageViews()
     {
+        // determines how images in the swapchain are laid out in memory, aka how they are sampled/rendered
         _swapchainImageViews = new ImageView[_swapchainImages.Length];
         
         for (var i = 0; i < _swapchainImages.Length; i++)
@@ -508,7 +518,7 @@ public partial class ImGuiVulkanWindowImpl
             {
                 SType = StructureType.ImageViewCreateInfo,
                 Image = _swapchainImages[i],
-                ViewType = ImageViewType.Type2D,
+                ViewType = ImageViewType.Type2D, // final swapchain view is a 2D surface since it is a render target. can this be 3D for things like 3D displays?
                 Format = _swapchainImageFormat,
                 Components =
                 {
