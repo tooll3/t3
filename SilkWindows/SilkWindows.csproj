@@ -27,18 +27,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Vulkan\Silk.NET Lab\Shaders\imgui-background.frag.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Vulkan\Silk.NET Lab\Shaders\imgui-background.vert.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Vulkan\Silk.NET Lab\Shaders\triangle.frag.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Vulkan\Silk.NET Lab\Shaders\triangle.vert.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+      <None Update="Vulkan\Silk.NET Lab\Shaders\imgui-background.frag.glsl" CopyToOutputDirectory="Always"/>
+      <None Update="Vulkan\Silk.NET Lab\Shaders\imgui-background.vert.glsl" CopyToOutputDirectory="Always"/>
+      <None Update="Vulkan\Silk.NET Lab\Shaders\triangle.frag.glsl" CopyToOutputDirectory="Always"/>
+      <None Update="Vulkan\Silk.NET Lab\Shaders\triangle.vert.glsl" CopyToOutputDirectory="Always"/>
     </ItemGroup>
 
 </Project>
