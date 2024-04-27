@@ -21,6 +21,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Selection;
@@ -54,7 +55,6 @@ public class T3Ui
 
         //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
-        VariationHandling.Init();
 
         Playback.Current = DefaultTimelinePlayback;
         ThemeHandling.Initialize();
@@ -68,6 +68,7 @@ public class T3Ui
         if (_initialed || ImGui.GetWindowSize() == Vector2.Zero)
             return;
             
+        CompatibleMidiDeviceHandling.InitializeConnectedDevices();
         ActiveMidiRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
         _initialed = true;
     }
@@ -107,7 +108,9 @@ public class T3Ui
         // Set selected id so operator can check if they are selected or not  
         var selectedInstance = NodeSelection.GetSelectedInstance();
         MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
-            
+        
+        CompatibleMidiDeviceHandling.UpdateConnectedDevices();
+        
         // Keep invalidating selected op to enforce rendering of Transform gizmo  
         foreach (var si in NodeSelection.GetSelectedInstances().ToList())
         {
@@ -290,7 +293,7 @@ public class T3Ui
                     UndoRedoStack.Undo();
                 }
 
-                if (ImGui.MenuItem("Redo", "CTRL+Y", false, UndoRedoStack.CanRedo))
+                if (ImGui.MenuItem("Redo", "CTRL+SHIFT+Z", false, UndoRedoStack.CanRedo))
                 {
                     UndoRedoStack.Redo();
                 }

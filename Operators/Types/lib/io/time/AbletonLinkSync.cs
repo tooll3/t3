@@ -18,6 +18,9 @@ namespace T3.Operators.Types.Id_31ab98ec_5e79_4667_9a85_2fb168f41fa1
         [Output(Guid = "D6E453E6-1D3F-4765-A427-DD9967BFBC34", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Tempo = new();
 
+        [Output(Guid = "DEAB643C-F608-4DA9-A1C2-298449D17BC0", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<bool> IsConnected = new();
+        
         public AbletonLinkSync()
         {
             TryInitialize();
@@ -27,7 +30,10 @@ namespace T3.Operators.Types.Id_31ab98ec_5e79_4667_9a85_2fb168f41fa1
 
         private void Update(EvaluationContext context)
         {
-            if (_nativeLinkInstance == IntPtr.Zero)
+            var isConnected = _nativeLinkInstance != IntPtr.Zero;
+            IsConnected.Value = isConnected;
+            
+            if (!isConnected)
                 return;
             
             if (MathUtils.WasTriggered(TriggerStartPlaying.GetValue(context), ref _triggerStart))

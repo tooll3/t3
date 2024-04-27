@@ -142,7 +142,7 @@ namespace T3.Core.Utils
                                                   Gradient newGradient = gradientA.TypedClone();
                                                   for (int index = 0; index < gradientA.Steps.Count; index++)
                                                   {
-                                                      Log.Debug("Blending gradient steps...");
+                                                      //Log.Debug("Blending gradient steps...");
                                                       var stepA = gradientA.Steps[index];
                                                       var stepB = gradientB.Steps[index];
                                                       newGradient.Steps[index].NormalizedPosition =

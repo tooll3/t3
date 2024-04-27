@@ -13,8 +13,7 @@ using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9 
 {
-    public class MidiOutput : Instance<MidiOutput>
-,ICustomDropdownHolder,IStatusProvider
+    public class MidiOutput : Instance<MidiOutput>, ICustomDropdownHolder,IStatusProvider
     {
         [Output(Guid = "670C784C-DE53-46F4-B93A-A1F07AA8F18E")]
         public readonly Slot<Command> Result = new();
@@ -52,7 +51,7 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
             }
             
             
-            foreach (var (m, device) in MidiInConnectionManager._midiOutsWithDevices)
+            foreach (var (m, device) in MidiConnectionManager.MidiOutsWithDevices)
             {
                 if (device.ProductName != deviceName)
                     continue;
@@ -163,7 +162,7 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
                 yield break;
             }
             
-            foreach (var device in MidiInConnectionManager._midiOutsWithDevices.Values)
+            foreach (var device in MidiConnectionManager.MidiOutsWithDevices.Values)
             {
                 yield return device.ProductName;
             }

@@ -391,7 +391,7 @@
         {
           "Id": "3c8b43be-430f-4afe-8244-5282be49bfbc"/*Samples*/,
           "Type": "System.Single",
-          "Value": 8.0
+          "Value": 11.0
         }
       ],
       "Outputs": []

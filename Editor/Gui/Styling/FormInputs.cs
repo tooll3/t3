@@ -207,10 +207,14 @@ namespace T3.Editor.Gui.Styling
         }
         
         
-        public static bool AddSegmentedButton<T>(ref T selectedValue, string label, float columnWidth=0) where T : struct, Enum
+        public static bool AddSegmentedButtonWithLabel<T>(ref T selectedValue, string label, float columnWidth=0) where T : struct, Enum
         {
             DrawInputLabel(label);
+            return SegmentedButton(ref selectedValue, columnWidth);
+        }
 
+        public static bool SegmentedButton<T>(ref T selectedValue, float columnWidth = 0) where T : struct, Enum
+        {
             var modified = false;
             var selectedValueString = selectedValue.ToString();
             var isFirst = true;

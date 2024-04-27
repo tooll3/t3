@@ -23,6 +23,7 @@ namespace T3.Operators.Types.Id_98bd1491_6e69_4ae0_9fc1_0be8e6a72d32
             var strA = InputTextA.GetValue(context);
             var strB = InputTextB.GetValue(context);
             var blendFactor = Blend.GetValue(context).Clamp(0,1);
+            var blendSpread = BlendSpread.GetValue(context);
 
             var maxLength = Math.Max(strA.Length, strB.Length).Clamp(1,100);
             var scrambleFactor = Scramble.GetValue(context);
@@ -43,14 +44,18 @@ namespace T3.Operators.Types.Id_98bd1491_6e69_4ae0_9fc1_0be8e6a72d32
                     continue;
                 }
 
-                var charAInt = chars.IndexOf(charA).Clamp(0,chars.Length-1);
-                var charBInt = chars.IndexOf(charB).Clamp(0,chars.Length-1);
+                var charCount = chars.Length;
+                var charAInt = chars.IndexOf(charA).Clamp(0,charCount-1);
+                var charBInt = chars.IndexOf(charB).Clamp(0,charCount-1);
                 
                 var hashA = MathUtils.Hash01((uint)((index * 123 + scrambleSeed/100))); 
-                var scrambleOffset = hashA < 0.1f + scrambleFactor ?  (MathUtils.Hash01((uint)(index * 123 + scrambleSeed )) - 0.5f) * chars.Length 
-                                                     :0;
+                var scrambleOffset = hashA < scrambleFactor 
+                                         ? (MathUtils.Hash01((uint)(index * 123 + scrambleSeed )) - 0.5f) * charCount 
+                                         : 0;
 
-                var blendedValue = (int)(charAInt + (charBInt - charAInt) * blendFactor + scrambleOffset).Clamp(0, chars.Length-1);
+                var x = maxLength <= 1 ? 0: index/ (float)(maxLength-1);
+                var blendProgressForChar = ProgressTransition(x, blendFactor, blendSpread);
+                var blendedValue = (int)(charAInt + (charBInt - charAInt) * blendProgressForChar + scrambleOffset).Clamp(0, charCount-1);
                 var s = chars[blendedValue];
                 _stringBuilder.Append(s);
             }
@@ -66,6 +71,16 @@ namespace T3.Operators.Types.Id_98bd1491_6e69_4ae0_9fc1_0be8e6a72d32
             return str[index];
         }
         
+        /// <summary>
+        /// Return a normalized progress value for a given t and spreading.
+        /// </summary>
+        /// <remarks>
+        /// This is easier visualized than explained. Please have a look at: https://www.desmos.com/calculator/vd2njtavqq</remarks>
+        public static float ProgressTransition(float x, float progress, float spread=1)
+        {
+            return ((x-progress)/spread - progress + 1).Clamp(0,1);    
+        }
+        
         private StringBuilder _stringBuilder = new();
         
         
@@ -78,6 +93,9 @@ namespace T3.Operators.Types.Id_98bd1491_6e69_4ae0_9fc1_0be8e6a72d32
         
         [Input(Guid = "2EFD4A0C-958C-49F6-86CB-F8D9FD6FB308")]
         public readonly InputSlot<float> Blend= new();
+        
+        [Input(Guid = "C3E0CDE4-FECF-4802-A287-A173A6A12518")]
+        public readonly InputSlot<float> BlendSpread= new();
         
         [Input(Guid = "DC4E5B79-53E5-463A-92AD-D9BB1F2B0495")]
         public readonly InputSlot<float> Scramble= new();

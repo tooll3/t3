@@ -9,7 +9,7 @@ namespace T3.Editor.Gui.Windows.Variations
 {
     public class PresetCanvas : VariationBaseCanvas
     {
-        public override void DrawToolbarFunctions()
+        public virtual void DrawToolbarFunctions()
         {
             var s = ImGui.GetFrameHeight();
             if (VariationHandling.ActivePoolForPresets == null)
@@ -17,11 +17,11 @@ namespace T3.Editor.Gui.Windows.Variations
             
             if (CustomComponents.IconButton(Icon.Plus, new Vector2(s, s)))
             {
-                CreateVariation();
+                CreatePreset();
             }
         }
 
-        public override string GetTitle()
+        protected override string GetTitle()
         {
             if (VariationHandling.ActiveInstanceForPresets == null)
                 return "";
@@ -36,7 +36,7 @@ namespace T3.Editor.Gui.Windows.Variations
         {
         }
 
-        public override Variation CreateVariation()
+        private void CreatePreset()
         {
             var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
             if (newVariation != null)
@@ -49,7 +49,6 @@ namespace T3.Editor.Gui.Windows.Variations
             Selection.SetSelection(newVariation);
             ResetView();
             TriggerThumbnailUpdate();
-            return newVariation;
         }
     }
 }

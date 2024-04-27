@@ -13,7 +13,7 @@ namespace Operators.Utils.Recording;
 ///   - MidiInput and MidiStream recorder would need to share the same MidiEvent definition (maybe different from NAudio.MidiEvent)
 ///   - Handle MidiEvent should not rely on the MidiIn class to avoid double lookup of device description.
 /// </summary>
-public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
+public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
 {
     public readonly DataSet DataSet = new();
     public double LastEventTime = 0;
@@ -21,7 +21,7 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
     
     public MidiDataRecording()
     {
-        MidiInConnectionManager.RegisterConsumer(this);
+        MidiConnectionManager.RegisterConsumer(this);
     }
 
     public void Reset()
@@ -30,7 +30,7 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
         _channelsByHash.Clear();
     }
 
-    void MidiInConnectionManager.IMidiConsumer.MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
+    void MidiConnectionManager.IMidiConsumer.MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
         if (sender is not MidiIn midiIn || msg.MidiEvent == null || TypeNameRegistry.Entries.Values.Count == 0)
             return;
@@ -40,7 +40,7 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
         
         LastEventTime = Playback.RunTimeInSecs;
 
-        var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
+        var device = MidiConnectionManager.GetDescriptionForMidiIn(midiIn);
         var deviceName = (device.ProductName
                           + (device.ProductId is not (0 or 65535)
                                  ? device.ProductId.ToString()
@@ -144,11 +144,11 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
         return newChannel;
     }
 
-    void MidiInConnectionManager.IMidiConsumer.ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
+    void MidiConnectionManager.IMidiConsumer.ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
     }
     
-    void MidiInConnectionManager.IMidiConsumer.OnSettingsChanged()
+    void MidiConnectionManager.IMidiConsumer.OnSettingsChanged()
     {
     }
 

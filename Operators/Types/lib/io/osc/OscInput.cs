@@ -24,7 +24,6 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
         [Output(Guid = "8F426B4A-AD49-4AB9-80EE-3DF9F5A5AFF6", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> LastMessageTime = new ();
 
-
         public OscInput()
         {
             FirstResult.UpdateAction = Update;
@@ -132,10 +131,10 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
 
                 var matchesAddress = msg.Address == _address;
 
-                    if (matchesAddress || _teachingActive)
-                    {
-                        _lastMatchingSignals.Add(msg);
-                        _isDefaultValue = false;
+                if (matchesAddress || _teachingActive)
+                {
+                    _lastMatchingSignals.Add(msg);
+                    _isDefaultValue = false;
                 }
             }
         }
@@ -174,9 +173,5 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
 
         [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
         public readonly InputSlot<bool> PrintLogMessages = new();
-        
-        
-        
-
     }
 }

@@ -14,7 +14,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 {
-    public class MidiInput : Instance<MidiInput>, MidiInConnectionManager.IMidiConsumer, IStatusProvider
+    public class MidiInput : Instance<MidiInput>, MidiConnectionManager.IMidiConsumer, IStatusProvider
     {
         [Output(Guid = "01706780-D25B-4C30-A741-8B7B81E04D82")]
         public readonly Slot<float> Result = new();
@@ -39,21 +39,22 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             if (!isDisposing)
                 return;
 
-            MidiInConnectionManager.UnregisterConsumer(this);
+            MidiConnectionManager.UnregisterConsumer(this);
         }
 
         private void Update(EvaluationContext context)
         {
             if (!_initialized)
             {
-                MidiInConnectionManager.RegisterConsumer(this);
+                MidiConnectionManager.RegisterConsumer(this);
                 _initialized = true;
             }
             
             _trainedDeviceName = Device.GetValue(context);
 
-            var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(_trainedDeviceName.GetHashCode());
-            _warningMessage = midiIn == null ? $"Midi device '{_trainedDeviceName}' is not captured.\nYou can try Windows » Settings » Midi » Rescan Devices." : null;
+            _warningMessage = MidiConnectionManager.TryGetMidiIn(_trainedDeviceName, out _) 
+                                      ? null 
+                                      : $"Midi device '{_trainedDeviceName}' is not captured.\nYou can try Windows » Settings » Midi » Rescan Devices.";
             
             _trainedChannel = Channel.GetValue(context);
             _trainedControllerId = Control.GetValue(context);
@@ -141,7 +142,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
                 _lastMatchingSignals.Clear();
             }
-
+            
             if (_isDefaultValue && _trainedEventType != MidiEventTypes.MidiTime)
             {
                 Result.Value = defaultOutputValue;
@@ -150,7 +151,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                 WasHit.DirtyFlag.Clear();
                 return;
             }
-
+            
             var currentValue = UseControlRange
                                    ? _currentControllerId
                                    : MathUtils.RemapAndClamp(_currentControllerValue, 0, 127, outRange.X, outRange.Y);
@@ -163,6 +164,12 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
             _dampedOutputValue = MathUtils.Lerp(currentValue, _dampedOutputValue, damping);
 
+            if (ResetToDefaultTrigger.GetValue(context))
+            {
+                ResetToDefaultTrigger.SetTypedInputValue(false);
+                _isDefaultValue = true;
+            }
+            
             var reachTarget = MathF.Abs(_dampedOutputValue - currentValue) < 0.0001f;
             var needsUpdateNextFrame = !reachTarget || wasHit;
             Result.DirtyFlag.Trigger = needsUpdateNextFrame ? DirtyFlagTrigger.Animated : DirtyFlagTrigger.None;
@@ -212,9 +219,10 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
                 MidiSignal newSignal = null;
 
-                var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
+                var device = MidiConnectionManager.GetDescriptionForMidiIn(midiIn);
 
-
+                // var midiIn2 = midiIn;
+                // midiIn2.
                 if (msg.MidiEvent is ControlChangeEvent controlEvent)
                 {
                     if (_printLogMessages)
@@ -304,7 +312,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             }
         }
 
-        void MidiInConnectionManager.IMidiConsumer.OnSettingsChanged()
+        void MidiConnectionManager.IMidiConsumer.OnSettingsChanged()
         {
             Result.DirtyFlag.Invalidate();
             Range.DirtyFlag.Invalidate();
@@ -392,6 +400,9 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
         [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
         public readonly InputSlot<bool> PrintLogMessages = new();
+        
+        [Input(Guid = "AC35E75A-BEC5-497C-9C68-6B809B12CD8B")]
+        public readonly InputSlot<bool> ResetToDefaultTrigger = new();
 
 
     }

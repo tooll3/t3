@@ -16,7 +16,7 @@ using T3.Editor.Gui.Commands.Variations;
 namespace T3.Editor.Gui.Interaction.Variations.Model
 {
     /// <summary>
-    /// Collects all presets and variations for a symbol 
+    /// Collects all presets and variations for a symbol.
     /// </summary>
     public class SymbolVariationPool
     {
@@ -27,12 +27,12 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public static SymbolVariationPool InitVariationPoolForSymbol(Guid compositionId)
         {
-            var newPool = new SymbolVariationPool()
+            var newPool = new SymbolVariationPool
                               {
-                                  SymbolId = compositionId
+                                  SymbolId = compositionId,
+                                  Variations = LoadVariations(compositionId)
                               };
 
-            newPool.Variations = LoadVariations(compositionId);
             return newPool;
         }
 
@@ -91,9 +91,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public void SaveVariationsToFile()
         {
-            // if (Variations.Count == 0)
-            //     return;
-
             CreateFolderIfNotExists(VariationsFolder);
             
             var filePath = GetFilePathForVariationId(SymbolId);
@@ -108,7 +105,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
                 writer.WriteValue("Id", SymbolId);
 
-                // Presets
                 {
                     writer.WritePropertyName("Variations");
                     writer.WriteStartArray();
@@ -492,7 +488,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         private static MacroCommand CreateBlendTowardsVariationCommand(Instance compositionInstance, Variation variation, float blend)
         {
             var commands = new List<ICommand>();
-            //var parentSymbol = compositionInstance.Parent.Symbol;
             if (!variation.IsSnapshot)
                 return null;
             
