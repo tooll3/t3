@@ -52,8 +52,8 @@ namespace T3.Operators.Types.Id_c154b616_8aaf_4d43_ae95_035951b531c8
         private enum Modes
         {
             Replace,
-            Multiply,
             Add,
+            Multiply,
         }
     }
 }

@@ -1,6 +1,6 @@
 {
   "Id": "c154b616-8aaf-4d43-ae95-035951b531c8"/*ConvertPointAttributes*/,
-  "Description": "Takes one point attribute and converts it into another.",
+  "Description": "Takes one point attribute and converts it into another on a per-point basis, with some controls for transforming those attributes.\n\nFor finer control over point color or W, try [SpreadPointAttributes].\n",
   "InputUis": [
     {
       "InputId": "cace5c6d-5411-4835-97c0-b2690b4e1b26"/*Points*/,
@@ -8,42 +8,48 @@
       "Position": {
         "X": -501.39294,
         "Y": 452.90167
-      }
+      },
+      "Description": "Input points to be converted."
     },
     {
       "InputId": "c1631db3-ba6f-4bd5-badf-30309b001d60"/*Mode*/,
       "Position": {
         "X": -485.94177,
         "Y": 849.4209
-      }
+      },
+      "Description": "Replace: Sets ConvertTo to be exactly the same as ConvertFrom.\nAdd: Adds ConvertFrom onto ConvertTo.\nMultiply: Multiplies ConvertFrom by ConvertTo.\n\n"
     },
     {
       "InputId": "ec70d9cc-d0ed-4490-8f50-542e442f38cd"/*ConvertFrom*/,
       "Position": {
         "X": -483.93066,
         "Y": 673.4205
-      }
+      },
+      "Description": "Input attribute for use in conversion."
     },
     {
       "InputId": "035af505-295a-4ecd-9230-8e1e22f38c4a"/*ConvertTo*/,
       "Position": {
         "X": -483.93066,
         "Y": 718.4206
-      }
+      },
+      "Description": "Output attribute to be modified by this operator."
     },
     {
       "InputId": "ab049e91-c918-43f2-97b5-457c4eaffa89"/*Amount*/,
       "Position": {
         "X": -484.9242,
         "Y": 915.43134
-      }
+      },
+      "Description": "Multiplies the input attribute before converting."
     },
     {
       "InputId": "2d55ff51-5f1b-421a-95ab-9c18d34b0efe"/*Offset*/,
       "Position": {
         "X": -484.9242,
         "Y": 960.4316
-      }
+      },
+      "Description": "Added to the input attribute before converting."
     }
   ],
   "SymbolChildUis": [
