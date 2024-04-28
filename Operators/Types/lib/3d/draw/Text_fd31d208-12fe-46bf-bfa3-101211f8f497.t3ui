@@ -8,6 +8,7 @@
         "X": -436.39325,
         "Y": 175.66428
       },
+      "Description": "String / Input for the text to be drawn",
       "Usage": "Multiline"
     },
     {
@@ -15,14 +16,16 @@
       "Position": {
         "X": -437.69647,
         "Y": 293.73972
-      }
+      },
+      "Description": "defines which color the surfaces of the letters have"
     },
     {
       "InputId": "989e6950-fd32-4d0b-97c2-d03264cb2db5"/*Shadow*/,
       "Position": {
         "X": -437.69647,
         "Y": 338.73972
-      }
+      },
+      "Description": "Defines the color / opacity of the shadow that appears as an outline\nColors brighter than 1 create a glow effect"
     },
     {
       "InputId": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
@@ -30,6 +33,7 @@
         "X": -438.90158,
         "Y": 425.33575
       },
+      "Description": "Offsets the position of the Text element",
       "AddPadding": "True",
       "Scale": 0.01,
       "UseVec2Control": "Position"
@@ -41,6 +45,7 @@
         "Y": 492.487
       },
       "GroupTitle": "Font & Size",
+      "Description": "Defines which font is used",
       "Usage": "FilePath",
       "FileFilter": "Fonts (*.fnt)|*.fnt"
     },
@@ -50,6 +55,7 @@
         "X": -437.7634,
         "Y": 537.487
       },
+      "Description": "Uniformly scales the Text",
       "Min": 0.0,
       "Max": 500.0,
       "Scale": 1.0
@@ -60,6 +66,7 @@
         "X": -440.03976,
         "Y": 613.9148
       },
+      "Description": "Defines how wide the gaps between the letters and words are",
       "Min": -10.0,
       "Max": 10.0,
       "Scale": 0.1
@@ -69,7 +76,8 @@
       "Position": {
         "X": -448.00687,
         "Y": 698.57904
-      }
+      },
+      "Description": "Defines the space between the lines, if there are more than 1"
     },
     {
       "InputId": "ae7f7e83-fa18-44fd-b639-3bd0dbd3ac06"/*VerticalAlign*/,
@@ -77,14 +85,16 @@
         "X": -448.00687,
         "Y": 743.57904
       },
-      "GroupTitle": "Alignment"
+      "GroupTitle": "Alignment",
+      "Description": "Defines how high the letters are in relation to the pivot.\n\nTop: The pivot point is on the row line\nMiddle: The letters are centered above the pivot\nBottom: The pivot is at the bottom of the letters such as 'y' 'g' etc."
     },
     {
       "InputId": "82cc31ff-3307-4b6d-be70-16e471c2ffc9"/*HorizontalAlign*/,
       "Position": {
         "X": -448.00687,
         "Y": 788.57916
-      }
+      },
+      "Description": "Defines where the pivot is located in the horizontal position"
     },
     {
       "InputId": "28be4e86-6761-4d07-80bf-abf6f82897e4"/*CullMode*/,
@@ -92,14 +102,16 @@
         "X": -448.00687,
         "Y": 833.57916
       },
-      "GroupTitle": "Draw Options"
+      "GroupTitle": "Draw Options",
+      "Description": "Defines whether / which surface is rendered invisible"
     },
     {
       "InputId": "7a76d5aa-1f44-4238-9333-7c2951becc31"/*EnableZTest*/,
       "Position": {
         "X": -448.00687,
         "Y": 878.57916
-      }
+      },
+      "Description": "Activates / deactivates whether the text covers / is covered by other elements."
     }
   ],
   "SymbolChildUis": [
