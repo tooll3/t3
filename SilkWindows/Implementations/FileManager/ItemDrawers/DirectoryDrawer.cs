@@ -38,7 +38,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
             new FileTableColumn("Modified Date", ColumnFlags, (file, fonts) => file.DrawLastModified(fonts))
         ];
     
-    public DirectoryDrawer(IFileManager fileManager, DirectoryInfo directory, bool isReadOnly, DirectoryDrawer? parent, string? alias = null) :
+    public DirectoryDrawer(IFileManager fileManager, DirectoryInfo directory, bool isReadOnly, DirectoryDrawer? parent, bool startExpanded, string? alias = null) :
         base(fileManager, parent)
     {
         DirectoryInfo = directory;
@@ -73,6 +73,8 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
         {
             _relativeDirectory = DisplayName;
         }
+        
+        Expanded = startExpanded;
     }
     
     public void MarkNeedsRescan() => _needsRescan = true;
@@ -87,7 +89,7 @@ internal sealed class DirectoryDrawer : FileSystemDrawer
             switch (dir)
             {
                 case DirectoryInfo di:
-                    _directories.Add(new DirectoryDrawer(FileManager, di, IsReadOnly, this));
+                    _directories.Add(new DirectoryDrawer(FileManager, di, IsReadOnly, this, false));
                     break;
                 case FileInfo fi:
                     

@@ -32,7 +32,7 @@ public sealed partial class FileManager : AsyncImguiDrawer<PathInformation>, IFi
                                  if (!directoryInfo.Exists)
                                      throw new DirectoryNotFoundException(directoryInfo.FullName);
                                  
-                                 var drawer = new DirectoryDrawer(this, directoryInfo, dir.IsReadOnly, null, dir.Alias);
+                                 var drawer = new DirectoryDrawer(this, directoryInfo, dir.IsReadOnly, null, dir.startExpanded, dir.Alias);
                                  
                                  var id = "##col_" + directoryInfo.FullName;
                                  return new Column(drawer, dir.startExpanded, id);
