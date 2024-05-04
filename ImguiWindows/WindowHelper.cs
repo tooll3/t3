@@ -96,7 +96,7 @@ public sealed class WindowHelper
         {
             var windowSize = _window.Size;
             var clearColor = _imguiHandler?.ClearColor ?? _windowImpl.DefaultClearColor;
-            clearColor = Color.White;
+            //clearColor = Color.White;
             if (_windowImpl.Render(clearColor, deltaTime))
             {
                 _imguiHandler?.Draw(new Vector2(windowSize.X, windowSize.Y), deltaTime);
