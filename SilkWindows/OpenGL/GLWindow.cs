@@ -6,7 +6,7 @@ using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
 
-namespace SilkWindows;
+namespace SilkWindows.OpenGL;
 
 // ReSharper disable once InconsistentNaming
 internal sealed class GLWindow : IWindowImplementation

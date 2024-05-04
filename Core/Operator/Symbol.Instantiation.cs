@@ -202,7 +202,7 @@ public sealed partial class Symbol
                     }
                     catch (Exception e)
                     {
-                        reason = "Failed to create instance of type {symbol.InstanceType} with id {id}: {e}";
+                        reason = $"Failed to create instance of type {symbol.InstanceType} with id {id}: {e}";
                         instance = null;
                         return false;
                     }

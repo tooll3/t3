@@ -8,11 +8,13 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using ImGuiNET;
 using ImGuiVulkan;
+using Silk.NET.Core;
 using Silk.NET.Core.Native;
 using Silk.NET.Input;
 using Silk.NET.Input.Extensions;
 using Silk.NET.Maths;
 using Silk.NET.Vulkan;
+using Silk.NET.Vulkan.Extensions.KHR;
 using Silk.NET.Windowing;
 using Buffer = Silk.NET.Vulkan.Buffer;
 
@@ -30,7 +32,6 @@ namespace SilkWindows.Vulkan
         private readonly List<char> _pressedChars = new List<char>();
         private IKeyboard _keyboard;
         private DescriptorPool _descriptorPool;
-        private RenderPass _renderPass;
         private int _windowWidth;
         private int _windowHeight;
         private int _swapChainImageCt;
@@ -42,7 +43,6 @@ namespace SilkWindows.Vulkan
         private ShaderModule _shaderModuleFrag;
         private Pipeline _pipeline;
         private WindowRenderBuffers _mainWindowRenderBuffers;
-        private GlobalMemory _frameRenderBuffers;
         private DeviceMemory _fontMemory;
         private Image _fontImage;
         private ImageView _fontView;
@@ -59,7 +59,7 @@ namespace SilkWindows.Vulkan
         /// <param name="swapChainImageCt">The number of images used in the swap chain</param>
         /// <param name="swapChainFormat">The image format used by the swap chain</param>
         /// <param name="depthBufferFormat">The image formate used by the depth buffer, or null if no depth buffer is used</param>
-        public ImGuiControllerVk(Vk vk, IView view, IInputContext input, PhysicalDevice physicalDevice, uint graphicsFamilyIndex, int swapChainImageCt, Format swapChainFormat, Format? depthBufferFormat, Action? onConfigure)
+        public ImGuiControllerVk(Vk vk, KhrDynamicRendering rendering, IView view, IInputContext input, PhysicalDevice physicalDevice, uint graphicsFamilyIndex, int swapChainImageCt, Format swapChainFormat, Format? depthBufferFormat, Action? onConfigure)
         {
             var context = ImGuiNET.ImGui.CreateContext();
             Context = context;
@@ -70,7 +70,7 @@ namespace SilkWindows.Vulkan
             io.Fonts.AddFontDefault();
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
 
-            Init(vk, view, input, physicalDevice, graphicsFamilyIndex, swapChainImageCt, swapChainFormat, depthBufferFormat, onConfigure);
+            Init(vk, rendering, view, input, physicalDevice, graphicsFamilyIndex, swapChainImageCt, swapChainFormat, depthBufferFormat, onConfigure);
 
             SetKeyMappings();
 
@@ -79,7 +79,7 @@ namespace SilkWindows.Vulkan
             BeginFrame();
         }
 
-        private unsafe void Init(Vk vk, IView view, IInputContext input, PhysicalDevice physicalDevice, uint graphicsFamilyIndex, int swapChainImageCt, Format swapChainFormat, Format? depthBufferFormat, Action? onConfigure)
+        private unsafe void Init(Vk vk, KhrDynamicRendering rendering, IView view, IInputContext input, PhysicalDevice physicalDevice, uint graphicsFamilyIndex, int swapChainImageCt, Format swapChainFormat, Format? depthBufferFormat, Action? onConfigure)
         {
             _vk = vk;
             _view = view;
@@ -106,36 +106,44 @@ namespace SilkWindows.Vulkan
 
             // Create the descriptor pool for ImGui
             Span<DescriptorPoolSize> poolSizes = stackalloc DescriptorPoolSize[] { new DescriptorPoolSize(DescriptorType.CombinedImageSampler, 1) };
-            var descriptorPool = new DescriptorPoolCreateInfo();
-            descriptorPool.SType = StructureType.DescriptorPoolCreateInfo;
-            descriptorPool.PoolSizeCount = (uint)poolSizes.Length;
-            descriptorPool.PPoolSizes = (DescriptorPoolSize*)Unsafe.AsPointer(ref poolSizes.GetPinnableReference());
-            descriptorPool.MaxSets = 1;
+            var descriptorPool = new DescriptorPoolCreateInfo
+                                     {
+                                         SType = StructureType.DescriptorPoolCreateInfo,
+                                         PoolSizeCount = (uint)poolSizes.Length,
+                                         PPoolSizes = (DescriptorPoolSize*)Unsafe.AsPointer(ref poolSizes.GetPinnableReference()),
+                                         MaxSets = 1
+                                     };
             if (_vk.CreateDescriptorPool(_device, descriptorPool, default, out _descriptorPool) != Result.Success)
             {
                 throw new Exception($"Unable to create descriptor pool");
             }
 
             // Create the render pass
-            var colorAttachment = new AttachmentDescription();
-            colorAttachment.Format = swapChainFormat;
-            colorAttachment.Samples = SampleCountFlags.Count1Bit;
-            colorAttachment.LoadOp = AttachmentLoadOp.Load;
-            colorAttachment.StoreOp = AttachmentStoreOp.Store;
-            colorAttachment.StencilLoadOp = AttachmentLoadOp.DontCare;
-            colorAttachment.StencilStoreOp = AttachmentStoreOp.DontCare;
-            colorAttachment.InitialLayout = AttachmentLoadOp.Load == AttachmentLoadOp.Clear ? ImageLayout.Undefined : ImageLayout.PresentSrcKhr;
-            colorAttachment.FinalLayout = ImageLayout.PresentSrcKhr;
-
-            var colorAttachmentRef = new AttachmentReference();
-            colorAttachmentRef.Attachment = 0;
-            colorAttachmentRef.Layout = ImageLayout.ColorAttachmentOptimal;
-
-            var subpass = new SubpassDescription();
-            subpass.PipelineBindPoint = PipelineBindPoint.Graphics;
-            subpass.ColorAttachmentCount = 1;
-            subpass.PColorAttachments = (AttachmentReference*)Unsafe.AsPointer(ref colorAttachmentRef);
-
+            var colorAttachment = new AttachmentDescription
+                                      {
+                                          Format = swapChainFormat,
+                                          Samples = SampleCountFlags.Count1Bit,
+                                          LoadOp = AttachmentLoadOp.Load,
+                                          StoreOp = AttachmentStoreOp.Store,
+                                          StencilLoadOp = AttachmentLoadOp.DontCare,
+                                          StencilStoreOp = AttachmentStoreOp.DontCare,
+                                          InitialLayout = AttachmentLoadOp.Load == AttachmentLoadOp.Clear ? ImageLayout.Undefined : ImageLayout.PresentSrcKhr,
+                                          FinalLayout = ImageLayout.PresentSrcKhr
+                                      };
+            
+            var colorAttachmentRef = new AttachmentReference
+                                         {
+                                             Attachment = 0,
+                                             Layout = ImageLayout.ColorAttachmentOptimal
+                                         };
+            
+            var subpass = new SubpassDescription
+                              {
+                                  PipelineBindPoint = PipelineBindPoint.Graphics,
+                                  ColorAttachmentCount = 0,
+                                  PColorAttachments = (AttachmentReference*)Unsafe.AsPointer(ref colorAttachmentRef)
+                              };
+            
             Span<AttachmentDescription> attachments = stackalloc AttachmentDescription[] { colorAttachment };
             var depthAttachment = new AttachmentDescription();
             var depthAttachmentRef = new AttachmentReference();
@@ -158,39 +166,29 @@ namespace SilkWindows.Vulkan
                 attachments = stackalloc AttachmentDescription[] { colorAttachment, depthAttachment };
             }
 
-            var dependency = new SubpassDependency();
-            dependency.SrcSubpass = Vk.SubpassExternal;
-            dependency.DstSubpass = 0;
-            dependency.SrcStageMask = PipelineStageFlags.ColorAttachmentOutputBit;
-            dependency.SrcAccessMask = 0;
-            dependency.DstStageMask = PipelineStageFlags.ColorAttachmentOutputBit;
-            dependency.DstAccessMask = AccessFlags.ColorAttachmentReadBit | AccessFlags.ColorAttachmentWriteBit;
-
-            var renderPassInfo = new RenderPassCreateInfo();
-            renderPassInfo.SType = StructureType.RenderPassCreateInfo;
-            renderPassInfo.AttachmentCount = (uint)attachments.Length;
-            renderPassInfo.PAttachments = (AttachmentDescription*)Unsafe.AsPointer(ref attachments.GetPinnableReference());
-            renderPassInfo.SubpassCount = 1;
-            renderPassInfo.PSubpasses = (SubpassDescription*)Unsafe.AsPointer(ref subpass);
-            renderPassInfo.DependencyCount = 1;
-            renderPassInfo.PDependencies = (SubpassDependency*)Unsafe.AsPointer(ref dependency);
-
-            if (_vk.CreateRenderPass(_device, renderPassInfo, default, out _renderPass) != Result.Success)
-            {
-                throw new Exception($"Failed to create render pass");
-            }
-
-            var info = new SamplerCreateInfo();
-            info.SType = StructureType.SamplerCreateInfo;
-            info.MagFilter = Filter.Linear;
-            info.MinFilter = Filter.Linear;
-            info.MipmapMode = SamplerMipmapMode.Linear;
-            info.AddressModeU = SamplerAddressMode.Repeat;
-            info.AddressModeV = SamplerAddressMode.Repeat;
-            info.AddressModeW = SamplerAddressMode.Repeat;
-            info.MinLod = -1000;
-            info.MaxLod = 1000;
-            info.MaxAnisotropy = 1.0f;
+            var dependency = new SubpassDependency
+                                 {
+                                     SrcSubpass = Vk.SubpassExternal,
+                                     DstSubpass = 0,
+                                     SrcStageMask = PipelineStageFlags.ColorAttachmentOutputBit,
+                                     SrcAccessMask = 0,
+                                     DstStageMask = PipelineStageFlags.ColorAttachmentOutputBit,
+                                     DstAccessMask = AccessFlags.ColorAttachmentReadBit | AccessFlags.ColorAttachmentWriteBit
+                                 };
+            
+            var info = new SamplerCreateInfo
+                           {
+                               SType = StructureType.SamplerCreateInfo,
+                               MagFilter = Filter.Linear,
+                               MinFilter = Filter.Linear,
+                               MipmapMode = SamplerMipmapMode.Linear,
+                               AddressModeU = SamplerAddressMode.Repeat,
+                               AddressModeV = SamplerAddressMode.Repeat,
+                               AddressModeW = SamplerAddressMode.Repeat,
+                               MinLod = -1000,
+                               MaxLod = 1000,
+                               MaxAnisotropy = 1.0f
+                           };
             if (vk.CreateSampler(_device, info, default, out _fontSampler) != Result.Success)
             {
                 throw new Exception($"Unable to create sampler");
@@ -198,16 +196,20 @@ namespace SilkWindows.Vulkan
 
             var sampler = _fontSampler;
 
-            var binding = new DescriptorSetLayoutBinding();
-            binding.DescriptorType = DescriptorType.CombinedImageSampler;
-            binding.DescriptorCount = 1;
-            binding.StageFlags = ShaderStageFlags.FragmentBit;
-            binding.PImmutableSamplers = (Sampler*)Unsafe.AsPointer(ref _fontSampler);
-
-            var descriptorInfo = new DescriptorSetLayoutCreateInfo();
-            descriptorInfo.SType = StructureType.DescriptorSetLayoutCreateInfo;
-            descriptorInfo.BindingCount = 1;
-            descriptorInfo.PBindings = (DescriptorSetLayoutBinding*)Unsafe.AsPointer(ref binding);
+            var binding = new DescriptorSetLayoutBinding
+                              {
+                                  DescriptorType = DescriptorType.CombinedImageSampler,
+                                  DescriptorCount = 1,
+                                  StageFlags = ShaderStageFlags.FragmentBit,
+                                  PImmutableSamplers = (Sampler*)Unsafe.AsPointer(ref _fontSampler)
+                              };
+            
+            var descriptorInfo = new DescriptorSetLayoutCreateInfo
+                                     {
+                                         SType = StructureType.DescriptorSetLayoutCreateInfo,
+                                         BindingCount = 1,
+                                         PBindings = (DescriptorSetLayoutBinding*)Unsafe.AsPointer(ref binding)
+                                     };
             if (vk.CreateDescriptorSetLayout(_device, descriptorInfo, default, out _descriptorSetLayout) != Result.Success)
             {
                 throw new Exception($"Unable to create descriptor set layout");
@@ -215,29 +217,35 @@ namespace SilkWindows.Vulkan
 
             fixed (DescriptorSetLayout* pg_DescriptorSetLayout = &_descriptorSetLayout)
             {
-                var alloc_info = new DescriptorSetAllocateInfo();
-                alloc_info.SType = StructureType.DescriptorSetAllocateInfo;
-                alloc_info.DescriptorPool = _descriptorPool;
-                alloc_info.DescriptorSetCount = 1;
-                alloc_info.PSetLayouts = pg_DescriptorSetLayout;
+                var alloc_info = new DescriptorSetAllocateInfo
+                                     {
+                                         SType = StructureType.DescriptorSetAllocateInfo,
+                                         DescriptorPool = _descriptorPool,
+                                         DescriptorSetCount = 1,
+                                         PSetLayouts = pg_DescriptorSetLayout
+                                     };
                 if (vk.AllocateDescriptorSets(_device, alloc_info, out _descriptorSet) != Result.Success)
                 {
                     throw new Exception($"Unable to create descriptor sets");
                 }
             }
 
-            var vertPushConst = new PushConstantRange();
-            vertPushConst.StageFlags = ShaderStageFlags.VertexBit;
-            vertPushConst.Offset = sizeof(float) * 0;
-            vertPushConst.Size = sizeof(float) * 4;
-
+            var vertPushConst = new PushConstantRange
+                                    {
+                                        StageFlags = ShaderStageFlags.VertexBit,
+                                        Offset = sizeof(float) * 0,
+                                        Size = sizeof(float) * 4
+                                    };
+            
             var set_layout = _descriptorSetLayout;
-            var layout_info = new PipelineLayoutCreateInfo();
-            layout_info.SType = StructureType.PipelineLayoutCreateInfo;
-            layout_info.SetLayoutCount = 1;
-            layout_info.PSetLayouts = (DescriptorSetLayout*)Unsafe.AsPointer(ref set_layout);
-            layout_info.PushConstantRangeCount = 1;
-            layout_info.PPushConstantRanges = (PushConstantRange*)Unsafe.AsPointer(ref vertPushConst);
+            var layout_info = new PipelineLayoutCreateInfo
+                                  {
+                                      SType = StructureType.PipelineLayoutCreateInfo,
+                                      SetLayoutCount = 1,
+                                      PSetLayouts = (DescriptorSetLayout*)Unsafe.AsPointer(ref set_layout),
+                                      PushConstantRangeCount = 1,
+                                      PPushConstantRanges = (PushConstantRange*)Unsafe.AsPointer(ref vertPushConst)
+                                  };
             if (vk.CreatePipelineLayout(_device, layout_info, default, out _pipelineLayout) != Result.Success)
             {
                 throw new Exception($"Unable to create the descriptor set layout");
@@ -247,100 +255,154 @@ namespace SilkWindows.Vulkan
             
             // Create the pipeline
             Span<PipelineShaderStageCreateInfo> stage = stackalloc PipelineShaderStageCreateInfo[2];
-            stage[0].SType = StructureType.PipelineShaderStageCreateInfo;
-            stage[0].Stage = ShaderStageFlags.VertexBit;
-            stage[0].Module = _shaderModuleVert;
-            stage[0].PName = (byte*)SilkMarshal.StringToPtr("main");
-            stage[1].SType = StructureType.PipelineShaderStageCreateInfo;
-            stage[1].Stage = ShaderStageFlags.FragmentBit;
-            stage[1].Module = _shaderModuleFrag;
-            stage[1].PName = (byte*)SilkMarshal.StringToPtr("main");
+            stage[0] = new PipelineShaderStageCreateInfo
+                           {
+                               SType = StructureType.PipelineShaderStageCreateInfo,
+                               Stage = ShaderStageFlags.VertexBit,
+                               Module = _shaderModuleVert,
+                               PName = (byte*)SilkMarshal.StringToPtr("main")
+                           };
+            
+            stage[1] = new PipelineShaderStageCreateInfo
+                           {
+                               SType = StructureType.PipelineShaderStageCreateInfo,
+                               Stage = ShaderStageFlags.FragmentBit,
+                               Module = _shaderModuleFrag,
+                               PName = (byte*)SilkMarshal.StringToPtr("main")
+                           };
 
-            var binding_desc = new VertexInputBindingDescription();
-            binding_desc.Stride = (uint)Unsafe.SizeOf<ImDrawVert>();
-            binding_desc.InputRate = VertexInputRate.Vertex;
-
+            var binding_desc = new VertexInputBindingDescription
+                                   {
+                                       Stride = (uint)Unsafe.SizeOf<ImDrawVert>(),
+                                       InputRate = VertexInputRate.Vertex
+                                   };
+            
             Span<VertexInputAttributeDescription> attribute_desc = stackalloc VertexInputAttributeDescription[3];
-            attribute_desc[0].Location = 0;
-            attribute_desc[0].Binding = binding_desc.Binding;
-            attribute_desc[0].Format = Format.R32G32Sfloat;
-            attribute_desc[0].Offset = (uint)Marshal.OffsetOf<ImDrawVert>(nameof(ImDrawVert.pos));
-            attribute_desc[1].Location = 1;
-            attribute_desc[1].Binding = binding_desc.Binding;
-            attribute_desc[1].Format = Format.R32G32Sfloat;
-            attribute_desc[1].Offset = (uint)Marshal.OffsetOf<ImDrawVert>(nameof(ImDrawVert.uv));
-            attribute_desc[2].Location = 2;
-            attribute_desc[2].Binding = binding_desc.Binding;
-            attribute_desc[2].Format = Format.R8G8B8A8Unorm;
-            attribute_desc[2].Offset = (uint)Marshal.OffsetOf<ImDrawVert>(nameof(ImDrawVert.col));
+            attribute_desc[0] = new VertexInputAttributeDescription()
+                                    {
+                                        Location = 0,
+                                        Binding = binding_desc.Binding,
+                                        Format = Format.R32G32Sfloat,
+                                        Offset = (uint)Marshal.OffsetOf<ImDrawVert>(nameof(ImDrawVert.pos))
+                                    };
+            
+            attribute_desc[1] = new VertexInputAttributeDescription()
+                                    {
+                                        Location = 1,
+                                        Binding = binding_desc.Binding,
+                                        Format = Format.R32G32Sfloat,
+                                        Offset = (uint)Marshal.OffsetOf<ImDrawVert>(nameof(ImDrawVert.uv))
+                                    };
+            
+            attribute_desc[2] = new VertexInputAttributeDescription()
+                                    {
+                                        Location = 2,
+                                        Binding = binding_desc.Binding,
+                                        Format = Format.R8G8B8A8Unorm,
+                                        Offset = (uint)Marshal.OffsetOf<ImDrawVert>(nameof(ImDrawVert.col))
+                                    };
 
-            var vertex_info = new PipelineVertexInputStateCreateInfo();
-            vertex_info.SType = StructureType.PipelineVertexInputStateCreateInfo;
-            vertex_info.VertexBindingDescriptionCount = 1;
-            vertex_info.PVertexBindingDescriptions = (VertexInputBindingDescription*)Unsafe.AsPointer(ref binding_desc);
-            vertex_info.VertexAttributeDescriptionCount = 3;
-            vertex_info.PVertexAttributeDescriptions = (VertexInputAttributeDescription*)Unsafe.AsPointer(ref attribute_desc[0]);
-
-            var ia_info = new PipelineInputAssemblyStateCreateInfo();
-            ia_info.SType = StructureType.PipelineInputAssemblyStateCreateInfo;
-            ia_info.Topology = PrimitiveTopology.TriangleList;
-
-            var viewport_info = new PipelineViewportStateCreateInfo();
-            viewport_info.SType = StructureType.PipelineViewportStateCreateInfo;
-            viewport_info.ViewportCount = 1;
-            viewport_info.ScissorCount = 1;
-
-            var raster_info = new PipelineRasterizationStateCreateInfo();
-            raster_info.SType = StructureType.PipelineRasterizationStateCreateInfo;
-            raster_info.PolygonMode = PolygonMode.Fill;
-            raster_info.CullMode = CullModeFlags.None;
-            raster_info.FrontFace = FrontFace.CounterClockwise;
-            raster_info.LineWidth = 1.0f;
-
-            var ms_info = new PipelineMultisampleStateCreateInfo();
-            ms_info.SType = StructureType.PipelineMultisampleStateCreateInfo;
-            ms_info.RasterizationSamples = SampleCountFlags.Count1Bit;
-
-            var color_attachment = new PipelineColorBlendAttachmentState();
-            color_attachment.BlendEnable = new Silk.NET.Core.Bool32(true);
-            color_attachment.SrcColorBlendFactor = BlendFactor.SrcAlpha;
-            color_attachment.DstColorBlendFactor = BlendFactor.OneMinusSrcAlpha;
-            color_attachment.ColorBlendOp = BlendOp.Add;
-            color_attachment.SrcAlphaBlendFactor = BlendFactor.One;
-            color_attachment.DstAlphaBlendFactor = BlendFactor.OneMinusSrcAlpha;
-            color_attachment.AlphaBlendOp = BlendOp.Add;
-            color_attachment.ColorWriteMask = ColorComponentFlags.RBit | ColorComponentFlags.GBit | ColorComponentFlags.BBit | ColorComponentFlags.ABit;
-
-            var depth_info = new PipelineDepthStencilStateCreateInfo();
-            depth_info.SType = StructureType.PipelineDepthStencilStateCreateInfo;
-
-            var blend_info = new PipelineColorBlendStateCreateInfo();
-            blend_info.SType = StructureType.PipelineColorBlendStateCreateInfo;
-            blend_info.AttachmentCount = 1;
-            blend_info.PAttachments = (PipelineColorBlendAttachmentState*)Unsafe.AsPointer(ref color_attachment);
-
-            Span<DynamicState> dynamic_states = stackalloc DynamicState[] { DynamicState.Viewport, DynamicState.Scissor };
-            var dynamic_state = new PipelineDynamicStateCreateInfo();
-            dynamic_state.SType = StructureType.PipelineDynamicStateCreateInfo;
-            dynamic_state.DynamicStateCount = (uint)dynamic_states.Length;
-            dynamic_state.PDynamicStates = (DynamicState*)Unsafe.AsPointer(ref dynamic_states[0]);
-
-            var pipelineInfo = new GraphicsPipelineCreateInfo();
-            pipelineInfo.SType = StructureType.GraphicsPipelineCreateInfo;
-            pipelineInfo.Flags = default;
-            pipelineInfo.StageCount = 2;
-            pipelineInfo.PStages = (PipelineShaderStageCreateInfo*)Unsafe.AsPointer(ref stage[0]);
-            pipelineInfo.PVertexInputState = (PipelineVertexInputStateCreateInfo*)Unsafe.AsPointer(ref vertex_info);
-            pipelineInfo.PInputAssemblyState = (PipelineInputAssemblyStateCreateInfo*)Unsafe.AsPointer(ref ia_info);
-            pipelineInfo.PViewportState = (PipelineViewportStateCreateInfo*)Unsafe.AsPointer(ref viewport_info);
-            pipelineInfo.PRasterizationState = (PipelineRasterizationStateCreateInfo*)Unsafe.AsPointer(ref raster_info);
-            pipelineInfo.PMultisampleState = (PipelineMultisampleStateCreateInfo*)Unsafe.AsPointer(ref ms_info);
-            pipelineInfo.PDepthStencilState = (PipelineDepthStencilStateCreateInfo*)Unsafe.AsPointer(ref depth_info);
-            pipelineInfo.PColorBlendState = (PipelineColorBlendStateCreateInfo*)Unsafe.AsPointer(ref blend_info);
-            pipelineInfo.PDynamicState = (PipelineDynamicStateCreateInfo*)Unsafe.AsPointer(ref dynamic_state);
-            pipelineInfo.Layout = _pipelineLayout;
-            pipelineInfo.RenderPass = _renderPass;
-            pipelineInfo.Subpass = 0;
+            var vertex_info = new PipelineVertexInputStateCreateInfo
+                                  {
+                                      SType = StructureType.PipelineVertexInputStateCreateInfo,
+                                      VertexBindingDescriptionCount = 1,
+                                      PVertexBindingDescriptions = (VertexInputBindingDescription*)Unsafe.AsPointer(ref binding_desc),
+                                      VertexAttributeDescriptionCount = 3,
+                                      PVertexAttributeDescriptions = (VertexInputAttributeDescription*)Unsafe.AsPointer(ref attribute_desc[0])
+                                  };
+            
+            var ia_info = new PipelineInputAssemblyStateCreateInfo
+                              {
+                                  SType = StructureType.PipelineInputAssemblyStateCreateInfo,
+                                  Topology = PrimitiveTopology.TriangleList
+                              };
+            
+            var viewport_info = new PipelineViewportStateCreateInfo
+                                    {
+                                        SType = StructureType.PipelineViewportStateCreateInfo,
+                                        ViewportCount = 1,
+                                        ScissorCount = 1
+                                    };
+            
+            var raster_info = new PipelineRasterizationStateCreateInfo
+                                  {
+                                      SType = StructureType.PipelineRasterizationStateCreateInfo,
+                                      PolygonMode = PolygonMode.Fill,
+                                      CullMode = CullModeFlags.None,
+                                      FrontFace = FrontFace.CounterClockwise,
+                                      LineWidth = 1.0f
+                                  };
+            
+            var ms_info = new PipelineMultisampleStateCreateInfo
+                              {
+                                  SType = StructureType.PipelineMultisampleStateCreateInfo,
+                                  RasterizationSamples = SampleCountFlags.Count1Bit
+                              };
+            
+            var color_attachment = new PipelineColorBlendAttachmentState
+                                       {
+                                           BlendEnable = new Bool32(true),
+                                           SrcColorBlendFactor = BlendFactor.SrcAlpha,
+                                           DstColorBlendFactor = BlendFactor.OneMinusSrcAlpha,
+                                           ColorBlendOp = BlendOp.Add,
+                                           SrcAlphaBlendFactor = BlendFactor.One,
+                                           DstAlphaBlendFactor = BlendFactor.OneMinusSrcAlpha,
+                                           AlphaBlendOp = BlendOp.Add,
+                                           ColorWriteMask = ColorComponentFlags.RBit | ColorComponentFlags.GBit | ColorComponentFlags.BBit | ColorComponentFlags.ABit
+                                       };
+            
+            var depth_info = new PipelineDepthStencilStateCreateInfo
+                                 {
+                                     SType = StructureType.PipelineDepthStencilStateCreateInfo
+                                 };
+            
+            var blend_info = new PipelineColorBlendStateCreateInfo
+                                 {
+                                     SType = StructureType.PipelineColorBlendStateCreateInfo,
+                                     AttachmentCount = 0,
+                                     PAttachments = (PipelineColorBlendAttachmentState*)Unsafe.AsPointer(ref color_attachment)
+                                 };
+            
+            var dynamicStates = stackalloc DynamicState[] { DynamicState.Scissor, DynamicState.Viewport, DynamicState.ColorBlendEnableExt };
+            var dynamicStateCreateInfo = new PipelineDynamicStateCreateInfo
+                                             {
+                                                 SType = StructureType.PipelineDynamicStateCreateInfo,
+                                                 DynamicStateCount = 2,
+                                                 PDynamicStates = dynamicStates
+                                             };
+            
+            var colorFmt = Format.R32G32B32A32Sfloat;
+            var pipelineCreateInfo = new PipelineRenderingCreateInfoKHR
+                                         {
+                                             SType = StructureType.PipelineRenderingCreateInfoKhr,
+                                             ColorAttachmentCount = 0, // this needs to be made dynamic?
+                                             PNext = null,
+                                             DepthAttachmentFormat = Format.Undefined, // does this need to be too?
+                                             PColorAttachmentFormats = &colorFmt, // how about this??? does this get mapped or something?
+                                             StencilAttachmentFormat = Format.Undefined,
+                                             ViewMask = default
+                                         };
+        
+            var pipelineInfo = new GraphicsPipelineCreateInfo
+                                   {
+                                       SType = StructureType.GraphicsPipelineCreateInfo,
+                                       Flags = default,
+                                       StageCount = 2,
+                                       PStages = (PipelineShaderStageCreateInfo*)Unsafe.AsPointer(ref stage[0]),
+                                       PVertexInputState = (PipelineVertexInputStateCreateInfo*)Unsafe.AsPointer(ref vertex_info),
+                                       PInputAssemblyState = (PipelineInputAssemblyStateCreateInfo*)Unsafe.AsPointer(ref ia_info),
+                                       PViewportState = (PipelineViewportStateCreateInfo*)Unsafe.AsPointer(ref viewport_info),
+                                       PRasterizationState = (PipelineRasterizationStateCreateInfo*)Unsafe.AsPointer(ref raster_info),
+                                       PMultisampleState = (PipelineMultisampleStateCreateInfo*)Unsafe.AsPointer(ref ms_info),
+                                       PDepthStencilState = (PipelineDepthStencilStateCreateInfo*)Unsafe.AsPointer(ref depth_info),
+                                       PColorBlendState = (PipelineColorBlendStateCreateInfo*)Unsafe.AsPointer(ref blend_info),
+                                       PDynamicState = &dynamicStateCreateInfo,
+                                       Layout = _pipelineLayout,
+                                       RenderPass = default,
+                                       Subpass = 0,
+                                       PNext = &pipelineCreateInfo,
+                                   };
+            
             if (vk.CreateGraphicsPipelines(_device, default, 1, pipelineInfo, default, out _pipeline) != Result.Success)
             {
                 throw new Exception($"Unable to create the pipeline");
@@ -357,19 +419,23 @@ namespace SilkWindows.Vulkan
             ulong upload_size = (ulong)(width * height * 4 * sizeof(byte));
 
             // Submit one-time command to create the fonts texture
-            var poolInfo = new CommandPoolCreateInfo();
-            poolInfo.SType = StructureType.CommandPoolCreateInfo;
-            poolInfo.QueueFamilyIndex = graphicsFamilyIndex;
+            var poolInfo = new CommandPoolCreateInfo
+                               {
+                                   SType = StructureType.CommandPoolCreateInfo,
+                                   QueueFamilyIndex = graphicsFamilyIndex
+                               };
             if (_vk.CreateCommandPool(_device, poolInfo, null, out var commandPool) != Result.Success)
             {
                 throw new Exception("failed to create command pool!");
             }
 
-            var allocInfo = new CommandBufferAllocateInfo();
-            allocInfo.SType = StructureType.CommandBufferAllocateInfo;
-            allocInfo.CommandPool = commandPool;
-            allocInfo.Level = CommandBufferLevel.Primary;
-            allocInfo.CommandBufferCount = 1;
+            var allocInfo = new CommandBufferAllocateInfo
+                                {
+                                    SType = StructureType.CommandBufferAllocateInfo,
+                                    CommandPool = commandPool,
+                                    Level = CommandBufferLevel.Primary,
+                                    CommandBufferCount = 1
+                                };
             if (_vk.AllocateCommandBuffers(_device, allocInfo, out var commandBuffer) != Result.Success)
             {
                 throw new Exception($"Unable to allocate command buffers");
@@ -383,29 +449,32 @@ namespace SilkWindows.Vulkan
                 throw new Exception($"Failed to begin a command buffer");
             }
 
-            var imageInfo = new ImageCreateInfo();
-            imageInfo.SType = StructureType.ImageCreateInfo;
-            imageInfo.ImageType = ImageType.Type2D;
-            imageInfo.Format = Format.R8G8B8A8Unorm;
-            imageInfo.Extent.Width = (uint)width;
-            imageInfo.Extent.Height = (uint)height;
-            imageInfo.Extent.Depth = 1;
-            imageInfo.MipLevels = 1;
-            imageInfo.ArrayLayers = 1;
-            imageInfo.Samples = SampleCountFlags.Count1Bit;
-            imageInfo.Tiling = ImageTiling.Optimal;
-            imageInfo.Usage = ImageUsageFlags.SampledBit | ImageUsageFlags.TransferDstBit;
-            imageInfo.SharingMode = SharingMode.Exclusive;
-            imageInfo.InitialLayout = ImageLayout.Undefined;
+            var imageInfo = new ImageCreateInfo
+                                {
+                                    SType = StructureType.ImageCreateInfo,
+                                    ImageType = ImageType.Type2D,
+                                    Format = Format.R8G8B8A8Unorm,
+                                    MipLevels = 1,
+                                    ArrayLayers = 1,
+                                    Samples = SampleCountFlags.Count1Bit,
+                                    Tiling = ImageTiling.Optimal,
+                                    Usage = ImageUsageFlags.SampledBit | ImageUsageFlags.TransferDstBit,
+                                    SharingMode = SharingMode.Exclusive,
+                                    InitialLayout = ImageLayout.Undefined,
+                                    Extent = new Extent3D((uint)width, (uint)height, 1)
+                                };
+           
             if (_vk.CreateImage(_device, imageInfo, default, out _fontImage) != Result.Success)
             {
                 throw new Exception($"Failed to create font image");
             }
             _vk.GetImageMemoryRequirements(_device, _fontImage, out var fontReq);
-            var fontAllocInfo = new MemoryAllocateInfo();
-            fontAllocInfo.SType = StructureType.MemoryAllocateInfo;
-            fontAllocInfo.AllocationSize = fontReq.Size;
-            fontAllocInfo.MemoryTypeIndex = GetMemoryTypeIndex(vk, MemoryPropertyFlags.DeviceLocalBit, fontReq.MemoryTypeBits);
+            var fontAllocInfo = new MemoryAllocateInfo
+                                    {
+                                        SType = StructureType.MemoryAllocateInfo,
+                                        AllocationSize = fontReq.Size,
+                                        MemoryTypeIndex = GetMemoryTypeIndex(vk, MemoryPropertyFlags.DeviceLocalBit, fontReq.MemoryTypeBits)
+                                    };
             if (_vk.AllocateMemory(_device, &fontAllocInfo, default, out _fontMemory) != Result.Success)
             {
                 throw new Exception($"Failed to allocate device memory");
@@ -428,24 +497,31 @@ namespace SilkWindows.Vulkan
                 throw new Exception($"Failed to create an image view");
             }
 
-            var descImageInfo = new DescriptorImageInfo();
-            descImageInfo.Sampler = _fontSampler;
-            descImageInfo.ImageView = _fontView;
-            descImageInfo.ImageLayout = ImageLayout.ShaderReadOnlyOptimal;
-            var writeDescriptors = new WriteDescriptorSet();
-            writeDescriptors.SType = StructureType.WriteDescriptorSet;
-            writeDescriptors.DstSet = _descriptorSet;
-            writeDescriptors.DescriptorCount = 1;
-            writeDescriptors.DescriptorType = DescriptorType.CombinedImageSampler;
-            writeDescriptors.PImageInfo = (DescriptorImageInfo*)Unsafe.AsPointer(ref descImageInfo);
+            var descImageInfo = new DescriptorImageInfo
+                                    {
+                                        Sampler = _fontSampler,
+                                        ImageView = _fontView,
+                                        ImageLayout = ImageLayout.ShaderReadOnlyOptimal,
+                                    };
+            
+            var writeDescriptors = new WriteDescriptorSet
+                                       {
+                                           SType = StructureType.WriteDescriptorSet,
+                                           DstSet = _descriptorSet,
+                                           DescriptorCount = 1,
+                                           DescriptorType = DescriptorType.CombinedImageSampler,
+                                           PImageInfo = (DescriptorImageInfo*)Unsafe.AsPointer(ref descImageInfo)
+                                       };
             _vk.UpdateDescriptorSets(_device, 1, writeDescriptors, 0, default);
 
             // Create the Upload Buffer:
-            var bufferInfo = new BufferCreateInfo();
-            bufferInfo.SType = StructureType.BufferCreateInfo;
-            bufferInfo.Size = upload_size;
-            bufferInfo.Usage = BufferUsageFlags.TransferSrcBit;
-            bufferInfo.SharingMode = SharingMode.Exclusive;
+            var bufferInfo = new BufferCreateInfo
+                                 {
+                                     SType = StructureType.BufferCreateInfo,
+                                     Size = upload_size,
+                                     Usage = BufferUsageFlags.TransferSrcBit,
+                                     SharingMode = SharingMode.Exclusive
+                                 };
             if (_vk.CreateBuffer(_device, bufferInfo, default, out var uploadBuffer) != Result.Success)
             {
                 throw new Exception($"Failed to create a device buffer");
@@ -454,10 +530,12 @@ namespace SilkWindows.Vulkan
             _vk.GetBufferMemoryRequirements(_device, uploadBuffer, out var uploadReq);
             _bufferMemoryAlignment = (_bufferMemoryAlignment > uploadReq.Alignment) ? _bufferMemoryAlignment : uploadReq.Alignment;
 
-            var uploadAllocInfo = new MemoryAllocateInfo();
-            uploadAllocInfo.SType = StructureType.MemoryAllocateInfo;
-            uploadAllocInfo.AllocationSize = uploadReq.Size;
-            uploadAllocInfo.MemoryTypeIndex = GetMemoryTypeIndex(vk, MemoryPropertyFlags.HostVisibleBit, uploadReq.MemoryTypeBits);
+            var uploadAllocInfo = new MemoryAllocateInfo
+                                      {
+                                          SType = StructureType.MemoryAllocateInfo,
+                                          AllocationSize = uploadReq.Size,
+                                          MemoryTypeIndex = GetMemoryTypeIndex(vk, MemoryPropertyFlags.HostVisibleBit, uploadReq.MemoryTypeBits)
+                                      };
             if (_vk.AllocateMemory(_device, uploadAllocInfo, default, out var uploadBufferMemory) != Result.Success)
             {
                 throw new Exception($"Failed to allocate device memory");
@@ -474,10 +552,12 @@ namespace SilkWindows.Vulkan
             }
             Unsafe.CopyBlock(map, pixels.ToPointer(), (uint)upload_size);
 
-            var range = new MappedMemoryRange();
-            range.SType = StructureType.MappedMemoryRange;
-            range.Memory = uploadBufferMemory;
-            range.Size = upload_size;
+            var range = new MappedMemoryRange
+                            {
+                                SType = StructureType.MappedMemoryRange,
+                                Memory = uploadBufferMemory,
+                                Size = upload_size
+                            };
             if (_vk.FlushMappedMemoryRanges(_device, 1, range) != Result.Success)
             {
                 throw new Exception($"Failed to flush memory to device");
@@ -486,14 +566,16 @@ namespace SilkWindows.Vulkan
 
             const uint VK_QUEUE_FAMILY_IGNORED = ~0U;
 
-            var copyBarrier = new ImageMemoryBarrier();
-            copyBarrier.SType = StructureType.ImageMemoryBarrier;
-            copyBarrier.DstAccessMask = AccessFlags.TransferWriteBit;
-            copyBarrier.OldLayout = ImageLayout.Undefined;
-            copyBarrier.NewLayout = ImageLayout.TransferDstOptimal;
-            copyBarrier.SrcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-            copyBarrier.DstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-            copyBarrier.Image = _fontImage;
+            var copyBarrier = new ImageMemoryBarrier
+                                  {
+                                      SType = StructureType.ImageMemoryBarrier,
+                                      DstAccessMask = AccessFlags.TransferWriteBit,
+                                      OldLayout = ImageLayout.Undefined,
+                                      NewLayout = ImageLayout.TransferDstOptimal,
+                                      SrcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                      DstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                      Image = _fontImage
+                                  };
             copyBarrier.SubresourceRange.AspectMask = ImageAspectFlags.ColorBit;
             copyBarrier.SubresourceRange.LevelCount = 1;
             copyBarrier.SubresourceRange.LayerCount = 1;
@@ -507,15 +589,17 @@ namespace SilkWindows.Vulkan
             region.ImageExtent.Depth = 1;
             _vk.CmdCopyBufferToImage(commandBuffer, uploadBuffer, _fontImage, ImageLayout.TransferDstOptimal, 1, &region);
 
-            var use_barrier = new ImageMemoryBarrier();
-            use_barrier.SType = StructureType.ImageMemoryBarrier;
-            use_barrier.SrcAccessMask = AccessFlags.TransferWriteBit;
-            use_barrier.DstAccessMask = AccessFlags.ShaderReadBit;
-            use_barrier.OldLayout = ImageLayout.TransferDstOptimal;
-            use_barrier.NewLayout = ImageLayout.ShaderReadOnlyOptimal;
-            use_barrier.SrcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-            use_barrier.DstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-            use_barrier.Image = _fontImage;
+            var use_barrier = new ImageMemoryBarrier
+                                  {
+                                      SType = StructureType.ImageMemoryBarrier,
+                                      SrcAccessMask = AccessFlags.TransferWriteBit,
+                                      DstAccessMask = AccessFlags.ShaderReadBit,
+                                      OldLayout = ImageLayout.TransferDstOptimal,
+                                      NewLayout = ImageLayout.ShaderReadOnlyOptimal,
+                                      SrcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                      DstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                      Image = _fontImage
+                                  };
             use_barrier.SubresourceRange.AspectMask = ImageAspectFlags.ColorBit;
             use_barrier.SubresourceRange.LevelCount = 1;
             use_barrier.SubresourceRange.LayerCount = 1;
@@ -531,10 +615,12 @@ namespace SilkWindows.Vulkan
 
             _vk.GetDeviceQueue(_device, graphicsFamilyIndex, 0, out var graphicsQueue);
 
-            var submitInfo = new SubmitInfo();
-            submitInfo.SType = StructureType.SubmitInfo;
-            submitInfo.CommandBufferCount = 1;
-            submitInfo.PCommandBuffers = (CommandBuffer*)Unsafe.AsPointer(ref commandBuffer);
+            var submitInfo = new SubmitInfo
+                                 {
+                                     SType = StructureType.SubmitInfo,
+                                     CommandBufferCount = 1,
+                                     PCommandBuffers = (CommandBuffer*)Unsafe.AsPointer(ref commandBuffer)
+                                 };
             if (_vk.QueueSubmit(graphicsQueue, 1, submitInfo, default) != Result.Success)
             {
                 throw new Exception($"Failed to begin a command buffer");
@@ -644,13 +730,13 @@ namespace SilkWindows.Vulkan
         /// <summary>
         /// Renders the ImGui draw list data.
         /// </summary>
-        public void Render(CommandBuffer commandBuffer, Framebuffer framebuffer, Extent2D swapChainExtent)
+        public void Render(CommandBuffer commandBuffer, Extent2D swapChainExtent)
         {
             if (_frameBegun)
             {
                 _frameBegun = false;
                 ImGuiNET.ImGui.Render();
-                RenderImDrawData(ImGuiNET.ImGui.GetDrawData(), commandBuffer, framebuffer, swapChainExtent);
+                RenderImDrawData(ImGuiNET.ImGui.GetDrawData(), commandBuffer, swapChainExtent);
             }
         }
 
@@ -753,7 +839,7 @@ namespace SilkWindows.Vulkan
             io.KeyMap[(int)ImGuiKey.Z] = (int)Key.Z;
         }
 
-        private unsafe void RenderImDrawData(in ImDrawDataPtr drawDataPtr, in CommandBuffer commandBuffer, in Framebuffer framebuffer, in Extent2D swapChainExtent)
+        private unsafe void RenderImDrawData(in ImDrawDataPtr drawDataPtr, in CommandBuffer commandBuffer, in Extent2D swapChainExtent)
         {
             int framebufferWidth = (int)(drawDataPtr.DisplaySize.X * drawDataPtr.FramebufferScale.X);
             int framebufferHeight = (int)(drawDataPtr.DisplaySize.Y * drawDataPtr.FramebufferScale.Y);
@@ -761,17 +847,22 @@ namespace SilkWindows.Vulkan
             {
                 return;
             }
-
-            var renderPassInfo = new RenderPassBeginInfo();
-            renderPassInfo.SType = StructureType.RenderPassBeginInfo;
-            renderPassInfo.RenderPass = _renderPass;
-            renderPassInfo.Framebuffer = framebuffer;
-            renderPassInfo.RenderArea.Offset = default;
-            renderPassInfo.RenderArea.Extent = swapChainExtent;
-            renderPassInfo.ClearValueCount = 0;
-            renderPassInfo.PClearValues = default;
-
-            _vk.CmdBeginRenderPass(commandBuffer, &renderPassInfo, SubpassContents.Inline);
+            
+            var renderInfo = new RenderingInfo
+                                 {
+                                     ColorAttachmentCount = 0,
+                                     Flags = RenderingFlags.None,
+                                     LayerCount = 1, // todo - validation layer check
+                                     PColorAttachments = null,
+                                     PDepthAttachment = null,
+                                     PNext = null,
+                                     PStencilAttachment = null,
+                                     RenderArea = new Rect2D { Offset = new Offset2D { X = 0, Y = 0 }, Extent = swapChainExtent },
+                                     SType = StructureType.RenderingInfo,
+                                     ViewMask = 0
+                                 };
+            
+            _vk.CmdBeginRendering(commandBuffer, &renderInfo);
 
             var drawData = *drawDataPtr.NativePtr;
 
@@ -839,12 +930,20 @@ namespace SilkWindows.Vulkan
                 }
 
                 Span<MappedMemoryRange> range = stackalloc MappedMemoryRange[2];
-                range[0].SType = StructureType.MappedMemoryRange;
-                range[0].Memory = frameRenderBuffer.VertexBufferMemory;
-                range[0].Size = Vk.WholeSize;
-                range[1].SType = StructureType.MappedMemoryRange;
-                range[1].Memory = frameRenderBuffer.IndexBufferMemory;
-                range[1].Size = Vk.WholeSize;
+                range[0] = new MappedMemoryRange
+                               {
+                                   SType = StructureType.MappedMemoryRange,
+                                   Memory = frameRenderBuffer.VertexBufferMemory,
+                                      Size = Vk.WholeSize
+                               };
+                
+                range[1] = new MappedMemoryRange
+                               {
+                                   SType = StructureType.MappedMemoryRange,
+                                   Memory = frameRenderBuffer.IndexBufferMemory,
+                                   Size = Vk.WholeSize
+                               };
+                
                 if (_vk.FlushMappedMemoryRanges(_device, 2, range) != Result.Success)
                 {
                     throw new Exception($"Unable to flush memory to device");
@@ -918,7 +1017,7 @@ namespace SilkWindows.Vulkan
                             clipRect.Y = 0.0f;
 
                         // Apply scissor/clipping rectangle
-                        Rect2D scissor = new Rect2D();
+                        var scissor = new Rect2D();
                         scissor.Offset.X = (int)clipRect.X;
                         scissor.Offset.Y = (int)clipRect.Y;
                         scissor.Extent.Width = (uint)(clipRect.Z - clipRect.X);
@@ -933,7 +1032,7 @@ namespace SilkWindows.Vulkan
                 vertexOffset += cmd_list->VtxBuffer.Size;
             }
 
-            _vk.CmdEndRenderPass(commandBuffer);
+            _vk.CmdEndRendering(commandBuffer);
         }
 
         unsafe void CreateOrResizeBuffer(ref Buffer buffer, ref DeviceMemory buffer_memory, ref ulong bufferSize, ulong newSize, BufferUsageFlags usage)
@@ -984,14 +1083,6 @@ namespace SilkWindows.Vulkan
             _view.Resize -= WindowResized;
             _keyboard.KeyChar -= OnKeyChar;
 
-            for (uint n = 0; n < _mainWindowRenderBuffers.Count; n++)
-            {
-                _vk.DestroyBuffer(_device, _mainWindowRenderBuffers.FrameRenderBuffers[n].VertexBuffer, default);
-                _vk.FreeMemory(_device, _mainWindowRenderBuffers.FrameRenderBuffers[n].VertexBufferMemory, default);
-                _vk.DestroyBuffer(_device, _mainWindowRenderBuffers.FrameRenderBuffers[n].IndexBuffer, default);
-                _vk.FreeMemory(_device, _mainWindowRenderBuffers.FrameRenderBuffers[n].IndexBufferMemory, default);
-            }
-
             _vk.DestroyShaderModule(_device, _shaderModuleVert, default);
             _vk.DestroyShaderModule(_device, _shaderModuleFrag, default);
             _vk.DestroyImageView(_device, _fontView, default);
@@ -1002,7 +1093,7 @@ namespace SilkWindows.Vulkan
             _vk.DestroyPipelineLayout(_device, _pipelineLayout, default);
             _vk.DestroyPipeline(_device, _pipeline, default);
             _vk.DestroyDescriptorPool(_vk.CurrentDevice.Value, _descriptorPool, default);
-            _vk.DestroyRenderPass(_vk.CurrentDevice.Value, _renderPass, default);
+            //_vk.DestroyRenderPass(_vk.CurrentDevice.Value, _renderPass, default);
 
             ImGuiNET.ImGui.DestroyContext(this.Context);
         }
@@ -1023,5 +1114,7 @@ namespace SilkWindows.Vulkan
             public uint Count;
             public FrameRenderBuffer* FrameRenderBuffers;
         };
+        
+        private GlobalMemory _frameRenderBuffers;
     }
 }

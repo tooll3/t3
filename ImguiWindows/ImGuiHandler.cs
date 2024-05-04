@@ -121,7 +121,7 @@ internal sealed class ImGuiHandler
         }
     }
     
-    public void DisposeOfImguiContext()
+    public void Dispose()
     {
         lock (_contextLock)
         {
