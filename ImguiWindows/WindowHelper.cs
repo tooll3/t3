@@ -117,7 +117,7 @@ public sealed class WindowHelper
     
     private void OnClose()
     {
-        _imguiHandler?.DisposeOfImguiContext();
+        _imguiHandler?.Dispose();
     }
     
     private void OnWindowUpdate(double deltaSeconds)

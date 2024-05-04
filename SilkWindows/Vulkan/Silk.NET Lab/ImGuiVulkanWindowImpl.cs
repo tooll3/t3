@@ -2,19 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using ImGuiVulkan;
 using ImguiWindows;
 using Silk.NET.Core.Native;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Vulkan;
 using Silk.NET.Vulkan.Extensions.EXT;
-using Silk.NET.Windowing;
 using Silk.NET.Vulkan.Extensions.KHR;
+using Silk.NET.Windowing;
 using Semaphore = Silk.NET.Vulkan.Semaphore;
 
-namespace ImGuiVulkan;
+namespace SilkWindows.Vulkan.Silk.NET_Lab;
 
-public partial class ImGuiVulkanWindowImpl : IWindowImplementation
+public sealed partial class ImGuiVulkanWindowImpl : IWindowImplementation
 {
     public ImGuiVulkanWindowImpl(WindowOptions options)
     {
@@ -39,9 +40,8 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
         CreateLogicalDevice();
         CreateSwapChain();
         CreateImageViews();
-        CreateRenderPass();
+        //CreateRenderPass();
         CreateGraphicsPipeline();
-        CreateFramebuffers();
         CreateCommandPool();
         CreateCommandBuffers();
         CreateSyncObjects();
@@ -52,7 +52,7 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
     {
         // Wait for any fences
         var fence = _inFlightFences[_currentFrame];
-        _vk.WaitForFences(_device, 1, in fence, Silk.NET.Vulkan.Vk.True, ulong.MaxValue);
+        _vk.WaitForFences(_device, 1, in fence, Vk.True, ulong.MaxValue);
         
         // Manage swapchain
         uint imageIndex;
@@ -75,7 +75,7 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
         
         if (_imagesInFlight[imageIndex].Handle != 0)
         {
-            _vk.WaitForFences(_device, 1, in _imagesInFlight[imageIndex], Silk.NET.Vulkan.Vk.True, ulong.MaxValue);
+            _vk.WaitForFences(_device, 1, in _imagesInFlight[imageIndex], Vk.True, ulong.MaxValue);
         }
         
         _imagesInFlight[imageIndex] = _inFlightFences[_currentFrame];
@@ -84,7 +84,7 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
         var beginInfo = new CommandBufferBeginInfo
         {
             SType = StructureType.CommandBufferBeginInfo,
-            Flags = CommandBufferUsageFlags.SimultaneousUseBit //
+            Flags = CommandBufferUsageFlags.SimultaneousUseBit //,
         };
         
         if (_vk.BeginCommandBuffer(_commandBuffers[imageIndex], &beginInfo) != Result.Success)
@@ -93,13 +93,6 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
         }
         
         // Render triangle
-        var renderPassInfo = new RenderPassBeginInfo
-        {
-            SType = StructureType.RenderPassBeginInfo,
-            RenderPass = _renderPass,
-            Framebuffer = _swapchainFramebuffers[imageIndex],
-            RenderArea = { Offset = new Offset2D { X = 0, Y = 0 }, Extent = _swapchainExtent }
-        };
         
         var clearColorVal = new ClearValue
         {
@@ -113,16 +106,66 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
             }
         };
         
-        renderPassInfo.ClearValueCount = 1;
-        renderPassInfo.PClearValues = &clearColorVal;
+        // swapchain attachment
+        var attachmentInfo = new RenderingAttachmentInfo
+                                 {
+                                     SType = StructureType.RenderingAttachmentInfoKhr,
+                                     ClearValue = clearColorVal,
+                                     ImageLayout = ImageLayout.General,
+                                     ImageView = _swapchainImageViews[imageIndex],
+                                     LoadOp = AttachmentLoadOp.DontCare,
+                                     PNext = null,
+                                     StoreOp = AttachmentStoreOp.DontCare,
+                                     ResolveImageLayout = ImageLayout.PresentSrcKhr,
+                                     ResolveImageView = _swapchainImageViews[imageIndex],
+                                     ResolveMode = ResolveModeFlags.None
+                                 };
         
-        _vk.CmdBeginRenderPass(_commandBuffers[imageIndex], &renderPassInfo, SubpassContents.Inline);
+        var renderingInfo = new RenderingInfo
+                                {
+                                    SType = StructureType.RenderingInfo,
+                                    ColorAttachmentCount = 1,
+                                    PDepthAttachment = null,
+                                    Flags = RenderingFlags.None,
+                                    LayerCount = (uint)(_validationLayersEnabled ? _validationLayers.Length : 0),
+                                    PColorAttachments = &attachmentInfo, // textures and such go here, example in comment below
+                                    PNext = null,
+                                    PStencilAttachment = null,
+                                    RenderArea = new Rect2D{Offset = new Offset2D{X = 0, Y = 0}, Extent = _swapchainExtent},
+                                    ViewMask = 0
+                                };
+        
+        
+        //renderPassInfo.ClearValueCount = 1;
+        //renderPassInfo.PClearValues = &clearColorVal;
+        
+        _vk.CmdBeginRendering(_commandBuffers[imageIndex], &renderingInfo);
+        
+        var viewport = new Viewport
+        {
+            X = 0,
+            Y = 0,
+            Width = _swapchainExtent.Width,
+            Height = _swapchainExtent.Height,
+            MinDepth = 0.0f,
+            MaxDepth = 1.0f
+        };
+        
+        _vk.CmdSetViewport(_commandBuffers[imageIndex], 0, 1, &viewport);
+        
+        var scissorRect = new Rect2D
+        {
+            Offset = new Offset2D { X = 0, Y = 0 },
+            Extent = _swapchainExtent
+        };
+        
+        _vk.CmdSetScissor(_commandBuffers[imageIndex], 0, 1, &scissorRect);
         
         _vk.CmdBindPipeline(_commandBuffers[imageIndex], PipelineBindPoint.Graphics, _graphicsPipeline);
         
         _vk.CmdDraw(_commandBuffers[imageIndex], 3, 1, 0, 0);
         
-        _vk.CmdEndRenderPass(_commandBuffers[imageIndex]);
+        _vk.CmdEndRendering(_commandBuffers[imageIndex]);
         return true;
     }
     
@@ -180,7 +223,7 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
                 PWaitSemaphores = &signalSemaphore,
                 SwapchainCount = 1,
                 PSwapchains = swapchain,
-                PImageIndices = &imageIndex
+                PImageIndices = &imageIndex,
             };
             
             result = _vkSwapchain.QueuePresent(_presentQueue, &presentInfo);
@@ -193,7 +236,7 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
         }
         else if (result != Result.Success)
         {
-            throw new Exception("failed to present swap chain image!");
+            throw new Exception("failed to present swap chain image! " + result);
         }
         
         _currentFrame = (_currentFrame + 1) % MaxFramesInFlight;
@@ -228,7 +271,7 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
     
     public IImguiImplementation GetImguiImplementation()
     {
-        return new VulkanImGuiImpl(this, _vk, _window, _inputContext);
+        return new VulkanImGuiImpl(this, _rendering, _vk, _window, _inputContext);
     }
     
     public void OnWindowResize(Vector2D<int> size)
@@ -250,8 +293,6 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
     private DebugUtilsMessengerEXT _debugMessenger;
     private SurfaceKHR _surface;
     
-    private PhysicalDeviceFeatures _physicalDeviceFeatures;
-    
     internal PhysicalDevice PhysicalDevice => _physicalDevice;
     private PhysicalDevice _physicalDevice;
     private Device _device;
@@ -268,9 +309,7 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
     private Format _swapchainImageFormat;
     private Extent2D _swapchainExtent;
     private ImageView[] _swapchainImageViews;
-    private Framebuffer[] _swapchainFramebuffers;
     
-    private RenderPass _renderPass;
     private PipelineLayout _pipelineLayout;
     private Pipeline _graphicsPipeline;
     
@@ -285,13 +324,11 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
     
     private bool _framebufferResized = false;
     
-    private Silk.NET.Vulkan.Vk _vk;
+    private Vk _vk;
     private KhrSurface _vkSurface;
     private KhrSwapchain _vkSwapchain;
+    private KhrDynamicRendering _rendering;
     private ExtDebugUtils _debugUtils;
-    private string[] _validationLayers = ["VK_LAYER_KHRONOS_validation"];
-    private readonly List<string> _instanceExtensions = [ExtDebugUtils.ExtensionName];
-    private readonly List<string> _deviceExtensions = [KhrSwapchain.ExtensionName];
     
     // validation
     public enum ValidationModes
@@ -299,23 +336,18 @@ public partial class ImGuiVulkanWindowImpl : IWindowImplementation
         Requested,
         None
     }
-    
-    private bool _validationLayersEnabled;
-    private const ValidationModes ValidationMode = ValidationModes.Requested;
-    
     private const int MaxFramesInFlight = 8;
     private const bool EventBasedRendering = false;
     
-    internal void GetFrameInfo(out CommandBuffer commandBuffer, out Framebuffer frameBuffer, out Extent2D swapchainExtent)
+    internal void GetFrameInfo(out CommandBuffer commandBuffer, out Extent2D swapchainExtent)
     {
         commandBuffer = _commandBuffers[_currentImageIndex];
-        frameBuffer = _swapchainFramebuffers[_currentImageIndex];
         swapchainExtent = _swapchainExtent;
     }
     
     internal void WaitForIdle()
     {
-        _vk.WaitForFences(_device, 1, in _inFlightFences[_currentFrame], Silk.NET.Vulkan.Vk.True, ulong.MaxValue);
+        _vk.WaitForFences(_device, 1, in _inFlightFences[_currentFrame], Vk.True, ulong.MaxValue);
         _vk.QueueWaitIdle(_graphicsQueue);
         _vk.QueueWaitIdle(_presentQueue);
         _vk.DeviceWaitIdle(_device);

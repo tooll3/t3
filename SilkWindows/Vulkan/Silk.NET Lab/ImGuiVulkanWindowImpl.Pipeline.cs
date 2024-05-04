@@ -3,24 +3,22 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using ImGuiVulkan;
 using Silk.NET.Core;
 using Silk.NET.Core.Native;
 using Silk.NET.Maths;
 using Silk.NET.Vulkan;
+using Silk.NET.Vulkan.Extensions.EXT;
+using Silk.NET.Vulkan.Extensions.KHR;
 using Result = Silk.NET.Vulkan.Result;
 using Semaphore = Silk.NET.Vulkan.Semaphore;
 
-namespace ImGuiVulkan;
+namespace SilkWindows.Vulkan.Silk.NET_Lab;
 
-public partial class ImGuiVulkanWindowImpl
+public sealed partial class ImGuiVulkanWindowImpl
 {
     private unsafe void CleanupSwapchain()
     {
-        foreach (var framebuffer in _swapchainFramebuffers)
-        {
-            _vk.DestroyFramebuffer(_device, framebuffer, null);
-        }
-        
         fixed (CommandBuffer* buffers = _commandBuffers)
         {
             _vk.FreeCommandBuffers(_device, _commandPool, (uint) _commandBuffers.Length, buffers);
@@ -28,7 +26,6 @@ public partial class ImGuiVulkanWindowImpl
         
         _vk.DestroyPipeline(_device, _graphicsPipeline, null);
         _vk.DestroyPipelineLayout(_device, _pipelineLayout, null);
-        _vk.DestroyRenderPass(_device, _renderPass, null);
         
         foreach (var imageView in _swapchainImageViews)
         {
@@ -40,73 +37,56 @@ public partial class ImGuiVulkanWindowImpl
     
     private unsafe void CreateInstance()
     {
-        _vk = Silk.NET.Vulkan.Vk.GetApi();
-        
-        var isMacOs = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-        
-        if (isMacOs)
-        {
-            _instanceExtensions.Add("VK_KHR_portability_enumeration");
-            _deviceExtensions.Add("VK_KHR_portability_subset");
-        }
-        
-        CheckValidationLayerSupport();
-        
         var appInfo = new ApplicationInfo
-        {
-            SType = StructureType.ApplicationInfo,
-            PApplicationName = (byte*) Marshal.StringToHGlobalAnsi(_window.Title),
-            ApplicationVersion = new Version32(1, 0, 0),
-            PEngineName = (byte*) Marshal.StringToHGlobalAnsi("No Engine"),
-            EngineVersion = new Version32(1, 0, 0),
-            ApiVersion = Silk.NET.Vulkan.Vk.Version13
-        };
-        
-        var createInfo = new InstanceCreateInfo
-        {
-            SType = StructureType.InstanceCreateInfo,
-            PApplicationInfo = &appInfo
-        };
-        
-        if (isMacOs)
-        {
-            createInfo.Flags = InstanceCreateFlags.EnumeratePortabilityBitKhr;
-        }
+                          {
+                              SType = StructureType.ApplicationInfo,
+                              PApplicationName = (byte*)Marshal.StringToHGlobalAnsi(_window.Title),
+                              ApplicationVersion = new Version32(1, 0, 0),
+                              PEngineName = (byte*)Marshal.StringToHGlobalAnsi("No Engine"),
+                              EngineVersion = new Version32(1, 0, 0),
+                              ApiVersion = Vk.Version13
+                          };
         
         var extensions = _window.VkSurface!.GetRequiredExtensions(out var extCount);
+        
         // TODO Review that this count doesn't realistically exceed 1k (recommended max for stackalloc)
         // Should probably be allocated on heap anyway as this isn't super performance critical.
-        var newExtensions = stackalloc byte*[(int) (extCount + _instanceExtensions.Count)];
+        var newExtensions = stackalloc byte*[(int)(extCount + _instanceExtensions.Length)];
         for (var i = 0; i < extCount; i++)
         {
             newExtensions[i] = extensions[i];
         }
         
-        for (var i = 0; i < _instanceExtensions.Count; i++)
+        for (var i = 0; i < _instanceExtensions.Length; i++)
         {
-            newExtensions[extCount + i] = (byte*) SilkMarshal.StringToPtr(_instanceExtensions[i]);
+            newExtensions[extCount + i] = (byte*)SilkMarshal.StringToPtr(_instanceExtensions[i]);
         }
         
-        extCount += (uint) _instanceExtensions.Count;
-        createInfo.EnabledExtensionCount = extCount;
-        createInfo.PpEnabledExtensionNames = newExtensions;
+        extCount += (uint)_instanceExtensions.Length;
         
-        if (_validationLayersEnabled)
-        {
-            createInfo.EnabledLayerCount = (uint) _validationLayers.Length;
-            createInfo.PpEnabledLayerNames = (byte**) SilkMarshal.StringArrayToPtr(_validationLayers);
-        }
-        else
-        {
-            createInfo.EnabledLayerCount = 0;
-            createInfo.PNext = null;
-        }
+        _vk = Vk.GetApi();
+        CheckValidationLayerSupport();
+        
+        var isMacOs = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+        
+        var createInfo = new InstanceCreateInfo()
+                                     {
+                                         SType = StructureType.InstanceCreateInfo,
+                                         EnabledExtensionCount = extCount,
+                                         EnabledLayerCount = _validationLayersEnabled ? (uint) _validationLayers.Length : 0,
+                                         Flags = isMacOs ? InstanceCreateFlags.EnumeratePortabilityBitKhr : InstanceCreateFlags.None,
+                                         PApplicationInfo = &appInfo,
+                                         PNext = null,
+                                         PpEnabledExtensionNames = newExtensions,
+                                         PpEnabledLayerNames = _validationLayersEnabled ? (byte**)SilkMarshal.StringArrayToPtr(_validationLayers) : null
+                                     };
         
         fixed (Instance* instance = &_instance)
         {
-            if (_vk.CreateInstance(&createInfo, null, instance) != Result.Success)
+            var result = _vk.CreateInstance(&createInfo, null, instance);
+            if (result != Result.Success)
             {
-                throw new Exception("Failed to create instance!");
+                throw new Exception("Failed to create instance! Result: " + result);
             }
         }
         
@@ -162,8 +142,6 @@ public partial class ImGuiVulkanWindowImpl
         
         if (_physicalDevice.Handle == 0)
             throw new Exception("No suitable device.");
-        
-        _vk.GetPhysicalDeviceFeatures(_physicalDevice, out _physicalDeviceFeatures);
     }
     
     // Caching the returned values breaks the ability for resizing the window
@@ -216,7 +194,17 @@ public partial class ImGuiVulkanWindowImpl
     
     private unsafe bool CheckDeviceExtensionSupport(PhysicalDevice device)
     {
-        return _deviceExtensions.All(ext => _vk.IsDeviceExtensionPresent(device, ext));
+        return _deviceExtensions.All(ext =>
+                                     {
+                                         var present =  _vk.IsDeviceExtensionPresent(device, ext);
+                                         
+                                         if(!present)
+                                         {
+                                             Console.WriteLine($"Device extension {ext} not supported.");
+                                         }
+                                         
+                                         return present;
+                                     });
     }
     
     // Caching these values might have unintended side effects
@@ -243,7 +231,7 @@ public partial class ImGuiVulkanWindowImpl
             
             _vkSurface.GetPhysicalDeviceSurfaceSupport(device, i, _surface, out var presentSupport);
             
-            if (presentSupport == Silk.NET.Vulkan.Vk.True)
+            if (presentSupport == Vk.True)
             {
                 indices.PresentFamily = i;
             }
@@ -300,38 +288,37 @@ public partial class ImGuiVulkanWindowImpl
             queueCreateInfos[i] = queueCreateInfo;
         }
         
-        var deviceFeatures = new PhysicalDeviceFeatures();
+        _vk.GetPhysicalDeviceFeatures2(_physicalDevice, out var physicalDeviceFeatures2);
+        PhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures = new PhysicalDeviceDynamicRenderingFeatures
+                                                                              {
+                                                                                  DynamicRendering = true,
+                                                                                  PNext = &physicalDeviceFeatures2,
+                                                                                    SType = StructureType.PhysicalDeviceDynamicRenderingFeatures
+                                                                              };
         
         var createInfo = new DeviceCreateInfo
                              {
                                  SType = StructureType.DeviceCreateInfo,
                                  QueueCreateInfoCount = (uint) uniqueQueueFamilies.Length,
                                  PQueueCreateInfos = queueCreateInfos,
-                                 PEnabledFeatures = &deviceFeatures,
-                                 EnabledExtensionCount = (uint) _deviceExtensions.Count
+                                 PEnabledFeatures = null,
+                                 EnabledExtensionCount = (uint) _deviceExtensions.Length,
+                                 PpEnabledExtensionNames = (byte**) SilkMarshal.StringArrayToPtr(_deviceExtensions),
+                                 EnabledLayerCount = _validationLayersEnabled ? (uint) _validationLayers.Length : 0, // todo - device layers should be instance layers? deprecated
+                                 PpEnabledLayerNames = _validationLayersEnabled ? (byte**) SilkMarshal.StringArrayToPtr(_validationLayers) : null,
+                                 Flags = default,
+                                 PNext = &dynamicRenderingFeatures
                              };
-        
-        var enabledExtensionNames = SilkMarshal.StringArrayToPtr(_deviceExtensions);
-        createInfo.PpEnabledExtensionNames = (byte**) enabledExtensionNames;
-        
-        if (_validationLayersEnabled)
-        {
-            createInfo.EnabledLayerCount = (uint) _validationLayers.Length;
-            createInfo.PpEnabledLayerNames = (byte**) SilkMarshal.StringArrayToPtr(_validationLayers);
-        }
-        else
-        {
-            createInfo.EnabledLayerCount = 0;
-        }
         
         fixed (Device* device = &_device)
         {
             // todo - verify _physicalDeviceFeatures has what we need for best-practice implementation before creating device
             // maybe when initially choosing physical device
             
-            if (_vk.CreateDevice(_physicalDevice, &createInfo, null, device) != Result.Success)
+            var result = _vk.CreateDevice(_physicalDevice, &createInfo, null, device);
+            if (result != Result.Success)
             {
-                throw new Exception("Failed to create logical device.");
+                throw new Exception("Failed to create logical device. Result: " + result);
             }
         }
         
@@ -350,6 +337,11 @@ public partial class ImGuiVulkanWindowImpl
         if (!_vk.TryGetDeviceExtension(_instance, _device, out _vkSwapchain))
         {
             throw new NotSupportedException("KHR_swapchain extension not found.");
+        }
+        
+        if (!_vk.TryGetDeviceExtension(_instance, _device, out _rendering))
+        {
+            Console.WriteLine("KHR_rendering extension not found.");
         }
         
         Console.WriteLine($"Vulkan Instance: \"{_vk.CurrentInstance?.Handle}\", Device: \"{_vk.CurrentDevice?.Handle}\"");
@@ -380,7 +372,8 @@ public partial class ImGuiVulkanWindowImpl
             ImageColorSpace = surfaceFormat.ColorSpace,
             ImageExtent = extent,
             ImageArrayLayers = 1,
-            ImageUsage = ImageUsageFlags.ColorAttachmentBit
+            ImageUsage = ImageUsageFlags.ColorAttachmentBit,
+            //ext = &
         };
         
         var indices = FindQueueFamilies(_physicalDevice);
@@ -403,7 +396,7 @@ public partial class ImGuiVulkanWindowImpl
             createInfo.PreTransform = swapChainSupport.Capabilities.CurrentTransform; // disable transformations - just render straight to the screen
             createInfo.CompositeAlpha = CompositeAlphaFlagsKHR.OpaqueBitKhr; // opaque window transparency
             createInfo.PresentMode = presentMode;
-            createInfo.Clipped = Silk.NET.Vulkan.Vk.True;
+            createInfo.Clipped = Vk.True;
             
             createInfo.OldSwapchain = default; // todo: this might be for window resizing and such - specify previous swapchain if it exists?
             
@@ -449,9 +442,8 @@ public partial class ImGuiVulkanWindowImpl
         
         CreateSwapChain();
         CreateImageViews();
-        CreateRenderPass();
+       // CreateRenderPass();
         CreateGraphicsPipeline();
-        CreateFramebuffers();
         CreateCommandBuffers();
         
         _imagesInFlight = new Fence[_swapchainImages.Length];
@@ -557,7 +549,7 @@ public partial class ImGuiVulkanWindowImpl
             StoreOp = AttachmentStoreOp.Store,
             StencilLoadOp = AttachmentLoadOp.DontCare,
             StencilStoreOp = AttachmentStoreOp.DontCare,
-            InitialLayout = ImageLayout.Undefined,
+            InitialLayout = ImageLayout.SharedPresentKhr,
             FinalLayout = ImageLayout.PresentSrcKhr
         };
         
@@ -570,13 +562,13 @@ public partial class ImGuiVulkanWindowImpl
         var subpass = new SubpassDescription
         {
             PipelineBindPoint = PipelineBindPoint.Graphics,
-            ColorAttachmentCount = 1,
+            ColorAttachmentCount = 0,
             PColorAttachments = &colorAttachmentRef
         };
         
         var dependency = new SubpassDependency
         {
-            SrcSubpass = Silk.NET.Vulkan.Vk.SubpassExternal,
+            SrcSubpass = Vk.SubpassExternal,
             DstSubpass = 0,
             SrcStageMask = PipelineStageFlags.ColorAttachmentOutputBit,
             SrcAccessMask = 0,
@@ -587,7 +579,7 @@ public partial class ImGuiVulkanWindowImpl
         var renderPassInfo = new RenderPassCreateInfo
         {
             SType = StructureType.RenderPassCreateInfo,
-            AttachmentCount = 1,
+            AttachmentCount = 0,
             PAttachments = &colorAttachment,
             SubpassCount = 1,
             PSubpasses = &subpass,
@@ -595,9 +587,9 @@ public partial class ImGuiVulkanWindowImpl
             PDependencies = &dependency
         };
         
-        fixed (RenderPass* renderPass = &_renderPass)
+     //   fixed (RenderPass* renderPass = &_renderPass)
         {
-            if (_vk.CreateRenderPass(_device, &renderPassInfo, null, renderPass) != Result.Success)
+       //     if (_vk.CreateRenderPass(_device, &renderPassInfo, null, renderPass) != Result.Success)
             {
                 throw new Exception("failed to create render pass!");
             }
@@ -652,7 +644,7 @@ public partial class ImGuiVulkanWindowImpl
         {
             SType = StructureType.PipelineInputAssemblyStateCreateInfo,
             Topology = PrimitiveTopology.TriangleList,
-            PrimitiveRestartEnable = Silk.NET.Vulkan.Vk.False
+            PrimitiveRestartEnable = Vk.False
         };
         
         var viewport = new Viewport
@@ -679,19 +671,19 @@ public partial class ImGuiVulkanWindowImpl
         var rasterizer = new PipelineRasterizationStateCreateInfo
         {
             SType = StructureType.PipelineRasterizationStateCreateInfo,
-            DepthClampEnable = Silk.NET.Vulkan.Vk.False,
-            RasterizerDiscardEnable = Silk.NET.Vulkan.Vk.False,
+            DepthClampEnable = Vk.False,
+            RasterizerDiscardEnable = Vk.False,
             PolygonMode = PolygonMode.Fill,
             LineWidth = 1.0f,
             CullMode = CullModeFlags.BackBit,
             FrontFace = FrontFace.Clockwise,
-            DepthBiasEnable = Silk.NET.Vulkan.Vk.False
+            DepthBiasEnable = Vk.False
         };
         
         var multisampling = new PipelineMultisampleStateCreateInfo
         {
             SType = StructureType.PipelineMultisampleStateCreateInfo,
-            SampleShadingEnable = Silk.NET.Vulkan.Vk.False,
+            SampleShadingEnable = Vk.False,
             RasterizationSamples = SampleCountFlags.Count1Bit
         };
         
@@ -701,15 +693,15 @@ public partial class ImGuiVulkanWindowImpl
                              ColorComponentFlags.GBit |
                              ColorComponentFlags.BBit |
                              ColorComponentFlags.ABit,
-            BlendEnable = Silk.NET.Vulkan.Vk.False
+            BlendEnable = Vk.False
         };
         
         var colorBlending = new PipelineColorBlendStateCreateInfo
         {
             SType = StructureType.PipelineColorBlendStateCreateInfo,
-            LogicOpEnable = Silk.NET.Vulkan.Vk.False,
+            LogicOpEnable = Vk.False,
             LogicOp = LogicOp.Copy,
-            AttachmentCount = 1,
+            AttachmentCount = 0,
             PAttachments = &colorBlendAttachment
         };
         
@@ -733,6 +725,27 @@ public partial class ImGuiVulkanWindowImpl
             }
         }
         
+        var colorFmt = Format.R32G32B32A32Sfloat;
+        
+        var pipelineCreateInfo = new PipelineRenderingCreateInfoKHR
+                                     {
+                                       SType = StructureType.PipelineRenderingCreateInfoKhr,
+                                       ColorAttachmentCount = 0, // this needs to be made dynamic?
+                                       PNext = null,
+                                       DepthAttachmentFormat = Format.Undefined, // does this need to be too?
+                                       PColorAttachmentFormats = &colorFmt, // how about this??? does this get mapped or something?
+                                       StencilAttachmentFormat = Format.Undefined,
+                                       ViewMask = default
+                                     };
+        
+        var dynamicStates = stackalloc DynamicState[] {DynamicState.Scissor, DynamicState.Viewport, DynamicState.ColorBlendEnableExt};
+        var dynamicStateCreateInfo = new PipelineDynamicStateCreateInfo
+        {
+            SType = StructureType.PipelineDynamicStateCreateInfo,
+            DynamicStateCount = 2,
+            PDynamicStates = dynamicStates
+        };
+        
         var pipelineInfo = new GraphicsPipelineCreateInfo
         {
             SType = StructureType.GraphicsPipelineCreateInfo,
@@ -745,9 +758,11 @@ public partial class ImGuiVulkanWindowImpl
             PMultisampleState = &multisampling,
             PColorBlendState = &colorBlending,
             Layout = _pipelineLayout,
-            RenderPass = _renderPass,
+            RenderPass = default,
             Subpass = 0,
-            BasePipelineHandle = default
+            BasePipelineHandle = default,
+            PNext = &pipelineCreateInfo,
+            PDynamicState = &dynamicStateCreateInfo
         };
         
         fixed (Pipeline* graphicsPipeline = &_graphicsPipeline)
@@ -755,7 +770,7 @@ public partial class ImGuiVulkanWindowImpl
             if (_vk.CreateGraphicsPipelines
                     (_device, default, 1, &pipelineInfo, null, graphicsPipeline) != Result.Success)
             {
-                throw new Exception("failed to create graphics pipeline!");
+         //       throw new Exception("failed to create graphics pipeline!");
             }
         }
         
@@ -784,34 +799,6 @@ public partial class ImGuiVulkanWindowImpl
         return shaderModule;
     }
     
-    private unsafe void CreateFramebuffers()
-    {
-        _swapchainFramebuffers = new Framebuffer[_swapchainImageViews.Length];
-        
-        for (var i = 0; i < _swapchainImageViews.Length; i++)
-        {
-            var attachment = _swapchainImageViews[i];
-            var framebufferInfo = new FramebufferCreateInfo
-            {
-                SType = StructureType.FramebufferCreateInfo,
-                RenderPass = _renderPass,
-                AttachmentCount = 1,
-                PAttachments = &attachment,
-                Width = _swapchainExtent.Width,
-                Height = _swapchainExtent.Height,
-                Layers = 1
-            };
-            
-            var framebuffer = new Framebuffer();
-            if (_vk.CreateFramebuffer(_device, &framebufferInfo, null, &framebuffer) != Result.Success)
-            {
-                throw new Exception("failed to create framebuffer!");
-            }
-            
-            _swapchainFramebuffers[i] = framebuffer;
-        }
-    }
-    
     private unsafe void CreateCommandPool()
     {
         var queueFamilyIndices = FindQueueFamilies(_physicalDevice);
@@ -834,7 +821,7 @@ public partial class ImGuiVulkanWindowImpl
     
     private unsafe void CreateCommandBuffers()
     {
-        _commandBuffers = new CommandBuffer[_swapchainFramebuffers.Length];
+        _commandBuffers = new CommandBuffer[MaxFramesInFlight];
         
         var allocInfo = new CommandBufferAllocateInfo
         {
@@ -883,4 +870,30 @@ public partial class ImGuiVulkanWindowImpl
             _inFlightFences[i] = inFlightFence;
         }
     }
+    private static readonly string[] _defaultInstanceExtensions =
+        [
+            #if DEBUG
+            ExtDebugUtils.ExtensionName,
+            #endif
+        ];
+    
+    private readonly string[] _instanceExtensions = RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+                                               ? _defaultInstanceExtensions.Append("VK_KHR_portability_enumeration").ToArray()
+                                               : _defaultInstanceExtensions;
+
+    
+    private static readonly string[] _defaultDeviceExtensions =
+        [
+            KhrSwapchain.ExtensionName,
+            //KhrDynamicRendering.ExtensionName,
+          //  KhrDynamicRenderingOverloads.CmdBeginRendering()
+            //KhrCreateRenderpass2.ExtensionName,
+            //KhrGetPhysicalDeviceProperties2.ExtensionName
+            //ExtShaderObject.ExtensionName
+        ];
+    
+    private readonly string[] _deviceExtensions = RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+                                                      ? _defaultDeviceExtensions.Append("VK_KHR_portability_subset").ToArray()
+                                                      : _defaultDeviceExtensions;
+    
 }
