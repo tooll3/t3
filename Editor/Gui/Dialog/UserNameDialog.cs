@@ -7,7 +7,9 @@ namespace T3.Editor.Gui.Dialog
 {
     public class UserNameDialog : ModalDialog
     {
-        private string _userName = DefaultName;
+        private string _userName = string.Empty;
+        
+        protected override void OnShowNextFrame() => _userName = UserSettings.Config.UserName;
 
         public void Draw()
         {
@@ -39,7 +41,6 @@ namespace T3.Editor.Gui.Dialog
                         Log.Error($"Error while renaming user {e}");
                     }
 
-                    _userName = DefaultName;
                     ImGui.CloseCurrentPopup();
                 }
 
@@ -54,7 +55,5 @@ namespace T3.Editor.Gui.Dialog
 
             EndDialog();
         }
-
-        private static string DefaultName => UserSettings.Config.UserName;
     }
 }
