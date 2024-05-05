@@ -260,7 +260,8 @@ namespace T3.Editor.Gui.Styling
                                           string placeHolder = null,
                                           string warning = null,
                                           string tooltip = null,
-                                          string defaultValue = NoDefaultString)
+                                          string defaultValue = NoDefaultString,
+                                          bool autoFocus = false)
         {
             var hasDefault = defaultValue != NoDefaultString;
             var isDefault = hasDefault && value == defaultValue;
@@ -277,10 +278,17 @@ namespace T3.Editor.Gui.Styling
 
             var inputSize = GetAvailableInputSize(tooltip, false, true);
             ImGui.SetNextItemWidth(inputSize.X);
+            
             var modified = ImGui.InputText("##" + label, ref value, 1000);
             if (!modified && wasNull)
                 value = null;
 
+            if (autoFocus)
+            {
+                // Todo - how the hell do you make this not select the entire text?
+                ImGui.SetKeyboardFocusHere(-1);
+            }
+            
             AppendTooltip(tooltip);
 
             if (string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(placeHolder))

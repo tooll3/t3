@@ -286,7 +286,7 @@ internal static class ProjectSetup
 
     public static void DisposePackages()
     {
-        var allPackages = EditorSymbolPackage.AllPackages.ToArray();
+        var allPackages = SymbolPackage.AllPackages.ToArray();
         foreach(var package in allPackages)
             package.Dispose();
     }
