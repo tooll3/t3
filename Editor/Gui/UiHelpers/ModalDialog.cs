@@ -38,7 +38,11 @@ namespace T3.Editor.Gui.UiHelpers
         public void ShowNextFrame()
         {
             _shouldShowNextFrame = true;
+            OnShowNextFrame();
         }
+        
+        // Todo - should be an abstract function other modal dialogs can use to initialize their values
+        protected virtual void OnShowNextFrame(){}
 
         protected bool BeginDialog(string title)
         {
