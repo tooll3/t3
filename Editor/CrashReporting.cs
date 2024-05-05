@@ -97,7 +97,7 @@ internal static class CrashReporting
         }
         
         const string confirmation = "Send crash report (it really helps!)";
-        var result = BlockingWindow.Instance.Show(message, @"☠🙈 Damn!", confirmation, "No thanks, I hate it when things are fixed");
+        var result = BlockingWindow.Instance.ShowMessageBox(message, @"☠🙈 Damn!", confirmation, "No thanks, I hate it when things are fixed");
         
         if (json != null)
         {
