@@ -682,16 +682,10 @@ namespace T3.Editor.Gui.Styling
         // Todo: this needs to be resized horizontally so the label shows correctly
         internal static bool DrawProjectDropdown(ref EditableSymbolProject selectedValue)
         {
-            return DrawDropdown(ref selectedValue, EditableSymbolProject.AllProjects.OrderBy(x => x.DisplayName), "Project", GetDisplayText,
+            return DrawDropdown(ref selectedValue, EditableSymbolProject.AllProjects.OrderBy(x => x.DisplayName), "Project", x => x.DisplayName,
                                 defaultDisplayText: "Select a project",
                                 tooltip: "Select a project to edit symbols in.",
                                 labelOnSameLine: false);
-
-            static string GetDisplayText(EditableSymbolProject project)
-            {
-                var projectFile = project.CsProjectFile;
-                return $"{projectFile.Name} - ({projectFile.RootNamespace})";
-            }
         }
 
         public static void DrawSymbolCodeContextMenuItem(Symbol symbol)
