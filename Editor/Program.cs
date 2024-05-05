@@ -180,7 +180,7 @@ namespace T3.Editor
             }
             catch (Exception e)
             {
-                Log.Warning("Exception during shutdown: " + e.Message);
+                BlockingWindow.Instance.ShowMessageBox("Exception during shutdown: \n" + e);
             }
 
             // Release all resources

@@ -8,8 +8,17 @@ using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
-    public class NewProjectDialog : ModalDialog
+    internal sealed class NewProjectDialog : ModalDialog
     {
+        protected override void OnShowNextFrame()
+        {
+            _shareResources = true;
+            _newName = string.Empty;
+            _userName = UserSettings.Config.UserName;
+            _newNamespace = _userName;
+            _needsAutoFocus = true;
+        }
+        
         public void Draw()
         {
             DialogSize = new Vector2(500, 300);
@@ -17,23 +26,22 @@ namespace T3.Editor.Gui.Graph.Dialogs
             if (BeginDialog("Create new project"))
             {
                 // Name and namespace
-                var username = UserSettings.Config.UserName;
-
                 string namespaceWarningText = null;
                 bool namespaceCorrect = true;
-                if (!_newNamespace.StartsWith(username + '.'))
+                if (!_newNamespace.StartsWith(_userName) || _newNamespace.Length > _userName.Length + 1 && _newNamespace[_userName.Length] != '.')
                 {
                     namespaceCorrect = false;
-                    namespaceWarningText = $"Namespace must be within the \"{username}\" namespace";
+                    namespaceWarningText = $"Namespace must be within the \"{_userName}\" namespace";
                 }
                 else if(!GraphUtils.IsNamespaceValid(_newNamespace))
                 {
                     namespaceCorrect = false;
                     namespaceWarningText = "Namespace must be a valid C# namespace";
                 }
-                    
+                
                 FormInputs.AddStringInput("Namespace", ref _newNamespace, 
-                                          warning: namespaceWarningText);
+                                          warning: namespaceWarningText, autoFocus: _needsAutoFocus);
+                _needsAutoFocus = false;
                 
                 var nameCorrect = GraphUtils.IsIdentifierValid(_newName);
                 FormInputs.AddStringInput("Name", ref _newName,
@@ -66,15 +74,12 @@ namespace T3.Editor.Gui.Graph.Dialogs
                         Log.Error(message);
                         BlockingWindow.Instance.ShowMessageBox(message, "Failed to create new project");
                     }
-                    
-                    ResetValuesToDefault();
                 }
 
                 ImGui.SameLine();
                 if (ImGui.Button("Cancel"))
                 {
                     ImGui.CloseCurrentPopup();
-                    ResetValuesToDefault();
                 }
 
                 EndDialogContent();
@@ -83,15 +88,10 @@ namespace T3.Editor.Gui.Graph.Dialogs
             EndDialog();
         }
 
-        private static void ResetValuesToDefault()
-        {
-            _shareResources = true;
-            _newName = string.Empty;
-            _newNamespace = string.Empty;
-        }
-
-        private static string _newName = string.Empty;
-        private static string _newNamespace = string.Empty;
-        private static bool _shareResources = true;
+        private string _newName = string.Empty;
+        private string _newNamespace = string.Empty;
+        private string _userName = string.Empty;
+        private bool _shareResources = true;
+        private bool _needsAutoFocus;
     }
 }
