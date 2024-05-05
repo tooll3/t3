@@ -60,7 +60,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                                                       isEnabled: namespaceCorrect && nameCorrect,
                                                       enableTriggerWithReturn: false))
                 {
-                    if (ProjectSetup.TryCreateProject(_newName, _newNamespace, _shareResources, out var project))
+                    if (ProjectSetup.TryCreateProject(_newName, _newNamespace + '.' + _newName, _shareResources, out var project))
                     {
                         T3Ui.Save(false); // todo : this is probably not needed
                         ImGui.CloseCurrentPopup();
