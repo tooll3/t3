@@ -28,7 +28,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 // Name and namespace
                 string namespaceWarningText = null;
                 bool namespaceCorrect = true;
-                if (!_newNamespace.StartsWith(_userName) || _newNamespace.Length > _userName.Length + 1 && _newNamespace[_userName.Length] != '.')
+                if (!_newNamespace.StartsWith(_userName) || _newNamespace.Length > _userName.Length && _newNamespace[_userName.Length] != '.')
                 {
                     namespaceCorrect = false;
                     namespaceWarningText = $"Namespace must be within the \"{_userName}\" namespace";
