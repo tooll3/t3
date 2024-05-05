@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Dialog
 
         public void Draw()
         {
-            if (BeginDialog("Edit project name"))
+            if (BeginDialog("Edit username"))
             {
                 ImGui.PushFont(Fonts.FontSmall);
                 ImGui.TextUnformatted("Nickname");
@@ -22,17 +22,17 @@ namespace T3.Editor.Gui.Dialog
                 if (ImGui.IsWindowAppearing())
                     ImGui.SetKeyboardFocusHere();
 
-                ImGui.InputText("##name", ref _userName, 255);
+                ImGui.InputText("##name", ref _userName, 32);
 
                 CustomComponents
-                   .HelpText("Tooll will use this to group your projects into a namespace.\n\n(This is a local setting only and not stored online.\n\nIt should be short and not contain spaces or special characters.");
+                   .HelpText("Tooll will use this to group your projects into a namespace.\n\nIt should be short and not contain spaces or special characters.");
                 ImGui.Spacing();
 
                 if (CustomComponents.DisablableButton("Rename", GraphUtils.IsValidProjectName(_userName)))
                 {
                     try
                     {
-                        ProjectNameChanged?.Invoke(this, _userName);
+                        UserSettings.Config.UserName = _userName;
                     }
                     catch (Exception e)
                     {
@@ -55,7 +55,6 @@ namespace T3.Editor.Gui.Dialog
             EndDialog();
         }
 
-        public event EventHandler<string> ProjectNameChanged;
-        private const string DefaultName = "RadNewProjectName";
+        private static string DefaultName => UserSettings.Config.UserName;
     }
 }
