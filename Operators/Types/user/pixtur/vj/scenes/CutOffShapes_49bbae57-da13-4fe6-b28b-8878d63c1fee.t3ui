@@ -471,7 +471,7 @@
       }
     },
     {
-      "ChildId": "fa6b9bcb-a2f1-48bd-90ca-496f06bdfb10"/*RandomString*/,
+      "ChildId": "fa6b9bcb-a2f1-48bd-90ca-496f06bdfb10"/*AnimRandomString*/,
       "Position": {
         "X": 2372.7188,
         "Y": 701.3174
@@ -535,7 +535,7 @@
       }
     },
     {
-      "ChildId": "d465f7e4-fccc-44bb-8b87-2884cd33dbf6"/*RandomString*/,
+      "ChildId": "d465f7e4-fccc-44bb-8b87-2884cd33dbf6"/*AnimRandomString*/,
       "Position": {
         "X": 2372.7188,
         "Y": 658.3174
@@ -639,13 +639,6 @@
       "Position": {
         "X": 2372.7188,
         "Y": 615.3174
-      }
-    },
-    {
-      "ChildId": "beed5a48-a287-47c4-8195-8296d33b0121"/*_ObsoleteParticleSimulationExample*/,
-      "Position": {
-        "X": 842.56537,
-        "Y": 1.0102539
       }
     },
     {

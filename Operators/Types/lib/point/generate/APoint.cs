@@ -96,7 +96,7 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
 
             if (sizeChanged)
             {
-                Log.Debug("Updating Point buffer size....", this);
+                // Log.Debug("Updating Point buffer size....", this);
                 ResourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_buffer, UnorderedAccessViewBufferFlags.None, ref _bufferWithViews.Uav);
                 _bufferWithViews.Buffer = _buffer;

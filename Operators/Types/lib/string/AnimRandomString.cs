@@ -5,7 +5,7 @@ using T3.Operators.Types.Id_3af25959_fd3f_4608_b521_5860d82554df;
 
 namespace T3.Operators.Types.Id_dd7fa7ee_266a_43c8_b29f_3357488b26be
 {
-    public class RandomString : Instance<RandomString>
+    public class AnimRandomString : Instance<AnimRandomString>
     {
         [Output(Guid = "3a769380-1586-4d7f-a881-e509d5c14c1b")]
         public readonly Slot<string> Fragments = new();

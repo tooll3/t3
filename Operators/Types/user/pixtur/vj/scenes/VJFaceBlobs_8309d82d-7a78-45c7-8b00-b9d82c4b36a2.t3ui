@@ -236,7 +236,7 @@
       }
     },
     {
-      "ChildId": "95564a4b-635e-465c-a831-220978dff09a"/*RandomString*/,
+      "ChildId": "95564a4b-635e-465c-a831-220978dff09a"/*AnimRandomString*/,
       "Position": {
         "X": 338.48157,
         "Y": 399.35254

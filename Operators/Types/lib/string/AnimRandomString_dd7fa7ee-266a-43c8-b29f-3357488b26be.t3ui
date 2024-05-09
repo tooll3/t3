@@ -1,5 +1,5 @@
 {
-  "Id": "dd7fa7ee-266a-43c8-b29f-3357488b26be"/*RandomString*/,
+  "Id": "dd7fa7ee-266a-43c8-b29f-3357488b26be"/*AnimRandomString*/,
   "Description": "Returns a random word per beat.",
   "InputUis": [
     {
@@ -33,17 +33,17 @@
       }
     },
     {
-      "ChildId": "5f0f0745-cb7f-4191-92c8-c1cd062dcfae"/*Counter*/,
-      "Position": {
-        "X": -0.19548035,
-        "Y": 85.84247
-      }
-    },
-    {
       "ChildId": "d49a1aed-efe6-48b7-a6e7-8c2d3f4db751"/*FloatToInt*/,
       "Position": {
         "X": 150.0,
         "Y": 56.0
+      }
+    },
+    {
+      "ChildId": "fa40238c-0cd8-4ffc-b8ea-18d11fa12790"/*AnimValue*/,
+      "Position": {
+        "X": 1.0560608,
+        "Y": 214.44357
       }
     }
   ],

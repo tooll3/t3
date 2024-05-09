@@ -3737,21 +3737,21 @@
       "SymbolId": "208a86b5-55cc-460a-86e6-2b17da818494",
       "InputValues": [
         {
-          "Id": "4b8a067d-8630-485e-b390-1fca7cc06323"/*Stretch*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 1.0,
-            "Y": -1.0,
-            "Z": 1.0
-          }
-        },
-        {
           "Id": "da73250e-fcf2-4fe9-9a84-a1d139a0390c"/*Rotate*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
             "Y": 0.0,
             "Z": 90.0
+          }
+        },
+        {
+          "Id": "4b8a067d-8630-485e-b390-1fca7cc06323"/*Stretch*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 1.0,
+            "Y": -1.0,
+            "Z": 1.0
           }
         }
       ],

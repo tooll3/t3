@@ -1832,7 +1832,7 @@
       "Outputs": []
     },
     {
-      "Id": "fa6b9bcb-a2f1-48bd-90ca-496f06bdfb10"/*RandomString*/,
+      "Id": "fa6b9bcb-a2f1-48bd-90ca-496f06bdfb10"/*AnimRandomString*/,
       "SymbolId": "dd7fa7ee-266a-43c8-b29f-3357488b26be",
       "InputValues": [
         {
@@ -1951,7 +1951,7 @@
       "Outputs": []
     },
     {
-      "Id": "d465f7e4-fccc-44bb-8b87-2884cd33dbf6"/*RandomString*/,
+      "Id": "d465f7e4-fccc-44bb-8b87-2884cd33dbf6"/*AnimRandomString*/,
       "SymbolId": "dd7fa7ee-266a-43c8-b29f-3357488b26be",
       "InputValues": [
         {
@@ -2284,12 +2284,6 @@
           }
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "beed5a48-a287-47c4-8195-8296d33b0121"/*_ObsoleteParticleSimulationExample*/,
-      "SymbolId": "c05bc3da-6f9c-45a7-8030-78476027359d",
-      "InputValues": [],
       "Outputs": []
     },
     {
