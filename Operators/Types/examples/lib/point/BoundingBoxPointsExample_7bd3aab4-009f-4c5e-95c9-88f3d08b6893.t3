@@ -7,7 +7,13 @@
     {
       "Id": "6ea7f88e-4616-472e-91a3-6b9bcd58e9f5"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "b654ffe2-d46e-4a62-89b3-a9692d5c6481"/*Count*/,
+          "Type": "System.Int32",
+          "Value": 10
+        }
+      ],
       "Outputs": []
     },
     {

@@ -19,7 +19,6 @@
       "GroupTitle": "Randomize",
       "Min": 0.0,
       "Max": 10.0,
-      "Clamp": true,
       "Format": "{0:0.000} ×"
     },
     {
