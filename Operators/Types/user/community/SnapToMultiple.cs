@@ -18,15 +18,17 @@ namespace T3.Operators.Types.Id_c3090c65_194a_4f95_9b70_d003f54103f7
         {
             var v = Value.GetValue(context);
             var mod = Mod.GetValue(context);
-            if (mod == 0){
-                return;
-			}
-            for(int goodvalue=mod;goodvalue>0;goodvalue--){
-				if(v%goodvalue == 0){
-					Result.Value = goodvalue;
+
+            for(int nextLowestMod=mod;nextLowestMod>0;nextLowestMod--)
+			{
+				if(v%nextLowestMod == 0)
+				{
+					Result.Value = nextLowestMod;
 					return;
 				}
+				
 			}
+			
         }
         
         [Input(Guid = "3bf35135-8fb1-46d3-95ea-008eded67060")]
