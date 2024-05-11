@@ -19,7 +19,9 @@
       },
       "GroupTitle": "Visual Settings",
       "Description": "The number of frames spanning the width of the atlas.",
-      "AddPadding": "True"
+      "AddPadding": "True",
+      "Min": 1,
+      "Clamp": true
     },
     {
       "InputId": "25ac515f-2f7f-4ebf-9852-fc96bc83d6af"/*FrameCountY*/,
@@ -27,7 +29,9 @@
         "X": -431.55664,
         "Y": -103.402405
       },
-      "Description": "The number of frames spanning the height of the atlas."
+      "Description": "The number of frames spanning the height of the atlas.",
+      "Min": 1,
+      "Clamp": true
     },
     {
       "InputId": "65f7f342-fbe8-4fb3-9019-c891fa651d5d"/*FramesToTruncate*/,
@@ -108,13 +112,6 @@
       "Position": {
         "X": 206.82373,
         "Y": -329.7483
-      }
-    },
-    {
-      "ChildId": "a17d35a6-4b7b-4839-86db-53e6da087c81"/*ClampInt*/,
-      "Position": {
-        "X": -27.758392,
-        "Y": 53.472992
       }
     },
     {
@@ -206,13 +203,6 @@
       "Position": {
         "X": -39.186462,
         "Y": 731.2847
-      }
-    },
-    {
-      "ChildId": "e859a80f-73e6-404f-8028-93acf66f3235"/*ClampInt*/,
-      "Position": {
-        "X": -131.83304,
-        "Y": 638.8741
       }
     },
     {
@@ -379,50 +369,8 @@
     {
       "ChildId": "7f3ef40e-4dee-4653-92df-bd4029327144"/*Value*/,
       "Position": {
-        "X": -692.68445,
-        "Y": 258.12955
-      }
-    },
-    {
-      "ChildId": "28ca4d22-2f39-4c4d-ad10-0fde310c14fb"/*IntValue*/,
-      "Position": {
-        "X": -1476.9756,
-        "Y": 380.31586
-      }
-    },
-    {
-      "ChildId": "1677c88f-79e5-4c01-b702-4aff1990f1be"/*IntValue*/,
-      "Position": {
-        "X": -1479.4697,
-        "Y": 301.74713
-      }
-    },
-    {
-      "ChildId": "1f08c22a-aafd-4c61-ac9a-2737b6f72bff"/*IntValue*/,
-      "Position": {
-        "X": -964.6102,
-        "Y": 421.379
-      }
-    },
-    {
-      "ChildId": "f758e789-eb94-42b6-b5db-948651f69ae5"/*IterateList*/,
-      "Position": {
-        "X": -1161.9597,
-        "Y": 598.9934
-      }
-    },
-    {
-      "ChildId": "67f0ca8e-d1d3-4fbe-9719-a91191d48689"/*ModInt*/,
-      "Position": {
-        "X": -1251.0696,
-        "Y": 364.0384
-      }
-    },
-    {
-      "ChildId": "62c9f8a8-efad-4f5d-92cd-fe0cd178e195"/*SnapToMultiple*/,
-      "Position": {
-        "X": -1282.196,
-        "Y": 511.35083
+        "X": -464.9873,
+        "Y": 286.81583
       }
     },
     {
