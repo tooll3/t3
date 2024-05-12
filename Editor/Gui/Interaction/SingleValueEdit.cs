@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
@@ -52,8 +53,8 @@ namespace T3.Editor.Gui.Interaction
             return result;
         }
 
-        private static int _editInteractionCounter =0;
-        
+        private static int _editInteractionCounter = 0;
+
         public static InputEditStateFlags Draw(ref double value,
                                                Vector2 size,
                                                double min = double.NegativeInfinity,
@@ -62,6 +63,7 @@ namespace T3.Editor.Gui.Interaction
                                                float scale = 1,
                                                string format = "{0:0.000}")
         {
+            _numberFormat = format;
             _currentTabIndex++;
             var componentId = ImGui.GetID("valueEdit");
 
@@ -71,12 +73,12 @@ namespace T3.Editor.Gui.Interaction
                 //Log.Debug("  ShouldFocus for index " + TabFocusIndex  +  "  state " + _state );
                 SetState(InputStates.TextInput);
                 _activeJogDialId = componentId;
-                _jogDialText = FormatValueForButton(ref value);
+                _startValue = value;
+                _jogDialText = FormatValueForButton(ref value, true);
             }
 
             var io = ImGui.GetIO();
 
-            _numberFormat = format;
             if (componentId == _activeJogDialId)
             {
                 switch (_state)
@@ -117,8 +119,9 @@ namespace T3.Editor.Gui.Interaction
                             SetState(InputStates.Inactive);
                             break;
                         }
+
                         var restarted = (float)(ImGui.GetTime() - _timeOpened) < 0.1f;
-                        DrawValueEditMethod(ref _editValue, restarted,_center, min, max, clamp, scale);
+                        DrawValueEditMethod(ref _editValue, restarted, _center, min, max, clamp, scale);
 
                         break;
 
@@ -153,14 +156,17 @@ namespace T3.Editor.Gui.Interaction
                             completedAfterTabbing = true;
                         }
 
+                        var completedAfterFocusLoss = ImGui.IsKeyPressed((ImGuiKey)Key.Esc) || ImGui.IsItemDeactivated() || !ImGui.IsWindowFocused();
+
                         var cancelInputAfterFocusLoss = !shouldFocus && !ImGui.IsItemActive();
-                        if (cancelInputAfterFocusLoss)
+                        if (cancelInputAfterFocusLoss || completedAfterFocusLoss)
                         {
                             // NOTE: This happens after canceling editing by closing the input
                             // and reopen the state. Sadly there doesn't appear to be a simple fix for this.
+                            _tabFocusIndex = -1;
                         }
 
-                        if (completedAfterTabbing || ImGui.IsKeyPressed((ImGuiKey)Key.Esc) || ImGui.IsItemDeactivated() || !ImGui.IsWindowFocused())
+                        if (completedAfterTabbing || completedAfterFocusLoss)
                         {
                             SetState(InputStates.Inactive);
                             if (double.IsNaN(_editValue))
@@ -175,6 +181,7 @@ namespace T3.Editor.Gui.Interaction
                             _editValue = _startValue;
                             _jogDialText = value.ToString();
                         }
+
                         break;
                 }
 
@@ -228,7 +235,7 @@ namespace T3.Editor.Gui.Interaction
                                 factor = 10f;
                             }
 
-                            value += wheel * scale * 10  * factor;
+                            value += wheel * scale * 10 * factor;
                             _hoveredComponentModifiedByWheel = true;
                             return InputEditStateFlags.Modified;
                         }
@@ -314,10 +321,10 @@ namespace T3.Editor.Gui.Interaction
                 var row = table.NewRow();
                 table.Rows.Add(row);
                 var newValue = double.Parse((string)row["expression"]);
-                
+
                 if (double.IsNaN(newValue) || double.IsInfinity(newValue))
                     return false;
-                
+
                 editValue = newValue;
                 return true;
             }
@@ -327,14 +334,27 @@ namespace T3.Editor.Gui.Interaction
             }
         }
 
-        private static string FormatValueForButton(ref double value)
+        private static readonly Regex FilterFormattingPattern = new(@".*(\{0:(.+)\}).*");
+
+        private static string FormatValueForButton(ref double value, bool hideSuffix = false)
         {
             // Don't use rounding for integers
+            if (_numberFormat == "{0:0}")
+                return "" + (int)value;
+
             try
             {
-                return (_numberFormat == "{0:0}")
-                           ? "" + (int)value
-                           : string.Format(_numberFormat, value);
+                if (!hideSuffix)
+                    return string.Format(_numberFormat, value);
+
+                // Special formatting suffices like ° or × will break the parse and lead to incorrect value input.
+                // So we filter them out here.
+                var match = FilterFormattingPattern.Match(_numberFormat);
+
+                return string.Format(
+                                     match.Success
+                                         ? match.Groups[1].Value
+                                         : _numberFormat, value);
             }
             catch (FormatException)
             {
@@ -353,7 +373,7 @@ namespace T3.Editor.Gui.Interaction
             ImGui.Button("##dial", size);
             if (string.IsNullOrEmpty(label))
                 return;
-            
+
             ImGui.GetWindowDrawList().AddText(keepPos + new Vector2(4, 4), color1, label);
         }
 
