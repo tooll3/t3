@@ -6,7 +6,7 @@
       "InputId": "8cc15ea0-074f-40ed-813d-b93f48681094"/*Image*/,
       "Position": {
         "X": -200.0,
-        "Y": 0.0
+        "Y": -123.96756
       },
       "Description": "Image to use as a background for the blob.\nDrawn behind the background color."
     },
