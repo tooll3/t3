@@ -1,0 +1,56 @@
+{
+  "Id": "722e79cc-47bc-42cc-8fce-2e06f36f8caa",
+  "Variations": [
+    {
+      "Id": "fd5ffa70-a9a4-4440-b27a-098271e5df22",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Tight blob",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "effde91f-2cbc-4400-b1fb-17677c538fe6": {
+            "X": 0.0,
+            "Y": 0.23500001
+          },
+          "19db4357-97ae-4e83-8464-4e4cf9182bdb": 46
+        }
+      }
+    },
+    {
+      "Id": "809160ce-b1a1-4d78-a4e2-099afa2630a8",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Extra Scatter",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "71d1e34f-bf8c-4e24-87b2-177bb3249b12": 100.0,
+          "19db4357-97ae-4e83-8464-4e4cf9182bdb": 46
+        }
+      }
+    },
+    {
+      "Id": "53d6778b-286b-4e07-8253-dc8cba389f2b",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Few.",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "5c7e5e27-2eb8-4933-97cb-fc49d576d625": 10,
+          "19db4357-97ae-4e83-8464-4e4cf9182bdb": 46
+        }
+      }
+    }
+  ]
+}

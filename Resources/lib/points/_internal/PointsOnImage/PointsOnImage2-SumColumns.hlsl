@@ -26,7 +26,7 @@ RWTexture2D<float> Sums : register(u0);
     for (y = 0; y < ImageHeight; ++y)
     {
         normalizedSum += Sums[uint2(RowSumIndex, y)] * sumReciproc;
-        Sums[int2(RowSumIndex, y)].r = saturate(normalizedSum);
+        Sums[int2(RowSumIndex, y)].r = normalizedSum;
     }
     // Sums[int2(0, ImageHeight)] = 1;
 }

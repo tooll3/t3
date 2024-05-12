@@ -12,11 +12,6 @@
           "Id": "5c7e5e27-2eb8-4933-97cb-fc49d576d625"/*Count*/,
           "Type": "System.Int32",
           "Value": 1000
-        },
-        {
-          "Id": "6a93d3ee-bf8c-4f4a-9582-62ee1dd752ed"/*Seed*/,
-          "Type": "System.Single",
-          "Value": 11.39
         }
       ],
       "Outputs": []
