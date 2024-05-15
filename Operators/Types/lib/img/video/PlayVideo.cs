@@ -74,7 +74,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             var durationWithMargin = _engine.Duration - completionThreshold;
             HasCompleted.Value = !_loop && _engine.CurrentTime > durationWithMargin  || requestedTime > durationWithMargin; 
             
-            var isSameTime = Math.Abs(context.LocalFxTime - _lastContextTime) < 0.001;
+            var isSameTime = Math.Abs(requestedTime - _lastContextTime) < 0.001;
             var dontUpdate = isSameTime && !pathChanged && _hasUpdatedTexture && !_isSeeking;
             if (dontUpdate)
             {
@@ -83,7 +83,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             }
 
             _loop = Loop.GetValue(context);
-            _lastContextTime = context.LocalFxTime;
+            _lastContextTime = requestedTime;
             _lastUpdateRunTimeInSecs = Playback.RunTimeInSecs;
             
             if (pathChanged)
