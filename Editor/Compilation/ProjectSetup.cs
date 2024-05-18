@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using T3.Core;
 using T3.Core.Compilation;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -11,6 +12,7 @@ using T3.Editor.External;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Serialization;
 
 namespace T3.Editor.Compilation;
 
@@ -23,13 +25,14 @@ internal static class ProjectSetup
     {
         var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, shareResources, UserSettings.Config.DefaultNewProjectDirectory);
 
-        if (!newCsProj.TryRecompile(out var releaseInfo))
+        if (!newCsProj.TryRecompile())
         {
             Log.Error("Failed to compile new project");
             newProject = null;
             return false;
         }
 
+        var releaseInfo = newCsProj.Assembly.ReleaseInfo;
         if (releaseInfo.HomeGuid == Guid.Empty)
         {
             Log.Error("Failed to create project home");
@@ -78,22 +81,19 @@ internal static class ProjectSetup
                .EnumerateDirectories("*", SearchOption.TopDirectoryOnly) // ignore "player" project directory
                .Where(folder => !string.Equals(folder.Name, PlayerExporter.ExportFolderName, StringComparison.OrdinalIgnoreCase))
                .ToList()
-               .ForEach(package =>
+               .ForEach(directoryInfo =>
                         {
-                            foreach (var file in package.EnumerateFiles($"{package.Name}.dll", SearchOption.TopDirectoryOnly))
-                            {
-                                var loaded = RuntimeAssemblies.TryLoadAssemblyInformation(file.FullName, out var assembly, out var releaseInfo);
-                                if (!loaded)
-                                {
-                                    Log.Error($"Could not load assembly at \"{file.FullName}\"");
-                                    continue;
-                                }
-
-                                if (assembly.IsOperatorAssembly)
-                                    readOnlyPackages.Add(new EditorSymbolPackage(assembly));
-                                else
-                                    nonOperatorAssemblies.Add(assembly);
-                            }
+                            // todo - load by releaseInfo json, then load associated assembly
+                            var directory = directoryInfo.FullName!;
+                            var packageInfo = Path.Combine(directory, RuntimeAssemblies.PackageInfoFileName);
+                            if (!RuntimeAssemblies.TryLoadAssemblyFromPackageInfoFile(packageInfo, out var assembly)) 
+                                return;
+                            
+                            if (assembly.IsOperatorAssembly)
+                                readOnlyPackages.Add(new EditorSymbolPackage(assembly));
+                            else
+                                nonOperatorAssemblies.Add(assembly);
+                                
                         });
             
             Log.Debug($"Found built-in operator assemblies in {stopwatch.ElapsedMilliseconds}ms");
@@ -111,7 +111,7 @@ internal static class ProjectSetup
                                                                                 .Where(path =>
                                                                                        {
                                                                                            var subDir = Path.GetFileName(path);
-                                                                                           return !subDir.StartsWith('.');
+                                                                                           return !subDir.StartsWith('.'); // ignore things like .git and .syncthing folders 
                                                                                        }));
             #endif
                                           
@@ -143,7 +143,7 @@ internal static class ProjectSetup
                                return;
                            }
                            
-                           if (csProjFile.TryLoadLatestAssembly(out var releaseInfo))
+                           if (csProjFile.TryLoadLatestAssembly())
                            {
                                InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
                            }
@@ -156,7 +156,7 @@ internal static class ProjectSetup
             foreach (var csProjFile in projectsNeedingCompilation)
             {
                 // check again if assembly can be loaded as previous compilations could have compiled this project
-                if (csProjFile.TryLoadLatestAssembly(out var releaseInfo) || csProjFile.TryRecompile(out releaseInfo))
+                if (csProjFile.TryLoadLatestAssembly() || csProjFile.TryRecompile())
                 {
                     InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
                 }
@@ -240,7 +240,7 @@ internal static class ProjectSetup
             Log.Info($"Loaded {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
         }
     }
-
+    
     private static readonly string CoreOperatorDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators");
     #if DEBUG
     private static readonly string T3ParentDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "..", "..", "..", "..");

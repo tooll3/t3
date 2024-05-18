@@ -62,6 +62,7 @@
     <PropertyGroup>
       <OperatorReferenceArray>@(OpPacks -> '%(OpPackageInfoJson)', ',')</OperatorReferenceArray>
       <OperatorPackageInfoJson>{
+          "AssemblyFileName": "$(AssemblyName)",
 	"HomeGuid": "$(HomeGuid)", 
 	"RootNamespace": "$(RootNamespace)", 
           "Version": "$(VersionPrefix)",

@@ -132,11 +132,12 @@ internal sealed partial class CsProjectFile
         var rootNamespacePropertyName = GetNameOf(PropertyType.RootNamespace);
         var editorVersionPropertyName = GetNameOf(PropertyType.EditorVersion);
         propertyGroup.AddProperty(fullJsonTagName, "{\n" +
-                                                $"\t\"HomeGuid\": \"{UnevaluatedVariable(homeGuidPropertyName)}\", \n" +
-                                                $"\t\"RootNamespace\": \"{UnevaluatedVariable(rootNamespacePropertyName)}\",\n" +
-                                                $"\t\"Version\": \"{UnevaluatedVariable(GetNameOf(PropertyType.VersionPrefix))}\",\n" +
-                                                $"\t\"EditorVersion\": \"{UnevaluatedVariable(editorVersionPropertyName)}\",\n" +
-                                                $"\t\"OperatorPackages\": [{UnevaluatedVariable(opReferencesArray)}\n\t]\n" +
+                                                $"\t\"{nameof(ReleaseInfoSerialized.HomeGuid)}\": \"{UnevaluatedVariable(homeGuidPropertyName)}\", \n" +
+                                                $"\t\"{nameof(ReleaseInfoSerialized.RootNamespace)}\": \"{UnevaluatedVariable(rootNamespacePropertyName)}\",\n" +
+                                                $"\t\"{nameof(ReleaseInfoSerialized.AssemblyFileName)}\": \"{UnevaluatedVariable(GetNameOf(PropertyType.RootNamespace))}\",\n" +
+                                                $"\t\"{nameof(ReleaseInfoSerialized.Version)}\": \"{UnevaluatedVariable(GetNameOf(PropertyType.VersionPrefix))}\",\n" +
+                                                $"\t\"{nameof(ReleaseInfoSerialized.EditorVersion)}\": \"{UnevaluatedVariable(editorVersionPropertyName)}\",\n" +
+                                                $"\t\"{nameof(ReleaseInfoSerialized.OperatorPackages)}\": [{UnevaluatedVariable(opReferencesArray)}\n\t]\n" +
                                                 "}\n");
         
         const string outputPathVariable = "OutputPath"; // built-in variable to get the output path of the project

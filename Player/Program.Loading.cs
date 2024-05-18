@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -29,7 +30,13 @@ internal static partial class Program
                                                                           {
                                                                               var relativePath = Path.GetRelativePath(searchDirectory, file);
                                                                               Log.Debug($"Found dll: {relativePath}");
-                                                                              RuntimeAssemblies.TryLoadAssemblyInformation(file, out var info, out _);
+                                                                              var fileName = Path.GetFileNameWithoutExtension(file);
+                                                                              
+                                                                              // hack - we need to provide a release info to load the assembly but it is not currently exported into player
+                                                                              var releaseInfo =
+                                                                                  new ReleaseInfo(fileName, Guid.Empty, "Player", new Version(1, 0),
+                                                                                                  new Version(1, 0), []);
+                                                                              RuntimeAssemblies.TryLoadAssemblyInformation(file, out var info, releaseInfo);
                                                                               return info;
                                                                           })
                                                                   .Where(info =>
