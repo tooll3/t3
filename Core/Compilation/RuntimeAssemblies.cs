@@ -39,9 +39,63 @@ public static class RuntimeAssemblies
 
         Environment.SetEnvironmentVariable(envVar, envValue, EnvironmentVariableTarget.User);
     }
-
-    public static bool TryLoadAssemblyInformation(string path, [NotNullWhen(true)] out AssemblyInformation? info, out ReleaseInfo releaseInfo)
+    
+    public static bool TryLoadAssemblyFromPackageInfoFile(string filePath, [NotNullWhen(true)] out AssemblyInformation? assembly)
     {
+        if (!JsonUtils.TryLoadingJson<ReleaseInfoSerialized>(filePath, out var releaseInfoSerialized))
+        {
+            Log.Warning($"Could not load package info from path {filePath}");
+            assembly = null;
+            return false;
+        }
+
+        var releaseInfo = releaseInfoSerialized.ToReleaseInfo();
+        var directory = Path.GetDirectoryName(filePath);
+        var assemblyFilePath = Path.Combine(directory!, releaseInfo.AssemblyFileName + ".dll");
+        if (TryLoadAssemblyInformation(assemblyFilePath, out assembly, releaseInfo)) 
+            return true;
+        
+        Log.Error($"Could not load assembly at \"{filePath}\"");
+        return false;
+    }
+    
+    public static bool TryLoadAssemblyFromDirectory(string directory, [NotNullWhen(true)] out AssemblyInformation? assembly)
+    {
+        var releaseInfoPath = Path.Combine(directory, PackageInfoFileName);
+        if (!File.Exists(releaseInfoPath))
+        {
+            assembly = null;
+            Log.Warning($"Could not find package info at \"{releaseInfoPath}\"");
+            return false;
+        }
+        
+        if (!JsonUtils.TryLoadingJson<ReleaseInfoSerialized>(releaseInfoPath, out var releaseInfoSerialized))
+        {
+            Log.Warning($"Could not load package info from path {releaseInfoPath}");
+            assembly = null;
+            return false;
+        }
+        
+        var releaseInfo = releaseInfoSerialized.ToReleaseInfo();
+        var assemblyFilePath = Path.Combine(directory, releaseInfo.AssemblyFileName + ".dll");
+        if (!TryLoadAssemblyInformation(assemblyFilePath, out assembly, releaseInfo))
+        {
+            Log.Error($"Could not load assembly at \"{directory}\"");
+            return false;
+        }
+        
+        return true;
+    }
+
+    public static bool TryLoadAssemblyInformation(string path, [NotNullWhen(true)] out AssemblyInformation? info, ReleaseInfo releaseInfo)
+    {
+        if(!File.Exists(path))
+        {
+            Log.Error($"Assembly file does not exist at \"{path}\"\n{Environment.StackTrace}");
+            info = null;
+            return false;
+        }
+        
         AssemblyName assemblyName;
         try
         {
@@ -51,7 +105,6 @@ public static class RuntimeAssemblies
         {
             Log.Error($"Failed to get assembly name for {path}\n{e.Message}\n{e.StackTrace}");
             info = null;
-            releaseInfo = null;
             return false;
         }
 
@@ -61,32 +114,19 @@ public static class RuntimeAssemblies
                                           Path = path
                                       };
 
-        var success = TryLoadAssemblyInformation(assemblyNameAndPath, out info, out releaseInfo);
+        var success = TryLoadAssemblyInformation(assemblyNameAndPath, out info, releaseInfo);
 
-        if (releaseInfo == null)
+        if (!success)
         {
-            string error = $"Failed to load package info for {assemblyName.FullName} from \"{path}\". Try removing the offending package and restart the application.";
+            string error = $"Failed to load package {assemblyName.FullName} from \"{path}\". Try removing the offending package and restart the application.";
             SystemUi.BlockingWindow.Instance.ShowMessageBox(error);
-            throw new Exception(error);
         }
 
         return success;
     }
-
-    private static bool TryLoadAssemblyInformation(AssemblyNameAndPath name, [NotNullWhen(true)] out AssemblyInformation? info,
-                                                   [NotNullWhen(true)] out ReleaseInfo? releaseInfo)
+    
+    private static bool TryLoadAssemblyInformation(AssemblyNameAndPath name, [NotNullWhen(true)] out AssemblyInformation? info, ReleaseInfo releaseInfo)
     {
-        var packageInfoPath = Path.Combine(Path.GetDirectoryName(name.Path)!, PackageInfoFileName);
-        if (!JsonUtils.TryLoadingJson(packageInfoPath, out ReleaseInfoSerialized? json))
-        {
-            Log.Warning($"Failed to load package info from path {packageInfoPath}");
-            releaseInfo = null;
-        }
-        else
-        {
-            releaseInfo = json.ToReleaseInfo();
-        }
-            
         try
         {
             var loadContext = new AssemblyLoadContext(name.AssemblyName.FullName, true);
@@ -100,7 +140,6 @@ public static class RuntimeAssemblies
         {
             Log.Error($"Failed to load assembly {name.AssemblyName.FullName}\n{name.Path}\n{e.Message}\n{e.StackTrace}");
             info = null;
-            releaseInfo = null;
             return false;
         }
     }
@@ -117,21 +156,8 @@ public static class RuntimeAssemblies
     }
 
     public const string PackageInfoFileName = "OperatorPackage.json";
-
-
-    [Serializable]
-    private readonly record struct OperatorPackageReferenceSerialized(string Identity, string Version, bool ResourcesOnly);
-    [Serializable]
-    // Warning: Do not change these structs, as they are used in the serialization of the operator package file and is linked to the csproj json output
-    // todo - add package's own Version to release info
-    private record ReleaseInfoSerialized(
-        Guid HomeGuid,
-        string RootNamespace,
-        string EditorVersion,
-        string Version,
-        OperatorPackageReferenceSerialized[] OperatorPackages);
     
-    private static ReleaseInfo ToReleaseInfo(this ReleaseInfoSerialized serialized)
+    public static ReleaseInfo ToReleaseInfo(this ReleaseInfoSerialized serialized)
     {
         if (!Version.TryParse(serialized.EditorVersion, out var editorVersion))
         {
@@ -146,6 +172,7 @@ public static class RuntimeAssemblies
         }
         
         return new ReleaseInfo(
+            serialized.AssemblyFileName,
             serialized.HomeGuid,
             serialized.RootNamespace,
             editorVersion,
@@ -156,5 +183,20 @@ public static class RuntimeAssemblies
     }
 }
 
+[Serializable]
+public readonly record struct OperatorPackageReferenceSerialized(string Identity, string Version, bool ResourcesOnly);
+
+[Serializable]
+// Warning: Do not change these structs, as they are used in the serialization of the operator package file and is linked to the csproj json output
+// todo - add package's own Version to release info
+public record ReleaseInfoSerialized(
+    string AssemblyFileName,
+    Guid HomeGuid,
+    string RootNamespace,
+    string EditorVersion,
+    string Version,
+    OperatorPackageReferenceSerialized[] OperatorPackages);
+
 public sealed record OperatorPackageReference(string Identity, Version Version, bool ResourcesOnly);
-public sealed record ReleaseInfo(Guid HomeGuid, string RootNamespace, Version EditorVersion, Version Version, OperatorPackageReference[] OperatorPackages);
+
+public sealed record ReleaseInfo(string AssemblyFileName, Guid HomeGuid, string RootNamespace, Version EditorVersion, Version Version, OperatorPackageReference[] OperatorPackages);

@@ -15,7 +15,7 @@ internal sealed partial class CsProjectFile
                     (Type: PropertyType.DisableTransitiveProjectReferences, Value: "true"),
                     (Type: PropertyType.VersionPrefix, Value: "1.0.0"),
                     (Type: PropertyType.Nullable, Value: "enable"),
-                    (Type: PropertyType.EditorVersion, Value: Program.Version.ToBasicVersionString())
+                    (Type: PropertyType.EditorVersion, Value: Program.Version.ToBasicVersionString()),
                 }
         .ToFrozenDictionary(x => x.Type, x => x.Value);
     
