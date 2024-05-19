@@ -198,7 +198,10 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             
             string? fileManValue;
             lock (_fileManagerResultLock)
+            {
                 fileManValue = _latestFileManagerResult;
+                _latestFileManagerResult = null;
+            }
             
             var valueIsUpdated = !string.IsNullOrEmpty(fileManValue) && fileManValue != value;
             
@@ -390,7 +393,10 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 
                 if (fileManagerResult != null)
                 {
-                    _latestFileManagerResult = fileManagerResult.RelativePathWithAlias ?? fileManagerResult.RelativePath;
+                    lock (_fileManagerResultLock) // unnecessary, but consistent
+                    {
+                        _latestFileManagerResult = fileManagerResult.RelativePathWithAlias ?? fileManagerResult.RelativePath;
+                    }
                 }
                 
                 _hasClosedFileManager = true;
