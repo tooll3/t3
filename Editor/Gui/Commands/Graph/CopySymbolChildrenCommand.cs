@@ -20,23 +20,36 @@ namespace T3.Editor.Gui.Commands.Graph
         private CopyMode _copyMode;
         
         public enum CopyMode {Normal, ClipboardSource, ClipboardTarget}
+        
+        private readonly Action? _destructorAction;
 
         public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi,
                                          IEnumerable<SymbolUi.Child> symbolChildrenToCopy,
                                          List<Annotation> selectedAnnotations,
                                          SymbolUi targetCompositionUi,
-                                         Vector2 targetPosition, CopyMode copyMode = CopyMode.Normal)
+                                         Vector2 targetPosition, CopyMode copyMode = CopyMode.Normal, Symbol sourceSymbol = null)
         {
             _copyMode = copyMode;
-            _sourceSymbolId = sourceCompositionUi.Symbol.Id;
             
-            if(copyMode == CopyMode.ClipboardSource)
+            if (copyMode == CopyMode.ClipboardSource)
+            {
                 _clipboardSymbolUi = sourceCompositionUi;
+                _sourcePastedSymbol = sourceSymbol;
+                _sourceSymbolId = sourceSymbol!.Id;
+            }
+            else
+            {
+                _sourceSymbolId = sourceCompositionUi.Symbol.Id;
+                sourceSymbol = sourceCompositionUi.Symbol;
+            }
             
             _targetSymbolId = targetCompositionUi.Symbol.Id;
             
-            if(copyMode == CopyMode.ClipboardTarget)
+            if (copyMode == CopyMode.ClipboardTarget)
+            {
                 _clipboardSymbolUi = targetCompositionUi;
+                //_destructorAction = () => ((EditorSymbolPackage)targetCompositionUi.Symbol.SymbolPackage).RemoveSymbolUi(targetCompositionUi);
+            }
             
             _targetPosition = targetPosition;
 
@@ -59,7 +72,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
             foreach (var entry in _childrenToCopy)
             {
-                _connectionsToCopy.AddRange(from con in sourceCompositionUi.Symbol.Connections
+                _connectionsToCopy.AddRange(from con in sourceSymbol.Connections
                                             where con.TargetParentOrChildId == entry.ChildId
                                             let newTargetId = OldToNewIdDict[entry.ChildId]
                                             from connectionSource in symbolChildrenToCopy
@@ -76,6 +89,11 @@ namespace T3.Editor.Gui.Commands.Graph
                                     .ToList();
                 //_annotationsToCopy.AddRange(selectedAnnotations);
             }
+        }
+        
+        ~CopySymbolChildrenCommand()
+        {
+            _destructorAction?.Invoke();
         }
 
         public void Undo()
@@ -104,6 +122,7 @@ namespace T3.Editor.Gui.Commands.Graph
         {
             SymbolUi targetCompositionSymbolUi;
             SymbolUi sourceCompositionSymbolUi;
+            Symbol sourceCompositionSymbol;
             
             if (_copyMode == CopyMode.ClipboardTarget)
             {
@@ -119,23 +138,29 @@ namespace T3.Editor.Gui.Commands.Graph
             if (_copyMode == CopyMode.ClipboardSource)
             {
                 sourceCompositionSymbolUi = _clipboardSymbolUi;
+                sourceCompositionSymbol = _sourcePastedSymbol!;
             }
-            else if (!SymbolUiRegistry.TryGetSymbolUi(_sourceSymbolId, out sourceCompositionSymbolUi))
+            else
             {
-                this.LogError(false, $"Failed to find source symbol with id: {_sourceSymbolId} - was it removed?");
-                return;
+                if (!SymbolUiRegistry.TryGetSymbolUi(_sourceSymbolId, out sourceCompositionSymbolUi))
+                {
+                    this.LogError(false, $"Failed to find source symbol with id: {_sourceSymbolId} - was it removed?");
+                    return;
+                }
+                
+                sourceCompositionSymbol = sourceCompositionSymbolUi.Symbol;
             }
-
+            
             var targetSymbol = targetCompositionSymbolUi!.Symbol;
 
             // copy animations first, so when creating the new child instances can automatically create animations actions for the existing curves
             var childIdsToCopyAnimations = _childrenToCopy.Select(entry => entry.ChildId).ToList();
             var oldToNewIdDict = _childrenToCopy.ToDictionary(entry => entry.ChildId, entry => entry.AddedId);
-            sourceCompositionSymbolUi!.Symbol.Animator.CopyAnimationsTo(targetSymbol.Animator, childIdsToCopyAnimations, oldToNewIdDict);
+            sourceCompositionSymbol.Animator.CopyAnimationsTo(targetSymbol.Animator, childIdsToCopyAnimations, oldToNewIdDict);
 
             foreach (var childEntryToCopy in _childrenToCopy)
             {
-                if (!sourceCompositionSymbolUi.Symbol.Children.TryGetValue(childEntryToCopy.ChildId, out var symbolChildToCopy))
+                if (!sourceCompositionSymbol.Children.TryGetValue(childEntryToCopy.ChildId, out var symbolChildToCopy))
                 {
                     Log.Warning("Skipping attempt to copy undefined operator. This can be related to undo/redo operations. Please try to reproduce and tell pixtur");
                     continue;
@@ -217,6 +242,7 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private readonly Vector2 _targetPosition;
         private readonly Guid _sourceSymbolId;
+        private readonly Symbol? _sourcePastedSymbol;
         private readonly SymbolUi _clipboardSymbolUi;
         private readonly Guid _targetSymbolId;
         private readonly List<Entry> _childrenToCopy = new();

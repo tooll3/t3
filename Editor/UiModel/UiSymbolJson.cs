@@ -199,7 +199,7 @@ namespace T3.Editor.UiModel
 
             var success = TryReadSymbolUi(mainObject, symbol, out symbolUi);
             if(success)
-                symbolUi.UpdateConsistencyWithSymbol();
+                symbolUi.UpdateConsistencyWithSymbol(symbol);
 
             return success;
         }
@@ -289,7 +289,7 @@ namespace T3.Editor.UiModel
 
             var symbolChildUiJson = (JArray)mainObject[JsonKeys.SymbolChildUis];
             symbolUi = new SymbolUi(symbol: symbol, 
-                                    childUis: parent => CreateSymbolUiChildren(parent, symbolChildUiJson), 
+                                    childUis: (parent) => CreateSymbolUiChildren(parent, symbolChildUiJson), 
                                     inputs: inputDict, 
                                     outputs: outputDict, 
                                     annotations: annotationDict, 
@@ -303,11 +303,10 @@ namespace T3.Editor.UiModel
             return true;
         }
 
-        private static List<SymbolUi.Child> CreateSymbolUiChildren(SymbolUi parent, IEnumerable<JToken> childJsons)
+        private static List<SymbolUi.Child> CreateSymbolUiChildren(Symbol parentSymbol, IEnumerable<JToken> childJsons)
         {
             var symbolChildUis = new List<SymbolUi.Child>();
-            var symbol = parent.Symbol;
-            var symbolId = symbol.Id;
+            var symbolId = parentSymbol.Id;
             foreach (var childEntry in childJsons)
             {
                 var childIdString = childEntry[JsonKeys.ChildId].Value<string>();
@@ -315,17 +314,16 @@ namespace T3.Editor.UiModel
 
                 if (!hasChildId)
                 {
-                    Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for invalid child id `{childIdString}`");
+                    Log.Warning($"Skipping UI child definition in {parentSymbol.Name} {symbolId} for invalid child id `{childIdString}`");
                     continue;
                 }
                 
-                if (!symbol.Children.TryGetValue(childId, out var symbolChild))
+                if (!parentSymbol.Children.TryGetValue(childId, out var symbolChild))
                 {
-                    Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for undefined child {childId}");
+                    Log.Warning($"Skipping UI child definition in {parentSymbol.Name} {symbolId} for undefined child {childId}");
                     continue;
                 }
                 
-                var parentSymbol = parent.Symbol;
                 var childUi = new SymbolUi.Child(symbolChild.Id, parentSymbol.Id, (EditorSymbolPackage)parentSymbol.SymbolPackage);
                 
                 if (childEntry[JsonKeys.Comment] != null)

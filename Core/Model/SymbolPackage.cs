@@ -220,7 +220,7 @@ public abstract partial class SymbolPackage : IResourcePackage
         symbol.CreateAnimationUpdateActionsForSymbolInstances();
     }
 
-    internal Symbol CreateSymbol(Type instanceType, Guid id)
+    protected internal Symbol CreateSymbol(Type instanceType, Guid id)
     {
         return new Symbol(instanceType, id, this);
     }

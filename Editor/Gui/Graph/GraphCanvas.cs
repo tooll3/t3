@@ -1024,7 +1024,9 @@ namespace T3.Editor.Gui.Graph
             if (selectedChildren.Count + selectedAnnotations.Count == 0)
                 return;
             
-            var resultJsonString = GraphOperations.CopyNodesAsJson(composition, selectedChildren, selectedAnnotations);
+            if(!GraphOperations.TryCopyNodesAsJson(composition, selectedChildren, selectedAnnotations, out var resultJsonString))
+                return;
+            
             EditorUi.Instance.SetClipboardText(resultJsonString);
         }
 
@@ -1060,7 +1062,8 @@ namespace T3.Editor.Gui.Graph
                                                         containerSymbolUi.Annotations.Values.ToList(),
                                                         compositionSymbolUi,
                                                         InverseTransformPositionFloat(ImGui.GetMousePos()),
-                                                        copyMode: CopySymbolChildrenCommand.CopyMode.ClipboardSource);
+                                                        copyMode: CopySymbolChildrenCommand.CopyMode.ClipboardSource,
+                                                        sourceSymbol: containerSymbol);
                 
                 cmd.Do(); // FIXME: Shouldn't this be UndoRedoQueue.AddAndExecute() ? 
 

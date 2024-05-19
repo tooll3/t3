@@ -26,14 +26,19 @@ namespace T3.Editor.Gui.Graph.Modification
             return newSymbolChild.GetChildUi();
         }
 
-        public static string CopyNodesAsJson(Instance composition, 
+        public static bool TryCopyNodesAsJson(Instance composition, 
                                              IEnumerable<SymbolUi.Child> selectedChildren, 
-                                             List<Annotation> selectedAnnotations)
+                                             List<Annotation> selectedAnnotations, out string resultJsonString)
         {
-            var resultJsonString = string.Empty;
-
-            var containerOp = new Symbol(typeof(object), Guid.NewGuid(), null);
-            var newContainerUi = new SymbolUi(containerOp, true);
+            
+            resultJsonString = string.Empty;
+            
+            var package = GraphWindow.Focused!.Package;
+            if (!package.TryCreateNewSymbol<object>(out var newContainerUi))
+            {
+                Log.Error($"Failed to copy nodes to clipboard. Could not create new symbol.");
+                return false;
+            }
             
             var cmd = new CopySymbolChildrenCommand(composition.GetSymbolUi(),
                                                     selectedChildren,
@@ -42,15 +47,15 @@ namespace T3.Editor.Gui.Graph.Modification
                                                     Vector2.Zero,
                                                     copyMode: CopySymbolChildrenCommand.CopyMode.ClipboardTarget);
             cmd.Do();
-
+            
             using (var writer = new StringWriter())
             {
                 var jsonWriter = new JsonTextWriter(writer);
                 jsonWriter.WriteStartArray();
-                SymbolJson.WriteSymbol(containerOp, jsonWriter);
+                SymbolJson.WriteSymbol(newContainerUi.Symbol, jsonWriter);
                 SymbolUiJson.WriteSymbolUi(newContainerUi, jsonWriter);
                 jsonWriter.WriteEndArray();
-
+                
                 try
                 {
                     resultJsonString = writer.ToString();
@@ -58,10 +63,15 @@ namespace T3.Editor.Gui.Graph.Modification
                 catch (Exception)
                 {
                     Log.Error("Could not copy elements to clipboard. Perhaps a tool like TeamViewer locks it.");
+                    
+                    // remove symbol from package as it is only temporary
+                    package.RemoveSymbolUi(newContainerUi);
+                    return false;
                 }
             }
-
-            return resultJsonString;
+            
+            package.RemoveSymbolUi(newContainerUi);
+            return true;
         }
     }
 }
