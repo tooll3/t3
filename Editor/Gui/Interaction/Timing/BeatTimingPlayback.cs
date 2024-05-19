@@ -10,9 +10,16 @@ namespace T3.Editor.Gui.Interaction.Timing
     {
         public override void Update(bool idleMotionEnabled = false)
         {
+            var currentRuntimeInSecs = IsRenderingToFile ?   TimeInSecs : RunTimeInSecs;
+
+            LastFrameDuration = (float)(currentRuntimeInSecs - _lastFrameStart);
+            _lastFrameStart = currentRuntimeInSecs;
+            
             FxTimeInBars = BeatTiming.BeatTime;
             Bpm = BeatTiming.Bpm;
             TimeInBars = FxTimeInBars;
         }
+        
+        private static double _lastFrameStart;
     }
 }

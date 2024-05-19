@@ -79,8 +79,8 @@ namespace T3.Core.Animation
         public bool IsLooping = false;
         public static bool OpNotReady;
         
-        public static double RunTimeInSecs => _runTimeWatch.Elapsed.TotalSeconds;
-        public static double LastFrameDuration { get; private set; }
+        public static double RunTimeInSecs => RunTimeWatch.Elapsed.TotalSeconds;
+        public static double LastFrameDuration { get; protected set; }
         public double LastFrameDurationInBars => BarsFromSeconds(LastFrameDuration);
         
         public virtual void Update(bool idleMotionEnabled = false)
@@ -106,7 +106,7 @@ namespace T3.Core.Animation
             }
             else
             {
-                var timeWasManipulated = Math.Abs(TimeInBars - _previousTime) > 0.001f;
+                var timeWasManipulated = Math.Abs(TimeInBars - _previousTimeInBars) > 0.001f;
                 if (timeWasManipulated)
                 {
                     FxTimeInBars = TimeInBars;
@@ -129,7 +129,7 @@ namespace T3.Core.Animation
                     TimeInBars -= loopDuration;
             }
 
-            _previousTime = TimeInBars;
+            _previousTimeInBars = TimeInBars;
         }
 
         public double BarsFromSeconds(double secs)
@@ -143,8 +143,8 @@ namespace T3.Core.Animation
         }
         
         private static double _lastFrameStart;
-        private double _previousTime;
-        private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
+        private double _previousTimeInBars;
+        private static readonly Stopwatch RunTimeWatch = Stopwatch.StartNew();
         private bool _isRenderingToFile;
     }
 }
