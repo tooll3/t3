@@ -9,7 +9,7 @@
     },
     {
       "Id": "f8afee64-627d-48e4-b4ea-a15601a01aa1"/*SequenceIndex*/,
-      "DefaultValue": 1
+      "DefaultValue": 0
     },
     {
       "Id": "e3ad4e64-f7cf-49a1-b3ae-4d285c05103a"/*UpdateMode*/,
