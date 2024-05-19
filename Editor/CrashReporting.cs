@@ -71,10 +71,10 @@ internal static class CrashReporting
             if (primaryComposition != null)
             {
                 var compositionUi = primaryComposition.Symbol.GetSymbolUi();
-                json = GraphOperations.CopyNodesAsJson(
-                                                           primaryComposition,
-                                                           compositionUi.ChildUis.Values,
-                                                           compositionUi.Annotations.Values.ToList());
+                GraphOperations.TryCopyNodesAsJson(primaryComposition,
+                                                   compositionUi.ChildUis.Values,
+                                                   compositionUi.Annotations.Values.ToList(),
+                                                   out json);
             }
         }
         catch (Exception e)

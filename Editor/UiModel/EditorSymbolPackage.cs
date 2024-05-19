@@ -382,4 +382,30 @@ internal class EditorSymbolPackage : SymbolPackage
     {
         return SymbolUiDict.TryGetValue(rSymbolId, out symbolUi);
     }
+    
+    // todo - output should be an IDisposable wrapper and RemoveSymbolUi should be called in Dispose and made private
+    internal bool TryCreateNewSymbol<T>([NotNullWhen(true)] out SymbolUi? symbolUi)
+    {
+        var containerOp = CreateSymbol(typeof(T), Guid.NewGuid());
+        
+        if (!SymbolDict.TryAdd(containerOp.Id, containerOp))
+        {
+            Log.Error($"Failed to add new symbol for {containerOp.Name} ({containerOp.Id})");
+            symbolUi = null;
+            return false;
+        }
+        
+        symbolUi = new SymbolUi(containerOp, true);
+        if (SymbolUiDict.TryAdd(containerOp.Id, symbolUi))
+            return true;
+        
+        Log.Error($"Failed to add new symbol ui for {containerOp.Name} ({containerOp.Id})");
+        return false;
+    }
+    
+    internal bool RemoveSymbolUi(SymbolUi newContainerUi)
+    {
+        var symbolId = newContainerUi.Symbol.Id;
+        return SymbolUiDict.TryRemove(symbolId, out _) && SymbolDict.TryRemove(symbolId, out _);
+    }
 }

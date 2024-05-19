@@ -35,14 +35,14 @@ namespace T3.Editor.UiModel
         }
 
         internal SymbolUi(Symbol symbol,
-                        Func<SymbolUi, List<Child>> childUis,
+                        Func<Symbol, List<Child>> childUis,
                         IDictionary<Guid, IInputUi> inputs,
                         IDictionary<Guid, IOutputUi> outputs,
                         IDictionary<Guid, Annotation> annotations,
                         OrderedDictionary<Guid, ExternalLink> links,
                         bool updateConsistency) : this(symbol, false)
         {
-            _childUis = childUis(this).ToDictionary(x => x.Id, x => x);
+            _childUis = childUis(symbol).ToDictionary(x => x.Id, x => x);
             
             InputUis = inputs;
             OutputUis = outputs;
@@ -51,7 +51,7 @@ namespace T3.Editor.UiModel
             ReadOnly = true;
             
             if (updateConsistency)
-                UpdateConsistencyWithSymbol();
+                UpdateConsistencyWithSymbol(symbol);
         }
 
         IEnumerable<ISelectableCanvasObject> ISelectionContainer.GetSelectables() => GetSelectables();
@@ -71,9 +71,14 @@ namespace T3.Editor.UiModel
                 yield return annotation.Value;
         }
 
-        internal void UpdateConsistencyWithSymbol()
+        /// <summary>
+        /// Updates the consistency of the symbol ui with the symbol.
+        /// Requires providing a symbol as an argument if the symbol is not part of a package - i.e. if it is a pasted symbol
+        /// </summary>
+        /// <param name="symbol"></param>
+        internal void UpdateConsistencyWithSymbol(Symbol symbol = null)
         {
-            var symbol = Symbol;
+            symbol ??= Symbol;
             // Check if child entries are missing
             foreach (var child in symbol.Children.Values)
             {
@@ -94,7 +99,7 @@ namespace T3.Editor.UiModel
 
             foreach (var childUi in _childUis.Values)
             {
-                if(!Symbol.Children.ContainsKey(childUi.Id))
+                if(!symbol.Children.ContainsKey(childUi.Id))
                     childIdsToRemove.Add(childUi.Id);
             }
             
@@ -107,13 +112,13 @@ namespace T3.Editor.UiModel
             var inputUiFactory = InputUiFactory.Entries;
             var existingInputs = InputUis.Values.ToList();
             InputUis.Clear();
-            for (int i = 0; i < Symbol.InputDefinitions.Count; i++)
+            for (int i = 0; i < symbol.InputDefinitions.Count; i++)
             {
-                Symbol.InputDefinition input = Symbol.InputDefinitions[i];
+                Symbol.InputDefinition input = symbol.InputDefinitions[i];
                 var existingInputUi = existingInputs.SingleOrDefault(inputUi => inputUi.Id == input.Id);
                 if (existingInputUi == null || existingInputUi.Type != input.DefaultValue.ValueType)
                 {
-                    Log.Debug($"Found no input ui entry for symbol child input '{Symbol.Name}.{input.Name}' - creating a new one");
+                    Log.Debug($"Found no input ui entry for symbol child input '{symbol.Name}.{input.Name}' - creating a new one");
                     InputUis.Remove(input.Id);
                     var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
                     IInputUi newInputUi = inputCreator();
@@ -130,18 +135,18 @@ namespace T3.Editor.UiModel
             }
 
             // check if there are input entries where no input ui exists anymore
-            foreach (var inputUiToRemove in InputUis.Where(kv => !Symbol.InputDefinitions.Exists(inputDef => inputDef.Id == kv.Key)).ToList())
+            foreach (var inputUiToRemove in InputUis.Where(kv => !symbol.InputDefinitions.Exists(inputDef => inputDef.Id == kv.Key)).ToList())
             {
                 Log.Debug($"InputUi '{inputUiToRemove.Value.Id}' still existed but no corresponding input definition anymore. Removing the ui.");
                 InputUis.Remove(inputUiToRemove.Key);
             }
 
             var outputUiFactory = OutputUiFactory.Entries;
-            foreach (var output in Symbol.OutputDefinitions)
+            foreach (var output in symbol.OutputDefinitions)
             {
                 if (!OutputUis.TryGetValue(output.Id, out var value) || (value.Type != output.ValueType))
                 {
-                    Log.Debug($"Found no output ui for '{Symbol.Name}.{output.Name}' - creating a new one");
+                    Log.Debug($"Found no output ui for '{symbol.Name}.{output.Name}' - creating a new one");
                     OutputUis.Remove(output.Id); // if type has changed remove the old entry
 
                     if (!outputUiFactory.TryGetValue(output.ValueType, out var outputUiCreator))
