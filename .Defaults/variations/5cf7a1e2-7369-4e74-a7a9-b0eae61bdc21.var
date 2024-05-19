@@ -1,0 +1,87 @@
+{
+  "Id": "5cf7a1e2-7369-4e74-a7a9-b0eae61bdc21",
+  "Variations": [
+    {
+      "Id": "bbf8cb65-2257-422b-94a4-1e80f3d7a866",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "The City",
+      "PosOnCanvas": {
+        "X": -206.50003,
+        "Y": -217.34552
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "a9111412-3369-4848-af48-8a96f5697c84": {
+            "X": 1.0,
+            "Y": 0.99998987,
+            "Z": 0.99998987,
+            "W": 1.0
+          },
+          "f9899540-e495-41cb-87da-302d1bf090ac": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          },
+          "dce72235-839e-41f1-a2a4-e19f0ef66e5c": {
+            "X": 0.41,
+            "Y": 0.35
+          },
+          "7b1a1f18-a1d4-4737-9c06-21f263277140": {
+            "X": 512,
+            "Y": 512
+          },
+          "b4277cab-d286-410f-81be-ff4d53a9eca9": 4
+        }
+      }
+    },
+    {
+      "Id": "0842d90e-071b-4511-a75e-8f0c33348bb9",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "BunsPlanet",
+      "PosOnCanvas": {
+        "X": -205.25809,
+        "Y": -110.53708
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "a9111412-3369-4848-af48-8a96f5697c84": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          },
+          "f9899540-e495-41cb-87da-302d1bf090ac": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          },
+          "f4a32527-da4d-49af-aeb0-ed9c5c28ac04": 6.46,
+          "dce72235-839e-41f1-a2a4-e19f0ef66e5c": {
+            "X": 0.26,
+            "Y": 1.0
+          },
+          "b4277cab-d286-410f-81be-ff4d53a9eca9": 0
+        }
+      }
+    },
+    {
+      "Id": "f3fe7107-4c47-4c28-bf77-a6a3ac7b3ded",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Voronoi",
+      "PosOnCanvas": {
+        "X": -208.00345,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "b4277cab-d286-410f-81be-ff4d53a9eca9": 3
+        }
+      }
+    }
+  ]
+}
