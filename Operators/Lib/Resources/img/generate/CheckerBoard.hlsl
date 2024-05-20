@@ -36,7 +36,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     }
 
     p /= Size * Scale ;
-    p += Offset;
+    p += Offset * float2(-1,1);
 
     float2 a = mod(p,1);
 

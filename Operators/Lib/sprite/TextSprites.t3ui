@@ -1,6 +1,6 @@
 {
   "Id": "1a6a58ea-c63a-4c99-aa9d-aeaeb01662f4"/*TextSprites*/,
-  "Description": "Creates Points and Sprites from a text that can be animated and then rendered with [DrawPointSprites] or [DrawPointSpritesShaded].\n\nThis operator is an advanced solution that loads a BmFont fond definition and the matching MSDF (multichannel distance field) texture and generates a set of buffers.\nThis buffers can then be modified and combined with other operators.\n\nThe Point - buffer includes position, orientation and W (size).\nThe Sprite - buffer contains additional attributes for rendering like texture UV coordinates for characters, pivot, size and layout information.\n\nSome tips:\n- You might replace the Point buffer with another buffer (e.g. [RadialPoints].\n- For rending basic text usage consider using [Text].\n\nCheck the examples.",
+  "Description": "Creates Points and Sprites from a text that can be animated and then rendered with [DrawPointSprites] or [DrawPointSpritesShaded].\n\nThis operator is an advanced solution that loads a BmFont font definition and the matching MSDF (multichannel distance field) texture and generates a set of buffers.\nThis buffers can then be modified and combined with other operators.\n\nThe Point - buffer includes position, orientation and W (size).\nThe Sprite - buffer contains additional attributes for rendering like texture UV coordinates for characters, pivot, size and layout information.\n\nSome tips:\n- You might replace the Point buffer with another buffer (e.g. [RadialPoints].\n- For rending basic text usage consider using [Text].\n\nCheck the examples.",
   "InputUis": [
     {
       "InputId": "f2dd87b1-7f37-4b02-871b-b2e35972f246"/*Text*/,
@@ -16,6 +16,7 @@
         "X": -200.0,
         "Y": 45.0
       },
+      "AddPadding": "True",
       "Usage": "FilePath"
     },
     {
@@ -24,6 +25,7 @@
         "X": -200.0,
         "Y": 90.0
       },
+      "GroupTitle": "Appearance",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -55,6 +57,7 @@
         "X": -200.0,
         "Y": 270.0
       },
+      "AddPadding": "True",
       "Scale": 0.001
     },
     {
@@ -62,7 +65,8 @@
       "Position": {
         "X": -200.0,
         "Y": 315.0
-      }
+      },
+      "GroupTitle": "Align"
     },
     {
       "InputId": "e43bc887-d425-4f9c-8a86-a32c761de0cc"/*HorizontalAlign*/,
@@ -76,7 +80,8 @@
       "Position": {
         "X": -200.0,
         "Y": 405.0
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],

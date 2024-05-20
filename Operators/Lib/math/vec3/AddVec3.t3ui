@@ -1,6 +1,6 @@
 {
   "Id": "15ac7153-69af-45f8-bcdd-50cdef0c9ae1"/*AddVec3*/,
-  "Description": "",
+  "Description": "Adds two Vec3 variables together",
   "InputUis": [
     {
       "InputId": "f933c566-cbb2-4d2c-9e3b-f7ad3b2f7292"/*Input1*/,

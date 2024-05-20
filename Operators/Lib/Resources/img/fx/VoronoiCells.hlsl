@@ -6,20 +6,15 @@ cbuffer ParamConstants : register(b0)
 {
     float4 EdgeColor;
     float4 Background;
-    float IsAnimated;
+
+
     float Scale;
-    float TestParam;
     float LineWidth;
+    float Phase;
+    
 }
 
 
-cbuffer TimeConstants : register(b1)
-{
-    float globalTime;
-    float time;
-    float runTime;
-    float beatTime;
-}
 
 cbuffer Resolution : register(b2)
 {
@@ -73,7 +68,8 @@ float4 sampleTexture( float2 p )
 float3 voronoi( in float2 x, out float4 color )
 {
     float2 n = float2(floor(x.x), floor(x.y));
-    float2 f = mod(x,1);
+    
+    float2 f = mod(x, 1.00);
 
     //----------------------------------
     // first pass: regular voronoi
@@ -89,10 +85,8 @@ float3 voronoi( in float2 x, out float4 color )
         {
             float2 g = float2(float(i),float(j));
             float2 o = sampleTexture( n + g ).xy;
-            if(IsAnimated) {
-                o = 0.5 + 0.5*sin( beatTime + 6.2831*o );
-            }
-
+            o = 0.5 + 0.5*sin( Phase + 6.2831 * o );
+            
             float2 r = g + o - f;
             float d = dot(r,r);
 
@@ -118,10 +112,7 @@ float3 voronoi( in float2 x, out float4 color )
         color = sampleTexture(n + g);
         float2 o = color.xy;
 
-        if(IsAnimated)
-        {
-            o = 0.5 + 0.5*sin( beatTime + 6.2831*o ).xy;
-        }
+        o = 0.5 + 0.5*sin( Phase + 6.2831*o ).xy;
 
         float2 r = g + o - f;
 
@@ -142,30 +133,16 @@ void mainImage( out float4 fragColor, in float2 fragCoord )
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
     float2 uv = psInput.texCoord;
-
     float4 inputColor = inputTexture.Sample(texSampler, uv);
-    //return inputColor;
-
-    aspectRatio = TargetWidth/TargetHeight;
+    aspectRatio = TargetWidth / TargetHeight;
     
     uv.x *= aspectRatio;
 
     float2 p = uv * Scale;
-    //p+= 0.25;    
     float4 cellColor;
     float3 c = voronoi( p, cellColor );
-
-    //cellColor = inputTexture.Sample(texSampler, c.yz / 1);
-    // isolines
-    float isoLines = c.x*(0.5 + 0.5*sin(TestParam*c.x));
     float3 col =  Background.rgb * cellColor.rgb;
 
-    // borders	
     col = lerp( EdgeColor.rgb, col, smoothstep( 0.04,  0.07,  c.x - LineWidth * 0.1 + 0.1  ) );
-    
-    // feature points
-    //float dd = length( c.yz );
-    //col = lerp( float3(1.0,0.6,0.1), col, smoothstep( 0.0, 0.12, dd) );
-
-    return float4(col,1.0);
+    return float4(col, 1.0);
 }

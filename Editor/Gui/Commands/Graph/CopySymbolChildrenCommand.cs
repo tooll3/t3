@@ -172,7 +172,10 @@ namespace T3.Editor.Gui.Commands.Graph
                     newOutput.IsDisabled = output.IsDisabled;
                     
                 }
-                newSymbolChild.IsBypassed = symbolChildToCopy.IsBypassed;
+                if(symbolChildToCopy.IsBypassed)
+                {
+                    newSymbolChild.IsBypassed = true;
+                }
             }
 
             // add connections between copied children

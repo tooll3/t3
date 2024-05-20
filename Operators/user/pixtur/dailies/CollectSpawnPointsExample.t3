@@ -546,6 +546,18 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "fc6236ad-87cd-4285-a75b-9c6e5459511b"/*CustomPointShader*/,
+      "SymbolId": "3d958f08-9c0f-45eb-a252-de880b5834f3",
+      "InputValues": [
+        {
+          "Id": "e9712b03-e7aa-4fe5-b5cf-f2c5d0c0b0df"/*ShaderCode*/,
+          "Type": "System.String",
+          "Value": "p.Color = float4(1,1,1,1);"
+        }
+      ],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -726,6 +738,12 @@
     {
       "SourceParentOrChildId": "7c6357c5-6d55-4d32-8082-27b4c2937fd8",
       "SourceSlotId": "b3309ed0-574f-4907-b477-4a1cf98b2fe5",
+      "TargetParentOrChildId": "fc6236ad-87cd-4285-a75b-9c6e5459511b",
+      "TargetSlotId": "e77660e2-0fd0-45ea-8e0b-c607a757bb49"
+    },
+    {
+      "SourceParentOrChildId": "fc6236ad-87cd-4285-a75b-9c6e5459511b",
+      "SourceSlotId": "e0097148-4395-4441-83d2-c5cf5b76bb61",
       "TargetParentOrChildId": "fce5a4ac-05cb-4cd2-9aca-87c8b8d71293",
       "TargetSlotId": "bbec658b-84fa-4528-ad03-6b306531b152"
     }

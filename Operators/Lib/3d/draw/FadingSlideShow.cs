@@ -45,6 +45,9 @@ namespace lib._3d.draw
         [Input(Guid = "fcf2c4d0-4e36-473e-8c67-66cc1048dc06")]
         public readonly InputSlot<bool> TriggerUpdate = new InputSlot<bool>();
 
+        [Input(Guid = "8b5fb93a-ee65-44d9-88be-66ee2e174385")]
+        public readonly InputSlot<int> FadeType = new InputSlot<int>();
+
     }
 }
 

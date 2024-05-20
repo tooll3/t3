@@ -9,7 +9,7 @@
       "SymbolId": "e1c294b5-1ea8-435e-a437-26d280d3c2f4",
       "InputValues": [
         {
-          "Id": "58c08101-ac16-4aed-aa84-259853734116"/*Position*/,
+          "Id": "58c08101-ac16-4aed-aa84-259853734116"/*LightPosition*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": -0.060000002,
@@ -18,29 +18,9 @@
           }
         },
         {
-          "Id": "b9ca7291-1f78-47e2-8ba9-35ccb282833c"/*Size*/,
+          "Id": "500549e0-aa60-4555-b82a-a829568959ff"/*CenterIntensity*/,
           "Type": "System.Single",
-          "Value": 0.14
-        },
-        {
-          "Id": "c59b6588-9e39-49ed-99b7-632e5f2b3bf4"/*Rays*/,
-          "Type": "System.Single",
-          "Value": 2.7
-        },
-        {
-          "Id": "59568136-2903-4fd5-a504-8a6308a2a2dc"/*Samples*/,
-          "Type": "System.Int32",
-          "Value": 38
-        },
-        {
-          "Id": "9529d9b2-40ca-4f30-9142-1338dc4e07ff"/*BlurSize*/,
-          "Type": "System.Single",
-          "Value": 0.02
-        },
-        {
-          "Id": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
-          "Type": "System.Single",
-          "Value": 0.75
+          "Value": 4.8
         }
       ],
       "Outputs": []

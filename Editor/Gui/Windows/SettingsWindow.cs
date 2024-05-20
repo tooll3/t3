@@ -2,7 +2,7 @@
 using Operators.Utils;
 using T3.Core.IO;
 using T3.Editor.Gui.Interaction;
-using T3.Editor.Gui.Interaction.Variations.Midi;
+using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -34,7 +34,7 @@ namespace T3.Editor.Gui.Windows
             ImGui.BeginChild("categories", new Vector2(120 * T3Ui.UiScaleFactor, -1), true, ImGuiWindowFlags.NoScrollbar);
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
-                FormInputs.AddSegmentedButton(ref _activeCategory, "", 110 * T3Ui.UiScaleFactor);
+                FormInputs.AddSegmentedButtonWithLabel(ref _activeCategory, "", 110 * T3Ui.UiScaleFactor);
                 ImGui.PopStyleVar();
             }
             ImGui.EndChild();
@@ -196,8 +196,9 @@ namespace T3.Editor.Gui.Windows
 
                         if (ImGui.Button("Rescan devices"))
                         {
-                            MidiInConnectionManager.Rescan();
-                            MidiOutConnectionManager.Init();
+                            MidiConnectionManager.Rescan();
+                            //MidiOutConnectionManager.Init();
+                            CompatibleMidiDeviceHandling.InitializeConnectedDevices();
                         }
 
                         {
@@ -214,19 +215,13 @@ namespace T3.Editor.Gui.Windows
                             {
                                 changed = true;
                                 ProjectSettings.Config.LimitMidiDeviceCapture = string.IsNullOrEmpty(limitMidiDevices) ? null : limitMidiDevices;
-                                MidiInConnectionManager.Rescan();
+                                MidiConnectionManager.Rescan();
                             }
 
                             FormInputs.AddVerticalSpace();
                         }
-                        FormInputs.SetIndentToLeft();
-                        changed |= FormInputs.AddCheckBox("Enable Midi snapshot LEDs",
-                                                          ref ProjectSettings.Config.EnableMidiSnapshotIndication,
-                                                          "With selected midi controllers like APC Mini and APC40, Tooll will highlight LEDs for available and active snapshots. This requires an active MIDI out channel which will interfere with the [MidiOut] operator.\nChanging this requires a restart.",
-                                                          ProjectSettings.Defaults.EnableMidiSnapshotIndication);
 
                         FormInputs.AddVerticalSpace();
-                        FormInputs.SetIndentToParameters();
                         break;
                     }
                     case Categories.SpaceMouse:

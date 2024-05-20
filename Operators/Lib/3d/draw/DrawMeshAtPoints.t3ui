@@ -27,7 +27,10 @@
         "X": 711.3174,
         "Y": 4207.455
       },
-      "Description": "Uniformly scales the meshes using the Points as center of scaling."
+      "Description": "Uniformly scales the meshes using the Points as center of scaling.",
+      "Min": 0.0,
+      "Max": 5.0,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "dd511aab-0472-4109-9c10-cc1ab5042499"/*EnableZWrite*/,

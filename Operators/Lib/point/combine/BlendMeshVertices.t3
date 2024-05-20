@@ -4,19 +4,15 @@
   "Namespace": "lib.point.combine",
   "Inputs": [
     {
+      "Id": "a7ef92db-87c9-4cf3-bd62-f8cb858d9ed9"/*MeshA*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "44acb67a-a443-4c11-8939-2b76132f8dbf"/*MeshB*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "add0fd7b-fa76-4788-8940-d1949a44b342"/*BlendValue*/,
-      "DefaultValue": 0.5
-    },
-    {
-      "Id": "5ccbc77e-2180-4c83-aaa6-ed3232de8afb"/*BlendMode*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "42941c1f-c53e-45ed-876c-f9043753a473"/*Pairing*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "355ae0a4-893a-4852-a37d-9dd77179c507"/*RangeWidth*/,
       "DefaultValue": 0.5
     },
     {
@@ -24,12 +20,16 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "a7ef92db-87c9-4cf3-bd62-f8cb858d9ed9"/*MeshA*/,
-      "DefaultValue": null
+      "Id": "5ccbc77e-2180-4c83-aaa6-ed3232de8afb"/*BlendMode*/,
+      "DefaultValue": 0
     },
     {
-      "Id": "44acb67a-a443-4c11-8939-2b76132f8dbf"/*MeshB*/,
-      "DefaultValue": null
+      "Id": "355ae0a4-893a-4852-a37d-9dd77179c507"/*RangeWidth*/,
+      "DefaultValue": 0.5
+    },
+    {
+      "Id": "42941c1f-c53e-45ed-876c-f9043753a473"/*Pairing*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [

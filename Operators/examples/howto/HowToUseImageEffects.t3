@@ -221,16 +221,6 @@
       "SymbolId": "8bede700-4e3e-42d8-8097-9744abdb8ad3",
       "InputValues": [
         {
-          "Id": "17c45c4e-590e-4de6-90c2-befe2f89831d"/*ShadeColor*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 1.0
-          }
-        },
-        {
           "Id": "84cea304-79d9-4f8c-a171-584897b9b468"/*Displacement*/,
           "Type": "System.Single",
           "Value": 1.6466668
@@ -239,6 +229,16 @@
           "Id": "f942fc0d-ed5f-4594-8690-d464c5b12ed8"/*Shading*/,
           "Type": "System.Single",
           "Value": 0.53999996
+        },
+        {
+          "Id": "17c45c4e-590e-4de6-90c2-befe2f89831d"/*ShadeColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
         }
       ],
       "Outputs": []

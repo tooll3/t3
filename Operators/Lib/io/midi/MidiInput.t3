@@ -48,6 +48,10 @@
     {
       "Id": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "ac35e75a-bec5-497c-9c68-6b809b12cd8b"/*ResetToDefaultTrigger*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

@@ -1,6 +1,6 @@
 {
   "Id": "085b7841-9502-4b49-896e-3b1fa023f1bf"/*CombineMaterialChannels*/,
-  "Description": "Combines roughness, metallic, and ambient occlusion texture maps that are loaded with [LoadImage] into a single texture for [SetMaterial] to create PBR Materials.",
+  "Description": "Combines roughness, metallic, and ambient occlusion texture maps that are loaded with [LoadImage] into a single texture for [SetMaterial] to create PBR Materials.\n\nIf no normalmap is available [NormalMap] can be used to generate one.\n\nOlder version: [CombineMaterialChannels2]",
   "InputUis": [
     {
       "InputId": "c697d838-f9a3-4ee7-af3d-713494f0ae93"/*Roughness*/,

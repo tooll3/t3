@@ -57,10 +57,13 @@ internal static partial class GraphUtils
 
     public static bool IsNamespaceValid(string namespaceName) => ValidTypeNameSpacePattern.IsMatch(namespaceName);
 
-    private static readonly Regex ValidTypeNameSpacePattern = NamespaceRegex();
+    private static readonly Regex ValidTypeNameSpacePattern = _namespaceRegex;
     private static readonly string[] ReservedWords = new string[] { "value", "Var", "instance", "item", "Input", "slot" };
     private static readonly Lazy<CodeDomProvider> IdentifierValidator = new(() => CodeDomProvider.CreateProvider("C#"));
 
-    [GeneratedRegex(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$")]
-    private static partial Regex NamespaceRegex();
+    // FIXME: This lines below are an attempt to replace the following line...
+    // [GeneratedRegex(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$")]
+    // private static partial Regex NamespaceRegex();
+
+    private static readonly Regex _namespaceRegex = new Regex(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
 }

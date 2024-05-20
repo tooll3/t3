@@ -30,6 +30,9 @@ namespace lib._3d.postfx
         [Input(Guid = "77ed2341-48f2-4e0f-913d-b2f368449088")]
         public readonly InputSlot<float> ClampEffect = new();
 
+        [Input(Guid = "2ac4c1a2-c53e-4b78-90fc-15c0b69c8b28")]
+        public readonly InputSlot<System.Numerics.Vector3> VelocityOffset = new InputSlot<System.Numerics.Vector3>();
+
     }
 }
 

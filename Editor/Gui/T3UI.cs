@@ -22,6 +22,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Selection;
@@ -45,7 +46,6 @@ public static class T3Ui
     {
         //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
-        VariationHandling.Init();
 
         Playback.Current = DefaultTimelinePlayback;
         ThemeHandling.Initialize();
@@ -59,6 +59,8 @@ public static class T3Ui
         if (_initialed || ImGui.GetWindowSize() == Vector2.Zero)
             return;
 
+
+        CompatibleMidiDeviceHandling.InitializeConnectedDevices();
         ActiveMidiRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
         _initialed = true;
     }
@@ -76,10 +78,9 @@ public static class T3Ui
         // Prepare the current frame 
         RenderStatsCollector.StartNewFrame();
             
-        if (Playback.Current.IsLive && GraphWindow.Focused != null)
+        if (!Playback.Current.IsRenderingToFile && GraphWindow.Focused != null)
         {
             PlaybackUtils.UpdatePlaybackAndSyncing();
-            //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
             AudioEngine.CompleteFrame(Playback.Current, Playback.LastFrameDuration);    // Update
         }
         TextureReadAccess.Update();
@@ -94,6 +95,7 @@ public static class T3Ui
         SrvManager.FreeUnusedTextures();
         KeyboardBinding.InitFrame();
         ConnectionSnapEndHelper.PrepareNewFrame();
+        CompatibleMidiDeviceHandling.UpdateConnectedDevices();
 
         var nodeSelection = GraphWindow.Focused?.GraphCanvas.NodeSelection;
 
@@ -353,7 +355,7 @@ public static class T3Ui
                     UndoRedoStack.Undo();
                 }
 
-                if (ImGui.MenuItem("Redo", "CTRL+Y", false, UndoRedoStack.CanRedo))
+                if (ImGui.MenuItem("Redo", "CTRL+SHIFT+Z", false, UndoRedoStack.CanRedo))
                 {
                     UndoRedoStack.Redo();
                 }

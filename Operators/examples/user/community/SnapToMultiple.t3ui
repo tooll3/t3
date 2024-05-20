@@ -1,0 +1,30 @@
+{
+  "Id": "c3090c65-194a-4f95-9b70-d003f54103f7"/*SnapToMultiple*/,
+  "Description": "Similar to [ModInt], but instead of returning the remainder after the division by Mod, it returns the next lowest value of Mod that would result in a remainder of 0.",
+  "InputUis": [
+    {
+      "InputId": "3bf35135-8fb1-46d3-95ea-008eded67060"/*Value*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "e122bf1d-8455-43f6-867f-4f43f3d6533c"/*Mod*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "87a311ce-238c-472c-b43e-e4ed5268bbc5"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

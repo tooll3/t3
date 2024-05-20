@@ -1,0 +1,67 @@
+{
+  "Id": "1a241222-200b-417d-a8c7-131e3b48cc36",
+  "Variations": [
+    {
+      "Id": "cd887045-1dc9-445c-a01f-47f9dfa34c3f",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Default",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {}
+      }
+    },
+    {
+      "Id": "dc80dcb6-4afb-4156-b361-5c17ccd7c40c",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "1000 Particles Source",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "0b42b3e6-a6fd-4edc-88b1-d91f9c775023": 1000,
+          "0bdc6243-3e52-4b1a-b070-731ed27388c6": 0.0,
+          "15716b21-9905-4c1e-8330-06afc72552a5": 10.0
+        }
+      }
+    },
+    {
+      "Id": "b4c92c30-d7cd-4da8-acea-72268a8c1a9d",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Dense",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "0b42b3e6-a6fd-4edc-88b1-d91f9c775023": 10000
+        }
+      }
+    },
+    {
+      "Id": "e54673a6-530d-4af3-90bd-6febce4ef9f4",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Milkyway",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "0b42b3e6-a6fd-4edc-88b1-d91f9c775023": 3000,
+          "0bdc6243-3e52-4b1a-b070-731ed27388c6": 10.0,
+          "15716b21-9905-4c1e-8330-06afc72552a5": 1000.0
+        }
+      }
+    }
+  ]
+}

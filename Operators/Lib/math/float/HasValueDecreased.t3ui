@@ -1,6 +1,6 @@
 {
   "Id": "f376121a-2360-4232-9724-0db6937062c3"/*HasValueDecreased*/,
-  "Description": "",
+  "Description": "Tests whether the incoming value has decreased by a defined threshold and outputs this as a Boolean\n\nOperator with more Options: [HasValueChanged]\n\nSimilar to [HasValueIncreased], [IsGreater] and [HasValueDecreased]",
   "InputUis": [
     {
       "InputId": "0ce24e8e-7d35-41a1-85a5-0c55d4247a90"/*Value*/,
@@ -14,7 +14,8 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],

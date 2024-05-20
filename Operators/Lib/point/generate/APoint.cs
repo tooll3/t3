@@ -32,6 +32,7 @@ namespace lib.point.generate
         
         public APoint()
         {
+            UpdateBuffer(); // Force update when application starts (needed for executable export)
             Buffer.UpdateAction = UpdateWithBuffer;
             ResultList.UpdateAction = Update;
             OutPosition.UpdateAction = Update;
@@ -97,7 +98,7 @@ namespace lib.point.generate
 
             if (sizeChanged)
             {
-                Log.Debug("Updating Point buffer size....", this);
+                // Log.Debug("Updating Point buffer size....", this);
                 ResourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_buffer, UnorderedAccessViewBufferFlags.None, ref _bufferWithViews.Uav);
                 _bufferWithViews.Buffer = _buffer;

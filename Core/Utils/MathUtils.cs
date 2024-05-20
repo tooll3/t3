@@ -16,7 +16,7 @@ namespace T3.Core.Utils
         public static float PerlinNoise(float value, float period, int octaves, int seed)
         {
             var noiseSum = 0.0f;
-
+            octaves = octaves.Clamp(1, 20);
             var frequency = period;
             var amplitude = 0.5f;
             for (var octave = 0; octave < octaves - 1; octave++)
@@ -67,6 +67,7 @@ namespace T3.Core.Utils
         
         public static float Hash01( uint x )
         {
+            x *= 13331U;
             const uint k = 1103515245U;  // GLIB C
             x = ((x>>8)^x)*k;
             x = ((x>>8)^x)*k;

@@ -1,6 +1,6 @@
 {
   "Id": "5a0b0485-7a55-4bf4-ae23-04f51d890334"/*FractalNoise*/,
-  "Description": "",
+  "Description": "Generates a procedural fractal noise image effect also known as Pink noise or fractional noise that can be used to create visual patterns that look like cloud, smoke, dust and scratches on film and similar\n\nAvailable Noise Ops [WorleyNoise] [FractalNoise] [ShardNoise]",
   "InputUis": [
     {
       "InputId": "091aaf77-46f4-4aeb-aaa8-f11fe34e8a7f"/*ColorA*/,
@@ -58,7 +58,7 @@
       "Max": 5.0
     },
     {
-      "InputId": "2238e8c8-6bf8-4d3f-be5e-3291b6dc1441"/*Phase*/,
+      "InputId": "2238e8c8-6bf8-4d3f-be5e-3291b6dc1441"/*RandomPhase*/,
       "Position": {
         "X": -151.8326,
         "Y": 235.49301

@@ -98,8 +98,8 @@ namespace T3.Editor.Gui.UiHelpers
 
             // Rendering (controlled from render windows)
             public string RenderVideoFilePath = "./Render/render-v01.mp4";
+            public string RenderSequenceFilePath = "./ImageSequence/";
 
-            
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             

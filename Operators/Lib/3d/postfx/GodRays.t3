@@ -12,7 +12,11 @@
       "DefaultValue": null
     },
     {
-      "Id": "58c08101-ac16-4aed-aa84-259853734116"/*Position*/,
+      "Id": "b64c4ece-8b59-4b32-a5fe-b99006286987"/*CameraReference*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "58c08101-ac16-4aed-aa84-259853734116"/*LightPosition*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
@@ -38,24 +42,28 @@
       }
     },
     {
-      "Id": "500549e0-aa60-4555-b82a-a829568959ff"/*Intensity*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "b9ca7291-1f78-47e2-8ba9-35ccb282833c"/*Size*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "c59b6588-9e39-49ed-99b7-632e5f2b3bf4"/*Rays*/,
-      "DefaultValue": 0.5
-    },
-    {
       "Id": "59568136-2903-4fd5-a504-8a6308a2a2dc"/*Samples*/,
       "DefaultValue": 50
     },
     {
+      "Id": "500549e0-aa60-4555-b82a-a829568959ff"/*CenterIntensity*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "c59b6588-9e39-49ed-99b7-632e5f2b3bf4"/*RayIntensity*/,
+      "DefaultValue": 0.5
+    },
+    {
+      "Id": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
+      "DefaultValue": 1.0
+    },
+    {
       "Id": "6d985988-3107-4480-8852-f17fe1c6d002"/*ShiftDepth*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "b9ca7291-1f78-47e2-8ba9-35ccb282833c"/*Size*/,
+      "DefaultValue": 1.0
     },
     {
       "Id": "71acc14a-e26a-4412-9556-d88e0ec70e63"/*Offset*/,
@@ -72,14 +80,6 @@
     {
       "Id": "5129404e-54c5-4c5a-9736-69361bb3077d"/*BlurOffset*/,
       "DefaultValue": 0.0
-    },
-    {
-      "Id": "b64c4ece-8b59-4b32-a5fe-b99006286987"/*CameraReference*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
-      "DefaultValue": 1.0
     }
   ],
   "Children": [

@@ -9,7 +9,7 @@
     },
     {
       "Id": "5af4a05f-72dc-4c0d-a728-309bf3a1b1b9"/*Format*/,
-      "DefaultValue": "{0:0.000}"
+      "DefaultValue": "dddd MMMM dd, yyyy"
     }
   ],
   "Children": [],

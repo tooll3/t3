@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
+using System.Collections.Generic;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -32,10 +33,10 @@ namespace lib.anim
 
         private void Update(EvaluationContext context)
         {
-            _startValue = StartValue.GetValue(context);
-            _endValue = EndValue.GetValue(context);
+            _baseValue = Base.GetValue(context);
+            _amplitudeValue = Amplitude.GetValue(context);
             _bias = Bias.GetValue(context);
-            _shape = (Shapes)(int)Shape.GetValue(context).Clamp(0,Enum.GetNames(typeof(Shapes)).Length -1);
+            _shape = Shape.GetEnumValue<Shapes>(context);
             _duration = Duration.GetValue(context);
             _delay = Delay.GetValue(context);
 
@@ -49,9 +50,12 @@ namespace lib.anim
 
             var animMode = AnimMode.GetEnumValue<AnimModes>(context);//   (AnimModes)AnimMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(AnimModes)).Length -1);
 
-
+            var triggerVariableName = UseTriggerVar.GetValue(context);
             
-            var triggered = Trigger.GetValue(context);
+            var isTriggeredByVar = !Trigger.IsConnected 
+                                   && context.IntVariables.GetValueOrDefault(triggerVariableName, 1 ) == 1;
+
+            var triggered = Trigger.GetValue(context) || isTriggeredByVar;
             if (triggered != _trigger)
             {
                 HasCompleted.Value = false;
@@ -147,19 +151,20 @@ namespace lib.anim
                 }
             }
             
-            var normalizedValue = CalcNormalizedValueForFraction(LastFraction);
+            var normalizedValue = CalcNormalizedValueForFraction(LastFraction, (int)_shape);
             if (double.IsNaN(LastFraction) || double.IsInfinity(LastFraction))
             {
                 LastFraction = 0;
             }
             
-            Result.Value = MathUtils.Lerp(_startValue, _endValue,  normalizedValue);
+            //Result.Value = MathUtils.Lerp(_baseValue, _amplitudeValue,  normalizedValue);
+            Result.Value = _baseValue + _amplitudeValue *  normalizedValue;
         }
         
-        public float CalcNormalizedValueForFraction(double t)
+        public float CalcNormalizedValueForFraction(double t, int shapeIndex)
         {
             //var fraction = CalcFraction(t);
-            var value = MapShapes[(int)_shape]((float)t);
+            var value = MapShapes[shapeIndex]((float)t);
             var biased = SchlickBias(value, _bias);
             return biased;
         }
@@ -184,8 +189,8 @@ namespace lib.anim
         private bool _trigger;
         private Shapes _shape;
         private float _bias;
-        private float _startValue;
-        private float _endValue;
+        private float _baseValue;
+        private float _amplitudeValue;
         private float _duration = 1;
         private float _delay;
 
@@ -226,10 +231,10 @@ namespace lib.anim
         public readonly InputSlot<float> Duration = new();
         
         [Input(Guid = "3AD8E756-7720-4F43-85DA-EFE1AF364CFE")]
-        public readonly InputSlot<float> StartValue = new();
+        public readonly InputSlot<float> Base = new();
         
         [Input(Guid = "287fa06c-3e18-43f2-a4e1-0780c946dd84")]
-        public readonly InputSlot<float> EndValue = new();
+        public readonly InputSlot<float> Amplitude = new();
 
         [Input(Guid = "214e244a-9e95-4292-81f5-cd0199f05c66")]
         public readonly InputSlot<float> Delay = new();
@@ -246,5 +251,8 @@ namespace lib.anim
             PlayTime,
             AppRunTime,
         }
+        
+        [Input(Guid = "FFECB0C3-4D62-40F6-8F46-B982AE0A1800")]
+        public readonly InputSlot<string> UseTriggerVar = new();
     }
 }

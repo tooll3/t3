@@ -1,20 +1,21 @@
 {
   "Id": "c1c3725a-0745-4ce1-874b-839810c2124c"/*DateTimeToString*/,
-  "Description": "",
+  "Description": "Uses [NowAsDateTime] output to convert it into a string",
   "InputUis": [
     {
       "InputId": "c420e846-8ba2-4be4-ad43-9f4380da0851"/*Value*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
+        "X": -182.1091,
+        "Y": -14.074188
+      },
+      "Description": "Input for a 'DateTime' paramenter\n\nFor example by [NowAsDateTime] operator"
     },
     {
       "InputId": "5af4a05f-72dc-4c0d-a728-309bf3a1b1b9"/*Format*/,
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": -133.22765,
+        "Y": 40.552734
       },
       "Usage": "Default"
     }
@@ -27,6 +28,15 @@
         "X": 0.0,
         "Y": 0.0
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "bb0ffba9-a635-495a-baa7-86fffb62fad2",
+      "Title": "Custom date and time format strings",
+      "Description": "Describe how to use the Format field",
+      "LinkUrl": "https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings#date-and-time-separator-specifiers",
+      "LinkType": "Reference"
     }
   ]
 }

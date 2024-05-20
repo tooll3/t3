@@ -1,7 +1,5 @@
 {
-  "Name": "RenderTarget",
-  "Id": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
-  "Namespace": "lib.img.generate",
+  "Id": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1"/*RenderTarget*/,
   "Inputs": [
     {
       "Id": "4da253b7-4953-439a-b03f-1d515a78bddf"/*Command*/,

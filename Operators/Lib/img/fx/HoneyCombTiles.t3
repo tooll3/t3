@@ -33,6 +33,10 @@
       }
     },
     {
+      "Id": "0c227ab3-3394-40fb-9274-d857a2293d35"/*Rotation*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "00ffc593-d62e-4f40-8957-906b444b8f3b"/*Divisions*/,
       "DefaultValue": 20.0
     },
@@ -42,10 +46,6 @@
     },
     {
       "Id": "228b8705-92c7-467b-ab0f-eee60a618c72"/*MixOriginal*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "0c227ab3-3394-40fb-9274-d857a2293d35"/*Rotation*/,
       "DefaultValue": 0.0
     },
     {

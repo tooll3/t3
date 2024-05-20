@@ -20,11 +20,11 @@ public abstract class BaseRenderWindow : Window
     {
         var composition = GraphWindow.Focused?.CompositionOp;
         if (composition == null)
-            return AudioEngine.clipChannels(null);
+            return AudioEngine.GetClipSampleRate(null);
         
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);
-        return AudioEngine.clipChannels(soundtrack);
+        return AudioEngine.GetClipChannelCount(soundtrack);
     }
 
     protected static int SoundtrackSampleRate()
@@ -32,11 +32,11 @@ public abstract class BaseRenderWindow : Window
         var composition = GraphWindow.Focused?.CompositionOp;
 
         if (composition == null)
-            return AudioEngine.clipSampleRate(null);
+            return AudioEngine.GetClipSampleRate(null);
         
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);
-        return AudioEngine.clipSampleRate(soundtrack);
+        return AudioEngine.GetClipSampleRate(soundtrack);
     }
 
     protected static void SetRenderingStarted()
@@ -238,15 +238,15 @@ public abstract class BaseRenderWindow : Window
         if (soundtrack != null)
             AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
 
-        if (!_recording)
+        if (!_audioRecording)
         {
             _timingOverhang = 0.0;
             adaptedDeltaTime = 1.0 / Fps;
 
-            Playback.Current.IsLive = false;
+            Playback.Current.IsRenderingToFile = true;
             Playback.Current.PlaybackSpeed = 1.0;
 
-            AudioEngine.prepareRecording(Playback.Current, Fps);
+            AudioRendering.PrepareRecording(Playback.Current, Fps);
 
             double requestedEndTimeInSeconds = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
             double actualEndTimeInSeconds = startTimeInSeconds + FrameCount / Fps;
@@ -255,7 +255,7 @@ public abstract class BaseRenderWindow : Window
             Log.Debug($"Actually recording from {startTimeInSeconds:0.0000} to {actualEndTimeInSeconds:0.0000} seconds due to frame raster");
             Log.Debug($"Using {Playback.Current.Bpm} bpm");
 
-            _recording = true;
+            _audioRecording = true;
         }
 
         // update audio parameters, respecting looping etc.
@@ -270,14 +270,14 @@ public abstract class BaseRenderWindow : Window
 
     protected static void ReleasePlaybackTime()
     {
-        AudioEngine.endRecording(Playback.Current, Fps);
+        AudioRendering.EndRecording(Playback.Current, Fps);
 
         Playback.Current.TimeInSecs = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
-        Playback.Current.IsLive = true;
+        Playback.Current.IsRenderingToFile = false;
         Playback.Current.PlaybackSpeed = 0.0;
         Playback.Current.Update();
 
-        _recording = false;
+        _audioRecording = false;
     }
 
     public override List<Window> GetInstances()
@@ -290,7 +290,7 @@ public abstract class BaseRenderWindow : Window
         if (texture == null || texture.IsDisposed)
         {
             warning = "You have selected an operator that does not render. " +
-                      "Hint: Use a [RenderTarget] with format B8G8R8A8_UNorm for fast exports.";
+                      "Ready to export to video.";
             return true;
         }
 
@@ -298,7 +298,7 @@ public abstract class BaseRenderWindow : Window
         return false;
     }
 
-    protected const string PreferredInputFormatHint = "Hint: Use a [ConvertFormat] with format B8G8R8A8_UNorm for fast exports.";
+    protected const string PreferredInputFormatHint = "Ready to export to video.";
 
     protected static double Progress => (FrameCount <= 1) ? 0 :
         (FrameIndex / (double)(FrameCount - 1)).Clamp(0, 1);
@@ -311,7 +311,7 @@ public abstract class BaseRenderWindow : Window
     private static float _lastValidFps = Fps;
 
     private static double _timingOverhang; // Time that could not be updated due to MS resolution (in seconds)
-    private static bool _recording; 
+    private static bool _audioRecording; 
     //public static bool IsExporting => _isExporting;
 
     // ReSharper disable once InconsistentNaming

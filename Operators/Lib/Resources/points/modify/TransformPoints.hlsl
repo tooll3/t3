@@ -26,28 +26,28 @@ static const float WorldSpace = 2;
     uint numStructs, stride;
     SourcePoints.GetDimensions(numStructs, stride);
     if (i.x >= numStructs)
-    {
         return;
-    }
 
-    float w = SourcePoints[i.x].W;
-    float3 pOrg = SourcePoints[i.x].Position;
-    float3 p = pOrg;
+    Point p = SourcePoints[i.x];
 
-    //float4 orgRot;
-    //float v = q_separate_v(SourcePoints[i.x].rotation, orgRot);
+    float w = p.W;
+    // float3 pOrg = p.Position;
+    float3 pos = p.Position;
 
-    float4 orgRot = SourcePoints[i.x].Rotation;
+    // float4 orgRot;
+    // float v = q_separate_v(SourcePoints[i.x].rotation, orgRot);
+
+    float4 orgRot = p.Rotation;
     float4 rotation = orgRot;
 
     if (CoordinateSpace < 0.5)
     {
-        p.xyz = 0;
+        pos.xyz = 0;
         rotation = float4(0, 0, 0, 1);
     }
 
-    float3 pLocal = p;
-    p = mul(float4(p, 1), TransformMatrix).xyz;
+    float3 pLocal = pos;
+    pos = mul(float4(pos, 1), TransformMatrix).xyz;
 
     float4 newRotation = rotation;
 
@@ -76,29 +76,23 @@ static const float WorldSpace = 2;
 
     if (WIsWeight >= 0.5)
     {
-        float3 weightedOffset = (p - pLocal) * w;
-        p = pLocal + weightedOffset;
+        float3 weightedOffset = (pos - pLocal) * w;
+        pos = pLocal + weightedOffset;
         weight = w;
-
-        // newRotation *= w;
         newRotation = qSlerp(orgRot, newRotation, w);
-        // newRotation= orgRot ;
-        // newRotation = float4(1,0,1,1);
-        // p.y += 1;
     }
 
     if (CoordinateSpace < 0.5)
     {
-        p.xyz = qRotateVec3(p.xyz, orgRot).xyz;
-        p += pOrg;
+        pos.xyz = qRotateVec3(pos.xyz, orgRot).xyz;
+        pos += p.Position;
+        p.Stretch *= TransformMatrix._m00_m11_m22;
     }
 
-    ResultPoints[i.x].Position = p.xyz;
-    ResultPoints[i.x].Rotation = newRotation;
-    ResultPoints[i.x].Color = SourcePoints[i.x].Color;
-    ResultPoints[i.x].Selected = SourcePoints[i.x].Selected;
-    ResultPoints[i.x].Stretch = SourcePoints[i.x].Stretch;
+    p.Position = pos.xyz;
+    p.Rotation = newRotation;
 
-    float orgW = SourcePoints[i.x].W;
-    ResultPoints[i.x].W = lerp(orgW, orgW * ScaleW + OffsetW, weight);
+    p.W = lerp(p.W, p.W * ScaleW + OffsetW, weight);
+
+    ResultPoints[i.x] = p;
 }

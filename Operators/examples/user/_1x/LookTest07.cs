@@ -1,0 +1,19 @@
+using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
+using T3.Core.Operator;
+using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Slots;
+
+namespace examples.user._1x
+{
+    [Guid("24bd37aa-e348-40c6-9df4-95c870b2890d")]
+    public class LookTest07 : Instance<LookTest07>
+    {
+
+        [Output(Guid = "84f86eb1-9d2c-4630-b9e6-4aa8a0a8f44f")]
+        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new Slot<SharpDX.Direct3D11.Texture2D>();
+
+
+    }
+}
+

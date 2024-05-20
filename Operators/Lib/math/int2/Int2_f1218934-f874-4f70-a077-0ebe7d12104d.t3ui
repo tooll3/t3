@@ -1,5 +1,6 @@
 {
   "Id": "f1218934-f874-4f70-a077-0ebe7d12104d"/*Int2*/,
+  "Description": "Converts 2 single integers to an int2\n\nFor the opposite see [Int2Components]",
   "InputUis": [
     {
       "InputId": "579e72d6-638e-4b17-bb4e-88a55e3a1d4d"/*X*/,

@@ -31,7 +31,7 @@ namespace lib.img.generate
         public readonly InputSlot<float> Scale = new InputSlot<float>();
 
         [Input(Guid = "2238e8c8-6bf8-4d3f-be5e-3291b6dc1441")]
-        public readonly InputSlot<float> Phase = new InputSlot<float>();
+        public readonly InputSlot<float> RandomPhase = new InputSlot<float>();
 
         [Input(Guid = "c5f42436-432c-4d18-8bc2-f7f0772442f8")]
         public readonly InputSlot<int> Iterations = new InputSlot<int>();

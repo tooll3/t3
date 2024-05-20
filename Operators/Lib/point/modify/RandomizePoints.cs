@@ -35,7 +35,7 @@ namespace lib.point.modify
         public readonly InputSlot<Vector3> Stretch = new InputSlot<Vector3>();
 
         [Input(Guid = "4dffb439-da81-477c-8100-34a9ba59b0ee")]
-        public readonly InputSlot<float> RandomSeed = new InputSlot<float>();
+        public readonly InputSlot<float> RandomPhase = new InputSlot<float>();
 
         [Input(Guid = "5282AD12-AACF-4A62-8FDE-DF0148AB0F1F")]
         public readonly InputSlot<Vector2> BiasAndGain = new InputSlot<Vector2>();

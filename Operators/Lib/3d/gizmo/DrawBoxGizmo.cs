@@ -15,7 +15,7 @@ namespace lib._3d.gizmo
 
 
         [Input(Guid = "656697b8-b271-463b-9e38-fdb5758d3736")]
-        public readonly InputSlot<Vector4> Value = new();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "6f95e60a-f259-45fa-b23f-ce284cc9275e")]
         public readonly InputSlot<Vector3> Stretch = new();

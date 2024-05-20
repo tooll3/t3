@@ -20,22 +20,22 @@ namespace lib.sprite
         public readonly InputSlot<BufferWithViews> SpriteBuffer = new();
 
         [Input(Guid = "08c37dd9-155c-4fb4-a9d0-f29ddd7da9b0")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new();
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "c694946c-37b6-4792-8fc5-4204ede69f90")]
-        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "cf7692c9-d6bd-4e93-b89c-14ab507b6da5")]
-        public readonly InputSlot<float> Size = new();
-
-        [Input(Guid = "9df7e923-76d2-4e98-af72-3a73b47de960")]
-        public readonly InputSlot<bool> EnableDepthWrite = new();
-
-        [Input(Guid = "fecc8310-208e-45de-a43b-bf547663e743", MappedType = typeof(SharedEnums.BlendModes))]
-        public readonly InputSlot<int> BlendMod = new();
+        public readonly InputSlot<float> Size = new InputSlot<float>();
 
         [Input(Guid = "926bdbc2-ee14-4125-8886-18f445766ef3")]
-        public readonly InputSlot<float> AlphaCutOff = new();
+        public readonly InputSlot<float> AlphaCutOff = new InputSlot<float>();
+
+        [Input(Guid = "9df7e923-76d2-4e98-af72-3a73b47de960")]
+        public readonly InputSlot<bool> EnableDepthWrite = new InputSlot<bool>();
+
+        [Input(Guid = "fecc8310-208e-45de-a43b-bf547663e743", MappedType = typeof(SharedEnums.BlendModes))]
+        public readonly InputSlot<int> BlendMod = new InputSlot<int>();
     }
 }
 

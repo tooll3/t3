@@ -266,14 +266,16 @@ namespace T3.Editor.Gui.Graph
                 
                 var doubleClicked = ImGui.IsMouseDoubleClicked(0);
 
-                if ((ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
-                    && !preventInteractions
-                    && tempConnections.Count == 0)
+				// FIXME: Verify and clean up merge chaos
+                //if ((ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || ImGui.IsWindowFocused())
+                //    && !preventInteractions
+                //    && tempConnections.Count == 0)
+                var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
+                if (isOnBackground && (ImGui.IsMouseDoubleClicked(0) || KeyboardBinding.Triggered(UserActions.CloseOperator)))
                 {
                     HandleFenceSelection(_window.CompositionOp, _selectionFence);
                 }
-
-                var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
+                
                 if (isOnBackground && doubleClicked)
                 {
                     _window.TrySetCompositionOpToParent();

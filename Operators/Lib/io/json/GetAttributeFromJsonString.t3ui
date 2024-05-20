@@ -1,6 +1,6 @@
 {
   "Id": "43783ad9-72a0-4928-bb86-c89aae5c5d85"/*GetAttributeFromJsonString*/,
-  "Description": "",
+  "Description": "Loads a Json string from a URL and outputs the defined part as a string.\n\nSimpler alternative [RequestUrl]\n\nAlso see [LoadImageFromUrl] [WriteToFile] [ReadFile] [PickStringPart] [FilesInFolder]",
   "InputUis": [
     {
       "InputId": "918d69a9-c29a-43fe-9961-c1dcde31e2ec"/*JsonString*/,
@@ -8,6 +8,7 @@
         "X": 51.512096,
         "Y": 46.995968
       },
+      "Description": "Defines the URL / path to the json string",
       "Usage": "Default"
     },
     {
@@ -16,6 +17,8 @@
         "X": 51.512096,
         "Y": 91.99597
       },
+      "Description": "Defines the column from which the string should be output",
+      "AddPadding": "True",
       "Usage": "Default"
     },
     {
@@ -23,7 +26,8 @@
       "Position": {
         "X": 51.512096,
         "Y": 136.99597
-      }
+      },
+      "Description": "Defines the row index (starting with 0) from which the string should be output"
     }
   ],
   "SymbolChildUis": [],

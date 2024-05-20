@@ -1,0 +1,13 @@
+{
+  "Name": "GetLightPosition",
+  "Id": "5914f00f-6600-42a2-bbd5-4201053058ec",
+  "Namespace": "lib.3d._",
+  "Inputs": [
+    {
+      "Id": "a5c6ce06-f260-43ae-8ac7-5ea1cfb3f94e"/*LightIndex*/,
+      "DefaultValue": -1
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

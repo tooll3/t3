@@ -1,6 +1,6 @@
 {
   "Id": "70176d3c-825c-40b3-8121-a465735518fe"/*AColor*/,
-  "Description": "",
+  "Description": "Generates a single color defined by Red / Green / Blue / Alpha (RGBA) values.\nCan be connected to any Operator with a color input.",
   "InputUis": [
     {
       "InputId": "03dc1ef1-d75a-4f65-a607-d5dc4de56a2c"/*RGBA*/,

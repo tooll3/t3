@@ -1,99 +1,117 @@
 {
   "Id": "da8ebc61-87cf-44ff-888e-994c8628ddb7"/*TriangleGridTransition*/,
-  "Description": "",
+  "Description": "Creates a linear- or clock-wipe transition between two images using a truncated border consisting of triangles.\n\nAlso see [FadingSlideShow] [HoneyCombTiles]",
   "InputUis": [
     {
       "InputId": "5a5bed81-c48d-43dd-a6b0-fc7964f90f2d"/*Image*/,
       "Position": {
         "X": -198.11073,
         "Y": -74.62686
-      }
+      },
+      "Description": "Input for the first Image"
     },
     {
       "InputId": "36a9b777-0201-4cec-9c6f-d5ec09e92b3a"/*ImageB*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Second Image input"
     },
     {
-      "InputId": "846f8b1e-e6bb-4e6a-a42c-f83636fd4b6f"/*Fill*/,
+      "InputId": "dab4e3df-aaa6-411c-83f6-e4c730b740ce"/*EffectRotation*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
-    },
-    {
-      "InputId": "e97a432e-4996-41b0-8ae8-10c9f2d15bc4"/*Background*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 89.999985
-      }
-    },
-    {
-      "InputId": "0c6065b9-eb20-4a37-9d70-419d1c8912a6"/*Center*/,
-      "Position": {
-        "X": -201.968,
-        "Y": 155.99208
-      }
-    },
-    {
-      "InputId": "6164020b-3059-4ce5-8a8f-a56150b8a6be"/*Divisions*/,
-      "Position": {
-        "X": -201.968,
-        "Y": 200.99208
       },
-      "Scale": 0.1
-    },
-    {
-      "InputId": "8c652498-33c7-4faa-a8c0-3f3d296474c8"/*LineThickness*/,
-      "Position": {
-        "X": -201.968,
-        "Y": 245.99207
-      }
-    },
-    {
-      "InputId": "659de0cb-82d8-45a9-b99d-748b3c56e8e8"/*MixOriginal*/,
-      "Position": {
-        "X": -200.00002,
-        "Y": 315.3429
-      }
-    },
-    {
-      "InputId": "dab4e3df-aaa6-411c-83f6-e4c730b740ce"/*Rotation*/,
-      "Position": {
-        "X": -200.00002,
-        "Y": 360.3429
-      },
+      "Description": "Rotates and animates the effect like a clock-wope transition",
+      "AddPadding": "True",
       "Scale": 0.5
-    },
-    {
-      "InputId": "82a572d3-a39f-4ab3-bc17-804d3098d1c1"/*EffectWidth*/,
-      "Position": {
-        "X": -195.03636,
-        "Y": 400.33328
-      }
     },
     {
       "InputId": "8d4e1265-8479-4525-adbc-fe5c31d9984a"/*EffectCenter*/,
       "Position": {
-        "X": -192.67474,
-        "Y": 547.8009
-      }
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Description": "Increases the width of the effect / shifts and animates the effect like a linear-wipe transition"
     },
     {
-      "InputId": "5baee095-f7fe-4a07-a01d-cbb2f3c2f3bc"/*Resolution*/,
+      "InputId": "846f8b1e-e6bb-4e6a-a42c-f83636fd4b6f"/*Fill*/,
       "Position": {
-        "X": -208.26138,
-        "Y": 705.45325
-      }
+        "X": -215.69875,
+        "Y": 244.8023
+      },
+      "GroupTitle": "Settings",
+      "Description": "Color that is multiplied with the triangles that appear during the transition"
+    },
+    {
+      "InputId": "e97a432e-4996-41b0-8ae8-10c9f2d15bc4"/*Background*/,
+      "Position": {
+        "X": -215.69875,
+        "Y": 289.8023
+      },
+      "Description": "Background color that appears during the transition"
+    },
+    {
+      "InputId": "6164020b-3059-4ce5-8a8f-a56150b8a6be"/*Divisions*/,
+      "Position": {
+        "X": -215.69875,
+        "Y": 334.8023
+      },
+      "Description": "Amount of triangles used for the effect",
+      "AddPadding": "True",
+      "Scale": 0.1
+    },
+    {
+      "InputId": "82a572d3-a39f-4ab3-bc17-804d3098d1c1"/*EffectFalloff*/,
+      "Position": {
+        "X": -215.69875,
+        "Y": 379.8023
+      },
+      "Description": "Increases the falloff of the effect"
+    },
+    {
+      "InputId": "8c652498-33c7-4faa-a8c0-3f3d296474c8"/*LineThickness*/,
+      "Position": {
+        "X": -215.69875,
+        "Y": 424.8023
+      },
+      "Description": "Decreases the size of the triangles"
     },
     {
       "InputId": "d99d5c03-2563-41e6-9bfe-bd61a7fed37d"/*Scatter*/,
       "Position": {
-        "X": -208.26138,
-        "Y": 750.45325
-      }
+        "X": -215.69875,
+        "Y": 469.8023
+      },
+      "Description": "Randomly scatters the effect"
+    },
+    {
+      "InputId": "5baee095-f7fe-4a07-a01d-cbb2f3c2f3bc"/*Resolution*/,
+      "Position": {
+        "X": -215.69875,
+        "Y": 514.8023
+      },
+      "Description": "Overwrites the resolution of the output image",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "0c6065b9-eb20-4a37-9d70-419d1c8912a6"/*Center*/,
+      "Position": {
+        "X": -195.41698,
+        "Y": 697.0867
+      },
+      "GroupTitle": "Advanced Options",
+      "Description": "Shifts the location of the effect"
+    },
+    {
+      "InputId": "659de0cb-82d8-45a9-b99d-748b3c56e8e8"/*MixOriginal*/,
+      "Position": {
+        "X": -195.41698,
+        "Y": 742.0867
+      },
+      "Description": "Defines how intense the original image is mixed into the effect (currently ignored)"
     }
   ],
   "SymbolChildUis": [
@@ -108,7 +126,7 @@
       "ChildId": "82047030-92cc-4372-b77e-e056fbb5a3c0"/*Vector4Components*/,
       "Position": {
         "X": -25.082056,
-        "Y": 74.952194
+        "Y": 85.952194
       }
     },
     {

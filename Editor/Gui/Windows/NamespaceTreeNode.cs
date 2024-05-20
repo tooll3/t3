@@ -47,6 +47,21 @@ namespace T3.Editor.Gui.Windows
                 SortInOperator(symbol);
             }
         }
+        // define an action delegate that takes a Symbol and returns a bool
+
+        
+        public void PopulateCompleteTree(Predicate<Symbol> filterAction)
+        {
+            Name = RootNodeId;
+            Clear();
+
+            foreach (var symbol in EditorSymbolPackage.AllSymbols.OrderBy(symbol => symbol.Namespace + symbol.Name))
+            {
+                if(filterAction(symbol))
+                    SortInOperator(symbol);
+            }
+        }
+        
         
         public void SortInOperator(Symbol symbol)
         {

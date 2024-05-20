@@ -63,6 +63,10 @@ public class RenameInputDialog : ModalDialog
                                                 ref _newInputName, "NewName",
                                                 _lastWarning,
                                                 "This is a C# class. It must be unique and\nnot include spaces or special characters");
+        if (changed)
+        {
+            _lastWarning = null;
+        }
 
         if (isValid && (isWindowAppearing || changed))
         {

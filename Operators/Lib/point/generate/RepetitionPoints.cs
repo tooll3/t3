@@ -9,9 +9,9 @@ using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Point = T3.Core.DataTypes.Point;
 
-namespace lib.point.generate
+namespace Lib.point.generate
 {
-	[Guid("73d99108-f49a-48fb-aa5d-707c00abb1c2")]
+    [Guid("73d99108-f49a-48fb-aa5d-707c00abb1c2")]
     public class RepetitionPoints : Instance<RepetitionPoints>
     {
         [Output(Guid = "46c3b7f4-3590-46d7-871f-b98685f62c07")]
@@ -63,14 +63,16 @@ namespace lib.point.generate
                                                       translation: translation);
             
                 //context.ObjectToWorld = transform * prevTransform;
-                
-                //var rot = Quaternion.CreateFromAxisAngle(new System.Numerics.Vector3(0,1,0), (float)Math.Atan2(startPosition.X - to.X, startPosition.Y - to.Y) );
+                //var rot = Quaternion.CreateFromAxisAngle(new Vector3(0,1,0), (float)Math.Atan2(startPosition.X - to.X, startPosition.Y - to.Y) );
                 Vector4 v = new Vector4(0, 0, 0, 1);
                 var pos = Vector4.Transform(v, transform);
             
                 _pointList.TypedElements[i].Position = new Vector3(pos.X, pos.Y, pos.Z);
                 _pointList.TypedElements[i].W = scale.Length() / Vector3.One.Length() + startW;
                 _pointList.TypedElements[i].Orientation =  new Quaternion(rotation.X, rotation.Y, rotation.Z, rotation.W);
+                _pointList.TypedElements[i].Color = new Vector4(1, 1, 1, 1);
+                _pointList.TypedElements[i].Selected = 1;
+                _pointList.TypedElements[i].Stretch = Vector3.One;
             }
             
             if (addSeparator)

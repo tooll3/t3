@@ -11,7 +11,7 @@
         {
           "Id": "895dab2c-e3be-4e73-9c96-0f6101cea113"/*Path*/,
           "Type": "System.String",
-          "Value": "D:\\Framefield Dropbox\\ff-projects\\raumHoch\\2023-03 SpurLab\\_work\\2023-05-03 gsg-tracking-research\\_export\\test-lines-v07.obj"
+          "Value": "C:\\Users\\pixtur\\Downloads\\test-lines-v07.obj"
         },
         {
           "Id": "dcacd412-1885-4a10-b073-54192f074ae8"/*Mode*/,
@@ -639,7 +639,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "D:\\Framefield Dropbox\\ff-projects\\raumHoch\\2023-03 SpurLab\\_work\\2023-05-03 gsg-tracking-research\\_export\\gsg-office-building.obj"
+          "Value": "C:\\Users\\pixtur\\Downloads\\gsg-office-building.obj"
         }
       ],
       "Outputs": []
@@ -1104,7 +1104,13 @@
     {
       "Id": "04b7d32f-ad1a-4561-928c-b04f4450b0ef"/*PointsToCPU*/,
       "SymbolId": "a5f4552f-7e25-43a5-bb14-21ab836fa0b3",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "eff239da-39e9-41d3-968b-c74723ec2545"/*TriggerUpdate*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
       "Outputs": []
     },
     {
@@ -1673,12 +1679,6 @@
       "SourceSlotId": "1f4e7cac-1f62-4633-b0f3-a3017a026753",
       "TargetParentOrChildId": "a1ca11fd-2507-4d03-90df-85b8c7f1fb21",
       "TargetSlotId": "b990cf29-00a5-4e39-8687-4502c7c7eebc"
-    },
-    {
-      "SourceParentOrChildId": "9782ea71-dbf3-4993-ab4b-079f24516c3d",
-      "SourceSlotId": "6c78d167-f9f5-43a0-8cd6-8a8b0a34067e",
-      "TargetParentOrChildId": "a20c8f80-8a70-44aa-8b32-ff80d53ed769",
-      "TargetSlotId": "944152fb-3786-4474-90ea-c292b5dde801"
     },
     {
       "SourceParentOrChildId": "b5f15804-36d2-48fb-9cf6-6fa33b359b5f",

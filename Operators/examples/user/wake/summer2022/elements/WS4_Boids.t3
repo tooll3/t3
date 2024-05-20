@@ -319,6 +319,16 @@
       "SymbolId": "d14233a2-8240-47d3-bb92-0854f6d3b218",
       "InputValues": [
         {
+          "Id": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Refresh*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "c42d8124-d656-4b52-864f-9c9d888e0c54"/*WrapSize*/,
+          "Type": "System.Single",
+          "Value": 2.0
+        },
+        {
           "Id": "e92432c8-6ceb-494b-9cf4-b21191567b29"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -334,19 +344,9 @@
           "Value": 0.02
         },
         {
-          "Id": "c42d8124-d656-4b52-864f-9c9d888e0c54"/*WrapSize*/,
-          "Type": "System.Single",
-          "Value": 2.0
-        },
-        {
           "Id": "0744e03b-9df3-4a5e-9cfa-f522d9d946ea"/*NoiseAmount*/,
           "Type": "System.Single",
           "Value": 0.04
-        },
-        {
-          "Id": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Reset*/,
-          "Type": "System.Boolean",
-          "Value": false
         },
         {
           "Id": "49337c9b-7016-4093-b695-f7d1dd948fa1"/*FadeNearest*/,
@@ -1139,12 +1139,12 @@
           "Value": 0.77
         },
         {
-          "Id": "3ad8e756-7720-4f43-85da-efe1af364cfe"/*StartValue*/,
+          "Id": "3ad8e756-7720-4f43-85da-efe1af364cfe"/*Base*/,
           "Type": "System.Single",
           "Value": 0.1
         },
         {
-          "Id": "287fa06c-3e18-43f2-a4e1-0780c946dd84"/*EndValue*/,
+          "Id": "287fa06c-3e18-43f2-a4e1-0780c946dd84"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 0.13
         },
@@ -1171,12 +1171,12 @@
           "Value": 1.38
         },
         {
-          "Id": "3ad8e756-7720-4f43-85da-efe1af364cfe"/*StartValue*/,
+          "Id": "3ad8e756-7720-4f43-85da-efe1af364cfe"/*Base*/,
           "Type": "System.Single",
           "Value": 0.1
         },
         {
-          "Id": "287fa06c-3e18-43f2-a4e1-0780c946dd84"/*EndValue*/,
+          "Id": "287fa06c-3e18-43f2-a4e1-0780c946dd84"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 0.17
         },
@@ -1414,7 +1414,7 @@
       "SymbolId": "e1c294b5-1ea8-435e-a437-26d280d3c2f4",
       "InputValues": [
         {
-          "Id": "58c08101-ac16-4aed-aa84-259853734116"/*Position*/,
+          "Id": "58c08101-ac16-4aed-aa84-259853734116"/*LightPosition*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
@@ -1443,7 +1443,7 @@
           }
         },
         {
-          "Id": "500549e0-aa60-4555-b82a-a829568959ff"/*Intensity*/,
+          "Id": "500549e0-aa60-4555-b82a-a829568959ff"/*CenterIntensity*/,
           "Type": "System.Single",
           "Value": 0.29
         },

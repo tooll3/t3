@@ -26,7 +26,6 @@ namespace lib.io.osc
         [Output(Guid = "8F426B4A-AD49-4AB9-80EE-3DF9F5A5AFF6", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> LastMessageTime = new ();
 
-
         public OscInput()
         {
             FirstResult.UpdateAction = Update;
@@ -134,10 +133,10 @@ namespace lib.io.osc
 
                 var matchesAddress = msg.Address == _address;
 
-                    if (matchesAddress || _teachingActive)
-                    {
-                        _lastMatchingSignals.Add(msg);
-                        _isDefaultValue = false;
+                if (matchesAddress || _teachingActive)
+                {
+                    _lastMatchingSignals.Add(msg);
+                    _isDefaultValue = false;
                 }
             }
         }
@@ -176,9 +175,5 @@ namespace lib.io.osc
 
         [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
         public readonly InputSlot<bool> PrintLogMessages = new();
-        
-        
-        
-
     }
 }

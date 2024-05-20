@@ -1,6 +1,6 @@
 {
   "Id": "68e0d0cb-1e57-4e9c-9f22-bd7927ddb4c5"/*RecomputeNormals*/,
-  "Description": "",
+  "Description": "Recalculates the normals (smoothing groups) of the surfaces of a mesh. For example, if these are changed by [DeformMesh] and similar operators",
   "InputUis": [
     {
       "InputId": "b55aeb9b-5286-476a-b8f0-86cb96e41310"/*InputMesh*/,
@@ -8,14 +8,16 @@
       "Position": {
         "X": -142.75635,
         "Y": 1687.4246
-      }
+      },
+      "Description": "Mesh Input"
     },
     {
       "InputId": "fd3f8225-3d33-40d3-af15-ae768e2c67ad"/*RecomputeIndices*/,
       "Position": {
         "X": -170.62433,
         "Y": 1893.0575
-      }
+      },
+      "Description": "Defines whether the indices should also be recalculated"
     }
   ],
   "SymbolChildUis": [
@@ -139,22 +141,22 @@
     {
       "ChildId": "95432194-a127-438d-a35b-e624c0a29e59"/*Once*/,
       "Position": {
-        "X": 867.98425,
-        "Y": 1494.199
+        "X": 766.6789,
+        "Y": 1490.1469
       }
     },
     {
       "ChildId": "4139f7f3-9b51-4587-93bc-4a5554890c12"/*HasIntChanged*/,
       "Position": {
-        "X": 867.98425,
-        "Y": 1550.199
+        "X": 766.6789,
+        "Y": 1533.1469
       }
     },
     {
       "ChildId": "741fed04-5875-4097-ade7-1bfa85509dcc"/*HasIntChanged*/,
       "Position": {
-        "X": 867.98425,
-        "Y": 1606.199
+        "X": 766.6789,
+        "Y": 1589.1469
       }
     },
     {
@@ -205,6 +207,20 @@
         "X": 1356.3417,
         "Y": 2443.179
       }
+    },
+    {
+      "ChildId": "80b0aa6d-4bc2-4e6e-8e70-8ffadef5183d"/*IsBufferDirty*/,
+      "Position": {
+        "X": 466.81512,
+        "Y": 1466.9489
+      }
+    },
+    {
+      "ChildId": "f3f9e067-d3ef-469b-80cb-1ef29891c3b0"/*IsBufferDirty*/,
+      "Position": {
+        "X": 458.19318,
+        "Y": 1335.4884
+      }
     }
   ],
   "OutputUis": [
@@ -231,8 +247,8 @@
         "Y": 1261.5504
       },
       "Size": {
-        "X": 1038.9318,
-        "Y": 994.00574
+        "X": 1011.4439,
+        "Y": 951.6286
       }
     }
   ]

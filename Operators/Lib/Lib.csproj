@@ -50,6 +50,10 @@
     <ItemGroup Label="OperatorPackages">
         <Operators Include="lib.types" Version="1.0.0" ResourcesOnly="False" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="io\video\" />
+    </ItemGroup>
     <Target Name="CreatePackageInfo" AfterTargets="AfterBuild">
         <ItemGroup Label="Define json structure of referenced operator packages">
             <OpPacks Include="@(Operators)">

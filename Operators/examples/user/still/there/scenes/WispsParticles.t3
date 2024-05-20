@@ -1466,14 +1466,14 @@
           }
         },
         {
-          "Id": "a6c523ba-4529-4a51-b6ce-69d396490625"/*EnableDepthTest*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
           "Id": "f7a4cab5-6095-4b7f-98d0-faea091dda29"/*Label*/,
           "Type": "System.String",
           "Value": "Ribbons start"
+        },
+        {
+          "Id": "a6c523ba-4529-4a51-b6ce-69d396490625"/*EnableDepthTest*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": [
@@ -1512,14 +1512,14 @@
           }
         },
         {
-          "Id": "a6c523ba-4529-4a51-b6ce-69d396490625"/*EnableDepthTest*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
           "Id": "f7a4cab5-6095-4b7f-98d0-faea091dda29"/*Label*/,
           "Type": "System.String",
           "Value": "Scans Starts here"
+        },
+        {
+          "Id": "a6c523ba-4529-4a51-b6ce-69d396490625"/*EnableDepthTest*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": [

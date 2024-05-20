@@ -16,17 +16,18 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Variations
 {
+    /// <summary>
+    /// Controls arranging and blending variations on a canvas for Presets and Snapshots.
+    /// </summary>
     internal abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContainer
     {
-        public abstract Variation CreateVariation();
-        public abstract void DrawToolbarFunctions();
-        public abstract string GetTitle();
+        protected abstract string GetTitle();
 
         private protected abstract Instance InstanceForBlendOperations { get; }
         private protected abstract SymbolVariationPool PoolForBlendOperations { get; }
         protected abstract void DrawAdditionalContextMenuContent(Instance InstanceForBlendOperations);
 
-        public void Draw(ImDrawListPtr drawList, bool hideHeader = false)
+        public void DrawBaseCanvas(ImDrawListPtr drawList, bool hideHeader = false)
         {
             UpdateCanvas(out _);
 

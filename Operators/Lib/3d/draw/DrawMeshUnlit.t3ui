@@ -89,6 +89,13 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "48da47d3-8d30-4e85-8ecc-8c07894c54b4"/*TextureWrap*/,
+      "Position": {
+        "X": 550.2577,
+        "Y": 4840.0693
+      }
     }
   ],
   "SymbolChildUis": [
