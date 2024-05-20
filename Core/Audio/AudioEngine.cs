@@ -139,6 +139,7 @@ namespace T3.Core.Audio
             return info.Channels;
         }
 
+        // TODO: Rename to GetClipOrDefaultSampleRate
         public static int GetClipSampleRate(AudioClip clip)
         {
             if (clip == null || !ClipStreams.TryGetValue(clip.Id, out var stream))

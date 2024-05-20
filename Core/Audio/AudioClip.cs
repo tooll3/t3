@@ -1,7 +1,9 @@
 ﻿using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.Model;
 using T3.Core.Resource;
+using T3.Serialization;
 
 namespace T3.Core.Audio;
 
@@ -17,7 +19,7 @@ public class AudioClip
     public double EndTime;
     public float Bpm = 120;
     public bool DiscardAfterUse = true;
-    public bool IsSoundtrack;
+    public bool IsSoundtrack = false;
     public float Volume = 1.0f;
     #endregion
 
@@ -26,8 +28,20 @@ public class AudioClip
     /// </summary>
     public double LengthInSeconds;
 
+    private readonly SymbolPackage _symbolPackage;
+
+    public AudioClip(SymbolPackage symbolPackage)
+    {
+        _symbolPackage = symbolPackage;
+    }
+
+    public bool TryGetAbsoluteFilePath(out string absolutePath)
+    {
+        return ResourceManager.TryResolvePath(FilePath, [_symbolPackage], out absolutePath, out _);
+    }
+
     #region serialization
-    public static AudioClip FromJson(JToken jToken)
+    public static AudioClip FromJson(JToken jToken, SymbolPackage symbolPackage)
     {
         var idToken = jToken[nameof(Id)];
 
@@ -35,10 +49,12 @@ public class AudioClip
         if (idString == null)
             return null;
 
-        var newAudioClip = new AudioClip
+        var path = jToken[nameof(FilePath)]?.Value<string>();
+
+        var newAudioClip = new AudioClip(symbolPackage)
                                {
                                    Id = Guid.Parse(idString),
-                                   FilePath = jToken[nameof(FilePath)]?.Value<string>() ?? String.Empty,
+                                   FilePath = path,
                                    StartTime = jToken[nameof(StartTime)]?.Value<double>() ?? 0,
                                    EndTime = jToken[nameof(EndTime)]?.Value<double>() ?? 0,
                                    Bpm = jToken[nameof(Bpm)]?.Value<float>() ?? 0,
@@ -62,7 +78,7 @@ public class AudioClip
             writer.WriteValue(nameof(DiscardAfterUse), DiscardAfterUse);
             writer.WriteValue(nameof(IsSoundtrack), IsSoundtrack);
             writer.WriteObject(nameof(FilePath), FilePath);
-            if(Math.Abs(Volume - 1.0f) > 0.001f)
+            if (Math.Abs(Volume - 1.0f) > 0.001f)
                 writer.WriteObject(nameof(Volume), Volume);
         }
         writer.WriteEndObject();
