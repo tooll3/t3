@@ -1,13 +1,9 @@
 {
-  "Id": "fcdc3089-2df5-467b-841b-7745efaf13db"/*StringBuilder*/,
-<<<<<<<< HEAD:Operators/libDataTypes/lib/string/buffers/StringBuilder.t3ui
-  "Description": "",
-========
+  "Id": "fcdc3089-2df5-467b-841b-7745efaf13db" /*StringBuilder*/,
   "Description": "Sends the predefined (or incoming) string to the output when a trigger is activated\n\nThe output of this operator is made for [StringBuilderToString]",
->>>>>>>> feat/dev-prepare-merge-to-main:Operators/Lib/string/buffers/StringBuilder.t3ui
   "InputUis": [
     {
-      "InputId": "f5c0b04e-8c4e-43ba-ae19-79f80c0f830d"/*ClearTrigger*/,
+      "InputId": "f5c0b04e-8c4e-43ba-ae19-79f80c0f830d" /*ClearTrigger*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
@@ -15,7 +11,7 @@
       "Description": "If this trigger is activated, the 'InitialString' is output (or updated)"
     },
     {
-      "InputId": "85f3d00c-005d-4c2f-bf41-f5b5c672f286"/*InitialString*/,
+      "InputId": "85f3d00c-005d-4c2f-bf41-f5b5c672f286" /*InitialString*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
@@ -27,7 +23,7 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "deb52613-01fc-428d-b2d1-4be7b6767fad"/*Builder*/,
+      "OutputId": "deb52613-01fc-428d-b2d1-4be7b6767fad" /*Builder*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
