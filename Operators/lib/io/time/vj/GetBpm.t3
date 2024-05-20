@@ -1,8 +1,0 @@
-{
-  "Name": "GetBpm",
-  "Id": "6ae8ebb8-3174-463d-9ffb-e14e12eb3029",
-  "Namespace": "lib.io.time.vj",
-  "Inputs": [],
-  "Children": [],
-  "Connections": []
-}

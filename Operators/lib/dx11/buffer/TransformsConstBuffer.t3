@@ -1,8 +1,0 @@
-{
-  "Name": "TransformsConstBuffer",
-  "Id": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
-  "Namespace": "lib.dx11.buffer",
-  "Inputs": [],
-  "Children": [],
-  "Connections": []
-}

@@ -1,8 +1,0 @@
-{
-  "Name": "GetPosition",
-  "Id": "b7731197-b922-4ed8-8e22-bc7596c64f6c",
-  "Namespace": "lib.exec.context",
-  "Inputs": [],
-  "Children": [],
-  "Connections": []
-}
