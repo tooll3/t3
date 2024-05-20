@@ -42,7 +42,7 @@ namespace T3.Editor.Gui.Windows.Variations
             var graphWindow = GraphWindow.Focused;
             if (graphWindow == null)
                 return;
-            
+
             var nodeSelection = graphWindow.GraphCanvas.NodeSelection;
 
             var compositionHasVariations = VariationHandling.ActivePoolForSnapshots != null && VariationHandling.ActivePoolForSnapshots.AllVariations.Count > 0;
@@ -110,7 +110,6 @@ namespace T3.Editor.Gui.Windows.Variations
 
             drawList.ChannelsSetCurrent(0);
             {
-
                 switch (_interactionMode)
                 {
                     case InteractionModes.Presets:
@@ -135,9 +134,13 @@ namespace T3.Editor.Gui.Windows.Variations
                             || VariationHandling.ActiveInstanceForSnapshots == null
                             || VariationHandling.ActivePoolForSnapshots.AllVariations.Count == 0)
                         {
-                            var childUi = SymbolUiRegistry.Entries[VariationHandling.ActiveInstanceForSnapshots.Symbol.Id];
-                            var snapshotsEnabledForNone = !childUi.ChildUis.Any(s => s.SnapshotGroupIndex > 0);
-                            var additionalHint = snapshotsEnabledForNone ? "Use the graph window context menu\nto activate snapshots for operators." : "";
+                            var additionalHint = "";
+                            if (VariationHandling.ActiveInstanceForSnapshots != null
+                                && SymbolUiRegistry.TryGetSymbolUi(VariationHandling.ActiveInstanceForSnapshots.Symbol.Id, out var childUi)
+                                && !childUi.ChildUis.Values.Any(s => s.SnapshotGroupIndex > 0))
+                            {
+                                additionalHint = "Use the graph window context menu\nto activate snapshots for operators.";
+                            }
 
                             if (CustomComponents
                                .EmptyWindowMessage("No Snapshots yet.\n\nWith snapshots you can switch or blend\nbetween parameter sets in your composition.\n\n"
@@ -146,13 +149,15 @@ namespace T3.Editor.Gui.Windows.Variations
                                 var url = "https://github.com/tooll3/t3/wiki/PresetsAndSnapshots";
                                 Process.Start("explorer", url);
                             }
+                            // }
                         }
                         else
                         {
                             _snapshotCanvas.DrawBaseCanvas(drawList);
                         }
+
                         break;
-                    
+
                     case InteractionModes.ParameterGroups:
                         _parameterGroupUi.DrawContent();
                         break;

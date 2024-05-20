@@ -106,7 +106,7 @@ namespace T3.Editor.Gui.Windows
                     var helpMissingCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.LacksDescription && (i.IsLibOperator || !_onlyInLib));
                     var missingAllParameterHelpCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.LacksAllParameterDescription && (i.IsLibOperator || !_onlyInLib));
                     var lackGroupingCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.LacksParameterGrouping && (i.IsLibOperator || !_onlyInLib));
-                    var unusedCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.DependingSymbolIds.Count == 0 && (i.IsLibOperator || !_onlyInLib));
+                    var unusedCount = SymbolAnalysis.InformationForSymbolIds.Values.Count(i => i.DependingSymbols.Count == 0 && (i.IsLibOperator || !_onlyInLib));
 
                     needsUpdate |= ImGui.Checkbox($"Help missing ({helpMissingCount})", ref _filterMissingDescriptions);
                     needsUpdate |= ImGui.Checkbox($"Parameter help missing ({missingAllParameterHelpCount})", ref _filterMissingAllParameterDescriptions);
@@ -134,7 +134,7 @@ namespace T3.Editor.Gui.Windows
                                                                         || (_filterMissingAllParameterDescriptions && info.LacksAllParameterDescription)
                                                                         || (_filterMissingSomeParameterDescriptions && info.LacksSomeParameterDescription)
                                                                         || (_filterMissingParameterGrouping && info.LacksParameterGrouping)
-                                                                        || (_filterUnused && info.DependingSymbolIds.Count== 0)
+                                                                        || (_filterUnused && info.DependingSymbols.Count== 0)
                                                                         );
                                                            });
                     }

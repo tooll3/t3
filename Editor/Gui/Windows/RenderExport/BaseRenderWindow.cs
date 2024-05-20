@@ -20,7 +20,7 @@ public abstract class BaseRenderWindow : Window
     {
         var composition = GraphWindow.Focused?.CompositionOp;
         if (composition == null)
-            return AudioEngine.clipChannels(null);
+            return AudioEngine.GetClipSampleRate(null);
         
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);
@@ -32,7 +32,7 @@ public abstract class BaseRenderWindow : Window
         var composition = GraphWindow.Focused?.CompositionOp;
 
         if (composition == null)
-            return AudioEngine.clipSampleRate(null);
+            return AudioEngine.GetClipSampleRate(null);
         
         PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
         settings.GetMainSoundtrack(out var soundtrack);

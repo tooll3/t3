@@ -55,10 +55,10 @@ namespace T3.Editor.Gui.Windows
             Name = RootNodeId;
             Clear();
 
-            foreach (var symbol in SymbolRegistry.Entries.OrderBy(pair => pair.Value.Namespace + pair.Value.Name))
+            foreach (var symbol in EditorSymbolPackage.AllSymbols.OrderBy(symbol => symbol.Namespace + symbol.Name))
             {
-                if(filterAction(symbol.Value))
-                    SortInOperator(symbol.Value);
+                if(filterAction(symbol))
+                    SortInOperator(symbol);
             }
         }
         
