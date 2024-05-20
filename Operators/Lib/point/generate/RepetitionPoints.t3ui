@@ -1,0 +1,90 @@
+{
+  "Id": "73d99108-f49a-48fb-aa5d-707c00abb1c2"/*RepetitionPoints*/,
+  "Description": "Generate a list of points by repeating a transform operation.\nThis can be very useful in combination with [DrawMeshAtPoints].\n\nAlso, by driving the Offset parameter with an LFO, you can produce seamlessly animated endless scenes. This can be useful for VJ projects.",
+  "InputUis": [
+    {
+      "InputId": "81ea19e7-97dc-461d-8eb0-7e9091cc1fc3"/*Count*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "4213911b-4103-481f-85c6-9bccac116264"/*StartPosition*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "2f1383f3-f5ae-4f2d-bb8e-0ad8e35dd621"/*StartW*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "3a1a829d-d273-4ec0-b327-30be0e0463c4"/*Translate*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      },
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "5956a2c7-addc-409a-87d8-62e67da212f4"/*Scale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      }
+    },
+    {
+      "InputId": "af208e67-43bb-4c09-8076-859e7fefa93f"/*Rotate*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
+    },
+    {
+      "InputId": "283f9939-7b04-4733-8130-edcf34305fe5"/*Pivot*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "af3c87e3-889d-410f-b4bc-62bd29bee8fa"/*Phase*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      },
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "ff0c0b01-6272-4580-8ce0-8629c7807d68"/*AddSeparator*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "46c3b7f4-3590-46d7-871f-b98685f62c07"/*ResultList*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "dbc10554-5e12-4200-8202-5e3eb1837590",
+      "Title": "Example video",
+      "Description": "",
+      "LinkUrl": "https://youtu.be/Nv_ctYjNOVM?feature=shared&t=62",
+      "LinkType": "TutorialVideo"
+    }
+  ]
+}

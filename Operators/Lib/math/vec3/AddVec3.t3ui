@@ -1,0 +1,30 @@
+{
+  "Id": "15ac7153-69af-45f8-bcdd-50cdef0c9ae1"/*AddVec3*/,
+  "Description": "Adds two Vec3 variables together",
+  "InputUis": [
+    {
+      "InputId": "f933c566-cbb2-4d2c-9e3b-f7ad3b2f7292"/*Input1*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "08624ca6-8b69-48f5-8896-a483b403778e"/*Input2*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c8942be3-53cf-4764-8663-35159c8e0f6d"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

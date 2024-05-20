@@ -1,0 +1,13 @@
+{
+  "Name": "FirstValidTexture",
+  "Id": "db73b47d-3d42-4b17-b8fd-08b6f1286716",
+  "Namespace": "lib.dx11._",
+  "Inputs": [
+    {
+      "Id": "1725f61d-44e5-4718-9331-f6520f105657"/*Input*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,0 +1,82 @@
+{
+  "Id": "49796f63-27a8-4714-ba69-2073488ca833"/*OscillateVec2*/,
+  "Description": "A helper that combines 2 sin waves into a vector\n\nSimilar Operators [OscillateVec3] [AnimValue] [AnimVec2] [AnimVec3]",
+  "InputUis": [
+    {
+      "InputId": "2c812efc-de0b-4263-a651-2966c596fe76"/*SpeedFactor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "increases the speed at which the curves are drawn"
+    },
+    {
+      "InputId": "f82759c6-154d-41cb-97a8-8b1eea635f6b"/*OverrideTime*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Description": "Input to override the standard time"
+    },
+    {
+      "InputId": "2c9a6b15-ac0d-4708-a6c8-2834cfc3086c"/*Amplitude*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      },
+      "Description": "Increases the highest and lowest point of the curves",
+      "AddPadding": "True",
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "031bf887-e45e-45aa-ba17-214aecf155da"/*AmplitudeScale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      },
+      "Description": "Uniformly scales the amplitude of all curves"
+    },
+    {
+      "InputId": "4959c4c7-e216-4c3d-9b51-228fe4a0b0f9"/*Period*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Description": "Increases / decreases the time it takes to draw a curve for each curve",
+      "AddPadding": "True",
+      "Min": -1.0,
+      "Max": 1.0,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "48a94f9e-32fc-46d0-9e06-8f7cbe1d40f3"/*Phase*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      },
+      "Description": "Moves the phase of the curves back and forth on the time axis",
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "63c0681d-eb5a-45bb-b0df-be868e236c1e"/*Offset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "Description": "Increases / decreases the values of the curves on the vertical axis up and down",
+      "UseVec2Control": "Position"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "9df7498c-543f-46f3-b331-ae8f143a2a65"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

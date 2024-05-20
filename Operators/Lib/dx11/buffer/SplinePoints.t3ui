@@ -1,0 +1,67 @@
+{
+  "Id": "edecd98f-209b-423d-8201-0fd7d590c4cf"/*SplinePoints*/,
+  "Description": "Samples the incoming points into a set of spline points.",
+  "InputUis": [
+    {
+      "InputId": "88ab4088-efa9-42b7-afe9-d44a2ff6e58a"/*SampleCount*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "a438a275-7633-4502-9718-e548bb0ce4de"/*PreSampleSteps*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "336f26e1-853f-41a3-afe0-e2402a9d7452"/*UpVector*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "2ab21e92-6838-4ac7-8d10-6f8b3c8b5612"/*Curvature*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "02968cef-1a5e-4a7f-b451-b692f4c9b6ab"/*Points*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "28b45955-1e05-43a9-87b6-44eabc30bea7"/*OutBuffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "1b0a8c95-cf11-4ef6-bdb7-c54d0cd7beb7"/*SampledPoints*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "fefc4e6c-8841-4b2b-8159-f1f9ad80f5f9",
+      "Title": "Example video",
+      "Description": "Shows how to use this operator for building a retro-style logo.",
+      "LinkUrl": "https://youtu.be/7S4aedYxqQE?feature=shared&t=135",
+      "LinkType": "TutorialVideo"
+    }
+  ]
+}

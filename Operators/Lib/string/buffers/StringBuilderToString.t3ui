@@ -1,0 +1,23 @@
+{
+  "Id": "c5f1292a-e692-422b-9261-b5ae3451cd7c"/*StringBuilderToString*/,
+  "Description": "Converts the 'Builder' Output of a [StringBuilder] or [BuildRandomString] to a string",
+  "InputUis": [
+    {
+      "InputId": "4690405c-343c-4f4b-bf32-51f5d2cc9c76"/*InputBuffer*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "71c4aa96-9a20-494a-9a28-6dd33a867ed2"/*String*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

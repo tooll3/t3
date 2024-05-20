@@ -1,0 +1,30 @@
+{
+  "Id": "010aca02-263a-471c-b407-025b023f7f60"/*ExecuteRawBufferUpdate*/,
+  "InputUis": [
+    {
+      "InputId": "62ac9f97-1fca-49f3-8fac-f0a580c367ba"/*UpdateCommands*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "8d7adbc1-0d55-47e0-93c5-42926af00771"/*Buffer*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "da3cd196-9454-438b-91b0-95486347902c"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

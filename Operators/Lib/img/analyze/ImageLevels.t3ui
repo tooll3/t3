@@ -1,0 +1,79 @@
+{
+  "Id": "592a2b6f-d4e3-43e0-9e73-034cca3b3900"/*ImageLevels*/,
+  "Description": "Visualizes the image brightness distribution of an image.",
+  "InputUis": [
+    {
+      "InputId": "f434bac8-b7d8-4787-adf2-1782d6588da8"/*Texture2d*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -42.40055,
+        "Y": 172.89989
+      }
+    },
+    {
+      "InputId": "1224b62e-5fca-41e9-a388-4c13c1458d56"/*Center*/,
+      "Position": {
+        "X": -39.94302,
+        "Y": 251.02048
+      },
+      "Min": -1.0,
+      "Max": 1.0,
+      "Scale": 0.001,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "48e80f45-9685-4ded-aa1c-d05e16658c5a"/*Width*/,
+      "Position": {
+        "X": -39.94302,
+        "Y": 296.02048
+      }
+    },
+    {
+      "InputId": "f1084d72-f8b8-4723-82be-e1e98880faf3"/*Rotation*/,
+      "Position": {
+        "X": -39.94302,
+        "Y": 341.02048
+      },
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.000}°"
+    },
+    {
+      "InputId": "a8a4d660-7356-40de-8dc6-549a72b69973"/*ShowOriginal*/,
+      "Position": {
+        "X": -39.94302,
+        "Y": 386.02048
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "e0755f36-83a3-40ec-b3f0-45171aa56dcc"/*_ImageFxShaderSetup2*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 202.54338,
+        "Y": 197.32584
+      },
+      "Position": {
+        "X": 438.16678,
+        "Y": 135.56946
+      }
+    },
+    {
+      "ChildId": "c2951663-1f4b-495e-9f97-c68b333f13b0"/*Vector2Components*/,
+      "Position": {
+        "X": 159.7204,
+        "Y": 245.94528
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "ae9ebfa0-3528-489b-9c07-090f26dd6968"/*Output*/,
+      "Position": {
+        "X": 786.0802,
+        "Y": 238.57426
+      }
+    }
+  ]
+}

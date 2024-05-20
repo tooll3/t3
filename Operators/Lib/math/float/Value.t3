@@ -1,0 +1,13 @@
+{
+  "Name": "Value",
+  "Id": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

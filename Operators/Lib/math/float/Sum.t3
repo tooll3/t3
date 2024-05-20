@@ -1,0 +1,13 @@
+{
+  "Name": "Sum",
+  "Id": "2f851b5b-b66d-40b0-9445-e733dc4b907d",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "af4a49e6-1ecd-4e94-ae6d-fb5d2bc8430c"/*InputValues*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

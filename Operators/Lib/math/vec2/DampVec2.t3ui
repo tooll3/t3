@@ -1,0 +1,43 @@
+{
+  "Id": "fb801f10-8f84-4f69-9f7e-66cc7f6b7878"/*DampVec2*/,
+  "Description": "Damps (i.e. smoothens or filters) an incoming Vector2.\n\nOther damping functions: [Damp], [DampAngle], [DampVec3] and [DampFloatList].",
+  "InputUis": [
+    {
+      "InputId": "e5d132e7-018e-4b37-a49b-8274ac988311"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 469.0
+      },
+      "Description": "Input value to be dampened."
+    },
+    {
+      "InputId": "dc4a8e1c-9399-4e06-a3d8-168839085f02"/*Damping*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 379.0
+      },
+      "Description": "Amount of damping to apply.\nThe ideal setting for this depends on the range of the input values: Generally, lower damping works better with very large changes in value.",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "e5a9f11d-dc51-45bb-9ae0-3ddb6119527d"/*Method*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 424.0
+      },
+      "Description": "LinearInterpolation: Linear interpolate between the current and target value by the damping amount. Set Damping to 0 for no damping, and to 1 to freeze the current value (and never reach the target).\n\nDampedSpring: Uses a \"critically damped spring\" to provide very smooth interpolation that will never overshoot. For reference, this method is used by Unity's SmoothDamp method."
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a49381b7-f05b-48e6-9205-b10d81df9671"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

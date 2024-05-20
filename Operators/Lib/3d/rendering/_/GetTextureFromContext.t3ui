@@ -1,0 +1,24 @@
+{
+  "Id": "dee8f2de-5cbd-4ca7-9449-d6c74197546e"/*GetTextureFromContext*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "2986cf49-0ca3-46ce-8725-34f3c9d3c116"/*Id*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c7cac361-00d9-48d4-be48-311551f3d449"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

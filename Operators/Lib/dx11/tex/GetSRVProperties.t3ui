@@ -1,0 +1,31 @@
+{
+  "Id": "bc489196-9a30-4580-af6f-dc059f226da1"/*GetSRVProperties*/,
+  "Description": "Returns the properties of a ShaderResourceView.",
+  "InputUis": [
+    {
+      "InputId": "e79473f4-3fd2-467e-acda-b27ef7dae6a9"/*SRV*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "431b39fd-4b62-478b-bbfa-4346102c3f61"/*ElementCount*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "59c4fe70-9129-4bce-ba39-6d252a59fb97"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

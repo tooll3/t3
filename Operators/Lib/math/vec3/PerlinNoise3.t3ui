@@ -1,0 +1,89 @@
+{
+  "Id": "50aab941-0a29-474a-affd-13a74ea0c780"/*PerlinNoise3*/,
+  "Description": "Generates a continuously and randomly changing value in the predefined range based on Perlin Noise / Gradient Noise.\n\nUseful to create random looking animations e.g. flickering light, wind, fire, camshake, changing colors etc.\n\nThis creates PerlinNoise in 3 dimensions. See [PerlinNoise] and [PerlinNoise2] for Operators with less dimensions",
+  "InputUis": [
+    {
+      "InputId": "deddfbee-386d-4f8f-9339-ec6c01908a11"/*OverrideTime*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": -144.5552
+      }
+    },
+    {
+      "InputId": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": -54.555206
+      },
+      "GroupTitle": "Complexity",
+      "Min": 0.0,
+      "Max": 50.0
+    },
+    {
+      "InputId": "2693cb7d-33b3-4a0c-929f-e6911d2d4a0c"/*Octaves*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": -9.555206
+      }
+    },
+    {
+      "InputId": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 125.44479
+      },
+      "GroupTitle": "Output Range"
+    },
+    {
+      "InputId": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*AmplitudeXYZ*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 125.44479
+      }
+    },
+    {
+      "InputId": "b4b38d87-f661-4b8b-b978-70bf34152422"/*RangeMin*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 35.444794
+      },
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "5401e715-7a82-43ab-ba16-d0e55a1d83d4"/*RangeMax*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 80.44479
+      }
+    },
+    {
+      "InputId": "b7b95fc2-c73f-4db1-bdab-2445fe62f032"/*BiasAndGain*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 125.44479
+      },
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0,
+      "UseVec2Control": "BiasAndGain"
+    },
+    {
+      "InputId": "1cd2174e-aeb2-4258-8395-a9cc16f276b5"/*Seed*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": -99.55521
+      },
+      "GroupTitle": "Options"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "1666bc49-4dae-4cb0-900b-80b50f913117"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

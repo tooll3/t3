@@ -1,0 +1,26 @@
+{
+  "Name": "Trigger",
+  "Id": "0bec016a-5e1b-467a-8273-368d4d6b9935",
+  "Namespace": "lib.math.bool",
+  "Inputs": [
+    {
+      "Id": "e7c1f0af-da6d-4e33-ac86-7dc96bfe7eb3"/*BoolValue*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "6ad61e57-1073-483e-a0dd-96a9033aa39b"/*OnlyOnDown*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "fa14ac1d-3247-4d36-bc96-14ff7356720a"/*ColorInGraph*/,
+      "DefaultValue": {
+        "X": 0.53588516,
+        "Y": 0.53588516,
+        "Z": 0.53588516,
+        "W": 0.5885168
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

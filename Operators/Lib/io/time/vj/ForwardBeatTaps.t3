@@ -1,0 +1,25 @@
+{
+  "Name": "ForwardBeatTaps",
+  "Id": "79db48d8-38d3-47ca-9c9b-85dde2fa660d",
+  "Namespace": "lib.io.time.vj",
+  "Inputs": [
+    {
+      "Id": "89576f05-3f3d-48d1-ab63-f3c16c85db63"/*SubTree*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "37da48ac-a7c5-47c8-9fb3-82d4403b2ba0"/*TriggerBeatTap*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "58b6df86-b02e-4183-9b63-1033c9dff25f"/*TriggerResync*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "2e18ae65-044e-443d-9288-7a9bb6864514"/*SlideSyncTimeOffset*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

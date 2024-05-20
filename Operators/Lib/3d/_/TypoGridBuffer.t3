@@ -1,0 +1,57 @@
+{
+  "Name": "TypoGridBuffer",
+  "Id": "fa45d013-5a1c-45a0-9b05-a4a4edfb06f9",
+  "Namespace": "lib.3d._",
+  "Inputs": [
+    {
+      "Id": "86144b95-9272-4d02-a1a7-67c6544c3bb9"/*Height*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "00b52213-7d87-457a-8a17-f33d471cdafe"/*BufferSize*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
+    },
+    {
+      "Id": "e4aa7336-3d09-470e-b09c-352efbc706f3"/*CellSize*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "92985ef6-b9c1-4892-bb76-c9cbad69ec8a"/*CellPadding*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "e815d72e-1c71-42b7-a0a2-994c6e9f2954"/*Text*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "18b86e6a-3a7f-4fe4-9716-57ac19528cfd"/*TextCycle*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "1f34d82f-455e-4d6b-8c36-b058fbb5de3d"/*WrapText*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "a9a4470c-980c-4fff-936b-da0d28584e02"/*TextOffset*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "df1a4a1e-f1fb-4fb5-8416-422d224c3d23"/*HighlightCharacters*/,
+      "DefaultValue": ""
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,0 +1,21 @@
+{
+  "Name": "_ComputeLightOcclusions",
+  "Id": "de0e54c3-631b-4a01-a8a7-8cdff2e07e55",
+  "Namespace": "lib.3d.postfx",
+  "Inputs": [
+    {
+      "Id": "088ddcee-1407-4cd8-85bc-6704b8ea73b1"/*UpdateCommand*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "d2147f2d-04dd-47aa-8cab-5b588e178a1f"/*InputImage*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "2869e416-7d0b-4ef5-b25b-5794fd840848"/*LightIndex*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

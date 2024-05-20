@@ -1,0 +1,33 @@
+{
+  "Name": "RotateVector3",
+  "Id": "ce7c2103-3669-4c7a-ba61-a10428b9d467",
+  "Namespace": "lib.math.vec3",
+  "Inputs": [
+    {
+      "Id": "56229f73-cbe2-4279-a659-d70d32e0df59"/*VectorA*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "991f39df-e4c1-4d43-aa5b-09b223aa14d2"/*Angle*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "351b4e46-397d-41dd-ad89-6ce200e36e2d"/*Axis*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 1.0
+      }
+    },
+    {
+      "Id": "f23112f4-265a-4cca-9eea-d701d9fe447f"/*Scale*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

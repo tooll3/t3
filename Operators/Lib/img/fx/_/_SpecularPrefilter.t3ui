@@ -1,0 +1,80 @@
+{
+  "Id": "cc3cc712-9e87-49c6-b04b-49a12cf2ba75"/*_SpecularPrefilter*/,
+  "Description": "GGX prefiltering for input cubemap. Different roughness prefilterings are store in mip levels.",
+  "InputUis": [
+    {
+      "InputId": "9f7926aa-ac69-4963-af1d-342ad06fc278"/*CubeMap*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "d7c5e69e-9da0-44f1-baf7-a9d2a91ca41c"/*VertexShader*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "2a217f9d-2f9f-418a-8568-f767905384d5"/*GeometryShader*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "04d1b56f-8655-4d6c-9bdc-a84057a199d0"/*PixelShader*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "26459a4a-1bd8-4987-b41b-6c354cc48d47"/*ShaderResources*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "86d3eee1-a4b2-4f23-9c5e-39830c90d0da"/*Exposure*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
+    },
+    {
+      "InputId": "b994bff4-d1ac-4a30-a6dc-dc7bbe05d15d"/*SamplerStates*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
+      "InputId": "9d792412-d1f0-45f9-abd6-4eab79719924"/*UpdateLive*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      }
+    },
+    {
+      "InputId": "663be4f2-ae53-4a4f-a825-d4d8a30161ad"/*QualityFactor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "5dab6e1b-6136-45a9-bd63-1e18eafc20b7"/*FilteredCubeMap*/,
+      "Position": {
+        "X": 29.03888,
+        "Y": -147.24622
+      }
+    }
+  ]
+}

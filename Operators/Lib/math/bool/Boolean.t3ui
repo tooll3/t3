@@ -1,0 +1,33 @@
+{
+  "Id": "ed0f5188-8888-453e-8db4-20d87d18e9f4"/*Boolean*/,
+  "Description": "Defines a boolean value that can be true or false. Also offers a convenient toggle control in the graph.\nIf you give it an intance name, it'll appear on the operator. You can also change its color appearance.\n\nThis operator is also known as a toggle button in some other apps.",
+  "InputUis": [
+    {
+      "InputId": "e7c1f0af-da6d-4e33-ac86-7dc96bfe7eb3"/*BoolValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*ColorInGraph*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "97a91f72-1e40-412c-911e-70b142e16925"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

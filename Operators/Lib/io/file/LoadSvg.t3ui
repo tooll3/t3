@@ -1,0 +1,66 @@
+{
+  "Id": "e8d94dd7-eb54-42fe-a7b1-b43543dd457e"/*LoadSvg*/,
+  "Description": "Loads an SVG file as points so it can be rendered as points or lines. The supported SVG feature set is very basic, and depending on your exporting applications, elements could be missing or not correctly represented. Missing SVG features include: - Masking - Text - Fill - Effects - Stroke styles like dashes The \"ImportAs Lines\" mode inserts double points so closed shapes will be closed when rendering lines. To draw the SVG, you can convert the list to a GPU point buffer with [ListToBuffer] and then use [DrawLines]. Also see: [PrepareSvgLineTransition], [SvgLineTransitionExample]",
+  "InputUis": [
+    {
+      "InputId": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "FilePath",
+      "FileFilter": "svg files|*.svg"
+    },
+    {
+      "InputId": "c6692e97-e7f8-4b3f-95bc-5f86c2b399a5"/*Scale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Min": 0.0,
+      "Max": 1000.0,
+      "Scale": 0.001
+    },
+    {
+      "InputId": "4dfce92e-9282-486f-a274-e59402696bbb"/*CenterToBounds*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "221bf10c-b13e-40cf-80af-769c10a21c5b"/*ScaleToBounds*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "8d63c134-1257-4331-ae84-f5eb6dd66c13"/*ImportAs*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "2bb64740-ed2f-4295-923d-d585d70197e7"/*ReduceFactor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "Min": 0.01,
+      "Max": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e21e3843-7d63-4db2-9234-77664e872a0f"/*ResultList*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

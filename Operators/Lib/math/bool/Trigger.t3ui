@@ -1,0 +1,40 @@
+{
+  "Id": "0bec016a-5e1b-467a-8273-368d4d6b9935"/*Trigger*/,
+  "Description": "Returns a boolean that gets reset to false on the next frame.",
+  "InputUis": [
+    {
+      "InputId": "e7c1f0af-da6d-4e33-ac86-7dc96bfe7eb3"/*BoolValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "6ad61e57-1073-483e-a0dd-96a9033aa39b"/*OnlyOnDown*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "fa14ac1d-3247-4d36-bc96-14ff7356720a"/*ColorInGraph*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "2451ea62-9915-4ec1-a65e-4d44a3758fa8"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

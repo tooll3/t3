@@ -1,0 +1,51 @@
+{
+  "Id": "a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b"/*PickSDXVector4*/,
+  "Description": "A helper to access elements of a transform matrix stored in a Vector4[]",
+  "InputUis": [
+    {
+      "InputId": "0f9eebb0-6f13-4751-abac-15a467ad56c2"/*Input*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "dbc92e88-cae2-44a8-b291-1a6168624244"/*Index*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "b0a0dd4c-90bb-49e9-ba83-e96c3fab2929"/*Value1*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "c46bcd47-c620-4894-8e0d-9202c1790914"/*Value2*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "3349f39a-7980-4efd-849c-70a4c13d5177"/*Value3*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "c5ea9711-6326-4edc-932b-35fd11323e4f"/*Value4*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

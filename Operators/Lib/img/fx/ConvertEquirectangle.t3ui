@@ -1,0 +1,176 @@
+{
+  "Id": "c6014c28-c6ab-4b4e-b6bf-0cee92fb4b40"/*ConvertEquirectangle*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "57ce1074-7971-4542-95c8-86f58ed75c7d"/*Image*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "07d45e2f-75dd-455c-b8fe-b96ab2f830a2"/*Resolution*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "5b4054db-ab07-4d21-8bfd-3a490f3da760"/*AString*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 307.15845,
+        "Y": 380.2736
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 32.750793
+      }
+    },
+    {
+      "ChildId": "a625dbd9-566d-402d-8b49-11e6cf000ea7"/*PixelShaderFromSource*/,
+      "Position": {
+        "X": 704.79297,
+        "Y": 301.00003
+      }
+    },
+    {
+      "ChildId": "66ab2db8-7fb5-4453-b710-ef3b5bf5a9d8"/*VertexShader*/,
+      "Position": {
+        "X": 704.79297,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "f7925003-643a-4cf6-ba80-ccc2b3587482"/*RasterizerStateOp*/,
+      "Position": {
+        "X": 704.79297,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "03552ca5-1688-4409-86e2-4c25afa77841"/*SamplerStateOp*/,
+      "Position": {
+        "X": 704.79297,
+        "Y": 169.0
+      }
+    },
+    {
+      "ChildId": "56fd6fd1-2bc7-499b-8ced-10f49bfbed5b"/*Rasterizer*/,
+      "Position": {
+        "X": 854.79297,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "62aefa7d-1dd3-4751-b9b1-58e051e838f5"/*PixelShaderStage*/,
+      "Position": {
+        "X": 854.79297,
+        "Y": 169.0
+      }
+    },
+    {
+      "ChildId": "827259bc-0b49-4f3a-8b1c-d184cc9c2bf6"/*VertexShaderStage*/,
+      "Position": {
+        "X": 854.79297,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "c91db98c-bab0-4eef-9769-ac9f29b07012"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 854.79297,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "1661b612-46b7-404e-91bf-634e92d472ad"/*OutputMergerStage*/,
+      "Position": {
+        "X": 854.79297,
+        "Y": 473.00003
+      }
+    },
+    {
+      "ChildId": "fe3f79cf-1f34-438d-8c90-3549b999be2b"/*Execute*/,
+      "Position": {
+        "X": 1004.79297,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "6251edf0-5dfa-4eff-a438-090623aaaa4d"/*RenderTarget*/,
+      "Position": {
+        "X": 1154.793,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "6cb12968-a50e-4d8f-b0f5-496b1597ddb3"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 704.79297,
+        "Y": 364.00003
+      }
+    },
+    {
+      "ChildId": "c7abfd98-f433-4db5-b89f-25c0d002f904"/*Draw*/,
+      "Position": {
+        "X": 854.79297,
+        "Y": 562.0
+      }
+    },
+    {
+      "ChildId": "310fbcbd-97a2-4b74-a6c4-9b59e38d55c4"/*GetTextureSize*/,
+      "Position": {
+        "X": 554.79297,
+        "Y": 252.0
+      }
+    },
+    {
+      "ChildId": "032da9b2-a716-40ee-989c-84809a867071"/*ResolutionConstBuffer*/,
+      "Position": {
+        "X": 704.79297,
+        "Y": 212.0
+      }
+    },
+    {
+      "ChildId": "8663fdab-5ea0-472e-b280-3544c50180b9"/*UseFallbackTexture*/,
+      "Position": {
+        "X": 554.79297,
+        "Y": 430.00003
+      }
+    },
+    {
+      "ChildId": "703bd3fa-da60-4106-b9b0-960cf321606f"/*BlendStateOp*/,
+      "Position": {
+        "X": 704.79297,
+        "Y": 473.00003
+      }
+    },
+    {
+      "ChildId": "f565638b-e1f4-4144-9c99-2d9fce2b1c4f"/*RenderTargetBlendDesc*/,
+      "Position": {
+        "X": 552.2925,
+        "Y": 555.51575
+      }
+    },
+    {
+      "ChildId": "39dd9911-4bc3-415c-803f-2c4aa0691f24"/*LoadImage*/,
+      "Position": {
+        "X": 404.79297,
+        "Y": 364.00003
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "000b79eb-b390-4b6b-9fdc-b99f12bc308d"/*ColorBuffer*/,
+      "Position": {
+        "X": 1564.793,
+        "Y": 292.5
+      }
+    }
+  ]
+}

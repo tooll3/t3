@@ -1,0 +1,44 @@
+{
+  "Id": "09641970-b03a-431f-b3c6-5d8df824dde8"/*Texture3dComponents*/,
+  "Description": "description missing",
+  "InputUis": [
+    {
+      "InputId": "29ded573-c67a-4f19-a988-8cd6473c98a6"/*Input*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a3772275-af0b-48e6-a3f8-ecd7c4c6eda4"/*Texture*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "4f9b2aeb-9bfd-400b-8839-45bec3ce2543"/*ShaderResourceView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "45bef676-b9c1-45d2-964c-4a505471675b"/*UnorderedAccessView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "bc7cfc1c-db71-4fd4-ba37-ede980400aa1"/*RenderTargetView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

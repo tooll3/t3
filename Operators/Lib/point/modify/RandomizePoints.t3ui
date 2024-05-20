@@ -1,0 +1,245 @@
+{
+  "Id": "ec0675d7-6b72-4b15-b141-80bdd2367cd8"/*RandomizePoints*/,
+  "Description": "Smoothly randomizes various point attributes. It's an extremely versatile operator that provides a various options of applying the random modifications and can be smoothly animated.\n\nNote:  This is an updated version of [_RandomizePoints_Legacy1]. It supports phase seeds, colors, extends and different randomization methods and an improved BiasGain method.",
+  "InputUis": [
+    {
+      "InputId": "cb157c8e-98f1-46e9-b197-d17dea896e30"/*Points*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -530.5576,
+        "Y": 757.5355
+      }
+    },
+    {
+      "InputId": "82384eba-1d7a-41c8-a703-9184c961d766"/*Amount*/,
+      "Position": {
+        "X": -528.5664,
+        "Y": 886.51764
+      },
+      "GroupTitle": "Randomize",
+      "Min": 0.0,
+      "Max": 10.0,
+      "Format": "{0:0.000} ×"
+    },
+    {
+      "InputId": "270bcf23-35ee-4c4f-aae5-192435b1aee3"/*Position*/,
+      "Position": {
+        "X": -528.5664,
+        "Y": 931.51764
+      }
+    },
+    {
+      "InputId": "2cf68ba3-0665-43c8-88ab-64a9fb668ecc"/*Rotation*/,
+      "Position": {
+        "X": -528.5664,
+        "Y": 987.5176
+      },
+      "Min": -90.0,
+      "Max": 90.0,
+      "Scale": 0.1
+    },
+    {
+      "InputId": "e5b7c7b0-a207-44c2-b5d4-ef393c5dccb2"/*W*/,
+      "Position": {
+        "X": -526.3627,
+        "Y": 1062.1829
+      }
+    },
+    {
+      "InputId": "dd46595e-01e5-4616-9682-3a4eb7f63016"/*ColorHSB*/,
+      "Position": {
+        "X": -526.3627,
+        "Y": 1107.1829
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "1e2c9b94-b303-4454-ba08-5246c7336660"/*Stretch*/,
+      "Position": {
+        "X": -526.3627,
+        "Y": 1152.1829
+      }
+    },
+    {
+      "InputId": "4dffb439-da81-477c-8100-34a9ba59b0ee"/*RandomPhase*/,
+      "Position": {
+        "X": -528.21466,
+        "Y": 1269.0726
+      },
+      "GroupTitle": "Seed"
+    },
+    {
+      "InputId": "5282ad12-aacf-4a62-8fde-df0148ab0f1f"/*BiasAndGain*/,
+      "Position": {
+        "X": -533.79504,
+        "Y": 1404.0837
+      },
+      "GroupTitle": "Distribution",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000} ×",
+      "UseVec2Control": "BiasAndGain"
+    },
+    {
+      "InputId": "362fcd1a-444a-417b-b49f-ee1babaee998"/*UseSelection*/,
+      "Position": {
+        "X": -531.8203,
+        "Y": 1492.5273
+      }
+    },
+    {
+      "InputId": "9b4cc2f7-97f0-4b70-9773-d33ab4b893d1"/*OffsetMode*/,
+      "Position": {
+        "X": -542.2938,
+        "Y": 1563.6161
+      }
+    },
+    {
+      "InputId": "f06e85cc-a9b7-44c6-9f77-28c422db9f41"/*Space*/,
+      "Position": {
+        "X": -542.2938,
+        "Y": 1608.6161
+      }
+    },
+    {
+      "InputId": "0ee3b20d-b11b-4009-b1e4-ba35c1050252"/*Interpolation*/,
+      "Position": {
+        "X": -542.2938,
+        "Y": 1653.6161
+      }
+    },
+    {
+      "InputId": "e86074d8-f77f-4716-9eb9-bb3948c21e68"/*Repeat*/,
+      "Position": {
+        "X": -542.2938,
+        "Y": 1698.6161
+      }
+    },
+    {
+      "InputId": "002e8e48-2eb3-4450-aa37-e539f1157600"/*ClampColorsEtc*/,
+      "Position": {
+        "X": -542.2938,
+        "Y": 1743.6161
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "3893bec3-9d60-4d5f-866d-88f82f3b533a"/*ComputeShader*/,
+      "Position": {
+        "X": -196.98376,
+        "Y": 661.37665
+      }
+    },
+    {
+      "ChildId": "40c3d6ad-5b01-479d-9d7e-801c887bcca8"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 199.4545,
+        "Y": 634.2387
+      }
+    },
+    {
+      "ChildId": "afaf2228-cf7f-4ab4-97b1-0d7c4a13b231"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 10.822624,
+        "Y": 851.9973
+      }
+    },
+    {
+      "ChildId": "f504d6a0-6569-4166-adea-4a8de5d6ef33"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 369.65942,
+        "Y": 693.23505
+      }
+    },
+    {
+      "ChildId": "fee0f89f-a3bd-4dca-bcb6-247d6f3528f5"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 5.618538,
+        "Y": 687.72864
+      }
+    },
+    {
+      "ChildId": "84a97ec8-5f05-4b37-a0b8-045ff05590de"/*Vector3Components*/,
+      "Position": {
+        "X": -398.5664,
+        "Y": 931.51764
+      }
+    },
+    {
+      "ChildId": "4d30579c-4ba6-4fcb-86f8-250736c821fd"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": -153.2356,
+        "Y": 824.69165
+      }
+    },
+    {
+      "ChildId": "78cb0c2e-41d9-4587-8a5c-b15b60112547"/*GetBufferComponents*/,
+      "Position": {
+        "X": -379.90247,
+        "Y": 753.65216
+      }
+    },
+    {
+      "ChildId": "39853341-b0da-4356-84fd-5359b8fc685a"/*GetBufferComponents*/,
+      "Position": {
+        "X": 10.822624,
+        "Y": 795.9973
+      }
+    },
+    {
+      "ChildId": "adc58824-0f14-4ffa-80e8-57ad9ab9adb8"/*Vector3Components*/,
+      "Position": {
+        "X": -398.5664,
+        "Y": 987.5176
+      }
+    },
+    {
+      "ChildId": "a26813c5-d026-49b7-9015-66613b9a3c09"/*IntsToBuffer*/,
+      "Position": {
+        "X": 16.642944,
+        "Y": 1575.6836
+      }
+    },
+    {
+      "ChildId": "f4815e54-b64c-403e-9d62-1f11bc453fe4"/*Vector3Components*/,
+      "Position": {
+        "X": -376.36267,
+        "Y": 1163.1829
+      }
+    },
+    {
+      "ChildId": "a7c0b8fd-c4bc-4733-acc9-9b4d187e8a87"/*Vector4Components*/,
+      "Position": {
+        "X": -376.36267,
+        "Y": 1107.1829
+      }
+    },
+    {
+      "ChildId": "8f6a43bc-9b55-487e-a279-83d4f10ea25e"/*Vector2Components*/,
+      "Position": {
+        "X": -383.79504,
+        "Y": 1404.0837
+      }
+    },
+    {
+      "ChildId": "74a14f7f-fe23-4a1a-8e93-09c7a31f4138"/*BoolToInt*/,
+      "Position": {
+        "X": -176.71204,
+        "Y": 1777.1062
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "172dcbd2-a475-4514-8620-38f07a0ea4aa"/*Output*/,
+      "Position": {
+        "X": 499.6593,
+        "Y": 693.23505
+      }
+    }
+  ]
+}

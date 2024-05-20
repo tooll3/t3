@@ -1,0 +1,20 @@
+{
+  "Name": "Vec2ToVec3",
+  "Id": "b732a668-8994-4f34-ab96-5245d355e33f",
+  "Namespace": "lib.math.vec2",
+  "Inputs": [
+    {
+      "Id": "a71e7512-08ac-40b4-abdc-5b0835472e7f"/*XY*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "f1e036d8-61bc-4fdc-bb87-5a8a27982d65"/*Z*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

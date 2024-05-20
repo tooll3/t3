@@ -1,0 +1,17 @@
+{
+  "Name": "IntToString",
+  "Id": "416a1c8d-4143-4de7-bcf9-466c4009112a",
+  "Namespace": "lib.string",
+  "Inputs": [
+    {
+      "Id": "3c1a8975-ab27-40b3-9fee-7de38643294a"/*Value*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "a9dd6368-455d-4b1d-8685-02d8f7640ecf"/*Format*/,
+      "DefaultValue": "{0:0}"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

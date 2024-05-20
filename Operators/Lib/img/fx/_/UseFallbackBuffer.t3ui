@@ -1,0 +1,30 @@
+{
+  "Id": "49549c3e-b09e-4633-86c6-1ac075f56b69"/*UseFallbackBuffer*/,
+  "Description": "Uses a fallback buffer if the primary input is not connected or not initialized. \nThis",
+  "InputUis": [
+    {
+      "InputId": "7246fa40-3106-4d60-ab2c-5e913f3a9648"/*PrimaryBuffer*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "9904bd42-cbe5-4f83-aab0-4973e1cbcbf8"/*Fallback*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ef014ae5-962f-4a7b-9dcb-9e26863dd074"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

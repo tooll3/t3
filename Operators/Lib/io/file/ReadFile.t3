@@ -1,0 +1,17 @@
+{
+  "Name": "ReadFile",
+  "Id": "5f71d2f8-98c8-4502-8f40-2ea4a1e18cca",
+  "Namespace": "lib.io.file",
+  "Inputs": [
+    {
+      "Id": "24b7e7e1-fe0b-46be-807e-0afacd4800f9"/*FilePath*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "5c6241f7-6a4f-4972-a314-98fd070f91dd"/*TriggerUpdate*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

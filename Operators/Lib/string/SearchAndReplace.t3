@@ -1,0 +1,21 @@
+{
+  "Name": "SearchAndReplace",
+  "Id": "b7910fc6-c3b2-4daf-93cd-010dcfe22a57",
+  "Namespace": "lib.string",
+  "Inputs": [
+    {
+      "Id": "3ca66cbd-a16a-479c-b858-84732e5023ad"/*OriginalString*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "4fe3f641-1c36-4970-be71-dafb5632fb53"/*SearchPattern*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "de8297ae-c7d8-414a-8825-d0ff9c2e3d78"/*Replace*/,
+      "DefaultValue": ""
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

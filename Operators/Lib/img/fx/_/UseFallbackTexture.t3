@@ -1,0 +1,17 @@
+{
+  "Name": "UseFallbackTexture",
+  "Id": "b470fdf9-ac0b-4eb9-9600-453b8c094e3f",
+  "Namespace": "lib.img.fx._",
+  "Inputs": [
+    {
+      "Id": "91bffbba-b815-44d7-8f93-3238376935bf"/*TextureA*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "38b478fa-c431-4dc1-80ef-d6c53c90389e"/*Fallback*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,0 +1,80 @@
+{
+  "Id": "a9e77500-ccb5-45b9-9f17-0d9bf9b58fb5"/*SoundTrackLevels*/,
+  "Description": "This operator has been deprecated.\n\nIt uses a save JSON export of soundtrack levels to scan for beats.\n\nConsider using [AudioReaction]",
+  "InputUis": [
+    {
+      "InputId": "839bab2b-440f-40e9-a670-723f2a684aa9"/*FilePath*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "FilePath"
+    },
+    {
+      "InputId": "4ef9500a-daa4-4979-a03c-306e8e56c2f1"/*Threshold*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "ca11288e-e040-4ed6-bcf4-402b7214861a"/*Smooth*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "b51ef02f-c91b-4fa4-b8a1-2b660cef5f5e"/*BeatTimeMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "9b510876-f2a4-49f1-acd2-8cefb5662a2a"/*FlashDecay*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "ae5d1534-7a35-4148-88bd-db2e353d5fc1"/*MinTimeBetweenPeaks*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "cfad7cde-8e78-4983-924a-0a50f15ef747"/*Level*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "39ea5257-d6f3-4ccf-b03e-17d98c1e192f"/*BeatIndex*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "49f89288-3066-4282-8e8d-0828d814a599"/*BeatTime*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "409d628f-2cbe-4bb1-9937-b78203e68489"/*Loudness*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

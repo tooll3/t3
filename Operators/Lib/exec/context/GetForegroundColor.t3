@@ -1,0 +1,8 @@
+{
+  "Name": "GetForegroundColor",
+  "Id": "6c1271a0-058f-4ff0-940b-f196e5debdf7",
+  "Namespace": "lib.exec.context",
+  "Inputs": [],
+  "Children": [],
+  "Connections": []
+}

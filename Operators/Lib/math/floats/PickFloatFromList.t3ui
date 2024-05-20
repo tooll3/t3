@@ -1,0 +1,31 @@
+{
+  "Id": "0841cdd4-0106-4f4e-826b-8de23bb5b5f0"/*PickFloatFromList*/,
+  "Description": "Picks a float value from the connected float list.\nAlso see [PickFloat].",
+  "InputUis": [
+    {
+      "InputId": "329ba6a4-5b84-43fc-8899-0c04465844da"/*Input*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "2f87e21a-a1bd-4e2a-948c-2fa35245998d"/*Index*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ec2286af-3ee0-4af0-aa23-272d4b3710e0"/*Selected*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

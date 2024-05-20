@@ -1,0 +1,27 @@
+{
+  "Name": "ScaleResolution",
+  "Id": "eb818dd0-0c9c-40ee-b76e-2148f958b987",
+  "Namespace": "lib.math.int2",
+  "Inputs": [
+    {
+      "Id": "266b57dc-26b5-4267-854d-a8e1a25cf29c"/*Resolution*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
+    },
+    {
+      "Id": "94703070-18a3-41a7-b8e7-53d6e24d84cf"/*Factor*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "d14b7c37-e012-4659-98e9-226ab97291be"/*ClampToValidTextureSize*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

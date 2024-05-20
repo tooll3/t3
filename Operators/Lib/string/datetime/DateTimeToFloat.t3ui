@@ -1,0 +1,38 @@
+{
+  "Id": "10acf0aa-2cb3-446b-b837-b6abe24d44da"/*DateTimeToFloat*/,
+  "Description": "Converts a DateTime into different float values like normalized time of day (between 0 ... 1), day of the year, etc.",
+  "InputUis": [
+    {
+      "InputId": "7b432357-225c-499e-9109-61168b4be4a7"/*Value*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "5d9065a3-a124-4261-b5a9-25d969e30f73"/*OutputMapping*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "ec1a2e0c-4c65-45e8-bfac-fae10cf3a717"/*HourOffset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e07dc943-b32b-4037-9e84-0e50b4b67d05"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

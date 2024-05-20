@@ -1,0 +1,320 @@
+{
+  "Id": "ffd94e5a-bc98-4e70-84d8-cce831e6925f"/*DrawPoints*/,
+  "Description": "Draws a point buffer with the set camera, transform, and fog. The points are drawn as camera-facing billboards, ignoring the point orientation. The W attribute of the points is used for scaling. This can be controlled with the UseWForSize parameter.\n\nYou can connect a texture to override the round shape.\n\nThere are many Operators allowing you to create and manipulate point buffers in countless ways. Please have a look at the examples listed below.\n\nFor additional effects, you can experiment with different blend modes or disable depth testing. Note, however, that the points are drawn in the order they are defined in the buffer and not sorted by distance to the camera. This can introduce unwanted artifacts with transparent blending.\n\nAlthough drawing points is fast, drawing very large points can lead to high fill rates and can drastically impact render performance.\n\nSome notes regarding the size: For historic reasons we apply a 1/10 factor on the size: A point with W=1 will have a radius of 0.01 world units. So a scale of 5 draws a point with a 1 unit diameter.\n\n\nAlso see: [HowToDrawThings], [HowToUsePoints], [DrawLines], [DrawRibbons].\nFor a Operator with more Options see [DrawBillboards].",
+  "InputUis": [
+    {
+      "InputId": "5df18658-ef86-4c0f-8bb4-4ac3fbbf9a33"/*GPoints*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 610.5747,
+        "Y": 3899.9446
+      },
+      "Description": "Input for Points"
+    },
+    {
+      "InputId": "cc442161-e9ca-40ea-be3b-f87189d4e155"/*Color*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4164.768
+      },
+      "Description": "Defines the color of the Points.\nIf a Texture is used this color will be multiplied.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4209.768
+      },
+      "Description": "Defines the size of the Points",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 0.5
+    },
+    {
+      "InputId": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4254.768
+      },
+      "Description": "Defines whether the \"W\" value of the Gpoints used has an influence on the size of the rendered Points"
+    },
+    {
+      "InputId": "8fab9161-48d4-43b0-a18f-5942b7071a49"/*BlendMode*/,
+      "Position": {
+        "X": 605.939,
+        "Y": 4315.253
+      },
+      "GroupTitle": "Draw options",
+      "Description": "Defines the Blendmode."
+    },
+    {
+      "InputId": "3fbad175-6060-40f2-a675-bdae20107698"/*FadeNearest*/,
+      "Position": {
+        "X": 610.02814,
+        "Y": 4361.2554
+      },
+      "Description": "Points closer to the camera Fade out."
+    },
+    {
+      "InputId": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
+      "Position": {
+        "X": 610.02814,
+        "Y": 4406.2554
+      },
+      "Description": "Defines whether Points cover themselves or are covered by or covers other 3D elements.",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
+      "Position": {
+        "X": 610.02814,
+        "Y": 4451.2554
+      },
+      "Description": "Defines whether Points cover themselves or are covered by or covers other 3D elements."
+    },
+    {
+      "InputId": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"/*Texture_*/,
+      "Position": {
+        "X": 606.9613,
+        "Y": 4603.536
+      },
+      "Description": "Input for a Texturemap",
+      "AddPadding": "True"
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "5d56ca7d-23e8-4ae6-9f7b-6ea1e6d1bdc6"/*TransformsConstBuffer*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1852.2701,
+        "Y": 3831.2249
+      }
+    },
+    {
+      "ChildId": "dbc238da-63e9-4af5-9559-1c8953f202f7"/*VertexShader*/,
+      "Position": {
+        "X": 1852.2701,
+        "Y": 3788.2249
+      }
+    },
+    {
+      "ChildId": "4544a16b-5491-4caf-be39-ffd86ee73871"/*RasterizerStateOp*/,
+      "Position": {
+        "X": 2114.5088,
+        "Y": 4139.006
+      }
+    },
+    {
+      "ChildId": "d8abd2d6-a08f-4ace-861f-87998df45a5e"/*PixelShader*/,
+      "Position": {
+        "X": 1921.5166,
+        "Y": 4202.8975
+      }
+    },
+    {
+      "ChildId": "5646ba88-44b3-4cc8-943f-ce8b9bb1c82c"/*Rasterizer*/,
+      "Position": {
+        "X": 2264.5088,
+        "Y": 4139.006
+      }
+    },
+    {
+      "ChildId": "89a2bd74-7948-4b96-acd7-d995480656ac"/*PixelShaderStage*/,
+      "Position": {
+        "X": 2304.508,
+        "Y": 3443.0962
+      }
+    },
+    {
+      "ChildId": "eef93a22-38e7-4d7a-9431-f79c26affeba"/*VertexShaderStage*/,
+      "Position": {
+        "X": 2052.5376,
+        "Y": 3497.678
+      }
+    },
+    {
+      "ChildId": "189f0dfa-7c6d-41e9-9aac-8676f18a4e50"/*InputAssemblerStage*/,
+      "Position": {
+        "X": 2139.7566,
+        "Y": 3777.9434
+      }
+    },
+    {
+      "ChildId": "897c5510-e5d3-4852-8d65-9fb626b6d96c"/*SamplerStateOp*/,
+      "Position": {
+        "X": 1918.6431,
+        "Y": 4318.739
+      }
+    },
+    {
+      "ChildId": "083217bb-8b1c-4fa0-8160-06fa4560198b"/*Execute*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 81.28825,
+        "Y": 890.9817
+      },
+      "Position": {
+        "X": 2441.5234,
+        "Y": 3702.3064
+      }
+    },
+    {
+      "ChildId": "f7eae62c-4c2e-4b9c-b5c5-746fac519ce1"/*Vector4Components*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 111.079544,
+        "Y": 59.905018
+      },
+      "Position": {
+        "X": 1466.085,
+        "Y": 4098.1055
+      }
+    },
+    {
+      "ChildId": "69ca6de5-7000-49b3-88ac-3d30c752f00f"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 125.808426,
+        "Y": 241.31604
+      },
+      "Position": {
+        "X": 1658.2855,
+        "Y": 4065.7842
+      }
+    },
+    {
+      "ChildId": "debe7b54-4e22-4bda-8f7c-b24c7051c233"/*TimeConstBuffer*/,
+      "Position": {
+        "X": 1852.2701,
+        "Y": 3874.2249
+      }
+    },
+    {
+      "ChildId": "0f882c2c-b1ec-420a-ac13-a2921ea624e6"/*Draw*/,
+      "Position": {
+        "X": 2039.7183,
+        "Y": 4571.755
+      }
+    },
+    {
+      "ChildId": "f71b2d3c-cd93-4fd6-80c4-a0edec63e9d9"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 1291.7802,
+        "Y": 4565.558
+      }
+    },
+    {
+      "ChildId": "a3aa886e-23a4-417b-804d-5edcf9989e85"/*UseFallbackTexture*/,
+      "Position": {
+        "X": 1141.7802,
+        "Y": 4565.558
+      }
+    },
+    {
+      "ChildId": "b736fed6-9c87-4d4f-9b56-3f00fd9b5a80"/*PickBlendMode*/,
+      "Position": {
+        "X": 1999.4204,
+        "Y": 4515.408
+      }
+    },
+    {
+      "ChildId": "fb23259d-cbf0-4f1c-aa57-8d6305f6bfce"/*MultiplyInt*/,
+      "Position": {
+        "X": 1909.7183,
+        "Y": 4571.755
+      }
+    },
+    {
+      "ChildId": "52e766f8-b68e-4c3a-9c99-f8e5fcf42092"/*IntToFloat*/,
+      "Position": {
+        "X": 1468.5548,
+        "Y": 4240.544
+      }
+    },
+    {
+      "ChildId": "c798588d-7e91-4dda-a644-9e012191f177"/*GetBufferComponents*/,
+      "Position": {
+        "X": 1105.2336,
+        "Y": 3845.1238
+      }
+    },
+    {
+      "ChildId": "5ce3570b-ecb6-4bbf-acff-a48a4dd45a4b"/*ContextCBuffers*/,
+      "Position": {
+        "X": 1852.2701,
+        "Y": 3917.2249
+      }
+    },
+    {
+      "ChildId": "c9dc53d5-27c6-464e-8ecb-2a9b93f4a398"/*OutputMergerStage*/,
+      "Position": {
+        "X": 2152.005,
+        "Y": 4456.2124
+      }
+    },
+    {
+      "ChildId": "02cb87a0-3250-45dd-bc1e-0f1bd902be9c"/*BoolToFloat*/,
+      "Position": {
+        "X": 1468.5548,
+        "Y": 4296.544
+      }
+    },
+    {
+      "ChildId": "ce29ae17-be5c-4d16-9e3d-49971fc74167"/*LoadImage*/,
+      "Position": {
+        "X": 910.15625,
+        "Y": 4626.4653
+      }
+    },
+    {
+      "ChildId": "847987c5-a576-4081-9579-a24af0f29a6b"/*DepthStencilStateOp*/,
+      "Position": {
+        "X": 1999.4204,
+        "Y": 4446.408
+      }
+    },
+    {
+      "ChildId": "5d12754c-546c-4d1e-bcbb-3f1dd9a8fd2a"/*BoolToFloat*/,
+      "Position": {
+        "X": 1252.2148,
+        "Y": 4791.9507
+      }
+    },
+    {
+      "ChildId": "fd0b19bc-ffcc-436f-800b-f934f82a0423"/*BlendColors*/,
+      "Position": {
+        "X": 1126.8871,
+        "Y": 4039.9224
+      }
+    },
+    {
+      "ChildId": "43937000-6623-4ae7-b4c3-e4ddeabe2a71"/*GetForegroundColor*/,
+      "Position": {
+        "X": 1002.66223,
+        "Y": 4105.8643
+      }
+    },
+    {
+      "ChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93"/*SetPixelAndVertexShaderStage*/,
+      "Position": {
+        "X": 2261.624,
+        "Y": 3877.5342
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "b73347d9-9d9f-4929-b9df-e2d6db722856"/*Output*/,
+      "Position": {
+        "X": 2662.6118,
+        "Y": 4184.992
+      }
+    }
+  ]
+}

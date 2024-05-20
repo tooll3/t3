@@ -1,0 +1,143 @@
+{
+  "Id": "7ad3a38a-9f04-43ba-a16f-6982b87dd2d4"/*AnalyzeBuffers*/,
+  "Description": "An internal operator that generates counts that can be used to combine multiple GPU buffers into a new buffer.",
+  "InputUis": [
+    {
+      "InputId": "c8a5769e-2536-4caa-8380-22fbeed1ef12"/*Input*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "bf9c64ac-39b5-41c0-a896-84809b12fff6"/*Index*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "d8064b98-7df5-4c8b-95df-ef528c0a1946"/*ComputeShader*/,
+      "Position": {
+        "X": 122.01576,
+        "Y": 552.8011
+      }
+    },
+    {
+      "ChildId": "673c8e24-f848-4e3e-b571-5aaa850a0e81"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 471.04163,
+        "Y": 587.7994
+      }
+    },
+    {
+      "ChildId": "ed575b0a-6b9a-48a5-ae8b-f3e4a8e2a280"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 138.28679,
+        "Y": 135.58852
+      },
+      "Position": {
+        "X": 82.63007,
+        "Y": 908.67883
+      }
+    },
+    {
+      "ChildId": "107f335b-365a-4de4-b5bb-46d2f5762039"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 641.2465,
+        "Y": 646.7957
+      }
+    },
+    {
+      "ChildId": "4067fd61-48cd-41e5-a450-4a4f6ce3a363"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 273.14893,
+        "Y": 590.2168
+      }
+    },
+    {
+      "ChildId": "c181554e-709a-4997-80f7-c23152cf5dbc"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 77.5927,
+        "Y": 799.58417
+      }
+    },
+    {
+      "ChildId": "b2c5e46f-39cf-4d9a-9b14-30c84296745c"/*GetBufferComponents*/,
+      "Position": {
+        "X": -213.77097,
+        "Y": 700.4401
+      }
+    },
+    {
+      "ChildId": "e6e22e9c-41b9-4467-836d-8479b84452e4"/*GetBufferComponents*/,
+      "Position": {
+        "X": 273.14893,
+        "Y": 659.2168
+      }
+    },
+    {
+      "ChildId": "232fed4b-36b1-4aed-bfa4-e1f0f3341af6"/*IntToFloat*/,
+      "Position": {
+        "X": -47.369926,
+        "Y": 908.67883
+      }
+    },
+    {
+      "ChildId": "eb4b0789-e6a7-46ac-9670-6ca1ae4d72f7"/*ClampInt*/,
+      "Position": {
+        "X": -182.01859,
+        "Y": 759.8851
+      }
+    },
+    {
+      "ChildId": "cd9015aa-2e0a-4bf9-b5e8-97b6e3709982"/*IntToFloat*/,
+      "Position": {
+        "X": -46.684986,
+        "Y": 1006.406
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "0702a722-0b93-4840-9abd-f8ee348c3647"/*TotalSize*/,
+      "Position": {
+        "X": 771.2465,
+        "Y": 946.7957
+      }
+    },
+    {
+      "OutputId": "4906b2ce-7aaf-4025-b48e-49e6d660c13b"/*BufferCount*/,
+      "Position": {
+        "X": 771.2465,
+        "Y": 1046.7957
+      }
+    },
+    {
+      "OutputId": "5638e071-a0a7-4ee2-aa04-9b651821bebb"/*SelectedBuffer*/,
+      "Position": {
+        "X": 771.2465,
+        "Y": 1146.7957
+      }
+    },
+    {
+      "OutputId": "d7bbd6d5-57eb-4c3a-8c84-e497e490af83"/*StartPositionForSelected*/,
+      "Position": {
+        "X": 771.2465,
+        "Y": 1246.7957
+      }
+    },
+    {
+      "OutputId": "79fe54be-6841-4f4d-8216-0fa26ff21f21"/*Stride*/,
+      "Position": {
+        "X": 771.2465,
+        "Y": 1346.7957
+      }
+    }
+  ]
+}

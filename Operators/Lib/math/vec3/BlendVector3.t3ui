@@ -1,0 +1,30 @@
+{
+  "Id": "fc201df2-8b05-4567-9f24-0d9128aa8507"/*BlendVector3*/,
+  "Description": "Blends (lerps) two vectors.\n\nAlso see [LerpVec3]",
+  "InputUis": [
+    {
+      "InputId": "83c7b887-e1af-4b9f-ad2f-469867940bda"/*Vectors*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "f5f12cf3-5750-4a3c-807e-9da29f950c29"/*F*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a24028c7-5611-4f86-9580-b8d9ddf2ca25"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

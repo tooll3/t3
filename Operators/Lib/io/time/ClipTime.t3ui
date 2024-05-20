@@ -1,0 +1,14 @@
+{
+  "Id": "83b8fc42-a200-4c3d-85dc-035b4f478069"/*ClipTime*/,
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "3d9050a0-5688-4315-a6a4-fd8f1613eae2"/*Time*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "Id": "9a34f503-709b-42e0-a25f-bc74573afa6b"/*IsIntEven*/,
+  "Description": "Checks whether the incoming or defined Integer is Odd or Even and gives out a bool accordingly\n\nCan be combined with [IntValue] and [Boolean] to visualize",
+  "InputUis": [
+    {
+      "InputId": "c5703990-1062-4512-b016-74ae1cce538a"/*Value*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "b69bc0ba-010d-4268-93f4-d5f682af00d5"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

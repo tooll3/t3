@@ -1,0 +1,51 @@
+{
+  "Id": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7"/*StructuredBufferWithViews*/,
+  "Description": "Generates a GPU buffer with optional shader resource view and unordered access view. This 'BufferWithView' type makes it easier to use the buffer without generating new shader resource views.\n\nYou can access the views with [GetBufferComponents].",
+  "InputUis": [
+    {
+      "InputId": "16f98211-fe97-4235-b33a-ddbbd2b5997f"/*Count*/,
+      "Position": {
+        "X": 28.028454,
+        "Y": 63.88211
+      }
+    },
+    {
+      "InputId": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
+      "Position": {
+        "X": 28.028454,
+        "Y": 63.88211
+      }
+    },
+    {
+      "InputId": "bb5fa9b9-1155-47f5-9ed5-7832826f3df2"/*CreateSrv*/,
+      "Position": {
+        "X": 28.028454,
+        "Y": 108.88211
+      }
+    },
+    {
+      "InputId": "dd0db46d-a6a0-4d84-9dd4-ab805e2197fb"/*CreateUav*/,
+      "Position": {
+        "X": 28.028454,
+        "Y": 153.88211
+      }
+    },
+    {
+      "InputId": "43c2b314-4809-4022-9b07-99965e5c1a7a"/*BufferFlags*/,
+      "Position": {
+        "X": 28.028454,
+        "Y": 198.88211
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c997268d-6709-49de-980e-64d7a47504f7"/*BufferWithViews*/,
+      "Position": {
+        "X": 173.02592,
+        "Y": 86.64038
+      }
+    }
+  ]
+}

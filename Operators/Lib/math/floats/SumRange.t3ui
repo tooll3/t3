@@ -1,0 +1,37 @@
+{
+  "Id": "d3a19896-230f-458f-b4ba-e448f63f0d51"/*SumRange*/,
+  "Description": "Takes a <FloatList> and sums up the values of the given index range' limits.\nThis can be useful for beat detection on an FFT analysis.\nAlso see [SoundInput], [DetectBpm], [DampPeakDecay].",
+  "InputUis": [
+    {
+      "InputId": "865d1fd4-b225-4651-bc01-c43f071b8b42"/*LowerLimit*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "646e17f6-5a98-42c7-8d3b-26ccb02d3e68"/*UpperLimit*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "056eba13-3ea9-4d0f-a45d-fce1ffaf403c"/*Input*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "3bfdd07b-8212-424d-b449-f7b87551410f"/*Selected*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

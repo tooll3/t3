@@ -1,0 +1,33 @@
+{
+  "Name": "SplinePoints",
+  "Id": "edecd98f-209b-423d-8201-0fd7d590c4cf",
+  "Namespace": "lib.dx11.buffer",
+  "Inputs": [
+    {
+      "Id": "88ab4088-efa9-42b7-afe9-d44a2ff6e58a"/*SampleCount*/,
+      "DefaultValue": 100
+    },
+    {
+      "Id": "a438a275-7633-4502-9718-e548bb0ce4de"/*PreSampleSteps*/,
+      "DefaultValue": 40
+    },
+    {
+      "Id": "336f26e1-853f-41a3-afe0-e2402a9d7452"/*UpVector*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 1.0
+      }
+    },
+    {
+      "Id": "2ab21e92-6838-4ac7-8d10-6f8b3c8b5612"/*Curvature*/,
+      "DefaultValue": 4.0
+    },
+    {
+      "Id": "02968cef-1a5e-4a7f-b451-b692f4c9b6ab"/*Points*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

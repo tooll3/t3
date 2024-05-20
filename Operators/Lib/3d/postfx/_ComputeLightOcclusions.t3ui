@@ -1,0 +1,39 @@
+{
+  "Id": "de0e54c3-631b-4a01-a8a7-8cdff2e07e55"/*_ComputeLightOcclusions*/,
+  "Description": "Internal operator that converts GPU data for point light occlusion.",
+  "InputUis": [
+    {
+      "InputId": "088ddcee-1407-4cd8-85bc-6704b8ea73b1"/*UpdateCommand*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "d2147f2d-04dd-47aa-8cab-5b588e178a1f"/*InputImage*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "2869e416-7d0b-4ef5-b25b-5794fd840848"/*LightIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d6a7b2cf-740e-4b52-8bb2-bc786f2c39ab"/*Output*/,
+      "Position": {
+        "X": -64.1279,
+        "Y": 161.41205
+      }
+    }
+  ]
+}

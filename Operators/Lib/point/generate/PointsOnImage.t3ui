@@ -1,0 +1,403 @@
+{
+  "Id": "722e79cc-47bc-42cc-8fce-2e06f36f8caa"/*PointsOnImage*/,
+  "Description": "Uses the image brightness to emit points.\n\nWARNING: this is extremely slow for high resolution. We recommend setting fixed resolutions like 512x512px.",
+  "InputUis": [
+    {
+      "InputId": "065bb5be-e5ee-4ed6-8521-a0969fcb6f4f"/*IsEnabled*/,
+      "Position": {
+        "X": -1251.6332,
+        "Y": 804.2572
+      },
+      "Description": "In certain situation it you an save resources by disabling update.\nE.g. you could use [Once] on only compute a single distribution of Image and Seed do not change."
+    },
+    {
+      "InputId": "5c7e5e27-2eb8-4933-97cb-fc49d576d625"/*Count*/,
+      "Position": {
+        "X": -1251.6332,
+        "Y": 849.2572
+      },
+      "Description": "The counts of emitted points. Note that the resolution of the connected image has larger impact on performance than the number of points. "
+    },
+    {
+      "InputId": "effde91f-2cbc-4400-b1fb-17677c538fe6"/*BiasAndGain*/,
+      "Position": {
+        "X": -1229.6033,
+        "Y": 1463.8694
+      },
+      "Description": "Applies bias and gain before sampling the image. This can be useful to increase the contrast of the distribution.",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
+    },
+    {
+      "InputId": "71d1e34f-bf8c-4e24-87b2-177bb3249b12"/*ScatterWithinPixel*/,
+      "Position": {
+        "X": -1229.6033,
+        "Y": 1508.8694
+      },
+      "Description": "On images with very small resolution the pixels can be become noticible. This parameter scatters the points with the pixels.\nValues larger than one add an additional scattering."
+    },
+    {
+      "InputId": "db2ccacc-8fcd-4567-b83a-d8954dc6c217"/*ApplyColorToPoints*/,
+      "Position": {
+        "X": -1236.3203,
+        "Y": 1633.6984
+      },
+      "Description": "Samples the image color (including alpha) to the Point attribute. If disabled, points will be white."
+    },
+    {
+      "InputId": "19db4357-97ae-4e83-8464-4e4cf9182bdb"/*Seed*/,
+      "Position": {
+        "X": -1255.3143,
+        "Y": 1920.4591
+      },
+      "GroupTitle": "Options",
+      "Description": "A random seed. Consider connecting [CountInt] to add a animated dithering."
+    },
+    {
+      "InputId": "5184f2ec-4f91-4dd2-9872-d9ad8d4e5d92"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -1273.5485,
+        "Y": 2372.6665
+      }
+    },
+    {
+      "InputId": "1d0e573e-f733-4715-afe3-f96950f29aa4"/*ColorWeight*/,
+      "Position": {
+        "X": -1273.5485,
+        "Y": 2417.6665
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "9cfdd6b7-fb67-4b45-a87b-95a7bdc195fc"/*Execute*/,
+      "Position": {
+        "X": 1451.923,
+        "Y": 1015.0403
+      }
+    },
+    {
+      "ChildId": "beeeec03-cef3-40fa-b2cb-935ef8b758f2"/*ComputeShaderStage*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 111.4145,
+        "Y": 284.16235
+      },
+      "Position": {
+        "X": 970.89166,
+        "Y": 1680.3477
+      }
+    },
+    {
+      "ChildId": "5a726518-8046-4bc4-8492-5395f44b2854"/*ComputeShader*/,
+      "Position": {
+        "X": 497.8405,
+        "Y": 1711.3079
+      }
+    },
+    {
+      "ChildId": "8aff11f2-1c5e-4d60-a907-a81a5572afbc"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 742.5412,
+        "Y": 1743.9158
+      }
+    },
+    {
+      "ChildId": "48a58a1e-87a3-49f6-a850-1d45da35793a"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 576.9323,
+        "Y": 1973.9724
+      }
+    },
+    {
+      "ChildId": "b2c34af4-e6e3-475d-ada3-17d6de9f7b40"/*GetBufferComponents*/,
+      "Position": {
+        "X": 742.5412,
+        "Y": 1950.9158
+      }
+    },
+    {
+      "ChildId": "70dc34dd-24fb-4930-8cbe-49d33c66f036"/*ClampInt*/,
+      "Position": {
+        "X": 291.13022,
+        "Y": 1823.5685
+      }
+    },
+    {
+      "ChildId": "a7d2fed2-6976-46f7-9ba8-6fd048e629bb"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 17.482697,
+        "Y": 1467.1927
+      }
+    },
+    {
+      "ChildId": "fc720002-8240-4175-857e-1502ab6c3b71"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": -970.33746,
+        "Y": 2234.9429
+      }
+    },
+    {
+      "ChildId": "4f403291-1cfe-48b1-8d13-9a8bd3ef62f4"/*clampedSampler*/,
+      "Position": {
+        "X": 742.5412,
+        "Y": 1907.9158
+      }
+    },
+    {
+      "ChildId": "97493ef1-8f78-4b80-811c-5f9d2bf098f0"/*UseFallbackTexture*/,
+      "Position": {
+        "X": -1123.5485,
+        "Y": 2329.6665
+      }
+    },
+    {
+      "ChildId": "e8a95244-bc71-4795-95f3-009d4b797e95"/*LoadImage*/,
+      "Position": {
+        "X": -1279.7039,
+        "Y": 2575.884
+      }
+    },
+    {
+      "ChildId": "d943d3d9-2bc6-4d2c-8c40-54511a89f61d"/*Texture2d*/,
+      "Position": {
+        "X": -373.23355,
+        "Y": 1706.422
+      }
+    },
+    {
+      "ChildId": "98a843f0-6cf5-4950-8bdb-7753a501a7f2"/*GetTextureSize*/,
+      "Position": {
+        "X": -789.9219,
+        "Y": 1923.317
+      }
+    },
+    {
+      "ChildId": "552dd0c2-3176-4ce8-b830-2275bd52d858"/*AddInt2*/,
+      "Position": {
+        "X": -523.2335,
+        "Y": 1706.422
+      }
+    },
+    {
+      "ChildId": "179e25c4-dae7-4499-8674-deb257e8ccff"/*UavFromTexture2d*/,
+      "Position": {
+        "X": -226.46097,
+        "Y": 1679.5266
+      }
+    },
+    {
+      "ChildId": "f24ec15e-28b2-4f5b-8b01-9bb77d5b874c"/*ComputeShader*/,
+      "Position": {
+        "X": 317.04474,
+        "Y": 899.34644
+      }
+    },
+    {
+      "ChildId": "e85b298a-5610-472a-b775-de46719ee752"/*CalcInt2DispatchCount*/,
+      "Position": {
+        "X": 632.6108,
+        "Y": 935.2029
+      }
+    },
+    {
+      "ChildId": "0fa51a80-e605-4533-ac49-5823f3732b30"/*ComputeShaderStage*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 110.60479,
+        "Y": 116.327065
+      },
+      "Position": {
+        "X": 893.9944,
+        "Y": 893.046
+      }
+    },
+    {
+      "ChildId": "89b3e218-9d87-4685-85d1-6e0113f05a83"/*ComputeShader*/,
+      "Position": {
+        "X": 396.72125,
+        "Y": 1206.9009
+      }
+    },
+    {
+      "ChildId": "7a8487c8-df61-410d-b35b-613b16a24dac"/*CalcInt2DispatchCount*/,
+      "Position": {
+        "X": 631.7147,
+        "Y": 1229.529
+      }
+    },
+    {
+      "ChildId": "32d0da61-1917-486e-a7f0-e7b740322863"/*ComputeShaderStage*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 110.60479,
+        "Y": 116.327065
+      },
+      "Position": {
+        "X": 945.8163,
+        "Y": 1159.4934
+      }
+    },
+    {
+      "ChildId": "142dda1e-21c1-496a-b90d-6289cbea54f5"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 1601.923,
+        "Y": 1015.0403
+      }
+    },
+    {
+      "ChildId": "731227b1-0a7e-4af4-ad9d-9ccf8f1e0ebf"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": -226.46097,
+        "Y": 1735.5266
+      }
+    },
+    {
+      "ChildId": "56d655ae-5fce-4e1c-a6da-91f79c4d3a7a"/*IntsToBuffer*/,
+      "Position": {
+        "X": -49.24591,
+        "Y": 1347.8806
+      }
+    },
+    {
+      "ChildId": "0d3ca3e8-144a-435c-84df-511b74184ffa"/*Int2Components*/,
+      "Position": {
+        "X": -494.65485,
+        "Y": 1867.9668
+      }
+    },
+    {
+      "ChildId": "33203938-430c-4945-935c-ff1f56f0d41c"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 493.2115,
+        "Y": 990.7926
+      }
+    },
+    {
+      "ChildId": "310678e9-5be3-4371-a366-6f2e19454144"/*Vector2Components*/,
+      "Position": {
+        "X": -920.0915,
+        "Y": 1454.885
+      }
+    },
+    {
+      "ChildId": "295c904d-8254-43f7-8efa-56b01170e24f"/*BoolToInt*/,
+      "Position": {
+        "X": -661.0269,
+        "Y": 2135.0708
+      }
+    },
+    {
+      "ChildId": "d634faa3-d9aa-4753-acba-908313e132fe"/*Vector4Components*/,
+      "Position": {
+        "X": -666.7588,
+        "Y": 2397.2703
+      }
+    },
+    {
+      "ChildId": "b612b369-7b47-4590-b662-f4f7190cf46a"/*__padding*/,
+      "Position": {
+        "X": -265.25378,
+        "Y": 1539.146
+      }
+    },
+    {
+      "ChildId": "6217f4ed-294c-4cd1-8b76-3b4ed971143a"/*Magnitude*/,
+      "Position": {
+        "X": -519.5111,
+        "Y": 2792.7715
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "7c8567c9-1456-4040-ad43-4cc8a96efbaf"/*OutputPoints*/,
+      "Position": {
+        "X": 1991.6978,
+        "Y": 932.4903
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "35df41a3-4f88-4a08-b7c7-e886ab986224",
+      "Title": "Emit Points",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 268.69284,
+        "Y": 1634.9211
+      },
+      "Size": {
+        "X": 843.23096,
+        "Y": 402.7776
+      }
+    },
+    {
+      "Id": "cbf3f0ee-bce7-4a66-bb50-301cd42b7132",
+      "Title": "Sum Rows",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 317.17358,
+        "Y": 833.04596
+      },
+      "Size": {
+        "X": 747.42554,
+        "Y": 236.32709
+      }
+    },
+    {
+      "Id": "f79c9c15-c89c-4296-9ebe-acfc704c33b4",
+      "Title": "Sum Columns",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 336.72125,
+        "Y": 1112.9409
+      },
+      "Size": {
+        "X": 747.42554,
+        "Y": 236.32709
+      }
+    },
+    {
+      "Id": "76501a94-e13d-4361-bed3-2774c5f9bef8",
+      "Title": "Some documentation on how this op works:\nThis shaders creates a cummulive distribution function (CDF) for the rows and columns of the image and then uses binary search to find the the position of of a normalized random number vector 2.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1487.0685,
+        "Y": 322.70786
+      },
+      "Size": {
+        "X": 487.86307,
+        "Y": 175.55513
+      }
+    }
+  ]
+}

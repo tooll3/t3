@@ -1,0 +1,21 @@
+{
+  "Name": "StopWatch",
+  "Id": "485af23d-543e-44a7-b29f-693ed9533ab5",
+  "Namespace": "lib.io.time",
+  "Inputs": [
+    {
+      "Id": "38754151-704a-4374-817e-98dfaca62e49"/*ResetTrigger*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "c19343b2-7534-43a9-a9a6-ce9019437c62"/*DurationIn*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "bf89d8b2-d8fe-4a3c-9255-67944ec831cb"/*PauseWithPlayback*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

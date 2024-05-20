@@ -1,0 +1,38 @@
+{
+  "Id": "944d1903-cd23-49ca-9b0d-2fc73bfcfd30"/*SetContextTexture*/,
+  "Description": "An internal op that sets the pre-filtered specular map \nfor the environment to the context.",
+  "InputUis": [
+    {
+      "InputId": "16863415-1d90-46a7-80a4-372602a49c6f"/*SubTree*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "1cd51956-0e0c-4b3f-b071-8d86cdcb7080"/*Id*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "3ab2e94d-b10b-4cd9-9ee0-073292a947fc"/*PrefilteredSpecularMap*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "db61864d-0dd4-44bf-9722-0b9ce7e8fdd4"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

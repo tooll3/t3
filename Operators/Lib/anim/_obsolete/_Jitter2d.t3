@@ -1,0 +1,48 @@
+{
+  "Name": "_Jitter2d",
+  "Id": "23794a1f-372d-484b-ac31-9470d0e77819",
+  "Namespace": "lib.anim._obsolete",
+  "Inputs": [
+    {
+      "Id": "8f17b67c-2d55-4148-b880-1dd948ce9808"/*Position*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "f101af0c-de31-4afb-acb4-8166c62c2ec8"/*JumpDistance*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "87de02d8-a7af-4e5c-a079-a70af222f0be"/*MaxRange*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "1df95beb-da6d-4263-8273-7a180fd190f5"/*Rate*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "38086d8a-15e0-4f3e-b161-a46a79fc5cc3"/*Blending*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "227d36c5-e1aa-4f3f-aed1-aa92a25dba8f"/*SmoothBlending*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "34ea227b-13db-42dd-ade5-1b07d2f6bad5"/*Seed*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "bf5e7465-7349-48bd-8358-cce6e9983aa0"/*Reset*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "ce65293a-e13e-427a-93d2-efb0214ad274"/*Jump*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

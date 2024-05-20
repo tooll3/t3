@@ -1,0 +1,30 @@
+{
+  "Id": "7934f11d-c95c-41ae-b282-6e568b9c5f30"/*SubInts*/,
+  "Description": "Subtracts int B from int A.",
+  "InputUis": [
+    {
+      "InputId": "944152fb-3786-4474-90ea-c292b5dde801"/*Input1*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b1a34f4a-7be5-4c6b-84f1-0bb04cc80d0d"/*Input2*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e66c9218-06dc-4e8d-9f30-9d81f22e39ba"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

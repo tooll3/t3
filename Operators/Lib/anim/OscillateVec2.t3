@@ -1,0 +1,49 @@
+{
+  "Name": "OscillateVec2",
+  "Id": "49796f63-27a8-4714-ba69-2073488ca833",
+  "Namespace": "lib.anim",
+  "Inputs": [
+    {
+      "Id": "2c812efc-de0b-4263-a651-2966c596fe76"/*SpeedFactor*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "f82759c6-154d-41cb-97a8-8b1eea635f6b"/*OverrideTime*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "2c9a6b15-ac0d-4708-a6c8-2834cfc3086c"/*Amplitude*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0
+      }
+    },
+    {
+      "Id": "031bf887-e45e-45aa-ba17-214aecf155da"/*AmplitudeScale*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "4959c4c7-e216-4c3d-9b51-228fe4a0b0f9"/*Period*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0
+      }
+    },
+    {
+      "Id": "48a94f9e-32fc-46d0-9e06-8f7cbe1d40f3"/*Phase*/,
+      "DefaultValue": {
+        "X": 1.570789,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "63c0681d-eb5a-45bb-b0df-be868e236c1e"/*Offset*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,0 +1,39 @@
+{
+  "Id": "a0fcf7ed-1f14-4a8b-a57e-99e5b2407b1b"/*SplitString*/,
+  "Description": "Splits a string by the provided separation character. Returns a List<string> that can be parsed with [PickFromStringList].",
+  "InputUis": [
+    {
+      "InputId": "b1fd8b37-140e-487f-bfe2-bc426d8fe439"/*String*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Multiline"
+    },
+    {
+      "InputId": "c54e4b16-b185-41f8-bc50-230b7624d093"/*Split*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "52745502-3b69-4b2e-be47-d2660fe08e48"/*Fragments*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "6c78d167-f9f5-43a0-8cd6-8a8b0a34067e"/*Count*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "Id": "2cd650a1-5b77-4040-895b-6049dc09206e"/*_DepthOfField*/,
+  "Description": "Internal implementation of the Depth of Field effect.\n\nThis is an internal component of [DepthOfField].",
+  "InputUis": [
+    {
+      "InputId": "70bedeea-1594-4b2d-8ce2-e5573a57cde6"/*Color*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -188.14142,
+        "Y": 39.066624
+      }
+    },
+    {
+      "InputId": "5c23dc93-192c-4aa7-a265-2b6bc407283d"/*DepthBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -188.14142,
+        "Y": 84.06662
+      }
+    },
+    {
+      "InputId": "cde20e8a-a7f3-47b9-9336-2e03a4c98f43"/*Near*/,
+      "Position": {
+        "X": -188.33533,
+        "Y": 125.14412
+      }
+    },
+    {
+      "InputId": "ac494dbc-0dd0-4d72-8a82-59c8166b7333"/*Far*/,
+      "Position": {
+        "X": -188.33533,
+        "Y": 170.14413
+      }
+    },
+    {
+      "InputId": "6f1cfe39-d3eb-4e9c-904e-5c72920288f9"/*FocusCenter*/,
+      "Position": {
+        "X": -188.33533,
+        "Y": 215.14413
+      },
+      "Min": 0.0,
+      "Max": 10000.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "616b0d12-f4d6-4b54-9745-25c510cab04f"/*FocusRange*/,
+      "Position": {
+        "X": -188.33533,
+        "Y": 260.1441
+      },
+      "Min": 0.0,
+      "Max": 10000.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "30038b30-7247-4395-8fae-d69c2b4c0ec6"/*BlurSize*/,
+      "Position": {
+        "X": -188.33533,
+        "Y": 305.1441
+      },
+      "Min": 0.0,
+      "Max": 60.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "3ea66775-0864-40af-ab73-7f5321ef81aa"/*QualityScale*/,
+      "Position": {
+        "X": -188.33533,
+        "Y": 350.1441
+      },
+      "Min": 0.2,
+      "Max": 2.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "f66e71e9-aef9-41da-b722-843951e0dbd5"/*OutputTexture*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -188.33533,
+        "Y": 395.1441
+      }
+    },
+    {
+      "InputId": "fa3a3202-fb06-417c-ad96-75c96c3b6208"/*MaxSamples*/,
+      "Position": {
+        "X": -188.33533,
+        "Y": 440.1441
+      }
+    },
+    {
+      "InputId": "01773066-ea85-488d-abb3-a08e4afcb95c"/*Resolution*/,
+      "Position": {
+        "X": -188.33533,
+        "Y": 485.1441
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "29ef2c06-235f-4adb-88a8-a8025ba7be2d"/*ComputeShader*/,
+      "Position": {
+        "X": -86.49368,
+        "Y": -179.5447
+      }
+    },
+    {
+      "ChildId": "9bbfb27d-716d-4850-84b0-3c7d4969bf0f"/*ComputeShaderStage*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 118.20774,
+        "Y": 370.8352
+      },
+      "Position": {
+        "X": 441.48816,
+        "Y": 19.518105
+      }
+    },
+    {
+      "ChildId": "c2074dab-5912-4e28-90b6-65383c7769c4"/*SamplerStateOp*/,
+      "Position": {
+        "X": 255.4161,
+        "Y": 313.193
+      }
+    },
+    {
+      "ChildId": "c2faf923-d02b-4c24-a8b9-8696c02bee18"/*UavFromTexture2d*/,
+      "Position": {
+        "X": 255.4161,
+        "Y": 356.193
+      }
+    },
+    {
+      "ChildId": "755cb70a-c514-44e7-8464-8aee9fe74e04"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 255.4161,
+        "Y": 257.19305
+      }
+    },
+    {
+      "ChildId": "630fd9d9-9e60-40f5-a79f-19d83bb5630d"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 255.4161,
+        "Y": 201.19305
+      }
+    },
+    {
+      "ChildId": "f7960548-cf74-43ef-8a18-c6b9d98bb9c1"/*FloatsToBuffer*/,
+      "Position": {
+        "X": 261.0854,
+        "Y": 55.698242
+      }
+    },
+    {
+      "ChildId": "6f6d57cc-5a3a-4ea9-b7ec-486a5e7f1e0d"/*IntToFloat*/,
+      "Position": {
+        "X": 25.95169,
+        "Y": 474.00012
+      }
+    },
+    {
+      "ChildId": "c623e4a4-ed2b-4c53-9763-cfbf7401d6a2"/*CalcInt2DispatchCount*/,
+      "Position": {
+        "X": 62.326385,
+        "Y": -137.94281
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "6771dc30-32e5-49af-a059-58de21e5155e"/*Output*/,
+      "Position": {
+        "X": 628.4948,
+        "Y": 144.15936
+      }
+    }
+  ]
+}

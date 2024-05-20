@@ -1,0 +1,45 @@
+{
+  "Id": "2a0c932a-eb81-4a7d-aeac-836a23b0b789"/*SetFloatVar*/,
+  "Description": "Writes a float value to the context's float variable dictionary.\nUse [ContextFloat] to read this value further down the graph.",
+  "InputUis": [
+    {
+      "InputId": "e64d396e-855a-4b20-a8f5-39b4f98e8036"/*SubGraph*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "6ee64d39-855a-4b20-a8f5-39b4f98e8036"/*VariableName*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "68e31eaa-1481-48f4-b742-5177a241fe6d"/*Value*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "da431996-4c4c-4cdc-9723-9116bbb5440c"/*ClearAfterExecution*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "9c0c1734-453e-4f88-b20a-47c7e34b7caa"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

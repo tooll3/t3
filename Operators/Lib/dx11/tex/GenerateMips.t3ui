@@ -1,0 +1,22 @@
+{
+  "Id": "32a6a351-6d22-4915-aa0e-e0483b7f4e76"/*GenerateMips*/,
+  "InputUis": [
+    {
+      "InputId": "a4e3001c-0663-48ec-8f56-b11ff0b40850"/*Texture*/,
+      "Position": {
+        "X": -155.11952,
+        "Y": -2.5896416
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ac14864f-3288-4cab-87a0-636cee626a2b"/*TextureWithMips*/,
+      "Position": {
+        "X": 118.6056,
+        "Y": 34.721115
+      }
+    }
+  ]
+}

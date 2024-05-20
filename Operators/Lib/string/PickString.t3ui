@@ -1,0 +1,32 @@
+{
+  "Id": "a9784e5e-7696-49a0-bb77-2302587ede59"/*PickString*/,
+  "Description": "Picks a string of multiple connected.",
+  "InputUis": [
+    {
+      "InputId": "202ce6d5-ee5a-41c7-bd04-4c1490f3ea9c"/*Input*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "20e76577-92ee-443d-9630-ebc41e38bb85"/*Index*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "74104eb6-dfc2-4ad2-9600-91c5a33855d4"/*Selected*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

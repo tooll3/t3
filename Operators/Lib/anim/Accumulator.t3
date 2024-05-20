@@ -1,0 +1,29 @@
+{
+  "Name": "Accumulator",
+  "Id": "90b2c6d2-e9a6-4910-b42d-94202f07be27",
+  "Namespace": "lib.anim",
+  "Inputs": [
+    {
+      "Id": "7caf37ec-ed34-4711-b02c-e136d070fff7"/*Running*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "052f9cd1-4b3e-483f-b628-c356f58ff87e"/*Increment*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "26f05385-3c48-499a-bc30-69bad0a2218c"/*StartValue*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "9f1d76d2-c3dd-4035-a37c-300eb011331b"/*ResetTrigger*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "4d90cd4b-8e11-4b86-a668-26810af029b3"/*Modulo*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

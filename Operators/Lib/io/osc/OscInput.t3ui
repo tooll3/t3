@@ -1,0 +1,75 @@
+{
+  "Id": "3a1d7ea0-5445-4df0-b08a-6596e53f815a"/*OscInput*/,
+  "Description": "Receives OSC input from a connected server.",
+  "InputUis": [
+    {
+      "InputId": "87efd3c4-f2df-4996-924f-12c631bad8d8"/*Port*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "17d1fe47-430a-4465-92aa-92a4effb515f"/*Address*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "5544b675-0de2-4a28-97d0-1a67349152fc"/*FirstResult*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    },
+    {
+      "OutputId": "1e2ec3d2-b242-4e6f-8d15-290584315aa9"/*Results*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 138.0
+      }
+    },
+    {
+      "OutputId": "8f426b4a-ad49-4ab9-80ee-3df9f5a5aff6"/*LastMessageTime*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 238.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "a3d23b48-e04d-4d53-80cc-d671a3a5428a",
+      "Title": "Video Tutorial",
+      "Description": "This example illustrates how to build a quick drawing application with OSC input.",
+      "LinkUrl": "https://youtu.be/4xxhQ1JX-ls?si=MGq4M5VoxY7D6_l8",
+      "LinkType": "TutorialVideo"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "Name": "UseMaterial",
+  "Id": "11c5b420-d20b-42df-bc96-8a9e851521e5",
+  "Namespace": "lib.3d.rendering",
+  "Inputs": [
+    {
+      "Id": "61613a9e-a67c-4a68-9668-c986895f0945"/*SubTree*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "e3a3bc6c-149b-47ae-a73c-a2c5ee571253"/*MaterialReference*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

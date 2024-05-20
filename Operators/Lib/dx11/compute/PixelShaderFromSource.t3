@@ -1,0 +1,21 @@
+{
+  "Name": "PixelShaderFromSource",
+  "Id": "9f784a4a-857f-41ad-afc1-0de08c1cfec6",
+  "Namespace": "lib.dx11.compute",
+  "Inputs": [
+    {
+      "Id": "a192e8cc-2874-4f02-bbf1-4622e99666e1"/*ShaderSource*/,
+      "DefaultValue": "Resources\\lib\\img\\compute-shader.hlsl"
+    },
+    {
+      "Id": "2b616fb0-2966-45a9-a0cc-da960ca509cf"/*EntryPoint*/,
+      "DefaultValue": "main"
+    },
+    {
+      "Id": "baa49d7d-127c-4c93-ae90-7e4db3598af9"/*DebugName*/,
+      "DefaultValue": ""
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
