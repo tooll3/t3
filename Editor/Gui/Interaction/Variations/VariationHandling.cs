@@ -39,11 +39,13 @@ internal static class VariationHandling
     public static void Update()
     {
         // Sync with composition selected in UI
-        var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+        var primaryGraphWindow = GraphWindow.Focused;
         if (primaryGraphWindow == null)
             return;
 
-        var singleSelectedInstance = NodeSelection.GetSelectedInstance();
+        var nodeSelection = primaryGraphWindow.GraphCanvas.NodeSelection;
+        var singleSelectedInstance = nodeSelection.GetSelectedInstanceWithoutComposition();
+        
         if (singleSelectedInstance != null)
         {
             var selectedSymbolId = singleSelectedInstance.Symbol.Id;
@@ -56,10 +58,8 @@ internal static class VariationHandling
         {
             ActivePoolForPresets = null;
 
-            var activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
-            if (activeCompositionInstance == null)
-                return;
-
+            var activeCompositionInstance = primaryGraphWindow.CompositionOp;
+            
             ActiveInstanceForSnapshots = activeCompositionInstance;
 
             // Prevent variations for library operators
@@ -72,7 +72,7 @@ internal static class VariationHandling
                 ActivePoolForSnapshots = GetOrLoadVariations(activeCompositionInstance.Symbol.Id);
             }
 
-            if (!NodeSelection.IsAnythingSelected())
+            if (!nodeSelection.IsAnythingSelected())
             {
                 ActiveInstanceForPresets = ActiveInstanceForSnapshots;
             }
@@ -89,9 +89,9 @@ internal static class VariationHandling
             return variationForComposition;
         }
 
-        var newOpVariation = SymbolVariationPool.InitVariationPoolForSymbol(symbolId);
-        _variationPoolForOperators[newOpVariation.SymbolId] = newOpVariation;
-        return newOpVariation;
+        var newOpVariationPool = new SymbolVariationPool(symbolId);
+        _variationPoolForOperators[newOpVariationPool.SymbolId] = newOpVariationPool;
+        return newOpVariationPool;
     }
 
     private const int AutoIndex = -1;
@@ -118,7 +118,7 @@ internal static class VariationHandling
         if (newVariation == null)
             return null;
 
-        newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(ActivePoolForSnapshots.Variations);
+        newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(ActivePoolForSnapshots.AllVariations);
         if (activationIndex != AutoIndex)
             newVariation.ActivationIndex = activationIndex;
 
@@ -151,11 +151,10 @@ internal static class VariationHandling
 
     private static void AddSnapshotEnabledChildrenToList(Instance instance, List<Instance> list)
     {
-        var compositionUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
-        foreach (var childInstance in instance.Children)
+        var compositionUi = instance.GetSymbolUi();
+        foreach (var childInstance in instance.Children.Values)
         {
-            var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
-            Debug.Assert(symbolChildUi != null);
+            var symbolChildUi = compositionUi.ChildUis[childInstance.SymbolChildId];            // Debug.Assert(symbolChildUi != null);
 
             if (symbolChildUi.SnapshotGroupIndex == 0)
                 continue;
@@ -164,20 +163,20 @@ internal static class VariationHandling
         }
     }
 
-    private static IEnumerable<Instance> GetSnapshotEnabledChildren(Instance instance)
-    {
-        var compositionUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
-        foreach (var childInstance in instance.Children)
-        {
-            var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
-            Debug.Assert(symbolChildUi != null);
-
-            if (symbolChildUi.SnapshotGroupIndex == 0)
-                continue;
-
-            yield return childInstance;
-        }
-    }
+    // private static IEnumerable<Instance> GetSnapshotEnabledChildren(Instance instance)
+    // {
+    //     var compositionUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+    //     foreach (var childInstance in instance.Children)
+    //     {
+    //         var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
+    //         Debug.Assert(symbolChildUi != null);
+    //
+    //         if (symbolChildUi.SnapshotGroupIndex == 0)
+    //             continue;
+    //
+    //         yield return childInstance;
+    //     }
+    // }
     
     private static readonly Dictionary<Guid, SymbolVariationPool> _variationPoolForOperators = new();
     private static readonly List<Instance> _affectedInstances = new(100);

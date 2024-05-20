@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.Windows.Variations
         private protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
         private protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
 
-        public override void DrawToolbarFunctions()
+        public virtual void DrawToolbarFunctions()
         {
             var s = ImGui.GetFrameHeight();
 
@@ -24,7 +24,7 @@ namespace T3.Editor.Gui.Windows.Variations
             }
         }
 
-        public override string GetTitle()
+        protected override string GetTitle()
         {
             return VariationHandling.ActiveInstanceForSnapshots != null 
                        ? $"...for {VariationHandling.ActiveInstanceForSnapshots.Symbol.Name}" 
@@ -88,18 +88,17 @@ namespace T3.Editor.Gui.Windows.Variations
             }
         }
 
-        public override Variation CreateVariation()
+        private void CreateVariation()
         {
             var newVariation = VariationHandling.CreateOrUpdateSnapshotVariation();
             if (newVariation == null)
-                return new Variation();
+                return;
 
             PoolForBlendOperations.SaveVariationsToFile();
             CanvasElementSelection.SetSelection(newVariation);
             ResetView();
             TriggerThumbnailUpdate();
             VariationThumbnail.VariationForRenaming = newVariation;
-            return new Variation();
         }
     }
 }
