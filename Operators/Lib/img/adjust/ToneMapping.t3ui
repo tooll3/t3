@@ -34,18 +34,6 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "d90b4269-312f-4378-930f-0447533c7977"/*_ImageFxShaderSetup2*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 134.97804,
-        "Y": 481.95227
-      },
-      "Position": {
-        "X": 566.4485,
-        "Y": 145.9968
-      }
-    },
-    {
       "ChildId": "5e4ffbe2-74e8-440c-9939-6cefd81665db"/*IntToFloat*/,
       "Position": {
         "X": 303.7946,
@@ -57,6 +45,13 @@
       "Position": {
         "X": 303.7946,
         "Y": 476.2435
+      }
+    },
+    {
+      "ChildId": "46d18eb7-013b-4f6f-8e86-2b37a0313fd2"/*_ImageFxShaderSetupStatic*/,
+      "Position": {
+        "X": 604.3195,
+        "Y": 265.85956
       }
     }
   ],

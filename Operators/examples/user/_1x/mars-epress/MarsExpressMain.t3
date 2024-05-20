@@ -1,0 +1,190 @@
+{
+  "Name": "MarsExpressMain",
+  "Id": "ee4065db-3b30-4b1f-95e1-127c41a9d185",
+  "Namespace": "user.1x.mars-epress",
+  "Inputs": [],
+  "Children": [
+    {
+      "Id": "31851d51-c3c5-4a4c-a4e3-ad22d718396a"/*ImageSequenceClip*/,
+      "SymbolId": "927a77d5-7bf0-477b-b288-4bb48d4980cd",
+      "InputValues": [
+        {
+          "Id": "a1e08fde-2d9b-4a2d-bf09-a5e54ad8cfa0"/*FilePath*/,
+          "Type": "System.String",
+          "Value": "Resources\\user\\1x\\mars-express\\sequence"
+        },
+        {
+          "Id": "25215a7e-1e38-4370-8845-cbf422a7eb92"/*TriggerUpdate*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5e6c968e-593a-40e5-8749-0a4cf8e13ef3"/*ImageSequenceClip*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 30.474417,
+                "End": 35.747528
+              },
+              "SourceRange": {
+                "Start": 30.474417,
+                "End": 35.747528
+              },
+              "LayerIndex": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "3d5b3c37-4ccd-470d-9c0b-4f95e8b7973a"/*RenderTarget*/,
+      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "f7108b07-ff8e-43c4-8c8a-2e4a0345ad2d"/*ImageSequenceClip*/,
+      "SymbolId": "927a77d5-7bf0-477b-b288-4bb48d4980cd",
+      "InputValues": [
+        {
+          "Id": "a1e08fde-2d9b-4a2d-bf09-a5e54ad8cfa0"/*FilePath*/,
+          "Type": "System.String",
+          "Value": "Resources\\user\\1x\\mars-express\\sequence"
+        },
+        {
+          "Id": "25215a7e-1e38-4370-8845-cbf422a7eb92"/*TriggerUpdate*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5e6c968e-593a-40e5-8749-0a4cf8e13ef3"/*ImageSequenceClip*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 0.0,
+                "End": 15.3575
+              },
+              "SourceRange": {
+                "Start": 0.0,
+                "End": 15.357504
+              },
+              "LayerIndex": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "6e35fa27-3a22-4c4c-96e5-78bc656e3671"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e06cac0f-bd55-487c-b86a-0db0c8202167"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "f6ec547f-8105-4af9-af7c-1b7b7f9f0de8"/*TimeClip*/,
+      "SymbolId": "3036067a-a4c2-434b-b0e3-ac95c5c943f4",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "de6ff8b5-40fe-47fa-b9f2-d926b17f9a7f"/*TimeClip*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 15.3575,
+                "End": 30.474417
+              },
+              "SourceRange": {
+                "Start": 15.3575,
+                "End": 30.474417
+              },
+              "LayerIndex": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "d825ee6b-89e8-4488-b2df-ff3d50528432"/*MarsAsciiMirrorScene*/,
+      "SymbolId": "df176113-ccc4-43e7-a462-5f37fff72fd2",
+      "InputValues": [],
+      "Outputs": []
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "3d5b3c37-4ccd-470d-9c0b-4f95e8b7973a",
+      "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "e7ebc68e-a1e4-4699-be3b-e9c87478fd53"
+    },
+    {
+      "SourceParentOrChildId": "e06cac0f-bd55-487c-b86a-0db0c8202167",
+      "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
+      "TargetParentOrChildId": "3d5b3c37-4ccd-470d-9c0b-4f95e8b7973a",
+      "TargetSlotId": "4da253b7-4953-439a-b03f-1d515a78bddf"
+    },
+    {
+      "SourceParentOrChildId": "31851d51-c3c5-4a4c-a4e3-ad22d718396a",
+      "SourceSlotId": "5e6c968e-593a-40e5-8749-0a4cf8e13ef3",
+      "TargetParentOrChildId": "6e35fa27-3a22-4c4c-96e5-78bc656e3671",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "f7108b07-ff8e-43c4-8c8a-2e4a0345ad2d",
+      "SourceSlotId": "5e6c968e-593a-40e5-8749-0a4cf8e13ef3",
+      "TargetParentOrChildId": "6e35fa27-3a22-4c4c-96e5-78bc656e3671",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "f6ec547f-8105-4af9-af7c-1b7b7f9f0de8",
+      "SourceSlotId": "de6ff8b5-40fe-47fa-b9f2-d926b17f9a7f",
+      "TargetParentOrChildId": "e06cac0f-bd55-487c-b86a-0db0c8202167",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "6e35fa27-3a22-4c4c-96e5-78bc656e3671",
+      "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
+      "TargetParentOrChildId": "e06cac0f-bd55-487c-b86a-0db0c8202167",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "d825ee6b-89e8-4488-b2df-ff3d50528432",
+      "SourceSlotId": "491dc8f6-8688-4b21-92f7-a92857f40539",
+      "TargetParentOrChildId": "f6ec547f-8105-4af9-af7c-1b7b7f9f0de8",
+      "TargetSlotId": "35f501f4-5c79-4628-9441-8b3782544bf6"
+    }
+  ],
+  "PlaybackSettings": {
+    "Enabled": true,
+    "Bpm": 120.0,
+    "AudioSource": 0,
+    "Syncing": 0,
+    "AudioDecayFactor": 0.98,
+    "AudioGainFactor": 1.0,
+    "AudioInputDeviceName": "",
+    "AudioClips": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000000",
+        "StartTime": 0.0,
+        "EndTime": 0.0,
+        "Bpm": 120.0,
+        "DiscardAfterUse": true,
+        "IsSoundtrack": true,
+        "FilePath": "Resources\\user\\1x\\mars-express\\soundtrack\\mars-express.mp3"
+      }
+    ]
+  }
+}

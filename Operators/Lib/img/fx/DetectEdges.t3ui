@@ -1,6 +1,6 @@
 {
   "Id": "2a5475c8-9e16-409f-8c40-a3063e045d38"/*DetectEdges*/,
-  "Description": "Detects edges in the incoming image.\n\nTry the presets.",
+  "Description": "Detects edges in the incoming image.\n\nTry the presets.\n\nFor similar effects see: [Steps] [DistortAndShade] [Displace] [FakeLight]",
   "InputUis": [
     {
       "InputId": "4041b6d8-15e5-428c-9967-7105975a46f7"/*Image*/,

@@ -1,0 +1,170 @@
+{
+  "Id": "5317ade3-d4df-480d-872d-a17c63909da0"/*CameraExample*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "a599a4d4-2cf1-41c7-aded-b60cb13fd5ac"/*CubeMesh*/,
+      "Position": {
+        "X": 151.60275,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "b42d7783-7d1c-41e3-bdeb-c3f34e74042e"/*DrawMesh*/,
+      "Position": {
+        "X": 301.60275,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "1a58fd57-3e60-4d33-b815-4fe9e6c880c6"/*Camera*/,
+      "Comment": "Check the presets",
+      "Position": {
+        "X": 587.01086,
+        "Y": 71.55603
+      }
+    },
+    {
+      "ChildId": "84939bc5-fc1e-44b9-b7cc-920afe13685d"/*RenderTarget*/,
+      "Position": {
+        "X": 737.01086,
+        "Y": 71.55603
+      }
+    },
+    {
+      "ChildId": "c2de45ec-758e-473a-846b-40ddbec951f8"/*SphereMesh*/,
+      "Position": {
+        "X": 1.602745,
+        "Y": 56.0
+      }
+    },
+    {
+      "ChildId": "6f6673cb-0927-47ac-a77f-9a4fc05b98a3"/*TransformMesh*/,
+      "Position": {
+        "X": 151.60275,
+        "Y": 56.0
+      }
+    },
+    {
+      "ChildId": "d0171860-cc35-48f5-879f-a72a24cc6258"/*DrawMesh*/,
+      "Position": {
+        "X": 301.60275,
+        "Y": 56.0
+      }
+    },
+    {
+      "ChildId": "fdb9a1a0-0434-4b47-925f-ef185faf82ef"/*Execute*/,
+      "Position": {
+        "X": 445.064,
+        "Y": 39.343628
+      }
+    },
+    {
+      "ChildId": "7f7a8f84-d1e3-4b5a-bf55-4edf2041f154"/*TorusMesh*/,
+      "Position": {
+        "X": 1.602745,
+        "Y": 112.0
+      }
+    },
+    {
+      "ChildId": "abf95939-a9b5-43f2-ab43-d5b35f76f616"/*DrawMesh*/,
+      "Position": {
+        "X": 301.60275,
+        "Y": 112.0
+      }
+    },
+    {
+      "ChildId": "7ab99642-4270-411a-be34-ae9fe2065b12"/*TransformMesh*/,
+      "Position": {
+        "X": 151.60275,
+        "Y": 112.0
+      }
+    },
+    {
+      "ChildId": "a965d0a1-cd5c-4661-bb71-9103c1c65441"/*CylinderMesh*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 179.79846
+      }
+    },
+    {
+      "ChildId": "ecfa7699-a770-46aa-b4d5-62332f80c855"/*DrawMesh*/,
+      "Position": {
+        "X": 301.60275,
+        "Y": 168.0
+      }
+    },
+    {
+      "ChildId": "bc53c76e-2a7e-4637-897f-8b15f8853601"/*Text*/,
+      "Position": {
+        "X": 151.60275,
+        "Y": 224.0
+      }
+    },
+    {
+      "ChildId": "d3e5e889-3c3f-4c1c-961e-24892397bd67"/*Transform*/,
+      "Position": {
+        "X": 301.60275,
+        "Y": 224.0
+      }
+    },
+    {
+      "ChildId": "935eafd0-4392-45b8-811f-073fdf96e7d3"/*Text*/,
+      "Position": {
+        "X": 151.60275,
+        "Y": 280.0
+      }
+    },
+    {
+      "ChildId": "f70506a7-6ce5-4aa7-8661-e81789b16596"/*Transform*/,
+      "Position": {
+        "X": 301.60275,
+        "Y": 280.0
+      }
+    },
+    {
+      "ChildId": "3fee99b3-aaa6-4ae9-a1a8-c3f78c20a2fc"/*CubeMesh*/,
+      "Position": {
+        "X": 151.60275,
+        "Y": 336.0
+      }
+    },
+    {
+      "ChildId": "c7917b4d-8146-464c-9d6b-0871f9e6461c"/*DrawMesh*/,
+      "Position": {
+        "X": 301.60275,
+        "Y": 336.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "0c2f45b5-7591-45a6-9861-ce2575444dd4"/*ColorBuffer*/,
+      "Position": {
+        "X": 887.01086,
+        "Y": 71.55603
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "de5df825-b026-414c-941f-80ef7902ae41",
+      "Title": "I know, this is a contemporary art master piece ;)",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -6.2782974,
+        "Y": -51.027527
+      },
+      "Size": {
+        "X": 581.0387,
+        "Y": 446.01733
+      }
+    }
+  ]
+}

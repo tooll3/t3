@@ -1,13 +1,14 @@
 {
   "Id": "51648ecd-05ee-40b3-b562-8518ada70918"/*Not*/,
-  "Description": "",
+  "Description": "Creates and / or inverts a single Boolean value\n\nSimilar to [Boolean] (but inverted)",
   "InputUis": [
     {
       "InputId": "e5322b67-9c56-4afe-a398-79294858acc0"/*BoolValue*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Input for Boolean value"
     }
   ],
   "SymbolChildUis": [],

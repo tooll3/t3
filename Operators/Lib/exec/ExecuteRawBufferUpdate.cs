@@ -22,16 +22,7 @@ namespace lib.exec
         {
             // This will execute the input
             UpdateCommands.GetValue(context);
-            //if (command == null)
-            //    return;
-
-            
-            var inputBuffer = Buffer.GetValue(context);
-            //if (inputBuffer == null)
-            //    return;
-
-            Output.Value = inputBuffer;
-            //Log.Debug("updating buffer " + inputBuffer);
+            Output.Value = Buffer.GetValue(context);
         }
 
         [Input(Guid = "62AC9F97-1FCA-49F3-8FAC-F0A580C367BA")]

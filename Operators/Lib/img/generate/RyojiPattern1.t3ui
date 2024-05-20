@@ -1,6 +1,6 @@
 {
   "Id": "3ee3597d-dbf1-43a2-89d9-2f7b099112c7"/*RyojiPattern1*/,
-  "Description": "Generates animated patterns inspired by Ryoji Ikeda. It subdivides the image into smaller and smaller segments and can produce a wide variety of effects. Please check the presets and the example.",
+  "Description": "Generates animated patterns inspired by Ryoji Ikeda. It subdivides the image into smaller and smaller segments and can produce a wide variety of effects. Please check the presets and the example.\n\nFor a version with more options see: [RyojiPattern2]\n\nOther interesting patterns can be generated with [SinForm] [ZollnerPattern] [FraserGrid] [Raster] [CheckerBoard] [RyojiPattern2] [RyojiPattern1]",
   "InputUis": [
     {
       "InputId": "b5b92db7-0278-466a-b5bd-caa79655cde1"/*Image*/,

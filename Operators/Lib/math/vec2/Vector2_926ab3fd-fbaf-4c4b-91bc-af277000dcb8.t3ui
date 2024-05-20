@@ -1,5 +1,6 @@
 {
   "Id": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8"/*Vector2*/,
+  "Description": "Converts 2 single values to a vec2\n\nFor the opposite see [Vector2Components]",
   "InputUis": [
     {
       "InputId": "6b9d0106-78f9-4507-a0f6-234c5dfb0f85"/*X*/,

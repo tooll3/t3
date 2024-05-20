@@ -1,6 +1,6 @@
 {
   "Id": "ef357e66-24e9-4f54-8d86-869db74602f4"/*PickFromStringList*/,
-  "Description": "",
+  "Description": "Can switch between different strings if the 'Fragments' output of a [SplitString] operator is used as an input",
   "InputUis": [
     {
       "InputId": "8d5e77a6-1ec4-4979-ad26-f7862049bce1"/*Input*/,
@@ -8,7 +8,8 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Input for [SplitString]"
     },
     {
       "InputId": "12ce5fe3-750f-47ed-9507-416cb327a615"/*Index*/,
@@ -16,7 +17,8 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Index that controls which part of a string is used"
     }
   ],
   "SymbolChildUis": [],

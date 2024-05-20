@@ -1,34 +1,76 @@
 {
   "Id": "d14233a2-8240-47d3-bb92-0854f6d3b218"/*DustParticles*/,
-  "Description": "Draws points that repeated wrapped and animated around the current camera position.\n\nTip: This effect can be combined with [SetFog].",
+  "Description": "Creates a volume around the camera in which points that behave like dust or snow are spawned and repeated / wrapped infinitely.\n\nTip: This effect can be combined with [SetFog], [DepthOfField], [MotionBlur] among others.",
   "InputUis": [
+    {
+      "InputId": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Refresh*/,
+      "Position": {
+        "X": -1430.8794,
+        "Y": -54.35611
+      },
+      "GroupTitle": "Particles",
+      "Description": "If no particles are visible double click to reset the particle simulation\n\nThis can become necessary if a change in parameters such as 'count' or 'WrapSize' result in no particles being displayed"
+    },
     {
       "InputId": "df0a84c2-a1e9-492f-903a-5ef7511c6ec8"/*Count*/,
       "Position": {
-        "X": -1405.7656,
-        "Y": -115.39193
-      }
-    },
-    {
-      "InputId": "e92432c8-6ceb-494b-9cf4-b21191567b29"/*Color*/,
-      "Position": {
-        "X": -1359.4902,
-        "Y": 175.22432
-      }
-    },
-    {
-      "InputId": "70f0f867-a4de-44da-b8e3-a7e95e1740a3"/*Size*/,
-      "Position": {
-        "X": -1359.4902,
-        "Y": 220.22432
-      }
+        "X": -1430.8794,
+        "Y": -9.356102
+      },
+      "Description": "Controls the number of particles\nChanging this setting may require a refresh",
+      "AddPadding": "True",
+      "Min": 1,
+      "Max": 1000000,
+      "Scale": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "c42d8124-d656-4b52-864f-9c9d888e0c54"/*WrapSize*/,
       "Position": {
+        "X": -1430.8794,
+        "Y": 35.643898
+      },
+      "Description": "Changes the size of the volume around the camera in which particles are spawned and repeated\nChanging this setting may require a refresh",
+      "Min": 0.001,
+      "Max": 15.0
+    },
+    {
+      "InputId": "e3a995dc-ec77-439c-8aed-e47df5e2b923"/*OffsetVolume*/,
+      "Position": {
+        "X": -1430.8794,
+        "Y": 80.6439
+      },
+      "Description": "Offsets the Volume that spawns and wraps the particles from the position of the camera",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "e92432c8-6ceb-494b-9cf4-b21191567b29"/*Color*/,
+      "Position": {
+        "X": -1411.95,
+        "Y": 179.68898
+      },
+      "GroupTitle": "Appearance",
+      "Description": "Defines the color of the particles"
+    },
+    {
+      "InputId": "70f0f867-a4de-44da-b8e3-a7e95e1740a3"/*Size*/,
+      "Position": {
+        "X": -1411.95,
+        "Y": 224.68898
+      },
+      "Description": "Defines the Size of the particles"
+    },
+    {
+      "InputId": "9ef1f3f7-da31-408b-b563-7d6c089278c7"/*Gravity*/,
+      "Position": {
         "X": -1359.4902,
-        "Y": 265.22437
-      }
+        "Y": 355.22437
+      },
+      "GroupTitle": "Movement",
+      "Description": "Adds a linear force in the defined axis",
+      "Min": -0.1,
+      "Max": 0.1,
+      "Scale": 0.001
     },
     {
       "InputId": "0744e03b-9df3-4a5e-9cfa-f522d9d946ea"/*NoiseAmount*/,
@@ -36,7 +78,8 @@
         "X": -1359.4902,
         "Y": 400.22437
       },
-      "GroupTitle": "Noise"
+      "Description": "Changes the speed of the noise animation",
+      "AddPadding": "True"
     },
     {
       "InputId": "10fa40ee-c6f6-4f6b-bf70-54eeb4c11891"/*NoiseFrequency*/,
@@ -44,6 +87,7 @@
         "X": -1359.4902,
         "Y": 445.22437
       },
+      "Description": "Changes the granularity of the noise\nHigher values create many small spatially limited turbulences\nLower values create movements that affect more particles at the same time",
       "Min": 0.0,
       "Max": 3.0
     },
@@ -52,14 +96,16 @@
       "Position": {
         "X": -1359.4902,
         "Y": 490.22437
-      }
+      },
+      "Description": "Adds a per particle noise variation"
     },
     {
       "InputId": "cee8f890-4ea3-4f58-9940-156c93c7bc1f"/*Phase*/,
       "Position": {
         "X": -1359.4902,
         "Y": 535.22437
-      }
+      },
+      "Description": "Changes the Phase / Random Seed of the Noise Animation"
     },
     {
       "InputId": "bafd96cc-c886-4392-8f57-592cb8651181"/*TrailLength*/,
@@ -67,45 +113,28 @@
         "X": -1358.6415,
         "Y": 629.25867
       },
-      "GroupTitle": "Trails..."
+      "GroupTitle": "Trails...",
+      "Description": "Adds a tail of particles to each particle",
+      "Min": 0,
+      "Max": 250,
+      "Scale": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "fd8340d5-b604-4605-9c3a-a57477d85919"/*TrailColor*/,
       "Position": {
         "X": -1358.6415,
         "Y": 674.25867
-      }
+      },
+      "Description": "Defines the color of the trails"
     },
     {
       "InputId": "31cfdca2-7f14-4c88-93ca-6f160829ca78"/*TrailWidth*/,
       "Position": {
         "X": -1358.6415,
-        "Y": 764.25867
-      }
-    },
-    {
-      "InputId": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Reset*/,
-      "Position": {
-        "X": -1357.8181,
-        "Y": 851.17926
-      }
-    },
-    {
-      "InputId": "9ef1f3f7-da31-408b-b563-7d6c089278c7"/*Gravity*/,
-      "Position": {
-        "X": -1381.7103,
-        "Y": 1196.5905
+        "Y": 719.25867
       },
-      "Min": -0.1,
-      "Max": 0.1,
-      "Scale": 0.001
-    },
-    {
-      "InputId": "e3a995dc-ec77-439c-8aed-e47df5e2b923"/*OffsetVolume*/,
-      "Position": {
-        "X": -1380.4293,
-        "Y": 1298.5939
-      }
+      "Description": "changes the thickness of the trails"
     },
     {
       "InputId": "49337c9b-7016-4093-b695-f7d1dd948fa1"/*FadeNearest*/,
@@ -113,28 +142,32 @@
         "X": -1380.4293,
         "Y": 1343.5939
       },
-      "GroupTitle": "Rendering..."
+      "GroupTitle": "Rendering...",
+      "Description": "Defines how close to the camera the particles start to fade out"
     },
     {
       "InputId": "60b17724-e469-463f-9700-745b4d45d6ff"/*EnableZWrite*/,
       "Position": {
         "X": -1380.4293,
         "Y": 1388.5939
-      }
+      },
+      "Description": "Enables / disables Z-Writing / sorting"
     },
     {
       "InputId": "a8f0a422-4846-48ad-8756-9d542b3141d3"/*BlendMode*/,
       "Position": {
         "X": -1380.4293,
         "Y": 1433.5939
-      }
+      },
+      "Description": "Defines what blendmode is used to render the particles"
     },
     {
       "InputId": "9b42caa4-040a-4f83-8822-bc5bfbdff334"/*Texture_*/,
       "Position": {
         "X": -1380.4293,
         "Y": 1568.5939
-      }
+      },
+      "Description": "Input for a custom texture which overrides the default point / blob"
     }
   ],
   "SymbolChildUis": [

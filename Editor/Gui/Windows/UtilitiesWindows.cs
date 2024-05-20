@@ -37,7 +37,7 @@ public class UtilitiesWindow : Window
         ImGui.BeginChild("categories", new Vector2(160 * T3Ui.UiScaleFactor, -1), true, ImGuiWindowFlags.NoScrollbar);
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
-            FormInputs.AddSegmentedButton(ref _activeCategory, "", 150 * T3Ui.UiScaleFactor);
+            FormInputs.AddSegmentedButtonWithLabel(ref _activeCategory, "", 150 * T3Ui.UiScaleFactor);
             ImGui.PopStyleVar();
         }
         ImGui.EndChild();

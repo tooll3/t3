@@ -41,6 +41,11 @@
           }
         },
         {
+          "Id": "0c227ab3-3394-40fb-9274-d857a2293d35"/*Rotation*/,
+          "Type": "System.Single",
+          "Value": 0.53157747
+        },
+        {
           "Id": "00ffc593-d62e-4f40-8957-906b444b8f3b"/*Divisions*/,
           "Type": "System.Single",
           "Value": 21.1491
@@ -49,11 +54,6 @@
           "Id": "e635d5cd-8250-4722-a11a-ffe27a922f3e"/*LineThickness*/,
           "Type": "System.Single",
           "Value": 4.8
-        },
-        {
-          "Id": "0c227ab3-3394-40fb-9274-d857a2293d35"/*Rotation*/,
-          "Type": "System.Single",
-          "Value": 0.53157747
         },
         {
           "Id": "03afbb91-a64f-48bc-a306-b378a068aca8"/*Resolution*/,

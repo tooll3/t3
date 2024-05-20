@@ -42,17 +42,17 @@ RWStructuredBuffer<Point> ResultPoints : u0;
 
 static const float NoisePhase = 0;
 
-#define VolumeSphere  0
-#define VolumeBox  1
-#define VolumePlane  2
-#define VolumeZebra  3
-#define VolumeNoise  4
+#define VolumeSphere 0
+#define VolumeBox 1
+#define VolumePlane 2
+#define VolumeZebra 3
+#define VolumeNoise 4
 
-#define ModeOverride    0
-#define ModeAdd         1
-#define ModeSub         2
-#define ModeMultiply    3
-#define ModeInvert      4
+#define ModeOverride 0
+#define ModeAdd 1
+#define ModeSub 2
+#define ModeMultiply 3
+#define ModeInvert 4
 
 float Bias2(float x, float bias)
 {
@@ -61,9 +61,9 @@ float Bias2(float x, float bias)
                : 1 - pow(1 - x, clamp(1 - bias, 0.005, 1));
 }
 
-inline float LinearStep(float min, float max, float t) 
+inline float LinearStep(float min, float max, float t)
 {
-    return saturate((t- min) / (max-min)  );
+    return saturate((t - min) / (max - min));
 }
 
 [numthreads(64, 1, 1)] void main(uint3 i
@@ -78,7 +78,7 @@ inline float LinearStep(float min, float max, float t)
 
     Point p = SourcePoints[i.x];
 
-    //ResultPoints[i.x] = SourcePoints[i.x];
+    // ResultPoints[i.x] = SourcePoints[i.x];
 
     if (isnan(p.W))
     {
@@ -96,7 +96,6 @@ inline float LinearStep(float min, float max, float t)
     {
         float distance = length(posInVolume);
         s = LinearStep(1 + FallOff, 1, distance);
-        
     }
     else if (VolumeShape == VolumeBox)
     {
@@ -145,11 +144,17 @@ inline float LinearStep(float min, float max, float t)
         s = s * (1 - w);
     }
 
-    p.W = (DiscardNonSelected && s <= 0)
-                    ? sqrt(-1)
-                : (ClampResult)
-                    ? saturate(s)
-                    : s;
+    float result = (DiscardNonSelected && s <= 0)
+                       ? sqrt(-1)
+                   : (ClampResult)
+                       ? saturate(s)
+                       : s;
+
+    p.Selected = result;
+    if (SetW)
+    {
+        p.W = result;
+    }
 
     ResultPoints[i.x] = p;
 }

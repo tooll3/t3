@@ -15,14 +15,18 @@
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "GroupTitle": "Picker Settings",
+      "Description": "Defines the point of the image whose color is output on the X and Y axis.\nX: 0 Left / 1 Right\nY: 0 Top / 1 Bottom"
     },
     {
       "InputId": "84ff0ce4-443d-438d-8fc7-6d6ede75d67b"/*AlwaysUpdate*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "Description": "If activated, the incoming image is constantly updated. Helpful if the image is not static but changes over time (video / animation etc.)",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],

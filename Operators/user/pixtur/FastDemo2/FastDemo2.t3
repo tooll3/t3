@@ -94,7 +94,7 @@
           "Value": 0.32999998
         },
         {
-          "Id": "3ad8e756-7720-4f43-85da-efe1af364cfe"/*StartValue*/,
+          "Id": "3ad8e756-7720-4f43-85da-efe1af364cfe"/*Base*/,
           "Type": "System.Single",
           "Value": 0.14
         },

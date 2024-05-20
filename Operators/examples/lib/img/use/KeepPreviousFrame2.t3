@@ -1,0 +1,17 @@
+{
+  "Name": "KeepPreviousFrame2",
+  "Id": "57c1fe66-d8bc-4ea5-ad25-6986d4c2bba4",
+  "Namespace": "examples.lib.img.use",
+  "Inputs": [
+    {
+      "Id": "b304efd5-a8e4-4213-9c85-8f482c55c880"/*ImageA*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "9bae6e82-3691-4f1a-82e0-77b3953b7019"/*Keep*/,
+      "DefaultValue": true
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

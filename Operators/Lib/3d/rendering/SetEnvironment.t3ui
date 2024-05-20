@@ -73,6 +73,14 @@
         "Y": 1336.7096
       },
       "Description": "Sets the radius for the sphere mesh that surrounds the scene.\n\nProTip: Clipping of the Background can be prevented either by this setting or by the \"NearFarClip\" settings in the used camera."
+    },
+    {
+      "InputId": "46d76d8a-5fb6-4138-a88b-950a2e5b8529"/*QualityFactor*/,
+      "Position": {
+        "X": 114.808914,
+        "Y": 1381.7096
+      },
+      "Description": "A factor that is apply to the sample count for the different roughness levels.\nWhen enabling Live update this is Significant(!) impact on your rendering performance, so turning this down until it the artifacts are noticable. "
     }
   ],
   "SymbolChildUis": [
@@ -107,8 +115,8 @@
     {
       "ChildId": "20636efb-c637-4879-93fd-0b507509ec4e"/*SetContextTexture*/,
       "Position": {
-        "X": 983.5674,
-        "Y": 433.22534
+        "X": 1084.2887,
+        "Y": 432.318
       }
     },
     {
@@ -116,7 +124,7 @@
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
-        "Y": 166.0
+        "Y": 192.0
       },
       "Position": {
         "X": 712.7189,
@@ -140,7 +148,7 @@
     {
       "ChildId": "db7944aa-ade6-450e-af4d-d4af0fd039fc"/*DrawMeshUnlit*/,
       "Position": {
-        "X": 937.41504,
+        "X": 1087.415,
         "Y": 943.25555
       }
     },
@@ -189,29 +197,43 @@
     {
       "ChildId": "ce742e93-72f1-4be4-ac1a-37e6a5a98c4e"/*GetTextureSize*/,
       "Position": {
-        "X": 458.10214,
-        "Y": 525.4608
+        "X": 605.45374,
+        "Y": 535.2658
       }
     },
     {
       "ChildId": "66262d33-299d-4752-beb5-845123b5593e"/*BoolToInt*/,
       "Position": {
-        "X": 641.8202,
-        "Y": 541.5845
+        "X": 742.5415,
+        "Y": 540.6771
       }
     },
     {
       "ChildId": "5254b03f-0846-458e-add4-340c1afb6552"/*PickTexture*/,
       "Position": {
-        "X": 823.05054,
-        "Y": 501.41577
+        "X": 923.77185,
+        "Y": 500.50842
       }
     },
     {
       "ChildId": "aa7acd2f-79ce-4e8b-b7d1-fc32958a5834"/*LoadImage*/,
       "Position": {
-        "X": 519.10034,
-        "Y": 325.35867
+        "X": 742.5415,
+        "Y": 484.67712
+      }
+    },
+    {
+      "ChildId": "21e433dd-ce81-43a7-9d6c-27b94c067d69"/*BoolToFloat*/,
+      "Position": {
+        "X": 295.86642,
+        "Y": 1038.8162
+      }
+    },
+    {
+      "ChildId": "57d70a8c-f7e8-4529-b4b4-51a8f06bf6db"/*Multiply*/,
+      "Position": {
+        "X": 465.529,
+        "Y": 1373.6943
       }
     }
   ],

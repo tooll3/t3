@@ -24,7 +24,7 @@ namespace T3.Core.Animation
     {
         public Playback()
         {
-            _isLive = true;
+            _isRenderingToFile = false;
             Current = this;
         }
 
@@ -50,11 +50,19 @@ namespace T3.Core.Animation
         public TimeRange LoopRange;
 
         public double Bpm { get;  set; } = 120.0;
-        public bool IsLive
+        
+        /// <summary>
+        /// Controls if the playback is controlled by rendering output.
+        /// </summary>
+        /// <remarks>
+        /// During rendering of videos or image sequence this setting is set to false
+        /// to prevent time updates that interfere with rendered controlled audio output. 
+        /// </remarks>
+        public bool IsRenderingToFile
         {
-            get => _isLive;
+            get => _isRenderingToFile;
             set {
-                _isLive = value;
+                _isRenderingToFile = value;
                 if (value)
                 {
                     PlaybackSpeed = 0;
@@ -71,15 +79,15 @@ namespace T3.Core.Animation
         public bool IsLooping = false;
         public static bool OpNotReady;
         
-        public static double RunTimeInSecs => _runTimeWatch.Elapsed.TotalSeconds;
-        public static double LastFrameDuration { get; private set; }
+        public static double RunTimeInSecs => RunTimeWatch.Elapsed.TotalSeconds;
+        public static double LastFrameDuration { get; protected set; }
         public double LastFrameDurationInBars => BarsFromSeconds(LastFrameDuration);
         
         public virtual void Update(bool idleMotionEnabled = false)
         {
-            // if we are not live, TimeInBars is provided externally
+            // If we are not live, TimeInBars is provided externally
             Current = this;
-            var currentRuntime = (IsLive) ? RunTimeInSecs : TimeInSecs;
+            var currentRuntime = IsRenderingToFile ?   TimeInSecs : RunTimeInSecs;
 
             LastFrameDuration = currentRuntime - _lastFrameStart;
             _lastFrameStart = currentRuntime;
@@ -87,7 +95,7 @@ namespace T3.Core.Animation
             var timeSinceLastFrameInSecs = LastFrameDuration;
             var isPlaying = Math.Abs(PlaybackSpeed) > 0.001;
 
-            if (!IsLive)
+            if (IsRenderingToFile)
             {
                 FxTimeInBars = TimeInBars;
             }
@@ -98,7 +106,7 @@ namespace T3.Core.Animation
             }
             else
             {
-                var timeWasManipulated = Math.Abs(TimeInBars - _previousTime) > 0.001f;
+                var timeWasManipulated = Math.Abs(TimeInBars - _previousTimeInBars) > 0.001f;
                 if (timeWasManipulated)
                 {
                     FxTimeInBars = TimeInBars;
@@ -110,7 +118,7 @@ namespace T3.Core.Animation
             }
 
             // don't support looping if recording (looping sound is not implemented yet)
-            if (IsLive && IsLooping && TimeInBars > LoopRange.End)
+            if (!IsRenderingToFile && IsLooping && TimeInBars > LoopRange.End)
             {
                 double loopDuration = LoopRange.End - LoopRange.Start;
 
@@ -121,7 +129,7 @@ namespace T3.Core.Animation
                     TimeInBars -= loopDuration;
             }
 
-            _previousTime = TimeInBars;
+            _previousTimeInBars = TimeInBars;
         }
 
         public double BarsFromSeconds(double secs)
@@ -135,8 +143,8 @@ namespace T3.Core.Animation
         }
         
         private static double _lastFrameStart;
-        private double _previousTime;
-        private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
-        private bool _isLive;
+        private double _previousTimeInBars;
+        private static readonly Stopwatch RunTimeWatch = Stopwatch.StartNew();
+        private bool _isRenderingToFile;
     }
 }

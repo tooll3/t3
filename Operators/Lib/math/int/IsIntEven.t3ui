@@ -1,6 +1,6 @@
 {
   "Id": "9a34f503-709b-42e0-a25f-bc74573afa6b"/*IsIntEven*/,
-  "Description": "",
+  "Description": "Checks whether the incoming or defined Integer is Odd or Even and gives out a bool accordingly\n\nCan be combined with [IntValue] and [Boolean] to visualize",
   "InputUis": [
     {
       "InputId": "c5703990-1062-4512-b016-74ae1cce538a"/*Value*/,

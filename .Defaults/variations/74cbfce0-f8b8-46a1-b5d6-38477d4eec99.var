@@ -1,0 +1,165 @@
+{
+  "Id": "74cbfce0-f8b8-46a1-b5d6-38477d4eec99",
+  "Variations": [
+    {
+      "Id": "80b15a2d-37e5-42dc-aa1e-634f8c7edc05",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Default",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {}
+      }
+    },
+    {
+      "Id": "fb4f8a96-29e1-4eb5-8af0-8aa79a973b7f",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Ocean",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "7a331539-33ea-48b9-8930-daf93dd33d7c": 9.7,
+          "53479387-1c04-4fbc-b093-043075495e10": 0.4,
+          "ef8c86ee-16c0-446e-9ce0-c6342adbf32a": {
+            "X": 0.0,
+            "Y": 0.15687649,
+            "Z": 0.291866,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "51494576-46c2-4748-82cd-a25ed47a2cd8",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "SwimmingPool",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "7a331539-33ea-48b9-8930-daf93dd33d7c": 9.1,
+          "ef8c86ee-16c0-446e-9ce0-c6342adbf32a": {
+            "X": 0.0,
+            "Y": 0.58215475,
+            "Z": 1.0,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "b20d72d9-da1e-43cf-a48f-bdc07c3329a5",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "ForestFire",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "53479387-1c04-4fbc-b093-043075495e10": 0.2,
+          "ef8c86ee-16c0-446e-9ce0-c6342adbf32a": {
+            "X": 0.69377995,
+            "Y": 0.28027585,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "fe46b37f-6f37-4793-9bf8-cd6fa4f9edc4",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "Fog",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "ef8c86ee-16c0-446e-9ce0-c6342adbf32a": {
+            "X": 0.9762621,
+            "Y": 0.9960405,
+            "Z": 1.0,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "def295bd-08f7-49bc-a6f2-01e5db75b710",
+      "IsPreset": true,
+      "ActivationIndex": 6,
+      "Title": "Tooll3",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "ef8c86ee-16c0-446e-9ce0-c6342adbf32a": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.40174103,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "f37c3baa-92fc-4d03-b756-d7c5246879ae",
+      "IsPreset": true,
+      "ActivationIndex": 7,
+      "Title": "CelPainChick",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "7a331539-33ea-48b9-8930-daf93dd33d7c": 30.0,
+          "53479387-1c04-4fbc-b093-043075495e10": -50.0,
+          "ef8c86ee-16c0-446e-9ce0-c6342adbf32a": {
+            "X": 1.0,
+            "Y": 0.59181976,
+            "Z": 0.5952091,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "6ec957b5-70c8-4340-8b85-ef67363c1e01",
+      "IsPreset": true,
+      "ActivationIndex": 8,
+      "Title": "AutoIndustrie",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "53479387-1c04-4fbc-b093-043075495e10": 0.5,
+          "ef8c86ee-16c0-446e-9ce0-c6342adbf32a": {
+            "X": 0.47666535,
+            "Y": 0.47368458,
+            "Z": 0.4832536,
+            "W": 1.0
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1133,6 +1133,12 @@
       "SymbolId": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "674b6885-3433-41e4-a45f-7d09969ba278"/*SamplePointColorAttributesExample*/,
+      "SymbolId": "f4528476-298d-42b7-8138-3916bea2da6e",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

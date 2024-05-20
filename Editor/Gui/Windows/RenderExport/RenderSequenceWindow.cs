@@ -26,13 +26,16 @@ public class RenderSequenceWindow : BaseRenderWindow
         FormInputs.AddStringInput("Folder", ref _targetFolder);
         ImGui.SameLine();
         FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.Folder, ref _targetFolder);
+
+        FormInputs.AddVerticalSpace(5);
         ImGui.Separator();
+        FormInputs.AddVerticalSpace(5);
 
         var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
 
         if (!IsExportingImages && !IsToollRenderingSomething)
         {
-            if (ImGui.Button("Start Export"))
+            if (ImGui.Button("Start Render"))
             {
                 if (ValidateOrCreateTargetFolder(_targetFolder))
                 {
@@ -47,7 +50,7 @@ public class RenderSequenceWindow : BaseRenderWindow
         else if(IsExportingImages)
         {
             // Handle audio although we do not save it
-            AudioEngine.LastMixDownBuffer(Playback.LastFrameDuration);
+            AudioRendering.GetLastMixDownBuffer(Playback.LastFrameDuration);
             var success = SaveCurrentFrameAndAdvance(mainTexture);
             ImGui.ProgressBar((float) Progress, new Vector2(-1, 4));
 
@@ -124,7 +127,7 @@ public class RenderSequenceWindow : BaseRenderWindow
     private static string Extension => _fileFormat.ToString().ToLower(); 
 
     private static double _exportStartedTime;
-    private static string _targetFolder = "./Render";
+    private static string _targetFolder = UserSettings.Config.RenderSequenceFilePath;
 
     private static ScreenshotWriter.FileFormats _fileFormat;
     private static string _lastHelpString = string.Empty;

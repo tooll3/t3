@@ -1,6 +1,6 @@
 {
   "Id": "82a5f040-926b-4970-9da2-aa36de94b436"/*RgbaToColor*/,
-  "Description": "",
+  "Description": "Creates a Color from 4 values (RGBA)\n\nSimilar to [AColor] and [PickColor] and the same as [Vector4]\nAlternative with more functions: [SampleGradient]\n\n\nFor the opposite see [Vector4Components]\n\nAlso see: [HSBToColor]\n",
   "InputUis": [
     {
       "InputId": "5f2de1d3-6803-4f56-aaf1-9e29b4d81eb8"/*R*/,
@@ -38,6 +38,7 @@
         "X": 0.0,
         "Y": 45.0
       },
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true

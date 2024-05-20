@@ -75,14 +75,6 @@
         "Y": 2339.6355
       },
       "GroupTitle": "Options"
-    },
-    {
-      "InputId": "ec50aedf-5c2d-4f32-ad7e-205dd435e1fd"/*RecomputeNormals_*/,
-      "Position": {
-        "X": 3.1917114,
-        "Y": 2421.6038
-      },
-      "Description": "Will apply [RecomputeNormals] after displacement. This operator is experimental and like to add artifacts to complex meshes."
     }
   ],
   "SymbolChildUis": [
@@ -199,8 +191,8 @@
     {
       "ChildId": "2a71171b-6824-4b6c-958d-a9fe3d368a39"/*RecomputeNormals*/,
       "Position": {
-        "X": 1732.6808,
-        "Y": 1570.3586
+        "X": 1693.6223,
+        "Y": 1472.3699
       }
     },
     {
@@ -222,20 +214,6 @@
       "Position": {
         "X": 170.62408,
         "Y": 2005.5707
-      }
-    },
-    {
-      "ChildId": "a534aec6-4df6-45f6-9233-3b1223500162"/*PickMeshBuffer*/,
-      "Position": {
-        "X": 1888.163,
-        "Y": 1464.1471
-      }
-    },
-    {
-      "ChildId": "f7116530-221d-450e-bc77-6c7caba9b17c"/*BoolToInt*/,
-      "Position": {
-        "X": 153.19171,
-        "Y": 2421.6038
       }
     }
   ],

@@ -1,6 +1,6 @@
 {
   "Id": "f86358e0-2573-4acd-9a90-e95108e8a4da"/*Int2Components*/,
-  "Description": "",
+  "Description": "Converts an int2 to 4 single integers\n\nFor the opposite see [Int2]",
   "InputUis": [
     {
       "InputId": "425ba347-d82a-49ec-b8b4-d0f8f7e3a504"/*Resolution*/,

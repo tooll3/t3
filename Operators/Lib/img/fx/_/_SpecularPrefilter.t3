@@ -34,6 +34,10 @@
     {
       "Id": "9d792412-d1f0-45f9-abd6-4eab79719924"/*UpdateLive*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "663be4f2-ae53-4a4f-a825-d4d8a30161ad"/*QualityFactor*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [],

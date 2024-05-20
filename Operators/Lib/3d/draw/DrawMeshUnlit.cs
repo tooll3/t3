@@ -43,6 +43,9 @@ namespace lib._3d.draw
         [Input(Guid = "44b31261-df87-4289-bc64-db349476e418")]
         public readonly InputSlot<float> BlurLevel = new();
 
+        [Input(Guid = "48da47d3-8d30-4e85-8ecc-8c07894c54b4")]
+        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> TextureWrap = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
+
     }
 }
 

@@ -813,17 +813,17 @@
           "Value": 1000
         },
         {
-          "Id": "3d50d3c5-07e6-4246-8740-fcdc62173e1d"/*SmoothDistance*/,
-          "Type": "System.Single",
-          "Value": 0.01
-        },
-        {
           "Id": "354e468d-d38a-49ba-b2f3-8e522723d43f"/*SampleRange*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.0,
             "Y": 0.92
           }
+        },
+        {
+          "Id": "3d50d3c5-07e6-4246-8740-fcdc62173e1d"/*SmoothDistance*/,
+          "Type": "System.Single",
+          "Value": 0.01
         }
       ],
       "Outputs": []

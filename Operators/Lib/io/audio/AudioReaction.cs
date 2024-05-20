@@ -245,7 +245,7 @@ namespace lib.io.audio
         
         private static readonly List<float> _emptyList = new();
         public double PlaybackTimeInSecs =>
-            (Playback.Current.IsLive) ? Playback.RunTimeInSecs : Playback.Current.TimeInSecs;
+            (Playback.Current.IsRenderingToFile) ?   Playback.Current.TimeInSecs : Playback.RunTimeInSecs;
 
         /// <summary>
         /// This is used only for visualization

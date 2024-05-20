@@ -417,7 +417,7 @@ namespace T3.Editor.Gui.Interaction
                     ImGui.PushID("v");
                     if (SingleValueEdit.Draw(ref v, inputSize, 0, 20, true, 0.005f, "{0:0.00}") is InputEditStateFlags.Modified)
                     {
-                        cColor.V = v.Clamp(0, 10);
+                        cColor.V = v.Clamp(0, 1000);
                         edited |= InputEditStateFlags.Modified;
                     }
 

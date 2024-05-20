@@ -16,8 +16,7 @@ using T3.Core.Utils;
 namespace lib.io.midi
 {
 	[Guid("f9f4281b-92ee-430d-a930-6b588a5cb9a9")]
-    public class MidiOutput : Instance<MidiOutput>
-,ICustomDropdownHolder,IStatusProvider
+    public class MidiOutput : Instance<MidiOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider
     {
         [Output(Guid = "670C784C-DE53-46F4-B93A-A1F07AA8F18E")]
         public readonly Slot<Command> Result = new();
@@ -27,6 +26,16 @@ namespace lib.io.midi
             Result.UpdateAction = Update;
         }
 
+        private bool _initialized;
+        protected override void Dispose(bool isDisposing)
+        {
+            if(!isDisposing) return;
+
+            if (_initialized)
+            {
+                MidiConnectionManager.UnregisterConsumer(this);
+            }
+        }
         private void Update(EvaluationContext context)
         {
             var deviceName = Device.GetValue(context);
@@ -40,6 +49,13 @@ namespace lib.io.midi
 
             var triggerJustActivated = false;
             var triggerJustDeactivated = false;
+
+            if(!_initialized)
+            {
+                MidiConnectionManager.RegisterConsumer(this);
+                _initialized = true;
+            }
+
             if (triggerActive != _triggered)
             {
                 if (triggerActive)
@@ -55,7 +71,7 @@ namespace lib.io.midi
             }
             
             
-            foreach (var (m, device) in MidiInConnectionManager._midiOutsWithDevices)
+            foreach (var (m, device) in MidiConnectionManager.MidiOutsWithDevices)
             {
                 if (device.ProductName != deviceName)
                     continue;
@@ -78,8 +94,18 @@ namespace lib.io.midi
                             break;
                         
                         case SendModes.Notes_FixedDuration:
-                            if(triggerActive)
-                                midiEvent = new NoteOnEvent(0, channel, noteOrControllerIndex, velocity, durationInMs);
+                            if (triggerActive)
+                            {
+                                var noteOnEvent= new NoteOnEvent(0, channel, noteOrControllerIndex, velocity, durationInMs);
+                                midiEvent = noteOnEvent;
+                                _lastNoteOnTime = Playback.RunTimeInSecs;
+                                _offEvent = noteOnEvent.OffEvent;
+                            }
+                            else if (Playback.RunTimeInSecs - _lastNoteOnTime > durationInMs / 1000.0)
+                            {
+                                midiEvent = _offEvent;
+                                _offEvent = null;
+                            }
                             break;
                         
                         case SendModes.ControllerChange:
@@ -119,6 +145,8 @@ namespace lib.io.midi
             }
             _lastErrorMessage = !foundDevice ? $"Can't find MidiDevice {deviceName}" : null;
         }
+        
+        private double _lastNoteOnTime;
 
         private static int GetMicrosecondsPerQuarterNoteFromBpm(double bpm)
         {
@@ -154,7 +182,7 @@ namespace lib.io.midi
                 yield break;
             }
             
-            foreach (var device in MidiInConnectionManager._midiOutsWithDevices.Values)
+            foreach (var device in MidiConnectionManager.MidiOutsWithDevices.Values)
             {
                 yield return device.ProductName;
             }
@@ -177,6 +205,13 @@ namespace lib.io.midi
         {
             return _lastErrorMessage;
         }
+
+        // We don't actually receive midi in this operator, those methods can remain empty, we just want the MIDI connection thread up
+        public void MessageReceivedHandler(object sender, MidiInMessageEventArgs msg) {}
+
+        public void ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg) {}
+
+        public void OnSettingsChanged() {}
 
         private string _lastErrorMessage;
         #endregion
@@ -203,5 +238,6 @@ namespace lib.io.midi
         [Input(Guid = "ABE9393E-282E-4DE0-8F86-541FA955658F")]
         public readonly InputSlot<float> DurationInSecs = new ();
 
+        private NoteEvent _offEvent;
     }
 }

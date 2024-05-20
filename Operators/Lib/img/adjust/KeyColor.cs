@@ -39,6 +39,9 @@ namespace lib.img.adjust
         [Input(Guid = "e32268a7-8527-4d0d-b9ba-11c23cb07dd2", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new();
 
+        [Input(Guid = "749654ec-1203-4f28-be9b-e3d3e2bff9d2")]
+        public readonly InputSlot<float> Choke = new InputSlot<float>();
+
         private enum Modes
         {
             RemoveKeyed,

@@ -35,9 +35,6 @@ namespace lib._3d.mesh.modify
 
         [Input(Guid = "7c6fa9b0-1c70-4865-8f01-d22c41ff9b6b")]
         public readonly InputSlot<bool> UseVertexSelection = new InputSlot<bool>();
-
-        [Input(Guid = "ec50aedf-5c2d-4f32-ad7e-205dd435e1fd")]
-        public readonly InputSlot<bool> RecomputeNormals_ = new InputSlot<bool>();
         
         private enum Modes
         {

@@ -1,23 +1,23 @@
-using System;
+﻿using System;
 using System.Numerics;
 using ImGuiNET;
-using lib.anim;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95;
 
-namespace libEditor.CustomUi
+namespace T3.Editor.Gui.ChildUi
 {
     public static class TriggerAnimUi
     {
-        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
             if (!(instance is TriggerAnim anim)
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
-                return SymbolUi.Child.CustomUiResult.None;
+                return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
             // if (RateEditLabel.Draw(ref triggerAnimation.Rate.TypedInputValue.Value,
@@ -32,7 +32,7 @@ namespace libEditor.CustomUi
 
             if (h < 10)
             {
-                return SymbolUi.Child.CustomUiResult.None;
+                return SymbolChildUi.CustomUiResult.None;
             }
             
 
@@ -46,8 +46,8 @@ namespace libEditor.CustomUi
 
             if (h > 14)
             {
-                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), anim.EndValue);
-                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), anim.StartValue);
+                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), anim.Amplitude);
+                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), anim.Base);
             }
             
             // Graph dragging to edit Bias and Ratio
@@ -117,13 +117,19 @@ namespace libEditor.CustomUi
                 //  0-----1 - - - - - -   lh
                 //        |
                 //        |
+                
+                
+                var shapeValue = anim.Shape.IsConnected 
+                                ? anim.Shape.Value 
+                                :anim.Shape.TypedInputValue.Value;
+                var shapeIndex = shapeValue.Clamp(0, Enum.GetNames<TriggerAnim.Shapes>().Length -1 );
 
                 for (var i = 0; i < GraphListSteps; i++)
                 {
                     var f = (float)i / GraphListSteps;
                     var fragment = f * (1 + previousCycleFragment) - previousCycleFragment;
                     GraphLinePoints[i] = new Vector2((f * duration +  delay) * graphWidth,
-                                                     (0.5f - anim.CalcNormalizedValueForFraction(fragment) / 2) * h
+                                                     (0.5f - anim.CalcNormalizedValueForFraction(fragment, shapeIndex) / 2) * h
                                                     ) + graphRect.Min;
                 }
 
@@ -132,10 +138,10 @@ namespace libEditor.CustomUi
             }
             drawList.PopClipRect();
             ImGui.PopID();
-            return SymbolUi.Child.CustomUiResult.Rendered 
-                   | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
-                   | SymbolUi.Child.CustomUiResult.PreventInputLabels
-                   | SymbolUi.Child.CustomUiResult.PreventTooltip;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
         }
 
         private static float _dragStartBias;

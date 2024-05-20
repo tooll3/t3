@@ -1516,14 +1516,6 @@
       "SymbolId": "0626aba2-ed0c-40c4-9b50-2e729d0d8d86",
       "InputValues": [
         {
-          "Id": "40121009-b4b4-4613-9655-af09dcfea402"/*OffsetCopies*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.04
-          }
-        },
-        {
           "Id": "c6fbd3b2-45da-40bc-958a-8ab13b8cdf2b"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.07666667
@@ -1537,6 +1529,14 @@
           "Id": "33f88b64-3d8f-4b07-afdc-18d3b3eb63c8"/*Copies*/,
           "Type": "System.Single",
           "Value": 10.0
+        },
+        {
+          "Id": "40121009-b4b4-4613-9655-af09dcfea402"/*OffsetCopies*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.04
+          }
         }
       ],
       "Outputs": []

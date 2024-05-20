@@ -19,6 +19,9 @@ namespace lib.io.time
         [Output(Guid = "D6E453E6-1D3F-4765-A427-DD9967BFBC34", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Tempo = new();
 
+        [Output(Guid = "DEAB643C-F608-4DA9-A1C2-298449D17BC0", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<bool> IsConnected = new();
+        
         public AbletonLinkSync()
         {
             TryInitialize();
@@ -28,7 +31,10 @@ namespace lib.io.time
 
         private void Update(EvaluationContext context)
         {
-            if (_nativeLinkInstance == IntPtr.Zero)
+            var isConnected = _nativeLinkInstance != IntPtr.Zero;
+            IsConnected.Value = isConnected;
+            
+            if (!isConnected)
                 return;
             
             if (MathUtils.WasTriggered(TriggerStartPlaying.GetValue(context), ref _triggerStart))
@@ -55,6 +61,7 @@ namespace lib.io.time
             if (_startMeasure == 0)
             {
                 _startMeasure = Math.Floor(beat / quantum) * quantum;
+                _startMeasure = 0;
             }
 
             var pauseIfDisconnected = PauseIfDisconnected.GetValue(context);

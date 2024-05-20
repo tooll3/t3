@@ -15,6 +15,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace lib.dx11.buffer
 {
@@ -178,7 +179,10 @@ namespace lib.dx11.buffer
                 lastPos = pos;
 
                 result[index].W = 1;
-                result[index].Orientation = LookAt(-Vector3.Normalize(d), -upVector);
+                result[index].Orientation = LookAt(Vector3.Normalize(d), -upVector);
+                result[index].Color = SampleLinearColors(t, ref sourcePoints);
+                result[index].Stretch = new Vector3(1.0f, 1.0f, 1.0f);
+                result[index].Selected = 1;
             }
 
             return result;
@@ -205,7 +209,33 @@ namespace lib.dx11.buffer
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 SampleCubicBezier(float t, float curvature, ref Point[] points)
+        public static System.Numerics.Vector4 SampleLinearColors(float t, ref Point[] points)
+        {
+            int i;
+
+            if (t >= 1f)
+            {
+                t = 1f;
+                i = points.Length - 2; // Adjusted index
+            }
+            else
+            {
+                var tt = t * (points.Length - 1);
+                i = (int)tt;
+                t = tt - i;
+            }
+
+            var pA = points[i].Color;
+            var pB = points[i + 1].Color;
+
+            // Perform linear interpolation between colors
+            var interpolatedColor = pA + (pB - pA) * t;
+
+            return interpolatedColor;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static System.Numerics.Vector3 SampleCubicBezier(float t, float curvature, ref Point[] points)
         {
             int i;
 

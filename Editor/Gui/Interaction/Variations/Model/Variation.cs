@@ -12,7 +12,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 {
     /// <summary>
     /// Base class for serialization of presents and snapshots
-    /// </summary>
+    /// </summary>/
     public class Variation : ISelectableCanvasObject
     {
         // Serialized fields...

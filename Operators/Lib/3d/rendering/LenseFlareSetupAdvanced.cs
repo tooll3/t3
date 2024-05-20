@@ -12,9 +12,6 @@ namespace lib._3d.rendering
         [Output(Guid = "fe0eca40-4f2d-475b-8372-0351d9f67c59")]
         public readonly Slot<Command> Output = new();
 
-        [Output(Guid = "e2e8f9a0-48eb-4014-8356-8aa4d1a81a6d")]
-        public readonly Slot<float> Centerglow = new Slot<float>();
-
         [Input(Guid = "f2c310f0-a019-40e5-9b17-3c35d254bb82")]
         public readonly InputSlot<float> Brightness = new();
 

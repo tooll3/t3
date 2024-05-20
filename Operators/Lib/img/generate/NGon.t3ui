@@ -1,6 +1,6 @@
 {
   "Id": "22a3cd4e-02b3-44d7-ad2b-aab5810c5e88"/*NGon*/,
-  "Description": "Renders a polygon shape similar to [Blob] or [RoundedRect].",
+  "Description": "Renders a polygon shape similar to [Blob] or [RoundedRect].\n\nSimilar Ops: [NGon] [RoundedRect] [Rings] [RadialGradient] [LinearGradient] [Blob]",
   "InputUis": [
     {
       "InputId": "837a9689-d7a8-43db-88a5-2ac3ce8fbd37"/*Image*/,

@@ -18,7 +18,7 @@ using T3.Serialization;
 namespace T3.Editor.Gui.Interaction.Variations.Model
 {
     /// <summary>
-    /// Collects all presets and variations for a symbol 
+    /// Collects all presets and variations for a symbol.
     /// </summary>
     internal sealed class SymbolVariationPool
     {
@@ -100,9 +100,14 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public void SaveVariationsToFile()
         {
+        	// FIXME: Unclear after merge: verify if this is done implicitly by SaveVariationsToFile()
+        	// CreateFolderIfNotExists(UserData.UserDataLocation.User);
+        	
             SaveVariationsToFile(UserData.UserDataLocation.User);
 
             #if DEBUG
+            
+            
 
             SaveVariationsToFile(UserData.UserDataLocation.Defaults);
             #endif
@@ -492,7 +497,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         private static MacroCommand CreateBlendTowardsVariationCommand(Instance compositionInstance, Variation variation, float blend)
         {
             var commands = new List<ICommand>();
-            //var parentSymbol = compositionInstance.Parent.Symbol;
             if (!variation.IsSnapshot)
                 return null;
 

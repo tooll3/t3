@@ -51,7 +51,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float radians = Rotation / 180 *3.141578;
     float2 angle =  float2(sin(radians),cos(radians));
-    float distanceFromCenter=  dot(p-Center, angle);
+    float distanceFromCenter=  dot(p-Center * float2(1,-1), angle);
     float normalizedDistance= -distanceFromCenter / Width;
     float4 visibleOrgColor = lerp(float4(0,0,0,0), orgColor, ShowOriginal);
 

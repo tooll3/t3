@@ -85,22 +85,6 @@
           }
         },
         {
-          "Id": "78259bce-6e58-424c-9d06-5eea1f37606a"/*Size*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.63,
-            "Y": 1.149
-          }
-        },
-        {
-          "Id": "40121009-b4b4-4613-9655-af09dcfea402"/*OffsetCopies*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 1.2366667,
-            "Y": 0.06999999
-          }
-        },
-        {
           "Id": "c6fbd3b2-45da-40bc-958a-8ab13b8cdf2b"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.9866666
@@ -111,9 +95,25 @@
           "Value": -1.1999996
         },
         {
+          "Id": "78259bce-6e58-424c-9d06-5eea1f37606a"/*Size*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.63,
+            "Y": 1.149
+          }
+        },
+        {
           "Id": "33f88b64-3d8f-4b07-afdc-18d3b3eb63c8"/*Copies*/,
           "Type": "System.Single",
           "Value": 2.5333335
+        },
+        {
+          "Id": "40121009-b4b4-4613-9655-af09dcfea402"/*OffsetCopies*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 1.2366667,
+            "Y": 0.06999999
+          }
         }
       ],
       "Outputs": []

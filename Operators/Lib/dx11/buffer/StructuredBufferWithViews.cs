@@ -29,7 +29,10 @@ namespace lib.dx11.buffer
             var uavBufferFlags = BufferFlags.GetValue(context);
 
             if (sizeInBytes <= 0)
+            {
+                BufferWithViews.Value = null;
                 return;
+            }
 
             BufferWithViews.Value ??= new BufferWithViews();
 

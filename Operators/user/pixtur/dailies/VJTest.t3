@@ -104,7 +104,7 @@
       "Outputs": []
     },
     {
-      "Id": "4e943fa2-aa55-479f-bc68-1fdba57b7c10"/*RandomString*/,
+      "Id": "4e943fa2-aa55-479f-bc68-1fdba57b7c10"/*AnimRandomString*/,
       "SymbolId": "dd7fa7ee-266a-43c8-b29f-3357488b26be",
       "InputValues": [
         {
@@ -204,7 +204,7 @@
       "Outputs": []
     },
     {
-      "Id": "8a094ed1-8883-4815-ad87-4e0fdb4e4d83"/*RandomString*/,
+      "Id": "8a094ed1-8883-4815-ad87-4e0fdb4e4d83"/*AnimRandomString*/,
       "SymbolId": "dd7fa7ee-266a-43c8-b29f-3357488b26be",
       "InputValues": [
         {

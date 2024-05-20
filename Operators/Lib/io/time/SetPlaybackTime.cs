@@ -42,10 +42,10 @@ namespace lib.io.time
                     return;
                 }
 
-                if (Math.Abs(Playback.Current.PlaybackSpeed) < 0.001f)
-                {
-                    Log.Warning("Setting playback speed requires playback to be running.", this);
-                }
+                // if (Math.Abs(Playback.Current.PlaybackSpeed) < 0.001f)
+                // {
+                //     Log.Warning("Setting playback speed requires playback to be running.", this);
+                // }
 
                 if (ShowLogMessages.GetValue(context))
                 {
