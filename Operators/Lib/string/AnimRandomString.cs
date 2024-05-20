@@ -1,16 +1,13 @@
 using System.Runtime.InteropServices;
+using Lib.@string;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
 namespace lib.@string
 {
-<<<<<<<< HEAD:Operators/Lib/string/RandomString.cs
 	[Guid("dd7fa7ee-266a-43c8-b29f-3357488b26be")]
-    public class RandomString : Instance<RandomString>
-========
     public class AnimRandomString : Instance<AnimRandomString>
->>>>>>>> feat/dev-prepare-merge-to-main:Operators/Lib/string/AnimRandomString.cs
     {
         [Output(Guid = "3a769380-1586-4d7f-a881-e509d5c14c1b")]
         public readonly Slot<string> Fragments = new();

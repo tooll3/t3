@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_245de58f_d3d0_4c57_ba27_1b884b7f6b31
+namespace examples.user.fuzzy.osc
 {
+    [Guid("245de58f-d3d0-4c57-ba27-1b884b7f6b31")]
     public class DrivenByMossExample : Instance<DrivenByMossExample>
     {
 

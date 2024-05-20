@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Text;
 using T3.Core.Operator;
@@ -6,8 +7,9 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 
-namespace T3.Operators.Types.Id_98bd1491_6e69_4ae0_9fc1_0be8e6a72d32
+namespace Lib.@string
 {
+    [Guid("98bd1491-6e69-4ae0-9fc1-0be8e6a72d32")]
     public class BlendStrings : Instance<BlendStrings>
     {
         [Output(Guid = "1bb629bb-dd30-48df-b6b4-3245af10dc09")]

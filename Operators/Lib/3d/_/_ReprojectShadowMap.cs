@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
 
-namespace T3.Operators.Types.Id_e6df0d5d_bf6c_4672_801e_7a3270bd359b
+namespace Lib._3d._
 {
+    [Guid("e6df0d5d-bf6c-4672-801e-7a3270bd359b")]
     public class _ReprojectShadowMap : Instance<_ReprojectShadowMap>
     {
         [Output(Guid = "5d59930e-6cf7-46f5-b28f-c4c4682877bd")]

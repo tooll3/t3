@@ -5,12 +5,8 @@ using T3.Core.Operator.Slots;
 
 namespace lib.img.fx
 {
-<<<<<<<< HEAD:Operators/Lib/img/fx/MosiacTiling.cs
 	[Guid("c68fbb84-2f56-4aed-97ab-3c2df0ec700b")]
     public class MosiacTiling : Instance<MosiacTiling>
-========
-    public class MosaicTiling : Instance<MosaicTiling>
->>>>>>>> feat/dev-prepare-merge-to-main:Operators/Lib/img/fx/MosaicTiling.cs
     {
         [Output(Guid = "0ce69c7f-29c9-461b-b593-402c4f9131e8")]
         public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();

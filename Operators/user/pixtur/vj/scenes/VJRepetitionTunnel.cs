@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_eb863321_07e8_41d3_ae6e_29d9abacfa66
+namespace user.pixtur.vj.scenes
 {
+    [Guid("eb863321-07e8-41d3-ae6e-29d9abacfa66")]
     public class VJRepetitionTunnel : Instance<VJRepetitionTunnel>
     {
         [Output(Guid = "3d5621f4-ca45-4bd9-8bcf-5205209ea080")]

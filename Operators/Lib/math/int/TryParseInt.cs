@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_f833d070_97d7_4c2b_974a_fd116c88ec38
+namespace Lib.math.@int
 {
+    [Guid("f833d070-97d7-4c2b-974a-fd116c88ec38")]
     public class TryParseInt : Instance<TryParseInt>
     {
         [Output(Guid = "b494af0a-0010-4729-8b7e-cb9e8922545a")]

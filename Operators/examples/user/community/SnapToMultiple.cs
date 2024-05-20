@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_c3090c65_194a_4f95_9b70_d003f54103f7 
+namespace examples.user.community 
 {
+    [Guid("c3090c65-194a-4f95-9b70-d003f54103f7")]
     public class SnapToMultiple : Instance<SnapToMultiple>
     {
         [Output(Guid = "87a311ce-238c-472c-b43e-e4ed5268bbc5")]

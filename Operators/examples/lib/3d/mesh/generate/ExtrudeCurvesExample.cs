@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_a469ca9f_a7f9_46b8_b34c_0a1c109e1222
+namespace examples.lib._3d.mesh.generate
 {
+    [Guid("a469ca9f-a7f9-46b8-b34c-0a1c109e1222")]
     public class ExtrudeCurvesExample : Instance<ExtrudeCurvesExample>
     {
         [Output(Guid = "7661ebdf-0d10-437a-8b3e-71fac37cbd1a")]

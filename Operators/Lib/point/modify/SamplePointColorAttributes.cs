@@ -1,12 +1,15 @@
+using System.Runtime.InteropServices;
 using System;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_056ea55a_91a2_4b55_bcce_e44cc8602623
+namespace Lib.point.modify
 {
+    [Guid("056ea55a-91a2-4b55-bcce-e44cc8602623")]
     public class SamplePointColorAttributes : Instance<SamplePointColorAttributes>
 ,ITransformable
     {

@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using T3.Core.Animation;
@@ -6,8 +7,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_d21652e9_4dc3_4ece_9205_51fced56c3bd
+namespace Lib.anim
 {
+    [Guid("d21652e9-4dc3-4ece-9205-51fced56c3bd")]
     public class WasTrigger : Instance<WasTrigger>
     {
         [Output(Guid = "bbbfa448-3499-4d88-8fe4-0caea4c270fd", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

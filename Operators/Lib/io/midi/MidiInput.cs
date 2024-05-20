@@ -17,7 +17,7 @@ using Vector2 = System.Numerics.Vector2;
 namespace lib.io.midi
 {
 	[Guid("59a0458e-2f3a-4856-96cd-32936f783cc5")]
-    public class MidiInput : Instance<MidiInput>, IMidiConsumer, IStatusProvider
+    public class MidiInput : Instance<MidiInput>, MidiConnectionManager.IMidiConsumer, IStatusProvider
     {
         [Output(Guid = "01706780-D25B-4C30-A741-8B7B81E04D82")]
         public readonly Slot<float> Result = new();
@@ -196,6 +196,7 @@ namespace lib.io.midi
         public void ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
         {
         }
+        
 
         /// <summary>
         /// This will cause update to be called on next frame 
@@ -312,7 +313,7 @@ namespace lib.io.midi
             }
         }
 
-        void MidiConnectionManager.IMidiConsumer.OnSettingsChanged()
+        public void OnSettingsChanged()
         {
             Result.DirtyFlag.Invalidate();
             Range.DirtyFlag.Invalidate();

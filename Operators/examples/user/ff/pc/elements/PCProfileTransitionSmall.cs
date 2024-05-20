@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_ecaad404_88a8_42e2_a46c_9358b7552550
+namespace examples.user.ff.pc.elements
 {
+    [Guid("ecaad404-88a8-42e2-a46c-9358b7552550")]
     public class PCProfileTransitionSmall : Instance<PCProfileTransitionSmall>
     {
         [Output(Guid = "f7a454dc-88c1-4c8c-9cad-0fc5fd833142")]

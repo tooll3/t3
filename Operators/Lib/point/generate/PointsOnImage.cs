@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_722e79cc_47bc_42cc_8fce_2e06f36f8caa
+namespace Lib.point.generate
 {
+    [Guid("722e79cc-47bc-42cc-8fce-2e06f36f8caa")]
     public class PointsOnImage : Instance<PointsOnImage>
     {
         [Output(Guid = "7c8567c9-1456-4040-ad43-4cc8a96efbaf")]

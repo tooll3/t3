@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,8 +11,9 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace T3.Operators.Types.Id_de0e54c3_631b_4a01_a8a7_8cdff2e07e55
+namespace Lib._3d.postfx
 {
+    [Guid("de0e54c3-631b-4a01-a8a7-8cdff2e07e55")]
     public class _ComputeLightOcclusions : Instance<_ComputeLightOcclusions>
     {
         [Output(Guid = "D6A7B2CF-740E-4B52-8BB2-BC786F2C39AB")]

@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_69bd6cd3_85b2_4a6c_9184_ab25045a51aa
+namespace Lib.point.generate
 {
+    [Guid("69bd6cd3-85b2-4a6c-9184-ab25045a51aa")]
     public class BoundingBoxPoints : Instance<BoundingBoxPoints>
     {
 

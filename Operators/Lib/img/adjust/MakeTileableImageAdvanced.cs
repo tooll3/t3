@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_613507c8_fe54_40b0_8434_d0c4b4f59b45
+namespace Lib.img.adjust
 {
+    [Guid("613507c8-fe54-40b0-8434-d0c4b4f59b45")]
     public class MakeTileableImageAdvanced : Instance<MakeTileableImageAdvanced>
     {
 

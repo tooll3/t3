@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_d38fe24e_be01_4a22_9595_b06bc906bf49
+namespace Lib._3d.draw
 {
+    [Guid("d38fe24e-be01-4a22-9595-b06bc906bf49")]
     public class ShadowPlane : Instance<ShadowPlane>
     {
         [Output(Guid = "e7622351-6afd-41dd-b9c7-bddc1e25e128")]

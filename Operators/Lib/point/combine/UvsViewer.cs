@@ -1,8 +1,9 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_68cf773d_30ac_4ae0_bc1e_b7a17ea322bb
+namespace Lib.point.combine
 {
     public class UVsViewer : Instance<UVsViewer>
     {

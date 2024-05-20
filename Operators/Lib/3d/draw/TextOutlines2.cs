@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
@@ -5,8 +6,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_84e9333f_38d2_422f_abf5_bf3929f01c7e
+namespace Lib._3d.draw
 {
+    [Guid("84e9333f-38d2-422f-abf5-bf3929f01c7e")]
     public class TextOutlines2 : Instance<TextOutlines2>
 ,ITransformable
     {

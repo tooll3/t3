@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_574d636f_64e6_4f07_ac17_49754d2c3599
+namespace Lib._3d.postfx
 {
+    [Guid("574d636f-64e6-4f07-ac17-49754d2c3599")]
     public class GetPointLightOccclusion : Instance<GetPointLightOccclusion>
     {
         [Output(Guid = "21ef57a3-de27-4e31-8693-e38e693f8948")]

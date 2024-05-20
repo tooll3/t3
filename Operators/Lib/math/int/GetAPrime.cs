@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_f99cb938_205d_4605_8c17_e0be67f25d98
+namespace Lib.math.@int
 {
+    [Guid("f99cb938-205d-4605-8c17-e0be67f25d98")]
     public class GetAPrime : Instance<GetAPrime>
     {
         [Output(Guid = "219AF347-49C8-4CED-A689-6E6ED0E49710")]

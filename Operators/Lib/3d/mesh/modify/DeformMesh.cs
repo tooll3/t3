@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -5,8 +6,9 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using static T3.Core.Animation.VDefinition;
 
-namespace T3.Operators.Types.Id_a8fd7522_7874_4411_ad8d_b2e7a20bc4ac
+namespace Lib._3d.mesh.modify
 {
+    [Guid("a8fd7522-7874-4411-ad8d-b2e7a20bc4ac")]
     public class DeformMesh : Instance<DeformMesh>
 ,ITransformable
     {

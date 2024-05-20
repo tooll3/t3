@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -9,8 +10,9 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_57c1fe66_d8bc_4ea5_ad25_6986d4c2bba4
+namespace examples.lib.img.use
 {
+    [Guid("57c1fe66-d8bc-4ea5-ad25-6986d4c2bba4")]
     public class KeepPreviousFrame2 : Instance<KeepPreviousFrame2>
     {
         [Output(Guid = "7ba708e0-1cbb-411a-aa2c-bc78d248d761")]

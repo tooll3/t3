@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_2496ff9d_2953_4ed0_9550_b4d2ce322fa7
+namespace examples.user._1x
 {
+    [Guid("2496ff9d-2953-4ed0-9550-b4d2ce322fa7")]
     public class ProceduralMoon1x : Instance<ProceduralMoon1x>
     {
         [Output(Guid = "e712ab39-2cfd-4b5e-94b8-4b2119e41139")]

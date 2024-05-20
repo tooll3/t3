@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_ffbbef55_3149_48c1_95cf_cad691ce15fe
+namespace Lib.point.transform
 {
+    [Guid("ffbbef55-3149-48c1-95cf-cad691ce15fe")]
     public class BoundPoints : Instance<BoundPoints>
     {
 

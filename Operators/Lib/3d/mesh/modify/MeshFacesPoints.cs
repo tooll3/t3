@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_58a490b1_eb8a_4102_906a_f74a79c0ad1c
+namespace Lib._3d.mesh.modify
 {
+    [Guid("58a490b1-eb8a-4102-906a-f74a79c0ad1c")]
     public class MeshFacesPoints : Instance<MeshFacesPoints>
     {
 

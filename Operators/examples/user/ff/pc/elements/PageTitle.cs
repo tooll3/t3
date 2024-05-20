@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_ffe6b076_f561_4230_a0c3_282fb4d58383
+namespace examples.user.ff.pc.elements
 {
+    [Guid("ffe6b076-f561-4230-a0c3-282fb4d58383")]
     public class PageTitle : Instance<PageTitle>
     {
 

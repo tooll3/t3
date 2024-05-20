@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_78024fb9_4c07_400d_a919_8e1488dc37c5
+namespace user.pixtur.vj.scenes
 {
+    [Guid("78024fb9-4c07-400d-a919-8e1488dc37c5")]
     public class VJSkullScene : Instance<VJSkullScene>
     {
 

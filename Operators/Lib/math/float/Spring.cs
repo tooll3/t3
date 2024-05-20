@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using T3.Core.Animation;
 using T3.Core.Operator;
@@ -5,8 +6,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_0b337922_aeca_473a_bfe9_4ab6ff804b11
+namespace Lib.math.@float
 {
+    [Guid("0b337922-aeca-473a-bfe9-4ab6ff804b11")]
     public class Spring : Instance<Spring>
     {
         [Output(Guid = "e989b1ae-c7c0-4209-89c7-3aa589695d85", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

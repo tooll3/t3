@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Numerics;
 using T3.Core.DataTypes;
@@ -6,8 +7,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_348652c3_abf5_4fe9_873b_89d1acaaf0ff
+namespace Lib._3d.gizmo
 {
+    [Guid("348652c3-abf5-4fe9-873b-89d1acaaf0ff")]
     public class Locator : Instance<Locator>, ITransformable
     {
         [Output(Guid = "357c4c25-2b08-4470-84b1-9707a3d8e56e")]

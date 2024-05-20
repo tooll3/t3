@@ -72,9 +72,7 @@ namespace Operators.Utils
                 consumer.OnSettingsChanged();
             }
         }
-<<<<<<<< HEAD:Core/IO/MidiInConnectionManager.cs
-        
-========
+
 
         public interface IMidiConsumer
         {
@@ -89,7 +87,7 @@ namespace Operators.Utils
         }
 
         // FIXME: remove
->>>>>>>> feat/dev-prepare-merge-to-main:Operators/Lib/Utils/MidiConnectionManager.cs
+
         public static MidiInCapabilities GetDescriptionForMidiIn(MidiIn midiIn)
         {
             _devicesByMidiIn.TryGetValue(midiIn, out var description);

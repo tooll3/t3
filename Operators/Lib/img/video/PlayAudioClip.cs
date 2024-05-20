@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.IO;
 using T3.Core.Animation;
@@ -9,8 +10,9 @@ using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
 
-namespace T3.Operators.Types.Id_c2b2758a_5b3e_465a_87b7_c6a13d3fba48
+namespace Lib.img.video
 {
+    [Guid("c2b2758a-5b3e-465a-87b7-c6a13d3fba48")]
     public class PlayAudioClip : Instance<PlayAudioClip>, IStatusProvider
     {
         [Output(Guid = "93B2B489-A522-439E-AC9E-8D47C073D721", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
@@ -32,28 +34,30 @@ namespace T3.Operators.Types.Id_c2b2758a_5b3e_465a_87b7_c6a13d3fba48
             {
                 _startRunTimeInSecs = Playback.RunTimeInSecs - timeParameter;
             }
-                            
-            if(_audioClip == null || _audioClip.FilePath != url)
-            {
-                if(!File.Exists(url))
-                {
-                    _errorMessageForStatus = $"File not found: {url}";
-                    return;
-                }
-                
-                _audioClip = new AudioClip
-                                 {
-                                     FilePath = url,
-                                     StartTime = 0,
-                                     EndTime = 0,
-                                     IsSoundtrack = true,
-                                     LengthInSeconds = 0,
-                                     Volume = Volume.GetValue(context),
-                                     Id = Guid.NewGuid(),
-                                 };
-                _startRunTimeInSecs = Playback.RunTimeInSecs;
-                _errorMessageForStatus = null;
-            }
+                      
+            // TODO: This is currently disabled until we figure out how to provide symbol package for constructor.
+            
+            // if(_audioClip == null || _audioClip.FilePath != url)
+            // {
+            //     if(!File.Exists(url))
+            //     {
+            //         _errorMessageForStatus = $"File not found: {url}";
+            //         return;
+            //     }
+            //     
+            //     _audioClip = new AudioClip
+            //                      {
+            //                          FilePath = url,
+            //                          StartTime = 0,
+            //                          EndTime = 0,
+            //                          IsSoundtrack = true,
+            //                          LengthInSeconds = 0,
+            //                          Volume = Volume.GetValue(context),
+            //                          Id = Guid.NewGuid(),
+            //                      };
+            //     _startRunTimeInSecs = Playback.RunTimeInSecs;
+            //     _errorMessageForStatus = null;
+            // }
 
             if (_audioClip != null && IsPlaying.GetValue(context))
             {

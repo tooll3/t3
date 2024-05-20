@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_53ff1a68_e888_444f_9ccc_23239c94d6db
+namespace Lib.img.fx
 {
+    [Guid("53ff1a68-e888-444f-9ccc-23239c94d6db")]
     public class LightRaysFx : Instance<LightRaysFx>
     {
         [Output(Guid = "bdc413f2-9a15-4333-baba-aa57f73dda1a")]

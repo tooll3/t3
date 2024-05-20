@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Numerics;
 using T3.Core.DataTypes;
@@ -8,8 +9,9 @@ using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Point = T3.Core.DataTypes.Point;
 
-namespace T3.Operators.Types.Id_73d99108_f49a_48fb_aa5d_707c00abb1c2
+namespace Lib.point.generate
 {
+    [Guid("73d99108-f49a-48fb-aa5d-707c00abb1c2")]
     public class RepetitionPoints : Instance<RepetitionPoints>
     {
         [Output(Guid = "46c3b7f4-3590-46d7-871f-b98685f62c07")]

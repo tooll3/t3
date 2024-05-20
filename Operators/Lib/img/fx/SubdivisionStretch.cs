@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_e34c88f6_815e_4ce1_a6a8_59e2c8101849
+namespace Lib.img.fx
 {
+    [Guid("e34c88f6-815e-4ce1-a6a8-59e2c8101849")]
     public class SubdivisionStretch : Instance<SubdivisionStretch>
     {
         [Output(Guid = "d8ec6fe5-ee96-4eaa-ba1f-05c67cdf0f0b")]

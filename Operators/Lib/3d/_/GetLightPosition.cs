@@ -12,8 +12,9 @@ using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace T3.Operators.Types.Id_5914f00f_6600_42a2_bbd5_4201053058ec
+namespace Lib._3d._
 {
+    [Guid("5914f00f-6600-42a2-bbd5-4201053058ec")]
     public class GetLightPosition : Instance<GetLightPosition>
     {
         [Output(Guid = "598EA068-AAA0-43A7-BA58-A8021370CA90", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

@@ -1,23 +1,22 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using ImGuiNET;
+using lib.anim;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95;
 
-namespace T3.Editor.Gui.ChildUi
+namespace libEditor.CustomUi
 {
     public static class TriggerAnimUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
+        public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
             if (!(instance is TriggerAnim anim)
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
             // if (RateEditLabel.Draw(ref triggerAnimation.Rate.TypedInputValue.Value,
@@ -32,7 +31,7 @@ namespace T3.Editor.Gui.ChildUi
 
             if (h < 10)
             {
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolUi.Child.CustomUiResult.None;
             }
             
 
@@ -138,10 +137,10 @@ namespace T3.Editor.Gui.ChildUi
             }
             drawList.PopClipRect();
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered 
-                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
-                   | SymbolChildUi.CustomUiResult.PreventInputLabels
-                   | SymbolChildUi.CustomUiResult.PreventTooltip;
+            return SymbolUi.Child.CustomUiResult.Rendered 
+                   | SymbolUi.Child.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolUi.Child.CustomUiResult.PreventInputLabels
+                   | SymbolUi.Child.CustomUiResult.PreventTooltip;
         }
 
         private static float _dragStartBias;

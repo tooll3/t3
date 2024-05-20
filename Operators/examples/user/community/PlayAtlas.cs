@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_9e243276_1807_49f7_9e78_29b582aafb39
+namespace examples.user.community
 {
+    [Guid("9e243276-1807-49f7-9e78-29b582aafb39")]
     public class PlayAtlas : Instance<PlayAtlas>
     {
 

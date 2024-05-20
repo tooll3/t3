@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_3af25959_fd3f_4608_b521_5860d82554df
+namespace Lib.@string
 {
+    [Guid("3af25959-fd3f-4608-b521-5860d82554df")]
     public class MockStrings : Instance<MockStrings>
     {
         [Output(Guid = "461d8e3a-b4db-4a12-94c5-c791e347e51f")]

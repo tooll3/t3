@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Numerics;
 using T3.Core.DataTypes;
@@ -11,8 +12,9 @@ using T3.Core.Utils.Geometry;
 
 // ReSharper disable SuggestVarOrType_SimpleTypes
 
-namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
+namespace Lib._3d.transform
 {
+    [Guid("6415ed0e-3692-45e2-8e70-fe0cf4d29ebc")]
     public class OrbitCamera : Instance<OrbitCamera>
                              , ICameraPropertiesProvider, ICamera
     {

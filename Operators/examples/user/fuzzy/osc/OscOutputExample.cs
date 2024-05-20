@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_48e284ff_cfcc_4d6c_83d4_256c9380de61
+namespace examples.user.fuzzy.osc
 {
+    [Guid("48e284ff-cfcc-4d6c-83d4-256c9380de61")]
     public class OscOutputExample : Instance<OscOutputExample>
     {
 

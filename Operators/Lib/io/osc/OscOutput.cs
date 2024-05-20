@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -7,8 +8,9 @@ using System;
 using T3.Core.Utils;
 using T3.Core.Operator.Interfaces;
 
-namespace T3.Operators.Types.Id_4e99da86_482f_4037_8664_b2371526d632
+namespace Lib.io.osc
 {
+    [Guid("4e99da86-482f-4037-8664-b2371526d632")]
     public class OscOutput : Instance<OscOutput>, IStatusProvider
     {
         [Input(Guid = "98f38caa-4f79-425c-ab46-22d7dbe62978")]

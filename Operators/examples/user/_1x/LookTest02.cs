@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_701f78b9_5b1a_4332_ab5e_89bcb1f520ce
+namespace examples.user._1x
 {
+    [Guid("701f78b9-5b1a-4332-ab5e-89bcb1f520ce")]
     public class LookTest02 : Instance<LookTest02>
     {
 

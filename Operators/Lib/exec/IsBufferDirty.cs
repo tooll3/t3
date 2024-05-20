@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_02b84d90_aa4e_4cf9_94d5_feb5d7ca731e
+namespace Lib.exec
 {
+    [Guid("02b84d90-aa4e-4cf9-94d5-feb5d7ca731e")]
     public class IsBufferDirty : Instance<IsBufferDirty>
     {
         [Output(Guid = "b3f19e80-8c09-4e38-9b6d-fc864facd34a")]

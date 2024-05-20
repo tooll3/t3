@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using T3.Core.Animation;
@@ -6,8 +7,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_c30ba288_9e40_4636_beb5_68401d91fe37
+namespace Lib.math.floats
 {
+    [Guid("c30ba288-9e40-4636-beb5-68401d91fe37")]
     public class DampFloatList : Instance<DampFloatList>
     {
         [Output(Guid = "23c867c8-d175-463f-bcaa-18e6be5f20c2", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

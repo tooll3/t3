@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_ac185a9e_02c4_4ee0_b55e_4e7384c09d0c
+namespace Lib.point.transform
 {
+    [Guid("ac185a9e-02c4-4ee0-b55e-4e7384c09d0c")]
     public class MovePointsToCurveSpace : Instance<MovePointsToCurveSpace>
     {
 
