@@ -160,7 +160,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.OpenPopup(PlaybackSettingsPopup.PlaybackSettingsPopupId);
             }
 
-            PlaybackSettingsPopup.DrawPlaybackSettings(compositionWithSettings);
+            PlaybackSettingsPopup.DrawPlaybackSettings(composition);
 
             CustomComponents.TooltipForLastItem("Timeline Settings",
                                                 "Switch between soundtrack and VJ modes. Control BPM and other inputs.");
