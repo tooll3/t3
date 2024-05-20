@@ -275,8 +275,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     HandleFenceSelection(_window.CompositionOp, _selectionFence);
                 }
-
-                var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
+                
                 if (isOnBackground && doubleClicked)
                 {
                     _window.TrySetCompositionOpToParent();
