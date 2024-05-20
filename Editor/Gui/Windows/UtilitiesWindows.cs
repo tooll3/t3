@@ -30,6 +30,7 @@ public class UtilitiesWindow : Window
         Assets,
         CrashReporting,
         SvgConversion,
+        OperatorMigration,
     }
 
     private Categories _activeCategory;
@@ -93,8 +94,9 @@ public class UtilitiesWindow : Window
 
                         ImGui.TreePop();
                     }
+
                     break;
-                
+
                 case Categories.Assets:
                     FormInputs.AddSectionHeader("File Assets");
                     FileAssetsHelper.Draw();
@@ -135,12 +137,18 @@ public class UtilitiesWindow : Window
                 case Categories.SvgConversion:
                     SvgFontConversion.Draw();
                     break;
+
+                case Categories.OperatorMigration:
+                    OperatorFormatMigrationHelper.Draw();
+                    break;
             }
 
             ImGui.EndChild();
             ImGui.PopStyleVar();
         }
     }
+
+
 
     private static void SimulateCrash()
     {
