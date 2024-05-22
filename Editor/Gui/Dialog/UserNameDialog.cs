@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.Dialog
                    .HelpText("Tooll will use this to group your projects into a namespace.\n\nIt should be short and not contain spaces or special characters.");
                 ImGui.Spacing();
 
-                if (CustomComponents.DisablableButton("Rename", GraphUtils.IsValidProjectName(_userName)))
+                if (CustomComponents.DisablableButton("Okay", GraphUtils.IsValidProjectName(_userName)))
                 {
                     try
                     {
@@ -44,11 +44,11 @@ namespace T3.Editor.Gui.Dialog
                     ImGui.CloseCurrentPopup();
                 }
 
-                ImGui.SameLine();
-                if (ImGui.Button("Cancel"))
-                {
-                    ImGui.CloseCurrentPopup();
-                }
+                // ImGui.SameLine();
+                // if (ImGui.Button("Cancel"))
+                // {
+                //     ImGui.CloseCurrentPopup();
+                // }
 
                 EndDialogContent();
             }

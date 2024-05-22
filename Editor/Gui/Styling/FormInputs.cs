@@ -526,13 +526,14 @@ namespace T3.Editor.Gui.Styling
             // Tooltip
             ImGui.PushStyleColor(ImGuiCol.PopupBg, UiColors.BackgroundFull.Rgba);
             ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 1 * ImGui.GetStyle().Alpha);
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 10));
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);
             ImGui.TextUnformatted(tooltip);
             ImGui.PopTextWrapPos();
             ImGui.EndTooltip();
+            ImGui.PopStyleVar(2);
             ImGui.PopStyleColor();
-            ImGui.PopStyleVar(1);
         }
 
         private static bool AppendResetButton(bool hasReset, string id)

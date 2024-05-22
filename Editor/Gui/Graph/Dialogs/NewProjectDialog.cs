@@ -1,10 +1,12 @@
 ﻿using ImGuiNET;
+using T3.Core.Model;
 using T3.Core.SystemUi;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
@@ -21,10 +23,11 @@ namespace T3.Editor.Gui.Graph.Dialogs
         
         public void Draw()
         {
-            DialogSize = new Vector2(500, 300);
+            DialogSize = new Vector2(550, 300);
 
             if (BeginDialog("Create new project"))
             {
+
                 // Name and namespace
                 string namespaceWarningText = null;
                 bool namespaceCorrect = true;
@@ -40,12 +43,23 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 }
                 
                 FormInputs.AddStringInput("Namespace", ref _newNamespace, 
-                                          warning: namespaceWarningText, autoFocus: _needsAutoFocus);
+                                          warning: namespaceWarningText, 
+                                          autoFocus: _needsAutoFocus, tooltip:"Namespace is used to group your projects and should be unique to you.");
                 _needsAutoFocus = false;
                 
+                var warning = string.Empty;
                 var nameCorrect = GraphUtils.IsIdentifierValid(_newName);
+                if (!nameCorrect)
+                    warning = "Name must be a valid C# identifier.";   
+                
+                var isProjectNameUnique = !DoesProjectWithNameExists(_newName);
+                if(!isProjectNameUnique)
+                    warning = "A project with this name already exists.";
+                
+                //ImGui.SetKeyboardFocusHere();
                 FormInputs.AddStringInput("Name", ref _newName,
-                                          warning: !nameCorrect ? "Name must be a valid C# identifier" : null);
+                                          tooltip: "Is used to identify your project. Must not contain spaces or special characters.",
+                                          warning: warning);
                 
                 FormInputs.AddCheckBox("Share Resources", ref _shareResources, "Enabling this allows anyone with this package to reference shaders, " +
                                                                                "images, and other resources that belong to this package in other projects.\n" +
@@ -56,8 +70,10 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.TextColored(UiColors.StatusWarning, "Warning: there is no way to change this without editing the project code at this time.");
                 }
                 
+
+                
                 if (CustomComponents.DisablableButton(label: "Create",
-                                                      isEnabled: namespaceCorrect && nameCorrect,
+                                                      isEnabled: namespaceCorrect && nameCorrect && isProjectNameUnique,
                                                       enableTriggerWithReturn: false))
                 {
                     if (ProjectSetup.TryCreateProject(_newName, _newNamespace + '.' + _newName, _shareResources, out var project))
@@ -81,11 +97,33 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 {
                     ImGui.CloseCurrentPopup();
                 }
+                
+                FormInputs.SetIndentToLeft();
+                FormInputs.AddHint("Creates a new project. Projects are used to group operators and resources. " +
+                                   "You can find your project in \\Documents\\T3Projects\\");
+                
+                FormInputs.SetIndentToParameters();                
 
                 EndDialogContent();
             }
 
             EndDialog();
+        }
+        
+        private static bool DoesProjectWithNameExists(string name)
+        {
+            foreach (var package in SymbolPackage.AllPackages.Cast<EditorSymbolPackage>())
+            {
+                if (!package.HasHome)
+                    continue;
+                
+                var existingProjectName = package.DisplayName;
+                
+                if (string.Equals(existingProjectName, name))
+                    return true;
+            }
+            
+            return false;
         }
 
         private string _newName = string.Empty;

@@ -28,11 +28,13 @@ internal sealed class MessageBox<T> : IImguiDrawer<T>
         var padding = contentRegion.X * 0.1f;
         var widthAvailable = contentRegion.X - padding;
         
+        ImGui.PushFont(fonts.Regular);
         ImGui.NewLine();
         ImGui.PushTextWrapPos(widthAvailable);
         ImGui.SetCursorPosX(padding);
         ImGui.TextWrapped(_message);
         ImGui.PopTextWrapPos();
+        ImGui.PopFont();
         
         DrawSpacing(fonts);
         
