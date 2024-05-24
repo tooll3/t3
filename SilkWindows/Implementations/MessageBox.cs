@@ -67,14 +67,19 @@ internal sealed class MessageBox<T> : IImguiDrawer<T>
         
         var width = ImGui.GetContentRegionAvail().X;
         var size = new Vector2(width, 0);
+        var i = 0;
         foreach (var button in _buttons)
         {
             var name = _toString.Invoke(button);
+            
+            ImGui.PushID(++i);
             
             if (ImGui.Button(name, size))
             {
                 _result ??= button;
             }
+            
+            ImGui.PopID();
             
             ImGui.Spacing();
         }
