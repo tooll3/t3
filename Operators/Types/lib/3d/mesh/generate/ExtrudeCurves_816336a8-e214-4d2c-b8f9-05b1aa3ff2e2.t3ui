@@ -38,6 +38,16 @@
         "X": -1423.521,
         "Y": 1169.9822
       }
+    },
+    {
+      "InputId": "8104d7e7-0cea-4009-851d-1b0a23802ad8"/*FixHoles*/,
+      "Position": {
+        "X": -1423.521,
+        "Y": 1214.9822
+      },
+      "GroupTitle": "Alternative Method",
+      "Description": "Activate if the mesh doesn't look right (holes). We noticed a compatibility issue with some GPUs.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
@@ -207,6 +217,44 @@
       "Position": {
         "X": -937.3934,
         "Y": 1231.455
+      }
+    },
+    {
+      "ChildId": "e6cc1859-fea7-48a8-96a9-3dbba9d71f27"/*Source*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 171.57288,
+        "Y": 17.878124
+      },
+      "Position": {
+        "X": -583.1848,
+        "Y": 415.87204
+      }
+    },
+    {
+      "ChildId": "05d1072c-ee6e-40e6-80a4-106d6a0dbda6"/*Source*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 171.57288,
+        "Y": 17.878124
+      },
+      "Position": {
+        "X": -585.38196,
+        "Y": 475.74628
+      }
+    },
+    {
+      "ChildId": "ea94207b-a29a-4cf1-99e6-12b1bfc61791"/*PickString*/,
+      "Position": {
+        "X": -322.7276,
+        "Y": 455.8299
+      }
+    },
+    {
+      "ChildId": "bd7770dc-9639-476d-9a36-7173ad9bc9f4"/*BoolToInt*/,
+      "Position": {
+        "X": -1074.1956,
+        "Y": 1343.9025
       }
     }
   ],
