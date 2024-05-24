@@ -96,7 +96,7 @@ internal static class CrashReporting
                        "You can use it to troubleshoot/reproduce the issue.";
         }
         
-        message += "\n\n" + Environment.StackTrace;
+        message += "\n\n" + (sentryEvent.Exception?.ToString() ?? Environment.StackTrace);
         
         const string confirmation = "Send crash report (it really helps!)";
         var result = BlockingWindow.Instance.ShowMessageBox(message, @"☠🙈 Damn!", confirmation, "No thanks, I hate it when things are fixed");
