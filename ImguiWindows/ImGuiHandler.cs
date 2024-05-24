@@ -17,6 +17,9 @@ internal sealed class ImGuiHandler
     private readonly string _childWindowId;
     private ImFonts? _fontObj;
     private readonly IntPtr _context;
+    private readonly int _myWindowId;
+    private static int _incrementingWindowId = 0;
+    
     
     public ImGuiHandler(IImguiImplementation impl, IImguiDrawer drawer, FontPack? fontPack, object? lockObj)
     {
@@ -27,6 +30,8 @@ internal sealed class ImGuiHandler
         _fontPack = fontPack;
         _contextLock = lockObj ?? new object();
         _imguiController = impl;
+        
+        _myWindowId = Interlocked.Increment(ref _incrementingWindowId);
         
         lock (_contextLock)
         {
@@ -100,6 +105,8 @@ internal sealed class ImGuiHandler
             ImGui.SetCurrentContext(_context);
             _imguiController.StartImguiFrame((float)deltaTime);
             
+            ImGui.PushID(_myWindowId);
+            
             ImGui.SetNextWindowSize(windowSize);
             ImGui.SetNextWindowPos(new Vector2(0, 0));
             
@@ -111,6 +118,8 @@ internal sealed class ImGuiHandler
             ImGui.BeginChild(_childWindowId, Vector2.Zero, false);
             _drawer.OnRender(_windowTitle, deltaTime, _fontObj!);
             ImGui.EndChild();
+            
+            ImGui.PopID();
             
             ImGui.End();
             
