@@ -39,10 +39,10 @@ public sealed class WindowHelper
         void Dispose()
         {
             _windowImpl.Dispose();
-            _window.Dispose();
             
             _graphicsContext?.Dispose();
             _inputContext?.Dispose();
+            _window.Dispose();
             
             _graphicsContext = null;
             _inputContext = null;
@@ -96,7 +96,7 @@ public sealed class WindowHelper
         {
             var windowSize = _window.Size;
             var clearColor = _imguiHandler?.ClearColor ?? _windowImpl.DefaultClearColor;
-            //clearColor = Color.White;
+            
             if (_windowImpl.Render(clearColor, deltaTime))
             {
                 _imguiHandler?.Draw(new Vector2(windowSize.X, windowSize.Y), deltaTime);
