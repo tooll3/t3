@@ -302,7 +302,7 @@ public static class T3Ui
                             if (GraphWindow.GraphWindowInstances.Count > 0)
                             {
                                 var choice = BlockingWindow.Instance.ShowMessageBox("Would you like to create a new window?", "Opening " + name, "Yes", "No");
-                                replaceFocusedWindow = choice == "Yes";
+                                replaceFocusedWindow = choice == "No";
                             }
                             
                             if (!GraphWindow.TryOpenPackage(package, replaceFocusedWindow))
