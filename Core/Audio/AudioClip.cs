@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Resource;
 using T3.Serialization;
@@ -77,7 +78,14 @@ public class AudioClip
             writer.WriteValue(nameof(Bpm), Bpm);
             writer.WriteValue(nameof(DiscardAfterUse), DiscardAfterUse);
             writer.WriteValue(nameof(IsSoundtrack), IsSoundtrack);
-            writer.WriteObject(nameof(FilePath), FilePath);
+            if (string.IsNullOrEmpty(FilePath))
+            {
+                Log.Warning("Empty file path in AudioClip.");
+            }
+            else
+            {
+                writer.WriteObject(nameof(FilePath), FilePath);
+            }
             if (Math.Abs(Volume - 1.0f) > 0.001f)
                 writer.WriteObject(nameof(Volume), Volume);
         }
