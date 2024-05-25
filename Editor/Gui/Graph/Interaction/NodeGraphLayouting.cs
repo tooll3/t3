@@ -25,7 +25,7 @@ internal class NodeGraphLayouting
         var commands = new List<ICommand>();
         var compositionSymbolUi = composition.GetSymbolUi();
 
-        foreach (var n in _nodeSelection.GetSelectedChildUis())
+        foreach (var n in _nodeSelection.GetSelectedChildUis().ToList())
         {
             //var xxx = NodeOperations.CollectSlotDependencies(n)
             var connectedChildren = _structure.CollectConnectedChildren(n.SymbolChild, composition);

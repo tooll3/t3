@@ -10,7 +10,7 @@ using T3.Editor.Compilation;
 
 namespace T3.Editor.UiModel;
 
-
+[DebuggerDisplay("{DisplayName}")]
 internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 {
     public override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;

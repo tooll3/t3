@@ -64,6 +64,4 @@ internal static partial class GraphUtils
     // FIXME: This lines below are an attempt to replace the following line...
     [GeneratedRegex(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$")]
     private static partial Regex NamespaceRegex();
-
-    //private static readonly Regex _namespaceRegex = new Regex(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
 }
