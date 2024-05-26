@@ -8,13 +8,13 @@ using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_e3ff58e2_847a_4c97_947c_cfbcf8f9c79d
 {
-    public class BlendCameras : Instance<BlendCameras>
+    public class MorphCameras : Instance<MorphCameras>
 ,IStatusProvider
     {
         [Output(Guid = "d0a6f926-c4ed-4cc9-917d-942f8c34fd65")]
         public readonly Slot<Command> Output = new();
 
-        public BlendCameras()
+        public MorphCameras()
         {
             Output.UpdateAction = Update;
         }

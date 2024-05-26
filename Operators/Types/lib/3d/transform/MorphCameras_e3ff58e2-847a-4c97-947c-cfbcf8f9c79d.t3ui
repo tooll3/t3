@@ -1,5 +1,5 @@
 {
-  "Id": "e3ff58e2-847a-4c97-947c-cfbcf8f9c79d"/*BlendCameras*/,
+  "Id": "e3ff58e2-847a-4c97-947c-cfbcf8f9c79d"/*MorphCameras*/,
   "Description": "Smoothly blends between multiple cameras (from the same scene) by using a floating point index to morph between the settings (Position / FOV / Clipping etc.) of all connected cameras (by using their reference outputs).\n\nRestrictions: This Operator only blends between cameras that are bound to the same scene (e.g. [Group] [DrawMesh] etc.).\n\nTo blend between completely independent cameras and different scenes, a combination of [RenderTarget] and [BlendImages] is recommended. To cut / switch between different Cameras and Different Scenes [Switch] or [TimeClip] can be used.",
   "InputUis": [
     {
