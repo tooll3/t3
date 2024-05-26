@@ -8,7 +8,8 @@ using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_e3ff58e2_847a_4c97_947c_cfbcf8f9c79d
 {
-    public class BlendCameras : Instance<BlendCameras>, IStatusProvider
+    public class BlendCameras : Instance<BlendCameras>
+,IStatusProvider
     {
         [Output(Guid = "d0a6f926-c4ed-4cc9-917d-942f8c34fd65")]
         public readonly Slot<Command> Output = new();
@@ -22,7 +23,7 @@ namespace T3.Operators.Types.Id_e3ff58e2_847a_4c97_947c_cfbcf8f9c79d
         {
             try
             {
-                var cameraInputs = Cameras.GetCollectedTypedInputs();
+                var cameraInputs = CameraReferences.GetCollectedTypedInputs();
                 var cameraCount = cameraInputs.Count;
 
                 var floatIndex = Index.GetValue(context).Clamp(0, cameraCount - 1.0001f);
@@ -31,7 +32,7 @@ namespace T3.Operators.Types.Id_e3ff58e2_847a_4c97_947c_cfbcf8f9c79d
                 ICamera camA;
                 ICamera camB;
                 
-                Cameras.DirtyFlag.Clear();
+                CameraReferences.DirtyFlag.Clear();
                 if (cameraCount == 0)
                 {
                     _lastErrorMessage = "No cameras connected?";
@@ -119,7 +120,7 @@ namespace T3.Operators.Types.Id_e3ff58e2_847a_4c97_947c_cfbcf8f9c79d
         public readonly InputSlot<Command> Command = new();
 
         [Input(Guid = "FF2ED90B-38BD-4BA8-AF07-23BE87EABCC3")]
-        public readonly MultiInputSlot<Object> Cameras = new();
+        public readonly MultiInputSlot<Object> CameraReferences = new();
 
         [Input(Guid = "3B71FDBF-CB2D-45F1-84DD-7AC66763E6AE")]
         public readonly InputSlot<float> Index = new();
