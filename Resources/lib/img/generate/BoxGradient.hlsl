@@ -66,7 +66,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 p = uv;
     p -= 0.5;
     p.x *= aspectRation;
-
+    p+=Center * float2(-1,1);
     // Convert the rotation angle from degrees to radians
     float rotationRadians = radians(Rotation);
     // Apply the rotation to the point
@@ -75,7 +75,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float c = 0;
 
 
-    c = sdBox(p+Center*float2(-1,1), Size)* 2 - Offset * Width;
+    c = sdBox(p, Size)* 2 - Offset * Width;
  
    
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
