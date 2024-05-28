@@ -1,0 +1,179 @@
+{
+  "Id": "dc2273a7-8a54-4e6f-8d8e-9a675c1ef599"/*BoxGradient*/,
+  "Description": "This is an implemetation of the signed distance field \"Box - Exact\" desbribed  in the \"2D distance functions\" article on Inigo Quilez's website. \n\nBased on [RadialGradient]\n\n2D, SDF, sdBox, [RoundedRect]",
+  "InputUis": [
+    {
+      "InputId": "e155a2f2-2b21-49b5-9bd4-0c363684d93f"/*Center*/,
+      "Position": {
+        "X": -273.87378,
+        "Y": -60.74695
+      },
+      "GroupTitle": "Shape",
+      "Min": -0.5,
+      "Max": 0.5,
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "06f28039-d349-4f5f-a68f-6009886e180b"/*Size*/,
+      "Position": {
+        "X": -273.87378,
+        "Y": -15.746948
+      }
+    },
+    {
+      "InputId": "5e7cd523-0c39-42e4-a4e9-05cc20477296"/*Gradient*/,
+      "Position": {
+        "X": -275.0653,
+        "Y": 109.463745
+      },
+      "GroupTitle": "Style",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "94d46ad8-7dd6-490c-ade4-a527c7ee9d05"/*GradientWidth*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 172.82591
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "c3d48bd0-5153-4631-ae6c-a7ded46ce952"/*Offset*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 217.82591
+      },
+      "Min": -0.5,
+      "Max": 0.5
+    },
+    {
+      "InputId": "94516412-20a6-41a9-a036-a3b5ed67b04a"/*BiasAndGain*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 262.82593
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "UseVec2Control": "BiasAndGain"
+    },
+    {
+      "InputId": "c9e1ea04-1c81-4554-964f-e361a502b9b8"/*PingPong*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 318.82593
+      }
+    },
+    {
+      "InputId": "8f50765e-3d85-4814-a99a-ecdff18c97e7"/*Repeat*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 374.82593
+      }
+    },
+    {
+      "InputId": "71cd9153-da17-47f0-9251-80bdef8906b3"/*Image*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 419.82593
+      },
+      "GroupTitle": "Additional Features"
+    },
+    {
+      "InputId": "63241bae-bfe6-415f-9288-ffcf1be15fc6"/*BlendMode*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 493.503
+      }
+    },
+    {
+      "InputId": "70641015-e77b-4a75-b3f2-eb3534cceead"/*Resolution*/,
+      "Position": {
+        "X": -270.2631,
+        "Y": 577.8617
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "3b46ece1-a7be-42f1-a3e4-c4bda3a03169"/*Vector2Components*/,
+      "Position": {
+        "X": -123.87378,
+        "Y": -60.74695
+      }
+    },
+    {
+      "ChildId": "decf22da-532e-4d45-acb0-4d1072d9921e"/*GradientsToTexture*/,
+      "Position": {
+        "X": -122.50214,
+        "Y": 74.43153
+      }
+    },
+    {
+      "ChildId": "06917b14-4bd5-4840-8991-5c43626a36dc"/*BoolToFloat*/,
+      "Position": {
+        "X": -120.71631,
+        "Y": 318.82593
+      }
+    },
+    {
+      "ChildId": "45b30540-b3b5-4790-ba75-f9fee6bf4e36"/*BoolToFloat*/,
+      "Position": {
+        "X": -120.71631,
+        "Y": 374.82593
+      }
+    },
+    {
+      "ChildId": "8b8d8b02-50d2-448e-87fa-28bfca5116b2"/*_multiImageFxSetupStatic*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 113.965515,
+        "Y": 410.5478
+      },
+      "Position": {
+        "X": 664.41205,
+        "Y": -49.932617
+      }
+    },
+    {
+      "ChildId": "06fadd69-478c-4583-b86e-3c7091a24edd"/*IntToFloat*/,
+      "Position": {
+        "X": -121.629974,
+        "Y": 511.77606
+      }
+    },
+    {
+      "ChildId": "4810224c-6cc8-456b-b364-6a580b560e9f"/*Vector2Components*/,
+      "Position": {
+        "X": -120.71631,
+        "Y": 262.82593
+      }
+    },
+    {
+      "ChildId": "0094265a-6359-4b3a-b5be-3562f05f8d45"/*Vector2Components*/,
+      "Position": {
+        "X": -123.87378,
+        "Y": -4.7469482
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "04ffa9f0-346a-4dd7-83fb-af13cae73722"/*TextureOutput*/,
+      "Position": {
+        "X": 841.1781,
+        "Y": -46.06142
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "820728ab-2a32-4786-9a3c-b0f7a69cbcc3",
+      "Title": "2D distance functions",
+      "Description": "",
+      "LinkUrl": "https://iquilezles.org/articles/distfunctions2d/",
+      "LinkType": "Documentation"
+    }
+  ]
+}
