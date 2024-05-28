@@ -21,10 +21,17 @@
       }
     },
     {
+      "InputId": "1dd6cf1e-d374-40d5-b51f-21b91deb3802"/*Rotation*/,
+      "Position": {
+        "X": -273.87378,
+        "Y": 29.253052
+      }
+    },
+    {
       "InputId": "5e7cd523-0c39-42e4-a4e9-05cc20477296"/*Gradient*/,
       "Position": {
         "X": -275.0653,
-        "Y": 109.463745
+        "Y": 109.46376
       },
       "GroupTitle": "Style",
       "AddPadding": "True"
@@ -33,7 +40,7 @@
       "InputId": "94d46ad8-7dd6-490c-ade4-a527c7ee9d05"/*GradientWidth*/,
       "Position": {
         "X": -270.7163,
-        "Y": 172.82591
+        "Y": 172.82593
       },
       "Min": 0.0,
       "Max": 1.0
@@ -42,7 +49,7 @@
       "InputId": "c3d48bd0-5153-4631-ae6c-a7ded46ce952"/*Offset*/,
       "Position": {
         "X": -270.7163,
-        "Y": 217.82591
+        "Y": 217.82593
       },
       "Min": -0.5,
       "Max": 0.5
