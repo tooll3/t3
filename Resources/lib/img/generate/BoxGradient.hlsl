@@ -5,12 +5,14 @@ cbuffer ParamConstants : register(b0)
 {
     float2 Center;
     float2 Size;
+    float Rotation; 
     float Width;
     float Offset;
     float PingPong;
     float Repeat;
     float BlendMode;
     float2 BiasAndGain;
+    
     
 
     float IsTextureValid; // Automatically added by _FxShaderSetup
@@ -45,6 +47,17 @@ float sdBox( in float2 p, in float2 b )
     return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
 }
 
+// Function to rotate a point around the origin
+inline float2 rotatePoint(float2 p, float angle)
+{
+    float cosAngle = cos(angle);
+    float sinAngle = sin(angle);
+    return float2(
+        p.x * cosAngle - p.y * sinAngle,
+        p.x * sinAngle + p.y * cosAngle
+    );
+}
+
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
     float2 uv = psInput.texCoord;
@@ -53,6 +66,11 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 p = uv;
     p -= 0.5;
     p.x *= aspectRation;
+
+    // Convert the rotation angle from degrees to radians
+    float rotationRadians = radians(Rotation);
+    // Apply the rotation to the point
+    p = rotatePoint(p, rotationRadians);
     
     float c = 0;
 
