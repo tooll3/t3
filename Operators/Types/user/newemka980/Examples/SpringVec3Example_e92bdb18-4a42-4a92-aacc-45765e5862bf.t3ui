@@ -6,92 +6,89 @@
     {
       "ChildId": "f76e8753-adde-4521-b007-a8875422b459"/*DrawMesh*/,
       "Position": {
-        "X": 987.907,
-        "Y": 368.11914
-      }
-    },
-    {
-      "ChildId": "27754240-5e07-4bad-bd1a-24a2bf2f1f6e"/*TransformMesh*/,
-      "Position": {
-        "X": 910.5747,
-        "Y": 368.11914
+        "X": 568.42505,
+        "Y": 331.01367
       }
     },
     {
       "ChildId": "35d8302e-80d6-4540-a3a4-f395c99c4a7f"/*AnimVec3*/,
       "Position": {
-        "X": 27.420898,
-        "Y": 457.3452
+        "X": -296.18378,
+        "Y": 454.18762
       }
     },
     {
       "ChildId": "c46c8f76-2f58-440e-8c80-432da68d7632"/*SpringVec3*/,
+      "Comment": "Position",
       "Position": {
-        "X": 674.9905,
+        "X": 540.8412,
         "Y": 451.5415
       }
     },
     {
       "ChildId": "dc07b56f-6acb-43e5-afe5-dfc9bb34e77b"/*SpringVec2*/,
+      "Comment": "Just for the sake of showing [SpringVec2] ",
       "Position": {
-        "X": 684.3589,
-        "Y": 746.53613
+        "X": 1651.571,
+        "Y": 221.04785
       }
     },
     {
       "ChildId": "371812ed-bc02-4788-a21b-a8c7a19caa7e"/*AnimVec2*/,
       "Position": {
-        "X": 534.3589,
-        "Y": 746.53613
+        "X": 1501.571,
+        "Y": 221.04785
       }
     },
     {
       "ChildId": "42c894dc-24bd-46f2-a8ba-ce1d58693209"/*Layer2d*/,
       "Position": {
-        "X": 834.3595,
-        "Y": 746.53613
+        "X": 1801.5717,
+        "Y": 221.04785
       }
     },
     {
       "ChildId": "27333cca-9e9a-4204-90f6-afb91c4a4824"/*Camera*/,
       "Position": {
-        "X": 1821.5487,
-        "Y": 371.1079
+        "X": 1632.5471,
+        "Y": 369.255
       }
     },
     {
       "ChildId": "19093da4-0df6-4c13-821b-5392182c3143"/*RenderTarget*/,
       "Position": {
-        "X": 2047.585,
-        "Y": 370.45068
+        "X": 2259.775,
+        "Y": 400.76355
       }
     },
     {
       "ChildId": "0d5f7e71-97fa-46c6-a6e4-0ab591063a5a"/*SpringVec3*/,
+      "Comment": "Rotation",
       "Position": {
-        "X": 674.9905,
+        "X": 540.8412,
         "Y": 507.5415
       }
     },
     {
       "ChildId": "e388fcb8-ab65-4f2d-b9e3-fd36471b2985"/*Vector3Components*/,
+      "Comment": "switching X and Z so the rotation follows the movement",
       "Position": {
-        "X": 357.96582,
-        "Y": 577.1455
+        "X": 32.127167,
+        "Y": 552.3927
       }
     },
     {
       "ChildId": "14e9444c-9344-4dc7-acf3-013c2f51e08d"/*Vector3*/,
       "Position": {
-        "X": 528.5261,
-        "Y": 546.9702
+        "X": 204.92145,
+        "Y": 543.8126
       }
     },
     {
       "ChildId": "8386cdf2-6dcd-4c65-8ded-4329de6fb536"/*ScaleVector3*/,
       "Position": {
-        "X": 206.61865,
-        "Y": 525.70654
+        "X": -116.98602,
+        "Y": 522.54895
       }
     },
     {
@@ -102,79 +99,38 @@
       }
     },
     {
-      "ChildId": "79b909fa-3e6d-4007-8cd2-90e866ec2465"/*NormalizeVector3*/,
-      "Position": {
-        "X": 1500.8894,
-        "Y": 560.4868
-      }
-    },
-    {
-      "ChildId": "daf9647d-cef3-408e-a4f9-a7236ea8f540"/*AnimValue*/,
-      "Position": {
-        "X": 914.59644,
-        "Y": 678.93994
-      }
-    },
-    {
-      "ChildId": "6d6a2fd4-0450-4c6a-b8df-ca3998948d59"/*AnimValue*/,
-      "Position": {
-        "X": 962.1028,
-        "Y": 736.83154
-      }
-    },
-    {
-      "ChildId": "3cd18bc3-bb71-423c-a9e4-0cf16a860790"/*AnimValue*/,
-      "Position": {
-        "X": 1062.9701,
-        "Y": 781.7832
-      }
-    },
-    {
-      "ChildId": "b7a1ccec-9d7a-45c9-b43e-99ceae58baf6"/*Add*/,
-      "Position": {
-        "X": 1153.9698,
-        "Y": 683.1089
-      }
-    },
-    {
-      "ChildId": "d74ea028-8388-456b-8ead-ff55517f6b16"/*Add*/,
-      "Position": {
-        "X": 1330.6687,
-        "Y": 732.8865
-      }
-    },
-    {
       "ChildId": "a396b68e-3f94-4a07-af15-66f98ca19bf6"/*MidiInput*/,
       "Position": {
-        "X": 0.0,
-        "Y": 621.5679
+        "X": -129.46875,
+        "Y": 574.4545
       }
     },
     {
       "ChildId": "8d3cae5c-33e8-4173-abb7-b4dda31915b2"/*Group*/,
+      "Comment": "Group is like Parent and child hierarchy in other 3D softwares",
       "Position": {
-        "X": 1369.5507,
+        "X": 1445.859,
         "Y": 357.15527
       }
     },
     {
       "ChildId": "fc81ee64-82e2-446e-8d0c-4bd5db11c7f4"/*CylinderMesh*/,
       "Position": {
-        "X": 684.77686,
-        "Y": 150.31055
+        "X": 237.1073,
+        "Y": 192.55798
       }
     },
     {
       "ChildId": "b7a6c16e-8f8a-4910-bb32-7951b614b5de"/*DrawMesh*/,
       "Position": {
-        "X": 872.50586,
-        "Y": 132.92383
+        "X": 424.8363,
+        "Y": 175.17126
       }
     },
     {
       "ChildId": "5cbc8859-10ba-4155-898e-6086545b5b2f"/*Transform*/,
       "Position": {
-        "X": 920.98865,
+        "X": 786.83936,
         "Y": 0.0
       }
     },
@@ -188,8 +144,22 @@
     {
       "ChildId": "f25f11d0-30bf-4348-820b-321b0e82c322"/*Group*/,
       "Position": {
-        "X": 1045.8689,
-        "Y": 69.66846
+        "X": 998.90936,
+        "Y": 92.2464
+      }
+    },
+    {
+      "ChildId": "312ed840-c956-4abc-9292-14c65cd9c1e7"/*Execute*/,
+      "Position": {
+        "X": 1982.419,
+        "Y": 411.10687
+      }
+    },
+    {
+      "ChildId": "146dd775-133d-4ae4-9ee5-65ac987a763f"/*Text*/,
+      "Position": {
+        "X": 1240.0581,
+        "Y": 629.0673
       }
     }
   ],
