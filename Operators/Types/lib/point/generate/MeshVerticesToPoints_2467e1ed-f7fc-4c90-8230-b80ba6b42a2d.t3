@@ -4,12 +4,12 @@
   "Namespace": "lib.point.generate",
   "Inputs": [
     {
-      "Id": "e5ab7ae6-d8de-4c92-9130-1082e5a56ba1"/*W*/,
-      "DefaultValue": 1.0
-    },
-    {
       "Id": "b990cf29-00a5-4e39-8687-4502c7c7eebc"/*Mesh*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "e5ab7ae6-d8de-4c92-9130-1082e5a56ba1"/*W*/,
+      "DefaultValue": 1.0
     },
     {
       "Id": "664b9a97-0709-40d5-b0a0-651092e658af"/*OffsetByTBN*/,
