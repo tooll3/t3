@@ -1,44 +1,50 @@
 {
   "Id": "58a490b1-eb8a-4102-906a-f74a79c0ad1c"/*MeshFacesPoints*/,
-  "Description": "Set points at the \"Inscribed Circle Center\" of the mesh's faces, the W attribute gets the radius\n[MeshVerticesToPoints] ",
+  "Description": "Set points at the \"Inscribed Circle Center\" of the mesh's faces, as the W attribute gets the radius the size of wach of the faces defines the size of the points. \n\nUseful combinations [LoadObj] and [DrawPoints] and more.\n\nSimilar Operators:\nTo create a point at each vertice of the connected mesh [MeshVerticesToPoints] can be used.\nTo get evenly distributed points on a mesh [PointsOnMesh] can be used.",
   "InputUis": [
     {
       "InputId": "bad1db42-201c-4d3b-8e62-82e812a8388f"/*InputMesh*/,
       "Position": {
-        "X": -450.06876,
-        "Y": 1449.7473
-      }
-    },
-    {
-      "InputId": "67b24f6d-61d1-49df-9e86-4555474f91b4"/*OffsetByTBN*/,
-      "Position": {
-        "X": -450.06876,
-        "Y": 1494.7473
-      }
+        "X": -685.22125,
+        "Y": 1771.5349
+      },
+      "Description": "Mesh input via [LoadObj] for example"
     },
     {
       "InputId": "9361aeff-d96f-400c-8837-7d98fb6da99e"/*W*/,
       "Position": {
-        "X": -466.17496,
-        "Y": 2255.8389
-      }
+        "X": -685.22125,
+        "Y": 1816.5349
+      },
+      "GroupTitle": "Settings",
+      "Description": "Scales the W / size of the points."
     },
     {
-      "InputId": "ffe056e2-c937-4d91-a2ad-73e7988ea994"/*Color*/,
+      "InputId": "67b24f6d-61d1-49df-9e86-4555474f91b4"/*OffsetByTBN*/,
       "Position": {
-        "X": -472.6174,
-        "Y": 2103.2693
+        "X": -685.22125,
+        "Y": 1861.5349
       },
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
+      "Description": "Moves the points along one of the axes of the normal"
     },
     {
       "InputId": "13184872-063b-473a-bf3d-68cd1356a261"/*StretchZ*/,
       "Position": {
-        "X": -472.61743,
-        "Y": 2331.88
-      }
+        "X": -685.22125,
+        "Y": 1906.5349
+      },
+      "Description": "Defines how much Z is stretched."
+    },
+    {
+      "InputId": "ffe056e2-c937-4d91-a2ad-73e7988ea994"/*Color*/,
+      "Position": {
+        "X": -685.22125,
+        "Y": 1951.5349
+      },
+      "Description": "Defines the color of the points",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [

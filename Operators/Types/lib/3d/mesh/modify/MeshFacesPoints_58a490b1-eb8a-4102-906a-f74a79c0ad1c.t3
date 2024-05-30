@@ -8,6 +8,10 @@
       "DefaultValue": null
     },
     {
+      "Id": "9361aeff-d96f-400c-8837-7d98fb6da99e"/*W*/,
+      "DefaultValue": 100.0
+    },
+    {
       "Id": "67b24f6d-61d1-49df-9e86-4555474f91b4"/*OffsetByTBN*/,
       "DefaultValue": {
         "X": 0.0,
@@ -16,7 +20,7 @@
       }
     },
     {
-      "Id": "9361aeff-d96f-400c-8837-7d98fb6da99e"/*W*/,
+      "Id": "13184872-063b-473a-bf3d-68cd1356a261"/*StretchZ*/,
       "DefaultValue": 1.0
     },
     {
@@ -27,10 +31,6 @@
         "Z": 1.0,
         "W": 1.0
       }
-    },
-    {
-      "Id": "13184872-063b-473a-bf3d-68cd1356a261"/*StretchZ*/,
-      "DefaultValue": 1.0
     }
   ],
   "Children": [
