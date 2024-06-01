@@ -7,7 +7,8 @@
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Red / Green / Blue / Alpha"
     }
   ],
   "SymbolChildUis": [],
