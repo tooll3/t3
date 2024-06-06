@@ -1,0 +1,17 @@
+{
+  "Name": "GamepadInput",
+  "Id": "0be5b4ff-1c13-4b07-b2cc-74717c169ec9",
+  "Namespace": "lib.io.input",
+  "Inputs": [
+    {
+      "Id": "a5ce6a90-af4c-48e2-bc95-4abc8d6fedc1"/*Key*/,
+      "DefaultValue": 13
+    },
+    {
+      "Id": "ce41839a-f451-42eb-a866-2f24a3a9e792"/*Mode*/,
+      "DefaultValue": 3
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

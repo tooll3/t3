@@ -1,0 +1,30 @@
+{
+  "Id": "0be5b4ff-1c13-4b07-b2cc-74717c169ec9"/*GamepadInput*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "a5ce6a90-af4c-48e2-bc95-4abc8d6fedc1"/*Key*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "ce41839a-f451-42eb-a866-2f24a3a9e792"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "f6017861-9366-481a-a8eb-a13678f85360"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}
