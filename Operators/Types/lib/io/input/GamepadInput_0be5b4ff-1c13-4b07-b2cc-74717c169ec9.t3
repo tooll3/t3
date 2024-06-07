@@ -4,10 +4,6 @@
   "Namespace": "lib.io.input",
   "Inputs": [
     {
-      "Id": "a5ce6a90-af4c-48e2-bc95-4abc8d6fedc1"/*Key*/,
-      "DefaultValue": 13
-    },
-    {
       "Id": "ce41839a-f451-42eb-a866-2f24a3a9e792"/*Mode*/,
       "DefaultValue": 3
     }

@@ -1,0 +1,37 @@
+{
+  "Id": "0f09816e-b26c-4236-815a-5f9953957b05"/*GamepadInputExample*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "c90f631b-090b-4cb1-8d97-2b380a8d7b3f"/*GamepadInput*/,
+      "Position": {
+        "X": 42.759033,
+        "Y": 28.505981
+      }
+    },
+    {
+      "ChildId": "b44365f4-33f0-44d3-ae91-d4fa010abac1"/*Layer2d*/,
+      "Position": {
+        "X": 387.91565,
+        "Y": 32.8916
+      }
+    },
+    {
+      "ChildId": "ceaef894-2259-44a1-aca3-0533fd5af84f"/*RenderTarget*/,
+      "Position": {
+        "X": 537.91565,
+        "Y": 32.8916
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "fdad7c0f-98fd-4284-9b84-650a9d1fb13d"/*ColorBuffer*/,
+      "Position": {
+        "X": 710.0,
+        "Y": 24.5
+      }
+    }
+  ]
+}
