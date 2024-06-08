@@ -14,6 +14,9 @@ using T3.Editor.Gui.Windows.TimeLine.Raster;
 
 namespace T3.Editor.Gui.OutputUi;
 
+/// <summary>
+/// Provides a simple canvas to visualize a <see cref="DataSet"/>.
+/// </summary>
 public class DataSetViewCanvas
 {
     public void Draw(DataSet dataSet)

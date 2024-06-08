@@ -9,7 +9,8 @@ namespace Operators.Utils.Recording;
 
 /// <summary>
 /// This is a stub for an implementation of midi signal recording
-/// - These recordings are intended for later playback so that MidiConsumers would receive the signals and replay them like live signals. For this to work...
+/// - These recordings are intended for later playback so that MidiConsumers would receive the
+///   signals and replay them like live signals. For this to work...
 ///   - MidiInput and MidiStream recorder would need to share the same MidiEvent definition (maybe different from NAudio.MidiEvent)
 ///   - Handle MidiEvent should not rely on the MidiIn class to avoid double lookup of device description.
 /// </summary>

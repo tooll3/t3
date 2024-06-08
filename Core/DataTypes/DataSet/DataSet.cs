@@ -7,8 +7,9 @@ using T3.Core.Model;
 using T3.Core.Resource;
 
 namespace T3.Core.DataTypes.DataSet;
+
 /// <summary>
-/// Defines a set of event channels. 
+/// Defines a set of <see cref="DataChannel"/> event channels. 
 /// </summary>
 public class DataSet
 {

@@ -142,7 +142,7 @@ namespace Operators.Utils
                         Log.Debug($"OSC connection on port {Port} closed");
                         while (receiver.State == OscSocketState.Closed)
                         {
-                            Thread.Sleep(5000);
+                            Thread.Sleep(1000);
                             Log.Debug($"Trying to reconnect OSC port {Port}...");
                             receiver.Connect();
                         }
