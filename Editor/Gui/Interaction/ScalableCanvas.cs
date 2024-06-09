@@ -410,6 +410,8 @@ namespace T3.Editor.Gui.Interaction
 
         protected void HandleInteraction(T3Ui.EditingFlags flags)
         {
+            if (_draggedCanvas == this && !ImGui.IsMouseDragging(ImGuiMouseButton.Right))
+                _draggedCanvas = null;
             
             var isDraggingConnection = (ConnectionMaker.TempConnections.Count > 0) && ImGui.IsWindowFocused();
             
@@ -433,8 +435,10 @@ namespace T3.Editor.Gui.Interaction
                 return;
 
             var isVerticalColorSliderActive = FrameStats.Last.OpenedPopUpName == "ColorBrightnessSlider";
+            var isAnotherWindowDragged = _draggedCanvas != null && _draggedCanvas != this;
             
             if (!isVerticalColorSliderActive 
+                && !isAnotherWindowDragged
                 && !flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse)
                 && (
                         
@@ -445,11 +449,14 @@ namespace T3.Editor.Gui.Interaction
             {
                 ScrollTarget -= Io.MouseDelta / (ParentScale * ScaleTarget);
                 UserScrolledCanvas = true;
+                _draggedCanvas = this;
             }
             else
             {
                 UserScrolledCanvas = false;
             }
+
+
 
             if (!flags.HasFlag(T3Ui.EditingFlags.PreventZoomWithMouseWheel))
                 //&& !ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
@@ -458,6 +465,8 @@ namespace T3.Editor.Gui.Interaction
                 ScaleTarget = ClampScaleToValidRange(ScaleTarget);
             }
         }
+
+        protected static ScalableCanvas _draggedCanvas;
 
         protected Vector2 ClampScaleToValidRange(Vector2 scale)
         {
