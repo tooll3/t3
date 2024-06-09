@@ -287,7 +287,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     ImGui.BeginTooltip();
                     if (timeSinceLastEvent < 10)
                     {
-                        ImGui.BeginChild("canavs", new Vector2(400, 250));
+                        ImGui.BeginChild("canvas", new Vector2(400, 250));
 
                         //DataSetOutputUi.DrawDataSet(dataSet);
                         _dataSetView.Draw(DataRecording.ActiveRecordingSet);
