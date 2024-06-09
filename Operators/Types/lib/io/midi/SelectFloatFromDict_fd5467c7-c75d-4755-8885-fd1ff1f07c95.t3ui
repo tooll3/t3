@@ -16,7 +16,7 @@
         "X": -200.0,
         "Y": 45.0
       },
-      "Usage": "Default"
+      "Usage": "CustomDropdown"
     }
   ],
   "SymbolChildUis": [],

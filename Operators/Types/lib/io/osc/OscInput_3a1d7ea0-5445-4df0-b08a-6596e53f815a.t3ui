@@ -15,7 +15,8 @@
         "X": -200.0,
         "Y": 45.0
       },
-      "Usage": "Default"
+      "GroupTitle": "Filter value",
+      "Usage": "CustomDropdown"
     },
     {
       "InputId": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
@@ -25,18 +26,12 @@
       }
     },
     {
-      "InputId": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 180.0
-      }
-    },
-    {
       "InputId": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
       "Position": {
         "X": -200.0,
         "Y": 225.0
-      }
+      },
+      "GroupTitle": "Options"
     }
   ],
   "SymbolChildUis": [],
@@ -60,6 +55,13 @@
       "Position": {
         "X": 133.0,
         "Y": 238.0
+      }
+    },
+    {
+      "OutputId": "f697732e-46f3-4037-afc5-56f396bd70ad"/*Values*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 338.0
       }
     }
   ],
