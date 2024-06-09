@@ -218,12 +218,7 @@
           }
         },
         {
-          "Id": "a7d80f3e-298d-4eb5-9751-ec432cda4065"/*SnapFraction*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        },
-        {
-          "Id": "dc5e2101-e4d5-495a-8291-58aef1876657"/*FractionBlend*/,
+          "Id": "a7d80f3e-298d-4eb5-9751-ec432cda4065"/*Scatter*/,
           "Type": "System.Single",
           "Value": 1.0
         },
