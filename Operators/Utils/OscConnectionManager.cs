@@ -214,5 +214,31 @@ namespace Operators.Utils
             private readonly Thread _thread;
             public bool _isRunning;
         }
+        
+        public static bool TryGetValueAndPathForMessagePart(object arg, out float value)
+        {
+            value = arg switch
+                        {
+                            float f => f,
+                            int   i => i,
+                            bool  b => b ? 1f:0f,
+                            string s => float.TryParse(s, out var f) ? f : float.NaN,
+                            double d => (float)d,
+                            _      => float.NaN
+                        };
+            return !float.IsNaN(value);
+        }
+
+        public static string BuildMessageComponentPath(OscMessage msg, int index)
+        {
+            const string channels="xyzw";
+            var suffix = index < 4 ? channels[index].ToString() : index.ToString(); 
+            return  msg.Address + "." + suffix;
+        }
+        
+        public static string BuildMessageComponentPath(OscMessage msg)
+        {
+            return  msg.Address;
+        }
     }
 }

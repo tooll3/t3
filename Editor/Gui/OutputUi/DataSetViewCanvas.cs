@@ -51,7 +51,6 @@ public class DataSetViewCanvas
         var dl = ImGui.GetWindowDrawList();
         var min = ImGui.GetWindowPos();
         var max = ImGui.GetContentRegionAvail() + min;
-            
 
         var visibleMinTime = _canvas.InverseTransformX(min.X);
         var visibleMaxTime = _canvas.InverseTransformX(max.X);
@@ -62,9 +61,12 @@ public class DataSetViewCanvas
 
         var filterRecentEventDuration = 10;
         var dataSetChannels = dataSet.Channels.OrderBy(c => string.Join((string)".", (IEnumerable<string>)c.Path));
-        
+
         foreach (var channel in dataSetChannels)
         {
+            var newVisibleRange = new ValueRange() {Min = float.PositiveInfinity, Max = float.NegativeInfinity};
+            _channelValueRanges.TryGetValue(channel.GetHashCode(), out var valueRange);
+            
             if (OnlyRecentEvents)
             {
                 var lastEvent = channel.GetLastEvent();
@@ -87,21 +89,33 @@ public class DataSetViewCanvas
             }
 
             double lastEventTime = 0;
+            var visibleEventCounts = 0;
+            const int maxVisibleEvents = 500;
                 
             // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < channel.Events.Count; index++)
+            for (var index = channel.Events.Count - 1; index >= 0
+                                                       && index >= channel.Events.Count - maxVisibleEvents
+                                                       && visibleEventCounts < maxVisibleEvents; index--)
             {
                 var dataEvent = channel.Events[index];
                 var msg = dataEvent.Value.ToString();
         
                 var height = 1 * (layerHeight -2);
+                var value = float.NaN;
                 if (dataEvent is { Value: float f })
                 {
-                    height = (1-(f / 127)) * (layerHeight -2) ;
+                    value = f;
+                    var fNormalized = 0f;
+                    if (!float.IsNaN(f))
+                    {
+                        fNormalized = ((f-valueRange.Min) / (valueRange.Max - valueRange.Min)).Clamp(0,1);
+                    }
+                    
+                    height = (1-fNormalized) * (layerHeight -2) ;
                     msg = $"{f:0.00}";
                 }
 
-                    
+                
                 if (dataEvent is DataIntervalEvent intervalEvent)
                 {
                     lastEventTime = intervalEvent.EndTime;
@@ -125,6 +139,9 @@ public class DataSetViewCanvas
                 }
                 else
                 {
+                    if (!(dataEvent.Time > visibleMinTime) || !(dataEvent.Time < visibleMaxTime))
+                        continue;
+                    
                     var xStart = _canvas.TransformX((float)dataEvent.Time);
                     var y = layerMin.Y + height;
                     dl.AddRectFilled(new Vector2(xStart, y), new Vector2(xStart + 2, y+2), UiColors.StatusAutomated);
@@ -137,7 +154,22 @@ public class DataSetViewCanvas
                     }
                     lastEventTime = dataEvent.Time;
                 }
+
+                if (!float.IsNaN(value))
+                {
+                    newVisibleRange.Min = MathF.Min(newVisibleRange.Min, value);
+                    newVisibleRange.Max = MathF.Max(newVisibleRange.Max, value);
+                }
+                visibleEventCounts++;
             }
+
+            
+            var newRange = new ValueRange(MathUtils.Lerp(valueRange.Min, newVisibleRange.Min, 0.1f),
+                                                                        MathUtils.Lerp(valueRange.Max, newVisibleRange.Max, 0.1f));
+            if (float.IsNaN(newRange.Min) || float.IsNaN(newRange.Max))
+                newRange = new ValueRange();
+            
+            _channelValueRanges[channel.GetHashCode()] = newRange; 
 
             var timeSinceEvent = MathF.Pow((float)(currentTime - lastEventTime).Clamp(0,10)/10,0.25f);
             var color = Color.Mix(UiColors.StatusAnimated, UiColors.TextMuted, (float)timeSinceEvent);
@@ -161,7 +193,19 @@ public class DataSetViewCanvas
         ImGui.EndChild();
         ImGui.SetCursorPos(Vector2.Zero);
     }
-        
+
+    private struct ValueRange
+    {
+        public ValueRange(float min, float max)
+        {
+            Min = min;
+            Max = max;
+        }
+        public float Min;
+        public float Max;
+    }
+
+    private readonly Dictionary<int, ValueRange> _channelValueRanges = new();
 
     public bool OnlyRecentEvents = true;
     public bool Scroll = true;

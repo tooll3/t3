@@ -16,20 +16,22 @@ namespace Operators.Utils.Recording;
 /// </summary>
 public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
 {
-    public readonly DataSet DataSet = new();
+    //public readonly DataSet DataSet = new();
     public double LastEventTime = 0;
 
+    private DataSet _dataSet;
     
-    public MidiDataRecording()
+    public MidiDataRecording(DataSet dataSet)
     {
+        _dataSet = dataSet;
         MidiConnectionManager.RegisterConsumer(this);
     }
 
-    public void Reset()
-    {
-        DataSet.Clear();
-        _channelsByHash.Clear();
-    }
+    // public void Reset()
+    // {
+    //     _dataSet.Clear();
+    //     _channelsByHash.Clear();
+    // }
 
     void MidiConnectionManager.IMidiConsumer.MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
@@ -116,7 +118,7 @@ public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
                                             }
                              };
         _channelsByHash[hash] = newChannel;
-        DataSet.Channels.Add(newChannel);
+        _dataSet.Channels.Add(newChannel);
         return newChannel;
     }
 
@@ -141,7 +143,7 @@ public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
                                             },
                              };
         _channelsByHash[hash] = newChannel;
-        DataSet.Channels.Add(newChannel);
+        _dataSet.Channels.Add(newChannel);
         return newChannel;
     }
 

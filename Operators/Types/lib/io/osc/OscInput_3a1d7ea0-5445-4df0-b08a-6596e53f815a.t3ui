@@ -1,13 +1,17 @@
 {
   "Id": "3a1d7ea0-5445-4df0-b08a-6596e53f815a"/*OscInput*/,
-  "Description": "Receives OSC input from a connected server.",
+  "Description": "Receives OSC input from a connected server. \n\nIn most scenarios it is useful to record some input messages and then pick the relevant addresses by using a [SelectFloatFromDict] or [SelectVec2FromDict] operator.\n\nYou might want to adjust the default OSC port in the settings window to see a visual indication of incoming messages in the timeline bar.",
   "InputUis": [
     {
       "InputId": "87efd3c4-f2df-4996-924f-12c631bad8d8"/*Port*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "OSC port to listen on. \n\nChanging this parameter will discard recorded values and reconnect.",
+      "Min": 0,
+      "Max": 65335,
+      "Clamp": true
     },
     {
       "InputId": "17d1fe47-430a-4465-92aa-92a4effb515f"/*Address*/,
@@ -16,6 +20,7 @@
         "Y": 45.0
       },
       "GroupTitle": "Filter value",
+      "Description": "An optional filter to the collected OSC addresses. The first match to this filter will be used for the float output parameter.\n\nThis can be useful to directly pick a channel without the need to insert an [SelectFloatFromDict] operator.\n\nThis list is automatically filled with all addresses used by incoming OSC message after connecting to that port. This list is shared between all OscInput operators listing to that port. \nNext to the address there is an indicator for the data-type of that address. E.g. <ff> for a vec2 or <ddd> for a double precision Vec3.",
       "Usage": "CustomDropdown"
     },
     {
@@ -31,7 +36,8 @@
         "X": -200.0,
         "Y": 225.0
       },
-      "GroupTitle": "Options"
+      "GroupTitle": "Options",
+      "Description": "This is only useful for additional debugging, because enable it can lead to excessive log output.\nEnabling it can also have a performance impact."
     }
   ],
   "SymbolChildUis": [],

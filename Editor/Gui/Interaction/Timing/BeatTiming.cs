@@ -6,6 +6,7 @@ using T3.Core.Audio;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.Logging;
 using T3.Operators.Types.Id_4023bcbf_74a6_4e50_a12e_4c22be5dbbdf;
+using DataRecording = T3.Core.DataTypes.DataSet.DataRecording;
 
 //using T3.Core.Utils;
 
@@ -40,7 +41,7 @@ namespace T3.Editor.Gui.Interaction.Timing
             if (_initialized)
                 return;
             
-            DataRecording.DataSetsById["BeatTiming"] = _syncTimingData;
+            Operators.Types.Id_4023bcbf_74a6_4e50_a12e_4c22be5dbbdf.DataRecording.DataSetsById["BeatTiming"] = _syncTimingData;
             _initialized = true;
         }
         public static void Update()
@@ -122,7 +123,7 @@ namespace T3.Editor.Gui.Interaction.Timing
             DetectAndProcessOffSeriesTaps(_syncMeasureTriggered);
             KeepTap();
             UpdatePhaseAndDurationFromMultipleTaps();
-            ActiveMidiRecording.ActiveRecordingSet ??= new DataSet();
+            DataRecording.ActiveRecordingSet ??= new DataSet();
         }
 
         private static readonly DataChannel _tapsChannel = new(typeof(float)) { Path = new List<string> { "Tapping", "Taps" } };

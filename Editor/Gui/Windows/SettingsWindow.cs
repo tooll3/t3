@@ -24,6 +24,7 @@ namespace T3.Editor.Gui.Windows
             Theme,
             Project,
             Midi,
+            OSC,
             SpaceMouse,
             Keyboard,
         }
@@ -220,6 +221,24 @@ namespace T3.Editor.Gui.Windows
                         FormInputs.AddVerticalSpace();
                         break;
                     }
+                    case Categories.OSC:
+                    {
+                        FormInputs.AddSectionHeader("OSC");
+                        
+                        CustomComponents
+                           .HelpText("On startup, Tooll will listen for OSC messages on the default port." +
+                                     "The IO indicator in the timeline will show incoming messages.\n" +
+                                     "You can also use the OscInput operator to receive OSC from other ports.");
+                        
+                        FormInputs.AddInt("Default Port", ref ProjectSettings.Config.DefaultOscPort,
+                                          0, 65535, 1,
+                                          "If a valid port is set, Tooll will listen for OSC messages on this port by default.",
+                                          8000);
+                        
+                        FormInputs.AddVerticalSpace();
+                        break;
+                    }
+
                     case Categories.SpaceMouse:
                         FormInputs.AddSectionHeader("Space Mouse");
 

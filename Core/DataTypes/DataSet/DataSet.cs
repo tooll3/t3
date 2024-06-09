@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -86,9 +87,12 @@ public class DataChannel
 
             writer.WritePropertyName("Events");
             writer.WriteStartArray();
-            foreach (var dataEvent in Events)
+            lock (Events)
             {
-                dataEvent.ToJson(converter, writer);
+                foreach (var dataEvent in Events.ToList())
+                {
+                    dataEvent.ToJson(converter, writer);
+                }
             }
 
             writer.WriteEndArray();

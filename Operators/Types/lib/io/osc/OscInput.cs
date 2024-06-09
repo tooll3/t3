@@ -76,30 +76,21 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
             {
                 if (_lastMatchingSignals.Count > 0)
                 {
-                    _allResults.Clear();
                     foreach (var m in _lastMatchingSignals)
                     {
-
                         if (m.Count == 0)
                             continue;
+                        
+                        _allResults.Clear();
 
                         for (var index = 0; index < m.Count; index++)
                         {
-                            var obj = m[index];
-                            var floatValue = obj switch
-                                        {
-                                            float f => f,
-                                            int i   => i,
-                                            bool b  => b ? 1 : 0,
-                                            _       => float.NaN
-                                        };
-                            
-                            if (!float.IsNaN(floatValue))
+                            if (OscConnectionManager.TryGetValueAndPathForMessagePart(m[index], out var floatValue))
                             {
-                                const string channels="xyzw";
-                                var suffix = index < 4 ? channels[index].ToString() : index.ToString(); 
-                                var address = m.Address + "." + suffix;
-                                _valuesByKeys[address] = floatValue;
+                                var path = m.Count == 1 
+                                               ? OscConnectionManager.BuildMessageComponentPath(m)
+                                               : OscConnectionManager.BuildMessageComponentPath(m, index);
+                                _valuesByKeys[path] = floatValue;
                             }
                             
                             _allResults.Add(floatValue);

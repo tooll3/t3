@@ -69,7 +69,8 @@ public class T3Ui
             return;
             
         CompatibleMidiDeviceHandling.InitializeConnectedDevices();
-        ActiveMidiRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
+        // DataRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
+        // DataRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
         _initialed = true;
     }
 
@@ -520,7 +521,8 @@ public class T3Ui
     public static float UiScaleFactor { get; set; } = 1;
     public static float DisplayScaleFactor { get; set; } = 1;
     public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
-    public static readonly MidiDataRecording MidiDataRecording = new();
+    public static readonly MidiDataRecording MidiDataRecording = new(DataRecording.ActiveRecordingSet);
+    public static readonly OscDataRecording OscDataRecording = new(DataRecording.ActiveRecordingSet);
         
     //private static readonly AutoBackup.AutoBackup _autoBackup = new();
         
