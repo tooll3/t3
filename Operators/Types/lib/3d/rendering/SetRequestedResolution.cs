@@ -28,7 +28,7 @@ namespace T3.Operators.Types.Id_5b3a0c1d_87d6_4d88_ae20_ff9f95049ecf
             context.RequestedResolution = new Int2((int)(newResolution.X * resolutionFactor).Clamp(1, 16384),
                                                    (int)(newResolution.Y * resolutionFactor).Clamp(1, 16384));
             
-            Texture.Value = Texture.GetValue(context);
+            Result.Value = Texture.GetValue(context);
             context.RequestedResolution = previousResolution;
         }
 
