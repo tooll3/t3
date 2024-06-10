@@ -17,6 +17,9 @@ namespace T3.Operators.Types.Id_dc2273a7_8a54_4e6f_8d8e_9a675c1ef599
         [Input(Guid = "06f28039-d349-4f5f-a68f-6009886e180b")]
         public readonly InputSlot<System.Numerics.Vector2> Size = new InputSlot<System.Numerics.Vector2>();
 
+        [Input(Guid = "06553d30-0a71-435b-8796-b61db670fbc6")]
+        public readonly InputSlot<System.Numerics.Vector4> CornersRadius = new InputSlot<System.Numerics.Vector4>();
+
         [Input(Guid = "1dd6cf1e-d374-40d5-b51f-21b91deb3802")]
         public readonly InputSlot<float> Rotation = new InputSlot<float>();
 
