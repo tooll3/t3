@@ -5,8 +5,8 @@
     {
       "InputId": "e155a2f2-2b21-49b5-9bd4-0c363684d93f"/*Center*/,
       "Position": {
-        "X": -273.87378,
-        "Y": -60.74695
+        "X": -277.04544,
+        "Y": -141.62457
       },
       "GroupTitle": "Shape",
       "Min": -0.5,
@@ -16,9 +16,20 @@
     {
       "InputId": "06f28039-d349-4f5f-a68f-6009886e180b"/*Size*/,
       "Position": {
+        "X": -277.04544,
+        "Y": -96.62457
+      }
+    },
+    {
+      "InputId": "06553d30-0a71-435b-8796-b61db670fbc6"/*CornersRadius*/,
+      "Position": {
         "X": -273.87378,
         "Y": -15.746948
-      }
+      },
+      "Description": "top left, top right, bottom right, bottom left",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "1dd6cf1e-d374-40d5-b51f-21b91deb3802"/*Rotation*/,
@@ -106,8 +117,8 @@
     {
       "ChildId": "3b46ece1-a7be-42f1-a3e4-c4bda3a03169"/*Vector2Components*/,
       "Position": {
-        "X": -123.87378,
-        "Y": -60.74695
+        "X": -127.04544,
+        "Y": -152.62457
       }
     },
     {
@@ -135,12 +146,12 @@
       "ChildId": "8b8d8b02-50d2-448e-87fa-28bfca5116b2"/*_multiImageFxSetupStatic*/,
       "Style": "Resizable",
       "Size": {
-        "X": 113.965515,
-        "Y": 410.5478
+        "X": 123.87697,
+        "Y": 648.42316
       },
       "Position": {
-        "X": 664.41205,
-        "Y": -49.932617
+        "X": 676.52606,
+        "Y": -286.70663
       }
     },
     {
@@ -160,8 +171,16 @@
     {
       "ChildId": "0094265a-6359-4b3a-b5be-3562f05f8d45"/*Vector2Components*/,
       "Position": {
+        "X": -127.04544,
+        "Y": -96.62457
+      }
+    },
+    {
+      "ChildId": "1e874625-65bf-47cd-8024-93c7b4c8b140"/*Vector4Components*/,
+      "Comment": "Connection order (top left, top right, bottom right, bottom left) ",
+      "Position": {
         "X": -123.87378,
-        "Y": -4.7469482
+        "Y": -15.746948
       }
     }
   ],

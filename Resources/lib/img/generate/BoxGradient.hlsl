@@ -5,6 +5,7 @@ cbuffer ParamConstants : register(b0)
 {
     float2 Center;
     float2 Size;
+    float4 CornersRadius;
     float Rotation; 
     float Width;
     float Offset;
@@ -41,10 +42,12 @@ float fmod(float x, float y)
 }
 
 //source: https://iquilezles.org/articles/distfunctions2d/
-float sdBox( in float2 p, in float2 b )
+float sdRoundedBox( in float2 p, in float2 b, in float4 r )
 {
-    float2 d = abs(p)-b;
-    return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
+    r.xy = (p.x>0.0)?r.xy : r.zw;
+    r.x  = (p.y>0.0)?r.x  : r.y;
+    float2 q = abs(p)-b+r.x;
+    return min(max(q.x,q.y),0.0) + length(max(q,0.0)) - r.x;
 }
 
 // Function to rotate a point around the origin
@@ -74,10 +77,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     
     float c = 0;
 
-
-    c = sdBox(p, Size)* 2 - Offset * Width;
- 
-   
+    c = sdRoundedBox(p, Size, CornersRadius)* 2 - Offset * Width;
+    
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
 
     c = PingPong > 0.5
@@ -90,11 +91,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             : saturate(c);
 
     float dBiased = ApplyBiasAndGain(c, BiasAndGain.x, BiasAndGain.y);
-    // float dBiased = Bias >= 0
-    //                     ? pow(c, Bias + 1)
-    //                     : 1 - pow(clamp(1 - c, 0, 10), -Bias + 1);
 
-    dBiased = clamp(dBiased, 0.001, 0.999);
+    //dBiased = clamp(dBiased, 0.001, 0.999); // I don't think it's needed
     float4 gradient = Gradient.Sample(clammpedSampler, float2(dBiased, 0));
 
     return (IsTextureValid < 0.5) ? gradient : BlendColors(orgColor, gradient, (int)BlendMode);
