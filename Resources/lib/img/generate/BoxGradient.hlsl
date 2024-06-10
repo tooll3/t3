@@ -80,7 +80,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     c = sdRoundedBox(p, Size*UniformScale, CornersRadius*UniformScale)* 2 - Offset * Width;
     
-    float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
+    float4 orgColor = ImageA.Sample(texSampler, uv);
 
     c = PingPong > 0.5
             ? (Repeat < 0.5 ? (abs(c) / Width)
@@ -93,7 +93,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float dBiased = ApplyBiasAndGain(c, BiasAndGain.x, BiasAndGain.y);
 
-    //dBiased = clamp(dBiased, 0.001, 0.999); // I don't think it's needed
+    dBiased = clamp(dBiased, 0.001, 0.999); // I don't think it's needed
     float4 gradient = Gradient.Sample(clammpedSampler, float2(dBiased, 0));
 
     return (IsTextureValid < 0.5) ? gradient : BlendColors(orgColor, gradient, (int)BlendMode);
