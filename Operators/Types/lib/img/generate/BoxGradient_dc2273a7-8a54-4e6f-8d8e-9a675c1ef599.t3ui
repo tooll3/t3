@@ -23,8 +23,8 @@
     {
       "InputId": "06553d30-0a71-435b-8796-b61db670fbc6"/*CornersRadius*/,
       "Position": {
-        "X": -273.87378,
-        "Y": -15.746948
+        "X": -277.04544,
+        "Y": -51.624573
       },
       "Description": "top left, top right, bottom right, bottom left",
       "Min": 0.0,
@@ -36,6 +36,13 @@
       "Position": {
         "X": -273.87378,
         "Y": 29.253052
+      }
+    },
+    {
+      "InputId": "5a164383-4f9d-4978-bfcb-a1c48b9b8f34"/*UniformScale*/,
+      "Position": {
+        "X": -275.0653,
+        "Y": 64.46376
       }
     },
     {

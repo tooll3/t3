@@ -7,6 +7,7 @@ cbuffer ParamConstants : register(b0)
     float2 Size;
     float4 CornersRadius;
     float Rotation; 
+    float UniformScale;
     float Width;
     float Offset;
     float PingPong;
@@ -77,7 +78,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     
     float c = 0;
 
-    c = sdRoundedBox(p, Size, CornersRadius)* 2 - Offset * Width;
+    c = sdRoundedBox(p, Size*UniformScale, CornersRadius*UniformScale)* 2 - Offset * Width;
     
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
 

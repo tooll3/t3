@@ -23,6 +23,9 @@ namespace T3.Operators.Types.Id_dc2273a7_8a54_4e6f_8d8e_9a675c1ef599
         [Input(Guid = "1dd6cf1e-d374-40d5-b51f-21b91deb3802")]
         public readonly InputSlot<float> Rotation = new InputSlot<float>();
 
+        [Input(Guid = "5a164383-4f9d-4978-bfcb-a1c48b9b8f34")]
+        public readonly InputSlot<float> UniformScale = new InputSlot<float>();
+
         [Input(Guid = "5e7cd523-0c39-42e4-a4e9-05cc20477296")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
 
