@@ -17,10 +17,18 @@ namespace T3.Operators.Types.Id_2f851b5b_b66d_40b0_9445_e733dc4b907d
         private void Update(EvaluationContext context)
         {
             Result.Value = 0;
+            var connectedCount = 0;
             foreach (var input in InputValues.GetCollectedTypedInputs())
             {
                 Result.Value += input.GetValue(context);
+                connectedCount++;
             }
+
+            if (connectedCount == 0)
+            {
+                Result.Value = InputValues.GetValue(context);
+            }
+            
             InputValues.DirtyFlag.Clear();
         }
 

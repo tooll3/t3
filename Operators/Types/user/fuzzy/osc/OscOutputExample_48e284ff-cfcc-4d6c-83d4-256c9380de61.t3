@@ -14,24 +14,19 @@
           "Value": "192.168.1.19"
         },
         {
-          "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Location*/,
+          "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Address*/,
           "Type": "System.String",
           "Value": "/label1"
         },
         {
-          "Id": "d5e9e9be-093b-4d57-9070-9b2cf33aa45b"/*String*/,
-          "Type": "System.String",
-          "Value": "1"
-        },
-        {
-          "Id": "827c7ae2-c129-4d04-a715-328c0a86bf8a"/*Number*/,
+          "Id": "827c7ae2-c129-4d04-a715-328c0a86bf8a"/*Values*/,
           "Type": "System.Single",
           "Value": 0.67
         },
         {
-          "Id": "4931217b-e30d-42a6-9cda-bc49a8fd8d67"/*OscValueType*/,
-          "Type": "System.Int32",
-          "Value": 1
+          "Id": "d5e9e9be-093b-4d57-9070-9b2cf33aa45b"/*Strings*/,
+          "Type": "System.String",
+          "Value": "1"
         }
       ],
       "Outputs": []
@@ -64,24 +59,19 @@
           "Value": "192.168.1.19"
         },
         {
-          "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Location*/,
+          "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Address*/,
           "Type": "System.String",
           "Value": "/fader1"
         },
         {
-          "Id": "d5e9e9be-093b-4d57-9070-9b2cf33aa45b"/*String*/,
-          "Type": "System.String",
-          "Value": "1"
-        },
-        {
-          "Id": "827c7ae2-c129-4d04-a715-328c0a86bf8a"/*Number*/,
+          "Id": "827c7ae2-c129-4d04-a715-328c0a86bf8a"/*Values*/,
           "Type": "System.Single",
           "Value": 0.67
         },
         {
-          "Id": "4931217b-e30d-42a6-9cda-bc49a8fd8d67"/*OscValueType*/,
-          "Type": "System.Int32",
-          "Value": 0
+          "Id": "d5e9e9be-093b-4d57-9070-9b2cf33aa45b"/*Strings*/,
+          "Type": "System.String",
+          "Value": "1"
         }
       ],
       "Outputs": []
