@@ -20,6 +20,10 @@
       "DefaultValue": "/tooll3"
     },
     {
+      "Id": "fdb1d27b-9a9d-47ab-8dbf-7e1bab5b4a24"/*Reconnect*/,
+      "DefaultValue": false
+    },
+    {
       "Id": "827c7ae2-c129-4d04-a715-328c0a86bf8a"/*Values*/,
       "DefaultValue": 0.0
     },

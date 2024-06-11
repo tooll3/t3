@@ -40,12 +40,21 @@
       "Usage": "Default"
     },
     {
+      "InputId": "fdb1d27b-9a9d-47ab-8dbf-7e1bab5b4a24"/*Reconnect*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "AddPadding": "True"
+    },
+    {
       "InputId": "827c7ae2-c129-4d04-a715-328c0a86bf8a"/*Values*/,
       "Relevancy": "Relevant",
       "Position": {
         "X": -200.0,
         "Y": 180.0
       },
+      "GroupTitle": "Content",
       "Description": "One or more values to send. You can connect multiple float values to send.\n\nThis paraemter is ignored (not send) if default. Click on the paraemter name to reset it."
     },
     {
@@ -54,7 +63,6 @@
         "X": -200.0,
         "Y": 225.0
       },
-      "GroupTitle": "Content",
       "Description": "One or more strings to send. You can connect multiple strings to send.\nThe strings will always be sent after the float values.\n\nThis paraemter is ignored (not send) if default. Click on the paraemter name to reset it.",
       "Usage": "Default"
     },

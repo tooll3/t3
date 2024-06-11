@@ -6,6 +6,7 @@ using Rug.Osc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
 
 namespace T3.Operators.Types.Id_4e99da86_482f_4037_8664_b2371526d632
@@ -31,13 +32,17 @@ namespace T3.Operators.Types.Id_4e99da86_482f_4037_8664_b2371526d632
             var somethingHasChanged = false;
             var port = Port.GetValue(context);
             var ipAddressString = IpAddress.GetValue(context).Trim();
+            var reconnect = Reconnect.GetValue(context);
+            if (reconnect)
+            {
+                Reconnect.SetTypedInputValue(false);
+            }
 
-            IPAddress newIpAddress = null;
             var ipAddressChanged = ipAddressString != _lastIpAddressString;
             if (ipAddressChanged)
             {
                 _lastIpAddressString = ipAddressString;
-                if (!TryGetValidAddress(ipAddressString, out var error, out newIpAddress))
+                if (!TryGetValidAddress(ipAddressString, out var error, out _newIpAddress))
                 {
                     _lastErrorMessage = error;
                     return;
@@ -53,16 +58,16 @@ namespace T3.Operators.Types.Id_4e99da86_482f_4037_8664_b2371526d632
             if (_connected)
             {
                 var targetChanged = ipAddressChanged || port != _port;
-                if (targetChanged)
+                if (targetChanged || reconnect)
                 {
                     somethingHasChanged = true;
                     _sender.Close();
-                    _connected = TryConnectOsc(newIpAddress, port);
+                    _connected = TryConnectOsc(_newIpAddress, port);
                 }
             }
-            else if(newIpAddress != null)
+            else if(_newIpAddress != null)
             {
-                _connected = TryConnectOsc(newIpAddress, port);
+                _connected = TryConnectOsc(_newIpAddress, port);
             }
 
             if (OscAddress.IsValidAddressPattern(oscAddress) == false)
@@ -287,7 +292,8 @@ namespace T3.Operators.Types.Id_4e99da86_482f_4037_8664_b2371526d632
         
         private  SymbolChild.Input _valuesInput;
         private  SymbolChild.Input _stringsInput;
-        
+        private IPAddress _newIpAddress = null;
+
         
         public IStatusProvider.StatusLevel GetStatusLevel()
         {
@@ -305,9 +311,12 @@ namespace T3.Operators.Types.Id_4e99da86_482f_4037_8664_b2371526d632
 
         [Input(Guid = "6c0e07ba-7ea6-4dab-af0b-61cf9cb74ad7")]
         public readonly InputSlot<int> Port = new();
-
+        
         [Input(Guid = "9016e418-7761-4916-aafb-c95599f77f38")]
         public readonly InputSlot<string> Address = new();
+        
+        [Input(Guid = "FDB1D27B-9A9D-47AB-8DBF-7E1BAB5B4A24")]
+        public readonly InputSlot<bool> Reconnect = new();
 
         [Input(Guid = "827c7ae2-c129-4d04-a715-328c0a86bf8a")]
         public readonly MultiInputSlot<float> Values = new();
