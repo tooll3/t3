@@ -12,10 +12,8 @@ cbuffer ParamConstants : register(b0)
     float Offset;
     float PingPong;
     float Repeat;
-    float BlendMode;
     float2 BiasAndGain;
-    
-    
+    float BlendMode;
 
     float IsTextureValid; // Automatically added by _FxShaderSetup
 }
@@ -51,6 +49,7 @@ float sdRoundedBox( in float2 p, in float2 b, in float4 r )
     return min(max(q.x,q.y),0.0) + length(max(q,0.0)) - r.x;
 }
 
+
 // Function to rotate a point around the origin
 inline float2 rotatePoint(float2 p, float angle)
 {
@@ -79,8 +78,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float c = 0;
 
     c = sdRoundedBox(p, Size*UniformScale, CornersRadius*UniformScale)* 2 - Offset * Width;
+   
     
-    float4 orgColor = ImageA.Sample(texSampler, uv);
+    float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
 
     c = PingPong > 0.5
             ? (Repeat < 0.5 ? (abs(c) / Width)
@@ -93,7 +93,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float dBiased = ApplyBiasAndGain(c, BiasAndGain.x, BiasAndGain.y);
 
-    dBiased = clamp(dBiased, 0.001, 0.999); // I don't think it's needed
+    dBiased = clamp(dBiased, 0.001, 0.999); 
     float4 gradient = Gradient.Sample(clammpedSampler, float2(dBiased, 0));
 
     return (IsTextureValid < 0.5) ? gradient : BlendColors(orgColor, gradient, (int)BlendMode);
