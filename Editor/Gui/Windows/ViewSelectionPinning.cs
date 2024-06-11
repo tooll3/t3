@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
@@ -30,20 +31,20 @@ namespace T3.Editor.Gui.Windows
 
             FrameStats.AddPinnedId(pinnedOrSelectedInstance.SymbolChildId);    
             
+            // Keep pinned if pinned operator changed
+            var oneSelected = NodeSelection.Selection.Count == 1;
+            var selectedOp= NodeSelection.GetFirstSelectedInstance();
+            var isPinnedToSelected = pinnedOrSelectedInstance == selectedOp;
+            
             if (CustomComponents.IconButton(Icon.Pin, 
                                                    
                                                   new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight) * T3Ui.UiScaleFactor,
                                             _isPinned ? CustomComponents.ButtonStates.Activated : CustomComponents.ButtonStates.Dimmed
                                                   ))
             {
-                
                 if (_isPinned)
                 {
-                    // Keep pinned if pinned operator changed
-                    var oneSelected = NodeSelection.Selection.Count == 1;
-                    var selectedOp= NodeSelection.GetFirstSelectedInstance();
-                    var opChanged = pinnedOrSelectedInstance != selectedOp;
-                    if (!opChanged || !oneSelected)
+                    if (isPinnedToSelected || !oneSelected)
                     {
                         _isPinned = false;
                     }
@@ -52,12 +53,27 @@ namespace T3.Editor.Gui.Windows
                 {
                     _isPinned = true;
                 }
-                if (_isPinned)
-                    PinSelectionToView();
+
             }
             CustomComponents.TooltipForLastItem("Pin output to active operator.");
-            
-            
+
+            if (_isPinned)
+            {
+                ImGui.SameLine();
+                if (CustomComponents.IconButton(Icon.PlayOutput,
+
+                                                new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight) * T3Ui.UiScaleFactor,
+                                                isPinnedToSelected ? CustomComponents.ButtonStates.Disabled : CustomComponents.ButtonStates.Normal
+                                               ))
+                {
+                    if (!isPinnedToSelected && oneSelected)
+                    {
+                        PinSelectionToView();
+                    }
+                }
+                CustomComponents.TooltipForLastItem($"Pin output to selected {selectedOp.Symbol.Name}.");
+            }
+                
             ImGui.SameLine();
             ImGui.SetNextItemWidth(200);
             var suffix = _isPinned ? " (pinned)" : " (selected)";
@@ -79,23 +95,12 @@ namespace T3.Editor.Gui.Windows
                     {
                         _isPinned = false;
                     }
-
-                    var instanceSelectedInGraph = NodeSelection.GetFirstSelectedInstance();
-                    if (instanceSelectedInGraph != pinnedOrSelectedInstance)
-                    {
-                        if (ImGui.MenuItem("Pin Selection to View"))
-                        {
-                            _isPinned = true;
-                            PinSelectionToView();
-                        }
-                    }
                 }
                 else
                 {
                     if (ImGui.MenuItem("Pin Selection to View"))
                     {
                         _isPinned = true;
-                        PinSelectionToView();
                     }
                 }
 
