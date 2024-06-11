@@ -2,19 +2,6 @@
   "Id": "dc2273a7-8a54-4e6f-8d8e-9a675c1ef599",
   "Variations": [
     {
-      "Id": "42890f52-6711-436a-94e8-a02354d907bc",
-      "IsPreset": true,
-      "ActivationIndex": 1,
-      "Title": "Default",
-      "PosOnCanvas": {
-        "X": 48.810246,
-        "Y": -250.20741
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {}
-      }
-    },
-    {
       "Id": "772a4436-4435-4754-8e6f-f7df1868459b",
       "IsPreset": true,
       "ActivationIndex": 2,
@@ -160,6 +147,70 @@
             "X": 0.0,
             "Y": 1.0
           },
+          "c9e1ea04-1c81-4554-964f-e361a502b9b8": false,
+          "8f50765e-3d85-4814-a99a-ecdff18c97e7": false
+        }
+      }
+    },
+    {
+      "Id": "dc07dc8f-662b-4cb5-8027-d1a842801ec6",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "FancyPanel",
+      "PosOnCanvas": {
+        "X": 17.350517,
+        "Y": -283.08203
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "5e7cd523-0c39-42e4-a4e9-05cc20477296": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "e8768fec-bb1b-424c-96dd-a991f10d34e8",
+                  "NormalizedPosition": 0.024896266,
+                  "Color": {
+                    "R": 0.035045624,
+                    "G": 0.0,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "d08ee7b2-c53e-4c1e-83e6-6e44a71b8748",
+                  "NormalizedPosition": 0.12033195,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 1.0,
+                    "B": 0.9898777,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "972de91d-115d-40b9-8879-08248ae8ba55",
+                  "NormalizedPosition": 1.0,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 0.0,
+                    "B": 0.0,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "06f28039-d349-4f5f-a68f-6009886e180b": {
+            "X": 0.8,
+            "Y": 0.2
+          },
+          "06553d30-0a71-435b-8796-b61db670fbc6": {
+            "X": 0.2,
+            "Y": 0.05,
+            "Z": 0.2,
+            "W": 0.0
+          },
+          "94d46ad8-7dd6-490c-ade4-a527c7ee9d05": 0.07,
           "c9e1ea04-1c81-4554-964f-e361a502b9b8": false,
           "8f50765e-3d85-4814-a99a-ecdff18c97e7": false
         }

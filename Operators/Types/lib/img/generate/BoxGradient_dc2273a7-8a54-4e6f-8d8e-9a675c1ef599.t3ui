@@ -3,10 +3,27 @@
   "Description": "A box gradient using the signed distance field \"Box - Exact\" desbribed  in the \"2D distance functions\" article on Inigo Quilez's website. \n\nBased on [RadialGradient]\n\n2D, SDF, sdBox, [RoundedRect]",
   "InputUis": [
     {
+      "InputId": "71cd9153-da17-47f0-9251-80bdef8906b3"/*Image*/,
+      "Position": {
+        "X": -267.11908,
+        "Y": -283.68253
+      },
+      "GroupTitle": "Additional Features"
+    },
+    {
+      "InputId": "5e7cd523-0c39-42e4-a4e9-05cc20477296"/*Gradient*/,
+      "Position": {
+        "X": -267.11908,
+        "Y": -238.68253
+      },
+      "GroupTitle": "Style",
+      "AddPadding": "True"
+    },
+    {
       "InputId": "e155a2f2-2b21-49b5-9bd4-0c363684d93f"/*Center*/,
       "Position": {
         "X": -277.04544,
-        "Y": -141.62457
+        "Y": -152.62457
       },
       "GroupTitle": "Shape",
       "Min": -0.5,
@@ -17,14 +34,14 @@
       "InputId": "06f28039-d349-4f5f-a68f-6009886e180b"/*Size*/,
       "Position": {
         "X": -277.04544,
-        "Y": -96.62457
+        "Y": -107.62457
       }
     },
     {
       "InputId": "06553d30-0a71-435b-8796-b61db670fbc6"/*CornersRadius*/,
       "Position": {
-        "X": -277.04544,
-        "Y": -51.624573
+        "X": -270.7163,
+        "Y": 26.825928
       },
       "Description": "top left, top right, bottom right, bottom left",
       "Min": 0.0,
@@ -34,31 +51,22 @@
     {
       "InputId": "1dd6cf1e-d374-40d5-b51f-21b91deb3802"/*Rotation*/,
       "Position": {
-        "X": -273.87378,
-        "Y": 29.253052
+        "X": -270.7163,
+        "Y": 71.82593
       }
     },
     {
       "InputId": "5a164383-4f9d-4978-bfcb-a1c48b9b8f34"/*UniformScale*/,
       "Position": {
-        "X": -275.0653,
-        "Y": 64.46376
+        "X": -270.7163,
+        "Y": 116.82593
       }
-    },
-    {
-      "InputId": "5e7cd523-0c39-42e4-a4e9-05cc20477296"/*Gradient*/,
-      "Position": {
-        "X": -275.0653,
-        "Y": 109.46376
-      },
-      "GroupTitle": "Style",
-      "AddPadding": "True"
     },
     {
       "InputId": "94d46ad8-7dd6-490c-ade4-a527c7ee9d05"/*GradientWidth*/,
       "Position": {
         "X": -270.7163,
-        "Y": 172.82593
+        "Y": 161.82593
       },
       "Min": 0.0,
       "Max": 1.0
@@ -67,43 +75,35 @@
       "InputId": "c3d48bd0-5153-4631-ae6c-a7ded46ce952"/*Offset*/,
       "Position": {
         "X": -270.7163,
-        "Y": 217.82593
+        "Y": 206.82593
       },
       "Min": -0.5,
       "Max": 0.5
     },
     {
-      "InputId": "94516412-20a6-41a9-a036-a3b5ed67b04a"/*BiasAndGain*/,
-      "Position": {
-        "X": -270.7163,
-        "Y": 262.82593
-      },
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true,
-      "UseVec2Control": "BiasAndGain"
-    },
-    {
       "InputId": "c9e1ea04-1c81-4554-964f-e361a502b9b8"/*PingPong*/,
       "Position": {
         "X": -270.7163,
-        "Y": 318.82593
+        "Y": 307.82593
       }
     },
     {
       "InputId": "8f50765e-3d85-4814-a99a-ecdff18c97e7"/*Repeat*/,
       "Position": {
         "X": -270.7163,
-        "Y": 374.82593
+        "Y": 363.82593
       }
     },
     {
-      "InputId": "71cd9153-da17-47f0-9251-80bdef8906b3"/*Image*/,
+      "InputId": "94516412-20a6-41a9-a036-a3b5ed67b04a"/*BiasAndGain*/,
       "Position": {
         "X": -270.7163,
         "Y": 419.82593
       },
-      "GroupTitle": "Additional Features"
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "UseVec2Control": "BiasAndGain"
     },
     {
       "InputId": "63241bae-bfe6-415f-9288-ffcf1be15fc6"/*BlendMode*/,
@@ -131,8 +131,8 @@
     {
       "ChildId": "decf22da-532e-4d45-acb0-4d1072d9921e"/*GradientsToTexture*/,
       "Position": {
-        "X": -122.50214,
-        "Y": 74.43153
+        "X": -131.32559,
+        "Y": -233.28627
       }
     },
     {
@@ -172,7 +172,7 @@
       "ChildId": "4810224c-6cc8-456b-b364-6a580b560e9f"/*Vector2Components*/,
       "Position": {
         "X": -120.71631,
-        "Y": 262.82593
+        "Y": 430.82593
       }
     },
     {
