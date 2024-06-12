@@ -19,6 +19,6 @@ void main(uint3 i : SV_DispatchThreadID)
 
     uint targetIndex = i.x + (int)StartIndex;
 
-    int4 faceIndices =  Indices[i.x] +  StartVertex;
+    int3 faceIndices =  Indices[i.x] +  StartVertex;
     ResultIndices[targetIndex] = faceIndices;
 }
