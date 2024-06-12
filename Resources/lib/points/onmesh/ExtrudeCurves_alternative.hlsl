@@ -15,7 +15,7 @@ StructuredBuffer<Point> RailPoints : t0;
 StructuredBuffer<Point> ShapePoints : t1;
 
 RWStructuredBuffer<PbrVertex> Vertices : u0;
-RWStructuredBuffer<int4> TriangleIndices : u1;
+RWStructuredBuffer<int3> TriangleIndices : u1;
 
 
 
