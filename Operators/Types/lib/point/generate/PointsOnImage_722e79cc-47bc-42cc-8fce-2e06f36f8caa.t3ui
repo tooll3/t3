@@ -74,6 +74,20 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "a970dad9-e5e9-4756-a84c-86737cce7e8f"/*ClampThreshold*/,
+      "Position": {
+        "X": -1273.5485,
+        "Y": 2462.6665
+      }
+    },
+    {
+      "InputId": "9af8bd73-43cd-4d54-b7a1-d537a880e736"/*Mode*/,
+      "Position": {
+        "X": -1273.5485,
+        "Y": 2507.6665
+      }
     }
   ],
   "SymbolChildUis": [
@@ -162,8 +176,8 @@
     {
       "ChildId": "e8a95244-bc71-4795-95f3-009d4b797e95"/*LoadImage*/,
       "Position": {
-        "X": -1279.7039,
-        "Y": 2575.884
+        "X": -1294.6311,
+        "Y": 2692.5881
       }
     },
     {
@@ -307,13 +321,6 @@
       "Position": {
         "X": -265.25378,
         "Y": 1539.146
-      }
-    },
-    {
-      "ChildId": "6217f4ed-294c-4cd1-8b76-3b4ed971143a"/*Magnitude*/,
-      "Position": {
-        "X": -519.5111,
-        "Y": 2792.7715
       }
     }
   ],
