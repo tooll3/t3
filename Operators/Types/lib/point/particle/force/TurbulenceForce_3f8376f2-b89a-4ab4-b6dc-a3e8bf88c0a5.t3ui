@@ -1,6 +1,6 @@
 {
   "Id": "3f8376f2-b89a-4ab4-b6dc-a3e8bf88c0a5"/*TurbulenceForce*/,
-  "Description": "Adds a turbulence force to a Particle Simulation.",
+  "Description": "Adds a turbulence force to a Particle Simulation.\n\nAlso see [SimNoiseOffset] and [AddNoise]",
   "InputUis": [
     {
       "InputId": "e27a97ce-3d0f-41a9-93c3-a1691f4029aa"/*Amount*/,
@@ -8,6 +8,7 @@
         "X": -1348.7484,
         "Y": 198.4042
       },
+      "Description": "Defines the total intensity of the random movements.",
       "Min": 0.0,
       "Max": 5.0,
       "Clamp": true,
@@ -19,14 +20,16 @@
         "X": -1348.7484,
         "Y": 243.40396
       },
-      "GroupTitle": "Group Title"
+      "GroupTitle": "Settings",
+      "Description": "Defines the frequency, i.e. how fast the points move."
     },
     {
       "InputId": "419b5ec5-8f6d-4c2d-a633-37d125cfcf07"/*Phase*/,
       "Position": {
         "X": -1348.7484,
         "Y": 288.40384
-      }
+      },
+      "Description": "Defines the phase of the noise and can be animated with a [Value], e.g. using [Time]."
     },
     {
       "InputId": "56144ddb-9d4b-4e08-9169-7853a767f794"/*Variation*/,
@@ -34,6 +37,7 @@
         "X": -1348.7484,
         "Y": 333.4038
       },
+      "Description": "Adds more variance and detail to the noise.",
       "Min": 0.0,
       "Max": 1.0,
       "Format": "{0:0.000} ±"
@@ -44,6 +48,8 @@
         "X": -1348.7484,
         "Y": 378.40393
       },
+      "Description": "Multiplier for the individual axes to amplify / attenuate the noise in certain directions.",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 5.0,
       "Format": "{0:0.000}"
@@ -54,14 +60,16 @@
         "X": -1348.7484,
         "Y": 468.40387
       },
-      "GroupTitle": "Additional options"
+      "GroupTitle": "Additional options",
+      "Description": "Switches back and forth between different noise variants"
     },
     {
       "InputId": "d1ebfcaa-ce47-4064-9169-7afa64f942f5"/*ShowGizmo*/,
       "Position": {
         "X": -1348.7484,
         "Y": 513.4038
-      }
+      },
+      "Description": "Defines whether and how a helper gizmo should be visible in the output window."
     },
     {
       "InputId": "671a04f9-0f40-45ea-a2df-4f06c08d9647"/*AmountFromVelocity*/,
@@ -69,6 +77,7 @@
         "X": -1348.7484,
         "Y": 558.4038
       },
+      "Description": "Defines whether the particles with more momentum should be more affected by the noise.",
       "AddPadding": "True"
     }
   ],
