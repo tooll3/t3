@@ -9,6 +9,7 @@ using T3.Core.Resource;
 using T3.Editor.App;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.UiHelpers;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Exploration
@@ -46,7 +47,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                                       SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
                                   };
 
-            _canvasTexture = new Texture2D(Program.Device, description);
+            _canvasTexture = ResourceManager.CreateTexture2D(description);
             CanvasTextureSrv = SrvManager.GetSrvForTexture(_canvasTexture);
             _canvasTextureRtv = new RenderTargetView(Program.Device, _canvasTexture);
             _initialized = true;
@@ -71,9 +72,9 @@ namespace T3.Editor.Gui.Windows.Exploration
                                                                0.0f, 1.0f));
             deviceContext.OutputMerger.SetTargets(_canvasTextureRtv);
 
-            var vertexShader = SharedResources.FullScreenVertexShaderResource.Shader;
+            var vertexShader = SharedResources.FullScreenVertexShaderResource.Value;
             deviceContext.VertexShader.Set(vertexShader);
-            var pixelShader = SharedResources.FullScreenPixelShaderResource.Shader;
+            var pixelShader = SharedResources.FullScreenPixelShaderResource.Value;
             deviceContext.PixelShader.Set(pixelShader);
             deviceContext.PixelShader.SetShaderResource(0, previewTextureSrv);
 

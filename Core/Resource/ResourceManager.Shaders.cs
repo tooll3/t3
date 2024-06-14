@@ -1,9 +1,12 @@
 #nullable enable
 using System;
-using System.Collections.Generic;
-using System.IO;
+using System.Diagnostics.CodeAnalysis;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
+
+// ReSharper disable ConvertToLocalFunction
 
 namespace T3.Core.Resource;
 
@@ -13,156 +16,57 @@ namespace T3.Core.Resource;
 /// </summary>
 public sealed partial class ResourceManager
 {
-    public bool TryCreateShaderResourceFromSource<TShader>(out ShaderResource<TShader> resource, string shaderSource, Instance instance, out string reason,
+    internal static bool TryCompileShaderFromSource<TShader>([NotNullWhen(true)] ref TShader? resource, string shaderSource, Instance instance, out string reason,
                                                            string name = "", string entryPoint = "main")
-        where TShader : class, IDisposable
+        where TShader : AbstractShader
     {
-        var resourceId = GetNextResourceId();
         if (string.IsNullOrWhiteSpace(name))
         {
-            name = $"{typeof(TShader).Name}_{resourceId}";
+            name = $"{typeof(TShader).Name}_{instance.SymbolChildId}";
         }
 
-        var compiled = ShaderCompiler.TryCreateShaderResourceFromCode<TShader>(shaderCode: shaderSource,
-                                                                               name: name,
-                                                                               directories: instance.AvailableResourcePackages,
-                                                                               entryPoint: entryPoint,
-                                                                               resourceId: resourceId,
-                                                                               resource: out var newResource,
-                                                                               reason: out reason);
+        var compilationArgs = new ShaderCompiler.ShaderCompilationArgs(
+                                                                       SourceCode: shaderSource, 
+                                                                       EntryPoint: entryPoint, 
+                                                                       Owner: instance,
+                                                                       Name: name, 
+                                                                       OldBytecode: resource?.CompiledBytecode);
+        var compiled = ShaderCompiler.TryCompileShaderFromSource(compilationArgs, true, true, out resource, out reason);
 
-        if (compiled)
-        {
-            ResourcesById.TryAdd(newResource.Id, newResource);
-        }
-        else
+        if (!compiled)
         {
             Log.Error($"Failed to compile shader '{name}'");
         }
 
-        resource = newResource;
         return compiled;
     }
 
-    public bool TryCreateShaderResource<TShader>(out ShaderResource<TShader>? resource, Instance? instance, string relativePath,
-                                                 out string reason,
-                                                 string name = "", string entryPoint = "main", Action? fileChangedAction = null)
-        where TShader : class, IDisposable
+    public static Resource<TShader> CreateShaderResource<TShader>(string relativePath, Instance? instance, Func<string> getEntryPoint)
+        where TShader : AbstractShader
     {
-        if (string.IsNullOrWhiteSpace(relativePath))
-        {
-            resource = null;
-            reason = "Empty file name";
-            Log.Warning(reason);
-            return false;
-        }
+        ArgumentNullException.ThrowIfNull(getEntryPoint, nameof(getEntryPoint));
+        TryGenerate<TShader> func = (FileResource fileResource, TShader? currentValue, out TShader? newShader, out string? reason) =>
+                                    {
+                                        var success = ShaderCompiler.TryGetShaderFromFile(fileResource, ref currentValue, instance, out reason, getEntryPoint());
+                                        newShader = currentValue;
+                                        return success;
+                                    };
 
-        if (!TryResolvePath(relativePath, instance?.AvailableResourcePackages, out var path, out var resourceContainer))
-        {
-            resource = null;
-            reason = $"Path not found: '{relativePath}' (Resolved to '{path}').";
-            Log.Warning(reason);
-            return false;
-        }
+        return new Resource<TShader>(relativePath, instance, func);
+    }
+    
+    public static Resource<TShader> CreateShaderResource<TShader>(InputSlot<string> sourceSlot, Func<string> getEntryPoint)
+        where TShader : AbstractShader
+    {
+        ArgumentNullException.ThrowIfNull(getEntryPoint, nameof(getEntryPoint));
+        var instance = sourceSlot.Parent;
+        TryGenerate<TShader> func = (FileResource fileResource, TShader? currentValue, out TShader? newShader, out string? reason) =>
+                                    {
+                                        var success = ShaderCompiler.TryGetShaderFromFile(fileResource, ref currentValue, instance, out reason, getEntryPoint());
+                                        newShader = currentValue;
+                                        return success;
+                                    };
 
-        var fileInfo = new FileInfo(path);
-        if (string.IsNullOrWhiteSpace(name))
-            name = fileInfo.Name;
-        
-        if(string.IsNullOrWhiteSpace(entryPoint))
-            entryPoint = "main";
-        
-        List<IResourcePackage> compilationReferences = new();
-        ResourceFileWatcher? fileWatcher = null;
-        ResourceFileHook? fileHook = null;
-
-        if (instance != null)
-            compilationReferences.AddRange(instance.AvailableResourcePackages);
-
-        if (resourceContainer != null)
-        {
-            compilationReferences.Add(resourceContainer);
-            fileWatcher = resourceContainer.FileWatcher;
-            if (TryFindExistingResource(fileWatcher, relativePath, fileChangedAction, entryPoint, out fileHook, out var potentialResource))
-            {
-                resource = potentialResource;
-                reason = string.Empty;
-                return true;
-            }
-        }
-
-
-        // need to create
-        var resourceId = GetNextResourceId();
-        var compiled = ShaderCompiler.TryCreateShaderResourceFromFile(srcFile: path,
-                                                                      entryPoint: entryPoint,
-                                                                      name: name,
-                                                                      resourceId: resourceId,
-                                                                      resource: out resource,
-                                                                      reason: out reason,
-                                                                      resourceDirs: compilationReferences,
-                                                                      forceRecompile: false);
-
-        if (!compiled)
-        {
-            Log.Error($"Failed to compile shader '{path}'");
-            return false;
-        }
-
-        ResourcesById.TryAdd(resource!.Id, resource);
-        if (resourceContainer == null || fileWatcher == null)
-            return true;
-
-        if (fileHook == null)
-        {
-            fileHook = new ResourceFileHook(path, new[] { resourceId });
-            fileWatcher.HooksForResourceFilePaths.TryAdd(relativePath, fileHook);
-        }
-
-        if (fileChangedAction != null)
-        {
-            fileHook.FileChangeAction -= fileChangedAction;
-            fileHook.FileChangeAction += fileChangedAction;
-        }
-
-        return true;
-
-        static bool TryFindExistingResource(ResourceFileWatcher? fileWatcher, string relativePath, Action? fileChangedAction, string entryPoint, out ResourceFileHook? fileHook, out ShaderResource<TShader>? resource)
-        {
-            if (fileWatcher == null)
-            {
-                fileHook = null;
-                resource = null;
-                return false;
-            }
-            
-            if(!fileWatcher.HooksForResourceFilePaths.TryGetValue(relativePath, out fileHook))
-            {
-                resource = null;
-                return false;
-            }
-
-            var resourceIds = fileHook.ResourceIds;
-            var count = resourceIds.Count;
-            for (var index = 0; index < count; index++)
-            {
-                var id = resourceIds[index];
-                var resourceById = ResourcesById[id];
-                if (resourceById is not ShaderResource<TShader> shaderResource || shaderResource.EntryPoint != entryPoint)
-                    continue;
-
-                if (fileChangedAction != null)
-                {
-                    fileHook.FileChangeAction -= fileChangedAction;
-                    fileHook.FileChangeAction += fileChangedAction;
-                }
-
-                resource = shaderResource;
-                return true;
-            }
-
-            resource = null;
-            return false;
-        }
+        return new Resource<TShader>(sourceSlot, func);
     }
 }

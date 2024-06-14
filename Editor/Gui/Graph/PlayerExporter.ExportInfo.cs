@@ -2,6 +2,7 @@
 using System.IO;
 using T3.Core.Operator;
 using T3.Core.Resource;
+using T3.Editor.Gui.Windows.Utilities;
 
 namespace T3.Editor.Gui.Graph;
 
@@ -31,11 +32,13 @@ internal static partial class PlayerExporter
         public bool TryAddSharedResource(string relativePath, IReadOnlyList<IResourcePackage>? otherDirs = null)
         {
             var searchDirs = otherDirs ?? Array.Empty<IResourcePackage>();
-            if (!ResourceManager.TryResolvePath(relativePath, searchDirs, out var absolutePath, out _))
+            var tempResourceConsumer = new TempResourceConsumer(searchDirs);
+            if (!ResourceManager.TryResolvePath(relativePath, tempResourceConsumer, out var absolutePath, out _))
             {
                 Log.Error($"Can't find file: {relativePath}");
                 return false;
             }
+            
             
             relativePath = relativePath.Replace("\\", "/");
             absolutePath = absolutePath.Replace("\\", "/");
@@ -53,14 +56,14 @@ internal static partial class PlayerExporter
             // search for shader includes
             if (absolutePath.EndsWith(".hlsl", StringComparison.OrdinalIgnoreCase))
             {
-                 var shaderFolder = Path.GetDirectoryName(absolutePath)!;
-                 ShaderCompiler.ShaderResourcePackage shaderResourcePackage = new(shaderFolder);
-                 var shaderDirs = searchDirs.Append(shaderResourcePackage).Distinct().ToArray();
-                 var shaderText = File.ReadAllText(absolutePath);
-                 foreach (var includePath in ShaderCompiler.GetIncludesFrom(shaderText))
-                 {
-                     TryAddSharedResource(includePath, shaderDirs);
-                 }
+                var fileInfo = new FileInfo(absolutePath);
+                ShaderCompiler.ShaderResourcePackage shaderResourcePackage = new(fileInfo);
+                var shaderDirs = searchDirs.Append(shaderResourcePackage).Distinct().ToArray();
+                var shaderText = File.ReadAllText(absolutePath);
+                foreach (var includePath in ShaderCompiler.GetIncludesFrom(shaderText))
+                {
+                    TryAddSharedResource(includePath, shaderDirs);
+                }
             }
 
             return true;

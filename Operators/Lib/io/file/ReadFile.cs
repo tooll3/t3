@@ -17,44 +17,55 @@ namespace lib.io.file
 
         public ReadFile()
         {
+            _fileContents = new Resource<string>(FilePath, TryLoad);
+            _fileContents.Changed += UpdateResult;
             Result.UpdateAction = Update;
+        }
+
+        private void UpdateResult(object sender, string e)
+        {
+            Result.Value = e;
+        }
+
+        private bool TryLoad(FileResource file, string currentValue, out string newValue, out string failureReason)
+        {
+            if (!file.TryOpenFileStream(out var stream, out failureReason, FileAccess.Read))
+            {
+                newValue = null;
+                return false;
+            }
+
+            try
+            {
+                using var fileStream = stream;
+                using var reader = new StreamReader(fileStream);
+                newValue = reader.ReadToEnd();
+                return true;
+            }
+            catch (Exception e)
+            {
+                failureReason = $"Failed to read file {file.AbsolutePath}:" + e.Message;
+                newValue = null;
+                return false;
+            }
         }
 
         private void Update(EvaluationContext context)
         {
-            var triggerUpdate = TriggerUpdate.GetValue(context);
+            if(TriggerUpdate.GetValue(context))
+                _fileContents.InvokeChangeEvent();
             
-            var filepath = FilePath.GetValue(context);
-            
-            if (string.IsNullOrEmpty(filepath))
-            {
-                return;
-            }
-
-            if (!TryGetFilePath(filepath, out var absolutePath))
-            {
-                Log.Error($"Could not find file: {filepath}", this);
-                return;
-            }
-            
-            ResourceFileWatcher.AddFileHook(absolutePath, () => {FilePath.DirtyFlag.Invalidate();});
-            
-            //ResourceManager.Instance().
-
-            try
-            {
-                Result.Value = File.ReadAllText(absolutePath);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to read file {absolutePath}:" + e.Message);
-            }
+            Result.DirtyFlag.Clear();
         }
+        
+        
         
         [Input(Guid = "24b7e7e1-fe0b-46be-807e-0afacd4800f9")]
         public readonly InputSlot<string> FilePath = new();
         
         [Input(Guid = "5C6241F7-6A4F-4972-A314-98FD070F91DD")]
         public readonly InputSlot<bool> TriggerUpdate = new();
+
+        private Resource<string> _fileContents;
     }
 }

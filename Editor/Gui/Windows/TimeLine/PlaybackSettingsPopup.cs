@@ -123,7 +123,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     if (ImGui.Button("Add soundtrack to composition"))
                     {
-                        settings.AudioClips.Add(new AudioClip(settings.SymbolPackage)
+                        settings.AudioClips.Add(new AudioClip()
                                                     {
                                                         IsSoundtrack = true,
                                                     });

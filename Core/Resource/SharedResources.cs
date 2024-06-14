@@ -4,6 +4,9 @@ using SharpDX.Direct3D11;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Resource;
+using PixelShader = T3.Core.DataTypes.PixelShader;
+using Texture2D = T3.Core.DataTypes.Texture2D;
+using VertexShader = T3.Core.DataTypes.VertexShader;
 
 namespace T3.Editor.App
 {
@@ -27,47 +30,17 @@ namespace T3.Editor.App
                 throw new Exception($"{nameof(ShaderCompiler)}.{nameof(ShaderCompiler.Instance)} not initialized");
             }
             
-            const string errorHeader = $"{nameof(SharedResources)} error: ";
-
-            var resourceManager = ResourceManager.Instance();
-            var gotFullscreenVertexShader = resourceManager.TryCreateShaderResource(
-                 relativePath: @"dx11\fullscreen-texture.hlsl",
-                 instance: null,
-                 entryPoint: "vsMain",
-                 name: "vs-fullscreen-texture",
-                 fileChangedAction: null,
-                 resource: out _fullScreenVertexShaderResource,
-                 reason: out var errorMessage);
+            _fullScreenVertexShaderResource = ResourceManager.CreateShaderResource<VertexShader>(@"dx11\fullscreen-texture.hlsl", null, () => "vsMain");
+            _fullScreenPixelShaderResource = ResourceManager.CreateShaderResource<PixelShader>(@"dx11\fullscreen-texture.hlsl", null, () => "psMain");
             
-
-            if (!string.IsNullOrWhiteSpace(errorMessage))
+            if (_fullScreenVertexShaderResource.Value == null)
             {
-                Log.Error(errorHeader + errorMessage);
-            }
-
-            if (!gotFullscreenVertexShader)
-            {
-                throw new Exception("Failed to load fullscreen vertex shader");
+                throw new Exception($"{nameof(SharedResources)} Failed to load fullscreen vertex shader");
             }
             
-            var gotFullscreenPixelShader = resourceManager.TryCreateShaderResource(
-                relativePath: @"dx11\fullscreen-texture.hlsl",
-                instance: null,
-                entryPoint: "psMain",
-                name: "ps-fullscreen-texture",
-                fileChangedAction: null,
-                resource: out _fullScreenPixelShaderResource,
-                reason: out errorMessage);
-            
-
-            if (!string.IsNullOrWhiteSpace(errorMessage))
+            if (_fullScreenPixelShaderResource.Value == null)
             {
-                Log.Error(errorHeader + errorMessage);
-            }
-            
-            if (!gotFullscreenPixelShader)
-            {
-                throw new Exception("Failed to load fullscreen pixel shader");
+                throw new Exception($"{nameof(SharedResources)} Failed to load fullscreen pixel shader");
             }
             
             ViewWindowRasterizerState = new RasterizerState(ResourceManager.Device, new RasterizerStateDescription
@@ -84,30 +57,39 @@ namespace T3.Editor.App
                                                                                                        IsAntialiasedLineEnabled = false
                                                                                                    }); 
             
+            _viewWindowDefaultTexture = ResourceManager.CreateTextureResource(@"t3-editor/images/t3-background.png", null);
+            _colorPickerTexture = ResourceManager.CreateTextureResource(@"t3-editor/images/t3-colorpicker.png", null);
 
-            (uint texId, var tmpId ) = resourceManager.CreateTextureFromFile(@"t3-editor/images/t3-background.png",  null, null);
-            ViewWindowDefaultSrvId = tmpId;
-            
-            (uint texResourceId3, var srvResourceId ) = resourceManager.CreateTextureFromFile(@"t3-editor/images/t3-colorpicker.png", null, null);
-            if (ResourceManager.ResourcesById[srvResourceId] is ShaderResourceViewResource srvResource)
+            if (_viewWindowDefaultTexture.Value == null)
             {
-                ColorPickerImageSrv = srvResource.ShaderResourceView;
+                Log.Error("Failed to load default view window background texture");
             }
             else
             {
-                Log.Warning("Color picker texture not found");
+                ResourceManager.CreateShaderResourceView(_viewWindowDefaultTexture.Value, "view window default texture SRV", ref ViewWindowDefaultTextureSrv);
+            }
+            
+            if (_colorPickerTexture.Value == null)
+            {
+                Log.Error("Failed to load color picker texture");
+            }
+            else
+            {
+                ResourceManager.CreateShaderResourceView(_colorPickerTexture.Value, "color picker image SRV", ref ColorPickerImageSrv);
             }
         }
         
         public static RasterizerState ViewWindowRasterizerState;
-        public static uint ViewWindowDefaultSrvId;
+        public static ShaderResourceView ViewWindowDefaultTextureSrv;
         public static ShaderResourceView ColorPickerImageSrv;
-        private static ShaderResource<VertexShader> _fullScreenVertexShaderResource;
-        private static ShaderResource<PixelShader> _fullScreenPixelShaderResource;
+        private static Resource<VertexShader> _fullScreenVertexShaderResource;
+        private static Resource<PixelShader> _fullScreenPixelShaderResource;
+        private static Resource<Texture2D> _viewWindowDefaultTexture;
+        private static Resource<Texture2D> _colorPickerTexture;
 
-        public static ShaderResource<VertexShader> FullScreenVertexShaderResource => _fullScreenVertexShaderResource;
+        public static Resource<VertexShader> FullScreenVertexShaderResource => _fullScreenVertexShaderResource;
 
-        public static ShaderResource<PixelShader> FullScreenPixelShaderResource => _fullScreenPixelShaderResource;
+        public static Resource<PixelShader> FullScreenPixelShaderResource => _fullScreenPixelShaderResource;
 
         private sealed class SharedResourceObject : IResourcePackage
         {

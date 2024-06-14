@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
@@ -25,9 +25,15 @@ using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.Gui.Windows.Utilities;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.SystemUi;
+using ComputeShader = T3.Core.DataTypes.ComputeShader;
+using GeometryShader = T3.Core.DataTypes.GeometryShader;
+using PixelShader = T3.Core.DataTypes.PixelShader;
+using Texture2D = SharpDX.Direct3D11.Texture2D;
+using VertexShader = T3.Core.DataTypes.VertexShader;
 
 namespace T3.Editor.Gui.Graph
 {
@@ -816,17 +822,18 @@ namespace T3.Editor.Gui.Graph
                 }
             }
 
-            Directory.CreateDirectory(destinationDirectory);
+            var directoryInfo = Directory.CreateDirectory(destinationDirectory);
 
             // copy all files in directory to temp directory for intellisense to work
             var allFilesInDirectory = Directory.EnumerateFiles(directory);
+            FileInfo copiedFile;
             foreach (var file in allFilesInDirectory)
             {
                 var destinationPath = Path.Combine(destinationDirectory, Path.GetFileName(file));
                 File.Copy(file, destinationPath);
             }
 
-            ShaderLinter.AddPackage(new ShaderCompiler.ShaderResourcePackage(destinationDirectory), ResourceManager.SharedShaderPackages,
+            ShaderLinter.AddPackage(new ShaderCompiler.ShaderResourcePackage(directoryInfo), ResourceManager.SharedShaderPackages,
                                     replaceExisting: true);
             newFilePath = Path.Combine(destinationDirectory, Path.GetFileName(filePath));
         }
@@ -859,18 +866,11 @@ namespace T3.Editor.Gui.Graph
 
             return found;
 
-            static bool TryGetSourceFile<T>(IShaderOperator<T> op, out string filePath, out IResourcePackage package) where T : class, IDisposable
+            static bool TryGetSourceFile<T>(IShaderOperator<T> op, out string filePath, out IResourcePackage package) where T : AbstractShader
             {
-                if (op.SourceIsSourceCode)
-                {
-                    package = null;
-                    filePath = null;
-                    return false;
-                }
-
-                var relative = op.Source.GetCurrentValue();
+                var relative = op.Path.GetCurrentValue();
                 var instance = op.Instance;
-                return ResourceManager.TryResolvePath(relative, instance.AvailableResourcePackages, out filePath, out package);
+                return ResourceManager.TryResolvePath(relative, instance, out filePath, out package);
             }
         }
 

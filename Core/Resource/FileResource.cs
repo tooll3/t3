@@ -1,0 +1,183 @@
+#nullable enable
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using T3.Core.Logging;
+
+namespace T3.Core.Resource;
+
+public sealed partial class FileResource
+{
+    internal FileResource(IResourcePackage? package, string absolutePath)
+    {
+        ResourcePackage = package;
+        AbsolutePath = absolutePath;
+        _onResourceChanged = OnFileResourceChanged;
+    }
+    
+    ~FileResource()
+    {
+        lock (CollectionLock)
+        {
+            if(_registered)
+                Unregister(this);
+        }
+    }
+    
+    private void OnFileResourceChanged(WatcherChangeTypes changeTypes, string absolutePath)
+    {
+        // todo - do we need to dispatch this to the main thread?
+        if (changeTypes.WasMoved())
+        {
+            ChangeFilePath(absolutePath);
+            FileMoved?.Invoke(this, absolutePath);
+        }
+        else if (changeTypes.WasDeleted())
+        {
+            Log.Warning($"Resource {GetType()} \"{AbsolutePath}\" was deleted.");
+            FileDeleted?.Invoke(this, EventArgs.Empty);
+        }
+        
+        FileChanged?.Invoke(this, changeTypes);
+    }
+    
+    private void ChangeFilePath(string absolutePath)
+    {
+        if (!_registered)
+        {
+            AbsolutePath = absolutePath;
+            return;
+        }
+        
+        // todo - packages should pre-load resources to manage them themselves? what about resources not owned by a package?
+        // todo - check to see if owning package has changed
+        // todo - adjust dependencies if owning package did change
+        
+        lock (CollectionLock)
+        {
+            Unregister(this);
+            
+            AbsolutePath = absolutePath;
+            _fileInfo = null;
+            Register(this);
+        }
+    }
+    
+    internal void Claim(object owner)
+    {
+        lock (CollectionLock)
+        {
+            Debug.Assert(!_instantiatedResources.Contains(owner));
+            _instantiatedResources.Add(owner);
+            
+            if (_instantiatedResources.Count == 1)
+                Register(this);
+        }
+    }
+    
+    internal void Release(object owner)
+    {
+        lock (CollectionLock)
+        {
+            var removed = _instantiatedResources.Remove(owner);
+            Debug.Assert(removed);
+            
+            if (_instantiatedResources.Count == 0)
+            {
+                Unregister(this);
+            }
+        }
+    }
+    
+    internal static bool TryGetFileResource(string relativePath, IResourceConsumer? owner, [NotNullWhen(true)] out FileResource? resource)
+    {
+        if (!ResourceManager.TryResolvePath(relativePath, owner, out var absolutePath, out var resourceContainer))
+        {
+            Log.Error($"Path not found: '{relativePath}' (Resolved to '{absolutePath}').");
+            resource = null;
+            return false;
+        }
+        
+        lock (CollectionLock)
+        {
+            if (FileResources.TryGetValue(absolutePath, out resource))
+                return true;
+            
+            resource = new FileResource(resourceContainer, absolutePath);
+        }
+        
+        return true;
+    }
+    
+    private static void Unregister(FileResource resource)
+    {
+        var path = resource.AbsolutePath;
+        
+        lock (CollectionLock)
+        {
+            if (!FileResources.Remove(path, out _))
+            {
+                return;
+            }
+        }
+        
+        resource.ResourcePackage?.FileWatcher?.RemoveFileHook(path, resource._onResourceChanged);
+        resource._registered = false;
+    }
+    
+    private static void Register(FileResource resource)
+    {
+        var path = resource.AbsolutePath;
+        lock (CollectionLock)
+        {
+            if (!FileResources.TryAdd(path, resource))
+            {
+                return;
+            }
+        }
+        
+        resource.ResourcePackage?.FileWatcher?.AddFileHook(path, resource._onResourceChanged);
+        resource._registered = true;
+    }
+    
+    public string AbsolutePath { get; private set; }
+    public string? FileExtension => FileInfo?.Extension;
+    public IResourcePackage? ResourcePackage { get; private set; }
+    
+    private FileInfo? _fileInfo;
+    public FileInfo? FileInfo
+    {
+        get
+        {
+            if (_fileInfo == null)
+            {
+                return _fileInfo = new FileInfo(AbsolutePath);
+            }
+            
+            try
+            {
+                _fileInfo.Refresh();
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to refresh file info for {AbsolutePath}: {e}");
+            }
+            
+            return _fileInfo;
+        }
+    }
+    
+    public event EventHandler? FileDeleted;
+    public event EventHandler<string>? FileMoved;
+    public event EventHandler<WatcherChangeTypes>? FileChanged;
+    
+    private readonly FileWatcherAction _onResourceChanged;
+    private bool _registered;
+    
+    private static readonly Dictionary<string, FileResource> FileResources = new();
+    public static readonly IReadOnlyCollection<FileResource> AllFileResources = FileResources.Values;
+    private readonly List<object> _instantiatedResources = new();
+    private static readonly object CollectionLock = new();
+}

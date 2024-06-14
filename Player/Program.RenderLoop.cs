@@ -58,10 +58,10 @@ internal static partial class Program
             {
                 _outputTexture = outputTexture;
                 _deviceContext.Rasterizer.State = _rasterizerState;
-                if (_fullScreenVertexShaderResource?.Shader != null)
-                    _deviceContext.VertexShader.Set(_fullScreenVertexShaderResource.Shader);
-                if (_fullScreenPixelShaderResource?.Shader != null)
-                    _deviceContext.PixelShader.Set(_fullScreenPixelShaderResource.Shader);
+                if (_fullScreenVertexShaderResource?.Value != null)
+                    _deviceContext.VertexShader.Set(_fullScreenVertexShaderResource.Value);
+                if (_fullScreenPixelShaderResource?.Value != null)
+                    _deviceContext.PixelShader.Set(_fullScreenPixelShaderResource.Value);
 
                 if (_outputTextureSrv == null || textureChanged)
                 {

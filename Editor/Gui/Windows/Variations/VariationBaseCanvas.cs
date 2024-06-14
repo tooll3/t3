@@ -1,5 +1,5 @@
 ﻿using ImGuiNET;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Interaction;
@@ -12,6 +12,7 @@ using T3.Editor.Gui.UiHelpers.DelaunayVoronoi;
 using T3.Editor.Gui.Windows.Exploration;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.UiModel;
+using Point = T3.Editor.Gui.UiHelpers.DelaunayVoronoi.Point;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Variations

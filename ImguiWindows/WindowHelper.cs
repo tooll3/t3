@@ -92,6 +92,7 @@ public sealed class WindowHelper
         Console.WriteLine("Starting render");
         #endif
         
+        DebugMouse("RenderWindowContents");
         lock (_graphicsContextLock)
         {
             var windowSize = _window.Size;
@@ -102,6 +103,24 @@ public sealed class WindowHelper
                 _imguiHandler?.Draw(new Vector2(windowSize.X, windowSize.Y), deltaTime);
                 _windowImpl.EndRender();
             }
+        }
+    }
+    
+    private void DebugMouse(string callsite)
+    {
+        var mice = _inputContext!.Mice;
+        int mCounter = 0;
+        int wCounter = 0;
+        foreach(var mouse in mice)
+        {
+            mCounter++;
+            foreach (var wheel in mouse.ScrollWheels)
+            {
+                wCounter++;
+                Console.WriteLine($"scroll in mouse {mouse.Name} ({mCounter}, {wCounter}) at {callsite}:" + wheel.Y);
+            }
+            
+            wCounter = 0;
         }
     }
     
@@ -122,6 +141,7 @@ public sealed class WindowHelper
     
     private void OnWindowUpdate(double deltaSeconds)
     {
+        DebugMouse("OnWindowUpdate");
         if (_imguiHandler == null) return;
         
         _imguiHandler.OnWindowUpdate(deltaSeconds, out var shouldCloseWindow);

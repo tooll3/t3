@@ -141,13 +141,13 @@ public sealed class WindowsUiContentDrawer : IUiContentDrawer<Device>
                     ProgramWindows.SetRasterizerState(SharedResources.ViewWindowRasterizerState);
                     ProgramWindows.SetPixelShaderSRV(_viewWindowBackgroundSrv);
                 }
-                else if (ResourceManager.ResourcesById[SharedResources.ViewWindowDefaultSrvId] is ShaderResourceViewResource srvr)
+                else if (SharedResources.ViewWindowDefaultTextureSrv != null)
                 {
-                    ProgramWindows.SetPixelShaderSRV(srvr.ShaderResourceView);
+                    ProgramWindows.SetPixelShaderSRV(SharedResources.ViewWindowDefaultTextureSrv);
                 }
                 else
                 {
-                    Log.Debug($"Invalid {nameof(ShaderResourceView)} for 2nd render view");
+                    Log.Debug($"Null {nameof(ShaderResourceView)} for 2nd render view");
                 }
                 
                 ProgramWindows.CopyToSecondaryRenderOutput();

@@ -67,7 +67,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY()-6);
                 if (PlaybackUtils.TryFindingSoundtrack(out var soundtrack, out var composition))
                 {
-                    _timeLineImage.Draw(Drawlist, soundtrack);
+                    _timeLineImage.Draw(Drawlist, soundtrack, compositionOp);
                 }
                 _timeRasterSwitcher.Draw(Playback);
 

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -14,7 +12,9 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using Color = SharpDX.Color;
+using ComputeShader = T3.Core.DataTypes.ComputeShader;
 using Device = SharpDX.Direct3D11.Device;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector4 = System.Numerics.Vector4;
 
@@ -221,22 +221,21 @@ namespace lib.img.generate
             
             const string sourcePath = @"dx11\resolve-multisampled-depth-buffer-cs.hlsl";
             const string entryPoint = "main";
-            const string debugName = "resolve-multisampled-depth-buffer";
-            var resourceManager = ResourceManager.Instance();
 
-            var success = resourceManager.TryCreateShaderResource(out _resolveComputeShaderResource,
-                                                                  relativePath: sourcePath,
-                                                                  instance: this,
-                                                                  entryPoint: entryPoint, 
-                                                                  name: debugName,
-                                                                  reason: out var errorMessage);
-
-            if(!success)
-                Log.Error($"Failed to initialize {nameof(RenderTarget)}: {errorMessage}");
+            _resolveComputeShaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, this, () => entryPoint);
+            
+            if (_resolveComputeShaderResource.Value == null)
+            {
+                Log.Error("Failed to load resolve shader", this);
+            }
         }
         
         private void ResolveDepthBuffer()
         {
+            var resolveShader = _resolveComputeShaderResource.Value;
+            if (resolveShader == null)
+                return;
+            
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
@@ -244,7 +243,6 @@ namespace lib.img.generate
             var prevUavs = csStage.GetUnorderedAccessViews(0, 1);
             var prevSrvs = csStage.GetShaderResources(0, 1);
 
-            ComputeShader resolveShader = _resolveComputeShaderResource.Shader;
             csStage.Set(resolveShader);
 
             const int threadNumX = 16, threadNumY = 16;
@@ -304,7 +302,7 @@ namespace lib.img.generate
                                                        SampleDescription = new SampleDescription(_sampleCount, 0),
                                                        Usage = ResourceUsage.Default,
                                                    };
-                    _multiSampledColorBuffer = new Texture2D(device, texture2DDescription);
+                    _multiSampledColorBuffer = ResourceManager.CreateTexture2D(texture2DDescription);
 
                     _multiSampledColorBufferSrv = new ShaderResourceView(device, _multiSampledColorBuffer);
                     _multiSampledColorBufferRtv = new RenderTargetView(device, _multiSampledColorBuffer,
@@ -339,7 +337,7 @@ namespace lib.img.generate
                 {
                     try
                     {
-                        _resolvedColorBuffer = new Texture2D(device,
+                        _resolvedColorBuffer = ResourceManager.CreateTexture2D(
                                                              new Texture2DDescription
                                                                  {
                                                                      ArraySize = 1,
@@ -395,7 +393,7 @@ namespace lib.img.generate
                 // Depth / Multi sampled
                 try
                 {
-                    _multiSampledDepthBuffer = new Texture2D(device,
+                    _multiSampledDepthBuffer = ResourceManager.CreateTexture2D(
                                                              new Texture2DDescription
                                                                  {
                                                                      ArraySize = 1,
@@ -441,7 +439,7 @@ namespace lib.img.generate
                 {
                     try
                     {
-                        _resolvedDepthBuffer = new Texture2D(device,
+                        _resolvedDepthBuffer = ResourceManager.CreateTexture2D(
                                                              new Texture2DDescription
                                                                  {
                                                                      ArraySize = 1,
@@ -555,6 +553,6 @@ namespace lib.img.generate
         private static int _statsCountPixels;
         private static bool _registeredStats;
 
-        private static ShaderResource<ComputeShader> _resolveComputeShaderResource;
+        private static Resource<ComputeShader> _resolveComputeShaderResource;
     }
 }

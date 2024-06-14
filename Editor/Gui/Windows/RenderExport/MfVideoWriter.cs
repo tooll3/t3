@@ -8,9 +8,9 @@ Copyright(c) 2016 Juri Tomak
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SharpDX;
-using SharpDX.Direct3D11;
 using SharpDX.MediaFoundation;
 using SharpDX.WIC;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Resource;
 using MF = SharpDX.MediaFoundation;
@@ -189,7 +189,7 @@ internal abstract class MfVideoWriter : IDisposable
         var dataBox = ResourceManager.Device.ImmediateContext.MapSubresource(cpuAccessTexture,
                                                                              0,
                                                                              0,
-                                                                             MapMode.Read,
+                                                                             SharpDX.Direct3D11.MapMode.Read,
                                                                              SharpDX.Direct3D11.MapFlags.None,
                                                                              out var inputStream);
 

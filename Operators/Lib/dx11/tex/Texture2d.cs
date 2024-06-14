@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.DataTypes.Vector;
@@ -8,6 +7,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.dx11.tex
 {
@@ -16,8 +16,8 @@ namespace lib.dx11.tex
     {
         [Output(Guid = "{007129E4-0EAE-4CB9-A142-90C1C171A5FB}")]
         public readonly Slot<Texture2D> Texture = new();
-
-        private uint _textureResId;
+        
+        private Texture2D _texture2dResource;
 
         public Texture2d()
         {
@@ -54,7 +54,10 @@ namespace lib.dx11.tex
                                       CpuAccessFlags = CpuAccessFlags.GetValue(context),
                                       OptionFlags = ResourceOptionFlags.GetValue(context)
                                   };
-                ResourceManager.Instance().CreateTexture2d(texDesc, "Texture2D", ref _textureResId, ref Texture.Value);
+                if(ResourceManager.ReplaceTexture2DIfNeeded(texDesc, ref _texture2dResource))
+                {
+                    Texture.Value = _texture2dResource;
+                }
             }
             catch(Exception e)
             {

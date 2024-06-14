@@ -21,6 +21,8 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Scene = SharpGLTF.Schema2.Scene;
+using Texture2D = T3.Core.DataTypes.Texture2D;
+using ComputeShader = T3.Core.DataTypes.ComputeShader;
 
 namespace user.pixtur.research.gltf;
 
@@ -393,38 +395,54 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     /// </summary>
     private static void PrepareCombineShaderResources(Instance instance, bool forceUpdate = false)
     {
-        if (!forceUpdate && _combineChannelsComputeShaderResource != null)
-            return;
-
-        const string sourcePath = @"cs\CombineGltfChannels-cs.hlsl";
-        const string entryPoint = "main";
         const string debugName = "combine-channel-textures";
-        var resourceManager = ResourceManager.Instance();
+        
+        if (_combineChannelsComputeShaderResource == null)
+        {
+            const string sourcePath = @"cs\CombineGltfChannels-cs.hlsl";
+            const string entryPoint = "main";
 
-        var success = resourceManager.TryCreateShaderResource(out _combineChannelsComputeShaderResource,
-                                                              relativePath: sourcePath,
-                                                              entryPoint: entryPoint,
-                                                              instance: instance,
-                                                              name: debugName,
-                                                              reason: out var errorMessage);
+            _combineChannelsComputeShaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, instance, () => entryPoint);
+            _combineChannelsComputeShaderResource.Changed += OnShaderChanged;
 
-        if (!success || !string.IsNullOrWhiteSpace(errorMessage))
-            Log.Error($"Failed to initialize video conversion shader: {errorMessage}");
+            OnShaderChanged(null, _combineChannelsComputeShaderResource.Value);
+        }
+        
+        if (!forceUpdate && _combineChannelsComputeShaderResource?.Value != null)
+            return;
+        
+        OnShaderChanged(null, _combineChannelsComputeShaderResource!.Value);
+        return;
 
-        var samplerDesc = new SamplerStateDescription()
-                              {
-                                  Filter = Filter.MinMagMipLinear,
-                                  AddressU = TextureAddressMode.Clamp,
-                                  AddressV = TextureAddressMode.Clamp,
-                                  AddressW = TextureAddressMode.Clamp,
-                                  MipLodBias = 0,
-                                  MaximumAnisotropy = 1,
-                                  ComparisonFunction = Comparison.Never,
-                                  MinimumLod = -999999,
-                                  MaximumLod = 9999999
-                              };
+        static void OnShaderChanged(object? sender, ComputeShader? e)
+        {
+            if (e == null)
+            {
+                Log.Error($"Failed to initialize video conversion shader in {nameof(LoadGltfScene)}");
+                return;
+            }
+            
+            if (_combineChannelsComputeShaderResource.TryGetValue(out var shader))
+            {
+                shader.Name = debugName;
+            }
 
-        _combineChannelsSampler = new SamplerState(ResourceManager.Device, samplerDesc);
+            var samplerDesc = new SamplerStateDescription
+                                  {
+                                      Filter = Filter.MinMagMipLinear,
+                                      AddressU = TextureAddressMode.Clamp,
+                                      AddressV = TextureAddressMode.Clamp,
+                                      AddressW = TextureAddressMode.Clamp,
+                                      MipLodBias = 0,
+                                      MaximumAnisotropy = 1,
+                                      ComparisonFunction = Comparison.Never,
+                                      MinimumLod = -999999,
+                                      MaximumLod = 9999999
+                                  };
+
+            _combineChannelsSampler?.Dispose();
+            _combineChannelsSampler = new SamplerState(ResourceManager.Device, samplerDesc);
+        }
     }
 
     /// <summary>
@@ -476,7 +494,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         var prevSamplers = csStage.GetSamplers(0, 1);
 
         // Set Shader
-        var convertShader = _combineChannelsComputeShaderResource.Shader;
+        var convertShader = _combineChannelsComputeShaderResource.Value;
         csStage.Set(convertShader);
 
         var srvs = new[] { metallicRoughnessSrv, occlusionSrv };
@@ -499,7 +517,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                                ArraySize = 1
                                            };
 
-        var resultTexture = new Texture2D(ResourceManager.Device, resultTextureDescription);
+        var resultTexture = ResourceManager.CreateTexture2D(resultTextureDescription);
         resultSrv = new ShaderResourceView(ResourceManager.Device, resultTexture);
         var resultUav = new UnorderedAccessView(ResourceManager.Device, resultTexture);
         csStage.SetUnorderedAccessView(0, resultUav, 0);
@@ -519,7 +537,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         csStage.Set(prevShader);
     }
 
-    private static ShaderResource<SharpDX.Direct3D11.ComputeShader> _combineChannelsComputeShaderResource;
+    private static Resource<T3.Core.DataTypes.ComputeShader> _combineChannelsComputeShaderResource;
 
     /// <summary>
     /// Tries to create a texture from a gltf material channel.
@@ -549,7 +567,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                        BitmapPaletteType.Custom);
 
             texture = ResourceManager.CreateTexture2DFromBitmap(ResourceManager.Device, formatConverter);
-            texture.DebugName = channel.Key;
+            texture.Name = channel.Key;
 
             Log.Debug($" Created {gltfMaterial.Name}.{channel.Key} with {texture.Description.Width}×{texture.Description.Height}");
             // bitmapFrameDecode.Dispose();

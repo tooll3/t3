@@ -34,6 +34,8 @@ using DeviceContext = SharpDX.Direct3D11.DeviceContext;
 using Factory = SharpDX.DXGI.Factory;
 using FillMode = SharpDX.Direct3D11.FillMode;
 using ResourceManager = T3.Core.Resource.ResourceManager;
+using VertexShader = T3.Core.DataTypes.VertexShader;
+using PixelShader = T3.Core.DataTypes.PixelShader;
 
 namespace T3.Player
 {
@@ -411,8 +413,8 @@ namespace T3.Player
         private static Texture2D _outputTexture;
         private static ShaderResourceView _outputTextureSrv;
         private static RasterizerState _rasterizerState;
-        private static ShaderResource<VertexShader> _fullScreenVertexShaderResource;
-        private static ShaderResource<PixelShader> _fullScreenPixelShaderResource;
+        private static Resource<VertexShader> _fullScreenVertexShaderResource;
+        private static Resource<PixelShader> _fullScreenPixelShaderResource;
         private static Device _device;
         private static Int2 _resolution;
         private static Slot<Texture2D> _textureOutput;

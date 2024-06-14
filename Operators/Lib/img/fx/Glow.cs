@@ -1,10 +1,10 @@
 using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.img.fx
 {

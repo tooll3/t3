@@ -60,6 +60,7 @@ internal static class ProjectSetup
         project.Dispose();
     }
 
+    // todo - separate out PackageInfo from loading the packages to handle dependencies on load
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
     internal static bool TryInitialize(out Exception exception)
     {

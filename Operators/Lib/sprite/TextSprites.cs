@@ -1,8 +1,5 @@
 using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
 using System.Numerics;
-using Operators.Utils;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
@@ -12,6 +9,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using Utils;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.sprite
 {
@@ -27,78 +25,99 @@ namespace lib.sprite
         [Output(Guid = "5BB66419-9FA8-4BD0-8476-D389E9EC78D5")]
         public readonly Slot<Texture2D> Texture = new();
 
+        private Resource<Texture2D>? _texture;
+        private ShaderResourceView? _textureSrv;
+        private readonly Resource<BmFontDescription> _bmFont;
         public TextSprites()
         {
+            _bmFont = new Resource<BmFontDescription>(Filepath, TryGenerateFont);
             SpriteBuffer.UpdateAction = Update;
             PointBuffer.UpdateAction = Update;
-            Texture.UpdateAction = Update;
+        }
+
+        private bool TryGenerateFont(FileResource file, BmFontDescription? currentValue, out BmFontDescription? newValue, out string? failureReason)
+        {
+            var absolutePath = file.AbsolutePath;
+            if (BmFontDescription.TryInitializeFromFile(absolutePath, out var potentialValue))
+            {
+                var fileExtension = Path.GetExtension(absolutePath);
+                var imageFilePath = absolutePath.Replace(fileExtension, ".png");
+                if (TryUpdateTexture(imageFilePath))
+                {
+                    newValue = potentialValue;
+                    failureReason = null;
+                    return true;
+                }
+
+                newValue = null;
+                failureReason = $"Could not load texture from file '{imageFilePath}'";
+                return false;
+            }
+
+            failureReason = $"Could not load font from file '{file.AbsolutePath}'";
+            newValue = null;
+            return false;
         }
 
         private void Update(EvaluationContext context)
         {
-            if (Filepath.DirtyFlag.IsDirty || _bmFont == null)
-            {
-                var filepath = Filepath.GetValue(context);
-                
-                if(!TryGetFilePath(filepath, out var absolutePath))
-                {
-                    Log.Error($"Could not find file: {filepath}", this);
-                    return;
-                }
-                
-                _bmFont = BmFontDescription.InitializeFromFile(absolutePath);
-                if (_bmFont != null)
-                {
-                    var imageFilePath = absolutePath.Replace(".fnt", ".png");
-                    UpdateTexture(imageFilePath);
-                }
-            }
-
             UpdateMesh(context); 
 
             // Prevent multiple evaluation because previously fetched SRV will be disposed
-            Texture.DirtyFlag.Clear();
             SpriteBuffer.DirtyFlag.Clear();
             PointBuffer.DirtyFlag.Clear();
         }
-
-        private void UpdateTexture(string imageFilePath)
+        
+        private bool TryUpdateTexture(string imageFilePath)
         {
-            ShaderResourceView srv = null;
-
-            try
+            if (_texture != null)
             {
-                (_textureResId, _srvResId) = ResourceManager.Instance().CreateTextureFromFile(imageFilePath, this, () => { Texture.DirtyFlag.Invalidate(); });
-
-                if (ResourceManager.ResourcesById.TryGetValue(_textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
-                    Texture.Value = textureResource.Texture;
-
-                if (ResourceManager.ResourcesById.TryGetValue(_srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
-                    srv = srvResource.ShaderResourceView;
+                _texture.Dispose();
+                _texture = null;
+                Texture.Value = null;
             }
-            catch (Exception e)
+            
+            _texture = ResourceManager.CreateTextureResource(imageFilePath, this);
+
+            var success = _texture.Value != null;
+            if (success)
             {
-                Log.Error($"Filed to create texture from file '{imageFilePath}':" + e.Message);
+                var tex = _texture.Value;
+                tex.Name = imageFilePath;
+                UpdateTexture(tex);
             }
-
-            try
-            {
-                if (srv != null)
-                    ResourceManager.Device.ImmediateContext.GenerateMips(srv);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to generate mipmaps for texture {imageFilePath}:" + e);
-            }
-
+            
             Texture.DirtyFlag.Clear();
+            return success;
+
+            void UpdateTexture(Texture2D texture)
+            {
+                if (Texture.Value == texture)
+                {
+                    return;
+                }
+
+                Texture.Value = texture;
+                ResourceManager.CreateShaderResourceView(texture, "TextSpritesSRV", ref _textureSrv);
+
+                try
+                {
+                    if (_textureSrv != null)
+                        ResourceManager.Device.ImmediateContext.GenerateMips(_textureSrv);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to generate mipmaps for texture {texture.Name}:" + e);
+                }
+            }
         }
 
         private void UpdateMesh(EvaluationContext context)
         {
             var text = Text.GetValue(context);
 
-            if (_bmFont == null)
+            var bmFont = _bmFont.Value;
+            if (bmFont == null)
             {
                 Log.Warning("Can't generate text sprites without valid BMFont definition", this);
                 return;
@@ -119,31 +138,31 @@ namespace lib.sprite
             const float viewHeightInT3Units = 2;
             var textSize = Size.GetValue(context);
 
-            var scaleFactor =  (textSize / _bmFont.BmFont.Info.Size) * (viewHeightInT3Units / 1080f); // from cursor space to t3 units  
+            var scaleFactor =  (textSize / bmFont.BmFont.Info.Size) * (viewHeightInT3Units / 1080f); // from cursor space to t3 units  
             var textPosition = Position.GetValue(context);
 
             var numLinesInText = text.Split('\n').Length;
 
             var color = Color.GetValue(context);
-            float textureWidth = _bmFont.BmFont.Common.ScaleW;
-            float textureHeight = _bmFont.BmFont.Common.ScaleH;
+            float textureWidth = bmFont.BmFont.Common.ScaleW;
+            float textureHeight = bmFont.BmFont.Common.ScaleH;
             float cursorX = 0;
             float cursorY = 0;
-            var verticalCenterOffset = _bmFont.Padding.Up + _bmFont.BmFont.Common.Base + _bmFont.Padding.Down - _bmFont.BmFont.Info.Size / 2f;
+            var verticalCenterOffset = bmFont.Padding.Up + bmFont.BmFont.Common.Base + bmFont.Padding.Down - bmFont.BmFont.Info.Size / 2f;
 
             switch (verticalAlign)
             {
                 case BmFontDescription.VerticalAligns.Top:
                     // an ugly approximation to the original text implementation
-                    cursorY = _bmFont.BmFont.Common.Base * (1 + _bmFont.Padding.Up / _bmFont.BmFont.Info.Size) - verticalCenterOffset;
+                    cursorY = bmFont.BmFont.Common.Base * (1 + bmFont.Padding.Up / bmFont.BmFont.Info.Size) - verticalCenterOffset;
                     break;
                 
                 case BmFontDescription.VerticalAligns.Middle:
-                    cursorY = _bmFont.BmFont.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2;
+                    cursorY = bmFont.BmFont.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2;
                     break;
                 
                 case BmFontDescription.VerticalAligns.Bottom:
-                    cursorY = _bmFont.BmFont.Common.LineHeight * lineHeight * (numLinesInText) - (verticalCenterOffset - offsetBaseLine);
+                    cursorY = bmFont.BmFont.Common.LineHeight * lineHeight * (numLinesInText) - (verticalCenterOffset - offsetBaseLine);
                     break;
             }
             
@@ -160,7 +179,7 @@ namespace lib.sprite
                 {
                     AdjustLineAlignment();
 
-                    cursorY -= _bmFont.BmFont.Common.LineHeight * lineHeight;
+                    cursorY -= bmFont.BmFont.Common.LineHeight * lineHeight;
                     cursorX = 0;
                     currentLineCharacterCount = 0;
                     lastCharId = 0;
@@ -168,13 +187,13 @@ namespace lib.sprite
                     continue;
                 }
 
-                if (!_bmFont.InfoForCharacter.TryGetValue(c, out var charInfo))
+                if (!bmFont.InfoForCharacter.TryGetValue(c, out var charInfo))
                 {
                     lastCharId = 0;
                     continue;
                 }
 
-                cursorX += _bmFont.GetKerning(lastCharId, charInfo.Id) *0;
+                cursorX += bmFont.GetKerning(lastCharId, charInfo.Id) *0;
 
 
 
@@ -290,8 +309,6 @@ namespace lib.sprite
             }
         }
 
-        private BmFontDescription _bmFont;
-
         private readonly List<Sprite> _sprites = new(100);
         private readonly List<Point> _points = new(100);
 
@@ -325,8 +342,5 @@ namespace lib.sprite
 
         [Input(Guid = "7094D22F-DCF9-4FD0-9570-7243E3284CF4")]
         public readonly InputSlot<float> OffsetBaseLine = new();
-
-        private uint _textureResId;
-        private uint _srvResId;
     }
 }

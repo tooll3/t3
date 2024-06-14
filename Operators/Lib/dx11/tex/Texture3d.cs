@@ -7,6 +7,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using Texture3D = T3.Core.DataTypes.Texture3D;
 
 namespace lib.dx11.tex
 {
@@ -18,8 +19,8 @@ namespace lib.dx11.tex
         [Output(Guid = "3cbfceaa-4fa1-44e9-8c43-aff7dba7f871")]
         public readonly Slot<T3.Core.DataTypes.Texture3dWithViews> OutputTexture = new(new T3.Core.DataTypes.Texture3dWithViews());
 
-        private uint _textureResId;
-
+        private Texture3D _texture3d;
+        
         public Texture3d()
         {
             OutputTexture.UpdateAction = UpdateTexture;
@@ -46,14 +47,19 @@ namespace lib.dx11.tex
                                   CpuAccessFlags = CpuAccessFlags.GetValue(context),
                                   OptionFlags = ResourceOptionFlags.GetValue(context)
                               };
-            var rm = ResourceManager.Instance();
-            rm.CreateTexture3d(texDesc, "Texture3D", ref _textureResId, ref OutputTexture.Value.Texture);
-            if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.ShaderResource) > 0)
-                rm.CreateShaderResourceView(_textureResId, "", ref OutputTexture.Value.Srv);
-            if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.RenderTarget) > 0)
-                rm.CreateRenderTargetView(_textureResId, "", ref OutputTexture.Value.Rtv);
-            if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.UnorderedAccess) > 0)
-                rm.CreateUnorderedAccessView(_textureResId, "", ref OutputTexture.Value.Uav);
+            if (ResourceManager.CreateTexture3d(texDesc, ref _texture3d))
+            {
+                var tex = _texture3d;
+                OutputTexture.Value.Texture = tex;
+                
+                if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.ShaderResource) > 0)
+                    ResourceManager.CreateShaderResourceView(tex, "", ref OutputTexture.Value.Srv);
+                if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.RenderTarget) > 0)
+                    ResourceManager.CreateRenderTargetView(tex, "", ref OutputTexture.Value.Rtv);
+                if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.UnorderedAccess) > 0)
+                    ResourceManager.CreateUnorderedAccessView(tex, "", ref OutputTexture.Value.Uav);
+                
+            }
         }
 
         [Input(Guid = "dca953d6-bdc1-42eb-9a4d-5974c42cf45b")]

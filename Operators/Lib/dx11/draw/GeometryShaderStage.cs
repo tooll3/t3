@@ -57,12 +57,12 @@ namespace lib.dx11.draw
         private Buffer[] _constantBuffers = new Buffer[0];
         private ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[0];
 
-        private GeometryShader _prevGeometryShader;
+        private SharpDX.Direct3D11.GeometryShader _prevGeometryShader;
         private Buffer[] _prevConstantBuffers;
         private ShaderResourceView[] _prevShaderResourceViews;
 
         [Input(Guid = "2A217F9D-2F9F-418A-8568-F767905384D5")]
-        public readonly InputSlot<GeometryShader> GeometryShader = new();
+        public readonly InputSlot<T3.Core.DataTypes.GeometryShader> GeometryShader = new();
 
         [Input(Guid = "380b3ea4-aab8-4e19-bd31-9af3aef834b4")]
         public readonly MultiInputSlot<Buffer> ConstantBuffers = new();

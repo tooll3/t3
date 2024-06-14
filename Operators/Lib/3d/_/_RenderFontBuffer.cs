@@ -24,29 +24,22 @@ namespace lib._3d._
         
         public _RenderFontBuffer()
         {
-            Buffer.UpdateAction = Update;
+            Buffer.UpdateAction = UpdateMesh;
+            _fontResource = new Resource<BmFontDescription>(Filepath, OnFileChanged);
         }
-
-        private void Update(EvaluationContext context)
+        
+        private bool OnFileChanged(FileResource file, BmFontDescription currentValue, out BmFontDescription newValue, out string failureReason)
         {
-            if (Filepath.DirtyFlag.IsDirty || _font == null)
+            if (BmFontDescription.TryInitializeFromFile(file.AbsolutePath, out newValue))
             {
-                var filepath = Filepath.GetValue(context);
-                
-                if(!TryGetFilePath(filepath, out var absolutePath))
-                {
-                    Log.Error($"Could not find file: {filepath}", this);
-                    return;
-                }
-                
-                ResourceFileWatcher.AddFileHook(absolutePath, () => {Filepath.DirtyFlag.Invalidate();});
-                
-                _font = BmFontDescription.InitializeFromFile(absolutePath);
+                failureReason = null;
+                return true;
             }
             
-            UpdateMesh(context);
+            failureReason = "Failed to load font from file";
+            return false;
         }
-
+        
         private void UpdateMesh(EvaluationContext context)
         {
             var text = Text.GetValue(context);
@@ -201,6 +194,7 @@ namespace lib._3d._
 
         private BmFontDescription _font;
         private BufferLayout[] _bufferContent;
+        private Resource<BmFontDescription> _fontResource;
 
         [StructLayout(LayoutKind.Explicit, Size = StructSize)]
         public struct BufferLayout

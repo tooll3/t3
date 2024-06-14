@@ -1,9 +1,11 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Utils;
 
@@ -135,4 +137,20 @@ public partial class ResourceManager
 
     // ReSharper disable once FieldCanBeMadeReadOnly.Local
     private static Utils.ObjectPooling.ArrayPool<Range> _rangeArrayPool = new(true, 30);
+
+    internal static bool TryConvertToRelativePath(string newPath, [NotNullWhen(true)] out string? relativePath)
+    {
+        foreach (var package in SymbolPackage.AllPackages)
+        {
+            var folder = package.ResourcesFolder;
+            if (newPath.StartsWith(folder))
+            {
+                relativePath = '/' + Path.Combine(package.Alias, newPath[folder.Length..]);
+                return true;
+            }
+        }
+
+        relativePath = null;
+        return false;
+    }
 }

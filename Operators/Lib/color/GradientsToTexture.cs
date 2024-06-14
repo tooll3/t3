@@ -12,6 +12,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 using Utilities = T3.Core.Utils.Utilities;
 
 namespace lib.color
@@ -126,7 +127,7 @@ namespace lib.color
                                                  pitch:useHorizontal ? gradientSizeInBytes : gradientsCount * entrySizeInBytes)
                                          };
                 Utilities.Dispose(ref GradientsTexture.Value);
-                GradientsTexture.Value = new Texture2D(ResourceManager.Device, texDesc, dataRectangles);
+                GradientsTexture.Value = ResourceManager.CreateTexture2D(texDesc, dataRectangles);
             }
             catch (Exception e)
             {

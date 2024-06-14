@@ -1,41 +1,41 @@
+#nullable enable
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using ManagedBass;
 using T3.Core.Audio;
+using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Audio
 {
-    public class AudioImageGenerator
+    internal static class AudioImageGenerator
     {
-        public AudioImageGenerator(AudioClip audioClip)
+        public static bool TryGenerateSoundSpectrumAndVolume(AudioClip clip, IResourceConsumer instance, [NotNullWhen(true)] out string? imagePathAbsolute)
         {
-            var relativePath = audioClip.FilePath;
-            if(!audioClip.TryGetAbsoluteFilePath(out SoundFilePathAbsolute))
-                throw new Exception($"Could not get absolute path for audio clip: {relativePath}");
-            
-            SoundFilePath = relativePath;
-            string imageExtension = UserSettings.Config.ExpandSpectrumVisualizerVertically ? ".10.waveform.png" : ".waveform.png";
-            ImageFilePath = SoundFilePath + imageExtension;
-            ImageFilePathAbsolute = SoundFilePathAbsolute + imageExtension;
-        }
-
-        public bool TryGenerateSoundSpectrumAndVolume()
-        {
-            if (string.IsNullOrWhiteSpace(SoundFilePathAbsolute) || !File.Exists(SoundFilePathAbsolute))
-                return false;
-
-            if (File.Exists(ImageFilePathAbsolute))
+            var relativePath = clip.FilePath;
+            if (!clip.TryGetAbsoluteFilePath(instance, out var soundFilePathAbsolute))
             {
-                Log.Debug($"Reusing sound image file: {ImageFilePath}");
+                Log.Error($"Could not get absolute path for audio clip: {relativePath}");
+                imagePathAbsolute = null;
+                return false;
+            }
+
+            string imageExtension = UserSettings.Config.ExpandSpectrumVisualizerVertically ? ".10.waveform.png" : ".waveform.png";
+            var imageFilePath = clip.FilePath! + imageExtension;
+            imagePathAbsolute = soundFilePathAbsolute + imageExtension;
+            
+            if (File.Exists(imagePathAbsolute))
+            {
+                Log.Debug($"Reusing sound image file: {imageFilePath}");
                 return true;
             }
 
-            Log.Debug($"Generating {ImageFilePath}...");
+            Log.Debug($"Generating {imageFilePath}...");
 
             Bass.Init(-1, 44100, 0, IntPtr.Zero);
-            var stream = Bass.CreateStream(SoundFilePathAbsolute, 0, 0, BassFlags.Decode | BassFlags.Prescan);
+            var stream = Bass.CreateStream(soundFilePathAbsolute, 0, 0, BassFlags.Decode | BassFlags.Prescan);
 
             var streamLength = Bass.ChannelGetLength(stream);
 
@@ -118,7 +118,7 @@ namespace T3.Editor.Gui.Audio
             bool success;
             try
             {
-                spectrumImage.Save(ImageFilePathAbsolute);
+                spectrumImage.Save(imagePathAbsolute);
                 success = true;
             }
             catch(Exception e)
@@ -171,7 +171,7 @@ namespace T3.Editor.Gui.Audio
             int RoundToInt(float value) => (int)Math.Round(value);
         }
 
-        sealed class PreComputedLogs
+        private sealed class PreComputedLogs
         {
             // ReSharper disable once FieldCanBeMadeReadOnly.Local
             private double[] _logEvaluations = new double[ImageHeight + 2];
@@ -186,18 +186,9 @@ namespace T3.Editor.Gui.Audio
                     _logEvaluations[i] = Math.Log(i + 1);
                 }
             }
-            
-            public double Log(int rowIndex)
-            {
-                return _logEvaluations[rowIndex];
-            }
         }
 
         private static readonly PreComputedLogs PrecomputedLogs = new();
-        public readonly string SoundFilePath;
-        public readonly string SoundFilePathAbsolute;
-        public readonly string ImageFilePath;
-        public readonly string ImageFilePathAbsolute;
         private static readonly Color[] IntensityPalette = GeneratePalette();
 
 

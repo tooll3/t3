@@ -1,26 +1,30 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using SharpDX.D3DCompiler;
 using T3.Core.Logging;
+using T3.Core.Model;
 
 namespace T3.Core.Resource;
 
 public abstract partial class ShaderCompiler
 {
-    internal static bool TryCompileShaderFromSource<TShader>(ShaderCompilationArgs args, string name, ref TShader shader, ref ShaderBytecode blob, bool useCache,
-                                                             bool forceRecompile, out string reason)
-        where TShader : class, IDisposable
+    internal static bool TryCompileShaderFromSource<TShader>(ShaderCompilationArgs args, bool useCache,
+                                                             bool forceRecompile, [NotNullWhen(true)] out TShader? shader, out string reason)
+        where TShader : class
     {
         var includes = GetIncludesFrom(args.SourceCode);
-        var includeDirectories = args.IncludeDirectories;
+        var includeDirectories = args.Owner;
 
         foreach (var include in includes)
         {
             if (!ResourceManager.TryResolvePath(include, includeDirectories, out _, out _))
             {
                 reason = $"Can't find include file: {include}";
+                shader = null;
                 return false;
             }
         }
@@ -31,7 +35,7 @@ public abstract partial class ShaderCompiler
         var hashCombination = new ULongFromTwoInts(args.SourceCode.GetHashCode(), args.EntryPoint.GetHashCode());
         var hash = hashCombination.Value;
         bool success = false;
-        ShaderBytecode compiledBlob;
+        byte[] compiledBlob;
 
         if (useCache)
         {
@@ -45,7 +49,7 @@ public abstract partial class ShaderCompiler
                 else if (Instance.CompileShaderFromSource<TShader>(args, out compiledBlob, out reason))
                 {
                     success = true;
-                    CacheSuccessfulCompilation(blob, hash, compiledBlob);
+                    CacheSuccessfulCompilation(args.OldBytecode, hash, compiledBlob);
                     reason = "compiled successfully";
                 }
             }
@@ -59,22 +63,19 @@ public abstract partial class ShaderCompiler
             }
         }
 
+        var name = args.Name;
         if (success)
         {
-            blob = compiledBlob;
-
-            if (shader is IDisposable oldDisposableShader)
-                oldDisposableShader.Dispose();
-
-            Instance.CreateShaderInstance(name, compiledBlob!, out shader);
+            Instance.CreateShaderInstance(name, compiledBlob, out shader!);
             Log.Debug($"{name} - {args.EntryPoint} {reason}");
             return true;
         }
 
         reason = $"Failed to compile shader '{name}'.\n{reason}";
+        shader = null;
         return false;
 
-        static bool TryLoadCached(ulong hash, out ShaderBytecode compiledBlob, out string reason)
+        static bool TryLoadCached(ulong hash, [NotNullWhen(true)] out byte[]? compiledBlob, out string reason)
         {
             if (ShaderBytecodeCache.TryGetValue(hash, out compiledBlob))
             {
@@ -99,36 +100,41 @@ public abstract partial class ShaderCompiler
     /// <summary>
     /// A simple method to prepare <see cref="ShaderCompilationArgs"/> before calling the actual shader compilation.
     /// </summary>
-    internal static bool TryPrepareSourceFile(string srcFile, string entryPoint, IEnumerable<IResourcePackage> resourceDirs,
+    internal static bool TryPrepareSourceFile(ShaderCompilationFileArgs fileArgs,
                                               out string errorMessage, out ShaderCompilationArgs args)
     {
-        var file = new FileInfo(srcFile);
-        if (!file.Exists)
+        var fileResource = fileArgs.FileResource;
+        var file = fileResource.FileInfo;
+        if (file is null || !file.Exists)
         {
-            errorMessage = $"Shader file '{srcFile}' not found.";
+            errorMessage = $"Shader file '{fileResource.AbsolutePath}' not found.";
             Log.Error(errorMessage);
             args = default;
             return false;
         }
 
-        List<IResourcePackage> directories =
-            [
-                new ShaderResourcePackage(file.DirectoryName!)
-            ];
-
-        if (resourceDirs != null)
-            directories.AddRange(resourceDirs);
-
         try
         {
-            var sourceCodeText = File.ReadAllText(srcFile);
+            var sourceCodeText = File.ReadAllText(fileResource.AbsolutePath);
             errorMessage = string.Empty;
-            args = new ShaderCompilationArgs(sourceCodeText, entryPoint, directories);
+            var directoryPackage = new ShaderResourcePackage(file.Directory!);
+            IResourceConsumer consumer;
+            if (fileArgs.Owner != null)
+            {
+                var packages = fileArgs.Owner.AvailableResourcePackages.Append(directoryPackage).ToArray();
+                consumer = new TempResourceConsumer(packages);
+            }
+            else
+            {
+                consumer = new TempResourceConsumer([directoryPackage]);
+            }
+            
+            args = new ShaderCompilationArgs(sourceCodeText, fileArgs.EntryPoint, consumer, file.Name, fileArgs.OldBytecode);
             return true;
         }
         catch (Exception e)
         {
-            errorMessage = $"Failed to read shader file '{srcFile}'.\n{e.Message}";
+            errorMessage = $"Failed to read shader file '{fileResource.AbsolutePath}'.\n{e.Message}";
             Log.Error(errorMessage);
             args = default;
             return false;
@@ -145,13 +151,63 @@ public abstract partial class ShaderCompiler
                                  .Select(x => x[1]);
     }
 
-    public record struct ShaderCompilationArgs(string SourceCode, string EntryPoint, IReadOnlyList<IResourcePackage> IncludeDirectories);
+    internal record struct ShaderCompilationFileArgs(FileResource FileResource, string EntryPoint, IResourceConsumer? Owner, byte[]? OldBytecode);
+    public record struct ShaderCompilationArgs(string SourceCode, string EntryPoint, IResourceConsumer Owner, string Name, byte[]? OldBytecode);
 
-    public sealed class ShaderResourcePackage(string resourcesFolder) : IResourcePackage
+    public sealed class ShaderResourcePackage : IResourcePackage
     {
         public string? Alias => null;
-        public string ResourcesFolder { get; } = resourcesFolder;
-        public ResourceFileWatcher FileWatcher => null;
+        public string ResourcesFolder { get; }
+        public ResourceFileWatcher? FileWatcher => _resourceConsumer?.Package?.FileWatcher;
         public bool IsReadOnly => true;
+        public IReadOnlyList<IResourcePackage> AvailableResourcePackages { get; }
+        private readonly IResourceConsumer? _resourceConsumer;
+
+        public ShaderResourcePackage(FileInfo shaderFile)
+        {
+            ResourcesFolder = shaderFile.DirectoryName!;
+            AvailableResourcePackages = new List<IResourcePackage> { this };
+        }
+
+        public ShaderResourcePackage(DirectoryInfo directoryInfo)
+        {
+            ResourcesFolder = directoryInfo.FullName;
+            AvailableResourcePackages = new List<IResourcePackage> { this };
+        }
+
+        public ShaderResourcePackage(IResourceConsumer resourceConsumer)
+        {
+            _resourceConsumer = resourceConsumer;
+            ResourcesFolder = resourceConsumer.Package!.ResourcesFolder;
+            AvailableResourcePackages = resourceConsumer.AvailableResourcePackages;
+        }
+        
+        public ShaderResourcePackage(FileInfo shaderFile, IResourceConsumer resourceConsumer)
+        {
+            _resourceConsumer = resourceConsumer;
+            ResourcesFolder = shaderFile?.DirectoryName ?? resourceConsumer?.Package!.ResourcesFolder!;
+            
+            if(ResourcesFolder == null)
+                throw new ArgumentException("ResourcesFolder must not be null");
+
+            if (resourceConsumer != null)
+            {
+                var ownerPackages = resourceConsumer.AvailableResourcePackages;
+                var availableResourcePackages = new List<IResourcePackage>(ownerPackages.Count + 1)
+                                                    {
+                                                        this
+                                                    };
+
+                availableResourcePackages.AddRange(ownerPackages);
+                AvailableResourcePackages = availableResourcePackages;
+            }
+            else
+            {
+                AvailableResourcePackages = new List<IResourcePackage> { this };
+            }
+        }
+
+        public SymbolPackage? Package => _resourceConsumer?.Package;
+        public event Action? Disposing;
     }
 }

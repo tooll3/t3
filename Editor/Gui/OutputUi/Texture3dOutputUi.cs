@@ -9,7 +9,8 @@ using T3.Core.Resource;
 using T3.Editor.App;
 using T3.Editor.Gui.Windows;
 using Buffer = SharpDX.Direct3D11.Buffer;
-using ComputeShader = SharpDX.Direct3D11.ComputeShader;
+using ComputeShader = T3.Core.DataTypes.ComputeShader;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace T3.Editor.Gui.OutputUi
 {
@@ -18,17 +19,16 @@ namespace T3.Editor.Gui.OutputUi
         public Texture3dOutputUi()
         {
             const string sourcePath = @"internal\render-volume-slice-cs.hlsl";
-            const string entryPoint = "main";
             const string debugName = "render-volume-slice";
-            var resourceManager = ResourceManager.Instance();
-            var success= resourceManager.TryCreateShaderResource(resource: out _shaderResource, 
-                                                                                relativePath: sourcePath, 
-                                                                                instance: null,
-                                                                                reason: out var errorMessage, 
-                                                                                name: debugName, 
-                                                                                entryPoint: entryPoint, 
-                                                                                fileChangedAction: null);
+            _shaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, null, () => "main");
 
+            var shader = _shaderResource.Value;
+            var success = shader != null;
+            if (success)
+            {
+                shader!.Name = debugName;
+            }
+            
             var texDesc = new Texture2DDescription()
                               {
                                   ArraySize = 1,
@@ -42,7 +42,8 @@ namespace T3.Editor.Gui.OutputUi
                                   SampleDescription = new SampleDescription(1, 0),
                                   Usage = ResourceUsage.Default,
                               };
-            _viewTexture = new Texture2D(ResourceManager.Device, texDesc);
+
+            _viewTexture = ResourceManager.CreateTexture2D(texDesc);
             _viewTextureUav = new UnorderedAccessView(ResourceManager.Device, _viewTexture);
         }
 
@@ -77,7 +78,6 @@ namespace T3.Editor.Gui.OutputUi
             if (texture3d?.Texture == null)
                 return null;
 
-            var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
@@ -86,7 +86,7 @@ namespace T3.Editor.Gui.OutputUi
             var prevSrvs = csStage.GetShaderResources(0, 1);
             var prevConstBuffer = csStage.GetConstantBuffers(0, 1);
 
-            ComputeShader resolveShader = _shaderResource.Shader;
+            var resolveShader = _shaderResource.Value;
             csStage.Set(resolveShader);
 
             Int4 parameter = new Int4(_zPosIndex, 0, 0, 0);
@@ -110,9 +110,9 @@ namespace T3.Editor.Gui.OutputUi
         }
 
         private readonly Texture2D _viewTexture = null;
-        private UnorderedAccessView _viewTextureUav = null;
+        private readonly UnorderedAccessView _viewTextureUav = null;
         private int _zPosIndex = 0;
         private Buffer _paramBuffer = null;
-        private ShaderResource<ComputeShader> _shaderResource;
+        private readonly Resource<ComputeShader> _shaderResource;
     }
 }

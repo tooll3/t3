@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace T3.Core.Utils;
 
@@ -341,4 +342,24 @@ public static class StringUtils
         // we finished the filter - it's a match!
         return true;
     }
+    
+    public static unsafe void ReplaceCharUnsafe(this string str, char toReplace, char replacement)
+    {
+        fixed (char* strPtr = str)
+        {
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (strPtr[i] == toReplace)
+                    strPtr[i] = replacement;
+            }
+        }
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ToForwardSlashesUnsafe(this string str)
+    {
+        str.ReplaceCharUnsafe('\\', '/');
+    }
+    
+    public static string ToForwardSlashes(this string str) => str.Replace('\\', '/');
 }

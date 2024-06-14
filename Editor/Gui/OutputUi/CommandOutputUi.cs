@@ -9,15 +9,16 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Editor.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 using Utilities = T3.Core.Utils.Utilities;
 
 namespace T3.Editor.Gui.OutputUi
 {
-    public class CommandOutputUi : OutputUi<Command>
+    internal class CommandOutputUi : OutputUi<Command>
     {
         public bool GizmosEnabled { get; set; } = false;
 
-        public CommandOutputUi()
+        internal CommandOutputUi()
         {
             // ensure op exists for drawing grid
             var outputWindowGridSymbolId = Guid.Parse("e5588101-5686-4b02-ab7d-e58199ba552e");
@@ -104,7 +105,7 @@ namespace T3.Editor.Gui.OutputUi
 
         protected override void DrawTypedValue(ISlot slot)
         {
-            if (slot is Slot<Command> typedSlot)
+            if (slot is Slot<Command>)
             {
                 ImageOutputCanvas.Current.DrawTexture(_colorBuffer);
             }
@@ -121,32 +122,29 @@ namespace T3.Editor.Gui.OutputUi
 
                 // Initialize color buffer
                 {
-                    if (_colorBuffer != null
-                        && _colorBuffer.Description.Width == size.Width
-                        && _colorBuffer.Description.Height == size.Height
-                        && _colorBuffer.Description.Format == format)
-                        return false; // nothing changed
+                    if (_colorBuffer != null)
+                    {
+                        var currentColorDesc = _colorBuffer.Description;
+                        if (currentColorDesc.Width == size.Width
+                            && currentColorDesc.Height == size.Height
+                            && currentColorDesc.Format == format)
+                            return false; // nothing changed
+                    }
 
                     _colorBuffer?.Dispose();
                     _colorBufferSrv?.Dispose();
                     _colorBufferRtv?.Dispose();
 
-                    var colorDesc = new Texture2DDescription()
+                    var colorDesc = DefaultColorDescription with 
                                         {
-                                            ArraySize = 1,
-                                            BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource,
-                                            CpuAccessFlags = CpuAccessFlags.None,
                                             Format = format,
                                             Width = size.Width,
                                             Height = size.Height,
-                                            MipLevels = 1,
-                                            OptionFlags = ResourceOptionFlags.None,
-                                            SampleDescription = new SampleDescription(1, 0),
-                                            Usage = ResourceUsage.Default
                                         };
-                    _colorBuffer = new Texture2D(device, colorDesc);
-                    _colorBufferSrv = new ShaderResourceView(device, _colorBuffer);
-                    _colorBufferRtv = new RenderTargetView(device, _colorBuffer);
+                    
+                    _colorBuffer = ResourceManager.CreateTexture2D(colorDesc);
+                    ResourceManager.CreateShaderResourceView(_colorBuffer, null, ref _colorBufferSrv);
+                    ResourceManager.CreateRenderTargetView(_colorBuffer, null, ref _colorBufferRtv);
                 }
 
                 // Initialize depth buffer 
@@ -168,12 +166,14 @@ namespace T3.Editor.Gui.OutputUi
                                             Usage = ResourceUsage.Default
                                         };
 
-                    _depthBuffer = new Texture2D(device, depthDesc);
+                    _depthBuffer = ResourceManager.CreateTexture2D(depthDesc);
                     var depthViewDesc = new DepthStencilViewDescription()
                                             {
                                                 Format = Format.D32_Float,
                                                 Dimension = DepthStencilViewDimension.Texture2D
                                             };
+                    
+                    _depthBufferDsv?.Dispose();
                     _depthBufferDsv = new DepthStencilView(device, _depthBuffer, depthViewDesc);
                     //Log.Debug("new depth stencil view");
                 }
@@ -186,6 +186,17 @@ namespace T3.Editor.Gui.OutputUi
             
             return true;
         }
+
+        private static readonly Texture2DDescription DefaultColorDescription = new()
+                                                                                   {
+                                                                                       ArraySize = 1,
+                                                                                       BindFlags = BindFlags.DepthStencil | BindFlags.ShaderResource,
+                                                                                       CpuAccessFlags = CpuAccessFlags.None,
+                                                                                       MipLevels = 1,
+                                                                                       OptionFlags = ResourceOptionFlags.None,
+                                                                                       SampleDescription = new SampleDescription(1, 0),
+                                                                                       Usage = ResourceUsage.Default
+                                                                                   };
 
         private Texture2D _colorBuffer;
         private ShaderResourceView _colorBufferSrv;

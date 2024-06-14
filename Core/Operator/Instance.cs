@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using T3.Core.Logging;
@@ -11,7 +12,7 @@ using T3.Core.Utils;
 
 namespace T3.Core.Operator
 {
-    public abstract class Instance :  IGuidPathContainer
+    public abstract class Instance :  IGuidPathContainer, IResourceConsumer
     {
         public abstract Type Type { get; }
 
@@ -38,6 +39,9 @@ namespace T3.Core.Operator
                 _resourceFoldersDirty = true;
             }
         }
+        
+        SymbolPackage IResourceConsumer.Package => Symbol.SymbolPackage;
+        public event Action? Disposing;
 
         public Symbol Symbol => SymbolRegistry.SymbolsByType[Type];
 
@@ -82,6 +86,7 @@ namespace T3.Core.Operator
 
         public void Dispose()
         {
+            Disposing?.Invoke();
             Dispose(true);
         }
 
@@ -241,11 +246,17 @@ namespace T3.Core.Operator
                 instance = instance._parent;
             }
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool TryGetFileResource(string relativePath, [NotNullWhen(true)] out FileResource? fileResource)
+        {
+            return FileResource.TryGetFileResource(relativePath, this, out fileResource);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected bool TryGetFilePath(string relativePath, out string absolutePath, bool isFolder = false)
+        protected internal bool TryGetFilePath(string relativePath, out string absolutePath, bool isFolder = false)
         {
-            return ResourceManager.TryResolvePath(relativePath, AvailableResourcePackages, out absolutePath, out _, isFolder);
+            return ResourceManager.TryResolvePath(relativePath, this, out absolutePath, out _, isFolder);
         }
         
         

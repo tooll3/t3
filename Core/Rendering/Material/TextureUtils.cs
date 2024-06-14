@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core.Logging;
 using T3.Core.Resource;
 using Vector4 = System.Numerics.Vector4;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace T3.Core.Rendering.Material;
 
-public static class TextureUtils
+internal static class TextureUtils
 {
-    public static Texture2D CreateColorTexture(Vector4 c)
+    internal static Texture2D CreateColorTexture(Vector4 c)
     {
         var colorDesc = new Texture2DDescription()
                             {
@@ -26,48 +27,10 @@ public static class TextureUtils
                                 Usage = ResourceUsage.Default
                             };
 
-        var colorBuffer = new Texture2D(ResourceManager.Device, colorDesc);
-        var colorBufferRtv = new RenderTargetView(ResourceManager.Device, colorBuffer);
+        var dxTex = new SharpDX.Direct3D11.Texture2D(ResourceManager.Device, colorDesc);
+        var colorBuffer = new Texture2D(dxTex);
+        var colorBufferRtv = new RenderTargetView(ResourceManager.Device, dxTex);
         ResourceManager.Device.ImmediateContext.ClearRenderTargetView(colorBufferRtv, new Color(c.X, c.Y, c.Z, c.W));
         return colorBuffer;
-    }
-
-    public static ShaderResourceView LoadTextureAsSrv(string imagePath)
-    {
-        var resourceManager = ResourceManager.Instance();
-        try
-        {
-            var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, null, () => { });
-
-            if (ResourceManager.ResourcesById.TryGetValue(srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
-                return srvResource.ShaderResourceView;
-
-            Log.Warning($"Failed loading texture {imagePath}");
-        }
-        catch (Exception e)
-        {
-            Log.Warning($"Failed loading texture {imagePath} " + e);
-        }
-
-        return null;
-    }
-
-    public static Texture2D LoadTexture(string imagePath)
-    {
-        var resourceManager = ResourceManager.Instance();
-        try
-        {
-            var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, null, () => { });
-            if (ResourceManager.ResourcesById.TryGetValue(textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
-                return textureResource.Texture;
-
-            Log.Warning($"Failed loading texture {imagePath}");
-        }
-        catch (Exception e)
-        {
-            Log.Warning($"Failed loading texture {imagePath} " + e);
-        }
-
-        return null;
     }
 }

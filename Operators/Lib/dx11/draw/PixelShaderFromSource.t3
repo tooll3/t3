@@ -1,7 +1,7 @@
 {
   "Name": "PixelShaderFromSource",
   "Id": "9f784a4a-857f-41ad-afc1-0de08c1cfec6",
-  "Namespace": "lib.dx11.compute",
+  "Namespace": "lib.dx11.draw",
   "Inputs": [
     {
       "Id": "a192e8cc-2874-4f02-bbf1-4622e99666e1"/*ShaderSource*/,

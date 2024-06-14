@@ -1,6 +1,6 @@
 using ImGuiNET;
-using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using T3.Core.DataTypes;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;

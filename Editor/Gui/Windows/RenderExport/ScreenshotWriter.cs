@@ -1,7 +1,7 @@
 using SharpDX;
-using SharpDX.Direct3D11;
 using SharpDX.IO;
 using SharpDX.WIC;
+using T3.Core.DataTypes;
 using T3.Core.Resource;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
@@ -32,7 +32,7 @@ public static class ScreenshotWriter
         var dataBox = immediateContext.MapSubresource(request.CpuAccessTexture,
                                                       0,
                                                       0,
-                                                      MapMode.Read,
+                                                      SharpDX.Direct3D11.MapMode.Read,
                                                       SharpDX.Direct3D11.MapFlags.None,
                                                       out var imageStream);
         using var dataStream = imageStream;

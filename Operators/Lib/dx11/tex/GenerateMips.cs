@@ -6,6 +6,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.dx11.tex
 {
@@ -31,10 +32,10 @@ namespace lib.dx11.tex
 
                     if ((texture.Description.BindFlags & BindFlags.RenderTarget) > 0)
                     {
-                        if (_srv == null || _srv.Resource != texture)
+                        if (_srv == null || _srv.Resource != (SharpDX.Direct3D11.Resource)texture)
                         {
                             _srv?.Dispose();
-                            _srv = new ShaderResourceView(ResourceManager.Device, texture); // todo: create via resource manager
+                            ResourceManager.CreateShaderResourceView(texture, null, ref _srv);
                         }
 
                         ResourceManager.Device.ImmediateContext.GenerateMips(_srv);

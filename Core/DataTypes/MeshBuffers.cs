@@ -1,9 +1,11 @@
-﻿namespace T3.Core.DataTypes
+﻿using System;
+
+namespace T3.Core.DataTypes
 {
     /// <summary>
     /// Combines buffers required for mesh rendering
     /// </summary>
-    public class MeshBuffers
+    public class MeshBuffers: IDisposable
     {
         public BufferWithViews VertexBuffer = new ();
         public BufferWithViews IndicesBuffer = new ();
@@ -34,5 +36,11 @@
             IndicesBuffer?.Srv != null
                 ? IndicesBuffer.Srv.Description.Buffer.ElementCount
                 : 0;
+
+        public void Dispose()
+        {
+            VertexBuffer?.Dispose();
+            IndicesBuffer?.Dispose();
+        }
     }
 }

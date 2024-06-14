@@ -1,10 +1,11 @@
 using System.Runtime.InteropServices;
+using lib.Utils;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using PixelShaderD3D = SharpDX.Direct3D11.PixelShader;
+using PixelShaderD3D = T3.Core.DataTypes.PixelShader;
 
 namespace lib.dx11.draw
 {
@@ -25,28 +26,11 @@ namespace lib.dx11.draw
         
         private void Update(EvaluationContext context)
         {
-            var updated = ShaderOperatorImpl.TryUpdateShader(context, ref _sourcePath, out var warningMessage);
-
-            if (warningMessage != _warningMessage)
-            {
-                Warning.Value = _warningMessage;
-                _warningMessage = warningMessage;
-            }
+          
         }
 
         public InputSlot<string> SourcePathSlot => Source;
 
-        public IStatusProvider.StatusLevel GetStatusLevel()
-        {
-            return string.IsNullOrEmpty(_warningMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
-        }
-
-        public string GetStatusMessage()
-        {
-            return _warningMessage;
-        }
-        
-        private string _warningMessage = string.Empty;
         private string _sourcePath = string.Empty;
 
         [Input(Guid = "24646F06-1509-43CE-94C6-EEB608AD97CD")]
@@ -63,13 +47,18 @@ namespace lib.dx11.draw
 
         #region IShaderOperator implementation
         private IShaderOperator<PixelShaderD3D> ShaderOperatorImpl => this;
-        InputSlot<string> IShaderOperator<PixelShaderD3D>.Source => Source;
+        InputSlot<string> IShaderOperator<PixelShaderD3D>.Path => Source;
         InputSlot<string> IShaderOperator<PixelShaderD3D>.EntryPoint => EntryPoint;
         InputSlot<string> IShaderOperator<PixelShaderD3D>.DebugName => DebugName;
-        Slot<PixelShaderD3D> IShaderOperator<PixelShaderD3D>.Shader => Shader;
-        ShaderResource<PixelShaderD3D> IShaderOperator<PixelShaderD3D>.ShaderResource { get; set; }
-        bool IShaderOperator<PixelShaderD3D>.SourceIsSourceCode => false;
-        Instance IShaderOperator<PixelShaderD3D>.Instance => this;
+        Slot<PixelShaderD3D> IShaderOperator<PixelShaderD3D>.ShaderSlot => Shader;
+        #endregion
+        
+        #region IStatusProvider implementation
+        private readonly DefaultShaderStatusProvider _statusProviderImplementation = new ();
+        public void SetWarning(string message) => _statusProviderImplementation.Warning = message;
+        string IShaderOperator<PixelShaderD3D>.CachedEntryPoint { get; set; }
+        IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel() => _statusProviderImplementation.GetStatusLevel();
+        string IStatusProvider.GetStatusMessage() => _statusProviderImplementation.GetStatusMessage();
         #endregion
     }
 }

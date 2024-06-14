@@ -73,13 +73,13 @@ public abstract partial class ShaderCompiler
         BlockingWindow.Instance.ShowMessageBox(finalMessage, title);
     }
 
-    private static void CacheSuccessfulCompilation(ShaderBytecode oldBytecode, ulong hash, ShaderBytecode newBytecode)
+    private static void CacheSuccessfulCompilation(byte[]? oldBytecode, ulong hash, byte[] newBytecode)
     {
         CacheShaderInMemory(oldBytecode, hash, newBytecode);
         SaveBytecodeToDisk(hash, newBytecode);
     }
 
-    private static void SaveBytecodeToDisk(ulong hash, ShaderBytecode bytecode)
+    private static void SaveBytecodeToDisk(ulong hash, byte[] byteCode)
     {
         if (!_diskCachingEnabled)
         {
@@ -87,10 +87,10 @@ public abstract partial class ShaderCompiler
         }
         
         var path = GetPathForShaderCache(hash);
-        File.WriteAllBytes(path, bytecode.Data);
+        File.WriteAllBytes(path, byteCode);
     }
 
-    private static bool TryLoadBytecodeFromDisk(ulong hash, [NotNullWhen(true)] out ShaderBytecode bytecode)
+    private static bool TryLoadBytecodeFromDisk(ulong hash, [NotNullWhen(true)] out byte[] bytecode)
     {
         if (!_diskCachingEnabled)
         {
@@ -106,12 +106,11 @@ public abstract partial class ShaderCompiler
             return false;
         }
 
-        var data = File.ReadAllBytes(path);
-        bytecode = new ShaderBytecode(data);
+        bytecode = File.ReadAllBytes(path);
         return true;
     }
 
-    private static void CacheShaderInMemory(ShaderBytecode oldBytecode, ulong hash, ShaderBytecode newBytecode)
+    private static void CacheShaderInMemory(byte[]? oldBytecode, ulong hash, byte[] newBytecode)
     {
         if (oldBytecode != null)
         {
@@ -131,8 +130,8 @@ public abstract partial class ShaderCompiler
         return Path.Combine(_shaderCacheDirectory, hashCode + FileExtension);
     }
 
-    private static readonly Dictionary<ShaderBytecode, ulong> ShaderBytecodeHashes = new();
-    private static readonly Dictionary<ulong, ShaderBytecode> ShaderBytecodeCache = new();
+    private static readonly Dictionary<byte[], ulong> ShaderBytecodeHashes = new();
+    private static readonly Dictionary<ulong, byte[]> ShaderBytecodeCache = new();
     
     [StructLayout(LayoutKind.Explicit)]
     private readonly struct ULongFromTwoInts(int a, int b)

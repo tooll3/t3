@@ -1,19 +1,20 @@
 using System.Runtime.InteropServices;
+using lib.Utils;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using ComputeShaderD3D = SharpDX.Direct3D11.ComputeShader;
+using ComputeShaderT3 = T3.Core.DataTypes.ComputeShader;
 
 namespace lib.dx11.compute
 {
 	[Guid("a256d70f-adb3-481d-a926-caf35bd3e64c")]
-    public class ComputeShader : Instance<ComputeShader>, IDescriptiveFilename, IStatusProvider, IShaderOperator<ComputeShaderD3D>
+    public class ComputeShader : Instance<ComputeShader>, IDescriptiveFilename, IStatusProvider, IShaderOperator<ComputeShaderT3>
     {
         [Output(Guid = "{6C118567-8827-4422-86CC-4D4D00762D87}")]
-        public readonly Slot<ComputeShaderD3D> Shader = new();
+        public readonly Slot<ComputeShaderT3> Shader = new();
 
         [Output(Guid = "a6fe06e0-b6a9-463c-9e62-930c58b0a0a1")]
         public readonly Slot<Int3> ThreadCount = new();
@@ -22,21 +23,22 @@ namespace lib.dx11.compute
         {
             Shader.UpdateAction = Update;
             ThreadCount.UpdateAction = Update;
+            ShaderOperatorImpl.Initialize();
         }
 
         public InputSlot<string> SourcePathSlot => Source;
 
         private void Update(EvaluationContext context)
         {
-            var updated = ShaderOperatorImpl.TryUpdateShader(context, ref _sourcePath, out _statusWarning);
-
-            if (updated)
+            var shader = Shader.Value;
+            if (shader == null)
             {
-                if (ShaderOperatorImpl.ShaderResource.TryGetThreadGroups(out var threadCount))
-                    ThreadCount.Value = threadCount;
+                return;
             }
+            
+            if (Shader.Value.TryGetThreadGroups(out var threadCount))
+                ThreadCount.Value = threadCount;
 
-            Shader.DirtyFlag.Clear();
             ThreadCount.DirtyFlag.Clear();
         }
 
@@ -48,30 +50,26 @@ namespace lib.dx11.compute
 
         [Input(Guid = "{C0701D0B-D37F-4570-9E9A-EC2E88B919D1}")]
         public readonly InputSlot<string> DebugName = new();
-
-        public IStatusProvider.StatusLevel GetStatusLevel()
-        {
-            return string.IsNullOrEmpty(_statusWarning) ? IStatusProvider.StatusLevel.Undefined : IStatusProvider.StatusLevel.Warning;
-        }
-
-        public string GetStatusMessage()
-        {
-            return _statusWarning;
-        }
-
-        private string _statusWarning;
-        private string _sourcePath;
+        
         public IEnumerable<string> FileFilter => FileFilters;
         private static readonly string[] FileFilters = [ResourceManager.DefaultShaderFilter];
+        
         #region IShaderOperator implementation
-        private IShaderOperator<ComputeShaderD3D> ShaderOperatorImpl => this;
-        InputSlot<string> IShaderOperator<ComputeShaderD3D>.Source => Source;
-        InputSlot<string> IShaderOperator<ComputeShaderD3D>.EntryPoint => EntryPoint;
-        InputSlot<string> IShaderOperator<ComputeShaderD3D>.DebugName => DebugName;
-        Slot<ComputeShaderD3D> IShaderOperator<ComputeShaderD3D>.Shader => Shader;
-        ShaderResource<ComputeShaderD3D> IShaderOperator<ComputeShaderD3D>.ShaderResource { get; set; }
-        bool IShaderOperator<ComputeShaderD3D>.SourceIsSourceCode => false;
-        Instance IShaderOperator<ComputeShaderD3D>.Instance => this;
+        private IShaderOperator<ComputeShaderT3> ShaderOperatorImpl => this;
+        InputSlot<string> IShaderOperator<ComputeShaderT3>.Path => Source;
+        InputSlot<string> IShaderOperator<ComputeShaderT3>.EntryPoint => EntryPoint;
+        InputSlot<string> IShaderOperator<ComputeShaderT3>.DebugName => DebugName;
+
+         string IShaderOperator<ComputeShaderT3>.CachedEntryPoint { get; set; }
+
+         Slot<ComputeShaderT3> IShaderOperator<ComputeShaderT3>.ShaderSlot => Shader;
+        #endregion
+
+        #region IStatusProvider implementation
+        private readonly DefaultShaderStatusProvider _statusProviderImplementation = new ();
+        public void SetWarning(string message) => _statusProviderImplementation.Warning = message;
+        IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel() => _statusProviderImplementation.GetStatusLevel();
+        string IStatusProvider.GetStatusMessage() => _statusProviderImplementation.GetStatusMessage();
         #endregion
     }
 }

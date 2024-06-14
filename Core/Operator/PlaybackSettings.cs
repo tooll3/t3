@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core.Audio;
 using T3.Core.Model;
 using T3.Serialization;
+using T3.Core.Resource;
 
 namespace T3.Core.Operator
 {
@@ -12,6 +13,7 @@ namespace T3.Core.Operator
     /// Defines playback related settings for a symbol like its primary soundtrack or audio input device,
     /// BPM rate and other settings.
     /// </summary>
+    ///  todo - treat AudioClips the same way as timeline clips - soundtracks might be a special case
     public class PlaybackSettings
     {
         public bool Enabled { get; set; }
@@ -55,8 +57,7 @@ namespace T3.Core.Operator
             Tapping,
         }
 
-
-        public void WriteToJson(JsonTextWriter writer)
+        internal void WriteToJson(JsonTextWriter writer)
         {
             var hasSettingsForClips = Enabled || AudioClips.Count > 0;
             if (!hasSettingsForClips)
@@ -93,9 +94,9 @@ namespace T3.Core.Operator
             writer.WriteEndObject();
         }
 
-        public static PlaybackSettings ReadFromJson(JToken o, SymbolPackage symbolPackage)
+        internal static PlaybackSettings ReadFromJson(JToken o, SymbolPackage symbolPackage)
         {
-            var clips = GetClips(o, symbolPackage).ToList(); // Support legacy json format
+            var clips = GetClips(o).ToList(); // Support legacy json format
 
             var settingsToken = (JObject)o[nameof(Symbol.PlaybackSettings)];
             if (settingsToken == null && clips.Count == 0)
@@ -117,7 +118,7 @@ namespace T3.Core.Operator
                 newSettings.AudioGainFactor = JsonUtils.ReadToken(settingsToken, nameof(AudioGainFactor), 1f);
                 newSettings.AudioInputDeviceName = JsonUtils.ReadToken<string>(settingsToken, nameof(AudioInputDeviceName), null);
                 
-                newSettings.AudioClips.AddRange(GetClips(settingsToken, symbolPackage)); // Support correct format
+                newSettings.AudioClips.AddRange(GetClips(settingsToken)); // Support correct format
             }
             
             if (newSettings.Bpm == 0 && newSettings.GetMainSoundtrack(out var soundtrack))
@@ -129,14 +130,17 @@ namespace T3.Core.Operator
             return newSettings;
         }
 
-        private static IEnumerable<AudioClip> GetClips(JToken o, SymbolPackage symbolPackage)
+        private static IEnumerable<AudioClip> GetClips(JToken o)
         {
             var jAudioClipArray = (JArray)o[nameof(Symbol.PlaybackSettings.AudioClips)];
             if (jAudioClipArray != null)
             {
                 foreach (var c in jAudioClipArray)
                 {
-                    yield return AudioClip.FromJson(c, symbolPackage);
+                    if (AudioClip.TryFromJson(c, out var clip))
+                    {
+                        yield return clip;
+                    }
                 }
             }
         }

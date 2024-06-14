@@ -1,12 +1,10 @@
 #nullable enable
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Utils;
 
@@ -15,12 +13,12 @@ namespace T3.Core.Resource
     /// <summary>
     /// File handler and GPU resource generator. Should probably be split into multiple classes, but for now it is a
     /// multi-file partial class.
+    /// Todo: rename to `Resources`? for ease of use
     /// </summary>
     public sealed partial class ResourceManager
     {
         public const string ResourcesSubfolder = "Resources";
         public const char PathSeparator = '/';
-        public static readonly ConcurrentDictionary<uint, AbstractResource> ResourcesById = new();
 
         public static ResourceManager Instance() => _instance;
         private static readonly ResourceManager _instance = new();
@@ -28,10 +26,10 @@ namespace T3.Core.Resource
         static ResourceManager()
         {
         }
-
-        public static bool TryResolvePath(string relativePath, IEnumerable<IResourcePackage>? resourceContainers, out string absolutePath, out IResourcePackage? resourceContainer, bool isFolder = false)
+        
+        public static bool TryResolvePath(string relativePath, IResourceConsumer? consumer, out string absolutePath, out IResourcePackage? resourceContainer, bool isFolder = false)
         {
-            var packages = resourceContainers?.ToArray();
+            var packages = consumer?.AvailableResourcePackages.ToArray();
             if (string.IsNullOrWhiteSpace(relativePath))
             {
                 absolutePath = string.Empty;
@@ -177,10 +175,6 @@ namespace T3.Core.Resource
                 return false;
             }
         }
-
-        private uint GetNextResourceId() => Interlocked.Increment(ref _resourceIdCounter);
-
-        private uint _resourceIdCounter = 1;
 
         internal static void AddSharedResourceFolder(IResourcePackage resourcePackage, bool allowSharedNonCodeFiles)
         {

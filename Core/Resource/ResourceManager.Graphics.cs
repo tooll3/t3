@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -11,11 +12,13 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
-using T3.Core.Operator;
 using T3.Core.Resource.Dds;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
+using Texture2D = T3.Core.DataTypes.Texture2D;
+using Texture3D = T3.Core.DataTypes.Texture3D;
 
 namespace T3.Core.Resource;
 
@@ -31,172 +34,82 @@ public sealed partial class ResourceManager
         InitializeDevice(device);
     }
 
-    public void CreateRenderTargetView(uint textureId, string name, ref RenderTargetView? renderTargetView)
-    {
-        if (!ResourcesById.TryGetValue(textureId, out var resource))
-        {
-            Log.Error($"Trying to look up texture resource with id {textureId} but did not found it.");
-            return;
-        }
-
-        switch (resource)
-        {
-            case Texture2dResource texture2dResource:
-                renderTargetView?.Dispose();
-                renderTargetView = new RenderTargetView(Device, texture2dResource.Texture) { DebugName = name };
-                Log.Info($"Created render target view '{name}' for texture '{texture2dResource.Name}'.");
-                break;
-            case Texture3dResource texture3dResource:
-                renderTargetView?.Dispose();
-                renderTargetView = new RenderTargetView(Device, texture3dResource.Texture) { DebugName = name };
-                Log.Info($"Created render target view '{name}' for texture '{texture3dResource.Name}'.");
-                break;
-            default:
-                Log.Error("Trying to generate render target view from a resource that's not a texture resource");
-                break;
-        }
-    }
-
-    private static void CreateTexture2d(string filename, ref Texture2D? texture)
+    private static bool TryCreateTexture2d(Stream stream, out Texture2D? texture, [NotNullWhen(false)] out string? failureReason)
     {
         try
         {
-            ImagingFactory factory = new ImagingFactory();
-            var bitmapDecoder = new BitmapDecoder(factory, filename, DecodeOptions.CacheOnDemand);
-            var formatConverter = new FormatConverter(factory);
-            var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
+            using var factory = new ImagingFactory();
+            using var bitmapDecoder = new BitmapDecoder(factory, stream, DecodeOptions.CacheOnDemand);
+            using var formatConverter = new FormatConverter(factory);
+            using var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
             formatConverter.Initialize(bitmapFrameDecode, PixelFormat.Format32bppRGBA, BitmapDitherType.None, null, 0.0, BitmapPaletteType.Custom);
 
-            texture?.Dispose();
+            
             texture = CreateTexture2DFromBitmap(Device, formatConverter);
-            string name = Path.GetFileName(filename);
-            texture.DebugName = name;
-            bitmapFrameDecode.Dispose();
-            bitmapDecoder.Dispose();
-            formatConverter.Dispose();
-            factory.Dispose();
-            Log.Info($"Created texture '{name}' from '{filename}'");
+            failureReason = null;
+            return true;
         }
         catch (Exception e)
         {
-            Log.Info($"Info: couldn't access file '{filename}': {e.Message}.");
+            failureReason = e.Message;
+            Log.Info($"Info: couldn't access file: {e.Message}.");
+            texture = null;
+            return false;
         }
     }
-
-    public void CreateUnorderedAccessView(uint textureId, string name, ref UnorderedAccessView? unorderedAccessView)
+    
+    private static bool TryCreateTextureResourceFromFile(FileResource fileResource, Texture2D? currentValue, [NotNullWhen(true)] out Texture2D? resource, [NotNullWhen(false)] out string? failureReason)
     {
-        if (!ResourcesById.TryGetValue(textureId, out var resource))
+        var extension = fileResource.FileExtension;
+        if (!fileResource.TryOpenFileStream(out var fileStream, out failureReason, FileAccess.Read))
         {
-            Log.Error($"Trying to look up texture resource with id {textureId} but did not found it.");
-            return;
+            resource = null;
+            return false;
         }
-
-        switch (resource)
-        {
-            case Texture2dResource texture2dResource:
-                unorderedAccessView?.Dispose();
-                unorderedAccessView = new UnorderedAccessView(Device, texture2dResource.Texture) { DebugName = name };
-                Log.Info($"Created unordered resource view '{name}' for texture '{texture2dResource.Name}'.");
-                break;
-            case Texture3dResource texture3dResource:
-                unorderedAccessView?.Dispose();
-                unorderedAccessView = new UnorderedAccessView(Device, texture3dResource.Texture) { DebugName = name };
-                Log.Info($"Created unordered resource view '{name}' for texture '{texture3dResource.Name}'.");
-                break;
-            default:
-                Log.Error("Trying to generate unordered resource view from a resource that's not a texture resource");
-                break;
-        }
-    }
-
-    /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
-    public (uint textureId, uint srvResourceId) CreateTextureFromFile(string relativePath, Instance? instance, Action? fileChangeAction)
-    {
-        const uint nullResource = 0;
         
-        if (!TryResolvePath(relativePath, instance?.AvailableResourcePackages, out var path, out var relevantFileWatcher))
+        using var stream = fileStream;
+        
+        Texture2D? texture;
+        
+        if (string.Equals(extension, ".dds", StringComparison.OrdinalIgnoreCase))
         {
-            // todo - search other packages? common?
-            Log.Warning($"Couldn't find texture '{relativePath} (Resolved to '{path}'.");
-            return (nullResource, nullResource);
-        }
-
-        var fileWatcher = relevantFileWatcher?.FileWatcher;
-        var hasFileWatcher = fileWatcher != null;
-
-        if (hasFileWatcher && fileWatcher!.HooksForResourceFilePaths.TryGetValue(relativePath, out var existingHook))
-        {
-            uint textureId = existingHook.ResourceIds.First();
-            existingHook.FileChangeAction += fileChangeAction;
-            uint srvId = (from srvResourceEntry in ShaderResourceViews
-                          where srvResourceEntry.TextureId == textureId
-                          select srvResourceEntry.Id).Single();
-            return (textureId, srvId);
-        }
-
-        Texture2D? texture = null;
-        ShaderResourceView? srv = null;
-        if (path.EndsWith(".dds", StringComparison.OrdinalIgnoreCase))
-        {
-            var ddsFile = DdsFile.FromFile(path);
-            DdsDirectX.CreateTexture(ddsFile, Device, Device.ImmediateContext, out var resource, out srv);
-            texture = (Texture2D)resource;
+            var ddsFile = DdsFile.FromStream(stream);
+            try
+            {
+                DdsDirectX.CreateTexture(ddsFile, Device, Device.ImmediateContext, out var dxTextureResource, out var srv);
+                srv?.Dispose();
+                var dxTex = (SharpDX.Direct3D11.Texture2D)dxTextureResource;
+                texture = new Texture2D(dxTex);
+            }
+            catch (Exception e)
+            {
+                failureReason = $"Failed to create texture from DDS: {e}";
+                resource = null;
+                return false;
+            }
         }
         else
         {
-            CreateTexture2d(path, ref texture);
+            if (!TryCreateTexture2d(stream, out texture, out failureReason))
+            {
+                resource = null;
+                return false;
+            }
         }
-
-        var fileName = Path.GetFileName(path);
-        var textureResourceEntry = new Texture2dResource(GetNextResourceId(), fileName, texture);
-        ResourcesById.TryAdd(textureResourceEntry.Id, textureResourceEntry);
-
-        uint srvResourceId;
-        if (srv == null)
+        
+        if (texture == null)
         {
-            srvResourceId = CreateShaderResourceView(textureResourceEntry.Id, fileName);
+            failureReason = "Failed to create texture";
+            resource = null;
+            return false;
         }
-        else
-        {
-            var textureViewResourceEntry = new ShaderResourceViewResource(GetNextResourceId(), fileName, srv, textureResourceEntry.Id);
-            ResourcesById.TryAdd(textureViewResourceEntry.Id, textureViewResourceEntry);
-            ShaderResourceViews.Add(textureViewResourceEntry);
-            srvResourceId = textureViewResourceEntry.Id;
-        }
-
-        if (hasFileWatcher)
-        {
-            var hook = new ResourceFileHook(relativePath, new[] { textureResourceEntry.Id, srvResourceId });
-            hook.FileChangeAction += fileChangeAction;
-            fileWatcher!.HooksForResourceFilePaths.TryAdd(relativePath, hook);
-        }
-
-        return (textureResourceEntry.Id, srvResourceId);
+        
+        texture.Name = fileResource.FileInfo?.Name;
+        resource = texture;
+        failureReason = null;
+        return true;
     }
-
-    public void UpdateTextureFromFile(uint textureId, string path, ref Texture2D? texture)
-    {
-        ResourcesById.TryGetValue(textureId, out var resource);
-        if (resource is Texture2dResource textureResource)
-        {
-            CreateTexture2d(path, ref textureResource.Texture);
-            texture = textureResource.Texture;
-        }
-    }
-
-    /**
-         * Returns a textureViewResourceEntryId
-         */
-    private uint CreateShaderResourceView(uint textureId, string name)
-    {
-        ShaderResourceView? textureView = null;
-        CreateShaderResourceView(textureId, name, ref textureView);
-        var textureViewResourceEntry = new ShaderResourceViewResource(GetNextResourceId(), name, textureView, textureId);
-        ResourcesById.TryAdd(textureViewResourceEntry.Id, textureViewResourceEntry);
-        ShaderResourceViews.Add(textureViewResourceEntry);
-        return textureViewResourceEntry.Id;
-    }
-
+    
     public static void CreateStructuredBufferUav(Buffer? buffer, UnorderedAccessViewBufferFlags bufferFlags, ref UnorderedAccessView? uav)
     {
         if (buffer == null)
@@ -374,7 +287,7 @@ public sealed partial class ResourceManager
         buffer ??= new Buffer(Device, bufferDesc);
     }
 
-    public static void SetupConstBuffer<T>(T bufferData, ref Buffer? buffer) where T : struct
+    public static void SetupConstBuffer<T>(T bufferData, [NotNull] ref Buffer? buffer) where T : struct
     {
         using var data = new DataStream(Marshal.SizeOf(typeof(T)), true, true);
 
@@ -417,106 +330,98 @@ public sealed partial class ResourceManager
         DefaultSamplerState = new SamplerState(device, samplerDesc);
     }
 
-    public void CreateShaderResourceView(uint textureId, string name, ref ShaderResourceView? shaderResourceView)
+    public static void CreateShaderResourceView<T>(T resource, string? name, [NotNullWhen(true)] ref ShaderResourceView? shaderResourceView)
+    where T : AbstractTexture
     {
-        if (!ResourcesById.TryGetValue(textureId, out var resource))
-        {
-            Log.Error($"Trying to look up texture resource with id {textureId} but did not found it.");
-            return;
-        }
-
-        switch (resource)
-        {
-            case Texture2dResource texture2dResource:
-                shaderResourceView?.Dispose();
-                shaderResourceView = new ShaderResourceView(Device, texture2dResource.Texture) { DebugName = name };
-                Log.Info($"Created shader resource view '{name}' for texture '{texture2dResource.Name}'.");
-                break;
-            case Texture3dResource texture3dResource:
-                shaderResourceView?.Dispose();
-                shaderResourceView = new ShaderResourceView(Device, texture3dResource.Texture) { DebugName = name };
-                Log.Info($"Created shader resource view '{name}' for texture '{texture3dResource.Name}'.");
-                break;
-            default:
-                Log.Error("Trying to generate shader resource view from a resource that's not a texture resource");
-                break;
-        }
+        CreateTextureView(resource, name, ref shaderResourceView, 
+                                    constructor: (device, texture) => new ShaderResourceView(device, texture));
     }
 
-    public bool CreateTexture2d(Texture2DDescription description, string name, ref uint id, ref Texture2D? texture)
+    public static void CreateRenderTargetView<T>(T resource, string? name, ref RenderTargetView? renderTargetView)
+        where T : AbstractTexture
     {
-        if (texture != null)
-        {
-            bool descriptionMatches;
-            try
-            {
-                descriptionMatches = texture.Description.Equals(description);
-            }
-            catch
-            {
-                descriptionMatches = false;
-            }
-
-            if (descriptionMatches)
-            {
-                return false; // no change
-            }
-        }
-
-        ResourcesById.TryGetValue(id, out var resource);
-
-        if (resource is not Texture2dResource texture2dResource)
-        {
-            // no entry so far, if texture is also null then create a new one
-            texture ??= new Texture2D(Device, description);
-
-            // new texture, create resource entry
-            texture2dResource = new Texture2dResource(GetNextResourceId(), name, texture);
-            ResourcesById.TryAdd(texture2dResource.Id, texture2dResource);
-        }
-        else
-        {
-            texture2dResource.Texture?.Dispose();
-            texture2dResource.Texture = new Texture2D(Device, description);
-            texture = texture2dResource.Texture;
-        }
-
-        id = texture2dResource.Id;
-
-        return true;
+        CreateTextureView(resource, name, ref renderTargetView, 
+                             constructor: (device, texture) => new RenderTargetView(device, texture));
     }
 
-    public bool CreateTexture3d(Texture3DDescription description, string name, ref uint id, ref Texture3D? texture)
+    public static void CreateUnorderedAccessView<T>(T resource, string? name, ref UnorderedAccessView? unorderedAccessView)
+        where T : AbstractTexture
     {
-        if (texture != null && texture.Description.Equals(description))
-        {
-            return false; // no change
-        }
-
-        ResourcesById.TryGetValue(id, out var resource);
-
-        if (resource is not Texture3dResource texture3dResource)
-        {
-            // no entry so far, if texture is also null then create a new one
-            texture ??= new Texture3D(Device, description);
-
-            // new texture, create resource entry
-            texture3dResource = new Texture3dResource(GetNextResourceId(), name, texture);
-            ResourcesById.TryAdd(texture3dResource.Id, texture3dResource);
-        }
-        else
-        {
-            texture3dResource.Texture?.Dispose();
-            texture3dResource.Texture = new Texture3D(Device, description);
-            texture = texture3dResource.Texture;
-        }
-
-        id = texture3dResource.Id;
-
-        return true;
+        CreateTextureView(resource, name, ref unorderedAccessView, 
+                             constructor: (device, texture) => new UnorderedAccessView(device, texture));
+    }
+    
+    private static void CreateTextureView<T>(AbstractTexture resource, string? name, ref T? view, Func<Device, AbstractTexture, T> constructor) where T : ResourceView
+    {
+        view?.Dispose();
+        view = constructor(Device, resource);
+        view.DebugName = name;
     }
 
-    private static readonly List<ShaderResourceViewResource> ShaderResourceViews = new();
+    public static Texture2D CreateTexture2D(Texture2DDescription description, DataRectangle[]? dataRectangles = null)
+    {
+        var dxTexture = new SharpDX.Direct3D11.Texture2D(Device, description, dataRectangles);
+        return new Texture2D(dxTexture);
+    }
+
+    public static Texture3D CreateTexture3D(Texture3DDescription description)
+    {
+        var dxTexture = new SharpDX.Direct3D11.Texture3D(Device, description);
+        return new Texture3D(dxTexture);
+    }
+
+    public static bool ReplaceTexture2DIfNeeded(Texture2DDescription description, [NotNullWhen(true)] ref Texture2D? texture)
+    {
+        var shouldCreateNew = texture == null;
+        SharpDX.Direct3D11.Texture2D dxTexture = texture;
+        try
+        {
+            shouldCreateNew = shouldCreateNew || !EqualityComparer<Texture2DDescription>.Default.Equals(dxTexture!.Description, description);
+        }
+        catch (Exception e)
+        {
+            shouldCreateNew = true;
+            Log.Warning($"Failed to get texture description: {e}");
+        }
+
+        if (shouldCreateNew)
+        {
+            texture?.Dispose();
+            texture = CreateTexture2D(description);
+            return true;
+        }
+
+        // unchanged
+        return false;
+    }
+
+    public static bool CreateTexture3d(Texture3DDescription description, [NotNullWhen(true)] ref Texture3D? texture)
+    {
+        var shouldCreateNew = texture == null;
+        try
+        {
+            if (texture != null)
+            {
+                shouldCreateNew = shouldCreateNew || !EqualityComparer<Texture3DDescription>.Default.Equals(texture.Description, description);
+            }
+        }
+        catch (Exception e)
+        {
+            shouldCreateNew = true;
+            Log.Warning($"Failed to get texture description: {e}");
+        }
+
+        if (shouldCreateNew)
+        {
+            texture?.Dispose();
+            texture = CreateTexture3D(description);
+            return true;
+        }
+
+        // unchanged
+        return false;
+    }
+
     private Device _device = null!;
     public SamplerState DefaultSamplerState { get; private set; } = null!;
 
@@ -549,6 +454,7 @@ public sealed partial class ResourceManager
             stride /= 2;
         }
 
-        return new Texture2D(device, texDesc, dataRectangles);
+        var dxTexture = new SharpDX.Direct3D11.Texture2D(device, texDesc, dataRectangles);
+        return new Texture2D(dxTexture);
     }
 }

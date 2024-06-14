@@ -1,4 +1,5 @@
 
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using T3.Core.Logging;
 
@@ -6,13 +7,19 @@ namespace Utils
 {
     public class BmFontDescription
     {
-        public static BmFontDescription InitializeFromFile(string filepath)
+        public static bool TryInitializeFromFile(string filepath, [NotNullWhen(true)] out BmFontDescription? fontDescription)
         {
             if (_fontDescriptionForFilePaths == null || filepath == null)
-                return null;
+            {
+                fontDescription = null;
+                return false;
+            }
 
             if (_fontDescriptionForFilePaths.TryGetValue(filepath, out var font))
-                return font;
+            {
+                fontDescription = font;
+                return true;
+            }
             
             Font bmFont;
             try
@@ -26,14 +33,15 @@ namespace Utils
             catch (Exception e)
             {
                 Log.Error($"Failed to load font {filepath} " + e + "\n" + e.Message);
-                return null;
+                fontDescription = null;
+                return false;
             }
 
-            var newFontDescription = new BmFontDescription(bmFont);
-            _fontDescriptionForFilePaths[filepath] = newFontDescription;
+            fontDescription = new BmFontDescription(bmFont);
+            _fontDescriptionForFilePaths[filepath] = fontDescription;
             
             
-            return newFontDescription;
+            return true;
         }
 
         private BmFontDescription(Font bmFont)

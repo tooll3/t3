@@ -1,6 +1,8 @@
+#nullable enable
 using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -27,8 +29,28 @@ namespace lib.io.file
 
         public LoadSvg()
         {
+            _svgResource = new Resource<SvgDocument>(FilePath, TryLoad);
             ResultList.UpdateAction = Update;
             _pointListWithSeparator.TypedElements[_pointListWithSeparator.NumElements - 1] = Point.Separator();
+        }
+
+        private bool TryLoad(FileResource file, SvgDocument? currentValue, 
+                             [NotNullWhen(true)] out SvgDocument? newValue, 
+                             [NotNullWhen(false)] out string? failureReason)
+        {
+            _dirtyFile = true;
+            try
+            {
+                newValue = SvgDocument.Open<SvgDocument>(file.AbsolutePath, null);
+                failureReason = null;
+                return true;
+            }
+            catch (Exception e)
+            {
+                failureReason = $"Failed to load svg document {file.AbsolutePath}:" + e.Message;
+                newValue = null;
+                return false;
+            }
         }
 
         private struct GraphicsPathEntry
@@ -39,43 +61,35 @@ namespace lib.io.file
 
         private void Update(EvaluationContext context)
         {
-            var filepath = FilePath.GetValue(context);
-            if (!TryGetFilePath(filepath, out var fullPath))
+            var needsUpdate = _dirtyFile || Scale.IsDirty || CenterToBounds.IsDirty || ScaleToBounds.IsDirty ||  ImportAs.IsDirty || ReduceFactor.IsDirty;
+            if (!needsUpdate)
+                return;
+            
+            if(!_svgResource.TryGetValue(out var svgDoc))
             {
-                Log.Debug($"File {filepath} doesn't exist", this);
+                _pointListWithSeparator.SetLength(0);
+                ResultList.Value = _pointListWithSeparator;
                 return;
             }
             
-            ResourceFileWatcher.AddFileHook(fullPath, () => {FilePath.DirtyFlag.Invalidate();});
-
             var centerToBounds = CenterToBounds.GetValue(context);
             var scaleToBounds = ScaleToBounds.GetValue(context);
-            SvgDocument svgDoc;
-            try
-            {
-                svgDoc = SvgDocument.Open<SvgDocument>(fullPath, null);
-            }
-            catch (Exception e)
-            {
-                Log.Warning($"Failed to load svg document {fullPath}:" + e.Message);
-                return;
-            }
 
             var bounds = new Vector3(svgDoc.Bounds.Size.Width, svgDoc.Bounds.Size.Height, 0);
             var centerOffset = centerToBounds ? new Vector3(-bounds.X / 2, bounds.Y / 2, 0) : Vector3.Zero;
             var fitBoundsFactor = scaleToBounds ? (2f / bounds.Y) : 1;
             var scale = Scale.GetValue(context) * fitBoundsFactor;
-            _importAsLines = ImportAs.GetValue(context) == 0;
-            _reduceFactor = ReduceFactor.GetValue(context).Clamp(0.001f, 1f);
+            var importAsLines = ImportAs.GetValue(context) == 0;
+            var reduceFactor = ReduceFactor.GetValue(context).Clamp(0.001f, 1f);
 
             var svgElements = svgDoc.Descendants();
-            var pathElements = ConvertAllNodesIntoGraphicPaths(svgElements);
+            var pathElements = ConvertAllNodesIntoGraphicPaths(svgElements, importAsLines);
 
             // Flatten and sum total point count including separators 
             var totalPointCount = 0;
             foreach (var p in pathElements)
             {
-                p.GraphicsPath.Flatten(null, _reduceFactor);
+                p.GraphicsPath.Flatten(null, reduceFactor);
                 var closePoint = p.NeedsClosing ? 1 : 0;
                 totalPointCount += p.GraphicsPath.PointCount + 1 + closePoint;
             }
@@ -142,7 +156,6 @@ namespace lib.io.file
                 pointIndex++;
             }
 
-            Log.Debug($"Loaded svg {filepath} with {pointIndex} points", this);
 
             ResultList.Value = _pointListWithSeparator;
         }
@@ -152,7 +165,7 @@ namespace lib.io.file
             return Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), (float)(Math.Atan2(p1.X - p2.X, -(p1.Y - p2.Y)) + Math.PI / 2));
         }
 
-        private List<GraphicsPathEntry> ConvertAllNodesIntoGraphicPaths(IEnumerable<SvgElement> nodes)
+        private List<GraphicsPathEntry> ConvertAllNodesIntoGraphicPaths(IEnumerable<SvgElement> nodes, bool importAsLines)
         {
             var paths = new List<GraphicsPathEntry>();
 
@@ -226,7 +239,7 @@ namespace lib.io.file
                         paths.Add(new GraphicsPathEntry
                                       {
                                           GraphicsPath = graphicsPath,
-                                          NeedsClosing = needsClosing && _importAsLines
+                                          NeedsClosing = needsClosing && importAsLines
                                       });
                         break;
                     }
@@ -236,9 +249,8 @@ namespace lib.io.file
             return paths;
         }
 
+        private readonly Resource<SvgDocument> _svgResource;
         private readonly StructuredList<Point> _pointListWithSeparator = new(101);
-        private bool _importAsLines;
-        private float _reduceFactor = 0.5f;
 
         [Input(Guid = "EF2A461D-C66D-44D8-8B0E-E48A57EC991F")]
         public readonly InputSlot<string> FilePath = new();
@@ -265,5 +277,6 @@ namespace lib.io.file
         }
 
         private static ISvgRenderer _svgRenderer;
+        private bool _dirtyFile;
     }
 }

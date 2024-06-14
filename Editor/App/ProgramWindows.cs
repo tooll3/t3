@@ -13,6 +13,8 @@ using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.SystemUi;
 using Device = SharpDX.Direct3D11.Device;
+using PixelShader = T3.Core.DataTypes.PixelShader;
+using VertexShader = T3.Core.DataTypes.VertexShader;
 
 namespace T3.Editor.App;
 
@@ -36,8 +38,8 @@ internal static class ProgramWindows
         ImGuiDx11RenderForm.InputMethods = messageHandlers;
     }
 
-    public static void SetVertexShader(ShaderResource<VertexShader> resource) => _deviceContext.VertexShader.Set(resource.Shader);
-    public static void SetPixelShader(ShaderResource<PixelShader> resource) => _deviceContext.PixelShader.Set(resource.Shader);
+    public static void SetVertexShader(Resource<VertexShader> resource) => _deviceContext.VertexShader.Set(resource.Value);
+    public static void SetPixelShader(Resource<PixelShader> resource) => _deviceContext.PixelShader.Set(resource.Value);
 
     internal static void HandleFullscreenToggle()
     {

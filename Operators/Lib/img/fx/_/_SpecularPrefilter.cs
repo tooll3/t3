@@ -12,6 +12,9 @@ using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
+using PixelShader = T3.Core.DataTypes.PixelShader;
+using VertexShader = T3.Core.DataTypes.VertexShader;
+using GeometryShader = T3.Core.DataTypes.GeometryShader;
 
 namespace lib.img.fx._
 {
@@ -398,17 +401,17 @@ namespace lib.img.fx._
         private SamplerState[] _samplerStates = new SamplerState[0];
 
         // VS
-        private VertexShader _prevVertexShader;
+        private SharpDX.Direct3D11.VertexShader _prevVertexShader;
         private Buffer[] _prevVsConstantBuffers;
         private ShaderResourceView[] _prevVsShaderResourceViews;
 
         // GS
-        private GeometryShader _prevGeometryShader;
+        private SharpDX.Direct3D11.GeometryShader _prevGeometryShader;
         private Buffer[] _prevGsConstantBuffers;
         private ShaderResourceView[] _prevGsShaderResourceViews;
 
         // PS
-        private PixelShader _prevPixelShader;
+        private SharpDX.Direct3D11.PixelShader _prevPixelShader;
         private Buffer[] _prevPsConstantBuffers;
         private ShaderResourceView[] _prevPsShaderResourceViews;
         private SamplerState[] _prevPsSamplerStates = new SamplerState[0];

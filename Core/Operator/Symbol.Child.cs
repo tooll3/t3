@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
-using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace T3.Core.Operator
 {

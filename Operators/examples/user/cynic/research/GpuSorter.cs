@@ -7,6 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using ComputeShader = T3.Core.DataTypes.ComputeShader;
 
 namespace examples.user.cynic.research
 {
@@ -19,6 +20,11 @@ namespace examples.user.cynic.research
         public GpuSorter()
         {
             Command.UpdateAction = Update;
+            _sortShaderResource = ResourceManager.CreateShaderResource<ComputeShader>("Resources/proj-partial/particle/bitonic-sort.hlsl", this, () => "bitonicSort");
+            _transposeShaderResource = ResourceManager.CreateShaderResource<ComputeShader>("Resources//proj-partial/particle/bitonic-transpose.hlsl", this, () => "transpose");
+
+            ResourceManager.SetupConstBuffer(Int4.Zero, ref _parameterConstBuffer);
+            _parameterConstBuffer.DebugName = "GpuSort-ParameterConstBuffer";
         }
 
         private void Update(EvaluationContext context)
@@ -45,8 +51,8 @@ namespace examples.user.cynic.research
 
             var prevShader = csStage.Get();
             var prevConstBuffer = csStage.GetConstantBuffers(0, 1)[0];
-            ComputeShader sortShader = _sortShaderResource.Shader;
-            ComputeShader transposeShader = _transposeShaderResource.Shader;
+            ComputeShader sortShader = _sortShaderResource;
+            ComputeShader transposeShader = _transposeShaderResource;
             csStage.Set(sortShader);
             csStage.SetConstantBuffer(0, _parameterConstBuffer);
             csStage.SetUnorderedAccessView(0, uav1);
@@ -154,46 +160,11 @@ namespace examples.user.cynic.research
 
         public void Init()
         {
-            var resourceManager = ResourceManager.Instance();
-
-            if (_sortShaderResource == null)
-            {
-                string sourcePath = @"Resources\proj-partial\particle\bitonic-sort.hlsl";
-                string entryPoint = "bitonicSort";
-                string debugName = "bitonic-sort";
-                resourceManager.TryCreateShaderResource(resource: out _sortShaderResource, 
-                                                        relativePath: sourcePath, 
-                                                        instance: this,
-                                                        reason: out var errorMessage, 
-                                                        name: debugName, 
-                                                        entryPoint: entryPoint);
-            }
-
-            if (_transposeShaderResource == null)
-            {
-                string sourcePath = @"Resources\proj-partial\particle\bitonic-transpose.hlsl";
-                string entryPoint = "transpose";
-                string debugName = "bitonic-transpose";
-                resourceManager.TryCreateShaderResource(resource: out _transposeShaderResource, 
-                                                        relativePath: sourcePath, 
-                                                        instance: this,
-                                                        reason: out var errorMessage, 
-                                                        name: debugName, 
-                                                        entryPoint: entryPoint);
-            }
-
-            InitConstBuffer();
-        }
-
-        private void InitConstBuffer()
-        {
-            ResourceManager.SetupConstBuffer(Int4.Zero, ref _parameterConstBuffer);
-            _parameterConstBuffer.DebugName = "GpuSort-ParameterConstBuffer";
         }
 
         private Buffer _parameterConstBuffer;
-        private ShaderResource<ComputeShader> _sortShaderResource;
-        private ShaderResource<ComputeShader> _transposeShaderResource;
+        private readonly Resource<ComputeShader> _sortShaderResource;
+        private readonly Resource<ComputeShader> _transposeShaderResource;
 
         [Input(Guid = "37dddd93-2b54-4598-aaca-40710ed06417")]
         public readonly InputSlot<SharpDX.Direct3D11.UnorderedAccessView> BufferUav = new();

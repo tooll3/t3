@@ -1,8 +1,8 @@
 using System.IO;
 using ImGuiNET;
-using SharpDX.Direct3D11;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;

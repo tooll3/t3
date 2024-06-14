@@ -1,26 +1,23 @@
 using System.Runtime.InteropServices;
+using lib.Utils;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using GeometryShaderD3D = SharpDX.Direct3D11.GeometryShader;
+using GeometryShaderD3D = T3.Core.DataTypes.GeometryShader;
 
 namespace lib.dx11._
 {
 	[Guid("a908cc64-e8cb-490c-ae45-c2c5fbfcedfb")]
-    public class GeometryShader : Instance<GeometryShader>, IShaderOperator<GeometryShaderD3D>
+    public class GeometryShader : Instance<GeometryShader>, IShaderOperator<GeometryShaderD3D>, IStatusProvider
     {
         [Output(Guid = "85B65C27-D5B3-4FE1-88AF-B1F6ABAA4515")]
         public readonly Slot<GeometryShaderD3D> Shader = new();
 
         public GeometryShader()
         {
-            Shader.UpdateAction = Update;
-        }
-
-        private void Update(EvaluationContext context)
-        {
-            var updated = ShaderOperatorImpl.TryUpdateShader(context, ref _cachedSource, out _warning);
+            ShaderOperatorImpl.Initialize();
         }
 
         [Input(Guid = "258c53e6-7708-49b7-88e2-1e40d2a4f88d")]
@@ -36,13 +33,19 @@ namespace lib.dx11._
         
         #region IShaderOperator implementation
         private IShaderOperator<GeometryShaderD3D> ShaderOperatorImpl => this;
-        InputSlot<string> IShaderOperator<GeometryShaderD3D>.Source => Source;
+        InputSlot<string> IShaderOperator<GeometryShaderD3D>.Path => Source;
+        Slot<GeometryShaderD3D> IShaderOperator<GeometryShaderD3D>.ShaderSlot => Shader;
         InputSlot<string> IShaderOperator<GeometryShaderD3D>.EntryPoint => EntryPoint;
         InputSlot<string> IShaderOperator<GeometryShaderD3D>.DebugName => DebugName;
-        Slot<GeometryShaderD3D> IShaderOperator<GeometryShaderD3D>.Shader => Shader;
-        ShaderResource<GeometryShaderD3D> IShaderOperator<GeometryShaderD3D>.ShaderResource { get; set; }
-        bool IShaderOperator<GeometryShaderD3D>.SourceIsSourceCode => false;
-        Instance IShaderOperator<GeometryShaderD3D>.Instance => this;
+        #endregion
+        
+        
+        #region IStatusProvider implementation
+        private readonly DefaultShaderStatusProvider _statusProviderImplementation = new ();
+        public void SetWarning(string message) => _statusProviderImplementation.Warning = message;
+        string IShaderOperator<GeometryShaderD3D>.CachedEntryPoint { get; set; }
+        IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel() => _statusProviderImplementation.GetStatusLevel();
+        string IStatusProvider.GetStatusMessage() => _statusProviderImplementation.GetStatusMessage();
         #endregion
     }
 }

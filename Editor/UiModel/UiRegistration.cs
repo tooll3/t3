@@ -7,7 +7,6 @@ using T3.Core.DataTypes;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Rendering.Material;
-using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
@@ -15,8 +14,14 @@ using T3.Editor.Gui.InputUi.SingleControl;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using ComputeShader = T3.Core.DataTypes.ComputeShader;
+using GeometryShader = T3.Core.DataTypes.GeometryShader;
 using Int3 = T3.Core.DataTypes.Vector.Int3;
+using PixelShader = T3.Core.DataTypes.PixelShader;
 using Point = T3.Core.DataTypes.Point;
+using Texture2D = T3.Core.DataTypes.Texture2D;
+using Texture3D = T3.Core.DataTypes.Texture3D;
+using VertexShader = T3.Core.DataTypes.VertexShader;
 
 namespace T3.Editor.UiModel;
 

@@ -10,6 +10,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows.Utilities;
 using T3.Serialization;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis
@@ -106,7 +107,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 var filter = request.Filter;
                 var value = request.Value;
                 
-                var drawnItems = ResourceManager.EnumerateResources(filter, request.IsFolder, request.ResourcePackages, ResourceManager.PathMode.Aliased);
+                var drawnItems = ResourceManager.EnumerateResources(filter, request.IsFolder, request.ResourcePackageContainer.AvailableResourcePackages, ResourceManager.PathMode.Aliased);
                 
                 var args = new InputWithTypeAheadSearch.Args<string>("##filePathSearch", drawnItems, GetTextInfo, request.ShowWarning);
                 var changed = InputWithTypeAheadSearch.Draw(args, ref value, out _);
@@ -121,16 +122,24 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
         
         private readonly record struct InputResult(bool Modified, string Value);
 
-        private readonly record struct InputRequest(string Value, string[] Filter, bool IsFolder, bool ShowWarning, IEnumerable<IResourcePackage> ResourcePackages);
+        private readonly record struct InputRequest(string Value, string[] Filter, bool IsFolder, bool ShowWarning, IResourceConsumer ResourcePackageContainer);
 
-        private static InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string value, string filter, Func<InputRequest, InputResult> draw)
+        private static unsafe InputEditStateFlags DrawFileInput(FileOperations.FilePickerTypes type, ref string value, string filter, Func<InputRequest, InputResult> draw)
         {
             ImGui.SetNextItemWidth(-70);
 
             var selectedInstances = GraphWindow.Focused!.GraphCanvas.NodeSelection.GetSelectedInstances().ToArray();
-            var packagesInCommon = selectedInstances.PackagesInCommon().ToArray();
+            var needsToGatherPackages = _searchResourceConsumer is null 
+                                        || selectedInstances.Length != _selectedInstances.Length 
+                                        || !selectedInstances.Except(_selectedInstances).Any();
+            if (needsToGatherPackages)
+            {
+                var packagesInCommon = selectedInstances.PackagesInCommon().ToArray();
+                _searchResourceConsumer = new TempResourceConsumer(packagesInCommon);
+            }
+            
             var isFolder = type == FileOperations.FilePickerTypes.Folder;
-            var exists = ResourceManager.TryResolvePath(value, packagesInCommon, out _, out _, isFolder);
+            var exists = ResourceManager.TryResolvePath(value, _searchResourceConsumer, out _, out _, isFolder);
             
             var warning = type switch
                               {
@@ -167,7 +176,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                                      .Distinct()
                                      .ToArray();
 
-            var result = draw(new InputRequest(value, fileFiltersInCommon, isFolder, ShowWarning: !exists, packagesInCommon));
+            var result = draw(new InputRequest(value, fileFiltersInCommon, isFolder, ShowWarning: !exists, _searchResourceConsumer));
             value = result.Value;
             var inputEditStateFlags = result.Modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
 
@@ -186,7 +195,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             
             if (ImGui.Button("...##fileSelector"))
             {
-                OpenFileManager(type, packagesInCommon, fileFiltersInCommon, isFolder, async: true);
+                OpenFileManager(type, _searchResourceConsumer.AvailableResourcePackages, fileFiltersInCommon, isFolder, async: true);
             }
             
             if (fileManagerOpen)
@@ -407,5 +416,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
         private static bool _fileManagerOpen;
         private static readonly object _fileManagerResultLock = new();
         private static bool _hasClosedFileManager;
+        private static Instance[] _selectedInstances = [];
+        private static TempResourceConsumer? _searchResourceConsumer;
     }
 }

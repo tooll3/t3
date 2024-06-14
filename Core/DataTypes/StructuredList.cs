@@ -10,6 +10,7 @@ using T3.Core.Model;
 
 namespace T3.Core.DataTypes
 {
+    // todo - optimize with spans to prevent needing new arrays
     public abstract class StructuredList
     {
         public StructuredList(Type type)

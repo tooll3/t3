@@ -121,7 +121,7 @@ internal sealed partial class Conversion
 
         static void AddShaderUsingStatement(ref string s, string shaderTypeName, string replacement)
         {
-            const string shaderUsingStatementFmt = "using {0} = SharpDX.Direct3D11.{1};";
+            const string shaderUsingStatementFmt = "using {0} = T3.Core.DataTypes.{1};";
             var usingStatement = string.Format(shaderUsingStatementFmt, replacement, shaderTypeName);
 
             if (!s.Contains(usingStatement))

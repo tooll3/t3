@@ -2,6 +2,8 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.Resource;
 using T3.Editor.Gui.Graph.Rendering;
+using ComputeShader = T3.Core.DataTypes.ComputeShader;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
@@ -140,7 +142,7 @@ internal static class TextureReadAccess
 
         for (var i = 0; i < CpuAccessTextureCount; ++i)
         {
-            _imagesWithCpuAccess.Add(new Texture2D(ResourceManager.Device, cpuAccessDescription));
+            _imagesWithCpuAccess.Add(ResourceManager.CreateTexture2D(cpuAccessDescription));
         }
 
         // Create format conversion texture
@@ -157,8 +159,8 @@ internal static class TextureReadAccess
                                                 CpuAccessFlags = CpuAccessFlags.None,
                                                 ArraySize = 1
                                             };
-        _conversionTexture = new Texture2D(ResourceManager.Device, convertTextureDescription);
-        _conversionUav = new UnorderedAccessView(ResourceManager.Device, _conversionTexture);
+        _conversionTexture = ResourceManager.CreateTexture2D(convertTextureDescription);
+        ResourceManager.CreateUnorderedAccessView(_conversionTexture, "textureReadAccessUav", ref _conversionUav);
     }
 
     #region conversion shader
@@ -170,17 +172,12 @@ internal static class TextureReadAccess
         const string sourcePath = @"img\ConvertFormat-cs.hlsl";
         const string entryPoint = "main";
         const string debugName = "resolve-convert-texture-format";
-        var resourceManager = ResourceManager.Instance();
 
-        var success = resourceManager.TryCreateShaderResource(out _convertComputeShaderResource,
-                                                              relativePath: sourcePath,
-                                                              entryPoint: entryPoint,
-                                                              name: debugName,
-                                                              instance: null,
-                                                              reason: out var errorMessage);
+        _convertComputeShaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, null, () => entryPoint);
+       
 
-        if (!success || !string.IsNullOrWhiteSpace(errorMessage))
-            Log.Error($"Failed to initialize video conversion shader: {errorMessage}");
+        if (_convertComputeShaderResource.Value == null)
+            Log.Error($"Failed to initialize video conversion shader");
     }
 
     private static void ConvertTextureToRgba(Texture2D inputTexture)
@@ -194,7 +191,7 @@ internal static class TextureReadAccess
         var prevUavs = csStage.GetUnorderedAccessViews(0, 1);
         var prevSrvs = csStage.GetShaderResources(0, 1);
 
-        var convertShader = _convertComputeShaderResource.Shader;
+        var convertShader = _convertComputeShaderResource.Value;
         csStage.Set(convertShader);
 
         const int threadNumX = 16, threadNumY = 16;
@@ -212,7 +209,7 @@ internal static class TextureReadAccess
         csStage.Set(prevShader);
     }
 
-    private static ShaderResource<SharpDX.Direct3D11.ComputeShader> _convertComputeShaderResource;
+    private static Resource<ComputeShader> _convertComputeShaderResource;
     #endregion
 
     private static readonly List<ReadRequestItem> _readRequests = new(3);

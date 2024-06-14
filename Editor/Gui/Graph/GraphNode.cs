@@ -21,6 +21,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 using Color = T3.Core.DataTypes.Vector.Color;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
@@ -838,7 +839,7 @@ namespace T3.Editor.Gui.Graph
                 return;
 
             var firstOutput = instance.Outputs[0];
-            if (!(firstOutput is Slot<Texture2D> textureSlot))
+            if (firstOutput is not Slot<Texture2D> textureSlot)
                 return;
 
             var texture = textureSlot.Value;

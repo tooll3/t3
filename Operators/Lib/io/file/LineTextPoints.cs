@@ -35,34 +35,61 @@ namespace lib.io.file
 
         public LineTextPoints()
         {
+            _svgResource = new Resource<SvgDocument>(FilePath, TryLoadSvg);
             ResultList.UpdateAction = Update;
             _pointListWithSeparator.TypedElements[_pointListWithSeparator.NumElements - 1] = Point.Separator();
         }
 
-        private readonly List<float> _lineWidths = new(10);
+        private bool TryLoadSvg(FileResource file, SvgDocument? currentvalue, out SvgDocument? newvalue, out string? failurereason)
+        {
+            _svgFileUpdated = true;
+            
+            try
+            {
+                newvalue = SvgDocument.Open<SvgDocument>(file.AbsolutePath, null);
+                failurereason = null;
+                return true;
+            }
+            catch (Exception e)
+            {
+                newvalue = null;
+                failurereason = $"Failed to load svg file:" + e.Message;
+                return false;
+            }
+        }
 
         private void Update(EvaluationContext context)
         {
-            var fontNeedsUpdate = FilePath.DirtyFlag.IsDirty || ReduceCurveThreshold.DirtyFlag.IsDirty || CornerWeightBalance.DirtyFlag.IsDirty;
-            var reduceThreshold = ReduceCurveThreshold.GetValue(context);
-            var cornerBalance = CornerWeightBalance.GetValue(context);
+            var fontNeedsUpdate = _svgFileUpdated || ReduceCurveThreshold.DirtyFlag.IsDirty || CornerWeightBalance.DirtyFlag.IsDirty;
+
+            if (fontNeedsUpdate)
+            {
+                var lineFontKey = new LineFontDefinition(Key: FilePath.GetValue(context),
+                                                         ReduceCurveThreshold: ReduceCurveThreshold.GetValue(context),
+                                                         CornerBalance: CornerWeightBalance.GetValue(context));
+                _svgFileUpdated = false;
+
+                if (!_svgResource.TryGetValue(out var svgDoc))
+                {
+                    ResultList.Value = null;
+                    return;
+                }
+
+                _lineFont = LineFont.Create(svgDoc, _lineFontKey, lineFontKey, this);
+                _lineFontKey = lineFontKey;
+            }
             
-            var filepath = FilePath.GetValue(context);
-            if (!TryGetFilePath(filepath, out var fullPath))
-            {
-                Log.Debug($"File {filepath} doesn't exist", this);
+            var needsUpdate = fontNeedsUpdate
+                                || Text.DirtyFlag.IsDirty
+                                || Position.DirtyFlag.IsDirty
+                                || Size.DirtyFlag.IsDirty
+                                || LineHeight.DirtyFlag.IsDirty
+                                || VerticalAlign.DirtyFlag.IsDirty
+                                || HorizontalAlign.DirtyFlag.IsDirty
+                                || Spacing.DirtyFlag.IsDirty;
+            
+            if (!needsUpdate)
                 return;
-            }
-
-            ResourceFileWatcher.AddFileHook(fullPath, () => { FilePath.DirtyFlag.Invalidate(); });
-
-            _lineFont = LineFont.CreateFromFilepath(fullPath, reduceThreshold, cornerBalance, fontNeedsUpdate);
-            if (_lineFont == null)
-            {
-                Log.Debug($"Failed to load svg font {fullPath}", this);
-                ResultList.Value = null;
-                return;
-            }
 
             var cursorPos = Vector3.Zero;
 
@@ -99,8 +126,6 @@ namespace lib.io.file
                     }
                 }
             }
-
-            _lineWidths.Clear();
 
             switch (verticalAlign)
             {
@@ -160,7 +185,8 @@ namespace lib.io.file
                     }
                 }
 
-                for (var pointIndex = 0; pointIndex < glyph.Points.Length; pointIndex++)
+                var numPoints = glyph.Points.Length;
+                for (var pointIndex = 0; pointIndex < numPoints; pointIndex++)
                 {
                     var p = glyph.Points[pointIndex];
                     var pointPos = p.Position;
@@ -178,20 +204,22 @@ namespace lib.io.file
                 lastCharForKerning = c;
             }
 
-            if (_points.Count == 0)
+            var pointCount = _points.Count;
+            if (pointCount == 0)
             {
                 ResultList.Value = null;
                 return;
             }
 
-            if (_pointListWithSeparator.TypedElements.Length != _points.Count)
+            if (_pointListWithSeparator.TypedElements.Length != pointCount)
             {
                 _pointListWithSeparator = new StructuredList<Point>(_points.Count);
             }
 
-            for (int index = 0; index < _points.Count; index++)
+            for (int index = pointCount - 1; index >= 0; --index)
             {
                 _pointListWithSeparator.TypedElements[index] = _points[index];
+                _points.RemoveAt(index); // clear while we're here
             }
 
             ResultList.Value = _pointListWithSeparator;
@@ -273,9 +301,14 @@ namespace lib.io.file
         public readonly InputSlot<float> CornerWeightBalance = new();
 
         private LineFont _lineFont;
+        private readonly Resource<SvgDocument> _svgResource;
+        private bool _svgFileUpdated;
+        private LineFontDefinition? _lineFontKey;
     }
 
-    internal class LineFont
+    internal record struct LineFontDefinition(string Key, float ReduceCurveThreshold, float CornerBalance);
+        
+    internal sealed class LineFont
     {
         private const int GlyphTableLength = 256;
         private Glyph[] _glyphTable; // Lookup table for fast lookup
@@ -314,43 +347,55 @@ namespace lib.io.file
         public float LineHeight = 1000; // identical with FontSize
         public float ReduceCurveThreshold = 0.2f;
         public float CornerWeightBalance = 0.5f;
+        
 
-        public static LineFont CreateFromFilepath(string filepath, float reduceCurveThreshold, float cornerBalance, bool forceUpdate = false)
+        public static LineFont Create(SvgDocument svgDoc, LineFontDefinition? previousKey, LineFontDefinition key, object user)
         {
-            if (string.IsNullOrEmpty(filepath))
-                return null;
-
-            if (!forceUpdate && _definitionsForFilePaths.TryGetValue(filepath, out var definition))
-                return definition;
-
-            if (!File.Exists(filepath))
-                return null;
+            if (svgDoc == null)
+                throw new ArgumentNullException(nameof(svgDoc));
             
-            Log.Debug($"Loading SvgFont definition {filepath}");
-            SvgDocument svgDoc;
-            try
+            if (previousKey == key)
             {
-                svgDoc = SvgDocument.Open<SvgDocument>(filepath, null);
-            }
-            catch (Exception e)
-            {
-                Log.Warning($"Failed to load svg document {filepath}:" + e.Message);
-                return null;
+                return _definitionsForFilePaths[previousKey.Value];
             }
 
-            var glyphs = new Dictionary<char, Glyph>();
+            if (previousKey.HasValue)
+            {
+                var users = _users[previousKey.Value];
+                users.Remove(user);
+                if (users.Count == 0)
+                {
+                    _users.Remove(previousKey.Value);
+                    _definitionsForFilePaths.Remove(previousKey.Value);
+                }
+            }
+            
+            if (_definitionsForFilePaths.TryGetValue(key, out var definition))
+            {
+                if (_users.TryGetValue(key, out var users))
+                {
+                    users.Add(user);
+                }
+                else
+                {
+                    _users[key] = [user];
+                }
+                
+                return definition;
+            }
 
             var svgElementCollection = svgDoc.Children;
             var newLineFont = new LineFont()
                                   {
-                                      ReduceCurveThreshold = reduceCurveThreshold,
-                                      CornerWeightBalance = cornerBalance,
+                                      ReduceCurveThreshold = key.ReduceCurveThreshold,
+                                      CornerWeightBalance = key.CornerBalance,
                                   };
+            
             ParseFontDefinitionsInElements(svgElementCollection, newLineFont);
 
             newLineFont.InitGlyphTable();
 
-            _definitionsForFilePaths[filepath] = newLineFont;
+            _definitionsForFilePaths[key] = newLineFont;
             return newLineFont;
         }
 
@@ -538,7 +583,8 @@ namespace lib.io.file
             return points;
         }
 
-        private static readonly Dictionary<string, LineFont> _definitionsForFilePaths = new();
+        private static readonly Dictionary<LineFontDefinition, LineFont> _definitionsForFilePaths = new();
+        private static readonly Dictionary<LineFontDefinition, HashSet<object>> _users = new();
 
         private static readonly List<Point> _tempPoints = new(100); // Reuse to avoid GC
 

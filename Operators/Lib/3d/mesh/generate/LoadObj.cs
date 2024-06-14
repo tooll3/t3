@@ -1,9 +1,9 @@
 using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
+using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
-using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -13,6 +13,8 @@ using T3.Core.Rendering;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Int3 = T3.Core.DataTypes.Vector.Int3;
+
 // ReSharper disable RedundantNameQualifier
 
 namespace lib._3d.mesh.generate
@@ -26,157 +28,169 @@ namespace lib._3d.mesh.generate
         public LoadObj()
         {
             Data.UpdateAction = Update;
+            _resource = new Resource<MeshDataSet>(Path, TryCreateResource, allowDisposal: false);
+            _resource.Changed += OnMeshChanged;
+        }
+
+        private void OnMeshChanged(object sender, MeshDataSet e)
+        {
+            Data.Value = e.DataBuffers;
+        }
+
+        private bool TryCreateResource(FileResource file, MeshDataSet? currentValue, out MeshDataSet? newValue, out string? failureReason)
+        {
+            var absolutePath = file.AbsolutePath;
+            if (_useGpuCaching)
+            {
+                if (_meshBufferCache.TryGetValue(absolutePath, out var cachedBuffer))
+                {
+                    newValue = cachedBuffer;
+                    failureReason = null;
+                    return true;
+                }
+            }
+
+            var mesh = ObjMesh.LoadFromFile(absolutePath);
+            if (mesh == null || mesh.DistinctDistinctVertices.Count == 0)
+            {
+                failureReason = $"Can't read file {absolutePath}";
+                Log.Warning(failureReason, this);
+                _warningMessage = failureReason;
+                newValue = null;
+                return false;
+            }
+
+            mesh.UpdateVertexSorting(_vertexSorting);
+
+            newValue = new MeshDataSet(mesh, _scaleFactor);
+
+            if (_useGpuCaching)
+            {
+                _meshBufferCache[absolutePath] = newValue;
+            }
+            else
+            {
+                currentValue?.Dispose();
+            }
+            
+            failureReason = null;
+            return true;
         }
 
         private float _scaleFactor;
         
         private void Update(EvaluationContext context)
         {
-            var path = Path.GetValue(context);
-            var vertexSorting = SortVertices.GetEnumValue<ObjMesh.SortDirections>(context);
-            var useGpuCaching = UseGPUCaching.GetValue(context);
-            var scaleFactor = ScaleFactor.GetValue(context);
             if (ClearGPUCache.GetValue(context))
             {
                 _meshBufferCache.Clear();
             }
+
+            var shouldInvoke = SortVertices.DirtyFlag.IsDirty || UseGPUCaching.DirtyFlag.IsDirty;
+            var scaleFactor = ScaleFactor.GetValue(context);
             
-            if (_sourceFileChanged ||  path != _lastFilePath 
-                                   || SortVertices.DirtyFlag.IsDirty 
-                                   || Math.Abs(scaleFactor - _scaleFactor) > 0.001f
-                                   || vertexSorting != _lastSorting)
+            var scaleHasChangedSignificantly = Math.Abs(scaleFactor - _scaleFactor) > 0.001f;
+            shouldInvoke |= scaleHasChangedSignificantly;
+            
+            _scaleFactor = scaleFactor;
+            _vertexSorting = SortVertices.GetEnumValue<ObjMesh.SortDirections>(context);
+            _useGpuCaching = UseGPUCaching.GetValue(context);
+            
+            if(shouldInvoke)
             {
-                if (!TryGetFilePath(path, out var absolutePath))
-                {
-                    string warningMessage = $"File not found: {path}";
-                    Log.Error(warningMessage, this);
-                    _warningMessage = warningMessage;
-                    return;
-                }
-                
-                ResourceFileWatcher.AddFileHook(absolutePath, FileChangedHandler);
-                _sourceFileChanged = false;
-                _lastSorting = vertexSorting;
-                _scaleFactor = scaleFactor;
-                
-                if (useGpuCaching)
-                {
-                    if (_meshBufferCache.TryGetValue(absolutePath, out var cachedBuffer))
-                    {
-                        Data.Value = cachedBuffer.DataBuffers;
-                        return;
-                    }
-                }
+                _resource.InvokeChangeEvent();
+            }
 
-                var mesh = ObjMesh.LoadFromFile(absolutePath);
-                if (mesh == null || mesh.DistinctDistinctVertices.Count == 0)
-                {
-                    var warningMessage = $"Can't read file {absolutePath}";
-                    Log.Warning(warningMessage, this);
-                    _warningMessage = warningMessage;
-                    return;
-                }
+            _warningMessage = null;
+        }
 
-                mesh.UpdateVertexSorting(vertexSorting);
+        public InputSlot<string> SourcePathSlot => Path;
+        private ObjMesh.SortDirections _vertexSorting;
+        private bool _useGpuCaching;
 
-                _lastFilePath = path;
+        private sealed class MeshDataSet : IDisposable
+        {
+            public readonly MeshBuffers DataBuffers;
 
-                var newData = new MeshDataSet();
-                var reversedLookup = new int[mesh.DistinctDistinctVertices.Count];
+            public MeshDataSet(ObjMesh mesh, float scaleFactor)
+            {
+                var vertexBufferWithViews = new BufferWithViews();
+                var indexBufferWithViews = new BufferWithViews();
+                var distinctVertices = mesh.DistinctDistinctVertices;
+                var verticesCount = distinctVertices.Count;
+                var faces = mesh.Faces;
+                var faceCount = faces.Count;
+                var sortedVertexIndices = mesh.SortedVertexIndices;
+                var vertexBufferData = new PbrVertex[verticesCount];
+                var indexBufferData = new Int3[faceCount];
+                var reversedLookup = new int[verticesCount];
 
                 // Create Vertex buffer
                 {
-                    var verticesCount = mesh.DistinctDistinctVertices.Count;
-                    if (newData.VertexBufferData.Length != verticesCount)
-                        newData.VertexBufferData = new PbrVertex[verticesCount];
-
                     for (var vertexIndex = 0; vertexIndex < verticesCount; vertexIndex++)
                     {
-                        var sortedVertexIndex = mesh.SortedVertexIndices[vertexIndex];
-                        var sortedVertex = mesh.DistinctDistinctVertices[sortedVertexIndex];
+                        var sortedVertexIndex = sortedVertexIndices[vertexIndex];
+                        var sortedVertex = distinctVertices[sortedVertexIndex];
                         reversedLookup[sortedVertexIndex] = vertexIndex;
-                        newData.VertexBufferData[vertexIndex] = new PbrVertex
-                                                                    {
-                                                                        Position = mesh.Positions[sortedVertex.PositionIndex] * scaleFactor,
-                                                                        Normal = mesh.Normals[sortedVertex.NormalIndex],
-                                                                        Tangent = mesh.VertexTangents[sortedVertexIndex],
-                                                                        Bitangent = mesh.VertexBinormals[sortedVertexIndex],
-                                                                        Texcoord = mesh.TexCoords[sortedVertex.TextureCoordsIndex],
-                                                                        Selection = 1,
-                                                                    };
+                        vertexBufferData[vertexIndex] = new PbrVertex
+                                                            {
+                                                                Position = mesh.Positions[sortedVertex.PositionIndex] * scaleFactor,
+                                                                Normal = mesh.Normals[sortedVertex.NormalIndex],
+                                                                Tangent = mesh.VertexTangents[sortedVertexIndex],
+                                                                Bitangent = mesh.VertexBinormals[sortedVertexIndex],
+                                                                Texcoord = mesh.TexCoords[sortedVertex.TextureCoordsIndex],
+                                                                Selection = 1,
+                                                            };
                     }
 
-                    ResourceManager.SetupStructuredBuffer(newData.VertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
-                                                          ref newData.VertexBuffer);
-                    ResourceManager.CreateStructuredBufferSrv(newData.VertexBuffer, ref newData.VertexBufferWithViews.Srv);
-                    ResourceManager.CreateStructuredBufferUav(newData.VertexBuffer, UnorderedAccessViewBufferFlags.None, ref newData.VertexBufferWithViews.Uav);
-                    newData.VertexBufferWithViews.Buffer = newData.VertexBuffer;
+                    Buffer vertexBuffer = null;
+
+                    ResourceManager.SetupStructuredBuffer(vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
+                                                          ref vertexBuffer);
+                    ResourceManager.CreateStructuredBufferSrv(vertexBuffer, ref vertexBufferWithViews.Srv);
+                    ResourceManager.CreateStructuredBufferUav(vertexBuffer, UnorderedAccessViewBufferFlags.None, ref vertexBufferWithViews.Uav);
+                    vertexBufferWithViews.Buffer = vertexBuffer;
                 }
 
                 // Create Index buffer
                 {
-                    var faceCount = mesh.Faces.Count;
-                    if (newData.IndexBufferData.Length != faceCount)
-                        newData.IndexBufferData = new Int3[faceCount];
-
                     for (var faceIndex = 0; faceIndex < faceCount; faceIndex++)
                     {
-                        var face = mesh.Faces[faceIndex];
+                        var face = faces[faceIndex];
                         var v1Index = mesh.GetVertexIndex(face.V0, face.V0n, face.V0t);
                         var v2Index = mesh.GetVertexIndex(face.V1, face.V1n, face.V1t);
                         var v3Index = mesh.GetVertexIndex(face.V2, face.V2n, face.V2t);
 
-                        newData.IndexBufferData[faceIndex]
+                        indexBufferData[faceIndex]
                             = new Int3(reversedLookup[v1Index],
-                                               reversedLookup[v2Index],
-                                               reversedLookup[v3Index]);
+                                       reversedLookup[v2Index],
+                                       reversedLookup[v3Index]);
                     }
 
+                    Buffer indexBuffer = null;
                     const int stride = 3 * 4;
-                    ResourceManager.SetupStructuredBuffer(newData.IndexBufferData, stride * faceCount, stride, ref newData.IndexBuffer);
-                    ResourceManager.CreateStructuredBufferSrv(newData.IndexBuffer, ref newData.IndexBufferWithViews.Srv);
-                    ResourceManager.CreateStructuredBufferUav(newData.IndexBuffer, UnorderedAccessViewBufferFlags.None, ref newData.IndexBufferWithViews.Uav);
-                    newData.IndexBufferWithViews.Buffer = newData.IndexBuffer;
+                    ResourceManager.SetupStructuredBuffer(indexBufferData, stride * faceCount, stride, ref indexBuffer);
+                    ResourceManager.CreateStructuredBufferSrv(indexBuffer, ref indexBufferWithViews.Srv);
+                    ResourceManager.CreateStructuredBufferUav(indexBuffer, UnorderedAccessViewBufferFlags.None, ref indexBufferWithViews.Uav);
+                    indexBufferWithViews.Buffer = indexBuffer;
                 }
 
-                if (useGpuCaching)
-                {
-                    _meshBufferCache[absolutePath] = newData;
-                }
-
-                _meshData = newData;
+                DataBuffers = new MeshBuffers
+                                  {
+                                      VertexBuffer = vertexBufferWithViews,
+                                      IndicesBuffer = indexBufferWithViews
+                                  };
             }
 
-            _meshData.DataBuffers.VertexBuffer = _meshData.VertexBufferWithViews;
-            _meshData.DataBuffers.IndicesBuffer = _meshData.IndexBufferWithViews;
-            Data.Value = _meshData.DataBuffers;
-            _warningMessage = null;
-        }
-
-        private void FileChangedHandler()
-        {
-            Path.DirtyFlag.Invalidate();
-            _sourceFileChanged = true;
-        }
-
-        public InputSlot<string> SourcePathSlot => Path;
-
-        private bool _sourceFileChanged;
-        private string _lastFilePath;
-        private ObjMesh.SortDirections _lastSorting;
-        private MeshDataSet _meshData = new();
-
-        private class MeshDataSet
-        {
-            public readonly MeshBuffers DataBuffers = new();
-
-            public Buffer VertexBuffer;
-            public PbrVertex[] VertexBufferData = Array.Empty<PbrVertex>();
-            public readonly BufferWithViews VertexBufferWithViews = new();
-
-            public Buffer IndexBuffer;
-            public Int3[] IndexBufferData = Array.Empty<Int3>();
-            public readonly BufferWithViews IndexBufferWithViews = new();
+            public void Dispose()
+            {
+                DataBuffers.Dispose();
+                GC.SuppressFinalize(this);
+            }
+            ~MeshDataSet()
+            {
+                Dispose();
+            }
         }
 
         
@@ -210,7 +224,7 @@ namespace lib._3d.mesh.generate
         [Input(Guid = "C39A61B3-FB6B-4611-8F13-273F13C9C491")]
         public readonly InputSlot<float> ScaleFactor = new();
 
-
+        private readonly Resource<MeshDataSet> _resource;
         public IEnumerable<string> FileFilter => FileFilters;
         private static readonly string[] FileFilters = ["*.obj"];
     }

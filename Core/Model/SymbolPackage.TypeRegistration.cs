@@ -14,12 +14,18 @@ using T3.Core.DataTypes.DataSet;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering.Material;
-using T3.Core.Resource;
 using T3.Serialization;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Int3 = T3.Core.DataTypes.Vector.Int3;
 using Point = T3.Core.DataTypes.Point;
 using Vector4 = System.Numerics.Vector4;
+using GeometryShader = T3.Core.DataTypes.GeometryShader;
+using ComputeShader = T3.Core.DataTypes.ComputeShader;
+using PixelShader = T3.Core.DataTypes.PixelShader;
+using Texture2D = T3.Core.DataTypes.Texture2D;
+using Texture3D = T3.Core.DataTypes.Texture3D;
+using VertexShader = T3.Core.DataTypes.VertexShader;
+// todo - Default Value Creators should be removed for types that are using their "default" values, i.e. "null" or zero
 
 namespace T3.Core.Model;
 
@@ -419,7 +425,7 @@ public partial class SymbolPackage
                      InputDefaultValueCreator<Comparison>,
                      (writer, obj) => writer.WriteValue(obj.ToString()),
                      JsonToEnumValue<Comparison>);
-        RegisterType(typeof(SharpDX.Direct3D11.ComputeShader), "ComputeShader",
+        RegisterType(typeof(ComputeShader), "ComputeShader",
                      () => new InputValue<ComputeShader>(null));
         RegisterType(typeof(SharpDX.Direct3D11.CpuAccessFlags), "CpuAccessFlags",
                      InputDefaultValueCreator<CpuAccessFlags>,
@@ -441,11 +447,11 @@ public partial class SymbolPackage
                      InputDefaultValueCreator<Filter>,
                      (writer, obj) => writer.WriteValue(obj.ToString()),
                      JsonToEnumValue<Filter>);
-        RegisterType(typeof(SharpDX.Direct3D11.GeometryShader), "GeometryShader",
+        RegisterType(typeof(GeometryShader), "GeometryShader",
                      () => new InputValue<GeometryShader>(null));
         RegisterType(typeof(SharpDX.Direct3D11.InputLayout), "InputLayout",
                      () => new InputValue<InputLayout>(null));
-        RegisterType(typeof(SharpDX.Direct3D11.PixelShader), "PixelShader",
+        RegisterType(typeof(PixelShader), "PixelShader",
                      () => new InputValue<PixelShader>(null));
         RegisterType(typeof(SharpDX.Direct3D11.RenderTargetBlendDescription), "RenderTargetBlendDescription",
                      () => new InputValue<RenderTargetBlendDescription>());
@@ -465,9 +471,9 @@ public partial class SymbolPackage
                      () => new InputValue<SamplerState>(null));
         RegisterType(typeof(SharpDX.Direct3D11.ShaderResourceView), "ShaderResourceView",
                      () => new InputValue<ShaderResourceView>(null));
-        RegisterType(typeof(SharpDX.Direct3D11.Texture2D), "Texture2D",
+        RegisterType(typeof(Texture2D), "Texture2D",
                      () => new InputValue<Texture2D>(null));
-        RegisterType(typeof(SharpDX.Direct3D11.Texture3D), "Texture3D",
+        RegisterType(typeof(Texture3D), "Texture3D",
                      () => new InputValue<Texture3D>(null));
         RegisterType(typeof(SharpDX.Direct3D11.TextureAddressMode), "TextureAddressMode",
                      InputDefaultValueCreator<TextureAddressMode>,
@@ -479,7 +485,7 @@ public partial class SymbolPackage
                      InputDefaultValueCreator<UnorderedAccessViewBufferFlags>,
                      (writer, obj) => writer.WriteValue(obj.ToString()),
                      JsonToEnumValue<UnorderedAccessViewBufferFlags>);
-        RegisterType(typeof(SharpDX.Direct3D11.VertexShader), "VertexShader",
+        RegisterType(typeof(VertexShader), "VertexShader",
                      () => new InputValue<VertexShader>(null));
         RegisterType(typeof(SharpDX.DXGI.Format), "Format",
                      InputDefaultValueCreator<Format>,

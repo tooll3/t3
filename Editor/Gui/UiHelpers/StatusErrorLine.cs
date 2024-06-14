@@ -31,7 +31,7 @@ namespace T3.Editor.Gui.UiHelpers
                 var logMessage = lastEntry.Message;
                 if (lastEntry.Level == ILogEntry.EntryLevel.Error)
                 {
-                    logMessage = ShaderResource.ExtractMeaningfulShaderErrorMessage(logMessage);
+                    logMessage = DX11ShaderCompiler.ExtractMeaningfulShaderErrorMessage(logMessage);
                 }
 
                 var width = ImGui.CalcTextSize(logMessage);

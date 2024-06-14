@@ -89,7 +89,7 @@ namespace T3.Editor.Gui.Graph
             var resourceDir = Path.Combine(exportDir, ResourceManager.ResourcesSubfolder);
             Directory.CreateDirectory(resourceDir);
             
-            if (!TryFindSoundtrack(symbol, out var absolutePath, out var relativePath))
+            if (!TryFindSoundtrack(instance, symbol, out var absolutePath, out var relativePath))
             {
                 reason = $"Failed to find soundTrack for [{symbol.Name}] with relative path \"{relativePath}\"";
                 return false;
@@ -375,7 +375,7 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private static bool TryFindSoundtrack(Symbol symbol, out string? absolutePath, out string? relativePath)
+        private static bool TryFindSoundtrack(Instance instance, Symbol symbol, out string? absolutePath, out string? relativePath)
         {
             var playbackSettings = symbol.PlaybackSettings;
             var soundtrack = playbackSettings?.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
@@ -396,7 +396,7 @@ namespace T3.Editor.Gui.Graph
             }
 
             relativePath = soundtrack.FilePath;
-            return soundtrack.TryGetAbsoluteFilePath(out absolutePath);
+            return soundtrack.TryGetAbsoluteFilePath(instance, out absolutePath);
         }
 
         private static void CheckInputForResourcePath(ISlot inputSlot, ExportInfo exportInfo)
@@ -427,7 +427,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     var relativeDirectory = stringValue.Value;
 
-                    if (!ResourceManager.TryResolvePath(relativeDirectory, parent.AvailableResourcePackages, out var absoluteDirectory, out _))
+                    if (!ResourceManager.TryResolvePath(relativeDirectory, parent, out var absoluteDirectory, out _))
                     {
                         Log.Warning($"Directory '{relativeDirectory}' was not found in any resource folder");
                     }

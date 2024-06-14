@@ -9,6 +9,7 @@ using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 using Utilities = T3.Core.Utils.Utilities;
 
 namespace Lib._3d.postfx
@@ -59,7 +60,7 @@ namespace Lib._3d.postfx
                                ArraySize = 1
                            };
             Utilities.Dispose(ref _imageWithCpuAccess);
-            _imageWithCpuAccess = new Texture2D(d3DDevice, desc);
+            _imageWithCpuAccess = ResourceManager.CreateTexture2D(desc);
             immediateContext.CopyResource(inputImage, _imageWithCpuAccess);
 
             // Gets a pointer to the image data, and denies the GPU access to that subresource.            

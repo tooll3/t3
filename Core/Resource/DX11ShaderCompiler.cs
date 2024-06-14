@@ -1,21 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
+using T3.Core.Model;
 
 namespace T3.Core.Resource;
 
 /// <summary>
 /// An implementation of the <see cref="ShaderCompiler"/> class that uses the DirectX 11 shader compiler from SharpDX
 /// </summary>
-public class DX11ShaderCompiler : ShaderCompiler
+public sealed partial class DX11ShaderCompiler : ShaderCompiler
 {
     public Device Device { get; set; }
 
-    protected override bool CompileShaderFromSource<TShader>(ShaderCompilationArgs args, out ShaderBytecode blob, out string errorMessage)
+    protected override bool CompileShaderFromSource<TShader>(ShaderCompilationArgs args, out byte[] blob, out string errorMessage)
     {
         CompilationResult compilationResult = null;
         string resultMessage;
@@ -28,7 +31,7 @@ public class DX11ShaderCompiler : ShaderCompiler
             flags |= ShaderFlags.Debug;
             #endif
 
-            compilationResult = ShaderBytecode.Compile(args.SourceCode, args.EntryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler(args.IncludeDirectories));
+            compilationResult = ShaderBytecode.Compile(args.SourceCode, args.EntryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler(args.Owner));
 
             success = compilationResult.ResultCode == Result.Ok;
             resultMessage = compilationResult.Message;
@@ -41,12 +44,12 @@ public class DX11ShaderCompiler : ShaderCompiler
 
         if (success)
         {
-            blob = compilationResult.Bytecode;
+            blob = compilationResult.Bytecode.Data;
             errorMessage = string.Empty;
         }
         else
         {
-            resultMessage = ShaderResource.ExtractMeaningfulShaderErrorMessage(resultMessage);
+            resultMessage = ExtractMeaningfulShaderErrorMessage(resultMessage);
             errorMessage = resultMessage;
             blob = null;
         }
@@ -54,16 +57,37 @@ public class DX11ShaderCompiler : ShaderCompiler
         return success;
     }
     
-    protected override void CreateShaderInstance<TShader>(string name, in ShaderBytecode blob, out TShader shader)
+    protected override void CreateShaderInstance<TShader>(string name, in byte[] blob, out TShader shader)
     {
         // As shader type is generic we've to use Activator and PropertyInfo to create/set the shader object
         var shaderType = typeof(TShader);
 
-        shader = (TShader)ShaderConstructors[shaderType].Invoke(Device, blob.Data);
+        shader = (TShader)ShaderConstructors[shaderType].Invoke(Device, blob);
         
         var debugNameInfo = shaderType.GetProperty("DebugName");
         debugNameInfo?.SetValue(shader, name);
     }
+    public static string ExtractMeaningfulShaderErrorMessage(string message)
+    {
+        var shaderErrorMatch = ShaderErrorPatternRegex().Match(message);
+        if (!shaderErrorMatch.Success)
+            return message;
+
+        var shaderName = shaderErrorMatch.Groups[1].Value;
+        var lineNumber = shaderErrorMatch.Groups[2].Value;
+        var errorMessage = shaderErrorMatch.Groups[3].Value;
+
+        errorMessage = errorMessage.Split('\n').First();
+        return $"Line {lineNumber}: {errorMessage}\n\n{shaderName}";
+    }
+    
+    /// <summary>
+    /// Matches errors like....
+    ///
+    /// Failed to compile shader 'ComputeWobble': C:\Users\pixtur\coding\t3\Resources\compute-ColorGrade.hlsl(32,12-56): warning X3206: implicit truncation of vector type
+    /// </summary>
+    [GeneratedRegex(@"(.*?)\((.*)\):(.*)")]
+    private static partial Regex ShaderErrorPatternRegex();
 
     private static readonly IReadOnlyDictionary<Type, Func<Device, byte[], object> > ShaderConstructors = new Dictionary<Type, Func<Device, byte[], object>>()
                                                                                    {
@@ -81,14 +105,14 @@ public class DX11ShaderCompiler : ShaderCompiler
                                                                                        { typeof(GeometryShader), "gs_5_0" },
                                                                                    };
 
-    private class IncludeHandler : SharpDX.D3DCompiler.Include
+    private class IncludeHandler : SharpDX.D3DCompiler.Include, IResourceConsumer
     {
         private StreamReader _streamReader;
-        private readonly IReadOnlyList<IResourcePackage> _directories;
+        private readonly IResourceConsumer _owner;
         
-        public IncludeHandler(IReadOnlyList<IResourcePackage> directories)
+        public IncludeHandler(IResourceConsumer owner)
         {
-            _directories = directories;
+            _owner = owner;
         }
 
         public void Dispose()
@@ -100,7 +124,7 @@ public class DX11ShaderCompiler : ShaderCompiler
 
         public Stream Open(IncludeType type, string fileName, Stream parentStream)
         {
-            if (ResourceManager.TryResolvePath(fileName, _directories, out var path, out _))
+            if (ResourceManager.TryResolvePath(fileName, _owner, out var path, out _))
             {
                 _streamReader = new StreamReader(path);
                 return _streamReader.BaseStream;
@@ -115,5 +139,9 @@ public class DX11ShaderCompiler : ShaderCompiler
         {
             _streamReader.Close();
         }
+
+        public IReadOnlyList<IResourcePackage> AvailableResourcePackages { get; }
+        public SymbolPackage Package { get; }
+        public event Action Disposing;
     }
 }

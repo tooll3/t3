@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -7,6 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.img.generate
 {
@@ -19,64 +19,34 @@ namespace lib.img.generate
         [Output(Guid = "{A4A46C04-FF03-48CE-83C9-0C0BAA0F72E7}")]
         public readonly Slot<ShaderResourceView> ShaderResourceView = new();
 
-        private uint _textureResId;
-        private uint _srvResId;
-
         public LoadImage()
         {
-            Texture.UpdateAction = UpdateTexture;
-            ShaderResourceView.UpdateAction = UpdateShaderResourceView;
-        }
-
-        private void UpdateShaderResourceView(EvaluationContext context)
-        {
-            if (Texture.DirtyFlag.IsDirty || ShaderResourceView.DirtyFlag.IsDirty)
+            _textureResource = ResourceManager.CreateTextureResource(Path);
+            _textureResource.Changed += OnTextureChanged;
+            if (_textureResource.Value != null)
             {
-                UpdateTexture(context);
-                //Texture.DirtyFlag.Clear();
+                OnTextureChanged(this, _textureResource.Value);
             }
         }
 
-        private void UpdateTexture(EvaluationContext context)
+        private void OnTextureChanged(object sender, Texture2D e)
         {
-            var resourceManager = ResourceManager.Instance();
-            if (Path.DirtyFlag.IsDirty)
-            { 
-                string imagePath = Path.GetValue(context);
-                try
-                {
-                    (_textureResId, _srvResId) = resourceManager.CreateTextureFromFile(imagePath, this, () =>
-                                                                                                  {
-                                                                                                      Texture.DirtyFlag.Invalidate();
-                                                                                                      ShaderResourceView.DirtyFlag.Invalidate();
-                                                                                                  });
-                    if (ResourceManager.ResourcesById.TryGetValue(_textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
-                        Texture.Value = textureResource.Texture;
-                    if (ResourceManager.ResourcesById.TryGetValue(_srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
-                        ShaderResourceView.Value = srvResource.ShaderResourceView;
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"Failed to create texture from file '{imagePath}':" + e.Message);
-                }
-            }
-            else
-            {
-                resourceManager.UpdateTextureFromFile(_textureResId, Path.Value, ref Texture.Value);
-                resourceManager.CreateShaderResourceView(_textureResId, "", ref ShaderResourceView.Value);
-            }
+            Texture.Value = e;
+            Texture.DirtyFlag.Clear();
+            
+            var currentSrv = ShaderResourceView.Value;
+            ResourceManager.CreateShaderResourceView(e, "", ref currentSrv);
 
             try
             {
-                if (ShaderResourceView.Value != null)
-                    ResourceManager.Device.ImmediateContext.GenerateMips(ShaderResourceView.Value);
+                ResourceManager.Device.ImmediateContext.GenerateMips(currentSrv);
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Log.Error($"Failed to generate mipmaps for texture {Path.GetValue(context)}:" + e);
+                Log.Error($"Failed to generate mipmaps for texture {Path.Value}:" + exception);
             }
-
-            Texture.DirtyFlag.Clear();
+            
+            ShaderResourceView.Value = currentSrv;
             ShaderResourceView.DirtyFlag.Clear();
         }
 
@@ -86,5 +56,8 @@ namespace lib.img.generate
         public IEnumerable<string> FileFilter => FileFilters;
         private static readonly string[] FileFilters = ["*.png", "*.jpg", "*.jpeg", "*.bmp", "*.tga", "*.dds", "*.gif"];
         public InputSlot<string> SourcePathSlot => Path;
+        
+        private Resource<T3.Core.DataTypes.Texture2D> _textureResource;
+        private ShaderResourceView _srv;
     }
 }

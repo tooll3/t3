@@ -29,26 +29,28 @@ namespace T3.Core.DataTypes
         public readonly int ParticleSizeInBytes = 80;
         public int ParticleSystemSizeInBytes => MaxCount * ParticleSizeInBytes;
 
-        public void Init()
+        public LegacyParticleSystem()
         {
-            if (_initDeadListShaderResource == null)
-            {
-                string sourcePath = @"particles\particle-dead-list-init.hlsl";
-                string entryPoint = "main";
-                string debugName = "particle-dead-list-init";
-                var resourceManager = ResourceManager.Instance();
-                resourceManager.TryCreateShaderResource(resource: out _initDeadListShaderResource, 
-                                                        relativePath: sourcePath, 
-                                                        instance: null,
-                                                        reason: out var errorMessage, 
-                                                        name: entryPoint, 
-                                                        entryPoint: debugName, 
-                                                        fileChangedAction: null);
-                
-                if (!string.IsNullOrWhiteSpace(errorMessage))
-                    Log.Error($"{nameof(LegacyParticleSystem)}: {errorMessage}");
-            }
+            string sourcePath = @"particles\particle-dead-list-init.hlsl";
+            //string debugName = "particle-dead-list-init";
+            _initDeadListShaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, null, () => "main");
 
+            if (_initDeadListShaderResource.Value != null)
+            {
+                Init();
+            }
+            
+            _initDeadListShaderResource.Changed += (sender, args) =>
+            {
+                if (_initDeadListShaderResource.Value != null)
+                {
+                    Init();
+                }
+            };
+        }
+
+        public void Init()
+        {            
             InitParticleBufferAndViews();
             InitDeadParticleIndices();
             InitAliveParticleIndices();
@@ -76,7 +78,7 @@ namespace T3.Core.DataTypes
             ResourceManager.CreateStructuredBufferUav(DeadParticleIndices, UnorderedAccessViewBufferFlags.Append, ref DeadParticleIndicesUav);
             
             // init counter of the dead list buffer (must be done due to uav binding)
-            ComputeShader deadListInitShader = _initDeadListShaderResource.Shader;
+            ComputeShader deadListInitShader = _initDeadListShaderResource.Value;
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
@@ -84,7 +86,7 @@ namespace T3.Core.DataTypes
             var prevUavs = csStage.GetUnorderedAccessViews(0, 1);
             
             // set and call the init shader
-            _initDeadListShaderResource.TryGetThreadGroups(out var threadGroups);
+            deadListInitShader.TryGetThreadGroups(out var threadGroups);
             
             csStage.Set(deadListInitShader);
             csStage.SetUnorderedAccessView(0, DeadParticleIndicesUav, 0);
@@ -119,6 +121,6 @@ namespace T3.Core.DataTypes
             ParticleCountConstBuffer.DebugName = "ParticleCountConstBuffer";
         }
 
-        private ShaderResource<ComputeShader> _initDeadListShaderResource;
+        private Resource<ComputeShader> _initDeadListShaderResource;
     }
 }

@@ -1,158 +1,187 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using SharpDX.Direct3D11;
 using T3.Core.Logging;
 
 namespace T3.Core.Resource
 {
     public class ResourceFileWatcher
     {
-        
         public ResourceFileWatcher(string watchedFolder)
         {
             Directory.CreateDirectory(watchedFolder);
-            
-            FileSystemEventHandler handler = (_, eventArgs) => FileChangedHandler(eventArgs, HooksForResourceFilePaths);
-            RenamedEventHandler renamedHandler = (_, eventArgs) => FileChangedHandler(eventArgs, HooksForResourceFilePaths);
-            
-            var hlslWatcher = AddWatcher(watchedFolder, "*.hlsl", _fileWatchers, handler);
-            hlslWatcher.Deleted += handler;
-            hlslWatcher.Renamed += renamedHandler;
-            hlslWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // Creation time needed for visual studio (2017)
-
-            AddWatcher(watchedFolder, "*.png", _fileWatchers, handler);
-            AddWatcher(watchedFolder, "*.jpg", _fileWatchers, handler);
-            AddWatcher(watchedFolder, "*.dds", _fileWatchers, handler);
-            AddWatcher(watchedFolder, "*.tiff", _fileWatchers, handler);
+            _watchedDirectory = watchedFolder;
         }
 
-        // todo - optimize this by making pairing it with the correct watcher that already exists
-        public static void AddFileHook(string filepath, Action action)
+        public void AddFileHook(string filepath, FileWatcherAction action)
         {
             if (string.IsNullOrWhiteSpace(filepath))
                 return;
 
-            string pattern;
-            try
+            ArgumentNullException.ThrowIfNull(action);
+
+            if (!filepath.StartsWith(_watchedDirectory))
             {
-                pattern = "*" + Path.GetExtension(filepath);
-            }
-            catch
-            {
-                Log.Warning($"Can't get filepath from source file: {filepath}");
+                Log.Error($"Cannot watch file outside of watched directory: \"{filepath}\" is not in \"{_watchedDirectory}\"");
                 return;
             }
-
-            if (!ExternalFileWatchers.ContainsKey(pattern))
+            
+            if (!_fileChangeActions.TryGetValue(filepath, out var existingActions))
             {
-                FileSystemEventHandler handler = (_, eventArgs) => FileChangedHandler(eventArgs, StaticHooksForResourceFilePaths);
-                AddWatcher(Path.GetDirectoryName(filepath), pattern, ExternalFileWatchers, handler);
+                existingActions = new List<FileWatcherAction>();
+                _fileChangeActions.Add(filepath, existingActions);
             }
-
-            if (StaticHooksForResourceFilePaths.TryGetValue(filepath, out var hook))
+            
+            existingActions.Add(action);
+            
+            if (_fsWatcher == null)
             {
-                hook.FileChangeAction -= action;
-                hook.FileChangeAction += action;
-            }
-            else
-            {
-                if (!File.Exists(filepath))
-                {
-                    Log.Warning($"Can't access filepath: {filepath}");
-                    return;
-                }
-
-                var newHook = new ResourceFileHook(filepath, Array.Empty<uint>())
-                                  {
-                                      FileChangeAction = action
-                                  };
-                StaticHooksForResourceFilePaths.TryAdd(filepath, newHook);
-            }
-        }
-
-        private static FileSystemWatcher AddWatcher(string folder, string filePattern, Dictionary<string, FileSystemWatcher> collection, FileSystemEventHandler handler)
-        {
-            Directory.CreateDirectory(folder);
-            var newWatcher = new FileSystemWatcher(folder, filePattern)
+                _fsWatcher = new(_watchedDirectory)
                                  {
                                      IncludeSubdirectories = true,
                                      EnableRaisingEvents = true
                                  };
-            newWatcher.Changed += handler;
-            newWatcher.Created += handler;
-            collection.Add(filePattern, newWatcher);
-            return newWatcher;
+                
+                _fsWatcher.Changed += OnFileChanged;
+                _fsWatcher.Created += OnFileCreated;
+                _fsWatcher.Deleted += OnFileDeleted;
+                _fsWatcher.Error += OnError;
+                _fsWatcher.Renamed += OnFileRenamed;
+            }
         }
-
-        private static void FileChangedHandler(FileSystemEventArgs fileSystemEventArgs, ConcurrentDictionary<string, ResourceFileHook> hooks)
+        
+        public void RemoveFileHook(string absolutePath, FileWatcherAction onResourceChanged)
         {
-            if (!hooks.TryGetValue(fileSystemEventArgs.FullPath, out var fileHook))
+            if (_fileChangeActions.TryGetValue(absolutePath, out var actions))
             {
+                actions.Remove(onResourceChanged);
+                if (actions.Count == 0)
+                {
+                    _fileChangeActions.Remove(absolutePath);
+                    
+                    if (_fileChangeActions.Count == 0)
+                    {
+                        DisposeFileWatcher(ref _fsWatcher);
+                    }
+                }
+            }
+        }
+        
+        private void OnFileRenamed(object sender, RenamedEventArgs e)
+        {
+            if (!_fileChangeActions.Remove(e.OldFullPath, out var actions)) 
+                return;
+            
+            var newPath = e.FullPath;
+            if (_fileChangeActions.TryGetValue(newPath, out var previousActions))
+            {
+                previousActions.AddRange(actions);
                 return;
             }
-
-            var lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
-            if (lastWriteTime == fileHook.LastWriteReferenceTime)
-                return;
-
+            
+            _fileChangeActions.Add(newPath, actions); 
+        }
+        
+        private void OnError(object sender, ErrorEventArgs e)
+        {
+            Log.Error($"File watcher error: {e.GetException()}");
+            _fsWatcher?.Dispose();
+            _fsWatcher = new FileSystemWatcher(_watchedDirectory)
+                             {
+                                 IncludeSubdirectories = true,
+                                 EnableRaisingEvents = true
+                             };
+        }
+        
+        private void OnFileDeleted(object sender, FileSystemEventArgs e)
+        {
+            OnFileChanged(sender, e);
+            Log.Warning($"File deleted: {e.FullPath}");
+        }
+        
+        private void Execute(List<FileWatcherAction> actions, WatcherChangeTypes type, string absolutePath)
+        {
             // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
             //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
             //       it cannot read the file. 
 
             Thread.Sleep(32);
-            var ids = string.Join(",", fileHook.ResourceIds);
-            Log.Info($"Updating '{fileSystemEventArgs.FullPath}' ({ids} {fileSystemEventArgs.ChangeType})");
-
-            fileHook.FileChangeAction?.Invoke();
-
-            fileHook.LastWriteReferenceTime = lastWriteTime;
-
-            // else discard the (duplicated) OnChanged event
+            
+            foreach (var action in actions)
+            {
+                try
+                {
+                    action(type, absolutePath);
+                }
+                catch (Exception exception)
+                {
+                    Log.Error($"Error in file change action: {exception}");
+                }
+            }
+        }
+        
+        private void OnFileCreated(object sender, FileSystemEventArgs e)
+        {
+            Log.Info($"File created: {e.FullPath}");
+            FileCreated?.Invoke(this, e.FullPath);
+        }
+        
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            if (!_fileChangeActions.TryGetValue(e.FullPath, out var actions))
+                return;
+            
+            Execute(actions, e.ChangeType, e.FullPath);
         }
 
         public void Dispose()
         {
-            foreach(var watcher in _fileWatchers.Values)
-            {
-                watcher.EnableRaisingEvents = false;
-                watcher.Dispose();
-            }
-
-            foreach (var hook in HooksForResourceFilePaths)
-            {
-                // not sure if this is necessary, but it doesn't hurt
-                // something something garbage collector dangling references with events something something
-                hook.Value.FileChangeAction = null;
-            }
+            DisposeFileWatcher(ref _fsWatcher);
+            
+            _fileChangeActions.Clear();
         }
-
-        internal readonly ConcurrentDictionary<string, ResourceFileHook> HooksForResourceFilePaths = new();
-        private static readonly ConcurrentDictionary<string, ResourceFileHook> StaticHooksForResourceFilePaths = new(); 
-
-        private readonly Dictionary<string, FileSystemWatcher> _fileWatchers = new(5);
-        private static readonly Dictionary<string, FileSystemWatcher> ExternalFileWatchers = new(5);
-    }
-
-    /// <summary>
-    /// Used by some <see cref="AbstractResource"/>s to link to a file.
-    /// Note that multiple resources likes <see cref="VertexShader"/> and <see cref="PixelShader"/> can
-    /// depend on the same source file. 
-    /// </summary>
-    public class ResourceFileHook
-    {
-        public ResourceFileHook(string path, IEnumerable<uint> ids)
+        
+        private readonly string _watchedDirectory;
+        private FileSystemWatcher? _fsWatcher = null;
+        
+        private readonly Dictionary<string, List<FileWatcherAction>> _fileChangeActions = new();
+        public event EventHandler<string>? FileCreated;
+        
+        private static void DisposeFileWatcher(ref FileSystemWatcher? watcher)
         {
-            Path = path;
-            ResourceIds.AddRange(ids);
-            LastWriteReferenceTime = File.GetLastWriteTime(path);
+            if (watcher == null)
+                return;
+            
+            watcher.EnableRaisingEvents = false;
+            watcher.Dispose();
+            watcher = null;
         }
-
-        public readonly string Path;
-        public readonly List<uint> ResourceIds = new();
-        public DateTime LastWriteReferenceTime;
-        public Action FileChangeAction;
+    }
+    
+    public delegate void FileWatcherAction(WatcherChangeTypes changeTypes, string absolutePath);
+    
+    public static class WatcherChangeTypesExtensions
+    {
+        public static bool WasDeleted(this WatcherChangeTypes changeTypes)
+        {
+            return (changeTypes & WatcherChangeTypes.Deleted) == WatcherChangeTypes.Deleted;
+        }
+        
+        public static bool WasMoved(this WatcherChangeTypes changeTypes)
+        {
+            return (changeTypes & WatcherChangeTypes.Renamed) == WatcherChangeTypes.Renamed;
+        }
+        
+        public static bool WasCreated(this WatcherChangeTypes changeTypes)
+        {
+            return (changeTypes & WatcherChangeTypes.Created) == WatcherChangeTypes.Created;
+        }
+        
+        public static bool WasChanged(this WatcherChangeTypes changeTypes)
+        {
+            return (changeTypes & WatcherChangeTypes.Changed) == WatcherChangeTypes.Changed;
+        }
     }
 }
