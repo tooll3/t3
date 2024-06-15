@@ -6,6 +6,10 @@
     /// </summary>
     public static class BeatTimingDetails
     {
+        public static float DistanceToMeasure;
+        public static float DistanceToBeat;
+        
+        public static float MeasureDuration;
         public static float BeatDurationInSecs;
         public static float SlideOffsetInSecs;
         public static float WasTapTriggered;
@@ -16,6 +20,6 @@
 
         public static float LastPhaseOffset;
         public static float BarSync;
-        public static float LastTapBarSync;
+        public static float LastTapDistanceToBeat;
     }
 }

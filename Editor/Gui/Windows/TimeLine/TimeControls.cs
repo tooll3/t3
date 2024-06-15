@@ -44,7 +44,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
             if (KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
                 UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
 
-            
             {
                 //const float editFrameRate = 30;
 
@@ -269,7 +268,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             // MidiIndicator
             {
-                var timeSinceLastEvent = Playback.RunTimeInSecs - Math.Max(T3Ui.MidiDataRecording.LastEventTime,T3Ui.OscDataRecording.LastEventTime);
+                var timeSinceLastEvent = Playback.RunTimeInSecs - Math.Max(T3Ui.MidiDataRecording.LastEventTime, T3Ui.OscDataRecording.LastEventTime);
                 var flashFactor = MathF.Pow((float)timeSinceLastEvent.Clamp(0, 1) / 1, 0.5f);
                 var color = Color.Mix(UiColors.StatusAnimated, UiColors.BackgroundFull.Fade(0.3f), flashFactor);
                 ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
@@ -320,7 +319,15 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                     {
-                        BeatTiming.TriggerSyncTap();
+                        if (ImGui.GetIO().KeyCtrl)
+                        {
+                            var roundedBpm = Math.Round(BeatTiming.Bpm*2)/2;
+                            BeatTiming.SetBpmRate((float)roundedBpm);
+                        }
+                        else
+                        {
+                            BeatTiming.TriggerSyncTap();
+                        }
                     }
                     else if (ImGui.IsMouseClicked(ImGuiMouseButton.Right))
                     {
@@ -328,29 +335,30 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     }
                 }
 
-                CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.",
+                CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.\n"
+                                                   + "Ctrl+Click to round BPM",
                                                     $"Tap: {KeyboardBinding.ListKeyboardShortcuts(UserActions.TapBeatSync)}\n"
                                                     + $"Resync: {KeyboardBinding.ListKeyboardShortcuts(UserActions.TapBeatSyncMeasure)}");
 
                 ImGui.SameLine();
 
-                ImGui.PushButtonRepeat(true);
-                {
-                    if (CustomComponents.IconButton(Icon.ChevronLeft, ControlSize))
-                    {
-                        BeatTiming.TriggerDelaySync();
-                    }
-
-                    ImGui.SameLine();
-
-                    if (CustomComponents.IconButton(Icon.ChevronRight, ControlSize))
-                    {
-                        BeatTiming.TriggerAdvanceSync();
-                    }
-
-                    ImGui.SameLine();
-                }
-                ImGui.PopButtonRepeat();
+                // ImGui.PushButtonRepeat(true);
+                // {
+                //     if (CustomComponents.IconButton(Icon.ChevronLeft, ControlSize))
+                //     {
+                //         BeatTiming.TriggerDelaySync();
+                //     }
+                //
+                //     ImGui.SameLine();
+                //
+                //     if (CustomComponents.IconButton(Icon.ChevronRight, ControlSize))
+                //     {
+                //         BeatTiming.TriggerAdvanceSync();
+                //     }
+                //
+                //     ImGui.SameLine();
+                // }
+                // ImGui.PopButtonRepeat();
             }
             else
             {
@@ -408,10 +416,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 if (playback.PlaybackSpeed < -1)
                 {
-                    ImGui.GetWindowDrawList().AddText( ImGui.GetItemRectMin() + new Vector2(20,4), UiColors.ForegroundFull, $"×{-playback.PlaybackSpeed:0}");
+                    ImGui.GetWindowDrawList().AddText(ImGui.GetItemRectMin() + new Vector2(20, 4), UiColors.ForegroundFull, $"×{-playback.PlaybackSpeed:0}");
                 }
 
-                
                 CustomComponents.TooltipForLastItem("Play backwards",
                                                     "Play backwards (and faster): " +
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackBackwards, false) +
@@ -439,7 +446,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 if (playback.PlaybackSpeed > 1)
                 {
-                    ImGui.GetWindowDrawList().AddText( ImGui.GetItemRectMin() + new Vector2(20,4), UiColors.ForegroundFull, $"×{playback.PlaybackSpeed:0}");
+                    ImGui.GetWindowDrawList().AddText(ImGui.GetItemRectMin() + new Vector2(20, 4), UiColors.ForegroundFull, $"×{playback.PlaybackSpeed:0}");
                 }
 
                 CustomComponents.TooltipForLastItem("Start playback",
