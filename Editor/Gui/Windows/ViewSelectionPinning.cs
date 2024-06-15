@@ -43,10 +43,7 @@ namespace T3.Editor.Gui.Windows
             {
                 if (_isPinned)
                 {
-                    if (isPinnedToSelected || !oneSelected)
-                    {
-                        _isPinned = false;
-                    }
+                    _isPinned = false;
                 }
                 else if (selectedOp != null)
                 {
