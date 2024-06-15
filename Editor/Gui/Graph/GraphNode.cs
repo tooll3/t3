@@ -607,7 +607,7 @@ namespace T3.Editor.Gui.Graph
 
                     if (childUi.ConnectionStyleOverrides.ContainsKey(outputDef.Id))
                     {
-                        line.ColorForType.Rgba.W = 0.3f;
+                        line.ColorForType.Rgba.W = 0.1f;
                     }
 
                     line.IsSelected |= childUi.IsSelected || hovered | isNodeHovered;

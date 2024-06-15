@@ -209,6 +209,8 @@ namespace T3.Editor.Gui.Windows
                 if (hasInstancePath && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                 {
                     GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(entry.SourceIdPath?.ToList());
+                    if(!string.IsNullOrEmpty(entry.Message))
+                        EditorUi.Instance.SetClipboardText(entry.Message);
                 }
             }
         }
