@@ -36,6 +36,10 @@
       "DefaultValue": 0.5
     },
     {
+      "Id": "e45c6abf-df32-47cf-833d-e1391749b8f4"/*RecordingMode*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "3ce54ca0-cd50-4dc2-bd3d-51e26ebf05ce"/*RecordValue*/,
       "DefaultValue": 0.0
     },
