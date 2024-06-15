@@ -117,7 +117,45 @@ namespace T3.Core.Operator.Slots
                     {
                         if (inputSlot.IsConnected)
                         {
-                            inputSlot.DirtyFlag.Target = inputSlot.GetConnection(0).Invalidate();
+                            // inputSlot.DirtyFlag.Target = inputSlot.GetConnection(0).Invalidate();
+                            if (inputSlot.IsMultiInput)
+                            {
+                                // NOTE: In situations with extremely large graphs (1000 of instances)
+                                // invalidation can become bottle neck. In these cases it might be justified
+                                // to limit the invalidation to "active" parts of the subgraph. The [Switch]
+                                // operator defines this list.
+                                if (inputSlot.LimitMultiInputInvalidationToIndices != null)
+                                {
+                                    var multiInput = (IMultiInputSlot)inputSlot;
+                                    var dirtySum = 0;
+                                    var index = 0;
+
+                                    foreach (var entry in multiInput.GetCollectedInputs())
+                                    {
+                                        if (!inputSlot.LimitMultiInputInvalidationToIndices.Contains(index++))
+                                            continue;
+
+                                        dirtySum += entry.Invalidate();
+                                    }
+
+                                    inputSlot.DirtyFlag.Target = dirtySum;
+                                }
+                                else
+                                {
+                                    var multiInput = (IMultiInputSlot)inputSlot;
+                                    int dirtySum = 0;
+                                    foreach (var entry in multiInput.GetCollectedInputs())
+                                    {
+                                        dirtySum += entry.Invalidate();
+                                    }
+
+                                    inputSlot.DirtyFlag.Target = dirtySum;
+                                }
+                            }
+                            else
+                            {
+                                inputSlot.DirtyFlag.Target = inputSlot.GetConnection(0).Invalidate();
+                            }
                         }
                         else if ((inputSlot.DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
                         {
