@@ -3,52 +3,82 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-//using System.Threading.Channels;
-//using System.Windows.Forms;
+using System.Text.RegularExpressions;
 using Operators.Utils;
 using Rug.Osc;
-using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
-using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
 {
     public class OscInput : Instance<OscInput>, OscConnectionManager.IOscConsumer, IStatusProvider, ICustomDropdownHolder
     {
-        [Output(Guid = "F697732E-46F3-4037-AFC5-56F396BD70AD", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Dict<float>> Values = new();
-
-        [Output(Guid = "5544b675-0de2-4a28-97d0-1a67349152fc")]
-        public readonly Slot<float> FirstResult = new();
+        [Output(Guid = "F697732E-46F3-4037-AFC5-56F396BD70AD")]
+        public readonly Slot<Dict<float>> Contents = new();
 
         [Output(Guid = "1E2EC3D2-B242-4E6F-8D15-290584315AA9")]
-        public readonly Slot<List<float>> Results = new();
+        public readonly Slot<List<float>> Values = new();
 
-        [Output(Guid = "8F426B4A-AD49-4AB9-80EE-3DF9F5A5AFF6")]
-        public readonly Slot<float> LastMessageTime = new();
+        [Output(Guid = "3291E15A-1900-4252-8591-D016281527F0", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<bool> WasTrigger = new();
+
 
         public OscInput()
         {
-            FirstResult.UpdateAction = Update;
-            Results.UpdateAction = Update;
-            LastMessageTime.UpdateAction = Update;
             Values.UpdateAction = Update;
+            Contents.UpdateAction = Update;
+            
+            WasTrigger.UpdateAction = AnimatedUpdate;
         }
 
+        
         private void Update(EvaluationContext context)
         {
-            var statusNeedsUpdate = Address.DirtyFlag.IsDirty || Port.DirtyFlag.IsDirty;
-            var newAddress =Address.GetValue(context);
+            var useKeyValuePairs = UseKeyValuePairs.GetValue(context);
+            if (useKeyValuePairs != _useKeyValuePairs)
+            {
+                _valuesByKeys.Clear();
+                _useKeyValuePairs = useKeyValuePairs;
+            }
+
+            // Update address and give connectivity status 
+            _filterKey = FilterKey.GetValue(context);
+            
+            var filterPattern = Pattern.GetValue(context);
+            if(filterPattern != _filterPattern)
+            {
+                _filterPattern = filterPattern;
+                if (!string.IsNullOrEmpty(filterPattern))
+                {
+                    try
+                    {
+                        _filterRegex = new Regex(filterPattern);
+                    }
+                    catch (Exception e)
+                    {
+                        SetStatus("Invalid regex pattern: " + e.Message, IStatusProvider.StatusLevel.Warning);
+                        _filterRegex = null;
+                        return;
+                    }
+                }
+                
+                _valuesByKeys.Clear();
+            }
+            
+
+            if (Address.DirtyFlag.IsDirty || Port.DirtyFlag.IsDirty)
+                UpdateStatusMessage();
+            
+            var newAddress = Address.GetValue(context);
             if (newAddress != _address)
             {
                 _valuesByKeys.Clear();
                 _address = newAddress;
-            } 
+            }
 
             var newPort = Port.GetValue(context);
             if (newPort != _registeredPort)
@@ -70,59 +100,29 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
                 _registeredPort = newPort;
             }
 
+            // Update output
             _printLogMessages = PrintLogMessages.GetValue(context);
 
-            lock (this)
-            {
-                if (_lastMatchingSignals.Count > 0)
-                {
-                    foreach (var m in _lastMatchingSignals)
-                    {
-                        if (m.Count == 0)
-                            continue;
-                        
-                        _allResults.Clear();
+            Values.Value = _collectedFloatResults;
+            Contents.Value = _valuesByKeys;
+            _wasTrigger = true;
 
-                        for (var index = 0; index < m.Count; index++)
-                        {
-                            if (OscConnectionManager.TryGetValueAndPathForMessagePart(m[index], out var floatValue))
-                            {
-                                var path = m.Count == 1 
-                                               ? OscConnectionManager.BuildMessageComponentPath(m)
-                                               : OscConnectionManager.BuildMessageComponentPath(m, index);
-                                _valuesByKeys[path] = floatValue;
-                            }
-                            
-                            _allResults.Add(floatValue);
-                        }
-
-                        _currentControllerValue = _allResults.Count > 0
-                                                      ? _allResults[0]
-                                                      : float.NaN;
-
-                        _lastMessageTime = Playback.RunTimeInSecs;
-                        _isDefaultValue = false;
-                    }
-
-                    _lastMatchingSignals.Clear();
-                }
-            }
-
-            FirstResult.Value = _isDefaultValue 
-                                    ? DefaultOutputValue.GetValue(context) 
-                                    : _currentControllerValue;
-            Results.Value = _allResults;
-            LastMessageTime.Value = (float)_lastMessageTime;
-            Values.Value = _valuesByKeys;
-
-            if (statusNeedsUpdate)
-                UpdateStatusMessage();
-
-            FirstResult.DirtyFlag.Clear();
-            LastMessageTime.DirtyFlag.Clear();
-            Results.DirtyFlag.Clear();
+            // Prevent updates from multiple connected outputs
             Values.DirtyFlag.Clear();
+            Contents.DirtyFlag.Clear();
         }
+
+        /// <summary>
+        /// WasHit needs to send true and false to trigger events in connected operators.
+        /// To avoid updating the rest of the operator on every frame, we have have this
+        /// alternative update method that only sends the trigger value. 
+        /// </summary>
+        private void AnimatedUpdate(EvaluationContext context)
+        {
+            WasTrigger.Value = _wasTrigger;
+            _wasTrigger = false;
+        }
+        private bool _wasTrigger;
 
         private void UpdateStatusMessage()
         {
@@ -153,7 +153,8 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
             SetStatus($"Listening on {ipAddress}:{_registeredPort}\nNo messages received, yet.", IStatusProvider.StatusLevel.Notice);
         }
 
-        // Called in other thread!
+        # region handling async messages from other thread
+        
         public void ProcessMessage(OscMessage msg)
         {
             lock (this)
@@ -163,26 +164,123 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
                     Log.Debug($"Received OSC: {msg}", this);
                 }
 
-                if (string.IsNullOrEmpty(_address) || msg.Address.StartsWith(_address))
-                {
-                    _lastMatchingSignals.Add(msg);
-                    _isDefaultValue = false;
-                }
+                if (!string.IsNullOrEmpty(_address) && !msg.Address.StartsWith(_address))
+                    return;
 
+                if (!ParseMessages(msg))
+                    return;
+                
                 SetStatus(string.Empty, IStatusProvider.StatusLevel.Success);
                 FlagAsDirty();
             }
         }
-
+        
         /// <summary>
         /// This will cause Update to be called on next frame 
         /// </summary>
         private void FlagAsDirty()
         {
-            FirstResult.DirtyFlag.Invalidate();
-            Results.DirtyFlag.Invalidate();
-            LastMessageTime.DirtyFlag.Invalidate();
+            Contents.DirtyFlag.Invalidate();
+            Values.DirtyFlag.Invalidate();
         }
+        
+        private bool ParseMessages(OscMessage m)
+        {
+            if (m.Count == 0)
+                return false;
+
+            _collectedFloatResults.Clear();
+            if (_useKeyValuePairs)
+            {
+                if (m.Count % 2 != 0)
+                {
+                    SetStatus("Osc message has odd number of elements, can't be used as key value pairs",
+                              IStatusProvider.StatusLevel.Warning);
+                    return false;
+                }
+
+                if (!string.IsNullOrEmpty(_filterKey))
+                {
+                    var foundMatch = false;
+                    for (var index = 0; index < m.Count; index += 2)
+                    {
+                        if (m[index] is not string key)
+                            continue;
+
+                        if (key != _filterKey)
+                            continue;
+
+                        var valueAsString = m[index + 1].ToString();
+
+                        if (valueAsString == null)
+                            continue;
+
+                        if (_filterRegex != null)
+                        {
+                            if (!_filterRegex.IsMatch(valueAsString))
+                                continue;
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(valueAsString))
+                                continue;
+                        }
+
+                        // if (valueAsString != _filterPattern)
+                        //     continue;
+
+                        foundMatch = true;
+                        break;
+                    }
+
+                    if (!foundMatch)
+                    {
+                        if (_printLogMessages)
+                        {
+                            Log.Debug($"Skipping OSC message not matching {_filterKey} == {_filterPattern}", this);
+                            return false;
+                        }
+                    }
+                }
+
+                for (var index = 0; index < m.Count; index += 2)
+                {
+                    if (m[index] is not string key)
+                    {
+                        SetStatus("Expected key but got " + m[index].GetType().Name,
+                                  IStatusProvider.StatusLevel.Warning);
+                        break;
+                    }
+
+                    if (OscConnectionManager.TryGetFloatFromMessagePart(m[index + 1], out var floatValue))
+                    {
+                        _valuesByKeys[m.Address + "/" + key] = floatValue;
+                    }
+
+                    _collectedFloatResults.Add(floatValue);
+                }
+            }
+            else
+            {
+                for (var index = 0; index < m.Count; index++)
+                {
+                    if (OscConnectionManager.TryGetFloatFromMessagePart(m[index], out var floatValue))
+                    {
+                        var path = m.Count == 1
+                                       ? OscConnectionManager.BuildMessageComponentPath(m)
+                                       : OscConnectionManager.BuildMessageComponentPath(m, index);
+                        _valuesByKeys[path] = floatValue;
+                    }
+
+                    _collectedFloatResults.Add(floatValue);
+                }
+            }
+
+            return true;
+        }
+        # endregion
+
+
 
         protected override void Dispose(bool isDisposing)
         {
@@ -192,7 +290,7 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
             OscConnectionManager.UnregisterConsumer(this);
         }
 
-        private string GetLocalIpAddress()
+        private static string GetLocalIpAddress()
         {
             using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0);
 
@@ -261,9 +359,12 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
         }
         #endregion
 
-        private double _lastMessageTime;
-        private readonly List<float> _allResults = new();
-
+        private bool _useKeyValuePairs;
+        private string _filterKey;
+        private string _filterPattern;
+        private Regex _filterRegex;
+        
+        private readonly List<float> _collectedFloatResults = new(10);
         private readonly Dict<float> _valuesByKeys = new(0f);
 
         private const int UndefinedPortId = -1;
@@ -271,9 +372,6 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
         private string _address;
 
         private bool _printLogMessages;
-        private bool _isDefaultValue = true;
-        private readonly List<OscMessage> _lastMatchingSignals = new(10);
-        private float _currentControllerValue;
 
         [Input(Guid = "87EFD3C4-F2DF-4996-924F-12C631BAD8D8")]
         public readonly InputSlot<int> Port = new();
@@ -281,14 +379,17 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
         [Input(Guid = "17D1FE47-430A-4465-92AA-92A4EFFB515F")]
         public readonly InputSlot<string> Address = new();
 
-        [Input(Guid = "4636D6CF-8233-4281-8840-5BA079B5F1A6")]
-        public readonly InputSlot<float> DefaultOutputValue = new();
-
-        // [Input(Guid = "7C681EE6-D071-4284-8585-1C3E03A089EA")]
-        // public readonly InputSlot<bool> IsScanning = new();
-
         [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
         public readonly InputSlot<bool> PrintLogMessages = new();
+
+        [Input(Guid = "8014A7A6-CACB-4206-A5B4-87C14235A20C")]
+        public readonly InputSlot<bool> UseKeyValuePairs = new();
+
+        [Input(Guid = "8E5D30A3-5878-4F64-9EB4-AD5782A957BF")]
+        public readonly InputSlot<string> FilterKey = new();
+
+        [Input(Guid = "DBF1C777-D399-49BC-ACB0-335CD1F7FA81")]
+        public readonly InputSlot<string> Pattern = new();
 
         private const string Separator = " - ";
     }

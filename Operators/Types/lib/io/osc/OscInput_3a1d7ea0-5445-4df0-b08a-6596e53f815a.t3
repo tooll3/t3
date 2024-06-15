@@ -12,12 +12,20 @@
       "DefaultValue": ""
     },
     {
-      "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
-      "DefaultValue": 0.0
-    },
-    {
       "Id": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "8014a7a6-cacb-4206-a5b4-87c14235a20c"/*UseKeyValuePairs*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "8e5d30a3-5878-4f64-9eb4-ad5782a957bf"/*FilterKey*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "dbf1c777-d399-49bc-acb0-335cd1f7fa81"/*Pattern*/,
+      "DefaultValue": ""
     }
   ],
   "Children": [],

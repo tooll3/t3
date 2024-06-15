@@ -229,6 +229,9 @@ namespace T3.Editor.Gui.Windows
                            .HelpText("On startup, Tooll will listen for OSC messages on the default port." +
                                      "The IO indicator in the timeline will show incoming messages.\n" +
                                      "You can also use the OscInput operator to receive OSC from other ports.");
+                            
+                        CustomComponents
+                           .HelpText("Changing the port will require a restart of Tooll.");
                         
                         FormInputs.AddInt("Default Port", ref ProjectSettings.Config.DefaultOscPort,
                                           0, 65535, 1,

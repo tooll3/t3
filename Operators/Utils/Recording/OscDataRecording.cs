@@ -36,7 +36,7 @@ public class OscDataRecording : OscConnectionManager.IOscConsumer
 
         for (var index = 0; index < msg.Count; index++)
         {
-            if (!OscConnectionManager.TryGetValueAndPathForMessagePart(msg[index], out var value))
+            if (!OscConnectionManager.TryGetFloatFromMessagePart(msg[index], out var value))
                 continue;
 
             var pathWithIndex = msg.Count == 1

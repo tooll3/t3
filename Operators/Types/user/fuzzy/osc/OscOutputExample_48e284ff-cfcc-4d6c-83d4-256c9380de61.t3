@@ -19,11 +19,6 @@
           "Value": "/label1"
         },
         {
-          "Id": "827c7ae2-c129-4d04-a715-328c0a86bf8a"/*Values*/,
-          "Type": "System.Single",
-          "Value": 0.67
-        },
-        {
           "Id": "d5e9e9be-093b-4d57-9070-9b2cf33aa45b"/*Strings*/,
           "Type": "System.String",
           "Value": "1"
@@ -95,7 +90,7 @@
         {
           "Id": "054ade21-c08e-4633-9725-6168fd7806f9"/*Category*/,
           "Type": "System.Int32",
-          "Value": 6
+          "Value": 0
         }
       ],
       "Outputs": []

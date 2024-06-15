@@ -215,7 +215,7 @@ namespace Operators.Utils
             public bool _isRunning;
         }
         
-        public static bool TryGetValueAndPathForMessagePart(object arg, out float value)
+        public static bool TryGetFloatFromMessagePart(object arg, out float value)
         {
             value = arg switch
                         {
