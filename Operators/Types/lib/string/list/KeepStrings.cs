@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Windows.Forms;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -23,12 +22,21 @@ namespace T3.Operators.Types.Id_56eda8f4_09fc_48a3_ab1d_fbff4f4b6438
             Strings.UpdateAction = Update;
         }
 
+        private bool _clear;
+        
         private void Update(EvaluationContext context)
         {
             var maxCount = MaxCount.GetValue(context).Clamp(0, 10000);
             //var insertTriggered = MathUtils.WasTriggered(InsertTrigger.GetValue(context), ref _insertTrigger);
             var insertTriggered = InsertTrigger.GetValue(context);
 
+            if (MathUtils.WasTriggered(ClearTrigger.GetValue(context), ref _clear))
+            {
+                _strings.Clear();
+                _insertTimes.Clear();
+                ClearTrigger.SetTypedInputValue(false);
+            }
+            
             var onlyOnChanges = OnlyOnChanges.GetValue(context);
             var newStr = NewString.GetValue(context);
             var hasStringChanged = newStr != _lastString;

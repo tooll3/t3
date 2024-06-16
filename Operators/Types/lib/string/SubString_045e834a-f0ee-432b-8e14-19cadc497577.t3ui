@@ -1,0 +1,48 @@
+{
+  "Id": "045e834a-f0ee-432b-8e14-19cadc497577"/*SubString*/,
+  "Description": "Returns a subString of the connect string. \nThis can be useful for trimming a string to a maximun length.",
+  "InputUis": [
+    {
+      "InputId": "e7f79746-ff87-478e-9755-a8c7b1c34354"/*InputText*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "e88fbe0e-f7ac-48f1-9d17-e5e5eb8d4ffc"/*Mode*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "8bed669e-1141-433f-a8a5-ecbde812462b"/*Start*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "1910639e-5a41-4258-9d63-962dda5ea299"/*Length*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 180.0
+      },
+      "Min": 0,
+      "Max": 100000,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "fba93f4a-aecc-4bcb-9d5a-85b13e362b85"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}
