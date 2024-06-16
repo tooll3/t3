@@ -9,7 +9,7 @@
     },
     {
       "Id": "545629c0-c027-4e7c-888c-8e0589940d9d"/*WrapColumn*/,
-      "DefaultValue": 0
+      "DefaultValue": 100
     },
     {
       "Id": "9a474693-b2f2-4293-bb52-2f9401a0c928"/*Mode*/,

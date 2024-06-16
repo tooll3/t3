@@ -25,18 +25,19 @@ namespace T3.Operators.Types.Id_98bd1491_6e69_4ae0_9fc1_0be8e6a72d32
             var blendFactor = Blend.GetValue(context).Clamp(0,1);
             var blendSpread = BlendSpread.GetValue(context);
 
-            var maxLength = Math.Max(strA.Length, strB.Length).Clamp(1,100);
+            var totalMaxLength = MaxLength.GetValue(context).Clamp(1, 10000); // 10000 is going to be slow!
+            var maxLength = Math.Max(strA.Length, strB.Length).Clamp(1,totalMaxLength);
             var scrambleFactor = Scramble.GetValue(context);
             var scrambleSeed = ScrambleSeed.GetValue(context);
 
-            const string chars = " .-/\\?#<^*(&ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijlmnopqrstuvwxyz0123456789";
+            const string chars = " .-/\\?#<^*()&AÁÄBCDEFGHIJKLMNOÄÓÖPQRSTUÜÜÚVWXYZaäåbcdefghijklmnoóöpqrsßtuúüvwxyz0123456789";
             
             _stringBuilder.Clear();
 
             for (int index = 0; index < maxLength; index++)
             {
-                var charA = GetChar(strA, index);
-                var charB = GetChar(strB, index);
+                var charA = GetCharOrSpace(strA, index);
+                var charB = GetCharOrSpace(strB, index);
                 
                 if (charA == '\n' || charB == '\n')
                 {
@@ -63,7 +64,7 @@ namespace T3.Operators.Types.Id_98bd1491_6e69_4ae0_9fc1_0be8e6a72d32
             Result.Value = _stringBuilder.ToString();
         }
 
-        private static char GetChar(string str, int index)
+        private static char GetCharOrSpace(string str, int index)
         {
             if (index < 0 || index >= str.Length)
                 return ' ';
@@ -103,6 +104,8 @@ namespace T3.Operators.Types.Id_98bd1491_6e69_4ae0_9fc1_0be8e6a72d32
         [Input(Guid = "D95E112F-B89A-4AA1-954B-10521C0A3815")]
         public readonly InputSlot<int> ScrambleSeed= new();
 
+        [Input(Guid = "D70DA276-C047-42DB-A921-5C1263613CBB")]
+        public readonly InputSlot<int> MaxLength= new();
 
     }
 }
