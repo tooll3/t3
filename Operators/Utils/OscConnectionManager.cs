@@ -41,6 +41,10 @@ namespace Operators.Utils
 
                         _groupsByPort.Remove(group.Port);
                     }
+                    else
+                    {
+                        group.Consumers.Remove(consumer);
+                    }
                 }
 
                 break;

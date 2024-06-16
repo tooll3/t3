@@ -42,7 +42,7 @@
       "Description": "Many applications (e.g. Super Collider) send their data bundled as a list of key value pairs. Enabling this option will use the keys as another segment of the address path."
     },
     {
-      "InputId": "8e5d30a3-5878-4f64-9eb4-ad5782a957bf"/*FilterKey*/,
+      "InputId": "8e5d30a3-5878-4f64-9eb4-ad5782a957bf"/*SearchFilterKey*/,
       "Position": {
         "X": -200.0,
         "Y": 315.0
@@ -51,12 +51,35 @@
       "Usage": "Default"
     },
     {
-      "InputId": "dbf1c777-d399-49bc-acb0-335cd1f7fa81"/*Pattern*/,
+      "InputId": "dbf1c777-d399-49bc-acb0-335cd1f7fa81"/*SearchPattern*/,
       "Position": {
         "X": -200.0,
         "Y": 360.0
       },
       "Description": "This is a regular expression pattern, so it can not only match single strings but a range of values.",
+      "Usage": "Default"
+    },
+    {
+      "InputId": "3b179ff2-172a-4fda-8e26-7bb3e80628d0"/*IsListening*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
+    },
+    {
+      "InputId": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysInPaths*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "abc7817d-25dc-479b-984e-73b49d9ade5f"/*FilterKeys*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 495.0
+      },
       "Usage": "Default"
     }
   ],

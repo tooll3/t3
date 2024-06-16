@@ -20,11 +20,23 @@
       "DefaultValue": false
     },
     {
-      "Id": "8e5d30a3-5878-4f64-9eb4-ad5782a957bf"/*FilterKey*/,
+      "Id": "8e5d30a3-5878-4f64-9eb4-ad5782a957bf"/*SearchFilterKey*/,
       "DefaultValue": ""
     },
     {
-      "Id": "dbf1c777-d399-49bc-acb0-335cd1f7fa81"/*Pattern*/,
+      "Id": "dbf1c777-d399-49bc-acb0-335cd1f7fa81"/*SearchPattern*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "3b179ff2-172a-4fda-8e26-7bb3e80628d0"/*IsListening*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysInPaths*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "abc7817d-25dc-479b-984e-73b49d9ade5f"/*FilterKeys*/,
       "DefaultValue": ""
     }
   ],

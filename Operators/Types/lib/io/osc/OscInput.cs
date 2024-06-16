@@ -26,30 +26,57 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
         [Output(Guid = "3291E15A-1900-4252-8591-D016281527F0", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> WasTrigger = new();
 
-
         public OscInput()
         {
             Values.UpdateAction = Update;
             Contents.UpdateAction = Update;
-            
+
             WasTrigger.UpdateAction = AnimatedUpdate;
         }
 
-        
+        private bool _isListening;
+        private readonly List<string> _groupingKeys = new();
+        private readonly List<string> _filterKeys = new();
+
         private void Update(EvaluationContext context)
         {
+            var shouldClear = false;
+            
             var useKeyValuePairs = UseKeyValuePairs.GetValue(context);
             if (useKeyValuePairs != _useKeyValuePairs)
             {
-                _valuesByKeys.Clear();
+                shouldClear = true;
                 _useKeyValuePairs = useKeyValuePairs;
             }
 
+            if (GroupKeysInPaths.DirtyFlag.IsDirty)
+            {
+                _groupingKeys.Clear();
+                _groupingKeys.AddRange(GroupKeysInPaths.GetValue(context).Split(","));
+                shouldClear = true;
+            }
+
+            if (FilterKeys.DirtyFlag.IsDirty)
+            {
+                _filterKeys.Clear();
+                var filters = FilterKeys.GetValue(context);
+                if (string.IsNullOrEmpty(filters))
+                {
+                    _filterKeys.Clear();
+                }
+                else
+                {
+                    _filterKeys.AddRange(filters.Split(","));
+                }
+
+                shouldClear = true;
+            }
+
             // Update address and give connectivity status 
-            _filterKey = FilterKey.GetValue(context);
-            
-            var filterPattern = Pattern.GetValue(context);
-            if(filterPattern != _filterPattern)
+            _searchFilterKey = SearchFilterKey.GetValue(context);
+
+            var filterPattern = SearchPattern.GetValue(context);
+            if (filterPattern != _filterPattern)
             {
                 _filterPattern = filterPattern;
                 if (!string.IsNullOrEmpty(filterPattern))
@@ -65,49 +92,69 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
                         return;
                     }
                 }
-                
-                _valuesByKeys.Clear();
+
+                shouldClear = true;
             }
-            
 
             if (Address.DirtyFlag.IsDirty || Port.DirtyFlag.IsDirty)
                 UpdateStatusMessage();
-            
+
+            var isListening = IsListening.GetValue(context);
+            var isListeningChanged = isListening != _isListening;
+            if (isListeningChanged)
+            {
+                _isListening = isListening;
+            }
+
             var newAddress = Address.GetValue(context);
             if (newAddress != _address)
             {
-                _valuesByKeys.Clear();
+                shouldClear = true;
                 _address = newAddress;
             }
 
             var newPort = Port.GetValue(context);
-            if (newPort != _registeredPort)
+            var portChanged = newPort != _port;
+            if (portChanged || isListeningChanged)
             {
-                _valuesByKeys.Clear();
-
+                shouldClear = true;
+                
                 if (newPort < 0 || newPort > 65535)
                 {
                     SetStatus("Invalid port number", IStatusProvider.StatusLevel.Warning);
                     return;
                 }
 
-                if (_registeredPort != UndefinedPortId)
+                if (_isConnected && (_port != UndefinedPortId || !isListening))
                 {
+                    Log.Debug("Unregister after isListeningChanged 2", this);
                     OscConnectionManager.UnregisterConsumer(this);
+                    _isConnected = false;
                 }
 
-                OscConnectionManager.RegisterConsumer(this, newPort);
-                _registeredPort = newPort;
+                if (isListening)
+                {
+                    Log.Debug($"Register after {_port}", this);
+                    OscConnectionManager.RegisterConsumer(this, newPort);
+                    _isConnected = true;
+                }
+
+                _port = newPort;
             }
 
             // Update output
             _printLogMessages = PrintLogMessages.GetValue(context);
 
             Values.Value = _collectedFloatResults;
-            Contents.Value = _valuesByKeys;
-            _wasTrigger = true;
 
-            // Prevent updates from multiple connected outputs
+            lock (_valuesByKeys)
+            {
+                if(shouldClear)
+                    _valuesByKeys.Clear();
+                
+                Contents.Value = _valuesByKeys;
+            }
+
             Values.DirtyFlag.Clear();
             Contents.DirtyFlag.Clear();
         }
@@ -119,16 +166,23 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
         /// </summary>
         private void AnimatedUpdate(EvaluationContext context)
         {
+            if (Math.Abs(_lastUpdateFrame - context.LocalFxTime) < 0.001f)
+                return;
+            
+            _lastUpdateFrame = context.LocalFxTime;
+            Update(context);
+            
             WasTrigger.Value = _wasTrigger;
             _wasTrigger = false;
         }
+
         private bool _wasTrigger;
 
         private void UpdateStatusMessage()
         {
             // Update status message
             var ipAddress = GetLocalIpAddress();
-            var portIsActive = OscConnectionManager.TryGetScannedAddressesForPort(_registeredPort, out var addresses) && addresses.Count > 0;
+            var portIsActive = OscConnectionManager.TryGetScannedAddressesForPort(_port, out var addresses) && addresses.Count > 0;
             var addressIsDefined = !string.IsNullOrEmpty(_address);
             var addressIsActive = addressIsDefined && portIsActive && addresses.ContainsKey(_address);
 
@@ -140,7 +194,7 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
 
             if (addressIsDefined && portIsActive)
             {
-                SetStatus($"No messages for {_address} on {_registeredPort}.", IStatusProvider.StatusLevel.Warning);
+                SetStatus($"No messages for {_address} on {_port}.", IStatusProvider.StatusLevel.Warning);
                 return;
             }
 
@@ -150,11 +204,10 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
                 return;
             }
 
-            SetStatus($"Listening on {ipAddress}:{_registeredPort}\nNo messages received, yet.", IStatusProvider.StatusLevel.Notice);
+            SetStatus($"Listening on {ipAddress}:{_port}\nNo messages received, yet.", IStatusProvider.StatusLevel.Notice);
         }
 
         # region handling async messages from other thread
-        
         public void ProcessMessage(OscMessage msg)
         {
             lock (this)
@@ -169,12 +222,12 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
 
                 if (!ParseMessages(msg))
                     return;
-                
+
                 SetStatus(string.Empty, IStatusProvider.StatusLevel.Success);
                 FlagAsDirty();
             }
         }
-        
+
         /// <summary>
         /// This will cause Update to be called on next frame 
         /// </summary>
@@ -182,105 +235,125 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
         {
             Contents.DirtyFlag.Invalidate();
             Values.DirtyFlag.Invalidate();
+            _wasTrigger = true;
         }
-        
+
         private bool ParseMessages(OscMessage m)
         {
-            if (m.Count == 0)
-                return false;
-
-            _collectedFloatResults.Clear();
-            if (_useKeyValuePairs)
+            lock (_valuesByKeys)
             {
-                if (m.Count % 2 != 0)
-                {
-                    SetStatus("Osc message has odd number of elements, can't be used as key value pairs",
-                              IStatusProvider.StatusLevel.Warning);
+                if (m.Count == 0)
                     return false;
-                }
 
-                if (!string.IsNullOrEmpty(_filterKey))
+                _collectedFloatResults.Clear();
+                if (_useKeyValuePairs)
                 {
-                    var foundMatch = false;
-                    for (var index = 0; index < m.Count; index += 2)
+                    if (m.Count % 2 != 0)
                     {
-                        if (m[index] is not string key)
-                            continue;
-
-                        if (key != _filterKey)
-                            continue;
-
-                        var valueAsString = m[index + 1].ToString();
-
-                        if (valueAsString == null)
-                            continue;
-
-                        if (_filterRegex != null)
-                        {
-                            if (!_filterRegex.IsMatch(valueAsString))
-                                continue;
-                        }
-                        else
-                        {
-                            if (!string.IsNullOrEmpty(valueAsString))
-                                continue;
-                        }
-
-                        // if (valueAsString != _filterPattern)
-                        //     continue;
-
-                        foundMatch = true;
-                        break;
+                        SetStatus("Osc message has odd number of elements, can't be used as key value pairs",
+                                  IStatusProvider.StatusLevel.Warning);
+                        return false;
                     }
 
-                    if (!foundMatch)
+                    if (!string.IsNullOrEmpty(_searchFilterKey))
                     {
-                        if (_printLogMessages)
+                        var foundMatch = false;
+                        for (var index = 0; index < m.Count; index += 2)
                         {
-                            Log.Debug($"Skipping OSC message not matching {_filterKey} == {_filterPattern}", this);
+                            if (m[index] is not string key)
+                                continue;
+
+                            if (key != _searchFilterKey)
+                                continue;
+
+                            var valueAsString = m[index + 1].ToString();
+
+                            if (valueAsString == null)
+                                continue;
+
+                            if (_filterRegex != null)
+                            {
+                                if (!_filterRegex.IsMatch(valueAsString))
+                                    continue;
+                            }
+                            else
+                            {
+                                if (!string.IsNullOrEmpty(valueAsString))
+                                    continue;
+                            }
+
+                            foundMatch = true;
+                            break;
+                        }
+
+                        if (!foundMatch)
+                        {
+                            if (_printLogMessages)
+                            {
+                                Log.Debug($"Skipping OSC message not matching {_searchFilterKey} == {_filterPattern}", this);
+                            }
                             return false;
                         }
                     }
-                }
 
-                for (var index = 0; index < m.Count; index += 2)
+                    var groupingSuffix = "";
+                    if (_groupingKeys.Count > 0)
+                    {
+                        foreach (var groupKey in _groupingKeys)
+                        {
+                            for (var index = 0; index < m.Count; index += 2)
+                            {
+                                if (m[index] is not string key || key != groupKey)
+                                    continue;
+
+                                groupingSuffix += key + "_" + m[index + 1]  + "/";
+                            }
+                        }
+                    }
+
+                    for (var index = 0; index < m.Count; index += 2)
+                    {
+                        if (m[index] is not string key)
+                        {
+                            SetStatus("Expected key but got " + m[index].GetType().Name,
+                                      IStatusProvider.StatusLevel.Warning);
+                            break;
+                        }
+
+                        if (_groupingKeys.Contains(key))
+                            continue;
+
+                        if (_filterKeys.Count > 0 && !_filterKeys.Contains(key))
+                            continue;
+
+                        if (OscConnectionManager.TryGetFloatFromMessagePart(m[index + 1], out var floatValue))
+                        {
+                            _valuesByKeys[m.Address + "/" + groupingSuffix + key] = floatValue;
+                        }
+
+                        _collectedFloatResults.Add(floatValue);
+                    }
+                }
+                else
                 {
-                    if (m[index] is not string key)
+                    for (var index = 0; index < m.Count; index++)
                     {
-                        SetStatus("Expected key but got " + m[index].GetType().Name,
-                                  IStatusProvider.StatusLevel.Warning);
-                        break;
-                    }
+                        if (OscConnectionManager.TryGetFloatFromMessagePart(m[index], out var floatValue))
+                        {
+                            var path = m.Count == 1
+                                           ? OscConnectionManager.BuildMessageComponentPath(m)
+                                           : OscConnectionManager.BuildMessageComponentPath(m, index);
+                            _valuesByKeys[path] = floatValue;
+                        }
 
-                    if (OscConnectionManager.TryGetFloatFromMessagePart(m[index + 1], out var floatValue))
-                    {
-                        _valuesByKeys[m.Address + "/" + key] = floatValue;
+                        _collectedFloatResults.Add(floatValue);
                     }
-
-                    _collectedFloatResults.Add(floatValue);
                 }
-            }
-            else
-            {
-                for (var index = 0; index < m.Count; index++)
-                {
-                    if (OscConnectionManager.TryGetFloatFromMessagePart(m[index], out var floatValue))
-                    {
-                        var path = m.Count == 1
-                                       ? OscConnectionManager.BuildMessageComponentPath(m)
-                                       : OscConnectionManager.BuildMessageComponentPath(m, index);
-                        _valuesByKeys[path] = floatValue;
-                    }
 
-                    _collectedFloatResults.Add(floatValue);
-                }
+                return true;
             }
-
-            return true;
         }
         # endregion
-
-
 
         protected override void Dispose(bool isDisposing)
         {
@@ -358,39 +431,53 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
             }
         }
         #endregion
-
+        
+        private double _lastUpdateFrame = -1;
+        private bool _isConnected;
+        
         private bool _useKeyValuePairs;
-        private string _filterKey;
+        private string _searchFilterKey;
         private string _filterPattern;
         private Regex _filterRegex;
-        
+
         private readonly List<float> _collectedFloatResults = new(10);
         private readonly Dict<float> _valuesByKeys = new(0f);
 
         private const int UndefinedPortId = -1;
-        private int _registeredPort = UndefinedPortId;
+        private int _port = UndefinedPortId;
         private string _address;
 
         private bool _printLogMessages;
+        
 
         [Input(Guid = "87EFD3C4-F2DF-4996-924F-12C631BAD8D8")]
         public readonly InputSlot<int> Port = new();
 
         [Input(Guid = "17D1FE47-430A-4465-92AA-92A4EFFB515F")]
         public readonly InputSlot<string> Address = new();
-
-        [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
-        public readonly InputSlot<bool> PrintLogMessages = new();
+        
 
         [Input(Guid = "8014A7A6-CACB-4206-A5B4-87C14235A20C")]
         public readonly InputSlot<bool> UseKeyValuePairs = new();
 
+        [Input(Guid = "D9470564-3629-49FC-B9A2-4EA8B5AF6B60")]
+        public readonly InputSlot<string> GroupKeysInPaths = new();
+
+        [Input(Guid = "ABC7817D-25DC-479B-984E-73B49D9ADE5F")]
+        public readonly InputSlot<string> FilterKeys = new();
+
         [Input(Guid = "8E5D30A3-5878-4F64-9EB4-AD5782A957BF")]
-        public readonly InputSlot<string> FilterKey = new();
+        public readonly InputSlot<string> SearchFilterKey = new();
 
         [Input(Guid = "DBF1C777-D399-49BC-ACB0-335CD1F7FA81")]
-        public readonly InputSlot<string> Pattern = new();
+        public readonly InputSlot<string> SearchPattern = new();
 
+        [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
+        public readonly InputSlot<bool> PrintLogMessages = new();
+        
+        [Input(Guid = "3B179FF2-172A-4FDA-8E26-7BB3E80628D0")]
+        public readonly InputSlot<bool> IsListening = new();
+        
         private const string Separator = " - ";
     }
 }
