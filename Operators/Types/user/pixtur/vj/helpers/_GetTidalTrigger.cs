@@ -28,9 +28,13 @@ namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
 
         private void Update(EvaluationContext context)
         {
-            if(Math.Abs(context.LocalFxTime - _lastUpdateTime) < 0.001f)
+            if (Math.Abs(context.LocalFxTime - _lastUpdateTime) < 0.001f)
+            {
+                Log.Debug($"Skip multiple updates {context.LocalFxTime - _lastUpdateTime}");
                 return;
+            }
             
+            var logDebug = LogDebug.GetValue(context);
             _lastUpdateTime = context.LocalFxTime;
             
             _dict = DictionaryInput.GetValue(context);
@@ -48,9 +52,15 @@ namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
                 return;
             }
 
+            WasTrigger.Value = false;
             
             var notePath = path + NoteChannel.GetValue(context);
             var cyclePath = path + CycleChannel.GetValue(context);
+
+            if (logDebug)
+            {
+                Log.Debug($"Note: {notePath}  / {cyclePath}", this);
+            }
 
             if (
                 _dict.TryGetValue(notePath, out var note)
@@ -58,12 +68,22 @@ namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
             {
                 if (useNotesForBeats)
                 {
-                    if ($"{note}" == channel)
+                    if ($"{note:0}" == channel)
                     {
                         Note.Value = note;
                         WasTrigger.Value = cycle > _lastCycle;
                         _lastCycle = cycle;
-                        Log.Debug($"found beat {notePath} '{note}'  '{channel}' " );
+                        if (logDebug)
+                        {
+                            Log.Debug($"found beat {notePath} '{note}'  '{channel}' " ,this);
+                        }
+                    }
+                    else
+                    {
+                        if (logDebug)
+                        {
+                            Log.Debug($"not matching '{note:0}' vs '{channel}' " ,this);
+                        }
                     }
                 }
                 else
@@ -74,10 +94,7 @@ namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
                 }
                 SetStatus(null, IStatusProvider.StatusLevel.Success);
             }
-            else
-            {
-                SetStatus($"Key not found: {path}", IStatusProvider.StatusLevel.Warning);
-            }
+
 
             Note.DirtyFlag.Clear();
             WasTrigger.DirtyFlag.Clear();
@@ -149,6 +166,8 @@ namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
 
         [Input(Guid = "8E355D24-4934-4008-990D-76448A647281")]
         public readonly InputSlot<bool> UseNotesForBeats = new();
-
+        
+        [Input(Guid = "183C0A33-A37B-42EB-B160-B370AAD2E924")]
+        public readonly InputSlot<bool> LogDebug = new();
     }
 }

@@ -26,6 +26,10 @@
     {
       "Id": "656303da-90bf-4790-84e8-7b9f5aac2ebd"/*Notes*/,
       "DefaultValue": ""
+    },
+    {
+      "Id": "2a0e7afe-8903-44c7-b99d-399d7a6243e1"/*LogDebug*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
@@ -395,7 +399,7 @@
         {
           "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
           "Type": "System.Single",
-          "Value": 0.17
+          "Value": 0.11
         }
       ],
       "Outputs": []
@@ -403,7 +407,13 @@
     {
       "Id": "62c61d72-41b8-45dc-87e0-f1181dd4ebfe"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "4f9ab443-3885-4a57-9116-6be5824bd95b"/*Amount*/,
+          "Type": "System.Single",
+          "Value": 0.3
+        }
+      ],
       "Outputs": []
     },
     {
@@ -634,6 +644,12 @@
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "2a0e7afe-8903-44c7-b99d-399d7a6243e1",
+      "TargetParentOrChildId": "8e3eeba4-dcb8-496b-a52d-6989d235ea4f",
+      "TargetSlotId": "183c0a33-a37b-42eb-b160-b370aad2e924"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "11a66dbf-000d-4241-bc67-1acb7a3771d2",
       "TargetParentOrChildId": "8e3eeba4-dcb8-496b-a52d-6989d235ea4f",
       "TargetSlotId": "8e355d24-4934-4008-990d-76448a647281"
@@ -649,12 +665,6 @@
       "SourceSlotId": "ff44cec1-765d-420b-8c3c-77f971b5f50b",
       "TargetParentOrChildId": "8e3eeba4-dcb8-496b-a52d-6989d235ea4f",
       "TargetSlotId": "eddeab43-5d7e-4f42-abb7-7909c9a7212e"
-    },
-    {
-      "SourceParentOrChildId": "8adf7eec-3271-4d58-92e9-9000bcdef5ea",
-      "SourceSlotId": "e47bf25e-351a-44e6-84c6-ad3abc93531a",
-      "TargetParentOrChildId": "8e3eeba4-dcb8-496b-a52d-6989d235ea4f",
-      "TargetSlotId": "fac3cc60-2a58-4106-a258-3798df04455a"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

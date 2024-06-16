@@ -1,0 +1,168 @@
+{
+  "Id": "52282884-fa27-428d-ba8f-eeaf4d69e00a"/*LiveCodingVideoSource*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "5b561b66-ec20-421b-965f-c17f5c881d8b"/*UseNdi*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "7bd8f734-23ef-4312-8a22-8f81199ac6b0"/*FadeIn*/,
+      "Position": {
+        "X": -212.69833,
+        "Y": 399.49478
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "b82c0c1e-7958-46d1-811b-472b1015ea98"/*PlayVideo*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 269.3999
+      }
+    },
+    {
+      "ChildId": "ba7a29aa-beb5-4945-a092-7bea23f0e2b1"/*KeyColor*/,
+      "Position": {
+        "X": 668.0993,
+        "Y": 187.70013
+      }
+    },
+    {
+      "ChildId": "8c756b70-4e00-48ff-a723-901f2b72ddc4"/*Layer2d*/,
+      "Position": {
+        "X": 1364.7041,
+        "Y": 245.50342
+      }
+    },
+    {
+      "ChildId": "6694f56b-c685-4d75-a027-1fdbb52f74d9"/*Blur*/,
+      "Position": {
+        "X": 1214.7041,
+        "Y": 321.50336
+      }
+    },
+    {
+      "ChildId": "bcac58b1-6d81-4f24-a74c-10d043e25999"/*KeyExecuteLines*/,
+      "Position": {
+        "X": 821.57025,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "784cf094-a424-410b-b8b1-6a5e0e9496af"/*Layer2d*/,
+      "Position": {
+        "X": 1364.7041,
+        "Y": 142.50342
+      }
+    },
+    {
+      "ChildId": "31c1475e-7a34-44ae-8d67-e753fec9bebf"/*Time*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 269.3999
+      }
+    },
+    {
+      "ChildId": "5b313c01-f85f-4e33-bbba-0c64b0ad2d66"/*Add*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 269.3999
+      }
+    },
+    {
+      "ChildId": "63967e41-b96f-4261-bdc2-6703c75adf0a"/*Group*/,
+      "Position": {
+        "X": 1524.8429,
+        "Y": 147.9425
+      }
+    },
+    {
+      "ChildId": "7cc1ff00-3815-4a44-b362-3da0813405b5"/*Shadow*/,
+      "Position": {
+        "X": 1364.7041,
+        "Y": 321.50336
+      }
+    },
+    {
+      "ChildId": "322d1093-26a5-40f2-9510-bbd6217f196c"/*Crop*/,
+      "Position": {
+        "X": 671.57025,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "c2805634-7a4b-4809-b96a-8da96e53fa1f"/*AfterGlow2*/,
+      "Position": {
+        "X": 971.57025,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "22cce203-abd9-4ca8-82b4-a0c591007948"/*MidiInput*/,
+      "Position": {
+        "X": 1214.7041,
+        "Y": 377.50336
+      }
+    },
+    {
+      "ChildId": "e4c7ce8b-bf83-490d-aa01-60df1e7f32b1"/*SampleGradient*/,
+      "Comment": "This never fades out completely to keep group alive.",
+      "Position": {
+        "X": 1364.7041,
+        "Y": 377.50336
+      }
+    },
+    {
+      "ChildId": "8ebc45e9-6a4c-4877-bdcf-19b59056b3d2"/*PickTexture*/,
+      "Position": {
+        "X": 450.0,
+        "Y": 76.3999
+      }
+    },
+    {
+      "ChildId": "b6a2c8f4-05e7-4d9b-8f62-bbc853bd8a46"/*NdiInput*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 76.3999
+      }
+    },
+    {
+      "ChildId": "d3febda4-9ff8-488b-bf1a-a17d5f1f5551"/*Layer2d*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 76.3999
+      }
+    },
+    {
+      "ChildId": "bac837e2-1f98-424c-8ee4-c7bbcb0969e9"/*RenderTarget*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 76.3999
+      }
+    },
+    {
+      "ChildId": "c1aaf2d2-482f-4b01-ac65-975e4bf8ae91"/*BoolToInt*/,
+      "Position": {
+        "X": 61.34961,
+        "Y": -37.94507
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "63660f7f-c5ea-4a0c-b155-7cb5d8eab222"/*Output*/,
+      "Position": {
+        "X": 1934.8429,
+        "Y": 206.75168
+      }
+    }
+  ]
+}

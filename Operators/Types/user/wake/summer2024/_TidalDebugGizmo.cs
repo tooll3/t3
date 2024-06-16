@@ -1,5 +1,4 @@
 using T3.Core.DataTypes;
-using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -34,6 +33,9 @@ namespace T3.Operators.Types.Id_9fb0c9a1_5d76_47bc_8749_17aa8d13e4e4
 
         [Input(Guid = "656303da-90bf-4790-84e8-7b9f5aac2ebd")]
         public readonly InputSlot<string> Notes = new InputSlot<string>();
+
+        [Input(Guid = "2a0e7afe-8903-44c7-b99d-399d7a6243e1")]
+        public readonly InputSlot<bool> LogDebug = new InputSlot<bool>();
 
     }
 }

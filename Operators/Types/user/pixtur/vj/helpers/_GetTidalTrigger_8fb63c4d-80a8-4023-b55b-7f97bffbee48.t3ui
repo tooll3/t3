@@ -56,6 +56,13 @@
         "X": -200.0,
         "Y": 90.0
       }
+    },
+    {
+      "InputId": "183c0a33-a37b-42eb-b160-b370aad2e924"/*LogDebug*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
     }
   ],
   "SymbolChildUis": [],

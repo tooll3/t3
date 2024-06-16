@@ -5,8 +5,8 @@
     {
       "InputId": "ff44cec1-765d-420b-8c3c-77f971b5f50b"/*DictionaryInput*/,
       "Position": {
-        "X": -640.84656,
-        "Y": -1.1408997
+        "X": -630.2769,
+        "Y": 23.834671
       }
     },
     {
@@ -48,6 +48,13 @@
         "Y": 463.2263
       },
       "Usage": "Multiline"
+    },
+    {
+      "InputId": "2a0e7afe-8903-44c7-b99d-399d7a6243e1"/*LogDebug*/,
+      "Position": {
+        "X": -1013.464,
+        "Y": 508.2263
+      }
     }
   ],
   "SymbolChildUis": [
@@ -82,8 +89,8 @@
     {
       "ChildId": "8adf7eec-3271-4d58-92e9-9000bcdef5ea"/*CombineStrings*/,
       "Position": {
-        "X": -780.0971,
-        "Y": 149.28839
+        "X": -786.9805,
+        "Y": 119.8772
       }
     },
     {
@@ -250,8 +257,8 @@
     {
       "ChildId": "2092e9e1-e07c-485f-bbf8-6b44129a4e99"/*DrawLines*/,
       "Position": {
-        "X": 587.43933,
-        "Y": 1262.019
+        "X": 609.9671,
+        "Y": 1241.2936
       }
     }
   ],
