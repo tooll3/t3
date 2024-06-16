@@ -77,7 +77,8 @@
       "Position": {
         "X": -200.0,
         "Y": 495.0
-      }
+      },
+      "Description": "Recording value might be useful for tapping in rythms during a live set.\nIf there is an input (e.g. MidiInput) connected to recordValue, it will detect hits and writes them to the cycle.\n\nThe different modes define how recording should work: Either continues overdubbing or by clearing the complete cycle on recording start.\n"
     },
     {
       "InputId": "3ce54ca0-cd50-4dc2-bd3d-51e26ebf05ce"/*RecordValue*/,

@@ -100,9 +100,9 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             }
 
             var time = context.LocalFxTime * _rate;
-            var overrideTime = OverrideTime.GetValue(context) / CurrentSequence.Count;
             if (OverrideTime.IsConnected)
             {
+                var overrideTime = OverrideTime.GetValue(context);
                 time = overrideTime * _rate;
             }
             
@@ -146,7 +146,6 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
                     {
                         // Clear all steps if it has been a while since the last record
                         var cyclesSinceLastRecord = (time - _recordingStartTime) / (_rate * 4);
-                        Log.Debug("Time since last record: " + cyclesSinceLastRecord + " cycles");
                         if(cyclesSinceLastRecord > 1f)
                         {
                             for (var index = 0; index < CurrentSequence.Count; index++)
@@ -158,7 +157,7 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
                             _lastRecordedIndex = 0;
                         }
                         
-                        var nearestStepIndex = (int)Math.Round(NormalizedBarTime * CurrentSequence.Count);
+                        var nearestStepIndex = (int)Math.Floor(NormalizedBarTime * CurrentSequence.Count);
                         SetStepValue(nearestStepIndex, 1);
                     }
 
