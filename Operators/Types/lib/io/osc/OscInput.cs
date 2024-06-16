@@ -40,6 +40,11 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
 
         private void Update(EvaluationContext context)
         {
+            if (Math.Abs(_lastUpdateFrame - context.LocalFxTime) < 0.001f)
+                return;
+            
+            _lastUpdateFrame = context.LocalFxTime;
+            
             var shouldClear = false;
             
             var useKeyValuePairs = UseKeyValuePairs.GetValue(context);
@@ -303,10 +308,23 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
                         {
                             for (var index = 0; index < m.Count; index += 2)
                             {
-                                if (m[index] is not string key || key != groupKey)
+                                if (m[index] is not string key)
                                     continue;
 
-                                groupingSuffix +=  m[index + 1]  + "/";
+                                if (groupKey.StartsWith("$"))
+                                {
+                                    if (key == groupKey.Substring(1))
+                                    {
+                                        groupingSuffix += key + "_" + m[index + 1] + "/";
+                                    }
+                                }
+                                else
+                                {
+                                    if (key == groupKey)
+                                    {
+                                        groupingSuffix +=  m[index + 1]  + "/";
+                                    }
+                                }
 
                                 // Adding the key as prefix might help but leads to cluttered paths
                                 //groupingSuffix += key + "_" + m[index + 1]  + "/";
