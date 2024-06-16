@@ -49,10 +49,10 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
                 _useKeyValuePairs = useKeyValuePairs;
             }
 
-            if (GroupKeysInPaths.DirtyFlag.IsDirty)
+            if (GroupKeysAsPaths.DirtyFlag.IsDirty)
             {
                 _groupingKeys.Clear();
-                _groupingKeys.AddRange(GroupKeysInPaths.GetValue(context).Split(","));
+                _groupingKeys.AddRange(GroupKeysAsPaths.GetValue(context).Split(","));
                 shouldClear = true;
             }
 
@@ -306,7 +306,10 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
                                 if (m[index] is not string key || key != groupKey)
                                     continue;
 
-                                groupingSuffix += key + "_" + m[index + 1]  + "/";
+                                groupingSuffix +=  m[index + 1]  + "/";
+
+                                // Adding the key as prefix might help but leads to cluttered paths
+                                //groupingSuffix += key + "_" + m[index + 1]  + "/";
                             }
                         }
                     }
@@ -461,7 +464,7 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
         public readonly InputSlot<bool> UseKeyValuePairs = new();
 
         [Input(Guid = "D9470564-3629-49FC-B9A2-4EA8B5AF6B60")]
-        public readonly InputSlot<string> GroupKeysInPaths = new();
+        public readonly InputSlot<string> GroupKeysAsPaths = new();
 
         [Input(Guid = "ABC7817D-25DC-479B-984E-73B49D9ADE5F")]
         public readonly InputSlot<string> FilterKeys = new();

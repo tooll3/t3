@@ -67,7 +67,7 @@
       }
     },
     {
-      "InputId": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysInPaths*/,
+      "InputId": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysAsPaths*/,
       "Position": {
         "X": -200.0,
         "Y": 450.0

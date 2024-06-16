@@ -34,20 +34,10 @@ namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
             _lastUpdateTime = context.LocalFxTime;
             
             _dict = DictionaryInput.GetValue(context);
-            // var selectString = Select.GetValue(context);
             
             var useNotesForBeats = UseNotesForBeats.GetValue(context);
             var id = Id.GetValue(context);
             var channel = Channel.GetValue(context);
-            
-            // if(selectString.EndsWith("/"))
-            //     selectString = selectString[..^1];
-
-            // if (string.IsNullOrEmpty(selectString))
-            // {
-            //     SetStatus("No key selected", IStatusProvider.StatusLevel.Warning);
-            //     return;
-            // }
             
             var path = useNotesForBeats ? $"/dirt/play/{id}/"
                 : $"/dirt/play/{id}/{channel}/";
@@ -74,10 +64,6 @@ namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
                         WasTrigger.Value = cycle > _lastCycle;
                         _lastCycle = cycle;
                         Log.Debug($"found beat {notePath} '{note}'  '{channel}' " );
-                    }
-                    else
-                    {
-                        //Log.Debug($"Skipping note because it is not the right channel '{note}'  '{channel}' " );
                     }
                 }
                 else

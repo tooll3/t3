@@ -32,7 +32,7 @@
       "DefaultValue": true
     },
     {
-      "Id": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysInPaths*/,
+      "Id": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysAsPaths*/,
       "DefaultValue": ""
     },
     {
