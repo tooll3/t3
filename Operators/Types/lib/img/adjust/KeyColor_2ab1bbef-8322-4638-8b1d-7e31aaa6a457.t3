@@ -46,7 +46,7 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "e32268a7-8527-4d0d-b9ba-11c23cb07dd2"/*Mode*/,
+      "Id": "e32268a7-8527-4d0d-b9ba-11c23cb07dd2"/*Return*/,
       "DefaultValue": 0
     },
     {
