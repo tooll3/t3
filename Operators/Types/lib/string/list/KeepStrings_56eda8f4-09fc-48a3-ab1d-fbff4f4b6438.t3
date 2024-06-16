@@ -1,0 +1,41 @@
+{
+  "Name": "KeepStrings",
+  "Id": "56eda8f4-09fc-48a3-ab1d-fbff4f4b6438",
+  "Namespace": "lib.string.list",
+  "Inputs": [
+    {
+      "Id": "26adb8d2-14e7-4006-99ed-bcbbede8352a"/*NewString*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "d045f941-7035-4a84-b0b0-2691477ef375"/*InsertTrigger*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "1b777f1e-e219-4b8f-b185-94466c280881"/*MaxCount*/,
+      "DefaultValue": 100
+    },
+    {
+      "Id": "2ff583b8-8b3e-4441-aa60-7365f4c54320"/*ClearTrigger*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "3a9e3e1c-e8c2-46c7-96ac-b7c317205ed4"/*OnlyOnChanges*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "694574a3-a3a9-4073-beec-a6a10ed64b81"/*InsertMode*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "d44903ae-379f-4f7a-80fa-56379e3cfae9"/*InsertIndex*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "ba5cd2ae-15df-4d67-8690-a5b0d1b81971"/*Index*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
