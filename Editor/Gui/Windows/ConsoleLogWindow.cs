@@ -263,7 +263,7 @@ namespace T3.Editor.Gui.Windows
 
             if (_isAtBottom)
             {
-                _shouldScrollToBottom = true;
+                //_shouldScrollToBottom = true;
             }
         }
 
