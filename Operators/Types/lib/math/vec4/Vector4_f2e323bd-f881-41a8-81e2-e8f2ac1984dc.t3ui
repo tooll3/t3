@@ -7,28 +7,32 @@
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Input / definition of X"
     },
     {
       "InputId": "46a4ee87-ab2b-406b-a9ae-c000f887d99f"/*Y*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Input / definition of Y"
     },
     {
       "InputId": "59908ecc-1822-4aba-a2d9-cfe97168b3b3"/*Z*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Description": "Input / definition of Z"
     },
     {
       "InputId": "6ce53000-34d6-4d9a-aef3-164fd223f6d2"/*W*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "Description": "Input / definition of W"
     }
   ],
   "SymbolChildUis": [],

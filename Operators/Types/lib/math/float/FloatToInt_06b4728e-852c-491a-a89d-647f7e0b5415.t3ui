@@ -9,6 +9,7 @@
         "X": 0.0,
         "Y": 0.0
       },
+      "Description": "Definition / input for the Float value to be converted into an Integer.",
       "Min": -100.0,
       "Max": 100.0
     }
