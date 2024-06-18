@@ -29,7 +29,7 @@
     },
     {
       "Id": "d70da276-c047-42db-a921-5c1263613cbb"/*MaxLength*/,
-      "DefaultValue": 0
+      "DefaultValue": 1000
     }
   ],
   "Children": [],
