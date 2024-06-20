@@ -18,12 +18,6 @@ namespace lib.dx11.draw
         {
             ShaderOperatorImpl.Initialize();
         }
-        
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            ShaderOperatorImpl.OnDispose();
-        }
 
         [Input(Guid = "a192e8cc-2874-4f02-bbf1-4622e99666e1")]
         public readonly InputSlot<string> ShaderSource = new();
