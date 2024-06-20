@@ -12,7 +12,7 @@ namespace Operators.Utils
         public static void RegisterConsumer(IOscConsumer consumer, int port)
         {
             var group = CreateOrGetReceiverForPort(port);
-            group.Consumers.Add(consumer);
+            group?.Consumers.Add(consumer);
         }
 
         public static void UnregisterConsumer(IOscConsumer consumer)
