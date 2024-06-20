@@ -128,21 +128,21 @@ internal static class VariationHandling
     }
 
     // TODO: Implement undo/redo!
-    public static void RemoveInstancesFromVariations(List<Instance> instances, List<Variation> variations)
+    public static void RemoveInstancesFromVariations(IEnumerable<Guid> symbolChildIds, List<Variation> variations)
     {
         if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
         {
             return;
         }
 
-        foreach (var variation in variations)
+        foreach (var id in symbolChildIds)
         {
-            foreach (var instance in instances)
+            foreach (var variation in variations)
             {
-                if (!variation.ParameterSetsForChildIds.ContainsKey(instance.SymbolChildId))
+                if (!variation.ParameterSetsForChildIds.ContainsKey(id))
                     continue;
 
-                variation.ParameterSetsForChildIds.Remove(instance.SymbolChildId);
+                variation.ParameterSetsForChildIds.Remove(id);
             }
         }
 
@@ -178,7 +178,7 @@ internal static class VariationHandling
             yield return childInstance;
         }
     }
-    
+
     private static readonly Dictionary<Guid, SymbolVariationPool> _variationPoolForOperators = new();
     private static readonly List<Instance> _affectedInstances = new(100);
 }

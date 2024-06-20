@@ -747,11 +747,31 @@ namespace T3.Editor.Gui.Graph
                                enabled: someOpsSelected))
             {
                 // Disable if already enabled for all
-                var enabledForAll = selectedChildUis.TrueForAll(c2 => c2.SnapshotGroupIndex > 0);
+                var disableBecauseAllEnabled = selectedChildUis.TrueForAll(c2 => c2.SnapshotGroupIndex > 0);
                 foreach (var c in selectedChildUis)
                 {
-                    c.SnapshotGroupIndex = enabledForAll ? 0 : 1;
+                    c.SnapshotGroupIndex = disableBecauseAllEnabled ? 0 : 1; // Hide in another snapshot group
                 }
+
+                // Add to add snapshots
+                var allSnapshots = VariationHandling.ActivePoolForSnapshots?.Variations;
+                if (allSnapshots != null && allSnapshots.Count > 0)
+                {
+                    if (disableBecauseAllEnabled)
+                    {
+                        VariationHandling.RemoveInstancesFromVariations(selectedChildUis.Select(ui => ui.Id), allSnapshots);
+                    }
+                    // Remove from snapshots
+                    else
+                    {
+                        var selectedInstances = selectedChildUis.Select(ui => CompositionOp.Children.Single(child => child.SymbolChildId == ui.Id)).ToList();
+                        foreach (var snapshot in allSnapshots)
+                        {
+                            VariationHandling.ActivePoolForSnapshots.UpdateVariationPropertiesForInstances(snapshot, selectedInstances);
+                        }
+                    }
+                }
+
                 FlagCurrentCompositionAsModified();
             }
 
