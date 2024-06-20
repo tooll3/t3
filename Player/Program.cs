@@ -212,7 +212,7 @@ namespace T3.Player
                 // Init wasapi input if required
                 if (playbackSettings is { AudioSource: PlaybackSettings.AudioSources.ProjectSoundTrack } && playbackSettings.GetMainSoundtrack(out _soundtrack))
                 {
-                    if (_soundtrack.TryGetAbsoluteFilePath(out _))
+                    if (_soundtrack.TryGetAbsoluteFilePath(_project, out _))
                     {
                         _playback.Bpm = _soundtrack.Bpm;
                         // Trigger loading clip
