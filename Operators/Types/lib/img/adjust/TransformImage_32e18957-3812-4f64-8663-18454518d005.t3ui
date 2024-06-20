@@ -15,6 +15,8 @@
         "X": -214.98917,
         "Y": 172.78781
       },
+      "GroupTitle": "Transform",
+      "Description": "Moves the incoming image",
       "UseVec2Control": "Position"
     },
     {
@@ -22,14 +24,17 @@
       "Position": {
         "X": -214.98917,
         "Y": 228.78781
-      }
+      },
+      "Description": "Scales the incoming image in the following directions:\n\nX: Width\nY: Height",
+      "AddPadding": "True"
     },
     {
       "InputId": "5b8ff5d7-e4d6-4631-8f0a-afb8086383e7"/*Scale*/,
       "Position": {
         "X": -214.98917,
         "Y": 273.7878
-      }
+      },
+      "Description": "Linearly scales the incoming image"
     },
     {
       "InputId": "6a786aa9-edf4-4363-9e34-0ddc7e763f0b"/*Rotation*/,
@@ -37,37 +42,44 @@
         "X": -214.98917,
         "Y": 318.7878
       },
-      "Min": -1.0,
-      "Max": 42.0,
-      "Scale": 0.5
+      "Description": "Rotates the incoming image",
+      "AddPadding": "True",
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "5c76dc8d-3a28-4b93-b3a0-e008c1ff14e9"/*Resolution*/,
       "Position": {
         "X": -214.98917,
         "Y": 363.7878
-      }
+      },
+      "GroupTitle": "Settings",
+      "Description": "Overwrites the resolution of the incoming image"
     },
     {
       "InputId": "c31a95a9-2cfb-4eea-8006-97f883d11847"/*GenerateMips*/,
       "Position": {
         "X": -214.98917,
         "Y": 408.7878
-      }
+      },
+      "Description": "Defines whether Mipmaps should be generated"
     },
     {
       "InputId": "64e5cdf2-19b0-461c-b936-ea46ee58028f"/*Filter*/,
       "Position": {
         "X": -214.98917,
         "Y": 453.7878
-      }
+      },
+      "Description": "Defines the Image filtering used"
     },
     {
       "InputId": "43eb4d4e-2bb5-4c97-a5dd-91539b8258cd"/*WrapMode*/,
       "Position": {
         "X": -214.98917,
         "Y": 498.7878
-      }
+      },
+      "Description": "Defines how the area around the image is will be rendered"
     }
   ],
   "SymbolChildUis": [
