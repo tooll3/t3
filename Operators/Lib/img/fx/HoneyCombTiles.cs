@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.fx
     public class HoneyCombTiles : Instance<HoneyCombTiles>
     {
         [Output(Guid = "2c2d62c4-3735-40a4-bc97-eaecf7e4cb7f")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "452fb0e1-34c1-4042-9a7c-30bf8dd4cb3c")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "dc8c94e6-97d9-4aa5-9edd-5a8d01e4f7c4")]
         public readonly InputSlot<System.Numerics.Vector4> Fill = new InputSlot<System.Numerics.Vector4>();

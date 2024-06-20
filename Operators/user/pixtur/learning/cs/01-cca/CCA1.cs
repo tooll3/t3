@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -13,7 +13,7 @@ namespace user.pixtur.learning.cs._01_cca
         public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "78b6c005-2ab5-48e3-af81-2daa0d75c00f")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture2d = new();
+        public readonly InputSlot<Texture2D> Texture2d = new();
 
         [Input(Guid = "0e7ada5a-da80-4709-a65a-ccd34da3d0e3")]
         public readonly InputSlot<float> Threshold = new();

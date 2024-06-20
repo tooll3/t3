@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,7 +11,7 @@ namespace examples.user.wake.strings
     {
 
         [Output(Guid = "9569f79b-2045-4b69-b87a-8b1cc09ef275")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output3 = new();
+        public readonly Slot<Texture2D> Output3 = new();
 
 
     }

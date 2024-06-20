@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,13 +10,13 @@ namespace lib.img.fx
     public class Displace : Instance<Displace>
     {
         [Output(Guid = "0faa056c-b1d6-4e1f-a9be-b0791f3bae84")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
+        public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "d0508dfa-89cf-4713-8f5e-893dd5bfc3f4")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "3b5b278d-fd4e-4216-9916-5cd7ffd54ab2")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> DisplaceMap = new();
+        public readonly InputSlot<Texture2D> DisplaceMap = new();
 
         [Input(Guid = "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f")]
         public readonly InputSlot<float> Displacement = new();

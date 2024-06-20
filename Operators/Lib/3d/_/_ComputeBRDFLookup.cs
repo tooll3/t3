@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -11,7 +12,7 @@ namespace lib._3d._
     {
 
         [Output(Guid = "21e0ee79-8e98-45aa-86e9-194ca6d70989")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> BRDF = new();
+        public readonly Slot<Texture2D> BRDF = new();
 
         [Input(Guid = "e22057e4-1aae-4698-b7f6-120dde027a5d")]
         public readonly InputSlot<Int2> Size = new();

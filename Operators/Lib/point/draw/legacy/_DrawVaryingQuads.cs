@@ -53,7 +53,7 @@ namespace lib.point.draw.legacy
         public readonly InputSlot<BufferWithViews> GPoints = new();
 
         [Input(Guid = "4256223c-ed88-4263-90f0-96cbc6da84d2")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new();
+        public readonly InputSlot<Texture2D> Texture_ = new();
 
         [Input(Guid = "7d021815-20a0-475d-91e0-1514173bf5d5")]
         public readonly InputSlot<float> AlphaCutOff = new();

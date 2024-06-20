@@ -1,6 +1,5 @@
 using System.Runtime.InteropServices;
 using System;
-using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -9,8 +8,10 @@ using System.IO;
 using SharpDX.WIC;
 using System.Net.Http;
 using System.Threading.Tasks;
+using SharpDX.Direct3D11;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.img.generate
 {
@@ -129,7 +130,7 @@ namespace lib.img.generate
 
                         _image?.Dispose();
                         _image = ResourceManager.CreateTexture2DFromBitmap(ResourceManager.Device, formatConverter);
-                        _image.DebugName = _url;
+                        _image.Name = _url;
                         bitmapFrameDecode.Dispose();
                         bitmapDecoder.Dispose();
                         formatConverter.Dispose();

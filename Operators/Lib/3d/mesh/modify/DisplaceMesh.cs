@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -28,7 +29,7 @@ namespace lib._3d.mesh.modify
         public readonly InputSlot<System.Numerics.Vector3> Offset = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "0211ebf0-d4b6-45aa-8c75-6e745941aa93")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();
 
         [Input(Guid = "c7e1c790-8e52-4064-9ffb-c0b8c2a50320")]
         public readonly InputSlot<System.Numerics.Vector2> ScaleUV = new InputSlot<System.Numerics.Vector2>();

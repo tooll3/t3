@@ -46,7 +46,7 @@ namespace lib._3d.draw
         public readonly InputSlot<bool> EnableZWrite = new();
 
         [Input(Guid = "120e2a56-c7fa-4eb8-80b0-ff75cc924960")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ColorMap = new();
+        public readonly InputSlot<Texture2D> ColorMap = new();
 
         [Input(Guid = "f5037611-c425-4097-927f-08041dfee27f")]
         public readonly InputSlot<MeshBuffers> Mesh = new();

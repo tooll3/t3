@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -13,7 +13,7 @@ namespace examples.user.still.there.research
         public readonly Slot<Texture2D> TextureOutput = new();
 
         [Output(Guid = "2f952eff-24b7-4497-a52d-f4cd72a779d7")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> DepthBuffer = new();
+        public readonly Slot<Texture2D> DepthBuffer = new();
 
 
     }

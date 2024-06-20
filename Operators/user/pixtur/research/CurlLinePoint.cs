@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -57,7 +58,7 @@ namespace user.pixtur.research
         public readonly InputSlot<int> LineLength = new();
 
         [Input(Guid = "8460bcc9-0d50-4773-afe3-2d69fd2384ea")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxCurveTexture = new();
+        public readonly InputSlot<Texture2D> FxCurveTexture = new();
         
         
         

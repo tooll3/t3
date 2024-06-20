@@ -15,6 +15,7 @@ using Vector2 = System.Numerics.Vector2;
 using PixelShader = T3.Core.DataTypes.PixelShader;
 using VertexShader = T3.Core.DataTypes.VertexShader;
 using GeometryShader = T3.Core.DataTypes.GeometryShader;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.img.fx._
 {
@@ -149,7 +150,7 @@ namespace lib.img.fx._
             Utilities.Dispose(ref _prefilteredCubeMap);
             try
             {
-                _prefilteredCubeMap = new Texture2D(device, cubeMapDesc);
+                _prefilteredCubeMap = ResourceManager.CreateTexture2D(cubeMapDesc);
             }
             catch(SharpDXException e)
             {

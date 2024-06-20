@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -67,7 +68,7 @@ namespace lib.sprite._experimental
         public readonly InputSlot<float> BlueOffset = new();
 
         [Input(Guid = "cc572e12-8dec-4f92-90a2-766d9299aaad")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "4e2bdf5e-9584-442a-b0f2-91b94955ebd5")]
         public readonly InputSlot<System.Numerics.Vector3> Center = new();

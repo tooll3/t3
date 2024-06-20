@@ -1,11 +1,12 @@
 using System.Runtime.InteropServices;
 using System;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using UnorderedAccessView = SharpDX.Direct3D11.UnorderedAccessView;
 
 namespace lib.dx11.tex
 {
@@ -31,7 +32,7 @@ namespace lib.dx11.tex
             
             try
             {
-                if (texture.Description.BindFlags.HasFlag(BindFlags.UnorderedAccess))
+                if (texture.Description.BindFlags.HasFlag(SharpDX.Direct3D11.BindFlags.UnorderedAccess))
                 {
                     UnorderedAccessView.Value?.Dispose();
                     UnorderedAccessView.Value = new UnorderedAccessView(ResourceManager.Device, texture); // todo: create via resource manager

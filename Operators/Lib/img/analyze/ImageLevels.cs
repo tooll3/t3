@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,10 +10,10 @@ namespace lib.img.analyze
     public class ImageLevels : Instance<ImageLevels>
     {
         [Output(Guid = "ae9ebfa0-3528-489b-9c07-090f26dd6968")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
+        public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "f434bac8-b7d8-4787-adf2-1782d6588da8")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture2d = new();
+        public readonly InputSlot<Texture2D> Texture2d = new();
 
         [Input(Guid = "1224b62e-5fca-41e9-a388-4c13c1458d56")]
         public readonly InputSlot<System.Numerics.Vector2> Center = new();

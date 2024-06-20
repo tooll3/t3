@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -62,7 +63,7 @@ namespace lib.point.modify
 
         
         [Input(Guid = "743616e2-817a-4b39-a3b1-58b58f3465b2")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
 
         private enum Attributes

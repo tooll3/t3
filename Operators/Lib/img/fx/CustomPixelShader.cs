@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -32,13 +33,13 @@ namespace lib.img.fx
         public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "5f90f885-0ccc-4014-a921-dc710257835a")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTexture = new();
+        public readonly InputSlot<Texture2D> FxTexture = new();
 
         [Input(Guid = "fb8d51fe-b4c2-452a-9e53-b649aed92bd7")]
         public readonly InputSlot<bool> IgnoreTemplate = new();
 
         [Output(Guid = "12fcfd9e-1c2f-46fc-b570-83b93ec7d101")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
     }
 }
 

@@ -25,7 +25,7 @@ namespace user.pixtur.research
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> PointBuffer = new();
 
         [Input(Guid = "9f53c882-49e5-4ff4-9862-f33a8b8aedd7")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ReferenceImage = new();
+        public readonly InputSlot<Texture2D> ReferenceImage = new();
 
     }
 }

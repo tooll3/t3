@@ -11,7 +11,7 @@ namespace examples.user._1x
     {
 
         [Output(Guid = "d6775a29-1ba2-4404-87f2-ae2600f4b8cb")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new Slot<SharpDX.Direct3D11.Texture2D>();
+        public readonly Slot<Texture2D> TextureOutput = new Slot<Texture2D>();
 
 
     }

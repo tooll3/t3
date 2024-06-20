@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -11,7 +11,7 @@ namespace examples.user.community
     {
 
         [Input(Guid = "6bffaa67-be6d-43cc-9890-75d0a1c51d75")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture2d = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Texture2d = new InputSlot<Texture2D>();
 
         [Input(Guid = "a47fc959-4ffa-4790-ac1f-5097a72fab3f")]
         public readonly InputSlot<int> FrameCountX = new InputSlot<int>();
@@ -35,7 +35,7 @@ namespace examples.user.community
         public readonly InputSlot<float> FineDelay = new InputSlot<float>();
 
         [Output(Guid = "372da297-6bb0-49fc-a92f-41bfcc5f9f1a")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> output = new Slot<SharpDX.Direct3D11.Texture2D>();
+        public readonly Slot<Texture2D> output = new Slot<Texture2D>();
 
     }
 }

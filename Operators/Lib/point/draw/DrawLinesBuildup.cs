@@ -32,7 +32,7 @@ namespace lib.point.draw
         public readonly InputSlot<float> VisibleRange = new();
 
         [Input(Guid = "929e0b9d-da3f-46b9-a61f-bd6500613166")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new();
+        public readonly InputSlot<Texture2D> Texture_ = new();
 
         [Input(Guid = "53e8c321-7ec7-43bd-8324-46132fcced3d")]
         public readonly InputSlot<bool> EnableTest = new();

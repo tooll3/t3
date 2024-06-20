@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -122,7 +123,7 @@ namespace lib.dx11.compute
         private static bool _statsRegistered;        
 
         [Input(Guid = "5c0e9c96-9aba-4757-ae1f-cc50fb6173f1")]
-        public readonly InputSlot<SharpDX.Direct3D11.ComputeShader> ComputeShader = new();
+        public readonly InputSlot<T3.Core.DataTypes.ComputeShader> ComputeShader = new();
 
         [Input(Guid = "180cae35-10e3-47f3-8191-f6ecea7d321c")]
         public readonly InputSlot<Int3> Dispatch = new();

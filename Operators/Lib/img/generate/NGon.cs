@@ -12,10 +12,10 @@ namespace lib.img.generate
     public class NGon : Instance<NGon>
     {
         [Output(Guid = "2b217712-b13e-4335-8aa1-ccb6578dade7")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "837a9689-d7a8-43db-88a5-2ac3ce8fbd37")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "1e13694f-18ad-4cd7-8cae-a5c692904edc")]
         public readonly InputSlot<System.Numerics.Vector4> Fill = new InputSlot<System.Numerics.Vector4>();

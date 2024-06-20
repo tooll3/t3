@@ -5,6 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering.Material;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib._3d.rendering._
 {

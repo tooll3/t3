@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -13,7 +13,7 @@ namespace user.pixtur.dailies
         public readonly Slot<Texture2D> TextureOutput = new();
 
         [Output(Guid = "1c531799-0580-4814-818c-21ce444532ae")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output2 = new();
+        public readonly Slot<Texture2D> Output2 = new();
 
 
     }

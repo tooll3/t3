@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,13 +11,13 @@ namespace lib.img.generate
     public class SinForm : Instance<SinForm>
     {
         [Output(Guid = "719c0dbb-788c-4156-b776-b893ff616416")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "7eca4ec2-40f1-4699-8c1f-9e196917df67")]
         public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
 
         [Input(Guid = "5ac1e50d-21af-40e8-ba0b-45a3e8cdd75d")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "ea8656ce-a75d-4cfd-9deb-cd3a36294399")]
         public readonly InputSlot<System.Numerics.Vector4> Fill = new InputSlot<System.Numerics.Vector4>();

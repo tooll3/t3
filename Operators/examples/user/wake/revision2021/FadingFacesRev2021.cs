@@ -17,7 +17,7 @@ namespace examples.user.wake.revision2021
         public readonly TimeClipSlot<Command> Output2 = new();
 
         [Output(Guid = "fc1d05ff-7395-4408-a025-4f3d4247a2ea")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output3 = new();
+        public readonly Slot<Texture2D> Output3 = new();
 
 
     }

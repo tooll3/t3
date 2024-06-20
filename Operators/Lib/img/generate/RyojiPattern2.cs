@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.generate
     public class RyojiPattern2 : Instance<RyojiPattern2>
     {
         [Output(Guid = "c26d8fbe-19b5-475a-bf2e-8dd7c1136c4b")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "e6b078e9-6df0-463c-b7af-ae0d425327db")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "ce9797b3-223a-42cd-84aa-51346e8aa422")]
         public readonly InputSlot<System.Numerics.Vector4> Background = new();

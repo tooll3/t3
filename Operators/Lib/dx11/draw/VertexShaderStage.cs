@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -67,7 +68,7 @@ namespace lib.dx11.draw
         private ShaderResourceView[] _prevShaderResourceViews;
 
         [Input(Guid = "B1C236E5-6757-4D77-9911-E3ACD5EA9FE9")]
-        public readonly InputSlot<SharpDX.Direct3D11.VertexShader> VertexShader = new();
+        public readonly InputSlot<T3.Core.DataTypes.VertexShader> VertexShader = new();
 
         [Input(Guid = "BBA8F6EB-7CFF-435B-AB47-FEBF58DD8FBA")]
         public readonly MultiInputSlot<Buffer> ConstantBuffers = new();

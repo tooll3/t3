@@ -13,7 +13,7 @@ namespace lib._3d.draw
         public readonly Slot<Command> Output = new();
 
         [Output(Guid = "51ba413f-1a7a-4860-8654-bdbd78a1bba4")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "61469462-04ef-4f75-bd58-2bd42b8da15a")]
         public readonly InputSlot<float> IndexAndFraction = new();

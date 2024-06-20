@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,7 +11,7 @@ namespace lib.img.generate
     public class Raster : Instance<Raster>
     {
         [Output(Guid = "44a192a6-ece7-4501-81d6-d0cc1d50bb93")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "fd22eaf6-ed3c-4e63-985c-3a3756ecaef2")]
         public readonly InputSlot<Int2> Resolution = new();
@@ -46,7 +47,7 @@ namespace lib.img.generate
         public readonly InputSlot<float> Feather = new();
 
         [Input(Guid = "cce27287-9774-436c-9e90-1becb42d8f95")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "c1378bbd-70df-4b6e-876f-5f1f1c59a617")]
         public readonly InputSlot<float> RedToDotSize = new();

@@ -14,7 +14,7 @@ namespace lib._3d.rendering._
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "307e2b98-a337-4636-969f-a19841b11511")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "018dab29-db3b-49ee-872b-9042c4c0bced")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new();

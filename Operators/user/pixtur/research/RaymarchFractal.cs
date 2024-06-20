@@ -11,7 +11,7 @@ namespace user.pixtur.research
     public class RaymarchFractal : Instance<RaymarchFractal>
     {
         [Output(Guid = "da8c003a-893f-402e-a8c2-d92b41d4ea00")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Output(Guid = "5bb98ed6-8d29-428f-b5c3-1953df353c8c")]
         public readonly Slot<Command> DrawCommand = new();
@@ -80,7 +80,7 @@ namespace user.pixtur.research
         public readonly InputSlot<float> DistToColor = new();
 
         [Input(Guid = "f9cc2427-135d-492e-b25d-276715ab82f3")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "3522be02-01e2-4ac4-8e73-bf81eeb71cf0")]
         public readonly InputSlot<Int2> Resolution = new();

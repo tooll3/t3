@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,10 +11,10 @@ namespace examples.fx
     {
 
         [Output(Guid = "0dca196f-bd3b-4cc1-ac5f-929f2a6dfdce")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
+        public readonly Slot<Texture2D> Output = new();
 
         [Output(Guid = "bec5b37d-b007-4bd7-9f5f-dc545820140a")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> OutputRG = new();
+        public readonly Slot<Texture2D> OutputRG = new();
 
         [Input(Guid = "f07bae81-5e2d-4d50-a22c-424434d8bbba")]
         public readonly InputSlot<int> Scale = new();
@@ -22,10 +23,10 @@ namespace examples.fx
         public readonly InputSlot<float> Lod = new();
 
         [Input(Guid = "e2dfcaa4-6e1f-4eee-9052-f4e036bc39fb")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image1 = new();
+        public readonly InputSlot<Texture2D> Image1 = new();
 
         [Input(Guid = "7cae97b4-f83e-4862-8be4-6ca7142aeb1f")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image2 = new();
+        public readonly InputSlot<Texture2D> Image2 = new();
 
     }
 }

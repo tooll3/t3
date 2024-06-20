@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,10 +10,10 @@ namespace lib.img.generate
     public class NumberPattern : Instance<NumberPattern>
     {
         [Output(Guid = "569ef449-6919-4e6f-880e-6f26c6fd2a5e")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "8a3681fa-4820-4855-9a12-c3740772f4d8")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "90620390-0fc4-4f2f-9c8f-04c6a75ee19e")]
         public readonly InputSlot<System.Numerics.Vector4> TextColor = new();

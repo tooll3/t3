@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,13 +11,13 @@ namespace lib.img.fx
     public class FakeLight : Instance<FakeLight>
     {
         [Output(Guid = "27e1e1b6-89e0-4dca-98e1-5989286f6331")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
+        public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "00c53b57-7347-4ebc-97d7-1ab48483f09b")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> HeightMap = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> HeightMap = new InputSlot<Texture2D>();
 
         [Input(Guid = "56eccacb-65ac-4813-ad7e-fad8e581f570")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> LightMap = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> LightMap = new InputSlot<Texture2D>();
 
         [Input(Guid = "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40")]
         public readonly InputSlot<float> Amount = new InputSlot<float>();

@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using T3.Core.Logging;
 using T3.Core.Model;
+using T3.Core.SystemUi;
+using T3.SystemUi;
 
 namespace T3.Core.Operator;
 
@@ -74,8 +77,9 @@ public sealed partial class Symbol
                 {
                     var isMultiInput = info.IsMultiInput;
                     var valueType = info.GenericArguments[0];
-                    var inputDef = CreateInputDefinition(id, info.Name, isMultiInput, valueType);
-                    InputDefinitions.Add(inputDef);
+                    
+                    if(TryCreateInputDefinition(id, info.Name, isMultiInput, valueType, _instanceType, out var inputDef))
+                        InputDefinitions.Add(inputDef);
                 }
             }
 
@@ -146,23 +150,28 @@ public sealed partial class Symbol
 
             return;
 
-            static InputDefinition CreateInputDefinition(Guid id, string name, bool isMultiInput, Type valueType)
+            static bool TryCreateInputDefinition(Guid id, string name, bool isMultiInput, Type valueType, Type instanceType, out InputDefinition inputDef)
             {
                 // create new input definition
                 if (!InputValueCreators.Entries.TryGetValue(valueType, out var creationFunc))
                 {
-                    Log.Error("Can't create default value for " + valueType);
-                    return null;
+                    BlockingWindow.Instance.ShowMessageBox($"[{instanceType}] can't create Input Definition for "
+                                                           + valueType
+                                                           + ". You may want to ensure you are using the correct T3 types in your script.", "Slot type error");
+                    inputDef = null;
+                    return false;
                 }
 
                 try
                 {
-                    return new InputDefinition { Id = id, Name = name, DefaultValue = creationFunc(), IsMultiInput = isMultiInput };
+                    inputDef = new InputDefinition { Id = id, Name = name, DefaultValue = creationFunc(), IsMultiInput = isMultiInput };
+                    return true;
                 }
                 catch (Exception e)
                 {
                     Log.Error($"Failed to create default value for {valueType}: {e}");
-                    return null;
+                    inputDef = null;
+                    return false;
                 }
             }
         }

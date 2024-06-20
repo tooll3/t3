@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,11 +10,11 @@ namespace examples.templates
     public class _ImgFxShaderTemplate : Instance<_ImgFxShaderTemplate>
     {
         [Output(Guid = "46381071-48e7-4ae7-a5c2-63bcd0fba47b")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
 
         [Input(Guid = "bf5f239e-8f6b-4fea-86d2-95e3add1a28c")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "4583d292-de66-4bff-abe6-5c2f5920b18b")]
         public readonly InputSlot<float> SampleRadius = new();

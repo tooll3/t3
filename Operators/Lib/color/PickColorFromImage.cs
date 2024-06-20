@@ -1,14 +1,15 @@
 using System.Runtime.InteropServices;
 using System;
+using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
@@ -70,7 +71,7 @@ namespace lib.color
                                    ArraySize = 1
                                };
                 Utilities.Dispose(ref _imageWithCpuAccess);
-                _imageWithCpuAccess = new Texture2D(d3DDevice, desc);
+                _imageWithCpuAccess = ResourceManager.CreateTexture2D(desc);
                 immediateContext.CopyResource(inputImage, _imageWithCpuAccess);
             }
 

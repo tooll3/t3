@@ -1,8 +1,6 @@
 #nullable enable
 using System;
-using SharpDX.D3DCompiler;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 
 namespace T3.Core.Resource;
 
@@ -25,8 +23,8 @@ public abstract partial class ShaderCompiler
     }
 
     protected abstract bool CompileShaderFromSource<TShader>(ShaderCompilationArgs args, out byte[] blob, out string errorMessage)
-        where TShader : class;
+        where TShader : AbstractShader;
 
     protected abstract void CreateShaderInstance<TShader>(string name, in byte[] blob, out TShader shader)
-        where TShader : class;
+        where TShader : AbstractShader;
 }

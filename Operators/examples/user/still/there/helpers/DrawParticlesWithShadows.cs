@@ -43,7 +43,7 @@ namespace examples.user.still.there.helpers
         public readonly InputSlot<T3.Core.DataTypes.Gradient> ColorOverLife = new();
 
         [Input(Guid = "d167ff24-353b-4e45-adcc-c03f898018ac")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ColorForDirection = new();
+        public readonly InputSlot<Texture2D> ColorForDirection = new();
 
         [Input(Guid = "3b14fc1e-3b56-4498-9da3-8b7cfba3a8ca")]
         public readonly InputSlot<System.Numerics.Vector3> LightPos = new();

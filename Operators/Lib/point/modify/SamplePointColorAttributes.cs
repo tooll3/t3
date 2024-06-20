@@ -30,7 +30,7 @@ namespace Lib.point.modify
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
         [Input(Guid = "32e576f6-bcee-4762-babf-86aa95930e52")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();
 
         [Input(Guid = "6d244ad5-04d3-47dd-8986-b5bf90ee5b0a")]
         public readonly InputSlot<System.Numerics.Vector4> BaseColor = new InputSlot<System.Numerics.Vector4>();

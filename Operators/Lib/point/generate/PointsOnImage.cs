@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -30,7 +31,7 @@ namespace Lib.point.generate
         public readonly InputSlot<int> Seed = new InputSlot<int>();
 
         [Input(Guid = "5184f2ec-4f91-4dd2-9872-d9ad8d4e5d92")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "1d0e573e-f733-4715-afe3-f96950f29aa4")]
         public readonly InputSlot<System.Numerics.Vector4> ColorWeight = new InputSlot<System.Numerics.Vector4>();

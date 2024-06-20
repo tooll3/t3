@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,13 +11,13 @@ namespace lib.img.fx
     public class TriangleGridTransition : Instance<TriangleGridTransition>
     {
         [Output(Guid = "64932d5a-de45-49c2-8ce2-fcde79d6627c")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "5a5bed81-c48d-43dd-a6b0-fc7964f90f2d")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "36a9b777-0201-4cec-9c6f-d5ec09e92b3a")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageB = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> ImageB = new InputSlot<Texture2D>();
 
         [Input(Guid = "dab4e3df-aaa6-411c-83f6-e4c730b740ce")]
         public readonly InputSlot<float> EffectRotation = new InputSlot<float>();

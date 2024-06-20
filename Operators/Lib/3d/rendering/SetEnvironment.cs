@@ -17,7 +17,7 @@ namespace lib._3d.rendering
         public readonly InputSlot<Command> SubTree = new();
 
         [Input(Guid = "5c042a08-74b3-4a6b-a420-2fcfa0fc01ee")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> CubeMap = new();
+        public readonly InputSlot<Texture2D> CubeMap = new();
 
         [Input(Guid = "c3c815fa-8672-4d99-99a7-986844f2fc45")]
         public readonly InputSlot<bool> UpdateLive = new();

@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,7 +11,7 @@ namespace user.pixtur.learning.cs
     {
 
         [Output(Guid = "4716a457-7d92-481a-b651-566bc453cfb9")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> output = new();
+        public readonly Slot<Texture2D> output = new();
 
     }
 }

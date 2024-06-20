@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.fx
     public class NormalMap : Instance<NormalMap>
     {
         [Output(Guid = "b1fa156b-a959-42f8-9a81-30a667d60554")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
+        public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "3b04296a-14e5-40e0-91a2-eda0314b0490")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> LightMap = new();
+        public readonly InputSlot<Texture2D> LightMap = new();
 
         [Input(Guid = "ab21289c-f91c-4991-a7e5-ecb0c0954f02")]
         public readonly InputSlot<float> Impact = new();

@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -11,7 +12,7 @@ namespace lib._3d._
     public class ReprojectToUV : Instance<ReprojectToUV>
     {
         [Output(Guid = "7d2fc5fe-0e1c-4132-9322-e08b3638bf83")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         
         [Input(Guid = "5ba52f22-0fe6-4316-a512-7577fcdff091")]
@@ -21,7 +22,7 @@ namespace lib._3d._
         public readonly InputSlot<System.Numerics.Vector4> Color = new();
 
         [Input(Guid = "04e2fd86-3dbc-4718-9f3b-361dff3e49c8")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
         
         [Input(Guid = "CB1254AB-4D68-41DB-A326-C5E34BB5D2F4")]
         public readonly InputSlot<object> CameraReference = new();

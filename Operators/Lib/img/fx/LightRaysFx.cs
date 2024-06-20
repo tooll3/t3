@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,13 +11,13 @@ namespace Lib.img.fx
     public class LightRaysFx : Instance<LightRaysFx>
     {
         [Output(Guid = "bdc413f2-9a15-4333-baba-aa57f73dda1a")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
+        public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "9d4f4e29-b2fe-415b-90f1-18390b520346")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "e110c111-34d5-4251-87eb-6cb56d2a026e")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> TextureFX = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> TextureFX = new InputSlot<Texture2D>();
 
         [Input(Guid = "7d60c1e1-4924-48e8-991f-df83370c9a30")]
         public readonly InputSlot<System.Numerics.Vector2> Direction = new InputSlot<System.Numerics.Vector2>();

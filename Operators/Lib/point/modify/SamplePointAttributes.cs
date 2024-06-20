@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -72,7 +73,7 @@ namespace lib.point.modify
         public readonly InputSlot<float> AlphaOffset = new InputSlot<float>();
 
         [Input(Guid = "d1f3b362-7ed4-4833-99e9-0fdc46ca2319")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();
 
         [Input(Guid = "a82bc040-a398-41ed-93e1-74309d44a663")]
         public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();

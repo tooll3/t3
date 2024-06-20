@@ -39,7 +39,7 @@ namespace lib.point.draw.legacy
         public readonly InputSlot<System.Numerics.Vector3> RotateAxis = new();
 
         [Input(Guid = "ae975647-36f6-494c-b4f1-3289e4d8c03e")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new();
+        public readonly InputSlot<Texture2D> Texture_ = new();
 
         [Input(Guid = "fc19ad98-65ea-46f2-896d-6b9279a9eaa4")]
         public readonly InputSlot<Int2> TextureCells = new();

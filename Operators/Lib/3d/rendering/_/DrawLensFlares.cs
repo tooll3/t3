@@ -32,7 +32,7 @@ namespace lib._3d.rendering._
         public readonly MultiInputSlot<StructuredList> LenseFlareDefinitions = new MultiInputSlot<StructuredList>();
 
         [Input(Guid = "8e1ceafe-4697-45a2-9464-9f0797cb6de5")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Texture_ = new InputSlot<Texture2D>();
     }
 }
 

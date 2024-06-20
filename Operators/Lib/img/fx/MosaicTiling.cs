@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,13 +10,13 @@ namespace lib.img.fx
     public class MosiacTiling : Instance<MosiacTiling>
     {
         [Output(Guid = "0ce69c7f-29c9-461b-b593-402c4f9131e8")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "5a5ebec0-88ac-4e8e-873b-88e5d68fb920")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "58ed6ff5-4a5e-452d-ab60-efdfbccc3413")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTextures = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> FxTextures = new InputSlot<Texture2D>();
 
         [Input(Guid = "732f95f6-c0f3-4cee-bd0c-c8144b5b4c63")]
         public readonly InputSlot<System.Numerics.Vector2> Center = new InputSlot<System.Numerics.Vector2>();

@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,13 +11,13 @@ namespace lib._3d.postfx
     public class MotionBlur : Instance<MotionBlur>
     {
         [Output(Guid = "1b237829-8cfd-4039-a6c5-8ca3dbb225f7")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
+        public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "619c2684-8495-4c19-a5b2-673728feaa00")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "3d99ccde-2bc3-4a25-962d-dab4fc6c554a")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> DepthMap = new();
+        public readonly InputSlot<Texture2D> DepthMap = new();
 
         [Input(Guid = "d757058a-a31e-487f-b002-cc06bc478535")]
         public readonly InputSlot<Object> CameraReference = new();

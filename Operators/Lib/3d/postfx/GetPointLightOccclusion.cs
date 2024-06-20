@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -17,7 +17,7 @@ namespace Lib._3d.postfx
 
 
         [Input(Guid = "9a427b76-4976-4f7e-9033-1ba08b743c23")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> DepthMap = new();
+        public readonly InputSlot<Texture2D> DepthMap = new();
 
         [Input(Guid = "370e5f20-a349-4a15-b7e2-342f9ece0b07")]
         public readonly InputSlot<System.Numerics.Vector2> NearFarRange = new();

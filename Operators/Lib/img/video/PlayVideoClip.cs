@@ -3,6 +3,7 @@ using System;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.MediaFoundation;

@@ -22,7 +22,7 @@ namespace lib._3d.rendering._
         public readonly InputSlot<float> Size = new();
 
         [Input(Guid = "3ca52af7-5710-4912-a171-11fffd91fd1a")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new();
+        public readonly InputSlot<Texture2D> Texture_ = new();
 
         [Input(Guid = "257c4149-7c27-48ce-abd5-c0dbfc1631b3")]
         public readonly InputSlot<int> BlendMod = new();

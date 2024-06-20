@@ -12,10 +12,10 @@ namespace lib.dx11._
     public class _ImageFxShaderSetup2 : Instance<_ImageFxShaderSetup2>
     {
         [Output(Guid = "36e01dc9-0680-4af5-9329-0ac6a5f78f8c")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "36abde68-0d79-4fb6-b8ce-ac8a27b66850")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "16dce9bc-02d9-48f8-b07e-94a9af48d27b")]
         public readonly InputSlot<string> Source = new();

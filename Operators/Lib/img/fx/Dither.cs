@@ -11,10 +11,10 @@ namespace lib.img.fx
     public class Dither : Instance<Dither>
     {
         [Output(Guid = "dac50008-a681-4e9a-8a71-e5f4f49a8eb5")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "4167d4a6-7f8c-4bc9-9424-a54388d2560b")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "0a3e1e60-39c1-4cb7-a6c1-6442ef0fe9cd")]
         public readonly InputSlot<System.Numerics.Vector4> ShadowColor = new InputSlot<System.Numerics.Vector4>();

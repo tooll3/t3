@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,16 +11,16 @@ namespace lib.img.fx._
     public class _multiImageFxSetupStatic : Instance<_multiImageFxSetupStatic>
     {
         [Output(Guid = "76b6c677-12db-4404-aff7-ee3391d2d831")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
+        public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "f6269be3-3331-43a6-91ec-138b47199f3e")]
         public readonly InputSlot<string> ShaderPath = new();
 
         [Input(Guid = "55126bff-8c94-415d-96dd-3c16e216e663")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageA = new();
+        public readonly InputSlot<Texture2D> ImageA = new();
 
         [Input(Guid = "0bb90f8d-88c9-4a99-b44f-f284b505c65b")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageB = new();
+        public readonly InputSlot<Texture2D> ImageB = new();
 
         [Input(Guid = "2929c4c9-6d6a-47b7-b80e-d7a1f90b6945")]
         public readonly MultiInputSlot<float> FloatParams = new();

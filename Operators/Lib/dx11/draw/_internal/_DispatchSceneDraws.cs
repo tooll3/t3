@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -209,10 +210,10 @@ namespace lib.dx11.draw._internal
         public readonly InputSlot<SceneSetup> SceneSetup = new();
 
         [Input(Guid = "7a9ae929-7001-42ef-b7f2-f2e03bbb7206")]
-        public readonly InputSlot<SharpDX.Direct3D11.VertexShader> VertexShader = new();
+        public readonly InputSlot<T3.Core.DataTypes.VertexShader> VertexShader = new();
 
         [Input(Guid = "59864DA4-3658-4D7D-830E-6EF0D3CBB505")]
-        public readonly InputSlot<SharpDX.Direct3D11.PixelShader> PixelShader = new();
+        public readonly InputSlot<T3.Core.DataTypes.PixelShader> PixelShader = new();
 
         [Input(Guid = "27405ECF-4994-4E67-8604-D86426345344")]
         public readonly InputSlot<ShaderResourceView> PrefilteredSpecular = new();

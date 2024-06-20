@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,7 +11,7 @@ namespace examples.lib._3d.draw
     {
 
         [Output(Guid = "823e0f6a-518b-46cd-a929-7e069fe653a7")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> ImageOutput = new();
+        public readonly Slot<Texture2D> ImageOutput = new();
 
 
     }

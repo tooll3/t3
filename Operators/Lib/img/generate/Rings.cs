@@ -12,10 +12,10 @@ namespace lib.img.generate
     public class Rings : Instance<Rings>
     {
         [Output(Guid = "ee4053c2-10a4-4cf5-83ea-be4a8e12b80f")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "a22945ec-c576-491a-83d0-ffea9dd0cdc4")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "2323ca7b-af43-4630-af27-78c9ad4c9dcc")]
         public readonly InputSlot<System.Numerics.Vector4> Fill = new();

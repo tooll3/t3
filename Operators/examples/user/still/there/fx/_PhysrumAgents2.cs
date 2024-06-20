@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -32,7 +32,7 @@ namespace examples.user.still.there.fx
         public readonly InputSlot<System.Numerics.Vector4> DecayRatio = new();
 
         [Input(Guid = "6516ba78-3b9a-475d-88b7-f88337f6686b")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> EffectTexture = new();
+        public readonly InputSlot<Texture2D> EffectTexture = new();
 
         [Input(Guid = "5100f7d8-a5e0-4630-b646-2db20e0cc4be")]
         public readonly InputSlot<Int2> BlockCount = new();
@@ -47,7 +47,7 @@ namespace examples.user.still.there.fx
         public readonly InputSlot<float> FXBlueFor_SideAngle = new();
 
         [Input(Guid = "8f74bb82-393c-4594-b92c-fbe6adfa8ed5")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> SeedTexture = new();
+        public readonly InputSlot<Texture2D> SeedTexture = new();
 
         [Input(Guid = "bdedd5d8-a1b9-4e2d-ba7e-824ee1fdfcba")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> PointsBuffer = new();

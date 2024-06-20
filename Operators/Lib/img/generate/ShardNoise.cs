@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,7 +11,7 @@ namespace lib.img.generate
     public class ShardNoise : Instance<ShardNoise>
     {
         [Output(Guid = "7aa58fd2-2bf4-41a3-8eea-269a082c93a8")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "2c6a429d-5a38-4457-94d5-8994e7d1242d")]
         public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();

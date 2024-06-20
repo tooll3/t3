@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -12,7 +13,7 @@ namespace lib.point.particle.force
         public readonly Slot<T3.Core.DataTypes.ParticleSystem> Particles = new();
 
         [Input(Guid = "fcb4c9ff-b8b7-4fa3-b1ab-d8af6dbedc96")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> SignedNormalMap = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> SignedNormalMap = new InputSlot<Texture2D>();
 
         [Input(Guid = "eddf467a-d96e-4639-aa09-b49dc1775c1b")]
         public readonly InputSlot<float> Amount = new InputSlot<float>();

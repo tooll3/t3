@@ -57,7 +57,7 @@ namespace user.pixtur.research
 
 
         [Output(Guid = "1c9c6951-c300-4ada-ae34-783b30f31180")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         private enum InputSources
         {

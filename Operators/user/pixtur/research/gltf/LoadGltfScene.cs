@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using SharpDX.DXGI;
 using SharpDX.WIC;
 using SharpGLTF.Schema2;

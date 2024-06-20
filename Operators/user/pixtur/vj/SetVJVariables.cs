@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,11 +11,11 @@ namespace user.pixtur.vj
     {
 
         [Output(Guid = "a8127182-4b8d-4be2-8c50-9ce475d2699d")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output2 = new();
+        public readonly Slot<Texture2D> Output2 = new();
 
         
         [Input(Guid = "693345bd-0cd8-4dca-9416-42a9bdcbc293")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
 
     }

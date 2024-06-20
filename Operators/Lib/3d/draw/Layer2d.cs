@@ -57,7 +57,7 @@ namespace lib._3d.draw
         public readonly InputSlot<bool> EnableDepthWrite = new();
 
         [Input(Guid = "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         public enum ScaleModes
         {

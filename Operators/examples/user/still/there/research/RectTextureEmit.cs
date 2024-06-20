@@ -13,7 +13,7 @@ namespace examples.user.still.there.research
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "7d0e8a44-367c-4eb0-8fa3-d26a67a5ec35")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "d9e528ba-0aa1-42b2-8169-984d7a340228")]
         public readonly InputSlot<int> EmitCountPerFrame = new();

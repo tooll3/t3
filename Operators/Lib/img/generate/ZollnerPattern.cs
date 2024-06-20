@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.generate
     public class ZollnerPattern : Instance<ZollnerPattern>
     {
         [Output(Guid = "16393dfd-962c-4dbb-b698-c2099143d98c")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "b68794e6-4067-4500-b8ba-7cb6f5e9ea28")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "bc362c49-5a25-4b62-b385-ce18b1f79077")]
         public readonly InputSlot<System.Numerics.Vector4> Fill = new();

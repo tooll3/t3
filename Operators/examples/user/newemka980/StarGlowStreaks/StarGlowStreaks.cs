@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,10 +11,10 @@ namespace examples.user.newemka980.StarGlowStreaks
     public class StarGlowStreaks : Instance<StarGlowStreaks>
     {
         [Output(Guid = "a256b06b-1500-4189-9820-906addbf387e")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "afcba3d4-b7db-40bd-919a-d4f49b1bf7fc")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "87148268-6d28-4d71-a2b5-b1ec0fb66685")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new();

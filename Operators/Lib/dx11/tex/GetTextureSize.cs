@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -96,7 +97,7 @@ namespace lib.dx11.tex
         
 
         [Input(Guid = "8b15d8e1-10c7-41e1-84db-a85e31e0c909")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "52b2f067-5619-4d8d-a982-58668a8dc6a4")]
         public readonly InputSlot<Int2> OverrideSize = new();

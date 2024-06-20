@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.fx
     public class Steps : Instance<Steps>
     {
         [Output(Guid = "b2c389a0-6f8c-4e64-b3d5-09b549ae32c1")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "c5c7888a-294d-4a51-a68d-446cc7f1444c")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "3fa998ee-becf-4a32-948f-5c5be67d7728")]
         public readonly InputSlot<Int2> Resolution = new();

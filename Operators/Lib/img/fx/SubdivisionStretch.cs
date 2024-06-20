@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,10 +10,10 @@ namespace Lib.img.fx
     public class SubdivisionStretch : Instance<SubdivisionStretch>
     {
         [Output(Guid = "d8ec6fe5-ee96-4eaa-ba1f-05c67cdf0f0b")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "40bc83fb-a3a4-4bfd-b131-8ecf2908b1a3")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "32d082f5-d6e1-4068-bcd9-a01977ed72df")]
         public readonly InputSlot<int> MaxSubdivisions = new InputSlot<int>();

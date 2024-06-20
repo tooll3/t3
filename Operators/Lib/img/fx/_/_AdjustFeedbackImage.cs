@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,10 +10,10 @@ namespace lib.img.fx._
     public class _AdjustFeedbackImage : Instance<_AdjustFeedbackImage>
     {
         [Output(Guid = "ab287fb8-750a-4b46-96f5-8ddddeb46a5f")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "b781c374-5fb7-4f4f-ae6d-78f9bfcd72c6")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "1b29262b-d7b6-4df2-abb1-bf35aa7729a2")]
         public readonly InputSlot<float> LimitDarks = new();

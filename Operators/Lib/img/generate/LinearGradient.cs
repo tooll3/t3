@@ -12,10 +12,10 @@ namespace lib.img.generate
     public class LinearGradient : Instance<LinearGradient>
     {
         [Output(Guid = "d140f068-d71e-4af5-a563-ab599dae5dbf")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "e47e9e63-9c94-4c29-9555-2452fa498d57")]
         public readonly InputSlot<Gradient> Gradient = new InputSlot<Gradient>();

@@ -20,7 +20,7 @@ namespace lib.sprite
         public readonly InputSlot<BufferWithViews> Sprites = new();
 
         [Input(Guid = "1e2dbb8c-c164-49b3-b96a-b80655d5dcce")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "62dd6e4f-5cf5-4bd9-9683-8b9ed5d423f6")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new();

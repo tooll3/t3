@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,11 +11,11 @@ namespace lib.img.adjust
     public class Blur : Instance<Blur>
     {
         [Output(Guid = "fa46b9f0-46d6-4ab3-8406-409e1dc5e9a4")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
 
         [Input(Guid = "c115fd60-86c5-425f-975b-0b5e92c0f42b")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "99188668-b6ac-468b-a892-cd020a3862b2")]
         public readonly InputSlot<float> Size = new();

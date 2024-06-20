@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.fx
     public class EdgeRepeat : Instance<EdgeRepeat>
     {
         [Output(Guid = "f2e7625f-7918-4b0f-8b51-4304dde13bc6")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "22b41600-7d42-44ad-8e94-3819f8d24964")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "35e6faff-7e13-4fa8-8aca-32efc02f29e0")]
         public readonly InputSlot<System.Numerics.Vector4> Fill = new();

@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,22 +10,22 @@ namespace lib.img.use
     public class Combine3Images : Instance<Combine3Images>
     {
         [Output(Guid = "d45d6948-5482-4585-9c05-5d32f99b2558")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
+        public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "81e08eab-9428-435b-a710-6cede1549834")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageA = new();
+        public readonly InputSlot<Texture2D> ImageA = new();
 
         [Input(Guid = "a3d1ab20-fbfb-4123-a877-09050edae8bf")]
         public readonly InputSlot<System.Numerics.Vector4> ColorA = new();
 
         [Input(Guid = "d42bf975-9789-40d8-9a7e-c83b157603fb")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageB = new();
+        public readonly InputSlot<Texture2D> ImageB = new();
 
         [Input(Guid = "188ab3e1-4a91-48e8-a764-6178f006069b")]
         public readonly InputSlot<System.Numerics.Vector4> ColorB = new();
 
         [Input(Guid = "8950b878-944d-42e1-b106-49337fa15ffa")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageC = new();
+        public readonly InputSlot<Texture2D> ImageC = new();
 
         [Input(Guid = "f6438d7e-da04-4e43-a8f1-2c18b6aff948")]
         public readonly InputSlot<System.Numerics.Vector4> ColorC = new();

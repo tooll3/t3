@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.generate
     public class VoronoiCells : Instance<VoronoiCells>
     {
         [Output(Guid = "3c91677f-ceb1-4c14-9eda-90ccb70f12a1")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "f5bad014-1895-4490-8c00-4c775db54716")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "fd554dbb-113f-4722-af28-4e1ec39852cc")]
         public readonly InputSlot<System.Numerics.Vector4> EdgeColor = new InputSlot<System.Numerics.Vector4>();

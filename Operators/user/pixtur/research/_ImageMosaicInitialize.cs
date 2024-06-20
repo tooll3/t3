@@ -1,10 +1,12 @@
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace user.pixtur.research
 {
@@ -27,7 +29,7 @@ namespace user.pixtur.research
         public readonly Slot<Command> Output2 = new();
 
         [Output(Guid = "c0f96ebc-9cf7-4eef-9442-ebd7a47dce5c")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureArray = new();
+        public readonly Slot<Texture2D> TextureArray = new();
 
 
     }

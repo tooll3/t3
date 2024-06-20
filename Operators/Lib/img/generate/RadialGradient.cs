@@ -12,10 +12,10 @@ namespace lib.img.generate
     public class RadialGradient : Instance<RadialGradient>
     {
         [Output(Guid = "9785937a-2b8f-4b2e-92ac-98ec067a40f2")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "54bca43c-fc2b-4a40-b991-8b76e35eee01")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "3f5a284b-e2f0-47e2-bf79-2a7fe8949519")]
         public readonly InputSlot<Gradient> Gradient = new InputSlot<Gradient>();

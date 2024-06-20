@@ -9,6 +9,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace examples.lib.img.use
 {
@@ -59,8 +60,8 @@ namespace examples.lib.img.use
                     Utilities.Dispose(ref _prevTextureA);
                     Utilities.Dispose(ref _prevTextureB);
 
-                    _prevTextureA = new Texture2D(ResourceManager.Device, description);
-                    _prevTextureB = new Texture2D(ResourceManager.Device, description);
+                    _prevTextureA = ResourceManager.CreateTexture2D(description);
+                    _prevTextureB = ResourceManager.CreateTexture2D(description);
                     _prevTextureView = description;
                 }
 

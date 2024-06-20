@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,7 +11,7 @@ namespace lib.img.generate
     public class FractalNoise : Instance<FractalNoise>
     {
         [Output(Guid = "c85e033e-794c-4943-bf5d-545555df9360")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "091aaf77-46f4-4aeb-aaa8-f11fe34e8a7f")]
         public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();

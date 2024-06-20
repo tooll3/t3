@@ -22,7 +22,7 @@ namespace lib.point.draw
         public readonly InputSlot<float> Radius = new();
 
         [Input(Guid = "df0ed524-d094-47e0-b974-c936a7ea8ee1")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new();
+        public readonly InputSlot<Texture2D> Texture_ = new();
 
         [Input(Guid = "84e512f6-6dca-4c56-bcd8-a08e596a42bf")]
         public readonly InputSlot<bool> EnableZWrite = new();

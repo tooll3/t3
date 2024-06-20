@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.dx11._
     public class _ImageFxShaderSetupStatic : Instance<_ImageFxShaderSetupStatic>
     {
         [Output(Guid = "d49f10dc-6617-4541-96d3-b58b0266b631")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "b55312c4-6441-473f-a107-df50de60c72e")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "1e4e274b-60b2-4fe8-b275-ebef80d520a7")]
         public readonly InputSlot<string> Source = new();

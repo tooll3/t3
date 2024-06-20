@@ -13,7 +13,7 @@ namespace examples.user.still.worksforeverybody.fx
         public readonly Slot<Command> Result = new();
 
         [Output(Guid = "11a8a9be-ea04-4c8a-98df-41badc753370")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
 
         [Input(Guid = "3ad5ed8e-947c-4c47-9e97-407017fa4b46")]

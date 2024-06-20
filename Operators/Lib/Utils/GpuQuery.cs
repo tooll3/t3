@@ -4,6 +4,7 @@ using PixelShaderD3D = SharpDX.Direct3D11.PixelShader;
 using System;
 using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 
 namespace Utils
 {

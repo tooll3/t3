@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,10 +10,10 @@ namespace lib.img.fx
     public class ChromaticAbberation : Instance<ChromaticAbberation>
     {
         [Output(Guid = "8af0d916-9708-422b-8fb7-39ef59c82d7f")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "b62aece4-8098-475b-a4d3-469f81a58207")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "4c51b5f5-5307-45a7-9641-25f572627926")]
         public readonly InputSlot<float> Size = new();

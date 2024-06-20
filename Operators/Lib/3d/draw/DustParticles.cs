@@ -65,7 +65,7 @@ namespace lib._3d.draw
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "9b42caa4-040a-4f83-8822-bc5bfbdff334")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Texture_ = new InputSlot<Texture2D>();
 
 
     }

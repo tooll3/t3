@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -25,7 +26,7 @@ namespace user.pixtur.learning.cs._06_boids
         public readonly InputSlot<float> JitterCellLookup = new();
 
         [Input(Guid = "5e8c41a5-5389-4ab7-9060-3b0a6ca98267")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> EffectTexture = new();
+        public readonly InputSlot<Texture2D> EffectTexture = new();
 
         [Input(Guid = "a2ea7dcb-f30d-4f13-8e7d-2faa38518525")]
         public readonly InputSlot<float> EffectTwist = new();

@@ -16,6 +16,7 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
 using ResourceManager = T3.Core.Resource.ResourceManager;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.img.video
 {
@@ -199,7 +200,7 @@ namespace lib.img.video
             var device = ResourceManager.Device;
             try
             {
-                _texture = new Texture2D(device,
+                _texture = ResourceManager.CreateTexture2D(
                                          new Texture2DDescription
                                              {
                                                  ArraySize = 1,
@@ -383,7 +384,7 @@ namespace lib.img.video
 
 
                 _engine.TransferVideoFrame(
-                                           _texture,
+                                           (SharpDX.Direct3D11.Texture2D)_texture,
                                            ToVideoRect(default),
                                            //new RawRectangle(0, 0, renderTarget.ViewWidth, renderTarget.ViewHeight),
                                            new RawRectangle(0, 0, _textureSize.Width, _textureSize.Height),

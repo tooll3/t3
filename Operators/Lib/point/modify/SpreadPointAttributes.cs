@@ -35,7 +35,7 @@ namespace lib.point.modify
         public readonly InputSlot<float> Phase = new InputSlot<float>();
 
         [Input(Guid = "cd91ff45-7f21-40fd-86c8-8dd95204c3b3")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ValueTexture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> ValueTexture = new InputSlot<Texture2D>();
 
         [Input(Guid = "27bf737b-966e-4203-b8fd-2d9c7b19dcad")]
         public readonly InputSlot<Curve> WCurve = new InputSlot<Curve>();

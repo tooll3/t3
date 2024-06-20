@@ -80,7 +80,7 @@ namespace lib.point.draw
         public readonly InputSlot<bool> SpreadRepeat = new();
 
         [Input(Guid = "fd1c7125-7e7c-4dc2-8407-441b7df7b2b9")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new();
+        public readonly InputSlot<Texture2D> Texture_ = new();
 
         [Input(Guid = "a1b479af-bd24-496c-93e1-514b8bcae7ac")]
         public readonly InputSlot<int> AtlasMode = new();
@@ -89,7 +89,7 @@ namespace lib.point.draw
         public readonly InputSlot<Int2> AtlasSize = new();
 
         [Input(Guid = "e71d2391-3ca3-4f04-b8d9-caefcb069285")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTexture = new();
+        public readonly InputSlot<Texture2D> FxTexture = new();
 
         [Input(Guid = "a56b7c1a-9bb9-4f3d-a98d-dee72fd9f599", MappedType = typeof(FxTextureModes))]
         public readonly InputSlot<int> FxTextureMode = new();

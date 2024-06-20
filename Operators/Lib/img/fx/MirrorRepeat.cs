@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.fx
     public class MirrorRepeat : Instance<MirrorRepeat>
     {
         [Output(Guid = "7dc02a27-bc05-447f-9053-a44a60123980")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "25bdfb83-a61c-448c-a909-527f1bb73740")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "149a9d1c-b76e-4256-8f5d-a261923a9ae5")]
         public readonly InputSlot<float> RotateMirror = new InputSlot<float>();

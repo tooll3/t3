@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,19 +11,19 @@ namespace lib.img.fx._
     public class _trippleImageFxSetup : Instance<_trippleImageFxSetup>
     {
         [Output(Guid = "86db735f-56fb-41b5-af15-5f55411d3ca7")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
+        public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "58dd103d-4172-4cea-9c78-c9f6db9be41e")]
         public readonly InputSlot<string> ShaderPath = new();
 
         [Input(Guid = "9f6dab55-54bf-4c21-93d1-b2bb6beb8c5c")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageA = new();
+        public readonly InputSlot<Texture2D> ImageA = new();
 
         [Input(Guid = "85d0fe6a-145e-4b17-ad00-62ad7afe58e4")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageB = new();
+        public readonly InputSlot<Texture2D> ImageB = new();
 
         [Input(Guid = "4e6a74d8-203a-4621-b167-85e109da204f")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageC = new();
+        public readonly InputSlot<Texture2D> ImageC = new();
 
         [Input(Guid = "39c7dd84-7418-49e6-850e-6064db28660c")]
         public readonly MultiInputSlot<float> FloatParams = new();

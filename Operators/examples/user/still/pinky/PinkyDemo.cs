@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,7 +11,7 @@ namespace examples.user.still.pinky
     {
 
         [Output(Guid = "6cb5826d-6999-4d5c-bf10-badc690666e8")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output2 = new();
+        public readonly Slot<Texture2D> Output2 = new();
 
 
     }

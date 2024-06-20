@@ -35,7 +35,7 @@ namespace lib.point.draw
         public readonly InputSlot<bool> UseWAsTexCoordV = new();
 
         [Input(Guid = "c10f9c6c-9923-42c6-848d-6b98097acc67")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new();
+        public readonly InputSlot<Texture2D> Texture_ = new();
 
         [Input(Guid = "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa")]
         public readonly InputSlot<bool> EnableZTest = new();

@@ -37,7 +37,7 @@ namespace examples.user.newemka980.Shading
         public readonly InputSlot<bool> EnableZWrite = new();
 
         [Input(Guid = "aaca0bae-9943-45d5-8389-45343ad86e39")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ColorMap = new();
+        public readonly InputSlot<Texture2D> ColorMap = new();
 
         [Input(Guid = "ada7f290-b23f-4b50-87b4-0e9b91c66fbf")]
         public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new();

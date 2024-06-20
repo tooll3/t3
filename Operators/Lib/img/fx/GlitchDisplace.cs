@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,10 +11,10 @@ namespace lib.img.fx
     {
 
         [Output(Guid = "4808ce68-4785-4d25-a2e2-68f6c89ae577")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output2 = new();
+        public readonly Slot<Texture2D> Output2 = new();
 
         [Input(Guid = "7914bb8b-8444-4438-a156-b00d099ce659")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "de2930b4-bc0a-401f-a8b5-933d0d2297bc")]
         public readonly InputSlot<int> Rows = new InputSlot<int>();

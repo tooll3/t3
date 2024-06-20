@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,13 +10,13 @@ namespace lib.img.fx._
     public class BlurWithMask : Instance<BlurWithMask>
     {
         [Output(Guid = "8d199a8d-b02e-4fa2-8f7d-b156e4302fe3")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "29f6bc05-de55-4336-a275-f06b835c66f8")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "4837051f-033c-4e9e-9d1c-0fe85c1467cb")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Mask = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Mask = new InputSlot<Texture2D>();
 
         [Input(Guid = "fa5bb047-7466-4d68-9977-7a86815ca0f2")]
         public readonly InputSlot<float> Size = new InputSlot<float>();

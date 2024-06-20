@@ -7,7 +7,7 @@ using T3.Core.DataTypes.Vector;
 namespace T3.Core.DataTypes;
 
 // for some bytecode access convenience (reflection) and to avoid direct SharpDX references for later
-public sealed class ComputeShader(SharpDX.Direct3D11.ComputeShader shader, ShaderBytecode compiledBytecode)
+public sealed class ComputeShader(SharpDX.Direct3D11.ComputeShader shader, byte[] compiledBytecode)
     : Shader<SharpDX.Direct3D11.ComputeShader>(shader, compiledBytecode)
 {
     public bool TryGetThreadGroups(out Int3 threadGroups)

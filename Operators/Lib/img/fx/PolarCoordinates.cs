@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.fx
     public class PolarCoordinates : Instance<PolarCoordinates>
     {
         [Output(Guid = "1758e789-809c-430a-a5c8-22fd8bbe5e54")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "dfa1d71d-2964-41c2-bb04-86a39c36ce6e")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "4c07b8bd-c78d-44ce-bb95-8114284af2bf")]
         public readonly InputSlot<System.Numerics.Vector2> Center = new();

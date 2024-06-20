@@ -13,7 +13,7 @@ namespace lib._3d._
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "de65c36d-10a7-446f-a4dd-e55ce42f4203")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> DepthBuffer = new();
+        public readonly InputSlot<Texture2D> DepthBuffer = new();
 
         [Input(Guid = "a5f6347a-9c57-46f2-be39-80499b35cdf7")]
         public readonly InputSlot<float> Near = new();
@@ -22,7 +22,7 @@ namespace lib._3d._
         public readonly InputSlot<float> Far = new();
 
         [Input(Guid = "50dbf432-ea4d-4d49-8cf4-e946a950b998")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> OutputTexture = new();
+        public readonly InputSlot<Texture2D> OutputTexture = new();
 
         [Input(Guid = "7e1e99e1-3e2a-4960-bcc3-5b7e8e6ae95c")]
         public readonly InputSlot<System.Numerics.Vector2> OutRange = new();

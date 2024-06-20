@@ -11,7 +11,7 @@ namespace user.pixtur.vj.lennies
     {
 
         [Output(Guid = "24572cbd-ce42-4d53-9ff9-6780eb30e947")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output2 = new();
+        public readonly Slot<Texture2D> Output2 = new();
 
         [Input(Guid = "3ed34802-c8ca-4182-920e-aa476a256430")]
         public readonly InputSlot<Command> MoreContent = new();

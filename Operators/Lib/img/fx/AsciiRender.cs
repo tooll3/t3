@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.fx
     public class AsciiRender : Instance<AsciiRender>
     {
         [Output(Guid = "b0b6a771-e1a4-4681-a8be-8ed7ac1f66c4")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
+        public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "b7d24c9b-ad9e-4ba5-82d9-15414868cdd9")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageA = new();
+        public readonly InputSlot<Texture2D> ImageA = new();
 
         [Input(Guid = "9e093ac2-0dc0-4791-bb27-36d1f6ea1c47")]
         public readonly InputSlot<System.Numerics.Vector4> Fill = new();

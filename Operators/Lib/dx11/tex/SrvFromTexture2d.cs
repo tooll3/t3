@@ -9,6 +9,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.dx11.tex
 {

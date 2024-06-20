@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -34,7 +35,7 @@ namespace lib.point._experimental
         public readonly InputSlot<System.Numerics.Vector3> Center = new();
 
         [Input(Guid = "818ebbce-9174-4fd1-800e-be816870311e")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "709050be-0873-4a37-96fb-c8fa98780c6f")]
         public readonly InputSlot<System.Numerics.Vector2> TextureStretch = new();

@@ -35,7 +35,7 @@ namespace lib.point.draw
         public readonly InputSlot<bool> UseWAsTexCoordV = new();
 
         [Input(Guid = "47667ddc-1bbb-4686-9144-ce218172b5ec")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new();
+        public readonly InputSlot<Texture2D> Texture_ = new();
 
         [Input(Guid = "f59b07c9-f947-4ab5-96c7-20801aca8d1a")]
         public readonly InputSlot<bool> EnableTest = new();

@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace examples.user.still.worksforeverybody.fx
     public class CafeWallPattern : Instance<CafeWallPattern>
     {
         [Output(Guid = "cdf70feb-2cb0-44cd-bf4b-38c7af917029")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "2ac6c8b8-ebf5-4653-b390-da008c4be0e6")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "39ae4389-b20d-42b1-b0a4-a9359e3e2f2b")]
         public readonly InputSlot<System.Numerics.Vector4> Fill = new();

@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -19,10 +20,10 @@ namespace lib.img.adjust
     public class TransformImage : Instance<TransformImage>
     {
         [Output(Guid = "54831ac3-d747-4cdf-9520-3cfd651158bf")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "3aab9b12-1e02-4d7a-83b6-da1500a6bcbf")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "6f4184f1-6017-4bcc-ac1f-5ea4862bfb0c")]
         public readonly InputSlot<System.Numerics.Vector2> Offset = new();

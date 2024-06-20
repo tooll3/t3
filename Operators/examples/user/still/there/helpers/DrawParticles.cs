@@ -41,7 +41,7 @@ namespace examples.user.still.there.helpers
         public readonly InputSlot<T3.Core.DataTypes.Gradient> ColorOverLife = new();
 
         [Input(Guid = "98d353fe-e65e-4ccb-aa79-502dfde30fba")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ColorForDirection = new();
+        public readonly InputSlot<Texture2D> ColorForDirection = new();
 
     }
 }

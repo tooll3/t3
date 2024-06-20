@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,13 +11,13 @@ namespace lib._3d.postfx
     public class GodRays : Instance<GodRays>
     {
         [Output(Guid = "28bf4abe-e9a9-4302-bcca-67a6957b43a7")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "c94e4bb6-d6fc-4184-bd71-3563f4416413")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
 
         [Input(Guid = "bba257ae-e45d-43b6-9905-52e526583978")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> DepthBuffer = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> DepthBuffer = new InputSlot<Texture2D>();
 
         [Input(Guid = "b64c4ece-8b59-4b32-a5fe-b99006286987")]
         public readonly InputSlot<Object> CameraReference = new InputSlot<Object>();

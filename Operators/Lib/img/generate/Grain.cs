@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,11 +11,11 @@ namespace lib.img.generate
     public class Grain : Instance<Grain>
     {
         [Output(Guid = "df388f27-f5b6-417b-87a7-a6a59b625128")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
 
         [Input(Guid = "4525c76c-cdcf-47f3-aa96-335cfc5b5c1b")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "195da7e0-5279-4900-80cd-5635e96ab454")]
         public readonly InputSlot<float> Amount = new();

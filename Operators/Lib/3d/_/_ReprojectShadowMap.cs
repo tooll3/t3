@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -11,14 +12,14 @@ namespace Lib._3d._
     public class _ReprojectShadowMap : Instance<_ReprojectShadowMap>
     {
         [Output(Guid = "5d59930e-6cf7-46f5-b28f-c4c4682877bd")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         
         [Input(Guid = "0a8d40f1-c032-4c60-ac46-f7c6fd501f61")]
         public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new();
 
         [Input(Guid = "b95865f0-ae7a-4290-aebb-43bc6f277474")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
         
         [Input(Guid = "ceeeeca9-492d-40bd-9fbb-670b7f469d56")]
         public readonly InputSlot<object> CameraReference = new();

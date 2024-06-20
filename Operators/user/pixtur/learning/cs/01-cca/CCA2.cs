@@ -14,7 +14,7 @@ namespace user.pixtur.learning.cs._01_cca
         public readonly Slot<Texture2D> Output = new();
 
         [Input(Guid = "c116d483-da8c-4ffa-9630-c687fc0ca205")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture2d = new();
+        public readonly InputSlot<Texture2D> Texture2d = new();
 
         [Input(Guid = "8f7d797d-b35b-4cd5-8929-bef91eaf2967")]
         public readonly InputSlot<float> Threshold = new();

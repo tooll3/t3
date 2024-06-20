@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -11,16 +12,16 @@ namespace user.pixtur.research
     public class MultiRenderTargetShaderSetup : Instance<MultiRenderTargetShaderSetup>
     {
         [Output(Guid = "1cd18000-1e59-4262-929a-61ab9a26afcf")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Output(Guid = "53b4e530-878f-4d70-9283-576329ea194b")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output2 = new();
+        public readonly Slot<Texture2D> Output2 = new();
 
         [Output(Guid = "b1c54e99-2bb7-4acc-9a23-c99f3ad44614")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output3 = new();
+        public readonly Slot<Texture2D> Output3 = new();
 
         [Input(Guid = "4ce89122-f988-46b6-94bb-6c94bc386ec3")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "5d3770ad-b90d-4086-8391-3c7a3ad4b750")]
         public readonly InputSlot<string> Source = new();

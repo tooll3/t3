@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,11 +10,11 @@ namespace lib.img.fx
     public class DetectEdges : Instance<DetectEdges>
     {
         [Output(Guid = "caf8af48-8819-49b4-890b-89545c8c0ff5")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
 
         [Input(Guid = "4041b6d8-15e5-428c-9967-7105975a46f7")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "7f66aa8d-fbdd-47d6-ba38-07e257e19401")]
         public readonly InputSlot<float> SampleRadius = new();

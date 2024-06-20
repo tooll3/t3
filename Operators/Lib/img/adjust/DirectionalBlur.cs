@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.adjust
     public class DirectionalBlur : Instance<DirectionalBlur>
     {
         [Output(Guid = "c57e38ab-a802-498c-b0f7-cad86e6426a3")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "3cc9487b-bf18-416c-9d69-86592130bfa6")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "e94e2b7e-6f0a-42b5-bf5e-abdffe728273")]
         public readonly InputSlot<float> Size = new();
@@ -37,7 +38,7 @@ namespace lib.img.adjust
         public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> Wrap = new();
 
         [Input(Guid = "fd99fc97-43a8-4a04-8e17-95c2abc289fc")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTextures = new();
+        public readonly InputSlot<Texture2D> FxTextures = new();
 
         [Input(Guid = "b295586d-2339-4d69-868a-c17468e77998")]
         public readonly InputSlot<bool> RefinementPass = new();

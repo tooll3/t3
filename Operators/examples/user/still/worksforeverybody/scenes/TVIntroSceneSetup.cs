@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -13,7 +13,7 @@ namespace examples.user.still.worksforeverybody.scenes
         public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "4c5c6be2-05d0-4a70-8705-1c0aad83fa2d")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> TvImage = new();
+        public readonly InputSlot<Texture2D> TvImage = new();
 
         [Input(Guid = "7b9c9b05-4654-48c5-9ee4-8eff949f106f")]
         public readonly InputSlot<float> TransitionProgress = new();

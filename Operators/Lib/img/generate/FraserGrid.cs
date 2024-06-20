@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.generate
     public class FraserGrid : Instance<FraserGrid>
     {
         [Output(Guid = "de51ef93-049b-44df-9ea4-996929d8fa59")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "22d7ec5a-ba4e-4d2e-b15b-4de172b26e1e")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "6f4215a5-bd04-4151-b468-e06424c560a6")]
         public readonly InputSlot<System.Numerics.Vector4> Fill = new();

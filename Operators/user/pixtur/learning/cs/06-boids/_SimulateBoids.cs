@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -31,7 +31,7 @@ namespace user.pixtur.learning.cs._06_boids
         public readonly InputSlot<float> EffectTwist = new();
 
         [Input(Guid = "e07deb43-5fc1-4600-83d1-b371cc52d12c")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> EffectTexture = new();
+        public readonly InputSlot<Texture2D> EffectTexture = new();
 
         [Input(Guid = "d4881b3a-c91c-406d-b871-3d45b124cfd3")]
         public readonly InputSlot<float> Alpha = new();

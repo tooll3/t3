@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,16 +11,16 @@ namespace lib._3d.postfx
     {
 
         [Output(Guid = "a54cc25b-9ea2-4012-b462-16c565718cf8")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOut = new();
+        public readonly Slot<Texture2D> TextureOut = new();
 
         [Output(Guid = "07695aef-ea0d-4cdc-864f-dd2de8a947fb")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Depth = new();
+        public readonly Slot<Texture2D> Depth = new();
 
         [Input(Guid = "bc1685a8-0a92-460f-85ca-7f096db965f0")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> TextureBuffer = new();
+        public readonly InputSlot<Texture2D> TextureBuffer = new();
 
         [Input(Guid = "c2e7ebf7-5056-4380-9a9f-850b350804c9")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> DepthBuffer = new();
+        public readonly InputSlot<Texture2D> DepthBuffer = new();
 
         [Input(Guid = "3655d507-96b3-4ded-9cef-886ea703ca89")]
         public readonly InputSlot<float> Amount = new();

@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.generate
     public class KochKaleidoskope : Instance<KochKaleidoskope>
     {
         [Output(Guid = "15711a30-7d0c-40f4-be68-e2e75c5b4dc5")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "362bcc93-74a0-40fb-a19f-bff8b7246c34")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "79c84135-5390-455b-bf60-53d4002d0606")]
         public readonly InputSlot<float> Scale = new();

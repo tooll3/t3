@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -11,7 +12,7 @@ namespace user.pixtur.learning.cs._07_CCAInstancing
     {
 
         [Output(Guid = "b4059e4a-8238-4f37-ab2d-d45d7853cff9")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> CABuffer2 = new();
+        public readonly Slot<Texture2D> CABuffer2 = new();
 
         [Input(Guid = "69b5c584-f365-469c-bf08-b1a125f7d757")]
         public readonly InputSlot<Int2> Resolution = new();
@@ -41,7 +42,7 @@ namespace user.pixtur.learning.cs._07_CCAInstancing
         public readonly InputSlot<bool> ResetOnChange = new();
 
         [Input(Guid = "9d58ecd1-7ed1-43d2-83f4-1710e4258822")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTexture = new();
+        public readonly InputSlot<Texture2D> FxTexture = new();
 
         [Input(Guid = "eb02b152-63ad-4227-ba5d-6baa9ce9884a")]
         public readonly InputSlot<float> FxThreshold = new();

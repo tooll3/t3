@@ -38,7 +38,7 @@ namespace lib.point.draw
         public readonly InputSlot<bool> EnableZTest = new InputSlot<bool>();
 
         [Input(Guid = "850e3a32-11ba-4ad2-a2b1-6164f077ddd6")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Texture_ = new InputSlot<Texture2D>();
     }
 }
 

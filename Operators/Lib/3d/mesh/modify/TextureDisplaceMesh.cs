@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -63,7 +64,7 @@ namespace lib._3d.mesh.modify
         public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new();
 
         [Input(Guid = "81f729bd-9e50-4f44-9b96-8792da2aa0b0")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
 
         private enum Attributes

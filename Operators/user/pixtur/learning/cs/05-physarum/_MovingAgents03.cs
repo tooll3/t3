@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -38,7 +38,7 @@ namespace user.pixtur.learning.cs._05_physarum
         public readonly InputSlot<System.Numerics.Vector4> DecayRatio = new();
 
         [Input(Guid = "fe682c44-28d8-4013-bb63-8dfbe1eacf0b")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> EffectTexture = new();
+        public readonly InputSlot<Texture2D> EffectTexture = new();
 
         [Input(Guid = "d360cb06-7bff-499b-aeec-5314f53e8ddf")]
         public readonly InputSlot<Int2> BlockCount = new();

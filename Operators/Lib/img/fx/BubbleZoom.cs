@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +11,10 @@ namespace lib.img.fx
     public class BubbleZoom : Instance<BubbleZoom>
     {
         [Output(Guid = "f49bcb2b-106d-45f5-8161-8d4975b30f8c")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "019b7a1a-0f86-48e2-b5e9-9a04480a3b07")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "277c5e50-7d0f-416f-ba14-69ba407802dc")]
         public readonly InputSlot<System.Numerics.Vector2> Center = new();

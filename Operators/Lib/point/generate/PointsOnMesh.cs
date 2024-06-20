@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -28,7 +29,7 @@ namespace lib.point.generate
         public readonly InputSlot<bool> IsEnabled = new();
 
         [Input(Guid = "132584c0-c27c-448a-b31d-ae72f0fb4baa")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "1843683c-53a2-4862-a9a5-4b3afe729ace")]
         public readonly InputSlot<bool> UseVertexSelection = new();

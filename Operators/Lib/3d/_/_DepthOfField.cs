@@ -14,10 +14,10 @@ namespace lib._3d._
         public readonly Slot<Command> Output = new();
 
         [Input(Guid = "70bedeea-1594-4b2d-8ce2-e5573a57cde6")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Color = new();
+        public readonly InputSlot<Texture2D> Color = new();
 
         [Input(Guid = "5c23dc93-192c-4aa7-a265-2b6bc407283d")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> DepthBuffer = new();
+        public readonly InputSlot<Texture2D> DepthBuffer = new();
 
         [Input(Guid = "cde20e8a-a7f3-47b9-9336-2e03a4c98f43")]
         public readonly InputSlot<float> Near = new();
@@ -38,7 +38,7 @@ namespace lib._3d._
         public readonly InputSlot<float> QualityScale = new();
 
         [Input(Guid = "f66e71e9-aef9-41da-b722-843951e0dbd5")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> OutputTexture = new();
+        public readonly InputSlot<Texture2D> OutputTexture = new();
 
         [Input(Guid = "fa3a3202-fb06-417c-ad96-75c96c3b6208")]
         public readonly InputSlot<int> MaxSamples = new();

@@ -32,7 +32,7 @@ namespace lib._3d.draw
         public readonly InputSlot<bool> EnableZWrite = new();
 
         [Input(Guid = "a02180a6-7778-4fa2-9a69-228a26936755")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "a0b6601e-4fbb-4489-9e15-59e80db0d26c")]
         public readonly InputSlot<bool> UseCubeMap = new();

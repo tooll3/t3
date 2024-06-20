@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using SharpDX.D3DCompiler;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Model;
 
@@ -14,7 +15,7 @@ public abstract partial class ShaderCompiler
 {
     internal static bool TryCompileShaderFromSource<TShader>(ShaderCompilationArgs args, bool useCache,
                                                              bool forceRecompile, [NotNullWhen(true)] out TShader? shader, out string reason)
-        where TShader : class
+        where TShader : AbstractShader
     {
         var includes = GetIncludesFrom(args.SourceCode);
         var includeDirectories = args.Owner;

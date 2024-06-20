@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -75,7 +76,7 @@ namespace lib.dx11.draw
         public readonly MultiInputSlot<Buffer> ConstantBuffers = new();
 
         [Input(Guid = "1B9BE6EB-96C8-4B1C-B854-99B64EAF5618")]
-        public readonly InputSlot<SharpDX.Direct3D11.PixelShader> PixelShader = new();
+        public readonly InputSlot<T3.Core.DataTypes.PixelShader> PixelShader = new();
 
         [Input(Guid = "50052906-4691-4A84-A69D-A109044B5300")]
         public readonly MultiInputSlot<ShaderResourceView> ShaderResources = new();

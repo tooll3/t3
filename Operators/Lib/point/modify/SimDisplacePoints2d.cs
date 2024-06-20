@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -37,7 +38,7 @@ namespace lib.point.modify
         public readonly InputSlot<float> Twist = new();
 
         [Input(Guid = "6ae9a21e-3aea-410b-b740-28390a4b4715")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "e2add306-b57c-466d-af22-580aa333a697")]
         public readonly InputSlot<System.Numerics.Vector3> Center = new();

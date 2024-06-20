@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -14,7 +14,7 @@ namespace Lib.img.adjust
         public readonly Slot<Texture2D> Selected = new Slot<Texture2D>();
 
         [Input(Guid = "f09d6911-dd5f-4dac-a475-3ea291f04dfe")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageA = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> ImageA = new InputSlot<Texture2D>();
 
         [Input(Guid = "e0f2826f-867d-461b-b1ec-95d30d592539")]
         public readonly InputSlot<float> EdgeFallOff = new InputSlot<float>();

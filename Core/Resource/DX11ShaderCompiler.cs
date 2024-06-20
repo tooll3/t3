@@ -6,8 +6,13 @@ using System.Text.RegularExpressions;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Model;
+using ComputeShader = SharpDX.Direct3D11.ComputeShader;
+using GeometryShader = SharpDX.Direct3D11.GeometryShader;
+using PixelShader = SharpDX.Direct3D11.PixelShader;
+using VertexShader = SharpDX.Direct3D11.VertexShader;
 
 namespace T3.Core.Resource;
 
@@ -89,20 +94,20 @@ public sealed partial class DX11ShaderCompiler : ShaderCompiler
     [GeneratedRegex(@"(.*?)\((.*)\):(.*)")]
     private static partial Regex ShaderErrorPatternRegex();
 
-    private static readonly IReadOnlyDictionary<Type, Func<Device, byte[], object> > ShaderConstructors = new Dictionary<Type, Func<Device, byte[], object>>()
+    private static readonly IReadOnlyDictionary<Type, Func<Device, byte[], AbstractShader> > ShaderConstructors = new Dictionary<Type, Func<Device, byte[], AbstractShader>>()
                                                                                    {
-                                                                                       { typeof(VertexShader), (device, data) => new VertexShader(device, data, null) },
-                                                                                       { typeof(PixelShader), (device, data) => new PixelShader(device, data, null) },
-                                                                                       { typeof(ComputeShader), (device, data) => new ComputeShader(device, data, null) },
-                                                                                       { typeof(GeometryShader), (device, data) => new GeometryShader(device, data, null) },
+                                                                                       { typeof(T3.Core.DataTypes.VertexShader), (device, data) => new DataTypes.VertexShader(new VertexShader(device, data, null), data) },
+                                                                                       { typeof(T3.Core.DataTypes.PixelShader), (device, data) => new DataTypes.PixelShader(new PixelShader(device, data, null), data) },
+                                                                                       { typeof(T3.Core.DataTypes.ComputeShader), (device, data) => new DataTypes.ComputeShader(new ComputeShader(device, data, null), data) },
+                                                                                       { typeof(T3.Core.DataTypes.GeometryShader), (device, data) => new DataTypes.GeometryShader(new GeometryShader(device, data, null), data) },
                                                                                    };
     
     private static readonly IReadOnlyDictionary<Type, string> ShaderProfiles = new Dictionary<Type, string>()
                                                                                    {
-                                                                                       { typeof(VertexShader), "vs_5_0" },
-                                                                                       { typeof(PixelShader), "ps_5_0" },
-                                                                                       { typeof(ComputeShader), "cs_5_0" },
-                                                                                       { typeof(GeometryShader), "gs_5_0" },
+                                                                                       { typeof(T3.Core.DataTypes.VertexShader), "vs_5_0" },
+                                                                                       { typeof(T3.Core.DataTypes.PixelShader), "ps_5_0" },
+                                                                                       { typeof(T3.Core.DataTypes.ComputeShader), "cs_5_0" },
+                                                                                       { typeof(T3.Core.DataTypes.GeometryShader), "gs_5_0" },
                                                                                    };
 
     private class IncludeHandler : SharpDX.D3DCompiler.Include, IResourceConsumer

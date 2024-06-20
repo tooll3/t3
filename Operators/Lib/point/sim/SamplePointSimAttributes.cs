@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -64,7 +65,7 @@ namespace lib.point.sim
         public readonly InputSlot<float> BlueOffset = new();
 
         [Input(Guid = "c868345f-0318-4da7-968f-d859661d5b7e")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "57e60306-a398-432b-ac02-9e6334608264")]
         public readonly InputSlot<System.Numerics.Vector3> Center = new();

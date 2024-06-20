@@ -12,11 +12,11 @@ namespace lib.img.generate
     public class Blob : Instance<Blob>
     {
         [Output(Guid = "b882de23-5b94-4791-af13-e195211cffb3")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
 
         [Input(Guid = "8cc15ea0-074f-40ed-813d-b93f48681094")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new();
+        public readonly InputSlot<Texture2D> Image = new();
 
         [Input(Guid = "d2b0dd99-c289-4c1b-9335-c29a6b4a6ba3")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new();

@@ -17,7 +17,7 @@ namespace lib._3d._
         public readonly InputSlot<string> Text = new();
 
         [Input(Guid = "1178c7c0-12ec-4284-9d28-c357f8e8a8ca")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> DisplaceTexture = new();
+        public readonly InputSlot<Texture2D> DisplaceTexture = new();
 
         [Input(Guid = "a5b86357-0d11-4034-b19a-5c2d617bb261")]
         public readonly InputSlot<Int2> GridSize = new();

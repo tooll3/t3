@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,7 +11,7 @@ namespace lib.img.generate
     public class WorleyNoise : Instance<WorleyNoise>
     {
         [Output(Guid = "59ca5836-cd4a-4c2d-b721-c392c332f798")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new ();
+        public readonly Slot<Texture2D> TextureOutput = new ();
 
         [Input(Guid = "a9111412-3369-4848-af48-8a96f5697c84")]
         public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();

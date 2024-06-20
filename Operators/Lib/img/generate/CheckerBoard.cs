@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,7 +11,7 @@ namespace lib.img.generate
     public class CheckerBoard : Instance<CheckerBoard>
     {
         [Output(Guid = "9dd9dbeb-b506-4d10-97b7-34feaab91f07")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "1192cfbe-585f-45f0-a37b-5fe78ca32d7b")]
         public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();
