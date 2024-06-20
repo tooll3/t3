@@ -137,6 +137,25 @@
           "c0fa79d5-2c49-4d40-998f-4eb0101ae050": 5
         }
       }
+    },
+    {
+      "Id": "734ae814-5e44-41e7-999e-50e2cfc4ed4c",
+      "IsPreset": true,
+      "ActivationIndex": 9,
+      "Title": "Scale Shake",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c0fa79d5-2c49-4d40-998f-4eb0101ae050": 4,
+          "0d56fc27-fa15-4f1e-aa09-f97af93d42c7": 0.23000002,
+          "3ad8e756-7720-4f43-85da-efe1af364cfe": 1.0,
+          "287fa06c-3e18-43f2-a4e1-0780c946dd84": 0.01,
+          "9bfd5ae3-9ca6-4f7b-b24b-f554ad4d0255": 0.53999996
+        }
+      }
     }
   ]
 }
