@@ -130,9 +130,9 @@
           "Id": "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac"/*Key*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.18431373,
-            "Y": 0.24705884,
-            "Z": 0.23137257,
+            "X": 0.1764706,
+            "Y": 0.23529413,
+            "Z": 0.23529413,
             "W": 1.0
           }
         },
@@ -261,6 +261,11 @@
             "Z": 0.0,
             "W": 1.0
           }
+        },
+        {
+          "Id": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []
@@ -273,8 +278,8 @@
           "Id": "eff02108-2335-46b5-95ba-4235b9a26349"/*LeftRight*/,
           "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "X": -1430,
-            "Y": -427
+            "X": -1851,
+            "Y": -14
           }
         }
       ],
@@ -287,7 +292,12 @@
         {
           "Id": "ec6f2f37-05f7-41ad-8a42-2e6974cce0cd"/*DecayRate*/,
           "Type": "System.Single",
-          "Value": 0.015
+          "Value": 0.0128
+        },
+        {
+          "Id": "edc5e4e1-b4fc-4f1a-a080-ddbe2ca18a55"/*GlowImpact*/,
+          "Type": "System.Single",
+          "Value": 0.66
         }
       ],
       "Outputs": []
@@ -381,7 +391,7 @@
         {
           "Id": "fd1fca6b-a3be-440b-86ba-6b7b1bbd2a8c"/*SourceName*/,
           "Type": "System.String",
-          "Value": "LENAS-LAPTOP.LOCAL (OBS7)"
+          "Value": "LENAS-LAPTOP.LOCAL (OBS9)"
         }
       ],
       "Outputs": []

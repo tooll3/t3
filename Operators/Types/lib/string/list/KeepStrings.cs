@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.Generic;   
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -123,10 +123,9 @@ namespace T3.Operators.Types.Id_56eda8f4_09fc_48a3_ab1d_fbff4f4b6438
             Count.Value = _strings.Count;
         }
 
-        private bool _insertTrigger;
 
-        private List<string> _strings = new();
-        private List<float> _insertTimes = new();
+        private readonly List<string> _strings = new();
+        private readonly List<float> _insertTimes = new();
         private int _index;
 
         private string _lastString = string.Empty;

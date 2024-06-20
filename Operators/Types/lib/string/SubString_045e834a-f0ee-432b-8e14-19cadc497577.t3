@@ -8,10 +8,6 @@
       "DefaultValue": ""
     },
     {
-      "Id": "e88fbe0e-f7ac-48f1-9d17-e5e5eb8d4ffc"/*Mode*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "8bed669e-1141-433f-a8a5-ecbde812462b"/*Start*/,
       "DefaultValue": 0
     },

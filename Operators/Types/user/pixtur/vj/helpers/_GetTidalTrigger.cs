@@ -30,7 +30,6 @@ namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
         {
             if (Math.Abs(context.LocalFxTime - _lastUpdateTime) < 0.001f)
             {
-                Log.Debug($"Skip multiple updates {context.LocalFxTime - _lastUpdateTime}");
                 return;
             }
             
@@ -43,8 +42,8 @@ namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
             var id = Id.GetValue(context);
             var channel = Channel.GetValue(context);
             
-            var path = useNotesForBeats ? $"/dirt/play/{id}/"
-                : $"/dirt/play/{id}/{channel}/";
+            var path = useNotesForBeats ? $"/dirt/play/{id}/{channel}/"
+                : $"/dirt/play/{id}/{channel}/s_midi/";
 
             if (_dict == null)
             {
@@ -59,7 +58,7 @@ namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
 
             if (logDebug)
             {
-                Log.Debug($"Note: {notePath}  / {cyclePath}", this);
+                Log.Debug($"Note: {notePath}   Cycle: {cyclePath}", this);
             }
 
             if (
@@ -68,22 +67,12 @@ namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
             {
                 if (useNotesForBeats)
                 {
-                    if ($"{note:0}" == channel)
+                    Note.Value = note;
+                    WasTrigger.Value = cycle > _lastCycle;
+                    _lastCycle = cycle;
+                    if (logDebug)
                     {
-                        Note.Value = note;
-                        WasTrigger.Value = cycle > _lastCycle;
-                        _lastCycle = cycle;
-                        if (logDebug)
-                        {
-                            Log.Debug($"found beat {notePath} '{note}'  '{channel}' " ,this);
-                        }
-                    }
-                    else
-                    {
-                        if (logDebug)
-                        {
-                            Log.Debug($"not matching '{note:0}' vs '{channel}' " ,this);
-                        }
+                        Log.Debug($"found beat {notePath} '{note}'  '{channel}' " ,this);
                     }
                 }
                 else

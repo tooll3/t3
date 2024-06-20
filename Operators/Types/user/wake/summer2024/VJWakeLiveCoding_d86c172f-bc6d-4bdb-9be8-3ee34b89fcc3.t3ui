@@ -4,14 +4,6 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "858a3cd4-a47a-4196-837d-bd4b66de1fe9"/*RenderTarget*/,
-      "Comment": "Careful! Fixed resolution",
-      "Position": {
-        "X": 1609.2794,
-        "Y": 2829.2075
-      }
-    },
-    {
       "ChildId": "e08cce2a-3dc4-414b-9137-a5834cbcbce1"/*AnimValue*/,
       "Position": {
         "X": 498.04718,
@@ -23,6 +15,674 @@
       "Position": {
         "X": 648.0472,
         "Y": -362.0656
+      }
+    },
+    {
+      "ChildId": "1bb28065-85a1-47ca-a880-8b378244da40"/*OscInput*/,
+      "Position": {
+        "X": -8648.005,
+        "Y": 1574.2026
+      }
+    },
+    {
+      "ChildId": "6353226d-a4cf-443d-bb1b-c90d9a053ddb"/*Piano Intro*/,
+      "Position": {
+        "X": -7708.097,
+        "Y": 1390.0148
+      }
+    },
+    {
+      "ChildId": "ff0898df-b16d-424d-a654-f42fca044644"/*Bass*/,
+      "Position": {
+        "X": -4796.134,
+        "Y": 6076.078
+      }
+    },
+    {
+      "ChildId": "1f8cc5c0-3431-48f9-8b3a-ac034092598e"/*Beats Start*/,
+      "Position": {
+        "X": -4796.134,
+        "Y": 6132.078
+      }
+    },
+    {
+      "ChildId": "fee6653d-9977-485c-83ce-59c5970f4716"/*Arps*/,
+      "Position": {
+        "X": -4796.134,
+        "Y": 6188.078
+      }
+    },
+    {
+      "ChildId": "d8537afc-98f6-4458-84b8-d68069c3eb64"/*Arps and Bass*/,
+      "Position": {
+        "X": -4796.134,
+        "Y": 6244.078
+      }
+    },
+    {
+      "ChildId": "f114795c-968d-4384-97bc-63591c118dc8"/*Arps+His*/,
+      "Position": {
+        "X": -4796.134,
+        "Y": 6300.078
+      }
+    },
+    {
+      "ChildId": "0cdec8d0-dfbf-4b0b-bf4c-111d4d251df7"/*Ohhha*/,
+      "Position": {
+        "X": -4796.134,
+        "Y": 6356.078
+      }
+    },
+    {
+      "ChildId": "09ba6307-04fe-4f5e-84af-00c38dc8159f"/*+Bazzz*/,
+      "Position": {
+        "X": -4796.134,
+        "Y": 6412.078
+      }
+    },
+    {
+      "ChildId": "e3075cbd-3782-4d29-afeb-dffc0976b95a"/*+arps again*/,
+      "Position": {
+        "X": -4796.134,
+        "Y": 6468.078
+      }
+    },
+    {
+      "ChildId": "58642df3-2c90-458c-bf64-822118513514"/*bassLine*/,
+      "Position": {
+        "X": -4796.134,
+        "Y": 6524.078
+      }
+    },
+    {
+      "ChildId": "6ee80fc7-a57b-4a70-aaea-1cd455cf94b1"/*TwinkleArps*/,
+      "Position": {
+        "X": -4796.134,
+        "Y": 6580.078
+      }
+    },
+    {
+      "ChildId": "2845db8e-3092-4260-9bf0-ebd7ac2b78f8"/*Twinkle only*/,
+      "Position": {
+        "X": -4781.839,
+        "Y": 6668.201
+      }
+    },
+    {
+      "ChildId": "e21e7d0f-6485-4f72-98b1-1b6616f6f26c"/*+Beats*/,
+      "Position": {
+        "X": -4784.424,
+        "Y": 6763.8237
+      }
+    },
+    {
+      "ChildId": "759fa5a6-2dc2-46b5-884c-337c97bd5924"/*+onlyBeats*/,
+      "Position": {
+        "X": -4790.8584,
+        "Y": 6838.0728
+      }
+    },
+    {
+      "ChildId": "46c03483-9a51-4bcc-9a43-48c0c5616cc4"/*Heaven*/,
+      "Position": {
+        "X": -4790.286,
+        "Y": 6954.2285
+      }
+    },
+    {
+      "ChildId": "5855e946-5b12-4078-8695-4763fab29d6a"/*+Pads*/,
+      "Position": {
+        "X": -4791.378,
+        "Y": 7031.46
+      }
+    },
+    {
+      "ChildId": "59b96428-83d8-402f-a481-2467c52ddad2"/*Piano*/,
+      "Position": {
+        "X": -8026.8804,
+        "Y": 1479.3829
+      }
+    },
+    {
+      "ChildId": "5b7a13ce-4fd8-4173-b5fa-f875b0659357"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8026.8804,
+        "Y": 1535.3832
+      }
+    },
+    {
+      "ChildId": "dce1d0f2-6075-42a3-88c3-475c595315a3"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8026.8804,
+        "Y": 1591.3832
+      }
+    },
+    {
+      "ChildId": "119ef639-68b1-40a7-ae94-dfdd784f3f6e"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8026.8804,
+        "Y": 1647.3829
+      }
+    },
+    {
+      "ChildId": "18cf4f6f-43e2-47e8-8d32-090a543546f9"/*MainPad*/,
+      "Position": {
+        "X": -8039.689,
+        "Y": 1799.3339
+      }
+    },
+    {
+      "ChildId": "6fc5a8ad-3883-458b-80a5-2f5bef5fba10"/*Flute Melody*/,
+      "Position": {
+        "X": -8039.689,
+        "Y": 1855.3344
+      }
+    },
+    {
+      "ChildId": "8041c49e-442b-4b6e-ab4f-eb4a2a32a550"/*Clap*/,
+      "Position": {
+        "X": -8093.8438,
+        "Y": 2623.063
+      }
+    },
+    {
+      "ChildId": "c67bbc05-b950-4860-b839-2fd5229c0337"/*Fishies*/,
+      "Position": {
+        "X": -7870.322,
+        "Y": 2510.8333
+      }
+    },
+    {
+      "ChildId": "b3f3e63b-9df8-4513-af9c-b08e64ab2a68"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8093.8438,
+        "Y": 2511.063
+      }
+    },
+    {
+      "ChildId": "80bd94dd-8225-4b52-b07d-b51f0a95c5de"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8103.122,
+        "Y": 2696.2615
+      }
+    },
+    {
+      "ChildId": "a6281d8b-ebc5-4e98-abcf-88279eadb357"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8251.203,
+        "Y": 3142.207
+      }
+    },
+    {
+      "ChildId": "bf4d9ad4-b53e-4848-ab3e-fe16a80afe45"/*Relevation*/,
+      "Position": {
+        "X": -7907.256,
+        "Y": 3101.2344
+      }
+    },
+    {
+      "ChildId": "0c309952-6171-4424-ac86-6270622a8bda"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8251.203,
+        "Y": 3086.207
+      }
+    },
+    {
+      "ChildId": "3d84c0a5-0a4e-4c2d-8149-15aacfbc20e3"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8251.203,
+        "Y": 3198.207
+      }
+    },
+    {
+      "ChildId": "fc613f23-cf0b-4c0c-a1b7-1001bfccc98f"/*Oha Voice*/,
+      "Position": {
+        "X": -8241.489,
+        "Y": 3399.0461
+      }
+    },
+    {
+      "ChildId": "d4ac881e-77ca-43ed-ab23-2623bcec9cf4"/*Bass*/,
+      "Position": {
+        "X": -8241.489,
+        "Y": 3455.0461
+      }
+    },
+    {
+      "ChildId": "293e09d1-3552-4ab6-93a7-de134d920143"/*Bass2*/,
+      "Position": {
+        "X": -8241.489,
+        "Y": 3511.0461
+      }
+    },
+    {
+      "ChildId": "69adb076-14a3-465c-a933-0edd9347adba"/*Main Arps*/,
+      "Position": {
+        "X": -8254.51,
+        "Y": 3714.1038
+      }
+    },
+    {
+      "ChildId": "48ad527a-db27-42dc-a72f-7398394045c0"/*Bass 3*/,
+      "Position": {
+        "X": -8241.489,
+        "Y": 3567.0461
+      }
+    },
+    {
+      "ChildId": "849779c9-66cb-41ea-b6d6-bd0da74155ad"/*Beats*/,
+      "Position": {
+        "X": -8251.203,
+        "Y": 3030.207
+      }
+    },
+    {
+      "ChildId": "9033b203-0851-49f2-a374-778f2ca6e8a0"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8251.175,
+        "Y": 3797.5024
+      }
+    },
+    {
+      "ChildId": "31c27c55-88df-48e9-ab2b-76744ef438ef"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8251.175,
+        "Y": 3853.5024
+      }
+    },
+    {
+      "ChildId": "825ad30a-d449-450a-afce-fe0c1b82ed27"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8258.812,
+        "Y": 4030.7349
+      }
+    },
+    {
+      "ChildId": "36a36aa4-3832-43ee-ba0e-a9d1af261241"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8297.29,
+        "Y": 4395.774
+      }
+    },
+    {
+      "ChildId": "4c8c446f-5020-4384-9faa-558bd4ea6ab4"/*Suffering*/,
+      "Position": {
+        "X": -8070.701,
+        "Y": 4346.8438
+      }
+    },
+    {
+      "ChildId": "e84aa721-565e-4e0c-ad79-93b6b7c47513"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8297.29,
+        "Y": 4451.774
+      }
+    },
+    {
+      "ChildId": "e325d071-054b-48ce-b6fc-5c55111f2dcf"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8297.29,
+        "Y": 4563.774
+      }
+    },
+    {
+      "ChildId": "9545b34e-ad88-4f43-823d-4f2d2eedcf07"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8297.29,
+        "Y": 4507.774
+      }
+    },
+    {
+      "ChildId": "abe67087-ff82-46a6-bcbc-15634650e279"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8317.624,
+        "Y": 4668.7134
+      }
+    },
+    {
+      "ChildId": "0b57c44d-47e5-4559-884b-e874ab786d0b"/*Patterns*/,
+      "Position": {
+        "X": -7672.653,
+        "Y": 1710.7826
+      }
+    },
+    {
+      "ChildId": "6cdcea9c-12a5-457c-9984-6aecfc6b515e"/*Beats*/,
+      "Position": {
+        "X": -8014.8306,
+        "Y": 1994.8784
+      }
+    },
+    {
+      "ChildId": "b9e96be4-263c-4c05-90ae-b0181bbeeea9"/*PeopleDoStuff*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 190.3789,
+        "Y": 126.40514
+      },
+      "Position": {
+        "X": -6781.567,
+        "Y": 1360.3966
+      }
+    },
+    {
+      "ChildId": "9b98acbb-61f8-4c9d-a1d4-bb7fd6a914c3"/*ActivePart*/,
+      "Position": {
+        "X": -6515.149,
+        "Y": 2343.6982
+      },
+      "SnapshotGroupIndex": "1"
+    },
+    {
+      "ChildId": "e8643b6d-cb27-4bee-827b-963fc50ea8e1"/*WaitingScene*/,
+      "Position": {
+        "X": -6707.4185,
+        "Y": 1323.131
+      }
+    },
+    {
+      "ChildId": "438f8ce0-90ee-44a4-8887-990b2e6df3fb"/*Switch*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 84.94459,
+        "Y": 463.88364
+      },
+      "Position": {
+        "X": -6246.95,
+        "Y": 1353.9567
+      }
+    },
+    {
+      "ChildId": "d2864cdb-53c2-49fb-be8f-a11efe400a91"/*RenderTarget*/,
+      "Position": {
+        "X": -5702.1646,
+        "Y": 1656.1415
+      }
+    },
+    {
+      "ChildId": "8db04885-e7d5-41ac-ae65-74f0a2101ead"/*SetVJVariables*/,
+      "Position": {
+        "X": -5552.1646,
+        "Y": 1656.1415
+      }
+    },
+    {
+      "ChildId": "221874d0-4acc-442b-95bf-3fab440979b8"/*Group*/,
+      "Position": {
+        "X": -5852.1646,
+        "Y": 1656.1415
+      }
+    },
+    {
+      "ChildId": "22cf3e21-c80f-4132-8c40-f0c885e7ccf2"/*SampleGradient*/,
+      "Position": {
+        "X": -6003.86,
+        "Y": 1761.681
+      }
+    },
+    {
+      "ChildId": "59d64208-bfdf-486f-887d-c2bf8836a414"/*MasterFade*/,
+      "Position": {
+        "X": -6135.457,
+        "Y": 1772.5302
+      }
+    },
+    {
+      "ChildId": "61b252ae-0a2d-4b92-bfe1-1c5d60c01e62"/*DeconstructedFaces*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 164.65665,
+        "Y": 87.09636
+      },
+      "Position": {
+        "X": -6697.185,
+        "Y": 1858.0873
+      }
+    },
+    {
+      "ChildId": "5d43fbbc-4bba-42b6-adf7-4d44e1395b47"/*NotePainting*/,
+      "Position": {
+        "X": -6830.152,
+        "Y": 2636.61
+      }
+    },
+    {
+      "ChildId": "684b9fc3-a9bf-46c3-a82f-6542cd4a2994"/*TheMoralQuestion*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 153.17113,
+        "Y": 80.20169
+      },
+      "Position": {
+        "X": -6688.311,
+        "Y": 2157.5273
+      }
+    },
+    {
+      "ChildId": "186515e3-65af-4bac-9dc6-d6bc604b9083"/*TheGrid*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 159.6468,
+        "Y": 65.09181
+      },
+      "Position": {
+        "X": -6692.808,
+        "Y": 2043.5049
+      }
+    },
+    {
+      "ChildId": "5e5bc0e9-6c3a-49b8-ac45-867e183da853"/*TheTruth*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": -6703.7305,
+        "Y": 1687.8429
+      }
+    },
+    {
+      "ChildId": "3fcde8a7-7975-4ed0-bdf3-862539d5f9bf"/*Layer2d*/,
+      "Position": {
+        "X": -6523.749,
+        "Y": 2628.8506
+      }
+    },
+    {
+      "ChildId": "fea2f08b-8ff7-4411-a25a-3529c2d1ad4d"/*LiveCodingVideoSource*/,
+      "Position": {
+        "X": -6018.3906,
+        "Y": 1631.4775
+      }
+    },
+    {
+      "ChildId": "a310e96b-b266-4222-a717-97a318a46264"/*Any*/,
+      "Position": {
+        "X": -7135.776,
+        "Y": 1371.7057
+      }
+    },
+    {
+      "ChildId": "19e3de21-d958-4353-ace1-b812164736ea"/*Panic*/,
+      "Position": {
+        "X": -7830.9253,
+        "Y": 2075.8752
+      }
+    },
+    {
+      "ChildId": "1a20ca18-f288-4c73-b1b6-27edf835a31a"/*Panic*/,
+      "Position": {
+        "X": -8038.498,
+        "Y": 2081.462
+      }
+    },
+    {
+      "ChildId": "6d809908-fed9-4402-94a1-1cebcdeef746"/*DrFew*/,
+      "Position": {
+        "X": -8038.498,
+        "Y": 2137.462
+      }
+    },
+    {
+      "ChildId": "5fb32f62-74a0-488c-8fc0-ddc48e4a4192"/*Sequential*/,
+      "Position": {
+        "X": -8038.498,
+        "Y": 2249.462
+      }
+    },
+    {
+      "ChildId": "bf00b7ea-0850-4c6c-9f9b-6612582d4ae1"/*AnimValue*/,
+      "Position": {
+        "X": -7396.3247,
+        "Y": 1918.1295
+      }
+    },
+    {
+      "ChildId": "e26ec9eb-a2ed-4c65-bbdb-d89347e914f9"/*SequenceAnim*/,
+      "Position": {
+        "X": -7254.7056,
+        "Y": 1920.2773
+      }
+    },
+    {
+      "ChildId": "bea54839-af73-46ab-bccc-685a2b86dd2a"/*PickBool*/,
+      "Position": {
+        "X": -7081.546,
+        "Y": 1857.2032
+      }
+    },
+    {
+      "ChildId": "6265be97-bcc6-46ce-810f-bb424e18c1e3"/*MidiInput*/,
+      "Position": {
+        "X": -7396.3247,
+        "Y": 1961.1295
+      }
+    },
+    {
+      "ChildId": "6f17f690-2390-4674-aaae-18bc06aaee74"/*AnimValue*/,
+      "Position": {
+        "X": -7332.109,
+        "Y": 2189.5173
+      }
+    },
+    {
+      "ChildId": "c9a595f1-7e16-4952-9c95-7fd4ca460f68"/*MidiInput*/,
+      "Position": {
+        "X": -6146.5137,
+        "Y": 1656.5092
+      }
+    },
+    {
+      "ChildId": "a23cd900-31ef-4a37-bd1b-ce0de52c9cf5"/*Layer2d*/,
+      "Position": {
+        "X": -5824.171,
+        "Y": 1803.313
+      }
+    },
+    {
+      "ChildId": "320016c0-ac99-4e80-967e-184c7a5f0537"/*TriggerAnim*/,
+      "Position": {
+        "X": -7455.449,
+        "Y": 2053.99
+      }
+    },
+    {
+      "ChildId": "396d9487-a0e2-4a86-831a-432dd114775a"/*Any*/,
+      "Position": {
+        "X": -7520.263,
+        "Y": 2126.385
+      }
+    },
+    {
+      "ChildId": "5d01e42a-9f99-445d-a988-04e90d11d56b"/*SynthTiling*/,
+      "Position": {
+        "X": -6701.6313,
+        "Y": 1611.614
+      }
+    },
+    {
+      "ChildId": "98ee2016-d2bd-49a5-bb7e-718bd26eeb5c"/*Claps*/,
+      "Position": {
+        "X": -8038.498,
+        "Y": 2193.462
+      }
+    },
+    {
+      "ChildId": "861c1200-33ac-4549-ad9f-42d6b3a9cd20"/*DrumTraks*/,
+      "Position": {
+        "X": -8038.498,
+        "Y": 2305.462
+      }
+    },
+    {
+      "ChildId": "58583e85-99bc-4f23-b039-cc88abeb793f"/*HiHats*/,
+      "Position": {
+        "X": -8040.5166,
+        "Y": 2423.1108
+      }
+    },
+    {
+      "ChildId": "1cfd0a75-885d-4ca3-8577-95e7debcbf53"/*Kick*/,
+      "Position": {
+        "X": -8093.8438,
+        "Y": 2567.063
+      }
+    },
+    {
+      "ChildId": "949fd9ad-fb57-45e2-8515-c30c4f624317"/*OscInput*/,
+      "Position": {
+        "X": -8644.874,
+        "Y": 1688.2739
+      }
+    },
+    {
+      "ChildId": "4218d526-0b71-4d58-90ec-8a720dfb65c1"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8103.122,
+        "Y": 2752.2615
+      }
+    },
+    {
+      "ChildId": "e508c337-bb8a-404e-bf68-8a42a68a328b"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8103.122,
+        "Y": 2808.2615
+      }
+    },
+    {
+      "ChildId": "900d2301-921b-42a9-b9ca-78e26cf2c5d8"/*_TidalDebugGizmo*/,
+      "Position": {
+        "X": -8258.812,
+        "Y": 4086.7344
+      }
+    },
+    {
+      "ChildId": "26b4d330-9b50-4bfa-8e68-e277ae082328"/*Beats*/,
+      "Position": {
+        "X": -8254.51,
+        "Y": 3658.1038
+      }
+    },
+    {
+      "ChildId": "e3e41294-9905-4c76-8107-db355e9a199b"/*Relevation*/,
+      "Position": {
+        "X": -7813.9326,
+        "Y": 3636.9094
+      }
+    },
+    {
+      "ChildId": "17cc2480-cae5-4c33-8112-e10ceaba25bf"/*Beats*/,
+      "Position": {
+        "X": -8297.29,
+        "Y": 4339.774
+      }
+    },
+    {
+      "ChildId": "858a3cd4-a47a-4196-837d-bd4b66de1fe9"/*RenderTarget*/,
+      "Position": {
+        "X": 1609.2794,
+        "Y": 2829.2075
       }
     },
     {
@@ -420,8 +1080,8 @@
     {
       "ChildId": "ee44c4a1-e044-4866-a9ef-d8ee6244dc91"/*Time*/,
       "Position": {
-        "X": -4090.7483,
-        "Y": 5618.8525
+        "X": -2564.4539,
+        "Y": 5262.8857
       }
     },
     {
@@ -441,15 +1101,15 @@
     {
       "ChildId": "8559bcba-c7d3-4816-b445-360ff001e0ba"/*Multiply*/,
       "Position": {
-        "X": -3640.7483,
-        "Y": 5618.8525
+        "X": -1992.926,
+        "Y": 5257.0986
       }
     },
     {
       "ChildId": "f2cd9d29-9904-4b77-a29c-75fe89a983b5"/*Sub*/,
       "Position": {
-        "X": -3940.7483,
-        "Y": 5618.8525
+        "X": -2292.9258,
+        "Y": 5257.0986
       }
     },
     {
@@ -476,15 +1136,15 @@
     {
       "ChildId": "b18a5a88-d53a-446c-9f8e-d5c4ea75880a"/*ToSeconds*/,
       "Position": {
-        "X": -3790.7483,
-        "Y": 5618.8525
+        "X": -2142.9263,
+        "Y": 5257.0986
       }
     },
     {
       "ChildId": "2dd0a1d8-56a7-47f4-bdb4-9034f4bd4317"/*Add*/,
       "Position": {
-        "X": -3490.7483,
-        "Y": 5618.8525
+        "X": -1842.926,
+        "Y": 5257.0986
       }
     },
     {
@@ -748,11 +1408,6 @@
     },
     {
       "ChildId": "40dce2aa-4cb7-4ebc-bc87-e57efecb7e69"/*SequenceAnim*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 115.21404,
-        "Y": 52.98087
-      },
       "Position": {
         "X": -1713.3884,
         "Y": 5867.2754
@@ -1137,129 +1792,10 @@
       }
     },
     {
-      "ChildId": "1bb28065-85a1-47ca-a880-8b378244da40"/*OscInput*/,
-      "Position": {
-        "X": -8648.005,
-        "Y": 1574.2026
-      }
-    },
-    {
-      "ChildId": "6353226d-a4cf-443d-bb1b-c90d9a053ddb"/*Piano Intro*/,
-      "Position": {
-        "X": -7708.097,
-        "Y": 1390.0148
-      }
-    },
-    {
       "ChildId": "667a78b3-5595-4a47-8e38-e2ee1d1d4f8f"/*TriggerAnim*/,
       "Position": {
         "X": -396.9986,
         "Y": 6965.992
-      }
-    },
-    {
-      "ChildId": "ff0898df-b16d-424d-a654-f42fca044644"/*Bass*/,
-      "Position": {
-        "X": -4058.134,
-        "Y": 6095.414
-      }
-    },
-    {
-      "ChildId": "1f8cc5c0-3431-48f9-8b3a-ac034092598e"/*Beats Start*/,
-      "Position": {
-        "X": -4058.134,
-        "Y": 6151.414
-      }
-    },
-    {
-      "ChildId": "fee6653d-9977-485c-83ce-59c5970f4716"/*Arps*/,
-      "Position": {
-        "X": -4058.134,
-        "Y": 6207.414
-      }
-    },
-    {
-      "ChildId": "d8537afc-98f6-4458-84b8-d68069c3eb64"/*Arps and Bass*/,
-      "Position": {
-        "X": -4058.134,
-        "Y": 6263.414
-      }
-    },
-    {
-      "ChildId": "f114795c-968d-4384-97bc-63591c118dc8"/*Arps+His*/,
-      "Position": {
-        "X": -4058.134,
-        "Y": 6319.414
-      }
-    },
-    {
-      "ChildId": "0cdec8d0-dfbf-4b0b-bf4c-111d4d251df7"/*Ohhha*/,
-      "Position": {
-        "X": -4058.134,
-        "Y": 6375.414
-      }
-    },
-    {
-      "ChildId": "09ba6307-04fe-4f5e-84af-00c38dc8159f"/*+Bazzz*/,
-      "Position": {
-        "X": -4058.134,
-        "Y": 6431.414
-      }
-    },
-    {
-      "ChildId": "e3075cbd-3782-4d29-afeb-dffc0976b95a"/*+arps again*/,
-      "Position": {
-        "X": -4058.134,
-        "Y": 6487.414
-      }
-    },
-    {
-      "ChildId": "58642df3-2c90-458c-bf64-822118513514"/*bassLine*/,
-      "Position": {
-        "X": -4058.134,
-        "Y": 6543.414
-      }
-    },
-    {
-      "ChildId": "6ee80fc7-a57b-4a70-aaea-1cd455cf94b1"/*TwinkleArps*/,
-      "Position": {
-        "X": -4058.134,
-        "Y": 6599.414
-      }
-    },
-    {
-      "ChildId": "2845db8e-3092-4260-9bf0-ebd7ac2b78f8"/*Twinkle only*/,
-      "Position": {
-        "X": -4043.8394,
-        "Y": 6687.537
-      }
-    },
-    {
-      "ChildId": "e21e7d0f-6485-4f72-98b1-1b6616f6f26c"/*+Beats*/,
-      "Position": {
-        "X": -4046.4238,
-        "Y": 6783.1597
-      }
-    },
-    {
-      "ChildId": "759fa5a6-2dc2-46b5-884c-337c97bd5924"/*+onlyBeats*/,
-      "Position": {
-        "X": -4052.859,
-        "Y": 6857.4087
-      }
-    },
-    {
-      "ChildId": "46c03483-9a51-4bcc-9a43-48c0c5616cc4"/*Heaven*/,
-      "Position": {
-        "X": -4052.2866,
-        "Y": 6973.5645
-      }
-    },
-    {
-      "ChildId": "5855e946-5b12-4078-8695-4763fab29d6a"/*+Pads*/,
-      "Position": {
-        "X": -4053.378,
-        "Y": 7050.796
       }
     },
     {
@@ -1277,328 +1813,6 @@
       }
     },
     {
-      "ChildId": "59b96428-83d8-402f-a481-2467c52ddad2"/*Piano*/,
-      "Position": {
-        "X": -8026.8804,
-        "Y": 1479.3829
-      }
-    },
-    {
-      "ChildId": "5b7a13ce-4fd8-4173-b5fa-f875b0659357"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8026.8804,
-        "Y": 1535.3832
-      }
-    },
-    {
-      "ChildId": "dce1d0f2-6075-42a3-88c3-475c595315a3"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8026.8804,
-        "Y": 1591.3832
-      }
-    },
-    {
-      "ChildId": "119ef639-68b1-40a7-ae94-dfdd784f3f6e"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8026.8804,
-        "Y": 1647.3829
-      }
-    },
-    {
-      "ChildId": "18cf4f6f-43e2-47e8-8d32-090a543546f9"/*MainPad*/,
-      "Position": {
-        "X": -8039.689,
-        "Y": 1799.3339
-      }
-    },
-    {
-      "ChildId": "6fc5a8ad-3883-458b-80a5-2f5bef5fba10"/*Flute Melody*/,
-      "Position": {
-        "X": -8039.689,
-        "Y": 1855.3344
-      }
-    },
-    {
-      "ChildId": "8041c49e-442b-4b6e-ab4f-eb4a2a32a550"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8085.5195,
-        "Y": 2370.476
-      }
-    },
-    {
-      "ChildId": "c67bbc05-b950-4860-b839-2fd5229c0337"/*SpreadLayout*/,
-      "Position": {
-        "X": -7846.169,
-        "Y": 2312.628
-      }
-    },
-    {
-      "ChildId": "b3f3e63b-9df8-4513-af9c-b08e64ab2a68"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8085.5195,
-        "Y": 2314.476
-      }
-    },
-    {
-      "ChildId": "80bd94dd-8225-4b52-b07d-b51f0a95c5de"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8085.5195,
-        "Y": 2426.476
-      }
-    },
-    {
-      "ChildId": "a6281d8b-ebc5-4e98-abcf-88279eadb357"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8139.0527,
-        "Y": 2623.9958
-      }
-    },
-    {
-      "ChildId": "bf4d9ad4-b53e-4848-ab3e-fe16a80afe45"/*Relelation*/,
-      "Position": {
-        "X": -7795.1055,
-        "Y": 2583.0232
-      }
-    },
-    {
-      "ChildId": "0c309952-6171-4424-ac86-6270622a8bda"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8139.0527,
-        "Y": 2567.9958
-      }
-    },
-    {
-      "ChildId": "3d84c0a5-0a4e-4c2d-8149-15aacfbc20e3"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8139.0527,
-        "Y": 2679.9958
-      }
-    },
-    {
-      "ChildId": "fc613f23-cf0b-4c0c-a1b7-1001bfccc98f"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8139.0527,
-        "Y": 2735.9958
-      }
-    },
-    {
-      "ChildId": "d4ac881e-77ca-43ed-ab23-2623bcec9cf4"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8139.0527,
-        "Y": 2791.9958
-      }
-    },
-    {
-      "ChildId": "293e09d1-3552-4ab6-93a7-de134d920143"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8139.0527,
-        "Y": 2847.9958
-      }
-    },
-    {
-      "ChildId": "69adb076-14a3-465c-a933-0edd9347adba"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8146.893,
-        "Y": 2979.821
-      }
-    },
-    {
-      "ChildId": "48ad527a-db27-42dc-a72f-7398394045c0"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8139.0527,
-        "Y": 2903.9958
-      }
-    },
-    {
-      "ChildId": "849779c9-66cb-41ea-b6d6-bd0da74155ad"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8146.1704,
-        "Y": 3069.6902
-      }
-    },
-    {
-      "ChildId": "9033b203-0851-49f2-a374-778f2ca6e8a0"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8143.9893,
-        "Y": 3151.5046
-      }
-    },
-    {
-      "ChildId": "31c27c55-88df-48e9-ab2b-76744ef438ef"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8151.6255,
-        "Y": 3248.9568
-      }
-    },
-    {
-      "ChildId": "825ad30a-d449-450a-afce-fe0c1b82ed27"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8151.6255,
-        "Y": 3304.9568
-      }
-    },
-    {
-      "ChildId": "36a36aa4-3832-43ee-ba0e-a9d1af261241"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8170.6123,
-        "Y": 3392.3005
-      }
-    },
-    {
-      "ChildId": "4c8c446f-5020-4384-9faa-558bd4ea6ab4"/*Suffering*/,
-      "Position": {
-        "X": -7966.358,
-        "Y": 3386.1687
-      }
-    },
-    {
-      "ChildId": "e84aa721-565e-4e0c-ad79-93b6b7c47513"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8170.6123,
-        "Y": 3448.3
-      }
-    },
-    {
-      "ChildId": "e325d071-054b-48ce-b6fc-5c55111f2dcf"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8170.6123,
-        "Y": 3560.3
-      }
-    },
-    {
-      "ChildId": "9545b34e-ad88-4f43-823d-4f2d2eedcf07"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8170.6123,
-        "Y": 3504.3
-      }
-    },
-    {
-      "ChildId": "abe67087-ff82-46a6-bcbc-15634650e279"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8170.6123,
-        "Y": 3616.3
-      }
-    },
-    {
-      "ChildId": "0b57c44d-47e5-4559-884b-e874ab786d0b"/*Patterns*/,
-      "Position": {
-        "X": -7672.653,
-        "Y": 1710.7826
-      }
-    },
-    {
-      "ChildId": "6cdcea9c-12a5-457c-9984-6aecfc6b515e"/*Beats*/,
-      "Position": {
-        "X": -8039.689,
-        "Y": 1911.3344
-      }
-    },
-    {
-      "ChildId": "b9e96be4-263c-4c05-90ae-b0181bbeeea9"/*PeopleDoStuff*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 190.3789,
-        "Y": 126.40514
-      },
-      "Position": {
-        "X": -6780.4873,
-        "Y": 1524.4468
-      }
-    },
-    {
-      "ChildId": "9b98acbb-61f8-4c9d-a1d4-bb7fd6a914c3"/*ActivePart*/,
-      "Position": {
-        "X": -6515.149,
-        "Y": 2343.6982
-      },
-      "SnapshotGroupIndex": "1"
-    },
-    {
-      "ChildId": "e8643b6d-cb27-4bee-827b-963fc50ea8e1"/*WaitingScene*/,
-      "Position": {
-        "X": -6780.4873,
-        "Y": 1481.4468
-      }
-    },
-    {
-      "ChildId": "438f8ce0-90ee-44a4-8887-990b2e6df3fb"/*Switch*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 84.94459,
-        "Y": 463.88364
-      },
-      "Position": {
-        "X": -6246.95,
-        "Y": 1353.9567
-      }
-    },
-    {
-      "ChildId": "d2864cdb-53c2-49fb-be8f-a11efe400a91"/*RenderTarget*/,
-      "Position": {
-        "X": -5702.1646,
-        "Y": 1656.1415
-      }
-    },
-    {
-      "ChildId": "8db04885-e7d5-41ac-ae65-74f0a2101ead"/*SetVJVariables*/,
-      "Position": {
-        "X": -5552.1646,
-        "Y": 1656.1415
-      }
-    },
-    {
-      "ChildId": "221874d0-4acc-442b-95bf-3fab440979b8"/*Group*/,
-      "Position": {
-        "X": -5852.1646,
-        "Y": 1656.1415
-      }
-    },
-    {
-      "ChildId": "22cf3e21-c80f-4132-8c40-f0c885e7ccf2"/*SampleGradient*/,
-      "Position": {
-        "X": -6003.86,
-        "Y": 1761.681
-      }
-    },
-    {
-      "ChildId": "59d64208-bfdf-486f-887d-c2bf8836a414"/*MasterFade*/,
-      "Position": {
-        "X": -6135.457,
-        "Y": 1772.5302
-      }
-    },
-    {
-      "ChildId": "61b252ae-0a2d-4b92-bfe1-1c5d60c01e62"/*DeconstructedFaces*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -6767.3076,
-        "Y": 1936.215
-      }
-    },
-    {
-      "ChildId": "5d43fbbc-4bba-42b6-adf7-4d44e1395b47"/*NotePainting*/,
-      "Position": {
-        "X": -6910.9683,
-        "Y": 2633.502
-      }
-    },
-    {
-      "ChildId": "684b9fc3-a9bf-46c3-a82f-6542cd4a2994"/*TheMoralQuestion*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -6767.3076,
-        "Y": 2022.2148
-      }
-    },
-    {
       "ChildId": "3b1f678b-d337-48f2-bbbb-7acbd709bc72"/*Value*/,
       "Position": {
         "X": -2736.0586,
@@ -1613,132 +1827,10 @@
       }
     },
     {
-      "ChildId": "186515e3-65af-4bac-9dc6-d6bc604b9083"/*TheGrid*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -6767.3076,
-        "Y": 1979.215
-      }
-    },
-    {
-      "ChildId": "5e5bc0e9-6c3a-49b8-ac45-867e183da853"/*TheTruth*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
-      "Position": {
-        "X": -6773.524,
-        "Y": 1817.536
-      }
-    },
-    {
       "ChildId": "82b23847-dcae-4d88-a98f-83cbd8cc1c1f"/*LiveCodingVideoSource*/,
       "Position": {
         "X": 588.5771,
         "Y": 2817.7217
-      }
-    },
-    {
-      "ChildId": "3fcde8a7-7975-4ed0-bdf3-862539d5f9bf"/*Layer2d*/,
-      "Position": {
-        "X": -6523.749,
-        "Y": 2628.8506
-      }
-    },
-    {
-      "ChildId": "fea2f08b-8ff7-4411-a25a-3529c2d1ad4d"/*LiveCodingVideoSource*/,
-      "Position": {
-        "X": -6018.3906,
-        "Y": 1631.4775
-      }
-    },
-    {
-      "ChildId": "a310e96b-b266-4222-a717-97a318a46264"/*Any*/,
-      "Position": {
-        "X": -7064.1396,
-        "Y": 1317.9785
-      }
-    },
-    {
-      "ChildId": "19e3de21-d958-4353-ace1-b812164736ea"/*Panic*/,
-      "Position": {
-        "X": -7830.9253,
-        "Y": 2075.8752
-      }
-    },
-    {
-      "ChildId": "1a20ca18-f288-4c73-b1b6-27edf835a31a"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8038.498,
-        "Y": 2081.462
-      }
-    },
-    {
-      "ChildId": "6d809908-fed9-4402-94a1-1cebcdeef746"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8038.498,
-        "Y": 2137.462
-      }
-    },
-    {
-      "ChildId": "eaa98571-c6e6-42be-89d7-6383a493948d"/*OscInput*/,
-      "Position": {
-        "X": -8589.315,
-        "Y": 1838.389
-      }
-    },
-    {
-      "ChildId": "5fb32f62-74a0-488c-8fc0-ddc48e4a4192"/*_TidalDebugGizmo*/,
-      "Position": {
-        "X": -8038.498,
-        "Y": 2193.462
-      }
-    },
-    {
-      "ChildId": "11e62c21-db11-4d0c-b785-ede6f245a768"/*Layer2d*/,
-      "Position": {
-        "X": -6706.075,
-        "Y": 1322.589
-      }
-    },
-    {
-      "ChildId": "bf00b7ea-0850-4c6c-9f9b-6612582d4ae1"/*AnimValue*/,
-      "Position": {
-        "X": -7477.744,
-        "Y": 2001.6368
-      }
-    },
-    {
-      "ChildId": "e26ec9eb-a2ed-4c65-bbdb-d89347e914f9"/*SequenceAnim*/,
-      "Position": {
-        "X": -7336.125,
-        "Y": 2003.7847
-      }
-    },
-    {
-      "ChildId": "bea54839-af73-46ab-bccc-685a2b86dd2a"/*PickBool*/,
-      "Position": {
-        "X": -7162.9653,
-        "Y": 1940.7106
-      }
-    },
-    {
-      "ChildId": "6265be97-bcc6-46ce-810f-bb424e18c1e3"/*MidiInput*/,
-      "Position": {
-        "X": -7477.744,
-        "Y": 2044.6368
-      }
-    },
-    {
-      "ChildId": "6f17f690-2390-4674-aaae-18bc06aaee74"/*AnimValue*/,
-      "Position": {
-        "X": -7332.109,
-        "Y": 2189.5173
       }
     }
   ],
@@ -1753,24 +1845,6 @@
   ],
   "Annotations": [
     {
-      "Id": "f2c3f293-5cdc-4a85-af26-7a095a858a0c",
-      "Title": "Getting sync 125 BPM",
-      "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
-        "W": 1.0
-      },
-      "Position": {
-        "X": -4153.9873,
-        "Y": 5538.1855
-      },
-      "Size": {
-        "X": 951.2189,
-        "Y": 186.50941
-      }
-    },
-    {
       "Id": "6f9a845c-f4c6-4760-9a90-f3294f00461e",
       "Title": "Dummy Time Markers for \ninitial live coding capture\n",
       "Color": {
@@ -1780,12 +1854,48 @@
         "W": 1.0
       },
       "Position": {
-        "X": -4118.134,
-        "Y": 6035.414
+        "X": -4851.0493,
+        "Y": 5959.4956
       },
       "Size": {
         "X": 290.8078,
         "Y": 1148.5924
+      }
+    },
+    {
+      "Id": "b828f5b2-bee6-4261-921c-5535c9b1386a",
+      "Title": "First 2mins",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -8311.203,
+        "Y": 2970.207
+      },
+      "Size": {
+        "X": 230.0,
+        "Y": 324.0
+      }
+    },
+    {
+      "Id": "f2c3f293-5cdc-4a85-af26-7a095a858a0c",
+      "Title": "Getting sync 125 BPM",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2627.6929,
+        "Y": 5182.2188
+      },
+      "Size": {
+        "X": 951.2189,
+        "Y": 186.50941
       }
     }
   ]

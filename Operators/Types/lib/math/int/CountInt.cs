@@ -58,7 +58,7 @@ namespace T3.Operators.Types.Id_0e1d5f4b_3ba0_4e71_aa26_7308b6df214d
         private bool _initialized;
         private bool _lastIncrementTrigger;
         private bool _lastDecrementTrigger;
-        private const float MinTimeElapsedBeforeEvaluation = 1 / 1000f;
+        private const float MinTimeElapsedBeforeEvaluation = 1 / 10000f;
         private double _lastEvalTime;
 
         

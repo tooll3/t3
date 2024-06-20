@@ -11,13 +11,6 @@
       "Usage": "Default"
     },
     {
-      "InputId": "e88fbe0e-f7ac-48f1-9d17-e5e5eb8d4ffc"/*Mode*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 90.0
-      }
-    },
-    {
       "InputId": "8bed669e-1141-433f-a8a5-ecbde812462b"/*Start*/,
       "Position": {
         "X": 0.0,

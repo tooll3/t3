@@ -290,11 +290,6 @@
           "Value": 4
         },
         {
-          "Id": "62e68350-739a-4220-bb84-70b33ea1baf0"/*BrightnessOffset*/,
-          "Type": "System.Single",
-          "Value": -5.314961
-        },
-        {
           "Id": "f5f424a1-42a4-4429-8d99-47a7c6176400"/*Red*/,
           "Type": "System.Int32",
           "Value": 6
@@ -314,7 +309,7 @@
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0065357015,
-            "Y": -0.16,
+            "Y": -0.01633957,
             "Z": 0.0
           }
         },
@@ -329,7 +324,7 @@
         {
           "Id": "3afdb344-0a09-4907-89f1-447c991273da"/*Scale*/,
           "Type": "System.Single",
-          "Value": 4.1
+          "Value": 1.99
         },
         {
           "Id": "d5c1a82b-5633-446e-9836-a735a55c7a91"/*TextureMode*/,
@@ -397,6 +392,11 @@
       "Id": "72554ba0-89bf-4a7d-bd13-d780c8016bb2"/*RandomizePoints*/,
       "SymbolId": "ec0675d7-6b72-4b15-b141-80bdd2367cd8",
       "InputValues": [
+        {
+          "Id": "82384eba-1d7a-41c8-a703-9184c961d766"/*Amount*/,
+          "Type": "System.Single",
+          "Value": 0.0
+        },
         {
           "Id": "270bcf23-35ee-4c4f-aae5-192435b1aee3"/*Position*/,
           "Type": "System.Numerics.Vector3",
