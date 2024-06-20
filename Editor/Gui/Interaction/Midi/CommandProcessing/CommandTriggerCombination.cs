@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using T3.Core.Logging;
 
 namespace T3.Editor.Gui.Interaction.Midi.CommandProcessing;
 
@@ -50,7 +51,30 @@ public class CommandTriggerCombination
         _executesAt = executesAt;
         _actionWithoutParameters = action;
     }
+
+    public override string ToString()
+    {
+        var keys = string.Join(", ", _keyRanges);
+        var mode = _requiredInputMode is CompatibleMidiDevice.InputModes.None or CompatibleMidiDevice.InputModes.Default  
+                       ? "" 
+                       : "+ " +  _requiredInputMode;
         
+        if(_indexAction != null )
+            return $"{mode}{keys} -> IndexAction {_indexAction.Method.Name}";
+        
+        if(_indicesAction != null )
+            return $"{mode}{keys} -> IndicesAction {_indicesAction.Method.Name}";
+        
+        if(_actionWithoutParameters != null )
+            return $"{mode}{keys} -> ActionWithoutParameters {_actionWithoutParameters.Method.Name}";
+
+        if(_controllerValueUpdateAction != null )
+            return $"{mode}{keys} -> ControllerValueUpdateAction {_controllerValueUpdateAction.Method.Name}";
+
+        
+        return "Undefined CommandTriggerAction";
+    }
+
     public void InvokeMatchingButtonCommands(List<ButtonSignal> buttonSignals, CompatibleMidiDevice.InputModes activeMode,
                                              CompatibleMidiDevice.InputModes releasedMode)
     {

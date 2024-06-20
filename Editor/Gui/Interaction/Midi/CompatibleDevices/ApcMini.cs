@@ -27,16 +27,30 @@ public class ApcMini : CompatibleMidiDevice
                       new(BlendActions.StartBlendingSnapshots, InputModes.Default, new[] { SceneTrigger1To64 },
                           CommandTriggerCombination.ExecutesAt.AllCombinedButtonsReleased),
 
-                      new(BlendActions.StopBlendingTowards, InputModes.Default, new[] { Shift },
-                          CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
-                      new(BlendActions.StartBlendingTowardsSnapshot, requiredInputMode: InputModes.BlendTo, new[] { SceneTrigger1To64 },
+
+                      // new(BlendActions.StopBlendingTowards, InputModes.BlendTo, new[] { SceneLaunch8ClipStopAll },
+                      //     CommandTriggerCombination.ExecutesAt.ModeButtonReleased),
+                      
+                      new(BlendActions.StartBlendingTowardsSnapshot, 
+                          requiredInputMode: InputModes.BlendTo, 
+                          new[] { SceneTrigger1To64 },
                           CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+
+                      // Sadly this is not triggered
+                      // new(BlendActions.StopBlendingTowards, InputModes.BlendTo, new[] { Shift },
+                      //     CommandTriggerCombination.ExecutesAt.ModeButtonReleased),
+                      
+                      new(BlendActions.StopBlendingTowards, InputModes.Default, new[] { SceneLaunch8ClipStopAll },
+                          CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
+                      
                       new(BlendActions.UpdateBlendingTowardsProgress, InputModes.Default, new[] { Slider9 },
                           CommandTriggerCombination.ExecutesAt.ControllerChange),
 
                       new(BlendActions.UpdateBlendValues, InputModes.Default, new[] { Sliders1To8 }, CommandTriggerCombination.ExecutesAt.ControllerChange),
-                      new(SnapshotActions.SaveSnapshotAtNextFreeSlot, InputModes.Default, new[] { SceneLaunch8ClipStopAll },
-                          CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
+                      
+                      // new(SnapshotActions.SaveSnapshotAtNextFreeSlot, InputModes.Default, new[] { SceneLaunch8ClipStopAll },
+                      //     CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
+                      
                       //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { ChannelButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
                   };
         
@@ -146,16 +160,13 @@ public class ApcMini : CompatibleMidiDevice
             return orgColor;
         }
 
-        if (ActiveMode == InputModes.Save)
-        {
-            return (int)ApcButtonColor.Yellow;
-        }
-        else if (ActiveMode == InputModes.Delete)
-        {
-            return (int)ApcButtonColor.Red;
-        }
-
-        return orgColor;
+        return ActiveMode switch
+                   {
+                       InputModes.Save   => (int)ApcButtonColor.Yellow,
+                       InputModes.BlendTo => (int)ApcButtonColor.Yellow,
+                       InputModes.Delete => (int)ApcButtonColor.Red,
+                       _                 => orgColor
+                   };
     }
 
     private int _updateCount;

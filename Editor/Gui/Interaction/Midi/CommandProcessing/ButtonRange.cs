@@ -14,6 +14,13 @@ public readonly struct ButtonRange
         _reversed = true;
     }
 
+    public override string ToString()
+    {
+        return _startIndex == _lastIndex 
+                   ? $"[{_startIndex}]" 
+                   : $"[{_startIndex}..{_lastIndex}] {(_reversed ? " reversed" : "")}";
+    }
+
     public ButtonRange(int startIndex, int lastIndex, bool reversed = false)
     {
         _startIndex = startIndex;
