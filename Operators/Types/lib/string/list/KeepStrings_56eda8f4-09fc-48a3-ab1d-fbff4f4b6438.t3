@@ -28,10 +28,6 @@
       "DefaultValue": 0
     },
     {
-      "Id": "d44903ae-379f-4f7a-80fa-56379e3cfae9"/*InsertIndex*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "ba5cd2ae-15df-4d67-8690-a5b0d1b81971"/*Index*/,
       "DefaultValue": 0
     }

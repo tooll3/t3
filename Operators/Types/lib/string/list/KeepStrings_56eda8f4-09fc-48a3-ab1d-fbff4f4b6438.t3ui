@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "26adb8d2-14e7-4006-99ed-bcbbede8352a"/*NewString*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": 0.0,
         "Y": 45.0
@@ -43,13 +44,6 @@
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
-    },
-    {
-      "InputId": "d44903ae-379f-4f7a-80fa-56379e3cfae9"/*InsertIndex*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 135.0
       }
     },
     {

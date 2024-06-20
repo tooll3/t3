@@ -280,6 +280,69 @@
           "ee2bc31a-a67f-4bec-bce7-0a70db88082c": 1
         }
       }
+    },
+    {
+      "Id": "f2c0f3dc-0ae1-4aaa-9135-f7fbf5d5dbf0",
+      "IsPreset": true,
+      "ActivationIndex": 10,
+      "Title": "BlueHighlights",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 279.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "32d082f5-d6e1-4068-bcd9-a01977ed72df": 14,
+          "71c99158-cf0e-4ceb-82ee-5ef5685441b3": 0.04,
+          "6bdb499c-1300-4fe1-8634-7d3edc4d4050": false,
+          "c8550e83-bd37-4db3-a859-4a6bcd64a63c": 0.42,
+          "6d3c2c76-df35-411a-8e25-450dc9cd6f4e": -0.4,
+          "22afde68-08c5-438f-9425-fe255b2e079f": {
+            "X": 0.0,
+            "Y": 0.100000024
+          },
+          "819898d2-230b-4176-a1b7-a008aed9631d": 76,
+          "82a8fbb3-c1be-494e-8a8d-e7ccf5440556": 0.001,
+          "be07242e-39fc-4631-ab6e-3023c9444406": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "9993e238-2900-42d8-919d-01f01c0974fb",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 0.99999,
+                    "G": 0.99999684,
+                    "B": 1.0,
+                    "A": 0.0
+                  }
+                },
+                {
+                  "Id": "51bdcc42-8327-462d-8dc3-87ab5ab347fc",
+                  "NormalizedPosition": 0.9614129,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 0.99999,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "b29c11f9-2ccf-45a5-80d0-ad61252bd94d",
+                  "NormalizedPosition": 0.99703175,
+                  "Color": {
+                    "R": 0.12649402,
+                    "G": 4.656263,
+                    "B": 4.4664803,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "d90350a0-9fa8-4747-805b-ba7ab8125595": false
+        }
+      }
     }
   ]
 }

@@ -13,7 +13,7 @@
     },
     {
       "Id": "2cff056f-1886-46a1-9e8c-998d5bdec279"/*IsSimulationVariable*/,
-      "DefaultValue": ""
+      "DefaultValue": "IsSimulation"
     }
   ],
   "Children": [],

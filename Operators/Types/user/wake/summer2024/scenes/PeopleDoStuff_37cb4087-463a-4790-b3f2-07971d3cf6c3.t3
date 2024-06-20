@@ -324,7 +324,7 @@
           "Id": "9e24c5d1-191a-4c1a-b88e-03df826fffc0"/*Translation*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 0.0,
+            "X": 0.82,
             "Y": -0.08,
             "Z": 0.0
           }
@@ -345,8 +345,9 @@
       "Outputs": []
     },
     {
-      "Id": "44618f05-4299-4432-8af3-1aa2567b7744"/*AString*/,
+      "Id": "44618f05-4299-4432-8af3-1aa2567b7744"/*RandomNames*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
+      "Name": "RandomNames",
       "InputValues": [
         {
           "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
@@ -368,7 +369,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "0777af0f-7add-4ad5-83cc-fcbd366aff9f",
+                  "Id": "a250cf10-6237-44d3-954b-c94a7b9137b6",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 1.0,
@@ -378,7 +379,7 @@
                   }
                 },
                 {
-                  "Id": "f722cc72-0027-43b0-9907-564b827b1a74",
+                  "Id": "858b09ba-e1ed-4902-be1a-385fe5adc3a4",
                   "NormalizedPosition": 0.6352201,
                   "Color": {
                     "R": 9.9999E-07,
@@ -423,7 +424,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "caeddca4-56e3-458b-8c8a-8f82a8432d46",
+                  "Id": "6a38a6e3-ca89-4cd3-98be-475c0eac942c",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 0.0,
@@ -433,7 +434,7 @@
                   }
                 },
                 {
-                  "Id": "9f0eae5b-d6df-4209-8486-4b22f0447cd6",
+                  "Id": "7ef6b54a-8381-4676-ae2c-ad74fa435cee",
                   "NormalizedPosition": 1.0,
                   "Color": {
                     "R": 0.19138753,
@@ -553,7 +554,7 @@
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0,
-            "W": 0.0
+            "W": 1.0
           }
         }
       ],
@@ -610,7 +611,7 @@
         {
           "Id": "721c34b5-bb06-49e0-a71e-2aebbf2557e0"/*BpmRate*/,
           "Type": "System.Single",
-          "Value": 200.0
+          "Value": 120.0
         },
         {
           "Id": "fbf10760-b559-4e9c-b8dc-ce61d3f21c82"/*TriggerUpdate*/,

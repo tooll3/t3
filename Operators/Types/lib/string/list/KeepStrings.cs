@@ -1,4 +1,6 @@
-using System.Collections.Generic;   
+using System;
+using System.Collections.Generic;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -27,8 +29,8 @@ namespace T3.Operators.Types.Id_56eda8f4_09fc_48a3_ab1d_fbff4f4b6438
         private void Update(EvaluationContext context)
         {
             var maxCount = MaxCount.GetValue(context).Clamp(0, 10000);
-            //var insertTriggered = MathUtils.WasTriggered(InsertTrigger.GetValue(context), ref _insertTrigger);
             var insertTriggered = InsertTrigger.GetValue(context);
+            var index = Index.GetValue(context).Mod(maxCount);
 
             if (MathUtils.WasTriggered(ClearTrigger.GetValue(context), ref _clear))
             {
@@ -81,7 +83,6 @@ namespace T3.Operators.Types.Id_56eda8f4_09fc_48a3_ab1d_fbff4f4b6438
 
                             _index = 0;
                         }
-
                         break;
                     case InsertModes.Overwrite:
                         if (hasStringChanged || !onlyOnChanges)
@@ -113,7 +114,35 @@ namespace T3.Operators.Types.Id_56eda8f4_09fc_48a3_ab1d_fbff4f4b6438
                                 _insertTimes.RemoveAt(_insertTimes.Count - 1);
                             }
                         }
-
+                        break;
+                    
+                    case InsertModes.UseIndex:
+                        try
+                        {
+                            while (_strings.Count > maxCount && _strings.Count > 1)
+                            {
+                                _strings.RemoveAt(_strings.Count - 1);
+                                _insertTimes.RemoveAt(_insertTimes.Count - 1);
+                            }
+                            
+                            if (hasStringChanged || !onlyOnChanges)
+                            {
+                                if (_strings.Count <= index)
+                                {
+                                    _strings.Add(newStr);
+                                    _insertTimes.Add((float)context.LocalFxTime);
+                                }
+                                else
+                                {
+                                    _strings[index] = newStr;
+                                    _insertTimes[index]= (float)context.LocalFxTime;
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Debug($"Error in KeepStrings: {index} {e.Message} {e.StackTrace}", this);
+                        }
                         break;
                 }
             }
@@ -135,7 +164,7 @@ namespace T3.Operators.Types.Id_56eda8f4_09fc_48a3_ab1d_fbff4f4b6438
             Append,
             Insert,
             Overwrite,
-            IndexIfConnected,
+            UseIndex,
         }
 
         [Input(Guid = "26ADB8D2-14E7-4006-99ED-BCBBEDE8352A")]
@@ -155,10 +184,7 @@ namespace T3.Operators.Types.Id_56eda8f4_09fc_48a3_ab1d_fbff4f4b6438
 
         [Input(Guid = "694574A3-A3A9-4073-BEEC-A6A10ED64B81", MappedType = typeof(InsertModes))]
         public readonly InputSlot<int> InsertMode = new();
-
-        [Input(Guid = "D44903AE-379F-4F7A-80FA-56379E3CFAE9")]
-        public readonly InputSlot<int> InsertIndex = new();
-
+        
         [Input(Guid = "ba5cd2ae-15df-4d67-8690-a5b0d1b81971")]
         public readonly InputSlot<int> Index = new(0);
     }
