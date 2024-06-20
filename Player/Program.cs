@@ -198,6 +198,7 @@ namespace T3.Player
                 if (!demoSymbol.TryCreateParentlessInstance(out _project))
                 {
                     CloseApplication(true, $"Failed to create instance of project op {demoSymbol}");
+                    return;
                 }
                 
                 _evalContext = new EvaluationContext();
