@@ -13,7 +13,7 @@ namespace lib.math.@bool
 
         public All()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

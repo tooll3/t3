@@ -17,8 +17,8 @@ namespace lib.math.vec3
 
         public EulerToAxisAngle()
         {
-            Axis.UpdateAction = Update;
-            Angle.UpdateAction = Update;
+            Axis.UpdateAction += Update;
+            Angle.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -27,7 +27,7 @@ namespace lib._3d._
 
         public _LenseFlareHoopPosition()
         {
-            LightPosition.UpdateAction = Update;
+            LightPosition.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

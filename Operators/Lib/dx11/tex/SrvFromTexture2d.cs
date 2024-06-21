@@ -21,7 +21,7 @@ namespace lib.dx11.tex
 
         public SrvFromTexture2d()
         {
-            ShaderResourceView.UpdateAction = Update;
+            ShaderResourceView.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

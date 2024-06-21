@@ -14,7 +14,7 @@ namespace lib.math.@float
 
         public PickInt()
         {
-            Selected.UpdateAction = Update;
+            Selected.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

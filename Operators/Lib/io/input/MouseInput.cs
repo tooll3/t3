@@ -24,9 +24,9 @@ namespace lib.io.input
 
         public MouseInput()
         {
-            Position.UpdateAction = Update;
-            Position3d.UpdateAction = Update;
-            IsLeftButtonDown.UpdateAction = Update;
+            Position.UpdateAction += Update;
+            Position3d.UpdateAction += Update;
+            IsLeftButtonDown.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

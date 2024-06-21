@@ -16,7 +16,7 @@ namespace lib.io.time
         
         public SetPlaybackSpeed()
         {
-            Commands.UpdateAction = Update;
+            Commands.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

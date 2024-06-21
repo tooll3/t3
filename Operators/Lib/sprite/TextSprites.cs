@@ -32,8 +32,8 @@ namespace lib.sprite
         public TextSprites()
         {
             _bmFont = new Resource<BmFontDescription>(Filepath, TryGenerateFont);
-            SpriteBuffer.UpdateAction = Update;
-            PointBuffer.UpdateAction = Update;
+            SpriteBuffer.UpdateAction += Update;
+            PointBuffer.UpdateAction += Update;
         }
 
         private bool TryGenerateFont(FileResource file, BmFontDescription? currentValue, out BmFontDescription? newValue, out string? failureReason)
@@ -117,7 +117,7 @@ namespace lib.sprite
         {
             var text = Text.GetValue(context);
 
-            var bmFont = _bmFont.Value;
+            var bmFont = _bmFont.GetValue(context);
             if (bmFont == null)
             {
                 Log.Warning("Can't generate text sprites without valid BMFont definition", this);

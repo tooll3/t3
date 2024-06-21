@@ -28,9 +28,9 @@ namespace lib.io.osc
 
         public OscInput()
         {
-            FirstResult.UpdateAction = Update;
-            Results.UpdateAction = Update;
-            LastMessageTime.UpdateAction = Update;
+            FirstResult.UpdateAction += Update;
+            Results.UpdateAction += Update;
+            LastMessageTime.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

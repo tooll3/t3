@@ -15,7 +15,7 @@ namespace lib.dx11.draw
 
         public RenderTargetBlendDesc()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
 

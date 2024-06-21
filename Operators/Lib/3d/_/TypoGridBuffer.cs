@@ -19,7 +19,7 @@ namespace lib._3d._
 
         public TypoGridBuffer()
         {
-            Buffer.UpdateAction = Update;
+            Buffer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

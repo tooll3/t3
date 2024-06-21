@@ -1,11 +1,13 @@
 #nullable enable
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace T3.Core.Resource
@@ -22,6 +24,7 @@ namespace T3.Core.Resource
 
         public static ResourceManager Instance() => _instance;
         private static readonly ResourceManager _instance = new();
+        
 
         static ResourceManager()
         {

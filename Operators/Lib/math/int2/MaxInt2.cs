@@ -17,7 +17,7 @@ namespace lib.math.int2
         public MaxInt2()
         {
             
-            MaxSize.UpdateAction = Update;
+            MaxSize.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

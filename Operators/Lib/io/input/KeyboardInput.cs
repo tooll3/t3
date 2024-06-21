@@ -17,7 +17,7 @@ namespace lib.io.input
 
         public KeyboardInput()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

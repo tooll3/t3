@@ -22,7 +22,7 @@ namespace lib.dx11.tex
 
         public Texture2d()
         {
-            Texture.UpdateAction = UpdateTexture;
+            Texture.UpdateAction += UpdateTexture;
         }
 
         private void UpdateTexture(EvaluationContext context)

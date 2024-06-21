@@ -19,7 +19,7 @@ namespace lib.io.input
         
         public DataRecording()
         {
-            DataSet.UpdateAction = Update;
+            DataSet.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

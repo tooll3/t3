@@ -21,8 +21,8 @@ namespace lib.anim
 
         public SequenceAnim()
         {
-            Result.UpdateAction = Update;
-            WasStep.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            WasStep.UpdateAction += Update;
         }
         
         // Only for custom UI

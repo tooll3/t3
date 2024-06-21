@@ -18,7 +18,7 @@ namespace lib.dx11.tex
 
         public UavFromTexture2d()
         {
-            UnorderedAccessView.UpdateAction = Update;
+            UnorderedAccessView.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -23,20 +23,18 @@ namespace lib.img.generate
         public LoadImage()
         {
             _textureResource = ResourceManager.CreateTextureResource(Path);
-            _textureResource.Changed += OnTextureChanged;
-            if (_textureResource.Value != null)
-            {
-                OnTextureChanged(this, _textureResource.Value);
-            }
+            Texture.UpdateAction = UpdateTexture;
+            ShaderResourceView.UpdateAction = UpdateSRV;
         }
 
-        private void OnTextureChanged(object sender, Texture2D e)
+        private void UpdateSRV(EvaluationContext context)
         {
-            Texture.Value = e;
-            Texture.DirtyFlag.Clear();
-            
+            var texture = Texture.GetValue(context);
+            if (texture == null)
+                return;
+
             var currentSrv = ShaderResourceView.Value;
-            ResourceManager.CreateShaderResourceView(e, "", ref currentSrv);
+            ResourceManager.CreateShaderResourceView(texture, "", ref currentSrv);
 
             try
             {
@@ -46,9 +44,13 @@ namespace lib.img.generate
             {
                 Log.Error($"Failed to generate mipmaps for texture {Path.Value}:" + exception);
             }
-            
+
             ShaderResourceView.Value = currentSrv;
-            ShaderResourceView.DirtyFlag.Clear();
+        }
+
+        private void UpdateTexture(EvaluationContext context)
+        {
+            Texture.Value = _textureResource.GetValue(context);
         }
 
         [Input(Guid = "{76CC3811-4AE0-48B2-A119-890DB5A4EEB2}")]

@@ -18,7 +18,7 @@ namespace lib.math.vec2
         
         public GridPosition()
         {
-            Position.UpdateAction = Update;
+            Position.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

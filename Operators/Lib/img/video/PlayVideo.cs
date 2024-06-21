@@ -43,8 +43,8 @@ namespace lib.img.video
         
         public PlayVideo()
         {
-            Texture.UpdateAction = Update;
-            UpdateCount.UpdateAction = Update;
+            Texture.UpdateAction += Update;
+            UpdateCount.UpdateAction += Update;
         }
             
         private void Update(EvaluationContext context)

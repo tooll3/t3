@@ -26,8 +26,8 @@ namespace examples.lib.img.use
 
         public KeepPreviousFrame2()
         {
-            TextureA.UpdateAction = UpdateTexture;
-            TextureB.UpdateAction = UpdateTexture;
+            TextureA.UpdateAction += UpdateTexture;
+            TextureB.UpdateAction += UpdateTexture;
         }
 
         private void UpdateTexture(EvaluationContext context)

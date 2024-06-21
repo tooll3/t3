@@ -23,8 +23,8 @@ namespace lib.io.audio
 
         public DetectBpm()
         {
-            DetectedBpm.UpdateAction = Update;
-            Measurements.UpdateAction = Update;
+            DetectedBpm.UpdateAction += Update;
+            Measurements.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

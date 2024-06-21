@@ -15,7 +15,7 @@ namespace lib.exec
         
         public ExecuteBufferUpdate()
         {
-            Output2.UpdateAction = Update;
+            Output2.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

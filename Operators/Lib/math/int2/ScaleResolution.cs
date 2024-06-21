@@ -14,7 +14,7 @@ namespace lib.math.int2
         
         public ScaleResolution()
         {
-            Size.UpdateAction = Update;
+            Size.UpdateAction += Update;
         }
 
         private const int MaxSize = 16384;

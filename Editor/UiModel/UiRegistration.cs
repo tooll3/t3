@@ -161,7 +161,7 @@ internal static class UiRegistration
         RegisterUiType(typeof(Texture2D), new TextureUiProperties(), () => new FallbackInputUi<Texture2D>(),
                        () => new Texture2dOutputUi());
         RegisterUiType(typeof(Texture3D), new ShaderUiProperties(), () => new FallbackInputUi<Texture3D>(),
-                       () => new ValueOutputUi<SharpDX.Direct3D11.Texture3D>());
+                       () => new ValueOutputUi<Texture3D>());
         RegisterUiType(typeof(SharpDX.Direct3D11.TextureAddressMode), new ShaderUiProperties(), () => new EnumInputUi<TextureAddressMode>(),
                        () => new ValueOutputUi<TextureAddressMode>());
         RegisterUiType(typeof(SharpDX.Direct3D11.UnorderedAccessView), new TextureUiProperties(), () => new FallbackInputUi<UnorderedAccessView>(),

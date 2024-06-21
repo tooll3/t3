@@ -14,7 +14,7 @@ namespace lib.exec
 
         public ResetSubtreeTrigger()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -19,7 +19,7 @@ namespace lib.dx11.draw
 
         public InputAssemblerStage()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
             Output.Value.RestoreAction = Restore;
         }
 

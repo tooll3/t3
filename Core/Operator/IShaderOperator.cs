@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
@@ -25,9 +26,9 @@ public interface IShaderCodeOperator<T> where T : AbstractShader
     void Initialize()
     {
         Action<EvaluationContext> invalidateShader = context => ShaderSlot.DirtyFlag.Invalidate();
-        Code.UpdateAction = invalidateShader;
-        EntryPoint.UpdateAction = invalidateShader;
-        ShaderSlot.UpdateAction = UpdateShader;
+        Code.UpdateAction += invalidateShader;
+        EntryPoint.UpdateAction += invalidateShader;
+        ShaderSlot.UpdateAction += UpdateShader;
     }
 
     private void UpdateShader(EvaluationContext context)
@@ -90,9 +91,10 @@ public interface IShaderCodeOperator<T> where T : AbstractShader
     }
 }
 
-public interface IShaderOperator<T> where T : AbstractShader
+public interface IShaderOperator<T> : IDescriptiveFilename where T : AbstractShader
 {
     public InputSlot<string> Path { get; }
+    InputSlot<string> IDescriptiveFilename.SourcePathSlot => Path;
     public Slot<T> ShaderSlot { get; }
     public InputSlot<string> EntryPoint { get; }
     public InputSlot<string> DebugName { get; }
@@ -100,11 +102,13 @@ public interface IShaderOperator<T> where T : AbstractShader
     public void SetWarning(string message);
     
     protected string CachedEntryPoint { get; set; }
+    void OnShaderUpdate(EvaluationContext context, T? shader);
+    
     IResourceConsumer Instance => ShaderSlot.Parent;
 
     void Initialize()
     {
-        EntryPoint.UpdateAction = context =>
+        EntryPoint.UpdateAction += context =>
                                   {
                                       CachedEntryPoint = EntryPoint.GetValue(context);
                                       ShaderSlot.DirtyFlag.Invalidate();
@@ -112,26 +116,14 @@ public interface IShaderOperator<T> where T : AbstractShader
         
         var resource = ResourceManager.CreateShaderResource<T>(Path, () => CachedEntryPoint);
         ShaderResources[this] = resource;
-
-        if (resource.Value != null)
-        {
-            ShaderSlot.Value = resource.Value;
-        }
         
-        resource.Changed += (_, shader) =>
-                            {
-                                ShaderSlot.Value = shader;
-                            };
-    }
-    
-    void OnDispose()
-    {
-        if (ShaderResources.TryRemove(this, out var resource))
-        {
-            resource.Dispose();
-        }
-
-        ShaderSlot.Value = null;
+        ShaderSlot.UpdateAction = context =>
+                                  {
+                                      Path.Update(context);
+                                      var shader = resource.Value;
+                                      ShaderSlot.Value = shader;
+                                      OnShaderUpdate(context, shader);
+                                  };
     }
 
     private static readonly ConcurrentDictionary<IShaderOperator<T>, Resource<T>> ShaderResources = new();

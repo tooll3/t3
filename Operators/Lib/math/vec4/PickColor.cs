@@ -15,7 +15,7 @@ namespace lib.math.vec4
 
         public PickColor()
         {
-            Selected.UpdateAction = Update;
+            Selected.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

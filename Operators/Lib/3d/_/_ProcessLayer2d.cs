@@ -23,7 +23,7 @@ namespace lib._3d._
         
         public _ProcessLayer2d()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         

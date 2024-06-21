@@ -36,7 +36,7 @@ namespace Lib.io.osc
 
         public OscOutput()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private enum OscTypes

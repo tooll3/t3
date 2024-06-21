@@ -15,7 +15,7 @@ namespace lib.@string.datetime
 
         public DateTimeToFloat()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

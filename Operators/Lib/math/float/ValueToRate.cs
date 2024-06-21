@@ -17,7 +17,7 @@ namespace lib.math.@float
 
         public ValueToRate()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         /**

@@ -19,7 +19,7 @@ namespace lib.math.@float
 
         public IntsToBuffer()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

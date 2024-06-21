@@ -14,7 +14,7 @@ namespace lib.math.@int
 
         public DateTimeInSecs()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

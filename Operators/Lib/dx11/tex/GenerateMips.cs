@@ -19,7 +19,7 @@ namespace lib.dx11.tex
 
         public GenerateMips()
         {
-            TextureWithMips.UpdateAction = Update;
+            TextureWithMips.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

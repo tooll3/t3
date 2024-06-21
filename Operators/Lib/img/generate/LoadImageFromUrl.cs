@@ -26,8 +26,8 @@ namespace lib.img.generate
 
         public LoadImageFromUrl()
         {
-            Texture.UpdateAction = UpdateShaderResourceView;
-            ShaderResourceView.UpdateAction = UpdateShaderResourceView;
+            Texture.UpdateAction += UpdateShaderResourceView;
+            ShaderResourceView.UpdateAction += UpdateShaderResourceView;
         }
 
         private bool _triggerUpdate;

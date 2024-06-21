@@ -5,15 +5,15 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using GeometryShaderD3D = T3.Core.DataTypes.GeometryShader;
+using GeometryShaderT3 = T3.Core.DataTypes.GeometryShader;
 
 namespace lib.dx11._
 {
 	[Guid("a908cc64-e8cb-490c-ae45-c2c5fbfcedfb")]
-    public class GeometryShader : Instance<GeometryShader>, IShaderOperator<GeometryShaderD3D>, IStatusProvider
+    public class GeometryShader : Instance<GeometryShader>, IShaderOperator<GeometryShaderT3>, IStatusProvider
     {
         [Output(Guid = "85B65C27-D5B3-4FE1-88AF-B1F6ABAA4515")]
-        public readonly Slot<GeometryShaderD3D> Shader = new();
+        public readonly Slot<GeometryShaderT3> Shader = new();
 
         public GeometryShader()
         {
@@ -29,23 +29,27 @@ namespace lib.dx11._
         [Input(Guid = "08789371-8193-49af-9ef4-97b12d9e6981")]
         public readonly InputSlot<string> DebugName = new();
 
-        private string _cachedSource, _warning;
-        
         #region IShaderOperator implementation
-        private IShaderOperator<GeometryShaderD3D> ShaderOperatorImpl => this;
-        InputSlot<string> IShaderOperator<GeometryShaderD3D>.Path => Source;
-        Slot<GeometryShaderD3D> IShaderOperator<GeometryShaderD3D>.ShaderSlot => Shader;
-        InputSlot<string> IShaderOperator<GeometryShaderD3D>.EntryPoint => EntryPoint;
-        InputSlot<string> IShaderOperator<GeometryShaderD3D>.DebugName => DebugName;
+        private IShaderOperator<GeometryShaderT3> ShaderOperatorImpl => this;
+        InputSlot<string> IShaderOperator<GeometryShaderT3>.Path => Source;
+        Slot<GeometryShaderT3> IShaderOperator<GeometryShaderT3>.ShaderSlot => Shader;
+        InputSlot<string> IShaderOperator<GeometryShaderT3>.EntryPoint => EntryPoint;
+        InputSlot<string> IShaderOperator<GeometryShaderT3>.DebugName => DebugName;
+        string IShaderOperator<GeometryShaderT3>.CachedEntryPoint { get; set; }
+        void IShaderOperator<GeometryShaderT3>.OnShaderUpdate(EvaluationContext context, GeometryShaderT3 shader)
+        {
+            
+        }
         #endregion
         
         
         #region IStatusProvider implementation
         private readonly DefaultShaderStatusProvider _statusProviderImplementation = new ();
         public void SetWarning(string message) => _statusProviderImplementation.Warning = message;
-        string IShaderOperator<GeometryShaderD3D>.CachedEntryPoint { get; set; }
+
         IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel() => _statusProviderImplementation.GetStatusLevel();
         string IStatusProvider.GetStatusMessage() => _statusProviderImplementation.GetStatusMessage();
         #endregion
+        public IEnumerable<string> FileFilter { get; } = ["*.geom", "*.geom.hlsl", ResourceManager.DefaultShaderFilter];
     }
 }

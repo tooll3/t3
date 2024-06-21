@@ -14,7 +14,7 @@ namespace lib.math.floats
         
         public DeltaSinceLastFrame()
         {
-            Change.UpdateAction = Update;
+            Change.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

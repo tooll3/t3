@@ -15,7 +15,7 @@ namespace lib.exec
 
         public ExecuteRawBufferUpdate()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

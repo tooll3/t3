@@ -24,8 +24,8 @@ namespace lib.math.vec3
         
         public HasVec3Changed()
         {
-            HasChanged.UpdateAction = Update;
-            Delta.UpdateAction = Update;
+            HasChanged.UpdateAction += Update;
+            Delta.UpdateAction += Update;
         }
 
         private double _lastEvalTime = 0;

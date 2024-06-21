@@ -28,7 +28,7 @@ namespace lib.@string
 
         public FilePathParts()
         {
-            FilenameWithoutExtension.UpdateAction = Update;
+            FilenameWithoutExtension.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

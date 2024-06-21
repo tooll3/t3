@@ -29,7 +29,7 @@ public class LoadGltf : Instance<LoadGltf>, IDescriptiveFilename, IStatusProvide
 
     public LoadGltf()
     {
-        Data.UpdateAction = Update;
+        Data.UpdateAction += Update;
     }
 
     private void Update(EvaluationContext context)

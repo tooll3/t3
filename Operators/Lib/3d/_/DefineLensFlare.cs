@@ -22,7 +22,7 @@ namespace lib._3d._
 
         public DefineLensFlare()
         {
-            OutBuffer.UpdateAction = Update;
+            OutBuffer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

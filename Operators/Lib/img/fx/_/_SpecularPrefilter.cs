@@ -27,7 +27,7 @@ namespace lib.img.fx._
 
         public _SpecularPrefilter()
         {
-            FilteredCubeMap.UpdateAction = Update;
+            FilteredCubeMap.UpdateAction += Update;
         }
 
         private bool _updatedOnce = false;

@@ -2,102 +2,144 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.IO;
+using System.Threading;
 using T3.Core.Logging;
+using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace T3.Core.Resource
 {
-
     public sealed class Resource<T> : IDisposable
     {
-        public T? Value { get; private set; }
-        public event EventHandler<T?>? Changed;
-        
-        public static implicit operator T?(Resource<T> resource) => resource.Value;
-
-        // todo - should resources be use the same sort of Dirty flag as slots and execute in the same way?
-        public Resource(InputSlot<string> slot, TryGenerate<T> tryGenerate, bool allowDisposal = true, EqualityComparer<T?>? comparer = null) 
-            : this(slot.Value, slot.Parent, tryGenerate, allowDisposal, comparer)
+        public T? Value
         {
-            slot.UpdateAction = context =>
-                                {
-                                    var newValue = slot.GetValue(context);
-                                    if (newValue == _relativePath)
-                                        return;
+            get
+            {
+                #if DEBUG
+                if (_slot is not null && !_hasWarned)
+                {
+                    Log.Warning($"[{_owner}] It is recommended to use {nameof(GetValue)} instead of the Value property when using a slot." +
+                                $" This is because the Value property will not update the slot value when the file is moved. " +
+                                $"Slot: {_slot}", _owner!);
+                    _hasWarned = true;
+                }
+                #endif
+                return _lazyValue.Value;
+            }
+        }
+        
 
-                                    SubstituteForwardSlashesInSlot(slot);
-
-                                    ReplaceFile(newValue);
-                                    return;
-
-                                    static void SubstituteForwardSlashesInSlot(InputSlot<string> slot)
-                                    {
-                                        // Ensure typed values use forward slashes
-                                        // todo: this is a bit of a hack, but it works for now
-                                        // basically, if the typed value is being used, this should also be updating "newValue"
-                                        var typedValue = slot.TypedInputValue.Value;
-                                        if (typedValue == null)
-                                            return;
-
-                                        typedValue.ToForwardSlashesUnsafe();
-                                    }
-                                };
+        public T? GetValue(EvaluationContext context)
+        {
+            if (_slot == null)
+                return _lazyValue.Value;
             
-            // update slot value when file is moved
-            _onFileMoved += (newPath) =>
-                              {
-                                  if(ResourceManager.TryConvertToRelativePath(newPath, out var relativePath))
-                                      newPath = relativePath;
-                                  
-                                  slot.SetTypedInputValue(newPath.ToForwardSlashes());
-                              };
+            var newPath = _slot.GetValue(context);
+
+            TryReplaceFile(newPath);
+            
+            return _lazyValue.Value;
+
+            //SubstituteForwardSlashesInSlot(_slot);
+            static void SubstituteForwardSlashesInSlot(InputSlot<string> slot)
+            {
+                // Ensure typed values use forward slashes
+                // todo: this is a bit of a hack, but it works for now
+                // basically, if the typed value is being used, this should also be updating "newValue"
+                var typedValue = slot.TypedInputValue.Value;
+                if (typedValue == null)
+                    return;
+
+                typedValue.ToForwardSlashesUnsafe();
+            }
+        }
+        
+        internal event EventHandler<T?>? Changed;
+
+        public bool TryGetValue(EvaluationContext context, [NotNullWhen(true)] out T? value)
+        {
+            value = GetValue(context);
+            return !_equalityComparer.Equals(value, default);
         }
 
-        internal Resource(string? relativePath, IResourceConsumer? owner,
-                          TryGenerate<T> tryGenerate, bool allowDisposal = true,
-                          EqualityComparer<T?>? equalityComparer = null) 
+        public void MarkFileAsChanged()
+        {
+            OnFileUpdate(_owner, WatcherChangeTypes.Changed);
+        }
+
+        #region Constructors
+        public Resource(InputSlot<string> slot, TryGenerate<T> tryGenerate, bool allowDisposal = true, EqualityComparer<T?>? comparer = null)
+            : this(slot.Value, slot.Parent, tryGenerate, allowDisposal, comparer)
+        {
+            _slot = slot;
+                                
+
+            // update slot value when file is moved
+            _onFileMoved += (newPath) =>
+                            {
+                                if (ResourceManager.TryConvertToRelativePath(newPath, out var relativePath))
+                                    newPath = relativePath;
+
+                                slot.SetTypedInputValue(newPath.ToForwardSlashes());
+                            };
+        }
+
+        public Resource(string? relativePath, IResourceConsumer? owner,
+                        TryGenerate<T> tryGenerate, bool allowDisposal = true,
+                        EqualityComparer<T?>? equalityComparer = null)
         {
             ArgumentNullException.ThrowIfNull(tryGenerate, nameof(tryGenerate));
 
             _tryGenerate = tryGenerate;
             _equalityComparer = equalityComparer ?? EqualityComparer<T?>.Default;
-            _onFileChanged += OnFileUpdate;
             _owner = owner;
             _allowDisposal = allowDisposal;
-            
-            if(owner != null)
-                owner.Disposing += Dispose;
 
-            ReplaceFile(relativePath);
-            
-            if (_fileResource != null)
-                OnFileUpdate(_fileResource, WatcherChangeTypes.Created);
-            
+            _onFileChanged = OnFileUpdate;
+            _valueFactory = ValueFactory;
+            _onDispose = Dispose;
+
+            ResetLazyValue(ref _lazyValue);
+
+            if (owner != null)
+                owner.Disposing += _onDispose;
+
+            TryReplaceFile(relativePath);
         }
+        #endregion
 
-        private void ReplaceFile(string? relativePath)
+        #region File Handling
+        private bool TryReplaceFile(string? relativePath)
         {
             ReleaseFileResource();
-            _relativePath = relativePath;
-
             if (string.IsNullOrWhiteSpace(relativePath))
-                return;
+                return false;
 
-            if (FileResource.TryGetFileResource(relativePath, _owner, out var fileResource))
-            {
-                fileResource.Claim(this);
-                _fileResource = fileResource;
-                fileResource.FileChanged += _onFileChanged;
-            }
+            relativePath = relativePath.ToForwardSlashes();
+            _relativePath = relativePath;
+            return TryGetFileResource(relativePath);
+        }
+
+        private bool TryGetFileResource(string? relativePath)
+        {
+            if (string.IsNullOrWhiteSpace(relativePath))
+                return false;
+
+            if (!FileResource.TryGetFileResource(relativePath, _owner, out var fileResource))
+                return false;
+
+            fileResource.Claim(this);
+            _fileResource = fileResource;
+            fileResource.FileChanged += _onFileChanged;
+            return true;
         }
 
         private void ReleaseFileResource()
         {
             if (_fileResource == null) return;
-            
+
             _fileResource.FileChanged -= _onFileChanged;
             _fileResource.Release(this);
             _fileResource = null;
@@ -105,46 +147,103 @@ namespace T3.Core.Resource
 
         private void OnFileUpdate(object? sender, WatcherChangeTypes changeTypes)
         {
-            var hasMoved = changeTypes.WasMoved();
-            var fileResource = _fileResource!;
-            var deleted = changeTypes.WasDeleted() || fileResource.FileInfo?.Exists == false;
-            T? newValue;
+            ResetLazyValue(ref _lazyValue);
 
-            if (hasMoved && _onFileMoved != null)
+            if (changeTypes.WasMoved() && _onFileMoved != null)
             {
-                _onFileMoved.Invoke(fileResource.AbsolutePath);
+                _onFileMoved.Invoke(_fileResource!.AbsolutePath);
+            }
+        }
+        #endregion
+
+        #region Value Evaluation
+        private void ResetLazyValue([NotNull] ref Lazy<T?>? lazyValue)
+        {
+            if (lazyValue == null)
+            {
+                _previouslyHadValue = false;
+                lazyValue = new Lazy<T?>(_valueFactory, LazyThreadSafetyMode.None);
                 return;
             }
 
-            if (deleted && !hasMoved)
+            _previouslyHadValue = lazyValue.IsValueCreated && !_equalityComparer.Equals(lazyValue.Value, default);
+
+            if (!_previouslyHadValue)
+                return;
+
+            DisposeValue();
+            lazyValue = new Lazy<T?>(_valueFactory, LazyThreadSafetyMode.None);
+        }
+
+        private T? ValueFactory()
+        {
+            if (_currentlyEvaluating)
             {
-                newValue = default;
-                _hasValue = false;
+                throw new
+                    InvalidOperationException("Circular dependency detected - do not use the Resource.Value property within the change handler - instead reference the argument passed to the change handler.");
             }
-            else if (!_tryGenerate.Invoke(fileResource, Value, out newValue, out var failureReason))
+
+            _currentlyEvaluating = true;
+
+            string? failureReason;
+            bool success;
+            T? newValue;
+            var hasFileResource = _fileResource != null;
+
+            if (!hasFileResource)
             {
-                _hasValue = false;
-                var errorLog = $"Failed to generate {typeof(T)} from file '{fileResource.AbsolutePath}': {failureReason}";
+                hasFileResource = TryReplaceFile(_relativePath);
+            }
+
+            if (hasFileResource && _fileResource!.FileInfo is { Exists : true })
+            {
+                try
+                {
+                    // get current value without creating it if it hasn't been created yet
+                    var currentValue = _lazyValue.IsValueCreated ? _lazyValue.Value : default;
+                    success = _tryGenerate.Invoke(_fileResource, currentValue, out newValue, out failureReason);
+                }
+                catch (Exception e)
+                {
+                    failureReason = e.ToString();
+                    success = false;
+                    newValue = default;
+                }
+            }
+            else
+            {
+                success = false;
                 
-                if(_owner != null)
+                #if !DEBUG
+                failureReason = "File not found";
+                #else
+                failureReason = "File not found:\n" + Environment.StackTrace;
+                #endif
+                
+                newValue = default;
+            }
+
+            if (!success)
+            {
+                var errorLog = $"Failed to generate {typeof(T)} from file {GetPathLog()}: {failureReason ?? "No reason given"}";
+
+                if (_owner != null)
                     Log.Error(errorLog, _owner);
                 else
                     Log.Error(errorLog);
             }
-            else
-            {
-                _hasValue = true;
-            }
 
-            if (_equalityComparer.Equals(Value, newValue))
-                return;
+            if (success || _previouslyHadValue)
+                Changed?.Invoke(this, newValue);
 
-            // if the value has changed, notify listeners and dispose of the old value
-            DisposeValue();
-            Value = newValue;
-            Changed?.Invoke(this, Value);
+            _currentlyEvaluating = false;
+            return newValue;
+
+            string GetPathLog() => $"'{_relativePath}' ({_fileResource?.AbsolutePath ?? "unresolved"})'";
         }
+        #endregion
 
+        #region Value Disposal
         public void Dispose()
         {
             if (_disposed)
@@ -156,9 +255,9 @@ namespace T3.Core.Resource
 
             if (DisposeValue())
                 Changed?.Invoke(this, default);
-            
-            if(_owner != null)
-                _owner.Disposing -= Dispose;
+
+            if (_owner != null)
+                _owner.Disposing -= _onDispose;
 
             Changed = null;
         }
@@ -169,55 +268,50 @@ namespace T3.Core.Resource
         /// <returns></returns>
         private bool DisposeValue()
         {
-            if(!_allowDisposal || !IsDisposableType)
+            if (!_allowDisposal || !IsDisposableType)
                 return false;
-            
-            var notNull = !_equalityComparer.Equals(Value, default);
-            if (notNull)
-            {
-                ((IDisposable)Value!).Dispose();
-            }
 
-            Value = default;
-            _hasValue = false;
-            return notNull;
-        }
-
-        private static readonly bool IsDisposableType = typeof(IDisposable).IsAssignableFrom(typeof(T));
-        private readonly TryGenerate<T> _tryGenerate;
-        private readonly EqualityComparer<T?> _equalityComparer;
-
-        private FileResource? _fileResource;
-        private readonly IResourceConsumer? _owner;
-
-        private readonly EventHandler<WatcherChangeTypes> _onFileChanged;
-        private readonly Action<string>? _onFileMoved;
-        private string? _relativePath;
-
-        private bool _disposed;
-        private bool _allowDisposal;
-        private bool _hasValue;
-
-        public void InvokeChangeEvent()
-        {
-            OnFileUpdate(_owner, WatcherChangeTypes.Changed);
-        }
-
-        public bool TryGetValue([NotNullWhen(true)] out T? value)
-        {
-            if (!_hasValue)
-            {
-                value = default;
+            if (_lazyValue is not {IsValueCreated: true})
                 return false;
-            }
-            
-            value = Value!;
+
+            var value = _lazyValue.Value;
+            if (_equalityComparer.Equals(value, default))
+                return false;
+
+            ((IDisposable)value!).Dispose();
             return true;
         }
+        #endregion
+
+        // type handling
+        private static readonly bool IsDisposableType = typeof(IDisposable).IsAssignableFrom(typeof(T));
+        private readonly EqualityComparer<T?> _equalityComparer;
+
+        // file handling
+        private FileResource? _fileResource;
+        private readonly EventHandler<WatcherChangeTypes> _onFileChanged;
+        private readonly Action<string>? _onFileMoved;
+        private readonly IResourceConsumer? _owner;
+        private string? _relativePath;
+        private readonly InputSlot<string>? _slot;
+
+        // Value handling
+        private Lazy<T?> _lazyValue;
+        private readonly Func<T?> _valueFactory;
+        private bool _currentlyEvaluating;
+        private bool _previouslyHadValue;
+        private bool _disposed;
+        private readonly TryGenerate<T> _tryGenerate;
+        private readonly Action _onDispose;
+        private readonly bool _allowDisposal;
+        
+        #if DEBUG
+        private bool _hasWarned;
+        #endif
     }
 
-    public delegate bool TryGenerate<T>(FileResource file, 
-                                        T? currentValue, 
-                                        [NotNullWhen(true)] out T? newValue, 
+    public delegate bool TryGenerate<T>(FileResource file,
+                                        T? currentValue,
+                                        [NotNullWhen(true)] out T? newValue,
                                         [NotNullWhen(false)] out string? failureReason);
 }

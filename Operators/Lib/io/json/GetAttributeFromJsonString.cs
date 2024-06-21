@@ -25,9 +25,9 @@ namespace lib.io.json
         
         public GetAttributeFromJsonString()
         {
-            Result.UpdateAction = Update;
-            Columns.UpdateAction = Update;
-            RowCount.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            Columns.UpdateAction += Update;
+            RowCount.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

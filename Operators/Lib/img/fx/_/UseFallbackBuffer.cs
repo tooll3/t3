@@ -14,7 +14,7 @@ namespace lib.img.fx._
 
         public UseFallbackBuffer()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

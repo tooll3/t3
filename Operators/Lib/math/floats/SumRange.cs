@@ -15,7 +15,7 @@ namespace lib.math.floats
 
         public SumRange()
         {
-            Selected.UpdateAction = Update;
+            Selected.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

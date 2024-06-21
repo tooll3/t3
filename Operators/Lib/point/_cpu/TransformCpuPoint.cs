@@ -26,8 +26,8 @@ namespace lib.point._cpu
         //
         public TransformCpuPoint()
         {
-            ResultPoint.UpdateAction = Update;
-            Position.UpdateAction = Update;
+            ResultPoint.UpdateAction += Update;
+            Position.UpdateAction += Update;
 
             _pointList.TypedElements[0] = new Point();
         }

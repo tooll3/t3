@@ -13,7 +13,7 @@ namespace lib.types
 
         public Int3()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

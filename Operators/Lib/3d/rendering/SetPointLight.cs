@@ -15,7 +15,7 @@ namespace lib._3d.rendering
 
         public SetPointLight()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

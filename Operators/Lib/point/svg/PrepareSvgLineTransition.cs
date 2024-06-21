@@ -24,7 +24,7 @@ namespace lib.point.svg
 
         public PrepareSvgLineTransition()
         {
-            ResultList.UpdateAction = Update;
+            ResultList.UpdateAction += Update;
         }
 
         private static List<Segment> segments = new(1000);

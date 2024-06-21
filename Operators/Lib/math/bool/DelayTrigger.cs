@@ -20,8 +20,8 @@ namespace lib.math.@bool
         
         public DelayTrigger()
         {
-            DelayedTrigger.UpdateAction = Update;
-            RemainingTime.UpdateAction = Update;
+            DelayedTrigger.UpdateAction += Update;
+            RemainingTime.UpdateAction += Update;
         }
         
         private double _lastFalseTime;

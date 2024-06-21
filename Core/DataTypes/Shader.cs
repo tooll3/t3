@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Diagnostics;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
@@ -40,6 +41,7 @@ public abstract class Shader<TShader> : AbstractShader where TShader : DeviceChi
 
     internal Shader(TShader shader, byte[] compiledBytecode) : base(shader, compiledBytecode)
     {
+        Debug.Assert(shader != null);
         _shader = shader;
     }
 }

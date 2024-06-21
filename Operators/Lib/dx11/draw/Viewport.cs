@@ -14,7 +14,7 @@ namespace lib.dx11.draw
 
         public Viewport()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

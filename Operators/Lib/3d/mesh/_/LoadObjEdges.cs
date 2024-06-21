@@ -19,7 +19,7 @@ namespace lib._3d.mesh._
 
         public LoadObjEdges()
         {
-            Data.UpdateAction = Update;
+            Data.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

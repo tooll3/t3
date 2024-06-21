@@ -14,7 +14,7 @@ namespace lib.@string
 
         public FloatToString()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

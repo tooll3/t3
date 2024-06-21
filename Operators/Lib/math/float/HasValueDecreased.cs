@@ -14,7 +14,7 @@ namespace lib.math.@float
 
         public HasValueDecreased()
         {
-            HasDecreased.UpdateAction = Update;
+            HasDecreased.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

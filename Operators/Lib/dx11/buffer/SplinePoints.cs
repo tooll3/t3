@@ -31,8 +31,8 @@ namespace lib.dx11.buffer
 
         public SplinePoints()
         {
-            OutBuffer.UpdateAction = Update;
-            SampledPoints.UpdateAction = Update;
+            OutBuffer.UpdateAction += Update;
+            SampledPoints.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -34,7 +34,7 @@ namespace lib._3d.mesh.generate
 
         public NGonMesh()
         {
-            Data.UpdateAction = Update;
+            Data.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

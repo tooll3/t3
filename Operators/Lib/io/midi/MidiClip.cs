@@ -27,9 +27,9 @@ namespace lib.io.midi
         public MidiClip()
         {
             _initialized = false;
-            Values.UpdateAction = Update;
-            ChannelNames.UpdateAction = Update;
-            DeltaTicksPerQuarterNote.UpdateAction = Update;
+            Values.UpdateAction += Update;
+            ChannelNames.UpdateAction += Update;
+            DeltaTicksPerQuarterNote.UpdateAction += Update;
         }
 
         protected override void Dispose(bool isDisposing)

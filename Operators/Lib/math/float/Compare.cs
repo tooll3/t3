@@ -15,7 +15,7 @@ namespace lib.math.@float
 
         public Compare()
         {
-            IsTrue.UpdateAction = Update;
+            IsTrue.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

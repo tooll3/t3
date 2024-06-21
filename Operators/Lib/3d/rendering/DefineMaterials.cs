@@ -17,7 +17,7 @@ namespace lib._3d.rendering
 
         public DefineMaterials()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
         
 

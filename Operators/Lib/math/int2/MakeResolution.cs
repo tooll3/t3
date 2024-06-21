@@ -15,7 +15,7 @@ namespace lib.math.int2
         
         public MakeResolution()
         {
-            Size.UpdateAction = Update;
+            Size.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -25,10 +25,10 @@ namespace lib._3d._
         
         public PickSDXVector4()
         {
-            Value1.UpdateAction = Update;
-            Value2.UpdateAction = Update;
-            Value3.UpdateAction = Update;
-            Value4.UpdateAction = Update;
+            Value1.UpdateAction += Update;
+            Value2.UpdateAction += Update;
+            Value3.UpdateAction += Update;
+            Value4.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

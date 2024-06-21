@@ -20,7 +20,7 @@ namespace lib.io.audio._
 
         public GetBeatTimingDetails()
         {
-            Values.UpdateAction = Update;
+            Values.UpdateAction += Update;
         }
         
         private void Update(EvaluationContext context)

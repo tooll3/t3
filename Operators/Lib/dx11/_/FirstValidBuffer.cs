@@ -15,7 +15,7 @@ namespace lib.dx11._
         
         public FirstValidBuffer()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

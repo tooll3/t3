@@ -35,13 +35,13 @@ namespace lib._3d.rendering._
         
         public GetPbrParameters()
         {
-            PbrParameterBuffer.UpdateAction = UpdatePbrParameterBuffer;
-            AlbedoColorMap.UpdateAction = UpdateAlbedoColorMap;
-            EmissiveColorMap.UpdateAction = UpdateEmissiveColorMap;
-            RoughnessMetallicOcclusionMap.UpdateAction = UpdateRoughnessMetallicOcclusionMap;
-            NormalMap.UpdateAction = UpdateNormalMap;
-            BrdfLookupMap.UpdateAction = UpdateBrdfLookupMap;
-            PrefilteredSpecularMap.UpdateAction = UpdatePrefilteredSpecularMap;
+            PbrParameterBuffer.UpdateAction += UpdatePbrParameterBuffer;
+            AlbedoColorMap.UpdateAction += UpdateAlbedoColorMap;
+            EmissiveColorMap.UpdateAction += UpdateEmissiveColorMap;
+            RoughnessMetallicOcclusionMap.UpdateAction += UpdateRoughnessMetallicOcclusionMap;
+            NormalMap.UpdateAction += UpdateNormalMap;
+            BrdfLookupMap.UpdateAction += UpdateBrdfLookupMap;
+            PrefilteredSpecularMap.UpdateAction += UpdatePrefilteredSpecularMap;
         }
 
         

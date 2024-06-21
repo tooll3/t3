@@ -17,7 +17,7 @@ namespace Lib.anim
         
         public WasTrigger()
         {
-            WasTriggered.UpdateAction = Update;
+            WasTriggered.UpdateAction += Update;
         }
 
         

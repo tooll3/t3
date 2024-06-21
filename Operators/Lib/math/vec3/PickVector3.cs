@@ -14,7 +14,7 @@ namespace lib.math.vec3
 
         public PickVector3()
         {
-            Selected.UpdateAction = Update;
+            Selected.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

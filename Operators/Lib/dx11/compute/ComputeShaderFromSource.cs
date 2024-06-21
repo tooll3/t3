@@ -20,7 +20,7 @@ namespace lib.dx11.compute
 
         public ComputeShaderFromSource()
         {
-            Shader.UpdateAction = Update;
+            Shader.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

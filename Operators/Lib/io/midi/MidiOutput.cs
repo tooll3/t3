@@ -23,7 +23,7 @@ namespace lib.io.midi
 
         public MidiOutput()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private bool _initialized;

@@ -17,7 +17,7 @@ namespace lib._3d._
 
         public ApplyCamMatrices()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

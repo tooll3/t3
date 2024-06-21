@@ -19,7 +19,7 @@ namespace lib.point._cpu
 
         public RadialPointsCpu()
         {
-            ResultList.UpdateAction = Update;
+            ResultList.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

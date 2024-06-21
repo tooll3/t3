@@ -26,8 +26,8 @@ namespace lib._3d.rendering
         
         public SetMaterial()
         {
-            Output.UpdateAction = Update;
-            Reference.UpdateAction = Update;
+            Output.UpdateAction += Update;
+            Reference.UpdateAction += Update;
         }
         
         private void Update(EvaluationContext context)

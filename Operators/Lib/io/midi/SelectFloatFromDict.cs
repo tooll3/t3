@@ -21,7 +21,7 @@ namespace lib.io.midi
         public SelectFloatFromDict() : base()
         {
             Result.Value = 0f;
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -35,12 +35,12 @@ namespace lib.dx11.buffer
         
         public GetBufferComponents()
         {
-            Buffer.UpdateAction = Update;
-            ShaderResourceView.UpdateAction = Update;
-            UnorderedAccessView.UpdateAction = Update;
-            Length.UpdateAction = Update;
-            Stride.UpdateAction = Update;
-            IsValid.UpdateAction = Update;
+            Buffer.UpdateAction += Update;
+            ShaderResourceView.UpdateAction += Update;
+            UnorderedAccessView.UpdateAction += Update;
+            Length.UpdateAction += Update;
+            Stride.UpdateAction += Update;
+            IsValid.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

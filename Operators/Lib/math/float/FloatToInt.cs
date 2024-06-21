@@ -13,7 +13,7 @@ namespace lib.math.@float
 
         public FloatToInt()
         {
-            Integer.UpdateAction = Update;
+            Integer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -26,8 +26,8 @@ namespace lib._3d.transform
 
         public SliceViewPort()
         {
-            Output.UpdateAction = Update;
-            Count.UpdateAction = Update;
+            Output.UpdateAction += Update;
+            Count.UpdateAction += Update;
         }
 
         private const int MaxCells = 1000;

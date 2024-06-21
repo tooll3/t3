@@ -16,7 +16,7 @@ namespace lib.color
 
         public BlendColors()
         {
-            Color.UpdateAction = Update;
+            Color.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

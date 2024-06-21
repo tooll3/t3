@@ -23,8 +23,8 @@ namespace lib.point._cpu
 
         public LinearPointsCpu()
         {
-            PointList.UpdateAction = Update;
-            Result.UpdateAction = Update;
+            PointList.UpdateAction += Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

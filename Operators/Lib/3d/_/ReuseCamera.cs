@@ -17,7 +17,7 @@ namespace lib._3d._
         
         public ReuseCamera()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

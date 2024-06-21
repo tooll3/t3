@@ -18,7 +18,7 @@ namespace lib.io.audio
 
         public AudioFrequencies()
         {
-            FftBuffer.UpdateAction = Update;
+            FftBuffer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

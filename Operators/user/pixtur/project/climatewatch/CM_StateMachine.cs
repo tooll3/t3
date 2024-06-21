@@ -52,8 +52,8 @@ namespace user.pixtur.project.climatewatch
         
         public CM_StateMachine()
         {
-            SimulationProgress.UpdateAction = Update;
-            RestCarbon.UpdateAction = Update;
+            SimulationProgress.UpdateAction += Update;
+            RestCarbon.UpdateAction += Update;
         }
 
         private static double RunTime => Playback.RunTimeInSecs;

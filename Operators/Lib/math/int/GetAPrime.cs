@@ -13,7 +13,7 @@ namespace Lib.math.@int
 
         public GetAPrime()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         

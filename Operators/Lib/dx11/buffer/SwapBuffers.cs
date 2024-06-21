@@ -17,8 +17,8 @@ namespace lib.dx11.buffer
         
         public SwapBuffers()
         {
-            BufferA.UpdateAction = Update;
-            BufferB.UpdateAction = Update;
+            BufferA.UpdateAction += Update;
+            BufferB.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

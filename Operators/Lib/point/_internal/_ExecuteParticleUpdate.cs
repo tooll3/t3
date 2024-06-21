@@ -15,7 +15,7 @@ namespace lib.point._internal
         
         public _ExecuteParticleUpdate()
         {
-            Output2.UpdateAction = Update;
+            Output2.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

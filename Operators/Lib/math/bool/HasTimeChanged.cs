@@ -16,7 +16,7 @@ namespace lib.math.@bool
         
         public HasTimeChanged()
         {
-            HasChanged.UpdateAction = Update;
+            HasChanged.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

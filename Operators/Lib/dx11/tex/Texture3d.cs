@@ -24,7 +24,7 @@ namespace lib.dx11.tex
         
         public Texture3d()
         {
-            OutputTexture.UpdateAction = UpdateTexture;
+            OutputTexture.UpdateAction += UpdateTexture;
         }
 
         private void UpdateTexture(EvaluationContext context)

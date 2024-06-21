@@ -13,7 +13,7 @@ namespace lib.exec
 
         public Once()
         {
-            OutputTrigger.UpdateAction = Update;
+            OutputTrigger.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

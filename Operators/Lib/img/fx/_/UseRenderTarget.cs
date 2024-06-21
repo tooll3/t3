@@ -23,9 +23,9 @@ namespace lib.img.fx._
         
         public UseRenderTarget()
         {
-            Texture.UpdateAction = UpdateTexture;
-            DepthTexture.UpdateAction = UpdateTexture;
-            Reference.UpdateAction = UpdateTexture;
+            Texture.UpdateAction += UpdateTexture;
+            DepthTexture.UpdateAction += UpdateTexture;
+            Reference.UpdateAction += UpdateTexture;
         }
         
         private void UpdateTexture(EvaluationContext context)

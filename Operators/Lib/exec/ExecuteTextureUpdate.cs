@@ -15,7 +15,7 @@ namespace lib.exec
 
         public ExecuteTextureUpdate()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

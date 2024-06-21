@@ -14,7 +14,7 @@ namespace lib.io.time
 
         public RunTime()
         {
-            TimeInSeconds.UpdateAction = Update;
+            TimeInSeconds.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

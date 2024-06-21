@@ -16,8 +16,8 @@ namespace lib.data
 
         public GetIteration()
         {
-            Progress.UpdateAction = Update;
-            Index.UpdateAction = Update;
+            Progress.UpdateAction += Update;
+            Index.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

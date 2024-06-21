@@ -18,7 +18,7 @@ namespace lib.io.time
         
         public SetPlaybackTime()
         {
-            Commands.UpdateAction = Update;
+            Commands.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

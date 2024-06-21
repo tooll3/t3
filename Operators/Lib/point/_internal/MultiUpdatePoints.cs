@@ -17,7 +17,7 @@ namespace lib.point._internal
         
         public MultiUpdatePoints()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
 

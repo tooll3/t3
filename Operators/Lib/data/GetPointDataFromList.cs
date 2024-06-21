@@ -23,9 +23,9 @@ namespace lib.data
         
         public GetPointDataFromList()
         {
-            W.UpdateAction = Update;
-            Position.UpdateAction = Update;
-            Orientation.UpdateAction = Update;
+            W.UpdateAction += Update;
+            Position.UpdateAction += Update;
+            Orientation.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

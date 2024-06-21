@@ -24,7 +24,7 @@ namespace lib._3d._
         
         public _RenderFontBuffer()
         {
-            Buffer.UpdateAction = UpdateMesh;
+            Buffer.UpdateAction += UpdateMesh;
             _fontResource = new Resource<BmFontDescription>(Filepath, OnFileChanged);
         }
         

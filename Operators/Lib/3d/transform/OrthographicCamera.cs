@@ -23,7 +23,7 @@ namespace lib._3d.transform
 
         public OrthographicCamera()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
             Reference.Value = this;
         }
 

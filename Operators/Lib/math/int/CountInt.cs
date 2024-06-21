@@ -13,7 +13,7 @@ namespace lib.math.@int
 
         public CountInt()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

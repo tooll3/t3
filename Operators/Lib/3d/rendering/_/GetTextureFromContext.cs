@@ -14,7 +14,7 @@ namespace lib._3d.rendering._
 
         public GetTextureFromContext()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

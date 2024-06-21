@@ -19,7 +19,7 @@ namespace lib._3d.rendering
 
         public SetFog()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

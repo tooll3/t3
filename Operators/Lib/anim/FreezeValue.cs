@@ -18,8 +18,8 @@ namespace lib.anim
         
         public FreezeValue()
         {
-            Result.UpdateAction = Update;
-            DeltaSinceFreeze.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            DeltaSinceFreeze.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

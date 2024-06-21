@@ -15,7 +15,7 @@ namespace lib.math.@bool
 
         public Trigger()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

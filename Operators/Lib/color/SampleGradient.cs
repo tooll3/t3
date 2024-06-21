@@ -21,8 +21,8 @@ namespace lib.color
 
         public SampleGradient()
         {
-            Color.UpdateAction = Update;
-            OutGradient.UpdateAction = Update;
+            Color.UpdateAction += Update;
+            OutGradient.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

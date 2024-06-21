@@ -24,10 +24,10 @@ namespace lib.math.int2
         
         public RequestedResolution()
         {
-            Size.UpdateAction = Update;
-            Width.UpdateAction = Update;
-            Height.UpdateAction = Update;
-            AspectRatio.UpdateAction = Update;
+            Size.UpdateAction += Update;
+            Width.UpdateAction += Update;
+            Height.UpdateAction += Update;
+            AspectRatio.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

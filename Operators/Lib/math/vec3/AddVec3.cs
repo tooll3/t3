@@ -17,7 +17,7 @@ namespace lib.math.vec3
 
         public AddVec3()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

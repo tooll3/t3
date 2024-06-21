@@ -15,7 +15,7 @@ namespace lib.point.particle
 
         public SwitchParticleForce()
         {
-            Selected.UpdateAction = Update;
+            Selected.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

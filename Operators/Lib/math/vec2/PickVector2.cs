@@ -14,7 +14,7 @@ namespace lib.math.vec2
 
         public PickVector2()
         {
-            Selected.UpdateAction = Update;
+            Selected.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

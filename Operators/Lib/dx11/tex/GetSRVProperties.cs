@@ -21,8 +21,8 @@ namespace lib.dx11.tex
 
         public GetSRVProperties()
         {
-            ElementCount.UpdateAction = Update;
-            Buffer.UpdateAction = Update;
+            ElementCount.UpdateAction += Update;
+            Buffer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

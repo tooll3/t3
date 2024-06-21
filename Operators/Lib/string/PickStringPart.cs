@@ -19,8 +19,8 @@ namespace lib.@string
 
         public PickStringPart()
         {
-            Fragments.UpdateAction = Update;
-            TotalCount.UpdateAction = Update;
+            Fragments.UpdateAction += Update;
+            TotalCount.UpdateAction += Update;
         }
 
         private enum EntityTypes

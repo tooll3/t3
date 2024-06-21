@@ -24,8 +24,8 @@ namespace examples.user.still.worksforeverybody.fx
         
         public SaveParameterSet()
         {
-            Result.UpdateAction = Update;
-            Points.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            Points.UpdateAction += Update;
             UpdatePointLists();
         }
 

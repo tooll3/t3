@@ -16,7 +16,7 @@ namespace lib.img.use
 
         public PickTexture()
         {
-            Selected.UpdateAction = Update;
+            Selected.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

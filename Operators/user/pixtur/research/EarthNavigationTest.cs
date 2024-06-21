@@ -33,10 +33,10 @@ namespace user.pixtur.research
         
         public EarthNavigationTest()
         {
-            Result.UpdateAction = Update;
-            P1.UpdateAction = Update;
-            P2.UpdateAction = Update;
-            P3.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            P1.UpdateAction += Update;
+            P2.UpdateAction += Update;
+            P3.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

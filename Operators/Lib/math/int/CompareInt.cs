@@ -18,8 +18,8 @@ namespace lib.math.@int
 
         public CompareInt()
         {
-            IsTrue.UpdateAction = Update;
-            ResultValue.UpdateAction = Update;
+            IsTrue.UpdateAction += Update;
+            ResultValue.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

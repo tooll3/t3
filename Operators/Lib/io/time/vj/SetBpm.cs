@@ -17,7 +17,7 @@ namespace lib.io.time.vj
         
         public SetBpm()
         {
-            Commands.UpdateAction = Update;
+            Commands.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -18,8 +18,8 @@ namespace lib.dx11.buffer
         
         public SwapTextures()
         {
-            TextureA.UpdateAction = Update;
-            TextureB.UpdateAction = Update;
+            TextureA.UpdateAction += Update;
+            TextureB.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

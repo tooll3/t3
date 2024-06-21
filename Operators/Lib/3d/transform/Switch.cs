@@ -18,8 +18,8 @@ namespace lib._3d.transform
         
         public Switch()
         {
-            Output.UpdateAction = Update;
-            Count.UpdateAction = UpdateCount;
+            Output.UpdateAction += Update;
+            Count.UpdateAction += UpdateCount;
         }
 
         private void UpdateCount(EvaluationContext context)

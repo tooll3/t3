@@ -13,7 +13,7 @@ namespace examples.user.community
 
         public SnapToMultiple()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

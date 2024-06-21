@@ -13,7 +13,7 @@ namespace lib.io.time
 
         public ClipTime()
         {
-            Time.UpdateAction = Update;
+            Time.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

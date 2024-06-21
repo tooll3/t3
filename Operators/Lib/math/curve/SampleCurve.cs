@@ -17,8 +17,8 @@ namespace lib.math.curve
 
         public SampleCurve()
         {
-            Result.UpdateAction = Update;
-            CurveOutput.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            CurveOutput.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

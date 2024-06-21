@@ -18,7 +18,7 @@ namespace lib.point._cpu
 
         public LinePointsCpu()
         {
-            ResultList.UpdateAction = Update;
+            ResultList.UpdateAction += Update;
             _pointListWithSeparator.TypedElements[2] = Point.Separator();
         }
 

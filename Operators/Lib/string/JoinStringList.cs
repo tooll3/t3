@@ -15,7 +15,7 @@ namespace lib.@string
 
         public JoinStringList()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -15,7 +15,7 @@ namespace lib.io.input
         
         public MidiRecording()
         {
-            DataSet.UpdateAction = Update;
+            DataSet.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

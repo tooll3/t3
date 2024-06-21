@@ -28,9 +28,9 @@ namespace lib.exec.context
         
         public CamPosition()
         {
-            Command.UpdateAction = Update;
-            Position.UpdateAction = Update;
-            Direction.UpdateAction = Update;
+            Command.UpdateAction += Update;
+            Position.UpdateAction += Update;
+            Direction.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

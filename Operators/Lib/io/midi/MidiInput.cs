@@ -30,9 +30,9 @@ namespace lib.io.midi
         
         public MidiInput()
         {
-            Result.UpdateAction = Update;
-            Range.UpdateAction = Update;
-            WasHit.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            Range.UpdateAction += Update;
+            WasHit.UpdateAction += Update;
         }
 
         private bool _initialized;

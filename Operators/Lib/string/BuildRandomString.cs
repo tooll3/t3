@@ -20,8 +20,8 @@ namespace lib.@string
 
         public BuildRandomString()
         {
-            Result.UpdateAction = Update;
-            Builder.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            Builder.UpdateAction += Update;
         }
 
         private double _lastUpdateTime = 0;

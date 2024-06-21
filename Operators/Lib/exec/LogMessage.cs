@@ -17,7 +17,7 @@ namespace lib.exec
 
         public LogMessage()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
         
         private void Update(EvaluationContext context)

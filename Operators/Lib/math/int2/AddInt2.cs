@@ -15,7 +15,7 @@ namespace lib.math.int2
 
         public AddInt2()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

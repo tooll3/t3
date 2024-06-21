@@ -16,7 +16,7 @@ namespace lib.dx11.buffer
 
         public TransformsConstBuffer()
         {
-            Buffer.UpdateAction = Update;
+            Buffer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

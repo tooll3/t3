@@ -42,9 +42,9 @@ namespace lib.point._experimental
 
         public _SketchImpl()
         {
-            OutPages.UpdateAction = Update;
-            CursorPosInWorld.UpdateAction = Update;
-            StatusMessage.UpdateAction = Update;
+            OutPages.UpdateAction += Update;
+            CursorPosInWorld.UpdateAction += Update;
+            StatusMessage.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

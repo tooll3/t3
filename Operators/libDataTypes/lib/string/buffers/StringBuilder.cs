@@ -15,7 +15,7 @@ namespace lib.types
         public StringBuilder()
         {
             
-            Builder.UpdateAction = Update;
+            Builder.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

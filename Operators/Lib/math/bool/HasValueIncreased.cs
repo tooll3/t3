@@ -14,7 +14,7 @@ namespace lib.math.@bool
 
         public HasValueIncreased()
         {
-            HasIncreased.UpdateAction = Update;
+            HasIncreased.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

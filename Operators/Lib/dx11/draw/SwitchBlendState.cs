@@ -16,7 +16,7 @@ namespace lib.dx11.draw
 
         public SwitchBlendState()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private BlendState[] _blendStates = new BlendState[0];

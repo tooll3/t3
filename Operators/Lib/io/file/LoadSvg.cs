@@ -30,7 +30,7 @@ namespace lib.io.file
         public LoadSvg()
         {
             _svgResource = new Resource<SvgDocument>(FilePath, TryLoad);
-            ResultList.UpdateAction = Update;
+            ResultList.UpdateAction += Update;
             _pointListWithSeparator.TypedElements[_pointListWithSeparator.NumElements - 1] = Point.Separator();
         }
 
@@ -65,7 +65,7 @@ namespace lib.io.file
             if (!needsUpdate)
                 return;
             
-            if(!_svgResource.TryGetValue(out var svgDoc))
+            if(!_svgResource.TryGetValue(context, out var svgDoc))
             {
                 _pointListWithSeparator.SetLength(0);
                 ResultList.Value = _pointListWithSeparator;

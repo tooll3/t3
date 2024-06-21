@@ -18,8 +18,8 @@ namespace lib.data
         
         public JoinLists()
         {
-            Length.UpdateAction = Update;
-            Result.UpdateAction = Update;
+            Length.UpdateAction += Update;
+            Result.UpdateAction += Update;
         }
 
 

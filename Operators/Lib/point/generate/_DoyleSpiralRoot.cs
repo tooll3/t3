@@ -22,9 +22,9 @@ namespace lib.point.generate
 
         public _DoyleSpiralRoot()
         {
-            A.UpdateAction = Update;
-            B.UpdateAction = Update;
-            B.UpdateAction = Update;
+            A.UpdateAction += Update;
+            B.UpdateAction += Update;
+            B.UpdateAction += Update;
         }
         
 

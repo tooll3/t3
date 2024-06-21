@@ -14,7 +14,7 @@ namespace lib.math.vec3
 
         public Magnitude()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

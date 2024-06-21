@@ -25,7 +25,7 @@ namespace lib._3d.transform
 
         public Transform()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -18,7 +18,7 @@ namespace lib.dx11.buffer
 
         public StructuredBufferWithViews()
         {
-            BufferWithViews.UpdateAction = UpdateBuffer;
+            BufferWithViews.UpdateAction += UpdateBuffer;
         }
 
         private void UpdateBuffer(EvaluationContext context)

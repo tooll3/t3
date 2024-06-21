@@ -13,7 +13,7 @@ namespace lib.math.@float
 
         public Div()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

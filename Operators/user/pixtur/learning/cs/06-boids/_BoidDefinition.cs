@@ -14,7 +14,7 @@ namespace user.pixtur.learning.cs._06_boids
 
         public _BoidDefinition()
         {
-            OutBuffer.UpdateAction = Update;
+            OutBuffer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

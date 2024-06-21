@@ -28,8 +28,8 @@ namespace examples.user.still.worksforeverybody
         
         public _WFEGameState()
         {
-            TotalScore.UpdateAction = Update;
-            ScoreChanged.UpdateAction = Update;
+            TotalScore.UpdateAction += Update;
+            ScoreChanged.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

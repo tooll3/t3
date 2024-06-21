@@ -27,7 +27,7 @@ namespace lib._3d.mesh.generate
 
         public CylinderMesh()
         {
-            Data.UpdateAction = Update;
+            Data.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

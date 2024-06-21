@@ -22,8 +22,8 @@ namespace lib.dx11.buffer
         
         public SrvFromStructuredBuffer()
         {
-            ShaderResourceView.UpdateAction = Update;
-            ElementCount.UpdateAction = Update;
+            ShaderResourceView.UpdateAction += Update;
+            ElementCount.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

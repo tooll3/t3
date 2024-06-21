@@ -14,7 +14,7 @@ namespace lib.dx11.draw
 
         public ShowTexture2d()
         {
-            TextureOutput.UpdateAction = Update;
+            TextureOutput.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

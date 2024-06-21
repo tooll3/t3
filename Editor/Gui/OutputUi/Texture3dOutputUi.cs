@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.OutputUi
     {
         public Texture3dOutputUi()
         {
-            const string sourcePath = @"internal\render-volume-slice-cs.hlsl";
+            const string sourcePath = @"img/internal/render-volume-slice-cs.hlsl";
             const string debugName = "render-volume-slice";
             _shaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, null, () => "main");
 

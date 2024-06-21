@@ -14,7 +14,7 @@ namespace lib.point._internal
 
         public _SetParticleSystemComponents()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
         
         private void Update(EvaluationContext context)

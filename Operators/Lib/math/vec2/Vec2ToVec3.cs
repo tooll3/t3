@@ -14,7 +14,7 @@ namespace lib.math.vec2
 
         public Vec2ToVec3()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -15,7 +15,7 @@ namespace lib.@string
 
         public WrapString()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

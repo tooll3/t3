@@ -19,7 +19,7 @@ namespace examples.user.cynic.research
 
         public GpuSorter()
         {
-            Command.UpdateAction = Update;
+            Command.UpdateAction += Update;
             _sortShaderResource = ResourceManager.CreateShaderResource<ComputeShader>("Resources/proj-partial/particle/bitonic-sort.hlsl", this, () => "bitonicSort");
             _transposeShaderResource = ResourceManager.CreateShaderResource<ComputeShader>("Resources//proj-partial/particle/bitonic-transpose.hlsl", this, () => "transpose");
 
@@ -51,8 +51,8 @@ namespace examples.user.cynic.research
 
             var prevShader = csStage.Get();
             var prevConstBuffer = csStage.GetConstantBuffers(0, 1)[0];
-            ComputeShader sortShader = _sortShaderResource;
-            ComputeShader transposeShader = _transposeShaderResource;
+            ComputeShader sortShader = _sortShaderResource.Value;
+            ComputeShader transposeShader = _transposeShaderResource.Value;
             csStage.Set(sortShader);
             csStage.SetConstantBuffer(0, _parameterConstBuffer);
             csStage.SetUnorderedAccessView(0, uav1);

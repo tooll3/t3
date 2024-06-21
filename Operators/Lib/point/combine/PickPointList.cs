@@ -15,7 +15,7 @@ namespace lib.point.combine
 
         public PickPointList()
         {
-            Selected.UpdateAction = Update;
+            Selected.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

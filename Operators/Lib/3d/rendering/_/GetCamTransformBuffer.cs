@@ -22,7 +22,7 @@ namespace lib._3d.rendering._
         
         public GetCamTransformBuffer()
         {
-            Buffer.UpdateAction = Update;
+            Buffer.UpdateAction += Update;
             
         }
         

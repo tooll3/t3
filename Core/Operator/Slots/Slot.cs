@@ -326,6 +326,7 @@ namespace T3.Core.Operator.Slots
         Guid ISlot.Id { get => Id; set => Id = value; }
         DirtyFlag ISlot.DirtyFlag => DirtyFlag;
 
+        // todo - this should be an action list or event? ordered execution can be important
         public virtual Action<EvaluationContext> UpdateAction { get; set; }
 
         protected Action<EvaluationContext> _keepOriginalUpdateAction;

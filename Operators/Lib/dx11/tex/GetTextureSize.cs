@@ -27,10 +27,10 @@ namespace lib.dx11.tex
 
         public GetTextureSize()
         {
-            Size.UpdateAction = Update;
-            SizeFloat.UpdateAction = Update;
-            TotalSize.UpdateAction = Update;
-            IsTextureValid.UpdateAction = Update;
+            Size.UpdateAction += Update;
+            SizeFloat.UpdateAction += Update;
+            TotalSize.UpdateAction += Update;
+            IsTextureValid.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -18,7 +18,7 @@ namespace lib.dx11.draw
 
         public GeometryShaderStage()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
             Output.Value.RestoreAction = Restore;
         }
 

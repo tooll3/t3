@@ -18,8 +18,8 @@ namespace lib.io.time
 
         public StopWatch()
         {
-            LastDuration.UpdateAction = Update;
-            Delta.UpdateAction = Update;
+            LastDuration.UpdateAction += Update;
+            Delta.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

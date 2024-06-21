@@ -29,8 +29,8 @@ namespace lib.io.audio
 
         public DetectBeatOffset()
         {
-            Measurements.UpdateAction = Update;
-            Peak.UpdateAction = Update;
+            Measurements.UpdateAction += Update;
+            Peak.UpdateAction += Update;
         }
         
         private class TimeEntry

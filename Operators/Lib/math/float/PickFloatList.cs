@@ -15,7 +15,7 @@ namespace lib.math.@float
 
         public PickFloatList()
         {
-            Selected.UpdateAction = Update;
+            Selected.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

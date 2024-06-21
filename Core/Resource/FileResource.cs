@@ -153,7 +153,15 @@ public sealed partial class FileResource
         {
             if (_fileInfo == null)
             {
-                return _fileInfo = new FileInfo(AbsolutePath);
+                try
+                {
+                    return _fileInfo = new FileInfo(AbsolutePath);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to create file info for {AbsolutePath}: {e}");
+                    return null;
+                }
             }
             
             try

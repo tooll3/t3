@@ -14,7 +14,7 @@ namespace lib.color
 
         public HSBToColor()
         {
-            Color.UpdateAction = Update;
+            Color.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

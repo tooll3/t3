@@ -20,7 +20,7 @@ namespace examples.user.still.worksforeverybody.fx
 
         public WFESaveScore()
         {
-            Results.UpdateAction = Update;
+            Results.UpdateAction += Update;
         }
         
         private void Update(EvaluationContext context)

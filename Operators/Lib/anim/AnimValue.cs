@@ -20,8 +20,8 @@ namespace lib.anim
         
         public AnimValue()
         {
-            Result.UpdateAction = Update;
-            WasHit.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            WasHit.UpdateAction += Update;
         }
 
         public double _normalizedTime; // only public for Ui

@@ -41,7 +41,7 @@ public sealed partial class ResourceManager
         return compiled;
     }
 
-    public static Resource<TShader> CreateShaderResource<TShader>(string relativePath, Instance? instance, Func<string> getEntryPoint)
+    public static Resource<TShader> CreateShaderResource<TShader>(string relativePath, Instance? instance, Func<string> getEntryPoint, Action<TShader?>? onShaderCompiled = null)
         where TShader : AbstractShader
     {
         ArgumentNullException.ThrowIfNull(getEntryPoint, nameof(getEntryPoint));
@@ -49,6 +49,7 @@ public sealed partial class ResourceManager
                                     {
                                         var success = ShaderCompiler.TryGetShaderFromFile(fileResource, ref currentValue, instance, out reason, getEntryPoint());
                                         newShader = currentValue;
+                                        onShaderCompiled?.Invoke(currentValue);
                                         return success;
                                     };
 

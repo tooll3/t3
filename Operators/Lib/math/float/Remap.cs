@@ -16,7 +16,7 @@ namespace lib.math.@float
 
         public Remap()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

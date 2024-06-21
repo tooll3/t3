@@ -16,7 +16,7 @@ namespace lib.dx11._
         
         public FirstValidTexture()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

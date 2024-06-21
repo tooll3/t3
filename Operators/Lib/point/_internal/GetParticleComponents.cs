@@ -22,8 +22,8 @@ namespace lib.point._internal
         
         public GetParticleComponents()
         {
-            ParticlesUav.UpdateAction = Update;
-            Length.UpdateAction = Update;
+            ParticlesUav.UpdateAction += Update;
+            Length.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

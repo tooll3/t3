@@ -22,7 +22,7 @@ namespace lib.dx11.buffer
 
         public FloatsToBuffer()
         {
-            Buffer.UpdateAction = Update;
+            Buffer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

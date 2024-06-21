@@ -36,7 +36,7 @@ namespace lib.io.file
         public LineTextPoints()
         {
             _svgResource = new Resource<SvgDocument>(FilePath, TryLoadSvg);
-            ResultList.UpdateAction = Update;
+            ResultList.UpdateAction += Update;
             _pointListWithSeparator.TypedElements[_pointListWithSeparator.NumElements - 1] = Point.Separator();
         }
 
@@ -69,7 +69,7 @@ namespace lib.io.file
                                                          CornerBalance: CornerWeightBalance.GetValue(context));
                 _svgFileUpdated = false;
 
-                if (!_svgResource.TryGetValue(out var svgDoc))
+                if (!_svgResource.TryGetValue(context, out var svgDoc))
                 {
                     ResultList.Value = null;
                     return;

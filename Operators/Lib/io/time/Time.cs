@@ -19,8 +19,8 @@ namespace lib.io.time
         
         public Time()
         {
-            TimeInBars.UpdateAction = Update;
-            TimeInSecs.UpdateAction = Update;
+            TimeInBars.UpdateAction += Update;
+            TimeInSecs.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

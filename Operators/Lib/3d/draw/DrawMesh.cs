@@ -23,7 +23,7 @@ namespace lib._3d.draw
         
         public DrawMesh()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

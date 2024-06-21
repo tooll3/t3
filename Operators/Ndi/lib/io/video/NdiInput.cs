@@ -30,8 +30,8 @@ namespace t3.ndi
             // Note that this example does see local sources (new Finder(true))
             // This is for ease of testing, but normally is not needed in released products.
             _ndiInputFinder = new Finder(true);
-            Texture.UpdateAction = Update;
-            UploadTime.UpdateAction = Update;
+            Texture.UpdateAction += Update;
+            UploadTime.UpdateAction += Update;
         }
 
         ~NdiInput()

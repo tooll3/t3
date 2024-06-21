@@ -15,7 +15,7 @@ namespace lib.data
         
         public DataList()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
 

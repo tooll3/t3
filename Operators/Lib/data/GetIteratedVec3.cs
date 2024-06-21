@@ -16,7 +16,7 @@ namespace lib.data
 
         public GetIteratedVec3()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
             Result.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
         }
 

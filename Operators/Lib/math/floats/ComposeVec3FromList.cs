@@ -16,7 +16,7 @@ namespace lib.math.floats
 
         public ComposeVec3FromList()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

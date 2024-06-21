@@ -23,8 +23,8 @@ namespace lib.math.@bool
         
         public HasValueChanged()
         {
-            HasChanged.UpdateAction = Update;
-            Delta.UpdateAction = Update;
+            HasChanged.UpdateAction += Update;
+            Delta.UpdateAction += Update;
         }
 
         private double _lastEvalTime = 0;

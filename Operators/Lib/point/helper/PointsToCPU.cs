@@ -22,7 +22,7 @@ namespace lib.point.helper
 
         public PointsToCPU()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
         
         private void Update(EvaluationContext context)

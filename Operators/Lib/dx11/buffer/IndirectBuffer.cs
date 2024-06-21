@@ -17,7 +17,7 @@ namespace lib.dx11.buffer
 
         public IndirectBuffer()
         {
-            Buffer.UpdateAction = UpdateBuffer;
+            Buffer.UpdateAction += UpdateBuffer;
         }
 
         private void UpdateBuffer(EvaluationContext context)

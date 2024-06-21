@@ -19,7 +19,7 @@ namespace lib.color
 
         public BlendGradients()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

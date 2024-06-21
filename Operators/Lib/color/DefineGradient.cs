@@ -17,7 +17,7 @@ namespace lib.color
 
         public DefineGradient()
         {
-            OutGradient.UpdateAction = Update;
+            OutGradient.UpdateAction += Update;
             
             _slots = new List<Pair>
                             {

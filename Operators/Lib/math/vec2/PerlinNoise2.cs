@@ -15,7 +15,7 @@ namespace lib.math.vec2
 
         public PerlinNoise2()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -13,7 +13,7 @@ namespace Lib.math.@float
 
         public TryParse()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

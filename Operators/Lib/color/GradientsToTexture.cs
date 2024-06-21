@@ -26,7 +26,7 @@ namespace lib.color
         
         public GradientsToTexture()
         {
-            GradientsTexture.UpdateAction = Update;
+            GradientsTexture.UpdateAction += Update;
         }
         
         private void Update(EvaluationContext context)

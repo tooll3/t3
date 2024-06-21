@@ -16,7 +16,7 @@ namespace lib.anim._obsolete
 
         public _Jitter2d()
         {
-            NewPosition.UpdateAction = Update;
+            NewPosition.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -21,26 +21,29 @@ namespace lib.dx11.compute
 
         public ComputeShader()
         {
-            Shader.UpdateAction = Update;
-            ThreadCount.UpdateAction = Update;
+            ThreadCount.UpdateAction += context =>
+                                        {
+                                            var shader = Shader.GetValue(context);
+                                            OnShaderUpdate(context, shader);
+                                        };
+            
             ShaderOperatorImpl.Initialize();
         }
 
-        public InputSlot<string> SourcePathSlot => Source;
-
-        private void Update(EvaluationContext context)
+        public void OnShaderUpdate(EvaluationContext context, ComputeShaderT3? shader)
         {
-            var shader = Shader.Value;
             if (shader == null)
             {
                 return;
             }
             
-            if (Shader.Value.TryGetThreadGroups(out var threadCount))
+            if (shader.TryGetThreadGroups(out var threadCount))
                 ThreadCount.Value = threadCount;
 
             ThreadCount.DirtyFlag.Clear();
         }
+
+        public InputSlot<string> SourcePathSlot => Source;
 
         [Input(Guid = "{AFB69C81-5063-4CB9-9D42-841B994B5EC0}")]
         public readonly InputSlot<string> Source = new();
@@ -52,7 +55,7 @@ namespace lib.dx11.compute
         public readonly InputSlot<string> DebugName = new();
         
         public IEnumerable<string> FileFilter => FileFilters;
-        private static readonly string[] FileFilters = [ResourceManager.DefaultShaderFilter];
+        private static readonly string[] FileFilters = ["*.compute", "*.compute.hlsl", ResourceManager.DefaultShaderFilter];
         
         #region IShaderOperator implementation
         private IShaderOperator<ComputeShaderT3> ShaderOperatorImpl => this;

@@ -15,7 +15,7 @@ namespace lib.exec
 
         public ExecRepeatedly()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private int _callsSinceLastRefresh;

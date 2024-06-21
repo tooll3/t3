@@ -23,7 +23,7 @@ namespace Lib._3d.postfx
 
         public _ComputeLightOcclusions()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

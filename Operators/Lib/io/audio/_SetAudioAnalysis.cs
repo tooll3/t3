@@ -15,7 +15,7 @@ namespace lib.io.audio
 
         public _SetAudioAnalysis()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -18,7 +18,7 @@ namespace lib.dx11.draw
 
         public OutputMergerStage() 
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
             Output.Value.RestoreAction = Restore;
         }
 

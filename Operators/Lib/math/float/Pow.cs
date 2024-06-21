@@ -14,7 +14,7 @@ namespace lib.math.@float
 
         public Pow()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

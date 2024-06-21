@@ -23,8 +23,8 @@ namespace lib.point._cpu
         
         public SampleSplinePoint()
         {
-            Output.UpdateAction = Update;
-            Position.UpdateAction = Update;
+            Output.UpdateAction += Update;
+            Position.UpdateAction += Update;
         }
 
 

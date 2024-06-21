@@ -18,7 +18,7 @@ namespace Lib.math.floats
 
         public DampFloatList()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

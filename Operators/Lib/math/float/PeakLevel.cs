@@ -25,10 +25,10 @@ namespace lib.math.@float
 
         public PeakLevel()
         {
-            AttackLevel.UpdateAction = Update;
-            FoundPeak.UpdateAction = Update;
-            TimeSincePeak.UpdateAction = Update;
-            MovingSum.UpdateAction = Update;
+            AttackLevel.UpdateAction += Update;
+            FoundPeak.UpdateAction += Update;
+            TimeSincePeak.UpdateAction += Update;
+            MovingSum.UpdateAction += Update;
         }
 
 

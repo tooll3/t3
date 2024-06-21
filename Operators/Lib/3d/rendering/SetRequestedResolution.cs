@@ -13,7 +13,7 @@ namespace Lib._3d.rendering
     {
         public SetRequestedResolution()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }    
         
         [Output(Guid = "2ABE986A-6A21-4CEB-B907-5B6E317E34A1")]

@@ -14,7 +14,7 @@ namespace lib.dx11.tex
 
         public ShowTexture3d()
         {
-            TextureOutput.UpdateAction = Update;
+            TextureOutput.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

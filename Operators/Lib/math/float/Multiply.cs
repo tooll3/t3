@@ -13,7 +13,7 @@ namespace lib.math.@float
 
         public Multiply()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -25,8 +25,8 @@ namespace lib.io.time
         public AbletonLinkSync()
         {
             TryInitialize();
-            Result.UpdateAction = Update;
-            Tempo.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            Tempo.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

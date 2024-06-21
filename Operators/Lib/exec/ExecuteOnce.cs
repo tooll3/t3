@@ -17,8 +17,8 @@ namespace lib.exec
 
         public ExecuteOnce()
         {
-            Output.UpdateAction = Update;
-            OutputTrigger.UpdateAction = Update;
+            Output.UpdateAction += Update;
+            OutputTrigger.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

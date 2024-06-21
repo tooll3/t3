@@ -18,7 +18,7 @@ namespace lib.dx11.draw
 
         public DepthStencilStateOp()
         {
-            DepthState.UpdateAction = Update;
+            DepthState.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

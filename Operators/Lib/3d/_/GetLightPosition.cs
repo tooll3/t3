@@ -34,11 +34,11 @@ namespace Lib._3d._
         
         public GetLightPosition()
         {
-            Position.UpdateAction = Update;
-            LightCount.UpdateAction = Update;
-            Radius.UpdateAction = Update;
-            Intensity.UpdateAction = Update;
-            Color.UpdateAction = Update;
+            Position.UpdateAction += Update;
+            LightCount.UpdateAction += Update;
+            Radius.UpdateAction += Update;
+            Intensity.UpdateAction += Update;
+            Color.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -20,8 +20,8 @@ namespace lib.anim
 
         public Counter()
         {
-            Result.UpdateAction = Update;
-            WasStep.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            WasStep.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

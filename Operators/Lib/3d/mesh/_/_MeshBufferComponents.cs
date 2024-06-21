@@ -18,8 +18,8 @@ namespace lib._3d.mesh._
 
         public _MeshBufferComponents()
         {
-            Vertices.UpdateAction = Update;
-            Indices.UpdateAction = Update;
+            Vertices.UpdateAction += Update;
+            Indices.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

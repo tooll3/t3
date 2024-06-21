@@ -26,7 +26,7 @@ namespace lib._3d.mesh.generate
 
         public SphereMesh()
         {
-            Data.UpdateAction = Update;
+            Data.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

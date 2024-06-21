@@ -22,10 +22,10 @@ namespace lib.dx11.tex
 
         public Texture3dComponents()
         {
-            Texture.UpdateAction = Update;
-            ShaderResourceView.UpdateAction = Update;
-            UnorderedAccessView.UpdateAction = Update;
-            RenderTargetView.UpdateAction = Update;
+            Texture.UpdateAction += Update;
+            ShaderResourceView.UpdateAction += Update;
+            UnorderedAccessView.UpdateAction += Update;
+            RenderTargetView.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

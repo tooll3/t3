@@ -13,7 +13,7 @@ namespace lib.exec.context
 
         public GetFloatVar()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
             Variable.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
         }
 

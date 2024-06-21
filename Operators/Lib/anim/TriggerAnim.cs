@@ -20,8 +20,8 @@ namespace lib.anim
         
         public TriggerAnim()
         {
-            Result.UpdateAction = Update;
-            HasCompleted.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            HasCompleted.UpdateAction += Update;
         }
 
         private enum Directions

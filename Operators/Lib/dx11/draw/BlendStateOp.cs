@@ -19,7 +19,7 @@ namespace lib.dx11.draw
 
         public BlendStateOp()
         {
-            BlendState.UpdateAction = Update;
+            BlendState.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -18,8 +18,8 @@ namespace lib.@string.list
         
         public SplitString()
         {
-            Fragments.UpdateAction = Update;
-            Count.UpdateAction = Update;
+            Fragments.UpdateAction += Update;
+            Count.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

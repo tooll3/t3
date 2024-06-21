@@ -19,7 +19,7 @@ namespace Lib.point.generate
 
         public RepetitionPoints()
         {
-            ResultList.UpdateAction = Update;
+            ResultList.UpdateAction += Update;
         }
         
         private void Update(EvaluationContext context)

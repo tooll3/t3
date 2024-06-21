@@ -16,7 +16,7 @@ namespace lib.math.@int
 
         public AddInts()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

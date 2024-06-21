@@ -35,8 +35,8 @@ namespace lib.img.generate
 
         public RenderTarget()
         {
-            ColorBuffer.UpdateAction = Update;
-            DepthBuffer.UpdateAction = Update;
+            ColorBuffer.UpdateAction += Update;
+            DepthBuffer.UpdateAction += Update;
             SetupResolveShaderResources();
 
             lock (_lock)

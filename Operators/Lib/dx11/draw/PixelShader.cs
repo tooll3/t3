@@ -5,33 +5,28 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using PixelShaderD3D = T3.Core.DataTypes.PixelShader;
+using PixelShaderT3 = T3.Core.DataTypes.PixelShader;
 
 namespace lib.dx11.draw
 {
 	[Guid("f7c625da-fede-4993-976c-e259e0ee4985")]
-    public class PixelShader : Instance<PixelShader>, IDescriptiveFilename, IStatusProvider, IShaderOperator<PixelShaderD3D>
+    public class PixelShader : Instance<PixelShader>, IDescriptiveFilename, IStatusProvider, IShaderOperator<PixelShaderT3>
     {
         [Output(Guid = "9C6E72F8-5CE6-42C3-ABAA-1829D2C066C1")]
-        public readonly Slot<PixelShaderD3D> Shader = new();
+        public readonly Slot<PixelShaderT3> Shader = new();
         
         [Output(Guid = "5D24B1D4-79E4-4AF9-BBC3-78F9ACE1BE98")]
         public readonly Slot<string> Warning = new();
 
         public PixelShader()
         {
-            Shader.UpdateAction = Update;
-            Warning.UpdateAction = Update;
+            ShaderOperatorImpl.Initialize();
         }
-        
-        private void Update(EvaluationContext context)
+        public void OnShaderUpdate(EvaluationContext context, PixelShaderT3 shader)
         {
-          
         }
 
         public InputSlot<string> SourcePathSlot => Source;
-
-        private string _sourcePath = string.Empty;
 
         [Input(Guid = "24646F06-1509-43CE-94C6-EEB608AD97CD")]
         public readonly InputSlot<string> Source = new();
@@ -43,20 +38,21 @@ namespace lib.dx11.draw
         public readonly InputSlot<string> DebugName = new();
 
         public IEnumerable<string> FileFilter => FileFilters;
-        private static readonly string[] FileFilters = [ResourceManager.DefaultShaderFilter];
+        private static readonly string[] FileFilters = ["*.frag", "*.frag.hlsl", ResourceManager.DefaultShaderFilter];
 
         #region IShaderOperator implementation
-        private IShaderOperator<PixelShaderD3D> ShaderOperatorImpl => this;
-        InputSlot<string> IShaderOperator<PixelShaderD3D>.Path => Source;
-        InputSlot<string> IShaderOperator<PixelShaderD3D>.EntryPoint => EntryPoint;
-        InputSlot<string> IShaderOperator<PixelShaderD3D>.DebugName => DebugName;
-        Slot<PixelShaderD3D> IShaderOperator<PixelShaderD3D>.ShaderSlot => Shader;
+        private IShaderOperator<PixelShaderT3> ShaderOperatorImpl => this;
+        InputSlot<string> IShaderOperator<PixelShaderT3>.Path => Source;
+        InputSlot<string> IShaderOperator<PixelShaderT3>.EntryPoint => EntryPoint;
+        InputSlot<string> IShaderOperator<PixelShaderT3>.DebugName => DebugName;
+        Slot<PixelShaderT3> IShaderOperator<PixelShaderT3>.ShaderSlot => Shader;
+        string IShaderOperator<PixelShaderT3>.CachedEntryPoint { get; set; }
         #endregion
         
         #region IStatusProvider implementation
         private readonly DefaultShaderStatusProvider _statusProviderImplementation = new ();
         public void SetWarning(string message) => _statusProviderImplementation.Warning = message;
-        string IShaderOperator<PixelShaderD3D>.CachedEntryPoint { get; set; }
+
         IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel() => _statusProviderImplementation.GetStatusLevel();
         string IStatusProvider.GetStatusMessage() => _statusProviderImplementation.GetStatusMessage();
         #endregion

@@ -17,8 +17,8 @@ namespace lib._3d.rendering._
 
         public ContextCBuffers()
         {
-            FogParameters.UpdateAction = Update;
-            PointLights.UpdateAction = Update;
+            FogParameters.UpdateAction += Update;
+            PointLights.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

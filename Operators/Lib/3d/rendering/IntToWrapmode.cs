@@ -14,7 +14,7 @@ namespace lib._3d.rendering
 
         public IntToWrapmode()
         {
-            Selected.UpdateAction = Update;
+            Selected.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

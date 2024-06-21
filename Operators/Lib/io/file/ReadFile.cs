@@ -18,13 +18,7 @@ namespace lib.io.file
         public ReadFile()
         {
             _fileContents = new Resource<string>(FilePath, TryLoad);
-            _fileContents.Changed += UpdateResult;
-            Result.UpdateAction = Update;
-        }
-
-        private void UpdateResult(object sender, string e)
-        {
-            Result.Value = e;
+            Result.UpdateAction += Update;
         }
 
         private bool TryLoad(FileResource file, string currentValue, out string newValue, out string failureReason)
@@ -53,8 +47,9 @@ namespace lib.io.file
         private void Update(EvaluationContext context)
         {
             if(TriggerUpdate.GetValue(context))
-                _fileContents.InvokeChangeEvent();
+                _fileContents.MarkFileAsChanged();
             
+            Result.Value = _fileContents.Value;
             Result.DirtyFlag.Clear();
         }
         

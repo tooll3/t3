@@ -15,7 +15,7 @@ namespace lib._3d.rendering._
 
         public SetContextTexture()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         //private Buffer _parameterBuffer = null;

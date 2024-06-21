@@ -16,7 +16,7 @@ namespace lib.@string.datetime
 
         public StringToDateTime()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

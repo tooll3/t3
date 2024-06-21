@@ -22,9 +22,9 @@ namespace t3.unsplash
 
         public UnsplashAPI()
         {
-            PhotoUrl.UpdateAction = Update;
-            PhotoAuthor.UpdateAction = Update;
-            ResultList.UpdateAction = Update;
+            PhotoUrl.UpdateAction += Update;
+            PhotoAuthor.UpdateAction += Update;
+            ResultList.UpdateAction += Update;
         }
 
         

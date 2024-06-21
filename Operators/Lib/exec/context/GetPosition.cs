@@ -25,10 +25,10 @@ namespace lib.exec.context
         
         public GetPosition()
         {
-            UpdateCommand.UpdateAction = Update;
-            Position.UpdateAction = UpdateReturnResults;
-            Scale.UpdateAction = UpdateReturnResults;
-            ObjectToWorld.UpdateAction = UpdateReturnResults;
+            UpdateCommand.UpdateAction += Update;
+            Position.UpdateAction += UpdateReturnResults;
+            Scale.UpdateAction += UpdateReturnResults;
+            ObjectToWorld.UpdateAction += UpdateReturnResults;
         }
 
         private void UpdateReturnResults(EvaluationContext context)

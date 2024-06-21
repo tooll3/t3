@@ -19,8 +19,8 @@ namespace lib.math.@float
         
         public DetectPulse()
         {
-            HasChanged.UpdateAction = Update;
-            DebugValue.UpdateAction = Update;
+            HasChanged.UpdateAction += Update;
+            DebugValue.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

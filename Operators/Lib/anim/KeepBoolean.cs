@@ -17,8 +17,8 @@ namespace lib.anim
         
         public KeepBoolean()
         {
-            Result.UpdateAction = Update;
-            TimeSinceFreeze.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            TimeSinceFreeze.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

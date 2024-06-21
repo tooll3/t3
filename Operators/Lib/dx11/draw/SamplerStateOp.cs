@@ -18,7 +18,7 @@ namespace lib.dx11.draw
 
         public SamplerStateOp()
         {
-            SamplerState.UpdateAction = Update;
+            SamplerState.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

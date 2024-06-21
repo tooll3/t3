@@ -19,7 +19,7 @@ namespace lib.math.floats
 
         public PlaybackFFT()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

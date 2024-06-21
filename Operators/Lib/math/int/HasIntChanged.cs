@@ -14,7 +14,7 @@ namespace lib.math.@int
 
         public HasIntChanged()
         {
-            HasChanged.UpdateAction = Update;
+            HasChanged.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

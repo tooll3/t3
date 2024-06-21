@@ -20,7 +20,7 @@ namespace lib.@string
 
         public IndexOf()
         {
-            Index.UpdateAction = Update;
+            Index.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

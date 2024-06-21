@@ -26,8 +26,8 @@ namespace Lib._3d.transform
 
         public OrbitCamera()
         {
-            Output.UpdateAction = UpdateOutputWithSubtree;
-            Reference.UpdateAction = UpdateCameraDefinition;
+            Output.UpdateAction += UpdateOutputWithSubtree;
+            Reference.UpdateAction += UpdateCameraDefinition;
             Reference.Value = this;
         }
 

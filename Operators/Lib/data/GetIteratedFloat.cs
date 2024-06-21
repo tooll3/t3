@@ -15,7 +15,7 @@ namespace lib.data
 
         public GetIteratedFloat()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
             Result.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
         }
 

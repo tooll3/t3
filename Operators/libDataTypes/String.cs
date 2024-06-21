@@ -13,7 +13,7 @@ namespace lib.types
 
         public String()
         {
-            Result.UpdateAction = UpdateString;
+            Result.UpdateAction += UpdateString;
         }
 
         private void UpdateString(EvaluationContext context)

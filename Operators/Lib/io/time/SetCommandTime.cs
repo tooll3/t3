@@ -17,7 +17,7 @@ namespace lib.io.time
         
         public SetCommandTime()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

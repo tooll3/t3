@@ -14,7 +14,7 @@ namespace lib.dx11.buffer
 
         public StructuredBuffer()
         {
-            Buffer.UpdateAction = UpdateBuffer;
+            Buffer.UpdateAction += UpdateBuffer;
         }
 
         private void UpdateBuffer(EvaluationContext context)

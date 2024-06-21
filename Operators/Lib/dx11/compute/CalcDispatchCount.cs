@@ -14,7 +14,7 @@ namespace lib.dx11.compute
 
         public CalcDispatchCount()
         {
-            DispatchCount.UpdateAction = Update;
+            DispatchCount.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

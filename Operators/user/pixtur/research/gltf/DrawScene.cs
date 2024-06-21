@@ -24,7 +24,7 @@ namespace user.pixtur.research.gltf
         
         public DrawScene()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
         
         // private void Update(EvaluationContext context)

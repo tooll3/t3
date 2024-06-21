@@ -21,8 +21,8 @@ namespace lib.point._experimental
 
         public _GetSketchPoints()
         {
-            DistanceToCurrentTime.UpdateAction = Update;
-            PointList.UpdateAction = Update;
+            DistanceToCurrentTime.UpdateAction += Update;
+            PointList.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

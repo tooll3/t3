@@ -17,7 +17,7 @@ namespace lib.exec.context
 
         public SetIntVariable()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
         
         

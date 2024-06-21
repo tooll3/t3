@@ -14,7 +14,7 @@ namespace lib.exec
 
         public Loop()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

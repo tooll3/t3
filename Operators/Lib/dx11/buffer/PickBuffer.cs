@@ -19,8 +19,8 @@ namespace lib.dx11.buffer
         
         public PickBuffer()
         {
-            Output.UpdateAction = Update;
-            Count.UpdateAction = Update;
+            Output.UpdateAction += Update;
+            Count.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

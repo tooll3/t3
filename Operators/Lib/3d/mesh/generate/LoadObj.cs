@@ -28,14 +28,8 @@ namespace lib._3d.mesh.generate
 
         public LoadObj()
         {
-            Data.UpdateAction = Update;
+            Data.UpdateAction += Update;
             _resource = new Resource<MeshDataSet>(Path, TryCreateResource, allowDisposal: false);
-            _resource.Changed += OnMeshChanged;
-        }
-
-        private void OnMeshChanged(object sender, MeshDataSet e)
-        {
-            Data.Value = e.DataBuffers;
         }
 
         private bool TryCreateResource(FileResource file, MeshDataSet? currentValue, out MeshDataSet? newValue, out string? failureReason)
@@ -99,10 +93,12 @@ namespace lib._3d.mesh.generate
             
             if(shouldInvoke)
             {
-                _resource.InvokeChangeEvent();
+                _resource.MarkFileAsChanged();
             }
 
             _warningMessage = null;
+            
+            Data.Value = _resource.GetValue(context)?.DataBuffers;
         }
 
         public InputSlot<string> SourcePathSlot => Path;

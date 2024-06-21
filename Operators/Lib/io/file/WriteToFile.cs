@@ -19,7 +19,7 @@ namespace lib.io.file
 
         public WriteToFile()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

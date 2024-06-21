@@ -5,15 +5,15 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using VertexShaderD3D = T3.Core.DataTypes.VertexShader;
+using VertexShaderT3 = T3.Core.DataTypes.VertexShader;
 
 namespace lib.dx11.draw
 {
 	[Guid("646f5988-0a76-4996-a538-ba48054fd0ad")]
-    public class VertexShader : Instance<VertexShader>, IDescriptiveFilename, IStatusProvider, IShaderOperator<VertexShaderD3D>
+    public class VertexShader : Instance<VertexShader>, IDescriptiveFilename, IStatusProvider, IShaderOperator<VertexShaderT3>
     {
         [Output(Guid = "ED31838B-14B5-4875-A0FC-DC427E874362")]
-        public readonly Slot<VertexShaderD3D> Shader = new();
+        public readonly Slot<VertexShaderT3> Shader = new();
 
         public VertexShader()
         {
@@ -33,21 +33,26 @@ namespace lib.dx11.draw
         public readonly InputSlot<string> DebugName = new();
         
         public IEnumerable<string> FileFilter => FileFilters;
-        private static readonly string[] FileFilters = ["*.hlsl"];
+        private static readonly string[] FileFilters = ["*.vert", "*.vert.hlsl", ResourceManager.DefaultShaderFilter];
 
         #region IShaderOperator implementation
-        private IShaderOperator<VertexShaderD3D> ShaderOperatorImpl => this;
-        InputSlot<string> IShaderOperator<VertexShaderD3D>.Path => Source;
-        InputSlot<string> IShaderOperator<VertexShaderD3D>.EntryPoint => EntryPoint;
-        InputSlot<string> IShaderOperator<VertexShaderD3D>.DebugName => DebugName;
-        Slot<VertexShaderD3D> IShaderOperator<VertexShaderD3D>.ShaderSlot => Shader;
+        private IShaderOperator<VertexShaderT3> ShaderOperatorImpl => this;
+        InputSlot<string> IShaderOperator<VertexShaderT3>.Path => Source;
+        InputSlot<string> IShaderOperator<VertexShaderT3>.EntryPoint => EntryPoint;
+        InputSlot<string> IShaderOperator<VertexShaderT3>.DebugName => DebugName;
+        Slot<VertexShaderT3> IShaderOperator<VertexShaderT3>.ShaderSlot => Shader;
+        string IShaderOperator<VertexShaderT3>.CachedEntryPoint { get; set; }
+        public void OnShaderUpdate(EvaluationContext context, VertexShaderT3 shader)
+        {
+            
+        }
         #endregion
         
         
         #region IStatusProvider implementation
         private readonly DefaultShaderStatusProvider _statusProviderImplementation = new ();
         public void SetWarning(string message) => _statusProviderImplementation.Warning = message;
-        string IShaderOperator<VertexShaderD3D>.CachedEntryPoint { get; set; }
+
         IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel() => _statusProviderImplementation.GetStatusLevel();
         string IStatusProvider.GetStatusMessage() => _statusProviderImplementation.GetStatusMessage();
         #endregion

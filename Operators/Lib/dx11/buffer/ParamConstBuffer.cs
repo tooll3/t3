@@ -15,7 +15,7 @@ namespace lib.dx11.buffer
 
         public ParamConstBuffer()
         {
-            Buffer.UpdateAction = Update;
+            Buffer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

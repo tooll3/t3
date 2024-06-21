@@ -22,8 +22,8 @@ namespace lib._3d.transform
  
         public Camera()
         {
-            Output.UpdateAction = UpdateOutputWithSubtree;
-            Reference.UpdateAction = UpdateCameraDefinition;
+            Output.UpdateAction += UpdateOutputWithSubtree;
+            Reference.UpdateAction += UpdateCameraDefinition;
             Reference.Value = this;
         }
 

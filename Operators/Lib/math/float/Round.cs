@@ -13,7 +13,7 @@ namespace lib.math.@float
 
         public Round()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

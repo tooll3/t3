@@ -13,7 +13,7 @@ namespace lib.@string.list
 
         public StringLength()
         {
-            Length.UpdateAction = Update;
+            Length.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

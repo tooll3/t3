@@ -35,13 +35,13 @@ namespace lib._3d.mesh._
         
         public AnalyzeMeshBuffers()
         {
-            MeshBufferCount.UpdateAction = Update;
-            SelectedIndexBufferStartPos.UpdateAction = Update;
-            SelectedVertexBufferStartPos.UpdateAction = Update;
-            TotalIndexCount.UpdateAction = Update;
-            TotalVertexCount.UpdateAction = Update;
-            SelectedIndexBuffer.UpdateAction = Update;
-            SelectedVertexBuffer.UpdateAction = Update;
+            MeshBufferCount.UpdateAction += Update;
+            SelectedIndexBufferStartPos.UpdateAction += Update;
+            SelectedVertexBufferStartPos.UpdateAction += Update;
+            TotalIndexCount.UpdateAction += Update;
+            TotalVertexCount.UpdateAction += Update;
+            SelectedIndexBuffer.UpdateAction += Update;
+            SelectedVertexBuffer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

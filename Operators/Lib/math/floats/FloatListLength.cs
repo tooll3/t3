@@ -14,7 +14,7 @@ namespace lib.math.floats
 
         public FloatListLength()
         {
-            Length.UpdateAction = Update;
+            Length.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

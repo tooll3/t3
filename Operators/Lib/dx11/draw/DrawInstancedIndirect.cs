@@ -17,7 +17,7 @@ namespace lib.dx11.draw
 
         public DrawInstancedIndirect()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

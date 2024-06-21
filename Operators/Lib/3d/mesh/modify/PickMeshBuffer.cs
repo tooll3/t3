@@ -16,7 +16,7 @@ namespace lib._3d.mesh.modify
         
         public PickMeshBuffer()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

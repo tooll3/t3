@@ -23,7 +23,7 @@ namespace lib.math.floats
 
         public ValuesToTexture()
         {
-            CurveTexture.UpdateAction = Update;
+            CurveTexture.UpdateAction += Update;
         }
 
         private float[] _floatBuffer = new float[0];

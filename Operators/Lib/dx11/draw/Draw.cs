@@ -27,7 +27,7 @@ namespace lib.dx11.draw
                     _registeredForStats = true;
                 }
             }
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

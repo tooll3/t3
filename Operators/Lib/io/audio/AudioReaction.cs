@@ -27,9 +27,9 @@ namespace lib.io.audio
         
         public AudioReaction()
         {
-            Level.UpdateAction = Update;
-            WasHit.UpdateAction = Update;
-            HitCount.UpdateAction = Update;
+            Level.UpdateAction += Update;
+            WasHit.UpdateAction += Update;
+            HitCount.UpdateAction += Update;
         }
 
         private double _lastEvalTime;

@@ -27,9 +27,9 @@ namespace user.pixtur.learning.cs._01_cca
         
         public InitCATransitionBuffer()
         {
-            OutBuffer.UpdateAction = Update;
-            TableLength.UpdateAction = Update;
-            WasUpdated.UpdateAction = Update;
+            OutBuffer.UpdateAction += Update;
+            TableLength.UpdateAction += Update;
+            WasUpdated.UpdateAction += Update;
         }
 
         private int _neighbourCount;

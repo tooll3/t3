@@ -13,7 +13,7 @@ namespace lib.types
 
         public Color()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

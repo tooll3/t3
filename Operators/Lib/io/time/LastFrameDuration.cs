@@ -15,7 +15,7 @@ namespace lib.io.time
         
         public LastFrameDuration()
         {
-            Duration.UpdateAction = Update;
+            Duration.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

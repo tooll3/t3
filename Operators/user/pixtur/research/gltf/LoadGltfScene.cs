@@ -45,8 +45,8 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
     public LoadGltfScene()
     {
-        ResultSetup.UpdateAction = Update;
-        Mesh.UpdateAction = Update;
+        ResultSetup.UpdateAction += Update;
+        Mesh.UpdateAction += Update;
     }
 
     private void Update(EvaluationContext context)
@@ -403,19 +403,18 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             const string sourcePath = @"cs\CombineGltfChannels-cs.hlsl";
             const string entryPoint = "main";
 
-            _combineChannelsComputeShaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, instance, () => entryPoint);
-            _combineChannelsComputeShaderResource.Changed += OnShaderChanged;
+            _combineChannelsComputeShaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, instance, () => entryPoint, OnShaderChanged);
 
-            OnShaderChanged(null, _combineChannelsComputeShaderResource.Value);
+            OnShaderChanged(_combineChannelsComputeShaderResource.Value);
         }
         
         if (!forceUpdate && _combineChannelsComputeShaderResource?.Value != null)
             return;
         
-        OnShaderChanged(null, _combineChannelsComputeShaderResource!.Value);
+        OnShaderChanged(_combineChannelsComputeShaderResource!.Value);
         return;
 
-        static void OnShaderChanged(object? sender, ComputeShader? e)
+        static void OnShaderChanged(ComputeShader? e)
         {
             if (e == null)
             {
@@ -423,10 +422,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                 return;
             }
             
-            if (_combineChannelsComputeShaderResource.TryGetValue(out var shader))
-            {
-                shader.Name = debugName;
-            }
+            e.Name = "CombineGltfChannels";
 
             var samplerDesc = new SamplerStateDescription
                                   {

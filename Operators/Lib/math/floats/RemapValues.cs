@@ -15,7 +15,7 @@ namespace lib.math.floats
 
         public RemapValues()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

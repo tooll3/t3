@@ -27,7 +27,7 @@ namespace lib._3d.mesh.generate
 
         public CubeMesh()
         {
-            Data.UpdateAction = Update;
+            Data.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

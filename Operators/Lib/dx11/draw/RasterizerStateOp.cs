@@ -18,7 +18,7 @@ namespace lib.dx11.draw
 
         public RasterizerStateOp()
         {
-            RasterizerState.UpdateAction = Update;
+            RasterizerState.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

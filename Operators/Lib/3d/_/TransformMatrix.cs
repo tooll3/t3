@@ -23,8 +23,8 @@ namespace lib._3d._
         
         public TransformMatrix()
         {
-            Result.UpdateAction = Update;
-            ResultInverted.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            ResultInverted.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

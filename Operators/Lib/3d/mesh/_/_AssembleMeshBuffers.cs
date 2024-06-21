@@ -15,7 +15,7 @@ namespace lib._3d.mesh._
         
         public _AssembleMeshBuffers()
         {
-            MeshBuffers.UpdateAction = Update;
+            MeshBuffers.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

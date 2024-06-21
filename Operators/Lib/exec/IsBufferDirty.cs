@@ -15,7 +15,7 @@ namespace Lib.exec
 
         public IsBufferDirty()
         {
-            HasChanged.UpdateAction = Update;
+            HasChanged.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

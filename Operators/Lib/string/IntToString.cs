@@ -14,7 +14,7 @@ namespace lib.@string
 
         public IntToString()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

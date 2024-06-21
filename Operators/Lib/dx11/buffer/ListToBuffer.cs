@@ -25,8 +25,8 @@ namespace lib.dx11.buffer
 
         public ListToBuffer()
         {
-            OutBuffer.UpdateAction = Update;
-            Length.UpdateAction = Update;
+            OutBuffer.UpdateAction += Update;
+            Length.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

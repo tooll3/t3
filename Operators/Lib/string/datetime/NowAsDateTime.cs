@@ -15,7 +15,7 @@ namespace lib.@string.datetime
 
         public NowAsDateTime()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

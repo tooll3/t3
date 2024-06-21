@@ -23,7 +23,7 @@ namespace lib.img.fx._
 
         public BuildAsciiFontSorting()
         {
-            MappingTexture.UpdateAction = Update;
+            MappingTexture.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

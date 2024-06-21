@@ -28,11 +28,11 @@ namespace lib.point._internal
 
         public AnalyzeBuffers()
         {
-            BufferCount.UpdateAction = Update;
-            StartPositionForSelected.UpdateAction = Update;
-            TotalSize.UpdateAction = Update;
-            SelectedBuffer.UpdateAction = Update;
-            Stride.UpdateAction = Update;
+            BufferCount.UpdateAction += Update;
+            StartPositionForSelected.UpdateAction += Update;
+            TotalSize.UpdateAction += Update;
+            SelectedBuffer.UpdateAction += Update;
+            Stride.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

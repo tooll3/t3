@@ -27,9 +27,9 @@ namespace lib.anim
 
         public FindKeyframes()
         {
-            Time.UpdateAction = Update;
-            Value.UpdateAction = Update;
-            KeyframeCount.UpdateAction = Update;
+            Time.UpdateAction += Update;
+            Value.UpdateAction += Update;
+            KeyframeCount.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

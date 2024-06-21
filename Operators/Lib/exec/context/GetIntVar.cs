@@ -15,7 +15,7 @@ namespace lib.exec.context
 
         public GetIntVar()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
             VariableName.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
         }
 

@@ -22,7 +22,7 @@ namespace lib.dx11.compute
 
         public ComputeShaderStage()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
             if (!_statsRegistered)
             {
                 RenderStatsCollector.RegisterProvider(this);

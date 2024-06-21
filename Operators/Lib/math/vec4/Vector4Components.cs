@@ -20,10 +20,10 @@ namespace lib.math.vec4
 
         public Vector4Components()
         {
-            X.UpdateAction = Update;
-            Y.UpdateAction = Update;
-            Z.UpdateAction = Update;
-            W.UpdateAction = Update;
+            X.UpdateAction += Update;
+            Y.UpdateAction += Update;
+            Z.UpdateAction += Update;
+            W.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

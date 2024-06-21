@@ -43,7 +43,7 @@ namespace lib.dx11.draw._internal
 
         public _DispatchSceneDraws()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

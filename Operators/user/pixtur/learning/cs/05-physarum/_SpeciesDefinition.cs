@@ -17,7 +17,7 @@ namespace user.pixtur.learning.cs._05_physarum
         
         public _SpeciesDefinition()
         {
-            OutBuffer.UpdateAction = Update;
+            OutBuffer.UpdateAction += Update;
             _slots = new List<IInputSlot>()
                          {
                              ComfortZones,

@@ -21,7 +21,7 @@ namespace lib.dx11
 
         public GpuMeasure()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
 
             _d3dDevice = ResourceManager.Device;
             _queryTimeStampDisjoint = new GpuQuery(_d3dDevice, new QueryDescription() { Type = QueryType.TimestampDisjoint });

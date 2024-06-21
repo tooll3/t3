@@ -13,7 +13,7 @@ namespace lib.math.@int
 
         public IntValue()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

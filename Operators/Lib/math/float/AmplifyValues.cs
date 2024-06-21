@@ -16,7 +16,7 @@ namespace lib.math.@float
 
         public AmplifyValues()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -13,7 +13,7 @@ namespace lib.math.vec4
 
         public RgbaToColor()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

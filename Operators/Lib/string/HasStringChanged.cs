@@ -15,7 +15,7 @@ namespace lib.@string
         
         public HasStringChanged()
         {
-            HasChanged.UpdateAction = Update;
+            HasChanged.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

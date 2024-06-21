@@ -23,7 +23,7 @@ namespace lib.math.curve
 
         public CurvesToTexture()
         {
-            CurveTexture.UpdateAction = Update;
+            CurveTexture.UpdateAction += Update;
         }
 
         private readonly List<Curve> _curves = new(4);

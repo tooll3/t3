@@ -23,8 +23,8 @@ namespace lib.io.file
 
         public FilesInFolder()
         {
-            Files.UpdateAction = Update;
-            NumberOfFiles.UpdateAction = Update;
+            Files.UpdateAction += Update;
+            NumberOfFiles.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

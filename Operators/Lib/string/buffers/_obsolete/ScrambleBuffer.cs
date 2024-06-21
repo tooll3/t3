@@ -17,7 +17,7 @@ namespace lib.@string.buffers._obsolete
         
         public ScrambleBuffer()
         {
-            Builder.UpdateAction = Update;
+            Builder.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

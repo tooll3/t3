@@ -21,7 +21,7 @@ namespace Lib.img.video
         
         public PlayAudioClip()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
             
         private void Update(EvaluationContext context)

@@ -28,10 +28,10 @@ namespace lib.io.audio._obsolete
 
         public SoundTrackLevels()
         {
-            Level.UpdateAction = Update;
-            BeatIndex.UpdateAction = Update;
-            Loudness.UpdateAction = Update;
-            Level.UpdateAction = Update;
+            Level.UpdateAction += Update;
+            BeatIndex.UpdateAction += Update;
+            Loudness.UpdateAction += Update;
+            Level.UpdateAction += Update;
         }
         
 

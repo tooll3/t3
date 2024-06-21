@@ -30,10 +30,10 @@ namespace lib._3d.rendering._
 
         public GetCamProperties2()
         {
-            CameraCount.UpdateAction = Update;
-            Position.UpdateAction = Update;
-            CamToWorldRows.UpdateAction = Update;
-            WorldToClipSpaceRows.UpdateAction = Update;
+            CameraCount.UpdateAction += Update;
+            Position.UpdateAction += Update;
+            CamToWorldRows.UpdateAction += Update;
+            WorldToClipSpaceRows.UpdateAction += Update;
         }
 
         private List<ICameraPropertiesProvider> _cameraInstances = new();

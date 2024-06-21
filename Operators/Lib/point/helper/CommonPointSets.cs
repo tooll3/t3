@@ -33,8 +33,8 @@ namespace lib.point.helper
             if (!_initialized)
                 Init();
             
-            CpuBuffer.UpdateAction = Update;
-            GpuBuffer.UpdateAction = Update;
+            CpuBuffer.UpdateAction += Update;
+            GpuBuffer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -21,9 +21,9 @@ namespace lib.io.audio._obsolete
 
         public _LegacyAudioReaction()
         {
-            Level.UpdateAction = Update;
-            PeakCount.UpdateAction = Update;
-            PeakDetected.UpdateAction = Update;
+            Level.UpdateAction += Update;
+            PeakCount.UpdateAction += Update;
+            PeakDetected.UpdateAction += Update;
         }
 
         private double _lastEvalTime = 0;

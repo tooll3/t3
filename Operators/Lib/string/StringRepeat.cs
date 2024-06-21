@@ -15,7 +15,7 @@ namespace lib.@string
 
         public StringRepeat()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -28,7 +28,7 @@ namespace lib.point.helper
 
         public LoadObjAsPoints()
         {
-            Points.UpdateAction = Update;
+            Points.UpdateAction += Update;
         }
 
         private static int[][] _sortAxisAndDirections =

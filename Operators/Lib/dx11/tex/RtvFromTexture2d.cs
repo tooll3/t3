@@ -20,7 +20,7 @@ namespace lib.dx11.tex
 
         public RtvFromTexture2d()
         {
-            RenderTargetView.UpdateAction = Update;
+            RenderTargetView.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

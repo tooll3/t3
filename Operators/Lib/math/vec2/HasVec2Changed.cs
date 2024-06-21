@@ -20,8 +20,8 @@ namespace lib.math.vec2
         
         public HasVec2Changed()
         {
-            HasChanged.UpdateAction = Update;
-            Delta.UpdateAction = Update;
+            HasChanged.UpdateAction += Update;
+            Delta.UpdateAction += Update;
         }
 
         private double _lastEvalTime = 0;

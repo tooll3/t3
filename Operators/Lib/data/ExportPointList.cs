@@ -18,7 +18,7 @@ namespace lib.data
         
         public ExportPointList()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
             
             
         }

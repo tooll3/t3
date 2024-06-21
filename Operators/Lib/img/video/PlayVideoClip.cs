@@ -49,8 +49,8 @@ namespace lib.img.video
 
         public PlayVideoClip()
         {
-            Texture.UpdateAction = Update;
-            TimeSlot.UpdateAction = Update;
+            Texture.UpdateAction += Update;
+            TimeSlot.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

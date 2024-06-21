@@ -16,7 +16,7 @@ namespace lib.img.fx._
 
         public ColorGradeConstBuffer()
         {
-            Buffer.UpdateAction = Update;
+            Buffer.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

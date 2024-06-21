@@ -13,7 +13,7 @@ namespace lib.math.@float
 
         public Abs()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

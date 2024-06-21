@@ -24,7 +24,7 @@ namespace lib.color
 
         public PickColorFromImage()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction += Update;
         }
 
         private unsafe void Update(EvaluationContext context)

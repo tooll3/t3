@@ -19,7 +19,7 @@ namespace lib.point._internal
 
         public _MixPoints()
         {
-            Result.UpdateAction = Update;
+            Result.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

@@ -15,8 +15,8 @@ namespace lib.math.vec2
 
         public Vector2Components()
         {
-            X.UpdateAction = Update;
-            Y.UpdateAction = Update;
+            X.UpdateAction += Update;
+            Y.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

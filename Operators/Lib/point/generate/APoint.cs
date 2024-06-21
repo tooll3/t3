@@ -34,9 +34,9 @@ namespace lib.point.generate
         public APoint()
         {
             UpdateBuffer(); // Force update when application starts (needed for executable export)
-            Buffer.UpdateAction = UpdateWithBuffer;
-            ResultList.UpdateAction = Update;
-            OutPosition.UpdateAction = Update;
+            Buffer.UpdateAction += UpdateWithBuffer;
+            ResultList.UpdateAction += Update;
+            OutPosition.UpdateAction += Update;
             _pointListWithSeparator.TypedElements[1] = Point.Separator();
 
         }

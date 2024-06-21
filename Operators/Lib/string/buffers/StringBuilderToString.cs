@@ -14,7 +14,7 @@ namespace lib.@string.buffers
         
         public StringBuilderToString()
         {
-            String.UpdateAction = Update;
+            String.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)

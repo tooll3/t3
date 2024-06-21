@@ -20,9 +20,9 @@ namespace lib.anim._obsolete
 
         public __ObsoletePulsate()
         {
-            Result.UpdateAction = Update;
-            Counter.UpdateAction = Update;
-            Bang.UpdateAction = Update;
+            Result.UpdateAction += Update;
+            Counter.UpdateAction += Update;
+            Bang.UpdateAction += Update;
         }
 
         private void Update (EvaluationContext context)

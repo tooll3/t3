@@ -18,9 +18,9 @@ namespace lib.math.vec3
 
         public Vector3Components()
         {
-            X.UpdateAction = Update;
-            Y.UpdateAction = Update;
-            Z.UpdateAction = Update;
+            X.UpdateAction += Update;
+            Y.UpdateAction += Update;
+            Z.UpdateAction += Update;
         }
 
         private void Update(EvaluationContext context)
