@@ -129,9 +129,10 @@ namespace T3.Editor.Gui.OutputUi
                             && currentColorDesc.Height == size.Height
                             && currentColorDesc.Format == format)
                             return false; // nothing changed
+                        
+                        _colorBuffer.Dispose();
                     }
 
-                    _colorBuffer?.Dispose();
                     _colorBufferSrv?.Dispose();
                     _colorBufferRtv?.Dispose();
 
@@ -152,22 +153,14 @@ namespace T3.Editor.Gui.OutputUi
                     Utilities.Dispose(ref _depthBufferDsv);
                     Utilities.Dispose(ref _depthBuffer);
 
-                    var depthDesc = new Texture2DDescription()
+                    var depthDesc = DefaultDepthDescription with
                                         {
-                                            ArraySize = 1,
-                                            BindFlags = BindFlags.DepthStencil | BindFlags.ShaderResource,
-                                            CpuAccessFlags = CpuAccessFlags.None,
-                                            Format = Format.R32_Typeless,
                                             Width = size.Width,
                                             Height = size.Height,
-                                            MipLevels = 1,
-                                            OptionFlags = ResourceOptionFlags.None,
-                                            SampleDescription = new SampleDescription(1, 0),
-                                            Usage = ResourceUsage.Default
                                         };
 
                     _depthBuffer = ResourceManager.CreateTexture2D(depthDesc);
-                    var depthViewDesc = new DepthStencilViewDescription()
+                    var depthViewDesc = new DepthStencilViewDescription
                                             {
                                                 Format = Format.D32_Float,
                                                 Dimension = DepthStencilViewDimension.Texture2D
@@ -190,7 +183,7 @@ namespace T3.Editor.Gui.OutputUi
         private static readonly Texture2DDescription DefaultColorDescription = new()
                                                                                    {
                                                                                        ArraySize = 1,
-                                                                                       BindFlags = BindFlags.DepthStencil | BindFlags.ShaderResource,
+                                                                                       BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource,
                                                                                        CpuAccessFlags = CpuAccessFlags.None,
                                                                                        MipLevels = 1,
                                                                                        OptionFlags = ResourceOptionFlags.None,
@@ -198,6 +191,19 @@ namespace T3.Editor.Gui.OutputUi
                                                                                        Usage = ResourceUsage.Default
                                                                                    };
 
+        private static readonly Texture2DDescription DefaultDepthDescription = new()
+                                                                                   {
+                                                                                       ArraySize = 1,
+                                                                                       BindFlags = BindFlags.DepthStencil | BindFlags.ShaderResource,
+                                                                                       CpuAccessFlags = CpuAccessFlags.None,
+                                                                                       Format = Format.R32_Typeless,
+                                                                                       Width = 1,
+                                                                                       Height = 1,
+                                                                                       MipLevels = 1,
+                                                                                       OptionFlags = ResourceOptionFlags.None,
+                                                                                       SampleDescription = new SampleDescription(1, 0),
+                                                                                       Usage = ResourceUsage.Default
+                                                                                   };
         private Texture2D _colorBuffer;
         private ShaderResourceView _colorBufferSrv;
         
