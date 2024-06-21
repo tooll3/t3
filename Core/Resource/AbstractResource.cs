@@ -77,8 +77,11 @@ namespace T3.Core.Resource
                                 
 
             // update slot value when file is moved
-            _onFileMoved += (newPath) =>
+            _onFileMoved += newPath =>
                             {
+                                if(_slot.IsConnected)
+                                    return;
+                                
                                 if (ResourceManager.TryConvertToRelativePath(newPath, out var relativePath))
                                     newPath = relativePath;
 
