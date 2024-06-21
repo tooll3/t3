@@ -108,23 +108,20 @@ public interface IShaderOperator<T> : IDescriptiveFilename where T : AbstractSha
 
     void Initialize()
     {
-        EntryPoint.UpdateAction += context =>
-                                  {
-                                      CachedEntryPoint = EntryPoint.GetValue(context);
-                                      ShaderSlot.DirtyFlag.Invalidate();
-                                  };
-        
         var resource = ResourceManager.CreateShaderResource<T>(Path, () => CachedEntryPoint);
-        ShaderResources[this] = resource;
-        
         ShaderSlot.UpdateAction = context =>
                                   {
-                                      Path.Update(context);
-                                      var shader = resource.Value;
+                                      if (!Path.DirtyFlag.IsDirty && EntryPoint.DirtyFlag.IsDirty)
+                                      {
+                                          // we still need to recompile if the entrypoint changes
+                                          resource.MarkFileAsChanged();
+                                      }
+                                      
+                                      CachedEntryPoint = EntryPoint.GetValue(context);
+                                      
+                                      var shader = resource.GetValue(context);
                                       ShaderSlot.Value = shader;
                                       OnShaderUpdate(context, shader);
                                   };
     }
-
-    private static readonly ConcurrentDictionary<IShaderOperator<T>, Resource<T>> ShaderResources = new();
 }
