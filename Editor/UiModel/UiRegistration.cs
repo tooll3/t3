@@ -14,14 +14,14 @@ using T3.Editor.Gui.InputUi.SingleControl;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
-using ComputeShader = T3.Core.DataTypes.ComputeShader;
-using GeometryShader = T3.Core.DataTypes.GeometryShader;
 using Int3 = T3.Core.DataTypes.Vector.Int3;
-using PixelShader = T3.Core.DataTypes.PixelShader;
 using Point = T3.Core.DataTypes.Point;
 using Texture2D = T3.Core.DataTypes.Texture2D;
 using Texture3D = T3.Core.DataTypes.Texture3D;
+using PixelShader = T3.Core.DataTypes.PixelShader;
 using VertexShader = T3.Core.DataTypes.VertexShader;
+using ComputeShader = T3.Core.DataTypes.ComputeShader;
+using GeometryShader = T3.Core.DataTypes.GeometryShader;
 
 namespace T3.Editor.UiModel;
 
@@ -141,7 +141,7 @@ internal static class UiRegistration
 
         RegisterUiType(typeof(SharpDX.Direct3D11.InputLayout), new ShaderUiProperties(), () => new FallbackInputUi<InputLayout>(),
                        () => new ValueOutputUi<InputLayout>());
-        RegisterUiType(typeof(SharpDX.Direct3D11.PixelShader), new ShaderUiProperties(), () => new FallbackInputUi<PixelShader>(),
+        RegisterUiType(typeof(PixelShader), new ShaderUiProperties(), () => new FallbackInputUi<PixelShader>(),
                        () => new ValueOutputUi<PixelShader>());
         RegisterUiType(typeof(SharpDX.Direct3D11.RasterizerState), new ShaderUiProperties(), () => new FallbackInputUi<RasterizerState>(),
                        () => new ValueOutputUi<RasterizerState>());
@@ -158,9 +158,9 @@ internal static class UiRegistration
                        () => new ValueOutputUi<SamplerState>());
         RegisterUiType(typeof(SharpDX.Direct3D11.ShaderResourceView), new TextureUiProperties(), () => new FallbackInputUi<ShaderResourceView>(),
                        () => new ShaderResourceViewOutputUi());
-        RegisterUiType(typeof(SharpDX.Direct3D11.Texture2D), new TextureUiProperties(), () => new FallbackInputUi<Texture2D>(),
+        RegisterUiType(typeof(Texture2D), new TextureUiProperties(), () => new FallbackInputUi<Texture2D>(),
                        () => new Texture2dOutputUi());
-        RegisterUiType(typeof(SharpDX.Direct3D11.Texture3D), new ShaderUiProperties(), () => new FallbackInputUi<Texture3D>(),
+        RegisterUiType(typeof(Texture3D), new ShaderUiProperties(), () => new FallbackInputUi<Texture3D>(),
                        () => new ValueOutputUi<SharpDX.Direct3D11.Texture3D>());
         RegisterUiType(typeof(SharpDX.Direct3D11.TextureAddressMode), new ShaderUiProperties(), () => new EnumInputUi<TextureAddressMode>(),
                        () => new ValueOutputUi<TextureAddressMode>());
@@ -169,7 +169,7 @@ internal static class UiRegistration
         RegisterUiType(typeof(SharpDX.Direct3D11.UnorderedAccessViewBufferFlags), new ShaderUiProperties(),
                        () => new EnumInputUi<UnorderedAccessViewBufferFlags>(),
                        () => new ValueOutputUi<UnorderedAccessViewBufferFlags>());
-        RegisterUiType(typeof(SharpDX.Direct3D11.VertexShader), new ShaderUiProperties(), () => new FallbackInputUi<VertexShader>(),
+        RegisterUiType(typeof(VertexShader), new ShaderUiProperties(), () => new FallbackInputUi<VertexShader>(),
                        () => new ValueOutputUi<VertexShader>());
         RegisterUiType(typeof(SharpDX.DXGI.Format), new ShaderUiProperties(), () => new EnumInputUi<Format>(), () => new ValueOutputUi<Format>());
         RegisterUiType(typeof(SharpDX.Mathematics.Interop.RawViewportF), new ShaderUiProperties(), () => new FallbackInputUi<RawViewportF>(),

@@ -140,7 +140,7 @@ namespace T3.Editor
                 var innerException = uiException.InnerException?.Message.Replace("\\r", "\r") ?? string.Empty;
                 BlockingWindow.Instance.ShowMessageBox($"Loading Operators failed:\n\n{uiException.Message}\n{innerException}\n\n" +
                                             $"This is liked caused by a corrupted operator file." +
-                                            $"\nPlease try restarting and restore backup.",
+                                            $"\nPlease try restarting and restore backup.\n\n" + uiException,
                                             @"Error", "Ok");
                 EditorUi.Instance.ExitApplication();
             }

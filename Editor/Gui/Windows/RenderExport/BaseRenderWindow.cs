@@ -1,15 +1,12 @@
 using System.IO;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes;
 using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
-using T3.Editor.SystemUi;
-using T3.SystemUi;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
@@ -285,7 +282,7 @@ public abstract class BaseRenderWindow : Window
         return new List<Window>();
     }
 
-    protected static bool FindIssueWithTexture(Texture2D texture, List<Format> supportedInputFormats, out string warning)
+    protected static bool FindIssueWithTexture(Texture2D texture, List<SharpDX.DXGI.Format> supportedInputFormats, out string warning)
     {
         if (texture == null || texture.IsDisposed)
         {
