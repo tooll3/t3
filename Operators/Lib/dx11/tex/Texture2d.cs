@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
@@ -12,12 +13,12 @@ using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.dx11.tex
 {
-	[Guid("f52db9a4-fde9-49ca-9ef7-131825c34e65")]
+    [Guid("f52db9a4-fde9-49ca-9ef7-131825c34e65")]
     public class Texture2d : Instance<Texture2d>
     {
         [Output(Guid = "{007129E4-0EAE-4CB9-A142-90C1C171A5FB}")]
         public readonly Slot<Texture2D> Texture = new();
-        
+
         private Texture2D _texture2dResource;
 
         public Texture2d()
@@ -36,8 +37,7 @@ namespace lib.dx11.tex
 
             var requestedMipLevels = MipLevels.GetValue(context);
             var maxMapLevels = (int)Math.Log2(Math.Max(size.Width, size.Height));
-            var mipLevels = Math.Min(requestedMipLevels, maxMapLevels)+1;
-            
+            var mipLevels = Math.Min(requestedMipLevels, maxMapLevels) + 1;
 
             try
             {
@@ -55,16 +55,43 @@ namespace lib.dx11.tex
                                       CpuAccessFlags = CpuAccessFlags.GetValue(context),
                                       OptionFlags = ResourceOptionFlags.GetValue(context)
                                   };
-                if(ResourceManager.ReplaceTexture2DIfNeeded(texDesc, ref _texture2dResource))
+
+                if (ReplaceTexture2DIfNeeded(texDesc, ref _texture2dResource))
                 {
                     Texture.Value = _texture2dResource;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Error($"[{nameof(Texture2d)}] Failed to create Texture2d: {e.Message}", this);
             }
+
             //ResourceManager.Instance().id .TestId = _textureResId;
+            return;
+
+            static bool ReplaceTexture2DIfNeeded(Texture2DDescription description, [NotNullWhen(true)] ref Texture2D? texture)
+            {
+                var shouldCreateNew = texture == null;
+                try
+                {
+                    shouldCreateNew = shouldCreateNew || !EqualityComparer<Texture2DDescription>.Default.Equals(texture!.Description, description);
+                }
+                catch (Exception e)
+                {
+                    shouldCreateNew = true;
+                    Log.Warning($"Failed to get texture description: {e}");
+                }
+
+                if (shouldCreateNew)
+                {
+                    texture?.Dispose();
+                    texture = ResourceManager.CreateTexture2D(description);
+                    return true;
+                }
+
+                // unchanged
+                return false;
+            }
         }
 
         [Input(Guid = "{B77088A9-2676-4CAA-809A-5E0F120D25D7}")]

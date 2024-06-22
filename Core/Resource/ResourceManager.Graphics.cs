@@ -370,29 +370,6 @@ public sealed partial class ResourceManager
         return new Texture3D(dxTexture);
     }
 
-    public static bool ReplaceTexture2DIfNeeded(Texture2DDescription description, [NotNullWhen(true)] ref Texture2D? texture)
-    {
-        var shouldCreateNew = texture == null;
-        try
-        {
-            shouldCreateNew = shouldCreateNew || !EqualityComparer<Texture2DDescription>.Default.Equals(texture!.Description, description);
-        }
-        catch (Exception e)
-        {
-            shouldCreateNew = true;
-            Log.Warning($"Failed to get texture description: {e}");
-        }
-
-        if (shouldCreateNew)
-        {
-            texture?.Dispose();
-            texture = CreateTexture2D(description);
-            return true;
-        }
-
-        // unchanged
-        return false;
-    }
 
     public static bool CreateTexture3d(Texture3DDescription description, [NotNullWhen(true)] ref Texture3D? texture)
     {
