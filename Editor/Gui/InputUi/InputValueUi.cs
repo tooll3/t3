@@ -55,8 +55,8 @@ namespace T3.Editor.Gui.InputUi
         public string Description { get; set; }
         #endregion
 
-        private const float ConnectionAreaWidth = 30.0f;
-        private static float ParameterNameWidth => MathF.Max( ImGui.GetTextLineHeight() * 120.0f / 16, ImGui.GetWindowWidth() * 0.3f);
+        private const float ConnectionAreaWidth = 25.0f;
+        private static float ParameterNameWidth => MathF.Max( ImGui.GetTextLineHeight() * 130.0f / 16, ImGui.GetWindowWidth() * 0.35f);
 
         public SymbolUi Parent { get; set; }
         public Symbol.InputDefinition InputDefinition { get; set; }
@@ -123,9 +123,7 @@ namespace T3.Editor.Gui.InputUi
                 return editState;
 
             if (inputSlot.Input == null)
-            {
                 return InputEditStateFlags.Nothing;
-            }
             
             var name = inputSlot.Input.Name;
             var typeColor = TypeUiRegistry.Entries[Type].Color;
@@ -583,7 +581,7 @@ namespace T3.Editor.Gui.InputUi
                 ImGui.PopStyleVar();
 
                 // Draw control
-                ImGui.PushItemWidth(200.0f);
+                //ImGui.PushItemWidth(200.0f);
                 ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? UiColors.TextMuted.Rgba : UiColors.ForegroundFull.Rgba);
                 if (input.IsDefault)
                 {
@@ -608,7 +606,7 @@ namespace T3.Editor.Gui.InputUi
                 input.IsDefault &= (editState & InputEditStateFlags.Modified) != InputEditStateFlags.Modified;
 
                 ImGui.PopStyleColor();
-                ImGui.PopItemWidth();
+                //ImGui.PopItemWidth();
                 return editState;
             }
             #endregion
