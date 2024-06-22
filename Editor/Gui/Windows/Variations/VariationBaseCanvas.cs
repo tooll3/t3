@@ -44,7 +44,7 @@ namespace T3.Editor.Gui.Windows.Variations
             if (instanceForBlending != _instanceForBlending || pinnedOutputChanged)
             {
                 _instanceForBlending = instanceForBlending;
-                RefreshView();
+                RefreshView(hideHeader);
             }
 
             //UpdateCanvas();
@@ -403,7 +403,7 @@ namespace T3.Editor.Gui.Windows.Variations
             _allThumbnailsRendered = false;
         }
 
-        protected void ResetView()
+        protected void ResetView(bool hideHide = false)
         {
             var pool = PoolForBlendOperations;
             if (pool == null)
@@ -411,7 +411,10 @@ namespace T3.Editor.Gui.Windows.Variations
 
             if (TryToGetBoundingBox(pool.Variations, 40, out var area))
             {
-                area.Min.Y -= 200;
+                if (!hideHide)
+                {
+                    area.Min.Y -= 150;
+                }
                 FitAreaOnCanvas(area);
             }
         }
@@ -547,11 +550,11 @@ namespace T3.Editor.Gui.Windows.Variations
         #endregion
 
         #region layout and view
-        public void RefreshView()
+        public void RefreshView(bool hideHeader = false)
         {
             TriggerThumbnailUpdate();
             Selection.Clear();
-            ResetView();
+            ResetView(hideHeader);
         }
 
         private static bool TryToGetBoundingBox(List<Variation> variations, float extend, out ImRect area)
@@ -589,7 +592,7 @@ namespace T3.Editor.Gui.Windows.Variations
         /// </summary>
         internal static Vector2 FindFreePositionForNewThumbnail(List<Variation> variations)
         {
-            if (!TryToGetBoundingBox(variations, 0, out var area))
+            if (variations.Count == 0 || !TryToGetBoundingBox(variations, 0, out var area))
             {
                 return Vector2.Zero;
             }
