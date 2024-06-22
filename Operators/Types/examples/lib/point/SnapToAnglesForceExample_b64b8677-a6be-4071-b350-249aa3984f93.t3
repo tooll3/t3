@@ -1256,7 +1256,7 @@
           "Value": 18
         },
         {
-          "Id": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*SubdivisionThreshold*/,
+          "Id": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*Threshold*/,
           "Type": "System.Single",
           "Value": 0.04
         },
