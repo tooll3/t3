@@ -108,6 +108,7 @@ public sealed class WindowHelper
     
     private void DebugMouse(string callsite)
     {
+        return;
         var mice = _inputContext!.Mice;
         int mCounter = 0;
         int wCounter = 0;
