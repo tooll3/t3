@@ -373,10 +373,9 @@ public sealed partial class ResourceManager
     public static bool ReplaceTexture2DIfNeeded(Texture2DDescription description, [NotNullWhen(true)] ref Texture2D? texture)
     {
         var shouldCreateNew = texture == null;
-        SharpDX.Direct3D11.Texture2D dxTexture = texture;
         try
         {
-            shouldCreateNew = shouldCreateNew || !EqualityComparer<Texture2DDescription>.Default.Equals(dxTexture!.Description, description);
+            shouldCreateNew = shouldCreateNew || !EqualityComparer<Texture2DDescription>.Default.Equals(texture!.Description, description);
         }
         catch (Exception e)
         {

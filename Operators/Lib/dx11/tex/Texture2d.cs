@@ -62,7 +62,7 @@ namespace lib.dx11.tex
             }
             catch(Exception e)
             {
-                Log.Error($"Failed to create Texture2d: {e.Message}", this);
+                Log.Error($"[{nameof(Texture2d)}] Failed to create Texture2d: {e.Message}", this);
             }
             //ResourceManager.Instance().id .TestId = _textureResId;
         }
