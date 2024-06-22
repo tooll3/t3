@@ -64,6 +64,8 @@ namespace lib.io.file
             var needsUpdate = _dirtyFile || Scale.IsDirty || CenterToBounds.IsDirty || ScaleToBounds.IsDirty ||  ImportAs.IsDirty || ReduceFactor.IsDirty;
             if (!needsUpdate)
                 return;
+
+            _dirtyFile = false;
             
             if(!_svgResource.TryGetValue(context, out var svgDoc))
             {
@@ -277,6 +279,6 @@ namespace lib.io.file
         }
 
         private static ISvgRenderer _svgRenderer;
-        private bool _dirtyFile;
+        private bool _dirtyFile = true;
     }
 }

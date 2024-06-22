@@ -42,14 +42,16 @@ namespace lib._3d._
         
         private void UpdateMesh(EvaluationContext context)
         {
+            if (!_fontResource.TryGetValue(context, out var font))
+            {
+                return;
+            }
+            
             var text = Text.GetValue(context);
             if (string.IsNullOrEmpty(text) )
             {
                 text = " ";
             }
-
-            if (_font == null)
-                return;
 
             var lineNumber = 0;
             var horizontalAlign = (BmFontDescription.HorizontalAligns)HorizontalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(BmFontDescription.HorizontalAligns)).Length -1);
@@ -57,15 +59,15 @@ namespace lib._3d._
             
             var characterSpacing = Spacing.GetValue(context);
             var lineHeight = LineHeight.GetValue(context);
-            var scaleFactor = 1.0 / _font.BmFont.Info.Size * 0.00185; 
+            var scaleFactor = 1.0 / font.BmFont.Info.Size * 0.00185; 
             var size = (float)(Size.GetValue(context)  * scaleFactor); // Scaling to match 1080p 72DPI pt font sizes 
             var position = Position.GetValue(context);
 
             var numLinesInText = text.Split('\n').Length;
 
             var color = Color.GetValue(context);
-            float textureWidth = _font.BmFont.Common.ScaleW;
-            float textureHeight = _font.BmFont.Common.ScaleH;
+            float textureWidth = font.BmFont.Common.ScaleW;
+            float textureHeight = font.BmFont.Common.ScaleH;
             float cursorX = 0;
             float cursorY = 0;
             const float sdfWidth = 5f; // assumption after some experiments
@@ -73,14 +75,14 @@ namespace lib._3d._
             switch (verticalAlign)
             {
                 case BmFontDescription.VerticalAligns.Top:
-                    cursorY = _font.BmFont.Common.Base * (1 + sdfWidth / _font.BmFont.Info.Size);
+                    cursorY = font.BmFont.Common.Base * (1 + sdfWidth / font.BmFont.Info.Size);
                     break;
                 case BmFontDescription.VerticalAligns.Middle:
-                    cursorY = _font.BmFont.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2 + _font.BmFont.Common.LineHeight / 2f +
-                              _font.BmFont.Common.Base * (sdfWidth / _font.BmFont.Info.Size);
+                    cursorY = font.BmFont.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2 + font.BmFont.Common.LineHeight / 2f +
+                              font.BmFont.Common.Base * (sdfWidth / font.BmFont.Info.Size);
                     break;
                 case BmFontDescription.VerticalAligns.Bottom:
-                    cursorY = _font.BmFont.Common.LineHeight * lineHeight * numLinesInText;
+                    cursorY = font.BmFont.Common.LineHeight * lineHeight * numLinesInText;
                     break;
             }
 
@@ -101,7 +103,7 @@ namespace lib._3d._
                 {
                     AdjustLineAlignment();
 
-                    cursorY -= _font.BmFont.Common.LineHeight * lineHeight;
+                    cursorY -= font.BmFont.Common.LineHeight * lineHeight;
                     cursorX = 0;
                     currentLineCharacterCount = 0;
                     lastChar = 0;
@@ -109,7 +111,7 @@ namespace lib._3d._
                     continue;
                 }
 
-                if (!_font.InfoForCharacter.TryGetValue(c, out var charInfo))
+                if (!font.InfoForCharacter.TryGetValue(c, out var charInfo))
                 {
                     lastChar = 0;
                     continue;
@@ -120,7 +122,7 @@ namespace lib._3d._
                 if (lastChar != 0)
                 {
                     int key = lastChar | c;
-                    if (_font.KerningForPairs.TryGetValue(key, out var kerning2))
+                    if (font.KerningForPairs.TryGetValue(key, out var kerning2))
                     {
                         cursorX += kerning2;
                     }
@@ -192,7 +194,6 @@ namespace lib._3d._
             }
         }
 
-        private BmFontDescription _font;
         private BufferLayout[] _bufferContent;
         private Resource<BmFontDescription> _fontResource;
 
