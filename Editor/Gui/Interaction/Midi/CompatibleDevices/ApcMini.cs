@@ -8,7 +8,8 @@ using T3.Editor.Gui.Interaction.Variations.Model;
 namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 
 [SuppressMessage("ReSharper", "UnusedMember.Local")]
-[MidiDeviceProduct("APC MINI")]
+
+[MidiDeviceProduct("APC MINI;APC mini mk2")]
 public class ApcMini : CompatibleMidiDevice
 {
     public ApcMini()

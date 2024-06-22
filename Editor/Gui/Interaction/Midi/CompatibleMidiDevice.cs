@@ -13,7 +13,7 @@ namespace T3.Editor.Gui.Interaction.Midi;
 
 /// <summary>
 /// Combines midi signals related to Variations into triggers and invokes matching <see cref="CommandTriggerCombination"/>s.
-/// Allow allows to update the status of midi devices, e.g. for controlling LEDs to indicate available or active variations.
+/// Allow to update the status of midi devices, e.g. for controlling LEDs to indicate available or active variations.
 /// </summary>
 /// <remarks>
 /// This is NOT related to the MidiInput operator: Both are registered as independent <see cref="MidiConnectionManager.IMidiConsumer"/>
@@ -277,8 +277,8 @@ public class MidiDeviceProductAttribute : Attribute
 {
     public MidiDeviceProductAttribute(string productName)
     {
-        ProductName = productName;
+        ProductNames =  productName.Split(';');
     }
 
-    public string ProductName { get; set; }
+    public string[] ProductNames { get; }
 }
