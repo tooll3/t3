@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.Variations;
 
@@ -11,6 +12,6 @@ public  class ParameterGroupUi
     
     public  void DrawContent()
     {
-        ImGui.Text(" Hello there!\nTgeasdfkhasdkf");
+        CustomComponents.EmptyWindowMessage("Not implemented yet.");
     }
 }

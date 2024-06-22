@@ -134,8 +134,8 @@ namespace T3.Core.Operator
         
 
         private bool _isBypassed;
-        
-        private bool IsBypassable()
+
+        public bool IsBypassable()
         {
             if(Symbol.OutputDefinitions.Count == 0)
                 return false;

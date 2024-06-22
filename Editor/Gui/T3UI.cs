@@ -405,7 +405,10 @@ public class T3Ui
             UserSettings.Config.ShowMainMenu = true;
             UserSettings.Config.ShowTitleAndDescription = true;
             UserSettings.Config.ShowToolbar = true;
-            UserSettings.Config.ShowTimeline = true;
+            if (Playback.Current.Settings.Syncing == PlaybackSettings.SyncModes.Timeline)
+            {
+                UserSettings.Config.ShowTimeline = true;
+            }
         }
             
     }
