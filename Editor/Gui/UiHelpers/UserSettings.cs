@@ -63,6 +63,8 @@ namespace T3.Editor.Gui.UiHelpers
             public bool AdjustCameraSpeedWithMouseWheel = false;
             public float CameraSpeed = 1;
 
+            public bool MiddleMouseButtonZooms = false;
+
             public TimeLineCanvas.FrameStepAmount FrameStepAmount = TimeLineCanvas.FrameStepAmount.FrameAt30Fps;
             
             public bool MouseWheelEditsNeedCtrlKey = true;

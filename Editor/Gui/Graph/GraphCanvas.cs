@@ -303,7 +303,27 @@ namespace T3.Editor.Gui.Graph
                     
                     if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
                     {
-                        PinSelectedToOutputWindow();
+                        if (UserSettings.Config.FocusMode)
+                        {
+                            var selectedImage = NodeSelection.GetFirstSelectedInstance();
+                            if (selectedImage != null)
+                            {
+                                GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
+                            }
+                        }
+                        else
+                        {
+                            PinSelectedToOutputWindow();
+                        }
+                    }
+                    
+                    if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
+                    {
+                        var selectedImage = NodeSelection.GetFirstSelectedInstance();
+                        if (selectedImage != null)
+                        {
+                            GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
+                        }
                     }
 
                     if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
@@ -362,14 +382,7 @@ namespace T3.Editor.Gui.Graph
                         NodeNavigation.SelectLeft();
                     }
                     
-                    if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
-                    {
-                        var selectedImage = NodeSelection.GetFirstSelectedInstance();
-                        if (selectedImage != null)
-                        {
-                            GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
-                        }
-                    }
+
                 }
 
                 if (ImGui.IsWindowFocused()  && !preventInteractions)

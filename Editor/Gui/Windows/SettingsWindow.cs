@@ -119,6 +119,9 @@ namespace T3.Editor.Gui.Windows
                                                               "Value input method",
                                                               "The control that pops up when dragging on a number value"
                                                              );
+                        
+                        
+
 
                         FormInputs.SetIndentToLeft();
                         FormInputs.AddVerticalSpace();
@@ -135,6 +138,10 @@ namespace T3.Editor.Gui.Windows
                         FormInputs.AddVerticalSpace();
                         FormInputs.AddSectionHeader("Advanced");
                         FormInputs.AddVerticalSpace();
+                        changed |= FormInputs.AddCheckBox("Middle mouse button zooms canvas",
+                                                          ref UserSettings.Config.MiddleMouseButtonZooms,
+                                                          "This can be useful if you're working with tablets or other input devices that lack a mouse wheel.",
+                                                          UserSettings.Defaults.MiddleMouseButtonZooms);
                         changed |= FormInputs.AddCheckBox("Reset time after playback",
                                                           ref UserSettings.Config.ResetTimeAfterPlayback,
                                                           "After the playback is halted, the time will reset to the moment when the playback began. This feature proves beneficial for iteratively reviewing animations without requiring manual rewinding.",
