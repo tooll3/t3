@@ -157,7 +157,7 @@ internal static class VariationHandling
             var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
             Debug.Assert(symbolChildUi != null);
 
-            if (symbolChildUi.SnapshotGroupIndex == 0)
+            if (!symbolChildUi.EnabledForSnapshots)
                 continue;
 
             list.Add(childInstance);
@@ -172,7 +172,7 @@ internal static class VariationHandling
             var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
             Debug.Assert(symbolChildUi != null);
 
-            if (symbolChildUi.SnapshotGroupIndex == 0)
+            if (!symbolChildUi.EnabledForSnapshots)
                 continue;
 
             yield return childInstance;

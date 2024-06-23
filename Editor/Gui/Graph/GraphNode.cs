@@ -340,7 +340,7 @@ namespace T3.Editor.Gui.Graph
 
                     // Snapshot indicator
                     {
-                        if (childUi.SnapshotGroupIndex > 0)
+                        if (childUi.EnabledForSnapshots)
                         {
                             DrawIndicator(UiColors.StatusAutomated, ref indicatorCount);
                         }

@@ -132,7 +132,7 @@ namespace T3.Editor.Gui.Windows.Variations
                             || VariationHandling.ActivePoolForSnapshots.Variations.Count == 0)
                         {
                             var childUi = SymbolUiRegistry.Entries[VariationHandling.ActiveInstanceForSnapshots.Symbol.Id];
-                            var snapshotsEnabledForNone = !childUi.ChildUis.Any(s => s.SnapshotGroupIndex > 0);
+                            var snapshotsEnabledForNone = !childUi.ChildUis.Any(s => s.EnabledForSnapshots);
                             var additionalHint = snapshotsEnabledForNone ? "Use the graph window context menu\nto activate snapshots for operators." : "";
 
                             if (CustomComponents

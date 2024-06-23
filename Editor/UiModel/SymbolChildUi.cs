@@ -43,8 +43,22 @@ namespace T3.Editor.UiModel
         public Vector2 Size { get; set; } = DefaultOpSize;
         public bool IsSelected => NodeSelection.IsNodeSelected(this);
         
-        // FIXME: This should be a boolean
-        public int SnapshotGroupIndex { get; set; }
+        /// <summary>
+        /// We use this index as a hack to distinuish the following states:
+        /// 0 - not relevant for snapshots
+        /// 1 - used for snapshots (creating a new snapshot will copy the current state of child)
+        /// >1 - used for ParameterCollections 
+        /// </summary>
+        internal int SnapshotGroupIndex { get; set; }
+        private const int GroupIndexForSnapshots = 1; 
+
+        public bool EnabledForSnapshots
+        {
+            get => GroupIndexForSnapshots == SnapshotGroupIndex;
+            set => SnapshotGroupIndex = value ? SnapshotGroupIndex : 0;
+        }
+        
+        
         public Styles Style { get; set; }
         public string Comment { get; set; }
 

@@ -469,7 +469,8 @@ namespace T3.Editor.Gui.Graph
                     }
                     else
                     {
-                        var connectionDroppedOnBackground = ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
+                        var connectionDroppedOnBackground =
+                            ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
                         if (connectionDroppedOnBackground)
                         {
                             //Log.Warning("Skipping complete operation on background drop?");
@@ -703,7 +704,9 @@ namespace T3.Editor.Gui.Graph
             // ------ for selection -----------------------
             var oneOpSelected = selectedChildUis.Count == 1;
             var someOpsSelected = selectedChildUis.Count > 0;
-            var snapShotsEnabledFromSomeOps = !selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SnapshotGroupIndex == 0);
+            var snapShotsEnabledFromSomeOps 
+                = selectedChildUis
+                   .Any(selectedChildUi => selectedChildUi.EnabledForSnapshots);
 
             var label = oneOpSelected
                             ? $"{selectedChildUis[0].SymbolChild.ReadableName}..."
@@ -761,10 +764,13 @@ namespace T3.Editor.Gui.Graph
                                enabled: someOpsSelected))
             {
                 // Disable if already enabled for all
-                var disableBecauseAllEnabled = selectedChildUis.TrueForAll(c2 => c2.SnapshotGroupIndex > 0);
+                var disableBecauseAllEnabled
+                    = selectedChildUis
+                       .TrueForAll(c2 => c2.EnabledForSnapshots);
+
                 foreach (var c in selectedChildUis)
                 {
-                    c.SnapshotGroupIndex = disableBecauseAllEnabled ? 0 : 1; // Hide in another snapshot group
+                    c.EnabledForSnapshots = !disableBecauseAllEnabled;
                 }
 
                 // Add to add snapshots
@@ -884,10 +890,8 @@ namespace T3.Editor.Gui.Graph
             {
                 var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
                 var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
-                SymbolBrowser.OpenAt(position, null, null, false, startingSearchString, symbol =>
-                    {
-                        ChangeSymbol.ChangeOperatorSymbol(CompositionOp, selectedChildUis, symbol);
-                    });
+                SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
+                                     symbol => { ChangeSymbol.ChangeOperatorSymbol(CompositionOp, selectedChildUis, symbol); });
             }
 
             if (ImGui.BeginMenu("Symbol definition..."))
