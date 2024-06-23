@@ -3,17 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Model;
-using T3.Core.Operator;
 using T3.Core.Utils;
 
 namespace T3.Core.Resource;
 
 public static partial class ResourceManager
 {
-    private static bool RelativePathBackwardsCompatibility(string relativePath, out bool isAbsolute, out List<Range>? backCompatPaths)
+    private static bool RelativePathBackwardsCompatibility(string relativePath, out bool isAbsolute, [NotNullWhen(true)] out List<Range>? backCompatPaths)
     {
         backCompatPaths = null;
         if (Path.IsPathRooted(relativePath))

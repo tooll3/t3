@@ -55,7 +55,9 @@ public static partial class ResourceManager
         return new Resource<Texture2D>(slot, TryCreateTextureResourceFromFile);
     }
 
-    private static bool TryCreateTextureResourceFromFile(FileResource fileResource, Texture2D? currentValue, [NotNullWhen(true)] out Texture2D? resource, [NotNullWhen(false)] out string? failureReason)
+    private static bool TryCreateTextureResourceFromFile(FileResource fileResource, Texture2D? currentValue, 
+                                                         [NotNullWhen(true)] out Texture2D? resource, 
+                                                         [NotNullWhen(false)] out string? failureReason)
     {
         if (!fileResource.TryOpenFileStream(out var fileStream, out failureReason, FileAccess.Read))
         {

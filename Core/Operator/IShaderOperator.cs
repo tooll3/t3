@@ -68,13 +68,26 @@ public interface IShaderCodeOperator<T> where T : AbstractShader
         }
 
         //Log.Debug($"Attempting to update shader \"{debugName}\" ({GetType().Name}) with entry point \"{entryPoint}\".");
+
+        if (string.IsNullOrWhiteSpace(debugName))
+        {
+            debugName = $"{typeof(T).Name}_{instance}";
+        }
+
+        var compilationArgs = new ShaderCompiler.ShaderCompilationArgs(
+                                                                       SourceCode: source,
+                                                                       EntryPoint: entryPoint,
+                                                                       Owner: instance,
+                                                                       Name: debugName,
+                                                                       OldBytecode: currentShader?.CompiledBytecode);
         
-        var compiled = ResourceManager.TryCompileShaderFromSource(ref currentShader,
-                                                                 shaderSource: source,
-                                                                 instance: instance,
-                                                                 entryPoint: entryPoint,
-                                                                 name: debugName,
-                                                                 reason: out var errorMessage);
+        var compiled = ShaderCompiler.TryCompileShaderFromSource(compilationArgs, true, true, out currentShader, out var errorMessage);
+
+        if (!compiled)
+        {
+            Log.Error($"Failed to compile shader '{debugName}'");
+        }
+                
         shaderSlot.Value = currentShader;
         shaderSlot.DirtyFlag.Clear();
 

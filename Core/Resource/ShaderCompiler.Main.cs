@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using SharpDX.D3DCompiler;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Model;

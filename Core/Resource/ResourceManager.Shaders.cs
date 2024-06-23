@@ -3,7 +3,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
-using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
 // ReSharper disable ConvertToLocalFunction
@@ -16,32 +15,8 @@ namespace T3.Core.Resource;
 /// </summary>
 public static partial class ResourceManager
 {
-    internal static bool TryCompileShaderFromSource<TShader>([NotNullWhen(true)] ref TShader? resource, string shaderSource, Instance instance, out string reason,
-                                                           string name = "", string entryPoint = "main")
-        where TShader : AbstractShader
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            name = $"{typeof(TShader).Name}_{instance.SymbolChildId}";
-        }
 
-        var compilationArgs = new ShaderCompiler.ShaderCompilationArgs(
-                                                                       SourceCode: shaderSource, 
-                                                                       EntryPoint: entryPoint, 
-                                                                       Owner: instance,
-                                                                       Name: name, 
-                                                                       OldBytecode: resource?.CompiledBytecode);
-        var compiled = ShaderCompiler.TryCompileShaderFromSource(compilationArgs, true, true, out resource, out reason);
-
-        if (!compiled)
-        {
-            Log.Error($"Failed to compile shader '{name}'");
-        }
-
-        return compiled;
-    }
-
-    public static Resource<TShader> CreateShaderResource<TShader>(string relativePath, Instance? instance, Func<string> getEntryPoint, Action<TShader?>? onShaderCompiled = null)
+    public static Resource<TShader> CreateShaderResource<TShader>(string relativePath, IResourceConsumer? instance, Func<string> getEntryPoint, Action<TShader?>? onShaderCompiled = null)
         where TShader : AbstractShader
     {
         ArgumentNullException.ThrowIfNull(getEntryPoint, nameof(getEntryPoint));
