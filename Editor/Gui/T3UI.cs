@@ -86,6 +86,8 @@ public static class T3Ui
         TextureReadAccess.Update();
 
         AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
+        
+        ResourceManager.RaiseFileWatchingEvents();
 
         VariationHandling.Update();
         MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;

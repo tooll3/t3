@@ -13,6 +13,37 @@ namespace T3.Core.Resource
 {
     public sealed class Resource<T> : IDisposable
     {
+        #region Constructors
+        public Resource(InputSlot<string> slot, TryGenerate<T> tryGenerate,
+                        bool allowDisposal = true, EqualityComparer<T?>? comparer = null)
+            : this(slot.Value, slot.Parent, tryGenerate, allowDisposal, comparer)
+        {
+            _slot = slot;
+        }
+
+        public Resource(string? relativePath, IResourceConsumer? owner, TryGenerate<T> tryGenerate, 
+                        bool allowDisposal = true, EqualityComparer<T?>? equalityComparer = null)
+        {
+            ArgumentNullException.ThrowIfNull(tryGenerate, nameof(tryGenerate));
+
+            _tryGenerate = tryGenerate;
+            _equalityComparer = equalityComparer ?? EqualityComparer<T?>.Default;
+            _owner = owner;
+            _allowDisposal = allowDisposal;
+
+            _onFileChanged = OnFileUpdate;
+            _valueFactory = ValueFactory;
+            _onDispose = Dispose;
+
+            if (owner != null)
+                owner.Disposing += _onDispose;
+
+            ReplaceFilePath(relativePath);
+            _lazyValue = new Lazy<T?>(_valueFactory, ThreadSafetyMode);
+        }
+        #endregion
+        public bool IsDisposed => _isDisposed;
+
         public T? Value
         {
             get
@@ -26,37 +57,39 @@ namespace T3.Core.Resource
                     _hasWarned = true;
                 }
                 #endif
+
+                ObjectDisposedException.ThrowIf(_isDisposed, this);
+
                 return _lazyValue.Value;
             }
         }
-        
 
         public T? GetValue(EvaluationContext context)
         {
-            if (_slot == null)
+            ObjectDisposedException.ThrowIf(_isDisposed, this);
+
+            if (_slot is not { IsDirty: true })
                 return _lazyValue.Value;
-            
+
             var newPath = _slot.GetValue(context);
 
-            TryReplaceFile(newPath);
-            
-            return _lazyValue.Value;
-
-            //SubstituteForwardSlashesInSlot(_slot);
-            static void SubstituteForwardSlashesInSlot(InputSlot<string> slot)
+            if (!string.IsNullOrWhiteSpace(newPath))
             {
-                // Ensure typed values use forward slashes
-                // todo: this is a bit of a hack, but it works for now
-                // basically, if the typed value is being used, this should also be updating "newValue"
-                var typedValue = slot.TypedInputValue.Value;
-                if (typedValue == null)
-                    return;
-
-                typedValue.ToForwardSlashesUnsafe();
+                if (!_slot.IsConnected)
+                {
+                    newPath.ToForwardSlashesUnsafe();
+                }
+                else
+                {
+                    newPath = newPath.ToForwardSlashes();
+                }
             }
+
+            ReplaceFilePath(newPath);
+            MarkFileAsChanged();
+
+            return _lazyValue.Value;
         }
-        
-        internal event EventHandler<T?>? Changed;
 
         public bool TryGetValue(EvaluationContext context, [NotNullWhen(true)] out T? value)
         {
@@ -64,73 +97,60 @@ namespace T3.Core.Resource
             return !_equalityComparer.Equals(value, default);
         }
 
-        public void MarkFileAsChanged()
+        public void AddDependentSlot(ISlot outputSlot)
         {
-            OnFileUpdate(_owner, WatcherChangeTypes.Changed);
+            if (outputSlot is IInputSlot)
+            {
+                throw new InvalidOperationException("Cannot add an input slot as a dependent slot - only outputs are permitted.");
+            }
+
+            _dependentSlots.Add(outputSlot);
         }
 
-        #region Constructors
-        public Resource(InputSlot<string> slot, TryGenerate<T> tryGenerate, bool allowDisposal = true, EqualityComparer<T?>? comparer = null)
-            : this(slot.Value, slot.Parent, tryGenerate, allowDisposal, comparer)
+        public void AddDependentSlot(params ISlot[] slots)
         {
-            _slot = slot;
-                                
-
-            // update slot value when file is moved
-            _onFileMoved += newPath =>
-                            {
-                                if(_slot.IsConnected)
-                                    return;
-                                
-                                if (ResourceManager.TryConvertToRelativePath(newPath, out var relativePath))
-                                    newPath = relativePath;
-
-                                slot.SetTypedInputValue(newPath.ToForwardSlashes());
-                            };
+            foreach (var slot in slots)
+            {
+                AddDependentSlot(slot);
+            }
         }
-
-        public Resource(string? relativePath, IResourceConsumer? owner,
-                        TryGenerate<T> tryGenerate, bool allowDisposal = true,
-                        EqualityComparer<T?>? equalityComparer = null)
-        {
-            ArgumentNullException.ThrowIfNull(tryGenerate, nameof(tryGenerate));
-
-            _tryGenerate = tryGenerate;
-            _equalityComparer = equalityComparer ?? EqualityComparer<T?>.Default;
-            _owner = owner;
-            _allowDisposal = allowDisposal;
-
-            _onFileChanged = OnFileUpdate;
-            _valueFactory = ValueFactory;
-            _onDispose = Dispose;
-
-            ResetLazyValue(ref _lazyValue);
-
-            if (owner != null)
-                owner.Disposing += _onDispose;
-
-            TryReplaceFile(relativePath);
-        }
-        #endregion
 
         #region File Handling
-        private bool TryReplaceFile(string? relativePath)
+        public void MarkFileAsChanged()
         {
-            ReleaseFileResource();
-            if (string.IsNullOrWhiteSpace(relativePath))
-                return false;
+            ResetLazyValue();
+            foreach (var slot in _dependentSlots)
+                slot.DirtyFlag.Invalidate();
 
-            relativePath = relativePath.ToForwardSlashes();
-            _relativePath = relativePath;
-            return TryGetFileResource(relativePath);
+            Changed?.Invoke();
+            return;
+
+            void ResetLazyValue()
+            {
+                if (!_lazyValue.IsValueCreated)
+                    return;
+
+                DisposeValue();
+                _lazyValue = new Lazy<T?>(_valueFactory, ThreadSafetyMode);
+            }
         }
 
-        private bool TryGetFileResource(string? relativePath)
+        /// <summary>
+        /// Replaces the current file path with a new one and ensures we have a FileResource if possible
+        /// </summary>
+        /// <param name="newUserPath">Path to replace the current value of <see cref="_userPath"/></param>
+        /// <returns>True if we have a file resource</returns>
+        private bool ReplaceFilePath(string? newUserPath)
         {
-            if (string.IsNullOrWhiteSpace(relativePath))
-                return false;
+            // if the file resource is already set and the path is the same, return true
+            if (_fileResource != null && _userPath == newUserPath)
+                return true;
 
-            if (!FileResource.TryGetFileResource(relativePath, _owner, out var fileResource))
+            ReleaseFileResource();
+
+            _userPath = newUserPath;
+
+            if (!FileResource.TryGetFileResource(newUserPath, _owner, out var fileResource))
                 return false;
 
             fileResource.Claim(this);
@@ -150,53 +170,35 @@ namespace T3.Core.Resource
 
         private void OnFileUpdate(object? sender, WatcherChangeTypes changeTypes)
         {
-            ResetLazyValue(ref _lazyValue);
-
-            if (changeTypes.WasMoved() && _onFileMoved != null)
+            Log.Debug($"{_fileResource!.AbsolutePath} changed. {changeTypes}");
+            // change type-in value to the new path
+            if (changeTypes.WasMoved())
             {
-                _onFileMoved.Invoke(_fileResource!.AbsolutePath);
+                // we know the fileResource is not null because this is only called by the file resource
+                var newPath = _fileResource!.AbsolutePath;
+
+                if (ResourceManager.TryConvertToRelativePath(newPath, out var relativePath))
+                {
+                    newPath = relativePath;
+                }
+                
+                _userPath = newPath;
+
+                if (_slot is { IsConnected: false })
+                    _slot.SetTypedInputValue(newPath.ToForwardSlashes());
             }
+
+            MarkFileAsChanged();
         }
         #endregion
 
         #region Value Evaluation
-        private void ResetLazyValue([NotNull] ref Lazy<T?>? lazyValue)
-        {
-            if (lazyValue == null)
-            {
-                _previouslyHadValue = false;
-                lazyValue = new Lazy<T?>(_valueFactory, LazyThreadSafetyMode.None);
-                return;
-            }
-
-            _previouslyHadValue = lazyValue.IsValueCreated && !_equalityComparer.Equals(lazyValue.Value, default);
-
-            if (!_previouslyHadValue)
-                return;
-
-            DisposeValue();
-            lazyValue = new Lazy<T?>(_valueFactory, LazyThreadSafetyMode.None);
-        }
-
         private T? ValueFactory()
         {
-            if (_currentlyEvaluating)
-            {
-                throw new
-                    InvalidOperationException("Circular dependency detected - do not use the Resource.Value property within the change handler - instead reference the argument passed to the change handler.");
-            }
-
-            _currentlyEvaluating = true;
-
             string? failureReason;
             bool success;
             T? newValue;
-            var hasFileResource = _fileResource != null;
-
-            if (!hasFileResource)
-            {
-                hasFileResource = TryReplaceFile(_relativePath);
-            }
+            var hasFileResource = _fileResource != null || ReplaceFilePath(_userPath);
 
             if (hasFileResource && _fileResource!.FileInfo is { Exists : true })
             {
@@ -216,13 +218,13 @@ namespace T3.Core.Resource
             else
             {
                 success = false;
-                
+
                 #if !DEBUG
                 failureReason = "File not found";
                 #else
                 failureReason = "File not found:\n" + Environment.StackTrace;
                 #endif
-                
+
                 newValue = default;
             }
 
@@ -236,28 +238,24 @@ namespace T3.Core.Resource
                     Log.Error(errorLog);
             }
 
-            if (success || _previouslyHadValue)
-                Changed?.Invoke(this, newValue);
-
-            _currentlyEvaluating = false;
             return newValue;
 
-            string GetPathLog() => $"'{_relativePath}' ({_fileResource?.AbsolutePath ?? "unresolved"})'";
+            string GetPathLog() => $"'{_userPath}' ({_fileResource?.AbsolutePath ?? "unresolved"})'";
         }
         #endregion
 
         #region Value Disposal
         public void Dispose()
         {
-            if (_disposed)
+            if (_isDisposed)
                 return;
 
-            _disposed = true;
+            _isDisposed = true;
 
             ReleaseFileResource();
 
             if (DisposeValue())
-                Changed?.Invoke(this, default);
+                Changed?.Invoke();
 
             if (_owner != null)
                 _owner.Disposing -= _onDispose;
@@ -274,7 +272,7 @@ namespace T3.Core.Resource
             if (!_allowDisposal || !IsDisposableType)
                 return false;
 
-            if (_lazyValue is not {IsValueCreated: true})
+            if (_lazyValue is not { IsValueCreated: true })
                 return false;
 
             var value = _lazyValue.Value;
@@ -293,21 +291,22 @@ namespace T3.Core.Resource
         // file handling
         private FileResource? _fileResource;
         private readonly EventHandler<WatcherChangeTypes> _onFileChanged;
-        private readonly Action<string>? _onFileMoved;
         private readonly IResourceConsumer? _owner;
-        private string? _relativePath;
+        private string? _userPath;
         private readonly InputSlot<string>? _slot;
 
         // Value handling
         private Lazy<T?> _lazyValue;
         private readonly Func<T?> _valueFactory;
-        private bool _currentlyEvaluating;
-        private bool _previouslyHadValue;
-        private bool _disposed;
+        private bool _isDisposed;
         private readonly TryGenerate<T> _tryGenerate;
         private readonly Action _onDispose;
         private readonly bool _allowDisposal;
-        
+        private const LazyThreadSafetyMode ThreadSafetyMode = LazyThreadSafetyMode.None;
+        internal event Action? Changed;
+
+        private readonly List<ISlot> _dependentSlots = new();
+
         #if DEBUG
         private bool _hasWarned;
         #endif

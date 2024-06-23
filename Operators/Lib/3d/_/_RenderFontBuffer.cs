@@ -1,7 +1,6 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using Operators.Utils;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -24,8 +23,9 @@ namespace lib._3d._
         
         public _RenderFontBuffer()
         {
-            Buffer.UpdateAction += UpdateMesh;
             _fontResource = new Resource<BmFontDescription>(Filepath, OnFileChanged);
+            _fontResource.AddDependentSlot(Buffer);
+            Buffer.UpdateAction += UpdateMesh;
         }
         
         private bool OnFileChanged(FileResource file, BmFontDescription currentValue, out BmFontDescription newValue, out string failureReason)
@@ -165,9 +165,13 @@ namespace lib._3d._
             AdjustLineAlignment();
 
             ResourceManager.SetupStructuredBuffer(_bufferContent, ref Buffer.Value);
-            Buffer.Value.DebugName = nameof(_RenderFontBuffer);
+            if(Buffer.Value != null)
+                Buffer.Value.DebugName = nameof(_RenderFontBuffer);
+            
             VertexCount.Value = outputIndex * 6;
 
+            return;
+            
             void AdjustLineAlignment()
             {
                 switch (horizontalAlign)

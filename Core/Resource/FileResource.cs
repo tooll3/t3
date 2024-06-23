@@ -91,8 +91,14 @@ public sealed partial class FileResource
         }
     }
     
-    internal static bool TryGetFileResource(string relativePath, IResourceConsumer? owner, [NotNullWhen(true)] out FileResource? resource)
+    internal static bool TryGetFileResource(string? relativePath, IResourceConsumer? owner, [NotNullWhen(true)] out FileResource? resource)
     {
+        if (string.IsNullOrWhiteSpace(relativePath))
+        {
+            resource = null;
+            return false;
+        }
+        
         if (!ResourceManager.TryResolvePath(relativePath, owner, out var absolutePath, out var resourceContainer))
         {
             Log.Error($"Path not found: '{relativePath}' (Resolved to '{absolutePath}').");

@@ -246,12 +246,6 @@ namespace T3.Core.Operator
                 instance = instance._parent;
             }
         }
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool TryGetFileResource(string relativePath, [NotNullWhen(true)] out FileResource? fileResource)
-        {
-            return FileResource.TryGetFileResource(relativePath, this, out fileResource);
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected internal bool TryGetFilePath(string relativePath, out string absolutePath, bool isFolder = false)

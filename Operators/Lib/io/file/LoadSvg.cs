@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Numerics;
+using lib.Utils;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -29,28 +30,10 @@ namespace lib.io.file
 
         public LoadSvg()
         {
-            _svgResource = new Resource<SvgDocument>(FilePath, TryLoad);
+            _svgResource = new Resource<SvgDocument>(FilePath, SvgLoader.TryLoad);
+            _svgResource.AddDependentSlot(ResultList);
             ResultList.UpdateAction += Update;
             _pointListWithSeparator.TypedElements[_pointListWithSeparator.NumElements - 1] = Point.Separator();
-        }
-
-        private bool TryLoad(FileResource file, SvgDocument? currentValue, 
-                             [NotNullWhen(true)] out SvgDocument? newValue, 
-                             [NotNullWhen(false)] out string? failureReason)
-        {
-            _dirtyFile = true;
-            try
-            {
-                newValue = SvgDocument.Open<SvgDocument>(file.AbsolutePath, null);
-                failureReason = null;
-                return true;
-            }
-            catch (Exception e)
-            {
-                failureReason = $"Failed to load svg document {file.AbsolutePath}:" + e.Message;
-                newValue = null;
-                return false;
-            }
         }
 
         private struct GraphicsPathEntry
@@ -61,11 +44,9 @@ namespace lib.io.file
 
         private void Update(EvaluationContext context)
         {
-            var needsUpdate = _dirtyFile || Scale.IsDirty || CenterToBounds.IsDirty || ScaleToBounds.IsDirty ||  ImportAs.IsDirty || ReduceFactor.IsDirty;
+            var needsUpdate = Scale.IsDirty || CenterToBounds.IsDirty || ScaleToBounds.IsDirty ||  ImportAs.IsDirty || ReduceFactor.IsDirty;
             if (!needsUpdate)
                 return;
-
-            _dirtyFile = false;
             
             if(!_svgResource.TryGetValue(context, out var svgDoc))
             {
@@ -279,6 +260,5 @@ namespace lib.io.file
         }
 
         private static ISvgRenderer _svgRenderer;
-        private bool _dirtyFile = true;
     }
 }

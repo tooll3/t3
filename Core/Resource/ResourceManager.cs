@@ -1,13 +1,8 @@
 #nullable enable
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 namespace T3.Core.Resource
@@ -28,6 +23,7 @@ namespace T3.Core.Resource
 
         static ResourceManager()
         {
+            
         }
         
         public static bool TryResolvePath(string relativePath, IResourceConsumer? consumer, out string absolutePath, out IResourcePackage? resourceContainer, bool isFolder = false)
@@ -197,5 +193,31 @@ namespace T3.Core.Resource
         public static IReadOnlyList<IResourcePackage> SharedShaderPackages => ShaderPackages;
         private static readonly List<IResourcePackage> ShaderPackages = new(4);
         public enum PathMode {Absolute, Relative, Aliased, Raw}
+
+        public static void RaiseFileWatchingEvents()
+        {
+            // dispatched to main thread
+            lock (FileWatchers)
+            {
+                foreach (var fileWatcher in FileWatchers)
+                {
+                    fileWatcher.RaiseQueuedFileChanges();
+                }
+            }
+        }
+        
+        internal static void UnregisterWatcher(ResourceFileWatcher resourceFileWatcher)
+        {
+            lock (FileWatchers)
+                FileWatchers.Remove(resourceFileWatcher);
+        }
+
+        internal static void RegisterWatcher(ResourceFileWatcher resourceFileWatcher)
+        {
+            lock (FileWatchers)
+                FileWatchers.Add(resourceFileWatcher);
+        }
+
+        private static readonly List<ResourceFileWatcher> FileWatchers = [];
     }
 }

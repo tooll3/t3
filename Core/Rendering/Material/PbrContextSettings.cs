@@ -19,9 +19,8 @@ public static class PbrContextSettings
         if (!TryLoadTextureAsSrv("images/BRDF-LookUp.dds", out _bdrfLookupTextureResource, ref PbrLookUpTextureSrv))
         {
             Log.Error("Could not load prefiltered BRDF texture");
-            _bdrfLookupTextureResource.Changed += (sender, args) =>
+            _bdrfLookupTextureResource.Changed += () =>
             {
-
                 PbrLookUpTextureSrv = new ShaderResourceView(ResourceManager.Device, _bdrfLookupTextureResource.Value);
             };
         }

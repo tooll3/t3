@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using lib.Utils;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -35,49 +36,24 @@ namespace lib.io.file
 
         public LineTextPoints()
         {
-            _svgResource = new Resource<SvgDocument>(FilePath, TryLoadSvg);
+            _svgResource = new Resource<SvgDocument>(FilePath, SvgLoader.TryLoad);
+            _svgResource.AddDependentSlot(ResultList);
             ResultList.UpdateAction += Update;
             _pointListWithSeparator.TypedElements[_pointListWithSeparator.NumElements - 1] = Point.Separator();
         }
 
-        private bool TryLoadSvg(FileResource file, SvgDocument? currentvalue, out SvgDocument? newvalue, out string? failurereason)
-        {
-            _svgFileUpdated = true;
-            
-            try
-            {
-                newvalue = SvgDocument.Open<SvgDocument>(file.AbsolutePath, null);
-                failurereason = null;
-                return true;
-            }
-            catch (Exception e)
-            {
-                newvalue = null;
-                failurereason = $"Failed to load svg file:" + e.Message;
-                return false;
-            }
-        }
-
         private void Update(EvaluationContext context)
         {
-            var fontNeedsUpdate = _svgFileUpdated || ReduceCurveThreshold.DirtyFlag.IsDirty || CornerWeightBalance.DirtyFlag.IsDirty;
-
-            if (fontNeedsUpdate)
+            if (!_svgResource.TryGetValue(context, out var svgDoc))
             {
-                var lineFontKey = new LineFontDefinition(Key: FilePath.GetValue(context),
-                                                         ReduceCurveThreshold: ReduceCurveThreshold.GetValue(context),
-                                                         CornerBalance: CornerWeightBalance.GetValue(context));
-                _svgFileUpdated = false;
-
-                if (!_svgResource.TryGetValue(context, out var svgDoc))
-                {
-                    ResultList.Value = null;
-                    return;
-                }
-
-                _lineFont = LineFont.Create(svgDoc, _lineFontKey, lineFontKey, this);
-                _lineFontKey = lineFontKey;
+                ResultList.Value = null;
+                return;
             }
+            
+            var lineFontKey = new LineFontDefinition(Key: FilePath.GetValue(context),
+                                                     ReduceCurveThreshold: ReduceCurveThreshold.GetValue(context),
+                                                     CornerBalance: CornerWeightBalance.GetValue(context));
+            var fontNeedsUpdate = _lineFontKey != lineFontKey;
             
             var needsUpdate = fontNeedsUpdate
                                 || Text.DirtyFlag.IsDirty
@@ -90,7 +66,10 @@ namespace lib.io.file
             
             if (!needsUpdate)
                 return;
-
+            
+            _lineFont = LineFont.Create(svgDoc, _lineFontKey, lineFontKey, this);
+            _lineFontKey = lineFontKey;
+            
             var cursorPos = Vector3.Zero;
 
             var text = Text.GetValue(context);
@@ -302,7 +281,6 @@ namespace lib.io.file
 
         private LineFont _lineFont;
         private readonly Resource<SvgDocument> _svgResource;
-        private bool _svgFileUpdated;
         private LineFontDefinition? _lineFontKey;
     }
 

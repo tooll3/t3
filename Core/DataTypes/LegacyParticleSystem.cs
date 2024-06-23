@@ -35,24 +35,23 @@ namespace T3.Core.DataTypes
             //string debugName = "particle-dead-list-init";
             _initDeadListShaderResource = ResourceManager.CreateShaderResource<ComputeShader>(sourcePath, null, () => "main");
 
-            if (_initDeadListShaderResource.Value != null)
-            {
+
                 Init();
-            }
-            
-            _initDeadListShaderResource.Changed += (sender, args) =>
-            {
-                if (_initDeadListShaderResource.Value != null)
-                {
-                    Init();
-                }
-            };
+            _initDeadListShaderResource.Changed += Init;
         }
 
         public void Init()
         {            
+            // init counter of the dead list buffer (must be done due to uav binding)
+            var deadListInitShader = _initDeadListShaderResource.Value;
+            if (deadListInitShader == null)
+            {
+                Log.Error("Failed to load dead list init shader");
+                return;
+            }
+            
             InitParticleBufferAndViews();
-            InitDeadParticleIndices();
+            InitDeadParticleIndices(deadListInitShader);
             InitAliveParticleIndices();
             InitIndirectArgBuffer();
             InitParticleCountConstBuffer();
@@ -70,15 +69,13 @@ namespace T3.Core.DataTypes
 
         private const int ParticleIndexSizeInBytes = 8;
 
-        private void InitDeadParticleIndices()
+        private void InitDeadParticleIndices(ComputeShader deadListInitShader)
         {
             // init the buffer 
             var resourceManager = ResourceManager.Instance();
             ResourceManager.SetupStructuredBuffer(ParticleIndexSizeInBytes*MaxCount, ParticleIndexSizeInBytes, ref DeadParticleIndices);
             ResourceManager.CreateStructuredBufferUav(DeadParticleIndices, UnorderedAccessViewBufferFlags.Append, ref DeadParticleIndicesUav);
             
-            // init counter of the dead list buffer (must be done due to uav binding)
-            ComputeShader deadListInitShader = _initDeadListShaderResource.Value;
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
@@ -101,7 +98,6 @@ namespace T3.Core.DataTypes
 
         private void InitAliveParticleIndices()
         {
-            var resourceManager = ResourceManager.Instance();
             ResourceManager.SetupStructuredBuffer(ParticleIndexSizeInBytes*MaxCount, ParticleIndexSizeInBytes, ref AliveParticleIndices);
             ResourceManager.CreateStructuredBufferUav(AliveParticleIndices, UnorderedAccessViewBufferFlags.Counter, ref AliveParticleIndicesUav);
             ResourceManager.CreateStructuredBufferSrv(AliveParticleIndices, ref AliveParticleIndicesSrv);
@@ -109,7 +105,6 @@ namespace T3.Core.DataTypes
 
         private void InitIndirectArgBuffer()
         {
-            var resourceManager = ResourceManager.Instance();
             int sizeInBytes = 16;
             ResourceManager.SetupIndirectBuffer(sizeInBytes, ref IndirectArgsBuffer);
             ResourceManager.CreateBufferUav<uint>(IndirectArgsBuffer, Format.R32_UInt, ref IndirectArgsBufferUav);

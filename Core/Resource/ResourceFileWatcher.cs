@@ -1,21 +1,31 @@
 ﻿#nullable enable
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
+using System.Linq;
 using T3.Core.Logging;
 
 namespace T3.Core.Resource
 {
-    public class ResourceFileWatcher
+    public sealed class ResourceFileWatcher : IDisposable
     {
         public ResourceFileWatcher(string watchedFolder)
         {
             Directory.CreateDirectory(watchedFolder);
             _watchedDirectory = watchedFolder;
+            ResourceManager.RegisterWatcher(this);
         }
 
-        public void AddFileHook(string filepath, FileWatcherAction action)
+        public void Dispose()
+        {
+            DisposeFileWatcher(ref _fsWatcher);
+
+            _fileChangeActions.Clear();
+            ResourceManager.UnregisterWatcher(this);
+        }
+
+        internal void AddFileHook(string filepath, FileWatcherAction action)
         {
             if (string.IsNullOrWhiteSpace(filepath))
                 return;
@@ -27,63 +37,140 @@ namespace T3.Core.Resource
                 Log.Error($"Cannot watch file outside of watched directory: \"{filepath}\" is not in \"{_watchedDirectory}\"");
                 return;
             }
-            
+
             if (!_fileChangeActions.TryGetValue(filepath, out var existingActions))
             {
                 existingActions = new List<FileWatcherAction>();
-                _fileChangeActions.Add(filepath, existingActions);
+                _fileChangeActions.TryAdd(filepath, existingActions);
             }
-            
+
             existingActions.Add(action);
-            
-            if (_fsWatcher == null)
+
+            if (_fsWatcher != null) return;
+
+            _fsWatcher = new(_watchedDirectory)
+                             {
+                                 IncludeSubdirectories = true,
+                                 EnableRaisingEvents = true
+                             };
+
+            _fsWatcher.Changed += OnFileChanged;
+            _fsWatcher.Created += OnFileCreated;
+            _fsWatcher.Deleted += OnFileDeleted;
+            _fsWatcher.Error += OnError;
+            _fsWatcher.Renamed += OnFileRenamed;
+        }
+
+        internal void RemoveFileHook(string absolutePath, FileWatcherAction onResourceChanged)
+        {
+            if (!_fileChangeActions.TryGetValue(absolutePath, out var actions))
+                return;
+
+            actions.Remove(onResourceChanged);
+            if (actions.Count != 0)
+                return;
+
+            _fileChangeActions.Remove(absolutePath, out _);
+
+            if (_fileChangeActions.Count == 0)
             {
-                _fsWatcher = new(_watchedDirectory)
-                                 {
-                                     IncludeSubdirectories = true,
-                                     EnableRaisingEvents = true
-                                 };
-                
-                _fsWatcher.Changed += OnFileChanged;
-                _fsWatcher.Created += OnFileCreated;
-                _fsWatcher.Deleted += OnFileDeleted;
-                _fsWatcher.Error += OnError;
-                _fsWatcher.Renamed += OnFileRenamed;
+                DisposeFileWatcher(ref _fsWatcher);
             }
         }
-        
-        public void RemoveFileHook(string absolutePath, FileWatcherAction onResourceChanged)
+
+        internal void RaiseQueuedFileChanges()
         {
-            if (_fileChangeActions.TryGetValue(absolutePath, out var actions))
+            var currentTime = DateTime.UtcNow.Ticks;
+            const long thresholdMs = 1000 * TimeSpan.TicksPerMillisecond;
+            lock (_eventLock)
             {
-                actions.Remove(onResourceChanged);
-                if (actions.Count == 0)
+                if (_newFileEvents.Count == 0)
+                    return;
+
+                var fileEvents = _newFileEvents.OrderBy(x => x.Value).ToArray();
+                FileKey previous = default;
+                foreach (var (fileKey, details) in fileEvents)
                 {
-                    _fileChangeActions.Remove(absolutePath);
-                    
-                    if (_fileChangeActions.Count == 0)
+                    if (currentTime - details.TimeTicks < thresholdMs)
+                        break;
+
+                    _newFileEvents.Remove(fileKey);
+
+                    if (fileKey == previous) // ignore duplicates
+                        continue;
+
+                    previous = fileKey;
+
+                    if (fileKey.isRename)
                     {
-                        DisposeFileWatcher(ref _fsWatcher);
+                        HandleRename((RenamedEventArgs)details.Args);
+                    }
+
+                    var path = details.Args.FullPath;
+                    if (!_fileChangeActions.TryGetValue(path, out var actions))
+                    {
+                        continue;
+                    }
+
+                    // queue these actions so that we don't hold the lock while executing them
+                    foreach (var action in actions)
+                    {
+                        _queuedActions.Enqueue(new FileWatchQueuedAction(details.Args, action));
                     }
                 }
             }
+
+            while (_queuedActions.TryDequeue(out var queuedAction))
+            {
+                try
+                {
+                    var args = queuedAction.Args;
+                    queuedAction.Action(args.ChangeType, args.FullPath);
+                }
+                catch (Exception exception)
+                {
+                    Log.Error($"Error in file change action: {exception}");
+                }
+            }
+
+            return;
+            
+            void HandleRename(RenamedEventArgs e)
+            {
+                if (!_fileChangeActions.Remove(e.OldFullPath, out var actions))
+                    return;
+
+                var newPath = e.FullPath;
+                if (_fileChangeActions.TryGetValue(newPath, out var previousActions))
+                {
+                    previousActions.AddRange(actions);
+                    return;
+                }
+
+                _fileChangeActions.TryAdd(newPath, actions);
+            }
         }
-        
+
+        private void OnFileCreated(object sender, FileSystemEventArgs e)
+        {
+            Log.Info($"File created: {e.FullPath}");
+            FileCreated?.Invoke(this, e.FullPath);
+        }
+
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            var fileKey = new FileKey(e.FullPath, e.ChangeType, e is RenamedEventArgs);
+            lock (_eventLock)
+            {
+                _newFileEvents[fileKey] = new FileWatchDetails(DateTime.UtcNow.Ticks, e);
+            }
+        }
+
         private void OnFileRenamed(object sender, RenamedEventArgs e)
         {
-            if (!_fileChangeActions.Remove(e.OldFullPath, out var actions)) 
-                return;
-            
-            var newPath = e.FullPath;
-            if (_fileChangeActions.TryGetValue(newPath, out var previousActions))
-            {
-                previousActions.AddRange(actions);
-                return;
-            }
-            
-            _fileChangeActions.Add(newPath, actions); 
+            OnFileChanged(sender, e);
         }
-        
+
         private void OnError(object sender, ErrorEventArgs e)
         {
             Log.Error($"File watcher error: {e.GetException()}");
@@ -94,91 +181,58 @@ namespace T3.Core.Resource
                                  EnableRaisingEvents = true
                              };
         }
-        
+
         private void OnFileDeleted(object sender, FileSystemEventArgs e)
         {
             OnFileChanged(sender, e);
             Log.Warning($"File deleted: {e.FullPath}");
         }
-        
-        private void Execute(List<FileWatcherAction> actions, WatcherChangeTypes type, string absolutePath)
-        {
-            // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
-            //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
-            //       it cannot read the file. 
 
-            Thread.Sleep(32);
-            
-            foreach (var action in actions)
-            {
-                try
-                {
-                    action(type, absolutePath);
-                }
-                catch (Exception exception)
-                {
-                    Log.Error($"Error in file change action: {exception}");
-                }
-            }
-        }
-        
-        private void OnFileCreated(object sender, FileSystemEventArgs e)
-        {
-            Log.Info($"File created: {e.FullPath}");
-            FileCreated?.Invoke(this, e.FullPath);
-        }
-        
-        private void OnFileChanged(object sender, FileSystemEventArgs e)
-        {
-            if (!_fileChangeActions.TryGetValue(e.FullPath, out var actions))
-                return;
-            
-            Execute(actions, e.ChangeType, e.FullPath);
-        }
-
-        public void Dispose()
-        {
-            DisposeFileWatcher(ref _fsWatcher);
-            
-            _fileChangeActions.Clear();
-        }
-        
-        private readonly string _watchedDirectory;
-        private FileSystemWatcher? _fsWatcher = null;
-        
-        private readonly Dictionary<string, List<FileWatcherAction>> _fileChangeActions = new();
-        public event EventHandler<string>? FileCreated;
-        
         private static void DisposeFileWatcher(ref FileSystemWatcher? watcher)
         {
             if (watcher == null)
                 return;
-            
+
             watcher.EnableRaisingEvents = false;
             watcher.Dispose();
             watcher = null;
         }
+
+        private record struct FileKey(string Path, WatcherChangeTypes ChangeType, bool isRename);
+
+        private record struct FileWatchDetails(long TimeTicks, FileSystemEventArgs Args);
+
+        private record struct FileWatchQueuedAction(FileSystemEventArgs Args, FileWatcherAction Action);
+
+        private readonly Dictionary<FileKey, FileWatchDetails> _newFileEvents = new();
+        private readonly object _eventLock = new();
+        private readonly string _watchedDirectory;
+        private FileSystemWatcher? _fsWatcher = null;
+
+        private readonly ConcurrentDictionary<string, List<FileWatcherAction>> _fileChangeActions = new();
+        private readonly Queue<FileWatchQueuedAction> _queuedActions = new();
+        public event EventHandler<string>? FileCreated;
     }
-    
-    public delegate void FileWatcherAction(WatcherChangeTypes changeTypes, string absolutePath);
-    
-    public static class WatcherChangeTypesExtensions
+
+    internal delegate void FileWatcherAction(WatcherChangeTypes changeTypes, string absolutePath);
+
+    internal static class WatcherChangeTypesExtensions
     {
         public static bool WasDeleted(this WatcherChangeTypes changeTypes)
         {
             return (changeTypes & WatcherChangeTypes.Deleted) == WatcherChangeTypes.Deleted;
         }
-        
+
         public static bool WasMoved(this WatcherChangeTypes changeTypes)
         {
             return (changeTypes & WatcherChangeTypes.Renamed) == WatcherChangeTypes.Renamed;
         }
-        
+
         public static bool WasCreated(this WatcherChangeTypes changeTypes)
         {
             return (changeTypes & WatcherChangeTypes.Created) == WatcherChangeTypes.Created;
         }
-        
+
         public static bool WasChanged(this WatcherChangeTypes changeTypes)
         {
             return (changeTypes & WatcherChangeTypes.Changed) == WatcherChangeTypes.Changed;

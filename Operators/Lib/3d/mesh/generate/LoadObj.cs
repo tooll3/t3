@@ -1,9 +1,5 @@
 using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
-using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -28,8 +24,9 @@ namespace lib._3d.mesh.generate
 
         public LoadObj()
         {
-            Data.UpdateAction += Update;
             _resource = new Resource<MeshDataSet>(Path, TryCreateResource, allowDisposal: false);
+            _resource.AddDependentSlot(Data);
+            Data.UpdateAction += Update;
         }
 
         private bool TryCreateResource(FileResource file, MeshDataSet? currentValue, out MeshDataSet? newValue, out string? failureReason)

@@ -1,7 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
-using System.IO;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -18,7 +15,17 @@ namespace lib.io.file
         public ReadFile()
         {
             _fileContents = new Resource<string>(FilePath, TryLoad);
+            _fileContents.AddDependentSlot(Result);
             Result.UpdateAction += Update;
+            TriggerUpdate.UpdateAction += OnTriggerUpdate;
+        }
+
+        private void OnTriggerUpdate(EvaluationContext context)
+        {
+            if (TriggerUpdate.GetValue(context))
+            {
+                _fileContents.MarkFileAsChanged();
+            }
         }
 
         private bool TryLoad(FileResource file, string currentValue, out string newValue, out string failureReason)
