@@ -7,7 +7,7 @@ using T3.Core.Utils;
 
 namespace T3.Core.Resource;
 
-public sealed partial class ResourceManager
+public static partial class ResourceManager
 {
     public static IEnumerable<IResourcePackage> GetSharedPackagesForFilters(string[] fileExtensionFilters, bool isFolder, out string[] culledFilters)
     {

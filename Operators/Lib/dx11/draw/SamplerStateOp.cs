@@ -49,7 +49,7 @@ namespace lib.dx11.draw
                 if (SamplerState.Value == null)
                 {
                     // there was no previous valid sampler state, so set default sampler state
-                    SamplerState.Value = ResourceManager.Instance().DefaultSamplerState;
+                    SamplerState.Value = ResourceManager.DefaultSamplerState;
                     Log.Error("Using the default sampler state instead.", this);
                 }
                 else

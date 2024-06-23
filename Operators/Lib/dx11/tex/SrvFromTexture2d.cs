@@ -28,7 +28,6 @@ namespace lib.dx11.tex
         {
             try
             {
-                ResourceManager.Instance();
                 Texture2D texture = Texture.GetValue(context);
                 if (texture != null)
                 {

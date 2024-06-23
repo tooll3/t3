@@ -24,7 +24,6 @@ namespace lib.dx11.draw
 
         private void Update(EvaluationContext context)
         {
-            var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var rasterizer = deviceContext.Rasterizer;

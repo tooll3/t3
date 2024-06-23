@@ -12,14 +12,11 @@ namespace T3.Core.Resource
     /// multi-file partial class.
     /// Todo: rename to `Resources`? for ease of use
     /// </summary>
-    public sealed partial class ResourceManager
+    public static partial class ResourceManager
     {
         public const string ResourcesSubfolder = "Resources";
         public const char PathSeparator = '/';
 
-        public static ResourceManager Instance() => _instance;
-        private static readonly ResourceManager _instance = new();
-        
 
         static ResourceManager()
         {

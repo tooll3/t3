@@ -26,7 +26,6 @@ namespace lib.dx11.draw
             if (buffer == null)
                 return;
             
-            var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             deviceContext.DrawInstancedIndirect(buffer, AlignedByteOffsetForArgs.GetValue(context));

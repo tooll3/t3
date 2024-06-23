@@ -32,8 +32,6 @@ namespace lib._3d.mesh.generate
         {
             try
             {
-                var resourceManager = ResourceManager.Instance();
-
                 var majorRadius = Radius.GetValue(context);
                 var tubeRadius = Thickness.GetValue(context);
 

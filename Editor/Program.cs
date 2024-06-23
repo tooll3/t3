@@ -128,7 +128,7 @@ namespace T3.Editor
             ProgramWindows.SetInteractionDevices(spaceMouse);
 
             Log.Debug($"About to initialize Resource Manager");
-            ResourceManager.Instance().Init(device);
+            ResourceManager.Init(device);
             SharedResources.Initialize();
 
             Log.Debug($"About to initialize T3 UI");

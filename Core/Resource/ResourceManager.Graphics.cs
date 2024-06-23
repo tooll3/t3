@@ -19,13 +19,13 @@ namespace T3.Core.Resource;
 /// <summary>
 /// Loads or creates resources that can be loaded into a shader, such as textures, buffers, SRVs, UAVs, etc
 /// </summary>
-public sealed partial class ResourceManager
+public static partial class ResourceManager
 {
-    public static Device Device => _instance._device;
+    public static Device Device { get; private set; } = null!;
 
-    public void Init(Device device)
+    public static void Init(Device device)
     {
-        _device = device;
+        Device = device;
         var samplerDesc = new SamplerStateDescription
                               {
                                   Filter = Filter.MinMagMipLinear,
@@ -257,7 +257,5 @@ public sealed partial class ResourceManager
         }
     }
 
-
-    private Device _device = null!;
-    public SamplerState DefaultSamplerState { get; private set; } = null!;
+    public static SamplerState DefaultSamplerState { get; private set; } = null!;
 }

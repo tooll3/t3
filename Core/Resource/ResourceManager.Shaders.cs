@@ -14,7 +14,7 @@ namespace T3.Core.Resource;
 /// Creates or loads shaders as "resources" and handles their filehooks, compilation, etc
 /// Could do with some simplification - perhaps their arguments should be condensed into a struct?
 /// </summary>
-public sealed partial class ResourceManager
+public static partial class ResourceManager
 {
     internal static bool TryCompileShaderFromSource<TShader>([NotNullWhen(true)] ref TShader? resource, string shaderSource, Instance instance, out string reason,
                                                            string name = "", string entryPoint = "main")

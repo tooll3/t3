@@ -147,7 +147,7 @@ namespace T3.Player
                 var deviceCreationFlags = DeviceCreationFlags.None;
                 #endif
                 Device.CreateWithSwapChain(DriverType.Hardware, deviceCreationFlags, desc, out _device, out _swapChain);
-                ResourceManager.Instance().Init(_device);
+                ResourceManager.Init(_device);
                 _deviceContext = _device.ImmediateContext;
 
                 var cursor = CoreUi.Instance.Cursor;

@@ -44,7 +44,6 @@ namespace examples.user.cynic.research
                 return;
             }
 
-            var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;

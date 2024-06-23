@@ -28,7 +28,6 @@ namespace lib.dx11.buffer
 
         private void Update(EvaluationContext context)
         {
-            var resourceManager = ResourceManager.Instance();
             var buffer = Buffer.GetValue(context);
             if (buffer != null)
             {

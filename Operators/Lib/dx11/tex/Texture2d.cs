@@ -66,7 +66,6 @@ namespace lib.dx11.tex
                 Log.Error($"[{nameof(Texture2d)}] Failed to create Texture2d: {e.Message}", this);
             }
 
-            //ResourceManager.Instance().id .TestId = _textureResId;
             return;
 
             static bool ReplaceTexture2DIfNeeded(Texture2DDescription description, [NotNullWhen(true)] ref Texture2D? texture)

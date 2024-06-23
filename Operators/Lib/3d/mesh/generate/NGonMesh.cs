@@ -41,8 +41,6 @@ namespace lib._3d.mesh.generate
         {
             try
             {
-                var resourceManager = ResourceManager.Instance();
-
                 var radius = Radius.GetValue(context);
                 var stretch = Stretch.GetValue(context);
                 var rotation = Rotation.GetValue(context);

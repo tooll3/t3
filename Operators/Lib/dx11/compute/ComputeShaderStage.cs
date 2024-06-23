@@ -32,7 +32,6 @@ namespace lib.dx11.compute
 
         private void Update(EvaluationContext context)
         {
-            var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;

@@ -59,7 +59,6 @@ namespace T3.Core.DataTypes
 
         private void InitParticleBufferAndViews()
         {
-            ResourceManager.Instance();
             int stride = ParticleSizeInBytes;
             var bufferData = Enumerable.Repeat(-10.0f, MaxCount * (stride / 4)).ToArray(); // init with negative lifetime other values doesn't matter
             ResourceManager.SetupStructuredBuffer(bufferData, stride * MaxCount, stride, ref ParticleBuffer);
@@ -72,7 +71,6 @@ namespace T3.Core.DataTypes
         private void InitDeadParticleIndices(ComputeShader deadListInitShader)
         {
             // init the buffer 
-            var resourceManager = ResourceManager.Instance();
             ResourceManager.SetupStructuredBuffer(ParticleIndexSizeInBytes*MaxCount, ParticleIndexSizeInBytes, ref DeadParticleIndices);
             ResourceManager.CreateStructuredBufferUav(DeadParticleIndices, UnorderedAccessViewBufferFlags.Append, ref DeadParticleIndicesUav);
             

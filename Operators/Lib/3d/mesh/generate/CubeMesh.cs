@@ -34,7 +34,6 @@ namespace lib._3d.mesh.generate
         {
             try
             {
-                var resourceManager = ResourceManager.Instance();
 
                 var scale = Scale.GetValue(context);
                 var stretch = Stretch.GetValue(context);

@@ -48,7 +48,6 @@ namespace T3.Editor.Gui.OutputUi
             StartInvalidation(slot);
 
             // setup render target - TODO: this should not be done for all 'Command' outputs as most of them don't produce image content
-            var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
 
             Int2 size = context.RequestedResolution;

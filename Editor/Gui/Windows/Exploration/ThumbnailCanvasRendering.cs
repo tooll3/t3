@@ -61,7 +61,6 @@ namespace T3.Editor.Gui.Windows.Exploration
             var previewTextureSrv = SrvManager.GetSrvForTexture(textureSlot.Value);
 
             // Setup graphics pipeline for rendering into the canvas texture
-            var resourceManager = ResourceManager.Instance();
             var deviceContext = ResourceManager.Device.ImmediateContext;
             deviceContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
 

@@ -118,7 +118,6 @@ namespace user.pixtur.learning.cs._01_cca
                 
                 
                 const int stride = 4;
-                var resourceManager = ResourceManager.Instance();
                 _bufferWithViews.Buffer = _buffer;
                 ResourceManager.SetupStructuredBuffer(_cellBuffer, stride * _cellBuffer.Length, stride, ref _buffer);
                 ResourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);

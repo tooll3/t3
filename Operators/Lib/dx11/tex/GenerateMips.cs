@@ -24,7 +24,6 @@ namespace lib.dx11.tex
 
         private void Update(EvaluationContext context)
         {
-            var resourceManager = ResourceManager.Instance();
             Texture2D texture = Texture.GetValue(context);
             if (texture != null)
             {

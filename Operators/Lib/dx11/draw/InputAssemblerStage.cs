@@ -26,7 +26,6 @@ namespace lib.dx11.draw
         private Buffer[] _vertexBuffer = new Buffer[0];
         private void Update(EvaluationContext context)
         {
-            var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var iaStage = deviceContext.InputAssembler;
@@ -41,7 +40,6 @@ namespace lib.dx11.draw
 
         public void Restore(EvaluationContext context)
         {
-            var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var iaStage = deviceContext.InputAssembler;

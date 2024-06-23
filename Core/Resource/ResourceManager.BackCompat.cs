@@ -11,7 +11,7 @@ using T3.Core.Utils;
 
 namespace T3.Core.Resource;
 
-public partial class ResourceManager
+public static partial class ResourceManager
 {
     private static bool RelativePathBackwardsCompatibility(string relativePath, out bool isAbsolute, out List<Range>? backCompatPaths)
     {
