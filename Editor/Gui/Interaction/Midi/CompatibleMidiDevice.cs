@@ -6,8 +6,6 @@ using NAudio.Midi;
 using Operators.Utils;
 using T3.Core.Logging;
 using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
-using T3.Editor.Gui.Interaction.Variations;
-using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.Gui.Interaction.Midi;
 

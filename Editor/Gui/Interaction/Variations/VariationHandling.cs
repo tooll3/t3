@@ -77,8 +77,7 @@ internal static class VariationHandling
                 ActiveInstanceForPresets = ActiveInstanceForSnapshots;
             }
         }
-
-        CompatibleMidiDeviceHandling.UpdateConnectedDevices();
+        
         BlendActions.SmoothVariationBlending.UpdateBlend();
     }
 

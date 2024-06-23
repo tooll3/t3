@@ -15,7 +15,7 @@ using T3.Editor.Gui.Windows.Variations;
 namespace T3.Editor.Gui.Interaction.Variations.Model
 {
     /// <summary>
-    /// Base class for serialization of presents and snapshots
+    /// Base class for serialization of presents, snapshots and ParameterCollection-Scenes
     /// </summary>/
     public class Variation : ISelectableCanvasObject
     {

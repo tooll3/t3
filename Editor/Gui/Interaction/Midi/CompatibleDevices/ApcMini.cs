@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
+using T3.Editor.Gui.Interaction.ParameterCollections;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 
@@ -28,16 +29,13 @@ public class ApcMini : CompatibleMidiDevice
                       new(BlendActions.StartBlendingSnapshots, InputModes.Default, new[] { SceneTrigger1To64 },
                           CommandTriggerCombination.ExecutesAt.AllCombinedButtonsReleased),
 
-
-                      // new(BlendActions.StopBlendingTowards, InputModes.BlendTo, new[] { SceneLaunch8ClipStopAll },
-                      //     CommandTriggerCombination.ExecutesAt.ModeButtonReleased),
                       
                       new(BlendActions.StartBlendingTowardsSnapshot, 
                           requiredInputMode: InputModes.BlendTo, 
                           new[] { SceneTrigger1To64 },
                           CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
 
-                      // Sadly this is not triggered
+                      // Sadly this is not triggered. 
                       // new(BlendActions.StopBlendingTowards, InputModes.BlendTo, new[] { Shift },
                       //     CommandTriggerCombination.ExecutesAt.ModeButtonReleased),
                       
@@ -46,8 +44,13 @@ public class ApcMini : CompatibleMidiDevice
                       
                       new(BlendActions.UpdateBlendingTowardsProgress, InputModes.Default, new[] { Slider9 },
                           CommandTriggerCombination.ExecutesAt.ControllerChange),
+                      
+                      new(BlendActions.UpdateBlendValues, InputModes.Default, new[] { Sliders1To8 }, 
+                          CommandTriggerCombination.ExecutesAt.ControllerChange),
 
-                      new(BlendActions.UpdateBlendValues, InputModes.Default, new[] { Sliders1To8 }, CommandTriggerCombination.ExecutesAt.ControllerChange),
+                      // A first stub for parameter collection control.
+                      // new(ParamCollectionActions.SetParamGroupControl, InputModes.Default, new[] { Sliders1To8 },
+                      //     CommandTriggerCombination.ExecutesAt.ControllerChange),
                       
                       // new(SnapshotActions.SaveSnapshotAtNextFreeSlot, InputModes.Default, new[] { SceneLaunch8ClipStopAll },
                       //     CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),

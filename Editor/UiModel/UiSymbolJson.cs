@@ -11,6 +11,7 @@ using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction.ParameterCollections;
 using T3.Editor.Gui.OutputUi;
 using Truncon.Collections;
 
@@ -36,7 +37,7 @@ namespace T3.Editor.UiModel
             WriteOutputUis(symbolUi, writer);
             WriteAnnotations(symbolUi, writer);
             WriteLinks(symbolUi, writer);
-
+            WriteParamCollections(symbolUi, writer);
             writer.WriteEndObject();
         }
 
@@ -189,6 +190,21 @@ namespace T3.Editor.UiModel
             writer.WriteEndArray();
         }
         
+        private static void WriteParamCollections(SymbolUi symbolUi, JsonTextWriter writer)
+        {
+            if (symbolUi.ParamCollections.Count == 0)
+                return;
+            
+            writer.WritePropertyName(JsonKeys.ParamCollections);
+            writer.WriteStartArray();
+
+            foreach (var paramCollection in symbolUi.ParamCollections)
+            {
+                paramCollection.ToJson(writer);
+            }
+
+            writer.WriteEndArray();
+        }
         
         internal static bool TryReadSymbolUi(JToken mainObject, out SymbolUi symbolUi)
         {
@@ -351,9 +367,10 @@ namespace T3.Editor.UiModel
 
             var annotationDict = ReadAnnotations(mainObject);
             var linksDict = ReadLinks(mainObject);
+            var paramCollections = ReadParamCollections(mainObject, symbolId);
 
 
-            symbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict, linksDict)
+            symbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict, linksDict, paramCollections)
                            {
                                Description = mainObject[JsonKeys.Description]?.Value<string>()
                            };
@@ -415,6 +432,19 @@ namespace T3.Editor.UiModel
             return linkDict;
         }
         
+        private static List<ParameterCollection> ReadParamCollections(JToken symbolUiToken, Guid symbolId)
+        {
+            var collections = new List<ParameterCollection>();
+            var jArray = (JArray)symbolUiToken[JsonKeys.ParamCollections];
+            if (jArray == null)
+                return collections;
+            
+            foreach (var cToken in jArray)
+            {
+                collections.Add(ParameterCollection.FromJson(symbolId,cToken));
+            }
+            return collections;
+        }
 
         private readonly struct JsonKeys
         {
@@ -427,6 +457,7 @@ namespace T3.Editor.UiModel
             public const string Position = nameof(Position);
             public const string Annotations = nameof(Annotations);
             public const string Links = nameof(Links);
+            public const string ParamCollections = nameof(ParamCollections);
             public const string Comment = nameof(Comment);
             public const string Id = nameof(Id);
             public const string Title = nameof(Title);

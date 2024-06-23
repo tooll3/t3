@@ -22,6 +22,7 @@ using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Midi;
+using T3.Editor.Gui.Interaction.ParameterCollections;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Selection;
@@ -98,6 +99,7 @@ public class T3Ui
         AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
 
         VariationHandling.Update();
+        ParameterCollectionHandling.Update();
         MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
         MouseWheelFieldHovered = false;
 

@@ -24,16 +24,11 @@ internal static class ParameterExtraction
         return _symbolIdsForTypes.ContainsKey(inputSlot.ValueType);
     }
     
-    public static void ExtractAsConnectedOperator(IInputSlot inputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
+    public static void ExtractAsConnectedOperator(SymbolUi compositionUi, IInputSlot inputSlot, SymbolChildUi symbolChildUi)
     {
-        var composition = NodeSelection.GetSelectedComposition() ?? inputSlot.Parent.Parent;
-        if (composition == null)
-        {
-            Log.Warning("Can't publish input to undefined composition");
-            return;
-        }
-
-        var compositionSymbol = composition.Symbol;
+        var input = inputSlot.Input;
+        var composition = inputSlot.Parent.Parent;
+        var compositionSymbol = compositionUi.Symbol;
         var commands = new List<ICommand>();
 
         // Find matching symbol

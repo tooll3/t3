@@ -24,6 +24,7 @@ using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Animation;
+using T3.Editor.Gui.Interaction.ParameterCollections;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -56,7 +57,7 @@ namespace T3.Editor.Gui.InputUi
         #endregion
 
         private const float ConnectionAreaWidth = 25.0f;
-        private static float ParameterNameWidth => MathF.Max( ImGui.GetTextLineHeight() * 130.0f / 16, ImGui.GetWindowWidth() * 0.35f);
+        private static float ParameterNameWidth => MathF.Max(ImGui.GetTextLineHeight() * 130.0f / 16, ImGui.GetWindowWidth() * 0.35f);
 
         public SymbolUi Parent { get; set; }
         public Symbol.InputDefinition InputDefinition { get; set; }
@@ -124,7 +125,7 @@ namespace T3.Editor.Gui.InputUi
 
             if (inputSlot.Input == null)
                 return InputEditStateFlags.Nothing;
-            
+
             var name = inputSlot.Input.Name;
             var typeColor = TypeUiRegistry.Entries[Type].Color;
             var compositionSymbol = compositionUi.Symbol;
@@ -166,7 +167,7 @@ namespace T3.Editor.Gui.InputUi
                 {
                     // Just show actual value
                     ImGui.Button(name + "##paramName", new Vector2(-1, 0));
-                    
+
                     if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                     {
                         if (ImGui.MenuItem("Parameters settings"))
@@ -254,42 +255,41 @@ namespace T3.Editor.Gui.InputUi
 
                         ImGui.EndPopup();
                     }
-                    
+
                     CustomComponents.ContextMenuForItem(() =>
-                                    {
-                                        if (ImGui.MenuItem("Set as default", !input.IsDefault))
-                                        {
-                                            // Todo: Implement Undo/Redo Command
-                                            input.SetCurrentValueAsDefault();
-                                            var symbolUi = SymbolUiRegistry.Entries[symbolChildUi.SymbolChild.Symbol.Id];
-                                            symbolUi.Symbol.InvalidateInputDefaultInInstances(inputSlot);
-                                            symbolUi.FlagAsModified();
-                                        }
+                                                        {
+                                                            if (ImGui.MenuItem("Set as default", !input.IsDefault))
+                                                            {
+                                                                // Todo: Implement Undo/Redo Command
+                                                                input.SetCurrentValueAsDefault();
+                                                                var symbolUi = SymbolUiRegistry.Entries[symbolChildUi.SymbolChild.Symbol.Id];
+                                                                symbolUi.Symbol.InvalidateInputDefaultInInstances(inputSlot);
+                                                                symbolUi.FlagAsModified();
+                                                            }
 
-                                        if (ImGui.MenuItem("Reset to default", !input.IsDefault))
-                                        {
-                                            UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id,
-                                                                            input));
-                                        }
+                                                            if (ImGui.MenuItem("Reset to default", !input.IsDefault))
+                                                            {
+                                                                UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id,
+                                                                                                     input));
+                                                            }
 
-                                        if (ImGui.MenuItem("Extract as connection operator"))
-                                        {
-                                            ParameterExtraction.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input);
-                                        }
+                                                            if (ImGui.MenuItem("Extract as connection operator"))
+                                                            {
+                                                                ParameterExtraction.ExtractAsConnectedOperator(compositionUi, inputSlot, symbolChildUi);
+                                                            }
 
-                                        if (ImGui.MenuItem("Publish as Input"))
-                                        {
-                                            PublishAsInput(inputSlot, symbolChildUi, input);
-                                        }
+                                                            if (ImGui.MenuItem("Publish as Input"))
+                                                            {
+                                                                PublishAsInput(inputSlot, symbolChildUi, input);
+                                                            }
 
-                                        if (ImGui.MenuItem("Parameters settings"))
-                                            editState = InputEditStateFlags.ShowOptions;
-                                    });
+                                                            if (ImGui.MenuItem("Parameters settings"))
+                                                                editState = InputEditStateFlags.ShowOptions;
+                                                        });
 
                     ImGui.PopStyleVar();
                     ImGui.SameLine();
 
-   
                     ImGui.PushItemWidth(200.0f);
                     ImGui.PushStyleColor(ImGuiCol.Text,
                                          input.IsDefault
@@ -360,7 +360,7 @@ namespace T3.Editor.Gui.InputUi
                                                             if (ImGui.MenuItem("Remove keyframe"))
                                                             {
                                                                 AnimationOperations.RemoveKeyframeFromCurves(animator.GetCurvesForInput(inputSlot),
-                                                                    Playback.Current.TimeInBars);
+                                                                         Playback.Current.TimeInBars);
                                                             }
                                                         }
                                                         else
@@ -368,7 +368,7 @@ namespace T3.Editor.Gui.InputUi
                                                             if (ImGui.MenuItem("Insert keyframe"))
                                                             {
                                                                 AnimationOperations.InsertKeyframeToCurves(animator.GetCurvesForInput(inputSlot),
-                                                                    Playback.Current.TimeInBars);
+                                                                         Playback.Current.TimeInBars);
                                                             }
                                                         }
 
@@ -416,6 +416,7 @@ namespace T3.Editor.Gui.InputUi
                 ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.OperatorBackground.Apply(typeColor).Rgba);
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Rgba);
 
+                // Connection area...
                 var inputOperation = InputOperations.None;
 
                 if (ConnectionMaker.TempConnections.Count == 0)
@@ -452,7 +453,7 @@ namespace T3.Editor.Gui.InputUi
                             break;
                         }
                         case InputOperations.Extract:
-                            ParameterExtraction.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input);
+                            ParameterExtraction.ExtractAsConnectedOperator(compositionUi, inputSlot, symbolChildUi);
                             break;
                         case InputOperations.ConnectWithSearch:
                         {
@@ -475,7 +476,7 @@ namespace T3.Editor.Gui.InputUi
 
                 Icons.DrawIconOnLastItem(icon, UiColors.TextMuted.Fade(0.3f));
 
-                // Draw out input
+                // Drag out connection lines
                 if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickThreshold)
                 {
                     if (ConnectionMaker.TempConnections.Count == 0)
@@ -506,7 +507,7 @@ namespace T3.Editor.Gui.InputUi
 
                 ImGui.SameLine();
 
-                // Draw Name
+                // Draw Name Button
                 ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
 
                 if (input.IsDefault)
@@ -519,6 +520,7 @@ namespace T3.Editor.Gui.InputUi
                     {
                         CustomComponents.TooltipForLastItem(Description);
                     }
+
                     ImGui.PopStyleColor(2);
                     ImGui.SameLine();
                 }
@@ -532,6 +534,7 @@ namespace T3.Editor.Gui.InputUi
                         {
                             CustomComponents.TooltipForLastItem(Description, "Click to reset to default");
                         }
+
                         Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 4));
                     }
 
@@ -541,54 +544,64 @@ namespace T3.Editor.Gui.InputUi
                     }
                 }
 
-                CustomComponents.ContextMenuForItem(() =>
-                                                    {
-                                                        if (ImGui.MenuItem("Set as default", !input.IsDefault))
-                                                        {
-                                                            // Todo: Implement Undo/Redo Command
-                                                            input.SetCurrentValueAsDefault();
-                                                            var symbolUi = SymbolUiRegistry.Entries[symbolChildUi.SymbolChild.Symbol.Id];
-                                                            symbolUi.Symbol.InvalidateInputDefaultInInstances(inputSlot);
-                                                            symbolUi.FlagAsModified();
-                                                        }
+                CustomComponents.ContextMenuForItem
+                    (() =>
+                     {
+                         if (ImGui.MenuItem("Set as default", !input.IsDefault))
+                         {
+                             // Todo: Implement Undo/Redo Command
+                             input.SetCurrentValueAsDefault();
+                             var symbolUi = SymbolUiRegistry.Entries[symbolChildUi.SymbolChild.Symbol.Id];
+                             symbolUi.Symbol.InvalidateInputDefaultInInstances(inputSlot);
+                             symbolUi.FlagAsModified();
+                         }
 
-                                                        if (ImGui.MenuItem("Reset to default", !input.IsDefault))
-                                                        {
-                                                            UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id,
-                                                                                            input));
-                                                        }
+                         if (ImGui.MenuItem("Reset to default", !input.IsDefault))
+                         {
+                             UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id,
+                                                                                 input));
+                         }
 
-                                                        if (ImGui.MenuItem("Extract as connection operator"))
-                                                        {
-                                                            ParameterExtraction.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input);
-                                                        }
+                         if (ImGui.MenuItem("Extract as connection operator"))
+                         {
+                             ParameterExtraction.ExtractAsConnectedOperator(compositionUi, inputSlot, symbolChildUi);
+                         }
 
-                                                        if (ImGui.MenuItem("Publish as Input"))
-                                                        {
-                                                            PublishAsInput(inputSlot, symbolChildUi, input);
-                                                        }
+                         if (ImGui.MenuItem("Publish as Input"))
+                         {
+                             PublishAsInput(inputSlot, symbolChildUi, input);
+                         }
+                         
+                         if (ParameterCollectionHandling.TryGetCollectionForParameter(compositionUi, inputSlot, symbolChildUi, input, out var collection))
+                         {
+                             if (ImGui.MenuItem($"Remove from collection {collection.Title}"))
+                             {
+                                 Log.Debug("Not implemented yet");
+                             }
+                         }
+                         else if (ImGui.MenuItem("Add to Parameter Collection"))
+                         {
+                             ParameterCollectionHandling.AddParameterToNewOrActiveCollection(compositionUi, inputSlot, symbolChildUi, input);
+                         }
 
-                                                        if (ImGui.MenuItem("Parameters settings"))
-                                                            editState = InputEditStateFlags.ShowOptions;
+                         if (ImGui.MenuItem("Parameters settings"))
+                             editState = InputEditStateFlags.ShowOptions;
 
-                                                        if (ParameterWindow.IsAnyInstanceVisible() && ImGui.MenuItem("Rename input"))
-                                                        {
-                                                            ParameterWindow.RenameInputDialog.ShowNextFrame(symbolChildUi.SymbolChild.Symbol,
-                                                                input.InputDefinition.Id);
-                                                        }
-                                                    });
-
+                         if (ParameterWindow.IsAnyInstanceVisible() && ImGui.MenuItem("Rename input"))
+                         {
+                             ParameterWindow.RenameInputDialog.ShowNextFrame(symbolChildUi.SymbolChild.Symbol,
+                                                                             input.InputDefinition.Id);
+                         }
+                     });
                 ImGui.PopStyleVar();
 
-                // Draw control
-                //ImGui.PushItemWidth(200.0f);
+                // Draw parameter value
+                ImGui.SetNextItemWidth(-1);
                 ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? UiColors.TextMuted.Rgba : UiColors.ForegroundFull.Rgba);
                 if (input.IsDefault)
                 {
                     input.Value.Assign(input.DefaultValue);
                 }
-
-                ImGui.SetNextItemWidth(-1);
 
                 editState |= DrawEditControl(name, input, ref typedInputSlot.TypedInputValue.Value, false);
                 if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified ||
@@ -641,6 +654,7 @@ namespace T3.Editor.Gui.InputUi
                 Log.Warning("Publishing wasn't possible");
                 return;
             }
+
             var cmd = new AddConnectionCommand(updatedComposition.Symbol,
                                                new Symbol.Connection(sourceParentOrChildId: ConnectionMaker.UseSymbolContainerId,
                                                                      sourceSlotId: newInputDefinition.Id,
@@ -648,17 +662,18 @@ namespace T3.Editor.Gui.InputUi
                                                                      targetSlotId: input.InputDefinition.Id),
                                                0);
             cmd.Do();
-            
+
             newInputDefinition.DefaultValue.Assign(input.Value.Clone());
             originalInputSlot.Input.Value.Assign(input.Value.Clone());
             originalInputSlot.DirtyFlag.Invalidate();
-            
+
             var newSlot = updatedComposition.Inputs.FirstOrDefault(i => i.Id == newInputDefinition.Id);
             if (newSlot != null)
             {
                 newSlot.Input.Value.Assign(input.Value.Clone());
                 newSlot.Input.IsDefault = false;
             }
+
             UndoRedoStack.Clear();
         }
 
@@ -696,18 +711,18 @@ namespace T3.Editor.Gui.InputUi
                 if (FormInputs.AddEnumDropdown(ref tmpForRef, "Relevancy"))
                     Relevancy = tmpForRef;
             }
-            
+
             FormInputs.AddVerticalSpace(5);
         }
 
         public virtual void DrawDescriptionEdit()
         {
             FormInputs.AddVerticalSpace();
-            
+
             FormInputs.AddSectionHeader("Documentation");
             var width = ImGui.GetContentRegionAvail().X;
-            var description = string.IsNullOrEmpty( Description) ? string.Empty : Description;
-            if (ImGui.InputTextMultiline("##parameterDescription", ref description, 16000, new Vector2(width,0)))
+            var description = string.IsNullOrEmpty(Description) ? string.Empty : Description;
+            if (ImGui.InputTextMultiline("##parameterDescription", ref description, 16000, new Vector2(width, 0)))
             {
                 Description = string.IsNullOrEmpty(description) ? null : description;
                 Parent.FlagAsModified();
