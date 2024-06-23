@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
@@ -48,20 +49,47 @@ namespace lib.dx11.tex
                                   CpuAccessFlags = CpuAccessFlags.GetValue(context),
                                   OptionFlags = ResourceOptionFlags.GetValue(context)
                               };
-            if (ResourceManager.CreateTexture3d(texDesc, ref _texture3d))
+            if (CreateTexture3d(texDesc, ref _texture3d))
             {
                 var tex = _texture3d;
                 OutputTexture.Value.Texture = tex;
                 
                 if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.ShaderResource) > 0)
-                    ResourceManager.CreateShaderResourceView(tex, "", ref OutputTexture.Value.Srv);
+                    tex.CreateShaderResourceView(ref OutputTexture.Value.Srv, "");
                 if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.RenderTarget) > 0)
-                    ResourceManager.CreateRenderTargetView(tex, "", ref OutputTexture.Value.Rtv);
+                    tex.CreateRenderTargetView(ref OutputTexture.Value.Rtv, "");
                 if ((BindFlags.Value & SharpDX.Direct3D11.BindFlags.UnorderedAccess) > 0)
-                    ResourceManager.CreateUnorderedAccessView(tex, "", ref OutputTexture.Value.Uav);
+                    tex.CreateUnorderedAccessView(ref OutputTexture.Value.Uav, "");
                 
             }
         }
+
+        private static bool CreateTexture3d(Texture3DDescription description, [NotNullWhen(true)] ref Texture3D? texture)
+        {
+            var shouldCreateNew = texture == null;
+            try
+            {
+                if (texture != null)
+                {
+                    shouldCreateNew = shouldCreateNew || !EqualityComparer<Texture3DDescription>.Default.Equals(texture.Description, description);
+                }
+            }
+            catch (Exception e)
+            {
+                shouldCreateNew = true;
+                Log.Warning($"Failed to get texture description: {e}");
+            }
+
+            if (shouldCreateNew)
+            {
+                texture?.Dispose();
+                texture = Texture3D.CreateTexture3D(description);
+                return true;
+            }
+
+            // unchanged
+            return false;
+    }
 
         [Input(Guid = "dca953d6-bdc1-42eb-9a4d-5974c42cf45b")]
         public readonly InputSlot<Int3> Size = new();

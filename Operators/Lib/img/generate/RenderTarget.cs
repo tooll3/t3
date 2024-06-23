@@ -303,7 +303,7 @@ namespace lib.img.generate
                                                        SampleDescription = new SampleDescription(_sampleCount, 0),
                                                        Usage = ResourceUsage.Default,
                                                    };
-                    _multiSampledColorBuffer = ResourceManager.CreateTexture2D(texture2DDescription);
+                    _multiSampledColorBuffer = Texture2D.CreateTexture2D(texture2DDescription);
 
                     _multiSampledColorBufferSrv = new ShaderResourceView(device, _multiSampledColorBuffer);
                     _multiSampledColorBufferRtv = new RenderTargetView(device, _multiSampledColorBuffer,
@@ -338,7 +338,7 @@ namespace lib.img.generate
                 {
                     try
                     {
-                        _resolvedColorBuffer = ResourceManager.CreateTexture2D(
+                        _resolvedColorBuffer = Texture2D.CreateTexture2D(
                                                              new Texture2DDescription
                                                                  {
                                                                      ArraySize = 1,
@@ -394,7 +394,7 @@ namespace lib.img.generate
                 // Depth / Multi sampled
                 try
                 {
-                    _multiSampledDepthBuffer = ResourceManager.CreateTexture2D(
+                    _multiSampledDepthBuffer = Texture2D.CreateTexture2D(
                                                              new Texture2DDescription
                                                                  {
                                                                      ArraySize = 1,
@@ -440,7 +440,7 @@ namespace lib.img.generate
                 {
                     try
                     {
-                        _resolvedDepthBuffer = ResourceManager.CreateTexture2D(
+                        _resolvedDepthBuffer = Texture2D.CreateTexture2D(
                                                              new Texture2DDescription
                                                                  {
                                                                      ArraySize = 1,

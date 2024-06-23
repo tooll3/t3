@@ -76,7 +76,7 @@ namespace lib.img.fx._
                 var dataRectangles = new SharpDX.DataRectangle[] { new(dataStream.DataPointer, listSizeInBytes) };
                 Utilities.Dispose(ref MappingTexture.Value);
 
-                MappingTexture.Value = ResourceManager.CreateTexture2D(texDesc, dataRectangles);
+                MappingTexture.Value = Texture2D.CreateTexture2D(texDesc, dataRectangles);
             }
         }
 

@@ -101,7 +101,7 @@ namespace lib.sprite
                 }
 
                 Texture.Value = texture;
-                ResourceManager.CreateShaderResourceView(texture, "TextSpritesSRV", ref _textureSrv);
+                texture.CreateShaderResourceView(ref _textureSrv, "TextSpritesSRV");
 
                 try
                 {

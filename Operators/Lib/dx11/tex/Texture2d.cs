@@ -85,7 +85,7 @@ namespace lib.dx11.tex
                 if (shouldCreateNew)
                 {
                     texture?.Dispose();
-                    texture = ResourceManager.CreateTexture2D(description);
+                    texture = Texture2D.CreateTexture2D(description);
                     return true;
                 }
 

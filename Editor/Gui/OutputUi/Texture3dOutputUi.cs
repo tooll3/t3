@@ -43,7 +43,7 @@ namespace T3.Editor.Gui.OutputUi
                                   Usage = ResourceUsage.Default,
                               };
 
-            _viewTexture = ResourceManager.CreateTexture2D(texDesc);
+            _viewTexture = Texture2D.CreateTexture2D(texDesc);
             _viewTextureUav = new UnorderedAccessView(ResourceManager.Device, _viewTexture);
         }
 

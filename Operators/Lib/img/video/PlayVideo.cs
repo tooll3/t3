@@ -200,7 +200,7 @@ namespace lib.img.video
             var device = ResourceManager.Device;
             try
             {
-                _texture = ResourceManager.CreateTexture2D(
+                _texture = Texture2D.CreateTexture2D(
                                          new Texture2DDescription
                                              {
                                                  ArraySize = 1,

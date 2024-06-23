@@ -143,9 +143,9 @@ namespace T3.Editor.Gui.OutputUi
                                             Height = size.Height,
                                         };
                     
-                    _colorBuffer = ResourceManager.CreateTexture2D(colorDesc);
-                    ResourceManager.CreateShaderResourceView(_colorBuffer, null, ref _colorBufferSrv);
-                    ResourceManager.CreateRenderTargetView(_colorBuffer, null, ref _colorBufferRtv);
+                    _colorBuffer = Texture2D.CreateTexture2D(colorDesc);
+                    _colorBuffer.CreateShaderResourceView(ref _colorBufferSrv, null);
+                    _colorBuffer.CreateRenderTargetView(ref _colorBufferRtv, null);
                 }
 
                 // Initialize depth buffer 
@@ -159,7 +159,7 @@ namespace T3.Editor.Gui.OutputUi
                                             Height = size.Height,
                                         };
 
-                    _depthBuffer = ResourceManager.CreateTexture2D(depthDesc);
+                    _depthBuffer = Texture2D.CreateTexture2D(depthDesc);
                     var depthViewDesc = new DepthStencilViewDescription
                                             {
                                                 Format = Format.D32_Float,

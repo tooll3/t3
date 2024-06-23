@@ -47,7 +47,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                                       SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
                                   };
 
-            _canvasTexture = ResourceManager.CreateTexture2D(description);
+            _canvasTexture = Texture2D.CreateTexture2D(description);
             CanvasTextureSrv = SrvManager.GetSrvForTexture(_canvasTexture);
             _canvasTextureRtv = new RenderTargetView(Program.Device, _canvasTexture);
             _initialized = true;

@@ -106,8 +106,24 @@ namespace T3.Core.DataTypes
         private void InitIndirectArgBuffer()
         {
             int sizeInBytes = 16;
-            ResourceManager.SetupIndirectBuffer(sizeInBytes, ref IndirectArgsBuffer);
+            SetupIndirectBuffer(sizeInBytes, ref IndirectArgsBuffer);
             ResourceManager.CreateBufferUav<uint>(IndirectArgsBuffer, Format.R32_UInt, ref IndirectArgsBufferUav);
+
+            static void SetupIndirectBuffer(int sizeInBytes, ref Buffer? buffer)
+            {
+                if (buffer != null)
+                    return;
+
+                var bufferDesc = new BufferDescription
+                                     {
+                                         Usage = ResourceUsage.Default,
+                                         BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
+                                         SizeInBytes = sizeInBytes,
+                                         OptionFlags = ResourceOptionFlags.DrawIndirectArguments,
+                                     };
+
+                buffer = new Buffer(ResourceManager.Device, bufferDesc);
+            }
         }
         
         private void InitParticleCountConstBuffer()

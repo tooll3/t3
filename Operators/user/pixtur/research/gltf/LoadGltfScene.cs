@@ -514,7 +514,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                                ArraySize = 1
                                            };
 
-        var resultTexture = ResourceManager.CreateTexture2D(resultTextureDescription);
+        var resultTexture = Texture2D.CreateTexture2D(resultTextureDescription);
         resultSrv = new ShaderResourceView(ResourceManager.Device, resultTexture);
         var resultUav = new UnorderedAccessView(ResourceManager.Device, resultTexture);
         csStage.SetUnorderedAccessView(0, resultUav, 0);
@@ -563,7 +563,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             formatConverter.Initialize(bitmapFrameDecode, SharpDX.WIC.PixelFormat.Format32bppRGBA, BitmapDitherType.None, null, 0.0,
                                        BitmapPaletteType.Custom);
 
-            texture = ResourceManager.CreateTexture2DFromBitmap(ResourceManager.Device, formatConverter);
+            texture = Texture2D.CreateFromBitmap(ResourceManager.Device, formatConverter);
             texture.Name = channel.Key;
 
             Log.Debug($" Created {gltfMaterial.Name}.{channel.Key} with {texture.Description.Width}×{texture.Description.Height}");

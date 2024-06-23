@@ -129,7 +129,7 @@ namespace lib.img.generate
                                                    BitmapPaletteType.Custom);
 
                         _image?.Dispose();
-                        _image = ResourceManager.CreateTexture2DFromBitmap(ResourceManager.Device, formatConverter);
+                        _image = Texture2D.CreateFromBitmap(ResourceManager.Device, formatConverter);
                         _image.Name = _url;
                         bitmapFrameDecode.Dispose();
                         bitmapDecoder.Dispose();

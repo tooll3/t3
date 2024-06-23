@@ -60,8 +60,8 @@ namespace examples.lib.img.use
                     Utilities.Dispose(ref _prevTextureA);
                     Utilities.Dispose(ref _prevTextureB);
 
-                    _prevTextureA = ResourceManager.CreateTexture2D(description);
-                    _prevTextureB = ResourceManager.CreateTexture2D(description);
+                    _prevTextureA = Texture2D.CreateTexture2D(description);
+                    _prevTextureB = Texture2D.CreateTexture2D(description);
                     _prevTextureView = description;
                 }
 

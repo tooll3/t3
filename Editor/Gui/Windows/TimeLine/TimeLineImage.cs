@@ -2,6 +2,7 @@ using System.IO;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Audio;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Gui.Audio;
@@ -59,7 +60,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             if (resource.Value != null)
             {
                 _loadedImagePath = imagePath;
-                ResourceManager.CreateShaderResourceView(_textureResource.Value, imagePath, ref _srv);
+                _textureResource.Value.CreateShaderResourceView(ref _srv, imagePath);
             }
             
             _loadedImagePath = imagePath;

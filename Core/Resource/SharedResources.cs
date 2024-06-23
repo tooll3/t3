@@ -2,6 +2,7 @@
 using System.IO;
 using SharpDX.Direct3D11;
 using T3.Core.Compilation;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Resource;
 using PixelShader = T3.Core.DataTypes.PixelShader;
@@ -66,7 +67,7 @@ namespace T3.Editor.App
             }
             else
             {
-                ResourceManager.CreateShaderResourceView(_viewWindowDefaultTexture.Value, "view window default texture SRV", ref ViewWindowDefaultTextureSrv);
+                _viewWindowDefaultTexture.Value.CreateShaderResourceView(ref ViewWindowDefaultTextureSrv, "view window default texture SRV");
             }
             
             if (_colorPickerTexture.Value == null)
@@ -75,7 +76,7 @@ namespace T3.Editor.App
             }
             else
             {
-                ResourceManager.CreateShaderResourceView(_colorPickerTexture.Value, "color picker image SRV", ref ColorPickerImageSrv);
+                _colorPickerTexture.Value.CreateShaderResourceView(ref ColorPickerImageSrv, "color picker image SRV");
             }
         }
         

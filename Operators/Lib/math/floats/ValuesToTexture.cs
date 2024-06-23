@@ -96,7 +96,7 @@ namespace lib.math.floats
                                                      pitch: useHorizontal ? listSizeInBytes : 1 * entrySizeInBytes)
                                              };
                     Utilities.Dispose(ref CurveTexture.Value);
-                    CurveTexture.Value = ResourceManager.CreateTexture2D(texDesc, dataRectangles);
+                    CurveTexture.Value = Texture2D.CreateTexture2D(texDesc, dataRectangles);
                 }
                 catch (Exception e)
                 {

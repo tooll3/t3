@@ -92,8 +92,7 @@ public sealed partial class ResourceManager
                 if (!StringUtils.MatchesSearchFilter(fileName, filter, true))
                     continue;
                 
-                var isWildcard = FilterIsWildcard(filter);
-                if (isWildcard)
+                if (filter.EndsWith('*'))
                 {
                     if (PathIsShader(fileName))
                         continue;
@@ -112,7 +111,6 @@ public sealed partial class ResourceManager
         }
     }
     
-    private static bool FilterIsWildcard(string filter) => filter.EndsWith("*");
     public const string DefaultShaderFilter = "*.hlsl";
     private static bool PathIsShader(string path) => StringUtils.MatchesSearchFilter(path, DefaultShaderFilter, true);
 }

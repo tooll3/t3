@@ -36,7 +36,7 @@ namespace lib.dx11.tex
                         if (_srv == null || _srv.Resource != (SharpDX.Direct3D11.Resource)texture)
                         {
                             _srv?.Dispose();
-                            ResourceManager.CreateShaderResourceView(texture, null, ref _srv);
+                            texture.CreateShaderResourceView(ref _srv, null);
                         }
 
                         ResourceManager.Device.ImmediateContext.GenerateMips(_srv);

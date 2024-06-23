@@ -14,7 +14,6 @@ namespace lib.dx11.buffer
         [Output(Guid = "837133D3-308C-48AA-9AFE-B9EB09E76A69")]
         public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new();
 
-
         public IndirectBuffer()
         {
             Buffer.UpdateAction += UpdateBuffer;
@@ -36,7 +35,8 @@ namespace lib.dx11.buffer
                                  OptionFlags = ResourceOptionFlags.DrawIndirectArguments,
                                  StructureByteStride = stride
                              };
-            ResourceManager.SetupBuffer(bufferDesc, ref Buffer.Value);
+            
+            Buffer.Value ??= new SharpDX.Direct3D11.Buffer(ResourceManager.Device, bufferDesc);
         }
 
         [Input(Guid = "38D649D2-861B-4302-A879-973D6405A4DE")]

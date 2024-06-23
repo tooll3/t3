@@ -128,7 +128,7 @@ namespace lib.color
                                                  pitch:useHorizontal ? gradientSizeInBytes : gradientsCount * entrySizeInBytes)
                                          };
                 Utilities.Dispose(ref GradientsTexture.Value);
-                GradientsTexture.Value = ResourceManager.CreateTexture2D(texDesc, dataRectangles);
+                GradientsTexture.Value = Texture2D.CreateTexture2D(texDesc, dataRectangles);
             }
             catch (Exception e)
             {

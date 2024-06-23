@@ -135,7 +135,7 @@ namespace lib.math.curve
                                                  )
                                          };
                 Utilities.Dispose(ref CurveTexture.Value);
-                CurveTexture.Value = ResourceManager.CreateTexture2D(texDesc, dataRectangles);
+                CurveTexture.Value = Texture2D.CreateTexture2D(texDesc, dataRectangles);
             }
             catch (Exception e)
             {

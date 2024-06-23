@@ -71,7 +71,7 @@ namespace lib.color
                                    ArraySize = 1
                                };
                 Utilities.Dispose(ref _imageWithCpuAccess);
-                _imageWithCpuAccess = ResourceManager.CreateTexture2D(desc);
+                _imageWithCpuAccess = Texture2D.CreateTexture2D(desc);
                 immediateContext.CopyResource(inputImage, _imageWithCpuAccess);
             }
 

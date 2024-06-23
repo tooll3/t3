@@ -61,7 +61,7 @@ namespace Lib._3d.postfx
                                ArraySize = 1
                            };
             Utilities.Dispose(ref _imageWithCpuAccess);
-            _imageWithCpuAccess = ResourceManager.CreateTexture2D(desc);
+            _imageWithCpuAccess = Texture2D.CreateTexture2D(desc);
             immediateContext.CopyResource(inputImage, _imageWithCpuAccess);
 
             // Gets a pointer to the image data, and denies the GPU access to that subresource.            

@@ -150,7 +150,7 @@ namespace lib.img.fx._
             Utilities.Dispose(ref _prefilteredCubeMap);
             try
             {
-                _prefilteredCubeMap = ResourceManager.CreateTexture2D(cubeMapDesc);
+                _prefilteredCubeMap = Texture2D.CreateTexture2D(cubeMapDesc);
             }
             catch(SharpDXException e)
             {

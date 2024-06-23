@@ -1,5 +1,6 @@
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using T3.Core.DataTypes;
 using T3.Core.Resource;
 using T3.Editor.Gui.Graph.Rendering;
 using ComputeShader = T3.Core.DataTypes.ComputeShader;
@@ -142,7 +143,7 @@ internal static class TextureReadAccess
 
         for (var i = 0; i < CpuAccessTextureCount; ++i)
         {
-            _imagesWithCpuAccess.Add(ResourceManager.CreateTexture2D(cpuAccessDescription));
+            _imagesWithCpuAccess.Add(Texture2D.CreateTexture2D(cpuAccessDescription));
         }
 
         // Create format conversion texture
@@ -159,8 +160,8 @@ internal static class TextureReadAccess
                                                 CpuAccessFlags = CpuAccessFlags.None,
                                                 ArraySize = 1
                                             };
-        _conversionTexture = ResourceManager.CreateTexture2D(convertTextureDescription);
-        ResourceManager.CreateUnorderedAccessView(_conversionTexture, "textureReadAccessUav", ref _conversionUav);
+        _conversionTexture = Texture2D.CreateTexture2D(convertTextureDescription);
+        _conversionTexture.CreateUnorderedAccessView(ref _conversionUav, "textureReadAccessUav");
     }
 
     #region conversion shader
