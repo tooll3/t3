@@ -48,17 +48,18 @@ namespace T3.Core.Resource
 
             if (_fsWatcher != null) return;
 
-            _fsWatcher = new(_watchedDirectory)
+            _fsWatcher = new FileSystemWatcher(_watchedDirectory)
                              {
                                  IncludeSubdirectories = true,
-                                 EnableRaisingEvents = true
+                                 EnableRaisingEvents = true,
+                                 NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName
                              };
 
             _fsWatcher.Changed += OnFileChanged;
+            _fsWatcher.Renamed += OnFileChanged;
             _fsWatcher.Created += OnFileCreated;
             _fsWatcher.Deleted += OnFileDeleted;
             _fsWatcher.Error += OnError;
-            _fsWatcher.Renamed += OnFileRenamed;
         }
 
         internal void RemoveFileHook(string absolutePath, FileWatcherAction onResourceChanged)
@@ -81,17 +82,19 @@ namespace T3.Core.Resource
         internal void RaiseQueuedFileChanges()
         {
             var currentTime = DateTime.UtcNow.Ticks;
-            const long thresholdMs = 1000 * TimeSpan.TicksPerMillisecond;
+            
+            const long thresholdMs = 394;
+            const long thresholdTicks = thresholdMs * TimeSpan.TicksPerMillisecond;
             lock (_eventLock)
             {
                 if (_newFileEvents.Count == 0)
                     return;
 
-                var fileEvents = _newFileEvents.OrderBy(x => x.Value).ToArray();
+                var fileEvents = _newFileEvents.OrderBy(x => x.Value.TimeTicks).ToArray();
                 FileKey previous = default;
                 foreach (var (fileKey, details) in fileEvents)
                 {
-                    if (currentTime - details.TimeTicks < thresholdMs)
+                    if (currentTime - details.TimeTicks < thresholdTicks)
                         break;
 
                     _newFileEvents.Remove(fileKey);
@@ -155,6 +158,7 @@ namespace T3.Core.Resource
         {
             Log.Info($"File created: {e.FullPath}");
             FileCreated?.Invoke(this, e.FullPath);
+            OnFileChanged(this, e);
         }
 
         private void OnFileChanged(object sender, FileSystemEventArgs e)
@@ -164,11 +168,6 @@ namespace T3.Core.Resource
             {
                 _newFileEvents[fileKey] = new FileWatchDetails(DateTime.UtcNow.Ticks, e);
             }
-        }
-
-        private void OnFileRenamed(object sender, RenamedEventArgs e)
-        {
-            OnFileChanged(sender, e);
         }
 
         private void OnError(object sender, ErrorEventArgs e)

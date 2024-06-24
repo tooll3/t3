@@ -25,7 +25,7 @@ namespace lib._3d.mesh.generate
         public LoadObj()
         {
             _resource = new Resource<MeshDataSet>(Path, TryCreateResource, allowDisposal: false);
-            _resource.AddDependentSlot(Data);
+            _resource.AddDependentSlots(Data);
             Data.UpdateAction += Update;
         }
 

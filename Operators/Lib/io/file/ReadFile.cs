@@ -15,7 +15,7 @@ namespace lib.io.file
         public ReadFile()
         {
             _fileContents = new Resource<string>(FilePath, TryLoad);
-            _fileContents.AddDependentSlot(Result);
+            _fileContents.AddDependentSlots(Result);
             Result.UpdateAction += Update;
             TriggerUpdate.UpdateAction += OnTriggerUpdate;
         }

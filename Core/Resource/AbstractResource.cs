@@ -97,7 +97,7 @@ namespace T3.Core.Resource
             return !_equalityComparer.Equals(value, default);
         }
 
-        public void AddDependentSlot(ISlot outputSlot)
+        public void AddDependentSlots(ISlot outputSlot)
         {
             if (outputSlot is IInputSlot)
             {
@@ -107,11 +107,11 @@ namespace T3.Core.Resource
             _dependentSlots.Add(outputSlot);
         }
 
-        public void AddDependentSlot(params ISlot[] slots)
+        public void AddDependentSlots(params ISlot[] slots)
         {
             foreach (var slot in slots)
             {
-                AddDependentSlot(slot);
+                AddDependentSlots(slot);
             }
         }
 
@@ -119,8 +119,12 @@ namespace T3.Core.Resource
         public void MarkFileAsChanged()
         {
             ResetLazyValue();
+            
+            // force-invalidate all dependent slots
+            // it must be forced since this is called outside of the main invalidation loop
+            // this isn't the prettiest solution but it works for now. 
             foreach (var slot in _dependentSlots)
-                slot.DirtyFlag.Invalidate();
+                slot.DirtyFlag.ForceInvalidate();
 
             Changed?.Invoke();
             return;
@@ -170,7 +174,7 @@ namespace T3.Core.Resource
 
         private void OnFileUpdate(object? sender, WatcherChangeTypes changeTypes)
         {
-            Log.Debug($"{_fileResource!.AbsolutePath} changed. {changeTypes}");
+            Log.Debug($"Resource file '{_fileResource!.AbsolutePath}' changed: {changeTypes}");
             // change type-in value to the new path
             if (changeTypes.WasMoved())
             {

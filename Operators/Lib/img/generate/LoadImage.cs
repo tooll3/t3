@@ -23,7 +23,7 @@ namespace lib.img.generate
         public LoadImage()
         {
             _textureResource = ResourceManager.CreateTextureResource(Path);
-            _textureResource.AddDependentSlot(Texture);
+            _textureResource.AddDependentSlots(Texture);
             Texture.UpdateAction = UpdateTexture;
             ShaderResourceView.UpdateAction = UpdateTexture;
         }

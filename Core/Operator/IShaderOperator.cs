@@ -123,7 +123,7 @@ public interface IShaderOperator<T> : IDescriptiveFilename where T : AbstractSha
     {
         var resource = ResourceManager.CreateShaderResource<T>(Path, () => CachedEntryPoint);
         var shaderSlot = ShaderSlot;
-        resource.AddDependentSlot(shaderSlot);
+        resource.AddDependentSlots(shaderSlot);
         shaderSlot.UpdateAction = context =>
                                   {
                                       if (!Path.DirtyFlag.IsDirty && EntryPoint.DirtyFlag.IsDirty)

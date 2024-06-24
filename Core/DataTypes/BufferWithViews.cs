@@ -2,7 +2,7 @@
 
 namespace T3.Core.DataTypes
 {
-    public class BufferWithViews : IDisposable
+    public sealed class BufferWithViews : IDisposable
     {
         public SharpDX.Direct3D11.Buffer Buffer;
         public SharpDX.Direct3D11.ShaderResourceView Srv;

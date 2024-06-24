@@ -32,8 +32,8 @@ namespace lib.sprite
         public TextSprites()
         {
             _bmFont = new Resource<BmFontDescription>(Filepath, TryGenerateFont);
-            _bmFont.AddDependentSlot(SpriteBuffer);
-            _bmFont.AddDependentSlot(PointBuffer);
+            _bmFont.AddDependentSlots(SpriteBuffer);
+            _bmFont.AddDependentSlots(PointBuffer);
             SpriteBuffer.UpdateAction += Update;
             PointBuffer.UpdateAction += Update;
         }

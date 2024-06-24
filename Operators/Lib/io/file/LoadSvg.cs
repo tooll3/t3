@@ -31,7 +31,7 @@ namespace lib.io.file
         public LoadSvg()
         {
             _svgResource = new Resource<SvgDocument>(FilePath, SvgLoader.TryLoad);
-            _svgResource.AddDependentSlot(ResultList);
+            _svgResource.AddDependentSlots(ResultList);
             ResultList.UpdateAction += Update;
             _pointListWithSeparator.TypedElements[_pointListWithSeparator.NumElements - 1] = Point.Separator();
         }
