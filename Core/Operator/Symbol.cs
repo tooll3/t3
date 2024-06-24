@@ -51,6 +51,8 @@ namespace T3.Core.Operator
             }
         }
 
+        public bool IsGeneric => _instanceType.IsGenericTypeDefinition;
+
         public Symbol(Type instanceType, Guid symbolId, SymbolPackage symbolPackage)
         {
             Id = symbolId;
@@ -320,6 +322,7 @@ namespace T3.Core.Operator
             }
         }
         
+        internal void AddInstanceOfSelf(Instance instance) => _instancesOfSelf.Add(instance);
         private readonly List<Instance> _instancesOfSelf = new();
         private ConcurrentDictionary<Guid, Child> _children = new();
     }

@@ -21,7 +21,7 @@ namespace T3.Core.Operator.Slots
         
     }
 
-    public class InputValue<T> : InputValue
+    public sealed class InputValue<T> : InputValue
     {
         public InputValue() : this(default)
         {

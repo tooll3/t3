@@ -37,7 +37,7 @@ public sealed partial class Symbol
         // ... and create the new ones...
         foreach (var (symbolChild, parent, _) in existingInstancesRefreshInfo)
         {
-            var success = TryCreateNewInstance(symbolChild, parent, out _);
+            var success = symbolChild.TryCreateNewInstance(parent, out _);
         }
 
         // ... and add the connections again

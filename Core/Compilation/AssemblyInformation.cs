@@ -22,15 +22,137 @@ using T3.Serialization;
 
 namespace T3.Core.Compilation;
 
-public readonly record struct InputSlotInfo(string Name, InputAttribute Attribute, Type[] GenericArguments, FieldInfo Field, bool IsMultiInput);
+public readonly record struct InputSlotInfo(
+    string Name,
+    InputAttribute Attribute,
+    Type[] GenericArguments,
+    FieldInfo Field,
+    bool IsMultiInput,
+    int GenericTypeIndex)
+{
+    public bool IsGeneric => GenericTypeIndex >= 0;
+}
 
-public readonly record struct OperatorTypeInfo(
-    List<InputSlotInfo> Inputs,
-    List<OutputSlotInfo> Outputs,
-    Func<object> Constructor,
-    Type Type,
-    bool IsDescriptiveFileNameType,
-    ExtractableTypeInfo ExtractableTypeInfo);
+public sealed class OperatorTypeInfo
+{
+    internal OperatorTypeInfo(List<InputSlotInfo> inputs,
+                            List<OutputSlotInfo> outputs,
+                            bool isGeneric,
+                            Type type,
+                            bool isDescriptiveFileNameType,
+                            ExtractableTypeInfo extractableTypeInfo)
+    {
+        Inputs = inputs;
+        Outputs = outputs;
+        Type = type;
+        IsDescriptiveFileNameType = isDescriptiveFileNameType;
+        ExtractableTypeInfo = extractableTypeInfo;
+        
+        if (!isGeneric)
+        {
+            _nonGenericConstructor = Expression.Lambda<Func<object>>(Expression.New(type)).Compile();
+        }
+        else
+        {
+            GenericArguments = type.GetGenericArguments();
+        }
+    }
+
+    public readonly List<InputSlotInfo> Inputs;
+    public readonly List<OutputSlotInfo> Outputs;
+    public readonly Type[]? GenericArguments;
+    public readonly Type Type;
+    public readonly bool IsDescriptiveFileNameType;
+    public readonly ExtractableTypeInfo ExtractableTypeInfo;
+    
+    private readonly Func<object>? _nonGenericConstructor;
+
+    public Func<object> GetConstructor()
+    {
+        if (_nonGenericConstructor != null)
+            return _nonGenericConstructor;
+        throw new InvalidOperationException("Generic types must be provided for generic operators - use TryGetConstructor instead");
+    }
+    
+    public bool TryGetConstructor([NotNullWhen(true)] out Func<object>? constructor, params Type[] genericArguments)
+    {
+        Type constructedType;
+        try
+        {
+            constructedType = Type.MakeGenericType(genericArguments);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to create constructor for {Type.FullName}<{string.Join(", ", genericArguments.Select(t => t.FullName))}>\n{e.Message}");
+            constructor = null;
+            return false;
+        }
+
+        if (_genericConstructors.TryGetValue(constructedType, out constructor))
+            return true;
+        
+        constructor = Expression.Lambda<Func<object>>(Expression.New(constructedType)).Compile();
+        _genericConstructors.Add(constructedType, constructor);
+
+        return true;
+    }
+    
+
+    #region Not needed?
+
+    private static bool TryExtractGenericInformationOf(Type type, 
+                                                       [NotNullWhen(true)] out Type[]? genericParameters, 
+                                                       [NotNullWhen(true)] out Dictionary<Type, Type[]>? genericTypeConstraints)
+    {
+        if (!type.IsGenericTypeDefinition)
+        {
+            genericParameters = null;
+            genericTypeConstraints = null;
+            return false;
+        }
+        
+        genericParameters = type.GetGenericArguments();
+        genericTypeConstraints = new Dictionary<Type, Type[]>();
+        foreach (var genericParameter in genericParameters)
+        {
+            var constraints = genericParameter.GetGenericParameterConstraints();
+            genericTypeConstraints.Add(genericParameter, constraints);
+        }
+
+        return true;
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="genericArguments"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">If this method is called on a non-generic operator</exception>
+    private bool CanCreateWithArguments(params Type[] genericArguments)
+    {
+        ArgumentNullException.ThrowIfNull(genericArguments);
+        
+        if(genericArguments.Length != GenericArguments!.Length)
+            throw new InvalidOperationException($"GenericArguments must have {GenericArguments.Length} elements for operator {Type.FullName}");
+
+        var genericTypes = GenericArguments!;
+        var genericTypeCount = genericTypes.Length;
+        if (genericArguments.Length != genericTypeCount)
+            return false;
+
+        for (int i = 0; i < genericTypeCount; i++)
+        {
+            if (!genericTypes[i].IsAssignableFrom(genericArguments[i]))
+                return false;
+        }
+
+        return true;
+    }
+    
+    #endregion
+    
+    private readonly Dictionary<Type, Func<object>> _genericConstructors = new();
+}
 
 public readonly record struct ExtractableTypeInfo(bool IsExtractable, Type? ExtractableType);
 
@@ -38,19 +160,24 @@ public readonly record struct OutputSlotInfo
 {
     internal readonly Type? OutputDataType;
 
-    internal OutputSlotInfo(string Name, OutputAttribute Attribute, Type type, Type[] GenericArguments, FieldInfo Field)
+    internal OutputSlotInfo(string Name, OutputAttribute Attribute, Type type, Type[] GenericArguments, FieldInfo Field, int GenericTypeIndex)
     {
         this.Name = Name;
         this.Attribute = Attribute;
         this.GenericArguments = GenericArguments;
         this.Field = Field;
+        this.GenericTypeIndex = GenericTypeIndex;
         OutputDataType = GetOutputDataType(type);
+        IsGeneric = GenericTypeIndex >= 0;
     }
 
     public string Name { get; }
     public OutputAttribute Attribute { get; }
     public Type[] GenericArguments { get; }
     public FieldInfo Field { get; }
+
+    public int GenericTypeIndex { get; }
+    public bool IsGeneric { get; }
 
     private static Type? GetOutputDataType(Type fieldType)
     {
@@ -66,14 +193,6 @@ public readonly record struct OutputSlotInfo
         }
 
         return foundInterface?.GetGenericArguments().Single();
-    }
-
-    public void Deconstruct(out string Name, out OutputAttribute Attribute, out Type[] GenericArguments, out FieldInfo Field)
-    {
-        Name = this.Name;
-        Attribute = this.Attribute;
-        GenericArguments = this.GenericArguments;
-        Field = this.Field;
     }
 }
 
@@ -205,7 +324,7 @@ public sealed class AssemblyInformation
             return;
         }
 
-        var constructor = Expression.Lambda<Func<object>>(Expression.New(type)).Compile();
+        bool isGeneric = type.IsGenericTypeDefinition;
 
         var bindFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
         var slots = type.GetFields(bindFlags)
@@ -221,27 +340,29 @@ public sealed class AssemblyInformation
             if (fieldType.IsAssignableTo(typeof(IInputSlot)))
             {
                 var inputAttribute = field.GetCustomAttribute<InputAttribute>();
-                if (inputAttribute is not null)
-                {
-                    var isMultiInput = fieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
-                    inputFields.Add(new InputSlotInfo(name, inputAttribute, genericArguments, field, isMultiInput));
-                }
-                else
+                if (inputAttribute is null)
                 {
                     Log.Error($"Input slot {field.Name} in {type.FullName} is missing {nameof(InputAttribute)}");
+                    continue;
                 }
+
+                var genericTypeDefinition = fieldType.GetGenericTypeDefinition();
+                var isMultiInput = genericTypeDefinition == typeof(MultiInputSlot<>);
+
+                int genericIndex = GetSlotGenericIndex(isGeneric, fieldType);
+                inputFields.Add(new InputSlotInfo(name, inputAttribute, genericArguments, field, isMultiInput, genericIndex));
             }
             else
             {
                 var outputAttribute = field.GetCustomAttribute<OutputAttribute>();
-                if (outputAttribute is not null)
-                { 
-                    outputFields.Add(new OutputSlotInfo(name, outputAttribute, fieldType, genericArguments, field));
-                }
-                else
+                if (outputAttribute is null)
                 {
                     Log.Error($"Output slot {field.Name} in {type.FullName} is missing {nameof(OutputAttribute)}");
+                    continue;
                 }
+
+                var genericIndex = GetSlotGenericIndex(isGeneric, fieldType);
+                outputFields.Add(new OutputSlotInfo(name, outputAttribute, fieldType, genericArguments, field, genericIndex));
             }
         }
 
@@ -264,16 +385,29 @@ public sealed class AssemblyInformation
         }
 
         var added = _operatorTypeInfo.TryAdd(id, new OperatorTypeInfo(
-                                                                      Type: type,
-                                                                      Constructor: constructor,
-                                                                      Inputs: inputFields,
-                                                                      Outputs: outputFields,
-                                                                      IsDescriptiveFileNameType: isDescriptive,
-                                                                      ExtractableTypeInfo: extractableTypeInfo));
+                                                                      type: type,
+                                                                      inputs: inputFields,
+                                                                      isGeneric: isGeneric,
+                                                                      outputs: outputFields,
+                                                                      isDescriptiveFileNameType: isDescriptive,
+                                                                      extractableTypeInfo: extractableTypeInfo));
 
         if (!added)
         {
             Log.Error($"Failed to add operator type {type.FullName} with guid {id} because the id was already in use by {_operatorTypeInfo[id].Type.FullName}");
+        }
+
+        return;
+
+        static int GetSlotGenericIndex(bool isGeneric, Type fieldType)
+        {
+            int genericIndex = -1;
+            if (isGeneric && fieldType.IsGenericTypeDefinition)
+            {
+                genericIndex = fieldType.GenericParameterPosition;
+            }
+
+            return genericIndex;
         }
     }
 
@@ -422,7 +556,6 @@ public sealed class AssemblyInformation
     }
 
     private DependencyContext? _dependencyContext;
-    private readonly ConcurrentDictionary<Type, Func<object>> _constructors = new();
     private AssemblyLoadContext? _loadContext;
-    private CompositeCompilationAssemblyResolver _assemblyResolver;
+    private readonly CompositeCompilationAssemblyResolver _assemblyResolver;
 }

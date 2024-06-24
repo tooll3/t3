@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
+using T3.Core.Compilation;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using Texture2D = T3.Core.DataTypes.Texture2D;
 
@@ -32,6 +36,8 @@ namespace T3.Core.Operator
             public Dictionary<Guid, Input> Inputs { get; private init; } = new();
             public Dictionary<Guid, Output> Outputs { get; private init; } = new();
 
+            private readonly bool _isGeneric;
+
             internal Child(Symbol symbol, Guid childId, Symbol parent, string name, bool isBypassed)
             {
                 Symbol = symbol;
@@ -39,6 +45,7 @@ namespace T3.Core.Operator
                 Parent = parent;
                 Name = name ?? string.Empty;
                 _isBypassed = isBypassed;
+                _isGeneric = symbol.IsGeneric;
 
                 foreach (var inputDefinition in symbol.InputDefinitions)
                 {
@@ -371,6 +378,10 @@ namespace T3.Core.Operator
                 var newGuidBytes = new ReadOnlySpan<byte>(hashComputer.GetHashAndReset(), 0, 16);
                 return new Guid(newGuidBytes);
             }
+            
+            
+       
         }
+
     }
 }
