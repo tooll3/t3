@@ -37,7 +37,7 @@ public abstract class Shader<TShader> : AbstractShader where TShader : DeviceChi
     private readonly TShader _shader;
     public sealed override string Name { get => _shader.DebugName; set => _shader.DebugName = value; }
 
-    public static implicit operator TShader(Shader<TShader> shader) => shader._shader;
+    public static implicit operator TShader?(Shader<TShader>? shader) => shader?._shader;
 
     internal Shader(TShader shader, byte[] compiledBytecode) : base(shader, compiledBytecode)
     {

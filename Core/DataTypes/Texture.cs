@@ -133,7 +133,7 @@ public abstract class Texture<T>(T texture) : AbstractTexture(texture)
     where T : SharpDX.Direct3D11.Resource
 {
     public static implicit operator T(Texture<T> texture) => texture.TextureObject;
-    public static implicit operator SharpDX.Direct3D11.Resource(Texture<T> texture) => texture.TextureObject;
+    public static implicit operator SharpDX.Direct3D11.Resource?(Texture<T>? texture) => texture?.TextureObject;
     protected readonly T TextureObject = texture;
     public bool IsDisposed => TextureObject.IsDisposed;
 }

@@ -9,6 +9,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
+using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
@@ -29,6 +30,26 @@ namespace lib.point.helper
         public LoadObjAsPoints()
         {
             Points.UpdateAction += Update;
+            _meshResource = new Resource<ObjMesh>(Path, TryLoadMesh, allowDisposal: false);
+            _meshResource.AddDependentSlots(Points);
+        }
+
+        private bool TryLoadMesh(FileResource file, ObjMesh? currentValue, out ObjMesh? newValue, out string? failureReason)
+        {
+            var absolutePath = file.AbsolutePath;
+            
+            var mesh = ObjMesh.LoadFromFile(absolutePath);
+            if (mesh == null)
+            {
+                failureReason = $"Can't read file {absolutePath}";
+                Log.Warning(failureReason, this);
+                newValue = null;
+                return false;
+            }
+            
+            newValue = mesh;
+            failureReason = null;
+            return true;
         }
 
         private static int[][] _sortAxisAndDirections =
@@ -43,18 +64,9 @@ namespace lib.point.helper
 
         private void Update(EvaluationContext context)
         {
-            var path = Path.GetValue(context);
-            if (!TryGetFilePath(path, out var absolutePath))
+            if (!_meshResource.TryGetValue(context, out var mesh))
             {
-                Log.Error($"File not found: {path}", this);
-                return;
-            }
-            
-            var mesh = ObjMesh.LoadFromFile(absolutePath);
-
-            if (mesh == null)
-            {
-                Log.Warning($"Can't read file \"{absolutePath}\"", this);
+                Log.Debug("No mesh found", this);
                 return;
             }
 
@@ -90,12 +102,12 @@ namespace lib.point.helper
                 {
                     if (mesh.Colors.Count == 0)
                     {
-                        Log.Warning($"{path} doesn't contain colors definitions. You can use MeshLab to export such files.", this);
+                        Log.Warning($"Mesh doesn't contain colors definitions. You can use MeshLab to export such files.", this);
                     }
 
                     if (mesh.Positions.Count == 0)
                     {
-                        Log.Warning($"{path} doesn't contain vertex definitions.", this);
+                        Log.Warning($"Mesh doesn't contain vertex definitions.", this);
                     }
 
                     try
@@ -149,7 +161,7 @@ namespace lib.point.helper
                             }
                         }
 
-                        Log.Debug($"loaded {path} with and {mesh.Colors.Count} colored points", this);
+                        Log.Debug($"loaded mesh with {mesh.Colors.Count} colored points", this);
                     }
                     catch (Exception e)
                     {
@@ -224,7 +236,7 @@ namespace lib.point.helper
                                                                   };
 
                         _points.TypedElements[pointIndex] = Point.Separator();
-                        Log.Debug($"loaded {path} with {segmentCount} segments and {vertexCount} points", this);
+                        Log.Debug($"loaded mesh with {segmentCount} segments and {vertexCount} points", this);
                     }
                     catch (Exception e)
                     {
@@ -260,7 +272,7 @@ namespace lib.point.helper
                             _points.TypedElements[index] = points[index];
                         }
 
-                        Log.Debug($"loaded {path} with {_points.Elements} points found", this);
+                        Log.Debug($"loaded mesh with {_points.Elements} points found", this);
                     }
                     catch (Exception e)
                     {
@@ -329,6 +341,7 @@ namespace lib.point.helper
 
 
         private StructuredList<Point> _points = new(0);
+        private Resource<ObjMesh> _meshResource;
 
         enum Modes
         {
