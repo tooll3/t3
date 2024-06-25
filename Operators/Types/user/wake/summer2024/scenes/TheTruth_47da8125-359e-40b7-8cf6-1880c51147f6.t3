@@ -249,6 +249,11 @@
           "Value": 4
         },
         {
+          "Id": "62e68350-739a-4220-bb84-70b33ea1baf0"/*BrightnessOffset*/,
+          "Type": "System.Single",
+          "Value": -5.4
+        },
+        {
           "Id": "f5f424a1-42a4-4429-8d99-47a7c6176400"/*Red*/,
           "Type": "System.Int32",
           "Value": 6

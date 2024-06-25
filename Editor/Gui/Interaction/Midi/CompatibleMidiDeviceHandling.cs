@@ -88,6 +88,7 @@ public static class CompatibleMidiDeviceHandling
               {
                   typeof(Apc40Mk2),
                   typeof(ApcMini),
+                  typeof(ApcMiniMk2),
                   typeof(NanoControl8)
               };
 

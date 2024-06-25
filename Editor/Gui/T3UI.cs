@@ -99,7 +99,7 @@ public class T3Ui
         AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
 
         VariationHandling.Update();
-        ParameterCollectionHandling.Update();
+        //ParameterCollectionHandling.Update();
         MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
         MouseWheelFieldHovered = false;
 

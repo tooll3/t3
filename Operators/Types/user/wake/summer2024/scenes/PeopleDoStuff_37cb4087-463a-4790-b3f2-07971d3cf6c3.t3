@@ -126,7 +126,7 @@
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0,
-            "W": 0.23000002
+            "W": 0.51
           }
         }
       ],
@@ -369,7 +369,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "a250cf10-6237-44d3-954b-c94a7b9137b6",
+                  "Id": "31fba58f-ea0e-4fab-aa3f-7708ea9ed0d7",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 1.0,
@@ -379,7 +379,7 @@
                   }
                 },
                 {
-                  "Id": "858b09ba-e1ed-4902-be1a-385fe5adc3a4",
+                  "Id": "8ea64a0a-b554-4738-8587-de0dbe2799f3",
                   "NormalizedPosition": 0.6352201,
                   "Color": {
                     "R": 9.9999E-07,
@@ -424,7 +424,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "6a38a6e3-ca89-4cd3-98be-475c0eac942c",
+                  "Id": "26a743eb-2c62-4fc3-b9ff-9a5acc4644f0",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 0.0,
@@ -434,7 +434,7 @@
                   }
                 },
                 {
-                  "Id": "7ef6b54a-8381-4676-ae2c-ad74fa435cee",
+                  "Id": "199a5cd5-7708-4407-9084-2b00008496b8",
                   "NormalizedPosition": 1.0,
                   "Color": {
                     "R": 0.19138753,
@@ -617,6 +617,24 @@
           "Id": "fbf10760-b559-4e9c-b8dc-ce61d3f21c82"/*TriggerUpdate*/,
           "Type": "System.Boolean",
           "Value": true
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "5fa6f416-007c-4979-b44f-2a9602c7a1b5"/*Text*/,
+      "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "cbb16200-09a3-4a38-9bd7-3df95a859faa"/*Blur*/,
+      "SymbolId": "946da16c-f536-4887-b764-af9468f22c0f",
+      "InputValues": [
+        {
+          "Id": "99188668-b6ac-468b-a892-cd020a3862b2"/*Size*/,
+          "Type": "System.Single",
+          "Value": -0.0
         }
       ],
       "Outputs": []

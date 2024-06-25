@@ -103,7 +103,7 @@
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0,
-            "W": 0.57000005
+            "W": 0.4922048
           }
         },
         {
@@ -127,9 +127,9 @@
           "Id": "4dc44a7b-fe7c-4807-aaaa-53fb553de017"/*Gain*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.47317624,
-            "Y": 0.49113125,
-            "Z": 0.49038625,
+            "X": 0.6045541,
+            "Y": 0.62592465,
+            "Z": 0.6155761,
             "W": 0.506
           }
         },
@@ -137,9 +137,9 @@
           "Id": "be4dc864-a5f9-4356-91f9-58de8056a3a8"/*Gamma*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.4370839,
-            "Y": 0.447137,
-            "Z": 0.45347416,
+            "X": 0.46105272,
+            "Y": 0.46769398,
+            "Z": 0.47790763,
             "W": 0.506
           }
         },
@@ -147,9 +147,9 @@
           "Id": "e8cc8a26-313e-4399-b800-901019bbaa78"/*Lift*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.4880383,
-            "Y": 0.43512958,
-            "Z": 0.4425995,
+            "X": 0.49293602,
+            "Y": 0.45545593,
+            "Z": 0.4595705,
             "W": 0.25
           }
         },
@@ -248,12 +248,12 @@
         {
           "Id": "73ba7691-784f-4706-8a88-9305f723c4cc"/*Displacement*/,
           "Type": "System.Single",
-          "Value": 3.0
+          "Value": 3.11532
         },
         {
           "Id": "ffcdb058-5131-4146-8deb-a3102349e1c3"/*DisplaceOffset*/,
           "Type": "System.Single",
-          "Value": -0.16
+          "Value": -0.157582
         },
         {
           "Id": "1e6d0245-b5d4-45a5-8dac-6d905837060d"/*SampleDistance*/,
@@ -273,7 +273,7 @@
         {
           "Id": "c027bc94-4ef8-4828-8df5-d30abbd31cbc"/*AmplifyEdges*/,
           "Type": "System.Single",
-          "Value": 1.54
+          "Value": 1.5126579
         },
         {
           "Id": "5264cbf8-13f6-4dfe-a82d-4f0904973488"/*Reset*/,
@@ -283,7 +283,7 @@
         {
           "Id": "c7f25ad5-1907-4851-8057-7c73f82da1be"/*RangeClamping*/,
           "Type": "System.Single",
-          "Value": 0.17
+          "Value": 0.168698
         },
         {
           "Id": "e05425c3-21fd-4621-b9ac-dbc972e26431"/*TwirlNoise*/,
@@ -517,6 +517,7 @@
     },
     {
       "Id": "55fa0d12-8067-456b-a5d0-021a831cfde9"/*ColorGrade*/,
+      "IsBypassed": true,
       "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
       "InputValues": [
         {
@@ -564,7 +565,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "49c15713-e6e8-47f5-991c-b15dd254628c",
+                  "Id": "14f56448-4573-40a6-9bcf-8a656445b547",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 1.0,
@@ -574,7 +575,7 @@
                   }
                 },
                 {
-                  "Id": "33858f36-52b8-4d71-ab6b-6691616766f8",
+                  "Id": "26eab6a1-0228-459d-a9b9-134288adb855",
                   "NormalizedPosition": 1.0,
                   "Color": {
                     "R": 1.0,
@@ -639,7 +640,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "549112a8-f9c6-46b0-80db-8bdde8a66200",
+                  "Id": "46c0cdc8-f4a4-417e-939c-36a68f3d5542",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 1.0,
@@ -649,7 +650,7 @@
                   }
                 },
                 {
-                  "Id": "fb36587a-8272-4a43-b08b-09bc3b352c2d",
+                  "Id": "dea83141-7309-4f6f-8a18-f66716127195",
                   "NormalizedPosition": 0.2430989,
                   "Color": {
                     "R": 0.0,
@@ -750,6 +751,12 @@
     }
   ],
   "Connections": [
+    {
+      "SourceParentOrChildId": "45dad188-0df3-471a-8b07-7abb3c492986",
+      "SourceSlotId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "0798a196-3c9b-4912-9870-c462b415d7f8"
+    },
     {
       "SourceParentOrChildId": "a78c25ad-ca0f-4950-a3c8-fc853b105ac1",
       "SourceSlotId": "5e847363-142d-4da9-a5b3-3a7aa2541bed",

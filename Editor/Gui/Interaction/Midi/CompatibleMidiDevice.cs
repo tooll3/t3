@@ -242,7 +242,7 @@ public abstract class CompatibleMidiDevice : MidiConnectionManager.IMidiConsumer
         }
     }
 
-    private static void SendColor(MidiOut midiOut, int apcControlIndex, int colorCode)
+    protected virtual void SendColor(MidiOut midiOut, int apcControlIndex, int colorCode)
     {
         if (CacheControllerColors[apcControlIndex] == colorCode)
             return;
@@ -261,7 +261,7 @@ public abstract class CompatibleMidiDevice : MidiConnectionManager.IMidiConsumer
         CacheControllerColors[apcControlIndex] = colorCode;
     }
 
-    private static readonly int[] CacheControllerColors = Enumerable.Repeat(-1, 256).ToArray();
+    protected static readonly int[] CacheControllerColors = Enumerable.Repeat(-1, 256).ToArray();
     #endregion
 
     private readonly Dictionary<int, ButtonSignal> _combinedButtonSignals = new();

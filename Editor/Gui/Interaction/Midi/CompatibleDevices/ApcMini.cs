@@ -10,7 +10,7 @@ namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 
 [SuppressMessage("ReSharper", "UnusedMember.Local")]
 
-[MidiDeviceProduct("APC MINI;APC mini mk2")]
+[MidiDeviceProduct("APC MINI")]
 public class ApcMini : CompatibleMidiDevice
 {
     public ApcMini()
@@ -104,56 +104,6 @@ public class ApcMini : CompatibleMidiDevice
 
                             return AddModeHighlight(mappedIndex, (int)color);
                         });
-
-        // UpdateRangeLeds(midiOut, SceneLaunch8ClipStopAll, 
-        //                 mappedIndex => (int)ApcButtonColor.Red);
-
-        // if (activeVariation.IsGroupExpanded)
-        // {
-        //     var activeIndex = activeVariation.ActiveGroupIndex; 
-        //     UpdateRangeLeds(midiOut, ChannelButtons1To8,
-        //                     mappedIndex =>
-        //                     {
-        //                         var colorForGroupButton =
-        //                             mappedIndex == activeIndex
-        //                                 ? ApcButtonColor.Red
-        //                                 : (ImGui.GetFrameCount() - mappedIndex) % 30 < 3
-        //                                     ? ApcButtonColor.Red
-        //                                     : ApcButtonColor.Off;
-        //                                 
-        //                         return (int)colorForGroupButton;
-        //                     });
-        // }
-        // else
-        // {
-        //     UpdateRangeLeds(midiOut, ChannelButtons1To8,
-        //                     mappedIndex =>
-        //                     {
-        //                         var group = activeVariation.GetGroupAtIndex(mappedIndex);
-        //                         var isGroupDefined = group != null;
-        //                         
-        //                         var colorForGroupButton =
-        //                             isGroupDefined
-        //                                     ? group.Id == activeVariation.ActiveGroupId
-        //                                         ? ApcButtonColor.Red
-        //                                         : ApcButtonColor.Off
-        //                                     : ApcButtonColor.Off;
-        //                         return (int)colorForGroupButton;
-        //                     });
-        // }
-
-        // UpdateRangeLeds(midiOut, SceneLaunch1To8,
-        //                 mappedIndex =>
-        //                 {
-        //                     var g1 = activeVariation.GetGroupAtIndex(mappedIndex);
-        //                     var isUndefined1 = g1 == null;
-        //                     var color2 = isUndefined1
-        //                                      ? ApcButtonColor.Off
-        //                                      : g1.Id == activeVariation.ActiveGroupId
-        //                                          ? ApcButtonColor.Red
-        //                                          : ApcButtonColor.Off;
-        //                     return (int)color2;
-        //                 });
     }
 
     private int AddModeHighlight(int index, int orgColor)
