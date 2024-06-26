@@ -1,14 +1,12 @@
 using System.Runtime.InteropServices;
-using System;
-using System.IO;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Audio;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Resource;
 
 namespace Lib.img.video
 {
@@ -22,11 +20,41 @@ namespace Lib.img.video
         public PlayAudioClip()
         {
             Result.UpdateAction += Update;
+            _audioClipResource = new Resource<AudioClip>(Path, TryCreateClip);
+            _audioClipResource.AddDependentSlots(Result);
         }
-            
+
+        private bool TryCreateClip(FileResource file, AudioClip? currentValue, out AudioClip? newValue, out string failureReason)
+        {
+            var fileInfo = file.FileInfo;
+            if (fileInfo is { Exists: true })
+            {
+                newValue = new AudioClip
+                                 {
+                                     FilePath = Path.GetCurrentValue(),
+                                     StartTime = 0,
+                                     EndTime = 0,
+                                     IsSoundtrack = true,
+                                     LengthInSeconds = 0,
+                                     Volume = Volume.GetCurrentValue(),
+                                     Id = Guid.NewGuid(),
+                                 };
+                
+                failureReason = null;
+                _errorMessageForStatus = null;
+                return true;
+            }
+
+            newValue = null;
+            failureReason = $"File not found: {Path.GetCurrentValue()}";
+            _errorMessageForStatus = failureReason;
+            return false;
+        }
+
         private void Update(EvaluationContext context)
         {
-            var url = Path.GetValue(context);
+            var audioClip = _audioClipResource.GetValue(context);
+            
             var isTimeDirty = TimeInSecs.DirtyFlag.IsDirty;
             var timeParameter = TimeInSecs.GetValue(context);
             
@@ -34,50 +62,26 @@ namespace Lib.img.video
             {
                 _startRunTimeInSecs = Playback.RunTimeInSecs - timeParameter;
             }
-                      
-            // TODO: This is currently disabled until we figure out how to provide symbol package for constructor.
-            
-            // if(_audioClip == null || _audioClip.FilePath != url)
-            // {
-            //     if(!File.Exists(url))
-            //     {
-            //         _errorMessageForStatus = $"File not found: {url}";
-            //         return;
-            //     }
-            //     
-            //     _audioClip = new AudioClip
-            //                      {
-            //                          FilePath = url,
-            //                          StartTime = 0,
-            //                          EndTime = 0,
-            //                          IsSoundtrack = true,
-            //                          LengthInSeconds = 0,
-            //                          Volume = Volume.GetValue(context),
-            //                          Id = Guid.NewGuid(),
-            //                      };
-            //     _startRunTimeInSecs = Playback.RunTimeInSecs;
-            //     _errorMessageForStatus = null;
-            // }
 
-            if (_audioClip != null && IsPlaying.GetValue(context))
+            if (audioClip != null && IsPlaying.GetValue(context))
             {
                 var targetTime = TimeInSecs.IsConnected
                                      ? timeParameter
                                      : Playback.RunTimeInSecs - _startRunTimeInSecs;
                 
-                if(IsLooping.GetValue(context) && targetTime > _audioClip.LengthInSeconds)
+                if(IsLooping.GetValue(context) && targetTime > audioClip.LengthInSeconds)
                 {
-                    targetTime %= _audioClip.LengthInSeconds;
+                    targetTime %= audioClip.LengthInSeconds;
                 }
                 
                 //Log.Debug($" Playing at {targetTime:0.0}", this);
-                AudioEngine.UseAudioClip(_audioClip,  targetTime);
-                _audioClip.Volume =  Volume.GetValue(context);
+                AudioEngine.UseAudioClip(new(audioClip, this),  targetTime);
+                audioClip.Volume =  Volume.GetValue(context);
             }
         }
 
         private double _startRunTimeInSecs;
-        private AudioClip _audioClip;
+        private readonly Resource<AudioClip> _audioClipResource;
 
         IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel()
         {
