@@ -1,14 +1,22 @@
 ﻿#nullable enable
 using System;
 using System.Diagnostics.CodeAnalysis;
+using ManagedBass;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Resource;
 using T3.Serialization;
 
 namespace T3.Core.Audio;
+
+public record struct AudioClipInfo(AudioClip Clip, IResourceConsumer? Owner)
+{
+    public bool TryGetFileResource([NotNullWhen(true)] out FileResource? file)
+    {
+        return FileResource.TryGetFileResource(Clip.FilePath, Owner, out file);
+    }
+}
 
 /// <summary>
 /// Defines a single audio clip within a timeline.
@@ -27,7 +35,7 @@ public sealed class AudioClip
     #endregion
 
     /// <summary>
-    /// Is initialized after loading...
+    /// Is initialized after loading in <see cref="AudioClipStream"/>
     /// </summary>
     public double LengthInSeconds;
 
@@ -89,23 +97,4 @@ public sealed class AudioClip
         writer.WriteEndObject();
     }
     #endregion
-
-    public bool TryGetAbsoluteFilePath(IResourceConsumer instance, [NotNullWhen(true)] out string? absolutePath)
-    {
-        if (string.IsNullOrWhiteSpace(FilePath))
-        {
-            absolutePath = null;
-            return false;
-        }
-
-        if (ResourceManager.TryResolvePath(FilePath, instance, out var path, out _))
-        {
-            absolutePath = path;
-            return true;
-        }
-
-        Log.Warning($"Could not resolve path for AudioClip: {FilePath}");
-        absolutePath = null;
-        return false;
-    }
 }

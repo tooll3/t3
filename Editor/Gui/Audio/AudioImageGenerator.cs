@@ -15,7 +15,14 @@ namespace T3.Editor.Gui.Audio
         public static bool TryGenerateSoundSpectrumAndVolume(AudioClip clip, IResourceConsumer instance, [NotNullWhen(true)] out string? imagePathAbsolute)
         {
             var relativePath = clip.FilePath;
-            if (!clip.TryGetAbsoluteFilePath(instance, out var soundFilePathAbsolute))
+            if (relativePath == null)
+            {
+                Log.Error("Audio clip has no file path");
+                imagePathAbsolute = null;
+                return false;
+            }
+            
+            if (!ResourceManager.TryResolvePath(relativePath, instance, out var soundFilePathAbsolute, out _))
             {
                 Log.Error($"Could not get absolute path for audio clip: {relativePath}");
                 imagePathAbsolute = null;

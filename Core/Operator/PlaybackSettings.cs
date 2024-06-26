@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -26,18 +27,17 @@ namespace T3.Core.Operator
         public float AudioGainFactor = 1;
         public float AudioDecayFactor = 0.9f;
         
-        public SymbolPackage SymbolPackage { get; init; }
 
         public PlaybackSettings(){}
 
-        public bool GetMainSoundtrack(out AudioClip soundtrack)
+        public bool GetMainSoundtrack(IResourceConsumer instance, [NotNullWhen(true)] out AudioClipInfo? soundtrack)
         {
             foreach (var clip in AudioClips)
             {
                 if (!clip.IsSoundtrack)
                     continue;
 
-                soundtrack = clip;
+                soundtrack = new AudioClipInfo(clip, instance);
                 return true;
             }
 
@@ -94,7 +94,7 @@ namespace T3.Core.Operator
             writer.WriteEndObject();
         }
 
-        internal static PlaybackSettings ReadFromJson(JToken o, SymbolPackage symbolPackage)
+        internal static PlaybackSettings ReadFromJson(JToken o)
         {
             var clips = GetClips(o).ToList(); // Support legacy json format
 
@@ -105,7 +105,6 @@ namespace T3.Core.Operator
             var newSettings = new PlaybackSettings
                                   {
                                       AudioClips = clips,
-                                      SymbolPackage = symbolPackage
                                   };
             
             if (settingsToken != null)
@@ -121,10 +120,14 @@ namespace T3.Core.Operator
                 newSettings.AudioClips.AddRange(GetClips(settingsToken)); // Support correct format
             }
             
-            if (newSettings.Bpm == 0 && newSettings.GetMainSoundtrack(out var soundtrack))
+            if (newSettings.Bpm == 0)
             {
-                newSettings.Bpm = soundtrack.Bpm;
-                newSettings.Enabled = true;
+                var soundtrack = newSettings.AudioClips.FirstOrDefault(c => c.IsSoundtrack);
+                if (soundtrack != null)
+                {
+                    newSettings.Bpm = soundtrack.Bpm;
+                    newSettings.Enabled = true;
+                }
             }
 
             return newSettings;

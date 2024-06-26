@@ -91,7 +91,7 @@ public sealed partial class FileResource
         }
     }
     
-    internal static bool TryGetFileResource(string? relativePath, IResourceConsumer? owner, [NotNullWhen(true)] out FileResource? resource)
+    public static bool TryGetFileResource(string? relativePath, IResourceConsumer? owner, [NotNullWhen(true)] out FileResource? resource)
     {
         if (string.IsNullOrWhiteSpace(relativePath))
         {

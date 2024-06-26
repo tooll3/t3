@@ -1,4 +1,5 @@
 #nullable enable
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using SharpDX.Direct3D11;
@@ -89,26 +90,33 @@ namespace T3.Editor.Gui.Graph
             var resourceDir = Path.Combine(exportDir, ResourceManager.ResourcesSubfolder);
             Directory.CreateDirectory(resourceDir);
             
-            if (!TryFindSoundtrack(instance, symbol, out var absolutePath, out var relativePath))
+            if (!TryFindSoundtrack(instance, symbol, out var file, out var relativePath))
             {
-                reason = $"Failed to find soundTrack for [{symbol.Name}] with relative path \"{relativePath}\"";
+                reason = $"Failed to find soundTrack for [{symbol.Name}]";
                 return false;
             }
             
-            if (absolutePath != null)
+            var fileInfo = file!.FileInfo;
+            if(fileInfo is null || !fileInfo.Exists)
             {
-                if (Path.IsPathRooted(relativePath))
-                {
-                    reason = $"Soundtrack path is not relative: \"{relativePath}\"";
-                    return false;
-                }
-                
-                var newPath = Path.Combine(resourceDir, relativePath!);
-                if(!TryCopyFile(absolutePath, newPath))
-                {
-                    reason = $"Failed to copy soundtrack from \"{absolutePath}\" to \"{newPath}\"";
-                    return false;
-                }
+                reason = $"Soundtrack file does not exist: {fileInfo?.FullName}";
+                return false;
+            }
+            
+            var absolutePath = fileInfo.FullName;
+
+            // todo - determine if a path is relative or not even if it's "rooted" with an alias (for cross-platform)
+            if (Path.IsPathFullyQualified(relativePath))
+            {
+                reason = $"Soundtrack path is not relative: \"{relativePath}\"";
+                return false;
+            }
+
+            var newPath = Path.Combine(resourceDir, relativePath!);
+            if (!TryCopyFile(absolutePath, newPath))
+            {
+                reason = $"Failed to copy soundtrack from \"{absolutePath}\" to \"{newPath}\"";
+                return false;
             }
 
             if(!TryCopyDirectory(SharedResources.Directory, resourceDir, out reason))
@@ -375,28 +383,28 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private static bool TryFindSoundtrack(Instance instance, Symbol symbol, out string? absolutePath, out string? relativePath)
+        private static bool TryFindSoundtrack(Instance instance, Symbol symbol, [NotNullWhen(true)] out FileResource? file, [NotNullWhen(true)] out string? relativePath)
         {
             var playbackSettings = symbol.PlaybackSettings;
-            var soundtrack = playbackSettings?.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
-            if (soundtrack == null)
+            if (playbackSettings?.GetMainSoundtrack(instance, out var soundtrack) is not true)
             {
                 if (PlaybackUtils.TryFindingSoundtrack(out soundtrack, out _))
                 {
-                    Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {soundtrack.FilePath} set in parent...");
+                    Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {soundtrack.Value.Clip.FilePath} set in parent...");
                 }
                 else
                 {
+                    file = null;
                     relativePath = null;
-                    absolutePath = null;
-                    return true;
+                    return false;
                 }
 
                 Log.Debug("No soundtrack defined within operator.");
             }
 
-            relativePath = soundtrack.FilePath;
-            return soundtrack.TryGetAbsoluteFilePath(instance, out absolutePath);
+            var clipInfo = soundtrack.Value;
+            relativePath = clipInfo.Clip.FilePath;
+            return FileResource.TryGetFileResource(clipInfo.Clip.FilePath, instance, out file);
         }
 
         private static void CheckInputForResourcePath(ISlot inputSlot, ExportInfo exportInfo)

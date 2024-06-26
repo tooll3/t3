@@ -42,7 +42,7 @@ public static class AudioRendering
     public static void ExportAudioFrame(Playback playback, double frameDurationInSeconds, AudioClipStream clipStream)
     {
         // Create buffer if necessary
-        if (!_fifoBuffersForClips.TryGetValue(clipStream.AudioClip, out var buffer)) 
+        if (!_fifoBuffersForClips.TryGetValue(clipStream.ClipInfo, out var buffer)) 
         {
             buffer = Array.Empty<byte>(); // creat new, if not exists in dict
         }
@@ -105,7 +105,7 @@ public static class AudioRendering
         }
 
         // save to dictionary
-        _fifoBuffersForClips[clipStream.AudioClip] = buffer;
+        _fifoBuffersForClips[clipStream.ClipInfo] = buffer;
     }
 
     public static void EndRecording(Playback playback, double fps)
@@ -144,19 +144,19 @@ public static class AudioRendering
 
         foreach (var (_, clipStream) in AudioEngine.ClipStreams)
         {
-            if (!_fifoBuffersForClips.TryGetValue(clipStream.AudioClip, out var buffer))
+            if (!_fifoBuffersForClips.TryGetValue(clipStream.ClipInfo, out var buffer))
                 continue;
 
             var bytes = (int)Bass.ChannelSeconds2Bytes(clipStream.StreamHandle, frameDurationInSeconds);
             var result = buffer.SkipLast(buffer.Length - bytes).ToArray();
-            _fifoBuffersForClips[clipStream.AudioClip] = buffer.Skip(bytes).ToArray();
+            _fifoBuffersForClips[clipStream.ClipInfo] = buffer.Skip(bytes).ToArray();
             return result;
         }
 
         return null;
     }
 
-    private static readonly Dictionary<AudioClip, byte[]> _fifoBuffersForClips = new();
+    private static readonly Dictionary<AudioClipInfo, byte[]> _fifoBuffersForClips = new();
 
     private static BassSettingsBeforeExport _settingsBeforeExport;
 

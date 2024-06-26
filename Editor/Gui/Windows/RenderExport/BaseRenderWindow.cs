@@ -19,9 +19,11 @@ public abstract class BaseRenderWindow : Window
         if (composition == null)
             return AudioEngine.GetClipSampleRate(null);
         
-        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
-        settings.GetMainSoundtrack(out var soundtrack);
-        return AudioEngine.GetClipChannelCount(soundtrack);
+        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var instanceWithSettings, out var settings);
+        if (settings.GetMainSoundtrack(instanceWithSettings, out var soundtrack))
+            return AudioEngine.GetClipChannelCount(soundtrack);
+        else
+            return AudioEngine.GetClipChannelCount(null);
     }
 
     protected static int SoundtrackSampleRate()
@@ -31,9 +33,11 @@ public abstract class BaseRenderWindow : Window
         if (composition == null)
             return AudioEngine.GetClipSampleRate(null);
         
-        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
-        settings.GetMainSoundtrack(out var soundtrack);
-        return AudioEngine.GetClipSampleRate(soundtrack);
+        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var instanceWithSettings, out var settings);
+        if (settings.GetMainSoundtrack(instanceWithSettings, out var soundtrack))
+            return AudioEngine.GetClipSampleRate(soundtrack);
+        else
+            return AudioEngine.GetClipSampleRate(null);
     }
 
     protected static void SetRenderingStarted()
@@ -133,9 +137,10 @@ public abstract class BaseRenderWindow : Window
             }
             case TimeRanges.Soundtrack:
             {
-                if (PlaybackUtils.TryFindingSoundtrack(out var soundtrack, out var composition))
+                if (PlaybackUtils.TryFindingSoundtrack(out var soundtrackInfo, out var composition))
                 {
                     var playback = Playback.Current; // TODO, this should be non-static eventually
+                    var soundtrack = soundtrackInfo!.Value.Clip;
                     _startTimeInBars = (float)SecondsToReferenceTime(playback.SecondsFromBars(soundtrack.StartTime), _timeReference);
                     if (soundtrack.EndTime > 0)
                     {
@@ -216,7 +221,7 @@ public abstract class BaseRenderWindow : Window
     {
         // get playback settings
         var composition = GraphWindow.Focused?.CompositionOp;
-        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out _, out var settings);
+        PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var instanceWithSettings, out var settings);
 
         // change settings for all playback before calculating times
         Playback.Current.Bpm = settings.Bpm;
@@ -231,9 +236,8 @@ public abstract class BaseRenderWindow : Window
         var adaptedDeltaTime = Math.Max(Playback.Current.TimeInSecs - oldTimeInSecs + _timingOverhang, 0.0);
 
         // set user time in secs for audio playback
-        settings.GetMainSoundtrack(out var soundtrack);
-        if (soundtrack != null)
-            AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
+        if (settings.GetMainSoundtrack(instanceWithSettings, out var soundtrack))
+            AudioEngine.UseAudioClip(soundtrack.Value, Playback.Current.TimeInSecs);
 
         if (!_audioRecording)
         {

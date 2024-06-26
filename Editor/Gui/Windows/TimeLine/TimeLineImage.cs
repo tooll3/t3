@@ -12,13 +12,17 @@ namespace T3.Editor.Gui.Windows.TimeLine
 {
     public class TimeLineImage
     {
-        public void Draw(ImDrawListPtr drawList, AudioClip? soundTrack, IResourceConsumer instance)
+        public void Draw(ImDrawListPtr drawList, AudioClipInfo? soundTrackInfo)
         {
-            if (soundTrack == null)
+            if (soundTrackInfo == null)
                 return;
-            UpdateSoundTexture(soundTrack, instance);
+            
+            var soundTrack = soundTrackInfo.Value;
+            UpdateSoundTexture(soundTrack);
             if (_loadedImagePath == null)
                 return;
+            
+            var clip = soundTrack.Clip;
 
             var contentRegionMin = ImGui.GetWindowContentRegionMin();
             var contentRegionMax = ImGui.GetWindowContentRegionMax();
@@ -30,9 +34,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
             // drawlist.AddRectFilled(contentRegionMin + windowPos, 
             //                        contentRegionMax + windowPos, new Color(0,0,0,0.3f));
             
-            var songDurationInBars = (float)(soundTrack.LengthInSeconds * soundTrack.Bpm / 240);
-            var xMin = TimeLineCanvas.Current.TransformX((float) soundTrack.StartTime);
-            var xMax = TimeLineCanvas.Current.TransformX(songDurationInBars + (float)soundTrack.StartTime);
+            var songDurationInBars = (float)(clip.LengthInSeconds * clip.Bpm / 240);
+            var xMin = TimeLineCanvas.Current.TransformX((float) clip.StartTime);
+            var xMax = TimeLineCanvas.Current.TransformX(songDurationInBars + (float)clip.StartTime);
             
             if (_srv is { IsDisposed: false })
             {
@@ -42,9 +46,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
         }
 
-        private static void UpdateSoundTexture(AudioClip soundtrack, IResourceConsumer instance)
+        private static void UpdateSoundTexture(AudioClipInfo soundtrack)
         {
-            if (!AudioImageFactory.TryGetOrCreateImagePathForClip(soundtrack, instance, out var imagePath))
+            if (!AudioImageFactory.TryGetOrCreateImagePathForClip(soundtrack.Clip, soundtrack.Owner, out var imagePath))
             {
                 _loadedImagePath = null;
                 return;
@@ -54,7 +58,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 return;
 
             _textureResource?.Dispose();
-            var resource = ResourceManager.CreateTextureResource(imagePath, null);
+            var resource = ResourceManager.CreateTextureResource(imagePath, soundtrack.Owner);
             _textureResource = resource;
             
             if (resource.Value != null)

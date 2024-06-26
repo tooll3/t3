@@ -326,7 +326,7 @@ namespace T3.Core.Model
                 }
             }
 
-            symbol.PlaybackSettings = PlaybackSettings.ReadFromJson(jToken, package);
+            symbol.PlaybackSettings = PlaybackSettings.ReadFromJson(jToken);
 
             var animatorData = (JArray)jToken[JsonKeys.Animator];
             return new SymbolReadResult(symbol, childrenJsons, animatorData);

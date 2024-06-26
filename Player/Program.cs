@@ -211,19 +211,20 @@ namespace T3.Player
                 _resolution = new Int2(_resolvedOptions.Width, _resolvedOptions.Height);
 
                 // Init wasapi input if required
-                if (playbackSettings is { AudioSource: PlaybackSettings.AudioSources.ProjectSoundTrack } && playbackSettings.GetMainSoundtrack(out _soundtrack))
+                if (playbackSettings is { AudioSource: PlaybackSettings.AudioSources.ProjectSoundTrack } && playbackSettings.GetMainSoundtrack(_project, out _soundtrack))
                 {
-                    if (_soundtrack.TryGetAbsoluteFilePath(_project, out _))
+                    var soundtrack = _soundtrack.Value;
+                    if (!soundtrack.TryGetFileResource(out var file))
                     {
-                        _playback.Bpm = _soundtrack.Bpm;
+                        _playback.Bpm = soundtrack.Clip.Bpm;
                         // Trigger loading clip
-                        AudioEngine.UseAudioClip(_soundtrack, 0);
+                        AudioEngine.UseAudioClip(soundtrack, 0);
                         AudioEngine.CompleteFrame(_playback, Playback.LastFrameDuration); // Initialize
                         prerenderRequired = true;
                     }
                     else
                     {
-                        Log.Warning($"Can't find soundtrack {_soundtrack.FilePath}");
+                        Log.Warning($"Can't find soundtrack {soundtrack.Clip.FilePath}");
                         _soundtrack = null;
                     }
                 }
@@ -257,7 +258,7 @@ namespace T3.Player
                 // Sample some frames to preload all shaders and resources
                 if (prerenderRequired)
                 {
-                    PreloadShadersAndResources(_soundtrack.LengthInSeconds, _resolution, _playback, _deviceContext, _evalContext, _textureOutput, _swapChain,
+                    PreloadShadersAndResources(_soundtrack.Value.Clip.LengthInSeconds, _resolution, _playback, _deviceContext, _evalContext, _textureOutput, _swapChain,
                                                _renderView);
                 }
 
@@ -407,7 +408,7 @@ namespace T3.Player
         private static Instance _project;
         private static EvaluationContext _evalContext;
         private static Playback _playback;
-        private static AudioClip _soundtrack;
+        private static AudioClipInfo? _soundtrack;
         private static DeviceContext _deviceContext;
         private static Options _resolvedOptions;
         private static RenderForm _renderForm;

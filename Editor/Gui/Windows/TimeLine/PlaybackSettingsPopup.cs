@@ -8,6 +8,7 @@ using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Operator;
+using T3.Core.Resource;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
@@ -119,7 +120,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             if (settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
             {
                 //var soundtrack = ;
-                if (!settings.GetMainSoundtrack(out var soundtrack))
+                if (!settings.GetMainSoundtrack(compositionWithSettings, out var soundtrackInfo))
                 {
                     if (ImGui.Button("Add soundtrack to composition"))
                     {
@@ -131,15 +132,22 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 }
                 else
                 {
-                    var warning = !string.IsNullOrEmpty(soundtrack.FilePath) && !File.Exists(soundtrack.FilePath)
+                    var soundtrack = soundtrackInfo.Value;
+                    var warning = !soundtrack.TryGetFileResource(out var file)
                                       ? "File not found?"
                                       : null;
+                    
+                    var path = file?.AbsolutePath ?? string.Empty;
+                    
+                    // todo - replace with StringInputUi for file selection
                     var filepathModified = FormInputs.AddFilePicker("Soundtrack",
-                                                                    ref soundtrack.FilePath,
+                                                                    ref path,
                                                                     "filepath to soundtrack",
                                                                     warning,
                                                                     FileOperations.FilePickerTypes.File
                                                                    );
+                    
+                    soundtrack.Clip.FilePath = path;
                     FormInputs.ApplyIndent();
                     if (ImGui.Button("Reload"))
                     {
@@ -150,13 +158,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     ImGui.SameLine();
                     if (ImGui.Button("Remove"))
                     {
-                        settings.AudioClips.Remove(soundtrack);
+                        settings.AudioClips.Remove(soundtrack.Clip);
                     }
 
                     FormInputs.AddVerticalSpace();
 
                     if (FormInputs.AddFloat("BPM",
-                                            ref soundtrack.Bpm,
+                                            ref soundtrack.Clip.Bpm,
                                             0,
                                             1000,
                                             0.02f,
@@ -164,11 +172,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                             "In T3 animation units are in bars.\nThe BPM rate controls the animation speed of your project.",
                                             120))
                     {
-                        Playback.Current.Bpm = soundtrack.Bpm;
-                        settings.Bpm = soundtrack.Bpm;
+                        Playback.Current.Bpm = soundtrack.Clip.Bpm;
+                        settings.Bpm = soundtrack.Clip.Bpm;
                     }
 
-                    var soundtrackStartTime = (float)soundtrack.StartTime;
+                    var soundtrackStartTime = (float)soundtrack.Clip.StartTime;
 
                     if (FormInputs.AddFloat("Offset",
                                             ref soundtrackStartTime,
@@ -179,7 +187,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                             "Offsets the beginning of the soundtrack in seconds.",
                                             0))
                     {
-                        soundtrack.StartTime = soundtrackStartTime;
+                        soundtrack.Clip.StartTime = soundtrackStartTime;
                     }
 
                     FormInputs.AddEnumDropdown(ref UserSettings.Config.TimeDisplayMode, "Display Timeline in");
@@ -208,7 +216,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     if (filepathModified)
                     {
                         AudioEngine.ReloadClip(soundtrack);
-                        UpdateBpmFromSoundtrackConfig(soundtrack);
+                        UpdateBpmFromSoundtrackConfig(soundtrack.Clip);
                         UpdatePlaybackAndTimeline(settings);
                     }
                 }
