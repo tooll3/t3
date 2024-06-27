@@ -1185,7 +1185,6 @@
     },
     {
       "Id": "4b050fca-e8fa-4adb-a52b-8924e65cc352"/*SetVJVariables*/,
-      "IsBypassed": true,
       "SymbolId": "e14af8a3-8672-4348-af9e-735714c31c92",
       "InputValues": [],
       "Outputs": []
@@ -1451,12 +1450,7 @@
         {
           "Id": "00fd2794-567a-4f9b-a900-c2ebf9760764"/*Index*/,
           "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "e896b269-d17e-417f-be1f-2d6e9addae91"/*OptimizeInvalidation*/,
-          "Type": "System.Boolean",
-          "Value": true
+          "Value": 2
         }
       ],
       "Outputs": []
@@ -4248,7 +4242,7 @@
   ],
   "PlaybackSettings": {
     "Enabled": true,
-    "Bpm": 60.0,
+    "Bpm": 168.2672,
     "AudioSource": 1,
     "Syncing": 1,
     "AudioDecayFactor": 0.92,
