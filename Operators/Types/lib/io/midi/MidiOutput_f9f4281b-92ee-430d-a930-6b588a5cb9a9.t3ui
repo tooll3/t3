@@ -58,6 +58,16 @@
         "X": 197.0,
         "Y": 733.0
       }
+    },
+    {
+      "InputId": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 778.0
+      },
+      "Min": -1,
+      "Max": 127,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [],

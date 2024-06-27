@@ -39,7 +39,12 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
             var foundDevice = false;
             var noteOrControllerIndex = NoteOrController.GetValue(context).Clamp(0, 127);
             
-            var velocity = (int)(Velocity.GetValue(context).Clamp(0, 1)*127);
+            var velocity = (int)(Velocity.GetValue(context).Clamp(0, 1) * 127);
+            var intVelocity = Velocity127.GetValue(context);
+            if (intVelocity >= 0)
+            {
+                velocity = intVelocity.Clamp(0, 127);
+            }
             var durationInMs = ((int)(DurationInSecs.GetValue(context)*1000)).Clamp(1, 100000);
             var sendMode = SendMode.GetEnumValue<SendModes>(context);
             var triggerActive = TriggerSend.GetValue(context);
@@ -231,6 +236,9 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
 
         [Input(Guid = "61CCD308-0006-42DE-B190-C006E99B5871")]
         public readonly InputSlot<float> Velocity = new ();
+        
+        [Input(Guid = "A10E3F7B-D132-49CA-9F6D-726D5E699443")]
+        public readonly InputSlot<int> Velocity127 = new (-1);
         
         [Input(Guid = "ABE9393E-282E-4DE0-8F86-541FA955658F")]
         public readonly InputSlot<float> DurationInSecs = new ();
