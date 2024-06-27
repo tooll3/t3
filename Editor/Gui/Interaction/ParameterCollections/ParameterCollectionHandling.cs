@@ -30,10 +30,13 @@ public static class ParameterCollectionHandling
 {
     private static Instance _activeCompositionInstance;
     private static Instance _singleSelectedInstance;
+    public static ParameterCollection ActiveParamCollection;
+    
 
     public static void Update()
     {
         _singleSelectedInstance = NodeSelection.GetSelectedInstance();
+        TryGetActiveCollections(out ActiveParamCollection);
         
         // Sync with composition selected in UI
         var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
@@ -42,6 +45,8 @@ public static class ParameterCollectionHandling
         
         _activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
     }
+    
+    
     
     public static void AddParameterToNewOrActiveCollection(SymbolUi compositionUi, IInputSlot inputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
     {
@@ -70,13 +75,13 @@ public static class ParameterCollectionHandling
         c.ParameterDefinitions.Add(newParameterDefinition);
     }
 
-    public static bool TryGetActiveCollections(out ParameterCollection symbolUiParamCollection)
+    private static bool TryGetActiveCollections(out ParameterCollection symbolUiParamCollection)
     {
         symbolUiParamCollection = null;
         
         if (_activeCompositionInstance == null)
         {
-            Log.Warning("Can't apply controller change without composition");
+            //Log.Warning("Can't apply controller change without composition");
             return false;
         }
 
@@ -140,17 +145,17 @@ public static class ParameterCollectionHandling
     
     public static void TryApplyControllerChange(int controllerIndex, float normalizedValue)
     {
-        if (!TryGetActiveCollections(out var paramCollection))
+        if (ActiveParamCollection == null)
             return;
         
         // TODO: Implement controller bank shifting to support more than 8 controllers
-        if (controllerIndex >= paramCollection.ParameterDefinitions.Count )
+        if (controllerIndex >= ActiveParamCollection.ParameterDefinitions.Count )
         {
             Log.Debug($"No parameter on controller index {controllerIndex}");
             return;
         }
 
-        var paramDef = paramCollection.ParameterDefinitions[controllerIndex];
+        var paramDef = ActiveParamCollection.ParameterDefinitions[controllerIndex];
         
         if (!TryGetInputForParamDef(paramDef, out var input))
             return;
@@ -165,5 +170,29 @@ public static class ParameterCollectionHandling
         floatInput.SetTypedInputValue(normalizedValue);
     }
 
+    
+    public static bool TryGetGroupControllerValue(int controllerIndex, out float p)
+    {
+        p = 0;
+        
+        if (ActiveParamCollection == null)
+            return false;
+        
+        if(controllerIndex < 0 || controllerIndex >= ActiveParamCollection.ParameterDefinitions.Count)
+            return false;
+        
+        var paramDef = ActiveParamCollection.ParameterDefinitions[controllerIndex];
+        
+        if (!TryGetInputForParamDef(paramDef, out var input))
+            return false;
+        
+        if (input is not InputSlot<float> floatInput)
+        {
+            return false;
+        }
+
+        p= floatInput.Value;
+        return true;
+    }
 
 }

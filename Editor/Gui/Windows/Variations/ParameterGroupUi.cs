@@ -14,12 +14,14 @@ public  class ParameterGroupUi
     
     public  void DrawContent()
     {
-        if(!ParameterCollectionHandling.TryGetActiveCollections(out var c))
+        if(ParameterCollectionHandling.ActiveParamCollection == null)
         {
-            CustomComponents.EmptyWindowMessage("Not implemented yet.");
+            CustomComponents.EmptyWindowMessage("No collection defined yet.");
+            return;
+
         }
 
-        foreach (var x in c.ParameterDefinitions)
+        foreach (var x in ParameterCollectionHandling.ActiveParamCollection.ParameterDefinitions)
         {
             if (!ParameterCollectionHandling.TryGetInputForParamDef(x, out var input))
             {

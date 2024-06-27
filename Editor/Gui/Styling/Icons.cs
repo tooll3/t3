@@ -262,6 +262,7 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.OperatorBypassOff, slotIndex:88),
                 new (Icon.OperatorBypassOn, slotIndex:89),
                 new (Icon.OperatorDisabled, slotIndex:90),
+                new (Icon.Knob, slotIndex:91),
                 
             };
 
@@ -360,6 +361,7 @@ namespace T3.Editor.Gui.Styling
         SidePanelLeft,
         OperatorBypassOff,
         OperatorBypassOn,
-        OperatorDisabled
+        OperatorDisabled,
+        Knob
     }
 }

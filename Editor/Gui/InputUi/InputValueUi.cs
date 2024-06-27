@@ -508,42 +508,69 @@ namespace T3.Editor.Gui.InputUi
                 ImGui.SameLine();
 
                 // Draw Name Button
+
+                var isInCollection =
+                    ParameterCollectionHandling
+                       .TryGetCollectionForParameter(compositionUi, inputSlot, symbolChildUi, input, out var collection);
+                
                 ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
 
-                if (input.IsDefault)
+
+                var hasStyleCount = 0;
+
+                if (isInCollection)
+                {
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButton.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusControlled.Rgba);
+                    hasStyleCount = 2;
+                }
+                else if (input.IsDefault)
                 {
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButton.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                    ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
-
-                    if (!string.IsNullOrEmpty(Description))
-                    {
-                        CustomComponents.TooltipForLastItem(Description);
-                    }
-
-                    ImGui.PopStyleColor(2);
-                    ImGui.SameLine();
+                    hasStyleCount = 2;
                 }
-                else
+                
+
+                var isClicked =ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
+                
+                if (hasStyleCount > 0)
                 {
-                    var isClicked = ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
-                    ImGui.SameLine();
-                    if (ImGui.IsItemHovered())
-                    {
+                    ImGui.PopStyleColor(hasStyleCount);
+                }
+
+                if (isInCollection)
+                {
+                    //Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 4));
+                    Icons.DrawIconAtScreenPosition(Icon.Knob, ImGui.GetItemRectMin() + new Vector2(6, 5), ImGui.GetWindowDrawList(), UiColors.StatusControlled);
+                }
+                
+                if (ImGui.IsItemHovered())
+                {
+                        var text = "";
                         if (!string.IsNullOrEmpty(Description))
                         {
-                            CustomComponents.TooltipForLastItem(Description, "Click to reset to default");
+                            text += Description;
                         }
 
-                        Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 4));
-                    }
-
-                    if (isClicked)
-                    {
-                        UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));
-                    }
+                        if (isInCollection)
+                        {
+                            var collectionTitle = string.IsNullOrEmpty(collection.Title) ? string.Empty : collection.Title;
+                            text += $"\n Is in parameter collection {collectionTitle}";
+                        }
+                        
+                        
+                        CustomComponents.TooltipForLastItem( text, 
+                                                             "Click to reset to default");
+                        
                 }
 
+                if (isClicked)
+                {
+                    UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));
+                }
+
+                ImGui.SameLine();
                 CustomComponents.ContextMenuForItem
                     (() =>
                      {
@@ -572,7 +599,7 @@ namespace T3.Editor.Gui.InputUi
                              PublishAsInput(inputSlot, symbolChildUi, input);
                          }
                          
-                         if (ParameterCollectionHandling.TryGetCollectionForParameter(compositionUi, inputSlot, symbolChildUi, input, out var collection))
+                         if (isInCollection)
                          {
                              if (ImGui.MenuItem($"Remove from collection {collection.Title}"))
                              {
