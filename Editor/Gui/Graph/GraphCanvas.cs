@@ -224,8 +224,8 @@ namespace T3.Editor.Gui.Graph
             UpdateCanvas(editingFlags);
 
             /*
-             * This is a work around to delay setting the composition until ImGui has
-             * finally updated its window size and applied its layout so we can use
+             * This is a workaround to delay setting the composition until ImGui has
+             * finally updated its window size and applied its layout, so we can use
              * Graph window size to properly fit the content into view.
              *
              * The side effect of this hack is that CompositionOp stays undefined for
@@ -1225,7 +1225,7 @@ namespace T3.Editor.Gui.Graph
         #region public API
         /// <summary>
         /// The canvas that is currently being drawn from the UI.
-        /// Note that <see cref="GraphCanvas"/> is NOT a singleton so you can't rely on this to be valid outside of the Drawing() context.
+        /// Note that <see cref="GraphCanvas"/> is NOT a singleton, so you can't rely on this to be valid outside the Drawing() context.
         /// </summary>
         public static GraphCanvas Current { get; private set; }
 
