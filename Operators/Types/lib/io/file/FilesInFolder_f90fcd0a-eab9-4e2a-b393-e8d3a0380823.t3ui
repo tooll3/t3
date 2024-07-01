@@ -1,5 +1,6 @@
 {
   "Id": "f90fcd0a-eab9-4e2a-b393-e8d3a0380823"/*FilesInFolder*/,
+  "Description": "Scans a folder for all existing files and creates a list that can be used with [PickFromStringList]\nIt also counts files in a folder and outputs the amount as an integer.\n\nSee the example [FilesInFolderExample] and [FadingSlideShow] for what might be a useful combination\n\nOther interesting related ops: [ReadFile] [RequestUrl] [PickStringPart] [WriteToFile] [GetAttributeFromJsonString]",
   "InputUis": [
     {
       "InputId": "ca9778e7-072c-4304-9043-eeb2dc4ca5d7"/*Folder*/,
@@ -7,6 +8,7 @@
         "X": 0.5290108,
         "Y": -29.32594
       },
+      "Description": "Defines the selected folger / path",
       "Usage": "DirectoryPath"
     },
     {
@@ -15,6 +17,7 @@
         "X": 15.221848,
         "Y": 81.40785
       },
+      "Description": "All file names in the specified folder are searched for the string specified here. They are only selected if they match. Examples: .jpg .obj .png .mp4 .txt images- slideshow_ animated_cat-  and so on",
       "Usage": "Default"
     },
     {
@@ -22,7 +25,9 @@
       "Position": {
         "X": 0.0,
         "Y": 50.0
-      }
+      },
+      "Description": "triggers a scan of the selected folder and filter / filetype",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],

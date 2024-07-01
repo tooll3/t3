@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Gui\UiHelpers\ConvertSvgFonts" />
+    <Folder Include="Gui\Interaction\Variations\Snapshots\" />
   </ItemGroup>
 
 </Project>

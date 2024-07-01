@@ -134,8 +134,8 @@ namespace T3.Core.Operator
         
 
         private bool _isBypassed;
-        
-        private bool IsBypassable()
+
+        public bool IsBypassable()
         {
             if(Symbol.OutputDefinitions.Count == 0)
                 return false;
@@ -176,17 +176,13 @@ namespace T3.Core.Operator
             return false;
         }
 
-        private void SetBypassed(bool shouldBypass)
+        public void SetBypassed(bool shouldBypass)
         {
-            if (shouldBypass == _isBypassed)
-                return;
-            
             if(!IsBypassable())
                 return;
 
             if (Parent == null)
             {
-                // Clarify: shouldn't this be shouldBypass?
                 _isBypassed = shouldBypass;  // during loading parents are not yet assigned. This flag will later be used when creating instances
                 return;
             }
@@ -322,6 +318,11 @@ namespace T3.Core.Operator
                         continue;
 
                     ii.DirtyFlag.Invalidate();
+                }
+
+                foreach (var io in c.Parent.Outputs)
+                {
+                    io.DirtyFlag.Invalidate();
                 }
             }
         }

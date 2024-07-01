@@ -1,0 +1,158 @@
+{
+  "Id": "f4528476-298d-42b7-8138-3916bea2da6e"/*SamplePointColorAttributesExample*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "7b5ad32f-cd07-43bd-b8ad-329e9ac4bee9"/*GridPoints*/,
+      "Position": {
+        "X": 635.4922,
+        "Y": 15.0546875
+      }
+    },
+    {
+      "ChildId": "7b72a02c-da25-4791-85a8-224490f4f4c5"/*DrawPoints*/,
+      "Position": {
+        "X": 1406.2498,
+        "Y": 17.32959
+      }
+    },
+    {
+      "ChildId": "c0396e08-267b-48c8-9080-0433db29e4a2"/*SamplePointAttributes*/,
+      "Comment": "We control/modify the W value of the points ",
+      "Position": {
+        "X": 1106.2498,
+        "Y": 17.32959
+      }
+    },
+    {
+      "ChildId": "9a490615-d823-4feb-9952-bf07c63d1d26"/*SamplePointColorAttributes*/,
+      "Comment": "Use the alpha channel of BaseColor to blend in the texture ",
+      "Position": {
+        "X": 956.24976,
+        "Y": 17.32959
+      }
+    },
+    {
+      "ChildId": "bad78233-030f-4e79-82d0-352b69c235a5"/*Text*/,
+      "Position": {
+        "X": 22.204468,
+        "Y": 212.33447
+      }
+    },
+    {
+      "ChildId": "f8d9ba73-f120-4601-9f87-e2b140ecf7d5"/*RenderTarget*/,
+      "Position": {
+        "X": 322.20447,
+        "Y": 212.33447
+      }
+    },
+    {
+      "ChildId": "32d20d90-89e4-4cdf-b63a-0b77805b8ca9"/*Transform*/,
+      "Position": {
+        "X": 172.20447,
+        "Y": 212.33447
+      }
+    },
+    {
+      "ChildId": "1b1a38f2-f672-446a-8ecf-e54e260aca94"/*RandomizePoints*/,
+      "Position": {
+        "X": 806.24976,
+        "Y": 17.32959
+      }
+    },
+    {
+      "ChildId": "daae070b-cf24-4c88-a460-f11f6d076a72"/*LinearGradient*/,
+      "Position": {
+        "X": 953.6305,
+        "Y": 288.92487
+      }
+    },
+    {
+      "ChildId": "312c9c6e-0347-4b4a-898b-8b8284512ba4"/*Time*/,
+      "Position": {
+        "X": 635.4922,
+        "Y": 58.054688
+      }
+    },
+    {
+      "ChildId": "95e6d183-246c-4793-86b1-eb51feaad129"/*RenderTarget*/,
+      "Position": {
+        "X": 1706.2498,
+        "Y": 17.32959
+      }
+    },
+    {
+      "ChildId": "50c3b8f6-c7ec-4610-bf85-2aeadd7e4521"/*Camera*/,
+      "Position": {
+        "X": 1556.2498,
+        "Y": 17.32959
+      }
+    },
+    {
+      "ChildId": "6099b0f3-8565-4eff-916c-d68feb33a6bd"/*Scale*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 127.659935,
+        "Y": 22.193188
+      },
+      "Comment": "we need to adjust the scale a little",
+      "Position": {
+        "X": 762.62244,
+        "Y": 108.64047
+      }
+    },
+    {
+      "ChildId": "f7d4a523-c023-4f20-80cf-5956f54218ec"/*LinearGradient*/,
+      "Position": {
+        "X": 472.979,
+        "Y": 159.66663
+      }
+    },
+    {
+      "ChildId": "538500b9-0b5f-4eea-a4a4-a6a665331861"/*AddNoise*/,
+      "Comment": "We use the W as weight to contol the noise",
+      "Position": {
+        "X": 1256.2498,
+        "Y": 17.32959
+      }
+    },
+    {
+      "ChildId": "bc8a7e17-19aa-43ff-bf95-303b005d6108"/*Time*/,
+      "Position": {
+        "X": 1106.2498,
+        "Y": 99.32959
+      }
+    },
+    {
+      "ChildId": "2ab307d0-1bee-4a4e-b015-51ab0a00e47d"/*Blast it!*/,
+      "Position": {
+        "X": 584.8385,
+        "Y": 360.14276
+      }
+    },
+    {
+      "ChildId": "79f2287f-bf70-49e6-ae0f-5d59d108e629"/*TriggerAnim*/,
+      "Position": {
+        "X": 767.228,
+        "Y": 323.77863
+      }
+    },
+    {
+      "ChildId": "1a0b52ae-f04d-4914-aa50-9ab63692dd7e"/*TriggerAnim*/,
+      "Position": {
+        "X": 767.228,
+        "Y": 379.77863
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "7bd91d7a-6b16-4837-b43c-f3f99b66ac86"/*ColorBuffer*/,
+      "Position": {
+        "X": 1946.2123,
+        "Y": 16.606201
+      }
+    }
+  ]
+}

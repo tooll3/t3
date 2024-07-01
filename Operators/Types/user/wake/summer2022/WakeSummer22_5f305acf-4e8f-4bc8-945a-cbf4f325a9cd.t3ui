@@ -533,8 +533,8 @@
     {
       "ChildId": "aa0e4c82-d481-43ab-8c4a-44fbbb86f728"/*WaitingScene*/,
       "Position": {
-        "X": 189.20181,
-        "Y": 1250.7076
+        "X": -182.48508,
+        "Y": 1241.3486
       }
     },
     {
@@ -587,7 +587,7 @@
       }
     },
     {
-      "ChildId": "af9d3d06-e3d8-4f8c-b046-118161bacbd1"/*MosiacTiling*/,
+      "ChildId": "af9d3d06-e3d8-4f8c-b046-118161bacbd1"/*MosaicTiling*/,
       "Position": {
         "X": 65.58008,
         "Y": 2043.5563

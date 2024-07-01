@@ -42,6 +42,10 @@
       "DefaultValue": false
     },
     {
+      "Id": "e8923e83-ce48-4b71-a1aa-46b9ff79780b"/*ScaleMode*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "d7b83780-c4be-4337-b1df-0c98310b1926"/*GenerateMips*/,
       "DefaultValue": false
     },
@@ -92,8 +96,19 @@
           "Id": "f6269be3-3331-43a6-91ec-138b47199f3e"/*ShaderPath*/,
           "Type": "System.String",
           "Value": "Resources\\lib\\img\\fx\\Blend.hlsl"
+        },
+        {
+          "Id": "6022a4b0-c6fc-49a3-811a-179dcceb8b44"/*WrapMode*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Clamp"
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "b2c29ae7-69bd-4a78-951e-1e0952052b41"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
       "Outputs": []
     }
   ],
@@ -177,6 +192,12 @@
       "TargetSlotId": "2929c4c9-6d6a-47b7-b80e-d7a1f90b6945"
     },
     {
+      "SourceParentOrChildId": "b2c29ae7-69bd-4a78-951e-1e0952052b41",
+      "SourceSlotId": "db1073a1-b9d8-4d52-bc5c-7ae8c0ee1ac3",
+      "TargetParentOrChildId": "30ce4abc-21c1-4ad1-8b33-52aaa2df4dfb",
+      "TargetSlotId": "2929c4c9-6d6a-47b7-b80e-d7a1f90b6945"
+    },
+    {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "abaa52e9-7d3d-4ae5-89d2-5251f61e5392",
       "TargetParentOrChildId": "30ce4abc-21c1-4ad1-8b33-52aaa2df4dfb",
@@ -217,6 +238,12 @@
       "SourceSlotId": "cdc2cf4b-f788-4cb4-a3f5-8dfaa8bd54b3",
       "TargetParentOrChildId": "882f89a2-6842-4342-bc33-0d9a4977873f",
       "TargetSlotId": "253b9ae4-fac5-4641-bf0c-d8614606a840"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "e8923e83-ce48-4b71-a1aa-46b9ff79780b",
+      "TargetParentOrChildId": "b2c29ae7-69bd-4a78-951e-1e0952052b41",
+      "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

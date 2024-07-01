@@ -28,7 +28,7 @@ namespace T3.Editor.UiModel
                         List<SymbolChildUi> childUis,
                         OrderedDictionary<Guid, IInputUi> inputs,
                         OrderedDictionary<Guid, IOutputUi> outputs,
-                        OrderedDictionary<Guid, Annotation> annotations, 
+                        OrderedDictionary<Guid, Annotation> annotations,
                         OrderedDictionary<Guid, ExternalLink> links)
         {
             Symbol = symbol;
@@ -75,15 +75,13 @@ namespace T3.Editor.UiModel
             var annotations = new OrderedDictionary<Guid, Annotation>(Annotations.Count);
             foreach (var (_, annotation) in Annotations)
             {
-                var clonedAnnotation = annotation.Clone();
-                annotations.Add(clonedAnnotation.Id, clonedAnnotation);
+                annotations.Add(annotation.Clone().Id, annotation.Clone());
             }
             
             var links = new OrderedDictionary<Guid, ExternalLink>(Links.Count);
             foreach (var (_, link) in Links)
             {
-                var clonedLink = link.Clone();
-                links.Add(clonedLink.Id, clonedLink);
+                links.Add(link.Clone().Id, link.Clone());
             }
             
             return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations, links);

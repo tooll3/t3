@@ -16,7 +16,10 @@
         "X": -528.5664,
         "Y": 886.51764
       },
-      "GroupTitle": "Randomize"
+      "GroupTitle": "Randomize",
+      "Min": 0.0,
+      "Max": 10.0,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "270bcf23-35ee-4c4f-aae5-192435b1aee3"/*Position*/,
@@ -60,7 +63,7 @@
       }
     },
     {
-      "InputId": "4dffb439-da81-477c-8100-34a9ba59b0ee"/*RandomSeed*/,
+      "InputId": "4dffb439-da81-477c-8100-34a9ba59b0ee"/*RandomPhase*/,
       "Position": {
         "X": -528.21466,
         "Y": 1269.0726

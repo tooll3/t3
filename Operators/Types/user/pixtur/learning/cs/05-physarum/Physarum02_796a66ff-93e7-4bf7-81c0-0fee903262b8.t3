@@ -635,6 +635,11 @@
       "SymbolId": "6820b166-1782-43b9-bc5c-6b4f63b16f86",
       "InputValues": [
         {
+          "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
+          "Type": "System.Single",
+          "Value": 0.86
+        },
+        {
           "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
           "Type": "System.Single",
           "Value": 0.24
@@ -656,11 +661,6 @@
             "X": -0.13,
             "Y": -0.29
           }
-        },
-        {
-          "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
-          "Type": "System.Single",
-          "Value": 0.86
         },
         {
           "Id": "9d5e3055-c17e-4013-963d-e17c76b707c1"/*HighlightColor*/,

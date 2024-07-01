@@ -1,5 +1,6 @@
 {
   "Id": "1a411be2-1757-4019-8ce2-e29f808ed839"/*CheckerBoard*/,
+  "Description": "Generates a modular chessboard pattern\n\n\nOther interesting patterns can be generated with [SinForm] [ZollnerPattern] [FraserGrid] [Raster] [CheckerBoard] [RyojiPattern2] [RyojiPattern1]",
   "InputUis": [
     {
       "InputId": "1192cfbe-585f-45f0-a37b-5fe78ca32d7b"/*ColorA*/,

@@ -44,9 +44,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         uv.y)
     :  float2(
         uv.x, 
-        (uv.y - 0.5) * imageBAspect / imageAAspect + 0.5)
-    
-    ;
+        (uv.y - 0.5) * imageBAspect / imageAAspect + 0.5);
 
     float4 tB = ImageB.Sample(texSampler, uvB) * ImageBColor;    
 

@@ -1,0 +1,30 @@
+{
+  "Name": "DampFloatList",
+  "Id": "c30ba288-9e40-4636-beb5-68401d91fe37",
+  "Namespace": "lib.math.floats",
+  "Inputs": [
+    {
+      "Id": "491cc9cd-28fc-4ec4-8d98-5a7e0d17082a"/*Values*/,
+      "DefaultValue": {
+        "Values": [
+          5.0,
+          17.0
+        ]
+      }
+    },
+    {
+      "Id": "3d63df3d-81c0-4e27-ae0c-acd3092d952c"/*Damping*/,
+      "DefaultValue": 0.95
+    },
+    {
+      "Id": "ad97ae08-9aeb-4ed5-b5b1-e24d9af21cf7"/*Method*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "51bbb9f9-2895-4965-9f73-34d7dbae2ad1"/*UseAppRunTime*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

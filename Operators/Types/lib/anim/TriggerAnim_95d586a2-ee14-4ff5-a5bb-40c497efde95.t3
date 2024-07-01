@@ -20,11 +20,11 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "3ad8e756-7720-4f43-85da-efe1af364cfe"/*StartValue*/,
+      "Id": "3ad8e756-7720-4f43-85da-efe1af364cfe"/*Base*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "287fa06c-3e18-43f2-a4e1-0780c946dd84"/*EndValue*/,
+      "Id": "287fa06c-3e18-43f2-a4e1-0780c946dd84"/*Amplitude*/,
       "DefaultValue": 1.0
     },
     {
@@ -38,6 +38,10 @@
     {
       "Id": "06e511d2-891a-4f81-b49e-327410a2cb95"/*TimeMode*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "ffecb0c3-4d62-40f6-8f46-b982ae0a1800"/*UseTriggerVar*/,
+      "DefaultValue": "__Trigger"
     }
   ],
   "Children": [],

@@ -53,8 +53,8 @@
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "03749b41-cc3c-4f38-aea6-d7cea19fc073": {
-            "Width": 256,
-            "Height": 256
+            "X": 256,
+            "Y": 256
           },
           "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f": {
             "X": 0.0,
@@ -77,8 +77,8 @@
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "03749b41-cc3c-4f38-aea6-d7cea19fc073": {
-            "Width": 64,
-            "Height": 64
+            "X": 64,
+            "Y": 64
           },
           "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f": {
             "X": 0.0,
@@ -101,8 +101,8 @@
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "03749b41-cc3c-4f38-aea6-d7cea19fc073": {
-            "Width": 512,
-            "Height": 512
+            "X": 512,
+            "Y": 512
           },
           "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f": {
             "X": 0.0,
@@ -139,17 +139,35 @@
       "ActivationIndex": 7,
       "Title": "1px Black",
       "PosOnCanvas": {
-        "X": 1.8296509,
-        "Y": -244.63971
+        "X": 164.82965,
+        "Y": -337.6397
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "03749b41-cc3c-4f38-aea6-d7cea19fc073": {
-            "Width": 1,
-            "Height": 1
+            "X": 1,
+            "Y": 1
           },
           "6ea4f801-ff52-4266-a41f-b9ef02c68510": false,
           "e882e0f0-03f9-46e6-ac7a-709e6fa66613": 1
+        }
+      }
+    },
+    {
+      "Id": "816d7652-fe51-4b61-8614-b7802588d2d6",
+      "IsPreset": true,
+      "ActivationIndex": 8,
+      "Title": "Fast",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "aacafc4d-f47f-4893-9a6e-98db306a8901": false,
+          "e882e0f0-03f9-46e6-ac7a-709e6fa66613": 1,
+          "6ea4f801-ff52-4266-a41f-b9ef02c68510": false,
+          "abebb02b-bcaa-42c7-8eb8-da3c1b2fc840": false
         }
       }
     }

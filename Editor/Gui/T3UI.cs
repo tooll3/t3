@@ -21,6 +21,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Selection;
@@ -51,24 +52,21 @@ public class T3Ui
         #endif
         
         UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: log);
-
-        //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
-        VariationHandling.Init();
 
         Playback.Current = DefaultTimelinePlayback;
         ThemeHandling.Initialize();
     }
 
     public static readonly Playback DefaultTimelinePlayback = new();
-    public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new();
+    public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new() { PlaybackSpeed = 1};
         
     private void InitializeAfterAppWindowReady()
     {
         if (_initialed || ImGui.GetWindowSize() == Vector2.Zero)
             return;
             
-        ActiveMidiRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
+        CompatibleMidiDeviceHandling.InitializeConnectedDevices();
         _initialed = true;
     }
 
@@ -86,10 +84,9 @@ public class T3Ui
         // Prepare the current frame 
         RenderStatsCollector.StartNewFrame();
             
-        if (Playback.Current.IsLive)
+        if (!Playback.Current.IsRenderingToFile)
         {
             PlaybackUtils.UpdatePlaybackAndSyncing();
-            //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
             AudioEngine.CompleteFrame(Playback.Current, Playback.LastFrameDuration);    // Update
         }
         TextureReadAccess.Update();
@@ -108,7 +105,9 @@ public class T3Ui
         // Set selected id so operator can check if they are selected or not  
         var selectedInstance = NodeSelection.GetSelectedInstance();
         MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
-            
+        
+        CompatibleMidiDeviceHandling.UpdateConnectedDevices();
+        
         // Keep invalidating selected op to enforce rendering of Transform gizmo  
         foreach (var si in NodeSelection.GetSelectedInstances().ToList())
         {
@@ -291,7 +290,7 @@ public class T3Ui
                     UndoRedoStack.Undo();
                 }
 
-                if (ImGui.MenuItem("Redo", "CTRL+Y", false, UndoRedoStack.CanRedo))
+                if (ImGui.MenuItem("Redo", "CTRL+SHIFT+Z", false, UndoRedoStack.CanRedo))
                 {
                     UndoRedoStack.Redo();
                 }
@@ -402,7 +401,10 @@ public class T3Ui
             UserSettings.Config.ShowMainMenu = true;
             UserSettings.Config.ShowTitleAndDescription = true;
             UserSettings.Config.ShowToolbar = true;
-            UserSettings.Config.ShowTimeline = true;
+            if (Playback.Current.Settings.Syncing == PlaybackSettings.SyncModes.Timeline)
+            {
+                UserSettings.Config.ShowTimeline = true;
+            }
         }
             
     }
@@ -518,7 +520,8 @@ public class T3Ui
     public static float UiScaleFactor { get; set; } = 1;
     public static float DisplayScaleFactor { get; set; } = 1;
     public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
-    public static readonly MidiDataRecording MidiDataRecording = new();
+    public static readonly MidiDataRecording MidiDataRecording = new(DataRecording.ActiveRecordingSet);
+    public static readonly OscDataRecording OscDataRecording = new(DataRecording.ActiveRecordingSet);
         
     //private static readonly AutoBackup.AutoBackup _autoBackup = new();
         

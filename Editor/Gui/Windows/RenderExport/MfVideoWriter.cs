@@ -101,7 +101,8 @@ internal abstract class MfVideoWriter : IDisposable
                     waveFormat._nBlockAlign = (ushort)(waveFormat._nChannels * waveFormat._wBitsPerSample / 8);
                     waveFormat._nAvgBytesPerSec = waveFormat._nSamplesPerSec * waveFormat._nBlockAlign;
                     //_audioWriter = new FlacAudioWriter(SinkWriter, ref waveFormat);
-                    _audioWriter = new Mp3AudioWriter(SinkWriter, ref waveFormat);
+                    //_audioWriter = new Mp3AudioWriter(SinkWriter, ref waveFormat);
+                    _audioWriter = new AacAudioWriter(SinkWriter, ref waveFormat);
                 }
 
                 // Start writing the video file. MUST be called before write operations.

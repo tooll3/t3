@@ -49,16 +49,18 @@ namespace T3.Editor.Gui.Styling
             }
             
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+            filter ??= string.Empty;
             var wasChanged = ImGui.InputText(label, ref filter, 256);
             ImGui.PopStyleColor();
-
+            
             if (ImGui.IsItemActivated())
             {
                 _lastTypeAheadResults.Clear();
                 _selectedResultIndex = -1;
                 THelpers.DisableImGuiKeyboardNavigation();
             }
-
+            
+            
             var isItemDeactivated = ImGui.IsItemDeactivated();
             
             // We defer exit to get clicks on opened popup list
@@ -68,8 +70,10 @@ namespace T3.Editor.Gui.Styling
             {
                 _activeInputId = inputId;
 
-                ImGui.SetNextWindowPos(new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y));
-                ImGui.SetNextWindowSize(new Vector2(ImGui.GetItemRectSize().X, 320));
+                var lastPosition = new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y);
+                var size = new Vector2(ImGui.GetItemRectSize().X, 320);
+                ImGui.SetNextWindowPos(lastPosition);
+                ImGui.SetNextWindowSize(size);
                 if (ImGui.IsItemFocused() && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 {
                     wasChanged = true;
@@ -87,12 +91,24 @@ namespace T3.Editor.Gui.Styling
                     _lastTypeAheadResults.Clear();
                     var index = 0;
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Gray.Rgba);
-                        
+                    
+                    var matches = new List<string>();
+                    var others = new List<string>();
                     foreach (var word in items)
                     {
-                        if (word == null ||  !word.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
-                            continue;
-                        
+                        if (word != null && (filter == null || word.Contains(filter, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            matches.Add(word);
+                        }
+                        else
+                        {
+                            others.Add(word);
+                        }
+                    }
+                    
+                    var listItems = matches.Count  <=1 ? others : matches;
+                    foreach (var word in listItems)
+                    {
                         var isSelected = index == _selectedResultIndex;
                         
                         // We can't use IsItemHovered because we need to use Tooltip hack 

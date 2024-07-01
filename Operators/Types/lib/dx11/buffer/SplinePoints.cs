@@ -14,6 +14,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
 {
@@ -176,7 +177,10 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
                 lastPos = pos;
 
                 result[index].W = 1;
-                result[index].Orientation = LookAt(-Vector3.Normalize(d), -upVector);
+                result[index].Orientation = LookAt(Vector3.Normalize(d), -upVector);
+                result[index].Color = SampleLinearColors(t, ref sourcePoints);
+                result[index].Stretch = new Vector3(1.0f, 1.0f, 1.0f);
+                result[index].Selected = 1;
             }
 
             return result;
@@ -200,6 +204,32 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
             }
 
             return Bezier.GetPoint(points[i].Position, points[i + 1].Position, points[i + 2].Position, points[i + 3].Position, t);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static System.Numerics.Vector4 SampleLinearColors(float t, ref Point[] points)
+        {
+            int i;
+
+            if (t >= 1f)
+            {
+                t = 1f;
+                i = points.Length - 2; // Adjusted index
+            }
+            else
+            {
+                var tt = t * (points.Length - 1);
+                i = (int)tt;
+                t = tt - i;
+            }
+
+            var pA = points[i].Color;
+            var pB = points[i + 1].Color;
+
+            // Perform linear interpolation between colors
+            var interpolatedColor = pA + (pB - pA) * t;
+
+            return interpolatedColor;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

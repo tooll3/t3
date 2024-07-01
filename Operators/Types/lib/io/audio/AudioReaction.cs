@@ -243,7 +243,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         
         private static readonly List<float> _emptyList = new();
         public double PlaybackTimeInSecs =>
-            (Playback.Current.IsLive) ? Playback.RunTimeInSecs : Playback.Current.TimeInSecs;
+            (Playback.Current.IsRenderingToFile) ?   Playback.Current.TimeInSecs : Playback.RunTimeInSecs;
 
         /// <summary>
         /// This is used only for visualization

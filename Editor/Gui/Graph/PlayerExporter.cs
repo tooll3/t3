@@ -103,6 +103,10 @@ namespace T3.Editor.Gui.Graph
                                   playerBuildPath + "AbletonLinkDLL.dll",
                                   playerBuildPath + "AbletonLink.dll",
                                   playerBuildPath + "AbletonLink.deps.json",
+
+                                  playerBuildPath + "NAudio.Core.dll",
+                                  playerBuildPath + "Naudio.Midi.dll",
+
                               },
                           exportDir);
 

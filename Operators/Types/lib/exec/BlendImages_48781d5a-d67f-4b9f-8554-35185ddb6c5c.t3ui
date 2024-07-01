@@ -1,6 +1,6 @@
 {
   "Id": "48781d5a-d67f-4b9f-8554-35185ddb6c5c"/*BlendImages*/,
-  "Description": "Blends the connected input images with cross-fading and using a float index.\n\nPlease note: this will lead to inconsistent behavior if used with images of varying resolution unless you set an explicit resolution.\n\nAlso see: [PickTexture]\n\n\n",
+  "Description": "Blends the connected input images with cross-fading and using a float index.\n\nPlease note: this will lead to inconsistent behavior if used with images of varying resolution unless you set an explicit resolution.\n\nAlso see: [PickTexture]\n\n\nAll blend ops and similar: [BlendImages] [Blend] [BlendWithMask] [Combine3Images]",
   "InputUis": [
     {
       "InputId": "f1888e3b-edf6-409c-9cda-8c97fb18c38e"/*BlendFraction*/,
@@ -51,13 +51,6 @@
       "ChildId": "e5f300f8-f443-4a9a-a732-a8bbedbcd5bc"/*Modulo*/,
       "Position": {
         "X": -717.5594,
-        "Y": 454.28943
-      }
-    },
-    {
-      "ChildId": "1516ab3d-ff6e-464c-a413-87a425d4a510"/*Sub*/,
-      "Position": {
-        "X": -567.5594,
         "Y": 454.28943
       }
     },

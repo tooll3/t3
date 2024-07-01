@@ -30,6 +30,7 @@ public class UtilitiesWindow : Window
         Assets,
         CrashReporting,
         SvgConversion,
+        OperatorMigration,
     }
 
     private Categories _activeCategory;
@@ -39,7 +40,7 @@ public class UtilitiesWindow : Window
         ImGui.BeginChild("categories", new Vector2(160 * T3Ui.UiScaleFactor, -1), true, ImGuiWindowFlags.NoScrollbar);
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
-            FormInputs.AddSegmentedButton(ref _activeCategory, "", 150 * T3Ui.UiScaleFactor);
+            FormInputs.AddSegmentedButtonWithLabel(ref _activeCategory, "", 150 * T3Ui.UiScaleFactor);
             ImGui.PopStyleVar();
         }
         ImGui.EndChild();
@@ -93,8 +94,9 @@ public class UtilitiesWindow : Window
 
                         ImGui.TreePop();
                     }
+
                     break;
-                
+
                 case Categories.Assets:
                     FormInputs.AddSectionHeader("File Assets");
                     FileAssetsHelper.Draw();
@@ -135,12 +137,18 @@ public class UtilitiesWindow : Window
                 case Categories.SvgConversion:
                     SvgFontConversion.Draw();
                     break;
+
+                case Categories.OperatorMigration:
+                    OperatorFormatMigrationHelper.Draw();
+                    break;
             }
 
             ImGui.EndChild();
             ImGui.PopStyleVar();
         }
     }
+
+
 
     private static void SimulateCrash()
     {

@@ -36,7 +36,6 @@ namespace T3.Editor.UiModel
             WriteOutputUis(symbolUi, writer);
             WriteAnnotations(symbolUi, writer);
             WriteLinks(symbolUi, writer);
-
             writer.WriteEndObject();
         }
 
@@ -95,7 +94,7 @@ namespace T3.Editor.UiModel
                     writer.WritePropertyName(JsonKeys.Position);
                     _vector2ToJson(writer, childUi.PosOnCanvas);
 
-                    if(childUi.SnapshotGroupIndex > 0)
+                    if(childUi.SnapshotGroupIndex != 0)
                         writer.WriteObject(nameof(SymbolChildUi.SnapshotGroupIndex), childUi.SnapshotGroupIndex);
 
                     if (childUi.ConnectionStyleOverrides.Count > 0)
@@ -427,6 +426,7 @@ namespace T3.Editor.UiModel
             public const string Position = nameof(Position);
             public const string Annotations = nameof(Annotations);
             public const string Links = nameof(Links);
+            public const string ParamCollections = nameof(ParamCollections);
             public const string Comment = nameof(Comment);
             public const string Id = nameof(Id);
             public const string Title = nameof(Title);

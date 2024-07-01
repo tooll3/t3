@@ -35,6 +35,9 @@ namespace T3.Operators.Types.Id_f3b66187_34b2_4018_8380_279f9f296ded
         [Input(Guid = "0299761d-7397-4a2f-b591-81fadb404a92")]
         public readonly InputSlot<float> BackgroundDistance = new();
 
+        [Input(Guid = "46d76d8a-5fb6-4138-a88b-950a2e5b8529")]
+        public readonly InputSlot<float> QualityFactor = new InputSlot<float>();
+
     }
 }
 

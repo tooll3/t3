@@ -30,7 +30,7 @@ namespace T3.Editor
         public static Device Device { get; private set; }
 
         public static readonly bool IsStandAlone = File.Exists("StartT3.exe");
-        public const string Version = "3.9.1";
+        public const string Version = "3.9.2";
 
         /// <summary>
         /// Generate a release string with 

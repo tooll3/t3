@@ -487,22 +487,21 @@ namespace T3.Editor.Gui.Graph.Interaction
                     dx = delta.X > 0 ? 1 : -1;
                 }
 
-                _directions.Add(dx);
+                Directions.Add(dx);
 
-                if (_directions.Count < 2)
+                if (Directions.Count < 2)
                     return false;
 
-                // Queue length is optimized for 60 fps
-                // adjust length for different frame rates
-                if (_directions.Count > QueueLength * (1 / 60f) / T3.Core.Animation.Playback.LastFrameDuration)
-                    _directions.RemoveAt(0);
+                // Queue length is optimized for 60 fps adjust length for different frame rates
+                if (Directions.Count > QueueLength * (1 / 60f) / T3.Core.Animation.Playback.LastFrameDuration)
+                    Directions.RemoveAt(0);
 
-                // count direction changes
+                // Count direction changes
                 var changeDirectionCount = 0;
 
                 var lastD = 0;
                 var lastRealD = 0;
-                foreach (var d in _directions)
+                foreach (var d in Directions)
                 {
                     if (lastD != 0 && d != 0)
                     {
@@ -526,13 +525,13 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             public static void ResetShaking()
             {
-                _directions.Clear();
+                Directions.Clear();
             }
 
             private static Vector2 _lastPosition = Vector2.Zero;
             private const int QueueLength = 35;
             private const int ChangeDirectionThreshold = 5;
-            private static readonly List<int> _directions = new(QueueLength);
+            private static readonly List<int> Directions = new(QueueLength);
         }
 
     }

@@ -8,12 +8,16 @@
       "DefaultValue": null
     },
     {
+      "Id": "519d77c0-5605-433a-b8ce-6d84f99edd7b"/*Count*/,
+      "DefaultValue": 1
+    },
+    {
       "Id": "f32458a5-f19f-487b-8ae2-a575de0b4ff2"/*StartIndex*/,
       "DefaultValue": 0
     },
     {
-      "Id": "519d77c0-5605-433a-b8ce-6d84f99edd7b"/*Count*/,
-      "DefaultValue": 1
+      "Id": "af0758b6-3876-4c95-a80f-0233b96bc1a7"/*Step*/,
+      "DefaultValue": 1.0
     },
     {
       "Id": "60cea2c3-02ae-4132-ad11-3f16c2f71b6e"/*ScatterSelect*/,
@@ -22,10 +26,6 @@
     {
       "Id": "537e6055-9c33-4b14-aa17-b34fd9d6bb61"/*Seed*/,
       "DefaultValue": 0
-    },
-    {
-      "Id": "af0758b6-3876-4c95-a80f-0233b96bc1a7"/*Step*/,
-      "DefaultValue": 1.0
     }
   ],
   "Children": [
@@ -118,7 +118,7 @@
         {
           "Id": "e715919d-f3e3-4708-90a6-b55efb379257"/*Min*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 0
         },
         {
           "Id": "23e55b5d-b469-4d0f-a495-7e87fe65cccf"/*Max*/,

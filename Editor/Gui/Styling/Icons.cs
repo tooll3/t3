@@ -253,6 +253,17 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.PopUp, slotIndex:79),
                 new (Icon.Visible, slotIndex:80),
                 new (Icon.Hidden, slotIndex:81),
+                new (Icon.Thumbnails, slotIndex:82),
+                new (Icon.List, slotIndex:83),
+                new (Icon.Sorting, slotIndex:84),
+                new (Icon.Settings2, slotIndex:85),
+                new (Icon.SidePanelRight, slotIndex:86),
+                new (Icon.SidePanelLeft, slotIndex:87),
+                new (Icon.OperatorBypassOff, slotIndex:88),
+                new (Icon.OperatorBypassOn, slotIndex:89),
+                new (Icon.OperatorDisabled, slotIndex:90),
+                new (Icon.Knob, slotIndex:91),
+                
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -342,5 +353,15 @@ namespace T3.Editor.Gui.Styling
         PopUp,
         Visible,
         Hidden,
+        Thumbnails,
+        List,
+        Sorting,
+        Settings2,
+        SidePanelRight,
+        SidePanelLeft,
+        OperatorBypassOff,
+        OperatorBypassOn,
+        OperatorDisabled,
+        Knob
     }
 }

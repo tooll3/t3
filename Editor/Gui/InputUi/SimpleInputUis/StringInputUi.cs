@@ -136,25 +136,34 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 var changed = false;
 
                 var currentValue = customValueHoder.GetValueForInput(input.InputDefinition.Id);
-                if (ImGui.BeginCombo("##customDropdown", currentValue, ImGuiComboFlags.HeightLarge))
+                
+                // A dropdown implementation that prevents free string input
+                // if (ImGui.BeginCombo("##customDropdown", currentValue, ImGuiComboFlags.HeightLarge))
+                // {
+                //     foreach (var value2 in customValueHoder.GetOptionsForInput(input.InputDefinition.Id))
+                //     {
+                //         if (value2 == null)
+                //             continue;
+                //
+                //         var isSelected = value2 == currentValue;
+                //         if (!ImGui.Selectable($"{value2}", isSelected, ImGuiSelectableFlags.DontClosePopups))
+                //             continue;
+                //
+                //         ImGui.CloseCurrentPopup();
+                //         customValueHoder.HandleResultForInput(input.InputDefinition.Id, value2);
+                //         changed = true;
+                //     }
+                //
+                //     ImGui.EndCombo();
+                // }
+
+                if (InputWithTypeAheadSearch.Draw("##customDropdown", ref currentValue, customValueHoder.GetOptionsForInput(input.InputDefinition.Id)))
                 {
-                    foreach (var value2 in customValueHoder.GetOptionsForInput(input.InputDefinition.Id))
-                    {
-                        if (value2 == null)
-                            continue;
-
-                        var isSelected = value2 == currentValue;
-                        if (!ImGui.Selectable($"{value2}", isSelected, ImGuiSelectableFlags.DontClosePopups))
-                            continue;
-
-                        ImGui.CloseCurrentPopup();
-                        customValueHoder.HandleResultForInput(input.InputDefinition.Id, value2);
-                        changed = true;
-                    }
-
-                    ImGui.EndCombo();
+                    ImGui.CloseCurrentPopup();
+                    customValueHoder.HandleResultForInput(input.InputDefinition.Id, currentValue);
+                    changed = true;
                 }
-
+                
                 return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
             }
             else

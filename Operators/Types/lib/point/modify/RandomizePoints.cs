@@ -33,7 +33,7 @@ namespace T3.Operators.Types.Id_ec0675d7_6b72_4b15_b141_80bdd2367cd8
         public readonly InputSlot<System.Numerics.Vector3> Stretch = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "4dffb439-da81-477c-8100-34a9ba59b0ee")]
-        public readonly InputSlot<float> RandomSeed = new InputSlot<float>();
+        public readonly InputSlot<float> RandomPhase = new InputSlot<float>();
 
         [Input(Guid = "5282AD12-AACF-4A62-8FDE-DF0148AB0F1F")]
         public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();

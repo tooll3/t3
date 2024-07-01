@@ -14,49 +14,60 @@
       "Position": {
         "X": -158.25935,
         "Y": 219.10832
-      }
+      },
+      "Description": "Selects a color which will be multiplied with the incoming image."
     },
     {
       "InputId": "105d474f-a54e-4350-8de6-8bfd4dc0b0dd"/*Width*/,
       "Position": {
         "X": -158.25935,
         "Y": 269.10834
-      }
+      },
+      "Description": "Multiplier for Width",
+      "AddPadding": "True"
     },
     {
       "InputId": "a2d39e5b-38c7-4751-bc29-7389f9e9d8e5"/*Height*/,
       "Position": {
         "X": -158.25935,
         "Y": 319.10834
-      }
+      },
+      "Description": "Multiplier for Height"
     },
     {
       "InputId": "08a058b0-9889-49d3-87a0-a1a98278eb06"/*BlendMode*/,
       "Position": {
         "X": -158.25935,
         "Y": 364.10834
-      }
+      },
+      "GroupTitle": "Options",
+      "Description": "Selects the Blendmode"
     },
     {
       "InputId": "a4630612-743f-4396-8e2f-982052d508f4"/*EnableDepthTest*/,
       "Position": {
         "X": -158.25935,
         "Y": 409.10834
-      }
+      },
+      "Description": "This defines whether the Quad covers itself or is covered by or covers other meshes.",
+      "AddPadding": "True"
     },
     {
       "InputId": "efc093f5-6fa4-4042-9cc3-6fdc96355a72"/*EnableDepthWrite*/,
       "Position": {
         "X": -158.25935,
         "Y": 454.10834
-      }
+      },
+      "Description": "This defines whether the Quad covers itself or is covered by or covers other meshes."
     },
     {
       "InputId": "9fbee6ee-5933-48f6-84f0-1da5e4b744b2"/*Comparison*/,
       "Position": {
         "X": -158.25935,
         "Y": 499.10834
-      }
+      },
+      "Description": "Selects the comparison mode",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [

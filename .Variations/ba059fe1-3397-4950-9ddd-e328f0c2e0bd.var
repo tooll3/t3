@@ -1,0 +1,165 @@
+{
+  "Id": "ba059fe1-3397-4950-9ddd-e328f0c2e0bd",
+  "Variations": [
+    {
+      "Id": "ac69e284-f5a3-43eb-9bd8-1c4b7ac4fafb",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Frog",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "fd554dbb-113f-4722-af28-4e1ec39852cc": {
+            "X": 0.3946172,
+            "Y": 1.0,
+            "Z": 0.67830396,
+            "W": 1.0
+          },
+          "c81900c4-3478-4a53-b6e6-4e9a09c81a91": {
+            "X": 0.9616106,
+            "Y": 0.36019152,
+            "Z": 1.0,
+            "W": 0.0
+          },
+          "2bd55eb6-8bca-4f34-bc0e-d1223f47b410": false,
+          "b0e1cd04-9377-4ab0-9c4e-8780f4efa271": 58.0,
+          "7328bfec-fad5-4262-9c10-fad57bd39e2e": 4.2
+        }
+      }
+    },
+    {
+      "Id": "eb8462bb-2362-44c1-abfe-b0c2a3179642",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Default",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "2bd55eb6-8bca-4f34-bc0e-d1223f47b410": false
+        }
+      }
+    },
+    {
+      "Id": "549551fa-bccc-4d50-99fb-0cf8567743ef",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Church",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "fd554dbb-113f-4722-af28-4e1ec39852cc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          },
+          "c81900c4-3478-4a53-b6e6-4e9a09c81a91": {
+            "X": 2.179086,
+            "Y": 1.1621201,
+            "Z": 2.2,
+            "W": 0.0
+          },
+          "2bd55eb6-8bca-4f34-bc0e-d1223f47b410": false,
+          "b0e1cd04-9377-4ab0-9c4e-8780f4efa271": 20.2,
+          "7328bfec-fad5-4262-9c10-fad57bd39e2e": 0.74
+        }
+      }
+    },
+    {
+      "Id": "03308788-e14c-4c06-b744-20710b6ea03b",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Arctic",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "fd554dbb-113f-4722-af28-4e1ec39852cc": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.7
+          },
+          "c81900c4-3478-4a53-b6e6-4e9a09c81a91": {
+            "X": 0.0,
+            "Y": 0.79818344,
+            "Z": 1.0,
+            "W": 0.0
+          },
+          "2bd55eb6-8bca-4f34-bc0e-d1223f47b410": false,
+          "b0e1cd04-9377-4ab0-9c4e-8780f4efa271": 5.43,
+          "7328bfec-fad5-4262-9c10-fad57bd39e2e": 0.0
+        }
+      }
+    },
+    {
+      "Id": "d2be0aa2-82e0-4546-9260-08ae2b05c1a1",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "Puzzled",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "fd554dbb-113f-4722-af28-4e1ec39852cc": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          },
+          "c81900c4-3478-4a53-b6e6-4e9a09c81a91": {
+            "X": 0.49282295,
+            "Y": 0.49282295,
+            "Z": 0.49282295,
+            "W": 0.0
+          },
+          "2bd55eb6-8bca-4f34-bc0e-d1223f47b410": false,
+          "b0e1cd04-9377-4ab0-9c4e-8780f4efa271": 5.0,
+          "7328bfec-fad5-4262-9c10-fad57bd39e2e": 3.69
+        }
+      }
+    },
+    {
+      "Id": "2ec48263-27a8-4026-80f5-e0b65a3ce874",
+      "IsPreset": true,
+      "ActivationIndex": 6,
+      "Title": "ParkingLotMelting",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "fd554dbb-113f-4722-af28-4e1ec39852cc": {
+            "X": 0.34928232,
+            "Y": 0.34928232,
+            "Z": 0.34928232,
+            "W": 1.0
+          },
+          "c81900c4-3478-4a53-b6e6-4e9a09c81a91": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 0.0
+          },
+          "b0e1cd04-9377-4ab0-9c4e-8780f4efa271": 7.56,
+          "7328bfec-fad5-4262-9c10-fad57bd39e2e": 3.13,
+          "2bd55eb6-8bca-4f34-bc0e-d1223f47b410": true
+        }
+      }
+    }
+  ]
+}

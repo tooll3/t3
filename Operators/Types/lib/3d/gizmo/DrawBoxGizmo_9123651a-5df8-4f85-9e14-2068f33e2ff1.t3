@@ -4,7 +4,7 @@
   "Namespace": "lib.3d.gizmo",
   "Inputs": [
     {
-      "Id": "656697b8-b271-463b-9e38-fdb5758d3736"/*Value*/,
+      "Id": "656697b8-b271-463b-9e38-fdb5758d3736"/*Color*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 0.63810337,

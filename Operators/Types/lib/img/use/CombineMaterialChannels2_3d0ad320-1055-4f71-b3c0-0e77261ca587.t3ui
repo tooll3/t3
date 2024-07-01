@@ -1,6 +1,6 @@
 {
   "Id": "3d0ad320-1055-4f71-b3c0-0e77261ca587"/*CombineMaterialChannels2*/,
-  "Description": "Combines roughness, metallic, and ambient occlusion texture maps into a single texture for [SetMaterial].",
+  "Description": "Combines roughness, metallic, and ambient occlusion texture maps into a single texture for [SetMaterial].\n\nIf no normalmap is available [NormalMap] can be used to generate one.\n\nNewer version: [CombineMaterialChannels2]",
   "InputUis": [
     {
       "InputId": "223ff98a-9e21-46a0-954e-8c763226128e"/*ImageA*/,

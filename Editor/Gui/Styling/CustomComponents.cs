@@ -384,6 +384,18 @@ namespace T3.Editor.Gui.Styling
             ImGui.Dummy(new Vector2(0,4 * T3Ui.DisplayScaleFactor));
         }
 
+        public static void SmallGroupHeader(string text)
+        {
+            FormInputs.AddVerticalSpace(5);
+            ImGui.PushFont(Fonts.FontSmall);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            ImGui.SetCursorPosX(4);
+            ImGui.TextUnformatted(text.ToUpperInvariant());
+            ImGui.PopStyleColor();
+            ImGui.PopFont();
+            FormInputs.AddVerticalSpace(2);
+        }
+
         /// <summary>
         /// A small label that can be used to structure context menus
         /// </summary>
@@ -550,6 +562,15 @@ namespace T3.Editor.Gui.Styling
                     modified = true;
                     selectedValue = value;
                 }
+
+                if (isSelected)
+                {
+                    var min = ImGui.GetItemRectMin();
+                    var max = ImGui.GetItemRectMax();
+                    var drawList = ImGui.GetWindowDrawList();
+                    drawList.AddRectFilled(new Vector2(min.X-2, max.Y), new Vector2(max.X +2, max.Y +2) , UiColors.StatusActivated);
+                    
+                }
                 
                 isFirst = false;
             }
@@ -557,12 +578,30 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
-        public static bool DrawIconToggle(string name, Icon icon, ref bool isSelected)
+        public static bool DrawIconToggle(string name, Icon iconOff, Icon iconOn, ref bool isSelected, bool needsAttention = false, bool isEnabled= true)
         {
             var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
-            Icons.DrawIconOnLastItem(icon, isSelected ? UiColors.BackgroundActive : UiColors.TextMuted);
+            if (!isEnabled)
+            {
+                Icons.DrawIconOnLastItem(isSelected ? iconOn : iconOff, isSelected ? (needsAttention ? UiColors.StatusAttention: UiColors.BackgroundActive) 
+                                                                            : UiColors.TextDisabled.Fade(0.5f));
+                return false;
+            }
+            
+            Icons.DrawIconOnLastItem(isSelected ? iconOn : iconOff, isSelected ? (needsAttention ? UiColors.StatusAttention: UiColors.BackgroundActive) : UiColors.TextMuted);
             if (clicked)
                 isSelected = !isSelected;
+            
+            return clicked;
+        }
+        
+        public static bool DrawIconToggle(string name, Icon icon, ref bool isSelected, bool needsAttention = false)
+        {
+            var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
+            Icons.DrawIconOnLastItem(icon, isSelected ? (needsAttention ? UiColors.StatusAttention: UiColors.BackgroundActive) : UiColors.TextMuted);
+            if (clicked)
+                isSelected = !isSelected;
+            
             return clicked;
         }
 

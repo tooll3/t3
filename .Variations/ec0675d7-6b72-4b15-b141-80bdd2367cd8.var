@@ -7,12 +7,10 @@
       "ActivationIndex": 1,
       "Title": "Default",
       "PosOnCanvas": {
-        "X": 146.54701,
-        "Y": -126.68091
+        "X": 0.0,
+        "Y": 0.0
       },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {}
-      }
+      "ParameterSetsForChildIds": {}
     },
     {
       "Id": "8af25446-8777-485c-b202-13eae4e74842",

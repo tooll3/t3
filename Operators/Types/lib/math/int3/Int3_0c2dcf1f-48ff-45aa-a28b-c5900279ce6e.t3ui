@@ -1,26 +1,30 @@
 {
   "Id": "0c2dcf1f-48ff-45aa-a28b-c5900279ce6e"/*Int3*/,
+  "Description": "Converts 3 single integers to an int3",
   "InputUis": [
     {
       "InputId": "a1b1ea49-4234-4317-a83c-5537273eec4e"/*X*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Input / definition of X"
     },
     {
       "InputId": "5775e14f-7df4-4f2e-8712-d2a6e3c10ecf"/*Y*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Input / definition of Y"
     },
     {
       "InputId": "0564cf1c-40a3-40fc-92dd-2e2632eec37c"/*Z*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Description": "Input / definition of Z"
     }
   ],
   "SymbolChildUis": [],

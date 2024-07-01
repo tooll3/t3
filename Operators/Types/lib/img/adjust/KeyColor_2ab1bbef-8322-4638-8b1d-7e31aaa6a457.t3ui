@@ -63,10 +63,17 @@
       }
     },
     {
-      "InputId": "e32268a7-8527-4d0d-b9ba-11c23cb07dd2"/*Mode*/,
+      "InputId": "e32268a7-8527-4d0d-b9ba-11c23cb07dd2"/*Return*/,
       "Position": {
         "X": -41.019333,
         "Y": 1038.517
+      }
+    },
+    {
+      "InputId": "749654ec-1203-4f28-be9b-e3d3e2bff9d2"/*Choke*/,
+      "Position": {
+        "X": -41.019333,
+        "Y": 1083.517
       }
     }
   ],

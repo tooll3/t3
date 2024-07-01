@@ -53,7 +53,7 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
             context.ObjectToWorld = Matrix4x4.Multiply(objectToParentObject, context.ObjectToWorld);
             
             var commands = Commands.CollectedInputs;
-            if (IsEnabled.GetValue(context))
+            if (IsEnabled.GetValue(context) && color.W > 0)
             {
                 foreach (var t1 in commands)
                 {

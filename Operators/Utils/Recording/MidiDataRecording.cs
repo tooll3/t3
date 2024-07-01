@@ -9,28 +9,31 @@ namespace Operators.Utils.Recording;
 
 /// <summary>
 /// This is a stub for an implementation of midi signal recording
-/// - These recordings are intended for later playback so that MidiConsumers would receive the signals and replay them like live signals. For this to work...
+/// - These recordings are intended for later playback so that MidiConsumers would receive the
+///   signals and replay them like live signals. For this to work...
 ///   - MidiInput and MidiStream recorder would need to share the same MidiEvent definition (maybe different from NAudio.MidiEvent)
 ///   - Handle MidiEvent should not rely on the MidiIn class to avoid double lookup of device description.
 /// </summary>
-public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
+public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
 {
-    public readonly DataSet DataSet = new();
+    //public readonly DataSet DataSet = new();
     public double LastEventTime = 0;
 
+    private DataSet _dataSet;
     
-    public MidiDataRecording()
+    public MidiDataRecording(DataSet dataSet)
     {
-        MidiInConnectionManager.RegisterConsumer(this);
+        _dataSet = dataSet;
+        MidiConnectionManager.RegisterConsumer(this);
     }
 
-    public void Reset()
-    {
-        DataSet.Clear();
-        _channelsByHash.Clear();
-    }
+    // public void Reset()
+    // {
+    //     _dataSet.Clear();
+    //     _channelsByHash.Clear();
+    // }
 
-    void MidiInConnectionManager.IMidiConsumer.MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
+    void MidiConnectionManager.IMidiConsumer.MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
         if (sender is not MidiIn midiIn || msg.MidiEvent == null || TypeNameRegistry.Entries.Values.Count == 0)
             return;
@@ -40,7 +43,7 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
         
         LastEventTime = Playback.RunTimeInSecs;
 
-        var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
+        var device = MidiConnectionManager.GetDescriptionForMidiIn(midiIn);
         var deviceName = (device.ProductName
                           + (device.ProductId is not (0 or 65535)
                                  ? device.ProductId.ToString()
@@ -115,7 +118,7 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
                                             }
                              };
         _channelsByHash[hash] = newChannel;
-        DataSet.Channels.Add(newChannel);
+        _dataSet.Channels.Add(newChannel);
         return newChannel;
     }
 
@@ -140,15 +143,15 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
                                             },
                              };
         _channelsByHash[hash] = newChannel;
-        DataSet.Channels.Add(newChannel);
+        _dataSet.Channels.Add(newChannel);
         return newChannel;
     }
 
-    void MidiInConnectionManager.IMidiConsumer.ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
+    void MidiConnectionManager.IMidiConsumer.ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
     }
     
-    void MidiInConnectionManager.IMidiConsumer.OnSettingsChanged()
+    void MidiConnectionManager.IMidiConsumer.OnSettingsChanged()
     {
     }
 

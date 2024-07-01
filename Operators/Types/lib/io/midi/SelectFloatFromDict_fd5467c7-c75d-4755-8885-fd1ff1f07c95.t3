@@ -9,7 +9,7 @@
     },
     {
       "Id": "b0acb8ad-9f90-4908-b780-1297e0a1d572"/*Select*/,
-      "DefaultValue": "/channel1/C0"
+      "DefaultValue": ""
     }
   ],
   "Children": [],

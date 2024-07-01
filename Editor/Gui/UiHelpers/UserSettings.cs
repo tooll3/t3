@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -63,6 +63,8 @@ namespace T3.Editor.Gui.UiHelpers
             public bool AdjustCameraSpeedWithMouseWheel = false;
             public float CameraSpeed = 1;
 
+            public bool MiddleMouseButtonZooms = false;
+
             public TimeLineCanvas.FrameStepAmount FrameStepAmount = TimeLineCanvas.FrameStepAmount.FrameAt30Fps;
             
             public bool MouseWheelEditsNeedCtrlKey = true;
@@ -98,8 +100,8 @@ namespace T3.Editor.Gui.UiHelpers
 
             // Rendering (controlled from render windows)
             public string RenderVideoFilePath = "./Render/render-v01.mp4";
+            public string RenderSequenceFilePath = "./ImageSequence/";
 
-            
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             

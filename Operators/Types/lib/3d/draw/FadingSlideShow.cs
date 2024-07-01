@@ -43,6 +43,9 @@ namespace T3.Operators.Types.Id_cb89ed1d_03ea_4880_bfa0_1dd723e4bdab
         [Input(Guid = "fcf2c4d0-4e36-473e-8c67-66cc1048dc06")]
         public readonly InputSlot<bool> TriggerUpdate = new InputSlot<bool>();
 
+        [Input(Guid = "8b5fb93a-ee65-44d9-88be-66ee2e174385")]
+        public readonly InputSlot<int> FadeType = new InputSlot<int>();
+
     }
 }
 

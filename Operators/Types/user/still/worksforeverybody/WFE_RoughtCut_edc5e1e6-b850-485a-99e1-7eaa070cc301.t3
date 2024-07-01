@@ -612,12 +612,12 @@
             "Type": "T3.Core.Animation.TimeClip",
             "TimeClip": {
               "TimeRange": {
-                "Start": 148.68582,
-                "End": 309.75854
+                "Start": 149.50945,
+                "End": 310.58215
               },
               "SourceRange": {
-                "Start": 148.68582,
-                "End": 309.75854
+                "Start": 149.50945,
+                "End": 310.58215
               },
               "LayerIndex": 1
             }
@@ -693,12 +693,12 @@
             "Type": "T3.Core.Animation.TimeClip",
             "TimeClip": {
               "TimeRange": {
-                "Start": 122.93871,
-                "End": 149.34306
+                "Start": 123.105095,
+                "End": 149.50945
               },
               "SourceRange": {
-                "Start": 122.93871,
-                "End": 149.34306
+                "Start": 123.105095,
+                "End": 149.50945
               },
               "LayerIndex": -1
             }

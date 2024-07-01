@@ -15,12 +15,12 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
-public class RenderVideoWindow : RenderHelperWindow
+public class RenderVideoWindow : BaseRenderWindow
 {
     public RenderVideoWindow()
     {
         Config.Title = "Render Video";
-        _lastHelpString = RenderHelperWindow.PreferredInputFormatHint;
+        _lastHelpString = BaseRenderWindow.PreferredInputFormatHint;
     }
 
 
@@ -57,11 +57,11 @@ public class RenderVideoWindow : RenderHelperWindow
             CustomComponents.TooltipForLastItem(q.Description);
         }
 
-        FormInputs.AddStringInput("File", ref UserSettings.Config.RenderVideoFilePath);
+        FormInputs.AddStringInput("Filename", ref UserSettings.Config.RenderVideoFilePath);
         ImGui.SameLine();
         FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref UserSettings.Config.RenderVideoFilePath);
 
-        if (IsFilenameIncrementible())
+        if (IsFilenameIncrementable())
         {
             ImGui.PushStyleVar(ImGuiStyleVar.Alpha, _autoIncrementVersionNumber ? 0.7f : 0.3f);
             FormInputs.AddCheckBox("Increment version after export", ref _autoIncrementVersionNumber);
@@ -70,15 +70,17 @@ public class RenderVideoWindow : RenderHelperWindow
 
         FormInputs.AddCheckBox("Export Audio (experimental)", ref _exportAudio);
 
+        FormInputs.AddVerticalSpace(5);
         ImGui.Separator();
+        FormInputs.AddVerticalSpace(5);
 
-        if (!_isExporting)
+        if (!IsExportingVideo && !IsToollRenderingSomething)
         {
-            if (ImGui.Button("Start Export"))
+            if (ImGui.Button("Start Render"))
             {
                 if (ValidateOrCreateTargetFolder(UserSettings.Config.RenderVideoFilePath))
                 {
-                    _isExporting = true;
+                    IsExportingVideo = true;
                     _exportStartedTime = Playback.RunTimeInSecs;
                     FrameIndex = 0;
                     SetPlaybackTimeForThisFrame();
@@ -96,11 +98,11 @@ public class RenderVideoWindow : RenderHelperWindow
                 }
             }
         }
-        else
+        else if(IsExportingVideo)
         {
-            var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / Fps);
+            var audioFrame = AudioRendering.GetLastMixDownBuffer(1.0 / Fps);
             var success = SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
-                                                     soundtrackChannels(), soundtrackSampleRate());
+                                                     SoundtrackChannels(), SoundtrackSampleRate());
             ImGui.ProgressBar((float)Progress, new Vector2(-1, 4));
 
             var currentTime = Playback.RunTimeInSecs;
@@ -110,13 +112,13 @@ public class RenderVideoWindow : RenderHelperWindow
             {
                 var successful = success ? "successfully" : "unsuccessfully";
                 _lastHelpString = $"Sequence export finished {successful} in {HumanReadableDurationFromSeconds(durationSoFar)}";
-                _isExporting = false;
+                IsExportingVideo = false;
                 TryIncrementingFileName();
             }
             else if (ImGui.Button("Cancel"))
             {
                 _lastHelpString = $"Sequence export cancelled after {HumanReadableDurationFromSeconds(durationSoFar)}";
-                _isExporting = false;
+                IsExportingVideo = false;
             }
             else
             {
@@ -125,7 +127,7 @@ public class RenderVideoWindow : RenderHelperWindow
                 _lastHelpString += $"{Progress * 100.0:0}%%  {HumanReadableDurationFromSeconds(estimatedTimeLeft)} left";
             }
 
-            if (!_isExporting)
+            if (!IsExportingVideo)
             {
                 _videoWriter?.Dispose();
                 _videoWriter = null;
@@ -136,9 +138,10 @@ public class RenderVideoWindow : RenderHelperWindow
         CustomComponents.HelpText(_lastHelpString);
     }
 
+
     private static readonly Regex _matchFileVersionPattern = new Regex(@"\bv(\d{2,4})\b");
     
-    private static bool IsFilenameIncrementible()
+    private static bool IsFilenameIncrementable()
     {
         var filename = Path.GetFileName(UserSettings.Config.RenderVideoFilePath);
         if (string.IsNullOrEmpty(filename))
@@ -200,7 +203,7 @@ public class RenderVideoWindow : RenderHelperWindow
             var savedFrame = _videoWriter.ProcessFrames(ref mainTexture, ref audioFrame, channels, sampleRate);
             if (!savedFrame)
             {
-                Log.Debug($"Skipping {FrameIndex}");
+                //Log.Debug($"Skipping {FrameIndex}");
             }
             FrameIndex++;
             SetPlaybackTimeForThisFrame();
@@ -208,7 +211,7 @@ public class RenderVideoWindow : RenderHelperWindow
         catch (Exception e)
         {
             _lastHelpString = e.ToString();
-            _isExporting = false;
+            IsExportingVideo = false;
             _videoWriter?.Dispose();
             _videoWriter = null;
             ReleasePlaybackTime();
@@ -258,7 +261,26 @@ public class RenderVideoWindow : RenderHelperWindow
                                                             new QualityLevel(0.5, "Very good", "Excellent quality, but large."),
                                                             new QualityLevel(1, "Reference", "Indistinguishable. Very large files."),
                                                         };
-    
+
+    private static bool IsExportingVideo
+    {
+        get => _isExporting2;
+        set
+        {
+            if (value)
+            {
+                SetRenderingStarted();
+            }
+            else
+            {
+                RenderingFinished();
+            }
+
+            _isExporting2 = value;
+        }
+    }
+    private static bool _isExporting2;
+
     private static int _bitrate = 25000000;
 
     private static bool _autoIncrementVersionNumber = true;

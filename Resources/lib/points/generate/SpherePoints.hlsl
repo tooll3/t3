@@ -63,5 +63,6 @@ void main(uint3 dtID : SV_DispatchThreadID)
     ResultPoints[i].Rotation = qMul( qMul(rot,rot2) , rot5);
     ResultPoints[i].Color = 1;
     ResultPoints[i].Selected = 1;
+    ResultPoints[i].Stretch = 1;
 }
 

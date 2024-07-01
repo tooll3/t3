@@ -5,7 +5,7 @@ using ImGuiNET;
 using Operators.Utils;
 using T3.Core.IO;
 using T3.Editor.Gui.Interaction;
-using T3.Editor.Gui.Interaction.Variations.Midi;
+using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -24,6 +24,7 @@ namespace T3.Editor.Gui.Windows
             Theme,
             Project,
             Midi,
+            OSC,
             SpaceMouse,
             Keyboard,
         }
@@ -37,7 +38,7 @@ namespace T3.Editor.Gui.Windows
             ImGui.BeginChild("categories", new Vector2(120 * T3Ui.UiScaleFactor, -1), true, ImGuiWindowFlags.NoScrollbar);
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
-                FormInputs.AddSegmentedButton(ref _activeCategory, "", 110 * T3Ui.UiScaleFactor);
+                FormInputs.AddSegmentedButtonWithLabel(ref _activeCategory, "", 110 * T3Ui.UiScaleFactor);
                 ImGui.PopStyleVar();
             }
             ImGui.EndChild();
@@ -118,6 +119,9 @@ namespace T3.Editor.Gui.Windows
                                                               "Value input method",
                                                               "The control that pops up when dragging on a number value"
                                                              );
+                        
+                        
+
 
                         FormInputs.SetIndentToLeft();
                         FormInputs.AddVerticalSpace();
@@ -134,6 +138,10 @@ namespace T3.Editor.Gui.Windows
                         FormInputs.AddVerticalSpace();
                         FormInputs.AddSectionHeader("Advanced");
                         FormInputs.AddVerticalSpace();
+                        changed |= FormInputs.AddCheckBox("Middle mouse button zooms canvas",
+                                                          ref UserSettings.Config.MiddleMouseButtonZooms,
+                                                          "This can be useful if you're working with tablets or other input devices that lack a mouse wheel.",
+                                                          UserSettings.Defaults.MiddleMouseButtonZooms);
                         changed |= FormInputs.AddCheckBox("Reset time after playback",
                                                           ref UserSettings.Config.ResetTimeAfterPlayback,
                                                           "After the playback is halted, the time will reset to the moment when the playback began. This feature proves beneficial for iteratively reviewing animations without requiring manual rewinding.",
@@ -192,8 +200,9 @@ namespace T3.Editor.Gui.Windows
 
                         if (ImGui.Button("Rescan devices"))
                         {
-                            MidiInConnectionManager.Rescan();
-                            MidiOutConnectionManager.Init();
+                            MidiConnectionManager.Rescan();
+                            //MidiOutConnectionManager.Init();
+                            CompatibleMidiDeviceHandling.InitializeConnectedDevices();
                         }
 
                         {
@@ -210,21 +219,36 @@ namespace T3.Editor.Gui.Windows
                             {
                                 changed = true;
                                 ProjectSettings.Config.LimitMidiDeviceCapture = string.IsNullOrEmpty(limitMidiDevices) ? null : limitMidiDevices;
-                                MidiInConnectionManager.Rescan();
+                                MidiConnectionManager.Rescan();
                             }
 
                             FormInputs.AddVerticalSpace();
                         }
-                        FormInputs.SetIndentToLeft();
-                        changed |= FormInputs.AddCheckBox("Enable Midi snapshot LEDs",
-                                                          ref ProjectSettings.Config.EnableMidiSnapshotIndication,
-                                                          "With selected midi controllers like APC Mini and APC40, Tooll will highlight LEDs for available and active snapshots. This requires an active MIDI out channel which will interfere with the [MidiOut] operator.\nChanging this requires a restart.",
-                                                          ProjectSettings.Defaults.EnableMidiSnapshotIndication);
 
                         FormInputs.AddVerticalSpace();
-                        FormInputs.SetIndentToParameters();
                         break;
                     }
+                    case Categories.OSC:
+                    {
+                        FormInputs.AddSectionHeader("OSC");
+                        
+                        CustomComponents
+                           .HelpText("On startup, Tooll will listen for OSC messages on the default port." +
+                                     "The IO indicator in the timeline will show incoming messages.\n" +
+                                     "You can also use the OscInput operator to receive OSC from other ports.");
+                            
+                        CustomComponents
+                           .HelpText("Changing the port will require a restart of Tooll.");
+                        
+                        FormInputs.AddInt("Default Port", ref ProjectSettings.Config.DefaultOscPort,
+                                          0, 65535, 1,
+                                          "If a valid port is set, Tooll will listen for OSC messages on this port by default.",
+                                          8000);
+                        
+                        FormInputs.AddVerticalSpace();
+                        break;
+                    }
+
                     case Categories.SpaceMouse:
                         FormInputs.AddSectionHeader("Space Mouse");
 

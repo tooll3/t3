@@ -14,7 +14,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 {
-    public class MidiInput : Instance<MidiInput>, MidiInConnectionManager.IMidiConsumer, IStatusProvider
+    public class MidiInput : Instance<MidiInput>, MidiConnectionManager.IMidiConsumer, IStatusProvider
     {
         [Output(Guid = "01706780-D25B-4C30-A741-8B7B81E04D82")]
         public readonly Slot<float> Result = new();
@@ -39,21 +39,22 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             if (!isDisposing)
                 return;
 
-            MidiInConnectionManager.UnregisterConsumer(this);
+            MidiConnectionManager.UnregisterConsumer(this);
         }
 
         private void Update(EvaluationContext context)
         {
             if (!_initialized)
             {
-                MidiInConnectionManager.RegisterConsumer(this);
+                MidiConnectionManager.RegisterConsumer(this);
                 _initialized = true;
             }
             
             _trainedDeviceName = Device.GetValue(context);
 
-            var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(_trainedDeviceName.GetHashCode());
-            _warningMessage = midiIn == null ? $"Midi device '{_trainedDeviceName}' is not captured.\nYou can try Windows » Settings » Midi » Rescan Devices." : null;
+            _warningMessage = MidiConnectionManager.TryGetMidiIn(_trainedDeviceName, out _) 
+                                      ? null 
+                                      : $"Midi device '{_trainedDeviceName}' is not captured.\nYou can try Windows » Settings » Midi » Rescan Devices.";
             
             _trainedChannel = Channel.GetValue(context);
             _trainedControllerId = Control.GetValue(context);
@@ -129,11 +130,8 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                         _valuesForControlRange[index] = signal.ControllerValue;
                     }
 
-                    if (hasValueChanged && signal.ControllerValue > 0 && !Control.IsConnected)
-                    {
-                        Control.Value = _currentControllerId;
+                    if (hasValueChanged && signal.ControllerValue > 0)
                         wasHit = true;
-                    }
                     
                     LastMessageTime = Playback.RunTimeInSecs;
                     _isDefaultValue = false;
@@ -141,7 +139,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
                 _lastMatchingSignals.Clear();
             }
-
+            
             if (_isDefaultValue && _trainedEventType != MidiEventTypes.MidiTime)
             {
                 Result.Value = defaultOutputValue;
@@ -150,10 +148,10 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                 WasHit.DirtyFlag.Clear();
                 return;
             }
-
+            
             var currentValue = UseControlRange
                                    ? _currentControllerId
-                                   : MathUtils.RemapAndClamp(_currentControllerValue, 0, 127, outRange.X, outRange.Y);
+                                   : MathUtils.Remap(_currentControllerValue, 0, 127, outRange.X, outRange.Y);
 
             if (_trainedEventType == MidiEventTypes.MidiTime)
             {
@@ -163,6 +161,12 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
             _dampedOutputValue = MathUtils.Lerp(currentValue, _dampedOutputValue, damping);
 
+            if (ResetToDefaultTrigger.GetValue(context))
+            {
+                ResetToDefaultTrigger.SetTypedInputValue(false);
+                _isDefaultValue = true;
+            }
+            
             var reachTarget = MathF.Abs(_dampedOutputValue - currentValue) < 0.0001f;
             var needsUpdateNextFrame = !reachTarget || wasHit;
             Result.DirtyFlag.Trigger = needsUpdateNextFrame ? DirtyFlagTrigger.Animated : DirtyFlagTrigger.None;
@@ -212,57 +216,90 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
                 MidiSignal newSignal = null;
 
-                var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
+                var device = MidiConnectionManager.GetDescriptionForMidiIn(midiIn);
 
-
-                if (msg.MidiEvent is ControlChangeEvent controlEvent)
+                switch (msg.MidiEvent)
                 {
-                    if (_printLogMessages)
-                        Log.Debug($"{device}/{controlEvent}  ControlValue :{controlEvent.ControllerValue}", this);
-
-                    if (!UseControlRange)
+                    case ControlChangeEvent controlEvent:
                     {
+                        if (_printLogMessages)
+                            Log.Debug($"{device}/{controlEvent}", this);
+
+                        if (!UseControlRange)
+                        {
+                            newSignal = new MidiSignal()
+                                            {
+                                                Channel = controlEvent.Channel,
+                                                ControllerId = (int)controlEvent.Controller,
+                                                ControllerValue = controlEvent.ControllerValue,
+                                                EventType = MidiEventTypes.ControllerChanges,
+                                            };
+                        }
+
+                        break;
+                    }
+                    case NoteEvent noteEvent:
+                        switch (noteEvent.CommandCode)
+                        {
+                            case MidiCommandCode.NoteOn:
+                            {
+                                if (_printLogMessages)
+                                    Log.Debug($"{device}/{noteEvent}  ControlValue :{noteEvent.NoteNumber}", this);
+
+                                newSignal = new MidiSignal()
+                                                {
+                                                    Channel = noteEvent.Channel,
+                                                    ControllerId = noteEvent.NoteNumber,
+                                                    ControllerValue = noteEvent.Velocity,
+                                                    EventType = MidiEventTypes.Notes,
+                                                };
+                                break;
+                            }
+                            case MidiCommandCode.NoteOff:
+                                newSignal = new MidiSignal()
+                                                {
+                                                    Channel = noteEvent.Channel,
+                                                    ControllerId = noteEvent.NoteNumber,
+                                                    ControllerValue = 0,
+                                                    EventType = MidiEventTypes.Notes,
+                                                };
+                                break;
+
+                        }
+
+                        break;
+                    case PitchWheelChangeEvent midiEvent:
                         newSignal = new MidiSignal()
                                         {
-                                            Channel = controlEvent.Channel,
-                                            ControllerId = (int)controlEvent.Controller,
-                                            ControllerValue = controlEvent.ControllerValue,
-                                            EventType = MidiEventTypes.ControllerChanges,
+                                            Channel = midiEvent.Channel,
+                                            ControllerId = 10000+(int)midiEvent.CommandCode,
+                                            ControllerValue = midiEvent.Pitch,
+                                            EventType = MidiEventTypes.MidiEvent,
                                         };
-                    }
+                        Log.Debug("Pitch " + midiEvent.Pitch);
+                        break;
+                    
+                    case PatchChangeEvent patchChangeEvent:
+                        newSignal = new MidiSignal()
+                                        {
+                                            Channel = patchChangeEvent.Channel,
+                                            ControllerId = 10000+(int)patchChangeEvent.CommandCode,
+                                            ControllerValue = patchChangeEvent.Patch,
+                                            EventType = MidiEventTypes.MidiEvent,
+                                        };
+                        break;
+                    
+                    case ChannelAfterTouchEvent afterTouchEvent:
+                        newSignal = new MidiSignal()
+                                        {
+                                            Channel = afterTouchEvent.Channel,
+                                            ControllerId = 10000+(int)afterTouchEvent.CommandCode,
+                                            ControllerValue = afterTouchEvent.AfterTouchPressure,
+                                            EventType = MidiEventTypes.MidiEvent,
+                                        };
+                        break;
                 }
-                
-                if (msg.MidiEvent is NoteEvent noteEvent)
-                {
-                    switch (noteEvent.CommandCode)
-                    {
-                        case MidiCommandCode.NoteOn:
-                        {
-                            if (_printLogMessages)
-                                Log.Debug($"{device}/{noteEvent}  ControlValue :{noteEvent.NoteNumber}", this);
 
-                            newSignal = new MidiSignal()
-                                            {
-                                                Channel = noteEvent.Channel,
-                                                ControllerId = noteEvent.NoteNumber,
-                                                ControllerValue = noteEvent.Velocity,
-                                                EventType = MidiEventTypes.Notes,
-                                            };
-                            break;
-                        }
-                        case MidiCommandCode.NoteOff:
-                            newSignal = new MidiSignal()
-                                            {
-                                                Channel = noteEvent.Channel,
-                                                ControllerId = noteEvent.NoteNumber,
-                                                ControllerValue = 0,
-                                                EventType = MidiEventTypes.Notes,
-                                            };
-                            break;
-
-                    }
-                }
-                
                 if (!_teachingActive && msg.MidiEvent.CommandCode == MidiCommandCode.TimingClock)
                 {
                     _timingMsgCount++;
@@ -304,7 +341,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             }
         }
 
-        void MidiInConnectionManager.IMidiConsumer.OnSettingsChanged()
+        void MidiConnectionManager.IMidiConsumer.OnSettingsChanged()
         {
             Result.DirtyFlag.Invalidate();
             Range.DirtyFlag.Invalidate();
@@ -360,6 +397,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             Notes,
             ControllerChanges,
             MidiTime,
+            MidiEvent,
         }
         
         [Input(Guid = "AAD1E576-F144-423F-83B5-5694B1119C23")]
@@ -392,6 +430,9 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
         [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
         public readonly InputSlot<bool> PrintLogMessages = new();
+        
+        [Input(Guid = "AC35E75A-BEC5-497C-9C68-6B809B12CD8B")]
+        public readonly InputSlot<bool> ResetToDefaultTrigger = new();
 
 
     }

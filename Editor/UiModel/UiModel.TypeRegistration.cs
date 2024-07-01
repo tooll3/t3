@@ -68,6 +68,9 @@ public partial class UiSymbolData
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_e6072ecf_30d2_4c52_afa1_3b195d61617b.GetFloatVar), GetFloatVarUi.DrawChildUi);
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789.SetFloatVar), SetFloatVarUi.DrawChildUi);
 
+        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_fd5467c7_c75d_4755_8885_fd1ff1f07c95.SelectFloatFromDict), SelectFloatFromDictUi.DrawChildUi);
+        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_96b1e8f3_0b42_4a01_b82b_44ccbd857400.SelectVec2FromDict), SelectVec2FromDictUi.DrawChildUi);
+
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c.AudioReaction), AudioReactionUi.DrawChildUi);
     }
 

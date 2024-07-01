@@ -225,8 +225,9 @@ namespace T3.Editor.Gui.UiHelpers
                     var centerX = (int)areaOnScreen.GetCenter().X;
                     var y = areaOnScreen.Max.Y + RemoveThreshold;
                     
-                    drawList.AddRectFilled(new Vector2(areaOnScreen.Min.X, y), new Vector2(areaOnScreen.Max.X, y-1), UiColors.ForegroundFull.Fade(0.1f));
-                    Icons.DrawIconAtScreenPosition(Icon.Trash, new Vector2(centerX, y+10), drawList, isDraggedOutside ? UiColors.StatusAttention: UiColors.ForegroundFull.Fade(0.2f));
+                    drawList.AddRectFilled(new Vector2(areaOnScreen.Min.X, y), new Vector2(areaOnScreen.Max.X, y-1), UiColors.ForegroundFull.Fade(0.3f));
+                    Icons.DrawIconAtScreenPosition(Icon.Trash, new Vector2(centerX, y+10), drawList, 
+                                                   isDraggedOutside ? UiColors.StatusAttention: UiColors.ForegroundFull.Fade(0.6f));
                     stepModified = InputEditStateFlags.Modified;
                 }
 

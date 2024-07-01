@@ -44,7 +44,7 @@ namespace T3.Operators.Types.Id_ea7b8491_2f8e_4add_b0b1_fd068ccfed0d
 
             var originalTime = _normalizedTime;
             
-            _normalizedTime = (time + phase) * rateFactorFromContext * rate;
+            _normalizedTime = (time) * rateFactorFromContext * rate  + phase;
             Result.Value = AnimMath.CalcValueForNormalizedTime(_shape, _normalizedTime, 0, bias,ratio) * amplitude + offset;
             
             WasHit.Value = (int)originalTime != (int)_normalizedTime;

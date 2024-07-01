@@ -1,0 +1,21 @@
+{
+  "Name": "MorphCameras",
+  "Id": "e3ff58e2-847a-4c97-947c-cfbcf8f9c79d",
+  "Namespace": "lib.3d.transform",
+  "Inputs": [
+    {
+      "Id": "c7ee5d97-86c1-442f-91d0-b60e6cfe24c7"/*Command*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "ff2ed90b-38bd-4ba8-af07-23be87eabcc3"/*CameraReferences*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "3b71fdbf-cb2d-45f1-84dd-7ac66763e6ae"/*Index*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

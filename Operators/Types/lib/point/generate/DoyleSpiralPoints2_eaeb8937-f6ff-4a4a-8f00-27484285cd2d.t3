@@ -8,8 +8,40 @@
       "DefaultValue": 1000
     },
     {
+      "Id": "ffbfa2dd-75ed-439e-8bab-eb0104ab9c0d"/*Offset*/,
+      "DefaultValue": 100.0
+    },
+    {
+      "Id": "bfc2279a-7bf8-436a-a04d-813ecee1776a"/*PointsPerStep*/,
+      "DefaultValue": 8
+    },
+    {
+      "Id": "77f01a41-38ff-4186-8336-84a030be124f"/*SpiralSteepness*/,
+      "DefaultValue": 31
+    },
+    {
       "Id": "c576de4b-d0da-4fb7-8290-e9fc383f7c13"/*Scale*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "5af0a50e-0da1-4800-9fef-c1217eb2368a"/*ScaleBias*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "51748370-6134-4297-90bd-cbd77531d854"/*CenterPositionScale*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "dcc7b167-c743-46d7-9a01-08c291a2016f"/*W*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "c0e1a16c-7b1f-43bb-aa13-42cd37f499b8"/*WBias*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "58e4f212-dc64-4697-a561-296bb66e39ca"/*CenterSizeScale*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "1e099abf-0378-43a4-899c-ade1828e42a6"/*Center*/,
@@ -18,10 +50,6 @@
         "Y": 0.0,
         "Z": 0.0
       }
-    },
-    {
-      "Id": "dcc7b167-c743-46d7-9a01-08c291a2016f"/*W*/,
-      "DefaultValue": 1.0
     },
     {
       "Id": "4f0a45cb-7d9b-4021-9977-471215c377a6"/*OrientationAxis*/,
@@ -34,34 +62,6 @@
     {
       "Id": "b8a087a7-2a72-45e8-9adf-938cca729651"/*OrientationAngle*/,
       "DefaultValue": 0.0
-    },
-    {
-      "Id": "bfc2279a-7bf8-436a-a04d-813ecee1776a"/*P*/,
-      "DefaultValue": 8
-    },
-    {
-      "Id": "77f01a41-38ff-4186-8336-84a030be124f"/*Q*/,
-      "DefaultValue": 31
-    },
-    {
-      "Id": "ffbfa2dd-75ed-439e-8bab-eb0104ab9c0d"/*Offset*/,
-      "DefaultValue": 100.0
-    },
-    {
-      "Id": "c0e1a16c-7b1f-43bb-aa13-42cd37f499b8"/*Bias*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "51748370-6134-4297-90bd-cbd77531d854"/*CutOff*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "58e4f212-dc64-4697-a561-296bb66e39ca"/*CutOff2*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "5af0a50e-0da1-4800-9fef-c1217eb2368a"/*Bias2*/,
-      "DefaultValue": 1.0
     }
   ],
   "Children": [

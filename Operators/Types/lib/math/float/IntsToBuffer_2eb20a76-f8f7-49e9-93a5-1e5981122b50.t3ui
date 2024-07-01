@@ -1,6 +1,6 @@
 {
   "Id": "2eb20a76-f8f7-49e9-93a5-1e5981122b50"/*IntsToBuffer*/,
-  "Description": "",
+  "Description": "Combines / converts any connected integer into a buffer",
   "InputUis": [
     {
       "InputId": "49556d12-4cd1-4341-b9d8-c356668d296c"/*Params*/,

@@ -5,5 +5,5 @@
   "EnablePlaybackControlWithKeyboard": true,
   "WindowedMode": false,
   "LimitMidiDeviceCapture": null,
-  "EnableMidiSnapshotIndication": false
+  "DefaultOscPort": 8000
 }

@@ -1,3 +1,4 @@
+using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -22,6 +23,11 @@ namespace T3.Operators.Types.Id_0e1d5f4b_3ba0_4e71_aa26_7308b6df214d
                 _initialized = true;
             }
 
+            var currentTime =  context.LocalFxTime;
+            if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
+                return;
+            
+            _lastEvalTime = currentTime;
             var triggeredIncrement = TriggerIncrement.GetValue(context);
             var triggeredDecrement = TriggerDecrement.GetValue(context);
 
@@ -52,7 +58,10 @@ namespace T3.Operators.Types.Id_0e1d5f4b_3ba0_4e71_aa26_7308b6df214d
         private bool _initialized;
         private bool _lastIncrementTrigger;
         private bool _lastDecrementTrigger;
+        private const float MinTimeElapsedBeforeEvaluation = 1 / 10000f;
+        private double _lastEvalTime;
 
+        
         [Input(Guid = "bfd95809-61d2-49eb-85d4-ff9e36b2d158")]
         public readonly InputSlot<bool> TriggerIncrement = new();
         

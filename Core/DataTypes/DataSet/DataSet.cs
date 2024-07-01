@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Resource;
 
 namespace T3.Core.DataTypes.DataSet;
+
 /// <summary>
-/// Defines a set of event channels. 
+/// Defines a set of <see cref="DataChannel"/> event channels. 
 /// </summary>
 public class DataSet
 {
@@ -85,9 +87,12 @@ public class DataChannel
 
             writer.WritePropertyName("Events");
             writer.WriteStartArray();
-            foreach (var dataEvent in Events)
+            lock (Events)
             {
-                dataEvent.ToJson(converter, writer);
+                foreach (var dataEvent in Events.ToList())
+                {
+                    dataEvent.ToJson(converter, writer);
+                }
             }
 
             writer.WriteEndArray();

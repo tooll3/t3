@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -104,7 +104,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             FormInputs.SetIndentToParameters();
 
 
-            if (FormInputs.AddSegmentedButton(ref settings.AudioSource, "Audio Source"))
+            if (FormInputs.AddSegmentedButtonWithLabel(ref settings.AudioSource, "Audio Source"))
             {
                 UpdatePlaybackAndTimeline(settings);
             }
@@ -195,9 +195,19 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         UserSettings.Save();
                     }
 
+                    FormInputs.AddFloat("AudioDecay", ref settings.AudioDecayFactor,
+                                        0.001f,
+                                        1f,
+                                        0.01f,
+                                        true,
+                                        "The decay factors controls the impact of [AudioReaction] when AttackMode. Good values strongly depend on style, loudness and variation of input signal.",
+                                        0.9f);
+                    
                     if (filepathModified)
                     {
+                        AudioEngine.ReloadClip(soundtrack);
                         UpdateBpmFromSoundtrackConfig(soundtrack);
+                        UpdatePlaybackAndTimeline(settings);
                     }
                 }
             }
@@ -205,7 +215,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 FormInputs.AddVerticalSpace();
 
-                if (FormInputs.AddSegmentedButton(ref settings.Syncing, "Sync Mode"))
+                if (FormInputs.AddSegmentedButtonWithLabel(ref settings.Syncing, "Sync Mode"))
                 {
                     UpdatePlaybackAndTimeline(settings);
                 }
@@ -213,7 +223,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 if (settings.Syncing == PlaybackSettings.SyncModes.Tapping)
                 {
                     FormInputs.SetIndentToParameters();
-                    FormInputs.AddHint("Tab the [Sync] button on every beat.\nThe right click on measure to resync and refine.");
+                    FormInputs.AddHint("Tap the [Sync] button on every beat.\nThe right click on measure to resync and refine.");
                 }
                 
 
@@ -344,12 +354,19 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     Playback.Current = T3Ui.DefaultBeatTimingPlayback;
                     UserSettings.Config.ShowTimeline = false;
                     UserSettings.Config.EnableIdleMotion = true;
-                
+                    Bass.Configure(Configuration.UpdateThreads, true);
+                    
+                    Bass.Free();
+                    Bass.Init();
+                    Bass.Start();
+                    Playback.Current.PlaybackSpeed = 1;
                 }
                 else
                 {
                     Playback.Current = T3Ui.DefaultTimelinePlayback;
                     UserSettings.Config.ShowTimeline = true;
+                    Playback.Current.PlaybackSpeed = 0;
+
                 }
             }
         }

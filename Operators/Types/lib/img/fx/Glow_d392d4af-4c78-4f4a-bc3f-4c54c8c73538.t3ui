@@ -1,6 +1,6 @@
 {
   "Id": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538"/*Glow*/,
-  "Description": "Adds a bloom effect to the incoming image. It uses multiple resolution passes and is reasonably fast.\n\nYou can use the Offset parameter as a threshold for 'glowing' content.",
+  "Description": "Adds a bloom effect to the incoming image. It uses multiple resolution passes and is reasonably fast.\n\nYou can use the Offset parameter as a threshold for 'glowing' content.\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
   "InputUis": [
     {
       "InputId": "f6bdd487-c16e-4fb0-bfba-b3801f121314"/*Texture*/,
@@ -20,8 +20,7 @@
       "AddPadding": "True",
       "Min": 0.0,
       "Max": 5.0,
-      "Scale": 0.01,
-      "Clamp": true
+      "Scale": 0.01
     },
     {
       "InputId": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*Intensity*/,

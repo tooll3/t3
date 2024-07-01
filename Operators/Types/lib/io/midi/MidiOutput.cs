@@ -13,8 +13,7 @@ using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9 
 {
-    public class MidiOutput : Instance<MidiOutput>
-,ICustomDropdownHolder,IStatusProvider
+    public class MidiOutput : Instance<MidiOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider
     {
         [Output(Guid = "670C784C-DE53-46F4-B93A-A1F07AA8F18E")]
         public readonly Slot<Command> Result = new();
@@ -24,19 +23,41 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
             Result.UpdateAction = Update;
         }
 
+        private bool _initialized;
+        protected override void Dispose(bool isDisposing)
+        {
+            if(!isDisposing) return;
+
+            if (_initialized)
+            {
+                MidiConnectionManager.UnregisterConsumer(this);
+            }
+        }
         private void Update(EvaluationContext context)
         {
             var deviceName = Device.GetValue(context);
             var foundDevice = false;
             var noteOrControllerIndex = NoteOrController.GetValue(context).Clamp(0, 127);
             
-            var velocity = (int)(Velocity.GetValue(context).Clamp(0, 1)*127);
+            var velocity = (int)(Velocity.GetValue(context).Clamp(0, 1) * 127);
+            var intVelocity = Velocity127.GetValue(context);
+            if (intVelocity >= 0)
+            {
+                velocity = intVelocity.Clamp(0, 127);
+            }
             var durationInMs = ((int)(DurationInSecs.GetValue(context)*1000)).Clamp(1, 100000);
             var sendMode = SendMode.GetEnumValue<SendModes>(context);
             var triggerActive = TriggerSend.GetValue(context);
 
             var triggerJustActivated = false;
             var triggerJustDeactivated = false;
+
+            if(!_initialized)
+            {
+                MidiConnectionManager.RegisterConsumer(this);
+                _initialized = true;
+            }
+
             if (triggerActive != _triggered)
             {
                 if (triggerActive)
@@ -52,7 +73,7 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
             }
             
             
-            foreach (var (m, device) in MidiInConnectionManager._midiOutsWithDevices)
+            foreach (var (m, device) in MidiConnectionManager.MidiOutsWithDevices)
             {
                 if (device.ProductName != deviceName)
                     continue;
@@ -75,8 +96,18 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
                             break;
                         
                         case SendModes.Notes_FixedDuration:
-                            if(triggerActive)
-                                midiEvent = new NoteOnEvent(0, channel, noteOrControllerIndex, velocity, durationInMs);
+                            if (triggerActive)
+                            {
+                                var noteOnEvent= new NoteOnEvent(0, channel, noteOrControllerIndex, velocity, durationInMs);
+                                midiEvent = noteOnEvent;
+                                _lastNoteOnTime = Playback.RunTimeInSecs;
+                                _offEvent = noteOnEvent.OffEvent;
+                            }
+                            else if (Playback.RunTimeInSecs - _lastNoteOnTime > durationInMs / 1000.0)
+                            {
+                                midiEvent = _offEvent;
+                                _offEvent = null;
+                            }
                             break;
                         
                         case SendModes.ControllerChange:
@@ -116,6 +147,8 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
             }
             _lastErrorMessage = !foundDevice ? $"Can't find MidiDevice {deviceName}" : null;
         }
+        
+        private double _lastNoteOnTime;
 
         private static int GetMicrosecondsPerQuarterNoteFromBpm(double bpm)
         {
@@ -151,7 +184,7 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
                 yield break;
             }
             
-            foreach (var device in MidiInConnectionManager._midiOutsWithDevices.Values)
+            foreach (var device in MidiConnectionManager.MidiOutsWithDevices.Values)
             {
                 yield return device.ProductName;
             }
@@ -175,6 +208,13 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
             return _lastErrorMessage;
         }
 
+        // We don't actually receive midi in this operator, those methods can remain empty, we just want the MIDI connection thread up
+        public void MessageReceivedHandler(object sender, MidiInMessageEventArgs msg) {}
+
+        public void ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg) {}
+
+        public void OnSettingsChanged() {}
+
         private string _lastErrorMessage;
         #endregion
         
@@ -197,8 +237,12 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
         [Input(Guid = "61CCD308-0006-42DE-B190-C006E99B5871")]
         public readonly InputSlot<float> Velocity = new ();
         
+        [Input(Guid = "A10E3F7B-D132-49CA-9F6D-726D5E699443")]
+        public readonly InputSlot<int> Velocity127 = new (-1);
+        
         [Input(Guid = "ABE9393E-282E-4DE0-8F86-541FA955658F")]
         public readonly InputSlot<float> DurationInSecs = new ();
 
+        private NoteEvent _offEvent;
     }
 }

@@ -34,6 +34,8 @@
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0031" />
     <PackageReference Include="Svg" Version="3.3.0" />
     <PackageReference Include="unsplasharp.api" Version="0.7.0" />
+    <PackageReference Include="SixLabors.Fonts" Version="2.0.2"/>
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.1"/>
   </ItemGroup>
 
 </Project>

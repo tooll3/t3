@@ -1,0 +1,163 @@
+{
+  "Id": "1e29f81b-0c05-4784-b3ac-c475ce510159"/*MakeTileableImage*/,
+  "Description": "Makes an incoming image tileable based on linear edge Falloff.\n\nThis can be used to repeat an imported or generated texture infinitely without any obviously visible borders.\n\nAlso see [MakeTileableImageAdvanced] for a version with more options.",
+  "InputUis": [
+    {
+      "InputId": "f09d6911-dd5f-4dac-a475-3ea291f04dfe"/*ImageA*/,
+      "Position": {
+        "X": -532.8175,
+        "Y": -35.7612
+      }
+    },
+    {
+      "InputId": "e0f2826f-867d-461b-b1ec-95d30d592539"/*EdgeFallOff*/,
+      "Position": {
+        "X": -532.8175,
+        "Y": 9.2388
+      },
+      "Description": "Defines the length / size of the transition",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Scale": 0.01,
+      "Clamp": true
+    },
+    {
+      "InputId": "0cf0b6ec-93e4-4e08-939c-5588267c3991"/*TilingMode*/,
+      "Position": {
+        "X": -532.8175,
+        "Y": 54.2388
+      },
+      "Description": "Defines how the image is tiled:\n\n0 = No Tiling\n1 = horizontal tiling only\n2 = vertical tiling only\n3 = Vertical and horizontal tiling",
+      "Min": 0,
+      "Max": 3,
+      "Scale": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "829e2974-8da8-4067-a7e3-f2fdf07c3238"/*BlendWithMask*/,
+      "Comment": "We're blending in the first texture with the mask to hide the seam.",
+      "Position": {
+        "X": 195.14307,
+        "Y": -297.79492
+      }
+    },
+    {
+      "ChildId": "071cc25c-fdc7-447b-b1cb-a55a385569d0"/*TransformImage*/,
+      "Comment": "Now you can spot the vertical seam.\nIt's because we're shifting the texture on the X axis. And the texture wrapping mode is set to Wrap. \n",
+      "Position": {
+        "X": -78.65759,
+        "Y": -237.03445
+      }
+    },
+    {
+      "ChildId": "2da10875-0de5-488f-b293-bf15675e205b"/*LinearGradient*/,
+      "Position": {
+        "X": 44.40335,
+        "Y": -59.09671
+      }
+    },
+    {
+      "ChildId": "ecfe2689-aeb5-4ae6-9f8f-1a66e4bdc89c"/*TransformImage*/,
+      "Comment": "It's time to take care of the horizontal seam",
+      "Position": {
+        "X": 432.18115,
+        "Y": 368.80255
+      }
+    },
+    {
+      "ChildId": "61e30fc4-bd0f-4780-ac3f-f604b20c9858"/*BlendWithMask*/,
+      "Comment": "Now this texture can be repeated to the infinite",
+      "Position": {
+        "X": 613.89294,
+        "Y": 426.39722
+      }
+    },
+    {
+      "ChildId": "d2ceb93f-c6a7-4f6f-967f-6647ad2478a3"/*LinearGradient*/,
+      "Position": {
+        "X": 374.1277,
+        "Y": 561.48364
+      }
+    },
+    {
+      "ChildId": "a9e2a060-6437-47e1-92a9-a0490cf1ad1d"/*PickTexture*/,
+      "Position": {
+        "X": 940.0021,
+        "Y": 78.654724
+      }
+    },
+    {
+      "ChildId": "b20adcd4-ed92-47bc-b8c1-4abf566fbc64"/*TransformImage*/,
+      "Comment": "It's time to take care of the horizontal seam",
+      "Position": {
+        "X": -263.48935,
+        "Y": 904.216
+      }
+    },
+    {
+      "ChildId": "5b0b07e7-d749-48fd-8937-f4851eeb3870"/*BlendWithMask*/,
+      "Comment": "Now this texture can be repeated to the infinite",
+      "Position": {
+        "X": -39.93097,
+        "Y": 948.2187
+      }
+    },
+    {
+      "ChildId": "835e9c38-d08b-4d97-a9f7-28edfb84285d"/*LinearGradient*/,
+      "Position": {
+        "X": -262.01712,
+        "Y": 1066.5345
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "970d1691-47f4-43ce-937d-cad6a9c13922"/*Selected*/,
+      "Position": {
+        "X": 1307.2495,
+        "Y": 105.23187
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "24abb8f1-ca8c-400b-aad5-b6073b2942fc",
+      "Title": "Only Horizontal",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -323.48935,
+        "Y": 844.216
+      },
+      "Size": {
+        "X": 453.55835,
+        "Y": 305.31848
+      }
+    },
+    {
+      "Id": "f5a92c09-38bf-4b36-9b87-4bd4cca8e2d4",
+      "Title": "Only Vertical",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -150.7381,
+        "Y": -485.84833
+      },
+      "Size": {
+        "X": 547.2903,
+        "Y": 581.94617
+      }
+    }
+  ]
+}

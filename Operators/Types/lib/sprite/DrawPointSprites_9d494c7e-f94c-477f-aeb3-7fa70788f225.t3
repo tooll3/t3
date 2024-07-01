@@ -29,16 +29,16 @@
       "DefaultValue": 1.0
     },
     {
+      "Id": "926bdbc2-ee14-4125-8886-18f445766ef3"/*AlphaCutOff*/,
+      "DefaultValue": 0.001
+    },
+    {
       "Id": "9df7e923-76d2-4e98-af72-3a73b47de960"/*EnableDepthWrite*/,
       "DefaultValue": true
     },
     {
       "Id": "fecc8310-208e-45de-a43b-bf547663e743"/*BlendMod*/,
       "DefaultValue": 0
-    },
-    {
-      "Id": "926bdbc2-ee14-4125-8886-18f445766ef3"/*AlphaCutOff*/,
-      "DefaultValue": 0.001
     }
   ],
   "Children": [
