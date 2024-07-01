@@ -22,7 +22,6 @@ using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Midi;
-using T3.Editor.Gui.Interaction.ParameterCollections;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Selection;
@@ -53,8 +52,6 @@ public class T3Ui
         #endif
         
         UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: log);
-
-        //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
 
         Playback.Current = DefaultTimelinePlayback;
@@ -70,8 +67,6 @@ public class T3Ui
             return;
             
         CompatibleMidiDeviceHandling.InitializeConnectedDevices();
-        // DataRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
-        // DataRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
         _initialed = true;
     }
 
@@ -99,7 +94,6 @@ public class T3Ui
         AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
 
         VariationHandling.Update();
-        //ParameterCollectionHandling.Update();
         MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
         MouseWheelFieldHovered = false;
 

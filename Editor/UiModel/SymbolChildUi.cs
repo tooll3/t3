@@ -55,7 +55,7 @@ namespace T3.Editor.UiModel
         public bool EnabledForSnapshots
         {
             get => GroupIndexForSnapshots == SnapshotGroupIndex;
-            set => SnapshotGroupIndex = value ? SnapshotGroupIndex : 0;
+            set => SnapshotGroupIndex = value ? GroupIndexForSnapshots : 0;
         }
         
         

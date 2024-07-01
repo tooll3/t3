@@ -24,7 +24,6 @@ using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Animation;
-using T3.Editor.Gui.Interaction.ParameterCollections;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -508,23 +507,13 @@ namespace T3.Editor.Gui.InputUi
                 ImGui.SameLine();
 
                 // Draw Name Button
-
-                var isInCollection =
-                    ParameterCollectionHandling
-                       .TryGetCollectionForParameter(compositionUi, inputSlot, symbolChildUi, input, out var collection);
                 
                 ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
 
 
                 var hasStyleCount = 0;
 
-                if (isInCollection)
-                {
-                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButton.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusControlled.Rgba);
-                    hasStyleCount = 2;
-                }
-                else if (input.IsDefault)
+                if (input.IsDefault)
                 {
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButton.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
@@ -538,12 +527,7 @@ namespace T3.Editor.Gui.InputUi
                 {
                     ImGui.PopStyleColor(hasStyleCount);
                 }
-
-                if (isInCollection)
-                {
-                    //Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 4));
-                    Icons.DrawIconAtScreenPosition(Icon.Knob, ImGui.GetItemRectMin() + new Vector2(6, 5), ImGui.GetWindowDrawList(), UiColors.StatusControlled);
-                }
+                
                 
                 if (ImGui.IsItemHovered())
                 {
@@ -552,13 +536,6 @@ namespace T3.Editor.Gui.InputUi
                         {
                             text += Description;
                         }
-
-                        if (isInCollection)
-                        {
-                            var collectionTitle = string.IsNullOrEmpty(collection.Title) ? string.Empty : collection.Title;
-                            text += $"\n Is in parameter collection {collectionTitle}";
-                        }
-                        
                         
                         CustomComponents.TooltipForLastItem( text, 
                                                              "Click to reset to default");
@@ -599,17 +576,6 @@ namespace T3.Editor.Gui.InputUi
                              PublishAsInput(inputSlot, symbolChildUi, input);
                          }
                          
-                         if (isInCollection)
-                         {
-                             if (ImGui.MenuItem($"Remove from collection {collection.Title}"))
-                             {
-                                 Log.Debug("Not implemented yet");
-                             }
-                         }
-                         else if (ImGui.MenuItem("Add to Parameter Collection"))
-                         {
-                             ParameterCollectionHandling.AddParameterToNewOrActiveCollection(compositionUi, inputSlot, symbolChildUi, input);
-                         }
 
                          if (ImGui.MenuItem("Parameters settings"))
                              editState = InputEditStateFlags.ShowOptions;

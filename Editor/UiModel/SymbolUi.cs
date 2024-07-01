@@ -8,7 +8,6 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Interaction.ParameterCollections;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using Truncon.Collections;
@@ -30,8 +29,7 @@ namespace T3.Editor.UiModel
                         OrderedDictionary<Guid, IInputUi> inputs,
                         OrderedDictionary<Guid, IOutputUi> outputs,
                         OrderedDictionary<Guid, Annotation> annotations,
-                        OrderedDictionary<Guid, ExternalLink> links, 
-                        List<ParameterCollection> paramCollections)
+                        OrderedDictionary<Guid, ExternalLink> links)
         {
             Symbol = symbol;
             ChildUis = childUis;
@@ -39,7 +37,6 @@ namespace T3.Editor.UiModel
             OutputUis = outputs;
             Annotations = annotations;
             Links = links;
-            ParamCollections = paramCollections;
             UpdateConsistencyWithSymbol();
         }
 
@@ -87,14 +84,7 @@ namespace T3.Editor.UiModel
                 links.Add(link.Clone().Id, link.Clone());
             }
             
-            var paramCollections = new List<ParameterCollection>(ParamCollections.Count);
-            foreach (var p in ParamCollections)
-            {
-                var clonedCollection = p.Clone();
-                paramCollections.Add(clonedCollection);
-            }
-            
-            return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations, links, paramCollections);
+            return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations, links);
         }
         
 
@@ -318,7 +308,6 @@ namespace T3.Editor.UiModel
         public OrderedDictionary<Guid, IInputUi> InputUis { get; } = new();
         public OrderedDictionary<Guid, IOutputUi> OutputUis { get; }= new();
         public OrderedDictionary<Guid, Annotation> Annotations { get; }= new();
-        public List<ParameterCollection> ParamCollections { get; } = new();
     }
 
     public static class SymbolUiRegistry
