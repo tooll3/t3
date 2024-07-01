@@ -243,7 +243,7 @@ namespace T3.Editor.Gui.Windows
                         FormInputs.AddInt("Default Port", ref ProjectSettings.Config.DefaultOscPort,
                                           0, 65535, 1,
                                           "If a valid port is set, Tooll will listen for OSC messages on this port by default.",
-                                          8000);
+                                          -1);
                         
                         FormInputs.AddVerticalSpace();
                         break;

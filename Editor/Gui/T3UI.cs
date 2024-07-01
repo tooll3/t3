@@ -39,7 +39,7 @@ using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 
 namespace T3.Editor.Gui;
 
-public class T3Ui
+public class T3Ui: IDisposable
 {
     static T3Ui()
     {
@@ -507,6 +507,13 @@ public class T3Ui
             Log.Debug($"{s.Name} - {s.Namespace}  {c}");
         }
     }
+    
+   
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        OscDataRecording.Dispose();
+    }
 
     public static readonly UiSymbolData UiSymbolData;
     
@@ -544,4 +551,6 @@ public class T3Ui
 
     public static bool UseVSync = true;
     public static bool ItemRegionsVisible;
+    
+
 }

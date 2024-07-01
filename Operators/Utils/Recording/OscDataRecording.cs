@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Rug.Osc;
 using T3.Core.Animation;
@@ -11,7 +12,7 @@ namespace Operators.Utils.Recording;
 /// <summary>
 /// A stub for OSC message recording.
 /// </summary>
-public class OscDataRecording : OscConnectionManager.IOscConsumer
+public class OscDataRecording : OscConnectionManager.IOscConsumer, IDisposable
 {
     public double LastEventTime = 0;
 
@@ -28,7 +29,12 @@ public class OscDataRecording : OscConnectionManager.IOscConsumer
 
         OscConnectionManager.RegisterConsumer(this, _port);
     }
-
+    
+    ~OscDataRecording()
+    {
+        Dispose();
+    }
+    
     public void ProcessMessage(OscMessage msg)
     {
         if (msg.Count == 0)
@@ -75,6 +81,12 @@ public class OscDataRecording : OscConnectionManager.IOscConsumer
         _channelsByHash[hash] = newChannel;
         _dataSet.Channels.Add(newChannel);
         return newChannel;
+    }
+    
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        OscConnectionManager.UnregisterConsumer(this);
     }
 
     private readonly DataSet _dataSet;
