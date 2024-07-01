@@ -18,7 +18,7 @@
             public bool WindowedMode = false;
             
             public string LimitMidiDeviceCapture = null; 
-            public int DefaultOscPort = 8000; 
+            public int DefaultOscPort = -1; 
         }
     }
 }
