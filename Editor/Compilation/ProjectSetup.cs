@@ -60,7 +60,6 @@ internal static class ProjectSetup
         project.Dispose();
     }
 
-    // todo - separate out PackageInfo from loading the packages to handle dependencies on load
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
     internal static bool TryInitialize(out Exception exception)
     {
@@ -76,130 +75,37 @@ internal static class ProjectSetup
             ConcurrentBag<EditorSymbolPackage> readOnlyPackages = new(); // "static" packages, remember to filter by operator vs non-operator assemblies
             ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = new();
 
-            #if !DEBUG // Load pre-built built-in packages as read-only
-            var directory = Directory.CreateDirectory(CoreOperatorDirectory);
-            directory
-               .EnumerateDirectories("*", SearchOption.TopDirectoryOnly) // ignore "player" project directory
-               .Where(folder => !string.Equals(folder.Name, PlayerExporter.ExportFolderName, StringComparison.OrdinalIgnoreCase))
-               .ToList()
-               .ForEach(directoryInfo =>
-                        {
-                            // todo - load by releaseInfo json, then load associated assembly
-                            var directory = directoryInfo.FullName!;
-                            var packageInfo = Path.Combine(directory, RuntimeAssemblies.PackageInfoFileName);
-                            if (!RuntimeAssemblies.TryLoadAssemblyFromPackageInfoFile(packageInfo, out var assembly)) 
-                                return;
-                            
-                            if (assembly.IsOperatorAssembly)
-                                readOnlyPackages.Add(new EditorSymbolPackage(assembly));
-                            else
-                                nonOperatorAssemblies.Add(assembly);
-                                
-                        });
+            #if !DEBUG 
             
+            // Load pre-built built-in packages as read-only
+            LoadBuiltInPackages(readOnlyPackages, nonOperatorAssemblies);
+
             Log.Debug($"Found built-in operator assemblies in {stopwatch.ElapsedMilliseconds}ms");
             #endif
-            
-            // Find project directories
-            var topDirectories = new[] { CoreOperatorDirectory, UserSettings.Config.DefaultNewProjectDirectory };
-            var projectSearchDirectories = topDirectories
-                                          .Where(Directory.Exists)
-                                          .SelectMany(Directory.EnumerateDirectories)
-                                          .Where(dirName => !dirName.Contains(PlayerExporter.ExportFolderName, StringComparison.OrdinalIgnoreCase));
 
-            #if DEBUG // Add Built-in packages as projects
-            projectSearchDirectories = projectSearchDirectories.Concat(Directory.EnumerateDirectories(Path.Combine(T3ParentDirectory, "Operators"))
-                                                                                .Where(path =>
-                                                                                       {
-                                                                                           var subDir = Path.GetFileName(path);
-                                                                                           return !subDir.StartsWith('.'); // ignore things like .git and .syncthing folders 
-                                                                                       }));
-            #endif
-                                          
+            // Find project files
+            var csProjFiles = FindCsProjFiles();
 
-            // Find csproj files
-            var csProjFiles = projectSearchDirectories
-                             .SelectMany(dir => Directory.EnumerateFiles(dir, "*.csproj", SearchOption.AllDirectories))
-                             .Select(x => new FileInfo(x))
-                             .ToArray();
-
-            #if DEBUG
-            Log.Debug($"Found {csProjFiles.Length} csproj files in {stopwatch.ElapsedMilliseconds}ms");
-            #endif
+            // Load projects
+            var projects = LoadProjects(csProjFiles, nonOperatorAssemblies);
 
             stopwatch.Restart();
-            
-            ConcurrentBag<EditableSymbolProject> projects = new();
-            ConcurrentBag<CsProjectFile> projectsNeedingCompilation = new();
 
-            csProjFiles
-               .AsParallel()
-               .ForAll(fileInfo =>
-                       {
-                           stopwatch.Restart();
-
-                           if (!CsProjectFile.TryLoad(fileInfo.FullName, out var csProjFile, out var error))
-                           {
-                               Log.Error($"Failed to load project at \"{fileInfo.FullName}\":\n{error}");
-                               return;
-                           }
-                           
-                           if (csProjFile.TryLoadLatestAssembly())
-                           {
-                               InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
-                           }
-                           else
-                           {
-                               projectsNeedingCompilation.Add(csProjFile);
-                           }
-                       });
-
-            foreach (var csProjFile in projectsNeedingCompilation)
-            {
-                // check again if assembly can be loaded as previous compilations could have compiled this project
-                if (csProjFile.TryLoadLatestAssembly() || csProjFile.TryRecompile())
-                {
-                    InitializeLoadedProject(csProjFile, projects, nonOperatorAssemblies, stopwatch);
-                }
-                else
-                {
-                    Log.Info($"Failed to load {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
-                }
-            }
-
-            foreach (var project in projects)
-            {
-                project.CsProjectFile.RemoveOldBuilds(Compiler.BuildMode.Debug);
-            }
-
-            #if DEBUG
-            Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {totalStopwatch.ElapsedMilliseconds}ms");
-            #endif
-
-            // Load operators
-            stopwatch.Restart();
+            // Register UI types
             UiRegistration.RegisterUiTypes();
             InitializeCustomUis(nonOperatorAssemblies);
+
             Log.Debug($"Initialized custom uis in {stopwatch.ElapsedMilliseconds}ms");
 
-            stopwatch.Restart();
+
             var allSymbolPackages = projects
                                    .Concat(readOnlyPackages)
                                    .ToArray();
-
-            foreach (var package in allSymbolPackages)
-            {
-                package.InitializeResources();
-            }
-
-            var sharedShaderPackages = ResourceManager.SharedShaderPackages;
-            foreach (var package in allSymbolPackages)
-            {
-                package.InitializeShaderLinting(sharedShaderPackages);
-            }
             
-            ShaderLinter.AddPackage(SharedResources.ResourcePackage, sharedShaderPackages);
-            
+            // Initialize resources and shader linting
+            InitializePackageResources(allSymbolPackages);
+
+            // Update all symbol packages
             UpdateSymbolPackages(allSymbolPackages);
 
             #if DEBUG
@@ -207,14 +113,10 @@ internal static class ProjectSetup
             Log.Debug($"Total load time pre-home: {totalStopwatch.ElapsedMilliseconds}ms");
             #endif
 
-            foreach (var package in EditorSymbolPackage.AllPackages)
+            foreach (var package in SymbolPackage.AllPackages)
             {
                 Log.Debug($"Loaded {package.DisplayName}");
             }
-
-            stopwatch.Restart();
-
-            stopwatch.Stop();
 
             exception = null;
             return true;
@@ -224,9 +126,108 @@ internal static class ProjectSetup
             exception = e;
             return false;
         }
+    }
+
+    private static void LoadBuiltInPackages(ConcurrentBag<EditorSymbolPackage> readOnlyPackages, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies)
+    {
+        var directory = Directory.CreateDirectory(CoreOperatorDirectory);
+
+        directory
+           .EnumerateDirectories("*", SearchOption.TopDirectoryOnly) // ignore "player" project directory
+           .Where(folder => !string.Equals(folder.Name, PlayerExporter.ExportFolderName, StringComparison.OrdinalIgnoreCase))
+           .ToList()
+           .ForEach(directoryInfo =>
+                    {
+                        // todo - load by releaseInfo json, then load associated assembly
+                        var directory = directoryInfo.FullName!;
+                        var packageInfo = Path.Combine(directory, RuntimeAssemblies.PackageInfoFileName);
+                        if (!RuntimeAssemblies.TryLoadAssemblyFromPackageInfoFile(packageInfo, out var assembly))
+                            return;
+
+                        if (assembly.IsOperatorAssembly)
+                            readOnlyPackages.Add(new EditorSymbolPackage(assembly));
+                        else
+                            nonOperatorAssemblies.Add(assembly);
+                    });
+    }
+
+    private static void InitializePackageResources(IReadOnlyCollection<EditorSymbolPackage> allSymbolPackages)
+    {
+        foreach (var package in allSymbolPackages)
+        {
+            package.InitializeResources();
+        }
+
+        var sharedShaderPackages = ResourceManager.SharedShaderPackages;
+        foreach (var package in allSymbolPackages)
+        {
+            package.InitializeShaderLinting(sharedShaderPackages);
+        }
+
+        ShaderLinter.AddPackage(SharedResources.ResourcePackage, sharedShaderPackages);
+    }
+
+    private static IReadOnlyCollection<EditableSymbolProject> LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> assemblyInformations)
+    {
+        ConcurrentBag<EditableSymbolProject> projects = new();
+        ConcurrentBag<CsProjectFile> projectsNeedingCompilation = new();
+
+        // Load each project file and its associated assembly
+        csProjFiles
+           .AsParallel()
+           .ForAll(fileInfo =>
+                   {
+                       var stopwatch = new Stopwatch();
+
+                       if (!CsProjectFile.TryLoad(fileInfo.FullName, out var csProjFile, out var error))
+                       {
+                           Log.Error($"Failed to load project at \"{fileInfo.FullName}\":\n{error}");
+                           return;
+                       }
+
+                       if (csProjFile.TryLoadLatestAssembly())
+                       {
+                           InitializeLoadedProject(csProjFile, projects, assemblyInformations);
+                           Log.Info($"Loaded {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
+                       }
+                       else
+                       {
+                           // no assembly loaded - add to list of projects needing compilation
+                           projectsNeedingCompilation.Add(csProjFile);
+                       }
+                   });
+
+        var stopwatch = new Stopwatch();
+
+        // Compile projects that need it
+        foreach (var csProjFile in projectsNeedingCompilation)
+        {
+            stopwatch.Restart();
+            // check again if assembly can be loaded as previous compilations could have compiled this project
+            if (csProjFile.TryLoadLatestAssembly() || csProjFile.TryRecompile())
+            {
+                InitializeLoadedProject(csProjFile, projects, assemblyInformations);
+                Log.Info($"Loaded {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
+            }
+            else
+            {
+                Log.Info($"Failed to load {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
+            }
+        }
+
+        // Clean up old builds
+        foreach (var project in projects)
+        {
+            project.CsProjectFile.RemoveOldBuilds(Compiler.BuildMode.Debug);
+        }
+
+        #if DEBUG
+            Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {totalStopwatch.ElapsedMilliseconds}ms");
+        #endif
+        return projects;
 
         static void InitializeLoadedProject(CsProjectFile csProjFile, ConcurrentBag<EditableSymbolProject> projects,
-                                            ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, Stopwatch stopwatch)
+                                            ConcurrentBag<AssemblyInformation> nonOperatorAssemblies)
         {
             if (csProjFile.IsOperatorAssembly)
             {
@@ -237,11 +238,41 @@ internal static class ProjectSetup
             {
                 nonOperatorAssemblies.Add(csProjFile.Assembly);
             }
-
-            Log.Info($"Loaded {csProjFile.Name} in {stopwatch.ElapsedMilliseconds}ms");
         }
     }
-    
+
+    private static FileInfo[] FindCsProjFiles()
+    {
+        var csProjFiles = GetProjectDirectories()
+                         .SelectMany(dir => Directory.EnumerateFiles(dir, "*.csproj", SearchOption.AllDirectories))
+                         .Select(x => new FileInfo(x))
+                         .ToArray();
+
+        #if DEBUG
+            Log.Debug($"Found {csProjFiles.Length} csproj files in {stopwatch.ElapsedMilliseconds}ms");
+        #endif
+        return csProjFiles;
+    }
+
+    private static IEnumerable<string> GetProjectDirectories()
+    {
+        var topDirectories = new[] { CoreOperatorDirectory, UserSettings.Config.DefaultNewProjectDirectory };
+        var projectSearchDirectories = topDirectories
+                                      .Where(Directory.Exists)
+                                      .SelectMany(Directory.EnumerateDirectories)
+                                      .Where(dirName => !dirName.Contains(PlayerExporter.ExportFolderName, StringComparison.OrdinalIgnoreCase));
+
+        #if DEBUG // Add Built-in packages as projects
+            projectSearchDirectories = projectSearchDirectories.Concat(Directory.EnumerateDirectories(Path.Combine(T3ParentDirectory, "Operators"))
+                                                                                .Where(path =>
+                                                                                       {
+                                                                                           var subDir = Path.GetFileName(path);
+                                                                                           return !subDir.StartsWith('.'); // ignore things like .git and .syncthing folders 
+                                                                                       }));
+        #endif
+        return projectSearchDirectories;
+    }
+
     private static readonly string CoreOperatorDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "Operators");
     #if DEBUG
     private static readonly string T3ParentDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "..", "..", "..", "..");
@@ -288,12 +319,11 @@ internal static class ProjectSetup
     public static void DisposePackages()
     {
         var allPackages = SymbolPackage.AllPackages.ToArray();
-        foreach(var package in allPackages)
+        foreach (var package in allPackages)
             package.Dispose();
     }
 
     internal static void UpdateSymbolPackage(EditableSymbolProject project) => UpdateSymbolPackages(project);
-
 
     private static void UpdateSymbolPackages(params EditorSymbolPackage[] symbolPackages)
     {
@@ -339,10 +369,7 @@ internal static class ProjectSetup
 
         loadedSymbolUis
            .AsParallel()
-           .ForAll(pair =>
-                   {
-                       pair.Key.LocateSourceCodeFiles();
-                   });
+           .ForAll(pair => { pair.Key.LocateSourceCodeFiles(); });
 
         foreach (var (symbolPackage, symbolUis) in loadedSymbolUis)
         {
@@ -351,5 +378,6 @@ internal static class ProjectSetup
     }
 
     private readonly record struct SymbolUiLoadInfo(SymbolUi[] NewlyLoaded, SymbolUi[] PreExisting);
+
     private readonly record struct AssemblyConstructorInfo(AssemblyInformation AssemblyInformation, Type InstanceType);
 }

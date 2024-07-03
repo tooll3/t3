@@ -35,9 +35,10 @@ internal sealed partial class CsProjectFile
     private const string IncludeAllStr = "**";
     private static readonly string[] ExcludeFoldersFromOutput = [CreateIncludePath("bin", IncludeAllStr), CreateIncludePath("obj", IncludeAllStr)];
     private const string FileIncludeFmt = IncludeAllStr + @"{0}";
+    private const string DependenciesFolder = "dependencies";
     private static readonly ContentInclude.Group[] DefaultContent =
         [
-            new ContentInclude.Group(null, new ContentInclude(CreateIncludePath(".", "dependencies", IncludeAllStr))),
+            new ContentInclude.Group(null, new ContentInclude(CreateIncludePath(".", DependenciesFolder, IncludeAllStr))),
             new ContentInclude.Group(ReleaseConfigCondition,
                                     new ContentInclude(include: CreateIncludePath(ResourceManager.ResourcesSubfolder,IncludeAllStr),
                                                        linkDirectory: ResourceManager.ResourcesSubfolder,

@@ -165,7 +165,7 @@ internal sealed partial class CsProjectFile
         destinationDirectory = Path.GetFullPath(destinationDirectory);
         System.IO.Directory.CreateDirectory(destinationDirectory);
 
-        var dependenciesDirectory = Path.Combine(destinationDirectory, "dependencies");
+        var dependenciesDirectory = Path.Combine(destinationDirectory, DependenciesFolder);
         System.IO.Directory.CreateDirectory(dependenciesDirectory);
 
         var resourcesDirectory = Path.Combine(destinationDirectory, ResourceManager.ResourcesSubfolder);
