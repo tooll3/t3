@@ -173,10 +173,10 @@ namespace T3.Editor.UiModel
             foreach (var link in symbolUi.Links.Values)
             {
                 writer.WriteStartObject();
-                writer.WriteObject(JsonKeys.Id, link.Id);
-                writer.WriteObject(JsonKeys.Title, link.Title);
-                writer.WriteObject(JsonKeys.Description, link.Description);
-                writer.WriteObject(JsonKeys.LinkUrl, link.Url);
+                writer.WriteObject(JsonKeys.Id, link.Id.ToString());
+                writer.WriteObject(JsonKeys.Title, link.Title ?? string.Empty);
+                writer.WriteObject(JsonKeys.Description, link.Description ?? string.Empty);
+                writer.WriteObject(JsonKeys.LinkUrl, link.Url ?? string.Empty);
                 writer.WriteObject(JsonKeys.LinkType, link.Type);
                 writer.WriteEndObject();
             }
