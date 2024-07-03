@@ -11,6 +11,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace t3.ndi
 {
@@ -188,8 +189,6 @@ namespace t3.ndi
         /// </summary>
         private void ReceiveThreadProc(object param)
         {
-            var device = ResourceManager.Device;
-
             // Here we keep track of the receiver Id used for this thread.
             var currReceiverId = (int)param;
 
@@ -300,14 +299,15 @@ namespace t3.ndi
 
                                                  for (var i = 0; i < NumTextureEntries; ++i)
                                                  {
-                                                     _imagesWithCpuAccess.Add(new Texture2D(device, imageDesc));
+                                                     var tex2D = Texture2D.CreateTexture2D(imageDesc);
+                                                     _imagesWithCpuAccess.Add(tex2D);
                                                  }
 
                                                  _currentIndex = 0;
                                              }
 
                                              // copy texture to an internal image
-                                             var immediateContext = device.ImmediateContext;
+                                             var immediateContext = ResourceManager.Device.ImmediateContext;
                                              var writableImage = _imagesWithCpuAccess[_currentIndex];
                                              _currentIndex = (_currentIndex + 1) % NumTextureEntries;
 

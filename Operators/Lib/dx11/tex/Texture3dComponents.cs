@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,7 +10,7 @@ namespace lib.dx11.tex
     public class Texture3dComponents : Instance<Texture3dComponents>
     {
         [Output(Guid = "a3772275-af0b-48e6-a3f8-ecd7c4c6eda4")]
-        public readonly Slot<SharpDX.Direct3D11.Texture3D> Texture = new();
+        public readonly Slot<Texture3D> Texture = new();
 
         [Output(Guid = "4f9b2aeb-9bfd-400b-8839-45bec3ce2543")]
         public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> ShaderResourceView = new();
