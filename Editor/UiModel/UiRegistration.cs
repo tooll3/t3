@@ -56,6 +56,9 @@ internal static class UiRegistration
 
         RegisterUiType(typeof(DateTime), new ValueUiProperties(), () => new FallbackInputUi<DateTime>(),
                        () => new ValueOutputUi<DateTime>());
+        
+        RegisterUiType(typeof(System.Numerics.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<System.Numerics.Vector4[]>(),
+                       () => new ValueOutputUi<System.Numerics.Vector4[]>());
 
         // t3 core types
         RegisterUiType(typeof(T3.Core.DataTypes.BufferWithViews), new FallBackUiProperties(), () => new FallbackInputUi<T3.Core.DataTypes.BufferWithViews>(),
@@ -86,10 +89,11 @@ internal static class UiRegistration
 
         RegisterUiType(typeof(T3.Core.DataTypes.StructuredList), new ValueUiProperties(), () => new StructuredListInputUi(),
                        () => new StructuredListOutputUi());
-
-        RegisterUiType(typeof(T3.Core.DataTypes.Texture3dWithViews), new FallBackUiProperties(),
-                       () => new FallbackInputUi<T3.Core.DataTypes.Texture3dWithViews>(),
-                       () => new Texture3dOutputUi());
+        
+        RegisterUiType(typeof(Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
+        RegisterUiType(typeof(Int2), new ValueUiProperties(), () => new Int2InputUi(), () => new ValueOutputUi<Int2>());
+        
+        RegisterUiType(typeof(Dict<float>), new ValueUiProperties(), () => new FloatDictInputUi(), () => new FloatDictOutputUi());
 
         // Rendering
         RegisterUiType(typeof(MeshBuffers), new FallBackUiProperties(), () => new FallbackInputUi<MeshBuffers>(),
@@ -104,10 +108,26 @@ internal static class UiRegistration
         RegisterUiType(typeof(PbrMaterial), new FallBackUiProperties(),
                        () => new FallbackInputUi<PbrMaterial>(),
                        () => new ValueOutputUi<PbrMaterial>());
+        RegisterUiType(typeof(ComputeShader), new ShaderUiProperties(), () => new FallbackInputUi<ComputeShader>(),
+                       () => new ValueOutputUi<ComputeShader>());
+        RegisterUiType(typeof(GeometryShader), new ShaderUiProperties(), () => new FallbackInputUi<GeometryShader>(),
+                       () => new ValueOutputUi<GeometryShader>());
+        RegisterUiType(typeof(VertexShader), new ShaderUiProperties(), () => new FallbackInputUi<VertexShader>(),
+                       () => new ValueOutputUi<VertexShader>());
+        RegisterUiType(typeof(PixelShader), new ShaderUiProperties(), () => new FallbackInputUi<PixelShader>(),
+                       () => new ValueOutputUi<PixelShader>());
+
+        RegisterUiType(typeof(T3.Core.DataTypes.Texture3dWithViews), new FallBackUiProperties(),
+                       () => new FallbackInputUi<T3.Core.DataTypes.Texture3dWithViews>(),
+                       () => new Texture3dOutputUi());
+        
+        RegisterUiType(typeof(Texture2D), new TextureUiProperties(), () => new FallbackInputUi<Texture2D>(),
+                       () => new Texture2dOutputUi());
+        RegisterUiType(typeof(Texture3D), new ShaderUiProperties(), () => new FallbackInputUi<Texture3D>(),
+                       () => new ValueOutputUi<Texture3D>());
+        
 
         // sharpdx types
-        RegisterUiType(typeof(Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
-        RegisterUiType(typeof(Int2), new ValueUiProperties(), () => new Int2InputUi(), () => new ValueOutputUi<Int2>());
         RegisterUiType(typeof(SharpDX.Direct3D.PrimitiveTopology), new FallBackUiProperties(), () => new EnumInputUi<PrimitiveTopology>(),
                        () => new ValueOutputUi<PrimitiveTopology>());
         RegisterUiType(typeof(SharpDX.Direct3D11.BindFlags), new ShaderUiProperties(), () => new EnumInputUi<BindFlags>(),
@@ -123,8 +143,6 @@ internal static class UiRegistration
                        () => new ValueOutputUi<ColorWriteMaskFlags>());
         RegisterUiType(typeof(SharpDX.Direct3D11.Comparison), new ShaderUiProperties(), () => new EnumInputUi<Comparison>(),
                        () => new ValueOutputUi<Comparison>());
-        RegisterUiType(typeof(ComputeShader), new ShaderUiProperties(), () => new FallbackInputUi<ComputeShader>(),
-                       () => new ValueOutputUi<ComputeShader>());
         RegisterUiType(typeof(SharpDX.Direct3D11.CpuAccessFlags), new ShaderUiProperties(), () => new EnumInputUi<CpuAccessFlags>(),
                        () => new ValueOutputUi<CpuAccessFlags>());
         RegisterUiType(typeof(SharpDX.Direct3D11.CullMode), new ShaderUiProperties(), () => new EnumInputUi<CullMode>(),
@@ -136,13 +154,9 @@ internal static class UiRegistration
         RegisterUiType(typeof(SharpDX.Direct3D11.FillMode), new ShaderUiProperties(), () => new EnumInputUi<FillMode>(),
                        () => new ValueOutputUi<FillMode>());
         RegisterUiType(typeof(SharpDX.Direct3D11.Filter), new ShaderUiProperties(), () => new EnumInputUi<Filter>(), () => new ValueOutputUi<Filter>());
-        RegisterUiType(typeof(GeometryShader), new ShaderUiProperties(), () => new FallbackInputUi<GeometryShader>(),
-                       () => new ValueOutputUi<GeometryShader>());
 
         RegisterUiType(typeof(SharpDX.Direct3D11.InputLayout), new ShaderUiProperties(), () => new FallbackInputUi<InputLayout>(),
                        () => new ValueOutputUi<InputLayout>());
-        RegisterUiType(typeof(PixelShader), new ShaderUiProperties(), () => new FallbackInputUi<PixelShader>(),
-                       () => new ValueOutputUi<PixelShader>());
         RegisterUiType(typeof(SharpDX.Direct3D11.RasterizerState), new ShaderUiProperties(), () => new FallbackInputUi<RasterizerState>(),
                        () => new ValueOutputUi<RasterizerState>());
         RegisterUiType(typeof(SharpDX.Direct3D11.RenderTargetBlendDescription), new TextureUiProperties(),
@@ -158,10 +172,6 @@ internal static class UiRegistration
                        () => new ValueOutputUi<SamplerState>());
         RegisterUiType(typeof(SharpDX.Direct3D11.ShaderResourceView), new TextureUiProperties(), () => new FallbackInputUi<ShaderResourceView>(),
                        () => new ShaderResourceViewOutputUi());
-        RegisterUiType(typeof(Texture2D), new TextureUiProperties(), () => new FallbackInputUi<Texture2D>(),
-                       () => new Texture2dOutputUi());
-        RegisterUiType(typeof(Texture3D), new ShaderUiProperties(), () => new FallbackInputUi<Texture3D>(),
-                       () => new ValueOutputUi<Texture3D>());
         RegisterUiType(typeof(SharpDX.Direct3D11.TextureAddressMode), new ShaderUiProperties(), () => new EnumInputUi<TextureAddressMode>(),
                        () => new ValueOutputUi<TextureAddressMode>());
         RegisterUiType(typeof(SharpDX.Direct3D11.UnorderedAccessView), new TextureUiProperties(), () => new FallbackInputUi<UnorderedAccessView>(),
@@ -169,17 +179,11 @@ internal static class UiRegistration
         RegisterUiType(typeof(SharpDX.Direct3D11.UnorderedAccessViewBufferFlags), new ShaderUiProperties(),
                        () => new EnumInputUi<UnorderedAccessViewBufferFlags>(),
                        () => new ValueOutputUi<UnorderedAccessViewBufferFlags>());
-        RegisterUiType(typeof(VertexShader), new ShaderUiProperties(), () => new FallbackInputUi<VertexShader>(),
-                       () => new ValueOutputUi<VertexShader>());
         RegisterUiType(typeof(SharpDX.DXGI.Format), new ShaderUiProperties(), () => new EnumInputUi<Format>(), () => new ValueOutputUi<Format>());
         RegisterUiType(typeof(SharpDX.Mathematics.Interop.RawViewportF), new ShaderUiProperties(), () => new FallbackInputUi<RawViewportF>(),
                        () => new ValueOutputUi<RawViewportF>());
         RegisterUiType(typeof(SharpDX.Mathematics.Interop.RawRectangle), new ShaderUiProperties(), () => new FallbackInputUi<RawRectangle>(),
                        () => new ValueOutputUi<RawRectangle>());
-        RegisterUiType(typeof(System.Numerics.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<System.Numerics.Vector4[]>(),
-                       () => new ValueOutputUi<System.Numerics.Vector4[]>());
-        RegisterUiType(typeof(Dict<float>), new ValueUiProperties(),
-                       () => new FloatDictInputUi(), () => new FloatDictOutputUi());
         return;
 
         static void RegisterUiType(Type type, ITypeUiProperties uiProperties, Func<IInputUi> inputUi, Func<IOutputUi> outputUi)
