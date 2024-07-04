@@ -63,7 +63,6 @@ internal static class ProjectSetup
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
     internal static bool TryInitialize(out Exception exception)
     {
-        Stopwatch stopwatch = new();
         #if DEBUG
         Stopwatch totalStopwatch = new();
         totalStopwatch.Start();
@@ -76,11 +75,8 @@ internal static class ProjectSetup
             ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = new();
 
             #if !DEBUG 
-            
             // Load pre-built built-in packages as read-only
             LoadBuiltInPackages(readOnlyPackages, nonOperatorAssemblies);
-
-            Log.Debug($"Found built-in operator assemblies in {stopwatch.ElapsedMilliseconds}ms");
             #endif
 
             // Find project files
@@ -89,14 +85,10 @@ internal static class ProjectSetup
             // Load projects
             var projects = LoadProjects(csProjFiles, nonOperatorAssemblies);
 
-            stopwatch.Restart();
 
             // Register UI types
             UiRegistration.RegisterUiTypes();
             InitializeCustomUis(nonOperatorAssemblies);
-
-            Log.Debug($"Initialized custom uis in {stopwatch.ElapsedMilliseconds}ms");
-
 
             var allSymbolPackages = projects
                                    .Concat(readOnlyPackages)
@@ -108,16 +100,16 @@ internal static class ProjectSetup
             // Update all symbol packages
             UpdateSymbolPackages(allSymbolPackages);
 
-            #if DEBUG
-            totalStopwatch.Stop();
-            Log.Debug($"Total load time pre-home: {totalStopwatch.ElapsedMilliseconds}ms");
-            #endif
-
             foreach (var package in SymbolPackage.AllPackages)
             {
                 Log.Debug($"Loaded {package.DisplayName}");
             }
 
+            #if DEBUG
+            totalStopwatch.Stop();
+            Log.Debug($"Total load time: {totalStopwatch.ElapsedMilliseconds}ms");
+            #endif
+            
             exception = null;
             return true;
         }
@@ -220,10 +212,6 @@ internal static class ProjectSetup
         {
             project.CsProjectFile.RemoveOldBuilds(Compiler.BuildMode.Debug);
         }
-
-        #if DEBUG
-            Log.Debug($"Loaded {projects.Count} projects and {nonOperatorAssemblies.Count} non-operator assemblies in {totalStopwatch.ElapsedMilliseconds}ms");
-        #endif
         return projects;
 
         static void InitializeLoadedProject(CsProjectFile csProjFile, ConcurrentBag<EditableSymbolProject> projects,
@@ -243,15 +231,10 @@ internal static class ProjectSetup
 
     private static FileInfo[] FindCsProjFiles()
     {
-        var csProjFiles = GetProjectDirectories()
+        return GetProjectDirectories()
                          .SelectMany(dir => Directory.EnumerateFiles(dir, "*.csproj", SearchOption.AllDirectories))
                          .Select(x => new FileInfo(x))
                          .ToArray();
-
-        #if DEBUG
-            Log.Debug($"Found {csProjFiles.Length} csproj files in {stopwatch.ElapsedMilliseconds}ms");
-        #endif
-        return csProjFiles;
     }
 
     private static IEnumerable<string> GetProjectDirectories()
