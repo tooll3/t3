@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
@@ -354,7 +355,7 @@ namespace T3.Editor.Gui.Graph
                     if (nodeHasHiddenMatchingInputs)
                     {
                         var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.8f);
-                        var colorForType = TypeUiRegistry.Entries[tempConnections[0].ConnectionType].Color;
+                        var colorForType = TypeUiRegistry.GetPropertiesForType(tempConnections[0].ConnectionType).Color;
                         colorForType.Rgba.W *= blink;
                         drawList.AddRectFilled(
                                                 new Vector2(_usableScreenRect.Min.X, _usableScreenRect.Max.Y + 3),
@@ -603,7 +604,7 @@ namespace T3.Editor.Gui.Graph
                 ImGui.InvisibleButton("output", usableArea.GetSize());
                 THelpers.DebugItemRect();
                 var valueType = outputDef.ValueType;
-                var colorForType = TypeUiRegistry.Entries[valueType].Color.Fade(opacity);
+                var colorForType = TypeUiRegistry.GetPropertiesForType(valueType).Color.Fade(opacity);
             
                 //Note: isItemHovered does not work when dragging is active
                 var hovered = inActiveWindow &&
@@ -1408,9 +1409,10 @@ namespace T3.Editor.Gui.Graph
                                                   ));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Color ColorForInputType(Symbol.InputDefinition inputDef)
         {
-            return TypeUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
+            return TypeUiRegistry.GetPropertiesForType(inputDef.DefaultValue.ValueType).Color;
         }
 
         #region style variables

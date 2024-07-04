@@ -81,7 +81,7 @@ namespace libEditor.CustomUi
                 if (!string.IsNullOrEmpty(v))
                 {
                     ImGui.PushClipRect(usableArea.Min, usableArea.Max, true);
-                    var color = TypeUiRegistry.Entries[typeof(string)];
+                    var color = TypeUiRegistry.GetPropertiesForType(typeof(string));
                     ImGui.GetWindowDrawList().AddText(usableArea.Min, ImGui.ColorConvertFloat4ToU32(color.Color.Rgba), v);
                     ImGui.PopClipRect();
                 }

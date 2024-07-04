@@ -37,7 +37,7 @@ namespace T3.Editor.Gui.Graph
                 canvas.SelectableNodeMovement.Handle(outputUi);
 
                 // Rendering
-                var typeColor = TypeUiRegistry.Entries[outputDef.ValueType].Color;
+                var typeColor = TypeUiRegistry.GetPropertiesForType(outputDef.ValueType).Color;
 
                 drawList.AddRectFilled(LastScreenRect.Min, LastScreenRect.Max,
                                  hovered
@@ -81,7 +81,7 @@ namespace T3.Editor.Gui.Graph
                     ImGui.SetCursorScreenPos(usableSlotArea.Min);
                     ImGui.InvisibleButton("output", usableSlotArea.GetSize());
                     THelpers.DebugItemRect();
-                    var color = TypeUiRegistry.Entries[outputDef.ValueType].Color;
+                    var color = TypeUiRegistry.GetPropertiesForType(outputDef.ValueType).Color;
 
                     //Note: isItemHovered will not work
                     var slotHovered = ConnectionMaker.GetTempConnectionsFor(window).Count > 0

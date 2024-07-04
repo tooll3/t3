@@ -38,7 +38,7 @@ public static class TypeSelector
                                                       if (!isMatch)
                                                           return SearchableDropDown.ItemResults.FilteredOut;
 
-                                                      if (!TypeUiRegistry.Entries.TryGetValue(type, out var properties))
+                                                      if (!TypeUiRegistry.TryGetPropertiesForType(type, out var properties))
                                                       {
                                                           Log.Warning($"Type {type} is missing Type properties");
                                                           return SearchableDropDown.ItemResults.FilteredOut;

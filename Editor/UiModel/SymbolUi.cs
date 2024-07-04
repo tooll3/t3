@@ -109,7 +109,6 @@ namespace T3.Editor.UiModel
             }
 
             // check if input UIs are missing
-            var inputUiFactory = InputUiFactory.Entries;
             var existingInputs = InputUis.Values.ToList();
             InputUis.Clear();
             for (int i = 0; i < symbol.InputDefinitions.Count; i++)
@@ -120,8 +119,7 @@ namespace T3.Editor.UiModel
                 {
                     Log.Debug($"Found no input ui entry for symbol child input '{symbol.Name}.{input.Name}' - creating a new one");
                     InputUis.Remove(input.Id);
-                    var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
-                    IInputUi newInputUi = inputCreator();
+                    var newInputUi = InputUiFactory.Instance.CreateFor(input.DefaultValue.ValueType);
                     newInputUi.Parent = this;
                     newInputUi.InputDefinition = input;
                     newInputUi.PosOnCanvas = GetCanvasPositionForNextInputUi(this);
@@ -141,7 +139,6 @@ namespace T3.Editor.UiModel
                 InputUis.Remove(inputUiToRemove.Key);
             }
 
-            var outputUiFactory = OutputUiFactory.Entries;
             foreach (var output in symbol.OutputDefinitions)
             {
                 if (!OutputUis.TryGetValue(output.Id, out var value) || (value.Type != output.ValueType))
@@ -149,13 +146,7 @@ namespace T3.Editor.UiModel
                     Log.Debug($"Found no output ui for '{symbol.Name}.{output.Name}' - creating a new one");
                     OutputUis.Remove(output.Id); // if type has changed remove the old entry
 
-                    if (!outputUiFactory.TryGetValue(output.ValueType, out var outputUiCreator))
-                    {
-                        Log.Error($"Ignored {Symbol.Name}.{output.Name} with unknown type {output.ValueType}");
-                        continue;
-                    }
-
-                    var newOutputUi = outputUiCreator();
+                    var newOutputUi = OutputUiFactory.Instance.CreateFor(output.ValueType);
                     newOutputUi.OutputDefinition = output;
                     newOutputUi.PosOnCanvas = ComputeNewOutputUiPositionOnCanvas(_childUis.Values, OutputUis.Values);
                     OutputUis.Add(output.Id, newOutputUi);

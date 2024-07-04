@@ -5,7 +5,7 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.OutputUi
 {
-    public class ValueOutputUi<T> : OutputUi<T>
+    internal sealed class ValueOutputUi<T> : OutputUi<T>
     {
         public override IOutputUi Clone()
         {

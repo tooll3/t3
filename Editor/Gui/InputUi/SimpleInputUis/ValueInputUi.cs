@@ -3,11 +3,11 @@ using T3.Core.Operator;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis
 {
-    public class FallbackInputUi<T> : InputValueUi<T>
+    internal sealed class ValueInputUi<T> : InputValueUi<T>
     {
         public override IInputUi Clone()
         {
-            return new FallbackInputUi<T>
+            return new ValueInputUi<T>
                    {
                        InputDefinition = InputDefinition,
                        Parent = Parent,

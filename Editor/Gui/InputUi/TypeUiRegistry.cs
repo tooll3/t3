@@ -2,16 +2,23 @@
 {
     public static class TypeUiRegistry
     {
-        public static Dictionary<Type, ITypeUiProperties> Entries { get; } = new();
+        private static readonly Dictionary<Type, ITypeUiProperties> Entries = new();
 
         public static ITypeUiProperties GetPropertiesForType(Type type)
         {
-            var t = _fallBackTypeUiProperties;
-            if (type != null)
-                Entries.TryGetValue(type, out t);
-            return t;
+            return Entries.TryGetValue(type, out var properties) ? properties : _fallBackTypeUiProperties;
+        }
+        
+        public static bool TryGetPropertiesForType(Type type, out ITypeUiProperties properties)
+        {
+            return Entries.TryGetValue(type, out properties);
+        }
+        
+        internal static void SetProperties(Type type, ITypeUiProperties properties)
+        {
+            Entries[type] = properties ?? _fallBackTypeUiProperties;
         }
 
-        private static readonly ITypeUiProperties _fallBackTypeUiProperties = new FallBackUiProperties();
+        private static readonly ITypeUiProperties _fallBackTypeUiProperties = new ValueUiProperties();
     }
 }

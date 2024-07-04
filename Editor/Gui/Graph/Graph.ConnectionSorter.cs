@@ -74,7 +74,7 @@ internal partial class Graph
                 _linesFromInputNodes[inputNode].Add(newLine);
 
                 var color = UiColors.Gray;
-                if (TypeUiRegistry.Entries.TryGetValue(inputNode.Type, out var typeUiProperties))
+                if (TypeUiRegistry.TryGetPropertiesForType(inputNode.Type, out var typeUiProperties))
                     color = typeUiProperties.Color;
 
                 newLine.ColorForType = color;
@@ -99,7 +99,7 @@ internal partial class Graph
             if (!(newLine.Connection is ConnectionMaker.TempConnection c))
                 return;
 
-            newLine.ColorForType = TypeUiRegistry.Entries[c.ConnectionType].Color;
+            newLine.ColorForType = TypeUiRegistry.GetPropertiesForType(c.ConnectionType).Color;
 
             // if (!ConnectionMaker.TempConnections.Contains(c))
             //     return;

@@ -231,18 +231,12 @@ namespace T3.Editor.UiModel
                 }
 
                 var type = inputDefinition.DefaultValue.ValueType;
-                if (InputUiFactory.Entries.TryGetValue(type, out var inputCreator))
-                {
-                    // get the symbol input definition
-                    var inputUi = inputCreator();
-                    inputUi.InputDefinition = inputDefinition;
-                    inputUi.Read(uiInputEntry);
-                    inputDict.Add(inputId, inputUi);
-                }
-                else
-                {
-                    Log.Error($"Error creating input ui for non registered type '{type.Name}'.");
-                }
+                
+                // get the symbol input definition
+                var inputUi = InputUiFactory.Instance.CreateFor(type);
+                inputUi.InputDefinition = inputDefinition;
+                inputUi.Read(uiInputEntry);
+                inputDict.Add(inputId, inputUi);
             }
 
 
@@ -266,21 +260,13 @@ namespace T3.Editor.UiModel
                     continue;
                 }
 
-                var type = outputDefinition.ValueType;
-                if (OutputUiFactory.Entries.TryGetValue(type, out var outputCreator))
-                {
-                    var outputUi = outputCreator();
-                    outputUi.OutputDefinition = symbol.OutputDefinitions.First(def => def.Id == outputId);
+                var outputUi = OutputUiFactory.Instance.CreateFor(outputDefinition.ValueType);
+                outputUi.OutputDefinition = symbol.OutputDefinitions.First(def => def.Id == outputId);
 
-                    var positionToken = uiOutputEntry[JsonKeys.Position];
-                    outputUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
+                var positionToken = uiOutputEntry[JsonKeys.Position];
+                outputUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
 
-                    outputDict.Add(outputId, outputUi);
-                }
-                else
-                {
-                    Log.Error($"Error creating output ui for non registered type '{type.Name}'.");
-                }
+                outputDict.Add(outputId, outputUi);
             }
 
             var annotationDict = ReadAnnotations(mainObject);

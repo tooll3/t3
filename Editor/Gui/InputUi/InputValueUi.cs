@@ -123,7 +123,7 @@ namespace T3.Editor.Gui.InputUi
             }
             
             var name = inputSlot.Input.Name;
-            var typeColor = TypeUiRegistry.Entries[Type].Color;
+            var typeColor = TypeUiRegistry.GetPropertiesForType(Type).Color;
             var compositionSymbol = compositionUi.Symbol;
             var animator = compositionSymbol.Animator;
 

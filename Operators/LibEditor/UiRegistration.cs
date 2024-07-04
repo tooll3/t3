@@ -52,11 +52,6 @@ public class UiRegistration : IOperatorUIInitializer
         CustomChildUiRegistry.Register(typeof(Boolean), BooleanUi.DrawChildUi);
         CustomChildUiRegistry.Register(typeof(Trigger), TriggerUi.DrawChildUi);
 
-        CustomChildUiRegistry.Register(typeof(LoadObj), DescriptiveUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(ComputeShader), DescriptiveUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(VertexShader), DescriptiveUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(PixelShader), DescriptiveUi.DrawChildUi);
-
         CustomChildUiRegistry.Register(typeof(GetIntVar), GetIntVarUi.DrawChildUi);
         CustomChildUiRegistry.Register(typeof(GetFloatVar), GetFloatVarUi.DrawChildUi);
         CustomChildUiRegistry.Register(typeof(SetFloatVar), SetFloatVarUi.DrawChildUi);

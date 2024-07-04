@@ -39,7 +39,7 @@ namespace T3.Editor.Gui.Graph
                 canvas.SelectableNodeMovement.Handle(inputUi);
 
                 // Rendering
-                var typeColor = TypeUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
+                var typeColor = TypeUiRegistry.GetPropertiesForType(inputDef.DefaultValue.ValueType).Color;
 
                 drawList.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
                                        hovered
@@ -96,7 +96,7 @@ namespace T3.Editor.Gui.Graph
                     ImGui.SetCursorScreenPos(usableSlotArea.Min);
                     ImGui.InvisibleButton("output", usableSlotArea.GetSize());
                     THelpers.DebugItemRect();
-                    var color = TypeUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
+                    var color = TypeUiRegistry.GetPropertiesForType(inputDef.DefaultValue.ValueType).Color;
                     color = ColorVariations.ConnectionLines.Apply(color);
 
                     if (ConnectionMaker.IsInputNodeCurrentConnectionSource(window, inputDef))
