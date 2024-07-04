@@ -25,18 +25,12 @@ internal static class UiRegistration
 {
     public static void RegisterUiTypes()
     {
-        var valueProperties = new ValueUiProperties();
         var shaderProperties = new ShaderUiProperties();
         var texProperties = new TextureUiProperties();
         var stringProperties = new StringUiProperties();
         var gpuProperties = new GpuUiProperties();
         
-        // set colors of value types
-        RegisterTypesToProperty(valueProperties, typeof(bool), typeof(int), typeof(float), typeof(double), typeof(DateTime), typeof(object),
-                                typeof(Vector2), typeof(Vector3), typeof(Vector4), typeof(Quaternion), typeof(Int2), typeof(Int3), typeof(Int4),
-                                typeof(Curve), typeof(Gradient), typeof(StructuredList), typeof(Dict<float>), typeof(List<float>),
-                                typeof(Point[]), typeof(Vector4[]));
-        
+        // set colors of types
         TypeUiRegistry.SetProperties(typeof(string), stringProperties);
         TypeUiRegistry.SetProperties(typeof(List<string>), stringProperties);
         TypeUiRegistry.SetProperties(typeof(Command), new CommandUiProperties());
