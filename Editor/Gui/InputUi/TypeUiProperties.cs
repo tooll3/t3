@@ -3,37 +3,14 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.InputUi
 {
-    public sealed class ValueUiProperties : ITypeUiProperties
+    public record struct UiProperties(Color Color)
     {
-        public Color Color => UiColors.ColorForValues;
-    }
-    
-    public sealed class StringUiProperties : ITypeUiProperties
-    {
-        public Color Color => UiColors.ColorForString;
-    }
-
-    public sealed class TextureUiProperties : ITypeUiProperties
-    {
-        public Color Color => UiColors.ColorForTextures;
-    }
-
-    
-    public sealed class CommandUiProperties : ITypeUiProperties
-    {
-        public Color Color => UiColors.ColorForCommands;
-    }
-    
-    /// <summary>
-    /// Internal implementation - things that are below the tech level of normal artists.
-    /// </summary>
-    public sealed class ShaderUiProperties : ITypeUiProperties
-    {
-        public Color Color => UiColors.ColorForDX11;
-    }
-    
-    public sealed class GpuUiProperties : ITypeUiProperties
-    {
-        public Color Color => UiColors.ColorForGpuData;
+        internal static readonly UiProperties Value = new(UiColors.ColorForValues);
+        internal static readonly UiProperties Default = Value;
+        internal static readonly UiProperties String = new(UiColors.ColorForString);
+        internal static readonly UiProperties Texture = new(UiColors.ColorForTextures);
+        internal static readonly UiProperties Command = new(UiColors.ColorForCommands);
+        internal static readonly UiProperties Shader = new(UiColors.ColorForDX11);
+        internal static readonly UiProperties GpuData = new(UiColors.ColorForGpuData);
     }
 }

@@ -25,17 +25,13 @@ internal static class UiRegistration
 {
     public static void RegisterUiTypes()
     {
-        var shaderProperties = new ShaderUiProperties();
-        var texProperties = new TextureUiProperties();
-        var stringProperties = new StringUiProperties();
-        var gpuProperties = new GpuUiProperties();
         
         // set colors of types
-        TypeUiRegistry.SetProperties(typeof(string), stringProperties);
-        TypeUiRegistry.SetProperties(typeof(List<string>), stringProperties);
-        TypeUiRegistry.SetProperties(typeof(Command), new CommandUiProperties());
+        TypeUiRegistry.SetProperties(typeof(string), UiProperties.String);
+        TypeUiRegistry.SetProperties(typeof(List<string>), UiProperties.String);
+        TypeUiRegistry.SetProperties(typeof(Command), UiProperties.Command);
 
-        RegisterTypesToProperty(shaderProperties,
+        RegisterTypesToProperty(UiProperties.Shader,
                                 typeof(ComputeShader),
                                 typeof(GeometryShader),
                                 typeof(PixelShader),
@@ -68,7 +64,7 @@ internal static class UiRegistration
                                 typeof(SharpDX.Mathematics.Interop.RawRectangle)
                                );
 
-        RegisterTypesToProperty(texProperties, 
+        RegisterTypesToProperty(UiProperties.Texture, 
                                 typeof(Texture2D),
                                 typeof(RenderTargetReference),
 
@@ -80,7 +76,7 @@ internal static class UiRegistration
                                 typeof(SharpDX.Direct3D11.UnorderedAccessView)
                                );
         
-        RegisterTypesToProperty(gpuProperties,
+        RegisterTypesToProperty(UiProperties.GpuData,
                                 typeof(DataSet), typeof(SceneSetup), typeof(PbrMaterial), typeof(Texture3dWithViews), typeof(MeshBuffers), 
                                 typeof(ParticleSystem), typeof(GizmoVisibility),
                                 
@@ -125,7 +121,7 @@ internal static class UiRegistration
 
         return;
 
-        static void RegisterTypesToProperty(ITypeUiProperties properties, params Type[] types)
+        static void RegisterTypesToProperty(UiProperties properties, params Type[] types)
         {
             foreach(var type in types)
                 TypeUiRegistry.SetProperties(type, properties);
