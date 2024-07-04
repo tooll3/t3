@@ -28,6 +28,22 @@
       }
     },
     {
+      "Id": "7054cb41-0641-4c50-88a9-27eea0472b52"/*RotationFactor*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      }
+    },
+    {
+      "Id": "0fe2745d-5a87-47e1-84d4-544e96df42a7"/*RotationOffset2*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
       "Id": "ddd02480-dcfd-4ae9-a057-ee56472bc0ec"/*FOV*/,
       "DefaultValue": 45.0
     },

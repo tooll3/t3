@@ -11,7 +11,7 @@ using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_9e27c32d_b187_4b7c_9761_0c5bb4ae3c45
 {
-    public class CameraWithRotation : Instance<CameraWithRotation>,ICamera,ICameraPropertiesProvider
+    public class CameraWithRotation : Instance<CameraWithRotation>,ICameraPropertiesProvider
     {
         [Output(Guid = "70395556-2008-43ec-a73d-b4b35ae8ce58")]
         public readonly Slot<Command> Output = new();
@@ -65,10 +65,17 @@ namespace T3.Operators.Types.Id_9e27c32d_b187_4b7c_9761_0c5bb4ae3c45
             var position = Position.GetValue(context);
             
             var rotationMode = RotationMode.GetEnumValue<RotationModes>(context);
-            var eulerAngles = Rotation.GetValue(context);
             var quaternion = RotationQuaternion.GetValue(context);
             
-            var transform = rotationMode == RotationModes.Euler ?  Matrix4x4.CreateFromYawPitchRoll(eulerAngles.X, eulerAngles.Y, eulerAngles.Z)
+            var rotationFactor = RotationFactor.GetValue(context);
+            var rotationOffset2 = RotationOffset2.GetValue(context);
+            var eulerAngles = Rotation.GetValue(context) * rotationFactor + rotationOffset2;
+            
+            var transform = rotationMode == RotationModes.Euler ?  Matrix4x4.CreateFromYawPitchRoll(
+                                                                                                    eulerAngles.Y.ToRadians(),
+                                                                                                    eulerAngles.X.ToRadians(),
+                                                                                                    eulerAngles.Z.ToRadians())
+                                
                                 : Matrix4x4.CreateFromQuaternion(new Quaternion(quaternion.X, quaternion.Y, quaternion.Z, quaternion.W));
             
             var deltaFromPosition = Vector3.TransformNormal(Vector3.UnitZ, transform);
@@ -84,7 +91,7 @@ namespace T3.Operators.Types.Id_9e27c32d_b187_4b7c_9761_0c5bb4ae3c45
                                         Up = Up.GetValue(context),
                                         AspectRatio = aspectRatio,
                                         Fov = FOV.GetValue(context).ToRadians(),
-                                        Roll = eulerAngles.Z,
+                                        Roll = eulerAngles.Z.ToRadians(),
                                         RotationOffset = RotationOffset.GetValue(context),
                                         OffsetAffectsTarget = AlsoOffsetTarget.GetValue(context)
                                     };
@@ -146,6 +153,11 @@ namespace T3.Operators.Types.Id_9e27c32d_b187_4b7c_9761_0c5bb4ae3c45
         [Input(Guid = "D4087018-EB4B-4EFC-9387-4B1D2D81A395")]
         public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
         
+        [Input(Guid = "7054CB41-0641-4C50-88A9-27EEA0472B52")]
+        public readonly InputSlot<System.Numerics.Vector3> RotationFactor = new();
+        
+        [Input(Guid = "0FE2745D-5A87-47E1-84D4-544E96DF42A7")]
+        public readonly InputSlot<System.Numerics.Vector3> RotationOffset2 = new();
         
         // [Input(Guid = "66fa647e-c0f9-495d-8074-64fe05cf1977")]
         // public readonly InputSlot<System.Numerics.Vector3> Target = new();

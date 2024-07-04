@@ -1,0 +1,107 @@
+{
+  "Id": "6f3d09b4-5b3e-44cf-b023-7db157682897"/*LoadHFCSExample*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "1d0cfd7f-ba38-4245-bc2a-92e235eb52ca"/*LoadHFCS*/,
+      "Position": {
+        "X": 112.39966,
+        "Y": 395.1372
+      }
+    },
+    {
+      "ChildId": "d0dc2e61-4929-4296-8391-ecce63c8da34"/*CameraWithRotation*/,
+      "Position": {
+        "X": 584.5581,
+        "Y": 125.03125
+      }
+    },
+    {
+      "ChildId": "52a029a3-f5c1-4ba9-b5f2-2284761b2c7b"/*TorusMesh*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 120.745605
+      }
+    },
+    {
+      "ChildId": "9a502e2c-4f5b-4b5e-a0e7-a440361e9885"/*DrawMesh*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 120.745605
+      }
+    },
+    {
+      "ChildId": "8049db4a-1db4-4de5-9351-525faba6181e"/*Group*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 120.745605
+      }
+    },
+    {
+      "ChildId": "0dfb8883-3d91-42b2-99c3-0c2eb15523c8"/*GridPlane*/,
+      "Position": {
+        "X": 138.6836,
+        "Y": 207.64648
+      }
+    },
+    {
+      "ChildId": "6699a153-63c9-46e4-b22d-e960f13a22ed"/*ScaleVector3*/,
+      "Position": {
+        "X": 316.2849,
+        "Y": 265.5957
+      }
+    },
+    {
+      "ChildId": "102ef239-1de9-4b0d-855f-e9eafbadfc7d"/*PlayVideo*/,
+      "Position": {
+        "X": 364.35242,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "610e425d-c4c9-4a95-951b-877c5611e130"/*Layer2d*/,
+      "Position": {
+        "X": 728.84985,
+        "Y": 16.06543
+      }
+    },
+    {
+      "ChildId": "e7b58759-e5ae-4f17-beff-d35cb0c7a7d7"/*Group*/,
+      "Position": {
+        "X": 878.84985,
+        "Y": 16.06543
+      }
+    },
+    {
+      "ChildId": "21949ced-5fc6-4018-8755-3ddc2d003552"/*ConvertFormat*/,
+      "Position": {
+        "X": 514.3524,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "94ac6b4c-dbfa-4759-b1a4-2eff8ff50098"/*APoint*/,
+      "Position": {
+        "X": 398.39026,
+        "Y": 527.917
+      }
+    },
+    {
+      "ChildId": "e247986d-509e-4ff8-869b-e274a65e7fde"/*RenderTarget*/,
+      "Position": {
+        "X": 1028.8499,
+        "Y": 16.06543
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "8492ef4f-d86f-466c-873e-9ebbd4490cc3"/*ColorBuffer*/,
+      "Position": {
+        "X": 1438.8499,
+        "Y": 281.9585
+      }
+    }
+  ]
+}
