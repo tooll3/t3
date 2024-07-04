@@ -54,12 +54,20 @@ static const float WorldSpace = 2;
     // Transform rotation is kind of tricky. There might be more efficient ways to do this.
     if (UpdateRotation > 0.5)
     {
-        float3x3 orientationDest = float3x3(
-            TransformMatrix._m00_m01_m02,
-            TransformMatrix._m10_m11_m12,
-            TransformMatrix._m20_m21_m22);
+        // Extract scale from TransformMatrix
+        float3 scale;
+        scale.x = length(TransformMatrix._m00_m01_m02);
+        scale.y = length(TransformMatrix._m10_m11_m12);
+        scale.z = length(TransformMatrix._m20_m21_m22);
 
-        newRotation = normalize(qFromMatrix3Precise(transpose(orientationDest)));
+        // Remove scale from the matrix to get pure rotation
+        float3x3 rotationMatrix = float3x3(
+            TransformMatrix._m00_m01_m02 / scale.x,
+            TransformMatrix._m10_m11_m12 / scale.y,
+            TransformMatrix._m20_m21_m22 / scale.z
+        );
+
+        newRotation = normalize(qFromMatrix3Precise(transpose(rotationMatrix)));
 
         // Adjust rotation in point space
         if (CoordinateSpace < 0.5)
@@ -84,9 +92,17 @@ static const float WorldSpace = 2;
 
     if (CoordinateSpace < 0.5)
     {
-        pos.xyz = qRotateVec3(pos.xyz, orgRot).xyz;
-        pos += p.Position;
-        p.Stretch *= TransformMatrix._m00_m11_m22;
+    pos.xyz = qRotateVec3(pos.xyz, orgRot).xyz;
+    pos += p.Position;
+    
+    // Extract scale from TransformMatrix
+    float3 scale;
+    scale.x = length(TransformMatrix._m00_m01_m02);
+    scale.y = length(TransformMatrix._m10_m11_m12);
+    scale.z = length(TransformMatrix._m20_m21_m22);
+    
+    // Apply scale to Stretch
+    p.Stretch.xyz *= scale; 
     }
 
     p.Position = pos.xyz;
