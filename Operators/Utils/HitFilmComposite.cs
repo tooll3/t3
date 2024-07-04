@@ -222,8 +222,15 @@ public static class HitFilmComposite
     {
         public static bool Load(string filePath, out List<TransformationKey> orderedKeys)
         {
-            var keys = new Dictionary<double, TransformationKey>();
             orderedKeys = new List<TransformationKey>();
+            
+            if (!File.Exists(filePath))
+            {
+                Log.Warning($"Can't find {filePath}");
+                return false;
+            }
+            
+            var keys = new Dictionary<double, TransformationKey>();
             
             var timeResolution = 1.0 / 1000;
             

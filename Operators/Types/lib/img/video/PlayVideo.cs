@@ -96,8 +96,10 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             //Log.Debug($" PlayVideo.Update({shouldBeTimeInSecs:0.00s})", this);
             var clampedSeekTime = _loop? requestedTime % _engine.Duration 
                                       : Math.Clamp(requestedTime, 0.0, _engine.Duration);
+            
             var clampedVideoTime = _loop ? _engine.CurrentTime % _engine.Duration 
                                        : Math.Clamp(_engine.CurrentTime, 0.0, _engine.Duration);
+            
             var deltaTime = clampedSeekTime - clampedVideoTime;
             
             // Play when we are in the center portion of the video
@@ -356,10 +358,9 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                     return;
                 }
 
-                if (presentationTimeTicks == _lastStreamTick) return;
-
-
-
+                if (presentationTimeTicks == _lastStreamTick) 
+                    return;
+                
                 _engine.TransferVideoFrame(
                                            _texture,
                                            ToVideoRect(default),
