@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ImGuiNET;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.UiHelpers;
 
@@ -33,8 +34,10 @@ public class PathTreeDrawer
             _openPath.RemoveAt(_openPath.Count - 1);
         }
             
+        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+        ImGui.PushFont(Fonts.FontSmall);
         var maxPushLevelIndex = maxLevel;
-        for (var levelIndex = _openPath.Count; levelIndex < maxPushLevelIndex; levelIndex++)
+        for (var levelIndex = _openPath.Count; levelIndex < maxPushLevelIndex && levelIndex < path.Count; levelIndex++)
         {
             var label = path[levelIndex];
             var isOpen = ImGui.TreeNodeEx(label,ImGuiTreeNodeFlags.DefaultOpen);
@@ -47,6 +50,9 @@ public class PathTreeDrawer
             _openPath.Add(label);
             _collapsedIndex = 9999;
         }
+        ImGui.PopFont();
+        ImGui.PopStyleColor();
+
 
         return true;
     }

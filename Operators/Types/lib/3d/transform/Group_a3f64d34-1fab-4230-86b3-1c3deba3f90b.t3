@@ -51,6 +51,10 @@
     {
       "Id": "35a18838-b095-431f-a3af-2dba81dcc16f"/*ForceColorUpdate*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "b864bb2d-a9fd-4e63-8d3d-b0cc8da6a13c"/*EnableProfiling*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

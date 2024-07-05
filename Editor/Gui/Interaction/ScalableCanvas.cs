@@ -365,6 +365,20 @@ namespace T3.Editor.Gui.Interaction
 
         protected void DampScaling()
         {
+            
+            
+            var completed =  Scale.X > 1000 || Math.Abs(Scroll.X - ScrollTarget.X) < 1f
+                             && Math.Abs(Scroll.Y - ScrollTarget.Y) < 1f
+                             && Math.Abs(Scale.X - ScaleTarget.X) < 0.05f
+                             && Math.Abs(Scale.Y - ScaleTarget.Y) < 0.05f;
+
+            if (completed)
+            {
+                Scroll = ScrollTarget;
+                Scale = ScaleTarget;
+                return;
+            }
+            
             // Damp scaling
             var minInCanvas = Scroll;
             var maxInCanvas = Scroll + WindowSize / Scale;
@@ -378,16 +392,7 @@ namespace T3.Editor.Gui.Interaction
             Scale = WindowSize / (max - min);
             Scroll = min;
 
-            var completed = Math.Abs(Scroll.X - ScrollTarget.X) < 1f
-                            && Math.Abs(Scroll.Y - ScrollTarget.Y) < 1f
-                            && Math.Abs(Scale.X - ScaleTarget.X) < 0.05f
-                            && Math.Abs(Scale.Y - ScaleTarget.Y) < 0.05f;
 
-            if (completed)
-            {
-                Scroll = ScrollTarget;
-                Scale = ScaleTarget;
-            }
 
             if (float.IsNaN(ScaleTarget.X))
                 ScaleTarget.X = 1;

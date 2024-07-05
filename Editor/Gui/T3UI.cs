@@ -71,11 +71,15 @@ public class T3Ui: IDisposable
     }
 
     private bool _initialed;
+    private DataChannel _frameCountDebugChannel;
+    private DataChannel _lastFrameDurationChannel;
+    private DataChannel _frameRegionChannel;
 
     public void ProcessFrame()
     {
+        var frameStartTime = Playback.RunTimeInSecs;
+        DebugDataRecording.StartRegion("__Stats/ProcessFrame", null, ref _frameRegionChannel);
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-        
         
         CustomComponents.BeginFrame();
         FormInputs.BeginFrame();
@@ -164,6 +168,9 @@ public class T3Ui: IDisposable
         
         Playback.OpNotReady = false;
         AutoBackup.AutoBackup.CheckForSave();
+        var frameEndTime = Playback.RunTimeInSecs;
+        var duration = frameEndTime - frameStartTime;
+        DebugDataRecording.EndRegion(_frameRegionChannel,  $"{duration*1000:0ms}");
     }
 
     /// <summary>

@@ -11,6 +11,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes.DataSet;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
@@ -43,7 +44,12 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             Texture.UpdateAction = Update;
             UpdateCount.UpdateAction = Update;
         }
-            
+
+        private DataChannel _traceSeekChannel;
+        private DataChannel _traceEventChannel;
+        private DataChannel _traceUpdateChannel;
+        private DataChannel _update2Channel;
+        
         private void Update(EvaluationContext context)
         {
             // Initialize media foundation library and default values
@@ -68,6 +74,9 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             var requestedTime = OverrideTimeInSecs.IsConnected
                                          ? OverrideTimeInSecs.GetValue(context)
                                          : context.Playback.SecondsFromBars(context.LocalTime);
+            
+            DebugDataRecording.KeepTraceData(this,"00-Update", requestedTime, ref _update2Channel);
+
             
             const float completionThreshold =  0.016f; // A hack to prevent engine missing the end of playback
 
@@ -114,6 +123,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             var shouldSeek = !_engine.IsSeeking && Math.Abs(deltaTime) > seekThreshold;
             if (shouldSeek)
             {
+                DebugDataRecording.KeepTraceData(this,"02-Seeking", deltaTime, ref _traceSeekChannel);
                 //Log.Debug($"Seeking video to {clampedSeekTime:0.000} delta was {deltaTime:0.000)}s", this);
                 _seekTime = (float)clampedSeekTime; // + 1.1f/60f;
                 _seekRequested = true;
@@ -133,6 +143,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             if (_hasUpdatedTexture)
             {
                 UpdateCount.Value++;
+                DebugDataRecording.KeepTraceData(this, "03-TextureUpdate", UpdateCount.Value, ref _traceUpdateChannel);
             }
             
             Playback.OpNotReady |= !_hasUpdatedTexture || _isSeeking || _seekRequested;
@@ -224,6 +235,8 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
         private void EnginePlaybackEventHandler(MediaEngineEvent mediaEvent, long param1, int param2)
         {
+            DebugDataRecording.KeepTraceData(this, "04-MediaEngineEvent", mediaEvent, ref _traceEventChannel);
+
             switch (mediaEvent)
             {
                 case MediaEngineEvent.LoadStart:
@@ -323,13 +336,14 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                     _engine.Pause();
             }
 
-
-
-            if ((ReadyStates)_engine.ReadyState < ReadyStates.HaveCurrentData || !_engine.OnVideoStreamTick(out var presentationTimeTicks))
+            var hasNewFrame = _engine.OnVideoStreamTick(out var presentationTimeTicks);
+            if ((ReadyStates)_engine.ReadyState < ReadyStates.HaveCurrentData || !hasNewFrame)
             {
-                _hasUpdatedTexture = true;
+                _hasUpdatedTexture = true;  
                 return;
             }
+
+            DebugDataRecording.KeepTraceData(this, "04-HasNewFrame", presentationTimeTicks < 0 ? "N/A" : presentationTimeTicks/1000, ref _traceNewFrameChannel);
 
             if (_isSeeking && !_engine.IsSeeking)
             {
@@ -494,6 +508,6 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         [Input(Guid = "21B5671B-862F-4CEA-A355-FA019996C936")]
         public readonly InputSlot<bool> Loop = new();
 
-
+        private DataChannel _traceNewFrameChannel;
     }
 }

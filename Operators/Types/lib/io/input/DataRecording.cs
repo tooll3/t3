@@ -18,6 +18,7 @@ namespace T3.Operators.Types.Id_4023bcbf_74a6_4e50_a12e_4c22be5dbbdf
         public DataRecording()
         {
             DataSet.UpdateAction = Update;
+            DataSetsById["ActiveIORecording"] = T3.Core.DataTypes.DataSet.DataRecording.ActiveRecordingSet;
         }
 
         private void Update(EvaluationContext context)
