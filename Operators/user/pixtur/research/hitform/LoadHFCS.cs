@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Numerics;
 using Operators.Utils;
@@ -8,8 +9,9 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
 
-namespace T3.Operators.Types.Id_73faed85_f936_4f54_bef5_600a11405af3
+namespace user.pixtur.research.hitform
 {
+    [Guid("73faed85-f936-4f54-bef5-600a11405af3")]
     public class LoadHFCS : Instance<LoadHFCS>
     {
         [Output(Guid = "709BF59B-725C-46DE-9139-A159EFA59688", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

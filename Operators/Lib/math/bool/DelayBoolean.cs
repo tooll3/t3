@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using T3.Core.Animation;
@@ -7,8 +8,9 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 // ReSharper disable InconsistentNaming
 
-namespace T3.Operators.Types.Id_f997d943_7a71_4fdf_b182_7a521a73ba27
+namespace Lib.math.@bool
 {
+    [Guid("f997d943-7a71-4fdf-b182-7a521a73ba27")]
     public class DelayBoolean : Instance<DelayBoolean>
     {
         [Output(Guid = "377beba4-b9bb-4e76-aa81-b37f27b40bd9", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

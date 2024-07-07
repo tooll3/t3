@@ -181,7 +181,6 @@ namespace T3.Editor
             {
                 ProjectSetup.DisposePackages();
                 UiContentContentDrawer.Dispose();
-                T3Ui.Dispose();
             }
             catch (Exception e)
             {

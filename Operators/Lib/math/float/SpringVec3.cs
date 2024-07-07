@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Numerics;
 using T3.Core.Animation;
@@ -6,8 +7,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_25cc43ed_f6a3_4f3d_a87d_5204f4a5bfc2
+namespace Lib.math.@float
 {
+    [Guid("25cc43ed-f6a3-4f3d-a87d-5204f4a5bfc2")]
     public class SpringVec3 : Instance<SpringVec3>
     {
         [Output(Guid = "abc92693-3797-4fdd-8377-17aeaf1edf86", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

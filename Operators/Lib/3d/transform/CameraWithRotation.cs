@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Numerics;
 using T3.Core.DataTypes;
@@ -10,8 +11,9 @@ using T3.Core.Rendering;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
-namespace T3.Operators.Types.Id_9e27c32d_b187_4b7c_9761_0c5bb4ae3c45
+namespace Lib._3d.transform
 {
+    [Guid("9e27c32d-b187-4b7c-9761-0c5bb4ae3c45")]
     public class CameraWithRotation : Instance<CameraWithRotation>, ICameraPropertiesProvider
     {
         [Output(Guid = "70395556-2008-43ec-a73d-b4b35ae8ce58")]

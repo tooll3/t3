@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_7ba0451c_9b8d_46a7_bfac_9dcb15e00023
+namespace Lib.math.floats
 {
+    [Guid("7ba0451c-9b8d-46a7-bfac-9dcb15e00023")]
     public class FloatList : Instance<FloatList>
     {
         [Output(Guid = "918a871a-1ed6-4d40-a73e-05dbb3399b38")]

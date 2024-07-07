@@ -44,7 +44,7 @@ public static class AudioRendering
         // Create buffer if necessary
         if (!_fifoBuffersForClips.TryGetValue(clipStream.ClipInfo, out var buffer)) 
         {
-            buffer = _fifoBuffersForClips[clipStream.AudioClip] = new byte[0];
+            buffer = _fifoBuffersForClips[clipStream.ClipInfo] = new byte[0];
         }
         else
         {
@@ -63,7 +63,7 @@ public static class AudioRendering
                 if (streamPositionInBytes < 0)
                 {
                     // Clear the old buffer and replace with silence
-                    _fifoBuffersForClips[clipStream.AudioClip] = new byte[0];
+                    _fifoBuffersForClips[clipStream.ClipInfo] = new byte[0];
                     var silenceBytesToAdd = Math.Min(-streamPositionInBytes, bytes);
                     var silenceBuffer = new byte[silenceBytesToAdd];
 
@@ -106,7 +106,7 @@ public static class AudioRendering
                 }
             }
 
-            _fifoBuffersForClips[clipStream.AudioClip] = buffer;
+            _fifoBuffersForClips[clipStream.ClipInfo] = buffer;
         }
 
         // save to dictionary

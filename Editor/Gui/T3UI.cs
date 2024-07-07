@@ -13,6 +13,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
+using T3.Editor.App;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
@@ -571,12 +572,13 @@ public static class T3Ui
         }
     }
     
-   
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
-        OscDataRecording.Dispose();
-    }
+
+    //@imdom: needs clarification how to handle osc data disconnection on shutdown
+    // public void Dispose()
+    // {
+    //     GC.SuppressFinalize(this);
+    //     OscDataRecording.Dispose();
+    // }
 
     internal static bool DraggingIsInProgress = false;
     internal static bool MouseWheelFieldHovered { private get; set; }

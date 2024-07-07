@@ -84,10 +84,8 @@ namespace T3.Editor.Gui.Windows.Variations
                     }
                 }
 
-                VariationHandling.RemoveInstancesFromVariations(selectedInstances, selectedThumbnails);
+                VariationHandling.RemoveInstancesFromVariations(selectedInstances.Select(i=> i.SymbolChildId), selectedThumbnails);
             }
-
-            VariationHandling.RemoveInstancesFromVariations(selectedInstances.Select(i => i.SymbolChildId), selectedThumbnails);
         }
 
         private void CreateVariation()

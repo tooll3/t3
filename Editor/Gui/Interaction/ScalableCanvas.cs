@@ -218,6 +218,7 @@ namespace T3.Editor.Gui.Interaction
         public void SetScaleToMatchPixels()
         {
             ScaleTarget = Vector2.One;
+            
         }
 
         public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null, float paddingX = 0, float paddingY = 0)
@@ -435,10 +436,10 @@ namespace T3.Editor.Gui.Interaction
                 return;
             }
 
-            if (PreventMouseInteraction)
-                return;
+            // @imdom need clarification
+            // if (PreventMouseInteraction)
+            //     return;
             
-
             var isVerticalColorSliderActive = FrameStats.Last.OpenedPopUpName == "ColorBrightnessSlider";
             var isAnotherWindowDragged = _draggedCanvas != null && _draggedCanvas != this;
             
@@ -451,20 +452,15 @@ namespace T3.Editor.Gui.Interaction
                 && !isAnotherWindowDragged
                 && !flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse)
                 && (
-                        
                     ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
                     || (!UserSettings.Config.MiddleMouseButtonZooms && ImGui.IsMouseDragging(ImGuiMouseButton.Middle) && !ImGui.GetIO().KeyAlt)
                     || (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !ImGui.GetIO().KeyAlt)
                )
             {
-                ScrollTarget -= Io.MouseDelta / (ParentScale * ScaleTarget);
-                UserScrolledCanvas = true;
+                ScrollTarget -= mouseState.Delta / (ParentScale * ScaleTarget);
                 _draggedCanvas = this;
             }
-            else
-            {
-                UserScrolledCanvas = false;
-            }
+
             
             var preventZoom = flags.HasFlag(T3Ui.EditingFlags.PreventZoomWithMouseWheel);
 
@@ -588,7 +584,7 @@ namespace T3.Editor.Gui.Interaction
         private bool _isDragZooming;
         private float _lastZoomDelta;
 
-        private void ZoomWithDrag(ImGuiMouseButton mouseButton, bool altRequired = true )
+        private void ZoomWithDrag(ImGuiMouseButton mouseButton )
         {
             mouseButton = UserSettings.Config.MiddleMouseButtonZooms 
                               ? ImGuiMouseButton.Middle 
@@ -619,7 +615,7 @@ namespace T3.Editor.Gui.Interaction
                 
             var f = (float)Math.Pow(1.13f, -deltaMax / 40f);
             var delta2 =   f/_lastZoomDelta;
-            ApplyZoomDelta(_mousePosWhenDragZoomStarted, delta2);
+            ApplyZoomDelta(_mousePosWhenDragZoomStarted, delta2, out var zoomed); // FIXME: unclear what this does
             _lastZoomDelta = f;
         }
 
@@ -645,7 +641,7 @@ namespace T3.Editor.Gui.Interaction
         }
 
         public FillModes FillMode = FillModes.FillWindow;
-
+        
         public readonly record struct InteractionState(bool UserPannedCanvas, bool UserZoomedCanvas, MouseState MouseState);
 
         public static string PrintInteractionState(in InteractionState state)

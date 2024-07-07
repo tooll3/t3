@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using T3.Core.Logging;
@@ -6,8 +7,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_2ba45de7_c111_4c9f_9d19_8a17130dbcc8
+namespace Lib.math.floats
 {
+    [Guid("2ba45de7-c111-4c9f-9d19-8a17130dbcc8")]
     public class SetFloatListValue : Instance<SetFloatListValue>
     {
         [Output(Guid = "85bb4be8-b56d-4f00-89e2-89fa111a3636", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using CppSharp.Types.Std;
+﻿using System.Text;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.DataTypes.Vector;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
@@ -217,7 +211,7 @@ public class DataSetViewCanvas
             }
 
             _standardRaster.Draw(_canvas);
-            _canvas.UpdateCanvas();
+            _canvas.UpdateCanvas(out var interactionState);
 
             if (_scroll)
             {

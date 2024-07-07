@@ -519,13 +519,13 @@ namespace T3.Editor.Gui.InputUi
                 }
 
                 ShowInputContextMenu(true);
-
-                         if (ParameterWindow.IsAnyInstanceVisible() && ImGui.MenuItem("Rename input"))
-                         {
-                             ParameterWindow.RenameInputDialog.ShowNextFrame(symbolChildUi.SymbolChild.Symbol,
-                                                                             input.InputDefinition.Id);
-                         }
-                     });
+                
+                 if (ParameterWindow.IsAnyInstanceVisible() && ImGui.MenuItem("Rename input"))
+                 {
+                     ParameterWindow.RenameInputDialog.ShowNextFrame(symbolChildUi.SymbolChild.Symbol,
+                                                                     input.InputDefinition.Id);
+                 }
+                     
                 ImGui.PopStyleVar();
 
                 // Draw parameter value

@@ -37,7 +37,7 @@ namespace T3.Editor.Gui.Windows.Variations
 
         private void CreatePreset()
         {
-            var nextInsertionPosition = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
+            var nextInsertionPosition = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.AllVariations);
             var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
             if (newVariation != null)
             {

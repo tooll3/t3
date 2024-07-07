@@ -1,7 +1,5 @@
 {
-  "Name": "IntValue",
-  "Id": "cc07b314-4582-4c2c-84b8-bb32f59fc09b",
-  "Namespace": "lib.math.int",
+  "Id": "cc07b314-4582-4c2c-84b8-bb32f59fc09b"/*IntValue*/,
   "Inputs": [
     {
       "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,

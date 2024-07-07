@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -5,8 +6,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_045e834a_f0ee_432b_8e14_19cadc497577
+namespace Lib.@string
 {
+    [Guid("045e834a-f0ee-432b-8e14-19cadc497577")]
     public class SubString : Instance<SubString>
     {
         [Output(Guid = "fba93f4a-aecc-4bcb-9d5a-85b13e362b85")]

@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_bc7594df_68f0_4678_aec7_523474b3b36a
+namespace Lib.math.@int
 {
+    [Guid("bc7594df-68f0-4678-aec7-523474b3b36a")]
     public class SumInts : Instance<SumInts>
     {
         [Output(Guid = "FF5F8839-527F-419E-A140-B9F03033C509")]

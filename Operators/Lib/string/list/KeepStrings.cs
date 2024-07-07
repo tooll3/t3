@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using T3.Core.Logging;
@@ -6,8 +7,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_56eda8f4_09fc_48a3_ab1d_fbff4f4b6438
+namespace Lib.@string.list
 {
+    [Guid("56eda8f4-09fc-48a3-ab1d-fbff4f4b6438")]
     public class KeepStrings : Instance<KeepStrings>
     {
         [Output(Guid = "5e1b1aad-2fe2-49f3-9954-a35dc7b3ec25")]

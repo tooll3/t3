@@ -127,7 +127,7 @@ internal static class VariationHandling
     }
 
     // TODO: Implement undo/redo!
-    public static void RemoveInstancesFromVariations(IEnumerable<Guid> symbolChildIds, List<Variation> variations)
+    public static void RemoveInstancesFromVariations(IEnumerable<Guid> symbolChildIds, IReadOnlyList<Variation> variations)
     {
         if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
         {

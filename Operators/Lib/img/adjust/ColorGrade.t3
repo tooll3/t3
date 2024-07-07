@@ -1,7 +1,5 @@
 {
-  "Name": "ColorGrade",
-  "Id": "42d86738-d644-47c8-ab92-cc426d958e51",
-  "Namespace": "lib.img.adjust",
+  "Id": "42d86738-d644-47c8-ab92-cc426d958e51"/*ColorGrade*/,
   "Inputs": [
     {
       "Id": "777b2c27-a3c8-40d0-a196-80a08af51296"/*Texture2d*/,
@@ -73,6 +71,12 @@
   ],
   "Children": [
     {
+      "Id": "78d8f249-6488-4348-b6b9-451f89cf8c4a"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "861b22f0-5267-4160-8887-3ec9ffdf9653"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
@@ -85,21 +89,15 @@
       "Outputs": []
     },
     {
-      "Id": "78d8f249-6488-4348-b6b9-451f89cf8c4a"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "Id": "0ac1305d-697b-4d4b-80d2-4672117cb228"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "845edc7d-c347-4882-bab7-8ade293e15b4"/*Value*/,
-      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
-      "InputValues": [
-        {
-          "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
-          "Type": "System.Single",
-          "Value": 0.15
-        }
-      ],
+      "Id": "10328e98-bef5-4e67-a3f5-566b9752c077"/*_ImageFxShaderSetupStatic*/,
+      "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -125,26 +123,26 @@
       "Outputs": []
     },
     {
-      "Id": "51711a0c-c86c-465c-b5a9-067d9e8be9bd"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "0ac1305d-697b-4d4b-80d2-4672117cb228"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "10328e98-bef5-4e67-a3f5-566b9752c077"/*_ImageFxShaderSetupStatic*/,
-      "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
-      "InputValues": [],
+      "Id": "845edc7d-c347-4882-bab7-8ade293e15b4"/*Value*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "InputValues": [
+        {
+          "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
+          "Type": "System.Single",
+          "Value": 0.15
+        }
+      ],
       "Outputs": []
     },
     {
       "Id": "fa31315c-4a7e-4b2b-bad2-15dfaddbbd5f"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "51711a0c-c86c-465c-b5a9-067d9e8be9bd"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     }

@@ -90,7 +90,7 @@ namespace T3.Editor.UiModel
                     _vector2ToJson(writer, childUi.PosOnCanvas);
 
                     if(childUi.SnapshotGroupIndex != 0)
-                        writer.WriteObject(nameof(SymbolChildUi.SnapshotGroupIndex), childUi.SnapshotGroupIndex);
+                        writer.WriteObject(nameof(SymbolUi.Child.SnapshotGroupIndex), childUi.SnapshotGroupIndex);
 
                     if (childUi.ConnectionStyleOverrides.Count > 0)
                     {

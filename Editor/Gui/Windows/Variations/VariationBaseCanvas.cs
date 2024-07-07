@@ -26,9 +26,9 @@ namespace T3.Editor.Gui.Windows.Variations
 
         private protected abstract Instance InstanceForBlendOperations { get; }
         private protected abstract SymbolVariationPool PoolForBlendOperations { get; }
-        protected abstract void DrawAdditionalContextMenuContent(Instance InstanceForBlendOperations);
+        protected abstract void DrawAdditionalContextMenuContent(Instance instanceForBlendOperations);
 
-        public void DrawBaseCanvas(ImDrawListPtr drawList, bool hideHeader = false)
+        public void DrawBaseCanvas( ImDrawListPtr drawList, bool hideHeader = false)
         {
             UpdateCanvas(out _);
 
@@ -54,12 +54,12 @@ namespace T3.Editor.Gui.Windows.Variations
                     _currentRenderInstance = renderInstance;
                 }
             }
-
-
+            
             // Get instance for variations
             if (pinnedOutputChanged)
             {
-                _instanceForBlending = instanceForBlending;
+                //TODO: Check if this is required
+                //_instanceForBlending = InstanceForBlendOperations;
                 RefreshView(hideHeader);
             }
 
@@ -592,7 +592,7 @@ namespace T3.Editor.Gui.Windows.Variations
         /// </summary>
         internal static Vector2 FindFreePositionForNewThumbnail(IEnumerable<Variation> variations)
         {
-            if (variations.Count == 0 || !TryToGetBoundingBox(variations, 0, out var area))
+            if (!TryToGetBoundingBox(variations, 0, out var area))
             {
                 return Vector2.Zero;
             }

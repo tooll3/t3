@@ -1,4 +1,5 @@
-﻿using T3.Editor.Gui.OutputUi;
+﻿using T3.Core.DataTypes.DataSet;
+using T3.Editor.Gui.OutputUi;
 
 // ReSharper disable PossibleMultipleEnumeration
 

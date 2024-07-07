@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_47da8125_359e_40b7_8cf6_1880c51147f6
+namespace Types.user.wake.summer2024.scenes
 {
+    [Guid("47da8125-359e-40b7-8cf6-1880c51147f6")]
     public class TheTruth : Instance<TheTruth>
     {
         [Output(Guid = "fffca69d-5975-46ac-ae01-855b354a2e57")]

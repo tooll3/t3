@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using T3.Core.DataTypes;
@@ -7,8 +8,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_8fb63c4d_80a8_4023_b55b_7f97bffbee48
+namespace Types.user.pixtur.vj.helpers
 {
+    [Guid("8fb63c4d-80a8-4023-b55b-7f97bffbee48")]
     public class _GetTidalTrigger : Instance<_GetTidalTrigger>
                                   , IStatusProvider, ICustomDropdownHolder
     {

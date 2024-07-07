@@ -22,9 +22,7 @@ namespace Lib.io.osc
         {
             Result.UpdateAction += Update;
         }
-
-        }
-
+        
         private void Update(EvaluationContext context)
         {
             // We can't initialize this in constructor because parent is not set yet
@@ -274,16 +272,16 @@ namespace Lib.io.osc
             return false;
         }
 
-        private static SymbolChild.Input GetSymbolInput(ISlot inputSlot)
+        private static Symbol.Child.Input GetSymbolInput(ISlot inputSlot)
         {
             var op = inputSlot?.Parent;
             var composition = op?.Parent;
-            var symbolChild = composition?.Children.FirstOrDefault(c => c.SymbolChildId == op.SymbolChildId);
+            var symbolChild = composition?.Children[op.SymbolChildId];
             var symbolInput = symbolChild?.Inputs.FirstOrDefault(i => i.Id == inputSlot.Id);
             return symbolInput?.Input;
         }
         
-        private static bool IsInputDefault(SymbolChild.Input symbolInput)
+        private static bool IsInputDefault(Symbol.Child.Input symbolInput)
         {
             return symbolInput != null && symbolInput.IsDefault;
         }
@@ -293,8 +291,8 @@ namespace Lib.io.osc
         private bool _connected;
         private int _port;
         
-        private  SymbolChild.Input _valuesInput;
-        private  SymbolChild.Input _stringsInput;
+        private  Symbol.Child.Input _valuesInput;
+        private  Symbol.Child.Input _stringsInput;
         private IPAddress _newIpAddress = null;
 
         

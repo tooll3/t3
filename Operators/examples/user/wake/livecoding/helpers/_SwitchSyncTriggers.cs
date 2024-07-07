@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_58060f7a_2890_4cbe_8ca9_dab4ab15dccd
+namespace examples.user.wake.livecoding.helpers
 {
+    [Guid("58060f7a-2890-4cbe-8ca9-dab4ab15dccd")]
     public class _SwitchSyncTriggers : Instance<_SwitchSyncTriggers>
     {
         [Output(Guid = "8b09e16e-899b-4933-b88a-95e506a533f3")]

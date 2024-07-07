@@ -1,18 +1,21 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_dc2273a7_8a54_4e6f_8d8e_9a675c1ef599
+namespace Lib.img.generate
 {
+    [Guid("dc2273a7-8a54-4e6f-8d8e-9a675c1ef599")]
     public class BoxGradient : Instance<BoxGradient>
     {
         [Output(Guid = "04ffa9f0-346a-4dd7-83fb-af13cae73722")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         [Input(Guid = "71cd9153-da17-47f0-9251-80bdef8906b3")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<Texture2D> Image = new ();
 
         [Input(Guid = "5e7cd523-0c39-42e4-a4e9-05cc20477296")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();

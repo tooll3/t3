@@ -250,7 +250,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             {
                 var changed = false;
 
-                var currentValue = customValueHoder.GetValueForInput(input.InputDefinition.Id);
+                var currentValue = customValueHolder.GetValueForInput(input.InputDefinition.Id);
                 
                 // A dropdown implementation that prevents free string input
                 // if (ImGui.BeginCombo("##customDropdown", currentValue, ImGuiComboFlags.HeightLarge))
@@ -272,10 +272,14 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 //     ImGui.EndCombo();
                 // }
 
-                if (InputWithTypeAheadSearch.Draw("##customDropdown", ref currentValue, customValueHoder.GetOptionsForInput(input.InputDefinition.Id)))
+                var inputArgs = new InputWithTypeAheadSearch.Args<string>("##customDropdown", 
+                                                                          customValueHolder.GetOptionsForInput(input.InputDefinition.Id), 
+                                                                          GetTextInfo, 
+                                                                          false);
+                if (InputWithTypeAheadSearch.Draw<string>(inputArgs, ref currentValue, out var selected))
                 {
                     ImGui.CloseCurrentPopup();
-                    customValueHoder.HandleResultForInput(input.InputDefinition.Id, currentValue);
+                    customValueHolder.HandleResultForInput(input.InputDefinition.Id, selected);
                     changed = true;
                 }
                 
@@ -287,6 +291,11 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 //Log.Warning($"{instance?.Parent?.Symbol?.Name} doesn't support custom inputs");
                 return InputEditStateFlags.Nothing;
             }
+        }
+
+        private static InputWithTypeAheadSearch.Texts GetTextInfo(string arg)
+        {
+            return new InputWithTypeAheadSearch.Texts(arg, arg, null);
         }
 
         protected override void DrawReadOnlyControl(string name, ref string value)

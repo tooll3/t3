@@ -56,51 +56,7 @@ namespace T3.Editor.UiModel
 
         IEnumerable<ISelectableCanvasObject> ISelectionContainer.GetSelectables() => GetSelectables();
 
-            var childUis = new List<SymbolChildUi>(ChildUis.Count);
-            // foreach (var sourceChildUi in ChildUis)
-            // {
-            //     var clonedChildUi = sourceChildUi.Clone();
-            //     Guid newChildId = oldToNewIds[clonedChildUi.Id];
-            //     clonedChildUi.SymbolChild = newSymbol.Children.Single(child => child.Id == newChildId);
-            //     childUis.Add(clonedChildUi);
-            // }
-
-            var inputUis = new OrderedDictionary<Guid, IInputUi>(InputUis.Count);
-            foreach (var (_, inputUi) in InputUis)
-            {
-                var clonedInputUi = inputUi.Clone();
-                clonedInputUi.Parent = this;
-                Guid newInputId = oldToNewIds[clonedInputUi.Id];
-                clonedInputUi.InputDefinition = newSymbol.InputDefinitions.Single(inputDef => inputDef.Id == newInputId);
-                inputUis.Add(clonedInputUi.Id, clonedInputUi);
-            }
-
-            var outputUis = new OrderedDictionary<Guid, IOutputUi>(OutputUis.Count);
-            foreach (var (_, outputUi) in OutputUis)
-            {
-                var clonedOutputUi = outputUi.Clone();
-                Guid newOutputId = oldToNewIds[clonedOutputUi.Id];
-                clonedOutputUi.OutputDefinition = newSymbol.OutputDefinitions.Single(outputDef => outputDef.Id == newOutputId);
-                outputUis.Add(clonedOutputUi.Id, clonedOutputUi);
-            }
-
-            var annotations = new OrderedDictionary<Guid, Annotation>(Annotations.Count);
-            foreach (var (_, annotation) in Annotations)
-            {
-                annotations.Add(annotation.Clone().Id, annotation.Clone());
-            }
-            
-            var links = new OrderedDictionary<Guid, ExternalLink>(Links.Count);
-            foreach (var (_, link) in Links)
-            {
-                links.Add(link.Clone().Id, link.Clone());
-            }
-            
-            return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations, links);
-        }
-        
-
-        public IEnumerable<ISelectableCanvasObject> GetSelectables()
+        internal IEnumerable<ISelectableCanvasObject> GetSelectables()
         {
             foreach (var childUi in ChildUis.Values)
                 yield return childUi;

@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_9fb0c9a1_5d76_47bc_8749_17aa8d13e4e4
+namespace Types.user.wake.summer2024
 {
+    [Guid("9fb0c9a1-5d76-47bc-8749-17aa8d13e4e4")]
     public class _TidalDebugGizmo : Instance<_TidalDebugGizmo>
     {
         [Output(Guid = "0840d8d0-888d-40df-8941-cd920b1e4578")]

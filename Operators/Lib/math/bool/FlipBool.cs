@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -5,8 +6,9 @@ using T3.Core.Utils;
 
 // ReSharper disable InconsistentNaming
 
-namespace T3.Operators.Types.Id_f38311df_d356_4385_8535_96f52a71d53e
+namespace Lib.math.@bool
 {
+    [Guid("f38311df-d356-4385-8535-96f52a71d53e")]
     public class FlipBool : Instance<FlipBool>
     {
         [Output(Guid = "1ff6a7a5-142f-41f9-9802-f6875fbccd44")]

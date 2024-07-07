@@ -1,7 +1,5 @@
 {
-  "Name": "DetectEdges",
-  "Id": "2a5475c8-9e16-409f-8c40-a3063e045d38",
-  "Namespace": "lib.img.fx",
+  "Id": "2a5475c8-9e16-409f-8c40-a3063e045d38"/*DetectEdges*/,
   "Inputs": [
     {
       "Id": "4041b6d8-15e5-428c-9967-7105975a46f7"/*Image*/,
@@ -61,14 +59,14 @@
       "Outputs": []
     },
     {
-      "Id": "7c0ee695-1992-4bc9-8eef-4684d0a839a6"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "Id": "f41c66fe-5a7a-4b62-9d57-94302a090d1a"/*BoolToFloat*/,
+      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "f41c66fe-5a7a-4b62-9d57-94302a090d1a"/*BoolToFloat*/,
-      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
+      "Id": "7c0ee695-1992-4bc9-8eef-4684d0a839a6"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     }

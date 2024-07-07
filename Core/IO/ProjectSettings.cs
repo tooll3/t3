@@ -20,6 +20,7 @@ namespace T3.Core.IO
             public string LimitMidiDeviceCapture = null; 
             public bool EnableMidiSnapshotIndication = false;
             public WindowMode DefaultWindowMode = WindowMode.Fullscreen;
+            public int DefaultOscPort = 8000;
         }
     }
 

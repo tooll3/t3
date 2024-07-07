@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_96b1e8f3_0b42_4a01_b82b_44ccbd857400
+namespace Lib.io.osc
 {
+    [Guid("96b1e8f3-0b42-4a01-b82b-44ccbd857400")]
     public class SelectVec2FromDict : Instance<SelectVec2FromDict>, ICustomDropdownHolder
     {
         [Output(Guid = "7FF4E818-695D-4FFF-AA23-544D623EADFE")]

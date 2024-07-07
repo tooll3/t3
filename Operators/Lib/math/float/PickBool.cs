@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_b98ab7bd_1843_4208_9bdb_c279dfc5b5aa
+namespace Lib.math.@float
 {
+    [Guid("b98ab7bd-1843-4208-9bdb-c279dfc5b5aa")]
     public class PickBool : Instance<PickBool>
     {
         [Output(Guid = "70F3F63E-5623-4D54-BD8A-3EF3A39F8D51")]

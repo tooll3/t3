@@ -138,23 +138,24 @@ namespace T3.Editor.Gui.Graph
                         if (UserSettings.Config.FocusMode)
                         {
                             var selectedImage = NodeSelection.GetFirstSelectedInstance();
-                            if (selectedImage != null)
+                            if (selectedImage != null && GraphWindow.Focused != null)
                             {
-                                GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
+                                GraphWindow.Focused.SetBackgroundOutput(selectedImage);
                             }
                         }
                         else
                         {
-                            PinSelectedToOutputWindow();
+                            PinSelectedToOutputWindow(compositionOp);
                         }
                     }
                     
                     if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
                     {
                         var selectedImage = NodeSelection.GetFirstSelectedInstance();
-                        if (selectedImage != null)
+                        if (selectedImage != null && GraphWindow.Focused != null)
                         {
-                            GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
+                            GraphWindow.Focused.SetBackgroundOutput(selectedImage);
+                            //GraphWindow.Focused..SetBackgroundInstanceForCurrentGraph(selectedImage);
                         }
                     }
 
@@ -615,7 +616,7 @@ namespace T3.Editor.Gui.Graph
                 }
 
                 // Add to add snapshots
-                var allSnapshots = VariationHandling.ActivePoolForSnapshots?.Variations;
+                var allSnapshots = VariationHandling.ActivePoolForSnapshots?.AllVariations;
                 if (allSnapshots != null && allSnapshots.Count > 0)
                 {
                     if (disableBecauseAllEnabled)
@@ -625,7 +626,9 @@ namespace T3.Editor.Gui.Graph
                     // Remove from snapshots
                     else
                     {
-                        var selectedInstances = selectedChildUis.Select(ui => CompositionOp.Children.Single(child => child.SymbolChildId == ui.Id)).ToList();
+                        var selectedInstances = selectedChildUis
+                                               .Select(ui => compositionOp.Children[ui.Id])
+                                               .ToList();
                         foreach (var snapshot in allSnapshots)
                         {
                             VariationHandling.ActivePoolForSnapshots.UpdateVariationPropertiesForInstances(snapshot, selectedInstances);
@@ -633,7 +636,7 @@ namespace T3.Editor.Gui.Graph
                     }
                 }
 
-                FlagCurrentCompositionAsModified();
+                compositionSymbolUi.FlagAsModified();
             }
 
             if (ImGui.BeginMenu("Display as..."))
@@ -826,7 +829,7 @@ namespace T3.Editor.Gui.Graph
 
                 if (TryGetShaderPath(instance, out var filePath, out var owner))
                 {
-                    var shaderIsReadOnly = !owner.IsReadOnly;
+                    var shaderIsReadOnly = owner.IsReadOnly;
 
                     if (ImGui.MenuItem("Open in Shader Editor", true))
                     {

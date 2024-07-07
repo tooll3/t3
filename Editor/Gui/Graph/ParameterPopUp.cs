@@ -165,7 +165,7 @@ internal static class ParameterPopUp
                     FrameStats.Current.OpenedPopUpName = ParameterPopUpName;
                     ImGui.BeginChild("Scrolling", new Vector2(DefaultWindowSize.X, height - 5 ), false);
                     ImGui.PushFont(Fonts.FontSmall);
-                    ParameterWindow.DrawParameters(_selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi, hideNonEssentials: true);
+                    ParameterWindow.DrawParameters(graphWindow, _selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi, hideNonEssentials: true);
                     FormInputs.AddVerticalSpace();
                     ImGui.PopFont();
                     _lastRequiredHeight = ImGui.GetCursorPosY() + ImGui.GetFrameHeight();
