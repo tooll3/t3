@@ -126,7 +126,7 @@ public interface IShaderOperator<T> : IDescriptiveFilename where T : AbstractSha
         resource.AddDependentSlots(shaderSlot);
         shaderSlot.UpdateAction = context =>
                                   {
-                                      if (!Path.DirtyFlag.IsDirty && EntryPoint.DirtyFlag.IsDirty)
+                                      if (EntryPoint.DirtyFlag.IsDirty)
                                       {
                                           // we still need to recompile if the entrypoint changes
                                           resource.MarkFileAsChanged();

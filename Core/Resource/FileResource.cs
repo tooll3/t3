@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using T3.Core.Logging;
+using T3.Core.Utils;
 
 namespace T3.Core.Resource;
 
@@ -135,7 +136,7 @@ public sealed partial class FileResource
     
     private static void Register(FileResource resource)
     {
-        var path = resource.AbsolutePath;
+        var path = resource.AbsolutePath.ToForwardSlashes();
         lock (CollectionLock)
         {
             if (!FileResources.TryAdd(path, resource))

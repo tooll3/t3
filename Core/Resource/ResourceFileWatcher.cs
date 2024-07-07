@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using T3.Core.Logging;
+using T3.Core.Utils;
 
 namespace T3.Core.Resource
 {
@@ -13,7 +14,7 @@ namespace T3.Core.Resource
         public ResourceFileWatcher(string watchedFolder)
         {
             Directory.CreateDirectory(watchedFolder);
-            _watchedDirectory = watchedFolder;
+            _watchedDirectory = watchedFolder.ToForwardSlashes();
             ResourceManager.RegisterWatcher(this);
         }
 
@@ -163,6 +164,7 @@ namespace T3.Core.Resource
 
         private void OnFileChanged(object sender, FileSystemEventArgs e)
         {
+            e.FullPath.ToForwardSlashesUnsafe();
             var fileKey = new FileKey(e.FullPath, e.ChangeType, e is RenamedEventArgs);
             lock (_eventLock)
             {
