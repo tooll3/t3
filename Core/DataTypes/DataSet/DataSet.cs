@@ -101,20 +101,27 @@ public class DataChannel
         writer.WriteEndObject();
     }
     
-    public int FindHighestIndexBelowTime(double time)
+    public int FindIndexForTime(double time, bool findUpperIndex= true)
     {
         if (Events.Count == 0)
             return -1;
         
         var lastIndex = Events.Count - 1;
+        var firstIndex = 0;
+        
         if (Events[lastIndex].Time <= time)
             return lastIndex;
+
+        if (Events[firstIndex].Time >= time)
+            return firstIndex;
         
-        var firstIndex = 0;
         while (lastIndex - firstIndex > 1)
         {
             var middleIndex = (firstIndex + lastIndex) / 2;
-            if (Events[middleIndex].Time <= time)
+
+            var delta = Events[middleIndex].Time - time;
+
+            if (delta < 0)
                 firstIndex = middleIndex;
             else
                 lastIndex = middleIndex;
@@ -146,6 +153,7 @@ public class DataEvent
             case float f: v = f; break;
             case double d: v = d;break;
             case int i: v = i; break;
+            case long l: v = l; break;
             default: v= double.NaN; return false;
         }
 

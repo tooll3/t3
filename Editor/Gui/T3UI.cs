@@ -15,6 +15,7 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Editor.App;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Interaction;
@@ -71,14 +72,10 @@ public class T3Ui: IDisposable
     }
 
     private bool _initialed;
-    private DataChannel _frameCountDebugChannel;
-    private DataChannel _lastFrameDurationChannel;
-    private DataChannel _frameRegionChannel;
 
     public void ProcessFrame()
     {
-        var frameStartTime = Playback.RunTimeInSecs;
-        DebugDataRecording.StartRegion("__Stats/ProcessFrame", null, ref _frameRegionChannel);
+        Profiling.KeepFrameData();
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
         
         CustomComponents.BeginFrame();
@@ -140,8 +137,7 @@ public class T3Ui: IDisposable
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
-
-
+        
         FrameStats.CompleteFrame();
         TriggerGlobalActionsFromKeyBindings();
             
@@ -168,9 +164,8 @@ public class T3Ui: IDisposable
         
         Playback.OpNotReady = false;
         AutoBackup.AutoBackup.CheckForSave();
-        var frameEndTime = Playback.RunTimeInSecs;
-        var duration = frameEndTime - frameStartTime;
-        DebugDataRecording.EndRegion(_frameRegionChannel,  $"{duration*1000:0ms}");
+
+        Profiling.EndFrameData();
     }
 
     /// <summary>
@@ -558,6 +553,4 @@ public class T3Ui: IDisposable
 
     public static bool UseVSync = true;
     public static bool ItemRegionsVisible;
-    
-
 }

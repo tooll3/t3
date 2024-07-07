@@ -19,13 +19,13 @@ namespace T3.Editor.Gui.Interaction
     /// </summary>
     public class ScalableCanvas : ICanvas
     {
-        public ScalableCanvas(bool isCurveCanvas = false)
+        public ScalableCanvas(bool isCurveCanvas = false, float initialScale = 1)
         {
             if (!isCurveCanvas)
                 return;
             
-            Scale = new Vector2(1, -1);
-            ScaleTarget = new Vector2(1, -1);
+            Scale = new Vector2(initialScale, -initialScale);
+            ScaleTarget = new Vector2(initialScale, -initialScale);
         }
         
         

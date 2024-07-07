@@ -158,6 +158,10 @@ namespace T3.Editor
             }
 
             Log.RemoveWriter(splashScreen);
+            
+            if(UserSettings.Config.KeepTraceForLogMessages)
+                Log.AddWriter(new Profiling.ProfilingLogWriterClass());
+            
             splashScreen.Close();
             splashScreen.Dispose();
 

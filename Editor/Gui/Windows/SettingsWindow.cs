@@ -27,6 +27,7 @@ namespace T3.Editor.Gui.Windows
             OSC,
             SpaceMouse,
             Keyboard,
+            Profiling,
         }
 
         private Categories _activeCategory;
@@ -298,8 +299,33 @@ namespace T3.Editor.Gui.Windows
 
                             ImGui.EndTable();
                         }
-
                         break;
+                    case Categories.Profiling:
+                    {
+                        FormInputs.AddSectionHeader("Profiling and debugging");
+
+                        CustomComponents.HelpText("Enabling this will add slight performance overhead.\nChanges will require a restart of Tooll.");
+                        FormInputs.AddVerticalSpace();
+
+                        FormInputs.SetIndentToLeft();
+                        
+                        changed |= FormInputs.AddCheckBox("Enable Frame Profiling",
+                                                                         ref UserSettings.Config.EnableFrameProfiling,
+                                                                         "A basic frame profile for the duration of frame processing. Overhead is minimal.",
+                                                                         UserSettings.Defaults.EnableFrameProfiling);
+                        changed |= FormInputs.AddCheckBox("Keep Log Messages",
+                                                          ref UserSettings.Config.KeepTraceForLogMessages,
+                                                          "Store log messages in the profiling data. This can be useful to see correlation between frame drops and log messages.",
+                                                          UserSettings.Defaults.KeepTraceForLogMessages);
+                        
+                        changed |= FormInputs.AddCheckBox("Log GC Profiling",
+                                                          ref UserSettings.Config.EnableGCProfiling,
+                                                          "Log garbage collection information. This can be useful to see correlation between frame drops and GC activity.",
+                                                          UserSettings.Defaults.EnableGCProfiling);
+
+                        FormInputs.SetIndentToParameters();
+                        break;
+                    }
                 }
 
                 if (changed)
