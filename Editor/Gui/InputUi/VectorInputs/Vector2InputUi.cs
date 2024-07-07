@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         {
             float2Value.CopyTo(FloatComponents);
 
-            var controlRatio = MathUtils.RemapAndClamp(ImGui.GetWindowWidth(), 300, 350, 1, 16f / 9);
+            var controlRatio = MathUtils.RemapAndClamp(ImGui.GetWindowWidth(), 280, 350, 1, 16f / 9);
             var showControl = (controlRatio > 1f && UseVec2Control != Vec2Controls.None);
             var rightPadding = showControl ? ImGui.GetFrameHeight() * controlRatio : 0;
 

@@ -4,20 +4,16 @@
   "Namespace": "lib.point.generate",
   "Inputs": [
     {
-      "Id": "d737860b-2864-472d-ad46-4061b63a12d4"/*Seed*/,
-      "DefaultValue": 10.0
+      "Id": "3289dbe7-14f0-4bf0-b223-bb57419cf179"/*Mesh*/,
+      "DefaultValue": null
     },
     {
       "Id": "b3d526ee-b1f1-4254-b702-1980d659e557"/*Count*/,
       "DefaultValue": 10000
     },
     {
-      "Id": "3289dbe7-14f0-4bf0-b223-bb57419cf179"/*Mesh*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "ed758e72-6977-44e0-a997-bf0ad83f6ceb"/*IsEnabled*/,
-      "DefaultValue": true
+      "Id": "d737860b-2864-472d-ad46-4061b63a12d4"/*Seed*/,
+      "DefaultValue": 10.0
     },
     {
       "Id": "132584c0-c27c-448a-b31d-ae72f0fb4baa"/*Texture*/,
@@ -25,6 +21,10 @@
     },
     {
       "Id": "1843683c-53a2-4862-a9a5-4b3afe729ace"/*UseVertexSelection*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "ed758e72-6977-44e0-a997-bf0ad83f6ceb"/*IsEnabled*/,
       "DefaultValue": true
     }
   ],

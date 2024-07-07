@@ -2045,7 +2045,7 @@
           "Value": 4.9
         },
         {
-          "Id": "e32268a7-8527-4d0d-b9ba-11c23cb07dd2"/*Mode*/,
+          "Id": "e32268a7-8527-4d0d-b9ba-11c23cb07dd2"/*Return*/,
           "Type": "System.Int32",
           "Value": 2
         }
@@ -2075,7 +2075,7 @@
       "SymbolId": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de",
       "InputValues": [
         {
-          "Id": "4d7f1f34-ca1b-43ee-803f-cbc14bcc8679"/*Scale*/,
+          "Id": "4d7f1f34-ca1b-43ee-803f-cbc14bcc8679"/*GridScale*/,
           "Type": "System.Single",
           "Value": 0.208
         },
@@ -2089,14 +2089,9 @@
           }
         },
         {
-          "Id": "a7d80f3e-298d-4eb5-9751-ec432cda4065"/*SnapFraction*/,
+          "Id": "a7d80f3e-298d-4eb5-9751-ec432cda4065"/*Scatter*/,
           "Type": "System.Single",
           "Value": 0.08
-        },
-        {
-          "Id": "dc5e2101-e4d5-495a-8291-58aef1876657"/*FractionBlend*/,
-          "Type": "System.Single",
-          "Value": 3.98
         }
       ],
       "Outputs": []

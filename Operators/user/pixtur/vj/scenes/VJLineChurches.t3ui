@@ -422,8 +422,22 @@
     {
       "ChildId": "d1966338-cf0f-4ee4-86b0-db12fb2e4288"/*MidiInput*/,
       "Position": {
-        "X": 1850.0695,
-        "Y": -121.512375
+        "X": 1901.7379,
+        "Y": -111.22351
+      }
+    },
+    {
+      "ChildId": "b560bfaa-d596-4dfe-9037-e55ee1fc5adf"/*MidiInput*/,
+      "Position": {
+        "X": 1901.7379,
+        "Y": -154.22351
+      }
+    },
+    {
+      "ChildId": "7eee288c-37a9-4b8f-8614-b81fa61a3536"/*MidiInput*/,
+      "Position": {
+        "X": 1866.3192,
+        "Y": -69.7157
       }
     }
   ],

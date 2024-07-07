@@ -27,6 +27,9 @@ namespace lib._3d.mesh.generate
         [Input(Guid = "7a2eff05-ab49-42ab-816c-86937f0ebbaf")]
         public readonly InputSlot<bool> UseExtend = new InputSlot<bool>();
 
+        [Input(Guid = "8104d7e7-0cea-4009-851d-1b0a23802ad8")]
+        public readonly InputSlot<bool> FixHoles = new InputSlot<bool>();
+
 
         private enum SampleModes
         {

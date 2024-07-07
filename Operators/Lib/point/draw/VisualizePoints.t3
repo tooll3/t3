@@ -1156,6 +1156,11 @@
           "Value": 1.0
         },
         {
+          "Id": "b8ab4e0e-2c75-42af-9aec-865785f68091"/*SetColor*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
           "Id": "b4c4414d-e24d-4456-8c7d-00eb9de89de9"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {

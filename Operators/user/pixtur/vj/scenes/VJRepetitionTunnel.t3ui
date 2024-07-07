@@ -513,6 +513,27 @@
         "X": 1937.5728,
         "Y": 74.10323
       }
+    },
+    {
+      "ChildId": "01a86d4d-8788-4af3-8368-0e9e9560a85e"/*MidiInput*/,
+      "Position": {
+        "X": 495.3047,
+        "Y": 219.37494
+      }
+    },
+    {
+      "ChildId": "eaf5602f-1e2d-41fc-8f56-57ec0fa23d17"/*MidiInput*/,
+      "Position": {
+        "X": 1940.6082,
+        "Y": 139.03433
+      }
+    },
+    {
+      "ChildId": "42da6f98-53f4-4e97-b4ad-4f216d8b2d61"/*MidiInput*/,
+      "Position": {
+        "X": 592.33606,
+        "Y": 602.44257
+      }
     }
   ],
   "OutputUis": [

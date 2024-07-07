@@ -1,0 +1,31 @@
+{
+  "Id": "f997d943-7a71-4fdf-b182-7a521a73ba27"/*DelayBoolean*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "2141f8a4-0122-48a7-ae78-4f9b79e9ef1f"/*Trigger*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "75dda16e-7f61-43d6-a41e-aee8c56ca13e"/*FrameCount*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "377beba4-b9bb-4e76-aa81-b37f27b40bd9"/*DelayedTrigger*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

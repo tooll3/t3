@@ -35,6 +35,18 @@ namespace Lib.point.generate
 
         [Input(Guid = "1d0e573e-f733-4715-afe3-f96950f29aa4")]
         public readonly InputSlot<System.Numerics.Vector4> ColorWeight = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "a970dad9-e5e9-4756-a84c-86737cce7e8f")]
+        public readonly InputSlot<float> ClampThreshold = new InputSlot<float>();
+
+        [Input(Guid = "9af8bd73-43cd-4d54-b7a1-d537a880e736", MappedType = typeof(Modes))]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
+        
+        private enum Modes
+        {
+            UseBrightness,
+            UseSimilarity,
+        }
     }
 }
 

@@ -1,12 +1,13 @@
 using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
 namespace lib.exec.context
 {
 	[Guid("e6072ecf-30d2-4c52-afa1-3b195d61617b")]
-    public class GetFloatVar : Instance<GetFloatVar>
+    public class GetFloatVar : Instance<GetFloatVar>, ICustomDropdownHolder
     {
         [Output(Guid = "e368ba33-827e-4e08-aa19-ba894b40906a", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new();
@@ -14,15 +15,16 @@ namespace lib.exec.context
         public GetFloatVar()
         {
             Result.UpdateAction += Update;
-            Variable.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
         }
 
         private void Update(EvaluationContext context)
         {
-            string variableName = Variable.GetValue(context);
-            if (context.FloatVariables.TryGetValue(variableName, out float value))
+            if (VariableName.DirtyFlag.IsDirty && !VariableName.IsConnected)
+                _contextVariableNames= context.FloatVariables.Keys.ToList();
+            
+            var variableName = VariableName.GetValue(context);
+            if (variableName != null && context.FloatVariables.TryGetValue(variableName, out var value))
             {
-                // Log.Debug($"{variableName} : {value}", this);
                 Result.Value = value;
             }
             else
@@ -30,9 +32,36 @@ namespace lib.exec.context
                 Result.Value = FallbackDefault.GetValue(context);
             }
         }
+        
+        #region implementation of ICustomDropdownHolder
+        string ICustomDropdownHolder.GetValueForInput(Guid inputId)
+        {
+            return VariableName.Value;
+        }
+        
+        IEnumerable<string> ICustomDropdownHolder.GetOptionsForInput(Guid inputId)
+        {
+            return _contextVariableNames;
+        }
+        
+        void ICustomDropdownHolder.HandleResultForInput(Guid inputId, string result)
+        {
+            if (inputId != VariableName.Input.InputDefinition.Id)
+            {
+                Log.Warning("Unexpected input id {inputId} in HandleResultForInput", inputId);
+                return;
+            }
+            // Update the list of available variables when dropdown is shown
+            VariableName.DirtyFlag.Invalidate(); 
+            VariableName.SetTypedInputValue(result);
+        }
+        #endregion
+        
+        
+        private  List<string> _contextVariableNames = new ();
 
         [Input(Guid = "015d1ea0-ea51-4038-893a-4af2f8584631")]
-        public readonly InputSlot<string> Variable = new();
+        public readonly InputSlot<string> VariableName = new();
         
         [Input(Guid = "AE76829B-D17D-4443-9CF1-63E3C44B90C8")]
         public readonly InputSlot<float> FallbackDefault = new();

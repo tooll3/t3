@@ -55,16 +55,17 @@ public static class CompatibleMidiDeviceHandling
                 continue;
             }
 
-            var productName = attr.ProductName;
+            var productNames = attr.ProductNames;
 
             foreach (var (midiIn, midiInCapabilities) in MidiConnectionManager.MidiIns)
             {
-                if (midiInCapabilities.ProductName != productName)
+                var productName = midiInCapabilities.ProductName;
+                if (!productNames.Contains(productName))
                     continue;
                 
-                if (!MidiConnectionManager.TryGetMidiOut(attr.ProductName, out var midiOut))
+                if (!MidiConnectionManager.TryGetMidiOut(productName, out var midiOut))
                 {
-                    Log.Error($"Can't find midi out connection for {attr.ProductName}");
+                    Log.Error($"Can't find midi out connection for {attr.ProductNames}");
                     continue;
                 }
 
@@ -87,6 +88,7 @@ public static class CompatibleMidiDeviceHandling
               {
                   typeof(Apc40Mk2),
                   typeof(ApcMini),
+                  typeof(ApcMiniMk2),
                   typeof(NanoControl8)
               };
 

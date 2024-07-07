@@ -60,3 +60,7 @@ copy "Install\gradients.json" "..\T3-Standalone\.t3\gradients.json"
 @RD /S /Q "..\T3-Standalone\Resources\user\pixtur\Vj\Faces"
 @RD /S /Q "..\T3-Standalone\Resources\user\still\proj-monsters"
 @RD /S /Q "..\T3-Standalone\Resources\user\still\carpe-diem"
+@RD /S /Q "..\T3-Standalone\Resources\user\1x\mars-express\references"
+@RD /S /Q "..\T3-Standalone\Resources\user\1x\mars-express\sequence"
+@RD /S /Q "..\T3-Standalone\Resources\user\ff\persona"
+

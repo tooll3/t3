@@ -113,7 +113,7 @@ RWStructuredBuffer<Point> ResultPoints : u1;
     // ResultPoints[gi].rotation = Particles[gi].p.rotation;
     // ResultPoints[gi].w = Particles[gi].p.w;
     float lifeTime = LifeTime < 0.0
-                         ? (IsAutoCount ? 100000 : (float)(maxParticleCount / (newPointCount * 60)))
+                         ? (IsAutoCount ? 100000 : (float)(maxParticleCount / (newPointCount * 60.0)))
                          : LifeTime;
 
     float normalizedAge = (IsAutoCount && LifeTime < 0) ? 1 : (Time - Particles[gi].BirthTime) / lifeTime;

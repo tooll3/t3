@@ -126,7 +126,7 @@ namespace Operators.Utils
 
         /// <summary>
         /// For midi teaching, Tooll will capture all available midi devices.
-        /// This will prevent other applications from capturing them. User's can
+        /// This will prevent other applications from capturing them. Users can
         /// prevent this in the settings.
         /// </summary>
         private static bool IsMidiDeviceCaptureEnabled(string deviceName)

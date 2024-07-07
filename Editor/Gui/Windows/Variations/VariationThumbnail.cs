@@ -49,6 +49,7 @@ namespace T3.Editor.Gui.Windows.Variations
             var pMax = pMin + sizeOnScreen;
 
             var areaOnScreen = new ImRect(pMin, pMax);
+            drawList.AddRectFilled(pMin, pMax, UiColors.Gray.Fade(0.1f * focusOpacity));
             CustomComponents.FillWithStripes(drawList, areaOnScreen);
 
             drawList.AddImage((IntPtr)canvasSrv,
@@ -96,7 +97,7 @@ namespace T3.Editor.Gui.Windows.Variations
             ImGui.SetCursorScreenPos(pMin);
             ImGui.PushID(variation.Id.GetHashCode());
 
-            ImGui.InvisibleButton("##thumbnail", ThumbnailSize);
+            ImGui.InvisibleButton("##thumbnail", pMax-pMin);
 
             if (_canvas.IsBlendingActive)
             {

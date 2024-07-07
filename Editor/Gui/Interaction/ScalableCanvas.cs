@@ -19,13 +19,13 @@ namespace T3.Editor.Gui.Interaction
     /// </summary>
     internal class ScalableCanvas : ICanvas
     {
-        public ScalableCanvas(bool isCurveCanvas = false)
+        public ScalableCanvas(bool isCurveCanvas = false, float initialScale = 1)
         {
             if (!isCurveCanvas)
                 return;
             
-            Scale = new Vector2(1, -1);
-            ScaleTarget = new Vector2(1, -1);
+            Scale = new Vector2(initialScale, -initialScale);
+            ScaleTarget = new Vector2(initialScale, -initialScale);
         }
         
         
@@ -352,6 +352,20 @@ namespace T3.Editor.Gui.Interaction
 
         private void DampScaling(float deltaTime)
         {
+            
+            
+            var completed =  Scale.X > 1000 || Math.Abs(Scroll.X - ScrollTarget.X) < 1f
+                             && Math.Abs(Scroll.Y - ScrollTarget.Y) < 1f
+                             && Math.Abs(Scale.X - ScaleTarget.X) < 0.05f
+                             && Math.Abs(Scale.Y - ScaleTarget.Y) < 0.05f;
+
+            if (completed)
+            {
+                Scroll = ScrollTarget;
+                Scale = ScaleTarget;
+                return;
+            }
+            
             // Damp scaling
             var minInCanvas = Scroll;
             var maxInCanvas = Scroll + WindowSize / Scale;
@@ -365,16 +379,7 @@ namespace T3.Editor.Gui.Interaction
             Scale = WindowSize / (max - min);
             Scroll = min;
 
-            var completed = Math.Abs(Scroll.X - ScrollTarget.X) < 1f
-                            && Math.Abs(Scroll.Y - ScrollTarget.Y) < 1f
-                            && Math.Abs(Scale.X - ScaleTarget.X) < 0.05f
-                            && Math.Abs(Scale.Y - ScaleTarget.Y) < 0.05f;
 
-            if (completed)
-            {
-                Scroll = ScrollTarget;
-                Scale = ScaleTarget;
-            }
 
             if (float.IsNaN(ScaleTarget.X))
                 ScaleTarget.X = 1;
@@ -430,7 +435,12 @@ namespace T3.Editor.Gui.Interaction
                 return;
             }
 
+            if (PreventMouseInteraction)
+                return;
+            
+
             var isVerticalColorSliderActive = FrameStats.Last.OpenedPopUpName == "ColorBrightnessSlider";
+            var isAnotherWindowDragged = _draggedCanvas != null && _draggedCanvas != this;
             
             var preventPanning = flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse);
             var mouseIsDragging = ImGui.IsMouseDragging(ImGuiMouseButton.Right)
@@ -438,12 +448,22 @@ namespace T3.Editor.Gui.Interaction
                                   || ImGui.IsMouseDragging(ImGuiMouseButton.Middle);
             
             if (!isVerticalColorSliderActive 
-                && !preventPanning
-                && mouseIsDragging
+                && !isAnotherWindowDragged
+                && !flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse)
+                && (
+                        
+                    ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
+                    || (!UserSettings.Config.MiddleMouseButtonZooms && ImGui.IsMouseDragging(ImGuiMouseButton.Middle) && !ImGui.GetIO().KeyAlt)
+                    || (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !ImGui.GetIO().KeyAlt)
                )
             {
-                ScrollTarget -= mouseState.Delta / (ParentScale * ScaleTarget);
-                panned = true;
+                ScrollTarget -= Io.MouseDelta / (ParentScale * ScaleTarget);
+                UserScrolledCanvas = true;
+                _draggedCanvas = this;
+            }
+            else
+            {
+                UserScrolledCanvas = false;
             }
             
             var preventZoom = flags.HasFlag(T3Ui.EditingFlags.PreventZoomWithMouseWheel);
@@ -452,11 +472,14 @@ namespace T3.Editor.Gui.Interaction
                 //&& !ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
             {
                 ZoomWithMouseWheel(mouseState, out zoomed);
+                ZoomWithDrag(ImGuiMouseButton.Right);
                 ScaleTarget = ClampScaleToValidRange(ScaleTarget);
             }
             
             //Log.Debug($"({GetType().Name}) {nameof(preventPanning)}: {preventPanning}, {nameof(mouseIsDragging)}: {mouseIsDragging}, {nameof(preventZoom)}: {preventZoom}");
         }
+
+        protected static ScalableCanvas _draggedCanvas;
 
         protected Vector2 ClampScaleToValidRange(Vector2 scale)
         {
@@ -560,33 +583,45 @@ namespace T3.Editor.Gui.Interaction
             return zoomSum;
         }
 
-        // private void ZoomWithMiddleMouseDrag()
-        // {
-        //     if (ImGui.IsMouseClicked(ImGuiMouseButton.Middle))
-        //     {
-        //         _mousePosWhenMiddlePressed = ImGui.GetMousePos();
-        //         _scaleWhenMiddlePressed = ScaleTarget;
-        //     }
-        //
-        //     if (ImGui.IsMouseDragging(ImGuiMouseButton.Middle, 0))
-        //     {
-        //         var delta = ImGui.GetMousePos() - _mousePosWhenMiddlePressed;
-        //         var deltaMax = Math.Abs(delta.X) > Math.Abs(delta.Y)
-        //                            ? -delta.X
-        //                            : delta.Y;
-        //         if (IsCurveCanvas)
-        //         {
-        //         }
-        //         else
-        //         {
-        //             var f = (float)Math.Pow(1.1f, -deltaMax / 40f);
-        //             ScaleTarget = _scaleWhenMiddlePressed * f;
-        //             var focusCenter = (_mousePosWhenMiddlePressed - Scroll*Scale - WindowPos) / Scale; // ????????
-        //             var shift = ScrollTarget * ScaleTarget + (focusCenter * ScaleTarget);
-        //             ScrollTarget -= (_mousePosWhenMiddlePressed - shift - WindowPos) * ScaleTarget;
-        //         }
-        //     }
-        // }
+        private Vector2 _mousePosWhenDragZoomStarted;
+        private Vector2 _scaleWhenDragZoomStarted;
+        private bool _isDragZooming;
+        private float _lastZoomDelta;
+
+        private void ZoomWithDrag(ImGuiMouseButton mouseButton, bool altRequired = true )
+        {
+            mouseButton = UserSettings.Config.MiddleMouseButtonZooms 
+                              ? ImGuiMouseButton.Middle 
+                              : ImGuiMouseButton.Right;
+            
+            var hotkeysMatch = UserSettings.Config.MiddleMouseButtonZooms || ImGui.GetIO().KeyShift;
+            
+            if (ImGui.IsMouseClicked(mouseButton) && hotkeysMatch)
+            {
+                _isDragZooming = true;
+                _lastZoomDelta = 1;
+                _mousePosWhenDragZoomStarted = ImGui.GetMousePos();
+                _scaleWhenDragZoomStarted = ScaleTarget;
+            }
+
+            if (ImGui.IsMouseReleased(mouseButton))
+                _isDragZooming = false;
+
+            if (!ImGui.IsMouseDragging(mouseButton, 0))
+                return;
+            
+            var delta = ImGui.GetMousePos() - _mousePosWhenDragZoomStarted;
+            var deltaMax = Math.Abs(delta.X) > Math.Abs(delta.Y)
+                               ? -delta.X
+                               : delta.Y;
+            if (IsCurveCanvas || !_isDragZooming)
+                return;
+                
+            var f = (float)Math.Pow(1.13f, -deltaMax / 40f);
+            var delta2 =   f/_lastZoomDelta;
+            ApplyZoomDelta(_mousePosWhenDragZoomStarted, delta2);
+            _lastZoomDelta = f;
+        }
 
         private bool UsingParentCanvas
         {

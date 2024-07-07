@@ -1,7 +1,15 @@
 {
   "Id": "a469ca9f-a7f9-46b8-b34c-0a1c109e1222"/*ExtrudeCurvesExample*/,
-  "Description": "Three example setups made by newemka for the [ExtrudeCurves] operator.",
-  "InputUis": [],
+  "Description": "If the mesh surface has holes, activate FixHoles. Three example setups made by newemka for the [ExtrudeCurves] operator.",
+  "InputUis": [
+    {
+      "InputId": "7c55d6c6-d712-4464-8dd8-2b7fac96e270"/*FixHoles*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
   "SymbolChildUis": [
     {
       "ChildId": "4583340c-5329-4335-ac58-006d735efecb"/*RadialPoints*/,
@@ -34,8 +42,8 @@
     {
       "ChildId": "8f372609-be2c-4967-a63b-7759bea7c767"/*RenderTarget*/,
       "Position": {
-        "X": 1795.2789,
-        "Y": 470.54443
+        "X": 1881.9102,
+        "Y": 798.5057
       }
     },
     {
@@ -61,6 +69,7 @@
     },
     {
       "ChildId": "093227ab-7a81-458c-96f1-50ec06ddaa96"/*ExtrudeCurves*/,
+      "Comment": "If the generated mesh has holes on its surface, activate FixHoles",
       "Position": {
         "X": 518.8099,
         "Y": 216.13086
@@ -70,22 +79,22 @@
       "ChildId": "ea1fdfa1-f00b-4700-ba9a-353b4540bf97"/*RadialPoints*/,
       "Comment": "It's important to adjust the OrientationAngle in order to have the Normals (Z axis / blue line) looking outward the circle. Use [VisualizePoints] to check the points orientation.",
       "Position": {
-        "X": 130.50662,
-        "Y": 287.7412
+        "X": 134.55615,
+        "Y": 416.31384
       }
     },
     {
       "ChildId": "b522af85-d4d6-4d1c-a5e8-4eae02345698"/*AddNoise*/,
       "Position": {
-        "X": 320.2232,
-        "Y": 0.0
+        "X": 324.94763,
+        "Y": 216.48119
       }
     },
     {
       "ChildId": "241ddeb6-90b3-494e-84c6-0ca13b019b59"/*Time*/,
       "Position": {
-        "X": 19.565498,
-        "Y": 83.77197
+        "X": -215.55356,
+        "Y": 75.37488
       }
     },
     {
@@ -225,8 +234,8 @@
     {
       "ChildId": "0aba651d-2123-4126-9c8d-3cc801e775b2"/*RandomizePoints*/,
       "Position": {
-        "X": 353.1888,
-        "Y": 73.33496
+        "X": 324.94763,
+        "Y": 285.4812
       }
     },
     {
@@ -238,38 +247,24 @@
       }
     },
     {
-      "ChildId": "b3536c72-6d52-44cb-afa4-e57a1d234ee1"/*RenderTarget*/,
-      "Position": {
-        "X": 1444.2552,
-        "Y": 910.7446
-      }
-    },
-    {
-      "ChildId": "5af277db-64f4-4516-ba2f-60e0251cb2eb"/*RenderTarget*/,
-      "Position": {
-        "X": 1612.1979,
-        "Y": 1332.689
-      }
-    },
-    {
       "ChildId": "1b0e749a-908c-4eee-81f6-948872cefa64"/*OrbitCamera*/,
       "Position": {
-        "X": 1409.8793,
-        "Y": 266.5201
+        "X": 1731.9102,
+        "Y": 798.5057
       }
     },
     {
-      "ChildId": "b4d4e373-9bb3-4dd7-97b5-6c1e59ad9310"/*OrbitCamera*/,
+      "ChildId": "00690cf0-4b53-477b-a67c-a175cf225a54"/*SpreadLayout*/,
       "Position": {
-        "X": 1200.8708,
-        "Y": 835.8551
+        "X": 1436.76,
+        "Y": 786.08704
       }
     },
     {
-      "ChildId": "9f381017-be08-4865-8252-883abbf279a0"/*OrbitCamera*/,
+      "ChildId": "a27d91e0-443c-410e-9349-8784b779d80c"/*Camera*/,
       "Position": {
-        "X": 1414.608,
-        "Y": 1240.6316
+        "X": 1731.9102,
+        "Y": 742.5057
       }
     }
   ],
@@ -333,8 +328,8 @@
         "Y": 184.74121
       },
       "Size": {
-        "X": 605.7703,
-        "Y": 182.03404
+        "X": 602.73315,
+        "Y": 340.97824
       }
     }
   ]

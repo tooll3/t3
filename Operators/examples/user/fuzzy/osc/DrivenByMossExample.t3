@@ -19,14 +19,9 @@
           "Value": 8000
         },
         {
-          "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Location*/,
+          "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Address*/,
           "Type": "System.String",
           "Value": "/track/1/volume"
-        },
-        {
-          "Id": "4931217b-e30d-42a6-9cda-bc49a8fd8d67"/*OscValueType*/,
-          "Type": "System.Int32",
-          "Value": 0
         }
       ],
       "Outputs": []
@@ -112,14 +107,9 @@
           "Value": 8000
         },
         {
-          "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Location*/,
+          "Id": "9016e418-7761-4916-aafb-c95599f77f38"/*Address*/,
           "Type": "System.String",
           "Value": "/track/1/name"
-        },
-        {
-          "Id": "4931217b-e30d-42a6-9cda-bc49a8fd8d67"/*OscValueType*/,
-          "Type": "System.Int32",
-          "Value": 1
         }
       ],
       "Outputs": []

@@ -46,7 +46,7 @@ namespace lib.anim
 
             var originalTime = _normalizedTime;
             
-            _normalizedTime = (time + phase) * rateFactorFromContext * rate;
+            _normalizedTime = (time) * rateFactorFromContext * rate  + phase;
             Result.Value = AnimMath.CalcValueForNormalizedTime(_shape, _normalizedTime, 0, bias,ratio) * amplitude + offset;
             
             WasHit.Value = (int)originalTime != (int)_normalizedTime;

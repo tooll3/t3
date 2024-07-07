@@ -1,0 +1,28 @@
+{
+  "Name": "SpringVec2",
+  "Id": "4ee040a3-e5dd-42f0-8f7e-0275d7c72538",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "5ec00ae8-1cd5-418f-bd9f-1b925df08466"/*Value*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "9c8180fd-3e62-4fed-ad9a-c5c5b284e5e9"/*Tension*/,
+      "DefaultValue": 0.25
+    },
+    {
+      "Id": "54d7918f-1bca-4198-a12d-0bb9df9e3285"/*Strength*/,
+      "DefaultValue": 0.5
+    },
+    {
+      "Id": "1bd48756-f739-42b2-a1f3-bb5181a28392"/*UseAppRunTime*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

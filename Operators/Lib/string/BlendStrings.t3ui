@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "3197934e-d0ed-4a81-9dc1-2cc63d97ac6f"/*InputTextA*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": 0.0,
         "Y": 45.0
@@ -12,6 +13,7 @@
     },
     {
       "InputId": "ccc21ecc-2877-4fe7-8d78-f7e2a708d762"/*InputTextB*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": 0.0,
         "Y": 90.0
@@ -44,6 +46,13 @@
       "Position": {
         "X": 0.0,
         "Y": 225.0
+      }
+    },
+    {
+      "InputId": "d70da276-c047-42db-a921-5c1263613cbb"/*MaxLength*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 270.0
       }
     }
   ],

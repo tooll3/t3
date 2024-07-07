@@ -20,6 +20,7 @@ using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -134,7 +135,27 @@ namespace T3.Editor.Gui.Graph
 
                     if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
                     {
-                        PinSelectedToOutputWindow(compositionOp);
+                        if (UserSettings.Config.FocusMode)
+                        {
+                            var selectedImage = NodeSelection.GetFirstSelectedInstance();
+                            if (selectedImage != null)
+                            {
+                                GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
+                            }
+                        }
+                        else
+                        {
+                            PinSelectedToOutputWindow();
+                        }
+                    }
+                    
+                    if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
+                    {
+                        var selectedImage = NodeSelection.GetFirstSelectedInstance();
+                        if (selectedImage != null)
+                        {
+                            GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
+                        }
                     }
 
                     if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
@@ -527,7 +548,9 @@ namespace T3.Editor.Gui.Graph
             // ------ for selection -----------------------
             var oneOpSelected = selectedChildUis.Count == 1;
             var someOpsSelected = selectedChildUis.Count > 0;
-            var snapShotsEnabledFromSomeOps = !selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SnapshotGroupIndex == 0);
+            var snapShotsEnabledFromSomeOps 
+                = selectedChildUis
+                   .Any(selectedChildUi => selectedChildUi.EnabledForSnapshots);
 
             var label = oneOpSelected
                             ? $"{selectedChildUis[0].SymbolChild.ReadableName}..."
@@ -581,20 +604,36 @@ namespace T3.Editor.Gui.Graph
             var canModify = !compositionSymbolUi.Symbol.SymbolPackage.IsReadOnly;
             if (canModify)
             {
-                if (ImGui.MenuItem("Enable for snapshots",
-                                   KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleSnapshotControl, false),
-                                   selected: snapShotsEnabledFromSomeOps,
-                                   enabled: someOpsSelected))
-                {
-                    // Disable if already enabled for all
-                    var enabledForAll = selectedChildUis.TrueForAll(c2 => c2.SnapshotGroupIndex > 0);
-                    foreach (var c in selectedChildUis)
-                    {
-                        c.SnapshotGroupIndex = enabledForAll ? 0 : 1;
-                    }
+                // Disable if already enabled for all
+                var disableBecauseAllEnabled
+                    = selectedChildUis
+                       .TrueForAll(c2 => c2.EnabledForSnapshots);
 
-                    compositionSymbolUi.FlagAsModified();
+                foreach (var c in selectedChildUis)
+                {
+                    c.EnabledForSnapshots = !disableBecauseAllEnabled;
                 }
+
+                // Add to add snapshots
+                var allSnapshots = VariationHandling.ActivePoolForSnapshots?.Variations;
+                if (allSnapshots != null && allSnapshots.Count > 0)
+                {
+                    if (disableBecauseAllEnabled)
+                    {
+                        VariationHandling.RemoveInstancesFromVariations(selectedChildUis.Select(ui => ui.Id), allSnapshots);
+                    }
+                    // Remove from snapshots
+                    else
+                    {
+                        var selectedInstances = selectedChildUis.Select(ui => CompositionOp.Children.Single(child => child.SymbolChildId == ui.Id)).ToList();
+                        foreach (var snapshot in allSnapshots)
+                        {
+                            VariationHandling.ActivePoolForSnapshots.UpdateVariationPropertiesForInstances(snapshot, selectedInstances);
+                        }
+                    }
+                }
+
+                FlagCurrentCompositionAsModified();
             }
 
             if (ImGui.BeginMenu("Display as..."))

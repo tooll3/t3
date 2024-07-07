@@ -7,7 +7,7 @@
       "ActivationIndex": 1,
       "Title": "Saws",
       "PosOnCanvas": {
-        "X": 163.0,
+        "X": 326.00018,
         "Y": 0.0
       },
       "ParameterSetsForChildIds": {
@@ -22,8 +22,8 @@
       "ActivationIndex": 2,
       "Title": "Endless",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 93.0
+        "X": 326.00003,
+        "Y": 186.0
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -52,7 +52,7 @@
       "ActivationIndex": 4,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 0.0,
+        "X": 163.0,
         "Y": 0.0
       },
       "ParameterSetsForChildIds": {
@@ -67,7 +67,7 @@
       "ActivationIndex": 5,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 0.0,
+        "X": 163.0,
         "Y": 0.0
       },
       "ParameterSetsForChildIds": {
@@ -89,6 +89,21 @@
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "4cf5d20b-7335-4584-b246-c260ac5cdf4f": 7
+        }
+      }
+    },
+    {
+      "Id": "88d767eb-ff3d-4435-95a6-cec84a3edde3",
+      "IsPreset": true,
+      "ActivationIndex": 7,
+      "Title": "Steps",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "4cf5d20b-7335-4584-b246-c260ac5cdf4f": 12
         }
       }
     }

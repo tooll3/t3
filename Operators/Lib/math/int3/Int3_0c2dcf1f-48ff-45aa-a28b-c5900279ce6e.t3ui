@@ -7,21 +7,24 @@
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Input / definition of X"
     },
     {
       "InputId": "5775e14f-7df4-4f2e-8712-d2a6e3c10ecf"/*Y*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Input / definition of Y"
     },
     {
       "InputId": "0564cf1c-40a3-40fc-92dd-2e2632eec37c"/*Z*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Description": "Input / definition of Z"
     }
   ],
   "SymbolChildUis": [],

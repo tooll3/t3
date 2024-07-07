@@ -153,6 +153,10 @@ namespace T3.Core.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Mod(this int val, int repeat)
         {
+            // Prevent exception
+            if(repeat == 0)
+                return 0;
+            
             var x = val % repeat;
             if (x < 0)
                 x = repeat + x;

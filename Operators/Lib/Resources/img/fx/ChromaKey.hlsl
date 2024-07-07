@@ -32,15 +32,6 @@ struct vsOutput
 
 #define mod(x, y) (x - y * floor(x / y))
 
-float3 hsb2rgb(float3 c)
-{
-    float4 K = float4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-    float3 p = abs(frac(c.xxx + K.xyz) * 6.0 - K.www);
-    return c.z < 0.5 ?
-                     // float3 p = abs(frac(c.xxx + K.xyz) * 6.0 - K.www);
-               c.z * 2 * lerp(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y)
-                     : lerp(K.xxx, clamp(p - K.xxx, 0.0, 1.0), lerp(c.y, 0, (c.z * 2 - 1)));
-}
 
 float3 rgb2hsb(float3 c)
 {
@@ -58,38 +49,34 @@ float3 rgb2hsb(float3 c)
 }
 static float PI = 3.141578;
 
-float SCurve(float value, float amount, float correction)
-{
-    float curve = (value < 0.5)
-                      ? pow(value, amount) * pow(2.0, amount) * 0.5
-                      : 1.0 - pow(1.0 - value, amount) * pow(2.0, amount) * 0.5;
 
-    return pow(curve, correction);
+
+
+float HueDistance2(float hue1, float hue2)
+{
+    // Compute the absolute hue distance
+    float hueDistance = abs(hue1 - hue2);
+
+    // Normalize the hue distance to the range [0, 1]
+    return min(hueDistance, 1.0 - hueDistance);
 }
 
-float DeltaAngle(float angle1, float angle2)
-{
-    angle1 = (angle1 + PI) % (2 * PI) - PI;
-    angle2 = (angle2 + PI) % (2 * PI) - PI;
-
-    float delta = angle2 - angle1;
-    if (delta > PI)
-        return delta - 2 * PI;
-    if (delta < -PI)
-        return delta + 2 * PI;
-
-    return delta;
-}
 
 float GetColorDistance(float4 c)
 {
-    float3 hsb = rgb2hsb(c.rgb);
+    float3 hsb = float3(rgb2hsb( saturate( c.rgb)));
 
-    float3 keyColor = rgb2hsb(KeyColor.rgb);
-    float3 weights = float3(smoothstep(0, 1, hsb.y * 10) * WeightHue, WeightSaturation, WeightBrightness);
-    float distance = saturate(length(float3(abs(DeltaAngle(hsb.x / (2 * PI), keyColor.x / (2 * PI))), (hsb.yz - keyColor.yz)) * weights) * Exposure - Amplify);
+    float3 keyColorHsb = rgb2hsb(KeyColor.rgb);
+    float3 weights = float3(smoothstep(0, 1, hsb.y * 10) * WeightHue, WeightSaturation, WeightBrightness);    
+    float distance = saturate(
+        length(float3(
+            abs(HueDistance2(hsb.x, keyColorHsb.x)), // Hue
+            (hsb.yz - keyColorHsb.yz) // Saturation and Brightness
+            ) * weights) * Exposure - Amplify);
     return distance;
 }
+
+
 
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
@@ -118,7 +105,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     if (Mode < 1.5)
     {
-        return lerp(KeyColor, Background, distance);
+        return lerp( lerp(c.rgba,Background, c.a) , c.rgba, distance);
     }
 
     if (Mode < 2.5)

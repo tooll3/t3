@@ -19,7 +19,7 @@ namespace Lib.img.fx
         public readonly InputSlot<int> MaxSubdivisions = new InputSlot<int>();
 
         [Input(Guid = "71c99158-cf0e-4ceb-82ee-5ef5685441b3")]
-        public readonly InputSlot<float> SubdivisionThreshold = new InputSlot<float>();
+        public readonly InputSlot<float> Threshold = new InputSlot<float>();
 
         [Input(Guid = "6bdb499c-1300-4fe1-8634-7d3edc4d4050")]
         public readonly InputSlot<bool> UseAspectForSplit = new InputSlot<bool>();

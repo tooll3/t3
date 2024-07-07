@@ -85,12 +85,19 @@ namespace T3.Editor.Gui.Graph
                     if (instance is IStatusProvider statusProvider)
                     {
                         var statusLevel = statusProvider.GetStatusLevel();
-                        if (statusLevel == IStatusProvider.StatusLevel.Warning || statusLevel ==IStatusProvider.StatusLevel.Error)
+                        if (statusLevel != IStatusProvider.StatusLevel.Success && statusLevel != IStatusProvider.StatusLevel.Undefined)
                         {
                             ImGui.SetCursorScreenPos(_usableScreenRect.Min - new Vector2(10, 12) * T3Ui.UiScaleFactor);
                             ImGui.InvisibleButton("#warning", new Vector2(15, 15));
-                            Icons.DrawIconOnLastItem(Icon.Warning, UiColors.StatusWarning);
-                            CustomComponents.TooltipForLastItem( UiColors.StatusWarning, statusLevel.ToString(), statusProvider.GetStatusMessage(), false);
+                            var color = statusLevel switch
+                                            {
+                                                IStatusProvider.StatusLevel.Notice  => UiColors.StatusAttention,
+                                                IStatusProvider.StatusLevel.Warning => UiColors.StatusWarning,
+                                                IStatusProvider.StatusLevel.Error   => UiColors.StatusError,
+                                                _                                   => UiColors.StatusError
+                                            };
+                            Icons.DrawIconOnLastItem(Icon.Warning, color);
+                            CustomComponents.TooltipForLastItem(UiColors.StatusWarning, statusLevel.ToString(), statusProvider.GetStatusMessage(), false);
                         }
                     }
 
@@ -344,7 +351,7 @@ namespace T3.Editor.Gui.Graph
 
                     // Snapshot indicator
                     {
-                        if (childUi.SnapshotGroupIndex > 0)
+                        if (childUi.EnabledForSnapshots)
                         {
                             DrawIndicator(drawList, UiColors.StatusAutomated, opacity, ref indicatorCount);
                         }
@@ -626,7 +633,7 @@ namespace T3.Editor.Gui.Graph
             
                     if (childUi.ConnectionStyleOverrides.ContainsKey(outputDef.Id))
                     {
-                        line.ColorForType.Rgba.W = 0.3f;
+                        line.ColorForType.Rgba.W = 0.1f;
                     }
             
                     line.IsSelected |= isChildSelected || hovered | isNodeHovered;

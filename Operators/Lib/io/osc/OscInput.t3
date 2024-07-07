@@ -9,19 +9,35 @@
     },
     {
       "Id": "17d1fe47-430a-4465-92aa-92a4effb515f"/*Address*/,
-      "DefaultValue": "/slider_2"
-    },
-    {
-      "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
-      "DefaultValue": true
+      "DefaultValue": ""
     },
     {
       "Id": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "8014a7a6-cacb-4206-a5b4-87c14235a20c"/*UseKeyValuePairs*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "8e5d30a3-5878-4f64-9eb4-ad5782a957bf"/*SearchFilterKey*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "dbf1c777-d399-49bc-acb0-335cd1f7fa81"/*SearchPattern*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "3b179ff2-172a-4fda-8e26-7bb3e80628d0"/*IsListening*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysAsPaths*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "abc7817d-25dc-479b-984e-73b49d9ade5f"/*FilterKeys*/,
+      "DefaultValue": ""
     }
   ],
   "Children": [],

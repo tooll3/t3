@@ -21,7 +21,7 @@
       "Description": "The maximum number of splits applied to the image. "
     },
     {
-      "InputId": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*SubdivisionThreshold*/,
+      "InputId": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*Threshold*/,
       "Position": {
         "X": 122.82417,
         "Y": 199.68631

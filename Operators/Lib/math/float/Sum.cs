@@ -19,10 +19,18 @@ namespace Lib.math.@float
         private void Update(EvaluationContext context)
         {
             Result.Value = 0;
+            var connectedCount = 0;
             foreach (var input in InputValues.GetCollectedTypedInputs())
             {
                 Result.Value += input.GetValue(context);
+                connectedCount++;
             }
+
+            if (connectedCount == 0)
+            {
+                Result.Value = InputValues.GetValue(context);
+            }
+            
             InputValues.DirtyFlag.Clear();
         }
 

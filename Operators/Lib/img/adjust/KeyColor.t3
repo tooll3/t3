@@ -31,22 +31,22 @@
     },
     {
       "Id": "52942004-3a62-4c2d-95c0-0c18e531983e"/*WeightHue*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 10.0
     },
     {
       "Id": "d044302c-d87f-4ee7-b24d-11b3508a91c1"/*WeightSaturation*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 5.0
     },
     {
       "Id": "85826060-b94d-4f65-bf35-cad8fd8eb508"/*WeightBrightness*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 10.0
     },
     {
       "Id": "91e604d7-aed0-4fb9-9690-ab60a74c4df5"/*Amplify*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "e32268a7-8527-4d0d-b9ba-11c23cb07dd2"/*Mode*/,
+      "Id": "e32268a7-8527-4d0d-b9ba-11c23cb07dd2"/*Return*/,
       "DefaultValue": 0
     },
     {

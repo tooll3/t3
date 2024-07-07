@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
-      "DefaultValue": "Tooll loves you!"
+      "DefaultValue": "Tooll3 loves you!"
     },
     {
       "Id": "0e5f05b4-5e8a-4f6d-8cac-03b04649eb67"/*Color*/,

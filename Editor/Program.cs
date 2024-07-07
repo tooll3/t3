@@ -154,6 +154,10 @@ namespace T3.Editor
             T3Ui.InitializeEnvironment();
             
             Log.RemoveWriter(splashScreen);
+            
+            if(UserSettings.Config.KeepTraceForLogMessages)
+                Log.AddWriter(new Profiling.ProfilingLogWriterClass());
+            
             splashScreen.Close();
             splashScreen.Dispose();
 
@@ -177,6 +181,7 @@ namespace T3.Editor
             {
                 ProjectSetup.DisposePackages();
                 UiContentContentDrawer.Dispose();
+                T3Ui.Dispose();
             }
             catch (Exception e)
             {

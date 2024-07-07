@@ -52,15 +52,18 @@ namespace T3.Editor.Gui.Styling
             var color = args.Warning ? UiColors.StatusWarning.Rgba : UiColors.Text.Rgba;
             ImGui.PushStyleColor(ImGuiCol.Text, color);
             var wasChanged = ImGui.InputText(args.Label, ref filter, 256);
+            
+            filter ??= string.Empty;
             ImGui.PopStyleColor();
-
+            
             if (ImGui.IsItemActivated())
             {
                 _lastTypeAheadResults.Clear();
                 _selectedResultIndex = -1;
                 THelpers.DisableImGuiKeyboardNavigation();
             }
-
+            
+            
             var isItemDeactivated = ImGui.IsItemDeactivated();
             
             // We defer exit to get clicks on opened popup list
@@ -71,8 +74,10 @@ namespace T3.Editor.Gui.Styling
             {
                 _activeInputId = inputId;
 
-                ImGui.SetNextWindowPos(new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y));
-                ImGui.SetNextWindowSize(new Vector2(ImGui.GetItemRectSize().X, 320));
+                var lastPosition = new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y);
+                var size = new Vector2(ImGui.GetItemRectSize().X, 320);
+                ImGui.SetNextWindowPos(lastPosition);
+                ImGui.SetNextWindowSize(size);
                 if (ImGui.IsItemFocused() && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 {
                     wasChanged = true;
@@ -93,18 +98,23 @@ namespace T3.Editor.Gui.Styling
                     var index = 0;
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Gray.Rgba);
                     
-                    var getInfo = args.GetTextInfo;
-                        
-                    foreach (var item in args.Items)
+                    var matches = new List<string>();
+                    var others = new List<string>();
+                    foreach (var word in items)
                     {
-                        // this check shouldn't be necessary
-                        if(item == null)
-                            continue;
-                        
-                        var info = getInfo(item);
-                        if (!StringUtils.MatchesSearchFilter(info.SearchText, searchFilter, true))
-                            continue;
-                        
+                        if (word != null && (string.IsNullOrWhiteSpace(filter) || word.Contains(filter, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            matches.Add(word);
+                        }
+                        else
+                        {
+                            others.Add(word);
+                        }
+                    }
+                    
+                    var listItems = (!string.IsNullOrWhiteSpace(filter) && matches.Count  <=1) ? others : matches;
+                    foreach (var word in listItems)
+                    {
                         var isSelected = index == _selectedResultIndex;
                         
                         // We can't use IsItemHovered because we need to use Tooltip hack 

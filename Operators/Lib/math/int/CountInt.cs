@@ -24,6 +24,11 @@ namespace lib.math.@int
                 _initialized = true;
             }
 
+            var currentTime =  context.LocalFxTime;
+            if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
+                return;
+            
+            _lastEvalTime = currentTime;
             var triggeredIncrement = TriggerIncrement.GetValue(context);
             var triggeredDecrement = TriggerDecrement.GetValue(context);
 
@@ -54,7 +59,10 @@ namespace lib.math.@int
         private bool _initialized;
         private bool _lastIncrementTrigger;
         private bool _lastDecrementTrigger;
+        private const float MinTimeElapsedBeforeEvaluation = 1 / 10000f;
+        private double _lastEvalTime;
 
+        
         [Input(Guid = "bfd95809-61d2-49eb-85d4-ff9e36b2d158")]
         public readonly InputSlot<bool> TriggerIncrement = new();
         
