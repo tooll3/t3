@@ -24,7 +24,7 @@ namespace lib._3d.transform
         {
             try
             {
-                var cameraInputs = Cameras.GetCollectedTypedInputs();
+                var cameraInputs = CameraReferences.GetCollectedTypedInputs();
                 var cameraCount = cameraInputs.Count;
 
                 var floatIndex = Index.GetValue(context).Clamp(0, cameraCount - 1.0001f);
@@ -33,7 +33,7 @@ namespace lib._3d.transform
                 ICamera camA;
                 ICamera camB;
                 
-                Cameras.DirtyFlag.Clear();
+                CameraReferences.DirtyFlag.Clear();
                 if (cameraCount == 0)
                 {
                     _lastErrorMessage = "No cameras connected?";
@@ -121,7 +121,7 @@ namespace lib._3d.transform
         public readonly InputSlot<Command> Command = new();
 
         [Input(Guid = "FF2ED90B-38BD-4BA8-AF07-23BE87EABCC3")]
-        public readonly MultiInputSlot<Object> Cameras = new();
+        public readonly MultiInputSlot<Object> CameraReferences = new();
 
         [Input(Guid = "3B71FDBF-CB2D-45F1-84DD-7AC66763E6AE")]
         public readonly InputSlot<float> Index = new();

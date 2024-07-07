@@ -10,26 +10,29 @@ namespace Operators.Utils.Recording;
 
 /// <summary>
 /// This is a stub for an implementation of midi signal recording
-/// - These recordings are intended for later playback so that MidiConsumers would receive the signals and replay them like live signals. For this to work...
+/// - These recordings are intended for later playback so that MidiConsumers would receive the
+///   signals and replay them like live signals. For this to work...
 ///   - MidiInput and MidiStream recorder would need to share the same MidiEvent definition (maybe different from NAudio.MidiEvent)
 ///   - Handle MidiEvent should not rely on the MidiIn class to avoid double lookup of device description.
 /// </summary>
 public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
 {
-    public readonly DataSet DataSet = new();
+    //public readonly DataSet DataSet = new();
     public double LastEventTime = 0;
 
+    private DataSet _dataSet;
     
-    public MidiDataRecording()
+    public MidiDataRecording(DataSet dataSet)
     {
+        _dataSet = dataSet;
         MidiConnectionManager.RegisterConsumer(this);
     }
 
-    public void Reset()
-    {
-        DataSet.Clear();
-        _channelsByHash.Clear();
-    }
+    // public void Reset()
+    // {
+    //     _dataSet.Clear();
+    //     _channelsByHash.Clear();
+    // }
 
     void MidiConnectionManager.IMidiConsumer.MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
@@ -116,7 +119,7 @@ public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
                                             }
                              };
         _channelsByHash[hash] = newChannel;
-        DataSet.Channels.Add(newChannel);
+        _dataSet.Channels.Add(newChannel);
         return newChannel;
     }
 
@@ -141,7 +144,7 @@ public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
                                             },
                              };
         _channelsByHash[hash] = newChannel;
-        DataSet.Channels.Add(newChannel);
+        _dataSet.Channels.Add(newChannel);
         return newChannel;
     }
 

@@ -1,6 +1,8 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -47,6 +49,7 @@ internal static class ParameterPopUp
         _focusDelayCount = 3;
     }
 
+    private static Vector2 DefaultWindowSize => new Vector2(310, 250) * T3Ui.UiScaleFactor;
     public static void DrawParameterPopUp(GraphWindow graphWindow)
     {
         if (!_isOpen || _selectedInstance == null)
@@ -68,15 +71,16 @@ internal static class ParameterPopUp
 
         var nodeScreenRect = graphWindow.GraphCanvas.TransformRect(ImRect.RectWithSize(symbolChildUi.PosOnCanvas, symbolChildUi.Size));
         var screenPos = new Vector2(nodeScreenRect.Min.X + 5, nodeScreenRect.Max.Y + 5);
-        var height = _lastRequiredHeight.Clamp(MinHeight, MaxHeight);
+        var height = _lastRequiredHeight.Clamp(MinHeight, DefaultWindowSize.Y);
         ImGui.SetNextWindowPos(screenPos);
 
         var preventTabbingIntoUnfocusedStringInputs = ImGui.IsAnyItemActive() ? ImGuiWindowFlags.None : ImGuiWindowFlags.NoNavInputs;
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
         if (ImGui.BeginChild("Popup",
-                             new Vector2(280, height),
+                             new Vector2(DefaultWindowSize.X, height),
                              true,
                              preventTabbingIntoUnfocusedStringInputs
+                             | ImGuiWindowFlags.NoScrollWithMouse
                              | ImGuiWindowFlags.NoScrollbar))
         {
             if (ImGui.IsKeyDown(ImGuiKey.Escape))
@@ -100,19 +104,57 @@ internal static class ParameterPopUp
                 Close();
             }
 
+
             // Toolbar
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(4,4) * T3Ui.UiScaleFactor);
+                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6,4) * T3Ui.UiScaleFactor);
                 ImGui.SetCursorPos( new Vector2(5,5));
                 CustomComponents.AddSegmentedIconButton(ref _viewMode, _modeIcons);
-                ImGui.SameLine(0, 20);
-
-                var isPinned = _selectedInstance == graphWindow.GraphImageBackground.OutputInstance;
-                if (CustomComponents.DrawIconToggle("enabled", Icon.PlayOutput, ref isPinned))
+                
+                var spaceBetweenViewIconsAndActions = ImGui.GetContentRegionAvail().X- (17+5) *3 - 82  - ImGui.GetCursorPosX();
+                
+                // Bypass
                 {
-                    if (isPinned)
-                        graphWindow.SetBackgroundOutput(_selectedInstance);
+                    ImGui.SameLine(0, spaceBetweenViewIconsAndActions);
+                    var isBypassed = symbolChildUi.SymbolChild.IsBypassed;
+                    if (symbolChildUi.SymbolChild.IsBypassable())
+                    {
+                        if (CustomComponents.DrawIconToggle("bypassed", Icon.OperatorBypassOff, Icon.OperatorBypassOn, ref isBypassed, true))
+                        {
+                            UndoRedoStack.AddAndExecute(isBypassed
+                                                            ? new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, true)
+                                                            : new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, false));
+                        }
+                    }
+                    else
+                    {
+                        CustomComponents.DrawIconToggle("bypassed", Icon.OperatorBypassOff, Icon.OperatorBypassOn, ref isBypassed, true, false);
+                    }
                 }
+                
+                // Disable
+                {
+                    ImGui.SameLine();
+                    var isDisabled = symbolChildUi.IsDisabled;
+                    if (CustomComponents.DrawIconToggle("disabled", Icon.OperatorDisabled, ref isDisabled, true))
+                    {
+                        UndoRedoStack.AddAndExecute(isDisabled
+                                                        ? new ChangeInstanceIsDisabledCommand(symbolChildUi, true)
+                                                        : new ChangeInstanceIsDisabledCommand(symbolChildUi, false));
+                    }
+                }
+                
+                // Pin to background
+                {
+                    ImGui.SameLine(0, 20);
+                    var isPinned = _selectedInstance == graphWindow.GraphImageBackground.OutputInstance;
+                    if (CustomComponents.DrawIconToggle("enabled", Icon.PlayOutput, ref isPinned))
+                    {
+                        if (isPinned)
+                            graphWindow.SetBackgroundOutput(_selectedInstance);
+                    }
+                }
+                
                 ImGui.PopStyleVar();
             }
 
@@ -121,10 +163,15 @@ internal static class ParameterPopUp
             {
                 case ViewModes.Parameters:
                     FrameStats.Current.OpenedPopUpName = ParameterPopUpName;
+                    ImGui.BeginChild("Scrolling", new Vector2(DefaultWindowSize.X, height - 5 ), false);
                     ImGui.PushFont(Fonts.FontSmall);
                     ParameterWindow.DrawParameters(graphWindow, _selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi, hideNonEssentials: true);
+                    FormInputs.AddVerticalSpace();
                     ImGui.PopFont();
+                    _lastRequiredHeight = ImGui.GetCursorPosY() + ImGui.GetFrameHeight();
+                    ImGui.EndChild();
                     break;
+                
                 case ViewModes.Presets:
                     var allWindows = WindowManager.GetAllWindows();
                     foreach (var w in allWindows)
@@ -132,28 +179,44 @@ internal static class ParameterPopUp
                         if (w is not VariationsWindow variationsWindow)
                             continue;
 
+                        ImGui.BeginChild("Scrolling", DefaultWindowSize, false, 
+                                         ImGuiWindowFlags.NoScrollWithMouse|
+                                         ImGuiWindowFlags.NoScrollbar |
+                                         ImGuiWindowFlags.NoBackground);
                         variationsWindow.DrawWindowContent(hideHeader: true);
+                        _lastRequiredHeight = DefaultWindowSize.Y;
+                        ImGui.GetWindowDrawList().AddRect(ImGui.GetWindowPos()+ Vector2.One, ImGui.GetWindowPos() + ImGui.GetWindowSize() - new Vector2(2,27), UiColors.WindowBackground);
+
+                        ImGui.EndChild();
+                        break;
                     }
 
                     break;
                 case ViewModes.Help:
-                    FormInputs.AddVerticalSpace();
-                    ImGui.PushFont(Fonts.FontNormal);
-                    ImGui.SetCursorPosX(10);
-                    ImGui.TextUnformatted(symbolUi.Symbol.Name);
-                    ImGui.PopFont();
+                    ImGui.BeginChild("Scrolling", 
+                                     new Vector2(DefaultWindowSize.X, 
+                                                 height), 
+                                     false,
+                                     ImGuiWindowFlags.NoBackground
+                                     );
                     FormInputs.AddVerticalSpace();
                     OperatorHelp.DrawHelp(symbolUi);
                     FormInputs.AddVerticalSpace();
+                    _lastRequiredHeight = ImGui.GetCursorPosY() + ImGui.GetFrameHeight();
+                    // Draw small border to separate from graph
+                    ImGui.GetWindowDrawList().AddRect(ImGui.GetWindowPos()+ Vector2.One, ImGui.GetWindowPos() + ImGui.GetWindowSize() - new Vector2(2,2), UiColors.WindowBackground);
+                    ImGui.EndChild();
                     break;
 
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
-            _lastRequiredHeight = ImGui.GetCursorPosY();
+//
         }
 
+
+        
         ImGui.EndChild();
         ImGui.PopStyleVar();
     }
@@ -172,7 +235,7 @@ internal static class ParameterPopUp
 
     private static readonly List<Icon> _modeIcons = new()
                                                         {
-                                                            Icon.ParamsList,
+                                                            Icon.List,
                                                             Icon.Presets,
                                                             Icon.HelpOutline
                                                         };

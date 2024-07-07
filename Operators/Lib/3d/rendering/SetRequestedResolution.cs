@@ -30,7 +30,7 @@ namespace Lib._3d.rendering
             context.RequestedResolution = new Int2((int)(newResolution.X * resolutionFactor).Clamp(1, 16384),
                                                    (int)(newResolution.Y * resolutionFactor).Clamp(1, 16384));
             
-            Texture.Value = Texture.GetValue(context);
+            Result.Value = Texture.GetValue(context);
             context.RequestedResolution = previousResolution;
         }
 

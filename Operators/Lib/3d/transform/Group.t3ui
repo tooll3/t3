@@ -77,7 +77,16 @@
         "X": 0.0,
         "Y": 180.0
       },
+      "GroupTitle": "Additional Options",
       "Description": "Forces constant updating if the colors animation is ignored."
+    },
+    {
+      "InputId": "b864bb2d-a9fd-4e63-8d3d-b0cc8da6a13c"/*EnableProfiling*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 225.0
+      },
+      "Description": "Enabling this option will measure the time it took to update the content of this group.\nThis can be very useful for profiling and optimizing your designs.\n\nYou can see the measurements in the \"IO Window\". "
     }
   ],
   "SymbolChildUis": [],

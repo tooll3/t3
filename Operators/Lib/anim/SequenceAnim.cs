@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -82,30 +83,6 @@ namespace lib.anim
             
             var outputMode = (OutputModes)OutputMode.GetValue(context).Clamp(0, Enum.GetValues(typeof(OutputModes)).Length - 1);
             
-            var recValue = RecordValue.GetValue(context);
-            if (_recordingStartTime > context.LocalFxTime)
-                _recordingStartTime = double.NegativeInfinity;
-            
-            var timeSinceRecordStart = (context.LocalFxTime - _recordingStartTime);
-            IsRecording = MathF.Abs(_rate) > 0.001f && timeSinceRecordStart < (1 / _rate) - (1f/CurrentSequence.Count)/_rate;
-            
-            var wasRecordTriggered = (Math.Abs(recValue - _lastRecordValue) > 0.0001f && recValue > _lastRecordValue);
-            if (wasRecordTriggered)
-            {
-                _lastRecordedIndex = _lastStepIndex;
-                SetStepValue(_lastStepIndex, recValue.Clamp(0, 1));
-                if (!IsRecording)
-                {
-                    _recordingStartTime = context.LocalFxTime;
-                }
-            }
-            else if (IsRecording && _lastStepIndex != _lastRecordedIndex)
-            {
-                SetStepValue(_lastStepIndex, 0);
-                _lastRecordedIndex = _lastStepIndex;
-            }
-
-            _lastRecordValue = recValue;
             
             var hasIndexChanged = SequenceIndex.DirtyFlag.IsDirty;
             CurrentSequenceIndex = SequenceIndex.GetValue(context);
@@ -125,14 +102,95 @@ namespace lib.anim
             }
 
             var time = context.LocalFxTime * _rate;
-            var overrideTime = OverrideTime.GetValue(context) / CurrentSequence.Count;
             if (OverrideTime.IsConnected)
             {
+                var overrideTime = OverrideTime.GetValue(context);
                 time = overrideTime * _rate;
             }
-                 
+            
             NormalizedBarTime = (float)MathUtils.Fmod(time, 1).Clamp(0, 0.999999);
 
+            var recValue = RecordValue.GetValue(context);
+            var recordingMode = RecordingMode.GetEnumValue<RecordingModes2>(context);
+            
+            switch (recordingMode)
+            {
+                case RecordingModes2.None:
+                    break;
+                
+                case RecordingModes2.RecordValueChanges:
+                    if (_recordingStartTime > context.LocalFxTime)
+                        _recordingStartTime = double.NegativeInfinity;
+                    
+                    var timeSinceRecordStart = (context.LocalFxTime - _recordingStartTime);
+                    IsRecording = MathF.Abs(_rate) > 0.001f && timeSinceRecordStart < (1 / _rate) - (1f/CurrentSequence.Count)/_rate;
+                    var wasRecordTriggered = (Math.Abs(recValue - _lastRecordValue) > 0.0001f && recValue > _lastRecordValue);
+                    if (wasRecordTriggered)
+                    {
+                        _lastRecordedIndex = _lastStepIndex;
+                        SetStepValue(_lastStepIndex, recValue.Clamp(0, 1));
+                        if (!IsRecording)
+                        {
+                            _recordingStartTime = context.LocalFxTime;
+                        }
+                    }
+                    else if (IsRecording && _lastStepIndex != _lastRecordedIndex)
+                    {
+                        SetStepValue(_lastStepIndex, 0);
+                        _lastRecordedIndex = _lastStepIndex;
+                    }
+                    break;
+                
+                case RecordingModes2.RecordHitCycle:
+                    var hasIncreased = recValue - _lastRecordValue > 0.001f;
+                    var wasHit = MathUtils.WasTriggered(hasIncreased, ref _recordingValueIncreased);
+                    if (wasHit)
+                    {
+                        // Clear all steps if it has been a while since the last record
+                        var cyclesSinceLastRecord = (time - _recordingStartTime) / (_rate * 4);
+                        if(cyclesSinceLastRecord > 1f)
+                        {
+                            for (var index = 0; index < CurrentSequence.Count; index++)
+                            {
+                                SetStepValue(index, 0);
+                            }
+
+                            _recordingStartTime = time;
+                            _lastRecordedIndex = 0;
+                        }
+                        
+                        var nearestStepIndex = (int)Math.Floor(NormalizedBarTime * CurrentSequence.Count);
+                        SetStepValue(nearestStepIndex, 1);
+                    }
+
+                    break;
+                
+                case RecordingModes2.RecordHits:
+                    var shouldSetValue = _lastStepIndex != _lastRecordedIndex;
+                    var newValue = 0f;
+
+                    if (recValue - _lastRecordValue > 0.001f)
+                    {
+                        shouldSetValue = true;    
+                        newValue = recValue.Clamp(0,1);
+                        _lastRecordedIndex = 0;
+                    }
+
+                    if (shouldSetValue)
+                    {
+                        SetStepValue(_lastStepIndex, newValue);
+                        _lastRecordedIndex = _lastStepIndex;
+                    }
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
+            _lastRecordValue = recValue;
+            
+            
+            
             var updateMode = (UpdateModes)UpdateMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(UpdateModes)).Length - 1);
             switch (updateMode)
             {
@@ -228,6 +286,7 @@ namespace lib.anim
         private static readonly List<float> _emptySequence = new();
         private string _sequencesDefinition = string.Empty;
         private const float MaxCharacterValue = 8;
+        private bool _recordingValueIncreased;
         
         private double _recordingStartTime = double.NegativeInfinity;
         private int _lastRecordedIndex = 0;
@@ -253,6 +312,13 @@ namespace lib.anim
             Random,
         }
         
+        private enum RecordingModes2
+        {
+            None,
+            RecordHitCycle,
+            RecordHits,
+            RecordValueChanges,
+        }
 
         [Input(Guid = "7BDFB9A8-87B3-4603-890C-FE755F4C4492")]
         public readonly InputSlot<string> Sequence = new();
@@ -277,6 +343,9 @@ namespace lib.anim
 
         [Input(Guid = "1c9afc39-7bab-4042-86eb-c7e30595af8e")]
         public readonly InputSlot<float> Bias = new();
+
+        [Input(Guid = "E45C6ABF-DF32-47CF-833D-E1391749B8F4", MappedType = typeof(RecordingModes2))]
+        public readonly InputSlot<int> RecordingMode = new();
         
         [Input(Guid = "3CE54CA0-CD50-4DC2-BD3D-51E26EBF05CE")]
         public readonly InputSlot<float> RecordValue = new();

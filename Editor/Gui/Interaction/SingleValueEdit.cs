@@ -25,11 +25,11 @@ namespace T3.Editor.Gui.Interaction
                                                int min = int.MinValue,
                                                int max = int.MaxValue,
                                                bool clamp = false,
-                                               float scale = 1f,
+                                               float scale = 0.2f,
                                                string format = "{0:0}")
         {
             double doubleValue = value;
-            var result = Draw(ref doubleValue, size, min, max, clamp, scale, format);
+            var result = Draw(ref doubleValue, size, min, max, clamp, scale, format, useIntegers:true);
             value = (int)doubleValue;
             return result;
         }
@@ -59,7 +59,8 @@ namespace T3.Editor.Gui.Interaction
                                                double max = double.PositiveInfinity,
                                                bool clamp = false,
                                                float scale = 1,
-                                               string format = "{0:0.000}")
+                                               string format = "{0:0.000}",
+                                               bool useIntegers= false)
         {
             _numberFormat = format;
             _currentTabIndex++;
@@ -223,17 +224,24 @@ namespace T3.Editor.Gui.Interaction
                             if (wheel == 0)
                                 return InputEditStateFlags.Nothing;
 
-                            var factor = 1f;
-                            if (io.KeyShift)
-                            {
-                                factor = 0.01f;
-                            }
-                            else if (io.KeyAlt)
-                            {
-                                factor = 10f;
-                            }
 
-                            value += wheel * scale * 10 * factor;
+                            if (useIntegers)
+                            {
+                                value += wheel * (io.KeyAlt ? 10 : 1);
+                            }
+                            else
+                            {
+                                var factor = 1f;
+                                if (io.KeyShift)
+                                {
+                                    factor = 0.01f;
+                                }
+                                else if (io.KeyAlt)
+                                {
+                                    factor = 10f;
+                                }
+                                value += wheel * scale * 10 * factor;
+                            }
                             _hoveredComponentModifiedByWheel = true;
                             return InputEditStateFlags.Modified;
                         }

@@ -14,7 +14,7 @@ namespace lib.math.@float
         [Output(Guid = "aacea92a-c166-46dc-b775-d28baf9820f5", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new();
 
-        private const float MinTimeElapsedBeforeEvaluation = 1 / 1000f;
+        private const double MinTimeElapsedBeforeEvaluation = 1 / 1000.0;
 
         public Damp()
         {

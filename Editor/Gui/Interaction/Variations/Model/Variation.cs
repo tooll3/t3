@@ -11,7 +11,7 @@ using T3.Serialization;
 namespace T3.Editor.Gui.Interaction.Variations.Model
 {
     /// <summary>
-    /// Base class for serialization of presents and snapshots
+    /// Base class for serialization of presents, snapshots and ParameterCollection-Scenes
     /// </summary>/
     public class Variation : ISelectableCanvasObject
     {
@@ -20,11 +20,11 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         public string Title;
         public int ActivationIndex;
         public bool IsPreset;
-        
-        public Vector2 PosOnCanvas  { get; set; }
-        public Vector2 Size  { get; set; } = VariationThumbnail.ThumbnailSize;
+
+        public Vector2 PosOnCanvas { get; set; }
+        public Vector2 Size { get; set; } = VariationThumbnail.ThumbnailSize;
         public DateTime PublishedDate;
-        
+
         // Other properties...
         public bool IsSelected { get; set; }
         public States State { get; set; } = States.InActive;
@@ -35,7 +35,29 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         /// </summary>
         public Dictionary<Guid, Dictionary<Guid, InputValue>> ParameterSetsForChildIds;
 
-        public static Variation? FromJson(Guid symbolId, JToken jToken)
+        public Variation Clone()
+        {
+            return new Variation()
+                       {
+                           Id = Id,
+                           Title = Title,
+                           ActivationIndex = ActivationIndex,
+                           IsPreset = IsPreset,
+                           PosOnCanvas = PosOnCanvas,
+                           Size = Size,
+                           PublishedDate = PublishedDate,
+                           IsSelected = IsSelected,
+                           State = State,
+                           ParameterSetsForChildIds =
+                               ParameterSetsForChildIds
+                                  .ToDictionary(kv => kv.Key,
+                                                kv =>
+                                                    kv.Value.ToDictionary(kv2 => kv2.Key,
+                                                                          kv2 => kv2.Value.Clone())),
+                       };
+        }
+
+        public static Variation FromJson(Guid symbolId, JToken jToken)
         {
             if (!SymbolUiRegistry.TryGetSymbolUi(symbolId, out var compositionSymbolUi))
                 return null;
@@ -55,18 +77,15 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                                        ActivationIndex = jToken[nameof(ActivationIndex)]?.Value<int>() ?? -1,
                                        IsPreset = jToken[nameof(IsPreset)]?.Value<bool>() ?? false,
                                        ParameterSetsForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>(),
-                                       
                                    };
-            
-            
+
             var positionToken = jToken[nameof(PosOnCanvas)];
             if (positionToken != null)
             {
-                newVariation.PosOnCanvas = new Vector2(positionToken["X"]?.Value<float>() ?? 0, 
-                                                    positionToken["Y"]?.Value<float>() ?? 0);
+                newVariation.PosOnCanvas = new Vector2(positionToken["X"]?.Value<float>() ?? 0,
+                                                       positionToken["Y"]?.Value<float>() ?? 0);
             }
 
-            
             var changesToken = (JObject)jToken[nameof(ParameterSetsForChildIds)];
             if (changesToken == null)
                 return newVariation;
@@ -122,7 +141,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         public void ToJson(JsonTextWriter writer)
         {
             var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
-            
+
             //writer.WritePropertyName(Id.ToString());
             writer.WriteStartObject();
             {
@@ -130,10 +149,10 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                 writer.WriteValue(nameof(IsPreset), IsPreset);
                 writer.WriteValue(nameof(ActivationIndex), ActivationIndex);
                 writer.WriteObject(nameof(Title), Title);
-                
+
                 writer.WritePropertyName(nameof(PosOnCanvas));
                 vec2Writer(writer, PosOnCanvas);
-                
+
                 writer.WritePropertyName(nameof(ParameterSetsForChildIds));
                 writer.WriteStartObject();
                 {
@@ -146,6 +165,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                             writer.WritePropertyName(inputId.ToString());
                             value.ToJson(writer);
                         }
+
                         writer.WriteEndObject();
                     }
                 }
@@ -158,7 +178,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         {
             return $"{Title} #{ActivationIndex}";
         }
-        
+
         public enum States
         {
             Undefined,

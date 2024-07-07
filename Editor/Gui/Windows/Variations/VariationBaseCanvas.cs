@@ -26,9 +26,9 @@ namespace T3.Editor.Gui.Windows.Variations
 
         private protected abstract Instance InstanceForBlendOperations { get; }
         private protected abstract SymbolVariationPool PoolForBlendOperations { get; }
-        protected abstract void DrawAdditionalContextMenuContent(Instance InstanceForBlendOperations);
+        protected abstract void DrawAdditionalContextMenuContent(Instance instanceForBlendOperations);
 
-        public void DrawBaseCanvas(ImDrawListPtr drawList, bool hideHeader = false)
+        public void DrawBaseCanvas( ImDrawListPtr drawList, bool hideHeader = false)
         {
             UpdateCanvas(out _);
 
@@ -54,12 +54,13 @@ namespace T3.Editor.Gui.Windows.Variations
                     _currentRenderInstance = renderInstance;
                 }
             }
-
-
+            
             // Get instance for variations
             if (pinnedOutputChanged)
             {
-                RefreshView();
+                //TODO: Check if this is required
+                //_instanceForBlending = InstanceForBlendOperations;
+                RefreshView(hideHeader);
             }
 
             //UpdateCanvas();
@@ -403,7 +404,7 @@ namespace T3.Editor.Gui.Windows.Variations
             _allThumbnailsRendered = false;
         }
 
-        protected void ResetView()
+        protected void ResetView(bool hideHide = false)
         {
             var pool = PoolForBlendOperations;
             if (pool == null)
@@ -411,7 +412,10 @@ namespace T3.Editor.Gui.Windows.Variations
 
             if (TryToGetBoundingBox(pool.AllVariations, 40, out var area))
             {
-                area.Min.Y -= 200;
+                if (!hideHide)
+                {
+                    area.Min.Y -= 150;
+                }
                 FitAreaOnCanvas(area);
             }
         }
@@ -546,7 +550,7 @@ namespace T3.Editor.Gui.Windows.Variations
         #endregion
 
         #region layout and view
-        public void RefreshView()
+        public void RefreshView(bool hideHeader = false)
         {
             TriggerThumbnailUpdate();
             CanvasElementSelection.Clear();

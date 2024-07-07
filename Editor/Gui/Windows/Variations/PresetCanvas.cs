@@ -37,10 +37,11 @@ namespace T3.Editor.Gui.Windows.Variations
 
         private void CreatePreset()
         {
+            var nextInsertionPosition = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.AllVariations);
             var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
             if (newVariation != null)
             {
-                newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.AllVariations);
+                newVariation.PosOnCanvas = nextInsertionPosition;
                 VariationThumbnail.VariationForRenaming = newVariation;
                 VariationHandling.ActivePoolForPresets.SaveVariationsToFile();
             }

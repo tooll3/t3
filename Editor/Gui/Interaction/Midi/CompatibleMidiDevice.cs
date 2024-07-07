@@ -6,14 +6,12 @@ using NAudio.Midi;
 using Operators.Utils;
 using T3.Core.Logging;
 using T3.Editor.Gui.Interaction.Midi.CommandProcessing;
-using T3.Editor.Gui.Interaction.Variations;
-using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.Gui.Interaction.Midi;
 
 /// <summary>
 /// Combines midi signals related to Variations into triggers and invokes matching <see cref="CommandTriggerCombination"/>s.
-/// Allow allows to update the status of midi devices, e.g. for controlling LEDs to indicate available or active variations.
+/// Allow to update the status of midi devices, e.g. for controlling LEDs to indicate available or active variations.
 /// </summary>
 /// <remarks>
 /// This is NOT related to the MidiInput operator: Both are registered as independent <see cref="MidiConnectionManager.IMidiConsumer"/>
@@ -244,7 +242,7 @@ public abstract class CompatibleMidiDevice : MidiConnectionManager.IMidiConsumer
         }
     }
 
-    private static void SendColor(MidiOut midiOut, int apcControlIndex, int colorCode)
+    protected virtual void SendColor(MidiOut midiOut, int apcControlIndex, int colorCode)
     {
         if (CacheControllerColors[apcControlIndex] == colorCode)
             return;
@@ -263,7 +261,7 @@ public abstract class CompatibleMidiDevice : MidiConnectionManager.IMidiConsumer
         CacheControllerColors[apcControlIndex] = colorCode;
     }
 
-    private static readonly int[] CacheControllerColors = Enumerable.Repeat(-1, 256).ToArray();
+    protected static readonly int[] CacheControllerColors = Enumerable.Repeat(-1, 256).ToArray();
     #endregion
 
     private readonly Dictionary<int, ButtonSignal> _combinedButtonSignals = new();
@@ -277,8 +275,8 @@ public class MidiDeviceProductAttribute : Attribute
 {
     public MidiDeviceProductAttribute(string productName)
     {
-        ProductName = productName;
+        ProductNames =  productName.Split(';');
     }
 
-    public string ProductName { get; set; }
+    public string[] ProductNames { get; }
 }

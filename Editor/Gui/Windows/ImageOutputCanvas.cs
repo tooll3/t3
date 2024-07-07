@@ -124,9 +124,17 @@ namespace T3.Editor.Gui.Windows
         public void SetViewMode(Modes newMode)
         {
             _viewMode = newMode;
-            if (newMode == Modes.Pixel)
+            switch (newMode)
             {
-                SetScaleToMatchPixels();
+                case Modes.Pixel:
+                    SetScaleToMatchPixels();
+                    UserZoomedView = false;
+                    break;
+                case Modes.Fitted:
+                    UserZoomedView = false;
+                    UserPannedView = false;
+                    break;
+
             }
         }
 
@@ -136,11 +144,16 @@ namespace T3.Editor.Gui.Windows
         /// </summary>
         private void UpdateViewMode(InteractionState interactionState)
         {
+            UserZoomedView |= interactionState.UserZoomedCanvas;
+            UserPannedView |= interactionState.UserPannedCanvas;
+            
             switch (_viewMode)
             {
                 case Modes.Fitted:
                     if (interactionState.UserPannedCanvas || interactionState.UserZoomedCanvas)
+                    {
                         _viewMode = Modes.Custom;
+                    }
                     break;
 
                 case Modes.Pixel:
@@ -161,5 +174,8 @@ namespace T3.Editor.Gui.Windows
         public Modes ViewMode => _viewMode;
         private Modes _viewMode = Modes.Fitted;
         public bool DisableDamping = false;
+        
+        public bool UserPannedView = false;
+        public bool UserZoomedView = false; 
     }
 }

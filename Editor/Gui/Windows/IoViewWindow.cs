@@ -1,4 +1,5 @@
-﻿using T3.Editor.Gui.OutputUi;
+﻿using T3.Core.DataTypes.DataSet;
+using T3.Editor.Gui.OutputUi;
 
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -13,7 +14,7 @@ public class IoViewWindow : Window
 
     protected override void DrawContent()
     {
-        _canvas.Draw(T3Ui.MidiDataRecording.DataSet);
+        _canvas.Draw(DataRecording.ActiveRecordingSet);
     }
 
     public override List<Window> GetInstances()

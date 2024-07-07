@@ -52,15 +52,18 @@ namespace T3.Editor.Gui.Styling
             var color = args.Warning ? UiColors.StatusWarning.Rgba : UiColors.Text.Rgba;
             ImGui.PushStyleColor(ImGuiCol.Text, color);
             var wasChanged = ImGui.InputText(args.Label, ref filter, 256);
+            
+            filter ??= string.Empty;
             ImGui.PopStyleColor();
-
+            
             if (ImGui.IsItemActivated())
             {
                 _lastTypeAheadResults.Clear();
                 _selectedResultIndex = -1;
                 THelpers.DisableImGuiKeyboardNavigation();
             }
-
+            
+            
             var isItemDeactivated = ImGui.IsItemDeactivated();
             
             // We defer exit to get clicks on opened popup list
@@ -71,8 +74,10 @@ namespace T3.Editor.Gui.Styling
             {
                 _activeInputId = inputId;
 
-                ImGui.SetNextWindowPos(new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y));
-                ImGui.SetNextWindowSize(new Vector2(ImGui.GetItemRectSize().X, 320));
+                var lastPosition = new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y);
+                var size = new Vector2(ImGui.GetItemRectSize().X, 320);
+                ImGui.SetNextWindowPos(lastPosition);
+                ImGui.SetNextWindowSize(size);
                 if (ImGui.IsItemFocused() && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                 {
                     wasChanged = true;
@@ -93,30 +98,41 @@ namespace T3.Editor.Gui.Styling
                     var index = 0;
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Gray.Rgba);
                     
-                    var getInfo = args.GetTextInfo;
-                        
+                    var matches = new List<T>();
+                    var others = new List<T>();
                     foreach (var item in args.Items)
                     {
-                        // this check shouldn't be necessary
-                        if(item == null)
-                            continue;
+                        var word = args.GetTextInfo(item);
                         
-                        var info = getInfo(item);
-                        if (!StringUtils.MatchesSearchFilter(info.SearchText, searchFilter, true))
-                            continue;
-                        
+                        if(!StringUtils.MatchesSearchFilter(word.SearchText, filter, true))
+                        //if ((string.IsNullOrWhiteSpace(filter) || word.SearchText.Contains(filter, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            matches.Add(item);
+                        }
+                        else
+                        {
+                            others.Add(item);
+                        }
+                    }
+                    
+                    var listItems = (!string.IsNullOrWhiteSpace(filter) && matches.Count  <=1) ? others : matches;
+                    
+                    foreach (var item in listItems)
+                    {
                         var isSelected = index == _selectedResultIndex;
                         
                         // We can't use IsItemHovered because we need to use Tooltip hack 
                         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-                        ImGui.Selectable(info.DisplayText, isSelected);
+
+                        var textInfo = args.GetTextInfo(item);
+                        ImGui.Selectable(textInfo.DisplayText, isSelected);
 
                         var isItemHovered = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax()).Contains( ImGui.GetMousePos());
 
-                        if (isItemHovered && !string.IsNullOrEmpty(info.Tooltip))
+                        if (isItemHovered && !string.IsNullOrEmpty(textInfo.Tooltip))
                         {
                             ImGui.BeginTooltip();
-                            ImGui.TextUnformatted(info.Tooltip);
+                            ImGui.TextUnformatted(textInfo.Tooltip);
                             ImGui.EndTooltip();
                         }
                         
@@ -125,13 +141,13 @@ namespace T3.Editor.Gui.Styling
                         if ((ImGui.IsMouseClicked(ImGuiMouseButton.Left) && isItemHovered) 
                             || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
                         {
-                            filter = info.SearchText;
+                            filter = textInfo.SearchText;
                             wasChanged = true;
                             _activeInputId = 0;
                             selected = item;
                         }
 
-                        _lastTypeAheadResults.Add(info.SearchText);
+                        _lastTypeAheadResults.Add(textInfo.SearchText);
                         if (++index > 100)
                             break;
                     }

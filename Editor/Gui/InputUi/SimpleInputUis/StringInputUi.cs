@@ -250,26 +250,39 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             {
                 var changed = false;
 
-                var currentValue = customValueHolder.GetValueForInput(input.Id);
-                if (ImGui.BeginCombo("##customDropdown", currentValue, ImGuiComboFlags.HeightLarge))
+                var currentValue = customValueHolder.GetValueForInput(input.InputDefinition.Id);
+                
+                // A dropdown implementation that prevents free string input
+                // if (ImGui.BeginCombo("##customDropdown", currentValue, ImGuiComboFlags.HeightLarge))
+                // {
+                //     foreach (var value2 in customValueHoder.GetOptionsForInput(input.InputDefinition.Id))
+                //     {
+                //         if (value2 == null)
+                //             continue;
+                //
+                //         var isSelected = value2 == currentValue;
+                //         if (!ImGui.Selectable($"{value2}", isSelected, ImGuiSelectableFlags.DontClosePopups))
+                //             continue;
+                //
+                //         ImGui.CloseCurrentPopup();
+                //         customValueHoder.HandleResultForInput(input.InputDefinition.Id, value2);
+                //         changed = true;
+                //     }
+                //
+                //     ImGui.EndCombo();
+                // }
+
+                var inputArgs = new InputWithTypeAheadSearch.Args<string>("##customDropdown", 
+                                                                          customValueHolder.GetOptionsForInput(input.InputDefinition.Id), 
+                                                                          GetTextInfo, 
+                                                                          false);
+                if (InputWithTypeAheadSearch.Draw<string>(inputArgs, ref currentValue, out var selected))
                 {
-                    foreach (var value2 in customValueHolder.GetOptionsForInput(input.Id))
-                    {
-                        if (value2 == null)
-                            continue;
-
-                        var isSelected = value2 == currentValue;
-                        if (!ImGui.Selectable($"{value2}", isSelected, ImGuiSelectableFlags.DontClosePopups))
-                            continue;
-
-                        ImGui.CloseCurrentPopup();
-                        customValueHolder.HandleResultForInput(input.Id, value2);
-                        changed = true;
-                    }
-
-                    ImGui.EndCombo();
+                    ImGui.CloseCurrentPopup();
+                    customValueHolder.HandleResultForInput(input.InputDefinition.Id, selected);
+                    changed = true;
                 }
-
+                
                 return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
             }
             else
@@ -278,6 +291,11 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 //Log.Warning($"{instance?.Parent?.Symbol?.Name} doesn't support custom inputs");
                 return InputEditStateFlags.Nothing;
             }
+        }
+
+        private static InputWithTypeAheadSearch.Texts GetTextInfo(string arg)
+        {
+            return new InputWithTypeAheadSearch.Texts(arg, arg, null);
         }
 
         protected override void DrawReadOnlyControl(string name, ref string value)

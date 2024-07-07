@@ -1,0 +1,38 @@
+{
+  "Id": "f38311df-d356-4385-8535-96f52a71d53e"/*FlipBool*/,
+  "Description": "Toggles (flips) a boolean between true/false everytime it is triggered.\n\nThis is similar to [FlipFlop].",
+  "InputUis": [
+    {
+      "InputId": "182ed32b-209d-4f6d-ae51-9186883738de"/*Trigger*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "7a312233-a86b-4d89-ac06-816532e7458f"/*ResetTrigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "ad358d45-0531-4399-a755-c85d5ef01317"/*DefaultValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "1ff6a7a5-142f-41f9-9802-f6875fbccd44"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

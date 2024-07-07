@@ -5,6 +5,7 @@ using NewTek.NDI;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.Animation;
+using T3.Core.DataTypes.DataSet;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -53,6 +54,8 @@ namespace t3.ndi
                 Connect(sourceName);
                 _textureMutex.ReleaseMutex();
             }
+            
+            _isProfiling = EnableProfiling.GetValue(context);
 
             _textureMutex.WaitOne(Timeout.Infinite);
             _textureAction?.Invoke();
@@ -180,6 +183,9 @@ namespace t3.ndi
                                      on_program = onProgram,
                                      on_preview = onPreview
                                  };
+            
+            if(_isProfiling)
+                DebugDataRecording.KeepTraceData(this, "01-SetTallyIndicators", tallyStateDescriptor, ref _traceTallyChannel);
 
             NDIlib.recv_set_tally(_receiveInstancePtr, ref tallyStateDescriptor);
         }
@@ -189,8 +195,14 @@ namespace t3.ndi
         /// </summary>
         private void ReceiveThreadProc(object param)
         {
+
+            var device = ResourceManager.Device;
+
             // Here we keep track of the receiver Id used for this thread.
             var currReceiverId = (int)param;
+            
+            if(_isProfiling)
+                DebugDataRecording.KeepTraceData(this, "02-ReceiveThreadProc", currReceiverId, ref _traceReceiveThreadProc);
 
             while (!_exitThread && _receiveInstancePtr != IntPtr.Zero)
             {
@@ -199,7 +211,12 @@ namespace t3.ndi
                 var audioFrame = new NDIlib.audio_frame_v2_t();
                 var metadataFrame = new NDIlib.metadata_frame_t();
 
-                switch (NDIlib.recv_capture_v2(_receiveInstancePtr, ref videoFrame, ref audioFrame, ref metadataFrame, 1000))
+                var recvCaptureV2 = NDIlib.recv_capture_v2(_receiveInstancePtr, ref videoFrame, ref audioFrame, ref metadataFrame, 1000);
+
+                if(_isProfiling)
+                    DebugDataRecording.KeepTraceData(this, "03-ReceiveThreadProc", recvCaptureV2, ref _traceReceive2ThreadProc);
+
+                switch (recvCaptureV2)
                 {
                     // No data
                     case NDIlib.frame_type_e.frame_type_none:
@@ -246,9 +263,7 @@ namespace t3.ndi
                             }
                         }
                         
-
-
-
+                        
                         // For now, we need to be on the UI thread to fill our bitmap
                         _textureAction = () =>
                                          {
@@ -268,6 +283,7 @@ namespace t3.ndi
                                                  return;
                                              }
 
+                                             
                                              // create several textures with a given format with CPU access
                                              // to be able to read out the initial texture values
                                              const Format textureFormat = Format.B8G8R8A8_UNorm;
@@ -278,6 +294,9 @@ namespace t3.ndi
                                                  || _imagesWithCpuAccess[0].Description.Height != yRes
                                                  || _imagesWithCpuAccess[0].Description.MipLevels != 1)
                                              {
+                                                 DebugDataRecording.KeepTraceData(this, "07-_textureActionCreateNewTexture", currReceiverId, ref _traceTextureAction2Channel);
+
+                                                 
                                                  var imageDesc = new Texture2DDescription
                                                                      {
                                                                          BindFlags = BindFlags.ShaderResource,
@@ -310,11 +329,14 @@ namespace t3.ndi
                                              var immediateContext = ResourceManager.Device.ImmediateContext;
                                              var writableImage = _imagesWithCpuAccess[_currentIndex];
                                              _currentIndex = (_currentIndex + 1) % NumTextureEntries;
+                                             
+                                             // NOTE: During profiling we can observe that this block is zero length if image index is 0 ???
+                                             // We should investigate this, because there might be a bug in the code.
+                                             if(_isProfiling)
+                                                DebugDataRecording.StartRegion(this, "08-CopyTextureToIndex", _currentIndex, ref _traceTextureCopyChannel);
 
                                              // we have to map with a stride that represents multiples of 16 pixels here
                                              // (it is yet unclear why, but works)
-
-
                                              // map resource manually using our stride...
                                              var dataBox = immediateContext.MapSubresource(writableImage, 0, 0, MapMode.WriteDiscard,
                                                                                            SharpDX.Direct3D11.MapFlags.None, out int _);
@@ -329,6 +351,10 @@ namespace t3.ndi
                                              Texture.Value = writableImage;
                                              UploadTime.Value = (float)sw.Elapsed.TotalMilliseconds;
 
+                                             
+                                             if(_isProfiling)
+                                                DebugDataRecording.EndRegion(_traceTextureCopyChannel);
+                                             
                                              // free frames that were received after use
                                              NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
                                              _lastStatusMessage = null;
@@ -458,24 +484,6 @@ namespace t3.ndi
         private Action _textureAction;
         
 
-        [Input(Guid = "FD1FCA6B-A3BE-440B-86BA-6B7B1BBD2A8C")]
-        public InputSlot<string> SourceName = new();
-
-        public string GetValueForInput(Guid inputId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<string> GetOptionsForInput(Guid inputId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void HandleResultForInput(Guid inputId, string result)
-        {
-            throw new NotImplementedException();
-        }
-
         public IStatusProvider.StatusLevel GetStatusLevel()
         {
             return string.IsNullOrEmpty(_lastStatusMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
@@ -514,5 +522,20 @@ namespace t3.ndi
             SourceName.SetTypedInputValue(result);
         }
         #endregion
+
+        private bool _isProfiling;
+        private DataChannel _traceTallyChannel;
+        private DataChannel _traceReceiveThreadProc;
+        private DataChannel _traceReceive2ThreadProc;
+        private DataChannel _traceTextureCopyChannel;
+        private DataChannel _traceTextureAction2Channel;
+        
+        [Input(Guid = "FD1FCA6B-A3BE-440B-86BA-6B7B1BBD2A8C")]
+        public InputSlot<string> SourceName = new();
+        
+        [Input(Guid = "3F634E98-93F2-4B5E-A098-623B3F8E4C9C")]
+        public InputSlot<bool> EnableProfiling = new();
+
+        
     }
 }

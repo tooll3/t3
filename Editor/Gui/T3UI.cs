@@ -13,6 +13,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
+using T3.Editor.App;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
@@ -61,7 +62,6 @@ public static class T3Ui
 
 
         CompatibleMidiDeviceHandling.InitializeConnectedDevices();
-        ActiveMidiRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
         _initialed = true;
     }
 
@@ -69,6 +69,7 @@ public static class T3Ui
 
     internal static void ProcessFrame()
     {
+        Profiling.KeepFrameData();
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
 
         CustomComponents.BeginFrame();
@@ -118,8 +119,7 @@ public static class T3Ui
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
-
-
+        
         FrameStats.CompleteFrame();
         TriggerGlobalActionsFromKeyBindings();
 
@@ -147,6 +147,8 @@ public static class T3Ui
 
         Playback.OpNotReady = false;
         AutoBackup.AutoBackup.CheckForSave();
+
+        Profiling.EndFrameData();
     }
 
     private static void InvalidateSelectedOpsForTransormGizmo(NodeSelection nodeSelection)
@@ -486,7 +488,10 @@ public static class T3Ui
             UserSettings.Config.ShowMainMenu = true;
             UserSettings.Config.ShowTitleAndDescription = true;
             UserSettings.Config.ShowToolbar = true;
-            UserSettings.Config.ShowTimeline = true;
+            if (Playback.Current.Settings.Syncing == PlaybackSettings.SyncModes.Timeline)
+            {
+                UserSettings.Config.ShowTimeline = true;
+            }
         }
     }
 
@@ -566,6 +571,14 @@ public static class T3Ui
             Log.Debug($"{s.Name} - {s.Namespace}  {c}");
         }
     }
+    
+
+    //@imdom: needs clarification how to handle osc data disconnection on shutdown
+    // public void Dispose()
+    // {
+    //     GC.SuppressFinalize(this);
+    //     OscDataRecording.Dispose();
+    // }
 
     internal static bool DraggingIsInProgress = false;
     internal static bool MouseWheelFieldHovered { private get; set; }
@@ -581,7 +594,9 @@ public static class T3Ui
     public static float UiScaleFactor { get; internal set; } = 1;
     internal static float DisplayScaleFactor { get; set; } = 1;
     internal static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
-    internal static readonly MidiDataRecording MidiDataRecording = new();
+
+    public static readonly MidiDataRecording MidiDataRecording = new(DataRecording.ActiveRecordingSet);
+    public static readonly OscDataRecording OscDataRecording = new(DataRecording.ActiveRecordingSet);
 
     //private static readonly AutoBackup.AutoBackup _autoBackup = new();
 

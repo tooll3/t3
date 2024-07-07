@@ -99,9 +99,6 @@ namespace T3.Editor.Gui.Windows.Variations
                         case InteractionModes.Snapshots:
                             _snapshotCanvas.DrawToolbarFunctions();
                             break;
-                        case InteractionModes.ParameterGroups:
-                            _parameterGroupUi.DrawToolbarContent();
-                            break;
                     }
 
                     ImGui.EndChild();
@@ -157,10 +154,6 @@ namespace T3.Editor.Gui.Windows.Variations
                         }
 
                         break;
-
-                    case InteractionModes.ParameterGroups:
-                        _parameterGroupUi.DrawContent();
-                        break;
                 }
             }
 
@@ -171,7 +164,6 @@ namespace T3.Editor.Gui.Windows.Variations
         {
             Presets,
             Snapshots,
-            ParameterGroups,
         }
 
         private static readonly List<string> _options = new() { "Presets", "Snapshots" };
@@ -193,6 +185,5 @@ namespace T3.Editor.Gui.Windows.Variations
         private static SymbolVariationPool _poolWithVariationToBeDeleted;
         private readonly PresetCanvas _presetCanvas;
         private readonly SnapshotCanvas _snapshotCanvas;
-        private readonly ParameterGroupUi _parameterGroupUi = new();
     }
 }

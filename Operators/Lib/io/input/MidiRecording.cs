@@ -20,16 +20,16 @@ namespace lib.io.input
 
         private void Update(EvaluationContext context)
         {
-            if (ActiveMidiRecording.ActiveRecordingSet == null)
+            if (T3.Core.DataTypes.DataSet.DataRecording.ActiveRecordingSet == null)
                 return;
             
             var wasResetTriggered = MathUtils.WasTriggered(ResetTrigger.GetValue(context), ref _resetTrigger);
             if (wasResetTriggered)
             {
-                ActiveMidiRecording.ActiveRecordingSet.Clear();
+                T3.Core.DataTypes.DataSet.DataRecording.ActiveRecordingSet.Clear();
             }
 
-            DataSet.Value = ActiveMidiRecording.ActiveRecordingSet;
+            DataSet.Value = T3.Core.DataTypes.DataSet.DataRecording.ActiveRecordingSet;
         }
 
         [Input(Guid = "9b844a51-d108-426e-a264-d570d30031c6")]

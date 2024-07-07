@@ -12,6 +12,7 @@
         {
             Undefined,
             Success,
+            Notice,
             Warning,
             Error,
         }

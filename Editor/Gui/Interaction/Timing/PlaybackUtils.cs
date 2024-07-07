@@ -53,9 +53,9 @@ namespace T3.Editor.Gui.Interaction.Timing
                         if (TapProvider.ResyncTriggered)
                             BeatTiming.TriggerResyncMeasure();
                         
-                        BeatTiming.SlideSyncTime = TapProvider.SlideSyncTime;
                     }
-
+                    
+                    //BeatTiming.SlideSyncTime = ForwardBeatTaps.SlideSyncTime;
                     Playback.Current.Settings.Bpm = (float)Playback.Current.Bpm;
                     
                     if (hasBpmProvider && BpmProvider.TryGetNewBpmRate(out var newBpmRate2))

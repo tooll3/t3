@@ -12,7 +12,7 @@
       "DefaultValue": 17
     },
     {
-      "Id": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*SubdivisionThreshold*/,
+      "Id": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*Threshold*/,
       "DefaultValue": 0.1
     },
     {
@@ -106,7 +106,7 @@
     },
     {
       "Id": "d90350a0-9fa8-4747-805b-ba7ab8125595"/*Use4xMSAA*/,
-      "DefaultValue": true
+      "DefaultValue": false
     }
   ],
   "Children": [

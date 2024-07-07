@@ -103,14 +103,14 @@ public class OperatorHelp
     public static void DrawHelp(SymbolUi symbolUi)
     {
         // Title and namespace
-        ImGui.Indent(5);
+        ImGui.Indent(10);
         FormInputs.AddSectionHeader(symbolUi.Symbol.Name);
         ImGui.PushFont(Fonts.FontSmall);
         ImGui.TextUnformatted("in ");
         ImGui.SameLine();
         ImGui.TextUnformatted(symbolUi.Symbol.Namespace);
         ImGui.PopFont();
-        ImGui.Unindent(5);
+        ImGui.Unindent(10);
         FormInputs.SetIndentToLeft();
         FormInputs.AddVerticalSpace();
 

@@ -1,7 +1,9 @@
 using System.Runtime.InteropServices;
 using System;
 using System.Numerics;
+using T3.Core.Animation;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.DataSet;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -32,6 +34,14 @@ namespace lib._3d.transform
 
         private void Update(EvaluationContext context)
         {
+            var profilingEnabled = EnableProfiling.GetValue(context);
+            if (profilingEnabled)
+            {
+                DebugDataRecording.StartRegion(this, "Update", null, ref _profileChannel);
+            }
+
+            var startTime = Playback.RunTimeInSecs;
+            
             TransformCallback?.Invoke(this, context); // this this is stupid stupid
 
             // Build and set transform matrix
@@ -55,7 +65,7 @@ namespace lib._3d.transform
             context.ObjectToWorld = Matrix4x4.Multiply(objectToParentObject, context.ObjectToWorld);
             
             var commands = Commands.CollectedInputs;
-            if (IsEnabled.GetValue(context))
+            if (IsEnabled.GetValue(context) && color.W > 0)
             {
                 foreach (var t1 in commands)
                 {
@@ -80,6 +90,11 @@ namespace lib._3d.transform
             
             context.ForegroundColor = previousColor;
             context.ObjectToWorld = previousWorldTobject;
+            
+            if (profilingEnabled)
+            {
+                DebugDataRecording.EndRegion(_profileChannel, $"{(Playback.RunTimeInSecs - startTime) * 1000:0.0}ms");
+            }
         }
 
         [Input(Guid = "9E961F73-1EE7-4369-9AC7-5C653E570B6F")]
@@ -106,5 +121,9 @@ namespace lib._3d.transform
         [Input(Guid = "35A18838-B095-431F-A3AF-2DBA81DCC16F")]
         public readonly InputSlot<bool> ForceColorUpdate = new();
 
+        [Input(Guid = "B864BB2D-A9FD-4E63-8D3D-B0CC8DA6A13C")]
+        public readonly InputSlot<bool> EnableProfiling = new();
+
+        private DataChannel _profileChannel;
     }
 }

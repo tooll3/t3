@@ -1,6 +1,6 @@
 {
   "Id": "dd586355-64b3-4e96-af6d-b4927595dee7"/*AddNoise*/,
-  "Description": "Creates a new buffer by resampling the connected points. This can be useful for increasing resolution or smoothing out hard edges.",
+  "Description": "Creates a new buffer by resampling the connected points. This can be useful for increasing resolution or smoothing out hard edges.\n\nAlso see [SimNoiseOffset] and [TurbulenceForce]",
   "InputUis": [
     {
       "InputId": "3f5abde2-66e1-4b04-9bff-5a19a58aab86"/*Points*/,
@@ -15,56 +15,68 @@
       "Position": {
         "X": -354.29822,
         "Y": 941.61896
-      }
+      },
+      "Description": "Defines the total intensity of the random movements.",
+      "AddPadding": "True"
     },
     {
       "InputId": "929db7b2-f19c-4a28-b4c2-187365b99760"/*Frequency*/,
       "Position": {
         "X": -354.29822,
         "Y": 986.61896
-      }
+      },
+      "GroupTitle": "Settings",
+      "Description": "Defines the frequency, i.e. how fast the points move."
     },
     {
       "InputId": "aaba1602-e7a1-4b48-81d4-9d7b2b3aa8b1"/*Phase*/,
       "Position": {
         "X": -354.29822,
         "Y": 1031.619
-      }
+      },
+      "Description": "Defines the phase of the noise and can be animated with a [Value], e.g. using [Time]."
     },
     {
       "InputId": "1dfb45ae-b376-41ea-a1d2-97b170645b50"/*Variation*/,
       "Position": {
         "X": -354.29822,
         "Y": 1076.619
-      }
+      },
+      "Description": "Adds more variance and detail to the noise."
     },
     {
       "InputId": "c2df1fa3-88e1-4be2-954e-8c44edd9d421"/*AmountDistribution*/,
       "Position": {
         "X": -351.6601,
         "Y": 1169.9845
-      }
+      },
+      "Description": "Multiplier for the individual axes to amplify / attenuate the noise in certain directions.",
+      "AddPadding": "True"
     },
     {
       "InputId": "97c25ec6-ef71-42f8-9352-52baf2ce41a4"/*RotationLookupDistance*/,
       "Position": {
         "X": -351.6601,
         "Y": 1214.9845
-      }
+      },
+      "GroupTitle": "Additional Options",
+      "Description": "Defines the rotation lookup distance"
     },
     {
       "InputId": "6c2ab161-da81-47c2-8008-222cf994179c"/*UseWAsWeight*/,
       "Position": {
         "X": -351.6601,
         "Y": 1259.9845
-      }
+      },
+      "Description": "Defines whether particles are more or less affected by noise depending on the W value."
     },
     {
       "InputId": "2d229dc7-a7ec-4fae-b84c-5eea6b91e18a"/*NoiseOffset*/,
       "Position": {
         "X": -351.6601,
         "Y": 1304.9845
-      }
+      },
+      "Description": "Shifts the noise per axis."
     },
     {
       "InputId": "30ceafce-455a-449c-9ffd-928280d7a862"/*BiasAndGain*/,
@@ -72,6 +84,8 @@
         "X": -351.6601,
         "Y": 1349.9845
       },
+      "Description": "Bias And Gain to accentuate the noise both in time and space",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true,

@@ -8,6 +8,7 @@ using T3.Editor.Gui.Interaction.Variations.Model;
 namespace T3.Editor.Gui.Interaction.Midi.CompatibleDevices;
 
 [SuppressMessage("ReSharper", "UnusedMember.Local")]
+
 [MidiDeviceProduct("APC MINI")]
 public class ApcMini : CompatibleMidiDevice
 {
@@ -27,16 +28,32 @@ public class ApcMini : CompatibleMidiDevice
                       new(BlendActions.StartBlendingSnapshots, InputModes.Default, new[] { SceneTrigger1To64 },
                           CommandTriggerCombination.ExecutesAt.AllCombinedButtonsReleased),
 
-                      new(BlendActions.StopBlendingTowards, InputModes.Default, new[] { Shift },
-                          CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
-                      new(BlendActions.StartBlendingTowardsSnapshot, requiredInputMode: InputModes.BlendTo, new[] { SceneTrigger1To64 },
+                      
+                      new(BlendActions.StartBlendingTowardsSnapshot, 
+                          requiredInputMode: InputModes.BlendTo, 
+                          new[] { SceneTrigger1To64 },
                           CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+
+                      // Sadly this is not triggered. 
+                      // new(BlendActions.StopBlendingTowards, InputModes.BlendTo, new[] { Shift },
+                      //     CommandTriggerCombination.ExecutesAt.ModeButtonReleased),
+                      
+                      new(BlendActions.StopBlendingTowards, InputModes.Default, new[] { SceneLaunch8ClipStopAll },
+                          CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
+                      
                       new(BlendActions.UpdateBlendingTowardsProgress, InputModes.Default, new[] { Slider9 },
                           CommandTriggerCombination.ExecutesAt.ControllerChange),
+                      
+                      new(BlendActions.UpdateBlendValues, InputModes.Default, new[] { Sliders1To8 }, 
+                          CommandTriggerCombination.ExecutesAt.ControllerChange),
 
-                      new(BlendActions.UpdateBlendValues, InputModes.Default, new[] { Sliders1To8 }, CommandTriggerCombination.ExecutesAt.ControllerChange),
-                      new(SnapshotActions.SaveSnapshotAtNextFreeSlot, InputModes.Default, new[] { SceneLaunch8ClipStopAll },
-                          CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
+                      // A first stub for parameter collection control.
+                      // new(ParamCollectionActions.SetParamGroupControl, InputModes.Default, new[] { Sliders1To8 },
+                      //     CommandTriggerCombination.ExecutesAt.ControllerChange),
+                      
+                      // new(SnapshotActions.SaveSnapshotAtNextFreeSlot, InputModes.Default, new[] { SceneLaunch8ClipStopAll },
+                      //     CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
+                      
                       //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { ChannelButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
                   };
         
@@ -86,56 +103,6 @@ public class ApcMini : CompatibleMidiDevice
 
                             return AddModeHighlight(mappedIndex, (int)color);
                         });
-
-        // UpdateRangeLeds(midiOut, SceneLaunch8ClipStopAll, 
-        //                 mappedIndex => (int)ApcButtonColor.Red);
-
-        // if (activeVariation.IsGroupExpanded)
-        // {
-        //     var activeIndex = activeVariation.ActiveGroupIndex; 
-        //     UpdateRangeLeds(midiOut, ChannelButtons1To8,
-        //                     mappedIndex =>
-        //                     {
-        //                         var colorForGroupButton =
-        //                             mappedIndex == activeIndex
-        //                                 ? ApcButtonColor.Red
-        //                                 : (ImGui.GetFrameCount() - mappedIndex) % 30 < 3
-        //                                     ? ApcButtonColor.Red
-        //                                     : ApcButtonColor.Off;
-        //                                 
-        //                         return (int)colorForGroupButton;
-        //                     });
-        // }
-        // else
-        // {
-        //     UpdateRangeLeds(midiOut, ChannelButtons1To8,
-        //                     mappedIndex =>
-        //                     {
-        //                         var group = activeVariation.GetGroupAtIndex(mappedIndex);
-        //                         var isGroupDefined = group != null;
-        //                         
-        //                         var colorForGroupButton =
-        //                             isGroupDefined
-        //                                     ? group.Id == activeVariation.ActiveGroupId
-        //                                         ? ApcButtonColor.Red
-        //                                         : ApcButtonColor.Off
-        //                                     : ApcButtonColor.Off;
-        //                         return (int)colorForGroupButton;
-        //                     });
-        // }
-
-        // UpdateRangeLeds(midiOut, SceneLaunch1To8,
-        //                 mappedIndex =>
-        //                 {
-        //                     var g1 = activeVariation.GetGroupAtIndex(mappedIndex);
-        //                     var isUndefined1 = g1 == null;
-        //                     var color2 = isUndefined1
-        //                                      ? ApcButtonColor.Off
-        //                                      : g1.Id == activeVariation.ActiveGroupId
-        //                                          ? ApcButtonColor.Red
-        //                                          : ApcButtonColor.Off;
-        //                     return (int)color2;
-        //                 });
     }
 
     private int AddModeHighlight(int index, int orgColor)
@@ -146,16 +113,13 @@ public class ApcMini : CompatibleMidiDevice
             return orgColor;
         }
 
-        if (ActiveMode == InputModes.Save)
-        {
-            return (int)ApcButtonColor.Yellow;
-        }
-        else if (ActiveMode == InputModes.Delete)
-        {
-            return (int)ApcButtonColor.Red;
-        }
-
-        return orgColor;
+        return ActiveMode switch
+                   {
+                       InputModes.Save   => (int)ApcButtonColor.Yellow,
+                       InputModes.BlendTo => (int)ApcButtonColor.Yellow,
+                       InputModes.Delete => (int)ApcButtonColor.Red,
+                       _                 => orgColor
+                   };
     }
 
     private int _updateCount;

@@ -63,6 +63,8 @@ namespace T3.Editor.Gui.UiHelpers
             public bool AdjustCameraSpeedWithMouseWheel = false;
             public float CameraSpeed = 1;
 
+            public bool MiddleMouseButtonZooms = false;
+
             public FrameStepAmount FrameStepAmount = FrameStepAmount.FrameAt30Fps;
             
             public bool MouseWheelEditsNeedCtrlKey = true;
@@ -100,6 +102,12 @@ namespace T3.Editor.Gui.UiHelpers
             public string RenderVideoFilePath = "./Render/render-v01.mp4";
             public string RenderSequenceFilePath = "./ImageSequence/";
 
+            // Profiling
+            public bool EnableFrameProfiling = true;
+            public bool KeepTraceForLogMessages = false;
+            public bool EnableGCProfiling = false;
+
+            
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             

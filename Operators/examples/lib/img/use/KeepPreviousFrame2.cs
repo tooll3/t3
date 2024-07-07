@@ -1,8 +1,6 @@
 using System.Runtime.InteropServices;
 using System;
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -21,8 +19,6 @@ namespace examples.lib.img.use
 
         [Output(Guid = "B8C943B7-A402-4AE1-A489-EEFF900889CD")]
         public readonly Slot<Texture2D> TextureB = new();
-
-        private uint _textureResId;
 
         public KeepPreviousFrame2()
         {

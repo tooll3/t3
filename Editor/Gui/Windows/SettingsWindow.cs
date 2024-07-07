@@ -21,8 +21,10 @@ namespace T3.Editor.Gui.Windows
             Theme,
             Project,
             Midi,
+            OSC,
             SpaceMouse,
             Keyboard,
+            Profiling,
         }
 
         private Categories _activeCategory;
@@ -119,6 +121,9 @@ namespace T3.Editor.Gui.Windows
                                                               "Value input method",
                                                               "The control that pops up when dragging on a number value"
                                                              );
+                        
+                        
+
 
                         FormInputs.SetIndentToLeft();
                         FormInputs.AddVerticalSpace();
@@ -135,6 +140,10 @@ namespace T3.Editor.Gui.Windows
                         FormInputs.AddVerticalSpace();
                         FormInputs.AddSectionHeader("Advanced");
                         FormInputs.AddVerticalSpace();
+                        changed |= FormInputs.AddCheckBox("Middle mouse button zooms canvas",
+                                                          ref UserSettings.Config.MiddleMouseButtonZooms,
+                                                          "This can be useful if you're working with tablets or other input devices that lack a mouse wheel.",
+                                                          UserSettings.Defaults.MiddleMouseButtonZooms);
                         changed |= FormInputs.AddCheckBox("Reset time after playback",
                                                           ref UserSettings.Config.ResetTimeAfterPlayback,
                                                           "After the playback is halted, the time will reset to the moment when the playback began. This feature proves beneficial for iteratively reviewing animations without requiring manual rewinding.",
@@ -224,6 +233,27 @@ namespace T3.Editor.Gui.Windows
                         FormInputs.AddVerticalSpace();
                         break;
                     }
+                    case Categories.OSC:
+                    {
+                        FormInputs.AddSectionHeader("OSC");
+                        
+                        CustomComponents
+                           .HelpText("On startup, Tooll will listen for OSC messages on the default port." +
+                                     "The IO indicator in the timeline will show incoming messages.\n" +
+                                     "You can also use the OscInput operator to receive OSC from other ports.");
+                            
+                        CustomComponents
+                           .HelpText("Changing the port will require a restart of Tooll.");
+                        
+                        FormInputs.AddInt("Default Port", ref ProjectSettings.Config.DefaultOscPort,
+                                          0, 65535, 1,
+                                          "If a valid port is set, Tooll will listen for OSC messages on this port by default.",
+                                          -1);
+                        
+                        FormInputs.AddVerticalSpace();
+                        break;
+                    }
+
                     case Categories.SpaceMouse:
                         FormInputs.AddSectionHeader("Space Mouse");
 
@@ -273,8 +303,33 @@ namespace T3.Editor.Gui.Windows
 
                             ImGui.EndTable();
                         }
-
                         break;
+                    case Categories.Profiling:
+                    {
+                        FormInputs.AddSectionHeader("Profiling and debugging");
+
+                        CustomComponents.HelpText("Enabling this will add slight performance overhead.\nChanges will require a restart of Tooll.");
+                        FormInputs.AddVerticalSpace();
+
+                        FormInputs.SetIndentToLeft();
+                        
+                        changed |= FormInputs.AddCheckBox("Enable Frame Profiling",
+                                                                         ref UserSettings.Config.EnableFrameProfiling,
+                                                                         "A basic frame profile for the duration of frame processing. Overhead is minimal.",
+                                                                         UserSettings.Defaults.EnableFrameProfiling);
+                        changed |= FormInputs.AddCheckBox("Keep Log Messages",
+                                                          ref UserSettings.Config.KeepTraceForLogMessages,
+                                                          "Store log messages in the profiling data. This can be useful to see correlation between frame drops and log messages.",
+                                                          UserSettings.Defaults.KeepTraceForLogMessages);
+                        
+                        changed |= FormInputs.AddCheckBox("Log GC Profiling",
+                                                          ref UserSettings.Config.EnableGCProfiling,
+                                                          "Log garbage collection information. This can be useful to see correlation between frame drops and GC activity.",
+                                                          UserSettings.Defaults.EnableGCProfiling);
+
+                        FormInputs.SetIndentToParameters();
+                        break;
+                    }
                 }
 
                 if (changed)

@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.UiHelpers;
 
@@ -28,15 +29,26 @@ public class PathTreeDrawer
         var popLevelsCount =  _openPath.Count - matchPathLevelCount;
         for (var index = 0; index < popLevelsCount; index++)
         {
+            ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 10);
             ImGui.TreePop();
+            ImGui.PopStyleVar();
             _openPath.RemoveAt(_openPath.Count - 1);
         }
             
         var maxPushLevelIndex = maxLevel;
-        for (var levelIndex = _openPath.Count; levelIndex < maxPushLevelIndex; levelIndex++)
+        for (var levelIndex = _openPath.Count; levelIndex < maxPushLevelIndex && levelIndex < path.Count; levelIndex++)
         {
             var label = path[levelIndex];
+            
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 10);
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(0,0));
+            ImGui.PushFont(Fonts.FontSmall);
             var isOpen = ImGui.TreeNodeEx(label,ImGuiTreeNodeFlags.DefaultOpen);
+            ImGui.PopFont();
+            ImGui.PopStyleVar(2);
+            ImGui.PopStyleColor();
+            
             if (!isOpen)
             {
                 _collapsedIndex = levelIndex;
@@ -46,6 +58,7 @@ public class PathTreeDrawer
             _openPath.Add(label);
             _collapsedIndex = 9999;
         }
+
 
         return true;
     }

@@ -27,7 +27,7 @@ namespace libEditor.CustomUi
             }
             else
             {
-                WidgetElements.DrawPrimaryTitle(drawList, area, "Get " + instance.Variable.TypedInputValue.Value, canvasScale);
+                WidgetElements.DrawPrimaryTitle(drawList, area, "Get " + instance.VariableName.TypedInputValue.Value, canvasScale);
             }
 
             WidgetElements.DrawSmallValue(drawList, area, $"{value:0.000}", canvasScale);

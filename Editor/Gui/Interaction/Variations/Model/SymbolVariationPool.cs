@@ -362,6 +362,54 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             SaveVariationsToFile();
             return newVariation;
         }
+        
+        public void UpdateVariationPropertiesForInstances(Variation variation, List<Instance> instances)
+        {
+            if (instances == null || instances.Count == 0)
+            {
+                Log.Warning("No instances to create variation for");
+                return;
+            }
+
+            foreach (var instance in instances)
+            {
+                if (instance.Parent.Symbol.Id != SymbolId)
+                {
+                    Log.Error($"Instance {instance.SymbolChildId} is not a child of VariationPool operator {SymbolId}");
+                    return;
+                }
+
+                var changeSet = new Dictionary<Guid, InputValue>();
+                var hasAnimatableParameters = false;
+
+                foreach (var input in instance.Inputs)
+                {
+                    if (!ValueUtils.BlendMethods.ContainsKey(input.Input.Value.ValueType))
+                        continue;
+
+                    hasAnimatableParameters = true;
+
+                    if (input.Input.IsDefault)
+                    {
+                        continue;
+                    }
+
+                    if (ValueUtils.BlendMethods.ContainsKey(input.Input.Value.ValueType))
+                    {
+                        changeSet[input.Id] = input.Input.Value.Clone();
+                    }
+                }
+
+                if (!hasAnimatableParameters)
+                    continue;
+
+                // Write new changeset
+                variation.ParameterSetsForChildIds[instance.SymbolChildId] = changeSet;
+            }
+            
+            SaveVariationsToFile();
+        }
+        
 
         public void DeleteVariation(Variation variation)
         {

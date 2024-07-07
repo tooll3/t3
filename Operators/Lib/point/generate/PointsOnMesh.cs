@@ -16,23 +16,23 @@ namespace lib.point.generate
         [Output(Guid = "dedeebfb-07a9-4ab3-98fc-18d5dd6b1d33")]
         public readonly Slot<T3.Core.DataTypes.BufferWithViews> Colors = new();
 
-        [Input(Guid = "d737860b-2864-472d-ad46-4061b63a12d4")]
-        public readonly InputSlot<float> Seed = new();
+        [Input(Guid = "3289dbe7-14f0-4bf0-b223-bb57419cf179")]
+        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
 
         [Input(Guid = "b3d526ee-b1f1-4254-b702-1980d659e557")]
-        public readonly InputSlot<int> Count = new();
+        public readonly InputSlot<int> Count = new InputSlot<int>();
 
-        [Input(Guid = "3289dbe7-14f0-4bf0-b223-bb57419cf179")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new();
-
-        [Input(Guid = "ed758e72-6977-44e0-a997-bf0ad83f6ceb")]
-        public readonly InputSlot<bool> IsEnabled = new();
+        [Input(Guid = "d737860b-2864-472d-ad46-4061b63a12d4")]
+        public readonly InputSlot<float> Seed = new InputSlot<float>();
 
         [Input(Guid = "132584c0-c27c-448a-b31d-ae72f0fb4baa")]
         public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "1843683c-53a2-4862-a9a5-4b3afe729ace")]
-        public readonly InputSlot<bool> UseVertexSelection = new();
+        public readonly InputSlot<bool> UseVertexSelection = new InputSlot<bool>();
+
+        [Input(Guid = "ed758e72-6977-44e0-a997-bf0ad83f6ceb")]
+        public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
     }
 }
 
