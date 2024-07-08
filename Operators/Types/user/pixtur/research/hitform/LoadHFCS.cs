@@ -38,7 +38,6 @@ namespace T3.Operators.Types.Id_73faed85_f936_4f54_bef5_600a11405af3
                     _orderedKeys = orderedKeys;
                     Position.TimeClip.TimeRange.Start = (float)context.Playback.BarsFromSeconds( orderedKeys[0].TimeInSeconds);
                     Position.TimeClip.TimeRange.End =  (float)context.Playback.BarsFromSeconds(orderedKeys[^1].TimeInSeconds);
-                    _currentKeyIndex = 0;
                 }
                 else
                 {
@@ -52,23 +51,23 @@ namespace T3.Operators.Types.Id_73faed85_f936_4f54_bef5_600a11405af3
             
             var timeInBars = context.LocalFxTime;
             var timeInSecs = context.Playback.SecondsFromBars(timeInBars);
-            
-            
-            while (_currentKeyIndex < _orderedKeys.Count - 1 && timeInSecs > _orderedKeys[_currentKeyIndex + 1].TimeInSeconds)
+
+            var indexAtTime = MathUtils.FindIndexForTime(_orderedKeys, timeInSecs, i => _orderedKeys[i].TimeInSeconds );
+            var keyA = _orderedKeys[indexAtTime];
+            if(indexAtTime < _orderedKeys.Count-1)
             {
-                _currentKeyIndex++;
+                var next = _orderedKeys[indexAtTime+1];
+                var t = (timeInSecs - keyA.TimeInSeconds) / (next.TimeInSeconds - keyA.TimeInSeconds);
+                Position.Value = Vector3.Lerp(keyA.Position, next.Position, (float)t);
+                Rotation.Value = Vector3.Lerp(keyA.Orientation, next.Orientation, (float)t);
             }
-            
-            while (_currentKeyIndex > 0 && timeInSecs < _orderedKeys[_currentKeyIndex].TimeInSeconds)
+            else
             {
-                _currentKeyIndex--;
+                Position.Value = keyA.Position;
+                Rotation.Value = keyA.Orientation;
             }
-            
-            Position.Value = _orderedKeys[_currentKeyIndex].Position;
-            Rotation.Value = _orderedKeys[_currentKeyIndex].Orientation;
         }
         
-        private int _currentKeyIndex;
         private bool _triggered;
         private List<HitFilmComposite.TransformationKey> _orderedKeys = new();
         
