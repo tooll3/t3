@@ -63,7 +63,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             if (!_contextMenuIsOpen && rightMouseDragDelta > 3)
                 return;
 
-            if (ImGui.BeginPopupContextWindow("context_menu"))
+            if (ImGui.BeginPopupContextWindow("windows_context_menu"))
             {
                 _contextMenuIsOpen = true;
                 if (ImGui.MenuItem("Delete", null, false, ClipSelection.Count > 0))
