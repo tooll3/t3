@@ -8,6 +8,10 @@
       "DefaultValue": null
     },
     {
+      "Id": "8483c153-627c-4154-8fbe-3611ca788701"/*OnlyOnChanges*/,
+      "DefaultValue": false
+    },
+    {
       "Id": "acd53819-c248-4c95-a1a5-92a583e9b49b"/*Message*/,
       "DefaultValue": ""
     },
