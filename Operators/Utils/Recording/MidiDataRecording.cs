@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NAudio.Midi;
 using T3.Core.Animation;
@@ -72,12 +72,12 @@ public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
                         }
 
                         noteChannel.Events.Add(new DataIntervalEvent()
-                                                   {
-                                                       Time = someTime,
-                                                       EndTime = Double.PositiveInfinity,
-                                                       TimeCode = someTime,
-                                                       Value = (float)midiNoteEvent.Velocity,
-                                                   });
+                        {
+                            Time = someTime,
+                            EndTime = Double.PositiveInfinity,
+                            TimeCode = someTime,
+                            Value = (float)midiNoteEvent.Velocity,
+                        });
                         break;
                     }
                 }
@@ -88,13 +88,84 @@ public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
                 FindOrCreateControlChangeChannel(deviceName, controlChangeEvent)
                    .Events
                    .Add(new DataEvent()
-                            {
-                                Time = someTime,
-                                TimeCode = someTime,
-                                Value = (float)controlChangeEvent.ControllerValue,
-                            });
+                    {
+                        Time = someTime,
+                        TimeCode = someTime,
+                        Value = (float)controlChangeEvent.ControllerValue,
+                    });
+                break;
+
+            case PitchWheelChangeEvent pitchWheelChangeEvent:
+                FindOrCreatePitchWheelChangeChannel(deviceName, pitchWheelChangeEvent)
+                   .Events
+                   .Add(new DataEvent()
+                   {
+                       Time = someTime,
+                       TimeCode = someTime,
+                       Value = (float)pitchWheelChangeEvent.Pitch,
+                   });
+                break;
+
+            case ChannelAfterTouchEvent channelAfterTouchEvent:
+                FindOrCreateChannelAfterTouchChannel(deviceName, channelAfterTouchEvent)
+                   .Events
+                   .Add(new DataEvent()
+                   {
+                       Time = someTime,
+                       TimeCode = someTime,
+                       Value = (float)channelAfterTouchEvent.AfterTouchPressure,
+                   });
                 break;
         }
+    }
+
+    private DataChannel FindOrCreateChannelAfterTouchChannel(string deviceName, ChannelAfterTouchEvent channelAfterTouchEvent)
+    {
+        var hash = channelAfterTouchEvent.Channel;
+        hash = hash * 31 + deviceName.GetHashCode();
+
+        if (_channelsByHash.TryGetValue(hash, out var channel))
+        {
+            return channel;
+        }
+
+        var newChannel = new DataChannel(typeof(float))
+        {
+            Path = new List<string>
+            {
+                MidiNamespacePrefix,
+                deviceName,
+                channelAfterTouchEvent.Channel.ToString(),
+                "CP"
+            }
+        };
+        _channelsByHash[hash] = newChannel;
+        _dataSet.Channels.Add(newChannel);
+        return newChannel;
+    }
+    private DataChannel FindOrCreatePitchWheelChangeChannel(string deviceName, PitchWheelChangeEvent pitchWheelChangeEvent)
+    {
+        var hash = pitchWheelChangeEvent.Channel;
+        hash = hash * 31 + deviceName.GetHashCode();
+
+        if (_channelsByHash.TryGetValue(hash, out var channel))
+        {
+            return channel;
+        }
+
+        var newChannel = new DataChannel(typeof(float))
+        {
+            Path = new List<string>
+            {
+                MidiNamespacePrefix,
+                deviceName,
+                pitchWheelChangeEvent.Channel.ToString(),
+                "PB"
+            }
+        };
+        _channelsByHash[hash] = newChannel;
+        _dataSet.Channels.Add(newChannel);
+        return newChannel;
     }
 
     private DataChannel FindOrCreateControlChangeChannel(string deviceName, ControlChangeEvent controlChangeEvent)
@@ -108,15 +179,15 @@ public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
         }
 
         var newChannel = new DataChannel(typeof(float))
-                             {
-                                 Path = new List<string>
-                                            {
-                                                MidiNamespacePrefix,
-                                                deviceName,
-                                                controlChangeEvent.Channel.ToString(),
-                                                "CC" + (int)controlChangeEvent.Controller
-                                            }
-                             };
+        {
+            Path = new List<string>
+            {
+                MidiNamespacePrefix,
+                deviceName,
+                controlChangeEvent.Channel.ToString(),
+                "CC" + (int)controlChangeEvent.Controller
+            }
+        };
         _channelsByHash[hash] = newChannel;
         _dataSet.Channels.Add(newChannel);
         return newChannel;
@@ -133,15 +204,15 @@ public class MidiDataRecording : MidiConnectionManager.IMidiConsumer
         }
 
         var newChannel = new DataChannel(typeof(float))
-                             {
-                                 Path = new List<string>
-                                            {
-                                                MidiNamespacePrefix,
-                                                deviceName,
-                                                noteEvent.Channel.ToString(),
-                                                "N" + noteEvent.NoteNumber
-                                            },
-                             };
+        {
+            Path = new List<string>
+            {
+                MidiNamespacePrefix,
+                deviceName,
+                noteEvent.Channel.ToString(),
+                "N" + noteEvent.NoteNumber
+            },
+        };
         _channelsByHash[hash] = newChannel;
         _dataSet.Channels.Add(newChannel);
         return newChannel;
