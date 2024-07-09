@@ -417,6 +417,27 @@
         "X": -156.30804,
         "Y": -148.95718
       }
+    },
+    {
+      "ChildId": "902fcfc7-b6df-4f74-adf3-541ed7eea09a"/*Text*/,
+      "Position": {
+        "X": -679.86,
+        "Y": 318.2561
+      }
+    },
+    {
+      "ChildId": "7892557f-fa2f-4042-bf75-0b6f4f31a4ff"/*Transform*/,
+      "Position": {
+        "X": -529.86,
+        "Y": 318.2561
+      }
+    },
+    {
+      "ChildId": "916f57e0-06b9-42d8-9b86-dbfef24044a0"/*Multiply*/,
+      "Position": {
+        "X": 305.19684,
+        "Y": 616.184
+      }
     }
   ],
   "OutputUis": [
