@@ -291,10 +291,7 @@ public class DataSetViewCanvas
                 var channelHash = pathString.GetHashCode();
                 
                 // Compute random unique color
-                var foreGroundBrightness = UiColors.ForegroundFull.V;
-                var randomHue = (Math.Abs(channelHash) % 357) / 360f;
-                var randomSaturation = (channelHash % 13) / 13f / 3f + 0.4f;
-                var randomChannelColor = Color.FromHSV(randomHue, randomSaturation, foreGroundBrightness, 1);
+                var randomChannelColor = THelpers.RandomColorForHash(channelHash);
                 
                 _channelValueRanges.TryGetValue(channelHash, out var valueRange);
                 
