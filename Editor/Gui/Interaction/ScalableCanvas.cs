@@ -442,11 +442,11 @@ namespace T3.Editor.Gui.Interaction
             if (!isVerticalColorSliderActive 
                 && !isAnotherWindowDragged
                 && !flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse)
-                && (
+                && ((
                         
                     ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
                     || (!UserSettings.Config.MiddleMouseButtonZooms && ImGui.IsMouseDragging(ImGuiMouseButton.Middle) && !ImGui.GetIO().KeyAlt)
-                    || (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !ImGui.GetIO().KeyAlt)
+                    || (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !ImGui.GetIO().KeyAlt))
                )
             {
                 ScrollTarget -= Io.MouseDelta / (ParentScale * ScaleTarget);
