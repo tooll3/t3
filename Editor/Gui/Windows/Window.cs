@@ -96,7 +96,7 @@ namespace T3.Editor.Gui.Windows
                     ImGui.BeginChild("inner", 
                                      ImGui.GetWindowContentRegionMax()- ImGui.GetWindowContentRegionMin(), 
                                      true, 
-                                     ImGuiWindowFlags.NoMove| preventMouseScrolling | WindowFlags  );
+                                     ImGuiWindowFlags.NoMove| preventMouseScrolling | WindowFlags  | ImGuiWindowFlags.AlwaysUseWindowPadding );
                 
 
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));

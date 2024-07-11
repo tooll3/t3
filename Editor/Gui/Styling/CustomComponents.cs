@@ -652,7 +652,7 @@ namespace T3.Editor.Gui.Styling
                 return;
             
             var min = ImGui.GetWindowPos();
-            ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(0,0) , UiColors.StatusActivated);//.Fade(0.1f));
+            ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(0,0) , UiColors.ForegroundFull.Fade(0.2f));
         }
 
         public static string HumanReadablePascalCase(string f)

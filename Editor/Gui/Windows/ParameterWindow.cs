@@ -42,14 +42,10 @@ internal class ParameterWindow : Window
         // Convert to array to allow closing of windows
         foreach (var w in _parameterWindowInstances.ToArray())
         {
-            // var keep = T3Style.WindowPaddingForWindows;
-            // T3Style.WindowPaddingForWindows = new Vector2(5,5);
-            // ImGui.PushStyleVar(ImGuiStyleVar.ChildBorderSize,0);
-            // ImGui.PushStyleColor(ImGuiCol.Border, Color.Red.Rgba);
+            var keep = T3Style.WindowPaddingForWindows;
+            T3Style.WindowPaddingForWindows = new Vector2(5,5); // Todo: This should be a property of Window
             w.DrawOneInstance();
-            // T3Style.WindowPaddingForWindows = keep;
-            // ImGui.PopStyleColor();
-            // ImGui.PopStyleVar();
+            T3Style.WindowPaddingForWindows = keep;
         }
     }
 
