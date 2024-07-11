@@ -132,7 +132,9 @@ public class T3Ui: IDisposable
         // Draw everything!
         ImGui.DockSpaceOverViewport();
 
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 3);
         WindowManager.Draw();
+        ImGui.PopStyleVar();
             
         // Complete frame
         SingleValueEdit.StartNextFrame();
@@ -230,7 +232,7 @@ public class T3Ui: IDisposable
     private void DrawAppMenuBar()
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding * T3Ui.UiScaleFactor);
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForMenus * T3Ui.UiScaleFactor);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
             
         if (ImGui.BeginMainMenuBar())

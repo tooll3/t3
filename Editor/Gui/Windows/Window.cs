@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
 
@@ -65,7 +66,6 @@ namespace T3.Editor.Gui.Windows
 
         public void DrawOneInstance()
         {
-
             UpdateBeforeDraw();
 
             if (!Config.Visible)
@@ -83,7 +83,8 @@ namespace T3.Editor.Gui.Windows
 
             if (ImGui.Begin(Config.Title, ref Config.Visible, WindowFlags))
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding);
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForWindows);
+                
                 // Prevent window header from becoming invisible 
                 var windowPos = ImGui.GetWindowPos();
                 if (windowPos.X <= 0) windowPos.X = 0;
@@ -92,11 +93,20 @@ namespace T3.Editor.Gui.Windows
                 
                 var preventMouseScrolling = T3Ui.MouseWheelFieldWasHoveredLastFrame ? ImGuiWindowFlags.NoScrollWithMouse : ImGuiWindowFlags.None;
                 if (PreventWindowDragging)
-                    ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax()- ImGui.GetWindowContentRegionMin(), false, ImGuiWindowFlags.NoMove| preventMouseScrolling | WindowFlags);
+                    ImGui.BeginChild("inner", 
+                                     ImGui.GetWindowContentRegionMax()- ImGui.GetWindowContentRegionMin(), 
+                                     true, 
+                                     ImGuiWindowFlags.NoMove| preventMouseScrolling | WindowFlags  );
+                
 
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
+                
                 var idBefore = ImGui.GetID("");
                 DrawContent();
                 var idAfter = ImGui.GetID("");
+                
+                ImGui.PopStyleVar();
+                
                 if (idBefore != idAfter)
                 {
                     Log.Warning($"Inconsistent ImGui-ID after rendering {this}  {idBefore} != {idAfter}");

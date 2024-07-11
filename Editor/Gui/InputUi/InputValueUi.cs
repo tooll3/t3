@@ -434,7 +434,7 @@ namespace T3.Editor.Gui.InputUi
                     }
                 }
 
-                if (ImGui.Button(string.Empty, new Vector2(ConnectionAreaWidth, 0.0f)))
+                if(CustomComponents.RoundedButton(string.Empty, new Vector2(ConnectionAreaWidth, 0.0f), ImDrawFlags.RoundCornersAll))
                 {
                     switch (inputOperation)
                     {
@@ -463,7 +463,7 @@ namespace T3.Editor.Gui.InputUi
                         }
                     }
                 }
-
+                
                 var icon = inputOperation switch
                                {
                                    InputOperations.None              => Icon.AddKeyframe,
@@ -472,7 +472,7 @@ namespace T3.Editor.Gui.InputUi
                                    InputOperations.Extract           => Icon.ExtractInput,
                                    _                                 => throw new ArgumentOutOfRangeException()
                                };
-
+                
                 Icons.DrawIconOnLastItem(icon, UiColors.TextMuted.Fade(0.3f));
 
                 // Drag out connection lines

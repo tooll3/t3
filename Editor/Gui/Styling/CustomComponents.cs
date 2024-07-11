@@ -651,13 +651,26 @@ namespace T3.Editor.Gui.Styling
             if (!ImGui.IsWindowFocused())
                 return;
             
-            var min = ImGui.GetWindowPos() + new Vector2(1,1);
-            ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(-2,-1) , UiColors.ForegroundFull.Fade(0.1f));
+            var min = ImGui.GetWindowPos();
+            ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(0,0) , UiColors.StatusActivated);//.Fade(0.1f));
         }
 
         public static string HumanReadablePascalCase(string f)
         {
             return Regex.Replace(f, "(\\B[A-Z])", " $1");
+        }
+        
+        public static bool RoundedButton(string label, Vector2 vector2, ImDrawFlags roundedCorners)
+        {
+            roundedCorners = ImDrawFlags.RoundCornersLeft;
+            vector2.Y = ImGui.GetFrameHeight();
+            var result= ImGui.InvisibleButton(label, vector2);
+            var dl = ImGui.GetWindowDrawList();
+            //var color = ImGuiCol.Button.GetStyleColor();
+            var color = UiColors.BackgroundButton;
+            dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color,7, roundedCorners);
+            
+            return result;
         }
     }
 }
