@@ -75,7 +75,7 @@ public class OperatorHelp
         if (string.IsNullOrEmpty(firstLine))
             return;
         
-        ImGui.Indent(10);
+        //ImGui.Indent(10);
 
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
         ImGui.TextWrapped(firstLine);
@@ -98,7 +98,7 @@ public class OperatorHelp
         FormInputs.AddVerticalSpace();
         ImGui.PopStyleColor();
 
-        ImGui.Unindent(10);
+        //ImGui.Unindent(10);
     }
     
 

@@ -660,16 +660,16 @@ namespace T3.Editor.Gui.Styling
             return Regex.Replace(f, "(\\B[A-Z])", " $1");
         }
         
-        public static bool RoundedButton(string label, Vector2 vector2, ImDrawFlags roundedCorners)
+        public static bool RoundedButton(string id, Vector2 vector2, ImDrawFlags roundedCorners)
         {
             roundedCorners = ImDrawFlags.RoundCornersLeft;
             vector2.Y = ImGui.GetFrameHeight();
-            var result= ImGui.InvisibleButton(label, vector2);
+            var result= ImGui.InvisibleButton(id, vector2);
             var dl = ImGui.GetWindowDrawList();
-            //var color = ImGuiCol.Button.GetStyleColor();
-            var color = UiColors.BackgroundButton;
+            //var color = UiColors.BackgroundButton;
+            //var color = Getstylecolor(ImGuiCol.Button);
+            var color = ImGuiCol.Button.GetStyleColor();
             dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color,7, roundedCorners);
-            
             return result;
         }
     }
