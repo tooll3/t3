@@ -166,25 +166,5 @@
         "Y": 18.0
       }
     }
-  ],
-  "ParamCollections": [
-    {
-      "Id": "836ed81d-b198-4d05-9720-db9dba9af454",
-      "ParameterDefinitions": [
-        {
-          "SymbolChildId": "ba687aab-205f-4207-a446-f8c1e0e53cee",
-          "InputId": "acce4779-56d6-47c4-9c52-874fca91a3a1"
-        },
-        {
-          "SymbolChildId": "ba687aab-205f-4207-a446-f8c1e0e53cee",
-          "InputId": "13cbb509-f90c-4ae7-a9d3-a8fc907794e3"
-        },
-        {
-          "SymbolChildId": "ba687aab-205f-4207-a446-f8c1e0e53cee",
-          "InputId": "ca84209e-d821-40c6-b23c-38fc4bbd47b0"
-        }
-      ],
-      "Variations": []
-    }
   ]
 }

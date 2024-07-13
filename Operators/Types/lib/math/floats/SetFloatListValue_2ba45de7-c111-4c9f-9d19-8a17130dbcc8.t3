@@ -1,0 +1,31 @@
+{
+  "Name": "SetFloatListValue",
+  "Id": "2ba45de7-c111-4c9f-9d19-8a17130dbcc8",
+  "Namespace": "lib.math.floats",
+  "Inputs": [
+    {
+      "Id": "f6ea6675-b0e5-442e-8d6e-6d862b200cca"/*Mode*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "2f21b0a8-bc10-4bcb-8545-077a3b8243df"/*TriggerSet*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "6785b575-14c1-4162-8966-52f1be93e021"/*FloatList*/,
+      "DefaultValue": {
+        "Values": []
+      }
+    },
+    {
+      "Id": "e4e6050c-bdf7-48a9-85a4-5557848bdb8b"/*Index*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "2ffc3e9f-ef41-4c6a-aae7-a8e9008a096b"/*Value*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

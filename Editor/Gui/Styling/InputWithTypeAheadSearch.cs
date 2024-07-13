@@ -96,7 +96,7 @@ namespace T3.Editor.Gui.Styling
                     var others = new List<string>();
                     foreach (var word in items)
                     {
-                        if (word != null && (filter == null || word.Contains(filter, StringComparison.InvariantCultureIgnoreCase)))
+                        if (word != null && (string.IsNullOrWhiteSpace(filter) || word.Contains(filter, StringComparison.InvariantCultureIgnoreCase)))
                         {
                             matches.Add(word);
                         }
@@ -106,7 +106,7 @@ namespace T3.Editor.Gui.Styling
                         }
                     }
                     
-                    var listItems = matches.Count  <=1 ? others : matches;
+                    var listItems = (!string.IsNullOrWhiteSpace(filter) && matches.Count  <=1) ? others : matches;
                     foreach (var word in listItems)
                     {
                         var isSelected = index == _selectedResultIndex;

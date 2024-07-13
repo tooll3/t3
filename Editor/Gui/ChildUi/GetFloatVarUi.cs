@@ -26,7 +26,7 @@ namespace T3.Editor.Gui.ChildUi
             }
             else
             {
-                WidgetElements.DrawPrimaryTitle(drawList, area, "Get " + instance.Variable.TypedInputValue.Value);
+                WidgetElements.DrawPrimaryTitle(drawList, area, "Get " + instance.VariableName.TypedInputValue.Value);
             }
 
             WidgetElements.DrawSmallValue(drawList, area, $"{value:0.000}");

@@ -1,0 +1,40 @@
+{
+  "Id": "7ba0451c-9b8d-46a7-bfac-9dcb15e00023"/*FloatList*/,
+  "Description": "Creates and initialized a list of float values",
+  "InputUis": [
+    {
+      "InputId": "2b51b0be-25d1-4b7f-832d-8bc5498e5620"/*ResetTrigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "5f2b5280-a157-4499-b3fa-60939a9e3ddd"/*DefaultValue*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "a81d55fe-60fb-453f-a6c9-f08932066213"/*ListLenght*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "918a871a-1ed6-4d40-a73e-05dbb3399b38"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

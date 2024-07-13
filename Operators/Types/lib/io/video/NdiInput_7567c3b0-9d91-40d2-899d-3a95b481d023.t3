@@ -6,6 +6,10 @@
     {
       "Id": "fd1fca6b-a3be-440b-86ba-6b7b1bbd2a8c"/*SourceName*/,
       "DefaultValue": "0"
+    },
+    {
+      "Id": "3f634e98-93f2-4b5e-a098-623b3f8e4c9c"/*EnableProfiling*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

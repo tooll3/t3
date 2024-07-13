@@ -55,7 +55,7 @@ namespace T3.Editor.Gui.InputUi
         public string Description { get; set; }
         #endregion
 
-        private const float ConnectionAreaWidth = 25.0f;
+        
         private static float ParameterNameWidth => MathF.Max(ImGui.GetTextLineHeight() * 130.0f / 16, ImGui.GetWindowWidth() * 0.35f);
 
         public SymbolUi Parent { get; set; }
@@ -162,10 +162,11 @@ namespace T3.Editor.Gui.InputUi
             #region draw parameter types --------------------------------------------------------
             InputEditStateFlags DrawConnectedParameter()
             {
-                if (typedInputSlot.IsMultiInput)
+                if (inputSlot.IsMultiInput)
                 {
-                    // Just show actual value
-                    ImGui.Button(name + "##paramName", new Vector2(-1, 0));
+                    // Just show actual values
+                    InputArea.DrawConnectedMultiInputHeader(name, ParameterNameWidth);
+                    
 
                     if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                     {
@@ -178,36 +179,35 @@ namespace T3.Editor.Gui.InputUi
                     var multiInput = (MultiInputSlot<T>)typedInputSlot;
                     var allInputs = multiInput.GetCollectedTypedInputs();
 
-                    for (int multiInputIndex = 0; multiInputIndex < allInputs.Count; multiInputIndex++)
+                    for (var multiInputIndex = 0; multiInputIndex < allInputs.Count; multiInputIndex++)
                     {
                         ImGui.PushID(multiInputIndex);
-
-                        ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
-                        if (ImGui.Button(string.Empty, new Vector2(ConnectionAreaWidth, 0)))
+                        if (CustomComponents.RoundedButton(string.Empty, new Vector2(InputArea.ConnectionAreaWidth, 0), ImDrawFlags.RoundCornersLeft))
                         {
                             // TODO: implement with proper SelectionManager
-                            //var compositionSymbol = compositionSymbol;
-                            //var allConnections = compositionSymbol.Connections.FindAll(c => c.IsTargetOf(symbolChildUi.Id, inputSlot.Id));
-                            //var connection = allConnections[multiInputIndex];
-                            // var sourceUi = compositionUi.GetSelectables()
-                            //                             .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
                         }
-
-                        Icons.DrawIconOnLastItem(Icon.ConnectedParameter, UiColors.Text);
-
-                        ImGui.PopStyleColor();
-
+                        Icons.DrawIconOnLastItem(Icon.ConnectedParameter, typeColor);
                         ImGui.SameLine();
 
                         ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
-                        ImGui.Button("#" + multiInputIndex, new Vector2(ParameterNameWidth, 0.0f));
+                        
+                        var slot = allInputs[multiInputIndex];
+                        var connectedName = slot?.Parent?.Symbol?.Name?? "???";
+                        
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                        ImGui.Button($"{multiInputIndex}.", new Vector2(ParameterNameWidth, 0.0f));
+                        ImGui.PopStyleColor();
+                        
                         ImGui.PopStyleVar();
                         ImGui.SameLine();
 
                         ImGui.SetNextItemWidth(-1);
-                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAutomated.Rgba);
-                        var slot = allInputs[multiInputIndex];
-                        DrawReadOnlyControl("##multiInputParam", ref slot.Value);
+                        ImGui.PushStyleColor(ImGuiCol.Text, typeColor.Rgba);
+                        ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0,0.5f));
+                        
+                        var dummy  = slot != null ? slot.Value: default;
+                        DrawReadOnlyControl(connectedName, ref dummy);
+                        ImGui.PopStyleVar();
                         ImGui.PopStyleColor();
                         ImGui.PopID();
                     }
@@ -216,35 +216,11 @@ namespace T3.Editor.Gui.InputUi
                 }
                 else
                 {
-                    // Connected single inputs
-                    ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Rgba);
-                    if (ImGui.Button(String.Empty, new Vector2(ConnectionAreaWidth, 0.0f)))
-                    {
-                        // TODO: implement with proper selectionManager
-                        //var compositionSymbol = compositionSymbol;
-                        var connection = compositionSymbol.Connections.First(c => c.IsTargetOf(symbolChildUi.Id, inputSlot.Id));
-                        var sourceUi = compositionUi.GetSelectables()
-                                                    .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
-                        // Try to find instance
-                        if (sourceUi is SymbolChildUi sourceSymbolChildUi)
-                        {
-                            var selectedInstance = NodeSelection.GetFirstSelectedInstance();
-                            var parent = selectedInstance.Parent;
-                            var selectionTargetInstance = parent.Children.Single(instance => instance.SymbolChildId == sourceUi.Id);
-                            NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
-                            FitViewToSelectionHandling.FitViewToSelection();
-                        }
-                    }
-
-                    Icons.DrawIconOnLastItem(Icon.ConnectedParameter, UiColors.BackgroundFull);
-
-                    ImGui.PopStyleColor(2);
-                    ImGui.SameLine();
-
+                    InputArea.DrawConnectedSingleInputArea(inputSlot, compositionUi, typeColor, compositionSymbol, symbolChildUi);
+                    
                     // Draw Name
                     ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAutomated.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Rgba);
                     ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
                     ImGui.PopStyleColor();
                     if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
@@ -279,7 +255,7 @@ namespace T3.Editor.Gui.InputUi
 
                                                             if (ImGui.MenuItem("Publish as Input"))
                                                             {
-                                                                PublishAsInput(inputSlot, symbolChildUi, input);
+                                                                InputArea.PublishAsInput(inputSlot, symbolChildUi, input);
                                                             }
 
                                                             if (ImGui.MenuItem("Parameters settings"))
@@ -290,14 +266,17 @@ namespace T3.Editor.Gui.InputUi
                     ImGui.SameLine();
 
                     ImGui.PushItemWidth(200.0f);
-                    ImGui.PushStyleColor(ImGuiCol.Text,
-                                         input.IsDefault
-                                             ? UiColors.TextMuted.Rgba
-                                             : UiColors.ForegroundFull.Rgba);
                     ImGui.SetNextItemWidth(-1);
+                    
+                    var connectedSlot = typedInputSlot.GetConnection(0);
+                    var connectedName = connectedSlot?.Parent?.Symbol?.Name?? "???";
+                    
+                    ImGui.PushStyleColor(ImGuiCol.Text, typeColor.Rgba);
+                    ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0,0.5f));
 
-                    DrawReadOnlyControl(name, ref typedInputSlot.Value);
-                    ImGui.PopStyleColor();
+                    DrawReadOnlyControl(connectedName, ref typedInputSlot.Value);
+                    ImGui.PopStyleVar();
+                    ImGui.PopStyleColor(1);
                     ImGui.PopItemWidth();
                 }
 
@@ -320,7 +299,7 @@ namespace T3.Editor.Gui.InputUi
                 if (hasKeyframeAtCurrentTime) iconIndex |= onBit;
                 var icon = _keyframeButtonIcons[iconIndex];
 
-                if (ImGui.Button("##icon", new Vector2(ConnectionAreaWidth, 0.0f)))
+                if (CustomComponents.RoundedButton("##icon", new Vector2(InputArea.ConnectionAreaWidth, 0.0f), ImDrawFlags.RoundCornersLeft))
                 {
                     // TODO: this should use Undo/Redo commands
                     if (hasKeyframeAtCurrentTime)
@@ -412,104 +391,13 @@ namespace T3.Editor.Gui.InputUi
 
             InputEditStateFlags DrawNormalParameter()
             {
-                ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.OperatorBackground.Apply(typeColor).Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Rgba);
-
                 // Connection area...
-                var inputOperation = InputOperations.None;
-
-                if (ConnectionMaker.TempConnections.Count == 0)
-                {
-                    if (IsAnimatable && ImGui.GetIO().KeyAlt)
-                    {
-                        inputOperation = InputOperations.Animate;
-                    }
-                    else if (ImGui.GetIO().KeyCtrl && ParameterExtraction.IsInputSlotExtractable(inputSlot))
-                    {
-                        inputOperation = InputOperations.Extract;
-                    }
-                    else
-                    {
-                        inputOperation = InputOperations.ConnectWithSearch;
-                    }
-                }
-
-                if (ImGui.Button(string.Empty, new Vector2(ConnectionAreaWidth, 0.0f)))
-                {
-                    switch (inputOperation)
-                    {
-                        case InputOperations.Animate:
-                        {
-                            var cmd = new MacroCommand("add animation",
-                                                       new List<ICommand>()
-                                                           {
-                                                               new ChangeInputValueCommand(compositionUi.Symbol, symbolChildUi.SymbolChild.Id, input,
-                                                                                           inputSlot.Input.Value),
-                                                               new AddAnimationCommand(animator, inputSlot),
-                                                           });
-
-                            UndoRedoStack.AddAndExecute(cmd);
-                            break;
-                        }
-                        case InputOperations.Extract:
-                            ParameterExtraction.ExtractAsConnectedOperator(compositionUi, inputSlot, symbolChildUi);
-                            break;
-                        case InputOperations.ConnectWithSearch:
-                        {
-                            ConnectionMaker.StartFromInputSlot(compositionSymbol, symbolChildUi, InputDefinition);
-                            var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionSymbol, symbolChildUi, InputDefinition);
-                            ConnectionMaker.InitSymbolBrowserOnPrimaryGraphWindow(freePosition);
-                            break;
-                        }
-                    }
-                }
-
-                var icon = inputOperation switch
-                               {
-                                   InputOperations.None              => Icon.AddKeyframe,
-                                   InputOperations.Animate           => Icon.AddKeyframe,
-                                   InputOperations.ConnectWithSearch => Icon.AddOpToInput,
-                                   InputOperations.Extract           => Icon.ExtractInput,
-                                   _                                 => throw new ArgumentOutOfRangeException()
-                               };
-
-                Icons.DrawIconOnLastItem(icon, UiColors.TextMuted.Fade(0.3f));
-
-                // Drag out connection lines
-                if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickThreshold)
-                {
-                    if (ConnectionMaker.TempConnections.Count == 0)
-                    {
-                        ConnectionMaker.StartFromInputSlot(compositionSymbol, symbolChildUi, InputDefinition);
-                    }
-                }
-
-                ImGui.PopStyleColor(2);
-
-                if (ImGui.IsItemHovered())
-                {
-                    var tooltip = $"{input.DefaultValue.ValueType}\n\nAdd input connection";
-                    if (IsAnimatable)
-                    {
-                        tooltip += "\nHold ALT to animate";
-                    }
-
-                    if (ParameterExtraction.IsInputSlotExtractable(inputSlot))
-                    {
-                        tooltip += "\nHold CTRL to extract";
-                    }
-
-                    ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.SetTooltip(tooltip);
-                    ImGui.PopFont();
-                }
-
+                InputArea.DrawNormalInputArea(inputSlot, compositionUi, symbolChildUi, input, IsAnimatable, typeColor);
+                
                 ImGui.SameLine();
 
                 // Draw Name Button
-                
                 ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
-
 
                 var hasStyleCount = 0;
 
@@ -538,7 +426,7 @@ namespace T3.Editor.Gui.InputUi
                         }
                         
                         CustomComponents.TooltipForLastItem( text, 
-                                                             "Click to reset to default");
+                                                             input.IsDefault ? null: "Click to reset to default");
                         
                 }
 
@@ -573,7 +461,7 @@ namespace T3.Editor.Gui.InputUi
 
                          if (ImGui.MenuItem("Publish as Input"))
                          {
-                             PublishAsInput(inputSlot, symbolChildUi, input);
+                             InputArea.PublishAsInput(inputSlot, symbolChildUi, input);
                          }
                          
 
@@ -612,64 +500,11 @@ namespace T3.Editor.Gui.InputUi
                 input.IsDefault &= (editState & InputEditStateFlags.Modified) != InputEditStateFlags.Modified;
 
                 ImGui.PopStyleColor();
-                //ImGui.PopItemWidth();
                 return editState;
             }
             #endregion
         }
-
-        private enum InputOperations
-        {
-            None,
-            Animate,
-            ConnectWithSearch,
-            Extract,
-        }
-
-        private static void PublishAsInput(IInputSlot originalInputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
-        {
-            var composition = NodeSelection.GetSelectedComposition() ?? originalInputSlot.Parent.Parent;
-
-            if (composition == null)
-            {
-                Log.Warning("Can't publish input to undefined composition");
-                return;
-            }
-
-            InputsAndOutputs.AddInputToSymbol(input.Name, input.InputDefinition.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol);
-            GraphOperations.UpdateChangedOperators();
-
-            var updatedComposition = Structure.GetInstanceFromIdPath(OperatorUtils.BuildIdPathForInstance(composition));
-
-            var newInputDefinition = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
-            if (newInputDefinition == null)
-            {
-                Log.Warning("Publishing wasn't possible");
-                return;
-            }
-
-            var cmd = new AddConnectionCommand(updatedComposition.Symbol,
-                                               new Symbol.Connection(sourceParentOrChildId: ConnectionMaker.UseSymbolContainerId,
-                                                                     sourceSlotId: newInputDefinition.Id,
-                                                                     targetParentOrChildId: symbolChildUi.Id,
-                                                                     targetSlotId: input.InputDefinition.Id),
-                                               0);
-            cmd.Do();
-
-            newInputDefinition.DefaultValue.Assign(input.Value.Clone());
-            originalInputSlot.Input.Value.Assign(input.Value.Clone());
-            originalInputSlot.DirtyFlag.Invalidate();
-
-            var newSlot = updatedComposition.Inputs.FirstOrDefault(i => i.Id == newInputDefinition.Id);
-            if (newSlot != null)
-            {
-                newSlot.Input.Value.Assign(input.Value.Clone());
-                newSlot.Input.IsDefault = false;
-            }
-
-            UndoRedoStack.Clear();
-        }
-
+        
         public virtual void DrawSettings()
         {
             FormInputs.AddVerticalSpace(5);
@@ -760,5 +595,226 @@ namespace T3.Editor.Gui.InputUi
         public Type Type { get; } = typeof(T);
 
         private const Relevancy DefaultRelevancy = Relevancy.Optional;
+    }
+    
+    public class InputArea
+    {
+        public const float ConnectionAreaWidth = 25.0f;
+        
+        public static void DrawNormalInputArea(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi, SymbolChild.Input input,
+                                               bool isAnimatable, Color typeColor)
+        {
+            var buttonClicked = CustomComponents.RoundedButton(string.Empty, new Vector2(ConnectionAreaWidth, 0.0f), ImDrawFlags.RoundCornersAll);
+            
+            var inputOperation = InputOperations.None;
+            
+            if (ConnectionMaker.TempConnections.Count == 0)
+            {
+                if (isAnimatable && ImGui.GetIO().KeyAlt)
+                {
+                    inputOperation = InputOperations.Animate;
+                }
+                else if (ImGui.GetIO().KeyCtrl && ParameterExtraction.IsInputSlotExtractable(inputSlot))
+                {
+                    inputOperation = InputOperations.Extract;
+                }
+                else if(ImGui.IsItemHovered())
+                {
+                    inputOperation = InputOperations.ConnectWithSearch;
+                }
+            }
+            
+            
+            if(buttonClicked)
+            {
+                switch (inputOperation)
+                {
+                    case InputOperations.Animate:
+                    {
+                        var cmd = new MacroCommand("add animation",
+                                                   new List<ICommand>()
+                                                       {
+                                                           new ChangeInputValueCommand(compositionUi.Symbol, symbolChildUi.SymbolChild.Id, input,
+                                                                                       inputSlot.Input.Value),
+                                                           new AddAnimationCommand(compositionUi.Symbol.Animator, inputSlot),
+                                                       });
+                        
+                        UndoRedoStack.AddAndExecute(cmd);
+                        break;
+                    }
+                    case InputOperations.Extract:
+                        ParameterExtraction.ExtractAsConnectedOperator(compositionUi, inputSlot, symbolChildUi);
+                        break;
+                    case InputOperations.ConnectWithSearch:
+                    {
+                        ConnectionMaker.StartFromInputSlot(compositionUi.Symbol, symbolChildUi, input.InputDefinition);
+                        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionUi.Symbol, symbolChildUi, input.InputDefinition);
+                        ConnectionMaker.InitSymbolBrowserOnPrimaryGraphWindow(freePosition);
+                        break;
+                    }
+                }
+            }
+            
+            if(inputOperation != InputOperations.None)
+            {
+                var icon = inputOperation switch
+                               {
+                                   //InputOperations.None              => Icon.AddKeyframe,
+                                   InputOperations.Animate           => Icon.AddKeyframe,
+                                   InputOperations.ConnectWithSearch => Icon.AddOpToInput,
+                                   InputOperations.Extract           => Icon.ExtractInput,
+                                   _                                 => throw new ArgumentOutOfRangeException()
+                               };
+                
+                Icons.DrawIconOnLastItem(icon, typeColor);
+            }
+            else
+            {
+                var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax()) / 2;
+                var dl = ImGui.GetWindowDrawList();
+                dl.AddCircleFilled(center, 3, typeColor.Fade(0.5f));
+            }
+            
+            // Drag out connection lines
+            if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickThreshold)
+            {
+                if (ConnectionMaker.TempConnections.Count == 0)
+                {
+                    ConnectionMaker.StartFromInputSlot(compositionUi.Symbol, symbolChildUi, input.InputDefinition);
+                }
+            }
+            
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.BeginTooltip();
+                
+                if (!TypeNameRegistry.Entries.TryGetValue(input.DefaultValue.ValueType, out var typeName))
+                {
+                    typeName = input.DefaultValue.ValueType.ToString();
+                }
+                 
+                ImGui.TextUnformatted($"{typeName} - Input");
+                
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                ImGui.PushFont(Fonts.FontSmall);
+                FormInputs.AddVerticalSpace(4);
+                ImGui.TextUnformatted("Click to add input connection");
+                if (isAnimatable)
+                {
+                    ImGui.TextUnformatted("ALT+Click to animate");
+                }
+                
+                if (ParameterExtraction.IsInputSlotExtractable(inputSlot))
+                {
+                    ImGui.TextUnformatted("CTRL+Click to extract");
+                }
+                ImGui.PopFont();
+                ImGui.PopStyleColor();
+                ImGui.EndTooltip();
+            }
+        }
+        
+        private enum InputOperations
+        {
+            None,
+            Animate,
+            ConnectWithSearch,
+            Extract,
+        }
+        
+        public static void PublishAsInput(IInputSlot originalInputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
+        {
+            var composition = NodeSelection.GetSelectedComposition() ?? originalInputSlot.Parent.Parent;
+
+            if (composition == null)
+            {
+                Log.Warning("Can't publish input to undefined composition");
+                return;
+            }
+
+            InputsAndOutputs.AddInputToSymbol(input.Name, input.InputDefinition.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol);
+            GraphOperations.UpdateChangedOperators();
+
+            var updatedComposition = Structure.GetInstanceFromIdPath(OperatorUtils.BuildIdPathForInstance(composition));
+
+            var newInputDefinition = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
+            if (newInputDefinition == null)
+            {
+                Log.Warning("Publishing wasn't possible");
+                return;
+            }
+
+            var cmd = new AddConnectionCommand(updatedComposition.Symbol,
+                                               new Symbol.Connection(sourceParentOrChildId: ConnectionMaker.UseSymbolContainerId,
+                                                                     sourceSlotId: newInputDefinition.Id,
+                                                                     targetParentOrChildId: symbolChildUi.Id,
+                                                                     targetSlotId: input.InputDefinition.Id),
+                                               0);
+            cmd.Do();
+
+            newInputDefinition.DefaultValue.Assign(input.Value.Clone());
+            originalInputSlot.Input.Value.Assign(input.Value.Clone());
+            originalInputSlot.DirtyFlag.Invalidate();
+
+            var newSlot = updatedComposition.Inputs.FirstOrDefault(i => i.Id == newInputDefinition.Id);
+            if (newSlot != null)
+            {
+                newSlot.Input.Value.Assign(input.Value.Clone());
+                newSlot.Input.IsDefault = false;
+            }
+
+            UndoRedoStack.Clear();
+        }
+        
+        public static void DrawConnectedSingleInputArea(IInputSlot inputSlot, SymbolUi compositionUi, Color typeColor, Symbol compositionSymbol, SymbolChildUi symbolChildUi)
+        {
+            // Connected single inputs
+            //ImGui.PushStyleColor(ImGuiCol.Button, typeColor.Fade(0.5f).Rgba);
+            //ImGui.PushStyleColor(ImGuiCol.Text, typeColor.Rgba);
+            
+            if (CustomComponents.RoundedButton(String.Empty, new Vector2(InputArea.ConnectionAreaWidth, 0.0f), ImDrawFlags.RoundCornersLeft))
+            {
+                var sourceUi = FindConnectedSymbolChildUi(inputSlot.Id, compositionUi, symbolChildUi);
+                // Try to find instance
+                if (sourceUi is SymbolChildUi sourceSymbolChildUi)
+                {
+                    var selectedInstance = NodeSelection.GetFirstSelectedInstance();
+                    var parent = selectedInstance.Parent;
+                    var selectionTargetInstance = parent.Children.Single(instance => instance.SymbolChildId == sourceUi.Id);
+                    NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
+                    FitViewToSelectionHandling.FitViewToSelection();
+                }
+            }
+            
+            Icons.DrawIconOnLastItem(Icon.ConnectedParameter, typeColor.Rgba);
+            
+            //ImGui.PopStyleColor(1);
+            ImGui.SameLine();
+        }
+        
+        public static ISelectableCanvasObject FindConnectedSymbolChildUi(Guid inputSlotId, SymbolUi compositionUi, SymbolChildUi targetChildUi)
+        {
+            var connection = compositionUi.Symbol.Connections.FirstOrDefault(c => c.IsTargetOf(targetChildUi.Id, inputSlotId));
+            
+            if (connection == null)
+                return null;
+            
+            return compositionUi.GetSelectables()
+                                .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
+        }
+        
+        public static bool DrawConnectedMultiInputHeader(string name, float parameterNameWidth)
+        {
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.0f, 0.5f));
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            ImGui.PushFont(Fonts.FontBold);
+            CustomComponents.RoundedButton("##paramName", new Vector2(ConnectionAreaWidth, 0), ImDrawFlags.RoundCornersTopLeft);
+            ImGui.SameLine();
+            var wasClicked = ImGui.Button(name + "...##paramName", new Vector2(parameterNameWidth, 0));
+            ImGui.PopFont();
+            ImGui.PopStyleColor();
+            ImGui.PopStyleVar();
+            return wasClicked;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.UiHelpers
 {
@@ -101,6 +102,15 @@ namespace T3.Editor.Gui.UiHelpers
 
             var days = timeSinceLastBack.Value.TotalDays;
             return $"{days:0.0} days ago";
+        }
+        
+        public static Color RandomColorForHash(int channelHash)
+        {
+            var foreGroundBrightness = UiColors.ForegroundFull.V;
+            var randomHue = (Math.Abs(channelHash) % 357) / 360f;
+            var randomSaturation = (channelHash % 13) / 13f / 3f + 0.4f;
+            var randomChannelColor = Color.FromHSV(randomHue, randomSaturation, foreGroundBrightness, 1);
+            return randomChannelColor;
         }
     }
 

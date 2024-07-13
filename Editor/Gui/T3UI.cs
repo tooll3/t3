@@ -15,6 +15,7 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Editor.App;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Interaction;
@@ -74,8 +75,8 @@ public class T3Ui: IDisposable
 
     public void ProcessFrame()
     {
+        Profiling.KeepFrameData();
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-        
         
         CustomComponents.BeginFrame();
         FormInputs.BeginFrame();
@@ -131,13 +132,14 @@ public class T3Ui: IDisposable
         // Draw everything!
         ImGui.DockSpaceOverViewport();
 
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 3);
         WindowManager.Draw();
+        ImGui.PopStyleVar();
             
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
-
-
+        
         FrameStats.CompleteFrame();
         TriggerGlobalActionsFromKeyBindings();
             
@@ -164,6 +166,8 @@ public class T3Ui: IDisposable
         
         Playback.OpNotReady = false;
         AutoBackup.AutoBackup.CheckForSave();
+
+        Profiling.EndFrameData();
     }
 
     /// <summary>
@@ -228,7 +232,7 @@ public class T3Ui: IDisposable
     private void DrawAppMenuBar()
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding * T3Ui.UiScaleFactor);
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForMenus * T3Ui.UiScaleFactor);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
             
         if (ImGui.BeginMainMenuBar())

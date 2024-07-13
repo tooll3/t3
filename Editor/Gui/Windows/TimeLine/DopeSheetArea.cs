@@ -702,7 +702,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             // Update reference in Macro-command
             _changeKeyframesCommand.StoreCurrentValues();
-            // UndoRedoStack.Add(_changeKeyframesCommand);
             _changeKeyframesCommand = null;
         }
 

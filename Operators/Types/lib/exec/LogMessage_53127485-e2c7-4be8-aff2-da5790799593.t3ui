@@ -10,6 +10,13 @@
       }
     },
     {
+      "InputId": "8483c153-627c-4154-8fbe-3611ca788701"/*OnlyOnChanges*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "acd53819-c248-4c95-a1a5-92a583e9b49b"/*Message*/,
       "Position": {
         "X": -200.0,

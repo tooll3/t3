@@ -9,6 +9,15 @@
         "Y": 90.0
       },
       "Usage": "CustomDropdown"
+    },
+    {
+      "InputId": "3f634e98-93f2-4b5e-a098-623b3f8e4c9c"/*EnableProfiling*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "GroupTitle": "Additional Options",
+      "Description": "Log trace data for the NDI update timing."
     }
   ],
   "SymbolChildUis": [],

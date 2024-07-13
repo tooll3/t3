@@ -98,7 +98,7 @@
           "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.05,
+            "X": 0.05000003,
             "Y": 0.0
           }
         },
@@ -183,6 +183,11 @@
           "Id": "54ecb0e0-6fc0-4441-b26b-b820e95475a0"/*ShiftBrightness*/,
           "Type": "System.Single",
           "Value": -0.0014
+        },
+        {
+          "Id": "c027bc94-4ef8-4828-8df5-d30abbd31cbc"/*AmplifyEdges*/,
+          "Type": "System.Single",
+          "Value": 0.15012598
         },
         {
           "Id": "5264cbf8-13f6-4dfe-a82d-4f0904973488"/*Reset*/,
@@ -294,9 +299,9 @@
           "Id": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.47,
-            "Y": 0.47,
-            "Z": 0.47,
+            "X": 0.46997085,
+            "Y": 0.46997085,
+            "Z": 0.46997085,
             "W": 1.0
           }
         }
@@ -369,7 +374,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "31fba58f-ea0e-4fab-aa3f-7708ea9ed0d7",
+                  "Id": "c49ed190-9a38-4432-acce-d5c8df0a548d",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 1.0,
@@ -379,7 +384,7 @@
                   }
                 },
                 {
-                  "Id": "8ea64a0a-b554-4738-8587-de0dbe2799f3",
+                  "Id": "01cb2e52-d3c8-4b31-a415-13081105f578",
                   "NormalizedPosition": 0.6352201,
                   "Color": {
                     "R": 9.9999E-07,
@@ -424,22 +429,22 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "26a743eb-2c62-4fc3-b9ff-9a5acc4644f0",
+                  "Id": "20e5087e-ab0a-47e3-b67c-62ade18fdd1c",
                   "NormalizedPosition": 0.0,
                   "Color": {
-                    "R": 0.0,
-                    "G": 0.0,
-                    "B": 0.0,
+                    "R": 3.7672464E-05,
+                    "G": 3.7672464E-05,
+                    "B": 3.7672464E-05,
                     "A": 1.0
                   }
                 },
                 {
-                  "Id": "199a5cd5-7708-4407-9084-2b00008496b8",
+                  "Id": "086a5bcb-3904-48c2-b13a-3ce9918827e1",
                   "NormalizedPosition": 1.0,
                   "Color": {
-                    "R": 0.19138753,
-                    "G": 0.19138563,
-                    "B": 0.19138624,
+                    "R": 0.19137567,
+                    "G": 0.19137377,
+                    "B": 0.19137438,
                     "A": 1.0
                   }
                 }
@@ -554,7 +559,7 @@
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0,
-            "W": 1.0
+            "W": 0.992126
           }
         }
       ],
