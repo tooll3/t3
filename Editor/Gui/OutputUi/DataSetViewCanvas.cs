@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
-using CppSharp.Types.Std;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;

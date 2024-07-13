@@ -43,7 +43,7 @@ internal class ParameterWindow : Window
         foreach (var w in _parameterWindowInstances.ToArray())
         {
             var keep = T3Style.WindowPaddingForWindows;
-            T3Style.WindowPaddingForWindows = new Vector2(5,5); // Todo: This should be a property of Window
+            T3Style.WindowPaddingForWindows = new Vector2(5, 5); // Todo: This should be a property of Window
             w.DrawOneInstance();
             T3Style.WindowPaddingForWindows = keep;
         }
@@ -66,7 +66,9 @@ internal class ParameterWindow : Window
         {
             ImGui.SetNextItemWidth(2);
             string tmpBuffer = "";
+            ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
             ImGui.InputText("##imgui workaround", ref tmpBuffer, 1);
+            ImGui.PopStyleColor();
             ImGui.SameLine();
         }
 
@@ -167,7 +169,7 @@ internal class ParameterWindow : Window
 
         // Namespace and symbol
         {
-            ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
+            //ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
 
             ImGui.PushFont(Fonts.FontBold);
 
@@ -175,7 +177,7 @@ internal class ParameterWindow : Window
             ImGui.PopFont();
 
             ImGui.SameLine();
-            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextDisabled.Rgba);
             ImGui.TextUnformatted(" in ");
             ImGui.PopStyleColor();
             ImGui.SameLine();
@@ -185,7 +187,12 @@ internal class ParameterWindow : Window
 
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 29); // the question mark is now aligned to the right
             if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
-                                              SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
+                                              SymbolRegistry.Entries
+                                                            .Values
+                                                            .Select(i => i.Namespace)
+                                                            .Distinct()
+                                                            .OrderBy(i => i)
+                                            , outlineOnly: true))
             {
                 op.Symbol.Namespace = namespaceForEdit;
                 modified = true;
@@ -196,95 +203,103 @@ internal class ParameterWindow : Window
 
         _help.DrawHelpIcon(symbolUi);
 
-        // SymbolChild Name
-        if (symbolChildUi != null)
+        if (!_help.IsActive)
         {
-            ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 180); //we close the gap after Bypass button 
-
-            var nameForEdit = symbolChildUi.SymbolChild.Name;
-
-            if (ImGui.InputText("##symbolChildName", ref nameForEdit, 128))
+            // SymbolChild Name
+            if (symbolChildUi != null)
             {
-                _symbolChildNameCommand.NewName = nameForEdit;
-                symbolChildUi.SymbolChild.Name = nameForEdit;
-            }
+                //ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
+                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 180); //we close the gap after Bypass button 
 
-            if (ImGui.IsItemActivated())
-            {
-                _symbolChildNameCommand = new ChangeSymbolChildNameCommand(symbolChildUi, op.Parent.Symbol);
-            }
+                var nameForEdit = symbolChildUi.SymbolChild.Name;
 
-            if (ImGui.IsItemDeactivatedAfterEdit())
-            {
-                UndoRedoStack.Add(_symbolChildNameCommand);
-                _symbolChildNameCommand = null;
-            }
-
-            // Fake placeholder text
-            if (string.IsNullOrEmpty(nameForEdit))
-                ImGui.GetWindowDrawList().AddText(ImGui.GetItemRectMin() + new Vector2(5, 5),
-                                                  UiColors.TextMuted,
-                                                  "Untitled instance");
-
-            // Disabled toggle
-            {
-                ImGui.SameLine();
-                ImGui.PushFont(Fonts.FontBold);
-                if (symbolChildUi.IsDisabled)
+                ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 5);
+                if (ImGui.InputText("##symbolChildName", ref nameForEdit, 128))
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusAttention.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-                    if (ImGui.Button("DISABLED", new Vector2(90, 0)))
-                    {
-                        UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, false));
-                    }
-
-                    ImGui.PopStyleColor(2);
-                }
-                else
-                {
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                    if (ImGui.Button("ENABLED", new Vector2(90, 0)))
-                    {
-                        UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, true));
-                    }
-
-                    ImGui.PopStyleColor();
+                    _symbolChildNameCommand.NewName = nameForEdit;
+                    symbolChildUi.SymbolChild.Name = nameForEdit;
                 }
 
-                ImGui.PopFont();
-            }
+                ImGui.PopStyleVar();
 
-            // Bypass
-            {
-                ImGui.SameLine();
-                ImGui.PushFont(Fonts.FontBold);
-                if (symbolChildUi.SymbolChild.IsBypassed)
+                if (ImGui.IsItemActivated())
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusAttention.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-
-                    // TODO: check if bypassable
-                    if (ImGui.Button("BYPASSED", new Vector2(90, 0)))
-                    {
-                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, false));
-                    }
-
-                    ImGui.PopStyleColor(2);
-                }
-                else
-                {
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                    if (ImGui.Button("BYPASS", new Vector2(90, 0)))
-                    {
-                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, true));
-                    }
-
-                    ImGui.PopStyleColor();
+                    _symbolChildNameCommand = new ChangeSymbolChildNameCommand(symbolChildUi, op.Parent.Symbol);
                 }
 
-                ImGui.PopFont();
+                if (ImGui.IsItemDeactivatedAfterEdit())
+                {
+                    UndoRedoStack.Add(_symbolChildNameCommand);
+                    _symbolChildNameCommand = null;
+                }
+
+                // Fake placeholder text
+                if (string.IsNullOrEmpty(nameForEdit))
+                    ImGui.GetWindowDrawList().AddText(ImGui.GetItemRectMin() + new Vector2(5, 4),
+                                                      UiColors.TextMuted.Fade(0.5f),
+                                                      "Untitled instance");
+
+                ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundInputField.Rgba);
+                // Disabled toggle
+                {
+                    ImGui.SameLine();
+                    ImGui.PushFont(Fonts.FontBold);
+                    if (symbolChildUi.IsDisabled)
+                    {
+                        ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusAttention.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+                        if (ImGui.Button("DISABLED", new Vector2(90, 0)))
+                        {
+                            UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, false));
+                        }
+
+                        ImGui.PopStyleColor(2);
+                    }
+                    else
+                    {
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                        if (ImGui.Button("ENABLED", new Vector2(90, 0)))
+                        {
+                            UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, true));
+                        }
+
+                        ImGui.PopStyleColor();
+                    }
+
+                    ImGui.PopFont();
+                }
+
+                // Bypass
+                {
+                    ImGui.SameLine();
+                    ImGui.PushFont(Fonts.FontBold);
+                    if (symbolChildUi.SymbolChild.IsBypassed)
+                    {
+                        ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusAttention.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+
+                        // TODO: check if bypassable
+                        if (ImGui.Button("BYPASSED", new Vector2(90, 0)))
+                        {
+                            UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, false));
+                        }
+
+                        ImGui.PopStyleColor(2);
+                    }
+                    else
+                    {
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                        if (ImGui.Button("BYPASS", new Vector2(90, 0)))
+                        {
+                            UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, true));
+                        }
+
+                        ImGui.PopStyleColor();
+                    }
+
+                    ImGui.PopFont();
+                }
+                ImGui.PopStyleColor();
             }
         }
 
@@ -301,6 +316,8 @@ internal class ParameterWindow : Window
     {
         var groupState = GroupState.None;
 
+        ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundButton.Rgba);
+        ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, UiColors.BackgroundHover.Rgba);
         foreach (var inputSlot in instance.Inputs)
         {
             if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
@@ -341,7 +358,7 @@ internal class ParameterWindow : Window
 
             ImGui.PushID(inputSlot.Id.GetHashCode());
             var skipIfDefault = groupState == GroupState.InsideClosed;
-            
+
             // Draw the actual parameter line implemented
             // in the generic InputValueUi<T>.DrawParameterEdit() method
             var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials: hideNonEssentials, skipIfDefault);
@@ -381,10 +398,12 @@ internal class ParameterWindow : Window
             {
                 NodeSelection.SetSelection(inputUi);
             }
+
             ImGui.PopID();
         }
 
-        
+        ImGui.PopStyleColor(2);
+
         if (groupState == GroupState.InsideOpened)
             FormInputs.EndGroup();
     }

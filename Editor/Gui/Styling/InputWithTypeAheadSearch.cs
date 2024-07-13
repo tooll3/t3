@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
+using T3.Core.Logging;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Styling
@@ -22,7 +24,7 @@ namespace T3.Editor.Gui.Styling
     public static class InputWithTypeAheadSearch
     {
         
-        public static bool Draw(string label, ref string filter, IEnumerable<string> items)
+        public static bool Draw(string label, ref string filter, IEnumerable<string> items, bool outlineOnly=false)
         {
             var inputId = ImGui.GetID(label);
             var isSearchResultWindowOpen = inputId == _activeInputId;
@@ -48,10 +50,27 @@ namespace T3.Editor.Gui.Styling
                 }
             }
             
-            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+            //ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
             filter ??= string.Empty;
+            
+            if (outlineOnly)
+            {
+                ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.FrameBgActive, Color.Red.Rgba);
+                //ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize,0.1f);
+            }
             var wasChanged = ImGui.InputText(label, ref filter, 256);
-            ImGui.PopStyleColor();
+            
+            if (outlineOnly)
+            {
+                var drawList = ImGui.GetWindowDrawList();
+                drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.BackgroundInputField, 5);
+                //ImGui.PopStyleVar();
+                ImGui.PopStyleColor(2);
+            }
+
+            
+            //ImGui.PopStyleColor();
             
             if (ImGui.IsItemActivated())
             {

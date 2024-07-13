@@ -27,6 +27,7 @@ public class OperatorHelp
             ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 2);
             var toggledToEdit = ImGui.GetIO().KeyCtrl;
             var icon = toggledToEdit ? Icon.PopUp : Icon.Help;
+            ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
             if (CustomComponents.IconButton(
                                             icon,
                                             new Vector2(w, w),
@@ -44,6 +45,7 @@ public class OperatorHelp
                     _isDocumentationActive = !_isDocumentationActive;
                 }
             }
+            ImGui.PopStyleColor();
 
             if (ImGui.IsItemHovered() && !_isDocumentationActive)
             {
