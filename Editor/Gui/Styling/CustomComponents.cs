@@ -200,7 +200,6 @@ namespace T3.Editor.Gui.Styling
         {
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundButtonActivated.Rgba);
 
-            Color c;
             if (state != ButtonStates.Normal)
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, GetStateColor(state).Rgba);

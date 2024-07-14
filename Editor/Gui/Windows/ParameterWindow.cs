@@ -14,6 +14,7 @@ using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.UiModel;
 
@@ -62,77 +63,146 @@ internal class ParameterWindow : Window
         // Insert invisible spill over input to catch accidental imgui focus attempts
         {
             ImGui.SetNextItemWidth(2);
-            string tmpBuffer = "";
+            var tmpBuffer = "";
             ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
             ImGui.InputText("##imgui workaround", ref tmpBuffer, 1);
             ImGui.PopStyleColor();
             ImGui.SameLine();
         }
 
-        var instance = NodeSelection.GetFirstSelectedInstance();
-        if (instance != null)
-        {
-            if (!SymbolUiRegistry.Entries.TryGetValue(instance.Symbol.Id, out var symbolUi))
-            {
-                Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
-                return;
-            }
-
-            OperatorHelp.EditDescriptionDialog.Draw(instance.Symbol);
-            RenameInputDialog.Draw();
-
-            SymbolChildUi symbolChildUi = null;
-            if (instance.Parent != null)
-            {
-                var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
-                symbolChildUi = parentUi.ChildUis.SingleOrDefault(childUi => childUi.Id == instance.SymbolChildId);
-                if (symbolChildUi == null)
-                {
-                    Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
-                    return;
-                }
-            }
-
-            if (DrawSelectedSymbolHeader(instance, symbolChildUi, symbolUi))
-            {
-                symbolUi.FlagAsModified();
-            }
-
-            // TODO: This should be a mode with an enum...
-
-            var hideParameters = _help.IsActive || _parameterSettings.IsActive || instance.Parent == null;
-            if (!hideParameters)
-            {
-                DrawParametersArea(instance, symbolChildUi, symbolUi);
-            }
-            else if (_help.IsActive)
-            {
-                ImGui.BeginChild("help");
-                OperatorHelp.DrawHelp(symbolUi);
-                ImGui.EndChild();
-            }
-            else if (_parameterSettings.IsActive)
-            {
-                _parameterSettings.DrawSettings(symbolUi);
-            }
-
+        if (DrawSettingsForSelectedAnnotations())
             return;
+
+        var instance = NodeSelection.GetFirstSelectedInstance();
+
+        if (instance != _lastSelectedInstance)
+        {
+            _lastSelectedInstance = instance;
+            _viewMode = ViewModes.Parameters;
         }
 
-        if (!NodeSelection.IsAnythingSelected())
+        if (instance == null)
+        {
+            var selectedInputs = NodeSelection.GetSelectedNodes<IInputUi>().ToList();
+            if (selectedInputs.Count > 0)
+            {
+                instance = GraphWindow.GetMainComposition();
+                if(instance == null)
+                    return;
+                
+                var inputUi = selectedInputs.First();
+                _viewMode = ViewModes.Settings;
+                _parameterSettings.SelectInput(inputUi.Id);
+            }
+        }
+        
+        if (instance == null)
             return;
 
-        // Draw Annotation settings
-        foreach (var annotation in NodeSelection.GetSelectedNodes<Annotation>())
+        
+        // Draw dialogs
+        OperatorHelp.EditDescriptionDialog.Draw(instance.Symbol); // TODO: This is probably not required...
+        RenameInputDialog.Draw();
+
+        if (!TryGetUiDefinitions(instance, out var symbolUi, out var symbolChildUi))
+            return;
+
+        var modified = false;
+        modified |= DrawSymbolHeader(instance, symbolChildUi, symbolUi);
+
+        if (instance.Parent == null)
         {
-            ImGui.PushID(annotation.Id.GetHashCode());
-            ImGui.PushFont(Fonts.FontLarge);
-            ImGui.TextUnformatted("Annotation settings" + annotation.Title);
+            CustomComponents.EmptyWindowMessage("Home canvas.");
+            return;
+        }
+        
+        switch (_viewMode)
+        {
+            case ViewModes.Parameters:
+                DrawParametersArea(instance, symbolChildUi, symbolUi);
+                break;
+            case ViewModes.Settings:
+                modified |= _parameterSettings.DrawContent(symbolUi);
+                break;
+            case ViewModes.Help:
+                using (new ChildWindowScope("help",Vector2.Zero, ImGuiWindowFlags.None, Color.Transparent, 0, 0))
+                {
+                    OperatorHelp.DrawHelp(symbolUi);
+                }
+                break;
+        }
+        
+        if (modified)
+            symbolUi.FlagAsModified();
+    }
+    
+    private bool DrawSymbolHeader(Instance op, SymbolChildUi symbolChildUi, SymbolUi symbolUi)
+    {
+        var modified = false;
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
+        ImGui.BeginChild("header", new Vector2(0, ImGui.GetFrameHeight() + 5),
+                         false,
+                         ImGuiWindowFlags.AlwaysAutoResize
+                         | ImGuiWindowFlags.NoScrollbar
+                         | ImGuiWindowFlags.NoScrollWithMouse
+                         | ImGuiWindowFlags.NoBackground
+                         | ImGuiWindowFlags.AlwaysUseWindowPadding);
+        {
+            ImGui.AlignTextToFramePadding();
+            // Namespace and symbol
+            ImGui.PushFont(Fonts.FontBold);
+
+            ImGui.TextUnformatted(op.Symbol.Name);
             ImGui.PopFont();
 
-            ImGui.ColorEdit4("color", ref annotation.Color.Rgba);
-            ImGui.PopID();
+            ImGui.SameLine();
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextDisabled.Rgba);
+            ImGui.TextUnformatted(" in ");
+            ImGui.PopStyleColor();
+
+            ImGui.SameLine();
+
+            ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
+            var namespaceForEdit = op.Symbol.Namespace ?? "";
+
+            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 60); // the question mark is now aligned to the right
+            if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
+                                              SymbolRegistry.Entries
+                                                            .Values
+                                                            .Select(i => i.Namespace)
+                                                            .Distinct()
+                                                            .OrderBy(i => i)
+                                            , outlineOnly: true))
+            {
+                op.Symbol.Namespace = namespaceForEdit;
+                modified = true;
+            }
+
+            ImGui.PopStyleColor();
+
+
+            // Settings Modes
+            {
+                var isSettingsMode = _viewMode == ViewModes.Settings;
+                if (_parameterSettings.DrawToggleIcon(symbolUi, ref isSettingsMode))
+                {
+                    _viewMode = isSettingsMode ? ViewModes.Settings : ViewModes.Parameters;
+                }
+                CustomComponents.TooltipForLastItem("Click to toggle parameter settings.");
+            }
+
+            // Help-Mode
+            {
+                var isHelpMode = _viewMode == ViewModes.Help;
+                if (_help.DrawHelpIcon(symbolUi, ref isHelpMode))
+                {
+                    _viewMode = isHelpMode ? ViewModes.Help : ViewModes.Parameters;
+                }
+            }
         }
+        ImGui.EndChild();
+        ImGui.PopStyleVar();
+        return modified;
     }
 
     private void DrawParametersArea(Instance instance, SymbolChildUi symbolChildUi, SymbolUi symbolUi)
@@ -140,7 +210,7 @@ internal class ParameterWindow : Window
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
         ImGui.BeginChild("parameters", Vector2.Zero, false, ImGuiWindowFlags.AlwaysUseWindowPadding);
 
-        DrawInstanceSettings(instance, symbolChildUi, symbolUi);
+        DrawChildNameAndFlags(instance, symbolChildUi, symbolUi);
 
         var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
         var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
@@ -156,66 +226,7 @@ internal class ParameterWindow : Window
         ImGui.PopStyleVar();
     }
 
-    internal enum GroupState
-    {
-        None,
-        InsideClosed,
-        InsideOpened,
-    }
-
-    private bool DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi, SymbolUi symbolUi)
-    {
-        var modified = false;
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
-        ImGui.BeginChild("header", new Vector2(0, ImGui.GetFrameHeight()+5), 
-                         false, 
-                         ImGuiWindowFlags.AlwaysAutoResize
-                         |ImGuiWindowFlags.NoScrollbar
-                         |ImGuiWindowFlags.NoScrollWithMouse
-                         |ImGuiWindowFlags.NoBackground
-                         |ImGuiWindowFlags.AlwaysUseWindowPadding);
-        {
-            ImGui.AlignTextToFramePadding();
-            // Namespace and symbol
-            ImGui.PushFont(Fonts.FontBold);
-
-            ImGui.TextUnformatted(op.Symbol.Name);
-            ImGui.PopFont();
-
-            ImGui.SameLine();
-            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextDisabled.Rgba);
-            ImGui.TextUnformatted(" in ");
-            ImGui.PopStyleColor();
-            ImGui.SameLine();
-
-            ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
-            var namespaceForEdit = op.Symbol.Namespace ?? "";
-
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 29 * 2); // the question mark is now aligned to the right
-            if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
-                                              SymbolRegistry.Entries
-                                                            .Values
-                                                            .Select(i => i.Namespace)
-                                                            .Distinct()
-                                                            .OrderBy(i => i)
-                                            , outlineOnly: true))
-            {
-                op.Symbol.Namespace = namespaceForEdit;
-                modified = true;
-            }
-
-            ImGui.PopStyleColor();
-
-            _parameterSettings.DrawSettingsIcon(symbolUi);
-            _help.DrawHelpIcon(symbolUi);
-        }
-        ImGui.EndChild();
-        ImGui.PopStyleVar();
-        //ImGui.Dummy(new Vector2(0.0f, 5.0f));
-        return modified;
-    }
-
-    private void DrawInstanceSettings(Instance op, SymbolChildUi symbolChildUi, SymbolUi symbolUi)
+    private void DrawChildNameAndFlags(Instance op, SymbolChildUi symbolChildUi, SymbolUi symbolUi)
     {
         var hideParameters = _help.IsActive || _parameterSettings.IsActive;
         if (hideParameters)
@@ -224,7 +235,6 @@ internal class ParameterWindow : Window
         // SymbolChild Name
         if (symbolChildUi != null)
         {
-            //ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 180); //we close the gap after Bypass button 
 
             var nameForEdit = symbolChildUi.SymbolChild.Name;
@@ -317,6 +327,7 @@ internal class ParameterWindow : Window
             }
             ImGui.PopStyleColor();
         }
+
         FormInputs.AddVerticalSpace(5);
     }
 
@@ -338,10 +349,53 @@ internal class ParameterWindow : Window
                 Log.Warning("Trying to access an non existing input, probably the op instance is not the actual one.");
                 continue;
             }
-            
+
             InsertGroupsAndPadding(inputUi, ref groupState);
-            
-            DrawParameterLine(instance, symbolChildUi, compositionSymbolUi, hideNonEssentials, inputSlot, groupState, inputUi);
+
+            ImGui.PushID(inputSlot.Id.GetHashCode());
+            var skipIfDefault = groupState == GroupState.InsideClosed;
+
+            // Draw the actual parameter line implemented
+            // in the generic InputValueUi<T>.DrawParameterEdit() method
+            var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials: hideNonEssentials, skipIfDefault);
+
+            // ... and handle the edit state
+            if (editState.HasFlag(InputEditStateFlags.Started))
+            {
+                _inputSlotForActiveCommand = inputSlot;
+                _inputValueCommandInFlight =
+                    new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
+            }
+
+            if (editState.HasFlag(InputEditStateFlags.Modified))
+            {
+                if (_inputValueCommandInFlight == null || _inputSlotForActiveCommand != inputSlot)
+                {
+                    _inputValueCommandInFlight =
+                        new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
+                    _inputSlotForActiveCommand = inputSlot;
+                }
+
+                _inputValueCommandInFlight.AssignNewValue(inputSlot.Input.Value);
+                inputSlot.DirtyFlag.Invalidate();
+            }
+
+            if (editState.HasFlag(InputEditStateFlags.Finished))
+            {
+                if (_inputValueCommandInFlight != null && _inputSlotForActiveCommand == inputSlot)
+                {
+                    UndoRedoStack.Add(_inputValueCommandInFlight);
+                }
+
+                _inputValueCommandInFlight = null;
+            }
+
+            if (editState == InputEditStateFlags.ShowOptions)
+            {
+                NodeSelection.SetSelection(inputUi);
+            }
+
+            ImGui.PopID();
         }
 
         ImGui.PopStyleColor(2);
@@ -350,7 +404,7 @@ internal class ParameterWindow : Window
             FormInputs.EndGroup();
     }
 
-    public static void InsertGroupsAndPadding(IInputUi inputUi, ref GroupState groupState)
+    private static void InsertGroupsAndPadding(IInputUi inputUi, ref GroupState groupState)
     {
         // Layouts padding and groups
         if (inputUi.AddPadding)
@@ -358,7 +412,7 @@ internal class ParameterWindow : Window
 
         if (string.IsNullOrEmpty(inputUi.GroupTitle))
             return;
-        
+
         if (groupState == GroupState.InsideOpened)
             FormInputs.EndGroup();
 
@@ -381,54 +435,70 @@ internal class ParameterWindow : Window
         }
     }
 
-    private static void DrawParameterLine(Instance instance, SymbolChildUi symbolChildUi, SymbolUi compositionSymbolUi, bool hideNonEssentials,
-                                          IInputSlot inputSlot, GroupState groupState, IInputUi inputUi)
+    private static bool TryGetUiDefinitions(Instance instance, out SymbolUi symbolUi, out SymbolChildUi symbolChildUi)
     {
-        ImGui.PushID(inputSlot.Id.GetHashCode());
-        var skipIfDefault = groupState == GroupState.InsideClosed;
-
-        // Draw the actual parameter line implemented
-        // in the generic InputValueUi<T>.DrawParameterEdit() method
-        var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials: hideNonEssentials, skipIfDefault);
-
-        // ... and handle the edit state
-        if (editState.HasFlag(InputEditStateFlags.Started))
+        if (!SymbolUiRegistry.Entries.TryGetValue(instance.Symbol.Id, out symbolUi))
         {
-            _inputSlotForActiveCommand = inputSlot;
-            _inputValueCommandInFlight =
-                new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
+            symbolChildUi = null;
+            Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
+            return false;
         }
 
-        if (editState.HasFlag(InputEditStateFlags.Modified))
-        {
-            if (_inputValueCommandInFlight == null || _inputSlotForActiveCommand != inputSlot)
-            {
-                _inputValueCommandInFlight =
-                    new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
-                _inputSlotForActiveCommand = inputSlot;
-            }
+        symbolChildUi = null;
+        if (instance.Parent == null)
+            return true;
 
-            _inputValueCommandInFlight.AssignNewValue(inputSlot.Input.Value);
-            inputSlot.DirtyFlag.Invalidate();
-        }
+        var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
+        symbolChildUi = parentUi.ChildUis.SingleOrDefault(childUi => childUi.Id == instance.SymbolChildId);
+        if (symbolChildUi != null)
+            return true;
 
-        if (editState.HasFlag(InputEditStateFlags.Finished))
-        {
-            if (_inputValueCommandInFlight != null && _inputSlotForActiveCommand == inputSlot)
-            {
-                UndoRedoStack.Add(_inputValueCommandInFlight);
-            }
-
-            _inputValueCommandInFlight = null;
-        }
-
-        if (editState == InputEditStateFlags.ShowOptions)
-        {
-            NodeSelection.SetSelection(inputUi);
-        }
-
-        ImGui.PopID();
+        Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
+        return false;
     }
+    
+    // TODO: Refactor this into a separate class
+    private static bool DrawSettingsForSelectedAnnotations()
+    {
+        var somethingVisible = false;
+        // Draw Annotation settings
+        foreach (var annotation in NodeSelection.GetSelectedNodes<Annotation>())
+        {
+            ImGui.PushID(annotation.Id.GetHashCode());
+            ImGui.PushFont(Fonts.FontLarge);
+            ImGui.TextUnformatted("Annotation settings" + annotation.Title);
+            ImGui.PopFont();
+
+            ImGui.ColorEdit4("color", ref annotation.Color.Rgba);
+            ImGui.PopID();
+            somethingVisible = true;
+        }
+
+        return somethingVisible;
+    }
+    
+    private enum GroupState
+    {
+        None,
+        InsideClosed,
+        InsideOpened,
+    }
+
+    private enum ViewModes
+    {
+        Parameters,
+        Settings,
+        Help,
+    }
+
+    private static readonly List<Icon> _modeIcons = new()
+                                                        {
+                                                            Icon.List,
+                                                            Icon.Settings2,
+                                                            Icon.HelpOutline
+                                                        };
+
+    private ViewModes _viewMode = ViewModes.Parameters;
 
     public static bool IsAnyInstanceVisible()
     {
@@ -440,7 +510,10 @@ internal class ParameterWindow : Window
     private static ChangeInputValueCommand _inputValueCommandInFlight;
     private static IInputSlot _inputSlotForActiveCommand;
     private static int _instanceCounter;
-    private OperatorHelp _help = new();
+    private Instance _lastSelectedInstance;
+
+
+    private readonly OperatorHelp _help = new();
     private readonly ParameterSettings _parameterSettings = new();
     public static readonly RenameInputDialog RenameInputDialog = new();
 }

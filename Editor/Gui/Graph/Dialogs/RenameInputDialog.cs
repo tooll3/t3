@@ -26,9 +26,6 @@ public class RenameInputDialog : ModalDialog
     private static void DrawContent()
     {
         var isWindowAppearing = ImGui.IsWindowAppearing();
-        // ImGui.PushFont(Fonts.FontSmall);
-        // ImGui.TextUnformatted("New name");
-        // ImGui.PopFont();
 
         FormInputs.SetIndentToLeft();
         if (!SymbolRegistry.Entries.TryGetValue(_symbolId, out var symbol))
@@ -58,9 +55,6 @@ public class RenameInputDialog : ModalDialog
             _lastWarning = string.Empty;
         }
 
-        // ImGui.SetNextItemWidth(150);
-
-        //var warning = String.Empty;
         var isValid = GraphUtils.IsNewSymbolNameValid(_newInputName);
         if (!isValid)
         {
