@@ -109,22 +109,22 @@ namespace T3.Editor.Gui.Graph.Interaction
                         UndoRedoStack.Add(_moveCommand);
                     }
 
-                    // Reorder inputs nodes if dragged
-                    var selectedInputs = NodeSelection.GetSelectedNodes<IInputUi>().ToList();
-                    if (selectedInputs.Count > 0)
-                    {
-                        var composition = GraphCanvas.Current.CompositionOp;
-                        var compositionUi = SymbolUiRegistry.Entries[composition.Symbol.Id];
-                        composition.Symbol.InputDefinitions.Sort((a, b) =>
-                                                                 {
-                                                                     var childA = compositionUi.InputUis[a.Id];
-                                                                     var childB = compositionUi.InputUis[b.Id];
-                                                                     return (int)(childA.PosOnCanvas.Y * 10000 + childA.PosOnCanvas.X) -
-                                                                            (int)(childB.PosOnCanvas.Y * 10000 + childB.PosOnCanvas.X);
-                                                                 });
-                        composition.Symbol.SortInputSlotsByDefinitionOrder();
-                        InputsAndOutputs.AdjustInputOrderOfSymbol(composition.Symbol);
-                    }
+                    // // Reorder inputs nodes if dragged
+                    // var selectedInputs = NodeSelection.GetSelectedNodes<IInputUi>().ToList();
+                    // if (selectedInputs.Count > 0)
+                    // {
+                    //     var composition = GraphCanvas.Current.CompositionOp;
+                    //     var compositionUi = SymbolUiRegistry.Entries[composition.Symbol.Id];
+                    //     composition.Symbol.InputDefinitions.Sort((a, b) =>
+                    //                                              {
+                    //                                                  var childA = compositionUi.InputUis[a.Id];
+                    //                                                  var childB = compositionUi.InputUis[b.Id];
+                    //                                                  return (int)(childA.PosOnCanvas.Y * 10000 + childA.PosOnCanvas.X) -
+                    //                                                         (int)(childB.PosOnCanvas.Y * 10000 + childB.PosOnCanvas.X);
+                    //                                              });
+                    //     composition.Symbol.SortInputSlotsByDefinitionOrder();
+                    //     InputsAndOutputs.AdjustInputOrderOfSymbol(composition.Symbol);
+                    // }
                 }
                 else
                 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.Interaction;
@@ -281,6 +282,12 @@ namespace T3.Editor.Gui.Styling
                                           string tooltip = null,
                                           string defaultValue = NoDefaultString)
         {
+            if (string.IsNullOrEmpty(label))
+            {
+                Log.Error("AddStringInput() requires an id to work. Use ## prefix to hide." );
+                label = "##fallback";
+            }
+            
             var hasDefault = defaultValue != NoDefaultString;
             var isDefault = hasDefault && value == defaultValue;
 
@@ -298,7 +305,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.SetNextItemWidth(inputSize.X);
             ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 5);
             
-            var modified = ImGui.InputText("##" + label, ref value, 1000);
+            var modified = ImGui.InputText(label, ref value, 1000);
             if (!modified && wasNull)
                 value = null;
 
@@ -463,7 +470,7 @@ namespace T3.Editor.Gui.Styling
 
         public static void DrawInputLabel(string label)
         {
-            if (string.IsNullOrEmpty(label))
+            if (string.IsNullOrEmpty(label) || label.StartsWith("##"))
                 return;
 
             var labelSize = ImGui.CalcTextSize(label);

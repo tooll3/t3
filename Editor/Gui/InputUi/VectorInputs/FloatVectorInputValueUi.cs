@@ -189,7 +189,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             FormInputs.DrawFieldSetHeader("Custom Value format");
             
             if (
-                FormInputs.AddStringInput(null, 
+                FormInputs.AddStringInput("##valueFormat", 
                                           ref Format,
                                           "Custom format like {0:0.0}",
                                           null,

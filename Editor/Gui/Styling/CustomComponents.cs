@@ -697,19 +697,5 @@ namespace T3.Editor.Gui.Styling
             dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color,7, roundedCorners);
             return clicked;
         }
-        
-        public static bool RoundedButton(string id, string label, Vector2 vector2, ImDrawFlags roundedCorners)
-        {
-            //vector2.Y = ImGui.GetFrameHeight();
-            var result= ImGui.InvisibleButton(id, vector2);
-            var dl = ImGui.GetWindowDrawList();
-            var color = ImGuiCol.Button.GetStyleColor();
-            var textColor = ImGuiCol.Text.GetStyleColor();
-            dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color,7, roundedCorners);
-            dl.AddText(Fonts.FontNormal, Fonts.FontNormal.FontSize, 
-                       ImGui.GetItemRectMin() + new Vector2(6,(ImGui.GetItemRectSize().Y -Fonts.FontNormal.FontSize )/2-1),  
-                       textColor,label);
-            return result;
-        }
     }
 }

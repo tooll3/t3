@@ -156,7 +156,7 @@ internal class ParameterWindow : Window
         ImGui.PopStyleVar();
     }
 
-    private enum GroupState
+    internal enum GroupState
     {
         None,
         InsideClosed,
@@ -338,87 +338,96 @@ internal class ParameterWindow : Window
                 Log.Warning("Trying to access an non existing input, probably the op instance is not the actual one.");
                 continue;
             }
-
-            {
-                // Layouts padding and groups
-                if (inputUi.AddPadding)
-                    FormInputs.AddVerticalSpace(2);
-
-                if (!string.IsNullOrEmpty(inputUi.GroupTitle))
-                {
-                    if (groupState == GroupState.InsideOpened)
-                        FormInputs.EndGroup();
-
-                    if (inputUi.GroupTitle.EndsWith("..."))
-                    {
-                        var isOpen = FormInputs.BeginGroup(inputUi.GroupTitle);
-                        groupState = isOpen ? GroupState.InsideOpened : GroupState.InsideClosed;
-                    }
-                    else
-                    {
-                        groupState = GroupState.None;
-                        FormInputs.AddVerticalSpace(5);
-                        ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                        ImGui.SetCursorPosX(4);
-                        ImGui.TextUnformatted(inputUi.GroupTitle.ToUpperInvariant());
-                        ImGui.PopStyleColor();
-                        ImGui.PopFont();
-                        FormInputs.AddVerticalSpace(2);
-                    }
-                }
-            }
-
-            ImGui.PushID(inputSlot.Id.GetHashCode());
-            var skipIfDefault = groupState == GroupState.InsideClosed;
-
-            // Draw the actual parameter line implemented
-            // in the generic InputValueUi<T>.DrawParameterEdit() method
-            var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials: hideNonEssentials, skipIfDefault);
-
-            // ... and handle the edit state
-            if (editState.HasFlag(InputEditStateFlags.Started))
-            {
-                _inputSlotForActiveCommand = inputSlot;
-                _inputValueCommandInFlight =
-                    new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
-            }
-
-            if (editState.HasFlag(InputEditStateFlags.Modified))
-            {
-                if (_inputValueCommandInFlight == null || _inputSlotForActiveCommand != inputSlot)
-                {
-                    _inputValueCommandInFlight =
-                        new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
-                    _inputSlotForActiveCommand = inputSlot;
-                }
-
-                _inputValueCommandInFlight.AssignNewValue(inputSlot.Input.Value);
-                inputSlot.DirtyFlag.Invalidate();
-            }
-
-            if (editState.HasFlag(InputEditStateFlags.Finished))
-            {
-                if (_inputValueCommandInFlight != null && _inputSlotForActiveCommand == inputSlot)
-                {
-                    UndoRedoStack.Add(_inputValueCommandInFlight);
-                }
-
-                _inputValueCommandInFlight = null;
-            }
-
-            if (editState == InputEditStateFlags.ShowOptions)
-            {
-                NodeSelection.SetSelection(inputUi);
-            }
-
-            ImGui.PopID();
+            
+            InsertGroupsAndPadding(inputUi, ref groupState);
+            
+            DrawParameterLine(instance, symbolChildUi, compositionSymbolUi, hideNonEssentials, inputSlot, groupState, inputUi);
         }
 
         ImGui.PopStyleColor(2);
 
         if (groupState == GroupState.InsideOpened)
             FormInputs.EndGroup();
+    }
+
+    public static void InsertGroupsAndPadding(IInputUi inputUi, ref GroupState groupState)
+    {
+        // Layouts padding and groups
+        if (inputUi.AddPadding)
+            FormInputs.AddVerticalSpace(2);
+
+        if (string.IsNullOrEmpty(inputUi.GroupTitle))
+            return;
+        
+        if (groupState == GroupState.InsideOpened)
+            FormInputs.EndGroup();
+
+        if (inputUi.GroupTitle.EndsWith("..."))
+        {
+            var isOpen = FormInputs.BeginGroup(inputUi.GroupTitle);
+            groupState = isOpen ? GroupState.InsideOpened : GroupState.InsideClosed;
+        }
+        else
+        {
+            groupState = GroupState.None;
+            FormInputs.AddVerticalSpace(5);
+            ImGui.PushFont(Fonts.FontSmall);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            ImGui.SetCursorPosX(4);
+            ImGui.TextUnformatted(inputUi.GroupTitle.ToUpperInvariant());
+            ImGui.PopStyleColor();
+            ImGui.PopFont();
+            FormInputs.AddVerticalSpace(2);
+        }
+    }
+
+    private static void DrawParameterLine(Instance instance, SymbolChildUi symbolChildUi, SymbolUi compositionSymbolUi, bool hideNonEssentials,
+                                          IInputSlot inputSlot, GroupState groupState, IInputUi inputUi)
+    {
+        ImGui.PushID(inputSlot.Id.GetHashCode());
+        var skipIfDefault = groupState == GroupState.InsideClosed;
+
+        // Draw the actual parameter line implemented
+        // in the generic InputValueUi<T>.DrawParameterEdit() method
+        var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials: hideNonEssentials, skipIfDefault);
+
+        // ... and handle the edit state
+        if (editState.HasFlag(InputEditStateFlags.Started))
+        {
+            _inputSlotForActiveCommand = inputSlot;
+            _inputValueCommandInFlight =
+                new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
+        }
+
+        if (editState.HasFlag(InputEditStateFlags.Modified))
+        {
+            if (_inputValueCommandInFlight == null || _inputSlotForActiveCommand != inputSlot)
+            {
+                _inputValueCommandInFlight =
+                    new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
+                _inputSlotForActiveCommand = inputSlot;
+            }
+
+            _inputValueCommandInFlight.AssignNewValue(inputSlot.Input.Value);
+            inputSlot.DirtyFlag.Invalidate();
+        }
+
+        if (editState.HasFlag(InputEditStateFlags.Finished))
+        {
+            if (_inputValueCommandInFlight != null && _inputSlotForActiveCommand == inputSlot)
+            {
+                UndoRedoStack.Add(_inputValueCommandInFlight);
+            }
+
+            _inputValueCommandInFlight = null;
+        }
+
+        if (editState == InputEditStateFlags.ShowOptions)
+        {
+            NodeSelection.SetSelection(inputUi);
+        }
+
+        ImGui.PopID();
     }
 
     public static bool IsAnyInstanceVisible()

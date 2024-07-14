@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Logging;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -34,6 +37,8 @@ public class ParameterSettings
         }
     }
 
+    private static bool _wasDraggingParameterOrder;
+    
     public  void DrawSettings(SymbolUi symbolUi)
     {
         IInputUi selectedInputUi = null;
@@ -52,35 +57,95 @@ public class ParameterSettings
                                         Color.Transparent, 
                                         0))
             {
+                var dl = ImGui.GetWindowDrawList();
+                var parentSymbol = symbolUi.Symbol;
+
                 ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
-                foreach (var inputUi in symbolUi.InputUis.Values)
+                for (var index = 0; index < symbolUi.InputUis.Values.ToList().Count; index++)
                 {
+                    var inputUi = symbolUi.InputUis.Values.ToList()[index];
                     var isSelected = inputUi.InputDefinition.Id == _selectedInputId;
-                    if(isSelected)
+                    if (isSelected)
                         selectedInputUi = inputUi;
-                    
+
+                    var padding = inputUi.AddPadding ? 4 : 0f;
+                    if (!string.IsNullOrEmpty(inputUi.GroupTitle))
+                        padding = 13;
+
+                    var size = new Vector2(150, padding + ImGui.GetFrameHeight());
+                    var clicked = ImGui.InvisibleButton(inputUi.InputDefinition.Name, size);
+
                     var typeColor = TypeUiRegistry.GetPropertiesForType(inputUi.Type).Color;
                     var textColor = isSelected ? UiColors.ForegroundFull : typeColor.Fade(0.9f);
-                    var buttonBackground = isSelected ? UiColors.WindowBackground : Color.Transparent;
-                    var buttonHoverBackground = isSelected ? typeColor : typeColor.Fade(0.1f);
-                        
-                    using (new StyleScope( new []
-                                               {
-                                                   new Coloring(ImGuiCol.Button, buttonBackground),
-                                                   new Coloring(ImGuiCol.ButtonActive, buttonBackground),
-                                                   new Coloring(ImGuiCol.ButtonHovered, buttonHoverBackground),
-                                                   new Coloring(ImGuiCol.Text, textColor),
-                                               }))
+                    var backgroundColor = isSelected ? UiColors.WindowBackground : Color.Transparent;
+                    if (ImGui.IsItemHovered() && !isSelected)
                     {
-                        if (!CustomComponents.RoundedButton(inputUi.InputDefinition.Name, inputUi.InputDefinition.Name, new Vector2(150, ImGui.GetFrameHeight()), ImDrawFlags.RoundCornersLeft))
-                            continue;
-                        
+                        backgroundColor = UiColors.WindowBackground.Fade(0.5f);
+                    }
+
+                    if (ImGui.IsItemActive() && !ImGui.IsItemHovered())
+                    {
+                        var mouseDelta = ImGui.GetMouseDragDelta().Y;
+
+                        var indexDelta = mouseDelta switch
+                                        {
+                                            < 0 when ImGui.GetItemRectMin().Y > ImGui.GetMousePos().Y && index > 0                           => -1,
+                                            > 0 when ImGui.GetItemRectMin().Y < ImGui.GetMousePos().Y && index < symbolUi.InputUis.Count - 1 => 1,
+                                            _                                                                                                => 0
+                                        };
+
+                        if (indexDelta != 0)
+                        {
+                            (parentSymbol.InputDefinitions[index + indexDelta], parentSymbol.InputDefinitions[index]) 
+                                = (parentSymbol.InputDefinitions[index], parentSymbol.InputDefinitions[index + indexDelta]);
+                            
+                            (symbolUi.InputUis[index + indexDelta], symbolUi.InputUis[index]) 
+                                = (symbolUi.InputUis[index], symbolUi.InputUis[index + indexDelta]);
+                            
+                            _wasDraggingParameterOrder = true;
+                        }
+                    }
+
+
+                    var buttonHoverBackground = isSelected ? typeColor : typeColor.Fade(0.1f);
+
+                    dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), backgroundColor, 7, ImDrawFlags.RoundCornersLeft);
+
+                    // Draw group title
+                    if (!string.IsNullOrEmpty(inputUi.GroupTitle))
+                    {
+                        dl.AddText(Fonts.FontSmall, Fonts.FontSmall.FontSize,
+                                   ImGui.GetItemRectMin()
+                                   + new Vector2(6, 0),
+                                   UiColors.TextMuted.Fade(0.5f),
+                                   inputUi.GroupTitle);
+                    }
+
+                    // Draw name
+                    dl.AddText(Fonts.FontNormal, Fonts.FontNormal.FontSize,
+                               ImGui.GetItemRectMin()
+                               + new Vector2(6, padding + 2),
+                               textColor,
+                               inputUi.InputDefinition.Name);
+
+                    if (clicked && !_wasDraggingParameterOrder)
+                    { 
                         _selectedInputId = inputUi.InputDefinition.Id;
                     }
                 }
-                
+
                 ImGui.PopStyleVar();
+            
+                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left) && _wasDraggingParameterOrder)
+                {
+                    _wasDraggingParameterOrder = false;
+                    parentSymbol.SortInputSlotsByDefinitionOrder();
+                    InputsAndOutputs.AdjustInputOrderOfSymbol(parentSymbol);
+                    Log.Debug(" Applying new parameter order" + ImGui.GetMouseDragDelta().Y);
+                }
             }
+            
+            
 
             ImGui.SameLine(0,0);
             
@@ -134,7 +199,7 @@ public class ParameterSettings
                     if (style == ParameterListStyles.WithGroup)
                     {
                         var groupTitle = selectedInputUi.GroupTitle;
-                        if (FormInputs.AddStringInput(null, ref groupTitle, "Group Title", null,
+                        if (FormInputs.AddStringInput("##groupTitle", ref groupTitle, "Group Title", null,
                                                       "Group title shown above parameter\n\nGroup will be collapsed by default if name ends with '...' (three dots)."))
                         {
                             selectedInputUi.GroupTitle = groupTitle;
