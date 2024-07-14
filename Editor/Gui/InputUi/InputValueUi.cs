@@ -182,7 +182,7 @@ namespace T3.Editor.Gui.InputUi
                     for (var multiInputIndex = 0; multiInputIndex < allInputs.Count; multiInputIndex++)
                     {
                         ImGui.PushID(multiInputIndex);
-                        if (CustomComponents.RoundedButton(string.Empty, new Vector2(InputArea.ConnectionAreaWidth, 0), ImDrawFlags.RoundCornersLeft))
+                        if (CustomComponents.RoundedButton(string.Empty, InputArea.ConnectionAreaWidth, ImDrawFlags.RoundCornersLeft))
                         {
                             // TODO: implement with proper SelectionManager
                         }
@@ -299,7 +299,7 @@ namespace T3.Editor.Gui.InputUi
                 if (hasKeyframeAtCurrentTime) iconIndex |= onBit;
                 var icon = _keyframeButtonIcons[iconIndex];
 
-                if (CustomComponents.RoundedButton("##icon", new Vector2(InputArea.ConnectionAreaWidth, 0.0f), ImDrawFlags.RoundCornersLeft))
+                if (CustomComponents.RoundedButton("##icon", InputArea.ConnectionAreaWidth, ImDrawFlags.RoundCornersLeft))
                 {
                     // TODO: this should use Undo/Redo commands
                     if (hasKeyframeAtCurrentTime)
@@ -504,58 +504,15 @@ namespace T3.Editor.Gui.InputUi
             }
             #endregion
         }
+
+
         
         public virtual void DrawSettings()
         {
-            FormInputs.AddVerticalSpace(5);
-            {
-                var addPadding = AddPadding;
-                if (FormInputs.AddCheckBox("Insert Padding above", ref addPadding))
-                    AddPadding = addPadding;
-            }
 
-            {
-                var opensGroups = GroupTitle != null;
-                if (FormInputs.AddCheckBox("Starts Parameter group", ref opensGroups))
-                {
-                    GroupTitle = opensGroups ? "Group Title" : null;
-                }
-
-                if (opensGroups)
-                {
-                    var groupTitle = GroupTitle;
-                    if (FormInputs.AddStringInput("Group Title", ref groupTitle, "GroupTitle", null,
-                                                  "Group title shown above parameter\n\nGroup will be collapsed by default if name ends with '...' (three dots)."))
-                    {
-                        GroupTitle = groupTitle;
-                    }
-                }
-            }
-
-            FormInputs.AddVerticalSpace(5);
-
-            {
-                var tmpForRef = Relevancy;
-                if (FormInputs.AddEnumDropdown(ref tmpForRef, "Relevancy"))
-                    Relevancy = tmpForRef;
-            }
-
-            FormInputs.AddVerticalSpace(5);
         }
 
-        public virtual void DrawDescriptionEdit()
-        {
-            FormInputs.AddVerticalSpace();
 
-            FormInputs.AddSectionHeader("Documentation");
-            var width = ImGui.GetContentRegionAvail().X;
-            var description = string.IsNullOrEmpty(Description) ? string.Empty : Description;
-            if (ImGui.InputTextMultiline("##parameterDescription", ref description, 16000, new Vector2(width, 0)))
-            {
-                Description = string.IsNullOrEmpty(description) ? null : description;
-                Parent.FlagAsModified();
-            }
-        }
 
         public virtual void Write(JsonTextWriter writer)
         {
@@ -604,7 +561,7 @@ namespace T3.Editor.Gui.InputUi
         public static void DrawNormalInputArea(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi, SymbolChild.Input input,
                                                bool isAnimatable, Color typeColor)
         {
-            var buttonClicked = CustomComponents.RoundedButton(string.Empty, new Vector2(ConnectionAreaWidth, 0.0f), ImDrawFlags.RoundCornersAll);
+            var buttonClicked = CustomComponents.RoundedButton(string.Empty, ConnectionAreaWidth, ImDrawFlags.RoundCornersLeft);
             
             var inputOperation = InputOperations.None;
             
@@ -772,7 +729,7 @@ namespace T3.Editor.Gui.InputUi
             //ImGui.PushStyleColor(ImGuiCol.Button, typeColor.Fade(0.5f).Rgba);
             //ImGui.PushStyleColor(ImGuiCol.Text, typeColor.Rgba);
             
-            if (CustomComponents.RoundedButton(String.Empty, new Vector2(InputArea.ConnectionAreaWidth, 0.0f), ImDrawFlags.RoundCornersLeft))
+            if (CustomComponents.RoundedButton(String.Empty,  ConnectionAreaWidth, ImDrawFlags.RoundCornersLeft))
             {
                 var sourceUi = FindConnectedSymbolChildUi(inputSlot.Id, compositionUi, symbolChildUi);
                 // Try to find instance
@@ -808,7 +765,7 @@ namespace T3.Editor.Gui.InputUi
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.0f, 0.5f));
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
             ImGui.PushFont(Fonts.FontBold);
-            CustomComponents.RoundedButton("##paramName", new Vector2(ConnectionAreaWidth, 0), ImDrawFlags.RoundCornersTopLeft);
+            CustomComponents.RoundedButton("##paramName", ConnectionAreaWidth, ImDrawFlags.RoundCornersTopLeft);
             ImGui.SameLine();
             var wasClicked = ImGui.Button(name + "...##paramName", new Vector2(parameterNameWidth, 0));
             ImGui.PopFont();

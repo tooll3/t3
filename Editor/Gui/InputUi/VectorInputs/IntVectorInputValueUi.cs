@@ -81,11 +81,11 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         public override void DrawSettings()
         {
             base.DrawSettings();
-
-            ImGui.DragInt("Min", ref Min);
-            ImGui.DragInt("Max", ref Max);
-            ImGui.DragFloat("Scale", ref _scale);
-            ImGui.Checkbox("Clamp Range", ref Clamp);
+            FormInputs.DrawFieldSetHeader("Value Range");
+            if (FormInputs.DrawIntValueRangeControl(ref Min, ref Max, ref _scale, ref Clamp))
+            {
+                Parent.FlagAsModified();
+            }
         }
 
         public override void Write(JsonTextWriter writer)
@@ -127,7 +127,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         protected readonly int[] IntComponents;
 
         private const float DefaultScale = 0.1f;
-        private const int DefaultMin = int.MinValue;
-        private const int DefaultMax = int.MaxValue;        
+        public const int DefaultMin = int.MinValue;
+        public const int DefaultMax = int.MaxValue;        
     }
 }

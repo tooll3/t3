@@ -197,11 +197,8 @@ public class OperatorHelp
 
     public static void DrawExamples(SymbolUi symbolUi)
     {
-        ImGui.Indent();
         ImGui.PushFont(Fonts.FontSmall);
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(5, 5));
-        FormInputs.SetIndentToLeft();
-        // FormInputs.AddHint("Check the documentation in the header");
 
         // Draw links
         if (symbolUi.Links.Count > 0)
@@ -242,16 +239,14 @@ public class OperatorHelp
                 ImGui.SameLine();
             }
 
-            ImGui.Dummy(new Vector2(10, 10));
+            ImGui.Dummy(new Vector2(2, 2));
             ImGui.PopStyleColor();
         }
 
         var groupLabel = "Also see:";
-        var groupLabelShown = false;
         if (ExampleSymbolLinking.ExampleSymbols.TryGetValue(symbolUi.Symbol.Id, out var examplesOpIds))
         {
             DrawGroupLabel(groupLabel);
-            groupLabelShown = true;
 
             foreach (var guid in examplesOpIds)
             {
@@ -267,8 +262,11 @@ public class OperatorHelp
             var matches = _itemRegex.Matches(symbolUi.Description);
             if (matches.Count > 0)
             {
-                if (!groupLabelShown)
-                    DrawGroupLabel(groupLabel);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                ImGui.TextUnformatted(groupLabel);
+                ImGui.PopStyleColor();
+                
+                ImGui.Dummy(Vector2.One);
 
                 foreach (Match match in matches)
                 {
@@ -294,7 +292,6 @@ public class OperatorHelp
 
         ImGui.PopFont();
         ImGui.PopStyleVar();
-        ImGui.Unindent();
     }
 
     private static void DrawGroupLabel(string title)

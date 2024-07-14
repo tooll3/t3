@@ -35,7 +35,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             var showControl = (controlRatio > 1f && UseVec2Control != Vec2Controls.None);
             var rightPadding = showControl ? ImGui.GetFrameHeight() * controlRatio : 0;
 
-            var inputEditState = VectorValueEdit.Draw(FloatComponents, Min, Max, Scale, Clamp, rightPadding + 4, Format);
+            var inputEditState = VectorValueEdit.Draw(FloatComponents, Min, Max, Scale, Clamp, rightPadding , Format);
             var shouldClamp = false;
             
             if (showControl)
@@ -161,13 +161,11 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         public override void DrawSettings()
         {
             base.DrawSettings();
-            
-            {
-                FormInputs.AddVerticalSpace();
-                var tmpForRef = UseVec2Control;
-                if (FormInputs.AddEnumDropdown(ref tmpForRef, "Vec2 Control"))
-                    UseVec2Control = tmpForRef;
-            }
+
+            FormInputs.DrawFieldSetHeader("Show 2D Control");
+            var tmpForRef = UseVec2Control;
+            if (FormInputs.AddEnumDropdown(ref tmpForRef, null))
+                UseVec2Control = tmpForRef;
         }
 
         public override void Write(JsonTextWriter writer)

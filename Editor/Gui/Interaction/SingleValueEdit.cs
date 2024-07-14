@@ -28,10 +28,12 @@ namespace T3.Editor.Gui.Interaction
                                                int max = int.MaxValue,
                                                bool clamp = false,
                                                float scale = 0.2f,
-                                               string format = "{0:0}")
+                                               string format = "{0:0}",
+                                               int defaultValue = default,
+                                               float horizontalAlign = 0)
         {
             double doubleValue = value;
-            var result = Draw(ref doubleValue, size, min, max, clamp, scale, format, useIntegers:true);
+            var result = Draw(ref doubleValue, size, min, max, clamp, scale, format, useIntegers:true, defaultValue:defaultValue, horizontalAlign);
             value = (int)doubleValue;
             return result;
         }
@@ -45,10 +47,12 @@ namespace T3.Editor.Gui.Interaction
                                                float max = float.PositiveInfinity,
                                                bool clamp = false,
                                                float scale = 0.01f,
-                                               string format = "{0:0.000}")
+                                               string format = "{0:0.000}", 
+                                               float defaultValue= default,
+                                               float horizontalAlign = 0)
         {
             double floatValue = value;
-            var result = Draw(ref floatValue, size, min, max, clamp, scale, format);
+            var result = Draw(ref floatValue, size, min, max, clamp, scale, format, defaultValue:defaultValue, horizontalAlign:horizontalAlign);
             value = (float)floatValue;
             return result;
         }
@@ -62,7 +66,9 @@ namespace T3.Editor.Gui.Interaction
                                                bool clamp = false,
                                                float scale = 1,
                                                string format = "{0:0.000}",
-                                               bool useIntegers= false)
+                                               bool useIntegers= false, 
+                                               double defaultValue = default,
+                                               float horizontalAlign = 0)
         {
             _numberFormat = format;
             _currentTabIndex++;
@@ -88,7 +94,10 @@ namespace T3.Editor.Gui.Interaction
                         ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundActive.Rgba);
                         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundActive.Rgba);
                         ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundActive.Rgba);
-                        DrawButtonWithDynamicLabel(FormatValueForButton(ref _editValue), ref size);
+                        //DrawButtonWithDynamicLabel(FormatValueForButton(ref _editValue), ref size);
+                        ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(horizontalAlign,0.5f));
+                        ImGui.Button(FormatValueForButton(ref _editValue) + "###button", size);
+                        ImGui.PopStyleVar();
                         DrawValueRangeIndicator(value, min, max);
                         ImGui.PopStyleColor(3);
 
@@ -180,6 +189,7 @@ namespace T3.Editor.Gui.Interaction
                         if (!valid)
                         {
                             _editValue = _startValue;
+                            _editValue = defaultValue;
                             _jogDialText = value.ToString();
                         }
 
@@ -195,7 +205,11 @@ namespace T3.Editor.Gui.Interaction
                 return Math.Abs(_editValue - _startValue) > 0.0001f ? InputEditStateFlags.Modified : InputEditStateFlags.Started;
             }
 
-            DrawButtonWithDynamicLabel(FormatValueForButton(ref value), ref size);
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(horizontalAlign,0.5f));
+            ImGui.Button(FormatValueForButton(ref value) + "###button", size);
+            ImGui.PopStyleVar();
+
+            //DrawButtonWithDynamicLabel(FormatValueForButton(ref value), ref size);
             DrawValueRangeIndicator(value, min, max);
 
             if (ImGui.IsItemActivated())
