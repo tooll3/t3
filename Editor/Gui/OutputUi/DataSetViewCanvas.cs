@@ -238,11 +238,21 @@ public class DataSetViewCanvas
                 ImGui.SetScrollY((int)newScrollY);
             }
             
+            if (_scroll)
+            {
+                var windowWidth = ImGui.GetWindowWidth();
+                var width = _canvas.InverseTransformDirection(ImGui.GetWindowSize()).X;
+                var scale = windowWidth / width;
+                
+                _canvas.SetVisibleRangeHard(new Vector2(scale, -1),
+                                            new Vector2((float)currentTime - (windowWidth - 50 * T3Ui.UiScaleFactor) / scale, 0));                
+            }
+            
             var dl = ImGui.GetWindowDrawList();
             var min = ImGui.GetWindowPos();
             var max = ImGui.GetContentRegionAvail() + min;
             
-            var visibleMinTime = _canvas.InverseTransformX(min.X);
+            var visibleMinTime = _canvas.InverseTransformX(min.X+200);
             var visibleMaxTime = _canvas.InverseTransformX(max.X);
             
             const int maxVisibleEvents = 500;
@@ -352,156 +362,19 @@ public class DataSetViewCanvas
                     _lastEventTime = Math.Max(_lastEventTime, channel.Events[^1].Time);
                 }
                 
+                var keepSubWindowPos = ImGui.GetCursorScreenPos();
                 if (ImGui.IsRectVisible(layerMin, layerMax))
                 {
-                    var keepSubWindowPos = ImGui.GetCursorScreenPos();
-                    ImGui.BeginChild(channel.Path.Last(), new Vector2(ImGui.GetWindowSize().X, layerHeight), 
-                                     false, 
-                                     ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoNav | ImGuiWindowFlags.AlwaysAutoResize
-                                     );
-                    var dl2 = ImGui.GetWindowDrawList();
-                    //var dl2 = dl;
-                    // Draw events starting from the end (left to right)
-                    for (float fIndex = latestVisibleIndex;
-                         fIndex >= 0
-                         //&& fIndex >= latestVisibleIndex - maxVisibleEvents
-                         && fIndex >= oldestVisibleIndex
-                         && visibleEventCount < maxVisibleEvents;
-                         fIndex -= stepSize)
-                    {
-                        var index = (int)fIndex;
-                        
-                        var dataEvent = channel.Events[index];
-                        var msg = dataEvent.Value == null ? "NULL" : dataEvent.Value.ToString();
-                        
-                        float markerYInLayer;
-                        var value = float.NaN;
-                        
-                        if (dataEvent.TryGetNumericValue(out var numericValue))
-                        {
-                            value = (float)numericValue;
-                            var fNormalized = ((value - valueRange.Min) / (valueRange.Max - valueRange.Min)).Clamp(0, 1);
-                            markerYInLayer = (1 - fNormalized) * (layerHeight - 5) + 3;
-                            
-                            //string msg;
-                            if (Math.Abs(value) < 0.0001)
-                                msg = "0";
-                            else if (Math.Abs(value) < 10000)
-                            {
-                                msg = $"{value:G5}";
-                            }
-                            else if (Math.Abs(value) < 1000000)
-                            {
-                                msg = $"{value / 1000:0.0}K";
-                            }
-                            else if (Math.Abs(value) < 100000000)
-                            {
-                                msg = $"{value / 1000000:0.0}M";
-                            }
-                        }
-                        else
-                        {
-                            markerYInLayer = layerHeight - 3;
-                        }
-                        
-                        float xStart;
-                        
-                        // Draw interval events
-                        if (dataEvent is DataIntervalEvent intervalEvent)
-                        {
-                            if (!(intervalEvent.EndTime > visibleMinTime) || !(intervalEvent.Time < visibleMaxTime))
-                            {
-                                continue;
-                            }
-                            
-                            xStart = _canvas.TransformX((float)intervalEvent.Time);
-                            
-                            var endTime = intervalEvent.IsUnfinished ? currentTime : intervalEvent.EndTime;
-                            var xEnd = MathF.Max(_canvas.TransformX((float)endTime), xStart + 1);
-                            
-                            dl2.AddRectFilled(new Vector2(xStart, layerMin.Y + markerYInLayer),
-                                              new Vector2(xEnd, layerMax.Y),
-                                              randomChannelColor.Fade(0.3f));
-                            
-                            if (ImGui.IsWindowHovered() && ImGui.IsMouseHoveringRect(new Vector2(xStart, layerMin.Y), new Vector2(xEnd, layerMax.Y)))
-                            {
-                                ImGui.BeginTooltip();
-                                ImGui.Text($"{msg}\n{dataEvent.Time:0.000s} ... {endTime:0.000s}");
-                                ImGui.EndTooltip();
-                            }
-                        }
-                        // Draw value events
-                        else
-                        {
-                            if (!(dataEvent.Time > visibleMinTime) || !(dataEvent.Time < visibleMaxTime))
-                                continue;
-                            
-                            xStart = _canvas.TransformX((float)dataEvent.Time);
-                            var y = layerMin.Y + markerYInLayer;
-                            dl2.AddTriangleFilled(new Vector2(xStart, y - 3),
-                                                  new Vector2(xStart + 2.5f, y + 2),
-                                                  new Vector2(xStart - 2.5f, y + 2),
-                                                  randomChannelColor);
-                            
-                            plotCurvePoints[visiblePlotPointCount++] = new Vector2(xStart, y);
-                            
-                            if (ImGui.IsWindowHovered() && ImGui.IsMouseHoveringRect(new Vector2(xStart - 1, layerMin.Y), new Vector2(lastX, layerMax.Y)))
-                            {
-                                ImGui.BeginTooltip();
-                                ImGui.Text($"{msg}\n{dataEvent.Time:0.000s}");
-                                ImGui.EndTooltip();
-                            }
-                        }
-                        
-                        // Draw label if enough space
-                        {
-                            var shortMsg = msg.Length > 20 ? msg.Substring(0, 20) : msg;
-                            var gapSize = lastX - xStart;
-                            var estimatedWidth = shortMsg.Length * Fonts.FontSmall.FontSize * 0.6f;
-                            
-                            if (!string.IsNullOrEmpty(shortMsg) && gapSize > 20)
-                            {
-                                var fade = MathUtils.RemapAndClamp(gapSize, estimatedWidth - 30, estimatedWidth + 60, 0, 1);
-                                dl2.AddText(Fonts.FontSmall, Fonts.FontSmall.FontSize,
-                                            new Vector2(xStart + 8, layerMin.Y + 3),
-                                            randomChannelColor.Fade(0.6f * fade), shortMsg);
-                            }
-                            
-                            if (!float.IsNaN(value))
-                            {
-                                newVisibleRange.Min = MathF.Min(newVisibleRange.Min, value);
-                                newVisibleRange.Max = MathF.Max(newVisibleRange.Max, value);
-                            }
-                        }
-                        
-                        lastX = xStart;
-                        visibleEventCount++;
-                    }
-                    
-                    // Adjust auto height of plot line
-                    var newRange = new ValueRange(MathUtils.Lerp(valueRange.Min, newVisibleRange.Min, 0.1f),
-                                                  MathUtils.Lerp(valueRange.Max, newVisibleRange.Max, 0.1f));
-                    if (float.IsNaN(newRange.Min) || float.IsNaN(newRange.Max))
-                        newRange = new ValueRange();
-                    
-                    _channelValueRanges[channelHash] = newRange;
-                    
-                    // Draw plot line
-                    if (visiblePlotPointCount > 1)
-                    {
-                        dl.AddPolyline(ref plotCurvePoints[0], visiblePlotPointCount, randomChannelColor.Fade(0.2f), ImDrawFlags.None, 1);
-                    }
-                    
                     // Draw label flashing with recent events
                     if (channel.Events.Count > 0)
                     {
                         // Shade background
-                        dl2.AddRectFilled(layerMin + new Vector2(0, 1),
+                        dl.AddRectFilled(layerMin + new Vector2(0, 1),
                                          layerMin + new Vector2(200, layerHeight),
                                          UiColors.WindowBackground.Fade(0.7f)
                                         );
                         
-                        dl2.AddRectFilledMultiColor(layerMin + new Vector2(200, 1),
+                        dl.AddRectFilledMultiColor(layerMin + new Vector2(200, 1),
                                                    layerMin + new Vector2(400, layerHeight),
                                                    UiColors.WindowBackground.Fade(0.7f),
                                                    UiColors.WindowBackground.Fade(0.0f),
@@ -569,14 +442,155 @@ public class DataSetViewCanvas
                             //            label);
                         }
                     }
-                    ImGui.EndChild();
+                    //ImGui.SameLine(0,100);
+                    ImGui.SetCursorPosX(200);
+                    using (new ChildWindowScope(channel.Path.Last(),
+                                                new Vector2(ImGui.GetWindowSize().X-200, layerHeight),
+                                                ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoNav |
+                                                ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoBringToFrontOnFocus |
+                                                ImGuiWindowFlags.AlwaysAutoResize, Color.Transparent))
+                    {
+                        var dl2 = ImGui.GetWindowDrawList();
+                        
+                        // Draw events starting from the end (left to right)
+                        for (float fIndex = latestVisibleIndex;
+                             fIndex >= 0
+                             //&& fIndex >= latestVisibleIndex - maxVisibleEvents
+                             && fIndex >= oldestVisibleIndex
+                             && visibleEventCount < maxVisibleEvents;
+                             fIndex -= stepSize)
+                        {
+                            var index = (int)fIndex;
+                            
+                            var dataEvent = channel.Events[index];
+                            var msg = dataEvent.Value == null ? "NULL" : dataEvent.Value.ToString();
+                            
+                            float markerYInLayer;
+                            var value = float.NaN;
+                            
+                            if (dataEvent.TryGetNumericValue(out var numericValue))
+                            {
+                                value = (float)numericValue;
+                                var fNormalized = ((value - valueRange.Min) / (valueRange.Max - valueRange.Min)).Clamp(0, 1);
+                                markerYInLayer = (1 - fNormalized) * (layerHeight - 5) + 3;
+                                
+                                //string msg;
+                                if (Math.Abs(value) < 0.0001)
+                                    msg = "0";
+                                else if (Math.Abs(value) < 10000)
+                                {
+                                    msg = $"{value:G5}";
+                                }
+                                else if (Math.Abs(value) < 1000000)
+                                {
+                                    msg = $"{value / 1000:0.0}K";
+                                }
+                                else if (Math.Abs(value) < 100000000)
+                                {
+                                    msg = $"{value / 1000000:0.0}M";
+                                }
+                            }
+                            else
+                            {
+                                markerYInLayer = layerHeight - 3;
+                            }
+                            
+                            float xStart;
+                            
+                            // Draw interval events
+                            if (dataEvent is DataIntervalEvent intervalEvent)
+                            {
+                                if (!(intervalEvent.EndTime > visibleMinTime) || !(intervalEvent.Time < visibleMaxTime))
+                                {
+                                    continue;
+                                }
+                                
+                                xStart = _canvas.TransformX((float)intervalEvent.Time);
+                                
+                                var endTime = intervalEvent.IsUnfinished ? currentTime : intervalEvent.EndTime;
+                                var xEnd = MathF.Max(_canvas.TransformX((float)endTime), xStart + 1);
+                                
+                                dl2.AddRectFilled(new Vector2(xStart, layerMin.Y + markerYInLayer),
+                                                  new Vector2(xEnd, layerMax.Y),
+                                                  randomChannelColor.Fade(0.3f));
+                                
+                                if (ImGui.IsWindowHovered() && ImGui.IsMouseHoveringRect(new Vector2(xStart, layerMin.Y), new Vector2(xEnd, layerMax.Y)))
+                                {
+                                    ImGui.BeginTooltip();
+                                    ImGui.Text($"{msg}\n{dataEvent.Time:0.000s} ... {endTime:0.000s}");
+                                    ImGui.EndTooltip();
+                                }
+                            }
+                            // Draw value events
+                            else
+                            {
+                                if (!(dataEvent.Time > visibleMinTime) || !(dataEvent.Time < visibleMaxTime))
+                                    continue;
+                                
+                                xStart = _canvas.TransformX((float)dataEvent.Time);
+                                var y = layerMin.Y + markerYInLayer;
+                                dl2.AddTriangleFilled(new Vector2(xStart, y - 3),
+                                                      new Vector2(xStart + 2.5f, y + 2),
+                                                      new Vector2(xStart - 2.5f, y + 2),
+                                                      randomChannelColor);
+                                
+                                plotCurvePoints[visiblePlotPointCount++] = new Vector2(xStart, y);
+                                
+                                if (ImGui.IsWindowHovered() && ImGui.IsMouseHoveringRect(new Vector2(xStart - 1, layerMin.Y), new Vector2(lastX, layerMax.Y)))
+                                {
+                                    ImGui.BeginTooltip();
+                                    ImGui.Text($"{msg}\n{dataEvent.Time:0.000s}");
+                                    ImGui.EndTooltip();
+                                }
+                            }
+                            
+                            // Draw label if enough space
+                            {
+                                var shortMsg = msg.Length > 20 ? msg.Substring(0, 20) : msg;
+                                var gapSize = lastX - xStart;
+                                var estimatedWidth = shortMsg.Length * Fonts.FontSmall.FontSize * 0.6f;
+                                
+                                if (!string.IsNullOrEmpty(shortMsg) && gapSize > 20)
+                                {
+                                    var fade = MathUtils.RemapAndClamp(gapSize, estimatedWidth - 30, estimatedWidth + 60, 0, 1);
+                                    dl2.AddText(Fonts.FontSmall, Fonts.FontSmall.FontSize,
+                                                new Vector2(xStart + 8, layerMin.Y + 3),
+                                                randomChannelColor.Fade(0.6f * fade), shortMsg);
+                                }
+                                
+                                if (!float.IsNaN(value))
+                                {
+                                    newVisibleRange.Min = MathF.Min(newVisibleRange.Min, value);
+                                    newVisibleRange.Max = MathF.Max(newVisibleRange.Max, value);
+                                }
+                            }
+                            
+                            lastX = xStart;
+                            visibleEventCount++;
+                        }
+                        
+                        // Adjust auto height of plot line
+                        var newRange = new ValueRange(MathUtils.Lerp(valueRange.Min, newVisibleRange.Min, 0.1f),
+                                                      MathUtils.Lerp(valueRange.Max, newVisibleRange.Max, 0.1f));
+                        if (float.IsNaN(newRange.Min) || float.IsNaN(newRange.Max))
+                            newRange = new ValueRange();
+                        
+                        _channelValueRanges[channelHash] = newRange;
+                        
+                        // Draw plot line
+                        if (visiblePlotPointCount > 1)
+                        {
+                            dl.AddPolyline(ref plotCurvePoints[0], visiblePlotPointCount, randomChannelColor.Fade(0.2f), ImDrawFlags.None, 1);
+                        }
+                    }
+                    
+                    
+                    //ImGui.EndChild();
                     ImGui.SetCursorScreenPos(keepSubWindowPos);
-
                     
                     // Line below layer
                     dl.AddLine(new Vector2(layerMin.X, layerMax.Y), layerMax, UiColors.GridLines.Fade(0.2f));
                 }
-                
                 
                 layerMin.Y += layerHeight;
                 layerMax.Y += layerHeight;
