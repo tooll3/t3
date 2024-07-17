@@ -99,14 +99,15 @@ public class ParameterSettings
                 }
 
                 // Handle dragging
+                var itemMin = ImGui.GetItemRectMin();
                 if (ImGui.IsItemActive() && !ImGui.IsItemHovered())
                 {
                     var mouseDelta = ImGui.GetMouseDragDelta().Y;
 
                     var indexDelta = mouseDelta switch
                                          {
-                                             < 0 when ImGui.GetItemRectMin().Y > ImGui.GetMousePos().Y && index > 0                           => -1,
-                                             > 0 when ImGui.GetItemRectMin().Y < ImGui.GetMousePos().Y && index < symbolUi.InputUis.Count - 1 => 1,
+                                             < 0 when itemMin.Y > ImGui.GetMousePos().Y && index > 0                           => -1,
+                                             > 0 when itemMin.Y < ImGui.GetMousePos().Y && index < symbolUi.InputUis.Count - 1 => 1,
                                              _                                                                                                => 0
                                          };
 
@@ -122,13 +123,13 @@ public class ParameterSettings
                     }
                 }
 
-                dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), backgroundColor, 7, ImDrawFlags.RoundCornersLeft);
+                dl.AddRectFilled(itemMin, ImGui.GetItemRectMax(), backgroundColor, 7, ImDrawFlags.RoundCornersLeft);
 
                 // Draw group title
                 if (!string.IsNullOrEmpty(inputUi.GroupTitle))
                 {
                     dl.AddText(Fonts.FontSmall, Fonts.FontSmall.FontSize,
-                               ImGui.GetItemRectMin()
+                               itemMin
                                + new Vector2(6, 0),
                                UiColors.TextMuted.Fade(0.5f),
                                inputUi.GroupTitle);
@@ -136,11 +137,21 @@ public class ParameterSettings
 
                 // Draw name
                 dl.AddText(Fonts.FontNormal, Fonts.FontNormal.FontSize,
-                           ImGui.GetItemRectMin()
-                           + new Vector2(6, padding + 2),
+                           itemMin
+                           + new Vector2(8, padding + 2),
                            textColor,
                            inputUi.InputDefinition.Name);
 
+                // Drag handle
+                if(ImGui.IsItemActive() || (!ImGui.IsAnyItemActive() && ImGui.IsItemHovered()))
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        var pos = new Vector2(itemMin.X + 2, itemMin.Y  + i * 5  + size.Y / 2 - 6);
+                        dl.AddRectFilled(pos, pos+new Vector2(3,2), UiColors.ForegroundFull.Fade(0.2f), 0);
+                    }
+                }
+                
                 if (clicked && !_wasDraggingParameterOrder)
                 { 
                     _selectedInputId = inputUi.InputDefinition.Id;
@@ -149,6 +160,7 @@ public class ParameterSettings
                     if(selectedInstance == null) 
                         NodeSelection.SetSelection(inputUi);
                 }
+                
             }
 
             ImGui.PopStyleVar();
