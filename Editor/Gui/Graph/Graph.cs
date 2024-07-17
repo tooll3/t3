@@ -65,7 +65,7 @@ namespace T3.Editor.Gui.Graph
             // Checksum
             if (!needsReinit)
             {
-                var checkSum = 0;
+                var checkSum = _updateRequestCount;
                 
                 for (var index = 0; index < graphSymbol.Connections.Count; index++)
                 {
@@ -440,6 +440,11 @@ namespace T3.Editor.Gui.Graph
             }
         }
         
+        public static void RequestUpdate()
+        {
+            _updateRequestCount++;
+        }
+        
         private enum Channels
         {
             Annotations = 0,
@@ -447,6 +452,7 @@ namespace T3.Editor.Gui.Graph
         }
 
         public static float GraphOpacity = 0.2f;
+        public static int _updateRequestCount=0;
         
         private static int _lastCheckSum;
         internal static readonly ConnectionSorter Connections = new();

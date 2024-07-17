@@ -163,6 +163,7 @@ public class ParameterSettings
                 _wasDraggingParameterOrder = false;
                 parentSymbol.SortInputSlotsByDefinitionOrder();
                 InputsAndOutputs.AdjustInputOrderOfSymbol(parentSymbol);
+                Graph.Graph.RequestUpdate();
                 Log.Debug(" Applying new parameter order" + ImGui.GetMouseDragDelta().Y);
             }
         }
