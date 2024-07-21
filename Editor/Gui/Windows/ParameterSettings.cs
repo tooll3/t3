@@ -53,7 +53,7 @@ public class ParameterSettings
         {
             FormInputs.AddVerticalSpace(5);
             
-            var selectedInputUi = DrawSelection(symbolUi);
+            var selectedInputUi = DrawSelectionArea(symbolUi);
             ImGui.SameLine(0,0);
             modified = DrawSettingsForParameter(selectedInputUi);
         }
@@ -61,13 +61,12 @@ public class ParameterSettings
         return modified;
     }
 
-    private float _selectionWidth = 150;
-    private IInputUi DrawSelection(SymbolUi symbolUi)
+    private IInputUi DrawSelectionArea(SymbolUi symbolUi)
     {
         IInputUi selectedInputUi = null;
         
         using (new ChildWindowScope("selector", 
-                                    new Vector2(_selectionWidth * T3Ui.UiScaleFactor, 0),
+                                    new Vector2(SelectionWidth * T3Ui.UiScaleFactor, 0),
                                     ImGuiWindowFlags.NoBackground,
                                     Color.Transparent, 
                                     0))
@@ -80,7 +79,7 @@ public class ParameterSettings
             for (var index = 0; index < symbolUi.InputUis.Values.ToList().Count; index++)
             {
                 var inputUi = symbolUi.InputUis.Values.ToList()[index];
-                var isSelected = inputUi.InputDefinition.Id == _selectedInputId;
+                var isSelected = inputUi.InputDefinition.Id == SelectedInputId;
                 if (isSelected)
                     selectedInputUi = inputUi;
 
@@ -88,11 +87,11 @@ public class ParameterSettings
                 if (!string.IsNullOrEmpty(inputUi.GroupTitle))
                     padding = 13;
 
-                var size = new Vector2(_selectionWidth * T3Ui.UiScaleFactor, padding + ImGui.GetFrameHeight());
+                var size = new Vector2(SelectionWidth * T3Ui.UiScaleFactor, padding + ImGui.GetFrameHeight());
                 var clicked = ImGui.InvisibleButton(inputUi.InputDefinition.Name, size);
 
                 var typeColor = TypeUiRegistry.GetPropertiesForType(inputUi.Type).Color;
-                var textColor = isSelected ? UiColors.ForegroundFull : typeColor.Fade(0.9f);
+                var textColor = isSelected ? ColorVariations.OperatorLabel.Apply( typeColor) : typeColor.Fade(0.9f);
                 var backgroundColor = isSelected ? UiColors.WindowBackground : Color.Transparent;
                 if ((ImGui.IsItemHovered() || ImGui.IsItemActive()) && !isSelected)
                 {
@@ -142,7 +141,8 @@ public class ParameterSettings
                 }
 
                 // Draw name
-                dl.AddText(Fonts.FontNormal, Fonts.FontNormal.FontSize,
+                var font = isSelected ? Fonts.FontBold : Fonts.FontNormal;
+                dl.AddText(font, font.FontSize,
                            itemMin
                            + new Vector2(8, padding + 2),
                            textColor,
@@ -160,7 +160,7 @@ public class ParameterSettings
                 
                 if (clicked && !_wasDraggingParameterOrder)
                 { 
-                    _selectedInputId = inputUi.InputDefinition.Id;
+                    SelectedInputId = inputUi.InputDefinition.Id;
                     selectedInputUi = inputUi;
                     var selectedInstance = NodeSelection.GetFirstSelectedInstance();
                     if(selectedInstance == null) 
@@ -173,7 +173,7 @@ public class ParameterSettings
 
             if (selectedInputUi == null && symbolUi.InputUis.Count > 0)
             {
-                _selectedInputId = symbolUi.InputUis.Values.First().InputDefinition.Id;
+                SelectedInputId = symbolUi.InputUis.Values.First().InputDefinition.Id;
             }
             
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Left) && _wasDraggingParameterOrder)
@@ -282,6 +282,8 @@ public class ParameterSettings
         return modified;
     }
 
+    private const float SelectionWidth = 150;
+
     private enum ParameterListStyles
     {
         Default,
@@ -290,13 +292,13 @@ public class ParameterSettings
     }
 
     private static bool _wasDraggingParameterOrder;
-    private Guid _selectedInputId;
+    internal Guid SelectedInputId { get; set; }
     
     public bool IsActive { get; private set; } = false;
 
     public void SelectInput(Guid inputUiId)
     {
-        _selectedInputId = inputUiId;
+        SelectedInputId = inputUiId;
     }
 }
 

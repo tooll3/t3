@@ -75,9 +75,11 @@ internal class ParameterWindow : Window
 
         var instance = NodeSelection.GetFirstSelectedInstance();
 
-        if (instance != _lastSelectedInstance)
+        var id = instance?.SymbolChildId ?? Guid.Empty;
+
+        if (id != _lastSelectedInstanceId)
         {
-            _lastSelectedInstance = instance;
+            _lastSelectedInstanceId = id;
             _viewMode = ViewModes.Parameters;
         }
 
@@ -216,7 +218,7 @@ internal class ParameterWindow : Window
         var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
 
         // Draw parameters
-        DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false);
+        DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false, this );
         FormInputs.AddVerticalSpace(15);
 
         _help.DrawHelpSummary(symbolUi);
@@ -336,7 +338,7 @@ internal class ParameterWindow : Window
     /// The actual implementation is done in <see cref="InputValueUi{T}.DrawParameterEdit"/>  
     /// </summary>
     public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
-                                      SymbolUi compositionSymbolUi, bool hideNonEssentials)
+                                      SymbolUi compositionSymbolUi, bool hideNonEssentials, ParameterWindow parameterWindow = null)
     {
         var groupState = GroupState.None;
 
@@ -390,9 +392,11 @@ internal class ParameterWindow : Window
                 _inputValueCommandInFlight = null;
             }
 
-            if (editState == InputEditStateFlags.ShowOptions)
+            if (editState == InputEditStateFlags.ShowOptions && parameterWindow != null)
             {
-                NodeSelection.SetSelection(inputUi);
+                parameterWindow._viewMode = ViewModes.Settings;
+                parameterWindow._parameterSettings.SelectedInputId = inputUi.Id;
+                //NodeSelection.SetSelection(inputUi);
             }
 
             ImGui.PopID();
@@ -510,7 +514,7 @@ internal class ParameterWindow : Window
     private static ChangeInputValueCommand _inputValueCommandInFlight;
     private static IInputSlot _inputSlotForActiveCommand;
     private static int _instanceCounter;
-    private Instance _lastSelectedInstance;
+    private Guid _lastSelectedInstanceId;
 
 
     private readonly OperatorHelp _help = new();

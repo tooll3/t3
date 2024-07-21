@@ -419,15 +419,23 @@ namespace T3.Editor.Gui.InputUi
                 
                 if (ImGui.IsItemHovered())
                 {
-                        var text = "";
-                        if (!string.IsNullOrEmpty(Description))
-                        {
-                            text += Description;
-                        }
-                        
+                    var text = "";
+                    if (!string.IsNullOrEmpty(Description))
+                    {
+                        text += Description;
+                    }
+
+                    var additionalNotes = input.IsDefault ? null: "Click to reset to default";
+
+                    if (!string.IsNullOrEmpty(text) || !string.IsNullOrEmpty(additionalNotes))
+                    {
                         CustomComponents.TooltipForLastItem( text, 
-                                                             input.IsDefault ? null: "Click to reset to default");
-                        
+                                                             additionalNotes);
+                    }
+                    
+                
+                    if (!input.IsDefault)
+                        Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 4) * T3Ui.UiScaleFactor);
                 }
 
                 if (isClicked)
