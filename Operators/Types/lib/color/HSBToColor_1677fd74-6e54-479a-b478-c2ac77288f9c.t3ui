@@ -28,8 +28,7 @@
         "Y": 0.0
       },
       "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
+      "Max": 100.0
     },
     {
       "InputId": "fb8c2263-804d-4204-80aa-ba21bbefdd8e"/*Alpha*/,
