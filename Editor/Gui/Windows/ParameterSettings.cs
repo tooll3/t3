@@ -4,6 +4,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
@@ -72,7 +73,7 @@ public class ParameterSettings
                                     0))
         {
             var dl = ImGui.GetWindowDrawList();
-            var parentSymbol = symbolUi.Symbol;
+            var symbol = symbolUi.Symbol;
 
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f));
                 
@@ -93,28 +94,33 @@ public class ParameterSettings
                 var typeColor = TypeUiRegistry.GetPropertiesForType(inputUi.Type).Color;
                 var textColor = isSelected ? UiColors.ForegroundFull : typeColor.Fade(0.9f);
                 var backgroundColor = isSelected ? UiColors.WindowBackground : Color.Transparent;
-                if (ImGui.IsItemHovered() && !isSelected)
+                if ((ImGui.IsItemHovered() || ImGui.IsItemActive()) && !isSelected)
                 {
                     backgroundColor = UiColors.WindowBackground.Fade(0.5f);
                 }
 
                 // Handle dragging
                 var itemMin = ImGui.GetItemRectMin();
+                var itemMax = ImGui.GetItemRectMax();
                 if (ImGui.IsItemActive() && !ImGui.IsItemHovered())
                 {
-                    var mouseDelta = ImGui.GetMouseDragDelta().Y;
-
-                    var indexDelta = mouseDelta switch
-                                         {
-                                             < 0 when itemMin.Y > ImGui.GetMousePos().Y && index > 0                           => -1,
-                                             > 0 when itemMin.Y < ImGui.GetMousePos().Y && index < symbolUi.InputUis.Count - 1 => 1,
-                                             _                                                                                                => 0
-                                         };
-
+                    var mouseY = ImGui.GetMousePos().Y;
+                    var halfHeight = ImGui.GetItemRectSize().Y / 2;
+                    var indexDelta = 0;
+                    if (mouseY < itemMin.Y - halfHeight && index > 0)
+                    {
+                        indexDelta = -1;
+                    }
+                    else if (mouseY > itemMax.Y + halfHeight  && index < symbolUi.InputUis.Count - 1)
+                    {
+                        indexDelta = 1;
+                    }
+                        
+                    
                     if (indexDelta != 0)
                     {
-                        (parentSymbol.InputDefinitions[index + indexDelta], parentSymbol.InputDefinitions[index]) 
-                            = (parentSymbol.InputDefinitions[index], parentSymbol.InputDefinitions[index + indexDelta]);
+                        (symbol.InputDefinitions[index + indexDelta], symbol.InputDefinitions[index]) 
+                            = (symbol.InputDefinitions[index], symbol.InputDefinitions[index + indexDelta]);
                             
                         (symbolUi.InputUis[index + indexDelta], symbolUi.InputUis[index]) 
                             = (symbolUi.InputUis[index], symbolUi.InputUis[index + indexDelta]);
@@ -172,11 +178,11 @@ public class ParameterSettings
             
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Left) && _wasDraggingParameterOrder)
             {
+
                 _wasDraggingParameterOrder = false;
-                parentSymbol.SortInputSlotsByDefinitionOrder();
-                InputsAndOutputs.AdjustInputOrderOfSymbol(parentSymbol);
-                Graph.Graph.RequestUpdate();
-                Log.Debug(" Applying new parameter order" + ImGui.GetMouseDragDelta().Y);
+                symbol.SortInputSlotsByDefinitionOrder();
+                InputsAndOutputs.AdjustInputOrderOfSymbol(symbol);
+                Log.Debug(" Applying new parameter order");
             }
         }
 

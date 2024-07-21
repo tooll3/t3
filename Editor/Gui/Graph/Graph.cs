@@ -56,7 +56,8 @@ namespace T3.Editor.Gui.Graph
             _inputUisById = _symbolUi.InputUis;
             _outputUisById = _symbolUi.OutputUis;
 
-            if (ConnectionMaker.TempConnections.Count > 0 || AllConnections.Count != ConnectionMaker.TempConnections.Count + graphSymbol.Connections.Count)
+            if (ConnectionMaker.TempConnections.Count > 0 
+                || AllConnections.Count != ConnectionMaker.TempConnections.Count + graphSymbol.Connections.Count)
             {
                 _lastCheckSum = 0;
                 needsReinit = true;
@@ -65,29 +66,31 @@ namespace T3.Editor.Gui.Graph
             // Checksum
             if (!needsReinit)
             {
-                var checkSum = _updateRequestCount;
+                var checkSum = 0;
                 
                 for (var index = 0; index < graphSymbol.Connections.Count; index++)
                 {
                     var c = graphSymbol.Connections[index];
-                    checkSum += c.GetHashCode() * (index+1);
+                    checkSum =  checkSum * 31 + c.GetHashCode() * (index+1);
                 }
 
                 foreach (var c in ConnectionMaker.TempConnections)
                 {
-                    checkSum += c.GetHashCode();
+                    checkSum = checkSum * 31+ c.GetHashCode();
                 }
 
                 if (checkSum != _lastCheckSum)
                 {
                     needsReinit = true;
                     _lastCheckSum = checkSum;
+                    Log.Debug("Checksum changed");
                 }
             }
 
             //needsReinit = true;
             if (needsReinit)
             {
+                Log.Debug("Update connection viz");
                 AllConnections.Clear();
                 AllConnections.AddRange(graphSymbol.Connections);
                 AllConnections.AddRange(ConnectionMaker.TempConnections);
@@ -135,22 +138,23 @@ namespace T3.Editor.Gui.Graph
             // 4. Draw Inputs Nodes
             if (Connections != null)
             {
-                foreach (var (nodeId, node) in _inputUisById)
+                for(var index = 0 ; index<  _symbolUi.InputUis.Count; index++ )
                 {
-                    var index = graphSymbol.InputDefinitions.FindIndex(def => def.Id == nodeId);
                     var inputDef = graphSymbol.InputDefinitions[index];
-                    var isSelectedOrHovered = InputNode.Draw(inputDef, node, index);
-
+                    var inputUi = _symbolUi.InputUis[index];
+                    var isSelectedOrHovered = InputNode.Draw(inputDef, inputUi, index);
+                
                     var sourcePos = new Vector2(
                                                 InputNode._lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
                                                 InputNode._lastScreenRect.GetCenter().Y
                                                );
-                    foreach (var line in Connections.GetLinesFromInputNodes(node, nodeId))
+                    foreach (var line in Connections.GetLinesFromInputNodes(inputUi, inputDef.Id))
                     {
                         line.SourcePosition = sourcePos;
                         line.IsSelected |= isSelectedOrHovered;
                     }
                 }
+                
             }
 
             // 5. Draw Output Nodes
@@ -440,10 +444,6 @@ namespace T3.Editor.Gui.Graph
             }
         }
         
-        public static void RequestUpdate()
-        {
-            _updateRequestCount++;
-        }
         
         private enum Channels
         {
@@ -452,7 +452,6 @@ namespace T3.Editor.Gui.Graph
         }
 
         public static float GraphOpacity = 0.2f;
-        public static int _updateRequestCount=0;
         
         private static int _lastCheckSum;
         internal static readonly ConnectionSorter Connections = new();

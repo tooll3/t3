@@ -351,7 +351,7 @@ namespace T3.Core.Operator
                 var symbolChild = parentSymbol.Children.SingleOrDefault(child => child.Id == instance.SymbolChildId);
                 if (symbolChild == null)
                 {
-                    Log.Error($"Can't find SymnbolChild with id {instance.SymbolChildId} in {parentSymbol}");
+                    Log.Error($"Can't find SymbolChild with id {instance.SymbolChildId} in {parentSymbol}");
                     continue;
                 }
                 // update inputs of symbol child
