@@ -1,0 +1,32 @@
+{
+  "Id": "9412d0f4-dab8-4145-9719-10395e154fa7"/*NdiOutput*/,
+  "Description": "NDI live video output. R8G8B8A8_UNorm texture format  or R8G8B8A8_Typeless is required for output. You can adjust the render format by using a ConvertFormat op or [RenderTarget] like in this example: [TorusMesh]->[DrawMesh]->[RenderTarget]->[SpoutOutput].",
+  "InputUis": [
+    {
+        "InputId": "633199D4-1950-48E3-ACE9-0E266C7E5771" /*ScreenIndex*/,
+        "Relevancy": "Required",
+        "Position": {
+            "X": -200.0,
+            "Y": 0.0
+        }
+    },
+    {
+        "InputId": "9ACD5B21-CAC7-4A1E-B7A8-1552AD0A907D" /*TimeOut*/,
+        "Position": {
+            "X": -200.0,
+            "Y": 90.0
+        },
+        "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+        "OutputId": "16D64181-ABFE-4B34-98C3-87B88D049E50" /*TextureOutput*/,
+        "Position": {
+            "X": 300.0,
+            "Y": 200.0
+        }
+    }
+  ]
+}

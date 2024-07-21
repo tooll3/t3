@@ -96,6 +96,36 @@ namespace T3.Core.Utils
                 }
             }
         }
+
+        /// <summary>
+        /// Infinite modulo indexer, also allows to reference array indexes using negative values
+        /// Note: assumes count is positive, does not perform check for it
+        /// </summary>
+        /// <param name="index">Index value</param>
+        /// <param name="count">Element count</param>
+        /// <returns>A valid index to lookup in the array</returns>
+        public static int InfiniteModIndexer(int index, int count)
+        {
+            if (count == 0)
+                return 0;
+
+            if (index < count)
+            {
+                if (index >= 0)
+                {
+                    return index;
+                }
+                else
+                {
+                    int remainder = index % count;
+                    return remainder == 0 ? 0 : remainder + count;
+                }
+            }
+            else
+            {
+                return index % count;
+            }
+        }
     }
 
     public static class CastTo<TTarget>

@@ -1,0 +1,17 @@
+{
+  "Name": "NdiOutput",
+  "Id": "9412d0f4-dab8-4145-9719-10395e154fa7",
+  "Namespace": "lib.io.video",
+  "Inputs": [
+    {
+        "Id": "633199D4-1950-48E3-ACE9-0E266C7E5771" /*ScreenIndex*/,
+        "DefaultValue": 0
+    },
+    {
+        "Id": "9ACD5B21-CAC7-4A1E-B7A8-1552AD0A907D" /*TimeOut*/,
+        "DefaultValue": 10000
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
