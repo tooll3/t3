@@ -1,20 +1,19 @@
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
-using NewTek.NDI;
 using NewTek;
 using System.Linq;
+using T3.Core.Operator.Interfaces;
 
 namespace T3.Operators.Types.Id_9412d0f4_dab8_4145_9719_10395e154fa7
 {
-    public class NdiOutput : Instance<NdiOutput>
+    public class NdiOutput : Instance<NdiOutput>, IStatusProvider
     {
         [Output(Guid = "3c0ae0e5-a2af-4437-b7fa-8ad300cb8b8b", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
         public readonly Slot<Texture2D> TextureOutput = new();
@@ -45,18 +44,35 @@ namespace T3.Operators.Types.Id_9412d0f4_dab8_4145_9719_10395e154fa7
 
             TextureOutput.Value = texture;
 
-            //Single mip, non array and non multisampled //FIXME : we can actually handle mips using copy subresource
-            if (texture == null ||
-                (!allowedFormats.Contains(texture.Description.Format))
-                || texture.Description.SampleDescription.Count > 1
-                || texture.Description.ArraySize != 1)
+
+
+            if (texture == null)
             {
-                //FIXME : error pls 
+                _lastErrorMessage = "No texture input";
                 return;
             }
-
+            
+            if (!allowedFormats.Contains(texture.Description.Format))
+            {
+                _lastErrorMessage = "Texture format must be one of the following:\nB8G8R8A8_UNorm\nR8G8B8A8_UNorm\nB8G8R8A8_Typeless\nR8G8B8A8_Typeless \n\nPlease us [ConvertFormat] to convert the texture to a supported format.";
+                return;
+            }
+            
+            if (texture.Description.SampleDescription.Count > 1)
+            {
+                _lastErrorMessage = "Multisampled textures are not supported";
+                return;
+            }
+            
+            if (texture.Description.ArraySize != 1)
+            {
+                _lastErrorMessage = "Texture arrays are not supported";
+                return;
+            }
+            
             SendTexture(senderName, fps, alpha, ref texture);
             SenderName.Update(context);
+            _lastErrorMessage = string.Empty;
         }
 
         private void SetupNdiSender(string senderName, uint width, uint height)
@@ -219,5 +235,11 @@ namespace T3.Operators.Types.Id_9412d0f4_dab8_4145_9719_10395e154fa7
 
         [Input(Guid = "E6359F2E-E4F7-419D-A403-CE5EB0528898")]
         public InputSlot<bool> EnableAlpha = new();
+
+        IStatusProvider.StatusLevel IStatusProvider.GetStatusLevel() => string.IsNullOrEmpty(_lastErrorMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Error;
+
+        string IStatusProvider.GetStatusMessage() => _lastErrorMessage;
+
+        private string _lastErrorMessage;
     }
 }

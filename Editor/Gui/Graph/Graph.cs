@@ -90,7 +90,6 @@ namespace T3.Editor.Gui.Graph
             //needsReinit = true;
             if (needsReinit)
             {
-                Log.Debug("Update connection viz");
                 AllConnections.Clear();
                 AllConnections.AddRange(graphSymbol.Connections);
                 AllConnections.AddRange(ConnectionMaker.TempConnections);
