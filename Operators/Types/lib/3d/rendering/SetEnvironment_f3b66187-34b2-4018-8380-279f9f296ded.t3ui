@@ -1,6 +1,6 @@
 {
   "Id": "f3b66187-34b2-4018-8380-279f9f296ded"/*SetEnvironment*/,
-  "Description": "Sets the image based lighting (IBL) for the current RenderTarget. This texture can then be used by drawing operators for physically based rendering (PBR) further left in the graph.\n\nSome background information: a standard technology for rendering is to use environment textures that store various degrees of roughness in their mip map levels: fully reflective chrome in the highest resolution and very blurry/diffuse reflections in the lower levels. This is not just done be blurring, though: a single ultra bright pixel (E.g. the sun) can brighten the complete diffuse reflection. This computation is very(!) expensive and should not be done in real-time for high resolution environment maps.\n\nTo compute this IBL map [SetEnvironment] needs a cube map texture. As of now you can load equirectangular HDR maps only in DDS format and convert them with a [TextureToCubemap]. We are working on making this more convenient. You can also use procedural image textures for this.\n\nNOTICE: For the background environment to have the correctly alignment, the camera must be set after the environment:\n\n[DrawMesh]->[SetMaterial]->[SetPointLight]->[SetEnvironment]->[SetCamera].\n\nAlso see: [HowToDrawThings]",
+  "Description": "Sets the image based lighting (IBL) for the current RenderTarget. This texture can then be used by drawing operators for physically based rendering (PBR) further left in the graph.\nThe Operators needed are: [LoadImage] -> [TextureToCubeMap] -> [SetEnvironment]\n\n\nSome background information: a standard technology for rendering is to use environment textures that store various degrees of roughness in their mip map levels: fully reflective chrome in the highest resolution and very blurry/diffuse reflections in the lower levels. This is not just done be blurring, though: a single ultra bright pixel (E.g. the sun) can brighten the complete diffuse reflection. This computation is very(!) expensive and should not be done in real-time for high resolution environment maps.\n\nTo compute this IBL map [SetEnvironment] needs a cube map texture. As of now you can load equirectangular HDR maps only in DDS format and convert them with a [TextureToCubemap]. We are working on making this more convenient. You can also use procedural image textures for this.\n\nNOTICE: For the background environment to have the correctly alignment, the camera must be set after the environment:\n\n[DrawMesh]->[SetMaterial]->[SetPointLight]->[SetEnvironment]->[SetCamera].\n\nAlso see: [HowToDrawThings]",
   "InputUis": [
     {
       "InputId": "e4482cab-f20c-4f9f-9179-c64944164509"/*SubTree*/,
@@ -16,7 +16,8 @@
       "Position": {
         "X": 248.10037,
         "Y": 598.6846
-      }
+      },
+      "Description": "Cubemap input to overwrite the default cubemap.\nThis can be used with the [TextureToCubeMap] Operator."
     },
     {
       "InputId": "c3c815fa-8672-4d99-99a7-986844f2fc45"/*UpdateLive*/,
