@@ -83,7 +83,6 @@ namespace T3.Editor.Gui.Graph
                 {
                     needsReinit = true;
                     _lastCheckSum = checkSum;
-                    Log.Debug("Checksum changed");
                 }
             }
 

@@ -11,6 +11,13 @@
       "GroupTitle": "Additional Features"
     },
     {
+      "InputId": "1dd6cf1e-d374-40d5-b51f-21b91deb3802"/*Rotation*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 71.82593
+      }
+    },
+    {
       "InputId": "5e7cd523-0c39-42e4-a4e9-05cc20477296"/*Gradient*/,
       "Position": {
         "X": -267.11908,
@@ -47,13 +54,6 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
-    },
-    {
-      "InputId": "1dd6cf1e-d374-40d5-b51f-21b91deb3802"/*Rotation*/,
-      "Position": {
-        "X": -270.7163,
-        "Y": 71.82593
-      }
     },
     {
       "InputId": "5a164383-4f9d-4978-bfcb-a1c48b9b8f34"/*UniformScale*/,
