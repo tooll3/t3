@@ -17,6 +17,7 @@ using System.Linq;
 using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
 {
@@ -25,8 +26,6 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
         [Output(Guid = "85F1AF38-074E-475D-94F5-F48079979509", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Texture2D> Texture = new();
 
-        [Output(Guid = "85F1AF38-074E-475D-94F5-F48079979545", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> UploadTime = new();
 
         public NdiInput()
         {
@@ -36,7 +35,6 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
             // This is for ease of testing, but normally is not needed in released products.
             _ndiInputFinder = new Finder(true);
             Texture.UpdateAction = Update;
-            UploadTime.UpdateAction = Update;
         }
 
         ~NdiInput()
@@ -48,8 +46,14 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
         private double _lastUpdateRunTime;
         private void Update(EvaluationContext context)
         {
+            var reconnectTriggered = MathUtils.WasTriggered(TriggerReconnect.GetValue(context), ref _reconnect);
+            if (reconnectTriggered)
+            {
+                TriggerReconnect.SetTypedInputValue(false);
+            }
+            
             _lastUpdateRunTime = Playback.RunTimeInSecs;
-            if (SourceName.DirtyFlag.IsDirty)
+            if (SourceName.DirtyFlag.IsDirty || reconnectTriggered)
             {
                 var sourceName = SourceName.GetValue(context);
                 _textureMutex.WaitOne(Timeout.Infinite);
@@ -60,10 +64,12 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
             
             _isProfiling = EnableProfiling.GetValue(context);
 
-            _textureMutex.WaitOne(Timeout.Infinite);
+            //_textureMutex.WaitOne(Timeout.Infinite);
             _textureAction?.Invoke();
             _textureAction = null;
-            _textureMutex.ReleaseMutex();
+            //_textureMutex.ReleaseMutex();
+            
+            Texture.Value = _lastTexture;
         }
 
         private bool InitializeNdi()
@@ -117,7 +123,7 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                 return;
             }
             
-            Log.Debug($"Connecting to {sourceName}...");
+            Log.Debug($"Connecting to {sourceName}...",this);
 
             var selectedSourceT = new NDIlib.source_t
                               {
@@ -219,6 +225,7 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                 if(_isProfiling)
                     DebugDataRecording.KeepTraceData(this, "03-ReceiveThreadProc", recvCaptureV2, ref _traceReceive2ThreadProc);
 
+                //Log.Debug("received frame " + recvCaptureV2 + " from NDI input.", this);
                 switch (recvCaptureV2)
                 {
                     // No data
@@ -238,11 +245,13 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                         {
                             // always free received frame
                             NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
+                            Log.Warning("NDI input not enabled, skipping frame.", this);
                             break;
                         }
                         if (Playback.RunTimeInSecs - _lastUpdateRunTime > 1 / 30f)
                         {
                             NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
+                            // Log.Warning("Skipping frame?",this);
                             _lastStatusMessage= "skipping frame";
                             break;
                         }
@@ -251,8 +260,6 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                         var xRes = videoFrame.xres;
                         var yRes = videoFrame.yres;
                         var stride = videoFrame.line_stride_in_bytes;
-
-
                         
                         // Try to acquire our texture mutex for some time.
                         // End processing if we shall quit
@@ -262,6 +269,7 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                             {
                                 // Always free received frame
                                 NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
+                                Log.Warning("NDI input thread exiting.", this);
                                 break;
                             }
                         }
@@ -283,6 +291,7 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                                              {
                                                  // always free received frames
                                                  NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
+                                                 //Log.Warning("NDI input wxh = 0x0, skipping frame.", this);
                                                  return;
                                              }
 
@@ -298,7 +307,7 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                                                  || _imagesWithCpuAccess[0].Description.MipLevels != 1)
                                              {
                                                  DebugDataRecording.KeepTraceData(this, "07-_textureActionCreateNewTexture", currReceiverId, ref _traceTextureAction2Channel);
-
+                                                 //Log.Warning("resolution or format changed", this);
                                                  
                                                  var imageDesc = new Texture2DDescription
                                                                      {
@@ -316,8 +325,8 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
 
                                                  DisposeTextures();
 
-                                                 Log.Debug($"NDI input wxh = {xRes}x{yRes}, " +
-                                                           $"format = {textureFormat} ({textureFormat})");
+                                                 // Log.Debug($"NDI input wxh = {xRes}x{yRes}, " +
+                                                 //           $"format = {textureFormat} ({textureFormat})");
 
                                                  for (var i = 0; i < NumTextureEntries; ++i)
                                                  {
@@ -342,17 +351,13 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                                              // map resource manually using our stride...
                                              var dataBox = immediateContext.MapSubresource(writableImage, 0, 0, MapMode.WriteDiscard,
                                                                                            SharpDX.Direct3D11.MapFlags.None, out int _);
-
-                                             var sw = Stopwatch.StartNew();
-
+                                             
                                              T3.Core.Utils.Utilities.CopyImageMemory(videoFrame.p_data, dataBox.DataPointer, yRes,
                                                                                      videoFrame.line_stride_in_bytes, dataBox.RowPitch);
 
                                              // release our resources
                                              immediateContext.UnmapSubresource(writableImage, 0);
-                                             Texture.Value = writableImage;
-                                             UploadTime.Value = (float)sw.Elapsed.TotalMilliseconds;
-
+                                             _lastTexture = writableImage;
                                              
                                              if(_isProfiling)
                                                 DebugDataRecording.EndRegion(_traceTextureCopyChannel);
@@ -389,6 +394,7 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
         private void DisposeTextures()
         {
             Texture.Value = null;
+            _lastTexture = null;
 
             foreach (var image in _imagesWithCpuAccess)
                 image?.Dispose();
@@ -401,7 +407,8 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
         {
             if (_disposed)
                 return;
-            
+         
+            //Log.Debug("Disposing NdiInput...", this); 
             if (disposing)
             {
                 // This call happens when the window is closing, so we set the
@@ -472,7 +479,7 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
         private int _receiverId = 0;
 
         // hold several textures internally to speed up calculations
-        private const int NumTextureEntries = 2;
+        private const int NumTextureEntries = 3; 
 
         private readonly List<Texture2D> _imagesWithCpuAccess = new();
 
@@ -484,6 +491,8 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
 
         // action for changing the textures
         private Action _textureAction;
+        private Texture2D _lastTexture;
+        
         
 
         public IStatusProvider.StatusLevel GetStatusLevel()
@@ -520,12 +529,12 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
         
         void ICustomDropdownHolder.HandleResultForInput(Guid inputId, string result)
         {
-            Log.Debug($"Got {result}", this);
             SourceName.SetTypedInputValue(result);
         }
         #endregion
 
         private bool _isProfiling;
+        private bool _reconnect;
         private DataChannel _traceTallyChannel;
         private DataChannel _traceReceiveThreadProc;
         private DataChannel _traceReceive2ThreadProc;
@@ -537,6 +546,9 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
         
         [Input(Guid = "3F634E98-93F2-4B5E-A098-623B3F8E4C9C")]
         public InputSlot<bool> EnableProfiling = new();
+
+        [Input(Guid = "5E1EC76B-8FFE-43CA-867B-C9DDA0EAFB60")]
+        public InputSlot<bool> TriggerReconnect = new();
 
         
     }

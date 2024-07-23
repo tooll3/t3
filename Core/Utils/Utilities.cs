@@ -79,14 +79,14 @@ namespace T3.Core.Utils
 
         public static void CopyImageMemory(IntPtr srcData,  IntPtr dstData, int height, int srcStride, int dstStride)
         {
-            // Fast path, both strides arer the same
+            // Fast path, both strides are the same
             if (srcStride == dstStride)
             {
                 SharpDX.Utilities.CopyMemory(dstData, srcData, height * srcStride);
             }
             else
             {
-                //We could pass rowwidth as argument, bu the smallest of each stride is enough here
+                //We could pass row width as argument, bu the smallest of each stride is enough here
                 int rowWidth = Math.Min(srcStride, dstStride);
                 for (int i = 0; i < height; i++)
                 {
