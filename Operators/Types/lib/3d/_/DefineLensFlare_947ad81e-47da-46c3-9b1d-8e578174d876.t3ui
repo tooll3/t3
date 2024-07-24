@@ -27,6 +27,7 @@
       "AddPadding": "True",
       "Min": 0.0,
       "Max": 100.0,
+      "Scale": 0.001,
       "Clamp": true
     },
     {

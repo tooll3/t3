@@ -465,6 +465,12 @@
       "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "f5fa203f-530b-4a92-ac96-67a7a049e0f4"/*Pulsarium*/,
+      "SymbolId": "198321f6-3aa4-42ad-a34f-b39e02fe314b",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

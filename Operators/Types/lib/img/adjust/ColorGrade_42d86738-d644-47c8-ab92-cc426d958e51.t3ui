@@ -78,7 +78,8 @@
         "Y": 662.35626
       },
       "Min": -2.0,
-      "Max": 2.0
+      "Max": 2.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "b3e7d147-5f9a-480f-a5da-ea611e5b4805"/*GenerateMipmaps*/,
