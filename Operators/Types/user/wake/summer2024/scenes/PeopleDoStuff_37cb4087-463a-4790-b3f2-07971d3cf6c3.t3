@@ -46,14 +46,6 @@
           }
         },
         {
-          "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0
-          }
-        },
-        {
           "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
           "Type": "System.String",
           "Value": "Resources\\fonts\\PlayfairDisplay-Black.fnt"
@@ -106,7 +98,7 @@
           "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.049999997,
+            "X": 0.05,
             "Y": 0.0
           }
         },
@@ -191,11 +183,6 @@
           "Id": "54ecb0e0-6fc0-4441-b26b-b820e95475a0"/*ShiftBrightness*/,
           "Type": "System.Single",
           "Value": -0.0014
-        },
-        {
-          "Id": "c027bc94-4ef8-4828-8df5-d30abbd31cbc"/*AmplifyEdges*/,
-          "Type": "System.Single",
-          "Value": 0.141
         },
         {
           "Id": "5264cbf8-13f6-4dfe-a82d-4f0904973488"/*Reset*/,
@@ -382,7 +369,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "3846629e-79ad-46ce-a33a-049cbede713e",
+                  "Id": "3d89dbb7-d79f-4b11-85f0-c6a7fb5ba6a0",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 1.0,
@@ -392,7 +379,7 @@
                   }
                 },
                 {
-                  "Id": "2ef31dad-40fd-486e-9593-75764c0c4d22",
+                  "Id": "7cf69827-4406-4811-856c-31596cb383dc",
                   "NormalizedPosition": 0.6352201,
                   "Color": {
                     "R": 9.9999E-07,
@@ -415,12 +402,12 @@
         {
           "Id": "0d56fc27-fa15-4f1e-aa09-f97af93d42c7"/*Duration*/,
           "Type": "System.Single",
-          "Value": 0.66
+          "Value": 1.28
         },
         {
           "Id": "9bfd5ae3-9ca6-4f7b-b24b-f554ad4d0255"/*Bias*/,
           "Type": "System.Single",
-          "Value": 0.52
+          "Value": 0.57
         }
       ],
       "Outputs": []
@@ -437,7 +424,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "30818d35-7e94-48c5-ac19-366686d4e4cd",
+                  "Id": "c1b60ce9-ad37-4e99-9483-259e0c9c5338",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 0.0,
@@ -447,7 +434,7 @@
                   }
                 },
                 {
-                  "Id": "fbe98e4e-72a6-4f30-9ace-63cb621d09c9",
+                  "Id": "cff8e9af-b734-4ea8-8a3f-3d0370f6b3c8",
                   "NormalizedPosition": 1.0,
                   "Color": {
                     "R": 0.19138753,
