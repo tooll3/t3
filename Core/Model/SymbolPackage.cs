@@ -369,4 +369,9 @@ public record DependencyCounter
     public IResourcePackage Package { get; init; }
     public int SymbolChildCount { get; internal set; }
     public int ResourceCount { get; internal set; }
+    
+    public override string ToString()
+    {
+        return $"{Package.DisplayName}: Symbol References: {SymbolChildCount}, Resource References: {ResourceCount}";
+    }
 }

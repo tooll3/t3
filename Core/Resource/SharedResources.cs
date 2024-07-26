@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using SharpDX.Direct3D11;
 using T3.Core.Compilation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Model;
-using T3.Core.Resource;
 using PixelShader = T3.Core.DataTypes.PixelShader;
 using Texture2D = T3.Core.DataTypes.Texture2D;
 using VertexShader = T3.Core.DataTypes.VertexShader;
 
-namespace T3.Editor.App
+namespace T3.Core.Resource
 {
     /// <summary>
     /// A collection of rendering resource used across the T3 UI
@@ -97,6 +95,7 @@ namespace T3.Editor.App
 
         private sealed class SharedResourceObject : IResourcePackage
         {
+            public string DisplayName => "Shared Resources";
             public string Alias => "t3";
             // ReSharper disable once ReplaceAutoPropertyWithComputedProperty
             public string ResourcesFolder { get; } = Directory;

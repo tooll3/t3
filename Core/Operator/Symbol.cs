@@ -266,6 +266,11 @@ namespace T3.Core.Operator
                 Instance.Destroy(childInstance);
             }
 
+            if (removedFromSymbol)
+            {
+                SymbolPackage.RemoveDependencyOn(symbolChild.Symbol);
+            }
+
             return removedFromSymbol;
         }
 

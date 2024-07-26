@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
@@ -421,6 +422,12 @@ namespace T3.Editor.Gui.Graph
                         ImGui.PushID(p.SymbolChildId.GetHashCode());
 
                         var clicked = ImGui.Button(p.Symbol.Name);
+                        
+                        if (p.Parent == null && ImGui.BeginItemTooltip())
+                        {
+                            PopulateDependenciesTooltip(p);
+                            ImGui.EndTooltip();
+                        }
 
                         if (clicked)
                         {
@@ -432,9 +439,24 @@ namespace T3.Editor.Gui.Graph
                         ImGui.PopID();
                         ImGui.TextUnformatted(">");
                     }
+                    
+                    
                 }
                 ImGui.PopFont();
                 ImGui.PopStyleColor();
+            }
+
+            private static void PopulateDependenciesTooltip(Instance p)
+            {
+                var project = p.Symbol.SymbolPackage;
+                ImGui.Text("Project: " + project.DisplayName);
+                ImGui.NewLine();
+                ImGui.Text("Dependencies:");
+
+                foreach (var dependency in project.Dependencies)
+                {
+                    ImGui.Text(dependency.ToString());
+                }
             }
 
             private static void DrawNameAndDescription(Composition compositionOp)
@@ -442,6 +464,15 @@ namespace T3.Editor.Gui.Graph
                 ImGui.SetCursorPosX(8);
                 ImGui.PushFont(Fonts.FontLarge);
                 ImGui.TextUnformatted(compositionOp.Symbol.Name);
+
+                if (compositionOp.Instance.Parent == null && ImGui.BeginItemTooltip())
+                {
+                    ImGui.PushFont(Fonts.FontNormal);
+                    PopulateDependenciesTooltip(compositionOp.Instance);
+                    ImGui.PopFont();
+                    ImGui.EndTooltip();
+                }
+                
                 ImGui.SameLine();
 
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Fade(0.3f).Rgba);

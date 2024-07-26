@@ -9,6 +9,7 @@ using SharpDX.DXGI;
 using SharpDX.Windows;
 using T3.Core.Compilation;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Resource;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Styling;
 using Device = SharpDX.Direct3D11.Device;

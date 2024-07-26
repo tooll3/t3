@@ -156,6 +156,7 @@ public abstract partial class ShaderCompiler
 
     public sealed class ShaderResourcePackage : IResourcePackage
     {
+        public string DisplayName => ResourcesFolder;
         public string? Alias => null;
         public string ResourcesFolder { get; }
         public ResourceFileWatcher? FileWatcher => _resourceConsumer?.Package?.FileWatcher;

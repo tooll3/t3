@@ -2,6 +2,7 @@
 using System.IO;
 using ImGuiNET;
 using SilkWindows;
+using T3.Core.Resource;
 using T3.Editor.App;
 using T3.Editor.Gui;
 using T3.Editor.Gui.Styling;

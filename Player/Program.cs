@@ -21,7 +21,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
-using T3.Editor.App;
 using Device = SharpDX.Direct3D11.Device;
 using Resource = SharpDX.Direct3D11.Resource;
 using SharpDX.Windows;
