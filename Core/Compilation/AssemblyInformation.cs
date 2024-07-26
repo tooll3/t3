@@ -3,7 +3,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -11,14 +10,12 @@ using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.DependencyModel.Resolution;
-using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Serialization;
 
 namespace T3.Core.Compilation;
 
@@ -202,7 +199,6 @@ public sealed class AssemblyInformation
     public readonly string Name;
     public readonly string Path;
     public readonly string Directory;
-    public Version? Version => _assemblyName.Version;
 
     public bool IsOperatorAssembly => _operatorTypeInfo.Count > 0;
 
@@ -219,13 +215,9 @@ public sealed class AssemblyInformation
 
     private IEnumerable<Assembly> AllAssemblies => _loadContext?.Assemblies ?? Enumerable.Empty<Assembly>();
 
-    public readonly ReleaseInfo ReleaseInfo;
-
-    internal AssemblyInformation(ReleaseInfo releaseInfo, string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
+    internal AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly, AssemblyLoadContext loadContext)
     {
-        ReleaseInfo = releaseInfo;
         Name = assemblyName.Name ?? "Unknown Assembly Name";
-        var version = assemblyName.Version;
         Path = path;
         _assemblyName = assemblyName;
         _assembly = assembly;
@@ -416,7 +408,6 @@ public sealed class AssemblyInformation
     /// </summary>
     /// <param name="path">path to dll</param>
     /// <param name="assemblyResolver"></param>
-    /// <param name="loadContext"></param>
     private bool TryResolveReferences(string path, [NotNullWhen(true)] out CompositeCompilationAssemblyResolver? assemblyResolver)
     {
         _dependencyContext = DependencyContext.Load(_assembly);
@@ -558,4 +549,23 @@ public sealed class AssemblyInformation
     private DependencyContext? _dependencyContext;
     private AssemblyLoadContext? _loadContext;
     private readonly CompositeCompilationAssemblyResolver _assemblyResolver;
+
+    public bool TryGetReleaseInfo([NotNullWhen(true)] out ReleaseInfo? releaseInfo)
+    {
+        var releaseInfoPath = System.IO.Path.Combine(Directory, RuntimeAssemblies.PackageInfoFileName);
+        if (RuntimeAssemblies.TryLoadReleaseInfo(releaseInfoPath, out releaseInfo))
+        {
+            if (releaseInfo.Version != _assemblyName.Version)
+            {
+                Log.Warning($"ReleaseInfo version does not match assembly version. " +
+                            $"Assembly: {_assemblyName.FullName}, {_assemblyName.Version}\n" +
+                            $"ReleaseInfo: {releaseInfo.Version}");
+            }
+
+            return true;
+        }
+
+        releaseInfo = null;
+        return false;
+    }
 }

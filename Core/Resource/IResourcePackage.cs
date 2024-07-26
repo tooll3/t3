@@ -12,6 +12,7 @@ public interface IResourcePackage
     public string ResourcesFolder { get; }
     public ResourceFileWatcher? FileWatcher { get; }
     public bool IsReadOnly { get; }
+    public IReadOnlyCollection<DependencyCounter> Dependencies { get; }
 }
 
 public interface IResourceConsumer

@@ -160,6 +160,7 @@ public abstract partial class ShaderCompiler
         public string ResourcesFolder { get; }
         public ResourceFileWatcher? FileWatcher => _resourceConsumer?.Package?.FileWatcher;
         public bool IsReadOnly => true;
+        public IReadOnlyCollection<DependencyCounter> Dependencies => _resourceConsumer?.Package?.Dependencies ?? Array.Empty<DependencyCounter>();
         public IReadOnlyList<IResourcePackage> AvailableResourcePackages { get; }
         private readonly IResourceConsumer? _resourceConsumer;
 

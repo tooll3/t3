@@ -20,7 +20,8 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     /// Create a new <see cref="EditableSymbolProject"/> using the given <see cref="CsProjectFile"/>.
     /// </summary>
     /// <param name="csProjectFile"></param>
-    public EditableSymbolProject(CsProjectFile csProjectFile) : base(assembly: csProjectFile.Assembly)
+    /// <param name="releaseInfo"></param>
+    public EditableSymbolProject(CsProjectFile csProjectFile, ReleaseInfo releaseInfo) : base(assembly: csProjectFile.Assembly, releaseInfo: releaseInfo)
     {
         CsProjectFile = csProjectFile;
         lock(_allProjects)

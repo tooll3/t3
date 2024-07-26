@@ -52,7 +52,12 @@ internal static partial class Program
                              .AsParallel()
                              .Select(assemblyInfo =>
                                      {
-                                         var symbolPackage = new PlayerSymbolPackage(assemblyInfo);
+                                         if (!assemblyInfo.TryGetReleaseInfo(out var releaseInfo))
+                                         {
+                                             Log.Error($"Could not load release info for {assemblyInfo.Name}");
+                                         }
+                                         
+                                         var symbolPackage = new PlayerSymbolPackage(assemblyInfo, releaseInfo);
                                          symbolPackage.InitializeResources();
                                          symbolPackage.LoadSymbols(false, out var newSymbolsWithFiles, out _);
                                          return new PackageLoadInfo(symbolPackage, newSymbolsWithFiles);

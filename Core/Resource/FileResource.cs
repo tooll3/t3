@@ -5,13 +5,15 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Utils;
 
 namespace T3.Core.Resource;
 
-public sealed partial class FileResource
+public sealed partial class FileResource: IResource
 {
-    internal FileResource(IResourcePackage? package, string absolutePath)
+    IResourcePackage? IResource.OwningPackage => ResourcePackage;
+    private FileResource(IResourcePackage? package, string absolutePath)
     {
         ResourcePackage = package;
         AbsolutePath = absolutePath;
@@ -66,24 +68,30 @@ public sealed partial class FileResource
         }
     }
     
-    internal void Claim(object owner)
+    internal void Claim(IResource owner)
     {
         lock (CollectionLock)
         {
             Debug.Assert(!_instantiatedResources.Contains(owner));
             _instantiatedResources.Add(owner);
             
+            if(owner.OwningPackage is SymbolPackage symbolPackage)
+                symbolPackage.AddResourceDependencyOn(this);
+            
             if (_instantiatedResources.Count == 1)
                 Register(this);
         }
     }
     
-    internal void Release(object owner)
+    internal void Release(IResource owner)
     {
         lock (CollectionLock)
         {
             var removed = _instantiatedResources.Remove(owner);
             Debug.Assert(removed);
+            
+            if(owner.OwningPackage is SymbolPackage symbolPackage)
+                symbolPackage.RemoveResourceDependencyOn(this);
             
             if (_instantiatedResources.Count == 0)
             {
@@ -193,6 +201,6 @@ public sealed partial class FileResource
     
     private static readonly Dictionary<string, FileResource> FileResources = new();
     public static readonly IReadOnlyCollection<FileResource> AllFileResources = FileResources.Values;
-    private readonly List<object> _instantiatedResources = new();
+    private readonly List<IResource> _instantiatedResources = new();
     private static readonly object CollectionLock = new();
 }

@@ -295,4 +295,9 @@ internal sealed partial class CsProjectFile
 
     private const Compiler.BuildMode EditorBuildMode = Compiler.BuildMode.Debug;
     private const Compiler.BuildMode PlayerBuildMode = Compiler.BuildMode.Release;
+
+    public bool TryGetReleaseInfo([NotNullWhen(true)] out ReleaseInfo? releaseInfo)
+    {
+        return Assembly.TryGetReleaseInfo(out releaseInfo);
+    }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -43,15 +44,21 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     public string ResourcesFolder { get; private set; } = null!;
 
+    public IReadOnlyCollection<DependencyCounter> Dependencies => (ReadOnlyCollection<DependencyCounter>)DependencyDict.Values;
+    protected readonly ConcurrentDictionary<SymbolPackage, DependencyCounter> DependencyDict = new();
+    
+    protected readonly ReleaseInfo ReleaseInfo;
+
     static SymbolPackage()
     {
         RenderStatsCollector.RegisterProvider(new OpUpdateCounter());
         RegisterTypes();
     }
 
-    protected SymbolPackage(AssemblyInformation assembly)
+    protected SymbolPackage(AssemblyInformation assembly, ReleaseInfo releaseInfo)
     {
         AssemblyInformation = assembly;
+        ReleaseInfo = releaseInfo;
         lock(_allPackages)
             _allPackages.Add(this);
     }
@@ -267,13 +274,13 @@ public abstract partial class SymbolPackage : IResourcePackage
     {
         get
         {
-            if (AssemblyInformation.ReleaseInfo.HomeGuid == Guid.Empty)
+            if (ReleaseInfo.HomeGuid == Guid.Empty)
             {
                 return AssemblyInformation.Name;
             }
 
             // hacky way of getting the home namespace
-            var typeInfo = AssemblyInformation.OperatorTypeInfo[AssemblyInformation.ReleaseInfo.HomeGuid].Type;
+            var typeInfo = AssemblyInformation.OperatorTypeInfo[ReleaseInfo.HomeGuid].Type;
             return typeInfo.Namespace! + "." + typeInfo.Name; // alias is fully-qualified project name
         }
     }
@@ -281,4 +288,85 @@ public abstract partial class SymbolPackage : IResourcePackage
     public virtual bool IsReadOnly => true;
 
     internal bool TryGetSymbol(Guid symbolId, [NotNullWhen(true)] out Symbol? symbol) => SymbolDict.TryGetValue(symbolId, out symbol);
+
+    public void AddResourceDependencyOn(FileResource resource)
+    {
+        if (!TryGetDependencyCounter(resource, out var dependencyCount))
+            return;
+
+        dependencyCount.ResourceCount++;
+    }
+
+    public void RemoveResourceDependencyOn(FileResource fileResource)
+    {
+        if (!TryGetDependencyCounter(fileResource, out var dependency))
+            return;
+        
+        dependency.ResourceCount--;
+
+        RemoveIfNoRemainingReferences(dependency);
+    }
+
+    public void AddDependencyOn(Symbol symbol)
+    {
+        if(symbol.SymbolPackage == this)
+            return;
+        
+        if (!TryGetDependencyCounter(symbol, out var dependency))
+            return;
+        
+        dependency.SymbolChildCount++;
+    }
+    
+    public void RemoveDependencyOn(Symbol symbol)
+    {
+        if (symbol.SymbolPackage == this)
+            return;
+        
+        if (!TryGetDependencyCounter(symbol, out var dependency))
+            return;
+        
+        dependency.SymbolChildCount--;
+        RemoveIfNoRemainingReferences(dependency);
+    }
+
+    private void RemoveIfNoRemainingReferences(DependencyCounter dependency)
+    {
+        if (dependency.SymbolChildCount == 0 && dependency.ResourceCount == 0)
+        {
+            DependencyDict.Remove((SymbolPackage)dependency.Package, out _);
+        }
+    }
+
+    private bool TryGetDependencyCounter(IResource fileResource, [NotNullWhen(true)] out DependencyCounter? dependencyCounter)
+    {
+        var owningPackage = fileResource.OwningPackage;
+        if (owningPackage is not SymbolPackage symbolPackage)
+        {
+            dependencyCounter = null;
+            return false;
+        }
+
+        if (DependencyDict.TryGetValue(symbolPackage, out dependencyCounter)) 
+            return true;
+        
+        dependencyCounter = new DependencyCounter
+                                {
+                                    Package = symbolPackage
+                                };
+        DependencyDict.TryAdd(symbolPackage, dependencyCounter);
+
+        return true;
+    }
+
+    protected virtual void OnDependenciesChanged()
+    {
+    }
+}
+
+public record DependencyCounter
+{
+    public IResourcePackage Package { get; init; }
+    public int SymbolChildCount { get; internal set; }
+    public int ResourceCount { get; internal set; }
 }

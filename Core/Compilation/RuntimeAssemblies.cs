@@ -22,9 +22,9 @@ public static class RuntimeAssemblies
     {
         var coreAssembly = typeof(RuntimeAssemblies).Assembly;
         CorePath = coreAssembly.Location;
-        Version = coreAssembly.GetName().Version;
+        Version = coreAssembly.GetName().Version!;
 
-        CoreDirectory = Path.GetDirectoryName(CorePath);
+        CoreDirectory = Path.GetDirectoryName(CorePath)!;
         SetEnvironmentVariable(EnvironmentVariableName, CoreDirectory);
     }
 
@@ -40,16 +40,13 @@ public static class RuntimeAssemblies
         Environment.SetEnvironmentVariable(envVar, envValue, EnvironmentVariableTarget.User);
     }
     
-    public static bool TryLoadAssemblyFromPackageInfoFile(string filePath, [NotNullWhen(true)] out AssemblyInformation? assembly)
+    public static bool TryLoadAssemblyFromPackageInfoFile(string filePath, [NotNullWhen(true)] out AssemblyInformation? assembly, [NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
-        if (!JsonUtils.TryLoadingJson<ReleaseInfoSerialized>(filePath, out var releaseInfoSerialized))
+        if (!TryLoadReleaseInfo(filePath, out releaseInfo))
         {
-            Log.Warning($"Could not load package info from path {filePath}");
             assembly = null;
             return false;
         }
-
-        var releaseInfo = releaseInfoSerialized.ToReleaseInfo();
         var directory = Path.GetDirectoryName(filePath);
         var assemblyFilePath = Path.Combine(directory!, releaseInfo.AssemblyFileName + ".dll");
         if (TryLoadAssemblyInformation(assemblyFilePath, out assembly, releaseInfo)) 
@@ -58,7 +55,20 @@ public static class RuntimeAssemblies
         Log.Error($"Could not load assembly at \"{filePath}\"");
         return false;
     }
-    
+
+    public static bool TryLoadReleaseInfo(string filePath, [NotNullWhen(true)] out ReleaseInfo? releaseInfo)
+    {
+        if (!JsonUtils.TryLoadingJson<ReleaseInfoSerialized>(filePath, out var releaseInfoSerialized))
+        {
+            Log.Warning($"Could not load package info from path {filePath}");
+            releaseInfo = null;
+            return false;
+        }
+
+        releaseInfo = releaseInfoSerialized.ToReleaseInfo();
+        return true;
+    }
+
     public static bool TryLoadAssemblyFromDirectory(string directory, [NotNullWhen(true)] out AssemblyInformation? assembly)
     {
         var releaseInfoPath = Path.Combine(directory, PackageInfoFileName);
@@ -114,7 +124,7 @@ public static class RuntimeAssemblies
                                           Path = path
                                       };
 
-        var success = TryLoadAssemblyInformation(assemblyNameAndPath, out info, releaseInfo);
+        var success = TryLoadAssemblyInformation(assemblyNameAndPath, out info);
 
         if (!success)
         {
@@ -125,7 +135,7 @@ public static class RuntimeAssemblies
         return success;
     }
     
-    private static bool TryLoadAssemblyInformation(AssemblyNameAndPath name, [NotNullWhen(true)] out AssemblyInformation? info, ReleaseInfo releaseInfo)
+    private static bool TryLoadAssemblyInformation(AssemblyNameAndPath name, [NotNullWhen(true)] out AssemblyInformation? info)
     {
         try
         {
@@ -133,7 +143,7 @@ public static class RuntimeAssemblies
             var assembly = loadContext.LoadFromAssemblyPath(name.Path);
             Log.Debug($"Loaded assembly {name.AssemblyName.FullName}");
 
-            info = new AssemblyInformation(releaseInfo, name.Path, name.AssemblyName, assembly, loadContext);
+            info = new AssemblyInformation(name.Path, name.AssemblyName, assembly, loadContext);
             return true;
         }
         catch (Exception e)

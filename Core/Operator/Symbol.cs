@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.Operations;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Core.Operator
 {
@@ -17,7 +18,7 @@ namespace T3.Core.Operator
     /// <remarks>
     /// - There can be multiple <see cref="Instance"/>s of a symbol.
     /// </remarks>
-    public sealed partial class Symbol : IDisposable
+    public sealed partial class Symbol : IDisposable, IResource
     {
         #region Saved Properties
         public readonly Guid Id;
@@ -39,6 +40,7 @@ namespace T3.Core.Operator
         public PlaybackSettings PlaybackSettings { get; set; } = new();
         
         public SymbolPackage SymbolPackage { get; set; }
+        IResourcePackage IResource.OwningPackage => SymbolPackage;
         
         private Type _instanceType;
         public Type InstanceType

@@ -16,9 +16,7 @@ namespace T3.Editor.UiModel;
 // todo - make abstract, create NugetSymbolPackage
 internal class EditorSymbolPackage : SymbolPackage
 {
-    public ReleaseInfo ReleaseInfo => AssemblyInformation.ReleaseInfo;
-    
-    public EditorSymbolPackage(AssemblyInformation assembly) : base(assembly)
+    public EditorSymbolPackage(AssemblyInformation assembly, ReleaseInfo releaseInfo) : base(assembly, releaseInfo)
     {
         Log.Debug($"Added package {assembly.Name}");
         SymbolAdded += OnSymbolAdded;
@@ -286,7 +284,7 @@ internal class EditorSymbolPackage : SymbolPackage
             return true;
         }
 
-        var rootSymboLUi = SymbolUiDict[AssemblyInformation.ReleaseInfo!.HomeGuid];
+        var rootSymboLUi = SymbolUiDict[ReleaseInfo!.HomeGuid];
         Log.Debug($"{DisplayName}: Found home symbol");
 
         var symbol = rootSymboLUi.Symbol;
@@ -300,8 +298,8 @@ internal class EditorSymbolPackage : SymbolPackage
         return true;
     }
 
-    internal bool HasHome => AssemblyInformation.ReleaseInfo != null 
-                             && AssemblyInformation.ReleaseInfo.HomeGuid != Guid.Empty;
+    internal bool HasHome => ReleaseInfo != null 
+                             && ReleaseInfo.HomeGuid != Guid.Empty;
     
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUiDict = new();
     public IReadOnlyDictionary<Guid, SymbolUi> SymbolUis => SymbolUiDict;

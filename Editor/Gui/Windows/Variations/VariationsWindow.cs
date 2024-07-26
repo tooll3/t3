@@ -144,7 +144,7 @@ namespace T3.Editor.Gui.Windows.Variations
                                                    + additionalHint, "Learn More"))
                             {
                                 var url = "https://github.com/tooll3/t3/wiki/PresetsAndSnapshots";
-                                Process.Start("explorer", url);
+                                CoreUi.Instance.OpenWithDefaultApplication(url);
                             }
                             // }
                         }

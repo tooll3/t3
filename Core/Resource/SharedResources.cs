@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SharpDX.Direct3D11;
 using T3.Core.Compilation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Resource;
 using PixelShader = T3.Core.DataTypes.PixelShader;
 using Texture2D = T3.Core.DataTypes.Texture2D;
@@ -99,6 +102,7 @@ namespace T3.Editor.App
             public string ResourcesFolder { get; } = Directory;
             public ResourceFileWatcher FileWatcher => null;
             public bool IsReadOnly => true;
+            public IReadOnlyCollection<DependencyCounter> Dependencies { get; } = Array.Empty<DependencyCounter>();
         }
     }
 }

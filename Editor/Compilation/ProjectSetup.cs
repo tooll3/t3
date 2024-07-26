@@ -2,7 +2,6 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using T3.Core;
 using T3.Core.Compilation;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -12,7 +11,6 @@ using T3.Editor.External;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using T3.Serialization;
 
 namespace T3.Editor.Compilation;
 
@@ -32,7 +30,13 @@ internal static class ProjectSetup
             return false;
         }
 
-        var releaseInfo = newCsProj.Assembly.ReleaseInfo;
+        if (!newCsProj.TryGetReleaseInfo(out var releaseInfo))
+        {
+            Log.Error($"Failed to get release info for project {newCsProj.Name}");
+            newProject = null;
+            return false;
+        }
+        
         if (releaseInfo.HomeGuid == Guid.Empty)
         {
             Log.Error("Failed to create project home");
@@ -40,19 +44,18 @@ internal static class ProjectSetup
             return false;
         }
 
-        newProject = new EditableSymbolProject(newCsProj);
+        newProject = new EditableSymbolProject(newCsProj, releaseInfo);
         newProject.InitializeResources();
 
         UpdateSymbolPackages(newProject);
-        var newReleaseInfo = newProject.AssemblyInformation.ReleaseInfo;
-        if (newReleaseInfo.HomeGuid == Guid.Empty)
-        {
-            Log.Error("Failed to find project home");
-            RemoveSymbolPackage(newProject);
-            return false;
-        }
+        
+        if (releaseInfo.HomeGuid != Guid.Empty) 
+            return true;
+        
+        Log.Error("Failed to find project home");
+        RemoveSymbolPackage(newProject);
+        return false;
 
-        return true;
     }
 
     private static void RemoveSymbolPackage(EditableSymbolProject project)
@@ -133,11 +136,11 @@ internal static class ProjectSetup
                         // todo - load by releaseInfo json, then load associated assembly
                         var directory = directoryInfo.FullName!;
                         var packageInfo = Path.Combine(directory, RuntimeAssemblies.PackageInfoFileName);
-                        if (!RuntimeAssemblies.TryLoadAssemblyFromPackageInfoFile(packageInfo, out var assembly))
+                        if (!RuntimeAssemblies.TryLoadAssemblyFromPackageInfoFile(packageInfo, out var assembly, out var releaseInfo))
                             return;
 
                         if (assembly.IsOperatorAssembly)
-                            readOnlyPackages.Add(new EditorSymbolPackage(assembly));
+                            readOnlyPackages.Add(new EditorSymbolPackage(assembly, releaseInfo));
                         else
                             nonOperatorAssemblies.Add(assembly);
                     });
@@ -219,7 +222,12 @@ internal static class ProjectSetup
         {
             if (csProjFile.IsOperatorAssembly)
             {
-                var project = new EditableSymbolProject(csProjFile);
+                if (!csProjFile.TryGetReleaseInfo(out var releaseInfo))
+                {
+                    Log.Error($"Failed to load release info for {csProjFile.Name}");
+                    return;
+                }
+                var project = new EditableSymbolProject(csProjFile, releaseInfo);
                 projects.Add(project);
             }
             else

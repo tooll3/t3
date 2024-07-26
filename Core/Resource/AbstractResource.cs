@@ -11,8 +11,15 @@ using T3.Core.Utils;
 
 namespace T3.Core.Resource
 {
-    public sealed class Resource<T> : IDisposable
+    public interface IResource
     {
+        public IResourcePackage? OwningPackage { get; }
+    }
+    
+    public sealed class Resource<T> : IDisposable, IResource
+    {
+        IResourcePackage? IResource.OwningPackage => _owner?.Package;
+        
         #region Constructors
         public Resource(InputSlot<string> slot, TryGenerate<T> tryGenerate,
                         bool allowDisposal = true, EqualityComparer<T?>? comparer = null)
