@@ -52,7 +52,7 @@ sampler texSampler : register(s0);
     return frac(cos(mul(p,float2x2(-64.2,71.3,81.4,-29.8)) * (Phase + 8321.3)));
 } */
 
-// The original hash was not looking good enough 
+// The original hash was not looking good enough imo
 
 // This one is gorgeous!! Hash22 from Hash without Sine 2 https://www.shadertoy.com/view/XdGfRR 
 float2 hash22(float2 p)
@@ -129,7 +129,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             float2 p = floor(q) + float2(i, j);
             
             float2 h = hash22(p);
-            //float2 h = inputTexture.SampleLevel(texSampler, psInput.texCoord,6).xx * hash22(p) ;
+            //float2 h = inputTexture.SampleLevel(texSampler, psInput.texCoord,6).xx * hash22(p) ; // Just in case you want to use the texture to influence the noise
             float2 g = p + 0.5 + 0.5 * sin(h*Randomness);
             float d = f1;
             if(wt == 0) {
@@ -165,11 +165,10 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float4 textureValue = inputTexture.SampleLevel(texSampler, sampleUV, 0);
 
     float worley = ApplyBiasAndGain(worleyValue, GainAndBias.x, GainAndBias.y);
+    
     float4 worleyNoise = lerp(ColorB, ColorA, clamp(worley, Clamping.x, Clamping.y));
  
     float3 blended = worleyNoise.rgb * textureValue.rgb *FxTextureBlend;
-    
-    float4 _worley = lerp(ColorB, ColorA, clamp(worley, Clamping.x, Clamping.y));
 
     return (IsTextureValid < 0.5) ? lerp(ColorB, ColorA, clamp(worley, Clamping.x, Clamping.y)) : float4(blended,worleyNoise.a);
 }
