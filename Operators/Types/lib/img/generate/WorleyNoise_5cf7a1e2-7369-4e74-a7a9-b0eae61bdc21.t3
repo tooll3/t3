@@ -4,6 +4,14 @@
   "Namespace": "lib.img.generate",
   "Inputs": [
     {
+      "Id": "7c4d90e2-a31e-4663-a4bd-da9be8fbdaf4"/*Texture*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "57903730-3c40-41c0-96a2-c0127d8281c4"/*TextureBlend*/,
+      "DefaultValue": 1.0
+    },
+    {
       "Id": "a9111412-3369-4848-af48-8a96f5697c84"/*ColorA*/,
       "DefaultValue": {
         "X": 1.0,
@@ -40,6 +48,10 @@
       "DefaultValue": 5.0
     },
     {
+      "Id": "6f82fdd2-5dd6-447a-850b-e301abd35bae"/*Randomness*/,
+      "DefaultValue": 12.6
+    },
+    {
       "Id": "37fa6406-e29c-482d-9682-70cb2faea92d"/*Phase*/,
       "DefaultValue": 5.0
     },
@@ -64,8 +76,8 @@
     {
       "Id": "7b1a1f18-a1d4-4737-9c06-21f263277140"/*Resolution*/,
       "DefaultValue": {
-        "X": 256,
-        "Y": 256
+        "X": 512,
+        "Y": 512
       }
     },
     {
@@ -106,6 +118,11 @@
           "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
           "Value": "Resources\\user\\newemka980\\img\\generate\\WorleyNoise.hlsl"
+        },
+        {
+          "Id": "3fe1b650-ce34-4155-9b61-0425e39f7690"/*Wrap*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Mirror"
         },
         {
           "Id": "480d6c19-a33c-48b3-b9fa-aaf8bd31e6d9"/*GenerateMips*/,
@@ -311,9 +328,27 @@
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "6f82fdd2-5dd6-447a-850b-e301abd35bae",
+      "TargetParentOrChildId": "dbc99c3e-6947-43ef-a911-c1dec8a47ada",
+      "TargetSlotId": "4ef6f204-1894-4b0a-bb2d-8b5ecbad4040"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "57903730-3c40-41c0-96a2-c0127d8281c4",
+      "TargetParentOrChildId": "dbc99c3e-6947-43ef-a911-c1dec8a47ada",
+      "TargetSlotId": "4ef6f204-1894-4b0a-bb2d-8b5ecbad4040"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "7b1a1f18-a1d4-4737-9c06-21f263277140",
       "TargetParentOrChildId": "dbc99c3e-6947-43ef-a911-c1dec8a47ada",
       "TargetSlotId": "9695b557-433c-474b-bf34-219cbc134bee"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "7c4d90e2-a31e-4663-a4bd-da9be8fbdaf4",
+      "TargetParentOrChildId": "dbc99c3e-6947-43ef-a911-c1dec8a47ada",
+      "TargetSlotId": "b55312c4-6441-473f-a107-df50de60c72e"
     }
   ]
 }
