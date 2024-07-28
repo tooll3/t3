@@ -1,0 +1,44 @@
+{
+  "Id": "d69e0f2e-8fe2-478b-ba4e-2a55a92670ae"/*Gamepad*/,
+  "Description": "Gamepad input using XInput",
+  "InputUis": [
+    {
+      "InputId": "b37ab751-1e41-4e58-9e27-5ac9052662d8"/*Index*/,
+      "Position": {
+        "X": -77.79605,
+        "Y": 288.35236
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d4c0b5fc-11b7-497e-b59d-fed8ac8e2da2"/*Start*/,
+        "Position": {
+            "X": 220.42047,
+            "Y": 117.84843
+        }
+    },
+    {
+      "OutputId": "50baff6e-89bc-4c5f-9018-d6f680db1333"/*Back*/,
+        "Position": {
+            "X": 221.2225,
+            "Y": 258.45157
+        }
+    },
+    {
+      "OutputId": "68f0c486-5922-4b76-9d4e-70d80bf491bf"/*LeftThumb*/,
+        "Position": {
+            "X": 221.82373,
+            "Y": 218.89964
+        }
+    },
+    {
+      "OutputId": "2ccb0b7f-a26e-4db2-b527-7d238c9a9589"/*LeftTrigger*/,
+        "Position": {
+            "X": 221.2225,
+            "Y": 295.32272
+        }
+    }
+  ]
+}
