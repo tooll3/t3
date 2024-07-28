@@ -12,12 +12,8 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using System.Diagnostics;
-using System.Linq;
-using T3.Core.Animation;
-using T3.Core.DataTypes.DataSet;
-using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace t3.ndi
 {

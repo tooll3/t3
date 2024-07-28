@@ -20,7 +20,7 @@ namespace T3.Editor.Gui.Graph.Interaction
     /// - Frequently we want to select the parent operator when clicking on the background of a composition (e.g. to
     ///   to show it's parameters.  
     /// </summary>
-    public class NodeSelection : ISelection
+    internal class NodeSelection : ISelection
     {
         public NodeSelection(NavigationHistory history, Structure structure)
         {

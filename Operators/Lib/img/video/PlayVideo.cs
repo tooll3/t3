@@ -1,6 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -18,7 +16,6 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
 using ResourceManager = T3.Core.Resource.ResourceManager;
-using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.img.video
 {
