@@ -6,6 +6,8 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
@@ -147,15 +149,15 @@ namespace T3.Editor.Gui.Interaction.WithCurves
 
         private void ForSelectedOrAllPointsDo(DoSomethingWithKeyframeDelegate doFunc)
         {
-            UpdateCurveAndMakeUpdateKeyframeCommands(doFunc);
-        }
-
-        private void UpdateCurveAndMakeUpdateKeyframeCommands(DoSomethingWithKeyframeDelegate doFunc)
-        {
-            foreach (var keyframe in GetSelectedOrAllPoints())
+            var selectedOrAllPoints = GetSelectedOrAllPoints().ToList();
+            var cmd = new ChangeKeyframesCommand(selectedOrAllPoints, GetAllCurves());
+            
+            foreach (var keyframe in selectedOrAllPoints)
             {
                 doFunc(keyframe);
             }
+            cmd.StoreCurrentValues();
+            UndoRedoStack.Add(cmd);
         }
 
         private void OnSmooth()

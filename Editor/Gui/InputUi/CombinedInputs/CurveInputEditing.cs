@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -201,7 +200,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
             private ICommand StartDragCommand()
             {
-                _changeKeyframesCommand = new ChangeKeyframesCommand(Guid.Empty, SelectedKeyframes, GetAllCurves());
+                _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
                 return _changeKeyframesCommand;
             }
 
