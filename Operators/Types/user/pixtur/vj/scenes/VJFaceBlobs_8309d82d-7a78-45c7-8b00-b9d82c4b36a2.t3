@@ -348,12 +348,12 @@
         {
           "Id": "ffcdb058-5131-4146-8deb-a3102349e1c3"/*DisplaceOffset*/,
           "Type": "System.Single",
-          "Value": -0.23
+          "Value": -0.11
         },
         {
           "Id": "1e6d0245-b5d4-45a5-8dac-6d905837060d"/*SampleDistance*/,
           "Type": "System.Single",
-          "Value": 1.061
+          "Value": 1.35
         },
         {
           "Id": "c364b443-300e-4323-b0cc-f615649995a5"/*BlurRadius*/,

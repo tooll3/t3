@@ -316,7 +316,7 @@
         {
           "Id": "62a8185f-32c0-41d2-b8be-d8c1d7178c00"/*ModuloValue*/,
           "Type": "System.Single",
-          "Value": 1000.0
+          "Value": 100.0
         }
       ],
       "Outputs": []
@@ -328,7 +328,7 @@
         {
           "Id": "993d59bb-1fc0-4857-a36d-629b0e7aa0d2"/*Input2*/,
           "Type": "System.Single",
-          "Value": 50.0
+          "Value": 47.6
         }
       ],
       "Outputs": []
@@ -345,7 +345,7 @@
         {
           "Id": "73b493cb-91d1-4d4f-b9a8-005017ecac8f"/*Modulo*/,
           "Type": "System.Single",
-          "Value": 5000.0
+          "Value": 1890.0
         }
       ],
       "Outputs": []

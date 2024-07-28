@@ -485,7 +485,7 @@
         {
           "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
           "Type": "System.Single",
-          "Value": 0.57
+          "Value": 0.88
         },
         {
           "Id": "e4739314-4075-4d14-a80d-79e149081dac"/*SizeMode*/,
@@ -500,7 +500,7 @@
         {
           "Id": "c38647f6-c6ea-40a0-b872-0df6d4168c05"/*Offset*/,
           "Type": "System.Single",
-          "Value": -0.34
+          "Value": -0.21
         }
       ],
       "Outputs": []

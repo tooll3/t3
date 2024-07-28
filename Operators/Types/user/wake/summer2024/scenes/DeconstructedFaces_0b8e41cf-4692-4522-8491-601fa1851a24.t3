@@ -137,7 +137,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "d05fd8f7-809a-4f9e-be30-05d482312b77",
+                  "Id": "399819b8-bf5b-4726-9a38-6a41373a0aef",
                   "NormalizedPosition": 0.040983606,
                   "Color": {
                     "R": 0.0,
@@ -147,7 +147,7 @@
                   }
                 },
                 {
-                  "Id": "04237670-75b2-4e0b-933f-3e3b8295d1b9",
+                  "Id": "cd503d22-a121-44a2-b95f-ad0f63b9c58a",
                   "NormalizedPosition": 0.13114753,
                   "Color": {
                     "R": 0.0,
@@ -174,6 +174,11 @@
           "Id": "5774969c-ef4d-482e-ab37-b3a84b09debb"/*PingPong*/,
           "Type": "System.Boolean",
           "Value": true
+        },
+        {
+          "Id": "c38647f6-c6ea-40a0-b872-0df6d4168c05"/*Offset*/,
+          "Type": "System.Single",
+          "Value": 0.0
         }
       ],
       "Outputs": []
@@ -200,17 +205,25 @@
         {
           "Id": "d30b5542-d564-46e1-9f9e-987351eb425b"/*SplitCenter*/,
           "Type": "System.Single",
-          "Value": 0.36110237
+          "Value": 0.36
         },
         {
           "Id": "c8550e83-bd37-4db3-a859-4a6bcd64a63c"/*SplitCenterVariation*/,
           "Type": "System.Single",
-          "Value": 0.7275591
+          "Value": 0.73
         },
         {
           "Id": "6d3c2c76-df35-411a-8e25-450dc9cd6f4e"/*DirectionBias*/,
           "Type": "System.Single",
-          "Value": 0.19527563
+          "Value": 0.20000002
+        },
+        {
+          "Id": "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02"/*ScrollOffset*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0
+          }
         },
         {
           "Id": "22afde68-08c5-438f-9425-fe255b2e079f"/*ScrollBiasAndGain*/,
@@ -219,6 +232,11 @@
             "X": 0.0,
             "Y": 0.100000024
           }
+        },
+        {
+          "Id": "7a8684c9-ee81-49c1-ad13-d91d62799efb"/*RandomPhase*/,
+          "Type": "System.Single",
+          "Value": 0.0
         },
         {
           "Id": "819898d2-230b-4176-a1b7-a008aed9631d"/*RandomSeed*/,
@@ -231,6 +249,16 @@
           "Value": 0.001
         },
         {
+          "Id": "5cae4d6e-d441-42f7-8e17-3aeb58719f08"/*GapColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        },
+        {
           "Id": "be07242e-39fc-4631-ab6e-3023c9444406"/*Gradient*/,
           "Type": "T3.Core.DataTypes.Gradient",
           "Value": {
@@ -238,7 +266,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "b34742c7-6566-4f59-ab99-15c5791e5622",
+                  "Id": "d753a580-f85f-4641-807e-81e567670d15",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 0.99999,
@@ -248,7 +276,7 @@
                   }
                 },
                 {
-                  "Id": "3bf3bc67-4995-43a1-a22d-039ebc84c20d",
+                  "Id": "fd0ae838-2b70-4287-b0ab-1cc30beadefa",
                   "NormalizedPosition": 0.9614129,
                   "Color": {
                     "R": 1.0,
@@ -258,7 +286,7 @@
                   }
                 },
                 {
-                  "Id": "c6babecf-5708-4f8f-a154-6949889a6a70",
+                  "Id": "2aa892d6-d70c-4070-9cc6-ac6b2fa8d82d",
                   "NormalizedPosition": 0.99703175,
                   "Color": {
                     "R": 0.12649402,
@@ -309,7 +337,7 @@
         {
           "Id": "5c7e5e27-2eb8-4933-97cb-fc49d576d625"/*Count*/,
           "Type": "System.Int32",
-          "Value": 11555
+          "Value": 11560
         },
         {
           "Id": "19db4357-97ae-4e83-8464-4e4cf9182bdb"/*Seed*/,
@@ -319,7 +347,7 @@
         {
           "Id": "a970dad9-e5e9-4756-a84c-86737cce7e8f"/*ClampThreshold*/,
           "Type": "System.Single",
-          "Value": 0.24055117
+          "Value": 0.24
         }
       ],
       "Outputs": []
@@ -421,7 +449,7 @@
         {
           "Id": "5894156a-cc31-4236-908c-de0e5385fd84"/*Amount*/,
           "Type": "System.Single",
-          "Value": 7.937008
+          "Value": 8.0
         },
         {
           "Id": "929db7b2-f19c-4a28-b4c2-187365b99760"/*Frequency*/,
@@ -431,14 +459,14 @@
         {
           "Id": "1dfb45ae-b376-41ea-a1d2-97b170645b50"/*Variation*/,
           "Type": "System.Single",
-          "Value": 13.890079
+          "Value": 14.0
         },
         {
           "Id": "c2df1fa3-88e1-4be2-954e-8c44edd9d421"/*AmountDistribution*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 1.0,
-            "Y": 1.1785827,
+            "Y": 1.18,
             "Z": 1.0
           }
         }
@@ -1005,7 +1033,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "8f3369a3-f7fe-49e4-b8ff-bb80c34914d0",
+                  "Id": "ee80621b-848b-4e02-8210-28fbce3a7258",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 3.263219,
@@ -1015,7 +1043,7 @@
                   }
                 },
                 {
-                  "Id": "2561634b-78a9-4df1-94d6-c9fdbb1d51b7",
+                  "Id": "28c4abda-1b8e-4fa7-8817-dcbf47ebaf97",
                   "NormalizedPosition": 0.10687023,
                   "Color": {
                     "R": 14.903193,
@@ -1025,7 +1053,7 @@
                   }
                 },
                 {
-                  "Id": "12fbeb22-1770-4003-bb92-5b308c828663",
+                  "Id": "0b2b27d3-3baa-4dc4-9f00-5943630fa1fa",
                   "NormalizedPosition": 1.0,
                   "Color": {
                     "R": 1.0,
@@ -1457,6 +1485,18 @@
           "Id": "f29d5426-5e31-4c7c-be77-5e45bfb9daa9"/*Damping*/,
           "Type": "System.Single",
           "Value": 0.4
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "a3b840be-eca3-4d7c-bbcc-25cdde04bb2e"/*FadingSlideShowSoftEdge*/,
+      "SymbolId": "92750028-5fac-4e6d-84fe-f779f6d0ae33",
+      "InputValues": [
+        {
+          "Id": "6c52d99d-9361-4d99-b9b0-4397e564ca19"/*FolderWithImages*/,
+          "Type": "System.String",
+          "Value": "Resources\\user\\pixtur\\VJ\\agingFacesFemale"
         }
       ],
       "Outputs": []

@@ -123,7 +123,7 @@
         {
           "Id": "7a331539-33ea-48b9-8930-daf93dd33d7c"/*Distance*/,
           "Type": "System.Single",
-          "Value": 32.0
+          "Value": 1.5
         }
       ],
       "Outputs": []
@@ -861,9 +861,9 @@
           "Id": "f37c11a5-b210-4e83-8ebd-64ea49ee9b96"/*Scale*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 1.55,
-            "Y": 0.54,
-            "Z": 13.2
+            "X": 4.01,
+            "Y": 0.2,
+            "Z": 4.7
           }
         }
       ],

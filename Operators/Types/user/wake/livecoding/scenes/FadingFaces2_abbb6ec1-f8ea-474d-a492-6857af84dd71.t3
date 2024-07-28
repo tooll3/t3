@@ -248,22 +248,17 @@
         {
           "Id": "73ba7691-784f-4706-8a88-9305f723c4cc"/*Displacement*/,
           "Type": "System.Single",
-          "Value": 0.4
+          "Value": 7.6
         },
         {
           "Id": "ffcdb058-5131-4146-8deb-a3102349e1c3"/*DisplaceOffset*/,
           "Type": "System.Single",
-          "Value": -0.09
+          "Value": 0.34
         },
         {
           "Id": "1e6d0245-b5d4-45a5-8dac-6d905837060d"/*SampleDistance*/,
           "Type": "System.Single",
-          "Value": 0.747
-        },
-        {
-          "Id": "c364b443-300e-4323-b0cc-f615649995a5"/*BlurRadius*/,
-          "Type": "System.Single",
-          "Value": 1.98
+          "Value": 1.0
         },
         {
           "Id": "4ed2a94d-ea7b-4fc5-8b3b-2ced9542b763"/*Twist*/,
@@ -273,7 +268,7 @@
         {
           "Id": "54ecb0e0-6fc0-4441-b26b-b820e95475a0"/*ShiftBrightness*/,
           "Type": "System.Single",
-          "Value": -0.0049
+          "Value": -0.0186
         },
         {
           "Id": "c027bc94-4ef8-4828-8df5-d30abbd31cbc"/*AmplifyEdges*/,
@@ -288,27 +283,22 @@
         {
           "Id": "c7f25ad5-1907-4851-8057-7c73f82da1be"/*RangeClamping*/,
           "Type": "System.Single",
-          "Value": 0.04
+          "Value": 0.17
         },
         {
           "Id": "e05425c3-21fd-4621-b9ac-dbc972e26431"/*TwirlNoise*/,
           "Type": "System.Single",
-          "Value": 3.0
+          "Value": 5.0
         },
         {
           "Id": "b481a27b-3715-4b0e-869e-a2b5093138b6"/*TwirlNoiseScale*/,
           "Type": "System.Single",
-          "Value": 1.2
+          "Value": 2.0
         },
         {
           "Id": "f5fa4652-4292-4000-a29d-854d3a6f17fe"/*TwirlNoiseSpeed*/,
           "Type": "System.Single",
           "Value": 0.2
-        },
-        {
-          "Id": "3c93af8c-5658-4466-8301-95799b650e2b"/*AddBlurred*/,
-          "Type": "System.Single",
-          "Value": -0.005
         }
       ],
       "Outputs": []

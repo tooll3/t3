@@ -46,6 +46,14 @@
           }
         },
         {
+          "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0
+          }
+        },
+        {
           "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
           "Type": "System.String",
           "Value": "Resources\\fonts\\PlayfairDisplay-Black.fnt"
@@ -98,7 +106,7 @@
           "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.05,
+            "X": 0.050000012,
             "Y": 0.0
           }
         },
@@ -183,6 +191,11 @@
           "Id": "54ecb0e0-6fc0-4441-b26b-b820e95475a0"/*ShiftBrightness*/,
           "Type": "System.Single",
           "Value": -0.0014
+        },
+        {
+          "Id": "c027bc94-4ef8-4828-8df5-d30abbd31cbc"/*AmplifyEdges*/,
+          "Type": "System.Single",
+          "Value": 0.141
         },
         {
           "Id": "5264cbf8-13f6-4dfe-a82d-4f0904973488"/*Reset*/,
@@ -369,7 +382,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "3d89dbb7-d79f-4b11-85f0-c6a7fb5ba6a0",
+                  "Id": "7628e266-0099-4328-b828-b5793605a659",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 1.0,
@@ -379,7 +392,7 @@
                   }
                 },
                 {
-                  "Id": "7cf69827-4406-4811-856c-31596cb383dc",
+                  "Id": "e5a0a18c-92f7-43b3-8118-91c39ac64c77",
                   "NormalizedPosition": 0.6352201,
                   "Color": {
                     "R": 9.9999E-07,
@@ -424,7 +437,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "c1b60ce9-ad37-4e99-9483-259e0c9c5338",
+                  "Id": "e3a25983-159c-44f4-926a-1620c9ffc56b",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 0.0,
@@ -434,7 +447,7 @@
                   }
                 },
                 {
-                  "Id": "cff8e9af-b734-4ea8-8a3f-3d0370f6b3c8",
+                  "Id": "c7f11eca-fdaf-48bd-878b-a8bbba6e8ca0",
                   "NormalizedPosition": 1.0,
                   "Color": {
                     "R": 0.19138753,
