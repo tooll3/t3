@@ -114,8 +114,10 @@ public static class T3Ui
         // Draw everything!
         ImGui.DockSpaceOverViewport();
 
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 3);
         WindowManager.Draw();
-
+        ImGui.PopStyleVar();
+            
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
@@ -237,7 +239,7 @@ public static class T3Ui
     private static void DrawAppMenuBar()
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding * T3Ui.UiScaleFactor);
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForMenus * T3Ui.UiScaleFactor);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
 
         if (ImGui.BeginMainMenuBar())
@@ -620,4 +622,6 @@ public static class T3Ui
 
     internal static bool UseVSync = true;
     public static bool ItemRegionsVisible;
+    
+
 }

@@ -118,9 +118,9 @@ namespace T3.Editor.Gui.Styling
         private static ImRect GetCorrectUvRangeFromBrokenGlyphStructure(ImFontGlyphPtr g)
         {
             return new ImRect(             //-- U  -- V ---
-                              new Vector2(g.X1,   g.Y1),    // Min    
-                              new Vector2(g.U0, g.V0)   // Max
-                              );
+                                       new Vector2(g.X1,   g.Y1),    // Min    
+                                       new Vector2(g.U0, g.V0)   // Max
+                                      );
         }
 
         /// <summary>
@@ -266,7 +266,10 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.OperatorBypassOn, slotIndex:89),
                 new (Icon.OperatorDisabled, slotIndex:90),
                 new (Icon.Knob, slotIndex:91),
-                
+                new (Icon.ClampMinOn, slotIndex:92),
+                new (Icon.ClampMaxOn, slotIndex:93),
+                new (Icon.ClampMinOff, slotIndex:94),
+                new (Icon.ClampMaxOff, slotIndex:95),
             };
 
         public static readonly string IconAtlasPath = Path.Combine(SharedResources.Directory, @"t3-editor\images\t3-icons.png");
@@ -365,6 +368,10 @@ namespace T3.Editor.Gui.Styling
         OperatorBypassOff,
         OperatorBypassOn,
         OperatorDisabled,
-        Knob
+        Knob,
+        ClampMinOn,
+        ClampMaxOn,
+        ClampMinOff,
+        ClampMaxOff,
     }
 }

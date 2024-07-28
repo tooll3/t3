@@ -101,6 +101,8 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                 _singleCurveCanvas.NeedToAdjustScopeAfterFirstRendering = true;
             }
 
+
+
             protected override void DeleteSelectedKeyframes(Instance compositionOp)
             {
                 foreach (var curve in GetAllCurves())
@@ -191,7 +193,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
             private ICommand StartDragCommand(Guid symbolId)
             {
-                _changeKeyframesCommand = new ChangeKeyframesCommand(symbolId, SelectedKeyframes, GetAllCurves());
+                _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
                 return _changeKeyframesCommand;
             }
 

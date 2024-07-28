@@ -171,6 +171,7 @@ namespace T3.Editor.Gui.Styling
             Dimmed,
             Disabled,
             Activated,
+            NeedsAttention,
         }
 
         public static bool FloatingIconButton(Icon icon, Vector2 size)
@@ -197,29 +198,15 @@ namespace T3.Editor.Gui.Styling
 
         public static bool StateButton(string label, ButtonStates state = ButtonStates.Normal)
         {
-            //ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
-            //ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-            
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundButtonActivated.Rgba);
-            
+
             if (state != ButtonStates.Normal)
             {
-                Color c;
-                if (state == ButtonStates.Dimmed)
-                    c = UiColors.TextMuted;
-                else if (state == ButtonStates.Disabled)
-                    c = UiColors.TextDisabled;
-                else if (state == ButtonStates.Activated)
-                    c = UiColors.StatusActivated;
-                else
-                    c = UiColors.Text;
-
-                ImGui.PushStyleColor(ImGuiCol.Text, c.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, GetStateColor(state).Rgba);
                 if (state == ButtonStates.Activated)
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundButtonActivated.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButtonActivated.Fade(0.8f).Rgba);
-
                 }
             }
 
@@ -233,7 +220,6 @@ namespace T3.Editor.Gui.Styling
                 ImGui.PopStyleColor(2);
 
             ImGui.PopStyleColor(1);
-            //ImGui.PopStyleVar(1);
             return clicked;
         }
         
@@ -252,22 +238,11 @@ namespace T3.Editor.Gui.Styling
             
             if (state != ButtonStates.Normal)
             {
-                Color c;
-                if (state == ButtonStates.Dimmed)
-                    c = UiColors.TextMuted;
-                else if (state == ButtonStates.Disabled)
-                    c = UiColors.TextDisabled;
-                else if (state == ButtonStates.Activated)
-                    c = UiColors.StatusActivated;
-                else
-                    c = UiColors.Text;
-
-                ImGui.PushStyleColor(ImGuiCol.Text, c.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, GetStateColor(state).Rgba);
                 if (state == ButtonStates.Activated)
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundButtonActivated.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButtonActivated.Fade(0.8f).Rgba);
-
                 }
             }
 
@@ -283,6 +258,55 @@ namespace T3.Editor.Gui.Styling
             ImGui.PopStyleVar(2);
             ImGui.PopFont();
             return clicked;
+        }
+
+        public static bool IconButton(string id, Icon icon, float width, ImDrawFlags corners= ImDrawFlags.RoundCornersNone, ButtonStates state = ButtonStates.Normal, bool triggered =false)
+        {
+            var iconColor = GetStateColor(state);
+
+            var size = new Vector2(width, ImGui.GetFrameHeight());
+            if (width == 0)
+                size.X = size.Y;
+            
+            triggered |= ImGui.InvisibleButton(id, size);
+            
+            var dl = ImGui.GetWindowDrawList();
+            dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), GetButtonStateBackgroundColor(),7, corners);            
+            
+            Icons.DrawIconOnLastItem(icon, iconColor);
+            return triggered;
+        }
+
+        private static Color GetStateColor(ButtonStates state)
+        {
+            return state switch
+                       {
+                           ButtonStates.Dimmed         => UiColors.TextMuted.Fade(0.5f),
+                           ButtonStates.Disabled       => UiColors.TextDisabled,
+                           ButtonStates.Activated      => UiColors.StatusActivated,
+                           ButtonStates.NeedsAttention => UiColors.StatusAttention,
+                           _                           => UiColors.Text
+                       };
+        }
+
+        private static Color GetButtonStateBackgroundColor()
+        {
+            Color backgroundColor;
+
+            if (ImGui.IsItemActive())
+            {
+                backgroundColor = ImGuiCol.ButtonActive.GetStyleColor();
+            }
+            else if (ImGui.IsItemHovered())
+            {
+                backgroundColor = ImGuiCol.ButtonHovered.GetStyleColor();
+            }
+            else
+            {
+                backgroundColor = ImGuiCol.Button.GetStyleColor();
+            }
+
+            return backgroundColor;
         }
 
         public static void ContextMenuForItem(Action drawMenuItems, string title = null, string id = "context_menu",
@@ -647,19 +671,31 @@ namespace T3.Editor.Gui.Styling
         /// This is useful for windows that have window specific keyboard short cuts.
         /// Returns true if the window is focused
         /// </summary>
-        public static bool DrawWindowFocusFrame()
+        public static void DrawWindowFocusFrame()
         {
             if (!ImGui.IsWindowFocused())
-                return false;
+                return;
             
-            var min = ImGui.GetWindowPos() + new Vector2(1,1);
-            ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(-2,-1) , UiColors.ForegroundFull.Fade(0.1f));
-            return true;
+            var min = ImGui.GetWindowPos();
+            ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(0,0) , UiColors.ForegroundFull.Fade(0.2f));
         }
 
         public static string HumanReadablePascalCase(string f)
         {
             return Regex.Replace(f, "(\\B[A-Z])", " $1");
+        }
+
+        public static bool RoundedButton(string id, float width, ImDrawFlags roundedCorners)
+        {
+            var size = new Vector2(width, ImGui.GetFrameHeight());
+            if (width == 0)
+                size.X = size.Y;
+
+            var clicked = ImGui.InvisibleButton(id, size);
+            var dl = ImGui.GetWindowDrawList();
+            var color = ImGui.IsItemHovered() ? ImGuiCol.ButtonHovered.GetStyleColor() : ImGuiCol.Button.GetStyleColor();
+            dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color, 7, roundedCorners);
+            return clicked;
         }
 
         public static bool DrawDropdown<T>(ref T selectedValue, IEnumerable<T> values, string label, Func<T, string> getDisplayTextFunc,

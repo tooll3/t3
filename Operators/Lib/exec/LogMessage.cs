@@ -22,7 +22,20 @@ namespace lib.exec
         
         private void Update(EvaluationContext context)
         {
+            var triggerNeedsUpdate = OnlyOnChanges.DirtyFlag.IsDirty;
+            var onlyOnChanges = OnlyOnChanges.GetValue(context);
+            if (triggerNeedsUpdate)
+            {
+                Output.DirtyFlag.Trigger = onlyOnChanges ? DirtyFlagTrigger.None : DirtyFlagTrigger.Animated;
+            }
+            
             var message = Message.GetValue(context);
+            
+            if(onlyOnChanges && message == _lastMessage)
+                return;
+            
+            _lastMessage = message;
+            
             var logLevel = LogLevel.GetEnumValue<LogLevels>(context);
             if (logLevel > (int)LogLevels.None)
             {
@@ -45,13 +58,17 @@ namespace lib.exec
         } 
 
         private static readonly string fallbackMessage = "Log";
+        private string _lastMessage = null;
 
         private double _dampedPreviousUpdateDuration = 0;
         
 
         [Input(Guid = "183cd865-7939-4110-8192-f112fff3cc60")]
         public readonly InputSlot<Command> SubGraph = new();
-
+        
+        [Input(Guid = "8483C153-627C-4154-8FBE-3611CA788701")]
+        public readonly InputSlot<bool> OnlyOnChanges = new();
+        
         [Input(Guid = "acd53819-c248-4c95-a1a5-92a583e9b49b")]
         public readonly InputSlot<string> Message = new();
         

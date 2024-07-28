@@ -494,7 +494,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         var result = floatInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
-                            _changeKeyframesCommand = new ChangeKeyframesCommand(compositionSymbolId, SelectedKeyframes, _currentAnimationParameter.Curves);
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, _currentAnimationParameter.Curves);
                         }
 
                         if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -526,7 +526,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         var result = intInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
-                            _changeKeyframesCommand = new ChangeKeyframesCommand(compositionSymbolId, SelectedKeyframes, _currentAnimationParameter.Curves);
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, _currentAnimationParameter.Curves);
                         }
 
                         if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -682,7 +682,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         ICommand ITimeObjectManipulation.StartDragCommand(in Guid compositionSymbolId)
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(compositionSymbolId, SelectedKeyframes, GetAllCurves());
+            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
             return _changeKeyframesCommand;
         }
 
@@ -711,7 +711,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             // Update reference in Macro-command
             _changeKeyframesCommand.StoreCurrentValues();
-            // UndoRedoStack.Add(_changeKeyframesCommand);
             _changeKeyframesCommand = null;
         }
 

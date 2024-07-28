@@ -153,7 +153,7 @@ namespace T3.Editor.Gui.Windows.Exploration
         private bool IsCellVisible(GridCell gridCell)
         {
             var contentRegion = new ImRect(ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
-                                           ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
+                                                    ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
 
             contentRegion.Expand(_thumbnailSize * Scale);
 
@@ -205,7 +205,7 @@ namespace T3.Editor.Gui.Windows.Exploration
         private void SetGridFocusToWindowCenter()
         {
             var contentRegion = new ImRect(ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
-                                           ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
+                                                    ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
             var centerInCanvas = InverseTransformPositionFloat(contentRegion.GetCenter());
             _gridFocusIndex.X = (int)(centerInCanvas.X / _thumbnailSize.X);
             _gridFocusIndex.Y = (int)(centerInCanvas.Y / _thumbnailSize.Y);

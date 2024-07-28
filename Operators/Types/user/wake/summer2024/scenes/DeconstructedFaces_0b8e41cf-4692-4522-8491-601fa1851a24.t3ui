@@ -659,6 +659,13 @@
         "X": 3257.5925,
         "Y": 1160.2225
       }
+    },
+    {
+      "ChildId": "a3b840be-eca3-4d7c-bbcc-25cdde04bb2e"/*FadingSlideShowSoftEdge*/,
+      "Position": {
+        "X": 1427.5621,
+        "Y": 511.3756
+      }
     }
   ],
   "OutputUis": [

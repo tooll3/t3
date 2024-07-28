@@ -1,0 +1,45 @@
+{
+  "Name": "MidiControlOutput",
+  "Id": "a59c583b-dbc2-495c-a9b1-e64fc1e5d532",
+  "Namespace": "lib.io.midi",
+  "Inputs": [
+    {
+      "Id": "b8612a7d-cb19-4203-b5d0-a44ca71f5477"/*SendMode*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "5188cc2f-723c-497c-bfb8-1b00a3006327"/*TriggerSend*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "dc2f8501-2889-4949-9866-3c0eb43cd061"/*CCorPressure*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "aff6a747-7c3d-4cef-a5b7-daf9a60fcba0"/*Device*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "b8c8f9d2-4ec9-4351-82ae-a17140bbe484"/*ChannelNumber*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "083e3a73-4539-408e-a91a-1739cb4f3cc6"/*ControllerNumber*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "57096500-4ee4-4221-a7e7-1d2a065d01c8"/*Value*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "f558c83a-2ba1-4cfe-bbf4-f5cbfdf68c73"/*UseValueFloat*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "5734d4c9-1d84-4559-91d6-6611f0ea1658"/*ValueFloat*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

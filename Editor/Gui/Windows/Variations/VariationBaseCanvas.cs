@@ -545,7 +545,7 @@ namespace T3.Editor.Gui.Windows.Variations
         {
             var r = GetPixelRectForIndex(thumbnailIndex);
             return new ImRect(r.Min / _thumbnailCanvasRendering.GetCanvasTextureSize(),
-                              r.Max / _thumbnailCanvasRendering.GetCanvasTextureSize());
+                                       r.Max / _thumbnailCanvasRendering.GetCanvasTextureSize());
         }
         #endregion
 

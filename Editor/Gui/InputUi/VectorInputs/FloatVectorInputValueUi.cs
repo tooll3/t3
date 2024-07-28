@@ -146,37 +146,19 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
 
         public override void DrawSettings()
         {
-            base.DrawSettings();
-
-            FormInputs.AddFloat("Scale", ref _scale, 0.1f, 0, 100, false,
-                                "This will affect how responsive value ladder or jog dial are in Parameter Window. Use 0 to derived scale from Min/Max range.",
-                                0f);
-            FormInputs.AddFloat("Min", ref Min, -99999999, +99999999, 0.1f, false, "Set to range to defined a visible slider bar in parameter window",
-                                -99999999);
-            FormInputs.AddFloat("Max", ref Max, -99999999, +99999999, 0.1f, false, "Set to range to defined a visible slider bar in parameter window",
-                                99999999);
-            FormInputs.AddCheckBox("Clamp slider to range", ref Clamp,
-                                   "This will only clamp slider. Users are still able to enter numerical values outside of range.");
-            FormInputs.AddVerticalSpace();
-            if (
-                FormInputs.AddStringInput("Custom Format", ref Format, "Custom format like {0:0.0}", null,
-                                          "Defines custom value format. Here are some examples:\n\n{0:0.00000} - High precision\n{0:0}× - With a suffix", null)
-                )
-            {
-                if (string.IsNullOrWhiteSpace(Format))
-                {
-                    Format = null;
-                }
-            }
-
-            FormInputs.ApplyIndent();
-            if (ImGui.Button("Apply preset..."))
+            var keepPosition = ImGui.GetCursorPos();
+            ImGui.SetCursorPos(new Vector2(ImGui.GetWindowContentRegionMax().X - ImGui.GetFrameHeight() - ImGui.GetStyle().FramePadding.X, 
+                                           ImGui.GetWindowContentRegionMin().Y));
+            
+            if (CustomComponents.IconButton(Icon.Settings2, Vector2.One * ImGui.GetFrameHeight()))
             {
                 ImGui.OpenPopup("customFormats");
             }
+            ImGui.SetCursorPos(keepPosition);
 
             if (ImGui.BeginPopup("customFormats", ImGuiWindowFlags.Popup))
             {
+                ImGui.TextUnformatted("Apply formatting presets...");
                 foreach (var p in _valueSettingPresets)
                 {
                     if (ImGui.Button(p.Title))
@@ -192,6 +174,34 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
                 }
 
                 ImGui.EndPopup();
+            }
+            
+            base.DrawSettings();
+            
+            FormInputs.DrawFieldSetHeader("Value Range");
+            if (FormInputs.DrawValueRangeControl(ref Min, ref Max, ref _scale,  ref Clamp, DefaultMin, DefaultMax, DefaultScale))
+            {
+                Parent.FlagAsModified();
+            }
+            
+            FormInputs.DrawFieldSetHeader("Custom Value format");
+            
+            if (
+                FormInputs.AddStringInput("##valueFormat", 
+                                          ref Format,
+                                          "Custom format like {0:0.0}",
+                                          null,
+                                          "Defines custom value format. Here are some examples:\n\n"+
+                                          "{0:0.00000} - High precision\n"+
+                                          "{0:0}× - With a suffix\n" +
+                                          "{0:G5} - scientific notation", 
+                                          null)
+                )
+            {
+                if (string.IsNullOrWhiteSpace(Format))
+                {
+                    Format = null;
+                }
             }
         }
 

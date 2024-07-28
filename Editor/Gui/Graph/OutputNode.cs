@@ -70,10 +70,10 @@ namespace T3.Editor.Gui.Graph
                 // Draw slot 
                 {
                     var usableSlotArea = new ImRect(
-                                                    new Vector2(LastScreenRect.Min.X - GraphNode.UsableSlotThickness,
-                                                                LastScreenRect.Min.Y),
-                                                    new Vector2(LastScreenRect.Min.X,
-                                                                LastScreenRect.Max.Y)); 
+                                                             new Vector2(LastScreenRect.Min.X - GraphNode.UsableSlotThickness,
+                                                                         LastScreenRect.Min.Y),
+                                                             new Vector2(LastScreenRect.Min.X,
+                                                                         LastScreenRect.Max.Y)); 
                     
                     ConnectionSnapEndHelper.RegisterAsPotentialTarget(window, outputUi, usableSlotArea);
                     

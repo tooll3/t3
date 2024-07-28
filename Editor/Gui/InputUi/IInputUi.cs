@@ -47,7 +47,6 @@ namespace T3.Editor.Gui.InputUi
         InputEditStateFlags DrawParameterEdit(IInputSlot input, SymbolUi compositionUi, SymbolUi.Child symbolChildUi, bool hideNonEssentials, bool skipIfDefault);
         string GetSlotValue(IInputSlot inputSlot);
         void DrawSettings();
-        void DrawDescriptionEdit();
 
         IInputUi Clone();
         void Write(JsonTextWriter writer);

@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             var size = new Vector2(ImGui.GetContentRegionAvail().X - GradientEditor.StepHandleSize.X, 
                                    ImGui.GetFrameHeight());
             var area = new ImRect(ImGui.GetCursorScreenPos() + new Vector2(GradientEditor.StepHandleSize.X * 0.5f,0), 
-                                  ImGui.GetCursorScreenPos() + size);
+                                           ImGui.GetCursorScreenPos() + size);
             var drawList = ImGui.GetWindowDrawList();
 
             var cloneIfModified = input.IsDefault;

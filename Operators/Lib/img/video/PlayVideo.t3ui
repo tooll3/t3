@@ -45,6 +45,13 @@
       },
       "Description": "When activated, the video is repeated endlessly",
       "AddPadding": "True"
+    },
+    {
+      "InputId": "b62c208c-3735-4130-87de-8c03c8a9b5fa"/*IsPreciseAtPlayback*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 271.99597
+      }
     }
   ],
   "SymbolChildUis": [],

@@ -230,8 +230,8 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         public void StartDragCommand(Guid compositionSymbolId)
         {
             // FIXME: getting current curves is complicated here.
-            var mockNotWorking = Array.Empty<Curve>();
-            _changeKeyframesCommand = new ChangeKeyframesCommand(compositionSymbolId, _selectedKeyframes, mockNotWorking);
+            var mockNotWorking = new List<Curve>();
+            _changeKeyframesCommand = new ChangeKeyframesCommand(_selectedKeyframes, mockNotWorking);
         }
         
         

@@ -22,6 +22,10 @@
     {
       "Id": "21b5671b-862f-4cea-a355-fa019996c936"/*Loop*/,
       "DefaultValue": true
+    },
+    {
+      "Id": "b62c208c-3735-4130-87de-8c03c8a9b5fa"/*IsPreciseAtPlayback*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

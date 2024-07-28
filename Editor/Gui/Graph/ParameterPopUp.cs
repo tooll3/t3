@@ -50,6 +50,12 @@ internal static class ParameterPopUp
     }
 
     private static Vector2 DefaultWindowSize => new Vector2(310, 250) * T3Ui.UiScaleFactor;
+
+    private static void Close()
+    {
+        _isOpen = false;
+    }
+
     public static void DrawParameterPopUp(GraphWindow graphWindow)
     {
         if (!_isOpen || _selectedInstance == null)
@@ -165,7 +171,7 @@ internal static class ParameterPopUp
                     FrameStats.Current.OpenedPopUpName = ParameterPopUpName;
                     ImGui.BeginChild("Scrolling", new Vector2(DefaultWindowSize.X, height - 5 ), false);
                     ImGui.PushFont(Fonts.FontSmall);
-                    ParameterWindow.DrawParameters(graphWindow, _selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi, hideNonEssentials: true);
+                    ParameterWindow.DrawParameters(_selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi, hideNonEssentials: true);
                     FormInputs.AddVerticalSpace();
                     ImGui.PopFont();
                     _lastRequiredHeight = ImGui.GetCursorPosY() + ImGui.GetFrameHeight();
@@ -198,7 +204,7 @@ internal static class ParameterPopUp
                                                  height), 
                                      false,
                                      ImGuiWindowFlags.NoBackground
-                                     );
+                                    );
                     FormInputs.AddVerticalSpace();
                     OperatorHelp.DrawHelp(symbolUi);
                     FormInputs.AddVerticalSpace();
@@ -212,18 +218,13 @@ internal static class ParameterPopUp
                     throw new ArgumentOutOfRangeException();
             }
 
-//
+            //
         }
 
 
         
         ImGui.EndChild();
         ImGui.PopStyleVar();
-    }
-
-    private static void Close()
-    {
-        _isOpen = false;
     }
 
     private enum ViewModes

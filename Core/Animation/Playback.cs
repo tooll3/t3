@@ -106,7 +106,7 @@ namespace T3.Core.Animation
             }
             else
             {
-                var timeWasManipulated = Math.Abs(TimeInBars - _previousTimeInBars) > 0.001f;
+                var timeWasManipulated = Math.Abs(TimeInBars - _previousTimeInBars) > 0.00001f;
                 if (timeWasManipulated)
                 {
                     FxTimeInBars = TimeInBars;

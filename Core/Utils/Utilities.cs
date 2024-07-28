@@ -81,14 +81,14 @@ namespace T3.Core.Utils
 
         public static void CopyImageMemory(IntPtr srcData,  IntPtr dstData, int height, int srcStride, int dstStride)
         {
-            // Fast path, both strides arer the same
+            // Fast path, both strides are the same
             if (srcStride == dstStride)
             {
                 SharpDX.Utilities.CopyMemory(dstData, srcData, height * srcStride);
             }
             else
             {
-                //We could pass rowwidth as argument, bu the smallest of each stride is enough here
+                //We could pass row width as argument, bu the smallest of each stride is enough here
                 int rowWidth = Math.Min(srcStride, dstStride);
                 for (int i = 0; i < height; i++)
                 {
@@ -96,6 +96,36 @@ namespace T3.Core.Utils
                     srcData += srcStride;
                     dstData += dstStride;   
                 }
+            }
+        }
+
+        /// <summary>
+        /// Infinite modulo indexer, also allows to reference array indexes using negative values
+        /// Note: assumes count is positive, does not perform check for it
+        /// </summary>
+        /// <param name="index">Index value</param>
+        /// <param name="count">Element count</param>
+        /// <returns>A valid index to lookup in the array</returns>
+        public static int InfiniteModIndexer(int index, int count)
+        {
+            if (count == 0)
+                return 0;
+
+            if (index < count)
+            {
+                if (index >= 0)
+                {
+                    return index;
+                }
+                else
+                {
+                    int remainder = index % count;
+                    return remainder == 0 ? 0 : remainder + count;
+                }
+            }
+            else
+            {
+                return index % count;
             }
         }
     }

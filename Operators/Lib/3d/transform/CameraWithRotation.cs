@@ -14,7 +14,7 @@ using T3.Core.Utils.Geometry;
 namespace Lib._3d.transform
 {
     [Guid("9e27c32d-b187-4b7c-9761-0c5bb4ae3c45")]
-    public class CameraWithRotation : Instance<CameraWithRotation>, ICameraPropertiesProvider
+    public class CameraWithRotation : Instance<CameraWithRotation>, ICameraPropertiesProvider, ICamera
     {
         [Output(Guid = "70395556-2008-43ec-a73d-b4b35ae8ce58")]
         public readonly Slot<Command> Output = new();
@@ -73,14 +73,31 @@ namespace Lib._3d.transform
             var rotationFactor = RotationFactor.GetValue(context);
             var rotationOffset2 = RotationOffset2.GetValue(context);
             var eulerAngles = Rotation.GetValue(context) * rotationFactor + rotationOffset2;
-
-            var rotationMatrix = rotationMode == RotationModes.Euler
-                                     ? Matrix4x4.CreateFromYawPitchRoll(
-                                                                        eulerAngles.Y.ToRadians(),
-                                                                        eulerAngles.X.ToRadians(),
-                                                                        eulerAngles.Z.ToRadians())
-                                     : Matrix4x4.CreateFromQuaternion(new Quaternion(quaternion.X, quaternion.Y, quaternion.Z, quaternion.W));
-
+            
+            Matrix4x4 rotationMatrix = Matrix4x4.Identity;
+            switch (rotationMode)
+            {
+                case RotationModes.Euler:
+                {
+                    // This does not work because axis have to be applied in reverse order
+                    // rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(eulerAngles.Y.ToRadians(), // Yaw
+                    //                                                eulerAngles.X.ToRadians(), // Pitch (ups should have been X) 
+                    //                                                eulerAngles.Z.ToRadians()); // Roll
+                    
+                    // From Quaternion.cs:
+                    //  Roll first, about axis the object is facing, then
+                    //  pitch upward, then yaw to face into the new heading
+                    var pitch = Matrix4x4.CreateRotationY(eulerAngles.X.ToRadians());   // Yaw: Rotation around Y-axis
+                    var heading = Matrix4x4.CreateRotationX(eulerAngles.Y.ToRadians()); // Pitch: Rotation around X-axis
+                    var roll = Matrix4x4.CreateRotationZ(eulerAngles.Z.ToRadians());  // Roll: Rotation around Z-axis
+                    rotationMatrix = heading * pitch * roll;
+                    break;
+                }
+                case RotationModes.Quaternion:
+                    rotationMatrix = Matrix4x4.CreateFromQuaternion(new Quaternion(quaternion.X, quaternion.Y, quaternion.Z, quaternion.W));
+                    break;
+            }
+            
             var deltaFromPosition = Vector3.TransformNormal(Vector3.UnitZ, rotationMatrix);
             _target = position + deltaFromPosition;
 
@@ -104,11 +121,11 @@ namespace Lib._3d.transform
             camToClipSpace.M32 = _camDef.ViewPortShift.Y;
 
             var translationMatrix = Matrix4x4.CreateTranslation(-position);
-            var worldToCamera =  translationMatrix * rotationMatrix;
+            var worldToCamera =    translationMatrix * rotationMatrix;
             CameraToClipSpace = camToClipSpace;
             WorldToCamera = worldToCamera;
         }
-
+        
         private enum RotationModes
         {
             Euler,
@@ -122,6 +139,8 @@ namespace Lib._3d.transform
         private CameraDefinition _camDef;
 
         public Matrix4x4 CameraToClipSpace { get; set; }
+        
+        public CameraDefinition CameraDefinition => _camDef;
         public Matrix4x4 WorldToCamera { get; set; }
         public Matrix4x4 LastObjectToWorld { get; set; }
 

@@ -147,12 +147,12 @@
         {
           "Id": "e27a97ce-3d0f-41a9-93c3-a1691f4029aa"/*Amount*/,
           "Type": "System.Single",
-          "Value": 1.5352595
+          "Value": 2.92
         },
         {
           "Id": "f0345217-29f4-48f8-babd-8aed134cb0d5"/*Frequency*/,
           "Type": "System.Single",
-          "Value": 0.67549133
+          "Value": 0.68
         },
         {
           "Id": "419b5ec5-8f6d-4c2d-a633-37d125cfcf07"/*Phase*/,
@@ -262,7 +262,7 @@
         {
           "Id": "eddf467a-d96e-4639-aa09-b49dc1775c1b"/*Amount*/,
           "Type": "System.Single",
-          "Value": 3.2
+          "Value": 2.19
         },
         {
           "Id": "331843a6-f634-45ef-b9ad-21baf8612642"/*Twist*/,
@@ -312,7 +312,7 @@
             "X": 0.77,
             "Y": 0.77,
             "Z": 0.77,
-            "W": 0.23348188
+            "W": 0.59
           }
         },
         {
@@ -381,27 +381,27 @@
         {
           "Id": "ceb7008d-c536-4d87-b3f8-d5ba9fe29eed"/*Bounciness*/,
           "Type": "System.Single",
-          "Value": 0.61647403
+          "Value": 0.57
         },
         {
           "Id": "1097b588-db96-49c1-b6e6-78b5cb0f5f73"/*RandomizeBounce*/,
           "Type": "System.Single",
-          "Value": 0.0
+          "Value": 0.02
         },
         {
           "Id": "3b975bd9-b8aa-4a41-97fc-ccd3b5e89e63"/*Attraction*/,
           "Type": "System.Single",
-          "Value": 0.09075145
+          "Value": 0.11
         },
         {
           "Id": "7c6f58e7-27fc-4271-adef-248cffe5a8b7"/*Repulsion*/,
           "Type": "System.Single",
-          "Value": 0.17473993
+          "Value": 0.22
         },
         {
           "Id": "2ab85ac3-819d-4e3e-891a-7f27af627fdf"/*InvertVolume*/,
           "Type": "System.Boolean",
-          "Value": false
+          "Value": true
         }
       ],
       "Outputs": []
@@ -523,15 +523,15 @@
         {
           "Id": "82384eba-1d7a-41c8-a703-9184c961d766"/*Amount*/,
           "Type": "System.Single",
-          "Value": 0.07514417
+          "Value": 0.0
         },
         {
           "Id": "270bcf23-35ee-4c4f-aae5-192435b1aee3"/*Position*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 0.41497117,
-            "Y": 0.3672255,
-            "Z": 0.12699422
+            "X": 0.43,
+            "Y": 0.38,
+            "Z": 0.13
           }
         }
       ],

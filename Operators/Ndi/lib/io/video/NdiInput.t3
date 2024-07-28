@@ -10,6 +10,10 @@
     {
       "Id": "3f634e98-93f2-4b5e-a098-623b3f8e4c9c"/*EnableProfiling*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "5e1ec76b-8ffe-43ca-867b-c9dda0eafb60"/*TriggerReconnect*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

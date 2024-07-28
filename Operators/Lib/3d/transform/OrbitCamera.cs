@@ -69,6 +69,8 @@ namespace Lib._3d.transform
             {
                 aspectRatio = (float)context.RequestedResolution.Width / context.RequestedResolution.Height;
             }
+            
+            var positionOffset = PositionOffset.GetValue(context);
 
             Vector2 clip = NearFarClip.GetValue(context);
 
@@ -112,7 +114,9 @@ namespace Lib._3d.transform
 
             var adjustedViewDirection = Vector3.TransformNormal(viewDirection, rotateAim);
             adjustedViewDirection = Vector3.Normalize(adjustedViewDirection);
-            var target = eye + adjustedViewDirection;
+            
+            
+            
 
             // Computing matrix
             var up = Up.GetValue(context);
@@ -121,6 +125,10 @@ namespace Lib._3d.transform
             var rotateAroundViewDirection = Matrix4x4.CreateFromAxisAngle(adjustedViewDirection, roll);
             up = Vector3.TransformNormal(up, rotateAroundViewDirection);
             up = Vector3.Normalize(up);
+            
+            eye+= Vector3.TransformNormal(positionOffset, rot);
+            //eye+= positionOffset;
+            var target = eye + adjustedViewDirection;
 
             _dampedEye = Vector3.Lerp(eye, _dampedEye, damping);
             _dampedTarget = Vector3.Lerp(target, _dampedTarget, damping);
@@ -212,7 +220,11 @@ namespace Lib._3d.transform
 
         [Input(Guid = "C81B91C6-2D06-4E3E-97BD-01D60F5F0F7D")]
         public readonly InputSlot<System.Numerics.Vector3> RotationOffset = new InputSlot<System.Numerics.Vector3>();
-
+        
+        [Input(Guid = "11B13DB2-3C91-4199-8245-50AF200E3A9D")]
+        public readonly InputSlot<System.Numerics.Vector3> PositionOffset = new InputSlot<System.Numerics.Vector3>();
+        
+        
         [Input(Guid = "bd1bc8a5-72ce-42b0-8914-4f6e124a18ae")]
         public readonly InputSlot<float> AspectRatio = new InputSlot<float>();
 

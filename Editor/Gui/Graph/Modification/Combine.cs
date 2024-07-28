@@ -262,7 +262,7 @@ internal static class Combine
         if (!hasAtLeastOne)
         {
             return new ImRect(new Vector2(-100, -100),
-                                          new Vector2(100, 100));
+                                       new Vector2(100, 100));
         }
 
         return new ImRect(min, max);
