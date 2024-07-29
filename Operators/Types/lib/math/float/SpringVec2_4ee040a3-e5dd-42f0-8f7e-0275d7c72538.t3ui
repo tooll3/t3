@@ -1,6 +1,6 @@
 {
   "Id": "4ee040a3-e5dd-42f0-8f7e-0275d7c72538"/*SpringVec2*/,
-  "Description": "",
+  "Description": "This is the vector 2 version of [Spring] \n\nExample: [SpringVec3Example]\n\nSimilar op: [SpringVec3]",
   "InputUis": [
     {
       "InputId": "5ec00ae8-1cd5-418f-bd9f-1b925df08466"/*Value*/,
@@ -16,6 +16,7 @@
         "X": 36.0,
         "Y": 379.0
       },
+      "GroupTitle": "Settings",
       "Min": 0.01,
       "Max": 1.0,
       "Clamp": true
@@ -35,7 +36,8 @@
       "Position": {
         "X": 36.0,
         "Y": 469.0
-      }
+      },
+      "GroupTitle": "Advanced"
     }
   ],
   "SymbolChildUis": [],
