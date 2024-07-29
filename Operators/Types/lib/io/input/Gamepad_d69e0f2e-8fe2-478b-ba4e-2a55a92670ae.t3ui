@@ -14,31 +14,59 @@
   "OutputUis": [
     {
       "OutputId": "d4c0b5fc-11b7-497e-b59d-fed8ac8e2da2"/*Start*/,
-        "Position": {
-            "X": 220.42047,
-            "Y": 117.84843
-        }
+      "Position": {
+        "X": 220.42047,
+        "Y": 117.84843
+      }
     },
     {
       "OutputId": "50baff6e-89bc-4c5f-9018-d6f680db1333"/*Back*/,
-        "Position": {
-            "X": 221.2225,
-            "Y": 258.45157
-        }
+      "Position": {
+        "X": 221.2225,
+        "Y": 258.45157
+      }
     },
     {
       "OutputId": "68f0c486-5922-4b76-9d4e-70d80bf491bf"/*LeftThumb*/,
-        "Position": {
-            "X": 221.82373,
-            "Y": 218.89964
-        }
+      "Position": {
+        "X": 221.82373,
+        "Y": 218.89964
+      }
     },
     {
       "OutputId": "2ccb0b7f-a26e-4db2-b527-7d238c9a9589"/*LeftTrigger*/,
-        "Position": {
-            "X": 221.2225,
-            "Y": 295.32272
-        }
+      "Position": {
+        "X": 221.2225,
+        "Y": 295.32272
+      }
+    },
+    {
+      "OutputId": "2ba7ba57-4575-4f00-baf1-7fa8d589c04f"/*RightThumb*/,
+      "Position": {
+        "X": 221.82373,
+        "Y": 395.32272
+      }
+    },
+    {
+      "OutputId": "358ae1a6-26ee-4637-9b47-5db294b0063b"/*RightTrigger*/,
+      "Position": {
+        "X": 221.82373,
+        "Y": 495.32272
+      }
+    },
+    {
+      "OutputId": "87ba8362-03dd-4d8a-809a-2e9890fb8aa9"/*LeftShoulder*/,
+      "Position": {
+        "X": 221.82373,
+        "Y": 595.32275
+      }
+    },
+    {
+      "OutputId": "c99d778e-9678-43cc-86c6-e9fa2a794507"/*RightShoulder*/,
+      "Position": {
+        "X": 221.82373,
+        "Y": 695.32275
+      }
     }
   ]
 }
