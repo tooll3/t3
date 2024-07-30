@@ -67,33 +67,41 @@ namespace T3.Operators.Types.Id_d69e0f2e_8fe2_478b_ba4e_2a55a92670ae
         {
             Start.UpdateAction = Update;
             Back.UpdateAction = Update;
+
             LeftThumb.UpdateAction = Update;
             RightThumb.UpdateAction = Update;
+
             LeftTrigger.UpdateAction = Update;
             RightTrigger.UpdateAction = Update;
+
             LeftShoulder.UpdateAction = Update;
             RightShoulder.UpdateAction = Update;
+
             A.UpdateAction = Update;
             B.UpdateAction = Update;
             X.UpdateAction = Update;
             Y.UpdateAction = Update;
+
             DPadLeft.UpdateAction = Update;
             DPadRight.UpdateAction = Update;
             DPadUp.UpdateAction = Update;
             DPadDown.UpdateAction = Update;
-
-            
-            
+ 
         }
 
         private void Update(EvaluationContext context)
         {
             var index = Index.GetValue(context);
-            if (index != currentIndex)
+            if (index == 0)
             {
                 // FIXME : handle multi controller
                 this.currentController = new SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.One);
-                this.currentIndex = index;
+                //this.currentIndex = index;
+            }
+            else
+            {
+                this.currentController = new SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.Two);
+                //this.currentIndex = index;
             }
 
             var state = XInputGamepad.GetState(this.currentController);
@@ -123,6 +131,6 @@ namespace T3.Operators.Types.Id_d69e0f2e_8fe2_478b_ba4e_2a55a92670ae
         }
 
         [Input(Guid = "b37ab751-1e41-4e58-9e27-5ac9052662d8")]
-        public readonly InputSlot<int> Index = new InputSlot<int>();
+        public readonly InputSlot<int> Index = new();
     }
 }
