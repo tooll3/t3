@@ -28,7 +28,7 @@ namespace T3.Core.IO
         {
             this.A = a;
             this.B = b;
-            this.X = y;
+            this.X = x;
             this.Y = y;
         }
     }
