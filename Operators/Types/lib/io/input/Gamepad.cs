@@ -60,10 +60,6 @@ namespace T3.Operators.Types.Id_d69e0f2e_8fe2_478b_ba4e_2a55a92670ae
         public readonly Slot<bool> DPadDown = new();
        
 
-
-        private int currentIndex = -1;
-        private SharpDX.XInput.Controller currentController;
-
         public Gamepad()
         {
             Start.UpdateAction = Update;
@@ -93,7 +89,7 @@ namespace T3.Operators.Types.Id_d69e0f2e_8fe2_478b_ba4e_2a55a92670ae
         private void Update(EvaluationContext context)
         {
             var index = Index.GetValue(context);
-            SharpDX.XInput.Controller[] controllers = new SharpDX.XInput.Controller[4];
+            var controllers = new SharpDX.XInput.Controller[4];
             controllers[0] = new SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.One);
             controllers[1] = new SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.Two);
             controllers[2] = new SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.Three);
@@ -145,6 +141,9 @@ namespace T3.Operators.Types.Id_d69e0f2e_8fe2_478b_ba4e_2a55a92670ae
 
             //Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
         }
+
+        private int currentIndex = -1;
+        private SharpDX.XInput.Controller currentController;
 
         [Input(Guid = "b37ab751-1e41-4e58-9e27-5ac9052662d8")]
         public readonly InputSlot<int> Index = new();
