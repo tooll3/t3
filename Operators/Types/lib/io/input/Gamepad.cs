@@ -1,4 +1,5 @@
 using SharpDX;
+using System;
 using System.IO.Ports;
 using System.Runtime.InteropServices;
 using T3.Core.IO;
@@ -92,16 +93,31 @@ namespace T3.Operators.Types.Id_d69e0f2e_8fe2_478b_ba4e_2a55a92670ae
         private void Update(EvaluationContext context)
         {
             var index = Index.GetValue(context);
-            if (index == 0)
+            SharpDX.XInput.Controller[] controllers = new SharpDX.XInput.Controller[4];
+            controllers[0] = new SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.One);
+            controllers[1] = new SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.Two);
+            controllers[2] = new SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.Three);
+            controllers[3] = new SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.Four);
+
+            // Ensure index is within valid range
+            index = Math.Max(0, Math.Min(3, index));
+
+            // Find the first connected controller, starting from the specified index
+            for (int i = 0; i < 4; i++)
             {
-                // FIXME : handle multi controller
-                this.currentController = new SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.One);
-                //this.currentIndex = index;
+                int controllerIndex = (index + i) % 4;
+                if (controllers[controllerIndex].IsConnected)
+                {
+                    this.currentController = controllers[controllerIndex];
+                    break;
+                }
             }
-            else
+
+            // If no controller is connected, set currentController to null
+            if (this.currentController == null || !this.currentController.IsConnected)
             {
-                this.currentController = new SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.Two);
-                //this.currentIndex = index;
+                this.currentController = null;
+                return;
             }
 
             var state = XInputGamepad.GetState(this.currentController);
