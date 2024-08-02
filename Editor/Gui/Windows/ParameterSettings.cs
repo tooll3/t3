@@ -42,7 +42,7 @@ public class ParameterSettings
         return modified;
     }
     
-    public bool DrawContent(SymbolUi symbolUi)
+    internal bool DrawContent(SymbolUi symbolUi, NodeSelection nodeSelection)
     {
         var modified = false;
         
@@ -53,7 +53,7 @@ public class ParameterSettings
         {
             FormInputs.AddVerticalSpace(5);
             
-            var selectedInputUi = DrawSelectionArea(symbolUi);
+            var selectedInputUi = DrawSelectionArea(symbolUi, nodeSelection);
             ImGui.SameLine(0,0);
             modified = DrawSettingsForParameter(selectedInputUi);
         }
@@ -61,7 +61,7 @@ public class ParameterSettings
         return modified;
     }
 
-    private IInputUi DrawSelectionArea(SymbolUi symbolUi)
+    private IInputUi DrawSelectionArea(SymbolUi symbolUi, NodeSelection nodeSelection)
     {
         IInputUi selectedInputUi = null;
         
@@ -159,9 +159,9 @@ public class ParameterSettings
                 { 
                     SelectedInputId = inputUi.InputDefinition.Id;
                     selectedInputUi = inputUi;
-                    var selectedInstance = NodeSelection.GetFirstSelectedInstance();
+                    var selectedInstance = nodeSelection.GetFirstSelectedInstance();
                     if(selectedInstance == null) 
-                        NodeSelection.SetSelection(inputUi);
+                        nodeSelection.SetSelection(inputUi);
                 }
                 
             }

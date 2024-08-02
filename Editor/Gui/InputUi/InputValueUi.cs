@@ -12,7 +12,6 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
@@ -253,14 +252,24 @@ namespace T3.Editor.Gui.InputUi
                                                                                                      input));
                                                             }
 
-                                                            if (ImGui.MenuItem("Extract as connection operator"))
+                                                            var graphWindow = GraphWindow.Focused;
+                                                            if (graphWindow != null)
                                                             {
-                                                                ParameterExtraction.ExtractAsConnectedOperator(compositionUi, inputSlot, symbolChildUi);
-                                                            }
+                                                                var nodeSelection = graphWindow.GraphCanvas.NodeSelection;
+                                                                var structure = graphWindow.GraphCanvas.Structure;
+                                                                if (ImGui.MenuItem("Extract as connection operator"))
+                                                                {
+                                                                    ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, typedInputSlot, symbolChildUi, inputSlot.Input);
+                                                                }
 
-                                                            if (ImGui.MenuItem("Publish as Input"))
+                                                                if (ImGui.MenuItem("Publish as Input"))
+                                                                {
+                                                                    InputArea.PublishAsInput(nodeSelection, inputSlot, symbolChildUi, input);
+                                                                }
+                                                            }
+                                                            else
                                                             {
-                                                                InputArea.PublishAsInput(inputSlot, symbolChildUi, input);
+                                                                Log.Error($"Graph window not found");
                                                             }
 
                                                             if (ImGui.MenuItem("Parameters settings"))
@@ -272,9 +281,16 @@ namespace T3.Editor.Gui.InputUi
 
                     ImGui.PushItemWidth(200.0f);
                     ImGui.SetNextItemWidth(-1);
-                    
-                    var connectedSlot = typedInputSlot.GetConnection(0);
-                    var connectedName = connectedSlot?.Parent?.Symbol?.Name?? "???";
+
+                    string connectedName;
+                    if (typedInputSlot.TryGetFirstConnection(out var connectedSlot))
+                    {
+                        connectedName = connectedSlot.Parent.Symbol.Name;
+                    }
+                    else
+                    {
+                        connectedName = "???";
+                    }
                     
                     ImGui.PushStyleColor(ImGuiCol.Text, typeColor.Rgba);
                     ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0,0.5f));
@@ -397,7 +413,7 @@ namespace T3.Editor.Gui.InputUi
             InputEditStateFlags DrawNormalParameter()
             {
                 // Connection area...
-                InputArea.DrawNormalInputArea(window, nodeSelection,  inputSlot, compositionUi, symbolChildUi, input, IsAnimatable, typeColor, tempConnections);
+                InputArea.DrawNormalInputArea<T>(window, nodeSelection,  typedInputSlot, compositionUi, symbolChildUi, input, IsAnimatable, typeColor, tempConnections);
                 
                 ImGui.SameLine();
 
@@ -469,14 +485,15 @@ namespace T3.Editor.Gui.InputUi
                                                                                  input));
                          }
 
+                         
                          if (ImGui.MenuItem("Extract as connection operator"))
                          {
-                             ParameterExtraction.ExtractAsConnectedOperator(compositionUi, inputSlot, symbolChildUi);
+                             ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, typedInputSlot, symbolChildUi, inputSlot.Input);
                          }
 
                          if (ImGui.MenuItem("Publish as Input"))
                          {
-                             InputArea.PublishAsInput(inputSlot, structure, symbolChildUi, input);
+                             InputArea.PublishAsInput(nodeSelection, inputSlot, symbolChildUi, input);
                          }
                          
 
@@ -548,7 +565,7 @@ namespace T3.Editor.Gui.InputUi
                                                         {
                                                             if (ImGui.MenuItem("Publish as Input"))
                                                             {
-                                                                PublishAsInput(nodeSelection, structure, inputSlot, symbolChildUi, input);
+                                                                InputArea.PublishAsInput(nodeSelection, inputSlot, symbolChildUi, input);
                                                             }
                                                         }
 
@@ -620,7 +637,7 @@ namespace T3.Editor.Gui.InputUi
     {
         internal const float ConnectionAreaWidth = 25.0f;
 
-        internal static void DrawNormalInputArea(GraphWindow window, NodeSelection nodeSelection, IInputSlot inputSlot, SymbolUi compositionUi,
+        internal static void DrawNormalInputArea<T>(GraphWindow graphWindow, NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi compositionUi,
                                                  SymbolUi.Child symbolChildUi,
                                                  Symbol.Child.Input input,
                                                  bool isAnimatable, Color typeColor, IReadOnlyList<ConnectionMaker.TempConnection> tempConnections)
@@ -667,13 +684,13 @@ namespace T3.Editor.Gui.InputUi
                         //ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, compositionUi, inputSlot, symbolChildUi);
                         //public static void ExtractAsConnectedOperator<T>(NodeSelection nodeSelection, InputSlot<T> inputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
 
-                        ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, (InputSlot<T>)inputSlot, symbolChildUi, input);
+                        ParameterExtraction.ExtractAsConnectedOperator(nodeSelection, inputSlot, symbolChildUi, input);
                         break;
                     case InputOperations.ConnectWithSearch:
                     {
-                        ConnectionMaker.StartFromInputSlot(window, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
-                        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionUi.Symbol, symbolChildUi, input.InputDefinition);
-                        ConnectionMaker.InitSymbolBrowserAtPosition(window, freePosition);
+                        ConnectionMaker.StartFromInputSlot(graphWindow, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
+                        var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionUi.Symbol, symbolChildUi);
+                        ConnectionMaker.InitSymbolBrowserAtPosition(graphWindow, freePosition);
                         break;
                     }
                 }
@@ -704,7 +721,7 @@ namespace T3.Editor.Gui.InputUi
             {
                 if (tempConnections.Count == 0)
                 {
-                    ConnectionMaker.StartFromInputSlot(compositionUi.Symbol, symbolChildUi, input.InputDefinition);
+                    ConnectionMaker.StartFromInputSlot(graphWindow, compositionUi.Symbol, symbolChildUi, input.InputDefinition);
                 }
             }
             
@@ -746,7 +763,7 @@ namespace T3.Editor.Gui.InputUi
             Extract,
         }
 
-        public static void PublishAsInput(NodeSelection selection, Structure structure, IInputSlot originalInputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
+        public static void PublishAsInput(NodeSelection selection, IInputSlot originalInputSlot, SymbolUi.Child symbolChildUi, Symbol.Child.Input input)
         {
             var composition = selection.GetSelectedComposition() ?? originalInputSlot.Parent.Parent;
 

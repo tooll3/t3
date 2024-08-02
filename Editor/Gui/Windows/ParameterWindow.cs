@@ -65,7 +65,8 @@ internal class ParameterWindow : Window
         if(graphWindow == null)
             return;
 
-        if (DrawSettingsForSelectedAnnotations())
+        var nodeSelection = graphWindow.GraphCanvas.NodeSelection;
+        if (DrawSettingsForSelectedAnnotations(nodeSelection))
             return;
         
         var instance = nodeSelection.GetSelectedInstanceWithoutComposition();
@@ -80,10 +81,10 @@ internal class ParameterWindow : Window
 
         if (instance == null)
         {
-            var selectedInputs = NodeSelection.GetSelectedNodes<IInputUi>().ToList();
+            var selectedInputs = nodeSelection.GetSelectedNodes<IInputUi>().ToList();
             if (selectedInputs.Count > 0)
             {
-                instance = GraphWindow.GetMainComposition();
+                instance = graphWindow.CompositionOp;
                 if(instance == null)
                     return;
                 
@@ -119,7 +120,7 @@ internal class ParameterWindow : Window
                 DrawParametersArea(instance, symbolChildUi, symbolUi);
                 break;
             case ViewModes.Settings:
-                modified |= _parameterSettings.DrawContent(symbolUi);
+                modified |= _parameterSettings.DrawContent(symbolUi, nodeSelection);
                 break;
             case ViewModes.Help:
                 using (new ChildWindowScope("help",Vector2.Zero, ImGuiWindowFlags.None, Color.Transparent, 0, 0))
@@ -468,11 +469,11 @@ internal class ParameterWindow : Window
     }
     
     // TODO: Refactor this into a separate class
-    private static bool DrawSettingsForSelectedAnnotations()
+    private static bool DrawSettingsForSelectedAnnotations(NodeSelection nodeSelection)
     {
         var somethingVisible = false;
         // Draw Annotation settings
-        foreach (var annotation in NodeSelection.GetSelectedNodes<Annotation>())
+        foreach (var annotation in nodeSelection.GetSelectedNodes<Annotation>())
         {
             ImGui.PushID(annotation.Id.GetHashCode());
             ImGui.PushFont(Fonts.FontLarge);
