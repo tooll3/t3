@@ -203,9 +203,14 @@ namespace lib.io.midi
         /// </summary>
         private void FlagAsDirty()
         {
-            Result.DirtyFlag.Invalidate();
-            Range.DirtyFlag.Invalidate();
-            WasHit.DirtyFlag.Invalidate();
+            // Disable until invalidation is fixed
+            // Result.DirtyFlag.Invalidate();
+            // Range.DirtyFlag.Invalidate();
+            // WasHit.DirtyFlag.Invalidate();
+            
+            Result.DirtyFlag.Trigger =  DirtyFlagTrigger.Animated;
+            Range.DirtyFlag.Trigger =   DirtyFlagTrigger.Animated;
+            WasHit.DirtyFlag.Trigger =  DirtyFlagTrigger.Animated;
         }
 
         /// <remarks>
