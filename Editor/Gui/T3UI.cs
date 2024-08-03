@@ -114,7 +114,7 @@ public static class T3Ui
         // Draw everything!
         ImGui.DockSpaceOverViewport();
 
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 3);
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 1);
         WindowManager.Draw();
         ImGui.PopStyleVar();
             
