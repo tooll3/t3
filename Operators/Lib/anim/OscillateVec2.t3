@@ -1,7 +1,5 @@
 {
-  "Name": "OscillateVec2",
-  "Id": "49796f63-27a8-4714-ba69-2073488ca833",
-  "Namespace": "lib.anim",
+  "Id": "49796f63-27a8-4714-ba69-2073488ca833"/*OscillateVec2*/,
   "Inputs": [
     {
       "Id": "2c812efc-de0b-4263-a651-2966c596fe76"/*SpeedFactor*/,

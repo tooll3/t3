@@ -1,7 +1,5 @@
 {
-  "Name": "SamplerStateOp",
-  "Id": "9515d59d-0bd5-406b-96da-6a5f60215700",
-  "Namespace": "lib.dx11.draw",
+  "Id": "9515d59d-0bd5-406b-96da-6a5f60215700"/*SamplerStateOp*/,
   "Inputs": [
     {
       "Id": "a870921f-a28c-4501-9f31-38a18b0acdcc"/*Filter*/,

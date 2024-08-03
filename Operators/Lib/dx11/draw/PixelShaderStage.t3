@@ -1,7 +1,5 @@
 {
-  "Name": "PixelShaderStage",
-  "Id": "75306997-4329-44e9-a17a-050dae532182",
-  "Namespace": "lib.dx11.draw",
+  "Id": "75306997-4329-44e9-a17a-050dae532182"/*PixelShaderStage*/,
   "Inputs": [
     {
       "Id": "c4e91bc6-1691-4eb4-aed5-dd4cae528149"/*SamplerStates*/,

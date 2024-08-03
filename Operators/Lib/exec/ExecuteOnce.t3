@@ -1,7 +1,5 @@
 {
-  "Name": "ExecuteOnce",
-  "Id": "7a09136e-18b2-46b7-afff-8ef999e3965d",
-  "Namespace": "lib.exec",
+  "Id": "7a09136e-18b2-46b7-afff-8ef999e3965d"/*ExecuteOnce*/,
   "Inputs": [
     {
       "Id": "7450033d-5797-40c9-b6c4-b6e8d27fe501"/*Command*/,

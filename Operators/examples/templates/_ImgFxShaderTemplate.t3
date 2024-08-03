@@ -1,7 +1,5 @@
 {
-  "Name": "_ImgFxShaderTemplate",
-  "Id": "fdd58452-ecb4-458d-9f5b-9bce356d5125",
-  "Namespace": "examples.templates",
+  "Id": "fdd58452-ecb4-458d-9f5b-9bce356d5125"/*_ImgFxShaderTemplate*/,
   "Inputs": [
     {
       "Id": "bf5f239e-8f6b-4fea-86d2-95e3add1a28c"/*Image*/,
@@ -35,6 +33,12 @@
   ],
   "Children": [
     {
+      "Id": "bcd266c6-ab5f-43ee-8297-deaf9ffc14bd"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "a9fafbe5-97b4-497b-98dd-0aebacf13183"/*_ImageFxShaderSetupStatic*/,
       "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
       "InputValues": [
@@ -54,12 +58,6 @@
           "Value": "R16G16B16A16_Float"
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "bcd266c6-ab5f-43ee-8297-deaf9ffc14bd"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
       "Outputs": []
     }
   ],

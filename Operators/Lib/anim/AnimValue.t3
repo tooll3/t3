@@ -1,7 +1,5 @@
 {
-  "Name": "AnimValue",
-  "Id": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
-  "Namespace": "lib.anim",
+  "Id": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d"/*AnimValue*/,
   "Inputs": [
     {
       "Id": "4cf5d20b-7335-4584-b246-c260ac5cdf4f"/*Shape*/,

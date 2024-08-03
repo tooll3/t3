@@ -1,7 +1,5 @@
 {
-  "Name": "JoinStringList",
-  "Id": "51943340-70b1-4bb5-8cb9-0e79d366a57b",
-  "Namespace": "lib.string",
+  "Id": "51943340-70b1-4bb5-8cb9-0e79d366a57b"/*JoinStringList*/,
   "Inputs": [
     {
       "Id": "db366216-b485-48bf-b267-56344b317cf7"/*Input*/,

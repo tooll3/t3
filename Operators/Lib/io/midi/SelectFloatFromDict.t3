@@ -1,7 +1,5 @@
 {
-  "Name": "SelectFloatFromDict",
-  "Id": "fd5467c7-c75d-4755-8885-fd1ff1f07c95",
-  "Namespace": "lib.io.midi",
+  "Id": "fd5467c7-c75d-4755-8885-fd1ff1f07c95"/*SelectFloatFromDict*/,
   "Inputs": [
     {
       "Id": "126d52eb-cdf9-48e6-ac77-bb6e90700c56"/*DictionaryInput*/,

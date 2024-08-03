@@ -1,7 +1,5 @@
 {
-  "Name": "Viewport",
-  "Id": "1f23db4a-871e-42a9-9255-49b956993eb1",
-  "Namespace": "lib.dx11.draw",
+  "Id": "1f23db4a-871e-42a9-9255-49b956993eb1"/*Viewport*/,
   "Inputs": [
     {
       "Id": "65647489-4ad9-4d8c-8b4f-eeb726846488"/*X*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "TransformImage",
-  "Id": "32e18957-3812-4f64-8663-18454518d005",
-  "Namespace": "lib.img.adjust",
+  "Id": "32e18957-3812-4f64-8663-18454518d005"/*TransformImage*/,
   "Inputs": [
     {
       "Id": "3aab9b12-1e02-4d7a-83b6-da1500a6bcbf"/*Image*/,
@@ -51,13 +49,13 @@
   ],
   "Children": [
     {
-      "Id": "bf478418-fbc1-4e6c-a85b-c53129d432e9"/*Vector2Components*/,
+      "Id": "25acd8a3-db12-457a-98a9-f70e51be66d5"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "25acd8a3-db12-457a-98a9-f70e51be66d5"/*Vector2Components*/,
+      "Id": "bf478418-fbc1-4e6c-a85b-c53129d432e9"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []

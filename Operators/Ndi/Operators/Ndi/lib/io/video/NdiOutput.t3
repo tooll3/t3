@@ -1,0 +1,19 @@
+{
+  "Id": "9412d0f4-dab8-4145-9719-10395e154fa7"/*NdiOutput*/,
+  "Inputs": [
+    {
+      "Id": "740db4c4-4182-4743-a713-5a45855499d9"/*SenderName*/,
+      "DefaultValue": "Tooll3"
+    },
+    {
+      "Id": "ce0e267e-e96d-441f-86fb-bacef1f0186a"/*FrameRate*/,
+      "DefaultValue": 30
+    },
+    {
+      "Id": "e6359f2e-e4f7-419d-a403-ce5eb0528898"/*EnableAlpha*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

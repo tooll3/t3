@@ -1,7 +1,5 @@
 {
-  "Name": "_multiImageFxSetup",
-  "Id": "a2567844-3314-48de-bda7-7904b5546535",
-  "Namespace": "lib.img.fx._",
+  "Id": "a2567844-3314-48de-bda7-7904b5546535"/*_multiImageFxSetup*/,
   "Inputs": [
     {
       "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
@@ -46,29 +44,6 @@
   ],
   "Children": [
     {
-      "Id": "e5cef408-7948-414b-8392-05a47d214a8d"/*TransformsConstBuffer*/,
-      "SymbolId": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "61430d0e-3bee-4f1f-a804-6a4ad444e1b0"/*VertexShader*/,
-      "SymbolId": "646f5988-0a76-4996-a538-ba48054fd0ad",
-      "InputValues": [
-        {
-          "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\Default2-vs.hlsl"
-        },
-        {
-          "Id": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
-          "Type": "System.String",
-          "Value": "vsMain"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "c1bbce19-de42-47e1-82b2-b0267937a196"/*RasterizerStateOp*/,
       "SymbolId": "c7283335-ef57-46ad-9538-abbade65845a",
       "InputValues": [
@@ -86,25 +61,8 @@
       "Outputs": []
     },
     {
-      "Id": "451a7923-074a-4fc4-9239-21c670e69d03"/*PixelShader*/,
-      "SymbolId": "f7c625da-fede-4993-976c-e259e0ee4985",
-      "InputValues": [
-        {
-          "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\Default2-ps.hlsl"
-        },
-        {
-          "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
-          "Type": "System.String",
-          "Value": "psMain"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "99b5f89c-11c4-4064-963f-46441a487b29"/*TimeConstBuffer*/,
-      "SymbolId": "de8bc97a-8ef0-4d4a-9ffa-88046a2daf40",
+      "Id": "88206ecf-b4a4-4e54-a5e6-947f292d8211"/*SrvFromTexture2d*/,
+      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
       "InputValues": [],
       "Outputs": []
     },
@@ -136,8 +94,43 @@
       "Outputs": []
     },
     {
-      "Id": "52727e8d-1644-40aa-b735-80f98cb6c17e"/*Rasterizer*/,
-      "SymbolId": "fbd7f0f0-36a3-4fbb-91e1-cb33d4666d09",
+      "Id": "00feaf13-af28-4ea1-bd11-39cc6eae9f72"/*GetTextureSize*/,
+      "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "61430d0e-3bee-4f1f-a804-6a4ad444e1b0"/*VertexShader*/,
+      "SymbolId": "646f5988-0a76-4996-a538-ba48054fd0ad",
+      "InputValues": [
+        {
+          "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\Default2-vs.hlsl"
+        },
+        {
+          "Id": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
+          "Type": "System.String",
+          "Value": "vsMain"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "41ea3bd7-59c7-4dd4-9dbf-373567bb559f"/*ResolutionConstBuffer*/,
+      "SymbolId": "38e88910-6063-41d1-840b-8aeeb0eeccc0",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e5cef408-7948-414b-8392-05a47d214a8d"/*TransformsConstBuffer*/,
+      "SymbolId": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "633ea694-86b7-40b2-b052-e6dedba81bad"/*SrvFromTexture2d*/,
+      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
       "InputValues": [],
       "Outputs": []
     },
@@ -148,9 +141,20 @@
       "Outputs": []
     },
     {
-      "Id": "1200e2f2-bd0d-4c5e-8545-b7fe0bd59e40"/*Execute*/,
-      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
-      "InputValues": [],
+      "Id": "451a7923-074a-4fc4-9239-21c670e69d03"/*PixelShader*/,
+      "SymbolId": "f7c625da-fede-4993-976c-e259e0ee4985",
+      "InputValues": [
+        {
+          "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\Default2-ps.hlsl"
+        },
+        {
+          "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
+          "Type": "System.String",
+          "Value": "psMain"
+        }
+      ],
       "Outputs": []
     },
     {
@@ -194,14 +198,8 @@
       "Outputs": []
     },
     {
-      "Id": "88206ecf-b4a4-4e54-a5e6-947f292d8211"/*SrvFromTexture2d*/,
-      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "d36c9175-46a3-4447-9002-c25190e4ef42"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "Id": "1200e2f2-bd0d-4c5e-8545-b7fe0bd59e40"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
       "Outputs": []
     },
@@ -218,20 +216,14 @@
       "Outputs": []
     },
     {
-      "Id": "00feaf13-af28-4ea1-bd11-39cc6eae9f72"/*GetTextureSize*/,
-      "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
+      "Id": "c8ecb85b-5060-4c0b-8c0a-7918d2aa1eab"/*SetPixelAndVertexShaderStage*/,
+      "SymbolId": "b956f707-2a33-4330-b7ff-9c91edbcf041",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "633ea694-86b7-40b2-b052-e6dedba81bad"/*SrvFromTexture2d*/,
-      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "41ea3bd7-59c7-4dd4-9dbf-373567bb559f"/*ResolutionConstBuffer*/,
-      "SymbolId": "38e88910-6063-41d1-840b-8aeeb0eeccc0",
+      "Id": "d36c9175-46a3-4447-9002-c25190e4ef42"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
       "Outputs": []
     },
@@ -242,8 +234,14 @@
       "Outputs": []
     },
     {
-      "Id": "c8ecb85b-5060-4c0b-8c0a-7918d2aa1eab"/*SetPixelAndVertexShaderStage*/,
-      "SymbolId": "b956f707-2a33-4330-b7ff-9c91edbcf041",
+      "Id": "52727e8d-1644-40aa-b735-80f98cb6c17e"/*Rasterizer*/,
+      "SymbolId": "fbd7f0f0-36a3-4fbb-91e1-cb33d4666d09",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "99b5f89c-11c4-4064-963f-46441a487b29"/*TimeConstBuffer*/,
+      "SymbolId": "de8bc97a-8ef0-4d4a-9ffa-88046a2daf40",
       "InputValues": [],
       "Outputs": []
     }

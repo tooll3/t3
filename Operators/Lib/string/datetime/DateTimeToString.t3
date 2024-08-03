@@ -1,7 +1,5 @@
 {
-  "Name": "DateTimeToString",
-  "Id": "c1c3725a-0745-4ce1-874b-839810c2124c",
-  "Namespace": "lib.string.datetime",
+  "Id": "c1c3725a-0745-4ce1-874b-839810c2124c"/*DateTimeToString*/,
   "Inputs": [
     {
       "Id": "c420e846-8ba2-4be4-ad43-9f4380da0851"/*Value*/,

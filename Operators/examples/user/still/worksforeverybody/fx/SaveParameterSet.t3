@@ -1,7 +1,5 @@
 {
-  "Name": "SaveParameterSet",
-  "Id": "3246cf5a-3c9b-4765-89d1-68852a3dd7a1",
-  "Namespace": "user.still.worksforeverybody.fx",
+  "Id": "3246cf5a-3c9b-4765-89d1-68852a3dd7a1"/*SaveParameterSet*/,
   "Inputs": [
     {
       "Id": "d6a017af-df4e-4532-8a4a-208df224d60a"/*TriggerSaveParameters*/,

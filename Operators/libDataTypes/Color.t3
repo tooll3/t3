@@ -1,0 +1,16 @@
+{
+  "Id": "70176d3c-825c-40b3-8121-a465735518fe"/*Color*/,
+  "Inputs": [
+    {
+      "Id": "03dc1ef1-d75a-4f65-a607-d5dc4de56a2c"/*RGBA*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

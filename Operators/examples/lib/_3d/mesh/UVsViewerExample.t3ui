@@ -1,0 +1,205 @@
+{
+  "Id": "70e97e6b-3ddf-4a88-b080-c63fdbd251c9"/*UVsViewerExample*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "80414f93-388e-4d5d-a2e3-dc542d4d51ac"/*SphereMesh*/,
+      "Position": {
+        "X": 93.05803,
+        "Y": 131.63298
+      }
+    },
+    {
+      "ChildId": "173781a9-55aa-4412-bfd0-75db58a79d89"/*DrawMesh*/,
+      "Position": {
+        "X": 986.63806,
+        "Y": 164.18726
+      }
+    },
+    {
+      "ChildId": "11633d13-d6af-4157-a6f8-7a17177a20bd"/*SetMaterial*/,
+      "Position": {
+        "X": 1136.6381,
+        "Y": 164.18726
+      }
+    },
+    {
+      "ChildId": "244a53c5-1261-44aa-89a4-13316e18efaf"/*CheckerBoard*/,
+      "Position": {
+        "X": 440.96707,
+        "Y": 405.74954
+      }
+    },
+    {
+      "ChildId": "3d739213-68fd-4880-82d0-c3a265d44fc8"/*UVmap*/,
+      "Position": {
+        "X": 401.43018,
+        "Y": 158.23315
+      }
+    },
+    {
+      "ChildId": "c39742ab-6ae0-427d-8206-a7a82281e101"/*TriggerAnim*/,
+      "Position": {
+        "X": 551.4302,
+        "Y": 158.23315
+      }
+    },
+    {
+      "ChildId": "fad09e3f-6564-4c70-9802-5618999c24c3"/*TorusMesh*/,
+      "Position": {
+        "X": 93.05803,
+        "Y": 88.63396
+      }
+    },
+    {
+      "ChildId": "5a83a84f-5b2a-4028-b35d-b6c478632844"/*CylinderMesh*/,
+      "Position": {
+        "X": 93.05803,
+        "Y": 45.634205
+      }
+    },
+    {
+      "ChildId": "7e530b71-92dc-4dbc-a4a3-bfd039a35788"/*CommonPointSets*/,
+      "Position": {
+        "X": 358.37027,
+        "Y": 707.27466
+      }
+    },
+    {
+      "ChildId": "b58bbea3-7b0d-4da9-9f77-db2ea51a1dcd"/*TransformPoints*/,
+      "Position": {
+        "X": 508.3702,
+        "Y": 707.27466
+      }
+    },
+    {
+      "ChildId": "ba6906c5-56b3-4bc8-a52e-f28930332f6d"/*DrawLines*/,
+      "Position": {
+        "X": 658.37024,
+        "Y": 707.27466
+      }
+    },
+    {
+      "ChildId": "e84b8af2-00ae-46ab-9d5c-b99320291b2b"/*Camera*/,
+      "Position": {
+        "X": 1436.6381,
+        "Y": 164.18726
+      }
+    },
+    {
+      "ChildId": "fddaebf7-f580-41c2-9670-d484ae751bb1"/*RenderTarget*/,
+      "Position": {
+        "X": 1586.6381,
+        "Y": 164.18726
+      }
+    },
+    {
+      "ChildId": "ba6343aa-25e0-41a9-8fbe-76aa35147bfc"/*Text*/,
+      "Position": {
+        "X": 231.5823,
+        "Y": 522.8589
+      }
+    },
+    {
+      "ChildId": "51020cfd-c08d-49d7-b088-26fcfa549e4d"/*RenderTarget*/,
+      "Position": {
+        "X": 440.60477,
+        "Y": 554.8926
+      }
+    },
+    {
+      "ChildId": "7dcb5f73-b565-4c42-b0b5-4089951481e0"/*Blend*/,
+      "Position": {
+        "X": 663.58575,
+        "Y": 477.04593
+      }
+    },
+    {
+      "ChildId": "6ad219dc-2b77-42e7-8503-eab6882d3125"/*PickMeshBuffer*/,
+      "Position": {
+        "X": 248.29199,
+        "Y": 76.62695
+      }
+    },
+    {
+      "ChildId": "b5bb5ebd-7663-40d8-9116-71181ad681cf"/*LoadObj*/,
+      "Position": {
+        "X": 93.05803,
+        "Y": 174.63249
+      }
+    },
+    {
+      "ChildId": "fd42e3c7-f346-4594-8ff7-38bed198000b"/*Group*/,
+      "Position": {
+        "X": 1286.6381,
+        "Y": 164.18726
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "7c291a16-1e48-40c6-9fbc-cab14bb80720"/*ColorBuffer*/,
+      "Position": {
+        "X": 1736.6381,
+        "Y": 164.18726
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "ba59092d-42c5-4029-b147-5bca372433b7",
+      "Title": "Represents the area of the UV coordinates",
+      "Color": {
+        "X": 0.7092199,
+        "Y": 0.5583221,
+        "Z": 0.0,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 298.37027,
+        "Y": 647.27466
+      },
+      "Size": {
+        "X": 530.0,
+        "Y": 156.0
+      }
+    },
+    {
+      "Id": "34042f0b-29c3-41d0-b05e-bd3e3ffcaa91",
+      "Title": "Switch between 3D and 2D UV map ",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 398.292,
+        "Y": 76.62695
+      },
+      "Size": {
+        "X": 435.16028,
+        "Y": 149.17554
+      }
+    },
+    {
+      "Id": "83171f3e-915a-4e18-b09a-f3d310b94cf6",
+      "Title": "Edit your texture",
+      "Color": {
+        "X": 0.7446804,
+        "Y": 0.0,
+        "Z": 1.0,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 171.5823,
+        "Y": 246.81032
+      },
+      "Size": {
+        "X": 660.29767,
+        "Y": 378.49454
+      }
+    }
+  ]
+}

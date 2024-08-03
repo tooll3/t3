@@ -1,7 +1,5 @@
 {
-  "Name": "RasterizerStateOp",
-  "Id": "c7283335-ef57-46ad-9538-abbade65845a",
-  "Namespace": "lib.dx11.draw",
+  "Id": "c7283335-ef57-46ad-9538-abbade65845a"/*RasterizerStateOp*/,
   "Inputs": [
     {
       "Id": "03f3bc7f-3949-4a97-88cf-04e162cfa2f7"/*CullMode*/,

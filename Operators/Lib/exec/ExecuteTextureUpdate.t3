@@ -1,7 +1,5 @@
 {
-  "Name": "ExecuteTextureUpdate",
-  "Id": "6c2f8241-9f4b-451e-8a1d-871631d21163",
-  "Namespace": "lib.exec",
+  "Id": "6c2f8241-9f4b-451e-8a1d-871631d21163"/*ExecuteTextureUpdate*/,
   "Inputs": [
     {
       "Id": "088ddcee-1407-4cd8-85bc-6704b8ea73b1"/*UpdateCommands*/,

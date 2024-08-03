@@ -1,7 +1,5 @@
 {
-  "Name": "EdgeRepeat",
-  "Id": "72e627e9-f570-4936-92b1-b12ed8d6004e",
-  "Namespace": "lib.img.fx",
+  "Id": "72e627e9-f570-4936-92b1-b12ed8d6004e"/*EdgeRepeat*/,
   "Inputs": [
     {
       "Id": "22b41600-7d42-44ad-8e94-3819f8d24964"/*Image*/,
@@ -63,8 +61,8 @@
   ],
   "Children": [
     {
-      "Id": "3a6caa14-06fe-428b-ba61-33f910f4869c"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "Id": "b1a93100-d55f-41e8-8201-5a1b0e93235c"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
@@ -92,13 +90,13 @@
       "Outputs": []
     },
     {
-      "Id": "b1a93100-d55f-41e8-8201-5a1b0e93235c"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "Id": "c2dc66ce-c73f-4a7e-a449-e111791e8688"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "c2dc66ce-c73f-4a7e-a449-e111791e8688"/*Vector4Components*/,
+      "Id": "3a6caa14-06fe-428b-ba61-33f910f4869c"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []

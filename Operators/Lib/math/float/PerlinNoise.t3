@@ -1,7 +1,5 @@
 {
-  "Name": "PerlinNoise",
-  "Id": "436e93a8-03c0-4366-8d9a-2245e5bcaa6c",
-  "Namespace": "lib.math.float",
+  "Id": "436e93a8-03c0-4366-8d9a-2245e5bcaa6c"/*PerlinNoise*/,
   "Inputs": [
     {
       "Id": "eabbaf77-5f74-4303-9453-6fa44facc5db"/*OverrideTime*/,

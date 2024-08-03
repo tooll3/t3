@@ -1,7 +1,5 @@
 {
-  "Name": "IsIntEven",
-  "Id": "9a34f503-709b-42e0-a25f-bc74573afa6b",
-  "Namespace": "lib.math.int",
+  "Id": "9a34f503-709b-42e0-a25f-bc74573afa6b"/*IsIntEven*/,
   "Inputs": [
     {
       "Id": "c5703990-1062-4512-b016-74ae1cce538a"/*Value*/,

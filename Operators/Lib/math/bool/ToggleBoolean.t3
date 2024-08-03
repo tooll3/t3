@@ -1,7 +1,5 @@
 {
-  "Name": "ToggleBoolean",
-  "Id": "3f6a85be-a837-4681-9c2d-5c87e838f25a",
-  "Namespace": "lib.math.bool",
+  "Id": "3f6a85be-a837-4681-9c2d-5c87e838f25a"/*ToggleBoolean*/,
   "Inputs": [
     {
       "Id": "2216ea9a-a6fb-446e-b4be-0b9a111be745"/*TriggerToggle*/,

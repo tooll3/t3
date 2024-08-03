@@ -1,7 +1,5 @@
 {
-  "Name": "IntDiv",
-  "Id": "eae8b8af-ce79-4e0a-9777-2dd0a99c18cb",
-  "Namespace": "lib.math.int",
+  "Id": "eae8b8af-ce79-4e0a-9777-2dd0a99c18cb"/*IntDiv*/,
   "Inputs": [
     {
       "Id": "95aaaa60-5582-40b0-907d-74a39710c006"/*Numerator*/,

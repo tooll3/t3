@@ -1,7 +1,5 @@
 {
-  "Name": "Vec2ToVec3",
-  "Id": "b732a668-8994-4f34-ab96-5245d355e33f",
-  "Namespace": "lib.math.vec2",
+  "Id": "b732a668-8994-4f34-ab96-5245d355e33f"/*Vec2ToVec3*/,
   "Inputs": [
     {
       "Id": "a71e7512-08ac-40b4-abdc-5b0835472e7f"/*XY*/,

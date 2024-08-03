@@ -1,7 +1,5 @@
 {
-  "Name": "HasValueIncreased",
-  "Id": "c513c58d-e45c-408d-a0b8-250c9af31545",
-  "Namespace": "lib.math.bool",
+  "Id": "c513c58d-e45c-408d-a0b8-250c9af31545"/*HasValueIncreased*/,
   "Inputs": [
     {
       "Id": "ed88c6c7-1ea2-4593-9589-ec670afb4654"/*Value*/,

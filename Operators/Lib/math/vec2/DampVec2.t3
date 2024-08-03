@@ -1,7 +1,5 @@
 {
-  "Name": "DampVec2",
-  "Id": "fb801f10-8f84-4f69-9f7e-66cc7f6b7878",
-  "Namespace": "lib.math.vec2",
+  "Id": "fb801f10-8f84-4f69-9f7e-66cc7f6b7878"/*DampVec2*/,
   "Inputs": [
     {
       "Id": "e5d132e7-018e-4b37-a49b-8274ac988311"/*Value*/,

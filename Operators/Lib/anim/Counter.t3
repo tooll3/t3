@@ -1,7 +1,5 @@
 {
-  "Name": "Counter",
-  "Id": "11882635-4757-4cac-a024-70bb4e8b504c",
-  "Namespace": "lib.anim",
+  "Id": "11882635-4757-4cac-a024-70bb4e8b504c"/*Counter*/,
   "Inputs": [
     {
       "Id": "eefdb8ca-68e7-4e39-b302-22eb8930fb8c"/*TriggerIncrement*/,

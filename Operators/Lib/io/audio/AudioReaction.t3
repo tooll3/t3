@@ -1,7 +1,5 @@
 {
-  "Name": "AudioReaction",
-  "Id": "03477b9a-860e-4887-81c3-5fe51621122c",
-  "Namespace": "lib.io.audio",
+  "Id": "03477b9a-860e-4887-81c3-5fe51621122c"/*AudioReaction*/,
   "Inputs": [
     {
       "Id": "44409811-1a0f-4be6-83ea-b2f040ebf08b"/*InputBand*/,

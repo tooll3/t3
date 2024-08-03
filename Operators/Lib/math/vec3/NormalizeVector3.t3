@@ -1,7 +1,5 @@
 {
-  "Name": "NormalizeVector3",
-  "Id": "7805285e-e74b-48f5-8228-20bbb178e828",
-  "Namespace": "lib.math.vec3",
+  "Id": "7805285e-e74b-48f5-8228-20bbb178e828"/*NormalizeVector3*/,
   "Inputs": [
     {
       "Id": "2405182f-a918-451a-b039-46e71a541e4d"/*A*/,

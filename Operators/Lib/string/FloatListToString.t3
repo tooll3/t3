@@ -1,7 +1,5 @@
 {
-  "Name": "FloatListToString",
-  "Id": "abf1ec99-049d-474c-9023-5302d5a5c804",
-  "Namespace": "lib.string",
+  "Id": "abf1ec99-049d-474c-9023-5302d5a5c804"/*FloatListToString*/,
   "Inputs": [
     {
       "Id": "010c814b-be7d-4bf9-82be-1869217bd1ad"/*Value*/,

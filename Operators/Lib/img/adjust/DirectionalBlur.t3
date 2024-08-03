@@ -1,7 +1,5 @@
 {
-  "Name": "DirectionalBlur",
-  "Id": "1192ae86-b174-4b58-9cc6-38afb666ce35",
-  "Namespace": "lib.img.adjust",
+  "Id": "1192ae86-b174-4b58-9cc6-38afb666ce35"/*DirectionalBlur*/,
   "Inputs": [
     {
       "Id": "3cc9487b-bf18-416c-9d69-86592130bfa6"/*Image*/,
@@ -57,64 +55,6 @@
   ],
   "Children": [
     {
-      "Id": "728da07f-536c-49bb-8db6-692136fc3b46"/*_multiImageFxSetup*/,
-      "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
-      "InputValues": [
-        {
-          "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\DirectionalBlur.hlsl"
-        },
-        {
-          "Id": "fe1695b3-54db-4b53-8987-3216bcf59da9"/*ClearColor*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 0.0
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "4194c8e2-5f6e-410b-b98f-71ed330e395c"/*_ImageFxShaderSetupStatic*/,
-      "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "d5e26444-fe59-4923-98cb-5c22be2815f8"/*LoadImage*/,
-      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
-      "InputValues": [
-        {
-          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
-          "Type": "System.String",
-          "Value": "Resources\\common\\images\\black-pixel.png"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "c2ddd0ea-230b-47f1-982c-92dd229bf66c"/*UseFallbackTexture*/,
-      "SymbolId": "b470fdf9-ac0b-4eb9-9600-453b8c094e3f",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "8ca6add7-ca09-49f6-882c-e6a5b1a02fe4"/*PickTexture*/,
-      "SymbolId": "e6070817-cf2e-4430-87e0-bf3dd15afdb5",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "46f4e0b1-7fe7-4d83-a916-4d149364cfda"/*BoolToInt*/,
-      "SymbolId": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "2b352f5b-e2f8-4e58-b029-b91db67ca0f7"/*_multiImageFxSetup*/,
       "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
       "InputValues": [
@@ -137,8 +77,8 @@
       "Outputs": []
     },
     {
-      "Id": "1dc01264-c53e-459c-92b7-7a56af54fde3"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "Id": "8ca6add7-ca09-49f6-882c-e6a5b1a02fe4"/*PickTexture*/,
+      "SymbolId": "e6070817-cf2e-4430-87e0-bf3dd15afdb5",
       "InputValues": [],
       "Outputs": []
     },
@@ -155,14 +95,72 @@
       "Outputs": []
     },
     {
+      "Id": "d2d3cf3b-87f3-4804-98a5-44ebb4418c12"/*Multiply*/,
+      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c2ddd0ea-230b-47f1-982c-92dd229bf66c"/*UseFallbackTexture*/,
+      "SymbolId": "b470fdf9-ac0b-4eb9-9600-453b8c094e3f",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "4194c8e2-5f6e-410b-b98f-71ed330e395c"/*_ImageFxShaderSetupStatic*/,
+      "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "46f4e0b1-7fe7-4d83-a916-4d149364cfda"/*BoolToInt*/,
+      "SymbolId": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "1d6d89aa-4e25-4ed2-a5cd-9c975b2ebabf"/*Div*/,
       "SymbolId": "15fb88b2-81a1-43b8-97ba-41221293bb07",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "d2d3cf3b-87f3-4804-98a5-44ebb4418c12"/*Multiply*/,
-      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
+      "Id": "728da07f-536c-49bb-8db6-692136fc3b46"/*_multiImageFxSetup*/,
+      "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
+      "InputValues": [
+        {
+          "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\DirectionalBlur.hlsl"
+        },
+        {
+          "Id": "fe1695b3-54db-4b53-8987-3216bcf59da9"/*ClearColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.0
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "d5e26444-fe59-4923-98cb-5c22be2815f8"/*LoadImage*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [
+        {
+          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
+          "Type": "System.String",
+          "Value": "Resources\\common\\images\\black-pixel.png"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "1dc01264-c53e-459c-92b7-7a56af54fde3"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
     }

@@ -1,7 +1,5 @@
 {
-  "Name": "LogMessage",
-  "Id": "53127485-e2c7-4be8-aff2-da5790799593",
-  "Namespace": "lib.exec",
+  "Id": "53127485-e2c7-4be8-aff2-da5790799593"/*LogMessage*/,
   "Inputs": [
     {
       "Id": "183cd865-7939-4110-8192-f112fff3cc60"/*SubGraph*/,

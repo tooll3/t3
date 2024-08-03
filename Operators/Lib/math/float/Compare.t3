@@ -1,7 +1,5 @@
 {
-  "Name": "Compare",
-  "Id": "026869ee-b62f-481e-aadf-f8a1db77fe65",
-  "Namespace": "lib.math.float",
+  "Id": "026869ee-b62f-481e-aadf-f8a1db77fe65"/*Compare*/,
   "Inputs": [
     {
       "Id": "8d98d88c-7a0e-4282-823e-4889ef286e5a"/*Value*/,

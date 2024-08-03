@@ -1,7 +1,5 @@
 {
-  "Name": "FilePathParts",
-  "Id": "42c556fb-014b-4ac5-b390-f426ab415aa7",
-  "Namespace": "lib.string",
+  "Id": "42c556fb-014b-4ac5-b390-f426ab415aa7"/*FilePathParts*/,
   "Inputs": [
     {
       "Id": "04d5f714-4e38-4a1e-b245-f6f0b582b35a"/*FilePath*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "ClearRenderTarget",
-  "Id": "e3596381-c118-4e2e-a482-83049a9f74af",
-  "Namespace": "lib.dx11.draw",
+  "Id": "e3596381-c118-4e2e-a482-83049a9f74af"/*ClearRenderTarget*/,
   "Inputs": [
     {
       "Id": "d73d2fe7-1af4-48d6-9ad3-f8c87c3369d6"/*ClearColor*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "Any",
-  "Id": "1446e61e-7f68-4655-99c8-5be390f64851",
-  "Namespace": "lib.math.bool",
+  "Id": "1446e61e-7f68-4655-99c8-5be390f64851"/*Any*/,
   "Inputs": [
     {
       "Id": "374ad549-676b-4bd0-ae6a-421892b92bdb"/*Input*/,

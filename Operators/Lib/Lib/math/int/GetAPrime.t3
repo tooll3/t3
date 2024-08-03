@@ -1,0 +1,11 @@
+{
+  "Id": "f99cb938-205d-4605-8c17-e0be67f25d98"/*GetAPrime*/,
+  "Inputs": [
+    {
+      "Id": "f94d2c1c-35e4-4862-bbaa-1ed84fd276f6"/*Index*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

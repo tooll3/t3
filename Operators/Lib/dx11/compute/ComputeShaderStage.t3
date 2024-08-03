@@ -1,7 +1,5 @@
 {
-  "Name": "ComputeShaderStage",
-  "Id": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
-  "Namespace": "lib.dx11.compute",
+  "Id": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9"/*ComputeShaderStage*/,
   "Inputs": [
     {
       "Id": "5c0e9c96-9aba-4757-ae1f-cc50fb6173f1"/*ComputeShader*/,

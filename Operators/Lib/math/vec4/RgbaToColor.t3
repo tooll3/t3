@@ -1,7 +1,5 @@
 {
-  "Name": "RgbaToColor",
-  "Id": "82a5f040-926b-4970-9da2-aa36de94b436",
-  "Namespace": "lib.math.vec4",
+  "Id": "82a5f040-926b-4970-9da2-aa36de94b436"/*RgbaToColor*/,
   "Inputs": [
     {
       "Id": "5f2de1d3-6803-4f56-aaf1-9e29b4d81eb8"/*R*/,

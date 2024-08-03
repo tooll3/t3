@@ -1,7 +1,5 @@
 {
-  "Name": "_GetSketchPoints",
-  "Id": "271e397e-051c-473f-968f-a2251fed65d1",
-  "Namespace": "lib.point._experimental",
+  "Id": "271e397e-051c-473f-968f-a2251fed65d1"/*_GetSketchPoints*/,
   "Inputs": [
     {
       "Id": "c7c71de4-a9a8-4194-b490-ab48004565d1"/*Pages*/,

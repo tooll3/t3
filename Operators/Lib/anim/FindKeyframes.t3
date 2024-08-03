@@ -1,7 +1,5 @@
 {
-  "Name": "FindKeyframes",
-  "Id": "127e1eb9-aca9-4f8e-b0c9-b709c8a0745a",
-  "Namespace": "lib.anim",
+  "Id": "127e1eb9-aca9-4f8e-b0c9-b709c8a0745a"/*FindKeyframes*/,
   "Inputs": [
     {
       "Id": "3ad320b9-d1bc-4bdb-b5c8-20caa721621b"/*Mode*/,

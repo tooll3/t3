@@ -53,13 +53,6 @@
       }
     },
     {
-      "InputId": "abe9393e-282e-4de0-8f86-541fa955658f"/*DurationInSecs*/,
-      "Position": {
-        "X": 197.0,
-        "Y": 733.0
-      }
-    },
-    {
       "InputId": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
       "Position": {
         "X": 197.0,
@@ -68,6 +61,13 @@
       "Min": -1,
       "Max": 127,
       "Clamp": true
+    },
+    {
+      "InputId": "abe9393e-282e-4de0-8f86-541fa955658f"/*DurationInSecs*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 733.0
+      }
     }
   ],
   "SymbolChildUis": [],

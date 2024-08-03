@@ -1,0 +1,19 @@
+{
+  "Id": "e64f95e4-c045-400f-98ca-7c020ad46174"/*Switch*/,
+  "Inputs": [
+    {
+      "Id": "988dd1b5-636d-4a78-9592-2c6601401cc1"/*Commands*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "00fd2794-567a-4f9b-a900-c2ebf9760764"/*Index*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "e896b269-d17e-417f-be1f-2d6e9addae91"/*OptimizeInvalidation*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

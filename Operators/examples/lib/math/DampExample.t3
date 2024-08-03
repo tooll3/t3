@@ -1,7 +1,5 @@
 {
-  "Name": "DampExample",
-  "Id": "366b6a6f-9995-48a1-bc0e-5c516ec5170e",
-  "Namespace": "examples.lib.math",
+  "Id": "366b6a6f-9995-48a1-bc0e-5c516ec5170e"/*DampExample*/,
   "Inputs": [],
   "Children": [
     {
@@ -27,35 +25,23 @@
       "Outputs": []
     },
     {
-      "Id": "a54a075a-0ab8-4cfb-8599-b0bbcd6e6529"/*Damp*/,
-      "SymbolId": "af9c5db8-7144-4164-b605-b287aaf71bf6",
+      "Id": "e85cd3b9-1ad9-4db4-ab9c-3fe45a6c2b16"/*_AnimValueOld*/,
+      "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
-          "Id": "f29d5426-5e31-4c7c-be77-5e45bfb9daa9"/*Damping*/,
+          "Id": "a4d48d80-936c-4bbb-a2e8-32f86edd4ab2"/*Rate*/,
           "Type": "System.Single",
-          "Value": 1.0
+          "Value": 0.25
         },
         {
-          "Id": "76d52df1-597e-4429-9916-13e6e0d93248"/*Method*/,
-          "Type": "System.Int32",
-          "Value": 1
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "75b9b0f3-32ca-4836-9c9b-5d7d75bc4225"/*PerlinNoise*/,
-      "SymbolId": "436e93a8-03c0-4366-8d9a-2245e5bcaa6c",
-      "InputValues": [
-        {
-          "Id": "b7434932-aeea-407e-bb00-22337a21f293"/*Frequency*/,
+          "Id": "8a5033c2-7d22-44d7-9472-d23677b11388"/*Amplitude*/,
           "Type": "System.Single",
-          "Value": 10.0
+          "Value": 0.96
         },
         {
-          "Id": "557ae817-ec36-4866-8fed-64490e9255be"/*RangeMax*/,
+          "Id": "3396de1f-03af-43ee-a43a-55016bec70ae"/*Bias*/,
           "Type": "System.Single",
-          "Value": 1.0
+          "Value": 0.09
         }
       ],
       "Outputs": []
@@ -84,6 +70,23 @@
       "Outputs": []
     },
     {
+      "Id": "75b9b0f3-32ca-4836-9c9b-5d7d75bc4225"/*PerlinNoise*/,
+      "SymbolId": "436e93a8-03c0-4366-8d9a-2245e5bcaa6c",
+      "InputValues": [
+        {
+          "Id": "b7434932-aeea-407e-bb00-22337a21f293"/*Frequency*/,
+          "Type": "System.Single",
+          "Value": 10.0
+        },
+        {
+          "Id": "557ae817-ec36-4866-8fed-64490e9255be"/*RangeMax*/,
+          "Type": "System.Single",
+          "Value": 1.0
+        }
+      ],
+      "Outputs": []
+    },
+    {
       "Id": "578a9c44-0e79-483a-b02f-6e55107c9907"/*Damping*/,
       "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
       "Name": "Damping",
@@ -91,23 +94,18 @@
       "Outputs": []
     },
     {
-      "Id": "e85cd3b9-1ad9-4db4-ab9c-3fe45a6c2b16"/*_AnimValueOld*/,
-      "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
+      "Id": "a54a075a-0ab8-4cfb-8599-b0bbcd6e6529"/*Damp*/,
+      "SymbolId": "af9c5db8-7144-4164-b605-b287aaf71bf6",
       "InputValues": [
         {
-          "Id": "a4d48d80-936c-4bbb-a2e8-32f86edd4ab2"/*Rate*/,
+          "Id": "f29d5426-5e31-4c7c-be77-5e45bfb9daa9"/*Damping*/,
           "Type": "System.Single",
-          "Value": 0.25
+          "Value": 1.0
         },
         {
-          "Id": "8a5033c2-7d22-44d7-9472-d23677b11388"/*Amplitude*/,
-          "Type": "System.Single",
-          "Value": 0.96
-        },
-        {
-          "Id": "3396de1f-03af-43ee-a43a-55016bec70ae"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 0.09
+          "Id": "76d52df1-597e-4429-9916-13e6e0d93248"/*Method*/,
+          "Type": "System.Int32",
+          "Value": 1
         }
       ],
       "Outputs": []

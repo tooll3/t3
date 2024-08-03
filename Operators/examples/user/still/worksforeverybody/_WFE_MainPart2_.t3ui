@@ -1008,7 +1008,7 @@
       }
     },
     {
-      "ChildId": "74fd5bc3-f9f2-4722-b119-73b27c1ad561"/*AColor*/,
+      "ChildId": "74fd5bc3-f9f2-4722-b119-73b27c1ad561"/*Color*/,
       "Position": {
         "X": -3630.927,
         "Y": 959.28705
@@ -1022,7 +1022,7 @@
       }
     },
     {
-      "ChildId": "400acb48-1778-4a0e-a051-dd66c3135a5f"/*AColor*/,
+      "ChildId": "400acb48-1778-4a0e-a051-dd66c3135a5f"/*Color*/,
       "Position": {
         "X": -377.97668,
         "Y": -1014.8636

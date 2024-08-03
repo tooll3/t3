@@ -1,7 +1,5 @@
 {
-  "Name": "BlendGradients",
-  "Id": "b9999f07-da19-45b9-ae12-f9d0662c694c",
-  "Namespace": "lib.color",
+  "Id": "b9999f07-da19-45b9-ae12-f9d0662c694c"/*BlendGradients*/,
   "Inputs": [
     {
       "Id": "afa38628-b616-4b06-878d-ec554050f2b0"/*GradientA*/,

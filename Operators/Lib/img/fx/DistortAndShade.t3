@@ -1,7 +1,5 @@
 {
-  "Name": "DistortAndShade",
-  "Id": "8bede700-4e3e-42d8-8097-9744abdb8ad3",
-  "Namespace": "lib.img.fx",
+  "Id": "8bede700-4e3e-42d8-8097-9744abdb8ad3"/*DistortAndShade*/,
   "Inputs": [
     {
       "Id": "824e1ad4-0d33-458f-aefe-f3780ab06529"/*ImageA*/,
@@ -38,6 +36,30 @@
   ],
   "Children": [
     {
+      "Id": "32776b15-aad9-4677-9714-40f113c6883f"/*ColorGrade*/,
+      "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "0edf16eb-4f2b-4d4d-9290-681d5446c4a1"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c64e8840-3d50-4bbf-887d-e4735eec446c"/*ColorGrade*/,
+      "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "3c2648f9-bf02-44b7-9a2e-9920c5e8e8dd"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "0391973e-ae4b-4676-b974-c4d3cdd8a20c"/*_multiImageFxSetup*/,
       "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
       "InputValues": [
@@ -57,30 +79,6 @@
           "Value": "Mirror"
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "c64e8840-3d50-4bbf-887d-e4735eec446c"/*ColorGrade*/,
-      "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "32776b15-aad9-4677-9714-40f113c6883f"/*ColorGrade*/,
-      "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "3c2648f9-bf02-44b7-9a2e-9920c5e8e8dd"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "0edf16eb-4f2b-4d4d-9290-681d5446c4a1"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
       "Outputs": []
     }
   ],

@@ -1,5 +1,6 @@
 {
   "Id": "ef1d5cd0-61fd-4b50-8e83-5b3ec1d40ec3"/*LucidsNewProject*/,
+  "Description": "",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -155,14 +156,14 @@
       }
     },
     {
-      "ChildId": "ce5e8bde-cd86-494e-9f3a-a6515551763e"/*AColor*/,
+      "ChildId": "ce5e8bde-cd86-494e-9f3a-a6515551763e"/*Color*/,
       "Position": {
         "X": 819.3912,
         "Y": -1087.5692
       }
     },
     {
-      "ChildId": "e43ae85c-e3b3-45ab-a0f0-630e5d73817b"/*AColor*/,
+      "ChildId": "e43ae85c-e3b3-45ab-a0f0-630e5d73817b"/*Color*/,
       "Position": {
         "X": 819.3912,
         "Y": -1044.5692

@@ -1,0 +1,43 @@
+{
+  "Id": "642cec4f-d4e0-4d0a-8dc3-6ca8339b5f89"/*MidiNoteOutput*/,
+  "Inputs": [
+    {
+      "Id": "e1c1c77a-a6af-4565-b345-f788bf268b2b"/*TriggerSend*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "0e9e5c88-5fa4-40e4-8b02-ca2e9510057f"/*SendMode*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "97a4f0d3-e691-4c2c-b731-7e4afc77eed2"/*Device*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "4b63108c-c5b7-42b9-acdf-6bac0e882d08"/*ChannelNumber*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "90221c60-c7ac-4470-affb-e4fb22712ee5"/*NoteNumber*/,
+      "DefaultValue": 64
+    },
+    {
+      "Id": "a33619fa-bb33-4649-a714-285c5cce15dc"/*Velocity*/,
+      "DefaultValue": 100
+    },
+    {
+      "Id": "b7eca85f-3c35-43c3-9d79-2112d112c8c7"/*UseVelocityFloat*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "5a99b601-328a-4238-9841-ab6022a932f5"/*VelocityFloat*/,
+      "DefaultValue": 0.75
+    },
+    {
+      "Id": "eddb2482-f818-491b-a4e5-af0e163dba53"/*DurationInSecs*/,
+      "DefaultValue": 0.5
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

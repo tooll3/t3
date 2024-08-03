@@ -1,7 +1,5 @@
 {
-  "Name": "SetIntVariable",
-  "Id": "7953f704-ebee-498b-8bdd-a2c201dfe278",
-  "Namespace": "lib.exec.context",
+  "Id": "7953f704-ebee-498b-8bdd-a2c201dfe278"/*SetIntVariable*/,
   "Inputs": [
     {
       "Id": "662b8a63-58db-4c9e-b53a-7ece1f118e12"/*SubGraph*/,

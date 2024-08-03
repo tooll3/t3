@@ -1,7 +1,5 @@
 {
-  "Name": "Lerp",
-  "Id": "1f5294e1-9d0b-4cd5-9d65-14c8bbf59e61",
-  "Namespace": "lib.math.float",
+  "Id": "1f5294e1-9d0b-4cd5-9d65-14c8bbf59e61"/*Lerp*/,
   "Inputs": [
     {
       "Id": "f5904a0e-f7a6-4fd3-b8f3-8ecccd9363d7"/*A*/,

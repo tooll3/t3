@@ -1,7 +1,5 @@
 {
-  "Name": "SwitchBlendState",
-  "Id": "179093f6-d3ef-43bc-a5af-1df2379ec081",
-  "Namespace": "lib.dx11.draw",
+  "Id": "179093f6-d3ef-43bc-a5af-1df2379ec081"/*SwitchBlendState*/,
   "Inputs": [
     {
       "Id": "a737bb60-d98b-4405-914c-7df91a58d8bc"/*BlendStates*/,

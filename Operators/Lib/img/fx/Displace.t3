@@ -1,7 +1,5 @@
 {
-  "Name": "Displace",
-  "Id": "1b149f1f-529c-4418-ac9d-3871f24a9e38",
-  "Namespace": "lib.img.fx.",
+  "Id": "1b149f1f-529c-4418-ac9d-3871f24a9e38"/*Displace*/,
   "Inputs": [
     {
       "Id": "d0508dfa-89cf-4713-8f5e-893dd5bfc3f4"/*Image*/,
@@ -65,6 +63,24 @@
   ],
   "Children": [
     {
+      "Id": "0da95969-3de8-4603-9b0e-477c1aa6eb11"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "3cd803bd-74ca-4c14-b147-4c1422564cd6"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "3df8359a-b804-4daa-bd0a-af87bd5bd9b6"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "c2468361-b9f0-438f-b434-d1699c6b97f8"/*_multiImageFxSetup*/,
       "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
       "InputValues": [
@@ -89,24 +105,6 @@
           "Value": false
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "3cd803bd-74ca-4c14-b147-4c1422564cd6"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "0da95969-3de8-4603-9b0e-477c1aa6eb11"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "3df8359a-b804-4daa-bd0a-af87bd5bd9b6"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
       "Outputs": []
     }
   ],

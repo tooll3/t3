@@ -1,7 +1,5 @@
 {
-  "Name": "PickFloatList",
-  "Id": "6832d272-e63f-4ab2-b48c-85466b4ede1b",
-  "Namespace": "lib.math.float",
+  "Id": "6832d272-e63f-4ab2-b48c-85466b4ede1b"/*PickFloatList*/,
   "Inputs": [
     {
       "Id": "5a70a1af-d6c5-43bf-acb8-fce2c9a2de3c"/*Input*/,

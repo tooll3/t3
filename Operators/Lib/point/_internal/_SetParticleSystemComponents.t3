@@ -1,7 +1,5 @@
 {
-  "Name": "_SetParticleSystemComponents",
-  "Id": "705df4fe-8f91-4b1e-a7d1-432011ffcb3f",
-  "Namespace": "lib.point._internal",
+  "Id": "705df4fe-8f91-4b1e-a7d1-432011ffcb3f"/*_SetParticleSystemComponents*/,
   "Inputs": [
     {
       "Id": "13583f72-3f77-4be0-b596-b8dbd27ca19c"/*PointsSimBuffer*/,

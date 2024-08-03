@@ -1,7 +1,5 @@
 {
-  "Name": "IterateList",
-  "Id": "8b285708-3f20-4957-9eb2-bb40e0d320ee",
-  "Namespace": "user.cynic.research.data",
+  "Id": "8b285708-3f20-4957-9eb2-bb40e0d320ee"/*IterateList*/,
   "Inputs": [
     {
       "Id": "a5e1551b-697e-4316-a95e-315a39b69c76"/*List*/,

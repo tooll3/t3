@@ -1,7 +1,5 @@
 {
-  "Name": "StarGlowStreaksExample",
-  "Id": "4fdd6f40-c099-4caa-a05b-67c8a45961bb",
-  "Namespace": "user.newemka980.Examples",
+  "Id": "4fdd6f40-c099-4caa-a05b-67c8a45961bb"/*StarGlowStreaksExample*/,
   "Inputs": [],
   "Children": [
     {
@@ -33,31 +31,6 @@
       "Outputs": []
     },
     {
-      "Id": "4df7e315-7c55-4ec8-89d5-e3fdf753ef29"/*Camera*/,
-      "SymbolId": "746d886c-5ab6-44b1-bb15-f3ce2fadf7e6",
-      "InputValues": [
-        {
-          "Id": "313596cc-3854-436b-89da-5fd40164ce76"/*Position*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.3501279,
-            "Y": -0.19340214,
-            "Z": 1.7180331
-          }
-        },
-        {
-          "Id": "a7acb25c-d60c-43a6-b1df-2cd5c6e183f3"/*Target*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "fba1bdbd-b53e-4b83-b854-d4eafe23f776"/*SetMaterial*/,
       "SymbolId": "0ed2bee3-641f-4b08-8685-df1506e9af3c",
       "InputValues": [
@@ -80,55 +53,25 @@
       "Outputs": []
     },
     {
-      "Id": "07eddce9-4715-44d3-b680-3ef2de49e029"/*RenderTarget*/,
-      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
+      "Id": "4df7e315-7c55-4ec8-89d5-e3fdf753ef29"/*Camera*/,
+      "SymbolId": "746d886c-5ab6-44b1-bb15-f3ce2fadf7e6",
       "InputValues": [
         {
-          "Id": "f0cf3325-4967-4419-9beb-036cd6dbfd6a"/*GenerateMips*/,
-          "Type": "System.Boolean",
-          "Value": true
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "1648984e-7713-44bb-b0a9-15517be9a49a"/*LoadObj*/,
-      "SymbolId": "be52b670-9749-4c0d-89f0-d8b101395227",
-      "InputValues": [
-        {
-          "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
-          "Type": "System.String",
-          "Value": "Resources\\common\\meshes\\monkey.obj"
-        },
-        {
-          "Id": "c39a61b3-fb6b-4611-8f13-273f13c9c491"/*ScaleFactor*/,
-          "Type": "System.Single",
-          "Value": 0.44
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "93020cd3-5474-41ae-829c-2aa3c82b0a9d"/*PointLight*/,
-      "SymbolId": "9c67a8c8-839f-4f67-a949-08cb38b9dffd",
-      "InputValues": [
-        {
-          "Id": "f6d96a01-dc90-49c7-9152-a6a42bb05218"/*Position*/,
+          "Id": "313596cc-3854-436b-89da-5fd40164ce76"/*Position*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 2.0,
-            "Y": -1.0,
-            "Z": 0.17
+            "X": 0.3501279,
+            "Y": -0.19340214,
+            "Z": 1.7180331
           }
         },
         {
-          "Id": "ff3442c5-95c8-4bd6-a492-cb4a9a597ea1"/*Color*/,
-          "Type": "System.Numerics.Vector4",
+          "Id": "a7acb25c-d60c-43a6-b1df-2cd5c6e183f3"/*Target*/,
+          "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 0.9257642,
-            "Y": 0.14519893,
-            "Z": 0.50688004,
-            "W": 1.0
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
           }
         }
       ],
@@ -166,14 +109,25 @@
       "Outputs": []
     },
     {
-      "Id": "ad2b2c36-e3f5-4573-b890-e9b2c9fb66f7"/*Transform*/,
-      "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
-      "InputValues": [],
+      "Id": "1648984e-7713-44bb-b0a9-15517be9a49a"/*LoadObj*/,
+      "SymbolId": "be52b670-9749-4c0d-89f0-d8b101395227",
+      "InputValues": [
+        {
+          "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
+          "Type": "System.String",
+          "Value": "Resources\\common\\meshes\\monkey.obj"
+        },
+        {
+          "Id": "c39a61b3-fb6b-4611-8f13-273f13c9c491"/*ScaleFactor*/,
+          "Type": "System.Single",
+          "Value": 0.44
+        }
+      ],
       "Outputs": []
     },
     {
-      "Id": "60bb64de-81e2-4bac-82a9-ed66f184e0f2"/*Vector3*/,
-      "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
+      "Id": "850465a0-21b0-40d8-884e-dc6ffc4f53d4"/*Counter*/,
+      "SymbolId": "11882635-4757-4cac-a024-70bb4e8b504c",
       "InputValues": [],
       "Outputs": []
     },
@@ -195,12 +149,6 @@
       "Outputs": []
     },
     {
-      "Id": "850465a0-21b0-40d8-884e-dc6ffc4f53d4"/*Counter*/,
-      "SymbolId": "11882635-4757-4cac-a024-70bb4e8b504c",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "5deaa310-2e8e-4e06-b0f3-0625d0839a1e"/*CountInt*/,
       "SymbolId": "0e1d5f4b-3ba0-4e71-aa26-7308b6df214d",
       "InputValues": [
@@ -208,6 +156,56 @@
           "Id": "2ff3d674-90d7-4c8f-8551-aad9992540db"/*Modulo*/,
           "Type": "System.Int32",
           "Value": 5
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "ad2b2c36-e3f5-4573-b890-e9b2c9fb66f7"/*Transform*/,
+      "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "60bb64de-81e2-4bac-82a9-ed66f184e0f2"/*Vector3*/,
+      "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "93020cd3-5474-41ae-829c-2aa3c82b0a9d"/*PointLight*/,
+      "SymbolId": "9c67a8c8-839f-4f67-a949-08cb38b9dffd",
+      "InputValues": [
+        {
+          "Id": "f6d96a01-dc90-49c7-9152-a6a42bb05218"/*Position*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 2.0,
+            "Y": -1.0,
+            "Z": 0.17
+          }
+        },
+        {
+          "Id": "ff3442c5-95c8-4bd6-a492-cb4a9a597ea1"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.9257642,
+            "Y": 0.14519893,
+            "Z": 0.50688004,
+            "W": 1.0
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "07eddce9-4715-44d3-b680-3ef2de49e029"/*RenderTarget*/,
+      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
+      "InputValues": [
+        {
+          "Id": "f0cf3325-4967-4419-9beb-036cd6dbfd6a"/*GenerateMips*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []

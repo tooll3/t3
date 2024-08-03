@@ -1,0 +1,24 @@
+{
+  "Id": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e"/*String*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "dd9d8718-addc-49b1-bd33-aac22b366f94"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

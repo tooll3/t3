@@ -1,7 +1,5 @@
 {
-  "Name": "Vec3Distance",
-  "Id": "4af1080c-3133-4070-a440-4cf2f4cc10a1",
-  "Namespace": "lib.math.vec3",
+  "Id": "4af1080c-3133-4070-a440-4cf2f4cc10a1"/*Vec3Distance*/,
   "Inputs": [
     {
       "Id": "eecb6054-ecb8-4b22-a685-6740ed1cfe5c"/*Input1*/,

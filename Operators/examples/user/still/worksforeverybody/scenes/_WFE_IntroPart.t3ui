@@ -242,7 +242,7 @@
       }
     },
     {
-      "ChildId": "80d73376-1354-4ac2-909d-90d01408a428"/*AString*/,
+      "ChildId": "80d73376-1354-4ac2-909d-90d01408a428"/*String*/,
       "Position": {
         "X": 416.93372,
         "Y": 292.11798
@@ -256,28 +256,28 @@
       }
     },
     {
-      "ChildId": "968a60b0-7291-4375-828c-d45266f635ed"/*AString*/,
+      "ChildId": "968a60b0-7291-4375-828c-d45266f635ed"/*String*/,
       "Position": {
         "X": 416.93372,
         "Y": 335.11798
       }
     },
     {
-      "ChildId": "f1b08ccc-2c01-445d-91db-f1bf5dce0bac"/*AString*/,
+      "ChildId": "f1b08ccc-2c01-445d-91db-f1bf5dce0bac"/*String*/,
       "Position": {
         "X": 416.93372,
         "Y": 163.11798
       }
     },
     {
-      "ChildId": "990868f4-a12a-4a29-ba64-0341e54f1f37"/*AString*/,
+      "ChildId": "990868f4-a12a-4a29-ba64-0341e54f1f37"/*String*/,
       "Position": {
         "X": 416.93372,
         "Y": 206.11798
       }
     },
     {
-      "ChildId": "414a700b-562f-46a1-a206-cab4c2a055cc"/*AString*/,
+      "ChildId": "414a700b-562f-46a1-a206-cab4c2a055cc"/*String*/,
       "Position": {
         "X": 416.93372,
         "Y": 249.11798

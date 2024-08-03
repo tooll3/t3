@@ -1,7 +1,5 @@
 {
-  "Name": "BlendScenes",
-  "Id": "6e67d136-9285-48c6-a557-0a07361fc847",
-  "Namespace": "lib.exec",
+  "Id": "6e67d136-9285-48c6-a557-0a07361fc847"/*BlendScenes*/,
   "Inputs": [
     {
       "Id": "998b7cbc-b54c-4e81-bc61-31a7e05ce8e0"/*Scenes*/,
@@ -14,6 +12,18 @@
   ],
   "Children": [
     {
+      "Id": "2ffa8074-0bd9-4d6c-8878-70dabad7ae29"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "7ad52dfb-d63b-4b46-890e-72256db54bb7"/*Modulo*/,
+      "SymbolId": "5202d3f6-c970-4006-933d-3c60d6c202dc",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "c1185ed2-1d14-4975-a606-639173e609af"/*Switch*/,
       "SymbolId": "e64f95e4-c045-400f-98ca-7c020ad46174",
       "InputValues": [],
@@ -23,6 +33,30 @@
       "Id": "959f1eab-9e7f-4152-9f66-115204389b72"/*FloatToInt*/,
       "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "efdd35bb-806f-4bcb-b7f8-1dd6864ecb38"/*Group*/,
+      "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "8fbdc192-6f62-44bd-8739-956d8b707bac"/*Group*/,
+      "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "7f0ba63f-9f31-4524-8b9b-33a659380e9b"/*Sub*/,
+      "SymbolId": "3ba13faf-ea80-44ec-948a-02ed3d653a20",
+      "InputValues": [
+        {
+          "Id": "4889e720-e47c-4617-8353-06acf0af5283"/*Input1*/,
+          "Type": "System.Single",
+          "Value": 1.0
+        }
+      ],
       "Outputs": []
     },
     {
@@ -50,53 +84,11 @@
       "Outputs": []
     },
     {
-      "Id": "1294d0e9-5023-44ee-8644-4c94a1ef64f6"/*Switch*/,
-      "SymbolId": "e64f95e4-c045-400f-98ca-7c020ad46174",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "efdd35bb-806f-4bcb-b7f8-1dd6864ecb38"/*Group*/,
-      "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2ffa8074-0bd9-4d6c-8878-70dabad7ae29"/*Execute*/,
-      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "8fbdc192-6f62-44bd-8739-956d8b707bac"/*Group*/,
-      "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "9576ed9a-d637-41bb-938e-c1021b8d22b7"/*HSBToColor*/,
       "SymbolId": "1677fd74-6e54-479a-b478-c2ac77288f9c",
       "InputValues": [
         {
           "Id": "115e3d92-2e91-447d-ba81-18a508d3d36a"/*Brightness*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "7ad52dfb-d63b-4b46-890e-72256db54bb7"/*Modulo*/,
-      "SymbolId": "5202d3f6-c970-4006-933d-3c60d6c202dc",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "7f0ba63f-9f31-4524-8b9b-33a659380e9b"/*Sub*/,
-      "SymbolId": "3ba13faf-ea80-44ec-948a-02ed3d653a20",
-      "InputValues": [
-        {
-          "Id": "4889e720-e47c-4617-8353-06acf0af5283"/*Input1*/,
           "Type": "System.Single",
           "Value": 1.0
         }
@@ -113,6 +105,12 @@
           "Value": 1.0
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "1294d0e9-5023-44ee-8644-4c94a1ef64f6"/*Switch*/,
+      "SymbolId": "e64f95e4-c045-400f-98ca-7c020ad46174",
+      "InputValues": [],
       "Outputs": []
     }
   ],

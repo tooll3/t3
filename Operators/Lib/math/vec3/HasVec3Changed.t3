@@ -1,7 +1,5 @@
 {
-  "Name": "HasVec3Changed",
-  "Id": "841e4072-4138-4dda-b156-b01ec3a8f9ae",
-  "Namespace": "lib.math.vec3",
+  "Id": "841e4072-4138-4dda-b156-b01ec3a8f9ae"/*HasVec3Changed*/,
   "Inputs": [
     {
       "Id": "1d19da45-54e4-4ee9-a1a8-a04d9ffc5cac"/*Value*/,

@@ -116,7 +116,7 @@
       }
     },
     {
-      "ChildId": "24188c50-3e1a-4880-9999-5f573de177e6"/*AString*/,
+      "ChildId": "24188c50-3e1a-4880-9999-5f573de177e6"/*String*/,
       "Style": "Resizable",
       "Size": {
         "X": 109.350945,

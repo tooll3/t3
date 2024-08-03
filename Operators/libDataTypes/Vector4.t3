@@ -1,7 +1,5 @@
 {
-  "Name": "Vector4",
-  "Id": "f2e323bd-f881-41a8-81e2-e8f2ac1984dc",
-  "Namespace": "lib.types",
+  "Id": "f2e323bd-f881-41a8-81e2-e8f2ac1984dc"/*Vector4*/,
   "Inputs": [
     {
       "Id": "bdd35cdd-2220-4c58-9ec8-a5e48d7aaf7e"/*X*/,

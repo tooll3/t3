@@ -12,7 +12,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "1454a921-db1d-48f8-91f9-d564d5de45e7"/*AString*/,
+      "ChildId": "1454a921-db1d-48f8-91f9-d564d5de45e7"/*String*/,
       "Position": {
         "X": 0.0,
         "Y": 385.45654

@@ -1,7 +1,5 @@
 {
-  "Name": "BuildRandomString",
-  "Id": "7b21f10b-3548-4a23-95df-360addaeb03d",
-  "Namespace": "lib.string",
+  "Id": "7b21f10b-3548-4a23-95df-360addaeb03d"/*BuildRandomString*/,
   "Inputs": [
     {
       "Id": "ce436e27-05a5-431d-9aa2-920dbff639a7"/*WriteMode*/,

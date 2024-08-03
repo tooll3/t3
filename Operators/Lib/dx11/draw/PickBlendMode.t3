@@ -1,7 +1,5 @@
 {
-  "Name": "PickBlendMode",
-  "Id": "fd9bffd3-5c57-462f-8761-85f94c5a629b",
-  "Namespace": "lib.dx11.draw",
+  "Id": "fd9bffd3-5c57-462f-8761-85f94c5a629b"/*PickBlendMode*/,
   "Inputs": [
     {
       "Id": "30b58444-0485-4116-8b15-7e62fee69eaa"/*BlendMode*/,
@@ -10,20 +8,83 @@
   ],
   "Children": [
     {
-      "Id": "ecff38e1-c7ec-40cb-8511-b16b4fa4d647"/*BlendStateOp*/,
-      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
+      "Id": "9cd85a03-a0c3-4566-a8e8-f23032587b01"/*RenderTargetBlendDesc*/,
+      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
       "InputValues": [
         {
-          "Id": "3ca79807-00c9-471a-ac44-525a05740fed"/*AlphaToCoverageEnable*/,
+          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
           "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "873ad863-dec6-4b4b-9d81-89d5fa11beec"/*IndependentBlendEnable*/,
-          "Type": "System.Boolean",
-          "Value": false
+          "Value": true
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "e8c1d16a-fd0e-41ce-99e7-e8bc3b69868b"/*BlendStateOp*/,
+      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "b9ac860e-4f91-42c7-baf7-93f9905cbc28"/*BlendStateOp*/,
+      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "1d52da61-f32b-46d9-afc1-c2922799feab"/*Invert*/,
+      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
+      "Name": "Invert",
+      "InputValues": [
+        {
+          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "56c398ce-fe71-47eb-a33f-11eec8f82e79"/*SourceBlend*/,
+          "Type": "SharpDX.Direct3D11.BlendOption",
+          "Value": "InverseDestinationColor"
+        },
+        {
+          "Id": "8dc53fe4-79bb-43e4-9d4a-4e06f9a3214c"/*DestinationBlend*/,
+          "Type": "SharpDX.Direct3D11.BlendOption",
+          "Value": "InverseSourceColor"
+        },
+        {
+          "Id": "f56e4281-356a-451a-88f1-9cd8ad95d1a5"/*BlendOperation*/,
+          "Type": "SharpDX.Direct3D11.BlendOperation",
+          "Value": "Add"
+        },
+        {
+          "Id": "2632af70-5a05-429c-8123-fe280adea655"/*SourceAlphaBlend*/,
+          "Type": "SharpDX.Direct3D11.BlendOption",
+          "Value": "One"
+        },
+        {
+          "Id": "acc5550b-18ed-4dba-8e69-d5228e2ad850"/*DestinationAlphaBlend*/,
+          "Type": "SharpDX.Direct3D11.BlendOption",
+          "Value": "InverseSourceAlpha"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "41bc4763-eaa4-4e1c-9212-ebe0ee7679eb"/*SwitchBlendState*/,
+      "SymbolId": "179093f6-d3ef-43bc-a5af-1df2379ec081",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "8d40ecf9-d5da-4896-a02f-cf0b0b899de1"/*BlendStateOp*/,
+      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "fcc42cee-1340-4250-989c-23b8dd343d6a"/*BlendStateOp*/,
+      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -56,9 +117,9 @@
       "Outputs": []
     },
     {
-      "Id": "1ecbb18d-0ba2-4ff0-9252-66f53bf80a15"/*Add*/,
+      "Id": "1df85201-3804-4909-ac8f-681596e97c86"/*BlendOnWhites*/,
       "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
-      "Name": "Add",
+      "Name": "BlendOnWhites",
       "InputValues": [
         {
           "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
@@ -68,27 +129,49 @@
         {
           "Id": "56c398ce-fe71-47eb-a33f-11eec8f82e79"/*SourceBlend*/,
           "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "SourceAlpha"
-        },
-        {
-          "Id": "8dc53fe4-79bb-43e4-9d4a-4e06f9a3214c"/*DestinationBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
           "Value": "One"
         },
         {
-          "Id": "2632af70-5a05-429c-8123-fe280adea655"/*SourceAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "One"
-        },
-        {
-          "Id": "acc5550b-18ed-4dba-8e69-d5228e2ad850"/*DestinationAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "InverseSourceAlpha"
-        },
-        {
-          "Id": "01305a3e-54cc-4f6d-8774-f6ff04b4fec1"/*AlphaBlendOperation*/,
+          "Id": "f56e4281-356a-451a-88f1-9cd8ad95d1a5"/*BlendOperation*/,
           "Type": "SharpDX.Direct3D11.BlendOperation",
-          "Value": "Add"
+          "Value": "Minimum"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "53e0ef4c-c046-41a0-baa4-d891d476a0e6"/*No Blend*/,
+      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
+      "Name": "No Blend",
+      "InputValues": [
+        {
+          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "2a58b3a9-d63a-4087-8f99-4e8283b1a07e"/*BlendStateOp*/,
+      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "fb771ba7-931e-4257-bc7c-9554c1e159e9"/*BlendOnWhites*/,
+      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
+      "Name": "BlendOnWhites",
+      "InputValues": [
+        {
+          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "56c398ce-fe71-47eb-a33f-11eec8f82e79"/*SourceBlend*/,
+          "Type": "SharpDX.Direct3D11.BlendOption",
+          "Value": "One"
         }
       ],
       "Outputs": []
@@ -137,62 +220,6 @@
       "Outputs": []
     },
     {
-      "Id": "e8c1d16a-fd0e-41ce-99e7-e8bc3b69868b"/*BlendStateOp*/,
-      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "1d52da61-f32b-46d9-afc1-c2922799feab"/*Invert*/,
-      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
-      "Name": "Invert",
-      "InputValues": [
-        {
-          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "56c398ce-fe71-47eb-a33f-11eec8f82e79"/*SourceBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "InverseDestinationColor"
-        },
-        {
-          "Id": "8dc53fe4-79bb-43e4-9d4a-4e06f9a3214c"/*DestinationBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "InverseSourceColor"
-        },
-        {
-          "Id": "f56e4281-356a-451a-88f1-9cd8ad95d1a5"/*BlendOperation*/,
-          "Type": "SharpDX.Direct3D11.BlendOperation",
-          "Value": "Add"
-        },
-        {
-          "Id": "2632af70-5a05-429c-8123-fe280adea655"/*SourceAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "One"
-        },
-        {
-          "Id": "acc5550b-18ed-4dba-8e69-d5228e2ad850"/*DestinationAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "InverseSourceAlpha"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "fcc42cee-1340-4250-989c-23b8dd343d6a"/*BlendStateOp*/,
-      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "41bc4763-eaa4-4e1c-9212-ebe0ee7679eb"/*SwitchBlendState*/,
-      "SymbolId": "179093f6-d3ef-43bc-a5af-1df2379ec081",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "bff74c44-a870-4e61-807b-556bb8ad3752"/*RenderTargetBlendDesc*/,
       "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
       "InputValues": [
@@ -230,18 +257,16 @@
       "Outputs": []
     },
     {
-      "Id": "674b7d97-7baf-4388-9805-264eee280cbb"/*BlendStateOp*/,
+      "Id": "ecff38e1-c7ec-40cb-8511-b16b4fa4d647"/*BlendStateOp*/,
       "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "53e0ef4c-c046-41a0-baa4-d891d476a0e6"/*No Blend*/,
-      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
-      "Name": "No Blend",
       "InputValues": [
         {
-          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
+          "Id": "3ca79807-00c9-471a-ac44-525a05740fed"/*AlphaToCoverageEnable*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "873ad863-dec6-4b4b-9d81-89d5fa11beec"/*IndependentBlendEnable*/,
           "Type": "System.Boolean",
           "Value": false
         }
@@ -249,78 +274,57 @@
       "Outputs": []
     },
     {
-      "Id": "2a58b3a9-d63a-4087-8f99-4e8283b1a07e"/*BlendStateOp*/,
+      "Id": "674b7d97-7baf-4388-9805-264eee280cbb"/*BlendStateOp*/,
       "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "9cd85a03-a0c3-4566-a8e8-f23032587b01"/*RenderTargetBlendDesc*/,
+      "Id": "7ff6258e-c852-4adc-b458-b87df9396f05"/*BlendStateOp*/,
+      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "1ecbb18d-0ba2-4ff0-9252-66f53bf80a15"/*Add*/,
       "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
+      "Name": "Add",
       "InputValues": [
         {
           "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
           "Type": "System.Boolean",
           "Value": true
+        },
+        {
+          "Id": "56c398ce-fe71-47eb-a33f-11eec8f82e79"/*SourceBlend*/,
+          "Type": "SharpDX.Direct3D11.BlendOption",
+          "Value": "SourceAlpha"
+        },
+        {
+          "Id": "8dc53fe4-79bb-43e4-9d4a-4e06f9a3214c"/*DestinationBlend*/,
+          "Type": "SharpDX.Direct3D11.BlendOption",
+          "Value": "One"
+        },
+        {
+          "Id": "2632af70-5a05-429c-8123-fe280adea655"/*SourceAlphaBlend*/,
+          "Type": "SharpDX.Direct3D11.BlendOption",
+          "Value": "One"
+        },
+        {
+          "Id": "acc5550b-18ed-4dba-8e69-d5228e2ad850"/*DestinationAlphaBlend*/,
+          "Type": "SharpDX.Direct3D11.BlendOption",
+          "Value": "InverseSourceAlpha"
+        },
+        {
+          "Id": "01305a3e-54cc-4f6d-8774-f6ff04b4fec1"/*AlphaBlendOperation*/,
+          "Type": "SharpDX.Direct3D11.BlendOperation",
+          "Value": "Add"
         }
       ],
       "Outputs": []
     },
     {
       "Id": "1713bba2-4e8d-4d87-85e3-986742e3689a"/*BlendStateOp*/,
-      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "fb771ba7-931e-4257-bc7c-9554c1e159e9"/*BlendOnWhites*/,
-      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
-      "Name": "BlendOnWhites",
-      "InputValues": [
-        {
-          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "56c398ce-fe71-47eb-a33f-11eec8f82e79"/*SourceBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "One"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "8d40ecf9-d5da-4896-a02f-cf0b0b899de1"/*BlendStateOp*/,
-      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "1df85201-3804-4909-ac8f-681596e97c86"/*BlendOnWhites*/,
-      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
-      "Name": "BlendOnWhites",
-      "InputValues": [
-        {
-          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "56c398ce-fe71-47eb-a33f-11eec8f82e79"/*SourceBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "One"
-        },
-        {
-          "Id": "f56e4281-356a-451a-88f1-9cd8ad95d1a5"/*BlendOperation*/,
-          "Type": "SharpDX.Direct3D11.BlendOperation",
-          "Value": "Minimum"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "b9ac860e-4f91-42c7-baf7-93f9905cbc28"/*BlendStateOp*/,
       "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
       "InputValues": [],
       "Outputs": []
@@ -351,12 +355,6 @@
           "Value": "One"
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "7ff6258e-c852-4adc-b458-b87df9396f05"/*BlendStateOp*/,
-      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
-      "InputValues": [],
       "Outputs": []
     }
   ],

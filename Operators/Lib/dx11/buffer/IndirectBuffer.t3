@@ -1,7 +1,5 @@
 {
-  "Name": "IndirectBuffer",
-  "Id": "5a88fa27-16ad-454f-a08d-5e65dd75cefe",
-  "Namespace": "lib.dx11.buffer",
+  "Id": "5a88fa27-16ad-454f-a08d-5e65dd75cefe"/*IndirectBuffer*/,
   "Inputs": [
     {
       "Id": "38d649d2-861b-4302-a879-973d6405a4de"/*Stride*/,

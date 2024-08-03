@@ -24,15 +24,6 @@
       "Usage": "CustomDropdown"
     },
     {
-      "InputId": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 225.0
-      },
-      "GroupTitle": "Options",
-      "Description": "Logs all received OSC messages to the console window which can be very useful for debugging.\n\nEnabling it can have a performance impact, it can lead to excessive log output.  Tip: You can click on console log message to jump to the Operator that printed the message."
-    },
-    {
       "InputId": "8014a7a6-cacb-4206-a5b4-87c14235a20c"/*UseKeyValuePairs*/,
       "Position": {
         "X": -200.0,
@@ -40,6 +31,22 @@
       },
       "GroupTitle": "Key Value Pairs",
       "Description": "Many applications (e.g. Super Collider) send their data bundled as a list of key value pairs. Enabling this option will use the keys as another segment of the address path."
+    },
+    {
+      "InputId": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysAsPaths*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "abc7817d-25dc-479b-984e-73b49d9ade5f"/*FilterKeys*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 495.0
+      },
+      "Usage": "Default"
     },
     {
       "InputId": "8e5d30a3-5878-4f64-9eb4-ad5782a957bf"/*SearchFilterKey*/,
@@ -60,27 +67,20 @@
       "Usage": "Default"
     },
     {
+      "InputId": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "GroupTitle": "Options",
+      "Description": "Logs all received OSC messages to the console window which can be very useful for debugging.\n\nEnabling it can have a performance impact, it can lead to excessive log output.  Tip: You can click on console log message to jump to the Operator that printed the message."
+    },
+    {
       "InputId": "3b179ff2-172a-4fda-8e26-7bb3e80628d0"/*IsListening*/,
       "Position": {
         "X": -200.0,
         "Y": 405.0
       }
-    },
-    {
-      "InputId": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysAsPaths*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 450.0
-      },
-      "Usage": "Default"
-    },
-    {
-      "InputId": "abc7817d-25dc-479b-984e-73b49d9ade5f"/*FilterKeys*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 495.0
-      },
-      "Usage": "Default"
     }
   ],
   "SymbolChildUis": [],

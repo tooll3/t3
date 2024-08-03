@@ -1,7 +1,5 @@
 {
-  "Name": "CommonPointSets",
-  "Id": "353f63fc-e613-43ca-b037-02d7b9f4e935",
-  "Namespace": "lib.point.helper",
+  "Id": "353f63fc-e613-43ca-b037-02d7b9f4e935"/*CommonPointSets*/,
   "Inputs": [
     {
       "Id": "2ba96aee-ff89-41bd-90c5-c6c36907b6e4"/*Set*/,

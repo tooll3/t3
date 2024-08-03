@@ -1,7 +1,5 @@
 {
-  "Name": "DoyleSpiralPoints2",
-  "Id": "eaeb8937-f6ff-4a4a-8f00-27484285cd2d",
-  "Namespace": "lib.point.generate",
+  "Id": "eaeb8937-f6ff-4a4a-8f00-27484285cd2d"/*DoyleSpiralPoints2*/,
   "Inputs": [
     {
       "Id": "72ffae32-423d-4c4e-9b6a-39094b1d4bfd"/*Steps*/,
@@ -66,18 +64,6 @@
   ],
   "Children": [
     {
-      "Id": "4372c920-5987-4ae7-9010-683cd5413227"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\points\\generate\\DoyleSpiralPoints.hlsl"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "c1f5742d-d974-4d59-839b-d61e1710dc12"/*ComputeShaderStage*/,
       "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
       "InputValues": [
@@ -94,8 +80,64 @@
       "Outputs": []
     },
     {
+      "Id": "97aae4ab-46d9-486b-be5d-96c54e5e820f"/*padding*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "Name": "padding",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "dfcd4470-51c3-449e-be9e-200b949b82ae"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "40a3784c-becb-4e04-9f10-f98c2816eafc"/*Modulo*/,
+      "SymbolId": "5202d3f6-c970-4006-933d-3c60d6c202dc",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "fe783651-4b14-4f0e-86e1-4f9b790abd9c"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "80c3f746-e935-4161-8e04-bb30f091d73c"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "b33b0a98-0005-42bd-a5ca-cc0e8befb9ad"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "4e941219-7447-4233-8444-a1d629c567df"/*_DoyleSpiralRoot*/,
+      "SymbolId": "b2267122-4223-4eff-8ae4-91d149df535c",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "ea95333e-d2a7-48bf-8617-d16094de0723"/*padding*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "Name": "padding",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "d7472371-3a16-4d93-a136-d93f1ef7b3c5"/*CalcDispatchCount*/,
+      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "25510ec0-3bf3-41c2-b5d3-8d0b16d02ea3"/*Vector3Components*/,
+      "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
@@ -112,22 +154,45 @@
       "Outputs": []
     },
     {
-      "Id": "25510ec0-3bf3-41c2-b5d3-8d0b16d02ea3"/*Vector3Components*/,
+      "Id": "2009c0c5-bb7a-4991-b40a-d6715f4d38f1"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "ea95333e-d2a7-48bf-8617-d16094de0723"/*padding*/,
-      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
-      "Name": "padding",
+      "Id": "37ef7c7b-253a-4a15-b6db-095b6f4cce84"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "d7472371-3a16-4d93-a136-d93f1ef7b3c5"/*CalcDispatchCount*/,
-      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
+      "Id": "d2fa194a-a8e7-411d-8b07-b2536ae65bfb"/*StructuredBufferWithViews*/,
+      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
+      "InputValues": [
+        {
+          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
+          "Type": "System.Int32",
+          "Value": 64
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "86346875-f61a-4a02-88c4-35d12a6a2968"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "bfd41dd0-90b5-4e44-a3ec-05460f458d78"/*ClampInt*/,
+      "SymbolId": "5f734c25-9f1a-436c-b56c-7e0a1e07fdda",
+      "InputValues": [
+        {
+          "Id": "23e55b5d-b469-4d0f-a495-7e87fe65cccf"/*Max*/,
+          "Type": "System.Int32",
+          "Value": 10000000
+        }
+      ],
       "Outputs": []
     },
     {
@@ -154,99 +219,15 @@
       "Outputs": []
     },
     {
-      "Id": "97aae4ab-46d9-486b-be5d-96c54e5e820f"/*padding*/,
-      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
-      "Name": "padding",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "bfd41dd0-90b5-4e44-a3ec-05460f458d78"/*ClampInt*/,
-      "SymbolId": "5f734c25-9f1a-436c-b56c-7e0a1e07fdda",
+      "Id": "4372c920-5987-4ae7-9010-683cd5413227"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
       "InputValues": [
         {
-          "Id": "23e55b5d-b469-4d0f-a495-7e87fe65cccf"/*Max*/,
-          "Type": "System.Int32",
-          "Value": 10000000
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\points\\generate\\DoyleSpiralPoints.hlsl"
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "d2fa194a-a8e7-411d-8b07-b2536ae65bfb"/*StructuredBufferWithViews*/,
-      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
-      "InputValues": [
-        {
-          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
-          "Type": "System.Int32",
-          "Value": 64
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "86346875-f61a-4a02-88c4-35d12a6a2968"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2009c0c5-bb7a-4991-b40a-d6715f4d38f1"/*Vector3Components*/,
-      "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "40a3784c-becb-4e04-9f10-f98c2816eafc"/*Modulo*/,
-      "SymbolId": "5202d3f6-c970-4006-933d-3c60d6c202dc",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "4e941219-7447-4233-8444-a1d629c567df"/*_DoyleSpiralRoot*/,
-      "SymbolId": "b2267122-4223-4eff-8ae4-91d149df535c",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "bb314cbb-a412-40db-a665-345b88ee09d8"/*_DoyleSpiralRoot*/,
-      "SymbolId": "b2267122-4223-4eff-8ae4-91d149df535c",
-      "InputValues": [
-        {
-          "Id": "e0ee8c5d-d8c2-4856-858c-d25570a71679"/*P*/,
-          "Type": "System.Single",
-          "Value": 11.0
-        },
-        {
-          "Id": "8a4c30b3-a189-4fa1-adc5-66e7a68c75ba"/*Q*/,
-          "Type": "System.Single",
-          "Value": 114.62
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "37ef7c7b-253a-4a15-b6db-095b6f4cce84"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "dfcd4470-51c3-449e-be9e-200b949b82ae"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "80c3f746-e935-4161-8e04-bb30f091d73c"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "b33b0a98-0005-42bd-a5ca-cc0e8befb9ad"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
       "Outputs": []
     },
     {
@@ -262,6 +243,23 @@
           "Id": "23e55b5d-b469-4d0f-a495-7e87fe65cccf"/*Max*/,
           "Type": "System.Int32",
           "Value": 100
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "bb314cbb-a412-40db-a665-345b88ee09d8"/*_DoyleSpiralRoot*/,
+      "SymbolId": "b2267122-4223-4eff-8ae4-91d149df535c",
+      "InputValues": [
+        {
+          "Id": "e0ee8c5d-d8c2-4856-858c-d25570a71679"/*P*/,
+          "Type": "System.Single",
+          "Value": 11.0
+        },
+        {
+          "Id": "8a4c30b3-a189-4fa1-adc5-66e7a68c75ba"/*Q*/,
+          "Type": "System.Single",
+          "Value": 114.62
         }
       ],
       "Outputs": []

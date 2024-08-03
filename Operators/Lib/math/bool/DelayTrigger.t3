@@ -1,7 +1,5 @@
 {
-  "Name": "DelayTrigger",
-  "Id": "fbd9ac37-4427-4852-95d7-d8383fefbe36",
-  "Namespace": "lib.math.bool",
+  "Id": "fbd9ac37-4427-4852-95d7-d8383fefbe36"/*DelayTrigger*/,
   "Inputs": [
     {
       "Id": "ab225218-f4b6-4ab6-be28-f2526da4b1a0"/*Trigger*/,

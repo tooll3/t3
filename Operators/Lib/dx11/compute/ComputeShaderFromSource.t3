@@ -1,10 +1,8 @@
 {
-  "Name": "ComputeShaderFromSource",
-  "Id": "4e5bc624-9cda-46a8-9681-7fd412ea3893",
-  "Namespace": "lib.dx11.compute",
+  "Id": "4e5bc624-9cda-46a8-9681-7fd412ea3893"/*ComputeShaderFromSource*/,
   "Inputs": [
     {
-      "Id": "a8ee59c3-cb62-42e5-a3c9-f4968876c9cc"/*ShaderSource*/,
+      "Id": "a8ee59c3-cb62-42e5-a3c9-f4968876c9cc"/*Code*/,
       "DefaultValue": "Resources\\lib\\img\\compute-shader.hlsl"
     },
     {

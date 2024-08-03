@@ -1,7 +1,5 @@
 {
-  "Name": "Damp",
-  "Id": "af9c5db8-7144-4164-b605-b287aaf71bf6",
-  "Namespace": "lib.math.float",
+  "Id": "af9c5db8-7144-4164-b605-b287aaf71bf6"/*Damp*/,
   "Inputs": [
     {
       "Id": "795aca79-dd10-4f28-a290-a30e7b27b436"/*Value*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "DampAngle",
-  "Id": "9757618d-e72a-4507-8352-6f824b56cc58",
-  "Namespace": "lib.math.float",
+  "Id": "9757618d-e72a-4507-8352-6f824b56cc58"/*DampAngle*/,
   "Inputs": [
     {
       "Id": "49366f9d-0d85-4e87-ae54-6f048b1dc4b0"/*Value*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "ScaleVector3",
-  "Id": "646d6a5d-a1d7-471e-86ab-e1fb2542a2c2",
-  "Namespace": "lib.math.vec3",
+  "Id": "646d6a5d-a1d7-471e-86ab-e1fb2542a2c2"/*ScaleVector3*/,
   "Inputs": [
     {
       "Id": "de6bfe5a-ebcd-4da6-8c8a-79989a31dd9f"/*A*/,

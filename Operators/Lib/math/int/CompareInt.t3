@@ -1,7 +1,5 @@
 {
-  "Name": "CompareInt",
-  "Id": "05cf9ea7-045d-421f-8ed3-2c2f6b325a46",
-  "Namespace": "lib.math.int",
+  "Id": "05cf9ea7-045d-421f-8ed3-2c2f6b325a46"/*CompareInt*/,
   "Inputs": [
     {
       "Id": "3b6ca34b-4a64-458a-874f-a0aa094fc278"/*Value*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "_DispatchSceneDraws",
-  "Id": "6e32756e-4267-47f1-bad0-56ee8f58b070",
-  "Namespace": "lib.dx11.draw._internal",
+  "Id": "6e32756e-4267-47f1-bad0-56ee8f58b070"/*_DispatchSceneDraws*/,
   "Inputs": [
     {
       "Id": "dad22148-b87f-439a-9219-785bee63991c"/*SceneSetup*/,

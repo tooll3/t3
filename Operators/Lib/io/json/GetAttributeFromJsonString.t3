@@ -1,7 +1,5 @@
 {
-  "Name": "GetAttributeFromJsonString",
-  "Id": "43783ad9-72a0-4928-bb86-c89aae5c5d85",
-  "Namespace": "lib.io.json",
+  "Id": "43783ad9-72a0-4928-bb86-c89aae5c5d85"/*GetAttributeFromJsonString*/,
   "Inputs": [
     {
       "Id": "918d69a9-c29a-43fe-9961-c1dcde31e2ec"/*JsonString*/,

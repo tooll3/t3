@@ -1,7 +1,5 @@
 {
-  "Name": "KeepFloatValues",
-  "Id": "32a1d28e-23bc-44a8-becc-b52972464526",
-  "Namespace": "lib.math.floats",
+  "Id": "32a1d28e-23bc-44a8-becc-b52972464526"/*KeepFloatValues*/,
   "Inputs": [
     {
       "Id": "a5ed1db1-2dc9-43b2-97c3-cd416d07089b"/*Value*/,

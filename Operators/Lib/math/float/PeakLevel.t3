@@ -1,7 +1,5 @@
 {
-  "Name": "PeakLevel",
-  "Id": "d3fb5baf-43f8-4983-a1d9-42f4005a3af0",
-  "Namespace": "lib.math.float",
+  "Id": "d3fb5baf-43f8-4983-a1d9-42f4005a3af0"/*PeakLevel*/,
   "Inputs": [
     {
       "Id": "88ed25d3-ab67-47da-ad38-2f0126ce0492"/*Value*/,

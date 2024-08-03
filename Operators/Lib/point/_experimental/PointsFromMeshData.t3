@@ -1,7 +1,5 @@
 {
-  "Name": "PointsFromMeshData",
-  "Id": "7d302c05-9898-4c56-a894-1f8f44b9b920",
-  "Namespace": "lib.point._experimental",
+  "Id": "7d302c05-9898-4c56-a894-1f8f44b9b920"/*PointsFromMeshData*/,
   "Inputs": [
     {
       "Id": "1f4184f4-c186-43f4-9c01-e7af9c2e4920"/*Data*/,
@@ -18,15 +16,15 @@
   ],
   "Children": [
     {
-      "Id": "481f0d9d-ef30-4c65-ae2a-75a4f5384b34"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\points\\generate\\PointsFromMeshData.hlsl"
-        }
-      ],
+      "Id": "915a0c62-8a36-4c6c-b21b-e254256506d8"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c01cff33-f6fe-45ee-8134-544d2764a63e"/*CalcDispatchCount*/,
+      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -46,18 +44,6 @@
       "Outputs": []
     },
     {
-      "Id": "af23b2c7-5e2d-4f9b-84f3-03ab2430c711"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "c01cff33-f6fe-45ee-8134-544d2764a63e"/*CalcDispatchCount*/,
-      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "8fcd4515-f588-4210-b43c-42e00a066b69"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
@@ -70,20 +56,32 @@
       "Outputs": []
     },
     {
-      "Id": "a154b5cd-e86b-4320-b6ab-830ba1b95026"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "915a0c62-8a36-4c6c-b21b-e254256506d8"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "cb28fdc1-7158-4c59-95b1-16effedfbba8"/*IntToFloat*/,
       "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "af23b2c7-5e2d-4f9b-84f3-03ab2430c711"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "481f0d9d-ef30-4c65-ae2a-75a4f5384b34"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\points\\generate\\PointsFromMeshData.hlsl"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "7b86f16a-7d0c-4b92-b190-7e89e34821ff"/*TransformsConstBuffer*/,
+      "SymbolId": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
       "InputValues": [],
       "Outputs": []
     },
@@ -100,8 +98,8 @@
       "Outputs": []
     },
     {
-      "Id": "7b86f16a-7d0c-4b92-b190-7e89e34821ff"/*TransformsConstBuffer*/,
-      "SymbolId": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
+      "Id": "a154b5cd-e86b-4320-b6ab-830ba1b95026"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     }

@@ -1,7 +1,5 @@
 {
-  "Name": "SampleGradient",
-  "Id": "8211249d-7a26-4ad0-8d84-56da72a5c536",
-  "Namespace": "lib.color",
+  "Id": "8211249d-7a26-4ad0-8d84-56da72a5c536"/*SampleGradient*/,
   "Inputs": [
     {
       "Id": "a4527e01-f19a-4200-85e5-00144f3ce061"/*SamplePos*/,

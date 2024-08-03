@@ -2401,14 +2401,14 @@
       }
     },
     {
-      "ChildId": "c65d64f0-49d8-4c28-ae62-bcc8670b71cb"/*AColor*/,
+      "ChildId": "c65d64f0-49d8-4c28-ae62-bcc8670b71cb"/*Color*/,
       "Position": {
         "X": 6472.8916,
         "Y": -622.72687
       }
     },
     {
-      "ChildId": "caad7ea7-9eb8-487e-bc49-ad197e745673"/*AColor*/,
+      "ChildId": "caad7ea7-9eb8-487e-bc49-ad197e745673"/*Color*/,
       "Position": {
         "X": 2317.5354,
         "Y": 5631.432

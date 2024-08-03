@@ -1,7 +1,5 @@
 {
-  "Name": "DepthStencilStateOp",
-  "Id": "04858a08-f0fe-4536-9152-686659f0ab58",
-  "Namespace": "lib.dx11.draw",
+  "Id": "04858a08-f0fe-4536-9152-686659f0ab58"/*DepthStencilStateOp*/,
   "Inputs": [
     {
       "Id": "956b735b-c38a-4e8e-8186-caf4d36d4d20"/*EnableZTest*/,

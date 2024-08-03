@@ -1,7 +1,5 @@
 {
-  "Name": "AddInt2",
-  "Id": "40f0b1c9-9f87-489c-a6b9-ff9a5bd263ec",
-  "Namespace": "lib.math.int2",
+  "Id": "40f0b1c9-9f87-489c-a6b9-ff9a5bd263ec"/*AddInt2*/,
   "Inputs": [
     {
       "Id": "c14e4756-c8cc-42fc-af70-3473d9c6c861"/*Input1*/,

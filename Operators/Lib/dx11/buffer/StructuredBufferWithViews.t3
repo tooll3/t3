@@ -1,7 +1,5 @@
 {
-  "Name": "StructuredBufferWithViews",
-  "Id": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
-  "Namespace": "lib.dx11.buffer",
+  "Id": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7"/*StructuredBufferWithViews*/,
   "Inputs": [
     {
       "Id": "16f98211-fe97-4235-b33a-ddbbd2b5997f"/*Count*/,

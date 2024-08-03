@@ -1,7 +1,5 @@
 {
-  "Name": "NGon",
-  "Id": "22a3cd4e-02b3-44d7-ad2b-aab5810c5e88",
-  "Namespace": "lib.img.generate",
+  "Id": "22a3cd4e-02b3-44d7-ad2b-aab5810c5e88"/*NGon*/,
   "Inputs": [
     {
       "Id": "837a9689-d7a8-43db-88a5-2ac3ce8fbd37"/*Image*/,
@@ -90,6 +88,12 @@
       "Outputs": []
     },
     {
+      "Id": "eece859f-9e01-4b66-8a79-dd464bdac7e9"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "f4e274bb-564f-4147-b081-213b84bfccbf"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
@@ -121,12 +125,6 @@
           "Value": false
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "eece859f-9e01-4b66-8a79-dd464bdac7e9"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
       "Outputs": []
     }
   ],

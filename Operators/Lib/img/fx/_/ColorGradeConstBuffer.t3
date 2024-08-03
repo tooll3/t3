@@ -1,7 +1,5 @@
 {
-  "Name": "ColorGradeConstBuffer",
-  "Id": "1ba08d52-c8ec-479a-8dc0-95d92da36577",
-  "Namespace": "lib.img.fx._",
+  "Id": "1ba08d52-c8ec-479a-8dc0-95d92da36577"/*ColorGradeConstBuffer*/,
   "Inputs": [
     {
       "Id": "7834d068-e09f-4a10-8fca-ae73692836fc"/*Param1*/,

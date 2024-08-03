@@ -1,7 +1,5 @@
 {
-  "Name": "WFESaveScore",
-  "Id": "40676c51-ecca-4bc3-bd4a-eeb80fc0b937",
-  "Namespace": "user.still.worksforeverybody.fx",
+  "Id": "40676c51-ecca-4bc3-bd4a-eeb80fc0b937"/*WFESaveScore*/,
   "Inputs": [
     {
       "Id": "c0a2bbea-663b-4e15-8861-57b7db7a7300"/*TriggerSave*/,

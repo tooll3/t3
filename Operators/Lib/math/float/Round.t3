@@ -1,7 +1,5 @@
 {
-  "Name": "Round",
-  "Id": "ae0c87d6-2b1e-4e28-b0d0-8611a2f7e152",
-  "Namespace": "lib.math.float",
+  "Id": "ae0c87d6-2b1e-4e28-b0d0-8611a2f7e152"/*Round*/,
   "Inputs": [
     {
       "Id": "e911807f-b3a7-44e9-82d2-f04608b39ec3"/*Value*/,

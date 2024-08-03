@@ -1,0 +1,11 @@
+{
+  "Id": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b"/*_MeshBufferComponents*/,
+  "Inputs": [
+    {
+      "Id": "1b0b7587-de86-4fc4-be78-a21392e8aa9b"/*MeshBuffers*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

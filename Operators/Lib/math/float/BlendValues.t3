@@ -1,7 +1,5 @@
 {
-  "Name": "BlendValues",
-  "Id": "a1341063-f893-4447-93cd-63cfe514495e",
-  "Namespace": "lib.math.float",
+  "Id": "a1341063-f893-4447-93cd-63cfe514495e"/*BlendValues*/,
   "Inputs": [
     {
       "Id": "1c15cce3-3054-47f8-96b5-b8b741df40be"/*Values*/,

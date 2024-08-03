@@ -1,7 +1,5 @@
 {
-  "Name": "SnapPointsToGrid",
-  "Id": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de",
-  "Namespace": "lib.point._internal",
+  "Id": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de"/*SnapPointsToGrid*/,
   "Inputs": [
     {
       "Id": "953a95d0-5226-46bb-80c3-f20b27a32064"/*Points*/,
@@ -57,21 +55,27 @@
   ],
   "Children": [
     {
-      "Id": "c86327bc-e2d2-4471-9730-0eb23d8285d9"/*TimeConstBuffer*/,
-      "SymbolId": "de8bc97a-8ef0-4d4a-9ffa-88046a2daf40",
+      "Id": "f1f1df6d-a9bf-40db-aa68-43e6dc26a9a5"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "42b66a7b-c870-4b51-8d7d-e0906985b173"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\points\\_internal\\SnapPointsToGrid.hlsl"
-        }
-      ],
+      "Id": "6f0e06e6-b05e-4c4e-99a5-2c6a301db7a2"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "8f1d5616-21f1-48af-9a03-62f8d23c53ad"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c86327bc-e2d2-4471-9730-0eb23d8285d9"/*TimeConstBuffer*/,
+      "SymbolId": "de8bc97a-8ef0-4d4a-9ffa-88046a2daf40",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -91,32 +95,20 @@
       "Outputs": []
     },
     {
-      "Id": "f1f1df6d-a9bf-40db-aa68-43e6dc26a9a5"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "Id": "2ca7664c-2a38-4fa1-9379-caa14036b488"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "7efe46d6-8479-49ec-bb91-3833cf040da5"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "8f1d5616-21f1-48af-9a03-62f8d23c53ad"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "303af702-6182-4b4e-849c-ea2e5ba1b42b"/*CalcDispatchCount*/,
-      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "69a97ed6-7ad6-47a6-b584-e4d998f03cb4"/*Vector3Components*/,
+      "Id": "2a34997c-da14-4804-91c8-f71145d2551b"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "0d05c5f3-60bc-4c88-804d-c5fc9d8e7072"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     },
@@ -133,32 +125,8 @@
       "Outputs": []
     },
     {
-      "Id": "2ca7664c-2a38-4fa1-9379-caa14036b488"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "0d05c5f3-60bc-4c88-804d-c5fc9d8e7072"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2a34997c-da14-4804-91c8-f71145d2551b"/*Vector3Components*/,
+      "Id": "69a97ed6-7ad6-47a6-b584-e4d998f03cb4"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "c70caa98-6538-46be-a17d-637188973c14"/*BoolToFloat*/,
-      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "9df2648e-80eb-4ab0-ae8f-21c18308eaad"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
@@ -169,8 +137,38 @@
       "Outputs": []
     },
     {
-      "Id": "6f0e06e6-b05e-4c4e-99a5-2c6a301db7a2"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "Id": "42b66a7b-c870-4b51-8d7d-e0906985b173"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\points\\_internal\\SnapPointsToGrid.hlsl"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "9df2648e-80eb-4ab0-ae8f-21c18308eaad"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "7efe46d6-8479-49ec-bb91-3833cf040da5"/*GetSRVProperties*/,
+      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c70caa98-6538-46be-a17d-637188973c14"/*BoolToFloat*/,
+      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "303af702-6182-4b4e-849c-ea2e5ba1b42b"/*CalcDispatchCount*/,
+      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
       "InputValues": [],
       "Outputs": []
     }

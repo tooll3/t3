@@ -1,7 +1,5 @@
 {
-  "Name": "GeometryShader",
-  "Id": "a908cc64-e8cb-490c-ae45-c2c5fbfcedfb",
-  "Namespace": "lib.dx11._",
+  "Id": "a908cc64-e8cb-490c-ae45-c2c5fbfcedfb"/*GeometryShader*/,
   "Inputs": [
     {
       "Id": "258c53e6-7708-49b7-88e2-1e40d2a4f88d"/*Source*/,

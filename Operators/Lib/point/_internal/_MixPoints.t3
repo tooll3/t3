@@ -1,7 +1,5 @@
 {
-  "Name": "_MixPoints",
-  "Id": "bdd982c4-dfc4-48d6-888a-f067081dbe8e",
-  "Namespace": "lib.point._internal",
+  "Id": "bdd982c4-dfc4-48d6-888a-f067081dbe8e"/*_MixPoints*/,
   "Inputs": [
     {
       "Id": "57f1d1d3-b437-4761-a5f5-0520cf820f58"/*A*/,

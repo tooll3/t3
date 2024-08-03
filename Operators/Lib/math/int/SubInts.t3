@@ -1,7 +1,5 @@
 {
-  "Name": "SubInts",
-  "Id": "7934f11d-c95c-41ae-b282-6e568b9c5f30",
-  "Namespace": "lib.math.int",
+  "Id": "7934f11d-c95c-41ae-b282-6e568b9c5f30"/*SubInts*/,
   "Inputs": [
     {
       "Id": "944152fb-3786-4474-90ea-c292b5dde801"/*Input1*/,

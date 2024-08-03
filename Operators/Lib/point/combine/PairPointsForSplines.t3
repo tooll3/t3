@@ -1,7 +1,5 @@
 {
-  "Name": "PairPointsForSplines",
-  "Id": "5c7b6f3e-d3d5-4cfa-b30e-1a8cb6dbb4ad",
-  "Namespace": "lib.point.combine",
+  "Id": "5c7b6f3e-d3d5-4cfa-b30e-1a8cb6dbb4ad"/*PairPointsForSplines*/,
   "Inputs": [
     {
       "Id": "d1a8aa7c-673a-4505-b614-b02742ea812f"/*GPoints*/,
@@ -50,31 +48,9 @@
   ],
   "Children": [
     {
-      "Id": "d833bd20-6e8a-4d86-a09f-bad0338cb220"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\points\\combine\\PairPointsForSplines.hlsl"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "10d22fdb-f1c4-4bd1-8205-6dcc6a8c9e57"/*ComputeShaderStage*/,
-      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
-      "InputValues": [
-        {
-          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "T3.Core.DataTypes.Vector.Int3",
-          "Value": {
-            "X": 64,
-            "Y": 1,
-            "Z": 1
-          }
-        }
-      ],
+      "Id": "bb152d3e-bc32-4468-a000-8914c58cc9d1"/*Vector3Components*/,
+      "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -84,8 +60,20 @@
       "Outputs": []
     },
     {
-      "Id": "f070c00b-a878-456c-85d3-22db8541c4d7"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "Id": "96a379b2-be3d-4e94-8e52-7d8aa2dc7f18"/*AddInts*/,
+      "SymbolId": "ab73a49e-c548-437d-a4ab-b3fa41e30097",
+      "InputValues": [
+        {
+          "Id": "d5efbe02-8f33-42e9-a205-859c218acbec"/*Input2*/,
+          "Type": "System.Int32",
+          "Value": 1
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "436299c8-636f-4ab0-ac29-99c83b9df741"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     },
@@ -108,62 +96,20 @@
       "Outputs": []
     },
     {
-      "Id": "61a3c38b-c9ac-4947-aa54-15c4cd28a99c"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "b2ba61e4-53c7-4f3a-a0ad-8828e7bdf2ea"/*StructuredBufferWithViews*/,
-      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
+      "Id": "d833bd20-6e8a-4d86-a09f-bad0338cb220"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
       "InputValues": [
         {
-          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
-          "Type": "System.Int32",
-          "Value": 64
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\points\\combine\\PairPointsForSplines.hlsl"
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "436299c8-636f-4ab0-ac29-99c83b9df741"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "06a615bf-d025-43b2-883a-412674a525ca"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "6a03ead0-9fff-48be-90f9-a025c819d3ab"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
       "Outputs": []
     },
     {
       "Id": "c5b37cc8-b059-40ff-8d85-0abf4614274a"/*MaxInt*/,
       "SymbolId": "f7fd7342-18d1-443a-98ec-758974891434",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2bb76679-a88d-4407-835d-94c9f4294ff3"/*MultiplyInt*/,
-      "SymbolId": "6a4edb6a-5ced-4356-9090-4bf770cdeb52",
-      "InputValues": [
-        {
-          "Id": "e02f9e84-a7bf-45bf-9cb1-0b0c1c396796"/*B*/,
-          "Type": "System.Int32",
-          "Value": 3
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "cfda7827-4494-4bec-b530-e897980fa398"/*BoolToFloat*/,
-      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
     },
@@ -185,26 +131,78 @@
       "Outputs": []
     },
     {
-      "Id": "f5b8ae03-5f34-47dc-b38b-fc9aa7a29902"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "Id": "f070c00b-a878-456c-85d3-22db8541c4d7"/*GetSRVProperties*/,
+      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "96a379b2-be3d-4e94-8e52-7d8aa2dc7f18"/*AddInts*/,
-      "SymbolId": "ab73a49e-c548-437d-a4ab-b3fa41e30097",
+      "Id": "cfda7827-4494-4bec-b530-e897980fa398"/*BoolToFloat*/,
+      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "b2ba61e4-53c7-4f3a-a0ad-8828e7bdf2ea"/*StructuredBufferWithViews*/,
+      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {
-          "Id": "d5efbe02-8f33-42e9-a205-859c218acbec"/*Input2*/,
+          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 64
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "bb152d3e-bc32-4468-a000-8914c58cc9d1"/*Vector3Components*/,
-      "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
+      "Id": "6a03ead0-9fff-48be-90f9-a025c819d3ab"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "2bb76679-a88d-4407-835d-94c9f4294ff3"/*MultiplyInt*/,
+      "SymbolId": "6a4edb6a-5ced-4356-9090-4bf770cdeb52",
+      "InputValues": [
+        {
+          "Id": "e02f9e84-a7bf-45bf-9cb1-0b0c1c396796"/*B*/,
+          "Type": "System.Int32",
+          "Value": 3
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "61a3c38b-c9ac-4947-aa54-15c4cd28a99c"/*GetSRVProperties*/,
+      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "06a615bf-d025-43b2-883a-412674a525ca"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "10d22fdb-f1c4-4bd1-8205-6dcc6a8c9e57"/*ComputeShaderStage*/,
+      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
+      "InputValues": [
+        {
+          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
+          "Type": "T3.Core.DataTypes.Vector.Int3",
+          "Value": {
+            "X": 64,
+            "Y": 1,
+            "Z": 1
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "f5b8ae03-5f34-47dc-b38b-fc9aa7a29902"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
     }

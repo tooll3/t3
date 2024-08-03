@@ -1,7 +1,5 @@
 {
-  "Name": "RemapVec2",
-  "Id": "03c157ef-f0bc-4a2e-b862-775c6e886997",
-  "Namespace": "lib.math.vec2",
+  "Id": "03c157ef-f0bc-4a2e-b862-775c6e886997"/*RemapVec2*/,
   "Inputs": [
     {
       "Id": "cfc5b5e0-1a4a-4ccb-afeb-2c13d9889fdd"/*Value*/,

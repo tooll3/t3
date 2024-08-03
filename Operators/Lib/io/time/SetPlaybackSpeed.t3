@@ -1,7 +1,5 @@
 {
-  "Name": "SetPlaybackSpeed",
-  "Id": "fcd32cac-6544-42a3-8a14-203b8ca3559e",
-  "Namespace": "lib.io.time",
+  "Id": "fcd32cac-6544-42a3-8a14-203b8ca3559e"/*SetPlaybackSpeed*/,
   "Inputs": [
     {
       "Id": "4fdef030-d1d1-403a-b16c-a414f63fc913"/*SubGraph*/,

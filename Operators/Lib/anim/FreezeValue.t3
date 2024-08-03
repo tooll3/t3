@@ -1,7 +1,5 @@
 {
-  "Name": "FreezeValue",
-  "Id": "587dbb73-fd79-4481-a79e-f77055abda9a",
-  "Namespace": "lib.anim",
+  "Id": "587dbb73-fd79-4481-a79e-f77055abda9a"/*FreezeValue*/,
   "Inputs": [
     {
       "Id": "7d64e809-3280-47fa-ad0f-218c6081534f"/*Value*/,

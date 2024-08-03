@@ -1,7 +1,5 @@
 {
-  "Name": "CurvesToTexture",
-  "Id": "ab511978-bad5-4b69-90b2-c028447fe9f7",
-  "Namespace": "lib.math.curve",
+  "Id": "ab511978-bad5-4b69-90b2-c028447fe9f7"/*CurvesToTexture*/,
   "Inputs": [
     {
       "Id": "83c5a68a-2685-4506-8d79-d0db7d739102"/*Curves*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "TextSprites",
-  "Id": "1a6a58ea-c63a-4c99-aa9d-aeaeb01662f4",
-  "Namespace": "lib.sprite",
+  "Id": "1a6a58ea-c63a-4c99-aa9d-aeaeb01662f4"/*TextSprites*/,
   "Inputs": [
     {
       "Id": "f2dd87b1-7f37-4b02-871b-b2e35972f246"/*Text*/,

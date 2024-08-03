@@ -1,7 +1,5 @@
 {
-  "Name": "BuildAsciiFontSorting",
-  "Id": "b536f791-ae9a-45a7-a153-e2f36a65cfb3",
-  "Namespace": "lib.img.fx._",
+  "Id": "b536f791-ae9a-45a7-a153-e2f36a65cfb3"/*BuildAsciiFontSorting*/,
   "Inputs": [
     {
       "Id": "dab66e97-0b79-41ce-b6c7-9b01a123746e"/*Filepath*/,

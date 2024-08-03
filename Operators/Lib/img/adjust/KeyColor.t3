@@ -1,7 +1,5 @@
 {
-  "Name": "KeyColor",
-  "Id": "2ab1bbef-8322-4638-8b1d-7e31aaa6a457",
-  "Namespace": "lib.img.adjust",
+  "Id": "2ab1bbef-8322-4638-8b1d-7e31aaa6a457"/*KeyColor*/,
   "Inputs": [
     {
       "Id": "645e7d14-d4f8-46db-a5bc-b47136a00af5"/*Texture2d*/,
@@ -56,20 +54,8 @@
   ],
   "Children": [
     {
-      "Id": "3b090021-f6b7-44e7-8519-2dd0e20a5d62"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "c0354bce-5eb8-4a4f-ad53-bae7d42bce68"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "99fd4d48-60be-4716-aac1-73b5d2141535"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
     },
@@ -83,6 +69,18 @@
           "Value": "Resources\\lib\\img\\fx\\ChromaKey.hlsl"
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "99fd4d48-60be-4716-aac1-73b5d2141535"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "3b090021-f6b7-44e7-8519-2dd0e20a5d62"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
       "Outputs": []
     }
   ],

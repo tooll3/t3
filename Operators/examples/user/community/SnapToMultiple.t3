@@ -1,7 +1,5 @@
 {
-  "Name": "SnapToMultiple",
-  "Id": "c3090c65-194a-4f95-9b70-d003f54103f7",
-  "Namespace": "user.community",
+  "Id": "c3090c65-194a-4f95-9b70-d003f54103f7"/*SnapToMultiple*/,
   "Inputs": [
     {
       "Id": "3bf35135-8fb1-46d3-95ea-008eded67060"/*Value*/,

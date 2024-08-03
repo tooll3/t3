@@ -1,7 +1,5 @@
 {
-  "Name": "DateTimeToFloat",
-  "Id": "10acf0aa-2cb3-446b-b837-b6abe24d44da",
-  "Namespace": "lib.string.datetime",
+  "Id": "10acf0aa-2cb3-446b-b837-b6abe24d44da"/*DateTimeToFloat*/,
   "Inputs": [
     {
       "Id": "7b432357-225c-499e-9109-61168b4be4a7"/*Value*/,

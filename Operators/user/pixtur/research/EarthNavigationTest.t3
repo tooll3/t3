@@ -1,7 +1,5 @@
 {
-  "Name": "EarthNavigationTest",
-  "Id": "b3f34926-e536-439b-b47b-2ab89a0bc94d",
-  "Namespace": "user.pixtur.research",
+  "Id": "b3f34926-e536-439b-b47b-2ab89a0bc94d"/*EarthNavigationTest*/,
   "Inputs": [
     {
       "Id": "f5b2a750-9c2e-488f-90cd-9905e75382a7"/*Longitude*/,

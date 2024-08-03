@@ -1,7 +1,5 @@
 {
-  "Name": "OscInput",
-  "Id": "3a1d7ea0-5445-4df0-b08a-6596e53f815a",
-  "Namespace": "lib.io.osc",
+  "Id": "3a1d7ea0-5445-4df0-b08a-6596e53f815a"/*OscInput*/,
   "Inputs": [
     {
       "Id": "87efd3c4-f2df-4996-924f-12c631bad8d8"/*Port*/,
@@ -12,12 +10,16 @@
       "DefaultValue": ""
     },
     {
-      "Id": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
+      "Id": "8014a7a6-cacb-4206-a5b4-87c14235a20c"/*UseKeyValuePairs*/,
       "DefaultValue": false
     },
     {
-      "Id": "8014a7a6-cacb-4206-a5b4-87c14235a20c"/*UseKeyValuePairs*/,
-      "DefaultValue": false
+      "Id": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysAsPaths*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "abc7817d-25dc-479b-984e-73b49d9ade5f"/*FilterKeys*/,
+      "DefaultValue": ""
     },
     {
       "Id": "8e5d30a3-5878-4f64-9eb4-ad5782a957bf"/*SearchFilterKey*/,
@@ -28,16 +30,12 @@
       "DefaultValue": ""
     },
     {
+      "Id": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
+      "DefaultValue": false
+    },
+    {
       "Id": "3b179ff2-172a-4fda-8e26-7bb3e80628d0"/*IsListening*/,
       "DefaultValue": true
-    },
-    {
-      "Id": "d9470564-3629-49fc-b9a2-4ea8b5af6b60"/*GroupKeysAsPaths*/,
-      "DefaultValue": ""
-    },
-    {
-      "Id": "abc7817d-25dc-479b-984e-73b49d9ade5f"/*FilterKeys*/,
-      "DefaultValue": ""
     }
   ],
   "Children": [],

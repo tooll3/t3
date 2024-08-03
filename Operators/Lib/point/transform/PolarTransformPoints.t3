@@ -1,7 +1,5 @@
 {
-  "Name": "PolarTransformPoints",
-  "Id": "3d255f3e-d2e2-4f61-a03d-5af7043fabfc",
-  "Namespace": "lib.point.transform",
+  "Id": "3d255f3e-d2e2-4f61-a03d-5af7043fabfc"/*PolarTransformPoints*/,
   "Inputs": [
     {
       "Id": "83d00528-423a-43f9-8750-97d7a4909c49"/*Points*/,
@@ -42,13 +40,49 @@
   ],
   "Children": [
     {
-      "Id": "1679856f-c737-474e-866f-1feda15e9474"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "Id": "12b288d4-ad9d-47e8-ba78-684575e000cf"/*GetSRVProperties*/,
+      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "7f7dd26d-0fe2-4136-8a34-fedc238ca774"/*PickSDXVector4*/,
+      "SymbolId": "a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b",
       "InputValues": [
         {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\points\\modify\\PolarTransformPoints.hlsl"
+          "Id": "dbc92e88-cae2-44a8-b291-1a6168624244"/*Index*/,
+          "Type": "System.Int32",
+          "Value": 3
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "88da2f90-f46e-4be6-b5aa-76431f9f619a"/*PickSDXVector4*/,
+      "SymbolId": "a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b",
+      "InputValues": [
+        {
+          "Id": "dbc92e88-cae2-44a8-b291-1a6168624244"/*Index*/,
+          "Type": "System.Int32",
+          "Value": 2
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "ceec05c1-36cb-4aed-901f-c57ed0bb76d7"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "f91c80fa-3fff-4f5e-85b7-33897baf2a6f"/*PickSDXVector4*/,
+      "SymbolId": "a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b",
+      "InputValues": [
+        {
+          "Id": "dbc92e88-cae2-44a8-b291-1a6168624244"/*Index*/,
+          "Type": "System.Int32",
+          "Value": 1
         }
       ],
       "Outputs": []
@@ -70,18 +104,6 @@
       "Outputs": []
     },
     {
-      "Id": "ceec05c1-36cb-4aed-901f-c57ed0bb76d7"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "12b288d4-ad9d-47e8-ba78-684575e000cf"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "41e1caa7-2860-42f4-8783-cca374acee99"/*ExecuteBufferUpdate*/,
       "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
       "InputValues": [
@@ -91,12 +113,6 @@
           "Value": true
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "31fa509b-d9a7-41ef-8e02-33d05acb2c1f"/*CalcDispatchCount*/,
-      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
-      "InputValues": [],
       "Outputs": []
     },
     {
@@ -112,8 +128,32 @@
       "Outputs": []
     },
     {
-      "Id": "5e817aeb-c8c5-40b1-beb3-6c2b699587a3"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "Id": "1679856f-c737-474e-866f-1feda15e9474"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\points\\modify\\PolarTransformPoints.hlsl"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "7a3081aa-ad5e-4a41-afc6-63a36c854ca3"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "31fa509b-d9a7-41ef-8e02-33d05acb2c1f"/*CalcDispatchCount*/,
+      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "23da49ad-d9d6-40c1-8265-ed5448b1f0cf"/*PickSDXVector4*/,
+      "SymbolId": "a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b",
       "InputValues": [],
       "Outputs": []
     },
@@ -130,50 +170,8 @@
       "Outputs": []
     },
     {
-      "Id": "23da49ad-d9d6-40c1-8265-ed5448b1f0cf"/*PickSDXVector4*/,
-      "SymbolId": "a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "f91c80fa-3fff-4f5e-85b7-33897baf2a6f"/*PickSDXVector4*/,
-      "SymbolId": "a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b",
-      "InputValues": [
-        {
-          "Id": "dbc92e88-cae2-44a8-b291-1a6168624244"/*Index*/,
-          "Type": "System.Int32",
-          "Value": 1
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "88da2f90-f46e-4be6-b5aa-76431f9f619a"/*PickSDXVector4*/,
-      "SymbolId": "a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b",
-      "InputValues": [
-        {
-          "Id": "dbc92e88-cae2-44a8-b291-1a6168624244"/*Index*/,
-          "Type": "System.Int32",
-          "Value": 2
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "7f7dd26d-0fe2-4136-8a34-fedc238ca774"/*PickSDXVector4*/,
-      "SymbolId": "a83f2e4f-cb4d-4a6f-9f7a-2ea7fdfab54b",
-      "InputValues": [
-        {
-          "Id": "dbc92e88-cae2-44a8-b291-1a6168624244"/*Index*/,
-          "Type": "System.Int32",
-          "Value": 3
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "7a3081aa-ad5e-4a41-afc6-63a36c854ca3"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "Id": "5e817aeb-c8c5-40b1-beb3-6c2b699587a3"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     }

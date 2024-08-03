@@ -1,7 +1,5 @@
 {
-  "Name": "Atan2",
-  "Id": "7636bb3c-9f12-4323-b9be-e05f0eb561c5",
-  "Namespace": "lib.math.float",
+  "Id": "7636bb3c-9f12-4323-b9be-e05f0eb561c5"/*Atan2*/,
   "Inputs": [
     {
       "Id": "00770dc9-40a7-421c-a2fb-2d6bc1845387"/*Vector*/,

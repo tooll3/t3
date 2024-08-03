@@ -140,7 +140,7 @@
       }
     },
     {
-      "ChildId": "af172f9d-4244-4c81-8cb5-261dfd40a332"/*AString*/,
+      "ChildId": "af172f9d-4244-4c81-8cb5-261dfd40a332"/*String*/,
       "Style": "Resizable",
       "Size": {
         "X": 250.1877,
@@ -152,7 +152,7 @@
       }
     },
     {
-      "ChildId": "312b9084-61d9-402b-b0b2-53db34287232"/*AString*/,
+      "ChildId": "312b9084-61d9-402b-b0b2-53db34287232"/*String*/,
       "Position": {
         "X": -504.17798,
         "Y": 629.22577

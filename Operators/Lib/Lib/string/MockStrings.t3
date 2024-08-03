@@ -1,0 +1,11 @@
+{
+  "Id": "3af25959-fd3f-4608-b521-5860d82554df"/*MockStrings*/,
+  "Inputs": [
+    {
+      "Id": "054ade21-c08e-4633-9725-6168fd7806f9"/*Category*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

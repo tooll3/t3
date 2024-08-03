@@ -1,7 +1,5 @@
 {
-  "Name": "RtvFromTexture2d",
-  "Id": "57a1ee33-702a-41ad-a17e-b43033d58638",
-  "Namespace": "lib.dx11.tex",
+  "Id": "57a1ee33-702a-41ad-a17e-b43033d58638"/*RtvFromTexture2d*/,
   "Inputs": [
     {
       "Id": "73cf7c5d-cf0c-49db-91e8-dafe812e0232"/*Texture*/,

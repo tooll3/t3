@@ -1,7 +1,5 @@
 {
-  "Name": "RotateVector3",
-  "Id": "ce7c2103-3669-4c7a-ba61-a10428b9d467",
-  "Namespace": "lib.math.vec3",
+  "Id": "ce7c2103-3669-4c7a-ba61-a10428b9d467"/*RotateVector3*/,
   "Inputs": [
     {
       "Id": "56229f73-cbe2-4279-a659-d70d32e0df59"/*VectorA*/,

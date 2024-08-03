@@ -1,7 +1,5 @@
 {
-  "Name": "AmplifyValues",
-  "Id": "4def850e-3627-46d8-ae2b-58b513843885",
-  "Namespace": "lib.math.float",
+  "Id": "4def850e-3627-46d8-ae2b-58b513843885"/*AmplifyValues*/,
   "Inputs": [
     {
       "Id": "2c6c16e9-2037-4b5e-a4ac-6c5aab0fc582"/*Smoothing*/,

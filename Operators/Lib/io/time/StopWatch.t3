@@ -1,7 +1,5 @@
 {
-  "Name": "StopWatch",
-  "Id": "485af23d-543e-44a7-b29f-693ed9533ab5",
-  "Namespace": "lib.io.time",
+  "Id": "485af23d-543e-44a7-b29f-693ed9533ab5"/*StopWatch*/,
   "Inputs": [
     {
       "Id": "38754151-704a-4374-817e-98dfaca62e49"/*ResetTrigger*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "GetListItemAttribute",
-  "Id": "37794826-a099-4af3-90f4-1e49092a09e1",
-  "Namespace": "user.cynic.research.data",
+  "Id": "37794826-a099-4af3-90f4-1e49092a09e1"/*GetListItemAttribute*/,
   "Inputs": [
     {
       "Id": "9cf1ae77-1e80-443a-bb07-f545c3d2e71d"/*DataList*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "LastFrameDuration",
-  "Id": "5af2405c-35f4-46bf-90db-bb99b0c4a43e",
-  "Namespace": "lib.io.time",
+  "Id": "5af2405c-35f4-46bf-90db-bb99b0c4a43e"/*LastFrameDuration*/,
   "Inputs": [],
   "Children": [],
   "Connections": []

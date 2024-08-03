@@ -1,7 +1,5 @@
 {
-  "Name": "Sin",
-  "Id": "6ab63114-6477-4ab2-a071-a66a64a6d2b9",
-  "Namespace": "lib.math.float",
+  "Id": "6ab63114-6477-4ab2-a071-a66a64a6d2b9"/*Sin*/,
   "Inputs": [
     {
       "Id": "9c66d915-af91-4ecd-955a-d9c15ef3edda"/*Input*/,

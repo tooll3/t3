@@ -1,7 +1,5 @@
 {
-  "Name": "_SpecularPrefilter",
-  "Id": "cc3cc712-9e87-49c6-b04b-49a12cf2ba75",
-  "Namespace": "lib.img.fx._",
+  "Id": "cc3cc712-9e87-49c6-b04b-49a12cf2ba75"/*_SpecularPrefilter*/,
   "Inputs": [
     {
       "Id": "9f7926aa-ac69-4963-af1d-342ad06fc278"/*CubeMap*/,
