@@ -1,7 +1,5 @@
 {
-  "Name": "HasVec2Changed",
-  "Id": "cba315e4-6113-4a2e-969e-e4c2e914c293",
-  "Namespace": "lib.math.vec2",
+  "Id": "cba315e4-6113-4a2e-969e-e4c2e914c293"/*HasVec2Changed*/,
   "Inputs": [
     {
       "Id": "8c6af96b-c2eb-43b7-b3c3-eecc8e40117d"/*Value*/,

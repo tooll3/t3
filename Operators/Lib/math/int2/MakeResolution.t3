@@ -1,7 +1,5 @@
 {
-  "Name": "MakeResolution",
-  "Id": "58d86d45-f32d-4ddb-8eab-180161e05b2a",
-  "Namespace": "lib.math.int2",
+  "Id": "58d86d45-f32d-4ddb-8eab-180161e05b2a"/*MakeResolution*/,
   "Inputs": [
     {
       "Id": "e04cbaaf-d130-4185-9be7-daadafe9d402"/*Width*/,

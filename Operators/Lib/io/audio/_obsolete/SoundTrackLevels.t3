@@ -1,7 +1,5 @@
 {
-  "Name": "SoundTrackLevels",
-  "Id": "a9e77500-ccb5-45b9-9f17-0d9bf9b58fb5",
-  "Namespace": "lib.io.audio._obsolete",
+  "Id": "a9e77500-ccb5-45b9-9f17-0d9bf9b58fb5"/*SoundTrackLevels*/,
   "Inputs": [
     {
       "Id": "839bab2b-440f-40e9-a670-723f2a684aa9"/*FilePath*/,

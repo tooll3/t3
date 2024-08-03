@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
 using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
@@ -23,7 +24,7 @@ namespace T3.Editor.Gui.Styling
         public readonly record struct Texts(string DisplayText, string SearchText, string? Tooltip);
         public readonly record struct Args<T>(string Label, IEnumerable<T> Items, Func<T, Texts> GetTextInfo, bool Warning);
         
-        public static bool Draw<T>(Args<T> args, ref string filter, out T selected)
+        public static bool Draw<T>(Args<T> args, ref string filter, out T selected, bool outlineOnly=false)
         {
             var inputId = ImGui.GetID(args.Label);
             var isSearchResultWindowOpen = inputId == _activeInputId;
@@ -49,12 +50,24 @@ namespace T3.Editor.Gui.Styling
                 }
             }
 
+            if (outlineOnly)
+            {
+                ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.FrameBgActive, Color.Red.Rgba);
+            }
+            
             var color = args.Warning ? UiColors.StatusWarning.Rgba : UiColors.Text.Rgba;
             ImGui.PushStyleColor(ImGuiCol.Text, color);
             var wasChanged = ImGui.InputText(args.Label, ref filter, 256);
             
             filter ??= string.Empty;
-            ImGui.PopStyleColor();
+            
+            if (outlineOnly)
+            {
+                var drawList = ImGui.GetWindowDrawList();
+                drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.BackgroundInputField, 5);
+                ImGui.PopStyleColor(2);
+            }
             
             if (ImGui.IsItemActivated())
             {

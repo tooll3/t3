@@ -1,7 +1,5 @@
 {
-  "Name": "SearchAndReplace",
-  "Id": "b7910fc6-c3b2-4daf-93cd-010dcfe22a57",
-  "Namespace": "lib.string",
+  "Id": "b7910fc6-c3b2-4daf-93cd-010dcfe22a57"/*SearchAndReplace*/,
   "Inputs": [
     {
       "Id": "3ca66cbd-a16a-479c-b858-84732e5023ad"/*OriginalString*/,

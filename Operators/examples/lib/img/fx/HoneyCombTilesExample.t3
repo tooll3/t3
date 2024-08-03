@@ -1,19 +1,11 @@
 {
-  "Name": "HoneyCombTilesExample",
-  "Id": "a2612284-7b74-449e-903e-536eaab4833f",
-  "Namespace": "examples.lib.img.fx",
+  "Id": "a2612284-7b74-449e-903e-536eaab4833f"/*HoneyCombTilesExample*/,
   "Inputs": [],
   "Children": [
     {
-      "Id": "d4d50449-6353-4a73-a0d8-2d260d2a0c03"/*Multiply*/,
-      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
-      "InputValues": [
-        {
-          "Id": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"/*B*/,
-          "Type": "System.Single",
-          "Value": 90.0
-        }
-      ],
+      "Id": "86428e94-c771-4d62-9853-1eb878a755a8"/*Vector2*/,
+      "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -67,15 +59,48 @@
       "Outputs": []
     },
     {
-      "Id": "f977e884-6f1f-4199-8d60-6fb6e70f0046"/*Time*/,
-      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "d81111b9-5017-4569-a0dd-a10fd617fbf1"/*Sin*/,
-      "SymbolId": "6ab63114-6477-4ab2-a071-a66a64a6d2b9",
-      "InputValues": [],
+      "Id": "623008b2-b025-4c44-92f7-cfa963a039ee"/*_FractalNoiseOld*/,
+      "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
+      "InputValues": [
+        {
+          "Id": "6fe3a975-6bb5-4cf1-9a24-6cf04ac800b6"/*ColorA*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 0.9753597,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "a966d9a1-b36f-4f85-b918-8651ea7d055d"/*ColorB*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1E-06,
+            "Y": 9.9999E-07,
+            "Z": 9.9999E-07,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "2381e8e4-a4e5-4691-9059-3b2096146970"/*Stretch*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": -0.6037747,
+            "Y": 0.6344507
+          }
+        },
+        {
+          "Id": "4de046cc-26d7-466f-90b4-3a3bdd59acb3"/*Phase*/,
+          "Type": "System.Single",
+          "Value": 6.4171267
+        },
+        {
+          "Id": "0e3d1c9f-d0aa-4765-a0ab-d8292a981368"/*Bias*/,
+          "Type": "System.Single",
+          "Value": -5.4112678
+        }
+      ],
       "Outputs": []
     },
     {
@@ -101,8 +126,26 @@
       "Outputs": []
     },
     {
-      "Id": "86428e94-c771-4d62-9853-1eb878a755a8"/*Vector2*/,
-      "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
+      "Id": "d4d50449-6353-4a73-a0d8-2d260d2a0c03"/*Multiply*/,
+      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
+      "InputValues": [
+        {
+          "Id": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"/*B*/,
+          "Type": "System.Single",
+          "Value": 90.0
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "49ff145d-f173-440e-b453-a4c6239a06d2"/*Time*/,
+      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "f977e884-6f1f-4199-8d60-6fb6e70f0046"/*Time*/,
+      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
       "InputValues": [],
       "Outputs": []
     },
@@ -116,12 +159,6 @@
           "Value": 2.1065633
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "49ff145d-f173-440e-b453-a4c6239a06d2"/*Time*/,
-      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
-      "InputValues": [],
       "Outputs": []
     },
     {
@@ -152,6 +189,18 @@
           "Id": "8846aa50-e4d0-433c-9e5b-013a93f17f79"/*Feather*/,
           "Type": "System.Single",
           "Value": 1.104169
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "57469cac-54ed-4c03-9bae-657ba78e1931"/*Time*/,
+      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
+      "InputValues": [
+        {
+          "Id": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
+          "Type": "System.Single",
+          "Value": 2.7
         }
       ],
       "Outputs": []
@@ -215,60 +264,9 @@
       "Outputs": []
     },
     {
-      "Id": "623008b2-b025-4c44-92f7-cfa963a039ee"/*_FractalNoiseOld*/,
-      "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
-      "InputValues": [
-        {
-          "Id": "6fe3a975-6bb5-4cf1-9a24-6cf04ac800b6"/*ColorA*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 2.0,
-            "Y": 2.0,
-            "Z": 0.9753597,
-            "W": 1.0
-          }
-        },
-        {
-          "Id": "a966d9a1-b36f-4f85-b918-8651ea7d055d"/*ColorB*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 1E-06,
-            "Y": 9.9999E-07,
-            "Z": 9.9999E-07,
-            "W": 1.0
-          }
-        },
-        {
-          "Id": "2381e8e4-a4e5-4691-9059-3b2096146970"/*Stretch*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": -0.6037747,
-            "Y": 0.6344507
-          }
-        },
-        {
-          "Id": "4de046cc-26d7-466f-90b4-3a3bdd59acb3"/*Phase*/,
-          "Type": "System.Single",
-          "Value": 6.4171267
-        },
-        {
-          "Id": "0e3d1c9f-d0aa-4765-a0ab-d8292a981368"/*Bias*/,
-          "Type": "System.Single",
-          "Value": -5.4112678
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "57469cac-54ed-4c03-9bae-657ba78e1931"/*Time*/,
-      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
-      "InputValues": [
-        {
-          "Id": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
-          "Type": "System.Single",
-          "Value": 2.7
-        }
-      ],
+      "Id": "d81111b9-5017-4569-a0dd-a10fd617fbf1"/*Sin*/,
+      "SymbolId": "6ab63114-6477-4ab2-a071-a66a64a6d2b9",
+      "InputValues": [],
       "Outputs": []
     }
   ],

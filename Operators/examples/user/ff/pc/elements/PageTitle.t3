@@ -1,7 +1,5 @@
 {
-  "Name": "PageTitle",
-  "Id": "ffe6b076-f561-4230-a0c3-282fb4d58383",
-  "Namespace": "user.ff.pc.elements",
+  "Id": "ffe6b076-f561-4230-a0c3-282fb4d58383"/*PageTitle*/,
   "Inputs": [
     {
       "Id": "409adab7-82e6-4d70-af14-04180a4940b0"/*Title*/,

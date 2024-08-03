@@ -1,7 +1,5 @@
 {
-  "Name": "SequenceAnim",
-  "Id": "94a392e6-3e03-4ccf-a114-e6fafa263b4f",
-  "Namespace": "lib.anim",
+  "Id": "94a392e6-3e03-4ccf-a114-e6fafa263b4f"/*SequenceAnim*/,
   "Inputs": [
     {
       "Id": "7bdfb9a8-87b3-4603-890c-fe755f4c4492"/*Sequence*/,

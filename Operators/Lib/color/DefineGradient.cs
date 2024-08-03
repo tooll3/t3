@@ -55,7 +55,9 @@ namespace lib.color
                                         });
             }
             _gradient.SortHandles();
-            
+
+            _gradient.Interpolation = (Gradient.Interpolations)Interpolation.GetValue(context);
+
             OutGradient.Value = _gradient;    //FIXME: This might not be efficient or required
         }
 

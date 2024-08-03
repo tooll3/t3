@@ -1,7 +1,5 @@
 {
-  "Name": "Combine3Images",
-  "Id": "1d958538-98e7-4053-b1e2-3b9f1bc4faa9",
-  "Namespace": "lib.img.use",
+  "Id": "1d958538-98e7-4053-b1e2-3b9f1bc4faa9"/*Combine3Images*/,
   "Inputs": [
     {
       "Id": "81e08eab-9428-435b-a710-6cede1549834"/*ImageA*/,
@@ -65,12 +63,6 @@
   ],
   "Children": [
     {
-      "Id": "16d7fa18-2229-48db-b997-0fb90dcf1f65"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "d03465c6-3992-4155-bfb9-9a9ce198f8aa"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
@@ -83,7 +75,7 @@
       "Outputs": []
     },
     {
-      "Id": "f697ae9b-bfab-4cef-b43f-6c3800d242e7"/*Vector4Components*/,
+      "Id": "16d7fa18-2229-48db-b997-0fb90dcf1f65"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -115,6 +107,12 @@
     {
       "Id": "1f7560ad-98c1-4cdf-82c5-09d4e374abd2"/*IntToFloat*/,
       "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "f697ae9b-bfab-4cef-b43f-6c3800d242e7"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     }

@@ -1,7 +1,5 @@
 {
-  "Name": "EmptyComp",
-  "Id": "ffccf37c-d104-4c25-a626-460e52677083",
-  "Namespace": "user.pixtur.research",
+  "Id": "ffccf37c-d104-4c25-a626-460e52677083"/*EmptyComp*/,
   "Inputs": [],
   "Children": [
     {

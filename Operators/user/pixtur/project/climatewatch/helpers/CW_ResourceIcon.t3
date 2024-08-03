@@ -1,7 +1,5 @@
 {
-  "Name": "CW_ResourceIcon",
-  "Id": "487dad15-abb2-4d8f-a66a-520af9739684",
-  "Namespace": "user.pixtur.project.climatewatch.helpers",
+  "Id": "487dad15-abb2-4d8f-a66a-520af9739684"/*CW_ResourceIcon*/,
   "Inputs": [
     {
       "Id": "56bc4d62-4938-4173-86d5-1f1bd3ea6a43"/*ImagePath*/,
@@ -29,30 +27,27 @@
   ],
   "Children": [
     {
-      "Id": "792985da-7ebf-4314-af79-61dd4a60dd77"/*LoadImage*/,
-      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "Id": "764b97a4-0de0-49a3-8506-3731e47f7856"/*Transform*/,
+      "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "2d3aa6b8-2dcb-492c-a2c9-72ce8d1e3675"/*Multiply*/,
+      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
       "InputValues": [
         {
-          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\images\\icon\\source-coal-ignite.png"
+          "Id": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"/*B*/,
+          "Type": "System.Single",
+          "Value": -1.0
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "55b1921e-7c68-4e78-9f8b-56032cd34168"/*Layer2d*/,
-      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
-      "InputValues": [
-        {
-          "Id": "a384be77-c5fc-47b3-9ec3-960db9f9bae9"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.015000001
-          }
-        }
-      ],
+      "Id": "baf99a72-3b2e-4baf-aea1-173b4eb9ba36"/*DrawLines*/,
+      "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -78,29 +73,19 @@
       "Outputs": []
     },
     {
-      "Id": "7e3f22d8-87d7-4764-add4-dcbf6b7e3b28"/*Damp*/,
-      "SymbolId": "af9c5db8-7144-4164-b605-b287aaf71bf6",
+      "Id": "b4538b92-b3e2-4031-8cad-1f0519cbee2f"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "ab500a30-b65b-40d7-9240-619b390507fd"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "adbfb1ab-7e3b-449b-8977-c8f0e4e56e05"/*ScaleVector3*/,
-      "SymbolId": "646d6a5d-a1d7-471e-86ab-e1fb2542a2c2",
+      "Id": "792985da-7ebf-4314-af79-61dd4a60dd77"/*LoadImage*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {
-          "Id": "de6bfe5a-ebcd-4da6-8c8a-79989a31dd9f"/*A*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.197,
-            "Z": 0.0
-          }
+          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
+          "Type": "System.String",
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\images\\icon\\source-coal-ignite.png"
         }
       ],
       "Outputs": []
@@ -126,53 +111,17 @@
       "Outputs": []
     },
     {
-      "Id": "b4538b92-b3e2-4031-8cad-1f0519cbee2f"/*Execute*/,
-      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "764b97a4-0de0-49a3-8506-3731e47f7856"/*Transform*/,
-      "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "5b78798d-fa6e-454f-934f-0aa80cfeb05c"/*RadialPoints*/,
-      "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
+      "Id": "adbfb1ab-7e3b-449b-8977-c8f0e4e56e05"/*ScaleVector3*/,
+      "SymbolId": "646d6a5d-a1d7-471e-86ab-e1fb2542a2c2",
       "InputValues": [
         {
-          "Id": "acce4779-56d6-47c4-9c52-874fca91a3a1"/*Radius*/,
-          "Type": "System.Single",
-          "Value": 0.088
-        },
-        {
-          "Id": "5a3347a2-ba87-4b38-a1a8-94bd0ef70f48"/*StartAngle*/,
-          "Type": "System.Single",
-          "Value": -90.0
-        },
-        {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
-          "Type": "System.Boolean",
-          "Value": true
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "baf99a72-3b2e-4baf-aea1-173b4eb9ba36"/*DrawLines*/,
-      "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2d3aa6b8-2dcb-492c-a2c9-72ce8d1e3675"/*Multiply*/,
-      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
-      "InputValues": [
-        {
-          "Id": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"/*B*/,
-          "Type": "System.Single",
-          "Value": -1.0
+          "Id": "de6bfe5a-ebcd-4da6-8c8a-79989a31dd9f"/*A*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 0.0,
+            "Y": -0.197,
+            "Z": 0.0
+          }
         }
       ],
       "Outputs": []
@@ -223,6 +172,55 @@
     },
     {
       "Id": "97ea7214-bf55-4843-919f-97ed55525263"/*Damp*/,
+      "SymbolId": "af9c5db8-7144-4164-b605-b287aaf71bf6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "5b78798d-fa6e-454f-934f-0aa80cfeb05c"/*RadialPoints*/,
+      "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
+      "InputValues": [
+        {
+          "Id": "acce4779-56d6-47c4-9c52-874fca91a3a1"/*Radius*/,
+          "Type": "System.Single",
+          "Value": 0.088
+        },
+        {
+          "Id": "5a3347a2-ba87-4b38-a1a8-94bd0ef70f48"/*StartAngle*/,
+          "Type": "System.Single",
+          "Value": -90.0
+        },
+        {
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
+          "Type": "System.Boolean",
+          "Value": true
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "ab500a30-b65b-40d7-9240-619b390507fd"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "55b1921e-7c68-4e78-9f8b-56032cd34168"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [
+        {
+          "Id": "a384be77-c5fc-47b3-9ec3-960db9f9bae9"/*Position*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.015000001
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "7e3f22d8-87d7-4764-add4-dcbf6b7e3b28"/*Damp*/,
       "SymbolId": "af9c5db8-7144-4164-b605-b287aaf71bf6",
       "InputValues": [],
       "Outputs": []

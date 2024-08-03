@@ -1,7 +1,5 @@
 {
-  "Name": "CalcInt2DispatchCount",
-  "Id": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
-  "Namespace": "lib.dx11.compute",
+  "Id": "cc11774e-82dd-409f-97fb-5be3f2746f9d"/*CalcInt2DispatchCount*/,
   "Inputs": [
     {
       "Id": "714e7c0d-0137-4bc6-9e5b-93386b2efe13"/*Size*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "Texture2d",
-  "Id": "f52db9a4-fde9-49ca-9ef7-131825c34e65",
-  "Namespace": "lib.dx11.tex",
+  "Id": "f52db9a4-fde9-49ca-9ef7-131825c34e65"/*Texture2d*/,
   "Inputs": [
     {
       "Id": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,

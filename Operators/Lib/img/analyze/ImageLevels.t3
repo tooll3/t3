@@ -1,7 +1,5 @@
 {
-  "Name": "ImageLevels",
-  "Id": "592a2b6f-d4e3-43e0-9e73-034cca3b3900",
-  "Namespace": "lib.img.analyze",
+  "Id": "592a2b6f-d4e3-43e0-9e73-034cca3b3900"/*ImageLevels*/,
   "Inputs": [
     {
       "Id": "f434bac8-b7d8-4787-adf2-1782d6588da8"/*Texture2d*/,
@@ -29,6 +27,12 @@
   ],
   "Children": [
     {
+      "Id": "c2951663-1f4b-495e-9f97-c68b333f13b0"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "e0755f36-83a3-40ec-b3f0-45171aa56dcc"/*_ImageFxShaderSetup2*/,
       "SymbolId": "2b20afce-2b54-4bcc-ba0e-e456a0d92833",
       "InputValues": [
@@ -53,12 +57,6 @@
           "Value": 6
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "c2951663-1f4b-495e-9f97-c68b333f13b0"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
       "Outputs": []
     }
   ],

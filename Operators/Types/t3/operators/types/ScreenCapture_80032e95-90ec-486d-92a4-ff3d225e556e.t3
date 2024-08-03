@@ -1,0 +1,17 @@
+{
+  "Name": "ScreenCapture",
+  "Id": "80032e95-90ec-486d-92a4-ff3d225e556e",
+  "Namespace": "t3.operators.types",
+  "Inputs": [
+    {
+      "Id": "633199d4-1950-48e3-ace9-0e266c7e5771"/*ScreenIndex*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "9acd5b21-cac7-4a1e-b7a8-1552ad0a907d"/*TimeOut*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

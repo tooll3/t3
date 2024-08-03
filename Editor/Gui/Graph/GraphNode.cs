@@ -69,7 +69,7 @@ namespace T3.Editor.Gui.Graph
             var newNodeSize = ComputeNodeSize(childUi, visibleInputUis, _sorter);
             AdjustGroupLayoutAfterResize(childUi, newNodeSize, instance.Parent.GetSymbolUi());
             _usableScreenRect = _canvas.TransformRect(new ImRect(childUi.PosOnCanvas,
-                                                                             childUi.PosOnCanvas + childUi.Size));
+                                                                          childUi.PosOnCanvas + childUi.Size));
             _selectableScreenRect = _usableScreenRect;
             if (UserSettings.Config.ShowThumbnails)
                 PreparePreviewAndExpandSelectableArea(instance);
@@ -1014,14 +1014,14 @@ namespace T3.Editor.Gui.Graph
                 outputHeight = 1;
 
             return ImRect.RectWithSize(
-                                       new Vector2(
-                                                   opRect.Max.X + 1, // - GraphNode._usableSlotThickness,
-                                                   opRect.Min.Y + (outputHeight + SlotGaps) * outputIndex + 1
-                                                  ),
-                                       new Vector2(
-                                                   thickness,
-                                                   outputHeight
-                                                  ));
+                                                new Vector2(
+                                                            opRect.Max.X + 1, // - GraphNode._usableSlotThickness,
+                                                            opRect.Min.Y + (outputHeight + SlotGaps) * outputIndex + 1
+                                                           ),
+                                                new Vector2(
+                                                            thickness,
+                                                            outputHeight
+                                                           ));
         }
 
         /// <summary>
@@ -1396,9 +1396,9 @@ namespace T3.Editor.Gui.Graph
         private ImRect GetUsableInputSlotSize(int inputIndex, int visibleSlotCount)
         {
             var areaForParams = new ImRect(new Vector2(
-                                                       _usableScreenRect.Min.X,
-                                                       _usableScreenRect.Min.Y + NodeTitleHeight),
-                                           _usableScreenRect.Max);
+                                                                _usableScreenRect.Min.X,
+                                                                _usableScreenRect.Min.Y + NodeTitleHeight),
+                                                    _usableScreenRect.Max);
             var inputHeight = visibleSlotCount == 0
                                   ? areaForParams.GetHeight()
                                   : (areaForParams.GetHeight() + SlotGaps) / visibleSlotCount - SlotGaps;
@@ -1406,14 +1406,14 @@ namespace T3.Editor.Gui.Graph
                 inputHeight = 1;
 
             return ImRect.RectWithSize(
-                                       new Vector2(
-                                                   areaForParams.Min.X - UsableSlotThickness,
-                                                   Math.Min(_selectableScreenRect.Max.Y, areaForParams.Min.Y + (inputHeight + SlotGaps) * inputIndex)
-                                                  ),
-                                       new Vector2(
-                                                   UsableSlotThickness,
-                                                   inputHeight
-                                                  ));
+                                                new Vector2(
+                                                            areaForParams.Min.X - UsableSlotThickness,
+                                                            Math.Min(_selectableScreenRect.Max.Y, areaForParams.Min.Y + (inputHeight + SlotGaps) * inputIndex)
+                                                           ),
+                                                new Vector2(
+                                                            UsableSlotThickness,
+                                                            inputHeight
+                                                           ));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

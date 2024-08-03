@@ -1,7 +1,5 @@
 {
-  "Name": "ComposeVec3FromList",
-  "Id": "a52070ce-7110-439c-84e7-01f2a883b83f",
-  "Namespace": "lib.math.floats",
+  "Id": "a52070ce-7110-439c-84e7-01f2a883b83f"/*ComposeVec3FromList*/,
   "Inputs": [
     {
       "Id": "5166e16a-7366-4907-8b9d-5a9f81a93864"/*Input*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "ConvertColors",
-  "Id": "d5516087-f7dd-44d4-a7e1-3c18767de921",
-  "Namespace": "lib.img.adjust",
+  "Id": "d5516087-f7dd-44d4-a7e1-3c18767de921"/*ConvertColors*/,
   "Inputs": [
     {
       "Id": "dd2f08a9-a539-41e9-aa1e-f8ad64fb8d29"/*Texture2d*/,

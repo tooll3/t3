@@ -1,7 +1,5 @@
 {
-  "Name": "MultiUpdatePoints",
-  "Id": "62c89469-7194-486a-87cd-c3e6bc0cf5d2",
-  "Namespace": "lib.point._internal",
+  "Id": "62c89469-7194-486a-87cd-c3e6bc0cf5d2"/*MultiUpdatePoints*/,
   "Inputs": [
     {
       "Id": "7caa2f8c-64e1-4941-bd1c-8bdc89584ba7"/*PointBuffers*/,

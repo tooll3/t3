@@ -1,7 +1,5 @@
 {
-  "Name": "AnimVec3",
-  "Id": "7814fd81-b8d0-4edf-b828-5165f5657344",
-  "Namespace": "lib.anim",
+  "Id": "7814fd81-b8d0-4edf-b828-5165f5657344"/*AnimVec3*/,
   "Inputs": [
     {
       "Id": "fa1b36a1-4ed9-4187-aeb6-f7ba893cf3b2"/*OverrideTime*/,

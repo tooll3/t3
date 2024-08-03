@@ -1,7 +1,5 @@
 {
-  "Name": "SetFloatVar",
-  "Id": "2a0c932a-eb81-4a7d-aeac-836a23b0b789",
-  "Namespace": "lib.exec.context",
+  "Id": "2a0c932a-eb81-4a7d-aeac-836a23b0b789"/*SetFloatVar*/,
   "Inputs": [
     {
       "Id": "e64d396e-855a-4b20-a8f5-39b4f98e8036"/*SubGraph*/,

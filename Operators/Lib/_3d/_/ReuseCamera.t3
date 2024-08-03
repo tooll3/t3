@@ -1,0 +1,15 @@
+{
+  "Id": "484bec1b-e441-440a-85b4-b3865c57b4ed"/*ReuseCamera*/,
+  "Inputs": [
+    {
+      "Id": "582752a9-c68f-4312-aa71-26498c22419d"/*Command*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "e3d107f3-9b81-4b8e-bdaa-35d23052c90d"/*CameraReference*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

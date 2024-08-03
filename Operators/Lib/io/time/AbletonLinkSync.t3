@@ -1,7 +1,5 @@
 {
-  "Name": "AbletonLinkSync",
-  "Id": "31ab98ec-5e79-4667-9a85-2fb168f41fa1",
-  "Namespace": "lib.io.time",
+  "Id": "31ab98ec-5e79-4667-9a85-2fb168f41fa1"/*AbletonLinkSync*/,
   "Inputs": [
     {
       "Id": "cd977dbc-3340-4542-8e0f-01bde3882d6a"/*OutputType*/,

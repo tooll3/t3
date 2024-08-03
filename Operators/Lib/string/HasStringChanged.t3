@@ -1,7 +1,5 @@
 {
-  "Name": "HasStringChanged",
-  "Id": "de9f1dfd-05ec-466f-9f5f-46e7e8da219a",
-  "Namespace": "lib.string",
+  "Id": "de9f1dfd-05ec-466f-9f5f-46e7e8da219a"/*HasStringChanged*/,
   "Inputs": [
     {
       "Id": "303a7a17-5b3e-4d2e-a5bd-fde775be387a"/*Value*/,

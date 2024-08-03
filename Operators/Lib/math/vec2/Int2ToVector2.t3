@@ -1,7 +1,5 @@
 {
-  "Name": "Int2ToVector2",
-  "Id": "d1a66374-f0e8-4ef5-adf4-2871ec549d2a",
-  "Namespace": "lib.math.vec2",
+  "Id": "d1a66374-f0e8-4ef5-adf4-2871ec549d2a"/*Int2ToVector2*/,
   "Inputs": [
     {
       "Id": "5c493d16-cc75-4cd5-96d9-eca3adeaccd9"/*Int2*/,

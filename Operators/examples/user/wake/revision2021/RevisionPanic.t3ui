@@ -278,14 +278,14 @@
       "SnapshotGroupIndex": "1"
     },
     {
-      "ChildId": "e432e168-29fa-47a6-9eea-2b7eddaa8398"/*AString*/,
+      "ChildId": "e432e168-29fa-47a6-9eea-2b7eddaa8398"/*String*/,
       "Position": {
         "X": 1606.7753,
         "Y": 413.64398
       }
     },
     {
-      "ChildId": "2cf0f58a-b202-4d6c-9a32-f04053933395"/*AString*/,
+      "ChildId": "2cf0f58a-b202-4d6c-9a32-f04053933395"/*String*/,
       "Position": {
         "X": 1606.7753,
         "Y": 370.64398

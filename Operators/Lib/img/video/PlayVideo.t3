@@ -1,7 +1,5 @@
 {
-  "Name": "PlayVideo",
-  "Id": "914fb032-d7eb-414b-9e09-2bdd7049e049",
-  "Namespace": "lib.img.video",
+  "Id": "914fb032-d7eb-414b-9e09-2bdd7049e049"/*PlayVideo*/,
   "Inputs": [
     {
       "Id": "0e255347-08bc-4363-9ffa-ab863a1cea8e"/*Path*/,
@@ -22,6 +20,10 @@
     {
       "Id": "21b5671b-862f-4cea-a355-fa019996c936"/*Loop*/,
       "DefaultValue": true
+    },
+    {
+      "Id": "b62c208c-3735-4130-87de-8c03c8a9b5fa"/*IsPreciseAtPlayback*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

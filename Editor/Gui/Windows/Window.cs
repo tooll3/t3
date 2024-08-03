@@ -36,7 +36,7 @@ namespace T3.Editor.Gui.Windows
 
             if (ImGui.Begin(WindowDisplayTitle, ref Config.Visible, WindowFlags))
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding);
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForWindows);
                 // Prevent window header from becoming invisible 
                 var windowPos = ImGui.GetWindowPos();
                 if (windowPos.X <= 0) windowPos.X = 0;

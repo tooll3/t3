@@ -1,7 +1,5 @@
 {
-  "Name": "_AdjustFeedbackImage",
-  "Id": "d31a8463-0699-46d7-8e96-9abc6adb997d",
-  "Namespace": "lib.img.fx._",
+  "Id": "d31a8463-0699-46d7-8e96-9abc6adb997d"/*_AdjustFeedbackImage*/,
   "Inputs": [
     {
       "Id": "b781c374-5fb7-4f4f-ae6d-78f9bfcd72c6"/*Image*/,

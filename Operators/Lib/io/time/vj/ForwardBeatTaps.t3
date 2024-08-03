@@ -1,7 +1,5 @@
 {
-  "Name": "ForwardBeatTaps",
-  "Id": "79db48d8-38d3-47ca-9c9b-85dde2fa660d",
-  "Namespace": "lib.io.time.vj",
+  "Id": "79db48d8-38d3-47ca-9c9b-85dde2fa660d"/*ForwardBeatTaps*/,
   "Inputs": [
     {
       "Id": "89576f05-3f3d-48d1-ab63-f3c16c85db63"/*SubTree*/,

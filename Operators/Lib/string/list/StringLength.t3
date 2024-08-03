@@ -1,7 +1,5 @@
 {
-  "Name": "StringLength",
-  "Id": "4c496e8d-2a83-4493-a7a4-fdad29ef3f7d",
-  "Namespace": "lib.string.list",
+  "Id": "4c496e8d-2a83-4493-a7a4-fdad29ef3f7d"/*StringLength*/,
   "Inputs": [
     {
       "Id": "5794d63a-3ef7-42c5-b726-e814ea9093e3"/*InputString*/,

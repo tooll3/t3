@@ -1,7 +1,5 @@
 {
-  "Name": "TriggerAnim",
-  "Id": "95d586a2-ee14-4ff5-a5bb-40c497efde95",
-  "Namespace": "lib.anim",
+  "Id": "95d586a2-ee14-4ff5-a5bb-40c497efde95"/*TriggerAnim*/,
   "Inputs": [
     {
       "Id": "62949257-adb3-4c67-ac0a-d37ee28da81b"/*Trigger*/,

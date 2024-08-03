@@ -1,7 +1,5 @@
 {
-  "Name": "GeometryShaderStage",
-  "Id": "4abd5f2e-3296-4d71-8462-faa203091b1d",
-  "Namespace": "lib.dx11.draw",
+  "Id": "4abd5f2e-3296-4d71-8462-faa203091b1d"/*GeometryShaderStage*/,
   "Inputs": [
     {
       "Id": "2a217f9d-2f9f-418a-8568-f767905384d5"/*GeometryShader*/,

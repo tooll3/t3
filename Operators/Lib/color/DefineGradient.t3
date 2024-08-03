@@ -1,7 +1,5 @@
 {
-  "Name": "DefineGradient",
-  "Id": "185452c6-f299-42a3-b618-c6aa00d66c62",
-  "Namespace": "lib.color",
+  "Id": "185452c6-f299-42a3-b618-c6aa00d66c62"/*DefineGradient*/,
   "Inputs": [
     {
       "Id": "4723c177-9941-4fcb-9d5a-9a4ed18f3b5f"/*Color1*/,

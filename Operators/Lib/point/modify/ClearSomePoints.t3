@@ -1,7 +1,5 @@
 {
-  "Name": "ClearSomePoints",
-  "Id": "e570b2e6-6e35-4a14-ade6-f377494fe96d",
-  "Namespace": "lib.point.modify",
+  "Id": "e570b2e6-6e35-4a14-ade6-f377494fe96d"/*ClearSomePoints*/,
   "Inputs": [
     {
       "Id": "f1662ff8-2a3c-40c4-a313-4c8b831830d7"/*Points*/,
@@ -26,15 +24,27 @@
   ],
   "Children": [
     {
-      "Id": "f0a17957-9445-4115-8ca9-b8c9ce416ab5"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "Id": "082299b6-569a-44e9-9b06-1f583a5e3d77"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "7313b780-2965-47e6-b1e2-3cd930f53047"/*StructuredBufferWithViews*/,
+      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\points\\modify\\ClearSomePoints.hlsl"
+          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
+          "Type": "System.Int32",
+          "Value": 64
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "d6785148-4afd-4783-8766-9fa16d872887"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -54,8 +64,14 @@
       "Outputs": []
     },
     {
-      "Id": "082299b6-569a-44e9-9b06-1f583a5e3d77"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "Id": "a6835d06-b071-454c-a0c5-e67f6c889d6f"/*IntsToBuffer*/,
+      "SymbolId": "2eb20a76-f8f7-49e9-93a5-1e5981122b50",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "97b6d1f0-96bb-41f2-b781-672e280f8140"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     },
@@ -72,33 +88,15 @@
       "Outputs": []
     },
     {
-      "Id": "7313b780-2965-47e6-b1e2-3cd930f53047"/*StructuredBufferWithViews*/,
-      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
+      "Id": "f0a17957-9445-4115-8ca9-b8c9ce416ab5"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
       "InputValues": [
         {
-          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
-          "Type": "System.Int32",
-          "Value": 64
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\points\\modify\\ClearSomePoints.hlsl"
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "97b6d1f0-96bb-41f2-b781-672e280f8140"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "d6785148-4afd-4783-8766-9fa16d872887"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "a6835d06-b071-454c-a0c5-e67f6c889d6f"/*IntsToBuffer*/,
-      "SymbolId": "2eb20a76-f8f7-49e9-93a5-1e5981122b50",
-      "InputValues": [],
       "Outputs": []
     }
   ],

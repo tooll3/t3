@@ -1,7 +1,5 @@
 {
-  "Name": "SwapBuffers",
-  "Id": "020573c5-acaa-442e-9b1b-01338b0f4b62",
-  "Namespace": "lib.dx11.buffer",
+  "Id": "020573c5-acaa-442e-9b1b-01338b0f4b62"/*SwapBuffers*/,
   "Inputs": [
     {
       "Id": "243160dd-c19d-48f2-b966-c9b4ee79c2d6"/*BufferAInput*/,

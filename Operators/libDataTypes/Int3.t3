@@ -1,7 +1,5 @@
 {
-  "Name": "Int3",
-  "Id": "0c2dcf1f-48ff-45aa-a28b-c5900279ce6e",
-  "Namespace": "lib.types",
+  "Id": "0c2dcf1f-48ff-45aa-a28b-c5900279ce6e"/*Int3*/,
   "Inputs": [
     {
       "Id": "a1b1ea49-4234-4317-a83c-5537273eec4e"/*X*/,

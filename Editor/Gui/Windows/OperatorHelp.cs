@@ -16,51 +16,58 @@ namespace T3.Editor.Gui.Windows;
 
 public class OperatorHelp
 {
-    public void DrawHelpIcon(SymbolUi symbolUi)
+    public bool DrawHelpIcon(SymbolUi symbolUi, ref bool isEnabled)
     {
-        // Help indicator
+        var changed = false;
+        _isDocumentationActive = isEnabled;
+        
+        ImGui.SameLine();
+        var w = ImGui.GetFrameHeight();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 2);
+        var toggledToEdit = ImGui.GetIO().KeyCtrl;
+        var icon = toggledToEdit ? Icon.PopUp : Icon.Help;
+        ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
+        if (CustomComponents.IconButton(
+                                        icon,
+                                        new Vector2(w, w),
+                                        _isDocumentationActive
+                                            ? CustomComponents.ButtonStates.Activated
+                                            : CustomComponents.ButtonStates.Dimmed
+                                       ))
         {
-            ImGui.SameLine();
-            var w = ImGui.GetFrameHeight();
-            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 2);
-            var toggledToEdit = ImGui.GetIO().KeyCtrl;
-            var icon = toggledToEdit ? Icon.PopUp : Icon.Help;
-            if (CustomComponents.IconButton(
-                                            icon,
-                                            new Vector2(w, w),
-                                            _isDocumentationActive
-                                                ? CustomComponents.ButtonStates.Activated
-                                                : CustomComponents.ButtonStates.Dimmed
-                                           ))
+            changed= true;
+            if (toggledToEdit)
             {
-                if (toggledToEdit)
-                {
-                    EditDescriptionDialog.ShowNextFrame();
-                }
-                else
-                {
-                    _isDocumentationActive = !_isDocumentationActive;
-                }
-            }
-
-            if (ImGui.IsItemHovered() && !_isDocumentationActive)
-            {
-                _timeSinceTooltipHovered += ImGui.GetIO().DeltaTime;
-
-                var delayedFadeInToPreventImguiFlickering = (_timeSinceTooltipHovered * 3).Clamp(0.001f, 1);
-                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, delayedFadeInToPreventImguiFlickering * ImGui.GetStyle().Alpha);
-                ImGui.BeginTooltip();
-                ImGui.Dummy(new Vector2(500 * T3Ui.UiScaleFactor, 1));
-
-                DrawHelp(symbolUi);
-                ImGui.EndTooltip();
-                ImGui.PopStyleVar();
+                EditDescriptionDialog.ShowNextFrame();
             }
             else
             {
-                _timeSinceTooltipHovered = 0;
+                _isDocumentationActive = !_isDocumentationActive;
+                isEnabled = _isDocumentationActive;
             }
         }
+
+        ImGui.PopStyleColor();
+
+        if (ImGui.IsItemHovered() && !_isDocumentationActive)
+        {
+            _timeSinceTooltipHovered += ImGui.GetIO().DeltaTime;
+
+            var delayedFadeInToPreventImguiFlickering = (_timeSinceTooltipHovered * 3).Clamp(0.001f, 1);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, delayedFadeInToPreventImguiFlickering * ImGui.GetStyle().Alpha);
+            ImGui.BeginTooltip();
+            ImGui.Dummy(new Vector2(500 * T3Ui.UiScaleFactor, 1));
+
+            DrawHelp(symbolUi);
+            ImGui.EndTooltip();
+            ImGui.PopStyleVar();
+        }
+        else
+        {
+            _timeSinceTooltipHovered = 0;
+        }
+
+        return changed;
     }
 
     public void DrawHelpSummary(SymbolUi symbolUi)
@@ -72,8 +79,8 @@ public class OperatorHelp
         var firstLine = reader.ReadLine();
         if (string.IsNullOrEmpty(firstLine))
             return;
-        
-        ImGui.Indent(10);
+
+        //ImGui.Indent(10);
 
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
         ImGui.TextWrapped(firstLine);
@@ -83,22 +90,23 @@ public class OperatorHelp
             {
                 EditDescriptionDialog.ShowNextFrame();
             }
-        }        
+        }
+
         ImGui.PopStyleColor();
-        
+
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Fade(0.5f).Rgba);
         FormInputs.AddVerticalSpace(5);
         ImGui.TextUnformatted("Read more...");
         if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
         {
             _isDocumentationActive = true;
-        } 
+        }
+
         FormInputs.AddVerticalSpace();
         ImGui.PopStyleColor();
 
-        ImGui.Unindent(10);
+        //ImGui.Unindent(10);
     }
-    
 
     public static void DrawHelp(SymbolUi symbolUi)
     {
@@ -193,11 +201,8 @@ public class OperatorHelp
 
     public static void DrawExamples(SymbolUi symbolUi)
     {
-        ImGui.Indent();
         ImGui.PushFont(Fonts.FontSmall);
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(5, 5));
-        FormInputs.SetIndentToLeft();
-        // FormInputs.AddHint("Check the documentation in the header");
 
         // Draw links
         if (symbolUi.Links.Count > 0)
@@ -238,7 +243,7 @@ public class OperatorHelp
                 ImGui.SameLine();
             }
 
-            ImGui.Dummy(new Vector2(10, 10));
+            ImGui.Dummy(new Vector2(2, 2));
             ImGui.PopStyleColor();
         }
 
@@ -247,7 +252,6 @@ public class OperatorHelp
         if (ExampleSymbolLinking.ExampleSymbolUis.TryGetValue(symbolUi.Symbol.Id, out var examplesOpIds))
         {
             DrawGroupLabel(groupLabel);
-            groupLabelShown = true;
 
             foreach (var guid in examplesOpIds)
             {
@@ -263,8 +267,11 @@ public class OperatorHelp
             var matches = _itemRegex.Matches(symbolUi.Description);
             if (matches.Count > 0)
             {
-                if (!groupLabelShown)
-                    DrawGroupLabel(groupLabel);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                ImGui.TextUnformatted(groupLabel);
+                ImGui.PopStyleColor();
+
+                ImGui.Dummy(Vector2.One);
 
                 foreach (Match match in matches)
                 {
@@ -293,7 +300,6 @@ public class OperatorHelp
 
         ImGui.PopFont();
         ImGui.PopStyleVar();
-        ImGui.Unindent();
     }
 
     private static void DrawGroupLabel(string title)

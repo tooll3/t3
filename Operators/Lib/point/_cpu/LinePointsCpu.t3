@@ -1,7 +1,5 @@
 {
-  "Name": "LinePointsCpu",
-  "Id": "a98d7796-6e09-45d1-a372-f3ea55abd359",
-  "Namespace": "lib.point._cpu",
+  "Id": "a98d7796-6e09-45d1-a372-f3ea55abd359"/*LinePointsCpu*/,
   "Inputs": [
     {
       "Id": "cd2b1f6f-1964-4d15-92e0-57b77584301b"/*From*/,

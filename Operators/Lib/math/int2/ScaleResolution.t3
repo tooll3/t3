@@ -1,7 +1,5 @@
 {
-  "Name": "ScaleResolution",
-  "Id": "eb818dd0-0c9c-40ee-b76e-2148f958b987",
-  "Namespace": "lib.math.int2",
+  "Id": "eb818dd0-0c9c-40ee-b76e-2148f958b987"/*ScaleResolution*/,
   "Inputs": [
     {
       "Id": "266b57dc-26b5-4267-854d-a8e1a25cf29c"/*Resolution*/,

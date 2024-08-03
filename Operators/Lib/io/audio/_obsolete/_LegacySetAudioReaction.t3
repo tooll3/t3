@@ -1,7 +1,5 @@
 {
-  "Name": "_LegacySetAudioReaction",
-  "Id": "dd00cb1b-1c0e-4e79-9ea2-4b23686c6f37",
-  "Namespace": "lib.io.audio._obsolete",
+  "Id": "dd00cb1b-1c0e-4e79-9ea2-4b23686c6f37"/*_LegacySetAudioReaction*/,
   "Inputs": [
     {
       "Id": "d243af8f-7b1d-4110-912b-2c430726becc"/*Command*/,
@@ -14,12 +12,6 @@
   ],
   "Children": [
     {
-      "Id": "a7a36d51-2b6d-459d-a211-3015c475d363"/*_AnalyzeSound*/,
-      "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "753abb28-3707-49ab-8781-e1612220d3d3"/*SetFloatVar*/,
       "SymbolId": "2a0c932a-eb81-4a7d-aeac-836a23b0b789",
       "InputValues": [
@@ -29,6 +21,12 @@
           "Value": "BeatCount"
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "a7a36d51-2b6d-459d-a211-3015c475d363"/*_AnalyzeSound*/,
+      "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
+      "InputValues": [],
       "Outputs": []
     },
     {

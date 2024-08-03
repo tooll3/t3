@@ -88,10 +88,10 @@ namespace T3.Editor.Gui.Graph
                 // Draw slot 
                 {
                     var usableSlotArea = new ImRect(
-                                                    new Vector2(_lastScreenRect.Max.X,
-                                                                _lastScreenRect.Min.Y),
-                                                    new Vector2(_lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
-                                                                _lastScreenRect.Max.Y));
+                                                             new Vector2(_lastScreenRect.Max.X,
+                                                                         _lastScreenRect.Min.Y),
+                                                             new Vector2(_lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
+                                                                         _lastScreenRect.Max.Y));
 
                     ImGui.SetCursorScreenPos(usableSlotArea.Min);
                     ImGui.InvisibleButton("output", usableSlotArea.GetSize());

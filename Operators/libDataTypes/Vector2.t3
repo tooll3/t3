@@ -1,7 +1,5 @@
 {
-  "Name": "Vector2",
-  "Id": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
-  "Namespace": "lib.types",
+  "Id": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8"/*Vector2*/,
   "Inputs": [
     {
       "Id": "6b9d0106-78f9-4507-a0f6-234c5dfb0f85"/*X*/,

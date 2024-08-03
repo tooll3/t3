@@ -1,7 +1,5 @@
 {
-  "Name": "UavFromStructuredBuffer",
-  "Id": "0b5b14bf-c850-493a-afb1-72643926e214",
-  "Namespace": "lib.dx11.buffer",
+  "Id": "0b5b14bf-c850-493a-afb1-72643926e214"/*UavFromStructuredBuffer*/,
   "Inputs": [
     {
       "Id": "5d888f13-0ad8-4034-99ca-da36c8fb261c"/*Buffer*/,

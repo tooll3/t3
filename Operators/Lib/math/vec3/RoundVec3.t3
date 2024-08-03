@@ -1,7 +1,5 @@
 {
-  "Name": "RoundVec3",
-  "Id": "baa8cd75-5621-42ba-a79c-b008b7caa141",
-  "Namespace": "lib.math.vec3",
+  "Id": "baa8cd75-5621-42ba-a79c-b008b7caa141"/*RoundVec3*/,
   "Inputs": [
     {
       "Id": "158ff4f8-7470-4402-b16e-54a3a252fe7a"/*Value*/,

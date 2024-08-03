@@ -1,7 +1,5 @@
 {
-  "Name": "ChromaticAbberation",
-  "Id": "8a203866-148d-4785-ae0e-61328b7646bb",
-  "Namespace": "lib.img.fx",
+  "Id": "8a203866-148d-4785-ae0e-61328b7646bb"/*ChromaticAbberation*/,
   "Inputs": [
     {
       "Id": "b62aece4-8098-475b-a4d3-469f81a58207"/*Image*/,
@@ -25,6 +23,12 @@
     }
   ],
   "Children": [
+    {
+      "Id": "a978b641-0aee-40ff-b880-6409489ff863"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
     {
       "Id": "e214dd0d-2a6f-40d8-a3c0-c3d18fd4e346"/*_ImageFxShaderSetupStatic*/,
       "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
@@ -50,12 +54,6 @@
           "Value": false
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "a978b641-0aee-40ff-b880-6409489ff863"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
       "Outputs": []
     }
   ],

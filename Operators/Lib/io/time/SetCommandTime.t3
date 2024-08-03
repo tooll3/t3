@@ -1,7 +1,5 @@
 {
-  "Name": "SetCommandTime",
-  "Id": "32325c5b-53f7-4414-b4dd-a436e45528b0",
-  "Namespace": "lib.io.time",
+  "Id": "32325c5b-53f7-4414-b4dd-a436e45528b0"/*SetCommandTime*/,
   "Inputs": [
     {
       "Id": "01f2eef1-e3c1-49a5-b532-9c12da8caac5"/*SubTree*/,

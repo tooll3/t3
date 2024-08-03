@@ -1,7 +1,5 @@
 {
-  "Name": "BlendMeshVertices",
-  "Id": "93e2f11a-18a2-4dcb-86df-c452d340b409",
-  "Namespace": "lib.point.combine",
+  "Id": "93e2f11a-18a2-4dcb-86df-c452d340b409"/*BlendMeshVertices*/,
   "Inputs": [
     {
       "Id": "a7ef92db-87c9-4cf3-bd62-f8cb858d9ed9"/*MeshA*/,
@@ -34,18 +32,6 @@
   ],
   "Children": [
     {
-      "Id": "7a4a6664-6da2-476b-8001-989cf417782a"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\fx\\mesh-BlendVertices.hlsl"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "72a0564c-27cb-48e3-824f-8764b7cdb557"/*ComputeShaderStage*/,
       "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
       "InputValues": [
@@ -62,26 +48,8 @@
       "Outputs": []
     },
     {
-      "Id": "95ef52c0-c054-4743-b9e9-a6f2844d4f1f"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "272e0899-657e-4507-890e-ec78c10fb7d1"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "c8494085-f77c-43e3-9b7b-3b93dee57b3b"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "a2147c56-061d-468f-a0ba-b2187475c34d"/*CalcDispatchCount*/,
-      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
+      "Id": "9c18a852-4e7d-422a-8ecb-bb5f3ad54eca"/*_AssembleMeshBuffers*/,
+      "SymbolId": "e0849edd-ea1b-4657-b22d-5aa646318aa8",
       "InputValues": [],
       "Outputs": []
     },
@@ -98,33 +66,15 @@
       "Outputs": []
     },
     {
-      "Id": "e96d8a6c-f8e0-460b-9517-066961cc7bc1"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "e28c7fc4-2e61-4350-8744-bdedcf758c06"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "3e69b70d-6674-44b1-80c2-ce011178ad9a"/*_MeshBufferComponents*/,
-      "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "f234c6b5-1517-41cc-8f2e-7b3ba78546df"/*_MeshBufferComponents*/,
-      "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "9c18a852-4e7d-422a-8ecb-bb5f3ad54eca"/*_AssembleMeshBuffers*/,
-      "SymbolId": "e0849edd-ea1b-4657-b22d-5aa646318aa8",
-      "InputValues": [],
+      "Id": "7a4a6664-6da2-476b-8001-989cf417782a"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\3d\\mesh\\fx\\mesh-BlendVertices.hlsl"
+        }
+      ],
       "Outputs": []
     },
     {
@@ -134,8 +84,8 @@
       "Outputs": []
     },
     {
-      "Id": "5b303fe8-ea99-4f62-8fea-cbcc4a14407f"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "Id": "211f13be-bade-42e6-9941-3f0ea2cc0312"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     },
@@ -153,14 +103,62 @@
       "Outputs": []
     },
     {
-      "Id": "211f13be-bade-42e6-9941-3f0ea2cc0312"/*GetBufferComponents*/,
+      "Id": "5b303fe8-ea99-4f62-8fea-cbcc4a14407f"/*GetSRVProperties*/,
+      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e28c7fc4-2e61-4350-8744-bdedcf758c06"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "f234c6b5-1517-41cc-8f2e-7b3ba78546df"/*_MeshBufferComponents*/,
+      "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e96d8a6c-f8e0-460b-9517-066961cc7bc1"/*GetBufferComponents*/,
       "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "a2147c56-061d-468f-a0ba-b2187475c34d"/*CalcDispatchCount*/,
+      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "3e69b70d-6674-44b1-80c2-ce011178ad9a"/*_MeshBufferComponents*/,
+      "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "272e0899-657e-4507-890e-ec78c10fb7d1"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c8494085-f77c-43e3-9b7b-3b93dee57b3b"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
       "InputValues": [],
       "Outputs": []
     },
     {
       "Id": "11a518fd-a33d-4aa2-9f5f-3727ca75a386"/*DisplaceMeshNoise*/,
       "SymbolId": "b5709297-c714-4019-9d0b-6982590b5590",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "95ef52c0-c054-4743-b9e9-a6f2844d4f1f"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
       "Outputs": []
     }

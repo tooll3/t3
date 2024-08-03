@@ -1,7 +1,5 @@
 {
-  "Name": "Random",
-  "Id": "10673c38-8c7e-4aa1-8dcd-3f2711c709b5",
-  "Namespace": "lib.math.float",
+  "Id": "10673c38-8c7e-4aa1-8dcd-3f2711c709b5"/*Random*/,
   "Inputs": [
     {
       "Id": "f2513ead-7022-4774-8767-7f33d1b92b26"/*Seed*/,

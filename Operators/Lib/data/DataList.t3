@@ -1,7 +1,5 @@
 {
-  "Name": "DataList",
-  "Id": "bfe540ef-f8ad-45a2-b557-cd419d9c8e44",
-  "Namespace": "user.cynic.research.data",
+  "Id": "bfe540ef-f8ad-45a2-b557-cd419d9c8e44"/*DataList*/,
   "Inputs": [
     {
       "Id": "669ae1e4-dd47-4369-83c6-26d2705abf7b"/*InputList*/,

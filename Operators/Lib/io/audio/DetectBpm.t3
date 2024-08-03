@@ -1,7 +1,5 @@
 {
-  "Name": "DetectBpm",
-  "Id": "e712e801-863d-45c5-9ef8-fbe90dcb8375",
-  "Namespace": "lib.io.audio",
+  "Id": "e712e801-863d-45c5-9ef8-fbe90dcb8375"/*DetectBpm*/,
   "Inputs": [
     {
       "Id": "3d2d523e-6578-488c-92fa-9e2a3a773e11"/*LowerLimit*/,

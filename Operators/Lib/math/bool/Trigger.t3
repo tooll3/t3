@@ -1,7 +1,5 @@
 {
-  "Name": "Trigger",
-  "Id": "0bec016a-5e1b-467a-8273-368d4d6b9935",
-  "Namespace": "lib.math.bool",
+  "Id": "0bec016a-5e1b-467a-8273-368d4d6b9935"/*Trigger*/,
   "Inputs": [
     {
       "Id": "e7c1f0af-da6d-4e33-ac86-7dc96bfe7eb3"/*BoolValue*/,

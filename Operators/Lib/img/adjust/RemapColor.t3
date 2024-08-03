@@ -1,7 +1,5 @@
 {
-  "Name": "RemapColor",
-  "Id": "da93f7d1-ef91-4b4a-9708-2d9b1baa4c14",
-  "Namespace": "lib.img.adjust",
+  "Id": "da93f7d1-ef91-4b4a-9708-2d9b1baa4c14"/*RemapColor*/,
   "Inputs": [
     {
       "Id": "876f6f64-7cb4-4060-8571-e0b78b437d41"/*Image*/,
@@ -112,14 +110,20 @@
       "Outputs": []
     },
     {
-      "Id": "0ea5f0cd-02af-4872-8d07-3fc4ce0c4330"/*BoolToFloat*/,
-      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
+      "Id": "06c9a212-c48b-4ff1-8882-a309fd0f9d7d"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
       "Id": "05aef49e-71e0-4f76-b01f-536dc193d0dd"/*IntToFloat*/,
       "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "0ea5f0cd-02af-4872-8d07-3fc4ce0c4330"/*BoolToFloat*/,
+      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
     },
@@ -138,12 +142,6 @@
           "Value": "Clamp"
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "06c9a212-c48b-4ff1-8882-a309fd0f9d7d"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
       "Outputs": []
     }
   ],

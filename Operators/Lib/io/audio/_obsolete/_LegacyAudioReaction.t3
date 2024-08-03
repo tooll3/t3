@@ -1,7 +1,5 @@
 {
-  "Name": "_LegacyAudioReaction",
-  "Id": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
-  "Namespace": "lib.io.audio._obsolete",
+  "Id": "f8aed421-5e0e-4d1f-993c-1801153ebba8"/*_LegacyAudioReaction*/,
   "Inputs": [
     {
       "Id": "15f841f5-5153-4383-90b9-f6a4f72d5d6b"/*Band*/,

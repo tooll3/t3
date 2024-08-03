@@ -1,7 +1,5 @@
 {
-  "Name": "Boolean",
-  "Id": "ed0f5188-8888-453e-8db4-20d87d18e9f4",
-  "Namespace": "lib.math.bool",
+  "Id": "ed0f5188-8888-453e-8db4-20d87d18e9f4"/*Boolean*/,
   "Inputs": [
     {
       "Id": "e7c1f0af-da6d-4e33-ac86-7dc96bfe7eb3"/*BoolValue*/,

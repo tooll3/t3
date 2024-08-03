@@ -1,7 +1,5 @@
 {
-  "Name": "BubbleZoom",
-  "Id": "ca3f3c1b-6f22-4bf3-b06b-d2b0d85a8881",
-  "Namespace": "lib.img.fx",
+  "Id": "ca3f3c1b-6f22-4bf3-b06b-d2b0d85a8881"/*BubbleZoom*/,
   "Inputs": [
     {
       "Id": "019b7a1a-0f86-48e2-b5e9-9a04480a3b07"/*Image*/,
@@ -76,23 +74,6 @@
       "Outputs": []
     },
     {
-      "Id": "61289140-6786-4534-b6e3-6130f3c4ca54"/*_multiImageFxSetup*/,
-      "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
-      "InputValues": [
-        {
-          "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\BubbleZoom.hlsl"
-        },
-        {
-          "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Clamp"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "a6a5cc16-8a4b-40cb-9f5a-6f4f161d168c"/*GradientsToTexture*/,
       "SymbolId": "2c53eee7-eb38-449b-ad2a-d7a674952e5b",
       "InputValues": [
@@ -126,6 +107,23 @@
               ]
             }
           }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "61289140-6786-4534-b6e3-6130f3c4ca54"/*_multiImageFxSetup*/,
+      "SymbolId": "a2567844-3314-48de-bda7-7904b5546535",
+      "InputValues": [
+        {
+          "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\BubbleZoom.hlsl"
+        },
+        {
+          "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Clamp"
         }
       ],
       "Outputs": []

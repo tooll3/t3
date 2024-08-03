@@ -1,7 +1,5 @@
 {
-  "Name": "GetIntVar",
-  "Id": "470db771-c7f2-4c52-8897-d3a9b9fc6a4e",
-  "Namespace": "lib.exec.context",
+  "Id": "470db771-c7f2-4c52-8897-d3a9b9fc6a4e"/*GetIntVar*/,
   "Inputs": [
     {
       "Id": "d7662b65-f249-4887-a319-dc2cf7d192f2"/*VariableName*/,

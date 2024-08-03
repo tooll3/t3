@@ -1,7 +1,5 @@
 {
-  "Name": "GenerateMips",
-  "Id": "32a6a351-6d22-4915-aa0e-e0483b7f4e76",
-  "Namespace": "lib.dx11.tex",
+  "Id": "32a6a351-6d22-4915-aa0e-e0483b7f4e76"/*GenerateMips*/,
   "Inputs": [
     {
       "Id": "a4e3001c-0663-48ec-8f56-b11ff0b40850"/*Texture*/,

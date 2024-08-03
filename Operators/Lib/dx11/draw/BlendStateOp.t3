@@ -1,7 +1,5 @@
 {
-  "Name": "BlendStateOp",
-  "Id": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
-  "Namespace": "lib.dx11.draw",
+  "Id": "064ca51f-47ab-4cb7-95f2-e537b68e137e"/*BlendStateOp*/,
   "Inputs": [
     {
       "Id": "63d0e4e8-fa00-4059-a11b-6a31e66757dc"/*RenderTargets*/,

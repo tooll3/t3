@@ -1,7 +1,5 @@
 {
-  "Name": "SwapTextures",
-  "Id": "590a0b0b-c847-433c-8ffa-602ed0ae8f28",
-  "Namespace": "lib.dx11.buffer",
+  "Id": "590a0b0b-c847-433c-8ffa-602ed0ae8f28"/*SwapTextures*/,
   "Inputs": [
     {
       "Id": "9dd14a67-afdb-4cd4-bdd5-9fcd565bc65d"/*TextureAInput*/,

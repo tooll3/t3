@@ -1,7 +1,5 @@
 {
-  "Name": "VertexShader",
-  "Id": "646f5988-0a76-4996-a538-ba48054fd0ad",
-  "Namespace": "lib.dx11.draw",
+  "Id": "646f5988-0a76-4996-a538-ba48054fd0ad"/*VertexShader*/,
   "Inputs": [
     {
       "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,

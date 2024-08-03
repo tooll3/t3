@@ -1,7 +1,5 @@
 {
-  "Name": "Blend",
-  "Id": "9f43f769-d32a-4f49-92ac-e0be3ba250cf",
-  "Namespace": "lib.img.use",
+  "Id": "9f43f769-d32a-4f49-92ac-e0be3ba250cf"/*Blend*/,
   "Inputs": [
     {
       "Id": "abaa52e9-7d3d-4ae5-89d2-5251f61e5392"/*ImageA*/,
@@ -59,13 +57,13 @@
   ],
   "Children": [
     {
-      "Id": "46965dc5-8929-4d8f-82ff-29cebdce3b8d"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "Id": "882f89a2-6842-4342-bc33-0d9a4977873f"/*BoolToFloat*/,
+      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "42f85198-b793-4609-aba8-8a7e2db62bbf"/*Vector4Components*/,
+      "Id": "46965dc5-8929-4d8f-82ff-29cebdce3b8d"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -77,14 +75,20 @@
       "Outputs": []
     },
     {
+      "Id": "42f85198-b793-4609-aba8-8a7e2db62bbf"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "b7edf6bf-99d6-40a5-a459-570202ead322"/*IntToFloat*/,
       "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "882f89a2-6842-4342-bc33-0d9a4977873f"/*BoolToFloat*/,
-      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
+      "Id": "b2c29ae7-69bd-4a78-951e-1e0952052b41"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
     },
@@ -103,12 +107,6 @@
           "Value": "Clamp"
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "b2c29ae7-69bd-4a78-951e-1e0952052b41"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
-      "InputValues": [],
       "Outputs": []
     }
   ],

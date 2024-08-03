@@ -1,7 +1,5 @@
 {
-  "Name": "SampleCurve",
-  "Id": "b724ea74-d5d7-4928-9cd1-7a7850e4e179",
-  "Namespace": "lib.math.curve",
+  "Id": "b724ea74-d5d7-4928-9cd1-7a7850e4e179"/*SampleCurve*/,
   "Inputs": [
     {
       "Id": "108cb829-5f9e-4a45-bc6b-7cf40a0a0f89"/*Curve*/,

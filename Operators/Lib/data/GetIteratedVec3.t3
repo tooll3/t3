@@ -1,7 +1,5 @@
 {
-  "Name": "GetIteratedVec3",
-  "Id": "d86e9585-d233-455a-9059-fa93debfed01",
-  "Namespace": "user.cynic.research.data",
+  "Id": "d86e9585-d233-455a-9059-fa93debfed01"/*GetIteratedVec3*/,
   "Inputs": [
     {
       "Id": "18dc4a34-f0c1-4763-be36-71b59533916a"/*FieldName*/,

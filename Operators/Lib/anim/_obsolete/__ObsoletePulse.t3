@@ -1,7 +1,5 @@
 {
-  "Name": "__ObsoletePulse",
-  "Id": "5952d7b4-29ac-41fb-9324-287392d55048",
-  "Namespace": "lib.anim._obsolete",
+  "Id": "5952d7b4-29ac-41fb-9324-287392d55048"/*__ObsoletePulse*/,
   "Inputs": [
     {
       "Id": "a8d06cd6-ca17-404f-9852-a45ce35da623"/*Trigger*/,

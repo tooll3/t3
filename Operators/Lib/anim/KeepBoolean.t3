@@ -1,7 +1,5 @@
 {
-  "Name": "KeepBoolean",
-  "Id": "743e18c7-eed5-40df-9a86-7caa996d94a2",
-  "Namespace": "lib.anim",
+  "Id": "743e18c7-eed5-40df-9a86-7caa996d94a2"/*KeepBoolean*/,
   "Inputs": [
     {
       "Id": "2838dec7-502b-4761-bca7-7389bdb69504"/*Value*/,

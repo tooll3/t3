@@ -1,7 +1,5 @@
 {
-  "Name": "AddVec3",
-  "Id": "15ac7153-69af-45f8-bcdd-50cdef0c9ae1",
-  "Namespace": "lib.math.vec3",
+  "Id": "15ac7153-69af-45f8-bcdd-50cdef0c9ae1"/*AddVec3*/,
   "Inputs": [
     {
       "Id": "f933c566-cbb2-4d2c-9e3b-f7ad3b2f7292"/*Input1*/,

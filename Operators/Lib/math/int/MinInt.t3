@@ -1,7 +1,5 @@
 {
-  "Name": "MinInt",
-  "Id": "d1530d89-32b9-4e16-97fe-c08d095d9d03",
-  "Namespace": "lib.math.int",
+  "Id": "d1530d89-32b9-4e16-97fe-c08d095d9d03"/*MinInt*/,
   "Inputs": [
     {
       "Id": "6bb2b4eb-f5d9-43f0-8584-4ea3d38f6538"/*Ints*/,

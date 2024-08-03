@@ -1,7 +1,5 @@
 {
-  "Name": "CountInt",
-  "Id": "0e1d5f4b-3ba0-4e71-aa26-7308b6df214d",
-  "Namespace": "lib.math.int",
+  "Id": "0e1d5f4b-3ba0-4e71-aa26-7308b6df214d"/*CountInt*/,
   "Inputs": [
     {
       "Id": "bfd95809-61d2-49eb-85d4-ff9e36b2d158"/*TriggerIncrement*/,

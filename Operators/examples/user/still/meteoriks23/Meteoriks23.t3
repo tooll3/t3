@@ -1,18 +1,16 @@
 {
-  "Name": "Meteoriks23",
-  "Id": "71ac2f3c-c85f-43d1-9929-a8445b797e68",
-  "Namespace": "user.still.meteoriks23",
+  "Id": "71ac2f3c-c85f-43d1-9929-a8445b797e68"/*Meteoriks23*/,
   "Inputs": [],
   "Children": [
     {
-      "Id": "cb230429-fdaf-456f-851f-7834ba965762"/*MeteoriksEdit01*/,
-      "SymbolId": "351e27ae-cde8-4840-973c-2967023a254f",
+      "Id": "7f3680cb-c3fb-48f8-bbee-bd63b3542610"/*MeteoriksEdit02*/,
+      "SymbolId": "d90cce62-09e8-44da-a843-62a697b8e99a",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "7f3680cb-c3fb-48f8-bbee-bd63b3542610"/*MeteoriksEdit02*/,
-      "SymbolId": "d90cce62-09e8-44da-a843-62a697b8e99a",
+      "Id": "cb230429-fdaf-456f-851f-7834ba965762"/*MeteoriksEdit01*/,
+      "SymbolId": "351e27ae-cde8-4840-973c-2967023a254f",
       "InputValues": [],
       "Outputs": []
     }
@@ -40,8 +38,7 @@
         "EndTime": 0.0,
         "Bpm": 174.0,
         "DiscardAfterUse": true,
-        "IsSoundtrack": true,
-        "FilePath": ""
+        "IsSoundtrack": true
       }
     ]
   }

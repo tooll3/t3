@@ -1,9 +1,92 @@
 {
-  "Name": "PartialCredits",
-  "Id": "ec9d9b04-9f86-49f9-9463-f5ba04e4ee00",
-  "Namespace": "user.still.there.scenes",
+  "Id": "ec9d9b04-9f86-49f9-9463-f5ba04e4ee00"/*PartialCredits*/,
   "Inputs": [],
   "Children": [
+    {
+      "Id": "17ee19a4-1fca-4a64-aefa-38fcef93e45a"/*DrawLines*/,
+      "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "73ebf863-ba71-421c-bee7-312f13c5eff0"/*DrawLines*/,
+          "IsDisabled": true
+        }
+      ]
+    },
+    {
+      "Id": "200a4952-1c1c-4649-970d-9a0c17840a31"/*Camera*/,
+      "SymbolId": "746d886c-5ab6-44b1-bb15-f3ce2fadf7e6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "60dc334f-db31-42e0-b58e-2bb735951bb9"/*Transform*/,
+      "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
+      "InputValues": [
+        {
+          "Id": "b4a8c16d-5a0f-4867-ae03-92a675abe709"/*Translation*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 0.0,
+            "Y": -0.29314506,
+            "Z": 0.0
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "3cedbf17-a9e7-456f-833d-1eab2008173e"/*GridPoints*/,
+      "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
+      "InputValues": [
+        {
+          "Id": "8c46fc72-8960-4247-a5ef-dd38f822f1bb"/*CountY*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "6de4f08a-5834-4b9b-93e8-8f93fe32164c"/*CountZ*/,
+          "Type": "System.Int32",
+          "Value": 1
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "eb8c79d4-d147-419c-a606-4bbe7b71933f"/*GridPoints*/,
+          "IsDisabled": true
+        }
+      ]
+    },
+    {
+      "Id": "4d35d36f-f99a-4a58-8667-e72d318d4d78"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [
+        {
+          "Id": "4618d8e0-2718-4373-a071-88ec1843b0c8"/*Stretch*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 7.4,
+            "Y": 1.26
+          }
+        },
+        {
+          "Id": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1E-06,
+            "Y": 9.9999E-07,
+            "Z": 9.9999E-07,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
+    },
     {
       "Id": "c29d8a76-f79d-4c47-b9ce-3c6e3193236d"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
@@ -11,9 +94,74 @@
       "Outputs": []
     },
     {
-      "Id": "200a4952-1c1c-4649-970d-9a0c17840a31"/*Camera*/,
-      "SymbolId": "746d886c-5ab6-44b1-bb15-f3ce2fadf7e6",
+      "Id": "be27c8f8-f34c-49cb-b6e7-7ace4946d51a"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1"/*Execute*/,
+          "IsDisabled": true
+        }
+      ]
+    },
+    {
+      "Id": "b13ed921-23e1-4ecb-8128-fd197fbe73f3"/*CreditText*/,
+      "SymbolId": "7b1093bb-33ec-4fa4-a102-9a28002b511c",
+      "InputValues": [
+        {
+          "Id": "fb727199-d0bb-404e-a671-ec48bc11627b"/*Input*/,
+          "Type": "System.String",
+          "Value": "Statue \"La rivière étendue\" by Aristide Maillol  / Scanned by Caz Egelie"
+        },
+        {
+          "Id": "e4173f22-ddd9-413c-8ead-88ac71e9fc92"/*Progress*/,
+          "Type": "System.Single",
+          "Value": 0.5
+        },
+        {
+          "Id": "c21e5e9c-7e50-41b4-abd2-f054c944221e"/*Position*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.0,
+            "Y": -0.518
+          }
+        },
+        {
+          "Id": "e0af476f-461d-4d01-b01f-271886269ab6"/*Style*/,
+          "Type": "System.Int32",
+          "Value": 2
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "39379b07-8aa4-4d53-ba7e-f5bba55111e1"/*CreditText*/,
+      "SymbolId": "7b1093bb-33ec-4fa4-a102-9a28002b511c",
+      "InputValues": [
+        {
+          "Id": "fb727199-d0bb-404e-a671-ec48bc11627b"/*Input*/,
+          "Type": "System.String",
+          "Value": "MADE WITH Tooll3 / with help from\n"
+        },
+        {
+          "Id": "e4173f22-ddd9-413c-8ead-88ac71e9fc92"/*Progress*/,
+          "Type": "System.Single",
+          "Value": 0.5
+        },
+        {
+          "Id": "c21e5e9c-7e50-41b4-abd2-f054c944221e"/*Position*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.0,
+            "Y": -0.439
+          }
+        },
+        {
+          "Id": "e0af476f-461d-4d01-b01f-271886269ab6"/*Style*/,
+          "Type": "System.Int32",
+          "Value": 2
+        }
+      ],
       "Outputs": []
     },
     {
@@ -44,6 +192,95 @@
           "Value": 0
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "4b0e0a07-fd05-4091-afa1-004e0066b0d0"/*GridPoints*/,
+      "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
+      "InputValues": [
+        {
+          "Id": "72eda38f-fc49-4b1f-b7c0-97e07bee4f7c"/*CountX*/,
+          "Type": "System.Int32",
+          "Value": 100
+        },
+        {
+          "Id": "8c46fc72-8960-4247-a5ef-dd38f822f1bb"/*CountY*/,
+          "Type": "System.Int32",
+          "Value": 100
+        },
+        {
+          "Id": "6de4f08a-5834-4b9b-93e8-8f93fe32164c"/*CountZ*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "37a11e3d-e353-4b0f-a052-356582e235b0"/*Size*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 0.05,
+            "Y": 0.05,
+            "Z": 1.0
+          }
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "eb8c79d4-d147-419c-a606-4bbe7b71933f"/*GridPoints*/,
+          "IsDisabled": true
+        }
+      ]
+    },
+    {
+      "Id": "f36c44b6-6599-4683-96a3-62bc2bfe4898"/*CreditText*/,
+      "SymbolId": "7b1093bb-33ec-4fa4-a102-9a28002b511c",
+      "InputValues": [
+        {
+          "Id": "fb727199-d0bb-404e-a671-ec48bc11627b"/*Input*/,
+          "Type": "System.String",
+          "Value": "ARSILIATH   1X   NERO   GASPODE   PREACHER   PSENOUGH   ocornut   mellinoe"
+        },
+        {
+          "Id": "e4173f22-ddd9-413c-8ead-88ac71e9fc92"/*Progress*/,
+          "Type": "System.Single",
+          "Value": 0.5
+        },
+        {
+          "Id": "c21e5e9c-7e50-41b4-abd2-f054c944221e"/*Position*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.0,
+            "Y": -0.468
+          }
+        },
+        {
+          "Id": "e0af476f-461d-4d01-b01f-271886269ab6"/*Style*/,
+          "Type": "System.Int32",
+          "Value": 2
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "ecec3ef3-3e01-4631-8ca5-af20dce1f9aa"/*DrawPoints*/,
+      "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
+      "InputValues": [
+        {
+          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
+          "Type": "System.Single",
+          "Value": 0.04
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b73347d9-9d9f-4929-b9df-e2d6db722856"/*DrawPoints*/,
+          "IsDisabled": true
+        }
+      ]
+    },
+    {
+      "Id": "868cb735-0f9d-459c-946d-0f01167daada"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -105,245 +342,6 @@
         }
       ],
       "Outputs": []
-    },
-    {
-      "Id": "39379b07-8aa4-4d53-ba7e-f5bba55111e1"/*CreditText*/,
-      "SymbolId": "7b1093bb-33ec-4fa4-a102-9a28002b511c",
-      "InputValues": [
-        {
-          "Id": "fb727199-d0bb-404e-a671-ec48bc11627b"/*Input*/,
-          "Type": "System.String",
-          "Value": "MADE WITH Tooll3 / with help from\n"
-        },
-        {
-          "Id": "e4173f22-ddd9-413c-8ead-88ac71e9fc92"/*Progress*/,
-          "Type": "System.Single",
-          "Value": 0.5
-        },
-        {
-          "Id": "c21e5e9c-7e50-41b4-abd2-f054c944221e"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.439
-          }
-        },
-        {
-          "Id": "e0af476f-461d-4d01-b01f-271886269ab6"/*Style*/,
-          "Type": "System.Int32",
-          "Value": 2
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "f36c44b6-6599-4683-96a3-62bc2bfe4898"/*CreditText*/,
-      "SymbolId": "7b1093bb-33ec-4fa4-a102-9a28002b511c",
-      "InputValues": [
-        {
-          "Id": "fb727199-d0bb-404e-a671-ec48bc11627b"/*Input*/,
-          "Type": "System.String",
-          "Value": "ARSILIATH   1X   NERO   GASPODE   PREACHER   PSENOUGH   ocornut   mellinoe"
-        },
-        {
-          "Id": "e4173f22-ddd9-413c-8ead-88ac71e9fc92"/*Progress*/,
-          "Type": "System.Single",
-          "Value": 0.5
-        },
-        {
-          "Id": "c21e5e9c-7e50-41b4-abd2-f054c944221e"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.468
-          }
-        },
-        {
-          "Id": "e0af476f-461d-4d01-b01f-271886269ab6"/*Style*/,
-          "Type": "System.Int32",
-          "Value": 2
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "b13ed921-23e1-4ecb-8128-fd197fbe73f3"/*CreditText*/,
-      "SymbolId": "7b1093bb-33ec-4fa4-a102-9a28002b511c",
-      "InputValues": [
-        {
-          "Id": "fb727199-d0bb-404e-a671-ec48bc11627b"/*Input*/,
-          "Type": "System.String",
-          "Value": "Statue \"La rivière étendue\" by Aristide Maillol  / Scanned by Caz Egelie"
-        },
-        {
-          "Id": "e4173f22-ddd9-413c-8ead-88ac71e9fc92"/*Progress*/,
-          "Type": "System.Single",
-          "Value": 0.5
-        },
-        {
-          "Id": "c21e5e9c-7e50-41b4-abd2-f054c944221e"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.518
-          }
-        },
-        {
-          "Id": "e0af476f-461d-4d01-b01f-271886269ab6"/*Style*/,
-          "Type": "System.Int32",
-          "Value": 2
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "868cb735-0f9d-459c-946d-0f01167daada"/*Execute*/,
-      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "60dc334f-db31-42e0-b58e-2bb735951bb9"/*Transform*/,
-      "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
-      "InputValues": [
-        {
-          "Id": "b4a8c16d-5a0f-4867-ae03-92a675abe709"/*Translation*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.29314506,
-            "Z": 0.0
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "4d35d36f-f99a-4a58-8667-e72d318d4d78"/*Layer2d*/,
-      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
-      "InputValues": [
-        {
-          "Id": "4618d8e0-2718-4373-a071-88ec1843b0c8"/*Stretch*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 7.4,
-            "Y": 1.26
-          }
-        },
-        {
-          "Id": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 1E-06,
-            "Y": 9.9999E-07,
-            "Z": 9.9999E-07,
-            "W": 1.0
-          }
-        },
-        {
-          "Id": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,
-          "Type": "System.Boolean",
-          "Value": false
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "4b0e0a07-fd05-4091-afa1-004e0066b0d0"/*GridPoints*/,
-      "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
-      "InputValues": [
-        {
-          "Id": "72eda38f-fc49-4b1f-b7c0-97e07bee4f7c"/*CountX*/,
-          "Type": "System.Int32",
-          "Value": 100
-        },
-        {
-          "Id": "8c46fc72-8960-4247-a5ef-dd38f822f1bb"/*CountY*/,
-          "Type": "System.Int32",
-          "Value": 100
-        },
-        {
-          "Id": "6de4f08a-5834-4b9b-93e8-8f93fe32164c"/*CountZ*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "37a11e3d-e353-4b0f-a052-356582e235b0"/*Size*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.05,
-            "Y": 0.05,
-            "Z": 1.0
-          }
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "eb8c79d4-d147-419c-a606-4bbe7b71933f"/*GridPoints*/,
-          "IsDisabled": true
-        }
-      ]
-    },
-    {
-      "Id": "ecec3ef3-3e01-4631-8ca5-af20dce1f9aa"/*DrawPoints*/,
-      "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
-      "InputValues": [
-        {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
-          "Type": "System.Single",
-          "Value": 0.04
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "b73347d9-9d9f-4929-b9df-e2d6db722856"/*DrawPoints*/,
-          "IsDisabled": true
-        }
-      ]
-    },
-    {
-      "Id": "be27c8f8-f34c-49cb-b6e7-7ace4946d51a"/*Execute*/,
-      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
-      "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1"/*Execute*/,
-          "IsDisabled": true
-        }
-      ]
-    },
-    {
-      "Id": "3cedbf17-a9e7-456f-833d-1eab2008173e"/*GridPoints*/,
-      "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
-      "InputValues": [
-        {
-          "Id": "8c46fc72-8960-4247-a5ef-dd38f822f1bb"/*CountY*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "6de4f08a-5834-4b9b-93e8-8f93fe32164c"/*CountZ*/,
-          "Type": "System.Int32",
-          "Value": 1
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "eb8c79d4-d147-419c-a606-4bbe7b71933f"/*GridPoints*/,
-          "IsDisabled": true
-        }
-      ]
-    },
-    {
-      "Id": "17ee19a4-1fca-4a64-aefa-38fcef93e45a"/*DrawLines*/,
-      "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
-      "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "73ebf863-ba71-421c-bee7-312f13c5eff0"/*DrawLines*/,
-          "IsDisabled": true
-        }
-      ]
     }
   ],
   "Connections": [

@@ -19,7 +19,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "5b4054db-ab07-4d21-8bfd-3a490f3da760"/*AString*/,
+      "ChildId": "5b4054db-ab07-4d21-8bfd-3a490f3da760"/*String*/,
       "Style": "Resizable",
       "Size": {
         "X": 307.15845,

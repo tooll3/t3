@@ -1,9 +1,58 @@
 {
-  "Name": "BlendWithMaskExample",
-  "Id": "6594c457-82ab-4121-8e51-5212fe69262f",
-  "Namespace": "examples.lib.img.use",
+  "Id": "6594c457-82ab-4121-8e51-5212fe69262f"/*BlendWithMaskExample*/,
   "Inputs": [],
   "Children": [
+    {
+      "Id": "65bd2f7a-29eb-404b-8d24-aba1cce3f151"/*LoadImage*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [
+        {
+          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
+          "Type": "System.String",
+          "Value": "Resources\\images\\frog2.jpg"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "f5b22ec9-e184-4dc9-b0cf-6ed03202e0b0"/*BlendWithMask*/,
+      "SymbolId": "7da55d23-0bd1-457b-a036-9b6b51d2e34b",
+      "InputValues": [
+        {
+          "Id": "0f542667-8b2c-4fd7-9f9a-d63f1573d25a"/*ColorA*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 0.99999,
+            "Z": 0.99999,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "f551d82e-bbd5-40fd-9d84-e08d97f06c46"/*ColorB*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "1fd6d96e-75db-4845-8aa0-29be8160225f"/*Time*/,
+      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
+      "InputValues": [
+        {
+          "Id": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
+          "Type": "System.Single",
+          "Value": 90.0
+        }
+      ],
+      "Outputs": []
+    },
     {
       "Id": "1dce8460-0f31-4afb-9d7a-973c87ae931f"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
@@ -53,60 +102,9 @@
       "Outputs": []
     },
     {
-      "Id": "f5b22ec9-e184-4dc9-b0cf-6ed03202e0b0"/*BlendWithMask*/,
-      "SymbolId": "7da55d23-0bd1-457b-a036-9b6b51d2e34b",
-      "InputValues": [
-        {
-          "Id": "0f542667-8b2c-4fd7-9f9a-d63f1573d25a"/*ColorA*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 1.0,
-            "Y": 0.99999,
-            "Z": 0.99999,
-            "W": 1.0
-          }
-        },
-        {
-          "Id": "f551d82e-bbd5-40fd-9d84-e08d97f06c46"/*ColorB*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0,
-            "W": 1.0
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "3448034f-e4c9-453c-b21e-288c112cf2bb"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "65bd2f7a-29eb-404b-8d24-aba1cce3f151"/*LoadImage*/,
-      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
-      "InputValues": [
-        {
-          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
-          "Type": "System.String",
-          "Value": "Resources\\images\\frog2.jpg"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "1fd6d96e-75db-4845-8aa0-29be8160225f"/*Time*/,
-      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
-      "InputValues": [
-        {
-          "Id": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
-          "Type": "System.Single",
-          "Value": 90.0
-        }
-      ],
       "Outputs": []
     }
   ],

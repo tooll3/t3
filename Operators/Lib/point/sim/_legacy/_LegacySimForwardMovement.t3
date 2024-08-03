@@ -1,7 +1,5 @@
 {
-  "Name": "_LegacySimForwardMovement",
-  "Id": "69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8",
-  "Namespace": "lib.point.sim._legacy",
+  "Id": "69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8"/*_LegacySimForwardMovement*/,
   "Inputs": [
     {
       "Id": "2038b006-b5a3-472d-870b-d1a3623dfc0c"/*GPoints*/,
@@ -22,15 +20,39 @@
   ],
   "Children": [
     {
-      "Id": "88bb9f9a-2372-4146-87e6-fdd79020749a"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\points\\sim\\simulate-points.hlsl"
-        }
-      ],
+      "Id": "f4140bfe-485a-4d76-b1c1-b23459e2a0aa"/*Time*/,
+      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c8ee93cc-f01c-4fab-b407-274c72d3f388"/*CalcDispatchCount*/,
+      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "a6e028ef-6553-4f13-8249-e88d08d5b47a"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e9b718af-96d7-40aa-af64-2ec1f9a591ac"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "da0fc2e1-4698-475d-8448-2cb4679ad14a"/*And*/,
+      "SymbolId": "a18ae2d3-1735-40b8-bebb-65a6788bc872",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "999dd83c-deb8-435a-b581-6aed8687309f"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -50,39 +72,15 @@
       "Outputs": []
     },
     {
-      "Id": "a6e028ef-6553-4f13-8249-e88d08d5b47a"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "47474927-19ae-4c3f-b6df-38fa535c1e64"/*GetSRVProperties*/,
-      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "e9b718af-96d7-40aa-af64-2ec1f9a591ac"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "c8ee93cc-f01c-4fab-b407-274c72d3f388"/*CalcDispatchCount*/,
-      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "999dd83c-deb8-435a-b581-6aed8687309f"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "f4140bfe-485a-4d76-b1c1-b23459e2a0aa"/*Time*/,
-      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
-      "InputValues": [],
+      "Id": "88bb9f9a-2372-4146-87e6-fdd79020749a"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\points\\sim\\simulate-points.hlsl"
+        }
+      ],
       "Outputs": []
     },
     {
@@ -98,8 +96,8 @@
       "Outputs": []
     },
     {
-      "Id": "da0fc2e1-4698-475d-8448-2cb4679ad14a"/*And*/,
-      "SymbolId": "a18ae2d3-1735-40b8-bebb-65a6788bc872",
+      "Id": "47474927-19ae-4c3f-b6df-38fa535c1e64"/*GetSRVProperties*/,
+      "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
       "InputValues": [],
       "Outputs": []
     }

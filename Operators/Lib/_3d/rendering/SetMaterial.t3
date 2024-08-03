@@ -1,0 +1,61 @@
+{
+  "Id": "0ed2bee3-641f-4b08-8685-df1506e9af3c"/*SetMaterial*/,
+  "Inputs": [
+    {
+      "Id": "2a585a23-b60c-4c8b-8cfa-9ab2a8b04c7a"/*SubTree*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "9ff5ade2-cfa7-4616-ad89-356f3248e04f"/*BaseColor*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    },
+    {
+      "Id": "0eb51df1-570a-4ac6-bae6-5e03d6e66ceb"/*BaseColorMap*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "2c91c306-1815-4b22-a70f-746232f024d7"/*EmissiveColor*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0,
+        "W": 1.0
+      }
+    },
+    {
+      "Id": "6d859756-0243-42c5-973d-6de2dcdc5609"/*EmissiveColorMap*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "9d5ca726-28b0-4f3d-a5aa-f0ae3e2043a9"/*Specular*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "e14dcc43-7c18-4ed7-ad39-dfeab10e3d33"/*Roughness*/,
+      "DefaultValue": 0.25
+    },
+    {
+      "Id": "108ff533-f205-4989-b894-acf48e3cc1db"/*Metal*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "600bbc24-6b3a-4ac4-9ceb-702e71c839e9"/*NormalMap*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "c8003fbd-c6ce-440c-9f1f-6b15b5ee5274"/*RoughnessMetallicOcclusionMap*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "71e289f0-382b-4d0f-a2e0-701c7019a360"/*MaterialId*/,
+      "DefaultValue": ""
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

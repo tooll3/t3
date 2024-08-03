@@ -1,0 +1,11 @@
+{
+  "Id": "54ba8673-ff58-48d1-ae2e-ee2b83bc6860"/*IntToWrapmode*/,
+  "Inputs": [
+    {
+      "Id": "f50c736b-dc80-424b-8517-af0ca4168666"/*ModeIndex*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

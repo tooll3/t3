@@ -1,7 +1,5 @@
 {
-  "Name": "ChangeCase",
-  "Id": "acdd78b1-4e66-4fd0-a36b-5318670fefd4",
-  "Namespace": "lib.string",
+  "Id": "acdd78b1-4e66-4fd0-a36b-5318670fefd4"/*ChangeCase*/,
   "Inputs": [
     {
       "Id": "041c98b6-4450-46d7-9dae-c9030c88b9e6"/*InputText*/,

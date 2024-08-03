@@ -1,7 +1,5 @@
 {
-  "Name": "RenderTargetBlendDesc",
-  "Id": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
-  "Namespace": "lib.dx11.draw",
+  "Id": "38ee7546-8d7d-463c-aeea-e482d7ca3f30"/*RenderTargetBlendDesc*/,
   "Inputs": [
     {
       "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,

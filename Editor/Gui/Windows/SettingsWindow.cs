@@ -43,7 +43,7 @@ namespace T3.Editor.Gui.Windows
 
             ImGui.SameLine();
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(20, 5));
-            ImGui.BeginChild("content", new Vector2(-1, -1), true);
+            ImGui.BeginChild("content", new Vector2(0, 0), true);
             {
                 FormInputs.SetIndentToParameters();
                 switch (_activeCategory)

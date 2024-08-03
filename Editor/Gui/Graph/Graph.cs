@@ -50,7 +50,13 @@ namespace T3.Editor.Gui.Graph
             
             var tempConnections = ConnectionMaker.GetTempConnectionsFor(_window);
 
-            if (tempConnections.Count > 0 || AllConnections.Count != tempConnections.Count + graphSymbol.Connections.Count)
+            // _symbolUi = SymbolUiRegistry.Entries[graphSymbol.Id];
+            // _childUis = _symbolUi.ChildUis;
+            // _inputUisById = _symbolUi.InputUis;
+            // _outputUisById = _symbolUi.OutputUis;
+
+            if (tempConnections.Count > 0 
+                || AllConnections.Count != tempConnections.Count + graphSymbol.Connections.Count)
             {
                 _lastCheckSum = 0;
                 needsReinit = true;
@@ -64,12 +70,12 @@ namespace T3.Editor.Gui.Graph
                 for (var index = 0; index < graphSymbol.Connections.Count; index++)
                 {
                     var c = graphSymbol.Connections[index];
-                    checkSum += c.GetHashCode() * (index + 1);
+                    checkSum =  checkSum * 31 + c.GetHashCode() * (index+1);
                 }
 
                 foreach (var c in tempConnections)
                 {
-                    checkSum += c.GetHashCode();
+                    checkSum = checkSum * 31+ c.GetHashCode();
                 }
 
                 if (checkSum != _lastCheckSum)
@@ -129,22 +135,17 @@ namespace T3.Editor.Gui.Graph
             }
 
             // 4. Draw Inputs Nodes
-            foreach (var (nodeId, node) in compositionUi.InputUis)
+            for (var index = 0; index < graphSymbol.InputDefinitions.Count; index++)
             {
-                var index = graphSymbol.InputDefinitions.FindIndex(def => def.Id == nodeId);
-                if (index < 0)
-                {
-                    Log.Warning($"Input {nodeId} not found in {graphSymbol.Name}");
-                    continue;
-                }
                 var inputDef = graphSymbol.InputDefinitions[index];
-                var isSelectedOrHovered = InputNode.Draw(_window, drawList, inputDef, node, index);
+                var inputUi = compositionUi.InputUis[inputDef.Id];
+                var isSelectedOrHovered = InputNode.Draw(_window, drawList, inputDef, inputUi, index);
 
                 var sourcePos = new Vector2(
                                             InputNode._lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
                                             InputNode._lastScreenRect.GetCenter().Y
                                            );
-                foreach (var line in _connectionSorter.GetLinesFromInputNodes(node, nodeId))
+                foreach (var line in _connectionSorter.GetLinesFromInputNodes(inputUi, inputDef.Id))
                 {
                     line.SourcePosition = sourcePos;
                     line.IsSelected |= isSelectedOrHovered;
@@ -273,7 +274,8 @@ namespace T3.Editor.Gui.Graph
                 }
             }
         }
-
+        
+        
         private enum Channels
         {
             Annotations = 0,

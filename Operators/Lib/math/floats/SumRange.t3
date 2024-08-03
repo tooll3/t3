@@ -1,7 +1,5 @@
 {
-  "Name": "SumRange",
-  "Id": "d3a19896-230f-458f-b4ba-e448f63f0d51",
-  "Namespace": "lib.math.floats",
+  "Id": "d3a19896-230f-458f-b4ba-e448f63f0d51"/*SumRange*/,
   "Inputs": [
     {
       "Id": "865d1fd4-b225-4651-bc01-c43f071b8b42"/*LowerLimit*/,

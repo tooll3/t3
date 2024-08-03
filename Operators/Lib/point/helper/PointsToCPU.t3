@@ -1,7 +1,5 @@
 {
-  "Name": "PointsToCPU",
-  "Id": "a5f4552f-7e25-43a5-bb14-21ab836fa0b3",
-  "Namespace": "lib.point.helper",
+  "Id": "a5f4552f-7e25-43a5-bb14-21ab836fa0b3"/*PointsToCPU*/,
   "Inputs": [
     {
       "Id": "f267534c-59ae-4758-b04a-13b6337bc0eb"/*PointBuffer*/,

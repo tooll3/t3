@@ -1,7 +1,5 @@
 {
-  "Name": "_ExecuteParticleUpdate",
-  "Id": "b1352ba6-1164-4b44-9b69-a9eb802ea77d",
-  "Namespace": "lib.point._internal",
+  "Id": "b1352ba6-1164-4b44-9b69-a9eb802ea77d"/*_ExecuteParticleUpdate*/,
   "Inputs": [
     {
       "Id": "5d480604-dcb1-455c-b961-d72218380c99"/*Commands*/,

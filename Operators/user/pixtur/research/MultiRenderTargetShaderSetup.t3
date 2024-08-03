@@ -1,7 +1,5 @@
 {
-  "Name": "MultiRenderTargetShaderSetup",
-  "Id": "15ec2cc2-8c9e-41b7-8b55-0f39532a0882",
-  "Namespace": "user.pixtur.research",
+  "Id": "15ec2cc2-8c9e-41b7-8b55-0f39532a0882"/*MultiRenderTargetShaderSetup*/,
   "Inputs": [
     {
       "Id": "4ce89122-f988-46b6-94bb-6c94bc386ec3"/*Texture*/,
@@ -50,6 +48,18 @@
   ],
   "Children": [
     {
+      "Id": "e74663d8-3d49-4b8d-bfaf-bc4aa2cfae52"/*Texture2d*/,
+      "SymbolId": "f52db9a4-fde9-49ca-9ef7-131825c34e65",
+      "InputValues": [
+        {
+          "Id": "cfebc37f-6813-416a-9073-e48d31074115"/*BindFlags*/,
+          "Type": "SharpDX.Direct3D11.BindFlags",
+          "Value": "ShaderResource, RenderTarget"
+        }
+      ],
+      "Outputs": []
+    },
+    {
       "Id": "533957ab-4b1a-47c5-a115-eb0684ee4803"/*VertexShader*/,
       "SymbolId": "646f5988-0a76-4996-a538-ba48054fd0ad",
       "InputValues": [
@@ -84,47 +94,14 @@
       "Outputs": []
     },
     {
-      "Id": "e7c49c4c-02b7-45a7-8d2f-3019b7143b88"/*PixelShader*/,
-      "SymbolId": "f7c625da-fede-4993-976c-e259e0ee4985",
-      "InputValues": [
-        {
-          "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\research\\MutliRenderTargetShader\\img-multiRtTest2.hlsl"
-        },
-        {
-          "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
-          "Type": "System.String",
-          "Value": "psMain"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "a56a939c-d17f-419c-85c3-2e79dc7effc7"/*SamplerStateOp*/,
-      "SymbolId": "9515d59d-0bd5-406b-96da-6a5f60215700",
-      "InputValues": [
-        {
-          "Id": "e7c95fd5-14d1-434f-a140-f22ef69076ab"/*AddressU*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Wrap"
-        },
-        {
-          "Id": "fdeb503f-09c6-48d1-8853-7426f68cdec3"/*AddressV*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Wrap"
-        },
-        {
-          "Id": "93d8bf26-5067-4ccc-b4cb-e03970686462"/*AddressW*/,
-          "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Clamp"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "23715692-a934-4cdc-889e-3051e2b38b52"/*Rasterizer*/,
       "SymbolId": "fbd7f0f0-36a3-4fbb-91e1-cb33d4666d09",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "b830a843-ee34-4037-8795-bf6a8af819e1"/*UseFallbackTexture*/,
+      "SymbolId": "b470fdf9-ac0b-4eb9-9600-453b8c094e3f",
       "InputValues": [],
       "Outputs": []
     },
@@ -135,14 +112,32 @@
       "Outputs": []
     },
     {
-      "Id": "d4d5eaf2-4108-4367-ad3e-2753fb3189df"/*VertexShaderStage*/,
-      "SymbolId": "a9600440-4203-4315-bdb1-4dfd603b4515",
+      "Id": "4adb4390-6cdf-42cc-85ec-19f7f9fcd9d1"/*RtvFromTexture2d*/,
+      "SymbolId": "57a1ee33-702a-41ad-a17e-b43033d58638",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "518dd6c1-6fd7-4714-bb43-6a8978d801eb"/*InputAssemblerStage*/,
-      "SymbolId": "9d1266c5-23db-439f-a475-8000fdd1c318",
+      "Id": "372b9a56-44e3-425c-9475-181ed6ce929f"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "0eafc7da-5489-442d-937a-cc199fc6e1a5"/*RtvFromTexture2d*/,
+      "SymbolId": "57a1ee33-702a-41ad-a17e-b43033d58638",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "92f6bf89-08df-431e-8057-e491293a039f"/*GetTextureSize*/,
+      "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "b4a0ebeb-c296-45fe-a94e-57fb8db6980b"/*PickBlendMode*/,
+      "SymbolId": "fd9bffd3-5c57-462f-8761-85f94c5a629b",
       "InputValues": [],
       "Outputs": []
     },
@@ -169,51 +164,61 @@
       "Outputs": []
     },
     {
-      "Id": "27448ed3-b4fa-4c53-87c7-c3dfd591485a"/*Execute*/,
-      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "a61ed026-124a-4b42-9235-4b466708c3b4"/*SrvFromTexture2d*/,
-      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "372b9a56-44e3-425c-9475-181ed6ce929f"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "59ad60d0-72db-466f-86c1-88c0ae21ef58"/*Draw*/,
-      "SymbolId": "9b28e6b9-1d1f-42d8-8a9e-33497b1df820",
+      "Id": "79506476-9a57-454d-b3d2-0e1119925e09"/*Texture2d*/,
+      "SymbolId": "f52db9a4-fde9-49ca-9ef7-131825c34e65",
       "InputValues": [
         {
-          "Id": "8716b11a-ef71-437e-9930-bb747da818a7"/*VertexCount*/,
-          "Type": "System.Int32",
-          "Value": 6
+          "Id": "cfebc37f-6813-416a-9073-e48d31074115"/*BindFlags*/,
+          "Type": "SharpDX.Direct3D11.BindFlags",
+          "Value": "ShaderResource, RenderTarget"
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "92f6bf89-08df-431e-8057-e491293a039f"/*GetTextureSize*/,
-      "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
+      "Id": "28d89245-71d3-44a0-91f5-0e14dc479e03"/*Once*/,
+      "SymbolId": "e8d2b4ac-0ba2-400f-9c82-e5dd15a23d32",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "b4a0ebeb-c296-45fe-a94e-57fb8db6980b"/*PickBlendMode*/,
-      "SymbolId": "fd9bffd3-5c57-462f-8761-85f94c5a629b",
+      "Id": "518dd6c1-6fd7-4714-bb43-6a8978d801eb"/*InputAssemblerStage*/,
+      "SymbolId": "9d1266c5-23db-439f-a475-8000fdd1c318",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "b830a843-ee34-4037-8795-bf6a8af819e1"/*UseFallbackTexture*/,
-      "SymbolId": "b470fdf9-ac0b-4eb9-9600-453b8c094e3f",
+      "Id": "1c492ad7-e5e7-4ea9-9487-201968b1584d"/*ExecuteTextureUpdate*/,
+      "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c486fd60-907d-4e9c-820d-523f7895db50"/*LogMessage*/,
+      "SymbolId": "53127485-e2c7-4be8-aff2-da5790799593",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "8d6a6d3d-c814-41bc-b770-5a54dfdeb6a2"/*LogMessage*/,
+          "IsDisabled": true
+        }
+      ]
+    },
+    {
+      "Id": "e7c49c4c-02b7-45a7-8d2f-3019b7143b88"/*PixelShader*/,
+      "SymbolId": "f7c625da-fede-4993-976c-e259e0ee4985",
+      "InputValues": [
+        {
+          "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\user\\pixtur\\research\\MutliRenderTargetShader\\img-multiRtTest2.hlsl"
+        },
+        {
+          "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
+          "Type": "System.String",
+          "Value": "psMain"
+        }
+      ],
       "Outputs": []
     },
     {
@@ -247,33 +252,61 @@
       "Outputs": []
     },
     {
-      "Id": "1c492ad7-e5e7-4ea9-9487-201968b1584d"/*ExecuteTextureUpdate*/,
+      "Id": "f3d793d6-d340-4b61-94c2-070c4b62c77c"/*Time*/,
+      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "65f9bed1-a40b-4b25-aef7-6c09fe0c1ab2"/*HasTimeChanged*/,
+      "SymbolId": "2443b2fd-c397-4ea6-9588-b595f918cf01",
+      "InputValues": [
+        {
+          "Id": "bc112889-77a8-4967-a9b7-683b7c7017fe"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 2
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "6f819ffd-01e1-4db2-9692-d90f4edd6a59"/*ExecuteTextureUpdate*/,
       "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "79506476-9a57-454d-b3d2-0e1119925e09"/*Texture2d*/,
-      "SymbolId": "f52db9a4-fde9-49ca-9ef7-131825c34e65",
+      "Id": "a56a939c-d17f-419c-85c3-2e79dc7effc7"/*SamplerStateOp*/,
+      "SymbolId": "9515d59d-0bd5-406b-96da-6a5f60215700",
       "InputValues": [
         {
-          "Id": "cfebc37f-6813-416a-9073-e48d31074115"/*BindFlags*/,
-          "Type": "SharpDX.Direct3D11.BindFlags",
-          "Value": "ShaderResource, RenderTarget"
+          "Id": "e7c95fd5-14d1-434f-a140-f22ef69076ab"/*AddressU*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Wrap"
+        },
+        {
+          "Id": "fdeb503f-09c6-48d1-8853-7426f68cdec3"/*AddressV*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Wrap"
+        },
+        {
+          "Id": "93d8bf26-5067-4ccc-b4cb-e03970686462"/*AddressW*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Clamp"
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "e74663d8-3d49-4b8d-bfaf-bc4aa2cfae52"/*Texture2d*/,
-      "SymbolId": "f52db9a4-fde9-49ca-9ef7-131825c34e65",
-      "InputValues": [
-        {
-          "Id": "cfebc37f-6813-416a-9073-e48d31074115"/*BindFlags*/,
-          "Type": "SharpDX.Direct3D11.BindFlags",
-          "Value": "ShaderResource, RenderTarget"
-        }
-      ],
+      "Id": "6ca6c0db-aa07-4c92-a1dd-59a622a936a5"/*RtvFromTexture2d*/,
+      "SymbolId": "57a1ee33-702a-41ad-a17e-b43033d58638",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "3b92a1df-7c6a-4738-a094-d9b4f357c06e"/*ExecuteTextureUpdate*/,
+      "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -289,67 +322,32 @@
       "Outputs": []
     },
     {
-      "Id": "0eafc7da-5489-442d-937a-cc199fc6e1a5"/*RtvFromTexture2d*/,
-      "SymbolId": "57a1ee33-702a-41ad-a17e-b43033d58638",
+      "Id": "27448ed3-b4fa-4c53-87c7-c3dfd591485a"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "4adb4390-6cdf-42cc-85ec-19f7f9fcd9d1"/*RtvFromTexture2d*/,
-      "SymbolId": "57a1ee33-702a-41ad-a17e-b43033d58638",
+      "Id": "a61ed026-124a-4b42-9235-4b466708c3b4"/*SrvFromTexture2d*/,
+      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "6ca6c0db-aa07-4c92-a1dd-59a622a936a5"/*RtvFromTexture2d*/,
-      "SymbolId": "57a1ee33-702a-41ad-a17e-b43033d58638",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "f3d793d6-d340-4b61-94c2-070c4b62c77c"/*Time*/,
-      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "6f819ffd-01e1-4db2-9692-d90f4edd6a59"/*ExecuteTextureUpdate*/,
-      "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "3b92a1df-7c6a-4738-a094-d9b4f357c06e"/*ExecuteTextureUpdate*/,
-      "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "c486fd60-907d-4e9c-820d-523f7895db50"/*LogMessage*/,
-      "SymbolId": "53127485-e2c7-4be8-aff2-da5790799593",
-      "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "8d6a6d3d-c814-41bc-b770-5a54dfdeb6a2"/*LogMessage*/,
-          "IsDisabled": true
-        }
-      ]
-    },
-    {
-      "Id": "65f9bed1-a40b-4b25-aef7-6c09fe0c1ab2"/*HasTimeChanged*/,
-      "SymbolId": "2443b2fd-c397-4ea6-9588-b595f918cf01",
+      "Id": "59ad60d0-72db-466f-86c1-88c0ae21ef58"/*Draw*/,
+      "SymbolId": "9b28e6b9-1d1f-42d8-8a9e-33497b1df820",
       "InputValues": [
         {
-          "Id": "bc112889-77a8-4967-a9b7-683b7c7017fe"/*Mode*/,
+          "Id": "8716b11a-ef71-437e-9930-bb747da818a7"/*VertexCount*/,
           "Type": "System.Int32",
-          "Value": 2
+          "Value": 6
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "28d89245-71d3-44a0-91f5-0e14dc479e03"/*Once*/,
-      "SymbolId": "e8d2b4ac-0ba2-400f-9c82-e5dd15a23d32",
+      "Id": "d4d5eaf2-4108-4367-ad3e-2753fb3189df"/*VertexShaderStage*/,
+      "SymbolId": "a9600440-4203-4315-bdb1-4dfd603b4515",
       "InputValues": [],
       "Outputs": []
     }

@@ -1,7 +1,5 @@
 {
-  "Name": "FilesInFolder",
-  "Id": "f90fcd0a-eab9-4e2a-b393-e8d3a0380823",
-  "Namespace": "lib.io.file",
+  "Id": "f90fcd0a-eab9-4e2a-b393-e8d3a0380823"/*FilesInFolder*/,
   "Inputs": [
     {
       "Id": "ca9778e7-072c-4304-9043-eeb2dc4ca5d7"/*Folder*/,

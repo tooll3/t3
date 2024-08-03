@@ -232,6 +232,36 @@
           "00fd2794-567a-4f9b-a900-c2ebf9760764": 1
         }
       }
+    },
+    {
+      "Id": "abe98db9-d9db-4f59-85aa-38123be2c01e",
+      "IsPreset": false,
+      "ActivationIndex": 11,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 558.0
+      },
+      "ParameterSetsForChildIds": {
+        "64129846-7e9a-4afd-a46c-be50ba148aa2": {
+          "00fd2794-567a-4f9b-a900-c2ebf9760764": 10
+        }
+      }
+    },
+    {
+      "Id": "5a5d165f-4c2c-4638-ac35-2b7910aafde5",
+      "IsPreset": false,
+      "ActivationIndex": 13,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 558.0
+      },
+      "ParameterSetsForChildIds": {
+        "64129846-7e9a-4afd-a46c-be50ba148aa2": {
+          "00fd2794-567a-4f9b-a900-c2ebf9760764": 10
+        }
+      }
     }
   ]
 }

@@ -1,7 +1,5 @@
 {
-  "Name": "AfterGlow2",
-  "Id": "04ac6a30-a2ad-4e43-8954-94dc852b0602",
-  "Namespace": "lib.img.fx",
+  "Id": "04ac6a30-a2ad-4e43-8954-94dc852b0602"/*AfterGlow2*/,
   "Inputs": [
     {
       "Id": "f06e5ede-f7ff-48ed-b2cf-9a87ef5932ec"/*Image*/,
@@ -75,6 +73,12 @@
       "Outputs": []
     },
     {
+      "Id": "e7b3fe78-89df-41d9-902e-82d249c979a7"/*Vector4*/,
+      "SymbolId": "f2e323bd-f881-41a8-81e2-e8f2ac1984dc",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "3f277e17-24ee-458f-afdd-ef0273e6f624"/*RenderTarget*/,
       "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
       "InputValues": [
@@ -115,9 +119,39 @@
       "Outputs": []
     },
     {
-      "Id": "167dd6c5-5f2f-4a87-80f0-be85821faa56"/*Execute*/,
+      "Id": "244cbb37-4bff-4dff-b73b-e835b6dd58e4"/*GetTextureSize*/,
+      "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "130b531b-bd24-426e-a195-68dacebda931"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [
+        {
+          "Id": "c8d0e44e-acd1-4045-b565-e1ce0b722e70"/*BlendMode*/,
+          "Type": "System.Int32",
+          "Value": 1
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "8f32ce94-cb0a-40ec-ad5c-7ee0e224c478"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "0e24e124-3008-42f6-8cd6-fa57d10ffc86"/*ScaleSize*/,
+      "SymbolId": "c6d50423-54ea-4c9d-b547-eb78cc2c950c",
+      "InputValues": [
+        {
+          "Id": "133bbc5a-bdbf-4993-bd1a-878ec93ee04f"/*Factor*/,
+          "Type": "System.Single",
+          "Value": 1.0
+        }
+      ],
       "Outputs": []
     },
     {
@@ -156,45 +190,9 @@
       "Outputs": []
     },
     {
-      "Id": "e7b3fe78-89df-41d9-902e-82d249c979a7"/*Vector4*/,
-      "SymbolId": "f2e323bd-f881-41a8-81e2-e8f2ac1984dc",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "130b531b-bd24-426e-a195-68dacebda931"/*Layer2d*/,
-      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
-      "InputValues": [
-        {
-          "Id": "c8d0e44e-acd1-4045-b565-e1ce0b722e70"/*BlendMode*/,
-          "Type": "System.Int32",
-          "Value": 1
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "e7ea3c78-ac73-46a6-a2ce-e5080ca2c553"/*Layer2d*/,
-      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "8f32ce94-cb0a-40ec-ad5c-7ee0e224c478"/*Execute*/,
+      "Id": "167dd6c5-5f2f-4a87-80f0-be85821faa56"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "1cb10f4e-ee9a-47ba-8861-c012dd70431d"/*DrawScreenQuad*/,
-      "SymbolId": "5a2752e8-95ae-4d76-b903-1f52ef43bcdc",
-      "InputValues": [
-        {
-          "Id": "60cef5fb-b22a-4fa0-83bb-093d0f1d5b56"/*BlendMode*/,
-          "Type": "System.Int32",
-          "Value": 1
-        }
-      ],
       "Outputs": []
     },
     {
@@ -230,21 +228,21 @@
       "Outputs": []
     },
     {
-      "Id": "244cbb37-4bff-4dff-b73b-e835b6dd58e4"/*GetTextureSize*/,
-      "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
-      "InputValues": [],
+      "Id": "1cb10f4e-ee9a-47ba-8861-c012dd70431d"/*DrawScreenQuad*/,
+      "SymbolId": "5a2752e8-95ae-4d76-b903-1f52ef43bcdc",
+      "InputValues": [
+        {
+          "Id": "60cef5fb-b22a-4fa0-83bb-093d0f1d5b56"/*BlendMode*/,
+          "Type": "System.Int32",
+          "Value": 1
+        }
+      ],
       "Outputs": []
     },
     {
-      "Id": "0e24e124-3008-42f6-8cd6-fa57d10ffc86"/*ScaleSize*/,
-      "SymbolId": "c6d50423-54ea-4c9d-b547-eb78cc2c950c",
-      "InputValues": [
-        {
-          "Id": "133bbc5a-bdbf-4993-bd1a-878ec93ee04f"/*Factor*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        }
-      ],
+      "Id": "e7ea3c78-ac73-46a6-a2ce-e5080ca2c553"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [],
       "Outputs": []
     }
   ],

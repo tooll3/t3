@@ -1,7 +1,5 @@
 {
-  "Name": "ConvertFormat",
-  "Id": "e1cd1cdf-3982-4bb3-b080-9f0a851566d7",
-  "Namespace": "lib.img.adjust",
+  "Id": "e1cd1cdf-3982-4bb3-b080-9f0a851566d7"/*ConvertFormat*/,
   "Inputs": [
     {
       "Id": "33b6a702-2452-45d4-b5f7-7ff9f66940a6"/*Texture2d*/,
@@ -26,47 +24,7 @@
   ],
   "Children": [
     {
-      "Id": "d60df57f-308d-45b0-8125-3f3d5f28f030"/*SrvFromTexture2d*/,
-      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "305c0faa-2b26-444c-a152-cf1c69e8640b"/*GetTextureSize*/,
-      "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "e178ddf6-492e-4f03-89f6-31f0ce6cd3b8"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\img\\ConvertFormat-cs.hlsl"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "0516fdda-9803-4fef-80c9-02b98e768107"/*ComputeShaderStage*/,
-      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
-      "InputValues": [
-        {
-          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "T3.Core.DataTypes.Vector.Int3",
-          "Value": {
-            "X": 64,
-            "Y": 1,
-            "Z": 1
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "110b0517-ed20-4896-84da-6d2311e83337"/*ExecuteTextureUpdate*/,
+      "Id": "9838cfc2-c798-406f-b3d3-5cdf6ef99ca6"/*ExecuteTextureUpdate*/,
       "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
       "InputValues": [],
       "Outputs": []
@@ -99,42 +57,20 @@
       "Outputs": []
     },
     {
-      "Id": "bea8b06b-784d-4949-9e05-91f7934d0ad7"/*UavFromTexture2d*/,
-      "SymbolId": "84e02044-3011-4a5e-b76a-c904d9b4557f",
+      "Id": "305c0faa-2b26-444c-a152-cf1c69e8640b"/*GetTextureSize*/,
+      "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "59c78ddc-7622-4332-b0fe-468cbb4d6b7d"/*CalcInt2DispatchCount*/,
-      "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
+      "Id": "9f2330e0-847e-4b84-ac5f-8d4ef696a84f"/*GenerateMips*/,
+      "SymbolId": "32a6a351-6d22-4915-aa0e-e0483b7f4e76",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "5d64d841-b8d3-4495-9bff-a92f93da4678"/*PickTexture*/,
-      "SymbolId": "e6070817-cf2e-4430-87e0-bf3dd15afdb5",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "2eb42bc0-4598-4fbc-acb6-2c43c94a7ee6"/*ComputeShaderStage*/,
-      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
-      "InputValues": [
-        {
-          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "T3.Core.DataTypes.Vector.Int3",
-          "Value": {
-            "X": 64,
-            "Y": 1,
-            "Z": 1
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "9838cfc2-c798-406f-b3d3-5cdf6ef99ca6"/*ExecuteTextureUpdate*/,
-      "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
+      "Id": "d60df57f-308d-45b0-8125-3f3d5f28f030"/*SrvFromTexture2d*/,
+      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
       "InputValues": [],
       "Outputs": []
     },
@@ -166,15 +102,43 @@
       "Outputs": []
     },
     {
+      "Id": "e178ddf6-492e-4f03-89f6-31f0ce6cd3b8"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\ConvertFormat-cs.hlsl"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "bea8b06b-784d-4949-9e05-91f7934d0ad7"/*UavFromTexture2d*/,
+      "SymbolId": "84e02044-3011-4a5e-b76a-c904d9b4557f",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "6bd5358e-c7cc-4d09-b68c-a28003d4af7c"/*UavFromTexture2d*/,
       "SymbolId": "84e02044-3011-4a5e-b76a-c904d9b4557f",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "9f2330e0-847e-4b84-ac5f-8d4ef696a84f"/*GenerateMips*/,
-      "SymbolId": "32a6a351-6d22-4915-aa0e-e0483b7f4e76",
-      "InputValues": [],
+      "Id": "2eb42bc0-4598-4fbc-acb6-2c43c94a7ee6"/*ComputeShaderStage*/,
+      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
+      "InputValues": [
+        {
+          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
+          "Type": "T3.Core.DataTypes.Vector.Int3",
+          "Value": {
+            "X": 64,
+            "Y": 1,
+            "Z": 1
+          }
+        }
+      ],
       "Outputs": []
     },
     {
@@ -184,8 +148,42 @@
       "Outputs": []
     },
     {
+      "Id": "0516fdda-9803-4fef-80c9-02b98e768107"/*ComputeShaderStage*/,
+      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
+      "InputValues": [
+        {
+          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
+          "Type": "T3.Core.DataTypes.Vector.Int3",
+          "Value": {
+            "X": 64,
+            "Y": 1,
+            "Z": 1
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "59c78ddc-7622-4332-b0fe-468cbb4d6b7d"/*CalcInt2DispatchCount*/,
+      "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
       "Id": "1ce4ecda-776d-4fa6-bcd0-f7cbfe25ea9c"/*ScaleSize*/,
       "SymbolId": "c6d50423-54ea-4c9d-b547-eb78cc2c950c",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "5d64d841-b8d3-4495-9bff-a92f93da4678"/*PickTexture*/,
+      "SymbolId": "e6070817-cf2e-4430-87e0-bf3dd15afdb5",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "110b0517-ed20-4896-84da-6d2311e83337"/*ExecuteTextureUpdate*/,
+      "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
       "InputValues": [],
       "Outputs": []
     }

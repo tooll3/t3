@@ -1,0 +1,31 @@
+{
+  "Id": "89162b9f-75f5-4d32-9d28-8259cf47cf58"/*UnsplashAPI*/,
+  "Inputs": [
+    {
+      "Id": "6d3f829b-c64e-45f2-9e8d-3844f4864c3a"/*GetPhotoIndex*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "8f164aa3-962a-4b08-970e-cb730ca10f9b"/*ApiToken*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "8f879a22-186d-45c3-b30c-af909cc8e609"/*TriggerRequest*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "6ee4be4b-e0e9-40aa-afec-088b425791f1"/*Search*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "a506693e-2859-4d9d-ab85-0a0f51cc2da9"/*CollectionId*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "b3b90281-2d2a-4d79-8a0d-5d902cfaaa35"/*MaxResultCount*/,
+      "DefaultValue": 100
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

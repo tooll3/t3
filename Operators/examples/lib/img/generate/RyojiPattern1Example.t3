@@ -1,7 +1,5 @@
 {
-  "Name": "RyojiPattern1Example",
-  "Id": "d71a564b-44c7-42a6-b0ca-05d5f512be14",
-  "Namespace": "examples.lib.img.generate",
+  "Id": "d71a564b-44c7-42a6-b0ca-05d5f512be14"/*RyojiPattern1Example*/,
   "Inputs": [],
   "Children": [
     {
@@ -120,65 +118,6 @@
       "Outputs": []
     },
     {
-      "Id": "e9cbe991-e4f9-4cad-9184-ec8b1a6f4c03"/*TorusMesh*/,
-      "SymbolId": "a835ab86-29c1-438e-a7f7-2e297108bfd5",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "76c0472a-c867-4133-b637-d0c082833807"/*DrawMeshUnlit*/,
-      "SymbolId": "4499dcb1-c936-49ed-861b-2ad8ae58cb28",
-      "InputValues": [
-        {
-          "Id": "8d223463-edff-45fb-9ead-6650a911cebd"/*Culling*/,
-          "Type": "SharpDX.Direct3D11.CullMode",
-          "Value": "None"
-        },
-        {
-          "Id": "72060e5d-090f-4c84-890a-ca9ee238fe82"/*AlphaCutOff*/,
-          "Type": "System.Single",
-          "Value": 0.25
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "26b5d65c-6db4-4590-8525-03266e000752"/*OrbitCamera*/,
-      "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "70eb40e7-a073-49f0-93a0-659e2af78681"/*RenderTarget*/,
-      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "49dcff0e-b823-45e7-bb5e-b1d71d05911a"/*Glow*/,
-      "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
-      "InputValues": [
-        {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
-          "Type": "System.Single",
-          "Value": 3.8999999
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "ad7710c7-522a-4451-8f16-29024ce191ff"/*AnimValue*/,
-      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
-      "InputValues": [
-        {
-          "Id": "4cf5d20b-7335-4584-b246-c260ac5cdf4f"/*Shape*/,
-          "Type": "System.Int32",
-          "Value": 12
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "1f825751-27ad-44c0-9c8a-73c2063b929c"/*TriggerAnim*/,
       "SymbolId": "95d586a2-ee14-4ff5-a5bb-40c497efde95",
       "InputValues": [],
@@ -220,6 +159,65 @@
           }
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "49dcff0e-b823-45e7-bb5e-b1d71d05911a"/*Glow*/,
+      "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
+      "InputValues": [
+        {
+          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
+          "Type": "System.Single",
+          "Value": 3.8999999
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "ad7710c7-522a-4451-8f16-29024ce191ff"/*AnimValue*/,
+      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
+      "InputValues": [
+        {
+          "Id": "4cf5d20b-7335-4584-b246-c260ac5cdf4f"/*Shape*/,
+          "Type": "System.Int32",
+          "Value": 12
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "26b5d65c-6db4-4590-8525-03266e000752"/*OrbitCamera*/,
+      "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e9cbe991-e4f9-4cad-9184-ec8b1a6f4c03"/*TorusMesh*/,
+      "SymbolId": "a835ab86-29c1-438e-a7f7-2e297108bfd5",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "76c0472a-c867-4133-b637-d0c082833807"/*DrawMeshUnlit*/,
+      "SymbolId": "4499dcb1-c936-49ed-861b-2ad8ae58cb28",
+      "InputValues": [
+        {
+          "Id": "8d223463-edff-45fb-9ead-6650a911cebd"/*Culling*/,
+          "Type": "SharpDX.Direct3D11.CullMode",
+          "Value": "None"
+        },
+        {
+          "Id": "72060e5d-090f-4c84-890a-ca9ee238fe82"/*AlphaCutOff*/,
+          "Type": "System.Single",
+          "Value": 0.25
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "70eb40e7-a073-49f0-93a0-659e2af78681"/*RenderTarget*/,
+      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
+      "InputValues": [],
       "Outputs": []
     }
   ],

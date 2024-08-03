@@ -1,7 +1,5 @@
 {
-  "Name": "Or",
-  "Id": "9786dec1-b0fc-49d7-bf79-c9a1d457f386",
-  "Namespace": "lib.math.bool",
+  "Id": "9786dec1-b0fc-49d7-bf79-c9a1d457f386"/*Or*/,
   "Inputs": [
     {
       "Id": "50ed5538-8134-4d8d-aedc-61f19f60446e"/*A*/,

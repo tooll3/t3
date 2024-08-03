@@ -1,7 +1,5 @@
 {
-  "Name": "DateTimeInSecs",
-  "Id": "0bee3ec6-7e0d-471b-9ef7-ab9c22c6883b",
-  "Namespace": "lib.math.int",
+  "Id": "0bee3ec6-7e0d-471b-9ef7-ab9c22c6883b"/*DateTimeInSecs*/,
   "Inputs": [
     {
       "Id": "d81a3ecb-5718-48a9-9a50-85820e18957c"/*Freeze*/,

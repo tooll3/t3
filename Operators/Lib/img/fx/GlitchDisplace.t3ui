@@ -27,32 +27,6 @@
       "Description": "Defines how many glitch bars are generated horizontally"
     },
     {
-      "InputId": "990ac61f-09b7-42ad-a2ed-4fa27b7e491b"/*Scatter*/,
-      "Position": {
-        "X": 867.8816,
-        "Y": 5822.5356
-      },
-      "Description": "Randomly scatters the position of the glitch elements",
-      "AddPadding": "True"
-    },
-    {
-      "InputId": "5e591643-7c92-4fbb-8e14-4954f9493236"/*Stretch*/,
-      "Position": {
-        "X": 867.8816,
-        "Y": 5732.5356
-      },
-      "Description": "Scales the glitching bars\nX = width\nY = height",
-      "AddPadding": "True"
-    },
-    {
-      "InputId": "2e5c0cd5-8c34-49b1-b67e-1a6bc006b2b2"/*ScatterStretch*/,
-      "Position": {
-        "X": 867.8816,
-        "Y": 5867.5356
-      },
-      "Description": "Defines the maximum distance of the scattering"
-    },
-    {
       "InputId": "502e7ba7-4824-4928-9e15-cbb060e73b05"/*Size*/,
       "Position": {
         "X": 836.0191,
@@ -65,12 +39,54 @@
       "Clamp": true
     },
     {
+      "InputId": "20f149ee-123f-4347-ba8e-f403a3eae7d3"/*Amount*/,
+      "Position": {
+        "X": 836.0191,
+        "Y": 5600.4746
+      },
+      "Description": "Defines the overall intensity of the effect"
+    },
+    {
+      "InputId": "c0b5e7e3-278d-4abd-aa2d-964a47fb2fcf"/*Threshold*/,
+      "Position": {
+        "X": 836.0191,
+        "Y": 5645.4746
+      },
+      "Description": "Defines based on the method which part of the image the effect is applied to"
+    },
+    {
+      "InputId": "5e591643-7c92-4fbb-8e14-4954f9493236"/*Stretch*/,
+      "Position": {
+        "X": 867.8816,
+        "Y": 5732.5356
+      },
+      "Description": "Scales the glitching bars\nX = width\nY = height",
+      "AddPadding": "True"
+    },
+    {
       "InputId": "531556ad-5d4d-4110-b8ea-be1fd6d443fd"/*Offset*/,
       "Position": {
         "X": 867.8816,
         "Y": 5777.5356
       },
       "Description": "Randomly offsets the bars\nX = horizontally\nY = vertically"
+    },
+    {
+      "InputId": "990ac61f-09b7-42ad-a2ed-4fa27b7e491b"/*Scatter*/,
+      "Position": {
+        "X": 867.8816,
+        "Y": 5822.5356
+      },
+      "Description": "Randomly scatters the position of the glitch elements",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "2e5c0cd5-8c34-49b1-b67e-1a6bc006b2b2"/*ScatterStretch*/,
+      "Position": {
+        "X": 867.8816,
+        "Y": 5867.5356
+      },
+      "Description": "Defines the maximum distance of the scattering"
     },
     {
       "InputId": "2866ef59-644d-4af5-bb95-0d028b01bb47"/*ScatterOffset*/,
@@ -122,22 +138,6 @@
         "X": 1233.5548,
         "Y": 6295.265
       }
-    },
-    {
-      "InputId": "c0b5e7e3-278d-4abd-aa2d-964a47fb2fcf"/*Threshold*/,
-      "Position": {
-        "X": 836.0191,
-        "Y": 5645.4746
-      },
-      "Description": "Defines based on the method which part of the image the effect is applied to"
-    },
-    {
-      "InputId": "20f149ee-123f-4347-ba8e-f403a3eae7d3"/*Amount*/,
-      "Position": {
-        "X": 836.0191,
-        "Y": 5600.4746
-      },
-      "Description": "Defines the overall intensity of the effect"
     }
   ],
   "SymbolChildUis": [

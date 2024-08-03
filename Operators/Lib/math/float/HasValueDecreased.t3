@@ -1,7 +1,5 @@
 {
-  "Name": "HasValueDecreased",
-  "Id": "f376121a-2360-4232-9724-0db6937062c3",
-  "Namespace": "lib.math.float",
+  "Id": "f376121a-2360-4232-9724-0db6937062c3"/*HasValueDecreased*/,
   "Inputs": [
     {
       "Id": "0ce24e8e-7d35-41a1-85a5-0c55d4247a90"/*Value*/,

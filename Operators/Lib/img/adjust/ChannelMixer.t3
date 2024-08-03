@@ -1,7 +1,5 @@
 {
-  "Name": "ChannelMixer",
-  "Id": "51968877-03e7-472d-9b43-95bc8aeda3bc",
-  "Namespace": "lib.img.adjust",
+  "Id": "51968877-03e7-472d-9b43-95bc8aeda3bc"/*ChannelMixer*/,
   "Inputs": [
     {
       "Id": "28bb7ff9-190a-4624-9361-c4a530851bfd"/*Texture2d*/,
@@ -69,13 +67,13 @@
       "Outputs": []
     },
     {
-      "Id": "80db9bd5-cec6-49af-9cba-f33ef5752a31"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "Id": "34d84a40-5e42-46f2-aa44-5ad18246b03b"/*BoolToFloat*/,
+      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "1e6b6da4-4c9d-4bfe-a0ea-144116dbbe20"/*Vector4Components*/,
+      "Id": "80db9bd5-cec6-49af-9cba-f33ef5752a31"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -115,8 +113,8 @@
       "Outputs": []
     },
     {
-      "Id": "34d84a40-5e42-46f2-aa44-5ad18246b03b"/*BoolToFloat*/,
-      "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
+      "Id": "1e6b6da4-4c9d-4bfe-a0ea-144116dbbe20"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     }

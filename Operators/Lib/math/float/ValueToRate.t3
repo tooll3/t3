@@ -1,7 +1,5 @@
 {
-  "Name": "ValueToRate",
-  "Id": "8171c2f5-96df-41f6-884c-dbd004ae8a17",
-  "Namespace": "lib.math.float",
+  "Id": "8171c2f5-96df-41f6-884c-dbd004ae8a17"/*ValueToRate*/,
   "Inputs": [
     {
       "Id": "4f2dad75-0f45-498a-9a1a-7571dc9f0b09"/*Value*/,

@@ -1,7 +1,5 @@
 {
-  "Name": "_SketchImpl",
-  "Id": "b238b288-6e9b-4b91-bac9-3d7566416028",
-  "Namespace": "lib.point._experimental",
+  "Id": "b238b288-6e9b-4b91-bac9-3d7566416028"/*_SketchImpl*/,
   "Inputs": [
     {
       "Id": "c427f009-7e04-4168-82e6-5ebe2640204d"/*MousePos*/,

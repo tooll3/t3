@@ -13,7 +13,7 @@ namespace T3.Editor.Gui.Graph.Helpers;
 // todo - make this non-static to be able to edit multiple projects at once
 // each GraphWindow class should have its own Structure object, and some of this logic should be moved out where applicable
 // (i.e. dealing with packages, selecting root instasnce, etc
-internal class Structure
+public class Structure
 {
     private readonly Func<Instance> _getRootInstance;
 
@@ -275,9 +275,14 @@ internal class Structure
 
         var rootInstance = _getRootInstance();
         var rootId = rootInstance.SymbolChildId;
-        
-        if(childPath[0] != rootId)
-            throw new ArgumentException("Path does not start with the root instance");
+
+        if (childPath[0] != rootId)
+        {
+            instance = null;
+            Log.Warning("Can't access instance after root changed.");
+            return false;
+            //throw new ArgumentException("Path does not start with the root instance");
+        }
         
         var pathCount = childPath.Count;
         

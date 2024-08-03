@@ -1,7 +1,5 @@
 {
-  "Name": "LerpVec3",
-  "Id": "a40cb2a4-5e4c-41ef-b70d-40fa04adafbb",
-  "Namespace": "lib.math.vec3",
+  "Id": "a40cb2a4-5e4c-41ef-b70d-40fa04adafbb"/*LerpVec3*/,
   "Inputs": [
     {
       "Id": "a7fe900a-958d-4f79-9df7-d30b31bfb71b"/*A*/,

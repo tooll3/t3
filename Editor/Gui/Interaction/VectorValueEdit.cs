@@ -8,7 +8,7 @@ namespace T3.Editor.Gui.Interaction
         // Float control
         public static InputEditStateFlags Draw(float[] components, float min, float max, float scale, bool clamp, float rightPadding = 0, string format = null)
         {
-            var width = (ImGui.GetContentRegionAvail().X - rightPadding) / components.Length;
+            var width = (ImGui.GetContentRegionAvail().X - rightPadding) / components.Length-1;
             var size = new Vector2(width, 0);
 
             var resultingEditState = InputEditStateFlags.Nothing;
@@ -28,7 +28,7 @@ namespace T3.Editor.Gui.Interaction
         // Integer control
         public static InputEditStateFlags Draw(int[] components, int min, int max, float scale, bool clamp)
         {
-            var width = ImGui.GetContentRegionAvail().X / components.Length;
+            var width = ImGui.GetContentRegionAvail().X / components.Length-1;
             var size = new Vector2(width, 0);
 
             var resultingEditState = InputEditStateFlags.Nothing;

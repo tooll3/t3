@@ -1,7 +1,5 @@
 {
-  "Name": "ValuesToTexture",
-  "Id": "55cc0f79-96c9-482e-9794-934dc0f87708",
-  "Namespace": "lib.math.floats",
+  "Id": "55cc0f79-96c9-482e-9794-934dc0f87708"/*ValuesToTexture*/,
   "Inputs": [
     {
       "Id": "092c8d1f-a70e-4298-b5df-52c9d62f8e04"/*Values*/,

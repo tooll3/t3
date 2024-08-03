@@ -1,7 +1,5 @@
 {
-  "Name": "Accumulator",
-  "Id": "90b2c6d2-e9a6-4910-b42d-94202f07be27",
-  "Namespace": "lib.anim",
+  "Id": "90b2c6d2-e9a6-4910-b42d-94202f07be27"/*Accumulator*/,
   "Inputs": [
     {
       "Id": "7caf37ec-ed34-4711-b02c-e136d070fff7"/*Running*/,

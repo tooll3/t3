@@ -1,7 +1,5 @@
 {
-  "Name": "PickVector2",
-  "Id": "1cd2f5b1-bc54-4405-8ee6-d1acf59ebe14",
-  "Namespace": "lib.math.vec2",
+  "Id": "1cd2f5b1-bc54-4405-8ee6-d1acf59ebe14"/*PickVector2*/,
   "Inputs": [
     {
       "Id": "f210558a-4f9e-4e94-bbd4-ef73da498614"/*Input*/,

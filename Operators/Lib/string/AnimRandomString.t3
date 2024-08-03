@@ -1,7 +1,5 @@
 {
-  "Name": "AnimRandomString",
-  "Id": "dd7fa7ee-266a-43c8-b29f-3357488b26be",
-  "Namespace": "lib.string",
+  "Id": "dd7fa7ee-266a-43c8-b29f-3357488b26be"/*AnimRandomString*/,
   "Inputs": [
     {
       "Id": "4e36b984-43ff-447b-8e1d-a099fefd4d74"/*Rate*/,
@@ -13,18 +11,6 @@
     }
   ],
   "Children": [
-    {
-      "Id": "3af5dc6c-89f4-44b0-8c89-13b006d318cb"/*MockStrings*/,
-      "SymbolId": "3af25959-fd3f-4608-b521-5860d82554df",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "9a2ba5ae-1660-48d2-bc58-a9a97f575741"/*PickStringPart*/,
-      "SymbolId": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d",
-      "InputValues": [],
-      "Outputs": []
-    },
     {
       "Id": "d49a1aed-efe6-48b7-a6e7-8c2d3f4db751"/*FloatToInt*/,
       "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
@@ -41,6 +27,18 @@
           "Value": 12
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "9a2ba5ae-1660-48d2-bc58-a9a97f575741"/*PickStringPart*/,
+      "SymbolId": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "3af5dc6c-89f4-44b0-8c89-13b006d318cb"/*MockStrings*/,
+      "SymbolId": "3af25959-fd3f-4608-b521-5860d82554df",
+      "InputValues": [],
       "Outputs": []
     }
   ],

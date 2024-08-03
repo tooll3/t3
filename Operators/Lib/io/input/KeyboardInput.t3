@@ -1,7 +1,5 @@
 {
-  "Name": "KeyboardInput",
-  "Id": "2b00bb7a-92cc-41e5-a5f6-bc3e8b16c5eb",
-  "Namespace": "lib.io.input",
+  "Id": "2b00bb7a-92cc-41e5-a5f6-bc3e8b16c5eb"/*KeyboardInput*/,
   "Inputs": [
     {
       "Id": "a275fc1a-4036-483e-af54-6546fa03699c"/*Key*/,

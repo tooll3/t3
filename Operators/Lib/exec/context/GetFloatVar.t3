@@ -1,7 +1,5 @@
 {
-  "Name": "GetFloatVar",
-  "Id": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
-  "Namespace": "lib.exec.context",
+  "Id": "e6072ecf-30d2-4c52-afa1-3b195d61617b"/*GetFloatVar*/,
   "Inputs": [
     {
       "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,

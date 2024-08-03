@@ -1,7 +1,5 @@
 {
-  "Name": "Pow",
-  "Id": "58aa74af-32aa-4c46-8bb5-5811f16bf7f8",
-  "Namespace": "lib.math.float",
+  "Id": "58aa74af-32aa-4c46-8bb5-5811f16bf7f8"/*Pow*/,
   "Inputs": [
     {
       "Id": "376ad938-fe23-4f40-901a-b1b582ea4904"/*Value*/,

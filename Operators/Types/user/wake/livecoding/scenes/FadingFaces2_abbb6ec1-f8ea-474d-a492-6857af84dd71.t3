@@ -127,9 +127,9 @@
           "Id": "4dc44a7b-fe7c-4807-aaaa-53fb553de017"/*Gain*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.47317624,
-            "Y": 0.49113125,
-            "Z": 0.49038625,
+            "X": 0.6007783,
+            "Y": 0.6369657,
+            "Z": 0.61944216,
             "W": 0.506
           }
         },
@@ -137,9 +137,9 @@
           "Id": "be4dc864-a5f9-4356-91f9-58de8056a3a8"/*Gamma*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.4370839,
-            "Y": 0.447137,
-            "Z": 0.45347416,
+            "X": 0.37257513,
+            "Y": 0.3946429,
+            "Z": 0.41148892,
             "W": 0.506
           }
         },
@@ -248,12 +248,12 @@
         {
           "Id": "73ba7691-784f-4706-8a88-9305f723c4cc"/*Displacement*/,
           "Type": "System.Single",
-          "Value": 3.0
+          "Value": 7.6
         },
         {
           "Id": "ffcdb058-5131-4146-8deb-a3102349e1c3"/*DisplaceOffset*/,
           "Type": "System.Single",
-          "Value": -0.16
+          "Value": 0.34
         },
         {
           "Id": "1e6d0245-b5d4-45a5-8dac-6d905837060d"/*SampleDistance*/,
@@ -268,12 +268,12 @@
         {
           "Id": "54ecb0e0-6fc0-4441-b26b-b820e95475a0"/*ShiftBrightness*/,
           "Type": "System.Single",
-          "Value": -0.0003
+          "Value": -0.0186
         },
         {
           "Id": "c027bc94-4ef8-4828-8df5-d30abbd31cbc"/*AmplifyEdges*/,
           "Type": "System.Single",
-          "Value": 1.54
+          "Value": 3.06
         },
         {
           "Id": "5264cbf8-13f6-4dfe-a82d-4f0904973488"/*Reset*/,

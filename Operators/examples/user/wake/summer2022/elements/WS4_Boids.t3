@@ -122,18 +122,6 @@
       "Outputs": []
     },
     {
-      "Id": "2aae670d-1105-4ecc-ab40-54a6f18bbd76"/*Time*/,
-      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
-      "InputValues": [
-        {
-          "Id": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
-          "Type": "System.Single",
-          "Value": 5.0
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "73719959-0e77-4404-9770-b903dcfa0792"/*DrawLines*/,
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
       "InputValues": [
@@ -146,6 +134,18 @@
             "Z": 1.0,
             "W": 0.53
           }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "2aae670d-1105-4ecc-ab40-54a6f18bbd76"/*Time*/,
+      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
+      "InputValues": [
+        {
+          "Id": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
+          "Type": "System.Single",
+          "Value": 5.0
         }
       ],
       "Outputs": []
@@ -1835,6 +1835,18 @@
       "Outputs": []
     },
     {
+      "Id": "7b8706f4-eaaf-46d1-a9ae-7ebf33baaba1"/*Time*/,
+      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
+      "InputValues": [
+        {
+          "Id": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
+          "Type": "System.Single",
+          "Value": 0.1
+        }
+      ],
+      "Outputs": []
+    },
+    {
       "Id": "f54e80ca-6afc-4f1f-92a8-75f2b5c53bdd"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
@@ -1893,18 +1905,6 @@
           "Id": "cd917c3d-489e-4e4d-b5dc-eacc846d82ef"/*OrientationAngle*/,
           "Type": "System.Single",
           "Value": -90.0
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "7b8706f4-eaaf-46d1-a9ae-7ebf33baaba1"/*Time*/,
-      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
-      "InputValues": [
-        {
-          "Id": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
-          "Type": "System.Single",
-          "Value": 0.1
         }
       ],
       "Outputs": []

@@ -1,7 +1,5 @@
 {
-  "Name": "Rasterizer",
-  "Id": "fbd7f0f0-36a3-4fbb-91e1-cb33d4666d09",
-  "Namespace": "lib.dx11.draw",
+  "Id": "fbd7f0f0-36a3-4fbb-91e1-cb33d4666d09"/*Rasterizer*/,
   "Inputs": [
     {
       "Id": "35a52074-1e82-4352-91c3-d8e464f73bc7"/*RasterizerState*/,

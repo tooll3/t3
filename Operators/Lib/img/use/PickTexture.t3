@@ -1,7 +1,5 @@
 {
-  "Name": "PickTexture",
-  "Id": "e6070817-cf2e-4430-87e0-bf3dd15afdb5",
-  "Namespace": "lib.img.use",
+  "Id": "e6070817-cf2e-4430-87e0-bf3dd15afdb5"/*PickTexture*/,
   "Inputs": [
     {
       "Id": "6c935163-1729-4df0-a981-610b4aa7c6a3"/*Input*/,

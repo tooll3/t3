@@ -1,7 +1,5 @@
 {
-  "Name": "VoronoiCells",
-  "Id": "ba059fe1-3397-4950-9ddd-e328f0c2e0bd",
-  "Namespace": "lib.img.generate",
+  "Id": "ba059fe1-3397-4950-9ddd-e328f0c2e0bd"/*VoronoiCells*/,
   "Inputs": [
     {
       "Id": "f5bad014-1895-4490-8c00-4c775db54716"/*Image*/,
@@ -51,12 +49,6 @@
   ],
   "Children": [
     {
-      "Id": "ac5f45de-7b15-4563-8d92-cb54f065a808"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "513b1255-f9c5-4a08-bf30-db3a1641ade0"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
@@ -77,6 +69,12 @@
           "Value": "Clamp"
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "ac5f45de-7b15-4563-8d92-cb54f065a808"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
       "Outputs": []
     },
     {

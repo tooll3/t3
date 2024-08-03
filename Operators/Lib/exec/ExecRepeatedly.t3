@@ -1,7 +1,5 @@
 {
-  "Name": "ExecRepeatedly",
-  "Id": "46420979-1e56-4de3-a6ca-0447be1b9813",
-  "Namespace": "lib.exec",
+  "Id": "46420979-1e56-4de3-a6ca-0447be1b9813"/*ExecRepeatedly*/,
   "Inputs": [
     {
       "Id": "d9de54b8-6d05-4cad-a1eb-bfa770a4520d"/*Command*/,

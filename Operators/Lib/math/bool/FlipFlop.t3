@@ -1,7 +1,5 @@
 {
-  "Name": "FlipFlop",
-  "Id": "ec1ba1fb-ceb7-4d4f-86b4-389589c7e6f0",
-  "Namespace": "lib.math.bool",
+  "Id": "ec1ba1fb-ceb7-4d4f-86b4-389589c7e6f0"/*FlipFlop*/,
   "Inputs": [
     {
       "Id": "44678eb5-8320-4ac9-b757-e0f6f94f5274"/*Trigger*/,

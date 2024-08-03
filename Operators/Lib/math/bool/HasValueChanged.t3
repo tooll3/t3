@@ -1,7 +1,5 @@
 {
-  "Name": "HasValueChanged",
-  "Id": "146fae64-18da-4183-9794-a322f47c669e",
-  "Namespace": "lib.math.bool",
+  "Id": "146fae64-18da-4183-9794-a322f47c669e"/*HasValueChanged*/,
   "Inputs": [
     {
       "Id": "7f5fb125-8aca-4344-8b30-e7d4e7873c1c"/*Value*/,

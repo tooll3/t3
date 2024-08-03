@@ -1,0 +1,22 @@
+{
+  "Id": "5b3a0c1d-87d6-4d88-ae20-ff9f95049ecf"/*SetRequestedResolution*/,
+  "Inputs": [
+    {
+      "Id": "dd52dd4f-84ee-421b-91e9-da0b90adb1a6"/*Texture*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "d6303c59-5ea2-43b3-8e73-218b99d7df5f"/*Resolution*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
+    },
+    {
+      "Id": "c545b200-b3a8-42a8-ac83-d85c3b6e58ee"/*ScaleResolution*/,
+      "DefaultValue": 1.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

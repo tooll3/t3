@@ -1,7 +1,5 @@
 {
-  "Name": "RemapValues",
-  "Id": "efb9ecfc-5aa2-45f1-87b0-1455d7702aa7",
-  "Namespace": "lib.math.floats",
+  "Id": "efb9ecfc-5aa2-45f1-87b0-1455d7702aa7"/*RemapValues*/,
   "Inputs": [
     {
       "Id": "9871ad71-30b0-4454-9418-0916fd58afa8"/*InputValue*/,

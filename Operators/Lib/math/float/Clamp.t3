@@ -1,7 +1,5 @@
 {
-  "Name": "Clamp",
-  "Id": "c3a18346-930c-4242-9e42-aa9b3a439395",
-  "Namespace": "lib.math.float",
+  "Id": "c3a18346-930c-4242-9e42-aa9b3a439395"/*Clamp*/,
   "Inputs": [
     {
       "Id": "eb002b5d-b938-4b03-b2ea-26252ae051cd"/*Value*/,

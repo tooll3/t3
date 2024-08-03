@@ -1,7 +1,5 @@
 {
-  "Name": "FraserGrid",
-  "Id": "b882a5d0-f5ae-40a4-8c42-5b25e5775def",
-  "Namespace": "lib.img.generate",
+  "Id": "b882a5d0-f5ae-40a4-8c42-5b25e5775def"/*FraserGrid*/,
   "Inputs": [
     {
       "Id": "22d7ec5a-ba4e-4d2e-b15b-4de172b26e1e"/*Image*/,
@@ -102,12 +100,6 @@
   ],
   "Children": [
     {
-      "Id": "758b0f52-8f11-4e57-8b78-888b2237a0a6"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "84253b07-7a77-4b05-9a2a-2dc6ac3b0ef9"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
@@ -115,12 +107,6 @@
     },
     {
       "Id": "97504b48-c179-483d-9cc2-2484b01cc4f9"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "e755c43a-e6ee-4b3b-8b68-7163c89b953a"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -150,6 +136,18 @@
     {
       "Id": "66efaa6b-726d-4773-b021-7b68bfb16e0a"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "758b0f52-8f11-4e57-8b78-888b2237a0a6"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e755c43a-e6ee-4b3b-8b68-7163c89b953a"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     }

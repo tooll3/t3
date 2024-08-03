@@ -1,7 +1,5 @@
 {
-  "Name": "ShardNoise",
-  "Id": "dc34c54b-f856-4fd2-a182-68fd75189d7d",
-  "Namespace": "lib.img.generate",
+  "Id": "dc34c54b-f856-4fd2-a182-68fd75189d7d"/*ShardNoise*/,
   "Inputs": [
     {
       "Id": "2c6a429d-5a38-4457-94d5-8994e7d1242d"/*ColorA*/,
@@ -89,20 +87,8 @@
       "Outputs": []
     },
     {
-      "Id": "6c6382bf-7114-4b30-b3bc-953c6bc82273"/*Vector4Components*/,
-      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "e4f5138c-b10a-438b-b1ee-ee27f30c5ff4"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "9e20de28-68d3-4df3-8773-44d36641383f"/*Vector2Components*/,
-      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "Id": "02ac7c20-56b0-4f23-a9ab-3c4bce5b1089"/*Value*/,
+      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
       "InputValues": [],
       "Outputs": []
     },
@@ -124,13 +110,25 @@
       "Outputs": []
     },
     {
-      "Id": "13702d11-e23f-4a8c-a21e-61851e731d65"/*IntToFloat*/,
-      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
+      "Id": "9e20de28-68d3-4df3-8773-44d36641383f"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
       "Id": "3bf7a7b0-526d-4367-a08b-c2ee74f97acd"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "6c6382bf-7114-4b30-b3bc-953c6bc82273"/*Vector4Components*/,
+      "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e4f5138c-b10a-438b-b1ee-ee27f30c5ff4"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -142,8 +140,8 @@
       "Outputs": []
     },
     {
-      "Id": "02ac7c20-56b0-4f23-a9ab-3c4bce5b1089"/*Value*/,
-      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
+      "Id": "13702d11-e23f-4a8c-a21e-61851e731d65"/*IntToFloat*/,
+      "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
     }

@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "007930c8-3c0d-429f-b00e-31d3040b6868"/*AString*/,
+      "ChildId": "007930c8-3c0d-429f-b00e-31d3040b6868"/*String*/,
       "Position": {
         "X": -801.9615,
         "Y": 151.31252

@@ -82,7 +82,7 @@
       "SnapshotGroupIndex": "1"
     },
     {
-      "ChildId": "c159a75a-bbbf-4cdf-a9cf-008b01a5a297"/*AString*/,
+      "ChildId": "c159a75a-bbbf-4cdf-a9cf-008b01a5a297"/*String*/,
       "Style": "Resizable",
       "Size": {
         "X": 110.68692,
@@ -587,7 +587,7 @@
       }
     },
     {
-      "ChildId": "af9d3d06-e3d8-4f8c-b046-118161bacbd1"/*MosaicTiling*/,
+      "ChildId": "af9d3d06-e3d8-4f8c-b046-118161bacbd1"/*MosiacTiling*/,
       "Position": {
         "X": 65.58008,
         "Y": 2043.5563

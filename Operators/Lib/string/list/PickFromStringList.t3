@@ -1,7 +1,5 @@
 {
-  "Name": "PickFromStringList",
-  "Id": "ef357e66-24e9-4f54-8d86-869db74602f4",
-  "Namespace": "lib.string.list",
+  "Id": "ef357e66-24e9-4f54-8d86-869db74602f4"/*PickFromStringList*/,
   "Inputs": [
     {
       "Id": "8d5e77a6-1ec4-4979-ad26-f7862049bce1"/*Input*/,

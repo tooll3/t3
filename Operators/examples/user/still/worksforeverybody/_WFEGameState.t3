@@ -1,7 +1,5 @@
 {
-  "Name": "_WFEGameState",
-  "Id": "1dfc9f6d-effa-407b-8f8d-5adf62504205",
-  "Namespace": "user.still.worksforeverybody",
+  "Id": "1dfc9f6d-effa-407b-8f8d-5adf62504205"/*_WFEGameState*/,
   "Inputs": [
     {
       "Id": "d6bd6745-16f7-4dc4-90ce-8ce22d899633"/*TriggerReset*/,

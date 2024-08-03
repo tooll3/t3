@@ -1,0 +1,11 @@
+{
+  "Id": "bc7594df-68f0-4678-aec7-523474b3b36a"/*SumInts*/,
+  "Inputs": [
+    {
+      "Id": "f61859a4-fc6b-47dc-82f1-2eb7142b6b36"/*InputValues*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -34,7 +34,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         {
             float4Value.CopyTo(FloatComponents);
             var thumbWidth = ImGui.GetFrameHeight();
-            var inputEditState = VectorValueEdit.Draw(FloatComponents, Min, Max, Scale, Clamp, thumbWidth);
+            var inputEditState = VectorValueEdit.Draw(FloatComponents, Min, Max, Scale, Clamp, thumbWidth+1);
             
             ImGui.SameLine();
             if (!readOnly)

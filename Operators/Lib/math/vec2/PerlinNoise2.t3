@@ -1,7 +1,5 @@
 {
-  "Name": "PerlinNoise2",
-  "Id": "ccc06dd6-4eec-4d17-af0b-4f1700e7887a",
-  "Namespace": "lib.math.vec2",
+  "Id": "ccc06dd6-4eec-4d17-af0b-4f1700e7887a"/*PerlinNoise2*/,
   "Inputs": [
     {
       "Id": "f294c517-7427-4c14-a397-4605bffc52a4"/*OverrideTime*/,

@@ -23,9 +23,6 @@ public class RenameInputDialog : ModalDialog
     private static void DrawContent()
     {
         var isWindowAppearing = ImGui.IsWindowAppearing();
-        // ImGui.PushFont(Fonts.FontSmall);
-        // ImGui.TextUnformatted("New name");
-        // ImGui.PopFont();
 
         FormInputs.SetIndentToLeft();
         var symbol = _symbol;

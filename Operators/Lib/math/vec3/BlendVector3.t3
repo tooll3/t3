@@ -1,7 +1,5 @@
 {
-  "Name": "BlendVector3",
-  "Id": "fc201df2-8b05-4567-9f24-0d9128aa8507",
-  "Namespace": "lib.math.vec3",
+  "Id": "fc201df2-8b05-4567-9f24-0d9128aa8507"/*BlendVector3*/,
   "Inputs": [
     {
       "Id": "83c7b887-e1af-4b9f-ad2f-469867940bda"/*Vectors*/,

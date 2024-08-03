@@ -3,7 +3,7 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "a8ee59c3-cb62-42e5-a3c9-f4968876c9cc"/*ShaderSource*/,
+      "InputId": "a8ee59c3-cb62-42e5-a3c9-f4968876c9cc"/*Code*/,
       "Relevancy": "Required",
       "Position": {
         "X": 117.41934,
@@ -31,7 +31,7 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "190e262f-6554-4b34-b5b6-6617a98ab123"/*ComputerShader*/,
+      "OutputId": "190e262f-6554-4b34-b5b6-6617a98ab123"/*Shader*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

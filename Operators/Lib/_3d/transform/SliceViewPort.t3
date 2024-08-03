@@ -1,0 +1,33 @@
+{
+  "Id": "8b888408-e472-4bf9-be25-17a3dd8b90fd"/*SliceViewPort*/,
+  "Inputs": [
+    {
+      "Id": "21532b24-fed2-403b-abb1-6faa19311366"/*SubGraph*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "0ec5edfc-426c-40bb-a68e-80e4caa4c7bf"/*CellIndex*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "4d4db9ad-b3a3-4da6-8716-23d21c5ffc4a"/*CellCounts*/,
+      "DefaultValue": {
+        "X": 1,
+        "Y": 1
+      }
+    },
+    {
+      "Id": "aa060596-ba04-4862-b123-e328f1ef58e1"/*Stretch*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0
+      }
+    },
+    {
+      "Id": "354eb18c-aba0-43e6-b534-c119176547ff"/*Mode*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

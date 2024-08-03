@@ -1,0 +1,11 @@
+{
+  "Id": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e"/*String*/,
+  "Inputs": [
+    {
+      "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
+      "DefaultValue": ""
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

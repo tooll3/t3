@@ -1,7 +1,5 @@
 {
-  "Name": "SetBpm",
-  "Id": "f5158500-39e4-481e-aa4f-f7dbe8cbe0fa",
-  "Namespace": "lib.io.time.vj",
+  "Id": "f5158500-39e4-481e-aa4f-f7dbe8cbe0fa"/*SetBpm*/,
   "Inputs": [
     {
       "Id": "9cc32da8-f939-4ad3-b381-6df8338a371b"/*SubGraph*/,

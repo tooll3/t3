@@ -1,7 +1,5 @@
 {
-  "Name": "StringInsert",
-  "Id": "7dff2da3-30e3-4ad9-bfc6-d6800f90fca8",
-  "Namespace": "lib.string.buffers",
+  "Id": "7dff2da3-30e3-4ad9-bfc6-d6800f90fca8"/*StringInsert*/,
   "Inputs": [
     {
       "Id": "11d0a66a-e2e9-4267-9458-f9844a482235"/*Original*/,

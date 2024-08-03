@@ -1,7 +1,5 @@
 {
-  "Name": "LineTextPoints",
-  "Id": "3d862455-6a7b-4bf6-a159-e4f7cdba6062",
-  "Namespace": "lib.io.file",
+  "Id": "3d862455-6a7b-4bf6-a159-e4f7cdba6062"/*LineTextPoints*/,
   "Inputs": [
     {
       "Id": "8ee43c95-869e-4390-a567-cb0bb9c31bdd"/*Text*/,

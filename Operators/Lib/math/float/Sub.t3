@@ -1,7 +1,5 @@
 {
-  "Name": "Sub",
-  "Id": "3ba13faf-ea80-44ec-948a-02ed3d653a20",
-  "Namespace": "lib.math.float",
+  "Id": "3ba13faf-ea80-44ec-948a-02ed3d653a20"/*Sub*/,
   "Inputs": [
     {
       "Id": "4889e720-e47c-4617-8353-06acf0af5283"/*Input1*/,

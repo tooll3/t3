@@ -1,7 +1,5 @@
 {
-  "Name": "Texture3d",
-  "Id": "fc1ef086-c160-4174-8e60-a4eda931163d",
-  "Namespace": "lib.dx11.tex",
+  "Id": "fc1ef086-c160-4174-8e60-a4eda931163d"/*Texture3d*/,
   "Inputs": [
     {
       "Id": "dca953d6-bdc1-42eb-9a4d-5974c42cf45b"/*Size*/,

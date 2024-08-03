@@ -1,0 +1,39 @@
+{
+  "Id": "61c11adb-94f0-4dc7-9611-c22c40709cf4"/*MidiTriggerOutput*/,
+  "Inputs": [
+    {
+      "Id": "c134f57a-a40c-42e4-8223-5cd695b15caa"/*Device*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "4b63108c-c5b7-42b9-acdf-6bac0e882d08"/*ChannelNumber*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "5626d449-ef28-4d68-8805-014454f74f6b"/*TriggerProgramChange*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "90221c60-c7ac-4470-affb-e4fb22712ee5"/*ProgramChangeNumber*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "8f5e7919-09ae-4d38-a404-93ad6d9ea6ed"/*TriggerStart*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "09bb029e-5a17-4986-b2cb-94668c14c814"/*TriggerStop*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "9a4db45a-06da-4c47-bfff-860aae8d9dfe"/*TriggerContinue*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "7652082c-70b2-4ffe-88aa-63b9c323836f"/*TriggerTempoEvent*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

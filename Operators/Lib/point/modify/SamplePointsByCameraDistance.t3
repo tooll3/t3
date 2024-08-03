@@ -1,7 +1,5 @@
 {
-  "Name": "SamplePointsByCameraDistance",
-  "Id": "0f40e5e5-e406-4f87-854b-fbdd670b5504",
-  "Namespace": "lib.point.modify",
+  "Id": "0f40e5e5-e406-4f87-854b-fbdd670b5504"/*SamplePointsByCameraDistance*/,
   "Inputs": [
     {
       "Id": "57b87561-626c-44a9-ac81-393ede887c67"/*Points*/,
@@ -49,76 +47,6 @@
   ],
   "Children": [
     {
-      "Id": "0392bc01-29fc-4e00-af0c-85b5a4a7dc04"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\points\\modify\\SamplePointsByCameraDistance.hlsl"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "a7ebf595-2c6d-4f12-9f10-fa1dc894afd4"/*ComputeShaderStage*/,
-      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
-      "InputValues": [
-        {
-          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "T3.Core.DataTypes.Vector.Int3",
-          "Value": {
-            "X": 64,
-            "Y": 1,
-            "Z": 1
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "0deaa9f4-f743-4b8f-ba29-60013ee01958"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "b594e05f-8d48-4ed5-a6dc-eb2b19981104"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "47a6dbe3-076f-4185-b183-a27870190ad2"/*CalcDispatchCount*/,
-      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "b7b1d867-1df4-485c-8c30-68040da66996"/*StructuredBufferWithViews*/,
-      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
-      "InputValues": [
-        {
-          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
-          "Type": "System.Int32",
-          "Value": 64
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "d7071c19-5b91-4f54-94fe-58dfab63140c"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "47546476-8693-4825-88ba-7e27462fdcad"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "3ce6b0c2-9042-418e-8c2e-e9618b356bb0"/*CurvesToTexture*/,
       "SymbolId": "ab511978-bad5-4b69-90b2-c028447fe9f7",
       "InputValues": [
@@ -164,14 +92,84 @@
       "Outputs": []
     },
     {
+      "Id": "0deaa9f4-f743-4b8f-ba29-60013ee01958"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "0392bc01-29fc-4e00-af0c-85b5a4a7dc04"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\points\\modify\\SamplePointsByCameraDistance.hlsl"
+        }
+      ],
+      "Outputs": []
+    },
+    {
       "Id": "4859ba59-1619-45d4-be9a-fff75b52b497"/*TransformsConstBuffer*/,
       "SymbolId": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
       "InputValues": [],
       "Outputs": []
     },
     {
+      "Id": "b594e05f-8d48-4ed5-a6dc-eb2b19981104"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "47546476-8693-4825-88ba-7e27462fdcad"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "d7071c19-5b91-4f54-94fe-58dfab63140c"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "b7b1d867-1df4-485c-8c30-68040da66996"/*StructuredBufferWithViews*/,
+      "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
+      "InputValues": [
+        {
+          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
+          "Type": "System.Int32",
+          "Value": 64
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "a7ebf595-2c6d-4f12-9f10-fa1dc894afd4"/*ComputeShaderStage*/,
+      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
+      "InputValues": [
+        {
+          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
+          "Type": "T3.Core.DataTypes.Vector.Int3",
+          "Value": {
+            "X": 64,
+            "Y": 1,
+            "Z": 1
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
       "Id": "6da7f231-0da9-4492-b6e9-1adade3ff1fb"/*GetSRVProperties*/,
       "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "47a6dbe3-076f-4185-b183-a27870190ad2"/*CalcDispatchCount*/,
+      "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
       "InputValues": [],
       "Outputs": []
     }

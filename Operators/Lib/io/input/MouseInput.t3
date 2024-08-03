@@ -1,7 +1,5 @@
 {
-  "Name": "MouseInput",
-  "Id": "eff2ffff-dc39-4b90-9b1c-3c0a9a0108c6",
-  "Namespace": "lib.io.input",
+  "Id": "eff2ffff-dc39-4b90-9b1c-3c0a9a0108c6"/*MouseInput*/,
   "Inputs": [
     {
       "Id": "49775cc2-35b7-4c9f-a502-59fe8fbbe2a7"/*DoUpdate*/,

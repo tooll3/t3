@@ -1,7 +1,5 @@
 {
-  "Name": "GpuSorter",
-  "Id": "94a85a93-7d5c-401c-930c-c3a97a32932f",
-  "Namespace": "user.cynic.research",
+  "Id": "94a85a93-7d5c-401c-930c-c3a97a32932f"/*GpuSorter*/,
   "Inputs": [
     {
       "Id": "37dddd93-2b54-4598-aaca-40710ed06417"/*BufferUav*/,

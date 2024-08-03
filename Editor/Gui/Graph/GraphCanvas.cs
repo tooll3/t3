@@ -96,9 +96,9 @@ namespace T3.Editor.Gui.Graph
             ImGui.BeginGroup();
             {
                 ImGui.SetScrollY(0);
-                var focused = CustomComponents.DrawWindowFocusFrame();
-                if (focused)
-                    _window.TakeFocus();
+                CustomComponents.DrawWindowFocusFrame();
+                if (ImGui.IsWindowFocused())
+                    _window.TakeFocus(); 
                 
                 DrawDropHandler(_window.CompositionOp, _window.CompositionOp.GetSymbolUi());
                 ImGui.SetCursorScreenPos(Vector2.One * 100);
@@ -928,7 +928,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     var node = NodeSelection.Selection[index];
                     var nodeArea = new ImRect(node.PosOnCanvas,
-                                              node.PosOnCanvas + node.Size);
+                                                       node.PosOnCanvas + node.Size);
 
                     if (index == 0)
                     {
