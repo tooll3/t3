@@ -275,9 +275,14 @@ public class Structure
 
         var rootInstance = _getRootInstance();
         var rootId = rootInstance.SymbolChildId;
-        
-        if(childPath[0] != rootId)
-            throw new ArgumentException("Path does not start with the root instance");
+
+        if (childPath[0] != rootId)
+        {
+            instance = null;
+            Log.Warning("Can't access instance after root changed.");
+            return false;
+            //throw new ArgumentException("Path does not start with the root instance");
+        }
         
         var pathCount = childPath.Count;
         
