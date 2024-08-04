@@ -103,8 +103,7 @@ namespace T3.Editor.Gui.Styling
                                 ImGuiWindowFlags.NoTitleBar 
                                 | ImGuiWindowFlags.NoMove 
                                 | ImGuiWindowFlags.Tooltip // ugly as f**k. Sadly .PopUp will lead to random crashes.
-                                | ImGuiWindowFlags.NoFocusOnAppearing 
-                                | ImGuiWindowFlags.ChildWindow
+                                | ImGuiWindowFlags.NoFocusOnAppearing
                                ))
                 {
                     _lastTypeAheadResults.Clear();
