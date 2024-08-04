@@ -96,14 +96,11 @@ namespace T3.Editor.Gui.Styling
                     wasChanged = true;
                     _activeInputId = 0;
                 }
-
+                
                 const ImGuiWindowFlags flags = ImGuiWindowFlags.NoTitleBar
                                                | ImGuiWindowFlags.NoMove
                                                | ImGuiWindowFlags.Tooltip // ugly as f**k. Sadly .PopUp will lead to random crashes.
-                                               | ImGuiWindowFlags.NoFocusOnAppearing
-                                               | ImGuiWindowFlags.ChildWindow;
-                
-                var searchFilter = $"*{filter}*";
+                                               | ImGuiWindowFlags.NoFocusOnAppearing;
                 
                 if (ImGui.Begin("##typeAheadSearchPopup", ref isSearchResultWindowOpen,flags))
                 {
@@ -116,9 +113,7 @@ namespace T3.Editor.Gui.Styling
                     foreach (var item in args.Items)
                     {
                         var word = args.GetTextInfo(item);
-                        
-                        if(!StringUtils.MatchesSearchFilter(word.SearchText, filter, true))
-                        //if ((string.IsNullOrWhiteSpace(filter) || word.SearchText.Contains(filter, StringComparison.InvariantCultureIgnoreCase)))
+                        if(string.IsNullOrEmpty(filter) || word.SearchText.StartsWith(filter, StringComparison.InvariantCultureIgnoreCase))
                         {
                             matches.Add(item);
                         }
