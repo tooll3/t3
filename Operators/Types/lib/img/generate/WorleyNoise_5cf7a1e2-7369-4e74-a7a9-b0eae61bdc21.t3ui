@@ -3,6 +3,20 @@
   "Description": "Also called Voronoi noise and cellular noise.\nIt allows to create nice textures, from organic to science fiction spaceship hull. \n\nIt has various methods like:\n* Manhattan Worley\n* Chebyshev Worley\n\nCombine it with [Steps] or / and [DetectEdges] for example. \n\nAvailable Noise Ops [WorleyNoise] [FractalNoise] [ShardNoise]",
   "InputUis": [
     {
+      "InputId": "7c4d90e2-a31e-4663-a4bd-da9be8fbdaf4"/*Texture*/,
+      "Position": {
+        "X": -217.45303,
+        "Y": -145.67249
+      }
+    },
+    {
+      "InputId": "57903730-3c40-41c0-96a2-c0127d8281c4"/*TextureBlend*/,
+      "Position": {
+        "X": -218.26428,
+        "Y": 535.4367
+      }
+    },
+    {
       "InputId": "a9111412-3369-4848-af48-8a96f5697c84"/*ColorA*/,
       "Position": {
         "X": -217.45303,
@@ -41,6 +55,13 @@
       "Position": {
         "X": -217.45303,
         "Y": 79.32751
+      }
+    },
+    {
+      "InputId": "6f82fdd2-5dd6-447a-850b-e301abd35bae"/*Randomness*/,
+      "Position": {
+        "X": -218.26428,
+        "Y": 490.4367
       }
     },
     {
