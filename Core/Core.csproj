@@ -18,6 +18,7 @@
       <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
       <PackageReference Include="SharpDX.Mathematics" Version="4.2.0" />
       <PackageReference Include="SharpDX.MediaFoundation" Version="4.2.0" />
+      <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
     </ItemGroup>
 
     <ItemGroup>
