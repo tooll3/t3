@@ -32,8 +32,8 @@ namespace T3.Core.Resource
                 throw new Exception($"{nameof(ShaderCompiler)}.{nameof(ShaderCompiler.Instance)} not initialized");
             }
             
-            _fullScreenVertexShaderResource = ResourceManager.CreateShaderResource<VertexShader>(@"dx11\fullscreen-texture.hlsl", null, () => "vsMain");
-            _fullScreenPixelShaderResource = ResourceManager.CreateShaderResource<PixelShader>(@"dx11\fullscreen-texture.hlsl", null, () => "psMain");
+            _fullScreenVertexShaderResource = ResourceManager.CreateShaderResource<VertexShader>(@"dx11/fullscreen-texture.hlsl", null, () => "vsMain");
+            _fullScreenPixelShaderResource = ResourceManager.CreateShaderResource<PixelShader>(@"dx11/fullscreen-texture.hlsl", null, () => "psMain");
             
             if (_fullScreenVertexShaderResource.Value == null)
             {
