@@ -1,6 +1,4 @@
-using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using System;
 using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -8,8 +6,9 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using NewTek;
-using System.Linq;
+using SharpDX.Direct3D11;
 using T3.Core.Operator.Interfaces;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace Operators.Ndi.lib.io.video
 {
@@ -28,7 +27,7 @@ namespace Operators.Ndi.lib.io.video
             Dispose();
         }
 
-        private static readonly SharpDX.DXGI.Format[] allowedFormats = new Format[]
+        private static readonly Format[] allowedFormats = new Format[]
         {
             Format.B8G8R8A8_UNorm,
             Format.R8G8B8A8_UNorm,
@@ -131,7 +130,7 @@ namespace Operators.Ndi.lib.io.video
                 stagingDesc.Usage = ResourceUsage.Staging;
                 stagingDesc.MipLevels = 1; // later use copysubresource to use only mip 1 if necessary
 
-                stagingTexture = new Texture2D(device, stagingDesc);
+                stagingTexture = Texture2D.CreateTexture2D(stagingDesc);
 
                 textureData = Marshal.AllocHGlobal(width * height * 4);
             }
