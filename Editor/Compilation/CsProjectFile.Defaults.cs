@@ -19,15 +19,15 @@ internal sealed partial class CsProjectFile
                 }
         .ToFrozenDictionary(x => x.Type, x => x.Value);
     
-    private static readonly TagValue PrivateEnabledTag = new(MetadataTagType.Private, "true", true);
+    private static readonly TagValue[] DefaultReferenceTags = [new TagValue(MetadataTagType.Private, "true", true)];
     private static readonly Reference[] DefaultReferences =
         [
-            new Reference(ItemType.EditorReference, "Core.dll", PrivateEnabledTag),
-            new Reference(ItemType.EditorReference, "Logging.dll", PrivateEnabledTag),
-            new Reference(ItemType.EditorReference, "SharpDX.dll", PrivateEnabledTag),
-            new Reference(ItemType.EditorReference, "SharpDX.Direct3D11.dll", PrivateEnabledTag),
-            new Reference(ItemType.EditorReference, "SharpDX.DXGI.dll", PrivateEnabledTag),
-            new Reference(ItemType.EditorReference, "SharpDX.Direct2D1.dll", PrivateEnabledTag),
+            new Reference(ItemType.EditorReference, "Core.dll", DefaultReferenceTags),
+            new Reference(ItemType.EditorReference, "Logging.dll", DefaultReferenceTags),
+            new Reference(ItemType.EditorReference, "SharpDX.dll", DefaultReferenceTags),
+            new Reference(ItemType.EditorReference, "SharpDX.Direct3D11.dll", DefaultReferenceTags),
+            new Reference(ItemType.EditorReference, "SharpDX.DXGI.dll", DefaultReferenceTags),
+            new Reference(ItemType.EditorReference, "SharpDX.Direct2D1.dll", DefaultReferenceTags),
         ];
 
     // Note : we are trying to stay platform-agnostic with directories, and so we use unix path separators

@@ -207,6 +207,7 @@ public record ReleaseInfoSerialized(
     string Version,
     OperatorPackageReferenceSerialized[] OperatorPackages);
 
+// Identity must equal that package's root namespace
 public sealed record OperatorPackageReference(string Identity, Version Version, bool ResourcesOnly);
 
 public sealed record ReleaseInfo(string AssemblyFileName, Guid HomeGuid, string RootNamespace, Version EditorVersion, Version Version, OperatorPackageReference[] OperatorPackages);
