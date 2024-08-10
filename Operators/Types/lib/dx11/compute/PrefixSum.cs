@@ -16,6 +16,9 @@ namespace T3.Operators.Types.Id_d35a403b_7e6e_4725_a344_6e8008a4e1e1
         [Input(Guid = "c5561f3b-495e-47e1-95d4-ea3a750f1842")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> InputList2 = new();
 
+        [Input(Guid = "c58270bf-a121-4bb0-9309-33bab48eb0a7")]
+        public readonly InputSlot<bool> IsInclusive = new InputSlot<bool>();
+
     }
 }
 
