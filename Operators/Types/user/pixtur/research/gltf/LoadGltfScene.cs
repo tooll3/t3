@@ -150,12 +150,213 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                            {
                                Name = modelDefaultScene.Name
                            };
-
+        
         ParseChildren(modelDefaultScene.VisualChildren, rootNode);
 
         return rootNode;
     }
 
+    private class MeshChunkDef
+    {
+        public int StartFaceIndex;
+        public int FaceCount;
+        public int StartVertexIndex;    // This is actually not strictly necessary but simplifies the code
+        public int VertexCount;
+        
+        // This could also have a material reference as well as bounding boxes etc.
+    }
+
+    /** Flatten all meshes into a single mesh buffer seperated into chunks */
+    private SceneSetup.SceneNode ConvertToNodeStructureIntoChunks(Scene modelDefaultScene)
+    {
+        var rootNode = new SceneSetup.SceneNode()
+                           {
+                               Name = modelDefaultScene.Name
+                           };
+        
+        // Count all vertices and faces
+        var totalCounts = new MeshDataCounts();
+        ComputeTotalMeshCounts(modelDefaultScene.VisualChildren, ref totalCounts);
+
+        var meshDataSet = new MeshDataSet()
+                              {
+                                  VertexBufferData = new PbrVertex[totalCounts.VertexCount],
+                                  IndexBufferData = new Int3[totalCounts.FaceCount],
+                                  Chunks = new List<MeshChunkDef>(),
+                              };
+        
+        var meshBufferReference = new MeshBuffers(); // empty references that will be filled later
+        
+        // Fill the buffers 
+        var counters = new MeshDataCounts();
+        ParseChildrenIntoChunks(modelDefaultScene.VisualChildren, rootNode, ref counters, ref meshDataSet, ref meshBufferReference);
+
+        // Create actual mesh buffers
+        const int stride = 3 * 4;
+        var faceCount = meshDataSet.IndexBufferData.Length;
+        var verticesCount = meshDataSet.VertexBufferData.Length;
+        var indexBufferData = meshDataSet.IndexBufferData;
+        var vertexBufferData = meshDataSet.VertexBufferData;
+        
+
+        ResourceManager.SetupStructuredBuffer(indexBufferData, stride * faceCount, stride, ref meshBufferReference.IndicesBuffer.Buffer);
+        ResourceManager.CreateStructuredBufferSrv(meshBufferReference.IndicesBuffer.Buffer, ref meshBufferReference.IndicesBuffer.Srv);
+        ResourceManager.CreateStructuredBufferUav(meshBufferReference.IndicesBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
+                                                  ref meshBufferReference.IndicesBuffer.Uav);
+
+        ResourceManager.SetupStructuredBuffer(vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
+                                              ref meshBufferReference.VertexBuffer.Buffer);
+        ResourceManager.CreateStructuredBufferSrv(meshBufferReference.VertexBuffer.Buffer, ref meshBufferReference.VertexBuffer.Srv);
+        ResourceManager.CreateStructuredBufferUav(meshBufferReference.VertexBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
+                                                  ref meshBufferReference.VertexBuffer.Uav);
+        
+        // TODO: Create chunk definition buffer
+        // TODO: Create instance points
+        // TODO: Separate this into a separate operator
+        return rootNode;
+    }
+    
+    
+    private class MeshDataSet
+    {
+        public PbrVertex[] VertexBufferData;
+        public Int3[] IndexBufferData;
+        public List<MeshChunkDef> Chunks;
+    }
+
+    
+    private struct MeshDataCounts
+    {
+        public int ChunkCount;
+        public int VertexCount;
+        public int FaceCount;
+    }
+    
+    private void ComputeTotalMeshCounts(IEnumerable<Node> visualChildren, ref MeshDataCounts totalCounts)
+    {
+        foreach (var child in visualChildren)
+        {
+            if (child == null)
+                continue;
+            
+            if (child.Mesh != null)
+            {
+                foreach (var meshPrimitive in child.Mesh.Primitives)
+                {
+                    if(meshPrimitive == null)
+                        continue;
+
+                    if (!meshPrimitive.VertexAccessors.TryGetValue("POSITION", out var positionAccessor))
+                        continue;
+
+                    var triangleCount= meshPrimitive.GetTriangleIndices().Count();
+                    var verticesCount = positionAccessor.Count;
+                    
+                    if(triangleCount == 0 || verticesCount == 0)
+                        continue;
+                    
+                    totalCounts.ChunkCount++;
+                    totalCounts.VertexCount += verticesCount;
+                    totalCounts.FaceCount += triangleCount;
+                }
+            }
+
+            ComputeTotalMeshCounts(child.VisualChildren, ref totalCounts);
+        }
+    }
+    
+    /**
+     * TODO: This is work in progress!
+     * This will only add the mesh data to the meshDataSet, but not generate buffers.
+     */
+    private void ParseChildrenIntoChunks(IEnumerable<Node> visualChildren, SceneSetup.SceneNode parentNode, ref MeshDataCounts counters,
+                                         ref MeshDataSet meshData, ref MeshBuffers meshBufferReference)
+    {
+        foreach (var child in visualChildren)
+        {
+            if (child == null)
+                continue;
+
+            var t = child.LocalTransform.GetDecomposed();
+            var transform = new SceneSetup.Transform
+                                {
+                                    Translation = t.Translation,
+                                    Scale = t.Scale,
+                                    Rotation = t.Rotation,
+                                };
+
+            // Pure logic node
+            var structureNode = new SceneSetup.SceneNode
+                                    {
+                                        Name = child.Name,
+                                        MeshName = child.Mesh?.Name,
+                                        // MeshBuffers = meshBuffers,
+                                        Transform = transform,
+                                        CombinedTransform = child.WorldMatrix,
+                                    };
+
+            parentNode.ChildNodes.Add(structureNode);
+
+            var useStructureNodeForMesh = true;
+
+            if (child.Mesh != null)
+            {
+                foreach (var meshPrimitive in child.Mesh.Primitives)
+                {
+                    var currentChunkIndex = meshData.Chunks.Count;
+                    
+                    if(meshPrimitive == null)
+                        continue;
+
+                    if (!GetMeshDataFromPrimitive(meshPrimitive, out var vertexBufferData, out var indexBufferData, out var message))
+                        continue;
+                    
+                    
+                    // NOTE: This could be optimized by creating another version of GetMeshDataFromPrimitive that takes the start index
+                    Array.Copy(vertexBufferData, 0, meshData.VertexBufferData, counters.VertexCount, vertexBufferData.Length);
+                    Array.Copy(indexBufferData, 0, meshData.IndexBufferData, counters.FaceCount, indexBufferData.Length);
+                    meshData.Chunks.Add(new MeshChunkDef()
+                                            {
+                                                StartFaceIndex = counters.FaceCount,
+                                                FaceCount = indexBufferData.Length,
+                                                StartVertexIndex = counters.VertexCount,
+                                                VertexCount = vertexBufferData.Length,
+                                            });
+                    
+                    Log.Debug($" mesh:{child.Name} {child.Mesh?.Name}  {currentChunkIndex}");
+                    
+                    var materialDef = GetOrCreateMaterialDefinition(meshPrimitive.Material);
+
+                    //Log.Debug("Material: " + materialDef);
+
+                    if (useStructureNodeForMesh)
+                    {
+                        structureNode.MeshBuffers = meshBufferReference;
+                        structureNode.MeshChunkIndex = currentChunkIndex;
+                        structureNode.Material = materialDef;
+                        useStructureNodeForMesh = false;
+                        continue;
+                    }
+
+                    var meshNode = new SceneSetup.SceneNode()
+                                       {
+                                           Name = child.Name,
+                                           MeshName = child.Mesh?.Name,
+                                           MeshBuffers = meshBufferReference,
+                                           MeshChunkIndex = currentChunkIndex,
+                                           Transform = transform,
+                                           CombinedTransform = child.WorldMatrix,
+                                           Material = materialDef,
+                                       };
+                    parentNode.ChildNodes.Add(meshNode);
+                }
+            }
+
+            ParseChildrenIntoChunks(child.VisualChildren, structureNode, ref counters, ref meshData, ref meshBufferReference);
+        }
+    }
+    
+    
     private void ParseChildren(IEnumerable<Node> visualChildren, SceneSetup.SceneNode parentNode)
     {
         foreach (var child in visualChildren)
@@ -576,7 +777,8 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             return false;
         }
     }
-
+    
+    
     private static bool TryGenerateMeshBuffersFromGltfChild(MeshPrimitive meshPrimitive, out MeshBuffers newMesh, out string message)
     {
         // TODO: return cached mesh to reuse buffer

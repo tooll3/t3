@@ -36,6 +36,7 @@ public class SceneSetup : IEditableInputType, IDisposable
         public Matrix4x4 CombinedTransform;
         public Transform Transform;
         public string MeshName;
+        public int MeshChunkIndex;
         public MeshBuffers MeshBuffers;
         public SceneMaterial Material;
     }
