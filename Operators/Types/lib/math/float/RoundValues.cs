@@ -20,9 +20,9 @@ namespace T3.Operators.Types.Id_4b943f29_3e59_4b2c_a267_a8221525966c
 
         enum RoundType
         {
-            Round,
-            Floor,
-            Ceil
+            Round = 0,
+            Floor = 1,
+            Ceiling = 2 
         }
 
         private void Update(EvaluationContext context)

@@ -1,6 +1,6 @@
 {
   "Id": "4b943f29-3e59-4b2c-a267-a8221525966c"/*RoundValues*/,
-  "Description": "Round values to the nearest integer",
+  "Description": "Round values to the nearest integer \n\n Also see [RoundValuesExample]",
   "InputUis": [
     {
       "InputId": "854b35c6-696a-4706-bdf3-785f7f47b4e8"/*Input*/,
@@ -16,7 +16,10 @@
         "X": 0.0,
         "Y": 45.0
       },
-      "Description": "Selects the rounding Mode."
+      "Description": "Selects the rounding Mode.",
+      "Min": 0,
+      "Max": 2,
+      "Scale": 0.0
     }
   ],
   "SymbolChildUis": [],
