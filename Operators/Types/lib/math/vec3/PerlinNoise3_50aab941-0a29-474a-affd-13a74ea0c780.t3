@@ -28,6 +28,14 @@
       }
     },
     {
+      "Id": "3065b319-7c6f-4447-a32a-454ee690ba36"/*Offset*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
       "Id": "b4b38d87-f661-4b8b-b978-70bf34152422"/*RangeMin*/,
       "DefaultValue": {
         "X": -1.0,

@@ -18,31 +18,32 @@ namespace T3.Operators.Types.Id_3036067a_a4c2_434b_b0e3_ac95c5c943f4
 
         private void Update(EvaluationContext context)
         {
+            var startTime = Output.TimeClip.TimeRange.Start;
+            var endTime = Output.TimeClip.TimeRange.End;
+            var normalizedTime = (context.LocalFxTime - startTime) / (endTime - startTime);
+            context.FloatVariables["_normalizedTime"] = (float)normalizedTime;
+            
             var commands = Command.GetCollectedTypedInputs();
-            // foreach (var i in Command.GetCollectedTypedInputs())
-            // {
-                // do preparation if needed
-                for (int i = 0; i < commands.Count; i++)
-                {
-                    commands[i].Value?.PrepareAction?.Invoke(context);
-                }
 
-                // execute commands
-                for (int i = 0; i < commands.Count; i++)
-                {
-                    commands[i].GetValue(context);
-                }
+            // do preparation if needed
+            for (int i = 0; i < commands.Count; i++)
+            {
+                commands[i].Value?.PrepareAction?.Invoke(context);
+            }
 
-                // cleanup after usage
-                for (int i = 0; i < commands.Count; i++)
-                {
-                    commands[i].Value?.RestoreAction?.Invoke(context);
-                }                
-                
-                // Log.Debug("Update timeclip " + i , this);
-                // i.GetValue(context);
-            // }
-            //Command.GetValue(context);
+            // execute commands
+            for (int i = 0; i < commands.Count; i++)
+            {
+                commands[i].GetValue(context);
+            }
+
+            // cleanup after usage
+            for (int i = 0; i < commands.Count; i++)
+            {
+                commands[i].Value?.RestoreAction?.Invoke(context);
+            }                
+            
+
             Command.DirtyFlag.Clear();
         }
 
