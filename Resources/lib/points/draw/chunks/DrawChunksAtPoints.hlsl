@@ -97,12 +97,12 @@ psInput vsMain(uint id : SV_VertexID)
 
     // int pointIndex = id / verticesPerInstance;
 
+    // uint vertexIndex = FaceIndices[faceIndex][faceVertexIndex];
     uint drawFaceIndex = id / 3;
     uint faceVertexIndex = id % 3;
     uint vertexIndex = DrawData[drawFaceIndex].VertexIndices[faceVertexIndex];
     uint pointIndex = DrawData[drawFaceIndex].PointIndex;
 
-    // uint vertexIndex = FaceIndices[faceIndex][faceVertexIndex];
     PbrVertex vertex = PbrVertices[vertexIndex];
     float4 posInObject = float4(vertex.Position, 1);
 

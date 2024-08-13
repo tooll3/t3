@@ -1,0 +1,78 @@
+{
+  "Id": "d89fbdf2-bf94-43c4-99f8-d25182799587"/*Mappi2*/,
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "a4a81cc1-eea2-4901-a90a-80bd8a221c8b"/*RenderTarget*/,
+      "Position": {
+        "X": -361.71448,
+        "Y": -359.70978
+      }
+    },
+    {
+      "ChildId": "2b419348-e91c-498f-9d5d-c165397e11d9"/*Text*/,
+      "Position": {
+        "X": -511.71448,
+        "Y": -359.70978
+      }
+    },
+    {
+      "ChildId": "4e75175e-a48d-4fe3-a956-8c1cb4102a9b"/*Mappi2024*/,
+      "Position": {
+        "X": -403.03528,
+        "Y": -249.552
+      }
+    },
+    {
+      "ChildId": "20d68c50-1882-41fc-8bcc-904088d787d3"/*SetMaterial*/,
+      "Position": {
+        "X": 540.252,
+        "Y": 461.37213
+      }
+    },
+    {
+      "ChildId": "c6c0f385-df16-4f2e-b32b-becb7dd704ef"/*LoadObj*/,
+      "Position": {
+        "X": -105.117065,
+        "Y": -11.708069
+      }
+    },
+    {
+      "ChildId": "20487d33-7e51-493c-ad31-e7fece1c1905"/*LoadGltfScene*/,
+      "Position": {
+        "X": -447.6126,
+        "Y": 121.20062
+      }
+    },
+    {
+      "ChildId": "ecc41c81-88a2-4c3a-98d5-e98865fdb905"/*DrawScene*/,
+      "Position": {
+        "X": -180.89151,
+        "Y": 116.940735
+      }
+    },
+    {
+      "ChildId": "a6a38400-43c3-40be-b666-0c8dffd606eb"/*Transform*/,
+      "Position": {
+        "X": -30.89151,
+        "Y": 116.940735
+      }
+    },
+    {
+      "ChildId": "6b9038ad-81c9-4304-afbd-eddaa7f9efd9"/*_DispatchSceneDraws*/,
+      "Position": {
+        "X": -238.73584,
+        "Y": -130.5894
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "c5a1d5ca-8157-4194-a695-1bc200228564"/*ImgOutput*/,
+      "Position": {
+        "X": -211.71448,
+        "Y": -359.70978
+      }
+    }
+  ]
+}
