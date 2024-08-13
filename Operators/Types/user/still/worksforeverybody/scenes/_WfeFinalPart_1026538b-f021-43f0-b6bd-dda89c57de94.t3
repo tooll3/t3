@@ -1969,15 +1969,6 @@
           }
         },
         {
-          "Id": "2d59d002-838e-4150-ae8f-ff97bb19bd78"/*Translation*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": -0.6,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        },
-        {
           "Id": "938e7f13-c78f-4474-abe1-38e413fb74e6"/*ForceColorUpdate*/,
           "Type": "System.Boolean",
           "Value": true

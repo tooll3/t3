@@ -38,8 +38,8 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
 
     Point p = SourcePoints[i.x];
+    float w =  WIsWeight >= 0.5 ? p.W *  p.Selected:  p.Selected; 
 
-    float w = p.W;
     float3 pos = p.Position;
 
     float4 orgRot = p.Rotation;
@@ -80,15 +80,11 @@ void main(uint3 i : SV_DispatchThreadID)
         }
     }
 
-    float weight = 1;
 
-    if (WIsWeight >= 0.5)
-    {
-        float3 weightedOffset = (pos - pLocal) * w;
-        pos = pLocal + weightedOffset;
-        weight = w;
-        newRotation = qSlerp(orgRot, newRotation, w);
-    }
+    float3 weightedOffset = (pos - pLocal) * w;
+    pos = pLocal + weightedOffset;
+    //float weight = w;
+    newRotation = qSlerp(orgRot, newRotation, w);
 
     if (CoordinateSpace < 0.5)
     {
@@ -102,7 +98,7 @@ void main(uint3 i : SV_DispatchThreadID)
     p.Position = pos.xyz;
     p.Rotation = newRotation;
 
-    p.W = lerp(p.W, p.W * ScaleW + OffsetW, weight);
+    p.W = lerp(p.W, p.W * ScaleW + OffsetW, w);
 
     ResultPoints[i.x] = p;
 }
