@@ -13,11 +13,17 @@ namespace T3.Operators.Types.Id_5b9f1d97_4e10_4f31_ba83_4cbf7be9719b
 
         [Output(Guid = "78C53086-BB28-4C58-8B51-42CFDF6620C4")]
         public readonly Slot<BufferWithViews> Indices = new();
+        
+        
+        [Output(Guid = "8FEF2E09-4F1E-4BA8-8D62-858C3FB0AC23")]
+        public readonly Slot<BufferWithViews> ChunkDefs = new();
+
 
         public _MeshBufferComponents()
         {
             Vertices.UpdateAction = Update;
             Indices.UpdateAction = Update;
+            ChunkDefs.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
@@ -25,6 +31,7 @@ namespace T3.Operators.Types.Id_5b9f1d97_4e10_4f31_ba83_4cbf7be9719b
             var mesh = MeshBuffers.GetValue(context);
             Vertices.Value = null;
             Indices.Value = null;
+            ChunkDefs.Value = null;
 
             if (mesh == null)
             {
@@ -43,14 +50,17 @@ namespace T3.Operators.Types.Id_5b9f1d97_4e10_4f31_ba83_4cbf7be9719b
                 _lastError = "Indices buffer undefined";
                 return;
             }
-
+            
+            
             _lastError = null;
             
             Vertices.Value = mesh.VertexBuffer;
             Indices.Value = mesh.IndicesBuffer;
+            ChunkDefs.Value = mesh.ChunkDefsBuffer;
             
             Vertices.DirtyFlag.Clear();
             Indices.DirtyFlag.Clear();
+            ChunkDefs.DirtyFlag.Clear();
         }
 
         [Input(Guid = "1B0B7587-DE86-4FC4-BE78-A21392E8AA9B")]

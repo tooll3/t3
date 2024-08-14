@@ -898,12 +898,6 @@
       "Outputs": []
     },
     {
-      "Id": "2664a8cb-d755-4a90-9086-67897d32708f"/*TestFx*/,
-      "SymbolId": "cf960e66-ab0e-4aeb-bfa1-d6f53fe41472",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "ea9096ea-4d2a-4e37-bdab-90acd24d707d"/*DetectEdges*/,
       "SymbolId": "2a5475c8-9e16-409f-8c40-a3063e045d38",
       "InputValues": [

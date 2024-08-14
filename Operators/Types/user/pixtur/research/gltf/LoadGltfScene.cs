@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.WIC;
@@ -54,7 +55,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         _offsetMetallic = OffsetMetallic.GetValue(context);
 
         var meshChildIndex = MeshChildIndex.GetValue(context);
-
+        
         var sceneSetup = Setup.GetValue(context);
         if (sceneSetup == null || Setup.Input.IsDefault)
         {
@@ -65,6 +66,8 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         var filePath = Path.GetValue(context);
 
         _updateTriggered = TriggerUpdate.GetValue(context);
+        _updateTriggered |= MathUtils.WasChanged(CombineBuffer.GetValue(context), ref _combineBuffer);
+        
         TriggerUpdate.SetTypedInputValue(false);
 
         if (LoadFileIfRequired(filePath, out var newSetup))
@@ -129,7 +132,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         try
         {
             var model = ModelRoot.Load(fullPath);
-            var rootNode = ConvertToNodeStructure(model.DefaultScene);
+            var rootNode = _combineBuffer 
+                               ? ConvertToNodeStructureIntoChunks(model.DefaultScene)
+                               : ConvertToNodeStructure(model.DefaultScene);
 
             sceneSetup.RootNodes.Clear();
             sceneSetup.RootNodes.Add(rootNode);
@@ -152,19 +157,29 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                            };
         
         ParseChildren(modelDefaultScene.VisualChildren, rootNode);
-
         return rootNode;
     }
 
-    private class MeshChunkDef
+    
+    // Todo adjust shader implementation new stride
+    [StructLayout(LayoutKind.Explicit, Size = Stride)]
+    public struct MeshChunkDef
     {
+        [FieldOffset(0)]
         public int StartFaceIndex;
+        
+        [FieldOffset(4)]
         public int FaceCount;
-        public int StartVertexIndex;    // This is actually not strictly necessary but simplifies the code
+        
+        [FieldOffset(8)]
+        public int StartVertexIndex;
+        
+        [FieldOffset(12)]
         public int VertexCount;
         
-        // This could also have a material reference as well as bounding boxes etc.
-    }
+        public const int Stride = 16;
+    }    
+    
 
     /** Flatten all meshes into a single mesh buffer seperated into chunks */
     private SceneSetup.SceneNode ConvertToNodeStructureIntoChunks(Scene modelDefaultScene)
@@ -176,13 +191,16 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         
         // Count all vertices and faces
         var totalCounts = new MeshDataCounts();
-        ComputeTotalMeshCounts(modelDefaultScene.VisualChildren, ref totalCounts);
+        
+        HashSet<MeshPrimitive> collectedMeshPrimitives = new ();
+        
+        ComputeTotalMeshCounts(modelDefaultScene.VisualChildren, ref totalCounts, ref collectedMeshPrimitives);
 
         var meshDataSet = new MeshDataSet()
                               {
                                   VertexBufferData = new PbrVertex[totalCounts.VertexCount],
                                   IndexBufferData = new Int3[totalCounts.FaceCount],
-                                  Chunks = new List<MeshChunkDef>(),
+                                  ChunksDefs = new List<MeshChunkDef>(),
                               };
         
         var meshBufferReference = new MeshBuffers(); // empty references that will be filled later
@@ -192,14 +210,16 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         ParseChildrenIntoChunks(modelDefaultScene.VisualChildren, rootNode, ref counters, ref meshDataSet, ref meshBufferReference);
 
         // Create actual mesh buffers
-        const int stride = 3 * 4;
         var faceCount = meshDataSet.IndexBufferData.Length;
-        var verticesCount = meshDataSet.VertexBufferData.Length;
         var indexBufferData = meshDataSet.IndexBufferData;
+        
+        var verticesCount = meshDataSet.VertexBufferData.Length;
         var vertexBufferData = meshDataSet.VertexBufferData;
         
-
-        ResourceManager.SetupStructuredBuffer(indexBufferData, stride * faceCount, stride, ref meshBufferReference.IndicesBuffer.Buffer);
+        var chunkCount = meshDataSet.ChunksDefs.Count;
+        var chunkBufferData = meshDataSet.ChunksDefs.ToArray();
+        
+        ResourceManager.SetupStructuredBuffer(indexBufferData, 3 * 4 * faceCount, 3 * 4, ref meshBufferReference.IndicesBuffer.Buffer);
         ResourceManager.CreateStructuredBufferSrv(meshBufferReference.IndicesBuffer.Buffer, ref meshBufferReference.IndicesBuffer.Srv);
         ResourceManager.CreateStructuredBufferUav(meshBufferReference.IndicesBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
                                                   ref meshBufferReference.IndicesBuffer.Uav);
@@ -210,8 +230,14 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         ResourceManager.CreateStructuredBufferUav(meshBufferReference.VertexBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
                                                   ref meshBufferReference.VertexBuffer.Uav);
         
-        // TODO: Create chunk definition buffer
-        // TODO: Create instance points
+        
+        ResourceManager.SetupStructuredBuffer(chunkBufferData, MeshChunkDef.Stride * chunkCount, MeshChunkDef.Stride, ref meshBufferReference.ChunkDefsBuffer.Buffer);
+        ResourceManager.CreateStructuredBufferSrv(meshBufferReference.ChunkDefsBuffer.Buffer, ref meshBufferReference.ChunkDefsBuffer.Srv);
+        ResourceManager.CreateStructuredBufferUav(meshBufferReference.ChunkDefsBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
+                                                  ref meshBufferReference.ChunkDefsBuffer.Uav);
+        
+        
+        // TODO: Create instance points -> See [GetPointsFromSceneDef]
         // TODO: Separate this into a separate operator
         return rootNode;
     }
@@ -221,7 +247,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     {
         public PbrVertex[] VertexBufferData;
         public Int3[] IndexBufferData;
-        public List<MeshChunkDef> Chunks;
+        public List<MeshChunkDef> ChunksDefs;
     }
 
     
@@ -232,17 +258,21 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         public int FaceCount;
     }
     
-    private void ComputeTotalMeshCounts(IEnumerable<Node> visualChildren, ref MeshDataCounts totalCounts)
+    private void ComputeTotalMeshCounts(IEnumerable<Node> visualChildren, ref MeshDataCounts totalCounts, ref HashSet<MeshPrimitive> collectedMeshPrimitives)
     {
         foreach (var child in visualChildren)
         {
             if (child == null)
                 continue;
             
+            
             if (child.Mesh != null)
             {
                 foreach (var meshPrimitive in child.Mesh.Primitives)
                 {
+                    if(!collectedMeshPrimitives.Add(meshPrimitive))
+                        continue;
+                    
                     if(meshPrimitive == null)
                         continue;
 
@@ -261,7 +291,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                 }
             }
 
-            ComputeTotalMeshCounts(child.VisualChildren, ref totalCounts);
+            ComputeTotalMeshCounts(child.VisualChildren, ref totalCounts, ref collectedMeshPrimitives);
         }
     }
     
@@ -276,7 +306,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         {
             if (child == null)
                 continue;
-
+            
+            //if(!_meshChunkDefsForPrimitives.TryGetValue(child.Mesh))
+            
             var t = child.LocalTransform.GetDecomposed();
             var transform = new SceneSetup.Transform
                                 {
@@ -303,27 +335,45 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             {
                 foreach (var meshPrimitive in child.Mesh.Primitives)
                 {
-                    var currentChunkIndex = meshData.Chunks.Count;
-                    
                     if(meshPrimitive == null)
                         continue;
-
-                    if (!GetMeshDataFromPrimitive(meshPrimitive, out var vertexBufferData, out var indexBufferData, out var message))
-                        continue;
                     
-                    
-                    // NOTE: This could be optimized by creating another version of GetMeshDataFromPrimitive that takes the start index
-                    Array.Copy(vertexBufferData, 0, meshData.VertexBufferData, counters.VertexCount, vertexBufferData.Length);
-                    Array.Copy(indexBufferData, 0, meshData.IndexBufferData, counters.FaceCount, indexBufferData.Length);
-                    meshData.Chunks.Add(new MeshChunkDef()
-                                            {
-                                                StartFaceIndex = counters.FaceCount,
-                                                FaceCount = indexBufferData.Length,
-                                                StartVertexIndex = counters.VertexCount,
-                                                VertexCount = vertexBufferData.Length,
-                                            });
-                    
-                    Log.Debug($" mesh:{child.Name} {child.Mesh?.Name}  {currentChunkIndex}");
+                    if(!_chunkDefIndicesForPrimitives.TryGetValue(meshPrimitive, out var chunkDefIndex))
+                    {
+                        var currentChunkIndex = meshData.ChunksDefs.Count;
+                        
+                        if (!GetMeshDataFromPrimitive(meshPrimitive, out var vertexBufferData, out var indexBufferData, out var message))
+                            continue;
+                        
+                        
+                        Array.Copy(vertexBufferData, 0, meshData.VertexBufferData, counters.VertexCount, vertexBufferData.Length);
+                        
+                        for(var faceIndex=0; faceIndex<indexBufferData.Length; faceIndex++)
+                        {
+                            
+                            meshData.IndexBufferData[faceIndex + counters.FaceCount].X = indexBufferData[faceIndex].X + counters.VertexCount;
+                            meshData.IndexBufferData[faceIndex + counters.FaceCount].Y = indexBufferData[faceIndex].Y + counters.VertexCount;
+                            meshData.IndexBufferData[faceIndex + counters.FaceCount].Z = indexBufferData[faceIndex].Z + counters.VertexCount;
+                                
+                            // meshData.IndexBufferData[faceIndex + counters.FaceCount].X += counters.VertexCount;
+                            // meshData.IndexBufferData[faceIndex + counters.FaceCount].Y += counters.VertexCount;
+                            // meshData.IndexBufferData[faceIndex + counters.FaceCount].Z += counters.VertexCount;
+                        }
+                        
+                        meshData.ChunksDefs.Add(new MeshChunkDef()
+                                                {
+                                                    StartFaceIndex = counters.FaceCount,
+                                                    FaceCount = indexBufferData.Length,
+                                                    StartVertexIndex = counters.VertexCount,
+                                                    VertexCount = vertexBufferData.Length,
+                                                });
+                        _chunkDefIndicesForPrimitives[meshPrimitive] = currentChunkIndex;
+                        counters.VertexCount += vertexBufferData.Length;
+                        counters.FaceCount += indexBufferData.Length;
+                        
+                        Log.Debug($" mesh:{child.Name} {child.Mesh?.Name}  {currentChunkIndex}");
+                        chunkDefIndex = currentChunkIndex;
+                    }
                     
                     var materialDef = GetOrCreateMaterialDefinition(meshPrimitive.Material);
 
@@ -332,7 +382,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                     if (useStructureNodeForMesh)
                     {
                         structureNode.MeshBuffers = meshBufferReference;
-                        structureNode.MeshChunkIndex = currentChunkIndex;
+                        structureNode.MeshChunkIndex = chunkDefIndex;
                         structureNode.Material = materialDef;
                         useStructureNodeForMesh = false;
                         continue;
@@ -343,7 +393,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                            Name = child.Name,
                                            MeshName = child.Mesh?.Name,
                                            MeshBuffers = meshBufferReference,
-                                           MeshChunkIndex = currentChunkIndex,
+                                           MeshChunkIndex = chunkDefIndex,
                                            Transform = transform,
                                            CombinedTransform = child.WorldMatrix,
                                            Material = materialDef,
@@ -956,7 +1006,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
     private readonly Dictionary<string, SceneSetup.SceneMaterial> _sceneMaterialsByName = new();
     private readonly Dictionary<MeshPrimitive, MeshBuffers> _meshBuffersForPrimitives = new();
-
+    private readonly Dictionary<MeshPrimitive, int> _chunkDefIndicesForPrimitives = new();
+    
+    private bool _combineBuffer;
     private float _offsetRoughness;
     private float _offsetMetallic;
     private static SamplerState _combineChannelsSampler;
@@ -994,7 +1046,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
     [Input(Guid = "D02F41A6-1A6B-4A6E-8D6C-A28873C79F2C")]
     public readonly InputSlot<SceneSetup> Setup = new();
-
+    
+    [Input(Guid = "57F129AE-0B2E-465D-8C0E-F6259FDD37CE")]
+    public readonly InputSlot<bool> CombineBuffer = new();
+    
+    
     [Input(Guid = "EF7075E9-4BC2-442E-8E0C-E03667FF2E0A")]
     public readonly InputSlot<bool> TriggerUpdate = new();
 

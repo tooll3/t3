@@ -19,7 +19,6 @@ public class SceneSetup : IEditableInputType, IDisposable
     // TODO: Implement UI and serialize 
     // private Dictionary<string, string> MaterialAssignments;
     
-    
     /// <summary>
     /// Recursive description of the loaded nodes...
     /// This can be translated into a list of draw dispatches.
@@ -40,7 +39,7 @@ public class SceneSetup : IEditableInputType, IDisposable
         public MeshBuffers MeshBuffers;
         public SceneMaterial Material;
     }
-
+    
     /// <summary>
     /// Holds information required for building a T3 PbrMaterial.
     /// </summary>
@@ -50,14 +49,14 @@ public class SceneSetup : IEditableInputType, IDisposable
         public PbrMaterial.PbrParameters PbrParameters;
         public PbrMaterial PbrMaterial;
     }
-
+    
     // FIXME: This should probably be moved to somewhere in core -> Rendering
     public struct Transform
     {
         public Vector3 Translation;
         public Quaternion Rotation;
         public Vector3 Scale;
-
+        
         public Matrix4x4 ToTransform()
         {
             return GraphicsMath.CreateTransformationMatrix(
@@ -69,9 +68,9 @@ public class SceneSetup : IEditableInputType, IDisposable
                                                            translation: Translation);
         }
     }
-
+    
     public List<NodeSetting> NodeSettings;
-
+    
     /// <summary>
     /// Holds settings for a node inside the scene
     /// </summary>
@@ -80,7 +79,7 @@ public class SceneSetup : IEditableInputType, IDisposable
         public int NodeHashId;
         public string PbrMaterialId;
         public NodeVisibilities Visibility;
-
+        
         public enum NodeVisibilities
         {
             Default = 0,
@@ -89,10 +88,8 @@ public class SceneSetup : IEditableInputType, IDisposable
             HiddenBranch,
         }
     }
-
     
-        
-    #region dispatch preprocessing 
+    #region dispatch preprocessing
     /// <summary>
     /// Flattens the node structure
     /// </summary>
@@ -112,7 +109,7 @@ public class SceneSetup : IEditableInputType, IDisposable
     {
         if (node.MeshBuffers != null)
         {
-            var vertexCount = node.MeshBuffers.IndicesBuffer.Srv.Description.Buffer.ElementCount *3;
+            var vertexCount = node.MeshBuffers.IndicesBuffer.Srv.Description.Buffer.ElementCount * 3;
             var newDispatch = new SceneDrawDispatch
                                   {
                                       MeshBuffers = node.MeshBuffers,
@@ -120,6 +117,7 @@ public class SceneSetup : IEditableInputType, IDisposable
                                       VertexStartIndex = 0,
                                       Material = node.Material?.PbrMaterial,
                                       CombinedTransform = node.CombinedTransform,
+                                      ChunkIndex = node.MeshChunkIndex,
                                   };
             
             Dispatches.Add(newDispatch);
@@ -141,6 +139,7 @@ public class SceneSetup : IEditableInputType, IDisposable
         public int VertexStartIndex;
         public PbrMaterial Material;
         public Matrix4x4 CombinedTransform;
+        public int ChunkIndex;
     }
     
     public readonly List<SceneDrawDispatch> Dispatches = new();
@@ -151,10 +150,10 @@ public class SceneSetup : IEditableInputType, IDisposable
     {
         writer.WritePropertyName(nameof(SceneSetup));
         writer.WriteStartObject();
-
+        
         writer.WritePropertyName("NodeSettings");
         writer.WriteStartArray();
-
+        
         if (NodeSettings != null)
         {
             lock (NodeSettings)
@@ -163,18 +162,18 @@ public class SceneSetup : IEditableInputType, IDisposable
                 {
                     writer.WriteStartObject();
                     writer.WriteValue(nameof(setting.NodeHashId), setting.NodeHashId);
-
+                    
                     if (setting.Visibility != NodeSetting.NodeVisibilities.Default)
                         writer.WriteObject(nameof(setting.Visibility), setting.Visibility.ToString());
                     writer.WriteEndObject();
                 }
             }
         }
-
+        
         writer.WriteEndArray();
         writer.WriteEndObject();
     }
-
+    
     public void Read(JToken inputToken)
     {
         if (NodeSettings == null)
@@ -185,17 +184,17 @@ public class SceneSetup : IEditableInputType, IDisposable
         {
             NodeSettings.Clear();
         }
-
+        
         var nodeSettingsToken = inputToken[nameof(SceneSetup)];
         if (nodeSettingsToken == null)
             return;
-
+        
         try
         {
             var jArray = (JArray)nodeSettingsToken[nameof(NodeSettings)];
             if (jArray == null)
                 return;
-
+            
             foreach (var keyEntry in jArray)
             {
                 NodeSettings.Add(new NodeSetting()
@@ -213,9 +212,9 @@ public class SceneSetup : IEditableInputType, IDisposable
             Log.Warning("Can't read scene setting property " + e);
         }
     }
-
+    
     public object Clone() => TypedClone();
-
+    
     public SceneSetup TypedClone()
     {
         return new SceneSetup()
@@ -224,7 +223,7 @@ public class SceneSetup : IEditableInputType, IDisposable
                    };
     }
     #endregion
-
+    
     public void Dispose() => Dispose(true);
     
     public void Dispose(bool isDisposing)
@@ -232,19 +231,16 @@ public class SceneSetup : IEditableInputType, IDisposable
         if (isDisposing)
             return;
         
-        foreach(var dispatch in Dispatches)
+        foreach (var dispatch in Dispatches)
         {
             dispatch.MeshBuffers.IndicesBuffer.Dispose();
             dispatch.MeshBuffers.VertexBuffer.Dispose();
-
+            
             if (dispatch.Material != null)
             {
                 dispatch.Material.Dispose();
                 dispatch.Material = null;
             }
         }
-
-        
-        
     }
 }

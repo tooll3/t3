@@ -13,6 +13,8 @@ struct ChunkDef
 {
     int StartFaceIndex;
     int FaceCount;
+    int StartVertexIndex;
+    int VertexCount;
 };
 
 struct IndicesForDraw
@@ -61,11 +63,12 @@ void UpdateDrawData(uint DTid : SV_DispatchThreadID, uint _GI : SV_GroupIndex)
     }
 
     // Check if a valid pointIndex was found
+    
     if (pointIndex < PointCount)
     {
         uint chunkEndFaceIndex = ChunkEnds[pointIndex];
         uint chunkSize = ChunkSizes[pointIndex];
-        uint chunkStartFaceIndex = chunkEndFaceIndex - chunkSize;
+        uint chunkStartFaceIndex = chunkEndFaceIndex - chunkSize +1;    // FIXME: This point offset is weird
         uint faceIndexInPointChunk = faceIndex - chunkStartFaceIndex;
 
         uint chunkDefIndex = ChunkIndicesForPoints[pointIndex % ChunkIndexForPointsCounts];

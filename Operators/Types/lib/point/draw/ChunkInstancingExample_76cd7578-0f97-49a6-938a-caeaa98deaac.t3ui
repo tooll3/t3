@@ -1,0 +1,207 @@
+{
+  "Id": "76cd7578-0f97-49a6-938a-caeaa98deaac"/*ChunkInstancingExample*/,
+  "Description": "Prepare draw mesh chunks at points",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "eb6497be-ad00-4fcb-859f-d58d2ecfa3b3"/*LoadGltfScene*/,
+      "Position": {
+        "X": 204.10086,
+        "Y": 1503.8469
+      }
+    },
+    {
+      "ChildId": "5e247d9d-6c12-4506-b702-aeccd1c7f00d"/*DrawMeshChunksAtPoints*/,
+      "Position": {
+        "X": 1588.4222,
+        "Y": 1376.9026
+      }
+    },
+    {
+      "ChildId": "18f51bb4-21b3-43a7-9c57-5f3cd705ddb9"/*_GetSceneDefinitionPoints*/,
+      "Position": {
+        "X": 395.215,
+        "Y": 1406.6606
+      }
+    },
+    {
+      "ChildId": "36b2654b-6d36-4888-a916-463140fbe374"/*ListToBuffer*/,
+      "Position": {
+        "X": 661.7189,
+        "Y": 1070.4375
+      }
+    },
+    {
+      "ChildId": "25e06d6c-3183-4c73-ab03-cf679932dd5c"/*Camera*/,
+      "Position": {
+        "X": 2639.2898,
+        "Y": 1289.8413
+      }
+    },
+    {
+      "ChildId": "f650a3a2-c278-4524-ad03-e22dd660416e"/*SetFog*/,
+      "Position": {
+        "X": 1837.5277,
+        "Y": 1035.7468
+      }
+    },
+    {
+      "ChildId": "ea4a4294-0ebc-4132-b552-88135712f353"/*SelectPoints*/,
+      "Position": {
+        "X": 976.9801,
+        "Y": 997.8384
+      }
+    },
+    {
+      "ChildId": "b54b7bcb-0321-4497-81c4-e2ade9d4bd42"/*AddNoise*/,
+      "Position": {
+        "X": 1126.9801,
+        "Y": 997.8384
+      }
+    },
+    {
+      "ChildId": "0f806586-54b4-4dcf-98c8-9cf9bc1261df"/*Time*/,
+      "Position": {
+        "X": 976.9801,
+        "Y": 1053.8386
+      }
+    },
+    {
+      "ChildId": "f0096b2b-7c64-4de2-ac04-b3625b4bf004"/*RenderTarget*/,
+      "Position": {
+        "X": 2871.2747,
+        "Y": 1240.4607
+      }
+    },
+    {
+      "ChildId": "3ebc35be-4820-4564-ab25-03d632dbeec5"/*SSAO*/,
+      "Position": {
+        "X": 3021.2747,
+        "Y": 1240.4607
+      }
+    },
+    {
+      "ChildId": "f87c6e33-adad-444f-a555-6c0eea16a340"/*ParticleSystem*/,
+      "Position": {
+        "X": 1261.3601,
+        "Y": 1219.0546
+      }
+    },
+    {
+      "ChildId": "6aa96ffe-6b96-4591-9dc2-d7826efbf9c4"/*Trigger*/,
+      "Position": {
+        "X": 1092.3893,
+        "Y": 1256.8113
+      }
+    },
+    {
+      "ChildId": "2e2303aa-3e5c-4f74-8f4f-26bb7b563e40"/*ReconstructiveForce*/,
+      "Position": {
+        "X": 1092.3893,
+        "Y": 1312.8113
+      }
+    },
+    {
+      "ChildId": "64b19ba7-67ef-4309-a4f6-f34578892d6f"/*TurbulenceForce*/,
+      "Position": {
+        "X": 1092.3893,
+        "Y": 1381.8113
+      }
+    },
+    {
+      "ChildId": "3dd0e0d1-105d-4b77-9b83-61a1d411c5d1"/*Layer2d*/,
+      "Position": {
+        "X": 3321.2747,
+        "Y": 1235.6178
+      }
+    },
+    {
+      "ChildId": "0ec26475-4d0c-45e1-9e16-3e09741d66e1"/*Once*/,
+      "Position": {
+        "X": 1390.7114,
+        "Y": 1713.8604
+      }
+    },
+    {
+      "ChildId": "978e0fb1-ee36-4d80-b64a-b02e9d53e0f3"/*PickPointList*/,
+      "Position": {
+        "X": 1477.7463,
+        "Y": 1101.822
+      }
+    },
+    {
+      "ChildId": "9850efb0-35e2-4db9-aa28-ca96dd4fc7e2"/*PointSimulation*/,
+      "Position": {
+        "X": 1276.9801,
+        "Y": 997.8384
+      }
+    },
+    {
+      "ChildId": "fbc8a951-cdae-4618-848e-d5f9ec3afd7b"/*PointLight*/,
+      "Position": {
+        "X": 2410.5667,
+        "Y": 1297.7136
+      }
+    },
+    {
+      "ChildId": "2a053ab7-cfe8-4d38-800d-3a9ceeeb450e"/*SetMaterial*/,
+      "Position": {
+        "X": 1873.8264,
+        "Y": 1325.5901
+      }
+    },
+    {
+      "ChildId": "bf6374ff-f3c8-4085-9cf6-48914285a0e4"/*SetEnvironment*/,
+      "Position": {
+        "X": 2023.8264,
+        "Y": 1325.5901
+      }
+    },
+    {
+      "ChildId": "fd6f97da-a710-468c-8c43-fadf52dfeecd"/*RoundedRect*/,
+      "Position": {
+        "X": 2060.1172,
+        "Y": 1537.4817
+      }
+    },
+    {
+      "ChildId": "455f5d42-2462-470e-a12d-7c68e0c04066"/*TextureToCubeMap*/,
+      "Position": {
+        "X": 2211.9065,
+        "Y": 1518.6957
+      }
+    },
+    {
+      "ChildId": "f1aa0a61-717b-47cd-8ea7-f33f9f2f1010"/*DepthOfField*/,
+      "Position": {
+        "X": 3171.2747,
+        "Y": 1240.4607
+      }
+    },
+    {
+      "ChildId": "4b1de167-a9a3-45c8-b726-63c11aaff523"/*AnimVec3*/,
+      "Position": {
+        "X": 942.3893,
+        "Y": 1312.8113
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "95dee492-83bc-4b09-97bf-a8c7d20123ac"/*Update*/,
+      "Position": {
+        "X": 3501.1682,
+        "Y": 1225.1492
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "d17f8066-afb8-4c29-aabd-ec97558cbe3a",
+      "Title": "Overview documentation",
+      "Description": "An overview of the buffers and indices involved.",
+      "LinkUrl": "https://www.figma.com/design/wBNGUlaACjaCDOTdeBvBvR/ComputeShader-Ideas?node-id=928-405&t=WS7jHQP1VOaxf4kA-1",
+      "LinkType": "Documentation"
+    }
+  ]
+}

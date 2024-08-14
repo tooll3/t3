@@ -416,13 +416,6 @@
       }
     },
     {
-      "ChildId": "2664a8cb-d755-4a90-9086-67897d32708f"/*TestFx*/,
-      "Position": {
-        "X": 60.213196,
-        "Y": 1868.9596
-      }
-    },
-    {
       "ChildId": "ea9096ea-4d2a-4e37-bdab-90acd24d707d"/*DetectEdges*/,
       "Position": {
         "X": 1465.3303,
