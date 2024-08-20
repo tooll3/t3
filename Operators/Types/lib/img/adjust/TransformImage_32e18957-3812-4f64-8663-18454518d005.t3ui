@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "3aab9b12-1e02-4d7a-83b6-da1500a6bcbf"/*Image*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -246.7284,
         "Y": -38.124565
@@ -17,6 +18,9 @@
       },
       "GroupTitle": "Transform",
       "Description": "Moves the incoming image",
+      "Min": -1.0,
+      "Max": 1.0,
+      "Scale": 0.001,
       "UseVec2Control": "Position"
     },
     {
@@ -51,33 +55,40 @@
     {
       "InputId": "5c76dc8d-3a28-4b93-b3a0-e008c1ff14e9"/*Resolution*/,
       "Position": {
-        "X": -214.98917,
-        "Y": 363.7878
+        "X": -236.6665,
+        "Y": 62.998398
       },
       "GroupTitle": "Settings",
       "Description": "Overwrites the resolution of the incoming image"
     },
     {
+      "InputId": "cbb7a165-9f8a-4af8-8fb5-96c7b150f927"/*ResolutionFactor*/,
+      "Position": {
+        "X": -236.6665,
+        "Y": 107.9984
+      }
+    },
+    {
       "InputId": "c31a95a9-2cfb-4eea-8006-97f883d11847"/*GenerateMips*/,
       "Position": {
-        "X": -214.98917,
-        "Y": 408.7878
+        "X": -215.73666,
+        "Y": 502.2247
       },
       "Description": "Defines whether Mipmaps should be generated"
     },
     {
       "InputId": "64e5cdf2-19b0-461c-b936-ea46ee58028f"/*Filter*/,
       "Position": {
-        "X": -214.98917,
-        "Y": 453.7878
+        "X": -215.73666,
+        "Y": 547.22473
       },
       "Description": "Defines the Image filtering used"
     },
     {
       "InputId": "43eb4d4e-2bb5-4c97-a5dd-91539b8258cd"/*WrapMode*/,
       "Position": {
-        "X": -214.98917,
-        "Y": 498.7878
+        "X": -215.73666,
+        "Y": 592.2247
       },
       "Description": "Defines how the area around the image is will be rendered"
     }
@@ -100,8 +111,8 @@
     {
       "ChildId": "31adbf53-34ea-4f3a-981b-cf1757e60933"/*Wrap*/,
       "Position": {
-        "X": 464.82666,
-        "Y": 145.95316
+        "X": 556.76855,
+        "Y": -8.030762
       }
     },
     {
@@ -122,14 +133,35 @@
         "X": -22.272385,
         "Y": 510.22302
       }
+    },
+    {
+      "ChildId": "93cbb499-e916-4517-a172-71fb2f194925"/*GetTextureSize*/,
+      "Position": {
+        "X": -23.392242,
+        "Y": 51.444977
+      }
+    },
+    {
+      "ChildId": "c93d2ff8-d2ea-4bb8-add5-c766e5446e34"/*ScaleResolution*/,
+      "Position": {
+        "X": 259.1207,
+        "Y": 22.800735
+      }
+    },
+    {
+      "ChildId": "6fd25409-5867-4a4a-a36e-29eb1c162137"/*Vector2*/,
+      "Position": {
+        "X": 154.20953,
+        "Y": 117.78665
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "54831ac3-d747-4cdf-9520-3cfd651158bf"/*TextureOutput*/,
       "Position": {
-        "X": 647.9629,
-        "Y": 225.78851
+        "X": 739.9048,
+        "Y": 71.804596
       }
     }
   ]
