@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 using T3.Core.Rendering.Material;
 using T3.Core.Resource;
+using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
 namespace T3.Core.DataTypes;
@@ -118,6 +119,7 @@ public class SceneSetup : IEditableInputType, IDisposable
                                       Material = node.Material?.PbrMaterial,
                                       CombinedTransform = node.CombinedTransform,
                                       ChunkIndex = node.MeshChunkIndex,
+                                      Scale = node.Transform.Scale,
                                   };
             
             Dispatches.Add(newDispatch);
@@ -140,6 +142,7 @@ public class SceneSetup : IEditableInputType, IDisposable
         public PbrMaterial Material;
         public Matrix4x4 CombinedTransform;
         public int ChunkIndex;
+        public Vector3 Scale;
     }
     
     public readonly List<SceneDrawDispatch> Dispatches = new();

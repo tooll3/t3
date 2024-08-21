@@ -11,7 +11,7 @@
         {
           "Id": "292e80cf-ba31-4a50-9bf4-83712430f811"/*Path*/,
           "Type": "System.String",
-          "Value": "D:\\Framefield Dropbox\\Thomas Mann\\_projects\\2024-07-16 Mappi\\Blender\\_export\\cleaned-v02.glb"
+          "Value": "Resources\\user\\pixtur\\research\\Gltf\\instancing-test-v01.glb"
         },
         {
           "Id": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
@@ -40,9 +40,9 @@
       "SymbolId": "0e313329-74fb-4f2a-b1c2-136e1ecf9b3e",
       "InputValues": [
         {
-          "Id": "626134f7-3ef5-4781-a316-8fce4fc5c4eb"/*IsEnabled*/,
+          "Id": "fc846c4a-ac50-4260-8267-4484ced2d22f"/*IsEnabled*/,
           "Type": "System.Boolean",
-          "Value": false
+          "Value": true
         }
       ],
       "Outputs": []
@@ -79,29 +79,6 @@
             "X": 0.44879508,
             "Y": 0.16340671,
             "Z": -0.5021552
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "f650a3a2-c278-4524-ad03-e22dd660416e"/*SetFog*/,
-      "IsBypassed": true,
-      "SymbolId": "74cbfce0-f8b8-46a1-b5d6-38477d4eec99",
-      "InputValues": [
-        {
-          "Id": "7a331539-33ea-48b9-8930-daf93dd33d7c"/*Distance*/,
-          "Type": "System.Single",
-          "Value": 3.4
-        },
-        {
-          "Id": "ef8c86ee-16c0-446e-9ce0-c6342adbf32a"/*Color*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.72248805,
-            "Y": 0.3674487,
-            "Z": 0.21533836,
-            "W": 0.0
           }
         }
       ],
@@ -290,7 +267,7 @@
         {
           "Id": "8b418dcd-e7cd-4bce-a69e-a9a543426bfe"/*Index*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -492,6 +469,37 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "f69cc7ee-0861-4d93-84c2-d5243319b834"/*LoadGltfScene*/,
+      "SymbolId": "00618c91-f39a-44ea-b9d8-175c996460dc",
+      "InputValues": [
+        {
+          "Id": "292e80cf-ba31-4a50-9bf4-83712430f811"/*Path*/,
+          "Type": "System.String",
+          "Value": "D:\\Framefield Dropbox\\Thomas Mann\\_projects\\2024-07-16 Mappi\\Blender\\_export\\cleaned-v02.glb"
+        },
+        {
+          "Id": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
+          "Type": "T3.Core.DataTypes.SceneSetup",
+          "Value": {
+            "SceneSetup": {
+              "NodeSettings": []
+            }
+          }
+        },
+        {
+          "Id": "57f129ae-0b2e-465d-8c0e-f6259fdd37ce"/*CombineBuffer*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "ef7075e9-4bc2-442e-8e0c-e03667ff2e0a"/*TriggerUpdate*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -568,12 +576,6 @@
       "TargetSlotId": "40e840c7-b707-4f63-8ae8-bd7498d34f54"
     },
     {
-      "SourceParentOrChildId": "0ec26475-4d0c-45e1-9e16-3e09741d66e1",
-      "SourceSlotId": "68389552-6d8a-433b-a75f-18e76435519b",
-      "TargetParentOrChildId": "5e247d9d-6c12-4506-b702-aeccd1c7f00d",
-      "TargetSlotId": "626134f7-3ef5-4781-a316-8fce4fc5c4eb"
-    },
-    {
       "SourceParentOrChildId": "eb6497be-ad00-4fcb-859f-d58d2ecfa3b3",
       "SourceSlotId": "9891ea8d-7de7-4dd1-a61e-337adc569ef3",
       "TargetParentOrChildId": "5e247d9d-6c12-4506-b702-aeccd1c7f00d",
@@ -583,7 +585,7 @@
       "SourceParentOrChildId": "18f51bb4-21b3-43a7-9c57-5f3cd705ddb9",
       "SourceSlotId": "cb0e5b54-1c68-43a6-9101-2c9bc9b67c51",
       "TargetParentOrChildId": "5e247d9d-6c12-4506-b702-aeccd1c7f00d",
-      "TargetSlotId": "b52cfdf3-6f7c-4afb-8e32-7d8b6d8dd497"
+      "TargetSlotId": "8cdea8a6-7e39-433d-a616-2f64e5e04ed7"
     },
     {
       "SourceParentOrChildId": "0f806586-54b4-4dcf-98c8-9cf9bc1261df",

@@ -50,29 +50,33 @@ namespace T3.Operators.Types.Id_5b127401_600c_4247_9d59_2f6ff359ba85
                 var sceneDispatch = sceneDefinition.Dispatches[index];
                 var matrix = sceneDispatch.CombinedTransform;
                 
+                
                 //OutPosition.Value = pos;
                 instancePoints.TypedElements[index].Position = new Vector3(matrix.M41, matrix.M42, matrix.M43);
                 instancePoints.TypedElements[index].W = 1;
                 instancePoints.TypedElements[index].Color = Vector4.One;
-                instancePoints.TypedElements[index].Stretch = new Vector3( MathF.Abs(matrix.M11), MathF.Abs(matrix.M22), MathF.Abs(matrix.M33));
+                
+                //Matrix4x4.Decompose(matrix, out Vector3 scale, out Quaternion rotation, out Vector3 translation);
+                
+                //instancePoints.TypedElements[index].Stretch = scale;
+                
+                instancePoints.TypedElements[index].Stretch = Vector3.TransformNormal(Vector3.One,matrix );
+                //instancePoints.TypedElements[index].Stretch = new Vector3( MathF.Abs(matrix.M11), MathF.Abs(matrix.M22), MathF.Abs(matrix.M33));
                 instancePoints.TypedElements[index].Selected = 1;
                 instancePoints.TypedElements[index].Orientation = Quaternion.CreateFromRotationMatrix(matrix);
                 
                 chunkIndices[index] = sceneDispatch.ChunkIndex;
-                //Log.Debug("Dispatch: " + sceneDispatch.CombinedTransform);
+                //Log.Debug("Stretch: " + instancePoints.TypedElements[index].Stretch);
             }
             
-            ResultList.Value = instancePoints;
-            
             _indicesBuffer = new BufferWithViews();
-            IndicesBuffer.Value = _indicesBuffer;
-            
             ResourceManager.SetupStructuredBuffer(chunkIndices, dispatchesCount * 4, 4, ref _indicesBuffer.Buffer);
             ResourceManager.CreateStructuredBufferSrv(_indicesBuffer.Buffer, ref _indicesBuffer.Srv);
             ResourceManager.CreateStructuredBufferUav(_indicesBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
                                                       ref _indicesBuffer.Uav);
             
-            
+            ResultList.Value = instancePoints;
+            IndicesBuffer.Value = _indicesBuffer;
         }
         
         private readonly StructuredList<Point> _pointList = new(1);

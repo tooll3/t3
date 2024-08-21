@@ -43,18 +43,15 @@ void UpdateDrawData(uint DTid : SV_DispatchThreadID, uint _GI : SV_GroupIndex)
     uint pointIndex = PointCount; // Initialize to an invalid index
 
     // Binary search for the correct pointIndex
-    while (left <= right)
+    uint maxCount = 60;
+
+    while (left <= right && maxCount-- > 0)
     {
         uint mid = (left + right) / 2;
-        uint chunkEndFaceIndex = ChunkEnds[mid];
 
-        if (chunkEndFaceIndex >= faceIndex)
+        if (faceIndex < ChunkEnds[mid])
         {
-            pointIndex = mid;
-            if (mid == 0) 
-                break;
-                 
-            right = mid - 1;
+            right = mid ;
         }
         else
         {
@@ -62,13 +59,15 @@ void UpdateDrawData(uint DTid : SV_DispatchThreadID, uint _GI : SV_GroupIndex)
         }
     }
 
+    pointIndex = left;
+
     // Check if a valid pointIndex was found
     
     if (pointIndex < PointCount)
     {
         uint chunkEndFaceIndex = ChunkEnds[pointIndex];
         uint chunkSize = ChunkSizes[pointIndex];
-        uint chunkStartFaceIndex = chunkEndFaceIndex - chunkSize +1;    // FIXME: This point offset is weird
+        uint chunkStartFaceIndex = chunkEndFaceIndex - chunkSize;    // FIXME: This point offset is weird
         uint faceIndexInPointChunk = faceIndex - chunkStartFaceIndex;
 
         uint chunkDefIndex = ChunkIndicesForPoints[pointIndex % ChunkIndexForPointsCounts];
@@ -78,3 +77,19 @@ void UpdateDrawData(uint DTid : SV_DispatchThreadID, uint _GI : SV_GroupIndex)
         FaceDrawDatas[faceIndex].PointIndex = pointIndex;
     }
 }
+
+/*
+
+ends [1,2] 
+faceIndex = 1
+
+left = 0
+right = 1
+mid = 0
+
+midChunkEnd = ends[mid+1] = ends[1] = 
+
+*/
+
+// Write a method for a binary search in an inclusive prefix sum array
+

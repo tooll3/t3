@@ -193,6 +193,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         var totalCounts = new MeshDataCounts();
         
         HashSet<MeshPrimitive> collectedMeshPrimitives = new ();
+        _chunkDefIndicesForPrimitives.Clear();
         
         ComputeTotalMeshCounts(modelDefaultScene.VisualChildren, ref totalCounts, ref collectedMeshPrimitives);
 
@@ -295,6 +296,14 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         }
     }
     
+    private static string MatrixToString(Matrix4x4 m)
+    {
+        return $"{m.M11:0.00}  {m.M12:0.00}  {m.M13:0.00}  {m.M13:0.00}  |  " +
+               $"{m.M21:0.00}  {m.M22:0.00}  {m.M23:0.00}  {m.M23:0.00}  |  " +
+               $"{m.M31:0.00}  {m.M32:0.00}  {m.M33:0.00}  {m.M33:0.00}  |  " +
+               $"{m.M41:0.00}  {m.M42:0.00}  {m.M43:0.00}  {m.M43:0.00}  |  ";
+    }
+    
     /**
      * TODO: This is work in progress!
      * This will only add the mesh data to the meshDataSet, but not generate buffers.
@@ -307,17 +316,40 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             if (child == null)
                 continue;
             
-            //if(!_meshChunkDefsForPrimitives.TryGetValue(child.Mesh))
-            
             var t = child.LocalTransform.GetDecomposed();
+            
             var transform = new SceneSetup.Transform
                                 {
                                     Translation = t.Translation,
                                     Scale = t.Scale,
                                     Rotation = t.Rotation,
                                 };
+            
+            //var worldMatrix = child.WorldMatrix;//  Matrix4x4.CreateFromQuaternion(t.Rotation);
+            
+            //rotation = Quaternion.Normalize(rotation);
+            var rotMatrix = Matrix4x4.CreateFromQuaternion(t.Rotation);
+            
+            Matrix4x4.Decompose(rotMatrix, out Vector3 scale, out Quaternion rotation, out Vector3 translation);
+            
+            
+            // Normalize the quaternion and recompute the matrix with a scale of 1
+            //scale = Vector3.One;
+            
+            // rotMatrix = Matrix4x4.CreateScale(scale) *
+            //             Matrix4x4.CreateFromQuaternion(rotation) *
+            //             Matrix4x4.CreateTranslation(translation);
+            
+            
+            //var combinedMatrixFromt = Matrix4x4.CreateScale(t.Scale)  *  rotMatrix  *  Matrix4x4.CreateTranslation(t.Translation);
+            //var combinedMatrixFromt = rotMatrix;
+            //var combinedMatrixFromt = Matrix4x4.CreateFromQuaternion(t.Rotation);
 
             // Pure logic node
+            Log.Debug("Scale2: " +scale );
+            Log.Debug( $"Scale: {t.Scale:0.00}  Rot:{t.Rotation}   Translation:{t.Translation} >>>>" );
+            Log.Debug( MatrixToString(rotMatrix) );
+            //Log.Debug( MatrixToString(child.WorldMatrix) );
             var structureNode = new SceneSetup.SceneNode
                                     {
                                         Name = child.Name,
@@ -340,7 +372,6 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                     
                     if(!_chunkDefIndicesForPrimitives.TryGetValue(meshPrimitive, out var chunkDefIndex))
                     {
-                        var currentChunkIndex = meshData.ChunksDefs.Count;
                         
                         if (!GetMeshDataFromPrimitive(meshPrimitive, out var vertexBufferData, out var indexBufferData, out var message))
                             continue;
@@ -360,6 +391,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                             // meshData.IndexBufferData[faceIndex + counters.FaceCount].Z += counters.VertexCount;
                         }
                         
+                        var currentChunkIndex = meshData.ChunksDefs.Count;
                         meshData.ChunksDefs.Add(new MeshChunkDef()
                                                 {
                                                     StartFaceIndex = counters.FaceCount,
@@ -371,7 +403,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                         counters.VertexCount += vertexBufferData.Length;
                         counters.FaceCount += indexBufferData.Length;
                         
-                        Log.Debug($" mesh:{child.Name} {child.Mesh?.Name}  {currentChunkIndex}");
+                        
                         chunkDefIndex = currentChunkIndex;
                     }
                     
@@ -385,9 +417,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                         structureNode.MeshChunkIndex = chunkDefIndex;
                         structureNode.Material = materialDef;
                         useStructureNodeForMesh = false;
-                        continue;
+                        //continue;
                     }
-
+                    
+                    
+                    Log.Debug($">>>> mesh:{child.Name} {child.Mesh?.Name}   test: {child.LocalTransform.Matrix.M44}");
                     var meshNode = new SceneSetup.SceneNode()
                                        {
                                            Name = child.Name,
@@ -395,7 +429,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                            MeshBuffers = meshBufferReference,
                                            MeshChunkIndex = chunkDefIndex,
                                            Transform = transform,
-                                           CombinedTransform = child.WorldMatrix,
+                                           CombinedTransform = child.LocalTransform.Matrix,
                                            Material = materialDef,
                                        };
                     parentNode.ChildNodes.Add(meshNode);
