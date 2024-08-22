@@ -325,31 +325,6 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                     Rotation = t.Rotation,
                                 };
             
-            //var worldMatrix = child.WorldMatrix;//  Matrix4x4.CreateFromQuaternion(t.Rotation);
-            
-            //rotation = Quaternion.Normalize(rotation);
-            var rotMatrix = Matrix4x4.CreateFromQuaternion(t.Rotation);
-            
-            Matrix4x4.Decompose(rotMatrix, out Vector3 scale, out Quaternion rotation, out Vector3 translation);
-            
-            
-            // Normalize the quaternion and recompute the matrix with a scale of 1
-            //scale = Vector3.One;
-            
-            // rotMatrix = Matrix4x4.CreateScale(scale) *
-            //             Matrix4x4.CreateFromQuaternion(rotation) *
-            //             Matrix4x4.CreateTranslation(translation);
-            
-            
-            //var combinedMatrixFromt = Matrix4x4.CreateScale(t.Scale)  *  rotMatrix  *  Matrix4x4.CreateTranslation(t.Translation);
-            //var combinedMatrixFromt = rotMatrix;
-            //var combinedMatrixFromt = Matrix4x4.CreateFromQuaternion(t.Rotation);
-
-            // Pure logic node
-            Log.Debug("Scale2: " +scale );
-            Log.Debug( $"Scale: {t.Scale:0.00}  Rot:{t.Rotation}   Translation:{t.Translation} >>>>" );
-            Log.Debug( MatrixToString(rotMatrix) );
-            //Log.Debug( MatrixToString(child.WorldMatrix) );
             var structureNode = new SceneSetup.SceneNode
                                     {
                                         Name = child.Name,
@@ -385,10 +360,6 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                             meshData.IndexBufferData[faceIndex + counters.FaceCount].X = indexBufferData[faceIndex].X + counters.VertexCount;
                             meshData.IndexBufferData[faceIndex + counters.FaceCount].Y = indexBufferData[faceIndex].Y + counters.VertexCount;
                             meshData.IndexBufferData[faceIndex + counters.FaceCount].Z = indexBufferData[faceIndex].Z + counters.VertexCount;
-                                
-                            // meshData.IndexBufferData[faceIndex + counters.FaceCount].X += counters.VertexCount;
-                            // meshData.IndexBufferData[faceIndex + counters.FaceCount].Y += counters.VertexCount;
-                            // meshData.IndexBufferData[faceIndex + counters.FaceCount].Z += counters.VertexCount;
                         }
                         
                         var currentChunkIndex = meshData.ChunksDefs.Count;
@@ -409,19 +380,15 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                     
                     var materialDef = GetOrCreateMaterialDefinition(meshPrimitive.Material);
 
-                    //Log.Debug("Material: " + materialDef);
-
                     if (useStructureNodeForMesh)
                     {
                         structureNode.MeshBuffers = meshBufferReference;
                         structureNode.MeshChunkIndex = chunkDefIndex;
                         structureNode.Material = materialDef;
                         useStructureNodeForMesh = false;
-                        //continue;
+                        continue;
                     }
                     
-                    
-                    Log.Debug($">>>> mesh:{child.Name} {child.Mesh?.Name}   test: {child.LocalTransform.Matrix.M44}");
                     var meshNode = new SceneSetup.SceneNode()
                                        {
                                            Name = child.Name,
@@ -429,7 +396,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                            MeshBuffers = meshBufferReference,
                                            MeshChunkIndex = chunkDefIndex,
                                            Transform = transform,
-                                           CombinedTransform = child.LocalTransform.Matrix,
+                                           CombinedTransform = child.WorldMatrix,
                                            Material = materialDef,
                                        };
                     parentNode.ChildNodes.Add(meshNode);

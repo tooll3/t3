@@ -40,8 +40,6 @@ namespace T3.Operators.Types.Id_5b127401_600c_4247_9d59_2f6ff359ba85
             if(dispatchesCount == 0)
                 return;
             
-            //var rot = Quaternion.CreateFromAxisAngle(Vector3.Normalize( RotationAxis.GetValue(context)), RotationAngle.GetValue(context) * MathUtils.ToRad);
-            //var array = _addSeparator ? _pointListWithSeparator : _pointList;
             var instancePoints = new StructuredList<Point>(dispatchesCount);
             var chunkIndices = new int[dispatchesCount];
             
@@ -50,23 +48,14 @@ namespace T3.Operators.Types.Id_5b127401_600c_4247_9d59_2f6ff359ba85
                 var sceneDispatch = sceneDefinition.Dispatches[index];
                 var matrix = sceneDispatch.CombinedTransform;
                 
-                
-                //OutPosition.Value = pos;
-                instancePoints.TypedElements[index].Position = new Vector3(matrix.M41, matrix.M42, matrix.M43);
                 instancePoints.TypedElements[index].W = 1;
                 instancePoints.TypedElements[index].Color = Vector4.One;
-                
-                //Matrix4x4.Decompose(matrix, out Vector3 scale, out Quaternion rotation, out Vector3 translation);
-                
-                //instancePoints.TypedElements[index].Stretch = scale;
-                
-                instancePoints.TypedElements[index].Stretch = Vector3.TransformNormal(Vector3.One,matrix );
-                //instancePoints.TypedElements[index].Stretch = new Vector3( MathF.Abs(matrix.M11), MathF.Abs(matrix.M22), MathF.Abs(matrix.M33));
+                Matrix4x4.Decompose(matrix, out var scale, out var rotation, out var translation);
+                instancePoints.TypedElements[index].Position = translation;
+                instancePoints.TypedElements[index].Stretch = scale;
                 instancePoints.TypedElements[index].Selected = 1;
-                instancePoints.TypedElements[index].Orientation = Quaternion.CreateFromRotationMatrix(matrix);
-                
+                instancePoints.TypedElements[index].Orientation = rotation;
                 chunkIndices[index] = sceneDispatch.ChunkIndex;
-                //Log.Debug("Stretch: " + instancePoints.TypedElements[index].Stretch);
             }
             
             _indicesBuffer = new BufferWithViews();
