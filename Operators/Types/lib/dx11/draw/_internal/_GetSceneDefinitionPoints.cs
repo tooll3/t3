@@ -52,7 +52,7 @@ namespace T3.Operators.Types.Id_5b127401_600c_4247_9d59_2f6ff359ba85
                 instancePoints.TypedElements[index].Color = Vector4.One;
                 Matrix4x4.Decompose(matrix, out var scale, out var rotation, out var translation);
                 instancePoints.TypedElements[index].Position = translation;
-                instancePoints.TypedElements[index].Stretch = scale;
+                instancePoints.TypedElements[index].Stretch = new Vector3( MathF.Abs(scale.X), MathF.Abs(scale.Y), MathF.Abs(scale.Z));
                 instancePoints.TypedElements[index].Selected = 1;
                 instancePoints.TypedElements[index].Orientation = rotation;
                 chunkIndices[index] = sceneDispatch.ChunkIndex;
