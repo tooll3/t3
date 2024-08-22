@@ -445,6 +445,18 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "53049824-abfc-4f23-b939-6dab1b366e77"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "5a7d244d-4df0-4130-819d-7eea413419a5"/*iMappIntro01*/,
+      "SymbolId": "d3a7c4ff-6f3b-4d50-a542-6579cb11fab3",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -489,6 +501,12 @@
       "SourceSlotId": "cb0e5b54-1c68-43a6-9101-2c9bc9b67c51",
       "TargetParentOrChildId": "251f78bf-25d3-447c-8d3d-29dfcaf1aa69",
       "TargetSlotId": "8cdea8a6-7e39-433d-a616-2f64e5e04ed7"
+    },
+    {
+      "SourceParentOrChildId": "5a7d244d-4df0-4130-819d-7eea413419a5",
+      "SourceSlotId": "0a73c25c-88d9-4249-85b0-d7678974fa41",
+      "TargetParentOrChildId": "53049824-abfc-4f23-b939-6dab1b366e77",
+      "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
     },
     {
       "SourceParentOrChildId": "7c1d621d-c74a-40f5-b548-63babcd1000a",
@@ -603,7 +621,7 @@
         "Bpm": 137.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "Resources\\user\\pixtur\\projects\\proj-mappi2024\\soundtrack\\v0.7-Dr-Arrangement.mp3"
+        "FilePath": "Resources\\user\\pixtur\\projects\\proj-mappi2024\\soundtrack\\v1.3-MidPart-DrArr.mp3"
       }
     ]
   }

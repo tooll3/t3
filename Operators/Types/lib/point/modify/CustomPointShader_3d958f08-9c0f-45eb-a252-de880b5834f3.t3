@@ -147,7 +147,7 @@
         {
           "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
           "Type": "System.String",
-          "Value": "#include \"lib/shared/hash-functions.hlsl\"\n#include \"lib/shared/point.hlsl\"\n\ncbuffer Params : register(b1)\n{\n    float3 Center;\n    float A;\n    float B;\n    float C;\n    float D;\n}\n\nStructuredBuffer<Point> SourcePoints : t0;        \nRWStructuredBuffer<Point> ResultPoints : u0;   \n\n[numthreads(64,1,1)]\nvoid main(uint3 DTId : SV_DispatchThreadID)\n{\n    uint i = DTId.x;\n    uint numStructs, stride;\n    SourcePoints.GetDimensions(numStructs, stride);\n    if(i >= numStructs) {    \n        return;\n    }\n\n   float f = (float)i / numStructs;\n   Point p = SourcePoints[i];\n\n#include \"snippet\"\n\nResultPoints[i] = p;\n}\n"
+          "Value": "#include \"lib/shared/hash-functions.hlsl\"\n#include \"lib/shared/point.hlsl\"\n#include \"lib/shared/quat-functions.hlsl\"\n\ncbuffer Params : register(b1)\n{\n    float3 Center;\n    float A;\n    float B;\n    float C;\n    float D;\n}\n\nStructuredBuffer<Point> SourcePoints : t0;        \nRWStructuredBuffer<Point> ResultPoints : u0;   \n\n[numthreads(64,1,1)]\nvoid main(uint3 DTId : SV_DispatchThreadID)\n{\n    uint i = DTId.x;\n    uint numStructs, stride;\n    SourcePoints.GetDimensions(numStructs, stride);\n    if(i >= numStructs) {    \n        return;\n    }\n\n   float f = (float)i / numStructs;\n   Point p = SourcePoints[i];\n\n#include \"snippet\"\n\nResultPoints[i] = p;\n}\n"
         }
       ],
       "Outputs": []
