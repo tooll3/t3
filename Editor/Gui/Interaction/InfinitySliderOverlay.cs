@@ -27,7 +27,7 @@ namespace T3.Editor.Gui.Interaction
             {
                 _value = roundedValue;
                 _center = _io.MousePos;
-                _dampedDistance = 50;
+                _verticalDistance = 50;
                 _dampedAngleVelocity = 0;
                 _dampedModifierScaleFactor = 1;
                 _lastXOffset = 0;
@@ -35,7 +35,6 @@ namespace T3.Editor.Gui.Interaction
                 _isManipulating = false;
             }
 
-            var mouseYDistance = _center.Y - _io.MousePos.Y;
 
             // Update angle...
             var mousePosX = (int)(_io.MousePos.X * 2)/2;
@@ -47,13 +46,21 @@ namespace T3.Editor.Gui.Interaction
             }
             
             _lastXOffset = xOffset;
+            if (ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+            {
+                _dragCenterStart = _center;
+            }
+            if (ImGui.IsMouseDragging(ImGuiMouseButton.Right))
+            {
+                _center += ImGui.GetMouseDragDelta();
+            }
 
             _dampedAngleVelocity = MathUtils.Lerp(_dampedAngleVelocity, (float)deltaX, 0.06f);
 
             // Update radius and value range
-            _dampedDistance = mouseYDistance;
+            _verticalDistance = _center.Y - _io.MousePos.Y;
             const int log10YDistance = 100;
-            var normalizedLogDistanceForLog10 = _dampedDistance / log10YDistance;
+            var normalizedLogDistanceForLog10 = _verticalDistance / log10YDistance;
 
             // Value range and tick interval 
             _dampedModifierScaleFactor = MathUtils.Lerp(_dampedModifierScaleFactor, GetKeyboardScaleFactor(), 0.1f);
@@ -254,8 +261,9 @@ namespace T3.Editor.Gui.Interaction
         /** The precise value before rounding. This used for all internal calculations. */
         private static double _value;
 
-        private static float _dampedDistance;
+        private static float _verticalDistance;
         private static Vector2 _center = Vector2.Zero;
+        private static Vector2 _dragCenterStart = Vector2.Zero;
         private static float _dampedAngleVelocity;
         private static double _lastXOffset;
         private static double _dampedModifierScaleFactor;
