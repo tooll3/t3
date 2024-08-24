@@ -316,7 +316,7 @@ namespace T3.Editor.Gui.Styling
             
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
-            if (ImGui.BeginPopupContextItem(id, flags))
+            if (ImGui.BeginPopupContextWindow(id, flags))
             {
                 if(wasAlreadyOpen)
                     ImGui.Separator();
