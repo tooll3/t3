@@ -6,7 +6,6 @@ using T3.Core.Compilation;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
-using T3.Editor.App;
 using T3.Editor.External;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
@@ -23,37 +22,23 @@ internal static class ProjectSetup
     {
         var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, shareResources, UserSettings.Config.DefaultNewProjectDirectory);
 
-        if (!newCsProj.TryRecompile())
+        if (!newCsProj.TryRecompile(out var releaseInfo))
         {
             Log.Error("Failed to compile new project");
             newProject = null;
             return false;
         }
 
-        if (!newCsProj.TryGetReleaseInfo(out var releaseInfo))
-        {
-            Log.Error($"Failed to get release info for project {newCsProj.Name}");
-            newProject = null;
-            return false;
-        }
-
         if (releaseInfo.HomeGuid == Guid.Empty)
         {
-            Log.Error("Failed to create project home");
+            Log.Error($"No project home found for project {name}");
             newProject = null;
             return false;
         }
 
-        newProject = new EditableSymbolProject(newCsProj, releaseInfo);
-        newProject.InitializeResources();
+        newProject = new EditableSymbolProject(newCsProj);
 
         UpdateSymbolPackages(newProject);
-
-        if (releaseInfo.HomeGuid != Guid.Empty)
-            return true;
-
-        Log.Error("Failed to find project home");
-        RemoveSymbolPackage(newProject);
         return false;
     }
 
@@ -92,22 +77,21 @@ internal static class ProjectSetup
             var csProjFiles = FindCsProjFiles();
 
             // Load projects
-            var projects = LoadProjects(csProjFiles, nonOperatorAssemblies);
+            LoadProjects(csProjFiles, nonOperatorAssemblies, out _, out _);
 
             // Register UI types
             UiRegistration.RegisterUiTypes();
             InitializeCustomUis(nonOperatorAssemblies);
 
-            var allSymbolPackages = projects
-                                   .Concat(readOnlyPackages.Select(x => x.Package))
-                                   .Cast<EditorSymbolPackage>()
-                                   .ToArray();
+            var allPackages = LoadedPackages.Values
+                                            .Select(x => (EditorSymbolPackage)x.Package)
+                                            .ToArray();
 
             // Initialize resources and shader linting
-            InitializePackageResources(allSymbolPackages);
+            InitializePackageResources(allPackages);
 
             // Update all symbol packages
-            UpdateSymbolPackages(allSymbolPackages);
+            UpdateSymbolPackages(allPackages);
 
             foreach (var package in SymbolPackage.AllPackages)
             {
@@ -158,7 +142,7 @@ internal static class ProjectSetup
 
                         if (assembly.IsOperatorAssembly)
                         {
-                            readOnlyPackages.Add(new PackageWithReleaseInfo(new EditorSymbolPackage(assembly, releaseInfo), releaseInfo));
+                            readOnlyPackages.Add(new PackageWithReleaseInfo(new EditorSymbolPackage(assembly), releaseInfo));
                         }
                         else
                         {
@@ -169,11 +153,6 @@ internal static class ProjectSetup
 
     private static void InitializePackageResources(IReadOnlyCollection<EditorSymbolPackage> allSymbolPackages)
     {
-        foreach (var package in allSymbolPackages)
-        {
-            package.InitializeResources();
-        }
-
         var sharedShaderPackages = ResourceManager.SharedShaderPackages;
         foreach (var package in allSymbolPackages)
         {
@@ -185,10 +164,9 @@ internal static class ProjectSetup
 
     private readonly record struct ProjectWithReleaseInfo(FileInfo ProjectFile, CsProjectFile? CsProject, ReleaseInfo? ReleaseInfo);
 
-    private static IReadOnlyCollection<EditableSymbolProject> LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies)
+    private static void LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, out List<ProjectWithReleaseInfo> unsatisfiedProjects, out List<ProjectWithReleaseInfo> failedProjects)
     {
         List<EditableSymbolProject> projects = new();
-        ConcurrentBag<CsProjectFile> projectsNeedingCompilation = new();
 
         // Load each project file and its associated assembly
         var releases = csProjFiles
@@ -201,9 +179,8 @@ internal static class ProjectSetup
                                       return new ProjectWithReleaseInfo(fileInfo, null, null);
                                   }
 
-                                  // todo: this will currently break - need to load release info from json before the project has been built.
-                                  // this may require some reworking of how that works (MSBuild actions in C#?), or generation at project creation time
-                                  if (!csProjFile.TryGetReleaseInfo(out var releaseInfo))
+                                  // this may call for some reworking of how that works (MSBuild actions in C#?), or generation at project creation time
+                                  if (!csProjFile.TryGetReleaseInfo(out var releaseInfo) && !csProjFile.TryRecompile(out releaseInfo))
                                   {
                                       Log.Error($"Failed to load release info for {csProjFile.Name}");
                                       return new ProjectWithReleaseInfo(fileInfo, csProjFile, null);
@@ -226,7 +203,7 @@ internal static class ProjectSetup
                              })
                       .ToArray();
 
-        LoadProjects(nonOperatorAssemblies, releases, out var failedProjects, out var unsatisfiedProjects);
+        LoadProjects(nonOperatorAssemblies, releases, out failedProjects, out unsatisfiedProjects);
         
         foreach(var project in failedProjects)
         {
@@ -237,8 +214,6 @@ internal static class ProjectSetup
         {
             Log.Error($"Unsatisfied dependencies for {project.CsProject!.Name}");
         }
-
-        return projects;
     }
 
     private static void LoadProjects(ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, IReadOnlyCollection<ProjectWithReleaseInfo> releases,
@@ -281,6 +256,17 @@ internal static class ProjectSetup
             // if no further dependencies were satisfied, we're done
             // whether it's because of success or failure
             shouldTryAgain = unsatisfied.Count < unsatisfiedCount;
+        }
+
+        // todo - this compilation process is not as robust as the previous loop
+        for (var index = unsatisfied.Count - 1; index >= 0; index--)
+        {
+            var project = unsatisfied[index];
+            if (!TryLoad(nonOperatorAssemblies, project, loadedOperatorPackages))
+            {
+                failed.Add(project);
+                unsatisfied.RemoveAt(index);
+            }
         }
 
         unsatisfiedProjects = unsatisfied;
@@ -330,7 +316,7 @@ internal static class ProjectSetup
 
         void SatisfyDependencies()
         {
-            for (var i = unsatisfied.Count; i >= 0; i--)
+            for (var i = unsatisfied.Count - 1; i >= 0; i--)
             {
                 var release = unsatisfied[i];
                 if (AllDependenciesAreSatisfied(release))
@@ -345,7 +331,7 @@ internal static class ProjectSetup
     private static bool TryLoadProject(ProjectWithReleaseInfo release, out PackageWithReleaseInfo? operatorPackage)
     {
         var csProj = release.CsProject!;
-        if (!csProj.TryLoadLatestAssembly() && !csProj.TryRecompile())
+        if (!csProj.TryLoadLatestAssembly() && !csProj.TryRecompile(out _))
         {
             Log.Error($"Failed to load {csProj.Name}");
             operatorPackage = null;
@@ -355,7 +341,7 @@ internal static class ProjectSetup
         csProj.RemoveOldBuilds(Compiler.BuildMode.Debug);
         if (csProj.IsOperatorAssembly)
         {
-            var project = new EditableSymbolProject(csProj, release.ReleaseInfo!);
+            var project = new EditableSymbolProject(csProj);
             operatorPackage = new PackageWithReleaseInfo(project, release.ReleaseInfo);
         }
         else
@@ -469,6 +455,7 @@ internal static class ProjectSetup
         switch (symbolPackages.Length)
         {
             case 0:
+                return;
                 throw new ArgumentException("No symbol packages to update");
             case 1:
             {

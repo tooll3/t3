@@ -8,6 +8,7 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Editor.Compilation;
 using T3.Editor.External;
 using T3.Editor.Gui.ChildUi;
 
@@ -16,12 +17,22 @@ namespace T3.Editor.UiModel;
 // todo - make abstract, create NugetSymbolPackage
 internal class EditorSymbolPackage : SymbolPackage
 {
-    public EditorSymbolPackage(AssemblyInformation assembly, ReleaseInfo releaseInfo) : base(assembly, releaseInfo)
+    /// <summary>
+    /// Constructor for a successfully compiled package
+    /// </summary>
+    /// <param name="assembly">Main assembly of the package</param>
+    /// <param name="releaseInfo">Release info of the package</param>
+    public EditorSymbolPackage(AssemblyInformation assembly) : base(assembly)
     {
         Log.Debug($"Added package {assembly.Name}");
         SymbolAdded += OnSymbolAdded;
     }
 
+    protected EditorSymbolPackage(AssemblyInformation assembly, string directory) : base(assembly, directory)
+    {
+        Log.Debug($"Added package {assembly.Name} in directory {directory}");
+        SymbolAdded += OnSymbolAdded;
+    }
 
     protected virtual void OnSymbolAdded(string? path, Symbol symbol)
     {
@@ -298,9 +309,15 @@ internal class EditorSymbolPackage : SymbolPackage
         return true;
     }
 
-    internal bool HasHome => ReleaseInfo != null 
-                             && ReleaseInfo.HomeGuid != Guid.Empty;
-    
+    internal bool HasHome
+    {
+        get
+        {
+            var releaseInfo = ReleaseInfo;
+             return releaseInfo != null && releaseInfo.HomeGuid != Guid.Empty;
+        }
+    }
+
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUiDict = new();
     public IReadOnlyDictionary<Guid, SymbolUi> SymbolUis => SymbolUiDict;
 

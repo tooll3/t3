@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using T3.Core.Compilation;
 using T3.Core.Operator;
 using T3.Core.SystemUi;
 using T3.Editor.Compilation;
@@ -9,7 +10,6 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Windows;
-using T3.Editor.SystemUi;
 
 namespace T3.Editor.UiModel
 {
@@ -19,6 +19,17 @@ namespace T3.Editor.UiModel
     internal partial class EditableSymbolProject
     {
         public static event Action? CompilationComplete;
+
+        protected override ReleaseInfo ReleaseInfo
+        {
+            get
+            {
+                if(CsProjectFile.TryGetReleaseInfo(out var releaseInfo))
+                    return releaseInfo;
+
+                throw new Exception($"No release info found for project {CsProjectFile.Name}");
+            }
+        }
 
         public bool TryCompile(string sourceCode, string newSymbolName, Guid newSymbolId, string nameSpace, out Symbol newSymbol, out SymbolUi newSymbolUi)
         {
@@ -217,7 +228,7 @@ namespace T3.Editor.UiModel
             SaveModifiedSymbols();
 
             MarkAsSaving();
-            var updated = CsProjectFile.TryRecompile();
+            var updated = CsProjectFile.TryRecompile(out _);
             UnmarkAsSaving();
 
             return updated;

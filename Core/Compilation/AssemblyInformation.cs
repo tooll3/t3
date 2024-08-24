@@ -555,7 +555,7 @@ public sealed class AssemblyInformation
         var releaseInfoPath = System.IO.Path.Combine(Directory, RuntimeAssemblies.PackageInfoFileName);
         if (RuntimeAssemblies.TryLoadReleaseInfo(releaseInfoPath, out releaseInfo))
         {
-            if (releaseInfo.Version != _assemblyName.Version)
+            if (!releaseInfo.Version.Matches(_assemblyName.Version))
             {
                 Log.Warning($"ReleaseInfo version does not match assembly version. " +
                             $"Assembly: {_assemblyName.FullName}, {_assemblyName.Version}\n" +
@@ -569,3 +569,4 @@ public sealed class AssemblyInformation
         return false;
     }
 }
+

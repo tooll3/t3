@@ -6,7 +6,7 @@
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
-    <VersionPrefix>1.0.1</VersionPrefix>
+    <VersionPrefix>1.0.5</VersionPrefix>
     <RootNamespace>lib.Editor</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>

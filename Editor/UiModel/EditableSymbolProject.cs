@@ -21,7 +21,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     /// </summary>
     /// <param name="csProjectFile"></param>
     /// <param name="releaseInfo"></param>
-    public EditableSymbolProject(CsProjectFile csProjectFile, ReleaseInfo releaseInfo) : base(assembly: csProjectFile.Assembly, releaseInfo: releaseInfo)
+    public EditableSymbolProject(CsProjectFile csProjectFile) : base(assembly: csProjectFile.Assembly!, directory: csProjectFile.Directory)
     {
         CsProjectFile = csProjectFile;
         lock(_allProjects)
@@ -93,8 +93,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     }
 
 
-    public override string Folder => CsProjectFile.Directory;
-
     private string ExcludeFolder => Path.Combine(Folder, "bin");
 
     protected override IEnumerable<string> SymbolUiSearchFiles => FindFilesOfType(SymbolUiExtension);
@@ -111,9 +109,9 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
                         .Concat(Directory.EnumerateFiles(Folder, $"*{fileExtension}"));
     }
 
-    public override void InitializeResources()
+    protected override void InitializeResources(AssemblyInformation assembly)
     {
-        base.InitializeResources();
+        base.InitializeResources(assembly);
         _resourceFileWatcher = new ResourceFileWatcher(ResourcesFolder);
     }
 

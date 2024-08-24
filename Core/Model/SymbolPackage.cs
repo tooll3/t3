@@ -27,7 +27,7 @@ namespace T3.Core.Model;
 public abstract partial class SymbolPackage : IResourcePackage
 {
     public virtual AssemblyInformation AssemblyInformation { get; }
-    public virtual string Folder => AssemblyInformation.Directory;
+    public string Folder { get; }
     
     public virtual string DisplayName => AssemblyInformation.Name;
 
@@ -46,8 +46,17 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     public IReadOnlyCollection<DependencyCounter> Dependencies => (ReadOnlyCollection<DependencyCounter>)DependencyDict.Values;
     protected readonly ConcurrentDictionary<SymbolPackage, DependencyCounter> DependencyDict = new();
-    
-    protected readonly ReleaseInfo ReleaseInfo;
+
+    protected virtual ReleaseInfo ReleaseInfo
+    {
+        get
+        {
+            if (AssemblyInformation.TryGetReleaseInfo(out var releaseInfo))
+                return releaseInfo;
+            
+            throw new InvalidOperationException($"Failed to get release info for package {AssemblyInformation.Name}");
+        }
+    }
 
     static SymbolPackage()
     {
@@ -55,19 +64,22 @@ public abstract partial class SymbolPackage : IResourcePackage
         RegisterTypes();
     }
 
-    protected SymbolPackage(AssemblyInformation assembly, ReleaseInfo releaseInfo)
+    protected SymbolPackage(AssemblyInformation assembly, string? directory = null)
     {
         AssemblyInformation = assembly;
-        ReleaseInfo = releaseInfo;
+        Folder = directory ?? assembly.Directory;
         lock(_allPackages)
             _allPackages.Add(this);
+        
+        // ReSharper disable once VirtualMemberCallInConstructor
+        InitializeResources(assembly);
     }
 
-    public virtual void InitializeResources()
+    protected virtual void InitializeResources(AssemblyInformation assemblyInformation)
     {
         ResourcesFolder = Path.Combine(Folder, ResourceManager.ResourcesSubfolder);
         Directory.CreateDirectory(ResourcesFolder);
-        ResourceManager.AddSharedResourceFolder(this, AssemblyInformation.ShouldShareResources);
+        ResourceManager.AddSharedResourceFolder(this, assemblyInformation.ShouldShareResources);
     }
 
     public virtual void Dispose()

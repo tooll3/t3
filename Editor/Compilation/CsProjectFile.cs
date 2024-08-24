@@ -18,9 +18,11 @@ internal sealed partial class CsProjectFile
     public string Directory => _projectRootElement.DirectoryPath;
     public string Name => Path.GetFileNameWithoutExtension(FullPath);
     public readonly string? RootNamespace;
-    public AssemblyInformation Assembly { get; private set; }
-
-    public bool IsOperatorAssembly => Assembly.IsOperatorAssembly;
+    public AssemblyInformation? Assembly { get; private set; }
+    
+    // default to true bc uncompiled projects are normally operator assemblies. todo: this should be more robust
+    public bool IsOperatorAssembly => Assembly?.IsOperatorAssembly ?? true; 
+    
     public event Action<CsProjectFile>? Recompiled;
 
     private uint _buildId = GetNewBuildId();
@@ -28,6 +30,21 @@ internal sealed partial class CsProjectFile
     private readonly string _releaseRootDirectory;
     private readonly string _debugRootDirectory;
     private readonly ProjectRootElement _projectRootElement;
+
+    private CsProjectFile(ProjectRootElement projectRootElement)
+    {
+        _projectRootElement = projectRootElement;
+
+        RootNamespace = GetProperty(PropertyType.RootNamespace, _projectRootElement, Name);
+        _targetFramework = GetProperty(PropertyType.TargetFramework, _projectRootElement, DefaultProperties[PropertyType.TargetFramework]);
+
+        var dir = Directory;
+        _releaseRootDirectory = Path.Combine(dir, "bin", "Release");
+        _debugRootDirectory = Path.Combine(dir, "bin", "Debug");
+        
+        // clear the release info on recompilation
+        Recompiled += file => _cachedReleaseInfo = null;
+    }
 
     public static bool TryLoad(string filePath, [NotNullWhen(true)] out CsProjectFile? csProjFile, [NotNullWhen(false)] out string? error)
     {
@@ -51,18 +68,6 @@ internal sealed partial class CsProjectFile
             csProjFile = null;
             return false;
         }
-    }
-
-    private CsProjectFile(ProjectRootElement projectRootElement)
-    {
-        _projectRootElement = projectRootElement;
-
-        RootNamespace = GetProperty(PropertyType.RootNamespace, _projectRootElement, Name);
-        _targetFramework = GetProperty(PropertyType.TargetFramework, _projectRootElement, DefaultProperties[PropertyType.TargetFramework]);
-
-        var dir = Directory;
-        _releaseRootDirectory = Path.Combine(dir, "bin", "Release");
-        _debugRootDirectory = Path.Combine(dir, "bin", "Debug");
     }
 
     private FileInfo GetBuildTargetPath()
@@ -96,7 +101,7 @@ internal sealed partial class CsProjectFile
 
 
     // todo - rate limit recompiles for when multiple files change
-    public bool TryRecompile()
+    public bool TryRecompile([NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
         var previousBuildId = _buildId;
         var previousAssembly = Assembly;
@@ -106,6 +111,7 @@ internal sealed partial class CsProjectFile
         if (!success)
         {
             _buildId = previousBuildId;
+            releaseInfo = null;
             return false;
         }
 
@@ -118,7 +124,19 @@ internal sealed partial class CsProjectFile
 
         if (loaded)
         {
-            UpdateVersionForNewBuild();
+            if (TryGetReleaseInfo(out releaseInfo))
+            {
+                UpdateVersionForNextBuild();
+            }
+            else
+            {
+                loaded = false;
+                Log.Error($"{Name} successfully compiled but failed to find release info");
+            }
+        }
+        else
+        {
+            releaseInfo = null;
         }
         
         return loaded;
@@ -133,7 +151,7 @@ internal sealed partial class CsProjectFile
         _projectRootElement.Save();
     }
 
-    private void UpdateVersionForNewBuild()
+    private void UpdateVersionForNextBuild()
     {
         SetOrAddProperty(PropertyType.EditorVersion, Program.Version.ToBasicVersionString(), _projectRootElement);
         
@@ -295,9 +313,24 @@ internal sealed partial class CsProjectFile
 
     private const Compiler.BuildMode EditorBuildMode = Compiler.BuildMode.Debug;
     private const Compiler.BuildMode PlayerBuildMode = Compiler.BuildMode.Release;
+    private ReleaseInfo? _cachedReleaseInfo;
 
     public bool TryGetReleaseInfo([NotNullWhen(true)] out ReleaseInfo? releaseInfo)
     {
-        return Assembly.TryGetReleaseInfo(out releaseInfo);
+        if (_cachedReleaseInfo != null)
+        {
+            releaseInfo = _cachedReleaseInfo;
+            return true;
+        }
+
+        if (Assembly == null)
+        {
+            releaseInfo = null;
+            return false;
+        }
+        
+        var success = Assembly.TryGetReleaseInfo(out _cachedReleaseInfo);
+        releaseInfo = _cachedReleaseInfo;
+        return success;
     }
 }
