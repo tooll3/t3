@@ -55,7 +55,7 @@ float3 fmod(float3 x, float3 y)
     Point p = SourcePoints[index];
 
     float f = 0;
-    float f0 = Mode == SPREADOVER_BUFFER ? (float)index / pointCount
+    float f0 = Mode == SPREADOVER_BUFFER ? (float)index / (pointCount - 1)
                                          : p.W; // Clarify: Should we clamp w before sampling?
 
     if (MappingMode == MAPPING_NORMAL)
@@ -102,7 +102,7 @@ float3 fmod(float3 x, float3 y)
     }
 
     p.W = lerp(p.W, w, Amount);
-    ;
+
     p.Color = p.Color * gradientColor;
 
     ResultPoints[index] = p;
