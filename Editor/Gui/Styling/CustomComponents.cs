@@ -323,9 +323,8 @@ namespace T3.Editor.Gui.Styling
             
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
-            if (ImGui.BeginPopupContextWindow(id, flags))
+            if (ImGui.BeginPopupContextItem(id, flags))
             {
-                
                 FrameStats.Current.IsItemContextMenuOpen = true;
                 if (title != null)
                 {
