@@ -243,7 +243,9 @@ namespace T3.Core.Operator
             var parents = new HashSet<Symbol>();
             foreach (var instance in _instancesOfSelf)
             {
-                parents.Add(instance.Parent.Symbol);
+                var parent = instance.Parent;
+                if(parent != null)
+                    parents.Add(parent.Symbol);
             }
 
             foreach (var parentSymbol in parents)

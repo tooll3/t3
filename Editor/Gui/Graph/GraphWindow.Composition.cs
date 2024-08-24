@@ -10,12 +10,28 @@ internal sealed partial class GraphWindow
     {
         public SymbolUi SymbolUi => _symbolPackage.SymbolUis[_symbolId];
         public Symbol Symbol => _symbolPackage.Symbols[_symbolId];
-        public Instance Instance => _hasParent ? _parent!.Children[SymbolChildId] : _instance;
+        public Instance Instance
+        {
+            get
+            {
+                if (!_hasParent)
+                    return _instance;
+
+                if (!SymbolRegistry.TryGetSymbol(_parentSymbolId!.Value, out var parentSymbol))
+                {
+                    throw new Exception($"Could not find parent symbol with id {_parentSymbolId}");
+                }
+                
+                var parent = parentSymbol.InstancesOfSelf.First(x => x.SymbolChildId == _parentSymbolChildId);
+                return parent!.Children[SymbolChildId];
+            }
+        }
 
         public readonly Guid SymbolChildId;
         private readonly Guid _symbolId;
 
-        private readonly Instance? _parent;
+        private readonly Guid? _parentSymbolId;
+        private readonly Guid? _parentSymbolChildId;
         private readonly Instance _instance;
         private readonly bool _hasParent;
         private readonly EditorSymbolPackage _symbolPackage;
@@ -24,8 +40,13 @@ internal sealed partial class GraphWindow
         private Composition(Instance instance)
         {
             _symbolPackage = (EditorSymbolPackage)instance.Symbol.SymbolPackage;
-            _parent = instance.Parent;
-            _hasParent = _parent != null;
+            var parent = instance.Parent;
+            if (parent != null)
+            {
+                _hasParent = true;
+                _parentSymbolId = parent.Symbol.Id;
+                _parentSymbolChildId = parent.SymbolChildId;
+            }
             _instance = instance;
             SymbolChildId = instance.SymbolChildId;
             _symbolId = instance.Symbol.Id;
