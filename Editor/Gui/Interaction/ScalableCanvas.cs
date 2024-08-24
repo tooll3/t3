@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
@@ -422,8 +423,9 @@ namespace T3.Editor.Gui.Interaction
             var allowChildHover = flags.HasFlag(T3Ui.EditingFlags.AllowHoveredChildWindows)
                                       ? ImGuiHoveredFlags.ChildWindows
                                       : ImGuiHoveredFlags.None;
-            
-            if (!_isDragZooming && !ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | allowChildHover) && !isDraggingConnection)
+
+            var isWindowHovered = ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | allowChildHover);
+            if (!_isDragZooming && !isWindowHovered && !isDraggingConnection)
                 return;
             
             //DrawCanvasDebugInfos();
@@ -485,8 +487,8 @@ namespace T3.Editor.Gui.Interaction
             
 
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
-            
-            ApplyZoomDelta(focusCenterOnScreen, zoomDelta);
+            if(Math.Abs(zoomDelta - 1) > 0.01f)
+                ApplyZoomDelta(focusCenterOnScreen, zoomDelta);
         }
         
         protected void ApplyZoomDelta(Vector2 focusCenterOnScreen, float zoomDelta)
@@ -605,7 +607,8 @@ namespace T3.Editor.Gui.Interaction
             var deltaMax = Math.Abs(delta.X) > Math.Abs(delta.Y)
                                ? -delta.X
                                : delta.Y;
-            if (IsCurveCanvas || !_isDragZooming)
+            
+            if (!_isDragZooming)
                 return;
             
             var f = (float)Math.Pow(1.13f, -deltaMax / 40f);
