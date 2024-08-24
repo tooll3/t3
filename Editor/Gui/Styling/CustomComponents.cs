@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
+using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
@@ -312,14 +313,18 @@ namespace T3.Editor.Gui.Styling
         public static void ContextMenuForItem(Action drawMenuItems, string title = null, string id = "context_menu",
                                               ImGuiPopupFlags flags = ImGuiPopupFlags.MouseButtonRight)
         {
-            var wasAlreadyOpen = ImGui.IsPopupOpen(id);
+
+            // prevent context menu from opening when dragging
+            {
+                var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
+                if (wasDraggingRight)
+                    return;
+            }
             
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
             if (ImGui.BeginPopupContextWindow(id, flags))
             {
-                if(wasAlreadyOpen)
-                    ImGui.Separator();
                 
                 FrameStats.Current.IsItemContextMenuOpen = true;
                 if (title != null)
