@@ -457,6 +457,12 @@
       "SymbolId": "d3a7c4ff-6f3b-4d50-a542-6579cb11fab3",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "353c94a5-55f9-41f4-bd0e-2861d97c484d"/*ComputeShaderFromSource*/,
+      "SymbolId": "4e5bc624-9cda-46a8-9681-7fd412ea3893",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

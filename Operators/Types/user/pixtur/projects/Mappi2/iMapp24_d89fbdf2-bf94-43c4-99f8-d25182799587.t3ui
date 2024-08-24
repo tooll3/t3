@@ -180,6 +180,13 @@
         "X": 577.14246,
         "Y": 1468.1235
       }
+    },
+    {
+      "ChildId": "353c94a5-55f9-41f4-bd0e-2861d97c484d"/*ComputeShaderFromSource*/,
+      "Position": {
+        "X": -59.226196,
+        "Y": 964.82733
+      }
     }
   ],
   "OutputUis": [

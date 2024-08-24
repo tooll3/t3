@@ -20,9 +20,10 @@ The meaningful blending range for distances is controlled by the Length and Phas
 cbuffer Params : register(b0)
 {
     float Amount;
-    float ColorDistance;
     float Range;
-    float Phase;
+    float OffsetRange;
+    float AffectPosition;
+    float AffectOrientation;
 }
 
 cbuffer Params : register(b1)
@@ -72,7 +73,10 @@ float3 fmod(float3 x, float3 y)
         float len = length(dir);
         float dd = 1 / (len + 0.1);
 
-        float weight = smoothstep(ColorDistance, 0, len);
+        // float weight = smoothstep(Range + OffsetRange, 0 + OffsetRange, len);
+        float weight = smoothstep(Range, 0, len - OffsetRange);
+        // float weight = 1 - saturate((len - OffsetRange) / Range);
+
         totalWeight += weight;
         resultColor += max(0, FieldPoints[fieldIndex].Color) * weight;
 
@@ -90,13 +94,15 @@ float3 fmod(float3 x, float3 y)
 
     // Offset
     float3 dir = totalForce / gMagnitude;
-    p.Position -= dir * clamp(gMagnitude, 0, 1) * Amount;
+    // p.Position -= dir * clamp(gMagnitude, 0, 1) * Amount * AffectPosition;
+    p.Position -= dir * totalWeight * Amount * AffectPosition;
 
     // Orient towards
-    p.Rotation = qLookAt(dir, float3(0, 1, 0));
+    float4 lookAtRotation = normalize(qLookAt(-dir, float3(0, 0, 1)));
+    p.Rotation = qSlerp(p.Rotation, lookAtRotation, totalWeight * Amount * AffectOrientation);
 
     // Scale
-    p.W += totalWeight * Amount * 2;
+    // p.W += totalWeight * Amount * 2;
 
     if (totalWeight > 0.0f)
     {
