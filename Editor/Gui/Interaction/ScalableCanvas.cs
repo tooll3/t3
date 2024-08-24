@@ -437,8 +437,7 @@ namespace T3.Editor.Gui.Interaction
                 return;
             
             var isVerticalColorSliderActive = FrameStats.Last.OpenedPopUpName == "ColorBrightnessSlider";
-            var isAnotherWindowDragged = _draggedCanvas != null && _draggedCanvas != this;
-            
+            var isAnotherWindowDragged =  _draggedCanvas != null && _draggedCanvas != this || CustomComponents.IsDragScrolling;
             if (!isVerticalColorSliderActive
                 && !isAnotherWindowDragged
                 && !flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse)
@@ -469,6 +468,7 @@ namespace T3.Editor.Gui.Interaction
         }
         
         protected static ScalableCanvas _draggedCanvas;
+        public static bool IsAnyCanvasDragged => _draggedCanvas != null;
         
         protected Vector2 ClampScaleToValidRange(Vector2 scale)
         {

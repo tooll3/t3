@@ -696,5 +696,38 @@ namespace T3.Editor.Gui.Styling
             dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color,7, roundedCorners);
             return clicked;
         }
+        
+        
+        private static Vector2 _dragScrollStart;
+        public static bool IsDragScrolling;
+        private static uint _scrollingId;
+
+        public static void HandleDragScrolling()
+        {
+            var currentId = ImGui.GetID("");
+
+            if (IsDragScrolling && _scrollingId == currentId)
+            {
+                if (ImGui.IsMouseReleased(ImGuiMouseButton.Right))
+                {
+                    IsDragScrolling = false;
+                }
+                
+                if (ImGui.IsMouseDragging(ImGuiMouseButton.Right))
+                {
+                    ImGui.SetScrollY(_dragScrollStart.Y - ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Y);
+                }
+
+                return;
+            }
+            
+            if ( ImGui.IsWindowHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+            {
+                _dragScrollStart = new Vector2(ImGui.GetScrollX(),  ImGui.GetScrollY());
+                IsDragScrolling = true;
+                _scrollingId = currentId;
+            }
+        }
     }
+    
 }
