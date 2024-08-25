@@ -359,24 +359,29 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             var inProgress = InProgress[window];
             var connectionList = inProgress.TempConnections;
             var symbolInstance = childInstance.Parent;
-            var sourceInstance = symbolInstance.Children[connectionList[0].SourceParentOrChildId];
             
-            // Check for cycles
-            var outputSlot = sourceInstance.Outputs[0];
-            var deps = new HashSet<ISlot>();
-            Structure.CollectSlotDependencies(outputSlot, deps);
-
-            foreach (var d in deps)
+            var sourceId = connectionList[0].SourceParentOrChildId;
+            if (sourceId != Guid.Empty) // empty if coming from the parent input slots
             {
-                if (d.Parent.SymbolChildId != targetUi.Id)
-                    continue;
+                var sourceInstance = symbolInstance.Children[sourceId];
 
-                Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
-                Log.Debug($"Dependency: [{d.Parent.Symbol.Name}], target: [{targetUi.SymbolChild.Symbol.Name}]");
-                //TempConnections.Clear();
-                //ConnectionSnapEndHelper.ResetSnapping();
-                AbortOperation(inProgress);
-                return;
+                // Check for cycles
+                var outputSlot = sourceInstance.Outputs[0];
+                var deps = new HashSet<ISlot>();
+                Structure.CollectSlotDependencies(outputSlot, deps);
+
+                foreach (var d in deps)
+                {
+                    if (d.Parent.SymbolChildId != targetUi.Id)
+                        continue;
+
+                    Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
+                    Log.Debug($"Dependency: [{d.Parent.Symbol.Name}], target: [{targetUi.SymbolChild.Symbol.Name}]");
+                    //TempConnections.Clear();
+                    //ConnectionSnapEndHelper.ResetSnapping();
+                    AbortOperation(inProgress);
+                    return;
+                }
             }
 
             var symbol = symbolInstance.Symbol;
