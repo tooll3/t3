@@ -57,12 +57,12 @@
       "DefaultValue": true
     },
     {
-      "Id": "fc846c4a-ac50-4260-8267-4484ced2d22f"/*IsEnabled*/,
-      "DefaultValue": true
-    },
-    {
       "Id": "8cdea8a6-7e39-433d-a616-2f64e5e04ed7"/*ChunkIndices*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "fc846c4a-ac50-4260-8267-4484ced2d22f"/*UpdateDrawData*/,
+      "DefaultValue": true
     }
   ],
   "Children": [

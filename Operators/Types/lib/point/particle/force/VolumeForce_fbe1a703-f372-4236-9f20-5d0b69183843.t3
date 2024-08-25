@@ -4,7 +4,19 @@
   "Namespace": "lib.point.particle.force",
   "Inputs": [
     {
+      "Id": "86c81e40-79e8-4699-a7fe-581f0b09d266"/*VolumeShape*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "e3485fea-3a75-47f9-9a7d-ea69f4feb5f6"/*VolumeCenter*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "721c500b-ae7c-4249-a374-1bcf6ae13abd"/*VolumeRotate*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
@@ -24,18 +36,6 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "721c500b-ae7c-4249-a374-1bcf6ae13abd"/*VolumeRotate*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
-    },
-    {
-      "Id": "86c81e40-79e8-4699-a7fe-581f0b09d266"/*VolumeShape*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "ceb7008d-c536-4d87-b3f8-d5ba9fe29eed"/*Bounciness*/,
       "DefaultValue": 1.0
     },
@@ -52,6 +52,10 @@
       "DefaultValue": 0.2
     },
     {
+      "Id": "b7a82887-9b8a-4999-8970-515fe199724a"/*AttractionDecay*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "7c6f58e7-27fc-4271-adef-248cffe5a8b7"/*Repulsion*/,
       "DefaultValue": 0.1
     },
@@ -62,10 +66,6 @@
     {
       "Id": "2ab85ac3-819d-4e3e-891a-7f27af627fdf"/*InvertVolume*/,
       "DefaultValue": false
-    },
-    {
-      "Id": "b7a82887-9b8a-4999-8970-515fe199724a"/*AttractionDecay*/,
-      "DefaultValue": 0.0
     }
   ],
   "Children": [

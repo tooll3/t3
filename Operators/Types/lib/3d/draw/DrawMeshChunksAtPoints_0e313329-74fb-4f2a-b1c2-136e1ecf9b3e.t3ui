@@ -91,18 +91,18 @@
       }
     },
     {
-      "InputId": "fc846c4a-ac50-4260-8267-4484ced2d22f"/*IsEnabled*/,
-      "Position": {
-        "X": 2953.1187,
-        "Y": 4168.499
-      }
-    },
-    {
       "InputId": "8cdea8a6-7e39-433d-a616-2f64e5e04ed7"/*ChunkIndices*/,
       "Relevancy": "Required",
       "Position": {
         "X": 1100.8807,
         "Y": 4123.607
+      }
+    },
+    {
+      "InputId": "fc846c4a-ac50-4260-8267-4484ced2d22f"/*UpdateDrawData*/,
+      "Position": {
+        "X": 2953.1187,
+        "Y": 4168.499
       }
     }
   ],

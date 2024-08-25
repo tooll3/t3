@@ -40,7 +40,7 @@
       "SymbolId": "0e313329-74fb-4f2a-b1c2-136e1ecf9b3e",
       "InputValues": [
         {
-          "Id": "fc846c4a-ac50-4260-8267-4484ced2d22f"/*IsEnabled*/,
+          "Id": "fc846c4a-ac50-4260-8267-4484ced2d22f"/*UpdateDrawData*/,
           "Type": "System.Boolean",
           "Value": true
         }
