@@ -210,7 +210,7 @@ internal class EditorSymbolPackage : SymbolPackage
         }
         else
         {
-            Log.Debug($"{AssemblyInformation.Name}: Found {sourceCodeCount} operator source code files out of {sourceCodeAttempts} files.");
+            Log.Debug($"{AssemblyInformation.Name}: Found {sourceCodeCount} operator source code files out of {sourceCodeAttempts} C# files.");
         }
         #endif
         
