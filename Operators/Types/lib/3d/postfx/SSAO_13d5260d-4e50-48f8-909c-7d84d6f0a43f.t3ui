@@ -132,21 +132,21 @@
       "ChildId": "7be0b9ab-f995-4ecd-8caf-dce6e5400c0c"/*TimeConstBuffer*/,
       "Position": {
         "X": 396.25244,
-        "Y": 2059.7578
+        "Y": 2072.7578
       }
     },
     {
       "ChildId": "ee278cc0-de57-4d87-8555-59cc1d8106a6"/*SamplerStateOp*/,
       "Position": {
         "X": 396.25244,
-        "Y": 2326.7576
+        "Y": 2339.7576
       }
     },
     {
       "ChildId": "12ac9849-d05b-4e70-b65b-a70285040622"/*BlendStateOp*/,
       "Position": {
         "X": 396.25244,
-        "Y": 2369.7576
+        "Y": 2382.7576
       }
     },
     {
@@ -212,7 +212,7 @@
       "ChildId": "56ace423-2a59-4e92-b901-51ac0bd1ac92"/*SrvFromTexture2d*/,
       "Position": {
         "X": 396.25244,
-        "Y": 2158.7576
+        "Y": 2171.7576
       }
     },
     {
@@ -239,22 +239,22 @@
     {
       "ChildId": "45925486-b7d7-46d4-94ba-e5a1c7d68e77"/*GetTextureSize*/,
       "Position": {
-        "X": 210.50856,
-        "Y": 1359.4862
+        "X": -84.25029,
+        "Y": 1420.5155
       }
     },
     {
       "ChildId": "a82df568-de7a-465a-a24c-1406885aa354"/*ResolutionConstBuffer*/,
       "Position": {
         "X": 396.25244,
-        "Y": 2102.7578
+        "Y": 2115.7578
       }
     },
     {
       "ChildId": "e352e8f6-40fd-4e8f-92a4-33fc6c9349f7"/*SrvFromTexture2d*/,
       "Position": {
         "X": 396.25244,
-        "Y": 2214.7576
+        "Y": 2227.7576
       }
     },
     {
@@ -268,7 +268,7 @@
       "ChildId": "f9cfa60a-ce0e-4dde-9ecd-6384f09a3da8"/*SrvFromTexture2d*/,
       "Position": {
         "X": 396.25244,
-        "Y": 2270.7576
+        "Y": 2283.7576
       }
     },
     {
@@ -304,6 +304,20 @@
       "Position": {
         "X": 37.48494,
         "Y": 2005.9436
+      }
+    },
+    {
+      "ChildId": "cea906fd-c655-4945-bc87-910b0f08af31"/*Vector2Components*/,
+      "Position": {
+        "X": 46.995422,
+        "Y": 1465.3282
+      }
+    },
+    {
+      "ChildId": "8d61938b-9558-4bda-8655-5c61123ce3cf"/*Div*/,
+      "Position": {
+        "X": 196.99542,
+        "Y": 1465.3282
       }
     }
   ],
