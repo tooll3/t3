@@ -98,6 +98,10 @@ public class T3Ui: IDisposable
         MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
         MouseWheelFieldHovered = false;
 
+        // A work around for potential mouse capture
+        DragFieldWasHoveredLastFrame = DragFieldHovered;
+        DragFieldHovered = false;
+        
         FitViewToSelectionHandling.ProcessNewFrame();
         SrvManager.FreeUnusedTextures();
         KeyboardBinding.InitFrame();
@@ -525,6 +529,8 @@ public class T3Ui: IDisposable
     public static bool DraggingIsInProgress = false;
     public static bool MouseWheelFieldHovered { private get; set; }
     public static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }
+    public static bool DragFieldHovered { private get; set; }
+    public static bool DragFieldWasHoveredLastFrame { get; private set; }
     public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
     public const string FloatNumberFormat = "{0:F2}";
     public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
