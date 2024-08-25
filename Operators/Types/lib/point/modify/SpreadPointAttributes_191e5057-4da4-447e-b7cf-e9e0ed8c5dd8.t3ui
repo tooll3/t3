@@ -186,6 +186,13 @@
         "X": -254.37363,
         "Y": 860.94025
       }
+    },
+    {
+      "ChildId": "4b10b4a9-f257-420b-bddb-ff1c87b401c6"/*SamplerStateOp*/,
+      "Position": {
+        "X": 142.67749,
+        "Y": 1162.8037
+      }
     }
   ],
   "OutputUis": [
