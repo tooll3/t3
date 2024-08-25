@@ -1,7 +1,125 @@
 {
-  "Id": "21b0a346-f214-449f-ae27-7bfbe5395d66"/*SetAttrWithPointFields*/,
+  "Id": "21b0a346-f214-449f-ae27-7bfbe5395d66"/*SetAttributesWithPointFields*/,
   "Description": "Sets various attributes points from the distance of a 2nd (small) set of points.",
   "InputUis": [
+    {
+      "InputId": "7485a1bc-0983-4348-a7d7-d723e92eecd9"/*Amount*/,
+      "Position": {
+        "X": -152.66492,
+        "Y": 915.29175
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "11584b2f-3df4-4073-bcde-01e0fdaa3f5d"/*Range*/,
+      "Position": {
+        "X": -152.66492,
+        "Y": 960.29175
+      },
+      "GroupTitle": "Field Edge"
+    },
+    {
+      "InputId": "a32d5d18-df0b-4fc2-9139-a68cc0449681"/*OffsetRange*/,
+      "Position": {
+        "X": -152.66492,
+        "Y": 1005.2918
+      }
+    },
+    {
+      "InputId": "3c70a819-d813-4ebd-9e5b-c185fac70ea2"/*BiasAndGain*/,
+      "Position": {
+        "X": -306.32886,
+        "Y": 1319.4006
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
+    },
+    {
+      "InputId": "46238904-91b9-47ab-bf90-9392fb034dc3"/*Variation*/,
+      "Position": {
+        "X": -156.32886,
+        "Y": 1375.4006
+      },
+      "Min": 0.0,
+      "Max": 0.1
+    },
+    {
+      "InputId": "71ca8ac5-37ee-4b4c-aa04-9706e7923cff"/*AffectColor*/,
+      "Position": {
+        "X": -147.53534,
+        "Y": 1258.146
+      },
+      "GroupTitle": "Color"
+    },
+    {
+      "InputId": "8003ed74-aed6-4a2e-ae98-d293b023975f"/*ColorMode*/,
+      "Position": {
+        "X": -155.02618,
+        "Y": 708.914
+      }
+    },
+    {
+      "InputId": "959d8403-74d0-4f8b-b2f8-28ba0d26a3e6"/*Gradient*/,
+      "Position": {
+        "X": -327.12628,
+        "Y": 1526.3972
+      }
+    },
+    {
+      "InputId": "9e69c4d8-3432-4afa-965f-55faffc35d32"/*AffectPosition*/,
+      "Position": {
+        "X": -152.66492,
+        "Y": 1050.292
+      },
+      "GroupTitle": "Move and Rotation"
+    },
+    {
+      "InputId": "49bcec9b-d043-4f2d-a381-2697003268c9"/*AffectOrientation*/,
+      "Position": {
+        "X": -152.66492,
+        "Y": 1095.292
+      }
+    },
+    {
+      "InputId": "f4eff9af-3f65-4603-9432-45c97978c92f"/*OrientationUpVector*/,
+      "Position": {
+        "X": -297.53534,
+        "Y": 1168.146
+      }
+    },
+    {
+      "InputId": "ea732975-c8c7-4210-b2ea-0e73298c54d1"/*AffectW*/,
+      "Position": {
+        "X": -147.53534,
+        "Y": 1213.146
+      },
+      "GroupTitle": "W"
+    },
+    {
+      "InputId": "f2cc5c36-1c99-421a-a253-1213317d9c98"/*WMode*/,
+      "Position": {
+        "X": -155.02618,
+        "Y": 753.914
+      }
+    },
+    {
+      "InputId": "85e831f2-b72d-4a86-a4a8-52fda5dddabc"/*WCurveAffectsWeight*/,
+      "Position": {
+        "X": -305.02618,
+        "Y": 798.914
+      }
+    },
+    {
+      "InputId": "d3d92fe5-9a56-45f6-acc7-67370d744c0e"/*WCurve*/,
+      "Position": {
+        "X": -314.44363,
+        "Y": 1415.1472
+      }
+    },
     {
       "InputId": "cfc0c91e-4cb6-4408-a463-21209d7d4742"/*Points*/,
       "Relevancy": "Required",
@@ -18,71 +136,6 @@
         "Y": 455.21533
       },
       "Description": "Controls the modification field. Not that count is clamped to 10."
-    },
-    {
-      "InputId": "7485a1bc-0983-4348-a7d7-d723e92eecd9"/*Amount*/,
-      "Position": {
-        "X": -164.25922,
-        "Y": 819.411
-      },
-      "Min": 0.0,
-      "Max": 1.0
-    },
-    {
-      "InputId": "11584b2f-3df4-4073-bcde-01e0fdaa3f5d"/*Range*/,
-      "Position": {
-        "X": -164.25922,
-        "Y": 864.411
-      }
-    },
-    {
-      "InputId": "a32d5d18-df0b-4fc2-9139-a68cc0449681"/*OffsetRange*/,
-      "Position": {
-        "X": -164.98535,
-        "Y": 978.73303
-      }
-    },
-    {
-      "InputId": "9e69c4d8-3432-4afa-965f-55faffc35d32"/*AffectPosition*/,
-      "Position": {
-        "X": -164.98535,
-        "Y": 1023.73303
-      }
-    },
-    {
-      "InputId": "49bcec9b-d043-4f2d-a381-2697003268c9"/*AffectOrientation*/,
-      "Position": {
-        "X": -169.01566,
-        "Y": 1227.0272
-      }
-    },
-    {
-      "InputId": "f4eff9af-3f65-4603-9432-45c97978c92f"/*OrientationUpVector*/,
-      "Position": {
-        "X": -324.10608,
-        "Y": 1154.5208
-      }
-    },
-    {
-      "InputId": "ea732975-c8c7-4210-b2ea-0e73298c54d1"/*Phase*/,
-      "Position": {
-        "X": -467.26144,
-        "Y": 1028.4407
-      }
-    },
-    {
-      "InputId": "959d8403-74d0-4f8b-b2f8-28ba0d26a3e6"/*Gradient*/,
-      "Position": {
-        "X": -307.73828,
-        "Y": 1455.9567
-      }
-    },
-    {
-      "InputId": "d3d92fe5-9a56-45f6-acc7-67370d744c0e"/*WCurve*/,
-      "Position": {
-        "X": -295.05563,
-        "Y": 1344.7067
-      }
     }
   ],
   "SymbolChildUis": [
@@ -103,8 +156,8 @@
     {
       "ChildId": "d8aa6e53-4b7c-415c-95d0-fff4f4e40b34"/*FloatsToBuffer*/,
       "Position": {
-        "X": 5.526062,
-        "Y": 809.88477
+        "X": 29.286621,
+        "Y": 909.4592
       }
     },
     {
@@ -145,29 +198,29 @@
     {
       "ChildId": "75c2d124-a137-4731-9df1-d6dda083ad6b"/*CurvesToTexture*/,
       "Position": {
-        "X": -145.05563,
-        "Y": 1344.7067
+        "X": -164.44363,
+        "Y": 1415.1472
       }
     },
     {
       "ChildId": "50e9b5c4-ba54-4bac-a7b7-bb117bbc9c0e"/*SrvFromTexture2d*/,
       "Position": {
-        "X": 4.9443665,
-        "Y": 1344.7067
+        "X": -14.443634,
+        "Y": 1415.1472
       }
     },
     {
       "ChildId": "d1f1bf88-0c46-44b0-a88d-8eefc2926d18"/*GradientsToTexture*/,
       "Position": {
-        "X": -157.73828,
-        "Y": 1455.9567
+        "X": -177.12628,
+        "Y": 1526.3972
       }
     },
     {
       "ChildId": "70b82ea5-effb-4657-a28f-02296bdfbe53"/*SrvFromTexture2d*/,
       "Position": {
-        "X": -7.7382812,
-        "Y": 1455.9567
+        "X": -27.126282,
+        "Y": 1526.3972
       }
     },
     {
@@ -201,8 +254,29 @@
     {
       "ChildId": "0c4bd519-8d86-4efa-be4b-b24c6ca04714"/*Vector3Components*/,
       "Position": {
-        "X": -174.10608,
-        "Y": 1154.5208
+        "X": -147.53534,
+        "Y": 1157.146
+      }
+    },
+    {
+      "ChildId": "ae4b2ba8-7570-41e2-a495-8ee1756eddc7"/*Vector2Components*/,
+      "Position": {
+        "X": -156.32886,
+        "Y": 1319.4006
+      }
+    },
+    {
+      "ChildId": "d7613f3e-52ae-4bbd-90c1-d962533411d3"/*SamplerStateOp*/,
+      "Position": {
+        "X": 199.85052,
+        "Y": 642.5657
+      }
+    },
+    {
+      "ChildId": "e53f4cdb-c783-46ab-9df5-dd252549766f"/*BoolToInt*/,
+      "Position": {
+        "X": -155.02618,
+        "Y": 798.914
       }
     }
   ],

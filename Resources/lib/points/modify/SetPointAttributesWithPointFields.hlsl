@@ -16,6 +16,7 @@ The meaningful blending range for distances is controlled by the Length and Phas
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
 #include "lib/shared/quat-functions.hlsl"
+#include "lib/shared/bias-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -23,22 +24,37 @@ cbuffer Params : register(b0)
     float Range;
     float OffsetRange;
     float AffectPosition;
+
+    float3 OrientationUpVector;
     float AffectOrientation;
+
+    float AffectW;
+    float AffectColor;
+    float2 BiasAndGain;
+    float Variation;
 }
 
 cbuffer Params : register(b1)
 {
     int FieldCount;
-    int Mode;
-    int MappingMode;
-    int ApplyMode;
+    int ColorMode;
+    int WMode;
+    int WCurveAffectsWeight;
 }
+
+#define COLORMODE_REPLACE_ADD 0
+#define COLORMODE_REPLACE_AVERAGE 1
+#define COLORMODE_BLEND 2
+
+#define WMODE_SET 0
+#define WMODE_ADD 1
+#define WMODE_BLEND 2
 
 StructuredBuffer<Point> SourcePoints : t0;
 StructuredBuffer<Point> FieldPoints : t1;
 
 Texture2D<float4> CurveImage : register(t2);
-Texture2D<float4> GradientImage : register(t2);
+Texture2D<float4> GradientImage : register(t3);
 
 RWStructuredBuffer<Point> ResultPoints : u0;
 
@@ -51,7 +67,7 @@ float3 fmod(float3 x, float3 y)
 
 [numthreads(64, 1, 1)] void main(uint3 i : SV_DispatchThreadID)
 {
-    int index = i.x;
+    uint index = i.x;
     uint pointCount, stride;
     SourcePoints.GetDimensions(pointCount, stride);
     if (index >= pointCount)
@@ -64,21 +80,38 @@ float3 fmod(float3 x, float3 y)
     float3 totalForce;
     float totalWeight = 0;
 
-    float4 resultColor = float4(0, 0, 0, 0);
+    float4 totalColor = float4(0, 0, 0, 0);
+    float totalW;
+    int usedCount = 0;
+
+    float noise = (hash11u(index) - 0.5) * Variation;
 
     for (int fieldIndex = 0; fieldIndex < FieldCount; fieldIndex++)
     {
+        float w = FieldPoints[fieldIndex].W;
+        if (isnan(w) || w < 0.0001)
+            continue;
+
+        usedCount++;
         float3 fPos = FieldPoints[fieldIndex].Position;
-        float3 dir = (p.Position - fPos) * FieldPoints[fieldIndex].W;
+        float3 dir = (p.Position - fPos) / w;
         float len = length(dir);
         float dd = 1 / (len + 0.1);
 
-        // float weight = smoothstep(Range + OffsetRange, 0 + OffsetRange, len);
-        float weight = smoothstep(Range, 0, len - OffsetRange);
-        // float weight = 1 - saturate((len - OffsetRange) / Range);
+        float f = (1 - saturate((len - OffsetRange) / Range)) + noise;
+        f = ApplyBiasAndGain(f, BiasAndGain.x, BiasAndGain.y);
+        f *= p.Selected;
 
-        totalWeight += weight;
-        resultColor += max(0, FieldPoints[fieldIndex].Color) * weight;
+        float fw = CurveImage.SampleLevel(texSampler, float2(f, 0.5), 0).r;
+        totalW += fw;
+
+        f *= WCurveAffectsWeight ? fw : 1;
+
+        float4 color = GradientImage.SampleLevel(texSampler, float2(f, 0.5), 0);
+        totalColor += FieldPoints[fieldIndex].Color * color * (ColorMode == COLORMODE_BLEND ? f : 1);
+
+        // weight = weightFactor;
+        totalWeight += f;
 
         float distanceSq = dot(dir, dir);
         if (distanceSq > 0.0001)
@@ -90,24 +123,60 @@ float3 fmod(float3 x, float3 y)
         }
     }
 
+    float selectAmount = Amount * p.Selected;
+
     float gMagnitude = length(totalForce) + 0.0001;
 
     // Offset
     float3 dir = totalForce / gMagnitude;
-    // p.Position -= dir * clamp(gMagnitude, 0, 1) * Amount * AffectPosition;
-    p.Position -= dir * totalWeight * Amount * AffectPosition;
+    p.Position -= dir * totalWeight * selectAmount * AffectPosition;
 
     // Orient towards
-    float4 lookAtRotation = normalize(qLookAt(-dir, float3(0, 0, 1)));
-    p.Rotation = qSlerp(p.Rotation, lookAtRotation, totalWeight * Amount * AffectOrientation);
+    float4 lookAtRotation = normalize(qLookAt(-dir, OrientationUpVector));
+    p.Rotation = qSlerp(p.Rotation, lookAtRotation, totalWeight * selectAmount * AffectOrientation);
 
-    // Scale
-    // p.W += totalWeight * Amount * 2;
+    // Color
+    float colorAffect = selectAmount * AffectColor;
+    float4 c = 0;
 
-    if (totalWeight > 0.0f)
+    switch (ColorMode)
     {
-        resultColor /= totalWeight;
-        p.Color = lerp(p.Color, resultColor, saturate(totalWeight));
+    case COLORMODE_REPLACE_ADD:
+        c = lerp(p.Color, totalColor, colorAffect);
+        break;
+
+    case COLORMODE_REPLACE_AVERAGE:
+        if (totalWeight > 0.001)
+        {
+            totalColor /= totalWeight;
+        }
+        c = lerp(p.Color, totalColor, colorAffect);
+        break;
+
+    case COLORMODE_BLEND:
+        if (totalWeight > 0.001)
+        {
+            totalColor /= totalWeight;
+        }
+        c = lerp(p.Color, totalColor, saturate(totalWeight) * colorAffect);
+        break;
+    }
+
+    p.Color = float4(max(c.rgb, 0), saturate(c.a));
+
+    // W
+    float wAffect = selectAmount * AffectW;
+    switch (WMode)
+    {
+    case WMODE_SET:
+        p.W = totalW * wAffect;
+        break;
+    case WMODE_ADD:
+        p.W += totalW * wAffect;
+        break;
+    case WMODE_BLEND:
+        p.W = lerp(p.W, totalW, totalWeight * wAffect);
+        break;
     }
 
     ResultPoints[index] = p;
