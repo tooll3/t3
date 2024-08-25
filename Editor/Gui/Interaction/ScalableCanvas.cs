@@ -236,38 +236,38 @@ namespace T3.Editor.Gui.Interaction
         {
             var areaSize = area.GetSize();
             if (areaSize.X == 0)
-            {
                 areaSize.X = 1;
-            }
             
-
             if (areaSize.Y == 0)
                 areaSize.Y = 1;
             
-            if (Scale.X == 0 || Scale.Y == 0)
-            {
-                Scale = Vector2.One;
-            }
             
-            ScaleTarget = (WindowSize - new Vector2(paddingX, paddingY));
-            ScaleTarget.X = MathF.Max(ScaleTarget.X, 20);
-            ScaleTarget.Y = MathF.Max(ScaleTarget.Y, 20);
+            //var newScale = new Vector2(WindowSize.X / areaSize.X, WindowSize.Y / areaSize.Y);
+            var newScale = (WindowSize - new Vector2(paddingX, paddingY));
+            //ScaleTarget = (WindowSize - new Vector2(paddingX, paddingY));
+            newScale.X = MathF.Max(newScale.X, 20);
+            newScale.Y = MathF.Max(newScale.Y, 20);
             
-            ScaleTarget /= areaSize;
+            newScale /= areaSize;
             
             if (flipY)
             {
-                ScaleTarget.Y *= -1;
+                newScale.Y *= -1;
             }
-            
-            ScrollTarget = new Vector2(area.Min.X - paddingX / ScaleTarget.X / 2,
-                                       area.Max.Y - paddingY / ScaleTarget.Y / 2);
+            ScrollTarget = new Vector2(area.Min.X - (paddingX / newScale.X) / 2,
+                                       area.Max.Y - (paddingY / newScale.Y) / 2);
             
             if (parent != null)
             {
-                ScaleTarget /= parent.Scale;
+                newScale /= parent.Scale;
             }
-
+            ScaleTarget = newScale;
+            
+            if(ScaleTarget.X == 0 || ScaleTarget.Y == 0 || float.IsNaN(ScaleTarget.X) || float.IsNaN(ScaleTarget.Y) || float.IsInfinity(ScaleTarget.X) || float.IsInfinity(ScaleTarget.Y))
+                Scale = ScaleTarget;
+            
+            if (float.IsNaN(ScrollTarget.X) || float.IsNaN(ScrollTarget.Y) || float.IsInfinity(ScrollTarget.X) || float.IsInfinity(ScrollTarget.Y))
+                Scroll = ScrollTarget;
         }
         
         public void SetVerticalScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null)
