@@ -325,11 +325,14 @@ internal sealed partial class CsProjectFile
 
         if (Assembly == null)
         {
-            releaseInfo = null;
-            return false;
+            if (!TryLoadLatestAssembly())
+            {
+                releaseInfo = null;
+                return false;
+            }
         }
         
-        var success = Assembly.TryGetReleaseInfo(out _cachedReleaseInfo);
+        var success = Assembly!.TryGetReleaseInfo(out _cachedReleaseInfo);
         releaseInfo = _cachedReleaseInfo;
         return success;
     }

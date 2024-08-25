@@ -126,8 +126,7 @@ internal static class ProjectSetup
 
         directory
            .EnumerateDirectories("*", SearchOption.TopDirectoryOnly)
-           .Where(folder => !string.Equals(folder.Name, PlayerExporter.ExportFolderName,
-                                           StringComparison.OrdinalIgnoreCase)) // ignore "player" project directory
+           .Where(folder => !folder.Name.EndsWith(PlayerExporter.ExportFolderName, StringComparison.OrdinalIgnoreCase)) // ignore "player" project directory
            .ToList()
            .ForEach(directoryInfo =>
                     {
@@ -381,7 +380,9 @@ internal static class ProjectSetup
 
     private static IEnumerable<string> GetProjectDirectories()
     {
-        var topDirectories = new[] { CoreOperatorDirectory, UserSettings.Config.DefaultNewProjectDirectory };
+        // ReSharper disable once JoinDeclarationAndInitializer
+        string[] topDirectories = [UserSettings.Config.DefaultNewProjectDirectory];
+        
         var projectSearchDirectories = topDirectories
                                       .Where(Directory.Exists)
                                       .SelectMany(Directory.EnumerateDirectories)
