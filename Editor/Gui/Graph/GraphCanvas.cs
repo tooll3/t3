@@ -1003,7 +1003,7 @@ namespace T3.Editor.Gui.Graph
             {
                 selectedInputUis ??= NodeSelection.GetSelectedNodes<IInputUi>().ToList();
                 selectedOutputUis ??= NodeSelection.GetSelectedNodes<IOutputUi>().ToList();
-                if (selectedInputUis.Count > 0)
+                if (selectedInputUis.Count > 0 || selectedOutputUis.Count > 0)
                 {
                     InputsAndOutputs.RemoveInputsAndOutputsFromSymbol(inputIdsToRemove: selectedInputUis.Select(entry => entry.Id).ToArray(), 
                                                                       outputIdsToRemove: selectedOutputUis.Select(entry => entry.Id).ToArray(),

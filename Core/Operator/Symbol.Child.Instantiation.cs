@@ -68,9 +68,14 @@ public static class SymbolInstantiation
         for (int i = 0; i < childOutputDefinitionCount; i++)
         {
             Debug.Assert(i < childOutputs.Count);
-            var outputSlot = childOutputs[i];
             var outputDefinition = childOutputDefinitions[i];
             var id = outputDefinition.Id;
+            if (i >= childOutputs.Count)
+            {
+                Log.Warning($"Skipping undefined output: {id}");
+                continue;
+            }
+            var outputSlot = childOutputs[i];
             outputSlot.Id = id;
             var symbolChildOutput = symbolChildOutputs[id];
             if (outputDefinition.OutputDataType != null)
