@@ -5,6 +5,7 @@ using T3.Core.IO;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils.Geometry;
 using T3.Editor.Gui.Interaction.TransformGizmos;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.Camera
@@ -139,7 +140,7 @@ namespace T3.Editor.Gui.Interaction.Camera
                     _orbitVelocity += delta * _deltaTime * -0.1f;
                 }
             }
-            else if (ImGui.IsMouseDragging(ImGuiMouseButton.Right))
+            else if (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !CustomComponents.IsDragScrolling && !ScalableCanvas.IsAnyCanvasDragged)
             {
                 Pan();
             }

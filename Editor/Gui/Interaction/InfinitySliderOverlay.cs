@@ -50,15 +50,20 @@ namespace T3.Editor.Gui.Interaction
             {
                 _dragCenterStart = _center;
             }
-            if (ImGui.IsMouseDragging(ImGuiMouseButton.Right))
-            {
-                _center += ImGui.GetMouseDragDelta();
-            }
 
+            var isDraggingWidgetPosition = ImGui.IsMouseDown(ImGuiMouseButton.Right);
+            if (isDraggingWidgetPosition)
+            {
+                _center = _dragCenterStart + ImGui.GetMouseDragDelta(ImGuiMouseButton.Right);
+            }
+            else
+            {
+                _verticalDistance = _center.Y - _io.MousePos.Y;
+            }
+            
             _dampedAngleVelocity = MathUtils.Lerp(_dampedAngleVelocity, (float)deltaX, 0.06f);
 
             // Update radius and value range
-            _verticalDistance = _center.Y - _io.MousePos.Y;
             const int log10YDistance = 100;
             var normalizedLogDistanceForLog10 = _verticalDistance / log10YDistance;
 
@@ -75,9 +80,12 @@ namespace T3.Editor.Gui.Interaction
             const float width = 750;
 
             // Update value...
-            _value += deltaX / width * valueRange;
-            if (clamp)
-                _value = _value.Clamp(min, max);
+            if (!isDraggingWidgetPosition)
+            {
+                _value += deltaX / width * valueRange;
+                if (clamp)
+                    _value = _value.Clamp(min, max);
+            }
             
             roundedValue = _io.KeyCtrl ? _value : Math.Round(_value / (tickValueInterval / 10)) * (tickValueInterval / 10);
 
@@ -194,8 +202,8 @@ namespace T3.Editor.Gui.Interaction
                 var labelSize = ImGui.CalcTextSize(label);
                 drawList.AddRectFilled(
                                        new Vector2(screenX - labelSize.X / 2 - 10, rect.Max.Y),
-                                       new Vector2(screenX + labelSize.X / 2 + 10, rect.Max.Y + 25),
-                                       UiColors.BackgroundFull.Fade(0.5f),
+                                       new Vector2(screenX + labelSize.X / 2 + 10, rect.Max.Y + 35),
+                                       UiColors.BackgroundFull.Fade(0.8f),
                                        5
                                       );
                 drawList.AddLine(new Vector2(screenX, rect.Min.Y),

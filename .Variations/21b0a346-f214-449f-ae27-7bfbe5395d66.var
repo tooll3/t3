@@ -1,0 +1,99 @@
+{
+  "Id": "21b0a346-f214-449f-ae27-7bfbe5395d66",
+  "Variations": [
+    {
+      "Id": "4eb72755-9831-40f2-bbad-ac6faddcc14b",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "GLowy thing",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "11584b2f-3df4-4073-bcde-01e0fdaa3f5d": 5.81,
+          "a32d5d18-df0b-4fc2-9139-a68cc0449681": 1.51,
+          "71ca8ac5-37ee-4b4c-aa04-9706e7923cff": 1.0,
+          "8003ed74-aed6-4a2e-ae98-d293b023975f": 0,
+          "959d8403-74d0-4f8b-b2f8-28ba0d26a3e6": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "3efda087-1453-4758-a28d-56969647c61d",
+                  "NormalizedPosition": 0.080548495,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 0.0,
+                    "B": 0.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "3f75160f-4bb2-4408-9072-d0f6dc1de4ef",
+                  "NormalizedPosition": 0.11145443,
+                  "Color": {
+                    "R": 20.932863,
+                    "G": 13.237103,
+                    "B": 5.09225,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "630a104e-3657-4083-a5c9-06f8bac28b63",
+                  "NormalizedPosition": 0.31620625,
+                  "Color": {
+                    "R": 1.2481681,
+                    "G": 0.60601616,
+                    "B": 0.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "95bf6d9c-2972-4de5-9367-5122969e84e7",
+                  "NormalizedPosition": 0.73343635,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 0.0,
+                    "B": 0.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "868ff098-0ca8-4c65-a09c-69bc0553f341",
+                  "NormalizedPosition": 1.0,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 0.0,
+                    "B": 0.0,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "9e69c4d8-3432-4afa-965f-55faffc35d32": 0.09
+        }
+      }
+    },
+    {
+      "Id": "4d30c004-eb6d-4209-92f4-a23c77ccedd9",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Starting Simple",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "11584b2f-3df4-4073-bcde-01e0fdaa3f5d": 0.99,
+          "71ca8ac5-37ee-4b4c-aa04-9706e7923cff": 1.0,
+          "8003ed74-aed6-4a2e-ae98-d293b023975f": 2,
+          "9e69c4d8-3432-4afa-965f-55faffc35d32": -0.18
+        }
+      }
+    }
+  ]
+}

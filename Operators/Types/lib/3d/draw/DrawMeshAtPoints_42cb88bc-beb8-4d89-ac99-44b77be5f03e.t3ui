@@ -29,7 +29,7 @@
       },
       "Description": "Uniformly scales the meshes using the Points as center of scaling.",
       "Min": 0.0,
-      "Max": 5.0,
+      "Max": 1.0,
       "Format": "{0:0.000} ×"
     },
     {

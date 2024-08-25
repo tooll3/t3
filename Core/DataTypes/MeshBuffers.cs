@@ -7,6 +7,7 @@
     {
         public BufferWithViews VertexBuffer = new ();
         public BufferWithViews IndicesBuffer = new ();
+        public BufferWithViews ChunkDefsBuffer = new ();
 
         public override string ToString()
         {

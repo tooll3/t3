@@ -64,7 +64,6 @@ void GetTranslationAndRotation(float weight, float3 pointPos, float4 rotation,
     SourcePoints.GetDimensions(numStructs, stride);
     if (i.x >= numStructs)
     {
-        ResultPoints[i.x].W = 0;
         return;
     }
 

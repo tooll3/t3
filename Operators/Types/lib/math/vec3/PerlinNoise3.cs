@@ -31,16 +31,24 @@ namespace T3.Operators.Types.Id_50aab941_0a29_474a_affd_13a74ea0c780
             var scaleXYZ = AmplitudeXYZ.GetValue(context);
             var biasAndGain = BiasAndGain.GetValue(context);
             var offset = Offset.GetValue(context);
-            
+
             var scaleToUniformFactor = 1.37f;
-            var x = ((MathUtils.PerlinNoise(value, period, octaves, seed)*scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X,biasAndGain.Y) 
-                    * (rangeMax.X - rangeMin.X) * scaleXYZ.X * scale + rangeMin.X;
-            var y = ((MathUtils.PerlinNoise(value, period, octaves, seed + 123)*scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X,biasAndGain.Y)
-                    * (rangeMax.Y - rangeMin.Y) * scaleXYZ.Y * scale + rangeMin.Y;
-            var z = ((MathUtils.PerlinNoise(value, period, octaves, seed + 234)*scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X,biasAndGain.Y)
-                    * (rangeMax.Z - rangeMin.Z) * scaleXYZ.Z * scale + rangeMin.Z;
+            var vec = new Vector3(ScalarNoise(0), ScalarNoise(123), ScalarNoise(234));
+
+            Result.Value = Remap3(vec, Vector3.Zero,  Vector3.One, rangeMin, rangeMax) * scaleXYZ *scale +offset;//new Vector3(x, y, z) + offset;
+            return;
+
+            float ScalarNoise(int seedOffset)
+            {
+                return (MathUtils.PerlinNoise(value, period, octaves, seed + seedOffset)*scaleToUniformFactor + 1f) * 0.5f.ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y);
+            }
             
-            Result.Value  = new Vector3(x, y, z) + offset;
+            Vector3 Remap3(Vector3 value3, Vector3 inMin, Vector3 inMax, Vector3 outMin, Vector3 outMax)
+            {
+                var factor = (value3 - inMin) / (inMax - inMin);
+                var v = factor * (outMax - outMin) + outMin;
+                return v;
+            }
         }
 
         [Input(Guid = "deddfbee-386d-4f8f-9339-ec6c01908a11")]

@@ -104,7 +104,7 @@ namespace T3.Editor.Gui.Windows.Output
                 _imageCanvas.Deactivate();
 
                 _camSelectionHandling.Update(drawnInstance, drawnType);
-                _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction;
+                _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction | drawnType != typeof(Texture2D);
                 _imageCanvas.Update();
 
                 T3Ui.UiScaleFactor = keepScale;

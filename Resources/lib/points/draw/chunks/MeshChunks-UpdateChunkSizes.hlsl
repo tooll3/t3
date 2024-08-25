@@ -12,6 +12,8 @@ struct ChunkDef
 {
     int StartFaceIndex;
     int FaceCount;
+    int StartVertexIndex;
+    int VertexCount;
 };
 
 cbuffer Params : register(b0)

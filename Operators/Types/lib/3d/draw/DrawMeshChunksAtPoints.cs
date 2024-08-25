@@ -46,6 +46,12 @@ namespace T3.Operators.Types.Id_0e313329_74fb_4f2a_b1c2_136e1ecf9b3e
 
         [Input(Guid = "7d609639-d9f3-4c7c-9fde-91c71a29aedc")]
         public readonly InputSlot<bool> UseStretch = new InputSlot<bool>();
+
+        [Input(Guid = "fc846c4a-ac50-4260-8267-4484ced2d22f")]
+        public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
+
+        [Input(Guid = "8cdea8a6-7e39-433d-a616-2f64e5e04ed7")]
+        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> ChunkIndices = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
     }
 }
 

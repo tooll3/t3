@@ -1,10 +1,13 @@
 using System;
 using System.Numerics;
+using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Operators.Types.Id_00618c91_f39a_44ea_b9d8_175c996460dc;
 
 namespace T3.Operators.Types.Id_5b127401_600c_4247_9d59_2f6ff359ba85
 {
@@ -15,7 +18,10 @@ namespace T3.Operators.Types.Id_5b127401_600c_4247_9d59_2f6ff359ba85
         
         [Output(Guid = "D9C04756-8922-496D-8380-120F280EF65B")]
         public readonly Slot<StructuredList> ResultList = new();
-
+        
+        [Output(Guid = "CB0E5B54-1C68-43A6-9101-2C9BC9B67C51")]
+        public readonly Slot<BufferWithViews> IndicesBuffer = new();
+        
         
         public _GetSceneDefinitionPoints()
         {
@@ -30,38 +36,44 @@ namespace T3.Operators.Types.Id_5b127401_600c_4247_9d59_2f6ff359ba85
             
             sceneDefinition.GenerateSceneDrawDispatches();
             
-            if(sceneDefinition.Dispatches.Count == 0)
+            var dispatchesCount = sceneDefinition.Dispatches.Count;
+            if(dispatchesCount == 0)
                 return;
             
-            //var rot = Quaternion.CreateFromAxisAngle(Vector3.Normalize( RotationAxis.GetValue(context)), RotationAngle.GetValue(context) * MathUtils.ToRad);
-            //var array = _addSeparator ? _pointListWithSeparator : _pointList;
-            var array = new StructuredList<Point>(sceneDefinition.Dispatches.Count);
+            var instancePoints = new StructuredList<Point>(dispatchesCount);
+            var chunkIndices = new int[dispatchesCount];
             
-            for (var index = 0; index < sceneDefinition.Dispatches.Count; index++)
+            for (var index = 0; index < dispatchesCount; index++)
             {
                 var sceneDispatch = sceneDefinition.Dispatches[index];
                 var matrix = sceneDispatch.CombinedTransform;
                 
-                //OutPosition.Value = pos;
-                array.TypedElements[index].Position = new Vector3(matrix.M41, matrix.M42, matrix.M43);
-                array.TypedElements[index].W = 1;
-                array.TypedElements[index].Color = Vector4.One;
-                array.TypedElements[index].Stretch = new Vector3( MathF.Abs(matrix.M11), MathF.Abs(matrix.M22), MathF.Abs(matrix.M33));
-                array.TypedElements[index].Selected = 1;
-                array.TypedElements[index].Orientation = Quaternion.CreateFromRotationMatrix(matrix);
-                //Log.Debug("Dispatch: " + sceneDispatch.CombinedTransform);
+                instancePoints.TypedElements[index].W = 1;
+                instancePoints.TypedElements[index].Color = Vector4.One;
+                Matrix4x4.Decompose(matrix, out var scale, out var rotation, out var translation);
+                instancePoints.TypedElements[index].Position = translation;
+                instancePoints.TypedElements[index].Stretch = new Vector3( MathF.Abs(scale.X), MathF.Abs(scale.Y), MathF.Abs(scale.Z));
+                instancePoints.TypedElements[index].Selected = 1;
+                instancePoints.TypedElements[index].Orientation = rotation;
+                chunkIndices[index] = sceneDispatch.ChunkIndex;
             }
             
-            ResultList.Value = array;            
+            _indicesBuffer = new BufferWithViews();
+            ResourceManager.SetupStructuredBuffer(chunkIndices, dispatchesCount * 4, 4, ref _indicesBuffer.Buffer);
+            ResourceManager.CreateStructuredBufferSrv(_indicesBuffer.Buffer, ref _indicesBuffer.Srv);
+            ResourceManager.CreateStructuredBufferUav(_indicesBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
+                                                      ref _indicesBuffer.Uav);
             
+            ResultList.Value = instancePoints;
+            IndicesBuffer.Value = _indicesBuffer;
         }
         
         private readonly StructuredList<Point> _pointList = new(1);
+        private BufferWithViews _indicesBuffer = new();
         
 
         [Input(Guid = "41054d35-5564-42db-9109-263f8c447057")]
         public readonly InputSlot<SceneSetup> SceneSetup = new();
-
         
     }
 }
