@@ -40,8 +40,7 @@ public static class TypeSelector
 
                                                       if (!TypeUiRegistry.TryGetPropertiesForType(type, out var properties))
                                                       {
-                                                          Log.Warning($"Type {type} is missing Type properties");
-                                                          return SearchableDropDown.ItemResults.FilteredOut;
+                                                          properties = UiProperties.Default;
                                                       }
 
                                                       var typeColor = ColorVariations.OperatorLabel.Apply(properties.Color).Rgba;
