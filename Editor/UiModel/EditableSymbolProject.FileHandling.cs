@@ -199,13 +199,21 @@ internal sealed partial class EditableSymbolProject
 
     private void OnFileChanged(object sender, FileSystemEventArgs args)
     {
+        var name = args.Name;
+        if (name == null)
+            return;
+        
+        // generated file by dotnet - ignore
+        if(name.EndsWith("AssemblyInfo.cs"))
+            return;
+        
         MarkAsNeedingRecompilation();
     }
 
     private void OnFileRenamed(object sender, RenamedEventArgs args)
     {
         BlockingWindow.Instance.ShowMessageBox($"File {args.OldFullPath} renamed to {args.FullPath}. Please do not do this while the editor is running.");
-        _needsCompilation = true;
+        MarkAsNeedingRecompilation();
     }
 
     public override void LocateSourceCodeFiles()
