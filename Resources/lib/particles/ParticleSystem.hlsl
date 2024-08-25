@@ -82,9 +82,11 @@ RWStructuredBuffer<Point> ResultPoints : u1;
 
         // These will not change over lifetime...
         Particles[gi].Color = EmitPoints[addIndex].Color;
-        //Particles[gi].Color = EmitPoints[addIndex].Color;
+        // Particles[gi].Color = EmitPoints[addIndex].Color;
         ResultPoints[gi].Stretch = EmitPoints[addIndex].Stretch;
         ResultPoints[gi].Selected = EmitPoints[addIndex].Selected;
+        ResultPoints[gi].Color = EmitPoints[addIndex].Selected;
+
         // Particles[gi].Selected = EmitPoints[addIndex].Selected;
     }
 
@@ -108,10 +110,10 @@ RWStructuredBuffer<Point> ResultPoints : u1;
 
     // Copy result
     // Todo: This could by optimized by not copying color
-    //ResultPoints[gi] = Particles[gi];
+    // ResultPoints[gi] = Particles[gi];
     ResultPoints[gi].Position = Particles[gi].Position;
     ResultPoints[gi].Rotation = Particles[gi].Rotation;
-    //ResultPoints[gi].Rotation = Particles[gi].Rotation;
+    ResultPoints[gi].Color = Particles[gi].Color;
 
     // Attempt with lerping to smooth position updates
     // ResultPoints[gi].position = lerp(Particles[gi].p.position, ResultPoints[gi].position, 0);
@@ -144,6 +146,6 @@ RWStructuredBuffer<Point> ResultPoints : u1;
         ResultPoints[gi].W = tooOld ? NAN : speed * 100;
     }
 
-    //ResultPoints[gi].Selected = 1;
-    //ResultPoints[gi].Stretch = 1;
+    // ResultPoints[gi].Selected = 1;
+    // ResultPoints[gi].Stretch = 1;
 }
