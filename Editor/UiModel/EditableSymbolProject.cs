@@ -88,8 +88,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         newDestinationProject.FilePathHandlers.TryAdd(id, symbolPathHandler);
 
         symbolUi.FlagAsModified();
-        newDestinationProject.MarkAsNeedingRecompilation();
-        MarkAsNeedingRecompilation();
     }
 
 

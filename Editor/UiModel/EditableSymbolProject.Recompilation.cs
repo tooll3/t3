@@ -342,9 +342,11 @@ namespace T3.Editor.UiModel
             if (newDestinationProject != this)
             {
                 GiveSymbolToPackage(id, newDestinationProject);
+                newDestinationProject.SaveModifiedSymbols();
                 newDestinationProject.MarkAsNeedingRecompilation();
             }
 
+            SaveModifiedSymbols();
             MarkAsNeedingRecompilation();
         }
 
@@ -379,8 +381,6 @@ namespace T3.Editor.UiModel
 
         private void MarkAsNeedingRecompilation()
         {
-            if (IsSaving)
-                return;
             _needsCompilation = true;
         }
 

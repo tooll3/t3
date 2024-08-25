@@ -130,7 +130,6 @@ internal static class ProjectSetup
            .ToList()
            .ForEach(directoryInfo =>
                     {
-                        // todo - load by releaseInfo json, then load associated assembly
                         var thisDir = directoryInfo.FullName!;
                         var packageInfo = Path.Combine(thisDir, RuntimeAssemblies.PackageInfoFileName);
                         if (!RuntimeAssemblies.TryLoadAssemblyFromPackageInfoFile(packageInfo, out var assembly, out var releaseInfo))

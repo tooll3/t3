@@ -183,6 +183,7 @@ internal sealed partial class EditableSymbolProject
 
         using var sw = new StreamWriter(sourcePath, SaveOptions);
         sw.Write(sourceCode);
+        MarkAsNeedingRecompilation();
     }
 
     private void MarkAsSaving()
