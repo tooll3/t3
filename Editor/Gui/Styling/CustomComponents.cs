@@ -9,6 +9,7 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Styling
@@ -323,7 +324,7 @@ namespace T3.Editor.Gui.Styling
             
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
-            if (ImGui.BeginPopupContextWindow(id, flags))
+            if (ImGui.BeginPopupContextItem(id, flags))
             {
                 FrameStats.Current.IsItemContextMenuOpen = true;
                 if (title != null)
@@ -725,7 +726,8 @@ namespace T3.Editor.Gui.Styling
                 return;
             }
             
-            if ( ImGui.IsWindowHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+            
+            if ( ImGui.IsWindowHovered() && !T3Ui.DragFieldWasHoveredLastFrame && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
             {
                 _dragScrollStart = new Vector2(ImGui.GetScrollX(),  ImGui.GetScrollY());
                 IsDragScrolling = true;
