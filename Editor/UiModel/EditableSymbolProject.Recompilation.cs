@@ -91,6 +91,8 @@ namespace T3.Editor.UiModel
 
             var symbolUi = SymbolUiDict[id];
             symbolUi.FlagAsModified();
+            
+            CsProjectFile.UpdateVersionForIOChange();
 
             if (TryRecompile())
             {
