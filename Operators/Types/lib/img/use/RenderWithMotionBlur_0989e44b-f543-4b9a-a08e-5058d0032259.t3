@@ -169,18 +169,6 @@
       "Outputs": []
     },
     {
-      "Id": "6f5c29e3-4c28-4ceb-9f4e-10060c119328"/*SetIntVariable*/,
-      "SymbolId": "7953f704-ebee-498b-8bdd-a2c201dfe278",
-      "InputValues": [
-        {
-          "Id": "bfd87742-aaf5-4fa8-b714-fd275de1c60d"/*VariableName*/,
-          "Type": "System.String",
-          "Value": "__MotionBlurPass"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "61b0be33-154e-4ea6-ae7d-8334f6fe11b9"/*GetIntVar*/,
       "SymbolId": "470db771-c7f2-4c52-8897-d3a9b9fc6a4e",
       "InputValues": [],

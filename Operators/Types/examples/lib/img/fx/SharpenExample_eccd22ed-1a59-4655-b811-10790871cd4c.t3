@@ -1,7 +1,7 @@
 {
   "Name": "SharpenExample",
   "Id": "eccd22ed-1a59-4655-b811-10790871cd4c",
-  "Namespace": "examples\\lib\\img\\fx",
+  "Namespace": "examples.lib.img.fx",
   "Inputs": [],
   "Children": [
     {

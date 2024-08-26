@@ -83,6 +83,11 @@
             "X": 2,
             "Y": 2
           }
+        },
+        {
+          "Id": "354eb18c-aba0-43e6-b534-c119176547ff"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []

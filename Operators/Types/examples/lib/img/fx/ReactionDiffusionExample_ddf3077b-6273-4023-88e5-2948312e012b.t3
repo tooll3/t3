@@ -1,7 +1,7 @@
 {
   "Name": "ReactionDiffusionExample",
   "Id": "ddf3077b-6273-4023-88e5-2948312e012b",
-  "Namespace": "examples\\lib\\img\\fx",
+  "Namespace": "examples.lib.img.fx",
   "Inputs": [],
   "Children": [
     {
