@@ -98,7 +98,12 @@ public class OperatorHelp
 
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Fade(0.5f).Rgba);
         FormInputs.AddVerticalSpace(5);
-        ImGui.TextUnformatted("Read more...");
+        
+        if (firstLine != symbolUi.Description)
+        {
+            ImGui.TextUnformatted("Read more...");
+        }
+        
         if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
         {
             _isDocumentationActive = true;
