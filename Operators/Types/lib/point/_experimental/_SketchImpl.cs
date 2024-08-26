@@ -379,7 +379,14 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                 Pages = new List<Page>();
                 try
                 {
-                    Pages = JsonUtils.TryLoadingJson<List<Page>>(filepath);
+                    try
+                    {
+                        Pages = JsonUtils.TryLoadingJson<List<Page>>(filepath);
+                    }
+                    catch ( Exception e)
+                    {
+                        Log.Debug("Failed reading sketch pages from json: " + e.Message, this);
+                    }
 
                     if (Pages != null)
                     {
