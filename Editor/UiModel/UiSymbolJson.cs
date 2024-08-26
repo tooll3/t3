@@ -207,7 +207,13 @@ namespace T3.Editor.UiModel
 
         internal static bool TryReadSymbolUi(JToken mainObject, Guid symbolId, out SymbolUi symbolUi)
         {
-            var symbol = SymbolRegistry.Entries[symbolId];
+            if(!SymbolRegistry.Entries.TryGetValue(symbolId, out var symbol))
+            {
+                Log.Debug($"Skipping t3ui definition for undefined {symbolId}. Probably .t3 and .cs files are missing");
+                symbolUi = null;
+                return false;
+            }
+            
 
             var inputDict = new OrderedDictionary<Guid, IInputUi>();
             foreach (JToken uiInputEntry in (JArray)mainObject[JsonKeys.InputUis])
