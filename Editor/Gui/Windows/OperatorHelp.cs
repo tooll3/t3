@@ -18,10 +18,10 @@ namespace T3.Editor.Gui.Windows;
 
 public class OperatorHelp
 {
-    public bool DrawHelpIcon(SymbolUi symbolUi, ref bool isEnabled)
+    public bool DrawHelpIcon(SymbolUi symbolUi, out bool isEnabled)
     {
         var changed = false;
-        _isDocumentationActive = isEnabled;
+        
         
         ImGui.SameLine();
         var w = ImGui.GetFrameHeight();
@@ -68,7 +68,7 @@ public class OperatorHelp
         {
             _timeSinceTooltipHovered = 0;
         }
-
+        isEnabled = _isDocumentationActive;
         return changed;
     }
 
@@ -81,8 +81,6 @@ public class OperatorHelp
         var firstLine = reader.ReadLine();
         if (string.IsNullOrEmpty(firstLine))
             return;
-
-        //ImGui.Indent(10);
 
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
         ImGui.TextWrapped(firstLine);
@@ -102,17 +100,15 @@ public class OperatorHelp
         if (firstLine != symbolUi.Description)
         {
             ImGui.TextUnformatted("Read more...");
+            if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            {
+                _isDocumentationActive = true;
+            }
         }
         
-        if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-        {
-            _isDocumentationActive = true;
-        }
-
         FormInputs.AddVerticalSpace();
         ImGui.PopStyleColor();
 
-        //ImGui.Unindent(10);
     }
 
     public static void DrawHelp(SymbolUi symbolUi)
