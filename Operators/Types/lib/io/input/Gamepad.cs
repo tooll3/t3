@@ -104,19 +104,19 @@ namespace T3.Operators.Types.Id_d69e0f2e_8fe2_478b_ba4e_2a55a92670ae
                 int controllerIndex = (index + i) % 4;
                 if (controllers[controllerIndex].IsConnected)
                 {
-                    this.currentController = controllers[controllerIndex];
+                    this._currentController = controllers[controllerIndex];
                     break;
                 }
             }
 
             // If no controller is connected, set currentController to null
-            if (this.currentController == null || !this.currentController.IsConnected)
+            if (this._currentController == null || !this._currentController.IsConnected)
             {
-                this.currentController = null;
+                this._currentController = null;
                 return;
             }
 
-            var state = XInputGamepad.GetState(this.currentController);
+            var state = XInputGamepad.GetState(this._currentController);
 
             Start.Value = state.Start;
             Back.Value = state.Back;
@@ -142,8 +142,7 @@ namespace T3.Operators.Types.Id_d69e0f2e_8fe2_478b_ba4e_2a55a92670ae
             //Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
         }
 
-        private int currentIndex = -1;
-        private SharpDX.XInput.Controller currentController;
+        private SharpDX.XInput.Controller _currentController;
 
         [Input(Guid = "b37ab751-1e41-4e58-9e27-5ac9052662d8")]
         public readonly InputSlot<int> Index = new();
