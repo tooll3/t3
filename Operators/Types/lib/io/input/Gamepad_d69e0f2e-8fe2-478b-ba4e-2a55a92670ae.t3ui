@@ -18,122 +18,17 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "d4c0b5fc-11b7-497e-b59d-fed8ac8e2da2"/*Start*/,
-      "Position": {
-        "X": 220.42047,
-        "Y": 117.84843
-      }
-    },
-    {
-      "OutputId": "50baff6e-89bc-4c5f-9018-d6f680db1333"/*Back*/,
-      "Position": {
-        "X": 221.2225,
-        "Y": 258.45157
-      }
-    },
-    {
-      "OutputId": "68f0c486-5922-4b76-9d4e-70d80bf491bf"/*LeftThumb*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 218.89964
-      }
-    },
-    {
-      "OutputId": "2ccb0b7f-a26e-4db2-b527-7d238c9a9589"/*LeftTrigger*/,
-      "Position": {
-        "X": 221.2225,
-        "Y": 295.32272
-      }
-    },
-    {
-      "OutputId": "2ba7ba57-4575-4f00-baf1-7fa8d589c04f"/*RightThumb*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 395.32272
-      }
-    },
-    {
-      "OutputId": "358ae1a6-26ee-4637-9b47-5db294b0063b"/*RightTrigger*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 495.32272
-      }
-    },
-    {
-      "OutputId": "87ba8362-03dd-4d8a-809a-2e9890fb8aa9"/*LeftShoulder*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 595.32275
-      }
-    },
-    {
-      "OutputId": "c99d778e-9678-43cc-86c6-e9fa2a794507"/*RightShoulder*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 695.32275
-      }
-    },
-    {
-      "OutputId": "54d386a7-0cdc-4119-a052-1d601721eb50"/*A*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 795.32275
-      }
-    },
-    {
-      "OutputId": "1cbd54c0-8b9e-47d7-a35b-1323044bf21c"/*B*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 895.32275
-      }
-    },
-    {
-      "OutputId": "fe0a089a-edc7-45fd-8447-f0b43d48a444"/*X*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 995.32275
-      }
-    },
-    {
-      "OutputId": "5f0e04c9-7956-4805-ae4d-8227e875a92a"/*Y*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 1095.3228
-      }
-    },
-    {
-      "OutputId": "1829765c-3ec1-4750-b51b-610b7f50a95f"/*DPadLeft*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 1195.3228
-      }
-    },
-    {
-      "OutputId": "82f53f0b-869e-41c1-a5aa-a9bf7cd55b88"/*DPadRight*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 1295.3228
-      }
-    },
-    {
-      "OutputId": "8df9c334-238a-4542-93e0-a5baf44bf7a4"/*DPadUp*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 1395.3228
-      }
-    },
-    {
-      "OutputId": "5503c3a7-035f-4e4d-ac9a-dab5e0763c1a"/*DPadDown*/,
-      "Position": {
-        "X": 221.82373,
-        "Y": 1495.3228
-      }
-    },
-    {
       "OutputId": "64e9dec6-2b3a-4d7e-a174-991c8a8b929e"/*State*/,
       "Position": {
         "X": 221.82373,
         "Y": 1595.3228
+      }
+    },
+    {
+      "OutputId": "49907a55-54fa-4c95-8e00-e7beed734533"/*IsConnected*/,
+      "Position": {
+        "X": 221.82373,
+        "Y": 1695.3228
       }
     }
   ]
