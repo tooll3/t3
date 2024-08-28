@@ -543,6 +543,30 @@ namespace T3.Editor.Gui.Graph
                         _drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - 8, usableSlotArea.Max.Y - 2),
                                                 new Vector2(usableSlotArea.Max.X - 1, usableSlotArea.Max.Y),
                                                 reactiveSlotColor);
+                        if (socketCount == 0)
+                        {
+                            _drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - 2, usableSlotArea.Min.Y + 1),
+                                                    new Vector2(usableSlotArea.Max.X - 1, usableSlotArea.Max.Y-2),
+                                                    reactiveSlotColor);
+                            
+                            if (inputUi.Relevancy == Relevancy.Required)
+                            {
+                                var pos = usableSlotArea.GetCenter();
+                                
+                                var size = GraphCanvas.Current.Scale.X * 3;
+                                
+                                _drawList.AddCircleFilled(
+                                                          pos + new Vector2(-5, -(size *1f)),
+                                                          MathF.Min(3, size - 1),
+                                                          reactiveSlotColor
+                                                         );
+                                _drawList.AddCircleFilled(
+                                                          pos + new Vector2(-5, +(size * 1f)),
+                                                          MathF.Min(3, size - 1),
+                                                          reactiveSlotColor
+                                                         );                                
+                            }
+                        }
                     }
                 }
                 else
@@ -1048,6 +1072,11 @@ namespace T3.Editor.Gui.Graph
                         ImGui.PushFont(Fonts.FontSmall);
                         ImGui.TextColored(UiColors.Gray, $"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                         ImGui.PopFont();
+                        if (isMissing)
+                        {
+                            FormInputs.AddVerticalSpace(5);
+                            ImGui.TextColored(UiColors.StatusAttention, $"Requires input");   
+                        }
                     }
                     ImGui.EndTooltip();
 
