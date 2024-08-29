@@ -35,6 +35,7 @@ namespace T3.Core.IO
                 gamepad.Buttons.HasFlag(GamepadButtonFlags.B),
                 gamepad.Buttons.HasFlag(GamepadButtonFlags.X),
                 gamepad.Buttons.HasFlag(GamepadButtonFlags.Y)
+                
             );
 
             result.Back = gamepad.Buttons.HasFlag(GamepadButtonFlags.Back);
@@ -48,6 +49,9 @@ namespace T3.Core.IO
 
             result.LeftThumb = new Vector2(ApplyDeadZone(gamepad.LeftThumbX / (float)short.MaxValue, LeftDeadZone), ApplyDeadZone(gamepad.LeftThumbY / (float)short.MaxValue, LeftDeadZone));
             result.RightThumb = new Vector2(ApplyDeadZone(gamepad.RightThumbX / (float)short.MaxValue, RightDeadZone), ApplyDeadZone(gamepad.RightThumbY / (float)short.MaxValue, RightDeadZone));
+
+            result.LeftStickButton = gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftThumb);
+            result.RightStickButton = gamepad.Buttons.HasFlag(GamepadButtonFlags.RightThumb);
 
             return result;
         }

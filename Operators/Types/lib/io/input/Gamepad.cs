@@ -65,8 +65,11 @@ namespace T3.Operators.Types.Id_d69e0f2e_8fe2_478b_ba4e_2a55a92670ae
             _floatDict["LeftTrigger"] = state.LeftTrigger;
             _floatDict["RightTrigger"] = state.RightTrigger;
             _floatDict["LeftShoulder"] = state.LeftShoulder?1:0;
-            _floatDict["RightShoulder"] = state.RightShoulder?1:0;
-            
+            _floatDict["RightShoulder"] = state.RightShoulder ? 1:0;
+
+            _floatDict["LeftStickButton"] = state.LeftStickButton ? 1 : 0;
+            _floatDict["RightStickButton"] = state.RightStickButton ? 1 : 0;    
+
             _floatDict["Start"] = state.Start?1:0;
             _floatDict["Back"] = state.Back?1:0;
             
