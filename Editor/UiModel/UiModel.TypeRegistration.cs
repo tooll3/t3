@@ -70,6 +70,7 @@ public partial class UiSymbolData
 
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_fd5467c7_c75d_4755_8885_fd1ff1f07c95.SelectFloatFromDict), SelectFloatFromDictUi.DrawChildUi);
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_96b1e8f3_0b42_4a01_b82b_44ccbd857400.SelectVec2FromDict), SelectVec2FromDictUi.DrawChildUi);
+        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_05295c65_7dfd_4570_866e_9b5c4e735569.SelectBoolFromFloatDict), SelectBoolFromFloatDictUi.DrawChildUi);
 
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c.AudioReaction), AudioReactionUi.DrawChildUi);
     }
