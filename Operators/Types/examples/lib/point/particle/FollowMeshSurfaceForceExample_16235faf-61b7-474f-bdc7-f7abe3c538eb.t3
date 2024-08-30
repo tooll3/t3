@@ -224,7 +224,7 @@
         {
           "Id": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
           "Type": "System.Single",
-          "Value": 236.9
+          "Value": 4.0
         }
       ],
       "Outputs": []
