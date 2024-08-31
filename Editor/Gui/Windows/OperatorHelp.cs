@@ -248,7 +248,6 @@ public class OperatorHelp
         }
 
         var groupLabel = "Also see:";
-        var groupLabelShown = false;
         if (ExampleSymbolLinking.ExampleSymbolUis.TryGetValue(symbolUi.Symbol.Id, out var examplesOpIds))
         {
             DrawGroupLabel(groupLabel);
