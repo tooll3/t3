@@ -284,7 +284,8 @@ public class OperatorHelp
                         continue;
 
                     // This is slow and could be optimized by dictionary
-                    var referencedSymbol = EditorSymbolPackage.AllSymbols.SingleOrDefault(s => s.Name == referencedName);
+                    // todo: this should deal with actual guid references, not names
+                    var referencedSymbol = EditorSymbolPackage.AllSymbols.FirstOrDefault(s => s.Name == referencedName);
                     if (referencedSymbol != null)
                     {
                         var package = (EditorSymbolPackage)referencedSymbol.SymbolPackage;
