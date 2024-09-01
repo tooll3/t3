@@ -30,21 +30,11 @@ internal static partial class Program
                                                                           {
                                                                               var relativePath = Path.GetRelativePath(searchDirectory, file);
                                                                               Log.Debug($"Found dll: {relativePath}");
-                                                                              var fileName = Path.GetFileNameWithoutExtension(file);
                                                                               
-                                                                              // hack - we need to provide a release info to load the assembly but it is not currently exported into player
-                                                                              var releaseInfo =
-                                                                                  new ReleaseInfo(fileName, Guid.Empty, "Player", new Version(1, 0),
-                                                                                                  new Version(1, 0), []);
-                                                                              RuntimeAssemblies.TryLoadAssemblyInformation(file, out var info, releaseInfo);
+                                                                              RuntimeAssemblies.TryLoadAssemblyInformation(file, false, out var info);
                                                                               return info;
                                                                           })
-                                                                  .Where(info =>
-                                                                         {
-                                                                             var isOperatorAssembly = info.IsOperatorAssembly;
-                                                                             Log.Debug($"{info.Name} is operator assembly: {isOperatorAssembly}");
-                                                                             return isOperatorAssembly;
-                                                                         });
+                                                                  .Where(info => info is { IsEditorOnly: false });
                                               }).ToArray();
         
         Log.Debug($"Finished loading {assemblies.Length} operator assemblies. Loading symbols...");

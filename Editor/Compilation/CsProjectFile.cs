@@ -19,10 +19,6 @@ internal sealed partial class CsProjectFile
     public string Name => Path.GetFileNameWithoutExtension(FullPath);
     public readonly string? RootNamespace;
     public AssemblyInformation? Assembly { get; private set; }
-    
-    // default to true bc uncompiled projects are normally operator assemblies. todo: this should be more robust
-    public bool IsOperatorAssembly => Assembly?.IsOperatorAssembly ?? true; 
-    
     public event Action<CsProjectFile>? Recompiled;
 
     private uint _buildId = GetNewBuildId();
@@ -299,7 +295,7 @@ internal sealed partial class CsProjectFile
             return false;
         }
 
-        if (!RuntimeAssemblies.TryLoadAssemblyFromDirectory(assemblyFile.Directory.FullName, out var assembly))
+        if (!RuntimeAssemblies.TryLoadAssemblyFromDirectory(assemblyFile.Directory!.FullName, out var assembly))
         {
             Log.Error($"Could not load assembly at \"{assemblyFile.FullName}\"");
             return false;

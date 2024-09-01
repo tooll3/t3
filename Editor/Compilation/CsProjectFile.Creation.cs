@@ -137,6 +137,7 @@ internal sealed partial class CsProjectFile
                                                 $"\t\"{nameof(ReleaseInfoSerialized.AssemblyFileName)}\": \"{UnevaluatedVariable(GetNameOf(PropertyType.RootNamespace))}\",\n" +
                                                 $"\t\"{nameof(ReleaseInfoSerialized.Version)}\": \"{UnevaluatedVariable(GetNameOf(PropertyType.VersionPrefix))}\",\n" +
                                                 $"\t\"{nameof(ReleaseInfoSerialized.EditorVersion)}\": \"{UnevaluatedVariable(editorVersionPropertyName)}\",\n" +
+                                                $"\"{nameof(ReleaseInfoSerialized.IsEditorOnly)}\": \"{UnevaluatedVariable(GetNameOf(PropertyType.IsEditorOnly))}\",\n" + 
                                                 $"\t\"{nameof(ReleaseInfoSerialized.OperatorPackages)}\": [{UnevaluatedVariable(opReferencesArray)}\n\t]\n" +
                                                 "}\n");
         

@@ -12,6 +12,7 @@
     <VersionPrefix>1.0.4</VersionPrefix>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     <EditorVersion>3.9.1</EditorVersion>
+    <IsEditorOnly>false</IsEditorOnly>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../Core/Core.csproj" Private="false" />
@@ -63,6 +64,7 @@
                 "RootNamespace": "$(RootNamespace)",
                 "Version": "$(VersionPrefix)",
                 "EditorVersion": "$(EditorVersion)",
+          "IsEditorOnly": "$(IsEditorOnly)",
                 "OperatorPackages":
                 [$(OperatorReferenceArray)
                 ]

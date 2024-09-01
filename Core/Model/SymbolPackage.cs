@@ -12,6 +12,8 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Core.Stats;
+using T3.Core.SystemUi;
+using T3.SystemUi;
 
 // ReSharper disable RedundantNameQualifier
 
@@ -113,6 +115,15 @@ public abstract partial class SymbolPackage : IResourcePackage
     public void LoadSymbols(bool parallel, out List<SymbolJson.SymbolReadResult> newlyRead, out List<Symbol> allNewSymbols)
     {
         Log.Debug($"{AssemblyInformation.Name}: Loading symbols...");
+
+        if (!AssemblyInformation.TryLoadTypes())
+        {
+            var error = $"Failed to load types for {AssemblyInformation.Name}";
+            Log.Error(error);
+            newlyRead = [];
+            allNewSymbols = [];
+            return;
+        }
 
         ConcurrentDictionary<Guid, Type> newTypes = new();
 

@@ -681,9 +681,12 @@ namespace T3.Editor.Gui.Graph
         // todo - move outta here
         internal static SymbolUi.Child.CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect, Vector2 canvasScale)
         {
-            return CustomChildUiRegistry.Entries.TryGetValue(instance.Type, out var drawFunction) 
+            var type = instance.Type;
+            var result = CustomChildUiRegistry.TryGetValue(type, out var drawFunction) 
                        ? drawFunction(instance, drawList, selectableScreenRect, canvasScale) 
                        : SymbolUi.Child.CustomUiResult.None;
+            
+            return result;
         }
 
         private void DrawOverlayLine(ImDrawListPtr drawList, float opacity, Vector2 p1, Vector2 p2)

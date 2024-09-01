@@ -47,9 +47,10 @@ internal static class ProjectSetup
         project.Dispose();
     }
 
-    private readonly record struct PackageWithReleaseInfo(SymbolPackage Package, ReleaseInfo ReleaseInfo);
+    private readonly record struct ProjectWithReleaseInfo(FileInfo ProjectFile, CsProjectFile? CsProject, ReleaseInfo? ReleaseInfo);
 
     private static readonly Dictionary<string, PackageWithReleaseInfo> LoadedPackages = new();
+    private static readonly List<AssemblyInformation> NonOperatorAssemblies = new();
 
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
     internal static bool TryInitialize(out Exception exception)
@@ -80,18 +81,35 @@ internal static class ProjectSetup
             LoadProjects(csProjFiles, nonOperatorAssemblies, out _, out _);
 
             // Register UI types
-            UiRegistration.RegisterUiTypes();
-            InitializeCustomUis(nonOperatorAssemblies);
-
             var allPackages = LoadedPackages.Values
-                                            .Select(x => (EditorSymbolPackage)x.Package)
                                             .ToArray();
 
-            // Initialize resources and shader linting
-            InitializePackageResources(allPackages);
+            foreach (var assembly in nonOperatorAssemblies)
+            {
+                if (assembly.IsEditorOnly)
+                {
+                    // todo - should this relationship be inverted? should the load contexts
+                    // of the operator assemblies be responsible for loading the editor assemblies? that way 
+                    // one operator assembly can load multiple editor assemblies
+                    assembly.ReplaceResolversOf(allPackages);
+                    NonOperatorAssemblies.Add(assembly);
+                }
+            }
+            
+            var symbolPackages = allPackages.Where(x => x.Package is EditorSymbolPackage)
+                                            .Select(x => (EditorSymbolPackage)x.Package)
+                                            .ToArray();
+            
 
             // Update all symbol packages
-            UpdateSymbolPackages(allPackages);
+            UpdateSymbolPackages(symbolPackages);
+            
+            // Initialize resources and shader linting
+            InitializePackageResources(symbolPackages);
+            
+            // Initialize custom UIs
+            UiRegistration.RegisterUiTypes();
+            InitializeCustomUis();
 
             foreach (var package in SymbolPackage.AllPackages)
             {
@@ -120,9 +138,10 @@ internal static class ProjectSetup
             throw new InvalidOperationException($"Failed to add package {key}: already exists");
     }
 
-    private static void LoadBuiltInPackages(List<PackageWithReleaseInfo> readOnlyPackages, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies)
+    private static void LoadBuiltInPackages(ConcurrentBag<AssemblyInformation> nonOperatorAssemblies)
     {
         var directory = Directory.CreateDirectory(CoreOperatorDirectory);
+
 
         directory
            .EnumerateDirectories("*", SearchOption.TopDirectoryOnly)
@@ -138,9 +157,9 @@ internal static class ProjectSetup
                             return;
                         }
 
-                        if (assembly.IsOperatorAssembly)
+                        if (!assembly.IsEditorOnly)
                         {
-                            readOnlyPackages.Add(new PackageWithReleaseInfo(new EditorSymbolPackage(assembly), releaseInfo));
+                            AddToLoadedPackages(new PackageWithReleaseInfo(new EditorSymbolPackage(assembly), releaseInfo));
                         }
                         else
                         {
@@ -159,8 +178,6 @@ internal static class ProjectSetup
 
         ShaderLinter.AddPackage(SharedResources.ResourcePackage, sharedShaderPackages);
     }
-
-    private readonly record struct ProjectWithReleaseInfo(FileInfo ProjectFile, CsProjectFile? CsProject, ReleaseInfo? ReleaseInfo);
 
     private static void LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, out List<ProjectWithReleaseInfo> unsatisfiedProjects, out List<ProjectWithReleaseInfo> failedProjects)
     {
@@ -286,7 +303,8 @@ internal static class ProjectSetup
                 return true;
             }
 
-            nonOperatorAssemblies.Add(release.CsProject!.Assembly);
+            var assembly = release.CsProject!.Assembly!;
+            nonOperatorAssemblies.Add(assembly);
             return true;
         }
 
@@ -337,7 +355,7 @@ internal static class ProjectSetup
         }
 
         csProj.RemoveOldBuilds(Compiler.BuildMode.Debug);
-        if (csProj.IsOperatorAssembly)
+        if (!csProj.Assembly!.IsEditorOnly)
         {
             var project = new EditableSymbolProject(csProj);
             operatorPackage = new PackageWithReleaseInfo(project, release.ReleaseInfo);
@@ -403,9 +421,9 @@ internal static class ProjectSetup
     private static readonly string T3ParentDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "..", "..", "..", "..");
     #endif
 
-    private static void InitializeCustomUis(IReadOnlyCollection<AssemblyInformation> nonOperatorAssemblies)
+    private static void InitializeCustomUis()
     {
-        var uiInitializerTypes = nonOperatorAssemblies
+        var uiInitializerTypes = NonOperatorAssemblies
                                 .ToArray()
                                 .AsParallel()
                                 .SelectMany(assemblyInfo => assemblyInfo.TypesInheritingFrom(typeof(IOperatorUIInitializer))
@@ -415,22 +433,18 @@ internal static class ProjectSetup
         foreach (var constructorInfo in uiInitializerTypes)
         {
             //var assembly = Assembly.LoadFile(constructorInfo.AssemblyInformation.Path);
-            var assemblyName = constructorInfo.AssemblyInformation.Path;
+            var path = constructorInfo.AssemblyInformation.Path;
             var typeName = constructorInfo.InstanceType.FullName;
+            var assemblyInfo = constructorInfo.AssemblyInformation;
             try
             {
-                var activated = Activator.CreateInstanceFrom(assemblyName, typeName);
+                var activated = assemblyInfo.CreateInstance(constructorInfo.InstanceType);
                 if (activated == null)
                 {
                     throw new Exception($"Created null activator handle for {typeName}");
                 }
 
-                var initializer = (IOperatorUIInitializer)activated.Unwrap();
-                if (initializer == null)
-                {
-                    throw new Exception($"Casted to null initializer for {typeName}");
-                }
-
+                var initializer = (IOperatorUIInitializer)activated;
                 initializer.Initialize();
                 Log.Info($"Initialized UI initializer for {constructorInfo.AssemblyInformation.Name}: {typeName}");
             }

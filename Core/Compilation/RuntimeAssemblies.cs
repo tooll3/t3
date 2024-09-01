@@ -12,18 +12,14 @@ namespace T3.Core.Compilation;
 
 public static class RuntimeAssemblies
 {
-    public static readonly string CorePath;
-    public static readonly string CoreDirectory;
     public const string EnvironmentVariableName = "T3_ASSEMBLY_PATH";
-    public static readonly Version Version;
-
+    internal static readonly Assembly CoreAssembly = typeof(RuntimeAssemblies).Assembly;
+    public static readonly string CorePath = CoreAssembly.Location;
+    public static readonly string CoreDirectory = Path.GetDirectoryName(CorePath)!;
+    public static readonly Version Version = CoreAssembly.GetName().Version!;
+    
     static RuntimeAssemblies()
     {
-        var coreAssembly = typeof(RuntimeAssemblies).Assembly;
-        CorePath = coreAssembly.Location;
-        Version = coreAssembly.GetName().Version!;
-
-        CoreDirectory = Path.GetDirectoryName(CorePath)!;
         SetEnvironmentVariable(EnvironmentVariableName, CoreDirectory);
     }
 
@@ -48,7 +44,7 @@ public static class RuntimeAssemblies
         }
         var directory = Path.GetDirectoryName(filePath);
         var assemblyFilePath = Path.Combine(directory!, releaseInfo.AssemblyFileName + ".dll");
-        if (TryLoadAssemblyInformation(assemblyFilePath, out assembly, releaseInfo)) 
+        if (TryLoadAssemblyInformation(assemblyFilePath, releaseInfo.IsEditorOnly, out assembly)) 
             return true;
         
         Log.Error($"Could not load assembly at \"{filePath}\"");
@@ -87,7 +83,7 @@ public static class RuntimeAssemblies
         
         var releaseInfo = releaseInfoSerialized.ToReleaseInfo();
         var assemblyFilePath = Path.Combine(directory, releaseInfo.AssemblyFileName + ".dll");
-        if (!TryLoadAssemblyInformation(assemblyFilePath, out assembly, releaseInfo))
+        if (!TryLoadAssemblyInformation(assemblyFilePath, releaseInfo.IsEditorOnly, out assembly))
         {
             Log.Error($"Could not load assembly at \"{directory}\"");
             return false;
@@ -96,7 +92,7 @@ public static class RuntimeAssemblies
         return true;
     }
 
-    public static bool TryLoadAssemblyInformation(string path, [NotNullWhen(true)] out AssemblyInformation? info, ReleaseInfo releaseInfo)
+    public static bool TryLoadAssemblyInformation(string path, bool isEditorOnly, [NotNullWhen(true)] out AssemblyInformation? info)
     {
         if(!File.Exists(path))
         {
@@ -120,37 +116,13 @@ public static class RuntimeAssemblies
         var assemblyNameAndPath = new AssemblyNameAndPath()
                                       {
                                           AssemblyName = assemblyName,
-                                          Path = path
+                                          Path = path,
+                                          IsEditorOnly = isEditorOnly
                                       };
 
-        var success = TryLoadAssemblyInformation(assemblyNameAndPath, out info);
+        info = new AssemblyInformation(assemblyNameAndPath);
 
-        if (!success)
-        {
-            string error = $"Failed to load package {assemblyName.FullName} from \"{path}\". Try removing the offending package and restart the application.";
-            SystemUi.BlockingWindow.Instance.ShowMessageBox(error);
-        }
-
-        return success;
-    }
-    
-    private static bool TryLoadAssemblyInformation(AssemblyNameAndPath name, [NotNullWhen(true)] out AssemblyInformation? info)
-    {
-        try
-        {
-            var loadContext = new AssemblyLoadContext(name.AssemblyName.FullName, true);
-            var assembly = loadContext.LoadFromAssemblyPath(name.Path);
-            Log.Debug($"Loaded assembly {name.AssemblyName.FullName}");
-
-            info = new AssemblyInformation(name.Path, name.AssemblyName, assembly, loadContext);
-            return true;
-        }
-        catch (Exception e)
-        {
-            Log.Error($"Failed to load assembly {name.AssemblyName.FullName}\n{name.Path}\n{e.Message}\n{e.StackTrace}");
-            info = null;
-            return false;
-        }
+        return true;
     }
 
     public static string ToBasicVersionString(this Version versionPrefix)
@@ -169,11 +141,6 @@ public static class RuntimeAssemblies
                && version.Build == other.Build;
     }
 
-    private struct AssemblyNameAndPath
-    {
-        public AssemblyName AssemblyName;
-        public string Path;
-    }
 
     public const string PackageInfoFileName = "OperatorPackage.json";
     
@@ -197,6 +164,7 @@ public static class RuntimeAssemblies
             serialized.RootNamespace,
             editorVersion,
             version,
+            serialized.IsEditorOnly,
             serialized.OperatorPackages
                       .Select(x => new OperatorPackageReference(x.Identity, new Version(x.Version), x.ResourcesOnly))
                       .ToArray());
@@ -215,9 +183,17 @@ public record ReleaseInfoSerialized(
     string RootNamespace,
     string EditorVersion,
     string Version,
+    bool IsEditorOnly,
     OperatorPackageReferenceSerialized[] OperatorPackages);
 
 // Identity must equal that package's root namespace
 public sealed record OperatorPackageReference(string Identity, Version Version, bool ResourcesOnly);
 
-public sealed record ReleaseInfo(string AssemblyFileName, Guid HomeGuid, string RootNamespace, Version EditorVersion, Version Version, OperatorPackageReference[] OperatorPackages);
+public sealed record ReleaseInfo(string AssemblyFileName, Guid HomeGuid, string RootNamespace, Version EditorVersion, Version Version, bool IsEditorOnly, OperatorPackageReference[] OperatorPackages);
+
+internal struct AssemblyNameAndPath
+{
+    public AssemblyName AssemblyName;
+    public string Path;
+    public bool IsEditorOnly;
+}

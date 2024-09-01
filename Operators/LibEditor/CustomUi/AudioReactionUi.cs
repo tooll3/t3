@@ -16,10 +16,11 @@ namespace libEditor.CustomUi
     {
         public static SymbolUi.Child.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect, Vector2 canvasScale)
         {
-            if (!(instance is AudioReaction audioReaction2)
-                || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
+            if (instance is not AudioReaction audioReaction2)
                 return SymbolUi.Child.CustomUiResult.None;
-
+            
+            if(!ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
+                return SymbolUi.Child.CustomUiResult.None;
 
             var h = screenRect.GetHeight();
             var w = screenRect.GetWidth();

@@ -122,7 +122,7 @@ internal class EditorSymbolPackage : SymbolPackage
 
     private static void UnregisterCustomChildUi(Symbol symbol)
     {
-        CustomChildUiRegistry.EntriesRw.Remove(symbol.InstanceType, out _);
+        CustomChildUiRegistry.Remove(symbol.InstanceType);
     }
 
     public void RegisterUiSymbols(bool parallel, SymbolUi[] newSymbolUis, SymbolUi[] preExistingSymbolUis)
@@ -156,12 +156,11 @@ internal class EditorSymbolPackage : SymbolPackage
         void RegisterSymbolUi(SymbolUi symbolUi)
         {
             var symbol = symbolUi.Symbol;
-            var customUiEntries = CustomChildUiRegistry.EntriesRw;
             var operatorInfo = AssemblyInformation.OperatorTypeInfo[symbol.Id];
             
             if (operatorInfo.IsDescriptiveFileNameType)
             {
-                customUiEntries.TryAdd(symbol.InstanceType, descriptiveDrawFunc);
+                CustomChildUiRegistry.Register(symbol.InstanceType, descriptiveDrawFunc);
             }
             
             symbolUi.UpdateConsistencyWithSymbol();

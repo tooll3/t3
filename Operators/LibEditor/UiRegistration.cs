@@ -68,6 +68,6 @@ public class UiRegistration : IOperatorUIInitializer
             TemplateDefinition.AddTemplateDefinition(templateDefinition);
         }
         
-        Log.Debug("Registered UI EntriesRw. Total: {0}", CustomChildUiRegistry.Entries.Count);
+        Log.Debug("Registered UI Entries");
     }
 }

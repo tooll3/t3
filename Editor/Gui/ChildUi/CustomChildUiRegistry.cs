@@ -1,21 +1,24 @@
-﻿using System.Collections.Concurrent;
+﻿#nullable enable
+using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Runtime.Loader;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.ChildUi
 {
     public static class CustomChildUiRegistry
     {
-        public static IReadOnlyDictionary<Type, DrawChildUiDelegate> Entries => EntriesRw;
-        internal static readonly ConcurrentDictionary<Type, DrawChildUiDelegate> EntriesRw = new();
-        
-        public static void Register(Type type, DrawChildUiDelegate drawChildUiDelegate)
-        {
-            EntriesRw.TryAdd(type, drawChildUiDelegate);
-        }
+        private static readonly ConcurrentDictionary<Type, DrawChildUiDelegate> EntriesRw = new();
+
+        public static void Register(Type type, DrawChildUiDelegate drawChildUiDelegate) => EntriesRw.TryAdd(type, drawChildUiDelegate);
+
+        internal static bool TryGetValue(Type type, [NotNullWhen(true)] out DrawChildUiDelegate? o) => EntriesRw.TryGetValue(type, out o);
+
+        internal static bool Remove(Type symbolInstanceType) => EntriesRw.TryRemove(symbolInstanceType, out var _);
     }
 
     public delegate SymbolUi.Child.CustomUiResult DrawChildUiDelegate(Instance instance, ImDrawListPtr drawList, ImRect area, Vector2 scale);
