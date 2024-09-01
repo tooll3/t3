@@ -24,8 +24,6 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public EditableSymbolProject(CsProjectFile csProjectFile) : base(assembly: csProjectFile.Assembly!, directory: csProjectFile.Directory)
     {
         CsProjectFile = csProjectFile;
-        lock(_allProjects)
-            _allProjects.Add(this);
         Log.Debug($"Added project {csProjectFile.Name}");
         _csFileWatcher = new CodeFileWatcher(this, OnFileChanged, OnFileRenamed);
         DisplayName = $"{csProjectFile.Name} ({CsProjectFile.RootNamespace})";
@@ -117,13 +115,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     {
         base.Dispose();
         FileWatcher.Dispose();
-
-        lock (_allProjects)
-        {
-            var currentProjects = _allProjects.ToList();
-            currentProjects.Remove(this);
-            _allProjects = new ConcurrentBag<EditableSymbolProject>(currentProjects);
-        }
+        ProjectSetup.RemoveSymbolPackage(this, false);
     }
 
     public readonly CsProjectFile CsProjectFile;
@@ -131,6 +123,5 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     public override ResourceFileWatcher FileWatcher => _resourceFileWatcher;
     public override bool IsReadOnly => false;
 
-    private static ConcurrentBag<EditableSymbolProject> _allProjects = [];
-    public static readonly IEnumerable<EditableSymbolProject> AllProjects = _allProjects;
+    public static IEnumerable<EditableSymbolProject> AllProjects => ProjectSetup.AllPackages.Where(x => x is EditableSymbolProject).Cast<EditableSymbolProject>();
 }

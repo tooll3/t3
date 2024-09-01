@@ -8,7 +8,6 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Editor.Compilation;
 using T3.Editor.External;
 using T3.Editor.Gui.ChildUi;
 
@@ -33,6 +32,7 @@ internal class EditorSymbolPackage : SymbolPackage
         Log.Debug($"Added package {assembly.Name} in directory {directory}");
         SymbolAdded += OnSymbolAdded;
     }
+
 
     protected virtual void OnSymbolAdded(string? path, Symbol symbol)
     {
@@ -120,35 +120,18 @@ internal class EditorSymbolPackage : SymbolPackage
         newlyReadSymbolUis = newlyReadSymbolUiList.ToArray();
     }
 
-    private static void UnregisterCustomChildUi(Symbol symbol)
-    {
-        CustomChildUiRegistry.Remove(symbol.InstanceType);
-    }
-
-    public void RegisterUiSymbols(bool parallel, SymbolUi[] newSymbolUis, SymbolUi[] preExistingSymbolUis)
+    public void RegisterUiSymbols(SymbolUi[] newSymbolUis, SymbolUi[] preExistingSymbolUis)
     {
         Log.Debug($@"{DisplayName}: Registering UI entries...");
-
         
         foreach (var symbolUi in preExistingSymbolUis)
         {
-            symbolUi.UpdateConsistencyWithSymbol();
+            RegisterSymbolUi(symbolUi);
         }
-
-        var descriptiveDrawFunc = DescriptiveUi.DrawChildUiDelegate;
-
-        if (parallel)
+        
+        foreach(var symbolUi in newSymbolUis)
         {
-            newSymbolUis
-               .AsParallel()
-               .ForAll(RegisterSymbolUi);
-        }
-        else
-        {
-            foreach (var symbolUi in newSymbolUis)
-            {
-                RegisterSymbolUi(symbolUi);
-            }
+            RegisterSymbolUi(symbolUi);
         }
 
         return;
@@ -160,7 +143,7 @@ internal class EditorSymbolPackage : SymbolPackage
             
             if (operatorInfo.IsDescriptiveFileNameType)
             {
-                CustomChildUiRegistry.Register(symbol.InstanceType, descriptiveDrawFunc);
+                CustomChildUiRegistry.Register(symbol.InstanceType, DescriptiveUi.DrawChildUiDelegate, _customUiTypes);
             }
             
             symbolUi.UpdateConsistencyWithSymbol();
@@ -173,6 +156,7 @@ internal class EditorSymbolPackage : SymbolPackage
     {
         base.Dispose();
         ClearSymbolUis();
+        UnregisterAllCustomUi();
         ShaderLinter.RemovePackage(this);
     }
 
@@ -184,7 +168,7 @@ internal class EditorSymbolPackage : SymbolPackage
         {
             var symbol = symbolUi.Symbol;
             SymbolUiDict.TryRemove(symbol.Id, out _);
-            UnregisterCustomChildUi(symbol);
+            CustomChildUiRegistry.Remove(symbol.InstanceType);
         }
     }
 
@@ -422,4 +406,16 @@ internal class EditorSymbolPackage : SymbolPackage
         var symbolId = newContainerUi.Symbol.Id;
         return SymbolUiDict.TryRemove(symbolId, out _) && SymbolDict.TryRemove(symbolId, out _);
     }
+    
+    protected void UnregisterAllCustomUi()
+    {
+        for (var index = _customUiTypes.Count - 1; index >= 0; index--)
+        {
+            var type = _customUiTypes[index];
+            CustomChildUiRegistry.Remove(type);
+            _customUiTypes.RemoveAt(index);
+        }
+    }
+    
+    private readonly List<Type> _customUiTypes = [];
 }

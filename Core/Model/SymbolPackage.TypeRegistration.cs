@@ -500,11 +500,12 @@ public partial class SymbolPackage
         
     }
 
-    private static void RegisterType(Type type, string typeName,
+    private static void RegisterType(Type type, string? typeName,
                                      Func<InputValue> defaultValueCreator,
                                      Action<JsonTextWriter, object> valueToJsonConverter,
                                      Func<JToken, object> jsonToValueConverter)
     {
+        typeName ??= type.Name;
         RegisterType(type, typeName, defaultValueCreator);
         TypeValueToJsonConverters.Entries.Add(type, valueToJsonConverter);
         JsonToTypeValueConverters.Entries.Add(type, jsonToValueConverter);

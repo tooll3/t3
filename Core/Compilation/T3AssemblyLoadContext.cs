@@ -189,7 +189,6 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             Log.Warning($"Assembly {assemblyName.Name} loaded with different version: {assemblyNameOfResult.Version} vs {assemblyName.Version}");
         }
 
-        Log.Debug($"Returning already loaded assembly {assemblyName.Name}");
         return result;
     }
 

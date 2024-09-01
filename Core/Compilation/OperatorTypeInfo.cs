@@ -29,27 +29,27 @@ public sealed class OperatorTypeInfo
         }
         else
         {
-            GenericArguments = type.GetGenericArguments();
+            _genericArguments = type.GetGenericArguments();
         }
     }
 
-    public readonly List<InputSlotInfo> Inputs;
-    public readonly List<OutputSlotInfo> Outputs;
-    public readonly Type[]? GenericArguments;
-    public readonly Type Type;
+    internal readonly List<InputSlotInfo> Inputs;
+    internal readonly List<OutputSlotInfo> Outputs;
+    private readonly Type[]? _genericArguments;
+    internal readonly Type Type;
     public readonly bool IsDescriptiveFileNameType;
     public readonly ExtractableTypeInfo ExtractableTypeInfo;
     
     private readonly Func<object>? _nonGenericConstructor;
 
-    public Func<object> GetConstructor()
+    internal Func<object> GetConstructor()
     {
         if (_nonGenericConstructor != null)
             return _nonGenericConstructor;
         throw new InvalidOperationException("Generic types must be provided for generic operators - use TryGetConstructor instead");
     }
     
-    public bool TryGetConstructor([NotNullWhen(true)] out Func<object>? constructor, params Type[] genericArguments)
+    internal bool TryGetConstructor([NotNullWhen(true)] out Func<object>? constructor, params Type[] genericArguments)
     {
         Type constructedType;
         try
@@ -107,10 +107,10 @@ public sealed class OperatorTypeInfo
     {
         ArgumentNullException.ThrowIfNull(genericArguments);
         
-        if(genericArguments.Length != GenericArguments!.Length)
-            throw new InvalidOperationException($"GenericArguments must have {GenericArguments.Length} elements for operator {Type.FullName}");
+        if(genericArguments.Length != _genericArguments!.Length)
+            throw new InvalidOperationException($"GenericArguments must have {_genericArguments.Length} elements for operator {Type.FullName}");
 
-        var genericTypes = GenericArguments!;
+        var genericTypes = _genericArguments!;
         var genericTypeCount = genericTypes.Length;
         if (genericArguments.Length != genericTypeCount)
             return false;

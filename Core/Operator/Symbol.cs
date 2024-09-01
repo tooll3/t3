@@ -48,6 +48,13 @@ namespace T3.Core.Operator
             get => _instanceType;
             private set
             {
+                if (_instanceType != null)
+                {
+                    SymbolRegistry.SymbolsByType.Remove(_instanceType, out var symbol);
+                    if(symbol != this)
+                        throw new InvalidOperationException("Symbol type was not correctly removed from registry");
+                }
+                
                 _instanceType = value;
                 SymbolRegistry.SymbolsByType[value] = this;
             }

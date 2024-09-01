@@ -37,19 +37,28 @@ internal static class ProjectSetup
         }
 
         newProject = new EditableSymbolProject(newCsProj);
+        ActivePackages.Add(newProject.GetKey(), new PackageWithReleaseInfo(newProject, releaseInfo));
 
-        UpdateSymbolPackages(newProject);
+        UpdateSymbolPackage(newProject);
         return false;
     }
 
-    private static void RemoveSymbolPackage(EditableSymbolProject project)
+    internal static void RemoveSymbolPackage(SymbolPackage package, bool needsDispose)
     {
-        project.Dispose();
+        var key = package.GetKey();
+        if (!ActivePackages.Remove(key, out _))
+            throw new InvalidOperationException($"Failed to remove package {key}: does not exist");
+        
+        if (needsDispose)
+            package.Dispose();
     }
+    
+    private static string GetKey(this SymbolPackage package) => package.RootNamespace;
 
     private readonly record struct ProjectWithReleaseInfo(FileInfo ProjectFile, CsProjectFile? CsProject, ReleaseInfo? ReleaseInfo);
 
-    private static readonly Dictionary<string, PackageWithReleaseInfo> LoadedPackages = new();
+    private static readonly Dictionary<string, PackageWithReleaseInfo> ActivePackages = new();
+    internal static readonly IEnumerable<SymbolPackage> AllPackages = ActivePackages.Values.Select(x => x.Package);
     private static readonly List<AssemblyInformation> NonOperatorAssemblies = new();
 
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
@@ -81,35 +90,27 @@ internal static class ProjectSetup
             LoadProjects(csProjFiles, nonOperatorAssemblies, out _, out _);
 
             // Register UI types
-            var allPackages = LoadedPackages.Values
+            var allPackages = ActivePackages.Values
                                             .ToArray();
 
             foreach (var assembly in nonOperatorAssemblies)
             {
                 if (assembly.IsEditorOnly)
                 {
-                    // todo - should this relationship be inverted? should the load contexts
-                    // of the operator assemblies be responsible for loading the editor assemblies? that way 
-                    // one operator assembly can load multiple editor assemblies
-                    assembly.ReplaceResolversOf(allPackages);
                     NonOperatorAssemblies.Add(assembly);
                 }
             }
             
-            var symbolPackages = allPackages.Where(x => x.Package is EditorSymbolPackage)
-                                            .Select(x => (EditorSymbolPackage)x.Package)
-                                            .ToArray();
-            
 
             // Update all symbol packages
-            UpdateSymbolPackages(symbolPackages);
+            UpdateSymbolPackages(allPackages);
             
             // Initialize resources and shader linting
-            InitializePackageResources(symbolPackages);
+            InitializePackageResources(allPackages);
             
             // Initialize custom UIs
             UiRegistration.RegisterUiTypes();
-            InitializeCustomUis();
+            InitializeCustomUis(NonOperatorAssemblies);
 
             foreach (var package in SymbolPackage.AllPackages)
             {
@@ -133,8 +134,8 @@ internal static class ProjectSetup
 
     private static void AddToLoadedPackages(PackageWithReleaseInfo package)
     {
-        var key = package.ReleaseInfo.RootNamespace;
-        if (!LoadedPackages.TryAdd(key, package))
+        var key = package.Package.GetKey();
+        if (!ActivePackages.TryAdd(key, package))
             throw new InvalidOperationException($"Failed to add package {key}: already exists");
     }
 
@@ -168,12 +169,13 @@ internal static class ProjectSetup
                     });
     }
 
-    private static void InitializePackageResources(IReadOnlyCollection<EditorSymbolPackage> allSymbolPackages)
+    private static void InitializePackageResources(IReadOnlyCollection<PackageWithReleaseInfo> allSymbolPackages)
     {
         var sharedShaderPackages = ResourceManager.SharedShaderPackages;
         foreach (var package in allSymbolPackages)
         {
-            package.InitializeShaderLinting(sharedShaderPackages);
+            var symbolPackage = (EditorSymbolPackage)package.Package;
+            symbolPackage.InitializeShaderLinting(sharedShaderPackages);
         }
 
         ShaderLinter.AddPackage(SharedResources.ResourcePackage, sharedShaderPackages);
@@ -273,6 +275,7 @@ internal static class ProjectSetup
             shouldTryAgain = unsatisfied.Count < unsatisfiedCount;
         }
 
+        // try compiling/loading the unsatisfied projects anyway. should we do this?
         // todo - this compilation process is not as robust as the previous loop
         for (var index = unsatisfied.Count - 1; index >= 0; index--)
         {
@@ -378,7 +381,7 @@ internal static class ProjectSetup
 
         foreach (var packageReference in releaseInfo.OperatorPackages)
         {
-            if (!LoadedPackages.ContainsKey(packageReference.Identity))
+            if (!ActivePackages.ContainsKey(packageReference.Identity))
             {
                 return false;
             }
@@ -421,36 +424,45 @@ internal static class ProjectSetup
     private static readonly string T3ParentDirectory = Path.Combine(RuntimeAssemblies.CoreDirectory, "..", "..", "..", "..");
     #endif
 
-    private static void InitializeCustomUis()
+    private static void InitializeCustomUis(IReadOnlyList<AssemblyInformation> nonOperatorAssemblies)
     {
-        var uiInitializerTypes = NonOperatorAssemblies
+        if (nonOperatorAssemblies.Count == 0)
+            return;
+        
+        var uiInitializerTypes = nonOperatorAssemblies
                                 .ToArray()
                                 .AsParallel()
-                                .SelectMany(assemblyInfo => assemblyInfo.TypesInheritingFrom(typeof(IOperatorUIInitializer))
+                                .SelectMany(assemblyInfo => assemblyInfo.TypesInheritingFrom(typeof(IEditorUiExtension))
                                                                         .Select(type => new AssemblyConstructorInfo(assemblyInfo, type)))
                                 .ToList();
 
         foreach (var constructorInfo in uiInitializerTypes)
         {
             //var assembly = Assembly.LoadFile(constructorInfo.AssemblyInformation.Path);
-            var path = constructorInfo.AssemblyInformation.Path;
-            var typeName = constructorInfo.InstanceType.FullName;
             var assemblyInfo = constructorInfo.AssemblyInformation;
+            var instanceType = constructorInfo.InstanceType;
             try
             {
-                var activated = assemblyInfo.CreateInstance(constructorInfo.InstanceType);
+                var activated = assemblyInfo.CreateInstance(instanceType);
                 if (activated == null)
                 {
-                    throw new Exception($"Created null activator handle for {typeName}");
+                    Log.Error($"Created null object for {instanceType.Name}");
+                    continue;
                 }
 
-                var initializer = (IOperatorUIInitializer)activated;
+                var initializer = (IEditorUiExtension)activated;
                 initializer.Initialize();
-                Log.Info($"Initialized UI initializer for {constructorInfo.AssemblyInformation.Name}: {typeName}");
+                
+                if(_uiInitializers.TryGetValue(assemblyInfo, out var initializers))
+                    initializers.Add(initializer);
+                else
+                    _uiInitializers[assemblyInfo] = [initializer];
+                
+                Log.Info($"Initialized UI initializer for {constructorInfo.AssemblyInformation.Name}: {instanceType.Name}");
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to create UI initializer for {constructorInfo.AssemblyInformation.Name}: \"{typeName}\" - does it have a parameterless constructor?\n{e}");
+                Log.Error($"Failed to create UI initializer for {constructorInfo.AssemblyInformation.Name}: \"{instanceType}\" - does it have a parameterless constructor?\n{e}");
             }
         }
     }
@@ -462,36 +474,78 @@ internal static class ProjectSetup
             package.Dispose();
     }
 
-    internal static void UpdateSymbolPackage(EditableSymbolProject project) => UpdateSymbolPackages(project);
-
-    private static void UpdateSymbolPackages(params EditorSymbolPackage[] symbolPackages)
+    internal static void UpdateSymbolPackage<T>(T project) where T : EditorSymbolPackage
     {
-        switch (symbolPackages.Length)
+        UpdateSymbolPackages(ActivePackages[project.GetKey()]);
+    }
+
+    private static void UpdateSymbolPackages(params PackageWithReleaseInfo[] packages)
+    {
+        // update all of the editor ui packages in concert with the operator packages
+        var uiPackagesNeedingReload = new List<AssemblyInformation>();
+        foreach(var package in packages)
+        {
+            var assembly = package.Package.AssemblyInformation;
+            assembly.Unload();
+            
+            foreach(var nonOperatorAssembly in NonOperatorAssemblies)
+            {
+                if (!nonOperatorAssembly.DependsOn(package)) 
+                    continue;
+                
+                uiPackagesNeedingReload.Add(nonOperatorAssembly);
+            }
+        }
+        
+        foreach(var uiAssembly in uiPackagesNeedingReload)
+        {
+            if (_uiInitializers.TryGetValue(uiAssembly, out var initializers))
+            {
+                for (var index = initializers.Count - 1; index >= 0; index--)
+                {
+                    var initializer = initializers[index];
+                    initializer.Uninitialize();
+                    initializers.RemoveAt(index);
+                }
+            }
+            
+            uiAssembly.Unload();
+            uiAssembly.ReplaceResolversOf(packages);
+        }
+        
+        InitializeCustomUis(uiPackagesNeedingReload);
+        
+        // actually update the symbol packages
+        
+        // this switch statement exists to avoid the overhead of parallelization for a single package, e.g. when compiling changes to a single project
+        switch (packages.Length)
         {
             case 0:
                 return;
                 throw new ArgumentException("No symbol packages to update");
             case 1:
             {
-                var package = symbolPackages[0];
+                var package = (EditorSymbolPackage)packages[0].Package;
                 package.LoadSymbols(true, out var newlyRead, out var allNewSymbols);
                 package.ApplySymbolChildren(newlyRead);
                 package.LoadUiFiles(true, allNewSymbols, out var newlyLoadedUis, out var preExistingUis);
                 package.LocateSourceCodeFiles();
-                package.RegisterUiSymbols(true, newlyLoadedUis, preExistingUis);
+                package.RegisterUiSymbols(newlyLoadedUis, preExistingUis);
                 return;
             }
         }
 
+        // do the same as above, just in several steps so we can do them in parallel
         ConcurrentDictionary<EditorSymbolPackage, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
         ConcurrentDictionary<EditorSymbolPackage, List<Symbol>> loadedOrCreatedSymbols = new();
-        symbolPackages
+        packages
            .AsParallel()
            .ForAll(package => //pull out for non-editable ones too
                    {
-                       package.LoadSymbols(false, out var newlyRead, out var allNewSymbols);
-                       loadedSymbols.TryAdd(package, newlyRead);
-                       loadedOrCreatedSymbols.TryAdd(package, allNewSymbols);
+                       var symbolPackage = (EditorSymbolPackage)package.Package;
+                       symbolPackage.LoadSymbols(false, out var newlyRead, out var allNewSymbols);
+                       loadedSymbols.TryAdd(symbolPackage, newlyRead);
+                       loadedOrCreatedSymbols.TryAdd(symbolPackage, allNewSymbols);
                    });
 
         loadedSymbols
@@ -499,12 +553,14 @@ internal static class ProjectSetup
            .ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
 
         ConcurrentDictionary<EditorSymbolPackage, SymbolUiLoadInfo> loadedSymbolUis = new();
-        symbolPackages
+        packages
            .AsParallel()
            .ForAll(package =>
                    {
-                       package.LoadUiFiles(false, loadedOrCreatedSymbols[package], out var newlyRead, out var preExisting);
-                       loadedSymbolUis.TryAdd(package, new SymbolUiLoadInfo(newlyRead, preExisting));
+                       var symbolPackage = (EditorSymbolPackage)package.Package;
+                       var newlyRead = loadedOrCreatedSymbols[symbolPackage];
+                       symbolPackage.LoadUiFiles(false, newlyRead, out var newlyReadUis, out var preExisting);
+                       loadedSymbolUis.TryAdd(symbolPackage, new SymbolUiLoadInfo(newlyReadUis, preExisting));
                    });
 
         loadedSymbolUis
@@ -513,9 +569,11 @@ internal static class ProjectSetup
 
         foreach (var (symbolPackage, symbolUis) in loadedSymbolUis)
         {
-            symbolPackage.RegisterUiSymbols(false, symbolUis.NewlyLoaded, symbolUis.PreExisting);
+            symbolPackage.RegisterUiSymbols(symbolUis.NewlyLoaded, symbolUis.PreExisting);
         }
     }
+    
+    private static readonly Dictionary<AssemblyInformation, List<IEditorUiExtension>> _uiInitializers = new();
 
     private readonly record struct SymbolUiLoadInfo(SymbolUi[] NewlyLoaded, SymbolUi[] PreExisting);
 

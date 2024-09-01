@@ -19,6 +19,11 @@ namespace T3.Editor.Gui.Templates
         {
             TemplateDefinitionsEditable.Add(templateDefinition);
         }
+        
+        public static bool RemoveTemplateDefinition(TemplateDefinition templateDefinition)
+        {
+            return TemplateDefinitionsEditable.Remove(templateDefinition);
+        }
 
         public static IReadOnlyList<TemplateDefinition> TemplateDefinitions => TemplateDefinitionsEditable;
 

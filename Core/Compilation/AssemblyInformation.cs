@@ -26,7 +26,7 @@ public sealed class AssemblyInformation
         Directory = System.IO.Path.GetDirectoryName(Path)!;
         IsEditorOnly = assemblyInfo.IsEditorOnly;
     }
-    
+
     public readonly string Name;
     public readonly string Path;
     public readonly string Directory;
@@ -45,8 +45,9 @@ public sealed class AssemblyInformation
     private T3AssemblyLoadContext? _loadContextUnsafe;
 
     private Assembly? _assemblyUnsafe;
-    
+
     private readonly object _assemblyLock = new();
+
     private Assembly GetAssembly()
     {
         lock (_assemblyLock)
@@ -68,7 +69,7 @@ public sealed class AssemblyInformation
     {
         if (_loadContextUnsafe != null)
             return _loadContextUnsafe;
-        
+
         _loadContextUnsafe = new T3AssemblyLoadContext(_assemblyName, Path);
         Log.Debug($"Created load context for {Directory}");
         return _loadContextUnsafe;
@@ -89,7 +90,7 @@ public sealed class AssemblyInformation
             ShouldShareResources = false;
             return false;
         }
-        
+
         LoadTypes(types, assembly, out ShouldShareResources, out _types);
         return true;
     }
@@ -100,7 +101,7 @@ public sealed class AssemblyInformation
         {
             return [];
         }
-        
+
         return _types!.Values.Where(t => t.IsAssignableTo(type));
     }
 
@@ -226,7 +227,7 @@ public sealed class AssemblyInformation
                 var extractableType = interfaceType.GetGenericArguments().Single();
                 extractableTypeInfo = new ExtractableTypeInfo(true, extractableType);
             }
-            else if(interfaceType == typeof(IDescriptiveFilename))
+            else if (interfaceType == typeof(IDescriptiveFilename))
             {
                 isDescriptive = true;
             }
@@ -258,8 +259,6 @@ public sealed class AssemblyInformation
             return genericIndex;
         }
     }
-
-
 
     private static bool TryGetGuidOfType(Type newType, out Guid guid)
     {
@@ -294,14 +293,15 @@ public sealed class AssemblyInformation
         _operatorTypeInfo.Clear();
         _types?.Clear();
         _assemblyUnsafe = null;
-        
+
         var context = _loadContextUnsafe;
         if (context == null)
             return;
 
-        // because we only subscribe to the Resolving event once we've found the dependency context
+        // it's not on me to unload the context if it is not mine
         if (_loadContextOverridden)
         {
+            _loadContextUnsafe = null;
             return;
         }
 
@@ -328,30 +328,52 @@ public sealed class AssemblyInformation
         return false;
     }
 
-    public void ReplaceResolversOf(IReadOnlyList<PackageWithReleaseInfo> packages)
+    public bool DependsOn(PackageWithReleaseInfo package)
     {
         if (!TryGetReleaseInfo(out var releaseInfo))
         {
             Log.Error($"Failed to get release info for {Name}");
             throw new InvalidOperationException($"Failed to get release info for {Name}");
         }
-
-        var myDependencies = releaseInfo.OperatorPackages;
-        var loadContext = GetLoadContext();
         
+        foreach(var dependency in releaseInfo.OperatorPackages)
+        {
+            if (Matches(dependency, package.ReleaseInfo))
+                return true;
+        }
+        
+        foreach(var assemblyDependency in GetAssembly().GetReferencedAssemblies())
+        {
+            if (assemblyDependency.Name == package.ReleaseInfo.AssemblyFileName)
+                return true;
+        }
+
+        return false;
+    }
+
+    // todo - should this relationship be inverted? should the load contexts
+    // of the operator assemblies be responsible for loading the editor assemblies? that way 
+    // one operator assembly can load multiple editor assemblies
+    // probably not, editor references etc
+    public bool ReplaceResolversOf(IReadOnlyList<PackageWithReleaseInfo> packages)
+    {
+        var loadContext = GetLoadContext();
+
+        var matched = false;
+
         foreach (var package in packages)
         {
-            var dependencyMatch = myDependencies
-               .FirstOrDefault(d => Matches(d, package.ReleaseInfo));
-            if (dependencyMatch == null)
+            if (!DependsOn(package))
                 continue;
-            
+
+            matched = true;
             var assemblyInformation = package.Package.AssemblyInformation;
-            object packageOwner = package.Package; // this is an object because we don't really care that it's a SymbolPackage
-            
+
             assemblyInformation.ReplaceLoadContextWith(loadContext);
-            loadContext.AddAssemblyPath(packageOwner, assemblyInformation.Path);
+            loadContext.AddAssemblyPath(package.Package, assemblyInformation.Path);
         }
+
+        return matched;
     }
 
     private void ReplaceLoadContextWith(T3AssemblyLoadContext loadContext)
@@ -363,14 +385,16 @@ public sealed class AssemblyInformation
 
     public static bool Matches(OperatorPackageReference reference, ReleaseInfo releaseInfo)
     {
+        if (reference.ResourcesOnly)
+            return false;
+        
         var identity = reference.Identity;
         var assemblyFileName = releaseInfo.AssemblyFileName;
-        
+
         // todo : version checks
-        
+
         return identity.SequenceEqual(assemblyFileName);
     }
-
 
     private bool _loadContextOverridden;
 
@@ -380,5 +404,3 @@ public sealed class AssemblyInformation
         return assembly.CreateInstance(constructorInfoInstanceType.FullName!);
     }
 }
-
-public readonly record struct PackageWithReleaseInfo(SymbolPackage Package, ReleaseInfo ReleaseInfo);

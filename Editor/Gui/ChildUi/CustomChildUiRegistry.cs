@@ -14,11 +14,15 @@ namespace T3.Editor.Gui.ChildUi
     {
         private static readonly ConcurrentDictionary<Type, DrawChildUiDelegate> EntriesRw = new();
 
-        public static void Register(Type type, DrawChildUiDelegate drawChildUiDelegate) => EntriesRw.TryAdd(type, drawChildUiDelegate);
+        public static void Register(Type type, DrawChildUiDelegate drawChildUiDelegate, ICollection<Type> types)
+        {
+            if(EntriesRw.TryAdd(type, drawChildUiDelegate))
+                types.Add(type);
+        }
 
         internal static bool TryGetValue(Type type, [NotNullWhen(true)] out DrawChildUiDelegate? o) => EntriesRw.TryGetValue(type, out o);
 
-        internal static bool Remove(Type symbolInstanceType) => EntriesRw.TryRemove(symbolInstanceType, out var _);
+        public static bool Remove(Type symbolInstanceType) => EntriesRw.TryRemove(symbolInstanceType, out var _);
     }
 
     public delegate SymbolUi.Child.CustomUiResult DrawChildUiDelegate(Instance instance, ImDrawListPtr drawList, ImRect area, Vector2 scale);

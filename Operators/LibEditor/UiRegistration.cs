@@ -1,3 +1,4 @@
+using System.Reflection;
 using lib._3d.mesh.generate;
 using lib.anim;
 using lib.anim._obsolete;
@@ -25,7 +26,7 @@ using Boolean = lib.math.@bool.Boolean;
 
 namespace libEditor;
 
-public class UiRegistration : IOperatorUIInitializer
+public class UiRegistration : IEditorUiExtension
 {
     // ReSharper disable once EmptyConstructor
     public UiRegistration()
@@ -34,31 +35,31 @@ public class UiRegistration : IOperatorUIInitializer
 
     public void Initialize()
     {
-        CustomChildUiRegistry.Register(typeof(Counter), CounterUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(SampleGradient), GradientSliderUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(SampleCurve), SampleCurveUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(_Jitter), _JitterUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(_Jitter2d), Jitter2dUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(lib.types.String), StringUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(Value), ValueUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(IntValue), IntValueUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(Remap), RemapUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(AnimValue), AnimValueUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(AnimVec2), AnimVec2Ui.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(AnimVec3), AnimVec3Ui.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(SequenceAnim), SequenceAnimUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(TriggerAnim), TriggerAnimUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(MidiInput), MidiInputUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(Boolean), BooleanUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(Trigger), TriggerUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(Counter), CounterUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(SampleGradient), GradientSliderUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(SampleCurve), SampleCurveUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(_Jitter), _JitterUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(_Jitter2d), Jitter2dUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(lib.types.String), StringUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(Value), ValueUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(IntValue), IntValueUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(Remap), RemapUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(AnimValue), AnimValueUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(AnimVec2), AnimVec2Ui.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(AnimVec3), AnimVec3Ui.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(SequenceAnim), SequenceAnimUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(TriggerAnim), TriggerAnimUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(MidiInput), MidiInputUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(Boolean), BooleanUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(Trigger), TriggerUi.DrawChildUi, _types);
 
-        CustomChildUiRegistry.Register(typeof(GetIntVar), GetIntVarUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(GetFloatVar), GetFloatVarUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(SetFloatVar), SetFloatVarUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(GetIntVar), GetIntVarUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(GetFloatVar), GetFloatVarUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(SetFloatVar), SetFloatVarUi.DrawChildUi, _types);
 
-        CustomChildUiRegistry.Register(typeof(AudioReaction), AudioReactionUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(GpuMeasure), GpuMeasureUi.DrawChildUi);
-        CustomChildUiRegistry.Register(typeof(DataList), DataListUi.DrawChildUi);
+        CustomChildUiRegistry.Register(typeof(AudioReaction), AudioReactionUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(GpuMeasure), GpuMeasureUi.DrawChildUi, _types);
+        CustomChildUiRegistry.Register(typeof(DataList), DataListUi.DrawChildUi, _types);
 
         PlaybackUtils.BpmProvider = BpmProvider.Instance;
         PlaybackUtils.TapProvider = TapProvider.Instance;
@@ -70,4 +71,21 @@ public class UiRegistration : IOperatorUIInitializer
         
         Log.Debug("Registered UI Entries");
     }
+
+    public void Uninitialize()
+    {
+        foreach(var templateDefinition in TemplateDefinitions.Templates)
+        {
+            TemplateDefinition.RemoveTemplateDefinition(templateDefinition);
+        }
+        
+        foreach (var type in _types)
+        {
+            CustomChildUiRegistry.Remove(type);
+        }
+        
+        Log.Debug("Unregistered UI Entries");
+    }
+    
+    private readonly List<Type> _types = new();
 }

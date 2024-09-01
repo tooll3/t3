@@ -48,6 +48,7 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     public IReadOnlyCollection<DependencyCounter> Dependencies => (ReadOnlyCollection<DependencyCounter>)DependencyDict.Values;
     protected readonly ConcurrentDictionary<SymbolPackage, DependencyCounter> DependencyDict = new();
+    public string RootNamespace => ReleaseInfo.RootNamespace;
 
     protected virtual ReleaseInfo ReleaseInfo
     {
@@ -398,3 +399,5 @@ public record DependencyCounter
         return $"{Package.DisplayName}: Symbol References: {SymbolChildCount}, Resource References: {ResourceCount}";
     }
 }
+
+public readonly record struct PackageWithReleaseInfo(SymbolPackage Package, ReleaseInfo ReleaseInfo);
