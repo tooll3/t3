@@ -23,7 +23,7 @@ groupshared uint localSum = 0;
 }
 
     // Thread group dimensions
-    [numthreads(16, 16, 1)] void main(uint3 DTid : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID, uint GI : SV_GroupIndex)
+    [numthreads(8, 8, 1)] void main(uint3 DTid : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID, uint GI : SV_GroupIndex)
 {
     if (GI == 0)
         localSum = 0;

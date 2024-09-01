@@ -82,6 +82,16 @@
           "Value": "Wrap"
         },
         {
+          "Id": "6cf68692-43a5-4a93-873c-99aa0d2dde93"/*BufferColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.0
+          }
+        },
+        {
           "Id": "480d6c19-a33c-48b3-b9fa-aaf8bd31e6d9"/*GenerateMips*/,
           "Type": "System.Boolean",
           "Value": false

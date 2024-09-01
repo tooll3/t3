@@ -29,8 +29,9 @@ float3 fmod(float3 x, float3 y)
     return (x - y * floor(x / y));
 }
 
-#define SPREADOVER_BUFFER 0
-#define SPREADOVER_W 1
+#define SPREADMODE_BUFFER 0
+#define SPREADMODE_W 1
+#define SPREADMODE_SELECTION 2
 
 #define MAPPING_NORMAL 0
 #define MAPPING_FORSTART 1
@@ -54,14 +55,14 @@ float3 fmod(float3 x, float3 y)
 
     Point p = SourcePoints[index];
 
-    if (Mode != SPREADOVER_BUFFER && (isnan(p.W)))
+    if (Mode != SPREADMODE_BUFFER && (isnan(p.W)))
     {
         ResultPoints[index] = p;
         return;
     }
 
     float f = 0;
-    float f0 = Mode == SPREADOVER_BUFFER ? (float)index / (pointCount - 1)
+    float f0 = Mode == SPREADMODE_BUFFER ? (float)index / (pointCount - 1)
                                          : p.W; // Clarify: Should we clamp w before sampling?
 
     if (MappingMode == MAPPING_NORMAL)

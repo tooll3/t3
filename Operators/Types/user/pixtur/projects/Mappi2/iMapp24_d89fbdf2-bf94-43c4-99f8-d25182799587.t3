@@ -469,6 +469,12 @@
       "SymbolId": "d3a7c4ff-6f3b-4d50-a542-6579cb11fab3",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "de6f1d36-cbf4-4abf-9eb8-5f2fe1df34f8"/*iMappIntro02*/,
+      "SymbolId": "d19551f2-2941-438c-ab0d-bfc7cef032d9",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -633,7 +639,7 @@
         "Bpm": 137.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "Resources\\user\\pixtur\\projects\\proj-mappi2024\\soundtrack\\v2.1-Thomas.mp3"
+        "FilePath": "Resources\\user\\pixtur\\projects\\proj-mappi2024\\soundtrack\\v2.3-DumDrops.mp3"
       }
     ]
   }
