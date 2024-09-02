@@ -75,33 +75,38 @@ public sealed class AssemblyInformation
 
     internal bool TryLoadTypes()
     {
-        Type[] types;
-        var assembly = GetAssembly();
-        try
+        lock (_assemblyLock)
         {
-            types = assembly.GetTypes();
-        }
-        catch (Exception e)
-        {
-            Log.Warning($"Failed to load types from assembly {assembly.FullName}\n{e.Message}\n{e.StackTrace}");
-            _types = new Dictionary<string, Type>();
-            ShouldShareResources = false;
-            return false;
-        }
+            Type[] types;
+            var assembly = GetAssembly();
+            try
+            {
+                types = assembly.GetTypes();
+            }
+            catch (Exception e)
+            {
+                Log.Warning($"Failed to load types from assembly {assembly.FullName}\n{e.Message}\n{e.StackTrace}");
+                _types = new Dictionary<string, Type>();
+                ShouldShareResources = false;
+                return false;
+            }
 
-        Log.Debug($"Loading types from assembly {assembly.FullName}\n{(assembly.FullName!.StartsWith("lib.Editor") ? Environment.StackTrace : "")}");
-        LoadTypes(types, assembly, out ShouldShareResources, out _types);
-        return true;
+            LoadTypes(types, assembly, out ShouldShareResources, out _types);
+            return true;
+        }
     }
 
     public IEnumerable<Type> TypesInheritingFrom(Type type)
     {
-        if (_types == null && !TryLoadTypes())
+        lock (_assemblyLock)
         {
-            return [];
-        }
+            if (_types == null && !TryLoadTypes())
+            {
+                return [];
+            }
 
-        return _types!.Values.Where(t => t.IsAssignableTo(type));
+            return _types!.Values.Where(t => t.IsAssignableTo(type));
+        }
     }
 
     private void LoadTypes(Type[] types, Assembly assembly, out bool shouldShareResources, out Dictionary<string, Type> typeDict)
@@ -301,22 +306,25 @@ public sealed class AssemblyInformation
     public void Unload()
     {
         _operatorTypeInfo.Clear();
-        _types?.Clear();
-        _assemblyUnsafe = null;
-
-        var context = _loadContextUnsafe;
-        if (context == null)
-            return;
-
-        // it's not on me to unload the context if it is not mine
-        if (_loadContextOverridden)
+        lock (_assemblyLock)
         {
-            _loadContextUnsafe = null;
-            return;
-        }
+            _types?.Clear();
+            _assemblyUnsafe = null;
 
-        context.Unload();
-        _loadContextUnsafe = null;
+            var context = _loadContextUnsafe;
+            if (context == null)
+                return;
+
+            // it's not on me to unload the context if it is not mine
+            if (_loadContextOverridden)
+            {
+                _loadContextUnsafe = null;
+                return;
+            }
+
+            context.Unload();
+            _loadContextUnsafe = null;
+        }
     }
 
     public bool TryGetReleaseInfo([NotNullWhen(true)] out ReleaseInfo? releaseInfo)

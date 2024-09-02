@@ -131,7 +131,7 @@ internal static class ProjectSetup
 
         foreach (var package in SymbolPackage.AllPackages)
         {
-            Log.Debug($"Loaded {package.DisplayName}");
+            Log.Debug($"Completed loading {package.DisplayName}");
         }
 
         #if DEBUG
@@ -384,7 +384,7 @@ internal static class ProjectSetup
             operatorPackage = null;
         }
 
-        Log.Info($"Loaded {csProj.Name}");
+        Log.Info($"Loaded CSProj file {csProj.Name}");
         return true;
     }
 
@@ -444,7 +444,6 @@ internal static class ProjectSetup
             return;
 
         var uiInitializerTypes = nonOperatorAssemblies
-                                .ToArray()
                                 .AsParallel()
                                 .SelectMany(assemblyInfo => assemblyInfo.TypesInheritingFrom(typeof(IEditorUiExtension))
                                                                         .Select(type => new AssemblyConstructorInfo(assemblyInfo, type)))
