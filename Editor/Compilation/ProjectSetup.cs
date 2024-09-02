@@ -72,7 +72,7 @@ internal static class ProjectSetup
         try
         {
             // todo: change to load CsProjs from specific directories and specific nuget packages from a package directory
-            ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = new();
+            ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = [];
 
             #if !DEBUG
             // Load pre-built built-in packages as read-only
@@ -83,7 +83,7 @@ internal static class ProjectSetup
             var csProjFiles = FindCsProjFiles();
 
             // Load projects
-            LoadProjects(csProjFiles, nonOperatorAssemblies, forceRecompile, out _, out _);
+            LoadProjects(csProjFiles, nonOperatorAssemblies, forceRecompile, unsatisfiedProjects: out _, failedProjects: out _);
 
             // Register UI types
             var allPackages = ActivePackages.Values
@@ -229,7 +229,7 @@ internal static class ProjectSetup
                                      bool forceRecompile,
                                      out List<ProjectWithReleaseInfo> failedProjects, out List<ProjectWithReleaseInfo> unsatisfiedProjects)
     {
-        List<ProjectWithReleaseInfo> satisfied = new();
+        List<ProjectWithReleaseInfo> satisfied = [];
         var unsatisfied = new List<ProjectWithReleaseInfo>();
         foreach (var release in releases)
         {
