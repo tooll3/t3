@@ -40,7 +40,7 @@ internal static class ProjectSetup
         ActivePackages.Add(newProject.GetKey(), new PackageWithReleaseInfo(newProject, releaseInfo));
 
         UpdateSymbolPackage(newProject);
-        return false;
+        return true;
     }
 
     internal static void RemoveSymbolPackage(SymbolPackage package, bool needsDispose)
