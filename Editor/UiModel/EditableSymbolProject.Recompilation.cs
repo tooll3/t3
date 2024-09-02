@@ -233,8 +233,12 @@ namespace T3.Editor.UiModel
             MarkAsSaving();
             var updated = CsProjectFile.TryRecompile(out _);
             UnmarkAsSaving();
-            
-            UnregisterAllCustomUi();
+
+            if (updated)
+            {
+                UnregisterAllCustomUi();
+                AssemblyInformation.Unload();
+            }
 
             return updated;
         }

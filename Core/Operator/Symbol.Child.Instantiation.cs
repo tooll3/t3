@@ -116,8 +116,7 @@ public static class SymbolInstantiation
                 return false;
             }
 
-            Debug.Assert(newInstance != null);
-            newInstance!.SetChildId(symbolChild.Id);
+            newInstance.SetChildId(symbolChild.Id);
 
             newInstance.Parent = parent;
 

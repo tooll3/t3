@@ -355,12 +355,13 @@ internal class EditorSymbolPackage : SymbolPackage
 
         if (!TryReadAndApplyChildren(result))
         {
+            symbol.ReplaceWithContentsOf(symbol); // ugly but necessary to make sure the right symbol is in the registry
             Log.Error($"Failed to reload symbol for symbol {id}");
             return;
         }
         
         // transfer instances over to the new symbol and update them
-        symbol.ReplaceWith(newSymbol);
+        symbol.ReplaceWithContentsOf(newSymbol);
         UpdateSymbolInstances(symbol);
         
         var symbolUiJson = JsonFileResult<SymbolUi>.ReadAndCreate(symbolUiPath);

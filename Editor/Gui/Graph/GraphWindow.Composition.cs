@@ -23,7 +23,20 @@ internal sealed partial class GraphWindow
                 }
                 
                 var parent = parentSymbol.InstancesOfSelf.First(x => x.SymbolChildId == _parentSymbolChildId);
-                return parent!.Children[SymbolChildId];
+                var instance = parent!.Children[SymbolChildId];
+                
+                if (instance == _instance)
+                    return instance;
+                
+                lock (Compositions)
+                {
+                    Compositions.Remove(_instance, out var thisComposition);
+                    System.Diagnostics.Debug.Assert(thisComposition == this);
+                    _instance = instance;
+                    Compositions[instance] = this;
+                }
+
+                return instance;
             }
         }
 
@@ -32,14 +45,16 @@ internal sealed partial class GraphWindow
 
         private readonly Guid? _parentSymbolId;
         private readonly Guid? _parentSymbolChildId;
-        private readonly Instance _instance;
+        private Instance _instance;
         private readonly bool _hasParent;
         private readonly EditorSymbolPackage _symbolPackage;
         private int _checkoutCount;
 
         private Composition(Instance instance)
         {
-            _symbolPackage = (EditorSymbolPackage)instance.Symbol.SymbolPackage;
+            _instance = instance;
+            var symbol = instance.Symbol;
+            _symbolPackage = (EditorSymbolPackage)symbol.SymbolPackage;
             var parent = instance.Parent;
             if (parent != null)
             {
@@ -47,9 +62,9 @@ internal sealed partial class GraphWindow
                 _parentSymbolId = parent.Symbol.Id;
                 _parentSymbolChildId = parent.SymbolChildId;
             }
-            _instance = instance;
+            
             SymbolChildId = instance.SymbolChildId;
-            _symbolId = instance.Symbol.Id;
+            _symbolId = symbol.Id;
             _isReadOnly = _symbolPackage.IsReadOnly;
         }
 

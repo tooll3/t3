@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -28,9 +29,9 @@ namespace T3.Core.Operator
 
         public Symbol.Child? SymbolChild => _parent?.Symbol.Children[SymbolChildId];
 
-        private Instance _parent;
+        private Instance? _parent;
 
-        public Instance Parent
+        public Instance? Parent
         {
             get => _parent;
             internal set
@@ -43,7 +44,7 @@ namespace T3.Core.Operator
         SymbolPackage IResourceConsumer.Package => Symbol.SymbolPackage;
         public event Action? Disposing;
 
-        public Symbol Symbol => SymbolRegistry.SymbolsByType[Type];
+        public abstract Symbol Symbol { get; }
 
         private readonly List<ISlot> _outputs = new();
         public readonly IReadOnlyList<ISlot> Outputs;
@@ -65,11 +66,13 @@ namespace T3.Core.Operator
         /// <summary>
         /// get input without GC allocations 
         /// </summary>
-        public IInputSlot GetInput(Guid guid)
+        public IInputSlot? GetInput(Guid guid)
         {
             //return Inputs.SingleOrDefault(input => input.Id == guid);
-            foreach (var i in Inputs)
+            var inputCount = Inputs.Count;
+            for (var index = 0; index < inputCount; index++)
             {
+                var i = Inputs[index];
                 if (i.Id == guid)
                     return i;
             }
@@ -323,7 +326,14 @@ namespace T3.Core.Operator
 
     public class Instance<T> : Instance where T : Instance
     {
-        public sealed override Type Type { get; } = typeof(T);
+        private static readonly Type _staticType = typeof(T);
+        
+        // this intended to be a different symbol per-type
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly Symbol StaticSymbol = SymbolRegistry.SymbolsByType[_staticType];
+        
+        public sealed override Type Type => _staticType;
+        public sealed override Symbol Symbol => StaticSymbol;
 
         protected Instance()
         {

@@ -325,11 +325,15 @@ public sealed partial class Symbol
         IReadOnlyList<InputDefinition> NewInputDefinitions,
         IReadOnlyList<OutputDefinition> NewOutputDefinitions);
 
-    public void ReplaceWith(Symbol newSymbol)
+    public void ReplaceWithContentsOf(Symbol newSymbol)
     {
-        Connections.Clear();
-        Connections.AddRange(newSymbol.Connections);
-        _children = newSymbol._children;
-        SymbolRegistry.SymbolsByType[InstanceType] = this; // ugly - the other one replaced this value with itself when it was created
+        if (newSymbol != this)
+        {
+            Connections.Clear();
+            Connections.AddRange(newSymbol.Connections);
+            _children = newSymbol._children;
+        }
+
+        SymbolRegistry.SymbolsByType[InstanceType] = this; // todo: ugly - the other one replaced this value with itself when it was created
     }
 }
