@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -17,11 +18,38 @@ public static class RuntimeAssemblies
     public static readonly string CorePath = CoreAssembly.Location;
     public static readonly string CoreDirectory = Path.GetDirectoryName(CorePath)!;
     public static readonly Version Version = CoreAssembly.GetName().Version!;
+    public static readonly IReadOnlyList<Assembly> CoreAssemblies;
     
     static RuntimeAssemblies()
     {
         SetEnvironmentVariable(EnvironmentVariableName, CoreDirectory);
+
+        var alreadyLoadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+        var currentAssemblies = new List<Assembly>(128);
+        currentAssemblies.AddRange(alreadyLoadedAssemblies);
+        var otherAssemblyFiles = Directory.GetFiles(CoreDirectory, "*.dll");
+        foreach (var assemblyFile in otherAssemblyFiles)
+        {
+            if (string.IsNullOrWhiteSpace(assemblyFile))
+                continue;
+            
+            if (currentAssemblies.Any(x => x.Location == assemblyFile || x.GetName().Name == Path.GetFileNameWithoutExtension(assemblyFile)))
+                continue;
+
+            try
+            {
+                var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyFile);
+                currentAssemblies.Add(assembly);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Could not load assembly at \"{assemblyFile}\": {e.Message}");
+            }
+        }
+
+        CoreAssemblies = currentAssemblies;
     }
+
 
     private static void SetEnvironmentVariable(string envVar, string envValue)
     {

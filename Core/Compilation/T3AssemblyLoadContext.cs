@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -16,11 +17,25 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
     private readonly string _path;
     private Assembly? _myAssembly;
 
+    private static readonly IReadOnlyList<Assembly> CoreAssemblies = RuntimeAssemblies.CoreAssemblies;
+
     internal T3AssemblyLoadContext(AssemblyName assemblyName, string path) : base(assemblyName.Name, true)
     {
         _path = path;
         Resolving += OnResolving;
         _assemblyPaths[this] = path;
+
+        foreach (var assembly in CoreAssemblies)
+        {
+            AddToLoadedAssemblies(assembly, debug: false);
+            var location = assembly.Location;
+            if (string.IsNullOrWhiteSpace(location))
+            {
+                location = Path.Combine(RuntimeAssemblies.CoreDirectory, $"{assembly.GetName().Name}.dll");
+            }
+            
+            AddAssemblyPath(assembly, location);
+        }
     }
 
     internal void AddAssemblyPath(object packageOwner, string assemblyInformationPath)
@@ -28,7 +43,6 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         lock (_assemblyLock)
         {
             _assemblyPaths[packageOwner] = assemblyInformationPath;
-            _dependencyContext = null;
             _assemblyResolver = null;
         }
     }
@@ -43,8 +57,6 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             if (_myAssembly == null)
             {
                 _myAssembly = LoadFromAssemblyPath(_path);
-                _dependencyContext = DependencyContext.Load(_myAssembly);
-                AddToLoadedAssemblies(_myAssembly);
 
                 foreach (var referenced in _myAssembly.GetReferencedAssemblies())
                 {
@@ -54,51 +66,112 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             }
         }
 
-        if (_dependencyContext == null)
+        var allLoadedAssemblies = _loadedAssemblies.Values.Append(_myAssembly);
+        List<string> assemblyLocations = [];
+
+        foreach (var assembly in allLoadedAssemblies.Reverse()) // reverse to start with our assembly
         {
-            Log.Error($"Failed to load dependency context for {Name}");
+            var dependencyContext = DependencyContext.Load(assembly);
+            if (dependencyContext == null)
+            {
+                continue;
+            }
+
+            if (!TryFindLibrary(name, dependencyContext, out var library))
+                continue;
+
+            var wrapper = new CompilationLibrary(
+                                                 library!.Type,
+                                                 library.Name,
+                                                 library.Version,
+                                                 library.Hash,
+                                                 library.RuntimeAssemblyGroups.SelectMany(g => g.AssetPaths),
+                                                 library.Dependencies,
+                                                 library.Serviceable);
+
+            lock (_assemblyLock)
+            {
+                _assemblyResolver ??= CreateAssemblyResolver(_assemblyPaths.Values);
+                _assemblyResolver.TryResolveAssemblyPaths(wrapper, assemblyLocations);
+            }
+        }
+
+        var nameToSearchFor = name.Name;
+        if (nameToSearchFor == null)
+        {
+            Log.Error("Failed to get name for assembly");
             return null;
         }
 
-        if (!TryFindLibrary(name, _dependencyContext, out var library))
+        if (assemblyLocations.Count == 0)
         {
-            return null;
+            // search on our own using the paths we have
+            foreach (var path in _assemblyPaths.Values)
+            {
+                if (IsLikelyFile(path, nameToSearchFor))
+                    assemblyLocations.Add(path);
+            }
         }
 
-        var wrapper = new CompilationLibrary(
-                                             library!.Type,
-                                             library.Name,
-                                             library.Version,
-                                             library.Hash,
-                                             library.RuntimeAssemblyGroups.SelectMany(g => g.AssetPaths),
-                                             library.Dependencies,
-                                             library.Serviceable);
-
-        var assemblies = new List<string>();
-
-        lock (_assemblyLock)
+        if (assemblyLocations.Count == 0)
         {
-            _assemblyResolver ??= CreateAssemblyResolver(_assemblyPaths.Values);
+            // search directories of our explicitly added assembly paths
+            foreach (var path in _assemblyPaths.Values)
+            {
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    Log.Warning("Null path in assembly paths");
+                    continue;
+                }
+
+                var directory = Path.GetDirectoryName(path);
+                if (directory == null)
+                {
+                    continue;
+                }
+
+                var files = Directory.GetFiles(directory, "", SearchOption.TopDirectoryOnly);
+                foreach (var file in files)
+                {
+                    if (IsLikelyFile(file, nameToSearchFor))
+                        assemblyLocations.Add(file);
+                }
+            }
         }
 
-        _assemblyResolver.TryResolveAssemblyPaths(wrapper, assemblies);
+        static bool IsLikelyFile(string path, string nameToSearchFor)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+            
+            var inferredName = Path.GetFileNameWithoutExtension(path);
+            return !string.IsNullOrWhiteSpace(inferredName) 
+                   && string.Equals(inferredName, nameToSearchFor, StringComparison.OrdinalIgnoreCase);
+        }
 
-        switch (assemblies.Count)
+        string assemblyPath;
+        switch (assemblyLocations.Count)
         {
             case 0:
                 return null;
             case 1:
+                assemblyPath = assemblyLocations[0];
                 break;
             default:
             {
-                Log.Error($"Multiple assemblies found for {name.Name}");
-                foreach (var item in assemblies)
-                    Log.Info($"\t{item}");
+                var distinct = assemblyLocations.Distinct().ToArray();
+
+                if (distinct.Length > 1)
+                {
+                    Log.Error($"Multiple assemblies found for {name.Name}");
+                    foreach (var item in assemblyLocations)
+                        Log.Info($"\t{item}");
+                }
+
+                assemblyPath = distinct[0];
                 break;
             }
         }
-
-        var assemblyPath = assemblies[0];
 
         lock (_assemblyLock)
         {
@@ -116,32 +189,46 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         static bool TryFindLibrary(AssemblyName name, DependencyContext dependencyContext, out RuntimeLibrary? library)
         {
             var nameToSearchFor = name.Name;
+            if (nameToSearchFor == null)
+            {
+                library = default;
+                Log.Error("Failed to get name for assembly");
+                return false;
+            }
+
             foreach (var runtime in dependencyContext.RuntimeLibraries)
             {
-                if (string.Equals(runtime.Name, nameToSearchFor, StringComparison.OrdinalIgnoreCase))
+                if (TryFindInLibrary(runtime, nameToSearchFor))
                 {
                     library = runtime;
                     return true;
-                }
-
-                var assemblyGroups = runtime.RuntimeAssemblyGroups;
-                foreach (var assemblyGroup in assemblyGroups)
-                {
-                    var runtimeFiles = assemblyGroup.RuntimeFiles;
-                    foreach (var runtimeFile in runtimeFiles)
-                    {
-                        var fileName = System.IO.Path.GetFileNameWithoutExtension(runtimeFile.Path);
-                        if (string.Equals(fileName, nameToSearchFor, StringComparison.Ordinal))
-                        {
-                            library = runtime;
-                            return true;
-                        }
-                    }
                 }
             }
 
             library = default;
             return false;
+
+            static bool TryFindInLibrary(RuntimeLibrary runtime, string nameToSearchFor)
+            {
+                if (string.Equals(runtime.Name, nameToSearchFor, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+                foreach (var assemblyGroup in runtime.RuntimeAssemblyGroups)
+                {
+                    foreach (var runtimeFile in assemblyGroup.RuntimeFiles)
+                    {
+                        var fileName = System.IO.Path.GetFileNameWithoutExtension(runtimeFile.Path);
+                        if (string.Equals(fileName, nameToSearchFor, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
         }
     }
 
@@ -152,7 +239,6 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
     /// <param name="directory">path to dll</param>
     private static CompositeCompilationAssemblyResolver CreateAssemblyResolver(IEnumerable<string> paths)
     {
-        Log.Debug($"Creating assembly resolver for:\n{string.Join(", ", paths)}\n");
         var resolvers = paths
                        .Select(p => new AppBaseCompilationAssemblyResolver(p))
                        .Cast<ICompilationAssemblyResolver>()
@@ -164,7 +250,6 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
     private readonly object _assemblyLock = new();
     private CompositeCompilationAssemblyResolver? _assemblyResolver;
-    private DependencyContext? _dependencyContext;
     private readonly Dictionary<object, string> _assemblyPaths = new();
     private readonly Dictionary<string, Assembly> _loadedAssemblies = new();
 
@@ -174,10 +259,23 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         {
             result = OnResolving(this, assemblyName);
         }
-        
+
         if (result == null)
         {
             Log.Error($"Failed to load assembly {assemblyName.Name}");
+            var sb = new System.Text.StringBuilder();
+            foreach (var kvp in _assemblyPaths)
+            {
+                var path = kvp.Value;
+                var owner = kvp.Key;
+                sb.Append(owner);
+                sb.AppendLine(path);
+            }
+
+            if (sb.Length == 0)
+                Log.Error("No assembly paths found");
+            else
+                Log.Error(sb.ToString());
             return null;
         }
 
@@ -192,13 +290,14 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         return result;
     }
 
-    private void AddToLoadedAssemblies(Assembly assembly)
+    private void AddToLoadedAssemblies(Assembly assembly, bool debug = true)
     {
         lock (_assemblyLock)
         {
             var name = assembly.GetName().FullName;
             _loadedAssemblies[name] = assembly;
-            Log.Debug($"Loaded assembly {name} from {assembly.Location}");
+            if(debug && !name.StartsWith("System")) // don't log system assemblies - too much log spam for things that are probably not error-prone
+                Log.Debug($"Loaded assembly {name} from {assembly.Location}");
         }
     }
 

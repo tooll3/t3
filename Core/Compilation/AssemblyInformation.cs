@@ -59,8 +59,6 @@ public sealed class AssemblyInformation
             var assembly = loadContext.LoadFromAssemblyPath(Path);
 
             _assemblyUnsafe = assembly;
-
-            Log.Debug($"Loaded assembly {Name} at host context {assembly.HostContext}");
             return _assemblyUnsafe;
         }
     }
@@ -110,6 +108,13 @@ public sealed class AssemblyInformation
         typeDict = new Dictionary<string, Type>();
         foreach (var type in types)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (type == null)
+            {
+                Log.Warning($"Null type in assembly {assembly.FullName}");
+                continue;
+            }
+            
             if (!typeDict.TryAdd(type.FullName!, type))
             {
                 Log.Warning($"Duplicate type {type.FullName} in assembly {assembly.FullName}");

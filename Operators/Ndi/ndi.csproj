@@ -8,7 +8,6 @@
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
     <VersionPrefix>1.0.4</VersionPrefix>
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     <EditorVersion>3.9.1</EditorVersion>
@@ -16,7 +15,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../Core/Core.csproj" Private="false" />
-    <ProjectReference Include="../../Logging/Logging.csproj" Private="false" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NDILibDotNet6" Version="1.0.11" />

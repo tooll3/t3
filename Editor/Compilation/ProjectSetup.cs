@@ -59,7 +59,7 @@ internal static class ProjectSetup
 
     private static readonly Dictionary<string, PackageWithReleaseInfo> ActivePackages = new();
     internal static readonly IEnumerable<SymbolPackage> AllPackages = ActivePackages.Values.Select(x => x.Package);
-    private static readonly List<AssemblyInformation> NonOperatorAssemblies = new();
+    private static readonly List<AssemblyInformation> EditorOnlyPackages = [];
 
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
     internal static bool TryInitialize(out Exception exception)
@@ -72,15 +72,11 @@ internal static class ProjectSetup
         try
         {
             // todo: change to load CsProjs from specific directories and specific nuget packages from a package directory
-            List<PackageWithReleaseInfo> readOnlyPackages = new(); // "static" packages, remember to filter by operator vs non-operator assemblies
             ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = new();
 
             #if !DEBUG
             // Load pre-built built-in packages as read-only
-            LoadBuiltInPackages(readOnlyPackages, nonOperatorAssemblies);
-
-            foreach (var package in readOnlyPackages)
-                AddToLoadedPackages(package);
+            LoadBuiltInPackages(nonOperatorAssemblies);
             #endif
 
             // Find project files
@@ -97,11 +93,10 @@ internal static class ProjectSetup
             {
                 if (assembly.IsEditorOnly)
                 {
-                    NonOperatorAssemblies.Add(assembly);
+                    EditorOnlyPackages.Add(assembly);
                 }
             }
             
-
             // Update all symbol packages
             UpdateSymbolPackages(allPackages);
             
@@ -110,7 +105,7 @@ internal static class ProjectSetup
             
             // Initialize custom UIs
             UiRegistration.RegisterUiTypes();
-            InitializeCustomUis(NonOperatorAssemblies);
+            InitializeCustomUis(EditorOnlyPackages);
 
             foreach (var package in SymbolPackage.AllPackages)
             {
@@ -142,7 +137,6 @@ internal static class ProjectSetup
     private static void LoadBuiltInPackages(ConcurrentBag<AssemblyInformation> nonOperatorAssemblies)
     {
         var directory = Directory.CreateDirectory(CoreOperatorDirectory);
-
 
         directory
            .EnumerateDirectories("*", SearchOption.TopDirectoryOnly)
@@ -183,8 +177,6 @@ internal static class ProjectSetup
 
     private static void LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, out List<ProjectWithReleaseInfo> unsatisfiedProjects, out List<ProjectWithReleaseInfo> failedProjects)
     {
-        List<EditableSymbolProject> projects = new();
-
         // Load each project file and its associated assembly
         var releases = csProjFiles
                       .AsParallel()
@@ -350,6 +342,7 @@ internal static class ProjectSetup
     private static bool TryLoadProject(ProjectWithReleaseInfo release, out PackageWithReleaseInfo? operatorPackage)
     {
         var csProj = release.CsProject!;
+        csProj.RemoveOldBuilds(Compiler.BuildMode.Debug);
         if (!csProj.TryLoadLatestAssembly() && !csProj.TryRecompile(out _))
         {
             Log.Error($"Failed to load {csProj.Name}");
@@ -357,7 +350,6 @@ internal static class ProjectSetup
             return false;
         }
 
-        csProj.RemoveOldBuilds(Compiler.BuildMode.Debug);
         if (!csProj.Assembly!.IsEditorOnly)
         {
             var project = new EditableSymbolProject(csProj);
@@ -458,11 +450,15 @@ internal static class ProjectSetup
                 else
                     _uiInitializers[assemblyInfo] = [initializer];
                 
-                Log.Info($"Initialized UI initializer for {constructorInfo.AssemblyInformation.Name}: {instanceType.Name}");
+                Log.Info($"Initialized UI initializer for {assemblyInfo.Name}: {instanceType.Name}");
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to create UI initializer for {constructorInfo.AssemblyInformation.Name}: \"{instanceType}\" - does it have a parameterless constructor?\n{e}");
+                Log.Error($"Failed to create UI initializer for {assemblyInfo.Name}: \"{instanceType}\" - does it have a parameterless constructor?\n{e.Message}");
+                if (e is FileNotFoundException fileNotFoundException)
+                {
+                    Log.Error($"File not found: {fileNotFoundException.FileName}");
+                }
             }
         }
     }
@@ -488,7 +484,7 @@ internal static class ProjectSetup
             var assembly = package.Package.AssemblyInformation;
             assembly.Unload();
             
-            foreach(var nonOperatorAssembly in NonOperatorAssemblies)
+            foreach(var nonOperatorAssembly in EditorOnlyPackages)
             {
                 if (!nonOperatorAssembly.DependsOn(package)) 
                     continue;

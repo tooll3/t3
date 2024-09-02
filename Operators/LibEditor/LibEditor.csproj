@@ -5,7 +5,6 @@
     <Nullable>disable</Nullable>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
     <VersionPrefix>1.0.7</VersionPrefix>
     <RootNamespace>lib.Editor</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
@@ -14,13 +13,9 @@
     <IsEditorOnly>true</IsEditorOnly>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.csproj" Private="false" />
-    <ProjectReference Include="..\libDataTypes\libDataTypes.csproj" Private="false" />
-    <ProjectReference Include="..\lib\Lib.csproj" Private="false" />
-    <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" />
-    <ProjectReference Include="..\..\Serialization\Serialization.csproj" Private="false" />
-    <ProjectReference Include="..\..\SystemUI\SystemUI.csproj" Private="false" />
     <ProjectReference Include="..\..\Editor\Editor.csproj" Private="false" />
+      <ProjectReference Include="..\lib\Lib.csproj" Private="false" />
+        <ProjectReference Include="..\libDataTypes\libDataTypes.csproj" Private="false" />
   </ItemGroup>
   <!-- Include Resources/** into output/Resources -->
   <!-- Include Resources/** into output/Resources -->
