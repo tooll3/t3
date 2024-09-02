@@ -213,6 +213,7 @@ namespace T3.Editor.Gui.Graph
             if (UserSettings.Config.ShowMiniMap)
                 DrawMiniMap(_composition, GraphCanvas);
 
+            RefreshRootInstance();
             if (_compositionsForDisposal.TryPeek(out var latestComposition))
             {
                 if (!_compositionPath.Contains(latestComposition.SymbolChildId))

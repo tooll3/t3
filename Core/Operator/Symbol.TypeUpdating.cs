@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.SystemUi;
-using T3.SystemUi;
 
 namespace T3.Core.Operator;
 
 public sealed partial class Symbol
 {
+    public event EventHandler<Instance> ParentlessInstanceReplaced;
+    
     internal void UpdateInstanceType()
     {
         UpdateSlotsAndConnectionsForType(out var oldInputDefinitions, out var oldOutputDefinitions);
@@ -29,31 +28,17 @@ public sealed partial class Symbol
             {
                 existingInstancesRefreshInfo.Add(refreshInfo);
             }
-            else if (parentless)
-            {
-                parentlessInstances ??= [];
-                parentlessInstances.Add(instance);
-            }
-        }
 
-        // now remove the old instances itself...
-        foreach (var instance in instances)
-        {
             Instance.Destroy(instance);
             _instancesOfSelf.Remove(instance);
-        }
 
-        // ... and create the new ones...
-
-        if (parentlessInstances != null)
-        {
-            foreach (var instance in parentlessInstances)
+            if (parentless)
             {
-                var symbol = instance.Symbol;
-                if (!symbol.TryCreateParentlessInstance(out _))
+                if (TryCreateParentlessInstance(out var newParentlessInstance))
                 {
-                    Log.Error($"Could not recreate parentless instance of symbol: {symbol.Name}");
+                    ParentlessInstanceReplaced?.Invoke(this, newParentlessInstance);
                 }
+                
             }
         }
 

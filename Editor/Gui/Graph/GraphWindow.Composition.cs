@@ -32,7 +32,9 @@ internal sealed partial class GraphWindow
                 {
                     Compositions.Remove(_instance, out var thisComposition);
                     System.Diagnostics.Debug.Assert(thisComposition == this);
+                    _instance.Disposing -= InstanceOnDisposing;
                     _instance = instance;
+                    instance.Disposing += InstanceOnDisposing;
                     Compositions[instance] = this;
                 }
 
@@ -66,6 +68,17 @@ internal sealed partial class GraphWindow
             SymbolChildId = instance.SymbolChildId;
             _symbolId = symbol.Id;
             _isReadOnly = _symbolPackage.IsReadOnly;
+            
+            instance.Disposing += InstanceOnDisposing;
+        }
+
+        private void InstanceOnDisposing()
+        {
+            _instance.Disposing -= InstanceOnDisposing;
+            if(_disposed)
+                return;
+            
+          //  Dispose();
         }
 
         internal static Composition GetFor(Instance instance)

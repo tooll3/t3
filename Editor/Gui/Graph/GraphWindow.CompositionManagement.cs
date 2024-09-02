@@ -159,7 +159,7 @@ internal sealed partial class GraphWindow
     private string _dupeReadonlyNamespace = "";
     private string _dupeReadonlyName = "";
     private string _dupeReadonlyDescription = "";
-    private Stack<Composition> _compositionsForDisposal = new();
+    private readonly Stack<Composition> _compositionsForDisposal = new();
     private readonly List<Guid> _compositionPath = [];
 
     internal Composition RootInstance { get; private set; }

@@ -263,6 +263,7 @@ internal class EditorSymbolPackage : SymbolPackage
     }
 
     protected Instance? RootInstance;
+    private Symbol? RootSymbol;
 
     public bool TryGetRootInstance([NotNullWhen(true)] out Instance? rootInstance)
     {
@@ -282,14 +283,45 @@ internal class EditorSymbolPackage : SymbolPackage
         Log.Debug($"{DisplayName}: Found home symbol");
 
         var symbol = rootSymboLUi.Symbol;
+        if (RootSymbol != symbol)
+        {
+            if (RootSymbol != null)
+            {
+                RootSymbol.ParentlessInstanceReplaced -= OnRootInstanceReplaced;
+            }
+            
+            RootSymbol = symbol;
+            symbol.ParentlessInstanceReplaced += OnRootInstanceReplaced;
+        }
+        
         if (!symbol.TryCreateParentlessInstance(out rootInstance))
         {
             Log.Error($"Failed to create home instance for {AssemblyInformation.Name}'s symbol {symbol.Name} with id {symbol.Id}");
             return false;
         }
         
-        RootInstance = rootInstance;
+        ReplaceRootInstanceWith(rootInstance);
         return true;
+    }
+
+    private void OnRootInstanceReplaced(object? sender, Instance e)
+    {
+        RootInstance = e;
+    }
+
+    private void ReplaceRootInstanceWith(Instance rootInstance)
+    {
+        OnRootInstanceDisposed();
+        RootInstance = rootInstance;
+        rootInstance.Disposing += OnRootInstanceDisposed;
+    }
+
+    private void OnRootInstanceDisposed()
+    {
+        if (RootInstance == null)
+            return;
+        RootInstance!.Disposing -= OnRootInstanceDisposed;
+        RootInstance = null;
     }
 
     internal bool HasHome

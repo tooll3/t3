@@ -8,7 +8,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator;
 
-public static class SymbolInstantiation
+internal static class SymbolInstantiation
 {
     internal static bool TryCreateNewInstance(this Symbol.Child symbolChild, Instance parentInstance, [NotNullWhen(true)] out Instance newInstance)
     {

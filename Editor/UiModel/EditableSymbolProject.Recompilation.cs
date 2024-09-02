@@ -214,9 +214,7 @@ namespace T3.Editor.UiModel
                 foreach (var project in dirtyProjects)
                 {
                     if (project.TryRecompile())
-                    {
                         RecompiledProjects.Enqueue(project);
-                    }
                 }
 
                 _recompiling = false;
@@ -227,8 +225,8 @@ namespace T3.Editor.UiModel
         private bool TryRecompile()
         {
             _needsCompilation = false;
-
             SaveModifiedSymbols();
+            _needsCompilation = false;
 
             MarkAsSaving();
             var updated = CsProjectFile.TryRecompile(out _);
