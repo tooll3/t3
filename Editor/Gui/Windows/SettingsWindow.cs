@@ -76,6 +76,11 @@ namespace T3.Editor.Gui.Windows
                                                           "An experimental features that will drag neighbouring snapped operators",
                                                           UserSettings.Defaults.SmartGroupDragging);
 
+                        changed |= FormInputs.AddCheckBox("Mirror UI on second view",
+                                                          ref UserSettings.Config.MirrorUiOnSecondView,
+                                                          "On Windows mirroring displays can be extremely slow. This settings is will copy the UI to the second view instead of mirroring it.",
+                                                          UserSettings.Defaults.MirrorUiOnSecondView);
+                        
                         FormInputs.AddVerticalSpace();
                         FormInputs.SetIndentToParameters();
                         changed |= FormInputs.AddFloat("UI Scale",
