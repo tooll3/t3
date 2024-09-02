@@ -48,7 +48,7 @@ namespace T3.Editor
         }
 
         [STAThread]
-        private static void Main()
+        private static void Main(string[] args)
         {
             // Not calling this first will cause exceptions...
             Console.WriteLine("Starting T3 Editor");
@@ -133,8 +133,16 @@ namespace T3.Editor
 
             Log.Debug($"About to initialize T3 UI");
 
+            bool forceRecompileProjects;
+            
+            #if DEBUG
+            forceRecompileProjects = false;
+            #else
+            forceRecompileProjects = args is {Length: > 0} && args.Any(arg => arg == "--force-recompile");
+            #endif
+
             // Initialize UI and load complete symbol model
-            if (!ProjectSetup.TryInitialize(out var uiException))
+            if (!ProjectSetup.TryInitialize(forceRecompileProjects, out var uiException))
             {
                 Log.Error(uiException.Message + "\n\n" + uiException.StackTrace);
                 var innerException = uiException.InnerException?.Message.Replace("\\r", "\r") ?? string.Empty;

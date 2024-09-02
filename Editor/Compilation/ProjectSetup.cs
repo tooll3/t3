@@ -62,7 +62,7 @@ internal static class ProjectSetup
     private static readonly List<AssemblyInformation> EditorOnlyPackages = [];
 
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
-    internal static bool TryInitialize(out Exception exception)
+    internal static bool TryInitialize(bool forceRecompile, out Exception exception)
     {
         #if DEBUG
         Stopwatch totalStopwatch = new();
@@ -83,7 +83,7 @@ internal static class ProjectSetup
             var csProjFiles = FindCsProjFiles();
 
             // Load projects
-            LoadProjects(csProjFiles, nonOperatorAssemblies, out _, out _);
+            LoadProjects(csProjFiles, nonOperatorAssemblies, forceRecompile, out _, out _);
 
             // Register UI types
             var allPackages = ActivePackages.Values
@@ -175,7 +175,7 @@ internal static class ProjectSetup
         ShaderLinter.AddPackage(SharedResources.ResourcePackage, sharedShaderPackages);
     }
 
-    private static void LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, out List<ProjectWithReleaseInfo> unsatisfiedProjects, out List<ProjectWithReleaseInfo> failedProjects)
+    private static void LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, bool forceRecompile, out List<ProjectWithReleaseInfo> unsatisfiedProjects, out List<ProjectWithReleaseInfo> failedProjects)
     {
         // Load each project file and its associated assembly
         var releases = csProjFiles
@@ -212,7 +212,7 @@ internal static class ProjectSetup
                              })
                       .ToArray();
 
-        LoadProjects(nonOperatorAssemblies, releases, out failedProjects, out unsatisfiedProjects);
+        LoadProjects(nonOperatorAssemblies, releases, forceRecompile, out failedProjects, out unsatisfiedProjects);
         
         foreach(var project in failedProjects)
         {
@@ -226,6 +226,7 @@ internal static class ProjectSetup
     }
 
     private static void LoadProjects(ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, IReadOnlyCollection<ProjectWithReleaseInfo> releases,
+                                     bool forceRecompile,
                                      out List<ProjectWithReleaseInfo> failedProjects, out List<ProjectWithReleaseInfo> unsatisfiedProjects)
     {
         List<ProjectWithReleaseInfo> satisfied = new();
@@ -272,7 +273,7 @@ internal static class ProjectSetup
         for (var index = unsatisfied.Count - 1; index >= 0; index--)
         {
             var project = unsatisfied[index];
-            if (!TryLoad(nonOperatorAssemblies, project, loadedOperatorPackages))
+            if (!TryLoad(nonOperatorAssemblies, project, loadedOperatorPackages, forceRecompile))
             {
                 failed.Add(project);
                 unsatisfied.RemoveAt(index);
@@ -284,9 +285,9 @@ internal static class ProjectSetup
         return;
 
         static bool TryLoad(ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, ProjectWithReleaseInfo release,
-                            List<PackageWithReleaseInfo> loadedOperatorPackages)
+                            List<PackageWithReleaseInfo> loadedOperatorPackages, bool forceRecompile)
         {
-            if (!TryLoadProject(release, out var operatorPackage))
+            if (!TryLoadProject(release, forceRecompile, out var operatorPackage))
             {
                 return false;
             }
@@ -309,7 +310,7 @@ internal static class ProjectSetup
             {
                 var release = satisfied[i];
                 satisfied.RemoveAt(i);
-                if (!TryLoad(nonOperatorAssemblies, release, loadedOperatorPackages))
+                if (!TryLoad(nonOperatorAssemblies, release, loadedOperatorPackages, forceRecompile))
                     failed.Add(release);
             }
         }
@@ -320,7 +321,7 @@ internal static class ProjectSetup
             {
                 var release = failed[i];
                 failed.RemoveAt(i);
-                if (!TryLoad(nonOperatorAssemblies, release, loadedOperatorPackages))
+                if (!TryLoad(nonOperatorAssemblies, release, loadedOperatorPackages, forceRecompile))
                     failed.Add(release);
             }
         }
@@ -339,16 +340,20 @@ internal static class ProjectSetup
         }
     }
 
-    private static bool TryLoadProject(ProjectWithReleaseInfo release, out PackageWithReleaseInfo? operatorPackage)
+    private static bool TryLoadProject(ProjectWithReleaseInfo release, bool forceRecompile, out PackageWithReleaseInfo? operatorPackage)
     {
         var csProj = release.CsProject!;
         csProj.RemoveOldBuilds(Compiler.BuildMode.Debug);
-        if (!csProj.TryLoadLatestAssembly() && !csProj.TryRecompile(out _))
-        {
-            Log.Error($"Failed to load {csProj.Name}");
-            operatorPackage = null;
-            return false;
-        }
+
+        var success = forceRecompile
+                          ? csProj.TryRecompile(out _) || csProj.TryLoadLatestAssembly() // recompile - if failed, load latest
+                          : csProj.TryLoadLatestAssembly() || csProj.TryRecompile(out _); // load latest - if failed, recompile
+            if (!success)
+            {
+                Log.Error($"Failed to load {csProj.Name}");
+                operatorPackage = null;
+                return false;
+            }
 
         if (!csProj.Assembly!.IsEditorOnly)
         {
