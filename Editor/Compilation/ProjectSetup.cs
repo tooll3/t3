@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -14,11 +15,12 @@ using T3.Editor.UiModel;
 namespace T3.Editor.Compilation;
 
 /// <summary>
-/// handles the creation and management of symbol projects
+/// handles the creation, loading, unloading, and general management of projects and packages
+/// todo: simplify/refactor as it's pretty confusing
 /// </summary>
 internal static class ProjectSetup
 {
-    public static bool TryCreateProject(string name, string nameSpace, bool shareResources, out EditableSymbolProject newProject)
+    public static bool TryCreateProject(string name, string nameSpace, bool shareResources, [NotNullWhen(true)] out EditableSymbolProject? newProject)
     {
         var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, shareResources, UserSettings.Config.DefaultNewProjectDirectory);
 
@@ -37,9 +39,11 @@ internal static class ProjectSetup
         }
 
         newProject = new EditableSymbolProject(newCsProj);
-        ActivePackages.Add(newProject.GetKey(), new PackageWithReleaseInfo(newProject, releaseInfo));
+        var package = new PackageWithReleaseInfo(newProject, releaseInfo);
+        ActivePackages.Add(newProject.GetKey(), package);
 
-        UpdateSymbolPackage(newProject);
+        UpdateSymbolPackage(package);
+        InitializePackageResources(package);
         return true;
     }
 
@@ -61,8 +65,7 @@ internal static class ProjectSetup
     internal static readonly IEnumerable<SymbolPackage> AllPackages = ActivePackages.Values.Select(x => x.Package);
     private static readonly List<AssemblyInformation> EditorOnlyPackages = [];
 
-    [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
-    internal static bool TryInitialize(bool forceRecompile, out Exception exception)
+    internal static bool TryLoadAll(bool forceRecompile, [NotNullWhen(false)] out Exception? exception)
     {
         #if DEBUG
         Stopwatch totalStopwatch = new();
@@ -71,7 +74,7 @@ internal static class ProjectSetup
 
         try
         {
-            // todo: change to load CsProjs from specific directories and specific nuget packages from a package directory
+            // todo: change to load CsProj files from specific directories and specific nuget packages from a package directory
             ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = [];
 
             #if !DEBUG
@@ -144,7 +147,7 @@ internal static class ProjectSetup
            .ToList()
            .ForEach(directoryInfo =>
                     {
-                        var thisDir = directoryInfo.FullName!;
+                        var thisDir = directoryInfo.FullName;
                         var packageInfo = Path.Combine(thisDir, RuntimeAssemblies.PackageInfoFileName);
                         if (!RuntimeAssemblies.TryLoadAssemblyFromPackageInfoFile(packageInfo, out var assembly, out var releaseInfo))
                         {
@@ -165,16 +168,21 @@ internal static class ProjectSetup
 
     private static void InitializePackageResources(IReadOnlyCollection<PackageWithReleaseInfo> allSymbolPackages)
     {
-        var sharedShaderPackages = ResourceManager.SharedShaderPackages;
         foreach (var package in allSymbolPackages)
         {
-            var symbolPackage = (EditorSymbolPackage)package.Package;
-            symbolPackage.InitializeShaderLinting(sharedShaderPackages);
+            InitializePackageResources(package);
         }
 
-        ShaderLinter.AddPackage(SharedResources.ResourcePackage, sharedShaderPackages);
+        ShaderLinter.AddPackage(SharedResources.ResourcePackage, ResourceManager.SharedShaderPackages);
     }
 
+    private static void InitializePackageResources(PackageWithReleaseInfo package)
+    {
+        var symbolPackage = (EditorSymbolPackage)package.Package;
+        symbolPackage.InitializeShaderLinting(ResourceManager.SharedShaderPackages);
+    }
+
+    [SuppressMessage("ReSharper", "OutParameterValueIsAlwaysDiscarded.Local")]
     private static void LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, bool forceRecompile, out List<ProjectWithReleaseInfo> unsatisfiedProjects, out List<ProjectWithReleaseInfo> failedProjects)
     {
         // Load each project file and its associated assembly
@@ -292,7 +300,7 @@ internal static class ProjectSetup
                 return false;
             }
 
-            if (operatorPackage.HasValue) // wont have value if the assembly is a non-operator assembly
+            if (operatorPackage.HasValue) // won't have value if the assembly is a non-operator assembly
             {
                 loadedOperatorPackages.Add(operatorPackage.Value);
                 AddToLoadedPackages(operatorPackage.Value);
@@ -358,7 +366,7 @@ internal static class ProjectSetup
         if (!csProj.Assembly!.IsEditorOnly)
         {
             var project = new EditableSymbolProject(csProj);
-            operatorPackage = new PackageWithReleaseInfo(project, release.ReleaseInfo);
+            operatorPackage = new PackageWithReleaseInfo(project, release.ReleaseInfo!);
         }
         else
         {
@@ -373,8 +381,6 @@ internal static class ProjectSetup
     {
         var releaseInfo = projectWithReleaseInfo.ReleaseInfo!;
         Debug.Assert(releaseInfo != null);
-
-        var allSatisfied = false;
 
         foreach (var packageReference in releaseInfo.OperatorPackages)
         {
@@ -410,7 +416,7 @@ internal static class ProjectSetup
                                                                                 .Where(path =>
                                                                                        {
                                                                                            var subDir = Path.GetFileName(path);
-                                                                                           return !subDir.StartsWith('.'); // ignore things like .git and .syncthing folders 
+                                                                                           return !subDir.StartsWith('.'); // ignore things like .git and file sync folders 
                                                                                        }));
         #endif
         return projectSearchDirectories;
@@ -479,10 +485,15 @@ internal static class ProjectSetup
     {
         UpdateSymbolPackages(ActivePackages[project.GetKey()]);
     }
+    
+    private static void UpdateSymbolPackage(PackageWithReleaseInfo package)
+    {
+        UpdateSymbolPackages(package);
+    }
 
     private static void UpdateSymbolPackages(params PackageWithReleaseInfo[] packages)
     {
-        // update all of the editor ui packages in concert with the operator packages
+        // update all the editor ui packages in concert with the operator packages
         var uiPackagesNeedingReload = new List<AssemblyInformation>();
         foreach(var package in packages)
         {
@@ -522,8 +533,8 @@ internal static class ProjectSetup
         switch (packages.Length)
         {
             case 0:
+                Log.Warning($"Tried to update symbol packages but none were provided");
                 return;
-                throw new ArgumentException("No symbol packages to update");
             case 1:
             {
                 var package = (EditorSymbolPackage)packages[0].Package;

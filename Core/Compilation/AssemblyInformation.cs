@@ -89,6 +89,7 @@ public sealed class AssemblyInformation
             return false;
         }
 
+        Log.Debug($"Loading types from assembly {assembly.FullName}\n{(assembly.FullName!.StartsWith("lib.Editor") ? Environment.StackTrace : "")}");
         LoadTypes(types, assembly, out ShouldShareResources, out _types);
         return true;
     }
@@ -105,27 +106,29 @@ public sealed class AssemblyInformation
 
     private void LoadTypes(Type[] types, Assembly assembly, out bool shouldShareResources, out Dictionary<string, Type> typeDict)
     {
-        typeDict = new Dictionary<string, Type>();
+        var typesByName = new Dictionary<string, Type>();
         foreach (var type in types)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (type == null)
             {
-                Log.Warning($"Null type in assembly {assembly.FullName}");
+                Log.Error($"Null type in assembly {assembly.FullName}");
                 continue;
             }
             
-            if (!typeDict.TryAdd(type.FullName!, type))
+            var name = type.FullName;
+            if (name == null)
+                continue;
+            
+            if (!typesByName.TryAdd(name, type))
             {
-                Log.Warning($"Duplicate type {type.FullName} in assembly {assembly.FullName}");
+                Log.Warning($"Duplicate type {name} in assembly {assembly.FullName}");
             }
         }
 
-        _types = typeDict;
-
         ConcurrentBag<Type> nonOperatorTypes = new();
 
-        _types.Values.AsParallel().ForAll(type =>
+        typesByName.Values.AsParallel().ForAll(type =>
                                           {
                                               var isOperator = type.IsAssignableTo(typeof(Instance));
                                               if (!isOperator)
@@ -166,6 +169,8 @@ public sealed class AssemblyInformation
 
                                          return false;
                                      }).Any();
+        
+        typeDict = typesByName;
     }
 
     private void SetUpOperatorType(Type type)
