@@ -52,11 +52,11 @@ internal static class ProjectSetup
         var key = package.GetKey();
         if (!ActivePackages.Remove(key, out _))
             throw new InvalidOperationException($"Failed to remove package {key}: does not exist");
-        
+
         if (needsDispose)
             package.Dispose();
     }
-    
+
     private static string GetKey(this SymbolPackage package) => package.RootNamespace;
 
     private readonly record struct ProjectWithReleaseInfo(FileInfo ProjectFile, CsProjectFile? CsProject, ReleaseInfo? ReleaseInfo);
@@ -67,58 +67,9 @@ internal static class ProjectSetup
 
     internal static bool TryLoadAll(bool forceRecompile, [NotNullWhen(false)] out Exception? exception)
     {
-        #if DEBUG
-        Stopwatch totalStopwatch = new();
-        totalStopwatch.Start();
-        #endif
-
         try
         {
-            // todo: change to load CsProj files from specific directories and specific nuget packages from a package directory
-            ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = [];
-
-            #if !DEBUG
-            // Load pre-built built-in packages as read-only
-            LoadBuiltInPackages(nonOperatorAssemblies);
-            #endif
-
-            // Find project files
-            var csProjFiles = FindCsProjFiles();
-
-            // Load projects
-            LoadProjects(csProjFiles, nonOperatorAssemblies, forceRecompile, unsatisfiedProjects: out _, failedProjects: out _);
-
-            // Register UI types
-            var allPackages = ActivePackages.Values
-                                            .ToArray();
-
-            foreach (var assembly in nonOperatorAssemblies)
-            {
-                if (assembly.IsEditorOnly)
-                {
-                    EditorOnlyPackages.Add(assembly);
-                }
-            }
-            
-            // Update all symbol packages
-            UpdateSymbolPackages(allPackages);
-            
-            // Initialize resources and shader linting
-            InitializePackageResources(allPackages);
-            
-            // Initialize custom UIs
-            UiRegistration.RegisterUiTypes();
-            InitializeCustomUis(EditorOnlyPackages);
-
-            foreach (var package in SymbolPackage.AllPackages)
-            {
-                Log.Debug($"Loaded {package.DisplayName}");
-            }
-
-            #if DEBUG
-            totalStopwatch.Stop();
-            Log.Debug($"Total load time: {totalStopwatch.ElapsedMilliseconds}ms");
-            #endif
+            LoadAll(forceRecompile);
 
             exception = null;
             return true;
@@ -128,6 +79,65 @@ internal static class ProjectSetup
             exception = e;
             return false;
         }
+    }
+
+    /// <summary>
+    /// Loads all projects and packages - for use only at the start of the editor
+    /// </summary>
+    /// <param name="forceRecompile">all symbol projects will be recompiled if possible</param>
+    /// <exception cref="Exception">Unknown exceptions may be raised - if you want to handle them, wrap this in a try/catch</exception>
+    private static void LoadAll(bool forceRecompile)
+    {
+        #if DEBUG
+        Stopwatch totalStopwatch = new();
+        totalStopwatch.Start();
+        #endif
+
+        // todo: change to load CsProj files from specific directories and specific nuget packages from a package directory
+        ConcurrentBag<AssemblyInformation> nonOperatorAssemblies = [];
+
+        #if !DEBUG
+        // Load pre-built built-in packages as read-only
+        LoadBuiltInPackages(nonOperatorAssemblies);
+        #endif
+
+        // Find project files
+        var csProjFiles = FindCsProjFiles();
+
+        // Load projects
+        LoadProjects(csProjFiles, nonOperatorAssemblies, forceRecompile, unsatisfiedProjects: out _, failedProjects: out _);
+
+        // Register UI types
+        var allPackages = ActivePackages.Values
+                                        .ToArray();
+
+        foreach (var assembly in nonOperatorAssemblies)
+        {
+            if (assembly.IsEditorOnly)
+            {
+                EditorOnlyPackages.Add(assembly);
+            }
+        }
+
+        // Update all symbol packages
+        UpdateSymbolPackages(allPackages);
+
+        // Initialize resources and shader linting
+        InitializePackageResources(allPackages);
+
+        // Initialize custom UIs
+        UiRegistration.RegisterUiTypes();
+        InitializeCustomUis(EditorOnlyPackages);
+
+        foreach (var package in SymbolPackage.AllPackages)
+        {
+            Log.Debug($"Loaded {package.DisplayName}");
+        }
+
+        #if DEBUG
+            totalStopwatch.Stop();
+            Log.Debug($"Total load time: {totalStopwatch.ElapsedMilliseconds}ms");
+        #endif
     }
 
     private static void AddToLoadedPackages(PackageWithReleaseInfo package)
@@ -183,7 +193,8 @@ internal static class ProjectSetup
     }
 
     [SuppressMessage("ReSharper", "OutParameterValueIsAlwaysDiscarded.Local")]
-    private static void LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, bool forceRecompile, out List<ProjectWithReleaseInfo> unsatisfiedProjects, out List<ProjectWithReleaseInfo> failedProjects)
+    private static void LoadProjects(FileInfo[] csProjFiles, ConcurrentBag<AssemblyInformation> nonOperatorAssemblies, bool forceRecompile,
+                                     out List<ProjectWithReleaseInfo> unsatisfiedProjects, out List<ProjectWithReleaseInfo> failedProjects)
     {
         // Load each project file and its associated assembly
         var releases = csProjFiles
@@ -221,13 +232,13 @@ internal static class ProjectSetup
                       .ToArray();
 
         LoadProjects(nonOperatorAssemblies, releases, forceRecompile, out failedProjects, out unsatisfiedProjects);
-        
-        foreach(var project in failedProjects)
+
+        foreach (var project in failedProjects)
         {
             Log.Error($"Failed to load {project.CsProject!.Name}");
         }
-        
-        foreach(var project in unsatisfiedProjects)
+
+        foreach (var project in unsatisfiedProjects)
         {
             Log.Error($"Unsatisfied dependencies for {project.CsProject!.Name}");
         }
@@ -255,22 +266,22 @@ internal static class ProjectSetup
         while (shouldTryAgain)
         {
             // empty failures into satisfied
-            for(int i = failed.Count - 1; i >= 0; i--)
+            for (int i = failed.Count - 1; i >= 0; i--)
             {
                 var release = failed[i];
                 failed.RemoveAt(i);
                 satisfied.Add(release);
             }
-            
+
             // compile all projects that have satisfied dependencies
             CompileSatisfiedPackages();
             // retry failures after any successes
             RetryFailures();
 
             var unsatisfiedCount = unsatisfied.Count;
-            
+
             SatisfyDependencies();
-            
+
             // if no further dependencies were satisfied, we're done
             // whether it's because of success or failure
             shouldTryAgain = unsatisfied.Count < unsatisfiedCount;
@@ -356,12 +367,12 @@ internal static class ProjectSetup
         var success = forceRecompile
                           ? csProj.TryRecompile(out _) || csProj.TryLoadLatestAssembly() // recompile - if failed, load latest
                           : csProj.TryLoadLatestAssembly() || csProj.TryRecompile(out _); // load latest - if failed, recompile
-            if (!success)
-            {
-                Log.Error($"Failed to load {csProj.Name}");
-                operatorPackage = null;
-                return false;
-            }
+        if (!success)
+        {
+            Log.Error($"Failed to load {csProj.Name}");
+            operatorPackage = null;
+            return false;
+        }
 
         if (!csProj.Assembly!.IsEditorOnly)
         {
@@ -405,7 +416,7 @@ internal static class ProjectSetup
     {
         // ReSharper disable once JoinDeclarationAndInitializer
         string[] topDirectories = [UserSettings.Config.DefaultNewProjectDirectory];
-        
+
         var projectSearchDirectories = topDirectories
                                       .Where(Directory.Exists)
                                       .SelectMany(Directory.EnumerateDirectories)
@@ -431,7 +442,7 @@ internal static class ProjectSetup
     {
         if (nonOperatorAssemblies.Count == 0)
             return;
-        
+
         var uiInitializerTypes = nonOperatorAssemblies
                                 .ToArray()
                                 .AsParallel()
@@ -455,12 +466,12 @@ internal static class ProjectSetup
 
                 var initializer = (IEditorUiExtension)activated;
                 initializer.Initialize();
-                
-                if(_uiInitializers.TryGetValue(assemblyInfo, out var initializers))
+
+                if (_uiInitializers.TryGetValue(assemblyInfo, out var initializers))
                     initializers.Add(initializer);
                 else
                     _uiInitializers[assemblyInfo] = [initializer];
-                
+
                 Log.Info($"Initialized UI initializer for {assemblyInfo.Name}: {instanceType.Name}");
             }
             catch (Exception e)
@@ -485,7 +496,7 @@ internal static class ProjectSetup
     {
         UpdateSymbolPackages(ActivePackages[project.GetKey()]);
     }
-    
+
     private static void UpdateSymbolPackage(PackageWithReleaseInfo package)
     {
         UpdateSymbolPackages(package);
@@ -495,21 +506,21 @@ internal static class ProjectSetup
     {
         // update all the editor ui packages in concert with the operator packages
         var uiPackagesNeedingReload = new List<AssemblyInformation>();
-        foreach(var package in packages)
+        foreach (var package in packages)
         {
             var assembly = package.Package.AssemblyInformation;
             assembly.Unload();
-            
-            foreach(var nonOperatorAssembly in EditorOnlyPackages)
+
+            foreach (var nonOperatorAssembly in EditorOnlyPackages)
             {
-                if (!nonOperatorAssembly.DependsOn(package)) 
+                if (!nonOperatorAssembly.DependsOn(package))
                     continue;
-                
+
                 uiPackagesNeedingReload.Add(nonOperatorAssembly);
             }
         }
-        
-        foreach(var uiAssembly in uiPackagesNeedingReload)
+
+        foreach (var uiAssembly in uiPackagesNeedingReload)
         {
             if (_uiInitializers.TryGetValue(uiAssembly, out var initializers))
             {
@@ -520,15 +531,15 @@ internal static class ProjectSetup
                     initializers.RemoveAt(index);
                 }
             }
-            
+
             uiAssembly.Unload();
             uiAssembly.ReplaceResolversOf(packages);
         }
-        
+
         InitializeCustomUis(uiPackagesNeedingReload);
-        
+
         // actually update the symbol packages
-        
+
         // this switch statement exists to avoid the overhead of parallelization for a single package, e.g. when compiling changes to a single project
         switch (packages.Length)
         {
@@ -584,7 +595,7 @@ internal static class ProjectSetup
             symbolPackage.RegisterUiSymbols(symbolUis.NewlyLoaded, symbolUis.PreExisting);
         }
     }
-    
+
     private static readonly Dictionary<AssemblyInformation, List<IEditorUiExtension>> _uiInitializers = new();
 
     private readonly record struct SymbolUiLoadInfo(SymbolUi[] NewlyLoaded, SymbolUi[] PreExisting);
