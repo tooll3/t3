@@ -37,7 +37,8 @@ namespace T3.Core.Operator
             LocalTime = Playback.TimeInBars;
             LocalFxTime = Playback.FxTimeInBars;
             PointLights.Clear();
-            
+            FloatVariables.Clear();
+            IntVariables.Clear();
             
             PbrContextSettings.SetDefaultToContext(this);
         }
