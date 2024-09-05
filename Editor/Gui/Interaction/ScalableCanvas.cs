@@ -380,7 +380,7 @@ namespace T3.Editor.Gui.Interaction
             
             // Damp scaling
             var minInCanvas = Scroll;
-            var maxInCanvas = Scroll + WindowSize / Scale;
+            var maxInCanvas = Scroll + WindowSize  / Scale;
             var minTargetInCanvas = ScrollTarget;
             var maxTargetInCanvas = ScrollTarget + WindowSize / ScaleTarget;
             
@@ -388,18 +388,16 @@ namespace T3.Editor.Gui.Interaction
             
             var min = Vector2.Lerp(minInCanvas, minTargetInCanvas, f);
             var max = Vector2.Lerp(maxInCanvas, maxTargetInCanvas, f);
-            Scale = WindowSize / (max - min);
+            Scale = WindowSize  / (max - min);
             Scroll = min;
             
-
-
             if (float.IsNaN(ScaleTarget.X))
                 ScaleTarget.X = 1;
             
             if (float.IsNaN(ScaleTarget.Y))
                 ScaleTarget.Y = 1;
             
-            if (float.IsNaN(Scale.X) || float.IsNaN(Scale.Y))
+            if (float.IsNaN(Scale.X) || float.IsNaN(Scale.Y) || MathF.Sign(ScaleTarget.Y) != MathF.Sign(Scale.Y))
                 Scale = ScaleTarget;
             
             if (float.IsNaN(ScrollTarget.X))
