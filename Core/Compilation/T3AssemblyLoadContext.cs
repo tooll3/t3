@@ -16,8 +16,15 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 {
     private readonly string _path;
     private Assembly? _myAssembly;
-
-    private static readonly IReadOnlyList<Assembly> CoreAssemblies = RuntimeAssemblies.CoreAssemblies;
+    
+    private readonly object _assemblyLock = new();
+    private CompositeCompilationAssemblyResolver? _assemblyResolver;
+    private readonly Dictionary<object, string> _assemblyPaths = new();
+    
+    // this is an ultimate list of assemblies that have been loaded for this context
+    // keeping this cache allows us to avoid stack overflows during loading, and also
+    // speeds up the loading process.
+    private readonly Dictionary<string, Assembly> _loadedAssemblies = new();
 
     internal T3AssemblyLoadContext(AssemblyName assemblyName, string path) : base(assemblyName.Name, true)
     {
@@ -27,9 +34,10 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
         lock (_assemblyLock)
         {
-            foreach (var assembly in CoreAssemblies)
+            foreach (var assembly in RuntimeAssemblies.CoreAssemblies)
             {
                 AddToLoadedAssemblies(assembly, true, debug: false);
+                //CollectReferencedAssembliesOf(assembly, Default);
             }
         }
     }
@@ -47,15 +55,15 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
     {
         lock (_assemblyLock)
         {
-            if (TryGetLoadedAssembly(name, out var alreadyLoadedAssembly))
+            if (TryGetLoadedAssembly(name, context, out var alreadyLoadedAssembly))
                 return alreadyLoadedAssembly;
-            
+
             var nameToSearchFor = name.Name;
 
             if (_myAssembly == null)
             {
                 _myAssembly = LoadFromAssemblyPath(_path);
-                CollectReferencedAssembliesOf(_myAssembly);
+                CollectReferencedAssembliesOf(_myAssembly, this);
                 if (nameToSearchFor == _myAssembly.GetName().Name)
                     return _myAssembly;
             }
@@ -154,7 +162,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                     break;
                 }
             }
-            
+
             var inferredAssemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
             if (_loadedAssemblies.TryGetValue(inferredAssemblyName, out var assembly))
             {
@@ -163,21 +171,9 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
             assembly = context.LoadFromAssemblyPath(assemblyPath);
             AddToLoadedAssemblies(assembly, false);
-            CollectReferencedAssembliesOf(assembly);
-
+            CollectReferencedAssembliesOf(assembly, context);
 
             return assembly;
-        }
-
-        void CollectReferencedAssembliesOf(Assembly assembly)
-        {
-            foreach (var referenced in assembly.GetReferencedAssemblies())
-            {
-                if (_loadedAssemblies.TryGetValue(GetName(referenced), out _)) 
-                    continue;
-                
-                _ = OnResolving(context, referenced);
-            }
         }
 
         static bool IsLikelyFile(string path, string nameToSearchFor)
@@ -244,18 +240,21 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
                        .ToArray();
         return new CompositeCompilationAssemblyResolver(resolvers);
     }
-
-    private readonly object _assemblyLock = new();
-    private CompositeCompilationAssemblyResolver? _assemblyResolver;
-    private readonly Dictionary<object, string> _assemblyPaths = new();
-    private readonly Dictionary<string, Assembly> _loadedAssemblies = new();
-
+    
     protected override Assembly? Load(AssemblyName assemblyName)
     {
         var result = OnResolving(this, assemblyName);
 
         if (result == null)
         {
+            // https://stackoverflow.com/questions/1127431/xmlserializer-giving-filenotfoundexception-at-constructor#answer-1177040
+            var assemblyNameStr = assemblyName.Name;
+            if (assemblyNameStr != null && assemblyNameStr.EndsWith("XmlSerializers"))
+            {
+                Log.Debug($"Failed to find Xml assembly {assemblyName}. This is expected for XmlSerializers");
+                return null;
+            }
+            
             Log.Error($"Failed to load assembly {assemblyName.Name}");
             var sb = new System.Text.StringBuilder();
             foreach (var kvp in _assemblyPaths)
@@ -283,7 +282,7 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
 
         return result;
     }
-    
+
     // warning : not thread safe, must be wrapped in a lock around _assemblyLock
     private void AddToLoadedAssemblies(Assembly assembly, bool addPath, bool debug = true)
     {
@@ -294,11 +293,22 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
             return;
         }
 
-        if(addPath)
+        if (addPath)
             AddAssemblyPath(assembly, assembly.Location);
-        
+
         if (debug && !name.StartsWith("System")) // don't log system assemblies - too much log spam for things that are probably not error-prone
             Log.Debug($"{Name}: Loaded assembly {name} from {assembly.Location}");
+    }
+
+    private void CollectReferencedAssembliesOf(Assembly assembly, AssemblyLoadContext context)
+    {
+        foreach (var referenced in assembly.GetReferencedAssemblies())
+        {
+            if (_loadedAssemblies.TryGetValue(GetName(referenced), out _))
+                continue;
+
+            _ = OnResolving(context, referenced);
+        }
     }
 
     private static string GetName(Assembly assembly) => GetName(assembly.GetName());
@@ -309,21 +319,48 @@ internal sealed class T3AssemblyLoadContext : AssemblyLoadContext
         return name;
     }
 
-    private bool TryGetLoadedAssembly(AssemblyName assemblyName, [NotNullWhen(true)] out Assembly? assembly)
+    private bool TryGetLoadedAssembly(AssemblyName assemblyName, AssemblyLoadContext context, [NotNullWhen(true)] out Assembly? assembly)
     {
         var name = GetName(assemblyName);
+
+        // the following are performed in order of preference:
+
+        // first we check if we already have the assembly in our cache
         if (_loadedAssemblies.TryGetValue(name, out assembly))
             return true;
 
-        assembly = Default.Assemblies.FirstOrDefault(x => GetName(x) == name);
-        assembly ??= Assemblies.FirstOrDefault(x => GetName(x) == name);
+        // then we check the "Default" load context - the root load context of Tooll
+        if (TryGetExistingFromLoadContext(Default, name, out assembly))
+            return true;
 
-        if (assembly == null)
+        // then we check the context provided
+        if (TryGetExistingFromLoadContext(context, name, out assembly))
+            return true;
+
+        // then we check our own context, if the context provided is not our own
+        if (context != this && TryGetExistingFromLoadContext(this, name, out assembly))
+        {
+           return true;
+        }
+        
+        // guess we didn't find it :(
+        return false;
+
+        bool TryGetExistingFromLoadContext(AssemblyLoadContext context, string name, [NotNullWhen(true)] out Assembly? assembly)
+        {
+            assembly = context.Assemblies.FirstOrDefault(x => GetName(x) == name);
+
+            if (assembly != null)
+            {
+                AddToLoadedAssemblies(assembly, false);
+                CollectReferencedAssembliesOf(assembly, context);
+                return true;
+            }
+
             return false;
-
-        AddToLoadedAssemblies(assembly, false);
-        return true;
+        }
     }
+
 
     protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
     {

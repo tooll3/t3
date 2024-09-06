@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using Microsoft.Extensions.DependencyModel;
 using T3.Core.Logging;
 using T3.Serialization;
 
@@ -24,32 +25,15 @@ public static class RuntimeAssemblies
     {
         SetEnvironmentVariable(EnvironmentVariableName, CoreDirectory);
 
-        var alreadyLoadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-        var currentAssemblies = new List<Assembly>(128);
-        currentAssemblies.AddRange(alreadyLoadedAssemblies);
-        var otherAssemblyFiles = Directory.GetFiles(CoreDirectory, "*.dll");
-        foreach (var assemblyFile in otherAssemblyFiles)
-        {
-            if (string.IsNullOrWhiteSpace(assemblyFile))
-                continue;
-            
-            if (currentAssemblies.Any(x => x.Location == assemblyFile || x.GetName().Name == Path.GetFileNameWithoutExtension(assemblyFile)))
-                continue;
+       // var alreadyLoadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+        var assemblies = AssemblyLoadContext.Default.Assemblies.ToArray();
 
-            try
-            {
-                var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyFile);
-                currentAssemblies.Add(assembly);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Could not load assembly at \"{assemblyFile}\": {e.Message}");
-            }
-        }
-
-        CoreAssemblies = currentAssemblies;
+        assemblies.SelectMany(x => x.GetReferencedAssemblies())
+                  .DistinctBy(x => x.FullName).AsParallel()
+                  .ForAll(assemblyName => Assembly.Load(assemblyName));
+         
+        CoreAssemblies = AssemblyLoadContext.Default.Assemblies.ToArray();
     }
-
 
     private static void SetEnvironmentVariable(string envVar, string envValue)
     {
