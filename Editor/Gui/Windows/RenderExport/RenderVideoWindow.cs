@@ -46,6 +46,7 @@ public class RenderVideoWindow : BaseRenderWindow
         var currentDesc = mainTexture!.Description;
         size.Width = currentDesc.Width;
         size.Height = currentDesc.Height;
+        FormInputs.AddVerticalSpace();
 
         // Custom parameters for this renderer
         FormInputs.AddInt("Bitrate", ref _bitrate, 0, 25000000, 1000);
