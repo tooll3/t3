@@ -86,6 +86,8 @@ public class TimeLineCanvas : CurveEditCanvas
                              |ImGuiWindowFlags.NoScrollWithMouse);
 
             {
+                CustomComponents.HandleDragScrolling(this);
+                
                 if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
                     DeleteSelectedElements();
                     

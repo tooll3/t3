@@ -434,8 +434,10 @@ namespace T3.Editor.Gui.Interaction
             if (PreventMouseInteraction)
                 return;
             
+            //var isOtherWindowDragScrolling =  ImGui.GetID("");
             var isVerticalColorSliderActive = FrameStats.Last.OpenedPopUpName == "ColorBrightnessSlider";
-            var isAnotherWindowDragged =  _draggedCanvas != null && _draggedCanvas != this || CustomComponents.IsDragScrolling;
+            var isAnotherWindowDragged =  _draggedCanvas != null && _draggedCanvas != this 
+                                          || CustomComponents.IsAnotherWindowDragScrolling(this);
             if (!isVerticalColorSliderActive
                 && !isAnotherWindowDragged
                 && !flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse)

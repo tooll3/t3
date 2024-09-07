@@ -211,7 +211,7 @@ internal class ParameterWindow : Window
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
         ImGui.BeginChild("parameters", Vector2.Zero, false, ImGuiWindowFlags.AlwaysUseWindowPadding);
 
-        CustomComponents.HandleDragScrolling();
+        CustomComponents.HandleDragScrolling(this);
         DrawChildNameAndFlags(instance, symbolChildUi, symbolUi);
 
         var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];

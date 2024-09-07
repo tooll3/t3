@@ -704,18 +704,25 @@ namespace T3.Editor.Gui.Styling
         
         
         private static Vector2 _dragScrollStart;
-        public static bool IsDragScrolling;
-        private static uint _scrollingId;
+        public static bool IsDragScrolling => _draggedWindowObject != null;
+        //private static uint _scrollingId;
+        private static object _draggedWindowObject;
 
-        public static void HandleDragScrolling()
+        public static bool IsAnotherWindowDragScrolling(object windowObject)
         {
-            var currentId = ImGui.GetID("");
+            return _draggedWindowObject != null && _draggedWindowObject != windowObject;
+        }
+        
+        public static void HandleDragScrolling(object windowObject)
+        {
+            //var currentId = ImGui.GetID("");
 
-            if (IsDragScrolling && _scrollingId == currentId)
+            if (_draggedWindowObject == windowObject)
             {
                 if (ImGui.IsMouseReleased(ImGuiMouseButton.Right))
                 {
-                    IsDragScrolling = false;
+                    //IsDragScrolling = false;
+                    _draggedWindowObject = null;
                 }
                 
                 if (ImGui.IsMouseDragging(ImGuiMouseButton.Right))
@@ -730,8 +737,8 @@ namespace T3.Editor.Gui.Styling
             if ( ImGui.IsWindowHovered() && !T3Ui.DragFieldWasHoveredLastFrame && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
             {
                 _dragScrollStart = new Vector2(ImGui.GetScrollX(),  ImGui.GetScrollY());
-                IsDragScrolling = true;
-                _scrollingId = currentId;
+                //IsDragScrolling = true;
+                _draggedWindowObject = windowObject;
             }
         }
     }
