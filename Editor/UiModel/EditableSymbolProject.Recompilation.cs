@@ -6,7 +6,6 @@ using T3.Core.Compilation;
 using T3.Core.Operator;
 using T3.Core.SystemUi;
 using T3.Editor.Compilation;
-using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;

@@ -118,6 +118,8 @@ internal static class ProjectSetup
                 EditorOnlyPackages.Add(assembly);
             }
         }
+        
+        UiRegistration.RegisterUiTypes();
 
         // Update all symbol packages
         UpdateSymbolPackages(allPackages);
@@ -126,7 +128,6 @@ internal static class ProjectSetup
         InitializePackageResources(allPackages);
 
         // Initialize custom UIs
-        UiRegistration.RegisterUiTypes();
         InitializeCustomUis(EditorOnlyPackages);
 
         foreach (var package in SymbolPackage.AllPackages)

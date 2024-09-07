@@ -26,13 +26,13 @@ public static class RuntimeAssemblies
         SetEnvironmentVariable(EnvironmentVariableName, CoreDirectory);
 
        // var alreadyLoadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-        var assemblies = AssemblyLoadContext.Default.Assemblies.ToArray();
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
         assemblies.SelectMany(x => x.GetReferencedAssemblies())
                   .DistinctBy(x => x.FullName).AsParallel()
                   .ForAll(assemblyName => Assembly.Load(assemblyName));
-         
-        CoreAssemblies = AssemblyLoadContext.Default.Assemblies.ToArray();
+
+        CoreAssemblies = AppDomain.CurrentDomain.GetAssemblies();
     }
 
     private static void SetEnvironmentVariable(string envVar, string envValue)
