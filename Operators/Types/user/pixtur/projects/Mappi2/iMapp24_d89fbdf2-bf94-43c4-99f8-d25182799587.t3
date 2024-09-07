@@ -1354,6 +1354,12 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "cb1dcb9d-4ffd-49ab-88ef-da9f81a5a9fa"/*Katsumaki*/,
+      "SymbolId": "bfa5b00c-e1f3-4b15-8fec-859156facfce",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -1812,7 +1818,7 @@
         "Bpm": 137.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "Resources\\user\\pixtur\\projects\\proj-mappi2024\\soundtrack\\v2.3-DumDrops.mp3"
+        "FilePath": "Resources\\user\\pixtur\\projects\\proj-mappi2024\\soundtrack\\v2.7-Anpassungen&Sounddesign.mp3"
       }
     ]
   }
