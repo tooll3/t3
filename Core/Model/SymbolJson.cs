@@ -36,7 +36,7 @@ namespace T3.Core.Model
             writer.WritePropertyName(JsonKeys.Inputs);
             writer.WriteStartArray();
 
-            foreach (var input in inputs)
+            foreach (var input in inputs.OrderBy(x => x.Id))
             {
                 writer.WriteStartObject();
                 writer.WriteObject(JsonKeys.Id, input.Id);
