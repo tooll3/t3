@@ -439,21 +439,26 @@ namespace T3.Editor.Gui.Interaction
             //     return;
             
             var isVerticalColorSliderActive = FrameStats.Last.OpenedPopUpName == "ColorBrightnessSlider";
-            var isAnotherWindowDragged = _draggedCanvas != null && _draggedCanvas != this;
+            var iWasBeingDragged = _draggedCanvas == this;
+            var isAnotherWindowDragged = _draggedCanvas != null && !iWasBeingDragged;
             
-            var preventPanning = flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse);
+            var preventPanning = isAnotherWindowDragged || flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse);
             var mouseIsDragging = ImGui.IsMouseDragging(ImGuiMouseButton.Right)
                                   || (!UserSettings.Config.MiddleMouseButtonZooms && ImGui.IsMouseDragging(ImGuiMouseButton.Middle) && !ImGui.GetIO().KeyAlt)
                                   || ImGui.IsMouseDragging(ImGuiMouseButton.Middle);
             
             if (!isVerticalColorSliderActive 
-                && !isAnotherWindowDragged
                 && !preventPanning
                 && mouseIsDragging
                )
             {
                 ScrollTarget -= mouseState.Delta / (ParentScale * ScaleTarget);
                 _draggedCanvas = this;
+            }
+
+            if (iWasBeingDragged && !mouseIsDragging)
+            {
+                _draggedCanvas = null;
             }
 
             
