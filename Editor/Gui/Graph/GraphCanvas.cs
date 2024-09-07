@@ -126,15 +126,16 @@ namespace T3.Editor.Gui.Graph
                 return;
             }
 
-            var pathToParent = childIdPath.GetRange(0, childIdPath.Count - 1);
-            SetComposition(pathToParent, ICanvas.Transition.Undefined);
-
+            if (instance.Parent != CompositionOp)
+            {
+                var pathToParent = childIdPath.GetRange(0, childIdPath.Count - 1);
+                SetComposition(pathToParent, ICanvas.Transition.Undefined);
+            }
+            
             var parentComposition = instance.Parent;
             var parentUi = SymbolUiRegistry.Entries[parentComposition.Symbol.Id];
             var childInstanceUi = parentUi.ChildUis.SingleOrDefault(c => c.Id == instance.SymbolChildId);
             NodeSelection.SetSelectionToChildUi(childInstanceUi, instance);
-            // NodeSelection.Clear();
-            // NodeSelection.AddSymbolChildToSelection(childInstanceUi, instance);
             FitViewToSelectionHandling.FitViewToSelection();
         }
 

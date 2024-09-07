@@ -285,7 +285,6 @@ public class KeyboardBinding
                   new KeyboardBinding(UserActions.PlaybackJumpToStartTime, new KeyCombination(Key.Home)),
                   new KeyboardBinding(UserActions.PlaybackJumpToNextKeyframe, new KeyCombination(Key.Period)),
                   new KeyboardBinding(UserActions.PlaybackJumpToPreviousKeyframe, new KeyCombination(Key.Comma)),
-                  new KeyboardBinding(UserActions.PlaybackJumpBack, new KeyCombination(Key.B)),
 
                   new KeyboardBinding(UserActions.Undo, new KeyCombination(Key.Z, ctrl: true)),
                   new KeyboardBinding(UserActions.Redo, new KeyCombination(Key.Z, ctrl: true, shift: true)),
@@ -295,6 +294,8 @@ public class KeyboardBinding
                   new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)),
                   new KeyboardBinding(UserActions.ToggleAnimationPinning, new KeyCombination(Key.K, shift: true)),
 
+                  new KeyboardBinding(UserActions.SetStartTime, new KeyCombination(Key.B)),
+                  new KeyboardBinding(UserActions.SetEndTime, new KeyCombination(Key.N)),
                   new KeyboardBinding(UserActions.TapBeatSync, new KeyCombination(Key.Z)),
                   new KeyboardBinding(UserActions.TapBeatSyncMeasure, new KeyCombination(Key.X)),
                   
