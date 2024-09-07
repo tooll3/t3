@@ -170,7 +170,7 @@ internal static class ParameterPopUp
                 case ViewModes.Parameters:
                     FrameStats.Current.OpenedPopUpName = ParameterPopUpName;
                     ImGui.BeginChild("Scrolling", new Vector2(DefaultWindowSize.X, height - 5 ), false);
-                    CustomComponents.HandleDragScrolling();
+                    CustomComponents.HandleDragScrolling(_parameterPopUpReference);
                     ImGui.PushFont(Fonts.FontSmall);
                     ParameterWindow.DrawParameters(_selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi, hideNonEssentials: true);
                     FormInputs.AddVerticalSpace();
@@ -253,6 +253,7 @@ internal static class ParameterPopUp
 
     private static bool _isOpen;
     private static int _focusDelayCount;
+    private static object _parameterPopUpReference = new();
 
     private static GraphCanvas _graphCanvas;
     private static ViewModes _viewMode = ViewModes.Parameters;

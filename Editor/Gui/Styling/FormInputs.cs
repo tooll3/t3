@@ -432,7 +432,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.PopStyleVar(2);
         }
 
-        public static void AddVerticalSpace(float size = 20)
+        public static void AddVerticalSpace(float size = 10)
         {
             ImGui.Dummy(new Vector2(1, size * T3Ui.UiScaleFactor));
         }
