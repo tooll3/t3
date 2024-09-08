@@ -103,6 +103,41 @@
         "X": -1499.7317,
         "Y": -4711.058
       }
+    },
+    {
+      "ChildId": "dcf6639d-bc21-4017-b499-ae32139875ab"/*SetAttributesWithPointFieldsExamples*/,
+      "Position": {
+        "X": -2229.6843,
+        "Y": -4481.996
+      }
+    },
+    {
+      "ChildId": "6a7d8425-1e13-4736-bd28-b95cfcfca070"/*FollowMeshSurfaceForceExample*/,
+      "Position": {
+        "X": -2079.6843,
+        "Y": -4481.996
+      }
+    },
+    {
+      "ChildId": "9dbf8da0-8c67-4e21-81e7-50099d724f6d"/*GamePadExample*/,
+      "Position": {
+        "X": -1929.6843,
+        "Y": -4481.996
+      }
+    },
+    {
+      "ChildId": "34c81476-f98b-432d-ad1a-cf5599651b0c"/*Pulsarium*/,
+      "Position": {
+        "X": -1779.6843,
+        "Y": -4481.996
+      }
+    },
+    {
+      "ChildId": "03691601-e504-4710-b437-1aedf93fb962"/*BoundingBoxPointsExample*/,
+      "Position": {
+        "X": -1629.6843,
+        "Y": -4481.996
+      }
     }
   ],
   "OutputUis": [],
@@ -177,6 +212,24 @@
       "Size": {
         "X": 909.0123,
         "Y": 203.57906
+      }
+    },
+    {
+      "Id": "0ac6174a-8299-4674-91e9-4e2893157030",
+      "Title": "# New examples for v3.9.3",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2272.2883,
+        "Y": -4586.9355
+      },
+      "Size": {
+        "X": 925.6778,
+        "Y": 161.1207
       }
     }
   ],

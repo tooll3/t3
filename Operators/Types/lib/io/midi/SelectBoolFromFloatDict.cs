@@ -25,11 +25,16 @@ namespace T3.Operators.Types.Id_05295c65_7dfd_4570_866e_9b5c4e735569
         {
             _dict = DictionaryInput.GetValue(context);
             _selectCommand = Select.GetValue(context);
-            
-            var floatValue = 0.0f;
-            _dict?.TryGetValue(_selectCommand, out floatValue);
 
-            Result.Value = floatValue > 0.5f;
+            if (_dict != null && _dict.TryGetValue(_selectCommand, out var floatValue))
+            {
+                Result.Value = floatValue > 0.5f;
+                _lastWarningMessage = null;
+            }
+            else
+            {
+                _lastWarningMessage = $"Key '{_selectCommand}' not found in dictionary.";
+            }
         }
 
         private Dict<float> _dict;
@@ -65,11 +70,10 @@ namespace T3.Operators.Types.Id_05295c65_7dfd_4570_866e_9b5c4e735569
         #endregion        
         
 
-        public IStatusProvider.StatusLevel GetStatusLevel() => _statusLevel;
+        public IStatusProvider.StatusLevel GetStatusLevel() => string.IsNullOrEmpty(_lastWarningMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
         public string GetStatusMessage() => _lastWarningMessage;
 
         private string _lastWarningMessage = "Not updated yet.";
-        private IStatusProvider.StatusLevel _statusLevel;
         #endregion
         
         

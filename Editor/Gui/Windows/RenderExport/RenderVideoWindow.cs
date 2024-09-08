@@ -179,10 +179,6 @@ public class RenderVideoWindow : BaseRenderWindow
                                                       : Path.Combine(directoryName, newFilename);
     }
 
-    private string HumanReadableDurationFromSeconds(double seconds)
-    {
-        return $"{(int)(seconds / 60 / 60):00}:{(seconds / 60)%60:00}:{seconds%60:00}";
-    }
 
     private static int GetRealFrame()
     {

@@ -19,14 +19,18 @@ namespace T3.Operators.Types.Id_646d6a5d_a1d7_471e_86ab_e1fb2542a2c2
         {
             var a = A.GetValue(context);
             var b = B.GetValue(context);
-            Result.Value = a * b;
+            var u = ScaleUniform.GetValue(context);
+            Result.Value = a * b * u;
         }
         
         [Input(Guid = "DE6BFE5A-EBCD-4DA6-8C8A-79989A31DD9F")]
         public readonly InputSlot<System.Numerics.Vector3> A = new();
 
+        [Input(Guid = "2218624E-2F7B-4BC6-9C36-447C371A6CD7")]
+        public readonly InputSlot<System.Numerics.Vector3> B = new();
+        
         [Input(Guid = "4AB40AA5-B390-4042-A959-8EDDF9CBC9B0")]
-        public readonly InputSlot<float> B = new();
+        public readonly InputSlot<float> ScaleUniform = new();
         
     }
 }

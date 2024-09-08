@@ -3720,11 +3720,6 @@
       "SymbolId": "32e18957-3812-4f64-8663-18454518d005",
       "InputValues": [
         {
-          "Id": "cbb7a165-9f8a-4af8-8fb5-96c7b150f927"/*ResolutionFactor*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        },
-        {
           "Id": "64e5cdf2-19b0-461c-b936-ea46ee58028f"/*Filter*/,
           "Type": "SharpDX.Direct3D11.Filter",
           "Value": "MinMagMipPoint"
@@ -4517,13 +4512,7 @@
     {
       "Id": "01df9d26-73d5-4d81-b03f-b6a36613e587"/*TransformImage*/,
       "SymbolId": "32e18957-3812-4f64-8663-18454518d005",
-      "InputValues": [
-        {
-          "Id": "cbb7a165-9f8a-4af8-8fb5-96c7b150f927"/*ResolutionFactor*/,
-          "Type": "System.Single",
-          "Value": 4.0
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {
