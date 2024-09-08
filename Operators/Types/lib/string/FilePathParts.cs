@@ -40,6 +40,7 @@ namespace T3.Operators.Types.Id_42c556fb_014b_4ac5_b390_f426ab415aa7
                     Directory.Value = Path.GetDirectoryName(path);
                     Extension.Value = Path.GetExtension(path);
                     FilenameWithoutExtension.Value = Path.GetFileNameWithoutExtension(path);
+                    _errorMessageForStatus = null;
                     return;
                 }
                 catch (Exception e)
