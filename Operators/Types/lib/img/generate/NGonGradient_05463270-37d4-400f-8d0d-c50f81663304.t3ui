@@ -3,20 +3,6 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "3bc236ab-c5f8-4dee-b933-84cf627118ef"/*Image*/,
-      "Position": {
-        "X": -199.96725,
-        "Y": -203.49324
-      }
-    },
-    {
-      "InputId": "08937f41-a722-4d5b-8cf6-0b7d48323af4"/*Gradients*/,
-      "Position": {
-        "X": -223.31189,
-        "Y": -92.8365
-      }
-    },
-    {
       "InputId": "ee415be6-d478-44a8-b6b5-f315d1fde694"/*Position*/,
       "Position": {
         "X": -229.21353,
@@ -54,7 +40,8 @@
       "Position": {
         "X": -229.21353,
         "Y": 223.88443
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "49066387-92a6-46b2-a471-be0104e70651"/*Rotate*/,
@@ -65,6 +52,14 @@
       "Min": -180.0,
       "Max": 180.0,
       "Scale": 2.0
+    },
+    {
+      "InputId": "08937f41-a722-4d5b-8cf6-0b7d48323af4"/*Gradients*/,
+      "Position": {
+        "X": -223.31189,
+        "Y": -92.8365
+      },
+      "GroupTitle": "Gradient"
     },
     {
       "InputId": "134a9879-54f7-4b9c-8494-195a159d6428"/*Width*/,
@@ -100,6 +95,7 @@
         "X": -229.21353,
         "Y": 493.88443
       },
+      "AddPadding": "True",
       "UseVec2Control": "BiasAndGain"
     },
     {
@@ -107,13 +103,21 @@
       "Position": {
         "X": -225.93282,
         "Y": 576.24677
-      }
+      },
+      "GroupTitle": "Options"
     },
     {
       "InputId": "4bfe03f0-f1c3-47c0-98c3-873087e40c17"/*Resolution*/,
       "Position": {
         "X": -226.71382,
         "Y": 820.5888
+      }
+    },
+    {
+      "InputId": "3bc236ab-c5f8-4dee-b933-84cf627118ef"/*Image*/,
+      "Position": {
+        "X": -199.96725,
+        "Y": -203.49324
       }
     }
   ],

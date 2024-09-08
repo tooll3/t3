@@ -15,16 +15,10 @@
       "Position": {
         "X": -270.7163,
         "Y": 71.82593
-      }
-    },
-    {
-      "InputId": "5e7cd523-0c39-42e4-a4e9-05cc20477296"/*Gradient*/,
-      "Position": {
-        "X": -267.11908,
-        "Y": -238.68253
       },
-      "GroupTitle": "Style",
-      "AddPadding": "True"
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "e155a2f2-2b21-49b5-9bd4-0c363684d93f"/*Center*/,
@@ -42,7 +36,21 @@
       "Position": {
         "X": -277.04544,
         "Y": -107.62457
-      }
+      },
+      "Min": 0.0,
+      "Max": 5.0,
+      "Format": "{0:0.000} ×",
+      "UseVec2Control": "Position"
+    },
+    {
+      "InputId": "5a164383-4f9d-4978-bfcb-a1c48b9b8f34"/*UniformScale*/,
+      "Position": {
+        "X": -270.7163,
+        "Y": 116.82593
+      },
+      "Min": 0.0,
+      "Max": 5.0,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "06553d30-0a71-435b-8796-b61db670fbc6"/*CornersRadius*/,
@@ -51,16 +59,19 @@
         "Y": 26.825928
       },
       "Description": "top left, top right, bottom right, bottom left",
+      "AddPadding": "True",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
     },
     {
-      "InputId": "5a164383-4f9d-4978-bfcb-a1c48b9b8f34"/*UniformScale*/,
+      "InputId": "5e7cd523-0c39-42e4-a4e9-05cc20477296"/*Gradient*/,
       "Position": {
-        "X": -270.7163,
-        "Y": 116.82593
-      }
+        "X": -267.11908,
+        "Y": -238.68253
+      },
+      "GroupTitle": "Style",
+      "AddPadding": "True"
     },
     {
       "InputId": "94d46ad8-7dd6-490c-ade4-a527c7ee9d05"/*GradientWidth*/,
@@ -110,7 +121,8 @@
       "Position": {
         "X": -270.7163,
         "Y": 493.503
-      }
+      },
+      "GroupTitle": "Optoins"
     },
     {
       "InputId": "70641015-e77b-4a75-b3f2-eb3534cceead"/*Resolution*/,

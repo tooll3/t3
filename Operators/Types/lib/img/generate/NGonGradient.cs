@@ -11,12 +11,6 @@ namespace T3.Operators.Types.Id_05463270_37d4_400f_8d0d_c50f81663304
         [Output(Guid = "2cf9e9eb-9f08-43d3-bcde-7a05df13969b")]
         public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
 
-        [Input(Guid = "3bc236ab-c5f8-4dee-b933-84cf627118ef")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
-
-        [Input(Guid = "08937f41-a722-4d5b-8cf6-0b7d48323af4")]
-        public readonly MultiInputSlot<T3.Core.DataTypes.Gradient> Gradients = new MultiInputSlot<T3.Core.DataTypes.Gradient>();
-
         [Input(Guid = "ee415be6-d478-44a8-b6b5-f315d1fde694")]
         public readonly InputSlot<System.Numerics.Vector2> Position = new InputSlot<System.Numerics.Vector2>();
 
@@ -34,6 +28,9 @@ namespace T3.Operators.Types.Id_05463270_37d4_400f_8d0d_c50f81663304
 
         [Input(Guid = "49066387-92a6-46b2-a471-be0104e70651")]
         public readonly InputSlot<float> Rotate = new InputSlot<float>();
+
+        [Input(Guid = "08937f41-a722-4d5b-8cf6-0b7d48323af4")]
+        public readonly MultiInputSlot<T3.Core.DataTypes.Gradient> Gradients = new MultiInputSlot<T3.Core.DataTypes.Gradient>();
 
         [Input(Guid = "134a9879-54f7-4b9c-8494-195a159d6428")]
         public readonly InputSlot<float> Width = new InputSlot<float>();
@@ -55,6 +52,9 @@ namespace T3.Operators.Types.Id_05463270_37d4_400f_8d0d_c50f81663304
 
         [Input(Guid = "4bfe03f0-f1c3-47c0-98c3-873087e40c17")]
         public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+
+        [Input(Guid = "3bc236ab-c5f8-4dee-b933-84cf627118ef")]
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
     }
 }
 
