@@ -35,7 +35,7 @@ public static class UiColors
     
     public static Color BackgroundTabActive = Color.FromString("#3A3A3A");
     public static Color BackgroundTabInActive = Color.FromString("#CC282828");
-    public static Color BackgroundInputField = Color.FromString("#222222");
+    public static Color BackgroundInputField = Color.FromString("#141414");
     public static Color BackgroundInputFieldHover = new(0.1f, 0.1f, 0.1f, 1f);
     public static Color BackgroundInputFieldActive = new(0f, 0f, 0f, 1f);
     
