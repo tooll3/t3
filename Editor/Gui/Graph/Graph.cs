@@ -161,7 +161,7 @@ namespace T3.Editor.Gui.Graph
                 var outputDef = graphSymbol.OutputDefinitions.Find(od => od.Id == outputId);
                 OutputNode.Draw(outputDef, outputNode);
 
-                var targetPos = new Vector2(OutputNode.LastScreenRect.Min.X + GraphNode.InputSlotThickness,
+                var targetPos = new Vector2(OutputNode.LastScreenRect.Min.X ,
                                             OutputNode.LastScreenRect.GetCenter().Y);
 
                 foreach (var line in Connections.GetLinesToOutputNodes(outputNode, outputId))
