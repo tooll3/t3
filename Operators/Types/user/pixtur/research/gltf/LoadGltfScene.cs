@@ -897,29 +897,41 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
             // Collect texture coords
             Vector2[] texCoords = null;
+            Vector2[] texCoords2 = null; // For the second set of texture coordinates
+
             if (vertexAccessors.TryGetValue("TEXCOORD_0", out var texAccess))
             {
                 texCoords = texAccess.AsVector2Array().ToArray();
             }
+
+            if (vertexAccessors.TryGetValue("TEXCOORD_1", out var texAccess2))  // Check for second texture coordinate set
+            {
+                texCoords2 = texAccess2.AsVector2Array().ToArray();
+            }
+
 
             // Write vertex buffer
             for (var vertexIndex = 0; vertexIndex < positions.Count; vertexIndex++)
             {
                 var position = positions[vertexIndex];
                 vertexBufferData[vertexIndex] = new PbrVertex
-                                                    {
-                                                        Position = new Vector3(position.X, position.Y, position.Z),
-                                                        Normal = normals == null ? VectorT3.Up : normals[vertexIndex],
-                                                        Tangent = VectorT3.Right,
-                                                        Bitangent = VectorT3.ForwardLH,
-                                                        Texcoord = texCoords == null
-                                                                       ? Vector2.Zero
-                                                                       : new Vector2(texCoords[vertexIndex].X,
-                                                                                     1 - texCoords[vertexIndex].Y),
-                                                        Selection = 1,
-                                                    };
+                {
+                    Position = new Vector3(position.X, position.Y, position.Z),
+                    Normal = normals == null ? VectorT3.Up : normals[vertexIndex],
+                    Tangent = VectorT3.Right,
+                    Bitangent = VectorT3.ForwardLH,
+                    Texcoord = texCoords == null
+                               ? Vector2.Zero
+                               : new Vector2(texCoords[vertexIndex].X, 1 - texCoords[vertexIndex].Y), // Flip Y
+
+                    Texcoord2 = texCoords2 == null
+                                ? Vector2.Zero
+                                : new Vector2(texCoords2[vertexIndex].X, 1 - texCoords2[vertexIndex].Y), // Flip Y for the second set too
+
+                    Selection = 1,
+                };
             }
-            
+
             if (verticesCount == 0)
             {
                 message = "No vertices found";
