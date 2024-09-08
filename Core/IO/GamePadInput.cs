@@ -27,7 +27,7 @@ namespace T3.Core.IO
         public ButtonsState(bool a, bool b, bool x, bool y)
         {
             this.A = a;
-            this.B = b;
+            this.B = b; 
             this.X = x;
             this.Y = y;
         }
@@ -43,6 +43,9 @@ namespace T3.Core.IO
 
         public Vector2 LeftThumb;
         public Vector2 RightThumb;
+
+        public bool LeftStickButton;
+        public bool RightStickButton;
 
         public float LeftTrigger;
         public float RightTrigger;

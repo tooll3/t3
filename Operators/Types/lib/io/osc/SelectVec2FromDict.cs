@@ -26,10 +26,13 @@ namespace T3.Operators.Types.Id_96b1e8f3_0b42_4a01_b82b_44ccbd857400
             _dict = DictionaryInput.GetValue(context);
             _selectCommand = SelectX.GetValue(context);
 
-            if (_dict == null || _yKey== null)
+            if (_dict == null)
                 return;
-            
-            if(_dict.TryGetValue(_selectCommand, out var x) && _dict.TryGetValue(_yKey, out var y))
+
+            if (_yKey == null)
+                _yKey = FindKeyForY(_selectCommand);
+
+            if (_yKey != null && _dict.TryGetValue(_selectCommand, out var x) && _dict.TryGetValue(_yKey, out var y))
             {
                 Result.Value = new Vector2(x, y);
             }
