@@ -37,8 +37,8 @@ namespace T3.Operators.Types.Id_32e18957_3812_4f64_8663_18454518d005
         [Input(Guid = "5c76dc8d-3a28-4b93-b3a0-e008c1ff14e9")]
         public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
 
-        [Input(Guid = "cbb7a165-9f8a-4af8-8fb5-96c7b150f927")]
-        public readonly InputSlot<float> ResolutionFactor = new InputSlot<float>();
+        [Input(Guid = "ab234f59-74ba-442b-b3f0-bce23bb42a57")]
+        public readonly InputSlot<System.Numerics.Vector2> ResolutionFactor = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "c31a95a9-2cfb-4eea-8006-97f883d11847")]
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
