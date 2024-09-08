@@ -1,0 +1,69 @@
+{
+  "Name": "Sharpen",
+  "Id": "4b207e35-64b4-4833-977c-da6c7154a081",
+  "Namespace": "lib.img.fx",
+  "Inputs": [
+    {
+      "Id": "cdc10025-36a4-4fae-ad59-110ea9343cb0"/*Image*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "d6c4daf8-caa3-4991-8d03-50eaad142b39"/*SampleRadius*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "def5bcf3-d499-41ad-82b8-1b9706ebaab6"/*Strength*/,
+      "DefaultValue": 1.0
+    }
+  ],
+  "Children": [
+    {
+      "Id": "9d63c269-a033-4a94-a54f-4bbb45452440"/*_ImageFxShaderSetupStatic*/,
+      "SymbolId": "bd0b9c5b-c611-42d0-8200-31af9661f189",
+      "InputValues": [
+        {
+          "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\img\\fx\\Sharpen.hlsl"
+        },
+        {
+          "Id": "3fe1b650-ce34-4155-9b61-0425e39f7690"/*Wrap*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "MirrorOnce"
+        },
+        {
+          "Id": "ff7cb999-aa3a-4e11-b9c8-d027bdb55ff6"/*OutputFormat*/,
+          "Type": "SharpDX.DXGI.Format",
+          "Value": "R16G16B16A16_Float"
+        }
+      ],
+      "Outputs": []
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "9d63c269-a033-4a94-a54f-4bbb45452440",
+      "SourceSlotId": "d49f10dc-6617-4541-96d3-b58b0266b631",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "d412319c-42be-480d-a4e5-60b5b5b1722d"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "d6c4daf8-caa3-4991-8d03-50eaad142b39",
+      "TargetParentOrChildId": "9d63c269-a033-4a94-a54f-4bbb45452440",
+      "TargetSlotId": "4ef6f204-1894-4b0a-bb2d-8b5ecbad4040"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "def5bcf3-d499-41ad-82b8-1b9706ebaab6",
+      "TargetParentOrChildId": "9d63c269-a033-4a94-a54f-4bbb45452440",
+      "TargetSlotId": "4ef6f204-1894-4b0a-bb2d-8b5ecbad4040"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "cdc10025-36a4-4fae-ad59-110ea9343cb0",
+      "TargetParentOrChildId": "9d63c269-a033-4a94-a54f-4bbb45452440",
+      "TargetSlotId": "b55312c4-6441-473f-a107-df50de60c72e"
+    }
+  ]
+}

@@ -150,7 +150,7 @@
       "Name": "Get r",
       "InputValues": [
         {
-          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
           "Type": "System.String",
           "Value": "r"
         }
@@ -191,7 +191,7 @@
       "Name": "Get m",
       "InputValues": [
         {
-          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
           "Type": "System.String",
           "Value": "m"
         }

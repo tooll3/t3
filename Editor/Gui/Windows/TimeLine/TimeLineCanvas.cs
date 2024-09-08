@@ -5,6 +5,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Graph.Helpers;
@@ -86,6 +87,8 @@ public class TimeLineCanvas : CurveEditCanvas
                              |ImGuiWindowFlags.NoScrollWithMouse);
 
             {
+                CustomComponents.HandleDragScrolling(this);
+                
                 if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
                     DeleteSelectedElements();
                     
@@ -119,21 +122,11 @@ public class TimeLineCanvas : CurveEditCanvas
             _timeSelectionRange.Draw(Drawlist);
             DrawDragTimeArea();
 
-            if (FenceState == SelectionFence.States.CompletedAsClick)
+            var interactionPreventsTimeChangeOnClick= Mode == Modes.DopeView && DopeSheetArea.MouseClickChangedSelection;
+            if (!interactionPreventsTimeChangeOnClick && FenceState == SelectionFence.States.CompletedAsClick)
             {
                 var newTime = InverseTransformPositionFloat(ImGui.GetMousePos()).X;
-                if (Playback.IsLooping)
-                {
-                    Playback.TimeInBars = newTime;
-                    // var newStartTime = newTime - newTime % 4;
-                    // var duration = Playback.LoopRange.Duration;
-                    // Playback.LoopRange.Start = newStartTime;
-                    // Playback.LoopRange.Duration = duration;
-                }
-                else
-                {
-                    Playback.TimeInBars = newTime;
-                }
+                Playback.TimeInBars = newTime;
             }
         }
     }

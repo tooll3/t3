@@ -177,6 +177,36 @@
       "SymbolId": "812561d8-cbb5-40c3-a53e-3c3f0ad2352e",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "dcf6639d-bc21-4017-b499-ae32139875ab"/*SetAttributesWithPointFieldsExamples*/,
+      "SymbolId": "7644e221-9785-414b-905d-31fd68ec080c",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "6a7d8425-1e13-4736-bd28-b95cfcfca070"/*FollowMeshSurfaceForceExample*/,
+      "SymbolId": "16235faf-61b7-474f-bdc7-f7abe3c538eb",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "9dbf8da0-8c67-4e21-81e7-50099d724f6d"/*GamePadExample*/,
+      "SymbolId": "025285fd-c00f-44c7-8698-363ccc763fa1",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "34c81476-f98b-432d-ad1a-cf5599651b0c"/*Pulsarium*/,
+      "SymbolId": "198321f6-3aa4-42ad-a34f-b39e02fe314b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "03691601-e504-4710-b437-1aedf93fb962"/*BoundingBoxPointsExample*/,
+      "SymbolId": "7bd3aab4-009f-4c5e-95c9-88f3d08b6893",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

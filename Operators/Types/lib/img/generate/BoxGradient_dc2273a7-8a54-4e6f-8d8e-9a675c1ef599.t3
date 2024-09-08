@@ -8,6 +8,37 @@
       "DefaultValue": null
     },
     {
+      "Id": "1dd6cf1e-d374-40d5-b51f-21b91deb3802"/*Rotation*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "e155a2f2-2b21-49b5-9bd4-0c363684d93f"/*Center*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "06f28039-d349-4f5f-a68f-6009886e180b"/*Size*/,
+      "DefaultValue": {
+        "X": 0.25,
+        "Y": 0.25
+      }
+    },
+    {
+      "Id": "5a164383-4f9d-4978-bfcb-a1c48b9b8f34"/*UniformScale*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "06553d30-0a71-435b-8796-b61db670fbc6"/*CornersRadius*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0,
+        "W": 0.0
+      }
+    },
+    {
       "Id": "5e7cd523-0c39-42e4-a4e9-05cc20477296"/*Gradient*/,
       "DefaultValue": {
         "Gradient": {
@@ -36,37 +67,6 @@
           ]
         }
       }
-    },
-    {
-      "Id": "e155a2f2-2b21-49b5-9bd4-0c363684d93f"/*Center*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "Id": "06f28039-d349-4f5f-a68f-6009886e180b"/*Size*/,
-      "DefaultValue": {
-        "X": 0.25,
-        "Y": 0.25
-      }
-    },
-    {
-      "Id": "06553d30-0a71-435b-8796-b61db670fbc6"/*CornersRadius*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0,
-        "W": 0.0
-      }
-    },
-    {
-      "Id": "1dd6cf1e-d374-40d5-b51f-21b91deb3802"/*Rotation*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "5a164383-4f9d-4978-bfcb-a1c48b9b8f34"/*UniformScale*/,
-      "DefaultValue": 1.0
     },
     {
       "Id": "94d46ad8-7dd6-490c-ade4-a527c7ee9d05"/*GradientWidth*/,

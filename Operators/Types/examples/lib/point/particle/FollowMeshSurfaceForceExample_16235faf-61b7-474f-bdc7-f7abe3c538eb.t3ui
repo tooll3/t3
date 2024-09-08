@@ -1,0 +1,328 @@
+{
+  "Id": "16235faf-61b7-474f-bdc7-f7abe3c538eb"/*FollowMeshSurfaceForceExample*/,
+  "Description": "Uses a surface force to grow virtual stems with leaves.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "ff77512c-0b05-49b5-88c5-d58f61ec456d"/*ParticleSystem*/,
+      "Comment": "We emit only a selected number of points once.\n(E.g. one of each stem).\n\nNotice that very large lifetime.\nWe also add some drag to calm the stems down a notch.",
+      "Position": {
+        "X": 785.2086,
+        "Y": -48.602417
+      }
+    },
+    {
+      "ChildId": "775cad4e-066a-479d-bb7e-2e2e62cf72da"/*FollowMeshSurfaceForce*/,
+      "Position": {
+        "X": 635.2086,
+        "Y": 73.05582
+      }
+    },
+    {
+      "ChildId": "480b9d6c-1355-4800-a5b8-fa31435f46a4"/*CubeMesh*/,
+      "Position": {
+        "X": 252.09882,
+        "Y": 196.73633
+      }
+    },
+    {
+      "ChildId": "d3bd7c3e-071c-4da8-b6fa-9434ee491b7b"/*PointTrail2*/,
+      "Position": {
+        "X": 1410.2389,
+        "Y": 3.0
+      }
+    },
+    {
+      "ChildId": "fe33efc0-4537-45b0-af04-f8292d802772"/*DrawLines*/,
+      "Position": {
+        "X": 1560.2389,
+        "Y": 3.0
+      }
+    },
+    {
+      "ChildId": "6dcc2eda-c85d-4519-a060-d2affb3d35bd"/*OrbitCamera*/,
+      "Position": {
+        "X": 1860.2389,
+        "Y": 3.0
+      }
+    },
+    {
+      "ChildId": "62ad7c73-706d-4379-8e79-e25f051945f9"/*RenderTarget*/,
+      "Position": {
+        "X": 2010.2389,
+        "Y": 3.0
+      }
+    },
+    {
+      "ChildId": "83e90430-8701-4b78-a254-3bffc44f1af4"/*SSAO*/,
+      "Position": {
+        "X": 2160.2388,
+        "Y": 3.0
+      }
+    },
+    {
+      "ChildId": "b7128776-9996-4f02-a3c8-6e09a19e9a9f"/*SpreadPointAttributes*/,
+      "Comment": "The moving particles are the tip of stems.\n\nWe add some random variation to color.",
+      "Position": {
+        "X": 1260.2389,
+        "Y": 3.0
+      }
+    },
+    {
+      "ChildId": "e6f05223-7c72-45e2-89f5-d279d96ace87"/*Time*/,
+      "Position": {
+        "X": 1115.6064,
+        "Y": 102.35278
+      }
+    },
+    {
+      "ChildId": "bcfdde64-777a-46da-8710-c604c8315ffa"/*Time*/,
+      "Position": {
+        "X": 485.20862,
+        "Y": 71.05582
+      }
+    },
+    {
+      "ChildId": "7d489fde-e97a-4d7b-9278-2fd9cd130563"/*LoadObj*/,
+      "Comment": "This is as high poly as you should go.",
+      "Position": {
+        "X": 102.098816,
+        "Y": 239.73633
+      }
+    },
+    {
+      "ChildId": "23836a83-0129-40fb-8b71-e25b59ec6863"/*FilterPoints*/,
+      "Comment": "We filter some of the stems...",
+      "Position": {
+        "X": 955.94495,
+        "Y": 353.49512
+      }
+    },
+    {
+      "ChildId": "47d2ed8c-abd2-4bfe-af4d-a08d8dff97d6"/*ParticleSystem*/,
+      "Comment": "and append them to another particle system.",
+      "Position": {
+        "X": 1105.945,
+        "Y": 353.49512
+      }
+    },
+    {
+      "ChildId": "19579242-519b-4304-8661-cf93e13b06da"/*DrawMeshAtPoints*/,
+      "Position": {
+        "X": 1555.945,
+        "Y": 353.49512
+      }
+    },
+    {
+      "ChildId": "eb66c5d4-50d1-48d3-8895-e8cafcd77b19"/*QuadMesh*/,
+      "Comment": "I'm not a leave!",
+      "Position": {
+        "X": 1405.945,
+        "Y": 422.49512
+      }
+    },
+    {
+      "ChildId": "188acad3-3400-48f9-bab0-9a2f1a31e9d4"/*Group*/,
+      "Position": {
+        "X": 1710.2389,
+        "Y": 3.0
+      }
+    },
+    {
+      "ChildId": "ce5418cc-059e-4ec4-9a5b-80f0bb54bdfb"/*CountInt*/,
+      "Position": {
+        "X": 805.94495,
+        "Y": 353.49512
+      }
+    },
+    {
+      "ChildId": "3100a557-1e74-421f-aa48-618965161fe9"/*SpreadPointAttributes*/,
+      "Comment": "We add a small growth animation to the size.",
+      "Position": {
+        "X": 1255.945,
+        "Y": 353.49512
+      }
+    },
+    {
+      "ChildId": "c4655e46-a146-4584-aedd-e5565fc59675"/*RandomizePoints*/,
+      "Comment": "Adding some variations to the leaves orientation and size.\n\nAnimation the RandomPhase will lead to a subtle secondary animation.",
+      "Position": {
+        "X": 1405.945,
+        "Y": 353.49512
+      }
+    },
+    {
+      "ChildId": "5c5b7b71-a9d5-4ba0-9589-5341a2da896f"/*TransformMesh*/,
+      "Position": {
+        "X": 252.09882,
+        "Y": 239.73633
+      }
+    },
+    {
+      "ChildId": "039f598a-27da-460b-94da-eb2caf06479e"/*SphereMesh*/,
+      "Comment": "We reduce poly count. It would work with the defaults, but it doesn't make a visual difference onto the effect.",
+      "Position": {
+        "X": -47.901184,
+        "Y": 302.73633
+      }
+    },
+    {
+      "ChildId": "207f32fb-778b-48cd-bfd1-864bcaaf32b0"/*TransformMesh*/,
+      "Position": {
+        "X": 102.098816,
+        "Y": 302.73633
+      }
+    },
+    {
+      "ChildId": "decbe1ee-3605-48d6-8620-13cf23d0781c"/*TransformMesh*/,
+      "Comment": "Let's add some random movement to this sphere...",
+      "Position": {
+        "X": 252.09882,
+        "Y": 302.73633
+      }
+    },
+    {
+      "ChildId": "72ff9d82-34da-42ea-99af-11b4eb12e615"/*AnimVec3*/,
+      "Position": {
+        "X": 102.098816,
+        "Y": 408.73633
+      }
+    },
+    {
+      "ChildId": "4e6bf31c-1c5e-46d1-82f0-ece58232985c"/*PerlinNoise3*/,
+      "Position": {
+        "X": 102.098816,
+        "Y": 365.73633
+      }
+    },
+    {
+      "ChildId": "a5bb5adf-5b5a-4aac-9179-c041cb12c56b"/*PickMeshBuffer*/,
+      "Comment": "Switching between our geometries...",
+      "Position": {
+        "X": 402.09882,
+        "Y": 196.73633
+      }
+    },
+    {
+      "ChildId": "61a49ee8-aa7b-4680-ace5-63c5dd82ba6a"/*AnimValue*/,
+      "Position": {
+        "X": 102.098816,
+        "Y": 471.73633
+      }
+    },
+    {
+      "ChildId": "dabc93eb-a14c-49e7-a335-847a9a6094d0"/*CountInt*/,
+      "Position": {
+        "X": 252.09882,
+        "Y": 471.73633
+      }
+    },
+    {
+      "ChildId": "20bb7685-955f-4e23-8c73-26ce536238e1"/*HasTimeChanged*/,
+      "Position": {
+        "X": 955.94495,
+        "Y": 422.49512
+      }
+    },
+    {
+      "ChildId": "74139d64-af04-4fe8-83db-b4e7d9c1ca7e"/*Time*/,
+      "Position": {
+        "X": 1255.945,
+        "Y": 409.49512
+      }
+    },
+    {
+      "ChildId": "13a18577-39c6-42ac-9da8-73ce77035d19"/*Once*/,
+      "Position": {
+        "X": 485.20862,
+        "Y": -8.944183
+      }
+    },
+    {
+      "ChildId": "79f0059e-02cb-4b29-8fb2-26f962719e3c"/*RadialPoints*/,
+      "Position": {
+        "X": 635.2086,
+        "Y": -48.602417
+      }
+    },
+    {
+      "ChildId": "e4aec6a9-e62b-4696-951d-3761dc7fab35"/*Any*/,
+      "Position": {
+        "X": 635.2086,
+        "Y": -8.944183
+      }
+    },
+    {
+      "ChildId": "eba6fee3-02b3-46a9-a3ff-842b881b9b23"/*Restart me!*/,
+      "Position": {
+        "X": 485.20862,
+        "Y": 34.055817
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "96f1f7c7-e2f6-42df-817c-51096cb89771"/*Output*/,
+      "Position": {
+        "X": 2570.2388,
+        "Y": 253.86816
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "807feda3-230a-4295-b55d-b49898bc5bfa",
+      "Title": "Leaves",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 745.94495,
+        "Y": 293.49512
+      },
+      "Size": {
+        "X": 980.0,
+        "Y": 212.0
+      }
+    },
+    {
+      "Id": "f285df13-cf91-481a-9817-0e194dd89535",
+      "Title": "Stems",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1055.6064,
+        "Y": -57.0
+      },
+      "Size": {
+        "X": 674.63245,
+        "Y": 242.35278
+      }
+    },
+    {
+      "Id": "89cb9d04-6be9-46e6-b7c4-f74dc81714ea",
+      "Title": "Some Random geometry",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -60.0,
+        "Y": 136.73633
+      },
+      "Size": {
+        "X": 680.0,
+        "Y": 431.0
+      }
+    }
+  ]
+}

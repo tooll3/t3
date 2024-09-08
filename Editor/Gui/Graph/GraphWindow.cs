@@ -142,8 +142,7 @@ namespace T3.Editor.Gui.Graph
                                     selectedItem.PosOnCanvas + selectedItem.Size));
             }
 
-            area.Expand(550);
-
+            area.Expand(300);
             GraphCanvas.FitAreaOnCanvas(area);
         }
 
@@ -439,8 +438,8 @@ namespace T3.Editor.Gui.Graph
 
             ImGui.SetCursorPos(
                                new Vector2(
-                                           ImGui.GetWindowContentRegionMin().X,
-                                           ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
+                                           ImGui.GetWindowContentRegionMin().X+1,
+                                           ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y-1));
 
             ImGui.BeginChild("TimeControls", Vector2.Zero, false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoBackground);
             {

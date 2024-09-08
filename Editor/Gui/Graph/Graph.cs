@@ -56,7 +56,8 @@ namespace T3.Editor.Gui.Graph
             _inputUisById = _symbolUi.InputUis;
             _outputUisById = _symbolUi.OutputUis;
 
-            if (ConnectionMaker.TempConnections.Count > 0 || AllConnections.Count != ConnectionMaker.TempConnections.Count + graphSymbol.Connections.Count)
+            if (ConnectionMaker.TempConnections.Count > 0 
+                || AllConnections.Count != ConnectionMaker.TempConnections.Count + graphSymbol.Connections.Count)
             {
                 _lastCheckSum = 0;
                 needsReinit = true;
@@ -70,12 +71,12 @@ namespace T3.Editor.Gui.Graph
                 for (var index = 0; index < graphSymbol.Connections.Count; index++)
                 {
                     var c = graphSymbol.Connections[index];
-                    checkSum += c.GetHashCode() * (index+1);
+                    checkSum =  checkSum * 31 + c.GetHashCode() * (index+1);
                 }
 
                 foreach (var c in ConnectionMaker.TempConnections)
                 {
-                    checkSum += c.GetHashCode();
+                    checkSum = checkSum * 31+ c.GetHashCode();
                 }
 
                 if (checkSum != _lastCheckSum)
@@ -135,22 +136,23 @@ namespace T3.Editor.Gui.Graph
             // 4. Draw Inputs Nodes
             if (Connections != null)
             {
-                foreach (var (nodeId, node) in _inputUisById)
+                for(var index = 0 ; index<  _symbolUi.InputUis.Count; index++ )
                 {
-                    var index = graphSymbol.InputDefinitions.FindIndex(def => def.Id == nodeId);
                     var inputDef = graphSymbol.InputDefinitions[index];
-                    var isSelectedOrHovered = InputNode.Draw(inputDef, node, index);
-
+                    var inputUi = _symbolUi.InputUis[index];
+                    var isSelectedOrHovered = InputNode.Draw(inputDef, inputUi, index);
+                
                     var sourcePos = new Vector2(
                                                 InputNode._lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
                                                 InputNode._lastScreenRect.GetCenter().Y
                                                );
-                    foreach (var line in Connections.GetLinesFromInputNodes(node, nodeId))
+                    foreach (var line in Connections.GetLinesFromInputNodes(inputUi, inputDef.Id))
                     {
                         line.SourcePosition = sourcePos;
                         line.IsSelected |= isSelectedOrHovered;
                     }
                 }
+                
             }
 
             // 5. Draw Output Nodes
@@ -159,7 +161,7 @@ namespace T3.Editor.Gui.Graph
                 var outputDef = graphSymbol.OutputDefinitions.Find(od => od.Id == outputId);
                 OutputNode.Draw(outputDef, outputNode);
 
-                var targetPos = new Vector2(OutputNode.LastScreenRect.Min.X + GraphNode.InputSlotThickness,
+                var targetPos = new Vector2(OutputNode.LastScreenRect.Min.X ,
                                             OutputNode.LastScreenRect.GetCenter().Y);
 
                 foreach (var line in Connections.GetLinesToOutputNodes(outputNode, outputId))
@@ -439,6 +441,7 @@ namespace T3.Editor.Gui.Graph
                 }
             }
         }
+        
         
         private enum Channels
         {

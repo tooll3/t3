@@ -20,8 +20,17 @@ static const float PointSpace = 0;
 static const float ObjectSpace = 1;
 static const float WorldSpace = 2;
 
-[numthreads(64, 1, 1)] void main(uint3 i
-                                 : SV_DispatchThreadID)
+float3 ExtractScale(float4x4 TransformMatrix)
+{
+    float3 scale;
+    scale.x = length(TransformMatrix._m00_m01_m02);
+    scale.y = length(TransformMatrix._m10_m11_m12);
+    scale.z = length(TransformMatrix._m20_m21_m22);
+    return scale;
+}
+
+[numthreads(64, 1, 1)]
+void main(uint3 i : SV_DispatchThreadID)
 {
     uint numStructs, stride;
     SourcePoints.GetDimensions(numStructs, stride);
@@ -29,13 +38,9 @@ static const float WorldSpace = 2;
         return;
 
     Point p = SourcePoints[i.x];
+    float w =  WIsWeight >= 0.5 ? p.W *  p.Selected:  p.Selected; 
 
-    float w = p.W;
-    // float3 pOrg = p.Position;
     float3 pos = p.Position;
-
-    // float4 orgRot;
-    // float v = q_separate_v(SourcePoints[i.x].rotation, orgRot);
 
     float4 orgRot = p.Rotation;
     float4 rotation = orgRot;
@@ -51,15 +56,18 @@ static const float WorldSpace = 2;
 
     float4 newRotation = rotation;
 
-    // Transform rotation is kind of tricky. There might be more efficient ways to do this.
+    float3 scale = ExtractScale(TransformMatrix);
+
     if (UpdateRotation > 0.5)
     {
-        float3x3 orientationDest = float3x3(
-            TransformMatrix._m00_m01_m02,
-            TransformMatrix._m10_m11_m12,
-            TransformMatrix._m20_m21_m22);
+        // Remove scale from the matrix to get pure rotation
+        float3x3 rotationMatrix = float3x3(
+            TransformMatrix._m00_m01_m02 / scale.x,
+            TransformMatrix._m10_m11_m12 / scale.y,
+            TransformMatrix._m20_m21_m22 / scale.z
+        );
 
-        newRotation = normalize(qFromMatrix3Precise(transpose(orientationDest)));
+        newRotation = normalize(qFromMatrix3Precise(transpose(rotationMatrix)));
 
         // Adjust rotation in point space
         if (CoordinateSpace < 0.5)
@@ -72,27 +80,25 @@ static const float WorldSpace = 2;
         }
     }
 
-    float weight = 1;
 
-    if (WIsWeight >= 0.5)
-    {
-        float3 weightedOffset = (pos - pLocal) * w;
-        pos = pLocal + weightedOffset;
-        weight = w;
-        newRotation = qSlerp(orgRot, newRotation, w);
-    }
+    float3 weightedOffset = (pos - pLocal) * w;
+    pos = pLocal + weightedOffset;
+    //float weight = w;
+    newRotation = qSlerp(orgRot, newRotation, w);
 
     if (CoordinateSpace < 0.5)
     {
         pos.xyz = qRotateVec3(pos.xyz, orgRot).xyz;
         pos += p.Position;
-        p.Stretch *= TransformMatrix._m00_m11_m22;
+        
+        // Apply scale to Stretch
+        p.Stretch *= scale;
     }
 
     p.Position = pos.xyz;
     p.Rotation = newRotation;
 
-    p.W = lerp(p.W, p.W * ScaleW + OffsetW, weight);
+    p.W = lerp(p.W, p.W * ScaleW + OffsetW, w);
 
     ResultPoints[i.x] = p;
 }

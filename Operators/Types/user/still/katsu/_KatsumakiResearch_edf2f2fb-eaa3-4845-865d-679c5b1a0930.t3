@@ -1323,6 +1323,15 @@
           }
         },
         {
+          "Id": "721c500b-ae7c-4249-a374-1bcf6ae13abd"/*VolumeRotate*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 0.0,
+            "Y": 360.0,
+            "Z": 0.0
+          }
+        },
+        {
           "Id": "a75686be-909f-42fd-88f1-005e2fcd9f70"/*VolumeStretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -1335,15 +1344,6 @@
           "Id": "60eb8c10-93fa-487b-9eda-1767b485bb21"/*VolumeScale*/,
           "Type": "System.Single",
           "Value": 2.3999999
-        },
-        {
-          "Id": "721c500b-ae7c-4249-a374-1bcf6ae13abd"/*VolumeRotate*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": 360.0,
-            "Z": 0.0
-          }
         }
       ],
       "Outputs": []
@@ -1711,6 +1711,11 @@
       "SymbolId": "fbe1a703-f372-4236-9f20-5d0b69183843",
       "InputValues": [
         {
+          "Id": "86c81e40-79e8-4699-a7fe-581f0b09d266"/*VolumeShape*/,
+          "Type": "System.Int32",
+          "Value": 0
+        },
+        {
           "Id": "e3485fea-3a75-47f9-9a7d-ea69f4feb5f6"/*VolumeCenter*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -1723,11 +1728,6 @@
           "Id": "60eb8c10-93fa-487b-9eda-1767b485bb21"/*VolumeScale*/,
           "Type": "System.Single",
           "Value": 4.08
-        },
-        {
-          "Id": "86c81e40-79e8-4699-a7fe-581f0b09d266"/*VolumeShape*/,
-          "Type": "System.Int32",
-          "Value": 0
         },
         {
           "Id": "3b975bd9-b8aa-4a41-97fc-ccd3b5e89e63"/*Attraction*/,
@@ -2857,6 +2857,11 @@
       "SymbolId": "fbe1a703-f372-4236-9f20-5d0b69183843",
       "InputValues": [
         {
+          "Id": "86c81e40-79e8-4699-a7fe-581f0b09d266"/*VolumeShape*/,
+          "Type": "System.Int32",
+          "Value": 0
+        },
+        {
           "Id": "e3485fea-3a75-47f9-9a7d-ea69f4feb5f6"/*VolumeCenter*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -2869,11 +2874,6 @@
           "Id": "60eb8c10-93fa-487b-9eda-1767b485bb21"/*VolumeScale*/,
           "Type": "System.Single",
           "Value": 7.86
-        },
-        {
-          "Id": "86c81e40-79e8-4699-a7fe-581f0b09d266"/*VolumeShape*/,
-          "Type": "System.Int32",
-          "Value": 0
         },
         {
           "Id": "3b975bd9-b8aa-4a41-97fc-ccd3b5e89e63"/*Attraction*/,

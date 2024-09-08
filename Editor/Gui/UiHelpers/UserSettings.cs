@@ -48,6 +48,7 @@ namespace T3.Editor.Gui.UiHelpers
             public int WindowLayoutIndex = 0;
             public bool EnableIdleMotion = true;
             public bool SuspendRenderingWhenHidden = true;
+            public bool MirrorUiOnSecondView = false;
             
             // Interaction
             public bool WarnBeforeLibEdit = true;
@@ -102,6 +103,12 @@ namespace T3.Editor.Gui.UiHelpers
             public string RenderVideoFilePath = "./Render/render-v01.mp4";
             public string RenderSequenceFilePath = "./ImageSequence/";
 
+            // Profiling
+            public bool EnableFrameProfiling = true;
+            public bool KeepTraceForLogMessages = false;
+            public bool EnableGCProfiling = false;
+
+            
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             

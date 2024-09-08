@@ -103,9 +103,8 @@ namespace T3.Editor.Gui.Windows.Output
                 var windowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
                 if (Size.Width <= 0 || Size.Height <= 0)
                 {
-                    var borderSize = (int)ImGui.GetStyle().WindowBorderSize;
-                    return new Int2((int)windowSize.X - 2 * borderSize,
-                                     (int)windowSize.Y - 2 * borderSize);
+                    return new Int2((int)windowSize.X - 2,
+                                     (int)windowSize.Y - 2);
                 }
 
                 var windowAspectRatio = windowSize.X / windowSize.Y;

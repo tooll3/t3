@@ -3,25 +3,20 @@
   "Description": "Repels particles from primitive volumes.\n\nThis force uses the particle's radius in world units as defined on emit by [ParticleSystem]. Please check the documentation on that operator.\n",
   "InputUis": [
     {
+      "InputId": "86c81e40-79e8-4699-a7fe-581f0b09d266"/*VolumeShape*/,
+      "Position": {
+        "X": -301.69586,
+        "Y": 1770.7089
+      },
+      "GroupTitle": "Volume"
+    },
+    {
       "InputId": "e3485fea-3a75-47f9-9a7d-ea69f4feb5f6"/*VolumeCenter*/,
       "Position": {
         "X": -301.69586,
         "Y": 1590.7076
-      }
-    },
-    {
-      "InputId": "a75686be-909f-42fd-88f1-005e2fcd9f70"/*VolumeStretch*/,
-      "Position": {
-        "X": -301.69586,
-        "Y": 1635.7084
-      }
-    },
-    {
-      "InputId": "60eb8c10-93fa-487b-9eda-1767b485bb21"/*VolumeScale*/,
-      "Position": {
-        "X": -301.69586,
-        "Y": 1680.709
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "721c500b-ae7c-4249-a374-1bcf6ae13abd"/*VolumeRotate*/,
@@ -34,10 +29,18 @@
       "Scale": 1.0
     },
     {
-      "InputId": "86c81e40-79e8-4699-a7fe-581f0b09d266"/*VolumeShape*/,
+      "InputId": "a75686be-909f-42fd-88f1-005e2fcd9f70"/*VolumeStretch*/,
       "Position": {
         "X": -301.69586,
-        "Y": 1770.7089
+        "Y": 1635.7084
+      },
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "60eb8c10-93fa-487b-9eda-1767b485bb21"/*VolumeScale*/,
+      "Position": {
+        "X": -301.69586,
+        "Y": 1680.709
       }
     },
     {
@@ -45,7 +48,8 @@
       "Position": {
         "X": -301.69586,
         "Y": 1860.7086
-      }
+      },
+      "GroupTitle": "Behavior"
     },
     {
       "InputId": "1097b588-db96-49c1-b6e6-78b5cb0f5f73"/*RandomizeBounce*/,
@@ -70,6 +74,16 @@
       "AddPadding": "True"
     },
     {
+      "InputId": "b7a82887-9b8a-4999-8970-515fe199724a"/*AttractionDecay*/,
+      "Position": {
+        "X": -289.84814,
+        "Y": 2292.0205
+      },
+      "Min": 0.0,
+      "Max": 10.0,
+      "Clamp": true
+    },
+    {
       "InputId": "7c6f58e7-27fc-4271-adef-248cffe5a8b7"/*Repulsion*/,
       "Position": {
         "X": -289.84814,
@@ -81,7 +95,8 @@
       "Position": {
         "X": -289.84814,
         "Y": 2202.0205
-      }
+      },
+      "GroupTitle": "Options"
     },
     {
       "InputId": "2ab85ac3-819d-4e3e-891a-7f27af627fdf"/*InvertVolume*/,
@@ -89,16 +104,6 @@
         "X": -289.84814,
         "Y": 2247.0205
       }
-    },
-    {
-      "InputId": "b7a82887-9b8a-4999-8970-515fe199724a"/*AttractionDecay*/,
-      "Position": {
-        "X": -289.84814,
-        "Y": 2292.0205
-      },
-      "Min": 0.0,
-      "Max": 10.0,
-      "Clamp": true
     }
   ],
   "SymbolChildUis": [

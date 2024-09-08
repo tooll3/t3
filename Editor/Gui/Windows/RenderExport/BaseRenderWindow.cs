@@ -50,17 +50,31 @@ public abstract class BaseRenderWindow : Window
 
     protected static void DrawTimeSetup()
     {
+        FormInputs.AddSegmentedButtonWithLabel(ref _timeRange, "Render Range");
+        ApplyTimeRange();
+       
+        FormInputs.AddVerticalSpace();
         FormInputs.SetIndentToParameters();
         
         // Convert times if reference time selection changed
         var oldTimeReference = _timeReference;
 
-        if (FormInputs.AddEnumDropdown(ref _timeReference, "Time Format"))
+        if (FormInputs.AddSegmentedButtonWithLabel(ref _timeReference, "Defined as"))
         {
             _startTimeInBars = (float)ConvertReferenceTime(_startTimeInBars, oldTimeReference, _timeReference);
             _endTimeInBars = (float)ConvertReferenceTime(_endTimeInBars, oldTimeReference, _timeReference);
         }
 
+        var changed = false;
+        changed |= FormInputs.AddFloat($"Start in {_timeReference}", ref _startTimeInBars);
+        changed |= FormInputs.AddFloat($"End in {_timeReference}", ref _endTimeInBars);
+        if (changed)
+        {
+            _timeRange = TimeRanges.Custom;
+        }
+        
+        FormInputs.AddVerticalSpace();
+        
         // Change FPS if required
         FormInputs.AddFloat("FPS", ref Fps, 0);
         if (Fps < 0) Fps = -Fps;
@@ -70,13 +84,6 @@ public abstract class BaseRenderWindow : Window
             _endTimeInBars = (float)ConvertFps(_endTimeInBars, _lastValidFps, Fps);
             _lastValidFps = Fps;
         }
-
-        FormInputs.AddEnumDropdown(ref _timeRange, "Use Range");
-        ApplyTimeRange();
-        
-        FormInputs.AddFloat($"Start in {_timeReference}", ref _startTimeInBars);
-        FormInputs.AddFloat($"End in {_timeReference}", ref _endTimeInBars);
-
 
         var startTimeInSeconds = ReferenceTimeToSeconds(_startTimeInBars, _timeReference);
         var endTimeInSeconds = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
@@ -294,6 +301,11 @@ public abstract class BaseRenderWindow : Window
 
         warning = string.Empty;
         return false;
+    }
+    
+    protected string HumanReadableDurationFromSeconds(double seconds)
+    {
+        return $"{(int)(seconds / 60 / 60):00}:{(seconds / 60)%60:00}:{seconds%60:00}";
     }
 
     protected const string PreferredInputFormatHint = "Ready to export to video.";

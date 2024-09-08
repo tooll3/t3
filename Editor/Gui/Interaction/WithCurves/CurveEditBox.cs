@@ -235,7 +235,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         {
             // FIXME: getting current curves is complicated here.
             var mockNotWorking = new List<Curve>();
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, _selectedKeyframes, mockNotWorking);
+            _changeKeyframesCommand = new ChangeKeyframesCommand(_selectedKeyframes, mockNotWorking);
         }
         
         

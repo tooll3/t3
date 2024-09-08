@@ -27,6 +27,7 @@ namespace T3.Editor.Gui.Windows
             OSC,
             SpaceMouse,
             Keyboard,
+            Profiling,
         }
 
         private Categories _activeCategory;
@@ -45,7 +46,7 @@ namespace T3.Editor.Gui.Windows
 
             ImGui.SameLine();
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(20, 5));
-            ImGui.BeginChild("content", new Vector2(-1, -1), true);
+            ImGui.BeginChild("content", new Vector2(0, 0), true);
             {
                 FormInputs.SetIndentToParameters();
                 switch (_activeCategory)
@@ -75,6 +76,11 @@ namespace T3.Editor.Gui.Windows
                                                           "An experimental features that will drag neighbouring snapped operators",
                                                           UserSettings.Defaults.SmartGroupDragging);
 
+                        changed |= FormInputs.AddCheckBox("Mirror UI on second view",
+                                                          ref UserSettings.Config.MirrorUiOnSecondView,
+                                                          "On Windows mirroring displays can be extremely slow. This settings is will copy the UI to the second view instead of mirroring it.",
+                                                          UserSettings.Defaults.MirrorUiOnSecondView);
+                        
                         FormInputs.AddVerticalSpace();
                         FormInputs.SetIndentToParameters();
                         changed |= FormInputs.AddFloat("UI Scale",
@@ -298,8 +304,33 @@ namespace T3.Editor.Gui.Windows
 
                             ImGui.EndTable();
                         }
-
                         break;
+                    case Categories.Profiling:
+                    {
+                        FormInputs.AddSectionHeader("Profiling and debugging");
+
+                        CustomComponents.HelpText("Enabling this will add slight performance overhead.\nChanges will require a restart of Tooll.");
+                        FormInputs.AddVerticalSpace();
+
+                        FormInputs.SetIndentToLeft();
+                        
+                        changed |= FormInputs.AddCheckBox("Enable Frame Profiling",
+                                                                         ref UserSettings.Config.EnableFrameProfiling,
+                                                                         "A basic frame profile for the duration of frame processing. Overhead is minimal.",
+                                                                         UserSettings.Defaults.EnableFrameProfiling);
+                        changed |= FormInputs.AddCheckBox("Keep Log Messages",
+                                                          ref UserSettings.Config.KeepTraceForLogMessages,
+                                                          "Store log messages in the profiling data. This can be useful to see correlation between frame drops and log messages.",
+                                                          UserSettings.Defaults.KeepTraceForLogMessages);
+                        
+                        changed |= FormInputs.AddCheckBox("Log GC Profiling",
+                                                          ref UserSettings.Config.EnableGCProfiling,
+                                                          "Log garbage collection information. This can be useful to see correlation between frame drops and GC activity.",
+                                                          UserSettings.Defaults.EnableGCProfiling);
+
+                        FormInputs.SetIndentToParameters();
+                        break;
+                    }
                 }
 
                 if (changed)

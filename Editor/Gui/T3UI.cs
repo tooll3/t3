@@ -15,6 +15,7 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Editor.App;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Interaction;
@@ -74,8 +75,8 @@ public class T3Ui: IDisposable
 
     public void ProcessFrame()
     {
+        Profiling.KeepFrameData();
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-        
         
         CustomComponents.BeginFrame();
         FormInputs.BeginFrame();
@@ -97,6 +98,10 @@ public class T3Ui: IDisposable
         MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
         MouseWheelFieldHovered = false;
 
+        // A work around for potential mouse capture
+        DragFieldWasHoveredLastFrame = DragFieldHovered;
+        DragFieldHovered = false;
+        
         FitViewToSelectionHandling.ProcessNewFrame();
         SrvManager.FreeUnusedTextures();
         KeyboardBinding.InitFrame();
@@ -131,13 +136,14 @@ public class T3Ui: IDisposable
         // Draw everything!
         ImGui.DockSpaceOverViewport();
 
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 3);
         WindowManager.Draw();
+        ImGui.PopStyleVar();
             
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
-
-
+        
         FrameStats.CompleteFrame();
         TriggerGlobalActionsFromKeyBindings();
             
@@ -164,6 +170,8 @@ public class T3Ui: IDisposable
         
         Playback.OpNotReady = false;
         AutoBackup.AutoBackup.CheckForSave();
+
+        Profiling.EndFrameData();
     }
 
     /// <summary>
@@ -228,7 +236,7 @@ public class T3Ui: IDisposable
     private void DrawAppMenuBar()
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding * T3Ui.UiScaleFactor);
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForMenus * T3Ui.UiScaleFactor);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
             
         if (ImGui.BeginMainMenuBar())
@@ -521,6 +529,8 @@ public class T3Ui: IDisposable
     public static bool DraggingIsInProgress = false;
     public static bool MouseWheelFieldHovered { private get; set; }
     public static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }
+    public static bool DragFieldHovered { private get; set; }
+    public static bool DragFieldWasHoveredLastFrame { get; private set; }
     public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
     public const string FloatNumberFormat = "{0:F2}";
     public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;

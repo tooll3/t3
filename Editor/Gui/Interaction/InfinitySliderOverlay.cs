@@ -27,7 +27,7 @@ namespace T3.Editor.Gui.Interaction
             {
                 _value = roundedValue;
                 _center = _io.MousePos;
-                _dampedDistance = 50;
+                _verticalDistance = 50;
                 _dampedAngleVelocity = 0;
                 _dampedModifierScaleFactor = 1;
                 _lastXOffset = 0;
@@ -35,7 +35,6 @@ namespace T3.Editor.Gui.Interaction
                 _isManipulating = false;
             }
 
-            var mouseYDistance = _center.Y - _io.MousePos.Y;
 
             // Update angle...
             var mousePosX = (int)(_io.MousePos.X * 2)/2;
@@ -47,13 +46,26 @@ namespace T3.Editor.Gui.Interaction
             }
             
             _lastXOffset = xOffset;
+            if (ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+            {
+                _dragCenterStart = _center;
+            }
 
+            var isDraggingWidgetPosition = ImGui.IsMouseDown(ImGuiMouseButton.Right);
+            if (isDraggingWidgetPosition)
+            {
+                _center = _dragCenterStart + ImGui.GetMouseDragDelta(ImGuiMouseButton.Right);
+            }
+            else
+            {
+                _verticalDistance = _center.Y - _io.MousePos.Y;
+            }
+            
             _dampedAngleVelocity = MathUtils.Lerp(_dampedAngleVelocity, (float)deltaX, 0.06f);
 
             // Update radius and value range
-            _dampedDistance = mouseYDistance;
             const int log10YDistance = 100;
-            var normalizedLogDistanceForLog10 = _dampedDistance / log10YDistance;
+            var normalizedLogDistanceForLog10 = _verticalDistance / log10YDistance;
 
             // Value range and tick interval 
             _dampedModifierScaleFactor = MathUtils.Lerp(_dampedModifierScaleFactor, GetKeyboardScaleFactor(), 0.1f);
@@ -68,9 +80,12 @@ namespace T3.Editor.Gui.Interaction
             const float width = 750;
 
             // Update value...
-            _value += deltaX / width * valueRange;
-            if (clamp)
-                _value = _value.Clamp(min, max);
+            if (!isDraggingWidgetPosition)
+            {
+                _value += deltaX / width * valueRange;
+                if (clamp)
+                    _value = _value.Clamp(min, max);
+            }
             
             roundedValue = _io.KeyCtrl ? _value : Math.Round(_value / (tickValueInterval / 10)) * (tickValueInterval / 10);
 
@@ -187,8 +202,8 @@ namespace T3.Editor.Gui.Interaction
                 var labelSize = ImGui.CalcTextSize(label);
                 drawList.AddRectFilled(
                                        new Vector2(screenX - labelSize.X / 2 - 10, rect.Max.Y),
-                                       new Vector2(screenX + labelSize.X / 2 + 10, rect.Max.Y + 25),
-                                       UiColors.BackgroundFull.Fade(0.5f),
+                                       new Vector2(screenX + labelSize.X / 2 + 10, rect.Max.Y + 35),
+                                       UiColors.BackgroundFull.Fade(0.8f),
                                        5
                                       );
                 drawList.AddLine(new Vector2(screenX, rect.Min.Y),
@@ -254,8 +269,9 @@ namespace T3.Editor.Gui.Interaction
         /** The precise value before rounding. This used for all internal calculations. */
         private static double _value;
 
-        private static float _dampedDistance;
+        private static float _verticalDistance;
         private static Vector2 _center = Vector2.Zero;
+        private static Vector2 _dragCenterStart = Vector2.Zero;
         private static float _dampedAngleVelocity;
         private static double _lastXOffset;
         private static double _dampedModifierScaleFactor;

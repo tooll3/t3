@@ -251,7 +251,7 @@
         {
           "Id": "62e68350-739a-4220-bb84-70b33ea1baf0"/*BrightnessOffset*/,
           "Type": "System.Single",
-          "Value": -5.4
+          "Value": -0.8929134
         },
         {
           "Id": "f5f424a1-42a4-4429-8d99-47a7c6176400"/*Red*/,
@@ -387,7 +387,7 @@
           "Id": "f6d96a01-dc90-49c7-9152-a6a42bb05218"/*Position*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 0.0,
+            "X": 0.48,
             "Y": 0.04248275,
             "Z": 26.6
           }
@@ -680,7 +680,7 @@
         {
           "Id": "287fa06c-3e18-43f2-a4e1-0780c946dd84"/*Amplitude*/,
           "Type": "System.Single",
-          "Value": 0.005
+          "Value": 0.05090792
         },
         {
           "Id": "9bfd5ae3-9ca6-4f7b-b24b-f554ad4d0255"/*Bias*/,
@@ -844,7 +844,7 @@
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "bda603a7-f97f-4c4f-87e1-65f5404863b9",
+      "SourceSlotId": "1f5f95be-770c-4ef0-8232-d9596337937e",
       "TargetParentOrChildId": "7d5f797f-3d97-423c-8ede-ce6d42643d44",
       "TargetSlotId": "62949257-adb3-4c67-ac0a-d37ee28da81b"
     },

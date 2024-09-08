@@ -53,7 +53,9 @@ namespace T3.Operators.Types.Id_185452c6_f299_42a3_b618_c6aa00d66c62
                                         });
             }
             _gradient.SortHandles();
-            
+
+            _gradient.Interpolation = (Gradient.Interpolations)Interpolation.GetValue(context);
+
             OutGradient.Value = _gradient;    //FIXME: This might not be efficient or required
         }
 

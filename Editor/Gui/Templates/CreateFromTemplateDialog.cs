@@ -86,7 +86,7 @@ namespace T3.Editor.Gui.Templates
                 ImGui.SameLine();
                 //ImGui.PushStyleVar(ImGuiStyleVar., new Vector2(20,20));
                 
-                ImGui.BeginChild("options", new Vector2(-20, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
+                ImGui.BeginChild("options", new Vector2(-20, 0), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
                 {
                     ImGui.Dummy(new Vector2(20,10));
                     

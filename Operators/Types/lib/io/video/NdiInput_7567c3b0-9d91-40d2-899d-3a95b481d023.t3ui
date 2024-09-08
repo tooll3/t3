@@ -9,6 +9,22 @@
         "Y": 90.0
       },
       "Usage": "CustomDropdown"
+    },
+    {
+      "InputId": "3f634e98-93f2-4b5e-a098-623b3f8e4c9c"/*EnableProfiling*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "GroupTitle": "Additional Options",
+      "Description": "Log trace data for the NDI update timing."
+    },
+    {
+      "InputId": "5e1ec76b-8ffe-43ca-867b-c9dda0eafb60"/*TriggerReconnect*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
     }
   ],
   "SymbolChildUis": [],
@@ -18,13 +34,6 @@
       "Position": {
         "X": 300.0,
         "Y": 200.0
-      }
-    },
-    {
-      "OutputId": "85f1af38-074e-475d-94f5-f48079979545"/*UploadTime*/,
-      "Position": {
-        "X": 300.0,
-        "Y": 300.0
       }
     }
   ]

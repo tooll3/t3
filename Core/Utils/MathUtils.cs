@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using T3.Core.Animation;
 using Quaternion = System.Numerics.Quaternion;
@@ -129,7 +130,39 @@ namespace T3.Core.Utils
                                        ? mx.X
                                        : v.X, (v.Y < mn.Y) ? mn.Y : (v.Y > mx.Y) ? mx.Y : v.Y);
         }
-
+        
+        // method with a callback that returns a double of a given item
+        
+        
+        
+        public static int FindIndexForTime<T>(List<T> items, double time, Func<int, double> timeAtIndex)
+        {
+            if (items.Count == 0)
+                return -1;
+            
+            var lastIndex = items.Count - 1;
+            var firstIndex = 0;
+            
+            if (timeAtIndex(lastIndex) <= time)
+                return lastIndex;
+            
+            if (timeAtIndex(firstIndex) >= time)
+                return firstIndex;
+            
+            while (lastIndex - firstIndex > 1)
+            {
+                var middleIndex = (firstIndex + lastIndex) / 2;
+                
+                var delta = timeAtIndex(middleIndex) - time;
+                
+                if (delta < 0)
+                    firstIndex = middleIndex;
+                else
+                    lastIndex = middleIndex;
+            }
+            return firstIndex;
+        }
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Min<T>(T lhs, T rhs) where T : IComparable<T>
         {
@@ -351,7 +384,19 @@ namespace T3.Core.Utils
         {
             return new Vector3(vec.X / vec.W, vec.Y / vec.W, vec.Z / vec.W);
         }
-
+        
+        /// <summary>
+        /// Return true if a boolean changed
+        /// </summary>
+        public static bool WasChanged(bool newState, ref bool current)
+        {
+            if (newState == current)
+                return false;
+            
+            current = newState;
+            return true;
+        }
+        
         /// <summary>
         /// Return true if a boolean changed from false to true
         /// </summary>

@@ -633,7 +633,7 @@
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [
         {
-          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
           "Type": "System.String",
           "Value": "DZ"
         }
@@ -1942,7 +1942,7 @@
       "Name": "Get X",
       "InputValues": [
         {
-          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
           "Type": "System.String",
           "Value": "x"
         }
@@ -1964,15 +1964,6 @@
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        },
-        {
-          "Id": "2d59d002-838e-4150-ae8f-ff97bb19bd78"/*Translation*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": -0.6,
             "Y": 0.0,
             "Z": 0.0
           }
@@ -2285,7 +2276,7 @@
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [
         {
-          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
           "Type": "System.String",
           "Value": "x"
         }
@@ -2303,7 +2294,7 @@
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [
         {
-          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
           "Type": "System.String",
           "Value": "t"
         }
@@ -2903,7 +2894,7 @@
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [
         {
-          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
           "Type": "System.String",
           "Value": "x"
         }
@@ -2921,7 +2912,7 @@
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [
         {
-          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
           "Type": "System.String",
           "Value": "t"
         }
@@ -3862,7 +3853,7 @@
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [
         {
-          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
           "Type": "System.String",
           "Value": "DZ"
         }

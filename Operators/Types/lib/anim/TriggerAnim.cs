@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -46,12 +47,11 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                                       _                => context.LocalFxTime
                                   };
 
-            var animMode = AnimMode.GetEnumValue<AnimModes>(context);//   (AnimModes)AnimMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(AnimModes)).Length -1);
-
+            var animMode = AnimMode.GetEnumValue<AnimModes>(context);
             var triggerVariableName = UseTriggerVar.GetValue(context);
             
             var isTriggeredByVar = !Trigger.IsConnected 
-                                   && context.IntVariables.GetValueOrDefault(triggerVariableName, 1 ) == 1;
+                                   && context.IntVariables.GetValueOrDefault(triggerVariableName, 0 ) == 1;
 
             var triggered = Trigger.GetValue(context) || isTriggeredByVar;
             if (triggered != _trigger)

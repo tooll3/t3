@@ -1,13 +1,14 @@
 {
   "Id": "e85d98cf-9240-4f5d-8df6-35425d325778"/*TextureToCubeMap*/,
-  "Description": "Converts a 2d texture into a cube map that can then be used by [SetEnvironment] for PBR image based lighting.",
+  "Description": "Converts a 2d texture ([loaded with [LoadImage]) into a cube map that can then be used by [SetEnvironment] for PBR image based lighting.\nCurrently Tooll spports Equirectangular Cubemaps.\n\nIf changing values and settings in this Operator does not cause any changes in the VIewport, it may be necessary to (temporarily) activate 'UpdateLive' in the following [SetEnvironment] op.",
   "InputUis": [
     {
       "InputId": "8c57c309-c033-4371-9647-dea3529e5655"/*Orientation*/,
       "Position": {
         "X": -364.53455,
         "Y": 1030.2115
-      }
+      },
+      "Description": "Rotates the texture along the horizon.\n\nIf changing this value does not cause any changes in the VIewport, it may be necessary to activate 'UpdateLive' in the following [SetEnvironment] op."
     },
     {
       "InputId": "d5aa1045-5471-42c3-bfc2-c5fa9663817f"/*Image*/,
@@ -22,7 +23,8 @@
       "Position": {
         "X": -826.8507,
         "Y": 1648.8114
-      }
+      },
+      "Description": "Defines the resolution in pixels"
     }
   ],
   "SymbolChildUis": [

@@ -84,8 +84,10 @@ namespace T3.Editor.Gui.Windows.Output
 
         protected override void DrawContent()
         {
-            ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
-                             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
+            ImGui.BeginChild("##content", 
+                             new Vector2(0, ImGui.GetWindowHeight()), 
+                             false,
+                             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse );
             {
                 // Very ugly hack to prevent scaling the output above window size
                 var keepScale = T3Ui.UiScaleFactor;
@@ -102,7 +104,7 @@ namespace T3.Editor.Gui.Windows.Output
                 _imageCanvas.Deactivate();
 
                 _camSelectionHandling.Update(drawnInstance, drawnType);
-                _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction;
+                _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction | drawnType != typeof(Texture2D);
                 _imageCanvas.Update();
 
                 T3Ui.UiScaleFactor = keepScale;

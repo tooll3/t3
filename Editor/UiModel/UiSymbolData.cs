@@ -74,7 +74,7 @@ public partial class UiSymbolData : SymbolData
                                                      symbolUiJson.Object = symbolUi;
                                                      return symbolUiJson;
                                                  })
-                                         .Where(x => x.ObjectWasSet)
+                                         .Where(x => x is { ObjectWasSet: true })
                                          .ToList();
 
         Console.WriteLine(@"Registering Symbol UIs...");

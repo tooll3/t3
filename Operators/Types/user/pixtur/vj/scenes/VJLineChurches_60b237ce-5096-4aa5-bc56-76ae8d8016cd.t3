@@ -52,6 +52,11 @@
           "Id": "ca9778e7-072c-4304-9043-eeb2dc4ca5d7"/*Folder*/,
           "Type": "System.String",
           "Value": "Resources\\user\\pixtur\\VJ\\churches"
+        },
+        {
+          "Id": "e14a4aae-e253-4d14-80ef-a90271cd306a"/*TriggerUpdate*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []
@@ -152,7 +157,7 @@
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [
         {
-          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
           "Type": "System.String",
           "Value": "f"
         }
@@ -736,12 +741,12 @@
         {
           "Id": "32d082f5-d6e1-4068-bcd9-a01977ed72df"/*MaxSubdivisions*/,
           "Type": "System.Int32",
-          "Value": 15
+          "Value": 9
         },
         {
           "Id": "71c99158-cf0e-4ceb-82ee-5ef5685441b3"/*Threshold*/,
           "Type": "System.Single",
-          "Value": 0.0
+          "Value": 0.12
         },
         {
           "Id": "6bdb499c-1300-4fe1-8634-7d3edc4d4050"/*UseAspectForSplit*/,
@@ -749,19 +754,9 @@
           "Value": true
         },
         {
-          "Id": "d30b5542-d564-46e1-9f9e-987351eb425b"/*SplitCenter*/,
-          "Type": "System.Single",
-          "Value": 0.64
-        },
-        {
-          "Id": "c8550e83-bd37-4db3-a859-4a6bcd64a63c"/*SplitCenterVariation*/,
-          "Type": "System.Single",
-          "Value": 0.75
-        },
-        {
           "Id": "6d3c2c76-df35-411a-8e25-450dc9cd6f4e"/*DirectionBias*/,
           "Type": "System.Single",
-          "Value": -0.82
+          "Value": -1.19
         },
         {
           "Id": "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02"/*ScrollOffset*/,
@@ -769,6 +764,14 @@
           "Value": {
             "X": 0.82,
             "Y": 1.65
+          }
+        },
+        {
+          "Id": "22afde68-08c5-438f-9425-fe255b2e079f"/*ScrollBiasAndGain*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.16500002,
+            "Y": 0.525
           }
         },
         {
@@ -784,12 +787,12 @@
         {
           "Id": "82a8fbb3-c1be-494e-8a8d-e7ccf5440556"/*GapWidth*/,
           "Type": "System.Single",
-          "Value": 0.007
+          "Value": -0.011
         },
         {
           "Id": "3e164af6-1cb3-45b3-a319-e562789d73f7"/*Feather*/,
           "Type": "System.Single",
-          "Value": -0.0018
+          "Value": 0.0001
         },
         {
           "Id": "5cae4d6e-d441-42f7-8e17-3aeb58719f08"/*GapColor*/,
@@ -809,7 +812,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "a9a244da-9542-4752-af48-81aa25228cf9",
+                  "Id": "2a97acf8-c3c3-497b-92ff-eb92b9f476ec",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 1.0,
@@ -819,7 +822,7 @@
                   }
                 },
                 {
-                  "Id": "9c0f2d0d-6efe-4ca8-bb44-f1f37ad3550a",
+                  "Id": "7d2f52d8-fd4c-4e83-807d-406c609d2b34",
                   "NormalizedPosition": 1.0,
                   "Color": {
                     "R": 0.0,
@@ -835,7 +838,7 @@
         {
           "Id": "ee2bc31a-a67f-4bec-bce7-0a70db88082c"/*ColorMode*/,
           "Type": "System.Int32",
-          "Value": 2
+          "Value": -1
         },
         {
           "Id": "d90350a0-9fa8-4747-805b-ba7ab8125595"/*Use4xMSAA*/,
@@ -888,7 +891,7 @@
         {
           "Id": "29e289be-e735-4dd4-8826-5e434cc995fa"/*Index*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 0
         }
       ],
       "Outputs": []

@@ -71,7 +71,17 @@ internal static class Duplicate
         }
 
         // Create and register the new symbol
-        var newSymbol = new Symbol(type, newSymbolId);
+        Symbol newSymbol;
+        try
+        {
+            newSymbol= new Symbol(type, newSymbolId);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to duplicated symbol: {e.Message}");
+            return null;
+        }
+        
         newSymbol.PendingSource = newSource;
         SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
         var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];

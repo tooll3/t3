@@ -78,7 +78,8 @@
         "Y": 662.35626
       },
       "Min": -2.0,
-      "Max": 2.0
+      "Max": 2.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "b3e7d147-5f9a-480f-a5da-ea611e5b4805"/*GenerateMipmaps*/,
@@ -147,15 +148,15 @@
     {
       "ChildId": "0ac1305d-697b-4d4b-80d2-4672117cb228"/*Vector2Components*/,
       "Position": {
-        "X": 392.6546,
-        "Y": 656.4784
+        "X": 343.63788,
+        "Y": 654.4072
       }
     },
     {
       "ChildId": "10328e98-bef5-4e67-a3f5-566b9752c077"/*_ImageFxShaderSetupStatic*/,
       "Position": {
-        "X": 831.70105,
-        "Y": 192.5587
+        "X": 928.5582,
+        "Y": 132.04938
       }
     },
     {
@@ -170,8 +171,8 @@
     {
       "OutputId": "1680781d-af5e-4b77-beb6-3e4a12d73d59"/*Output*/,
       "Position": {
-        "X": 939.8677,
-        "Y": 642.9786
+        "X": 1149.7422,
+        "Y": 278.45978
       }
     }
   ],

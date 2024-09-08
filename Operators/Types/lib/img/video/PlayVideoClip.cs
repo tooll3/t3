@@ -203,7 +203,7 @@ namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
                                                  Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
                                                  Width = size.Width,
                                                  Height = size.Height,
-                                                 MipLevels = 0,
+                                                 MipLevels = 1,
                                                  OptionFlags = ResourceOptionFlags.None,
                                                  SampleDescription = new SampleDescription(1, 0),
                                                  Usage = ResourceUsage.Default

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
+using T3.Core.Logging;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Styling
@@ -21,12 +24,11 @@ namespace T3.Editor.Gui.Styling
     /// </remarks>
     public static class InputWithTypeAheadSearch
     {
-        
-        public static bool Draw(string label, ref string filter, IEnumerable<string> items)
+        public static bool Draw(string label, ref string filter, IEnumerable<string> items, bool outlineOnly = false)
         {
             var inputId = ImGui.GetID(label);
             var isSearchResultWindowOpen = inputId == _activeInputId;
-            
+
             if (isSearchResultWindowOpen)
             {
                 if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorDown, true))
@@ -47,26 +49,42 @@ namespace T3.Editor.Gui.Styling
                     }
                 }
             }
-            
-            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+
+            //ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
             filter ??= string.Empty;
+
+            if (outlineOnly)
+            {
+                ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.FrameBgActive, Color.Red.Rgba);
+                //ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize,0.1f);
+            }
+
             var wasChanged = ImGui.InputText(label, ref filter, 256);
-            ImGui.PopStyleColor();
-            
+
+            if (outlineOnly)
+            {
+                var drawList = ImGui.GetWindowDrawList();
+                drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.BackgroundInputField, 5);
+                //ImGui.PopStyleVar();
+                ImGui.PopStyleColor(2);
+            }
+
+            //ImGui.PopStyleColor();
+
             if (ImGui.IsItemActivated())
             {
                 _lastTypeAheadResults.Clear();
                 _selectedResultIndex = -1;
                 THelpers.DisableImGuiKeyboardNavigation();
             }
-            
-            
+
             var isItemDeactivated = ImGui.IsItemDeactivated();
-            
+
             // We defer exit to get clicks on opened popup list
             var lostFocus = isItemDeactivated || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
-            
-            if ( ImGui.IsItemActive() || isSearchResultWindowOpen)
+
+            if (ImGui.IsItemActive() || isSearchResultWindowOpen)
             {
                 _activeInputId = inputId;
 
@@ -79,46 +97,71 @@ namespace T3.Editor.Gui.Styling
                     wasChanged = true;
                     _activeInputId = 0;
                 }
-                
+
                 if (ImGui.Begin("##typeAheadSearchPopup", ref isSearchResultWindowOpen,
-                                ImGuiWindowFlags.NoTitleBar 
-                                | ImGuiWindowFlags.NoMove 
+                                ImGuiWindowFlags.NoTitleBar
+                                | ImGuiWindowFlags.NoMove
                                 | ImGuiWindowFlags.Tooltip // ugly as f**k. Sadly .PopUp will lead to random crashes.
-                                | ImGuiWindowFlags.NoFocusOnAppearing 
-                                | ImGuiWindowFlags.ChildWindow
+                                | ImGuiWindowFlags.NoFocusOnAppearing
                                ))
                 {
                     _lastTypeAheadResults.Clear();
                     var index = 0;
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Gray.Rgba);
-                    
-                    var matches = new List<string>();
-                    var others = new List<string>();
-                    foreach (var word in items)
+
+                    var listItems = new List<string>();
+                    if (string.IsNullOrWhiteSpace(filter))
                     {
-                        if (word != null && (filter == null || word.Contains(filter, StringComparison.InvariantCultureIgnoreCase)))
+                        listItems.AddRange(items.Where(i => i != null));
+                    }
+                    else
+                    {
+                        var matches = new List<ResultWithRelevancy>();
+                        var others = new List<string>();
+
+                        foreach (var word in items)
                         {
-                            matches.Add(word);
+                            if (word == null)
+                                continue;
+
+                            if (word.StartsWith(filter, StringComparison.InvariantCulture))
+                            {
+                                matches.Add(new ResultWithRelevancy(word, 1));
+                            }
+                            else if (word.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                matches.Add(new ResultWithRelevancy(word, 2));
+                            }
+                            else
+                            {
+                                others.Add(word);
+                            }
+                        }
+
+                        if (matches.Count > 0)
+                        {
+                            listItems = matches.OrderBy(r => r.Relevancy)
+                                               .Select(m => m.Word)
+                                               .ToList();
                         }
                         else
                         {
-                            others.Add(word);
+                            listItems = others;
                         }
                     }
-                    
-                    var listItems = matches.Count  <=1 ? others : matches;
+ 
                     foreach (var word in listItems)
                     {
                         var isSelected = index == _selectedResultIndex;
-                        
+
                         // We can't use IsItemHovered because we need to use Tooltip hack 
                         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
                         ImGui.Selectable(word, isSelected);
                         ImGui.PopStyleColor();
 
-                        var isItemHovered = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax()).Contains( ImGui.GetMousePos());
-                            
-                        if ((ImGui.IsMouseClicked(ImGuiMouseButton.Left) && isItemHovered) 
+                        var isItemHovered = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax()).Contains(ImGui.GetMousePos());
+
+                        if ((ImGui.IsMouseClicked(ImGuiMouseButton.Left) && isItemHovered)
                             || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
                         {
                             filter = word;
@@ -132,11 +175,12 @@ namespace T3.Editor.Gui.Styling
                     }
 
                     var isPopupHovered = new ImRect(ImGui.GetWindowContentRegionMin(), ImGui.GetWindowContentRegionMax()).Contains(ImGui.GetMousePos());
-                    
+
                     if (!isPopupHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                     {
                         _activeInputId = 0;
                     }
+
                     ImGui.PopStyleColor();
                 }
 
@@ -149,6 +193,18 @@ namespace T3.Editor.Gui.Styling
             }
 
             return wasChanged;
+        }
+
+        private struct ResultWithRelevancy
+        {
+            public ResultWithRelevancy(string word, float relevancy)
+            {
+                Word = word;
+                Relevancy = relevancy;
+            }
+
+            public string Word;
+            public float Relevancy;
         }
 
         private static readonly List<string> _lastTypeAheadResults = new();

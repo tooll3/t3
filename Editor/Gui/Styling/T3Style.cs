@@ -19,7 +19,8 @@ public static class T3Style
     }
 
     public const float ToolBarHeight = 25;
-    public static readonly Vector2 WindowChildPadding = new(5,5);
+    public static Vector2 WindowPaddingForWindows = new(0,0);
+    public static Vector2 WindowPaddingForMenus = new(5,5);
 
     public static void Apply()
     {
@@ -70,8 +71,9 @@ public static class T3Style
         style.FrameRounding = 0f;
         style.DisplayWindowPadding = Vector2.Zero;
         style.DisplaySafeAreaPadding = Vector2.Zero;
-        style.ChildBorderSize = 1;
+        style.ChildBorderSize = 0;
         style.TabRounding = 2;
+        style.WindowBorderSize = 0;
     }
 
     static public bool ColorsNeedUpdate;

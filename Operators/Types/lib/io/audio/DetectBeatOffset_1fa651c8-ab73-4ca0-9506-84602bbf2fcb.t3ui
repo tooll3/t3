@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "09628f30-9148-477e-a375-a7e661952ee5"/*FftInput*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -6.0125656,
         "Y": 54.259773

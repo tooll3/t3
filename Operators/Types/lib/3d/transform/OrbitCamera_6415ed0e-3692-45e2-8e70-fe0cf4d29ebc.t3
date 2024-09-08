@@ -98,6 +98,14 @@
       }
     },
     {
+      "Id": "11b13db2-3c91-4199-8245-50af200e3a9d"/*PositionOffset*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
       "Id": "bd1bc8a5-72ce-42b0-8914-4f6e124a18ae"/*AspectRatio*/,
       "DefaultValue": 0.0
     },

@@ -44,12 +44,12 @@ namespace T3.Operators.Types.Id_0b337922_aeca_473a_bfe9_4ab6ff804b11
             // based on https://x.com/itsmatharoo/status/1148297551931572224
             var targetValue = inputValue ;
 
-            _srpingedValue = MathUtils.Lerp(_srpingedValue, (targetValue - Result.Value) * test, tension);
-            Result.Value += _srpingedValue;
+            _springedValue = MathUtils.Lerp(_springedValue, (targetValue - Result.Value) * test, tension);
+            Result.Value += _springedValue;
         }
 
 
-        private float _srpingedValue;
+        private float _springedValue;
         private double _lastEvalTime;
 
         [Input(Guid = "782eb1a4-ee2a-4326-a7dc-7a40c5fb9b7c")]

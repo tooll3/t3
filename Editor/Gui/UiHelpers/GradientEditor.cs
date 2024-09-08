@@ -174,7 +174,7 @@ namespace T3.Editor.Gui.UiHelpers
 
                                                         ImGui.EndMenu();
                                                     }
-                                                }, "Gradient");
+                                                }, "Gradient", "gradientContextMenu");
 
             if (modified != InputEditStateFlags.Nothing && cloneIfModified)
             {

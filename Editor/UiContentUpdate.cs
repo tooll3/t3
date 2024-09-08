@@ -65,7 +65,6 @@ internal static class UiContentUpdate
         }
 
         ImGui.NewFrame();
-        ProgramWindows.Main.PrepareRenderingFrame();
 
         // Render 2nd view
         ProgramWindows.Viewer.SetVisible(T3Ui.ShowSecondaryRenderWindow);
@@ -78,30 +77,41 @@ internal static class UiContentUpdate
             ProgramWindows.SetVertexShader(SharedResources.FullScreenVertexShaderResource);
             ProgramWindows.SetPixelShader(SharedResources.FullScreenPixelShaderResource);
 
-            if (viewer.Texture is { IsDisposed: false })
+            if (UserSettings.Config.MirrorUiOnSecondView)
             {
-                //Log.Debug($"using TextureId:{resourceManager.SecondRenderWindowTexture}, debug name:{resourceManager.SecondRenderWindowTexture.DebugName}");
-                if (_viewWindowBackgroundSrv == null ||
-                    _viewWindowBackgroundSrv.Resource.NativePointer != viewer.Texture.NativePointer)
+                ProgramWindows.RebuildUiCopyTextureIfRequired();
+                ProgramWindows.CopyUiContentToShareTexture();
+                if (ProgramWindows.UiCopyTextureSrv != null && !ProgramWindows.UiCopyTextureSrv.IsDisposed)
                 {
-                    _viewWindowBackgroundSrv?.Dispose();
-                    _viewWindowBackgroundSrv = new ShaderResourceView(Program.Device, viewer.Texture);
+                    ProgramWindows.SetRasterizerState(SharedResources.ViewWindowRasterizerState);
+                    ProgramWindows.SetPixelShaderSRV(ProgramWindows.UiCopyTextureSrv);
+                    ProgramWindows.DrawTextureToSecondaryRenderOutput();
                 }
-
-                ProgramWindows.SetRasterizerState(SharedResources.ViewWindowRasterizerState);
-                ProgramWindows.SetPixelShaderSRV(_viewWindowBackgroundSrv);
-            }
-            else if (ResourceManager.ResourcesById[SharedResources.ViewWindowDefaultSrvId] is ShaderResourceViewResource srvr)
-            {
-                ProgramWindows.SetPixelShaderSRV(srvr.ShaderResourceView);
             }
             else
             {
-                Log.Debug($"Invalid {nameof(ShaderResourceView)} for 2nd render view");
+                if (viewer.Texture is { IsDisposed: false })
+                {
+                    if (_viewWindowBackgroundSrv == null ||
+                        _viewWindowBackgroundSrv.Resource.NativePointer != viewer.Texture.NativePointer)
+                    {
+                        _viewWindowBackgroundSrv?.Dispose();
+                        _viewWindowBackgroundSrv = new ShaderResourceView(Program.Device, viewer.Texture);
+                    }
+
+                    ProgramWindows.SetRasterizerState(SharedResources.ViewWindowRasterizerState);
+                    ProgramWindows.SetPixelShaderSRV(_viewWindowBackgroundSrv);
+                    ProgramWindows.DrawTextureToSecondaryRenderOutput();
+                }
+                else
+                {
+                    Log.Debug($"Invalid {nameof(ShaderResourceView)} for 2nd render view");
+                }
             }
-    
-            ProgramWindows.CopyToSecondaryRenderOutput();
         }
+
+        // Clear the main window buffer for next frame
+        ProgramWindows.Main.PrepareRenderingFrame();
 
         Program.T3Ui.ProcessFrame();
 
@@ -134,7 +144,12 @@ internal static class UiContentUpdate
     }
     
     private static long _lastElapsedTicks;
-    private static readonly Stopwatch _stopwatch = new() ;
+    private static readonly Stopwatch _stopwatch = new();
+    
+    /** Windows' implementation of mirroring a display is extremely slow and can
+     * take up to 50% of the GPU time. Enabling this work around will copy the Main window
+     * SwapChain buffer into a texture that is used for the 2nd viewer window.
+     */
     
     private static float _lastUiScale = 1;
     private static ShaderResourceView _viewWindowBackgroundSrv;

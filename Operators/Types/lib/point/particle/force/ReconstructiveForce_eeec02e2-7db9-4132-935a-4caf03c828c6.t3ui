@@ -54,7 +54,10 @@
         "X": -935.70306,
         "Y": 1966.3364
       },
-      "GroupTitle": "Force"
+      "GroupTitle": "Force",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "f6cb95fe-7079-4064-bac3-e36bc648da10"/*DistanceMode*/,

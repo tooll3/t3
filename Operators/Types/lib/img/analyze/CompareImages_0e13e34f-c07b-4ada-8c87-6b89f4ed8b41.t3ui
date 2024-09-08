@@ -33,7 +33,8 @@
       "Position": {
         "X": -704.83606,
         "Y": 449.13895
-      }
+      },
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "99171ae6-fb07-4121-bf23-e97f30b33be5"/*IntensityRange*/,

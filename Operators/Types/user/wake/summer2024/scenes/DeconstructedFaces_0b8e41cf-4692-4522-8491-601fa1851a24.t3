@@ -87,7 +87,17 @@
     {
       "Id": "ac0a4d0d-14e8-41e9-8241-4e187dc00d3a"/*Group*/,
       "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "9e24c5d1-191a-4c1a-b88e-03df826fffc0"/*Translation*/,
+          "Type": "System.Numerics.Vector3",
+          "Value": {
+            "X": 0.74,
+            "Y": 0.0,
+            "Z": 0.0
+          }
+        }
+      ],
       "Outputs": []
     },
     {
@@ -127,7 +137,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "611ebd4c-56eb-4ca3-ad32-8df08a7b2e46",
+                  "Id": "399819b8-bf5b-4726-9a38-6a41373a0aef",
                   "NormalizedPosition": 0.040983606,
                   "Color": {
                     "R": 0.0,
@@ -137,7 +147,7 @@
                   }
                 },
                 {
-                  "Id": "1e28b8a6-4bc6-4b42-892c-4dbdeebb7104",
+                  "Id": "cd503d22-a121-44a2-b95f-ad0f63b9c58a",
                   "NormalizedPosition": 0.13114753,
                   "Color": {
                     "R": 0.0,
@@ -164,6 +174,11 @@
           "Id": "5774969c-ef4d-482e-ab37-b3a84b09debb"/*PingPong*/,
           "Type": "System.Boolean",
           "Value": true
+        },
+        {
+          "Id": "c38647f6-c6ea-40a0-b872-0df6d4168c05"/*Offset*/,
+          "Type": "System.Single",
+          "Value": 0.0
         }
       ],
       "Outputs": []
@@ -203,12 +218,25 @@
           "Value": 0.20000002
         },
         {
+          "Id": "c6f0a794-ba0f-44cf-95cb-9ec6484f9f02"/*ScrollOffset*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0
+          }
+        },
+        {
           "Id": "22afde68-08c5-438f-9425-fe255b2e079f"/*ScrollBiasAndGain*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.0,
             "Y": 0.100000024
           }
+        },
+        {
+          "Id": "7a8684c9-ee81-49c1-ad13-d91d62799efb"/*RandomPhase*/,
+          "Type": "System.Single",
+          "Value": 0.0
         },
         {
           "Id": "819898d2-230b-4176-a1b7-a008aed9631d"/*RandomSeed*/,
@@ -221,6 +249,16 @@
           "Value": 0.001
         },
         {
+          "Id": "5cae4d6e-d441-42f7-8e17-3aeb58719f08"/*GapColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        },
+        {
           "Id": "be07242e-39fc-4631-ab6e-3023c9444406"/*Gradient*/,
           "Type": "T3.Core.DataTypes.Gradient",
           "Value": {
@@ -228,7 +266,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "ffdae9c5-6fac-4e17-8f44-6056d7c58a5e",
+                  "Id": "d753a580-f85f-4641-807e-81e567670d15",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 0.99999,
@@ -238,7 +276,7 @@
                   }
                 },
                 {
-                  "Id": "3698c7e8-005f-47b5-b923-b782420f91d5",
+                  "Id": "fd0ae838-2b70-4287-b0ab-1cc30beadefa",
                   "NormalizedPosition": 0.9614129,
                   "Color": {
                     "R": 1.0,
@@ -248,7 +286,7 @@
                   }
                 },
                 {
-                  "Id": "5b4a7660-e55d-42b6-87d2-776789930268",
+                  "Id": "2aa892d6-d70c-4070-9cc6-ac6b2fa8d82d",
                   "NormalizedPosition": 0.99703175,
                   "Color": {
                     "R": 0.12649402,
@@ -925,7 +963,7 @@
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [
         {
-          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+          "Id": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
           "Type": "System.String",
           "Value": "f"
         }
@@ -995,7 +1033,7 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "bce75875-96af-4ed8-8377-cbd07a668ea3",
+                  "Id": "ee80621b-848b-4e02-8210-28fbce3a7258",
                   "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 3.263219,
@@ -1005,7 +1043,7 @@
                   }
                 },
                 {
-                  "Id": "e43ae6cf-6333-47ab-a899-5cb45ceca4c9",
+                  "Id": "28c4abda-1b8e-4fa7-8817-dcbf47ebaf97",
                   "NormalizedPosition": 0.10687023,
                   "Color": {
                     "R": 14.903193,
@@ -1015,7 +1053,7 @@
                   }
                 },
                 {
-                  "Id": "31210a6a-4cd6-4941-aea8-56a8edeefaae",
+                  "Id": "0b2b27d3-3baa-4dc4-9f00-5943630fa1fa",
                   "NormalizedPosition": 1.0,
                   "Color": {
                     "R": 1.0,
@@ -1248,7 +1286,7 @@
         {
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
-          "Value": 1.4905022
+          "Value": 0.8
         }
       ],
       "Outputs": []
@@ -1447,6 +1485,18 @@
           "Id": "f29d5426-5e31-4c7c-be77-5e45bfb9daa9"/*Damping*/,
           "Type": "System.Single",
           "Value": 0.4
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "a3b840be-eca3-4d7c-bbcc-25cdde04bb2e"/*FadingSlideShowSoftEdge*/,
+      "SymbolId": "92750028-5fac-4e6d-84fe-f779f6d0ae33",
+      "InputValues": [
+        {
+          "Id": "6c52d99d-9361-4d99-b9b0-4397e564ca19"/*FolderWithImages*/,
+          "Type": "System.String",
+          "Value": "Resources\\user\\pixtur\\VJ\\agingFacesFemale"
         }
       ],
       "Outputs": []

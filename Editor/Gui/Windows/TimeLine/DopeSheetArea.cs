@@ -5,10 +5,12 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.VectorInputs;
@@ -34,6 +36,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters)
         {
+            MouseClickChangedSelection = false;
             if (CurvesTablesNeedsRefresh)
             {
                 RebuildCurveTables();
@@ -43,6 +46,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
             _drawList = ImGui.GetWindowDrawList();
             AnimationParameters = animationParameters;
             _compositionOp = compositionOp;
+
+            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            {
+                _selectionCountBeforeClick = SelectedKeyframes.Count;
+            }
+            
 
             ImGui.BeginGroup();
             {
@@ -106,24 +115,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                         new Vector2(max.X, max.Y), UiColors.ForegroundFull.Fade(0.04f));
             }
 
-            if (layerHovered)
-            {
-                ImGui.BeginTooltip();
 
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.TextUnformatted(parameter.Input.Input.Name);
-                FrameStats.Current.HoveredIds.Add(parameter.Input.Parent.SymbolChildId);
-
-                foreach (var curve in parameter.Curves)
-                {
-                    var v = curve.GetSampledValue(mouseTime);
-                    ImGui.TextUnformatted($"{v:0.00}");
-                }
-
-                ImGui.PopFont();
-
-                ImGui.EndTooltip();
-            }
 
             // Draw label and pinning
             {
@@ -156,14 +148,95 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 var iconColor = isPinned? UiColors.StatusAnimated : UiColors.Gray;
                 iconColor = iconColor.Fade(ImGui.IsItemHovered() ? 1 : 0.8f);
                 
-                Icons.DrawIconAtScreenPosition(Icon.Pin, lastPos, _drawList, iconColor);
+                Icons.DrawIconAtScreenPosition(Icon.Pin, lastPos + new Vector2(2,5), _drawList, iconColor);
                 var labelColor = layerHovered
                                      ? UiColors.ForegroundFull
                                      : isPinned
                                          ? UiColors.StatusAnimated
                                          : UiColors.TextMuted;
-                _drawList.AddText( lastPos+ new Vector2(20,0), labelColor, label);
+                
+                _drawList.AddText( lastPos+ new Vector2(20,3), labelColor, label);
+
                 ImGui.PopID();
+            }
+            
+            if (layerHovered)
+            {
+                _drawList.AddRectFilled(new Vector2(mousePos.X, min.Y),
+                                        new Vector2(mousePos.X+1, max.Y), UiColors.StatusAnimated.Fade(0.4f));
+                ImGui.BeginTooltip();
+
+                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.TextUnformatted(parameter.Input.Input.Name);
+                FrameStats.Current.HoveredIds.Add(parameter.Input.Parent.SymbolChildId);
+
+                foreach (var curve in parameter.Curves)
+                {
+                    var v = curve.GetSampledValue(mouseTime);
+                    ImGui.TextUnformatted($"{v:0.00}");
+                }
+
+                ImGui.PopFont();
+                ImGui.EndTooltip();
+
+                var isAnyKeysSelected = _selectionCountBeforeClick>0;
+                
+                var wasMouseDragging= ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() > 2;
+                var isMouseReleased = ImGui.IsMouseReleased(ImGuiMouseButton.Left);
+                var isLayerBackgroundClicked = !ImGui.IsAnyItemHovered() && isMouseReleased && !wasMouseDragging;
+                
+                // Select and focus parameter if no keyframes are selected
+                if (isLayerBackgroundClicked)
+                {
+                    if (!isAnyKeysSelected)
+                    {
+                        var instance = _compositionOp.Children.FirstOrDefault(c => c.SymbolChildId == parameter.ChildUi.SymbolChild.Id);
+                        if (instance != null)
+                        {
+                            var path =OperatorUtils.BuildIdPathForInstance(instance);
+                            GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
+                        }
+                    }
+                    
+                    if(ImGui.GetIO().KeyShift)
+                    {
+                        var someKeysNotVisible = false;
+                        foreach (var curve in parameter.Curves)
+                        {
+                            foreach(var k in curve.GetVDefinitions())
+                            {
+                                var x = TimeLineCanvas.Current.TransformX((float)k.U);
+                                var isNotVisible = x < min.X || x > max.X;
+                                if (isNotVisible)
+                                {
+                                    someKeysNotVisible = true;
+                                    break;
+                                }
+                            }
+                            SelectedKeyframes.UnionWith(curve.GetVDefinitions().Select(v => v));
+                        }
+                        
+                        if (someKeysNotVisible)
+                        {
+                            ViewAllOrSelectedKeys();
+                        }
+                        MouseClickChangedSelection = true;
+                    }
+                    else if(ImGui.GetIO().KeyCtrl)
+                    {
+                        foreach (var curve in parameter.Curves)
+                        {
+                            // remove keys from selection
+                            SelectedKeyframes.ExceptWith(curve.GetVDefinitions().Select(v => v));
+                        }
+                        MouseClickChangedSelection = true;
+                    }
+                    else if (isAnyKeysSelected)
+                    {
+                        SelectedKeyframes.Clear();
+                        MouseClickChangedSelection = true;
+                    }
+                }
             }
             
             // Draw curves and gradients...
@@ -485,7 +558,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         var result = floatInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
-                            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.SymbolChildId, SelectedKeyframes, _currentAnimationParameter.Curves);
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, _currentAnimationParameter.Curves);
                         }
 
                         if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -517,7 +590,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         var result = intInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
-                            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.SymbolChildId, SelectedKeyframes, _currentAnimationParameter.Curves);
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, _currentAnimationParameter.Curves);
                         }
 
                         if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -673,7 +746,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         ICommand ITimeObjectManipulation.StartDragCommand()
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, SelectedKeyframes, GetAllCurves());
+            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
             return _changeKeyframesCommand;
         }
 
@@ -702,7 +775,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             // Update reference in Macro-command
             _changeKeyframesCommand.StoreCurrentValues();
-            // UndoRedoStack.Add(_changeKeyframesCommand);
             _changeKeyframesCommand = null;
         }
 
@@ -741,5 +813,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private Instance _compositionOp;
         private ImDrawListPtr _drawList;
         private readonly ValueSnapHandler _snapHandler;
+        private int _selectionCountBeforeClick;
+        public bool MouseClickChangedSelection;
     }
 }
