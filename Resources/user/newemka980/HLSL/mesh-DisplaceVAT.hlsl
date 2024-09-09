@@ -1,7 +1,7 @@
 //#include "lib/shared/hash-functions.hlsl"
 //#include "lib/shared/noise-functions.hlsl"
 //#include "lib/shared/point.hlsl"
-//#include "lib/shared/quat-functions.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
@@ -41,7 +41,7 @@ RWStructuredBuffer<PbrVertex> ResultVertices : u0;
 
 sampler texSampler : register(s0);
 
-[numthreads(80,1,1)]
+[numthreads(72,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
     uint gi = i.x;
@@ -80,7 +80,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 bitangent = SourceVertices[gi].Bitangent;
     float3 tangent = SourceVertices[gi].Tangent;
     float3 orgNormal = SourceVertices[gi].Normal;
-    float3 newNormal = normals.rbg;
+    float3 newNormal =  normalize(normals.rbg  -.5) ;
 
     float3 newTangent = cross(bitangent, newNormal);
     float3 newBitangent = cross(newNormal, newTangent);

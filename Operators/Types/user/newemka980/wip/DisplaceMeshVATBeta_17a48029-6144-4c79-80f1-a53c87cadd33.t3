@@ -176,18 +176,6 @@
       "Outputs": []
     },
     {
-      "Id": "f9734c2c-68d5-43f1-bcd4-089a75466019"/*RecomputeNormals*/,
-      "SymbolId": "68e0d0cb-1e57-4e9c-9f22-bd7927ddb4c5",
-      "InputValues": [
-        {
-          "Id": "fd3f8225-3d33-40d3-af15-ae768e2c67ad"/*RecomputeIndices*/,
-          "Type": "System.Boolean",
-          "Value": false
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "9c9637f7-7b6d-443e-b136-e99f497b2352"/*SamplerStateOp*/,
       "SymbolId": "9515d59d-0bd5-406b-96da-6a5f60215700",
       "InputValues": [],
@@ -214,6 +202,12 @@
     {
       "Id": "7ca0ea54-ba8b-491f-b903-4470f4daf944"/*TransformsConstBuffer*/,
       "SymbolId": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c3373d06-44da-4d50-8406-716668502f9d"/*RecomputeNormals*/,
+      "SymbolId": "68e0d0cb-1e57-4e9c-9f22-bd7927ddb4c5",
       "InputValues": [],
       "Outputs": []
     }
@@ -442,6 +436,12 @@
       "TargetSlotId": "36f14238-5bb8-4521-9533-f4d1e8fb802b"
     },
     {
+      "SourceParentOrChildId": "3966256f-6209-4f1a-bbc4-21e09313dfef",
+      "SourceSlotId": "d71893dd-6ca2-4ab7-9e04-0bd7285eccfb",
+      "TargetParentOrChildId": "c3373d06-44da-4d50-8406-716668502f9d",
+      "TargetSlotId": "b55aeb9b-5286-476a-b8f0-86cb96e41310"
+    },
+    {
       "SourceParentOrChildId": "187d64bf-4fb6-45a9-ba68-2a6e35d50fce",
       "SourceSlotId": "c997268d-6709-49de-980e-64d7a47504f7",
       "TargetParentOrChildId": "c73ba57e-4991-4507-9228-4f64d58a0ed5",
@@ -452,12 +452,6 @@
       "SourceSlotId": "9860d118-7adc-4fe3-9548-749af53c4e83",
       "TargetParentOrChildId": "e3f9bcb9-b3c6-4131-b5cb-762a96d857aa",
       "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
-    },
-    {
-      "SourceParentOrChildId": "3966256f-6209-4f1a-bbc4-21e09313dfef",
-      "SourceSlotId": "d71893dd-6ca2-4ab7-9e04-0bd7285eccfb",
-      "TargetParentOrChildId": "f9734c2c-68d5-43f1-bcd4-089a75466019",
-      "TargetSlotId": "b55aeb9b-5286-476a-b8f0-86cb96e41310"
     }
   ]
 }
