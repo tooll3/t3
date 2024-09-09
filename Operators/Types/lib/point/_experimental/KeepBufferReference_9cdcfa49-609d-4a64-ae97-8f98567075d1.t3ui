@@ -1,0 +1,32 @@
+{
+  "Id": "9cdcfa49-609d-4a64-ae97-8f98567075d1"/*KeepBufferReference*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "1904c4c7-3288-42fb-a5cb-b76e38780376"/*Buffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "62a6df26-0ba4-41d5-a2e3-caaea5315b37"/*BufferReference*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "437c53cc-f949-4369-a2be-f7c66557eea7"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 138.0
+      }
+    }
+  ]
+}
