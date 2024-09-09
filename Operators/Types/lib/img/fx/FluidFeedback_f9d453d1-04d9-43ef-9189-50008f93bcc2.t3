@@ -57,7 +57,7 @@
   ],
   "Children": [
     {
-      "Id": "b47840dc-b5f2-42cc-b69e-5564f1ad74bd"/*UseRenderTarget*/,
+      "Id": "b47840dc-b5f2-42cc-b69e-5564f1ad74bd"/*UseTextureReference*/,
       "SymbolId": "fd5ac393-02a4-43ae-8cdf-64a947abbafa",
       "InputValues": [],
       "Outputs": []

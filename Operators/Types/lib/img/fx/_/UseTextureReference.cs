@@ -6,7 +6,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_fd5ac393_02a4_43ae_8cdf_64a947abbafa
 {
-    public class UseRenderTarget : Instance<UseRenderTarget>
+    public class UseTextureReference : Instance<UseTextureReference>
     {
         [Output(Guid = "CB9850B3-119A-4839-B79F-A882112503C6")]
         public readonly Slot<RenderTargetReference> Reference = new();
@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_fd5ac393_02a4_43ae_8cdf_64a947abbafa
         public readonly Slot<Texture2D> DepthTexture = new();
 
         
-        public UseRenderTarget()
+        public UseTextureReference()
         {
             Texture.UpdateAction = UpdateTexture;
             DepthTexture.UpdateAction = UpdateTexture;

@@ -32,7 +32,7 @@
       "Outputs": []
     },
     {
-      "Id": "b18c42df-0606-4f36-badf-c2aa27522a9c"/*UseRenderTarget*/,
+      "Id": "b18c42df-0606-4f36-badf-c2aa27522a9c"/*UseTextureReference*/,
       "SymbolId": "fd5ac393-02a4-43ae-8cdf-64a947abbafa",
       "InputValues": [],
       "Outputs": []
