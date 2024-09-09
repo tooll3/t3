@@ -11,6 +11,7 @@
     },
     {
       "InputId": "b478510f-eb33-4cf0-be0c-80ecea34e40d"/*DataList*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
