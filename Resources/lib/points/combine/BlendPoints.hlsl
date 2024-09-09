@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -47,11 +48,11 @@ RWStructuredBuffer<Point> ResultPoints : u0; // output
     }
     else if (BlendMode < 1.5)
     {
-        f = A.w;
+        f = A.W;
     }
     else if (BlendMode < 2.5)
     {
-        f = (1 - B.w);
+        f = (1 - B.W);
     }
 
     // Ranged
@@ -74,7 +75,10 @@ RWStructuredBuffer<Point> ResultPoints : u0; // output
     float fallOffFromCenter = smoothstep(0, 1, 1 - abs(f - 0.5) * 2);
     f += (hash11(t) - 0.5) * Scatter * fallOffFromCenter;
 
-    ResultPoints[i.x].rotation = q_slerp(A.rotation, B.rotation, f);
-    ResultPoints[i.x].position = lerp(A.position, B.position, f);
-    ResultPoints[i.x].w = lerp(A.w, B.w, f);
+    ResultPoints[i.x].Rotation = qSlerp(A.Rotation, B.Rotation, f);
+    ResultPoints[i.x].Position = lerp(A.Position, B.Position, f);
+    ResultPoints[i.x].W = lerp(A.W, B.W, f);
+    ResultPoints[i.x].Color = lerp(A.Color, B.Color, f);
+    ResultPoints[i.x].Stretch = lerp(A.Stretch, B.Stretch, f);
+    ResultPoints[i.x].Selected = lerp(A.Selected, B.Selected, f);
 }

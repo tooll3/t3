@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using JeremyAnsel.Media.Dds;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
@@ -28,11 +27,9 @@ namespace T3.Core.Resource
     {
         void Update(string path);
     }
-    
+
     public class ResourceManager
     {
-        public Texture2D SecondRenderWindowTexture { get; set; }
-
         public Assembly OperatorsAssembly { get; set; }
 
         public static ResourceManager Instance()
@@ -45,41 +42,9 @@ namespace T3.Core.Resource
             return (T)ResourcesById[resourceId];
         }
 
-        public VertexShader GetVertexShader(uint resourceId)
-        {
-            return GetResource<VertexShaderResource>(resourceId).VertexShader;
-        }
-
-        public PixelShader GetPixelShader(uint resourceId)
-        {
-            return GetResource<PixelShaderResource>(resourceId).PixelShader;
-        }
-
-        public ShaderBytecode GetPixelShaderBytecode(uint resourceId)
-        {
-            return GetResource<PixelShaderResource>(resourceId).Blob;
-        }
-        
-        
-        public ComputeShader GetComputeShader(uint resourceId)
-        {
-            return GetResource<ComputeShaderResource>(resourceId).ComputeShader;
-        }
-        
-        public ShaderBytecode GetComputeShaderBytecode(uint resourceId)
-        {
-            return GetResource<ComputeShaderResource>(resourceId).Blob;
-        }
-        
-        public GeometryShader GetGeometryShader(uint resourceId)
-        {
-            return GetResource<GeometryShaderResource>(resourceId).GeometryShader;
-        }
-
-        
         public OperatorResource GetOperatorFileResource(string path)
         {
-            bool foundFileEntryForPath = ResourceFileWatcher.ResourceFileHooks.TryGetValue(path, out var fileResource);
+            bool foundFileEntryForPath = ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(path, out var fileResource);
             if (foundFileEntryForPath)
             {
                 foreach (var id in fileResource.ResourceIds)
@@ -101,19 +66,19 @@ namespace T3.Core.Resource
                 return;
             }
 
-            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(oldPath, out var fileResource))
+            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(oldPath, out var fileResource))
             {
                 Log.Info($"renamed file resource from '{oldPath}' to '{newPath}'");
                 fileResource.Path = newPath;
-                ResourceFileWatcher.ResourceFileHooks.Remove(oldPath);
-                ResourceFileWatcher.ResourceFileHooks.Add(newPath, fileResource);
+                ResourceFileWatcher.HooksForResourceFilepaths.Remove(oldPath);
+                ResourceFileWatcher.HooksForResourceFilepaths.Add(newPath, fileResource);
             }
         }
 
         public const uint NullResource = 0;
         private uint _resourceIdCounter = 1;
 
-        private uint GetNextResourceId()
+        internal uint GetNextResourceId()
         {
             return _resourceIdCounter++;
         }
@@ -148,12 +113,10 @@ namespace T3.Core.Resource
 
         public SamplerState DefaultSamplerState { get; }
 
-
-
         public static void SetupConstBuffer<T>(T bufferData, ref Buffer buffer) where T : struct
         {
             using var data = new DataStream(Marshal.SizeOf(typeof(T)), true, true);
-            
+
             data.Write(bufferData);
             data.Position = 0;
 
@@ -181,12 +144,12 @@ namespace T3.Core.Resource
         public static void SetupIndirectBuffer(int sizeInBytes, ref Buffer buffer)
         {
             var bufferDesc = new BufferDescription
-                             {
-                                 Usage = ResourceUsage.Default,
-                                 BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
-                                 SizeInBytes = sizeInBytes,
-                                 OptionFlags = ResourceOptionFlags.DrawIndirectArguments,
-                             };
+                                 {
+                                     Usage = ResourceUsage.Default,
+                                     BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
+                                     SizeInBytes = sizeInBytes,
+                                     OptionFlags = ResourceOptionFlags.DrawIndirectArguments,
+                                 };
             SetupBuffer(bufferDesc, ref buffer);
         }
 
@@ -203,16 +166,16 @@ namespace T3.Core.Resource
 
             uav?.Dispose();
             var desc = new UnorderedAccessViewDescription
-                       {
-                           Dimension = UnorderedAccessViewDimension.Buffer,
-                           Format = format,
-                           Buffer = new UnorderedAccessViewDescription.BufferResource()
-                                    {
-                                        FirstElement = 0,
-                                        ElementCount = buffer.Description.SizeInBytes / Marshal.SizeOf<T>(),
-                                        Flags = UnorderedAccessViewBufferFlags.None
-                                    }
-                       };
+                           {
+                               Dimension = UnorderedAccessViewDimension.Buffer,
+                               Format = format,
+                               Buffer = new UnorderedAccessViewDescription.BufferResource()
+                                            {
+                                                FirstElement = 0,
+                                                ElementCount = buffer.Description.SizeInBytes / Marshal.SizeOf<T>(),
+                                                Flags = UnorderedAccessViewBufferFlags.None
+                                            }
+                           };
             uav = new UnorderedAccessView(Device, buffer, desc);
         }
 
@@ -226,14 +189,14 @@ namespace T3.Core.Resource
         public static void SetupStructuredBuffer<T>(T[] bufferData, int sizeInBytes, int stride, ref Buffer buffer) where T : struct
         {
             using var data = new DataStream(sizeInBytes, true, true);
-            
+
             data.WriteRange(bufferData);
             data.Position = 0;
 
             SetupStructuredBuffer(data, sizeInBytes, stride, ref buffer);
         }
 
-        public static void SetupStructuredBuffer(DataStream data, int sizeInBytes, int stride, ref Buffer buffer) 
+        public static void SetupStructuredBuffer(DataStream data, int sizeInBytes, int stride, ref Buffer buffer)
         {
             if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
             {
@@ -258,7 +221,6 @@ namespace T3.Core.Resource
         {
             try
             {
-
                 if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
                 {
                     buffer?.Dispose();
@@ -314,7 +276,7 @@ namespace T3.Core.Resource
             }
             catch (Exception e)
             {
-                Log.Warning("Failed to create SRV:"+e.Message);
+                Log.Warning("Failed to create SRV:" + e.Message);
             }
         }
 
@@ -325,7 +287,6 @@ namespace T3.Core.Resource
 
             try
             {
-
                 if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) == 0)
                 {
                     // Log.Warning($"{nameof(SrvFromStructuredBuffer)} - input buffer is not structured, skipping SRV creation.");
@@ -348,445 +309,14 @@ namespace T3.Core.Resource
             }
             catch (Exception e)
             {
-                Log.Warning("Failed to create UAV " +e.Message);
+                Log.Warning("Failed to create UAV " + e.Message);
             }
         }
 
-        private class IncludeHandler : SharpDX.D3DCompiler.Include
-        {
-            private StreamReader _streamReader;
-
-            public void Dispose()
-            {
-                _streamReader?.Dispose();
-            }
-
-            public IDisposable Shadow { get; set; }
-
-            public Stream Open(IncludeType type, string fileName, Stream parentStream)
-            {
-                try
-                {
-                    _streamReader = new StreamReader(Path.Combine(ResourcesFolder, fileName));
-                }
-                catch (DirectoryNotFoundException rs_e)
-                {
-                    try
-                    {
-                        _streamReader = new StreamReader(Path.Combine(
-                            new FileInfo(((System.IO.FileStream)parentStream).Name).DirectoryName.ToString(),
-                            fileName
-                        ));
-                    }
-                    catch (DirectoryNotFoundException in_e)
-                    {
-                        Log.Error($"Included file {fileName} wasn't found in {ResourcesFolder} or its parent folder " +
-                            $"({rs_e.Message}, {in_e.Message})");
-                        return null;
-                    }
-                }
-                return _streamReader.BaseStream;
-            }
-
-            public void Close(Stream stream)
-            {
-                _streamReader.Close();
-            }
-        }
-
-        public static string LastShaderError;
-        
-        internal static bool CompileShaderFromFile<TShader>(string srcFile, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
-            where TShader : class, IDisposable
-        {
-            CompilationResult compilationResult;
-            try
-            {
-                ShaderFlags flags = ShaderFlags.None;
-                #if DEBUG || FORCE_SHADER_DEBUG
-                flags |= ShaderFlags.Debug;
-                #endif
-                compilationResult = ShaderBytecode.CompileFromFile(srcFile, entryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler());
-            }
-            catch (Exception ce)
-            {
-                var message = ShaderResource.ExtractMeaningfulShaderErrorMessage(ce.Message);
-                LastShaderError = message;
-                Log.Error($"Shader error: {message} '{name}': {ce.Message}\nUsing previous resource state.");
-                return false;
-            }
-
-            try
-            {
-                blob?.Dispose();
-                blob = compilationResult.Bytecode;
-
-                shader?.Dispose();
-
-                // As shader type is generic we've to use Activator and PropertyInfo to create/set the shader object
-                Type shaderType = typeof(TShader);
-                shader = (TShader)Activator.CreateInstance(shaderType, Device, blob.Data, null);
-                PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
-                debugNameInfo?.SetValue(shader, name);
-                LastShaderError = null;
-                return true;
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Shader error: Failed to apply shader byte code after compilation: " + e.Message);
-                return false;
-            }
-        }
-
-        private static void CompileShaderFromSource<TShader>(string shaderSource, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
-            where TShader : class, IDisposable
-        {
-            CompilationResult compilationResult = null;
-            try
-            {
-                ShaderFlags flags = ShaderFlags.None;
-                #if DEBUG || FORCE_SHADER_DEBUG
-                flags |= ShaderFlags.Debug;
-                #endif
-
-                compilationResult = ShaderBytecode.Compile(shaderSource, entryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler());
-            }
-            catch (Exception ce)
-            {
-                var message = ShaderResource.ExtractMeaningfulShaderErrorMessage(ce.Message);
-                LastShaderError = message;
-                Log.Error($"{message}\n{name}");
-                return;
-            }
-
-            blob?.Dispose();
-            blob = compilationResult.Bytecode;
-
-            shader?.Dispose();
-            
-            // As shader type is generic we've to use Activator and PropertyInfo to create/set the shader object
-            Type shaderType = typeof(TShader);
-            shader = (TShader)Activator.CreateInstance(shaderType, Device, blob.Data, null);
-            PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
-            debugNameInfo?.SetValue(shader, name);
-
-            LastShaderError = null;
-            Log.Debug("Successfully Compiled shader");
-        }        
-        
-        public uint CreateVertexShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
-        {
-            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint) || !File.Exists(srcFile))
-                return NullResource;
-
-            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(srcFile, out var fileResource))
-            {
-                foreach (var id in fileResource.ResourceIds)
-                {
-                    if (ResourcesById[id] is not VertexShaderResource)
-                        continue;
-                    
-                    fileResource.FileChangeAction -= fileChangedAction;
-                    fileResource.FileChangeAction += fileChangedAction;
-                    return id;
-                }
-            }
-
-            VertexShader vertexShader = null;
-            ShaderBytecode blob = null;
-            CompileShaderFromFile(srcFile, entryPoint, name, "vs_5_0", ref vertexShader, ref blob);
-            if (vertexShader == null)
-            {
-                Log.Info($"Failed to create vertex shader '{name}'.");
-                return NullResource;
-            }
-
-            var newShaderResource = new VertexShaderResource(GetNextResourceId(), name, entryPoint, blob, vertexShader);
-            ResourcesById.Add(newShaderResource.Id, newShaderResource);
-            if (fileResource == null)
-            {
-                fileResource = new ResourceFileHook(srcFile, new[] { newShaderResource.Id });
-                ResourceFileWatcher.ResourceFileHooks.Add(srcFile, fileResource);
-            }
-            else
-            {
-                // File resource already exists, so just add the id of the new type resource
-                fileResource.ResourceIds.Add(newShaderResource.Id);
-            }
-
-            fileResource.FileChangeAction -= fileChangedAction;
-            fileResource.FileChangeAction += fileChangedAction;
-
-            return newShaderResource.Id;
-        }
-
-        public bool CreatePixelShaderFromSource(string shaderSource, string name, string entryPoint, ref uint resourceId)
-        {
-            if (string.IsNullOrWhiteSpace(shaderSource) || string.IsNullOrWhiteSpace(entryPoint))
-            {
-                resourceId = NullResource;
-                return false;        
-            }
-            
-            if (ResourcesById.TryGetValue(resourceId, out var resource) 
-                && resource is PixelShaderResource pixelShaderResource)
-            {
-                pixelShaderResource.PixelShader?.Dispose();
-            }
-            resourceId = GetNextResourceId();
-            
-            PixelShader shader = null;
-            ShaderBytecode blob = null;
-            CompileShaderFromSource(shaderSource, entryPoint, name, "ps_5_0", ref shader, ref blob);
-            if (shader == null)
-            {
-                //Log.Info($"Failed to create compute shader '{name}'.");
-                resourceId = NullResource;
-                return false;
-            }
-
-            var resourceEntry = new PixelShaderResource(resourceId, name, entryPoint, blob, shader);
-            ResourcesById.Add(resourceId, resourceEntry);
-            return true;
-        }        
-        
-        public bool CreatePixelShaderFromFile(out uint resourceId, string srcFile, string entryPoint, string name, Action fileChangedAction)
-        {
-            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint) || !File.Exists(srcFile))
-            {
-                resourceId= NullResource;
-                return false;
-            }
-
-            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(srcFile, out var fileResource))
-            {
-                foreach (var id in fileResource.ResourceIds)
-                {
-                    if (ResourcesById[id] is PixelShaderResource)
-                    {
-                        fileResource.FileChangeAction -= fileChangedAction;
-                        fileResource.FileChangeAction += fileChangedAction;
-                        resourceId = id;
-                        return true;
-                    }
-                }
-            }
-
-            PixelShader shader = null;
-            ShaderBytecode blob = null;
-            var success =CompileShaderFromFile(srcFile, entryPoint, name, "ps_5_0", ref shader, ref blob);
-            if (shader == null)
-            {
-                Log.Warning($"Failed to create pixel shader '{name}'.");
-                success = false;
-            }
-
-            var resourceEntry = new PixelShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
-            ResourcesById.Add(resourceEntry.Id, resourceEntry);
-            if (fileResource == null)
-            {
-                fileResource = new ResourceFileHook(srcFile, new[] { resourceEntry.Id });
-                ResourceFileWatcher.ResourceFileHooks.Add(srcFile, fileResource);
-            }
-            else
-            {
-                // file resource already exists, so just add the id of the new type resource
-                fileResource.ResourceIds.Add(resourceEntry.Id);
-            }
-
-            fileResource.FileChangeAction -= fileChangedAction;
-            fileResource.FileChangeAction += fileChangedAction;
-
-            resourceId = resourceEntry.Id; 
-            return success;
-        }
-
-        
-        public bool CreateComputeShaderFromSource(string shaderSource, string name, string entryPoint, ref uint resourceId)
-        {
-            if (string.IsNullOrEmpty(shaderSource) || string.IsNullOrEmpty(entryPoint))
-            {
-                resourceId = NullResource;
-                return false;        
-            }
-            
-            if (ResourcesById.TryGetValue(resourceId, out var resource) 
-                && resource is ComputeShaderResource computeShaderResource)
-            {
-                computeShaderResource.ComputeShader?.Dispose();
-            }
-            resourceId = GetNextResourceId();
-            
-            ComputeShader shader = null;
-            ShaderBytecode blob = null;
-            CompileShaderFromSource(shaderSource, entryPoint, name, "cs_5_0", ref shader, ref blob);
-            if (shader == null)
-            {
-                //Log.Info($"Failed to create compute shader '{name}'.");
-                resourceId = NullResource;
-                return false;
-            }
-
-            var resourceEntry = new ComputeShaderResource(resourceId, name, entryPoint, blob, shader);
-            ResourcesById.Add(resourceId, resourceEntry);
-            return true;
-        }
-        
-        public bool CreateComputeShaderFromFile(out uint resourceId, string srcFile, string entryPoint, string name, Action fileChangedAction)
-        {
-            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint) || !File.Exists(srcFile))
-            {
-                resourceId = NullResource;
-                return false;
-            }
-
-            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(srcFile, out var fileResource))
-            {
-                foreach (var id in fileResource.ResourceIds)
-                {
-                    if (ResourcesById[id] is not ComputeShaderResource csResource)
-                        continue;
-
-                    if (csResource.EntryPoint != entryPoint)
-                        continue;
-                    
-                    fileResource.FileChangeAction -= fileChangedAction;
-                    fileResource.FileChangeAction += fileChangedAction;
-                    resourceId = id;
-                    return true;
-                }
-            }
-
-            ComputeShader shader = null;
-            ShaderBytecode blob = null;
-            var success = CompileShaderFromFile(srcFile, entryPoint, name, "cs_5_0", ref shader, ref blob);
-            if (shader == null)
-            {
-                Log.Warning($"Failed to create compute shader '{name}'.");
-                //return NullResource;
-            }
-
-            var newResource = new ComputeShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
-            ResourcesById.Add(newResource.Id, newResource);
-            if (fileResource == null)
-            {
-                fileResource = new ResourceFileHook(srcFile, new[] { newResource.Id });
-                ResourceFileWatcher.ResourceFileHooks.Add(srcFile, fileResource);
-            }
-            else
-            {
-                // file resource already exists, so just add the id of the new type resource
-                fileResource.ResourceIds.Add(newResource.Id);
-            }
-
-            fileResource.FileChangeAction -= fileChangedAction;
-            fileResource.FileChangeAction += fileChangedAction;
-
-            resourceId = newResource.Id;
-            return success;
-        }
-        
-        
-        public uint CreateGeometryShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
-        {
-            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint) || !File.Exists(srcFile))
-                return NullResource;
-
-            bool foundFileEntryForPath = ResourceFileWatcher.ResourceFileHooks.TryGetValue(srcFile, out var fileResource);
-            if (foundFileEntryForPath)
-            {
-                foreach (var id in fileResource.ResourceIds)
-                {
-                    if (ResourcesById[id] is GeometryShaderResource gsResource)
-                    {
-                        if (gsResource.EntryPoint == entryPoint)
-                        {
-                            fileResource.FileChangeAction -= fileChangedAction;
-                            fileResource.FileChangeAction += fileChangedAction;
-                            return id;
-                        }
-                    }
-                }
-            }
-
-            GeometryShader shader = null;
-            ShaderBytecode blob = null;
-            CompileShaderFromFile(srcFile, entryPoint, name, "gs_5_0", ref shader, ref blob);
-            if (shader == null)
-            {
-                Log.Info($"Failed to create geometry shader '{name}'.");
-                return NullResource;
-            }
-
-            var resourceEntry = new GeometryShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
-            ResourcesById.Add(resourceEntry.Id, resourceEntry);
-            if (fileResource == null)
-            {
-                fileResource = new ResourceFileHook(srcFile, new[] { resourceEntry.Id });
-                ResourceFileWatcher.ResourceFileHooks.Add(srcFile, fileResource);
-            }
-            else
-            {
-                // file resource already exists, so just add the id of the new type resource
-                fileResource.ResourceIds.Add(resourceEntry.Id);
-            }
-
-            fileResource.FileChangeAction -= fileChangedAction;
-            fileResource.FileChangeAction += fileChangedAction;
-
-            return resourceEntry.Id;
-        }
-
-        public static void UpdateVertexShaderFromFile(string path, uint id, ref VertexShader vertexShader)
-        {
-            ResourcesById.TryGetValue(id, out var resource);
-            if (resource is VertexShaderResource vsResource)
-            {
-                vsResource.UpdateFromFile(path);
-                vertexShader = vsResource.VertexShader;
-            }
-        }
-
-        public static bool UpdatePixelShaderFromFile(string path, uint id, ref PixelShader vertexShader)
-        {
-            ResourcesById.TryGetValue(id, out var resource);
-            if (resource is PixelShaderResource vsResource)
-            {
-                bool success = vsResource.UpdateFromFile(path);
-                vertexShader = vsResource.PixelShader;
-                return success;
-            }
-
-            return false;
-        }
-
-        public static bool UpdateComputeShaderFromFile(string path, uint id, ref ComputeShader computeShader)
-        {
-            ResourcesById.TryGetValue(id, out var resource);
-            if (resource is ComputeShaderResource csResource)
-            {
-                var success =csResource.UpdateFromFile(path);
-                computeShader = csResource.ComputeShader;
-                return success;
-            }
-
-            return false;
-        }
-
-        public static void UpdateGeometryShaderFromFile(string path, uint id, ref GeometryShader geometryShader)
-        {
-            ResourcesById.TryGetValue(id, out var resource);
-            if (resource is GeometryShaderResource gsResource)
-            {
-                gsResource.UpdateFromFile(path);
-                geometryShader = gsResource.GeometryShader;
-            }
-        }
-        
         public uint CreateOperatorEntry(string sourceFilePath, string name, OperatorResource.UpdateDelegate updateHandler)
         {
             // todo: code below is redundant with all file resources -> refactor
-            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(sourceFilePath, out var fileResource))
+            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(sourceFilePath, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -799,13 +329,13 @@ namespace T3.Core.Resource
 
             var resourceEntry = new OperatorResource(GetNextResourceId(), name, null, updateHandler);
             ResourcesById.Add(resourceEntry.Id, resourceEntry);
-            
+
             if (fileResource == null)
             {
                 try
                 {
                     fileResource = new ResourceFileHook(sourceFilePath, new[] { resourceEntry.Id });
-                    ResourceFileWatcher.ResourceFileHooks.Add(sourceFilePath, fileResource);
+                    ResourceFileWatcher.HooksForResourceFilepaths.Add(sourceFilePath, fileResource);
                 }
                 catch (Exception e)
                 {
@@ -821,16 +351,12 @@ namespace T3.Core.Resource
             return resourceEntry.Id;
         }
 
-
-
-
-
         public static Texture2D CreateTexture2DFromBitmap(Device device, BitmapSource bitmapSource)
         {
             // Allocate DataStream to receive the WIC image pixels
             var stride = bitmapSource.Size.Width * 4;
             using var buffer = new SharpDX.DataStream(bitmapSource.Size.Height * stride, true, true);
-            
+
             // Copy the content of the WIC to the buffer
             bitmapSource.CopyPixels(stride, buffer);
             int mipLevels = (int)Math.Log(bitmapSource.Size.Width, 2.0) + 1;
@@ -899,7 +425,7 @@ namespace T3.Core.Resource
 
             return NullResource;
         }
-        
+
         public uint GetIdForTexture(Texture3D texture)
         {
             if (texture == null)
@@ -943,8 +469,7 @@ namespace T3.Core.Resource
                 Log.Error($"Trying to look up texture resource with id {textureId} but did not found it.");
             }
         }
-        
-        
+
         public void CreateUnorderedAccessView(uint textureId, string name, ref UnorderedAccessView unorderedAccessView)
         {
             if (ResourcesById.TryGetValue(textureId, out var resource))
@@ -971,7 +496,7 @@ namespace T3.Core.Resource
                 Log.Error($"Trying to look up texture resource with id {textureId} but did not found it.");
             }
         }
-        
+
         public void CreateRenderTargetView(uint textureId, string name, ref RenderTargetView renderTargetView)
         {
             if (ResourcesById.TryGetValue(textureId, out var resource))
@@ -1021,7 +546,7 @@ namespace T3.Core.Resource
                 return (NullResource, NullResource);
             }
 
-            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(filename, out var existingFileResource))
+            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(filename, out var existingFileResource))
             {
                 uint textureId = existingFileResource.ResourceIds.First();
                 existingFileResource.FileChangeAction += fileChangeAction;
@@ -1039,7 +564,7 @@ namespace T3.Core.Resource
                 var ddsFile = JeremyAnsel.Media.Dds.DdsFile.FromFile(filename);
                 DdsDirectX.CreateTexture(ddsFile, Device, Device.ImmediateContext, out var resource, out srv);
                 texture = (Texture2D)resource;
-            } 
+            }
             else
             {
                 CreateTexture2d(filename, ref texture);
@@ -1052,7 +577,7 @@ namespace T3.Core.Resource
             if (srv == null)
             {
                 srvResourceId = CreateShaderResourceView(textureResourceEntry.Id, fileName);
-            } 
+            }
             else
             {
                 var textureViewResourceEntry = new ShaderResourceViewResource(GetNextResourceId(), fileName, srv, textureResourceEntry.Id);
@@ -1063,7 +588,7 @@ namespace T3.Core.Resource
 
             var fileResource = new ResourceFileHook(filename, new[] { textureResourceEntry.Id, srvResourceId });
             fileResource.FileChangeAction += fileChangeAction;
-            ResourceFileWatcher.ResourceFileHooks.Add(filename, fileResource);
+            ResourceFileWatcher.HooksForResourceFilepaths.Add(filename, fileResource);
 
             return (textureResourceEntry.Id, srvResourceId);
         }
@@ -1122,22 +647,22 @@ namespace T3.Core.Resource
 
             return true;
         }
-        
+
         public bool CreateTexture3d(Texture3DDescription description, string name, ref uint id, ref Texture3D texture)
         {
             if (texture != null && texture.Description.Equals(description))
             {
                 return false; // no change
             }
-        
+
             ResourcesById.TryGetValue(id, out var resource);
             Texture3dResource texture3dResource = resource as Texture3dResource;
-        
+
             if (texture3dResource == null)
             {
                 // no entry so far, if texture is also null then create a new one
                 texture ??= new Texture3D(Device, description);
-        
+
                 // new texture, create resource entry
                 texture3dResource = new Texture3dResource(GetNextResourceId(), name, texture);
                 ResourcesById.Add(texture3dResource.Id, texture3dResource);
@@ -1148,20 +673,148 @@ namespace T3.Core.Resource
                 texture3dResource.Texture = new Texture3D(Device, description);
                 texture = texture3dResource.Texture;
             }
-        
+
             id = texture3dResource.Id;
-        
+
             return true;
         }
 
+        #region Shaders
+
+        public bool TryCreateShaderResourceFromSource<TShader>(out ShaderResource<TShader> resource, string shaderSource, out string errorMessage, string name = "", string entryPoint = "main")
+            where TShader : class, IDisposable
+        {
+            var resourceId = GetNextResourceId();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = $"{typeof(TShader).Name}_{resourceId}";
+            }
+            
+            var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromSource<TShader>(shaderSource: shaderSource, 
+                                                                                              name: name, 
+                                                                                              entryPoint: entryPoint, 
+                                                                                              resourceId: resourceId, 
+                                                                                              resource: out var newResource,
+                                                                                              errorMessage: out errorMessage);
+            
+            if (compiled)
+            {
+                ResourcesById.Add(newResource.Id, newResource);
+            }
+            else
+            {
+                Log.Error($"Failed to compile shader '{name}'");
+            }
+            
+            resource = newResource;
+            return compiled;
+        }
+
+        string ConstructShaderPath(string fileName)
+        {
+            if (Path.IsPathRooted(fileName))
+                return fileName;
+            
+            var fileInfo = new FileInfo(fileName);
+            
+            // get the most parent directory and check if it's already the resources folder
+            var parentDir = fileInfo.Directory;
+            while (parentDir != null && parentDir.Name != ResourcesFolder)
+            {
+                parentDir = parentDir.Parent;
+            }
+            
+            if (parentDir == null)
+            {
+                // not in resources folder, so prepend it
+                return Path.Combine(ResourcesFolder, fileName);
+            }
+            
+            // already in resources folder
+            return fileName;
+        }
+        
+        public bool TryCreateShaderResource<TShader>(out ShaderResource<TShader> resource, string fileName, out string errorMessage, 
+                                                     string name = "", string entryPoint = "main", Action fileChangedAction = null)
+            where TShader : class, IDisposable
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                resource = null;
+                errorMessage = "Empty file name";
+                return false;
+            }
+            
+            var path = ConstructShaderPath(fileName);
+            var fileInfo = new FileInfo(path);
+            if(!fileInfo.Exists)
+            {
+                resource = null;
+                errorMessage = $"File '{path}' doesn't exist";
+                return false;
+            }
+            
+            if(string.IsNullOrWhiteSpace(name))
+                name = fileInfo.Name;
+
+            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(path, out var fileHook))
+            {
+                foreach (var id in fileHook.ResourceIds)
+                {
+                    var resourceById = ResourcesById[id];
+                    if (resourceById is ShaderResource<TShader> shaderResource && shaderResource.EntryPoint == entryPoint)
+                    {
+                        if (fileChangedAction != null)
+                        {
+                            fileHook.FileChangeAction -= fileChangedAction;
+                            fileHook.FileChangeAction += fileChangedAction;
+                        }
+
+                        resource = shaderResource;
+                        errorMessage = string.Empty;
+                        return true;
+                    }
+                }
+            }
+            
+            // need to create
+            var resourceId = GetNextResourceId();
+            var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromFile(srcFile: path, 
+                                                                                entryPoint: entryPoint, 
+                                                                                name: name, 
+                                                                                resourceId: resourceId, 
+                                                                                resource: out resource,
+                                                                                errorMessage: out errorMessage);
+
+            if (!compiled)
+            {
+                Log.Error($"Failed to compile shader '{fileName}'");
+                return false;
+            }
+
+            ResourcesById.Add(resource.Id, resource);
+
+            // Warning: this may not play nice in a multi-threaded environment
+            if (fileHook == null)
+            {
+                fileHook = new ResourceFileHook(path, new[] { resourceId });
+                ResourceFileWatcher.HooksForResourceFilepaths.Add(path, fileHook);
+            }
+            
+            fileHook.FileChangeAction -= fileChangedAction;
+            fileHook.FileChangeAction += fileChangedAction;
+
+            return true;
+        }
+
+        #endregion
 
         public static readonly Dictionary<uint, AbstractResource> ResourcesById = new();
-        
+
         private static readonly List<ShaderResourceViewResource> _shaderResourceViews = new();
-        
+
         public const string ResourcesFolder = @"Resources";
 
         public static Device Device { get; private set; }
-        
     }
 }

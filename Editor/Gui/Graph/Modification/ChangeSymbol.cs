@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Microsoft.CodeAnalysis;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;

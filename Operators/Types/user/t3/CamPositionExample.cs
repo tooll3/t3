@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_5fb11919_0eef_4cee_bddf_bf30e0a98ad9
     public class CamPositionExample : Instance<CamPositionExample>
     {
         [Output(Guid = "d18c45be-bb7e-4727-8de2-2c227529ed76")]
-        public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> ColorBuffer = new();
 
 
     }

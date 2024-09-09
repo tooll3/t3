@@ -1,0 +1,207 @@
+{
+  "Id": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8"/*SpreadPointAttributes*/,
+  "Description": "Sets the W attribute of points from a curve.\n\nDifferent modes allow you to...\n- distribute the curve range along all points\n- or use different mapping ranges.\n\nYou can also connect a texture to provide an override for the curve.",
+  "InputUis": [
+    {
+      "InputId": "d504c3f9-290f-4a73-bf9d-f9266ea955f6"/*Points*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -460.336,
+        "Y": 399.21533
+      }
+    },
+    {
+      "InputId": "7634c477-6891-4fac-8f8a-3e580cb02277"/*Mode*/,
+      "Position": {
+        "X": -486.45615,
+        "Y": 494.388
+      }
+    },
+    {
+      "InputId": "d5a5862b-d3a2-4e6e-ad54-32cff7ced0fd"/*Amount*/,
+      "Position": {
+        "X": -460.60938,
+        "Y": 625.78015
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "840aa616-6983-4840-a58b-d5396a91c2f9"/*Mapping*/,
+      "Position": {
+        "X": -460.60938,
+        "Y": 670.7801
+      }
+    },
+    {
+      "InputId": "ba00fa7a-fcda-48da-a4c7-f2fe97997e50"/*ApplyMode*/,
+      "Position": {
+        "X": -460.60938,
+        "Y": 715.78015
+      }
+    },
+    {
+      "InputId": "38046ede-e786-4cb1-ac17-de6cb7b91c32"/*Range*/,
+      "Position": {
+        "X": -460.60938,
+        "Y": 760.78015
+      }
+    },
+    {
+      "InputId": "82a1a932-f5c3-41d5-9539-9b21663aee1b"/*Phase*/,
+      "Position": {
+        "X": -460.60938,
+        "Y": 805.78
+      }
+    },
+    {
+      "InputId": "cd91ff45-7f21-40fd-86c8-8dd95204c3b3"/*ValueTexture*/,
+      "Position": {
+        "X": -456.88803,
+        "Y": 967.647
+      }
+    },
+    {
+      "InputId": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+      "Position": {
+        "X": -456.88803,
+        "Y": 1012.6467
+      }
+    },
+    {
+      "InputId": "7c944690-d5b2-4894-a178-97593ecd797a"/*Gradient*/,
+      "Position": {
+        "X": -456.88803,
+        "Y": 1057.6467
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "b3370e7d-da15-48dc-996e-30512f45dd3e"/*ComputeShader*/,
+      "Position": {
+        "X": -45.7052,
+        "Y": 547.2895
+      }
+    },
+    {
+      "ChildId": "905228f2-25c0-4494-a98a-9293e4f9e976"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 369.72983,
+        "Y": 534.2059
+      }
+    },
+    {
+      "ChildId": "08a9d12e-d97b-4e40-957e-4afb9162ebca"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 89.06024,
+        "Y": 280.88968
+      },
+      "Position": {
+        "X": -42.48828,
+        "Y": 599.7141
+      }
+    },
+    {
+      "ChildId": "3841f0be-b63c-4fda-8c7f-c3cd80fc9d0b"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 557.9087,
+        "Y": 345.6515
+      }
+    },
+    {
+      "ChildId": "658f3d9b-ff59-4acb-b285-f782adabae76"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 199.85052,
+        "Y": 573.5657
+      }
+    },
+    {
+      "ChildId": "11a61704-32d6-49b7-8580-e13b82ebbb83"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 2.1963196,
+        "Y": 358.5017
+      }
+    },
+    {
+      "ChildId": "fbdc7366-82a7-4cb1-bddc-7acab908bcd3"/*GetBufferComponents*/,
+      "Position": {
+        "X": -310.336,
+        "Y": 399.21533
+      }
+    },
+    {
+      "ChildId": "9710e80e-e4d1-4fc6-8b69-515c3e9a8eb8"/*GetBufferComponents*/,
+      "Position": {
+        "X": 199.85052,
+        "Y": 642.5657
+      }
+    },
+    {
+      "ChildId": "c07a4962-64ae-48aa-b517-58f7fb7eba08"/*CurvesToTexture*/,
+      "Position": {
+        "X": -249.10107,
+        "Y": 1014.9326
+      }
+    },
+    {
+      "ChildId": "a75abfbb-426a-47d3-9018-1239afc4235f"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": 47.042145,
+        "Y": 958.3457
+      }
+    },
+    {
+      "ChildId": "ef24f862-a9d4-4fa7-82d5-9373a92513cf"/*FirstValidTexture*/,
+      "Position": {
+        "X": -102.957855,
+        "Y": 958.3457
+      }
+    },
+    {
+      "ChildId": "e6858bcc-16ce-45dc-a878-0ebe319e7872"/*GradientsToTexture*/,
+      "Position": {
+        "X": -249.10107,
+        "Y": 1083.9326
+      }
+    },
+    {
+      "ChildId": "a727cbe7-3609-41c1-a2ab-af348b583d3e"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": -7.6514893,
+        "Y": 1096.4443
+      }
+    },
+    {
+      "ChildId": "82dc9cf9-9fd9-4e6d-a7f2-bc0197b08cdd"/*IntToFloat*/,
+      "Position": {
+        "X": -342.88065,
+        "Y": 532.0271
+      }
+    },
+    {
+      "ChildId": "1256179c-554a-4585-9541-71707ea183b7"/*IntsToBuffer*/,
+      "Position": {
+        "X": -254.37363,
+        "Y": 860.94025
+      }
+    },
+    {
+      "ChildId": "4b10b4a9-f257-420b-bddb-ff1c87b401c6"/*SamplerStateOp*/,
+      "Position": {
+        "X": 142.67749,
+        "Y": 1162.8037
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "39c62e1e-7c63-4a88-9923-3f7f5fffbfbf"/*Output*/,
+      "Position": {
+        "X": 687.90857,
+        "Y": 345.6515
+      }
+    }
+  ]
+}

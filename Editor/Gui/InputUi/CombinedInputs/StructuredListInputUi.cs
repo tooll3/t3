@@ -7,9 +7,11 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 {
     public class StructuredListInputUi : InputValueUi<StructuredList>
     {
+
+
         public override IInputUi Clone()
         {
-            return new GradientInputUi
+            return new StructuredListInputUi
                        {
                            InputDefinition = InputDefinition,
                            Parent = Parent,
@@ -18,7 +20,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                            Size = Size,
                        };
         }
-        
+
         protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref StructuredList slist, bool readOnly)
         {
             if (slist == null)

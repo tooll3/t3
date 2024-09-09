@@ -134,8 +134,8 @@ namespace T3.Core.Operator
         
 
         private bool _isBypassed;
-        
-        private bool IsBypassable()
+
+        public bool IsBypassable()
         {
             if(Symbol.OutputDefinitions.Count == 0)
                 return false;
@@ -176,19 +176,25 @@ namespace T3.Core.Operator
             return false;
         }
 
-        private void SetBypassed(bool shouldBypass)
+        public void SetBypassed(bool shouldBypass)
         {
             if(!IsBypassable())
                 return;
 
             if (Parent == null)
             {
-                _isBypassed = true;  // during loading parents are not yet assigned. This flag will later be used when creating instances
+                _isBypassed = shouldBypass;  // during loading parents are not yet assigned. This flag will later be used when creating instances
                 return;
             }
             
             
             var parentInstancesOfSymbol = Parent.InstancesOfSymbol;
+            if (parentInstancesOfSymbol.Count == 0)
+            {
+                _isBypassed = shouldBypass;  // while duplicating / cloning as new symbol there are no instances yet.
+                return;
+            }
+            
             foreach (var parentInstance in parentInstancesOfSymbol)
             {
                 var instance = parentInstance.Children.First(child => child.SymbolChildId == Id);
@@ -196,6 +202,7 @@ namespace T3.Core.Operator
                 var mainInputSlot = instance.Inputs[0];
                 var mainOutputSlot = instance.Outputs[0];
 
+                
                 var wasByPassed = false;
                 
                 switch (mainOutputSlot)
@@ -209,6 +216,7 @@ namespace T3.Core.Operator
                         {
                             commandOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(commandInput);
                         break;
                     
                     case Slot<BufferWithViews> bufferOutput when mainInputSlot is Slot<BufferWithViews> bufferInput:
@@ -220,6 +228,7 @@ namespace T3.Core.Operator
                         {
                             bufferOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(bufferInput);
                         break;
                     case Slot<MeshBuffers> bufferOutput when mainInputSlot is Slot<MeshBuffers> bufferInput:
                         if (shouldBypass)
@@ -230,6 +239,8 @@ namespace T3.Core.Operator
                         {
                             bufferOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(bufferInput);
+
                         break;
                     case Slot<Texture2D> texture2dOutput when mainInputSlot is Slot<Texture2D> texture2dInput:
                         if (shouldBypass)
@@ -240,6 +251,8 @@ namespace T3.Core.Operator
                         {
                             texture2dOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(texture2dInput);
+
                         break;
                     case Slot<float> floatOutput when mainInputSlot is Slot<float> floatInput:
                         if (shouldBypass)
@@ -250,6 +263,8 @@ namespace T3.Core.Operator
                         {
                             floatOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(floatInput);
+
                         break;
                     
                     case Slot<Vector2> vec2Output when mainInputSlot is Slot<Vector2> vec2Input:
@@ -261,6 +276,8 @@ namespace T3.Core.Operator
                         {
                             vec2Output.RestoreUpdateAction();
                         }
+                        InvalidateConnected(vec2Input);
+
                         break;
                     case Slot<Vector3> vec3Output when mainInputSlot is Slot<Vector3> vec3Input:
                         if (shouldBypass)
@@ -271,6 +288,8 @@ namespace T3.Core.Operator
                         {
                             vec3Output.RestoreUpdateAction();
                         }
+                        InvalidateConnected(vec3Input);
+
                         break;
                     case Slot<string> stringOutput when mainInputSlot is Slot<string> stringInput:
                         if (shouldBypass)
@@ -281,11 +300,30 @@ namespace T3.Core.Operator
                         {
                             stringOutput.RestoreUpdateAction();
                         }
+                        InvalidateConnected(stringInput);
                         break;
-
                 }
 
                 _isBypassed = wasByPassed;
+            }
+        }
+
+        private static void InvalidateConnected<T>(Slot<T> bufferInput)
+        {
+            foreach (var c in bufferInput.InputConnection)
+            {
+                foreach (var ii in c.Parent.Inputs)
+                {
+                    if (ii.ValueType == typeof(string))
+                        continue;
+
+                    ii.DirtyFlag.Invalidate();
+                }
+
+                foreach (var io in c.Parent.Outputs)
+                {
+                    io.DirtyFlag.Invalidate();
+                }
             }
         }
 

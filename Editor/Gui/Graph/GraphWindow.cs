@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Selection;
@@ -74,7 +74,7 @@ namespace T3.Editor.Gui.Graph
         }
 
         private static int _instanceCounter;
-        public static readonly List<Window> GraphWindowInstances = new List<Window>();
+        public static readonly List<Window> GraphWindowInstances = new();
 
         public static IEnumerable<GraphWindow> GetVisibleInstances()
         {
@@ -142,8 +142,7 @@ namespace T3.Editor.Gui.Graph
                                     selectedItem.PosOnCanvas + selectedItem.Size));
             }
 
-            area.Expand(550);
-
+            area.Expand(300);
             GraphCanvas.FitAreaOnCanvas(area);
         }
 
@@ -168,7 +167,9 @@ namespace T3.Editor.Gui.Graph
             if (FitViewToSelectionHandling.FitViewToSelectionRequested)
                 FitViewToSelection();
 
-            var fadeBackgroundImage = GraphImageBackground.IsActive ? (ImGui.GetMousePos().X).Clamp(0, 100) / 100 : 1;
+            var fadeBackgroundImage = GraphImageBackground.IsActive 
+                                          ? (ImGui.GetMousePos().X + 50).Clamp(0, 100) / 100 
+                                          : 1;
             if (GraphImageBackground.IsActive && fadeBackgroundImage == 0)
             {
                 if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
@@ -230,15 +231,27 @@ namespace T3.Editor.Gui.Graph
 
                 drawList.ChannelsSetCurrent(0);
                 {
+                    const float activeBorderWidth = 30;
                     // Fade and toggle graph on right edge
                     var windowPos = Vector2.Zero;
                     var windowSize = ImGui.GetIO().DisplaySize;
                     var mousePos = ImGui.GetMousePos();
-                    var showBackgroundOnly = GraphImageBackground.IsActive && mousePos.X > windowSize.X + windowPos.X - 2;
+                    var showBackgroundOnly = GraphImageBackground.IsActive && mousePos.X > windowSize.X + windowPos.X - activeBorderWidth;
 
                     var graphFade = (GraphImageBackground.IsActive && !ImGui.IsMouseDown(ImGuiMouseButton.Left))
-                                        ? (windowSize.X + windowPos.X - mousePos.X).Clamp(0, 100) / 100
+                                        ? (windowSize.X + windowPos.X - mousePos.X - activeBorderWidth ).Clamp(0, 100) / 100
                                         : 1;
+
+                    if (graphFade < 1)
+                    {
+                        var x = windowPos.X + windowSize.X - activeBorderWidth;
+                        drawList.AddRectFilled(new Vector2(x, windowPos.Y ),
+                                               new Vector2(x+1, windowPos.Y + windowSize.Y),
+                                               UiColors.BackgroundFull.Fade((1-graphFade)) * 0.5f);
+                        drawList.AddRectFilled(new Vector2(x+1, windowPos.Y ),
+                                               new Vector2(x+2, windowPos.Y + windowSize.Y),
+                                               UiColors.ForegroundFull.Fade((1-graphFade)) * 0.5f);
+                    }
 
                     if (showBackgroundOnly)
                     {
@@ -425,8 +438,8 @@ namespace T3.Editor.Gui.Graph
 
             ImGui.SetCursorPos(
                                new Vector2(
-                                           ImGui.GetWindowContentRegionMin().X,
-                                           ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
+                                           ImGui.GetWindowContentRegionMin().X+1,
+                                           ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y-1));
 
             ImGui.BeginChild("TimeControls", Vector2.Zero, false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoBackground);
             {

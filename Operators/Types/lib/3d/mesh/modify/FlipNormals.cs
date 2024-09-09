@@ -1,7 +1,5 @@
-using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_0f61b638_7bda_4331_944a_50fdca401223
@@ -13,7 +11,7 @@ namespace T3.Operators.Types.Id_0f61b638_7bda_4331_944a_50fdca401223
         
 
         [Input(Guid = "89400186-9c36-4ba6-ac8a-55b7801fb99a")]
-        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
+        public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new();
     }
 }
 

@@ -1,0 +1,41 @@
+{
+  "Name": "LoadGltfScene",
+  "Id": "00618c91-f39a-44ea-b9d8-175c996460dc",
+  "Namespace": "user.pixtur.research.gltf",
+  "Inputs": [
+    {
+      "Id": "292e80cf-ba31-4a50-9bf4-83712430f811"/*Path*/,
+      "DefaultValue": "Resources\\examples\\assets\\DamagedHelmet.glb"
+    },
+    {
+      "Id": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
+      "DefaultValue": {
+        "SceneSetup": {
+          "NodeSettings": []
+        }
+      }
+    },
+    {
+      "Id": "57f129ae-0b2e-465d-8c0e-f6259fdd37ce"/*CombineBuffer*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "ef7075e9-4bc2-442e-8e0c-e03667ff2e0a"/*TriggerUpdate*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "d7ae3173-c490-47cf-8d4b-4c25102f6904"/*OffsetRoughness*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "49237499-9b1e-4371-afac-4e3394868370"/*OffsetMetallic*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "fb325383-754a-4702-aff2-c19e16363460"/*MeshChildIndex*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

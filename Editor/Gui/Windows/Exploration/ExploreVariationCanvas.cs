@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction;
@@ -382,12 +383,12 @@ namespace T3.Editor.Gui.Windows.Exploration
         private static readonly GridCell _gridCenter = GridCell.Center;
         private float _lastScale;
         private Vector2 _lastScroll = Vector2.One;
-        private static readonly Color _needsUpdateColor = new Color(1f, 1f, 1f, 0.05f);
-        private readonly Dictionary<int, ExplorationVariation> _variationByGridIndex = new Dictionary<int, ExplorationVariation>();
+        private static readonly Color _needsUpdateColor = new(1f, 1f, 1f, 0.05f);
+        private readonly Dictionary<int, ExplorationVariation> _variationByGridIndex = new();
         private GridCell _gridFocusIndex = _gridCenter;
         private int _currentOffsetIndexForFocus;
         private bool _updateCompleted;
-        private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
+        private readonly ImageOutputCanvas _imageCanvas = new();
 
         private readonly ExplorationWindow _explorationWindow;
         private ExplorationVariation _hoveringVariation;
@@ -409,7 +410,7 @@ namespace T3.Editor.Gui.Windows.Exploration
         private ISlot _firstOutputSlot;
 
         private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
-        private static readonly Vector2 _thumbnailSize = new Vector2(160, 160 / 16f * 9);
+        private static readonly Vector2 _thumbnailSize = new(160, 160 / 16f * 9);
         
         
     }

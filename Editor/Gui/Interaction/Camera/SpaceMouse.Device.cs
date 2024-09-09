@@ -394,7 +394,7 @@ public partial class SpaceMouse
         /// Key: the device handle
         /// Value: the device info class
         /// </summary>
-        private readonly Hashtable _deviceList = new Hashtable();
+        private readonly Hashtable _deviceList = new();
 
         //Event and delegate
         public delegate void MotionEventHandler(object sender, MotionEventArgs e);

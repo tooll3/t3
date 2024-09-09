@@ -1,59 +1,69 @@
 {
   "Id": "208a86b5-55cc-460a-86e6-2b17da818494"/*TransformMeshUVs*/,
-  "Description": "",
+  "Description": "Manipulates the existing UV coordinates of a mesh to change the mapping of textures.\n\nBecomes visible with [DrawMesh].\n\nTo overwrite existing UV Coordinates with planar mapping see [MeshProjectUV] \n\n\nAlso see [ReprojectToUV].",
   "InputUis": [
     {
       "InputId": "b9e7efdf-98d6-4d5a-94e8-16f38cfe4e55"/*InputMesh*/,
       "Relevancy": "Required",
       "Position": {
-        "X": 298.87473,
-        "Y": 2863.3635
+        "X": 187.80597,
+        "Y": 2798.411
       }
     },
     {
       "InputId": "b8409f71-d2e3-4fb3-91dc-abf96b55379f"/*Translate*/,
       "Position": {
-        "X": 298.87473,
-        "Y": 2908.3635
-      }
-    },
-    {
-      "InputId": "4b8a067d-8630-485e-b390-1fca7cc06323"/*Stretch*/,
-      "Position": {
-        "X": 298.87473,
-        "Y": 2953.3635
-      }
-    },
-    {
-      "InputId": "d2d278d9-7933-49ea-83c2-3566f5a13d1f"/*Scale*/,
-      "Position": {
-        "X": 298.87473,
-        "Y": 2998.3635
-      }
+        "X": 187.80597,
+        "Y": 2843.411
+      },
+      "GroupTitle": "Transform",
+      "Description": "Moves the UV coordinates linearly"
     },
     {
       "InputId": "da73250e-fcf2-4fe9-9a84-a1d139a0390c"/*Rotate*/,
       "Position": {
-        "X": 298.87473,
-        "Y": 3043.3635
+        "X": 187.80597,
+        "Y": 2888.411
       },
+      "Description": "Rotates the UV coordinates",
       "Min": -90.0,
       "Max": 90.0,
       "Format": "{0:0.0}°"
     },
     {
+      "InputId": "4b8a067d-8630-485e-b390-1fca7cc06323"/*Stretch*/,
+      "Position": {
+        "X": 187.80597,
+        "Y": 2933.411
+      },
+      "Description": "Scales the UV coordinates linearly per axis"
+    },
+    {
+      "InputId": "d2d278d9-7933-49ea-83c2-3566f5a13d1f"/*Uniformscale*/,
+      "Position": {
+        "X": 187.80597,
+        "Y": 2978.411
+      },
+      "Description": "Scales the UV coordinates linearly",
+      "AddPadding": "True"
+    },
+    {
       "InputId": "888017f2-3ac2-464b-ae6f-9f8caf53ba6d"/*UseVertexSelection*/,
       "Position": {
-        "X": 298.87473,
-        "Y": 3088.3635
-      }
+        "X": 194.30124,
+        "Y": 3059.135
+      },
+      "Description": "Defines whether only selected vertices should be affected by the manipulation",
+      "AddPadding": "True"
     },
     {
       "InputId": "590e24cc-00cc-4c9a-8f96-850857686c4a"/*Pivot*/,
       "Position": {
-        "X": 298.87473,
-        "Y": 3133.3635
-      }
+        "X": 194.30124,
+        "Y": 3104.135
+      },
+      "GroupTitle": "Transform Pivot",
+      "Description": "Moves the center point of the UV manipulations for rotations or scaling"
     }
   ],
   "SymbolChildUis": [

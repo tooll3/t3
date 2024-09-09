@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -38,5 +39,5 @@ int imod(int x, int y)
 
     // uint index = imod((int)StartIndex + (i.x * StepSize) + scatterOffset + 0.1,  sourceCount);
     int index = imod(int(StartIndex + 0.5) + (i.x * StepSize) + scatterOffset, sourceCount);
-    ResultPoints[i.x] = SourcePoints[index];
+    ResultPoints[i.x] = SourcePoints[index]; 
 }

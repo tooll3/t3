@@ -2,8 +2,6 @@
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -88,7 +86,7 @@ namespace T3.Editor.Gui.Templates
                 ImGui.SameLine();
                 //ImGui.PushStyleVar(ImGuiStyleVar., new Vector2(20,20));
                 
-                ImGui.BeginChild("options", new Vector2(-20, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
+                ImGui.BeginChild("options", new Vector2(-20, 0), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
                 {
                     ImGui.Dummy(new Vector2(20,10));
                     
@@ -160,7 +158,7 @@ namespace T3.Editor.Gui.Templates
         }
         
         private TemplateDefinition _selectedTemplate = TemplateDefinition.TemplateDefinitions[0];
-        private static readonly Regex _validResourceFolderPattern = new Regex(@"^Resources\\([A-Za-z_][A-Za-z_\-\d]*)(\\([A-Za-z_][A-Za-z\-_\d]*))*\\?$");
+        private static readonly Regex _validResourceFolderPattern = new(@"^Resources\\([A-Za-z_][A-Za-z_\-\d]*)(\\([A-Za-z_][A-Za-z\-_\d]*))*\\?$");
         
         private string NameSpace => string.IsNullOrEmpty(_newNameSpace) ? $"user.{UserSettings.Config.UserName}.{_newSymbolName}" : _newNameSpace;
         private string ResourceDirectory => string.IsNullOrEmpty(_resourceFolder) ? $"Resources\\user\\{UserSettings.Config.UserName}\\{_newSymbolName}\\" : _resourceFolder;

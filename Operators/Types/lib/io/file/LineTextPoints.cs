@@ -29,7 +29,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
     public class LineTextPoints : Instance<LineTextPoints>
     {
         [Output(Guid = "618e9151-cd91-4aa6-9d91-4bb51610cc8b")]
-        public readonly Slot<StructuredList> ResultList = new Slot<StructuredList>();
+        public readonly Slot<StructuredList> ResultList = new();
 
         public LineTextPoints()
         {
@@ -247,19 +247,19 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
         public readonly InputSlot<Vector3> Position = new();
 
         [Input(Guid = "FB14EABB-B3C8-437C-B083-EBC5E0A46F7B")]
-        public readonly InputSlot<float> Size = new InputSlot<float>();
+        public readonly InputSlot<float> Size = new();
 
         [Input(Guid = "EB22073E-2348-4E76-A096-A4F6F80E2C01")]
-        public readonly InputSlot<float> LineHeight = new InputSlot<float>();
+        public readonly InputSlot<float> LineHeight = new();
 
         [Input(Guid = "EEF1217E-E719-4C32-9A8A-5E7ACBE1A185", MappedType = typeof(VerticalAligns))]
-        public readonly InputSlot<int> VerticalAlign = new InputSlot<int>();
+        public readonly InputSlot<int> VerticalAlign = new();
 
         [Input(Guid = "4C275222-D85C-4037-8161-536105A6C80F", MappedType = typeof(HorizontalAligns))]
-        public readonly InputSlot<int> HorizontalAlign = new InputSlot<int>();
+        public readonly InputSlot<int> HorizontalAlign = new();
 
         [Input(Guid = "D9CD13D4-C6A3-42DE-9119-5A164CB12C41")]
-        public readonly InputSlot<float> Spacing = new InputSlot<float>();
+        public readonly InputSlot<float> Spacing = new();
 
         [Input(Guid = "05ACBA8D-1DD1-4D6C-BEFF-E11E466F7253")]
         public readonly InputSlot<string> FilePath = new();
@@ -427,7 +427,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             var pathElements = GraphicsPathEntry.CreateFromSvgElements(svgElements, true);
 
             // Flatten and sum total point count including separators 
-            Point newPoint;
+            
 
             _tempPoints.Clear();
             foreach (var pathElement in pathElements)
@@ -448,7 +448,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                 var pathPointCount = path.PathPoints.Length;
 
                 var loopStartIndex = _tempPoints.Count;
-                Vector3 lastPos = new Vector3(-9999f, 0f, 0f);
+                var lastPos = new Vector3(-9999f, 0f, 0f);
 
                 for (var pathPointIndex = 0; pathPointIndex < pathPointCount; pathPointIndex++)
                 {
@@ -463,10 +463,15 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                         continue;
                     }
 
-                    newPoint.Position = position;
-                    newPoint.W = 1;
-                    newPoint.Orientation = Quaternion.Identity;
-                    _tempPoints.Add(newPoint);
+                    _tempPoints.Add(new Point
+                                        {
+                                            Position = position,
+                                            W = 1,
+                                            Orientation = Quaternion.Identity,
+                                            Color = Vector4.One,
+                                            Stretch = Vector3.One,
+                                            Selected = 1,
+                                        });
                 }
 
                 // Close loop?

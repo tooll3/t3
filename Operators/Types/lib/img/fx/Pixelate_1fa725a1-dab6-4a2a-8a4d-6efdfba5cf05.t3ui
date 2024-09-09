@@ -1,0 +1,109 @@
+{
+  "Id": "1fa725a1-dab6-4a2a-8a4d-6efdfba5cf05"/*Pixelate*/,
+  "Description": "TilesAmount parameter works only if Divisor = 0, if Divisor is greater than 0 it will divide the resolution of your image and try to keep the tiles close to a square shape.\n\n[MosaicTiling] is similar, I needed a \"pixel perfect\" alternative that allows to define the desired X and Y resolution using integers.\n\nTags:\nlowres / low-res / Pixelart / resolution / Mosaic / tiling / old-school / retro / grid",
+  "InputUis": [
+    {
+      "InputId": "7db8987c-f128-476f-93bb-d79e761caecc"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 132.69783,
+        "Y": -15.624207
+      }
+    },
+    {
+      "InputId": "25711dcb-4b53-4a00-8b9d-7b653f8eaf59"/*Color*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 29.375793
+      },
+      "Description": "Multiplier color applied to the final output"
+    },
+    {
+      "InputId": "047db178-dab3-4123-90ec-becb4f439f4e"/*Divisor*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 74.37579
+      },
+      "Description": "Sets the size of the tiles according to the source resolution",
+      "Min": 0,
+      "Clamp": true
+    },
+    {
+      "InputId": "824bd327-4c52-422b-bd83-c568db8c0ea9"/*TileAmount*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 119.37579
+      },
+      "Description": "Set X and Y resolution (ignored if Divisor is greater than 0) "
+    },
+    {
+      "InputId": "f8a8381b-3a8c-4468-b66b-0a5be6f040bd"/*Shape*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 299.3758
+      },
+      "GroupTitle": "Extra feature",
+      "Description": "Customize the tile, could be used to "
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "aae3dec4-e007-41a7-8c97-7eeab9d3b719"/*Vector4Components*/,
+      "Position": {
+        "X": 306.96704,
+        "Y": 18.567886
+      }
+    },
+    {
+      "ChildId": "5233129b-a879-49b8-83c9-abb94bc31a11"/*_multiImageFxSetupStatic*/,
+      "Position": {
+        "X": 636.854,
+        "Y": -53.79959
+      }
+    },
+    {
+      "ChildId": "260e5d44-0826-4de0-ad22-f903d5b3c87c"/*UseFallbackTexture*/,
+      "Position": {
+        "X": 332.2987,
+        "Y": 380.80185
+      }
+    },
+    {
+      "ChildId": "70682c18-cc2b-4b8b-adf1-977d45b9391d"/*LoadImage*/,
+      "Position": {
+        "X": 125.34006,
+        "Y": 460.1192
+      }
+    },
+    {
+      "ChildId": "b5bd17ea-2ae3-4c80-a0a4-31fc419fee3d"/*Int2ToVector2*/,
+      "Position": {
+        "X": 306.96704,
+        "Y": 130.56789
+      }
+    },
+    {
+      "ChildId": "13e82ae1-dc6d-46c1-b048-4ed47129b95a"/*Vector2Components*/,
+      "Position": {
+        "X": 456.54227,
+        "Y": 116.97551
+      }
+    },
+    {
+      "ChildId": "310167bc-dd39-418a-8ecf-2ea039f1607e"/*IntToFloat*/,
+      "Position": {
+        "X": 306.96704,
+        "Y": 74.56789
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "47e693ca-a695-4f95-9f02-9b76894ee91c"/*TextureOutput*/,
+      "Position": {
+        "X": 802.60284,
+        "Y": -3.4600945
+      }
+    }
+  ]
+}

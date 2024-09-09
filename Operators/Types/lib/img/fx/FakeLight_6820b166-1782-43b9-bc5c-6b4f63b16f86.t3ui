@@ -1,6 +1,6 @@
 {
   "Id": "6820b166-1782-43b9-bc5c-6b4f63b16f86"/*FakeLight*/,
-  "Description": "Applies fake shading to the image.",
+  "Description": "Applies fake shading to the image.\n\nFor similar effects see: [Steps] [DetectEdges] [DistortAndShade] [Displace]",
   "InputUis": [
     {
       "InputId": "00c53b57-7347-4ebc-97d7-1ab48483f09b"/*HeightMap*/,
@@ -16,6 +16,13 @@
       "Position": {
         "X": -761.0598,
         "Y": 140.2838
+      }
+    },
+    {
+      "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
+      "Position": {
+        "X": -930.1597,
+        "Y": 237.93335
       }
     },
     {
@@ -47,20 +54,16 @@
         "X": -406.7303,
         "Y": 436.7386
       },
-      "Scale": 0.001
-    },
-    {
-      "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
-      "Position": {
-        "X": -975.6439,
-        "Y": 462.92966
-      }
+      "Min": -1.0,
+      "Max": 1.0,
+      "Scale": 0.001,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "9d5e3055-c17e-4013-963d-e17c76b707c1"/*HighlightColor*/,
       "Position": {
-        "X": -975.5961,
-        "Y": 536.4494
+        "X": -995.22015,
+        "Y": 566.9757
       }
     },
     {
@@ -77,7 +80,7 @@
         "Y": 862.13007
       },
       "Min": 0.0,
-      "Max": 5.0,
+      "Max": 100.0,
       "Scale": 0.01,
       "Clamp": true
     },
@@ -110,7 +113,7 @@
       }
     },
     {
-      "ChildId": "a6d895fd-16c0-4fa6-83d1-bdbd7dc5c01f"/*Vector2ToFloat2*/,
+      "ChildId": "a6d895fd-16c0-4fa6-83d1-bdbd7dc5c01f"/*Vector2Components*/,
       "Position": {
         "X": -276.7303,
         "Y": 436.7386

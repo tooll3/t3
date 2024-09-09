@@ -1,6 +1,6 @@
 {
   "Id": "42e6319e-669c-4524-8d0d-9416a86afdb3"/*AsciiRender*/,
-  "Description": "Draws the incoming image as shaded ASCII characters, similar to 'The Matrix'.\n\nTip: You can connect [AnimVec2] with the 'Endless vertical' to the offset.",
+  "Description": "Draws the incoming image as shaded ASCII characters, similar to 'The Matrix'.\n\nTip: You can connect [AnimVec2] with the 'Endless vertical' to the offset.\n\n\nFor similar effects or interesting combinations see: [MosaicTiling] [VoronoiCells] [SubdivisionStretch] [HoneyCombTiles] [TriangleGridTransition] [Dither] [AsciiRender]",
   "InputUis": [
     {
       "InputId": "b7d24c9b-ad9e-4ba5-82d9-15414868cdd9"/*ImageA*/,
@@ -29,7 +29,10 @@
       "Position": {
         "X": -47.22516,
         "Y": 522.08215
-      }
+      },
+      "Min": -2.0,
+      "Max": 2.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "c7502cc9-bfe4-40d1-9b85-c6f59a15e675"/*FontCharSize*/,
@@ -95,6 +98,18 @@
         "X": -51.309982,
         "Y": 1327.891
       }
+    },
+    {
+      "InputId": "a842bd72-abb2-4207-8397-7e727aaa6c63"/*BiasAndGain*/,
+      "Position": {
+        "X": -51.309982,
+        "Y": 1372.891
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true,
+      "Format": "{0:0.000}",
+      "UseVec2Control": "BiasAndGain"
     }
   ],
   "SymbolChildUis": [
@@ -130,7 +145,7 @@
       "ChildId": "533882ba-0e49-49a3-8108-90896b2fb1a6"/*TimeConstBuffer*/,
       "Position": {
         "X": 589.014,
-        "Y": 723.92316
+        "Y": 736.92316
       }
     },
     {
@@ -253,14 +268,14 @@
       }
     },
     {
-      "ChildId": "3425a484-b2a7-4078-82c4-bb6a00ac621a"/*Vector4ToFloat4*/,
+      "ChildId": "3425a484-b2a7-4078-82c4-bb6a00ac621a"/*Vector4Components*/,
       "Position": {
         "X": 196.32196,
         "Y": 423.84656
       }
     },
     {
-      "ChildId": "12a29516-de70-4629-bcbe-b6a2aed31294"/*Vector4ToFloat4*/,
+      "ChildId": "12a29516-de70-4629-bcbe-b6a2aed31294"/*Vector4Components*/,
       "Position": {
         "X": 196.32196,
         "Y": 479.84656
@@ -288,14 +303,14 @@
       }
     },
     {
-      "ChildId": "d79eb254-bfea-4690-bd61-23f9d5ff33a2"/*Vector2ToFloat2*/,
+      "ChildId": "d79eb254-bfea-4690-bd61-23f9d5ff33a2"/*Vector2Components*/,
       "Position": {
         "X": 196.32196,
         "Y": 535.8465
       }
     },
     {
-      "ChildId": "05b2eb5a-eea8-4374-a504-385e61a73808"/*Size2Components*/,
+      "ChildId": "05b2eb5a-eea8-4374-a504-385e61a73808"/*Int2Components*/,
       "Position": {
         "X": 196.32196,
         "Y": 591.8465
@@ -320,6 +335,13 @@
       "Position": {
         "X": 167.61693,
         "Y": 1071.8959
+      }
+    },
+    {
+      "ChildId": "1036ffbc-50f1-4b78-95d5-d3b30ceadfd0"/*Vector2Components*/,
+      "Position": {
+        "X": 102.39926,
+        "Y": 1393.4424
       }
     }
   ],

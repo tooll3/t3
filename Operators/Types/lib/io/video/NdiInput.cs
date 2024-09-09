@@ -1,7 +1,5 @@
-using NAudio.Wave;
 using NewTek;
 using NewTek.NDI;
-using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using System;
@@ -14,271 +12,228 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using Resource = SharpDX.Direct3D11.Resource;
-using PixelFormat = SharpDX.WIC.PixelFormat;
-
+using System.Diagnostics;
+using System.Linq;
+using T3.Core.Animation;
+using T3.Core.DataTypes.DataSet;
+using T3.Core.Operator.Interfaces;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
 {
-    public class NdiInput : Instance<NdiInput>
+    public class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDropdownHolder
     {
         [Output(Guid = "85F1AF38-074E-475D-94F5-F48079979509", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Texture2D> Texture = new();
 
+
         public NdiInput()
         {
             InitializeNdi();
-            _findInstance = new Finder(true);
+            
+            // Note that this example does see local sources (new Finder(true))
+            // This is for ease of testing, but normally is not needed in released products.
+            _ndiInputFinder = new Finder(true);
             Texture.UpdateAction = Update;
-            SourceNumber.DirtyFlag.Clear();
         }
+
         ~NdiInput()
         {
             Dispose(false);
         }
 
+
+        private double _lastUpdateRunTime;
         private void Update(EvaluationContext context)
         {
-            Command.GetValue(context);
-
-            if (SourceNumber.DirtyFlag.IsDirty)
+            var reconnectTriggered = MathUtils.WasTriggered(TriggerReconnect.GetValue(context), ref _reconnect);
+            if (reconnectTriggered)
             {
-                var sourceIndex = SourceNumber.GetValue(context);
-                if (sourceIndex >= 0 && sourceIndex < _findInstance.Sources.Count)
-                {
-                    SourceName.SetTypedInputValue(_findInstance.Sources[sourceIndex].Name);
-                }
-                SourceNumber.DirtyFlag.Clear();
+                TriggerReconnect.SetTypedInputValue(false);
             }
-
-            if (SourceName.DirtyFlag.IsDirty)
+            
+            _lastUpdateRunTime = Playback.RunTimeInSecs;
+            if (SourceName.DirtyFlag.IsDirty || reconnectTriggered)
             {
-                _sourceName = SourceName.GetValue(context);
-
-                var isNumeric = int.TryParse(_sourceName, out int sourceIndex);
-                if (isNumeric && sourceIndex < _findInstance.Sources.Count)
-                {
-                    _sourceName = _findInstance.Sources[sourceIndex].Name;
-                }
-
-                if (_sourceName.Contains(" ("))
-                {
-                    _textureMutex.WaitOne(Timeout.Infinite);
-                    DisposeTextures();
-                    Connect(new Source(_sourceName));
-                    _textureMutex.ReleaseMutex();
-                }
+                var sourceName = SourceName.GetValue(context);
+                _textureMutex.WaitOne(Timeout.Infinite);
+                DisposeTextures();
+                Connect(sourceName);
+                _textureMutex.ReleaseMutex();
             }
+            
+            _isProfiling = EnableProfiling.GetValue(context);
 
-            _textureMutex.WaitOne(Timeout.Infinite);
+            //_textureMutex.WaitOne(Timeout.Infinite);
             _textureAction?.Invoke();
             _textureAction = null;
-            _textureMutex.ReleaseMutex();
+            //_textureMutex.ReleaseMutex();
+            
+            Texture.Value = _lastTexture;
         }
 
         private bool InitializeNdi()
         {
             // Not required, but "correct". (see the SDK documentation)
-            if (!_initialized)
-            {
-                _initialized = NDIlib.initialize();
-                if (!_initialized)
-                {
-                    // Cannot run NDI. Most likely because the CPU is not sufficient (see SDK documentation).
-                    // you can check this directly with a call to NDIlib.is_supported_CPU()
-                    if (!NDIlib.is_supported_CPU())
-                    {
-                        Log.Error("CPU unsupported.", this);
-                    }
-                    else
-                    {
-                        // not sure why, but it's not going to run
-                        Log.Error("Cannot run NDI.", this);
-                    }
-                }
-            }
+            if (_initialized)
+                return _initialized;
 
-            return _initialized;
+            _initialized = NDIlib.initialize();
+
+            if (_initialized)
+                return _initialized;
+
+            // Cannot run NDI. Most likely because the CPU is not sufficient (see SDK documentation).
+            // you can check this directly with a call to NDIlib.is_supported_CPU()
+            // not sure why, but it's not going to run
+            SetErrorMessage(!NDIlib.is_supported_CPU() 
+                                ? "CPU unsupported." 
+                                : "Cannot run NDI.");
+
+            return false;
         }
 
-        // This will find NDI sources on the network.
-        // Continually updated as new sources arrive.
-        // Note that this example does see local sources (new Finder(true))
-        // This is for ease of testing, but normally is not needed in released products.
-        public Finder FindInstance
+        private void SetErrorMessage(string message)
         {
-            get { return _findInstance; }
+            Log.Error(message, this);
+            _lastStatusMessage = message;
         }
 
-        // connect to an NDI source in our Dictionary by name
-        private void Connect(Source source)
+
+        /// <summary>
+        ///  connect to an NDI source in our Dictionary by name
+        /// </summary>
+        // private void Connect(Source source)
+        private void Connect(string sourceName)
         {
             // Increment the receiver Id, meaning we have a new source to work with. If
             // there's already another receiver thread running, the commands it has
             // sent to the UI won't be processed.
-            int receiverId = Interlocked.Increment(ref _receiverId);
+            var receiverId = Interlocked.Increment(ref _receiverId);
+            
+            Disconnect();  // just to be safe
 
-            // before we are connected, we need to set up our image
-            // it's bad practice to do this in the constructor
-            //if (Child == null)
-            //    Child = VideoSurface;
-
-            // just to be safe
-            Disconnect();
-
-            // Sanity
-            if (source == null || String.IsNullOrEmpty(source.Name))
+            if (string.IsNullOrEmpty(sourceName))
                 return;
 
-            if (String.IsNullOrEmpty(_sourceName))
-                throw new ArgumentException("Receiver name can not be null or empty.", _sourceName);
-
-            // a source_t to describe the source to connect to.
-            NDIlib.source_t source_t = new NDIlib.source_t()
+            var sourceExists = _ndiInputFinder.Sources.Any(s => s.Name == sourceName);
+            if (!sourceExists)
             {
-                p_ndi_name = UTF.StringToUtf8(source.Name)
-            };
-
-            // make a description of the receiver we want
-            NDIlib.recv_create_v3_t recvDescription = new NDIlib.recv_create_v3_t()
-            {
-                // the source we selected
-                source_to_connect_to = source_t,
-
-                // we want BGRA frames for this example
-                color_format = NDIlib.recv_color_format_e.recv_color_format_BGRX_BGRA,
-
-                // we want full quality - for small previews or limited bandwidth, choose lowest
-                bandwidth = NDIlib.recv_bandwidth_e.recv_bandwidth_highest,
-
-                // let NDIlib deinterlace for us if needed
-                allow_video_fields = false,
-
-                // The name of the NDI receiver to create. This is a NULL terminated UTF8 string and should be
-                // the name of receive channel that you have. This is in many ways symettric with the name of
-                // senders, so this might be "Channel 1" on your system.
-                p_ndi_recv_name = UTF.StringToUtf8(_sourceName)
-            };
-
-            // create a new instance connected to this source
-            _recvInstancePtr = NDIlib.recv_create_v3(ref recvDescription);
-
-            // free the memory we allocated with StringToUtf8
-            Marshal.FreeHGlobal(source_t.p_ndi_name);
-            Marshal.FreeHGlobal(recvDescription.p_ndi_recv_name);
-
-            // did it work?
-            System.Diagnostics.Debug.Assert(_recvInstancePtr != IntPtr.Zero, "Failed to create NDI receive instance.");
-
-            if (_recvInstancePtr != IntPtr.Zero)
-            {
-                // We are now going to mark this source as being on program output for tally purposes (but not on preview)
-                SetTallyIndicators(true, false);
-
-                // start up a thread to receive on
-                _receiveThread = new Thread(ReceiveThreadProc) { IsBackground = true, Name = "NdiExampleReceiveThread" };
-
-                // Pass the current receiver Id to the new thread
-                _receiveThread.Start(receiverId);
+                SetErrorMessage($"NDI source {sourceName} not found");
+                return;
             }
+            
+            Log.Debug($"Connecting to {sourceName}...",this);
+
+            var selectedSourceT = new NDIlib.source_t
+                              {
+                                  p_ndi_name = UTF.StringToUtf8(sourceName)
+                              };
+
+            var receiverDescription = new NDIlib.recv_create_v3_t
+                                          {
+                                              source_to_connect_to = selectedSourceT,
+                                              color_format = NDIlib.recv_color_format_e.recv_color_format_BGRX_BGRA,
+                                              bandwidth = NDIlib.recv_bandwidth_e.recv_bandwidth_highest,
+                                              allow_video_fields = false,  // let NDIlib deinterlace for us if needed  ?
+
+                                              // The name of the NDI receiver to create. This is a NULL terminated UTF8 string and should be
+                                              // the name of receive channel that you have. This is in many ways symetric with the name of
+                                              // senders, so this might be "Channel 1" on your system.
+                                              p_ndi_recv_name = UTF.StringToUtf8(sourceName)
+                                          };
+
+            // Create a new instance connected to this source
+            _receiveInstancePtr = NDIlib.recv_create_v3(ref receiverDescription);
+
+            // Free the memory we allocated with StringToUtf8
+            Marshal.FreeHGlobal(selectedSourceT.p_ndi_name);
+            Marshal.FreeHGlobal(receiverDescription.p_ndi_recv_name);
+
+            System.Diagnostics.Debug.Assert(_receiveInstancePtr != IntPtr.Zero, "Failed to create NDI receive instance.");
+
+            if (_receiveInstancePtr == IntPtr.Zero)
+                return;
+
+            // Mark this source as being on program output for tally purposes (but not on preview)
+            SetTallyIndicators(true, false);
+            
+            _receiveThread = new Thread(ReceiveThreadProc) { IsBackground = true, Name = "NdiInputReceiver" };
+            _receiveThread.Start(receiverId);
         }
 
-        public void Disconnect()
+        private void Disconnect()
         {
             // in case we're connected, reset the tally indicators
             SetTallyIndicators(false, false);
 
-            // check for a running thread
             if (_receiveThread != null)
             {
-                // tell it to exit
                 _exitThread = true;
-
-                // wait for it to end
-                _receiveThread.Join();
+                _receiveThread.Join(); // wait for it to end
             }
 
-            // reset thread defaults
             _receiveThread = null;
             _exitThread = false;
 
-            // Destroy the receiver
-            NDIlib.recv_destroy(_recvInstancePtr);
+            NDIlib.recv_destroy(_receiveInstancePtr);
 
-            // set it to a safe value
-            _recvInstancePtr = IntPtr.Zero;
-
-            // set function status to defaults
-            //IsPtz = false;
-            //IsRecordingSupported = false;
-            //WebControlUrl = String.Empty;
+            _receiveInstancePtr = IntPtr.Zero;
         }
 
-        void SetTallyIndicators(bool onProgram, bool onPreview)
+        private void SetTallyIndicators(bool onProgram, bool onPreview)
         {
-            // we need to have a receive instance
-            if (_recvInstancePtr != IntPtr.Zero)
-            {
-                // set up a state descriptor
-                NDIlib.tally_t tallyState = new NDIlib.tally_t()
-                {
-                    on_program = onProgram,
-                    on_preview = onPreview
-                };
+            // We need to have a receive instance
+            if (_receiveInstancePtr == IntPtr.Zero)
+                return;
+            
+            var tallyStateDescriptor = new NDIlib.tally_t
+                                 {
+                                     on_program = onProgram,
+                                     on_preview = onPreview
+                                 };
+            
+            if(_isProfiling)
+                DebugDataRecording.KeepTraceData(this, "01-SetTallyIndicators", tallyStateDescriptor, ref _traceTallyChannel);
 
-                // set it on the receiver instance
-                NDIlib.recv_set_tally(_recvInstancePtr, ref tallyState);
-            }
+            NDIlib.recv_set_tally(_receiveInstancePtr, ref tallyStateDescriptor);
         }
 
-        // the receive thread runs though this loop until told to exit
-        void ReceiveThreadProc(object param)
+        /// <summary>
+        /// Receive thread runs though this loop until told to exit
+        /// </summary>
+        private void ReceiveThreadProc(object param)
         {
+
             var device = ResourceManager.Device;
 
             // Here we keep track of the receiver Id used for this thread.
-            int currReceiverId = (int)param;
+            var currReceiverId = (int)param;
+            
+            if(_isProfiling)
+                DebugDataRecording.KeepTraceData(this, "02-ReceiveThreadProc", currReceiverId, ref _traceReceiveThreadProc);
 
-            while (!_exitThread && _recvInstancePtr != IntPtr.Zero)
+            while (!_exitThread && _receiveInstancePtr != IntPtr.Zero)
             {
                 // The descriptors
-                NDIlib.video_frame_v2_t videoFrame = new NDIlib.video_frame_v2_t();
-                NDIlib.audio_frame_v2_t audioFrame = new NDIlib.audio_frame_v2_t();
-                NDIlib.metadata_frame_t metadataFrame = new NDIlib.metadata_frame_t();
+                var videoFrame = new NDIlib.video_frame_v2_t();
+                var audioFrame = new NDIlib.audio_frame_v2_t();
+                var metadataFrame = new NDIlib.metadata_frame_t();
 
-                switch (NDIlib.recv_capture_v2(_recvInstancePtr, ref videoFrame, ref audioFrame, ref metadataFrame, 1000))
+                var recvCaptureV2 = NDIlib.recv_capture_v2(_receiveInstancePtr, ref videoFrame, ref audioFrame, ref metadataFrame, 1000);
+
+                if(_isProfiling)
+                    DebugDataRecording.KeepTraceData(this, "03-ReceiveThreadProc", recvCaptureV2, ref _traceReceive2ThreadProc);
+
+                //Log.Debug("received frame " + recvCaptureV2 + " from NDI input.", this);
+                switch (recvCaptureV2)
                 {
                     // No data
                     case NDIlib.frame_type_e.frame_type_none:
-                        // No data received
                         break;
 
                     // frame settings - check for extended functionality
                     case NDIlib.frame_type_e.frame_type_status_change:
-                        // check for PTZ
-                        //IsPtz = NDIlib.recv_ptz_is_supported(_recvInstancePtr);
-
-                        // Check for recording
-                        //IsRecordingSupported = NDIlib.recv_recording_is_supported(_recvInstancePtr);
-
-                        // Check for a web control URL
-                        // We must free this string ptr if we get one.
-                        /*
-                        IntPtr webUrlPtr = NDIlib.recv_get_web_control(_recvInstancePtr);
-                        if (webUrlPtr == IntPtr.Zero)
-                        {
-                            WebControlUrl = String.Empty;
-                        }
-                        else
-                        {
-                            // convert to managed String
-                            WebControlUrl = NDI.UTF.Utf8ToString(webUrlPtr);
-
-                            // Don't forget to free the string ptr
-                            NDIlib.recv_free_string(_recvInstancePtr, webUrlPtr);
-                        }
-                        */
-
                         break;
 
                     // Video data
@@ -286,231 +241,141 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
 
                         // if not enabled, just discard
                         // this can also occasionally happen when changing sources
-                        if (!_videoEnabled || videoFrame.p_data == IntPtr.Zero)
+                        if (!VideoEnabled || videoFrame.p_data == IntPtr.Zero)
                         {
                             // always free received frame
-                            NDIlib.recv_free_video_v2(_recvInstancePtr, ref videoFrame);
+                            NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
+                            Log.Warning("NDI input not enabled, skipping frame.", this);
+                            break;
+                        }
+                        if (Playback.RunTimeInSecs - _lastUpdateRunTime > 1 / 30f)
+                        {
+                            NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
+                            // Log.Warning("Skipping frame?",this);
+                            _lastStatusMessage= "skipping frame";
                             break;
                         }
 
                         // get all our info so that we can free the frame
-                        int yres = (int)videoFrame.yres;
-                        int xres = (int)videoFrame.xres;
-                        int stride = (int)videoFrame.line_stride_in_bytes;
-
+                        var xRes = videoFrame.xres;
+                        var yRes = videoFrame.yres;
+                        var stride = videoFrame.line_stride_in_bytes;
+                        
                         // Try to acquire our texture mutex for some time.
                         // End processing if we shall quit
                         while (!_textureMutex.WaitOne(10))
                         {
                             if (_exitThread)
                             {
-                                // always free received frame
-                                NDIlib.recv_free_video_v2(_recvInstancePtr, ref videoFrame);
+                                // Always free received frame
+                                NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
+                                Log.Warning("NDI input thread exiting.", this);
                                 break;
                             }
                         }
-
+                        
+                        
                         // For now, we need to be on the UI thread to fill our bitmap
-                        _textureAction = new Action(() =>
-                        {
-                            // If the local receiver Id is not the same as the global receiver Id,
-                            // then that means that either the connection source has changed, or
-                            // the window has closed, in which case the latest receiver Id
-                            // will be 0. If either is true, we stop processing data.
-                            if (currReceiverId != _receiverId || _receiverId == 0)
-                            {
-                                return;
-                            }
+                        _textureAction = () =>
+                                         {
+                                             // If the local receiver Id is not the same as the global receiver Id,
+                                             // then that means that either the connection source has changed, or
+                                             // the window has closed, in which case the latest receiver Id
+                                             // will be 0. If either is true, we stop processing data.
+                                             if (currReceiverId != _receiverId || _receiverId == 0)
+                                             {
+                                                 return;
+                                             }
 
-                            if (xres == 0 || yres == 0 || stride == 0)
-                            {
-                                // always free received frames
-                                NDIlib.recv_free_video_v2(_recvInstancePtr, ref videoFrame);
-                                return;
-                            }
+                                             if (xRes == 0 || yRes == 0 || stride == 0)
+                                             {
+                                                 // always free received frames
+                                                 NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
+                                                 //Log.Warning("NDI input wxh = 0x0, skipping frame.", this);
+                                                 return;
+                                             }
 
-                            // create several textures with a given format with CPU access
-                            // to be able to read out the initial texture values
-                            SharpDX.DXGI.Format textureFormat = SharpDX.DXGI.Format.B8G8R8A8_UNorm;
-                            if (ImagesWithCpuAccess.Count == 0
-                                || ImagesWithCpuAccess[0].Description.Format != textureFormat
-                                || ImagesWithCpuAccess[0].Description.Width != (int)xres
-                                || ImagesWithCpuAccess[0].Description.Height != (int)yres
-                                || ImagesWithCpuAccess[0].Description.MipLevels != 1)
-                            {
-                                var imageDesc = new Texture2DDescription
-                                {
-                                    BindFlags = BindFlags.ShaderResource,
-                                    Format = textureFormat,
-                                    Width = (int)xres,
-                                    Height = (int)yres,
-                                    MipLevels = 1,
-                                    SampleDescription = new SampleDescription(1, 0),
-                                    Usage = ResourceUsage.Dynamic,
-                                    OptionFlags = ResourceOptionFlags.None,
-                                    CpuAccessFlags = CpuAccessFlags.Write,
-                                    ArraySize = 1
-                                };
+                                             
+                                             // create several textures with a given format with CPU access
+                                             // to be able to read out the initial texture values
+                                             const Format textureFormat = SharpDX.DXGI.Format.B8G8R8A8_UNorm;
+                                             
+                                             if (_imagesWithCpuAccess.Count == 0
+                                                 || _imagesWithCpuAccess[0].Description.Format != textureFormat
+                                                 || _imagesWithCpuAccess[0].Description.Width != xRes
+                                                 || _imagesWithCpuAccess[0].Description.Height != yRes
+                                                 || _imagesWithCpuAccess[0].Description.MipLevels != 1)
+                                             {
+                                                 DebugDataRecording.KeepTraceData(this, "07-_textureActionCreateNewTexture", currReceiverId, ref _traceTextureAction2Channel);
+                                                 //Log.Warning("resolution or format changed", this);
+                                                 
+                                                 var imageDesc = new Texture2DDescription
+                                                                     {
+                                                                         BindFlags = BindFlags.ShaderResource,
+                                                                         Format = textureFormat,
+                                                                         Width = xRes,
+                                                                         Height = yRes,
+                                                                         MipLevels = 1,
+                                                                         SampleDescription = new SampleDescription(1, 0),
+                                                                         Usage = ResourceUsage.Dynamic,
+                                                                         OptionFlags = ResourceOptionFlags.None,
+                                                                         CpuAccessFlags = CpuAccessFlags.Write,
+                                                                         ArraySize = 1
+                                                                     };
 
-                                DisposeTextures();
+                                                 DisposeTextures();
 
-                                Log.Debug($"NDI input wxh = {xres}x{yres}, " +
-                                            $"format = {textureFormat} ({textureFormat})");
+                                                 // Log.Debug($"NDI input wxh = {xRes}x{yRes}, " +
+                                                 //           $"format = {textureFormat} ({textureFormat})");
 
-                                for (var i = 0; i < NumTextureEntries; ++i)
-                                {
-                                    ImagesWithCpuAccess.Add(new Texture2D(device, imageDesc));
-                                }
+                                                 for (var i = 0; i < NumTextureEntries; ++i)
+                                                 {
+                                                     _imagesWithCpuAccess.Add(new Texture2D(device, imageDesc));
+                                                 }
 
-                                _currentIndex = 0;
-                            }
+                                                 _currentIndex = 0;
+                                             }
 
-                            // copy the spout texture to an internal image
-                            var immediateContext = device.ImmediateContext;
-                            var writableImage = ImagesWithCpuAccess[_currentIndex];
-                            _currentIndex = (_currentIndex + 1) % NumTextureEntries;
+                                             // copy texture to an internal image
+                                             var immediateContext = device.ImmediateContext;
+                                             var writableImage = _imagesWithCpuAccess[_currentIndex];
+                                             _currentIndex = (_currentIndex + 1) % NumTextureEntries;
+                                             
+                                             // NOTE: During profiling we can observe that this block is zero length if image index is 0 ???
+                                             // We should investigate this, because there might be a bug in the code.
+                                             if(_isProfiling)
+                                                DebugDataRecording.StartRegion(this, "08-CopyTextureToIndex", _currentIndex, ref _traceTextureCopyChannel);
 
-                            // we have to map with a stride that represents multiples of 16 pixels here
-                            // (it is yet unclear why, but works)
-                            var formatId = PixelFormat.Format32bppBGRA;
-                            int outputStride = PixelFormat.GetStride(formatId, ((xres+15)/16)*16);
+                                             // we have to map with a stride that represents multiples of 16 pixels here
+                                             // (it is yet unclear why, but works)
+                                             // map resource manually using our stride...
+                                             var dataBox = immediateContext.MapSubresource(writableImage, 0, 0, MapMode.WriteDiscard,
+                                                                                           SharpDX.Direct3D11.MapFlags.None, out int _);
+                                             
+                                             T3.Core.Utils.Utilities.CopyImageMemory(videoFrame.p_data, dataBox.DataPointer, yRes,
+                                                                                     videoFrame.line_stride_in_bytes, dataBox.RowPitch);
 
-                            // map resource manually using our stride...
-                            int mipSize;
-                            DataBox dataBox = immediateContext.MapSubresource((Resource)writableImage, 0, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out mipSize);
-                            DataStream outputStream = new DataStream(dataBox.DataPointer, mipSize * outputStride, canRead: true, canWrite: true);
-
-                            // copy our BGRA frame to the texture
-                            for (int loopY = 0; loopY < yres; loopY++)
-                            {
-                                int index = loopY * stride;
-                                outputStream.Position = loopY * outputStride;
-                                for (int loopX = xres; loopX > 0; --loopX)
-                                {
-                                    // convet bgr to rgb
-                                    int value = Marshal.ReadInt32(videoFrame.p_data, index);
-                                    outputStream.Write(value);
-                                    index += 4;
-                                }
-                            }
-
-                            // release our resources
-                            immediateContext.UnmapSubresource(writableImage, 0);
-                            Texture.Value = writableImage;
-
-                            // free frames that were received after use
-                            NDIlib.recv_free_video_v2(_recvInstancePtr, ref videoFrame);
-
-                        });
+                                             // release our resources
+                                             immediateContext.UnmapSubresource(writableImage, 0);
+                                             _lastTexture = writableImage;
+                                             
+                                             if(_isProfiling)
+                                                DebugDataRecording.EndRegion(_traceTextureCopyChannel);
+                                             
+                                             // free frames that were received after use
+                                             NDIlib.recv_free_video_v2(_receiveInstancePtr, ref videoFrame);
+                                             _lastStatusMessage = null;
+                                         };
 
                         _textureMutex.ReleaseMutex();
 
                         break;
 
-                    // audio is beyond the scope of this example
+                    // Ignore audio
                     case NDIlib.frame_type_e.frame_type_audio:
-
-                        // if no audio or disabled, nothing to do
-                        if (!_audioEnabled || audioFrame.p_data == IntPtr.Zero || audioFrame.no_samples == 0)
-                        {
-                            // alreays free received frames
-                            NDIlib.recv_free_audio_v2(_recvInstancePtr, ref audioFrame);
-
-                            break;
-                        }
-
-                        // if the audio format changed, we need to reconfigure the audio device
-                        bool formatChanged = false;
-
-                        // make sure our format has been created and matches the incomming audio
-                        if (_waveFormat == null ||
-                            _waveFormat.Channels != audioFrame.no_channels ||
-                            _waveFormat.SampleRate != audioFrame.sample_rate)
-                        {
-                            // Create a wavformat that matches the incomming frames
-                            _waveFormat = WaveFormat.CreateIeeeFloatWaveFormat((int)audioFrame.sample_rate, (int)audioFrame.no_channels);
-
-                            formatChanged = true;
-                        }
-
-                        // set up our audio buffer if needed
-                        if (_bufferedProvider == null || formatChanged)
-                        {
-                            _bufferedProvider = new BufferedWaveProvider(_waveFormat);
-                            _bufferedProvider.DiscardOnBufferOverflow = true;
-                        }
-
-                        // set up our multiplexer used to mix down to 2 output channels)
-                        if (_multiplexProvider == null || formatChanged)
-                        {
-                            _multiplexProvider = new MultiplexingWaveProvider(new List<IWaveProvider>() { _bufferedProvider }, 2);
-                        }
-
-
-                        // set up our audio output device
-                        if (_haveAudioDevice && (_wasapiOut == null || formatChanged))
-                        {
-                            try
-                            {
-                                // We can't guarantee audio sync or buffer fill, that's beyond the scope of this example.
-                                // This is close enough to show that audio is received and converted correctly.
-                                _wasapiOut = new WasapiOut(NAudio.CoreAudioApi.AudioClientShareMode.Shared, 50);
-                                _wasapiOut.Init(_multiplexProvider);
-                                //_wasapiOut.Volume = _volume;
-                                _wasapiOut.Play();
-                            }
-                            catch
-                            {
-                                // if this fails, assume that there is no audio device on the system
-                                // so that we don't retry/catch on every audio frame received
-                                _haveAudioDevice = false;
-                            }
-                        }
-
-                        // did we get a device?
-                        if (_haveAudioDevice && _wasapiOut != null)
-                        {
-                            // we're working in bytes, so take the size of a 32 bit sample (float) into account
-                            int sizeInBytes = (int)audioFrame.no_samples * (int)audioFrame.no_channels * sizeof(float);
-
-                            // NAudio is expecting interleaved audio and NDI uses planar.
-                            // create an interleaved frame and convert from the one we received
-                            NDIlib.audio_frame_interleaved_32f_t interleavedFrame = new NDIlib.audio_frame_interleaved_32f_t()
-                            {
-                                sample_rate = audioFrame.sample_rate,
-                                no_channels = audioFrame.no_channels,
-                                no_samples = audioFrame.no_samples,
-                                timecode = audioFrame.timecode
-                            };
-
-                            // we need a managed byte array to add to buffered provider
-                            byte[] audBuffer = new byte[sizeInBytes];
-
-                            // pin the byte[] and get a GC handle to it
-                            // doing it this way saves an expensive Marshal.Alloc/Marshal.Copy/Marshal.Free later
-                            // the data will only be moved once, during the fast interleave step that is required anyway
-                            GCHandle handle = GCHandle.Alloc(audBuffer, GCHandleType.Pinned);
-
-                            // access it by an IntPtr and use it for our interleaved audio buffer
-                            interleavedFrame.p_data = handle.AddrOfPinnedObject();
-
-                            // Convert from float planar to float interleaved audio
-                            // There is a matching version of this that converts to interleaved 16 bit audio frames if you need 16 bit
-                            NDIlib.util_audio_to_interleaved_32f_v2(ref audioFrame, ref interleavedFrame);
-
-                            // release the pin on the byte[]
-                            // never try to access p_data after the byte[] has been unpinned!
-                            // that IntPtr will no longer be valid.
-                            handle.Free();
-
-                            // push the byte[] buffer into the bufferedProvider for output
-                            _bufferedProvider.AddSamples(audBuffer, 0, sizeInBytes);
-                        }
-
-                        // free the frame that was received
-                        NDIlib.recv_free_audio_v2(_recvInstancePtr, ref audioFrame);
-
                         break;
+                    
+                    
                     // Metadata
                     case NDIlib.frame_type_e.frame_type_metadata:
 
@@ -520,63 +385,57 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                         //System.Diagnostics.Debug.Print(metadata);
 
                         // free frames that were received
-                        NDIlib.recv_free_metadata(_recvInstancePtr, ref metadataFrame);
+                        NDIlib.recv_free_metadata(_receiveInstancePtr, ref metadataFrame);
                         break;
                 }
             }
         }
 
-        protected void DisposeTextures()
+        private void DisposeTextures()
         {
             Texture.Value = null;
+            _lastTexture = null;
 
-            foreach (var image in ImagesWithCpuAccess)
+            foreach (var image in _imagesWithCpuAccess)
                 image?.Dispose();
 
-            ImagesWithCpuAccess.Clear();
+            _imagesWithCpuAccess.Clear();
         }
 
         #region IDisposable Support
-
         protected override void Dispose(bool disposing)
         {
-            if (!_disposed)
+            if (_disposed)
+                return;
+         
+            //Log.Debug("Disposing NdiInput...", this); 
+            if (disposing)
             {
-                if (disposing)
+                // This call happens when the window is closing, so we set the
+                // Id to 0 to signal we don't want to process any more frames.
+                Interlocked.Exchange(ref _receiverId, 0);
+
+                _exitThread = true;
+
+                // wait for it to exit
+                if (_receiveThread != null)
                 {
-                    // This call happens when the window is closing, so we set the
-                    // Id to 0 to signal we don't want to process any more frames.
-                    Interlocked.Exchange(ref _receiverId, 0);
-
-                    // tell the thread to exit
-                    _exitThread = true;
-
-                    // wait for it to exit
-                    if (_receiveThread != null)
-                    {
-                        _receiveThread.Join();
-                        _receiveThread = null;
-                    }
-
-                    // Stop the audio device if needed
-                    if (_wasapiOut != null)
-                    {
-                        _wasapiOut.Stop();
-                        _wasapiOut.Dispose();
-                        _wasapiOut = null;
-                    }
+                    _receiveThread.Join();
+                    _receiveThread = null;
                 }
-
-                // Destroy the receiver
-                if (_recvInstancePtr != IntPtr.Zero)
-                {
-                    NDIlib.recv_destroy(_recvInstancePtr);
-                    _recvInstancePtr = IntPtr.Zero;
-                }
-
-                _disposed = true;
             }
+
+            // Destroy the receiver
+            if (_receiveInstancePtr != IntPtr.Zero)
+            {
+                NDIlib.recv_destroy(_receiveInstancePtr);
+                _receiveInstancePtr = IntPtr.Zero;
+            }
+
+            _disposed = true;
         }
+
+        // TODO: clarify if this is called.
         public new void Dispose()
         {
             Dispose(true);
@@ -584,8 +443,8 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
             // dispose textures
             DisposeTextures();
 
-            if (_findInstance != null)
-                _findInstance.Dispose();
+            if (_ndiInputFinder != null)
+                _ndiInputFinder.Dispose();
 
             if (_initialized)
             {
@@ -593,45 +452,26 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                 _initialized = false;
             }
         }
-
         #endregion
 
-        private static bool _initialized;               // were static members initialized?
-        private Finder _findInstance;
-        private bool _disposed = false;
+        private static bool _initialized; 
+        private readonly Finder _ndiInputFinder;
+        private bool _disposed;
 
-        // a pointer to our unmanaged NDI receiver instance
-        IntPtr _recvInstancePtr = IntPtr.Zero;
+        // A pointer to our unmanaged NDI receiver instance
+        private IntPtr _receiveInstancePtr = IntPtr.Zero;
 
-        // a thread to receive frames on so that the UI is still functional
-        Thread _receiveThread = null;
+        // Thread to receive frames on so that the UI is still functional
+        private Thread _receiveThread;
 
-        // a way to exit the thread safely
-        bool _exitThread = false;
+        // A way to exit the thread safely
+        private bool _exitThread;
 
-        // should we send audio to Windows or not?
-        private bool _audioEnabled = false;
 
         // should we send video to Windows or not?
-        private bool _videoEnabled = true;
+        private const bool VideoEnabled = true;
 
-        // the NAudio related
-        private WasapiOut _wasapiOut = null;
-        private bool _haveAudioDevice = true;
-        private MultiplexingWaveProvider _multiplexProvider = null;
-        private BufferedWaveProvider _bufferedProvider = null;
-
-        // The last WaveFormat we used.
-        // This may change over time, so remember how we are configured currently.
-        private WaveFormat _waveFormat = null;
-
-        // the current audio volume
-        //private float _volume = 1.0f;
-
-        //private bool _isPtz = false;
-        //private bool _canRecord = false;
-        //private String _webControlUrl = String.Empty;
-        private String _sourceName = String.Empty;
+        // private string _sourceName = string.Empty;
 
         // This variable keeps track of the current Id of the receiver object. This
         // is a way to avoid processing frames on the UI thread when either the
@@ -639,36 +479,77 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
         private int _receiverId = 0;
 
         // hold several textures internally to speed up calculations
-        private const int NumTextureEntries = 2;
-        private readonly List<Texture2D> ImagesWithCpuAccess = new();
+        private const int NumTextureEntries = 3; 
+
+        private readonly List<Texture2D> _imagesWithCpuAccess = new();
+
         // current image index (used for circular access of ImagesWithCpuAccess)
         private int _currentIndex;
+
         // mutex protecting changes to our images
         private readonly Mutex _textureMutex = new();
+
         // action for changing the textures
         private Action _textureAction;
+        private Texture2D _lastTexture;
+        
+        
 
-        private enum SourceIndex
+        public IStatusProvider.StatusLevel GetStatusLevel()
         {
-            Source0 = 0,
-            Source1,
-            Source2,
-            Source3,
-            Source4,
-            Source5,
-            Source6,
-            Source7,
-            Source8,
-            Source9
-        };
+            return string.IsNullOrEmpty(_lastStatusMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
+        }
 
-        [Input(Guid = "306668F7-881D-4AEB-9AA0-0460013A05CB")]
-        public readonly InputSlot<Command> Command = new();
+        public string GetStatusMessage()
+        {
+            return _lastStatusMessage;
+        }
 
-        [Input(Guid = "D2C24F47-4B24-4037-8B1C-A85378359D2D", MappedType = typeof(SourceIndex))]
-        public InputSlot<int> SourceNumber = new();
+        private string _lastStatusMessage;
 
+        #region device dropdown
+        string ICustomDropdownHolder.GetValueForInput(Guid inputId)
+        {
+            return SourceName.Value;
+        }
+        
+        IEnumerable<string> ICustomDropdownHolder.GetOptionsForInput(Guid inputId)
+        {
+            if (inputId != SourceName.Id)
+            {
+                yield return "undefined";
+                yield break;
+            }
+        
+            foreach (var s in _ndiInputFinder.Sources)
+            {
+                yield return s.Name;
+            }
+        }
+        
+        void ICustomDropdownHolder.HandleResultForInput(Guid inputId, string result)
+        {
+            SourceName.SetTypedInputValue(result);
+        }
+        #endregion
+
+        private bool _isProfiling;
+        private bool _reconnect;
+        private DataChannel _traceTallyChannel;
+        private DataChannel _traceReceiveThreadProc;
+        private DataChannel _traceReceive2ThreadProc;
+        private DataChannel _traceTextureCopyChannel;
+        private DataChannel _traceTextureAction2Channel;
+        
         [Input(Guid = "FD1FCA6B-A3BE-440B-86BA-6B7B1BBD2A8C")]
         public InputSlot<string> SourceName = new();
+        
+        [Input(Guid = "3F634E98-93F2-4B5E-A098-623B3F8E4C9C")]
+        public InputSlot<bool> EnableProfiling = new();
+
+        [Input(Guid = "5E1EC76B-8FFE-43CA-867B-C9DDA0EAFB60")]
+        public InputSlot<bool> TriggerReconnect = new();
+
+        
     }
 }

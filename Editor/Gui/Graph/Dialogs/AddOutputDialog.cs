@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using ImGuiNET;
-using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Modification;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 

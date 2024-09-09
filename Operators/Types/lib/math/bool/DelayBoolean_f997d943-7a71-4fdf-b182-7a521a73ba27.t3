@@ -1,0 +1,17 @@
+{
+  "Name": "DelayBoolean",
+  "Id": "f997d943-7a71-4fdf-b182-7a521a73ba27",
+  "Namespace": "lib.math.bool",
+  "Inputs": [
+    {
+      "Id": "2141f8a4-0122-48a7-ae78-4f9b79e9ef1f"/*Trigger*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "75dda16e-7f61-43d6-a41e-aee8c56ca13e"/*FrameCount*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

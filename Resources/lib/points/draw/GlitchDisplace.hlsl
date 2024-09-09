@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 
@@ -81,7 +82,7 @@ psInput vsMain(uint id: SV_VertexID)
     float2 randCentered = (rand - 0.5) * 2;
     float2 rand2Centered = hash21((particleId + Seed * 2701) % 33533);
 
-    float4 centerInObject = float4(pointDef.position,1) + float4(randCentered * ScatterPosition,0,0);
+    float4 centerInObject = float4(pointDef.Position,1) + float4(randCentered * ScatterPosition,0,0);
     centerInObject.x *= aspect;
     float4 centerInCamera = mul(centerInObject, ObjectToCamera);
     centerInCamera.xyz /= centerInCamera.w;
@@ -90,7 +91,7 @@ psInput vsMain(uint id: SV_VertexID)
     float2 centerUv =   (centerInClipspace.xy / centerInClipspace.w + 1) * 0.5;
     centerUv.y = 1- centerUv.y;
 
-    float2 quadSize = pointDef.w * Size * Stretch * (1 + pow( rand, 2) * ScatterStretch) * 0.05;
+    float2 quadSize = pointDef.W * Size * Stretch * (1 + pow( rand, 2) * ScatterStretch) * 0.05;
     quadSize.x *= aspect;
     float4 vertexInClipSpace = centerInClipspace 
                              + float4(cornerDef.xy * quadSize, 0,0);

@@ -1,6 +1,6 @@
 {
   "Id": "25db2a97-38b2-4503-8842-fab3922d7a6c"/*PointTrail*/,
-  "Description": "Keeps previous copies of points in a cycling buffer that can be used to draw trails and other effects.",
+  "Description": "Keeps previous copies of points in a cycling buffer that can be used to draw trails and other effects.\nHint: If some features don't work as expected try [PointTrail2]\n\nCan be used with [DrawPoints] [DrawLines] [DrawBillboards] and similar",
   "InputUis": [
     {
       "InputId": "4389838c-fd1d-4400-b8e5-f373a05adff7"/*GPoints*/,
@@ -8,7 +8,8 @@
       "Position": {
         "X": -1214.1729,
         "Y": -243.8945
-      }
+      },
+      "Description": "Point input"
     },
     {
       "InputId": "6a2cb3f0-3b5a-4551-a809-3dc172bb7d79"/*TrailLength*/,
@@ -16,6 +17,7 @@
         "X": -1154.5363,
         "Y": -134.5934
       },
+      "Description": "Defines the length of the trail by the amount of points added",
       "Min": 1,
       "Clamp": true
     },
@@ -24,21 +26,26 @@
       "Position": {
         "X": -1162.7197,
         "Y": 533.0679
-      }
+      },
+      "Description": "Enables / disables the trail",
+      "AddPadding": "True"
     },
     {
       "InputId": "63621a98-874b-4d1a-9724-f4fa70b8ccf1"/*Reset*/,
       "Position": {
         "X": -1162.7197,
         "Y": 578.0679
-      }
+      },
+      "Description": "Resets the trail when clicked"
     },
     {
       "InputId": "56eac471-ad48-41ec-b617-cbcb67646c97"/*AddSeperatorThreshold*/,
       "Position": {
         "X": -1162.7197,
         "Y": 623.0679
-      }
+      },
+      "GroupTitle": "Options",
+      "Description": "Defines the threshold for the seperator"
     }
   ],
   "SymbolChildUis": [
@@ -125,13 +132,6 @@
       }
     },
     {
-      "ChildId": "5f66c180-c547-488e-8a7c-09e2fd907323"/*Counter*/,
-      "Position": {
-        "X": 119.39828,
-        "Y": 384.45682
-      }
-    },
-    {
       "ChildId": "f58e6118-455c-432e-9d96-1c60ee229afd"/*HasIntChanged*/,
       "Position": {
         "X": -698.4326,
@@ -195,24 +195,24 @@
       }
     },
     {
-      "ChildId": "d50db386-d5aa-44f6-bb7b-b4739672bfb1"/*GetIntVar*/,
-      "Position": {
-        "X": -306.62268,
-        "Y": 767.3782
-      }
-    },
-    {
-      "ChildId": "df35cbf5-d2ce-4ea3-b249-188afe3068e9"/*CompareInt*/,
-      "Position": {
-        "X": -156.62268,
-        "Y": 767.3782
-      }
-    },
-    {
       "ChildId": "51038808-7536-4ee1-a759-2bc62c6dd268"/*All*/,
       "Position": {
         "X": 195.93655,
         "Y": 815.73126
+      }
+    },
+    {
+      "ChildId": "a7679861-774f-4f51-a033-9df26d777121"/*CountInt*/,
+      "Position": {
+        "X": -205.79492,
+        "Y": 393.69745
+      }
+    },
+    {
+      "ChildId": "c8f4458e-7dc5-41f8-925a-81490cdda3ca"/*IntsToBuffer*/,
+      "Position": {
+        "X": -55.79492,
+        "Y": 393.69745
       }
     }
   ],

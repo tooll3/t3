@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_1f5294e1_9d0b_4cd5_9d65_14c8bbf59e61
     public class Lerp : Instance<Lerp>
     {
         [Output(Guid = "762ee8f9-52b5-4a0e-aa1e-b41fbb6d7d22")]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
         public Lerp()
         {

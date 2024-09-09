@@ -1,5 +1,4 @@
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -12,7 +11,7 @@ namespace T3.Operators.Types.Id_b6c5be1d_b133_45e9_a269_8047ea0d6ad7
     {
 
         [Output(Guid = "c997268d-6709-49de-980e-64d7a47504f7")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> BufferWithViews = new Slot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly Slot<T3.Core.DataTypes.BufferWithViews> BufferWithViews = new();
 
         public StructuredBufferWithViews()
         {
@@ -28,7 +27,10 @@ namespace T3.Operators.Types.Id_b6c5be1d_b133_45e9_a269_8047ea0d6ad7
             var uavBufferFlags = BufferFlags.GetValue(context);
 
             if (sizeInBytes <= 0)
+            {
+                BufferWithViews.Value = null;
                 return;
+            }
 
             BufferWithViews.Value ??= new BufferWithViews();
 

@@ -1,6 +1,6 @@
 ﻿// ReSharper disable RedundantArgumentDefaultValue
 
-using System.Numerics;
+using Color = T3.Core.DataTypes.Vector.Color;
 
 namespace T3.Editor.Gui.Styling;
 
@@ -35,7 +35,7 @@ public static class UiColors
     
     public static Color BackgroundTabActive = Color.FromString("#3A3A3A");
     public static Color BackgroundTabInActive = Color.FromString("#CC282828");
-    public static Color BackgroundInputField = Color.FromString("#222222");
+    public static Color BackgroundInputField = Color.FromString("#101010");
     public static Color BackgroundInputFieldHover = new(0.1f, 0.1f, 0.1f, 1f);
     public static Color BackgroundInputFieldActive = new(0f, 0f, 0f, 1f);
     
@@ -60,6 +60,8 @@ public static class UiColors
     [T3Style.Hint(GroupTitle = "Status colors")]
     public static Color StatusActivated = Color.FromString("#4592FF");
     public static Color StatusAutomated = new(0.08f, 0.48f, 0.7f, 1f);
+    public static Color StatusControlled = new(0.08f, 0.7f, 0.48f, 1f);
+    
     public static Color StatusAttention = new(203, 19, 113, 255);
     public static Color StatusWarning = new(203, 19, 113, 255);
     public static Color StatusError = new(203, 19, 113, 255);

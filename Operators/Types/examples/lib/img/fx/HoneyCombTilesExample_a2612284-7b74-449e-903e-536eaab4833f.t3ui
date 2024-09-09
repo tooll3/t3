@@ -1,6 +1,6 @@
 {
   "Id": "a2612284-7b74-449e-903e-536eaab4833f"/*HoneyCombTilesExample*/,
-  "Description": "A quick illustration of the [HexGrid] operator.",
+  "Description": "A quick illustration of the [HoneyCombTiles] operator.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -39,7 +39,7 @@
       }
     },
     {
-      "ChildId": "86428e94-c771-4d62-9853-1eb878a755a8"/*Float2ToVector2*/,
+      "ChildId": "86428e94-c771-4d62-9853-1eb878a755a8"/*Vector2*/,
       "Position": {
         "X": 403.48706,
         "Y": 138.24695
@@ -74,7 +74,7 @@
       }
     },
     {
-      "ChildId": "623008b2-b025-4c44-92f7-cfa963a039ee"/*FractalNoise*/,
+      "ChildId": "623008b2-b025-4c44-92f7-cfa963a039ee"/*_FractalNoiseOld*/,
       "Position": {
         "X": 171.69507,
         "Y": 0.0

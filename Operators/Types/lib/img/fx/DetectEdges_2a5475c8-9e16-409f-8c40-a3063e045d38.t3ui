@@ -1,6 +1,6 @@
 {
   "Id": "2a5475c8-9e16-409f-8c40-a3063e045d38"/*DetectEdges*/,
-  "Description": "Detects edges in the incoming image.\n\nTry the presets.",
+  "Description": "Detects edges in the incoming image.\n\nTry the presets.\n\nFor similar effects see: [Steps] [DistortAndShade] [Displace] [FakeLight]",
   "InputUis": [
     {
       "InputId": "4041b6d8-15e5-428c-9967-7105975a46f7"/*Image*/,
@@ -67,7 +67,7 @@
       }
     },
     {
-      "ChildId": "7c0ee695-1992-4bc9-8eef-4684d0a839a6"/*Vector4ToFloat4*/,
+      "ChildId": "7c0ee695-1992-4bc9-8eef-4684d0a839a6"/*Vector4Components*/,
       "Position": {
         "X": 315.8498,
         "Y": 163.31819

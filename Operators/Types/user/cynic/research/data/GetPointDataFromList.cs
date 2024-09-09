@@ -4,6 +4,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_1de7b1be_cab6_4beb_a837_4c817562efb2
 {
@@ -41,16 +42,16 @@ namespace T3.Operators.Types.Id_1de7b1be_cab6_4beb_a837_4c817562efb2
                 return;
             }
 
-            var point = pointList.TypedElements[index % pointList.NumElements];
+            var point = pointList.TypedElements[index.Mod(pointList.NumElements)];
             Position.Value = point.Position;
             W.Value = point.W;
             Orientation.Value = new Vector4(point.Orientation.X, point.Orientation.Y, point.Orientation.Z, point.Orientation.W);
         }
         
         [Input(Guid = "e35d2024-704e-42b4-8835-a53fa439a2bc")]
-        public readonly InputSlot<int> ItemIndex = new InputSlot<int>();
+        public readonly InputSlot<int> ItemIndex = new();
 
         [Input(Guid = "b478510f-eb33-4cf0-be0c-80ecea34e40d")]
-        public readonly InputSlot<StructuredList> DataList = new InputSlot<StructuredList>();
+        public readonly InputSlot<StructuredList> DataList = new();
     }
 }

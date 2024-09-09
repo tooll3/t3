@@ -33,8 +33,8 @@
     {
       "Id": "412055dc-88f7-4def-ac8e-76f7f424f905"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {
@@ -70,7 +70,7 @@
   ],
   "Children": [
     {
-      "Id": "523b7aec-d6f1-4982-8e10-02da1c410d89"/*Vector2ToFloat2*/,
+      "Id": "523b7aec-d6f1-4982-8e10-02da1c410d89"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []

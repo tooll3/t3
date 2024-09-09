@@ -1,6 +1,6 @@
 {
   "Id": "61ec6355-bd7d-4abb-aa44-b01b7d658e23"/*LoadImageFromUrl*/,
-  "Description": "Loads an image file with the specified URL. This process does not use caching.",
+  "Description": "Loads an image file with the specified URL. This process does not use caching.\n\nTo load an image from a local folder use [LoadImage]\n\nAlso see [RequestUrl]",
   "InputUis": [
     {
       "InputId": "21b2e219-0b2a-4323-b288-f39ed791e676"/*Url*/,

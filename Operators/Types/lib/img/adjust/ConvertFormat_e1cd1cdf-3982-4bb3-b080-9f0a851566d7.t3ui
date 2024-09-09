@@ -1,6 +1,6 @@
 {
   "Id": "e1cd1cdf-3982-4bb3-b080-9f0a851566d7"/*ConvertFormat*/,
-  "Description": "Converts a Texture into another format. This can be useful to speed up video file rendering or to fix unsupported texture formats for [PlayVideo].\n\nPlease note: The ScaleImage is only experiment and will crop from the upper left corner.",
+  "Description": "Converts a Texture into another format. This can be useful to speed up video file rendering or to fix unsupported texture formats for [PlayVideo].\n\nFor fast video exporting use [B8G8R8A8_UNorm].\n\nPlease note: The ScaleImage is only experimental and will crop from the upper left corner.",
   "InputUis": [
     {
       "InputId": "33b6a702-2452-45d4-b5f7-7ff9f66940a6"/*Texture2d*/,
@@ -90,7 +90,7 @@
       }
     },
     {
-      "ChildId": "59c78ddc-7622-4332-b0fe-468cbb4d6b7d"/*CalcSize2DispatchCount*/,
+      "ChildId": "59c78ddc-7622-4332-b0fe-468cbb4d6b7d"/*CalcInt2DispatchCount*/,
       "Position": {
         "X": 1118.3258,
         "Y": 271.62793
@@ -134,8 +134,8 @@
     {
       "ChildId": "9f2330e0-847e-4b84-ac5f-8d4ef696a84f"/*GenerateMips*/,
       "Position": {
-        "X": 1531.5865,
-        "Y": 939.8379
+        "X": 1539.2701,
+        "Y": 1004.18774
       }
     },
     {

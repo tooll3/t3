@@ -1,9 +1,7 @@
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 //using T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c;
@@ -13,10 +11,10 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
     public class Counter : Instance<Counter>
     {
         [Output(Guid = "c53e3a03-3a6d-4547-abbf-7901b5045539", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
         
         [Output(Guid = "BAE829AD-8454-4625-BDE4-A7AB62F579A4", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<bool> WasStep = new Slot<bool>();
+        public readonly Slot<bool> WasStep = new();
 
         public Counter()
         {
@@ -178,35 +176,35 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
         // private bool _lastCountTriggered;
 
         [Input(Guid = "eefdb8ca-68e7-4e39-b302-22eb8930fb8c")]
-        public readonly InputSlot<bool> TriggerIncrement = new InputSlot<bool>();
+        public readonly InputSlot<bool> TriggerIncrement = new();
 
         [Input(Guid = "7BFBAE6B-FA0B-4E5A-8040-E0BE3600AFEB")]
-        public readonly InputSlot<bool> TriggerReset = new InputSlot<bool>();
+        public readonly InputSlot<bool> TriggerReset = new();
 
         [Input(Guid = "754CEBE3-AB6C-4877-9C32-C67FBAE9E4C2")]
-        public readonly InputSlot<float> StartValue = new InputSlot<float>();
+        public readonly InputSlot<float> StartValue = new();
 
         [Input(Guid = "BCA3F7B2-A093-4CB3-89A5-0E2681760607")]
-        public readonly InputSlot<float> Increment = new InputSlot<float>();
+        public readonly InputSlot<float> Increment = new();
 
         [Input(Guid = "73B493CB-91D1-4D4F-B9A8-005017ECAC8F")]
-        public readonly InputSlot<float> Modulo = new InputSlot<float>();
+        public readonly InputSlot<float> Modulo = new();
 
         [Input(Guid = "286CBBFB-796D-499F-93D3-D467512110BE")]
-        public readonly InputSlot<float> Rate = new InputSlot<float>();
+        public readonly InputSlot<float> Rate = new();
 
         [Input(Guid = "701E7534-FAB2-4204-A68F-66D467E39F66")]
-        public readonly InputSlot<float> Phase = new InputSlot<float>();
+        public readonly InputSlot<float> Phase = new();
 
         [Input(Guid = "B04D475B-A898-421B-BF26-AE5CF982A351")]
-        public readonly InputSlot<float> Blending = new InputSlot<float>();
+        public readonly InputSlot<float> Blending = new();
 
 
         [Input(Guid = "E0C386B9-A987-4D11-9171-2971FA759827")]
-        public readonly InputSlot<bool> SmoothBlending = new InputSlot<bool>();
+        public readonly InputSlot<bool> SmoothBlending = new();
         
         [Input(Guid = "C386B9E0-A987-4D11-9171-2971FA759827", MappedType = typeof(SpeedFactors))]
-        public readonly InputSlot<int> AllowSpeedFactor = new InputSlot<int>();
+        public readonly InputSlot<int> AllowSpeedFactor = new();
 
     }
 }

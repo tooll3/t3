@@ -30,8 +30,8 @@
     {
       "Id": "94099125-52d7-475d-aff2-bb1bbd0bd30a"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {

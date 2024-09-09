@@ -13,7 +13,7 @@
     },
     {
       "Id": "88623684-a5e4-4415-8458-648761e834e1"/*GenerateMipMaps*/,
-      "DefaultValue": true
+      "DefaultValue": false
     },
     {
       "Id": "8686d1c3-c5a5-4b4a-b30f-95a1cfd0dc90"/*Enable*/,
@@ -55,7 +55,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -78,7 +78,7 @@
         {
           "Id": "58ff26e7-6beb-44cb-910b-fe467402cee9"/*MipLevels*/,
           "Type": "System.Int32",
-          "Value": 7
+          "Value": 0
         },
         {
           "Id": "67cd82c3-504b-4c80-8c49-5b303733ed52"/*Format*/,
@@ -105,7 +105,7 @@
       "Outputs": []
     },
     {
-      "Id": "59c78ddc-7622-4332-b0fe-468cbb4d6b7d"/*CalcSize2DispatchCount*/,
+      "Id": "59c78ddc-7622-4332-b0fe-468cbb4d6b7d"/*CalcInt2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []
@@ -122,7 +122,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,

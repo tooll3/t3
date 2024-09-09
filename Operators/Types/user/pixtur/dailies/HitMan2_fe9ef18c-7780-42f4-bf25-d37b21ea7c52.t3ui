@@ -312,14 +312,14 @@
       }
     },
     {
-      "ChildId": "914110ee-0fea-4223-8632-0d658735ce64"/*WaveForm2*/,
+      "ChildId": "914110ee-0fea-4223-8632-0d658735ce64"/*WaveForm*/,
       "Position": {
         "X": 2294.192,
         "Y": 93.799095
       }
     },
     {
-      "ChildId": "011bfe4c-d8a5-40ce-b67f-8f66828395de"/*WaveForm2*/,
+      "ChildId": "011bfe4c-d8a5-40ce-b67f-8f66828395de"/*WaveForm*/,
       "Position": {
         "X": 880.6236,
         "Y": 709.99457

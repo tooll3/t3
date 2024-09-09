@@ -74,11 +74,11 @@ namespace T3.Core.Operator.Interfaces
     // Todo: Find a better location of this class
     public class ViewCamera : ICamera
     {
-        public Vector3 CameraPosition { get; set; } = new Vector3(0, 0, 2.416f);
+        public Vector3 CameraPosition { get; set; } = new(0, 0, GraphicsMath.DefaultCameraDistance);
         public Vector3 CameraTarget { get; set; }
         public float CameraRoll { get; set; }
         public Matrix4x4 WorldToCamera { get; }
         public Matrix4x4 CameraToClipSpace { get; }
-        public CameraDefinition CameraDefinition => new();  // Not implemetned
+        public CameraDefinition CameraDefinition => new();  // Not implemented
     }
 }

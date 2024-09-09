@@ -1,5 +1,6 @@
 {
   "Id": "5202d3f6-c970-4006-933d-3c60d6c202dc"/*Modulo*/,
+  "Description": "Modulo for floats.",
   "InputUis": [
     {
       "InputId": "8a401e5d-295d-4403-a3af-1d6b91ce3dba"/*Value*/,

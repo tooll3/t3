@@ -1,6 +1,6 @@
 {
   "Id": "90b2c6d2-e9a6-4910-b42d-94202f07be27"/*Accumulator*/,
-  "Description": "A very simple proportional-integral-derivative controller.\n\nNote that the increment is a rate that get multiplied with the current frame duration: With an increment of 1 you have a full value change of 1 unit after one second.\n",
+  "Description": "Accumulates a value with the incoming rate.\n\nNote that the increment is a rate that get multiplied with the current frame duration: With an increment of 1 you have a full value change of 1 unit after one second.\n\nSimilar to [Time].\nFor a variant that does not count up linearly / smooth but in steps, see [Counter]",
   "InputUis": [
     {
       "InputId": "7caf37ec-ed34-4711-b02c-e136d070fff7"/*Running*/,
@@ -15,6 +15,8 @@
         "X": 36.0,
         "Y": 334.0
       },
+      "Description": "Defines how quickly / intensively the accumulator counts up",
+      "AddPadding": "True",
       "Min": -100.0,
       "Max": 100.0
     },
@@ -24,6 +26,8 @@
         "X": 197.0,
         "Y": 328.0
       },
+      "Description": "Defines the number with which the accumulator starts counting.\n\nNotice: On the fly changes are only applied after the reset trigger has been used",
+      "AddPadding": "True",
       "Min": -100.0,
       "Max": 100.0,
       "Scale": 0.01
@@ -33,14 +37,17 @@
       "Position": {
         "X": 197.0,
         "Y": 373.0
-      }
+      },
+      "Description": "Resets the accumulator"
     },
     {
       "InputId": "4d90cd4b-8e11-4b86-a668-26810af029b3"/*Modulo*/,
       "Position": {
         "X": 197.0,
         "Y": 418.0
-      }
+      },
+      "Description": "Additional modulo that can be useful to make the values loop.\nThis parameter is ignored when 0.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],

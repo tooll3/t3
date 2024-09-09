@@ -1,0 +1,17 @@
+{
+  "Name": "_ReadIntFromGpuBuffer",
+  "Id": "11ebbb25-984a-4772-b720-b8c7e5214a83",
+  "Namespace": "lib.3d._",
+  "Inputs": [
+    {
+      "Id": "1319eba8-8f22-47d7-b8ed-2871b2f95e9b"/*InputBuffer*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "de02bf72-426f-4548-89c7-d8d6a10aea85"/*Index*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

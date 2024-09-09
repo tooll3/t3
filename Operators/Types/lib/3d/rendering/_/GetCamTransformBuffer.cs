@@ -13,10 +13,10 @@ namespace T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e
     public class GetCamTransformBuffer : Instance<GetCamTransformBuffer>
     {
         [Output(Guid = "FB108D2D-04B0-427D-888D-79EB7EBF1E96", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<Buffer> Buffer = new Slot<Buffer>();
+        public readonly Slot<Buffer> Buffer = new();
 
         [Output(Guid = "8EDC2DB1-A214-4B77-A334-FA4BF1FF1AB7", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<Buffer> PreviousBuffer = new Slot<Buffer>();
+        public readonly Slot<Buffer> PreviousBuffer = new();
         
         public GetCamTransformBuffer()
         {
@@ -59,7 +59,7 @@ namespace T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e
         }
 
         [Input(Guid = "A3190889-5473-4870-97CF-93E6CF94132B")]
-        public readonly InputSlot<Object> CameraReference = new InputSlot<Object>();
+        public readonly InputSlot<Object> CameraReference = new();
 
         
         private TransformBufferLayout _bufferContent;

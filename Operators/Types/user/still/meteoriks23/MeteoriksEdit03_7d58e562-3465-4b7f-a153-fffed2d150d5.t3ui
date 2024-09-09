@@ -375,7 +375,7 @@
       }
     },
     {
-      "ChildId": "d36d8660-ca10-4c4e-a15a-a1ed57b0cead"/*RandomString*/,
+      "ChildId": "d36d8660-ca10-4c4e-a15a-a1ed57b0cead"/*AnimRandomString*/,
       "Position": {
         "X": 1898.0743,
         "Y": 1206.4727
@@ -690,7 +690,7 @@
       }
     },
     {
-      "ChildId": "89c51100-2985-4287-8991-b9f4bbebe7bb"/*RandomizePoints*/,
+      "ChildId": "89c51100-2985-4287-8991-b9f4bbebe7bb"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": 617.0288,
         "Y": -643.0408

@@ -684,14 +684,14 @@
       }
     },
     {
-      "ChildId": "cadd0aeb-3d31-4cf3-b454-aaaa2a5864b4"/*Float3ToVector3*/,
+      "ChildId": "cadd0aeb-3d31-4cf3-b454-aaaa2a5864b4"/*Vector3*/,
       "Position": {
         "X": -557.9369,
         "Y": 2650.2366
       }
     },
     {
-      "ChildId": "545a5743-49df-43e9-b1e8-9b2755455ced"/*Float3ToVector3*/,
+      "ChildId": "545a5743-49df-43e9-b1e8-9b2755455ced"/*Vector3*/,
       "Position": {
         "X": -557.9369,
         "Y": 2732.2366
@@ -728,8 +728,8 @@
     {
       "ChildId": "0dc768c3-8bb4-4e12-bd93-ce5c08abe468"/*Remap*/,
       "Position": {
-        "X": -557.9369,
-        "Y": 2568.2366
+        "X": -713.34216,
+        "Y": 2600.9153
       }
     },
     {
@@ -912,6 +912,20 @@
       "Position": {
         "X": 1178.4758,
         "Y": 681.8521
+      }
+    },
+    {
+      "ChildId": "a8534350-e8e1-4cd4-80db-6bf7a3324b8f"/*MeshProjectUV*/,
+      "Position": {
+        "X": -486.72443,
+        "Y": 2373.949
+      }
+    },
+    {
+      "ChildId": "d8c278d7-b733-4620-aded-45150ba608fb"/*AnimValue*/,
+      "Position": {
+        "X": -563.701,
+        "Y": 2577.658
       }
     }
   ],

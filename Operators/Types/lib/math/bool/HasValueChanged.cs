@@ -1,12 +1,8 @@
 using System;
-using System.Diagnostics;
-using T3.Core;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
@@ -14,13 +10,13 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
     public class HasValueChanged : Instance<HasValueChanged>
     {
         [Output(Guid = "35ab8188-77a1-4cd9-b2ad-c503034e49f9", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<bool> HasChanged = new Slot<bool>();
+        public readonly Slot<bool> HasChanged = new();
 
         [Output(Guid = "ab818835-77a1-4cd9-b2ad-c503034e49f9", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Delta = new Slot<float>();
+        public readonly Slot<float> Delta = new();
 
         [Output(Guid = "5E37DA80-5D1F-4E17-A0A1-1E386B3A2561")]
-        public readonly Slot<float> DeltaOnHit = new Slot<float>();
+        public readonly Slot<float> DeltaOnHit = new();
 
         
         public HasValueChanged()

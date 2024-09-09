@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using T3.Core.Animation;
 using Quaternion = System.Numerics.Quaternion;
@@ -16,7 +17,7 @@ namespace T3.Core.Utils
         public static float PerlinNoise(float value, float period, int octaves, int seed)
         {
             var noiseSum = 0.0f;
-
+            octaves = octaves.Clamp(1, 20);
             var frequency = period;
             var amplitude = 0.5f;
             for (var octave = 0; octave < octaves - 1; octave++)
@@ -39,6 +40,18 @@ namespace T3.Core.Utils
             n = (n << 13) ^ n;
             return (float)(1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
         }
+
+        public static float  ApplyBiasAndGain(this float x, float s, float t)
+        {
+            const float eps = 0.0001f;
+            const float r = 200;
+            s *= 2;
+            s = s < 1 ? (MathF.Pow(r, 1 - s)) : 1 / MathF.Pow(r, s - 1);
+            return x < t
+                       ? (t * x) / (x + s * (t - x) + eps)
+                       : ((1 - t) * (x - 1)) / (1 - x - s * (t - x) + eps) + 1;
+        }
+        
         
         public static uint XxHash(uint p)
         {
@@ -55,6 +68,7 @@ namespace T3.Core.Utils
         
         public static float Hash01( uint x )
         {
+            x *= 13331U;
             const uint k = 1103515245U;  // GLIB C
             x = ((x>>8)^x)*k;
             x = ((x>>8)^x)*k;
@@ -95,6 +109,17 @@ namespace T3.Core.Utils
         public static float ToRadians(this float val)
         {
             return val * MathF.PI / 180;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool _IsFinite(this float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
+        }        
+        
+        public static bool _IsFinite(this Vector3 value)
+        {
+            return value.X._IsFinite() && value.Y._IsFinite() && value.Z._IsFinite();
         }        
         
         public static Vector2 Clamp(Vector2 v, Vector2 mn, Vector2 mx)
@@ -105,7 +130,39 @@ namespace T3.Core.Utils
                                        ? mx.X
                                        : v.X, (v.Y < mn.Y) ? mn.Y : (v.Y > mx.Y) ? mx.Y : v.Y);
         }
-
+        
+        // method with a callback that returns a double of a given item
+        
+        
+        
+        public static int FindIndexForTime<T>(List<T> items, double time, Func<int, double> timeAtIndex)
+        {
+            if (items.Count == 0)
+                return -1;
+            
+            var lastIndex = items.Count - 1;
+            var firstIndex = 0;
+            
+            if (timeAtIndex(lastIndex) <= time)
+                return lastIndex;
+            
+            if (timeAtIndex(firstIndex) >= time)
+                return firstIndex;
+            
+            while (lastIndex - firstIndex > 1)
+            {
+                var middleIndex = (firstIndex + lastIndex) / 2;
+                
+                var delta = timeAtIndex(middleIndex) - time;
+                
+                if (delta < 0)
+                    firstIndex = middleIndex;
+                else
+                    lastIndex = middleIndex;
+            }
+            return firstIndex;
+        }
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Min<T>(T lhs, T rhs) where T : IComparable<T>
         {
@@ -126,6 +183,20 @@ namespace T3.Core.Utils
             else return val;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Mod(this int val, int repeat)
+        {
+            // Prevent exception
+            if(repeat == 0)
+                return 0;
+            
+            var x = val % repeat;
+            if (x < 0)
+                x = repeat + x;
+            
+            return x;
+        }
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] ToArray(this Vector2 vec2)
         {
@@ -313,7 +384,19 @@ namespace T3.Core.Utils
         {
             return new Vector3(vec.X / vec.W, vec.Y / vec.W, vec.Z / vec.W);
         }
-
+        
+        /// <summary>
+        /// Return true if a boolean changed
+        /// </summary>
+        public static bool WasChanged(bool newState, ref bool current)
+        {
+            if (newState == current)
+                return false;
+            
+            current = newState;
+            return true;
+        }
+        
         /// <summary>
         /// Return true if a boolean changed from false to true
         /// </summary>

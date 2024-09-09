@@ -12,6 +12,10 @@
       "DefaultValue": null
     },
     {
+      "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
+      "DefaultValue": 1.0
+    },
+    {
       "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
       "DefaultValue": 2.0
     },
@@ -29,10 +33,6 @@
         "X": 0.003,
         "Y": 0.015999999
       }
-    },
-    {
-      "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
-      "DefaultValue": 1.0
     },
     {
       "Id": "9d5e3055-c17e-4013-963d-e17c76b707c1"/*HighlightColor*/,
@@ -63,8 +63,8 @@
     {
       "Id": "3c615aa0-61b7-43c5-bea3-8d1110b4f5cd"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     }
   ],
@@ -86,13 +86,13 @@
         {
           "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Clamp"
+          "Value": "MirrorOnce"
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "a6d895fd-16c0-4fa6-83d1-bdbd7dc5c01f"/*Vector2ToFloat2*/,
+      "Id": "a6d895fd-16c0-4fa6-83d1-bdbd7dc5c01f"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -192,10 +192,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 256
+            "X": 256,
+            "Y": 256
           }
         }
       ],

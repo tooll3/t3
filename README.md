@@ -2,6 +2,7 @@
 
 [![Discord](https://img.shields.io/discord/823853172619083816.svg?style=for-the-badge)](https://discord.gg/YmSyQdeH3S)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](https://github.com/alelievr/Mixture/blob/master/LICENSE)
+[![Download](https://img.shields.io/badge/Download_Tooll3_v3.9.2-FF3A9E?style=for-the-badge&logoColor=white&logo=DocuSign)](https://github.com/tooll3/t3/releases/download/v3.9.2/Tooll-v3.9.2.zip)
 
 [![tooll-screenshot](https://user-images.githubusercontent.com/1732545/173256422-a4ef9894-d954-4bc3-8c24-000bfbe1c3ad.png)](https://www.youtube.com/watch?v=PrxhwOC9hLw "Tooll3 - A quick overview")
 
@@ -20,12 +21,12 @@ create motion graphics use many industry standard features like color correction
 We hope to bring together a community of artists, developers and creative tinkerers to drive the design and development of the software as a free open source project.
 
 ## Installation
-Please follow the [installation guide](https://github.com/tooll3/t3/wiki/Installation).
+Please follow the [installation guide](https://github.com/tooll3/t3/wiki/help.Installation).
 
 ## Get Help
-To get started read the [documentation](https://github.com/tooll3/t3/wiki/user-interface) or watch [tutorial videos](https://www.youtube.com/watch?v=eH2E02U6P5Q&list=PLj-rnPROvbn3LigXGRSDvmLtgTwmNHcQs&index=4)
+To get started read the [documentation](https://github.com/tooll3/t3/wiki) or watch [tutorial videos](https://www.youtube.com/watch?v=eH2E02U6P5Q&list=PLj-rnPROvbn3LigXGRSDvmLtgTwmNHcQs&index=4).
 
-If you have questions or feedback, please join us on discord: https://discord.gg/YmSyQdeH3S 
+If you have questions or feedback, please join us on Discord: https://discord.gg/YmSyQdeH3S 
 
 
 

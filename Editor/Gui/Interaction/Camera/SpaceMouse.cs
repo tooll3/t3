@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using System.Windows.Forms;
-using T3.Core.Utils;
 using T3.Editor.App;
 using T3.Editor.Gui.UiHelpers;
 
@@ -75,7 +74,8 @@ namespace T3.Editor.Gui.Interaction.Camera
 
             float translationVelocity = _dampedTranslation.Length() / 2000.0f;
             var direction = _dampedTranslation;
-            direction = Vector3.Normalize(direction);
+            if(direction.LengthSquared() > 0.0001f)
+                direction = Vector3.Normalize(direction);
 
             if (translationVelocity <  CameraInteractionParameters.MaxMoveVelocity)
                 direction *= translationVelocity;

@@ -7,7 +7,6 @@ using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Core.Operator
@@ -349,8 +348,12 @@ namespace T3.Core.Operator
 
                 connectionEntriesToReplace.Reverse(); // restore original order
 
-                var symbolChild = parentSymbol.Children.Single(child => child.Id == instance.SymbolChildId);
-
+                var symbolChild = parentSymbol.Children.SingleOrDefault(child => child.Id == instance.SymbolChildId);
+                if (symbolChild == null)
+                {
+                    Log.Error($"Can't find SymbolChild with id {instance.SymbolChildId} in {parentSymbol}");
+                    continue;
+                }
                 // update inputs of symbol child
                 var oldChildInputs = new Dictionary<Guid, SymbolChild.Input>(symbolChild.Inputs);
                 symbolChild.Inputs.Clear();
@@ -472,7 +475,16 @@ namespace T3.Core.Operator
 
         public Instance CreateInstance(Guid id)
         {
-            var newInstance = Activator.CreateInstance(InstanceType) as Instance;
+            Instance newInstance = null;
+            try
+            {
+                newInstance = Activator.CreateInstance(InstanceType) as Instance;
+            }
+            catch (TargetInvocationException e)
+            {
+                Log.Error($"Failed to create instance of " + InstanceType + " for symbol " + Name + " with id " + id + ": " + e.InnerException.Message);
+                return null;
+            }
             Debug.Assert(newInstance != null);
             newInstance.SymbolChildId = id;
             newInstance.Symbol = this;
@@ -526,10 +538,20 @@ namespace T3.Core.Operator
             // set up the inputs for the child instance
             for (int i = 0; i < symbolChild.Symbol.InputDefinitions.Count; i++)
             {
-                Debug.Assert(i < childInstance.Inputs.Count);
-                Guid inputDefinitionId = childSymbol.InputDefinitions[i].Id;
+                if (i >= childInstance.Inputs.Count)
+                {
+                    Log.Warning($"Skipping undefined input index");
+                    continue;
+                }
+                
+                var inputDefinitionId = childSymbol.InputDefinitions[i].Id;
                 var inputSlot = childInstance.Inputs[i];
-                inputSlot.Input = symbolChild.Inputs[inputDefinitionId];
+                if (!symbolChild.Inputs.TryGetValue(inputDefinitionId, out var input))
+                {
+                    Log.Warning($"Skipping undefined input: {inputDefinitionId}");
+                    continue;
+                }
+                inputSlot.Input = input;
                 inputSlot.Id = inputDefinitionId;
             }
 

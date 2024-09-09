@@ -1,0 +1,37 @@
+{
+  "Name": "MidiPitchbendOutput",
+  "Id": "01d33d21-d75e-4c22-bfe6-088e1ee4a5e8",
+  "Namespace": "lib.io.midi",
+  "Inputs": [
+    {
+      "Id": "5b25a41f-7609-4e19-98a2-1ecfaeb397bb"/*SendMode*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "e8665f67-9760-4289-ae2f-13665f63b4d8"/*TriggerSend*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "93868179-7d95-46c3-bd2c-8d6039afee69"/*Device*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "94f63571-52f4-45b8-a784-5556b4455f6a"/*ChannelNumber*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "b9982ed7-c481-4508-a61e-229eaf5e960e"/*Pitch*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "068a8ef1-9aa4-4e67-9700-5138358fa0b9"/*UsePitchFloat*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "e92b7f08-18c6-402b-a4dc-bf553f881593"/*PitchFloat*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

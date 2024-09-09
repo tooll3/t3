@@ -1,6 +1,6 @@
 {
   "Id": "1d958538-98e7-4053-b1e2-3b9f1bc4faa9"/*Combine3Images*/,
-  "Description": "A node to combine 3 input images into the RGBA channels of a new one.",
+  "Description": "A node to combine 3 input images into the RGBA channels of a new one.\n\nAll blend ops and similar: [BlendImages] [Blend] [BlendWithMask] [Combine3Images]",
   "InputUis": [
     {
       "InputId": "81e08eab-9428-435b-a710-6cede1549834"/*ImageA*/,
@@ -88,14 +88,14 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "16d7fa18-2229-48db-b997-0fb90dcf1f65"/*Vector4ToFloat4*/,
+      "ChildId": "16d7fa18-2229-48db-b997-0fb90dcf1f65"/*Vector4Components*/,
       "Position": {
         "X": 122.33575,
         "Y": 98.58719
       }
     },
     {
-      "ChildId": "d03465c6-3992-4155-bfb9-9a9ce198f8aa"/*Vector4ToFloat4*/,
+      "ChildId": "d03465c6-3992-4155-bfb9-9a9ce198f8aa"/*Vector4Components*/,
       "Position": {
         "X": 122.33575,
         "Y": 154.58716
@@ -109,7 +109,7 @@
       }
     },
     {
-      "ChildId": "f697ae9b-bfab-4cef-b43f-6c3800d242e7"/*Vector4ToFloat4*/,
+      "ChildId": "f697ae9b-bfab-4cef-b43f-6c3800d242e7"/*Vector4Components*/,
       "Position": {
         "X": 125.19737,
         "Y": 254.10223

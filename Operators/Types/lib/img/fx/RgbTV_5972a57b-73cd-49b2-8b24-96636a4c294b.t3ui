@@ -1,6 +1,6 @@
 {
   "Id": "5972a57b-73cd-49b2-8b24-96636a4c294b"/*RgbTV*/,
-  "Description": "Creates a vintage TV-glitch effect.",
+  "Description": "Creates a vintage TV-glitch effect.\n\nUseful Ops for a PostFX Pipeline: [MotionBlur] [DepthOfField] [ChromaticAbberation] [Glow] [Grain] [Blur]",
   "InputUis": [
     {
       "InputId": "2dbfdd5d-8b4b-447c-bd19-326d46657ea1"/*Image*/,
@@ -202,7 +202,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "325f5259-afad-4375-9772-480f826fd364"/*Vector2ToFloat2*/,
+      "ChildId": "325f5259-afad-4375-9772-480f826fd364"/*Vector2Components*/,
       "Position": {
         "X": 210.65906,
         "Y": 822.6969

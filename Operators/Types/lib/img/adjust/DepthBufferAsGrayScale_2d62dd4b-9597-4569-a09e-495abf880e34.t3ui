@@ -41,14 +41,14 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "e22b1137-23c0-4fde-b119-b794242b3471"/*Vector2ToFloat2*/,
+      "ChildId": "e22b1137-23c0-4fde-b119-b794242b3471"/*Vector2Components*/,
       "Position": {
         "X": -84.91547,
         "Y": 461.6969
       }
     },
     {
-      "ChildId": "5f81a76e-2b10-4322-a898-c485dda489a2"/*Vector2ToFloat2*/,
+      "ChildId": "5f81a76e-2b10-4322-a898-c485dda489a2"/*Vector2Components*/,
       "Position": {
         "X": -84.91547,
         "Y": 517.6969
@@ -116,7 +116,7 @@
       }
     },
     {
-      "ChildId": "fbce3d8e-9d5a-4041-a578-b8ef2a02e641"/*CalcSize2DispatchCount*/,
+      "ChildId": "fbce3d8e-9d5a-4041-a578-b8ef2a02e641"/*CalcInt2DispatchCount*/,
       "Position": {
         "X": 547.02167,
         "Y": 298.24878

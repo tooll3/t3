@@ -1,8 +1,8 @@
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_e6bbbeef_08d8_4105_b84d_39edadb549c0
 {
@@ -34,22 +34,18 @@ namespace T3.Operators.Types.Id_e6bbbeef_08d8_4105_b84d_39edadb549c0
             Count.Value = connections.Count;
 
             var index = Index.GetValue(context);
-            if (index < 0)
-                index = -index;
             
-            index %= connections.Count;
-            
-            Output.Value = connections[index].GetValue(context);
+            Output.Value = connections[index.Mod(connections.Count)].GetValue(context);
             
             Output.DirtyFlag.Clear();
             Count.DirtyFlag.Clear();
         }        
         
         [Input(Guid = "04776dc8-7b84-41f5-973c-22cadbf44f02")]
-        public readonly InputSlot<int> Index = new InputSlot<int>();
+        public readonly InputSlot<int> Index = new();
 
         [Input(Guid = "6B1C6232-819A-4021-82A9-994F8928BE13")]
-        public readonly MultiInputSlot<BufferWithViews> Input = new MultiInputSlot<BufferWithViews>();
+        public readonly MultiInputSlot<BufferWithViews> Input = new();
     }
 }
 

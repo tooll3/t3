@@ -4,7 +4,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Audio;
-using T3.Core.Logging;
 
 namespace T3.Operators.Types.Id_712c50e8_7cba_4b29_bde4_1d860ab6b701
 {

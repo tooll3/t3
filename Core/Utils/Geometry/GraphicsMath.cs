@@ -109,4 +109,8 @@ public static class GraphicsMath
 
     private const float FovEpsilon = 0.0001f;
     private const float MaxFov = MathF.PI - FovEpsilon;
+    
+    
+    public static float DefaultCamFovDegrees = 45;
+    public static readonly float DefaultCameraDistance = 1f / MathF.Tan(DefaultCamFovDegrees * MathF.PI / 360f);
 }

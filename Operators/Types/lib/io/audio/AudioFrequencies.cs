@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using T3.Core;
-using T3.Core.Animation;
 using T3.Core.Audio;
-using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66

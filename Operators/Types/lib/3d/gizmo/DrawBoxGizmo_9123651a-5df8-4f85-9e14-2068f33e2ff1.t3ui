@@ -1,41 +1,48 @@
 {
   "Id": "9123651a-5df8-4f85-9e14-2068f33e2ff1"/*DrawBoxGizmo*/,
+  "Description": "Creates a 3D wireframe cube that can be used as a bounding box",
   "InputUis": [
     {
-      "InputId": "656697b8-b271-463b-9e38-fdb5758d3736"/*Value*/,
+      "InputId": "656697b8-b271-463b-9e38-fdb5758d3736"/*Color*/,
       "Position": {
         "X": -277.8811,
         "Y": 311.51312
-      }
+      },
+      "Description": "Defines the color"
     },
     {
       "InputId": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Stretch*/,
       "Position": {
         "X": -277.8811,
         "Y": 446.51312
-      }
+      },
+      "Description": "Scales the box along its individual axes",
+      "AddPadding": "True"
     },
     {
       "InputId": "a331bfbb-8876-4e27-94b3-782e64efd72a"/*Scale*/,
       "Position": {
         "X": -277.8811,
         "Y": 491.51312
-      }
+      },
+      "Description": "Scales the size of the box linearly"
     },
     {
       "InputId": "83bb304e-3ed3-405f-92c7-58d263d9aafc"/*Position*/,
       "Position": {
         "X": -277.8811,
         "Y": 401.51312
-      }
+      },
+      "Description": "Defines the position of the box in 3D space",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "f4ff6b52-e845-48c4-a4ef-9ef89540d3bf"/*CommonPointSets*/,
       "Position": {
-        "X": -155.32034,
-        "Y": 187.84421
+        "X": -267.5323,
+        "Y": 181.46854
       }
     },
     {

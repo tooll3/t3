@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -167,19 +167,19 @@ namespace T3.Editor.Gui.Windows.Exploration
                                         max = floatInputUi.Max;
                                         clamp = floatInputUi.Clamp;
                                         break;
-                                    case Float2InputUi float2InputUi:
+                                    case Vector2InputUi float2InputUi:
                                         scale = float2InputUi.Scale;
                                         min = float2InputUi.Min;
                                         max = float2InputUi.Max;
                                         clamp = float2InputUi.Clamp;
                                         break;
-                                    case Float3InputUi float3InputUi:
+                                    case Vector3InputUi float3InputUi:
                                         scale = float3InputUi.Scale;
                                         min = float3InputUi.Min;
                                         max = float3InputUi.Max;
                                         clamp = float3InputUi.Clamp;
                                         break;
-                                    case Float4InputUi float4InputUi:
+                                    case Vector4InputUi float4InputUi:
                                         scale = 0.02f; // Reasonable default for color variations
                                         break;
                                 }
@@ -333,8 +333,8 @@ namespace T3.Editor.Gui.Windows.Exploration
                     var ty = (float)stepY / steps;
                     var inputVariationsAndWeights = new List<Tuple<ExplorationVariation, float>>()
                                                         {
-                                                            new Tuple<ExplorationVariation, float>(_blendedVariations[0], 1 - ty),
-                                                            new Tuple<ExplorationVariation, float>(_blendedVariations[1], ty),
+                                                            new(_blendedVariations[0], 1 - ty),
+                                                            new(_blendedVariations[1], ty),
                                                         };
                     var newVariation = ExplorationVariation.Mix(parameters, inputVariationsAndWeights, 0, GridCell.Center + new GridCell(0, stepY - steps / 2));
                     _variationCanvas.AddVariationToGrid(newVariation);
@@ -350,9 +350,9 @@ namespace T3.Editor.Gui.Windows.Exploration
                         var ty = (float)stepY / steps;
                         var inputVariationsAndWeights = new List<Tuple<ExplorationVariation, float>>()
                                                             {
-                                                                new Tuple<ExplorationVariation, float>(_blendedVariations[0], (1 - tx) * (1 - ty)),
-                                                                new Tuple<ExplorationVariation, float>(_blendedVariations[1], (1 - tx) * (ty)),
-                                                                new Tuple<ExplorationVariation, float>(_blendedVariations[2], (tx) * (ty)),
+                                                                new(_blendedVariations[0], (1 - tx) * (1 - ty)),
+                                                                new(_blendedVariations[1], (1 - tx) * (ty)),
+                                                                new(_blendedVariations[2], (tx) * (ty)),
                                                             };
 
                         var gridCell = GridCell.Center + new GridCell(stepX - steps / 2, stepY - steps / 2);
@@ -386,7 +386,7 @@ namespace T3.Editor.Gui.Windows.Exploration
             _variationCanvas.ClearVariations();
         }
 
-        private List<ExplorationVariation> _blendedVariations = new List<ExplorationVariation>();
+        private List<ExplorationVariation> _blendedVariations = new();
 
         public override List<Window> GetInstances()
         {
@@ -412,7 +412,7 @@ namespace T3.Editor.Gui.Windows.Exploration
             return RandomNames[_random.Next(RandomNames.Length)] + " " + RandomNames[_random.Next(RandomNames.Length)];
         }
 
-        private static Random _random = new Random();
+        private static Random _random = new();
 
         private static string[] RandomNames =
             {
@@ -425,12 +425,12 @@ namespace T3.Editor.Gui.Windows.Exploration
 
         public IOutputUi OutputUi { get; set; }
 
-        private readonly Dictionary<Guid, List<ExplorationVariation>> _variationsForSymbols = new Dictionary<Guid, List<ExplorationVariation>>();
+        private readonly Dictionary<Guid, List<ExplorationVariation>> _variationsForSymbols = new();
         private ExplorationVariation _lastHoveredVariation;
         private readonly ExploreVariationCanvas _variationCanvas;
-        private static readonly Vector2 Spacing = new Vector2(1, 5);
-        private static readonly Color NonMatchingVarationsColor = new Color(0.3f);
+        private static readonly Vector2 Spacing = new(1, 5);
+        private static readonly Color NonMatchingVarationsColor = new(0.3f);
         private static int _savedVariationIndex = 1;
-        internal readonly List<ExplorationVariation.VariationParameter> VariationParameters = new List<ExplorationVariation.VariationParameter>();
+        internal readonly List<ExplorationVariation.VariationParameter> VariationParameters = new();
     }
 }

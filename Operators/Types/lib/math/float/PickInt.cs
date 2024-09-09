@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_81555155_ae6f_40aa_961d_b6badb77af21
 {
@@ -21,11 +21,7 @@ namespace T3.Operators.Types.Id_81555155_ae6f_40aa_961d_b6badb77af21
             if (connections == null || connections.Count == 0)
                 return;
 
-            var index = Index.GetValue(context);
-            if (index < 0)
-                index = -index;
-
-            index %= connections.Count;
+            var index = Index.GetValue(context).Mod(connections.Count);
             Selected.Value = connections[index].GetValue(context);
         }
 

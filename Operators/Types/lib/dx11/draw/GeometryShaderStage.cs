@@ -1,5 +1,4 @@
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -12,7 +11,7 @@ namespace T3.Operators.Types.Id_4abd5f2e_3296_4d71_8462_faa203091b1d
     public class GeometryShaderStage : Instance<GeometryShaderStage>
     {
         [Output(Guid = "07198b7f-62bc-400e-9e7f-848460b96e38")]
-        public readonly Slot<Command> Output = new Slot<Command>(new Command());
+        public readonly Slot<Command> Output = new(new Command());
 
         public GeometryShaderStage()
         {
@@ -61,15 +60,15 @@ namespace T3.Operators.Types.Id_4abd5f2e_3296_4d71_8462_faa203091b1d
         private ShaderResourceView[] _prevShaderResourceViews;
 
         [Input(Guid = "2A217F9D-2F9F-418A-8568-F767905384D5")]
-        public readonly InputSlot<SharpDX.Direct3D11.GeometryShader> GeometryShader = new InputSlot<SharpDX.Direct3D11.GeometryShader>();
+        public readonly InputSlot<SharpDX.Direct3D11.GeometryShader> GeometryShader = new();
 
         [Input(Guid = "380b3ea4-aab8-4e19-bd31-9af3aef834b4")]
-        public readonly MultiInputSlot<Buffer> ConstantBuffers = new MultiInputSlot<Buffer>();
+        public readonly MultiInputSlot<Buffer> ConstantBuffers = new();
 
         [Input(Guid = "d17f9020-a7ad-4419-b11a-c48667cfc52e")]
-        public readonly MultiInputSlot<ShaderResourceView> ShaderResources = new MultiInputSlot<ShaderResourceView>();
+        public readonly MultiInputSlot<ShaderResourceView> ShaderResources = new();
 
         [Input(Guid = "7173630b-d7fd-4aa1-9398-d7e028e5df03")]
-        public readonly MultiInputSlot<SamplerState> SamplerStates = new MultiInputSlot<SamplerState>();
+        public readonly MultiInputSlot<SamplerState> SamplerStates = new();
     }
 }

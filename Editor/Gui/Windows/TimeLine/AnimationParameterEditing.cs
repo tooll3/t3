@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Editor.Gui.Interaction.WithCurves;

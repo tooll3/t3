@@ -2,8 +2,8 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Interaction.Snapping;
-using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.TimeLine
 {
@@ -96,11 +96,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(p);
         }
 
-        private static readonly Vector2 TimeRangeHandleSize = new Vector2(10, 20);
-        private static readonly Vector2 TimeRangeShadowSize = new Vector2(5, 9999);
-        private static readonly Color TimeRangeShadowColor = new Color(0, 0, 0, 0.5f);
-        private static readonly Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.3f);
-        private static readonly Color TimeRangeMarkerColor = new Color(1f, 1, 1f, 0.3f);
+        private static readonly Vector2 TimeRangeHandleSize = new(10, 20);
+        private static readonly Vector2 TimeRangeShadowSize = new(5, 9999);
+        private static readonly Color TimeRangeShadowColor = new(0, 0, 0, 0.5f);
+        private static readonly Color TimeRangeOutsideColor = new(0.0f, 0.0f, 0.0f, 0.3f);
+        private static readonly Color TimeRangeMarkerColor = new(1f, 1, 1f, 0.3f);
         private Playback _playback;
         
         #region implement snapping interface -----------------------------------

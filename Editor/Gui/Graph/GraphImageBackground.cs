@@ -6,7 +6,6 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -44,6 +43,17 @@ namespace T3.Editor.Gui.Graph
             if (_backgroundNodePath == null)
                 return;
 
+            // Prevent UiScaling for cropping image
+            var keepScale = T3Ui.UiScaleFactor;
+            T3Ui.UiScaleFactor = 1;
+
+            DrawNonScaledCanvasContent(imageOpacity);
+            T3Ui.UiScaleFactor = keepScale;
+        }
+
+        private void DrawNonScaledCanvasContent(float imageOpacity)
+        {
+            
             var selectedInstance = NodeSelection.GetSelectedInstance();
             if (selectedInstance is ICamera camera)
             {

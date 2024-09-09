@@ -1,5 +1,4 @@
 using System;
-using SharpDX;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,10 +8,10 @@ namespace T3.Operators.Types.Id_185958a3_be54_499d_a105_cad22c0dd448
     public class EulerToAxisAngle : Instance<EulerToAxisAngle>
     {
         [Output(Guid = "bf1ea1fa-cd5d-4bdf-b0cc-34042e4fd8df")]
-        public readonly Slot<System.Numerics.Vector3> Axis = new Slot<System.Numerics.Vector3>();
+        public readonly Slot<System.Numerics.Vector3> Axis = new();
 
         [Output(Guid = "7A400997-BCFC-4575-BC08-FBEFD5807F27")]
-        public readonly Slot<float> Angle = new Slot<float>();
+        public readonly Slot<float> Angle = new();
 
         public EulerToAxisAngle()
         {
@@ -65,6 +64,6 @@ namespace T3.Operators.Types.Id_185958a3_be54_499d_a105_cad22c0dd448
         }
 
         [Input(Guid = "30AB9590-D1E2-4926-BF01-B7395A719056")]
-        public readonly InputSlot<System.Numerics.Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
     }
 }

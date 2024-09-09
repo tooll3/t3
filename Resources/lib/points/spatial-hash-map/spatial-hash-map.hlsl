@@ -2,6 +2,7 @@
 // This code is derived after Guillaume Boissé 
 
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
 
@@ -74,7 +75,7 @@ void CountParticlesPerCell(uint DTid : SV_DispatchThreadID, uint _GI: SV_GroupIn
         return; // out of bounds
 
     //const uint particleIndex = aliveIndexBuffer[DTid.x];
-    const float3 position = _points[DTid.x].position;
+    const float3 position = _points[DTid.x].Position;
 
     if(!ParticleGridInsert(DTid.x, position))
         PointCellIndices[DTid.x] = uint2(uint(-1), 0);

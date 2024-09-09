@@ -1,6 +1,6 @@
 {
   "Id": "e64f95e4-c045-400f-98ca-7c020ad46174"/*Switch*/,
-  "Description": "Switches between connected graphs.\n\nThe index starts with 0 for the first input and will wrap on values exceeding the count of connected inputs.\n\nTip: \n- use index -1 to activate non (I.e. disable all)\n- use index -2 to activate all\n\nThe naming of this operator diverges from the Pick... convention like [PickColor], [PickImage] etc because it also allows to execute \"nothing\" or all connected inputs. \nThis is a a consequence of command being the only \"type\" that doesn't return data but only executes connected commands.\n\n\n",
+  "Description": "Switches between connected graphs. Can be used to \"cut\" between scenes.\nThe index starts with 0 for the first input and will wrap on values exceeding the count of connected inputs.\n\nTip: \n- use index -1 to activate non (I.e. disable all)\n- use index -2 to activate all\n\nThe naming of this operator diverges from the Pick... convention like [PickColor], [PickImage] etc because it also allows to execute \"nothing\" or all connected inputs. \nThis is a a consequence of command being the only \"type\" that doesn't return data but only executes connected commands.\n\nFor a more visual approach see [TimeClip].\n",
   "InputUis": [
     {
       "InputId": "988dd1b5-636d-4a78-9592-2c6601401cc1"/*Commands*/,
@@ -8,21 +8,27 @@
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "GroupTitle": "Input Scene",
+      "Description": "Scene Input"
     },
     {
       "InputId": "00fd2794-567a-4f9b-a900-c2ebf9760764"/*Index*/,
       "Position": {
         "X": 0.0,
         "Y": 45.0
-      }
+      },
+      "GroupTitle": "Scene Selection",
+      "Description": "Selects which connection is active starting from 0.\n-1 deactivates all incoming scenes.\n-2 activates all incoming scenes.\n\nNote that the index is wrapped: If you have two inputs connected, an index of 2 will route to the first."
     },
     {
       "InputId": "e896b269-d17e-417f-be1f-2d6e9addae91"/*OptimizeInvalidation*/,
       "Position": {
         "X": 0.0,
         "Y": 90.0
-      }
+      },
+      "Description": "If enabled Tooll will only invalidate the active connection. This can significantly improve performance for very complex scenes with thousands of Ops.\nThis feature is experimental and might have unexpected side effects.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],

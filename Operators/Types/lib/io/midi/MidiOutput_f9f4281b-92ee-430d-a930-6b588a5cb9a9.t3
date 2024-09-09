@@ -25,11 +25,15 @@
     },
     {
       "Id": "61ccd308-0006-42de-b190-c006e99b5871"/*Velocity*/,
-      "DefaultValue": 1.0
+      "DefaultValue": -1.0
     },
     {
       "Id": "abe9393e-282e-4de0-8f86-541fa955658f"/*DurationInSecs*/,
       "DefaultValue": 0.1
+    },
+    {
+      "Id": "a10e3f7b-d132-49ca-9f6d-726d5e699443"/*Velocity127*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

@@ -1,6 +1,5 @@
 ﻿using System;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -14,7 +13,7 @@ namespace T3.Operators.Types.Id_57a1ee33_702a_41ad_a17e_b43033d58638
     public class RtvFromTexture2d : Instance<RtvFromTexture2d>, IStatusProvider
     {
         [Output(Guid = "515E87C9-4CF8-4948-BA64-F6261F7FE5FC")]
-        public readonly Slot<RenderTargetView> RenderTargetView = new Slot<RenderTargetView>();
+        public readonly Slot<RenderTargetView> RenderTargetView = new();
 
         public RtvFromTexture2d()
         {

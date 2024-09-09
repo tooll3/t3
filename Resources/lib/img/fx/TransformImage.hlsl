@@ -46,7 +46,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float2 divisions = float2(sourceAspectRatio / Stretch.x, 1 / Stretch.y) / Scale;
     float2 p = psInput.texCoord;
-    p += Offset;
+    float2 offset = Offset * float2(-1,1); //translation on X will match the user's movement 
+    p += offset;
     p -= 0.5;
 
     // Rotate

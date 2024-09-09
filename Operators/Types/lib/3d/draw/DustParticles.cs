@@ -1,4 +1,3 @@
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -10,10 +9,19 @@ namespace T3.Operators.Types.Id_d14233a2_8240_47d3_bb92_0854f6d3b218
     public class DustParticles : Instance<DustParticles>
     {
         [Output(Guid = "846bc771-7367-48e2-8389-206e2ee5c063")]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        public readonly Slot<Command> Output = new();
+
+        [Input(Guid = "f084ae44-d69a-48c3-936b-b89e310ca185")]
+        public readonly InputSlot<bool> Refresh = new InputSlot<bool>();
 
         [Input(Guid = "df0a84c2-a1e9-492f-903a-5ef7511c6ec8")]
         public readonly InputSlot<int> Count = new InputSlot<int>();
+
+        [Input(Guid = "c42d8124-d656-4b52-864f-9c9d888e0c54")]
+        public readonly InputSlot<float> WrapSize = new InputSlot<float>();
+
+        [Input(Guid = "e3a995dc-ec77-439c-8aed-e47df5e2b923")]
+        public readonly InputSlot<System.Numerics.Vector3> OffsetVolume = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "e92432c8-6ceb-494b-9cf4-b21191567b29")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
@@ -21,8 +29,8 @@ namespace T3.Operators.Types.Id_d14233a2_8240_47d3_bb92_0854f6d3b218
         [Input(Guid = "70f0f867-a4de-44da-b8e3-a7e95e1740a3")]
         public readonly InputSlot<float> Size = new InputSlot<float>();
 
-        [Input(Guid = "c42d8124-d656-4b52-864f-9c9d888e0c54")]
-        public readonly InputSlot<float> WrapSize = new InputSlot<float>();
+        [Input(Guid = "9ef1f3f7-da31-408b-b563-7d6c089278c7")]
+        public readonly InputSlot<System.Numerics.Vector3> Gravity = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "0744e03b-9df3-4a5e-9cfa-f522d9d946ea")]
         public readonly InputSlot<float> NoiseAmount = new InputSlot<float>();
@@ -44,15 +52,6 @@ namespace T3.Operators.Types.Id_d14233a2_8240_47d3_bb92_0854f6d3b218
 
         [Input(Guid = "31cfdca2-7f14-4c88-93ca-6f160829ca78")]
         public readonly InputSlot<float> TrailWidth = new InputSlot<float>();
-
-        [Input(Guid = "f084ae44-d69a-48c3-936b-b89e310ca185")]
-        public readonly InputSlot<bool> Reset = new InputSlot<bool>();
-
-        [Input(Guid = "9ef1f3f7-da31-408b-b563-7d6c089278c7")]
-        public readonly InputSlot<System.Numerics.Vector3> Gravity = new InputSlot<System.Numerics.Vector3>();
-
-        [Input(Guid = "e3a995dc-ec77-439c-8aed-e47df5e2b923")]
-        public readonly InputSlot<System.Numerics.Vector3> OffsetVolume = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "49337c9b-7016-4093-b695-f7d1dd948fa1")]
         public readonly InputSlot<float> FadeNearest = new InputSlot<float>();

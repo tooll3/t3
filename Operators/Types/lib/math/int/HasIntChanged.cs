@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,7 +7,7 @@ namespace T3.Operators.Types.Id_62f7408a_a34a_459a_bd7d_bb349196df9b
     public class HasIntChanged : Instance<HasIntChanged>
     {
         [Output(Guid = "d8ce2d08-4fd3-4a56-92c3-469d661dab8b", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<bool> HasChanged = new Slot<bool>();
+        public readonly Slot<bool> HasChanged = new();
         
 
         public HasIntChanged()
@@ -51,10 +49,10 @@ namespace T3.Operators.Types.Id_62f7408a_a34a_459a_bd7d_bb349196df9b
         private int _lastValue;
         
         [Input(Guid = "A1462674-13D2-4380-8A93-11D0A23DA5AC")]
-        public readonly InputSlot<int> Value = new InputSlot<int>();
+        public readonly InputSlot<int> Value = new();
         
         [Input(Guid = "B68B0839-156E-4F31-916D-13D066C13831", MappedType = typeof(Modes))]
-        public readonly InputSlot<int> ReturnTrueIf = new InputSlot<int>();
+        public readonly InputSlot<int> ReturnTrueIf = new();
 
     }
 }

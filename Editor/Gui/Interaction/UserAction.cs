@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
@@ -75,6 +75,8 @@ public enum UserActions
     SelectToLeft,
 
     SearchGraph,
+    OpenOperator,
+    CloseOperator,
 
     // Layout and window management
     ToggleAllUiElements,
@@ -127,7 +129,7 @@ public enum UserActions
 
 public static class UserActionRegistry
 {
-    public static readonly HashSet<UserActions> DeferredActions = new HashSet<UserActions>();
+    public static readonly HashSet<UserActions> DeferredActions = new();
 
     public static bool WasActionQueued(UserActions action)
     {
@@ -283,7 +285,6 @@ public class KeyboardBinding
                   new KeyboardBinding(UserActions.PlaybackJumpToStartTime, new KeyCombination(Key.Home)),
                   new KeyboardBinding(UserActions.PlaybackJumpToNextKeyframe, new KeyCombination(Key.Period)),
                   new KeyboardBinding(UserActions.PlaybackJumpToPreviousKeyframe, new KeyCombination(Key.Comma)),
-                  new KeyboardBinding(UserActions.PlaybackJumpBack, new KeyCombination(Key.B)),
 
                   new KeyboardBinding(UserActions.Undo, new KeyCombination(Key.Z, ctrl: true)),
                   new KeyboardBinding(UserActions.Redo, new KeyCombination(Key.Z, ctrl: true, shift: true)),
@@ -293,6 +294,8 @@ public class KeyboardBinding
                   new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)),
                   new KeyboardBinding(UserActions.ToggleAnimationPinning, new KeyCombination(Key.K, shift: true)),
 
+                  new KeyboardBinding(UserActions.SetStartTime, new KeyCombination(Key.B)),
+                  new KeyboardBinding(UserActions.SetEndTime, new KeyCombination(Key.N)),
                   new KeyboardBinding(UserActions.TapBeatSync, new KeyCombination(Key.Z)),
                   new KeyboardBinding(UserActions.TapBeatSyncMeasure, new KeyCombination(Key.X)),
                   
@@ -308,6 +311,8 @@ public class KeyboardBinding
                   new KeyboardBinding(UserActions.AddComment, new KeyCombination(Key.C, shift: true, ctrl:true)) { _needsWindowFocus = true },
                   new KeyboardBinding(UserActions.ToggleVariationsWindow, new KeyCombination(Key.V, alt: true)) { _needsWindowFocus = false },
                   new KeyboardBinding(UserActions.SearchGraph, new KeyCombination(Key.F, ctrl: true)) { _needsWindowFocus = false },
+                  new KeyboardBinding(UserActions.OpenOperator, new KeyCombination(Key.I)) { _needsWindowFocus = true },
+                  new KeyboardBinding(UserActions.CloseOperator, new KeyCombination(Key.U)) { _needsWindowFocus = true },
 
                   new KeyboardBinding(UserActions.NavigateBackwards, new KeyCombination(Key.CursorLeft, alt: true)) { _needsWindowFocus = false },
                   new KeyboardBinding(UserActions.NavigateForward, new KeyCombination(Key.CursorRight, alt: true)) { _needsWindowFocus = false },

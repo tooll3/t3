@@ -53,7 +53,7 @@
       }
     },
     {
-      "ChildId": "f6e6cb07-8581-4817-8df6-13e5ff9ec50b"/*RandomizePoints*/,
+      "ChildId": "f6e6cb07-8581-4817-8df6-13e5ff9ec50b"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": 150.0,
         "Y": 28.163574

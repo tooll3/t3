@@ -39,12 +39,12 @@ namespace T3.Editor.Gui.Interaction.Timing
                     if (ForwardBeatTaps.ResyncTriggered)
                         BeatTiming.TriggerResyncMeasure();
 
-                    BeatTiming.SlideSyncTime = ForwardBeatTaps.SlideSyncTime;
+                    //BeatTiming.SlideSyncTime = ForwardBeatTaps.SlideSyncTime;
                     Playback.Current.Settings.Bpm = (float)Playback.Current.Bpm;
                     
                     if (SetBpm.TryGetNewBpmRate(out var newBpmRate2))
                     {
-                        Log.Warning("SetBpm in BeatTapping mode has effect.");
+                        Log.Warning("SetBpm in BeatTapping mode has no effect.");
                         // settings.Bpm = newBpmRate2;
                     }
                     

@@ -27,14 +27,14 @@
       "SymbolId": "17188f49-1243-4511-a46c-1804cae10768",
       "InputValues": [
         {
-          "Id": "d737860b-2864-472d-ad46-4061b63a12d4"/*Seed*/,
-          "Type": "System.Single",
-          "Value": 10.15
-        },
-        {
           "Id": "b3d526ee-b1f1-4254-b702-1980d659e557"/*Count*/,
           "Type": "System.Int32",
           "Value": 1000
+        },
+        {
+          "Id": "d737860b-2864-472d-ad46-4061b63a12d4"/*Seed*/,
+          "Type": "System.Single",
+          "Value": 10.15
         }
       ],
       "Outputs": []
@@ -107,11 +107,6 @@
           "Id": "60cea2c3-02ae-4132-ad11-3f16c2f71b6e"/*ScatterSelect*/,
           "Type": "System.Single",
           "Value": 0.99
-        },
-        {
-          "Id": "5171f411-42de-4701-acec-eb8ab69f21c5"/*StepInt*/,
-          "Type": "System.Int32",
-          "Value": 1
         }
       ],
       "Outputs": []
@@ -189,7 +184,7 @@
       "Outputs": []
     },
     {
-      "Id": "6c8a90f2-5868-444b-8ee4-d3285bf59d5b"/*RandomizePoints*/,
+      "Id": "6c8a90f2-5868-444b-8ee4-d3285bf59d5b"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -471,17 +466,14 @@
           }
         },
         {
+          "Id": "c6c3d50e-9731-42cc-a0fc-ee8d15ac6cca"/*Radius*/,
+          "Type": "System.Single",
+          "Value": 0.33
+        },
+        {
           "Id": "4ac28e13-fac9-4f1a-9aa7-e564a0d57e93"/*Round*/,
           "Type": "System.Single",
           "Value": 0.0
-        },
-        {
-          "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
-          "Type": "SharpDX.Size2",
-          "Value": {
-            "Width": 32,
-            "Height": 32
-          }
         },
         {
           "Id": "7613bc20-d400-440d-b6a5-5f60ce61a33c"/*Rotate*/,
@@ -489,9 +481,12 @@
           "Value": 60.000004
         },
         {
-          "Id": "c6c3d50e-9731-42cc-a0fc-ee8d15ac6cca"/*Radius*/,
-          "Type": "System.Single",
-          "Value": 0.33
+          "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
+          "Type": "T3.Core.DataTypes.Vector.Int2",
+          "Value": {
+            "X": 32,
+            "Y": 32
+          }
         }
       ],
       "Outputs": []
@@ -993,7 +988,7 @@
       "Outputs": []
     },
     {
-      "Id": "c3b21b67-fccb-4f56-829d-016f499c7746"/*RandomizePoints*/,
+      "Id": "c3b21b67-fccb-4f56-829d-016f499c7746"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {

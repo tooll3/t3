@@ -1,0 +1,127 @@
+{
+  "Id": "c47ab830-aae7-4f8f-b67c-9119bcbaf7df",
+  "Variations": [
+    {
+      "Id": "55c6f7de-ec7b-431e-b3fd-21de8f084448",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Floor",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "97c9849e-751c-49a9-823d-0af839fa503e": {
+            "X": 1.0,
+            "Y": 0.01,
+            "Z": 1.0
+          },
+          "9a7d34a1-ca39-48bc-b977-9a786d23f3b1": 10.0,
+          "febfae90-13e8-4f0a-8ccf-b8825ea525f8": {
+            "X": 0.0,
+            "Y": -0.5,
+            "Z": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "9f7bec32-fcf8-4850-a054-20c3fc5afd06",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Standard Cube",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {}
+      }
+    },
+    {
+      "Id": "28d5042c-2a02-429f-a6bc-7ee49e1fa980",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Floor tesselated huge",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "e445a6da-0b66-46ae-ad2b-650e9cc50798": {
+            "X": 100,
+            "Y": 1,
+            "Z": 100
+          },
+          "97c9849e-751c-49a9-823d-0af839fa503e": {
+            "X": 1.0,
+            "Y": 0.01,
+            "Z": 1.0
+          },
+          "9a7d34a1-ca39-48bc-b977-9a786d23f3b1": 100.0,
+          "febfae90-13e8-4f0a-8ccf-b8825ea525f8": {
+            "X": 0.0,
+            "Y": -0.5,
+            "Z": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "655ae63c-7be9-4108-96ce-fec0b46a1bab",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "Floor tesselated for Fog",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "e445a6da-0b66-46ae-ad2b-650e9cc50798": {
+            "X": 10,
+            "Y": 1,
+            "Z": 10
+          },
+          "97c9849e-751c-49a9-823d-0af839fa503e": {
+            "X": 1.0,
+            "Y": 0.01,
+            "Z": 1.0
+          },
+          "9a7d34a1-ca39-48bc-b977-9a786d23f3b1": 10.0,
+          "febfae90-13e8-4f0a-8ccf-b8825ea525f8": {
+            "X": 0.0,
+            "Y": -0.5,
+            "Z": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "9c9c534e-4952-4289-93ba-ddc859ec9e38",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "Pillar on ground stretchable",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "97c9849e-751c-49a9-823d-0af839fa503e": {
+            "X": 1.0,
+            "Y": 2.24,
+            "Z": 1.0
+          },
+          "febfae90-13e8-4f0a-8ccf-b8825ea525f8": {
+            "X": 0.0,
+            "Y": 0.5,
+            "Z": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

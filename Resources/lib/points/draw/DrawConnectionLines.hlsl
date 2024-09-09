@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 // struct Point
 // {
 //     float3 position;
@@ -95,7 +96,7 @@ psInput vsMain(uint id: SV_VertexID)
     Point pointA = Points[indexPair.x];
     Point pointB = Points[indexPair.y];
 
-    if(isnan(pointA.w) || isnan(pointB.w) ) 
+    if(isnan(pointA.W) || isnan(pointB.W) ) 
     {
         output.position = 0;
         return output;
@@ -117,9 +118,9 @@ psInput vsMain(uint id: SV_VertexID)
 
     //float3 forward = float3(0,1,0);
 
-    float3 posInObject = cornerFactors.x < 0.5 ? pointA.position : pointB.position;
-    float3 posAInCamera = mul(float4(pointA.position,1), ObjectToCamera).xyz;
-    float3 posBInCamera = mul(float4(pointB.position,1), ObjectToCamera).xyz;
+    float3 posInObject = cornerFactors.x < 0.5 ? pointA.Position : pointB.Position;
+    float3 posAInCamera = mul(float4(pointA.Position,1), ObjectToCamera).xyz;
+    float3 posBInCamera = mul(float4(pointB.Position,1), ObjectToCamera).xyz;
     float4 lineInCamera = float4(posAInCamera - posBInCamera, 1);
     float3 forwardInCamera = float3(0,0,-1);
 

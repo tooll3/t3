@@ -52,6 +52,7 @@
         "X": -8.08049,
         "Y": 527.35626
       },
+      "GroupTitle": "Vignette",
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
@@ -77,14 +78,16 @@
         "Y": 662.35626
       },
       "Min": -2.0,
-      "Max": 2.0
+      "Max": 2.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "b3e7d147-5f9a-480f-a5da-ea611e5b4805"/*GenerateMipmaps*/,
       "Position": {
         "X": -8.08049,
         "Y": 707.35626
-      }
+      },
+      "GroupTitle": "Additional options"
     },
     {
       "InputId": "c73bc2e6-338b-40f9-bfd6-32b6472ff250"/*ClampResult*/,
@@ -96,21 +99,21 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "861b22f0-5267-4160-8887-3ec9ffdf9653"/*Vector4ToFloat4*/,
+      "ChildId": "861b22f0-5267-4160-8887-3ec9ffdf9653"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
         "Y": 342.35632
       }
     },
     {
-      "ChildId": "e4224966-8692-4fb3-bfa9-cabca46d9966"/*Vector4ToFloat4*/,
+      "ChildId": "e4224966-8692-4fb3-bfa9-cabca46d9966"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
         "Y": 398.35623
       }
     },
     {
-      "ChildId": "78d8f249-6488-4348-b6b9-451f89cf8c4a"/*Vector4ToFloat4*/,
+      "ChildId": "78d8f249-6488-4348-b6b9-451f89cf8c4a"/*Vector4Components*/,
       "Position": {
         "X": 121.91951,
         "Y": 454.35626
@@ -136,24 +139,24 @@
       }
     },
     {
-      "ChildId": "51711a0c-c86c-465c-b5a9-067d9e8be9bd"/*Vector4ToFloat4*/,
+      "ChildId": "51711a0c-c86c-465c-b5a9-067d9e8be9bd"/*Vector4Components*/,
       "Position": {
         "X": 141.91951,
         "Y": 527.35626
       }
     },
     {
-      "ChildId": "0ac1305d-697b-4d4b-80d2-4672117cb228"/*Vector2ToFloat2*/,
+      "ChildId": "0ac1305d-697b-4d4b-80d2-4672117cb228"/*Vector2Components*/,
       "Position": {
-        "X": 392.6546,
-        "Y": 656.4784
+        "X": 343.63788,
+        "Y": 654.4072
       }
     },
     {
       "ChildId": "10328e98-bef5-4e67-a3f5-566b9752c077"/*_ImageFxShaderSetupStatic*/,
       "Position": {
-        "X": 831.70105,
-        "Y": 192.5587
+        "X": 928.5582,
+        "Y": 132.04938
       }
     },
     {
@@ -168,8 +171,8 @@
     {
       "OutputId": "1680781d-af5e-4b77-beb6-3e4a12d73d59"/*Output*/,
       "Position": {
-        "X": 939.8677,
-        "Y": 642.9786
+        "X": 1149.7422,
+        "Y": 278.45978
       }
     }
   ],

@@ -7,7 +7,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Core.Resource;
 
 namespace T3.Editor.Gui.Graph.Helpers;
 
@@ -45,10 +44,12 @@ internal static class GraphUtils
     {
         return !string.IsNullOrEmpty(newSymbolName)
                && _validTypeNamePattern.IsMatch(newSymbolName)
-               && !SymbolRegistry.Entries.Values.Any(value => string.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase));
+               && !SymbolRegistry.Entries.Values.Any(value => string.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase))
+               && !_reservedWords.Contains(newSymbolName);
     }
 
-    private static readonly Regex _validTypeNamePattern = new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
+    private static readonly string[] _reservedWords = new string[] { "object", "var", "float", "value", "Var", "instance", "item", "Input", "slot" };
+    private static readonly Regex _validTypeNamePattern = new("^[A-Za-z_]+[A-Za-z0-9_]*$");
 
     public static bool IsNameSpaceValid(string nameSpaceString)
     {
@@ -56,12 +57,12 @@ internal static class GraphUtils
                && _validTypeNameSpacePattern.IsMatch(nameSpaceString);
     }
 
-    private static readonly Regex _validTypeNameSpacePattern = new Regex(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
+    private static readonly Regex _validTypeNameSpacePattern = new(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
 
     public static bool IsValidUserName(string userName)
     {
         return _validUserNamePattern.IsMatch(userName);
     }
 
-    private static readonly Regex _validUserNamePattern = new Regex("^[A-Za-z0-9_]+$");
+    private static readonly Regex _validUserNamePattern = new("^[A-Za-z0-9_]+$");
 }

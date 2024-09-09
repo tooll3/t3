@@ -1,6 +1,6 @@
 {
   "Id": "5f846187-e109-45d1-97e0-ae95e3e7d9ba"/*SimNoiseOffset*/,
-  "Description": "Adds Perlin curl noise to a point buffer. \n\nNote: Different from [AddNoise], this effect modifies the original buffer and is therefore not deterministic.",
+  "Description": "Adds Perlin curl noise to a point buffer. \n\nNote: Different from [AddNoise], this effect modifies the original buffer and is therefore not deterministic.\nAlso see [TurbulenceForce]",
   "InputUis": [
     {
       "InputId": "679d6321-a5d7-41cc-a191-5e6cf353dfc4"/*GPoints*/,
@@ -15,56 +15,68 @@
       "Position": {
         "X": -70.61095,
         "Y": 494.005
-      }
+      },
+      "Description": "Defines the total intensity of the random movements.",
+      "AddPadding": "True"
     },
     {
       "InputId": "757c259a-118c-4438-bc09-cdc5708af2bc"/*Frequency*/,
       "Position": {
         "X": -70.61095,
         "Y": 539.00476
-      }
+      },
+      "GroupTitle": "Settings",
+      "Description": "Defines the frequency, i.e. how fast the points move."
     },
     {
       "InputId": "cb3ae9c7-5146-4bc6-9a87-3d17012fab52"/*Phase*/,
       "Position": {
         "X": -70.61095,
         "Y": 584.00464
-      }
+      },
+      "Description": "Defines the phase of the noise and can be animated with a [Value], e.g. using [Time]."
     },
     {
       "InputId": "ecdccc3c-b7a4-43f7-a4c8-0269ecff916a"/*Variation*/,
       "Position": {
         "X": -70.61095,
         "Y": 629.00464
-      }
+      },
+      "Description": "Adds more variance and detail to the noise."
     },
     {
       "InputId": "7f73e109-b13a-4114-b2a5-fe9e86270893"/*AmountDistribution*/,
       "Position": {
         "X": -70.61095,
         "Y": 674.00464
-      }
+      },
+      "Description": "Multiplier for the individual axes to amplify / attenuate the noise in certain directions.",
+      "AddPadding": "True"
     },
     {
       "InputId": "41ee0e65-e2dc-4bf7-af40-bc90517c6c23"/*RotLookupDistance*/,
       "Position": {
         "X": -70.61095,
         "Y": 719.00464
-      }
+      },
+      "GroupTitle": "Additional Options",
+      "Description": "Defines the rotation lookup distance"
     },
     {
       "InputId": "a0982e6c-da72-4d7f-a562-1a6ff144db46"/*UseCurlNoise*/,
       "Position": {
         "X": -70.61095,
         "Y": 764.00464
-      }
+      },
+      "Description": "Switches back and forth between different noise variants"
     },
     {
       "InputId": "536948f3-f76c-418a-9b76-2c9fed4dee33"/*IsEnabled*/,
       "Position": {
         "X": -70.61095,
         "Y": 809.00464
-      }
+      },
+      "Description": "Toggles the effect on / off"
     }
   ],
   "SymbolChildUis": [
@@ -123,7 +135,7 @@
       }
     },
     {
-      "ChildId": "8203f913-4103-4828-a030-7051c2e46ae7"/*Vector3ToFloat3*/,
+      "ChildId": "8203f913-4103-4828-a030-7051c2e46ae7"/*Vector3Components*/,
       "Position": {
         "X": 59.389217,
         "Y": 674.00464

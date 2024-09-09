@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
@@ -27,11 +28,11 @@ namespace T3.Editor.Gui.Windows
         }
 
         private readonly List<ILogEntry> _filteredEntries = new(1000);
-        
+
         protected override void DrawContent()
         {
             if (FrameStats.Last.UiColorsChanged)
-                _colorForLogLevel= UpdateLogLevelColors();
+                _colorForLogLevel = UpdateLogLevelColors();
 
             CustomComponents.ToggleButton("Scroll", ref _shouldScrollToBottom, Vector2.Zero);
             ImGui.SameLine();
@@ -43,6 +44,9 @@ namespace T3.Editor.Gui.Windows
                 {
                     _logEntries.Clear();
                 }
+                _shouldScrollToBottom= true;
+
+                Log.Info("Console cleared!");
             }
 
             ImGui.SameLine();
@@ -70,6 +74,7 @@ namespace T3.Editor.Gui.Windows
             CustomComponents.DrawInputFieldWithPlaceholder("Filter", ref _filterString);
 
             ImGui.Separator();
+            var itemIndex = 0;
             ImGui.BeginChild("scrolling");
             {
                 if (_logEntries == null)
@@ -105,12 +110,12 @@ namespace T3.Editor.Gui.Windows
                         listClipperPtr.Begin(items.Count, ImGui.GetTextLineHeightWithSpacing());
                         while (listClipperPtr.Step())
                         {
-                            for (var i = listClipperPtr.DisplayStart; i < listClipperPtr.DisplayEnd; ++i)
+                            for (itemIndex = listClipperPtr.DisplayStart; itemIndex < listClipperPtr.DisplayEnd; ++itemIndex)
                             {
-                                if (i < 0 || i >= items.Count)
+                                if (itemIndex < 0 || itemIndex >= items.Count)
                                     continue;
 
-                                DrawEntry(items[i]);
+                                DrawEntry(items[itemIndex]);
                             }
                         }
 
@@ -127,6 +132,24 @@ namespace T3.Editor.Gui.Windows
                 else
                 {
                     _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - ImGui.GetWindowHeight();
+                }
+
+                if (itemIndex < _logEntries.Count)
+                {
+                    var dl = ImGui.GetWindowDrawList();
+                    var bottomCenter = ImGui.GetWindowPos() + new Vector2(ImGui.GetWindowWidth() * 0.5f, ImGui.GetWindowHeight());
+                    var lineHeight = ImGui.GetFrameHeight() * 1.4f;
+                    var min = ImGui.GetWindowPos() + new Vector2(0, ImGui.GetWindowHeight() - lineHeight);
+                    var max = ImGui.GetWindowPos() + new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight());
+                    dl.AddRectFilledMultiColor(min, max,
+                                               UiColors.WindowBackground.Fade(0.0f),
+                                               UiColors.WindowBackground.Fade(0.0f),
+                                               UiColors.WindowBackground.Fade(1.0f),
+                                               UiColors.WindowBackground.Fade(1.0f));
+
+                    var label = $"{_logEntries.Count - itemIndex} more lines...";
+                    var labelSize = ImGui.CalcTextSize(label);
+                    dl.AddText(bottomCenter - new Vector2(labelSize.X * 0.5f, ImGui.GetFrameHeight()), UiColors.Text, label);
                 }
             }
 
@@ -160,7 +183,7 @@ namespace T3.Editor.Gui.Windows
 
             var color = GetColorForLogLevel(entryLevel)
                .Fade(FrameStats.Last.HoveredIds.Contains(entry.SourceId) ? 1 : 0.8f);
-            
+
             var lineBreak = entry.Message.IndexOf('\n');
             var hasMessageWithLineBreaks = lineBreak != -1;
             var firstLine = hasMessageWithLineBreaks ? entry.Message.Substring(0, lineBreak) : entry.Message;
@@ -207,6 +230,8 @@ namespace T3.Editor.Gui.Windows
                 if (hasInstancePath && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                 {
                     GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(entry.SourceIdPath?.ToList());
+                    if (!string.IsNullOrEmpty(entry.Message))
+                        EditorUi.Instance.SetClipboardText(entry.Message);
                 }
             }
         }
@@ -233,8 +258,6 @@ namespace T3.Editor.Gui.Windows
             var lineRect = new ImRect(min, min + size);
             return lineRect.Contains(ImGui.GetMousePos());
         }
-        
-                
 
         private static Dictionary<ILogEntry.EntryLevel, Color> _colorForLogLevel
             = UpdateLogLevelColors();
@@ -246,7 +269,7 @@ namespace T3.Editor.Gui.Windows
                            { ILogEntry.EntryLevel.Debug, UiColors.Text },
                            { ILogEntry.EntryLevel.Info, UiColors.Text },
                            { ILogEntry.EntryLevel.Warning, UiColors.StatusWarning },
-                           { ILogEntry.EntryLevel.Error, UiColors.StatusError},
+                           { ILogEntry.EntryLevel.Error, UiColors.StatusError },
                        };
         }
 
@@ -259,7 +282,7 @@ namespace T3.Editor.Gui.Windows
 
             if (_isAtBottom)
             {
-                _shouldScrollToBottom = true;
+                //_shouldScrollToBottom = true;
             }
         }
 

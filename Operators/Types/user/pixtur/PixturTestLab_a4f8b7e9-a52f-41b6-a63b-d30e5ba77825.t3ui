@@ -80,7 +80,7 @@
       }
     },
     {
-      "ChildId": "421e84a6-a0b4-46a1-b9ef-24773d63e4f2"/*FindClosestPointOnMeshExample*/,
+      "ChildId": "421e84a6-a0b4-46a1-b9ef-24773d63e4f2"/*FindClosestPointsOnMeshExample*/,
       "Position": {
         "X": -8300.876,
         "Y": -1179.2916

@@ -15,7 +15,7 @@ namespace T3.Core.DataTypes
     {
         public void Write(JsonTextWriter writer)
         {
-            writer.WritePropertyName(typeof(Gradient).Name);
+            writer.WritePropertyName(nameof(Gradient));
             writer.WriteStartObject();
 
             writer.WriteObject("Interpolation", Interpolation);
@@ -49,7 +49,7 @@ namespace T3.Core.DataTypes
             writer.WriteEndObject();
         }
 
-        public List<Step> Steps { get; set; } = new List<Step>();
+        public List<Step> Steps { get; set; } = new();
         public Interpolations Interpolation { get; set; }
 
         public virtual void Read(JToken inputToken)
@@ -172,13 +172,13 @@ namespace T3.Core.DataTypes
         {
             return new List<Step>
                        {
-                           new Step
+                           new()
                                {
                                    NormalizedPosition = 0,
                                    Color = new Vector4(1, 0, 1, 1),
                                    Id = Guid.NewGuid(),
                                },
-                           new Step
+                           new()
                                {
                                    NormalizedPosition = 1,
                                    Color = new Vector4(0, 0, 1, 1),
@@ -257,7 +257,7 @@ namespace T3.Core.DataTypes
         /// to flag a gradient as modified.
         /// </summary>
         /// <remarks>
-        /// Sampling sampling 30K points takes roughly 5ms. 
+        /// Sampling 30K points takes roughly 5ms. 
         /// </remarks>
         public override int GetHashCode()
         {

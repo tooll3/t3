@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using T3.Operators.Types.Id_39c96cfd_dedf_4f76_a471_d1c26c9ba9fa;
 
 namespace T3.Editor.Gui.Commands
 {
@@ -89,8 +88,8 @@ namespace T3.Editor.Gui.Commands
             return sb.ToString();
         }
 
-        private static readonly Stack<ICommand> _undoStack = new Stack<ICommand>();
-        private static readonly Stack<ICommand> _redoStack = new Stack<ICommand>();
+        private static readonly Stack<ICommand> _undoStack = new();
+        private static readonly Stack<ICommand> _redoStack = new();
 
         public static Stack<ICommand> UndoStack => _undoStack;
         public static Stack<ICommand> RedoStack => _redoStack;

@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi
 
         public double X { get; }
         public double Y { get; }
-        public HashSet<Triangle> AdjacentTriangles { get; } = new HashSet<Triangle>();
+        public HashSet<Triangle> AdjacentTriangles { get; } = new();
 
         public Point(double x, double y)
         {

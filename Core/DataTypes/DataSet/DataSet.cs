@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -8,6 +9,9 @@ using T3.Core.Resource;
 
 namespace T3.Core.DataTypes.DataSet;
 
+/// <summary>
+/// Defines a set of <see cref="DataChannel"/> event channels. 
+/// </summary>
 public class DataSet
 {
     public List<DataChannel> Channels { get; set; } = new();
@@ -48,13 +52,13 @@ public class DataChannel
         {
             throw new Exception("Can't create channel for unregistered value type");
         }
-
+        
         _typeName = typeName;
     }
 
     public List<string> Path { get; set; }
     public string Name { get; set; }
-    public List<DataEvent> Events { get; set; } = new();
+    public List<DataEvent> Events { get; set; } = new(100);
     private readonly Type _type;
     private readonly string _typeName;
 
@@ -83,15 +87,46 @@ public class DataChannel
 
             writer.WritePropertyName("Events");
             writer.WriteStartArray();
-            foreach (var dataEvent in Events)
+            lock (Events)
             {
-                dataEvent.ToJson(converter, writer);
+                foreach (var dataEvent in Events.ToList())
+                {
+                    dataEvent.ToJson(converter, writer);
+                }
             }
 
             writer.WriteEndArray();
         }
 
         writer.WriteEndObject();
+    }
+    
+    public int FindIndexForTime(double time, bool findUpperIndex= true)
+    {
+        if (Events.Count == 0)
+            return -1;
+        
+        var lastIndex = Events.Count - 1;
+        var firstIndex = 0;
+        
+        if (Events[lastIndex].Time <= time)
+            return lastIndex;
+
+        if (Events[firstIndex].Time >= time)
+            return firstIndex;
+        
+        while (lastIndex - firstIndex > 1)
+        {
+            var middleIndex = (firstIndex + lastIndex) / 2;
+
+            var delta = Events[middleIndex].Time - time;
+
+            if (delta < 0)
+                firstIndex = middleIndex;
+            else
+                lastIndex = middleIndex;
+        }
+        return firstIndex;
     }
 }
 
@@ -100,7 +135,7 @@ public class DataEvent
     public double Time;
     public double TimeCode;
 
-    public object Value { get; init; }
+    public object Value { get; set; }
 
     public virtual void ToJson(Action<JsonTextWriter, object> converter, JsonTextWriter writer)
     {
@@ -110,6 +145,20 @@ public class DataEvent
         converter(writer, Value);
         writer.WriteEndObject();
     }
+
+    public bool TryGetNumericValue(out double v)
+    {
+        switch (Value)
+        {
+            case float f: v = f; break;
+            case double d: v = d;break;
+            case int i: v = i; break;
+            case long l: v = l; break;
+            default: v= double.NaN; return false;
+        }
+
+        return !double.IsNaN(v);
+    }
 }
 
 public class DataIntervalEvent :DataEvent
@@ -118,7 +167,7 @@ public class DataIntervalEvent :DataEvent
     
     public bool IsUnfinished => double.IsInfinity(EndTime);
 
-    public void Finish(float someTime)
+    public void Finish(double someTime)
     {
         if (!IsUnfinished)
         {

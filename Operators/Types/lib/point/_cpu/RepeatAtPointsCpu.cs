@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Resources;
-using Microsoft.Win32;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -16,7 +11,7 @@ namespace T3.Operators.Types.Id_478522e1_5683_4db1_a7dc_db59838eca2a
     public class RepeatAtPointsCpu : Instance<RepeatAtPointsCpu>
     {
         [Output(Guid = "0e874f9d-352c-435f-a6d2-d7c8d01e2205")]
-        public readonly Slot<StructuredList> ResultList = new Slot<StructuredList>();
+        public readonly Slot<StructuredList> ResultList = new();
 
         public RepeatAtPointsCpu()
         {
@@ -63,12 +58,12 @@ namespace T3.Operators.Types.Id_478522e1_5683_4db1_a7dc_db59838eca2a
             ResultList.Value = _pointList;
         }
 
-        private readonly StructuredList<Point> _pointList = new StructuredList<Point>(10);
+        private readonly StructuredList<Point> _pointList = new(10);
 
         [Input(Guid = "6FFEC88A-F5B9-4D2F-8B03-A2D3DA9C6B8C")]
-        public readonly InputSlot<StructuredList> SourcePoints = new InputSlot<StructuredList>();
+        public readonly InputSlot<StructuredList> SourcePoints = new();
 
         [Input(Guid = "26EA6E28-E093-484C-9635-5C4AC0EFDFB7")]
-        public readonly InputSlot<StructuredList> DestinationsPoints = new InputSlot<StructuredList>();
+        public readonly InputSlot<StructuredList> DestinationsPoints = new();
     }
 }

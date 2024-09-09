@@ -4,14 +4,15 @@ using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpDX;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
+using Int3 = T3.Core.DataTypes.Vector.Int3;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
@@ -98,7 +99,7 @@ namespace T3.Core.Operator
                     return AddCurvesForFloatValue(inputSlot, vector4InputSlot.Value.ToArray(), originalCurves);
                 case Slot<int> intInputSlot:
                     return AddCurvesForIntValue(inputSlot, new []{intInputSlot.Value}, originalCurves);
-                case Slot<Size2> size2InputSlot:
+                case Slot<Int2> size2InputSlot:
                     return AddCurvesForIntValue(inputSlot, new []{size2InputSlot.Value.Width, size2InputSlot.Value.Height }, originalCurves);
                 case Slot<bool> boolInputSlot:
                     return AddCurvesForIntValue(inputSlot, new []{boolInputSlot.Value ? 1 :0 }, originalCurves);
@@ -197,7 +198,7 @@ namespace T3.Core.Operator
                                                         });
                         vector2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
-                    else if (inputSlot is Slot<Size2> size2InputSlot)
+                    else if (inputSlot is Slot<Int2> size2InputSlot)
                     {
                         size2InputSlot.OverrideWithAnimationAction(context =>
                                                         {
@@ -308,18 +309,16 @@ namespace T3.Core.Operator
  
         public bool IsInstanceAnimated(Instance instance)
         {
-            using (var e = _animatedInputCurves.Keys.GetEnumerator())
+            using var e = _animatedInputCurves.Keys.GetEnumerator();
+            while (e.MoveNext())
             {
-                while (e.MoveNext())
+                if (e.Current.SymbolChildId == instance.SymbolChildId)
                 {
-                    if (e.Current.SymbolChildId == instance.SymbolChildId)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
-
-                return false;
             }
+
+            return false;
 
             // code above generates way less allocations than the line below:
             // return _animatedInputCurves.Any(c => c.Key.InstanceId == instance.Id);

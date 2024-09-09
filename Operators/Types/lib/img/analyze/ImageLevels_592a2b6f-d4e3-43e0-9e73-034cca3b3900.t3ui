@@ -18,7 +18,8 @@
       },
       "Min": -1.0,
       "Max": 1.0,
-      "Scale": 0.001
+      "Scale": 0.001,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "48e80f45-9685-4ded-aa1c-d05e16658c5a"/*Width*/,
@@ -59,7 +60,7 @@
       }
     },
     {
-      "ChildId": "c2951663-1f4b-495e-9f97-c68b333f13b0"/*Vector2ToFloat2*/,
+      "ChildId": "c2951663-1f4b-495e-9f97-c68b333f13b0"/*Vector2Components*/,
       "Position": {
         "X": 159.7204,
         "Y": 245.94528

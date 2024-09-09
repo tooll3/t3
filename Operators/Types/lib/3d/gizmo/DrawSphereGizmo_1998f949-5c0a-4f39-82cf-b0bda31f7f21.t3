@@ -8,6 +8,10 @@
       "DefaultValue": 1.0
     },
     {
+      "Id": "a407fbe3-1f1b-4466-b4c2-511733046d00"/*InnerRadius*/,
+      "DefaultValue": 0.25
+    },
+    {
       "Id": "188c2244-e55a-4c55-be93-cccbd6fd4e41"/*Color*/,
       "DefaultValue": {
         "X": 1.0,
@@ -15,10 +19,6 @@
         "Z": 1.0,
         "W": 1.0
       }
-    },
-    {
-      "Id": "a407fbe3-1f1b-4466-b4c2-511733046d00"/*InnerRadius*/,
-      "DefaultValue": 0.0
     }
   ],
   "Children": [
@@ -148,7 +148,7 @@
       "Outputs": []
     },
     {
-      "Id": "34c30ed0-b20d-4613-a809-f9b51c01991b"/*Float3ToVector3*/,
+      "Id": "34c30ed0-b20d-4613-a809-f9b51c01991b"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []
@@ -160,7 +160,7 @@
       "Outputs": []
     },
     {
-      "Id": "14be5539-3247-4857-92e8-d6317f78d1c7"/*Float3ToVector3*/,
+      "Id": "14be5539-3247-4857-92e8-d6317f78d1c7"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []

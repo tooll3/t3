@@ -36,20 +36,20 @@
     {
       "Id": "ff0e3f81-1340-40e7-9c95-b88938d63901"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     }
   ],
   "Children": [
     {
-      "Id": "d86c6e46-5cbd-4801-98e0-199cef828843"/*Vector4ToFloat4*/,
+      "Id": "d86c6e46-5cbd-4801-98e0-199cef828843"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "ff64625a-fc9c-4919-9eae-b838cecdc3a4"/*Vector4ToFloat4*/,
+      "Id": "ff64625a-fc9c-4919-9eae-b838cecdc3a4"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -186,10 +186,10 @@
       "InputValues": [
         {
           "Id": "03749b41-cc3c-4f38-aea6-d7cea19fc073"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 0,
-            "Height": 0
+            "X": 0,
+            "Y": 0
           }
         },
         {

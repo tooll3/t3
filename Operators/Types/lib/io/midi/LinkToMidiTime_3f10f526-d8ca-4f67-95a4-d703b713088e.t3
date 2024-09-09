@@ -18,14 +18,14 @@
       "SymbolId": "c6d22dc3-a6ff-4a6f-aa14-8be6595da2b1",
       "InputValues": [
         {
-          "Id": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*Enabled*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
           "Id": "61ad3f49-8188-45bd-8d72-bbb35c04ca3c"/*TriggerMode*/,
           "Type": "System.Int32",
           "Value": 1
+        },
+        {
+          "Id": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*Enabled*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []

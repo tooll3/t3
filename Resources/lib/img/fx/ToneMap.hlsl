@@ -6,15 +6,7 @@ cbuffer ParamConstants : register(b0)
 {
     float Mode;
     float CorrectGamma;
-}
-
-
-cbuffer TimeConstants : register(b1)
-{
-    float globalTime;
-    float time;
-    float runTime;
-    float beatTime;
+    float GammaValue;
 }
 
 struct vsOutput
@@ -67,7 +59,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 {
     float2 uv = psInput.texCoord;
     float4 c = inputTexture.SampleLevel(texSampler, uv, 0.0);
-
+    
     if(Mode < 0.5) {
         c= float4( acesFilm(c.rgb), 1);
     }
@@ -80,9 +72,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     else if (Mode < 3.5) {
         c= float4( tonemapUncharted2(c.rgb), 1);
     }
-
+    
     if(CorrectGamma > 0.5) {
-        float gamma = 2.2;
+        float gamma = GammaValue;
         c.rgb = pow(c.rgb, 1.0/gamma);
     }
 

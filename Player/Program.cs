@@ -16,6 +16,7 @@ using SharpDX.DXGI;
 using SharpDX.Windows;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -41,7 +42,7 @@ namespace T3.Player
             [Option(Default = 1080, Required = false, HelpText = "Defines the height")]
             public int Height { get; set; }
 
-            public Size Size => new Size(Width, Height);
+            public Size Size => new(Width, Height);
 
             [Option(Default = false, Required = false, HelpText = "Run in windowed mode")]
             public bool Windowed { get; set; }
@@ -65,16 +66,16 @@ namespace T3.Player
 
                 var _ = new ProjectSettings(saveOnQuit: false);
 
-                Options options = ParseCommandLine(args);
-                if (options == null)
+                _commandLineOptions = ParseCommandLine(args);
+                if (_commandLineOptions == null)
                     return;
 
-                _vsync = !options.NoVsync;
-                Log.Debug($"using vsync: {_vsync}, windowed: {options.Windowed}, size: {options.Size}, loop: {options.Loop}, logging: {options.Logging}");
+                _vsync = !_commandLineOptions.NoVsync;
+                Log.Debug($"using vsync: {_vsync}, windowed: {_commandLineOptions.Windowed}, size: {_commandLineOptions.Size}, loop: {_commandLineOptions.Loop}, logging: {_commandLineOptions.Logging}");
 
-                var form = new RenderForm($"{ProjectSettings.Config.MainOperatorName}")
+                _renderForm = new RenderForm($"{ProjectSettings.Config.MainOperatorName}")
                                {
-                                   ClientSize = options.Size,
+                                   ClientSize = _commandLineOptions.Size,
                                    AllowUserResizing = false,
                                    Icon = new Icon(@"Resources\t3-editor\images\t3.ico")
                                };
@@ -83,10 +84,10 @@ namespace T3.Player
                 var desc = new SwapChainDescription()
                                {
                                    BufferCount = 3,
-                                   ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
+                                   ModeDescription = new ModeDescription(_renderForm.ClientSize.Width, _renderForm.ClientSize.Height,
                                                                          new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                                   IsWindowed = options.Windowed,
-                                   OutputHandle = form.Handle,
+                                   IsWindowed = _commandLineOptions.Windowed,
+                                   OutputHandle = _renderForm.Handle,
                                    SampleDescription = new SampleDescription(1, 0),
                                    SwapEffect = SwapEffect.FlipDiscard,
                                    Flags = SwapChainFlags.AllowModeSwitch,
@@ -95,12 +96,12 @@ namespace T3.Player
 
                 // Create Device and SwapChain
                 #if DEBUG || FORCE_D3D_DEBUG
-            var deviceCreationFlags = DeviceCreationFlags.Debug;
+                var deviceCreationFlags = DeviceCreationFlags.Debug;
                 #else
                 var deviceCreationFlags = DeviceCreationFlags.None;
                 #endif
-                Device.CreateWithSwapChain(DriverType.Hardware, deviceCreationFlags, desc, out var device, out _swapChain);
-                var context = device.ImmediateContext;
+                Device.CreateWithSwapChain(DriverType.Hardware, deviceCreationFlags, desc, out _device, out _swapChain);
+                _deviceContext = _device.ImmediateContext;
 
                 if (_swapChain.IsFullScreen)
                 {
@@ -109,19 +110,19 @@ namespace T3.Player
 
                 // Ignore all windows events
                 var factory = _swapChain.GetParent<Factory>();
-                factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAll);
+                factory.MakeWindowAssociation(_renderForm.Handle, WindowAssociationFlags.IgnoreAll);
 
-                var startedWindowed = options.Windowed;
+                var startedWindowed = _commandLineOptions.Windowed;
 
-                form.KeyDown += HandleKeyDown;
-                form.KeyUp += HandleKeyUp;
+                _renderForm.KeyDown += HandleKeyDown;
+                _renderForm.KeyUp += HandleKeyUp;
 
-                form.KeyUp += (sender, keyArgs) =>
+                _renderForm.KeyUp += (sender, keyArgs) =>
                               {
                                   if (startedWindowed && keyArgs.Alt && keyArgs.KeyCode == Keys.Enter)
                                   {
                                       _swapChain.IsFullScreen = !_swapChain.IsFullScreen;
-                                      RebuildBackBuffer(form, device, ref _renderView, ref _backBuffer, ref _swapChain);
+                                      RebuildBackBuffer(_renderForm, _device, ref _renderView, ref _backBuffer, ref _swapChain);
                                       if (_swapChain.IsFullScreen)
                                       {
                                           Cursor.Hide();
@@ -154,22 +155,38 @@ namespace T3.Player
                                   }
                               };
 
-                form.MouseMove += MouseMoveHandler;
-                form.MouseClick += MouseMoveHandler;
+                _renderForm.MouseMove += MouseMoveHandler;
+                _renderForm.MouseClick += MouseMoveHandler;
 
                 // New RenderTargetView from the backbuffer
                 _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
-                _renderView = new RenderTargetView(device, _backBuffer);
+                _renderView = new RenderTargetView(_device, _backBuffer);
 
-                ResourceManager.Init(device);
+                var shaderCompiler = new DX11ShaderCompiler
+                                         {
+                                             Device = _device
+                                         };
+                ShaderCompiler.Instance = shaderCompiler;
+                ResourceManager.Init(_device);
                 ResourceManager resourceManager = ResourceManager.Instance();
-                _fullScreenVertexShaderId =
-                    resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
-                resourceManager.CreatePixelShaderFromFile(out _fullScreenPixelShaderId, 
-                                                          @"Resources\lib\dx11\fullscreen-texture.hlsl", 
-                                                          "psMain", 
-                                                          "ps-fullscreen-texture", 
-                                                          () => { });
+                var gotVertexShader = resourceManager.TryCreateShaderResource(out  _fullScreenVertexShaderResource,
+                                                                              fileName: @"lib\dx11\fullscreen-texture.hlsl",
+                                                                              entryPoint: "vsMain",
+                                                                              name: "vs-fullscreen-texture",
+                                                                              errorMessage: out var errorMessage);
+                
+                if(!string.IsNullOrWhiteSpace(errorMessage))
+                    Log.Error($"Failed to load vertex shader: {errorMessage}");
+                    
+                
+                var gotPixelShader = resourceManager.TryCreateShaderResource(out  _fullScreenPixelShaderResource,
+                                                                             fileName: @"lib\dx11\fullscreen-texture.hlsl",
+                                                                             entryPoint: "psMain",
+                                                                             name: "ps-fullscreen-texture",
+                                                                             errorMessage: out errorMessage);
+                
+                if(!string.IsNullOrWhiteSpace(errorMessage))
+                    Log.Error($"Failed to load pixel shader: {errorMessage}");
 
                 Assembly operatorsAssembly;
                 try
@@ -213,7 +230,7 @@ namespace T3.Player
                             _playback.Bpm = _soundtrack.Bpm;
                             // Trigger loading clip
                             AudioEngine.UseAudioClip(_soundtrack, 0);
-                            AudioEngine.CompleteFrame(_playback); // Initialize
+                            AudioEngine.CompleteFrame(_playback, Playback.LastFrameDuration); // Initialize
                             prerenderRequired = true;
                         }
                         else
@@ -231,7 +248,7 @@ namespace T3.Player
                                              IsScissorEnabled = false,
                                              IsDepthClipEnabled = false
                                          };
-                var rasterizerState = new RasterizerState(device, rasterizerDesc);
+                _rasterizerState = new RasterizerState(_device, rasterizerDesc);
 
                 // Sample some frames to preload all shaders and resources
                 if (prerenderRequired)
@@ -245,11 +262,11 @@ namespace T3.Player
                         DirtyFlag.IncrementGlobalTicks();
                         DirtyFlag.InvalidationRefFrame++;
 
-                        context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
-                        context.OutputMerger.SetTargets(_renderView);
+                        _deviceContext.Rasterizer.SetViewport(new Viewport(0, 0, _renderForm.ClientSize.Width, _renderForm.ClientSize.Height, 0.0f, 1.0f));
+                        _deviceContext.OutputMerger.SetTargets(_renderView);
 
                         _evalContext.Reset();
-                        _evalContext.RequestedResolution = new Size2(options.Width, options.Height);
+                        _evalContext.RequestedResolution = new Int2(_commandLineOptions.Width, _commandLineOptions.Height);
 
                         if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
                         {
@@ -277,77 +294,88 @@ namespace T3.Player
                 stopwatch.Start();
 
                 // Main loop
-                RenderLoop.Run(form, () =>
-                                     {
-                                         WasapiAudioInput.StartFrame(_playback.Settings);
-                                         _playback.Update();
-
-                                         //Log.Debug($" render at playback time {_playback.TimeInSecs:0.00}s");
-                                         if (_soundtrack != null)
-                                         {
-                                             AudioEngine.UseAudioClip(_soundtrack, _playback.TimeInSecs);
-                                             if (_playback.TimeInSecs >= _soundtrack.LengthInSeconds + _soundtrack.StartTime)
-                                             {
-                                                 if (options.Loop)
-                                                 {
-                                                     _playback.TimeInSecs = 0.0;
-                                                 }
-                                                 else
-                                                 {
-                                                     Application.Exit();
-                                                 }
-                                             }
-                                         }
-
-                                         // Update
-                                         AudioEngine.CompleteFrame(_playback);
-
-                                         DirtyFlag.IncrementGlobalTicks();
-                                         DirtyFlag.InvalidationRefFrame++;
-
-                                         context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
-                                         context.OutputMerger.SetTargets(_renderView);
-
-                                         _evalContext.Reset();
-                                         _evalContext.RequestedResolution = new Size2(options.Width, options.Height);
-
-                                         if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
-                                         {
-                                             textureOutput.Invalidate();
-                                             Texture2D tex = textureOutput.GetValue(_evalContext);
-                                             if (tex != null)
-                                             {
-                                                 context.Rasterizer.State = rasterizerState;
-                                                 if (ResourceManager.ResourcesById[_fullScreenVertexShaderId] is VertexShaderResource vsr)
-                                                     context.VertexShader.Set(vsr.VertexShader);
-                                                 if (ResourceManager.ResourcesById[_fullScreenPixelShaderId] is PixelShaderResource psr)
-                                                     context.PixelShader.Set(psr.PixelShader);
-                                                 var srv = new ShaderResourceView(device, tex);
-                                                 context.PixelShader.SetShaderResource(0, srv);
-
-                                                 context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-                                                 context.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
-                                                 context.Draw(3, 0);
-                                                 context.PixelShader.SetShaderResource(0, null);
-                                             }
-                                         }
-
-                                         _swapChain.Present(_vsync ? 1 : 0, PresentFlags.None);
-                                     });
+                RenderLoop.Run(_renderForm, RenderCallback);
 
                 // Release all resources
                 _renderView.Dispose();
                 _backBuffer.Dispose();
-                context.ClearState();
-                context.Flush();
-                device.Dispose();
-                context.Dispose();
+                _deviceContext.ClearState();
+                _deviceContext.Flush();
+                _device.Dispose();
+                _deviceContext.Dispose();
             }
             catch (Exception e)
             {
                 Log.Error("Exception in main loop: " + e);
                 fileWriter.Dispose(); // flush and close
             }
+        }
+
+        private static void RenderCallback()
+        {
+            WasapiAudioInput.StartFrame(_playback.Settings);
+            _playback.Update();
+
+            //Log.Debug($" render at playback time {_playback.TimeInSecs:0.00}s");
+            if (_soundtrack != null)
+            {
+                AudioEngine.UseAudioClip(_soundtrack, _playback.TimeInSecs);
+                if (_playback.TimeInSecs >= _soundtrack.LengthInSeconds + _soundtrack.StartTime)
+                {
+                    if (_commandLineOptions.Loop)
+                    {
+                        _playback.TimeInSecs = 0.0;
+                    }
+                    else
+                    {
+                        Application.Exit();
+                    }
+                }
+            }
+
+            // Update
+            AudioEngine.CompleteFrame(_playback, Playback.LastFrameDuration);
+
+            DirtyFlag.IncrementGlobalTicks();
+            DirtyFlag.InvalidationRefFrame++;
+
+            _deviceContext.Rasterizer.SetViewport(new Viewport(0, 0, _renderForm.ClientSize.Width, _renderForm.ClientSize.Height, 0.0f, 1.0f));
+            _deviceContext.OutputMerger.SetTargets(_renderView);
+
+            _evalContext.Reset();
+            _evalContext.RequestedResolution = new Int2(_commandLineOptions.Width, _commandLineOptions.Height);
+
+            if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
+            {
+                textureOutput.Invalidate();
+                var outputTexture = textureOutput.GetValue(_evalContext);
+                var textureChanged = outputTexture != _outputTexture;
+                
+                if (_outputTexture != null || textureChanged)
+                {
+                    _outputTexture = outputTexture;
+                    _deviceContext.Rasterizer.State = _rasterizerState;
+                    if (_fullScreenVertexShaderResource?.Shader != null)
+                        _deviceContext.VertexShader.Set(_fullScreenVertexShaderResource.Shader);
+                    if (_fullScreenPixelShaderResource?.Shader != null)
+                        _deviceContext.PixelShader.Set(_fullScreenPixelShaderResource.Shader);
+
+                    if (_outputTextureSrv == null || textureChanged)
+                    {
+                        Log.Debug("Creating new player render srv...");
+                        _outputTextureSrv = new ShaderResourceView(_device, _outputTexture);
+                    }
+                    
+                    _deviceContext.PixelShader.SetShaderResource(0, _outputTextureSrv);
+
+                    _deviceContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+                    _deviceContext.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
+                    _deviceContext.Draw(3, 0);
+                    _deviceContext.PixelShader.SetShaderResource(0, null);
+                }
+            }
+
+            _swapChain.Present(_vsync ? 1 : 0, PresentFlags.None);
         }
 
         private static void MouseMoveHandler(object sender, MouseEventArgs e)
@@ -436,7 +464,14 @@ namespace T3.Player
         private static EvaluationContext _evalContext;
         private static Playback _playback;
         private static AudioClip _soundtrack;
-        private static uint _fullScreenVertexShaderId;
-        private static uint _fullScreenPixelShaderId;
+        private static DeviceContext _deviceContext;
+        private static Options _commandLineOptions;
+        private static RenderForm _renderForm;
+        private static Texture2D _outputTexture;
+        private static ShaderResourceView _outputTextureSrv;
+        private static RasterizerState _rasterizerState;
+        private static ShaderResource<VertexShader> _fullScreenVertexShaderResource;
+        private static ShaderResource<PixelShader> _fullScreenPixelShaderResource;
+        private static Device _device;
     }
 }

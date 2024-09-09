@@ -1,18 +1,14 @@
-using System;
-using T3.Core;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_3631c727_36a0_4f26_ae76_ee9c100efc33
 {
     public class Loop : Instance<Loop>
     {
         [Output(Guid = "5685cbc4-fe19-4f0e-95a3-147d1fbbad15")]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        public readonly Slot<Command> Output = new();
 
         public Loop()
         {

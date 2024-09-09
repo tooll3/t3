@@ -8,7 +8,8 @@
       "Position": {
         "X": -690.1123,
         "Y": -64.879105
-      }
+      },
+      "GroupTitle": "Points Input"
     },
     {
       "InputId": "d815c639-d412-4266-81df-f5889a87b4f6"/*SpriteBuffer*/,
@@ -16,7 +17,8 @@
       "Position": {
         "X": -690.1123,
         "Y": -8.879105
-      }
+      },
+      "GroupTitle": "Sprites Input"
     },
     {
       "InputId": "08c37dd9-155c-4fb4-a9d0-f29ddd7da9b0"/*Texture_*/,
@@ -29,36 +31,39 @@
     {
       "InputId": "c694946c-37b6-4792-8fc5-4204ede69f90"/*Color*/,
       "Position": {
-        "X": -672.44586,
-        "Y": 187.29137
-      }
+        "X": -680.84375,
+        "Y": 326.23785
+      },
+      "GroupTitle": "Appearance"
     },
     {
       "InputId": "cf7692c9-d6bd-4e93-b89c-14ab507b6da5"/*Size*/,
       "Position": {
-        "X": -672.44586,
-        "Y": 232.29138
+        "X": -680.84375,
+        "Y": 371.23785
       }
+    },
+    {
+      "InputId": "926bdbc2-ee14-4125-8886-18f445766ef3"/*AlphaCutOff*/,
+      "Position": {
+        "X": -680.84375,
+        "Y": 416.23785
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "9df7e923-76d2-4e98-af72-3a73b47de960"/*EnableDepthWrite*/,
       "Position": {
         "X": -674.21533,
         "Y": 586.9566
-      }
+      },
+      "GroupTitle": "Additional Options"
     },
     {
       "InputId": "fecc8310-208e-45de-a43b-bf547663e743"/*BlendMod*/,
       "Position": {
         "X": -674.21533,
         "Y": 631.9566
-      }
-    },
-    {
-      "InputId": "926bdbc2-ee14-4125-8886-18f445766ef3"/*AlphaCutOff*/,
-      "Position": {
-        "X": -674.21533,
-        "Y": 676.9566
       }
     }
   ],
@@ -139,7 +144,7 @@
       }
     },
     {
-      "ChildId": "4fb51a6b-1a60-4806-b456-9ce0f1e21b82"/*Vector4ToFloat4*/,
+      "ChildId": "4fb51a6b-1a60-4806-b456-9ce0f1e21b82"/*Vector4Components*/,
       "Style": "Resizable",
       "Size": {
         "X": 111.079544,

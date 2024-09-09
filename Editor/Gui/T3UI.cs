@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,12 +15,14 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Editor.App;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.Midi;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Selection;
@@ -31,36 +33,41 @@ using T3.Editor.Gui.UiHelpers.Wiki;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 
 namespace T3.Editor.Gui;
 
-public class T3Ui
+public class T3Ui: IDisposable
 {
     static T3Ui()
     {
         var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
-        UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: false);
 
-        //WindowManager.TryToInitialize();
+        #if DEBUG
+        var log = true;
+        #else
+        var log = false;
+        #endif
+        
+        UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: log);
         ExampleSymbolLinking.UpdateExampleLinks();
-        VariationHandling.Init();
 
         Playback.Current = DefaultTimelinePlayback;
         ThemeHandling.Initialize();
     }
 
     public static readonly Playback DefaultTimelinePlayback = new();
-    public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new BeatTimingPlayback();
+    public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new() { PlaybackSpeed = 1};
         
     private void InitializeAfterAppWindowReady()
     {
         if (_initialed || ImGui.GetWindowSize() == Vector2.Zero)
             return;
             
-        ActiveMidiRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
+        CompatibleMidiDeviceHandling.InitializeConnectedDevices();
         _initialed = true;
     }
 
@@ -68,8 +75,8 @@ public class T3Ui
 
     public void ProcessFrame()
     {
+        Profiling.KeepFrameData();
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-        
         
         CustomComponents.BeginFrame();
         FormInputs.BeginFrame();
@@ -78,19 +85,23 @@ public class T3Ui
         // Prepare the current frame 
         RenderStatsCollector.StartNewFrame();
             
-        PlaybackUtils.UpdatePlaybackAndSyncing();
+        if (!Playback.Current.IsRenderingToFile)
+        {
+            PlaybackUtils.UpdatePlaybackAndSyncing();
+            AudioEngine.CompleteFrame(Playback.Current, Playback.LastFrameDuration);    // Update
+        }
+        TextureReadAccess.Update();
 
-
-        //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
-            
-        AudioEngine.CompleteFrame(Playback.Current);    // Update
-            
         AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
 
         VariationHandling.Update();
         MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
         MouseWheelFieldHovered = false;
 
+        // A work around for potential mouse capture
+        DragFieldWasHoveredLastFrame = DragFieldHovered;
+        DragFieldHovered = false;
+        
         FitViewToSelectionHandling.ProcessNewFrame();
         SrvManager.FreeUnusedTextures();
         KeyboardBinding.InitFrame();
@@ -99,7 +110,9 @@ public class T3Ui
         // Set selected id so operator can check if they are selected or not  
         var selectedInstance = NodeSelection.GetSelectedInstance();
         MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
-            
+        
+        CompatibleMidiDeviceHandling.UpdateConnectedDevices();
+        
         // Keep invalidating selected op to enforce rendering of Transform gizmo  
         foreach (var si in NodeSelection.GetSelectedInstances().ToList())
         {
@@ -123,12 +136,14 @@ public class T3Ui
         // Draw everything!
         ImGui.DockSpaceOverViewport();
 
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 3);
         WindowManager.Draw();
+        ImGui.PopStyleVar();
             
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
-
+        
         FrameStats.CompleteFrame();
         TriggerGlobalActionsFromKeyBindings();
             
@@ -137,27 +152,33 @@ public class T3Ui
             DrawAppMenuBar();
         }
             
-        _userNameDialog.Draw();
         _searchDialog.Draw();
         _importDialog.Draw();
         _createFromTemplateDialog.Draw();
-            
-        if (!UserSettings.IsUserNameDefined() )
+        _userNameDialog.Draw();
+
+        if (IsWindowLayoutComplete())
         {
-            UserSettings.Config.UserName = Environment.UserName;
-            _userNameDialog.ShowNextFrame();
+            if (!UserSettings.IsUserNameDefined() )
+            {
+                UserSettings.Config.UserName = Environment.UserName;
+                _userNameDialog.ShowNextFrame();
+            }
         }
 
         KeyboardAndMouseOverlay.Draw();
         
         Playback.OpNotReady = false;
         AutoBackup.AutoBackup.CheckForSave();
+
+        Profiling.EndFrameData();
     }
 
-
-    private Dictionary<ImGuiKey, double> _keyReleaseTimes = new();
-
-
+    /// <summary>
+    /// This a bad work around to defer some ui actions until we have completed all
+    /// window initialization so they are not discarded by the setup process.
+    /// </summary>
+    private static bool IsWindowLayoutComplete() => ImGui.GetFrameCount() > 2;
 
     private void TriggerGlobalActionsFromKeyBindings()
     {
@@ -215,7 +236,7 @@ public class T3Ui
     private void DrawAppMenuBar()
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding * T3Ui.UiScaleFactor);
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowPaddingForMenus * T3Ui.UiScaleFactor);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
             
         if (ImGui.BeginMainMenuBar())
@@ -277,7 +298,7 @@ public class T3Ui
                     UndoRedoStack.Undo();
                 }
 
-                if (ImGui.MenuItem("Redo", "CTRL+Y", false, UndoRedoStack.CanRedo))
+                if (ImGui.MenuItem("Redo", "CTRL+SHIFT+Z", false, UndoRedoStack.CanRedo))
                 {
                     UndoRedoStack.Redo();
                 }
@@ -388,13 +409,16 @@ public class T3Ui
             UserSettings.Config.ShowMainMenu = true;
             UserSettings.Config.ShowTitleAndDescription = true;
             UserSettings.Config.ShowToolbar = true;
-            UserSettings.Config.ShowTimeline = true;
+            if (Playback.Current.Settings.Syncing == PlaybackSettings.SyncModes.Timeline)
+            {
+                UserSettings.Config.ShowTimeline = true;
+            }
         }
             
     }
         
-    private static readonly object _saveLocker = new object();
-    private static readonly Stopwatch _saveStopwatch = new Stopwatch();
+    private static readonly object _saveLocker = new();
+    private static readonly Stopwatch _saveStopwatch = new();
 
     private static void SaveInBackground(bool saveAll)
     {
@@ -453,7 +477,10 @@ public class T3Ui
 
         var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
         var sourceSymbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == symbolChildId);
-        var selectionTargetInstance = compositionOp.Children.Single(instance => instance.SymbolChildId == symbolChildId);
+        var selectionTargetInstance = compositionOp.Children.SingleOrDefault(instance => instance.SymbolChildId == symbolChildId);
+        if (selectionTargetInstance == null)
+            return;
+        
         NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
         FitViewToSelectionHandling.FitViewToSelection();
     }
@@ -488,20 +515,30 @@ public class T3Ui
             Log.Debug($"{s.Name} - {s.Namespace}  {c}");
         }
     }
+    
+   
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        OscDataRecording.Dispose();
+    }
 
     public static readonly UiSymbolData UiSymbolData;
     
-    public static IntPtr NotDroppingPointer = new IntPtr(0);
+    public static IntPtr NotDroppingPointer = new(0);
     public static bool DraggingIsInProgress = false;
     public static bool MouseWheelFieldHovered { private get; set; }
     public static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }
+    public static bool DragFieldHovered { private get; set; }
+    public static bool DragFieldWasHoveredLastFrame { get; private set; }
     public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
     public const string FloatNumberFormat = "{0:F2}";
     public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
     public static float UiScaleFactor { get; set; } = 1;
     public static float DisplayScaleFactor { get; set; } = 1;
     public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
-    public static readonly MidiDataRecording MidiDataRecording = new();
+    public static readonly MidiDataRecording MidiDataRecording = new(DataRecording.ActiveRecordingSet);
+    public static readonly OscDataRecording OscDataRecording = new(DataRecording.ActiveRecordingSet);
         
     //private static readonly AutoBackup.AutoBackup _autoBackup = new();
         
@@ -524,4 +561,6 @@ public class T3Ui
 
     public static bool UseVSync = true;
     public static bool ItemRegionsVisible;
+    
+
 }

@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -19,7 +20,7 @@ cbuffer Params : register(b0)
     float InitialVelocity;
 }
 
-cbuffer IntParams : register(b1)
+cbuffer IntParams : register(b1) 
 {
     int CollectCycleIndex;
 }
@@ -42,7 +43,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     if(Reset > 0.5)
     {
-        CollectedPoints[gi].w =  sqrt(-1);
+        CollectedPoints[gi].W =  sqrt(-1);
         return;
     }
 
@@ -55,12 +56,12 @@ void main(uint3 i : SV_DispatchThreadID)
 
         if(UseAging > 0.5) 
         {
-            CollectedPoints[gi].w = 0.0001;
+            CollectedPoints[gi].W = 0.0001;
         }
 
         if(SetInitialVelocity > 0.5) 
         {
-            CollectedPoints[gi].rotation = q_encode_v(CollectedPoints[gi].rotation, InitialVelocity);
+            CollectedPoints[gi].Rotation = q_encode_v(CollectedPoints[gi].Rotation, InitialVelocity);
         }
     }
 
@@ -70,20 +71,20 @@ void main(uint3 i : SV_DispatchThreadID)
     {
         if(UseAging > 0.5 ) 
         {
-            float age = CollectedPoints[gi].w;
+            float age = CollectedPoints[gi].W;
 
             if(!isnan(age)) 
             {    
                 if(age <= 0)
                 {
-                    CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points
+                    CollectedPoints[gi].W = sqrt(-1); // Flag non-initialized points
                 }
                 else if(age < MaxAge)
                 {
-                    CollectedPoints[gi].w = age+  DeltaTime * AgingRate;
+                    CollectedPoints[gi].W = age+  DeltaTime * AgingRate;
                 }
                 else if(ClampAtMaxAge) {
-                    CollectedPoints[gi].w = MaxAge;
+                    CollectedPoints[gi].W = MaxAge;
                 }
             }
         }
@@ -93,15 +94,15 @@ void main(uint3 i : SV_DispatchThreadID)
             
             Point p = CollectedPoints[gi];
             float4 rot;
-            float v = q_separate_v(p.rotation, rot);
+            float v = q_separate_v(p.Rotation, rot);
 
-            float3 forward =  normalize(rotate_vector(float3(0, 0, 1), rot));
+            float3 forward =  normalize(qRotateVec3(float3(0, 0, 1), rot));
 
             forward *= v * 0.01 * Speed;
-            p.position += forward;
+            p.Position += forward;
 
             v *= (1-Drag);
-            p.rotation = q_encode_v(rot, v);
+            p.Rotation = q_encode_v(rot, v);
 
             CollectedPoints[gi] = p;
         }

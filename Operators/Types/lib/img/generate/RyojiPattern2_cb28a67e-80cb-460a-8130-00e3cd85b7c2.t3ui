@@ -1,6 +1,6 @@
 {
   "Id": "cb28a67e-80cb-460a-8130-00e3cd85b7c2"/*RyojiPattern2*/,
-  "Description": "A pattern generator inspired by the work of Ryoji Ikeda. It subdivides the image space recursively and can generate a range of different patterns.",
+  "Description": "A pattern generator inspired by the work of Ryoji Ikeda. It subdivides the image space recursively and can generate a range of different patterns.\n\nFor an earlier version with less options see: [RyojiPattern1]\n\nOther interesting patterns can be generated with [SinForm] [ZollnerPattern] [FraserGrid] [Raster] [CheckerBoard]",
   "InputUis": [
     {
       "InputId": "e6b078e9-6df0-463c-b7af-ae0d425327db"/*Image*/,
@@ -147,14 +147,14 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "771396db-4841-4c81-8b27-53704b60db30"/*Vector4ToFloat4*/,
+      "ChildId": "771396db-4841-4c81-8b27-53704b60db30"/*Vector4Components*/,
       "Position": {
         "X": -13.804397,
         "Y": 33.416046
       }
     },
     {
-      "ChildId": "77546c21-ecb5-4974-aabe-fa9d64928ea9"/*Vector4ToFloat4*/,
+      "ChildId": "77546c21-ecb5-4974-aabe-fa9d64928ea9"/*Vector4Components*/,
       "Position": {
         "X": -13.804397,
         "Y": 89.41618
@@ -173,56 +173,56 @@
       }
     },
     {
-      "ChildId": "ac37b6b2-2254-40b9-905e-f89088ca32a9"/*Vector2ToFloat2*/,
+      "ChildId": "ac37b6b2-2254-40b9-905e-f89088ca32a9"/*Vector2Components*/,
       "Position": {
         "X": -13.804397,
         "Y": 201.41618
       }
     },
     {
-      "ChildId": "b86e6b15-eb21-408c-8b0d-d954bb7f6efe"/*Vector2ToFloat2*/,
+      "ChildId": "b86e6b15-eb21-408c-8b0d-d954bb7f6efe"/*Vector2Components*/,
       "Position": {
         "X": -17.772799,
         "Y": 423.01044
       }
     },
     {
-      "ChildId": "1a007e43-d525-43fb-bba9-733e531cb6bb"/*Vector4ToFloat4*/,
+      "ChildId": "1a007e43-d525-43fb-bba9-733e531cb6bb"/*Vector4Components*/,
       "Position": {
         "X": -13.804397,
         "Y": 145.41618
       }
     },
     {
-      "ChildId": "f18ca6cf-d901-40a8-a05d-a78b0e4d3ab2"/*Vector2ToFloat2*/,
+      "ChildId": "f18ca6cf-d901-40a8-a05d-a78b0e4d3ab2"/*Vector2Components*/,
       "Position": {
         "X": -17.772799,
         "Y": 479.0104
       }
     },
     {
-      "ChildId": "93d71f0f-dd21-4280-bd99-1e6c2f251c94"/*Vector2ToFloat2*/,
+      "ChildId": "93d71f0f-dd21-4280-bd99-1e6c2f251c94"/*Vector2Components*/,
       "Position": {
         "X": -17.772799,
         "Y": 522.01044
       }
     },
     {
-      "ChildId": "f778382d-9fb5-4a44-89e5-578cc96b7c06"/*Vector2ToFloat2*/,
+      "ChildId": "f778382d-9fb5-4a44-89e5-578cc96b7c06"/*Vector2Components*/,
       "Position": {
         "X": -17.772799,
         "Y": 578.0103
       }
     },
     {
-      "ChildId": "2efcafab-47ab-4790-9960-a0603aebdaf5"/*Vector2ToFloat2*/,
+      "ChildId": "2efcafab-47ab-4790-9960-a0603aebdaf5"/*Vector2Components*/,
       "Position": {
         "X": -13.804397,
         "Y": 257.4162
       }
     },
     {
-      "ChildId": "4ec8d6ef-bdcc-48d1-a340-4e0c475c478f"/*Vector2ToFloat2*/,
+      "ChildId": "4ec8d6ef-bdcc-48d1-a340-4e0c475c478f"/*Vector2Components*/,
       "Position": {
         "X": -13.804397,
         "Y": 298.99762

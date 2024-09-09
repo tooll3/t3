@@ -180,7 +180,7 @@ namespace T3.Operators.Types.Id_40676c51_ecca_4bc3_bd4a_eeb80fc0b937
             SendDataAsync(newEntry);
         }
 
-        private static Random _random = new Random(42);
+        private static Random _random = new(42);
         private int _lastScoreHash;
 
         private async void SendDataAsync(HighScoreEntry newEntry)

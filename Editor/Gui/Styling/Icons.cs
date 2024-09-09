@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
 
@@ -250,6 +251,22 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.Comment, 77),
                 new (Icon.Camera, 78),
                 new (Icon.PopUp, slotIndex:79),
+                new (Icon.Visible, slotIndex:80),
+                new (Icon.Hidden, slotIndex:81),
+                new (Icon.Thumbnails, slotIndex:82),
+                new (Icon.List, slotIndex:83),
+                new (Icon.Sorting, slotIndex:84),
+                new (Icon.Settings2, slotIndex:85),
+                new (Icon.SidePanelRight, slotIndex:86),
+                new (Icon.SidePanelLeft, slotIndex:87),
+                new (Icon.OperatorBypassOff, slotIndex:88),
+                new (Icon.OperatorBypassOn, slotIndex:89),
+                new (Icon.OperatorDisabled, slotIndex:90),
+                new (Icon.Knob, slotIndex:91),
+                new (Icon.ClampMinOn, slotIndex:92),
+                new (Icon.ClampMaxOn, slotIndex:93),
+                new (Icon.ClampMinOff, slotIndex:94),
+                new (Icon.ClampMaxOff, slotIndex:95),
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -336,6 +353,22 @@ namespace T3.Editor.Gui.Styling
         IO,
         Comment,
         Camera,
-        PopUp
+        PopUp,
+        Visible,
+        Hidden,
+        Thumbnails,
+        List,
+        Sorting,
+        Settings2,
+        SidePanelRight,
+        SidePanelLeft,
+        OperatorBypassOff,
+        OperatorBypassOn,
+        OperatorDisabled,
+        Knob,
+        ClampMinOn,
+        ClampMaxOn,
+        ClampMinOff,
+        ClampMaxOff,
     }
 }

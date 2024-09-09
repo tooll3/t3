@@ -35,13 +35,12 @@ namespace T3.Editor.Gui.InputUi
         Relevancy Relevancy { get; set; }
         string GroupTitle { get; set; }
         
-        /// <summary>
-        /// Insert a vertical padding
-        /// </summary>
+        /**Insert a vertical padding */
         bool AddPadding { get; set; }
         bool IsAnimatable { get; }
 
-
+        string Description { get; set; }
+        
         void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time);
         
         InputEditStateFlags DrawParameterEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi, bool hideNonEssentials, bool skipIfDefault);

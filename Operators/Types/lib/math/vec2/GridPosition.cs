@@ -1,11 +1,7 @@
-using System;
-using System.Numerics;
-using SharpDX;
-using T3.Core;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_310e174e_ea52_4c54_90e6_72dc8320118a
@@ -45,10 +41,10 @@ namespace T3.Operators.Types.Id_310e174e_ea52_4c54_90e6_72dc8320118a
         }
         
         [Input(Guid = "854731fb-bbc9-48e7-9bcb-45bc53340945")]
-        public readonly InputSlot<System.Numerics.Vector2> A = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> A = new();
 
         [Input(Guid = "2FA305B7-42FC-44FA-BFCF-219916F93EEF")]
-        public readonly InputSlot<SharpDX.Size2> RasterSize = new();
+        public readonly InputSlot<Int2> RasterSize = new();
         
         [Input(Guid = "938103EE-65BD-4F5E-AE5E-5635DC53E3E6")]
         public readonly InputSlot<int> Index = new();

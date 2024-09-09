@@ -30,7 +30,7 @@ namespace T3.Editor
         public static Device Device { get; private set; }
 
         public static readonly bool IsStandAlone = File.Exists("StartT3.exe");
-        public const string Version = "3.8.2";
+        public const string Version = "3.9.3";
 
         /// <summary>
         /// Generate a release string with 
@@ -54,6 +54,7 @@ namespace T3.Editor
         {
             // Not calling this first will cause exceptions...
             EditorUi.Instance = new MsFormsEditor();
+            ShaderCompiler.Instance = new DX11ShaderCompiler();
             
             StartupValidation.ValidateNotRunningFromSystemFolder();
             
@@ -65,7 +66,17 @@ namespace T3.Editor
             CrashReporting.InitializeCrashReporting();
 
             ISplashScreen splashScreen = new SplashScreen.SplashScreen();
-            splashScreen.Show("Resources/t3-editor/images/t3-SplashScreen.png");
+
+            try
+            {
+                splashScreen.Show("Resources/t3-editor/images/t3-SplashScreen.png");
+            }
+            catch (System.IO.FileNotFoundException e)
+            {
+                // Catching this exception will the validation check dialog allow to be shown later
+                Log.Error("Failed to create splash screen. Please make sure to run from the correct working directory: " + e.Message);
+            }
+            
             Log.AddWriter(splashScreen);
             Log.AddWriter(new ConsoleWriter());
             Log.AddWriter(FileWriter.CreateDefault());
@@ -92,6 +103,11 @@ namespace T3.Editor
             ProgramWindows.InitializeMainWindow(GetReleaseVersion(), out var device);
 
             Device = device;
+            
+            if(ShaderCompiler.Instance is not DX11ShaderCompiler shaderCompiler)
+                throw new Exception("ShaderCompiler is not DX11ShaderCompiler");
+            
+            shaderCompiler.Device = device;
 
             UiContentContentDrawer = new WindowsUiContentDrawer();
             UiContentContentDrawer.Initialize(device, ProgramWindows.Main.Width, ProgramWindows.Main.Height);
@@ -142,6 +158,10 @@ namespace T3.Editor
             }
 
             Log.RemoveWriter(splashScreen);
+            
+            if(UserSettings.Config.KeepTraceForLogMessages)
+                Log.AddWriter(new Profiling.ProfilingLogWriterClass());
+            
             splashScreen.Close();
             splashScreen.Dispose();
 
@@ -158,10 +178,12 @@ namespace T3.Editor
             T3Style.Apply();
 
             ProgramWindows.Main.RunRenderLoop(UiContentUpdate.RenderCallback);
+            IsShuttingDown = true;
 
             try
             {
                 UiContentContentDrawer.Dispose();
+                T3Ui.Dispose();
             }
             catch (Exception e)
             {
@@ -181,11 +203,12 @@ namespace T3.Editor
             Log.Debug("Shutdown complete");
         }
 
-        // Main loop
 
+        // Main loop
         public static readonly StatusErrorLine StatusErrorLine = new();
         public static readonly ConsoleLogWindow ConsoleLogWindow = new();
         public static T3Ui T3Ui;
         public static string RequestImGuiLayoutUpdate;
+        public static bool IsShuttingDown;
     }
 }

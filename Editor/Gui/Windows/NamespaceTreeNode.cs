@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SharpDX.Direct2D1;
 using T3.Core.Operator;
 
 namespace T3.Editor.Gui.Windows
@@ -11,7 +12,7 @@ namespace T3.Editor.Gui.Windows
     public class NamespaceTreeNode
     {
         public string Name { get; private set; }
-        public List<NamespaceTreeNode> Children { get; } = new List<NamespaceTreeNode>();
+        public List<NamespaceTreeNode> Children { get; } = new();
         private NamespaceTreeNode Parent { get; }
 
         public NamespaceTreeNode(string name, NamespaceTreeNode parent = null)
@@ -49,6 +50,21 @@ namespace T3.Editor.Gui.Windows
                 SortInOperator(symbol.Value);
             }
         }
+        // define an action delegate that takes a Symbol and returns a bool
+
+        
+        public void PopulateCompleteTree(Predicate<Symbol> filterAction)
+        {
+            Name = RootNodeId;
+            Clear();
+
+            foreach (var symbol in SymbolRegistry.Entries.OrderBy(pair => pair.Value.Namespace + pair.Value.Name))
+            {
+                if(filterAction(symbol.Value))
+                    SortInOperator(symbol.Value);
+            }
+        }
+        
         
         public void SortInOperator(Symbol symbol)
         {

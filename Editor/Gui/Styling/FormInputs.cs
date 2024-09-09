@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 
@@ -18,40 +20,55 @@ namespace T3.Editor.Gui.Styling
         {
             SetIndentToParameters();
         }
-        
+
         public static void AddSectionHeader(string label)
         {
-            AddVerticalSpace(1);
+            //AddVerticalSpace(1);
             ImGui.PushFont(Fonts.FontLarge);
             ImGui.Text(label);
             ImGui.PopFont();
             //AddVerticalSpace(20);
+        }
 
+        public static void DrawFieldSetHeader(string label)
+        {
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            ImGui.PushFont(Fonts.FontSmall);
+            AddVerticalSpace(5);
+            ImGui.TextUnformatted(label.ToUpperInvariant());
+            AddVerticalSpace(1);
+            ImGui.PopFont();
+            ImGui.PopStyleColor();
         }
 
         public static bool BeginGroup(string label)
         {
-            var shouldBeOpenByDefault = !label.EndsWith("...");
-
             AddVerticalSpace(5);
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            // var isNotCollapsable = !label.EndsWith("...");
+            // if (isNotCollapsable)
+            // {
+            //     ImGui.Text(label);
+            //     ImGui.PopStyleColor();
+            //     return true;
+            // }
 
-            var id = ImGui.GetID(label);
-            if (shouldBeOpenByDefault && !_openedGroups.Contains(id))
-            {
-                ImGui.SetNextItemOpen(true);
-                _openedGroups.Add(id);
-            }
+            // var id = ImGui.GetID(label);
+            // if (isNotCollapsable && !_openedGroups.Contains(id))
+            // {
+            //     ImGui.SetNextItemOpen(true);
+            //     _openedGroups.Add(id);
+            // }
 
             var isOpen = ImGui.TreeNode(label);
             ImGui.PopStyleColor();
-            if(isOpen)
+            if (isOpen)
                 ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 0);
-            
+
             return isOpen;
         }
 
-        private static HashSet<uint> _openedGroups = new();
+        // private static HashSet<uint> _openedGroups = new();
 
         public static void EndGroup()
         {
@@ -129,21 +146,21 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
-        public static bool AddEnumDropdown<T>(ref T selectedValue, string label, string tooltip = null) where T : struct, Enum, IConvertible, IFormattable
+        public static bool AddEnumDropdown<T>(ref T selectedValue, string label, string tooltip = null, T defaultValue= default) where T : struct, Enum, IConvertible, IFormattable
         {
             DrawInputLabel(label);
 
             var inputSize = GetAvailableInputSize(tooltip, false, true);
             ImGui.SetNextItemWidth(inputSize.X);
 
-            var modified = DrawEnumDropdown(ref selectedValue, label);
+            var modified = DrawEnumDropdown(ref selectedValue, label, defaultValue);
 
             AppendTooltip(tooltip);
 
             return modified;
         }
 
-        public static bool DrawEnumDropdown<T>(ref T selectedValue, string label) where T : struct, Enum, IConvertible, IFormattable
+        public static bool DrawEnumDropdown<T>(ref T selectedValue, string label, T defaultValue= default) where T : struct, Enum, IConvertible, IFormattable, IComparable
         {
             var names = Enum.GetNames<T>();
             var index = 0;
@@ -160,15 +177,20 @@ namespace T3.Editor.Gui.Styling
                 index++;
             }
 
+            ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundButton.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, selectedValue.Equals(defaultValue) ? UiColors.TextMuted.Rgba : UiColors.ForegroundFull.Rgba);
+            ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 5);
             var modified = ImGui.Combo($"##dropDown{typeof(T)}{label}", ref selectedIndex, names, names.Length, names.Length);
             if (modified)
             {
                 selectedValue = Enum.GetValues<T>()[selectedIndex];
             }
 
+            ImGui.PopStyleVar();
+            ImGui.PopStyleColor(2);
+
             return modified;
         }
-        
 
         public static bool AddDropdown(ref string selectedValue, IEnumerable<string> values, string label, string tooltip = null)
         {
@@ -200,20 +222,23 @@ namespace T3.Editor.Gui.Styling
             AppendTooltip(tooltip);
             return modified;
         }
-        
-        
-        public static bool AddSegmentedButton<T>(ref T selectedValue, string label, float columnWidth=0) where T : struct, Enum
+
+        public static bool AddSegmentedButtonWithLabel<T>(ref T selectedValue, string label, float columnWidth = 0) where T : struct, Enum
         {
             DrawInputLabel(label);
+            return SegmentedButton(ref selectedValue, columnWidth);
+        }
 
+        public static bool SegmentedButton<T>(ref T selectedValue, float columnWidth = 0) where T : struct, Enum
+        {
             var modified = false;
             var selectedValueString = selectedValue.ToString();
             var isFirst = true;
-            
+
             foreach (var value in Enum.GetValues<T>())
             {
                 var name = CustomComponents.HumanReadablePascalCase(Enum.GetName(value));
-                if (!isFirst && columnWidth <=0)
+                if (!isFirst && columnWidth <= 0)
                 {
                     ImGui.SameLine();
                 }
@@ -240,7 +265,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Rgba);
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundActive.Fade(0.7f).Rgba);
 
-            var clicked = ImGui.Button(name, new Vector2(width,0));
+            var clicked = ImGui.Button(name, new Vector2(width, 0));
             ImGui.PopStyleColor(4);
             return clicked;
         }
@@ -257,12 +282,18 @@ namespace T3.Editor.Gui.Styling
                                           string tooltip = null,
                                           string defaultValue = NoDefaultString)
         {
+            if (string.IsNullOrEmpty(label))
+            {
+                Log.Error("AddStringInput() requires an id to work. Use ## prefix to hide." );
+                label = "##fallback";
+            }
+            
             var hasDefault = defaultValue != NoDefaultString;
             var isDefault = hasDefault && value == defaultValue;
 
             if (isDefault)
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha);
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha * ImGui.GetStyle().Alpha);
             }
 
             DrawInputLabel(label);
@@ -272,11 +303,13 @@ namespace T3.Editor.Gui.Styling
 
             var inputSize = GetAvailableInputSize(tooltip, false, true);
             ImGui.SetNextItemWidth(inputSize.X);
-            var modified = ImGui.InputText("##" + label, ref value, 1000);
+            ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 5);
+            
+            var modified = ImGui.InputText("##"+ label, ref value, 1000);
             if (!modified && wasNull)
                 value = null;
 
-            AppendTooltip(tooltip);
+            ImGui.PopStyleVar();
 
             if (string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(placeHolder))
             {
@@ -284,10 +317,11 @@ namespace T3.Editor.Gui.Styling
                 var minPos = ImGui.GetItemRectMin();
                 var maxPos = ImGui.GetItemRectMax();
                 drawList.PushClipRect(minPos, maxPos);
-                drawList.AddText(minPos + new Vector2(8, 3), UiColors.ForegroundFull.Fade(0.25f), placeHolder);
+                drawList.AddText(minPos + new Vector2(8, 3)* T3Ui.UiScaleFactor, UiColors.ForegroundFull.Fade(0.25f), placeHolder);
                 drawList.PopClipRect();
             }
 
+            AppendTooltip(tooltip);
             if (isDefault)
             {
                 ImGui.PopStyleVar();
@@ -357,11 +391,13 @@ namespace T3.Editor.Gui.Styling
 
             if (isDefault)
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha);
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha * ImGui.GetStyle().Alpha);
             }
 
-            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 20);
+            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 20 * T3Ui.UiScaleFactor);
+            ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundButton.Rgba);
             var modified = ImGui.Checkbox(label, ref value);
+            ImGui.PopStyleColor();
 
             AppendTooltip(tooltip);
             if (isDefault)
@@ -377,9 +413,7 @@ namespace T3.Editor.Gui.Styling
 
             return modified;
         }
-        
-        
-        
+
         public static void AddHint(string label)
         {
             if (string.IsNullOrEmpty(label))
@@ -387,7 +421,7 @@ namespace T3.Editor.Gui.Styling
 
             AddVerticalSpace(5);
             ApplyIndent();
-            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 20));
 
             AddIcon(Icon.Hint);
@@ -398,7 +432,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.PopStyleVar(2);
         }
 
-        public static void AddVerticalSpace(float size = 20)
+        public static void AddVerticalSpace(float size = 10)
         {
             ImGui.Dummy(new Vector2(1, size * T3Ui.UiScaleFactor));
         }
@@ -414,7 +448,6 @@ namespace T3.Editor.Gui.Styling
             _paramIndent = 0;
         }
 
-        
         public static void SetIndentToParameters()
         {
             _paramIndent = DefaultParameterIndent;
@@ -437,7 +470,7 @@ namespace T3.Editor.Gui.Styling
 
         public static void DrawInputLabel(string label)
         {
-            if (string.IsNullOrEmpty(label))
+            if (string.IsNullOrEmpty(label) || label.StartsWith("##"))
                 return;
 
             var labelSize = ImGui.CalcTextSize(label);
@@ -451,13 +484,137 @@ namespace T3.Editor.Gui.Styling
             ImGui.SameLine();
             ImGui.SetCursorPosX(LeftParameterPadding + ParameterSpacing);
         }
+        
+        public static bool DrawValueRangeControl(ref float min, ref float max, ref float scale, ref bool clamped, float defaultMin, float defaultMax, float defaultScale)
+        {
+            var modified = false;
+            var flexWidth = ComputeFlexWidth(2, 3);
+            if (CustomComponents.IconButton("clampMin",
+                                            clamped ? Icon.ClampMinOn : Icon.ClampMinOff, 0,
+                                            ImDrawFlags.RoundCornersLeft,
+                                            clamped
+                                                ? CustomComponents.ButtonStates.NeedsAttention
+                                                : CustomComponents.ButtonStates.Dimmed))
+            {
+                modified = true;
+                clamped = !clamped;
+            }
+
+            modified |= SimpleFloatEdit(1, ref min, defaultMin, flexWidth);
+            modified |= SimpleFloatEdit(2, ref scale, defaultScale, flexWidth);
+            modified |= SimpleFloatEdit(3, ref max, defaultMax, flexWidth);
+
+            ImGui.SameLine();
+
+            if (CustomComponents.IconButton("clampMax",
+                                            clamped ? Icon.ClampMaxOn : Icon.ClampMaxOff, 0,
+                                            ImDrawFlags.RoundCornersRight,
+                                            clamped
+                                                ? CustomComponents.ButtonStates.NeedsAttention
+                                                : CustomComponents.ButtonStates.Dimmed))
+            {
+                modified = true;
+                clamped = !clamped;
+            }
+
+            return modified;
+        }
+
+        // TODO: This could become obsolete if SingleValueEdit would handle fading on default
+        private static bool SimpleFloatEdit(int id, ref float max, float defaultValue, float flexWidth)
+        {
+            var modified = false;
+            ImGui.SameLine();
+            ImGui.PushID(id);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, Math.Abs(max - defaultValue) < 0.0001f ? 0.5f : 1.0f);
+            if (SingleValueEdit.Draw(ref max, 
+                                     new Vector2(flexWidth, ImGui.GetFrameHeight()), 
+                                     format: "{0:G7}", 
+                                     defaultValue: defaultValue, horizontalAlign:0.5f)
+                               .HasFlag(InputEditStateFlags.Modified))
+            {
+                modified = true;
+            }
+
+            ImGui.PopStyleVar();
+            ImGui.PopID();
+            return modified;
+        }
+        
+        public static bool DrawIntValueRangeControl(ref int min, ref int max, ref float scale, ref bool clamped)
+        {
+            var modified = false;
+            var flexWidth = ComputeFlexWidth(2, 3);
+            if (CustomComponents.IconButton("clampMin",
+                                            clamped ? Icon.ClampMinOn : Icon.ClampMinOff, 0,
+                                            ImDrawFlags.RoundCornersLeft,
+                                            clamped
+                                                ? CustomComponents.ButtonStates.NeedsAttention
+                                                : CustomComponents.ButtonStates.Dimmed))
+            {
+                modified = true;
+                clamped = !clamped;
+            }
+
+            modified |= SimpleIntEdit(1, ref min, int.MinValue, flexWidth);
+            modified |= SimpleFloatEdit(2, ref scale, 0, flexWidth);
+            modified |= SimpleIntEdit(3, ref max, int.MaxValue, flexWidth);
+
+            ImGui.SameLine();
+
+            if (CustomComponents.IconButton("clampMax",
+                                            clamped ? Icon.ClampMaxOn : Icon.ClampMaxOff, 0,
+                                            ImDrawFlags.RoundCornersRight,
+                                            clamped
+                                                ? CustomComponents.ButtonStates.NeedsAttention
+                                                : CustomComponents.ButtonStates.Dimmed))
+            {
+                modified = true;
+                clamped = !clamped;
+            }
+
+            return modified;
+        }
+
+        // TODO: This could become obsolete if SingleValueEdit would handle fading on default
+        private static bool SimpleIntEdit(int id, ref int value, int defaultValue, float flexWidth)
+        {
+            var modified = false;
+            ImGui.SameLine();
+            ImGui.PushID(id);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, value == defaultValue ? 0.5f : 1.0f);
+            if (SingleValueEdit.Draw(ref value, 
+                                     new Vector2(flexWidth, ImGui.GetFrameHeight()), 
+                                     defaultValue: defaultValue, horizontalAlign:0.5f)
+                               .HasFlag(InputEditStateFlags.Modified))
+            {
+                modified = true;
+            }
+
+            ImGui.PopStyleVar();
+            ImGui.PopID();
+            return modified;
+        }
+        
+        
+        
+
+        /**
+         * Computes the fill width for input group segments
+         */
+        private static float ComputeFlexWidth(int fixedWidthItemCount, int flexItemCount)
+        {
+            var totalWidth = ImGui.GetContentRegionAvail().X;
+            var height = ImGui.GetFrameHeight();
+            return (totalWidth - fixedWidthItemCount * height) / flexItemCount;
+        }
 
         private static void DrawWarningBelowField(string warning)
         {
             if (string.IsNullOrEmpty(warning))
                 return;
 
-            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 20);
+            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 20 * T3Ui.UiScaleFactor);
             ImGui.PushFont(Fonts.FontSmall);
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusError.Rgba);
             ImGui.TextUnformatted(warning);
@@ -508,7 +665,7 @@ namespace T3.Editor.Gui.Styling
 
             // Tooltip
             ImGui.PushStyleColor(ImGuiCol.PopupBg, UiColors.BackgroundFull.Rgba);
-            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 1);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 1 * ImGui.GetStyle().Alpha);
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);
             ImGui.TextUnformatted(tooltip);
@@ -524,8 +681,9 @@ namespace T3.Editor.Gui.Styling
                 return false;
 
             ImGui.SameLine();
-            ImGui.PushID(id);
-            var clicked = CustomComponents.IconButton(Icon.Revert, Vector2.One * ImGui.GetFrameHeight());
+            ImGui.PushID(id??"fallback");
+            var clicked = CustomComponents.IconButton(Icon.Revert,
+                                                      new Vector2(Math.Min(.8f, T3Ui.UiScaleFactor)) * ImGui.GetFrameHeight());
             ImGui.PopID();
             return clicked;
         }
@@ -550,7 +708,5 @@ namespace T3.Editor.Gui.Styling
         private static float _widthRatio = 1;
         private static float LeftParameterPadding => _paramIndent * T3Ui.UiScaleFactor;
         public static float ParameterSpacing => 20 * T3Ui.UiScaleFactor;
-
-
     }
 }

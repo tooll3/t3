@@ -10,8 +10,8 @@
     {
       "Id": "6f327667-9054-4952-9f8f-570fa5497b13"/*Segments*/,
       "DefaultValue": {
-        "Width": 64,
-        "Height": 32
+        "X": 64,
+        "Y": 32
       }
     }
   ],

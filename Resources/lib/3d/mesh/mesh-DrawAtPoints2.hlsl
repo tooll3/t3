@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
 #include "lib/shared/hash-functions.hlsl"
@@ -162,9 +163,9 @@ psInput vsMain(uint id : SV_VertexID)
 
     Point _p = Points[pointId];
 
-    float4 pRotation = normalize(_p.rotation); 
-    float4 pPosition = float4(_p.position,1);
-    float pW = _p.w;
+    float4 pRotation = normalize(_p.Rotation); 
+    float4 pPosition = float4(_p.Position,1);
+    float pW = _p.W;
 
     // SETUP SEEDS ----------------------------------------------------------
 
@@ -197,7 +198,7 @@ psInput vsMain(uint id : SV_VertexID)
     float4 colorFromPoint = (UseRotationAsRgba > 0.5) ? pRotation : 1;
 
     float colorFxU = GetUFromMode(ColorVariationMode, pointId, f, normalizedScatter, pW, output.fog);
-    output.color = Color * ColorOverW.SampleLevel(texSampler, float2(colorFxU, 0), 0) * colorFromPoint;
+    output.color = Color * ColorOverW.SampleLevel(clampedSampler, float2(colorFxU, 0), 0) * colorFromPoint;
 
     float adjustedRotate = Rotate;
     float adjustedScale = Scale;
@@ -208,7 +209,7 @@ psInput vsMain(uint id : SV_VertexID)
         float4 centerPos = mul(float4(pInCamera.xyz, 1), CameraToClipSpace);
         centerPos.xyz /= centerPos.w;
 
-        float4 fxColor = FxTexture.SampleLevel(texSampler, (centerPos.xy * float2(1, -1) + 1) / 2, 0);
+        float4 fxColor = FxTexture.SampleLevel(clampedSampler, (centerPos.xy * float2(1, -1) + 1) / 2, 0);
 
         if(FxTextureMode < 0.5) 
         {
@@ -223,7 +224,7 @@ psInput vsMain(uint id : SV_VertexID)
 
     // Scale and stretch
     float scaleFxU = GetUFromMode(ScaleDistribution, pointId, f, normalizedScatter, pW, output.fog);
-    float scaleFromCurve = SizeOverW.SampleLevel(texSampler, float2(scaleFxU, 0), 0).r;
+    float scaleFromCurve = SizeOverW.SampleLevel(clampedSampler, float2(scaleFxU, 0), 0).r;
     float hideUndefinedPoints = isnan(pW) ? 0 : (UseWFoScale > 0.5 ? max(pW, 0) : 1 );
     
     float r= (RandomScale * scatterForScale.y *adjustedRandomize + 1);
@@ -236,12 +237,12 @@ psInput vsMain(uint id : SV_VertexID)
 
     vInObject.xyz *=   computedScale * Scale * Stretch * LimitScale(RandomStretch * scatterForScale + 1);
 
-    float3 randomOffset = rotate_vector((normalizedScatter.xyz - 0.5) * 2 * RandomPosition * Randomize, pRotation);
+    float3 randomOffset = qRotateVec3((normalizedScatter.xyz - 0.5) * 2 * RandomPosition * Randomize, pRotation);
     vInObject.xyz += randomOffset;
     vInObject.xyz += Offset;
 
 
-    float4x4 orientationMatrix = transpose(quaternion_to_matrix(normalize(pRotation)));
+    float4x4 orientationMatrix = transpose(qToMatrix(normalize(pRotation)));
     
     vInObject = mul(float4(vInObject.xyz, 1), orientationMatrix);
     vInObject += float4(pPosition.xyz, 0);

@@ -4,7 +4,7 @@ namespace T3.Core.Operator.Slots
 {
     public class MultiInputSlot<T> : InputSlot<T>, IMultiInputSlot
     {
-        public List<Slot<T>> CollectedInputs { get; } = new List<Slot<T>>(10);
+        public List<Slot<T>> CollectedInputs { get; } = new(10);
 
         public MultiInputSlot(InputValue<T> typedInputValue) : base(typedInputValue)
         {

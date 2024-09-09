@@ -1,0 +1,49 @@
+{
+  "Id": "25db2a97-38b2-4503-8842-fab3922d7a6c",
+  "Variations": [
+    {
+      "Id": "dee47275-4c47-49c8-a716-f93b58a01e15",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Default",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {}
+      }
+    },
+    {
+      "Id": "ed236eb5-64f0-4541-9bf0-aa40e21b71bd",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Long trail walking",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6a2cb3f0-3b5a-4551-a809-3dc172bb7d79": 500
+        }
+      }
+    },
+    {
+      "Id": "e4d527e0-debb-4b9f-8620-e174245043c2",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "My GPU is the longest",
+      "PosOnCanvas": {
+        "X": 489.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6a2cb3f0-3b5a-4551-a809-3dc172bb7d79": 1000,
+          "56eac471-ad48-41ec-b617-cbcb67646c97": 0.03
+        }
+      }
+    }
+  ]
+}

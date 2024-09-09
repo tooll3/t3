@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "7bdfb9a8-87b3-4603-890c-fe755f4c4492"/*Sequence*/,
-      "DefaultValue": "1101"
+      "DefaultValue": "1101110111011101\n1101110111011101\n1101110111011101"
     },
     {
       "Id": "f8afee64-627d-48e4-b4ea-a15601a01aa1"/*SequenceIndex*/,
@@ -34,6 +34,10 @@
     {
       "Id": "1c9afc39-7bab-4042-86eb-c7e30595af8e"/*Bias*/,
       "DefaultValue": 0.5
+    },
+    {
+      "Id": "e45c6abf-df32-47cf-833d-e1391749b8f4"/*RecordingMode*/,
+      "DefaultValue": 1
     },
     {
       "Id": "3ce54ca0-cd50-4dc2-bd3d-51e26ebf05ce"/*RecordValue*/,

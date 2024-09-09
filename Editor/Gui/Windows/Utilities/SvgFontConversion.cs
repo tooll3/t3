@@ -222,6 +222,6 @@ public static class SvgFontConversion
     private static bool _autoConvertOnParameterChange = true;
 
     private static readonly XNamespace _ns = "http://www.w3.org/2000/svg";
-    private static readonly StringBuilder _stringBuilder = new StringBuilder();
+    private static readonly StringBuilder _stringBuilder = new();
     private static string _svgFilePath;
 }

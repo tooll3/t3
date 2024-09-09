@@ -60,6 +60,11 @@
       "SymbolId": "50aab941-0a29-474a-affd-13a74ea0c780",
       "InputValues": [
         {
+          "Id": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
+          "Type": "System.Single",
+          "Value": 1.1999999
+        },
+        {
           "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 9.2
@@ -72,11 +77,6 @@
             "Y": 1.0,
             "Z": 1.0
           }
-        },
-        {
-          "Id": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
-          "Type": "System.Single",
-          "Value": 1.1999999
         }
       ],
       "Outputs": []
@@ -110,7 +110,7 @@
       "Outputs": []
     },
     {
-      "Id": "f6e6cb07-8581-4817-8df6-13e5ff9ec50b"/*RandomizePoints*/,
+      "Id": "f6e6cb07-8581-4817-8df6-13e5ff9ec50b"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -227,9 +227,9 @@
       "SymbolId": "d14233a2-8240-47d3-bb92-0854f6d3b218",
       "InputValues": [
         {
-          "Id": "70f0f867-a4de-44da-b8e3-a7e95e1740a3"/*Size*/,
-          "Type": "System.Single",
-          "Value": 0.23
+          "Id": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Refresh*/,
+          "Type": "System.Boolean",
+          "Value": false
         },
         {
           "Id": "c42d8124-d656-4b52-864f-9c9d888e0c54"/*WrapSize*/,
@@ -237,9 +237,9 @@
           "Value": 10.7
         },
         {
-          "Id": "f084ae44-d69a-48c3-936b-b89e310ca185"/*Reset*/,
-          "Type": "System.Boolean",
-          "Value": false
+          "Id": "70f0f867-a4de-44da-b8e3-a7e95e1740a3"/*Size*/,
+          "Type": "System.Single",
+          "Value": 0.23
         }
       ],
       "Outputs": []
@@ -248,11 +248,6 @@
       "Id": "2c7a88e5-2441-4b3b-aa22-316fe32da87c"/*PerlinNoise*/,
       "SymbolId": "436e93a8-03c0-4366-8d9a-2245e5bcaa6c",
       "InputValues": [
-        {
-          "Id": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
-          "Type": "System.Int32",
-          "Value": 83
-        },
         {
           "Id": "c6286f1c-00a3-40af-94dd-66375ed0343f"/*Octaves*/,
           "Type": "System.Int32",
@@ -267,6 +262,11 @@
           "Id": "557ae817-ec36-4866-8fed-64490e9255be"/*RangeMax*/,
           "Type": "System.Single",
           "Value": 22.6
+        },
+        {
+          "Id": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
+          "Type": "System.Int32",
+          "Value": 83
         }
       ],
       "Outputs": []

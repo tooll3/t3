@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Security.Policy;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -23,7 +22,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
         // public readonly Slot<BufferWithViews> IndexBuffer = new Slot<BufferWithViews>();
 
         [Output(Guid = "2CAEEB72-F67D-4101-9A85-24AB8DEEB1C7")]
-        public readonly Slot<StructuredList> Points = new Slot<StructuredList>();
+        public readonly Slot<StructuredList> Points = new();
 
         public LoadObjAsPoints()
         {
@@ -77,8 +76,8 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                     Log.Warning("Object mode not implemented", this);
                     break;
                 }
-                case Modes.Vertices_ColorInOrientation:
-                case Modes.Vertices_GrayscaleInOrientation:
+                case Modes.Vertices_WithColor:
+                case Modes.Vertices_ColorAsGrayScale:
                 case Modes.Vertices_GrayscaleAsW:
                 {
                     if (mesh.Colors.Count == 0)
@@ -110,11 +109,11 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                                                                                                     mesh.Positions[sortedVertexIndex].X,
                                                                                                     mesh.Positions[sortedVertexIndex].Y,
                                                                                                     mesh.Positions[sortedVertexIndex].Z),
-                                                                             Orientation = Quaternion.Identity,
                                                                              W = (c.X + c.Y + c.Z) / 3,
+                                                                             Color = c,
                                                                          };
                             }
-                            else if (exportMode == Modes.Vertices_GrayscaleInOrientation)
+                            else if (exportMode == Modes.Vertices_ColorAsGrayScale)
                             {
                                 var gray = (c.X + c.Y + c.Z) / 3;
                                 _points.TypedElements[vertexIndex] = new Point()
@@ -123,8 +122,8 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                                                                                                     mesh.Positions[sortedVertexIndex].X,
                                                                                                     mesh.Positions[sortedVertexIndex].Y,
                                                                                                     mesh.Positions[sortedVertexIndex].Z),
-                                                                             Orientation = new Quaternion(gray, gray, gray, 1),
                                                                              W = 1,
+                                                                             Color = new Vector4(gray),
                                                                          };
                             }
                             else
@@ -136,7 +135,8 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                                                                                                     mesh.Positions[sortedVertexIndex].Y,
                                                                                                     mesh.Positions[sortedVertexIndex].Z),
                                                                              Orientation = new Quaternion(c.X, c.Y, c.Z, c.W),
-                                                                             W = 1
+                                                                             W = 1,
+                                                                             Color = c,
                                                                          };
                             }
                         }
@@ -320,25 +320,25 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
         }
 
 
-        private StructuredList<Point> _points = new StructuredList<Point>(0);
+        private StructuredList<Point> _points = new(0);
 
         enum Modes
         {
             AllVertices,
             LinesVertices,
-            Vertices_ColorInOrientation,
-            Vertices_GrayscaleInOrientation,
+            Vertices_WithColor,
+            Vertices_ColorAsGrayScale,
             Vertices_GrayscaleAsW,
             WireframeLines,
         }
 
         [Input(Guid = "895dab2c-e3be-4e73-9c96-0f6101cea113")]
-        public readonly InputSlot<string> Path = new InputSlot<string>();
+        public readonly InputSlot<string> Path = new();
 
         [Input(Guid = "DCACD412-1885-4A10-B073-54192F074AE8", MappedType = typeof(Modes))]
-        public readonly InputSlot<int> Mode = new InputSlot<int>();
+        public readonly InputSlot<int> Mode = new();
 
         [Input(Guid = "0AE6B6C5-80FA-4229-B06B-D9C2AC8C2A3F", MappedType = typeof(ObjMesh.SortDirections))]
-        public readonly InputSlot<int> Sorting = new InputSlot<int>();
+        public readonly InputSlot<int> Sorting = new();
     }
 }

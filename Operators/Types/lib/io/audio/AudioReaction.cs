@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using T3.Core;
+using Microsoft.VisualBasic.Logging;
 using T3.Core.Animation;
 using T3.Core.Audio;
-using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
+using Log = T3.Core.Logging.Log;
 
 namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
 {
@@ -35,12 +34,21 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         
         private void Update(EvaluationContext context)
         {
+            if (context.IntVariables.TryGetValue("__MotionBlurPass", out var motionBlurPass))
+            {
+                if (motionBlurPass > 0)
+                {
+                    //Log.Debug($"Skip motion blur pass {motionBlurPass}");
+                    return;
+                }
+            } 
+            
             if (Math.Abs(context.LocalFxTime - _lastEvalTime) < 0.001f)
             {
                 return;
             }
 
-            _lastEvalTime = context.LocalFxTime;
+            _lastEvalTime = PlaybackTimeInSecs;
             var timeSinceLastHit = _lastEvalTime - _lastHitTime;
             if (timeSinceLastHit < -1)
             {
@@ -59,44 +67,20 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             }
 
 
-            List<float> bins = default;
             var mode = (InputModes)InputBand.GetValue(context).Clamp(0, Enum.GetNames(typeof(InputModes)).Length - 1);
-            switch (mode)
-            {
-                case InputModes.RawFft:
-                    bins = AudioAnalysis.FftGainBuffer == null
-                                ? _emptyList
-                                : AudioAnalysis.FftGainBuffer.ToList();
 
-                    break;
+            var bins2 = mode switch
+                            {
+                                InputModes.RawFft                => AudioAnalysis.FftGainBuffer,
+                                InputModes.NormalizedFft         => AudioAnalysis.FftNormalizedBuffer,
+                                InputModes.FrequencyBands        => AudioAnalysis.FrequencyBands,
+                                InputModes.FrequencyBandsPeaks   => AudioAnalysis.FrequencyBandPeaks,
+                                InputModes.FrequencyBandsAttacks => AudioAnalysis.FrequencyBandAttacks,
+                                _                                => null
+                            };
 
-                case InputModes.NormalizedFft:
-                    bins = AudioAnalysis.FftNormalizedBuffer == null
-                                ? _emptyList
-                                : AudioAnalysis.FftNormalizedBuffer.ToList();
-                    break;
-
-                case InputModes.FrequencyBands:
-                    bins = AudioAnalysis.FrequencyBands == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBands.ToList();
-                    break;
-
-                case InputModes.FrequencyBandsPeaks:
-                    bins = AudioAnalysis.FrequencyBandPeaks == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBandPeaks.ToList();
-
-                    break;
-
-                case InputModes.FrequencyBandsAttacks:
-                    bins = AudioAnalysis.FrequencyBandAttacks == null
-                                ? _emptyList
-                                : AudioAnalysis.FrequencyBandAttacks.ToList();
-
-                    break;
-            }
-
+            var bins = bins2 == null ? _emptyList : bins2.ToList();
+            
             var threshold = Threshold.GetValue(context);
             var minTimeBetweenHits = MinTimeBetweenHits.GetValue(context);
             
@@ -127,7 +111,8 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
 
                 if (couldBeHit != _isHitActive)
                 {
-                    if (!_isHitActive && timeSinceLastHit > minTimeBetweenHits)
+                    // changed this to >= minTimeBetweenHits to enable more steady beats
+                    if (!_isHitActive && timeSinceLastHit >= minTimeBetweenHits)
                     {
                         wasHit = true;
                         _isHitActive = couldBeHit;
@@ -140,7 +125,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
                         _isHitActive = couldBeHit;
                     }
                 }
-                
+
                 AccumulatedLevel +=  MathF.Pow((Sum * 2) / threshold, 2) * 0.001 * amplitude;
                 _dampedTimeBetweenHits = MathUtils.Lerp((float)timeSinceLastHit, _dampedTimeBetweenHits, 0.94f);
             }
@@ -257,7 +242,9 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         public readonly InputSlot<bool> Reset = new();
         
         private static readonly List<float> _emptyList = new();
-        
+        public double PlaybackTimeInSecs =>
+            (Playback.Current.IsRenderingToFile) ?   Playback.Current.TimeInSecs : Playback.RunTimeInSecs;
+
         /// <summary>
         /// This is used only for visualization
         /// </summary>

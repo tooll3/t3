@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -30,20 +31,23 @@ void main(uint3 i : SV_DispatchThreadID)
     TargetPoints.GetDimensions(targetPointCount, stride);
     uint targetPointIndex= gi % targetPointCount;
 
-    float3 pos = Particles[gi].p.position;
-    float4 rot = Particles[gi].p.rotation;
-    float3 velocity = Particles[gi].velocity;
+    float3 pos = Particles[gi].Position;
+    float4 rot = Particles[gi].Rotation;
+    float3 velocity = Particles[gi].Velocity;
 
-    float3 usedPos = DistanceMode < 0.5 ? pos : TargetPoints[gi].position;
+    float3 usedPos = DistanceMode < 0.5 ? pos : TargetPoints[gi].Position;
     float3 posInVolume = mul(float4(usedPos, 1), TransformVolume).xyz;
     float d =length(posInVolume); 
     const float r= 0.5;
     float t= (d + r*(FallOff -1)) / (2 * r * FallOff);
     float blendFactor = smoothstep(1,0, t) * Strength; 
 
-    //Particles[gi].p.w = blendFactor;
-    Particles[gi].p.position = lerp(pos, TargetPoints[targetPointIndex].position, blendFactor);
-    Particles[gi].p.rotation = q_slerp(rot, TargetPoints[targetPointIndex].rotation, blendFactor);
-    Particles[gi].velocity = lerp(velocity, 0, blendFactor);    
+    Particles[gi].Position = lerp(pos, TargetPoints[targetPointIndex].Position, blendFactor);
+    Particles[gi].Rotation = qSlerp(rot, TargetPoints[targetPointIndex].Rotation, blendFactor);
+    Particles[gi].Velocity = lerp(velocity, 0, blendFactor); 
+
+    Particles[gi].Color = lerp(Particles[gi].Color, TargetPoints[targetPointIndex].Color, blendFactor);
+
+    //Particles[gi].Radius = lerp(Particles[gi].Radius, TargetPoints[targetPointIndex].W, blendFactor);     
 }
 

@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_2c53eee7_eb38_449b_ad2a_d7a674952e5b
     public class GradientsToTexture : Instance<GradientsToTexture>
     {
         [Output(Guid = "7ad741ec-274d-493c-994f-1a125b96a6e9")]
-        public readonly Slot<Texture2D> GradientsTexture = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> GradientsTexture = new();
         
         public GradientsToTexture()
         {
@@ -120,8 +120,8 @@ namespace T3.Operators.Types.Id_2c53eee7_eb38_449b_ad2a_d7a674952e5b
                 dataStream.Position = 0;
                 var dataRectangles = new DataRectangle[]
                                          {
-                                             new DataRectangle(dataPointer:dataStream.DataPointer, 
-                                                               pitch:useHorizontal ? gradientSizeInBytes : gradientsCount * entrySizeInBytes)
+                                             new(dataPointer:dataStream.DataPointer, 
+                                                 pitch:useHorizontal ? gradientSizeInBytes : gradientsCount * entrySizeInBytes)
                                          };
                 Utilities.Dispose(ref GradientsTexture.Value);
                 GradientsTexture.Value = new Texture2D(ResourceManager.Device, texDesc, dataRectangles);

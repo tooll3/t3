@@ -38,8 +38,8 @@ internal static class ProgramWindows
         ImGuiDx11RenderForm.InputMethods = messageHandlers;
     }
 
-    public static void SetVertexShader(VertexShaderResource resource) => _deviceContext.VertexShader.Set(resource.VertexShader);
-    public static void SetPixelShader(PixelShaderResource resource) => _deviceContext.PixelShader.Set(resource.PixelShader);
+    public static void SetVertexShader(ShaderResource<VertexShader> resource) => _deviceContext.VertexShader.Set(resource.Shader);
+    public static void SetPixelShader(ShaderResource<PixelShader> resource) => _deviceContext.PixelShader.Set(resource.Shader);
 
     internal static void HandleFullscreenToggle()
     {
@@ -76,6 +76,12 @@ internal static class ProgramWindows
             _device = device;
             _deviceContext = device.ImmediateContext;
             _factory = swapchain.GetParent<Factory>();
+
+            foreach (var a in _factory.Adapters)
+            {
+                Log.Debug($"using {a.Description.Description}");
+                break;
+            }
 
             Main.SetDevice(device, _deviceContext, swapchain);
 
@@ -170,12 +176,12 @@ internal static class ProgramWindows
         _deviceContext.Rasterizer.State = viewWindowRasterizerState;
     }
 
-    public static void SetPixelShaderResource(ShaderResourceView viewWindowBackgroundSrv)
+    public static void SetPixelShaderSRV(ShaderResourceView viewWindowBackgroundSrv)
     {
         _deviceContext.PixelShader.SetShaderResource(0, viewWindowBackgroundSrv);
     }
 
-    public static void CopyToSecondaryRenderOutput()
+    public static void DrawTextureToSecondaryRenderOutput()
     {
         _deviceContext.Draw(3, 0);
         _deviceContext.PixelShader.SetShaderResource(0, null);
@@ -261,4 +267,62 @@ internal static class ProgramWindows
             throw (new ApplicationException($"Graphics card suspended ({resultCode}: {description}): {e.Message}"));
         }
     }
+
+    public static void RebuildUiCopyTextureIfRequired()
+    {
+        var needsRebuild = _uiCopyTexture == null ||
+                           _uiCopyTexture.Description.Width != Main.SwapChain.Description.ModeDescription.Width ||
+                           _uiCopyTexture.Description.Height != Main.SwapChain.Description.ModeDescription.Height;
+
+        if (!needsRebuild)
+            return;
+        
+        // Create a shader resource-compatible texture
+        var textureDesc = new Texture2DDescription
+                              {
+                                  Width = Main.SwapChain.Description.ModeDescription.Width,
+                                  Height = Main.SwapChain.Description.ModeDescription.Height,
+                                  MipLevels = 1,
+                                  ArraySize = 1,
+                                  Format = Main.SwapChain.Description.ModeDescription.Format,
+                                  SampleDescription = new SampleDescription(1, 0),
+                                  Usage = ResourceUsage.Default,
+                                  BindFlags = BindFlags.ShaderResource,
+                                  CpuAccessFlags = CpuAccessFlags.None,
+                                  OptionFlags = ResourceOptionFlags.None
+                              };
+
+        if (_uiCopyTexture is { IsDisposed: false })
+            _uiCopyTexture.Dispose();
+        
+        _uiCopyTexture = new Texture2D(_device, textureDesc);
+        
+        if (UiCopyTextureSrv is { IsDisposed: false })
+            UiCopyTextureSrv.Dispose();
+        
+        UiCopyTextureSrv = new ShaderResourceView(_device, _uiCopyTexture);
+    }
+
+    /// <summary>
+    /// For things like presentations, demos or certain live performance situations it
+    /// can be desired to share also T3's UI content on a second display.
+    ///  
+    /// On Windows duplicating a display is extremely expensive. This work around
+    /// copies the last frame into a texture which is then presented on the second display.
+    /// </summary>
+    public static void CopyUiContentToShareTexture()
+    {
+        if (_uiCopyTexture == null || _uiCopyTexture.IsDisposed)
+        {
+            Log.Warning("Can't use undefined uiCopyTexture");
+            return;
+        }
+        
+        _deviceContext.CopyResource(Main.BackBufferTexture, _uiCopyTexture);
+    }
+    
+    private static  Texture2D _uiCopyTexture;
+    public static  ShaderResourceView UiCopyTextureSrv { get; private set; }
+
+
 }

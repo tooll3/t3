@@ -4,6 +4,14 @@
   "Namespace": "lib.img.fx._",
   "Inputs": [
     {
+      "Id": "29f6bc05-de55-4336-a275-f06b835c66f8"/*Image*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "4837051f-033c-4e9e-9d1c-0fe85c1467cb"/*Mask*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "fa5bb047-7466-4d68-9977-7a86815ca0f2"/*Size*/,
       "DefaultValue": 2.0
     },
@@ -39,19 +47,11 @@
     {
       "Id": "684761a9-3bdf-4ef3-8d3e-191332609ecf"/*MaskOffset*/,
       "DefaultValue": 0.0
-    },
-    {
-      "Id": "29f6bc05-de55-4336-a275-f06b835c66f8"/*Image*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "4837051f-033c-4e9e-9d1c-0fe85c1467cb"/*Mask*/,
-      "DefaultValue": null
     }
   ],
   "Children": [
     {
-      "Id": "b2940c35-362a-4eb9-8f38-f14a5016a141"/*Vector2ToFloat2*/,
+      "Id": "b2940c35-362a-4eb9-8f38-f14a5016a141"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [
         {
@@ -135,7 +135,7 @@
       "Outputs": []
     },
     {
-      "Id": "f626873a-4305-484a-9ccf-77289cd983f5"/*Vector4ToFloat4*/,
+      "Id": "f626873a-4305-484a-9ccf-77289cd983f5"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []

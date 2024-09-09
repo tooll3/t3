@@ -287,7 +287,7 @@
       "Outputs": []
     },
     {
-      "Id": "59a1b91e-eb85-411f-bdef-66d248fb8663"/*Float3ToVector3*/,
+      "Id": "59a1b91e-eb85-411f-bdef-66d248fb8663"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []
@@ -383,7 +383,7 @@
       "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
       "InputValues": [
         {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
+          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*Radius*/,
           "Type": "System.Single",
           "Value": 1.1999999
         }
@@ -569,11 +569,6 @@
           }
         },
         {
-          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
-          "Type": "System.Single",
-          "Value": 76.6
-        },
-        {
           "Id": "8f439130-529c-42ff-a5c0-255476120f03"/*Direction*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -583,14 +578,14 @@
           }
         },
         {
+          "Id": "6fa2fddb-3b8d-4fda-9ac4-796618aa88d0"/*LengthFactor*/,
+          "Type": "System.Single",
+          "Value": 76.6
+        },
+        {
           "Id": "d120d8f7-aff6-4e30-b0d2-c45e3e477fde"/*W*/,
           "Type": "System.Single",
           "Value": 3.1999998
-        },
-        {
-          "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
-          "Type": "System.Single",
-          "Value": 0.0
         },
         {
           "Id": "83986e05-af3e-469f-a656-9956d37d12ba"/*Orientation*/,
@@ -610,6 +605,11 @@
           "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
           "Type": "System.Single",
           "Value": -90.0
+        },
+        {
+          "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
+          "Type": "System.Single",
+          "Value": 0.0
         }
       ],
       "Outputs": []
@@ -655,7 +655,7 @@
       "Outputs": []
     },
     {
-      "Id": "bb1560d6-3d68-4b10-a38f-236314d99d1a"/*RandomizePoints*/,
+      "Id": "bb1560d6-3d68-4b10-a38f-236314d99d1a"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -701,7 +701,7 @@
       "Outputs": []
     },
     {
-      "Id": "9b325c29-8ca8-4f74-a459-0ca135f02141"/*Float3ToVector3*/,
+      "Id": "9b325c29-8ca8-4f74-a459-0ca135f02141"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []

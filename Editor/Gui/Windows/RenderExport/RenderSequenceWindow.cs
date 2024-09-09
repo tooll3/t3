@@ -3,6 +3,7 @@ using System.IO;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
+using T3.Core.Audio;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -10,120 +11,124 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.RenderExport;
 
-public class RenderSequenceWindow : RenderHelperWindow
+public class RenderSequenceWindow : BaseRenderWindow
 {
     public RenderSequenceWindow()
     {
         Config.Title = "Render Sequence";
-        _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.";
+        _lastHelpString = PreferredInputFormatHint;
     }
-
-
+    
     protected override void DrawContent()
     {
         DrawTimeSetup();
 
-        // Custom parameters for this renderer
         FormInputs.AddEnumDropdown(ref _fileFormat, "FileFormat");
         FormInputs.AddStringInput("Folder", ref _targetFolder);
         ImGui.SameLine();
         FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.Folder, ref _targetFolder);
+
+        FormInputs.AddVerticalSpace(5);
         ImGui.Separator();
+        FormInputs.AddVerticalSpace(5);
 
         var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
-        if (mainTexture == null)
-        {
-            CustomComponents.HelpText("You have selected an operator that does not render. " +
-                                      "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for fast exports.");
-            return;
-        }
 
-        if (!IsExporting)
+        if (!IsExportingImages && !IsToollRenderingSomething)
         {
-            if (ImGui.Button("Start Export"))
+            if (ImGui.Button("Start Render"))
             {
                 if (ValidateOrCreateTargetFolder(_targetFolder))
                 {
-                    _isExporting = true;
+                    IsExportingImages = true;
                     _exportStartedTime = Playback.RunTimeInSecs;
                     FrameIndex = 0;
-                    SetPlaybackTimeForNextFrame();
+                    SetPlaybackTimeForThisFrame();
+                    TextureReadAccess.ClearQueue();
                 }
             }
         }
-        else
+        else if(IsExportingImages)
         {
+            // Handle audio although we do not save it
+            AudioRendering.GetLastMixDownBuffer(Playback.LastFrameDuration);
             var success = SaveCurrentFrameAndAdvance(mainTexture);
-            ScreenshotWriter.UpdateSaving();
-            ImGui.ProgressBar(Progress, new Vector2(-1, 4));
+            ImGui.ProgressBar((float) Progress, new Vector2(-1, 4));
 
             var currentTime = Playback.RunTimeInSecs;
             var durationSoFar = currentTime - _exportStartedTime;
-            if (GetRealFrame() >= FrameCount || !success)
+            if (FrameIndex >= FrameCount + 2 || !success)
             {
                 var successful = success ? "successfully" : "unsuccessfully";
                 _lastHelpString = $"Sequence export finished {successful} in {durationSoFar:0.00}s";
-                _isExporting = false;
+                IsExportingImages = false;
             }
             else if (ImGui.Button("Cancel"))
             {
                 _lastHelpString = $"Sequence export cancelled after {durationSoFar:0.00}s";
-                _isExporting = false;
+                IsExportingImages = false;
             }
             else
             {
-                var estimatedTimeLeft = durationSoFar - durationSoFar /  Progress;
-                _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {GetRealFrame()+1}/{FrameCount}  ";
-                _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0}s left";
+                var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
+                _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {FrameIndex+1}/{FrameCount}  ";
+                _lastHelpString += $"{Progress * 100.0:0}%%  {HumanReadableDurationFromSeconds( estimatedTimeLeft)} left";
             }
-
-            if (!IsExporting &&  ScreenshotWriter.SavingComplete)
+            
+            if (!IsExportingImages)
             {
-                ScreenshotWriter.Dispose();
+                ReleasePlaybackTime();
             }
         }
 
         CustomComponents.HelpText(_lastHelpString);
     }
 
-    private static int GetRealFrame()
-    {
-        // since we are double-buffering and discarding the first few frames,
-        // we have to subtract these frames to get the currently really shown framenumber...
-        return FrameIndex;
-    }
-
     private static string GetFilePath()
     {
-        return Path.Combine(_targetFolder, $"output_{GetRealFrame():0000}.{Extension}");
+        return Path.Combine(_targetFolder, $"output_{FrameIndex:0000}.{Extension}");
     }
 
     private static bool SaveCurrentFrameAndAdvance(Texture2D mainTexture)
     {
         try
         {
-            var success = SaveImage(mainTexture);
+            var success = ScreenshotWriter.StartSavingToFile(mainTexture, GetFilePath(), _fileFormat);
             FrameIndex++;
-            SetPlaybackTimeForNextFrame();
+            SetPlaybackTimeForThisFrame();
             return success;
         }
         catch (Exception e)
         {
             _lastHelpString = e.ToString();
-            _isExporting = false;
+            IsExportingImages = false;
             return false;
         }
     }
-
-    private static bool SaveImage(Texture2D mainTexture)
+    
+    private static bool IsExportingImages
     {
-        return ScreenshotWriter.StartSavingToFile(mainTexture, GetFilePath(), _fileFormat);
+        get => _isExporting2;
+        set
+        {
+            if (value)
+            {
+                SetRenderingStarted();
+            }
+            else
+            {
+                RenderingFinished();
+            }
+
+            _isExporting2 = value;
+        }
     }
+    private static bool _isExporting2;
 
     private static string Extension => _fileFormat.ToString().ToLower(); 
 
     private static double _exportStartedTime;
-    private static string _targetFolder = "./Render";
+    private static string _targetFolder = UserSettings.Config.RenderSequenceFilePath;
 
     private static ScreenshotWriter.FileFormats _fileFormat;
     private static string _lastHelpString = string.Empty;

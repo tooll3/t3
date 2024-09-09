@@ -20,6 +20,7 @@
         <PackageReference Include="SharpDX.Desktop" Version="4.2.0">
 		        <NoWarn>NU1701</NoWarn>
         </PackageReference>
+        <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0031" />
         <PackageReference Include="Svg" Version="3.3.0" />
     </ItemGroup>
 

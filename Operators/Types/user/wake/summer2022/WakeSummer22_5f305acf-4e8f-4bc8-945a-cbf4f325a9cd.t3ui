@@ -160,49 +160,49 @@
       }
     },
     {
-      "ChildId": "9e94d0b4-f405-4eba-867f-b699862bcc6c"/*Float2ToVector2*/,
+      "ChildId": "9e94d0b4-f405-4eba-867f-b699862bcc6c"/*Vector2*/,
       "Position": {
         "X": 1947.1757,
         "Y": 1265.982
       }
     },
     {
-      "ChildId": "d3dd26dc-284e-4a99-86b5-a0a7ae35de8f"/*Float2ToVector2*/,
+      "ChildId": "d3dd26dc-284e-4a99-86b5-a0a7ae35de8f"/*Vector2*/,
       "Position": {
         "X": 1947.1757,
         "Y": 1334.982
       }
     },
     {
-      "ChildId": "1c0e1dce-06e7-4d63-ae78-5ba93965743d"/*Float2ToVector2*/,
+      "ChildId": "1c0e1dce-06e7-4d63-ae78-5ba93965743d"/*Vector2*/,
       "Position": {
         "X": 1947.1757,
         "Y": 1403.982
       }
     },
     {
-      "ChildId": "3f7f4445-cd3f-4203-bd6f-ddf95ab21bff"/*Float2ToVector2*/,
+      "ChildId": "3f7f4445-cd3f-4203-bd6f-ddf95ab21bff"/*Vector2*/,
       "Position": {
         "X": 1947.1757,
         "Y": 1472.982
       }
     },
     {
-      "ChildId": "f52dfbe0-8857-4429-ba69-6d6a54dbd172"/*Float2ToVector2*/,
+      "ChildId": "f52dfbe0-8857-4429-ba69-6d6a54dbd172"/*Vector2*/,
       "Position": {
         "X": 1947.1757,
         "Y": 1541.9816
       }
     },
     {
-      "ChildId": "aaa6a762-160c-4d32-851b-f716db09c543"/*Float2ToVector2*/,
+      "ChildId": "aaa6a762-160c-4d32-851b-f716db09c543"/*Vector2*/,
       "Position": {
         "X": 1947.1757,
         "Y": 1610.982
       }
     },
     {
-      "ChildId": "8b28e3e7-88ea-446c-8bc2-e056f302313c"/*Float2ToVector2*/,
+      "ChildId": "8b28e3e7-88ea-446c-8bc2-e056f302313c"/*Vector2*/,
       "Position": {
         "X": 1947.1757,
         "Y": 1679.982
@@ -533,8 +533,8 @@
     {
       "ChildId": "aa0e4c82-d481-43ab-8c4a-44fbbb86f728"/*WaitingScene*/,
       "Position": {
-        "X": 189.20181,
-        "Y": 1250.7076
+        "X": -182.48508,
+        "Y": 1241.3486
       }
     },
     {
@@ -587,7 +587,7 @@
       }
     },
     {
-      "ChildId": "af9d3d06-e3d8-4f8c-b046-118161bacbd1"/*MosiacTiling*/,
+      "ChildId": "af9d3d06-e3d8-4f8c-b046-118161bacbd1"/*MosaicTiling*/,
       "Position": {
         "X": 65.58008,
         "Y": 2043.5563

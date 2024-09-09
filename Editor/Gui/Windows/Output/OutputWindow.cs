@@ -5,7 +5,6 @@ using System.Linq;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
@@ -13,7 +12,6 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.UiModel;
-using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Output
@@ -86,9 +84,15 @@ namespace T3.Editor.Gui.Windows.Output
 
         protected override void DrawContent()
         {
-            ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
-                             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
+            ImGui.BeginChild("##content", 
+                             new Vector2(0, ImGui.GetWindowHeight()), 
+                             false,
+                             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse );
             {
+                // Very ugly hack to prevent scaling the output above window size
+                var keepScale = T3Ui.UiScaleFactor;
+                T3Ui.UiScaleFactor = 1;
+                
                 // Draw output
                 _imageCanvas.SetAsCurrent();
 
@@ -100,8 +104,10 @@ namespace T3.Editor.Gui.Windows.Output
                 _imageCanvas.Deactivate();
 
                 _camSelectionHandling.Update(drawnInstance, drawnType);
-                _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction;
+                _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction | drawnType != typeof(Texture2D);
                 _imageCanvas.Update();
+
+                T3Ui.UiScaleFactor = keepScale;
                 DrawToolbar(drawnType);
                 CustomComponents.DrawWindowFocusFrame();
             }
@@ -177,7 +183,7 @@ namespace T3.Editor.Gui.Windows.Output
 
                 if (CustomComponents.IconButton(Icon.Snapshot, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight())))
                 {
-                    var folder = @"Screenshots/";
+                    const string folder = @"Screenshots/";
                     if (!Directory.Exists(folder))
                     {
                         Directory.CreateDirectory(folder);
@@ -188,8 +194,6 @@ namespace T3.Editor.Gui.Windows.Output
                 }
 
                 CustomComponents.TooltipForLastItem("Save screenshot");
-                if (!RenderHelperWindow.IsExporting)
-                    ScreenshotWriter.UpdateSaving();
             }
 
             ImGui.SameLine();
@@ -238,9 +242,9 @@ namespace T3.Editor.Gui.Windows.Output
             _evaluationContext.BackgroundColor = _backgroundColor;
 
             const string overrideSampleVariableName = "OverrideMotionBlurSamples";
-            if (RenderHelperWindow.IsExporting)
+            if (BaseRenderWindow.IsToollRenderingSomething)
             {
-                var samples = RenderHelperWindow.OverrideMotionBlurSamples;
+                var samples = BaseRenderWindow.OverrideMotionBlurSamples;
                 if (samples >= 0)
                 {
                     _evaluationContext.IntVariables[overrideSampleVariableName] = samples;

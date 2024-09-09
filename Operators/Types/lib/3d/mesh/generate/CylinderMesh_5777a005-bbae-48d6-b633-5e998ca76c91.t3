@@ -4,14 +4,6 @@
   "Namespace": "lib.3d.mesh.generate",
   "Inputs": [
     {
-      "Id": "66332a91-e0c2-442a-99f6-347dedaed72e"/*Center*/,
-      "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
-    },
-    {
       "Id": "8d290afb-2574-4afa-a545-a0d3588f89f6"/*Radius*/,
       "DefaultValue": 0.5
     },
@@ -32,6 +24,10 @@
       "DefaultValue": 32
     },
     {
+      "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
+      "DefaultValue": 1
+    },
+    {
       "Id": "c29b5881-85bc-4d29-bc72-6dd36730fa8f"/*Spin*/,
       "DefaultValue": 0.0
     },
@@ -44,12 +40,16 @@
       "DefaultValue": 360.0
     },
     {
-      "Id": "6ddf5966-9140-4bea-a56b-20690f9f436f"/*BasePivot*/,
-      "DefaultValue": 0.5
+      "Id": "66332a91-e0c2-442a-99f6-347dedaed72e"/*Center*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
     },
     {
-      "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
-      "DefaultValue": 1
+      "Id": "6ddf5966-9140-4bea-a56b-20690f9f436f"/*BasePivot*/,
+      "DefaultValue": 0.5
     },
     {
       "Id": "4c7e0f67-a35b-4a23-b640-b0375c1a3259"/*Rotation*/,

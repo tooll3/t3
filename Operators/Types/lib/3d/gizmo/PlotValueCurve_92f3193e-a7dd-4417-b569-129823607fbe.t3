@@ -31,6 +31,10 @@
     {
       "Id": "12a0a526-6255-49ee-a532-0e774dab91f8"/*Reset*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "932d5873-a16d-447f-a93a-6fb456c76256"/*BufferLength*/,
+      "DefaultValue": 256
     }
   ],
   "Children": [
@@ -62,17 +66,27 @@
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
       "InputValues": [
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
-          "Type": "System.Single",
-          "Value": 0.01
+          "Id": "75419a73-8a3e-4538-9a1d-e3b0ce7f8561"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 0.5
+          }
         },
         {
-          "Id": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableTest*/,
+          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
+          "Type": "System.Single",
+          "Value": 0.017
+        },
+        {
+          "Id": "9ba2aa59-e55b-4ebe-aa98-0f79ed77c7aa"/*EnableZTest*/,
           "Type": "System.Boolean",
           "Value": false
         },
         {
-          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableDepthWrite*/,
+          "Id": "c9cf2182-1297-463c-b5c1-d4ee7ad0895c"/*EnableZWrite*/,
           "Type": "System.Boolean",
           "Value": false
         }
@@ -153,6 +167,11 @@
           }
         },
         {
+          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
+          "Type": "System.String",
+          "Value": "Resources\\fonts\\Roboto-Light.fnt"
+        },
+        {
           "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
           "Type": "System.Single",
           "Value": 32.0
@@ -166,11 +185,6 @@
           "Id": "82cc31ff-3307-4b6d-be70-16e471c2ffc9"/*HorizontalAlign*/,
           "Type": "System.Int32",
           "Value": 0
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Roboto-Light.fnt"
         }
       ],
       "Outputs": []
@@ -254,6 +268,12 @@
       "SourceSlotId": "9fe97c16-b8ba-41a0-be15-a60d5124d806",
       "TargetParentOrChildId": "d03f8aeb-f6a5-4387-b215-e60ab6272a35",
       "TargetSlotId": "edb98f34-d019-47f6-b275-e5a80061e1f7"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "932d5873-a16d-447f-a93a-6fb456c76256",
+      "TargetParentOrChildId": "d337499a-e4f4-487c-a699-09a72316b8e3",
+      "TargetSlotId": "519133d3-0440-4c8a-8bc8-75aa17219ad5"
     },
     {
       "SourceParentOrChildId": "d03f8aeb-f6a5-4387-b215-e60ab6272a35",

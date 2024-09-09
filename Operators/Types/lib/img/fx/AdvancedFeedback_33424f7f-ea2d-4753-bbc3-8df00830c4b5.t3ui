@@ -1,6 +1,6 @@
 {
   "Id": "33424f7f-ea2d-4753-bbc3-8df00830c4b5"/*AdvancedFeedback*/,
-  "Description": "An advanced version of the [FluidFeedback] effect is much more versatile but harder to control. It also utilizes [DetectEdges] and stabilizes the feedback buffer to a meaningful value range, thus avoiding black or overly bright values.",
+  "Description": "An advanced version of the [FluidFeedback] effect is much more versatile but harder to control. It also utilizes [DetectEdges] and stabilizes the feedback buffer to a meaningful value range, thus avoiding black or overly bright values.\n\n\nAll Feedback Ops: [FluidFeedback] [AdvancedFeedback] [AdvancedFeedback2]\n\nAlso see [AfterGlow2]",
   "InputUis": [
     {
       "InputId": "0f29ca23-b5fb-484e-8ae6-8ed70d67d623"/*Command*/,
@@ -209,15 +209,15 @@
     {
       "ChildId": "b3a97d7b-cd02-4fb2-bdb5-f2a632e3396a"/*Displace*/,
       "Position": {
-        "X": 24.107605,
-        "Y": -260.45108
+        "X": 26.751404,
+        "Y": -285.83167
       }
     },
     {
       "ChildId": "c96a785d-f595-4964-b9a5-aa256be88163"/*Blur*/,
       "Position": {
-        "X": -186.32443,
-        "Y": -138.03241
+        "X": -176.27795,
+        "Y": -124.28461
       }
     },
     {

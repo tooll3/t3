@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
-using SharpDX.Direct3D11;
 using T3.Core.Logging;
 
 namespace T3.Core.Resource
@@ -49,18 +47,23 @@ namespace T3.Core.Resource
                 AddWatcher(ResourceManager.ResourcesFolder, pattern);
             }
 
-            if (ResourceFileHooks.TryGetValue(filepath, out var hook))
+            if (HooksForResourceFilepaths.TryGetValue(filepath, out var hook))
             {
                 hook.FileChangeAction -= action;
                 hook.FileChangeAction += action;
             }
             else
             {
+                if (!File.Exists(filepath))
+                {
+                    Log.Warning($"Can't access filepath: {filepath}");
+                    return;
+                }
                 var newHook = new ResourceFileHook(filepath, Array.Empty<uint>())
                                   {
                                       FileChangeAction = action
                                   };
-                ResourceFileHooks.Add(filepath,newHook);
+                HooksForResourceFilepaths.Add(filepath,newHook);
             }
         }
         
@@ -93,7 +96,7 @@ namespace T3.Core.Resource
         private static void FileChangedHandler(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
             // Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
-            if (!ResourceFileHooks.TryGetValue(fileSystemEventArgs.FullPath, out var fileHook))
+            if (!HooksForResourceFilepaths.TryGetValue(fileSystemEventArgs.FullPath, out var fileHook))
             {
                 //Log.Warning("Invalid FileResource?");
                 return;
@@ -119,7 +122,6 @@ namespace T3.Core.Resource
                 {
                     var updateable = resource as IUpdateable;
                     updateable?.Update(fileHook.Path);
-                    resource.UpToDate = false;
                 }
                 else
                 {
@@ -140,13 +142,13 @@ namespace T3.Core.Resource
         }
         
         private static FileSystemWatcher _csFileWatcher;
-        public static readonly Dictionary<string, ResourceFileHook> ResourceFileHooks = new();
+        public static readonly Dictionary<string, ResourceFileHook> HooksForResourceFilepaths = new();
     }
     
     /// <summary>
     /// Used by some <see cref="AbstractResource"/>s to link to a file.
     /// Note that multiple resources likes <see cref="VertexShader"/> and <see cref="PixelShader"/> can
-    /// depend on the some source file. 
+    /// depend on the same source file. 
     /// </summary>
     public class ResourceFileHook
     {

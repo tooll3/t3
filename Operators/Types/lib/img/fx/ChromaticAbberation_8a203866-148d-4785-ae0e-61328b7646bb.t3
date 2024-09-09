@@ -21,7 +21,7 @@
     },
     {
       "Id": "6dd98990-82a7-4f68-aef1-ff34d1825b3b"/*Distort*/,
-      "DefaultValue": 0.0
+      "DefaultValue": -0.1
     }
   ],
   "Children": [

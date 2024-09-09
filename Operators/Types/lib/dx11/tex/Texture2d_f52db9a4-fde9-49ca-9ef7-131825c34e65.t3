@@ -6,8 +6,8 @@
     {
       "Id": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,
       "DefaultValue": {
-        "Width": 256,
-        "Height": 256
+        "X": 256,
+        "Y": 256
       }
     },
     {

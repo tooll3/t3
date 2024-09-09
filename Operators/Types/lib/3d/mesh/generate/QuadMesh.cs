@@ -1,9 +1,8 @@
 using System;
 using System.Numerics;
-using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -21,7 +20,7 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
     public class QuadMesh : Instance<QuadMesh>
     {
         [Output(Guid = "9c86f704-a28f-4d2a-b7c0-15648f982462")]
-        public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
+        public readonly Slot<MeshBuffers> Data = new();
 
         public QuadMesh()
         {
@@ -67,7 +66,7 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
                     _vertexBufferData = new PbrVertex[verticesCount];
                 
                 if (_indexBufferData.Length != faceCount)
-                    _indexBufferData = new SharpDX.Int3[faceCount];
+                    _indexBufferData = new Int3[faceCount];
 
                 double columnStep = (scale * stretch.X) / (columns-1);  
                 double rowStep = (scale * stretch.Y) / (rows-1);
@@ -116,22 +115,22 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
                         if (columnIndex >= columns - 1 || rowIndex >= rows - 1)
                             continue;
                         
-                        _indexBufferData[faceIndex + 0] = new SharpDX.Int3(vertexIndex, vertexIndex + rows, vertexIndex + 1);
-                        _indexBufferData[faceIndex + 1] = new SharpDX.Int3(vertexIndex + rows, vertexIndex + rows+1, vertexIndex + 1);
+                        _indexBufferData[faceIndex + 0] = new Int3(vertexIndex, vertexIndex + rows, vertexIndex + 1);
+                        _indexBufferData[faceIndex + 1] = new Int3(vertexIndex + rows, vertexIndex + rows+1, vertexIndex + 1);
                     }
                 }
                 
                 // Write Data
-                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 ResourceManager.SetupStructuredBuffer(_vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride, ref _vertexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_vertexBuffer, ref _vertexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_vertexBuffer, UnorderedAccessViewBufferFlags.None, ref _vertexBufferWithViews.Uav);
+                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 
-                _indexBufferWithViews.Buffer = _indexBuffer;
                 const int stride = 3 * 4;
                 ResourceManager.SetupStructuredBuffer(_indexBufferData, stride * faceCount, stride, ref _indexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_indexBuffer, ref _indexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_indexBuffer, UnorderedAccessViewBufferFlags.None, ref _indexBufferWithViews.Uav);
+                _indexBufferWithViews.Buffer = _indexBuffer;
 
                 _data.VertexBuffer = _vertexBufferWithViews;
                 _data.IndicesBuffer = _indexBufferWithViews;
@@ -146,31 +145,31 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
 
         private Buffer _vertexBuffer;
         private PbrVertex[] _vertexBufferData = new PbrVertex[0];
-        private readonly BufferWithViews _vertexBufferWithViews = new BufferWithViews();
+        private readonly BufferWithViews _vertexBufferWithViews = new();
 
         private Buffer _indexBuffer;
-        private SharpDX.Int3[] _indexBufferData = new SharpDX.Int3[0];
-        private readonly BufferWithViews _indexBufferWithViews = new BufferWithViews();
+        private Int3[] _indexBufferData = new Int3[0];
+        private readonly BufferWithViews _indexBufferWithViews = new();
 
-        private readonly MeshBuffers _data = new MeshBuffers();
+        private readonly MeshBuffers _data = new();
 
         [Input(Guid = "18a5f3be-92a7-438c-b32b-e0da7c7a5736")]
-        public readonly InputSlot<Size2> Segments = new InputSlot<Size2>();
+        public readonly InputSlot<Int2> Segments = new();
         
         [Input(Guid = "0295DD65-95B4-4E02-8D61-4622F59D4FC4")]
-        public readonly InputSlot<Vector2> Stretch = new InputSlot<Vector2>();
+        public readonly InputSlot<Vector2> Stretch = new();
         
         [Input(Guid = "44fc1e7b-b1d1-4199-b373-8b7c4cc060d2")]
-        public readonly InputSlot<float> Scale = new InputSlot<float>();
+        public readonly InputSlot<float> Scale = new();
         
         [Input(Guid = "7F01D9B9-C612-4A2D-A52F-B56C54FB62AF")]
-        public readonly InputSlot<Vector2> Pivot = new InputSlot<Vector2>();
+        public readonly InputSlot<Vector2> Pivot = new();
         
         [Input(Guid = "B2A1C96A-4AEF-412A-B006-2EF285DD2479")]
-        public readonly InputSlot<Vector3> Center = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Center = new();
         
         [Input(Guid = "A89E41BF-5395-41F0-9804-A782ED4C0F30")]
-        public readonly InputSlot<Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Rotation = new();
         
     }
 }

@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {
@@ -124,8 +125,8 @@ void main(uint3 i : SV_DispatchThreadID)
     int texHeight;
     WriteOutput.GetDimensions(texWidth, texHeight);
 
-    float3 pos = Points[i.x].position;
-    float angle = Points[i.x].w;
+    float3 pos = Points[i.x].Position;
+    float angle = Points[i.x].W;
 
     float hash =hash11(i.x * 123.1);
 
@@ -161,12 +162,12 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float move = clamp(((leftComfort + rightComfort)/2 - frontComfort),-1,1) * CB.MoveToComfort + _baseMove;
     pos += float3(sin(angle),cos(angle),0) * move / TargetHeight;
-    Points[i.x].w = angle;
+    Points[i.x].W = angle;
     
     float3 aspectRatio = float3(TargetWidth / BlockCount.x /((float)TargetHeight / BlockCount.y),1,1);
     pos = (mod((pos  / aspectRatio + 1),2) - 1) * aspectRatio; 
-    Points[i.x].position = pos;
-    Points[i.x].rotation = rotate_angle_axis(-angle, float3(0,0,1));
+    Points[i.x].Position = pos;
+    Points[i.x].Rotation = qFromAngleAxis(-angle, float3(0,0,1));
     
     // Update map
     float2 gridPos = (pos.xy * float2(1,-1) +1)  * float2(texWidth, texHeight)/2;

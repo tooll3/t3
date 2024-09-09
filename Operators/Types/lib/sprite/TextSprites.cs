@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using Operators.Utils;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -46,8 +44,9 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                 }
             }
 
-            UpdateMesh(context);
-            
+            UpdateMesh(context); 
+
+            // Prevent multiple evaluation because previously fetched SRV will be disposed
             Texture.DirtyFlag.Clear();
             SpriteBuffer.DirtyFlag.Clear();
             PointBuffer.DirtyFlag.Clear();
@@ -120,7 +119,7 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
             float textureHeight = _bmFont.BmFont.Common.ScaleH;
             float cursorX = 0;
             float cursorY = 0;
-            var verticalCenterOffset = _bmFont.Padding.Up + _bmFont.BmFont.Common.Base + _bmFont.Padding.Down - _bmFont.BmFont.Info.Size /2f;
+            var verticalCenterOffset = _bmFont.Padding.Up + _bmFont.BmFont.Common.Base + _bmFont.Padding.Down - _bmFont.BmFont.Info.Size / 2f;
 
             switch (verticalAlign)
             {
@@ -205,7 +204,10 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                                     {
                                         Position = center,
                                         W = 1,
-                                        Orientation = Quaternion.Identity
+                                        Orientation = Quaternion.Identity,
+                                        Selected = 1,
+                                        Stretch = Vector3.One,
+                                        Color = Vector4.One,
                                     });
                     outputIndex++;
                     currentLineCharacterCount++;
@@ -218,16 +220,21 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
 
             AdjustLineAlignment();
 
-            SpriteBuffer.Value ??= new BufferWithViews();
-            ResourceManager.SetupStructuredBuffer( _sprites.Count > 0 ? _sprites.ToArray() : _nonSprite, ref SpriteBuffer.Value.Buffer);
-            ResourceManager.CreateStructuredBufferSrv(SpriteBuffer.Value.Buffer, ref SpriteBuffer.Value.Srv);
-            ResourceManager.CreateStructuredBufferUav(SpriteBuffer.Value.Buffer, UnorderedAccessViewBufferFlags.None,ref SpriteBuffer.Value.Uav);
-
-            PointBuffer.Value ??= new BufferWithViews();
-            ResourceManager.SetupStructuredBuffer( _points.Count > 0 ? _points.ToArray() : _nonPoints, ref PointBuffer.Value.Buffer);
-            ResourceManager.CreateStructuredBufferSrv(PointBuffer.Value.Buffer, ref PointBuffer.Value.Srv);
-            ResourceManager.CreateStructuredBufferUav(PointBuffer.Value.Buffer, UnorderedAccessViewBufferFlags.None,ref PointBuffer.Value.Uav);
-
+            var pointBuffer= new BufferWithViews();
+            ResourceManager.SetupStructuredBuffer( _points.Count > 0 ? _points.ToArray() : _nonPoints, ref pointBuffer.Buffer);
+            ResourceManager.CreateStructuredBufferSrv(pointBuffer.Buffer, ref pointBuffer.Srv);
+            ResourceManager.CreateStructuredBufferUav(pointBuffer.Buffer, UnorderedAccessViewBufferFlags.None,ref pointBuffer.Uav);
+            PointBuffer.Value?.Dispose();
+            PointBuffer.Value = pointBuffer;
+            
+            var spriteBuffer = new BufferWithViews();
+            ResourceManager.SetupStructuredBuffer( _sprites.Count > 0 ? _sprites.ToArray() : _nonSprite, ref spriteBuffer.Buffer);
+            ResourceManager.CreateStructuredBufferSrv(spriteBuffer.Buffer, ref spriteBuffer.Srv);
+            ResourceManager.CreateStructuredBufferUav(spriteBuffer.Buffer, UnorderedAccessViewBufferFlags.None,ref spriteBuffer.Uav);
+            SpriteBuffer.Value?.Dispose();
+            SpriteBuffer.Value = spriteBuffer;
+            
+            
             void AdjustLineAlignment()
             {
                 switch (horizontalAlign)
@@ -254,7 +261,9 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                                                                Position = Vector3.Zero,
                                                                W= float.NaN,
                                                                Orientation =  Quaternion.Identity,
-                                                             
+                                                               Color = Vector4.One,
+                                                               Selected = 1,
+                                                               Stretch = Vector3.One,
                                                            } };
 
         private void OffsetLineCharacters(float offset, int currentLineCharacterCount, int outputIndex)

@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.IO;
 using ManagedBass;
 using Newtonsoft.Json;
-using SharpDX;
 using T3.Core.Logging;
 using T3.Core.Utils;
 
@@ -177,10 +176,10 @@ namespace T3.Editor.Gui.Audio
 
         private readonly FftRegion[] _regions =
             {
-                new FftRegion() { Title = "levels", LowerLimit = 0f, UpperLimit = 1f },
-                new FftRegion() { Title = "highlevels", LowerLimit = 0.3f, UpperLimit = 1f },
-                new FftRegion() { Title = "midlevels", LowerLimit = 0.06f, UpperLimit = 0.3f },
-                new FftRegion() { Title = "lowlevels", LowerLimit = 0.0f, UpperLimit = 0.02f },
+                new() { Title = "levels", LowerLimit = 0f, UpperLimit = 1f },
+                new() { Title = "highlevels", LowerLimit = 0.3f, UpperLimit = 1f },
+                new() { Title = "midlevels", LowerLimit = 0.06f, UpperLimit = 0.3f },
+                new() { Title = "lowlevels", LowerLimit = 0.0f, UpperLimit = 0.02f },
             };
 
         private const int SpectrumLength = 1024;

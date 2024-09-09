@@ -1,6 +1,6 @@
 {
   "Id": "d002bd90-5921-48b0-a940-a8d0c779f674"/*Rings*/,
-  "Description": "Generates a procedural rings texture that can produce a wide variety of radial patterns. Please try the presets.",
+  "Description": "Generates a procedural rings texture that can produce a wide variety of radial patterns. Please try the presets.\n\n\nSimilar Ops: [NGon] [RoundedRect] [Rings] [RadialGradient] [LinearGradient] [Blob]",
   "InputUis": [
     {
       "InputId": "a22945ec-c576-491a-83d0-ffea9dd0cdc4"/*Image*/,
@@ -48,7 +48,8 @@
         "Y": -225.11075
       },
       "Min": -1.0,
-      "Max": 1.0
+      "Max": 1.0,
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "f74b3fd6-eee4-4218-9771-3f04c38e4ff1"/*Count*/,
@@ -194,35 +195,35 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "0d73ac25-19f4-41fb-bf0e-81f09eb1affa"/*Vector4ToFloat4*/,
+      "ChildId": "0d73ac25-19f4-41fb-bf0e-81f09eb1affa"/*Vector4Components*/,
       "Position": {
         "X": -1235.9949,
         "Y": -431.15872
       }
     },
     {
-      "ChildId": "6b273822-3d1c-409c-ab15-c3951d940a87"/*Vector4ToFloat4*/,
+      "ChildId": "6b273822-3d1c-409c-ab15-c3951d940a87"/*Vector4Components*/,
       "Position": {
         "X": -1235.9949,
         "Y": -375.1586
       }
     },
     {
-      "ChildId": "b8a9445e-bac4-4724-b060-891582df2579"/*Vector2ToFloat2*/,
+      "ChildId": "b8a9445e-bac4-4724-b060-891582df2579"/*Vector2Components*/,
       "Position": {
         "X": -1235.9949,
         "Y": -263.1586
       }
     },
     {
-      "ChildId": "77315f66-fd85-48d1-9f7a-731d37d9aee6"/*Vector2ToFloat2*/,
+      "ChildId": "77315f66-fd85-48d1-9f7a-731d37d9aee6"/*Vector2Components*/,
       "Position": {
         "X": -1235.9949,
         "Y": -207.15854
       }
     },
     {
-      "ChildId": "2071bf5e-1da9-4bae-881c-8de30a416d0d"/*Vector4ToFloat4*/,
+      "ChildId": "2071bf5e-1da9-4bae-881c-8de30a416d0d"/*Vector4Components*/,
       "Position": {
         "X": -1235.9949,
         "Y": -319.1586
@@ -236,28 +237,28 @@
       }
     },
     {
-      "ChildId": "4a8af0c6-5c94-4aad-9200-a4b334a0a574"/*Vector2ToFloat2*/,
+      "ChildId": "4a8af0c6-5c94-4aad-9200-a4b334a0a574"/*Vector2Components*/,
       "Position": {
         "X": -1237.9113,
         "Y": 66.309265
       }
     },
     {
-      "ChildId": "b9d72894-3c1a-44be-87a8-252ae28575d4"/*Vector2ToFloat2*/,
+      "ChildId": "b9d72894-3c1a-44be-87a8-252ae28575d4"/*Vector2Components*/,
       "Position": {
         "X": -1237.9113,
         "Y": 122.309296
       }
     },
     {
-      "ChildId": "fa434561-1c94-4b2e-8319-604201ea9ace"/*Vector2ToFloat2*/,
+      "ChildId": "fa434561-1c94-4b2e-8319-604201ea9ace"/*Vector2Components*/,
       "Position": {
         "X": -1237.9113,
         "Y": 178.30936
       }
     },
     {
-      "ChildId": "690dcf27-0802-438f-aa0c-fcbedf8c3521"/*Vector2ToFloat2*/,
+      "ChildId": "690dcf27-0802-438f-aa0c-fcbedf8c3521"/*Vector2Components*/,
       "Position": {
         "X": -1237.9113,
         "Y": 234.3096

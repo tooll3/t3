@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction
@@ -53,6 +52,8 @@ namespace T3.Editor.Gui.Graph.Interaction
             foreach (var symbolUi in SymbolUiRegistry.Entries.Values)
             {
                 usages.TryGetValue(symbolUi.Symbol.Id, out var usageCount);
+                
+                
 
                 InformationForSymbolIds[symbolUi.Symbol.Id]
                     = new SymbolInformation()
@@ -65,6 +66,11 @@ namespace T3.Editor.Gui.Graph.Interaction
                                                                .Select(c => c.Symbol.Id)
                                                                .ToList() ,
                               UsageCount = usageCount,
+                                LacksDescription = string.IsNullOrWhiteSpace(symbolUi.Description),
+                                LacksAllParameterDescription = symbolUi.InputUis.Count > 2 && symbolUi.InputUis.Values.All(i => string.IsNullOrWhiteSpace(i.Description)),
+                                LacksSomeParameterDescription = symbolUi.InputUis.Count > 2 && symbolUi.InputUis.Values.Any(i => string.IsNullOrWhiteSpace(i.Description)),
+                                LacksParameterGrouping = symbolUi.InputUis.Count > 4 && !symbolUi.InputUis.Values.Any(i => i.AddPadding || !string.IsNullOrEmpty(i.GroupTitle)),
+                                IsLibOperator = symbolUi.Symbol.Namespace.StartsWith("lib.") && !symbolUi.Symbol.Name.StartsWith("_") && !symbolUi.Symbol.Namespace.Contains("._"),
                           };
                 
             }
@@ -91,6 +97,12 @@ namespace T3.Editor.Gui.Graph.Interaction
             public HashSet<Guid> DependingSymbolIds = new();
             public List<Guid> ExampleSymbols = new();
             public int UsageCount { get; set; }
+            public bool LacksDescription;
+            public bool LacksAllParameterDescription;
+            public bool LacksSomeParameterDescription;
+            public bool LacksParameterGrouping;
+            public bool IsLibOperator;
+            
         }
     }
 }

@@ -7,7 +7,6 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -194,9 +193,9 @@ namespace T3.Editor.Gui.Windows
         {
             // Fixme: Deserialization doesn't work and results into new (incorrect) random Ids
             //[JsonConverter(typeof(List<Guid>))]
-            public List<Guid> IdPath = new List<Guid>();
+            public List<Guid> IdPath = new();
             public ScalableCanvas.Scope ViewScope;
-            public List<Guid> SelectedChildIds = new List<Guid>();
+            public List<Guid> SelectedChildIds = new();
         }
 
 

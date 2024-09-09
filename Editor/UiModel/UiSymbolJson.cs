@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -11,7 +12,6 @@ using T3.Core.Resource;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
-using T3.Editor.Gui.Styling;
 using Truncon.Collections;
 
 // ReSharper disable AssignNullToNotNullAttribute
@@ -36,7 +36,6 @@ namespace T3.Editor.UiModel
             WriteOutputUis(symbolUi, writer);
             WriteAnnotations(symbolUi, writer);
             WriteLinks(symbolUi, writer);
-
             writer.WriteEndObject();
         }
 
@@ -95,7 +94,7 @@ namespace T3.Editor.UiModel
                     writer.WritePropertyName(JsonKeys.Position);
                     _vector2ToJson(writer, childUi.PosOnCanvas);
 
-                    if(childUi.SnapshotGroupIndex > 0)
+                    if(childUi.SnapshotGroupIndex != 0)
                         writer.WriteObject(nameof(SymbolChildUi.SnapshotGroupIndex), childUi.SnapshotGroupIndex);
 
                     if (childUi.ConnectionStyleOverrides.Count > 0)
@@ -208,7 +207,13 @@ namespace T3.Editor.UiModel
 
         internal static bool TryReadSymbolUi(JToken mainObject, Guid symbolId, out SymbolUi symbolUi)
         {
-            var symbol = SymbolRegistry.Entries[symbolId];
+            if(!SymbolRegistry.Entries.TryGetValue(symbolId, out var symbol))
+            {
+                Log.Debug($"Skipping t3ui definition for undefined {symbolId}. Probably .t3 and .cs files are missing");
+                symbolUi = null;
+                return false;
+            }
+            
 
             var inputDict = new OrderedDictionary<Guid, IInputUi>();
             foreach (JToken uiInputEntry in (JArray)mainObject[JsonKeys.InputUis])
@@ -427,6 +432,7 @@ namespace T3.Editor.UiModel
             public const string Position = nameof(Position);
             public const string Annotations = nameof(Annotations);
             public const string Links = nameof(Links);
+            public const string ParamCollections = nameof(ParamCollections);
             public const string Comment = nameof(Comment);
             public const string Id = nameof(Id);
             public const string Title = nameof(Title);

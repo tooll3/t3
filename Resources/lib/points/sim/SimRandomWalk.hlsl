@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -35,16 +36,16 @@ void main(uint3 i : SV_DispatchThreadID)
     if(hash2.y < TurnRatio) {
         float turnDirection = hash2.y * 100 % 1 > 0.5 ? -1 : 1;
 
-        float4 q = ResultPoints[i.x].rotation;
+        float4 q = ResultPoints[i.x].Rotation;
         float randomAngle = (TurnAngle + hash2.x * RandomRotateAngle) * 3.141578 / 180 * turnDirection;
         
-        ResultPoints[i.x].rotation = qmul(q, rotate_angle_axis(randomAngle, float3(0,0,1)));
+        ResultPoints[i.x].Rotation = qMul(q, qFromAngleAxis(randomAngle, float3(0,0,1)));
     }
 
     float3 forward = float3(StepWidth + RandomStepWidth * hash2.y, 0,0);
-    float3 step = rotate_vector(forward,ResultPoints[i.x].rotation );
+    float3 step = qRotateVec3(forward, ResultPoints[i.x].Rotation );
 
-    ResultPoints[i.x].position += step;
-    ResultPoints[i.x].w += 0;
+    ResultPoints[i.x].Position += step;
+    ResultPoints[i.x].W += 0;
 }
 

@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.OutputUi
         public Guid Id => OutputDefinition.Id;
         public Type Type { get; } = typeof(T);
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
-        public Vector2 Size { get; set; } = new Vector2(100, 30);
+        public Vector2 Size { get; set; } = new(100, 30);
         public bool IsSelected => NodeSelection.IsNodeSelected(this);
         public abstract IOutputUi Clone();
 

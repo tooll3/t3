@@ -100,7 +100,7 @@ namespace T3.Core.Audio
                 inputDeviceIndex = device.WasapiDeviceIndex;
             }
 
-            Bass.Configure(Configuration.UpdateThreads, false);
+            //Bass.Configure(Configuration.UpdateThreads, false);
             // Bass.Configure(Configuration.DeviceBufferLength, 1024);
 
             BassWasapi.Stop();

@@ -42,11 +42,11 @@
       "ChildId": "2b0b88d7-dae5-4ee8-bb75-de94ece27af4"/*_AnimValueOld*/,
       "Position": {
         "X": 0.0,
-        "Y": 69.0
+        "Y": 67.0
       }
     },
     {
-      "ChildId": "2c95bd87-1eef-48d8-bd2b-627422f1bf75"/*Float3ToVector3*/,
+      "ChildId": "2c95bd87-1eef-48d8-bd2b-627422f1bf75"/*Vector3*/,
       "Position": {
         "X": 150.0,
         "Y": 69.0

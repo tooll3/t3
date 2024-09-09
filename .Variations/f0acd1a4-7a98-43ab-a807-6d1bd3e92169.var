@@ -33,17 +33,18 @@
       }
     },
     {
-      "Id": "d487ea03-22f7-47c9-bc5b-88d31fa51cfc",
+      "Id": "bbf847c5-f797-44e7-b439-42893f28ae84",
       "IsPreset": true,
       "ActivationIndex": 3,
-      "Title": "untitled",
+      "Title": "Negate",
       "PosOnCanvas": {
         "X": 0.0,
         "Y": 0.0
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
-          "252276fb-8de1-42cc-ba41-07d6862015bd": 57.296047
+          "f2baf278-adde-42de-afce-336b6c8d0387": 1.0,
+          "252276fb-8de1-42cc-ba41-07d6862015bd": 0.0
         }
       }
     }

@@ -1,19 +1,22 @@
 {
   "Id": "6b7c541a-ca36-4f21-ac95-89e874820c5a"/*BlendColors*/,
+  "Description": "Blends two colors with the defined blendmode",
   "InputUis": [
     {
       "InputId": "eb601c57-2025-4135-8292-223eaedaf187"/*ColorA*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Description": "Input for the first color"
     },
     {
       "InputId": "b9e5c6f3-7052-456f-9d1b-c182b4412433"/*ColorB*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Description": "Input for a second color"
     },
     {
       "InputId": "40803d0e-c37c-4b5d-b64b-fd1ef090a4f7"/*Factor*/,
@@ -21,6 +24,8 @@
         "X": -200.0,
         "Y": 90.0
       },
+      "GroupTitle": "Settings",
+      "Description": "Defines how strongly color B is faded into color A",
       "Min": 0.0,
       "Max": 1.0
     },
@@ -29,7 +34,9 @@
       "Position": {
         "X": -200.0,
         "Y": 135.0
-      }
+      },
+      "Description": "Defines the mode with which the colors are merged.",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],

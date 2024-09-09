@@ -1,7 +1,6 @@
 using System;
-using System.Numerics;
-using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -9,7 +8,6 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Quaternion = System.Numerics.Quaternion;
-using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
@@ -19,7 +17,7 @@ namespace T3.Operators.Types.Id_d8699da1_13aa_42f7_816a_88abb1d0ba06
     public class _ProcessLayer2d : Instance<_ProcessLayer2d>
     {
         [Output(Guid = "D81A2DB8-D72D-48B1-9201-0EE87822097E", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector4[]> Result = new Slot<Vector4[]>();
+        public readonly Slot<Vector4[]> Result = new();
         
         public _ProcessLayer2d()
         {
@@ -30,12 +28,12 @@ namespace T3.Operators.Types.Id_d8699da1_13aa_42f7_816a_88abb1d0ba06
         private void Update(EvaluationContext context)
         {
             var imageTexture = ImageTexture.GetValue(context);
-            var imageSize = new Size2(1,1);
+            var imageSize = new Int2(1,1);
             if (imageTexture != null)
             {
                 try
                 {
-                    imageSize = new Size2(imageTexture.Description.Width, imageTexture.Description.Height);
+                    imageSize = new Int2(imageTexture.Description.Width, imageTexture.Description.Height);
                 }
                 catch (Exception e)
                 {

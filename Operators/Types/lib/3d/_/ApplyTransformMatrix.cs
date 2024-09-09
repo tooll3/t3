@@ -1,16 +1,8 @@
-using System;
 using System.Numerics;
-using ManagedBass;
-using SharpDX;
-using T3.Core;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Vector4 = System.Numerics.Vector4;
 

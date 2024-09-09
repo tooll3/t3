@@ -13,7 +13,6 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.UiModel;
@@ -101,6 +100,13 @@ namespace T3.Editor.Gui.Graph
                                   playerBuildPath + "Processing.NDI.Lib.x64.dll",
                                   playerBuildPath + "basswasapi.dll",
                                   playerBuildPath + "bass.dll",
+                                  playerBuildPath + "AbletonLinkDLL.dll",
+                                  playerBuildPath + "AbletonLink.dll",
+                                  playerBuildPath + "AbletonLink.deps.json",
+
+                                  playerBuildPath + "NAudio.Core.dll",
+                                  playerBuildPath + "Naudio.Midi.dll",
+
                               },
                           exportDir);
 
@@ -170,8 +176,10 @@ namespace T3.Editor.Gui.Graph
 
                 resourcePaths.Add(@"Resources\lib\dx11\fullscreen-texture.hlsl");
                 resourcePaths.Add(@"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl");
+                resourcePaths.Add(@"Resources\lib\cs\CombineGltfChannels-cs.hlsl");
 
                 resourcePaths.Add(@"Resources\common\images\BRDF-LookUp.png");
+                resourcePaths.Add(@"Resources\common\images\BRDF-LookUp.dds");
                 resourcePaths.Add(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
 
                 resourcePaths.Add(@"Resources\t3-editor\images\t3.ico");
@@ -226,9 +234,9 @@ namespace T3.Editor.Gui.Graph
 
         private class ExportInfo
         {
-            private HashSet<Instance> CollectedInstances { get; } = new HashSet<Instance>();
-            public HashSet<Symbol> UniqueSymbols { get; } = new HashSet<Symbol>();
-            public HashSet<string> UniqueResourcePaths { get; } = new HashSet<string>();
+            private HashSet<Instance> CollectedInstances { get; } = new();
+            public HashSet<Symbol> UniqueSymbols { get; } = new();
+            public HashSet<string> UniqueResourcePaths { get; } = new();
 
             public bool AddInstance(Instance instance)
             {

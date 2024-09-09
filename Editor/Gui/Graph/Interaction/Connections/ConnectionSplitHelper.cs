@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using ImGuiNET;
-using SharpDX;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
@@ -10,7 +10,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
-using Color = T3.Editor.Gui.Styling.Color;
+using Color = T3.Core.DataTypes.Vector.Color;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Graph.Interaction.Connections
@@ -93,7 +93,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                             var sourceOpUi = SymbolUiRegistry.Entries[sourceOpInstance.Symbol.Id];
                             IOutputUi outputUi = sourceOpUi.OutputUis[output.OutputDefinition.Id];
                             EvaluationContext.Reset();
-                            EvaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
+                            EvaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
                             outputUi.DrawValue(outputSlot, EvaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
 
                             // if (!string.IsNullOrEmpty(sourceOpUi.Description))
@@ -159,7 +159,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
         }
 
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new() { DisableDamping = true };
-        private static readonly EvaluationContext EvaluationContext = new EvaluationContext();
+        private static readonly EvaluationContext EvaluationContext = new();
 
         public static PotentialConnectionSplit BestMatchLastFrame;
         private static PotentialConnectionSplit _bestMatchYetForCurrentFrame;

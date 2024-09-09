@@ -1,6 +1,6 @@
 {
   "Id": "3d0ad320-1055-4f71-b3c0-0e77261ca587"/*CombineMaterialChannels2*/,
-  "Description": "Combines roughness, metallic, and ambient occlusion texture maps into a single texture for [SetMaterial].",
+  "Description": "Combines roughness, metallic, and ambient occlusion texture maps into a single texture for [SetMaterial].\n\nIf no normalmap is available [NormalMap] can be used to generate one.\n\nNewer version: [CombineMaterialChannels2]",
   "InputUis": [
     {
       "InputId": "223ff98a-9e21-46a0-954e-8c763226128e"/*ImageA*/,
@@ -88,14 +88,14 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "c4642581-cdc6-4931-a07d-56834620a172"/*Vector4ToFloat4*/,
+      "ChildId": "c4642581-cdc6-4931-a07d-56834620a172"/*Vector4Components*/,
       "Position": {
         "X": 122.33575,
         "Y": 98.58719
       }
     },
     {
-      "ChildId": "ed4fc0ea-1363-4a96-b620-25a58531c2d9"/*Vector4ToFloat4*/,
+      "ChildId": "ed4fc0ea-1363-4a96-b620-25a58531c2d9"/*Vector4Components*/,
       "Position": {
         "X": 122.33575,
         "Y": 154.58716
@@ -109,7 +109,7 @@
       }
     },
     {
-      "ChildId": "028627ae-37e5-47ea-8ec4-970715ea6da9"/*Vector4ToFloat4*/,
+      "ChildId": "028627ae-37e5-47ea-8ec4-970715ea6da9"/*Vector4Components*/,
       "Position": {
         "X": 125.19737,
         "Y": 254.10223

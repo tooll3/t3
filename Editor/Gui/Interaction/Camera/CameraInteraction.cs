@@ -1,11 +1,11 @@
 using System;
-using System.Drawing;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator.Interfaces;
-using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using T3.Editor.Gui.Interaction.TransformGizmos;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.Camera
@@ -140,7 +140,7 @@ namespace T3.Editor.Gui.Interaction.Camera
                     _orbitVelocity += delta * _deltaTime * -0.1f;
                 }
             }
-            else if (ImGui.IsMouseDragging(ImGuiMouseButton.Right))
+            else if (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !CustomComponents.IsDragScrolling && !ScalableCanvas.IsAnyCanvasDragged)
             {
                 Pan();
             }
@@ -258,7 +258,7 @@ namespace T3.Editor.Gui.Interaction.Camera
                 var newViewVector = newViewDir * viewDirLength;
                 _intendedSetup.Position = _intendedSetup.Target - newViewVector;
 
-                _intendedSetup.Target = _intendedSetup.Position + newViewDir * UserSettings.Config.CameraSpeed * DefaultCameraDistance;
+                _intendedSetup.Target = _intendedSetup.Position + newViewDir * UserSettings.Config.CameraSpeed * GraphicsMath.DefaultCameraDistance;
             }
             else
             {
@@ -277,8 +277,7 @@ namespace T3.Editor.Gui.Interaction.Camera
             }
         }
 
-        private const float DefaultCamFovDegrees = 45;
-        public readonly float DefaultCameraDistance = 1f / MathF.Tan(DefaultCamFovDegrees * MathF.PI / 360f);
+
 
         private void Pan()
         {
@@ -376,14 +375,14 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         public void ResetCamera(ICamera cam)
         {
-            cam.CameraPosition = new Vector3(0, 0, CameraInteractionParameters.DefaultCameraPositionZ);
+            cam.CameraPosition = new Vector3(0, 0, GraphicsMath.DefaultCameraDistance);
             cam.CameraTarget = Vector3.Zero;
             cam.CameraRoll = 0;
         }
 
-        private static ViewAxis _viewAxis = new ViewAxis();
-        private readonly CameraSetup _smoothedSetup = new CameraSetup();
-        private readonly CameraSetup _intendedSetup = new CameraSetup();
+        private static ViewAxis _viewAxis = new();
+        private readonly CameraSetup _smoothedSetup = new();
+        private readonly CameraSetup _intendedSetup = new();
 
         private static float FrameDurationFactor => (ImGui.GetIO().DeltaTime);
         private bool _manipulatedByMouseWheel;

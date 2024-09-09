@@ -3,6 +3,7 @@
 
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {

@@ -322,6 +322,27 @@
         "X": 1512.0653,
         "Y": 607.78973
       }
+    },
+    {
+      "ChildId": "6e419eb9-94c3-499f-bd23-044f151acc1a"/*TorusMesh*/,
+      "Position": {
+        "X": 248.2475,
+        "Y": 1656.6692
+      }
+    },
+    {
+      "ChildId": "d1bd1e57-e725-4676-9d5d-d57ddc911830"/*DrawMesh*/,
+      "Position": {
+        "X": 398.2475,
+        "Y": 1656.6692
+      }
+    },
+    {
+      "ChildId": "d5f95f99-769d-4803-808d-f6f5bcd3da21"/*Transform*/,
+      "Position": {
+        "X": 548.2475,
+        "Y": 1656.6692
+      }
     }
   ],
   "OutputUis": [

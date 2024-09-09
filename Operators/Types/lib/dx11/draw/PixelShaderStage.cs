@@ -1,5 +1,4 @@
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -12,7 +11,7 @@ namespace T3.Operators.Types.Id_75306997_4329_44e9_a17a_050dae532182
     public class PixelShaderStage : Instance<PixelShaderStage>
     {
         [Output(Guid = "76E7AD5D-A31D-4B1F-9C42-B63C5161117C")]
-        public readonly Slot<Command> Output = new Slot<Command>(new Command());
+        public readonly Slot<Command> Output = new(new Command());
 
         public PixelShaderStage()
         {
@@ -68,15 +67,15 @@ namespace T3.Operators.Types.Id_75306997_4329_44e9_a17a_050dae532182
         private SamplerState[] _prevSamplerStates = new SamplerState[0];
 
         [Input(Guid = "C4E91BC6-1691-4EB4-AED5-DD4CAE528149")]
-        public readonly MultiInputSlot<SharpDX.Direct3D11.SamplerState> SamplerStates = new MultiInputSlot<SharpDX.Direct3D11.SamplerState>();
+        public readonly MultiInputSlot<SharpDX.Direct3D11.SamplerState> SamplerStates = new();
 
         [Input(Guid = "BE02A84B-A666-4119-BB6E-FEE1A3DF0981")]
-        public readonly MultiInputSlot<SharpDX.Direct3D11.Buffer> ConstantBuffers = new MultiInputSlot<SharpDX.Direct3D11.Buffer>();
+        public readonly MultiInputSlot<SharpDX.Direct3D11.Buffer> ConstantBuffers = new();
 
         [Input(Guid = "1B9BE6EB-96C8-4B1C-B854-99B64EAF5618")]
-        public readonly InputSlot<SharpDX.Direct3D11.PixelShader> PixelShader = new InputSlot<SharpDX.Direct3D11.PixelShader>();
+        public readonly InputSlot<SharpDX.Direct3D11.PixelShader> PixelShader = new();
 
         [Input(Guid = "50052906-4691-4A84-A69D-A109044B5300")]
-        public readonly MultiInputSlot<SharpDX.Direct3D11.ShaderResourceView> ShaderResources = new MultiInputSlot<SharpDX.Direct3D11.ShaderResourceView>();
+        public readonly MultiInputSlot<SharpDX.Direct3D11.ShaderResourceView> ShaderResources = new();
     }
 }

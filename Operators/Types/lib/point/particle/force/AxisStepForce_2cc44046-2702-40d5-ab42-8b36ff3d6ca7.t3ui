@@ -1,0 +1,220 @@
+{
+  "Id": "2cc44046-2702-40d5-ab42-8b36ff3d6ca7"/*AxisStepForce*/,
+  "Description": "A force for the [ParticleSystem] that applies random accelerations toward an axis direction. This can lead to interesting results in motion design. If ApplyTrigger is true, a random selection ratio of particles is chosen and accelerated.\n\nUse the following options:\n\n- AxisDistribution to control the frequency of XYZ axis selection.\n- AddOriginalVelocity to control whether the original acceleration is replaced or mixed in.\n- Set Seed to a value greater than 0 to control randomness. If it's set to 0, the current frame number is used as the random seed.\n\nPlease note that the RotationAxis space may depend on the [ParticleSystem.OrientTowardsVelocity] parameter. You can also try combining this effect with [ParticleSystem.Damp] for enhanced results.",
+  "InputUis": [
+    {
+      "InputId": "7a0aaade-2cf4-45f8-85aa-1133278899ad"/*ApplyTrigger*/,
+      "Position": {
+        "X": -540.1571,
+        "Y": 197.20462
+      }
+    },
+    {
+      "InputId": "a28e97a1-8bcf-4701-a8bb-97d69f91bc4b"/*Strength*/,
+      "Position": {
+        "X": -540.1571,
+        "Y": 242.20462
+      }
+    },
+    {
+      "InputId": "1f642c68-fca9-4552-bb23-9d066f4b2dda"/*RandomizeStrength*/,
+      "Position": {
+        "X": -540.1571,
+        "Y": 287.20462
+      }
+    },
+    {
+      "InputId": "42501a2b-4b10-43ff-8774-1e34fb868417"/*SelectRatio*/,
+      "Position": {
+        "X": -540.1571,
+        "Y": 332.20456
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "4701df38-3ec8-4133-ba40-afdf859e8f2f"/*AxisDistribution*/,
+      "Position": {
+        "X": -540.1571,
+        "Y": 377.20456
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "25e77db3-6ccb-4857-8dd6-e5c19395d85b"/*AddOriginalVelocity*/,
+      "Position": {
+        "X": -541.1749,
+        "Y": 451.7198
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "f5e93296-efe1-42e0-add8-f8b6298fe183"/*StrengthDistribution*/,
+      "Position": {
+        "X": -541.1749,
+        "Y": 496.7198
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "ab591dbc-b521-4ef0-b1e2-d03ff27b959e"/*AxisSpace*/,
+      "Position": {
+        "X": -541.097,
+        "Y": 617.51074
+      }
+    },
+    {
+      "InputId": "f6e3e1df-6f72-4c5f-a10e-771e5d7c9fa0"/*Seed*/,
+      "Position": {
+        "X": -790.11786,
+        "Y": 898.2902
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "4bdd95bf-1fe8-4c36-83ba-340dd788f5f6"/*ComputeShader*/,
+      "Position": {
+        "X": -282.6267,
+        "Y": 34.10643
+      }
+    },
+    {
+      "ChildId": "e211f42e-485c-4480-8564-c11f4c54a909"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 60.55307,
+        "Y": 13.514999
+      }
+    },
+    {
+      "ChildId": "3c66576c-d7c3-44c5-adce-a7a04d67a565"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 133.98141,
+        "Y": 229.21771
+      },
+      "Position": {
+        "X": -148.55838,
+        "Y": 203.31119
+      }
+    },
+    {
+      "ChildId": "771a8476-9db5-43de-a52a-3ceb0fc01541"/*CalcDispatchCount*/,
+      "Position": {
+        "X": -120.28223,
+        "Y": 51.26735
+      }
+    },
+    {
+      "ChildId": "6469a68c-64d8-40e7-83d0-7ab277743e23"/*HasTimeChanged*/,
+      "Position": {
+        "X": 66.415436,
+        "Y": 157.99245
+      }
+    },
+    {
+      "ChildId": "33423401-3712-4af1-af81-36dc43f8d197"/*Execute*/,
+      "Position": {
+        "X": 405.69742,
+        "Y": -154.29404
+      }
+    },
+    {
+      "ChildId": "bc7f7b19-5cb8-4934-98ff-0347529da587"/*_ExecuteParticleUpdate*/,
+      "Position": {
+        "X": 210.55307,
+        "Y": 13.514999
+      }
+    },
+    {
+      "ChildId": "ad2acce7-711c-4247-a714-18155fab7943"/*GetParticleComponents*/,
+      "Position": {
+        "X": -291.88226,
+        "Y": 106.34863
+      }
+    },
+    {
+      "ChildId": "1f2f6065-c472-4f07-993c-dd84fdcddbb1"/*BoolToFloat*/,
+      "Position": {
+        "X": -390.1572,
+        "Y": 197.20462
+      }
+    },
+    {
+      "ChildId": "d2f1195e-0e09-4cc8-9dfc-82fa68c9605d"/*Vector3Components*/,
+      "Position": {
+        "X": -390.1571,
+        "Y": 388.20456
+      }
+    },
+    {
+      "ChildId": "27f522cb-6d02-4915-9dc0-a213fb339cdd"/*IntToFloat*/,
+      "Position": {
+        "X": -388.93588,
+        "Y": 789.9988
+      }
+    },
+    {
+      "ChildId": "b9773c3c-be9d-4a1a-aeae-2abc0814946d"/*CompareInt*/,
+      "Position": {
+        "X": -538.9359,
+        "Y": 789.9988
+      }
+    },
+    {
+      "ChildId": "f9933aa7-28ed-4006-a985-998a3b9e6eb0"/*Time*/,
+      "Position": {
+        "X": -1138.9359,
+        "Y": 789.9988
+      }
+    },
+    {
+      "ChildId": "2093e56c-1385-45a4-82b4-f635936a5d18"/*Multiply*/,
+      "Position": {
+        "X": -988.9359,
+        "Y": 789.9988
+      }
+    },
+    {
+      "ChildId": "1a044a96-1d28-4477-a0be-4f7b81b459db"/*Modulo*/,
+      "Position": {
+        "X": -838.9359,
+        "Y": 789.9988
+      }
+    },
+    {
+      "ChildId": "2ada0814-b5f2-46c8-832d-700aff939588"/*FloatToInt*/,
+      "Position": {
+        "X": -688.9359,
+        "Y": 789.9988
+      }
+    },
+    {
+      "ChildId": "ab61b753-8b8a-44c7-8d37-25e2c35265e6"/*Vector3Components*/,
+      "Position": {
+        "X": -388.21307,
+        "Y": 518.94775
+      }
+    },
+    {
+      "ChildId": "7ae7087e-1cd6-477a-9941-1d0b5104cb7e"/*IntToFloat*/,
+      "Position": {
+        "X": -391.097,
+        "Y": 617.51074
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "2b56d43b-1d92-4895-81f0-e30fdac5e6ef"/*Particles*/,
+      "Position": {
+        "X": 360.55307,
+        "Y": 13.514999
+      }
+    }
+  ]
+}

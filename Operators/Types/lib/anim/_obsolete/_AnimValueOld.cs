@@ -1,10 +1,7 @@
 using System;
-using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
@@ -152,30 +149,30 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
         private const string SpeedFactorB = "SpeedFactorB";
 
         [Input(Guid = "4C38C34C-D992-47F1-BCB5-9BD13FC6474B", MappedType = typeof(Shapes))]
-        public readonly InputSlot<int> Shape = new InputSlot<int>();
+        public readonly InputSlot<int> Shape = new();
 
         [Input(Guid = "a4d48d80-936c-4bbb-a2e8-32f86edd4ab2")]
-        public readonly InputSlot<float> Rate = new InputSlot<float>();
+        public readonly InputSlot<float> Rate = new();
 
         [Input(Guid = "3b9e7272-ccf3-4fff-a079-5fcbb8a6c7d5")]
-        public readonly InputSlot<float> Ratio = new InputSlot<float>();
+        public readonly InputSlot<float> Ratio = new();
 
         [Input(Guid = "36ae5b4b-62e9-49c0-b841-97394122cb1e")]
-        public readonly InputSlot<float> Phase = new InputSlot<float>();
+        public readonly InputSlot<float> Phase = new();
 
         [Input(Guid = "8a5033c2-7d22-44d7-9472-d23677b11388")]
-        public readonly InputSlot<float> Amplitude = new InputSlot<float>();
+        public readonly InputSlot<float> Amplitude = new();
 
         [Input(Guid = "126511E6-771D-4DD0-8A9D-1861C7B45D23")]
-        public readonly InputSlot<float> Offset = new InputSlot<float>();
+        public readonly InputSlot<float> Offset = new();
 
         [Input(Guid = "3396DE1F-03AF-43EE-A43A-55016BEC70AE")]
-        public readonly InputSlot<float> Bias = new InputSlot<float>();
+        public readonly InputSlot<float> Bias = new();
 
         [Input(Guid = "76ca8a8b-f252-4687-805e-fb7a86a16567")]
-        public readonly InputSlot<float> OverrideTime = new InputSlot<float>();
+        public readonly InputSlot<float> OverrideTime = new();
 
         [Input(Guid = "6ca8a8b2-f252-4687-805e-fb7a86a16567", MappedType = typeof(SpeedFactors))]
-        public readonly InputSlot<int> AllowSpeedFactor = new InputSlot<int>();
+        public readonly InputSlot<int> AllowSpeedFactor = new();
     }
 }

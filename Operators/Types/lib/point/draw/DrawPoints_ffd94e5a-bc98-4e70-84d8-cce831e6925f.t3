@@ -21,15 +21,7 @@
       "DefaultValue": 0.1
     },
     {
-      "Id": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"/*Texture_*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
-      "DefaultValue": true
-    },
-    {
-      "Id": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
+      "Id": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
       "DefaultValue": true
     },
     {
@@ -41,8 +33,16 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
+      "Id": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
       "DefaultValue": true
+    },
+    {
+      "Id": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"/*Texture_*/,
+      "DefaultValue": null
     }
   ],
   "Children": [
@@ -120,18 +120,6 @@
       "Outputs": []
     },
     {
-      "Id": "89a2bd74-7948-4b96-acd7-d995480656ac"/*PixelShaderStage*/,
-      "SymbolId": "75306997-4329-44e9-a17a-050dae532182",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "eef93a22-38e7-4d7a-9431-f79c26affeba"/*VertexShaderStage*/,
-      "SymbolId": "a9600440-4203-4315-bdb1-4dfd603b4515",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "189f0dfa-7c6d-41e9-9aac-8676f18a4e50"/*InputAssemblerStage*/,
       "SymbolId": "9d1266c5-23db-439f-a475-8000fdd1c318",
       "InputValues": [],
@@ -156,7 +144,7 @@
       "Outputs": []
     },
     {
-      "Id": "f7eae62c-4c2e-4b9c-b5c5-746fac519ce1"/*Vector4ToFloat4*/,
+      "Id": "f7eae62c-4c2e-4b9c-b5c5-746fac519ce1"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [
         {
@@ -308,6 +296,12 @@
       "SymbolId": "6c1271a0-058f-4ff0-940b-f196e5debdf7",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "6d7b4f28-92ec-4681-98c5-d95993f1dc93"/*SetPixelAndVertexShaderStage*/,
+      "SymbolId": "b956f707-2a33-4330-b7ff-9c91edbcf041",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -330,20 +324,14 @@
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
-      "SourceParentOrChildId": "eef93a22-38e7-4d7a-9431-f79c26affeba",
-      "SourceSlotId": "65b394a9-06dc-4d9b-8819-15394ede2997",
+      "SourceParentOrChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93",
+      "SourceSlotId": "805e271d-b9c5-45a2-9040-f30c68b06ea6",
       "TargetParentOrChildId": "083217bb-8b1c-4fa0-8160-06fa4560198b",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
       "SourceParentOrChildId": "5646ba88-44b3-4cc8-943f-ce8b9bb1c82c",
       "SourceSlotId": "c723ad69-ff0c-47b2-9327-bd27c0d7b6d1",
-      "TargetParentOrChildId": "083217bb-8b1c-4fa0-8160-06fa4560198b",
-      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
-    },
-    {
-      "SourceParentOrChildId": "89a2bd74-7948-4b96-acd7-d995480656ac",
-      "SourceSlotId": "76e7ad5d-a31d-4b1f-9c42-b63c5161117c",
       "TargetParentOrChildId": "083217bb-8b1c-4fa0-8160-06fa4560198b",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
@@ -438,6 +426,66 @@
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },
     {
+      "SourceParentOrChildId": "d8abd2d6-a08f-4ace-861f-87998df45a5e",
+      "SourceSlotId": "9c6e72f8-5ce6-42c3-abaa-1829d2c066c1",
+      "TargetParentOrChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93",
+      "TargetSlotId": "59864da4-3658-4d7d-830e-6ef0d3cbb505"
+    },
+    {
+      "SourceParentOrChildId": "897c5510-e5d3-4852-8d65-9fb626b6d96c",
+      "SourceSlotId": "0e45c596-c80f-4927-941f-e3199401aa10",
+      "TargetParentOrChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93",
+      "TargetSlotId": "60bae25c-64fe-40df-a2e6-a99297a92e0b"
+    },
+    {
+      "SourceParentOrChildId": "dbc238da-63e9-4af5-9559-1c8953f202f7",
+      "SourceSlotId": "ed31838b-14b5-4875-a0fc-dc427e874362",
+      "TargetParentOrChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93",
+      "TargetSlotId": "7a9ae929-7001-42ef-b7f2-f2e03bbb7206"
+    },
+    {
+      "SourceParentOrChildId": "c798588d-7e91-4dda-a644-9e012191f177",
+      "SourceSlotId": "1368ab8e-d75e-429f-8ecd-0944f3ede9ab",
+      "TargetParentOrChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93",
+      "TargetSlotId": "83fdb275-3018-46a9-b75e-e9ee3d8660f4"
+    },
+    {
+      "SourceParentOrChildId": "f71b2d3c-cd93-4fd6-80c4-a0edec63e9d9",
+      "SourceSlotId": "dc71f39f-3fba-4fc6-b8ef-ce57c82bf78e",
+      "TargetParentOrChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93",
+      "TargetSlotId": "83fdb275-3018-46a9-b75e-e9ee3d8660f4"
+    },
+    {
+      "SourceParentOrChildId": "5d56ca7d-23e8-4ae6-9f7b-6ea1e6d1bdc6",
+      "SourceSlotId": "7a76d147-4b8e-48cf-aa3e-aac3aa90e888",
+      "TargetParentOrChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93",
+      "TargetSlotId": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"
+    },
+    {
+      "SourceParentOrChildId": "debe7b54-4e22-4bda-8f7c-b24c7051c233",
+      "SourceSlotId": "6c118567-8827-4422-86cc-4d4d00762d87",
+      "TargetParentOrChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93",
+      "TargetSlotId": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"
+    },
+    {
+      "SourceParentOrChildId": "69ca6de5-7000-49b3-88ac-3d30c752f00f",
+      "SourceSlotId": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710",
+      "TargetParentOrChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93",
+      "TargetSlotId": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"
+    },
+    {
+      "SourceParentOrChildId": "5ce3570b-ecb6-4bbf-acff-a48a4dd45a4b",
+      "SourceSlotId": "d4171c74-5a90-4fe9-8334-10f9701c284c",
+      "TargetParentOrChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93",
+      "TargetSlotId": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"
+    },
+    {
+      "SourceParentOrChildId": "5ce3570b-ecb6-4bbf-acff-a48a4dd45a4b",
+      "SourceSlotId": "5cb8c86e-c3a6-434c-b30a-a107121436b2",
+      "TargetParentOrChildId": "6d7b4f28-92ec-4681-98c5-d95993f1dc93",
+      "TargetSlotId": "9571b16e-72d1-4544-aa98-8a08b63bb5f6"
+    },
+    {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "814fc516-250f-4383-8f20-c2a358bbe4e1",
       "TargetParentOrChildId": "847987c5-a576-4081-9579-a24af0f29a6b",
@@ -448,60 +496,6 @@
       "SourceSlotId": "7acc95ad-d317-42fc-97f8-85f48d7e516f",
       "TargetParentOrChildId": "847987c5-a576-4081-9579-a24af0f29a6b",
       "TargetSlotId": "956b735b-c38a-4e8e-8186-caf4d36d4d20"
-    },
-    {
-      "SourceParentOrChildId": "d8abd2d6-a08f-4ace-861f-87998df45a5e",
-      "SourceSlotId": "9c6e72f8-5ce6-42c3-abaa-1829d2c066c1",
-      "TargetParentOrChildId": "89a2bd74-7948-4b96-acd7-d995480656ac",
-      "TargetSlotId": "1b9be6eb-96c8-4b1c-b854-99b64eaf5618"
-    },
-    {
-      "SourceParentOrChildId": "c798588d-7e91-4dda-a644-9e012191f177",
-      "SourceSlotId": "1368ab8e-d75e-429f-8ecd-0944f3ede9ab",
-      "TargetParentOrChildId": "89a2bd74-7948-4b96-acd7-d995480656ac",
-      "TargetSlotId": "50052906-4691-4a84-a69d-a109044b5300"
-    },
-    {
-      "SourceParentOrChildId": "f71b2d3c-cd93-4fd6-80c4-a0edec63e9d9",
-      "SourceSlotId": "dc71f39f-3fba-4fc6-b8ef-ce57c82bf78e",
-      "TargetParentOrChildId": "89a2bd74-7948-4b96-acd7-d995480656ac",
-      "TargetSlotId": "50052906-4691-4a84-a69d-a109044b5300"
-    },
-    {
-      "SourceParentOrChildId": "5d56ca7d-23e8-4ae6-9f7b-6ea1e6d1bdc6",
-      "SourceSlotId": "7a76d147-4b8e-48cf-aa3e-aac3aa90e888",
-      "TargetParentOrChildId": "89a2bd74-7948-4b96-acd7-d995480656ac",
-      "TargetSlotId": "be02a84b-a666-4119-bb6e-fee1a3df0981"
-    },
-    {
-      "SourceParentOrChildId": "debe7b54-4e22-4bda-8f7c-b24c7051c233",
-      "SourceSlotId": "6c118567-8827-4422-86cc-4d4d00762d87",
-      "TargetParentOrChildId": "89a2bd74-7948-4b96-acd7-d995480656ac",
-      "TargetSlotId": "be02a84b-a666-4119-bb6e-fee1a3df0981"
-    },
-    {
-      "SourceParentOrChildId": "69ca6de5-7000-49b3-88ac-3d30c752f00f",
-      "SourceSlotId": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710",
-      "TargetParentOrChildId": "89a2bd74-7948-4b96-acd7-d995480656ac",
-      "TargetSlotId": "be02a84b-a666-4119-bb6e-fee1a3df0981"
-    },
-    {
-      "SourceParentOrChildId": "5ce3570b-ecb6-4bbf-acff-a48a4dd45a4b",
-      "SourceSlotId": "d4171c74-5a90-4fe9-8334-10f9701c284c",
-      "TargetParentOrChildId": "89a2bd74-7948-4b96-acd7-d995480656ac",
-      "TargetSlotId": "be02a84b-a666-4119-bb6e-fee1a3df0981"
-    },
-    {
-      "SourceParentOrChildId": "5ce3570b-ecb6-4bbf-acff-a48a4dd45a4b",
-      "SourceSlotId": "5cb8c86e-c3a6-434c-b30a-a107121436b2",
-      "TargetParentOrChildId": "89a2bd74-7948-4b96-acd7-d995480656ac",
-      "TargetSlotId": "be02a84b-a666-4119-bb6e-fee1a3df0981"
-    },
-    {
-      "SourceParentOrChildId": "897c5510-e5d3-4852-8d65-9fb626b6d96c",
-      "SourceSlotId": "0e45c596-c80f-4927-941f-e3199401aa10",
-      "TargetParentOrChildId": "89a2bd74-7948-4b96-acd7-d995480656ac",
-      "TargetSlotId": "c4e91bc6-1691-4eb4-aed5-dd4cae528149"
     },
     {
       "SourceParentOrChildId": "ce29ae17-be5c-4d16-9e3d-49971fc74167",
@@ -538,48 +532,6 @@
       "SourceSlotId": "a42dd1c5-886c-4fa9-bf69-8b6321a48930",
       "TargetParentOrChildId": "c9dc53d5-27c6-464e-8ecb-2a9b93f4a398",
       "TargetSlotId": "e0bc9cf8-42c8-4632-b958-7a96f6d03ba2"
-    },
-    {
-      "SourceParentOrChildId": "c798588d-7e91-4dda-a644-9e012191f177",
-      "SourceSlotId": "1368ab8e-d75e-429f-8ecd-0944f3ede9ab",
-      "TargetParentOrChildId": "eef93a22-38e7-4d7a-9431-f79c26affeba",
-      "TargetSlotId": "3a0bea89-bd93-4594-b1b6-3e25689c67e6"
-    },
-    {
-      "SourceParentOrChildId": "dbc238da-63e9-4af5-9559-1c8953f202f7",
-      "SourceSlotId": "ed31838b-14b5-4875-a0fc-dc427e874362",
-      "TargetParentOrChildId": "eef93a22-38e7-4d7a-9431-f79c26affeba",
-      "TargetSlotId": "b1c236e5-6757-4d77-9911-e3acd5ea9fe9"
-    },
-    {
-      "SourceParentOrChildId": "5d56ca7d-23e8-4ae6-9f7b-6ea1e6d1bdc6",
-      "SourceSlotId": "7a76d147-4b8e-48cf-aa3e-aac3aa90e888",
-      "TargetParentOrChildId": "eef93a22-38e7-4d7a-9431-f79c26affeba",
-      "TargetSlotId": "bba8f6eb-7cff-435b-ab47-febf58dd8fba"
-    },
-    {
-      "SourceParentOrChildId": "debe7b54-4e22-4bda-8f7c-b24c7051c233",
-      "SourceSlotId": "6c118567-8827-4422-86cc-4d4d00762d87",
-      "TargetParentOrChildId": "eef93a22-38e7-4d7a-9431-f79c26affeba",
-      "TargetSlotId": "bba8f6eb-7cff-435b-ab47-febf58dd8fba"
-    },
-    {
-      "SourceParentOrChildId": "69ca6de5-7000-49b3-88ac-3d30c752f00f",
-      "SourceSlotId": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710",
-      "TargetParentOrChildId": "eef93a22-38e7-4d7a-9431-f79c26affeba",
-      "TargetSlotId": "bba8f6eb-7cff-435b-ab47-febf58dd8fba"
-    },
-    {
-      "SourceParentOrChildId": "5ce3570b-ecb6-4bbf-acff-a48a4dd45a4b",
-      "SourceSlotId": "d4171c74-5a90-4fe9-8334-10f9701c284c",
-      "TargetParentOrChildId": "eef93a22-38e7-4d7a-9431-f79c26affeba",
-      "TargetSlotId": "bba8f6eb-7cff-435b-ab47-febf58dd8fba"
-    },
-    {
-      "SourceParentOrChildId": "5ce3570b-ecb6-4bbf-acff-a48a4dd45a4b",
-      "SourceSlotId": "5cb8c86e-c3a6-434c-b30a-a107121436b2",
-      "TargetParentOrChildId": "eef93a22-38e7-4d7a-9431-f79c26affeba",
-      "TargetSlotId": "bba8f6eb-7cff-435b-ab47-febf58dd8fba"
     },
     {
       "SourceParentOrChildId": "a3aa886e-23a4-417b-804d-5edcf9989e85",

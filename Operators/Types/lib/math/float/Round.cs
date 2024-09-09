@@ -1,5 +1,3 @@
-using System;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,7 +7,7 @@ namespace T3.Operators.Types.Id_ae0c87d6_2b1e_4e28_b0d0_8611a2f7e152
     public class Round : Instance<Round>
     {
         [Output(Guid = "a886fa83-a8cc-4022-b4b1-26c134095223")]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
         public Round()
         {
@@ -41,12 +39,12 @@ namespace T3.Operators.Types.Id_ae0c87d6_2b1e_4e28_b0d0_8611a2f7e152
         
         
         [Input(Guid = "e911807f-b3a7-44e9-82d2-f04608b39ec3")]
-        public readonly InputSlot<float> Value = new InputSlot<float>();
+        public readonly InputSlot<float> Value = new();
 
         [Input(Guid = "31a045cf-9892-4d1b-b961-73bf73e58b6a")]
-        public readonly InputSlot<float> StepsPerUnit = new InputSlot<float>();
+        public readonly InputSlot<float> StepsPerUnit = new();
         
         [Input(Guid = "B2D2D730-ED57-4B5F-AA34-2060D86EFB47")]
-        public readonly InputSlot<float> RoundRatio = new InputSlot<float>();
+        public readonly InputSlot<float> RoundRatio = new();
     }
 }

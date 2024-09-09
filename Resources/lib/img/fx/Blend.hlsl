@@ -5,6 +5,7 @@ cbuffer ParamConstants : register(b0)
     float ColorMode;
     float AlphaMode;
     float UseNormalForUpperHalf;
+    float ScaleMode;
 }
 
 
@@ -25,8 +26,30 @@ float IsBetween(float value, float low, float high)
 
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
-    float4 tA = ImageA.Sample(texSampler, psInput.texCoord) * ImageAColor;
-    float4 tB = ImageB.Sample(texSampler, psInput.texCoord) * ImageBColor;
+    float2 uv = psInput.texCoord;
+
+    int height, width;
+
+    ImageA.GetDimensions(width, height);
+    float imageAAspect = (float)width / height;
+
+    ImageB.GetDimensions(width, height);
+    float imageBAspect = (float)width / height;
+
+
+    float aspectDifference =  (imageAAspect - imageBAspect) * (ScaleMode > 1.5 ? 1 : - 1);
+
+    float2 uvB = ScaleMode < 0.5 ? uv : ( aspectDifference < 0
+    ?  float2( 
+        (uv.x - 0.5) * imageAAspect / imageBAspect + 0.5, 
+        uv.y)
+    :  float2(
+        uv.x, 
+        (uv.y - 0.5) * imageBAspect / imageAAspect + 0.5));
+
+
+    float4 tA = ImageA.Sample(texSampler, uv) * ImageAColor;
+    float4 tB = ImageB.Sample(texSampler, uvB) * ImageBColor;
     tA.a = clamp(tA.a, 0, 1);
     tB.a = clamp(tB.a, 0, 1);
 
@@ -129,6 +152,11 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         break;
     case 8:
         rgb = tA.rgb - tB.rgb;
+        break;
+
+    case 9:
+        rgb = lerp(tA.rgb, tB.rgb, ImageBColor.a);
+        a = lerp(tA.a, tB.a, ImageBColor.a);
         break;
     }
 

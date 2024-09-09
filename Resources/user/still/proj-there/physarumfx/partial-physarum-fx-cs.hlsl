@@ -102,8 +102,8 @@ void main(uint3 i : SV_DispatchThreadID)
     int texHeight;
     WriteOutput.GetDimensions(texWidth, texHeight);
 
-    float3 pos = Points[i.x].position;
-    float angle = Points[i.x].rotation.w;
+    float3 pos = Points[i.x].Position;
+    float angle = Points[i.x].Rotation.w;
 
     float hash =hash11(i.x * 123.1);
 
@@ -144,15 +144,15 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float move = clamp(((leftComfort + rightComfort)/2 - frontComfort),-1,1) * CB.MoveToComfort + _baseMove;
     pos += float3(sin(angle),cos(angle),0) * move / TargetHeight;
-    Points[i.x].rotation.w = angle;
+    Points[i.x].Rotation.w = angle;
     
     float3 aspectRatio = float3(TargetWidth / BlockCount.x /((float)TargetHeight / BlockCount.y),1,1);
 
     
     float3 newPos = (mod((pos  / aspectRatio + 1),2) - 1) * aspectRatio; 
-    Points[i.x].w = length(newPos - pos) > 0.1 ? sqrt(-1) : 1;
+    Points[i.x].W = length(newPos - pos) > 0.1 ? sqrt(-1) : 1;
 
-    Points[i.x].position = pos;
+    Points[i.x].Position = pos;
     //Points[i.x].rotation = rotate_angle_axis(-angle, float3(0,0,1));
     
     // Update map

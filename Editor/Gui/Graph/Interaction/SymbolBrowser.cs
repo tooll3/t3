@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
@@ -200,7 +199,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, padding);
             ImGui.SetNextItemWidth(size.X);
 
-            ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 10);
+            ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 20);
 
             // Search input outline
             _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.Gray);
@@ -269,7 +268,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
             
             ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundPopup.Rgba);
-            //var itemForHelpIsHovered = false;
 
             if (ImGui.BeginChildFrame(999, size))
             {
@@ -542,7 +540,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (!ExampleSymbolLinking.ExampleSymbols.TryGetValue(itemForHelp.Symbol.Id, out var examples))
                 return;
 
-            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f * ImGui.GetStyle().Alpha);
             foreach (var guid in examples)
             {
                 const string label = "Example";
@@ -565,13 +563,20 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
 
             ImGui.SameLine();
+
+            var restSpace = ImGui.GetWindowWidth() - ImGui.GetCursorPos().X;
+            if (restSpace < 100)
+            {
+                ImGui.Dummy(new Vector2(10,10));
+            }
+
             ImGui.Button(label);
             SymbolTreeMenu.HandleDragAndDropForSymbolItem(symbolUi.Symbol);
             if (ImGui.IsItemHovered())
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
             }
-
+            
             if (!string.IsNullOrEmpty(symbolUi.Description))
             {
                 CustomComponents.TooltipForLastItem(symbolUi.Description);
@@ -668,14 +673,14 @@ namespace T3.Editor.Gui.Graph.Interaction
             Close();
         }
 
-        private readonly SymbolFilter _filter = new SymbolFilter();
+        private readonly SymbolFilter _filter = new();
 
         public Vector2 PosOnCanvas { get; private set; }
         public Vector2 OutputPositionOnScreen => _posInScreen + _size;
         public bool IsOpen;
 
         private readonly Vector2 _size = SymbolChildUi.DefaultOpSize;
-        private static Vector2 BrowserPositionOffset => new Vector2(0, 40);
+        private static Vector2 BrowserPositionOffset => new(0, 40);
 
         private bool _focusInputNextTime;
         private Vector2 _posInScreen;

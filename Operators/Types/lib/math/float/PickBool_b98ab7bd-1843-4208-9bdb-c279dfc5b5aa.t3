@@ -1,0 +1,17 @@
+{
+  "Name": "PickBool",
+  "Id": "b98ab7bd-1843-4208-9bdb-c279dfc5b5aa",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "1f97f10c-3158-446b-85ec-8dfdb25b4d67"/*BoolValues*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "ef785e90-49de-4075-be85-09327d48cb16"/*Index*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

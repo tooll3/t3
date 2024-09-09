@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
@@ -297,7 +297,7 @@ public static class ColorThemeEditor
         }
 
         private static bool _animatedAllColors;
-        private static Color _flashColor = new Color(1, 1, 1, 0f);
+        private static Color _flashColor = new(1, 1, 1, 0f);
     }
     
     

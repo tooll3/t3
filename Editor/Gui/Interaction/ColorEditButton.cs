@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
@@ -16,6 +17,10 @@ namespace T3.Editor.Gui.Interaction
             
             var buttonPosition = ImGui.GetCursorScreenPos();
             ImGui.ColorButton("##thumbnail", color, ImGuiColorEditFlags.AlphaPreviewHalf, size);
+            if (ImGui.IsItemHovered())
+            {
+                T3Ui.DragFieldHovered = true;
+            }
             
             // Don't you ImGui.IsItemActivated() to allow quick switching between color thumbnails
             if (triggerOpen || ImGui.IsItemHovered( ImGuiHoveredFlags.AllowWhenBlockedByPopup)

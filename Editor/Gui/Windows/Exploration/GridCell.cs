@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SharpDX;
+using T3.Core.DataTypes.Vector;
 
 namespace T3.Editor.Gui.Windows.Exploration
 {
@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.Windows.Exploration
             return new GridCell(a.X + b.X, a.Y + b.Y);
         }
 
-        public static GridCell operator +(GridCell a, Size2 b)
+        public static GridCell operator +(GridCell a, Int2 b)
         {
             return new GridCell(a.X + b.Width, a.Y + b.Height);
         }
@@ -48,7 +48,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
 
         public int GridIndex => Y * VariationGridSize + X;
-        public static GridCell Center = new GridCell(VariationGridSize / 2, VariationGridSize / 2);
+        public static GridCell Center = new(VariationGridSize / 2, VariationGridSize / 2);
         public const int VariationGridSize = 100;
     }
 }

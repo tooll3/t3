@@ -4,18 +4,6 @@
   "Namespace": "lib.point.combine",
   "Inputs": [
     {
-      "Id": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,
-      "DefaultValue": 0
-    },
-    {
-      "Id": "acef877d-214d-4ca0-ac11-95fa59d1f6fc"/*Pairing*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "97904d2e-ae67-4ab4-9201-7902a85d12f3"/*PointsA_*/,
       "DefaultValue": null
     },
@@ -24,12 +12,24 @@
       "DefaultValue": null
     },
     {
-      "Id": "bdb712a8-3dbc-458a-887a-5add51813196"/*RangeWidth*/,
-      "DefaultValue": 0.5
+      "Id": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "ee8e9e15-ce18-4034-abc6-dd56108c8a02"/*Scatter*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "bdb712a8-3dbc-458a-887a-5add51813196"/*RangeWidth*/,
+      "DefaultValue": 0.5
+    },
+    {
+      "Id": "acef877d-214d-4ca0-ac11-95fa59d1f6fc"/*Pairing*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [
@@ -51,7 +51,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -110,7 +110,7 @@
         {
           "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
           "Type": "System.Int32",
-          "Value": 32
+          "Value": 64
         }
       ],
       "Outputs": []

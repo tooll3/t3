@@ -9,7 +9,7 @@ namespace T3.Operators.Types.Id_371d72b8_69d4_4ced_beda_271386ad2fd6
     public class SelectPoints : Instance<SelectPoints>, ITransformable
     {
         [Output(Guid = "d81a0df4-54b4-4587-8f0f-32a740261d73")]
-        public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> Result2 = new TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> Result2 = new();
 
         public SelectPoints()
         {
@@ -21,13 +21,9 @@ namespace T3.Operators.Types.Id_371d72b8_69d4_4ced_beda_271386ad2fd6
         IInputSlot ITransformable.ScaleInput => VolumeScale;
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
-
         [Input(Guid = "f9a61731-c35e-48fd-b297-922fb4c3da4a")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
-        [Input(Guid = "2c5e5bb5-6023-4ff4-906d-d0a905110e95", MappedType = typeof(Shapes))]
-        public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
-        
         [Input(Guid = "0b11d459-01cc-4e91-99d2-37e77a0c8a35")]
         public readonly InputSlot<System.Numerics.Vector3> VolumeCenter = new InputSlot<System.Numerics.Vector3>();
 
@@ -42,6 +38,15 @@ namespace T3.Operators.Types.Id_371d72b8_69d4_4ced_beda_271386ad2fd6
 
         [Input(Guid = "56bf96b4-e7c4-4747-b57a-64a39e0d6314")]
         public readonly InputSlot<float> FallOff = new InputSlot<float>();
+
+        [Input(Guid = "2c5e5bb5-6023-4ff4-906d-d0a905110e95", MappedType = typeof(Shapes))]
+        public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
+
+        [Input(Guid = "418d7362-3c4b-4749-8f11-62a953065689")]
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "62119baf-5e02-4d2e-82bb-f82a149ccfb7")]
+        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
 
         [Input(Guid = "687fdc7e-8867-4883-9c41-06b9435c0562", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();
@@ -61,11 +66,8 @@ namespace T3.Operators.Types.Id_371d72b8_69d4_4ced_beda_271386ad2fd6
         [Input(Guid = "e577a3fb-0655-48b2-998a-1080e872c2cd")]
         public readonly InputSlot<bool> DiscardNonSelected = new InputSlot<bool>();
 
-        [Input(Guid = "bdfbbc26-6815-4c5e-b67f-fbe0bbf1f58b")]
-        public readonly InputSlot<float> Bias = new InputSlot<float>();
-
-        [Input(Guid = "62119baf-5e02-4d2e-82bb-f82a149ccfb7")]
-        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+        [Input(Guid = "ff8dcdf6-70d7-4151-81b8-bc50adc04e9a")]
+        public readonly InputSlot<bool> SetW = new InputSlot<bool>();
 
 
         

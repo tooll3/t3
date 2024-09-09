@@ -1,5 +1,6 @@
 {
   "Id": "f7366bdc-86b2-4951-8788-3826126ed8c2"/*KochKaleidoskope*/,
+  "Description": "This effect is based on Koch snowflake fractal curve.\nAngle starts working with Steps set to 2 and above.\n\nFor a much simpler version see: [MirrorRepeat] or [TransformImage]\n\nSimilar effects or interesting combinations: [MosaicTiling] [VoronoiCells] [SubdivisionStretch]",
   "InputUis": [
     {
       "InputId": "362bcc93-74a0-40fb-a19f-bff8b7246c34"/*Image*/,
@@ -20,14 +21,16 @@
       "Position": {
         "X": -308.4377,
         "Y": 148.1156
-      }
+      },
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "0b6c67e6-338e-4bb3-bcee-5cc9e2045824"/*Offset*/,
       "Position": {
         "X": -308.4377,
         "Y": 204.1156
-      }
+      },
+      "UseVec2Control": "Position"
     },
     {
       "InputId": "a1b3ae23-cb29-4e3e-93b6-fd4f1efadbf1"/*Angle*/,
@@ -41,7 +44,10 @@
       "Position": {
         "X": -307.04523,
         "Y": 293.16394
-      }
+      },
+      "Min": 1,
+      "Max": 666,
+      "Clamp": true
     },
     {
       "InputId": "9618504d-bfbd-4d3d-b4d4-03a7064f0fea"/*ShadeSteps*/,
@@ -56,7 +62,9 @@
         "X": -307.04523,
         "Y": 428.1638
       },
-      "Scale": 0.001
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "d2e12b96-7be3-4b31-bcdd-c882543a6ca6"/*ShadeFolds*/,
@@ -76,13 +84,6 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "6e2f6af0-ffa0-439b-8603-6fe38856cf42"/*LoadImage*/,
-      "Position": {
-        "X": -387.58182,
-        "Y": -111.196335
-      }
-    },
-    {
       "ChildId": "01fcbb18-8230-49b1-86fb-3f05cae07844"/*_ImageFxShaderSetup2*/,
       "Style": "Resizable",
       "Size": {
@@ -95,14 +96,14 @@
       }
     },
     {
-      "ChildId": "fe93448f-4cf0-4ed9-9d1c-910543c4ccd7"/*Vector2ToFloat2*/,
+      "ChildId": "fe93448f-4cf0-4ed9-9d1c-910543c4ccd7"/*Vector2Components*/,
       "Position": {
         "X": -178.43771,
         "Y": 148.1156
       }
     },
     {
-      "ChildId": "1f364656-3082-4ff4-b7ad-fdfa5bf5cfd2"/*Vector2ToFloat2*/,
+      "ChildId": "1f364656-3082-4ff4-b7ad-fdfa5bf5cfd2"/*Vector2Components*/,
       "Position": {
         "X": -178.43771,
         "Y": 204.1156
@@ -114,13 +115,6 @@
         "X": -177.04524,
         "Y": 293.16394
       }
-    },
-    {
-      "ChildId": "30ffc210-0d18-40b7-b0e4-c74940e8eb99"/*Layer2d*/,
-      "Position": {
-        "X": 374.53342,
-        "Y": 335.3444
-      }
     }
   ],
   "OutputUis": [
@@ -130,6 +124,15 @@
         "X": 518.2661,
         "Y": 119.74711
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "179198c7-60f5-46b4-94a2-b2bca6d14fc2",
+      "Title": "Wikipedia",
+      "Description": "",
+      "LinkUrl": "https://en.wikipedia.org/wiki/Koch_snowflake",
+      "LinkType": "Documentation"
     }
   ]
 }

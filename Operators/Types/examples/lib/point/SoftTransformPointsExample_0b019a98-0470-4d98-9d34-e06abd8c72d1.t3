@@ -14,20 +14,20 @@
           "Value": 12
         },
         {
-          "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
-          "Type": "System.Single",
-          "Value": 216.0
-        },
-        {
           "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
           "Type": "System.Single",
           "Value": 43.0
+        },
+        {
+          "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
+          "Type": "System.Single",
+          "Value": 216.0
         }
       ],
       "Outputs": []
     },
     {
-      "Id": "d59d88b3-b1b3-4bae-b09d-69d1bb7df960"/*RandomizePoints*/,
+      "Id": "d59d88b3-b1b3-4bae-b09d-69d1bb7df960"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -80,9 +80,14 @@
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
       "InputValues": [
         {
-          "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
-          "Type": "System.Single",
-          "Value": 0.02
+          "Id": "75419a73-8a3e-4538-9a1d-e3b0ce7f8561"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 0.23000002
+          }
         }
       ],
       "Outputs": []
@@ -119,36 +124,42 @@
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
-            "Y": 3.78,
-            "Z": 1.08
+            "Y": 0.79,
+            "Z": 0.8
           }
         },
         {
           "Id": "663e5d09-da7a-447c-abdd-984cc3ef5e4a"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 0.97,
-            "Y": 0.05,
-            "Z": -0.5000001
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 0.04
           }
+        },
+        {
+          "Id": "cdf7c96c-7630-4889-b7a9-4ae0c3160119"/*Scale*/,
+          "Type": "System.Single",
+          "Value": 0.64
         },
         {
           "Id": "3a7828e2-f58e-4229-b6c2-636cd5dbd011"/*VolumeCenter*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
-            "Y": -5.23,
+            "Y": -0.97,
             "Z": 0.0
           }
         },
         {
-          "Id": "76a7afbe-4782-4b3c-bc35-cc818cf06ab2"/*VolumeStretch*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 6.7000003,
-            "Y": 7.0,
-            "Z": 7.0
-          }
+          "Id": "24a0635f-9599-4a53-a35a-de90f4719f56"/*VolumeType*/,
+          "Type": "System.Int32",
+          "Value": 2
+        },
+        {
+          "Id": "36e2d2a8-4910-4c83-b9ff-ced8df59c7f1"/*VolumeSize*/,
+          "Type": "System.Single",
+          "Value": 0.38
         },
         {
           "Id": "1e1f40ea-15af-4191-b3ce-d2edc3eee243"/*FallOff*/,
@@ -158,7 +169,7 @@
         {
           "Id": "f98281bc-89cb-4ac7-9d27-e045e712eb3a"/*Bias*/,
           "Type": "System.Single",
-          "Value": -0.07999998
+          "Value": 0.52
         }
       ],
       "Outputs": []
@@ -177,6 +188,7 @@
     },
     {
       "Id": "0e297fda-b741-4096-9905-69c5b8a6090c"/*SoftTransformPoints*/,
+      "IsBypassed": true,
       "SymbolId": "697bbc2d-0b2e-4013-bbc3-d58a28a79f31",
       "InputValues": [
         {
@@ -253,7 +265,18 @@
     {
       "Id": "a667d5cb-2c19-43d2-b890-08774325173b"/*RenderTarget*/,
       "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        }
+      ],
       "Outputs": []
     },
     {
@@ -266,6 +289,18 @@
           "Value": 5.0
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "c8a54f87-b046-42f6-9638-82a73d5f2953"/*SetPointAttributes*/,
+      "SymbolId": "86b61bcf-4eaa-4f77-a535-8a1dc876aada",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "777c72ea-80af-475b-8750-d278fc7c32e3"/*PointsToCPU*/,
+      "SymbolId": "a5f4552f-7e25-43a5-bb14-21ab836fa0b3",
+      "InputValues": [],
       "Outputs": []
     }
   ],

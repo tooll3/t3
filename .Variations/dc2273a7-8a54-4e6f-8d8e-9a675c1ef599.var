@@ -1,0 +1,220 @@
+{
+  "Id": "dc2273a7-8a54-4e6f-8d8e-9a675c1ef599",
+  "Variations": [
+    {
+      "Id": "772a4436-4435-4754-8e6f-f7df1868459b",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "capsule",
+      "PosOnCanvas": {
+        "X": 51.04191,
+        "Y": -159.6662
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "06f28039-d349-4f5f-a68f-6009886e180b": {
+            "X": 0.0,
+            "Y": 0.15
+          },
+          "5e7cd523-0c39-42e4-a4e9-05cc20477296": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "feb5460d-c2c5-4c10-ac47-0daef5ee2bdd",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 0.99999,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "37e52bb9-600f-4214-a7d3-7fc84e539e46",
+                  "NormalizedPosition": 0.5,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 1.2159347E-11,
+                    "B": 1E-06,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "94d46ad8-7dd6-490c-ade4-a527c7ee9d05": 0.38,
+          "c3d48bd0-5153-4631-ae6c-a7ded46ce952": 0.8,
+          "94516412-20a6-41a9-a036-a3b5ed67b04a": {
+            "X": 0.65,
+            "Y": 0.595
+          }
+        }
+      }
+    },
+    {
+      "Id": "a210060b-eb47-4c99-a95d-b4acfeff5367",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "The Door",
+      "PosOnCanvas": {
+        "X": 214.0419,
+        "Y": -252.6662
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "06f28039-d349-4f5f-a68f-6009886e180b": {
+            "X": 2.0,
+            "Y": 2.18
+          },
+          "5e7cd523-0c39-42e4-a4e9-05cc20477296": {
+            "Gradient": {
+              "Interpolation": "Smooth",
+              "Steps": [
+                {
+                  "Id": "6a6174ad-09dc-43a6-949a-b6b9b2b0f186",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 0.99999,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "ff1cd803-fbe3-40e4-81db-2583e15ae61e",
+                  "NormalizedPosition": 1.0,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 1.2159347E-11,
+                    "B": 1E-06,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "94d46ad8-7dd6-490c-ade4-a527c7ee9d05": 0.09,
+          "94516412-20a6-41a9-a036-a3b5ed67b04a": {
+            "X": 0.27,
+            "Y": 0.34999996
+          },
+          "c9e1ea04-1c81-4554-964f-e361a502b9b8": true,
+          "8f50765e-3d85-4814-a99a-ecdff18c97e7": true
+        }
+      }
+    },
+    {
+      "Id": "ba32f611-07eb-4aca-b2a3-128c6961917f",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Square",
+      "PosOnCanvas": {
+        "X": 214.0419,
+        "Y": -159.6662
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "5e7cd523-0c39-42e4-a4e9-05cc20477296": {
+            "Gradient": {
+              "Interpolation": "Smooth",
+              "Steps": [
+                {
+                  "Id": "34419e29-022f-4c3e-9c40-faf4e6cfbc0e",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 0.99999,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "d6153aca-bc8f-4da6-91bb-7f1e7207bb7b",
+                  "NormalizedPosition": 1.0,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 1.2159347E-11,
+                    "B": 1E-06,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "94d46ad8-7dd6-490c-ade4-a527c7ee9d05": 0.0,
+          "94516412-20a6-41a9-a036-a3b5ed67b04a": {
+            "X": 0.0,
+            "Y": 1.0
+          },
+          "c9e1ea04-1c81-4554-964f-e361a502b9b8": false,
+          "8f50765e-3d85-4814-a99a-ecdff18c97e7": false
+        }
+      }
+    },
+    {
+      "Id": "dc07dc8f-662b-4cb5-8027-d1a842801ec6",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "FancyPanel",
+      "PosOnCanvas": {
+        "X": 51.04191,
+        "Y": -252.6662
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "5e7cd523-0c39-42e4-a4e9-05cc20477296": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "e8768fec-bb1b-424c-96dd-a991f10d34e8",
+                  "NormalizedPosition": 0.024896266,
+                  "Color": {
+                    "R": 0.035045624,
+                    "G": 0.0,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "d08ee7b2-c53e-4c1e-83e6-6e44a71b8748",
+                  "NormalizedPosition": 0.12033195,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 1.0,
+                    "B": 0.9898777,
+                    "A": 1.0
+                  }
+                },
+                {
+                  "Id": "972de91d-115d-40b9-8879-08248ae8ba55",
+                  "NormalizedPosition": 1.0,
+                  "Color": {
+                    "R": 0.0,
+                    "G": 0.0,
+                    "B": 0.0,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          },
+          "06f28039-d349-4f5f-a68f-6009886e180b": {
+            "X": 0.8,
+            "Y": 0.2
+          },
+          "06553d30-0a71-435b-8796-b61db670fbc6": {
+            "X": 0.2,
+            "Y": 0.05,
+            "Z": 0.2,
+            "W": 0.0
+          },
+          "94d46ad8-7dd6-490c-ade4-a527c7ee9d05": 0.07,
+          "c9e1ea04-1c81-4554-964f-e361a502b9b8": false,
+          "8f50765e-3d85-4814-a99a-ecdff18c97e7": false
+        }
+      }
+    }
+  ]
+}

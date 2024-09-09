@@ -1,0 +1,51 @@
+{
+  "Id": "2ba45de7-c111-4c9f-9d19-8a17130dbcc8"/*SetFloatListValue*/,
+  "Description": "Manipulate a value in a float list",
+  "InputUis": [
+    {
+      "InputId": "f6ea6675-b0e5-442e-8d6e-6d862b200cca"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "2f21b0a8-bc10-4bcb-8545-077a3b8243df"/*TriggerSet*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "6785b575-14c1-4162-8966-52f1be93e021"/*FloatList*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "e4e6050c-bdf7-48a9-85a4-5557848bdb8b"/*Index*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "2ffc3e9f-ef41-4c6a-aae7-a8e9008a096b"/*Value*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "85bb4be8-b56d-4f00-89e2-89fa111a3636"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "Id": "ee398291-674c-409b-aab8-9ca843ce6cef"/*HoneyCombTiles*/,
+  "Description": "Creates a hexagonal pattern based on an incoming image.\nTip: Use [AdjustColors] on the incoming image to manipulate the pattern\n\nFor similar effects or interesting combinations see: [MosaicTiling] [VoronoiCells] [SubdivisionStretch] [HoneyCombTiles] [TriangleGridTransition] [Dither] [AsciiRender]",
   "InputUis": [
     {
       "InputId": "452fb0e1-34c1-4042-9a7c-30bf8dd4cb3c"/*Image*/,
@@ -28,66 +29,75 @@
       "Position": {
         "X": -200.0,
         "Y": 134.99998
-      }
-    },
-    {
-      "InputId": "00ffc593-d62e-4f40-8957-906b444b8f3b"/*Divisions*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 179.99998
       },
-      "Scale": 0.1
-    },
-    {
-      "InputId": "e635d5cd-8250-4722-a11a-ffe27a922f3e"/*LineThickness*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 224.99997
-      }
-    },
-    {
-      "InputId": "228b8705-92c7-467b-ab0f-eee60a618c72"/*MixOriginal*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 269.99997
-      }
+      "Description": "Shifts the position of the Tiles without affecting the incoming image",
+      "AddPadding": "True"
     },
     {
       "InputId": "0c227ab3-3394-40fb-9274-d857a2293d35"/*Rotation*/,
       "Position": {
         "X": -200.0,
-        "Y": 314.99997
+        "Y": 179.99998
       },
+      "Description": "Rotates the pattern without rotating the incoming image",
       "Scale": 0.5
+    },
+    {
+      "InputId": "00ffc593-d62e-4f40-8957-906b444b8f3b"/*Divisions*/,
+      "Position": {
+        "X": -223.58344,
+        "Y": 289.3412
+      },
+      "Description": "Defines the size of the Tiles",
+      "AddPadding": "True",
+      "Scale": 0.1
+    },
+    {
+      "InputId": "e635d5cd-8250-4722-a11a-ffe27a922f3e"/*LineThickness*/,
+      "Position": {
+        "X": -223.58344,
+        "Y": 334.3412
+      },
+      "Description": "Defines the thickness of the lines between the Tiles"
+    },
+    {
+      "InputId": "228b8705-92c7-467b-ab0f-eee60a618c72"/*MixOriginal*/,
+      "Position": {
+        "X": -228.5755,
+        "Y": 569.90857
+      },
+      "Description": "Defines if and how much the incoming image is multiplied with the generated pattern",
+      "AddPadding": "True"
     },
     {
       "InputId": "03afbb91-a64f-48bc-a306-b378a068aca8"/*Resolution*/,
       "Position": {
-        "X": -200.7042,
-        "Y": 406.94577
-      }
+        "X": -228.5755,
+        "Y": 614.90857
+      },
+      "Description": "Overwrites the resolution"
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "32770d0f-2315-43c6-a27b-912776f591d5"/*Vector4ToFloat4*/,
+      "ChildId": "32770d0f-2315-43c6-a27b-912776f591d5"/*Vector4Components*/,
       "Position": {
         "X": -25.082056,
         "Y": 29.952059
       }
     },
     {
-      "ChildId": "88d47200-0bc0-4a4b-a815-871b743404cb"/*Vector4ToFloat4*/,
+      "ChildId": "88d47200-0bc0-4a4b-a815-871b743404cb"/*Vector4Components*/,
       "Position": {
         "X": -25.082056,
-        "Y": 74.952194
+        "Y": 85.952194
       }
     },
     {
-      "ChildId": "24484531-b3a5-4dd3-96bb-16fd467672b4"/*Vector2ToFloat2*/,
+      "ChildId": "24484531-b3a5-4dd3-96bb-16fd467672b4"/*Vector2Components*/,
       "Position": {
         "X": -25.082056,
-        "Y": 130.9522
+        "Y": 141.9522
       }
     },
     {

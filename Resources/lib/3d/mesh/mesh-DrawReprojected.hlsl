@@ -1,13 +1,12 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
 {
     float4 Color;    
-    //float TestParamA;
-    //float AlphaCutOff;
-    //float UseCubeMap;
+    float AspectRatio;
 };
 
 
@@ -41,7 +40,6 @@ cbuffer CamTransforms : register(b2)
 
 struct psInput
 {
-    float2 texCoord : TEXCOORD;
     float4 pixelPosition : SV_POSITION;
     float4 vertexPosInObject : VERTEXPOS;
 };
@@ -68,11 +66,10 @@ psInput vsMain(uint id: SV_VertexID)
     float4 vertexInClipSpace = mul(vertexPosInObject, ObjectToRefClipSpace);
     vertexInClipSpace.xyz /= vertexInClipSpace.w;    
 
-    output.texCoord = (vertexInClipSpace.xy * 0.5 -0.5);
-    output.texCoord.y = 1- output.texCoord.y;
 
-    //float4 aspect = float4(RefCameraToClipSpace[1][1] / RefCameraToClipSpace[0][0],1,1,1);
     float4 posInObject = float4(vertex.TexCoord * 2- 1, 0, 1);
+    posInObject.x *= AspectRatio;
+
     float4 posInClipSpace = mul(posInObject, ObjectToClipSpace);
     output.pixelPosition = posInClipSpace;
     return output;
@@ -81,16 +78,10 @@ psInput vsMain(uint id: SV_VertexID)
 
 float4 psMain(psInput pin) : SV_TARGET
 {
-    //return BaseColorMap2.Sample(texSampler, pin.texCoord) * Color;
-
     float4 vertexInClipSpace = mul(pin.vertexPosInObject, ObjectToRefClipSpace);
     vertexInClipSpace.xyz /= vertexInClipSpace.w;    
 
-    float2 uv = (vertexInClipSpace.xy * 0.5 -0.5);
-    uv.y = 1- uv.y;
-    uv.x += 1;
-    uv.y -= 1;
+    float2 uv = vertexInClipSpace.xy * float2(0.5, -0.5) + 0.5;
     float4 albedo = BaseColorMap2.Sample(texSampler, uv);
-
     return albedo * Color;
 }

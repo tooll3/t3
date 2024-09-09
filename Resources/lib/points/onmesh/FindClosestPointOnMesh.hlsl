@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
@@ -42,7 +43,7 @@ float udTriangle( in float3 v1, in float3 v2, in float3 v3, in float3 p )
 }
 
 
-float3 closesPointOnTriangle( in float3 p0, in float3 p1, in float3 p2, in float3 sourcePosition )
+float3 closestPointOnTriangle( in float3 p0, in float3 p1, in float3 p2, in float3 sourcePosition )
 {
     float3 edge0 = p1 - p0;
     float3 edge1 = p2 - p0;
@@ -154,7 +155,7 @@ void main(uint3 i : SV_DispatchThreadID)
     uint pointCount, pointStride;
     Points.GetDimensions(pointCount, pointStride);
     if(i.x >= pointCount) {
-        ResultPoints[i.x].w = 0 ;
+        ResultPoints[i.x].W = 0 ;
         return;
     }
 
@@ -167,13 +168,13 @@ void main(uint3 i : SV_DispatchThreadID)
     Point p = Points[i.x];
     int closestIndex = -1; 
     float closestDistance = 99999;
-    float3 pos = p.position;
+    float3 pos = p.Position;
     float3 closestPoint;
 
     for(uint faceIndex = 0; faceIndex < faceCount; faceIndex++) 
     {
         int3 f = Indices[faceIndex];
-        float3 pointOnFace = closesPointOnTriangle(
+        float3 pointOnFace = closestPointOnTriangle(
             Vertices[f[0]].Position,
             Vertices[f[1]].Position,
             Vertices[f[2]].Position,
@@ -190,9 +191,8 @@ void main(uint3 i : SV_DispatchThreadID)
 
     if(closestIndex>=0) 
     {
-        p.position = closestPoint;
+        p.Position = closestPoint;
     }
 
     ResultPoints[i.x] = p;
 }
-

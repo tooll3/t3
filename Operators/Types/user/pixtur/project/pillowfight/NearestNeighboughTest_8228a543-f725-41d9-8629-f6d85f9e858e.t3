@@ -69,7 +69,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -117,12 +117,7 @@
           "Value": 1.01
         },
         {
-          "Id": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
+          "Id": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
           "Type": "System.Boolean",
           "Value": false
         },
@@ -132,7 +127,12 @@
           "Value": 1
         },
         {
-          "Id": "d0a58cde-d292-4ceb-ba50-6965eb3ee3dd"/*UseWForSize*/,
+          "Id": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "7acc95ad-d317-42fc-97f8-85f48d7e516f"/*EnableZTest*/,
           "Type": "System.Boolean",
           "Value": false
         }
@@ -158,7 +158,7 @@
       "Outputs": []
     },
     {
-      "Id": "90565683-1d1b-4161-b716-d1b29de5ee0b"/*Vector3ToFloat3*/,
+      "Id": "90565683-1d1b-4161-b716-d1b29de5ee0b"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
@@ -205,7 +205,7 @@
       "Outputs": []
     },
     {
-      "Id": "2b7e849d-fac8-45ae-bc4e-62351aedd7c4"/*SnapPointsToGird*/,
+      "Id": "2b7e849d-fac8-45ae-bc4e-62351aedd7c4"/*SnapPointsToGrid*/,
       "SymbolId": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de",
       "InputValues": [
         {
@@ -218,12 +218,7 @@
           }
         },
         {
-          "Id": "a7d80f3e-298d-4eb5-9751-ec432cda4065"/*SnapFraction*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        },
-        {
-          "Id": "dc5e2101-e4d5-495a-8291-58aef1876657"/*FractionBlend*/,
+          "Id": "a7d80f3e-298d-4eb5-9751-ec432cda4065"/*Scatter*/,
           "Type": "System.Single",
           "Value": 1.0
         },

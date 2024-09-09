@@ -298,7 +298,7 @@
       }
     },
     {
-      "ChildId": "d086d8f5-d0fc-4751-b743-98f5d174adc7"/*SetPointsW*/,
+      "ChildId": "d086d8f5-d0fc-4751-b743-98f5d174adc7"/*SpreadPointAttributes*/,
       "Position": {
         "X": 1053.597,
         "Y": 167.00977

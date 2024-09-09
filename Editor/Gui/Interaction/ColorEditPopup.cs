@@ -17,7 +17,7 @@ using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using Color = T3.Editor.Gui.Styling.Color;
+using Color = T3.Core.DataTypes.Vector.Color;
 using Point = System.Drawing.Point;
 
 namespace T3.Editor.Gui.Interaction
@@ -44,7 +44,7 @@ namespace T3.Editor.Gui.Interaction
                 var drawList = ImGui.GetForegroundDrawList();
                 ImGui.ColorConvertRGBtoHSV(color.X, color.Y, color.Z, out var hNormalized, out var linearSaturation, out var v);
 
-                var compareColor = _isHoveringColor ? _hoveredColor : previousColor;
+                var compareColor = _isHoveringColor ? _hoveredColor : (Color)previousColor;
                 _dampedCompareColor = Vector4.Max(Vector4.Lerp(_dampedCompareColor, compareColor, 0.2f), Vector4.Zero);
                 edited = DrawCircleAndSliders(ref cColor, _dampedCompareColor, ref hNormalized, ref linearSaturation, v, drawList);
                 edited |= PickColor(ref cColor, previousColor);
@@ -419,7 +419,7 @@ namespace T3.Editor.Gui.Interaction
                     ImGui.PushID("v");
                     if (SingleValueEdit.Draw(ref v, inputSize, 0, 20, true, 0.005f, "{0:0.00}") is InputEditStateFlags.Modified)
                     {
-                        cColor.V = v.Clamp(0, 10);
+                        cColor.V = v.Clamp(0, 1000);
                         edited |= InputEditStateFlags.Modified;
                     }
 
@@ -864,7 +864,7 @@ namespace T3.Editor.Gui.Interaction
         /// <summary>
         /// Using color swatches doesn't make sense for these operators.
         /// </summary>
-        private static readonly List<string> _ignoredSymbols = new List<string>()
+        private static readonly List<string> _ignoredSymbols = new()
                                                                    {
                                                                        "ColorGrade",
                                                                        "ChannelMixer",

@@ -1,9 +1,10 @@
 {
   "Id": "fc201df2-8b05-4567-9f24-0d9128aa8507"/*BlendVector3*/,
-  "Description": "Blends (lerps) two vectors.",
+  "Description": "Blends (lerps) two vectors.\n\nAlso see [LerpVec3]",
   "InputUis": [
     {
       "InputId": "83c7b887-e1af-4b9f-ad2f-469867940bda"/*Vectors*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0

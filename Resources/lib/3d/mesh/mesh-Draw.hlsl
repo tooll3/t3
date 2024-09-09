@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
 
@@ -55,7 +56,8 @@ struct psInput
 };
 
 sampler texSampler : register(s0);
-sampler clampedSampler : register(s1);
+sampler linearSampler : register(s1);
+sampler clampedSampler : register(s2);
 
 
 StructuredBuffer<PbrVertex> PbrVertices : register(t0);
@@ -193,7 +195,7 @@ float4 psMain(psInput pin) : SV_TARGET
         // float3 irradiance = 0;// irradianceTexture.Sample(texSampler, N).rgb;
         uint width, height, levels;
         PrefilteredSpecular.GetDimensions(0, width, height, levels);
-        float3 irradiance = PrefilteredSpecular.SampleLevel(texSampler, N, 0.6 * levels).rgb;
+        float3 irradiance = PrefilteredSpecular.SampleLevel(linearSampler, N, 0.6 * levels).rgb;
 
         // Calculate Fresnel term for ambient lighting.
         // Since we use pre-filtered cubemap(s) and irradiance is coming from many directions
@@ -208,7 +210,7 @@ float4 psMain(psInput pin) : SV_TARGET
         float3 diffuseIBL = kd * albedo.rgb * irradiance;
 
 		// Sample pre-filtered specular reflection environment at correct mipmap level.
-		float3 specularIrradiance = PrefilteredSpecular.SampleLevel(texSampler, Lr, roughness * levels).rgb;
+		float3 specularIrradiance = PrefilteredSpecular.SampleLevel(linearSampler, Lr, roughness * levels).rgb;
 
 		// Split-sum approximation factors for Cook-Torrance specular BRDF.
 		float2 specularBRDF = BRDFLookup.SampleLevel(clampedSampler, float2(cosLo, roughness),0).rg;

@@ -1,14 +1,15 @@
 {
   "Id": "e6072ecf-30d2-4c52-afa1-3b195d61617b"/*GetFloatVar*/,
-  "Description": "Fetches a float variable from the context.\nUse [SetContextVariable] to set the variable further up the graph.\n\nImportant:\nIf you're using this together with [Loop], don't forget to use 'f' as the normalized progress variable.",
+  "Description": "Fetches a float variable from the context.\n\nUse [SetFloatVar] to set the variable further up the graph. Also [GetIntVar]\n\nImportant:\nIf you're using this together with [Loop], don't forget to use 'f' as the normalized progress variable.",
   "InputUis": [
     {
-      "InputId": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+      "InputId": "015d1ea0-ea51-4038-893a-4af2f8584631"/*VariableName*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
       },
-      "Usage": "Default"
+      "Description": "Note: When used with [Loop] this is frequently \"f\".",
+      "Usage": "CustomDropdown"
     },
     {
       "InputId": "ae76829b-d17d-4443-9cf1-63e3c44b90c8"/*FallbackDefault*/,

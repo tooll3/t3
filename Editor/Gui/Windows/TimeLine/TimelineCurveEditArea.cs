@@ -6,6 +6,7 @@ using System.Text;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
@@ -32,7 +33,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             // _curveEditBox = new CurveEditBox(timeLineCanvas, snapHandlerForU);
         }
 
-        private readonly StringBuilder _stringBuilder = new StringBuilder(100);
+        private readonly StringBuilder _stringBuilder = new(100);
         private readonly List<VDefinition> _visibleKeyframes = new(1000);
 
         public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters, bool fitCurvesVertically = false)
@@ -227,16 +228,15 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private static AddKeyframesCommand InsertNewKeyframe(Curve curve, float u)
         {
             var value = curve.GetSampledValue(u);
-            var previousU = curve.GetPreviousU(u);
 
-            var key = (previousU != null)
-                          ? curve.GetV(previousU.Value).Clone()
-                          : new VDefinition();
+            var newKey = curve.TryGetPreviousKey(u, out var previousKey)
+                             ? previousKey.Clone()
+                             : new VDefinition();
 
-            key.Value = value;
-            key.U = u;
+            newKey.Value = value;
+            newKey.U = u;
 
-            var command = new AddKeyframesCommand(curve, key);
+            var command = new AddKeyframesCommand(curve, newKey);
             return command;
         }
 
@@ -383,7 +383,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         public ICommand StartDragCommand()
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, SelectedKeyframes, GetAllCurves());
+            _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
             return _changeKeyframesCommand;
         }
 
@@ -493,6 +493,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private Instance _compositionOp;
         private readonly ValueSnapHandler _snapHandlerU;
         private readonly ValueSnapHandler _snapHandlerV;
-        private readonly Dictionary<int, int> _pinnedParameterComponents = new Dictionary<int, int>();
+        private readonly Dictionary<int, int> _pinnedParameterComponents = new();
     }
 }

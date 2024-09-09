@@ -1,12 +1,14 @@
 {
   "Id": "61c70843-08ea-4249-ba90-9971493e45d1"/*Cos*/,
+  "Description": "Creates a cosine wave also known as cosinusoidal wave or cosinusoid.\n\nUseful combinations: [Time] as an input\n\nAlternative with featuring more options: [Sin] \n\nAlso see: [AnimValue] [SampleCurve]",
   "InputUis": [
     {
       "InputId": "9764efb1-57a8-48da-b82e-4dcc2c3cb10a"/*Input*/,
       "Position": {
         "X": -1.6261063,
         "Y": -30.431416
-      }
+      },
+      "Description": "Input value\nExample: [Time]"
     }
   ],
   "SymbolChildUis": [],

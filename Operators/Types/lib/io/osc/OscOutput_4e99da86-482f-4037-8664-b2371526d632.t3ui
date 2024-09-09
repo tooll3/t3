@@ -1,0 +1,98 @@
+{
+  "Id": "4e99da86-482f-4037-8664-b2371526d632"/*OscOutput*/,
+  "Description": "Send out OSC signals to a receiver.",
+  "InputUis": [
+    {
+      "InputId": "3cca3654-2428-4526-8ed6-d1fa088c0bf9"/*SendTrigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "Description": "Enables sending messages. If you want a continues value stream, consider disabling the OnlySendChanges options.\n\nTip: Reduce the send rate, you can connect an [AnimValue].WasTrigger."
+    },
+    {
+      "InputId": "98f38caa-4f79-425c-ab46-22d7dbe62978"/*IpAddress*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "GroupTitle": "Destination",
+      "Description": "The target IP address which should be visible. If connection is not possible, check firewall settings and try to use ping.",
+      "Usage": "Default"
+    },
+    {
+      "InputId": "6c0e07ba-7ea6-4dab-af0b-61cf9cb74ad7"/*Port*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Description": "The target port on the receiver side.",
+      "Min": 0,
+      "Max": 65335
+    },
+    {
+      "InputId": "9016e418-7761-4916-aafb-c95599f77f38"/*Address*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Description": "The target address should start with a forward slash.\n\nPlease refer to the OSC documentation.",
+      "Usage": "Default"
+    },
+    {
+      "InputId": "fdb1d27b-9a9d-47ab-8dbf-7e1bab5b4a24"/*Reconnect*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      },
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "827c7ae2-c129-4d04-a715-328c0a86bf8a"/*Values*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      },
+      "GroupTitle": "Content",
+      "Description": "One or more values to send. You can connect multiple float values to send.\n\nThis paraemter is ignored (not send) if default. Click on the paraemter name to reset it."
+    },
+    {
+      "InputId": "d5e9e9be-093b-4d57-9070-9b2cf33aa45b"/*Strings*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "Description": "One or more strings to send. You can connect multiple strings to send.\nThe strings will always be sent after the float values.\n\nThis paraemter is ignored (not send) if default. Click on the paraemter name to reset it.",
+      "Usage": "Default"
+    },
+    {
+      "InputId": "13b11154-c8f0-453e-a64e-80d602319b73"/*OnlySendChanges*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      },
+      "GroupTitle": "Options",
+      "Description": "If enabled, packages will only be send if any of the parameters or the address changes."
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a6679d6c-fc34-4588-ab20-5079ad8f8a03"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "7d97a2ce-9297-4bac-b947-91dca0c12e4c",
+      "Title": "An introduction to OSC",
+      "Description": "",
+      "LinkUrl": "https://opensoundcontrol.stanford.edu/spec-1_0.html#introduction",
+      "LinkType": "Reference"
+    }
+  ]
+}

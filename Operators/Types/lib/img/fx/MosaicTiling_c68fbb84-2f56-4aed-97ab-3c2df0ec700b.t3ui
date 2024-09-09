@@ -1,0 +1,166 @@
+{
+  "Id": "c68fbb84-2f56-4aed-97ab-3c2df0ec700b"/*MosaicTiling*/,
+  "Description": "Subdivides the incoming image into recursive tiles. \nThis effect looks like the resolution of the image is reduced also known as 'pixelate' or 'resisizing without sampling'.\n\nCheck out the presets for an overview.\n\nFor similar effects or interesting combinations see: [MosaicTiling] [VoronoiCells] [SubdivisionStretch] [HoneyCombTiles] [TriangleGridTransition] [Dither] [AsciiRender]\n\nTags:\nPixelate / pixilated / Pixel / resolution / lowres / low-res / Pixelart / resolution / Mosiac",
+  "InputUis": [
+    {
+      "InputId": "5a5ebec0-88ac-4e8e-873b-88e5d68fb920"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 106.53725,
+        "Y": -129.33664
+      }
+    },
+    {
+      "InputId": "58ed6ff5-4a5e-452d-ab60-efdfbccc3413"/*FxTextures*/,
+      "Position": {
+        "X": 106.53725,
+        "Y": -84.33664
+      },
+      "Description": "Image input"
+    },
+    {
+      "InputId": "732f95f6-c0f3-4cee-bd0c-c8144b5b4c63"/*Center*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 29.375793
+      },
+      "Description": "Shifts the position of the effect over the input image",
+      "Scale": 0.01
+    },
+    {
+      "InputId": "746e0a30-8367-476e-97c9-f767aa47f6ad"/*Stretch*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 74.37579
+      },
+      "Description": "Defines the stretching (currently not evaluated)"
+    },
+    {
+      "InputId": "1ca6763a-cc17-499d-bfe5-aeac815bd8bb"/*Size*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 119.37579
+      },
+      "Description": "Defines the scaling of the tiles",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 2.0,
+      "Scale": 0.001
+    },
+    {
+      "InputId": "fae262db-2b93-4f4d-bc94-cb76b67b70cc"/*SubdivisionThreshold*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 164.3758
+      },
+      "Description": "Defines the threshold value from which a tile is further subdivided"
+    },
+    {
+      "InputId": "79932d92-ccc2-48ed-b412-37698749636b"/*MaxSubdivisions*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 217.32104
+      },
+      "Description": "Defines the maximum amount subdivisions"
+    },
+    {
+      "InputId": "30791a22-3a50-451f-a080-cdb2cb48d87d"/*Randomize*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 262.32104
+      },
+      "Description": "Randomizes the threshold for subdivisions",
+      "AddPadding": "True"
+    },
+    {
+      "InputId": "a99725c2-9a88-4d9f-8b38-cb3f392d0be9"/*Padding*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 307.32104
+      },
+      "GroupTitle": "Gaps",
+      "Description": "Defines the thickness of the lines between the tiles"
+    },
+    {
+      "InputId": "587c4737-46ad-4b92-9d14-21c0fc0da637"/*Feather*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 352.32104
+      },
+      "Description": "Defines the sharpness of the lines between the tiles"
+    },
+    {
+      "InputId": "2f80e505-4543-44e8-8799-fe0c13a91a51"/*GapColor*/,
+      "Position": {
+        "X": 128.79921,
+        "Y": 437.99042
+      },
+      "Description": "Defines the color and alpha of the lines between the tiles",
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "b243743d-ea21-427b-befb-7130d9c3157a"/*MixOriginal*/,
+      "Position": {
+        "X": 128.79921,
+        "Y": 482.99042
+      },
+      "GroupTitle": "Image",
+      "Description": "Multiplies the color of the original image with the result"
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "efb30cae-7028-412e-9401-5ff7acec8a27"/*Vector2Components*/,
+      "Position": {
+        "X": 321.91418,
+        "Y": 37.956757
+      }
+    },
+    {
+      "ChildId": "bfe8150d-e0f6-4f4e-a3d3-cd8a50ae6ca4"/*Vector2Components*/,
+      "Position": {
+        "X": 321.91418,
+        "Y": 93.95676
+      }
+    },
+    {
+      "ChildId": "14ef1100-1ad6-4057-bd74-4000c6ece035"/*Vector4Components*/,
+      "Position": {
+        "X": 321.74207,
+        "Y": 328.45667
+      }
+    },
+    {
+      "ChildId": "0b046afa-a364-40b3-a97d-708873e0c551"/*IntToFloat*/,
+      "Position": {
+        "X": 320.84106,
+        "Y": 428.41513
+      }
+    },
+    {
+      "ChildId": "cad868ef-df34-49de-8653-1d3276d7066f"/*_multiImageFxSetup*/,
+      "Position": {
+        "X": 688.4922,
+        "Y": 192.03278
+      }
+    },
+    {
+      "ChildId": "13fc6ec5-f483-4ff3-84ac-71f43730c65c"/*FirstValidTexture*/,
+      "Position": {
+        "X": 336.12442,
+        "Y": -173.25787
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "0ce69c7f-29c9-461b-b593-402c4f9131e8"/*TextureOutput*/,
+      "Position": {
+        "X": 803.0859,
+        "Y": -104.23233
+      }
+    }
+  ]
+}

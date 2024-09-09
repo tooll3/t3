@@ -22,6 +22,7 @@ using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -125,15 +126,16 @@ namespace T3.Editor.Gui.Graph
                 return;
             }
 
-            var pathToParent = childIdPath.GetRange(0, childIdPath.Count - 1);
-            SetComposition(pathToParent, ICanvas.Transition.Undefined);
-
+            if (instance.Parent != CompositionOp)
+            {
+                var pathToParent = childIdPath.GetRange(0, childIdPath.Count - 1);
+                SetComposition(pathToParent, ICanvas.Transition.Undefined);
+            }
+            
             var parentComposition = instance.Parent;
             var parentUi = SymbolUiRegistry.Entries[parentComposition.Symbol.Id];
             var childInstanceUi = parentUi.ChildUis.SingleOrDefault(c => c.Id == instance.SymbolChildId);
             NodeSelection.SetSelectionToChildUi(childInstanceUi, instance);
-            // NodeSelection.Clear();
-            // NodeSelection.AddSymbolChildToSelection(childInstanceUi, instance);
             FitViewToSelectionHandling.FitViewToSelection();
         }
 
@@ -223,8 +225,8 @@ namespace T3.Editor.Gui.Graph
             UpdateCanvas(editingFlags);
 
             /*
-             * This is a work around to delay setting the composition until ImGui has
-             * finally updated its window size and applied its layout so we can use
+             * This is a workaround to delay setting the composition until ImGui has
+             * finally updated its window size and applied its layout, so we can use
              * Graph window size to properly fit the content into view.
              *
              * The side effect of this hack is that CompositionOp stays undefined for
@@ -302,7 +304,27 @@ namespace T3.Editor.Gui.Graph
                     
                     if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
                     {
-                        PinSelectedToOutputWindow();
+                        if (UserSettings.Config.FocusMode)
+                        {
+                            var selectedImage = NodeSelection.GetFirstSelectedInstance();
+                            if (selectedImage != null)
+                            {
+                                GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
+                            }
+                        }
+                        else
+                        {
+                            PinSelectedToOutputWindow();
+                        }
+                    }
+                    
+                    if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
+                    {
+                        var selectedImage = NodeSelection.GetFirstSelectedInstance();
+                        if (selectedImage != null)
+                        {
+                            GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
+                        }
                     }
 
                     if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
@@ -361,14 +383,7 @@ namespace T3.Editor.Gui.Graph
                         NodeNavigation.SelectLeft();
                     }
                     
-                    if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
-                    {
-                        var selectedImage = NodeSelection.GetFirstSelectedInstance();
-                        if (selectedImage != null)
-                        {
-                            GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
-                        }
-                    }
+
                 }
 
                 if (ImGui.IsWindowFocused()  && !preventInteractions)
@@ -437,7 +452,7 @@ namespace T3.Editor.Gui.Graph
                     HandleFenceSelection();
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
-                if (isOnBackground && ImGui.IsMouseDoubleClicked(0))
+                if (isOnBackground && (ImGui.IsMouseDoubleClicked(0) || KeyboardBinding.Triggered(UserActions.CloseOperator)))
                 {
                     if (CompositionOp.Parent != null)
                         SetCompositionToParentInstance(CompositionOp.Parent);
@@ -455,7 +470,8 @@ namespace T3.Editor.Gui.Graph
                     }
                     else
                     {
-                        var connectionDroppedOnBackground = ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
+                        var connectionDroppedOnBackground =
+                            ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
                         if (connectionDroppedOnBackground)
                         {
                             //Log.Warning("Skipping complete operation on background drop?");
@@ -597,7 +613,7 @@ namespace T3.Editor.Gui.Graph
 
         private void DrawDropHandler()
         {
-            if (!T3Ui.DraggingIsInProgress)
+            if (!T3Ui.DraggingIsInProgress || CompositionOp == null)
                 return;
 
             ImGui.SetCursorPos(Vector2.Zero);
@@ -672,6 +688,8 @@ namespace T3.Editor.Gui.Graph
 
         private void DrawContextMenuContent()
         {
+            var clickPosition =ImGui.GetMousePosOnOpeningCurrentPopup();
+
             var selectedChildUis = GetSelectedChildUis();
             var nextUndoTitle = UndoRedoStack.CanUndo ? $" ({UndoRedoStack.GetNextUndoTitle()})" : string.Empty;
             if (ImGui.MenuItem("Undo" + nextUndoTitle,
@@ -687,7 +705,9 @@ namespace T3.Editor.Gui.Graph
             // ------ for selection -----------------------
             var oneOpSelected = selectedChildUis.Count == 1;
             var someOpsSelected = selectedChildUis.Count > 0;
-            var snapShotsEnabledFromSomeOps = !selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SnapshotGroupIndex == 0);
+            var snapShotsEnabledFromSomeOps 
+                = selectedChildUis
+                   .Any(selectedChildUi => selectedChildUi.EnabledForSnapshots);
 
             var label = oneOpSelected
                             ? $"{selectedChildUis[0].SymbolChild.ReadableName}..."
@@ -745,11 +765,34 @@ namespace T3.Editor.Gui.Graph
                                enabled: someOpsSelected))
             {
                 // Disable if already enabled for all
-                var enabledForAll = selectedChildUis.TrueForAll(c2 => c2.SnapshotGroupIndex > 0);
+                var disableBecauseAllEnabled
+                    = selectedChildUis
+                       .TrueForAll(c2 => c2.EnabledForSnapshots);
+
                 foreach (var c in selectedChildUis)
                 {
-                    c.SnapshotGroupIndex = enabledForAll ? 0 : 1;
+                    c.EnabledForSnapshots = !disableBecauseAllEnabled;
                 }
+
+                // Add to add snapshots
+                var allSnapshots = VariationHandling.ActivePoolForSnapshots?.Variations;
+                if (allSnapshots != null && allSnapshots.Count > 0)
+                {
+                    if (disableBecauseAllEnabled)
+                    {
+                        VariationHandling.RemoveInstancesFromVariations(selectedChildUis.Select(ui => ui.Id), allSnapshots);
+                    }
+                    // Remove from snapshots
+                    else
+                    {
+                        var selectedInstances = selectedChildUis.Select(ui => CompositionOp.Children.Single(child => child.SymbolChildId == ui.Id)).ToList();
+                        foreach (var snapshot in allSnapshots)
+                        {
+                            VariationHandling.ActivePoolForSnapshots.UpdateVariationPropertiesForInstances(snapshot, selectedInstances);
+                        }
+                    }
+                }
+
                 FlagCurrentCompositionAsModified();
             }
 
@@ -848,10 +891,8 @@ namespace T3.Editor.Gui.Graph
             {
                 var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
                 var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
-                SymbolBrowser.OpenAt(position, null, null, false, startingSearchString, symbol =>
-                    {
-                        ChangeSymbol.ChangeOperatorSymbol(CompositionOp, selectedChildUis, symbol);
-                    });
+                SymbolBrowser.OpenAt(position, null, null, false, startingSearchString,
+                                     symbol => { ChangeSymbol.ChangeOperatorSymbol(CompositionOp, selectedChildUis, symbol); });
             }
 
             if (ImGui.BeginMenu("Symbol definition..."))
@@ -886,7 +927,8 @@ namespace T3.Editor.Gui.Graph
             {
                 if (ImGui.MenuItem("Add Node...", "TAB", false, true))
                 {
-                    SymbolBrowser.OpenAt(InverseTransformPositionFloat(ImGui.GetMousePos()), null, null, false);
+
+                    SymbolBrowser.OpenAt(InverseTransformPositionFloat(clickPosition), null, null, false);
                 }
 
                 if (ImGui.MenuItem("Add input parameter..."))
@@ -1178,13 +1220,13 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private readonly List<ISelectableCanvasObject> _selectableItems = new List<ISelectableCanvasObject>();
+        private readonly List<ISelectableCanvasObject> _selectableItems = new();
         #endregion
 
         #region public API
         /// <summary>
         /// The canvas that is currently being drawn from the UI.
-        /// Note that <see cref="GraphCanvas"/> is NOT a singleton so you can't rely on this to be valid outside of the Drawing() context.
+        /// Note that <see cref="GraphCanvas"/> is NOT a singleton, so you can't rely on this to be valid outside the Drawing() context.
         /// </summary>
         public static GraphCanvas Current { get; private set; }
 
@@ -1204,7 +1246,7 @@ namespace T3.Editor.Gui.Graph
         public static readonly LibWarningDialog LibWarningDialog = new();
 
         private List<SymbolChildUi> ChildUis { get; set; }
-        public readonly SymbolBrowser SymbolBrowser = new SymbolBrowser();
+        public readonly SymbolBrowser SymbolBrowser = new();
         private string _symbolNameForDialogEdits = "";
         private string _symbolDescriptionForDialog = "";
         private string _nameSpaceForDialogEdits = "";

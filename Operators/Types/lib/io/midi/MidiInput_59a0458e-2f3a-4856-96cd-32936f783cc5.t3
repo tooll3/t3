@@ -41,12 +41,16 @@
     {
       "Id": "f650985f-00a7-452a-b3e4-69a8e9a78c3f"/*ControlRange*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {
       "Id": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "ac35e75a-bec5-497c-9c68-6b809b12cd8b"/*ResetToDefaultTrigger*/,
       "DefaultValue": false
     }
   ],

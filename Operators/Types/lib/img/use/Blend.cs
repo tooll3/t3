@@ -1,3 +1,4 @@
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -7,7 +8,7 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
     public class Blend : Instance<Blend>
     {
         [Output(Guid = "536fae14-b814-498c-a6b4-07775de36991")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new Slot<SharpDX.Direct3D11.Texture2D>();
+        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new();
 
         [Input(Guid = "abaa52e9-7d3d-4ae5-89d2-5251f61e5392")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ImageA = new InputSlot<SharpDX.Direct3D11.Texture2D>();
@@ -30,11 +31,14 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
         [Input(Guid = "cdc2cf4b-f788-4cb4-a3f5-8dfaa8bd54b3")]
         public readonly InputSlot<bool> NormalForUpperHalf = new InputSlot<bool>();
 
+        [Input(Guid = "e8923e83-ce48-4b71-a1aa-46b9ff79780b", MappedType = typeof(ScaleModes))]
+        public readonly InputSlot<int> ScaleMode = new InputSlot<int>();
+
         [Input(Guid = "d7b83780-c4be-4337-b1df-0c98310b1926")]
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
 
         [Input(Guid = "93e63b73-e572-4bb2-bbbd-11bbffad89e7")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
 
         private enum RgbBlendModes
         {
@@ -47,6 +51,7 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
             UseImageB_RGB = 6,
             Max = 7,
             Sub = 8,
+            MixUsingImageB_A = 9,
         }
 
         private enum AlphaBlendModes
@@ -60,6 +65,13 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
             UseImageB_Brightness = 6,
             Additive = 7,
             Max = 8,
+        }
+
+        private enum ScaleModes
+        {
+            Stretch = 0,
+            Fit = 1,
+            Cover = 2,
         }
     }
 }

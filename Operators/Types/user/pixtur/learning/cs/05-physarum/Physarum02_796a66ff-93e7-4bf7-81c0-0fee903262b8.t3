@@ -65,10 +65,10 @@
         },
         {
           "Id": "693957bc-5364-404d-84cd-0248fc609eca"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 0,
-            "Height": 0
+            "X": 0,
+            "Y": 0
           }
         },
         {
@@ -93,10 +93,10 @@
         },
         {
           "Id": "ad6beaae-4d4b-4f3b-ad7b-7d6389789610"/*BlockCount*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 2,
-            "Height": 2
+            "X": 2,
+            "Y": 2
           }
         },
         {
@@ -635,6 +635,11 @@
       "SymbolId": "6820b166-1782-43b9-bc5c-6b4f63b16f86",
       "InputValues": [
         {
+          "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
+          "Type": "System.Single",
+          "Value": 0.86
+        },
+        {
           "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
           "Type": "System.Single",
           "Value": 0.24
@@ -656,11 +661,6 @@
             "X": -0.13,
             "Y": -0.29
           }
-        },
-        {
-          "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
-          "Type": "System.Single",
-          "Value": 0.86
         },
         {
           "Id": "9d5e3055-c17e-4013-963d-e17c76b707c1"/*HighlightColor*/,
@@ -752,10 +752,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 256
+            "X": 256,
+            "Y": 256
           }
         }
       ],
@@ -843,7 +843,7 @@
       "Outputs": []
     },
     {
-      "Id": "4b5a30f7-3e80-4a13-b076-a8e9b3e33ed9"/*Vector2ToFloat2*/,
+      "Id": "4b5a30f7-3e80-4a13-b076-a8e9b3e33ed9"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -884,7 +884,7 @@
       "Outputs": []
     },
     {
-      "Id": "1fbf47a2-82b2-45d1-829a-13e513273380"/*Float2ToVector2*/,
+      "Id": "1fbf47a2-82b2-45d1-829a-13e513273380"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -1012,7 +1012,7 @@
       "Outputs": []
     },
     {
-      "Id": "f288d28e-1083-47c2-9fd7-40a86a0aeb25"/*Vector2ToFloat2*/,
+      "Id": "f288d28e-1083-47c2-9fd7-40a86a0aeb25"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []

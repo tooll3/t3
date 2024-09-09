@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 static const float3 Corners[] = 
 {
@@ -75,24 +76,24 @@ psInput vsMain(uint id: SV_VertexID)
     Point pointBB = Points[particleId > SegmentCount-2 ? SegmentCount-2: particleId+2];
 
     float3 posInObject = cornerFactors.x < 0.5
-        ? pointA.position
-        : pointB.position;
+        ? pointA.Position
+        : pointB.Position;
 
 
-    float4 aaInScreen  = mul(float4(pointAA.position,1), ObjectToClipSpace) * aspect;
+    float4 aaInScreen  = mul(float4(pointAA.Position,1), ObjectToClipSpace) * aspect;
     aaInScreen /= aaInScreen.w;
-    float4 aInScreen  = mul(float4(pointA.position,1), ObjectToClipSpace) * aspect;
+    float4 aInScreen  = mul(float4(pointA.Position,1), ObjectToClipSpace) * aspect;
     if(aInScreen.z < -0)
         discardFactor = 0;
     aInScreen /= aInScreen.w;
 
     
-    float4 bInScreen  = mul(float4(pointB.position,1), ObjectToClipSpace) * aspect;
+    float4 bInScreen  = mul(float4(pointB.Position,1), ObjectToClipSpace) * aspect;
     if(bInScreen.z < -0)
         discardFactor = 0;
 
     bInScreen /= bInScreen.w;
-    float4 bbInScreen  = mul(float4(pointBB.position,1), ObjectToClipSpace) * aspect;
+    float4 bbInScreen  = mul(float4(pointBB.Position,1), ObjectToClipSpace) * aspect;
     bbInScreen /= bbInScreen.w;
 
     float3 direction = (aInScreen - bInScreen).xyz;
@@ -106,10 +107,10 @@ psInput vsMain(uint id: SV_VertexID)
     float3 normal =  normalize( cross(direction, float3(0,0,1))); 
     float3 normalA =  normalize( cross(directionA, float3(0,0,1))); 
     float3 normalB =  normalize( cross(directionB, float3(0,0,1))); 
-    if(isnan(pointAA.w) || pointAA.w < 0.01) {
+    if(isnan(pointAA.W) || pointAA.W < 0.01) {
         normalA =normal;
     }
-    if(isnan(pointBB.w) || pointAA.w < 0.01) {
+    if(isnan(pointBB.W) || pointAA.W < 0.01) {
         normalB =normal;
     }
 
@@ -123,7 +124,7 @@ psInput vsMain(uint id: SV_VertexID)
     posInCamSpace.w = 1;
 
 
-    float wAtPoint = lerp( pointA.w  , pointB.w , cornerFactors.x);
+    float wAtPoint = lerp( pointA.W  , pointB.W , cornerFactors.x);
 
     // Buildup transition
 
@@ -139,8 +140,8 @@ psInput vsMain(uint id: SV_VertexID)
     output.position = pos / aspect;
     
     float3 n = cornerFactors.x < 0.5 
-        ? cross(pointA.position - pointAA.position, pointA.position - pointB.position)
-        : cross(pointB.position - pointA.position, pointB.position - pointBB.position);
+        ? cross(pointA.Position - pointAA.Position, pointA.Position - pointB.Position)
+        : cross(pointB.Position - pointA.Position, pointB.Position - pointBB.Position);
     n =normalize(n);
 
     output.fog = pow(saturate(-posInCamSpace.z/FogDistance), FogBias);

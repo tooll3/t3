@@ -1,11 +1,7 @@
-using System.Diagnostics;
-using T3.Core;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_32325c5b_53f7_4414_b4dd_a436e45528b0
@@ -14,7 +10,7 @@ namespace T3.Operators.Types.Id_32325c5b_53f7_4414_b4dd_a436e45528b0
     {
        
         [Output(Guid = "FE01C3B6-72E2-494E-8511-6D50C527463F")]
-        public readonly Slot<Command> Result = new Slot<Command>();
+        public readonly Slot<Command> Result = new();
 
         
         public SetCommandTime()

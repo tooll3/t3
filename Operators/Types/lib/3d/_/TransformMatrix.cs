@@ -1,7 +1,4 @@
-using System;
 using System.Numerics;
-using SharpDX;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -16,11 +13,11 @@ namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81
     public class TransformMatrix : Instance<TransformMatrix>
     {
         [Output(Guid = "751E97DE-C418-48C7-823E-D4660073A559")]
-        public readonly Slot<Vector4[]> Result = new Slot<Vector4[]>();
+        public readonly Slot<Vector4[]> Result = new();
         
 
         [Output(Guid = "ECA8121B-2A7F-4ECC-9143-556DCF78BA33")]
-        public readonly Slot<Vector4[]> ResultInverted = new Slot<Vector4[]>();
+        public readonly Slot<Vector4[]> ResultInverted = new();
         
         public TransformMatrix()
         {
@@ -84,16 +81,16 @@ namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81
         
         
         [Input(Guid = "3B817E6C-F532-4A8C-A2FF-A00DC926EEB2")]
-        public readonly InputSlot<System.Numerics.Vector3> Translation = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> Translation = new();
         
         [Input(Guid = "5339862D-5A18-4D0C-B908-9277F5997563")]
-        public readonly InputSlot<System.Numerics.Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
         
         [Input(Guid = "58B9DFB6-0596-4F0D-BAF6-7FB3AE426C94")]
-        public readonly InputSlot<System.Numerics.Vector3> Scale = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> Scale = new();
 
         [Input(Guid = "566F1619-1DE0-4B41-B167-7FC261730D62")]
-        public readonly InputSlot<float> UniformScale = new InputSlot<float>();
+        public readonly InputSlot<float> UniformScale = new();
         
         [Input(Guid = "F53F3311-E1FC-418B-8861-74ADC175D5FA")]
         public readonly InputSlot<System.Numerics.Vector3> Shear = new();
@@ -104,6 +101,6 @@ namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81
 
         
         [Input(Guid = "E19808D8-6D73-4638-B5F2-DDDDC49AD815")]
-        public readonly InputSlot<bool> Invert = new InputSlot<bool>();        
+        public readonly InputSlot<bool> Invert = new();        
     }
 }

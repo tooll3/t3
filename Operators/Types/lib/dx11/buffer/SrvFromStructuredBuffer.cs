@@ -1,9 +1,6 @@
-﻿using System;
-using System.Diagnostics;
-using SharpDX.Direct3D;
+﻿using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -15,10 +12,10 @@ namespace T3.Operators.Types.Id_8c41b312_6628_411c_a61d_604413b73a72
     public class SrvFromStructuredBuffer : Instance<SrvFromStructuredBuffer>
     {
         [Output(Guid = "2A1FCDF6-9416-45B2-96CA-A9D6D2692278")]
-        public readonly Slot<ShaderResourceView> ShaderResourceView = new Slot<ShaderResourceView>();
+        public readonly Slot<ShaderResourceView> ShaderResourceView = new();
 
         [Output(Guid = "E96EED5C-AE63-49B7-8ADD-2A818E4A2B89")]
-        public readonly Slot<int> ElementCount = new Slot<int>();
+        public readonly Slot<int> ElementCount = new();
         
         public SrvFromStructuredBuffer()
         {
@@ -56,6 +53,6 @@ namespace T3.Operators.Types.Id_8c41b312_6628_411c_a61d_604413b73a72
         }
 
         [Input(Guid = "BD65EF2C-F32A-4279-BB5C-7F6467B23283")]
-        public readonly InputSlot<SharpDX.Direct3D11.Buffer> Buffer = new InputSlot<SharpDX.Direct3D11.Buffer>();
+        public readonly InputSlot<SharpDX.Direct3D11.Buffer> Buffer = new();
     }
 }

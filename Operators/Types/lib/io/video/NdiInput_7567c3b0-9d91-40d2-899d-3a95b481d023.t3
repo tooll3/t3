@@ -4,16 +4,16 @@
   "Namespace": "lib.io.video",
   "Inputs": [
     {
-      "Id": "306668f7-881d-4aeb-9aa0-0460013a05cb"/*Command*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "fd1fca6b-a3be-440b-86ba-6b7b1bbd2a8c"/*SourceName*/,
       "DefaultValue": "0"
     },
     {
-      "Id": "d2c24f47-4b24-4037-8b1c-a85378359d2d"/*SourceNumber*/,
-      "DefaultValue": 0
+      "Id": "3f634e98-93f2-4b5e-a098-623b3f8e4c9c"/*EnableProfiling*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "5e1ec76b-8ffe-43ca-867b-c9dda0eafb60"/*TriggerReconnect*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

@@ -103,7 +103,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 pInCell = ppp * divisions;
     float2 cellId = (p1 - ppp) * divisions;
 
-    if (mod(cellId.y, 2) < 0.0001)
+    if ((int(cellId.y + 1000.0001) + 10) % 2 == 1)
+    // if (mod(cellId.y, 2.0) < 0.0001)
     {
         pInCell.y = 1 - pInCell.y;
     }

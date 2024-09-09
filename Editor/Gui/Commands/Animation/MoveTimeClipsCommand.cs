@@ -4,8 +4,6 @@ using System.Linq;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 
 namespace T3.Editor.Gui.Commands.Animation
 {

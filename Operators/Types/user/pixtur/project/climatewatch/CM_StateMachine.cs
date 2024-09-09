@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_b0453fd5_e9c5_481a_aa6b_0040bd5c1318
@@ -14,40 +12,40 @@ namespace T3.Operators.Types.Id_b0453fd5_e9c5_481a_aa6b_0040bd5c1318
     public class CM_StateMachine : Instance<CM_StateMachine>
     {
         [Output(Guid = "78a7a222-ef84-45cb-9732-eb29afc83c3d", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> SimulationProgress = new Slot<float>();
+        public readonly Slot<float> SimulationProgress = new();
 
         [Output(Guid = "BBE120E4-DD68-4301-A3F2-3C1CA7D345E5", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<string> RestCarbon = new Slot<string>();
+        public readonly Slot<string> RestCarbon = new();
 
         [Output(Guid = "8160A329-0A1A-4FDF-8E9D-D5E21CA95954", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> RestCarbonRatio = new Slot<float>();
+        public readonly Slot<float> RestCarbonRatio = new();
 
         [Output(Guid = "A72A83F1-B36B-4653-8D1F-C0EBA3D03A0A", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<bool> IsSimulationRunning = new Slot<bool>();
+        public readonly Slot<bool> IsSimulationRunning = new();
 
         [Output(Guid = "BE19AE67-EDB8-402C-A218-C327AF886D81", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Temperature = new Slot<float>();
+        public readonly Slot<float> Temperature = new();
 
         [Output(Guid = "08C995C9-B091-476C-8985-1C7EB64F451D", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<DateTime> Date = new Slot<DateTime>();
+        public readonly Slot<DateTime> Date = new();
 
         [Output(Guid = "B2865766-2D84-4753-8E03-AF044051FCC2", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> SourceOil = new Slot<float>();
+        public readonly Slot<float> SourceOil = new();
 
         [Output(Guid = "FB7618D7-A738-452C-A10E-EF7968866250", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> SourceGas = new Slot<float>();
+        public readonly Slot<float> SourceGas = new();
 
         [Output(Guid = "70682E31-6F51-4C08-8D96-BED403FC1C7D", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> SourceCoal = new Slot<float>();
+        public readonly Slot<float> SourceCoal = new();
 
         [Output(Guid = "01C2E74E-E665-4F01-84E6-10F41A74AD6A", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> SourceCoalMines = new Slot<float>();
+        public readonly Slot<float> SourceCoalMines = new();
 
         [Output(Guid = "FDBFE711-067B-4D95-83E6-A9125704069F", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<bool> FreezeParticleGrowth = new Slot<bool>();
+        public readonly Slot<bool> FreezeParticleGrowth = new();
 
         [Output(Guid = "64EDD71F-6D86-4669-9481-3D197B505022", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<bool> ResetParticles = new Slot<bool>();
+        public readonly Slot<bool> ResetParticles = new();
 
         
         public CM_StateMachine()
@@ -231,7 +229,7 @@ namespace T3.Operators.Types.Id_b0453fd5_e9c5_481a_aa6b_0040bd5c1318
         private const double IdleTimeOut = 3 * 60;
         private const long InitialRestCarbon = 7430000000000;
 
-        private readonly DateTime _initialDate = new DateTime(2021, 5, 12);
+        private readonly DateTime _initialDate = new(2021, 5, 12);
         private const float InitialTemp = 1.21f;
 
         private SimulationMode DefaultMode => _simulationModes[0];
@@ -285,7 +283,7 @@ namespace T3.Operators.Types.Id_b0453fd5_e9c5_481a_aa6b_0040bd5c1318
             }
         }
 
-        private List<SimulationMode> _simulationModes = new List<SimulationMode>()
+        private List<SimulationMode> _simulationModes = new()
                                                             {
                                                                 new SimulationMode(2125, 5f, 3381000000000, 1, 1, 1),
                                                                 new SimulationMode(2268, 5f, 3381000000000, 1, 0.6f, 0.4f),
@@ -298,22 +296,22 @@ namespace T3.Operators.Types.Id_b0453fd5_e9c5_481a_aa6b_0040bd5c1318
                                                             };
 
         [Input(Guid = "c766e021-8478-4507-859d-25badb679ff2")]
-        public readonly InputSlot<float> Value = new InputSlot<float>();
+        public readonly InputSlot<float> Value = new();
 
         [Input(Guid = "3477E8BA-CB57-4007-85A5-FD1EFE1B578C")]
-        public readonly InputSlot<bool> RenewPower = new InputSlot<bool>();
+        public readonly InputSlot<bool> RenewPower = new();
 
         [Input(Guid = "286AB912-8D04-466B-B5C8-4D673F7F97E1")]
-        public readonly InputSlot<bool> RenewHeating = new InputSlot<bool>();
+        public readonly InputSlot<bool> RenewHeating = new();
 
         [Input(Guid = "B212B24D-E6F2-481F-9DC6-42CBB4D9ADF6")]
-        public readonly InputSlot<bool> RenewMobility = new InputSlot<bool>();
+        public readonly InputSlot<bool> RenewMobility = new();
 
         [Input(Guid = "03C4CCC6-87AA-4F5B-B321-BE5A1CD6A3E8")]
-        public readonly InputSlot<bool> TriggerSimulation = new InputSlot<bool>();
+        public readonly InputSlot<bool> TriggerSimulation = new();
 
         [Input(Guid = "C82893BB-5106-4280-A2C0-03CAFC5112A1")]
-        public readonly InputSlot<float> SimulationSpeed = new InputSlot<float>();
+        public readonly InputSlot<float> SimulationSpeed = new();
 
         private float _simulationSpeed;
     }

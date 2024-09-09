@@ -1,16 +1,14 @@
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_0dbc4f3f_8fdb_402b_a7cb_6949cf21a98a
 {
     public class VideoClipLayer : Instance<VideoClipLayer>
     {
         [Output(Guid = "44A513CA-AB20-46DF-BB6B-F28B42DC86E0")]
-        public readonly TimeClipSlot<Command> Output = new TimeClipSlot<Command>();
+        public readonly TimeClipSlot<Command> Output = new();
 
         [Input(Guid = "31721e18-556b-452b-a8aa-18dbd44af74d")]
         public readonly InputSlot<string> Path = new();

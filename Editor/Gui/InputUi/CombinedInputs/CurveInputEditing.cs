@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
@@ -32,6 +30,10 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
         public static InputEditStateFlags DrawCanvasForCurve(ref Curve curveRef, SymbolChild.Input input, bool cloneIfModified,
                                                              T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
         {
+            var keepScale = T3Ui.UiScaleFactor;
+            T3Ui.UiScaleFactor = 1;
+
+            
             var imGuiId = ImGui.GetID("");
             var curveForEditing = curveRef;
             if (cloneIfModified)
@@ -73,7 +75,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             }
            
             
-            
+            T3Ui.UiScaleFactor = keepScale;
             return curveInteraction.EditState;
         }
 
@@ -202,7 +204,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
             private ICommand StartDragCommand()
             {
-                _changeKeyframesCommand = new ChangeKeyframesCommand(Guid.Empty, SelectedKeyframes, GetAllCurves());
+                _changeKeyframesCommand = new ChangeKeyframesCommand(SelectedKeyframes, GetAllCurves());
                 return _changeKeyframesCommand;
             }
 
@@ -303,9 +305,6 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                         {
                             CurvePoint.Draw(keyframe, this, interaction.SelectedKeyframes.Contains(keyframe), interaction);
                         }
-
-                        //var min = ImGui.GetWindowPos() ;
-                        //ImGui.GetWindowDrawList().AddText(min, Color.Green, " Curve #" + _objectIdGenerator.GetId(curve, out _));
 
                         interaction.HandleFenceSelection();
 

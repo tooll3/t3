@@ -1,58 +1,69 @@
 {
   "Id": "2dc5c9d1-ea93-4597-a4d9-7b610aad603a"/*BlendPoints*/,
+  "Description": "Creates different transitions between two different point setups",
   "InputUis": [
-    {
-      "InputId": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
-      "Position": {
-        "X": -448.6706,
-        "Y": 662.0187
-      },
-      "Min": 0.0,
-      "Max": 1.0
-    },
-    {
-      "InputId": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,
-      "Position": {
-        "X": -448.6706,
-        "Y": 707.0187
-      }
-    },
-    {
-      "InputId": "acef877d-214d-4ca0-ac11-95fa59d1f6fc"/*Pairing*/,
-      "Position": {
-        "X": -448.6706,
-        "Y": 752.0187
-      }
-    },
     {
       "InputId": "97904d2e-ae67-4ab4-9201-7902a85d12f3"/*PointsA_*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -452.71265,
-        "Y": 906.453
-      }
+        "X": -551.6894,
+        "Y": 515.0946
+      },
+      "Description": "Input for Point Setup A"
     },
     {
       "InputId": "91b903a2-5127-431b-ab66-d5a38ce1693c"/*PointsB_*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -452.71265,
-        "Y": 962.453
-      }
+        "X": -551.6894,
+        "Y": 571.0946
+      },
+      "Description": "Input for Point Setup B"
     },
     {
-      "InputId": "bdb712a8-3dbc-458a-887a-5add51813196"/*RangeWidth*/,
+      "InputId": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
       "Position": {
-        "X": -452.71265,
-        "Y": 1007.453
-      }
+        "X": -551.6894,
+        "Y": 616.0946
+      },
+      "Description": "Defines the transition between the two point setups\n0 = PointsA is displayed without changes\n1 = PointsB is displayed without changes\nIf the 'BlendMode' ist set to 'Blend', the points overshoot at values lower than 0 and higher than 1.\nIf the 'Blendmode' is set to 'RangeBlendSmooth', the transition loops.",
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "ee8e9e15-ce18-4034-abc6-dd56108c8a02"/*Scatter*/,
       "Position": {
-        "X": -452.71265,
-        "Y": 1052.453
-      }
+        "X": -551.6894,
+        "Y": 661.0946
+      },
+      "Description": "Adds a random noise to the points position during the transition"
+    },
+    {
+      "InputId": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,
+      "Position": {
+        "X": -549.20703,
+        "Y": 752.9427
+      },
+      "GroupTitle": "Options",
+      "Description": "Defines how to blend between the point setups"
+    },
+    {
+      "InputId": "bdb712a8-3dbc-458a-887a-5add51813196"/*RangeWidth*/,
+      "Position": {
+        "X": -549.20703,
+        "Y": 797.9427
+      },
+      "Description": "Defines the Range width when the 'BlendMode' is set to 'RangeBlend' or 'RangeBlendSmooth'"
+    },
+    {
+      "InputId": "acef877d-214d-4ca0-ac11-95fa59d1f6fc"/*Pairing*/,
+      "Position": {
+        "X": -554.49023,
+        "Y": 942.3042
+      },
+      "Description": "Selects the mode with which points are paired for blending",
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [

@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
 
@@ -66,6 +67,7 @@ struct psInput
     float3 worldPosition : POSITION;
     float3x3 tbnToWorld : TBASIS;    
     float fog:VPOS;
+    float4 color: COLOR;
 };
 
 sampler texSampler : register(s0);
@@ -102,12 +104,12 @@ psInput vsMain(uint id: SV_VertexID)
     //float3 side = float3(0, cos(spinRad), sin(spinRad)) * cornerFactors.y;
     float3 side = float3(cos(spinRad), 0, sin(spinRad)) * cornerFactors.y;
 
-    float WidthFactor = UseWAsWeight || isnan(p.w)> 0.5 ? p.w  : 1;
-    float3 widthV = rotate_vector(side, p.rotation) * Width * WidthFactor;
-    float3 pInObject = p.position + widthV;
+    float WidthFactor = UseWAsWeight || isnan(p.W)> 0.5 ? p.W  : 1;
+    float3 widthV = qRotateVec3(side, p.Rotation) * Width * WidthFactor;
+    float3 pInObject = p.Position + widthV;
 
     float3 normalTwisted =  float3(0, cos(spinRad + 3.141578/2), sin(spinRad + 3.141578/2));
-    float3 normal = normalize(rotate_vector(normalTwisted, p.rotation));
+    float3 normal = normalize(qRotateVec3(normalTwisted, p.Rotation));
     float4 normalInScreen = mul(float4(normal,0), ObjectToClipSpace);
 
     output.texCoord = float2(cornerFactors.x , cornerFactors.y /2 +0.5);
@@ -121,12 +123,12 @@ psInput vsMain(uint id: SV_VertexID)
         output.texCoord += TextureRange;
     }
     else  {
-        output.texCoord.x = p.w;
+        output.texCoord.x = p.W;
     }
 
     // Pass tangent space basis vectors (for normal mapping).
     float3x3 TBN = float3x3(
-        normalize(rotate_vector(float3(1,0,0), p.rotation)), //  vertex.Bitangent, 
+        normalize(qRotateVec3(float3(1,0,0), p.Rotation)), //  vertex.Bitangent, 
         side, 
         normal
         );
@@ -146,6 +148,7 @@ psInput vsMain(uint id: SV_VertexID)
     // Fog
     float4 posInCamera = mul(float4(pInObject,1), ObjectToCamera);
     output.fog = pow(saturate(-posInCamera.z/FogDistance), FogBias);
+    output.color = Color * p.Color;
     return output;    
 }
 
@@ -253,7 +256,7 @@ float4 psMain(psInput pin) : SV_TARGET
     }
 
     // Final fragment color.
-    float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor * Color;
+    float4 litColor = float4(directLighting + ambientLighting, 1.0) * BaseColor * pin.color;
     litColor += float4(EmissiveColorMap.Sample(texSampler, pin.texCoord).rgb * EmissiveColor.rgb, 0);
     litColor.rgb = lerp(litColor.rgb, FogColor.rgb, pin.fog * FogColor.a);
     litColor.a *= albedo.a;

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
     public class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatusProvider
     {
         [Output(Guid = "1F4E7CAC-1F62-4633-B0F3-A3017A026753")]
-        public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
+        public readonly Slot<MeshBuffers> Data = new();
 
         public LoadObj()
         {
@@ -96,18 +96,18 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                                                                     };
                     }
 
-                    newData.VertexBufferWithViews.Buffer = newData.VertexBuffer;
                     ResourceManager.SetupStructuredBuffer(newData.VertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
                                                           ref newData.VertexBuffer);
                     ResourceManager.CreateStructuredBufferSrv(newData.VertexBuffer, ref newData.VertexBufferWithViews.Srv);
                     ResourceManager.CreateStructuredBufferUav(newData.VertexBuffer, UnorderedAccessViewBufferFlags.None, ref newData.VertexBufferWithViews.Uav);
+                    newData.VertexBufferWithViews.Buffer = newData.VertexBuffer;
                 }
 
                 // Create Index buffer
                 {
                     var faceCount = mesh.Faces.Count;
                     if (newData.IndexBufferData.Length != faceCount)
-                        newData.IndexBufferData = new SharpDX.Int3[faceCount];
+                        newData.IndexBufferData = new Int3[faceCount];
 
                     for (var faceIndex = 0; faceIndex < faceCount; faceIndex++)
                     {
@@ -117,16 +117,16 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                         var v3Index = mesh.GetVertexIndex(face.V2, face.V2n, face.V2t);
 
                         newData.IndexBufferData[faceIndex]
-                            = new SharpDX.Int3(reversedLookup[v1Index],
+                            = new Int3(reversedLookup[v1Index],
                                                reversedLookup[v2Index],
                                                reversedLookup[v3Index]);
                     }
 
-                    newData.IndexBufferWithViews.Buffer = newData.IndexBuffer;
                     const int stride = 3 * 4;
                     ResourceManager.SetupStructuredBuffer(newData.IndexBufferData, stride * faceCount, stride, ref newData.IndexBuffer);
                     ResourceManager.CreateStructuredBufferSrv(newData.IndexBuffer, ref newData.IndexBufferWithViews.Srv);
                     ResourceManager.CreateStructuredBufferUav(newData.IndexBuffer, UnorderedAccessViewBufferFlags.None, ref newData.IndexBufferWithViews.Uav);
+                    newData.IndexBufferWithViews.Buffer = newData.IndexBuffer;
                 }
 
                 if (useGpuCaching)
@@ -157,7 +157,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
         private bool _sourceFileChanged;
         private string _lastFilePath;
         private ObjMesh.SortDirections _lastSorting;
-        private MeshDataSet _meshData = new MeshDataSet();
+        private MeshDataSet _meshData = new();
 
         private class MeshDataSet
         {
@@ -168,7 +168,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
             public readonly BufferWithViews VertexBufferWithViews = new();
 
             public Buffer IndexBuffer;
-            public SharpDX.Int3[] IndexBufferData = Array.Empty<Int3>();
+            public Int3[] IndexBufferData = Array.Empty<Int3>();
             public readonly BufferWithViews IndexBufferWithViews = new();
         }
 

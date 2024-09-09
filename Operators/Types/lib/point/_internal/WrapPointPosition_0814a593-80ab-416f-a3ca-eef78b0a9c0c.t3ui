@@ -95,14 +95,14 @@
       }
     },
     {
-      "ChildId": "6990aeab-3425-4ecd-9540-ec329f3af0bf"/*Vector3ToFloat3*/,
+      "ChildId": "6990aeab-3425-4ecd-9540-ec329f3af0bf"/*Vector3Components*/,
       "Position": {
         "X": 71.86014,
         "Y": 611.572
       }
     },
     {
-      "ChildId": "e313fd36-402f-45c7-b829-1077340b328b"/*Vector3ToFloat3*/,
+      "ChildId": "e313fd36-402f-45c7-b829-1077340b328b"/*Vector3Components*/,
       "Position": {
         "X": 71.86014,
         "Y": 667.572

@@ -1,9 +1,8 @@
 using System;
 using System.Numerics;
-using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -21,7 +20,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
     public class CubeMesh : Instance<CubeMesh>
     {
         [Output(Guid = "35660e2b-5005-44a2-bf57-db9a3f1b791d")]
-        public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
+        public readonly Slot<MeshBuffers> Data = new();
 
         public CubeMesh()
         {
@@ -67,7 +66,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                     _vertexBufferData = new PbrVertex[verticesCount];
 
                 if (_indexBufferData.Length != faceCount)
-                    _indexBufferData = new SharpDX.Int3[faceCount];
+                    _indexBufferData = new Int3[faceCount];
 
                 int sideFaceIndex = 0;
                 int sideVertexIndex = 0;
@@ -131,8 +130,8 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                             if (columnIndex >= columnCount - 1 || rowIndex >= rowCount - 1)
                                 continue;
 
-                            _indexBufferData[faceIndex + 0] = new SharpDX.Int3(vertexIndex, vertexIndex + rowCount, vertexIndex + 1);
-                            _indexBufferData[faceIndex + 1] = new SharpDX.Int3(vertexIndex + rowCount, vertexIndex + rowCount + 1, vertexIndex + 1);
+                            _indexBufferData[faceIndex + 0] = new Int3(vertexIndex, vertexIndex + rowCount, vertexIndex + 1);
+                            _indexBufferData[faceIndex + 1] = new Int3(vertexIndex + rowCount, vertexIndex + rowCount + 1, vertexIndex + 1);
                         }
                     }
 
@@ -141,16 +140,16 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                 }
 
                 // Write Data
-                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 ResourceManager.SetupStructuredBuffer(_vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride, ref _vertexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_vertexBuffer, ref _vertexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_vertexBuffer, UnorderedAccessViewBufferFlags.None, ref _vertexBufferWithViews.Uav);
+                _vertexBufferWithViews.Buffer = _vertexBuffer;
 
-                _indexBufferWithViews.Buffer = _indexBuffer;
                 const int stride = 3 * 4;
                 ResourceManager.SetupStructuredBuffer(_indexBufferData, stride * faceCount, stride, ref _indexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_indexBuffer, ref _indexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_indexBuffer, UnorderedAccessViewBufferFlags.None, ref _indexBufferWithViews.Uav);
+                _indexBufferWithViews.Buffer = _indexBuffer;
 
                 _data.VertexBuffer = _vertexBufferWithViews;
                 _data.IndicesBuffer = _indexBufferWithViews;
@@ -210,7 +209,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
         static private Side[] _sides =
             {
                 // Front
-                new Side
+                new()
                     {
                         Normal = VectorT3.ForwardLH,
                         Tangent = VectorT3.Right,
@@ -223,7 +222,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         SideRotation = Vector3.Zero
                     },
                 // Right
-                new Side
+                new()
                     {
                         Normal = default,
                         Tangent = default,
@@ -236,7 +235,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         SideRotation = new Vector3(0, (float)(Math.PI * 0.5), 0),
                     },
                 // Back
-                new Side
+                new()
                     {
                         Normal = -VectorT3.ForwardLH,
                         Tangent = -VectorT3.Right,
@@ -249,7 +248,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         SideRotation = new Vector3(0, (float)Math.PI, 0),
                     },
                 // Left
-                new Side
+                new()
                     {
                         Normal = default,
                         Tangent = default,
@@ -262,7 +261,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         SideRotation = new Vector3(0, (float)(Math.PI * 1.5), 0),
                     },
                 // Top
-                new Side
+                new()
                     {
                         Normal = default,
                         Tangent = default,
@@ -275,7 +274,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         SideRotation = new Vector3((float)(Math.PI * 0.5), 0, 0),
                     },
                 // Bottom
-                new Side
+                new()
                     {
                         Normal = default,
                         Tangent = default,
@@ -291,30 +290,30 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
 
         private Buffer _vertexBuffer;
         private PbrVertex[] _vertexBufferData = new PbrVertex[0];
-        private readonly BufferWithViews _vertexBufferWithViews = new BufferWithViews();
+        private readonly BufferWithViews _vertexBufferWithViews = new();
 
         private Buffer _indexBuffer;
-        private SharpDX.Int3[] _indexBufferData = new SharpDX.Int3[0];
-        private readonly BufferWithViews _indexBufferWithViews = new BufferWithViews();
+        private Int3[] _indexBufferData = new Int3[0];
+        private readonly BufferWithViews _indexBufferWithViews = new();
 
-        private readonly MeshBuffers _data = new MeshBuffers();
+        private readonly MeshBuffers _data = new();
 
         [Input(Guid = "E445A6DA-0B66-46AE-AD2B-650E9CC50798")]
-        public readonly InputSlot<Int3> Segments = new InputSlot<Int3>();
+        public readonly InputSlot<Int3> Segments = new();
 
         [Input(Guid = "97C9849E-751C-49A9-823D-0AF839FA503E")]
-        public readonly InputSlot<Vector3> Stretch = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Stretch = new();
 
         [Input(Guid = "9a7d34a1-ca39-48bc-b977-9a786d23f3b1")]
-        public readonly InputSlot<float> Scale = new InputSlot<float>();
+        public readonly InputSlot<float> Scale = new();
 
         [Input(Guid = "FEBFAE90-13E8-4F0A-8CCF-B8825EA525F8")]
-        public readonly InputSlot<Vector3> Pivot = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Pivot = new();
 
         [Input(Guid = "f4a78f77-8d8c-4b7b-8545-ea80947b428d")]
-        public readonly InputSlot<Vector3> Center = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Center = new();
 
         [Input(Guid = "e641c244-9dc8-444d-8dee-c3e9b710f9db")]
-        public readonly InputSlot<Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Rotation = new();
     }
 }

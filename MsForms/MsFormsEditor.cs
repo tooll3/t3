@@ -12,7 +12,14 @@ public class MsFormsEditor : MsForms, IEditorSystemUiService
 
     void IEditorSystemUiService.SetClipboardText(string text)
     {
-        Clipboard.SetText(text, TextDataFormat.UnicodeText);
+        try
+        {
+            Clipboard.SetText(text, TextDataFormat.UnicodeText);
+        }
+        catch (System.Runtime.InteropServices.ExternalException)
+        {
+            // TODO: should log this 
+        }
     }
 
     string IEditorSystemUiService.GetClipboardText()

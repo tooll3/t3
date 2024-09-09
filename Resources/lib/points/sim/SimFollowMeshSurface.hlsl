@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
@@ -17,7 +18,7 @@ cbuffer Params : register(b0)
 
 StructuredBuffer<PbrVertex> Vertices: t0;
 StructuredBuffer<int3> Indices: t1;
-StructuredBuffer<Point> SourcePoints : t2;         // input
+//StructuredBuffer<Point> SourcePoints : t2;         // input
 
 RWStructuredBuffer<Point> ResultPoints : u0;    // output
 
@@ -163,7 +164,7 @@ float4 q_from_tangentAndNormal(float3 dx, float3 dz)
         dz
         );
     
-    return normalize( quaternion_from_matrix_precise( transpose( orientationDest)));
+    return normalize( qFromMatrix3Precise( transpose( orientationDest)));
 }
 
 
@@ -196,8 +197,8 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 signedNoise = normalizedNoise * 2 - 1;
 
 
-    float3 pos = p.position;
-    float3 forward =  rotate_vector( float3(1,0,0), p.rotation);
+    float3 pos = p.Position;
+    float3 forward =  qRotateVec3( float3(1,0,0), p.Rotation);
 
     float usedSpeed = Speed + Speed * (1+signedPointHash) * RandomizeSpeed;
 
@@ -214,25 +215,25 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float3 targetPosWithDistance = closestSurfacePoint + distanceFromSurface;
 
-    float3 movement = targetPosWithDistance - p.position;
+    float3 movement = targetPosWithDistance - p.Position;
     float requiredSpeed= clamp(length(movement), 0.001,99999);
     float clampedSpeed = min(requiredSpeed, usedSpeed );
     float speedFactor = clampedSpeed / requiredSpeed;
     movement *= speedFactor;
     if(!isnan(movement.x) ) 
     {
-        p.position += movement;
+        p.Position += movement;
         float4 orientation = normalize(q_from_tangentAndNormal(movement, distanceFromSurface));
-        float4 mixedOrientation = q_slerp(orientation, p.rotation, 0.96);
+        float4 mixedOrientation = qSlerp(orientation, p.Rotation, 0.96);
 
         float usedSpin = (Spin + RandomSpin) * signedNoise;
         if(abs(usedSpin) > 0.001) 
         {
             float randomAngle = signedPointHash  * usedSpin;
-            mixedOrientation = normalize(qmul( mixedOrientation, rotate_angle_axis(randomAngle, distanceFromSurface )));
+            mixedOrientation = normalize(qMul( mixedOrientation, qFromAngleAxis(randomAngle, distanceFromSurface )));
         }
             
-        p.rotation = mixedOrientation;
+        p.Rotation = mixedOrientation;
     }
     ResultPoints[i.x] = p;
     //ResultPoints[i.x].position += float3(0,0.01,0);

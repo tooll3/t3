@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core.Animation;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -20,7 +16,7 @@ namespace T3.Operators.Types.Id_55cc0f79_96c9_482e_9794_934dc0f87708
     public class ValuesToTexture : Instance<ValuesToTexture>
     {
         [Output(Guid = "f01099a0-a196-4689-9900-edac07908714")]
-        public readonly Slot<Texture2D> CurveTexture = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> CurveTexture = new();
 
         public ValuesToTexture()
         {

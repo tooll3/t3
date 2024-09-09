@@ -1,11 +1,10 @@
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpDX;
 using T3.Core.Logging;
 using T3.Core.Model;
-using T3.Core.Resource;
 
 namespace T3.Core.DataTypes
 {
@@ -29,7 +28,7 @@ namespace T3.Core.DataTypes
         public abstract int NumElements { get; }
         public abstract int ElementSizeInBytes { get; }
         public abstract int TotalSizeInBytes { get; }
-        public abstract void WriteToStream(DataStream stream);
+        public abstract void WriteToStream(Stream stream);
         public abstract StructuredList TypedClone();
         public abstract object Clone();
         
@@ -45,7 +44,7 @@ namespace T3.Core.DataTypes
         public abstract StructuredList Read(JToken inputToken);
     }
 
-    public class StructuredList<T> : StructuredList where T : struct
+    public class StructuredList<T> : StructuredList where T : unmanaged
     {
         public StructuredList(T[] array) : base(typeof(T))
         {
@@ -86,10 +85,17 @@ namespace T3.Core.DataTypes
         public override int ElementSizeInBytes => Marshal.SizeOf<T>();
         public override int TotalSizeInBytes => NumElements * ElementSizeInBytes;
 
-        public override void WriteToStream(DataStream stream)
+        public override unsafe void WriteToStream(Stream stream)
         {
-            if (NumElements > 0)
-                stream.WriteRange(TypedElements);
+            for (int i = 0; i < TypedElements.Length; i++)
+            {
+                // pin element and write to stream
+                fixed(T* elementPtr = &TypedElements[i])
+                {
+                    var bytes = new Span<byte>(elementPtr, ElementSizeInBytes);
+                    stream.Write(bytes);
+                }
+            }
         }
 
         public override StructuredList TypedClone()
@@ -202,6 +208,13 @@ namespace T3.Core.DataTypes
                 foreach (var fieldInfo in fieldInfos)
                 {
                     var name = fieldInfo.Name;
+                    
+                    // Prevent writing read only attributes because they will cause an exception when
+                    // trying to read the const property like Point.Stride
+                    
+                    if (fieldInfo.IsPrivate || fieldInfo.IsStatic || fieldInfo.IsLiteral)
+                        continue;
+
                     writer.WritePropertyName(name);
                     var value = fieldInfo.GetValue(entry);
                     TypeValueToJsonConverters.Entries[fieldInfo.FieldType](writer, value);

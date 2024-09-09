@@ -143,6 +143,6 @@ namespace T3.Editor.Gui.Commands.Graph
 
         private readonly Guid _compositionSymbolId;
         private readonly ChildEntry[] _removedChildren;
-        private readonly List<ConnectionEntry> _removedConnections = new List<ConnectionEntry>();
+        private readonly List<ConnectionEntry> _removedConnections = new();
     }
 }

@@ -1,10 +1,8 @@
 using System;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
@@ -15,7 +13,7 @@ namespace T3.Operators.Types.Id_a38626d8_3145_4aa9_820f_ca16b3411985
     public class RadialPointsCpu : Instance<RadialPointsCpu>
     {
         [Output(Guid = "F270E4C2-3E5A-4F3E-B474-09E9291999E1")]
-        public readonly Slot<StructuredList> ResultList = new Slot<StructuredList>();
+        public readonly Slot<StructuredList> ResultList = new();
 
         public RadialPointsCpu()
         {
@@ -75,41 +73,41 @@ namespace T3.Operators.Types.Id_a38626d8_3145_4aa9_820f_ca16b3411985
             ResultList.Value = _pointList;
         }
 
-        private readonly StructuredList<Point> _pointList = new StructuredList<Point>(10);
+        private readonly StructuredList<Point> _pointList = new(10);
         //private readonly Point Separator;
 
         [Input(Guid = "cb697476-36df-44ae-bd1d-138cc49467c2")]
-        public readonly InputSlot<int> Count = new InputSlot<int>();
+        public readonly InputSlot<int> Count = new();
 
         [Input(Guid = "9C26FCAD-EF7D-46AA-9A7E-EB853E88E955")]
-        public readonly InputSlot<float> Radius = new InputSlot<float>();
+        public readonly InputSlot<float> Radius = new();
 
         [Input(Guid = "BCE00400-5951-4574-AF61-B24FF0AD5E23")]
-        public readonly InputSlot<float> RadiusOffset = new InputSlot<float>();
+        public readonly InputSlot<float> RadiusOffset = new();
 
         [Input(Guid = "D68DCBA4-D713-4BC7-A418-85042EFC26D3")]
-        public readonly InputSlot<Vector3> Center = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Center = new();
 
         [Input(Guid = "03A54164-8EF9-4CC8-88F3-55AA5DB3640C")]
-        public readonly InputSlot<Vector3> Offset = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Offset = new();
 
         [Input(Guid = "E3736CED-D10D-41F3-92ED-DDFC3EDD1BC6")]
-        public readonly InputSlot<float> StartAngle = new InputSlot<float>();
+        public readonly InputSlot<float> StartAngle = new();
 
         [Input(Guid = "C9341B17-5F56-4112-BA87-FE734B7BF0BA")]
-        public readonly InputSlot<float> Cycles = new InputSlot<float>();
+        public readonly InputSlot<float> Cycles = new();
 
         [Input(Guid = "D1E78447-E110-4CDF-B761-DFF32F05140D")]
-        public readonly InputSlot<Vector3> Axis = new InputSlot<Vector3>(Vector3.UnitZ);
+        public readonly InputSlot<Vector3> Axis = new(Vector3.UnitZ);
 
         [Input(Guid = "DEE89AD4-1516-40D0-A682-98E05A8B7C12")]
-        public readonly InputSlot<float> W = new InputSlot<float>();
+        public readonly InputSlot<float> W = new();
 
         [Input(Guid = "C02152E3-D643-4E1D-99CA-11AB6BC8A5FB")]
-        public readonly InputSlot<float> WOffset = new InputSlot<float>();
+        public readonly InputSlot<float> WOffset = new();
         
         [Input(Guid = "75ACDFBD-176B-4E65-BD33-AC10F8373EB2")]
-        public readonly InputSlot<bool> CloseCircle = new InputSlot<bool>();
+        public readonly InputSlot<bool> CloseCircle = new();
 
     }
 }
