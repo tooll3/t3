@@ -58,9 +58,8 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float3 posInWorld = v.Position;
  
-    float2 uv =SourceVertices[gi].TexCoord2 * ScaleUV;
-    //float2 uvmap =SourceVertices[gi].TexCoord2;
-    //float2 uv2 =SourceVertices[gi].TexCoord2 * ScaleUV;
+    float2 uv = SourceVertices[gi].TexCoord2 * ScaleUV;
+
     uv += MainOffset.xy;
     float4 texColor = DisplaceMap.SampleLevel(texSampler, uv, 0); 
     float4 normals = NormalMap.SampleLevel(texSampler, uv, 0);
@@ -71,7 +70,22 @@ void main(uint3 i : SV_DispatchThreadID)
     
     offset= texColor.rbg * Distribution;
     //v.Normal = normals.rgb;
-    ResultVertices[gi].Normal =  normals.rgb;
+    //ResultVertices[gi].Tangent = 0;
+    //ResultVertices[gi].Normal = v.Normal  ;
     ResultVertices[gi].Position = v.Position + offset;
     ResultVertices[gi].TexCoord = SourceVertices[gi].TexCoord;
+
+
+
+    float3 bitangent = SourceVertices[gi].Bitangent;
+    float3 tangent = SourceVertices[gi].Tangent;
+    float3 orgNormal = SourceVertices[gi].Normal;
+    float3 newNormal = normals.rbg;
+
+    float3 newTangent = cross(bitangent, newNormal);
+    float3 newBitangent = cross(newNormal, newTangent);
+
+
+    ResultVertices[gi].Normal =  newNormal;
+ 
 }
