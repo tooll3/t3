@@ -172,13 +172,6 @@
       }
     },
     {
-      "ChildId": "f9734c2c-68d5-43f1-bcd4-089a75466019"/*RecomputeNormals*/,
-      "Position": {
-        "X": 351.31207,
-        "Y": 67.63925
-      }
-    },
-    {
       "ChildId": "9c9637f7-7b6d-443e-b136-e99f497b2352"/*SamplerStateOp*/,
       "Position": {
         "X": -421.38885,
@@ -209,8 +202,15 @@
     {
       "ChildId": "7ca0ea54-ba8b-491f-b903-4470f4daf944"/*TransformsConstBuffer*/,
       "Position": {
-        "X": -390.9835,
-        "Y": -111.19441
+        "X": -437.51218,
+        "Y": -53.03354
+      }
+    },
+    {
+      "ChildId": "c3373d06-44da-4d50-8406-716668502f9d"/*RecomputeNormals*/,
+      "Position": {
+        "X": 370.08606,
+        "Y": 64.646774
       }
     }
   ],
