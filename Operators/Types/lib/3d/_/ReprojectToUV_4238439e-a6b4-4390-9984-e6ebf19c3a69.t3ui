@@ -263,6 +263,41 @@
         "X": 2571.5269,
         "Y": 4157.342
       }
+    },
+    {
+      "ChildId": "5f88bbe5-c84d-4e31-a104-b24b7235045d"/*GetSRVProperties*/,
+      "Position": {
+        "X": 862.15015,
+        "Y": 3949.6357
+      }
+    },
+    {
+      "ChildId": "4f390ea1-5f20-48de-86d4-4ccd405d58b8"/*Vector2Components*/,
+      "Position": {
+        "X": 1202.8174,
+        "Y": 4017.2395
+      }
+    },
+    {
+      "ChildId": "b14caa55-baf4-4e46-beeb-5ccda60f3170"/*Div*/,
+      "Position": {
+        "X": 1346.3864,
+        "Y": 4024.4912
+      }
+    },
+    {
+      "ChildId": "6634acbf-af0c-4b61-9f03-3951492b918e"/*Int2ToVector2*/,
+      "Position": {
+        "X": 862.07086,
+        "Y": 4381.984
+      }
+    },
+    {
+      "ChildId": "ccd1b489-0394-4855-a0dc-ff35db03da82"/*GetTextureSize*/,
+      "Position": {
+        "X": 1033.8698,
+        "Y": 3920.0554
+      }
     }
   ],
   "OutputUis": [
