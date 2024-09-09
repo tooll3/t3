@@ -53,7 +53,7 @@
       }
     },
     {
-      "ChildId": "241fead6-7086-4e94-8024-6c7a1aa56c66"/*UseRenderTarget*/,
+      "ChildId": "241fead6-7086-4e94-8024-6c7a1aa56c66"/*UseTextureReference*/,
       "Position": {
         "X": 317.0974,
         "Y": -203.60486

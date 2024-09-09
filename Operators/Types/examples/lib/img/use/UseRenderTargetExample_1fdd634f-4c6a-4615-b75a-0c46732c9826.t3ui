@@ -11,7 +11,7 @@
       }
     },
     {
-      "ChildId": "b18c42df-0606-4f36-badf-c2aa27522a9c"/*UseRenderTarget*/,
+      "ChildId": "b18c42df-0606-4f36-badf-c2aa27522a9c"/*UseTextureReference*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
