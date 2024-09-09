@@ -48,30 +48,9 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
         private void Update(EvaluationContext context)
         {
-            // Initialize media foundation library and default values
-            if (!_initialized)
-            {
-                SetupMediaFoundation();
-                Volume.TypedDefaultValue.Value = 1.0f;
-                ResyncThreshold.TypedDefaultValue.Value = 0.2f;
-                _initialized = true;
-            }
-            
-            var url = Path.GetValue(context);
-            var pathChanged = url != _url;
-            
-            if (_engine == null)
-            {
-                _errorMessageForStatus = "Initialization of MediaEngine failed";
-                return;
-            }
-            
-            
             var requestedTime = OverrideTimeInSecs.HasInputConnections
-                                         ? OverrideTimeInSecs.GetValue(context)
-                                         : context.Playback.SecondsFromBars(context.LocalTime);
-            
-            const float completionThreshold =  0.016f; // A hack to prevent engine missing the end of playback
+                                    ? OverrideTimeInSecs.GetValue(context)
+                                    : context.Playback.SecondsFromBars(context.LocalTime);
 
             if (_playbackController.HandleGettingFrames(Path.GetValue(context),
                                                         requestedTime,

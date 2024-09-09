@@ -119,7 +119,7 @@ namespace T3.Editor.Gui.ChildUi
                 //        |
                 
                 
-                var shapeValue = anim.Shape.IsConnected 
+                var shapeValue = anim.Shape.HasInputConnections 
                                 ? anim.Shape.Value 
                                 :anim.Shape.TypedInputValue.Value;
                 var shapeIndex = shapeValue.Clamp(0, Enum.GetNames<TriggerAnim.Shapes>().Length -1 );

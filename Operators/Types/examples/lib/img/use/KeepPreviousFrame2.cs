@@ -26,7 +26,7 @@ namespace T3.Operators.Types.Id_57c1fe66_d8bc_4ea5_ad25_6986d4c2bba4
         private void UpdateTexture(EvaluationContext context)
         {
             var keep = Keep.GetValue(context);
-            if (!ImageA.IsConnected || !keep)
+            if (!ImageA.HasInputConnections || !keep)
             {
                 return;
             }

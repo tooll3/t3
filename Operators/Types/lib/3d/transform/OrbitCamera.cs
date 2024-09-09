@@ -58,7 +58,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             LastObjectToWorld = context.ObjectToWorld;
             var damping = Damping.GetValue(context).Clamp(0, 1);
 
-            var isOverriding = OverrideTime.IsConnected;
+            var isOverriding = OverrideTime.HasInputConnections;
             var time = isOverriding ? OverrideTime.GetValue(context) : context.LocalFxTime;
 
             var fov = MathUtils.ToRad * (FOV.GetValue(context));

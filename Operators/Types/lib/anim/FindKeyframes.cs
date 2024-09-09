@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_127e1eb9_aca9_4f8e_b0c9_b709c8a0745a
 
         private void Update(EvaluationContext context)
         {
-            if (!AnimatedOp.IsConnected)
+            if (!AnimatedOp.HasInputConnections)
             {
                 _lastErrorMessage = "No animated operator connected to reference";
                 _lastAnimatedOp = null;
