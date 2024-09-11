@@ -68,6 +68,16 @@
       "GroupTitle": "Decay",
       "Description": "Controls how far the light shines into the scene.\n\nA low decay setting means the light is shining far.\nA high decay setting means the light reaches a short distance.",
       "Scale": 0.01
+    },
+    {
+      "InputId": "7d6e2f4b-cd5b-446d-b63e-1fd8780bf0fd"/*Range*/,
+      "Position": {
+        "X": -221.29916,
+        "Y": 418.05127
+      },
+      "Min": 0.01,
+      "Max": 1000.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [
@@ -130,8 +140,8 @@
     {
       "ChildId": "984617aa-f33b-430e-b2ae-06a34ade8e7c"/*Value*/,
       "Position": {
-        "X": -34.861755,
-        "Y": 167.03087
+        "X": -5.4845276,
+        "Y": 611.6065
       }
     }
   ],
