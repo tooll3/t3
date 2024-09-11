@@ -47,6 +47,9 @@ namespace T3.Operators.Types.Id_9c67a8c8_839f_4f67_a949_08cb38b9dffd
         [Input(Guid = "d6f6838c-4b36-41a8-86c5-1b1fe5dcece1")]
         public readonly InputSlot<float> Decay = new();
 
+        [Input(Guid = "7d6e2f4b-cd5b-446d-b63e-1fd8780bf0fd")]
+        public readonly InputSlot<float> Range = new InputSlot<float>();
+
     }
 }
 
