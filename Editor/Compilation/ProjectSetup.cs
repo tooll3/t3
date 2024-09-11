@@ -518,6 +518,13 @@ internal static class ProjectSetup
 
                 uiPackagesNeedingReload.Add(nonOperatorAssembly);
             }
+
+            if (!package.ReleaseInfo.EditorVersion.Matches(Program.Version))
+            {
+                var msg = $"The T3 editor version ({Program.Version}) does not match the editor version" +
+                             $" {package.Package.DisplayName} was authored with ({package.ReleaseInfo.EditorVersion})";
+                Log.Warning(msg);
+            }
         }
 
         foreach (var uiAssembly in uiPackagesNeedingReload)
