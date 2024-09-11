@@ -11,7 +11,7 @@
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
     </PropertyGroup>
-
+    
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1"/>
         <PackageReference Include="SharpDX.Desktop" Version="4.2.0" />
@@ -36,10 +36,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Core\Core.csproj" />
-      <ProjectReference Include="..\MsForms\MsForms.csproj" />
-      <ProjectReference Include="..\SilkWindows\SilkWindows.csproj" />
-      <ProjectReference Include="..\SystemUi\SystemUi.csproj" />
+        <ProjectReference Include="..\Core\Core.csproj"/>
+        <ProjectReference Include="..\MsForms\MsForms.csproj"/>
+        <ProjectReference Include="..\SilkWindows\SilkWindows.csproj"/>
     </ItemGroup>
 
 </Project>
