@@ -2,18 +2,20 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
-using SharpDX.Direct3D11;
 using T3.Core.Compilation;
+using T3.Core.DataTypes;
 using T3.Core.IO;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Core.SystemUi;
 using T3.Editor.App;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.Serialization;
 
@@ -27,11 +29,11 @@ namespace T3.Editor.Gui.Graph
             T3Ui.Save(false);
 
             // Collect all ops and types
-            var instance = composition.Children[childUi.SymbolChild.Id];
-            var symbol = instance.Symbol;
+            var exportedInstance = composition.Children[childUi.SymbolChild.Id];
+            var symbol = exportedInstance.Symbol;
             Log.Info($"Exporting {symbol.Name}...");
 
-            var output = instance.Outputs.FirstOrDefault();
+            var output = exportedInstance.Outputs.FirstOrDefault();
             if (output == null || output.ValueType != typeof(Texture2D))
             {
                 reason = "Can only export ops with 'Texture2D' output";
@@ -42,7 +44,7 @@ namespace T3.Editor.Gui.Graph
             
             // traverse starting at output and collect everything
             var exportInfo = new ExportInfo();
-            CollectChildSymbols(instance.Symbol, exportInfo);
+            CollectChildSymbols(exportedInstance.Symbol, exportInfo);
 
             exportDir = Path.Combine(UserSettings.Config.DefaultNewProjectDirectory, ExportFolderName, childUi.SymbolChild.ReadableName);
 
@@ -89,34 +91,42 @@ namespace T3.Editor.Gui.Graph
 
             var resourceDir = Path.Combine(exportDir, ResourceManager.ResourcesSubfolder);
             Directory.CreateDirectory(resourceDir);
-            
-            if (!TryFindSoundtrack(instance, symbol, out var file, out var relativePath))
-            {
-                reason = $"Failed to find soundTrack for [{symbol.Name}]";
-                return false;
-            }
-            
-            var fileInfo = file!.FileInfo;
-            if(fileInfo is null || !fileInfo.Exists)
-            {
-                reason = $"Soundtrack file does not exist: {fileInfo?.FullName}";
-                return false;
-            }
-            
-            var absolutePath = fileInfo.FullName;
 
-            // todo - determine if a path is relative or not even if it's "rooted" with an alias (for cross-platform)
-            if (Path.IsPathFullyQualified(relativePath))
+            if (TryFindSoundtrack(exportedInstance, symbol, out var file, out var relativePath))
             {
-                reason = $"Soundtrack path is not relative: \"{relativePath}\"";
-                return false;
-            }
+                var fileInfo = file!.FileInfo;
+                if (fileInfo is null || !fileInfo.Exists)
+                {
+                    reason = $"Soundtrack file does not exist: {fileInfo?.FullName}";
+                    return false;
+                }
 
-            var newPath = Path.Combine(resourceDir, relativePath!);
-            if (!TryCopyFile(absolutePath, newPath))
+                var absolutePath = fileInfo.FullName;
+
+                // todo - determine if a path is relative or not even if it's "rooted" with an alias (for cross-platform)
+                if (Path.IsPathFullyQualified(relativePath))
+                {
+                    reason = $"Soundtrack path is not relative: \"{relativePath}\"";
+                    return false;
+                }
+
+                var newPath = Path.Combine(resourceDir, relativePath!);
+                if (!TryCopyFile(absolutePath, newPath))
+                {
+                    reason = $"Failed to copy soundtrack from \"{absolutePath}\" to \"{newPath}\"";
+                    return false;
+                }
+            }
+            else
             {
-                reason = $"Failed to copy soundtrack from \"{absolutePath}\" to \"{newPath}\"";
-                return false;
+                const string yes = "Yes";
+                var choice = BlockingWindow.Instance.ShowMessageBox("No defined soundtrack found. Continue with export?", "No soundtrack", yes, "No, cancel export");
+                
+                if (choice != yes)
+                {
+                    reason = $"Failed to find soundTrack for [{symbol.Name}] - export cancelled, see log for details";
+                    return false;
+                }
             }
 
             if(!TryCopyDirectory(SharedResources.Directory, resourceDir, out reason))
@@ -185,8 +195,7 @@ namespace T3.Editor.Gui.Graph
                     }
                     catch (Exception e)
                     {
-                        reason = $"Failed to delete extraneous folders in {targetDirectory}. Exception:\n{e}";
-                        return false;
+                        Log.Warning($"Failed to delete extraneous folders in {targetDirectory}. Exception:\n{e}");
                     }
                 }
                 else
