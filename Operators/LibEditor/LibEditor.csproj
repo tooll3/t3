@@ -11,12 +11,15 @@
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     <EditorVersion>3.9.1</EditorVersion>
     <IsEditorOnly>true</IsEditorOnly>
+      <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Editor\Editor.csproj" Private="false" />
-      <ProjectReference Include="..\lib\Lib.csproj" Private="false" />
-        <ProjectReference Include="..\libDataTypes\libDataTypes.csproj" Private="false" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\Core.csproj" Private="false" PrivateAssets="all"/>
+        <ProjectReference Include="..\..\Editor\Editor.csproj" Private="false" PrivateAssets="all"/>
+        <ProjectReference Include="..\lib\Lib.csproj" Private="false" PrivateAssets="all"/>
+        <ProjectReference Include="..\libDataTypes\libDataTypes.csproj" Private="false" PrivateAssets="all"/>
+        <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" PrivateAssets="all"/>
+    </ItemGroup>
   <!-- Include Resources/** into output/Resources -->
   <!-- Include Resources/** into output/Resources -->
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
