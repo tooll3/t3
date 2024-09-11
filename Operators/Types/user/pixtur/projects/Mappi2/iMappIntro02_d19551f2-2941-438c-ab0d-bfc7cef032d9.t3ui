@@ -867,13 +867,6 @@
       }
     },
     {
-      "ChildId": "98bd5d96-b73b-465d-9f37-e07a2c006356"/*PlayVideo*/,
-      "Position": {
-        "X": -2117.6426,
-        "Y": 2865.3264
-      }
-    },
-    {
       "ChildId": "4796fd6f-4707-41a5-a017-2fde86aa33f2"/*TransformMesh*/,
       "Position": {
         "X": -1233.176,

@@ -151,7 +151,7 @@
         {
           "Id": "98155900-1bb9-427a-9c4e-0988fec806cd"/*Intensity*/,
           "Type": "System.Single",
-          "Value": 0.28
+          "Value": 1.2
         },
         {
           "Id": "f3ca8d13-4e24-4718-a59c-6a1b9a2a3c04"/*IsEnabled*/,
@@ -845,13 +845,7 @@
     {
       "Id": "02942cdc-b75e-4ecf-b93d-2e98314709b6"/*Group*/,
       "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
-      "InputValues": [
-        {
-          "Id": "35a18838-b095-431f-a3af-2dba81dcc16f"/*ForceColorUpdate*/,
-          "Type": "System.Boolean",
-          "Value": true
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -2965,18 +2959,6 @@
             "Y": 90.0,
             "Z": 0.0
           }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "98bd5d96-b73b-465d-9f37-e07a2c006356"/*PlayVideo*/,
-      "SymbolId": "914fb032-d7eb-414b-9e09-2bdd7049e049",
-      "InputValues": [
-        {
-          "Id": "0e255347-08bc-4363-9ffa-ab863a1cea8e"/*Path*/,
-          "Type": "System.String",
-          "Value": "C:\\Users\\pixtur\\Downloads\\render-v116.mp4"
         }
       ],
       "Outputs": []
