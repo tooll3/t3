@@ -5,15 +5,16 @@
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
-{
-    float Mode;
+{   
     float Amount;
-    float2 ScaleUV;
-
+    float2 MainOffset;
+    
+    //float2 ScaleUV;
+    float _Padding;
     float3 Distribution;
-    float UseVertexSelection;
+    //float UseVertexSelection;
 
-    float3 MainOffset;
+    
 }
 
 cbuffer Transforms : register(b1)
@@ -50,7 +51,8 @@ void main(uint3 i : SV_DispatchThreadID)
     if(gi >= pointCount) {
         return;
     }
-
+    float height, width;
+    DisplaceMap.GetDimensions(height, width);
     PbrVertex v = SourceVertices[gi];
     ResultVertices[gi] = SourceVertices[gi];
 
@@ -58,9 +60,9 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float3 posInWorld = v.Position;
  
-    float2 uv = SourceVertices[gi].TexCoord2 * ScaleUV;
-
-    uv += MainOffset.xy;
+    float2 uv = SourceVertices[gi].TexCoord2;// * ScaleUV;
+    float frame = 1/height; 
+    uv += MainOffset.xy + float2(0,frame);
     float4 texColor = DisplaceMap.SampleLevel(texSampler, uv, 0); 
     float4 normals = NormalMap.SampleLevel(texSampler, uv, 0);
     float3x3 TBN = float3x3(v.Tangent, v.Bitangent, v.Normal);
