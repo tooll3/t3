@@ -42,7 +42,7 @@ namespace T3.Operators.Types.Id_9cdcfa49_609d_4a64_ae97_8f98567075d1
             }
             
             //BufferReference.Value = _reference;
-            Log.Debug($"Set reference to {_bufferWithViews}", this);
+            //Log.Debug($"Set reference to {_bufferWithViews}", this);
         }
         
         [Input(Guid = "1904C4C7-3288-42FB-A5CB-B76E38780376")]
