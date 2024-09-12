@@ -41,7 +41,7 @@ namespace T3.Editor.Gui.Graph
             
             // traverse starting at output and collect everything
             var exportInfo = new ExportInfo();
-            CollectChildSymbols(exportedInstance.Symbol, exportInfo);
+            exportInfo.TryAddSymbol(symbol);
 
             exportDir = Path.Combine(UserSettings.Config.DefaultNewProjectDirectory, ExportFolderName, childUi.SymbolChild.ReadableName);
 
@@ -65,21 +65,8 @@ namespace T3.Editor.Gui.Graph
 
             // copy assemblies into export dir
             // get symbol packages directly used by the exported symbols
-            Dictionary<SymbolPackage, List<Symbol>> symbolPackageToSymbols = new();
-            foreach(var uniqueSymbol in exportInfo.UniqueSymbols)
-            {
-                var symbolPackage = uniqueSymbol.SymbolPackage;
-                if (!symbolPackageToSymbols.TryGetValue(symbolPackage, out var symbols))
-                {
-                    symbols = new List<Symbol>();
-                    symbolPackageToSymbols[symbolPackage] = symbols;
-                }
-                symbols.Add(uniqueSymbol);
-            }
             
-            var symbolPackages = symbolPackageToSymbols.Keys;
-            
-            if (!TryExportPackages(out reason, symbolPackages, operatorDir))
+            if (!TryExportPackages(out reason, exportInfo.SymbolPackages, operatorDir))
                 return false;
 
             // Copy referenced resources
@@ -133,7 +120,7 @@ namespace T3.Editor.Gui.Graph
             if(!TryCopyDirectory(playerDirectory, exportDir, out reason))
                 return false;
 
-            if (!TryCopyFiles(exportInfo.UniqueResourcePaths, resourceDir))
+            if (!TryCopyFiles(exportInfo.ResourcePaths, resourceDir))
             {
                 reason = "Failed to copy resource files - see log for details";
                 return false;
@@ -328,17 +315,6 @@ namespace T3.Editor.Gui.Graph
             }
 
             return false;
-        }
-
-        private static void CollectChildSymbols(Symbol symbol, ExportInfo exportInfo)
-        {
-            if (!exportInfo.TryAddSymbol(symbol))
-                return; // already visited
-
-            foreach (var symbolChild in symbol.Children.Values)
-            {
-                CollectChildSymbols(symbolChild.Symbol, exportInfo);
-            }
         }
 
         private static void RecursivelyCollectExportData(ISlot slot, ExportInfo exportInfo)
