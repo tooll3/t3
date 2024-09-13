@@ -29,7 +29,6 @@ sampler texSampler : register(s0);
 // Original GLSL shader by Inigo Quilez
 // https://iquilezles.org
 
-#define AA 2
 
 float mandelbrot(float2 c)
 {
@@ -43,10 +42,10 @@ float mandelbrot(float2 c)
     }
     #endif
 
-    const float B = 256.0;
+    const float B = 256;
     float l = 0.0;
     float2 z = float2(0.0, 0.0);
-    for (int i = 0; i < 512; i++)
+    for (int i = 0; i < 512; i++) 
     {
         z = float2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c;
         if (dot(z, z) > (B * B)) break;
@@ -57,14 +56,9 @@ float mandelbrot(float2 c)
 
     // ------------------------------------------------------
     // Smooth iteration count
-    // float sl = l - log(log(length(z)) / log(B)) / log(2.0);
 
     // Equivalent optimized smooth iteration count
     float sl = l - log2(log2(dot(z, z))) + 4.0;
-
-    //float al = smoothstep(-0.1, 0.0, sin(0.5 * 6.2831 * iTime));
-    //l = lerp(l, sl, al);
-
     return sl;
 }
 
