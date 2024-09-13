@@ -306,7 +306,7 @@ namespace T3.Editor.UiModel
 
             try
             {
-                array = (JArray)token[JsonKeys.InputUis];
+                array = (JArray)token[key];
             }
             catch
             {
