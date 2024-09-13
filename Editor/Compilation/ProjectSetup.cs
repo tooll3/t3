@@ -73,7 +73,10 @@ internal static partial class ProjectSetup
         var csProj = release.CsProject!;
         csProj.RemoveOldBuilds(Compiler.BuildMode.Debug);
 
-        forceRecompile = forceRecompile || release.ReleaseInfo == null || !release.ReleaseInfo.EditorVersion.Matches(Program.Version);
+        var releaseInfo = release.ReleaseInfo;
+        forceRecompile = forceRecompile 
+                         || releaseInfo == null 
+                         || !releaseInfo.EditorVersion.Matches(Program.Version) && !releaseInfo.RootNamespace.StartsWith("lib");
         
         var success = forceRecompile
                           ? csProj.TryRecompile(out _) || csProj.TryLoadLatestAssembly() // recompile - if failed, load latest
