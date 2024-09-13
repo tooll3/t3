@@ -88,7 +88,7 @@ namespace T3.Core.Model
 
                 writer.WritePropertyName(JsonKeys.InputValues);
                 writer.WriteStartArray();
-                foreach (var (id, inputValue) in child.Inputs)
+                foreach (var (id, inputValue) in child.Inputs.OrderBy(x => x.Key))
                 {
                     if (inputValue.IsDefault)
                         continue;

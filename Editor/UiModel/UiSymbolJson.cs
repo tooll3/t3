@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Core.SystemUi;
 using T3.Editor.External.Truncon.Collections;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
@@ -39,7 +40,7 @@ namespace T3.Editor.UiModel
             writer.WritePropertyName(JsonKeys.InputUis);
             writer.WriteStartArray();
 
-            foreach (var inputEntry in symbolUi.InputUis)
+            foreach (var inputEntry in symbolUi.InputUis.OrderBy(x => x.Key))
             {
                 var symbolInput = symbolUi.Symbol.InputDefinitions.SingleOrDefault(inputDef => inputDef.Id == inputEntry.Key);
                 if (symbolInput == null)
@@ -206,8 +207,39 @@ namespace T3.Editor.UiModel
 
         internal static bool TryReadSymbolUi(JToken mainObject, Symbol symbol, out SymbolUi symbolUi)
         {
+            JArray inputUiArray = null;
+            JArray outputUiArray = null;
+            try
+            {
+                inputUiArray = (JArray)mainObject[JsonKeys.InputUis];
+            }
+            catch
+            {
+                Log.Error($"Error parsing input UI list from [{symbol}]'s {EditorSymbolPackage.SymbolUiExtension} file - invalid format");
+                BlockingWindow.Instance.ShowMessageBox($"Error parsing symbol ui ({EditorSymbolPackage.SymbolUiExtension}) file of [{symbol}]- invalid format:\n\n" +
+                                                       mainObject +
+                                                       "\n\nTry deleting the file to regenerate it.");
+                symbolUi = null;
+                return false;
+            }
+            
+            try
+            {
+                outputUiArray = (JArray)mainObject[JsonKeys.OutputUis];
+            }
+            catch
+            {
+                Log.Error($"Error parsing output UI list from [{symbol}]'s {EditorSymbolPackage.SymbolUiExtension} file - invalid format");
+                BlockingWindow.Instance.ShowMessageBox($"Error parsing symbol ui ({EditorSymbolPackage.SymbolUiExtension}) file of [{symbol}]- invalid format:\n\n" +
+                                                       mainObject +
+                                                       "\n\nTry deleting the file to regenerate it.");
+                symbolUi = null;
+                return false;
+            }
+            
             var inputDict = new OrderedDictionary<Guid, IInputUi>();
-            foreach (JToken uiInputEntry in (JArray)mainObject[JsonKeys.InputUis])
+            
+            foreach (JToken uiInputEntry in inputUiArray)
             {
                 Guid inputId;
                 try
@@ -240,7 +272,7 @@ namespace T3.Editor.UiModel
 
 
             var outputDict = new OrderedDictionary<Guid, IOutputUi>();
-            foreach (var uiOutputEntry in (JArray)mainObject[JsonKeys.OutputUis])
+            foreach (var uiOutputEntry in outputUiArray)
             {
                 var outputIdString = uiOutputEntry[JsonKeys.OutputId].Value<string>();
                 var hasOutputId = Guid.TryParse(outputIdString, out var outputId);
