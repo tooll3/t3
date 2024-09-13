@@ -88,7 +88,10 @@ public abstract class BaseRenderWindow : Window
         var startTimeInSeconds = ReferenceTimeToSeconds(_startTimeInBars, _timeReference);
         var endTimeInSeconds = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
         FrameCount = (int)Math.Round((endTimeInSeconds - startTimeInSeconds) * Fps);
-
+        
+        FormInputs.AddFloat($"ResolutionFactor", ref ResolutionFactor, 0.125f, 4, 0.1f, true,
+                            "A factor applied to the output resolution of the rendered frames.");
+        
         if (FormInputs.AddInt($"Motion Blur Samples", ref _overrideMotionBlurSamples, -1, 50, 1,
                               "This requires a [RenderWithMotionBlur] operator. Please check its documentation."))
         {
@@ -230,6 +233,7 @@ public abstract class BaseRenderWindow : Window
         Playback.Current.Bpm = settings.Bpm;
         Playback.Current.PlaybackSpeed = 0.0;
         Playback.Current.Settings = settings;
+        Playback.Current.FrameSpeedFactor = Fps/60.0;
 
         // set user time in secs for video playback
         double startTimeInSeconds = ReferenceTimeToSeconds(_startTimeInBars, _timeReference);
@@ -280,6 +284,7 @@ public abstract class BaseRenderWindow : Window
         Playback.Current.TimeInSecs = ReferenceTimeToSeconds(_endTimeInBars, _timeReference);
         Playback.Current.IsRenderingToFile = false;
         Playback.Current.PlaybackSpeed = 0.0;
+        Playback.Current.FrameSpeedFactor = 1.0;    // TODO: this should use current display frame rate
         Playback.Current.Update();
 
         _audioRecording = false;
@@ -318,6 +323,7 @@ public abstract class BaseRenderWindow : Window
     private static float _startTimeInBars;
     private static float _endTimeInBars = 4.0f; 
     protected static float Fps = 60.0f;
+    protected static float ResolutionFactor = 1;
     private static float _lastValidFps = Fps;
 
     private static double _timingOverhang; // Time that could not be updated due to MS resolution (in seconds)
