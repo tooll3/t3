@@ -27,6 +27,7 @@ cbuffer Params : register(b0)
 
     float ScaleW;
     float OffsetW;
+    float Amount;
 }
 
 StructuredBuffer<Point> SourcePoints : t0;
@@ -95,6 +96,7 @@ static const float VolumeZebra = 3.5;
     {
         dBiased *= p.W;
     }
+    dBiased *= Amount;
 
     float3 rot = RotateAxis * PI / 180 * dBiased;
 
