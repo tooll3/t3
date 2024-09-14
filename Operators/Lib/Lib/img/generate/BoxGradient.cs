@@ -17,8 +17,8 @@ namespace Lib.img.generate
         [Input(Guid = "71cd9153-da17-47f0-9251-80bdef8906b3")]
         public readonly InputSlot<Texture2D> Image = new ();
 
-        [Input(Guid = "5e7cd523-0c39-42e4-a4e9-05cc20477296")]
-        public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
+        [Input(Guid = "1dd6cf1e-d374-40d5-b51f-21b91deb3802")]
+        public readonly InputSlot<float> Rotation = new InputSlot<float>();
 
         [Input(Guid = "e155a2f2-2b21-49b5-9bd4-0c363684d93f")]
         public readonly InputSlot<System.Numerics.Vector2> Center = new InputSlot<System.Numerics.Vector2>();
@@ -26,14 +26,14 @@ namespace Lib.img.generate
         [Input(Guid = "06f28039-d349-4f5f-a68f-6009886e180b")]
         public readonly InputSlot<System.Numerics.Vector2> Size = new InputSlot<System.Numerics.Vector2>();
 
+        [Input(Guid = "5a164383-4f9d-4978-bfcb-a1c48b9b8f34")]
+        public readonly InputSlot<float> UniformScale = new InputSlot<float>();
+
         [Input(Guid = "06553d30-0a71-435b-8796-b61db670fbc6")]
         public readonly InputSlot<System.Numerics.Vector4> CornersRadius = new InputSlot<System.Numerics.Vector4>();
 
-        [Input(Guid = "1dd6cf1e-d374-40d5-b51f-21b91deb3802")]
-        public readonly InputSlot<float> Rotation = new InputSlot<float>();
-
-        [Input(Guid = "5a164383-4f9d-4978-bfcb-a1c48b9b8f34")]
-        public readonly InputSlot<float> UniformScale = new InputSlot<float>();
+        [Input(Guid = "5e7cd523-0c39-42e4-a4e9-05cc20477296")]
+        public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
 
         [Input(Guid = "94d46ad8-7dd6-490c-ade4-a527c7ee9d05")]
         public readonly InputSlot<float> GradientWidth = new InputSlot<float>();

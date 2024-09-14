@@ -275,40 +275,9 @@ public static class HitFilmComposite
                     keys[key.Time] = transformKey;
                 }
                 
-                transformKey.Orientation = new Vector3(key.Value.Orientation.X, key.Value.Orientation.Y, key.Value.Orientation.Z);
+                // NOTE the order Y, X, Z is correct for HitFilm 
+                transformKey.Orientation = new Vector3(key.Value.Orientation.Y, key.Value.Orientation.X, key.Value.Orientation.Z);
             }
-            
-            
-            //layers = transformKeys;
-            
-            // Process CameraLayer
-            
-            // var cameraLayer = compositeShot.CompositionAsset.Layers.CameraLayer;
-            // var keyframes = new List<Keyframe>();
-            
-            // var positionAnimation = cameraLayer?.PropertyManager?.Position?.Animation;
-            // if (positionAnimation == null)
-            // {
-            //     Log.Warning("No animation found in CameraLayer");
-            //     return false;
-            // }
-            
-            // foreach (var key in positionAnimation.Keys)
-            // {
-            //     // var keyframe = new Keyframe
-            //     //                    {
-            //     //                        Time = key.Time,
-            //     //                        Position = key.Value.FXPoint3_32f
-            //     //                        // Add Orientation and Zoom if they are available in the XML structure
-            //     //                    };
-            //     // keyframes.Add(keyframe);
-            // }
-            //
-            // layers.Add(new Layer
-            //                {
-            //                    Type = "Camera",
-            //                    Keyframes = keyframes
-            //                });
             
             orderedKeys.AddRange(keys.Values.OrderBy(k => k.TimeInSeconds));
             return true;

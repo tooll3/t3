@@ -44,7 +44,6 @@ cbuffer FogParams : register(b3)
     float FogBias;
 }
 
-
 struct psInput
 {
     float4 position : SV_POSITION;
@@ -80,7 +79,7 @@ psInput vsMain(uint id
     float tooCloseFactor = saturate(-posInCamera.z / FadeNearest - 1);
     output.color.a *= tooCloseFactor;
 
-    float sizeFactor = UseWForSize > 0.5 ? pointDef.W : 1;
+    float sizeFactor = UseWForSize > 0.5 ? pointDef.W : (isnan(pointDef.W) ? 0 : 1);
 
     quadPosInCamera.xy += quadPos.xy * 0.10 * sizeFactor * Size;
     output.position = mul(quadPosInCamera, CameraToClipSpace);

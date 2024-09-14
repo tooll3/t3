@@ -14,6 +14,10 @@
       }
     },
     {
+      "Id": "57f129ae-0b2e-465d-8c0e-f6259fdd37ce"/*CombineBuffer*/,
+      "DefaultValue": false
+    },
+    {
       "Id": "ef7075e9-4bc2-442e-8e0c-e03667ff2e0a"/*TriggerUpdate*/,
       "DefaultValue": false
     },

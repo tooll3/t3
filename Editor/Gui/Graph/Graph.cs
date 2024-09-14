@@ -150,6 +150,7 @@ namespace T3.Editor.Gui.Graph
                     line.SourcePosition = sourcePos;
                     line.IsSelected |= isSelectedOrHovered;
                 }
+                
             }
 
             // 5. Draw Output Nodes
@@ -158,7 +159,7 @@ namespace T3.Editor.Gui.Graph
                 var outputDef = graphSymbol.OutputDefinitions.Find(od => od.Id == outputId);
                 OutputNode.Draw(_window, drawList, outputDef, outputNode);
 
-                var targetPos = new Vector2(OutputNode.LastScreenRect.Min.X + GraphNode.InputSlotThickness,
+                var targetPos = new Vector2(OutputNode.LastScreenRect.Min.X ,
                                             OutputNode.LastScreenRect.GetCenter().Y);
 
                 foreach (var line in _connectionSorter.GetLinesToOutputNodes(outputNode, outputId))

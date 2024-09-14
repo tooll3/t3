@@ -44,6 +44,7 @@ public class RenderVideoWindow : BaseRenderWindow
         var currentDesc = mainTexture!.Description;
         size.Width = currentDesc.Width;
         size.Height = currentDesc.Height;
+        FormInputs.AddVerticalSpace();
 
         // Custom parameters for this renderer
         FormInputs.AddInt("Bitrate", ref _bitrate, 0, 25000000, 1000);
@@ -176,10 +177,6 @@ public class RenderVideoWindow : BaseRenderWindow
                                                       : Path.Combine(directoryName, newFilename);
     }
 
-    private string HumanReadableDurationFromSeconds(double seconds)
-    {
-        return $"{(int)(seconds / 60 / 60):00}:{(seconds / 60)%60:00}:{seconds%60:00}";
-    }
 
     private static int GetRealFrame()
     {

@@ -28,7 +28,7 @@ namespace T3.Editor.Gui.Styling
         {
             var inputId = ImGui.GetID(args.Label);
             var isSearchResultWindowOpen = inputId == _activeInputId;
-            
+
             if (isSearchResultWindowOpen)
             {
                 if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorDown, true))
@@ -75,10 +75,9 @@ namespace T3.Editor.Gui.Styling
                 _selectedResultIndex = -1;
                 THelpers.DisableImGuiKeyboardNavigation();
             }
-            
-            
+
             var isItemDeactivated = ImGui.IsItemDeactivated();
-            
+
             // We defer exit to get clicks on opened popup list
             var lostFocus = isItemDeactivated || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
             selected = default;
@@ -128,7 +127,7 @@ namespace T3.Editor.Gui.Styling
                     foreach (var item in listItems)
                     {
                         var isSelected = index == _selectedResultIndex;
-                        
+
                         // We can't use IsItemHovered because we need to use Tooltip hack 
                         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
 
@@ -161,11 +160,12 @@ namespace T3.Editor.Gui.Styling
                     }
                     
                     var isPopupHovered = new ImRect(ImGui.GetWindowContentRegionMin(), ImGui.GetWindowContentRegionMax()).Contains(ImGui.GetMousePos());
-                    
+
                     if (!isPopupHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                     {
                         _activeInputId = 0;
                     }
+
                     ImGui.PopStyleColor();
                 }
 
@@ -178,6 +178,18 @@ namespace T3.Editor.Gui.Styling
             }
 
             return wasChanged;
+        }
+
+        private struct ResultWithRelevancy
+        {
+            public ResultWithRelevancy(string word, float relevancy)
+            {
+                Word = word;
+                Relevancy = relevancy;
+            }
+
+            public string Word;
+            public float Relevancy;
         }
 
         private static readonly List<string> _lastTypeAheadResults = new();

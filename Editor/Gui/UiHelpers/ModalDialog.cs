@@ -53,7 +53,7 @@ namespace T3.Editor.Gui.UiHelpers
             }
 
 
-            ImGui.SetNextWindowSize(DialogSize, ImGuiCond.FirstUseEver);
+            ImGui.SetNextWindowSize(DialogSize * T3Ui.UiScaleFactor, ImGuiCond.Appearing);
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(Padding, Padding));
 
             bool isOpen = true;

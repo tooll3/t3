@@ -60,7 +60,7 @@ namespace T3.Editor.Gui.Interaction.Timing
                     
                     if (hasBpmProvider && BpmProvider.TryGetNewBpmRate(out var newBpmRate2))
                     {
-                        Log.Warning("SetBpm in BeatTapping mode has effect.");
+                        Log.Warning("SetBpm in BeatTapping mode has no effect.");
                         // settings.Bpm = newBpmRate2;
                     }
                     

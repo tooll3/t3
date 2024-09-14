@@ -18,6 +18,9 @@ namespace lib.dx11.compute
         [Input(Guid = "c5561f3b-495e-47e1-95d4-ea3a750f1842")]
         public readonly InputSlot<BufferWithViews> InputList2 = new();
 
+        [Input(Guid = "c58270bf-a121-4bb0-9309-33bab48eb0a7")]
+        public readonly InputSlot<bool> IsInclusive = new InputSlot<bool>();
+
     }
 }
 

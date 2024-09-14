@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using ImGuiNET;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
@@ -223,11 +224,8 @@ namespace T3.Editor.Gui.Interaction
         {
             var areaSize = area.GetSize();
             if (areaSize.X == 0)
-            {
                 areaSize.X = 1;
-            }
             
-
             if (areaSize.Y == 0)
                 areaSize.Y = 1;
             
@@ -240,21 +238,32 @@ namespace T3.Editor.Gui.Interaction
             ScaleTarget.X = MathF.Max(ScaleTarget.X, 20);
             ScaleTarget.Y = MathF.Max(ScaleTarget.Y, 20);
             
-            ScaleTarget /= areaSize;
+            //var newScale = new Vector2(WindowSize.X / areaSize.X, WindowSize.Y / areaSize.Y);
+            var newScale = (WindowSize - new Vector2(paddingX, paddingY));
+            //ScaleTarget = (WindowSize - new Vector2(paddingX, paddingY));
+            newScale.X = MathF.Max(newScale.X, 20);
+            newScale.Y = MathF.Max(newScale.Y, 20);
+            
+            newScale /= areaSize;
             
             if (flipY)
             {
-                ScaleTarget.Y *= -1;
+                newScale.Y *= -1;
             }
-            
-            ScrollTarget = new Vector2(area.Min.X - paddingX / ScaleTarget.X / 2,
-                                       area.Max.Y - paddingY / ScaleTarget.Y / 2);
+            ScrollTarget = new Vector2(area.Min.X - (paddingX / newScale.X) / 2,
+                                       area.Max.Y - (paddingY / newScale.Y) / 2);
             
             if (parent != null)
             {
-                ScaleTarget /= parent.Scale;
+                newScale /= parent.Scale;
             }
-
+            ScaleTarget = newScale;
+            
+            if(ScaleTarget.X == 0 || ScaleTarget.Y == 0 || float.IsNaN(ScaleTarget.X) || float.IsNaN(ScaleTarget.Y) || float.IsInfinity(ScaleTarget.X) || float.IsInfinity(ScaleTarget.Y))
+                Scale = ScaleTarget;
+            
+            if (float.IsNaN(ScrollTarget.X) || float.IsNaN(ScrollTarget.Y) || float.IsInfinity(ScrollTarget.X) || float.IsInfinity(ScrollTarget.Y))
+                Scroll = ScrollTarget;
         }
         
         public void SetVerticalScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null)
@@ -367,7 +376,7 @@ namespace T3.Editor.Gui.Interaction
             
             // Damp scaling
             var minInCanvas = Scroll;
-            var maxInCanvas = Scroll + WindowSize / Scale;
+            var maxInCanvas = Scroll + WindowSize  / Scale;
             var minTargetInCanvas = ScrollTarget;
             var maxTargetInCanvas = ScrollTarget + WindowSize / ScaleTarget;
 
@@ -375,7 +384,7 @@ namespace T3.Editor.Gui.Interaction
 
             var min = Vector2.Lerp(minInCanvas, minTargetInCanvas, f);
             var max = Vector2.Lerp(maxInCanvas, maxTargetInCanvas, f);
-            Scale = WindowSize / (max - min);
+            Scale = WindowSize  / (max - min);
             Scroll = min;
             
 
@@ -386,7 +395,7 @@ namespace T3.Editor.Gui.Interaction
             if (float.IsNaN(ScaleTarget.Y))
                 ScaleTarget.Y = 1;
             
-            if (float.IsNaN(Scale.X) || float.IsNaN(Scale.Y))
+            if (float.IsNaN(Scale.X) || float.IsNaN(Scale.Y) || MathF.Sign(ScaleTarget.Y) != MathF.Sign(Scale.Y))
                 Scale = ScaleTarget;
             
             if (float.IsNaN(ScrollTarget.X))
@@ -418,49 +427,37 @@ namespace T3.Editor.Gui.Interaction
             var allowChildHover = flags.HasFlag(T3Ui.EditingFlags.AllowHoveredChildWindows)
                                       ? ImGuiHoveredFlags.ChildWindows
                                       : ImGuiHoveredFlags.None;
-            
-            var isHovered = ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | allowChildHover);
-            if (!isHovered && !isDraggingConnection)
-            {
-                //Log.Debug($"Not hovered {GetType().Name}");
-                return;
-            }
 
+            var isWindowHovered = ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | allowChildHover);
+            if (!_isDragZooming && !isWindowHovered && !isDraggingConnection)
+                return;
+            
             //DrawCanvasDebugInfos();
 
             if ((flags & T3Ui.EditingFlags.PreventMouseInteractions) != T3Ui.EditingFlags.None)
             {
                 //Log.Debug($"Preventing {GetType().Name}");
                 return;
+
             }
 
-            // @imdom need clarification
-            // if (PreventMouseInteraction)
-            //     return;
-            
+            //var isOtherWindowDragScrolling =  ImGui.GetID("");
             var isVerticalColorSliderActive = FrameStats.Last.OpenedPopUpName == "ColorBrightnessSlider";
-            var iWasBeingDragged = _draggedCanvas == this;
-            var isAnotherWindowDragged = _draggedCanvas != null && !iWasBeingDragged;
-            
-            var preventPanning = isAnotherWindowDragged || flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse);
-            var mouseIsDragging = ImGui.IsMouseDragging(ImGuiMouseButton.Right)
-                                  || (!UserSettings.Config.MiddleMouseButtonZooms && ImGui.IsMouseDragging(ImGuiMouseButton.Middle) && !ImGui.GetIO().KeyAlt)
-                                  || ImGui.IsMouseDragging(ImGuiMouseButton.Middle);
-            
-            if (!isVerticalColorSliderActive 
-                && !preventPanning
-                && mouseIsDragging
+            var isAnotherWindowDragged =  _draggedCanvas != null && _draggedCanvas != this 
+                                          || CustomComponents.IsAnotherWindowDragScrolling(this);
+            if (!isVerticalColorSliderActive
+                && !isAnotherWindowDragged
+                && !flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse)
+                && ((
+                        
+                        ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
+                    || (!UserSettings.Config.MiddleMouseButtonZooms && ImGui.IsMouseDragging(ImGuiMouseButton.Middle) && !ImGui.GetIO().KeyAlt)
+                    || (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && !ImGui.GetIO().KeyAlt))
                )
             {
                 ScrollTarget -= mouseState.Delta / (ParentScale * ScaleTarget);
                 _draggedCanvas = this;
             }
-
-            if (iWasBeingDragged && !mouseIsDragging)
-            {
-                _draggedCanvas = null;
-            }
-
             
             var preventZoom = flags.HasFlag(T3Ui.EditingFlags.PreventZoomWithMouseWheel);
 
@@ -476,6 +473,7 @@ namespace T3.Editor.Gui.Interaction
         }
         
         protected static ScalableCanvas _draggedCanvas;
+        public static bool IsAnyCanvasDragged => _draggedCanvas != null;
         
         protected Vector2 ClampScaleToValidRange(Vector2 scale)
         {
@@ -610,7 +608,8 @@ namespace T3.Editor.Gui.Interaction
             var deltaMax = Math.Abs(delta.X) > Math.Abs(delta.Y)
                                ? -delta.X
                                : delta.Y;
-            if (IsCurveCanvas || !_isDragZooming)
+            
+            if (!_isDragZooming)
                 return;
             
             var f = (float)Math.Pow(1.13f, -deltaMax / 40f);

@@ -19,7 +19,7 @@
     },
     {
       "Id": "a5448c00-a6d4-476e-bf41-826fdff531cc"/*AddSeperatorThreshold*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.25
     }
   ],
   "Children": [

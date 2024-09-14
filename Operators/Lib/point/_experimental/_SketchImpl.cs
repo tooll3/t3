@@ -387,7 +387,14 @@ namespace lib.point._experimental
                 Pages = new List<Page>();
                 try
                 {
-                    Pages = JsonUtils.TryLoadingJson<List<Page>>(filepath);
+                    try
+                    {
+                        Pages = JsonUtils.TryLoadingJson<List<Page>>(filepath);
+                    }
+                    catch ( Exception e)
+                    {
+                        Log.Debug("Failed reading sketch pages from json: " + e.Message, this);
+                    }
 
                     if (Pages != null)
                     {

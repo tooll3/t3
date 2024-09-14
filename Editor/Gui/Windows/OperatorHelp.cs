@@ -96,16 +96,19 @@ public class OperatorHelp
 
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Fade(0.5f).Rgba);
         FormInputs.AddVerticalSpace(5);
-        ImGui.TextUnformatted("Read more...");
-        if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+        
+        if (firstLine != symbolUi.Description)
         {
-            _isDocumentationActive = true;
+            ImGui.TextUnformatted("Read more...");
+            if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            {
+                _isDocumentationActive = true;
+            }
         }
-
+        
         FormInputs.AddVerticalSpace();
         ImGui.PopStyleColor();
 
-        //ImGui.Unindent(10);
     }
 
     public static void DrawHelp(SymbolUi symbolUi)

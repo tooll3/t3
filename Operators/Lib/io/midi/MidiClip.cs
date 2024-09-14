@@ -1,7 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;

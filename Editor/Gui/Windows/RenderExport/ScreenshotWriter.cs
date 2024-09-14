@@ -40,8 +40,17 @@ public static class ScreenshotWriter
         var width = request.CpuAccessTexture.Description.Width;
         var height = request.CpuAccessTexture.Description.Height;
         var factory = new ImagingFactory();
-
-        var stream = new WICStream(factory, request.Filepath, NativeFileAccess.Write);
+        
+        WICStream stream;
+        try
+        {
+            stream = new WICStream(factory, request.Filepath, NativeFileAccess.Write);
+        }
+        catch (Exception e)
+        {
+            Log.Warning("Failed to export image: " + e.Message);
+            return;
+        }
 
         // Initialize a Jpeg encoder with this stream
         BitmapEncoder encoder = request.FileFormat == FileFormats.Png

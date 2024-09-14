@@ -34,9 +34,10 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                 Drawlist = ImGui.GetWindowDrawList();
                 UpdateCanvas(out var interactionState, flags);
                 Drawlist = ImGui.GetWindowDrawList();
-
-                drawAdditionalCanvasContent(interactionState);
+                
                 HandleFenceUpdate(selectionFence, out _);
+                drawAdditionalCanvasContent(interactionState);
+
                 SnapHandlerForU.DrawSnapIndicator(this, ValueSnapHandler.Mode.VerticalLinesForU);
                 SnapHandlerForV.DrawSnapIndicator(this, ValueSnapHandler.Mode.HorizontalLinesForV);
             }
@@ -82,7 +83,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                 var sampledValue = (float)curve.GetSampledValue(hoverTime);
                 var posOnCanvas = new Vector2(hoverTime, sampledValue);
                 var posOnScreen = TransformPosition(posOnCanvas)
-                                - new Vector2(KeyframeIconWidth / 2 + 1, KeyframeIconWidth / 2 + 1);
+                                - new Vector2(KeyframeIconWidth / 2 -2 , KeyframeIconWidth / 2 -1);
                 Icons.Draw(Icon.CurveKeyframe, posOnScreen);
                 var drawlist = ImGui.GetWindowDrawList();
                 drawlist.AddText(posOnScreen + Vector2.One*20, UiColors.Gray, $"Insert at\n{hoverTime:0.00}  {sampledValue:0.00}");

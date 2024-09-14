@@ -39,6 +39,7 @@ namespace T3.Editor.Gui.Windows
                 {
                     _logEntries.Clear();
                 }
+                _shouldScrollToBottom= true;
 
                 Log.Info("Console cleared!");
             }

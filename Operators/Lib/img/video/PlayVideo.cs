@@ -11,11 +11,13 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
 using ResourceManager = T3.Core.Resource.ResourceManager;
+using Texture2D = T3.Core.DataTypes.Texture2D;
 
 namespace lib.img.video
 {
@@ -117,7 +119,7 @@ namespace lib.img.video
             // TODO:
             public bool HasPlaybackCompleted { get; private set; }
             public float Duration { get; private set; }
-            public Texture2D Texture { get; private set; }
+            public Texture2D Texture;
             public bool IsReadyForRendering => Texture != null && !_isSeeking;
 
             public bool HandleGettingFrames(string url, double requestedTime, float resyncThreshold, bool loop, float volume, bool precisePlayback)
@@ -297,7 +299,7 @@ namespace lib.img.video
                     }
 
                     _engine.TransferVideoFrame(
-                                               Texture,
+                                               (SharpDX.Direct3D11.Texture2D)Texture,
                                                ToVideoRect(default),
                                                //new RawRectangle(0, 0, renderTarget.ViewWidth, renderTarget.ViewHeight),
                                                new RawRectangle(0, 0, _textureSize.Width, _textureSize.Height),
@@ -369,21 +371,35 @@ namespace lib.img.video
                 var device = ResourceManager.Device;
                 try
                 {
-                    Texture = new Texture2D(device,
-                                            new Texture2DDescription
-                                                {
-                                                    ArraySize = 1,
-                                                    BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource | BindFlags.UnorderedAccess,
-                                                    CpuAccessFlags = CpuAccessFlags.None,
-                                                    Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
-                                                    Width = size.Width,
-                                                    Height = size.Height,
-                                                    MipLevels = 0,
-                                                    OptionFlags = ResourceOptionFlags.None,
-                                                    SampleDescription = new SampleDescription(1, 0),
-                                                    Usage = ResourceUsage.Default
-                                                });
-                    _textureSize = size;
+                    Texture = Texture2D.CreateTexture2D(new Texture2DDescription
+                                                            {
+                                                                ArraySize = 1,
+                                                                BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource | BindFlags.UnorderedAccess,
+                                                                CpuAccessFlags = CpuAccessFlags.None,
+                                                                Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
+                                                                Width = size.Width,
+                                                                Height = size.Height,
+                                                                MipLevels = 0,
+                                                                OptionFlags = ResourceOptionFlags.None,
+                                                                SampleDescription = new SampleDescription(1, 0),
+                                                                Usage = ResourceUsage.Default
+                                                            });
+                    
+                                                        // Texture = new Texture2D(device,
+                                                        //                  new Texture2DDescription
+                                                        //                      {
+                                                        //                          ArraySize = 1,
+                                                        //                          BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource | BindFlags.UnorderedAccess,
+                                                        //                          CpuAccessFlags = CpuAccessFlags.None,
+                                                        //                          Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
+                                                        //                          Width = size.Width,
+                                                        //                          Height = size.Height,
+                                                        //                          MipLevels = 0,
+                                                        //                          OptionFlags = ResourceOptionFlags.None,
+                                                        //                          SampleDescription = new SampleDescription(1, 0),
+                                                        //                          Usage = ResourceUsage.Default
+                                                        //                      });
+                                                        _textureSize = size;
                 }
                 catch (Exception e)
                 {

@@ -21,7 +21,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         public static void DrawPlaybackSettings(Instance? composition)
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(2, 2));
-            ImGui.SetNextWindowSize(new Vector2(600, 500) * T3Ui.UiScaleFactor);
+            ImGui.SetNextWindowSize(new Vector2(650, 500) * T3Ui.UiScaleFactor);
             if (!ImGui.BeginPopupContextItem(PlaybackSettingsPopupId))
             {
                 ImGui.PopStyleVar(1);

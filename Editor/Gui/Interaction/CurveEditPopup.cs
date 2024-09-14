@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using ImGuiNET;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
@@ -14,22 +15,24 @@ public static class CurveEditPopup
     public static bool DrawPopupIndicator(Instance compositionOp, Symbol.Child.Input input, ref Curve curve, Vector2 keepPositionForIcon, bool cloneIfModified, out InputEditStateFlags result)
     {
         var openPop = false;
+        result = InputEditStateFlags.Nothing;
         var keepPositionForContentBelow = ImGui.GetCursorPos();
         ImGui.SetCursorPos(keepPositionForIcon);
         var iconSize = ImGui.GetFrameHeight() * Vector2.One;
         ImGui.BeginChild("Icon", iconSize);
         var clicked = CustomComponents.IconButton(Icon.PopUp, iconSize);
         if (clicked)
-        {
             openPop = true;
-        }
-
+        
         ImGui.EndChild();
+
         ImGui.SetCursorPos(keepPositionForContentBelow);
+
         if (openPop)
         {
+            ImGui.SetNextWindowPos(keepPositionForIcon + ImGui.GetWindowPos(), ImGuiCond.Once);
             ImGui.OpenPopup(CurvePopupId);
-            ImGui.SetNextWindowSize(new Vector2(500, 400));
+            _justOpened = true;
         }
 
         var isOpen = ImGui.IsPopupOpen(CurvePopupId);
@@ -37,38 +40,41 @@ public static class CurveEditPopup
         result= DrawPopup(ref curve, input, cloneIfModified, compositionOp);
         return isOpen;
     }
+
+    private static bool _justOpened = false;
     
     private static InputEditStateFlags DrawPopup(ref Curve curve, Symbol.Child.Input input,
                                                  bool cloneIfModified, Instance comp)
     {
-        
         var edited = InputEditStateFlags.Nothing;
-        //var componentId = ImGui.GetID("curveEditor");
-        ImGui.SetNextWindowSize(new Vector2(500, 400));
-        if (ImGui.BeginPopup(CurvePopupId, ImGuiWindowFlags.Popup))
+        if (_justOpened)
         {
-            // if (_activatedComponentId != componentId)
-            // {
-            //     _activatedComponentId = componentId;
-            // }
-            
-            edited= CurveInputEditing.DrawCanvasForCurve(ref curve, input, cloneIfModified, comp, T3Ui.EditingFlags.ExpandVertically);
-            ImGui.EndPopup();
-        }
-        else
-        {
-            // if (_activatedComponentId == componentId)
-            // {
-            //     _activatedComponentId = 0;
-            // }
+            _justOpened = false;
+            ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.Once);
         }
 
+        var isOpen = true;
+
+        if (!ImGui.BeginPopupModal(CurvePopupId, ref isOpen))
+            return edited;
+        
+        // Close popup if clicked outside
+        if(ImGui.IsMouseClicked(ImGuiMouseButton.Left) && !ImGui.IsWindowHovered(ImGuiHoveredFlags.RootAndChildWindows|ImGuiHoveredFlags.RectOnly))
+            ImGui.CloseCurrentPopup();
+        
+        var keepScale = T3Ui.UiScaleFactor;
+        T3Ui.UiScaleFactor = 1;
+
+        edited= CurveInputEditing.DrawCanvasForCurve(ref curve, input, cloneIfModified, comp, T3Ui.EditingFlags.ExpandVertically);
+        
+        T3Ui.UiScaleFactor = keepScale;
+        
+        ImGui.EndPopup();
         return edited;
     }
     
     
     private static readonly CurveInputEditing.CurveInteraction.SingleCurveEditCanvas _singleCurveCanvas = new() { ImGuiTitle = "canvasPopup"};
     private const string CurvePopupId= "##CurvePopup";
-    // private static uint _activatedComponentId;
     private static readonly Bitmap _bmp = new(1, 1);
 }

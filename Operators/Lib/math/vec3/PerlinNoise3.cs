@@ -32,16 +32,25 @@ namespace lib.math.vec3
             var scale = Amplitude.GetValue(context);
             var scaleXYZ = AmplitudeXYZ.GetValue(context);
             var biasAndGain = BiasAndGain.GetValue(context);
-            
+            var offset = Offset.GetValue(context);
+
             var scaleToUniformFactor = 1.37f;
-            var x = ((MathUtils.PerlinNoise(value, period, octaves, seed)*scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X,biasAndGain.Y) 
-                    * (rangeMax.X - rangeMin.X) + rangeMin.X;
-            var y = ((MathUtils.PerlinNoise(value, period, octaves, seed + 123)*scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X,biasAndGain.Y)
-                    * (rangeMax.Y - rangeMin.Y) + rangeMin.Y;
-            var z = ((MathUtils.PerlinNoise(value, period, octaves, seed + 234)*scaleToUniformFactor + 1f) * 0.5f).ApplyBiasAndGain(biasAndGain.X,biasAndGain.Y)
-                    * (rangeMax.Z - rangeMin.Z) + rangeMin.Z;
+            var vec = new Vector3(ScalarNoise(0), ScalarNoise(123), ScalarNoise(234));
+
+            Result.Value = Remap3(vec, Vector3.Zero,  Vector3.One, rangeMin, rangeMax) * scaleXYZ *scale +offset;//new Vector3(x, y, z) + offset;
+            return;
+
+            float ScalarNoise(int seedOffset)
+            {
+                return (MathUtils.PerlinNoise(value, period, octaves, seed + seedOffset)*scaleToUniformFactor + 1f) * 0.5f.ApplyBiasAndGain(biasAndGain.X, biasAndGain.Y);
+            }
             
-            Result.Value  = new Vector3(x, y, z) * scaleXYZ  * scale;
+            Vector3 Remap3(Vector3 value3, Vector3 inMin, Vector3 inMax, Vector3 outMin, Vector3 outMax)
+            {
+                var factor = (value3 - inMin) / (inMax - inMin);
+                var v = factor * (outMax - outMin) + outMin;
+                return v;
+            }
         }
 
         [Input(Guid = "deddfbee-386d-4f8f-9339-ec6c01908a11")]
@@ -58,6 +67,9 @@ namespace lib.math.vec3
         
         [Input(Guid = "C427D83B-1046-4B8D-B44A-E616A64A702A")]
         public readonly InputSlot<Vector3> AmplitudeXYZ = new();
+        
+        [Input(Guid = "3065B319-7C6F-4447-A32A-454EE690BA36")]
+        public readonly InputSlot<Vector3> Offset = new();
         
         
         [Input(Guid = "B4B38D87-F661-4B8B-B978-70BF34152422")]

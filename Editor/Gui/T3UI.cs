@@ -94,6 +94,10 @@ public static class T3Ui
         MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
         MouseWheelFieldHovered = false;
 
+        // A work around for potential mouse capture
+        DragFieldWasHoveredLastFrame = DragFieldHovered;
+        DragFieldHovered = false;
+        
         FitViewToSelectionHandling.ProcessNewFrame();
         SrvManager.FreeUnusedTextures();
         KeyboardBinding.InitFrame();
@@ -585,6 +589,9 @@ public static class T3Ui
     internal static bool DraggingIsInProgress = false;
     internal static bool MouseWheelFieldHovered { private get; set; }
     internal static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }
+    public static bool DragFieldHovered { private get; set; }
+    public static bool DragFieldWasHoveredLastFrame { get; private set; }
+    
     internal static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
     internal const string FloatNumberFormat = "{0:F2}";
 

@@ -39,8 +39,8 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 TypeSelector.Draw(ref _selectedType);
                 
                 FormInputs.AddCheckBox("Multi-Input", ref _multiInput);
-
-
+                
+                FormInputs.AddVerticalSpace(5);
                 FormInputs.ApplyIndent();
                 if (CustomComponents.DisablableButton("Add", isValid))
                 {

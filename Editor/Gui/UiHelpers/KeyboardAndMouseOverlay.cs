@@ -23,6 +23,16 @@ public static class KeyboardAndMouseOverlay
         var dl = ImGui.GetForegroundDrawList();
         
         var pos = ImGui.GetMousePos() + new Vector2(30, 60);
+        if(pos.X + 120 > ImGui.GetIO().DisplaySize.X)
+            pos.X = ImGui.GetIO().DisplaySize.X - 120;
+
+        if (pos.Y + 90 > ImGui.GetIO().DisplaySize.Y)
+        {
+            var dy = 90 + pos.Y - ImGui.GetIO().DisplaySize.Y;
+            pos.Y -= dy;
+            pos.X += dy/2;
+        }
+        
         var panelSize = new Vector2(120, 90) * T3Ui.UiScaleFactor;
         dl.AddRectFilled(pos, pos + panelSize, UiColors.BackgroundFull.Fade(0.7f * _widgetFade), 10);
         
