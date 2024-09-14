@@ -405,9 +405,10 @@ namespace lib.img.video
         }
 
         // FIXME: we should call this properly
-        public new void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            base.Dispose();
+            Log.Warning($"Disposing video player");
+            base.Dispose(disposing);
             _engine.Shutdown();
             _engine.PlaybackEvent -= EnginePlaybackEventHandler;
             _engine.Dispose();

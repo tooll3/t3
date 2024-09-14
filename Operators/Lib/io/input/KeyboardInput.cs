@@ -10,7 +10,7 @@ using T3.SystemUi;
 namespace lib.io.input
 {
 	[Guid("2b00bb7a-92cc-41e5-a5f6-bc3e8b16c5eb")]
-    public class KeyboardInput : Instance<KeyboardInput>, IDisposable
+    public class KeyboardInput : Instance<KeyboardInput>
     {
         [Output(Guid = "55A1258C-3920-4F78-874A-B0652BAC885B", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> Result = new();

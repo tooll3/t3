@@ -9,8 +9,6 @@ namespace T3.Core.Operator;
 
 public sealed partial class Symbol
 {
-    public event EventHandler<Instance> ParentlessInstanceReplaced;
-    
     internal void UpdateInstanceType()
     {
         UpdateSlotsAndConnectionsForType(out var oldInputDefinitions, out var oldOutputDefinitions);
@@ -26,33 +24,20 @@ public sealed partial class Symbol
             return;
         
         // first remove relevant connections from instances and update symbol child input values if needed
-        Log.Debug($"Refreshing {count} instances of {this}");
         for (var index = count - 1; index >= 0; index--)
         {
             var instance = _instancesOfSelf[index];
             var parent = instance.Parent;
             if (parent == null)
             {
-                ++parentlessCount;
-                Log.Warning($"Instance {instance} has no parent. Skipping connections.");
+                Log.Warning($"Instance {instance} has no parent. Skipping connections and recreation.");
             }
             else if (TryGenerateConnectionInfo(instance, slotChanges, out var refreshInfo, parent))
             {
                 existingInstancesRefreshInfo.Add(refreshInfo);
             }
 
-            Instance.Destroy(instance);
-            _instancesOfSelf.RemoveAt(index);
-        }
-
-        while (parentlessCount > 0)
-        {
-            --parentlessCount;
-
-            if (TryGetParentlessInstance(out var newParentlessInstance))
-            {
-                ParentlessInstanceReplaced?.Invoke(this, newParentlessInstance);
-            }
+            DestroyInstance(instance);
         }
 
         foreach (var item in existingInstancesRefreshInfo)

@@ -43,6 +43,8 @@ public sealed partial class Symbol
         {
             return true;
         }
+
+        Log.Debug($"Creating parentless instance of {this}");
         
         var newSymbolChildId = Child.CreateIdDeterministically(this, null);
         var newSymbolChild = new Child(this, newSymbolChildId, null, null, false);

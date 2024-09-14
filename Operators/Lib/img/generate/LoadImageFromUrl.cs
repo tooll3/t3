@@ -47,7 +47,7 @@ namespace lib.img.generate
                     
                 _url = url;
                 HttpClient httpClient = null;
-                Dispose();
+                //Dispose();
 
                 if (_httpClient == null)
                 {
