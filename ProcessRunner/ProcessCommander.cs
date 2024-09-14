@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.RegularExpressions;
 using T3.Core.Logging;
@@ -28,10 +29,8 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
             return false;
         }
 
-        _process = CreatePowershellProcess("powershell", _workingDirectory);
-        if (!_process.Start())
+        if (!TryCreatePowershellProcess(out _process))
         {
-            Close(_process, 0f);
             isRunning = false;
             return false;
         }
@@ -50,6 +49,54 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
         _process.BeginErrorReadLine();
 
         isRunning = true;
+        return true;
+    }
+
+    private bool TryCreatePowershellProcess([NotNullWhen(true)] out Process? process)
+    {
+        // prefer cross-platform modern powershell
+        process = CreateProcess("pwsh", _workingDirectory);
+        
+        const string crossPlatformFailureMessage = "Failed to start cross-platform powershell";
+        const string legacyFailureMessage = "Failed to start legacy powershell";
+        try
+        {
+            if (!process.Start())
+            {
+                Close(process, 0f);
+                Log.Warning(crossPlatformFailureMessage);
+            }
+            else
+            {
+                Log.Info("Started cross-platform powershell");
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Error($"{crossPlatformFailureMessage}: {e.Message}");
+        }
+        
+        // fallback to legacy powershell
+        process = CreateProcess("powershell", _workingDirectory);
+        try
+        {
+            if (!process.Start())
+            {
+                Close(process, 0f);
+                process = null;
+                Log.Error(legacyFailureMessage);
+                return false;
+            }
+            
+            Log.Info("Started legacy powershell");
+        }
+        catch (Exception e)
+        {
+            Log.Error($"{legacyFailureMessage}: {e.Message}");
+            process = null;
+            return false;
+        }
+
         return true;
     }
 
@@ -172,7 +219,7 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
         }
     }
 
-    private static Process CreatePowershellProcess(string processName, string workingDirectory)
+    private static Process CreateProcess(string processName, string workingDirectory)
     {
         var process = new Process
                           {
