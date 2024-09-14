@@ -124,4 +124,5 @@ internal sealed partial class CsProjectFile
     }
     
     #endregion Utility Types for consistent handling
+
 }

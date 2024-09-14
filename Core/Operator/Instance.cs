@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using T3.Core.Logging;
@@ -49,7 +48,7 @@ namespace T3.Core.Operator
         private readonly List<ISlot> _outputs = new();
         public readonly IReadOnlyList<ISlot> Outputs;
 
-        private readonly Dictionary<Guid, Instance> _childInstances = new();
+        internal readonly Dictionary<Guid, Instance> ChildInstances = new();
         public readonly IReadOnlyDictionary<Guid, Instance> Children;
         private readonly List<IInputSlot> _inputs = new();
         public readonly IReadOnlyList<IInputSlot> Inputs;
@@ -84,10 +83,10 @@ namespace T3.Core.Operator
         {
             Outputs = _outputs;
             Inputs = _inputs;
-            Children = _childInstances;
+            Children = ChildInstances;
         }
 
-        public void Dispose()
+        internal void Dispose()
         {
             Disposing?.Invoke();
             Dispose(true);
@@ -290,38 +289,19 @@ namespace T3.Core.Operator
         private List<SymbolPackage> _availableResourcePackages;
         private bool _resourceFoldersDirty = true;
 
-        public static void Destroy(Instance instance)
-        {
-            var allChildren = instance._childInstances.Values.ToArray();
-            foreach (var child in allChildren)
-            {
-                DestroyChildInstance(instance, child.SymbolChildId);
-            }
-            
-            var parent = instance._parent;
-            if (parent != null)
-            {
-                DestroyChildInstance(parent, instance.SymbolChildId);
-            }
-            else
-            {
-                instance.Dispose();
-            }
-
-            return;
-
-            static void DestroyChildInstance(Instance parent, Guid childId)
-            {
-                parent._childInstances.Remove(childId, out var childInstance);
-                childInstance?.Dispose();
-            }
-        }
-
 
         internal static void AddChildTo(Instance parentInstance, Instance childInstance)
         {
-            parentInstance._childInstances.Add(childInstance.SymbolChildId, childInstance);
+            parentInstance.ChildInstances.Add(childInstance.SymbolChildId, childInstance);
         }
+
+        public sealed override string ToString()
+        {
+            const string fmt = "{0} ({1})";
+            return _asString ??= string.Format(fmt, GetType().Name, SymbolChildId.ToString());
+        }
+
+        private string? _asString;
     }
 
     public class Instance<T> : Instance where T : Instance

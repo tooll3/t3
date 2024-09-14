@@ -62,6 +62,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilkWindowTest", "SilkWindo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImguiWindows", "ImguiWindows\ImguiWindows.csproj", "{4BBDB15C-D8FA-4FFC-B39C-DD828FECFCF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessRunner", "ProcessRunner\ProcessRunner.csproj", "{FE16008C-9C2B-44CB-BE9B-D4F0422E0456}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -140,6 +142,10 @@ Global
 		{4BBDB15C-D8FA-4FFC-B39C-DD828FECFCF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BBDB15C-D8FA-4FFC-B39C-DD828FECFCF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BBDB15C-D8FA-4FFC-B39C-DD828FECFCF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE16008C-9C2B-44CB-BE9B-D4F0422E0456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE16008C-9C2B-44CB-BE9B-D4F0422E0456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE16008C-9C2B-44CB-BE9B-D4F0422E0456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE16008C-9C2B-44CB-BE9B-D4F0422E0456}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

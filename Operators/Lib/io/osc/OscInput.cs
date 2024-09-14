@@ -17,7 +17,7 @@ using T3.Core.Operator.Slots;
 namespace lib.io.osc
 {
 	[Guid("3a1d7ea0-5445-4df0-b08a-6596e53f815a")]
-    public class OscInput : Instance<OscInput>, OscConnectionManager.IOscConsumer, IDisposable, IStatusProvider, ICustomDropdownHolder
+    public class OscInput : Instance<OscInput>, OscConnectionManager.IOscConsumer, IStatusProvider, ICustomDropdownHolder
     {
         [Output(Guid = "F697732E-46F3-4037-AFC5-56F396BD70AD")]
         public readonly Slot<Dict<float>> Contents = new();

@@ -1,8 +1,10 @@
 #nullable enable
 using System.IO;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Gui.Windows.Utilities;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph;
 
@@ -10,20 +12,45 @@ internal static partial class PlayerExporter
 {
     private class ExportInfo
     {
-        private HashSet<Instance> CollectedInstances { get; } = new();
-        public HashSet<Symbol> UniqueSymbols { get; } = new();
-        public HashSet<ResourcePath> UniqueResourcePaths { get; } = new();
+        public IReadOnlyCollection<ResourcePath> ResourcePaths => _resourcePaths;
+        public IEnumerable<SymbolPackage> SymbolPackages => _symbolPackages.Keys;
 
-        public bool TryAddInstance(Instance instance) => CollectedInstances.Add(instance);
+        private readonly HashSet<Symbol> _symbols = new();
+        private readonly Dictionary<SymbolPackage, List<Symbol>> _symbolPackages = new();
+        private readonly HashSet<ResourcePath> _resourcePaths = new();
+        private readonly HashSet<Instance> _collectedInstances = new();
 
-        public void TryAddResourcePath(in ResourcePath path) => UniqueResourcePaths.Add(path);
+        public bool TryAddInstance(Instance instance) => _collectedInstances.Add(instance);
 
-        public bool TryAddSymbol(Symbol symbol) => UniqueSymbols.Add(symbol);
+        public void TryAddResourcePath(in ResourcePath path) => _resourcePaths.Add(path);
+
+        public bool TryAddSymbol(Symbol symbol)
+        {
+            Console.WriteLine("Including symbol: " + symbol.Name);
+            if(!_symbols.Add(symbol))
+                return false;
+            
+            var package = symbol.SymbolPackage;
+            if (!_symbolPackages.TryGetValue(package, out var symbols))
+            {
+                symbols = new List<Symbol>();
+                _symbolPackages.Add(package, symbols);
+            }
+            
+            symbols.Add(symbol);
+
+            foreach(var child in symbol.Children.Values)
+            {
+                TryAddSymbol(child.Symbol);
+            }
+
+            return true;
+        }
 
         public void PrintInfo()
         {
-            Log.Info($"Collected {CollectedInstances.Count} instances for export in {UniqueSymbols.Count} different symbols:");
-            foreach (var resourcePath in UniqueResourcePaths)
+            Log.Info($"Collected {_collectedInstances.Count} instances for export in {_symbols.Count} different symbols:");
+            foreach (var resourcePath in ResourcePaths)
             {
                 Log.Info($"  {resourcePath}");
             }

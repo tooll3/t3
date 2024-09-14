@@ -161,13 +161,13 @@ public static class RuntimeAssemblies
         if (!Version.TryParse(serialized.EditorVersion, out var editorVersion))
         {
             editorVersion = new Version(1, 0, 0);
-            Log.Warning($"{serialized.RootNamespace}: Failed to parse editor version \"{serialized.EditorVersion}\" from package info. Setting to {editorVersion}");
+            Log.Error($"{serialized.RootNamespace}: Failed to parse editor version \"{serialized.EditorVersion}\" from package info. Setting to {editorVersion}");
         }
         
         if (!Version.TryParse(serialized.Version, out var version))
         {
             version = new Version(1, 0, 0);
-            Log.Warning($"{serialized.RootNamespace}: Failed to parse package version \"{serialized.Version}\" from package info. Setting to {version}");
+            Log.Error($"{serialized.RootNamespace}: Failed to parse package version \"{serialized.Version}\" from package info. Setting to {version}");
         }
         
         return new ReleaseInfo(

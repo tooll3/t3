@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
@@ -35,8 +36,16 @@ public sealed partial class Symbol
         return newChild;
     }
 
-    public bool TryCreateParentlessInstance([NotNullWhen(true)] out Instance? newInstance)
+    public bool TryGetParentlessInstance([NotNullWhen(true)] out Instance? newInstance)
     {
+        newInstance = _instancesOfSelf.FirstOrDefault(x => x.Parent == null);
+        if (newInstance != null)
+        {
+            return true;
+        }
+
+        Log.Debug($"Creating parentless instance of {this}");
+        
         var newSymbolChildId = Child.CreateIdDeterministically(this, null);
         var newSymbolChild = new Child(this, newSymbolChildId, null, null, false);
         return newSymbolChild.TryCreateNewInstance(null, out newInstance);

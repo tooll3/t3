@@ -9,8 +9,6 @@ namespace T3.Core.Operator;
 
 public sealed partial class Symbol
 {
-    public event EventHandler<Instance> ParentlessInstanceReplaced;
-    
     internal void UpdateInstanceType()
     {
         UpdateSlotsAndConnectionsForType(out var oldInputDefinitions, out var oldOutputDefinitions);
@@ -19,47 +17,47 @@ public sealed partial class Symbol
 
         var slotChanges = new SlotChangeInfo(oldInputDefinitions, oldOutputDefinitions, InputDefinitions, OutputDefinitions);
 
-        var instances = _instancesOfSelf.ToArray(); // copy since we will modify it within a loop
-        List<Instance> parentlessInstances = null;
+        int parentlessCount = 0;
+        
+        var count = _instancesOfSelf.Count;
+        if (count == 0)
+            return;
+        
         // first remove relevant connections from instances and update symbol child input values if needed
-        foreach (var instance in instances)
+        for (var index = count - 1; index >= 0; index--)
         {
-            if (TryGenerateConnectionInfo(instance, slotChanges, out var refreshInfo, out var parentless))
+            var instance = _instancesOfSelf[index];
+            var parent = instance.Parent;
+            if (parent == null)
+            {
+                Log.Warning($"Instance {instance} has no parent. Skipping connections and recreation.");
+            }
+            else if (TryGenerateConnectionInfo(instance, slotChanges, out var refreshInfo, parent))
             {
                 existingInstancesRefreshInfo.Add(refreshInfo);
             }
 
-            Instance.Destroy(instance);
-            _instancesOfSelf.Remove(instance);
-
-            if (parentless)
-            {
-                if (TryCreateParentlessInstance(out var newParentlessInstance))
-                {
-                    ParentlessInstanceReplaced?.Invoke(this, newParentlessInstance);
-                }
-                
-            }
+            DestroyInstance(instance);
         }
 
-        foreach (var (symbolChild, parent, _) in existingInstancesRefreshInfo)
+        foreach (var item in existingInstancesRefreshInfo)
         {
+            var symbolChild = item.SymbolChild;
+            var parent = item.Parent;
             if (!symbolChild.TryCreateNewInstance(parent, newInstance: out _))
             {
-                Log.Error($"Could not recreate instance of symbol: {symbolChild.Symbol.Name} with parent: {parent.Symbol.Name}");
+                Log.Error($"Could not recreate instance of symbol: {symbolChild.Symbol.Name} with parent: {item.ParentSymbol.Name}");
             }
         }
 
         // ... and add the connections again
         existingInstancesRefreshInfo.Reverse(); // process reverse that multi input index are correct
-        foreach (var (_, parent, connectionsToReplace) in existingInstancesRefreshInfo)
+        foreach (var item in existingInstancesRefreshInfo)
         {
-            if (parent == null)
-                continue;
-            
-            foreach (var entry in connectionsToReplace)
+            var parentSymbol = item.ParentSymbol;
+            foreach (var entry in item.ConnectionsToReplace)
             {
-                parent.Symbol.AddConnection(entry.Connection, entry.MultiInputIndex);
+                parentSymbol.AddConnection(entry.Connection, entry.MultiInputIndex);
             }
         }
 
@@ -189,17 +187,9 @@ public sealed partial class Symbol
             }
         }
 
-        static bool TryGenerateConnectionInfo(Instance instance, SlotChangeInfo slotChangeInfo, out InstanceTypeRefreshInfo refreshInfo, out bool parentless)
+        static bool TryGenerateConnectionInfo(Instance instance, SlotChangeInfo slotChangeInfo, out InstanceTypeRefreshInfo refreshInfo, Instance parent)
         {
-            var parent = instance.Parent;
-            parentless = parent == null;
-            if (parentless)
-            {
-                Log.Error($"Warning: Instance {instance} has no parent. Skipping.");
-                refreshInfo = default;
-                return false;
-            }
-
+            var parentSymbol = parent.Symbol;
             if (!parent.Children.ContainsKey(instance.SymbolChildId))
             {
                 // This happens when recompiling ops...
@@ -208,7 +198,6 @@ public sealed partial class Symbol
                 return false;
             }
 
-            var parentSymbol = parent.Symbol;
             var parentConnections = parentSymbol.Connections;
             // get all connections that belong to this instance
             var connectionsToReplace = parentConnections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId ||
@@ -259,7 +248,7 @@ public sealed partial class Symbol
 
             connectionEntriesToReplace.Reverse(); // restore original order
 
-            var symbolChild = instance.SymbolChild;
+            var symbolChild = instance.SymbolChild!;
 
             // update inputs of symbol child
             var childInputDict = symbolChild.Inputs;
@@ -291,7 +280,7 @@ public sealed partial class Symbol
                 childOutputDict.Add(id, output);
             }
 
-            refreshInfo = new InstanceTypeRefreshInfo(symbolChild, parent, connectionEntriesToReplace);
+            refreshInfo = new InstanceTypeRefreshInfo(symbolChild, parent, parentSymbol, connectionEntriesToReplace);
             return true;
         }
     }
@@ -302,7 +291,7 @@ public sealed partial class Symbol
         public int MultiInputIndex { get; set; }
     }
 
-    private readonly record struct InstanceTypeRefreshInfo(Child SymbolChild, Instance Parent, List<ConnectionEntry> ConnectionsToReplace);
+    private readonly record struct InstanceTypeRefreshInfo(Child SymbolChild, Instance Parent, Symbol ParentSymbol, List<ConnectionEntry> ConnectionsToReplace);
 
     private readonly record struct SlotChangeInfo(
         IReadOnlyList<InputDefinition> OldInputDefinitions,

@@ -102,10 +102,12 @@ internal sealed partial class CsProjectFile
         var previousBuildId = _buildId;
         var previousAssembly = Assembly;
         _buildId = GetNewBuildId();
+        ModifyBuildVersion(0, 0 , 1);
         var success = Compiler.TryCompile(this, EditorBuildMode);
 
         if (!success)
         {
+            ModifyBuildVersion(0, 0, -1);
             _buildId = previousBuildId;
             releaseInfo = null;
             return false;
@@ -120,11 +122,7 @@ internal sealed partial class CsProjectFile
 
         if (loaded)
         {
-            if (TryGetReleaseInfo(out releaseInfo))
-            {
-                UpdateVersionForNextBuild();
-            }
-            else
+            if (!TryGetReleaseInfo(out releaseInfo))
             {
                 loaded = false;
                 Log.Error($"{Name} successfully compiled but failed to find release info");
@@ -138,21 +136,17 @@ internal sealed partial class CsProjectFile
         return loaded;
     }
 
-    // when inputs, outputs, or the existence of operators changes, we want to use the version number to mark this as a breaking change
-    public void UpdateVersionForIOChange()
+    public void UpdateVersionForIOChange(int modifyAmount)
     {
-        var version = GetCurrentVersion();
-        var newVersion = new Version(version.Major, version.Minor + 1, 0);
-        SetOrAddProperty(PropertyType.VersionPrefix, newVersion.ToBasicVersionString(), _projectRootElement);
-        _projectRootElement.Save();
+        ModifyBuildVersion(0, Math.Clamp(modifyAmount, -1, 1), 0);
     }
 
-    private void UpdateVersionForNextBuild()
+    private void ModifyBuildVersion(int majorModify, int minorModify, int buildModify)
     {
         SetOrAddProperty(PropertyType.EditorVersion, Program.Version.ToBasicVersionString(), _projectRootElement);
         
         var version = GetCurrentVersion();
-        var newVersion = new Version(version.Major, version.Minor, version.Build + 1);
+        var newVersion = new Version(version.Major + majorModify, version.Minor + minorModify, version.Build + buildModify);
         SetOrAddProperty(PropertyType.VersionPrefix, newVersion.ToBasicVersionString(), _projectRootElement);
          
         _projectRootElement.Save();

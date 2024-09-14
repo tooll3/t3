@@ -85,12 +85,32 @@ namespace T3.Core.Operator
 
         public void Dispose()
         {
-            foreach (var instance in _instancesOfSelf)
+            var allInstances = _instancesOfSelf.ToArray(); // copy as it will be modified
+            foreach (var instance in allInstances)
             {
-                instance.Dispose();
+                DestroyInstance(instance);
             }
             
-            _instancesOfSelf.Clear();
+            for (var index = _instancesOfSelf.Count - 1; index >= 0; index--)
+            {
+                var instance = _instancesOfSelf[index];
+                DestroyInstance(instance, index);
+            }
+        }
+
+        private void DestroyInstance(Instance instance, int index = -1)
+        {
+            var allChildren = instance.ChildInstances.Values.ToArray();
+            foreach (var child in allChildren)
+            {
+                child.Symbol.DestroyInstance(child);
+            }
+            
+            instance.Parent?.ChildInstances.Remove(instance.SymbolChildId);
+            instance.Dispose();
+            
+            index = index == -1 ? _instancesOfSelf.IndexOf(instance) : index;
+            _instancesOfSelf.RemoveAt(index);
         }
 
         public int GetMultiInputIndexFor(Connection con)
@@ -272,7 +292,7 @@ namespace T3.Core.Operator
             foreach (var instance in _instancesOfSelf)
             {
                 var childInstance = instance.Children[idOfRemovedChild];
-                Instance.Destroy(childInstance);
+                childInstance.Symbol.DestroyInstance(childInstance);
             }
 
             if (removedFromSymbol)
@@ -337,8 +357,12 @@ namespace T3.Core.Operator
                 slot.DirtyFlag.Invalidate();
             }
         }
-        
-        internal void AddInstanceOfSelf(Instance instance) => _instancesOfSelf.Add(instance);
+
+        internal void AddInstanceOfSelf(Instance instance)
+        {
+            _instancesOfSelf.Add(instance);
+        }
+
         private readonly List<Instance> _instancesOfSelf = new();
         private ConcurrentDictionary<Guid, Child> _children = new();
     }

@@ -20,27 +20,27 @@ namespace T3.Editor.Gui.OutputUi
 
         internal CommandOutputUi()
         {
+            _onGridInstanceDisposed = OnGridInstanceDisposed;
+            
             // ensure op exists for drawing grid
             var outputWindowGridSymbolId = Guid.Parse("e5588101-5686-4b02-ab7d-e58199ba552e");
             
             if(!SymbolRegistry.TryGetSymbol(outputWindowGridSymbolId, out var outputWindowGridSymbol))
             {
-                Log.Warning("CommandOutputUi: Could not find grid Gizmo symbol UI");
+                Log.Error("CommandOutputUi: Could not find grid Gizmo symbol");
                 return;
             }
-
-            if (!outputWindowGridSymbol.TryCreateParentlessInstance(out var gridInstance))
-            {
-                var message = $"{nameof(CommandOutputUi)} Could not create grid instance";
-                Log.Error(message);
-                throw new Exception(message);
-            }
-
-            _gridOutputs = gridInstance.Outputs;
+            
+            _outputWindowGridSymbol = outputWindowGridSymbol;
         }
 
         protected override void Recompute(ISlot slot, EvaluationContext context)
         {
+            if (!EnsureGridOutputsExist())
+            {
+                return;
+            }
+
             var originalCamMatrix = context.WorldToCamera;
             var originalViewMatrix = context.CameraToClipSpace;
             
@@ -90,6 +90,30 @@ namespace T3.Editor.Gui.OutputUi
             {
                 prevTargets[i].Dispose();
             }
+        }
+
+        private bool EnsureGridOutputsExist()
+        {
+            if (_gridOutputs != null) return true;
+            
+            if (!_outputWindowGridSymbol.TryGetParentlessInstance(out var gridInstance))
+            {
+                var message = $"{nameof(CommandOutputUi)} Could not create grid instance";
+                Log.Error(message);
+                return false;
+            }
+
+            gridInstance.Disposing += _onGridInstanceDisposed;
+            _gridInstance = gridInstance;
+            _gridOutputs = gridInstance.Outputs;
+            return true;
+        }
+        
+        private void OnGridInstanceDisposed()
+        {
+            _gridOutputs = null;
+            _gridInstance!.Disposing -= _onGridInstanceDisposed;
+            _gridInstance = null;
         }
 
         public override IOutputUi Clone()
@@ -210,6 +234,11 @@ namespace T3.Editor.Gui.OutputUi
         private Texture2D _depthBuffer;
         
         private DepthStencilView _depthBufferDsv;
+        
+        // instance management
+        private readonly Symbol _outputWindowGridSymbol;
+        private Instance? _gridInstance;
+        private readonly Action _onGridInstanceDisposed;
         private IReadOnlyList<ISlot> _gridOutputs;
     }
 }

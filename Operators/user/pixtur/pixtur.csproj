@@ -11,9 +11,11 @@
     <HomeGuid>00000000-0000-0000-0000-000000000000</HomeGuid>
     <EditorVersion>3.9.1</EditorVersion>
     <IsEditorOnly>false</IsEditorOnly>
+      <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="$../../../../../Core/Core.csproj" Private="false" />
+    <ProjectReference Include="$../../../../../Core/Core.csproj" Private="false" PrivateAssets="all"/>
+    <ProjectReference Include="$../../../../../Logging/Logging.csproj" Private="false" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AssetRipper.SharpGLTF.Runtime" Version="1.0.2" />
