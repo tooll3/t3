@@ -1,225 +1,231 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using System.Text.RegularExpressions;
+using T3.Core.Logging;
 
 namespace Main;
 
-public class ProcessCommander<T>(IEnumerable<T> items, bool printOnlyAtEnd, bool logToFiles, string logPrefix = "") where T : ILoggable
+internal static partial class ProcessUtils
 {
-    public bool Finished { get; private set; } = true;
+    [GeneratedRegex(@"\x1B\[[0-?]*[ -/]*[@-~]")]
+    private static partial Regex RemoveAnsiEscapeSequences();
 
-    /// <summary>
-    /// Runs a powershell session with the given commands and this commander's data
-    /// </summary>
-    /// <param name="commands"></param>
-    /// <param name="useAsync">True to use fully async IO, false to use a dedicated thread to capture powershell output</param>
-    /// <exception cref="InvalidOperationException">Raised if this process commander is already running</exception>
-    public void RunUntilFinished(IEnumerable<Command<T>> commands, bool useAsync, float delayBetweenItemsSeconds = 0f)
+    private static readonly Regex RemoveAnsiEscapeSequencesRegex = RemoveAnsiEscapeSequences();
+
+    public static string RemoveAnsiEscapeSequences(string input) =>
+        RemoveAnsiEscapeSequencesRegex.Replace(input, "");
+}
+
+public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
+{
+    private Process? _process;
+
+    public bool TryBeginProcess(out bool isRunning)
     {
-        if (!Finished)
-            throw new InvalidOperationException("Commander is already running");
-
-        Finished = false;
-        var process = CreatePowershellProcess();
-
-        process.Start();
-        process.Exited += (sender, args) => { };
-
-        if (useAsync)
+        if (_process != null)
         {
-            process.OutputDataReceived += OnOutputAsync;
-            process.ErrorDataReceived += OnErrorAsync;
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
+            isRunning = true;
+            return false;
         }
 
-        Task.Run(() =>
+        _process = CreatePowershellProcess("pwsh", _workingDirectory);
+        if (!_process.Start())
         {
-            _resetEvent.Reset();
-            WriteCompleteMessage(process);
-            _resetEvent.WaitOne(); // wait for response
-
-            T? currentData = default;
-            Console.WriteLine("Starting commands");
-            var currentCommands = new Queue<Command<T>>();
-            using var dataQueue = items.GetEnumerator();
-            while (!process.HasExited)
-            {
-                if (currentCommands.TryDequeue(out var cmd))
-                {
-                    if(delayBetweenItemsSeconds > 0f)
-                        Thread.Sleep((int)(delayBetweenItemsSeconds * 1000));
-                    
-                    var cmdString = cmd.GetCommand(currentData!);
-                    if (cmdString == null)
-                    {
-                        WriteToConsole($" --- Failed to generate command for {currentData}");
-                        currentCommands.Clear();
-                        continue;
-                    }
-
-                    WriteToProcess(process, cmdString);
-                    Thread.Sleep(100); // wait for command to start before writing completion signal
-                    WriteCompleteMessage(process);
-
-                    _resetEvent.WaitOne(); // wait for response
-
-                    var previousOutput = _previousOutput;
-                    var success = cmd.Evaluator(ref previousOutput, currentData!);
-
-                    if (!success)
-                    {
-                        // return to working directory
-                        WriteToProcess(process, $"cd '{ProcessCommands.WorkingDirectory}'");
-                        
-                        
-                        // log failure to console
-                        var response = previousOutput.Length < 256 ? previousOutput : previousOutput[^255..];
-
-                        var failureLog =
-                            $"Command failed for {currentData!.Name}: COMMAND: '{cmdString}' --> RESPONSE: '{response}'"; 
-                        WriteToConsole(failureLog, true);
-                        currentCommands.Clear();
-                        
-                        // create file to denote failure
-                        try
-                        {
-                            var filePath = ProcessCommands.GetErrorFilePath(currentData, logPrefix);
-                            using var writer = File.CreateText(filePath);
-                            writer.WriteLine(currentData.ToString());
-                            writer.WriteLine("--------------------------------------");
-                            writer.WriteLine($"\nCommand: {cmdString}");
-                            writer.WriteLine($"Response:\n{previousOutput}");
-                            writer.Close();
-                        }
-                        catch (Exception ex)
-                        {
-                            WriteToConsole(ex.Message, true);
-                        }
-                    }
-
-                    continue;
-                }
-
-                if (dataQueue.MoveNext())
-                {
-                    currentData = dataQueue.Current;
-                    lock (_previousConsoleOutputSb)
-                    {
-                        _previousConsoleOutputSb.Clear();
-                    }
-
-                    foreach (var command in commands)
-                    {
-                        currentCommands.Enqueue(command);
-                    }
-
-                    Console.WriteLine($"Enqueued {currentCommands.Count} commands for {currentData}");
-
-                    if (logToFiles)
-                    {
-                        InitializeLoggingFor(currentData);
-                    }
-
-                    continue;
-                }
-
-                ExitProcess(process);
-                break;
-            }
-
-            if (dataQueue.MoveNext())
-            {
-                WriteToConsole("Not all data was processed", true);
-            }
-        });
-
-        process.WaitForExit();
-
-        if (printOnlyAtEnd)
-        {
-            lock (_totalConsoleOutput)
-                Console.WriteLine(_totalConsoleOutput);
+            Close(_process, 0f);
+            isRunning = false;
+            return false;
         }
 
-        Finished = true;
-        _logFileWriter?.Close();
-        _logFileWriter = null;
-        Console.WriteLine("Process finished");
+        _process.Exited += (processObj, _) =>
+                           {
+                               if (processObj is not Process process)
+                                   return;
+
+                               Close(process, 0f);
+                           };
+
+        _process.OutputDataReceived += OnOutputAsync;
+        _process.ErrorDataReceived += OnErrorAsync;
+        _process.BeginOutputReadLine();
+        _process.BeginErrorReadLine();
+
+        isRunning = true;
+        return true;
     }
 
-    private void ExitProcess(Process process)
+    public void Close(float timeoutSeconds = 3f)
     {
-        WriteToProcess(process, "exit");
+        if (_process == null)
+            return;
+
+        Close(_process, timeoutSeconds);
+    }
+
+    private void Close(Process process, float timeoutSeconds)
+    {
+        if (!process.HasExited)
+        {
+            WriteToProcess(process, "exit");
+
+            var timeoutMs = (int)(timeoutSeconds * 1000);
+            if (process.WaitForExit(timeoutMs))
+            {
+                return;
+            }
+        }
+
+        if (!process.HasExited)
+        {
+            process.Kill();
+        }
+
         process.Close();
         process.Dispose();
+
+        if (process != _process)
+        {
+            Log.Error("Unexpected process exited");
+            return;
+        }
+
+        _process = null;
     }
 
-    private static Process CreatePowershellProcess()
+    public bool TryCommand(Command<T> cmd, T currentData, string? inDirectory = null, bool suppressOutput = false)
+    {
+        if(_process == null || _process.HasExited)
+        {
+            Log.Error("Process is not running");
+            return false;
+        }
+        
+        return TryCommand(cmd, currentData, _process!, inDirectory, suppressOutput);
+    }
+
+    private bool TryCommand(Command<T> cmd, T currentData, Process process, string? inDirectory = null, bool suppressOutput = false)
+    {
+        var cmdString = cmd.GetCommand(currentData);
+        if (cmdString == null)
+        {
+            WriteToConsole($" --- Failed to generate command for {currentData}");
+            return false;
+        }
+
+        string output;
+        
+        lock (_commandLock)
+        {
+            if (process.HasExited)
+            {
+                Log.Error("Process has exited unexpectedly");
+                return false;
+            }
+
+            var pOutputSuppress = _suppressConsoleOutput;
+            _suppressConsoleOutput = suppressOutput;
+            if (inDirectory != null)
+            {
+                ChangeDirectory(inDirectory);
+            }
+
+            output = WriteToProcessAndWaitForResponse(process, cmdString);
+            _suppressConsoleOutput = pOutputSuppress;
+        }
+        
+        var success = cmd.Evaluator(ref output, currentData!);
+
+        if (success)
+            return true;
+
+        // log failure to console
+        var response = output.Length < 256 ? output : output[^255..];
+
+        var failureLog = $"Command failed for {currentData!}: COMMAND: '{cmdString}' --> RESPONSE: '{response}'";
+        
+        if(!suppressOutput)
+            WriteToConsole(failureLog, true);
+        return false;
+    }
+
+    public void ChangeDirectory(string inDirectory)
+    {
+        lock (_commandLock)
+        {
+            if (_process is not { HasExited: false })
+            {
+                Log.Error("Process is not running");
+                return;
+            }
+
+            if (_workingDirectory == inDirectory)
+                return;
+
+            var response = WriteToProcessAndWaitForResponse(_process, $"cd '{inDirectory}'");
+            if (response != null && response.Contains("annot find path"))
+            {
+                Log.Error($"Failed to change directory to '{inDirectory}'");
+            }
+            else
+            {
+                _workingDirectory = inDirectory;
+            }
+        }
+    }
+
+    private static Process CreatePowershellProcess(string processName, string workingDirectory)
     {
         var process = new Process
-        {
-            StartInfo = new ProcessStartInfo
-            {
-                FileName = "pwsh",
-                //Arguments = "",
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardInput = true,
-                RedirectStandardError = true,
-                WorkingDirectory = ProcessCommands.WorkingDirectory
-            },
-            EnableRaisingEvents = true,
-        };
+                          {
+                              StartInfo = new ProcessStartInfo
+                                              {
+                                                  FileName = processName,
+                                                  //Arguments = "",
+                                                  RedirectStandardOutput = true,
+                                                  UseShellExecute = false,
+                                                  CreateNoWindow = true,
+                                                  RedirectStandardInput = true,
+                                                  RedirectStandardError = true,
+                                                  WorkingDirectory = workingDirectory
+                                              },
+                              EnableRaisingEvents = true,
+                          };
         return process;
-    }
-
-    private void InitializeLoggingFor(T data)
-    {
-        try
-        {
-            _logFileWriter?.Close();
-            var path = Path.Combine(ProcessCommands.LogDirectory, $"{logPrefix}_{data.Name}.log");
-            _logFileWriter = new StreamWriter(path, Encoding.Default, ProcessCommands.FileStreamOptions);
-            _logFileWriter.WriteLine(data.ToString());
-            _logFileWriter.WriteLine("--------------------------------------");
-            _logFileWriter.WriteLine();
-        }
-        catch (Exception e)
-        {
-            _logFileWriter = null;
-            Console.WriteLine($"Failed to initialize logging for {data}: {e}");
-        }
     }
 
     private void ReadAndPrintOutput(string outputString, bool error)
     {
-        WriteToConsole(outputString, error);
-        outputString = ProcessCommands.RemoveAnsiEscapeSequencesRegex.Replace(outputString, "");
-        lock (_previousConsoleOutputSb)
+        if(!_suppressConsoleOutput)
+            WriteToConsole(outputString, error);
+        
+        outputString = ProcessUtils.RemoveAnsiEscapeSequences(outputString);
+
+        lock (_outputLock)
         {
             _previousConsoleOutputSb.Append(outputString);
-        }
 
-        if (!IsCommandComplete(outputString))
-            return;
-
-        TriggerResetEvent();
-        return;
-
-        void TriggerResetEvent()
-        {
-            lock (_previousConsoleOutputSb)
+            if (!IsCommandComplete(outputString))
             {
-                _previousOutput = _previousConsoleOutputSb.ToString();
-                _previousConsoleOutputSb.Clear();
+                return;
             }
 
-            _previousOutput = _previousOutput
-                .Replace(CompleteMessageCommand, "")
-                .Replace(CompleteMessage, "");
+            // command is complete - trigger the waiting thread and wait for it to finish to continue
+            _produceOutputResetEvent.Set();
+            _consumeOutputResetEvent.WaitOne();
 
-            _resetEvent.Set();
+            _previousConsoleOutputSb.Clear();
+        }
+
+        return;
+
+        static bool IsCommandComplete(string output)
+        {
+            var completeIndex = output.LastIndexOf(CompleteMessage, StringComparison.Ordinal);
+            if (completeIndex == -1)
+                return false;
+
+            // check to see if it's part of the echo statement, rather than the response to the statement itself
+            var echoIndex = output.LastIndexOf("echo", StringComparison.Ordinal);
+            return echoIndex != completeIndex - 6;
         }
     }
 
@@ -237,27 +243,14 @@ public class ProcessCommander<T>(IEnumerable<T> items, bool printOnlyAtEnd, bool
 
     private void WriteToConsole(string message, bool isError = false)
     {
-        if (printOnlyAtEnd)
-        {
-            lock (_totalConsoleOutput)
-                _totalConsoleOutput.AppendLine(message);
-        }
-        else
-        {
-            if (isError)
-                Console.Error.WriteLine(message);
-            else
-                Console.WriteLine(message);
-        }
+        _singleLogSb.Clear();
+        _singleLogSb.Append(logPrefix).Append(message);
+        message = _singleLogSb.ToString();
 
-        try
-        {
-            _logFileWriter?.WriteLine(message);
-        }
-        catch (Exception e)
-        {
-            Console.Error.WriteLine($"Failed to write to log file: {e}");
-        }
+        if (isError)
+            Log.Error(message);
+        else
+            Log.Info(message);
     }
 
     private static void WriteToProcess(Process process, string message)
@@ -270,37 +263,70 @@ public class ProcessCommander<T>(IEnumerable<T> items, bool printOnlyAtEnd, bool
         catch (Exception e)
         {
             // ignored
-            Console.WriteLine($"Failed to write to process: {e.Message}");
+            Log.Error($"Failed to write to process: {e.Message}");
+        }
+    }
+
+    private string WriteToProcessAndWaitForResponse(Process process, string cmdString)
+    {
+        try
+        {
+            process.StandardInput.Write(cmdString);
+            process.StandardInput.Write(process.StandardInput.NewLine);
+            process.StandardInput.Flush();
+                //Thread.Sleep(10);
+            
+            //process.StandardInput.Write(process.StandardInput.NewLine); 
+            Thread.Sleep(100); // wait for command to start before writing completion signal
+            process.StandardInput.Write(CompleteMessageCommand);
+            process.StandardInput.Write(process.StandardInput.NewLine);
+            process.StandardInput.Flush();
+        }
+        catch (Exception e)
+        {
+            // ignored
+            var msg = $"Failed to write to process: {e.Message}";
+            Log.Error(msg);
+            _consumeOutputResetEvent.Set();
+            return msg;
+        }
+        
+        return GetLatestOutput();
+
+        string GetLatestOutput()
+        {
+            _produceOutputResetEvent.WaitOne();
+
+            var output = _previousConsoleOutputSb.ToString();
+            _consumeOutputResetEvent.Set();
+
+            return output
+                  .Replace(CompleteMessageCommand, "")
+                  .Replace(CompleteMessage, "");
         }
     }
 
     ~ProcessCommander()
     {
         // release unmanaged resources
-        _resetEvent.Dispose();
-        _logFileWriter?.Close();
+        _produceOutputResetEvent.Dispose();
+        _consumeOutputResetEvent.Dispose();
+        
+        if (_process != null)
+        {
+            Close(_process, 0f);
+        }
     }
 
-    private static void WriteCompleteMessage(Process process) =>
-        WriteToProcess(process, CompleteMessageCommand);
-
-    private static bool IsCommandComplete(string output)
-    {
-        var completeIndex = output.LastIndexOf(CompleteMessage, StringComparison.Ordinal);
-        if (completeIndex == -1)
-            return false;
-
-        // check to see if it's part of the echo statement, rather than the response to the statement itself
-        var echoIndex = output.LastIndexOf("echo", StringComparison.Ordinal);
-        return echoIndex != completeIndex - 6;
-    }
-
-    private readonly AutoResetEvent _resetEvent = new(true);
+    private readonly AutoResetEvent _produceOutputResetEvent = new(false);
+    private readonly AutoResetEvent _consumeOutputResetEvent = new(false);
 
     private const string CompleteMessageCommand = $"echo '{CompleteMessage}'";
-    private const string CompleteMessage = "{c_m_d}";
-    private readonly StringBuilder _totalConsoleOutput = new();
+    private const string CompleteMessage = "c(^_^c)"; // this can be anything unique, the shorter the better
     private readonly StringBuilder _previousConsoleOutputSb = new();
-    private string _previousOutput = string.Empty;
-    private StreamWriter? _logFileWriter;
+    private readonly StringBuilder _singleLogSb = new();
+    private readonly object _commandLock = new();
+    private readonly object _outputLock = new();
+    private string _workingDirectory = workingDirectory;
+    private bool _suppressConsoleOutput = false;
 }

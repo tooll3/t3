@@ -294,7 +294,8 @@ internal class EditorSymbolPackage : SymbolPackage
             symbol.ParentlessInstanceReplaced += OnRootInstanceReplaced;
         }
         
-        if (!symbol.TryCreateParentlessInstance(out rootInstance))
+        Log.Debug($"Creating home instance for {AssemblyInformation.Name}'s symbol {symbol}");
+        if (!symbol.TryGetParentlessInstance(out rootInstance))
         {
             Log.Error($"Failed to create home instance for {AssemblyInformation.Name}'s symbol {symbol.Name} with id {symbol.Id}");
             return false;

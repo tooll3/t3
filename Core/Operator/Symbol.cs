@@ -85,12 +85,13 @@ namespace T3.Core.Operator
 
         public void Dispose()
         {
-            foreach (var instance in _instancesOfSelf)
+            for (var index = _instancesOfSelf.Count - 1; index >= 0; index--)
             {
+                var instance = _instancesOfSelf[index];
+                Instance.Destroy(instance);
                 instance.Dispose();
+                _instancesOfSelf.RemoveAt(index);
             }
-            
-            _instancesOfSelf.Clear();
         }
 
         public int GetMultiInputIndexFor(Connection con)
@@ -337,8 +338,12 @@ namespace T3.Core.Operator
                 slot.DirtyFlag.Invalidate();
             }
         }
-        
-        internal void AddInstanceOfSelf(Instance instance) => _instancesOfSelf.Add(instance);
+
+        internal void AddInstanceOfSelf(Instance instance)
+        {
+            _instancesOfSelf.Add(instance);
+        }
+
         private readonly List<Instance> _instancesOfSelf = new();
         private ConcurrentDictionary<Guid, Child> _children = new();
     }

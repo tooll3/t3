@@ -92,13 +92,15 @@ namespace T3.Editor.UiModel
             var symbolUi = SymbolUiDict[id];
             symbolUi.FlagAsModified();
             
-            CsProjectFile.UpdateVersionForIOChange();
+            CsProjectFile.UpdateVersionForIOChange(1);
 
             if (TryRecompile())
             {
                 ProjectSetup.UpdateSymbolPackage(this);
                 return true;
             }
+            
+            CsProjectFile.UpdateVersionForIOChange(-1);
 
             _pendingSource[id] = currentSourceCode;
             symbolUi.FlagAsModified();

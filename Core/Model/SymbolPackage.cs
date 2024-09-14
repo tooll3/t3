@@ -145,7 +145,20 @@ public abstract partial class SymbolPackage : IResourcePackage
             }
         }
 
-        foreach (var symbol in updatedSymbols)
+        // sort for instance refresh optimization
+        var updatedSymbolsSorted = updatedSymbols
+                              .OrderBy(symbol =>
+                                       {
+                                           var existingInstances = symbol.InstancesOfSelf;
+                                           return existingInstances.Count == 0 ||
+                                                  
+                                                  // this is faster since we can assume an instance without a parent
+                                                  // is a root instance that will birth other instances
+                                                  existingInstances.Any(instance => instance.Parent == null);
+                                       })
+                              .ThenBy(symbol => symbol.InstancesOfSelf.Count);
+
+        foreach (var symbol in updatedSymbolsSorted)
         {
             UpdateSymbolInstances(symbol);
             SymbolUpdated?.Invoke(symbol);
@@ -163,7 +176,7 @@ public abstract partial class SymbolPackage : IResourcePackage
         newlyRead = [];
         allNewSymbols = [];
         
-        if (newTypes.Count > 0)
+        if (!newTypes.IsEmpty)
         {
             var searchFileEnumerator = parallel ? SymbolSearchFiles.AsParallel() : SymbolSearchFiles;
             var symbolsRead = searchFileEnumerator

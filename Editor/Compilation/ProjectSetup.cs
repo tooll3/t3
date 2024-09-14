@@ -181,6 +181,8 @@ internal static partial class ProjectSetup
 
     private static void UpdateSymbolPackages(params PackageWithReleaseInfo[] packages)
     {
+        var stopWatch = Stopwatch.StartNew();
+        
         // update all the editor ui packages in concert with the operator packages
         var uiPackagesNeedingReload = new List<AssemblyInformation>();
         foreach (var package in packages)
@@ -238,6 +240,8 @@ internal static partial class ProjectSetup
                 package.LoadUiFiles(true, allNewSymbols, out var newlyLoadedUis, out var preExistingUis);
                 package.LocateSourceCodeFiles();
                 package.RegisterUiSymbols(newlyLoadedUis, preExistingUis);
+
+                Log.Info($"Updated symbol package {package.DisplayName} in {stopWatch.ElapsedMilliseconds}ms");
                 return;
             }
         }
@@ -278,6 +282,8 @@ internal static partial class ProjectSetup
         {
             symbolPackage.RegisterUiSymbols(symbolUis.NewlyLoaded, symbolUis.PreExisting);
         }
+        
+        Log.Info($"Updated {packages.Length} symbol packages in {stopWatch.ElapsedMilliseconds}ms");
     }
 
     private static string GetKey(this SymbolPackage package) => package.RootNamespace;

@@ -1,84 +1,100 @@
 #nullable enable
 using System.Collections.Frozen;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Main;
 
 namespace T3.Editor.Compilation;
 
 internal static class Compiler
 {
+    internal static void StopProcess()
+    {
+        lock (_processLock)
+        {
+            if (_processCommander == null)
+                return;
+            
+            _processCommander.Close();
+            _processCommander = null;
+        }
+    }
+    
+    private static readonly string _workingDirectory = Path.Combine(T3.Core.UserData.UserData.TempFolder, "CompilationWorkingDirectory");
+
+    private static string GetCommandFor(in CompilationOptions compilationOptions)
+    {
+        var projectFile = compilationOptions.ProjectFile;
+
+        var buildModeName = compilationOptions.BuildMode == BuildMode.Debug ? "Debug" : "Release";
+        var targetDirectory = compilationOptions.TargetDirectory ?? projectFile.GetBuildTargetDirectory();
+        
+        var restoreArg = compilationOptions.RestoreNuGet ? "" : "--no-restore";
+        
+        // construct command
+        const string fmt = "dotnet build '{0}' --nologo --configuration {1} --verbosity {2} --output '{3}' {4} --no-self-contained";
+        return string.Format(fmt, projectFile.FullPath, buildModeName, VerbosityArgs[compilationOptions.Verbosity], targetDirectory, restoreArg);
+    }
+
+    private static bool Evaluate(ref string output, in CompilationOptions options)
+    {
+        var success = output.Contains("Build succeeded");
+        if (!success)
+        {
+            Log.Error(output);
+        }
+
+        return success;
+    }
+    
+    private readonly record struct CompilationOptions(CsProjectFile ProjectFile, BuildMode BuildMode, string? TargetDirectory, Verbosity Verbosity, bool RestoreNuGet);
+    
+    private static ProcessCommander<CompilationOptions>? _processCommander;
+    private static readonly object _processLock = new();
     
     public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, string? targetDirectory = null, Verbosity verbosity = Verbosity.Quiet)
     {
         Stopwatch stopwatch = new();
         stopwatch.Start();
-        var workingDirectory = projectFile.Directory;
-        
-        const string configurationArgFmt = "--configuration {0}";
-        string buildModeName = buildMode == BuildMode.Debug ? "Debug" : "Release";
-        var buildModeArg = string.Format(configurationArgFmt, buildModeName);
-        targetDirectory ??= projectFile.GetBuildTargetDirectory();
 
+        bool success;
 
-        const string command = "dotnet";
-        string arguments = $"build \"{projectFile.FullPath}\" --nologo {buildModeArg} --verbosity {VerbosityArgs[verbosity]} --output \"{targetDirectory}\"";
-        
-        var process = new Process
-                          {
-                              StartInfo = new ProcessStartInfo
-                                              {
-                                                  FileName = command,
-                                                  Arguments = arguments,
-                                                  WorkingDirectory = workingDirectory,
-                                                  UseShellExecute = false,
-                                                  RedirectStandardOutput = true
-                                              }
-                          };
-
-        var output = new List<string>(24);
-
-        process.OutputDataReceived += (sender, args) =>
-                                      {
-                                          if (args.Data == null)
-                                              return;
-                                          
-                                          Console.WriteLine(args.Data);
-                                          output.Add(args.Data);
-                                      };
-
-        process.Start();
-        process.BeginOutputReadLine();
-        process.WaitForExit();
-        
-        stopwatch.Stop();
-        
-        Log.Info($"{projectFile.Name}: Build process took {stopwatch.ElapsedMilliseconds} ms");
-
-        if (process.ExitCode != 0)
+        lock (_processLock)
         {
-            return false;
-        }
-        
-        var success = false;
-        foreach (var line in output)
-        {
-            if (line.Contains("Build succeeded"))
+            if (_processCommander == null)
             {
-                success = true;
-                break;
+                Directory.CreateDirectory(_workingDirectory);
+                _processCommander = new ProcessCommander<CompilationOptions>(_workingDirectory, "Compilation: ");
+                Log.Info("Compilation process started");
             }
+            
+            if (!_processCommander.TryBeginProcess(out var isRunning) && !isRunning)
+            {
+                Log.Error("Failed to start compilation process");
+                return false;
+            }
+            
+            Log.Info($"Compiling {projectFile.Name} in {buildMode} mode");
+
+            var compilationOptions = new CompilationOptions(projectFile, buildMode, targetDirectory, verbosity, false);
+            var command = new Command<CompilationOptions>(GetCommandFor, Evaluate);
+
+            success = _processCommander.TryCommand(command, compilationOptions, projectFile.Directory, true);
         }
-        
+
         if (!success)
         {
-            Log.Error($"{projectFile.Name}: Build failed based on output in {stopwatch.ElapsedMilliseconds}");
+            Log.Error($"{projectFile.Name}: Build failed in {stopwatch.ElapsedMilliseconds}");
             return false;
         }
         
         stopwatch.Stop();
+        Log.Info($"{projectFile.Name}: Build succeeded in {stopwatch.ElapsedMilliseconds}ms");
 
         return true;
     }
-    
 
     public enum BuildMode
     {

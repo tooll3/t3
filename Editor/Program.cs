@@ -1,4 +1,3 @@
-using ImGuiNET;
 using SharpDX.Direct3D11;
 using System.Diagnostics;
 using System.Globalization;
@@ -192,7 +191,16 @@ namespace T3.Editor
             }
             catch (Exception e)
             {
-                BlockingWindow.Instance.ShowMessageBox("Exception during shutdown: \n" + e);
+                BlockingWindow.Instance.ShowMessageBox("Exception during package shutdown: \n" + e);
+            }
+
+            try
+            {
+                Compiler.StopProcess();
+            }
+            catch (Exception e)
+            {
+                BlockingWindow.Instance.ShowMessageBox("Exception during compiler shutdown: \n" + e);
             }
 
             // Release all resources

@@ -29,7 +29,7 @@ namespace T3.Editor.Gui.OutputUi
                 return;
             }
 
-            if (!outputWindowGridSymbol.TryCreateParentlessInstance(out var gridInstance))
+            if (!outputWindowGridSymbol.TryGetParentlessInstance(out var gridInstance))
             {
                 var message = $"{nameof(CommandOutputUi)} Could not create grid instance";
                 Log.Error(message);

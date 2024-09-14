@@ -322,6 +322,14 @@ namespace T3.Core.Operator
         {
             parentInstance._childInstances.Add(childInstance.SymbolChildId, childInstance);
         }
+
+        public sealed override string ToString()
+        {
+            const string fmt = "{0} ({1})";
+            return _asString ??= string.Format(fmt, GetType().Name, SymbolChildId.ToString());
+        }
+
+        private string? _asString;
     }
 
     public class Instance<T> : Instance where T : Instance
