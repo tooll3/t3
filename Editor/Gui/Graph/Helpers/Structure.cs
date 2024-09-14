@@ -297,7 +297,7 @@ public class Structure
         {
             if (!instance.Children.TryGetValue(childPath[i], out instance))
             {
-                Log.Error("Did not find instance in path provided");
+                Log.Error("Did not find instance in path provided.\n" + Environment.StackTrace);
                 instance = null;
                 return false;
             }
