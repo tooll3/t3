@@ -28,7 +28,7 @@ public class ProcessCommander<T>(string workingDirectory, string logPrefix = "")
             return false;
         }
 
-        _process = CreatePowershellProcess("pwsh", _workingDirectory);
+        _process = CreatePowershellProcess("powershell", _workingDirectory);
         if (!_process.Start())
         {
             Close(_process, 0f);

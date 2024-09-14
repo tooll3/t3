@@ -24,6 +24,11 @@ internal static class Compiler
     
     private static readonly string _workingDirectory = Path.Combine(T3.Core.UserData.UserData.TempFolder, "CompilationWorkingDirectory");
 
+    static Compiler()
+    {
+        Directory.CreateDirectory(_workingDirectory);
+    }
+
     private static string GetCommandFor(in CompilationOptions compilationOptions)
     {
         var projectFile = compilationOptions.ProjectFile;
@@ -65,7 +70,6 @@ internal static class Compiler
         {
             if (_processCommander == null)
             {
-                Directory.CreateDirectory(_workingDirectory);
                 _processCommander = new ProcessCommander<CompilationOptions>(_workingDirectory, "Compilation: ");
                 Log.Info("Compilation process started");
             }
