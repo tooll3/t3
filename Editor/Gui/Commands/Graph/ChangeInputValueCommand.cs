@@ -62,7 +62,10 @@ namespace T3.Editor.Gui.Commands.Graph
                     //Log.Debug("  restore original keyframes...");
                     animator.SetTimeKeys(_childId, _inputId,_animationTime, _originalKeyframes);
                     
-                    var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
+                    var symbolChild = inputParentSymbol.Children.SingleOrDefault(child => child.Id == _childId);
+                    if (symbolChild == null)
+                        return;
+
                     InvalidateInstances(inputParentSymbol, symbolChild);
                 }
             }
