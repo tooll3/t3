@@ -4,6 +4,7 @@ using System.Linq;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
@@ -404,11 +405,7 @@ namespace T3.Editor.Gui.Graph
                         var mousePos = ImGui.GetMousePos();
                         var normalizedMousePos = (mousePos - widgetPos - Vector2.One * padding) / mapSize;
                         var mousePosInCanvas = bounds.Min + bounds.GetSize() * normalizedMousePos;
-
-                        // Debug visualization
-                        //var posInScreen = graphCanvas.TransformPosition(posInCanvas);
-                        //ImGui.GetForegroundDrawList().AddCircle(posInScreen, 10, Color.Green);
-
+                        
                         // Dragging
                         ImGui.InvisibleButton("##map", widgetSize);
                         if (ImGui.IsItemActive())
@@ -418,10 +415,10 @@ namespace T3.Editor.Gui.Graph
                             canvas.SetTargetScope(scope);
                         }
 
-                        if (ImGui.IsWindowHovered() && ImGui.GetIO().MouseWheel != 0)
+                        if (ImGui.IsItemHovered() && ImGui.GetIO().MouseWheel != 0)
                         {
-                            var centerInCanvas = (viewMaxInCanvas + viewMinInCanvas) / 2;
-                            canvas.ZoomWithMouseWheel(centerInCanvas);
+                            var posInScreen = canvas.TransformPositionFloat(mousePosInCanvas);
+                            canvas.ZoomWithMouseWheel(posInScreen);
                         }
                     }
                 }

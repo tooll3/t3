@@ -670,6 +670,9 @@ namespace T3.Editor.Gui.Graph
             var bounds = new ImRect(firstElement.PosOnCanvas, firstElement.PosOnCanvas + Vector2.One);
             foreach (var element in selectedOrAll)
             {
+                if(float.IsInfinity(element.PosOnCanvas.X) || float.IsInfinity(element.PosOnCanvas.Y))
+                    element.PosOnCanvas = Vector2.Zero;
+                
                 bounds.Add(element.PosOnCanvas);
                 bounds.Add(element.PosOnCanvas + element.Size);
             }
