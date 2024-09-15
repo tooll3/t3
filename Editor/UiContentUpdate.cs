@@ -22,7 +22,7 @@ internal static class UiContentUpdate
     public static void RenderCallback()
     {
         // An attempt to prevent System.ObjectDisposedException
-        if (Program.IsShuttingDown)
+        if (Program.IsShuttingDown || ProgramWindows.Main.Form.IsDisposed)
             return;
         
         var cursorPos = Cursor.Position;
