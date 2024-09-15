@@ -56,11 +56,17 @@ namespace T3.Editor.Gui.Windows.TimeLine
             // UpdateLocalTimeTranslation(compositionOp);
             // ImGui.TextUnformatted($"Scroll: {Scroll.X}   Scale: {Scale.X}");
 
+            // Very ugly hack to prevent scaling the output above window size
+            var keepScale = T3Ui.UiScaleFactor;
+            T3Ui.UiScaleFactor = 1;
+            
             ScrollToTimeAfterStopped();
 
             var modeChanged = UpdateMode();
             DrawCurveCanvas(_graphCanvas, drawAdditionalCanvasContent: DrawCanvasContent, _selectionFence, 0, T3Ui.EditingFlags.AllowHoveredChildWindows);
             Current = null;
+            
+            T3Ui.UiScaleFactor = keepScale;
             return;
 
             void DrawCanvasContent(InteractionState interactionState)

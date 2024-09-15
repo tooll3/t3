@@ -229,18 +229,7 @@ namespace T3.Editor.Gui.Interaction
             if (areaSize.Y == 0)
                 areaSize.Y = 1;
             
-            if (Scale.X == 0 || Scale.Y == 0)
-            {
-                Scale = Vector2.One;
-            }
-            
-            ScaleTarget = (WindowSize - new Vector2(paddingX, paddingY));
-            ScaleTarget.X = MathF.Max(ScaleTarget.X, 20);
-            ScaleTarget.Y = MathF.Max(ScaleTarget.Y, 20);
-            
-            //var newScale = new Vector2(WindowSize.X / areaSize.X, WindowSize.Y / areaSize.Y);
             var newScale = (WindowSize - new Vector2(paddingX, paddingY));
-            //ScaleTarget = (WindowSize - new Vector2(paddingX, paddingY));
             newScale.X = MathF.Max(newScale.X, 20);
             newScale.Y = MathF.Max(newScale.Y, 20);
             
@@ -253,10 +242,10 @@ namespace T3.Editor.Gui.Interaction
             ScrollTarget = new Vector2(area.Min.X - (paddingX / newScale.X) / 2,
                                        area.Max.Y - (paddingY / newScale.Y) / 2);
             
-            if (parent != null)
-            {
-                newScale /= parent.Scale;
-            }
+            // if (parent != null)
+            // {
+            //     newScale /= parent.Scale;
+            // }
             ScaleTarget = newScale;
             
             if(ScaleTarget.X == 0 || ScaleTarget.Y == 0 || float.IsNaN(ScaleTarget.X) || float.IsNaN(ScaleTarget.Y) || float.IsInfinity(ScaleTarget.X) || float.IsInfinity(ScaleTarget.Y))
@@ -413,6 +402,9 @@ namespace T3.Editor.Gui.Interaction
             zoomed = false;
             panned = false;
 
+            if (_draggedCanvas == this && !ImGui.IsMouseDragging(ImGuiMouseButton.Right))
+                _draggedCanvas = null;
+            
             var currentGraphWindow = GraphWindow.Focused;
             bool isCurrentGraphCanvas = currentGraphWindow?.GraphCanvas == this;
             bool isDraggingConnection = false;
