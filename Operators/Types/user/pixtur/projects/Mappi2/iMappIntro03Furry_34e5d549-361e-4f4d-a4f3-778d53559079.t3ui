@@ -710,25 +710,5 @@
         "Y": 8584.182
       }
     }
-  ],
-  "Annotations": [
-    {
-      "Id": "ebd8a7ba-c0f0-42c8-8aed-d6667df6c553",
-      "Title": "Growing stuff experiment",
-      "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
-        "W": 1.0
-      },
-      "Position": {
-        "X": "-Infinity",
-        "Y": "-Infinity"
-      },
-      "Size": {
-        "X": 858.0947,
-        "Y": 383.76587
-      }
-    }
   ]
 }
