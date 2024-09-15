@@ -819,6 +819,11 @@
           "Value": 0.24
         },
         {
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
           "Id": "6df5829e-a534-4620-bcd5-9324f94b4f54"/*Axis*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
