@@ -11,12 +11,19 @@
       }
     },
     {
+      "InputId": "2188244e-321b-4041-9729-2b6759cc5414"/*Amount*/,
+      "Position": {
+        "X": -876.99396,
+        "Y": 2141.9124
+      },
+      "GroupTitle": "Apply Changed"
+    },
+    {
       "InputId": "1055ad89-2aa1-493f-b991-ae55b7fbf2e4"/*Translate*/,
       "Position": {
         "X": -914.2013,
         "Y": 1367.2081
-      },
-      "GroupTitle": "Applied changes"
+      }
     },
     {
       "InputId": "a867c29a-3cca-49c0-92ae-a7d094b5213b"/*Dither*/,

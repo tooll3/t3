@@ -379,7 +379,7 @@
       "Outputs": []
     },
     {
-      "Id": "14d9f684-d778-4271-9748-0e47782b649b"/*UseRenderTarget*/,
+      "Id": "14d9f684-d778-4271-9748-0e47782b649b"/*UseTextureReference*/,
       "SymbolId": "fd5ac393-02a4-43ae-8cdf-64a947abbafa",
       "InputValues": [],
       "Outputs": []

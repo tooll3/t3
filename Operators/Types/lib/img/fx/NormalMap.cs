@@ -27,6 +27,9 @@ namespace T3.Operators.Types.Id_01458940_287f_4d31_9906_998efa9a2641
 
         [Input(Guid = "cf7e6f41-cc6e-46dd-8779-1273326a5a53", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new();
+
+        [Input(Guid = "4d25b1db-daeb-4b5e-b2bc-8681f332b092")]
+        public readonly InputSlot<SharpDX.DXGI.Format> OutputFormat = new InputSlot<SharpDX.DXGI.Format>();
         
         
         private enum Modes

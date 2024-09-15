@@ -110,7 +110,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "b47840dc-b5f2-42cc-b69e-5564f1ad74bd"/*UseRenderTarget*/,
+      "ChildId": "b47840dc-b5f2-42cc-b69e-5564f1ad74bd"/*UseTextureReference*/,
       "Position": {
         "X": -255.1246,
         "Y": -371.90958
