@@ -114,26 +114,29 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var layerHovered = ImGui.IsWindowHovered() && layerArea.Contains(mousePos);
 
             var isCurrentSelected = TimeLineCanvas.NodeSelection.GetSelectedInstanceWithoutComposition()?.SymbolChildId == parameter.Input.Parent.SymbolChildId;
-            if(TimeLineCanvas.HoveredIds.Contains(parameter.Input.Parent.SymbolChildId) || isCurrentSelected || layerHovered )
+            if (TimeLineCanvas.HoveredIds.Contains(parameter.Input.Parent.SymbolChildId) || isCurrentSelected || layerHovered)
             {
                 drawList.AddRectFilled(new Vector2(min.X, min.Y),
-                                        new Vector2(max.X, max.Y), UiColors.ForegroundFull.Fade(0.04f));
-            
+                                       new Vector2(max.X, max.Y), UiColors.ForegroundFull.Fade(0.04f));
 
-
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.TextUnformatted(parameter.Input.Input.Name);
-                TimeLineCanvas.HoveredIds.Add(parameter.Input.Parent.SymbolChildId);
-
-                foreach (var curve in parameter.Curves)
+                if (layerHovered)
                 {
-                    var v = curve.GetSampledValue(mouseTime);
-                    ImGui.TextUnformatted($"{v:0.00}");
+                    ImGui.BeginTooltip();
+
+                    ImGui.PushFont(Fonts.FontSmall);
+                    ImGui.TextUnformatted(parameter.Input.Input.Name);
+                    TimeLineCanvas.HoveredIds.Add(parameter.Input.Parent.SymbolChildId);
+
+                    foreach (var curve in parameter.Curves)
+                    {
+                        var v = curve.GetSampledValue(mouseTime);
+                        ImGui.TextUnformatted($"{v:0.00}");
+                    }
+
+                    ImGui.PopFont();
+
+                    ImGui.EndTooltip();
                 }
-
-                ImGui.PopFont();
-
-                ImGui.EndTooltip();
             }
 
             // Draw label and pinning
