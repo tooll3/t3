@@ -39,7 +39,7 @@ namespace T3.Operators.Types.Id_90b2c6d2_e9a6_4910_b42d_94202f07be27
                 var f = mode switch
                             {
                                 AccumulationModes.PerFrame   => 1,
-                                AccumulationModes.PerSeconds => increment * dt,
+                                AccumulationModes.PerSeconds => dt,
                                 _                            => 1
                             };
                 
