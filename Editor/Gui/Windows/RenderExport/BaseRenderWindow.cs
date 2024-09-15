@@ -50,11 +50,11 @@ public abstract class BaseRenderWindow : Window
 
     protected static void DrawTimeSetup()
     {
+        FormInputs.SetIndentToParameters();
         FormInputs.AddSegmentedButtonWithLabel(ref _timeRange, "Render Range");
         ApplyTimeRange();
        
         FormInputs.AddVerticalSpace();
-        FormInputs.SetIndentToParameters();
         
         // Convert times if reference time selection changed
         var oldTimeReference = _timeReference;

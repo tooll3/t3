@@ -18,10 +18,9 @@ namespace T3.Editor.Gui.Windows;
 
 public class OperatorHelp
 {
-    public bool DrawHelpIcon(SymbolUi symbolUi, out bool isEnabled)
+    public bool DrawHelpIcon(SymbolUi symbolUi, ref bool isEnabled)
     {
         var changed = false;
-        
         
         ImGui.SameLine();
         var w = ImGui.GetFrameHeight();
@@ -32,7 +31,7 @@ public class OperatorHelp
         if (CustomComponents.IconButton(
                                         icon,
                                         new Vector2(w, w),
-                                        _isDocumentationActive
+                                        isEnabled
                                             ? CustomComponents.ButtonStates.Activated
                                             : CustomComponents.ButtonStates.Dimmed
                                        ))
@@ -44,14 +43,13 @@ public class OperatorHelp
             }
             else
             {
-                _isDocumentationActive = !_isDocumentationActive;
-                isEnabled = _isDocumentationActive;
+                isEnabled = !isEnabled;
             }
         }
 
         ImGui.PopStyleColor();
 
-        if (ImGui.IsItemHovered() && !_isDocumentationActive)
+        if (ImGui.IsItemHovered() && !isEnabled)
         {
             _timeSinceTooltipHovered += ImGui.GetIO().DeltaTime;
 
@@ -68,19 +66,20 @@ public class OperatorHelp
         {
             _timeSinceTooltipHovered = 0;
         }
-        isEnabled = _isDocumentationActive;
         return changed;
     }
 
-    public void DrawHelpSummary(SymbolUi symbolUi)
+    public static bool DrawHelpSummary(SymbolUi symbolUi)
     {
         if (string.IsNullOrEmpty(symbolUi.Description))
-            return;
+            return false;
 
         using var reader = new StringReader(symbolUi.Description);
         var firstLine = reader.ReadLine();
         if (string.IsNullOrEmpty(firstLine))
-            return;
+            return false;
+
+        var helpRequested = false;
 
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
         ImGui.TextWrapped(firstLine);
@@ -97,18 +96,22 @@ public class OperatorHelp
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Fade(0.5f).Rgba);
         FormInputs.AddVerticalSpace(5);
         
-        if (firstLine != symbolUi.Description)
+        var anyParameterHasDescription = symbolUi.InputUis
+                                                 .Values
+                                                 .Any(inputUi => !string.IsNullOrEmpty(inputUi.Description));
+
+        if (firstLine != symbolUi.Description || anyParameterHasDescription)
         {
             ImGui.TextUnformatted("Read more...");
             if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
-                _isDocumentationActive = true;
+                helpRequested = true;
             }
         }
         
         FormInputs.AddVerticalSpace();
         ImGui.PopStyleColor();
-
+        return helpRequested;
     }
 
     public static void DrawHelp(SymbolUi symbolUi)
@@ -253,8 +256,6 @@ public class OperatorHelp
         var groupLabel = "Also see:";
         if (ExampleSymbolLinking.ExampleSymbols.TryGetValue(symbolUi.Symbol.Id, out var examplesOpIds))
         {
-            DrawGroupLabel(groupLabel);
-
             foreach (var guid in examplesOpIds)
             {
                 const string label = "Example";
@@ -313,7 +314,7 @@ public class OperatorHelp
     private static readonly Regex _itemRegex = new(@"\[([A-Za-z\d_]+)\]", RegexOptions.Compiled);
 
     private static readonly List<IInputUi> _parametersWithDescription = new(10);
-    public bool IsActive => _isDocumentationActive;
-    private bool _isDocumentationActive = false;
+    // public bool IsActive => _isDocumentationActive;
+    // private bool _isDocumentationActive = false;
     private static float _timeSinceTooltipHovered = 0;
 }
