@@ -29,7 +29,7 @@ public class PathTreeDrawer
             return false;
 
         var popLevelsCount =  _openPath.Count - matchPathLevelCount;
-        for (var index = 0; index < popLevelsCount; index++)
+        for (var index = 0; index < popLevelsCount && _openPath.Count > 0; index++)
         {
             ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 10);
             ImGui.TreePop();

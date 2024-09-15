@@ -47,7 +47,22 @@ public class MsFormsEditor : MsForms, IEditorSystemUiService
         }
 
         public string FileName { get => _dialog.FileName; set => _dialog.FileName = value; }
-        public string Filter { get => _dialog.Filter; set => _dialog.Filter = value; }
+        public string Filter
+        {
+            get => _dialog.Filter;
+            set
+            {
+                try
+                {
+                    _dialog.Filter = value;
+                }
+                catch (ArgumentException e)
+                {
+                    // TODO: should log this
+                }
+            }
+        }
+
         public string InitialDirectory { get => _dialog.InitialDirectory; set => _dialog.InitialDirectory = value; }
         public bool Multiselect { get => _dialog.Multiselect; set => _dialog.Multiselect = value; }
         public bool RestoreDirectory { get => _dialog.RestoreDirectory; set => _dialog.RestoreDirectory = value; }

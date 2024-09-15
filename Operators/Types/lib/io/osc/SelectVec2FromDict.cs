@@ -71,6 +71,9 @@ namespace T3.Operators.Types.Id_96b1e8f3_0b42_4a01_b82b_44ccbd857400
 
         private string FindKeyForY( string xKey)
         {
+            if (_dict == null)
+                return null;
+            
             var justFoundX = false;
             foreach (var key in _dict.Keys.OrderBy(x => x))
             {
