@@ -384,7 +384,19 @@ namespace T3.Core.Utils
         {
             return new Vector3(vec.X / vec.W, vec.Y / vec.W, vec.Z / vec.W);
         }
-
+        
+        /// <summary>
+        /// Return true if a boolean changed
+        /// </summary>
+        public static bool WasChanged(bool newState, ref bool current)
+        {
+            if (newState == current)
+                return false;
+            
+            current = newState;
+            return true;
+        }
+        
         /// <summary>
         /// Return true if a boolean changed from false to true
         /// </summary>

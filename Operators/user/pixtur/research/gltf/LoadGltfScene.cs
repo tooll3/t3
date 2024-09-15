@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using SharpDX.DXGI;
@@ -59,7 +60,7 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         _offsetMetallic = OffsetMetallic.GetValue(context);
 
         var meshChildIndex = MeshChildIndex.GetValue(context);
-
+        
         var sceneSetup = Setup.GetValue(context);
         if (sceneSetup == null || Setup.Input.IsDefault)
         {
@@ -70,6 +71,8 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         var filePath = Path.GetValue(context);
 
         _updateTriggered = TriggerUpdate.GetValue(context);
+        _updateTriggered |= MathUtils.WasChanged(CombineBuffer.GetValue(context), ref _combineBuffer);
+        
         TriggerUpdate.SetTypedInputValue(false);
 
         if (LoadFileIfRequired(filePath, out var newSetup))
@@ -133,7 +136,9 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         try
         {
             var model = ModelRoot.Load(fullPath);
-            var rootNode = ConvertToNodeStructure(model.DefaultScene);
+            var rootNode = _combineBuffer 
+                               ? ConvertToNodeStructureIntoChunks(model.DefaultScene)
+                               : ConvertToNodeStructure(model.DefaultScene);
 
             sceneSetup.RootNodes.Clear();
             sceneSetup.RootNodes.Add(rootNode);
@@ -154,12 +159,259 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                            {
                                Name = modelDefaultScene.Name
                            };
-
+        
         ParseChildren(modelDefaultScene.VisualChildren, rootNode);
-
         return rootNode;
     }
 
+    
+    // Todo adjust shader implementation new stride
+    [StructLayout(LayoutKind.Explicit, Size = Stride)]
+    public struct MeshChunkDef
+    {
+        [FieldOffset(0)]
+        public int StartFaceIndex;
+        
+        [FieldOffset(4)]
+        public int FaceCount;
+        
+        [FieldOffset(8)]
+        public int StartVertexIndex;
+        
+        [FieldOffset(12)]
+        public int VertexCount;
+        
+        public const int Stride = 16;
+    }    
+    
+
+    /** Flatten all meshes into a single mesh buffer seperated into chunks */
+    private SceneSetup.SceneNode ConvertToNodeStructureIntoChunks(Scene modelDefaultScene)
+    {
+        var rootNode = new SceneSetup.SceneNode()
+                           {
+                               Name = modelDefaultScene.Name
+                           };
+        
+        // Count all vertices and faces
+        var totalCounts = new MeshDataCounts();
+        
+        HashSet<MeshPrimitive> collectedMeshPrimitives = new ();
+        _chunkDefIndicesForPrimitives.Clear();
+        
+        ComputeTotalMeshCounts(modelDefaultScene.VisualChildren, ref totalCounts, ref collectedMeshPrimitives);
+
+        var meshDataSet = new MeshDataSet()
+                              {
+                                  VertexBufferData = new PbrVertex[totalCounts.VertexCount],
+                                  IndexBufferData = new Int3[totalCounts.FaceCount],
+                                  ChunksDefs = new List<MeshChunkDef>(),
+                              };
+        
+        var meshBufferReference = new MeshBuffers(); // empty references that will be filled later
+        
+        // Fill the buffers 
+        var counters = new MeshDataCounts();
+        ParseChildrenIntoChunks(modelDefaultScene.VisualChildren, rootNode, ref counters, ref meshDataSet, ref meshBufferReference);
+
+        // Create actual mesh buffers
+        var faceCount = meshDataSet.IndexBufferData.Length;
+        var indexBufferData = meshDataSet.IndexBufferData;
+        
+        var verticesCount = meshDataSet.VertexBufferData.Length;
+        var vertexBufferData = meshDataSet.VertexBufferData;
+        
+        var chunkCount = meshDataSet.ChunksDefs.Count;
+        var chunkBufferData = meshDataSet.ChunksDefs.ToArray();
+        
+        ResourceManager.SetupStructuredBuffer(indexBufferData, 3 * 4 * faceCount, 3 * 4, ref meshBufferReference.IndicesBuffer.Buffer);
+        ResourceManager.CreateStructuredBufferSrv(meshBufferReference.IndicesBuffer.Buffer, ref meshBufferReference.IndicesBuffer.Srv);
+        ResourceManager.CreateStructuredBufferUav(meshBufferReference.IndicesBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
+                                                  ref meshBufferReference.IndicesBuffer.Uav);
+
+        ResourceManager.SetupStructuredBuffer(vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
+                                              ref meshBufferReference.VertexBuffer.Buffer);
+        ResourceManager.CreateStructuredBufferSrv(meshBufferReference.VertexBuffer.Buffer, ref meshBufferReference.VertexBuffer.Srv);
+        ResourceManager.CreateStructuredBufferUav(meshBufferReference.VertexBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
+                                                  ref meshBufferReference.VertexBuffer.Uav);
+        
+        
+        ResourceManager.SetupStructuredBuffer(chunkBufferData, MeshChunkDef.Stride * chunkCount, MeshChunkDef.Stride, ref meshBufferReference.ChunkDefsBuffer.Buffer);
+        ResourceManager.CreateStructuredBufferSrv(meshBufferReference.ChunkDefsBuffer.Buffer, ref meshBufferReference.ChunkDefsBuffer.Srv);
+        ResourceManager.CreateStructuredBufferUav(meshBufferReference.ChunkDefsBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
+                                                  ref meshBufferReference.ChunkDefsBuffer.Uav);
+        
+        
+        // TODO: Create instance points -> See [GetPointsFromSceneDef]
+        // TODO: Separate this into a separate operator
+        return rootNode;
+    }
+    
+    
+    private class MeshDataSet
+    {
+        public PbrVertex[] VertexBufferData;
+        public Int3[] IndexBufferData;
+        public List<MeshChunkDef> ChunksDefs;
+    }
+
+    
+    private struct MeshDataCounts
+    {
+        public int ChunkCount;
+        public int VertexCount;
+        public int FaceCount;
+    }
+    
+    private void ComputeTotalMeshCounts(IEnumerable<Node> visualChildren, ref MeshDataCounts totalCounts, ref HashSet<MeshPrimitive> collectedMeshPrimitives)
+    {
+        foreach (var child in visualChildren)
+        {
+            if (child == null)
+                continue;
+            
+            
+            if (child.Mesh != null)
+            {
+                foreach (var meshPrimitive in child.Mesh.Primitives)
+                {
+                    if(!collectedMeshPrimitives.Add(meshPrimitive))
+                        continue;
+                    
+                    if(meshPrimitive == null)
+                        continue;
+
+                    if (!meshPrimitive.VertexAccessors.TryGetValue("POSITION", out var positionAccessor))
+                        continue;
+
+                    var triangleCount= meshPrimitive.GetTriangleIndices().Count();
+                    var verticesCount = positionAccessor.Count;
+                    
+                    if(triangleCount == 0 || verticesCount == 0)
+                        continue;
+                    
+                    totalCounts.ChunkCount++;
+                    totalCounts.VertexCount += verticesCount;
+                    totalCounts.FaceCount += triangleCount;
+                }
+            }
+
+            ComputeTotalMeshCounts(child.VisualChildren, ref totalCounts, ref collectedMeshPrimitives);
+        }
+    }
+    
+    private static string MatrixToString(Matrix4x4 m)
+    {
+        return $"{m.M11:0.00}  {m.M12:0.00}  {m.M13:0.00}  {m.M13:0.00}  |  " +
+               $"{m.M21:0.00}  {m.M22:0.00}  {m.M23:0.00}  {m.M23:0.00}  |  " +
+               $"{m.M31:0.00}  {m.M32:0.00}  {m.M33:0.00}  {m.M33:0.00}  |  " +
+               $"{m.M41:0.00}  {m.M42:0.00}  {m.M43:0.00}  {m.M43:0.00}  |  ";
+    }
+    
+    /**
+     * TODO: This is work in progress!
+     * This will only add the mesh data to the meshDataSet, but not generate buffers.
+     */
+    private void ParseChildrenIntoChunks(IEnumerable<Node> visualChildren, SceneSetup.SceneNode parentNode, ref MeshDataCounts counters,
+                                         ref MeshDataSet meshData, ref MeshBuffers meshBufferReference)
+    {
+        foreach (var child in visualChildren)
+        {
+            if (child == null)
+                continue;
+            
+            var t = child.LocalTransform.GetDecomposed();
+            
+            var transform = new SceneSetup.Transform
+                                {
+                                    Translation = t.Translation,
+                                    Scale = t.Scale,
+                                    Rotation = t.Rotation,
+                                };
+            
+            var structureNode = new SceneSetup.SceneNode
+                                    {
+                                        Name = child.Name,
+                                        MeshName = child.Mesh?.Name,
+                                        // MeshBuffers = meshBuffers,
+                                        Transform = transform,
+                                        CombinedTransform = child.WorldMatrix,
+                                    };
+
+            parentNode.ChildNodes.Add(structureNode);
+
+            var useStructureNodeForMesh = true;
+
+            if (child.Mesh != null)
+            {
+                foreach (var meshPrimitive in child.Mesh.Primitives)
+                {
+                    if(meshPrimitive == null)
+                        continue;
+                    
+                    if(!_chunkDefIndicesForPrimitives.TryGetValue(meshPrimitive, out var chunkDefIndex))
+                    {
+                        
+                        if (!GetMeshDataFromPrimitive(meshPrimitive, out var vertexBufferData, out var indexBufferData, out var message))
+                            continue;
+                        
+                        
+                        Array.Copy(vertexBufferData, 0, meshData.VertexBufferData, counters.VertexCount, vertexBufferData.Length);
+                        
+                        for(var faceIndex=0; faceIndex<indexBufferData.Length; faceIndex++)
+                        {
+                            
+                            meshData.IndexBufferData[faceIndex + counters.FaceCount].X = indexBufferData[faceIndex].X + counters.VertexCount;
+                            meshData.IndexBufferData[faceIndex + counters.FaceCount].Y = indexBufferData[faceIndex].Y + counters.VertexCount;
+                            meshData.IndexBufferData[faceIndex + counters.FaceCount].Z = indexBufferData[faceIndex].Z + counters.VertexCount;
+                        }
+                        
+                        var currentChunkIndex = meshData.ChunksDefs.Count;
+                        meshData.ChunksDefs.Add(new MeshChunkDef()
+                                                {
+                                                    StartFaceIndex = counters.FaceCount,
+                                                    FaceCount = indexBufferData.Length,
+                                                    StartVertexIndex = counters.VertexCount,
+                                                    VertexCount = vertexBufferData.Length,
+                                                });
+                        _chunkDefIndicesForPrimitives[meshPrimitive] = currentChunkIndex;
+                        counters.VertexCount += vertexBufferData.Length;
+                        counters.FaceCount += indexBufferData.Length;
+                        
+                        
+                        chunkDefIndex = currentChunkIndex;
+                    }
+                    
+                    var materialDef = GetOrCreateMaterialDefinition(meshPrimitive.Material);
+
+                    if (useStructureNodeForMesh)
+                    {
+                        structureNode.MeshBuffers = meshBufferReference;
+                        structureNode.MeshChunkIndex = chunkDefIndex;
+                        structureNode.Material = materialDef;
+                        useStructureNodeForMesh = false;
+                        continue;
+                    }
+                    
+                    var meshNode = new SceneSetup.SceneNode()
+                                       {
+                                           Name = child.Name,
+                                           MeshName = child.Mesh?.Name,
+                                           MeshBuffers = meshBufferReference,
+                                           MeshChunkIndex = chunkDefIndex,
+                                           Transform = transform,
+                                           CombinedTransform = child.WorldMatrix,
+                                           Material = materialDef,
+                                       };
+                    parentNode.ChildNodes.Add(meshNode);
+                }
+            }
+
+            ParseChildrenIntoChunks(child.VisualChildren, structureNode, ref counters, ref meshData, ref meshBufferReference);
+        }
+    }
+    
+    
     private void ParseChildren(IEnumerable<Node> visualChildren, SceneSetup.SceneNode parentNode)
     {
         foreach (var child in visualChildren)
@@ -194,19 +446,26 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                 var meshIndex = 0;
                 foreach (var meshPrimitive in child.Mesh.Primitives)
                 {
-                    meshIndex++;
-                    if (!TryGenerateMeshBuffersFromGltfChild(meshPrimitive, out var meshBuffers, out var errorMessage))
-                    {
-                        ShowError(errorMessage);
-                        meshBuffers = null;
-                    }
-
-                    if (meshBuffers == null)
+                    if(meshPrimitive == null)
                         continue;
 
-                    Log.Debug($" mesh:{child.Name} {child?.Mesh?.Name}  {meshIndex}");
-                    _meshBuffersForPrimitives[meshPrimitive] = meshBuffers;
+                    if (!_meshBuffersForPrimitives.TryGetValue(meshPrimitive, out var meshBuffers))
+                    {
+                        meshIndex++;
+                        if (!TryGenerateMeshBuffersFromGltfChild(meshPrimitive, out meshBuffers, out var errorMessage))
+                        {
+                            ShowError(errorMessage);
+                            meshBuffers = null;
+                        }
 
+                        if (meshBuffers == null)
+                            continue;
+
+                        _meshBuffersForPrimitives[meshPrimitive] = meshBuffers;
+                    }
+                    
+                    Log.Debug($" mesh:{child.Name} {child.Mesh?.Name}  {meshIndex}");
+                    
                     SceneSetup.SceneMaterial materialDef = GetOrCreateMaterialDefinition(meshPrimitive.Material);
 
                     //Log.Debug("Material: " + materialDef);
@@ -589,156 +848,22 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             return false;
         }
     }
-
+    
+    
     private static bool TryGenerateMeshBuffersFromGltfChild(MeshPrimitive meshPrimitive, out MeshBuffers newMesh, out string message)
     {
         // TODO: return cached mesh to reuse buffer
         newMesh = new MeshBuffers();
         message = null;
-
-        var vertexBufferData = Array.Empty<PbrVertex>();
-        var indexBufferData = Array.Empty<Int3>();
-
+        
+        if (!GetMeshDataFromPrimitive(meshPrimitive, out var vertexBufferData, out var indexBufferData, out message))
+            return false;
+        
         try
         {
-            // Convert vertices
-            var verticesCount = 0;
-            {
-                // TODO: Iterate over all primitives
-                var vertexAccessors = meshPrimitive.VertexAccessors;
-
-                // Collect positions
-                if (!vertexAccessors.TryGetValue("POSITION", out var positionAccessor))
-                {
-                    message = "Can't find POSITION attribute in gltf mesh";
-                    return false;
-                }
-
-                verticesCount = positionAccessor.Count;
-
-                if (vertexBufferData.Length != verticesCount)
-                    vertexBufferData = new PbrVertex[verticesCount];
-
-                var positions = positionAccessor.AsVector3Array();
-
-                // Collect normals
-                System.Numerics.Vector3[] normals = null;
-                if (vertexAccessors.TryGetValue("NORMAL", out var normalAccess))
-                {
-                    normals = normalAccess.AsVector3Array().ToArray();
-                }
-
-                // Collect texture coords
-                System.Numerics.Vector2[] texCoords = null;
-                if (vertexAccessors.TryGetValue("TEXCOORD_0", out var texAccess))
-                {
-                    texCoords = texAccess.AsVector2Array().ToArray();
-                }
-
-                // Write vertex buffer
-                for (var vertexIndex = 0; vertexIndex < positions.Count; vertexIndex++)
-                {
-                    var position = positions[vertexIndex];
-                    vertexBufferData[vertexIndex] = new PbrVertex
-                                                        {
-                                                            Position = new System.Numerics.Vector3(position.X, position.Y, position.Z),
-                                                            Normal = normals == null ? VectorT3.Up : normals[vertexIndex],
-                                                            Tangent = VectorT3.Right,
-                                                            Bitangent = VectorT3.ForwardLH,
-                                                            Texcoord = texCoords == null
-                                                                           ? Vector2.Zero
-                                                                           : new System.Numerics.Vector2(texCoords[vertexIndex].X,
-                                                                                         1 - texCoords[vertexIndex].Y),
-                                                            Selection = 1,
-                                                        };
-                }
-            }
-
-            // Convert indices
-            int faceCount;
-            int updatedTangentCount = 0;
-            {
-                var indices = meshPrimitive.GetTriangleIndices().ToList();
-                faceCount = indices.Count;
-                if (indexBufferData.Length != faceCount)
-                    indexBufferData = new Int3[faceCount];
-
-                var faceIndex = 0;
-                foreach (var (a, b, c) in indices)
-                {
-                    indexBufferData[faceIndex] = new Int3(a, b, c);
-                    faceIndex++;
-
-                    // Calc TBN space
-                    var p1 = vertexBufferData[a].Position;
-                    var p2 = vertexBufferData[b].Position;
-                    var p3 = vertexBufferData[c].Position;
-
-                    // check for degenerated triangle
-                    if (p1 == p2 || p1 == p3 || p2 == p3) continue;
-
-                    var uv1 = vertexBufferData[a].Texcoord;
-                    var uv2 = vertexBufferData[b].Texcoord;
-                    var uv3 = vertexBufferData[c].Texcoord;
-
-                    // check for degenerated triangle
-                    if (uv1 == uv2 || uv1 == uv3 || uv2 == uv3) continue;
-
-                    var n1 = vertexBufferData[a].Normal;
-                    var n2 = vertexBufferData[b].Normal;
-                    var n3 = vertexBufferData[c].Normal;
-
-                    // Taken from https://github.com/vpenades/SharpGLTF/blob/master/examples/SharpGLTF.Runtime.MonoGame/NormalTangentFactories.cs
-                    var s = p2 - p1;
-                    var t = p3 - p1;
-
-                    var sUv = uv2 - uv1;
-                    var tUv = uv3 - uv1;
-                    //var tUv =  uv1 - uv3;
-                    //tUv.Y = 1 - tUv.Y; 
-
-                    var sx = sUv.X;
-                    var tx = tUv.X;
-                    var sy = sUv.Y;
-                    var ty = tUv.Y;
-
-                    var r = 1.0F / ((sx * ty) - (tx * sy));
-
-                    if (!r._IsFinite()) continue;
-
-                    var sDir = new System.Numerics.Vector3((ty * s.X) - (sy * t.X), (ty * s.Y) - (sy * t.Y), (ty * s.Z) - (sy * t.Z)) * r;
-                    var tDir = new System.Numerics.Vector3((sx * t.X) - (tx * s.X), (sx * t.Y) - (tx * s.Y), (sx * t.Z) - (tx * s.Z)) * r;
-
-                    if (!sDir._IsFinite()) continue;
-                    if (!tDir._IsFinite()) continue;
-
-                    // Ill-fated attempt with brute force 
-                    // sDir =  Vector3.Cross(n1, Vector3.UnitY);
-                    // tDir =  Vector3.Cross(n1, sDir);
-
-                    // Todo: Sadly this fill add significant artifacts to complex meshes
-
-                    vertexBufferData[a].Tangent = Vector3.Normalize(sDir);
-                    vertexBufferData[a].Bitangent = Vector3.Normalize(tDir);
-
-                    updatedTangentCount++;
-                }
-
-                if (faceCount == 0)
-                {
-                    message = "No faces found";
-                    return false;
-                }
-            }
-
-            if (verticesCount == 0)
-            {
-                message = "No vertices found";
-                return false;
-            }
-
-            // Log.Debug($"  loaded gltf-child:  {verticesCount} vertices  {faceCount} faces  updated {updatedTangentCount} tangents", this);
-
+            var faceCount = indexBufferData.Length;
+            var verticesCount = vertexBufferData.Length;
+            
             const int stride = 3 * 4;
             ResourceManager.SetupStructuredBuffer(indexBufferData, stride * faceCount, stride, ref newMesh.IndicesBuffer.Buffer);
             ResourceManager.CreateStructuredBufferSrv(newMesh.IndicesBuffer.Buffer, ref newMesh.IndicesBuffer.Srv);
@@ -756,14 +881,155 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             message = $"Failed loading gltf: {e.Message}";
             return false;
         }
+        return true;
+    }
 
+    private static bool GetMeshDataFromPrimitive(MeshPrimitive meshPrimitive, out PbrVertex[] vertexBufferData, out Int3[] indexBufferData, out string message)
+    {
+        vertexBufferData = Array.Empty<PbrVertex>();
+        indexBufferData = Array.Empty<Int3>();
+            
+        // Convert vertices
+        {
+            // TODO: Iterate over all primitives
+            var vertexAccessors = meshPrimitive.VertexAccessors;
+
+            // Collect positions
+            if (!vertexAccessors.TryGetValue("POSITION", out var positionAccessor))
+            {
+                message = "Can't find POSITION attribute in gltf mesh";
+                return false;
+            }
+
+            var verticesCount = positionAccessor.Count;
+
+            if (vertexBufferData.Length != verticesCount)
+                vertexBufferData = new PbrVertex[verticesCount];
+
+            var positions = positionAccessor.AsVector3Array();
+
+            // Collect normals
+            Vector3[] normals = null;
+            if (vertexAccessors.TryGetValue("NORMAL", out var normalAccess))
+            {
+                normals = normalAccess.AsVector3Array().ToArray();
+            }
+
+            // Collect texture coords
+            Vector2[] texCoords = null;
+            if (vertexAccessors.TryGetValue("TEXCOORD_0", out var texAccess))
+            {
+                texCoords = texAccess.AsVector2Array().ToArray();
+            }
+
+            // Write vertex buffer
+            for (var vertexIndex = 0; vertexIndex < positions.Count; vertexIndex++)
+            {
+                var position = positions[vertexIndex];
+                vertexBufferData[vertexIndex] = new PbrVertex
+                                                    {
+                                                        Position = new Vector3(position.X, position.Y, position.Z),
+                                                        Normal = normals == null ? VectorT3.Up : normals[vertexIndex],
+                                                        Tangent = VectorT3.Right,
+                                                        Bitangent = VectorT3.ForwardLH,
+                                                        Texcoord = texCoords == null
+                                                                       ? Vector2.Zero
+                                                                       : new Vector2(texCoords[vertexIndex].X,
+                                                                                     1 - texCoords[vertexIndex].Y),
+                                                        Selection = 1,
+                                                    };
+            }
+            
+            if (verticesCount == 0)
+            {
+                message = "No vertices found";
+                return false;
+            }
+        }
+
+        // Convert indices
+        {
+            var indices = meshPrimitive.GetTriangleIndices().ToList();
+            var faceCount = indices.Count;
+            if (indexBufferData.Length != faceCount)
+                indexBufferData = new Int3[faceCount];
+
+            var faceIndex = 0;
+            foreach (var (a, b, c) in indices)
+            {
+                indexBufferData[faceIndex] = new Int3(a, b, c);
+                faceIndex++;
+
+                // Calc TBN space
+                var p1 = vertexBufferData[a].Position;
+                var p2 = vertexBufferData[b].Position;
+                var p3 = vertexBufferData[c].Position;
+
+                // check for degenerated triangle
+                if (p1 == p2 || p1 == p3 || p2 == p3) continue;
+
+                var uv1 = vertexBufferData[a].Texcoord;
+                var uv2 = vertexBufferData[b].Texcoord;
+                var uv3 = vertexBufferData[c].Texcoord;
+
+                // check for degenerated triangle
+                if (uv1 == uv2 || uv1 == uv3 || uv2 == uv3) continue;
+
+                var n1 = vertexBufferData[a].Normal;
+                var n2 = vertexBufferData[b].Normal;
+                var n3 = vertexBufferData[c].Normal;
+
+                // Taken from https://github.com/vpenades/SharpGLTF/blob/master/examples/SharpGLTF.Runtime.MonoGame/NormalTangentFactories.cs
+                var s = p2 - p1;
+                var t = p3 - p1;
+
+                var sUv = uv2 - uv1;
+                var tUv = uv3 - uv1;
+                //var tUv =  uv1 - uv3;
+                //tUv.Y = 1 - tUv.Y; 
+
+                var sx = sUv.X;
+                var tx = tUv.X;
+                var sy = sUv.Y;
+                var ty = tUv.Y;
+
+                var r = 1.0F / ((sx * ty) - (tx * sy));
+
+                if (!r._IsFinite()) continue;
+
+                var sDir = new Vector3((ty * s.X) - (sy * t.X), (ty * s.Y) - (sy * t.Y), (ty * s.Z) - (sy * t.Z)) * r;
+                var tDir = new Vector3((sx * t.X) - (tx * s.X), (sx * t.Y) - (tx * s.Y), (sx * t.Z) - (tx * s.Z)) * r;
+
+                if (!sDir._IsFinite()) continue;
+                if (!tDir._IsFinite()) continue;
+
+                // Ill-fated attempt with brute force 
+                // sDir =  Vector3.Cross(n1, Vector3.UnitY);
+                // tDir =  Vector3.Cross(n1, sDir);
+
+                // Todo: Sadly this fill add significant artifacts to complex meshes
+
+                vertexBufferData[a].Tangent = Vector3.Normalize(sDir);
+                vertexBufferData[a].Bitangent = Vector3.Normalize(tDir);
+            }
+
+            if (faceCount == 0)
+            {
+                message = "No faces found";
+                return false;
+            }
+        }
+        
+        message = null;
         return true;
     }
     #endregion
 
     private readonly Dictionary<string, SceneSetup.SceneMaterial> _sceneMaterialsByName = new();
     private readonly Dictionary<MeshPrimitive, MeshBuffers> _meshBuffersForPrimitives = new();
-
+    private readonly Dictionary<MeshPrimitive, int> _chunkDefIndicesForPrimitives = new();
+    
+    private bool _combineBuffer;
     private float _offsetRoughness;
     private float _offsetMetallic;
     private static SamplerState _combineChannelsSampler;
@@ -798,7 +1064,11 @@ public class LoadGltfScene : Instance<LoadGltfScene>
 
     [Input(Guid = "D02F41A6-1A6B-4A6E-8D6C-A28873C79F2C")]
     public readonly InputSlot<SceneSetup> Setup = new();
-
+    
+    [Input(Guid = "57F129AE-0B2E-465D-8C0E-F6259FDD37CE")]
+    public readonly InputSlot<bool> CombineBuffer = new();
+    
+    
     [Input(Guid = "EF7075E9-4BC2-442E-8E0C-E03667FF2E0A")]
     public readonly InputSlot<bool> TriggerUpdate = new();
 

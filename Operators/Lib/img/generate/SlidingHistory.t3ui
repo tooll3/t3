@@ -64,15 +64,15 @@
     {
       "ChildId": "72a2020d-e075-4cb4-9de9-5a2d56e8b787"/*GetTextureSize*/,
       "Position": {
-        "X": 527.7788,
-        "Y": 543.14606
+        "X": 490.6161,
+        "Y": 532.2158
       }
     },
     {
       "ChildId": "5bc5d5e6-f84c-4766-a8ef-ce58bf9e2d59"/*Int2Components*/,
       "Position": {
-        "X": 677.7788,
-        "Y": 543.14606
+        "X": 640.6161,
+        "Y": 532.2158
       }
     },
     {
@@ -156,7 +156,7 @@
       "ChildId": "492d1b5f-cc6d-4eb8-855a-eff0a98dae58"/*PickInt*/,
       "Position": {
         "X": 827.7788,
-        "Y": 638.14606
+        "Y": 651.14606
       }
     },
     {

@@ -76,25 +76,7 @@ namespace lib._3d.transform
                 }
 
                 var blend = floatIndex - index;
-
                 var blendedCamDef = CameraDefinition.Blend(camA.CameraDefinition, camB.CameraDefinition, blend);
-                //var fov = MathUtil.DegreesToRadians(MathUtils.Lerp(camA.Fov.TypedInputValue.Value, camB.Fov.TypedInputValue.Value, blend));
-
-                // var aspectRatio = MathUtils.Lerp(camA.AspectRatio.TypedInputValue.Value, camB.AspectRatio.TypedInputValue.Value, blend);
-                // if (aspectRatio < 0.0001f)
-                // {
-                //     aspectRatio = (float)context.RequestedResolution.Width / context.RequestedResolution.Height;
-                // }
-
-                // var nearFarClip = MathUtils.Lerp(camA.NearFarClip.TypedInputValue.Value, camB.NearFarClip.TypedInputValue.Value, blend);
-                // var viewPortShift = MathUtils.Lerp(camA.ViewportShift.TypedInputValue.Value, camB.ViewportShift.TypedInputValue.Value, blend);
-                // var pOffset = MathUtils.Lerp(camA.PositionOffset.TypedInputValue.Value, camB.PositionOffset.TypedInputValue.Value, blend);
-                // var positionValue = MathUtils.Lerp(camA.Position.TypedInputValue.Value, camB.Position.TypedInputValue.Value, blend);
-                // var offsetAffectsTarget = blend < 0.5 ? camA.OffsetAffectsTarget.TypedInputValue.Value : camB.OffsetAffectsTarget.TypedInputValue.Value;
-                // var targetValue = MathUtils.Lerp(camA.Target.TypedInputValue.Value, camB.Target.TypedInputValue.Value, blend);
-                // var upValue = MathUtils.Lerp(camA.Up.TypedInputValue.Value, camB.Up.TypedInputValue.Value, blend);
-                // var roll = MathUtils.Lerp(camA.Roll.TypedInputValue.Value, camB.Roll.TypedInputValue.Value, blend);
-                // var rOffset = MathUtils.Lerp(camA.RotationOffset.TypedInputValue.Value, camB.RotationOffset.TypedInputValue.Value, blend);
 
                 blendedCamDef.BuildProjectionMatrices(out var camToClipSpace, out var worldToCamera);
 

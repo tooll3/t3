@@ -60,7 +60,12 @@ internal static class UiContentUpdate
     }
     
     private static long _lastElapsedTicks;
-    private static readonly Stopwatch _stopwatch = new() ;
+    private static readonly Stopwatch _stopwatch = new();
+    
+    /** Windows' implementation of mirroring a display is extremely slow and can
+     * take up to 50% of the GPU time. Enabling this work around will copy the Main window
+     * SwapChain buffer into a texture that is used for the 2nd viewer window.
+     */
     
     private static float _lastUiScale = 1;
     private static bool _hasSetScaling = false;

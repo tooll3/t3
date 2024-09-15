@@ -48,6 +48,7 @@ namespace T3.Editor.Gui.UiHelpers
             public int WindowLayoutIndex = 0;
             public bool EnableIdleMotion = true;
             public bool SuspendRenderingWhenHidden = true;
+            public bool MirrorUiOnSecondView = false;
             
             // Interaction
             public bool WarnBeforeLibEdit = true;

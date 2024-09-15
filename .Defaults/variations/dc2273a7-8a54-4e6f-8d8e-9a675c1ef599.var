@@ -7,8 +7,8 @@
       "ActivationIndex": 2,
       "Title": "capsule",
       "PosOnCanvas": {
-        "X": 50.989082,
-        "Y": -38.860046
+        "X": 51.04191,
+        "Y": -159.6662
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -58,8 +58,8 @@
       "ActivationIndex": 3,
       "Title": "The Door",
       "PosOnCanvas": {
-        "X": 277.58835,
-        "Y": -253.47571
+        "X": 214.0419,
+        "Y": -252.6662
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -110,8 +110,8 @@
       "ActivationIndex": 4,
       "Title": "Square",
       "PosOnCanvas": {
-        "X": 298.3315,
-        "Y": -40.713562
+        "X": 214.0419,
+        "Y": -159.6662
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -158,8 +158,8 @@
       "ActivationIndex": 5,
       "Title": "FancyPanel",
       "PosOnCanvas": {
-        "X": 17.350517,
-        "Y": -283.08203
+        "X": 51.04191,
+        "Y": -252.6662
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {

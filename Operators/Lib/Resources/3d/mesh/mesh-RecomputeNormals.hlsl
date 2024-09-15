@@ -114,6 +114,7 @@ inline float ComputeTriangleArea(float3 P1, float3 P2, float3 P3)
 
     float3 bitangent = SourceVertices[gi].Bitangent;
     float3 tangent = SourceVertices[gi].Tangent;
+    float3 orgNormal = SourceVertices[gi].Normal;
     float3 newNormal = normalize(normalSum);
 
     float3 newTangent = cross(bitangent, newNormal);

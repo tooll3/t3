@@ -1,7 +1,7 @@
-#include "shared/hash-functions.hlsl"
-#include "shared/noise-functions.hlsl"
-#include "shared/point.hlsl"
-#include "shared/quat-functions.hlsl"
+#include "lib/shared/hash-functions.hlsl"
+#include "lib/shared/noise-functions.hlsl"
+#include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -20,43 +20,54 @@ static const float PointSpace = 0;
 static const float ObjectSpace = 1;
 static const float WorldSpace = 2;
 
-[numthreads(64, 1, 1)] void main(uint3 i
-                                 : SV_DispatchThreadID)
+float3 ExtractScale(float4x4 TransformMatrix)
+{
+    float3 scale;
+    scale.x = length(TransformMatrix._m00_m01_m02);
+    scale.y = length(TransformMatrix._m10_m11_m12);
+    scale.z = length(TransformMatrix._m20_m21_m22);
+    return scale;
+}
+
+[numthreads(64, 1, 1)]
+void main(uint3 i : SV_DispatchThreadID)
 {
     uint numStructs, stride;
     SourcePoints.GetDimensions(numStructs, stride);
     if (i.x >= numStructs)
-    {
         return;
-    }
 
-    float w = SourcePoints[i.x].w;
-    float3 pOrg = SourcePoints[i.x].position;
-    float3 p = pOrg;
+    Point p = SourcePoints[i.x];
+    float w =  WIsWeight >= 0.5 ? p.W *  p.Selected:  p.Selected; 
 
-    float4 orgRot = SourcePoints[i.x].rotation;
+    float3 pos = p.Position;
+
+    float4 orgRot = p.Rotation;
     float4 rotation = orgRot;
 
     if (CoordinateSpace < 0.5)
     {
-        p.xyz = 0;
+        pos.xyz = 0;
         rotation = float4(0, 0, 0, 1);
     }
 
-    float3 pLocal = p;
-    p = mul(float4(p, 1), TransformMatrix).xyz;
+    float3 pLocal = pos;
+    pos = mul(float4(pos, 1), TransformMatrix).xyz;
 
     float4 newRotation = rotation;
 
-    // Transform rotation is kind of tricky. There might be more efficient ways to do this.
+    float3 scale = ExtractScale(TransformMatrix);
+
     if (UpdateRotation > 0.5)
     {
-        float3x3 orientationDest = float3x3(
-            TransformMatrix._m00_m01_m02,
-            TransformMatrix._m10_m11_m12,
-            TransformMatrix._m20_m21_m22);
+        // Remove scale from the matrix to get pure rotation
+        float3x3 rotationMatrix = float3x3(
+            TransformMatrix._m00_m01_m02 / scale.x,
+            TransformMatrix._m10_m11_m12 / scale.y,
+            TransformMatrix._m20_m21_m22 / scale.z
+        );
 
-        newRotation = normalize(qFromMatrix3Precise(transpose(orientationDest)));
+        newRotation = normalize(qFromMatrix3Precise(transpose(rotationMatrix)));
 
         // Adjust rotation in point space
         if (CoordinateSpace < 0.5)
@@ -69,30 +80,25 @@ static const float WorldSpace = 2;
         }
     }
 
-    float weight = 1;
 
-    if (WIsWeight >= 0.5)
-    {
-        float3 weightedOffset = (p - pLocal) * w;
-        p = pLocal + weightedOffset;
-        weight = w;
-
-        // newRotation *= w;
-        newRotation = qSlerp(orgRot, newRotation, w);
-        // newRotation= orgRot ;
-        // newRotation = float4(1,0,1,1);
-        // p.y += 1;
-    }
+    float3 weightedOffset = (pos - pLocal) * w;
+    pos = pLocal + weightedOffset;
+    //float weight = w;
+    newRotation = qSlerp(orgRot, newRotation, w);
 
     if (CoordinateSpace < 0.5)
     {
-        p.xyz = qRotateVec3(p.xyz, orgRot).xyz;
-        p += pOrg;
+        pos.xyz = qRotateVec3(pos.xyz, orgRot).xyz;
+        pos += p.Position;
+        
+        // Apply scale to Stretch
+        p.Stretch *= scale;
     }
 
-    ResultPoints[i.x].Position = p.xyz;
-    ResultPoints[i.x].Rotation = newRotation;
+    p.Position = pos.xyz;
+    p.Rotation = newRotation;
 
-    float orgW = SourcePoints[i.x].W;
-    ResultPoints[i.x].W = lerp(orgW, orgW * ScaleW + OffsetW, weight);
+    p.W = lerp(p.W, p.W * ScaleW + OffsetW, w);
+
+    ResultPoints[i.x] = p;
 }

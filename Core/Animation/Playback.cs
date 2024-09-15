@@ -118,7 +118,7 @@ namespace T3.Core.Animation
             }
 
             // don't support looping if recording (looping sound is not implemented yet)
-            if (!IsRenderingToFile && IsLooping && TimeInBars > LoopRange.End)
+            if (!IsRenderingToFile && Math.Abs(PlaybackSpeed) > 0.1 && IsLooping && TimeInBars > LoopRange.End)
             {
                 double loopDuration = LoopRange.End - LoopRange.Start;
 

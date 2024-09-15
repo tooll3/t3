@@ -1,0 +1,36 @@
+{
+  "Id": "d69e0f2e-8fe2-478b-ba4e-2a55a92670ae"/*Gamepad*/,
+  "Description": "# Gamepad input using XInput. It supports up to four gamepads. \nUse in combination with these operators:\nThumbSticks: [SelectVec2FromDict]\nButtons: [SelectBoolFromFloatDict]\nTriggers: [SelectFloatFromDict]\nCheck the example: [GamePadExample]",
+  "InputUis": [
+    {
+      "InputId": "b37ab751-1e41-4e58-9e27-5ac9052662d8"/*Index*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -77.79605,
+        "Y": 288.35236
+      },
+      "GroupTitle": "Controller selection",
+      "Description": "Controller selection",
+      "Min": 0,
+      "Max": 3,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "64e9dec6-2b3a-4d7e-a174-991c8a8b929e"/*State*/,
+      "Position": {
+        "X": 221.82373,
+        "Y": 1595.3228
+      }
+    },
+    {
+      "OutputId": "49907a55-54fa-4c95-8e00-e7beed734533"/*IsConnected*/,
+      "Position": {
+        "X": 221.82373,
+        "Y": 1695.3228
+      }
+    }
+  ]
+}

@@ -13,6 +13,12 @@ namespace lib.img.generate
         [Output(Guid = "59ca5836-cd4a-4c2d-b721-c392c332f798")]
         public readonly Slot<Texture2D> TextureOutput = new ();
 
+        [Input(Guid = "7c4d90e2-a31e-4663-a4bd-da9be8fbdaf4")]
+        public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();
+
+        [Input(Guid = "57903730-3c40-41c0-96a2-c0127d8281c4")]
+        public readonly InputSlot<float> TextureBlend = new InputSlot<float>();
+
         [Input(Guid = "a9111412-3369-4848-af48-8a96f5697c84")]
         public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();
 
@@ -27,6 +33,9 @@ namespace lib.img.generate
 
         [Input(Guid = "f4a32527-da4d-49af-aeb0-ed9c5c28ac04")]
         public readonly InputSlot<float> Scale = new InputSlot<float>();
+
+        [Input(Guid = "6f82fdd2-5dd6-447a-850b-e301abd35bae")]
+        public readonly InputSlot<float> Randomness = new InputSlot<float>();
 
         [Input(Guid = "37fa6406-e29c-482d-9682-70cb2faea92d")]
         public readonly InputSlot<float> Phase = new InputSlot<float>();

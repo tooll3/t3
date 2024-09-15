@@ -10,7 +10,14 @@
       }
     },
     {
-      "InputId": "4ab40aa5-b390-4042-a959-8eddf9cbc9b0"/*B*/,
+      "InputId": "2218624e-2f7b-4bc6-9c36-447c371a6cd7"/*B*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "4ab40aa5-b390-4042-a959-8eddf9cbc9b0"/*ScaleUniform*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0

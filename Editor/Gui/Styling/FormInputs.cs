@@ -306,10 +306,6 @@ namespace T3.Editor.Gui.Styling
             ImGui.SetNextItemWidth(inputSize.X);
             ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 5);
             
-            //var modified = ImGui.InputText(label, ref value, 1000);
-            //if (!modified && wasNull)
-            //    value = null;
-
             
             var modified = ImGui.InputText("##" + label, ref value, 1000);
             if (!modified && wasNull)
@@ -331,7 +327,7 @@ namespace T3.Editor.Gui.Styling
                 var minPos = ImGui.GetItemRectMin();
                 var maxPos = ImGui.GetItemRectMax();
                 drawList.PushClipRect(minPos, maxPos);
-                drawList.AddText(minPos + new Vector2(8, 3), UiColors.ForegroundFull.Fade(0.25f), placeHolder);
+                drawList.AddText(minPos + new Vector2(8, 3)* T3Ui.UiScaleFactor, UiColors.ForegroundFull.Fade(0.25f), placeHolder);
                 drawList.PopClipRect();
             }
 
@@ -408,7 +404,7 @@ namespace T3.Editor.Gui.Styling
                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha * ImGui.GetStyle().Alpha);
             }
 
-            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 20);
+            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 20 * T3Ui.UiScaleFactor);
             ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundButton.Rgba);
             var modified = ImGui.Checkbox(label, ref value);
             ImGui.PopStyleColor();
@@ -446,7 +442,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.PopStyleVar(2);
         }
 
-        public static void AddVerticalSpace(float size = 20)
+        public static void AddVerticalSpace(float size = 10)
         {
             ImGui.Dummy(new Vector2(1, size * T3Ui.UiScaleFactor));
         }
@@ -628,7 +624,7 @@ namespace T3.Editor.Gui.Styling
             if (string.IsNullOrEmpty(warning))
                 return;
 
-            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 20);
+            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 20 * T3Ui.UiScaleFactor);
             ImGui.PushFont(Fonts.FontSmall);
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusError.Rgba);
             ImGui.TextUnformatted(warning);

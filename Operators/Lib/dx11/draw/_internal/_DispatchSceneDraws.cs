@@ -11,7 +11,6 @@ using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Rendering.Material;
 using T3.Core.Resource;
-using T3.Core.Utils.Geometry;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using PixelShader = SharpDX.Direct3D11.PixelShader;
 using VertexShader = SharpDX.Direct3D11.VertexShader;
@@ -26,12 +25,12 @@ namespace lib.dx11.draw._internal
     /// Draws the nodes defined in the scene setup by dispatching a series of draw calls.
     /// To improve performance we:
     /// - set shaders once
-    /// - set shared constant buffers (transform, fog, etc) only onec
+    /// - set shared constant buffers (transform, fog, etc.) only ones
     /// - only update material related SRVs
-    /// - only only clean-up once
+    /// - only clean-up once
     ///
     /// LATER optimizations could include:
-    /// - Using point references for sub component manipulation of color and transform
+    /// - Using point references for subcomponent manipulation of color and transform
     /// - Using point references for instancing
     /// - Sorting draw order to draw batches of matching materials, meshes etc points.  
     /// 

@@ -42,6 +42,7 @@ namespace lib.@string
                     Directory.Value = Path.GetDirectoryName(path);
                     Extension.Value = Path.GetExtension(path);
                     FilenameWithoutExtension.Value = Path.GetFileNameWithoutExtension(path);
+                    _errorMessageForStatus = null;
                     return;
                 }
                 catch (Exception e)

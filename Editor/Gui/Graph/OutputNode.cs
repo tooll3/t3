@@ -38,17 +38,28 @@ namespace T3.Editor.Gui.Graph
 
                 // Rendering
                 var typeColor = TypeUiRegistry.GetPropertiesForType(outputDef.ValueType).Color;
+                // Draw output indicator
+                {
+                    var backgroundColor = hovered
+                                    ? ColorVariations.OperatorBackgroundHover.Apply(typeColor)
+                                    : ColorVariations.OutputNodes.Apply(typeColor);
+                    
+                    var halfSize = LastScreenRect.GetSize() * 0.5f;
+                    var paddingX = MathF.Floor( LastScreenRect.GetSize().X * 0.1f);
+                    var indicatorColor = ColorVariations.ConnectionLines.Apply(typeColor).Fade(0.4f);
+                    
+                    drawList.AddRectFilled(LastScreenRect.Min, LastScreenRect.Max, backgroundColor.Fade(0.4f));
+                    
+                    drawList.AddRectFilled(new Vector2(LastScreenRect.Min.X, LastScreenRect.Min.Y),
+                                           new Vector2(LastScreenRect.Max.X - paddingX, LastScreenRect.Max.Y),
+                                           indicatorColor);
 
-                drawList.AddRectFilled(LastScreenRect.Min, LastScreenRect.Max,
-                                 hovered
-                                     ? ColorVariations.OperatorBackgroundHover.Apply(typeColor)
-                                     : ColorVariations.OutputNodes.Apply(typeColor));
-
-                // drawList.AddRectFilled(new Vector2(LastScreenRect.Min.X, LastScreenRect.Max.Y),
-                //                  new Vector2(LastScreenRect.Max.X,
-                //                              LastScreenRect.Max.Y + GraphNode.InputSlotThickness + GraphNode.InputSlotMargin),
-                //                  ColorVariations.OperatorInputZone.Apply(typeColor));
-
+                    drawList.AddTriangleFilled(new Vector2(LastScreenRect.Max.X -paddingX, LastScreenRect.Min.Y),
+                                               new Vector2(LastScreenRect.Max.X, LastScreenRect.Min.Y + halfSize.Y),
+                                               new Vector2(LastScreenRect.Max.X-paddingX, LastScreenRect.Max.Y),
+                                               indicatorColor);
+                }
+                
                 // Label
                 if(!string.IsNullOrEmpty(outputDef.Name)){
                     var isScaledDown = canvas.Scale.X < 1;

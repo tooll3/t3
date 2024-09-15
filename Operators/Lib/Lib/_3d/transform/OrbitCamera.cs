@@ -138,6 +138,10 @@ namespace Lib._3d.transform
             _cameraDefinition.Roll = roll;
             _cameraDefinition.Up = up;
             _cameraDefinition.AspectRatio = aspectRatio;
+            _cameraDefinition.NearFarClip = clip;
+            _cameraDefinition.Fov = fov;
+            _cameraDefinition.PositionOffset = positionOffset;
+            _cameraDefinition.RotationOffset = rotOffset;
 
             WorldToCamera = GraphicsMath.LookAtRH(_dampedEye, _dampedTarget, up);
 

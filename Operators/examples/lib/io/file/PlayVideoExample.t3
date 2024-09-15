@@ -3,7 +3,7 @@
   "Inputs": [
     {
       "Id": "d4d111e2-01f2-4a71-b2f1-927557a13a6f"/*FolderWithVideos*/,
-      "DefaultValue": ""
+      "DefaultValue": "Resources\\common\\test-footage"
     }
   ],
   "Children": [

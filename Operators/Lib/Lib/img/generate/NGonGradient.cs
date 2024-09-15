@@ -6,19 +6,13 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.img.generate
+namespace Lib.Lib.img.generate
 {
     [Guid("05463270-37d4-400f-8d0d-c50f81663304")]
     public class NGonGradient : Instance<NGonGradient>
     {
         [Output(Guid = "2cf9e9eb-9f08-43d3-bcde-7a05df13969b")]
-        public readonly Slot<Texture2D> TextureOutput = new();
-
-        [Input(Guid = "3bc236ab-c5f8-4dee-b933-84cf627118ef")]
-        public readonly InputSlot<Texture2D> Image = new ();
-
-        [Input(Guid = "08937f41-a722-4d5b-8cf6-0b7d48323af4")]
-        public readonly MultiInputSlot<T3.Core.DataTypes.Gradient> Gradients = new MultiInputSlot<T3.Core.DataTypes.Gradient>();
+        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new();
 
         [Input(Guid = "ee415be6-d478-44a8-b6b5-f315d1fde694")]
         public readonly InputSlot<System.Numerics.Vector2> Position = new InputSlot<System.Numerics.Vector2>();
@@ -37,6 +31,9 @@ namespace Lib.img.generate
 
         [Input(Guid = "49066387-92a6-46b2-a471-be0104e70651")]
         public readonly InputSlot<float> Rotate = new InputSlot<float>();
+
+        [Input(Guid = "08937f41-a722-4d5b-8cf6-0b7d48323af4")]
+        public readonly MultiInputSlot<T3.Core.DataTypes.Gradient> Gradients = new MultiInputSlot<T3.Core.DataTypes.Gradient>();
 
         [Input(Guid = "134a9879-54f7-4b9c-8494-195a159d6428")]
         public readonly InputSlot<float> Width = new InputSlot<float>();
@@ -58,6 +55,9 @@ namespace Lib.img.generate
 
         [Input(Guid = "4bfe03f0-f1c3-47c0-98c3-873087e40c17")]
         public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Resolution = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+
+        [Input(Guid = "3bc236ab-c5f8-4dee-b933-84cf627118ef")]
+        public readonly InputSlot<Texture2D> Image = new InputSlot<Texture2D>();
     }
 }
 

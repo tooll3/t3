@@ -180,9 +180,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight * (_maxLayerIndex - _minLayerIndex + 1 + 0.5f) + 1);
             var layerArea = new ImRect(min, max);
             LastHeight = max.Y - min.Y + 5;
-
-            _drawList.AddRectFilled(new Vector2(min.X, max.Y - 4+ 5),
-                                    new Vector2(max.X, max.Y - 1 + 5), new Color(0, 0, 0, 0.4f));
+            //
+            _drawList.AddRectFilled(new Vector2(min.X, max.Y - 4),
+                                    new Vector2(max.X, max.Y - 1), new Color(0, 0, 0, 0.4f));
+            
 
             var compositionSymbolUi = compositionOp.GetSymbolUi();
             foreach (var clip in clips)
@@ -219,7 +220,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
             
             var rounding = 3.5f;
             var randomColor = THelpers.RandomColorForHash(timeClip.Id.GetHashCode());
-            _drawList.AddRectFilled(position, itemRectMax, randomColor.Fade(0.25f), rounding);
+                    
+		   _drawList.AddRectFilled(position, itemRectMax, randomColor.Fade(0.25f), rounding);
             
             var timeRemapped = timeClip.TimeRange != timeClip.SourceRange;
             var timeStretched = Math.Abs(timeClip.TimeRange.Duration - timeClip.SourceRange.Duration) > 0.001;

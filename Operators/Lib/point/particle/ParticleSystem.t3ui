@@ -107,7 +107,7 @@
     },
     {
       "InputId": "c41d9633-1397-4602-a5f8-7808c3d63108"/*ParticleForces*/,
-      "Relevancy": "Relevant",
+      "Relevancy": "Required",
       "Position": {
         "X": -896.4389,
         "Y": 1143.6881

@@ -1,5 +1,7 @@
 {
-  "Id": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8"/*SpreadPointAttributes*/,
+  "Name": "SpreadPointAttributes",
+  "Id": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
+  "Namespace": "lib.point.modify",
   "Inputs": [
     {
       "Id": "d504c3f9-290f-4a73-bf9d-f9266ea955f6"/*Points*/,
@@ -97,6 +99,52 @@
   ],
   "Children": [
     {
+      "Id": "b3370e7d-da15-48dc-996e-30512f45dd3e"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\points\\modify\\SpreadPointAttributes.hlsl"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "905228f2-25c0-4494-a98a-9293e4f9e976"/*ComputeShaderStage*/,
+      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
+      "InputValues": [
+        {
+          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
+          "Type": "T3.Core.DataTypes.Vector.Int3",
+          "Value": {
+            "X": 64,
+            "Y": 1,
+            "Z": 1
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "08a9d12e-d97b-4e40-957e-4afb9162ebca"/*FloatsToBuffer*/,
+      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "3841f0be-b63c-4fda-8c7f-c3cd80fc9d0b"/*ExecuteBufferUpdate*/,
+      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
+      "InputValues": [
+        {
+          "Id": "6887f319-cf3f-4e87-9a8c-a7c912dbf5ad"/*IsEnabled*/,
+          "Type": "System.Boolean",
+          "Value": true
+        }
+      ],
+      "Outputs": []
+    },
+    {
       "Id": "658f3d9b-ff59-4acb-b285-f782adabae76"/*CalcDispatchCount*/,
       "SymbolId": "eb68addb-ec59-416f-8608-ff9d2319f3a3",
       "InputValues": [],
@@ -115,14 +163,14 @@
       "Outputs": []
     },
     {
-      "Id": "a727cbe7-3609-41c1-a2ab-af348b583d3e"/*SrvFromTexture2d*/,
-      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
+      "Id": "fbdc7366-82a7-4cb1-bddc-7acab908bcd3"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "08a9d12e-d97b-4e40-957e-4afb9162ebca"/*FloatsToBuffer*/,
-      "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
+      "Id": "9710e80e-e4d1-4fc6-8b69-515c3e9a8eb8"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
     },
@@ -166,24 +214,8 @@
       "Outputs": []
     },
     {
-      "Id": "905228f2-25c0-4494-a98a-9293e4f9e976"/*ComputeShaderStage*/,
-      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
-      "InputValues": [
-        {
-          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "T3.Core.DataTypes.Vector.Int3",
-          "Value": {
-            "X": 64,
-            "Y": 1,
-            "Z": 1
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "1256179c-554a-4585-9541-71707ea183b7"/*IntsToBuffer*/,
-      "SymbolId": "2eb20a76-f8f7-49e9-93a5-1e5981122b50",
+      "Id": "a75abfbb-426a-47d3-9018-1239afc4235f"/*SrvFromTexture2d*/,
+      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
       "InputValues": [],
       "Outputs": []
     },
@@ -194,39 +226,15 @@
       "Outputs": []
     },
     {
-      "Id": "9710e80e-e4d1-4fc6-8b69-515c3e9a8eb8"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "3841f0be-b63c-4fda-8c7f-c3cd80fc9d0b"/*ExecuteBufferUpdate*/,
-      "SymbolId": "58351c8f-4a73-448e-b7bb-69412e71bd76",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "e6858bcc-16ce-45dc-a878-0ebe319e7872"/*GradientsToTexture*/,
       "SymbolId": "2c53eee7-eb38-449b-ad2a-d7a674952e5b",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "a75abfbb-426a-47d3-9018-1239afc4235f"/*SrvFromTexture2d*/,
+      "Id": "a727cbe7-3609-41c1-a2ab-af348b583d3e"/*SrvFromTexture2d*/,
       "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
       "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "b3370e7d-da15-48dc-996e-30512f45dd3e"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources/lib/points/modify/SpreadPointAttributes.hlsl"
-        }
-      ],
       "Outputs": []
     },
     {
@@ -236,9 +244,26 @@
       "Outputs": []
     },
     {
-      "Id": "fbdc7366-82a7-4cb1-bddc-7acab908bcd3"/*GetBufferComponents*/,
-      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "Id": "1256179c-554a-4585-9541-71707ea183b7"/*IntsToBuffer*/,
+      "SymbolId": "2eb20a76-f8f7-49e9-93a5-1e5981122b50",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "4b10b4a9-f257-420b-bddb-ff1c87b401c6"/*SamplerStateOp*/,
+      "SymbolId": "9515d59d-0bd5-406b-96da-6a5f60215700",
+      "InputValues": [
+        {
+          "Id": "e7c95fd5-14d1-434f-a140-f22ef69076ab"/*AddressU*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Clamp"
+        },
+        {
+          "Id": "fdeb503f-09c6-48d1-8853-7426f68cdec3"/*AddressV*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Clamp"
+        }
+      ],
       "Outputs": []
     }
   ],
@@ -344,6 +369,12 @@
       "SourceSlotId": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710",
       "TargetParentOrChildId": "905228f2-25c0-4494-a98a-9293e4f9e976",
       "TargetSlotId": "34cf06fe-8f63-4f14-9c59-35a2c021b817"
+    },
+    {
+      "SourceParentOrChildId": "4b10b4a9-f257-420b-bddb-ff1c87b401c6",
+      "SourceSlotId": "0e45c596-c80f-4927-941f-e3199401aa10",
+      "TargetParentOrChildId": "905228f2-25c0-4494-a98a-9293e4f9e976",
+      "TargetSlotId": "4047c9e7-1edb-4c71-b85c-c1b87058c81c"
     },
     {
       "SourceParentOrChildId": "9710e80e-e4d1-4fc6-8b69-515c3e9a8eb8",

@@ -137,11 +137,29 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 }
             }
 
+            if (KeyboardBinding.Triggered(UserActions.SetStartTime))
+            {
+                Playback.Current.IsLooping = true;
+                Playback.Current.LoopRange.Start = (float)Playback.Current.TimeInBars;
+                if(Playback.Current.LoopRange.End < Playback.Current.LoopRange.Start)
+                    Playback.Current.LoopRange.End = Playback.Current.LoopRange.Start + 4;
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.SetEndTime))
+            {
+                Playback.Current.IsLooping = true;
+                Playback.Current.LoopRange.End = (float)Playback.Current.TimeInBars;
+                if(Playback.Current.LoopRange.Start > Playback.Current.LoopRange.End)
+                    Playback.Current.LoopRange.Start = Playback.Current.LoopRange.End - 4;
+            }
+
             if (KeyboardBinding.Triggered(UserActions.PlaybackJumpToNextKeyframe))
                 UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
 
             if (KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
                 UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
+
+
         }
 
         internal static void DrawTimeControls(TimeLineCanvas timeLineCanvas, Instance composition)
@@ -570,7 +588,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
 
             CustomComponents.TooltipForLastItem("Keep animated parameters visible",
-                                                "This can be useful when align animations between multiple operators. Toggle again to clear the visible animations.");
+                                                "This can be useful when align animations between multiple operators. Toggle again to clear the visible animations.\n\n"
+                                                + KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleAnimationPinning)
+                                                );
             ImGui.SameLine();
         }
 

@@ -225,6 +225,7 @@ namespace T3.Editor.App
         private SwapChain _swapChain;
         private RenderTargetView _renderTargetView;
         private Texture2D _backBufferTexture;
+        public Texture2D BackBufferTexture => _backBufferTexture;
         private bool _isResizingRightNow;
         private Rectangle _boundsBeforeFullscreen;
 

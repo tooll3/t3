@@ -47,13 +47,13 @@ namespace Lib.math.@float
             // based on https://x.com/itsmatharoo/status/1148297551931572224
             var targetValue = inputValue ;
 
-            _srpingedValue = MathUtils.Lerp(_srpingedValue, (targetValue - Result.Value) * test, tension);
+            _springedValue = MathUtils.Lerp(_springedValue, (targetValue - Result.Value) * test, tension);
 
-            Result.Value += _srpingedValue;
+            Result.Value += _springedValue;
         }
 
 
-        private Vector3 _srpingedValue;
+        private Vector3 _springedValue;
         private double _lastEvalTime;
 
         [Input(Guid = "5afee6d8-0697-43ab-9005-7be99cf928b6")]

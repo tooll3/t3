@@ -22,15 +22,16 @@ Texture2D<float4> CurveImage : register(t1);
 Texture2D<float4> GradientImage : register(t2);
 
 RWStructuredBuffer<Point> ResultPoints : u0;
-sampler texSampler : register(s0);
+sampler ClampedSampler : register(s0);
 
 float3 fmod(float3 x, float3 y)
 {
     return (x - y * floor(x / y));
 }
 
-#define SPREADOVER_BUFFER 0
-#define SPREADOVER_W 1
+#define SPREADMODE_BUFFER 0
+#define SPREADMODE_W 1
+#define SPREADMODE_SELECTION 2
 
 #define MAPPING_NORMAL 0
 #define MAPPING_FORSTART 1
@@ -54,8 +55,14 @@ float3 fmod(float3 x, float3 y)
 
     Point p = SourcePoints[index];
 
+    if (Mode != SPREADMODE_BUFFER && (isnan(p.W)))
+    {
+        ResultPoints[index] = p;
+        return;
+    }
+
     float f = 0;
-    float f0 = Mode == SPREADOVER_BUFFER ? (float)index / pointCount
+    float f0 = Mode == SPREADMODE_BUFFER ? (float)index / (pointCount - 1)
                                          : p.W; // Clarify: Should we clamp w before sampling?
 
     if (MappingMode == MAPPING_NORMAL)
@@ -83,26 +90,28 @@ float3 fmod(float3 x, float3 y)
         f = p.W;
     }
 
-    float curveValue = CurveImage.SampleLevel(texSampler, float2(f, 0.5), 0).r;
-    float4 gradientColor = GradientImage.SampleLevel(texSampler, float2(f, 0.5), 0);
+    float curveValue = CurveImage.SampleLevel(ClampedSampler, float2(f, 0.5), 0).r;
+    float4 gradientColor = GradientImage.SampleLevel(ClampedSampler, float2(f, 0.5), 0);
 
-    float w = 0;
+    if (!isnan(p.W))
+    {
+        float w = 0;
+        if (ApplyMode == APPLYMODE_REPLACE)
+        {
+            w = curveValue;
+        }
+        else if (ApplyMode == APPLYMODE_MULTIPLY)
+        {
+            w = p.W * curveValue;
+        }
+        else if (ApplyMode == APPLYMODE_ADD)
+        {
+            w = p.W + curveValue;
+        }
 
-    if (ApplyMode == APPLYMODE_REPLACE)
-    {
-        w = !isnan(p.W) ? curveValue : p.W;
-    }
-    else if (ApplyMode == APPLYMODE_MULTIPLY)
-    {
-        w = p.W * curveValue;
-    }
-    else if (ApplyMode == APPLYMODE_ADD)
-    {
-        w = p.W + curveValue;
+        p.W = lerp(p.W, w, Amount);
     }
 
-    p.W = lerp(p.W, w, Amount);
-    ;
     p.Color = p.Color * gradientColor;
 
     ResultPoints[index] = p;

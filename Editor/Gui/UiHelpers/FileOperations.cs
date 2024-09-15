@@ -70,7 +70,7 @@ namespace T3.Editor.Gui.UiHelpers
         {
             var modified = false;
             ImGui.SameLine();
-            if (ImGui.Button("...", new Vector2(30, 0)))
+            if (ImGui.Button("...", new Vector2(30, 0) * T3Ui.UiScaleFactor))
             {
                 string newPath = type == FilePickerTypes.File
                                      ? PickResourceFilePath(value, filter)

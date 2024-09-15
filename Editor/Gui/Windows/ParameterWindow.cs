@@ -371,8 +371,10 @@ internal class ParameterWindow : Window
 
             // Draw the actual parameter line implemented
             // in the generic InputValueUi<T>.DrawParameterEdit() method
+            
+            ImGui.PushID(inputSlot.Id.GetHashCode());
             var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials: hideNonEssentials, skipIfDefault);
-
+            ImGui.PopID();
             // ... and handle the edit state
             if (editState.HasFlag(InputEditStateFlags.Started))
             {

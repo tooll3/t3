@@ -24,7 +24,14 @@ public class SceneSetupInputUi : InputValueUi<SceneSetup>
 
     public override IInputUi Clone()
     {
-        return new SceneSetupInputUi();
+        return new SceneSetupInputUi()
+                   {
+                       InputDefinition = InputDefinition,
+                       Parent = Parent,
+                       PosOnCanvas = PosOnCanvas,
+                       Relevancy = Relevancy,
+                       Size = Size,
+                   };
     }
 
     protected override InputEditStateFlags DrawEditControl(string name, Symbol.Child.Input input, ref SceneSetup value, bool readOnly)

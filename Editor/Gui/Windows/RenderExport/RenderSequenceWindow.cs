@@ -71,7 +71,7 @@ public class RenderSequenceWindow : BaseRenderWindow
             {
                 var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
                 _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {FrameIndex+1}/{FrameCount}  ";
-                _lastHelpString += $"{Progress * 100.0:0}%%  {estimatedTimeLeft:0}s left";
+                _lastHelpString += $"{Progress * 100.0:0}%%  {HumanReadableDurationFromSeconds( estimatedTimeLeft)} left";
             }
             
             if (!IsExportingImages)

@@ -61,7 +61,7 @@ namespace T3.Core.Operator.Slots
         {
             if (_keepOriginalUpdateAction != null)
             {
-                Log.Warning("Already disabled or bypassed");
+                //Log.Warning("Already disabled or bypassed");
                 return false;
             }
             

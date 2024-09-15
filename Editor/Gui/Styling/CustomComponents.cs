@@ -6,6 +6,7 @@ using T3.Core.Operator;
 using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using T3.SystemUi;
@@ -312,15 +313,18 @@ namespace T3.Editor.Gui.Styling
         public static void ContextMenuForItem(Action drawMenuItems, string title = null, string id = "context_menu",
                                               ImGuiPopupFlags flags = ImGuiPopupFlags.MouseButtonRight)
         {
-            var wasAlreadyOpen = ImGui.IsPopupOpen(id);
+
+            // prevent context menu from opening when dragging
+            {
+                var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
+                if (wasDraggingRight)
+                    return;
+            }
             
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
             if (ImGui.BeginPopupContextItem(id, flags))
             {
-                if(wasAlreadyOpen)
-                    ImGui.Separator();
-                
                 FrameStats.Current.IsItemContextMenuOpen = true;
                 if (title != null)
                 {
@@ -690,13 +694,55 @@ namespace T3.Editor.Gui.Styling
             var size = new Vector2(width, ImGui.GetFrameHeight());
             if (width == 0)
                 size.X = size.Y;
-
-            var clicked = ImGui.InvisibleButton(id, size);
+            
+            var clicked= ImGui.InvisibleButton(id, size);
             var dl = ImGui.GetWindowDrawList();
             var color = ImGui.IsItemHovered() ? ImGuiCol.ButtonHovered.GetStyleColor() : ImGuiCol.Button.GetStyleColor();
-            dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color, 7, roundedCorners);
+            dl.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color,7, roundedCorners);
             return clicked;
         }
+        
+        
+        private static Vector2 _dragScrollStart;
+        public static bool IsDragScrolling => _draggedWindowObject != null;
+        //private static uint _scrollingId;
+        private static object _draggedWindowObject;
+
+        public static bool IsAnotherWindowDragScrolling(object windowObject)
+        {
+            return _draggedWindowObject != null && _draggedWindowObject != windowObject;
+        }
+        
+        public static void HandleDragScrolling(object windowObject)
+        {
+            //var currentId = ImGui.GetID("");
+
+            if (_draggedWindowObject == windowObject)
+            {
+                if (ImGui.IsMouseReleased(ImGuiMouseButton.Right))
+                {
+                    //IsDragScrolling = false;
+                    _draggedWindowObject = null;
+                }
+                
+                if (ImGui.IsMouseDragging(ImGuiMouseButton.Right))
+                {
+                    ImGui.SetScrollY(_dragScrollStart.Y - ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Y);
+                }
+
+                return;
+            }
+            
+            
+            if ( ImGui.IsWindowHovered() && !T3Ui.DragFieldWasHoveredLastFrame && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+            {
+                _dragScrollStart = new Vector2(ImGui.GetScrollX(),  ImGui.GetScrollY());
+                //IsDragScrolling = true;
+                _draggedWindowObject = windowObject;
+            }
+        }
+
+
 
         public static bool DrawDropdown<T>(ref T selectedValue, IEnumerable<T> values, string label, Func<T, string> getDisplayTextFunc,
                                            bool labelOnSameLine = false,
@@ -777,4 +823,5 @@ namespace T3.Editor.Gui.Styling
             }
         }
     }
+    
 }
