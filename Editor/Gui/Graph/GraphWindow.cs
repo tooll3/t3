@@ -481,18 +481,35 @@ namespace T3.Editor.Gui.Graph
 
             private static void DrawBreadcrumbs(Instance compositionOp)
             {
-                ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
+                ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 5));
                 IEnumerable<Instance> parents = Structure.CollectParentInstances(compositionOp);
+                FormInputs.AddVerticalSpace(10);
 
                 ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(1, 1));
+                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(0, 0));
                 {
+                    var isFirstChild = true;
                     foreach (var p in parents)
                     {
-                        ImGui.SameLine();
+                        if (isFirstChild)
+                        {
+                            isFirstChild=false;
+                            ImGui.SameLine(7);
+                        }
+                        else
+                        {
+                            ImGui.SameLine(0);
+                        }
+                        
+                        
+
                         ImGui.PushID(p.SymbolChildId.GetHashCode());
 
+                        ImGui.PushFont(Fonts.FontSmall);
                         var clicked = ImGui.Button(p.Symbol.Name);
+                        ImGui.PopFont();
 
                         if (clicked)
                         {
@@ -502,11 +519,13 @@ namespace T3.Editor.Gui.Graph
 
                         ImGui.SameLine();
                         ImGui.PopID();
-                        ImGui.TextUnformatted(">");
+                        ImGui.PushFont(Icons.IconFont);
+                        ImGui.TextUnformatted(BreadCrumbSeparator);
+                        ImGui.PopFont();
                     }
                 }
-                ImGui.PopFont();
-                ImGui.PopStyleColor();
+                ImGui.PopStyleVar(2);
+                ImGui.PopStyleColor(2);
             }
 
             private static void DrawNameAndDescription(Instance compositionOp)
@@ -520,39 +539,12 @@ namespace T3.Editor.Gui.Graph
                 ImGui.TextUnformatted("  - " + compositionOp.Symbol.Namespace);
                 ImGui.PopFont();
                 ImGui.PopStyleColor();
-
-                var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
-
-                if (!string.IsNullOrEmpty(symbolUi.Description))
-                {
-                    var desc = symbolUi.Description;
-                    ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                    {
-                        var sizeMatchingDescription = ImGui.CalcTextSize(desc) + new Vector2(20, 40);
-                        sizeMatchingDescription.X = Math.Max(300, sizeMatchingDescription.X);
-                        ImGui.Indent(9);
-                        ImGui.TextWrapped(desc);
-                    }
-                    ImGui.PopStyleColor(2);
-                    ImGui.PopFont();
-                }
-
-                ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-
-                ImGui.PushFont(Fonts.FontSmall);
-                if (ImGui.Button("Edit description..."))
-                    _editDescriptionDialog.ShowNextFrame();
-
-                ImGui.PopFont();
-                ImGui.PopStyleColor(2);
             }
         }
 
         internal readonly GraphImageBackground GraphImageBackground = new();
 
+        private static readonly string BreadCrumbSeparator = (char)Icon.ChevronRight + "";
         public readonly GraphCanvas GraphCanvas;
         private const int UseComputedHeight = -1;
         private int _customTimeLineHeight = UseComputedHeight;
