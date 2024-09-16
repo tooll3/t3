@@ -105,7 +105,18 @@
     {
       "Id": "0cf8a2db-538c-416f-a05a-e1dd7a010d1c"/*RenderTarget*/,
       "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        }
+      ],
       "Outputs": []
     },
     {
@@ -151,7 +162,7 @@
         {
           "Id": "98155900-1bb9-427a-9c4e-0988fec806cd"/*Intensity*/,
           "Type": "System.Single",
-          "Value": 0.28
+          "Value": 2.77
         },
         {
           "Id": "f3ca8d13-4e24-4718-a59c-6a1b9a2a3c04"/*IsEnabled*/,
@@ -845,13 +856,7 @@
     {
       "Id": "02942cdc-b75e-4ecf-b93d-2e98314709b6"/*Group*/,
       "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
-      "InputValues": [
-        {
-          "Id": "35a18838-b095-431f-a3af-2dba81dcc16f"/*ForceColorUpdate*/,
-          "Type": "System.Boolean",
-          "Value": true
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -2970,18 +2975,6 @@
       "Outputs": []
     },
     {
-      "Id": "98bd5d96-b73b-465d-9f37-e07a2c006356"/*PlayVideo*/,
-      "SymbolId": "914fb032-d7eb-414b-9e09-2bdd7049e049",
-      "InputValues": [
-        {
-          "Id": "0e255347-08bc-4363-9ffa-ab863a1cea8e"/*Path*/,
-          "Type": "System.String",
-          "Value": "C:\\Users\\pixtur\\Downloads\\render-v116.mp4"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "4796fd6f-4707-41a5-a017-2fde86aa33f2"/*TransformMesh*/,
       "SymbolId": "026e6917-6e6f-4ee3-b2d4-58f4f1de74c9",
       "InputValues": [
@@ -3182,12 +3175,36 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "e215e31b-e6b1-4e5a-a1bc-115e2274611a"/*TimeClip*/,
+      "SymbolId": "3036067a-a4c2-434b-b0e3-ac95c5c943f4",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "de6ff8b5-40fe-47fa-b9f2-d926b17f9a7f"/*TimeClip*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": -0.00043477863,
+                "End": 17.18069
+              },
+              "SourceRange": {
+                "Start": -0.00043477863,
+                "End": 17.18069
+              },
+              "LayerIndex": 0
+            }
+          }
+        }
+      ]
     }
   ],
   "Connections": [
     {
-      "SourceParentOrChildId": "494aebc1-a307-4edd-aedc-8db3b23d2e5a",
-      "SourceSlotId": "536fae14-b814-498c-a6b4-07775de36991",
+      "SourceParentOrChildId": "a430ff15-4f1b-4109-ab2f-03151cb24812",
+      "SourceSlotId": "9be415b6-b7f0-4b8f-8d93-c147ef8d0d44",
       "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "TargetSlotId": "e3df1bc8-9b91-46f5-ab16-742529febcf6"
     },

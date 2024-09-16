@@ -3,6 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.TransformGizmos;
+using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.OutputUi
@@ -13,7 +14,8 @@ namespace T3.Editor.Gui.OutputUi
         public Guid Id => OutputDefinition.Id;
         public Type Type { get; } = typeof(T);
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
-        public Vector2 Size { get; set; } = new(100, 30);
+        public Vector2 Size { get; set; } = SymbolUi.Child.DefaultOpSize;
+
         public abstract IOutputUi Clone();
 
         public void DrawValue(ISlot slot, EvaluationContext context, bool recompute)

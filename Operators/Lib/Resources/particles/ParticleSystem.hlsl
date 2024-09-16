@@ -3,8 +3,6 @@
 
 cbuffer Params : register(b0)
 {
-    float TriggerEmit;
-    float Reset;
     float Speed;
     float Drag;
 
@@ -18,6 +16,8 @@ cbuffer Params : register(b0)
 
 cbuffer IntParams : register(b1)
 {
+    int TriggerEmit;
+    int TriggerReset;
     int CollectCycleIndex;
     int WMode;
     int EmitMode;
@@ -44,7 +44,7 @@ RWStructuredBuffer<Point> ResultPoints : u1;
     if (gi >= maxParticleCount)
         return;
 
-    if (Reset > 0.5)
+    if (TriggerReset > 0.5)
     {
         Particles[gi].BirthTime = NAN;
         Particles[gi].Position = NAN;
@@ -65,7 +65,7 @@ RWStructuredBuffer<Point> ResultPoints : u1;
         addIndex = t2 > 0 ? -1 : particleBlock;
     }
 
-    if (TriggerEmit > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount)
+    if (TriggerEmit && addIndex >= 0 && addIndex < (int)newPointCount)
     {
         if (EmitMode != 0)
         {
@@ -146,6 +146,4 @@ RWStructuredBuffer<Point> ResultPoints : u1;
         ResultPoints[gi].W = tooOld ? NAN : speed * 100;
     }
 
-    // ResultPoints[gi].Selected = 1;
-    // ResultPoints[gi].Stretch = 1;
 }

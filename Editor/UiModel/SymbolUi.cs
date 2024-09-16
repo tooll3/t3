@@ -143,7 +143,6 @@ namespace T3.Editor.UiModel
             {
                 if (!OutputUis.TryGetValue(output.Id, out var value) || (value.Type != output.ValueType))
                 {
-                    Log.Debug($"Found no output ui for '{symbol.Name}.{output.Name}' - creating a new one");
                     OutputUis.Remove(output.Id); // if type has changed remove the old entry
 
                     var newOutputUi = OutputUiFactory.Instance.CreateFor(output.ValueType);

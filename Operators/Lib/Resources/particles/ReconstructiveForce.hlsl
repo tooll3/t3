@@ -11,6 +11,8 @@ cbuffer Params : register(b0)
     float Bias;
     float Strength;
     float DistanceMode;
+
+    float SpeedFactor;
 }
 
 StructuredBuffer<Point> TargetPoints : t0;   
@@ -40,12 +42,11 @@ void main(uint3 i : SV_DispatchThreadID)
     float d =length(posInVolume); 
     const float r= 0.5;
     float t= (d + r*(FallOff -1)) / (2 * r * FallOff);
-    float blendFactor = smoothstep(1,0, t) * Strength; 
+    float blendFactor = smoothstep(1,0, t) * Strength / SpeedFactor; 
 
     Particles[gi].Position = lerp(pos, TargetPoints[targetPointIndex].Position, blendFactor);
     Particles[gi].Rotation = qSlerp(rot, TargetPoints[targetPointIndex].Rotation, blendFactor);
     Particles[gi].Velocity = lerp(velocity, 0, blendFactor); 
-
     Particles[gi].Color = lerp(Particles[gi].Color, TargetPoints[targetPointIndex].Color, blendFactor);
 
     //Particles[gi].Radius = lerp(Particles[gi].Radius, TargetPoints[targetPointIndex].W, blendFactor);     

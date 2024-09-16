@@ -2,6 +2,10 @@
   "Id": "90b2c6d2-e9a6-4910-b42d-94202f07be27"/*Accumulator*/,
   "Inputs": [
     {
+      "Id": "f647a803-1635-4dcd-bb4d-a7817789a3e2"/*Accumulate*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "7caf37ec-ed34-4711-b02c-e136d070fff7"/*Running*/,
       "DefaultValue": true
     },

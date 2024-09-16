@@ -21,6 +21,12 @@ namespace lib._3d.gizmo
         [Input(Guid = "a4ea3140-3397-4989-98ee-3cf02d11f242")]
         public readonly InputSlot<float> Size = new();
 
+        [Input(Guid = "0b8c7835-078c-4990-8db5-edccd26018c9")]
+        public readonly InputSlot<int> BlendMod = new InputSlot<int>();
+
+        [Input(Guid = "5e7da35a-6537-4fc1-9f23-faab82c8eeaa")]
+        public readonly InputSlot<T3.Core.DataTypes.Vector.Int2> Segments = new InputSlot<T3.Core.DataTypes.Vector.Int2>();
+
     }
 }
 

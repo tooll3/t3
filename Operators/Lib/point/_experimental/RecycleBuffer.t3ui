@@ -1,0 +1,22 @@
+{
+  "Id": "9a36d1c3-cf55-4f3a-ae09-2f54eecb4642"/*RecycleBuffer*/,
+  "Description": "This will give a buffer reference to the input buffer with views.",
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "982016a9-c275-45f1-860e-9f1c3ec4bbfc"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "49e481df-e23b-4d1b-ae94-2acc67c56f9e"/*Reference*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 400.0
+      }
+    }
+  ]
+}

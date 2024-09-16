@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System.Text;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -22,7 +23,7 @@ namespace lib.@string
         {
             var str = InputText.GetValue(context);
             var mode = Mode.GetEnumValue<WrapLinesModes>(context);
-            var wrapColumn = WrapColumn.GetValue(context);
+            var wrapColumn = WrapColumn.GetValue(context).Clamp(1,10000);
 
             _stringBuilder.Clear();
             _stringBuilder.Append(str);
@@ -35,29 +36,7 @@ namespace lib.@string
         {
             if (lineWrap == WrapLinesModes.WrapAtCharacters)
             {
-                var lookBackIndex = insertPos;
-                while (lookBackIndex > 0 && stringBuilder[lookBackIndex] != '\n')
-                {
-                    lookBackIndex--;
-                }
-
-                var lineLength = insertPos - lookBackIndex + insertLength;
-                if (lineLength > wrapColumn && insertPos > 0 && insertPos < stringBuilder.Length)
-                {
-                    stringBuilder[insertPos - 1] = '\n';
-                    return;
-                }
-                
-                var lookForwardIndex = insertPos;
-                while (lookForwardIndex < stringBuilder.Length && stringBuilder[lookForwardIndex] != '\n')
-                {
-                    lookForwardIndex++;
-                }
-
-                if (lookForwardIndex - lookBackIndex > wrapColumn)
-                {
-                    stringBuilder[insertPos + insertLength - 1] = '\n';
-                }
+                Log.Warning("WrapAtCharacters has been deprecated. Use WrapToFillBlock instead.");
             }
             else if (lineWrap == WrapLinesModes.WrapAtWords)
             {

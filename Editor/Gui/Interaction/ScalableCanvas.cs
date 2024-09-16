@@ -477,7 +477,7 @@ namespace T3.Editor.Gui.Interaction
                        : new Vector2(scale.X.Clamp(0.1f, 40), scale.Y.Clamp(0.1f, 40));
         }
 
-        void ZoomWithMouseWheel(MouseState mouseState, out bool zoomed)
+        internal void ZoomWithMouseWheel(MouseState mouseState, out bool zoomed)
         { 
             var zoomDelta = ComputeZoomDeltaFromMouseWheel(mouseState);
             ApplyZoomDelta(mouseState.Position, zoomDelta, out zoomed);

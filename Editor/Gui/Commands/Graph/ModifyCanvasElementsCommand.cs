@@ -98,7 +98,10 @@ namespace T3.Editor.Gui.Commands.Graph
             bool changed = false;
             foreach (var entry in _entries)
             {
-                var selectable = selectables.SingleOrDefault(s => s.Id == entry.SelectableId);
+                if(entry == null)
+                    continue;
+            
+                var selectable = selectables.SingleOrDefault(s => s?.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
                 

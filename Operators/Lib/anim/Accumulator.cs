@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace lib.anim
 {
@@ -19,6 +20,7 @@ namespace lib.anim
         private void Update(EvaluationContext context)
         {
             var running = Running.GetValue(context);
+            var mode = Accumulate.GetEnumValue<AccumulationModes>(context);
             
             
             var startValue = StartValue.GetValue(context);
@@ -29,25 +31,38 @@ namespace lib.anim
             }
 
             var increment = Increment.GetValue(context);
-
+            
             var t = context.Playback.SecondsFromBars(context.LocalFxTime);
             var dt = t - _lastUpdateTime;
             _lastUpdateTime = t;
 
             if (running)
             {
-                _v += increment * dt;
+                var f = mode switch
+                            {
+                                AccumulationModes.PerFrame   => 1,
+                                AccumulationModes.PerSeconds => dt,
+                                _                            => 1
+                            };
+                
+                _v += increment * f;
             }
-
             
             var modulo = Modulo.GetValue(context);
             Result.Value = modulo > 0 ? (float)(_v % modulo): (float)_v;
-
-
         }
 
         private double _lastUpdateTime;
         private double _v;
+        
+        private enum AccumulationModes
+        {
+            PerFrame,
+            PerSeconds,
+        }        
+        
+        [Input(Guid = "F647A803-1635-4DCD-BB4D-A7817789A3E2", MappedType = typeof(AccumulationModes))]
+        public readonly InputSlot<int> Accumulate = new();
         
         [Input(Guid = "7CAF37EC-ED34-4711-B02C-E136D070FFF7")]
         public readonly InputSlot<bool> Running = new();

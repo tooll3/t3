@@ -40,6 +40,9 @@ namespace lib.img.adjust
         [Input(Guid = "cb52ff49-17de-4e36-b918-5de6973a234a")]
         public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
+        [Input(Guid = "7023f71c-1c13-4d66-85e7-b0918cb8b02c")]
+        public readonly InputSlot<float> Repeat = new InputSlot<float>();
+
 
         private enum Modes
         {

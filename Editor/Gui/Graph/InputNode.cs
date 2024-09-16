@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
@@ -44,7 +45,7 @@ namespace T3.Editor.Gui.Graph
                 drawList.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
                                        hovered
                                            ? ColorVariations.OperatorBackgroundHover.Apply(typeColor)
-                                           : ColorVariations.ConnectionLines.Apply(typeColor));
+                                           : ColorVariations.ConnectionLines.Apply(typeColor).Fade(0.5f));
 
                 var inputUiIsSelected = canvas.NodeSelection.IsNodeSelected(inputUi);
                 isSelectedOrHovered |= inputUiIsSelected;
@@ -64,8 +65,6 @@ namespace T3.Editor.Gui.Graph
                     ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontBold);
                     
                     // Index
-                    //var nameLabel = string.Format($"{inputDef.Name}");
-                    //var nameLabel = inputDef.Name;
                     var size = ImGui.CalcTextSize(inputDef.Name);
                     var yPos = _lastScreenRect.GetCenter().Y - size.Y / 2;
                     drawList.AddText(new Vector2(_lastScreenRect.Min.X - 20, yPos),
@@ -87,28 +86,17 @@ namespace T3.Editor.Gui.Graph
 
                 // Draw slot 
                 {
-                    var usableSlotArea = new ImRect(
-                                                             new Vector2(_lastScreenRect.Max.X,
-                                                                         _lastScreenRect.Min.Y),
-                                                             new Vector2(_lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
-                                                                         _lastScreenRect.Max.Y));
-
+                    var usableSlotArea = GetUsableOutputSlotArea(_lastScreenRect, canvas);
                     ImGui.SetCursorScreenPos(usableSlotArea.Min);
                     ImGui.InvisibleButton("output", usableSlotArea.GetSize());
                     THelpers.DebugItemRect();
-                    var color = TypeUiRegistry.GetPropertiesForType(inputDef.DefaultValue.ValueType).Color;
-                    color = ColorVariations.ConnectionLines.Apply(color);
+                    var color = ColorVariations.ConnectionLines.Apply(typeColor).Fade(0.5f);
 
-                    if (ConnectionMaker.IsInputNodeCurrentConnectionSource(window, inputDef))
+                    if (!ConnectionMaker.IsInputNodeCurrentConnectionSource(window, inputDef) && ImGui.IsItemHovered())
                     {
-                        drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
-                    }
-                    else if (ImGui.IsItemHovered())
-                    {
+                        color = ColorVariations.Highlight.Apply(typeColor).Fade(0.8f);
                         if (ConnectionMaker.IsMatchingInputType(window, inputDef.DefaultValue.ValueType))
                         {
-                            drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
-
                             if (ImGui.IsMouseReleased(0))
                             {
                                 ConnectionMaker.CompleteAtSymbolInputNode(window, window.CompositionOp.GetSymbolUi(), inputDef);
@@ -116,25 +104,45 @@ namespace T3.Editor.Gui.Graph
                         }
                         else
                         {
-                            drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, UiColors.Selection);
                             if (ImGui.IsItemClicked(0))
                             {
                                 ConnectionMaker.StartFromInputNode(window, inputDef);
                             }
                         }
                     }
-                    else
-                    {
-                        drawList.AddRectFilled(new Vector2(usableSlotArea.Min.X + 1,
-                                                           usableSlotArea.Min.Y),
-                                               new Vector2(usableSlotArea.Min.X + GraphNode.UsableSlotThickness,
-                                                           usableSlotArea.Max.Y),
+                    
+                    float foldX = (int)(usableSlotArea.Min.X + usableSlotArea.GetWidth() * 0.5f);
+                    drawList.AddRectFilled(usableSlotArea.Min+new Vector2(0,0),
+                                           new Vector2(foldX, usableSlotArea.Max.Y),
+                                           color);
+                    drawList.AddTriangleFilled(new Vector2(foldX, usableSlotArea.Min.Y),
+                                               new Vector2(usableSlotArea.Max.X, usableSlotArea.GetCenter().Y),
+                                               new Vector2(foldX, usableSlotArea.Max.Y),
                                                color);
-                    }
                 }
             }
             ImGui.PopID();
             return isSelectedOrHovered;
+        }
+        
+        private static ImRect GetUsableOutputSlotArea(ImRect opRect, GraphCanvas canvas)
+        {
+            var thickness = (int)MathUtils.RemapAndClamp(canvas.Scale.X, 0.5f, 1.2f, (int)(GraphNode.UsableSlotThickness * 0.5f), GraphNode.UsableSlotThickness) *
+                            T3Ui.UiScaleFactor;
+
+            var outputHeight = opRect.GetHeight();
+            if (outputHeight <= 0)
+                outputHeight = 1;
+
+            return ImRect.RectWithSize(
+                                       new Vector2(
+                                                   opRect.Max.X + 1, // - GraphNode._usableSlotThickness,
+                                                   opRect.Min.Y
+                                                  ),
+                                       new Vector2(
+                                                   thickness,
+                                                   outputHeight
+                                                  ));
         }
 
         internal static ImRect _lastScreenRect;

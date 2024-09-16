@@ -55,7 +55,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             if (!loaded)
                 return [];
 
-            Log.Info($"Reading presets definition for : {compositionId}");
+            //Log.Info($"Reading presets definition for : {compositionId}");
 
             using var sr = new StringReader(fileContent);
             using var jsonReader = new JsonTextReader(sr);

@@ -73,6 +73,9 @@ namespace Lib.io.osc
 
         private string FindKeyForY( string xKey)
         {
+            if (_dict == null)
+                return null;
+            
             var justFoundX = false;
             foreach (var key in _dict.Keys.OrderBy(x => x))
             {

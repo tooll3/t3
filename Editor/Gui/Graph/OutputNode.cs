@@ -61,13 +61,20 @@ namespace T3.Editor.Gui.Graph
                 }
                 
                 // Label
-                if(!string.IsNullOrEmpty(outputDef.Name)){
+                if(!string.IsNullOrEmpty(outputDef.Name))
+                {
+                    var size = ImGui.CalcTextSize(outputDef.Name);
+                    var yPos = LastScreenRect.GetCenter().Y - size.Y / 2;
+                    
                     var isScaledDown = canvas.Scale.X < 1;
                     drawList.PushClipRect(LastScreenRect.Min, LastScreenRect.Max, true);
                     ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontBold);
 
+                    var labelPos = new Vector2(
+                                               LastScreenRect.Min.X +4,
+                                               yPos);
                     var label = outputDef.Name;
-                    drawList.AddText(LastScreenRect.Min, ColorVariations.OperatorLabel.Apply(typeColor), label);
+                    drawList.AddText(labelPos, ColorVariations.OperatorLabel.Apply(typeColor), label);
                     
                     ImGui.PopFont();
                     drawList.PopClipRect();

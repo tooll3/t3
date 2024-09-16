@@ -76,6 +76,16 @@ namespace T3.Core.Animation
         }
         
         public double PlaybackSpeed { get; set; }
+        
+        /// <summary>
+        /// This is set when rendering updates not at 60fps. This can happen for...
+        /// 
+        /// - high framerate displays -> e.g. 2 for 120hz displays
+        /// - when rendering low fps image sequences -> e.g. 25/60 for 25fps
+        ///    
+        /// If possible simulation operators like [ParticleSystem] or [FeedbackEffect] should apply this factor to their overall speed factor.
+        /// </summary>
+        public double FrameSpeedFactor { get; set; } = 1;
         public bool IsLooping = false;
         public static bool OpNotReady;
         

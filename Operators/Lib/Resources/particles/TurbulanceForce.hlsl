@@ -30,9 +30,10 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 noiseLookup = (pos + variationOffset + Phase* float3(1,-1,0)  ) * Frequency;
     float3 velocity = Particles[i.x].Velocity;
     float speed = length(velocity);
+    float3 amount =  (Amount/100 + speed * AmountFromVelocity / 100 ) * AmountDistribution;
 
     Particles[i.x].Velocity = velocity + (UseCurlNoise < 0.5 
-        ? snoiseVec3(noiseLookup) * (Amount/100 + speed * AmountFromVelocity / 100 ) * AmountDistribution
-        : curlNoise(noiseLookup) * (Amount/100 + speed * AmountFromVelocity / 100) * AmountDistribution);
+        ? snoiseVec3(noiseLookup)
+        : curlNoise(noiseLookup)) * amount;
 }
 

@@ -48,11 +48,17 @@ public class LoadGltf : Instance<LoadGltf>, IDescriptiveFilename, IStatusProvide
                 return;
             }
 
-            var model = ModelRoot.Load(fullPath);
+            try
+            {            
+                var model = ModelRoot.Load(fullPath);
             
-            if(childIndexChanged)
-                UpdateBuffers(model, childIndex);
-            
+                if(childIndexChanged)
+                    UpdateBuffers(model, childIndex);
+            }
+            catch (Exception e)
+            {
+                ShowError($"Failed loading gltf: {e.Message}");
+            }
         }
     }
 

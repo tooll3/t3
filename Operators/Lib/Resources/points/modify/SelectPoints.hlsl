@@ -26,6 +26,7 @@ cbuffer Params : register(b1)
     float2 GainAndBias;
     float Phase;
     float Threshold;
+    float Scatter;
 }
 
 cbuffer Params : register(b2)
@@ -72,13 +73,9 @@ inline float LinearStep(float min, float max, float t)
     uint numStructs, stride;
     SourcePoints.GetDimensions(numStructs, stride);
     if (i.x >= numStructs)
-    {
         return;
-    }
 
     Point p = SourcePoints[i.x];
-
-    // ResultPoints[i.x] = SourcePoints[i.x];
 
     if (isnan(p.W))
     {
@@ -87,38 +84,39 @@ inline float LinearStep(float min, float max, float t)
     }
 
     float3 posInObject = p.Position;
-
     float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
 
     float s = 1;
+    float scatter = Scatter * (hash11u(i.x) - 0.5);
 
     if (VolumeShape == VolumeSphere)
     {
-        float distance = length(posInVolume);
+        float distance = length(posInVolume) + scatter;
         s = LinearStep(1 + FallOff, 1, distance);
     }
     else if (VolumeShape == VolumeBox)
     {
         float3 t = abs(posInVolume);
-        float distance = max(max(t.x, t.y), t.z) + Phase;
+        float distance = max(max(t.x, t.y), t.z) + Phase + scatter;
         s = LinearStep(1 + FallOff, 1, distance);
     }
     else if (VolumeShape == VolumePlane)
     {
-        float distance = posInVolume.y;
+        float distance = posInVolume.y + scatter;
         s = LinearStep(FallOff, 0, distance);
     }
     else if (VolumeShape == VolumeZebra)
     {
-        float distance = 1 - abs(mod(posInVolume.y * 1 + Phase, 2) - 1);
+        float distance = 1 - abs(mod(posInVolume.y * 1 + Phase, 2) - 1) + scatter;
         s = LinearStep(Threshold + 0.5 + FallOff, Threshold + 0.5, distance);
     }
     else if (VolumeShape == VolumeNoise)
     {
         float3 noiseLookup = (posInVolume * 0.91 + Phase);
         float noise = snoise(noiseLookup);
-        s = LinearStep(Threshold + FallOff, Threshold, noise);
+        s = LinearStep(Threshold + FallOff, Threshold, noise + scatter);
     }
+
 
     s = ApplyBiasAndGain(s, GainAndBias.x, GainAndBias.y);
 

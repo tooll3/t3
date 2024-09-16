@@ -132,21 +132,23 @@ namespace lib.io.osc
                     return;
                 }
 
+                // Unregister old port
                 if (_isConnected && (_port != UndefinedPortId || !isListening))
                 {
-                    Log.Debug("Unregister after isListeningChanged 2", this);
+                    // Log.Debug("Unregister after isListeningChanged", this);
                     OscConnectionManager.UnregisterConsumer(this);
                     _isConnected = false;
                 }
 
                 if (isListening)
                 {
-                    Log.Debug($"Register after {_port}", this);
+                    // Log.Debug($"Register {newPort}", this);
                     OscConnectionManager.RegisterConsumer(this, newPort);
                     _isConnected = true;
                 }
 
                 _port = newPort;
+                UpdateStatusMessage();
             }
 
             // Update output

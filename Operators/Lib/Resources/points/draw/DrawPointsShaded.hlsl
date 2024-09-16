@@ -184,7 +184,7 @@ float4 psMain(psInput pin) : SV_TARGET
     {
         float3 Li = Lights[i].position - pin.posInWorld; //- Lights[i].direction;
         float distance = length(Li);
-        float intensity = Lights[i].intensity / (pow(distance, Lights[i].decay) + 1);
+        float intensity = Lights[i].intensity / (pow(distance/Lights[i].range, Lights[i].decay) + 1);
         float3 Lradiance = Lights[i].color * intensity; // Lights[i].radiance;
 
         // Half-vector between Li and Lo.

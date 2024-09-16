@@ -48,6 +48,10 @@ internal static class CrashReporting
 
     private static SentryEvent CrashHandler(SentryEvent sentryEvent, SentryHint hint)
     {
+        // Aggregate exception normally don't cause crashes
+        if (sentryEvent.Exception is AggregateException)
+            return null;
+
         var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
         var timeSpan = THelpers.GetReadableRelativeTime(timeOfLastBackup);
 

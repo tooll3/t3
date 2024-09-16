@@ -172,7 +172,7 @@ public class DataIntervalEvent :DataEvent
     {
         if (!IsUnfinished)
         {
-            Log.Warning($"setting finish time of fished note? {EndTime} vs {someTime}");
+            //Log.Warning($"setting finish time of finished note? {EndTime} vs {someTime}");
         }
 
         EndTime = someTime;

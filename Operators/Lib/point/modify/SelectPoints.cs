@@ -41,6 +41,9 @@ namespace lib.point.modify
         [Input(Guid = "56bf96b4-e7c4-4747-b57a-64a39e0d6314")]
         public readonly InputSlot<float> FallOff = new InputSlot<float>();
 
+        [Input(Guid = "45957158-9924-46c2-8b48-f90f72b7148f")]
+        public readonly InputSlot<float> Scatter = new InputSlot<float>();
+
         [Input(Guid = "2c5e5bb5-6023-4ff4-906d-d0a905110e95", MappedType = typeof(Shapes))]
         public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
 

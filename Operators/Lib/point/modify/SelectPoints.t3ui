@@ -45,9 +45,17 @@
     {
       "InputId": "56bf96b4-e7c4-4747-b57a-64a39e0d6314"/*FallOff*/,
       "Position": {
-        "X": -927.20746,
-        "Y": 2153.4277
+        "X": -948.8596,
+        "Y": 2075.147
       }
+    },
+    {
+      "InputId": "45957158-9924-46c2-8b48-f90f72b7148f"/*Scatter*/,
+      "Position": {
+        "X": -948.8596,
+        "Y": 2120.147
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "2c5e5bb5-6023-4ff4-906d-d0a905110e95"/*VolumeShape*/,

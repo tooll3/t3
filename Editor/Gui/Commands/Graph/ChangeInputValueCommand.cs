@@ -64,6 +64,7 @@ namespace T3.Editor.Gui.Commands.Graph
                 }
 
                 var symbolChild = inputParentSymbol.Children[_childId];
+                
                 InvalidateInstances(inputParentSymbol, symbolChild);
             }
             else

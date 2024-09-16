@@ -74,6 +74,12 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         _updateTriggered |= MathUtils.WasChanged(CombineBuffer.GetValue(context), ref _combineBuffer);
         
         TriggerUpdate.SetTypedInputValue(false);
+        
+        if (filePath == null || !File.Exists(filePath))
+        {
+            _lastErrorMessage = $"Gltf File not found: {filePath}";
+            return;
+        }
 
         if (LoadFileIfRequired(filePath, out var newSetup))
         {

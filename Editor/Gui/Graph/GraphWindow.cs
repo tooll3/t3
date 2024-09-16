@@ -333,11 +333,7 @@ namespace T3.Editor.Gui.Graph
                         var mousePos = ImGui.GetMousePos();
                         var normalizedMousePos = (mousePos - widgetPos - Vector2.One * padding) / mapSize;
                         var mousePosInCanvas = bounds.Min + bounds.GetSize() * normalizedMousePos;
-
-                        // Debug visualization
-                        //var posInScreen = graphCanvas.TransformPosition(posInCanvas);
-                        //ImGui.GetForegroundDrawList().AddCircle(posInScreen, 10, Color.Green);
-
+                        
                         // Dragging
                         ImGui.InvisibleButton("##map", widgetSize);
                         if (ImGui.IsItemActive())
@@ -345,6 +341,16 @@ namespace T3.Editor.Gui.Graph
                             var scope = canvas.GetTargetScope();
                             scope.Scroll = mousePosInCanvas - (viewMaxInCanvas - viewMinInCanvas) / 2;
                             canvas.SetTargetScope(scope);
+                        }
+
+                        if (ImGui.IsItemHovered() && ImGui.GetIO().MouseWheel != 0)
+                        {
+                            var posInScreen = canvas.TransformPositionFloat(mousePosInCanvas);
+                            canvas.ZoomWithMouseWheel(new MouseState()
+                                                          {
+                                                              Position = posInScreen, 
+                                                              ScrollWheel  =ImGui.GetIO().MouseWheel
+                                                          }, out _);
                         }
                     }
                 }
@@ -412,17 +418,34 @@ namespace T3.Editor.Gui.Graph
             private static void DrawBreadcrumbs(GraphWindow window, Composition composition)
             {
                 ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
+                FormInputs.AddVerticalSpace(10);
                 var parents = Structure.CollectParentInstances(composition.Instance);
 
                 ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(1, 1));
+                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(0, 0));
                 {
+                    var isFirstChild = true;
                     foreach (var p in parents)
                     {
-                        ImGui.SameLine();
+                        if (isFirstChild)
+                        {
+                            isFirstChild=false;
+                            ImGui.SameLine(7);
+                        }
+                        else
+                        {
+                            ImGui.SameLine(0);
+                        }
+                        
+                        
+
                         ImGui.PushID(p.SymbolChildId.GetHashCode());
 
+                        ImGui.PushFont(Fonts.FontSmall);
                         var clicked = ImGui.Button(p.Symbol.Name);
+                        ImGui.PopFont();
                         
                         if (p.Parent == null && ImGui.BeginItemTooltip())
                         {
@@ -438,13 +461,15 @@ namespace T3.Editor.Gui.Graph
 
                         ImGui.SameLine();
                         ImGui.PopID();
-                        ImGui.TextUnformatted(">");
+                        ImGui.PushFont(Icons.IconFont);
+                        ImGui.TextUnformatted(BreadCrumbSeparator);
+                        ImGui.PopFont();
                     }
                     
                     
                 }
-                ImGui.PopFont();
-                ImGui.PopStyleColor();
+                ImGui.PopStyleVar(2);
+                ImGui.PopStyleColor(2);
             }
 
             private static void PopulateDependenciesTooltip(Instance p)
@@ -480,38 +505,12 @@ namespace T3.Editor.Gui.Graph
                 ImGui.TextUnformatted("  - " + compositionOp.Symbol.Namespace);
                 ImGui.PopFont();
                 ImGui.PopStyleColor();
-
-                var symbolUi = compositionOp.SymbolUi;
-
-                if (!string.IsNullOrEmpty(symbolUi.Description))
-                {
-                    var desc = symbolUi.Description;
-                    ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                    {
-                        var sizeMatchingDescription = ImGui.CalcTextSize(desc) + new Vector2(20, 40);
-                        sizeMatchingDescription.X = Math.Max(300, sizeMatchingDescription.X);
-                        ImGui.Indent(9);
-                        ImGui.TextWrapped(desc);
-                    }
-                    ImGui.PopStyleColor(2);
-                    ImGui.PopFont();
-                }
-
-                ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-
-                ImGui.PushFont(Fonts.FontSmall);
-                if (ImGui.Button("Edit description..."))
-                    EditDescriptionDialog.ShowNextFrame();
-
-                ImGui.PopFont();
-                ImGui.PopStyleColor(2);
             }
         }
 
         internal readonly GraphImageBackground GraphImageBackground;
+
+        private static readonly string BreadCrumbSeparator = (char)Icon.ChevronRight + "";
         public readonly GraphCanvas GraphCanvas;
         private const int UseComputedHeight = -1;
         private int _customTimeLineHeight = UseComputedHeight;

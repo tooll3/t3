@@ -58,9 +58,10 @@ namespace T3.Editor.Gui.Styling
             
             var color = args.Warning ? UiColors.StatusWarning.Rgba : UiColors.Text.Rgba;
             ImGui.PushStyleColor(ImGuiCol.Text, color);
-            var wasChanged = ImGui.InputText(args.Label, ref filter, 256);
             
             filter ??= string.Empty;
+            var wasChanged = ImGui.InputText(args.Label, ref filter, 256);
+            
             
             if (outlineOnly)
             {

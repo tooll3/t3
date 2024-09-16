@@ -208,26 +208,33 @@ internal abstract class MfVideoWriter : IDisposable
         var mediaBufferPointer = mediaBuffer.Lock(out _, out _);
 
         // Note: dataBox.RowPitch and outputStream.RowPitch can diverge if width is not divisible by 16.
-        for (var loopY = 0; loopY < _videoPixelSize.Height; loopY++)
+        try
         {
-            if (!FlipY)
-                inputStream.Position = (long)(loopY) * dataBox.RowPitch;
-            else
-                inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
-
-            outputStream.WriteRange(inputStream.ReadRange<byte>(rowStride));
-        }
-
-        // Copy our finished BGRA buffer to the media buffer pointer
-        for (var loopY = 0; loopY < height; loopY++)
-        {
-            var index = loopY * rowStride;
-            for (var loopX = width; loopX > 0; --loopX)
+            for (var loopY = 0; loopY < _videoPixelSize.Height; loopY++)
             {
-                var value = Marshal.ReadInt32(outputStream.DataPointer, index);
-                Marshal.WriteInt32(mediaBufferPointer, index, value);
-                index += 4;
+                if (!FlipY)
+                    inputStream.Position = (long)(loopY) * dataBox.RowPitch;
+                else
+                    inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
+
+                outputStream.WriteRange(inputStream.ReadRange<byte>(rowStride));
             }
+
+            // Copy our finished BGRA buffer to the media buffer pointer
+            for (var loopY = 0; loopY < height; loopY++)
+            {
+                var index = loopY * rowStride;
+                for (var loopX = width; loopX > 0; --loopX)
+                {
+                    var value = Marshal.ReadInt32(outputStream.DataPointer, index);
+                    Marshal.WriteInt32(mediaBufferPointer, index, value);
+                    index += 4;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Error("Failed to write video frame: " + e.Message);
         }
         inputStream?.Dispose();
         outputStream?.Dispose();

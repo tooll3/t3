@@ -132,7 +132,24 @@ namespace lib.color
                         color = new Vector4(r, g, b, a);
                     }
                         break;
-
+                    
+                    case Format.R32G32B32A32_Float:
+                        try
+                        {
+                            sourceStream.Seek(row * sourceDataBox.RowPitch + 16 * column, System.IO.SeekOrigin.Begin);
+                            var r = sourceStream.Read<float>();
+                            var g = sourceStream.Read<float>();
+                            var b = sourceStream.Read<float>();
+                            var a = sourceStream.Read<float>();
+                            color = new Vector4(r, g, b, a);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Warning(" Exception in PickColorFromImage: " + e.Message, this);
+                            return;
+                        }
+                        break;
+                    
                     default:
                         Log.Warning($"Can't access unknown texture format {inputDescription.Format}", this);
                         color = Color.White;

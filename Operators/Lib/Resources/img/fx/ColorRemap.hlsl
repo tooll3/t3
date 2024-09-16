@@ -8,6 +8,7 @@ cbuffer ParamConstants : register(b0)
     float Exposure;
 
     float2 BiasAndGain; 
+    float Repeat;
 }
 
 
@@ -25,22 +26,19 @@ sampler clampedSampler : register(s1);
 
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
-    //float2 uv = psInput.texCoord + float2(Offset,0);
     float4 orgColor = ImageA.Sample(linearSampler, psInput.texCoord);
-    //orgColor = GetSchlickBias(orgColor, Bias);  
-    //return orgColor;
 
     float4 gradient = 0;
     if (Mode < 0.5)
     {
         float gray = (orgColor.r + orgColor.g + orgColor.b) / 3 * Exposure;
-        orgColor = ApplyBiasAndGain(saturate(gray), BiasAndGain.x, BiasAndGain.y);
+        orgColor = ApplyBiasAndGain(saturate(gray), BiasAndGain.x, BiasAndGain.y) * Repeat;
         gradient = Gradient.Sample(linearSampler, float2(orgColor.r + Offset, 0));
     }
     else
     {
         orgColor.rgb *= Exposure;
-        orgColor = ApplyBiasAndGain(saturate(orgColor), BiasAndGain.x, BiasAndGain.y);
+        orgColor = ApplyBiasAndGain(saturate(orgColor), BiasAndGain.x, BiasAndGain.y)  * Repeat;
     
         gradient = float4(
             Gradient.Sample(linearSampler, float2(orgColor.r + Offset, 0)).r,

@@ -9,7 +9,7 @@ using Texture2D = T3.Core.DataTypes.Texture2D;
 namespace lib.img.fx._
 {
 	[Guid("fd5ac393-02a4-43ae-8cdf-64a947abbafa")]
-    public class UseRenderTarget : Instance<UseRenderTarget>
+    public class UseTextureReference : Instance<UseTextureReference>
     {
         [Output(Guid = "CB9850B3-119A-4839-B79F-A882112503C6")]
         public readonly Slot<RenderTargetReference> Reference = new();
@@ -21,7 +21,7 @@ namespace lib.img.fx._
         public readonly Slot<Texture2D> DepthTexture = new();
 
         
-        public UseRenderTarget()
+        public UseTextureReference()
         {
             Texture.UpdateAction += UpdateTexture;
             DepthTexture.UpdateAction += UpdateTexture;

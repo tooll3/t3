@@ -166,7 +166,7 @@
       "Outputs": []
     },
     {
-      "Id": "224d4619-4ede-4503-bc37-6a4f23f0fa0b"/*UseRenderTarget*/,
+      "Id": "224d4619-4ede-4503-bc37-6a4f23f0fa0b"/*UseTextureReference*/,
       "SymbolId": "fd5ac393-02a4-43ae-8cdf-64a947abbafa",
       "InputValues": [],
       "Outputs": []
