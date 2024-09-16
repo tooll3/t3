@@ -451,7 +451,7 @@ namespace T3.Core.Resource
                 {
                     shaderResourceView?.Dispose();
                     shaderResourceView = new ShaderResourceView(Device, texture2dResource.Texture) { DebugName = name };
-                    Log.Info($"Created shader resource view '{name}' for texture '{texture2dResource.Name}'.");
+                    //Log.Info($"Created shader resource view '{name}' for texture '{texture2dResource.Name}'.");
                 }
                 else if (resource is Texture3dResource texture3dResource)
                 {

@@ -46,7 +46,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                 return new List<Variation>();
             }
 
-            Log.Info($"Reading presets definition for : {compositionId}");
+            //Log.Info($"Reading presets definition for : {compositionId}");
 
             using var sr = new StreamReader(filepath);
             using var jsonReader = new JsonTextReader(sr);

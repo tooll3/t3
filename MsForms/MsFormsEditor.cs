@@ -56,7 +56,7 @@ public class MsFormsEditor : MsForms, IEditorSystemUiService
                 {
                     _dialog.Filter = value;
                 }
-                catch (ArgumentException e)
+                catch (ArgumentException)
                 {
                     // TODO: should log this
                 }
