@@ -56,7 +56,7 @@ public abstract class ShaderCompiler
 
                 if (success)
                 {
-                    Log.Debug($"Compiled shader '{name}'({hash}).");
+                    Log.Debug($"Compiled shader '{name}' ({hash}).");
                     if (blob != null)
                     {
                         if (_shaderBytecodeHashes.Remove(blob, out var oldHash))
@@ -65,7 +65,7 @@ public abstract class ShaderCompiler
                         }
 
                         blob.Dispose();
-                        Log.Debug($"Disposing old shader '{name}'({oldHash}).");
+                        Log.Debug($"Disposing old shader '{name}' ({oldHash}).");
                     }
 
                     _shaderBytecodeCache[hash] = latestBlob;

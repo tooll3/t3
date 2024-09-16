@@ -125,42 +125,50 @@ internal static class TextureReadAccess
             _readRequests.Clear();
         }
 
-        // Create read back textures
-        var cpuAccessDescription = new Texture2DDescription
-                                       {
-                                           BindFlags = BindFlags.None,
-                                           Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
-                                           Width = currentDesc.Width,
-                                           Height = currentDesc.Height,
-                                           MipLevels = 1,
-                                           SampleDescription = new SampleDescription(1, 0),
-                                           Usage = ResourceUsage.Staging,
-                                           OptionFlags = ResourceOptionFlags.None,
-                                           CpuAccessFlags = CpuAccessFlags.Read,
-                                           ArraySize = 1
-                                       };
-
-        for (var i = 0; i < CpuAccessTextureCount; ++i)
+        try
         {
-            _imagesWithCpuAccess.Add(new Texture2D(ResourceManager.Device, cpuAccessDescription));
-        }
+                
+            // Create read back textures
+            var cpuAccessDescription = new Texture2DDescription
+                                           {
+                                               BindFlags = BindFlags.None,
+                                               Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
+                                               Width = currentDesc.Width,
+                                               Height = currentDesc.Height,
+                                               MipLevels = 1,
+                                               SampleDescription = new SampleDescription(1, 0),
+                                               Usage = ResourceUsage.Staging,
+                                               OptionFlags = ResourceOptionFlags.None,
+                                               CpuAccessFlags = CpuAccessFlags.Read,
+                                               ArraySize = 1
+                                           };
 
-        // Create format conversion texture
-        var convertTextureDescription = new Texture2DDescription
-                                            {
-                                                BindFlags = BindFlags.UnorderedAccess | BindFlags.RenderTarget | BindFlags.ShaderResource,
-                                                Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
-                                                Width = currentDesc.Width,
-                                                Height = currentDesc.Height,
-                                                MipLevels = 1,
-                                                SampleDescription = new SampleDescription(1, 0),
-                                                Usage = ResourceUsage.Default,
-                                                OptionFlags = ResourceOptionFlags.None,
-                                                CpuAccessFlags = CpuAccessFlags.None,
-                                                ArraySize = 1
-                                            };
-        _conversionTexture = new Texture2D(ResourceManager.Device, convertTextureDescription);
-        _conversionUav = new UnorderedAccessView(ResourceManager.Device, _conversionTexture);
+            for (var i = 0; i < CpuAccessTextureCount; ++i)
+            {
+                _imagesWithCpuAccess.Add(new Texture2D(ResourceManager.Device, cpuAccessDescription));
+            }
+
+            // Create format conversion texture
+            var convertTextureDescription = new Texture2DDescription
+                                                {
+                                                    BindFlags = BindFlags.UnorderedAccess | BindFlags.RenderTarget | BindFlags.ShaderResource,
+                                                    Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
+                                                    Width = currentDesc.Width,
+                                                    Height = currentDesc.Height,
+                                                    MipLevels = 1,
+                                                    SampleDescription = new SampleDescription(1, 0),
+                                                    Usage = ResourceUsage.Default,
+                                                    OptionFlags = ResourceOptionFlags.None,
+                                                    CpuAccessFlags = CpuAccessFlags.None,
+                                                    ArraySize = 1
+                                                };
+            _conversionTexture = new Texture2D(ResourceManager.Device, convertTextureDescription);
+            _conversionUav = new UnorderedAccessView(ResourceManager.Device, _conversionTexture);
+        }
+        catch (SharpDX.SharpDXException e)
+        {
+            Log.Error($"Failed to create textures for CPU access: {e.Message}");
+        }
     }
 
     #region conversion shader

@@ -195,7 +195,8 @@ internal class ParameterWindow : Window
 
             // Help-Mode
             {
-                if (_help.DrawHelpIcon(symbolUi, out var isHelpMode))
+                var isHelpMode = _viewMode == ViewModes.Help;
+                if (_help.DrawHelpIcon(symbolUi, ref  isHelpMode))
                 {
                     _viewMode = isHelpMode ? ViewModes.Help : ViewModes.Parameters;
                 }
@@ -221,7 +222,8 @@ internal class ParameterWindow : Window
         DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false, this );
         FormInputs.AddVerticalSpace(15);
 
-        _help.DrawHelpSummary(symbolUi);
+        if(OperatorHelp.DrawHelpSummary(symbolUi)) 
+            _viewMode = ViewModes.Help;
 
         OperatorHelp.DrawExamples(symbolUi);
         ImGui.EndChild();
@@ -230,7 +232,7 @@ internal class ParameterWindow : Window
 
     private void DrawChildNameAndFlags(Instance op, SymbolChildUi symbolChildUi, SymbolUi symbolUi)
     {
-        var hideParameters = _help.IsActive || _parameterSettings.IsActive;
+        var hideParameters = _viewMode == ViewModes.Help || _parameterSettings.IsActive;
         if (hideParameters)
             return;
 

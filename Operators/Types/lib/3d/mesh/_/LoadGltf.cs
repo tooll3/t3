@@ -47,11 +47,17 @@ public class LoadGltf : Instance<LoadGltf>
             }
 
             var fullPath = System.IO.Path.GetFullPath(path);
-            var model = SharpGLTF.Schema2.ModelRoot.Load(fullPath);
-            
-            if(childIndexChanged)
-                UpdateBuffers(model, childIndex);
-            
+            try
+            {
+                var model = SharpGLTF.Schema2.ModelRoot.Load(fullPath);
+                
+                if(childIndexChanged)
+                    UpdateBuffers(model, childIndex);
+            }
+            catch (Exception e)
+            {
+                ShowError($"Failed loading gltf: {e.Message}");
+            }
         }
     }
 

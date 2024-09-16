@@ -85,7 +85,10 @@ namespace T3.Editor.Gui.Commands.Graph
             
             foreach (var entry in _entries)
             {
-                var selectable = GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
+                if(entry == null)
+                    continue;
+                
+                var selectable = GetSelectables().SingleOrDefault(s => s?.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
                 

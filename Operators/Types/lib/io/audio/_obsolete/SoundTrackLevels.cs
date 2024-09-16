@@ -45,15 +45,22 @@ namespace T3.Operators.Types.Id_a9e77500_ccb5_45b9_9f17_0d9bf9b58fb5
 
                 if (File.Exists(_filepath))
                 {
-                    using (var reader = new StreamReader(filePath))
+                    using var reader = new StreamReader(filePath);
+                    var jsonString = reader.ReadToEnd();
+
+                    try
                     {
-                        var jsonString = reader.ReadToEnd();
                         _upLevels = JsonConvert.DeserializeObject<float[]>(jsonString);
                         if (_upLevels == null || _upLevels.Length == 0)
                         {
                             Log.Warning("Loading sound levels failed", this);
                             return;
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warning("Failed to load soundtrack levels from file: " + e.Message);
+                        return;
                     }
                 }
                 else

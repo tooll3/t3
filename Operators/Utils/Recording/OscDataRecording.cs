@@ -23,7 +23,7 @@ public class OscDataRecording : OscConnectionManager.IOscConsumer, IDisposable
 
         if (_port is < 0 or > 65535)
         {
-            Log.Debug($"Default OSC recording because of invalid port {_port}");
+            Log.Debug($"OSC recording disabled. You can enable this in Settings.");
             return;
         }
 

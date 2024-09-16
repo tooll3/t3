@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 using Rug.Osc;
 using T3.Core.Logging;
 
@@ -17,65 +17,57 @@ namespace Operators.Utils
 
         public static void UnregisterConsumer(IOscConsumer consumer)
         {
-            var foundConsumer = false;
-            foreach (var group in _groupsByPort.Values)
+            lock (_groupsByPort)
             {
-                if (!group.Consumers.Contains(consumer))
-                    continue;
+                var foundConsumer = false;
 
-                foundConsumer = true;
-                lock (_groupsByPort)
+                foreach (var portGroup in _groupsByPort.Values)
                 {
-                    var shouldCloseGroup = @group.Consumers.Count == 1 && group._isRunning;
+                    if (!portGroup.Consumers.Contains(consumer))
+                        continue;
+
+                    foundConsumer = true;
+                    var shouldCloseGroup = portGroup.Consumers.Count == 1;
                     if (shouldCloseGroup)
                     {
-                        Log.Debug($"Closing OSC port {group.Port}");
+                        // Log.Debug($"Closing OSC port because no more listeners {portGroup.Port}");
                         try
                         {
-                            group.Stop();
+                            portGroup.Stop();
                         }
                         catch (Exception e)
                         {
-                            Log.Debug("Exception: " + e.Message);
+                            Log.Debug("Closing OSC Port failed" + e.Message);
                         }
 
-                        _groupsByPort.Remove(group.Port);
+                        _groupsByPort.Remove(portGroup.Port);
                     }
                     else
                     {
-                        group.Consumers.Remove(consumer);
+                        portGroup.Consumers.Remove(consumer);
                     }
+
+                    break;
                 }
 
-                break;
-            }
-
-            if (!foundConsumer)
-            {
-                Log.Error("Attempted to unregister a non-registered OSC consumer?");
+                if (!foundConsumer)
+                {
+                    Log.Error("Attempted to unregister a non-registered OSC consumer?");
+                }
             }
         }
 
         private static PortGroup CreateOrGetReceiverForPort(int port)
         {
+            if (port < 0 || port > 65535)
+                return null;
+
             if (_groupsByPort.TryGetValue(port, out var receiver))
                 return receiver;
 
-            var newReceiver = new OscReceiver(port);
-            try
-            {
-                newReceiver.Connect();
-                
-                var newGroup = new PortGroup(newReceiver);
-                _groupsByPort.Add(port, newGroup);
-                return newGroup;
-            }
-            catch (Exception e)
-            {
-                Log.Warning("Failed to open OSC connection " + e.Message);
-            }
-
-            return null;
+            var newGroup = new PortGroup(port);
+            _groupsByPort.Add(port, newGroup);
+            return newGroup;
         }
 
         public interface IOscConsumer
@@ -99,81 +91,97 @@ namespace Operators.Utils
 
         private class PortGroup
         {
-            public int Port => _receiver.Port;
+            public int Port { get; }
+
             public readonly Dictionary<string, string> ScannedAddresses = new();
-
             public readonly HashSet<IOscConsumer> Consumers = new();
+            private readonly OscReceiver _receiver;
 
-            public PortGroup(OscReceiver receiver)
+            public PortGroup(int listenPort)
             {
-                _receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
-                _thread = new Thread(ThreadProc);
-                _isRunning = true;
-                _thread.Start();
+                Port = listenPort;
+                _receiver = new OscReceiver(listenPort);
+                try
+                {
+                    _receiver.Connect();
+                    StartListening();
+                }
+                catch (Exception e)
+                {
+                    Log.Warning($"Failed to open OSC connection on port {listenPort}: {e.Message}");
+                    Stop();
+                }
             }
 
-            private void ThreadProc()
+            // Listen for OSC messages asynchronously
+            private async void StartListening()
             {
-                while (_isRunning)
+                var listenTask = ListenForMessagesAsync();
+                await listenTask.ContinueWith(task =>
+                                              {
+                                                  // This block executes when ListenForMessagesAsync completes
+                                                  if (task.IsFaulted)
+                                                  {
+                                                      Log.Warning($"Error while listening for OSC messages on port {Port}: {task.Exception?.Flatten().Message}");
+                                                  }
+                                                  else
+                                                  {
+                                                      Stop();
+                                                  }
+                                              }, TaskScheduler.FromCurrentSynchronizationContext()); // 
+            }
+
+            private async Task ListenForMessagesAsync()
+            {
+                try
                 {
-                    while (_receiver.State != OscSocketState.Closed)
+                    while (_receiver is { State: OscSocketState.Connected })
                     {
-                        if (_receiver.State != OscSocketState.Connected)
-                            continue;
-
-                        try
+                        while (_receiver.TryReceive(out var packet))
                         {
-                            // Get the next message. This will block until one arrives or the socket is closed
-                            var oscPacket = _receiver.Receive();
-
-                            // note rug.osc ignores non osc packets sent, so this is directly usable
-                            try
+                            switch (packet)
                             {
-                                switch (oscPacket)
-                                {
-                                    case OscBundle bundle:
+                                case OscBundle bundle:
+                                    foreach (var bundleContent in bundle)
                                     {
-                                        foreach (var bundleContent in bundle)
-                                        {
-                                            if (bundleContent is not OscMessage bundleMessage)
-                                                continue;
+                                        if (bundleContent is not OscMessage bundleMessage)
+                                            continue;
 
-                                            KeepMessageAddress(bundleMessage);
-                                            ForwardMessage(bundleMessage);
-                                        }
-
-                                        break;
+                                        KeepMessageAddress(bundleMessage);
+                                        ForwardMessage(bundleMessage);
                                     }
-                                    case OscMessage message:
-                                        KeepMessageAddress(message);
-                                        ForwardMessage(message);
-                                        break;
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Log.Warning($"Failed to parse OSC Message: '{oscPacket} {e.Message}'");
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Debug($"OSC connection on port {Port} changed {e.Message}");
-                        }
-                    }
 
-                    if (_isRunning)
-                    {
-                        // vux: remark : normally the only case this would happen is if another app was using the port when starting t3
-                        // the app got closed, otherwise listening on udp will not auto close, is that really necessary?
-                        Log.Debug($"OSC connection on port {Port} closed");
-                        while (_receiver.State == OscSocketState.Closed)
-                        {
-                            Thread.Sleep(100);
-                            Log.Debug($"Trying to reconnect OSC port {Port}...");
-                            _receiver.Connect();
+                                    break;
+
+                                case OscMessage message:
+                                    KeepMessageAddress(message);
+                                    ForwardMessage(message);
+                                    break;
+                            }
                         }
+
+                        // Wait a little to avoid CPU overuse
+                        await Task.Delay(2);
                     }
                 }
+                catch (Exception e)
+                {
+                    Log.Warning($"Error while processing OSC message: {e.Message}");
+                }
+            }
+
+            public void Stop()
+            {
+                if (_receiver == null)
+                    return;
+
+                if (_receiver.State == OscSocketState.Connected)
+                {
+                    Log.Warning("Closing OSC Receiver. " + Port);
+                    _receiver.Close();
+                }
+
+                _receiver?.Dispose();
             }
 
             private void ForwardMessage(OscMessage message)
@@ -182,13 +190,6 @@ namespace Operators.Utils
                 {
                     consumer.ProcessMessage(message);
                 }
-            }
-
-            public void Stop()
-            {
-                _isRunning = false;
-                _receiver.Dispose();
-                _thread.Join();
             }
 
             private void KeepMessageAddress(OscMessage packet)
@@ -213,36 +214,32 @@ namespace Operators.Utils
 
                 ScannedAddresses[packet.Address] = sb.ToString();
             }
-
-            private readonly OscReceiver _receiver;
-            private readonly Thread _thread;
-            public bool _isRunning;
         }
-        
+
         public static bool TryGetFloatFromMessagePart(object arg, out float value)
         {
             value = arg switch
                         {
-                            float f => f,
-                            int   i => i,
-                            bool  b => b ? 1f:0f,
+                            float f  => f,
+                            int i    => i,
+                            bool b   => b ? 1f : 0f,
                             string s => float.TryParse(s, out var f) ? f : float.NaN,
                             double d => (float)d,
-                            _      => float.NaN
+                            _        => float.NaN
                         };
             return !float.IsNaN(value);
         }
 
         public static string BuildMessageComponentPath(OscMessage msg, int index)
         {
-            const string channels="xyzw";
-            var suffix = index < 4 ? channels[index].ToString() : index.ToString(); 
-            return  msg.Address + "." + suffix;
+            const string channels = "xyzw";
+            var suffix = index < 4 ? channels[index].ToString() : index.ToString();
+            return msg.Address + "." + suffix;
         }
-        
+
         public static string BuildMessageComponentPath(OscMessage msg)
         {
-            return  msg.Address;
+            return msg.Address;
         }
     }
 }
