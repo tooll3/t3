@@ -86,7 +86,8 @@
       "Position": {
         "X": -200.0,
         "Y": 360.0
-      }
+      },
+      "Description": "Input for a [CombineMaterialChannels] Operator that combines a Roughness, Metallic and Occlusion Texture via RGB Channels (or for [LoadImage] to use a texture map which already combines these)"
     },
     {
       "InputId": "71e289f0-382b-4d0f-a2e0-701c7019a360"/*MaterialId*/,
@@ -94,6 +95,7 @@
         "X": -200.0,
         "Y": 405.0
       },
+      "Description": "ID used in context with [LoadGltfScene] and [DefineMaterials]",
       "Usage": "Default"
     }
   ],
