@@ -1,4 +1,7 @@
-﻿using ImGuiNET;
+﻿using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SilkWindows;
@@ -66,6 +69,28 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                     break;
                 case UsageType.FilePath:
                     inputEditStateFlags = DrawTypeAheadSearch(FileOperations.FilePickerTypes.File, ref value);
+                    ImGui.SameLine();
+                    if (ImGui.Button("Edit"))
+                    {
+                        var exists = ResourceManager.TryResolvePath(value, _searchResourceConsumer, out var absolutePath, out var resourceContainer, false);
+                        if (!File.Exists(absolutePath))
+                        {
+                            Log.Error("Can't open non-existing file " + absolutePath);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                Process.Start(new ProcessStartInfo(absolutePath) { UseShellExecute = true });
+                            }
+                            catch (Win32Exception e)
+                            {
+                                Log.Warning("Can't open editor: " + e.Message);
+                            }
+                        }
+                        //OpenFileManager(FileOperations.FilePickerTypes.File, _searchResourceConsumer.AvailableResourcePackages, new string[0], isFolder: false, async: true);
+                    }
+                    
                     NormalizePathSeparators(inputEditStateFlags, ref value);
                     break;
                 case UsageType.DirectoryPath:
@@ -82,6 +107,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
 
             return inputEditStateFlags;
 
+            
             static void NormalizePathSeparators(InputEditStateFlags inputEditStateFlags, ref string value)
             {
                 // normalize path separators when modified
