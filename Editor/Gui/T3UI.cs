@@ -180,8 +180,8 @@ public static class T3Ui
     }
 
     /// <summary>
-    /// This a bad work around to defer some ui actions until we have completed all
-    /// window initialization so they are not discarded by the setup process.
+    /// This a bad workaround to defer some ui actions until we have completed all
+    /// window initialization, so they are not discarded by the setup process.
     /// </summary>
     private static bool IsWindowLayoutComplete() => ImGui.GetFrameCount() > 2;
 

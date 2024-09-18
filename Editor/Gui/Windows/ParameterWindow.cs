@@ -104,10 +104,10 @@ internal class ParameterWindow : Window
 
         if (!TryGetUiDefinitions(instance, out var symbolUi, out var symbolChildUi))
             return;
-
+        
         var modified = false;
         modified |= DrawSymbolHeader(instance, symbolChildUi, symbolUi);
-
+        
         if (instance.Parent == null)
         {
             CustomComponents.EmptyWindowMessage("Home canvas.");
@@ -160,7 +160,6 @@ internal class ParameterWindow : Window
 
             ImGui.SameLine();
 
-            ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
             var namespaceForEdit = op.Symbol.Namespace ?? "";
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 60); // the question mark is now aligned to the right
 
