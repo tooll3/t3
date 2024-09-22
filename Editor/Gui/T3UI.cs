@@ -272,14 +272,16 @@ public static class T3Ui
                 }
 
                 // Disabled, at least for now, as this is an incomplete (or not even started) operation on the Main branch atm
-                //if (ImGui.MenuItem("Import Operators", null, false, !IsCurrentlySaving))
-                //{
-                //    _importDialog.ShowNextFrame();
-                //}
+                if (ImGui.MenuItem("Import Operators", null, false, !IsCurrentlySaving))
+                {
+                    BlockingWindow.Instance.ShowMessageBox("This feature is not yet implemented on the main branch - stay tuned for updates!", "Not yet implemented");
+                    //_importDialog.ShowNextFrame();
+                }
 
                 if (ImGui.MenuItem("Fix File references", ""))
                 {
-                    FileReferenceOperations.FixOperatorFilepathsCommand_Executed();
+                    BlockingWindow.Instance.ShowMessageBox("This feature is not yet implemented on the main branch - stay tuned for updates!", "Not yet implemented");
+                    //FileReferenceOperations.FixOperatorFilepathsCommand_Executed();
                 }
 
                 ImGui.Separator();
