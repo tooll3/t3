@@ -97,13 +97,13 @@ internal sealed partial class CsProjectFile
 
 
     // todo - rate limit recompiles for when multiple files change
-    public bool TryRecompile([NotNullWhen(true)] out ReleaseInfo? releaseInfo)
+    public bool TryRecompile([NotNullWhen(true)] out ReleaseInfo? releaseInfo, bool nugetRestore)
     {
         var previousBuildId = _buildId;
         var previousAssembly = Assembly;
         _buildId = GetNewBuildId();
         ModifyBuildVersion(0, 0 , 1);
-        var success = Compiler.TryCompile(this, EditorBuildMode);
+        var success = Compiler.TryCompile(this, EditorBuildMode, nugetRestore);
 
         if (!success)
         {
@@ -159,9 +159,9 @@ internal sealed partial class CsProjectFile
         return actualVersion;
     }
 
-    public bool TryCompileRelease(string externalDirectory)
+    public bool TryCompileRelease(string externalDirectory, bool nugetRestore = false)
     {
-        return Compiler.TryCompile(this, PlayerBuildMode, externalDirectory);
+        return Compiler.TryCompile(this, PlayerBuildMode, nugetRestore, targetDirectory: externalDirectory);
     }
 
     // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation

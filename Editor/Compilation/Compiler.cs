@@ -59,7 +59,7 @@ internal static class Compiler
     private static ProcessCommander<CompilationOptions>? _processCommander;
     private static readonly object _processLock = new();
     
-    public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, string? targetDirectory = null, Verbosity verbosity = Verbosity.Quiet)
+    public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, bool nugetRestore, string? targetDirectory = null, Verbosity verbosity = Verbosity.Quiet)
     {
         Stopwatch stopwatch = new();
         stopwatch.Start();
@@ -82,7 +82,7 @@ internal static class Compiler
             
             Log.Info($"Compiling {projectFile.Name} in {buildMode} mode");
 
-            var compilationOptions = new CompilationOptions(projectFile, buildMode, targetDirectory, verbosity, false);
+            var compilationOptions = new CompilationOptions(projectFile, buildMode, targetDirectory, verbosity, nugetRestore);
             var command = new Command<CompilationOptions>(GetCommandFor, Evaluate);
 
             success = _processCommander.TryCommand(command, compilationOptions, projectFile.Directory, true);

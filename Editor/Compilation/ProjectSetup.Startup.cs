@@ -141,7 +141,7 @@ internal static partial class ProjectSetup
                                   }
 
                                   // this may call for some reworking of how that works (MSBuild actions in C#?), or generation at project creation time
-                                  if (!csProjFile.TryGetReleaseInfo(out var releaseInfo) && !csProjFile.TryRecompile(out releaseInfo))
+                                  if (!csProjFile.TryGetReleaseInfo(out var releaseInfo) && !csProjFile.TryRecompile(out releaseInfo, true))
                                   {
                                       Log.Error($"Failed to load release info for {csProjFile.Name}");
                                       return new ProjectWithReleaseInfo(fileInfo, csProjFile, null);

@@ -230,7 +230,7 @@ namespace T3.Editor.UiModel
             _needsCompilation = false;
 
             MarkAsSaving();
-            var updated = CsProjectFile.TryRecompile(out _);
+            var updated = CsProjectFile.TryRecompile(out _, false);
             UnmarkAsSaving();
 
             if (updated)

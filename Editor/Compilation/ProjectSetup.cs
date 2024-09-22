@@ -22,7 +22,7 @@ internal static partial class ProjectSetup
     {
         var newCsProj = CsProjectFile.CreateNewProject(name, nameSpace, shareResources, UserSettings.Config.DefaultNewProjectDirectory);
 
-        if (!newCsProj.TryRecompile(out var releaseInfo))
+        if (!newCsProj.TryRecompile(out var releaseInfo, true))
         {
             Log.Error("Failed to compile new project");
             newProject = null;
@@ -79,8 +79,8 @@ internal static partial class ProjectSetup
                          || !releaseInfo.EditorVersion.Matches(Program.Version) && !releaseInfo.RootNamespace.StartsWith("lib");
         
         var success = forceRecompile
-                          ? csProj.TryRecompile(out _) || csProj.TryLoadLatestAssembly() // recompile - if failed, load latest
-                          : csProj.TryLoadLatestAssembly() || csProj.TryRecompile(out _); // load latest - if failed, recompile
+                          ? csProj.TryRecompile(out _, true) || csProj.TryLoadLatestAssembly() // recompile - if failed, load latest
+                          : csProj.TryLoadLatestAssembly() || csProj.TryRecompile(out _, true); // load latest - if failed, recompile
         if (!success)
         {
             Log.Error($"Failed to load {csProj.Name}");
