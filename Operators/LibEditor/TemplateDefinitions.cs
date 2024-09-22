@@ -7,6 +7,7 @@ using System.Linq;
 using lib.dx11._;
 using lib.dx11.compute;
 using T3.Core.Logging;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.Templates;
 
 namespace libEditor;
@@ -48,10 +49,8 @@ static class TemplateDefinitions
                                                      {
                                                          Log.Warning("Can't find compute shader for source file");
                                                      }
-                                                     
-
-                                                     // Open editor
-                                                     Process.Start(new ProcessStartInfo(newShaderFilename) { UseShellExecute = true });
+                                                    
+                                                     CoreUi.Instance.OpenWithDefaultApplication(newShaderFilename);
                                                  }
                                                  catch (Win32Exception e)
                                                  {
@@ -94,7 +93,7 @@ static class TemplateDefinitions
                                                      }
 
                                                      // Open editor
-                                                     Process.Start(new ProcessStartInfo(newShaderFilename) { UseShellExecute = true });
+                                                     CoreUi.Instance.OpenWithDefaultApplication(newShaderFilename);
                                                  }
                                                  catch (Exception e)
                                                  {

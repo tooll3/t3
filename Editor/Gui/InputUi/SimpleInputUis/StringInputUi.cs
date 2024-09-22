@@ -9,6 +9,7 @@ using SilkWindows.Implementations.FileManager;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
+using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Styling;
@@ -79,14 +80,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                         }
                         else
                         {
-                            try
-                            {
-                                Process.Start(new ProcessStartInfo(absolutePath) { UseShellExecute = true });
-                            }
-                            catch (Win32Exception e)
-                            {
-                                Log.Warning("Can't open editor: " + e.Message);
-                            }
+                            CoreUi.Instance.OpenWithDefaultApplication(absolutePath);
                         }
                         //OpenFileManager(FileOperations.FilePickerTypes.File, _searchResourceConsumer.AvailableResourcePackages, new string[0], isFolder: false, async: true);
                     }

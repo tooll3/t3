@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using ImGuiNET;
 using T3.Core.Resource;
+using T3.Core.SystemUi;
 using T3.Editor.SystemUi;
 using T3.SystemUi;
 
@@ -93,14 +94,7 @@ namespace T3.Editor.Gui.UiHelpers
                     }
                     else
                     {
-                        try
-                        {
-                            Process.Start(new ProcessStartInfo(value) { UseShellExecute = true });
-                        }
-                        catch (Win32Exception e)
-                        {
-                            Log.Warning("Can't open editor: " + e.Message);
-                        }
+                        CoreUi.Instance.OpenWithDefaultApplication(value);
                     }
                 }
             }

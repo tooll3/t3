@@ -16,6 +16,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\Core\Core.csproj" Private="false" PrivateAssets="all"/>
         <ProjectReference Include="..\..\Editor\Editor.csproj" Private="false" PrivateAssets="all"/>
+        <ProjectReference Include="..\..\SystemUi\SystemUi.csproj" />
         <ProjectReference Include="..\lib\Lib.csproj" Private="false" PrivateAssets="all"/>
         <ProjectReference Include="..\libDataTypes\libDataTypes.csproj" Private="false" PrivateAssets="all"/>
         <ProjectReference Include="..\..\Logging\Logging.csproj" Private="false" PrivateAssets="all"/>
