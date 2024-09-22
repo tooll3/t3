@@ -80,6 +80,8 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     {
                         T3Ui.Save(false); // todo : this is probably not needed
                         ImGui.CloseCurrentPopup();
+
+                        GraphWindow.TryOpenPackage(project, false);
                     }
                     else
                     {
