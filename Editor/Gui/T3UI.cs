@@ -258,8 +258,10 @@ public static class T3Ui
             if (ImGui.BeginMenu("Project"))
             {
                 UserSettings.Config.ShowMainMenu = true;
+                
+                var showNewTemplateOption = !IsCurrentlySaving && GraphWindow.Focused != null;
 
-                if (ImGui.MenuItem("New...", KeyboardBinding.ListKeyboardShortcuts(UserActions.New, false), false, !IsCurrentlySaving))
+                if (ImGui.MenuItem("New...", KeyboardBinding.ListKeyboardShortcuts(UserActions.New, false), false, showNewTemplateOption))
                 {
                     _createFromTemplateDialog.ShowNextFrame();
                 }
