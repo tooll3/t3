@@ -771,6 +771,25 @@ namespace T3.Editor.Gui.Graph
             }
             //}
 
+            var symbolPackage = compositionSymbolUi.Symbol.SymbolPackage;
+            if (!symbolPackage.IsReadOnly)
+            {
+                if (ImGui.BeginMenu("Open folder..."))
+                {
+                    if (ImGui.MenuItem("Project"))
+                    {
+                        CoreUi.Instance.OpenWithDefaultApplication(symbolPackage.Folder);
+                    }
+
+                    if (ImGui.MenuItem("Resources"))
+                    {
+                        CoreUi.Instance.OpenWithDefaultApplication(symbolPackage.ResourcesFolder);
+                    }
+                    
+                    ImGui.EndMenu();
+                }
+            }
+
             if (ImGui.BeginMenu("Add..."))
             {
                 if (ImGui.MenuItem("Add Node...", "TAB", false, true))

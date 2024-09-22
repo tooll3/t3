@@ -258,8 +258,9 @@ public static class T3Ui
             if (ImGui.BeginMenu("Project"))
             {
                 UserSettings.Config.ShowMainMenu = true;
-                
-                var showNewTemplateOption = !IsCurrentlySaving && GraphWindow.Focused != null;
+
+                var currentProject = GraphWindow.Focused?.Package;
+                var showNewTemplateOption = !IsCurrentlySaving && currentProject != null;
 
                 if (ImGui.MenuItem("New...", KeyboardBinding.ListKeyboardShortcuts(UserActions.New, false), false, showNewTemplateOption))
                 {
@@ -270,6 +271,33 @@ public static class T3Ui
                 {
                     _newProjectDialog.ShowNextFrame();
                 }
+
+                if (currentProject is { IsReadOnly: false } && currentProject is EditableSymbolProject project)
+                {
+                    ImGui.Separator();
+
+                    if (ImGui.BeginMenu("Open.."))
+                    {
+                        if (ImGui.MenuItem("Project Folder"))
+                        {
+                            CoreUi.Instance.OpenWithDefaultApplication(project.Folder);
+                        }
+
+                        if (ImGui.MenuItem("Resource Folder"))
+                        {
+                            CoreUi.Instance.OpenWithDefaultApplication(project.ResourcesFolder);
+                        }
+
+                        if (ImGui.MenuItem("Project in IDE"))
+                        {
+                            CoreUi.Instance.OpenWithDefaultApplication(project.CsProjectFile.FullPath);
+                        }
+                        
+                        ImGui.EndMenu();
+                    }
+                }
+
+                ImGui.Separator();
 
                 // Disabled, at least for now, as this is an incomplete (or not even started) operation on the Main branch atm
                 if (ImGui.MenuItem("Import Operators", null, false, !IsCurrentlySaving))
