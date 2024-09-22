@@ -271,10 +271,11 @@ public static class T3Ui
                     _newProjectDialog.ShowNextFrame();
                 }
 
-                if (ImGui.MenuItem("Import Operators", null, false, !IsCurrentlySaving))
-                {
-                    _importDialog.ShowNextFrame();
-                }
+                // Disabled, at least for now, as this is an incomplete (or not even started) operation on the Main branch atm
+                //if (ImGui.MenuItem("Import Operators", null, false, !IsCurrentlySaving))
+                //{
+                //    _importDialog.ShowNextFrame();
+                //}
 
                 if (ImGui.MenuItem("Fix File references", ""))
                 {
