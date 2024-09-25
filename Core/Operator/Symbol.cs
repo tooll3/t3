@@ -110,6 +110,11 @@ namespace T3.Core.Operator
             instance.Dispose();
             
             index = index == -1 ? _instancesOfSelf.IndexOf(instance) : index;
+            if (index < 0)
+            {
+                Log.Warning($"Skipping removal of instance from symbol {instance.Symbol} because it was not found.");
+                return;
+            }
             _instancesOfSelf.RemoveAt(index);
         }
 
