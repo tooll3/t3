@@ -159,6 +159,9 @@ internal class ParameterWindow : Window
             ImGui.PopStyleColor();
 
             ImGui.SameLine();
+            ImGui.TextUnformatted(op.Symbol.SymbolPackage.RootNamespace);
+            
+            ImGui.SameLine();
 
             var namespaceForEdit = op.Symbol.Namespace ?? "";
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 60); // the question mark is now aligned to the right
