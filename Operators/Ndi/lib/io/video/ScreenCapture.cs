@@ -1,19 +1,11 @@
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
-using NewTek.NDI;
-using NewTek;
-using System.Linq;
-using SharpGLTF.Schema2;
-using SharpDX.Direct2D1;
-using System.Threading;
 
 namespace Operators.Types.t3.operators.types
 {

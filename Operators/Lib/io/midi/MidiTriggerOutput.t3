@@ -1,7 +1,5 @@
 {
-  "Name": "MidiTriggerOutput",
-  "Id": "61c11adb-94f0-4dc7-9611-c22c40709cf4",
-  "Namespace": "lib.io.midi",
+  "Id": "61c11adb-94f0-4dc7-9611-c22c40709cf4"/*MidiTriggerOutput*/,
   "Inputs": [
     {
       "Id": "c134f57a-a40c-42e4-8223-5cd695b15caa"/*Device*/,

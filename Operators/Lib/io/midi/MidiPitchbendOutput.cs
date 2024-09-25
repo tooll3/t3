@@ -12,7 +12,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace lib.io.midi 
+namespace Operators.Lib.io.midi 
 {
     [Guid("01d33d21-d75e-4c22-bfe6-088e1ee4a5e8")]
     public class MidiPitchbendOutput : Instance<MidiPitchbendOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider

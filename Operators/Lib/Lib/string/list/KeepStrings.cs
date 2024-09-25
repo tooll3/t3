@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.@string.list
+namespace lib.@string.list
 {
     [Guid("56eda8f4-09fc-48a3-ab1d-fbff4f4b6438")]
     public class KeepStrings : Instance<KeepStrings>

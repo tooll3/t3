@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.img.fx
+namespace lib.img.fx
 {
     [Guid("1fa725a1-dab6-4a2a-8a4d-6efdfba5cf05")]
     public class Pixelate : Instance<Pixelate>

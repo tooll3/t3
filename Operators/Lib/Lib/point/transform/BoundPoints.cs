@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.point.transform
+namespace lib.point.transform
 {
     [Guid("ffbbef55-3149-48c1-95cf-cad691ce15fe")]
     public class BoundPoints : Instance<BoundPoints>

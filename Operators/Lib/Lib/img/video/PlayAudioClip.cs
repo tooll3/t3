@@ -8,7 +8,7 @@ using T3.Core.DataTypes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
 
-namespace Lib.img.video
+namespace lib.img.video
 {
     [Guid("c2b2758a-5b3e-465a-87b7-c6a13d3fba48")]
     public class PlayAudioClip : Instance<PlayAudioClip>, IStatusProvider

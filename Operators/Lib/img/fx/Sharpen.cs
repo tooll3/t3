@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.DataTypes;
 
-namespace Lib.img.fx
+namespace lib.img.fx
 {
     [Guid("4b207e35-64b4-4833-977c-da6c7154a081")]
     public class Sharpen : Instance<Sharpen>

@@ -1,7 +1,5 @@
 {
-  "Name": "MidiNoteOutput",
-  "Id": "642cec4f-d4e0-4d0a-8dc3-6ca8339b5f89",
-  "Namespace": "lib.io.midi",
+  "Id": "642cec4f-d4e0-4d0a-8dc3-6ca8339b5f89"/*MidiNoteOutput*/,
   "Inputs": [
     {
       "Id": "e1c1c77a-a6af-4565-b345-f788bf268b2b"/*TriggerSend*/,

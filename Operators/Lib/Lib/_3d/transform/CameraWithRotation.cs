@@ -11,7 +11,7 @@ using T3.Core.Rendering;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
-namespace Lib.Lib._3d.transform
+namespace lib.Lib._3d.transform
 {
     [Guid("9e27c32d-b187-4b7c-9761-0c5bb4ae3c45")]
     public class CameraWithRotation : Instance<CameraWithRotation>, ICameraPropertiesProvider, ICamera

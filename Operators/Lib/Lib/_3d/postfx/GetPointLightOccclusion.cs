@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib._3d.postfx
+namespace lib._3d.postfx
 {
     [Guid("574d636f-64e6-4f07-ac17-49754d2c3599")]
     public class GetPointLightOccclusion : Instance<GetPointLightOccclusion>

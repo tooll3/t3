@@ -6,7 +6,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using static T3.Core.Animation.VDefinition;
 
-namespace Lib._3d.mesh.modify
+namespace lib._3d.mesh.modify
 {
     [Guid("a8fd7522-7874-4411-ad8d-b2e7a20bc4ac")]
     public class DeformMesh : Instance<DeformMesh>

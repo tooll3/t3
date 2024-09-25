@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib._3d.draw
+namespace lib._3d.draw
 {
     [Guid("d38fe24e-be01-4a22-9595-b06bc906bf49")]
     public class ShadowPlane : Instance<ShadowPlane>

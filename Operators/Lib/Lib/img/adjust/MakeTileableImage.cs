@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.img.adjust
+namespace lib.img.adjust
 {
     [Guid("1e29f81b-0c05-4784-b3ac-c475ce510159")]
     public class MakeTileableImage : Instance<MakeTileableImage>

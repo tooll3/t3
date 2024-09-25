@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.point.generate
+namespace lib.point.generate
 {
     [Guid("69bd6cd3-85b2-4a6c-9184-ab25045a51aa")]
     public class BoundingBoxPoints : Instance<BoundingBoxPoints>

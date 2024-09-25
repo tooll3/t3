@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.math.floats
+namespace lib.math.floats
 {
     [Guid("c30ba288-9e40-4636-beb5-68401d91fe37")]
     public class DampFloatList : Instance<DampFloatList>

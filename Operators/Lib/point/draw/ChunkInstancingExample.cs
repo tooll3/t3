@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.point.draw
+namespace lib.point.draw
 {
     [Guid("76cd7578-0f97-49a6-938a-caeaa98deaac")]
     public class ChunkInstancingExample : Instance<ChunkInstancingExample>

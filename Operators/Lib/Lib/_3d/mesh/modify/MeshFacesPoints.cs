@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib._3d.mesh.modify
+namespace lib._3d.mesh.modify
 {
     [Guid("58a490b1-eb8a-4102-906a-f74a79c0ad1c")]
     public class MeshFacesPoints : Instance<MeshFacesPoints>

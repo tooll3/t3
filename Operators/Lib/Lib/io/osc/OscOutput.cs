@@ -10,7 +10,7 @@ using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
 
-namespace Lib.io.osc
+namespace lib.io.osc
 {
     [Guid("4e99da86-482f-4037-8664-b2371526d632")]
     public class OscOutput : Instance<OscOutput>, IStatusProvider

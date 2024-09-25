@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.anim
+namespace lib.anim
 {
     [Guid("d21652e9-4dc3-4ece-9205-51fced56c3bd")]
     public class WasTrigger : Instance<WasTrigger>

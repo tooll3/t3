@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Lib._3d.gizmo
+namespace lib._3d.gizmo
 {
     [Guid("348652c3-abf5-4fe9-873b-89d1acaaf0ff")]
     public class Locator : Instance<Locator>, ITransformable

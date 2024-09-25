@@ -9,7 +9,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Lib.point._experimental
+namespace lib.point._experimental
 {
     [Guid("9a36d1c3-cf55-4f3a-ae09-2f54eecb4642")]
     public class RecycleBuffer : Instance<RecycleBuffer>, IStatusProvider

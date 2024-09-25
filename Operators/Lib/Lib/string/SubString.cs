@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.@string
+namespace lib.@string
 {
     [Guid("045e834a-f0ee-432b-8e14-19cadc497577")]
     public class SubString : Instance<SubString>

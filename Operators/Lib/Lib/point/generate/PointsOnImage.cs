@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.point.generate
+namespace lib.point.generate
 {
     [Guid("722e79cc-47bc-42cc-8fce-2e06f36f8caa")]
     public class PointsOnImage : Instance<PointsOnImage>

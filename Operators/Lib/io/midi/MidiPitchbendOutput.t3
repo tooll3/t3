@@ -1,7 +1,5 @@
 {
-  "Name": "MidiPitchbendOutput",
-  "Id": "01d33d21-d75e-4c22-bfe6-088e1ee4a5e8",
-  "Namespace": "lib.io.midi",
+  "Id": "01d33d21-d75e-4c22-bfe6-088e1ee4a5e8"/*MidiPitchbendOutput*/,
   "Inputs": [
     {
       "Id": "5b25a41f-7609-4e19-98a2-1ecfaeb397bb"/*SendMode*/,

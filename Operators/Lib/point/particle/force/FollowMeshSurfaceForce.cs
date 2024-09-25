@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.point.particle.force
+namespace lib.point.particle.force
 {
     [Guid("26bb382c-5e3d-49ae-b17e-5bd49b083d9a")]
     public class FollowMeshSurfaceForce : Instance<FollowMeshSurfaceForce>

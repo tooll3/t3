@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.Lib.img.generate
+namespace lib.Lib.img.generate
 {
     [Guid("05463270-37d4-400f-8d0d-c50f81663304")]
     public class NGonGradient : Instance<NGonGradient>

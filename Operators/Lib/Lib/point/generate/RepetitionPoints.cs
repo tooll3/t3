@@ -9,7 +9,7 @@ using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Point = T3.Core.DataTypes.Point;
 
-namespace Lib.point.generate
+namespace lib.point.generate
 {
     [Guid("73d99108-f49a-48fb-aa5d-707c00abb1c2")]
     public class RepetitionPoints : Instance<RepetitionPoints>

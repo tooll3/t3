@@ -13,7 +13,7 @@ using T3.Core.Utils;
 using Texture2D = T3.Core.DataTypes.Texture2D;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace Lib._3d.postfx
+namespace lib._3d.postfx
 {
     [Guid("de0e54c3-631b-4a01-a8a7-8cdff2e07e55")]
     public class _ComputeLightOcclusions : Instance<_ComputeLightOcclusions>

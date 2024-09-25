@@ -8,7 +8,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 // ReSharper disable InconsistentNaming
 
-namespace Lib.math.@bool
+namespace lib.math.@bool
 {
     [Guid("f997d943-7a71-4fdf-b182-7a521a73ba27")]
     public class DelayBoolean : Instance<DelayBoolean>

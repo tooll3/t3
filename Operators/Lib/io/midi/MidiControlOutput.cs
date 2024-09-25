@@ -12,7 +12,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.io.midi 
+namespace Operators.Lib.io.midi 
 {
     [Guid("a59c583b-dbc2-495c-a9b1-e64fc1e5d532")]
     public class MidiControlOutput : Instance<MidiControlOutput>, MidiConnectionManager.IMidiConsumer, ICustomDropdownHolder,IStatusProvider

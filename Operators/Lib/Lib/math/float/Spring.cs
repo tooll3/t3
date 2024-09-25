@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.math.@float
+namespace lib.math.@float
 {
     [Guid("0b337922-aeca-473a-bfe9-4ab6ff804b11")]
     public class Spring : Instance<Spring>

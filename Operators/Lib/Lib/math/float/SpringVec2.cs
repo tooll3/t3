@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.math.@float
+namespace lib.math.@float
 {
     [Guid("4ee040a3-e5dd-42f0-8f7e-0275d7c72538")]
     public class SpringVec2 : Instance<SpringVec2>

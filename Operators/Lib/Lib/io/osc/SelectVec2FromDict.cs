@@ -9,7 +9,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Lib.io.osc
+namespace lib.io.osc
 {
     [Guid("96b1e8f3-0b42-4a01-b82b-44ccbd857400")]
     public class SelectVec2FromDict : Instance<SelectVec2FromDict>, ICustomDropdownHolder

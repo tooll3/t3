@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.math.@int
+namespace lib.math.@int
 {
     [Guid("bc7594df-68f0-4678-aec7-523474b3b36a")]
     public class SumInts : Instance<SumInts>

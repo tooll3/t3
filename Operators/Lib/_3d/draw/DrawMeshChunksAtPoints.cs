@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib._3d.draw
+namespace lib._3d.draw
 {
     [Guid("0e313329-74fb-4f2a-b1c2-136e1ecf9b3e")]
     public class DrawMeshChunksAtPoints : Instance<DrawMeshChunksAtPoints>

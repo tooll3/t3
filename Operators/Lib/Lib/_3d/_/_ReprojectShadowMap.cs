@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
 
-namespace Lib._3d._
+namespace lib._3d._
 {
     [Guid("e6df0d5d-bf6c-4672-801e-7a3270bd359b")]
     public class _ReprojectShadowMap : Instance<_ReprojectShadowMap>

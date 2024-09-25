@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.point.helper
+namespace lib.point.helper
 {
     [Guid("a53a0643-8daa-49c2-9c8c-34cfe5ad8030")]
     public class _VisualizePointFields : Instance<_VisualizePointFields>

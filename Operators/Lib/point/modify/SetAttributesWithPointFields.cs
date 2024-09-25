@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.point.modify
+namespace lib.point.modify
 {
     [Guid("21b0a346-f214-449f-ae27-7bfbe5395d66")]
     public class SetAttributesWithPointFields : Instance<SetAttributesWithPointFields>

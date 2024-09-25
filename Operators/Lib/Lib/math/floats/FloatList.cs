@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.math.floats
+namespace lib.math.floats
 {
     [Guid("7ba0451c-9b8d-46a7-bfac-9dcb15e00023")]
     public class FloatList : Instance<FloatList>

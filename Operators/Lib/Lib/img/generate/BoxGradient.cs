@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.img.generate
+namespace lib.img.generate
 {
     [Guid("dc2273a7-8a54-4e6f-8d8e-9a675c1ef599")]
     public class BoxGradient : Instance<BoxGradient>

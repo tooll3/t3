@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.img.fx
+namespace lib.img.fx
 {
     [Guid("53ff1a68-e888-444f-9ccc-23239c94d6db")]
     public class LightRaysFx : Instance<LightRaysFx>

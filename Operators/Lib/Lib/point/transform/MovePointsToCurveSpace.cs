@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.point.transform
+namespace lib.point.transform
 {
     [Guid("ac185a9e-02c4-4ee0-b55e-4e7384c09d0c")]
     public class MovePointsToCurveSpace : Instance<MovePointsToCurveSpace>

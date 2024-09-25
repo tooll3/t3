@@ -6,7 +6,7 @@ using T3.Core.Utils;
 
 // ReSharper disable InconsistentNaming
 
-namespace Lib.math.@bool
+namespace lib.math.@bool
 {
     [Guid("f38311df-d356-4385-8535-96f52a71d53e")]
     public class FlipBool : Instance<FlipBool>

@@ -11,7 +11,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Lib.dx11.buffer
+namespace lib.dx11.buffer
 {
     [Guid("c036b4f2-97bf-40f1-b4d5-c2067a4fa97f")]
     public class IntsToBufferWithViews : Instance<IntsToBufferWithViews>

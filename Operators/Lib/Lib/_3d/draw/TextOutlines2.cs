@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Lib._3d.draw
+namespace lib._3d.draw
 {
     [Guid("84e9333f-38d2-422f-abf5-bf3929f01c7e")]
     public class TextOutlines2 : Instance<TextOutlines2>

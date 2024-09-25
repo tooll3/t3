@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.img.fx
+namespace lib.img.fx
 {
     [Guid("e34c88f6-815e-4ce1-a6a8-59e2c8101849")]
     public class SubdivisionStretch : Instance<SubdivisionStretch>

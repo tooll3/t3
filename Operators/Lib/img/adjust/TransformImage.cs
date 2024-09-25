@@ -14,7 +14,7 @@ enum WrapModes
     MirrorOnce,
 }
 
-namespace Lib.img.adjust
+namespace lib.img.adjust
 {
     [Guid("32e18957-3812-4f64-8663-18454518d005")]
     public class TransformImage : Instance<TransformImage>

@@ -1,7 +1,5 @@
 {
-  "Name": "MidiControlOutput",
-  "Id": "a59c583b-dbc2-495c-a9b1-e64fc1e5d532",
-  "Namespace": "lib.io.midi",
+  "Id": "a59c583b-dbc2-495c-a9b1-e64fc1e5d532"/*MidiControlOutput*/,
   "Inputs": [
     {
       "Id": "b8612a7d-cb19-4203-b5d0-a44ca71f5477"/*SendMode*/,

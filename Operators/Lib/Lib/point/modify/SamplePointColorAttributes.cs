@@ -7,7 +7,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib.point.modify
+namespace lib.point.modify
 {
     [Guid("056ea55a-91a2-4b55-bcce-e44cc8602623")]
     public class SamplePointColorAttributes : Instance<SamplePointColorAttributes>

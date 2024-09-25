@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.point.combine
+namespace lib.point.combine
 {
     public class UVsViewer : Instance<UVsViewer>
     {

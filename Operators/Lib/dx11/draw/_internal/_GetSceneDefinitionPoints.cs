@@ -9,7 +9,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Lib.dx11.draw._internal
+namespace lib.dx11.draw._internal
 {
     [Guid("5b127401-600c-4247-9d59-2f6ff359ba85")]
     public class _GetSceneDefinitionPoints : Instance<_GetSceneDefinitionPoints>

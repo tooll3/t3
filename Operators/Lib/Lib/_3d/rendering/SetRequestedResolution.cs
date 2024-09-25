@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Lib._3d.rendering
+namespace lib._3d.rendering
 {
     [Guid("5b3a0c1d-87d6-4d88-ae20-ff9f95049ecf")]
     public class SetRequestedResolution : Instance<SetRequestedResolution>

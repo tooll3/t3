@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Lib.io.time
+namespace lib.io.time
 {
     [Guid("3be62864-30dd-4531-9980-28b634296e47")]
     public class GetFrameSpeedFactor : Instance<GetFrameSpeedFactor>

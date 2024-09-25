@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace examples.user.wake.livecoding.helpers
+namespace Operators.examples.user.wake.livecoding.helpers
 {
     [Guid("92750028-5fac-4e6d-84fe-f779f6d0ae33")]
     public class FadingSlideShowSoftEdge : Instance<FadingSlideShowSoftEdge>
