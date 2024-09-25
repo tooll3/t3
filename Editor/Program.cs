@@ -71,7 +71,9 @@ namespace T3.Editor
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
 
+            #if !DEBUG
             CrashReporting.InitializeCrashReporting();
+            #endif
 
             Console.WriteLine("Creating SplashScreen");
             ISplashScreen splashScreen = new SplashScreen.SplashScreen();
