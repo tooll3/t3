@@ -12,37 +12,21 @@ namespace T3.Editor.Gui.Graph.Dialogs
         public AddInputDialog()
         {
             Flags = ImGuiWindowFlags.NoResize;
-            
         }
         
         public void Draw(Symbol symbol)
         {
             if (BeginDialog("Add parameter input"))
             {
-                var warning = string.Empty;
-                var isValid = _selectedType != null && GraphUtils.IsIdentifierValid(_parameterName);
-
-                if (!isValid)
-                {
-                    warning = "parameter must not contain spaces or non-special characters.";
-                }
-                else if(symbol.InputDefinitions.Exists(i => i.Name == _parameterName))
-                {
-                    warning = "Parameter name already exists.";
-                    isValid = false;
-                }
-                
                 FormInputs.SetIndent(100);
-                FormInputs.AddStringInput("Name", ref _parameterName, "ParameterName", warning);
                 
-                FormInputs.DrawInputLabel("Type");
-                TypeSelector.Draw(ref _selectedType);
+                _ = SymbolModificationInputs.DrawFieldInputs(symbol, ref _parameterName, ref _selectedType, out var isValid);
                 
                 FormInputs.AddCheckBox("Multi-Input", ref _multiInput);
                 
                 FormInputs.AddVerticalSpace(5);
                 FormInputs.ApplyIndent();
-                if (CustomComponents.DisablableButton("Add", isValid))
+                if (CustomComponents.DisablableButton("Add", _selectedType != null && isValid))
                 {
                     InputsAndOutputs.AddInputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
                     _parameterName = string.Empty;
@@ -65,4 +49,5 @@ namespace T3.Editor.Gui.Graph.Dialogs
         private Type _selectedType = typeof(float);
 
     }
+    
 }

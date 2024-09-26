@@ -27,14 +27,13 @@ public class RenameInputDialog : ModalDialog
         FormInputs.SetIndentToLeft();
         var symbol = _symbol;
         FormInputs.AddHint($"Careful! This operation will modify the definition of {symbol.Name}.");
-            if(symbol.Namespace.StartsWith("lib"))
-            {
-                FormInputs.AddHint("This is library Operator. Modifying it might prevent migrating your projects to future versions of Tooll");
-                
-            }
+        if (symbol.Namespace.StartsWith("lib"))
+        {
+            FormInputs.AddHint("This is library Operator. Modifying it might prevent migrating your projects to future versions of Tooll");
+        }
 
-            FormInputs.SetIndentToParameters();
-            var inputDef = symbol.InputDefinitions.FirstOrDefault(i => i.Id == _inputId);
+        FormInputs.SetIndentToParameters();
+        var inputDef = symbol.InputDefinitions.FirstOrDefault(i => i.Id == _inputId);
         if (inputDef == null)
         {
             ImGui.TextUnformatted("invalid input");
@@ -50,20 +49,7 @@ public class RenameInputDialog : ModalDialog
         // ImGui.SetNextItemWidth(150);
 
         //var warning = String.Empty;
-        var isValid = GraphUtils.IsNewSymbolNameValid(_newInputName, symbol);
-        if (!isValid)
-        {
-            _lastWarning = "Invalid name";
-        }
-
-        var changed = FormInputs.AddStringInput("New input name",
-                                                ref _newInputName, "NewName",
-                                                _lastWarning,
-                                                "This is a C# class. It must be unique and\nnot include spaces or special characters");
-        if (changed)
-        {
-            _lastWarning = null;
-        }
+        var changed = SymbolModificationInputs.DrawFieldNameInput(symbol, ref _newInputName, out var isValid);
 
         if (isValid && (isWindowAppearing || changed))
         {

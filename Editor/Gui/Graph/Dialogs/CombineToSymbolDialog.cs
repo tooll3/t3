@@ -17,46 +17,12 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
             if (BeginDialog("Combine into symbol"))
             {
-                var projectChanged = CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
-                if(projectChanged && _projectToCopyTo != null)
-                {
-                    nameSpace = _projectToCopyTo.CsProjectFile.RootNamespace + '.' + compositionOp.Symbol.Namespace.Split('.').Last();
-                }
+                _ = SymbolModificationInputs.DrawProjectDropdown(ref nameSpace, ref _projectToCopyTo);
 
                 if (_projectToCopyTo != null)
                 {
-                    // namespace and title
-                    ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.TextUnformatted("Namespace");
-                    ImGui.SameLine();
+                    _ = SymbolModificationInputs.DrawSymbolNameAndNamespaceInputs(ref combineName, ref nameSpace, _projectToCopyTo, out var symbolNamesValid);
 
-                    ImGui.SetCursorPosX(250 + 20); // Not sure how else to layout this
-                    ImGui.TextUnformatted("Name");
-                    ImGui.PopFont();
-                    
-                    var rootNamespace = _projectToCopyTo.CsProjectFile.RootNamespace;
-                    var correct = nameSpace.StartsWith(rootNamespace) && GraphUtils.IsNamespaceValid(nameSpace);
-
-                    ImGui.SetNextItemWidth(250);
-                    var args = new InputWithTypeAheadSearch.Args<string>(Label: "##namespace2",
-                                                                        Items: _projectToCopyTo.SymbolUis.Values
-                                                                                               .Select(x => x.Symbol)
-                                                                                               .Select(i => i.Namespace)
-                                                                                               .Distinct()
-                                                                                               .OrderBy(i => i),
-                                                                        GetTextInfo: i => new InputWithTypeAheadSearch.Texts(i, i, null),
-                                                                        Warning: !correct);
-                    InputWithTypeAheadSearch.Draw(args, ref nameSpace, out _);
-
-                    ImGui.SetNextItemWidth(150);
-                    ImGui.SameLine();
-
-                    if (ImGui.IsWindowAppearing())
-                        ImGui.SetKeyboardFocusHere();
-
-                    ImGui.InputText("##name", ref combineName, 255);
-
-                    CustomComponents.HelpText("The name is a C# class. It must be unique and not include spaces or special characters");
                     ImGui.Spacing();
 
                     // Description
@@ -67,9 +33,8 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));
 
                     ImGui.Checkbox("Combine as time clip", ref _shouldBeTimeClip);
-
-                    if (CustomComponents.DisablableButton("Combine", correct && GraphUtils.IsNewSymbolNameValid(combineName, compositionOp.Symbol),
-                                                          enableTriggerWithReturn: false))
+                    
+                    if (CustomComponents.DisablableButton("Combine", symbolNamesValid, enableTriggerWithReturn: false))
                     {
                         var compositionSymbolUi = compositionOp.GetSymbolUi();
                         Combine.CombineAsNewType(compositionSymbolUi, _projectToCopyTo, selectedChildUis, selectedAnnotations, combineName, nameSpace, description,

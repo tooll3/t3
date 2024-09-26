@@ -24,18 +24,13 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
                 ImGui.SetNextItemWidth(150);
 
-                if (ImGui.IsWindowAppearing())
-                    ImGui.SetKeyboardFocusHere();
-
-                ImGui.InputText("##name", ref name, 255);
-
-                CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
-                ImGui.Spacing();
-
                 var symbolUi = selectedChildUis[0];
                 var symbol = symbolUi.SymbolChild.Symbol;
+                _ = SymbolModificationInputs.DrawSymbolNameInput(ref name, symbol.Namespace, symbol.SymbolPackage, true, out var isNameValid);
+
+                ImGui.Spacing();
                 
-                if (CustomComponents.DisablableButton("Rename", GraphUtils.IsNewSymbolNameValid(name, symbol)))
+                if (CustomComponents.DisablableButton("Rename", isNameValid))
                 {
                     SymbolNaming.RenameSymbol(symbol, name);
                     ImGui.CloseCurrentPopup();

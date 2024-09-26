@@ -90,7 +90,7 @@ internal static class Compiler
 
         if (!success)
         {
-            Log.Error($"{projectFile.Name}: Build failed in {stopwatch.ElapsedMilliseconds}");
+            Log.Error($"{projectFile.Name}: Build failed in {stopwatch.ElapsedMilliseconds}ms");
             return false;
         }
         

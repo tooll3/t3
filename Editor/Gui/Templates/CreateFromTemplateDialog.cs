@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using T3.Core.SystemUi;
 using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -115,34 +116,19 @@ namespace T3.Editor.Gui.Templates
                     {
                         _newNameSpace = _projectToCopyTo.CsProjectFile.RootNamespace + '.';
                     }
-
+                    
+                    _ = SymbolModificationInputs.DrawProjectDropdown(ref _newNameSpace, ref _projectToCopyTo);
 
                     if (_projectToCopyTo != null)
                     {
-                        var compositionSymbol = graphWindow.CompositionOp.Symbol;
-                        var isNewSymbolNameValid = GraphUtils.IsNewSymbolNameValid(_newSymbolName, compositionSymbol);
-                        FormInputs.AddStringInput("Name",
-                                                  ref _newSymbolName,
-                                                  null,
-                                                  isNewSymbolNameValid ? null : "Symbols must by unique and not contain spaces or special characters.");
-
-                        var rootNamespace = _projectToCopyTo.CsProjectFile.RootNamespace;
-                        var namespaceNeedsCorrecting = !_newNameSpace.StartsWith(rootNamespace);
-                        var isNamespaceValid = !namespaceNeedsCorrecting && GraphUtils.IsNamespaceValid(_newNameSpace);
-                        FormInputs.AddStringInput("NameSpace",
-                                                  ref _newNameSpace,
-                                                  rootNamespace,
-                                                  isNamespaceValid ? null : "Is required and may only include characters, numbers and dots.\n" +
-                                                                            "Must begin with the root namespace of the selected project."
-                                                 );
+                        _ = SymbolModificationInputs.DrawSymbolNameAndNamespaceInputs(ref _newSymbolName, ref _newNameSpace, _projectToCopyTo, out var isNewSymbolNameValid);
 
                         FormInputs.AddStringInput("Description", ref _newDescription);
 
                         ImGui.Dummy(new Vector2(10, 10));
 
-
                         if (CustomComponents.DisablableButton("Create",
-                                                              isNewSymbolNameValid && isNamespaceValid,
+                                                              isNewSymbolNameValid,
                                                               enableTriggerWithReturn: false))
                         {
                             TemplateUse.TryToApplyTemplate(_selectedTemplate, _newSymbolName, _newNameSpace, _newDescription, _projectToCopyTo);

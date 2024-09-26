@@ -139,7 +139,16 @@ public sealed class AssemblyInformation
                                               if (!isOperator)
                                                   nonOperatorTypes.Add(type);
                                               else
-                                                  SetUpOperatorType(type);
+                                              {
+                                                  try
+                                                  {
+                                                      SetUpOperatorType(type);
+                                                  }
+                                                    catch (Exception e)
+                                                    {
+                                                        Log.Error($"Failed to set up operator type {type.FullName}\n{e.Message}");
+                                                    }
+                                              }
                                           });
 
         shouldShareResources = nonOperatorTypes
@@ -190,23 +199,48 @@ public sealed class AssemblyInformation
 
         bool isGeneric = type.IsGenericTypeDefinition;
 
-        var bindFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
-        var slots = type.GetFields(bindFlags)
-                        .Where(field => field.FieldType.IsAssignableTo(typeof(ISlot)));
+        var bindFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Static;
+        
+        var allMembers = type.GetMembers(bindFlags);
+        var memberNames = new string[allMembers.Length];
 
         List<InputSlotInfo> inputFields = new();
         List<OutputSlotInfo> outputFields = new();
-        foreach (var field in slots)
+        
+        for(int i = 0; i < allMembers.Length; i++)
         {
+            var member = allMembers[i];
+            var name = member.Name;
+            memberNames[i] = name;
+
+            if (member is not FieldInfo field || field.IsSpecialName)
+            {
+                continue;
+            }
+
             var fieldType = field.FieldType;
-            var name = field.Name;
+            
+            if(!fieldType.IsAssignableTo(typeof(ISlot)))
+                continue;
+            
+            if (field.IsStatic)
+            {
+                Log.Error($"Static slot '{name}' in '{type.FullName}' is not allowed - please remove the static modifier");
+                continue;
+            }
+
+            if (!field.IsInitOnly)
+            {
+                Log.Warning($"Slot '{name}' in '{type.FullName}' is not read-only - it is recommended to make slots read-only");
+            }
+            
             var genericArguments = fieldType.GetGenericArguments();
             if (fieldType.IsAssignableTo(typeof(IInputSlot)))
             {
-                var inputAttribute = field.GetCustomAttribute<InputAttribute>();
+                var inputAttribute = member.GetCustomAttribute<InputAttribute>();
                 if (inputAttribute is null)
                 {
-                    Log.Error($"Input slot {field.Name} in {type.FullName} is missing {nameof(InputAttribute)}");
+                    Log.Error($"Input slot {name} in {type.FullName} is missing {nameof(InputAttribute)}");
                     continue;
                 }
 
@@ -218,10 +252,10 @@ public sealed class AssemblyInformation
             }
             else
             {
-                var outputAttribute = field.GetCustomAttribute<OutputAttribute>();
+                var outputAttribute = member.GetCustomAttribute<OutputAttribute>();
                 if (outputAttribute is null)
                 {
-                    Log.Error($"Output slot {field.Name} in {type.FullName} is missing {nameof(OutputAttribute)}");
+                    Log.Error($"Output slot {name} in {type.FullName} is missing {nameof(OutputAttribute)}");
                     continue;
                 }
 
@@ -253,6 +287,7 @@ public sealed class AssemblyInformation
                                                                       inputs: inputFields,
                                                                       isGeneric: isGeneric,
                                                                       outputs: outputFields,
+                                                                      memberNames: memberNames,
                                                                       isDescriptiveFileNameType: isDescriptive,
                                                                       extractableTypeInfo: extractableTypeInfo));
 
@@ -297,6 +332,9 @@ public sealed class AssemblyInformation
 
                 return true;
             default:
+                // this indicates there are multiple GuidAttributes on the type
+                // we may want to support this at some point to allow for "refactoring" of operators
+                // but it is not currently supported
                 Log.Error($"Type {newType.Name} has multiple GuidAttributes");
                 guid = Guid.Empty;
                 return false;

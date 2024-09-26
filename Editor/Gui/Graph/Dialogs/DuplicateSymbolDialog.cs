@@ -44,54 +44,16 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 return;
             }
 
-            var hasProject = _projectToCopyTo != null;
             DialogSize = new Vector2(600, 400);
 
             if (BeginDialog("Duplicate as new symbol"))
             {
-                var projectChanged = CustomComponents.DrawProjectDropdown(ref _projectToCopyTo);
-                if(projectChanged && hasProject)
+                _ = SymbolModificationInputs.DrawProjectDropdown(ref nameSpace, ref _projectToCopyTo);
+
+                if (_projectToCopyTo != null)
                 {
-                    nameSpace = _projectToCopyTo.CsProjectFile.RootNamespace + '.' + compositionOp.Symbol.Namespace.Split('.').Last();
-                }
-
-                if (hasProject)
-                {
-                    // Name and namespace
-                    ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.TextUnformatted("Namespace");
-                    ImGui.SameLine();
-
-                    ImGui.SetCursorPosX(250 + 20); // Not sure how else to layout this
-                    ImGui.TextUnformatted("Name");
-                    ImGui.PopFont();
-                    
-                    var rootNamespace = _projectToCopyTo.CsProjectFile.RootNamespace;
-                    var correct = nameSpace.StartsWith(rootNamespace) && GraphUtils.IsNamespaceValid(nameSpace);
-
-                    ImGui.SetNextItemWidth(250);
-                    //ImGui.InputText("##namespace", ref nameSpace, 255);
-                    var args = new InputWithTypeAheadSearch.Args<string>(Label: "##namespace2",
-                                                                        Items: _projectToCopyTo.SymbolUis.Values
-                                                                                               .Select(x => x.Symbol)
-                                                                                               .Select(i => i.Namespace)
-                                                                                               .Distinct()
-                                                                                               .OrderBy(i => i),
-                                                                        GetTextInfo: i => new InputWithTypeAheadSearch.Texts(i, i, null),
-                                                                        Warning: !correct);
-                    InputWithTypeAheadSearch.Draw(args, ref nameSpace, out _);
-
-                    ImGui.SetNextItemWidth(150);
-                    ImGui.SameLine();
-
-                    if (ImGui.IsWindowAppearing())
-                        ImGui.SetKeyboardFocusHere();
-
-                    ImGui.InputText("##name", ref newTypeName, 255);
-
-                    CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
+                    _ = SymbolModificationInputs.DrawSymbolNameAndNamespaceInputs(ref newTypeName, ref nameSpace, _projectToCopyTo, out var symbolNamesValid);
                     ImGui.Spacing();
-
 
                     // Description
                     ImGui.PushFont(Fonts.FontSmall);
@@ -99,8 +61,8 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.PopFont();
                     ImGui.SetNextItemWidth(460);
                     ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));
-
-                    if (CustomComponents.DisablableButton("Duplicate", correct && GraphUtils.IsNewSymbolNameValid(newTypeName, compositionOp.Symbol),
+                    
+                    if (CustomComponents.DisablableButton("Duplicate", symbolNamesValid,
                                                           enableTriggerWithReturn: false))
                     {
                         var compositionSymbolUi = compositionOp.GetSymbolUi();

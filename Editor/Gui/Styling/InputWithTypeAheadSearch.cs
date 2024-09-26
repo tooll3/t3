@@ -62,6 +62,8 @@ namespace T3.Editor.Gui.Styling
             filter ??= string.Empty;
             var wasChanged = ImGui.InputText(args.Label, ref filter, 256);
             
+            ImGui.PopStyleColor();
+            
             
             if (outlineOnly)
             {

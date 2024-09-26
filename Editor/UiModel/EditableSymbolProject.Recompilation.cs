@@ -33,10 +33,13 @@ namespace T3.Editor.UiModel
 
         public bool TryCompile(string sourceCode, string newSymbolName, Guid newSymbolId, string nameSpace, out Symbol newSymbol, out SymbolUi newSymbolUi)
         {
-            var path = SymbolPathHandler.GetCorrectPath(newSymbolName, nameSpace, Folder, CsProjectFile.RootNamespace, SourceCodeExtension);
+            var path = SymbolPathHandler.GetCorrectPath(newSymbolName, nameSpace, Folder, CsProjectFile.RootNamespace!, SourceCodeExtension);
+            
+            var alreadyExists = false;
 
             try
             {
+                alreadyExists = File.Exists(path);
                 File.WriteAllText(path, sourceCode);
             }
             catch
@@ -59,13 +62,26 @@ namespace T3.Editor.UiModel
 
                 return gotSymbol;
             }
+            
+            if (!alreadyExists)
+            {
+                // delete the newly created file
+                try
+                {
+                    File.Delete(path);
+                }
+                catch
+                {
+                    Log.Error($"Could not delete source code at {path}");
+                }
+            }
 
             newSymbol = null;
             newSymbolUi = null;
             return false;
         }
 
-        public bool TryRecompileWithNewSource(Symbol symbol, string newSource)
+        private bool TryRecompileWithNewSource(Symbol symbol, string newSource)
         {
             var id = symbol.Id;
             var gotCurrentSource = FilePathHandlers.TryGetValue(id, out var currentSourcePath);
@@ -128,7 +144,7 @@ namespace T3.Editor.UiModel
             return editableSymbolPackage.TryRecompileWithNewSource(symbol, newSource);
         }
 
-        public static bool RenameNameSpaces(NamespaceTreeNode node, string newNamespace, out string reason)
+        public static bool RenameNameSpaces(NamespaceTreeNode node, EditableSymbolProject sourcePackage, EditableSymbolProject targetPackage, string newNamespace, out string reason)
         {
             if (CheckCompilation(out reason))
             {
@@ -136,11 +152,6 @@ namespace T3.Editor.UiModel
             }
 
             var sourceNamespace = node.GetAsString();
-            if (!TryGetSourceAndTargetProjects(sourceNamespace, newNamespace, out var sourcePackage, out var targetPackage, out reason))
-            {
-                reason = "Could not find source or target projects";
-                return false;
-            }
 
             sourcePackage.RenameNamespace(sourceNamespace, newNamespace, targetPackage);
             reason = string.Empty;
@@ -153,13 +164,22 @@ namespace T3.Editor.UiModel
                 return false;
 
             if (symbol.SymbolPackage is not EditableSymbolProject)
+            {
+                reason = $"Source project {symbol.SymbolPackage} is not editable";
                 return false;
+            }
+
+            if (!TryGetEditableProjectOfNamespace(newNamespace, out var targetProject))
+            {
+                reason = $"Could not find project for namespace {newNamespace}";
+                return false;
+            }
             
-            var command = new ChangeSymbolNamespaceCommand(symbol, newNamespace, ChangeNamespace);
+            var command = new ChangeSymbolNamespaceCommand(symbol, targetProject, newNamespace, ChangeNamespace);
             UndoRedoStack.AddAndExecute(command);
             return true;
 
-            static string ChangeNamespace(Guid symbolId, string nameSpace)
+            static string ChangeNamespace(Guid symbolId, string nameSpace, EditableSymbolProject sourceProject, EditableSymbolProject targetProject)
             {
                 if (!SymbolUiRegistry.TryGetSymbolUi(symbolId, out var symbolUi))
                 {
@@ -170,9 +190,6 @@ namespace T3.Editor.UiModel
                 var currentNamespace = symbol.Namespace;
                 var reason = string.Empty;
                 if (currentNamespace == nameSpace)
-                    return reason;
-
-                if (!TryGetSourceAndTargetProjects(currentNamespace, nameSpace, out var sourceProject, out var targetProject, out reason))
                     return reason;
 
                 sourceProject.ChangeNamespaceOf(symbol, nameSpace, targetProject);
@@ -242,49 +259,27 @@ namespace T3.Editor.UiModel
             return updated;
         }
 
-        private static bool TryGetSourceAndTargetProjects(string sourceNamespace, string targetNamespace, out EditableSymbolProject sourceProject,
-                                                          out EditableSymbolProject targetProject, out string reason)
+        internal static bool TryGetEditableProjectOfNamespace(string targetNamespace, out EditableSymbolProject targetProject)
         {
-            if (!TryGetEditableProjectOfNamespace(sourceNamespace, out sourceProject))
+            var namespaceInfos = AllProjects
+               .Select(package => new PackageNamespaceInfo(package, package.CsProjectFile.RootNamespace));
+
+            foreach (var namespaceInfo in namespaceInfos)
             {
-                reason = $"The namespace {sourceNamespace} was not found. This is probably a bug. " +
-                         "Please try to reproduce this and file a bug report with reproduction steps.";
-                targetProject = null;
-                return false;
-            }
+                var projectNamespace = namespaceInfo.RootNamespace;
 
-            if (!TryGetEditableProjectOfNamespace(targetNamespace, out targetProject))
-            {
-                reason = $"The namespace {targetNamespace} belongs to a readonly project or the project does not exist." +
-                         $"Try making a new project with your desired namespace";
-                return false;
-            }
+                if (projectNamespace == null)
+                    continue;
 
-            reason = string.Empty;
-            return true;
-
-            static bool TryGetEditableProjectOfNamespace(string targetNamespace, out EditableSymbolProject targetProject)
-            {
-                var namespaceInfos = AllProjects
-                   .Select(package => new PackageNamespaceInfo(package, package.CsProjectFile.RootNamespace));
-
-                foreach (var namespaceInfo in namespaceInfos)
+                if (targetNamespace.StartsWith(projectNamespace))
                 {
-                    var projectNamespace = namespaceInfo.RootNamespace;
-
-                    if (projectNamespace == null)
-                        continue;
-
-                    if (targetNamespace.StartsWith(projectNamespace))
-                    {
-                        targetProject = namespaceInfo.Project;
-                        return true;
-                    }
+                    targetProject = namespaceInfo.Project;
+                    return true;
                 }
-
-                targetProject = null;
-                return false;
             }
+
+            targetProject = null;
+            return false;
         }
 
         private static bool CheckCompilation(out string reason)

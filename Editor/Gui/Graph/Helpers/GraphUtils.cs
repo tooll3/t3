@@ -1,9 +1,11 @@
 ﻿#nullable enable
 using System.CodeDom.Compiler;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.UiModel;
 
@@ -44,18 +46,119 @@ internal static partial class GraphUtils
         return CSharpSyntaxTree.ParseText(sourceCode);
     }
 
-    public static bool IsNewSymbolNameValid(string newSymbolName, Symbol symbol)
+    public static bool IsNewFieldNameValid(string? newFieldName, Symbol symbol, [NotNullWhen(false)] out string? reason)
     {
-        return IsIdentifierValid(newSymbolName)
-               && !ReservedWords.Contains(newSymbolName)
-               && !symbol.SymbolPackage.ContainsSymbolName(newSymbolName, symbol.Namespace);
+        if (string.IsNullOrWhiteSpace(newFieldName))
+        {
+            reason = "Name must not be empty";
+            return false;
+        }
+        
+        if (!IsIdentifierValidNotEmpty(newFieldName))
+        {
+            reason = "Name must be a valid C# identifier";
+            return false;
+        }
+        
+        var typeInfo = symbol.SymbolPackage.AssemblyInformation.OperatorTypeInfo[symbol.Id];
+        if (typeInfo.MemberNames.Contains(newFieldName))
+        {
+            reason = "Name must be unique within the operator";
+            return false;
+        }
+        
+        reason = null;
+        return true;
     }
 
-    public static bool IsIdentifierValid(string className) => !string.IsNullOrWhiteSpace(className)
-                                                              && IdentifierValidator.Value.IsValidIdentifier(className);
+    public static bool IsNewSymbolNameValid(string newSymbolName, string destinationNamespace, SymbolPackage destinationPackage, [NotNullWhen(false)] out string? reason)
+    {
+        var isNamespaceValid = IsNamespaceValid(destinationNamespace, out var namespaceComponents);
+        if (!isNamespaceValid)
+        {
+            reason = "Namespace must be a valid C# namespace";
+            return false;
+        }
+
+        if (!destinationNamespace.StartsWith(destinationPackage.RootNamespace))
+        {
+            reason = "Namespace must be within the project's root namespace";
+            return false;
+        }
+        
+        if(!IsIdentifierValid(newSymbolName))
+        {
+            reason = "Name must be a valid C# identifier";
+            return false;
+        }
+        
+        if (ReservedWords.Contains(newSymbolName))
+        {
+            reason = "Name must not be a C# reserved word";
+            return false;
+        }
+        
+        if (destinationPackage.ContainsSymbolName(newSymbolName, destinationNamespace))
+        {
+            reason = "Name must be unique within the namespace";
+            return false;
+        }
+
+        // check if the namespace contains a class name that exists
+        var namespaceSegmentCount = namespaceComponents.Length;
+        Span<char> nspBuilderBuffer = stackalloc char[destinationNamespace.Length];
+        for (int i = namespaceSegmentCount - 1; i >= 1; i--)
+        {
+            // treat the last segment of the namespace as a potential class name
+            var className = namespaceComponents[i];
+            
+            var nspBuilderCount = 0;
+            
+            // build the namespace up to the current segment
+            for(int nspIndex = 0; nspIndex < i; nspIndex++)
+            {
+                var nspSegment = namespaceComponents[nspIndex];
+                var insertSlice = nspBuilderBuffer[nspBuilderCount..];
+                nspSegment.CopyTo(insertSlice);
+                nspBuilderCount += nspSegment.Length;
+                nspBuilderBuffer[nspBuilderCount] = '.';
+                nspBuilderCount++;
+            }
+
+            var builtNamespace = nspBuilderBuffer[..(nspBuilderCount - 1)]; // remove trailing '.'
+
+            // check if the package contains namespace.className
+            if (destinationPackage.ContainsSymbolName(className, builtNamespace))
+            {
+                reason = $"Namespace must not contain a class name '{builtNamespace}.{className}'";
+                return false;
+            }
+        }
+        
+        var totalLength = destinationNamespace.Length + newSymbolName.Length + 1;
+        const int maxPathLength = 255;
+        if (totalLength > maxPathLength)
+        {
+            reason = $"Total length of namespace and class name must not exceed {maxPathLength} characters";
+            return false;
+        }
+        
+        reason = null;
+        return true;
+    }
+
+    public static bool IsIdentifierValid(string? className) => !string.IsNullOrWhiteSpace(className)
+                                                               && IsIdentifierValidNotEmpty(className);
+    
+    private static bool IsIdentifierValidNotEmpty(string className) => IdentifierValidator.Value.IsValidIdentifier(className);
     public static bool IsValidProjectName(string userName) => IdentifierValidator.Value.IsValidIdentifier(userName);
 
-    public static bool IsNamespaceValid(string namespaceName) => ValidTypeNameSpacePattern.IsMatch(namespaceName);
+    public static bool IsNamespaceValid(string namespaceName, out string[] namespaceComponents)
+    {
+        namespaceComponents = namespaceName.Split('.');
+        return ValidTypeNameSpacePattern.IsMatch(namespaceName)
+               && !namespaceComponents.Any(x => x.Length == 0 || ReservedWords.Contains(x));
+    }
 
     private static readonly Regex ValidTypeNameSpacePattern = NamespaceRegex();
     private static readonly string[] ReservedWords = new string[] { "value", "Var", "instance", "item", "Input", "slot" };

@@ -367,10 +367,10 @@ internal static class InputsAndOutputs
     {
         warning = null;
 
-        var isValid = GraphUtils.IsNewSymbolNameValid(newName, symbol);
+        var isValid = GraphUtils.IsNewFieldNameValid(newName, symbol, out var reason);
         if (!isValid)
         {
-            warning= $"{newName} is not a valid input name.";
+            warning= $"{newName} is not a valid input name: {reason}";
             return false;
         }
         var syntaxTree = GraphUtils.GetSyntaxTree(symbol);

@@ -104,7 +104,7 @@ namespace T3.Core.Operator
             foreach (var input in operatorTypeInfo.Inputs)
             {
                 var attribute = input.Attribute;
-                var inputSlot = (IInputSlot)input.Field.GetValue(this);
+                var inputSlot = input.GetSlotObject(this);
                 inputSlot!.Parent = this;
                 inputSlot.Id = attribute.Id;
                 inputSlot.MappedType = attribute.MappedType;
@@ -114,7 +114,7 @@ namespace T3.Core.Operator
             // outputs identified by attribute
             foreach (var output in operatorTypeInfo.Outputs)
             {
-                var slot = (ISlot)output.Field.GetValue(this);
+                var slot = output.GetSlotObject(this);
                 slot!.Parent = this;
                 slot.Id = output.Attribute.Id;
                 _outputs.Add(slot);

@@ -13,7 +13,7 @@ namespace T3.Editor.UiModel
     public sealed partial class SymbolUi : ISelectionContainer
     {
         internal Symbol Symbol => _package.Symbols[_id];
-        private readonly SymbolPackage _package;
+        private SymbolPackage _package;
         private readonly Guid _id;
 
         internal SymbolUi(Symbol symbol, bool updateConsistency)
@@ -52,6 +52,13 @@ namespace T3.Editor.UiModel
             
             if (updateConsistency)
                 UpdateConsistencyWithSymbol(symbol);
+        }
+
+        internal void UpdateSymbolPackage(SymbolPackage package)
+        {
+            if(package == null)
+                throw new ArgumentException("Symbol must have a package");
+            _package = package;   
         }
 
         IEnumerable<ISelectableCanvasObject> ISelectionContainer.GetSelectables() => GetSelectables();

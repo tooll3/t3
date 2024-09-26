@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using T3.Core.Logging;
 
 namespace T3.Core.Compilation;
@@ -12,17 +13,25 @@ public sealed class OperatorTypeInfo
 {
     internal OperatorTypeInfo(List<InputSlotInfo> inputs,
                               List<OutputSlotInfo> outputs,
+                              IReadOnlyList<string> memberNames,
                               bool isGeneric,
                               Type type,
                               bool isDescriptiveFileNameType,
                               ExtractableTypeInfo extractableTypeInfo)
     {
+        // TrimExcess to reduce memory footprint
+        inputs.TrimExcess();
+        outputs.TrimExcess();
+        
+        // assign fields
         Inputs = inputs;
         Outputs = outputs;
+        MemberNames = memberNames;
         Type = type;
         IsDescriptiveFileNameType = isDescriptiveFileNameType;
         ExtractableTypeInfo = extractableTypeInfo;
         
+        // get generics information and constructor
         if (!isGeneric)
         {
             _nonGenericConstructor = Expression.Lambda<Func<object>>(Expression.New(type)).Compile();
@@ -35,6 +44,7 @@ public sealed class OperatorTypeInfo
 
     internal readonly List<InputSlotInfo> Inputs;
     internal readonly List<OutputSlotInfo> Outputs;
+    public readonly IReadOnlyList<string> MemberNames;
     private readonly Type[]? _genericArguments;
     internal readonly Type Type;
     public readonly bool IsDescriptiveFileNameType;
@@ -46,10 +56,10 @@ public sealed class OperatorTypeInfo
     {
         if (_nonGenericConstructor != null)
             return _nonGenericConstructor;
-        throw new InvalidOperationException("Generic types must be provided for generic operators - use TryGetConstructor instead");
+        throw new InvalidOperationException($"Generic types must be provided for generic operators - use {nameof(TryGetGenericConstructor)} instead");
     }
     
-    internal bool TryGetConstructor([NotNullWhen(true)] out Func<object>? constructor, params Type[] genericArguments)
+    internal bool TryGetGenericConstructor([NotNullWhen(true)] out Func<object>? constructor, params Type[] genericArguments)
     {
         Type constructedType;
         try

@@ -36,7 +36,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     namespaceCorrect = false;
                     namespaceWarningText = $"Namespace must be within the \"{_userName}\" namespace";
                 }
-                else if(!GraphUtils.IsNamespaceValid(_newNamespace))
+                else if(!GraphUtils.IsNamespaceValid(_newNamespace, out _))
                 {
                     namespaceCorrect = false;
                     namespaceWarningText = "Namespace must be a valid C# namespace";

@@ -295,11 +295,13 @@ public abstract partial class SymbolPackage : IResourcePackage
 
     public const string SymbolExtension = ".t3";
 
-    public bool ContainsSymbolName(string newSymbolName, string symbolNamespace)
+    public bool ContainsSymbolName(ReadOnlySpan<char> newSymbolName, ReadOnlySpan<char> symbolNamespace)
     {
         foreach (var existing in SymbolDict.Values)
         {
-            if (existing.Name == newSymbolName && existing.Namespace == symbolNamespace)
+            var existingNamespace = existing.Namespace.AsSpan();
+            var existingName = existing.Name.AsSpan();
+            if (newSymbolName.SequenceEqual(existingName) && symbolNamespace.SequenceEqual(existingNamespace))
                 return true;
         }
 

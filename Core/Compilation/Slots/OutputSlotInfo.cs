@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
@@ -11,24 +12,29 @@ public readonly record struct OutputSlotInfo
 {
     internal readonly Type? OutputDataType;
 
-    internal OutputSlotInfo(string Name, OutputAttribute Attribute, Type type, Type[] GenericArguments, FieldInfo Field, int GenericTypeIndex)
+    internal OutputSlotInfo(string name, OutputAttribute attribute, Type type, Type[] genericArguments, FieldInfo field, int genericTypeIndex)
     {
-        this.Name = Name;
-        this.Attribute = Attribute;
-        this.GenericArguments = GenericArguments;
-        this.Field = Field;
-        this.GenericTypeIndex = GenericTypeIndex;
+        Name = name;
+        Attribute = attribute;
+        GenericArguments = genericArguments;
+        GenericTypeIndex = genericTypeIndex;
         OutputDataType = GetOutputDataType(type);
-        IsGeneric = GenericTypeIndex >= 0;
+        IsGeneric = genericTypeIndex >= 0;
+        _field = field;
     }
 
     public string Name { get; }
     public OutputAttribute Attribute { get; }
     public Type[] GenericArguments { get; }
-    public FieldInfo Field { get; }
-
     public int GenericTypeIndex { get; }
     public bool IsGeneric { get; }
+
+    private readonly FieldInfo _field;
+
+    internal ISlot GetSlotObject(object instance)
+    {
+        return (ISlot)_field.GetValue(instance)!;
+    }
 
     private static Type? GetOutputDataType(Type fieldType)
     {

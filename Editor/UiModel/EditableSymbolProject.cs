@@ -79,6 +79,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         Debug.Assert(symbolPathHandler != null);
 
         symbol.SymbolPackage = newDestinationProject;
+        symbolUi.UpdateSymbolPackage(newDestinationProject);
 
         newDestinationProject.SymbolDict.TryAdd(id, symbol);
         newDestinationProject.SymbolUiDict.TryAdd(id, symbolUi);
