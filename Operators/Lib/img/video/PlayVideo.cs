@@ -11,7 +11,6 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Animation;
 using T3.Core.Audio;
-using T3.Core.DataTypes;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Interfaces;

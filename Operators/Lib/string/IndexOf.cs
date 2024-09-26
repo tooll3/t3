@@ -1,7 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
-using System.Collections;
-using System.Text.RegularExpressions;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;

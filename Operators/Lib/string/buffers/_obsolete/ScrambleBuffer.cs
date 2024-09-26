@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
 using System.Text;
 using SharpDX;
 using T3.Core.Operator;

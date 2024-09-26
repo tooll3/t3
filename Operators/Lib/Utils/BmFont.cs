@@ -1,7 +1,3 @@
-using ComputeShaderD3D = SharpDX.Direct3D11.ComputeShader;
-using VertexShaderD3D = SharpDX.Direct3D11.VertexShader;
-using PixelShaderD3D = SharpDX.Direct3D11.PixelShader;
-using System;
 using System.Xml.Serialization;
 
 /*

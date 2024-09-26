@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using System.Linq;
 using System.Numerics;
 //using SharpDX;
 using T3.Core.DataTypes;

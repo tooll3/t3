@@ -1,13 +1,8 @@
 using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Numerics;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using SharpGLTF.Schema2;
-using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -17,7 +12,6 @@ using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Resource;
 using T3.Core.Utils.Geometry;
-using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace lib._3d.mesh._;
 

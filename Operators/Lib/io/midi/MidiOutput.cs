@@ -1,11 +1,8 @@
 using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
 using NAudio.Midi;
 using Operators.Utils;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
-using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;

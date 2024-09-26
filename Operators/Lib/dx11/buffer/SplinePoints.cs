@@ -1,10 +1,7 @@
 using System.Runtime.InteropServices;
-using System;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -16,7 +13,6 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
-using Vector4 = System.Numerics.Vector4;
 
 namespace lib.dx11.buffer
 {

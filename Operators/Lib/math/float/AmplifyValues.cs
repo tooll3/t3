@@ -1,9 +1,7 @@
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using System.Linq;
 using T3.Core.Utils;
 
 namespace lib.math.@float
