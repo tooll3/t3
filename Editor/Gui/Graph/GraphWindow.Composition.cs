@@ -49,7 +49,7 @@ internal sealed partial class GraphWindow
         private readonly Guid? _parentSymbolChildId;
         private Instance _instance;
         private readonly bool _hasParent;
-        private readonly EditorSymbolPackage _symbolPackage;
+        private EditorSymbolPackage _symbolPackage;
         private int _checkoutCount;
 
         private Composition(Instance instance)
@@ -57,6 +57,11 @@ internal sealed partial class GraphWindow
             _instance = instance;
             var symbol = instance.Symbol;
             _symbolPackage = (EditorSymbolPackage)symbol.SymbolPackage;
+            if (_symbolPackage is EditableSymbolProject project)
+            {
+                project.OnSymbolMoved += OnSymbolMoved;
+            }
+            
             var parent = instance.Parent;
             if (parent != null)
             {
@@ -70,6 +75,21 @@ internal sealed partial class GraphWindow
             _isReadOnly = _symbolPackage.IsReadOnly;
             
             instance.Disposing += InstanceOnDisposing;
+        }
+
+        private void OnSymbolMoved(Guid symbolId, EditableSymbolProject? newPackage)
+        {
+            if(_symbolId != symbolId)
+                return;
+
+            if (newPackage != null)
+            {
+                _symbolPackage = newPackage;
+            }
+            else
+            {
+                Log.Error($"Not implemented yet: symbol {symbolId} was deleted.");
+            }
         }
 
         private void InstanceOnDisposing()

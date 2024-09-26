@@ -90,6 +90,8 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         
         // move files to new project - incorrect paths will be corrected by the loading process
         symbolPathHandler.UpdateFromSymbol();
+        
+        OnSymbolMoved?.Invoke(id, newDestinationProject);
 
         symbolUi.FlagAsModified();
     }
@@ -124,6 +126,10 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         ProjectSetup.RemoveSymbolPackage(this, false);
     }
 
+    /// <summary>
+    /// Event raised when a symbol is moved to a different project or deleted
+    /// </summary>
+    public event Action<Guid, EditableSymbolProject?>? OnSymbolMoved;
     public readonly CsProjectFile CsProjectFile;
     private ResourceFileWatcher _resourceFileWatcher;
     public override ResourceFileWatcher FileWatcher => _resourceFileWatcher;

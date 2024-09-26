@@ -344,10 +344,11 @@ namespace T3.Editor.UiModel
                 throw new Exception($"Could not find source code for {symbol.Name} in {CsProjectFile.Name} ({id})");
             }
 
-            var symbolUi = SymbolUiDict[id];
-            symbolUi.FlagAsModified();
             
             newDestinationProject._pendingSource[id] = newSourceCode;
+
+            var symbolUi = SymbolUiDict[id];
+            symbolUi.FlagAsModified();
 
             if (newDestinationProject != this)
             {

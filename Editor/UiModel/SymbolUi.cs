@@ -54,11 +54,15 @@ namespace T3.Editor.UiModel
                 UpdateConsistencyWithSymbol(symbol);
         }
 
-        internal void UpdateSymbolPackage(SymbolPackage package)
+        internal void UpdateSymbolPackage(EditorSymbolPackage package)
         {
             if(package == null)
                 throw new ArgumentException("Symbol must have a package");
-            _package = package;   
+            _package = package;
+            foreach (var childUi in ChildUis.Values)
+            {
+                childUi.UpdateSymbolPackage(package);
+            }
         }
 
         IEnumerable<ISelectableCanvasObject> ISelectionContainer.GetSelectables() => GetSelectables();

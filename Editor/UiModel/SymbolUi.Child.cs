@@ -32,7 +32,7 @@ namespace T3.Editor.UiModel
             private Symbol Parent => _parentSymbolPackage.Symbols[_symbolId];
 
             private readonly Guid _symbolId;
-            private readonly EditorSymbolPackage _parentSymbolPackage;
+            private EditorSymbolPackage _parentSymbolPackage;
 
             public Guid Id { get; }
             public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
@@ -65,6 +65,10 @@ namespace T3.Editor.UiModel
                 _parentSymbolPackage = parentSymbolPackage;
             }
 
+            internal void UpdateSymbolPackage(EditorSymbolPackage parentSymbolPackage)
+            {
+                _parentSymbolPackage = parentSymbolPackage;
+            }
 
             private void SetDisabled(bool shouldBeDisabled)
             {
