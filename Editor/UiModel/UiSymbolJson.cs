@@ -209,83 +209,89 @@ namespace T3.Editor.UiModel
 
         internal static bool TryReadSymbolUi(JToken mainObject, Symbol symbol, out SymbolUi? symbolUi)
         {
-            if (!TryGetJArray(JsonKeys.InputUis, mainObject, symbol, out var inputUiArray) || 
-                !TryGetJArray(JsonKeys.OutputUis, mainObject, symbol, out var outputUiArray))
-            {
-                symbolUi = null;
-                return false;
-            }
-
             var inputDict = new OrderedDictionary<Guid, IInputUi>();
+            if (TryGetJArray(JsonKeys.InputUis, mainObject, symbol, out var inputUiArray))
+            {
+                foreach (JToken uiInputEntry in inputUiArray)
+                {
+                    Guid inputId;
+                    try
+                    {
+                        inputId = Guid.Parse(uiInputEntry[JsonKeys.InputId].Value<string>() ?? string.Empty);
+                    }
+                    catch
+                    {
+                        Log.Error("Skipping input with invalid symbolChildUi id");
+                        continue;
+                    }
+
+                    var inputDefinition = symbol.InputDefinitions.SingleOrDefault(def => def.Id == inputId);
+                    if (inputDefinition == null)
+                    {
+                        Log.Warning($"Found input entry in ui file for symbol '{symbol.Name}', but no corresponding input in symbol. " +
+                                    $"Assuming that the input was removed and ignoring the ui information.");
+                        continue;
+                    }
+
+                    var type = inputDefinition.DefaultValue.ValueType;
+
+                    // get the symbol input definition
+                    var inputUi = InputUiFactory.Instance.CreateFor(type);
+                    inputUi.InputDefinition = inputDefinition;
+                    inputUi.Read(uiInputEntry);
+                    inputDict.Add(inputId, inputUi);
+                }
+            }
             
-            foreach (JToken uiInputEntry in inputUiArray)
-            {
-                Guid inputId;
-                try
-                {
-                    inputId = Guid.Parse(uiInputEntry[JsonKeys.InputId].Value<string>() ?? string.Empty);
-                }
-                catch
-                {
-                    Log.Error("Skipping input with invalid symbolChildUi id");
-                    symbolUi = null;
-                    return false;
-                }
-
-                var inputDefinition = symbol.InputDefinitions.SingleOrDefault(def => def.Id == inputId);
-                if (inputDefinition == null)
-                {
-                    Log.Warning($"Found input entry in ui file for symbol '{symbol.Name}', but no corresponding input in symbol. " +
-                                $"Assuming that the input was removed and ignoring the ui information.");
-                    continue;
-                }
-
-                var type = inputDefinition.DefaultValue.ValueType;
-                
-                // get the symbol input definition
-                var inputUi = InputUiFactory.Instance.CreateFor(type);
-                inputUi.InputDefinition = inputDefinition;
-                inputUi.Read(uiInputEntry);
-                inputDict.Add(inputId, inputUi);
-            }
-
-
             var outputDict = new OrderedDictionary<Guid, IOutputUi>();
-            foreach (var uiOutputEntry in outputUiArray)
+            if (TryGetJArray(JsonKeys.OutputUis, mainObject, symbol, out var outputUiArray))
             {
-                var outputIdString = uiOutputEntry[JsonKeys.OutputId].Value<string>();
-                var hasOutputId = Guid.TryParse(outputIdString, out var outputId);
-
-                if (!hasOutputId)
+                foreach (var uiOutputEntry in outputUiArray)
                 {
-                    Log.Warning($"Skipping UI output in {symbol.Name} {symbol.Id} for invalid output id `{outputIdString}`");
-                    continue;
+                    var outputIdString = uiOutputEntry[JsonKeys.OutputId].Value<string>();
+                    var hasOutputId = Guid.TryParse(outputIdString, out var outputId);
+
+                    if (!hasOutputId)
+                    {
+                        Log.Warning($"Skipping UI output in {symbol.Name} {symbol.Id} for invalid output id `{outputIdString}`");
+                        continue;
+                    }
+
+                    var outputDefinition = symbol.OutputDefinitions.SingleOrDefault(def => def.Id == outputId);
+                    if (outputDefinition == null)
+                    {
+                        Log.Warning($"Found output entry in ui file for symbol '{symbol.Name}', but no corresponding output in symbol. " +
+                                    $"Assuming that the output was removed and ignoring the ui information.");
+                        continue;
+                    }
+
+                    var outputUi = OutputUiFactory.Instance.CreateFor(outputDefinition.ValueType);
+                    outputUi.OutputDefinition = symbol.OutputDefinitions.First(def => def.Id == outputId);
+
+                    var positionToken = uiOutputEntry[JsonKeys.Position];
+                    outputUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
+
+                    outputDict.Add(outputId, outputUi);
                 }
-                
-                var outputDefinition = symbol.OutputDefinitions.SingleOrDefault(def => def.Id == outputId);
-                if (outputDefinition == null)
-                {
-                    Log.Warning($"Found output entry in ui file for symbol '{symbol.Name}', but no corresponding output in symbol. " +
-                                $"Assuming that the output was removed and ignoring the ui information.");
-                    continue;
-                }
-
-                var outputUi = OutputUiFactory.Instance.CreateFor(outputDefinition.ValueType);
-                outputUi.OutputDefinition = symbol.OutputDefinitions.First(def => def.Id == outputId);
-
-                var positionToken = uiOutputEntry[JsonKeys.Position];
-                outputUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
-
-                outputDict.Add(outputId, outputUi);
             }
+
 
             var annotationDict = ReadAnnotations(mainObject);
             var linksDict = ReadLinks(mainObject);
 
 
-            var symbolChildUiJson = (JArray)mainObject[JsonKeys.SymbolChildUis];
+            IEnumerable<JToken> symbolChildUiJsonEnumerable;
+            if (TryGetJArray(JsonKeys.SymbolChildUis, mainObject, symbol, out var symbolChildUiJson))
+            {
+                symbolChildUiJsonEnumerable = symbolChildUiJson;
+            }
+            else
+            {
+                symbolChildUiJsonEnumerable = Array.Empty<JToken>();
+            }
+            
             symbolUi = new SymbolUi(symbol: symbol, 
-                                    childUis: (parent) => CreateSymbolUiChildren(parent, symbolChildUiJson), 
+                                    childUis: parent => CreateSymbolUiChildren(parent, symbolChildUiJsonEnumerable), 
                                     inputs: inputDict, 
                                     outputs: outputDict, 
                                     annotations: annotationDict, 
@@ -319,9 +325,9 @@ namespace T3.Editor.UiModel
             }
 
             Log.Error($"Error parsing {key} array from {symbol}'s {EditorSymbolPackage.SymbolUiExtension} file - invalid format");
-            BlockingWindow.Instance.ShowMessageBox($"Error parsing symbol ui ({EditorSymbolPackage.SymbolUiExtension}) file of {symbol}.\n\n" +
-                                                   $"It will be regenerated next time you save this project.\n\n" +
-                                                   token);
+            //BlockingWindow.Instance.ShowMessageBox($"Error parsing symbol ui ({EditorSymbolPackage.SymbolUiExtension}) file of {symbol}.\n\n" +
+             //                                      $"It will be regenerated next time you save this project.\n\n" +
+              //                                     token);
             return false;
         }
 
@@ -331,6 +337,9 @@ namespace T3.Editor.UiModel
             var symbolId = parentSymbol.Id;
             foreach (var childEntry in childJsons)
             {
+                if(childEntry == null)
+                    continue;
+                
                 var childIdString = childEntry[JsonKeys.ChildId].Value<string>();
                 var hasChildId = Guid.TryParse(childIdString, out var childId);
 

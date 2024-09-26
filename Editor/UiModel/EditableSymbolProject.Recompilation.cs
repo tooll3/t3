@@ -314,6 +314,7 @@ namespace T3.Editor.UiModel
         {
             var id = symbol.Id;
             sourceNamespace ??= symbol.Namespace;
+            string newSourceCode;
             if (FilePathHandlers.TryGetValue(id, out var filePathHandler) && filePathHandler.SourceCodePath != null)
             {
                 if (!TryConvertToValidCodeNamespace(sourceNamespace, out var sourceCodeNamespace))
@@ -329,8 +330,7 @@ namespace T3.Editor.UiModel
                 }
 
                 var sourceCode = File.ReadAllText(filePathHandler.SourceCodePath);
-                var newSourceCode = Regex.Replace(sourceCode, sourceCodeNamespace, newCodeNamespace);
-                _pendingSource[id] = newSourceCode;
+                newSourceCode = Regex.Replace(sourceCode, sourceCodeNamespace, newCodeNamespace);
             }
             else
             {
@@ -339,6 +339,8 @@ namespace T3.Editor.UiModel
 
             var symbolUi = SymbolUiDict[id];
             symbolUi.FlagAsModified();
+            
+            newDestinationProject._pendingSource[id] = newSourceCode;
 
             if (newDestinationProject != this)
             {

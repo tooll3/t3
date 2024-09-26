@@ -74,6 +74,9 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         SymbolUiDict.Remove(id, out var symbolUi);
         FilePathHandlers.Remove(id, out var symbolPathHandler);
         
+        if(_pendingSource.Remove(id, out var source))
+            newDestinationProject._pendingSource.TryAdd(id, source);
+        
         Debug.Assert(symbol != null);
         Debug.Assert(symbolUi != null);
         Debug.Assert(symbolPathHandler != null);
@@ -83,8 +86,10 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
         newDestinationProject.SymbolDict.TryAdd(id, symbol);
         newDestinationProject.SymbolUiDict.TryAdd(id, symbolUi);
-
         newDestinationProject.FilePathHandlers.TryAdd(id, symbolPathHandler);
+        
+        // move files to new project - incorrect paths will be corrected by the loading process
+        symbolPathHandler.UpdateFromSymbol();
 
         symbolUi.FlagAsModified();
     }

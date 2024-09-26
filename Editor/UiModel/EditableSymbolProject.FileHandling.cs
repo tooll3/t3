@@ -125,11 +125,8 @@ internal sealed partial class EditableSymbolProject
             return;
         }
 
-        pathHandler.UpdateFromSymbol();
-
         try
         {
-                
             var sourceCodePath = pathHandler.SourceCodePath;
             if (sourceCodePath != null)
                 WriteSymbolSourceToFile(id, sourceCodePath);
