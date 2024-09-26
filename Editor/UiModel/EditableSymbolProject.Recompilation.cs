@@ -313,7 +313,14 @@ namespace T3.Editor.UiModel
         private void ChangeNamespaceOf(Symbol symbol, string newNamespace, EditableSymbolProject newDestinationProject, string sourceNamespace = null)
         {
             var id = symbol.Id;
+            if (HasHome && ReleaseInfo.HomeGuid == id)
+            {
+                Log.Error($"Cannot change namespace of home symbol {symbol}");
+                return;
+            }
+            
             sourceNamespace ??= symbol.Namespace;
+            
             string newSourceCode;
             if (FilePathHandlers.TryGetValue(id, out var filePathHandler) && filePathHandler.SourceCodePath != null)
             {
