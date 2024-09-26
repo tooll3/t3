@@ -4,10 +4,6 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using System.Net;
 using Rug.Osc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
 
 namespace lib.io.osc

@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator;

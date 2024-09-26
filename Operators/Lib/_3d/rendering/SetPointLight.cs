@@ -3,7 +3,6 @@ using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Rendering;
 
 namespace lib._3d.rendering
 {

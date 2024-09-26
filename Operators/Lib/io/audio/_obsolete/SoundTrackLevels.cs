@@ -1,6 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
-using System.IO;
 using Newtonsoft.Json;
 using T3.Core.Animation;
 using T3.Core.Logging;

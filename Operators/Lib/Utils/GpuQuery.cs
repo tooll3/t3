@@ -1,10 +1,5 @@
-using ComputeShaderD3D = SharpDX.Direct3D11.ComputeShader;
-using VertexShaderD3D = SharpDX.Direct3D11.VertexShader;
-using PixelShaderD3D = SharpDX.Direct3D11.PixelShader;
-using System;
 using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core.DataTypes;
 
 namespace Utils
 {

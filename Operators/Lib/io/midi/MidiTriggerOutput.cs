@@ -1,6 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
 using NAudio.Midi;
 using Operators.Utils;
 using T3.Core.Animation;

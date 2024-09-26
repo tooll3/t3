@@ -1,10 +1,7 @@
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using System;
-using Microsoft.VisualBasic;
 using T3.Core.Animation;
 using T3.Core.Utils;
 

@@ -1,6 +1,4 @@
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
-using System.IO;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;

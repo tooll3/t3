@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
-using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -12,11 +11,6 @@ using T3.Core.Rendering;
 using T3.Core.Rendering.Material;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
-using PixelShader = SharpDX.Direct3D11.PixelShader;
-using VertexShader = SharpDX.Direct3D11.VertexShader;
-using ComputeShader = SharpDX.Direct3D11.ComputeShader;
-using PixelShaderStage = SharpDX.Direct3D11.PixelShaderStage;
-
 
 namespace lib.dx11.draw._internal
 {

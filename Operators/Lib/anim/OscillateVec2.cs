@@ -1,10 +1,8 @@
 using System.Runtime.InteropServices;
-using System;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using Vector3 = System.Numerics.Vector3;
 
 namespace lib.anim
 {
