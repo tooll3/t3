@@ -34,25 +34,26 @@
         <Using Include="T3.Core.Operator.Slots"/>
         <Using Include="T3.Core.Operator.Interfaces"/>
         <Using Include="T3.Core.Resource"/>
-        <Using Include="T3.Core.DataTypes.Texture2D" Alias="Texture2D"/>
-        <Using Include="SharpDX.Direct3D11.Buffer" Alias="Buffer"/>
-        <Using Include="SharpDX.Direct3D11.ShaderResourceView" Alias="ShaderResourceView"/>
-        <Using Include="SharpDX.Direct3D11.UnorderedAccessView" Alias="UnorderedAccessView"/>
-        <Using Include="SharpDX.Direct3D11.CullMode" Alias="CullMode"/>
-        <Using Include="SharpDX.Direct3D11.FillMode" Alias="FillMode"/>
-        <Using Include="SharpDX.Direct3D11.TextureAddressMode" Alias="TextureAddressMode"/>
-        <Using Include="SharpDX.Direct3D11.Filter" Alias="Filter"/>
-        <Using Include="SharpDX.DXGI.Format" Alias="Format"/>
-        <Using Include="SharpDX.Direct3D11.Texture2DDescription" Alias="Texture2DDescription"/>
+        
+        <Using Alias="Texture2D" Include="T3.Core.DataTypes.Texture2D"/>
+        <Using Alias="Buffer" Include="SharpDX.Direct3D11.Buffer"/>
+        <Using Alias="ShaderResourceView" Include="SharpDX.Direct3D11.ShaderResourceView"/>
+        <Using Alias="UnorderedAccessView" Include="SharpDX.Direct3D11.UnorderedAccessView"/>
+        <Using Alias="CullMode" Include="SharpDX.Direct3D11.CullMode"/>
+        <Using Alias="FillMode" Include="SharpDX.Direct3D11.FillMode"/>
+        <Using Alias="TextureAddressMode" Include="SharpDX.Direct3D11.TextureAddressMode"/>
+        <Using Alias="Filter" Include="SharpDX.Direct3D11.Filter"/>
+        <Using Alias="Format" Include="SharpDX.DXGI.Format"/>
+        <Using Alias="Texture2DDescription" Include="SharpDX.Direct3D11.Texture2DDescription"/>
         <Using Alias="Vector2" Include="System.Numerics.Vector2"/>
         <Using Alias="Vector3" Include="System.Numerics.Vector3"/>
         <Using Alias="Vector4" Include="System.Numerics.Vector4"/>
         <Using Alias="Matrix4x4" Include="System.Numerics.Matrix4x4"/>
         <Using Alias="Quaternion" Include="System.Numerics.Quaternion"/>
-        <Using Include="T3.Core.DataTypes.Vector.Int2" Alias="Int2"/>
-        <Using Include="T3.Core.DataTypes.Vector.Int3" Alias="Int3"/>
-        <Using Include="T3.Core.DataTypes.Vector.Int4" Alias="Int4"/>
-        <Using Include="T3.Core.Resource.ResourceManager" Alias="ResourceManager"/>
+        <Using Alias="Int2" Include="T3.Core.DataTypes.Vector.Int2"/>
+        <Using Alias="Int3" Include="T3.Core.DataTypes.Vector.Int3"/>
+        <Using Alias="Int4" Include="T3.Core.DataTypes.Vector.Int4"/>
+        <Using Alias="ResourceManager" Include="T3.Core.Resource.ResourceManager"/>
         <Using Alias="ComputeShader" Include="T3.Core.DataTypes.ComputeShader"/>
         <Using Alias="PixelShader" Include="T3.Core.DataTypes.PixelShader"/>
         <Using Alias="VertexShader" Include="T3.Core.DataTypes.VertexShader"/>
