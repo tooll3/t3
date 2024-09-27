@@ -14,11 +14,27 @@ internal sealed partial class CsProjectFile
         var rootElement = ProjectRootElement.Create();
         rootElement.Sdk = "Microsoft.NET.Sdk";
         AddDefaultPropertyGroup(rootElement, projectNamespace, homeGuid);
+        AddDefaultUsings(rootElement);
         AddDefaultReferenceGroup(rootElement);
         AddDefaultContent(rootElement);
         AddOpPackageItemGroup(rootElement);
         AddPackageInfoTarget(rootElement);
         return rootElement;
+    }
+    private static void AddDefaultUsings(ProjectRootElement project)
+    {
+        var itemGroup = project.AddItemGroup();
+        foreach (var use in DefaultUsingStatements)
+        {
+            var item = itemGroup.AddItem("Using", use.Name);
+            if(use.Static)
+                item.AddMetadata("Static", "True");
+
+            if (use.Alias != null)
+            {
+                item.AddMetadata("Alias", use.Alias);
+            }
+        }
     }
 
     private static void AddDefaultPropertyGroup(ProjectRootElement project, string projectNamespace, Guid homeGuid)

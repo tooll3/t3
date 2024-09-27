@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Frozen;
 using T3.Core.Compilation;
 using T3.Core.Model;
@@ -16,44 +17,98 @@ internal sealed partial class CsProjectFile
                     (Type: PropertyType.VersionPrefix, Value: "1.0.0"),
                     (Type: PropertyType.Nullable, Value: "enable"),
                     (Type: PropertyType.EditorVersion, Value: Program.Version.ToBasicVersionString()),
-                    (Type: PropertyType.IsEditorOnly, Value: "false")
+                    (Type: PropertyType.IsEditorOnly, Value: "false"),
+                    (Type: PropertyType.ImplicitUsings, Value: "disabled")
                 }
-        .ToFrozenDictionary(x => x.Type, x => x.Value);
+        .ToFrozenDictionary(keySelector: x => x.Type, elementSelector: x => x.Value);
     
-    private static readonly TagValue[] DefaultReferenceTags = [new TagValue(MetadataTagType.Private, "true", true)];
+    private static readonly TagValue[] DefaultReferenceTags = [new TagValue(Tag: MetadataTagType.Private, Value: "true", AddAsAttribute: true)];
     private static readonly Reference[] DefaultReferences =
         [
-            new Reference(ItemType.EditorReference, "Core.dll", DefaultReferenceTags),
-            new Reference(ItemType.EditorReference, "Logging.dll", DefaultReferenceTags),
-            new Reference(ItemType.EditorReference, "SharpDX.dll", DefaultReferenceTags),
-            new Reference(ItemType.EditorReference, "SharpDX.Direct3D11.dll", DefaultReferenceTags),
-            new Reference(ItemType.EditorReference, "SharpDX.DXGI.dll", DefaultReferenceTags),
-            new Reference(ItemType.EditorReference, "SharpDX.Direct2D1.dll", DefaultReferenceTags),
+            new Reference(type: ItemType.EditorReference, include: "Core.dll", tags: DefaultReferenceTags),
+            new Reference(type: ItemType.EditorReference, include: "Logging.dll", tags: DefaultReferenceTags),
+            new Reference(type: ItemType.EditorReference, include: "SharpDX.dll", tags: DefaultReferenceTags),
+            new Reference(type: ItemType.EditorReference, include: "SharpDX.Direct3D11.dll", tags: DefaultReferenceTags),
+            new Reference(type: ItemType.EditorReference, include: "SharpDX.DXGI.dll", tags: DefaultReferenceTags),
+            new Reference(type: ItemType.EditorReference, include: "SharpDX.Direct2D1.dll", tags: DefaultReferenceTags),
         ];
 
     // Note : we are trying to stay platform-agnostic with directories, and so we use unix path separators
-    private static readonly Condition ReleaseConfigCondition = new("Configuration", "Release", true);
+    private static readonly Condition ReleaseConfigCondition = new(ConditionVarName: "Configuration", RequiredValue: "Release", IfEqual: true);
     private const string IncludeAllStr = "**";
-    private static readonly string[] ExcludeFoldersFromOutput = [CreateIncludePath("bin", IncludeAllStr), CreateIncludePath("obj", IncludeAllStr)];
+    private static readonly string[] ExcludeFoldersFromOutput = [CreateIncludePath(args: ["bin", IncludeAllStr]), CreateIncludePath(args: ["obj", IncludeAllStr])];
     private const string FileIncludeFmt = IncludeAllStr + @"{0}";
     private const string DependenciesFolder = "dependencies";
     private static readonly ContentInclude.Group[] DefaultContent =
         [
-            new ContentInclude.Group(null, new ContentInclude(CreateIncludePath(".", DependenciesFolder, IncludeAllStr))),
-            new ContentInclude.Group(ReleaseConfigCondition,
-                                    new ContentInclude(include: CreateIncludePath(ResourceManager.ResourcesSubfolder,IncludeAllStr),
-                                                       linkDirectory: ResourceManager.ResourcesSubfolder,
-                                                       exclude: ExcludeFoldersFromOutput),
-                                    new ContentInclude(include: string.Format(FileIncludeFmt, SymbolPackage.SymbolExtension),
-                                                       linkDirectory: SymbolPackage.SymbolsSubfolder,
-                                                       exclude: ExcludeFoldersFromOutput),
-                                    new ContentInclude(include: string.Format(FileIncludeFmt, EditorSymbolPackage.SymbolUiExtension),
-                                                       linkDirectory: EditorSymbolPackage.SymbolUiSubFolder,
-                                                       exclude: ExcludeFoldersFromOutput),
-                                    new ContentInclude(include: string.Format(FileIncludeFmt, EditorSymbolPackage.SourceCodeExtension),
-                                                       linkDirectory: EditorSymbolPackage.SourceCodeSubFolder,
-                                                       exclude: ExcludeFoldersFromOutput))
+            new ContentInclude.Group(Condition: null, Content: new ContentInclude(include: CreateIncludePath(args: [".", DependenciesFolder, IncludeAllStr]))),
+            new ContentInclude.Group(Condition: ReleaseConfigCondition, Content:
+                [
+                                             new ContentInclude(include: CreateIncludePath(args: [ResourceManager.ResourcesSubfolder, IncludeAllStr]),
+                                                                linkDirectory: ResourceManager.ResourcesSubfolder,
+                                                                exclude: ExcludeFoldersFromOutput),
+                                             new ContentInclude(include: string.Format(format: FileIncludeFmt, arg0: SymbolPackage.SymbolExtension),
+                                                                linkDirectory: SymbolPackage.SymbolsSubfolder,
+                                                                exclude: ExcludeFoldersFromOutput),
+                                             new ContentInclude(include: string.Format(format: FileIncludeFmt, arg0: EditorSymbolPackage.SymbolUiExtension),
+                                                                linkDirectory: EditorSymbolPackage.SymbolUiSubFolder,
+                                                                exclude: ExcludeFoldersFromOutput),
+                                             new ContentInclude(include: string.Format(format: FileIncludeFmt, arg0: EditorSymbolPackage.SourceCodeExtension),
+                                                                linkDirectory: EditorSymbolPackage.SourceCodeSubFolder,
+                                                                exclude: ExcludeFoldersFromOutput)
+                                         ])
         ];
     
-    private static string CreateIncludePath(params string[] args) => string.Join(ResourceManager.PathSeparator, args);
+    private static string CreateIncludePath(params string[] args) => string.Join(separator: ResourceManager.PathSeparator, value: args);
+
+
+    private readonly record struct Using(string Name, string? Alias = null, bool Static = false);
+
+    private static readonly Using[] DefaultUsingStatements =
+        [
+            new (Name: "System"),
+            new (Name: "System.Numerics"),
+            new (Name: "System.Linq"),
+            new (Name: "System.Linq.Enumerable", Static: true),
+            new (Name: "System.Collections"),
+            new (Name: "System.Linq.Expressions"),
+            new (Name: "System.Collections.Generic"),
+            new (Name: "System.Text"),
+            new (Name: "System.Net"),
+            new (Name: "System.Net.Http"),
+            new (Name: "System.Threading.Tasks"),
+            new (Name: "System.IO"),
+            new (Name: "T3.Core.Logging"),
+            new (Name: "System.Runtime.InteropServices"),
+            new (Name: "T3.Core.Operator"),
+            new (Name: "T3.Core.Operator.Attributes"),
+            new (Name: "T3.Core.Operator.Slots"),
+            new (Name: "T3.Core.DataTypes"),
+            new (Name: "T3.Core.Operator.Interfaces"),
+            new (Name: "T3.Core.Resource"),
+            
+            new (Name: "T3.Core.DataTypes.Texture2D", Alias: "Texture2D"),
+            new (Name: "SharpDX.Direct3D11.Buffer", Alias: "Buffer"),
+            new (Name: "SharpDX.Direct3D11.ShaderResourceView", Alias: "ShaderResourceView"),
+            new (Name: "SharpDX.Direct3D11.UnorderedAccessView", Alias: "UnorderedAccessView"),
+            new (Name: "SharpDX.Direct3D11.CullMode", Alias: "CullMode"),
+            new (Name: "SharpDX.Direct3D11.FillMode", Alias: "FillMode"),
+            new (Name: "SharpDX.Direct3D11.TextureAddressMode", Alias: "TextureAddressMode"),
+            new (Name: "SharpDX.Direct3D11.Filter", Alias: "Filter"),
+            new (Name: "SharpDX.DXGI.Format", Alias: "Format"),
+            new (Name: "SharpDX.Direct3D11.Texture2DDescription", Alias: "Texture2DDescription"),
+            new (Name: "System.Numerics.Vector2", Alias: "Vector2"),
+            new (Name: "System.Numerics.Vector3", Alias: "Vector3"),
+            new (Name: "System.Numerics.Vector4", Alias: "Vector4"),
+            new (Name: "System.Numerics.Matrix4x4", Alias: "Matrix4x4"),
+            new (Name: "System.Numerics.Quaternion", Alias: "Quaternion"),
+            new (Name: "T3.Core.DataTypes.Vector.Int2", Alias: "Int2"),
+            new (Name: "T3.Core.DataTypes.Vector.Int3", Alias: "Int3"),
+            new (Name: "T3.Core.DataTypes.Vector.Int4", Alias: "Int4"),
+            new (Name: "T3.Core.Resource.ResourceManager", Alias: "ResourceManager"),
+            new (Name: "T3.Core.DataTypes.ComputeShader", Alias: "ComputeShader"),
+            new (Name: "T3.Core.DataTypes.PixelShader", Alias: "PixelShader"),
+            new (Name: "T3.Core.DataTypes.VertexShader", Alias: "VertexShader"),
+            new (Name: "T3.Core.DataTypes.GeometryShader", Alias: "GeometryShader")
+        ];
 }
