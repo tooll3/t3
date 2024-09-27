@@ -51,8 +51,10 @@ public sealed partial class Symbol : IDisposable, IResource
             if (_instanceType != null)
             {
                 SymbolRegistry.SymbolsByType.Remove(_instanceType, out var symbol);
-                if(symbol != this)
-                    throw new InvalidOperationException("Symbol type was not correctly removed from registry");
+                if (symbol != this)
+                {
+                    throw new InvalidOperationException($"Symbol type was not correctly removed from registry. Was this the result of a failed compilation? Symbol found: {symbol}");
+                }
             }
                 
             _instanceType = value;
